@@ -1,3 +1,4 @@
+import { ref, runTransaction, type Database } from "firebase/database";
 import {
   DEPLOY_SLOT_IDS,
   RESERVE_SLOT_IDS,
@@ -15,6 +16,7 @@ import type {
   SharedBattleReducerSlice,
   SharedBattleState,
 } from "./battle-types";
+import { battleStatePath } from "./battle-paths";
 
 function defaultReserveSlots(): Record<ReserveSlotId, string | null> {
   const slots = {} as Record<ReserveSlotId, string | null>;
@@ -159,4 +161,34 @@ export function normalizeBattleStateSnapshot(
     init: candidate.init as BattleInit,
     reducer: normalizeReducer(candidate.reducer),
   };
+}
+
+export interface EnsureBattleSessionInput {
+  database: Database;
+  roomId: string;
+  init: BattleInit;
+  initialMutable: BattleMutableState;
+}
+
+export async function ensureBattleSession(
+  input: EnsureBattleSessionInput,
+): Promise<void> {
+  await runTransaction(
+    ref(input.database, battleStatePath(input.roomId)),
+    (current: SharedBattleState | null) => {
+      if (current !== null && current.init !== undefined) {
+        return current;
+      }
+      const fresh: SharedBattleState = {
+        init: input.init,
+        reducer: {
+          mutable: input.initialMutable,
+          history: { past: [], future: [] },
+          lastTransition: null,
+          commandSerial: 0,
+        },
+      };
+      return fresh;
+    },
+  );
 }

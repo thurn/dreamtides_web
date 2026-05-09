@@ -1,6 +1,23 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { runTransaction } from "firebase/database";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../battle/types";
-import { normalizeBattleStateSnapshot } from "./battle-service";
+import { ensureBattleSession, normalizeBattleStateSnapshot } from "./battle-service";
+import type { Database } from "firebase/database";
+import type { SharedBattleState } from "./battle-types";
+
+vi.mock("firebase/database", () => ({
+  ref: vi.fn((db: unknown, path: unknown) => ({ db, path })),
+  runTransaction: vi.fn(),
+}));
+
+const mockedRunTransaction = runTransaction as unknown as ReturnType<typeof vi.fn>;
+
+const fakeInit = makeRawSnapshot({}).init as unknown as SharedBattleState["init"];
+const fakeInitial = makeRawSnapshot({}).reducer.mutable as unknown as SharedBattleState["reducer"]["mutable"];
+
+beforeEach(() => {
+  mockedRunTransaction.mockReset();
+});
 
 function makeRawSnapshot(overrides: Record<string, unknown>) {
   return {
@@ -113,5 +130,56 @@ describe("normalizeBattleStateSnapshot", () => {
     delete (raw.reducer as Record<string, unknown>).commandSerial;
     const result = normalizeBattleStateSnapshot(raw);
     expect(result?.reducer.commandSerial).toBe(0);
+  });
+});
+
+describe("ensureBattleSession", () => {
+  it("commits a new SharedBattleState when slot is null", async () => {
+    let captured: unknown;
+    mockedRunTransaction.mockImplementation(async (_ref, updater) => {
+      captured = updater(null);
+    });
+
+    await ensureBattleSession({
+      database: {} as Database,
+      roomId: "room-1",
+      init: fakeInit,
+      initialMutable: fakeInitial,
+    });
+
+    expect(captured).toMatchObject({
+      init: fakeInit,
+      reducer: {
+        mutable: fakeInitial,
+        history: { past: [], future: [] },
+        lastTransition: null,
+        commandSerial: 0,
+      },
+    });
+  });
+
+  it("aborts the transaction when slot already has init", async () => {
+    let captured: unknown;
+    const existing: SharedBattleState = {
+      init: fakeInit,
+      reducer: {
+        mutable: fakeInitial,
+        history: { past: [], future: [] },
+        lastTransition: null,
+        commandSerial: 7,
+      },
+    };
+    mockedRunTransaction.mockImplementation(async (_ref, updater) => {
+      captured = updater(existing);
+    });
+
+    await ensureBattleSession({
+      database: {} as Database,
+      roomId: "room-1",
+      init: fakeInit,
+      initialMutable: fakeInitial,
+    });
+
+    expect(captured).toBe(existing);
   });
 });
