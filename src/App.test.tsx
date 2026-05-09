@@ -35,7 +35,7 @@ vi.mock("./multiplayer/MultiplayerRoomGate", () => ({
       clientId: "client-test",
       room: {
         metadata: {
-          schemaVersion: 1,
+          schemaVersion: 2,
           createdAt: "2026-05-08T00:00:00.000Z",
           updatedAt: "2026-05-08T00:00:00.000Z",
         },

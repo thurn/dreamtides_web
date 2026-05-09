@@ -170,7 +170,7 @@ function makeSession(questState: QuestState | null): RoomSession {
     clientId: "client-1",
     room: {
       metadata: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         createdAt: "2026-05-08T12:00:00.000Z",
         updatedAt: "2026-05-08T12:00:00.000Z",
       },

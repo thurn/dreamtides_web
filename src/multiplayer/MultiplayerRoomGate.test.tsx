@@ -59,7 +59,7 @@ function mount(element: ReactElement): {
 function makeRoom(overrides: Partial<MultiplayerRoom> = {}): MultiplayerRoom {
   return {
     metadata: {
-      schemaVersion: 1,
+      schemaVersion: 2,
       createdAt: "2026-05-08T12:00:00.000Z",
       updatedAt: "2026-05-08T12:00:00.000Z",
     },
