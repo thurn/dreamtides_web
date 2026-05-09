@@ -7,6 +7,7 @@ import { getFirebaseDatabase } from "./firebase/app-config";
 import { MultiplayerRoomGate } from "./multiplayer/MultiplayerRoomGate";
 import { useQuest } from "./state/quest-context";
 import { MultiplayerQuestProvider } from "./state/multiplayer-quest-context";
+import { MultiplayerBattleProvider } from "./state/multiplayer-battle-context";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { HUD } from "./components/HUD";
 import { DeckViewer } from "./components/DeckViewer";
@@ -280,10 +281,17 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
           session={session}
           questContent={questContent}
         >
-          <QuestApp
-            cardDatabase={questContent.cardDatabase}
-            runtimeConfig={runtimeConfig}
-          />
+          <MultiplayerBattleProvider
+            database={database}
+            roomId={session.roomId}
+            clientId={session.clientId}
+            battleState={session.room.battleState}
+          >
+            <QuestApp
+              cardDatabase={questContent.cardDatabase}
+              runtimeConfig={runtimeConfig}
+            />
+          </MultiplayerBattleProvider>
         </MultiplayerQuestProvider>
       )}
     </MultiplayerRoomGate>
