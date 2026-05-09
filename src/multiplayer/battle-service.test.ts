@@ -312,48 +312,6 @@ describe("applyBattleCommandToRoom", () => {
 });
 
 describe("undoBattleInRoom and redoBattleInRoom", () => {
-  // Build a room that already has one committed command in past, so undo
-  // has something to do. Reuse the same init/initial/initialRoom pattern
-  // from the applyBattleCommandToRoom test.
-  function buildRoomWithOneCommittedCommand() {
-    const init = createBattleInit({
-      battleEntryKey: "test-undo",
-      site: makeBattleTestSite(),
-      state: makeBattleTestState(),
-      cardDatabase: makeBattleTestCardDatabase(),
-      dreamcallers: makeBattleTestDreamcallers(),
-      seedOverride: 1,
-      enableAi: false,
-    });
-    const initial = createInitialBattleState(init);
-    const initialRoom: MultiplayerRoom = {
-      metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
-      questState: null,
-      battleState: {
-        init,
-        reducer: {
-          mutable: initial,
-          history: { past: [], future: [] },
-          lastTransition: null,
-          commandSerial: 0,
-        },
-      },
-      presence: {},
-      actionLog: {},
-    };
-    return applyBattleCommandToRoom({
-      room: initialRoom,
-      command: {
-        id: "PLAY_CARD",
-        battleCardId: initial.sides.player.hand[0],
-        sourceSurface: "hand-tray",
-      },
-      now: "2026-05-09T00:00:00.000Z",
-      actorId: "client-a",
-      actionId: "seed-1",
-    });
-  }
-
   function buildFreshRoom(): MultiplayerRoom {
     const init = createBattleInit({
       battleEntryKey: "test-undo",
@@ -382,6 +340,24 @@ describe("undoBattleInRoom and redoBattleInRoom", () => {
     };
   }
 
+  // Build a room that already has one committed command in past, so undo
+  // has something to do.
+  function buildRoomWithOneCommittedCommand() {
+    const initialRoom = buildFreshRoom();
+    const initial = initialRoom.battleState!.reducer.mutable;
+    return applyBattleCommandToRoom({
+      room: initialRoom,
+      command: {
+        id: "PLAY_CARD",
+        battleCardId: initial.sides.player.hand[0],
+        sourceSurface: "hand-tray",
+      },
+      now: "2026-05-09T00:00:00.000Z",
+      actorId: "client-a",
+      actionId: "seed-1",
+    });
+  }
+
   it("undo moves the latest past entry into future and bumps commandSerial", () => {
     const seeded = buildRoomWithOneCommittedCommand();
     const next = undoBattleInRoom({
@@ -396,6 +372,10 @@ describe("undoBattleInRoom and redoBattleInRoom", () => {
       seeded.battleState!.reducer.commandSerial + 1,
     );
     expect(next.actionLog!["u1"].action).toBe("battle:UNDO");
+    const restoredEntry = next.battleState!.reducer.history.future[0];
+    expect(next.actionLog!["u1"].summary.restoredCommandLabel).toBe(
+      restoredEntry.metadata.label,
+    );
   });
 
   it("undo no-ops when past is empty", () => {
@@ -429,6 +409,13 @@ describe("undoBattleInRoom and redoBattleInRoom", () => {
       undone.battleState!.reducer.commandSerial + 1,
     );
     expect(next.actionLog!["r1"].action).toBe("battle:REDO");
+    const restoredEntry =
+      next.battleState!.reducer.history.past[
+        next.battleState!.reducer.history.past.length - 1
+      ];
+    expect(next.actionLog!["r1"].summary.restoredCommandLabel).toBe(
+      restoredEntry.metadata.label,
+    );
   });
 
   it("redo no-ops when future is empty", () => {

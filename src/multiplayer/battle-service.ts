@@ -385,6 +385,6 @@ export async function dispatchBattleHistoryNav(input: {
       actorId: input.actorId,
       actionId,
     });
-    return next === room ? room : next;
+    return next;
   });
 }
