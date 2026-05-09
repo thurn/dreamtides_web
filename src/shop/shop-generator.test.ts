@@ -7,6 +7,8 @@ import {
   generateSpecialtyShopInventory,
   effectivePrice,
   rerollCost,
+  runtimeSlotsToShopSlots,
+  shopSlotsToRuntime,
 } from "./shop-generator";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
@@ -112,6 +114,96 @@ describe("rerollCost", () => {
   it("returns 0 when enhanced", () => {
     expect(rerollCost(0, true)).toBe(0);
     expect(rerollCost(5, true)).toBe(0);
+  });
+});
+
+describe("shop runtime conversion", () => {
+  it("round-trips card, Dreamsign, and reroll slots", () => {
+    const card = makeCard({ cardNumber: 7, name: "Seven Bells" });
+    const dreamsign = {
+      id: "dreamsign-1",
+      name: "Dreamsign One",
+      effectDescription: "First effect.",
+      isBane: false,
+    };
+    const slots = [
+      {
+        itemType: "card" as const,
+        card,
+        dreamsign: null,
+        basePrice: 100,
+        discountPercent: 30,
+        purchased: false,
+      },
+      {
+        itemType: "dreamsign" as const,
+        card: null,
+        dreamsign,
+        basePrice: 150,
+        discountPercent: 0,
+        purchased: true,
+      },
+      {
+        itemType: "reroll" as const,
+        card: null,
+        dreamsign: null,
+        basePrice: 50,
+        discountPercent: 0,
+        purchased: false,
+      },
+    ];
+
+    const runtime = shopSlotsToRuntime(slots);
+
+    expect(runtime).toEqual([
+      {
+        itemType: "card",
+        cardNumber: 7,
+        basePrice: 100,
+        discountPercent: 30,
+        purchased: false,
+      },
+      {
+        itemType: "dreamsign",
+        dreamsign,
+        basePrice: 150,
+        discountPercent: 0,
+        purchased: true,
+      },
+      {
+        itemType: "reroll",
+        basePrice: 50,
+        discountPercent: 0,
+        purchased: false,
+      },
+    ]);
+    expect(runtimeSlotsToShopSlots(runtime, makeDatabase([card]))).toEqual(slots);
+  });
+
+  it("uses a null display card when runtime card data is missing", () => {
+    expect(
+      runtimeSlotsToShopSlots(
+        [
+          {
+            itemType: "card",
+            cardNumber: 404,
+            basePrice: 100,
+            discountPercent: 0,
+            purchased: false,
+          },
+        ],
+        makeDatabase([]),
+      ),
+    ).toEqual([
+      {
+        itemType: "card",
+        card: null,
+        dreamsign: null,
+        basePrice: 100,
+        discountPercent: 0,
+        purchased: false,
+      },
+    ]);
   });
 });
 

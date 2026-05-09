@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/quest";
@@ -7,12 +7,10 @@ import { CardOverlay } from "../components/CardOverlay";
 import { SIZE_PRESETS } from "../components/card-size";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
-import { logEvent } from "../logging";
 import {
-  generateShopInventory,
   effectivePrice,
   rerollCost,
-  type ShopInventoryResult,
+  runtimeSlotsToShopSlots,
   type ShopSlot,
 } from "../shop/shop-generator";
 
@@ -23,27 +21,18 @@ interface ShopScreenProps {
 
 /** Renders the Shop site screen with a 2x3 item grid, purchasing, and rerolling. */
 export function ShopScreen({ site }: ShopScreenProps) {
-  const { state, mutations, cardDatabase, questContent } = useQuest();
-  const { essence, deck } = state;
-  const selectedPackageTides = state.resolvedPackage?.selectedTides ?? [];
-  const initialInventoryRef = useRef<ShopInventoryResult | null>(null);
-  if (initialInventoryRef.current === null) {
-    initialInventoryRef.current = generateShopInventory(cardDatabase, deck, {
-      selectedPackageTides,
-      remainingDreamsignPoolIds: state.remainingDreamsignPool,
-      dreamsignTemplates: questContent.dreamsignTemplates,
-    });
-  }
-  const initialInventory = initialInventoryRef.current;
-  if (initialInventory === null) {
-    throw new Error("Failed to generate shop inventory");
-  }
-  const [slots, setSlots] = useState<ShopSlot[]>(initialInventory.slots);
-  const [rerollCount, setRerollCount] = useState(0);
-  const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
-  const [remainingDreamsignPool, setRemainingDreamsignPool] = useState<string[]>(
-    initialInventory.remainingDreamsignPoolIds,
+  const { state, mutations, cardDatabase } = useQuest();
+  const { essence } = state;
+  const runtime = state.siteRuntime[site.id];
+  const slots = useMemo<ShopSlot[]>(
+    () =>
+      runtime?.kind === "shop"
+        ? runtimeSlotsToShopSlots(runtime.slots, cardDatabase)
+        : [],
+    [cardDatabase, runtime],
   );
+  const rerollCount = runtime?.kind === "shop" ? runtime.rerollCount : 0;
+  const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
 
   const currentRerollCost = useMemo(
     () => rerollCost(rerollCount, site.isEnhanced),
@@ -69,11 +58,10 @@ export function ShopScreen({ site }: ShopScreenProps) {
   );
 
   useEffect(() => {
-    mutations.setRemainingDreamsignPool(
-      initialInventory.remainingDreamsignPoolIds,
-      "shop_inventory_revealed",
-    );
-  }, [mutations, initialInventory.remainingDreamsignPoolIds]);
+    if (runtime === undefined) {
+      mutations.ensureShopRuntime(site, false);
+    }
+  }, [mutations, runtime, site]);
 
   useEffect(() => {
     mutations.setCardSourceDebug(cardSourceDebugState, "shop_cards_shown");
@@ -88,111 +76,35 @@ export function ShopScreen({ site }: ShopScreenProps) {
 
   const handleBuy = useCallback(
     (index: number) => {
-      const slot = slots[index];
-      if (slot.purchased) return;
-
-      const price = effectivePrice(slot);
-      if (price > essence) return;
-
-      mutations.changeEssence(-price, "shop_purchase");
-
-      if (slot.itemType === "card" && slot.card) {
-        mutations.addCard(slot.card.cardNumber, "shop");
-        logEvent("shop_purchase", {
-          itemType: "card",
-          cardNumber: slot.card.cardNumber,
-          cardName: slot.card.name,
-          basePrice: slot.basePrice,
-          discountedPrice: price,
-          essenceRemaining: essence - price,
-        });
-      } else if (slot.itemType === "dreamsign" && slot.dreamsign) {
-        mutations.addDreamsign(slot.dreamsign, "Shop");
-        logEvent("shop_purchase", {
-          itemType: "dreamsign",
-          dreamsignName: slot.dreamsign.name,
-          basePrice: slot.basePrice,
-          discountedPrice: price,
-          essenceRemaining: essence - price,
-        });
-      }
-
-      setSlots((prev) =>
-        prev.map((s, i) => (i === index ? { ...s, purchased: true } : s)),
-      );
+      mutations.buyShopSlot(site.id, index);
     },
-    [slots, essence, mutations],
+    [mutations, site.id],
   );
 
   const handleReroll = useCallback(
     (index: number) => {
-      if (currentRerollCost > essence) return;
-
-      mutations.changeEssence(-currentRerollCost, "shop_reroll");
-      logEvent("shop_reroll", {
-        rerollCost: currentRerollCost,
-        rerollCount: rerollCount + 1,
-      });
-
-      setRerollCount((prev) => prev + 1);
-
-      // Regenerate unpurchased non-reroll slots
-      const newInventory = generateShopInventory(cardDatabase, deck, {
-        selectedPackageTides,
-        remainingDreamsignPoolIds: remainingDreamsignPool,
-        dreamsignTemplates: questContent.dreamsignTemplates,
-      });
-      setRemainingDreamsignPool(newInventory.remainingDreamsignPoolIds);
-      mutations.setRemainingDreamsignPool(
-        newInventory.remainingDreamsignPoolIds,
-        "shop_reroll_revealed",
-      );
-      // Collect only non-reroll replacement items to avoid introducing
-      // a second reroll slot from the freshly generated inventory.
-      const replacements = newInventory.slots.filter(
-        (s) => s.itemType !== "reroll",
-      );
-      let replacementIdx = 0;
-      setSlots((prev) =>
-        prev.map((s, i) => {
-          if (s.purchased) return s;
-          if (i === index) {
-            // Keep the reroll slot but update its price
-            return {
-              ...s,
-              basePrice:
-                rerollCost(rerollCount + 1, site.isEnhanced),
-            };
-          }
-          if (s.itemType === "reroll") return s;
-          const replacement = replacements[replacementIdx];
-          replacementIdx += 1;
-          return replacement ?? s;
-        }),
-      );
+      mutations.rerollShop(site, index);
     },
-    [
-      currentRerollCost,
-      essence,
-      rerollCount,
-      cardDatabase,
-      deck,
-      selectedPackageTides,
-      remainingDreamsignPool,
-      questContent.dreamsignTemplates,
-      site.isEnhanced,
-      mutations,
-    ],
+    [mutations, site],
   );
 
   const handleLeave = useCallback(() => {
-    logEvent("site_completed", {
-      siteType: "Shop",
-      outcome: "left",
-    });
-    mutations.markSiteVisited(site.id);
-    mutations.setScreen({ type: "dreamscape" });
+    mutations.completeSite(site.id, "shop_left");
   }, [site.id, mutations]);
+
+  if (runtime?.kind !== "shop") {
+    return (
+      <motion.div
+        className="flex min-h-full flex-col items-center justify-center px-4 py-6 md:px-8 md:py-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.4 }}
+      >
+        <p className="text-sm opacity-70">Opening shop...</p>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div

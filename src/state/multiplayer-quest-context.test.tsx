@@ -8,7 +8,7 @@ import type { QuestContent } from "../data/quest-content";
 import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
-import type { Dreamsign, QuestState } from "../types/quest";
+import type { Dreamsign, QuestState, SiteState } from "../types/quest";
 import { useQuest, type QuestContextValue } from "./quest-context";
 import { createDefaultState } from "./quest-context";
 import { MultiplayerQuestProvider } from "./multiplayer-quest-context";
@@ -676,6 +676,220 @@ describe("MultiplayerQuestProvider", () => {
         siteId: "site-1",
         amount: 400,
         isEnhanced: true,
+      },
+    });
+
+    randomSpy.mockRestore();
+  });
+
+  it("buys a shared shop card slot atomically and skips duplicate purchases", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 125,
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 50,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
+    const updater = latestRoomTransactionUpdater();
+    const nextRoom = updater?.(session.room);
+
+    expect(nextRoom?.questState?.essence).toBe(75);
+    expect(nextRoom?.questState?.deck).toEqual([
+      {
+        entryId: "deck-1",
+        cardNumber: 101,
+        transfiguration: null,
+        isBane: false,
+      },
+    ]);
+    expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
+      kind: "shop",
+      slots: [
+        {
+          itemType: "card",
+          cardNumber: 101,
+          basePrice: 100,
+          discountPercent: 50,
+          purchased: true,
+        },
+      ],
+      rerollCount: 0,
+      remainingDreamsignPoolIds: [],
+    });
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "buyShopSlot",
+      source: "shop_purchase",
+      summary: {
+        siteId: "site-1",
+        slotIndex: 0,
+        itemType: "card",
+        basePrice: 100,
+        discountedPrice: 50,
+        cardNumber: 101,
+      },
+    });
+    expect(updater?.(nextRoom ?? null)).toBe(nextRoom);
+  });
+
+  it("rejects unaffordable shared shop purchases", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 25,
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
+  it("rerolls shared shop slots while preserving purchased slots", () => {
+    const captured: QuestContextValue[] = [];
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0.99);
+    const site: SiteState = {
+      id: "site-1",
+      type: "Shop",
+      isEnhanced: false,
+      isVisited: false,
+    };
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 200,
+      remainingDreamsignPool: [],
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "reroll",
+              basePrice: 50,
+              discountPercent: 0,
+              purchased: false,
+            },
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 0,
+              purchased: true,
+            },
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    const questContent = {
+      ...makeQuestContent(),
+      cardDatabase: new Map([
+        [101, makeCard(101)],
+        [102, makeCard(102)],
+        [103, makeCard(103)],
+      ]),
+    };
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={questContent}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.rerollShop(site, 0);
+    const updater = latestRoomTransactionUpdater();
+    const nextRoom = updater?.(session.room);
+    const runtime = nextRoom?.questState?.siteRuntime["site-1"];
+
+    expect(nextRoom?.questState?.essence).toBe(150);
+    expect(runtime?.kind).toBe("shop");
+    expect(runtime?.kind === "shop" ? runtime.rerollCount : null).toBe(1);
+    expect(runtime?.kind === "shop" ? runtime.slots[0] : null).toEqual({
+      itemType: "reroll",
+      basePrice: 75,
+      discountPercent: 0,
+      purchased: false,
+    });
+    expect(runtime?.kind === "shop" ? runtime.slots[1] : null).toEqual({
+      itemType: "card",
+      cardNumber: 101,
+      basePrice: 100,
+      discountPercent: 0,
+      purchased: true,
+    });
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "rerollShop",
+      source: "shop_reroll",
+      summary: {
+        siteId: "site-1",
+        slotIndex: 0,
+        rerollCost: 50,
+        rerollCount: 1,
       },
     });
 

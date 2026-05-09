@@ -6,10 +6,9 @@ import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
-import { logEvent } from "../logging";
 import {
-  generateSpecialtyShopInventory,
   effectivePrice,
+  runtimeSlotsToShopSlots,
   type ShopSlot,
 } from "../shop/shop-generator";
 
@@ -21,24 +20,15 @@ interface SpecialtyShopScreenProps {
 /** Renders the Specialty Shop site screen with 4 curated cards. */
 export function SpecialtyShopScreen({ site }: SpecialtyShopScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
-  const { essence, deck } = state;
-  const selectedPackageTides = state.resolvedPackage?.selectedTides ?? [];
-
-  const [slots, setSlots] = useState<ShopSlot[]>(() => {
-    const inventory = generateSpecialtyShopInventory(
-      cardDatabase,
-      deck,
-      selectedPackageTides,
-    );
-    if (site.isEnhanced) {
-      return inventory.map((s) => ({
-        ...s,
-        basePrice: 0,
-        discountPercent: 0,
-      }));
-    }
-    return inventory;
-  });
+  const { essence } = state;
+  const runtime = state.siteRuntime[site.id];
+  const slots = useMemo<ShopSlot[]>(
+    () =>
+      runtime?.kind === "shop"
+        ? runtimeSlotsToShopSlots(runtime.slots, cardDatabase)
+        : [],
+    [cardDatabase, runtime],
+  );
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
   const visibleCardOffers = useMemo(
     () =>
@@ -60,6 +50,12 @@ export function SpecialtyShopScreen({ site }: SpecialtyShopScreenProps) {
   );
 
   useEffect(() => {
+    if (runtime === undefined) {
+      mutations.ensureShopRuntime(site, true);
+    }
+  }, [mutations, runtime, site]);
+
+  useEffect(() => {
     mutations.setCardSourceDebug(
       cardSourceDebugState,
       "specialty_shop_cards_shown",
@@ -75,44 +71,28 @@ export function SpecialtyShopScreen({ site }: SpecialtyShopScreenProps) {
 
   const handleBuy = useCallback(
     (index: number) => {
-      const slot = slots[index];
-      if (slot.purchased || !slot.card) return;
-
-      const price = effectivePrice(slot);
-      if (price > essence && !site.isEnhanced) return;
-
-      if (price > 0) {
-        mutations.changeEssence(-price, "specialty_shop_purchase");
-      }
-
-      mutations.addCard(slot.card.cardNumber, "specialty_shop");
-
-      logEvent("shop_purchase", {
-        itemType: "card",
-        cardNumber: slot.card.cardNumber,
-        cardName: slot.card.name,
-        basePrice: slot.basePrice,
-        discountedPrice: price,
-        essenceRemaining: essence - price,
-        isSpecialtyShop: true,
-        isEnhanced: site.isEnhanced,
-      });
-
-      setSlots((prev) =>
-        prev.map((s, i) => (i === index ? { ...s, purchased: true } : s)),
-      );
+      mutations.buyShopSlot(site.id, index);
     },
-    [slots, essence, site.isEnhanced, mutations],
+    [mutations, site.id],
   );
 
   const handleLeave = useCallback(() => {
-    logEvent("site_completed", {
-      siteType: "SpecialtyShop",
-      outcome: "left",
-    });
-    mutations.markSiteVisited(site.id);
-    mutations.setScreen({ type: "dreamscape" });
+    mutations.completeSite(site.id, "specialty_shop_left");
   }, [site.id, mutations]);
+
+  if (runtime?.kind !== "shop") {
+    return (
+      <motion.div
+        className="flex min-h-full flex-col items-center justify-center px-4 py-6 md:px-8 md:py-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.4 }}
+      >
+        <p className="text-sm opacity-70">Opening shop...</p>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div

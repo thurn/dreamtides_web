@@ -30,7 +30,10 @@ import type {
   QuestFailureSummary,
   QuestState,
   RewardSiteRuntime,
+  RuntimeShopSlot,
   Screen,
+  ShopSiteRuntime,
+  SiteState,
   TransfigurationType,
 } from "../types/quest";
 import type { DraftState } from "../types/draft";
@@ -55,6 +58,12 @@ import {
 } from "./quest-state-actions";
 import { generateRewardSiteData } from "../rewards/reward-generator";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
+import {
+  generateShopInventory,
+  generateSpecialtyShopInventory,
+  rerollCost,
+  shopSlotsToRuntime,
+} from "../shop/shop-generator";
 
 const MAX_DREAMSIGNS = 12;
 
@@ -152,6 +161,14 @@ function randomIntInRange(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function runtimeSlotPrice(slot: {
+  basePrice: number;
+  discountPercent: number;
+}): number {
+  if (slot.discountPercent === 0) return slot.basePrice;
+  return Math.round(slot.basePrice * (1 - slot.discountPercent / 100));
+}
+
 function nextDeckEntryId(deck: readonly DeckEntry[]): string {
   const highest = deck.reduce((max, entry) => {
     const match = /^deck-(\d+)$/.exec(entry.entryId);
@@ -175,6 +192,23 @@ function arraysEqual<T>(
     left.length === right.length &&
     left.every((value, index) => Object.is(value, right[index]))
   );
+}
+
+function deckCardNumbersEqual(
+  left: readonly DeckEntry[],
+  rightCardNumbers: readonly number[],
+): boolean {
+  return arraysEqual(
+    left.map((entry) => entry.cardNumber),
+    rightCardNumbers,
+  );
+}
+
+function runtimeShopSlotsEqual(
+  left: readonly RuntimeShopSlot[],
+  right: readonly RuntimeShopSlot[],
+): boolean {
+  return JSON.stringify(left) === JSON.stringify(right);
 }
 
 function completeSiteAndReturnToDreamscape(
@@ -1064,6 +1098,360 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const ensureShopRuntime = useCallback(
+    (site: SiteState, specialtyOnly: boolean) => {
+      const current = currentRef.current;
+      const expectedRemainingDreamsignPool = [
+        ...current.state.remainingDreamsignPool,
+      ];
+      const expectedSelectedTides = [
+        ...(current.state.resolvedPackage?.selectedTides ?? []),
+      ];
+      const expectedDeckCardNumbers = current.state.deck.map(
+        (entry) => entry.cardNumber,
+      );
+      let runtime: ShopSiteRuntime | null = null;
+      let remainingDreamsignPool = expectedRemainingDreamsignPool;
+
+      if (current.state.siteRuntime[site.id] === undefined) {
+        if (specialtyOnly) {
+          const generated = generateSpecialtyShopInventory(
+            current.questContent.cardDatabase,
+            current.state.deck,
+            expectedSelectedTides,
+          );
+          const slots = site.isEnhanced
+            ? generated.map((slot) => ({
+              ...slot,
+              basePrice: 0,
+              discountPercent: 0,
+            }))
+            : generated;
+          runtime = {
+            kind: "shop",
+            slots: shopSlotsToRuntime(slots),
+            rerollCount: 0,
+            remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
+          };
+        } else {
+          const generated = generateShopInventory(
+            current.questContent.cardDatabase,
+            current.state.deck,
+            {
+              selectedPackageTides: expectedSelectedTides,
+              remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
+              dreamsignTemplates: current.questContent.dreamsignTemplates,
+            },
+          );
+          runtime = {
+            kind: "shop",
+            slots: shopSlotsToRuntime(generated.slots),
+            rerollCount: 0,
+            remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+          };
+          remainingDreamsignPool = generated.remainingDreamsignPoolIds;
+        }
+      }
+
+      const now = new Date().toISOString();
+      const actionId = runtime === null ? null : crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          if (room.questState.siteRuntime[site.id] !== undefined) {
+            return room;
+          }
+          if (
+            runtime === null ||
+            actionId === null ||
+            !arraysEqual(
+              room.questState.remainingDreamsignPool,
+              expectedRemainingDreamsignPool,
+            ) ||
+            !arraysEqual(
+              room.questState.resolvedPackage?.selectedTides ?? [],
+              expectedSelectedTides,
+            ) ||
+            !deckCardNumbersEqual(room.questState.deck, expectedDeckCardNumbers)
+          ) {
+            return room;
+          }
+
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              remainingDreamsignPool,
+              siteRuntime: {
+                ...room.questState.siteRuntime,
+                [site.id]: runtime,
+              },
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: {
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "ensureShopRuntime",
+                source: "site_reveal",
+                summary: {
+                  siteId: site.id,
+                  specialtyOnly,
+                  slotCount: runtime.slots.length,
+                },
+              },
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const buyShopSlot = useCallback((siteId: string, slotIndex: number) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const runtime = room.questState.siteRuntime[siteId];
+        if (runtime === undefined || runtime.kind !== "shop") {
+          return room;
+        }
+        const slot = runtime.slots[slotIndex];
+        if (
+          slot === undefined ||
+          slot.purchased ||
+          slot.itemType === "reroll"
+        ) {
+          return room;
+        }
+
+        const price = runtimeSlotPrice(slot);
+        if (price > room.questState.essence) {
+          return room;
+        }
+        if (
+          slot.itemType === "dreamsign" &&
+          room.questState.dreamsigns.length >= MAX_DREAMSIGNS
+        ) {
+          return room;
+        }
+
+        let next: QuestState = {
+          ...room.questState,
+          essence: room.questState.essence - price,
+        };
+        const summary: Record<string, unknown> = {
+          siteId,
+          slotIndex,
+          itemType: slot.itemType,
+          basePrice: slot.basePrice,
+          discountedPrice: price,
+        };
+
+        if (slot.itemType === "card") {
+          next = {
+            ...next,
+            deck: [
+              ...next.deck,
+              {
+                entryId: nextDeckEntryId(next.deck),
+                cardNumber: slot.cardNumber,
+                transfiguration: null,
+                isBane: false,
+              },
+            ],
+          };
+          summary.cardNumber = slot.cardNumber;
+        } else {
+          next = {
+            ...next,
+            dreamsigns: [...next.dreamsigns, slot.dreamsign],
+          };
+          summary.dreamsignId = slot.dreamsign.id ?? null;
+          summary.dreamsignName = slot.dreamsign.name;
+        }
+
+        next = {
+          ...next,
+          siteRuntime: {
+            ...next.siteRuntime,
+            [siteId]: {
+              ...runtime,
+              slots: runtime.slots.map((candidate, index) =>
+                index === slotIndex
+                  ? { ...candidate, purchased: true }
+                  : candidate,
+              ),
+            },
+          },
+        };
+
+        return {
+          ...room,
+          questState: next,
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: {
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "buyShopSlot",
+              source: "shop_purchase",
+              summary,
+            },
+          },
+        };
+      },
+    });
+  }, []);
+
+  const rerollShop = useCallback((site: SiteState, slotIndex: number) => {
+    const current = currentRef.current;
+    const expectedRuntime = current.state.siteRuntime[site.id];
+    if (expectedRuntime === undefined || expectedRuntime.kind !== "shop") {
+      return;
+    }
+    const expectedSlot = expectedRuntime.slots[slotIndex];
+    if (
+      expectedSlot === undefined ||
+      expectedSlot.itemType !== "reroll" ||
+      expectedSlot.purchased
+    ) {
+      return;
+    }
+
+    const expectedEssence = current.state.essence;
+    const cost = rerollCost(expectedRuntime.rerollCount, site.isEnhanced);
+    if (cost > expectedEssence) {
+      return;
+    }
+    const expectedSelectedTides = [
+      ...(current.state.resolvedPackage?.selectedTides ?? []),
+    ];
+    const expectedDeckCardNumbers = current.state.deck.map(
+      (entry) => entry.cardNumber,
+    );
+    const generated = generateShopInventory(
+      current.questContent.cardDatabase,
+      current.state.deck,
+      {
+        selectedPackageTides: expectedSelectedTides,
+        remainingDreamsignPoolIds: expectedRuntime.remainingDreamsignPoolIds,
+        dreamsignTemplates: current.questContent.dreamsignTemplates,
+      },
+    );
+    const replacements = shopSlotsToRuntime(
+      generated.slots.filter((candidate) => candidate.itemType !== "reroll"),
+    );
+    let replacementIndex = 0;
+    const rerollCount = expectedRuntime.rerollCount + 1;
+    const slots = expectedRuntime.slots.map((candidate, index) => {
+      if (candidate.purchased) return candidate;
+      if (index === slotIndex) {
+        return {
+          ...candidate,
+          basePrice: rerollCost(rerollCount, site.isEnhanced),
+        };
+      }
+      if (candidate.itemType === "reroll") return candidate;
+      const replacement = replacements[replacementIndex];
+      replacementIndex += 1;
+      return replacement ?? candidate;
+    });
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const runtime = room.questState.siteRuntime[site.id];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "shop" ||
+          runtime.rerollCount !== expectedRuntime.rerollCount ||
+          room.questState.essence !== expectedEssence ||
+          !arraysEqual(
+            runtime.remainingDreamsignPoolIds,
+            expectedRuntime.remainingDreamsignPoolIds,
+          ) ||
+          !runtimeShopSlotsEqual(runtime.slots, expectedRuntime.slots) ||
+          !arraysEqual(
+            room.questState.remainingDreamsignPool,
+            expectedRuntime.remainingDreamsignPoolIds,
+          ) ||
+          !arraysEqual(
+            room.questState.resolvedPackage?.selectedTides ?? [],
+            expectedSelectedTides,
+          ) ||
+          !deckCardNumbersEqual(room.questState.deck, expectedDeckCardNumbers)
+        ) {
+          return room;
+        }
+
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            essence: room.questState.essence - cost,
+            remainingDreamsignPool: generated.remainingDreamsignPoolIds,
+            siteRuntime: {
+              ...room.questState.siteRuntime,
+              [site.id]: {
+                ...runtime,
+                slots,
+                rerollCount,
+                remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+              },
+            },
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: {
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "rerollShop",
+              source: "shop_reroll",
+              summary: {
+                siteId: site.id,
+                slotIndex,
+                rerollCost: cost,
+                rerollCount,
+              },
+            },
+          },
+        };
+      },
+    });
+  }, []);
+
   const mutations = useMemo<QuestMutations>(
     () => ({
       changeEssence,
@@ -1075,6 +1463,9 @@ export function MultiplayerQuestProvider({
       acceptDreamsignOffer,
       ensureEssenceSiteRuntime,
       acceptEssenceSite,
+      ensureShopRuntime,
+      buyShopSlot,
+      rerollShop,
       pickDraftCard,
       addCard: (_cardNumber: number, _source: string) => {
         unavailableMutation("addCard");
@@ -1118,6 +1509,7 @@ export function MultiplayerQuestProvider({
     }),
     [
       addDreamsign,
+      buyShopSlot,
       changeEssence,
       completeSite,
       ensureRewardSiteRuntime,
@@ -1126,7 +1518,9 @@ export function MultiplayerQuestProvider({
       acceptDreamsignOffer,
       ensureEssenceSiteRuntime,
       acceptEssenceSite,
+      ensureShopRuntime,
       pickDraftCard,
+      rerollShop,
       removeDreamsign,
       resetQuest,
       setCardSourceDebug,

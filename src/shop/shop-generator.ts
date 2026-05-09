@@ -1,6 +1,6 @@
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate, PackageTideId } from "../types/content";
-import type { DeckEntry, Dreamsign } from "../types/quest";
+import type { DeckEntry, Dreamsign, RuntimeShopSlot } from "../types/quest";
 
 import { isStarterCard } from "../data/card-database";
 import { countPackageOverlap } from "../data/quest-content";
@@ -64,6 +64,85 @@ export function effectivePrice(slot: ShopSlot): number {
 export function rerollCost(rerollCount: number, isEnhanced: boolean): number {
   if (isEnhanced) return 0;
   return REROLL_BASE_COST + REROLL_INCREMENT * rerollCount;
+}
+
+export function shopSlotsToRuntime(
+  slots: readonly ShopSlot[],
+): RuntimeShopSlot[] {
+  return slots.map((slot) => {
+    const base = {
+      basePrice: slot.basePrice,
+      discountPercent: slot.discountPercent,
+      purchased: slot.purchased,
+    };
+
+    if (slot.itemType === "card") {
+      if (slot.card === null) {
+        throw new Error("Cannot convert a card shop slot without a card");
+      }
+      return {
+        itemType: "card",
+        cardNumber: slot.card.cardNumber,
+        ...base,
+      };
+    }
+
+    if (slot.itemType === "dreamsign") {
+      if (slot.dreamsign === null) {
+        throw new Error(
+          "Cannot convert a Dreamsign shop slot without a Dreamsign",
+        );
+      }
+      return {
+        itemType: "dreamsign",
+        dreamsign: slot.dreamsign,
+        ...base,
+      };
+    }
+
+    return {
+      itemType: "reroll",
+      ...base,
+    };
+  });
+}
+
+export function runtimeSlotsToShopSlots(
+  slots: readonly RuntimeShopSlot[],
+  cardDatabase: ReadonlyMap<number, CardData>,
+): ShopSlot[] {
+  return slots.map((slot) => {
+    const base = {
+      basePrice: slot.basePrice,
+      discountPercent: slot.discountPercent,
+      purchased: slot.purchased,
+    };
+
+    if (slot.itemType === "card") {
+      return {
+        itemType: "card",
+        card: cardDatabase.get(slot.cardNumber) ?? null,
+        dreamsign: null,
+        ...base,
+      };
+    }
+
+    if (slot.itemType === "dreamsign") {
+      return {
+        itemType: "dreamsign",
+        card: null,
+        dreamsign: slot.dreamsign,
+        ...base,
+      };
+    }
+
+    return {
+      itemType: "reroll",
+      card: null,
+      dreamsign: null,
+      ...base,
+    };
+  });
 }
 
 function selectWeightedCard(
