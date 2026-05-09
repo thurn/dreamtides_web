@@ -130,7 +130,7 @@ describe("room service", () => {
     const listener = vi.fn();
     const room = {
       metadata: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         createdAt: timestamp,
         updatedAt: timestamp,
       },
@@ -338,7 +338,7 @@ describe("room service", () => {
   it("normalizes RTDB-stripped fields before invoking transaction updaters", async () => {
     const stripped = {
       metadata: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         createdAt: timestamp,
         updatedAt: timestamp,
       },
