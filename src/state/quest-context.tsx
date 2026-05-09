@@ -8,11 +8,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import {
-  createPlayableBattleCache,
-  PlayableBattleCacheProvider,
-  type PlayableBattleCache,
-} from "../components/playable-battle-cache";
 import type { QuestContent } from "../data/quest-content";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
@@ -697,14 +692,6 @@ export function QuestProvider({
   // snapshot so newly-added cards continue from the right counter rather than
   // colliding with restored ids.
   const entryIdCounter = useRef(deriveEntryIdCounter(state.deck));
-  // Scoped playable-battle bootstrap cache (bug-013). Held per `QuestProvider`
-  // instance so dev overlays, embedded demos, and parallel tests cannot leak
-  // frozen `BattleInit` snapshots across providers.
-  const playableBattleCacheRef = useRef<PlayableBattleCache | null>(null);
-  if (playableBattleCacheRef.current === null) {
-    playableBattleCacheRef.current = createPlayableBattleCache();
-  }
-  const playableBattleCache = playableBattleCacheRef.current;
 
   // FIND-01-2: write through to sessionStorage on every state change so a
   // mid-run reload (F5, accidental refresh, crash recovery) lands back on the
@@ -2083,16 +2070,14 @@ export function QuestProvider({
 
   const resetQuest = useCallback(() => {
     // Ordering invariant: `resetLog()` clears the ring buffer before any
-    // dependent reset hooks run so downstream subscribers (bridge,
-    // cache, queries) observe the cleared log. `resetBattleCompletionBridge`
-    // and `playableBattleCache.reset` are intentionally silent today — if
-    // either ever starts emitting a reset event, either reorder this so
-    // `resetLog()` happens last, or log `quest_reset` before wiping so the
-    // reset sequence stays visible.
+    // dependent reset hooks run so downstream subscribers (bridge, queries)
+    // observe the cleared log. `resetBattleCompletionBridge` is intentionally
+    // silent today — if it ever starts emitting a reset event, either reorder
+    // this so `resetLog()` happens last, or log `quest_reset` before wiping so
+    // the reset sequence stays visible.
     resetLog();
     entryIdCounter.current = 0;
     resetBattleCompletionBridge();
-    playableBattleCache.reset();
     clearPersistedQuestState();
     logEvent("quest_reset", {
       remainingDreamsignPoolSize: 0,
@@ -2100,7 +2085,7 @@ export function QuestProvider({
       hasDraftState: false,
     });
     setState(createDefaultState());
-  }, [playableBattleCache]);
+  }, []);
 
   const mutations = useMemo<QuestMutations>(
     () => ({
@@ -2188,13 +2173,7 @@ export function QuestProvider({
     [state, mutations, cardDatabase, questContent],
   );
 
-  return (
-    <QuestContextProvider value={value}>
-      <PlayableBattleCacheProvider cache={playableBattleCache}>
-        {children}
-      </PlayableBattleCacheProvider>
-    </QuestContextProvider>
-  );
+  return <QuestContextProvider value={value}>{children}</QuestContextProvider>;
 }
 
 /** Hook to access the quest state and mutation functions. */

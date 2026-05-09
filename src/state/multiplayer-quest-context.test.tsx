@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act, type ReactElement, type ReactNode } from "react";
+import { act, type ReactElement } from "react";
 import type { Database } from "firebase/database";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -27,12 +27,6 @@ const roomServiceMocks = vi.hoisted(() => ({
   writeRoomUpdate: vi.fn(),
 }));
 
-const playableBattleCacheMocks = vi.hoisted(() => ({
-  reset: vi.fn(),
-  get: vi.fn(),
-  set: vi.fn(),
-}));
-
 const bridgeMocks = vi.hoisted(() => ({
   resetBattleCompletionBridge: vi.fn(),
 }));
@@ -45,13 +39,6 @@ const loggingMocks = vi.hoisted(() => ({
 vi.mock("../multiplayer/room-service", () => ({
   runRoomTransaction: roomServiceMocks.runRoomTransaction,
   writeRoomUpdate: roomServiceMocks.writeRoomUpdate,
-}));
-
-vi.mock("../components/playable-battle-cache", () => ({
-  createPlayableBattleCache: vi.fn(() => playableBattleCacheMocks),
-  PlayableBattleCacheProvider: ({ children }: { children: ReactNode }) => (
-    <>{children}</>
-  ),
 }));
 
 vi.mock("../battle/integration/battle-completion-bridge", () => ({
@@ -413,7 +400,6 @@ describe("MultiplayerQuestProvider", () => {
 
     expect(loggingMocks.resetLog).toHaveBeenCalledTimes(1);
     expect(bridgeMocks.resetBattleCompletionBridge).toHaveBeenCalledTimes(1);
-    expect(playableBattleCacheMocks.reset).toHaveBeenCalledTimes(1);
     expect(roomServiceMocks.writeRoomUpdate).toHaveBeenCalledWith(
       database,
       "ab12cd",

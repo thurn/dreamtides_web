@@ -1,10 +1,5 @@
 import { useCallback, useMemo, useRef, type ReactNode } from "react";
 import type { Database } from "firebase/database";
-import {
-  createPlayableBattleCache,
-  PlayableBattleCacheProvider,
-  type PlayableBattleCache,
-} from "../components/playable-battle-cache";
 import { resetBattleCompletionBridge } from "../battle/integration/battle-completion-bridge";
 import type { QuestContent } from "../data/quest-content";
 import { resetLog } from "../logging";
@@ -777,26 +772,22 @@ export function MultiplayerQuestProvider({
   questContent,
 }: MultiplayerQuestProviderProps) {
   const state = session.room.questState ?? createDefaultState();
-  const playableBattleCache = useMemo(() => createPlayableBattleCache(), []);
   const currentRef = useRef<{
     database: Database;
     session: RoomSession;
     questContent: QuestContent;
     state: QuestState;
-    playableBattleCache: PlayableBattleCache;
   }>({
     database,
     session,
     questContent,
     state,
-    playableBattleCache,
   });
   currentRef.current = {
     database,
     session,
     questContent,
     state,
-    playableBattleCache,
   };
 
   const changeEssence = useCallback(
@@ -1026,7 +1017,6 @@ export function MultiplayerQuestProvider({
     const current = currentRef.current;
     resetLog();
     resetBattleCompletionBridge();
-    current.playableBattleCache.reset();
     writeWholeQuestState({
       database: current.database,
       roomId: current.session.roomId,
@@ -2926,11 +2916,5 @@ export function MultiplayerQuestProvider({
     [mutations, questContent, state],
   );
 
-  return (
-    <QuestContextProvider value={value}>
-      <PlayableBattleCacheProvider cache={playableBattleCache}>
-        {children}
-      </PlayableBattleCacheProvider>
-    </QuestContextProvider>
-  );
+  return <QuestContextProvider value={value}>{children}</QuestContextProvider>;
 }
