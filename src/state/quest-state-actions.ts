@@ -4,7 +4,7 @@ import type { QuestContent } from "../data/quest-content";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import {
   createInitialDraftState,
-  processPlayerPick,
+  processPlayerPickWithoutLogging,
 } from "../draft/draft-engine";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
@@ -15,6 +15,20 @@ import type {
   Screen,
 } from "../types/quest";
 import { deriveEntryIdCounter } from "./deck-entry-ids";
+
+export interface PreparedDraftPick {
+  expected: {
+    siteId: string;
+    cardNumber: number;
+    pickNumber: number;
+    currentOffer: number[];
+    deck: DeckEntry[];
+  };
+  next: {
+    deck: DeckEntry[];
+    draftState: QuestState["draftState"];
+  };
+}
 
 export function nextDeckEntryId(deck: readonly DeckEntry[]): string {
   return `deck-${String(deriveEntryIdCounter(deck) + 1)}`;
@@ -69,9 +83,102 @@ export function pickDraftCardInQuestState({
   }
 
   const draftState = structuredClone(prev.draftState);
-  processPlayerPick(cardNumber, draftState, cardDatabase);
+  processPlayerPickWithoutLogging(cardNumber, draftState, cardDatabase);
 
   return addCardToQuestState({ ...prev, draftState }, cardNumber, false);
+}
+
+export function prepareDraftCardPickInQuestState({
+  prev,
+  siteId,
+  cardNumber,
+  cardDatabase,
+}: {
+  prev: QuestState;
+  siteId: string;
+  cardNumber: number;
+  cardDatabase: Map<number, CardData>;
+}): PreparedDraftPick {
+  if (prev.draftState === null) {
+    throw new Error("Draft state is unavailable.");
+  }
+
+  const expected = {
+    siteId,
+    cardNumber,
+    pickNumber: prev.draftState.pickNumber,
+    currentOffer: [...prev.draftState.currentOffer],
+    deck: structuredClone(prev.deck),
+  };
+  const next = pickDraftCardInQuestState({
+    prev,
+    siteId,
+    cardNumber,
+    cardDatabase,
+  });
+
+  return {
+    expected,
+    next: {
+      deck: next.deck,
+      draftState: next.draftState,
+    },
+  };
+}
+
+function arraysEqual<T>(left: readonly T[], right: readonly T[]): boolean {
+  return (
+    left.length === right.length
+    && left.every((value, index) => Object.is(value, right[index]))
+  );
+}
+
+function deckEntriesEqual(
+  left: readonly DeckEntry[],
+  right: readonly DeckEntry[],
+): boolean {
+  return (
+    left.length === right.length
+    && left.every((entry, index) => {
+      const other = right[index];
+      return (
+        other !== undefined
+        && entry.entryId === other.entryId
+        && entry.cardNumber === other.cardNumber
+        && entry.transfiguration === other.transfiguration
+        && entry.isBane === other.isBane
+      );
+    })
+  );
+}
+
+export function commitPreparedDraftCardPickInQuestState({
+  prev,
+  prepared,
+}: {
+  prev: QuestState;
+  prepared: PreparedDraftPick;
+}): QuestState | null {
+  const draftState = prev.draftState;
+  if (draftState === null) {
+    return null;
+  }
+
+  if (
+    draftState.activeSiteId !== prepared.expected.siteId
+    || draftState.pickNumber !== prepared.expected.pickNumber
+    || !arraysEqual(draftState.currentOffer, prepared.expected.currentOffer)
+    || !draftState.currentOffer.includes(prepared.expected.cardNumber)
+    || !deckEntriesEqual(prev.deck, prepared.expected.deck)
+  ) {
+    return null;
+  }
+
+  return {
+    ...prev,
+    deck: prepared.next.deck,
+    draftState: prepared.next.draftState,
+  };
 }
 
 export function setQuestScreen(

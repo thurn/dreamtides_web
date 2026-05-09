@@ -402,6 +402,88 @@ describe("MultiplayerQuestProvider", () => {
 
   it("picks a draft card through a room transaction", () => {
     const captured: QuestContextValue[] = [];
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);
+    const cardDatabase = new Map<number, CardData>(
+      [101, 102, 103, 104, 201, 202, 203, 204].map((cardNumber) => [
+        cardNumber,
+        makeCard(cardNumber),
+      ]),
+    );
+    const questContent = {
+      ...makeQuestContent(),
+      cardDatabase,
+    };
+    const questState: QuestState = {
+      ...createDefaultState(),
+      draftState: {
+        remainingCopiesByCard: {
+          "201": 1,
+          "202": 1,
+          "203": 1,
+          "204": 1,
+        },
+        currentOffer: [101, 102, 103, 104],
+        activeSiteId: "site-1",
+        pickNumber: 1,
+        sitePicksCompleted: 0,
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={questContent}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.pickDraftCard("site-1", 101);
+    const randomCallsAfterPrepare = randomSpy.mock.calls.length;
+
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+    expect(randomCallsAfterPrepare).toBeGreaterThan(0);
+
+    const updater = roomServiceMocks.runRoomTransaction.mock.calls[0]?.[2] as
+      | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
+      | undefined;
+    const nextRoom = updater?.(session.room);
+    const nextRoomFromRetry = updater?.(session.room);
+
+    expect(nextRoom?.questState?.deck).toEqual([
+      {
+        entryId: "deck-1",
+        cardNumber: 101,
+        transfiguration: null,
+        isBane: false,
+      },
+    ]);
+    expect(nextRoom?.questState?.draftState?.pickNumber).toBe(2);
+    expect(nextRoom?.questState?.draftState?.sitePicksCompleted).toBe(1);
+    expect(nextRoom?.questState?.draftState?.currentOffer).not.toEqual([
+      101,
+      102,
+      103,
+      104,
+    ]);
+    expect(nextRoomFromRetry).toEqual(nextRoom);
+    expect(randomSpy).toHaveBeenCalledTimes(randomCallsAfterPrepare);
+    expect(loggingMocks.logEvent).not.toHaveBeenCalled();
+    expect(randomUUIDMock).toHaveBeenCalledTimes(1);
+    expect(nextRoom?.metadata.updatedAt).toEqual(expect.any(String));
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "pickDraftCard",
+      source: "draft_pick",
+      summary: { siteId: "site-1", cardNumber: 101 },
+    });
+    randomSpy.mockRestore();
+  });
+
+  it("rejects a stale draft pick without appending a pick action", () => {
+    const captured: QuestContextValue[] = [];
     const cardDatabase = new Map<number, CardData>(
       [101, 102, 103, 104, 201, 202, 203, 204].map((cardNumber) => [
         cardNumber,
@@ -440,37 +522,26 @@ describe("MultiplayerQuestProvider", () => {
 
     captured[captured.length - 1]?.mutations.pickDraftCard("site-1", 101);
 
-    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
-
     const updater = roomServiceMocks.runRoomTransaction.mock.calls[0]?.[2] as
       | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
       | undefined;
-    const nextRoom = updater?.(session.room);
-
-    expect(nextRoom?.questState?.deck).toEqual([
-      {
-        entryId: "deck-1",
-        cardNumber: 101,
-        transfiguration: null,
-        isBane: false,
+    const staleRoom: MultiplayerRoom = {
+      ...session.room,
+      questState: {
+        ...questState,
+        draftState: {
+          ...questState.draftState!,
+          currentOffer: [102, 103, 104, 201],
+          pickNumber: 2,
+        },
       },
-    ]);
-    expect(nextRoom?.questState?.draftState?.pickNumber).toBe(2);
-    expect(nextRoom?.questState?.draftState?.sitePicksCompleted).toBe(1);
-    expect(nextRoom?.questState?.draftState?.currentOffer).not.toEqual([
-      101,
-      102,
-      103,
-      104,
-    ]);
-    expect(nextRoom?.metadata.updatedAt).toEqual(expect.any(String));
-    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
-      timestamp: nextRoom?.metadata.updatedAt,
-      actorId: "client-1",
-      action: "pickDraftCard",
-      source: "draft_pick",
-      summary: { siteId: "site-1", cardNumber: 101 },
-    });
+      actionLog: {},
+    };
+    const nextRoom = updater?.(staleRoom);
+
+    expect(nextRoom).toBe(staleRoom);
+    expect(nextRoom?.actionLog).toEqual({});
+    expect(loggingMocks.logEvent).not.toHaveBeenCalled();
   });
 
   it("completes a site through a room transaction", () => {

@@ -42,8 +42,9 @@ import {
 } from "./quest-context";
 import {
   changeQuestEssence,
+  commitPreparedDraftCardPickInQuestState,
   completeQuestSite,
-  pickDraftCardInQuestState,
+  prepareDraftCardPickInQuestState,
   setQuestScreen,
   startQuestFromDreamcaller,
   updateQuestAtlas,
@@ -473,6 +474,21 @@ export function MultiplayerQuestProvider({
 
   const pickDraftCard = useCallback((siteId: string, cardNumber: number) => {
     const current = currentRef.current;
+    let prepared: ReturnType<typeof prepareDraftCardPickInQuestState>;
+    try {
+      prepared = prepareDraftCardPickInQuestState({
+        prev: current.state,
+        siteId,
+        cardNumber,
+        cardDatabase: current.questContent.cardDatabase,
+      });
+    } catch {
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
     writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
@@ -481,20 +497,13 @@ export function MultiplayerQuestProvider({
           return room ?? undefined;
         }
 
-        let next: QuestState;
-        try {
-          next = pickDraftCardInQuestState({
-            prev: room.questState,
-            siteId,
-            cardNumber,
-            cardDatabase: current.questContent.cardDatabase,
-          });
-        } catch {
-          return room ?? undefined;
+        const next = commitPreparedDraftCardPickInQuestState({
+          prev: room.questState,
+          prepared,
+        });
+        if (next === null) {
+          return room;
         }
-
-        const now = new Date().toISOString();
-        const actionId = crypto.randomUUID();
 
         return {
           ...room,

@@ -4,7 +4,6 @@ import { act } from "react";
 import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { processPlayerPick } from "../draft/draft-engine";
 import type { QuestMutations } from "../state/quest-context";
 import type { CardData } from "../types/cards";
 import type { DraftState } from "../types/draft";
@@ -496,11 +495,12 @@ describe("DraftSiteScreen", () => {
     const cardDatabase = makeCardDatabase();
     setQuestContext(makeState(), mutations, cardDatabase);
 
-    mutations.setDraftState = vi.fn((draftState: DraftState) => {
-      currentState = { ...currentState, draftState };
-      rerenderCurrent();
-    });
-    mutations.addCard = vi.fn((cardNumber: number) => {
+    mutations.pickDraftCard = vi.fn((siteId: string, cardNumber: number) => {
+      const draftState = currentState.draftState;
+      if (draftState === null || draftState.activeSiteId !== siteId) {
+        return;
+      }
+
       currentState = {
         ...currentState,
         deck: [
@@ -512,19 +512,15 @@ describe("DraftSiteScreen", () => {
             isBane: false,
           },
         ],
+        draftState: {
+          ...draftState,
+          remainingCopiesByCard: {},
+          currentOffer: [201, 202, 203, 204],
+          pickNumber: draftState.pickNumber + 1,
+          sitePicksCompleted: draftState.sitePicksCompleted + 1,
+        },
       };
       rerenderCurrent();
-    });
-    mutations.pickDraftCard = vi.fn((siteId: string, cardNumber: number) => {
-      const draftState = currentState.draftState;
-      if (draftState === null || draftState.activeSiteId !== siteId) {
-        return;
-      }
-
-      const cloned = structuredClone(draftState);
-      processPlayerPick(cardNumber, cloned, cardDatabase);
-      mutations.setDraftState(cloned, "draft_pick");
-      mutations.addCard(cardNumber, "draft_pick");
     });
 
     const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
@@ -536,6 +532,8 @@ describe("DraftSiteScreen", () => {
     });
 
     expect(mutations.pickDraftCard).toHaveBeenCalledWith("site-1", 101);
+    expect(mutations.setDraftState).not.toHaveBeenCalled();
+    expect(mutations.addCard).not.toHaveBeenCalled();
     expect(container.querySelector('[data-testid="draft-flying-card"]')).not.toBeNull();
     expect(container.textContent).toContain("Deck (2)");
     expect(container.textContent).toContain("Arc Runner");

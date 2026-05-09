@@ -12,9 +12,11 @@ import { createDefaultState } from "./quest-context";
 import {
   addCardToQuestState,
   changeQuestEssence,
+  commitPreparedDraftCardPickInQuestState,
   completeQuestSite,
   nextDeckEntryId,
   pickDraftCardInQuestState,
+  prepareDraftCardPickInQuestState,
   setQuestScreen,
   startQuestFromDreamcaller,
   updateQuestAtlas,
@@ -247,7 +249,52 @@ describe("quest state actions", () => {
     expect(next.draftState?.currentOffer).toHaveLength(4);
     expect(prev.draftState?.pickNumber).toBe(1);
     expect(prev.deck).toEqual([]);
-    vi.mocked(console.log).mockClear();
+    expect(console.log).not.toHaveBeenCalled();
+  });
+
+  it("commits only a prepared draft pick that matches the expected offer", () => {
+    const cardDatabase = new Map<number, CardData>(
+      [101, 102, 103, 104, 201, 202, 203, 204].map((cardNumber) => [
+        cardNumber,
+        makeCard(cardNumber),
+      ]),
+    );
+    const prev: QuestState = {
+      ...createDefaultState(),
+      draftState: {
+        remainingCopiesByCard: {
+          "201": 1,
+          "202": 1,
+          "203": 1,
+          "204": 1,
+        },
+        currentOffer: [101, 102, 103, 104],
+        activeSiteId: "site-1",
+        pickNumber: 1,
+        sitePicksCompleted: 0,
+      },
+    };
+    const prepared = prepareDraftCardPickInQuestState({
+      prev,
+      siteId: "site-1",
+      cardNumber: 101,
+      cardDatabase,
+    });
+    const stale: QuestState = {
+      ...prev,
+      draftState: {
+        ...prev.draftState!,
+        currentOffer: [102, 103, 104, 201],
+      },
+    };
+
+    expect(
+      commitPreparedDraftCardPickInQuestState({ prev, prepared })?.deck,
+    ).toEqual(prepared.next.deck);
+    expect(
+      commitPreparedDraftCardPickInQuestState({ prev: stale, prepared }),
+    ).toBeNull();
+    expect(console.log).not.toHaveBeenCalled();
   });
 
   it("starts a quest from a Dreamcaller in one state transition", () => {

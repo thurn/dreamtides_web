@@ -6,9 +6,9 @@ import { CardOverlay } from "../components/CardOverlay";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
+  countRemainingUniqueCards,
   enterDraftSite,
   getCurrentOffer,
-  processPlayerPick,
   completeDraftSite,
   SITE_PICKS,
 } from "../draft/draft-engine";
@@ -333,6 +333,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
       .map((num) => cardDatabase.get(num))
       .filter((c): c is CardData => c !== undefined);
     setCurrentOfferCards(sortCardsForDisplay(offerCards));
+    setOfferKey((prev) => prev + 1);
     setIsComplete(
       state.draftState.activeSiteId === siteId
       && state.draftState.currentOffer.length === 0
@@ -416,17 +417,6 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     pendingPickedCardNumberRef.current = null;
   }, [showDeckSidebar, state.deck]);
 
-  // Resolve the current offer from draft state using a neutral display order.
-  const refreshOffer = useCallback(() => {
-    const ds = draftStateRef.current;
-    if (!ds) return;
-    const cards = getCurrentOffer(ds)
-      .map((num) => cardDatabase.get(num))
-      .filter((c): c is CardData => c !== undefined);
-    setCurrentOfferCards(sortCardsForDisplay(cards));
-    setOfferKey((prev) => prev + 1);
-  }, [cardDatabase]);
-
   const handleCardPick = useCallback(
     (cardNumber: number) => {
       if (pickPhase !== "idle") return;
@@ -467,34 +457,37 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
       setTimeout(() => {
         setPickPhase("waiting");
 
-        const cloned = JSON.parse(JSON.stringify(ds)) as DraftState;
         const nextDraftedCardNumbers = [...draftedCardNumbers, cardNumber];
-        const siteComplete = processPlayerPick(
-          cardNumber,
-          cloned,
-          cardDatabase,
-        );
-        draftStateRef.current = cloned;
+        const sitePicksCompleted = ds.sitePicksCompleted + 1;
+        const siteComplete =
+          sitePicksCompleted >= SITE_PICKS
+          || countRemainingUniqueCards(ds.remainingCopiesByCard) < 4;
         mutations.pickDraftCard(siteId, cardNumber);
 
         if (siteComplete) {
-          completeDraftSite(cloned, nextDraftedCardNumbers);
+          completeDraftSite(
+            {
+              ...ds,
+              currentOffer: [],
+              pickNumber: ds.pickNumber + 1,
+              sitePicksCompleted,
+            },
+            nextDraftedCardNumbers,
+          );
           setTimeout(() => {
             setIsComplete(true);
             setPickPhase("idle");
             setPickedCardNumber(null);
           }, NEXT_PACK_DELAY);
         } else {
-          // Show the next offer after a brief pause.
           setTimeout(() => {
-            refreshOffer();
             setPickPhase("idle");
             setPickedCardNumber(null);
           }, NEXT_PACK_DELAY);
         }
       }, 300);
     },
-    [pickPhase, draftedCardNumbers, cardDatabase, mutations, refreshOffer],
+    [pickPhase, draftedCardNumbers, mutations, siteId],
   );
 
   const handleCardInspect = useCallback(

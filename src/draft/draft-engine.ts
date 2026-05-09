@@ -89,6 +89,7 @@ function spendShownOffer(
 function revealOffer(
   state: DraftState,
   config: DraftConfig,
+  options: { logEvents: boolean } = { logEvents: true },
 ): boolean {
   const offer = buildOffer({
     remainingCopiesByCard: state.remainingCopiesByCard,
@@ -102,12 +103,14 @@ function revealOffer(
   }
 
   spendShownOffer(state.remainingCopiesByCard, offer);
-  logEvent("draft_offer_revealed", {
-    pickNumber: state.pickNumber,
-    offerCards: offer,
-    poolRemaining: countRemainingCards(state.remainingCopiesByCard),
-    uniqueCardsRemaining: countRemainingUniqueCards(state.remainingCopiesByCard),
-  });
+  if (options.logEvents) {
+    logEvent("draft_offer_revealed", {
+      pickNumber: state.pickNumber,
+      offerCards: offer,
+      poolRemaining: countRemainingCards(state.remainingCopiesByCard),
+      uniqueCardsRemaining: countRemainingUniqueCards(state.remainingCopiesByCard),
+    });
+  }
   return true;
 }
 
@@ -254,11 +257,12 @@ export function getCurrentOffer(state: DraftState): number[] {
  * Process a player pick. The shown cards are spent from the fixed pool.
  * Returns whether the site visit is complete.
  */
-export function processPlayerPick(
+function processPlayerPickInternal(
   cardNumber: number,
   state: DraftState,
   cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
+  options: { logEvents: boolean },
 ): boolean {
   const currentOffer = [...state.currentOffer];
   if (!currentOffer.includes(cardNumber)) {
@@ -269,16 +273,18 @@ export function processPlayerPick(
 
   const card = cardDatabase.get(cardNumber);
 
-  logEvent("draft_pick_player", {
-    siteId: state.activeSiteId,
-    pickNumber: state.pickNumber,
-    cardNumber,
-    cardName: card?.name ?? "Unknown",
-    cardTides: card?.tides ?? [],
-    offerCards: currentOffer,
-    poolRemaining: countRemainingCards(state.remainingCopiesByCard),
-    uniqueCardsRemaining: countRemainingUniqueCards(state.remainingCopiesByCard),
-  });
+  if (options.logEvents) {
+    logEvent("draft_pick_player", {
+      siteId: state.activeSiteId,
+      pickNumber: state.pickNumber,
+      cardNumber,
+      cardName: card?.name ?? "Unknown",
+      cardTides: card?.tides ?? [],
+      offerCards: currentOffer,
+      poolRemaining: countRemainingCards(state.remainingCopiesByCard),
+      uniqueCardsRemaining: countRemainingUniqueCards(state.remainingCopiesByCard),
+    });
+  }
 
   state.pickNumber += 1;
   state.sitePicksCompleted += 1;
@@ -288,7 +294,29 @@ export function processPlayerPick(
     return true;
   }
 
-  return !revealOffer(state, config);
+  return !revealOffer(state, config, options);
+}
+
+export function processPlayerPick(
+  cardNumber: number,
+  state: DraftState,
+  cardDatabase: Map<number, CardData>,
+  config: DraftConfig = DEFAULT_DRAFT_CONFIG,
+): boolean {
+  return processPlayerPickInternal(cardNumber, state, cardDatabase, config, {
+    logEvents: true,
+  });
+}
+
+export function processPlayerPickWithoutLogging(
+  cardNumber: number,
+  state: DraftState,
+  cardDatabase: Map<number, CardData>,
+  config: DraftConfig = DEFAULT_DRAFT_CONFIG,
+): boolean {
+  return processPlayerPickInternal(cardNumber, state, cardDatabase, config, {
+    logEvents: false,
+  });
 }
 
 /** Finalize a draft site visit. Log the cards drafted during this visit. */
