@@ -7,12 +7,19 @@ import type {
 } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { SiteState } from "../../types/quest";
-import { createBattleLogBaseFields, logEventOnce } from "../../logging";
+import {
+  createBattleLogBaseFields,
+  logBattleCommandApplied,
+  logEventOnce,
+} from "../../logging";
 import { useQuest } from "../../state/quest-context";
+import { useMultiplayerBattle } from "../../state/multiplayer-battle-context";
+import { dispatchBattleReset } from "../../multiplayer/battle-service";
+import type { SharedBattleState } from "../../multiplayer/battle-types";
 import { completeBattleSiteVictory } from "../integration/battle-completion-bridge";
 import { beginQuestFailureRoute } from "../integration/failure-route";
 import { evaluateBattleResult } from "../engine/result";
-import { useBattleController } from "../state/controller";
+import { emitBattleTransitionLogEvents } from "../state/reducer";
 import { formatBattleCardId } from "../state/create-initial-state";
 import {
   selectBattleCardLocation,
@@ -29,9 +36,9 @@ import type {
   BattleCardKind,
   BattleCommandSourceSurface,
   BattleFieldSlotAddress,
-  BattleInit,
   BattleJudgmentResolution,
   BattleMutableState,
+  BattleReducerState,
   BattleSelection,
   BattleSide,
   BrowseableZone,
@@ -95,15 +102,31 @@ type JudgmentPauseState = {
   turnNumber: number;
 } | null;
 
-export function PlayableBattleScreen({
-  battleInit,
-  initialState,
-  site,
-}: {
-  battleInit: BattleInit;
-  initialState: BattleMutableState;
-  site: SiteState;
-}) {
+export function PlayableBattleScreen({ site }: { site: SiteState }) {
+  const { battleState, reducerState } = useMultiplayerBattle();
+  if (battleState === null || reducerState === null) {
+    return null; // BattleSiteRoute already shows the loading state.
+  }
+  return <PlayableBattleScreenInner site={site} />;
+}
+
+function PlayableBattleScreenInner({ site }: { site: SiteState }) {
+  const {
+    battleState: maybeBattleState,
+    reducerState: maybeReducerState,
+    dispatch,
+    database,
+    roomId,
+    clientId,
+  } = useMultiplayerBattle();
+  if (maybeBattleState === null || maybeReducerState === null) {
+    // Unreachable: PlayableBattleScreen wrapper guards. Narrow types here.
+    return null;
+  }
+  const battleState: SharedBattleState = maybeBattleState;
+  const reducerState: BattleReducerState = maybeReducerState;
+  const battleInit = battleState.init;
+  const initialState = battleState.reducer.mutable;
   if (battleInit.battleId !== initialState.battleId) {
     throw new Error(
       `PlayableBattleScreen battleInit/initialState battleId mismatch: ${battleInit.battleId} vs ${initialState.battleId}`,
@@ -131,7 +154,8 @@ export function PlayableBattleScreen({
   const [turnBannerTurnNumber, setTurnBannerTurnNumber] = useState<number | null>(
     initialState.activeSide === "player" ? initialState.turnNumber : null,
   );
-  const [reducerState, dispatch] = useBattleController(initialState, battleInit);
+  const loggedCommandSerialRef = useRef(0);
+  const judgmentPauseSerialRef = useRef(0);
   const isInteractionLocked = judgmentPause !== null;
   const canEndTurn = rewardOverlay === null && !isInteractionLocked && selectCanEndTurn(reducerState.mutable);
   const canPlayerAct = rewardOverlay === null && !isInteractionLocked &&
@@ -148,6 +172,22 @@ export function PlayableBattleScreen({
     !isInteractionLocked;
   useAutoClearForcedResult(reducerState, battleInit, dispatch);
   useAiTurnDriver(reducerState, dispatch, battleInit.enableAi);
+
+  useEffect(() => {
+    const serial = battleState.reducer.commandSerial;
+    if (serial === loggedCommandSerialRef.current) {
+      return;
+    }
+    loggedCommandSerialRef.current = serial;
+
+    if (reducerState.lastTransition !== null) {
+      emitBattleTransitionLogEvents(reducerState.lastTransition);
+    }
+    const lastEntry = reducerState.history.past[reducerState.history.past.length - 1];
+    if (lastEntry !== undefined) {
+      logBattleCommandApplied(lastEntry.metadata, reducerState.mutable);
+    }
+  }, [battleState.reducer.commandSerial, reducerState]);
 
   const inspectorSelection = (
     selection?.kind === "card" &&
@@ -255,8 +295,13 @@ export function PlayableBattleScreen({
   }, [reducerState.lastTransition, reducerState.mutable.result, rewardOverlay]);
 
   useEffect(() => {
-    const nextJudgmentPause = readJudgmentPause(reducerState);
+    const serial = battleState.reducer.commandSerial;
+    if (serial === judgmentPauseSerialRef.current) {
+      return;
+    }
+    judgmentPauseSerialRef.current = serial;
 
+    const nextJudgmentPause = readJudgmentPause(reducerState);
     if (nextJudgmentPause === null) {
       return;
     }
@@ -272,7 +317,7 @@ export function PlayableBattleScreen({
     setIsDreamcallerPanelOpen(false);
     setIsBattleLogOpen(false);
     setHoverPreview(null);
-  }, [reducerState]);
+  }, [battleState.reducer.commandSerial, reducerState]);
 
   useEffect(() => {
     if (selection?.kind !== "card") {
@@ -456,10 +501,14 @@ export function PlayableBattleScreen({
     setIsResultOverlayDismissed(false);
     setJudgmentPause(null);
     setIsBattleLogOpen(false);
-    const count = historyCount;
-    for (let index = 0; index < count; index += 1) {
-      dispatch({ type: "UNDO" });
-    }
+
+    void dispatchBattleReset({
+      database,
+      roomId,
+      actorId: clientId,
+    }).catch((error: unknown) => {
+      console.error("Failed to reset battle", error);
+    });
   }
 
   function handleChooseReward(index: number): void {
@@ -1004,15 +1053,11 @@ export function PlayableBattleScreen({
 }
 
 function readJudgmentPause(
-  reducerState: ReturnType<typeof useBattleController>[0],
+  reducerState: BattleReducerState,
 ): JudgmentPauseState {
   const lastTransition = reducerState.lastTransition;
 
-  if (
-    reducerState.lastActivity?.kind !== "command" ||
-    lastTransition === null ||
-    lastTransition.judgment === null
-  ) {
+  if (lastTransition === null || lastTransition.judgment === null) {
     return null;
   }
 
@@ -1029,7 +1074,7 @@ function readJudgmentPause(
 }
 
 function readJudgmentDissolvedCardNames(
-  reducerState: ReturnType<typeof useBattleController>[0],
+  reducerState: BattleReducerState,
 ): readonly string[] {
   const lastEntry = reducerState.history.past[reducerState.history.past.length - 1];
 

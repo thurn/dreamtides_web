@@ -1,19 +1,32 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
-import type { ReactElement } from "react";
+import { act, useReducer, useMemo } from "react";
+import type { ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import type { Database } from "firebase/database";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { QuestProvider } from "../../state/quest-context";
+import {
+  MultiplayerBattleContext,
+  type MultiplayerBattleValue,
+} from "../../state/multiplayer-battle-context";
 import { createBattleInit } from "../integration/create-battle-init";
 import { freezeQuestFailureSummary } from "../integration/failure-route";
+import {
+  createBattleControllerState,
+  battleControllerReducer,
+  type BattleControllerAction,
+} from "../state/controller";
 import { createInitialBattleState } from "../state/create-initial-state";
+import { createBattleReducerState } from "../state/reducer";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
+import type { SharedBattleState } from "../../multiplayer/battle-types";
+import type { BattleInit, BattleMutableState } from "../types";
 import { PlayableBattleScreen } from "./PlayableBattleScreen";
 
 const battleCompletionBridge = vi.hoisted(() => ({
@@ -24,6 +37,9 @@ const failureRouteMock = vi.hoisted(() => ({
     (input: import("../integration/failure-route").BeginQuestFailureRouteInput) =>
       import("../../types/quest").QuestFailureSummary
   >((input) => freezeQuestFailureSummary(input)),
+}));
+const battleServiceMock = vi.hoisted(() => ({
+  dispatchBattleReset: vi.fn(async () => undefined),
 }));
 
 vi.mock("../integration/battle-completion-bridge", () => ({
@@ -38,7 +54,19 @@ vi.mock("../integration/failure-route", async (importOriginal) => {
   };
 });
 
-function createTestBattle() {
+vi.mock("../../multiplayer/battle-service", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../multiplayer/battle-service")>();
+  return {
+    ...actual,
+    dispatchBattleReset: battleServiceMock.dispatchBattleReset,
+  };
+});
+
+function createTestBattle(): {
+  battleInit: BattleInit;
+  initialState: BattleMutableState;
+  site: ReturnType<typeof makeBattleTestSite>;
+} {
   const battleInit = createBattleInit({
     battleEntryKey: "site-7::2::dreamscape-2",
     site: makeBattleTestSite(),
@@ -52,6 +80,58 @@ function createTestBattle() {
     initialState: createInitialBattleState(battleInit),
     site: makeBattleTestSite(),
   };
+}
+
+/**
+ * Test-only host that emulates the multiplayer battle context using a local
+ * `useReducer`. Synchronous local dispatch keeps the existing test flow
+ * (click → assert) working without needing the Firebase round-trip.
+ */
+function TestMultiplayerBattleHost({
+  battleInit,
+  initialState,
+  children,
+}: {
+  battleInit: BattleInit;
+  initialState: BattleMutableState;
+  children: ReactNode;
+}) {
+  const [state, dispatchLocal] = useReducer(
+    (
+      reducerState: ReturnType<typeof createBattleControllerState>,
+      action: BattleControllerAction,
+    ) => battleControllerReducer(reducerState, action, battleInit),
+    initialState,
+    createBattleControllerState,
+  );
+
+  const value = useMemo<MultiplayerBattleValue>(() => {
+    const battleState: SharedBattleState = {
+      init: battleInit,
+      reducer: {
+        mutable: state.mutable,
+        history: state.history,
+        lastTransition: state.lastTransition,
+        commandSerial: state.activityId,
+      },
+    };
+    const reducerState = createBattleReducerState(state.mutable, state.history);
+    reducerState.lastTransition = state.lastTransition;
+    return {
+      database: {} as Database,
+      roomId: "test-room",
+      clientId: "test-client",
+      battleState,
+      reducerState,
+      dispatch: dispatchLocal,
+    };
+  }, [battleInit, state]);
+
+  return (
+    <MultiplayerBattleContext.Provider value={value}>
+      {children}
+    </MultiplayerBattleContext.Provider>
+  );
 }
 
 function mount(element: ReactElement): {
@@ -89,11 +169,12 @@ function renderScreen(
   return {
     ...testBattle,
     ...mount(
-      <PlayableBattleScreen
+      <TestMultiplayerBattleHost
         battleInit={testBattle.battleInit}
         initialState={testBattle.initialState}
-        site={testBattle.site}
-      />,
+      >
+        <PlayableBattleScreen site={testBattle.site} />
+      </TestMultiplayerBattleHost>,
     ),
   };
 }
@@ -101,6 +182,7 @@ function renderScreen(
 beforeEach(() => {
   battleCompletionBridge.completeBattleSiteVictory.mockClear();
   failureRouteMock.beginQuestFailureRoute.mockClear();
+  battleServiceMock.dispatchBattleReset.mockClear();
   vi.spyOn(console, "log").mockImplementation(() => undefined);
   (
     globalThis as typeof globalThis & {

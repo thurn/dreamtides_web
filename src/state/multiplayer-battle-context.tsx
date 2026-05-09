@@ -26,9 +26,8 @@ export interface MultiplayerBattleValue {
   dispatch: (action: BattleControllerAction) => void;
 }
 
-const MultiplayerBattleContext = createContext<MultiplayerBattleValue | null>(
-  null,
-);
+export const MultiplayerBattleContext =
+  createContext<MultiplayerBattleValue | null>(null);
 
 export function MultiplayerBattleProvider({
   children,

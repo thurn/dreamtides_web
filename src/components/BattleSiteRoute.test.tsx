@@ -40,28 +40,28 @@ vi.mock("../multiplayer/battle-service", async () => {
   };
 });
 
-vi.mock("../battle/components/PlayableBattleScreen", () => ({
-  PlayableBattleScreen: ({
-    battleInit,
-    initialState,
-  }: {
-    battleInit: {
-      battleEntryKey: string;
-      seed: number;
-    };
-    initialState: {
-      battleId: string;
-    };
-  }) => (
-    <div
-      data-screen="playable"
-      data-seed={String(battleInit.seed)}
-      data-battle-id={initialState.battleId}
-    >
-      {battleInit.battleEntryKey}
-    </div>
-  ),
-}));
+vi.mock("../battle/components/PlayableBattleScreen", async () => {
+  const { useMultiplayerBattle } = await import(
+    "../state/multiplayer-battle-context"
+  );
+  return {
+    PlayableBattleScreen: () => {
+      const { battleState } = useMultiplayerBattle();
+      if (battleState === null) {
+        return null;
+      }
+      return (
+        <div
+          data-screen="playable"
+          data-seed={String(battleState.init.seed)}
+          data-battle-id={battleState.reducer.mutable.battleId}
+        >
+          {battleState.init.battleEntryKey}
+        </div>
+      );
+    },
+  };
+});
 
 const roots: Root[] = [];
 

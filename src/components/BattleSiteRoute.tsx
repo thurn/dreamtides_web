@@ -60,11 +60,5 @@ export function BattleSiteRoute({
     );
   }
 
-  return (
-    <PlayableBattleScreen
-      battleInit={battleState.init}
-      initialState={battleState.reducer.mutable}
-      site={site}
-    />
-  );
+  return <PlayableBattleScreen site={site} />;
 }
