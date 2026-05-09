@@ -6,10 +6,8 @@ import { CardOverlay } from "../components/CardOverlay";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
-  countRemainingUniqueCards,
   enterDraftSite,
   getCurrentOffer,
-  completeDraftSite,
   SITE_PICKS,
 } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
@@ -456,38 +454,15 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
       // After animation, process the pick
       setTimeout(() => {
         setPickPhase("waiting");
-
-        const nextDraftedCardNumbers = [...draftedCardNumbers, cardNumber];
-        const sitePicksCompleted = ds.sitePicksCompleted + 1;
-        const siteComplete =
-          sitePicksCompleted >= SITE_PICKS
-          || countRemainingUniqueCards(ds.remainingCopiesByCard) < 4;
         mutations.pickDraftCard(siteId, cardNumber);
 
-        if (siteComplete) {
-          completeDraftSite(
-            {
-              ...ds,
-              currentOffer: [],
-              pickNumber: ds.pickNumber + 1,
-              sitePicksCompleted,
-            },
-            nextDraftedCardNumbers,
-          );
-          setTimeout(() => {
-            setIsComplete(true);
-            setPickPhase("idle");
-            setPickedCardNumber(null);
-          }, NEXT_PACK_DELAY);
-        } else {
-          setTimeout(() => {
-            setPickPhase("idle");
-            setPickedCardNumber(null);
-          }, NEXT_PACK_DELAY);
-        }
+        setTimeout(() => {
+          setPickPhase("idle");
+          setPickedCardNumber(null);
+        }, NEXT_PACK_DELAY);
       }, 300);
     },
-    [pickPhase, draftedCardNumbers, mutations, siteId],
+    [pickPhase, cardDatabase, mutations, siteId],
   );
 
   const handleCardInspect = useCallback(
@@ -509,7 +484,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
       cardsDrafted: draftedCardNumbers,
     });
 
-    mutations.markSiteVisited(siteId);
+    mutations.completeSite(siteId, "draft_site_completed");
     mutations.setScreen({ type: "dreamscape" });
   }, [siteId, draftedCardNumbers, mutations]);
 

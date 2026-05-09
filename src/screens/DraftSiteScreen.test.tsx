@@ -542,4 +542,75 @@ describe("DraftSiteScreen", () => {
       root.unmount();
     });
   });
+
+  it("keeps the draft screen open when a pick is not committed", () => {
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    setQuestContext(makeState(), mutations, cardDatabase);
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    clickButton(container, "Arc Runner");
+
+    act(() => {
+      vi.advanceTimersByTime(300 + 500);
+    });
+
+    expect(mutations.pickDraftCard).toHaveBeenCalledWith("site-1", 101);
+    expect(container.textContent).toContain("Pick 1/5");
+    expect(container.textContent).toContain("Arc Runner");
+    expect(container.textContent).not.toContain("Draft Complete");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("completes the draft site from the committed summary", () => {
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    setQuestContext(
+      makeState({
+        deck: [
+          {
+            entryId: "entry-1",
+            cardNumber: 1,
+            transfiguration: null,
+            isBane: false,
+          },
+          {
+            entryId: "entry-2",
+            cardNumber: 101,
+            transfiguration: null,
+            isBane: false,
+          },
+        ],
+        draftState: {
+          remainingCopiesByCard: {},
+          currentOffer: [],
+          activeSiteId: "site-1",
+          pickNumber: 2,
+          sitePicksCompleted: 1,
+        },
+      }),
+      mutations,
+      cardDatabase,
+    );
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    expect(container.textContent).toContain("Draft Complete");
+    clickButton(container, "Continue");
+
+    expect(mutations.completeSite).toHaveBeenCalledWith(
+      "site-1",
+      "draft_site_completed",
+    );
+    expect(mutations.markSiteVisited).not.toHaveBeenCalled();
+    expect(mutations.setScreen).toHaveBeenCalledWith({ type: "dreamscape" });
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
