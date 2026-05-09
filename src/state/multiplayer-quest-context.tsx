@@ -22,10 +22,13 @@ import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { DreamcallerContent } from "../types/content";
 import type {
   CardSourceDebugState,
+  DeckEntry,
   DreamAtlas,
   Dreamsign,
+  EssenceSiteRuntime,
   QuestFailureSummary,
   QuestState,
+  RewardSiteRuntime,
   Screen,
   TransfigurationType,
 } from "../types/quest";
@@ -49,6 +52,8 @@ import {
   startQuestFromDreamcaller,
   updateQuestAtlas,
 } from "./quest-state-actions";
+import { generateRewardSiteData } from "../rewards/reward-generator";
+import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 
 const MAX_DREAMSIGNS = 12;
 
@@ -140,6 +145,34 @@ function unavailableMutation(name: string): never {
   throw new Error(
     `${name} is not available in multiplayer until its composed Firebase action is implemented`,
   );
+}
+
+function randomIntInRange(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function nextDeckEntryId(deck: readonly DeckEntry[]): string {
+  const highest = deck.reduce((max, entry) => {
+    const match = /^deck-(\d+)$/.exec(entry.entryId);
+    return match === null ? max : Math.max(max, Number(match[1]));
+  }, 0);
+  return `deck-${String(highest + 1)}`;
+}
+
+function dreamsignMatches(left: Dreamsign, right: Dreamsign): boolean {
+  if (left.id !== undefined && right.id !== undefined) {
+    return left.id === right.id;
+  }
+  return left.name === right.name;
+}
+
+function completeSiteAndReturnToDreamscape(
+  state: QuestState,
+  siteId: string,
+): QuestState {
+  return setQuestScreen(completeQuestSite(state, siteId), {
+    type: "dreamscape",
+  });
 }
 
 export function MultiplayerQuestProvider({
@@ -531,11 +564,422 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const ensureRewardSiteRuntime = useCallback((siteId: string) => {
+    const current = currentRef.current;
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        if (room.questState.siteRuntime[siteId] !== undefined) {
+          return room;
+        }
+
+        const generated = generateRewardSiteData({
+          cardDatabase: current.questContent.cardDatabase,
+          dreamsignTemplates: current.questContent.dreamsignTemplates,
+          remainingDreamsignPoolIds: room.questState.remainingDreamsignPool,
+          selectedPackageTides:
+            room.questState.resolvedPackage?.selectedTides ?? [],
+        });
+        const runtime: RewardSiteRuntime = {
+          kind: "reward",
+          reward: generated.reward,
+          remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+          accepted: false,
+        };
+        const remainingDreamsignPool =
+          generated.spentDreamsignPoolIds.length > 0
+            ? generated.remainingDreamsignPoolIds
+            : room.questState.remainingDreamsignPool;
+        const now = new Date().toISOString();
+        const actionId = crypto.randomUUID();
+
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            remainingDreamsignPool,
+            siteRuntime: {
+              ...room.questState.siteRuntime,
+              [siteId]: runtime,
+            },
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: {
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "ensureRewardSiteRuntime",
+              source: "site_reveal",
+              summary: {
+                siteId,
+                rewardType: generated.reward.rewardType,
+              },
+            },
+          },
+        };
+      },
+    });
+  }, []);
+
+  const acceptRewardSite = useCallback((siteId: string) => {
+    const current = currentRef.current;
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const runtime = room.questState.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "reward" ||
+          runtime.accepted
+        ) {
+          return room;
+        }
+
+        let next: QuestState = room.questState;
+        const reward = runtime.reward;
+        if (reward.rewardType === "card") {
+          next = {
+            ...next,
+            deck: [
+              ...next.deck,
+              {
+                entryId: nextDeckEntryId(next.deck),
+                cardNumber: reward.cardNumber,
+                transfiguration: null,
+                isBane: false,
+              },
+            ],
+          };
+        } else if (reward.rewardType === "dreamsign") {
+          if (next.dreamsigns.length < MAX_DREAMSIGNS) {
+            next = {
+              ...next,
+              dreamsigns: [
+                ...next.dreamsigns,
+                {
+                  id: reward.dreamsignId,
+                  name: reward.dreamsignName,
+                  effectDescription: reward.dreamsignEffect,
+                  isBane: false,
+                },
+              ],
+            };
+          }
+        } else {
+          next = {
+            ...next,
+            essence: next.essence + reward.essenceAmount,
+          };
+        }
+
+        next = completeSiteAndReturnToDreamscape(
+          {
+            ...next,
+            siteRuntime: {
+              ...next.siteRuntime,
+              [siteId]: {
+                ...runtime,
+                accepted: true,
+              },
+            },
+          },
+          siteId,
+        );
+
+        const now = new Date().toISOString();
+        const actionId = crypto.randomUUID();
+        return {
+          ...room,
+          questState: next,
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: {
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "acceptRewardSite",
+              source: "site_reveal",
+              summary: {
+                siteId,
+                rewardType: reward.rewardType,
+              },
+            },
+          },
+        };
+      },
+    });
+  }, []);
+
+  const ensureDreamsignOfferRuntime = useCallback(
+    (siteId: string, optionCount: number) => {
+      const current = currentRef.current;
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          if (room.questState.siteRuntime[siteId] !== undefined) {
+            return room;
+          }
+
+          const revealed = drawDreamsignOptions(
+            room.questState.remainingDreamsignPool,
+            current.questContent.dreamsignTemplates,
+            optionCount,
+          );
+          const now = new Date().toISOString();
+          const actionId = crypto.randomUUID();
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              remainingDreamsignPool: revealed.remainingDreamsignPool,
+              siteRuntime: {
+                ...room.questState.siteRuntime,
+                [siteId]: {
+                  kind: "dreamsignOffer",
+                  offeredDreamsigns: revealed.offeredDreamsigns,
+                  remainingDreamsignPool: revealed.remainingDreamsignPool,
+                  accepted: false,
+                },
+              },
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: {
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "ensureDreamsignOfferRuntime",
+                source: "site_reveal",
+                summary: {
+                  siteId,
+                  optionCount,
+                  offeredCount: revealed.offeredDreamsigns.length,
+                },
+              },
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const acceptDreamsignOffer = useCallback(
+    (siteId: string, dreamsign: Dreamsign) => {
+      const current = currentRef.current;
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const runtime = room.questState.siteRuntime[siteId];
+          if (
+            runtime === undefined ||
+            runtime.kind !== "dreamsignOffer" ||
+            runtime.accepted ||
+            room.questState.dreamsigns.length >= MAX_DREAMSIGNS ||
+            !runtime.offeredDreamsigns.some((offered) =>
+              dreamsignMatches(offered, dreamsign),
+            )
+          ) {
+            return room;
+          }
+
+          const next = completeSiteAndReturnToDreamscape(
+            {
+              ...room.questState,
+              dreamsigns: [...room.questState.dreamsigns, dreamsign],
+              siteRuntime: {
+                ...room.questState.siteRuntime,
+                [siteId]: {
+                  ...runtime,
+                  accepted: true,
+                },
+              },
+            },
+            siteId,
+          );
+          const now = new Date().toISOString();
+          const actionId = crypto.randomUUID();
+          return {
+            ...room,
+            questState: next,
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: {
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "acceptDreamsignOffer",
+                source: "site_reveal",
+                summary: {
+                  siteId,
+                  dreamsignId: dreamsign.id ?? null,
+                  dreamsignName: dreamsign.name,
+                },
+              },
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const ensureEssenceSiteRuntime = useCallback(
+    (siteId: string, isEnhanced: boolean) => {
+      const current = currentRef.current;
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          if (room.questState.siteRuntime[siteId] !== undefined) {
+            return room;
+          }
+
+          const runtime: EssenceSiteRuntime = {
+            kind: "essence",
+            amount: isEnhanced
+              ? randomIntInRange(400, 600)
+              : randomIntInRange(200, 300),
+            accepted: false,
+          };
+          const now = new Date().toISOString();
+          const actionId = crypto.randomUUID();
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              siteRuntime: {
+                ...room.questState.siteRuntime,
+                [siteId]: runtime,
+              },
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: {
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "ensureEssenceSiteRuntime",
+                source: "site_reveal",
+                summary: {
+                  siteId,
+                  amount: runtime.amount,
+                  isEnhanced,
+                },
+              },
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const acceptEssenceSite = useCallback((siteId: string) => {
+    const current = currentRef.current;
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const runtime = room.questState.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "essence" ||
+          runtime.accepted
+        ) {
+          return room;
+        }
+
+        const next = completeSiteAndReturnToDreamscape(
+          {
+            ...room.questState,
+            essence: room.questState.essence + runtime.amount,
+            siteRuntime: {
+              ...room.questState.siteRuntime,
+              [siteId]: {
+                ...runtime,
+                accepted: true,
+              },
+            },
+          },
+          siteId,
+        );
+        const now = new Date().toISOString();
+        const actionId = crypto.randomUUID();
+        return {
+          ...room,
+          questState: next,
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: {
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "acceptEssenceSite",
+              source: "site_reveal",
+              summary: {
+                siteId,
+                amount: runtime.amount,
+              },
+            },
+          },
+        };
+      },
+    });
+  }, []);
+
   const mutations = useMemo<QuestMutations>(
     () => ({
       changeEssence,
       startQuest,
       completeSite,
+      ensureRewardSiteRuntime,
+      acceptRewardSite,
+      ensureDreamsignOfferRuntime,
+      acceptDreamsignOffer,
+      ensureEssenceSiteRuntime,
+      acceptEssenceSite,
       pickDraftCard,
       addCard: (_cardNumber: number, _source: string) => {
         unavailableMutation("addCard");
@@ -581,6 +1025,12 @@ export function MultiplayerQuestProvider({
       addDreamsign,
       changeEssence,
       completeSite,
+      ensureRewardSiteRuntime,
+      acceptRewardSite,
+      ensureDreamsignOfferRuntime,
+      acceptDreamsignOffer,
+      ensureEssenceSiteRuntime,
+      acceptEssenceSite,
       pickDraftCard,
       removeDreamsign,
       resetQuest,

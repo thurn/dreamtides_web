@@ -1,9 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 
 const MAX_DREAMSIGNS = 12;
 
@@ -16,23 +15,13 @@ interface DreamsignOfferingScreenProps {
 export function DreamsignOfferingScreen({
   site,
 }: DreamsignOfferingScreenProps) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations } = useQuest();
   const { dreamsigns: currentDreamsigns } = state;
 
   const optionCount = site.isEnhanced ? 3 : 1;
-  const revealedRef = useRef<ReturnType<typeof drawDreamsignOptions> | null>(null);
-  if (revealedRef.current === null) {
-    revealedRef.current = drawDreamsignOptions(
-      state.remainingDreamsignPool,
-      questContent.dreamsignTemplates,
-      optionCount,
-    );
-  }
-  const revealed = revealedRef.current;
-  if (revealed === null) {
-    throw new Error("Failed to reveal Dreamsign offering");
-  }
-  const options = revealed.offeredDreamsigns;
+  const runtime = state.siteRuntime[site.id];
+  const offerRuntime = runtime?.kind === "dreamsignOffer" ? runtime : null;
+  const options = offerRuntime?.offeredDreamsigns ?? null;
 
   const [purging, setPurging] = useState(false);
   const [pendingDreamsign, setPendingDreamsign] = useState<Dreamsign | null>(
@@ -40,24 +29,25 @@ export function DreamsignOfferingScreen({
   );
 
   useEffect(() => {
+    if (runtime === undefined) {
+      mutations.ensureDreamsignOfferRuntime(site.id, optionCount);
+    }
+  }, [mutations, optionCount, runtime, site.id]);
+
+  useEffect(() => {
+    if (options === null) {
+      return;
+    }
+
     logEvent("site_entered", {
       siteType: "DreamsignOffering",
       isEnhanced: site.isEnhanced,
       optionCount,
     });
-    mutations.setRemainingDreamsignPool(
-      revealed.remainingDreamsignPool,
-      "dreamsign_offering_revealed",
-    );
-  }, [site.isEnhanced, optionCount, mutations, revealed.remainingDreamsignPool]);
+  }, [site.isEnhanced, optionCount, options]);
 
   const completeSite = useCallback(() => {
-    logEvent("site_completed", {
-      siteType: "DreamsignOffering",
-      isEnhanced: site.isEnhanced,
-    });
-    mutations.markSiteVisited(site.id);
-    mutations.setScreen({ type: "dreamscape" });
+    mutations.completeSite(site.id, "dreamsign_offering");
   }, [site, mutations]);
 
   const handleAccept = useCallback(
@@ -67,23 +57,21 @@ export function DreamsignOfferingScreen({
         setPurging(true);
         return;
       }
-      mutations.addDreamsign(dreamsign, "DreamsignOffering");
-      completeSite();
+      mutations.acceptDreamsignOffer(site.id, dreamsign);
     },
-    [currentDreamsigns.length, mutations, completeSite],
+    [currentDreamsigns.length, mutations, site.id],
   );
 
   const handlePurge = useCallback(
     (index: number) => {
       mutations.removeDreamsign(index, "purged_for_new_dreamsign");
       if (pendingDreamsign) {
-        mutations.addDreamsign(pendingDreamsign, "DreamsignOffering");
+        mutations.acceptDreamsignOffer(site.id, pendingDreamsign);
       }
       setPurging(false);
       setPendingDreamsign(null);
-      completeSite();
     },
-    [pendingDreamsign, mutations, completeSite],
+    [pendingDreamsign, mutations, site.id],
   );
 
   const handleReject = useCallback(() => {
@@ -154,6 +142,14 @@ export function DreamsignOfferingScreen({
           Cancel
         </button>
       </motion.div>
+    );
+  }
+
+  if (options === null) {
+    return (
+      <div className="flex min-h-full items-center justify-center p-8 text-sm opacity-70">
+        Revealing Dreamsigns...
+      </div>
     );
   }
 

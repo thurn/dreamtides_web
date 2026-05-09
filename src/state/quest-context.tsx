@@ -26,9 +26,12 @@ import type {
   DeckEntry,
   DreamAtlas,
   Dreamsign,
+  EssenceSiteRuntime,
   QuestFailureSummary,
   QuestState,
+  RewardSiteRuntime,
   Screen,
+  SiteState,
   TransfigurationType,
 } from "../types/quest";
 import type { DraftState } from "../types/draft";
@@ -52,6 +55,8 @@ import {
   setQuestScreen,
   startQuestFromDreamcaller,
 } from "./quest-state-actions";
+import { generateRewardSiteData } from "../rewards/reward-generator";
+import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 
 export { deriveEntryIdCounter };
 
@@ -62,6 +67,12 @@ export interface QuestMutations {
   changeEssence: (delta: number, source: string) => void;
   startQuest: (dreamcaller: DreamcallerContent) => void;
   completeSite: (siteId: string, source: string) => void;
+  ensureRewardSiteRuntime: (siteId: string) => void;
+  acceptRewardSite: (siteId: string) => void;
+  ensureDreamsignOfferRuntime: (siteId: string, optionCount: number) => void;
+  acceptDreamsignOffer: (siteId: string, dreamsign: Dreamsign) => void;
+  ensureEssenceSiteRuntime: (siteId: string, isEnhanced: boolean) => void;
+  acceptEssenceSite: (siteId: string) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
@@ -125,6 +136,20 @@ export function QuestContextProvider({
 
 function screenName(screen: Screen): string {
   return screen.type === "site" ? `site:${screen.siteId}` : screen.type;
+}
+
+function randomIntInRange(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function findSite(state: QuestState, siteId: string): SiteState | null {
+  for (const node of Object.values(state.atlas.nodes)) {
+    const site = node.sites.find((candidate) => candidate.id === siteId);
+    if (site !== undefined) {
+      return site;
+    }
+  }
+  return null;
 }
 
 export function createDefaultState(): QuestState {
@@ -377,6 +402,307 @@ export function QuestProvider({
       return setQuestScreen(completeQuestSite(prev, siteId), {
         type: "dreamscape",
       });
+    });
+  }, []);
+
+  const ensureRewardSiteRuntime = useCallback(
+    (siteId: string) => {
+      setState((prev) => {
+        if (prev.siteRuntime[siteId] !== undefined) {
+          return prev;
+        }
+
+        const generated = generateRewardSiteData({
+          cardDatabase,
+          dreamsignTemplates: questContent.dreamsignTemplates,
+          remainingDreamsignPoolIds: prev.remainingDreamsignPool,
+          selectedPackageTides: prev.resolvedPackage?.selectedTides ?? [],
+        });
+        const runtime: RewardSiteRuntime = {
+          kind: "reward",
+          reward: generated.reward,
+          remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+          accepted: false,
+        };
+
+        if (generated.spentDreamsignPoolIds.length > 0) {
+          logEvent("dreamsign_pool_updated", {
+            source: "reward_site_revealed",
+            remainingDreamsignPoolSize:
+              generated.remainingDreamsignPoolIds.length,
+            remainingDreamsignPool: generated.remainingDreamsignPoolIds,
+          });
+        }
+
+        return {
+          ...prev,
+          remainingDreamsignPool:
+            generated.spentDreamsignPoolIds.length > 0
+              ? generated.remainingDreamsignPoolIds
+              : prev.remainingDreamsignPool,
+          siteRuntime: {
+            ...prev.siteRuntime,
+            [siteId]: runtime,
+          },
+        };
+      });
+    },
+    [cardDatabase, questContent.dreamsignTemplates],
+  );
+
+  const acceptRewardSite = useCallback(
+    (siteId: string) => {
+      setState((prev) => {
+        const runtime = prev.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "reward" ||
+          runtime.accepted
+        ) {
+          return prev;
+        }
+
+        let next: QuestState = prev;
+        const reward = runtime.reward;
+        if (reward.rewardType === "card") {
+          const card = cardDatabase.get(reward.cardNumber);
+          logEvent("card_added", {
+            cardNumber: reward.cardNumber,
+            cardName:
+              card?.name ?? `Unknown Card #${String(reward.cardNumber)}`,
+            source: "reward_site",
+          });
+          const entry: DeckEntry = {
+            entryId: nextEntryId(),
+            cardNumber: reward.cardNumber,
+            transfiguration: null,
+            isBane: false,
+          };
+          next = { ...next, deck: [...next.deck, entry] };
+        } else if (reward.rewardType === "dreamsign") {
+          if (next.dreamsigns.length < MAX_DREAMSIGNS) {
+            const dreamsign: Dreamsign = {
+              id: reward.dreamsignId,
+              name: reward.dreamsignName,
+              effectDescription: reward.dreamsignEffect,
+              isBane: false,
+            };
+            logEvent("dreamsign_acquired", {
+              name: dreamsign.name,
+              imageName: dreamsign.imageName ?? null,
+              isBane: dreamsign.isBane,
+              sourceSiteType: "Reward",
+            });
+            next = { ...next, dreamsigns: [...next.dreamsigns, dreamsign] };
+          }
+        } else {
+          const oldValue = next.essence;
+          const newValue = oldValue + reward.essenceAmount;
+          logEvent("essence_changed", {
+            oldValue,
+            newValue,
+            delta: reward.essenceAmount,
+            source: "reward_site",
+          });
+          next = { ...next, essence: newValue };
+        }
+
+        const site = findSite(next, siteId);
+        logEvent("site_completed", {
+          siteType: "Reward",
+          isEnhanced: site?.isEnhanced ?? false,
+        });
+        next = setQuestScreen(completeQuestSite(next, siteId), {
+          type: "dreamscape",
+        });
+
+        return {
+          ...next,
+          siteRuntime: {
+            ...next.siteRuntime,
+            [siteId]: {
+              ...runtime,
+              accepted: true,
+            },
+          },
+        };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const ensureDreamsignOfferRuntime = useCallback(
+    (siteId: string, optionCount: number) => {
+      setState((prev) => {
+        if (prev.siteRuntime[siteId] !== undefined) {
+          return prev;
+        }
+
+        const revealed = drawDreamsignOptions(
+          prev.remainingDreamsignPool,
+          questContent.dreamsignTemplates,
+          optionCount,
+        );
+        const site = findSite(prev, siteId);
+        const source =
+          site?.type === "DreamsignDraft"
+            ? "dreamsign_draft_revealed"
+            : "dreamsign_offering_revealed";
+        logEvent("dreamsign_pool_updated", {
+          source,
+          remainingDreamsignPoolSize: revealed.remainingDreamsignPool.length,
+          remainingDreamsignPool: revealed.remainingDreamsignPool,
+        });
+
+        return {
+          ...prev,
+          remainingDreamsignPool: revealed.remainingDreamsignPool,
+          siteRuntime: {
+            ...prev.siteRuntime,
+            [siteId]: {
+              kind: "dreamsignOffer",
+              offeredDreamsigns: revealed.offeredDreamsigns,
+              remainingDreamsignPool: revealed.remainingDreamsignPool,
+              accepted: false,
+            },
+          },
+        };
+      });
+    },
+    [questContent.dreamsignTemplates],
+  );
+
+  const acceptDreamsignOffer = useCallback(
+    (siteId: string, dreamsign: Dreamsign) => {
+      setState((prev) => {
+        const runtime = prev.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "dreamsignOffer" ||
+          runtime.accepted ||
+          prev.dreamsigns.length >= MAX_DREAMSIGNS
+        ) {
+          return prev;
+        }
+        const offered = runtime.offeredDreamsigns.some((candidate) =>
+          candidate.id !== undefined && dreamsign.id !== undefined
+            ? candidate.id === dreamsign.id
+            : candidate.name === dreamsign.name,
+        );
+        if (!offered) {
+          return prev;
+        }
+        const site = findSite(prev, siteId);
+        const sourceSiteType =
+          site?.type === "DreamsignDraft"
+            ? "DreamsignDraft"
+            : "DreamsignOffering";
+
+        logEvent("dreamsign_acquired", {
+          name: dreamsign.name,
+          imageName: dreamsign.imageName ?? null,
+          isBane: dreamsign.isBane,
+          sourceSiteType,
+        });
+        logEvent("site_completed", {
+          siteType: sourceSiteType,
+          isEnhanced: site?.isEnhanced ?? false,
+        });
+
+        const next = setQuestScreen(
+          completeQuestSite(
+            {
+              ...prev,
+              dreamsigns: [...prev.dreamsigns, dreamsign],
+              siteRuntime: {
+                ...prev.siteRuntime,
+                [siteId]: {
+                  ...runtime,
+                  accepted: true,
+                },
+              },
+            },
+            siteId,
+          ),
+          { type: "dreamscape" },
+        );
+        return next;
+      });
+    },
+    [],
+  );
+
+  const ensureEssenceSiteRuntime = useCallback(
+    (siteId: string, isEnhanced: boolean) => {
+      setState((prev) => {
+        if (prev.siteRuntime[siteId] !== undefined) {
+          return prev;
+        }
+
+        const runtime: EssenceSiteRuntime = {
+          kind: "essence",
+          amount: isEnhanced
+            ? randomIntInRange(400, 600)
+            : randomIntInRange(200, 300),
+          accepted: false,
+        };
+
+        return {
+          ...prev,
+          siteRuntime: {
+            ...prev.siteRuntime,
+            [siteId]: runtime,
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  const acceptEssenceSite = useCallback((siteId: string) => {
+    setState((prev) => {
+      const runtime = prev.siteRuntime[siteId];
+      if (
+        runtime === undefined ||
+        runtime.kind !== "essence" ||
+        runtime.accepted
+      ) {
+        return prev;
+      }
+
+      const oldValue = prev.essence;
+      const newValue = oldValue + runtime.amount;
+      logEvent("essence_changed", {
+        oldValue,
+        newValue,
+        delta: runtime.amount,
+        source: "essence_site",
+      });
+      const site = findSite(prev, siteId);
+      logEvent("site_completed", {
+        siteType: "Essence",
+        outcome: `Granted ${String(runtime.amount)} essence`,
+        isEnhanced: site?.isEnhanced ?? false,
+      });
+
+      const next = setQuestScreen(
+        completeQuestSite(
+          {
+            ...prev,
+            essence: newValue,
+            siteRuntime: {
+              ...prev.siteRuntime,
+              [siteId]: {
+                ...runtime,
+                accepted: true,
+              },
+            },
+          },
+          siteId,
+        ),
+        { type: "dreamscape" },
+      );
+      return next;
     });
   }, []);
 
@@ -692,6 +1018,12 @@ export function QuestProvider({
       changeEssence,
       startQuest,
       completeSite,
+      ensureRewardSiteRuntime,
+      acceptRewardSite,
+      ensureDreamsignOfferRuntime,
+      acceptDreamsignOffer,
+      ensureEssenceSiteRuntime,
+      acceptEssenceSite,
       pickDraftCard,
       addCard,
       addBaneCard,
@@ -715,6 +1047,12 @@ export function QuestProvider({
       changeEssence,
       startQuest,
       completeSite,
+      ensureRewardSiteRuntime,
+      acceptRewardSite,
+      ensureDreamsignOfferRuntime,
+      acceptDreamsignOffer,
+      ensureEssenceSiteRuntime,
+      acceptEssenceSite,
       pickDraftCard,
       addCard,
       addBaneCard,

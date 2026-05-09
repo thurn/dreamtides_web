@@ -81,6 +81,12 @@ function makeMutations(): QuestMutations {
     changeEssence: vi.fn(),
     startQuest: vi.fn(),
     completeSite: vi.fn(),
+    ensureRewardSiteRuntime: vi.fn(),
+    acceptRewardSite: vi.fn(),
+    ensureDreamsignOfferRuntime: vi.fn(),
+    acceptDreamsignOffer: vi.fn(),
+    ensureEssenceSiteRuntime: vi.fn(),
+    acceptEssenceSite: vi.fn(),
     pickDraftCard: vi.fn(),
     addCard: vi.fn(),
     addBaneCard: vi.fn(),
@@ -204,12 +210,23 @@ afterEach(() => {
 });
 
 describe("RewardSiteScreen", () => {
-  it("spends a shown Dreamsign on reveal and keeps it spent when declined", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0);
+  it("renders a shared Dreamsign reward and completes when declined", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
-        remainingDreamsignPool: ["dreamsign-1"],
+        siteRuntime: {
+          "site-1": {
+            kind: "reward",
+            reward: {
+              rewardType: "dreamsign",
+              dreamsignId: "dreamsign-1",
+              dreamsignName: "Dreamsign One",
+              dreamsignEffect: "First effect.",
+            },
+            remainingDreamsignPoolIds: [],
+            accepted: false,
+          },
+        },
       }),
       mutations,
       new Map(),
@@ -224,16 +241,11 @@ describe("RewardSiteScreen", () => {
     expect(container.textContent).toContain("Dreamsign One");
     expect(container.textContent).not.toContain("tide_alpha");
     expect(container.querySelector('img[alt="tide_alpha"]')).toBeNull();
-    expect(mutations.setRemainingDreamsignPool).toHaveBeenCalledWith(
-      [],
-      "reward_site_revealed",
-    );
 
     clickButton(container, "Decline");
 
-    expect(mutations.addDreamsign).not.toHaveBeenCalled();
-    expect(mutations.markSiteVisited).toHaveBeenCalledWith("site-1");
-    expect(mutations.setScreen).toHaveBeenCalledWith({ type: "dreamscape" });
+    expect(mutations.acceptRewardSite).not.toHaveBeenCalled();
+    expect(mutations.completeSite).toHaveBeenCalledWith("site-1", "reward_site");
     expect(logEvent).toHaveBeenCalledWith(
       "reward_declined",
       expect.objectContaining({ rewardType: "dreamsign" }),
@@ -244,57 +256,43 @@ describe("RewardSiteScreen", () => {
     });
   });
 
-  it("keeps the revealed reward stable across rerenders after spending the shared Dreamsign pool", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0);
+  it("requests runtime generation while the reward is being revealed", () => {
     const mutations = makeMutations();
-    const initialState = makeState({
-      remainingDreamsignPool: ["dreamsign-1"],
-    });
+    setQuestContext(makeState(), mutations, new Map());
 
-    setQuestContext(
-      initialState,
-      mutations,
-      new Map(),
-    );
-
-    const element = (
+    const { container, root } = mount(
       <RewardSiteScreen
         site={{ id: "site-1", type: "Reward", isEnhanced: false, isVisited: false }}
-      />
-    );
-    const { container, root } = mount(element);
-
-    expect(container.textContent).toContain("Dreamsign One");
-    expect(mutations.setRemainingDreamsignPool).toHaveBeenCalledTimes(1);
-    expect(mutations.setRemainingDreamsignPool).toHaveBeenCalledWith(
-      [],
-      "reward_site_revealed",
+      />,
     );
 
-    setQuestContext(
-      makeState({
-        remainingDreamsignPool: [],
-      }),
-      mutations,
-      new Map(),
-    );
-
-    act(() => {
-      root.render(element);
-    });
-
-    expect(container.textContent).toContain("Dreamsign One");
-    expect(mutations.setRemainingDreamsignPool).toHaveBeenCalledTimes(1);
+    expect(container.textContent).toContain("Revealing reward...");
+    expect(mutations.ensureRewardSiteRuntime).toHaveBeenCalledWith("site-1");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("reveals a card reward without mutating the Dreamsign pool", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0);
+  it("accepts a shared card reward through the composed mutation", () => {
     const mutations = makeMutations();
-    setQuestContext(makeState(), mutations);
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "reward",
+            reward: {
+              rewardType: "card",
+              cardNumber: 1,
+              cardName: "Card Reward",
+            },
+            remainingDreamsignPoolIds: [],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
 
     const { container, root } = mount(
       <RewardSiteScreen
@@ -303,12 +301,11 @@ describe("RewardSiteScreen", () => {
     );
 
     expect(container.textContent).toContain("Card Reward");
-    expect(mutations.setRemainingDreamsignPool).not.toHaveBeenCalled();
 
     clickButton(container, "Accept");
 
-    expect(mutations.addCard).toHaveBeenCalledWith(1, "reward_site");
-    expect(mutations.markSiteVisited).toHaveBeenCalledWith("site-1");
+    expect(mutations.acceptRewardSite).toHaveBeenCalledWith("site-1");
+    expect(mutations.addCard).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();

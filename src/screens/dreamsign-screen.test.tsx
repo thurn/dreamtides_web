@@ -10,7 +10,6 @@ import type { QuestState, SiteState } from "../types/quest";
 import { DreamsignDraftScreen } from "./DreamsignDraftScreen";
 import { DreamsignOfferingScreen } from "./DreamsignOfferingScreen";
 import { useQuest } from "../state/quest-context";
-import { logEvent } from "../logging";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -75,6 +74,12 @@ function makeMutations(): QuestMutations {
     changeEssence: vi.fn(),
     startQuest: vi.fn(),
     completeSite: vi.fn(),
+    ensureRewardSiteRuntime: vi.fn(),
+    acceptRewardSite: vi.fn(),
+    ensureDreamsignOfferRuntime: vi.fn(),
+    acceptDreamsignOffer: vi.fn(),
+    ensureEssenceSiteRuntime: vi.fn(),
+    acceptEssenceSite: vi.fn(),
     pickDraftCard: vi.fn(),
     addCard: vi.fn(),
     addBaneCard: vi.fn(),
@@ -182,11 +187,25 @@ afterEach(() => {
 });
 
 describe("DreamsignOfferingScreen", () => {
-  it("spends the shown dreamsign on reveal and keeps it spent when rejected", () => {
+  it("renders shared offered dreamsigns and completes when rejected", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
-        remainingDreamsignPool: ["embers-whisper", "glacial-insight"],
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["glacial-insight"],
+            accepted: false,
+          },
+        },
       }),
       mutations,
     );
@@ -194,19 +213,13 @@ describe("DreamsignOfferingScreen", () => {
     const { container, root } = mount(<DreamsignOfferingScreen site={makeSite()} />);
 
     expect(container.textContent).toContain("Ember's Whisper");
-    expect(mutations.setRemainingDreamsignPool).toHaveBeenCalledWith(
-      ["glacial-insight"],
-      "dreamsign_offering_revealed",
-    );
 
     clickButton(container, "Reject");
 
-    expect(mutations.addDreamsign).not.toHaveBeenCalled();
-    expect(mutations.markSiteVisited).toHaveBeenCalledWith("site-1");
-    expect(mutations.setScreen).toHaveBeenCalledWith({ type: "dreamscape" });
-    expect(logEvent).toHaveBeenCalledWith(
-      "site_completed",
-      expect.objectContaining({ siteType: "DreamsignOffering" }),
+    expect(mutations.acceptDreamsignOffer).not.toHaveBeenCalled();
+    expect(mutations.completeSite).toHaveBeenCalledWith(
+      "site-1",
+      "dreamsign_offering",
     );
 
     act(() => {
@@ -218,7 +231,21 @@ describe("DreamsignOfferingScreen", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
-        remainingDreamsignPool: ["embers-whisper", "glacial-insight"],
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["glacial-insight"],
+            accepted: false,
+          },
+        },
         dreamsigns: Array.from({ length: 12 }, (_, index) => ({
           name: `Held Sign ${String(index)}`,
           tide: index % 2 === 0 ? "tide_alpha" : "tide_zeta",
@@ -234,18 +261,30 @@ describe("DreamsignOfferingScreen", () => {
     clickButton(container, "Accept");
     clickButton(container, "Held Sign 0");
 
-    expect(mutations.setRemainingDreamsignPool).toHaveBeenCalledTimes(1);
-    expect(mutations.setRemainingDreamsignPool).toHaveBeenCalledWith(
-      ["glacial-insight"],
-      "dreamsign_offering_revealed",
-    );
     expect(mutations.removeDreamsign).toHaveBeenCalledWith(
       0,
       "purged_for_new_dreamsign",
     );
-    expect(mutations.addDreamsign).toHaveBeenCalledWith(
+    expect(mutations.acceptDreamsignOffer).toHaveBeenCalledWith(
+      "site-1",
       expect.objectContaining({ name: "Ember's Whisper" }),
-      "DreamsignOffering",
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("requests shared offer runtime while revealing options", () => {
+    const mutations = makeMutations();
+    setQuestContext(makeState(), mutations);
+
+    const { container, root } = mount(<DreamsignOfferingScreen site={makeSite()} />);
+
+    expect(container.textContent).toContain("Revealing Dreamsigns...");
+    expect(mutations.ensureDreamsignOfferRuntime).toHaveBeenCalledWith(
+      "site-1",
+      1,
     );
 
     act(() => {
@@ -255,16 +294,37 @@ describe("DreamsignOfferingScreen", () => {
 });
 
 describe("DreamsignDraftScreen", () => {
-  it("spends revealed draft options on mount and keeps them spent when skipped", () => {
+  it("renders shared draft options and completes when skipped", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
-        remainingDreamsignPool: [
-          "embers-whisper",
-          "glacial-insight",
-          "verdant-accord",
-          "stormthread-sigil",
-        ],
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+              {
+                id: "glacial-insight",
+                name: "Glacial Insight",
+                effectDescription: "Ice.",
+                isBane: false,
+              },
+              {
+                id: "verdant-accord",
+                name: "Verdant Accord",
+                effectDescription: "Growth.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["stormthread-sigil"],
+            accepted: false,
+          },
+        },
       }),
       mutations,
     );
@@ -278,16 +338,14 @@ describe("DreamsignDraftScreen", () => {
     expect(container.textContent).toContain("Ember's Whisper");
     expect(container.textContent).toContain("Glacial Insight");
     expect(container.textContent).toContain("Verdant Accord");
-    expect(mutations.setRemainingDreamsignPool).toHaveBeenCalledWith(
-      ["stormthread-sigil"],
-      "dreamsign_draft_revealed",
-    );
 
     clickButton(container, "Skip (discards both Dreamsigns)");
 
-    expect(mutations.addDreamsign).not.toHaveBeenCalled();
-    expect(mutations.markSiteVisited).toHaveBeenCalledWith("site-1");
-    expect(mutations.setScreen).toHaveBeenCalledWith({ type: "dreamscape" });
+    expect(mutations.acceptDreamsignOffer).not.toHaveBeenCalled();
+    expect(mutations.completeSite).toHaveBeenCalledWith(
+      "site-1",
+      "dreamsign_draft",
+    );
 
     act(() => {
       root.unmount();
@@ -298,7 +356,14 @@ describe("DreamsignDraftScreen", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
-        remainingDreamsignPool: ["missing-id"],
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [],
+            remainingDreamsignPool: [],
+            accepted: false,
+          },
+        },
       }),
       mutations,
     );
@@ -312,15 +377,14 @@ describe("DreamsignDraftScreen", () => {
     expect(container.textContent).toContain("The Dreamsign pool is exhausted.");
     expect(container.textContent).not.toContain("Ember's Whisper");
     expect(container.querySelectorAll("button")).toHaveLength(1);
-    expect(mutations.setRemainingDreamsignPool).toHaveBeenCalledWith(
-      [],
-      "dreamsign_draft_revealed",
-    );
 
     clickButton(container, "Skip (discards both Dreamsigns)");
 
-    expect(mutations.addDreamsign).not.toHaveBeenCalled();
-    expect(mutations.markSiteVisited).toHaveBeenCalledWith("site-1");
+    expect(mutations.acceptDreamsignOffer).not.toHaveBeenCalled();
+    expect(mutations.completeSite).toHaveBeenCalledWith(
+      "site-1",
+      "dreamsign_draft",
+    );
 
     act(() => {
       root.unmount();

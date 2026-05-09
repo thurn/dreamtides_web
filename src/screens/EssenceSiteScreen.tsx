@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
@@ -9,44 +9,35 @@ interface EssenceSiteScreenProps {
   site: SiteState;
 }
 
-/** Returns a random integer between min and max (inclusive). */
-function randomIntInRange(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 /** Grants essence with a count-up animation and auto-completes. */
 export function EssenceSiteScreen({ site }: EssenceSiteScreenProps) {
-  const { mutations } = useQuest();
-
-  const essenceAmount = useMemo(
-    () =>
-      site.isEnhanced
-        ? randomIntInRange(400, 600)
-        : randomIntInRange(200, 300),
-    [site.isEnhanced],
-  );
+  const { state, mutations } = useQuest();
+  const runtime = state.siteRuntime[site.id];
+  const essenceRuntime = runtime?.kind === "essence" ? runtime : null;
+  const essenceAmount = essenceRuntime?.amount ?? null;
 
   const [displayValue, setDisplayValue] = useState(0);
   const [phase, setPhase] = useState<"counting" | "done">("counting");
 
   const handleComplete = useCallback(() => {
-    logEvent("site_completed", {
-      siteType: "Essence",
-      outcome: `Granted ${String(essenceAmount)} essence`,
-      isEnhanced: site.isEnhanced,
-    });
-    mutations.markSiteVisited(site.id);
-    mutations.setScreen({ type: "dreamscape" });
-  }, [essenceAmount, site, mutations]);
+    if (essenceRuntime === null || essenceRuntime.accepted) {
+      return;
+    }
+    mutations.acceptEssenceSite(site.id);
+  }, [essenceRuntime, site, mutations]);
 
-  // Award essence at the start of the count-up so the HUD counter tweens
-  // alongside the on-screen +N rather than jumping after the transition.
   useEffect(() => {
-    mutations.changeEssence(essenceAmount, "essence_site");
-  }, [essenceAmount, mutations]);
+    if (runtime === undefined) {
+      mutations.ensureEssenceSiteRuntime(site.id, site.isEnhanced);
+    }
+  }, [mutations, runtime, site.id, site.isEnhanced]);
 
   // Count-up animation
   useEffect(() => {
+    if (essenceAmount === null) {
+      return;
+    }
+
     const duration = 800;
     const steps = 20;
     const interval = duration / steps;
@@ -69,11 +60,15 @@ export function EssenceSiteScreen({ site }: EssenceSiteScreenProps) {
 
   // Log site entry once on mount
   useEffect(() => {
+    if (essenceAmount === null) {
+      return;
+    }
+
     logEvent("site_entered", {
       siteType: "Essence",
       isEnhanced: site.isEnhanced,
     });
-  }, [site.isEnhanced]);
+  }, [essenceAmount, site.isEnhanced]);
 
   // Auto-complete after animation finishes
   useEffect(() => {
@@ -81,6 +76,14 @@ export function EssenceSiteScreen({ site }: EssenceSiteScreenProps) {
     const timer = setTimeout(handleComplete, 600);
     return () => clearTimeout(timer);
   }, [phase, handleComplete]);
+
+  if (essenceAmount === null) {
+    return (
+      <div className="flex min-h-full items-center justify-center p-8 text-sm opacity-70">
+        Gathering essence...
+      </div>
+    );
+  }
 
   return (
     <AnimatePresence>
