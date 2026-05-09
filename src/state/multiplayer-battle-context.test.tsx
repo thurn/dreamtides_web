@@ -52,6 +52,7 @@ function makeFakeBattleState(): SharedBattleState {
       history: { past: [], future: [] },
       lastTransition: null,
       commandSerial: 0,
+      lastActivityKind: null,
     },
   };
 }
@@ -194,6 +195,74 @@ describe("useMultiplayerBattle", () => {
         direction: "redo",
       }),
     );
+  });
+
+  it("hydrates reducerState.lastActivity from lastActivityKind", () => {
+    const fakeBattleState = makeFakeBattleState();
+    // Inject a stand-in past entry so the hydrator has metadata to attach.
+    const stubMetadata = {
+      label: "Test command",
+      commandId: "PLAY_CARD",
+      targets: [],
+      undoPayload: null,
+    } as unknown as SharedBattleState["reducer"]["history"]["past"][number]["metadata"];
+    const stubEntry = {
+      metadata: stubMetadata,
+      before: {
+        mutable: fakeBattleState.reducer.mutable,
+        lastTransition: null,
+      },
+      after: {
+        mutable: fakeBattleState.reducer.mutable,
+        lastTransition: null,
+      },
+    } as unknown as SharedBattleState["reducer"]["history"]["past"][number];
+    const undoneState: SharedBattleState = {
+      init: fakeBattleState.init,
+      reducer: {
+        ...fakeBattleState.reducer,
+        history: { past: [], future: [stubEntry] },
+        lastActivityKind: "undo",
+      },
+    };
+
+    const captured: MultiplayerBattleValue[] = [];
+    mount(
+      <MultiplayerBattleProvider
+        database={{} as Database}
+        roomId="room-undo"
+        clientId="client-u"
+        battleState={undoneState}
+      >
+        <CaptureValue onValue={(value) => captured.push(value)} />
+      </MultiplayerBattleProvider>,
+    );
+
+    const value = captured[captured.length - 1];
+    expect(value).toBeDefined();
+    expect(value!.reducerState).not.toBeNull();
+    expect(value!.reducerState!.lastActivity).not.toBeNull();
+    expect(value!.reducerState!.lastActivity!.kind).toBe("undo");
+    expect(value!.reducerState!.lastActivity!.metadata).toBe(stubMetadata);
+  });
+
+  it("leaves reducerState.lastActivity null when lastActivityKind is null", () => {
+    const fakeBattleState = makeFakeBattleState();
+    expect(fakeBattleState.reducer.lastActivityKind).toBeNull();
+    const captured: MultiplayerBattleValue[] = [];
+    mount(
+      <MultiplayerBattleProvider
+        database={{} as Database}
+        roomId="room-fresh"
+        clientId="client-f"
+        battleState={fakeBattleState}
+      >
+        <CaptureValue onValue={(value) => captured.push(value)} />
+      </MultiplayerBattleProvider>,
+    );
+    const value = captured[captured.length - 1];
+    expect(value).toBeDefined();
+    expect(value!.reducerState!.lastActivity).toBeNull();
   });
 
   it("dispatches CLEAR_FORCED_RESULT through dispatchClearForcedResult", async () => {

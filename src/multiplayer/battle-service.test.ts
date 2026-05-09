@@ -149,6 +149,15 @@ describe("normalizeBattleStateSnapshot", () => {
     const result = normalizeBattleStateSnapshot(raw);
     expect(result?.reducer.commandSerial).toBe(0);
   });
+
+  it("defaults missing lastActivityKind to null", () => {
+    const raw = makeRawSnapshot({});
+    expect(
+      (raw.reducer as Record<string, unknown>).lastActivityKind,
+    ).toBeUndefined();
+    const result = normalizeBattleStateSnapshot(raw);
+    expect(result?.reducer.lastActivityKind).toBeNull();
+  });
 });
 
 describe("ensureBattleSession", () => {
@@ -172,6 +181,7 @@ describe("ensureBattleSession", () => {
         history: { past: [], future: [] },
         lastTransition: null,
         commandSerial: 0,
+        lastActivityKind: null,
       },
     });
   });
@@ -185,6 +195,7 @@ describe("ensureBattleSession", () => {
         history: { past: [], future: [] },
         lastTransition: null,
         commandSerial: 7,
+        lastActivityKind: null,
       },
     };
     mockedRunTransaction.mockImplementation(async (_ref, updater) => {
@@ -224,6 +235,7 @@ describe("applyBattleCommandToRoom", () => {
           history: { past: [], future: [] },
           lastTransition: null,
           commandSerial: 0,
+          lastActivityKind: null,
         },
       },
       presence: {},
@@ -246,6 +258,7 @@ describe("applyBattleCommandToRoom", () => {
     const updatedBattle = next.battleState!;
     expect(updatedBattle.reducer.commandSerial).toBe(1);
     expect(updatedBattle.reducer.history.past.length).toBe(1);
+    expect(updatedBattle.reducer.lastActivityKind).toBe("command");
     expect(next.actionLog!["action-1"].action).toBe("battle:PLAY_CARD");
     expect(next.actionLog!["action-1"].source).toBe("hand-tray");
     expect(next.actionLog!["action-1"].summary.commandSerial).toBe(1);
@@ -273,6 +286,7 @@ describe("applyBattleCommandToRoom", () => {
           history: { past: [], future: [] },
           lastTransition: null,
           commandSerial: 0,
+          lastActivityKind: null,
         },
       },
       presence: {},
@@ -335,6 +349,7 @@ function buildFreshRoom(): MultiplayerRoom {
         history: { past: [], future: [] },
         lastTransition: null,
         commandSerial: 0,
+        lastActivityKind: null,
       },
     },
     presence: {},
@@ -374,6 +389,7 @@ describe("undoBattleInRoom and redoBattleInRoom", () => {
     expect(next.battleState!.reducer.commandSerial).toBe(
       seeded.battleState!.reducer.commandSerial + 1,
     );
+    expect(next.battleState!.reducer.lastActivityKind).toBe("undo");
     expect(next.actionLog!["u1"].action).toBe("battle:UNDO");
     const restoredEntry = next.battleState!.reducer.history.future[0];
     expect(next.actionLog!["u1"].summary.restoredCommandLabel).toBe(
@@ -411,6 +427,7 @@ describe("undoBattleInRoom and redoBattleInRoom", () => {
     expect(next.battleState!.reducer.commandSerial).toBe(
       undone.battleState!.reducer.commandSerial + 1,
     );
+    expect(next.battleState!.reducer.lastActivityKind).toBe("redo");
     expect(next.actionLog!["r1"].action).toBe("battle:REDO");
     const restoredEntry =
       next.battleState!.reducer.history.past[
@@ -466,6 +483,7 @@ describe("resetBattleInRoom", () => {
     expect(next.battleState!.reducer.commandSerial).toBe(
       seeded.battleState!.reducer.commandSerial + 1,
     );
+    expect(next.battleState!.reducer.lastActivityKind).toBe("command");
     expect(next.actionLog!["r1"].action).toBe("battle:RESET");
   });
 
@@ -543,6 +561,7 @@ describe("applyClearForcedResultToRoom", () => {
     expect(next.battleState!.reducer.commandSerial).toBe(
       forced.battleState!.reducer.commandSerial + 1,
     );
+    expect(next.battleState!.reducer.lastActivityKind).toBe("command");
     expect(next.actionLog!["clear-1"].action).toBe(
       "battle:CLEAR_FORCED_RESULT",
     );

@@ -52,6 +52,18 @@ export function MultiplayerBattleProvider({
       battleState.reducer.history,
     );
     seeded.lastTransition = battleState.reducer.lastTransition;
+    const kind = battleState.reducer.lastActivityKind;
+    if (kind !== null) {
+      const past = battleState.reducer.history.past;
+      const future = battleState.reducer.history.future;
+      const lastEntry = past[past.length - 1] ?? future[0];
+      if (lastEntry !== undefined) {
+        seeded.lastActivity = {
+          kind,
+          metadata: lastEntry.metadata,
+        };
+      }
+    }
     return seeded;
   }, [battleState]);
 

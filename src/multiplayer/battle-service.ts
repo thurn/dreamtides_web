@@ -156,6 +156,7 @@ function normalizeReducer(
     history: normalizeHistory(raw?.history),
     lastTransition: normalizeTransition(raw?.lastTransition ?? null),
     commandSerial: raw?.commandSerial ?? 0,
+    lastActivityKind: raw?.lastActivityKind ?? null,
   };
 }
 
@@ -198,6 +199,7 @@ export async function ensureBattleSession(
           history: { past: [], future: [] },
           lastTransition: null,
           commandSerial: 0,
+          lastActivityKind: null,
         },
       };
       return fresh;
@@ -249,6 +251,7 @@ export function applyBattleCommandToRoom(
         history: next.history,
         lastTransition: next.lastTransition,
         commandSerial: nextSerial,
+        lastActivityKind: "command",
       },
     },
     metadata: { ...room.metadata, updatedAt: now },
@@ -350,6 +353,7 @@ function navigateBattleHistory(
         history: result.history,
         lastTransition: result.restored.lastTransition,
         commandSerial: room.battleState.reducer.commandSerial + 1,
+        lastActivityKind: direction,
       },
     },
     metadata: { ...room.metadata, updatedAt: now },
@@ -412,6 +416,7 @@ export function resetBattleInRoom(
         history: { past: [], future: [] },
         lastTransition: null,
         commandSerial: room.battleState.reducer.commandSerial + 1,
+        lastActivityKind: "command",
       },
     },
     metadata: { ...room.metadata, updatedAt: now },
@@ -478,6 +483,7 @@ export function applyClearForcedResultToRoom(input: {
         history: next.history,
         lastTransition: next.lastTransition,
         commandSerial: nextSerial,
+        lastActivityKind: "command",
       },
     },
     metadata: { ...room.metadata, updatedAt: now },

@@ -92,6 +92,7 @@ function makeFakeBattleState(): SharedBattleState {
       history: { past: [], future: [] },
       lastTransition: null,
       commandSerial: 0,
+      lastActivityKind: null,
     },
   };
 }

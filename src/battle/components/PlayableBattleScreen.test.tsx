@@ -113,6 +113,7 @@ function TestMultiplayerBattleHost({
         history: state.history,
         lastTransition: state.lastTransition,
         commandSerial: state.activityId,
+        lastActivityKind: state.lastActivity?.kind ?? null,
       },
     };
     const reducerState = createBattleReducerState(state.mutable, state.history);
