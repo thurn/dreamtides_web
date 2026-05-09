@@ -7,7 +7,6 @@ import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
   enterDraftSite,
-  getCurrentOffer,
   SITE_PICKS,
 } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
@@ -270,9 +269,6 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const [pickPhase, setPickPhase] = useState<PickPhase>("idle");
   const [pickedCardNumber, setPickedCardNumber] = useState<number | null>(null);
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
-  const [currentOfferCards, setCurrentOfferCards] = useState<CardData[]>([]);
-  const [isComplete, setIsComplete] = useState(false);
-  const [offerKey, setOfferKey] = useState(0);
   const [showDeckSidebar, setShowDeckSidebar] = useState(true);
   const [highlightedDeckEntryId, setHighlightedDeckEntryId] = useState<string | null>(null);
   const [flyingCard, setFlyingCard] = useState<FlyingCardAnimation | null>(null);
@@ -282,20 +278,47 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const deckFlightTargetRef = useRef<HTMLDivElement | null>(null);
   const previousDeckEntryIdsRef = useRef(state.deck.map((entry) => entry.entryId));
 
+  // Multiplayer snapshots create a fresh state.draftState reference on every
+  // RTDB update (the normalizer in room-service rebuilds objects via spread).
+  // Derive everything from content-equal scalars so renders triggered by
+  // unrelated room writes don't churn local state or AnimatePresence keys.
+  const isActiveDraftSite = state.draftState?.activeSiteId === siteId;
+  const draftSitePicksCompleted = isActiveDraftSite
+    ? state.draftState?.sitePicksCompleted ?? 0
+    : 0;
+  const draftCurrentOfferKey = isActiveDraftSite
+    ? (state.draftState?.currentOffer ?? []).join(",")
+    : "";
+  const draftRemainingTotal = state.draftState
+    ? countRemainingCards(state.draftState.remainingCopiesByCard)
+    : 0;
+
   const draftedCardNumbers = useMemo(() => {
-    const draftState = state.draftState;
-    if (
-      draftState === null
-      || draftState.activeSiteId !== siteId
-      || draftState.sitePicksCompleted === 0
-    ) {
+    if (!isActiveDraftSite || draftSitePicksCompleted === 0) {
       return [];
     }
-
     return state.deck
-      .slice(-draftState.sitePicksCompleted)
+      .slice(-draftSitePicksCompleted)
       .map((entry) => entry.cardNumber);
-  }, [siteId, state.deck, state.draftState]);
+  }, [isActiveDraftSite, draftSitePicksCompleted, state.deck]);
+
+  const currentOfferCards = useMemo(() => {
+    if (!isActiveDraftSite || draftCurrentOfferKey === "") {
+      return [];
+    }
+    const offerNumbers = draftCurrentOfferKey
+      .split(",")
+      .map((num) => Number(num));
+    const offerCards = offerNumbers
+      .map((num) => cardDatabase.get(num))
+      .filter((c): c is CardData => c !== undefined);
+    return sortCardsForDisplay(offerCards);
+  }, [isActiveDraftSite, draftCurrentOfferKey, cardDatabase]);
+
+  const isComplete =
+    isActiveDraftSite
+    && draftCurrentOfferKey === ""
+    && (draftSitePicksCompleted > 0 || draftRemainingTotal < 4);
 
   const cardSourceDebugState = useMemo(
     () =>
@@ -310,39 +333,32 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     [currentOfferCards, isComplete, state.resolvedPackage],
   );
 
-  // Initialize or resume draft state for this site.
+  // Initialize or resume draft state for this site. The body only writes when
+  // we need to enter a different site — content-stable derivations above
+  // handle the steady-state display, so this effect must not call setState.
   useEffect(() => {
     if (cardDatabase.size === 0) return;
     if (state.draftState === null) return;
 
-    if (
-      state.draftState.activeSiteId === null
-      || state.draftState.activeSiteId !== siteId
-    ) {
-      const cloned = JSON.parse(JSON.stringify(state.draftState)) as DraftState;
-      enterDraftSite(cloned, siteId, cardDatabase);
-      draftStateRef.current = cloned;
-      mutations.setDraftState(cloned, "draft_site_enter");
+    if (state.draftState.activeSiteId === siteId) {
+      draftStateRef.current = state.draftState;
       return;
     }
 
-    draftStateRef.current = state.draftState;
-    const offerCards = getCurrentOffer(state.draftState)
-      .map((num) => cardDatabase.get(num))
-      .filter((c): c is CardData => c !== undefined);
-    setCurrentOfferCards(sortCardsForDisplay(offerCards));
-    setOfferKey((prev) => prev + 1);
-    setIsComplete(
-      state.draftState.activeSiteId === siteId
-      && state.draftState.currentOffer.length === 0
-      && (
-        state.draftState.sitePicksCompleted > 0
-        || countRemainingCards(state.draftState.remainingCopiesByCard) < 4
-      ),
-    );
+    const cloned = JSON.parse(JSON.stringify(state.draftState)) as DraftState;
+    enterDraftSite(cloned, siteId, cardDatabase);
+    draftStateRef.current = cloned;
+    mutations.setDraftState(cloned, "draft_site_enter");
   }, [siteId, state.draftState, cardDatabase, mutations]);
 
+  // Skip the RTDB write when the debug payload hasn't actually changed —
+  // otherwise bumping metadata.updatedAt re-fires the room subscription and
+  // we'd loop with the effects above.
+  const lastCardSourceDebugSignatureRef = useRef<string | null>(null);
   useEffect(() => {
+    const signature = JSON.stringify(cardSourceDebugState);
+    if (lastCardSourceDebugSignatureRef.current === signature) return;
+    lastCardSourceDebugSignatureRef.current = signature;
     mutations.setCardSourceDebug(cardSourceDebugState, "draft_site_cards_shown");
   }, [cardSourceDebugState, mutations]);
 
@@ -488,7 +504,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     mutations.setScreen({ type: "dreamscape" });
   }, [siteId, draftedCardNumbers, mutations]);
 
-  const pickNumber = (draftStateRef.current?.sitePicksCompleted ?? 0) + 1;
+  const pickNumber = draftSitePicksCompleted + 1;
 
   if (cardDatabase.size === 0) {
     return (
@@ -560,7 +576,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
         {/* 2x2 card grid, centered */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={`offer-${String(offerKey)}`}
+            key={`offer-${draftCurrentOfferKey}`}
             className="order-2 grid gap-3 md:gap-4"
             style={{
               gridTemplateColumns: "repeat(2, auto)",
