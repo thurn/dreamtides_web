@@ -6,6 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestContent } from "./data/quest-content";
 import { loadQuestContent } from "./data/quest-content";
+import { getFirebaseDatabase } from "./firebase/app-config";
 import type { CardData } from "./types/cards";
 import type { QuestMutations } from "./state/quest-context";
 import type { QuestState } from "./types/quest";
@@ -18,7 +19,7 @@ vi.mock("./data/quest-content", () => ({
 }));
 
 vi.mock("./firebase/app-config", () => ({
-  getFirebaseDatabase: vi.fn(() => ({})),
+  getFirebaseDatabase: vi.fn(),
 }));
 
 vi.mock("./multiplayer/MultiplayerRoomGate", () => ({
@@ -184,11 +185,21 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
+async function flushAppEffects(): Promise<void> {
+  await act(async () => {
+    await Promise.resolve();
+    await Promise.resolve();
+  });
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null));
   vi.mocked(loadQuestContent).mockResolvedValue(makeQuestContent());
+  vi.mocked(getFirebaseDatabase).mockReturnValue({} as ReturnType<
+    typeof getFirebaseDatabase
+  >);
   (
     globalThis as typeof globalThis & {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
@@ -215,12 +226,39 @@ describe("App", () => {
       />,
     );
 
-    await act(async () => {
-      await Promise.resolve();
-    });
+    await flushAppEffects();
 
     expect(container.querySelector("[data-room-gate='ab12cd']")).not.toBeNull();
     expect(container.querySelector("[data-multiplayer-provider]")).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders a Firebase setup issue when database initialization fails", async () => {
+    vi.mocked(getFirebaseDatabase).mockImplementationOnce(() => {
+      throw new Error("Missing VITE_FIREBASE_DATABASE_URL");
+    });
+
+    const { container, root } = mount(
+      <App
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          enableAi: false,
+          gameId: null,
+        }}
+      />,
+    );
+
+    await flushAppEffects();
+
+    expect(container.textContent).toContain("Firebase setup issue");
+    expect(container.textContent).toContain("Missing VITE_FIREBASE_DATABASE_URL");
+    expect(container.textContent).toContain("Required env: VITE_FIREBASE_API_KEY");
+    expect(container.querySelector("[data-room-gate]")).toBeNull();
+    expect(container.querySelector("[data-multiplayer-provider]")).toBeNull();
 
     act(() => {
       root.unmount();

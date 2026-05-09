@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
 import type { QuestContent } from "./data/quest-content";
 import { loadQuestContent } from "./data/quest-content";
@@ -167,6 +168,8 @@ function isBattleSiteHudHidden(state: QuestState): boolean {
 export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig }) {
   const [questContent, setQuestContent] = useState<QuestContent | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [database, setDatabase] = useState<Database | null>(null);
+  const [firebaseError, setFirebaseError] = useState<string | null>(null);
 
   useEffect(() => {
     loadQuestContent()
@@ -180,6 +183,22 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
         );
       });
   }, []);
+
+  useEffect(() => {
+    if (questContent === null) {
+      return;
+    }
+
+    try {
+      setDatabase(getFirebaseDatabase());
+      setFirebaseError(null);
+    } catch (error) {
+      setDatabase(null);
+      setFirebaseError(
+        error instanceof Error ? error.message : "Failed to initialize Firebase.",
+      );
+    }
+  }, [questContent]);
 
   if (loadError !== null) {
     return (
@@ -228,7 +247,30 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
     );
   }
 
-  const database = getFirebaseDatabase();
+  if (firebaseError !== null) {
+    return (
+      <main>
+        <h1>Firebase setup issue</h1>
+        <div>
+          <p>{firebaseError}</p>
+          <p>
+            Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN,
+            VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID,
+            VITE_FIREBASE_APP_ID.
+          </p>
+        </div>
+      </main>
+    );
+  }
+
+  if (database === null) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
+        <p className="text-lg opacity-80">Loading quest content...</p>
+      </div>
+    );
+  }
 
   return (
     <MultiplayerRoomGate database={database} gameId={runtimeConfig.gameId}>
