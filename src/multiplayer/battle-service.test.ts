@@ -1,8 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { runTransaction } from "firebase/database";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../battle/types";
-import { ensureBattleSession, normalizeBattleStateSnapshot } from "./battle-service";
+import {
+  applyBattleCommandToRoom,
+  ensureBattleSession,
+  normalizeBattleStateSnapshot,
+} from "./battle-service";
+import { createBattleInit } from "../battle/integration/create-battle-init";
+import { createInitialBattleState } from "../battle/state/create-initial-state";
+import {
+  makeBattleTestCardDatabase,
+  makeBattleTestDreamcallers,
+  makeBattleTestSite,
+  makeBattleTestState,
+} from "../battle/test-support";
 import type { Database } from "firebase/database";
+import type { MultiplayerRoom } from "./room-types";
 import type { SharedBattleState } from "./battle-types";
 
 vi.mock("firebase/database", () => ({
@@ -181,5 +194,74 @@ describe("ensureBattleSession", () => {
     });
 
     expect(captured).toBe(existing);
+  });
+});
+
+describe("applyBattleCommandToRoom", () => {
+  it("runs battleControllerReducer inside the room transaction and bumps commandSerial", () => {
+    const init = createBattleInit({
+      battleEntryKey: "test-1",
+      site: makeBattleTestSite(),
+      state: makeBattleTestState(),
+      cardDatabase: makeBattleTestCardDatabase(),
+      dreamcallers: makeBattleTestDreamcallers(),
+      seedOverride: 1,
+      enableAi: false,
+    });
+    const initial = createInitialBattleState(init);
+    const initialRoom: MultiplayerRoom = {
+      metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
+      questState: null,
+      battleState: {
+        init,
+        reducer: {
+          mutable: initial,
+          history: { past: [], future: [] },
+          lastTransition: null,
+          commandSerial: 0,
+        },
+      },
+      presence: {},
+      actionLog: {},
+    };
+
+    const next = applyBattleCommandToRoom({
+      room: initialRoom,
+      command: {
+        id: "PLAY_CARD",
+        battleCardId: initial.sides.player.hand[0],
+        sourceSurface: "hand-tray",
+      },
+      now: "2026-05-09T00:00:00.000Z",
+      actorId: "client-a",
+      actionId: "action-1",
+    });
+
+    expect(next).not.toBe(initialRoom);
+    const updatedBattle = next.battleState!;
+    expect(updatedBattle.reducer.commandSerial).toBe(1);
+    expect(updatedBattle.reducer.history.past.length).toBe(1);
+    expect(next.actionLog!["action-1"].action).toBe("battle:PLAY_CARD");
+    expect(next.actionLog!["action-1"].source).toBe("hand-tray");
+    expect(next.actionLog!["action-1"].summary.commandSerial).toBe(1);
+    expect(next.metadata.updatedAt).toBe("2026-05-09T00:00:00.000Z");
+  });
+
+  it("returns the input unchanged when battleState slot is null", () => {
+    const room: MultiplayerRoom = {
+      metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
+      questState: null,
+      battleState: null,
+      presence: {},
+      actionLog: {},
+    };
+    const next = applyBattleCommandToRoom({
+      room,
+      command: { id: "END_TURN", sourceSurface: "action-bar" },
+      now: "2026-05-09T00:00:00.000Z",
+      actorId: "client-a",
+      actionId: "action-1",
+    });
+    expect(next).toBe(room);
   });
 });

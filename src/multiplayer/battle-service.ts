@@ -12,11 +12,17 @@ import {
   type DeploySlotId,
   type ReserveSlotId,
 } from "../battle/types";
+import { battleControllerReducer } from "../battle/state/controller";
+import { createBattleReducerState } from "../battle/state/reducer";
+import type { BattleCommand } from "../battle/debug/commands";
 import type {
   SharedBattleReducerSlice,
   SharedBattleState,
 } from "./battle-types";
 import { battleStatePath } from "./battle-paths";
+import { buildActionLogEntry } from "./action-log";
+import { runRoomTransaction } from "./room-service";
+import type { MultiplayerRoom } from "./room-types";
 
 function defaultReserveSlots(): Record<ReserveSlotId, string | null> {
   const slots = {} as Record<ReserveSlotId, string | null>;
@@ -191,4 +197,108 @@ export async function ensureBattleSession(
       return fresh;
     },
   );
+}
+
+export interface ApplyBattleCommandInput {
+  room: MultiplayerRoom;
+  command: BattleCommand;
+  now: string;
+  actorId: string;
+  actionId: string;
+}
+
+export function applyBattleCommandToRoom(
+  input: ApplyBattleCommandInput,
+): MultiplayerRoom {
+  const { room, command, now, actorId, actionId } = input;
+  if (room.battleState === null) {
+    return room;
+  }
+
+  const reducerState = createBattleReducerState(
+    room.battleState.reducer.mutable,
+    room.battleState.reducer.history,
+  );
+  reducerState.lastTransition = room.battleState.reducer.lastTransition;
+
+  const next = battleControllerReducer(
+    reducerState,
+    { type: "APPLY_COMMAND", command },
+    room.battleState.init,
+  );
+  if (next === reducerState) {
+    return room;
+  }
+
+  const lastEntry = next.history.past[next.history.past.length - 1];
+  const actionLabel = lastEntry?.metadata.label ?? command.id;
+  const nextSerial = room.battleState.reducer.commandSerial + 1;
+
+  return {
+    ...room,
+    battleState: {
+      init: room.battleState.init,
+      reducer: {
+        mutable: next.mutable,
+        history: next.history,
+        lastTransition: next.lastTransition,
+        commandSerial: nextSerial,
+      },
+    },
+    metadata: { ...room.metadata, updatedAt: now },
+    actionLog: {
+      ...(room.actionLog ?? {}),
+      [actionId]: buildActionLogEntry({
+        timestamp: now,
+        actorId,
+        action: `battle:${command.id}`,
+        source: command.sourceSurface ?? "battle",
+        summary: {
+          commandLabel: actionLabel,
+          commandSerial: nextSerial,
+          ...summarizeCommand(command),
+        },
+      }),
+    },
+  };
+}
+
+function summarizeCommand(command: BattleCommand): Record<string, unknown> {
+  const summary: Record<string, unknown> = {};
+  if ("battleCardId" in command && command.battleCardId !== undefined) {
+    summary.battleCardId = command.battleCardId;
+  }
+  if ("target" in command && command.target !== undefined) {
+    summary.target = command.target;
+  }
+  if (command.id === "DEBUG_EDIT" && command.edit !== undefined) {
+    summary.editKind = command.edit.kind;
+  }
+  return summary;
+}
+
+export interface DispatchBattleCommandInput {
+  database: Database;
+  roomId: string;
+  command: BattleCommand;
+  actorId: string;
+  now?: string;
+  actionId?: string;
+}
+
+export async function dispatchBattleCommandToRoom(
+  input: DispatchBattleCommandInput,
+): Promise<void> {
+  const now = input.now ?? new Date().toISOString();
+  const actionId = input.actionId ?? crypto.randomUUID();
+  await runRoomTransaction(input.database, input.roomId, (room) => {
+    if (room === null) return undefined;
+    return applyBattleCommandToRoom({
+      room,
+      command: input.command,
+      now,
+      actorId: input.actorId,
+      actionId,
+    });
+  });
 }
