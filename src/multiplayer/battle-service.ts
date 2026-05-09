@@ -13,6 +13,10 @@ import {
   type ReserveSlotId,
 } from "../battle/types";
 import { battleControllerReducer } from "../battle/state/controller";
+import {
+  redoBattleHistory,
+  undoBattleHistory,
+} from "../battle/state/history";
 import { createBattleReducerState } from "../battle/state/reducer";
 import type { BattleCommand } from "../battle/debug/commands";
 import type {
@@ -303,5 +307,84 @@ export async function dispatchBattleCommandToRoom(
       actorId: input.actorId,
       actionId,
     });
+  });
+}
+
+export interface BattleHistoryNavInput {
+  room: MultiplayerRoom;
+  now: string;
+  actorId: string;
+  actionId: string;
+}
+
+export function undoBattleInRoom(input: BattleHistoryNavInput): MultiplayerRoom {
+  return navigateBattleHistory(input, "undo");
+}
+
+export function redoBattleInRoom(input: BattleHistoryNavInput): MultiplayerRoom {
+  return navigateBattleHistory(input, "redo");
+}
+
+function navigateBattleHistory(
+  input: BattleHistoryNavInput,
+  direction: "undo" | "redo",
+): MultiplayerRoom {
+  const { room, now, actorId, actionId } = input;
+  if (room.battleState === null) return room;
+
+  const result =
+    direction === "undo"
+      ? undoBattleHistory(room.battleState.reducer.history)
+      : redoBattleHistory(room.battleState.reducer.history);
+
+  if (result === null) return room;
+
+  return {
+    ...room,
+    battleState: {
+      init: room.battleState.init,
+      reducer: {
+        mutable: result.restored.mutable,
+        history: result.history,
+        lastTransition: result.restored.lastTransition,
+        commandSerial: room.battleState.reducer.commandSerial + 1,
+      },
+    },
+    metadata: { ...room.metadata, updatedAt: now },
+    actionLog: {
+      ...(room.actionLog ?? {}),
+      [actionId]: buildActionLogEntry({
+        timestamp: now,
+        actorId,
+        action: direction === "undo" ? "battle:UNDO" : "battle:REDO",
+        source: "history",
+        summary: {
+          commandSerial: room.battleState.reducer.commandSerial + 1,
+          restoredCommandLabel: result.entry.metadata.label,
+        },
+      }),
+    },
+  };
+}
+
+export async function dispatchBattleHistoryNav(input: {
+  database: Database;
+  roomId: string;
+  direction: "undo" | "redo";
+  actorId: string;
+  now?: string;
+  actionId?: string;
+}): Promise<void> {
+  const now = input.now ?? new Date().toISOString();
+  const actionId = input.actionId ?? crypto.randomUUID();
+  await runRoomTransaction(input.database, input.roomId, (room) => {
+    if (room === null) return undefined;
+    const next = (input.direction === "undo" ? undoBattleInRoom : redoBattleInRoom)({
+      room,
+      now,
+      actorId: input.actorId,
+      actionId,
+    });
+    return next === room ? room : next;
   });
 }
