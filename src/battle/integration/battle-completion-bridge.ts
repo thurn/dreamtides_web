@@ -45,6 +45,7 @@ export interface CompleteBattleSiteVictoryInput {
     | "updateAtlas"
   >;
   postVictoryHandoffDelayMs?: number;
+  clearBattleStateForRoom?: () => void;
 }
 
 export function completeBattleSiteVictory(
@@ -63,6 +64,7 @@ export function completeBattleSiteVictory(
     playerHasBanes,
     mutations,
     postVictoryHandoffDelayMs,
+    clearBattleStateForRoom,
   } = input;
 
   if (completedBattleIds.has(battleId)) {
@@ -117,26 +119,28 @@ export function completeBattleSiteVictory(
       mutations.setScreen({ type: "atlas" });
     }
 
-    if (dreamscapeId === null) {
-      return;
+    if (dreamscapeId !== null) {
+      const dreamscapeNode = atlasSnapshot.nodes[dreamscapeId];
+      const updatedAtlas = generateNewNodes(
+        atlasSnapshot,
+        dreamscapeId,
+        completionLevelAtBattleStart,
+        {
+          playerHasBanes,
+        },
+      );
+
+      mutations.updateAtlas(updatedAtlas);
+      logEvent("dreamscape_completed", {
+        dreamscapeId,
+        sitesVisitedCount: dreamscapeNode?.sites.length ?? 0,
+      });
+      mutations.setCurrentDreamscape(null);
     }
 
-    const dreamscapeNode = atlasSnapshot.nodes[dreamscapeId];
-    const updatedAtlas = generateNewNodes(
-      atlasSnapshot,
-      dreamscapeId,
-      completionLevelAtBattleStart,
-      {
-        playerHasBanes,
-      },
-    );
-
-    mutations.updateAtlas(updatedAtlas);
-    logEvent("dreamscape_completed", {
-      dreamscapeId,
-      sitesVisitedCount: dreamscapeNode?.sites.length ?? 0,
-    });
-    mutations.setCurrentDreamscape(null);
+    if (typeof clearBattleStateForRoom === "function") {
+      clearBattleStateForRoom();
+    }
   };
 
   if ((postVictoryHandoffDelayMs ?? 0) > 0) {

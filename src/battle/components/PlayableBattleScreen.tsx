@@ -14,7 +14,7 @@ import {
 } from "../../logging";
 import { useQuest } from "../../state/quest-context";
 import { useMultiplayerBattle } from "../../state/multiplayer-battle-context";
-import { dispatchBattleReset } from "../../multiplayer/battle-service";
+import { dispatchBattleReset, dispatchClearBattleState } from "../../multiplayer/battle-service";
 import type { SharedBattleState } from "../../multiplayer/battle-types";
 import { completeBattleSiteVictory } from "../integration/battle-completion-bridge";
 import { beginQuestFailureRoute } from "../integration/failure-route";
@@ -543,6 +543,14 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
         questState.deck.some((entry) => entry.isBane) ||
         questState.dreamsigns.some((dreamsign) => dreamsign.isBane),
       mutations,
+      clearBattleStateForRoom: () => {
+        void dispatchClearBattleState({
+          database,
+          roomId,
+        }).catch((error: unknown) => {
+          console.error("Failed to clear battle slot", error);
+        });
+      },
       postVictoryHandoffDelayMs: 800,
     });
   }

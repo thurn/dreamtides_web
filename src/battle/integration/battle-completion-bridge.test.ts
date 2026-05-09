@@ -107,9 +107,11 @@ describe("completeBattleSiteVictory", () => {
       edges: [],
       nexusId: "updated",
     };
+    const clearBattleStateForRoom = vi.fn();
     const input = makeInput({
       mutations: makeMutations(),
       postVictoryHandoffDelayMs: 800,
+      clearBattleStateForRoom,
     });
 
     mocks.generateNewNodes.mockReturnValue(updatedAtlas);
@@ -130,15 +132,18 @@ describe("completeBattleSiteVictory", () => {
     );
     expect(input.mutations.setScreen).not.toHaveBeenCalled();
     expect(mocks.generateNewNodes).not.toHaveBeenCalled();
+    expect(clearBattleStateForRoom).not.toHaveBeenCalled();
 
     vi.advanceTimersByTime(799);
 
     expect(input.mutations.setScreen).not.toHaveBeenCalled();
     expect(mocks.generateNewNodes).not.toHaveBeenCalled();
+    expect(clearBattleStateForRoom).not.toHaveBeenCalled();
 
     vi.advanceTimersByTime(1);
 
     expect(input.mutations.setScreen).toHaveBeenCalledWith({ type: "atlas" });
+    expect(clearBattleStateForRoom).toHaveBeenCalledTimes(1);
     expect(mocks.generateNewNodes).toHaveBeenCalledWith(
       input.atlasSnapshot,
       "dreamscape-1",
@@ -181,6 +186,7 @@ describe("completeBattleSiteVictory", () => {
   });
 
   it("skips the atlas transition for final boss victories", () => {
+    const clearBattleStateForRoom = vi.fn();
     const input = makeInput({
       battleId: "battle:none:site-final:6",
       siteId: "site-final",
@@ -210,6 +216,7 @@ describe("completeBattleSiteVictory", () => {
       isFinalBoss: true,
       playerHasBanes: false,
       mutations: makeMutations(),
+      clearBattleStateForRoom,
     });
 
     completeBattleSiteVictory(input);
@@ -217,6 +224,7 @@ describe("completeBattleSiteVictory", () => {
     expect(input.mutations.setScreen).not.toHaveBeenCalled();
     expect(input.mutations.updateAtlas).not.toHaveBeenCalled();
     expect(input.mutations.setCurrentDreamscape).not.toHaveBeenCalled();
+    expect(clearBattleStateForRoom).toHaveBeenCalledTimes(1);
   });
 
   it("ignores duplicate completion for the same battle id", () => {
