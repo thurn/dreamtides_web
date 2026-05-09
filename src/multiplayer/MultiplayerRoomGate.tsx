@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Database, Unsubscribe } from "firebase/database";
+import { pruneActionLog } from "./action-log";
 import { generateRoomId } from "./room-id";
-import { createRoom, subscribeToRoom, writePresence } from "./room-service";
-import type { MultiplayerRoom, RoomSession } from "./room-types";
+import { createRoom, subscribeToRoom, writePresence, writeRoomUpdate } from "./room-service";
+import { roomPath } from "./room-paths";
+import { ACTION_LOG_LIMIT, type MultiplayerRoom, type RoomSession } from "./room-types";
 
 interface MultiplayerRoomGateProps {
   database: Database;
@@ -116,6 +118,23 @@ export function MultiplayerRoomGate({
       isCurrent = false;
     };
   }, [clientId, database, readyRoomId]);
+
+  useEffect(() => {
+    if (gateState.status !== "ready") {
+      return;
+    }
+
+    const actionLog = gateState.room.actionLog ?? {};
+    if (Object.keys(actionLog).length <= ACTION_LOG_LIMIT + 10) {
+      return;
+    }
+
+    void writeRoomUpdate(database, {
+      [`${roomPath(gateState.roomId)}/actionLog`]: pruneActionLog(actionLog),
+    }).catch((error: unknown) => {
+      console.error("Failed to prune multiplayer action log", error);
+    });
+  }, [database, gateState]);
 
   const handleCreateGame = useCallback(async (): Promise<void> => {
     const roomId = generateRoomId();

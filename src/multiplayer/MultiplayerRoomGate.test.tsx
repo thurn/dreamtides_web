@@ -5,6 +5,7 @@ import type { Database } from "firebase/database";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MultiplayerRoomGate } from "./MultiplayerRoomGate";
+import { buildActionLogEntry } from "./action-log";
 import type { MultiplayerRoom } from "./room-types";
 
 type RoomSubscriptionSnapshot =
@@ -18,6 +19,7 @@ const serviceMocks = vi.hoisted(() => ({
   createRoom: vi.fn(),
   subscribeToRoom: vi.fn(),
   writePresence: vi.fn(),
+  writeRoomUpdate: vi.fn(),
 }));
 
 const roomIdMocks = vi.hoisted(() => ({
@@ -28,6 +30,7 @@ vi.mock("./room-service", () => ({
   createRoom: serviceMocks.createRoom,
   subscribeToRoom: serviceMocks.subscribeToRoom,
   writePresence: serviceMocks.writePresence,
+  writeRoomUpdate: serviceMocks.writeRoomUpdate,
 }));
 
 vi.mock("./room-id", () => ({
@@ -65,6 +68,26 @@ function makeRoom(overrides: Partial<MultiplayerRoom> = {}): MultiplayerRoom {
     actionLog: {},
     ...overrides,
   };
+}
+
+function makeActionLog(count: number): MultiplayerRoom["actionLog"] {
+  return Object.fromEntries(
+    Array.from({ length: count }, (_, index) => {
+      const actionNumber = index + 1;
+      return [
+        `action-${actionNumber}`,
+        buildActionLogEntry({
+          actorId: "client-1",
+          action: "testAction",
+          source: "test",
+          summary: { actionNumber },
+          timestamp: `2026-05-08T12:${String(Math.floor(index / 60)).padStart(2, "0")}:${String(
+            index % 60,
+          ).padStart(2, "0")}.000Z`,
+        }),
+      ];
+    }),
+  );
 }
 
 function subscribeWith(snapshot: RoomSubscriptionSnapshot): void {
@@ -113,11 +136,31 @@ function createButton(container: HTMLElement): HTMLButtonElement {
   return button;
 }
 
+function latestRoomUpdate(): {
+  databaseArg: Database;
+  updateMap: Record<string, unknown>;
+} {
+  const calls = serviceMocks.writeRoomUpdate.mock.calls as unknown as Array<
+    [Database, Record<string, unknown>]
+  >;
+  const call = calls[calls.length - 1];
+
+  if (call === undefined) {
+    throw new Error("Missing room update");
+  }
+
+  return {
+    databaseArg: call[0],
+    updateMap: call[1],
+  };
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
   serviceMocks.createRoom.mockResolvedValue(undefined);
   serviceMocks.subscribeToRoom.mockReturnValue(vi.fn());
   serviceMocks.writePresence.mockResolvedValue(undefined);
+  serviceMocks.writeRoomUpdate.mockResolvedValue(undefined);
   roomIdMocks.generateRoomId.mockReturnValue("ab12cd");
   window.history.replaceState(null, "", "/");
   Object.defineProperty(globalThis, "crypto", {
@@ -242,6 +285,54 @@ describe("MultiplayerRoomGate", () => {
     expect(serviceMocks.writePresence).toHaveBeenCalledOnce();
     expect(container.textContent).toContain("2 connected");
     expect(container.textContent).toContain("Room ab12cd");
+  });
+
+  it("prunes oversized action logs", async () => {
+    subscribeWith({
+      status: "ready",
+      room: makeRoom({ actionLog: makeActionLog(61) }),
+    });
+
+    mount(
+      <MultiplayerRoomGate database={database} gameId="ab12cd">
+        {() => <div>Quest App</div>}
+      </MultiplayerRoomGate>,
+    );
+
+    await act(async () => {
+      await flushEffects();
+    });
+
+    expect(serviceMocks.writeRoomUpdate).toHaveBeenCalledOnce();
+    const { databaseArg, updateMap } = latestRoomUpdate();
+    expect(databaseArg).toBe(database);
+
+    const pruned = updateMap[
+      "rooms/ab12cd/actionLog"
+    ] as NonNullable<MultiplayerRoom["actionLog"]>;
+    expect(Object.keys(pruned)).toHaveLength(50);
+    expect(pruned["action-11"]).toBeUndefined();
+    expect(pruned["action-12"]?.timestamp).toBe("2026-05-08T12:00:11.000Z");
+    expect(pruned["action-61"]?.timestamp).toBe("2026-05-08T12:01:00.000Z");
+  });
+
+  it("keeps action logs at the maintenance threshold", async () => {
+    subscribeWith({
+      status: "ready",
+      room: makeRoom({ actionLog: makeActionLog(60) }),
+    });
+
+    mount(
+      <MultiplayerRoomGate database={database} gameId="ab12cd">
+        {() => <div>Quest App</div>}
+      </MultiplayerRoomGate>,
+    );
+
+    await act(async () => {
+      await flushEffects();
+    });
+
+    expect(serviceMocks.writeRoomUpdate).not.toHaveBeenCalled();
   });
 
   it("shows Firebase setup issue when presence cannot be written", async () => {

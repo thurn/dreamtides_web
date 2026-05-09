@@ -12,6 +12,7 @@ import {
   runRoomTransaction,
   writeRoomUpdate,
 } from "../multiplayer/room-service";
+import { buildActionLogEntry } from "../multiplayer/action-log";
 import {
   buildQuestFieldUpdate,
   metadataUpdatedAtPath,
@@ -819,7 +820,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "startQuest",
@@ -828,7 +829,7 @@ export function MultiplayerQuestProvider({
                   dreamcallerId: dreamcaller.id,
                   dreamcallerName: dreamcaller.name,
                 },
-              },
+              }),
             },
           };
         },
@@ -1059,13 +1060,13 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "completeSite",
                 source,
                 summary: { siteId },
-              },
+              }),
             },
           };
         },
@@ -1120,13 +1121,13 @@ export function MultiplayerQuestProvider({
           },
           actionLog: {
             ...(room.actionLog ?? {}),
-            [actionId]: {
+            [actionId]: buildActionLogEntry({
               timestamp: now,
               actorId: current.session.clientId,
               action: "pickDraftCard",
               source: "draft_pick",
               summary: { siteId, cardNumber },
-            },
+            }),
           },
         };
       },
@@ -1210,7 +1211,7 @@ export function MultiplayerQuestProvider({
           },
           actionLog: {
             ...(room.actionLog ?? {}),
-            [actionId]: {
+            [actionId]: buildActionLogEntry({
               timestamp: now,
               actorId: current.session.clientId,
               action: "ensureRewardSiteRuntime",
@@ -1219,7 +1220,7 @@ export function MultiplayerQuestProvider({
                 siteId,
                 rewardType: runtime.reward.rewardType,
               },
-            },
+            }),
           },
         };
       },
@@ -1309,7 +1310,7 @@ export function MultiplayerQuestProvider({
           },
           actionLog: {
             ...(room.actionLog ?? {}),
-            [actionId]: {
+            [actionId]: buildActionLogEntry({
               timestamp: now,
               actorId: current.session.clientId,
               action: "acceptRewardSite",
@@ -1318,7 +1319,7 @@ export function MultiplayerQuestProvider({
                 siteId,
                 rewardType: reward.rewardType,
               },
-            },
+            }),
           },
         };
       },
@@ -1389,7 +1390,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "ensureDreamsignOfferRuntime",
@@ -1399,7 +1400,7 @@ export function MultiplayerQuestProvider({
                   optionCount,
                   offeredCount: runtime.offeredDreamsigns.length,
                 },
-              },
+              }),
             },
           };
         },
@@ -1475,7 +1476,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "acceptDreamsignOffer",
@@ -1486,7 +1487,7 @@ export function MultiplayerQuestProvider({
                   dreamsignName: dreamsign.name,
                   purgedDreamsignName: purgedDreamsign?.name ?? null,
                 },
-              },
+              }),
             },
           };
         },
@@ -1541,7 +1542,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "ensureEssenceSiteRuntime",
@@ -1551,7 +1552,7 @@ export function MultiplayerQuestProvider({
                   amount: runtime.amount,
                   isEnhanced,
                 },
-              },
+              }),
             },
           };
         },
@@ -1606,7 +1607,7 @@ export function MultiplayerQuestProvider({
           },
           actionLog: {
             ...(room.actionLog ?? {}),
-            [actionId]: {
+            [actionId]: buildActionLogEntry({
               timestamp: now,
               actorId: current.session.clientId,
               action: "acceptEssenceSite",
@@ -1615,7 +1616,7 @@ export function MultiplayerQuestProvider({
                 siteId,
                 amount: runtime.amount,
               },
-            },
+            }),
           },
         };
       },
@@ -1722,7 +1723,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "ensureShopRuntime",
@@ -1732,7 +1733,7 @@ export function MultiplayerQuestProvider({
                   specialtyOnly,
                   slotCount: runtime.slots.length,
                 },
-              },
+              }),
             },
           };
         },
@@ -1865,13 +1866,13 @@ export function MultiplayerQuestProvider({
           },
           actionLog: {
             ...(room.actionLog ?? {}),
-            [actionId]: {
+            [actionId]: buildActionLogEntry({
               timestamp: now,
               actorId: current.session.clientId,
               action: "buyShopSlot",
               source: "shop_purchase",
               summary,
-            },
+            }),
           },
         };
       },
@@ -1994,7 +1995,7 @@ export function MultiplayerQuestProvider({
           },
           actionLog: {
             ...(room.actionLog ?? {}),
-            [actionId]: {
+            [actionId]: buildActionLogEntry({
               timestamp: now,
               actorId: current.session.clientId,
               action: "rerollShop",
@@ -2005,7 +2006,7 @@ export function MultiplayerQuestProvider({
                 rerollCost: cost,
                 rerollCount,
               },
-            },
+            }),
           },
         };
       },
@@ -2071,7 +2072,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "ensureCardChoiceRuntime",
@@ -2081,7 +2082,7 @@ export function MultiplayerQuestProvider({
                   kind,
                   entryCount: runtime.entryIds.length,
                 },
-              },
+              }),
             },
           };
         },
@@ -2169,7 +2170,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "acceptTransfigurationChoice",
@@ -2181,7 +2182,7 @@ export function MultiplayerQuestProvider({
                   effectDescription: offered.effectDescription,
                   effectDetails: offered.effectDetails,
                 },
-              },
+              }),
             },
           };
         },
@@ -2264,7 +2265,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "acceptDuplicationChoice",
@@ -2275,7 +2276,7 @@ export function MultiplayerQuestProvider({
                   cardNumber: entry.cardNumber,
                   copyCount: expectedCopyCount,
                 },
-              },
+              }),
             },
           };
         },
@@ -2341,7 +2342,7 @@ export function MultiplayerQuestProvider({
           },
           actionLog: {
             ...(room.actionLog ?? {}),
-            [actionId]: {
+            [actionId]: buildActionLogEntry({
               timestamp: now,
               actorId: current.session.clientId,
               action: "ensureDreamJourneyRuntime",
@@ -2350,7 +2351,7 @@ export function MultiplayerQuestProvider({
                 siteId,
                 optionCount,
               },
-            },
+            }),
           },
         };
       },
@@ -2431,7 +2432,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "completeDreamJourneyOption",
@@ -2441,7 +2442,7 @@ export function MultiplayerQuestProvider({
                   optionId,
                   effectType: journey.effect.type,
                 },
-              },
+              }),
             },
           };
         },
@@ -2507,7 +2508,7 @@ export function MultiplayerQuestProvider({
           },
           actionLog: {
             ...(room.actionLog ?? {}),
-            [actionId]: {
+            [actionId]: buildActionLogEntry({
               timestamp: now,
               actorId: current.session.clientId,
               action: "ensureTemptingOfferRuntime",
@@ -2516,7 +2517,7 @@ export function MultiplayerQuestProvider({
                 siteId,
                 optionCount,
               },
-            },
+            }),
           },
         };
       },
@@ -2607,7 +2608,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: {
+              [actionId]: buildActionLogEntry({
                 timestamp: now,
                 actorId: current.session.clientId,
                 action: "completeTemptingOfferOption",
@@ -2618,7 +2619,7 @@ export function MultiplayerQuestProvider({
                   benefitType: offer.benefit.type,
                   costType: offer.cost.type,
                 },
-              },
+              }),
             },
           };
         },
