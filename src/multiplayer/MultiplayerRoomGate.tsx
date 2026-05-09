@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Database, Unsubscribe } from "firebase/database";
 import { generateRoomId } from "./room-id";
-import { createRoom, pruneRoomActionLog, subscribeToRoom, writePresence } from "./room-service";
+import {
+  createRoomReplacingAll,
+  pruneRoomActionLog,
+  subscribeToRoom,
+  writePresence,
+} from "./room-service";
 import { ACTION_LOG_LIMIT, type MultiplayerRoom, type RoomSession } from "./room-types";
 
 interface MultiplayerRoomGateProps {
@@ -137,7 +142,7 @@ export function MultiplayerRoomGate({
     setGateState({ status: "creating" });
 
     try {
-      await createRoom(database, roomId, timestamp());
+      await createRoomReplacingAll(database, roomId, timestamp());
       navigateToRoom(roomId);
       setActiveRoomId(roomId);
       setGateState({ status: "loading", roomId });
@@ -166,41 +171,44 @@ export function MultiplayerRoomGate({
 
   if (gateState.status === "create") {
     return (
-      <RoomShell title="Quest Multiplayer">
-        <button data-create-game="true" type="button" onClick={() => void handleCreateGame()}>
-          Create Game
-        </button>
+      <RoomShell subtitle="Quest Multiplayer">
+        <CreateGameButton onClick={() => void handleCreateGame()} label="Create Game" />
       </RoomShell>
     );
   }
 
   if (gateState.status === "creating") {
-    return <RoomShell title="Creating game">Creating game...</RoomShell>;
+    return (
+      <RoomShell subtitle="Creating game">
+        <p style={{ color: "#cbd5f5", opacity: 0.8 }}>Creating game...</p>
+      </RoomShell>
+    );
   }
 
   if (gateState.status === "loading") {
-    return <RoomShell title="Joining game">Loading {gateState.roomId}...</RoomShell>;
+    return (
+      <RoomShell subtitle="Joining game">
+        <p style={{ color: "#cbd5f5", opacity: 0.8 }}>Loading {gateState.roomId}...</p>
+      </RoomShell>
+    );
   }
 
   if (gateState.status === "missing") {
     return (
-      <RoomShell title="Game not found">
-        <button
-          data-create-game="true"
-          data-create-new-game="true"
-          type="button"
+      <RoomShell subtitle="Game not found">
+        <CreateGameButton
           onClick={() => void handleCreateGame()}
-        >
-          Create New Game
-        </button>
+          label="Create New Game"
+          extraAttrs={{ "data-create-new-game": "true" }}
+        />
       </RoomShell>
     );
   }
 
   return (
-    <RoomShell title="Firebase setup issue">
-      <p>{gateState.message}</p>
-      <p>
+    <RoomShell subtitle="Firebase setup issue">
+      <p style={{ color: "#fca5a5", maxWidth: "32rem", textAlign: "center" }}>{gateState.message}</p>
+      <p style={{ color: "#94a3b8", maxWidth: "32rem", textAlign: "center", fontSize: "0.875rem" }}>
         Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN,
         VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.
       </p>
@@ -208,11 +216,68 @@ export function MultiplayerRoomGate({
   );
 }
 
-function RoomShell({ title, children }: { title: string; children: ReactNode }): ReactNode {
+function CreateGameButton({
+  onClick,
+  label,
+  extraAttrs,
+}: {
+  onClick: () => void;
+  label: string;
+  extraAttrs?: Record<string, string>;
+}): ReactNode {
   return (
-    <main>
-      <h1>{title}</h1>
-      <div>{children}</div>
+    <button
+      data-create-game="true"
+      type="button"
+      onClick={onClick}
+      className="cursor-pointer rounded-2xl px-12 py-4 text-xl font-semibold tracking-wide transition-all duration-150 hover:-translate-y-0.5"
+      style={{
+        background: "linear-gradient(135deg, #7c3aed 0%, #a855f7 55%, #c084fc 100%)",
+        color: "#ffffff",
+        border: "2px solid rgba(192, 132, 252, 0.6)",
+        boxShadow:
+          "0 12px 32px rgba(124, 58, 237, 0.4), 0 0 28px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.18)",
+        textShadow: "0 1px 2px rgba(15, 8, 25, 0.35)",
+      }}
+      {...extraAttrs}
+    >
+      {label}
+    </button>
+  );
+}
+
+function RoomShell({
+  subtitle,
+  children,
+}: {
+  subtitle: string;
+  children: ReactNode;
+}): ReactNode {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center px-6 py-12">
+      <div className="flex w-full max-w-xl flex-col items-center gap-8 text-center">
+        <h1
+          className="text-6xl font-extrabold tracking-wide md:text-7xl"
+          style={{
+            background:
+              "linear-gradient(135deg, #a855f7 0%, #7c3aed 40%, #c084fc 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            textShadow:
+              "0 0 60px rgba(168, 85, 247, 0.4), 0 0 120px rgba(124, 58, 237, 0.2)",
+            filter: "drop-shadow(0 0 40px rgba(168, 85, 247, 0.3))",
+          }}
+        >
+          Dreamtides
+        </h1>
+        <p
+          className="text-lg opacity-70 md:text-xl"
+          style={{ color: "#e2e8f0" }}
+        >
+          {subtitle}
+        </p>
+        <div className="flex flex-col items-center gap-4">{children}</div>
+      </div>
     </main>
   );
 }

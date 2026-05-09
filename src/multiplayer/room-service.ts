@@ -146,6 +146,16 @@ export async function createRoom(
   );
 }
 
+export async function createRoomReplacingAll(
+  database: Database,
+  roomId: string,
+  nowIso: string = new Date().toISOString(),
+): Promise<void> {
+  await enqueueRoomWrite(roomId, () =>
+    set(ref(database, "rooms"), { [roomId]: createRoomRecord(nowIso) }),
+  );
+}
+
 export function subscribeToRoom(
   database: Database,
   roomId: string,

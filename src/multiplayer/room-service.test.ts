@@ -5,6 +5,7 @@ import { buildActionLogEntry } from "./action-log";
 import {
   createRoom,
   createRoomRecord,
+  createRoomReplacingAll,
   pruneRoomActionLog,
   runRoomTransaction,
   subscribeToRoom,
@@ -96,6 +97,16 @@ describe("room service", () => {
     expect(firebaseMocks.set).toHaveBeenCalledWith(
       { database, path: "rooms/ab12" },
       createRoomRecord(timestamp),
+    );
+  });
+
+  it("replaces the entire rooms tree when creating-and-replacing", async () => {
+    await createRoomReplacingAll(database, "ab12", timestamp);
+
+    expect(firebaseMocks.ref).toHaveBeenCalledWith(database, "rooms");
+    expect(firebaseMocks.set).toHaveBeenCalledWith(
+      { database, path: "rooms" },
+      { ab12: createRoomRecord(timestamp) },
     );
   });
 
