@@ -1,16 +1,10 @@
 import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
+import { useMultiplayerBattle } from "../state/multiplayer-battle-context";
+import { useEnsureBattleSession } from "../state/use-ensure-battle-session";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
-import { prepareInitialBattleState } from "../battle/engine/turn-flow";
-import { createBattleInit } from "../battle/integration/create-battle-init";
-import { cloneBattleMutableState, createInitialBattleState } from "../battle/state/create-initial-state";
-import type { BattleInit, BattleMutableState } from "../battle/types";
-import {
-  usePlayableBattleCache,
-  type PlayableBattleCache,
-} from "./playable-battle-cache";
 
 export function createBattleEntryKey(
   dreamscapeId: string | null,
@@ -21,9 +15,10 @@ export function createBattleEntryKey(
 }
 
 /**
- * Spec A-5 `BattleScreen` wrapper. Named `BattleSiteRoute` in code because it
- * also owns the site-context cache lookup (`battleEntryKey` → session) for the
- * playable battle surface.
+ * Spec A-5 `BattleScreen` wrapper. Drives the shared room-backed battle
+ * session: ensures `battleState` exists for the current `battleEntryKey`
+ * via `useEnsureBattleSession`, then renders the playable surface against
+ * the shared `init`/`mutable` snapshot.
  */
 export function BattleSiteRoute({
   site,
@@ -35,93 +30,41 @@ export function BattleSiteRoute({
   runtimeConfig: RuntimeConfig;
 }) {
   const { state, questContent } = useQuest();
-  const cache = usePlayableBattleCache();
+  const { database, roomId, battleState } = useMultiplayerBattle();
+
   const battleEntryKey = createBattleEntryKey(
     state.currentDreamscape,
     site.id,
     state.completionLevel,
   );
 
-  const cached = getOrCreateBattleSession(
-    cache,
+  useEnsureBattleSession({
+    database,
+    roomId,
+    battleState,
     battleEntryKey,
     site,
-    state,
+    questState: state,
     cardDatabase,
-    questContent.dreamcallers,
-    runtimeConfig.seedOverride,
-    runtimeConfig.enableAi,
-  );
+    dreamcallers: questContent.dreamcallers,
+    seedOverride: runtimeConfig.seedOverride,
+    enableAi: runtimeConfig.enableAi,
+  });
+
+  if (battleState === null) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
+        <p className="text-lg opacity-80">Preparing battle…</p>
+      </div>
+    );
+  }
 
   return (
     <PlayableBattleScreen
-      key={battleEntryKey}
-      battleInit={cached.battleInit}
-      initialState={cloneBattleMutableState(cached.initialStateTemplate)}
+      battleInit={battleState.init}
+      initialState={battleState.reducer.mutable}
       site={site}
     />
   );
-}
-
-interface BattleSessionCacheValue {
-  battleInit: BattleInit;
-  initialStateTemplate: BattleMutableState;
-}
-
-function getOrCreateBattleSession(
-  cache: PlayableBattleCache,
-  battleEntryKey: string,
-  site: SiteState,
-  state: ReturnType<typeof useQuest>["state"],
-  cardDatabase: ReadonlyMap<number, CardData>,
-  dreamcallers: ReturnType<typeof useQuest>["questContent"]["dreamcallers"],
-  seedOverride: number | null,
-  enableAi: boolean,
-): BattleSessionCacheValue {
-  const snapshotKey = createPlayableBattleCacheSnapshotKey(seedOverride, enableAi);
-  const cached = cache.get(battleEntryKey);
-  if (cached !== undefined && cached.snapshotKey === snapshotKey) {
-    return {
-      battleInit: cached.battleInit,
-      initialStateTemplate: cached.initialStateTemplate,
-    };
-  }
-
-  const battleInit = createBattleInit({
-    battleEntryKey,
-    site,
-    state,
-    cardDatabase,
-    dreamcallers,
-    seedOverride,
-    enableAi,
-  });
-  const created = {
-    snapshotKey,
-    battleInit,
-    initialStateTemplate: prepareInitialBattleState(
-      createInitialBattleState(battleInit),
-      battleInit,
-    ).state,
-  };
-  cache.set(battleEntryKey, created);
-  return {
-    battleInit,
-    initialStateTemplate: created.initialStateTemplate,
-  };
-}
-
-/**
- * Snapshot identity for a cached battle session. `battleEntryKey` already
- * encodes `siteId`, `completionLevel`, and `dreamscapeId`; the snapshot key
- * covers fields *orthogonal* to the cache bucket (bug-010): `seedOverride`,
- * which re-seeds an otherwise identical entry, and `enableAi`, which alters
- * the bound `BattleInit.enableAi` flag.
- */
-function createPlayableBattleCacheSnapshotKey(
-  seedOverride: number | null,
-  enableAi: boolean,
-): string {
-  const seedSegment = seedOverride === null ? "none" : String(seedOverride);
-  return `seed:${seedSegment}|enableAi:${enableAi ? "1" : "0"}`;
 }

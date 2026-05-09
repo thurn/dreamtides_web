@@ -18,6 +18,9 @@ import type { BattleControllerAction } from "../battle/state/controller";
 import type { BattleReducerState } from "../battle/types";
 
 export interface MultiplayerBattleValue {
+  database: Database;
+  roomId: string;
+  clientId: string;
   battleState: SharedBattleState | null;
   reducerState: BattleReducerState | null;
   dispatch: (action: BattleControllerAction) => void;
@@ -101,8 +104,15 @@ export function MultiplayerBattleProvider({
   }, []);
 
   const value = useMemo<MultiplayerBattleValue>(
-    () => ({ battleState, reducerState, dispatch }),
-    [battleState, reducerState, dispatch],
+    () => ({
+      database,
+      roomId,
+      clientId,
+      battleState,
+      reducerState,
+      dispatch,
+    }),
+    [database, roomId, clientId, battleState, reducerState, dispatch],
   );
 
   return (
