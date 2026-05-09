@@ -483,6 +483,14 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       reason: evaluation.reason ?? "forced_result",
       siteLabel: site.type,
       mutations,
+      clearBattleStateForRoom: () => {
+        void dispatchClearBattleState({
+          database,
+          roomId,
+        }).catch((error: unknown) => {
+          console.error("Failed to clear battle slot", error);
+        });
+      },
     });
   }
 

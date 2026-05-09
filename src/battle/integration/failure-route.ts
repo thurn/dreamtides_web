@@ -17,6 +17,7 @@ export interface FreezeQuestFailureSummaryInput {
 
 export interface BeginQuestFailureRouteInput extends FreezeQuestFailureSummaryInput {
   mutations: Pick<QuestMutations, "setFailureSummary" | "setScreen">;
+  clearBattleStateForRoom?: () => void;
 }
 
 export function freezeQuestFailureSummary(
@@ -56,5 +57,8 @@ export function beginQuestFailureRoute(
   });
   input.mutations.setFailureSummary(summary, "battle_failure_confirmed");
   input.mutations.setScreen({ type: "questFailed" });
+  if (typeof input.clearBattleStateForRoom === "function") {
+    input.clearBattleStateForRoom();
+  }
   return summary;
 }

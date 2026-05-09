@@ -145,4 +145,40 @@ describe("beginQuestFailureRoute", () => {
       ]),
     );
   });
+
+  it("invokes clearBattleStateForRoom once after setScreen", () => {
+    const mutations = makeMutations();
+    const clearBattleStateForRoom = vi.fn();
+    const callOrder: string[] = [];
+    mutations.setFailureSummary.mockImplementation(() => {
+      callOrder.push("setFailureSummary");
+    });
+    mutations.setScreen.mockImplementation(() => {
+      callOrder.push("setScreen");
+    });
+    clearBattleStateForRoom.mockImplementation(() => {
+      callOrder.push("clearBattleStateForRoom");
+    });
+
+    beginQuestFailureRoute({
+      battleInit: {
+        battleId: "battle-4",
+        siteId: "site-10",
+        dreamscapeId: null,
+      },
+      mutableState: makeMutableState(),
+      result: "defeat",
+      reason: "forced_result",
+      siteLabel: "Battle",
+      mutations,
+      clearBattleStateForRoom,
+    });
+
+    expect(clearBattleStateForRoom).toHaveBeenCalledTimes(1);
+    expect(callOrder).toEqual([
+      "setFailureSummary",
+      "setScreen",
+      "clearBattleStateForRoom",
+    ]);
+  });
 });
