@@ -88,7 +88,7 @@ export function TemptingOfferScreen({ site }: TemptingOfferScreenProps) {
     mutations.completeSite(site.id, "tempting_offer_skipped");
   }, [mutations, site.id]);
 
-  if (runtime === undefined) {
+  if (temptingOfferRuntime === null) {
     return (
       <div className="flex min-h-full items-center justify-center px-4 py-6">
         <p className="text-lg opacity-60">Revealing offer...</p>

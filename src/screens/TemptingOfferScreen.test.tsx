@@ -79,7 +79,7 @@ function makeMutations(): QuestMutations {
   };
 }
 
-function makeState(): QuestState {
+function makeState(overrides: Partial<QuestState> = {}): QuestState {
   return {
     essence: 250,
     deck: [],
@@ -103,6 +103,7 @@ function makeState(): QuestState {
     screen: { type: "site", siteId: "site-1" },
     activeSiteId: "site-1",
     failureSummary: null,
+    ...overrides,
   };
 }
 
@@ -149,6 +150,30 @@ afterEach(() => {
 });
 
 describe("TemptingOfferScreen", () => {
+  it("shows the revealing fallback for a wrong runtime kind", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "essence",
+            amount: 250,
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+    const { container, root } = mount(<TemptingOfferScreen site={makeSite()} />);
+
+    expect(container.textContent).toContain("Revealing offer...");
+    expect(mutations.ensureTemptingOfferRuntime).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("completes a shared offer option through the composed mutation", () => {
     const mutations = makeMutations();
     setQuestContext(makeState(), mutations);

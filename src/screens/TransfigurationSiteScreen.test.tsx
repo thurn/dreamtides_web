@@ -208,6 +208,32 @@ afterEach(() => {
 });
 
 describe("TransfigurationSiteScreen", () => {
+  it("shows the preparing fallback for a wrong runtime kind", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "essence",
+            amount: 250,
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+    const { container, root } = mount(
+      <TransfigurationSiteScreen site={makeSite()} />,
+    );
+
+    expect(container.textContent).toContain("Preparing choices...");
+    expect(mutations.ensureCardChoiceRuntime).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("accepts a shared card choice through the composed mutation", () => {
     const mutations = makeMutations();
     setQuestContext(makeState(), mutations);

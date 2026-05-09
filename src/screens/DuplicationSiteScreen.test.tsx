@@ -80,7 +80,7 @@ function makeMutations(): QuestMutations {
   };
 }
 
-function makeState(): QuestState {
+function makeState(overrides: Partial<QuestState> = {}): QuestState {
   return {
     essence: 250,
     deck: [
@@ -111,6 +111,7 @@ function makeState(): QuestState {
     screen: { type: "site", siteId: "site-1" },
     activeSiteId: "site-1",
     failureSummary: null,
+    ...overrides,
   };
 }
 
@@ -193,6 +194,30 @@ afterEach(() => {
 });
 
 describe("DuplicationSiteScreen", () => {
+  it("shows the preparing fallback for a wrong runtime kind", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "essence",
+            amount: 250,
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+    const { container, root } = mount(<DuplicationSiteScreen site={makeSite()} />);
+
+    expect(container.textContent).toContain("Preparing choices...");
+    expect(mutations.ensureCardChoiceRuntime).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("accepts a shared card choice through the composed mutation", () => {
     const mutations = makeMutations();
     setQuestContext(makeState(), mutations);

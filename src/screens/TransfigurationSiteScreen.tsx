@@ -128,7 +128,7 @@ export function TransfigurationSiteScreen({
     mutations.completeSite(site.id, "transfiguration_skipped");
   }, [mutations, site.id]);
 
-  if (runtime === undefined) {
+  if (cardChoiceRuntime === null) {
     return (
       <div className="flex min-h-full items-center justify-center px-4 py-6">
         <p className="text-lg opacity-60">Preparing choices...</p>

@@ -123,7 +123,7 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
     mutations.completeSite(site.id, "duplication_skipped");
   }, [mutations, site.id]);
 
-  if (runtime === undefined) {
+  if (cardChoiceRuntime === null) {
     return (
       <div className="flex min-h-full items-center justify-center px-4 py-6">
         <p className="text-lg opacity-60">Preparing choices...</p>

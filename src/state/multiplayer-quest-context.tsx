@@ -346,6 +346,19 @@ function deckEntriesRuntimeCompatible(
   );
 }
 
+function siteRuntimeAssumptionMatches(
+  state: QuestState,
+  siteId: string,
+  expectedType: SiteState["type"] | null,
+  expectedIsEnhanced: boolean,
+): boolean {
+  const site = findSite(state, siteId);
+  return (
+    site?.type === expectedType &&
+    site.isEnhanced === expectedIsEnhanced
+  );
+}
+
 function applyPreparedDreamJourneyEffect({
   prev,
   effect,
@@ -1900,6 +1913,8 @@ export function MultiplayerQuestProvider({
       const current = currentRef.current;
       const expectedDeck = structuredClone(current.state.deck);
       const site = findSite(current.state, siteId);
+      const expectedSiteType = site?.type ?? null;
+      const expectedIsEnhanced = site?.isEnhanced ?? false;
       const runtime: CardChoiceSiteRuntime | null =
         current.state.siteRuntime[siteId] === undefined
           ? {
@@ -1929,6 +1944,12 @@ export function MultiplayerQuestProvider({
           if (
             runtime === null ||
             actionId === null ||
+            !siteRuntimeAssumptionMatches(
+              room.questState,
+              siteId,
+              expectedSiteType,
+              expectedIsEnhanced,
+            ) ||
             !deckEntriesRuntimeCompatible(room.questState.deck, expectedDeck)
           ) {
             return room;
@@ -2147,6 +2168,8 @@ export function MultiplayerQuestProvider({
   const ensureDreamJourneyRuntime = useCallback((siteId: string) => {
     const current = currentRef.current;
     const site = findSite(current.state, siteId);
+    const expectedSiteType = site?.type ?? null;
+    const expectedIsEnhanced = site?.isEnhanced ?? false;
     const optionCount = site?.isEnhanced ? 3 : 2;
     const runtime: DreamJourneySiteRuntime | null =
       current.state.siteRuntime[siteId] === undefined
@@ -2171,7 +2194,16 @@ export function MultiplayerQuestProvider({
         if (room.questState.siteRuntime[siteId] !== undefined) {
           return room;
         }
-        if (runtime === null || actionId === null) {
+        if (
+          runtime === null ||
+          actionId === null ||
+          !siteRuntimeAssumptionMatches(
+            room.questState,
+            siteId,
+            expectedSiteType,
+            expectedIsEnhanced,
+          )
+        ) {
           return room;
         }
 
@@ -2302,6 +2334,8 @@ export function MultiplayerQuestProvider({
   const ensureTemptingOfferRuntime = useCallback((siteId: string) => {
     const current = currentRef.current;
     const site = findSite(current.state, siteId);
+    const expectedSiteType = site?.type ?? null;
+    const expectedIsEnhanced = site?.isEnhanced ?? false;
     const optionCount = site?.isEnhanced ? 3 : 2;
     const runtime: TemptingOfferSiteRuntime | null =
       current.state.siteRuntime[siteId] === undefined
@@ -2326,7 +2360,16 @@ export function MultiplayerQuestProvider({
         if (room.questState.siteRuntime[siteId] !== undefined) {
           return room;
         }
-        if (runtime === null || actionId === null) {
+        if (
+          runtime === null ||
+          actionId === null ||
+          !siteRuntimeAssumptionMatches(
+            room.questState,
+            siteId,
+            expectedSiteType,
+            expectedIsEnhanced,
+          )
+        ) {
           return room;
         }
 

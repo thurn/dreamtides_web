@@ -81,7 +81,7 @@ export function DreamJourneyScreen({ site }: DreamJourneyScreenProps) {
     mutations.completeSite(site.id, "dream_journey_skipped");
   }, [mutations, site.id]);
 
-  if (runtime === undefined) {
+  if (dreamJourneyRuntime === null) {
     return (
       <div className="flex min-h-full items-center justify-center px-4 py-6">
         <p className="text-lg opacity-60">Revealing journey...</p>
