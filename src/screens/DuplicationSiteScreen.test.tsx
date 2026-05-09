@@ -221,6 +221,10 @@ describe("DuplicationSiteScreen", () => {
 
   it("shows the preparing fallback for a wrong card-choice subtype", () => {
     const mutations = makeMutations();
+    const previewCard = makeCardDatabase().get(101);
+    if (previewCard === undefined) {
+      throw new Error("Missing preview card");
+    }
     setQuestContext(
       makeState({
         siteRuntime: {
@@ -229,6 +233,15 @@ describe("DuplicationSiteScreen", () => {
             choiceKind: "transfiguration",
             entryIds: ["deck-1"],
             acceptedEntryIds: [],
+            transfigurationOffers: [
+              {
+                entryId: "deck-1",
+                type: "Viridian",
+                effectDescription: "Viridian test effect",
+                effectDetails: { test: true },
+                previewCard,
+              },
+            ],
           },
         },
       }),

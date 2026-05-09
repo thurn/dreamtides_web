@@ -24,6 +24,8 @@ import type {
 } from "../types/content";
 import type {
   CardSourceDebugState,
+  CardChoiceSiteRuntime,
+  CardChoiceTransfigurationOffer,
   DeckEntry,
   DreamAtlas,
   Dreamsign,
@@ -67,6 +69,7 @@ import {
 } from "../shop/shop-generator";
 import {
   assignTransfiguration,
+  transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
 import {
   DREAM_JOURNEYS,
@@ -265,6 +268,83 @@ function selectCardChoiceEntryIds({
     entryIds.push(entry.entryId);
   }
   return entryIds;
+}
+
+function duplicationCopyCount(siteId: string, entryId: string): number {
+  let hash = 0;
+  for (const char of `${siteId}:${entryId}`) {
+    hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  }
+  return (hash % 4) + 1;
+}
+
+function effectDetailsEqual(
+  left: Record<string, unknown>,
+  right: Record<string, unknown>,
+): boolean {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function buildCardChoiceRuntime({
+  siteId: _siteId,
+  deck,
+  cardDatabase,
+  kind,
+  isEnhanced,
+}: {
+  siteId: string;
+  deck: readonly DeckEntry[];
+  cardDatabase: Map<number, CardData>;
+  kind: "transfiguration" | "duplication";
+  isEnhanced: boolean;
+}): CardChoiceSiteRuntime {
+  const entryIds = selectCardChoiceEntryIds({
+    deck,
+    cardDatabase,
+    kind,
+    isEnhanced,
+  });
+
+  if (kind === "duplication") {
+    return {
+      kind: "cardChoice",
+      choiceKind: "duplication",
+      entryIds,
+      acceptedEntryIds: [],
+    };
+  }
+
+  const deckByEntryId = new Map(deck.map((entry) => [entry.entryId, entry]));
+  const transfigurationOffers: CardChoiceTransfigurationOffer[] = [];
+  for (const entryId of entryIds) {
+    const entry = deckByEntryId.get(entryId);
+    if (entry === undefined) {
+      continue;
+    }
+    const card = cardDatabase.get(entry.cardNumber);
+    if (card === undefined) {
+      continue;
+    }
+    const offer = assignTransfiguration(card, entry.transfiguration);
+    if (offer === null) {
+      continue;
+    }
+    transfigurationOffers.push({
+      entryId,
+      type: offer.type,
+      effectDescription: offer.description,
+      effectDetails: transfigurationEffectDetails(offer, card),
+      previewCard: offer.previewCard,
+    });
+  }
+
+  return {
+    kind: "cardChoice",
+    choiceKind: "transfiguration",
+    entryIds,
+    acceptedEntryIds: [],
+    transfigurationOffers,
+  };
 }
 
 function applyDreamJourneyEffect({
@@ -1357,7 +1437,8 @@ export function QuestProvider({
           return prev;
         }
         const site = findSite(prev, siteId);
-        const entryIds = selectCardChoiceEntryIds({
+        const runtime = buildCardChoiceRuntime({
+          siteId,
           deck: prev.deck,
           cardDatabase,
           kind,
@@ -1368,12 +1449,7 @@ export function QuestProvider({
           ...prev,
           siteRuntime: {
             ...prev.siteRuntime,
-            [siteId]: {
-              kind: "cardChoice",
-              choiceKind: kind,
-              entryIds,
-              acceptedEntryIds: [],
-            },
+            [siteId]: runtime,
           },
         };
       });
@@ -1411,13 +1487,24 @@ export function QuestProvider({
         if (card === undefined) {
           return prev;
         }
+        const offered = runtime.transfigurationOffers.find(
+          (offer) => offer.entryId === entryId,
+        );
+        if (
+          offered === undefined ||
+          offered.type !== type ||
+          offered.effectDescription !== effectDescription ||
+          !effectDetailsEqual(offered.effectDetails, effectDetails)
+        ) {
+          return prev;
+        }
 
         logEvent("card_transfigured", {
           cardNumber: entry.cardNumber,
           cardName: card.name,
-          transfigurationType: type,
-          effectDescription,
-          modifiedFields: effectDetails,
+          transfigurationType: offered.type,
+          effectDescription: offered.effectDescription,
+          modifiedFields: offered.effectDetails,
         });
         logEvent("site_completed", {
           siteType: "Transfiguration",
@@ -1430,7 +1517,7 @@ export function QuestProvider({
               ...prev,
               deck: prev.deck.map((candidate) =>
                 candidate.entryId === entryId
-                  ? { ...candidate, transfiguration: type }
+                  ? { ...candidate, transfiguration: offered.type }
                   : candidate,
               ),
               siteRuntime: {
@@ -1475,15 +1562,19 @@ export function QuestProvider({
         if (card === undefined) {
           return prev;
         }
+        const expectedCopyCount = duplicationCopyCount(siteId, entryId);
+        if (copyCount !== expectedCopyCount) {
+          return prev;
+        }
 
         logEvent("card_duplicated", {
           cardNumber: card.cardNumber,
           cardName: card.name,
-          copyCount,
+          copyCount: expectedCopyCount,
         });
 
         const copies: DeckEntry[] = [];
-        for (let i = 0; i < copyCount; i += 1) {
+        for (let i = 0; i < expectedCopyCount; i += 1) {
           logEvent("card_added", {
             cardNumber: card.cardNumber,
             cardName: card.name,

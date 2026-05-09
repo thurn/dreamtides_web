@@ -5,7 +5,6 @@ import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import {
-  assignTransfiguration,
   TRANSFIGURATION_COLORS,
   transfigurationEffectDetails,
   type TransfigurationOffer,
@@ -27,19 +26,29 @@ interface TransfigurationCandidate {
 function buildCandidates(
   deck: DeckEntry[],
   cardDatabase: Map<number, CardData>,
-  entryIds: readonly string[],
+  offers: readonly {
+    entryId: string;
+    type: TransfigurationOffer["type"];
+    effectDescription: string;
+    previewCard: CardData;
+  }[],
 ): TransfigurationCandidate[] {
   const deckByEntryId = new Map(deck.map((entry) => [entry.entryId, entry]));
   const candidates: TransfigurationCandidate[] = [];
-  for (const entryId of entryIds) {
-    const entry = deckByEntryId.get(entryId);
+  for (const runtimeOffer of offers) {
+    const entry = deckByEntryId.get(runtimeOffer.entryId);
     if (entry === undefined || entry.transfiguration !== null) continue;
     const card = cardDatabase.get(entry.cardNumber);
     if (!card) continue;
-    const offer = assignTransfiguration(card, entry.transfiguration);
-    if (offer) {
-      candidates.push({ entry, card, offer });
-    }
+    candidates.push({
+      entry,
+      card,
+      offer: {
+        type: runtimeOffer.type,
+        description: runtimeOffer.effectDescription,
+        previewCard: runtimeOffer.previewCard,
+      },
+    });
   }
   return candidates;
 }
@@ -68,7 +77,11 @@ export function TransfigurationSiteScreen({
     () =>
       cardChoiceRuntime === null
         ? []
-        : buildCandidates(deck, cardDatabase, cardChoiceRuntime.entryIds),
+        : buildCandidates(
+          deck,
+          cardDatabase,
+          cardChoiceRuntime.transfigurationOffers,
+        ),
     [cardChoiceRuntime, cardDatabase, deck],
   );
   const acceptedEntryIds = useMemo(
@@ -99,14 +112,14 @@ export function TransfigurationSiteScreen({
 
   const handleEnhancedPick = useCallback(
     (entry: DeckEntry) => {
-      const card = cardDatabase.get(entry.cardNumber);
-      if (!card) return;
-      const offer = assignTransfiguration(card, entry.transfiguration);
-      if (!offer) return;
-      setEnhancedPickedEntry(entry);
-      setEnhancedOffer(offer);
+      const candidate = candidates.find(
+        (option) => option.entry.entryId === entry.entryId,
+      );
+      if (candidate === undefined) return;
+      setEnhancedPickedEntry(candidate.entry);
+      setEnhancedOffer(candidate.offer);
     },
-    [cardDatabase],
+    [candidates],
   );
 
   const handleEnhancedAccept = useCallback(() => {

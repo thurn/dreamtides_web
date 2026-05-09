@@ -1552,6 +1552,151 @@ describe("MultiplayerQuestProvider", () => {
     expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
   });
 
+  it("rejects transfiguration card-choice acceptance with malformed effect details", () => {
+    const captured: QuestContextValue[] = [];
+    const previewCard = makeCard(101);
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+      siteRuntime: {
+        "site-1": {
+          kind: "cardChoice",
+          choiceKind: "transfiguration",
+          entryIds: ["deck-1"],
+          acceptedEntryIds: [],
+          transfigurationOffers: [
+            {
+              entryId: "deck-1",
+              type: "Viridian",
+              effectDescription: "Energy cost: 1 -> 0",
+              effectDetails: { energyCost: { from: 1, to: 0 } },
+              previewCard: { ...previewCard, energyCost: 0 },
+            },
+          ],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptTransfigurationChoice(
+      "site-1",
+      "deck-1",
+      "Viridian",
+      "Energy cost: 1 -> 0",
+      { energyCost: { from: 1, to: 99 } },
+    );
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
+  it("rejects duplication card-choice acceptance with an excessive copy count", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+      siteRuntime: {
+        "site-1": {
+          kind: "cardChoice",
+          choiceKind: "duplication",
+          entryIds: ["deck-1"],
+          acceptedEntryIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptDuplicationChoice(
+      "site-1",
+      "deck-1",
+      99,
+    );
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
+  it("rejects duplication card-choice acceptance for a transfiguration runtime", () => {
+    const captured: QuestContextValue[] = [];
+    const previewCard = makeCard(101);
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+      siteRuntime: {
+        "site-1": {
+          kind: "cardChoice",
+          choiceKind: "transfiguration",
+          entryIds: ["deck-1"],
+          acceptedEntryIds: [],
+          transfigurationOffers: [
+            {
+              entryId: "deck-1",
+              type: "Viridian",
+              effectDescription: "Energy cost: 1 -> 0",
+              effectDetails: { energyCost: { from: 1, to: 0 } },
+              previewCard: { ...previewCard, energyCost: 0 },
+            },
+          ],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptDuplicationChoice(
+      "site-1",
+      "deck-1",
+      1,
+    );
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
   it("rejects tempting offer completion when the prepared dreamsign removal is stale", () => {
     const captured: QuestContextValue[] = [];
     const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);

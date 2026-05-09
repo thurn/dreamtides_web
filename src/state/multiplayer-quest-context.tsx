@@ -22,6 +22,7 @@ import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { DreamcallerContent, PackageTideId } from "../types/content";
 import type {
   CardSourceDebugState,
+  CardChoiceTransfigurationOffer,
   DeckEntry,
   DreamAtlas,
   Dreamsign,
@@ -67,7 +68,10 @@ import {
   rerollCost,
   shopSlotsToRuntime,
 } from "../shop/shop-generator";
-import { assignTransfiguration } from "../transfiguration/transfiguration-logic";
+import {
+  assignTransfiguration,
+  transfigurationEffectDetails,
+} from "../transfiguration/transfiguration-logic";
 import {
   DREAM_JOURNEYS,
   type JourneyEffect,
@@ -336,6 +340,83 @@ function selectCardChoiceEntryIds({
     entryIds.push(entry.entryId);
   }
   return entryIds;
+}
+
+function duplicationCopyCount(siteId: string, entryId: string): number {
+  let hash = 0;
+  for (const char of `${siteId}:${entryId}`) {
+    hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  }
+  return (hash % 4) + 1;
+}
+
+function effectDetailsEqual(
+  left: Record<string, unknown>,
+  right: Record<string, unknown>,
+): boolean {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function buildCardChoiceRuntime({
+  siteId: _siteId,
+  deck,
+  cardDatabase,
+  kind,
+  isEnhanced,
+}: {
+  siteId: string;
+  deck: readonly DeckEntry[];
+  cardDatabase: Map<number, CardData>;
+  kind: "transfiguration" | "duplication";
+  isEnhanced: boolean;
+}): CardChoiceSiteRuntime {
+  const entryIds = selectCardChoiceEntryIds({
+    deck,
+    cardDatabase,
+    kind,
+    isEnhanced,
+  });
+
+  if (kind === "duplication") {
+    return {
+      kind: "cardChoice",
+      choiceKind: "duplication",
+      entryIds,
+      acceptedEntryIds: [],
+    };
+  }
+
+  const deckByEntryId = new Map(deck.map((entry) => [entry.entryId, entry]));
+  const transfigurationOffers: CardChoiceTransfigurationOffer[] = [];
+  for (const entryId of entryIds) {
+    const entry = deckByEntryId.get(entryId);
+    if (entry === undefined) {
+      continue;
+    }
+    const card = cardDatabase.get(entry.cardNumber);
+    if (card === undefined) {
+      continue;
+    }
+    const offer = assignTransfiguration(card, entry.transfiguration);
+    if (offer === null) {
+      continue;
+    }
+    transfigurationOffers.push({
+      entryId,
+      type: offer.type,
+      effectDescription: offer.description,
+      effectDetails: transfigurationEffectDetails(offer, card),
+      previewCard: offer.previewCard,
+    });
+  }
+
+  return {
+    kind: "cardChoice",
+    choiceKind: "transfiguration",
+    entryIds,
+    acceptedEntryIds: [],
+    transfigurationOffers,
+  };
 }
 
 function deckEntriesRuntimeCompatible(
@@ -1940,17 +2021,13 @@ export function MultiplayerQuestProvider({
       const expectedIsEnhanced = site?.isEnhanced ?? false;
       const runtime: CardChoiceSiteRuntime | null =
         current.state.siteRuntime[siteId] === undefined
-          ? {
-            kind: "cardChoice",
-            choiceKind: kind,
-            entryIds: selectCardChoiceEntryIds({
+          ? buildCardChoiceRuntime({
+            siteId,
               deck: current.state.deck,
               cardDatabase: current.questContent.cardDatabase,
               kind,
               isEnhanced: site?.isEnhanced ?? false,
-            }),
-            acceptedEntryIds: [],
-          }
+          })
           : null;
       const now = new Date().toISOString();
       const actionId = runtime === null ? null : crypto.randomUUID();
@@ -2051,13 +2128,24 @@ export function MultiplayerQuestProvider({
           if (entry === undefined || entry.transfiguration !== null) {
             return room;
           }
+          const offered = runtime.transfigurationOffers.find(
+            (offer) => offer.entryId === entryId,
+          );
+          if (
+            offered === undefined ||
+            offered.type !== type ||
+            offered.effectDescription !== effectDescription ||
+            !effectDetailsEqual(offered.effectDetails, effectDetails)
+          ) {
+            return room;
+          }
 
           const next = completeSiteAndReturnToDreamscape(
             {
               ...room.questState,
               deck: room.questState.deck.map((candidate) =>
                 candidate.entryId === entryId
-                  ? { ...candidate, transfiguration: type }
+                  ? { ...candidate, transfiguration: offered.type }
                   : candidate,
               ),
               siteRuntime: {
@@ -2088,9 +2176,9 @@ export function MultiplayerQuestProvider({
                 summary: {
                   siteId,
                   entryId,
-                  transfigurationType: type,
-                  effectDescription,
-                  effectDetails,
+                  transfigurationType: offered.type,
+                  effectDescription: offered.effectDescription,
+                  effectDetails: offered.effectDetails,
                 },
               },
             },
@@ -2133,9 +2221,13 @@ export function MultiplayerQuestProvider({
           if (entry === undefined) {
             return room;
           }
+          const expectedCopyCount = duplicationCopyCount(siteId, entryId);
+          if (copyCount !== expectedCopyCount) {
+            return room;
+          }
 
           let deck = room.questState.deck;
-          for (let index = 0; index < copyCount; index += 1) {
+          for (let index = 0; index < expectedCopyCount; index += 1) {
             deck = [
               ...deck,
               {
@@ -2180,7 +2272,7 @@ export function MultiplayerQuestProvider({
                   siteId,
                   entryId,
                   cardNumber: entry.cardNumber,
-                  copyCount,
+                  copyCount: expectedCopyCount,
                 },
               },
             },

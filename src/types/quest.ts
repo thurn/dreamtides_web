@@ -1,4 +1,5 @@
 import type { PackageTideId, ResolvedDreamcallerPackage } from "./content";
+import type { CardData } from "./cards";
 import type { DraftState } from "./draft";
 
 /** Badge applied to a card via a Transfiguration site. */
@@ -201,12 +202,27 @@ export interface EssenceSiteRuntime {
 }
 
 /** Runtime state for a card choice site. */
-export interface CardChoiceSiteRuntime {
+export interface CardChoiceTransfigurationOffer {
+  entryId: string;
+  type: TransfigurationType;
+  effectDescription: string;
+  effectDetails: Record<string, unknown>;
+  previewCard: CardData;
+}
+
+export type CardChoiceSiteRuntime = {
   kind: "cardChoice";
-  choiceKind: "transfiguration" | "duplication";
   entryIds: string[];
   acceptedEntryIds: string[];
-}
+} & (
+  | {
+      choiceKind: "transfiguration";
+      transfigurationOffers: CardChoiceTransfigurationOffer[];
+    }
+  | {
+      choiceKind: "duplication";
+    }
+);
 
 /** Runtime state for a Dream Journey site. */
 export interface DreamJourneySiteRuntime {
