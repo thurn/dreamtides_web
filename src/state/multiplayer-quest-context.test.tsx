@@ -294,9 +294,9 @@ describe("MultiplayerQuestProvider", () => {
     );
 
     expect(() => {
-      captured[captured.length - 1]?.mutations.addCard(1, "test");
+      captured[captured.length - 1]?.mutations.removeCard("deck-1", "test");
     }).toThrow(
-      "addCard is not available in multiplayer until its composed Firebase action is implemented",
+      "removeCard is not available in multiplayer until its composed Firebase action is implemented",
     );
     expect(roomServiceMocks.writeRoomUpdate).not.toHaveBeenCalled();
   });

@@ -1025,6 +1025,161 @@ export function MultiplayerQuestProvider({
     [],
   );
 
+  const addCard = useCallback(
+    (cardNumber: number, source: string) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const entryId = nextDeckEntryId(room.questState.deck);
+          const entry: DeckEntry = {
+            entryId,
+            cardNumber,
+            transfiguration: null,
+            isBane: false,
+          };
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck: [...room.questState.deck, entry],
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "addCard",
+                source,
+                summary: { cardNumber },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const markSiteVisited = useCallback((siteId: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        if (room.questState.visitedSites.includes(siteId)) {
+          return room;
+        }
+        const updatedNodes = { ...room.questState.atlas.nodes };
+        for (const [nodeId, node] of Object.entries(updatedNodes)) {
+          const siteIndex = node.sites.findIndex((s) => s.id === siteId);
+          if (siteIndex !== -1) {
+            updatedNodes[nodeId] = {
+              ...node,
+              sites: node.sites.map((s, i) =>
+                i === siteIndex ? { ...s, isVisited: true } : s,
+              ),
+            };
+            break;
+          }
+        }
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            visitedSites: [...room.questState.visitedSites, siteId],
+            atlas: { ...room.questState.atlas, nodes: updatedNodes },
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "markSiteVisited",
+              source: "site_completion",
+              summary: { siteId },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const incrementCompletionLevel = useCallback(
+    (
+      essenceReward: number,
+      rewardCardNumber: number | null,
+      rewardCardName: string | null,
+      isMiniboss: boolean,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const newLevel = room.questState.completionLevel + 1;
+          const screen: Screen =
+            newLevel >= 7
+              ? { type: "questComplete" }
+              : room.questState.screen;
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              completionLevel: newLevel,
+              screen,
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "incrementCompletionLevel",
+                source: "battle_reward",
+                summary: {
+                  essenceReward,
+                  rewardCardNumber,
+                  rewardCardName,
+                  isMiniboss,
+                  newLevel,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const completeSite = useCallback(
     (siteId: string, source: string) => {
       const current = currentRef.current;
@@ -2656,9 +2811,7 @@ export function MultiplayerQuestProvider({
       ensureTemptingOfferRuntime,
       completeTemptingOfferOption,
       pickDraftCard,
-      addCard: (_cardNumber: number, _source: string) => {
-        unavailableMutation("addCard");
-      },
+      addCard,
       addBaneCard: (_cardNumber: number, _source: string) => {
         unavailableMutation("addBaneCard");
       },
@@ -2678,18 +2831,9 @@ export function MultiplayerQuestProvider({
       addDreamsign,
       removeDreamsign,
       setRemainingDreamsignPool,
-      incrementCompletionLevel: (
-        _essenceReward: number,
-        _rewardCardNumber: number | null,
-        _rewardCardName: string | null,
-        _isMiniboss: boolean,
-      ) => {
-        unavailableMutation("incrementCompletionLevel");
-      },
+      incrementCompletionLevel,
       setScreen,
-      markSiteVisited: (_siteId: string) => {
-        unavailableMutation("markSiteVisited");
-      },
+      markSiteVisited,
       setCurrentDreamscape,
       updateAtlas,
       setDraftState,
@@ -2697,6 +2841,7 @@ export function MultiplayerQuestProvider({
       resetQuest,
     }),
     [
+      addCard,
       addDreamsign,
       buyShopSlot,
       changeEssence,
@@ -2715,6 +2860,8 @@ export function MultiplayerQuestProvider({
       ensureTemptingOfferRuntime,
       completeTemptingOfferOption,
       ensureShopRuntime,
+      incrementCompletionLevel,
+      markSiteVisited,
       pickDraftCard,
       rerollShop,
       removeDreamsign,
