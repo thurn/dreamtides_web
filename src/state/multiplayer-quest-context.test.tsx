@@ -157,18 +157,20 @@ function CaptureQuest({
 
 describe("MultiplayerQuestProvider", () => {
   let actionIdCounter = 0;
+  let randomUUIDMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     roomServiceMocks.writeRoomUpdate.mockResolvedValue(undefined);
     roomServiceMocks.runRoomTransaction.mockResolvedValue(undefined);
     actionIdCounter = 0;
+    randomUUIDMock = vi.fn(() => {
+      actionIdCounter += 1;
+      return `action-${String(actionIdCounter)}`;
+    });
     Object.defineProperty(globalThis, "crypto", {
       configurable: true,
       value: {
-        randomUUID: vi.fn(() => {
-          actionIdCounter += 1;
-          return `action-${String(actionIdCounter)}`;
-        }),
+        randomUUID: randomUUIDMock,
       },
     });
   });
@@ -439,5 +441,33 @@ describe("MultiplayerQuestProvider", () => {
       source: "draft",
       summary: { siteId: "site-1" },
     });
+  });
+
+  it("skips site completion action logs when the site is already visited", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      visitedSites: ["site-1"],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.completeSite("site-1", "draft");
+
+    const updater = roomServiceMocks.runRoomTransaction.mock.calls[0]?.[2] as
+      | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
+      | undefined;
+    const nextRoom = updater?.(session.room);
+
+    expect(nextRoom).toBe(session.room);
+    expect(randomUUIDMock).not.toHaveBeenCalled();
   });
 });

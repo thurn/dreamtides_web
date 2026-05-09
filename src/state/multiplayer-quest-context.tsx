@@ -429,6 +429,9 @@ export function MultiplayerQuestProvider({
           if (room === null || room.questState === null) {
             return room ?? undefined;
           }
+          if (room.questState.visitedSites.includes(siteId)) {
+            return room;
+          }
 
           const next = setQuestScreen(
             completeQuestSite(room.questState, siteId),

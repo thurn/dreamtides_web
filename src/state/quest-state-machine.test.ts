@@ -1,8 +1,14 @@
-import { createElement } from "react";
+// @vitest-environment jsdom
+
+import { act, createElement, type ReactElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createRoot, type Root } from "react-dom/client";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestContent } from "../data/quest-content";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
+import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
+import { getLogEntries, resetLog } from "../logging";
+import type { CardData } from "../types/cards";
 import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { DraftState } from "../types/draft";
 import type {
@@ -22,13 +28,21 @@ import {
   type QuestContextValue,
 } from "./quest-context";
 
-function makeQuestContent(): QuestContent {
+const roots: Root[] = [];
+
+function makeQuestContent(
+  resolvedPackage: ResolvedDreamcallerPackage | null = null,
+  cardDatabase: Map<number, CardData> = new Map(),
+): QuestContent {
   return {
-    cardDatabase: new Map(),
+    cardDatabase,
     cardsByPackageTide: new Map(),
-    dreamcallers: [],
+    dreamcallers: resolvedPackage === null ? [] : [resolvedPackage.dreamcaller],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map(),
+    resolvedPackagesByDreamcallerId:
+      resolvedPackage === null
+        ? new Map<string, ResolvedDreamcallerPackage>()
+        : new Map([[resolvedPackage.dreamcaller.id, resolvedPackage]]),
   };
 }
 
@@ -94,6 +108,24 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
   };
 }
 
+function makeCard(cardNumber: number, tides: CardData["tides"] = []): CardData {
+  return {
+    name: `Card ${String(cardNumber)}`,
+    id: `card-${String(cardNumber)}`,
+    cardNumber,
+    cardType: "Character",
+    subtype: "",
+    isStarter: STARTER_CARD_NUMBERS.includes(cardNumber),
+    energyCost: 1,
+    spark: 1,
+    isFast: false,
+    tides,
+    renderedText: "Test card.",
+    imageNumber: cardNumber,
+    artOwned: true,
+  };
+}
+
 function makeDraftState(): DraftState {
   return {
     remainingCopiesByCard: {
@@ -124,8 +156,61 @@ function makeCardSourceDebugState(): CardSourceDebugState {
   };
 }
 
+function mount(element: ReactElement): void {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  roots.push(root);
+
+  act(() => {
+    root.render(element);
+  });
+}
+
+function mountQuestContext({
+  cardDatabase = new Map(),
+  questContent = makeQuestContent(null, cardDatabase),
+}: {
+  cardDatabase?: Map<number, CardData>;
+  questContent?: QuestContent;
+} = {}): QuestContextValue {
+  let captured: QuestContextValue | null = null;
+
+  function Capture() {
+    captured = useQuest();
+    return null;
+  }
+
+  mount(
+    createElement(QuestProvider, {
+      cardDatabase,
+      questContent,
+      children: createElement(Capture),
+    }),
+  );
+
+  if (captured === null) {
+    throw new Error("Failed to capture quest context");
+  }
+
+  return captured;
+}
+
 beforeEach(() => {
+  resetLog();
+  sessionStorage.clear();
   vi.spyOn(console, "log").mockImplementation(() => {});
+});
+
+afterEach(() => {
+  for (const root of roots.splice(0)) {
+    act(() => {
+      root.unmount();
+    });
+  }
+  document.body.innerHTML = "";
+  sessionStorage.clear();
+  vi.restoreAllMocks();
 });
 
 describe("deriveEntryIdCounter", () => {
@@ -171,6 +256,86 @@ describe("QuestProvider default state contract", () => {
     expect(mutationNames).toContain("setCardSourceDebug");
     expect(mutationNames).toContain("setRemainingDreamsignPool");
     expect(mutationNames).toContain("setDraftState");
+  });
+});
+
+describe("QuestProvider composed mutations", () => {
+  it("preserves quest start instrumentation while applying one state transition", () => {
+    const resolvedPackage = makeResolvedPackage();
+    const cardDatabase = new Map<number, CardData>([
+      [101, makeCard(101, ["core"])],
+      [202, makeCard(202, ["support-a"])],
+      ...STARTER_CARD_NUMBERS.map(
+        (cardNumber) =>
+          [cardNumber, makeCard(cardNumber)] as const,
+      ),
+    ]);
+    const quest = mountQuestContext({
+      cardDatabase,
+      questContent: makeQuestContent(resolvedPackage, cardDatabase),
+    });
+
+    act(() => {
+      quest.mutations.startQuest(resolvedPackage.dreamcaller);
+    });
+
+    const entries = getLogEntries();
+    expect(
+      entries.filter((entry) => entry.event === "card_added").map((entry) => ({
+        cardNumber: entry.cardNumber,
+        source: entry.source,
+      })),
+    ).toEqual(
+      STARTER_CARD_NUMBERS.map((cardNumber) => ({
+        cardNumber,
+        source: "quest_start_starter_deck",
+      })),
+    );
+    expect(entries.some((entry) => entry.event === "dreamcaller_selected")).toBe(false);
+    expect(entries.some((entry) => entry.event === "draft_pool_initialized")).toBe(true);
+    expect(entries.some((entry) => entry.event === "draft_state_updated")).toBe(true);
+    expect(entries.some((entry) => entry.event === "dreamscape_entered")).toBe(true);
+    expect(entries.some((entry) => entry.event === "screen_transition")).toBe(true);
+
+    const starterDeckEntry = entries.find(
+      (entry) => entry.event === "starter_deck_initialized",
+    );
+    expect(starterDeckEntry).toMatchObject({
+      starterCardNumbers: [...STARTER_CARD_NUMBERS],
+      totalDeckSize: STARTER_CARD_NUMBERS.length,
+    });
+
+    const questStartedEntry = entries.find(
+      (entry) => entry.event === "quest_started",
+    );
+    expect(questStartedEntry).toMatchObject({
+      startingDeckSize: STARTER_CARD_NUMBERS.length,
+      dreamcallerId: resolvedPackage.dreamcaller.id,
+      dreamcallerName: resolvedPackage.dreamcaller.name,
+      selectedPackageTides: resolvedPackage.selectedTides,
+    });
+  });
+
+  it("does not log duplicate local site completion", () => {
+    sessionStorage.setItem(
+      "quest-prototype-state-v1",
+      JSON.stringify({
+        version: 1,
+        state: {
+          ...createDefaultState(),
+          visitedSites: ["site-1"],
+        },
+      }),
+    );
+    const quest = mountQuestContext();
+
+    act(() => {
+      quest.mutations.completeSite("site-1", "draft");
+    });
+
+    expect(
+      getLogEntries().some((entry) => entry.event === "site_completed"),
+    ).toBe(false);
   });
 });
 

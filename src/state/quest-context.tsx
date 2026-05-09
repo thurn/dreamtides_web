@@ -15,6 +15,7 @@ import {
 } from "../components/playable-battle-cache";
 import type { QuestContent } from "../data/quest-content";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
+import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
 import type {
   DreamcallerContent,
@@ -34,6 +35,7 @@ import type { DraftState } from "../types/draft";
 import {
   countRemainingCards,
   countRemainingUniqueCards,
+  initializeDraftState,
 } from "../draft/draft-engine";
 import { logEvent, resetLog } from "../logging";
 import { resetBattleCompletionBridge } from "../battle/integration/battle-completion-bridge";
@@ -278,23 +280,104 @@ export function QuestProvider({
   const startQuest = useCallback(
     (dreamcaller: DreamcallerContent) => {
       setState((prev) => {
+        const resolvedPackage = questContent.resolvedPackagesByDreamcallerId.get(
+          dreamcaller.id,
+        );
+        if (resolvedPackage === undefined) {
+          throw new Error(`Missing resolved package for ${dreamcaller.id}`);
+        }
+
+        const starterCardNumbers = STARTER_CARD_NUMBERS.filter(
+          (cardNumber) =>
+            !prev.deck.some((entry) => entry.cardNumber === cardNumber),
+        );
         const next = startQuestFromDreamcaller({
           prev,
           dreamcaller,
           questContent,
         });
+
+        for (const cardNumber of starterCardNumbers) {
+          const card = cardDatabase.get(cardNumber);
+          logEvent("card_added", {
+            cardNumber,
+            cardName: card?.name ?? `Unknown Card #${String(cardNumber)}`,
+            source: "quest_start_starter_deck",
+          });
+        }
+
+        logEvent("starter_deck_initialized", {
+          starterCardNumbers,
+          starterCardNames: starterCardNumbers.map(
+            (cardNumber) =>
+              cardDatabase.get(cardNumber)?.name ??
+              `Unknown Card #${String(cardNumber)}`,
+          ),
+          totalDeckSize: next.deck.length,
+        });
+
+        initializeDraftState(cardDatabase, resolvedPackage);
+        if (next.draftState !== null) {
+          logEvent("draft_state_updated", {
+            source: "quest_start",
+            pickNumber: next.draftState.pickNumber,
+            sitePicksCompleted: next.draftState.sitePicksCompleted,
+            currentOfferSize: next.draftState.currentOffer.length,
+            remainingCards: countRemainingCards(
+              next.draftState.remainingCopiesByCard,
+            ),
+            remainingUniqueCards: countRemainingUniqueCards(
+              next.draftState.remainingCopiesByCard,
+            ),
+          });
+        }
+
+        logEvent("quest_started", {
+          initialEssence: prev.essence,
+          startingDeckSize: next.deck.length,
+          dreamcallerId: dreamcaller.id,
+          dreamcallerName: dreamcaller.name,
+          dreamcallerAwakening: dreamcaller.awakening,
+          packageSummary: {
+            mandatoryTides: resolvedPackage.mandatoryTides,
+            optionalSubset: resolvedPackage.optionalSubset,
+            selectedTides: resolvedPackage.selectedTides,
+          },
+          selectedPackageTides: resolvedPackage.selectedTides,
+          draftPoolSize: resolvedPackage.draftPoolSize,
+          dreamsignPoolSize: resolvedPackage.dreamsignPoolIds.length,
+          dreamscapesGenerated: Object.keys(next.atlas.nodes).length - 1,
+        });
+
+        if (next.currentDreamscape !== null) {
+          const node = next.atlas.nodes[next.currentDreamscape];
+          logEvent("dreamscape_entered", {
+            dreamscapeId: next.currentDreamscape,
+            biomeName: node?.biomeName ?? "unknown",
+          });
+        }
+        logEvent("screen_transition", {
+          from: screenName(prev.screen),
+          to: screenName(next.screen),
+        });
+
         entryIdCounter.current = deriveEntryIdCounter(next.deck);
         return next;
       });
     },
-    [questContent],
+    [cardDatabase, questContent],
   );
 
   const completeSite = useCallback((siteId: string, source: string) => {
-    logEvent("site_completed", { siteId, source });
-    setState((prev) =>
-      setQuestScreen(completeQuestSite(prev, siteId), { type: "dreamscape" }),
-    );
+    setState((prev) => {
+      if (prev.visitedSites.includes(siteId)) {
+        return prev;
+      }
+      logEvent("site_completed", { siteId, source });
+      return setQuestScreen(completeQuestSite(prev, siteId), {
+        type: "dreamscape",
+      });
+    });
   }, []);
 
   const pickDraftCard = useCallback(
