@@ -74,3 +74,6 @@ src/              Application source
 See `docs/quest_prototype/quest_prototype.md` for the architecture overview
 and `docs/quest_prototype/qa_tooling.md` for browser-QA notes using
 `npx agent-browser`.
+
+Firebase multiplayer setup and two-window QA live in
+`docs/quest_prototype/firebase_multiplayer.md`.
