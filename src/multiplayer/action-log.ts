@@ -28,7 +28,10 @@ export function pruneActionLog(
 ): Record<string, ActionLogEntry> {
   return Object.fromEntries(
     Object.entries(entries)
-      .sort(([, left], [, right]) => left.timestamp.localeCompare(right.timestamp))
+      .sort(([leftId, left], [rightId, right]) => {
+        const timestampOrder = left.timestamp.localeCompare(right.timestamp);
+        return timestampOrder === 0 ? leftId.localeCompare(rightId) : timestampOrder;
+      })
       .slice(-limit),
   );
 }

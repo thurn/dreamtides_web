@@ -17,9 +17,9 @@ type RoomListener = (snapshot: RoomSubscriptionSnapshot) => void;
 
 const serviceMocks = vi.hoisted(() => ({
   createRoom: vi.fn(),
+  pruneRoomActionLog: vi.fn(),
   subscribeToRoom: vi.fn(),
   writePresence: vi.fn(),
-  writeRoomUpdate: vi.fn(),
 }));
 
 const roomIdMocks = vi.hoisted(() => ({
@@ -28,9 +28,9 @@ const roomIdMocks = vi.hoisted(() => ({
 
 vi.mock("./room-service", () => ({
   createRoom: serviceMocks.createRoom,
+  pruneRoomActionLog: serviceMocks.pruneRoomActionLog,
   subscribeToRoom: serviceMocks.subscribeToRoom,
   writePresence: serviceMocks.writePresence,
-  writeRoomUpdate: serviceMocks.writeRoomUpdate,
 }));
 
 vi.mock("./room-id", () => ({
@@ -136,31 +136,12 @@ function createButton(container: HTMLElement): HTMLButtonElement {
   return button;
 }
 
-function latestRoomUpdate(): {
-  databaseArg: Database;
-  updateMap: Record<string, unknown>;
-} {
-  const calls = serviceMocks.writeRoomUpdate.mock.calls as unknown as Array<
-    [Database, Record<string, unknown>]
-  >;
-  const call = calls[calls.length - 1];
-
-  if (call === undefined) {
-    throw new Error("Missing room update");
-  }
-
-  return {
-    databaseArg: call[0],
-    updateMap: call[1],
-  };
-}
-
 beforeEach(() => {
   vi.clearAllMocks();
   serviceMocks.createRoom.mockResolvedValue(undefined);
+  serviceMocks.pruneRoomActionLog.mockResolvedValue(undefined);
   serviceMocks.subscribeToRoom.mockReturnValue(vi.fn());
   serviceMocks.writePresence.mockResolvedValue(undefined);
-  serviceMocks.writeRoomUpdate.mockResolvedValue(undefined);
   roomIdMocks.generateRoomId.mockReturnValue("ab12cd");
   window.history.replaceState(null, "", "/");
   Object.defineProperty(globalThis, "crypto", {
@@ -303,17 +284,7 @@ describe("MultiplayerRoomGate", () => {
       await flushEffects();
     });
 
-    expect(serviceMocks.writeRoomUpdate).toHaveBeenCalledOnce();
-    const { databaseArg, updateMap } = latestRoomUpdate();
-    expect(databaseArg).toBe(database);
-
-    const pruned = updateMap[
-      "rooms/ab12cd/actionLog"
-    ] as NonNullable<MultiplayerRoom["actionLog"]>;
-    expect(Object.keys(pruned)).toHaveLength(50);
-    expect(pruned["action-11"]).toBeUndefined();
-    expect(pruned["action-12"]?.timestamp).toBe("2026-05-08T12:00:11.000Z");
-    expect(pruned["action-61"]?.timestamp).toBe("2026-05-08T12:01:00.000Z");
+    expect(serviceMocks.pruneRoomActionLog).toHaveBeenCalledWith(database, "ab12cd");
   });
 
   it("keeps action logs at the maintenance threshold", async () => {
@@ -332,7 +303,7 @@ describe("MultiplayerRoomGate", () => {
       await flushEffects();
     });
 
-    expect(serviceMocks.writeRoomUpdate).not.toHaveBeenCalled();
+    expect(serviceMocks.pruneRoomActionLog).not.toHaveBeenCalled();
   });
 
   it("shows Firebase setup issue when presence cannot be written", async () => {

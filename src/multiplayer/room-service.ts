@@ -8,9 +8,12 @@ import {
   type Database,
   type Unsubscribe,
 } from "firebase/database";
+import { pruneActionLog } from "./action-log";
 import { presencePath, roomPath, type FirebaseUpdateMap } from "./room-paths";
 import {
+  ACTION_LOG_LIMIT,
   ROOM_SCHEMA_VERSION,
+  type ActionLogEntry,
   type MultiplayerRoom,
   type PresenceEntry,
   type RoomMetadata,
@@ -91,6 +94,21 @@ export async function writeRoomUpdate(
   updateMap: FirebaseUpdateMap,
 ): Promise<void> {
   await update(ref(database), updateMap);
+}
+
+export async function pruneRoomActionLog(
+  database: Database,
+  roomId: string,
+  limit: number = ACTION_LOG_LIMIT,
+): Promise<void> {
+  await runTransaction(ref(database, `${roomPath(roomId)}/actionLog`), (current) => {
+    const actionLog = (current ?? {}) as Record<string, ActionLogEntry>;
+    if (Object.keys(actionLog).length <= limit + 10) {
+      return current;
+    }
+
+    return pruneActionLog(actionLog, limit);
+  });
 }
 
 export async function runRoomTransaction(

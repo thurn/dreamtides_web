@@ -45,4 +45,21 @@ describe("action log helpers", () => {
     expect(pruned["action-6"]?.timestamp).toBe("2026-05-08T12:05:00.000Z");
     expect(pruned["action-55"]?.timestamp).toBe("2026-05-08T12:54:00.000Z");
   });
+
+  it("uses action id as the tie-breaker for matching timestamps", () => {
+    const entries = Object.fromEntries(
+      ["action-a", "action-c", "action-b"].map((actionId) => [
+        actionId,
+        buildActionLogEntry({
+          actorId: "client-1",
+          action: "testAction",
+          source: "test",
+          summary: { actionId },
+          timestamp: "2026-05-08T12:00:00.000Z",
+        }),
+      ]),
+    );
+
+    expect(Object.keys(pruneActionLog(entries, 2))).toEqual(["action-b", "action-c"]);
+  });
 });

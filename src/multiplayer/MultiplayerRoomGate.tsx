@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Database, Unsubscribe } from "firebase/database";
-import { pruneActionLog } from "./action-log";
 import { generateRoomId } from "./room-id";
-import { createRoom, subscribeToRoom, writePresence, writeRoomUpdate } from "./room-service";
-import { roomPath } from "./room-paths";
+import { createRoom, pruneRoomActionLog, subscribeToRoom, writePresence } from "./room-service";
 import { ACTION_LOG_LIMIT, type MultiplayerRoom, type RoomSession } from "./room-types";
 
 interface MultiplayerRoomGateProps {
@@ -129,9 +127,7 @@ export function MultiplayerRoomGate({
       return;
     }
 
-    void writeRoomUpdate(database, {
-      [`${roomPath(gateState.roomId)}/actionLog`]: pruneActionLog(actionLog),
-    }).catch((error: unknown) => {
+    void pruneRoomActionLog(database, gateState.roomId).catch((error: unknown) => {
       console.error("Failed to prune multiplayer action log", error);
     });
   }, [database, gateState]);

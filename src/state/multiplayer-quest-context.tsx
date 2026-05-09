@@ -791,6 +791,18 @@ export function MultiplayerQuestProvider({
   const startQuest = useCallback(
     (dreamcaller: DreamcallerContent) => {
       const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const actionEntry = buildActionLogEntry({
+        timestamp: now,
+        actorId: current.session.clientId,
+        action: "startQuest",
+        source: "quest_start",
+        summary: {
+          dreamcallerId: dreamcaller.id,
+          dreamcallerName: dreamcaller.name,
+        },
+      });
       writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
@@ -808,8 +820,6 @@ export function MultiplayerQuestProvider({
             dreamcaller,
             questContent: current.questContent,
           });
-          const now = new Date().toISOString();
-          const actionId = crypto.randomUUID();
 
           return {
             ...room,
@@ -820,16 +830,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: buildActionLogEntry({
-                timestamp: now,
-                actorId: current.session.clientId,
-                action: "startQuest",
-                source: "quest_start",
-                summary: {
-                  dreamcallerId: dreamcaller.id,
-                  dreamcallerName: dreamcaller.name,
-                },
-              }),
+              [actionId]: actionEntry,
             },
           };
         },
@@ -1027,6 +1028,19 @@ export function MultiplayerQuestProvider({
   const completeSite = useCallback(
     (siteId: string, source: string) => {
       const current = currentRef.current;
+      if (current.state.visitedSites.includes(siteId)) {
+        return;
+      }
+
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const actionEntry = buildActionLogEntry({
+        timestamp: now,
+        actorId: current.session.clientId,
+        action: "completeSite",
+        source,
+        summary: { siteId },
+      });
       writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
@@ -1042,8 +1056,6 @@ export function MultiplayerQuestProvider({
             completeQuestSite(room.questState, siteId),
             { type: "dreamscape" },
           );
-          const now = new Date().toISOString();
-          const actionId = crypto.randomUUID();
 
           return {
             ...room,
@@ -1060,13 +1072,7 @@ export function MultiplayerQuestProvider({
             },
             actionLog: {
               ...(room.actionLog ?? {}),
-              [actionId]: buildActionLogEntry({
-                timestamp: now,
-                actorId: current.session.clientId,
-                action: "completeSite",
-                source,
-                summary: { siteId },
-              }),
+              [actionId]: actionEntry,
             },
           };
         },

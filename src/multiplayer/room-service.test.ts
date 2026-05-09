@@ -1,9 +1,11 @@
 import type { Database } from "firebase/database";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MultiplayerRoom } from "./room-types";
+import { buildActionLogEntry } from "./action-log";
 import {
   createRoom,
   createRoomRecord,
+  pruneRoomActionLog,
   runRoomTransaction,
   subscribeToRoom,
   writePresence,
@@ -44,6 +46,26 @@ vi.mock("firebase/database", () => ({
 
 const database = { app: { name: "test-app" } } as Database;
 const timestamp = "2026-05-08T12:00:00.000Z";
+
+function makeActionLog(count: number): NonNullable<MultiplayerRoom["actionLog"]> {
+  return Object.fromEntries(
+    Array.from({ length: count }, (_, index) => {
+      const actionNumber = index + 1;
+      return [
+        `action-${actionNumber}`,
+        buildActionLogEntry({
+          actorId: "client-1",
+          action: "testAction",
+          source: "test",
+          summary: { actionNumber },
+          timestamp: `2026-05-08T12:${String(Math.floor(index / 60)).padStart(2, "0")}:${String(
+            index % 60,
+          ).padStart(2, "0")}.000Z`,
+        }),
+      ];
+    }),
+  );
+}
 
 describe("room service", () => {
   beforeEach(() => {
@@ -217,6 +239,38 @@ describe("room service", () => {
 
     expect(firebaseMocks.ref).toHaveBeenCalledWith(database);
     expect(firebaseMocks.update).toHaveBeenCalledWith({ database, path: undefined }, updateMap);
+  });
+
+  it("prunes action logs from the latest transaction value", async () => {
+    const current = makeActionLog(62);
+    firebaseMocks.runTransaction.mockImplementation(
+      (_entryRef, transactionUpdater: TransactionUpdater) => {
+        const next = transactionUpdater(current) as NonNullable<MultiplayerRoom["actionLog"]>;
+
+        expect(Object.keys(next)).toHaveLength(50);
+        expect(next["action-12"]).toBeUndefined();
+        expect(next["action-13"]?.timestamp).toBe("2026-05-08T12:00:12.000Z");
+        expect(next["action-62"]?.timestamp).toBe("2026-05-08T12:01:01.000Z");
+
+        return Promise.resolve({ committed: true, snapshot: null });
+      },
+    );
+
+    await pruneRoomActionLog(database, "ab12");
+
+    expect(firebaseMocks.ref).toHaveBeenCalledWith(database, "rooms/ab12/actionLog");
+  });
+
+  it("keeps action logs at the maintenance threshold", async () => {
+    const current = makeActionLog(60);
+    firebaseMocks.runTransaction.mockImplementation(
+      (_entryRef, transactionUpdater: TransactionUpdater) => {
+        expect(transactionUpdater(current)).toBe(current);
+        return Promise.resolve({ committed: true, snapshot: null });
+      },
+    );
+
+    await pruneRoomActionLog(database, "ab12");
   });
 
   it("allows transaction updaters to write null", async () => {

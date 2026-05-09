@@ -411,6 +411,7 @@ describe("MultiplayerQuestProvider", () => {
       | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
       | undefined;
     const nextRoom = updater?.(session.room);
+    const retryRoom = updater?.(session.room);
 
     expect(nextRoom?.questState?.dreamcaller?.id).toBe(testDreamcaller.id);
     expect(nextRoom?.questState?.draftState).toEqual(expect.any(Object));
@@ -429,6 +430,9 @@ describe("MultiplayerQuestProvider", () => {
         dreamcallerName: testDreamcaller.name,
       },
     });
+    expect(retryRoom?.metadata.updatedAt).toBe(nextRoom?.metadata.updatedAt);
+    expect(retryRoom?.actionLog).toEqual(nextRoom?.actionLog);
+    expect(randomUUIDMock).toHaveBeenCalledOnce();
   });
 
   it("picks a draft card through a room transaction", () => {
@@ -1833,6 +1837,7 @@ describe("MultiplayerQuestProvider", () => {
       | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
       | undefined;
     const nextRoom = updater?.(session.room);
+    const retryRoom = updater?.(session.room);
 
     expect(nextRoom?.questState?.visitedSites).toEqual(["site-1"]);
     expect(
@@ -1847,6 +1852,9 @@ describe("MultiplayerQuestProvider", () => {
       source: "draft",
       summary: { siteId: "site-1" },
     });
+    expect(retryRoom?.metadata.updatedAt).toBe(nextRoom?.metadata.updatedAt);
+    expect(retryRoom?.actionLog).toEqual(nextRoom?.actionLog);
+    expect(randomUUIDMock).toHaveBeenCalledOnce();
   });
 
   it("skips site completion action logs when the site is already visited", () => {
@@ -1868,12 +1876,7 @@ describe("MultiplayerQuestProvider", () => {
 
     captured[captured.length - 1]?.mutations.completeSite("site-1", "draft");
 
-    const updater = roomServiceMocks.runRoomTransaction.mock.calls[0]?.[2] as
-      | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
-      | undefined;
-    const nextRoom = updater?.(session.room);
-
-    expect(nextRoom).toBe(session.room);
+    expect(roomServiceMocks.runRoomTransaction).not.toHaveBeenCalled();
     expect(randomUUIDMock).not.toHaveBeenCalled();
   });
 });
