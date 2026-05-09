@@ -14,6 +14,7 @@ import type { DraftState } from "../types/draft";
 import type {
   CardSourceDebugState,
   Dreamcaller,
+  Dreamsign,
   QuestState,
 } from "../types/quest";
 import {
@@ -136,6 +137,15 @@ function makeDraftState(): DraftState {
     activeSiteId: "site-1",
     pickNumber: 3,
     sitePicksCompleted: 2,
+  };
+}
+
+function makeDreamsign(id: string, name: string): Dreamsign {
+  return {
+    id,
+    name,
+    effectDescription: `${name} effect.`,
+    isBane: false,
   };
 }
 
@@ -336,6 +346,65 @@ describe("QuestProvider composed mutations", () => {
     expect(
       getLogEntries().some((entry) => entry.event === "site_completed"),
     ).toBe(false);
+  });
+
+  it("rejects local Dreamsign acceptance when purge index is out of range", () => {
+    const selectedDreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    sessionStorage.setItem(
+      "quest-prototype-state-v1",
+      JSON.stringify({
+        version: 1,
+        state: {
+          ...createDefaultState(),
+          dreamsigns: [makeDreamsign("held-0", "Held 0")],
+          siteRuntime: {
+            "site-1": {
+              kind: "dreamsignOffer",
+              offeredDreamsigns: [selectedDreamsign],
+              remainingDreamsignPool: [],
+              accepted: false,
+            },
+          },
+          screen: { type: "site", siteId: "site-1" },
+          activeSiteId: "site-1",
+        },
+      }),
+    );
+    const captured: QuestContextValue[] = [];
+
+    function Capture() {
+      captured.push(useQuest());
+      return null;
+    }
+
+    mount(
+      createElement(QuestProvider, {
+        cardDatabase: new Map(),
+        questContent: makeQuestContent(),
+        children: createElement(Capture),
+      }),
+    );
+
+    act(() => {
+      captured[captured.length - 1]?.mutations.acceptDreamsignOffer(
+        "site-1",
+        selectedDreamsign,
+        5,
+      );
+    });
+    const latest = captured[captured.length - 1];
+
+    expect(latest?.state.dreamsigns).toEqual([
+      makeDreamsign("held-0", "Held 0"),
+    ]);
+    expect(latest?.state.siteRuntime["site-1"]).toEqual({
+      kind: "dreamsignOffer",
+      offeredDreamsigns: [selectedDreamsign],
+      remainingDreamsignPool: [],
+      accepted: false,
+    });
+    expect(latest?.state.screen).toEqual({ type: "site", siteId: "site-1" });
+    expect(latest?.state.visitedSites).toEqual([]);
   });
 });
 

@@ -817,6 +817,41 @@ describe("MultiplayerQuestProvider", () => {
     });
   });
 
+  it("rejects dreamsign acceptance when purge index is out of range", () => {
+    const captured: QuestContextValue[] = [];
+    const selectedDreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      dreamsigns: [makeDreamsign("held-0", "Held 0")],
+      siteRuntime: {
+        "site-1": {
+          kind: "dreamsignOffer",
+          offeredDreamsigns: [selectedDreamsign],
+          remainingDreamsignPool: [],
+          accepted: false,
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptDreamsignOffer(
+      "site-1",
+      selectedDreamsign,
+      5,
+    );
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
   it("skips duplicate dreamsign acceptance when runtime is already accepted", () => {
     const captured: QuestContextValue[] = [];
     const selectedDreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");

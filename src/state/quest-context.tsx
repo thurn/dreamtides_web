@@ -590,7 +590,7 @@ export function QuestProvider({
         const purgedDreamsign =
           purgeIndex === undefined ? null : prev.dreamsigns[purgeIndex];
         if (
-          (purgeIndex !== undefined && purgedDreamsign === null) ||
+          (purgeIndex !== undefined && purgedDreamsign == null) ||
           (prev.dreamsigns.length >= MAX_DREAMSIGNS &&
             purgeIndex === undefined)
         ) {

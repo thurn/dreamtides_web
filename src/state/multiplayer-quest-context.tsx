@@ -875,7 +875,7 @@ export function MultiplayerQuestProvider({
               ? null
               : room.questState.dreamsigns[purgeIndex];
           if (
-            (purgeIndex !== undefined && purgedDreamsign === null) ||
+            (purgeIndex !== undefined && purgedDreamsign == null) ||
             (room.questState.dreamsigns.length >= MAX_DREAMSIGNS &&
               purgeIndex === undefined)
           ) {
