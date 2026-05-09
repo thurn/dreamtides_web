@@ -12,6 +12,15 @@ import type { Dreamsign, QuestState, SiteState } from "../types/quest";
 import { useQuest, type QuestContextValue } from "./quest-context";
 import { createDefaultState } from "./quest-context";
 import { MultiplayerQuestProvider } from "./multiplayer-quest-context";
+import { createBattleInit } from "../battle/integration/create-battle-init";
+import { createInitialBattleState } from "../battle/state/create-initial-state";
+import {
+  makeBattleTestCardDatabase,
+  makeBattleTestDreamcallers,
+  makeBattleTestSite,
+  makeBattleTestState,
+} from "../battle/test-support";
+import type { SharedBattleState } from "../multiplayer/battle-types";
 
 const roomServiceMocks = vi.hoisted(() => ({
   runRoomTransaction: vi.fn(),
@@ -164,7 +173,10 @@ function latestRoomTransactionUpdater():
     | undefined;
 }
 
-function makeSession(questState: QuestState | null): RoomSession {
+function makeSession(
+  questState: QuestState | null,
+  battleState: SharedBattleState | null = null,
+): RoomSession {
   return {
     roomId: "ab12cd",
     clientId: "client-1",
@@ -175,9 +187,31 @@ function makeSession(questState: QuestState | null): RoomSession {
         updatedAt: "2026-05-08T12:00:00.000Z",
       },
       questState,
-      battleState: null,
+      battleState,
       presence: {},
       actionLog: {},
+    },
+  };
+}
+
+function makeFakeBattleState(): SharedBattleState {
+  const init = createBattleInit({
+    battleEntryKey: "reset-quest-test",
+    site: makeBattleTestSite(),
+    state: makeBattleTestState(),
+    cardDatabase: makeBattleTestCardDatabase(),
+    dreamcallers: makeBattleTestDreamcallers(),
+    seedOverride: 1,
+    enableAi: false,
+  });
+  const initial = createInitialBattleState(init);
+  return {
+    init,
+    reducer: {
+      mutable: initial,
+      history: { past: [], future: [] },
+      lastTransition: null,
+      commandSerial: 0,
     },
   };
 }
@@ -384,7 +418,38 @@ describe("MultiplayerQuestProvider", () => {
       "ab12cd",
       expect.objectContaining({
         "rooms/ab12cd/questState": createDefaultState(),
+        "rooms/ab12cd/battleState": null,
       }),
+    );
+  });
+
+  it("clears battleState when resetting a quest mid-battle", () => {
+    const captured: QuestContextValue[] = [];
+    const battleState = makeFakeBattleState();
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={makeSession(
+          { ...createDefaultState(), essence: 300 },
+          battleState,
+        )}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.resetQuest();
+
+    const calls = roomServiceMocks.writeRoomUpdate.mock.calls;
+    const lastCall = calls[calls.length - 1];
+    expect(lastCall?.[0]).toBe(database);
+    expect(lastCall?.[1]).toBe("ab12cd");
+    const updateMap = lastCall?.[2] as Record<string, unknown>;
+    expect(updateMap["rooms/ab12cd/questState"]).toEqual(createDefaultState());
+    expect(updateMap["rooms/ab12cd/battleState"]).toBeNull();
+    expect(updateMap["rooms/ab12cd/metadata/updatedAt"]).toEqual(
+      expect.any(String),
     );
   });
 

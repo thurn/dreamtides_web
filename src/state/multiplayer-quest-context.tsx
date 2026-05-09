@@ -19,6 +19,7 @@ import {
   questStatePath,
   type FirebaseUpdateMap,
 } from "../multiplayer/room-paths";
+import { battleStatePath } from "../multiplayer/battle-paths";
 import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { DreamcallerContent, PackageTideId } from "../types/content";
 import type {
@@ -148,6 +149,7 @@ function writeWholeQuestState({
   const updatedAt = new Date().toISOString();
   writeUpdate(database, roomId, {
     [questStatePath(roomId)]: state,
+    [battleStatePath(roomId)]: null,
     [metadataUpdatedAtPath(roomId)]: updatedAt,
   });
 }
