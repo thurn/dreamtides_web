@@ -120,8 +120,9 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     clientId,
   } = useMultiplayerBattle();
   if (maybeBattleState === null || maybeReducerState === null) {
-    // Unreachable: PlayableBattleScreen wrapper guards. Narrow types here.
-    return null;
+    throw new Error(
+      "PlayableBattleScreenInner reached without a non-null battleState. The wrapper component should have short-circuited.",
+    );
   }
   const battleState: SharedBattleState = maybeBattleState;
   const reducerState: BattleReducerState = maybeReducerState;
@@ -1052,6 +1053,11 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   );
 }
 
+// In multiplayer the shared reducer slice does not carry `lastActivity`
+// (per the V2 design spec), so the judgment-pause overlay fires whenever a
+// new commandSerial yields a transition with a non-null `judgment`. This
+// includes undoing or redoing into a snapshot whose `lastTransition`
+// captured a judgment, by design.
 function readJudgmentPause(
   reducerState: BattleReducerState,
 ): JudgmentPauseState {
