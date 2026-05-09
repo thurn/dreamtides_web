@@ -184,12 +184,19 @@ function randomIntInRange(min: number, max: number): number {
 }
 
 function stableStringify(value: unknown): string {
+  // Normalize to RTDB's on-disk shape: keys come back in alphabetical order
+  // (so we sort), and empty arrays/objects are dropped entirely on write
+  // (so a `[]` value compares equal to a missing key).
   return JSON.stringify(value, (_, v: unknown) => {
+    if (Array.isArray(v) && v.length === 0) return undefined;
     if (v !== null && typeof v === "object" && !Array.isArray(v)) {
-      const sorted: Record<string, unknown> = {};
       const record = v as Record<string, unknown>;
-      for (const key of Object.keys(record).sort()) {
-        sorted[key] = record[key];
+      const keys = Object.keys(record).sort();
+      const sorted: Record<string, unknown> = {};
+      for (const key of keys) {
+        const inner = record[key];
+        if (Array.isArray(inner) && inner.length === 0) continue;
+        sorted[key] = inner;
       }
       return sorted;
     }
@@ -874,9 +881,10 @@ export function MultiplayerQuestProvider({
       // Screen useEffects re-fire on every Firebase snapshot because
       // state.resolvedPackage and visibleCardOffers reference-change. Skipping
       // structurally-equal writes here breaks the snapshot/write loop that
-      // would otherwise starve concurrent transactions with maxretry.
-      // RTDB returns object keys in alphabetical order, so a plain
-      // JSON.stringify compare misses equal payloads — sort keys first.
+      // would otherwise starve concurrent transactions with maxretry. The
+      // compare is against snapshot-derived state, so the signature must
+      // match RTDB's on-disk shape (sorted keys, empty arrays dropped) —
+      // see stableStringify.
       if (
         stableStringify(next.cardSourceDebug) ===
         stableStringify(current.state.cardSourceDebug)
