@@ -9,6 +9,7 @@ import {
   type Unsubscribe,
 } from "firebase/database";
 import { pruneActionLog } from "./action-log";
+import { normalizeBattleStateSnapshot } from "./battle-service";
 import { presencePath, roomPath, type FirebaseUpdateMap } from "./room-paths";
 import {
   ACTION_LOG_LIMIT,
@@ -97,7 +98,7 @@ function normalizeRoomSnapshot(room: MultiplayerRoom): MultiplayerRoom {
   return {
     ...room,
     questState: normalizeQuestState(room.questState),
-    battleState: room.battleState ?? null,
+    battleState: normalizeBattleStateSnapshot(room.battleState ?? null),
     presence: room.presence ?? {},
     actionLog: room.actionLog ?? {},
   };
