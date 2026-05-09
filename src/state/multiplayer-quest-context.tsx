@@ -670,6 +670,8 @@ export function MultiplayerQuestProvider({
 
   const acceptRewardSite = useCallback((siteId: string) => {
     const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
     writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
@@ -737,8 +739,6 @@ export function MultiplayerQuestProvider({
           siteId,
         );
 
-        const now = new Date().toISOString();
-        const actionId = crypto.randomUUID();
         return {
           ...room,
           questState: next,
@@ -998,6 +998,8 @@ export function MultiplayerQuestProvider({
 
   const acceptEssenceSite = useCallback((siteId: string) => {
     const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
     writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
@@ -1028,8 +1030,6 @@ export function MultiplayerQuestProvider({
           },
           siteId,
         );
-        const now = new Date().toISOString();
-        const actionId = crypto.randomUUID();
         return {
           ...room,
           questState: next,

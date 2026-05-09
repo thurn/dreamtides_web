@@ -22,6 +22,7 @@ export function DreamsignOfferingScreen({
   const runtime = state.siteRuntime[site.id];
   const offerRuntime = runtime?.kind === "dreamsignOffer" ? runtime : null;
   const options = offerRuntime?.offeredDreamsigns ?? null;
+  const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
 
   const [purging, setPurging] = useState(false);
   const [pendingDreamsign, setPendingDreamsign] = useState<Dreamsign | null>(
@@ -32,7 +33,7 @@ export function DreamsignOfferingScreen({
     if (runtime === undefined) {
       mutations.ensureDreamsignOfferRuntime(site.id, optionCount);
     }
-  }, [mutations, optionCount, runtime, site.id]);
+  }, [mutations, optionCount, remainingDreamsignPoolKey, runtime, site.id]);
 
   useEffect(() => {
     if (options === null) {

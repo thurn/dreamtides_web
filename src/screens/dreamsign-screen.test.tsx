@@ -275,15 +275,29 @@ describe("DreamsignOfferingScreen", () => {
 
   it("requests shared offer runtime while revealing options", () => {
     const mutations = makeMutations();
-    setQuestContext(makeState(), mutations);
+    setQuestContext(
+      makeState({ remainingDreamsignPool: ["embers-whisper"] }),
+      mutations,
+    );
 
-    const { container, root } = mount(<DreamsignOfferingScreen site={makeSite()} />);
+    const element = <DreamsignOfferingScreen site={makeSite()} />;
+    const { container, root } = mount(element);
 
     expect(container.textContent).toContain("Revealing Dreamsigns...");
     expect(mutations.ensureDreamsignOfferRuntime).toHaveBeenCalledWith(
       "site-1",
       1,
     );
+
+    setQuestContext(
+      makeState({ remainingDreamsignPool: ["glacial-insight"] }),
+      mutations,
+    );
+    act(() => {
+      root.render(<DreamsignOfferingScreen site={makeSite()} />);
+    });
+
+    expect(mutations.ensureDreamsignOfferRuntime).toHaveBeenCalledTimes(2);
 
     act(() => {
       root.unmount();
@@ -292,6 +306,45 @@ describe("DreamsignOfferingScreen", () => {
 });
 
 describe("DreamsignDraftScreen", () => {
+  it("retries shared draft runtime reveal when the Dreamsign pool changes", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({ remainingDreamsignPool: ["embers-whisper"] }),
+      mutations,
+    );
+
+    const element = (
+      <DreamsignDraftScreen
+        site={makeSite({ type: "DreamsignDraft" })}
+      />
+    );
+    const { container, root } = mount(element);
+
+    expect(container.textContent).toContain("Revealing Dreamsigns...");
+    expect(mutations.ensureDreamsignOfferRuntime).toHaveBeenCalledWith(
+      "site-1",
+      3,
+    );
+
+    setQuestContext(
+      makeState({ remainingDreamsignPool: ["glacial-insight"] }),
+      mutations,
+    );
+    act(() => {
+      root.render(
+        <DreamsignDraftScreen
+          site={makeSite({ type: "DreamsignDraft" })}
+        />,
+      );
+    });
+
+    expect(mutations.ensureDreamsignOfferRuntime).toHaveBeenCalledTimes(2);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders shared draft options and completes when skipped", () => {
     const mutations = makeMutations();
     setQuestContext(

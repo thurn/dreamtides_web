@@ -258,16 +258,36 @@ describe("RewardSiteScreen", () => {
 
   it("requests runtime generation while the reward is being revealed", () => {
     const mutations = makeMutations();
-    setQuestContext(makeState(), mutations, new Map());
+    setQuestContext(
+      makeState({ remainingDreamsignPool: ["dreamsign-1"] }),
+      mutations,
+      new Map(),
+    );
 
-    const { container, root } = mount(
+    const element = (
       <RewardSiteScreen
         site={{ id: "site-1", type: "Reward", isEnhanced: false, isVisited: false }}
-      />,
+      />
     );
+    const { container, root } = mount(element);
 
     expect(container.textContent).toContain("Revealing reward...");
     expect(mutations.ensureRewardSiteRuntime).toHaveBeenCalledWith("site-1");
+
+    setQuestContext(
+      makeState({ remainingDreamsignPool: ["dreamsign-2"] }),
+      mutations,
+      new Map(),
+    );
+    act(() => {
+      root.render(
+        <RewardSiteScreen
+          site={{ id: "site-1", type: "Reward", isEnhanced: false, isVisited: false }}
+        />,
+      );
+    });
+
+    expect(mutations.ensureRewardSiteRuntime).toHaveBeenCalledTimes(2);
 
     act(() => {
       root.unmount();
