@@ -28,7 +28,6 @@ vi.mock("../multiplayer/battle-service", async () => {
     ...actual,
     dispatchBattleCommandToRoom: vi.fn(async () => undefined),
     dispatchBattleHistoryNav: vi.fn(async () => undefined),
-    dispatchBattleReset: vi.fn(async () => undefined),
     dispatchClearForcedResult: vi.fn(async () => undefined),
   };
 });
@@ -85,7 +84,6 @@ describe("useMultiplayerBattle", () => {
   beforeEach(() => {
     vi.mocked(battleService.dispatchBattleCommandToRoom).mockClear();
     vi.mocked(battleService.dispatchBattleHistoryNav).mockClear();
-    vi.mocked(battleService.dispatchBattleReset).mockClear();
     vi.mocked(battleService.dispatchClearForcedResult).mockClear();
   });
 

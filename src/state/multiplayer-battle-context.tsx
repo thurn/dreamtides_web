@@ -92,6 +92,11 @@ export function MultiplayerBattleProvider({
           console.error("Failed to dispatch clear forced result", error);
         });
         return;
+      default: {
+        const _exhaustive: never = action;
+        void _exhaustive;
+        return;
+      }
     }
   }, []);
 

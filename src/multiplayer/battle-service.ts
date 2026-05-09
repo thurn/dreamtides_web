@@ -468,7 +468,6 @@ export function applyClearForcedResultToRoom(input: {
     { type: "CLEAR_FORCED_RESULT" },
     room.battleState.init,
   );
-  if (next === seeded) return room;
   const nextSerial = room.battleState.reducer.commandSerial + 1;
   return {
     ...room,
