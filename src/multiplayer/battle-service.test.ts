@@ -3,6 +3,7 @@ import { runTransaction } from "firebase/database";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../battle/types";
 import {
   applyBattleCommandToRoom,
+  applyClearForcedResultToRoom,
   clearBattleStateInRoom,
   ensureBattleSession,
   normalizeBattleStateSnapshot,
@@ -483,6 +484,72 @@ describe("resetBattleInRoom", () => {
       actionId: "r1",
     });
     expect(next).toBe(room);
+  });
+});
+
+describe("applyClearForcedResultToRoom", () => {
+  it("returns the room unchanged when battleState is null", () => {
+    const room: MultiplayerRoom = {
+      metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
+      questState: null,
+      battleState: null,
+      presence: {},
+      actionLog: {},
+    };
+    const next = applyClearForcedResultToRoom({
+      room,
+      now: "2026-05-09T00:00:00.000Z",
+      actorId: "client-a",
+      actionId: "c1",
+    });
+    expect(next).toBe(room);
+  });
+
+  it("returns the room unchanged when forcedResult is null", () => {
+    const seeded = buildFreshRoom();
+    expect(seeded.battleState!.reducer.mutable.forcedResult).toBeNull();
+    const next = applyClearForcedResultToRoom({
+      room: seeded,
+      now: "2026-05-09T00:00:00.000Z",
+      actorId: "client-a",
+      actionId: "c1",
+    });
+    expect(next).toBe(seeded);
+  });
+
+  it("clears forcedResult, bumps commandSerial, and records action-log entry", () => {
+    const seeded = buildFreshRoom();
+    const forced = applyBattleCommandToRoom({
+      room: seeded,
+      command: {
+        id: "FORCE_RESULT",
+        result: "victory",
+        sourceSurface: "inspector",
+      },
+      now: "2026-05-09T00:00:00.000Z",
+      actorId: "client-a",
+      actionId: "force-1",
+    });
+    expect(forced.battleState!.reducer.mutable.forcedResult).toBe("victory");
+
+    const next = applyClearForcedResultToRoom({
+      room: forced,
+      now: "2026-05-09T00:00:01.000Z",
+      actorId: "client-a",
+      actionId: "clear-1",
+    });
+    expect(next).not.toBe(forced);
+    expect(next.battleState!.reducer.mutable.forcedResult).toBeNull();
+    expect(next.battleState!.reducer.commandSerial).toBe(
+      forced.battleState!.reducer.commandSerial + 1,
+    );
+    expect(next.actionLog!["clear-1"].action).toBe(
+      "battle:CLEAR_FORCED_RESULT",
+    );
+    expect(next.actionLog!["clear-1"].summary.commandSerial).toBe(
+      forced.battleState!.reducer.commandSerial + 1,
+    );
+    expect(next.metadata.updatedAt).toBe("2026-05-09T00:00:01.000Z");
   });
 });
 
