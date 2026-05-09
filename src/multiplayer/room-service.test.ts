@@ -170,6 +170,98 @@ describe("room service", () => {
     });
   });
 
+  it("restores RTDB-stripped empty arrays and null fields on quest state", () => {
+    const listener = vi.fn();
+    const stripped = {
+      essence: 250,
+      completionLevel: 0,
+      atlas: { nexusId: "nexus" },
+      screen: { type: "questStart" },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: stripped,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    expect(listener).toHaveBeenCalledWith({
+      status: "ready",
+      room: {
+        ...room,
+        questState: {
+          essence: 250,
+          deck: [],
+          dreamcaller: null,
+          resolvedPackage: null,
+          cardSourceDebug: null,
+          remainingDreamsignPool: [],
+          dreamsigns: [],
+          completionLevel: 0,
+          atlas: { nodes: {}, edges: [], nexusId: "nexus" },
+          currentDreamscape: null,
+          visitedSites: [],
+          siteRuntime: {},
+          draftState: null,
+          screen: { type: "questStart" },
+          activeSiteId: null,
+          failureSummary: null,
+        },
+      },
+    });
+  });
+
+  it("restores stripped fields on nested draft state and dreamscape nodes", () => {
+    const listener = vi.fn();
+    const strippedQuestState = {
+      ...createDefaultState(),
+      atlas: {
+        nexusId: "nexus",
+        edges: [["nexus", "dreamscape-1"]],
+        nodes: {
+          "dreamscape-1": {
+            id: "dreamscape-1",
+            biomeName: "Verdant Hollow",
+            biomeColor: "#22c55e",
+            position: { x: 0, y: 0 },
+            status: "available" as const,
+          },
+        },
+      },
+      draftState: {
+        pickNumber: 1,
+        sitePicksCompleted: 0,
+        remainingCopiesByCard: { "42": 2 },
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    const restoredNode = ready.room.questState?.atlas.nodes["dreamscape-1"];
+    expect(restoredNode?.sites).toEqual([]);
+    expect(restoredNode?.enhancedSiteType).toBeNull();
+    expect(ready.room.questState?.draftState).toEqual({
+      pickNumber: 1,
+      sitePicksCompleted: 0,
+      remainingCopiesByCard: { "42": 2 },
+      currentOffer: [],
+      activeSiteId: null,
+    });
+  });
+
   it("emits missing when the room snapshot does not exist", () => {
     const listener = vi.fn();
     firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
@@ -228,6 +320,46 @@ describe("room service", () => {
 
     expect(firebaseMocks.ref).toHaveBeenCalledWith(database, "rooms/ab12");
     expect(updater).toHaveBeenCalledWith(current);
+  });
+
+  it("normalizes RTDB-stripped fields before invoking transaction updaters", async () => {
+    const stripped = {
+      metadata: {
+        schemaVersion: 1,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      },
+    };
+    const updater = vi.fn(() => undefined);
+    firebaseMocks.runTransaction.mockImplementation(
+      (_entryRef, transactionUpdater: TransactionUpdater) => {
+        transactionUpdater(stripped);
+        return Promise.resolve({ committed: true, snapshot: null });
+      },
+    );
+
+    await runRoomTransaction(database, "ab12", updater);
+
+    expect(updater).toHaveBeenCalledWith({
+      metadata: stripped.metadata,
+      questState: null,
+      presence: {},
+      actionLog: {},
+    });
+  });
+
+  it("passes null to transaction updaters when current data is missing", async () => {
+    const updater = vi.fn(() => null);
+    firebaseMocks.runTransaction.mockImplementation(
+      (_entryRef, transactionUpdater: TransactionUpdater) => {
+        transactionUpdater(null);
+        return Promise.resolve({ committed: true, snapshot: null });
+      },
+    );
+
+    await runRoomTransaction(database, "ab12", updater);
+
+    expect(updater).toHaveBeenCalledWith(null);
   });
 
   it("writes focused updates from the root", async () => {

@@ -18,21 +18,78 @@ import {
   type PresenceEntry,
   type RoomMetadata,
 } from "./room-types";
-import type { QuestState } from "../types/quest";
+import { createDefaultState } from "../state/quest-context";
+import type { DraftState } from "../types/draft";
+import type {
+  DreamAtlas,
+  DreamscapeNode,
+  QuestState,
+} from "../types/quest";
 
 export type RoomSubscriptionSnapshot =
   | { status: "ready"; room: MultiplayerRoom }
   | { status: "missing" }
   | { status: "error"; message: string };
 
+function normalizeDreamscapeNode(node: DreamscapeNode): DreamscapeNode {
+  return {
+    ...node,
+    sites: node.sites ?? [],
+    enhancedSiteType: node.enhancedSiteType ?? null,
+  };
+}
+
+function normalizeAtlas(atlas: DreamAtlas | undefined): DreamAtlas {
+  const defaults = createDefaultState().atlas;
+  if (atlas === undefined) {
+    return defaults;
+  }
+  const rawNodes = atlas.nodes ?? defaults.nodes;
+  const nodes: Record<string, DreamscapeNode> = {};
+  for (const [id, node] of Object.entries(rawNodes)) {
+    nodes[id] = normalizeDreamscapeNode(node);
+  }
+  return {
+    nodes,
+    edges: atlas.edges ?? defaults.edges,
+    nexusId: atlas.nexusId ?? defaults.nexusId,
+  };
+}
+
+function normalizeDraftState(draftState: DraftState | null | undefined): DraftState | null {
+  if (draftState === null || draftState === undefined) {
+    return null;
+  }
+  return {
+    ...draftState,
+    currentOffer: draftState.currentOffer ?? [],
+    activeSiteId: draftState.activeSiteId ?? null,
+  };
+}
+
 function normalizeQuestState(questState: QuestState | null | undefined): QuestState | null {
   if (questState === null || questState === undefined) {
     return null;
   }
 
+  const defaults = createDefaultState();
   return {
-    ...questState,
-    siteRuntime: questState.siteRuntime ?? {},
+    essence: questState.essence ?? defaults.essence,
+    deck: questState.deck ?? defaults.deck,
+    dreamcaller: questState.dreamcaller ?? null,
+    resolvedPackage: questState.resolvedPackage ?? null,
+    cardSourceDebug: questState.cardSourceDebug ?? null,
+    remainingDreamsignPool: questState.remainingDreamsignPool ?? defaults.remainingDreamsignPool,
+    dreamsigns: questState.dreamsigns ?? defaults.dreamsigns,
+    completionLevel: questState.completionLevel ?? defaults.completionLevel,
+    atlas: normalizeAtlas(questState.atlas),
+    currentDreamscape: questState.currentDreamscape ?? null,
+    visitedSites: questState.visitedSites ?? defaults.visitedSites,
+    siteRuntime: questState.siteRuntime ?? defaults.siteRuntime,
+    draftState: normalizeDraftState(questState.draftState),
+    screen: questState.screen ?? defaults.screen,
+    activeSiteId: questState.activeSiteId ?? null,
+    failureSummary: questState.failureSummary ?? null,
   };
 }
 
@@ -117,7 +174,11 @@ export async function runRoomTransaction(
   updater: (current: MultiplayerRoom | null) => MultiplayerRoom | null | undefined,
 ): Promise<void> {
   await runTransaction(ref(database, roomPath(roomId)), (current) => {
-    const next = updater(current as MultiplayerRoom | null);
+    const normalized =
+      current === null || current === undefined
+        ? null
+        : normalizeRoomSnapshot(current as MultiplayerRoom);
+    const next = updater(normalized);
     return next === undefined ? current : next;
   });
 }
