@@ -6,6 +6,7 @@ import {
   ensureBattleSession,
   normalizeBattleStateSnapshot,
   redoBattleInRoom,
+  resetBattleInRoom,
   undoBattleInRoom,
 } from "./battle-service";
 import { createBattleInit } from "../battle/integration/create-battle-init";
@@ -311,53 +312,53 @@ describe("applyBattleCommandToRoom", () => {
   });
 });
 
+function buildFreshRoom(): MultiplayerRoom {
+  const init = createBattleInit({
+    battleEntryKey: "test-undo",
+    site: makeBattleTestSite(),
+    state: makeBattleTestState(),
+    cardDatabase: makeBattleTestCardDatabase(),
+    dreamcallers: makeBattleTestDreamcallers(),
+    seedOverride: 1,
+    enableAi: false,
+  });
+  const initial = createInitialBattleState(init);
+  return {
+    metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
+    questState: null,
+    battleState: {
+      init,
+      reducer: {
+        mutable: initial,
+        history: { past: [], future: [] },
+        lastTransition: null,
+        commandSerial: 0,
+      },
+    },
+    presence: {},
+    actionLog: {},
+  };
+}
+
+// Build a room that already has one committed command in past, so undo
+// has something to do.
+function buildRoomWithOneCommittedCommand() {
+  const initialRoom = buildFreshRoom();
+  const initial = initialRoom.battleState!.reducer.mutable;
+  return applyBattleCommandToRoom({
+    room: initialRoom,
+    command: {
+      id: "PLAY_CARD",
+      battleCardId: initial.sides.player.hand[0],
+      sourceSurface: "hand-tray",
+    },
+    now: "2026-05-09T00:00:00.000Z",
+    actorId: "client-a",
+    actionId: "seed-1",
+  });
+}
+
 describe("undoBattleInRoom and redoBattleInRoom", () => {
-  function buildFreshRoom(): MultiplayerRoom {
-    const init = createBattleInit({
-      battleEntryKey: "test-undo",
-      site: makeBattleTestSite(),
-      state: makeBattleTestState(),
-      cardDatabase: makeBattleTestCardDatabase(),
-      dreamcallers: makeBattleTestDreamcallers(),
-      seedOverride: 1,
-      enableAi: false,
-    });
-    const initial = createInitialBattleState(init);
-    return {
-      metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
-      questState: null,
-      battleState: {
-        init,
-        reducer: {
-          mutable: initial,
-          history: { past: [], future: [] },
-          lastTransition: null,
-          commandSerial: 0,
-        },
-      },
-      presence: {},
-      actionLog: {},
-    };
-  }
-
-  // Build a room that already has one committed command in past, so undo
-  // has something to do.
-  function buildRoomWithOneCommittedCommand() {
-    const initialRoom = buildFreshRoom();
-    const initial = initialRoom.battleState!.reducer.mutable;
-    return applyBattleCommandToRoom({
-      room: initialRoom,
-      command: {
-        id: "PLAY_CARD",
-        battleCardId: initial.sides.player.hand[0],
-        sourceSurface: "hand-tray",
-      },
-      now: "2026-05-09T00:00:00.000Z",
-      actorId: "client-a",
-      actionId: "seed-1",
-    });
-  }
-
   it("undo moves the latest past entry into future and bumps commandSerial", () => {
     const seeded = buildRoomWithOneCommittedCommand();
     const next = undoBattleInRoom({
@@ -442,6 +443,43 @@ describe("undoBattleInRoom and redoBattleInRoom", () => {
       now: "x",
       actorId: "client-a",
       actionId: "u1",
+    });
+    expect(next).toBe(room);
+  });
+});
+
+describe("resetBattleInRoom", () => {
+  it("clears history and resets mutable to the prepared initial state", () => {
+    // Reuse the seeded helper from the undo/redo tests — that helper builds
+    // a room with one committed PLAY_CARD in history.past.
+    const seeded = buildRoomWithOneCommittedCommand();
+    const next = resetBattleInRoom({
+      room: seeded,
+      now: "2026-05-09T00:00:00.000Z",
+      actorId: "client-a",
+      actionId: "r1",
+    });
+    expect(next.battleState!.reducer.history).toEqual({ past: [], future: [] });
+    expect(next.battleState!.reducer.lastTransition).toBeNull();
+    expect(next.battleState!.reducer.commandSerial).toBe(
+      seeded.battleState!.reducer.commandSerial + 1,
+    );
+    expect(next.actionLog!["r1"].action).toBe("battle:RESET");
+  });
+
+  it("returns the room unchanged when battleState is null", () => {
+    const room: MultiplayerRoom = {
+      metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
+      questState: null,
+      battleState: null,
+      presence: {},
+      actionLog: {},
+    };
+    const next = resetBattleInRoom({
+      room,
+      now: "x",
+      actorId: "client-a",
+      actionId: "r1",
     });
     expect(next).toBe(room);
   });

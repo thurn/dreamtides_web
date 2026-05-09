@@ -18,6 +18,8 @@ import {
   undoBattleHistory,
 } from "../battle/state/history";
 import { createBattleReducerState } from "../battle/state/reducer";
+import { createInitialBattleState } from "../battle/state/create-initial-state";
+import { prepareInitialBattleState } from "../battle/engine/turn-flow";
 import type { BattleCommand } from "../battle/debug/commands";
 import type {
   SharedBattleReducerSlice,
@@ -386,5 +388,59 @@ export async function dispatchBattleHistoryNav(input: {
       actionId,
     });
     return next;
+  });
+}
+
+export function resetBattleInRoom(
+  input: BattleHistoryNavInput,
+): MultiplayerRoom {
+  const { room, now, actorId, actionId } = input;
+  if (room.battleState === null) return room;
+
+  const init = room.battleState.init;
+  const initial = prepareInitialBattleState(
+    createInitialBattleState(init),
+    init,
+  ).state;
+
+  return {
+    ...room,
+    battleState: {
+      init,
+      reducer: {
+        mutable: initial,
+        history: { past: [], future: [] },
+        lastTransition: null,
+        commandSerial: room.battleState.reducer.commandSerial + 1,
+      },
+    },
+    metadata: { ...room.metadata, updatedAt: now },
+    actionLog: {
+      ...(room.actionLog ?? {}),
+      [actionId]: buildActionLogEntry({
+        timestamp: now,
+        actorId,
+        action: "battle:RESET",
+        source: "battle",
+        summary: {
+          commandSerial: room.battleState.reducer.commandSerial + 1,
+        },
+      }),
+    },
+  };
+}
+
+export async function dispatchBattleReset(input: {
+  database: Database;
+  roomId: string;
+  actorId: string;
+  now?: string;
+  actionId?: string;
+}): Promise<void> {
+  const now = input.now ?? new Date().toISOString();
+  const actionId = input.actionId ?? crypto.randomUUID();
+  await runRoomTransaction(input.database, input.roomId, (room) => {
+    if (room === null) return undefined;
+    return resetBattleInRoom({ room, now, actorId: input.actorId, actionId });
   });
 }
