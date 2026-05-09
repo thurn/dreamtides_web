@@ -3,6 +3,7 @@ import { runTransaction } from "firebase/database";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../battle/types";
 import {
   applyBattleCommandToRoom,
+  clearBattleStateInRoom,
   ensureBattleSession,
   normalizeBattleStateSnapshot,
   redoBattleInRoom,
@@ -481,6 +482,31 @@ describe("resetBattleInRoom", () => {
       actorId: "client-a",
       actionId: "r1",
     });
+    expect(next).toBe(room);
+  });
+});
+
+describe("clearBattleStateInRoom", () => {
+  it("nulls the slot", () => {
+    const seeded = buildRoomWithOneCommittedCommand();
+    expect(seeded.battleState).not.toBeNull();
+    const next = clearBattleStateInRoom({
+      room: seeded,
+      now: "2026-05-09T00:00:00.000Z",
+    });
+    expect(next.battleState).toBeNull();
+    expect(next.metadata.updatedAt).toBe("2026-05-09T00:00:00.000Z");
+  });
+
+  it("is idempotent on already-null slot", () => {
+    const room: MultiplayerRoom = {
+      metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
+      questState: null,
+      battleState: null,
+      presence: {},
+      actionLog: {},
+    };
+    const next = clearBattleStateInRoom({ room, now: "x" });
     expect(next).toBe(room);
   });
 });

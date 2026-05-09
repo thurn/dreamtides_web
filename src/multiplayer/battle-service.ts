@@ -444,3 +444,29 @@ export async function dispatchBattleReset(input: {
     return resetBattleInRoom({ room, now, actorId: input.actorId, actionId });
   });
 }
+
+export function clearBattleStateInRoom(input: {
+  room: MultiplayerRoom;
+  now: string;
+}): MultiplayerRoom {
+  if (input.room.battleState === null) {
+    return input.room;
+  }
+  return {
+    ...input.room,
+    battleState: null,
+    metadata: { ...input.room.metadata, updatedAt: input.now },
+  };
+}
+
+export async function dispatchClearBattleState(input: {
+  database: Database;
+  roomId: string;
+  now?: string;
+}): Promise<void> {
+  const now = input.now ?? new Date().toISOString();
+  await runRoomTransaction(input.database, input.roomId, (room) => {
+    if (room === null) return undefined;
+    return clearBattleStateInRoom({ room, now });
+  });
+}
