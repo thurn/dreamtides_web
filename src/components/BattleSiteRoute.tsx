@@ -15,10 +15,9 @@ export function createBattleEntryKey(
 }
 
 /**
- * Spec A-5 `BattleScreen` wrapper. Drives the shared room-backed battle
- * session: ensures `battleState` exists for the current `battleEntryKey`
- * via `useEnsureBattleSession`, then renders the playable surface against
- * the shared `init`/`mutable` snapshot.
+ * Drives the shared room-backed battle session: ensures `battleState` exists
+ * for the current `battleEntryKey` via `useEnsureBattleSession`, then renders
+ * the playable surface against the shared `init`/`mutable` snapshot.
  */
 export function BattleSiteRoute({
   site,
