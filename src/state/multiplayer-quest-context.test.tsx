@@ -6,6 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestContent } from "../data/quest-content";
 import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
+import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
 import type { QuestState } from "../types/quest";
 import { useQuest, type QuestContextValue } from "./quest-context";
@@ -28,6 +29,7 @@ const bridgeMocks = vi.hoisted(() => ({
 }));
 
 const loggingMocks = vi.hoisted(() => ({
+  logEvent: vi.fn(),
   resetLog: vi.fn(),
 }));
 
@@ -48,6 +50,7 @@ vi.mock("../battle/integration/battle-completion-bridge", () => ({
 }));
 
 vi.mock("../logging", () => ({
+  logEvent: loggingMocks.logEvent,
   resetLog: loggingMocks.resetLog,
 }));
 
@@ -80,6 +83,24 @@ function mount(element: ReactElement): {
   });
 
   return { container, root };
+}
+
+function makeCard(cardNumber: number): CardData {
+  return {
+    name: `Card ${String(cardNumber)}`,
+    id: `card-${String(cardNumber)}`,
+    cardNumber,
+    cardType: "Event",
+    subtype: "Test",
+    isStarter: false,
+    energyCost: 1,
+    spark: null,
+    isFast: false,
+    tides: ["materialize_value"],
+    renderedText: "Test card.",
+    imageNumber: cardNumber,
+    artOwned: true,
+  };
 }
 
 function makeQuestContent(): QuestContent {
@@ -376,6 +397,79 @@ describe("MultiplayerQuestProvider", () => {
         dreamcallerId: testDreamcaller.id,
         dreamcallerName: testDreamcaller.name,
       },
+    });
+  });
+
+  it("picks a draft card through a room transaction", () => {
+    const captured: QuestContextValue[] = [];
+    const cardDatabase = new Map<number, CardData>(
+      [101, 102, 103, 104, 201, 202, 203, 204].map((cardNumber) => [
+        cardNumber,
+        makeCard(cardNumber),
+      ]),
+    );
+    const questContent = {
+      ...makeQuestContent(),
+      cardDatabase,
+    };
+    const questState: QuestState = {
+      ...createDefaultState(),
+      draftState: {
+        remainingCopiesByCard: {
+          "201": 1,
+          "202": 1,
+          "203": 1,
+          "204": 1,
+        },
+        currentOffer: [101, 102, 103, 104],
+        activeSiteId: "site-1",
+        pickNumber: 1,
+        sitePicksCompleted: 0,
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={questContent}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.pickDraftCard("site-1", 101);
+
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+
+    const updater = roomServiceMocks.runRoomTransaction.mock.calls[0]?.[2] as
+      | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
+      | undefined;
+    const nextRoom = updater?.(session.room);
+
+    expect(nextRoom?.questState?.deck).toEqual([
+      {
+        entryId: "deck-1",
+        cardNumber: 101,
+        transfiguration: null,
+        isBane: false,
+      },
+    ]);
+    expect(nextRoom?.questState?.draftState?.pickNumber).toBe(2);
+    expect(nextRoom?.questState?.draftState?.sitePicksCompleted).toBe(1);
+    expect(nextRoom?.questState?.draftState?.currentOffer).not.toEqual([
+      101,
+      102,
+      103,
+      104,
+    ]);
+    expect(nextRoom?.metadata.updatedAt).toEqual(expect.any(String));
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "pickDraftCard",
+      source: "draft_pick",
+      summary: { siteId: "site-1", cardNumber: 101 },
     });
   });
 

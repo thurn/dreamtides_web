@@ -14,6 +14,7 @@ import {
   changeQuestEssence,
   completeQuestSite,
   nextDeckEntryId,
+  pickDraftCardInQuestState,
   setQuestScreen,
   startQuestFromDreamcaller,
   updateQuestAtlas,
@@ -200,6 +201,53 @@ describe("quest state actions", () => {
         isBane: false,
       },
     ]);
+  });
+
+  it("picks a draft card in one state transition", () => {
+    const cardDatabase = new Map<number, CardData>(
+      [101, 102, 103, 104, 201, 202, 203, 204].map((cardNumber) => [
+        cardNumber,
+        makeCard(cardNumber),
+      ]),
+    );
+    const prev: QuestState = {
+      ...createDefaultState(),
+      draftState: {
+        remainingCopiesByCard: {
+          "201": 1,
+          "202": 1,
+          "203": 1,
+          "204": 1,
+        },
+        currentOffer: [101, 102, 103, 104],
+        activeSiteId: "site-1",
+        pickNumber: 1,
+        sitePicksCompleted: 0,
+      },
+    };
+
+    const next = pickDraftCardInQuestState({
+      prev,
+      siteId: "site-1",
+      cardNumber: 101,
+      cardDatabase,
+    });
+
+    expect(next.deck).toEqual([
+      {
+        entryId: "deck-1",
+        cardNumber: 101,
+        transfiguration: null,
+        isBane: false,
+      },
+    ]);
+    expect(next.draftState?.pickNumber).toBe(2);
+    expect(next.draftState?.sitePicksCompleted).toBe(1);
+    expect(next.draftState?.currentOffer).not.toEqual([101, 102, 103, 104]);
+    expect(next.draftState?.currentOffer).toHaveLength(4);
+    expect(prev.draftState?.pickNumber).toBe(1);
+    expect(prev.deck).toEqual([]);
+    vi.mocked(console.log).mockClear();
   });
 
   it("starts a quest from a Dreamcaller in one state transition", () => {

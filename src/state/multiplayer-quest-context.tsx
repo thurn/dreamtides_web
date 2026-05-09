@@ -43,6 +43,7 @@ import {
 import {
   changeQuestEssence,
   completeQuestSite,
+  pickDraftCardInQuestState,
   setQuestScreen,
   startQuestFromDreamcaller,
   updateQuestAtlas,
@@ -470,8 +471,55 @@ export function MultiplayerQuestProvider({
     [],
   );
 
-  const pickDraftCard = useCallback((_siteId: string, _cardNumber: number) => {
-    unavailableMutation("pickDraftCard");
+  const pickDraftCard = useCallback((siteId: string, cardNumber: number) => {
+    const current = currentRef.current;
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+
+        let next: QuestState;
+        try {
+          next = pickDraftCardInQuestState({
+            prev: room.questState,
+            siteId,
+            cardNumber,
+            cardDatabase: current.questContent.cardDatabase,
+          });
+        } catch {
+          return room ?? undefined;
+        }
+
+        const now = new Date().toISOString();
+        const actionId = crypto.randomUUID();
+
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            deck: next.deck,
+            draftState: next.draftState,
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: {
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "pickDraftCard",
+              source: "draft_pick",
+              summary: { siteId, cardNumber },
+            },
+          },
+        };
+      },
+    });
   }, []);
 
   const mutations = useMemo<QuestMutations>(

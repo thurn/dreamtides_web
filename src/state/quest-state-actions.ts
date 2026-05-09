@@ -2,7 +2,11 @@ import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import type { QuestContent } from "../data/quest-content";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
-import { createInitialDraftState } from "../draft/draft-engine";
+import {
+  createInitialDraftState,
+  processPlayerPick,
+} from "../draft/draft-engine";
+import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
 import type {
   DeckEntry,
@@ -43,6 +47,31 @@ export function addCardToQuestState(
       },
     ],
   };
+}
+
+export function pickDraftCardInQuestState({
+  prev,
+  siteId,
+  cardNumber,
+  cardDatabase,
+}: {
+  prev: QuestState;
+  siteId: string;
+  cardNumber: number;
+  cardDatabase: Map<number, CardData>;
+}): QuestState {
+  if (prev.draftState === null) {
+    throw new Error("Draft state is unavailable.");
+  }
+
+  if (prev.draftState.activeSiteId !== siteId) {
+    throw new Error(`Draft site ${siteId} is not active.`);
+  }
+
+  const draftState = structuredClone(prev.draftState);
+  processPlayerPick(cardNumber, draftState, cardDatabase);
+
+  return addCardToQuestState({ ...prev, draftState }, cardNumber, false);
 }
 
 export function setQuestScreen(

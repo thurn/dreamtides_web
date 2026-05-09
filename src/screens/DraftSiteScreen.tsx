@@ -475,10 +475,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
           cardDatabase,
         );
         draftStateRef.current = cloned;
-        mutations.setDraftState(cloned, "draft_pick");
-
-        // Add picked card to deck
-        mutations.addCard(cardNumber, "draft_pick");
+        mutations.pickDraftCard(siteId, cardNumber);
 
         if (siteComplete) {
           completeDraftSite(cloned, nextDraftedCardNumbers);
