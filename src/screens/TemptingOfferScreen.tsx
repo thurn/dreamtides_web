@@ -8,18 +8,10 @@ import {
   type OfferEffect,
   type TemptingOffer,
 } from "../data/tempting-offers";
-import { createDreamsign } from "../data/dreamsigns";
-import { sampleRewardCards } from "../data/tide-weights";
 
 /** Props for the TemptingOfferScreen component. */
 interface TemptingOfferScreenProps {
   site: SiteState;
-}
-
-/** Picks N random unique elements from an array. */
-function pickRandom<T>(arr: readonly T[], count: number): T[] {
-  const shuffled = [...arr].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
 }
 
 /** Describes an offer effect for logging. */
@@ -46,18 +38,33 @@ function describeOfferEffect(effect: OfferEffect): string {
 
 /** Shows 2 (or 3 enhanced) benefit/cost pairs. Accept one or skip. */
 export function TemptingOfferScreen({ site }: TemptingOfferScreenProps) {
-  const { state, mutations, cardDatabase, questContent } = useQuest();
-  const { deck, dreamsigns: currentDreamsigns } = state;
-  const selectedPackageTides = state.resolvedPackage?.selectedTides ?? [];
+  const { state, mutations } = useQuest();
+  const runtime = state.siteRuntime[site.id];
+  const temptingOfferRuntime =
+    runtime !== undefined && runtime.kind === "temptingOffer" ? runtime : null;
 
   const pairCount = site.isEnhanced ? 3 : 2;
 
-  const offers = useMemo<TemptingOffer[]>(
-    () => pickRandom(TEMPTING_OFFERS, pairCount),
-    [pairCount],
+  const offers = useMemo<Array<{ optionId: string; offer: TemptingOffer }>>(
+    () =>
+      temptingOfferRuntime === null
+        ? []
+        : temptingOfferRuntime.optionIds.flatMap((optionId) => {
+          const match = /^offer-(\d+)$/.exec(optionId);
+          const offer =
+            match === null ? undefined : TEMPTING_OFFERS[Number(match[1])];
+          return offer === undefined ? [] : [{ optionId, offer }];
+        }),
+    [temptingOfferRuntime],
   );
 
   const [resultMessage, setResultMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (runtime === undefined) {
+      mutations.ensureTemptingOfferRuntime(site.id);
+    }
+  }, [mutations, runtime, site.id]);
 
   useEffect(() => {
     logEvent("site_entered", {
@@ -67,137 +74,27 @@ export function TemptingOfferScreen({ site }: TemptingOfferScreenProps) {
     });
   }, [site.isEnhanced, pairCount]);
 
-  const completeSite = useCallback(() => {
-    logEvent("site_completed", {
-      siteType: "TemptingOffer",
-      isEnhanced: site.isEnhanced,
-    });
-    mutations.markSiteVisited(site.id);
-    mutations.setScreen({ type: "dreamscape" });
-  }, [site, mutations]);
-
-  /** Removes N random non-bane cards from the deck. */
-  const removeRandomCards = useCallback(
-    (count: number) => {
-      const nonBaneEntries = deck.filter((e) => !e.isBane);
-      const shuffled = [...nonBaneEntries].sort(() => Math.random() - 0.5);
-      const toRemove = shuffled.slice(0, count);
-      for (const entry of toRemove) {
-        mutations.removeCard(entry.entryId, "tempting_offer");
-      }
-    },
-    [deck, mutations],
-  );
-
-  /** Adds N package-adjacent non-starter cards. */
-  const addRandomCards = useCallback(
-    (count: number) => {
-      const cards = sampleRewardCards(
-        cardDatabase,
-        count,
-        selectedPackageTides,
-      );
-      for (const card of cards) {
-        mutations.addCard(card.cardNumber, "tempting_offer");
-      }
-    },
-    [cardDatabase, mutations, selectedPackageTides],
-  );
-
-  /** Adds N bane cards from the non-starter pool. */
-  const addBaneCards = useCallback(
-    (count: number) => {
-      const cards = sampleRewardCards(cardDatabase, count);
-      for (const card of cards) {
-        mutations.addBaneCard(card.cardNumber, "tempting_offer");
-      }
-    },
-    [cardDatabase, mutations],
-  );
-
-  const applyEffect = useCallback(
-    (effect: OfferEffect) => {
-      switch (effect.type) {
-        case "addEssence":
-          mutations.changeEssence(effect.amount, "tempting_offer");
-          break;
-        case "addRandomCards":
-          addRandomCards(effect.count);
-          break;
-        case "addBaneCards":
-          addBaneCards(effect.count);
-          break;
-        case "removeEssence":
-          mutations.changeEssence(-effect.amount, "tempting_offer");
-          break;
-        case "removeDreamsign":
-          if (currentDreamsigns.length > 0) {
-            const index = Math.floor(
-              Math.random() * currentDreamsigns.length,
-            );
-            mutations.removeDreamsign(index, "tempting_offer_cost");
-          }
-          break;
-        case "reduceMaxDreamsigns":
-          // Log the reduction; actual max enforcement happens at dreamsign acquisition
-          logEvent("max_dreamsigns_reduced", { amount: effect.amount });
-          break;
-        case "removeRandomCards":
-          removeRandomCards(effect.count);
-          break;
-        case "addDreamsign": {
-          const templates = questContent.dreamsignTemplates;
-          if (templates.length > 0) {
-            const template =
-              templates[Math.floor(Math.random() * templates.length)];
-            mutations.addDreamsign(
-              createDreamsign(template, false),
-              "TemptingOffer",
-            );
-          }
-          break;
-        }
-      }
-    },
-    [
-      mutations,
-      currentDreamsigns,
-      addRandomCards,
-      addBaneCards,
-      removeRandomCards,
-      questContent.dreamsignTemplates,
-    ],
-  );
-
   const handleAccept = useCallback(
-    (offer: TemptingOffer) => {
-      // Apply benefit first, then cost
-      applyEffect(offer.benefit);
-      applyEffect(offer.cost);
-
-      const baneCount =
-        offer.cost.type === "addBaneCards" ? offer.cost.count : 0;
-
-      logEvent("tempting_offer_accepted", {
-        benefitDescription: offer.benefitDescription,
-        costDescription: offer.costDescription,
-        benefitEffect: describeOfferEffect(offer.benefit),
-        costEffect: describeOfferEffect(offer.cost),
-        baneCardsAdded: baneCount,
-      });
-
+    (optionId: string, offer: TemptingOffer) => {
       setResultMessage(
         `${describeOfferEffect(offer.benefit)} / ${describeOfferEffect(offer.cost)}`,
       );
-
-      setTimeout(completeSite, 1500);
+      mutations.completeTemptingOfferOption(site.id, optionId);
     },
-    [applyEffect, completeSite],
+    [mutations, site.id],
   );
 
   const handleSkip = useCallback(() => {
-    completeSite();
-  }, [completeSite]);
+    mutations.completeSite(site.id, "tempting_offer_skipped");
+  }, [mutations, site.id]);
+
+  if (runtime === undefined) {
+    return (
+      <div className="flex min-h-full items-center justify-center px-4 py-6">
+        <p className="text-lg opacity-60">Revealing offer...</p>
+      </div>
+    );
+  }
 
   return (
     <motion.div
@@ -264,7 +161,7 @@ export function TemptingOfferScreen({ site }: TemptingOfferScreenProps) {
 
       {/* Offer pairs */}
       <div className="flex w-full max-w-3xl flex-col gap-4">
-        {offers.map((offer, index) => (
+        {offers.map(({ optionId, offer }, index) => (
           <motion.div
             key={`offer-${String(index)}`}
             className="flex flex-col gap-3 rounded-xl p-4"
@@ -331,7 +228,7 @@ export function TemptingOfferScreen({ site }: TemptingOfferScreenProps) {
                   "linear-gradient(135deg, #7c3aed 0%, #ef4444 100%)",
               }}
               disabled={resultMessage !== null}
-              onClick={() => handleAccept(offer)}
+              onClick={() => handleAccept(optionId, offer)}
             >
               Accept Offer
             </button>

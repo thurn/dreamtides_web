@@ -3,18 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { sampleRewardCards } from "../data/tide-weights";
 import { DREAM_JOURNEYS, type JourneyEffect, type DreamJourney } from "../data/dream-journeys";
 
 /** Props for the DreamJourneyScreen component. */
 interface DreamJourneyScreenProps {
   site: SiteState;
-}
-
-/** Picks N random unique elements from an array. */
-function pickRandom<T>(arr: readonly T[], count: number): T[] {
-  const shuffled = [...arr].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
 }
 
 /** Describes the result of a journey effect for the result message. */
@@ -39,18 +32,33 @@ function describeEffect(effect: JourneyEffect): string {
 
 /** Shows 2 (or 3 enhanced) journey options. Choose one or skip. */
 export function DreamJourneyScreen({ site }: DreamJourneyScreenProps) {
-  const { state, mutations, cardDatabase } = useQuest();
-  const { deck } = state;
-  const selectedPackageTides = state.resolvedPackage?.selectedTides ?? [];
+  const { state, mutations } = useQuest();
+  const runtime = state.siteRuntime[site.id];
+  const dreamJourneyRuntime =
+    runtime !== undefined && runtime.kind === "dreamJourney" ? runtime : null;
 
   const optionCount = site.isEnhanced ? 3 : 2;
 
   const options = useMemo<DreamJourney[]>(
-    () => pickRandom(DREAM_JOURNEYS, optionCount),
-    [optionCount],
+    () =>
+      dreamJourneyRuntime === null
+        ? []
+        : dreamJourneyRuntime.optionIds.flatMap((optionId) => {
+          const journey = DREAM_JOURNEYS.find(
+            (candidate) => candidate.name === optionId,
+          );
+          return journey === undefined ? [] : [journey];
+        }),
+    [dreamJourneyRuntime],
   );
 
   const [resultMessage, setResultMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (runtime === undefined) {
+      mutations.ensureDreamJourneyRuntime(site.id);
+    }
+  }, [mutations, runtime, site.id]);
 
   useEffect(() => {
     logEvent("site_entered", {
@@ -60,112 +68,26 @@ export function DreamJourneyScreen({ site }: DreamJourneyScreenProps) {
     });
   }, [site.isEnhanced, optionCount]);
 
-  const completeSite = useCallback(() => {
-    logEvent("site_completed", {
-      siteType: "DreamJourney",
-      isEnhanced: site.isEnhanced,
-    });
-    mutations.markSiteVisited(site.id);
-    mutations.setScreen({ type: "dreamscape" });
-  }, [site, mutations]);
-
-  /** Removes N random non-bane cards from the deck. */
-  const removeRandomCards = useCallback(
-    (count: number) => {
-      const nonBaneEntries = deck.filter((e) => !e.isBane);
-      const shuffled = [...nonBaneEntries].sort(() => Math.random() - 0.5);
-      const toRemove = shuffled.slice(0, count);
-      for (const entry of toRemove) {
-        mutations.removeCard(entry.entryId, "dream_journey");
-      }
-    },
-    [deck, mutations],
-  );
-
-  /** Adds N package-adjacent non-starter cards to the deck. */
-  const addRandomCards = useCallback(
-    (count: number) => {
-      const cards = sampleRewardCards(
-        cardDatabase,
-        count,
-        selectedPackageTides,
-      );
-      for (const card of cards) {
-        mutations.addCard(card.cardNumber, "dream_journey");
-      }
-    },
-    [cardDatabase, mutations, selectedPackageTides],
-  );
-
-  const applyEffect = useCallback(
-    (effect: JourneyEffect) => {
-      switch (effect.type) {
-        case "addEssence":
-          mutations.changeEssence(effect.amount, "dream_journey");
-          break;
-        case "removeEssence":
-          mutations.changeEssence(-effect.amount, "dream_journey");
-          break;
-        case "removeRandomCards":
-          removeRandomCards(effect.count);
-          break;
-        case "addRandomCards":
-          addRandomCards(effect.count);
-          break;
-        case "addEssenceAndRemoveCards":
-          mutations.changeEssence(effect.essenceAmount, "dream_journey");
-          removeRandomCards(effect.removeCount);
-          break;
-        case "removeCardsAndAddRandomCards":
-          removeRandomCards(effect.removeCount);
-          addRandomCards(effect.addCount);
-          break;
-        case "upgradeRandomCards":
-          // Upgrade simulated as transfiguration: pick random cards
-          // and apply a random transfiguration badge.
-          {
-            const eligible = deck.filter((e) => e.transfiguration === null);
-            const shuffled = [...eligible].sort(() => Math.random() - 0.5);
-            const toUpgrade = shuffled.slice(0, effect.count);
-            const types = [
-              "Viridian",
-              "Golden",
-              "Scarlet",
-              "Azure",
-              "Bronze",
-            ] as const;
-            for (const entry of toUpgrade) {
-              const type = types[Math.floor(Math.random() * types.length)];
-              mutations.transfigureCard(entry.entryId, type, "Dream Journey upgrade", { source: "dreamJourney", type });
-            }
-          }
-          break;
-      }
-    },
-    [deck, mutations, removeRandomCards, addRandomCards],
-  );
-
   const handleChoose = useCallback(
     (journey: DreamJourney) => {
-      applyEffect(journey.effect);
       const message = describeEffect(journey.effect);
       setResultMessage(message);
-
-      logEvent("dream_journey_chosen", {
-        journeyName: journey.name,
-        effectType: journey.effect.type,
-        resultMessage: message,
-      });
-
-      // Show result briefly before completing
-      setTimeout(completeSite, 1500);
+      mutations.completeDreamJourneyOption(site.id, journey.name);
     },
-    [applyEffect, completeSite],
+    [mutations, site.id],
   );
 
   const handleSkip = useCallback(() => {
-    completeSite();
-  }, [completeSite]);
+    mutations.completeSite(site.id, "dream_journey_skipped");
+  }, [mutations, site.id]);
+
+  if (runtime === undefined) {
+    return (
+      <div className="flex min-h-full items-center justify-center px-4 py-6">
+        <p className="text-lg opacity-60">Revealing journey...</p>
+      </div>
+    );
+  }
 
   return (
     <motion.div

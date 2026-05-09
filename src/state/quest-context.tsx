@@ -19,6 +19,7 @@ import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
 import type {
   DreamcallerContent,
+  PackageTideId,
   ResolvedDreamcallerPackage,
 } from "../types/content";
 import type {
@@ -64,6 +65,19 @@ import {
   rerollCost,
   shopSlotsToRuntime,
 } from "../shop/shop-generator";
+import {
+  assignTransfiguration,
+} from "../transfiguration/transfiguration-logic";
+import {
+  DREAM_JOURNEYS,
+  type JourneyEffect,
+} from "../data/dream-journeys";
+import {
+  TEMPTING_OFFERS,
+  type OfferEffect,
+} from "../data/tempting-offers";
+import { sampleRewardCards } from "../data/tide-weights";
+import { createDreamsign } from "../data/dreamsigns";
 
 export { deriveEntryIdCounter };
 
@@ -87,6 +101,26 @@ export interface QuestMutations {
   ensureShopRuntime: (site: SiteState, specialtyOnly: boolean) => void;
   buyShopSlot: (siteId: string, slotIndex: number) => void;
   rerollShop: (site: SiteState, slotIndex: number) => void;
+  ensureCardChoiceRuntime: (
+    siteId: string,
+    kind: "transfiguration" | "duplication",
+  ) => void;
+  acceptTransfigurationChoice: (
+    siteId: string,
+    entryId: string,
+    type: TransfigurationType,
+    effectDescription: string,
+    effectDetails: Record<string, unknown>,
+  ) => void;
+  acceptDuplicationChoice: (
+    siteId: string,
+    entryId: string,
+    copyCount: number,
+  ) => void;
+  ensureDreamJourneyRuntime: (siteId: string) => void;
+  completeDreamJourneyOption: (siteId: string, optionId: string) => void;
+  ensureTemptingOfferRuntime: (siteId: string) => void;
+  completeTemptingOfferOption: (siteId: string, optionId: string) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
@@ -172,6 +206,304 @@ function findSite(state: QuestState, siteId: string): SiteState | null {
     }
   }
   return null;
+}
+
+function shuffled<T>(items: readonly T[]): T[] {
+  return [...items].sort(() => Math.random() - 0.5);
+}
+
+function dreamJourneyOptionId(journey: (typeof DREAM_JOURNEYS)[number]): string {
+  return journey.name;
+}
+
+function temptingOfferOptionId(index: number): string {
+  return `offer-${String(index)}`;
+}
+
+function findDreamJourneyOption(optionId: string) {
+  return DREAM_JOURNEYS.find((journey) => dreamJourneyOptionId(journey) === optionId);
+}
+
+function findTemptingOfferOption(optionId: string) {
+  const match = /^offer-(\d+)$/.exec(optionId);
+  if (match === null) {
+    return undefined;
+  }
+  return TEMPTING_OFFERS[Number(match[1])];
+}
+
+function selectCardChoiceEntryIds({
+  deck,
+  cardDatabase,
+  kind,
+  isEnhanced,
+}: {
+  deck: readonly DeckEntry[];
+  cardDatabase: Map<number, CardData>;
+  kind: "transfiguration" | "duplication";
+  isEnhanced: boolean;
+}): string[] {
+  const entryIds: string[] = [];
+  const entries = isEnhanced ? [...deck] : shuffled(deck);
+  const limit = isEnhanced ? Number.POSITIVE_INFINITY : 3;
+
+  for (const entry of entries) {
+    if (entryIds.length >= limit) {
+      break;
+    }
+    const card = cardDatabase.get(entry.cardNumber);
+    if (card === undefined) {
+      continue;
+    }
+    if (
+      kind === "transfiguration" &&
+      (entry.transfiguration !== null ||
+        assignTransfiguration(card, entry.transfiguration) === null)
+    ) {
+      continue;
+    }
+    entryIds.push(entry.entryId);
+  }
+  return entryIds;
+}
+
+function applyDreamJourneyEffect({
+  prev,
+  effect,
+  cardDatabase,
+  selectedPackageTides,
+  nextEntryId,
+}: {
+  prev: QuestState;
+  effect: JourneyEffect;
+  cardDatabase: Map<number, CardData>;
+  selectedPackageTides: readonly PackageTideId[];
+  nextEntryId: () => string;
+}): QuestState {
+  const removeRandomCards = (state: QuestState, count: number): QuestState => {
+    const toRemove = shuffled(state.deck.filter((entry) => !entry.isBane)).slice(0, count);
+    if (toRemove.length === 0) {
+      return state;
+    }
+    const removedEntryIds = new Set(toRemove.map((entry) => entry.entryId));
+    for (const entry of toRemove) {
+      const card = cardDatabase.get(entry.cardNumber);
+      logEvent("card_removed", {
+        cardNumber: entry.cardNumber,
+        cardName: card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
+        source: "dream_journey",
+      });
+    }
+    return {
+      ...state,
+      deck: state.deck.filter((entry) => !removedEntryIds.has(entry.entryId)),
+    };
+  };
+
+  const addRandomCards = (state: QuestState, count: number): QuestState => {
+    const cards = sampleRewardCards(cardDatabase, count, selectedPackageTides);
+    return {
+      ...state,
+      deck: [
+        ...state.deck,
+        ...cards.map((card) => {
+          logEvent("card_added", {
+            cardNumber: card.cardNumber,
+            cardName: card.name,
+            source: "dream_journey",
+          });
+          return {
+            entryId: nextEntryId(),
+            cardNumber: card.cardNumber,
+            transfiguration: null,
+            isBane: false,
+          };
+        }),
+      ],
+    };
+  };
+
+  const changeEssence = (state: QuestState, delta: number): QuestState => {
+    logEvent("essence_changed", {
+      oldValue: state.essence,
+      newValue: state.essence + delta,
+      delta,
+      source: "dream_journey",
+    });
+    return { ...state, essence: state.essence + delta };
+  };
+
+  switch (effect.type) {
+    case "addEssence":
+      return changeEssence(prev, effect.amount);
+    case "removeEssence":
+      return changeEssence(prev, -effect.amount);
+    case "removeRandomCards":
+      return removeRandomCards(prev, effect.count);
+    case "addRandomCards":
+      return addRandomCards(prev, effect.count);
+    case "addEssenceAndRemoveCards":
+      return removeRandomCards(
+        changeEssence(prev, effect.essenceAmount),
+        effect.removeCount,
+      );
+    case "removeCardsAndAddRandomCards":
+      return addRandomCards(
+        removeRandomCards(prev, effect.removeCount),
+        effect.addCount,
+      );
+    case "upgradeRandomCards": {
+      const types = ["Viridian", "Golden", "Scarlet", "Azure", "Bronze"] as const;
+      const toUpgrade = shuffled(prev.deck.filter((entry) => entry.transfiguration === null)).slice(0, effect.count);
+      const upgrades = new Map<string, TransfigurationType>();
+      for (const entry of toUpgrade) {
+        const type = types[Math.floor(Math.random() * types.length)];
+        const card = cardDatabase.get(entry.cardNumber);
+        upgrades.set(entry.entryId, type);
+        logEvent("card_transfigured", {
+          cardNumber: entry.cardNumber,
+          cardName: card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
+          transfigurationType: type,
+          effectDescription: "Dream Journey upgrade",
+          modifiedFields: { source: "dreamJourney", type },
+        });
+      }
+      return {
+        ...prev,
+        deck: prev.deck.map((entry) => {
+          const type = upgrades.get(entry.entryId);
+          return type === undefined ? entry : { ...entry, transfiguration: type };
+        }),
+      };
+    }
+  }
+}
+
+function applyTemptingOfferEffect({
+  prev,
+  effect,
+  cardDatabase,
+  selectedPackageTides,
+  dreamsignTemplates,
+  nextEntryId,
+}: {
+  prev: QuestState;
+  effect: OfferEffect;
+  cardDatabase: Map<number, CardData>;
+  selectedPackageTides: readonly PackageTideId[];
+  dreamsignTemplates: QuestContent["dreamsignTemplates"];
+  nextEntryId: () => string;
+}): QuestState {
+  const addCards = (
+    state: QuestState,
+    count: number,
+    isBane: boolean,
+  ): QuestState => {
+    const cards = sampleRewardCards(
+      cardDatabase,
+      count,
+      isBane ? [] : selectedPackageTides,
+    );
+    return {
+      ...state,
+      deck: [
+        ...state.deck,
+        ...cards.map((card) => {
+          logEvent("card_added", {
+            cardNumber: card.cardNumber,
+            cardName: card.name,
+            source: "tempting_offer",
+            ...(isBane ? { isBane: true } : {}),
+          });
+          return {
+            entryId: nextEntryId(),
+            cardNumber: card.cardNumber,
+            transfiguration: null,
+            isBane,
+          };
+        }),
+      ],
+    };
+  };
+
+  const removeRandomCards = (state: QuestState, count: number): QuestState => {
+    const toRemove = shuffled(state.deck.filter((entry) => !entry.isBane)).slice(0, count);
+    if (toRemove.length === 0) {
+      return state;
+    }
+    const removedEntryIds = new Set(toRemove.map((entry) => entry.entryId));
+    for (const entry of toRemove) {
+      const card = cardDatabase.get(entry.cardNumber);
+      logEvent("card_removed", {
+        cardNumber: entry.cardNumber,
+        cardName: card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
+        source: "tempting_offer",
+      });
+    }
+    return {
+      ...state,
+      deck: state.deck.filter((entry) => !removedEntryIds.has(entry.entryId)),
+    };
+  };
+
+  switch (effect.type) {
+    case "addEssence":
+      logEvent("essence_changed", {
+        oldValue: prev.essence,
+        newValue: prev.essence + effect.amount,
+        delta: effect.amount,
+        source: "tempting_offer",
+      });
+      return { ...prev, essence: prev.essence + effect.amount };
+    case "addRandomCards":
+      return addCards(prev, effect.count, false);
+    case "addBaneCards":
+      return addCards(prev, effect.count, true);
+    case "removeEssence":
+      logEvent("essence_changed", {
+        oldValue: prev.essence,
+        newValue: prev.essence - effect.amount,
+        delta: -effect.amount,
+        source: "tempting_offer",
+      });
+      return { ...prev, essence: prev.essence - effect.amount };
+    case "removeDreamsign": {
+      if (prev.dreamsigns.length === 0) {
+        return prev;
+      }
+      const index = Math.floor(Math.random() * prev.dreamsigns.length);
+      const dreamsign = prev.dreamsigns[index];
+      logEvent("dreamsign_removed", {
+        name: dreamsign.name,
+        imageName: dreamsign.imageName ?? null,
+        reason: "tempting_offer_cost",
+      });
+      return {
+        ...prev,
+        dreamsigns: prev.dreamsigns.filter((_, dreamsignIndex) => dreamsignIndex !== index),
+      };
+    }
+    case "reduceMaxDreamsigns":
+      logEvent("max_dreamsigns_reduced", { amount: effect.amount });
+      return prev;
+    case "removeRandomCards":
+      return removeRandomCards(prev, effect.count);
+    case "addDreamsign": {
+      if (dreamsignTemplates.length === 0 || prev.dreamsigns.length >= MAX_DREAMSIGNS) {
+        return prev;
+      }
+      const template =
+        dreamsignTemplates[Math.floor(Math.random() * dreamsignTemplates.length)];
+      const dreamsign = createDreamsign(template, false);
+      logEvent("dreamsign_acquired", {
+        name: dreamsign.name,
+        imageName: dreamsign.imageName ?? null,
+        isBane: dreamsign.isBane,
+        sourceSiteType: "TemptingOffer",
+      });
+      return { ...prev, dreamsigns: [...prev.dreamsigns, dreamsign] };
+    }
+  }
 }
 
 export function createDefaultState(): QuestState {
@@ -1018,6 +1350,356 @@ export function QuestProvider({
     [cardDatabase, questContent.dreamsignTemplates],
   );
 
+  const ensureCardChoiceRuntime = useCallback(
+    (siteId: string, kind: "transfiguration" | "duplication") => {
+      setState((prev) => {
+        if (prev.siteRuntime[siteId] !== undefined) {
+          return prev;
+        }
+        const site = findSite(prev, siteId);
+        const entryIds = selectCardChoiceEntryIds({
+          deck: prev.deck,
+          cardDatabase,
+          kind,
+          isEnhanced: site?.isEnhanced ?? false,
+        });
+
+        return {
+          ...prev,
+          siteRuntime: {
+            ...prev.siteRuntime,
+            [siteId]: {
+              kind: "cardChoice",
+              entryIds,
+              acceptedEntryIds: [],
+            },
+          },
+        };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const acceptTransfigurationChoice = useCallback(
+    (
+      siteId: string,
+      entryId: string,
+      type: TransfigurationType,
+      effectDescription: string,
+      effectDetails: Record<string, unknown>,
+    ) => {
+      setState((prev) => {
+        if (prev.visitedSites.includes(siteId)) {
+          return prev;
+        }
+        const runtime = prev.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "cardChoice" ||
+          runtime.acceptedEntryIds.length > 0 ||
+          !runtime.entryIds.includes(entryId)
+        ) {
+          return prev;
+        }
+        const entry = prev.deck.find((candidate) => candidate.entryId === entryId);
+        if (entry === undefined || entry.transfiguration !== null) {
+          return prev;
+        }
+        const card = cardDatabase.get(entry.cardNumber);
+        if (card === undefined) {
+          return prev;
+        }
+
+        logEvent("card_transfigured", {
+          cardNumber: entry.cardNumber,
+          cardName: card.name,
+          transfigurationType: type,
+          effectDescription,
+          modifiedFields: effectDetails,
+        });
+        logEvent("site_completed", {
+          siteType: "Transfiguration",
+          outcome: "completed",
+        });
+
+        const next = setQuestScreen(
+          completeQuestSite(
+            {
+              ...prev,
+              deck: prev.deck.map((candidate) =>
+                candidate.entryId === entryId
+                  ? { ...candidate, transfiguration: type }
+                  : candidate,
+              ),
+              siteRuntime: {
+                ...prev.siteRuntime,
+                [siteId]: {
+                  ...runtime,
+                  acceptedEntryIds: [entryId],
+                },
+              },
+            },
+            siteId,
+          ),
+          { type: "dreamscape" },
+        );
+        return next;
+      });
+    },
+    [cardDatabase],
+  );
+
+  const acceptDuplicationChoice = useCallback(
+    (siteId: string, entryId: string, copyCount: number) => {
+      setState((prev) => {
+        if (prev.visitedSites.includes(siteId) || copyCount < 1) {
+          return prev;
+        }
+        const runtime = prev.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "cardChoice" ||
+          runtime.acceptedEntryIds.length > 0 ||
+          !runtime.entryIds.includes(entryId)
+        ) {
+          return prev;
+        }
+        const entry = prev.deck.find((candidate) => candidate.entryId === entryId);
+        if (entry === undefined) {
+          return prev;
+        }
+        const card = cardDatabase.get(entry.cardNumber);
+        if (card === undefined) {
+          return prev;
+        }
+
+        logEvent("card_duplicated", {
+          cardNumber: card.cardNumber,
+          cardName: card.name,
+          copyCount,
+        });
+
+        const copies: DeckEntry[] = [];
+        for (let i = 0; i < copyCount; i += 1) {
+          logEvent("card_added", {
+            cardNumber: card.cardNumber,
+            cardName: card.name,
+            source: "duplication",
+          });
+          copies.push({
+            entryId: nextEntryId(),
+            cardNumber: card.cardNumber,
+            transfiguration: null,
+            isBane: false,
+          });
+        }
+        logEvent("site_completed", {
+          siteType: "Duplication",
+          outcome: "completed",
+        });
+
+        return setQuestScreen(
+          completeQuestSite(
+            {
+              ...prev,
+              deck: [...prev.deck, ...copies],
+              siteRuntime: {
+                ...prev.siteRuntime,
+                [siteId]: {
+                  ...runtime,
+                  acceptedEntryIds: [entryId],
+                },
+              },
+            },
+            siteId,
+          ),
+          { type: "dreamscape" },
+        );
+      });
+    },
+    [cardDatabase],
+  );
+
+  const ensureDreamJourneyRuntime = useCallback((siteId: string) => {
+    setState((prev) => {
+      if (prev.siteRuntime[siteId] !== undefined) {
+        return prev;
+      }
+      const site = findSite(prev, siteId);
+      const optionCount = site?.isEnhanced ? 3 : 2;
+      const optionIds = shuffled(DREAM_JOURNEYS)
+        .slice(0, optionCount)
+        .map(dreamJourneyOptionId);
+
+      return {
+        ...prev,
+        siteRuntime: {
+          ...prev.siteRuntime,
+          [siteId]: {
+            kind: "dreamJourney",
+            optionIds,
+            completed: false,
+          },
+        },
+      };
+    });
+  }, []);
+
+  const completeDreamJourneyOption = useCallback(
+    (siteId: string, optionId: string) => {
+      setState((prev) => {
+        if (prev.visitedSites.includes(siteId)) {
+          return prev;
+        }
+        const runtime = prev.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "dreamJourney" ||
+          runtime.completed ||
+          !runtime.optionIds.includes(optionId)
+        ) {
+          return prev;
+        }
+        const journey = findDreamJourneyOption(optionId);
+        if (journey === undefined) {
+          return prev;
+        }
+        const selectedPackageTides = prev.resolvedPackage?.selectedTides ?? [];
+        let next = applyDreamJourneyEffect({
+          prev,
+          effect: journey.effect,
+          cardDatabase,
+          selectedPackageTides,
+          nextEntryId,
+        });
+        logEvent("dream_journey_chosen", {
+          journeyName: journey.name,
+          effectType: journey.effect.type,
+        });
+        const site = findSite(prev, siteId);
+        logEvent("site_completed", {
+          siteType: "DreamJourney",
+          isEnhanced: site?.isEnhanced ?? false,
+        });
+        next = setQuestScreen(
+          completeQuestSite(
+            {
+              ...next,
+              siteRuntime: {
+                ...next.siteRuntime,
+                [siteId]: {
+                  ...runtime,
+                  completed: true,
+                },
+              },
+            },
+            siteId,
+          ),
+          { type: "dreamscape" },
+        );
+        return next;
+      });
+    },
+    [cardDatabase],
+  );
+
+  const ensureTemptingOfferRuntime = useCallback((siteId: string) => {
+    setState((prev) => {
+      if (prev.siteRuntime[siteId] !== undefined) {
+        return prev;
+      }
+      const site = findSite(prev, siteId);
+      const optionCount = site?.isEnhanced ? 3 : 2;
+      const optionIds = shuffled(
+        TEMPTING_OFFERS.map((_, index) => temptingOfferOptionId(index)),
+      ).slice(0, optionCount);
+
+      return {
+        ...prev,
+        siteRuntime: {
+          ...prev.siteRuntime,
+          [siteId]: {
+            kind: "temptingOffer",
+            optionIds,
+            completed: false,
+          },
+        },
+      };
+    });
+  }, []);
+
+  const completeTemptingOfferOption = useCallback(
+    (siteId: string, optionId: string) => {
+      setState((prev) => {
+        if (prev.visitedSites.includes(siteId)) {
+          return prev;
+        }
+        const runtime = prev.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "temptingOffer" ||
+          runtime.completed ||
+          !runtime.optionIds.includes(optionId)
+        ) {
+          return prev;
+        }
+        const offer = findTemptingOfferOption(optionId);
+        if (offer === undefined) {
+          return prev;
+        }
+        const selectedPackageTides = prev.resolvedPackage?.selectedTides ?? [];
+        let next = applyTemptingOfferEffect({
+          prev,
+          effect: offer.benefit,
+          cardDatabase,
+          selectedPackageTides,
+          dreamsignTemplates: questContent.dreamsignTemplates,
+          nextEntryId,
+        });
+        next = applyTemptingOfferEffect({
+          prev: next,
+          effect: offer.cost,
+          cardDatabase,
+          selectedPackageTides,
+          dreamsignTemplates: questContent.dreamsignTemplates,
+          nextEntryId,
+        });
+
+        logEvent("tempting_offer_accepted", {
+          benefitDescription: offer.benefitDescription,
+          costDescription: offer.costDescription,
+          benefitEffect: offer.benefit.type,
+          costEffect: offer.cost.type,
+          baneCardsAdded:
+            offer.cost.type === "addBaneCards" ? offer.cost.count : 0,
+        });
+        const site = findSite(prev, siteId);
+        logEvent("site_completed", {
+          siteType: "TemptingOffer",
+          isEnhanced: site?.isEnhanced ?? false,
+        });
+
+        return setQuestScreen(
+          completeQuestSite(
+            {
+              ...next,
+              siteRuntime: {
+                ...next.siteRuntime,
+                [siteId]: {
+                  ...runtime,
+                  completed: true,
+                },
+              },
+            },
+            siteId,
+          ),
+          { type: "dreamscape" },
+        );
+      });
+    },
+    [cardDatabase, questContent.dreamsignTemplates],
+  );
+
   const pickDraftCard = useCallback(
     (_siteId: string, _cardNumber: number) => {
       throw new Error(
@@ -1339,6 +2021,13 @@ export function QuestProvider({
       ensureShopRuntime,
       buyShopSlot,
       rerollShop,
+      ensureCardChoiceRuntime,
+      acceptTransfigurationChoice,
+      acceptDuplicationChoice,
+      ensureDreamJourneyRuntime,
+      completeDreamJourneyOption,
+      ensureTemptingOfferRuntime,
+      completeTemptingOfferOption,
       pickDraftCard,
       addCard,
       addBaneCard,
@@ -1371,6 +2060,13 @@ export function QuestProvider({
       ensureShopRuntime,
       buyShopSlot,
       rerollShop,
+      ensureCardChoiceRuntime,
+      acceptTransfigurationChoice,
+      acceptDuplicationChoice,
+      ensureDreamJourneyRuntime,
+      completeDreamJourneyOption,
+      ensureTemptingOfferRuntime,
+      completeTemptingOfferOption,
       pickDraftCard,
       addCard,
       addBaneCard,

@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { SiteState, DeckEntry } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
-import { logEvent } from "../logging";
 
 /** Props for the DuplicationSiteScreen component. */
 interface DuplicationSiteScreenProps {
@@ -18,19 +17,29 @@ interface DuplicationCandidate {
   copyCount: number;
 }
 
-/** Selects up to count random cards from the deck with random copy counts. */
-function selectCandidates(
+export function duplicationCopyCount(siteId: string, entryId: string): number {
+  let hash = 0;
+  for (const char of `${siteId}:${entryId}`) {
+    hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  }
+  return (hash % 4) + 1;
+}
+
+/** Builds duplication candidates from shared runtime entry ids. */
+function buildCandidates(
   deck: DeckEntry[],
   cardDatabase: Map<number, CardData>,
-  count: number,
+  siteId: string,
+  entryIds: readonly string[],
 ): DuplicationCandidate[] {
+  const deckByEntryId = new Map(deck.map((entry) => [entry.entryId, entry]));
   const candidates: DuplicationCandidate[] = [];
-  const shuffled = [...deck].sort(() => Math.random() - 0.5);
-  for (const entry of shuffled) {
-    if (candidates.length >= count) break;
+  for (const entryId of entryIds) {
+    const entry = deckByEntryId.get(entryId);
+    if (entry === undefined) continue;
     const card = cardDatabase.get(entry.cardNumber);
     if (!card) continue;
-    const copyCount = Math.floor(Math.random() * 4) + 1;
+    const copyCount = duplicationCopyCount(siteId, entryId);
     candidates.push({ entry, card, copyCount });
   }
   return candidates;
@@ -40,49 +49,43 @@ function selectCandidates(
 export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
   const { deck } = state;
+  const runtime = state.siteRuntime[site.id];
+  const cardChoiceRuntime =
+    runtime !== undefined && runtime.kind === "cardChoice" ? runtime : null;
 
-  const [candidates] = useState<DuplicationCandidate[]>(() =>
-    selectCandidates(deck, cardDatabase, 3),
+  useEffect(() => {
+    if (runtime === undefined) {
+      mutations.ensureCardChoiceRuntime(site.id, "duplication");
+    }
+  }, [mutations, runtime, site.id]);
+
+  const candidates = useMemo(
+    () =>
+      cardChoiceRuntime === null
+        ? []
+        : buildCandidates(
+          deck,
+          cardDatabase,
+          site.id,
+          cardChoiceRuntime.entryIds,
+        ),
+    [cardChoiceRuntime, cardDatabase, deck, site.id],
   );
-  const [duplicated, setDuplicated] = useState(false);
+  const duplicated = (cardChoiceRuntime?.acceptedEntryIds.length ?? 0) > 0;
 
   // Enhanced mode state
   const [enhancedPickedEntry, setEnhancedPickedEntry] =
     useState<DeckEntry | null>(null);
   const [enhancedCopyCount, setEnhancedCopyCount] = useState<number>(0);
 
-  const autoReturnTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (autoReturnTimer.current !== null) {
-        clearTimeout(autoReturnTimer.current);
-      }
-    };
-  }, []);
-
   const handleDuplicate = useCallback(
     (candidate: DuplicationCandidate) => {
       if (duplicated) return;
-
-      logEvent("card_duplicated", {
-        cardNumber: candidate.card.cardNumber,
-        cardName: candidate.card.name,
-        copyCount: candidate.copyCount,
-      });
-
-      for (let i = 0; i < candidate.copyCount; i++) {
-        mutations.addCard(candidate.card.cardNumber, "duplication");
-      }
-
-      setDuplicated(true);
-
-      // Return to dreamscape after brief delay for visual feedback
-      autoReturnTimer.current = setTimeout(() => {
-        autoReturnTimer.current = null;
-        mutations.markSiteVisited(site.id);
-        mutations.setScreen({ type: "dreamscape" });
-      }, 800);
+      mutations.acceptDuplicationChoice(
+        site.id,
+        candidate.entry.entryId,
+        candidate.copyCount,
+      );
     },
     [duplicated, mutations, site.id],
   );
@@ -91,11 +94,10 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
     (entry: DeckEntry) => {
       const card = cardDatabase.get(entry.cardNumber);
       if (!card) return;
-      const copyCount = Math.floor(Math.random() * 4) + 1;
       setEnhancedPickedEntry(entry);
-      setEnhancedCopyCount(copyCount);
+      setEnhancedCopyCount(duplicationCopyCount(site.id, entry.entryId));
     },
-    [cardDatabase],
+    [cardDatabase, site.id],
   );
 
   const handleEnhancedDuplicate = useCallback(() => {
@@ -103,23 +105,11 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
     const card = cardDatabase.get(enhancedPickedEntry.cardNumber);
     if (!card) return;
 
-    logEvent("card_duplicated", {
-      cardNumber: card.cardNumber,
-      cardName: card.name,
-      copyCount: enhancedCopyCount,
-    });
-
-    for (let i = 0; i < enhancedCopyCount; i++) {
-      mutations.addCard(card.cardNumber, "duplication");
-    }
-
-    setDuplicated(true);
-
-    autoReturnTimer.current = setTimeout(() => {
-      autoReturnTimer.current = null;
-      mutations.markSiteVisited(site.id);
-      mutations.setScreen({ type: "dreamscape" });
-    }, 800);
+    mutations.acceptDuplicationChoice(
+      site.id,
+      enhancedPickedEntry.entryId,
+      enhancedCopyCount,
+    );
   }, [
     duplicated,
     enhancedPickedEntry,
@@ -130,17 +120,16 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
   ]);
 
   const handleClose = useCallback(() => {
-    if (autoReturnTimer.current !== null) {
-      clearTimeout(autoReturnTimer.current);
-      autoReturnTimer.current = null;
-    }
-    logEvent("site_completed", {
-      siteType: "Duplication",
-      outcome: duplicated ? "completed" : "skipped",
-    });
-    mutations.markSiteVisited(site.id);
-    mutations.setScreen({ type: "dreamscape" });
-  }, [duplicated, mutations, site.id]);
+    mutations.completeSite(site.id, "duplication_skipped");
+  }, [mutations, site.id]);
+
+  if (runtime === undefined) {
+    return (
+      <div className="flex min-h-full items-center justify-center px-4 py-6">
+        <p className="text-lg opacity-60">Preparing choices...</p>
+      </div>
+    );
+  }
 
   // Enhanced mode: full deck browser
   if (site.isEnhanced) {
@@ -178,19 +167,17 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
 
         {!enhancedPickedEntry && !duplicated && (
           <div className="grid w-full max-w-5xl grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-            {deck.map((entry, index) => {
-              const card = cardDatabase.get(entry.cardNumber);
-              if (!card) return null;
+            {candidates.map((candidate, index) => {
               return (
                 <motion.div
-                  key={entry.entryId}
+                  key={candidate.entry.entryId}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.03 }}
                 >
                   <CardDisplay
-                    card={card}
-                    onClick={() => handleEnhancedPick(entry)}
+                    card={candidate.card}
+                    onClick={() => handleEnhancedPick(candidate.entry)}
                   />
                 </motion.div>
               );

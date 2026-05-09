@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { SiteState, DeckEntry } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
-import { logEvent } from "../logging";
 import {
   assignTransfiguration,
   TRANSFIGURATION_COLORS,
@@ -24,25 +23,25 @@ interface TransfigurationCandidate {
   offer: TransfigurationOffer;
 }
 
-/** Selects up to count random untransfigured cards that have eligible transfigurations. */
-function selectCandidates(
+/** Builds transfiguration candidates from shared runtime entry ids. */
+function buildCandidates(
   deck: DeckEntry[],
   cardDatabase: Map<number, CardData>,
-  count: number,
+  entryIds: readonly string[],
 ): TransfigurationCandidate[] {
-  const eligible: TransfigurationCandidate[] = [];
-  const shuffled = [...deck].sort(() => Math.random() - 0.5);
-  for (const entry of shuffled) {
-    if (eligible.length >= count) break;
-    if (entry.transfiguration !== null) continue;
+  const deckByEntryId = new Map(deck.map((entry) => [entry.entryId, entry]));
+  const candidates: TransfigurationCandidate[] = [];
+  for (const entryId of entryIds) {
+    const entry = deckByEntryId.get(entryId);
+    if (entry === undefined || entry.transfiguration !== null) continue;
     const card = cardDatabase.get(entry.cardNumber);
     if (!card) continue;
     const offer = assignTransfiguration(card, entry.transfiguration);
     if (offer) {
-      eligible.push({ entry, card, offer });
+      candidates.push({ entry, card, offer });
     }
   }
-  return eligible;
+  return candidates;
 }
 
 /** Renders the Transfiguration site screen. */
@@ -51,12 +50,26 @@ export function TransfigurationSiteScreen({
 }: TransfigurationSiteScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
   const { deck } = state;
+  const runtime = state.siteRuntime[site.id];
+  const cardChoiceRuntime =
+    runtime !== undefined && runtime.kind === "cardChoice" ? runtime : null;
 
-  const [candidates] = useState<TransfigurationCandidate[]>(() =>
-    selectCandidates(deck, cardDatabase, 3),
+  useEffect(() => {
+    if (runtime === undefined) {
+      mutations.ensureCardChoiceRuntime(site.id, "transfiguration");
+    }
+  }, [mutations, runtime, site.id]);
+
+  const candidates = useMemo(
+    () =>
+      cardChoiceRuntime === null
+        ? []
+        : buildCandidates(deck, cardDatabase, cardChoiceRuntime.entryIds),
+    [cardChoiceRuntime, cardDatabase, deck],
   );
-  const [acceptedEntryIds, setAcceptedEntryIds] = useState<Set<string>>(
-    new Set(),
+  const acceptedEntryIds = useMemo(
+    () => new Set(cardChoiceRuntime?.acceptedEntryIds ?? []),
+    [cardChoiceRuntime],
   );
 
   // Enhanced mode: pick from full deck
@@ -66,41 +79,16 @@ export function TransfigurationSiteScreen({
     useState<TransfigurationOffer | null>(null);
   const [enhancedAccepted, setEnhancedAccepted] = useState(false);
 
-  const untransfiguredDeck = useMemo(
-    () => deck.filter((e) => e.transfiguration === null),
-    [deck],
-  );
-
-  const autoReturnTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (autoReturnTimer.current !== null) {
-        clearTimeout(autoReturnTimer.current);
-      }
-    };
-  }, []);
-
   const handleAccept = useCallback(
     (candidate: TransfigurationCandidate) => {
       if (acceptedEntryIds.size > 0) return;
-      mutations.transfigureCard(
+      mutations.acceptTransfigurationChoice(
+        site.id,
         candidate.entry.entryId,
         candidate.offer.type,
         candidate.offer.description,
         transfigurationEffectDetails(candidate.offer, candidate.card),
       );
-      setAcceptedEntryIds(new Set([candidate.entry.entryId]));
-
-      logEvent("site_completed", {
-        siteType: "Transfiguration",
-        outcome: "completed",
-      });
-      autoReturnTimer.current = setTimeout(() => {
-        autoReturnTimer.current = null;
-        mutations.markSiteVisited(site.id);
-        mutations.setScreen({ type: "dreamscape" });
-      }, 800);
     },
     [mutations, acceptedEntryIds.size, site.id],
   );
@@ -121,23 +109,14 @@ export function TransfigurationSiteScreen({
     if (!enhancedPickedEntry || !enhancedOffer) return;
     const card = cardDatabase.get(enhancedPickedEntry.cardNumber);
     if (!card) return;
-    mutations.transfigureCard(
+    mutations.acceptTransfigurationChoice(
+      site.id,
       enhancedPickedEntry.entryId,
       enhancedOffer.type,
       enhancedOffer.description,
       transfigurationEffectDetails(enhancedOffer, card),
     );
     setEnhancedAccepted(true);
-
-    logEvent("site_completed", {
-      siteType: "Transfiguration",
-      outcome: "completed",
-    });
-    autoReturnTimer.current = setTimeout(() => {
-      autoReturnTimer.current = null;
-      mutations.markSiteVisited(site.id);
-      mutations.setScreen({ type: "dreamscape" });
-    }, 800);
   }, [enhancedPickedEntry, enhancedOffer, mutations, cardDatabase, site.id]);
 
   const handleEnhancedReject = useCallback(() => {
@@ -146,19 +125,16 @@ export function TransfigurationSiteScreen({
   }, []);
 
   const handleClose = useCallback(() => {
-    if (autoReturnTimer.current !== null) {
-      clearTimeout(autoReturnTimer.current);
-      autoReturnTimer.current = null;
-    }
-    if (acceptedEntryIds.size === 0 && !enhancedAccepted) {
-      logEvent("site_completed", {
-        siteType: "Transfiguration",
-        outcome: "skipped",
-      });
-    }
-    mutations.markSiteVisited(site.id);
-    mutations.setScreen({ type: "dreamscape" });
-  }, [mutations, site.id, acceptedEntryIds.size, enhancedAccepted]);
+    mutations.completeSite(site.id, "transfiguration_skipped");
+  }, [mutations, site.id]);
+
+  if (runtime === undefined) {
+    return (
+      <div className="flex min-h-full items-center justify-center px-4 py-6">
+        <p className="text-lg opacity-60">Preparing choices...</p>
+      </div>
+    );
+  }
 
   // Enhanced mode: full deck browser for picking
   if (site.isEnhanced) {
@@ -196,19 +172,17 @@ export function TransfigurationSiteScreen({
 
         {!enhancedPickedEntry && (
           <div className="grid w-full max-w-5xl grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-            {untransfiguredDeck.map((entry, index) => {
-              const card = cardDatabase.get(entry.cardNumber);
-              if (!card) return null;
+            {candidates.map((candidate, index) => {
               return (
                 <motion.div
-                  key={entry.entryId}
+                  key={candidate.entry.entryId}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.03 }}
                 >
                   <CardDisplay
-                    card={card}
-                    onClick={() => handleEnhancedPick(entry)}
+                    card={candidate.card}
+                    onClick={() => handleEnhancedPick(candidate.entry)}
                   />
                 </motion.div>
               );
