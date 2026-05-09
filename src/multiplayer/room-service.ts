@@ -9,7 +9,7 @@ import {
   type Unsubscribe,
 } from "firebase/database";
 import { pruneActionLog } from "./action-log";
-import { normalizeBattleStateSnapshot } from "./battle-service";
+import { normalizeBattleStateSnapshot } from "./battle-normalize";
 import { presencePath, roomPath, type FirebaseUpdateMap } from "./room-paths";
 import {
   ACTION_LOG_LIMIT,

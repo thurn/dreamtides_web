@@ -6,11 +6,11 @@ import {
   applyClearForcedResultToRoom,
   clearBattleStateInRoom,
   ensureBattleSession,
-  normalizeBattleStateSnapshot,
   redoBattleInRoom,
   resetBattleInRoom,
   undoBattleInRoom,
 } from "./battle-service";
+import { normalizeBattleStateSnapshot } from "./battle-normalize";
 import { createBattleInit } from "../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import {
