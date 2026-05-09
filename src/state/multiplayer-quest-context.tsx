@@ -183,6 +183,20 @@ function randomIntInRange(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function stableStringify(value: unknown): string {
+  return JSON.stringify(value, (_, v: unknown) => {
+    if (v !== null && typeof v === "object" && !Array.isArray(v)) {
+      const sorted: Record<string, unknown> = {};
+      const record = v as Record<string, unknown>;
+      for (const key of Object.keys(record).sort()) {
+        sorted[key] = record[key];
+      }
+      return sorted;
+    }
+    return v;
+  });
+}
+
 function runtimeSlotPrice(slot: {
   basePrice: number;
   discountPercent: number;
@@ -857,6 +871,18 @@ export function MultiplayerQuestProvider({
     (cardSourceDebug: CardSourceDebugState | null, _source: string) => {
       const current = currentRef.current;
       const next = applyCardSourceDebug(current.state, cardSourceDebug);
+      // Screen useEffects re-fire on every Firebase snapshot because
+      // state.resolvedPackage and visibleCardOffers reference-change. Skipping
+      // structurally-equal writes here breaks the snapshot/write loop that
+      // would otherwise starve concurrent transactions with maxretry.
+      // RTDB returns object keys in alphabetical order, so a plain
+      // JSON.stringify compare misses equal payloads — sort keys first.
+      if (
+        stableStringify(next.cardSourceDebug) ===
+        stableStringify(current.state.cardSourceDebug)
+      ) {
+        return;
+      }
       writeQuestField({
         database: current.database,
         roomId: current.session.roomId,

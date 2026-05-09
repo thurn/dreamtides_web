@@ -351,14 +351,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     mutations.setDraftState(cloned, "draft_site_enter");
   }, [siteId, state.draftState, cardDatabase, mutations]);
 
-  // Skip the RTDB write when the debug payload hasn't actually changed —
-  // otherwise bumping metadata.updatedAt re-fires the room subscription and
-  // we'd loop with the effects above.
-  const lastCardSourceDebugSignatureRef = useRef<string | null>(null);
   useEffect(() => {
-    const signature = JSON.stringify(cardSourceDebugState);
-    if (lastCardSourceDebugSignatureRef.current === signature) return;
-    lastCardSourceDebugSignatureRef.current = signature;
     mutations.setCardSourceDebug(cardSourceDebugState, "draft_site_cards_shown");
   }, [cardSourceDebugState, mutations]);
 
