@@ -51,7 +51,11 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
   const { deck } = state;
   const runtime = state.siteRuntime[site.id];
   const cardChoiceRuntime =
-    runtime !== undefined && runtime.kind === "cardChoice" ? runtime : null;
+    runtime !== undefined &&
+      runtime.kind === "cardChoice" &&
+      runtime.choiceKind === "duplication"
+      ? runtime
+      : null;
 
   useEffect(() => {
     if (runtime === undefined) {

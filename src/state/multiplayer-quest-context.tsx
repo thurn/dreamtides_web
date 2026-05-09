@@ -199,6 +199,17 @@ function dreamsignMatches(left: Dreamsign, right: Dreamsign): boolean {
   return left.name === right.name;
 }
 
+function dreamsignDetailsEqual(left: Dreamsign, right: Dreamsign): boolean {
+  return (
+    left.id === right.id &&
+    left.name === right.name &&
+    left.effectDescription === right.effectDescription &&
+    left.imageName === right.imageName &&
+    left.imageAlt === right.imageAlt &&
+    left.isBane === right.isBane
+  );
+}
+
 function arraysEqual<T>(
   left: readonly T[],
   right: readonly T[],
@@ -502,7 +513,7 @@ function applyPreparedTemptingOfferEffect({
     addCardNumbers: number[];
     addBaneCardNumbers: number[];
     removeEntryIds: string[];
-    removeDreamsignIndex: number | null;
+    removeDreamsign: { index: number; dreamsign: Dreamsign } | null;
     addedDreamsign: Dreamsign | null;
   };
 }): QuestState | null {
@@ -552,16 +563,22 @@ function applyPreparedTemptingOfferEffect({
     case "removeEssence":
       return { ...prev, essence: prev.essence - effect.amount };
     case "removeDreamsign":
-      if (prepared.removeDreamsignIndex === null) {
+      if (prepared.removeDreamsign === null) {
         return prev;
       }
-      if (prev.dreamsigns[prepared.removeDreamsignIndex] === undefined) {
+      if (
+        prev.dreamsigns[prepared.removeDreamsign.index] === undefined ||
+        !dreamsignDetailsEqual(
+          prev.dreamsigns[prepared.removeDreamsign.index],
+          prepared.removeDreamsign.dreamsign,
+        )
+      ) {
         return null;
       }
       return {
         ...prev,
         dreamsigns: prev.dreamsigns.filter(
-          (_, index) => index !== prepared.removeDreamsignIndex,
+          (_, index) => index !== prepared.removeDreamsign?.index,
         ),
       };
     case "reduceMaxDreamsigns":
@@ -626,9 +643,15 @@ function prepareTemptingOfferEffects({
     removeEntryIds: shuffled(state.deck.filter((entry) => !entry.isBane))
       .slice(0, removeCount)
       .map((entry) => entry.entryId),
-    removeDreamsignIndex:
+    removeDreamsign:
       shouldRemoveDreamsign && state.dreamsigns.length > 0
-        ? Math.floor(Math.random() * state.dreamsigns.length)
+        ? (() => {
+          const index = Math.floor(Math.random() * state.dreamsigns.length);
+          return {
+            index,
+            dreamsign: { ...state.dreamsigns[index] },
+          };
+        })()
         : null,
     addedDreamsign:
       shouldAddDreamsign && dreamsignTemplates.length > 0
@@ -1919,6 +1942,7 @@ export function MultiplayerQuestProvider({
         current.state.siteRuntime[siteId] === undefined
           ? {
             kind: "cardChoice",
+            choiceKind: kind,
             entryIds: selectCardChoiceEntryIds({
               deck: current.state.deck,
               cardDatabase: current.questContent.cardDatabase,
@@ -2015,6 +2039,7 @@ export function MultiplayerQuestProvider({
           if (
             runtime === undefined ||
             runtime.kind !== "cardChoice" ||
+            runtime.choiceKind !== "transfiguration" ||
             runtime.acceptedEntryIds.length > 0 ||
             !runtime.entryIds.includes(entryId)
           ) {
@@ -2096,6 +2121,7 @@ export function MultiplayerQuestProvider({
           if (
             runtime === undefined ||
             runtime.kind !== "cardChoice" ||
+            runtime.choiceKind !== "duplication" ||
             runtime.acceptedEntryIds.length > 0 ||
             !runtime.entryIds.includes(entryId)
           ) {

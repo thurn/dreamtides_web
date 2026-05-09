@@ -1509,6 +1509,94 @@ describe("MultiplayerQuestProvider", () => {
     expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
   });
 
+  it("rejects transfiguration card-choice acceptance for a duplication runtime", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+      siteRuntime: {
+        "site-1": {
+          kind: "cardChoice",
+          choiceKind: "duplication",
+          entryIds: ["deck-1"],
+          acceptedEntryIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptTransfigurationChoice(
+      "site-1",
+      "deck-1",
+      "Viridian",
+      "Viridian test effect",
+      { test: true },
+    );
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
+  it("rejects tempting offer completion when the prepared dreamsign removal is stale", () => {
+    const captured: QuestContextValue[] = [];
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);
+    const heldDreamsign = makeDreamsign("held-0", "Held 0");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      dreamsigns: [heldDreamsign, makeDreamsign("held-1", "Held 1")],
+      siteRuntime: {
+        "site-1": {
+          kind: "temptingOffer",
+          optionIds: ["offer-3"],
+          completed: false,
+        },
+      },
+    };
+    const session = makeSession(questState);
+    const staleRoom: MultiplayerRoom = {
+      ...session.room,
+      questState: {
+        ...questState,
+        dreamsigns: [
+          makeDreamsign("held-replacement", "Held Replacement"),
+          makeDreamsign("held-1", "Held 1"),
+        ],
+      },
+    };
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.completeTemptingOfferOption(
+      "site-1",
+      "offer-3",
+    );
+
+    expect(latestRoomTransactionUpdater()?.(staleRoom)).toBe(staleRoom);
+    randomSpy.mockRestore();
+  });
+
   it("completes a site through a room transaction", () => {
     const captured: QuestContextValue[] = [];
     const questState: QuestState = {

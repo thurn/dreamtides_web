@@ -52,7 +52,11 @@ export function TransfigurationSiteScreen({
   const { deck } = state;
   const runtime = state.siteRuntime[site.id];
   const cardChoiceRuntime =
-    runtime !== undefined && runtime.kind === "cardChoice" ? runtime : null;
+    runtime !== undefined &&
+      runtime.kind === "cardChoice" &&
+      runtime.choiceKind === "transfiguration"
+      ? runtime
+      : null;
 
   useEffect(() => {
     if (runtime === undefined) {

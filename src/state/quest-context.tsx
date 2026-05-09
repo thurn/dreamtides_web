@@ -1370,6 +1370,7 @@ export function QuestProvider({
             ...prev.siteRuntime,
             [siteId]: {
               kind: "cardChoice",
+              choiceKind: kind,
               entryIds,
               acceptedEntryIds: [],
             },
@@ -1396,6 +1397,7 @@ export function QuestProvider({
         if (
           runtime === undefined ||
           runtime.kind !== "cardChoice" ||
+          runtime.choiceKind !== "transfiguration" ||
           runtime.acceptedEntryIds.length > 0 ||
           !runtime.entryIds.includes(entryId)
         ) {
@@ -1459,6 +1461,7 @@ export function QuestProvider({
         if (
           runtime === undefined ||
           runtime.kind !== "cardChoice" ||
+          runtime.choiceKind !== "duplication" ||
           runtime.acceptedEntryIds.length > 0 ||
           !runtime.entryIds.includes(entryId)
         ) {

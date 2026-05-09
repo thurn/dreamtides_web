@@ -116,6 +116,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     siteRuntime: {
       "site-1": {
         kind: "cardChoice",
+        choiceKind: "transfiguration",
         entryIds: ["deck-1"],
         acceptedEntryIds: [],
       },
@@ -228,6 +229,33 @@ describe("TransfigurationSiteScreen", () => {
 
     expect(container.textContent).toContain("Preparing choices...");
     expect(mutations.ensureCardChoiceRuntime).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows the preparing fallback for a wrong card-choice subtype", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "cardChoice",
+            choiceKind: "duplication",
+            entryIds: ["deck-1"],
+            acceptedEntryIds: [],
+          },
+        },
+      }),
+      mutations,
+    );
+    const { container, root } = mount(
+      <TransfigurationSiteScreen site={makeSite()} />,
+    );
+
+    expect(container.textContent).toContain("Preparing choices...");
+    expect(mutations.acceptTransfigurationChoice).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();

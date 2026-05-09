@@ -203,6 +203,7 @@ export interface EssenceSiteRuntime {
 /** Runtime state for a card choice site. */
 export interface CardChoiceSiteRuntime {
   kind: "cardChoice";
+  choiceKind: "transfiguration" | "duplication";
   entryIds: string[];
   acceptedEntryIds: string[];
 }
