@@ -1605,6 +1605,49 @@ describe("MultiplayerQuestProvider", () => {
     expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
   });
 
+  it("rejects transfiguration card-choice acceptance when serialized runtime has no offers", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+      siteRuntime: {
+        "site-1": {
+          kind: "cardChoice",
+          choiceKind: "transfiguration",
+          entryIds: ["deck-1"],
+          acceptedEntryIds: [],
+        },
+      } as unknown as QuestState["siteRuntime"],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptTransfigurationChoice(
+      "site-1",
+      "deck-1",
+      "Viridian",
+      "Energy cost: 1 -> 0",
+      { energyCost: { from: 1, to: 0 } },
+    );
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
   it("rejects duplication card-choice acceptance with an excessive copy count", () => {
     const captured: QuestContextValue[] = [];
     const questState: QuestState = {

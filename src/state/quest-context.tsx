@@ -1474,6 +1474,7 @@ export function QuestProvider({
           runtime === undefined ||
           runtime.kind !== "cardChoice" ||
           runtime.choiceKind !== "transfiguration" ||
+          !Array.isArray(runtime.transfigurationOffers) ||
           runtime.acceptedEntryIds.length > 0 ||
           !runtime.entryIds.includes(entryId)
         ) {

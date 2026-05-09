@@ -63,7 +63,8 @@ export function TransfigurationSiteScreen({
   const cardChoiceRuntime =
     runtime !== undefined &&
       runtime.kind === "cardChoice" &&
-      runtime.choiceKind === "transfiguration"
+      runtime.choiceKind === "transfiguration" &&
+      Array.isArray(runtime.transfigurationOffers)
       ? runtime
       : null;
 

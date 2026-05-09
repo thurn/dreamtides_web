@@ -285,6 +285,33 @@ describe("TransfigurationSiteScreen", () => {
     });
   });
 
+  it("shows the preparing fallback for serialized transfiguration runtime without offers", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "cardChoice",
+            choiceKind: "transfiguration",
+            entryIds: ["deck-1"],
+            acceptedEntryIds: [],
+          },
+        } as unknown as QuestState["siteRuntime"],
+      }),
+      mutations,
+    );
+    const { container, root } = mount(
+      <TransfigurationSiteScreen site={makeSite()} />,
+    );
+
+    expect(container.textContent).toContain("Preparing choices...");
+    expect(mutations.acceptTransfigurationChoice).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("accepts a shared card choice through the composed mutation", () => {
     const mutations = makeMutations();
     setQuestContext(makeState(), mutations);
