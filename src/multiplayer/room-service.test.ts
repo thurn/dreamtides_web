@@ -367,7 +367,7 @@ describe("room service", () => {
       "rooms/ab12/metadata/updatedAt": timestamp,
     };
 
-    await writeRoomUpdate(database, updateMap);
+    await writeRoomUpdate(database, "ab12", updateMap);
 
     expect(firebaseMocks.ref).toHaveBeenCalledWith(database);
     expect(firebaseMocks.update).toHaveBeenCalledWith({ database, path: undefined }, updateMap);
@@ -415,5 +415,77 @@ describe("room service", () => {
     );
 
     await runRoomTransaction(database, "ab12", () => null);
+  });
+
+  it("serializes writes against the same room so transactions are not aborted", async () => {
+    const order: string[] = [];
+    let release: () => void = () => undefined;
+    const transactionGate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+
+    firebaseMocks.runTransaction.mockImplementation(async () => {
+      order.push("transaction:start");
+      await transactionGate;
+      order.push("transaction:commit");
+      return { committed: true, snapshot: null };
+    });
+    firebaseMocks.update.mockImplementation(() => {
+      order.push("update:run");
+      return Promise.resolve();
+    });
+
+    const txPromise = runRoomTransaction(database, "ab12", () => null);
+    const updatePromise = writeRoomUpdate(database, "ab12", {
+      "rooms/ab12/metadata/updatedAt": timestamp,
+    });
+
+    await Promise.resolve();
+    expect(order).toEqual(["transaction:start"]);
+
+    release();
+    await txPromise;
+    await updatePromise;
+
+    expect(order).toEqual([
+      "transaction:start",
+      "transaction:commit",
+      "update:run",
+    ]);
+  });
+
+  it("does not block writes for a different room while one room is in flight", async () => {
+    const order: string[] = [];
+    let release: () => void = () => undefined;
+    const transactionGate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+
+    firebaseMocks.runTransaction.mockImplementationOnce(async () => {
+      order.push("room-a:transaction:start");
+      await transactionGate;
+      order.push("room-a:transaction:commit");
+      return { committed: true, snapshot: null };
+    });
+    firebaseMocks.update.mockImplementation(() => {
+      order.push("room-b:update:run");
+      return Promise.resolve();
+    });
+
+    const aPromise = runRoomTransaction(database, "room-a", () => null);
+    const bPromise = writeRoomUpdate(database, "room-b", {
+      "rooms/room-b/metadata/updatedAt": timestamp,
+    });
+
+    await bPromise;
+    expect(order).toEqual(["room-a:transaction:start", "room-b:update:run"]);
+
+    release();
+    await aPromise;
+    expect(order).toEqual([
+      "room-a:transaction:start",
+      "room-b:update:run",
+      "room-a:transaction:commit",
+    ]);
   });
 });

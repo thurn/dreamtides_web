@@ -96,9 +96,10 @@ export interface MultiplayerQuestProviderProps {
 
 function writeUpdate(
   database: Database,
+  roomId: string,
   updateMap: FirebaseUpdateMap,
 ): void {
-  void writeRoomUpdate(database, updateMap).catch((error: unknown) => {
+  void writeRoomUpdate(database, roomId, updateMap).catch((error: unknown) => {
     console.error("Failed to write multiplayer quest update", error);
   });
 }
@@ -130,6 +131,7 @@ function writeQuestField<K extends keyof QuestState>({
 }): void {
   writeUpdate(
     database,
+    roomId,
     buildQuestFieldUpdate(roomId, field, value, new Date().toISOString()),
   );
 }
@@ -144,7 +146,7 @@ function writeWholeQuestState({
   state: QuestState;
 }): void {
   const updatedAt = new Date().toISOString();
-  writeUpdate(database, {
+  writeUpdate(database, roomId, {
     [questStatePath(roomId)]: state,
     [metadataUpdatedAtPath(roomId)]: updatedAt,
   });
@@ -160,7 +162,7 @@ function writeScreenUpdate({
   state: QuestState;
 }): void {
   const updatedAt = new Date().toISOString();
-  writeUpdate(database, {
+  writeUpdate(database, roomId, {
     ...buildQuestFieldUpdate(roomId, "screen", state.screen, updatedAt),
     ...buildQuestFieldUpdate(
       roomId,
@@ -925,7 +927,7 @@ export function MultiplayerQuestProvider({
         visitedSites: nodeId !== null ? [] : current.state.visitedSites,
       };
       const updatedAt = new Date().toISOString();
-      writeUpdate(current.database, {
+      writeUpdate(current.database, current.session.roomId, {
         ...buildQuestFieldUpdate(
           current.session.roomId,
           "currentDreamscape",
@@ -1001,7 +1003,7 @@ export function MultiplayerQuestProvider({
       const current = currentRef.current;
       const next = applyDreamcallerSelection(current.state, resolvedPackage);
       const updatedAt = new Date().toISOString();
-      writeUpdate(current.database, {
+      writeUpdate(current.database, current.session.roomId, {
         ...buildQuestFieldUpdate(
           current.session.roomId,
           "dreamcaller",

@@ -117,12 +117,33 @@ export function createRoomRecord(nowIso: string = new Date().toISOString()): Mul
   };
 }
 
+const roomWriteQueues = new Map<string, Promise<void>>();
+
+function enqueueRoomWrite<T>(
+  roomId: string,
+  task: () => Promise<T>,
+): Promise<T> {
+  const previous = roomWriteQueues.get(roomId) ?? Promise.resolve();
+  const result = previous.then(
+    () => task(),
+    () => task(),
+  );
+  const chainTail = result.then(
+    () => undefined,
+    () => undefined,
+  );
+  roomWriteQueues.set(roomId, chainTail);
+  return result;
+}
+
 export async function createRoom(
   database: Database,
   roomId: string,
   nowIso: string = new Date().toISOString(),
 ): Promise<void> {
-  await set(ref(database, roomPath(roomId)), createRoomRecord(nowIso));
+  await enqueueRoomWrite(roomId, () =>
+    set(ref(database, roomPath(roomId)), createRoomRecord(nowIso)),
+  );
 }
 
 export function subscribeToRoom(
@@ -148,9 +169,10 @@ export function subscribeToRoom(
 
 export async function writeRoomUpdate(
   database: Database,
+  roomId: string,
   updateMap: FirebaseUpdateMap,
 ): Promise<void> {
-  await update(ref(database), updateMap);
+  await enqueueRoomWrite(roomId, () => update(ref(database), updateMap));
 }
 
 export async function pruneRoomActionLog(
@@ -158,14 +180,16 @@ export async function pruneRoomActionLog(
   roomId: string,
   limit: number = ACTION_LOG_LIMIT,
 ): Promise<void> {
-  await runTransaction(ref(database, `${roomPath(roomId)}/actionLog`), (current) => {
-    const actionLog = (current ?? {}) as Record<string, ActionLogEntry>;
-    if (Object.keys(actionLog).length <= limit + 10) {
-      return current;
-    }
+  await enqueueRoomWrite(roomId, () =>
+    runTransaction(ref(database, `${roomPath(roomId)}/actionLog`), (current) => {
+      const actionLog = (current ?? {}) as Record<string, ActionLogEntry>;
+      if (Object.keys(actionLog).length <= limit + 10) {
+        return current;
+      }
 
-    return pruneActionLog(actionLog, limit);
-  });
+      return pruneActionLog(actionLog, limit);
+    }),
+  );
 }
 
 export async function runRoomTransaction(
@@ -173,14 +197,16 @@ export async function runRoomTransaction(
   roomId: string,
   updater: (current: MultiplayerRoom | null) => MultiplayerRoom | null | undefined,
 ): Promise<void> {
-  await runTransaction(ref(database, roomPath(roomId)), (current) => {
-    const normalized =
-      current === null || current === undefined
-        ? null
-        : normalizeRoomSnapshot(current as MultiplayerRoom);
-    const next = updater(normalized);
-    return next === undefined ? current : next;
-  });
+  await enqueueRoomWrite(roomId, () =>
+    runTransaction(ref(database, roomPath(roomId)), (current) => {
+      const normalized =
+        current === null || current === undefined
+          ? null
+          : normalizeRoomSnapshot(current as MultiplayerRoom);
+      const next = updater(normalized);
+      return next === undefined ? current : next;
+    }),
+  );
 }
 
 export async function writePresence(
@@ -189,9 +215,11 @@ export async function writePresence(
   clientId: string,
   nowIso: string = new Date().toISOString(),
 ): Promise<void> {
-  const entryRef = ref(database, presencePath(roomId, clientId));
-  const entry: PresenceEntry = { connected: true, lastSeenAt: nowIso };
+  await enqueueRoomWrite(roomId, async () => {
+    const entryRef = ref(database, presencePath(roomId, clientId));
+    const entry: PresenceEntry = { connected: true, lastSeenAt: nowIso };
 
-  await onDisconnect(entryRef).remove();
-  await set(entryRef, entry);
+    await onDisconnect(entryRef).remove();
+    await set(entryRef, entry);
+  });
 }

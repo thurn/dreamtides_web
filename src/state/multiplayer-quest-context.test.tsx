@@ -275,6 +275,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(roomServiceMocks.writeRoomUpdate).toHaveBeenCalledTimes(1);
     expect(roomServiceMocks.writeRoomUpdate).toHaveBeenCalledWith(
       database,
+      "ab12cd",
       expect.objectContaining({
         "rooms/ab12cd/questState/essence": 325,
       }),
@@ -379,6 +380,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(playableBattleCacheMocks.reset).toHaveBeenCalledTimes(1);
     expect(roomServiceMocks.writeRoomUpdate).toHaveBeenCalledWith(
       database,
+      "ab12cd",
       expect.objectContaining({
         "rooms/ab12cd/questState": createDefaultState(),
       }),
