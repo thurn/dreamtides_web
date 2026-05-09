@@ -247,6 +247,49 @@ describe("applyBattleCommandToRoom", () => {
     expect(next.metadata.updatedAt).toBe("2026-05-09T00:00:00.000Z");
   });
 
+  it("records the forced result in the action-log summary", () => {
+    const init = createBattleInit({
+      battleEntryKey: "test-force",
+      site: makeBattleTestSite(),
+      state: makeBattleTestState(),
+      cardDatabase: makeBattleTestCardDatabase(),
+      dreamcallers: makeBattleTestDreamcallers(),
+      seedOverride: 1,
+      enableAi: false,
+    });
+    const initial = createInitialBattleState(init);
+    const initialRoom: MultiplayerRoom = {
+      metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
+      questState: null,
+      battleState: {
+        init,
+        reducer: {
+          mutable: initial,
+          history: { past: [], future: [] },
+          lastTransition: null,
+          commandSerial: 0,
+        },
+      },
+      presence: {},
+      actionLog: {},
+    };
+
+    const next = applyBattleCommandToRoom({
+      room: initialRoom,
+      command: {
+        id: "FORCE_RESULT",
+        result: "victory",
+        sourceSurface: "inspector",
+      },
+      now: "2026-05-09T00:00:00.000Z",
+      actorId: "client-a",
+      actionId: "force-1",
+    });
+
+    expect(next).not.toBe(initialRoom);
+    expect(next.actionLog!["force-1"].summary.result).toBe("victory");
+  });
+
   it("returns the input unchanged when battleState slot is null", () => {
     const room: MultiplayerRoom = {
       metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },

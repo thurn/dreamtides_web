@@ -274,6 +274,9 @@ function summarizeCommand(command: BattleCommand): Record<string, unknown> {
   if (command.id === "DEBUG_EDIT" && command.edit !== undefined) {
     summary.editKind = command.edit.kind;
   }
+  if (command.id === "FORCE_RESULT") {
+    summary.result = command.result;
+  }
   return summary;
 }
 
