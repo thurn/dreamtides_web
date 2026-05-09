@@ -20,6 +20,8 @@ export function RewardSiteScreen({ site }: RewardSiteScreenProps) {
     runtime?.kind === "reward" ? runtime : null;
   const rewardData = rewardRuntime?.reward ?? null;
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
+  const selectedPackageTidesKey =
+    state.resolvedPackage?.selectedTides.join("\u0000") ?? "";
   const cardSourceDebugState = useMemo(
     () =>
       rewardData?.rewardType === "card"
@@ -44,7 +46,13 @@ export function RewardSiteScreen({ site }: RewardSiteScreenProps) {
     if (runtime === undefined) {
       mutations.ensureRewardSiteRuntime(site.id);
     }
-  }, [mutations, remainingDreamsignPoolKey, runtime, site.id]);
+  }, [
+    mutations,
+    remainingDreamsignPoolKey,
+    runtime,
+    selectedPackageTidesKey,
+    site.id,
+  ]);
 
   useEffect(() => {
     if (rewardData === null) {

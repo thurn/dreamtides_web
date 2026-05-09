@@ -817,6 +817,103 @@ describe("MultiplayerQuestProvider", () => {
     });
   });
 
+  it("rejects reward acceptance when the site is already visited", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      visitedSites: ["site-1"],
+      siteRuntime: {
+        "site-1": {
+          kind: "reward",
+          reward: {
+            rewardType: "card",
+            cardNumber: 101,
+            cardName: "Card 101",
+          },
+          remainingDreamsignPoolIds: [],
+          accepted: false,
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptRewardSite("site-1");
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
+  it("rejects dreamsign acceptance when the site is already visited", () => {
+    const captured: QuestContextValue[] = [];
+    const selectedDreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      visitedSites: ["site-1"],
+      siteRuntime: {
+        "site-1": {
+          kind: "dreamsignOffer",
+          offeredDreamsigns: [selectedDreamsign],
+          remainingDreamsignPool: [],
+          accepted: false,
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptDreamsignOffer(
+      "site-1",
+      selectedDreamsign,
+    );
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
+  it("rejects essence acceptance when the site is already visited", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      visitedSites: ["site-1"],
+      siteRuntime: {
+        "site-1": {
+          kind: "essence",
+          amount: 250,
+          accepted: false,
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptEssenceSite("site-1");
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
   it("rejects dreamsign acceptance when purge index is out of range", () => {
     const captured: QuestContextValue[] = [];
     const selectedDreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");

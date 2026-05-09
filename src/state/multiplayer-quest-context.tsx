@@ -679,6 +679,9 @@ export function MultiplayerQuestProvider({
         if (room === null || room.questState === null) {
           return room ?? undefined;
         }
+        if (room.questState.visitedSites.includes(siteId)) {
+          return room;
+        }
         const runtime = room.questState.siteRuntime[siteId];
         if (
           runtime === undefined ||
@@ -859,6 +862,9 @@ export function MultiplayerQuestProvider({
           if (room === null || room.questState === null) {
             return room ?? undefined;
           }
+          if (room.questState.visitedSites.includes(siteId)) {
+            return room;
+          }
           const runtime = room.questState.siteRuntime[siteId];
           if (
             runtime === undefined ||
@@ -1006,6 +1012,9 @@ export function MultiplayerQuestProvider({
       updater: (room) => {
         if (room === null || room.questState === null) {
           return room ?? undefined;
+        }
+        if (room.questState.visitedSites.includes(siteId)) {
+          return room;
         }
         const runtime = room.questState.siteRuntime[siteId];
         if (
