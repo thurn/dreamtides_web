@@ -1763,6 +1763,16 @@ git commit -m "Mount MultiplayerBattleProvider above QuestApp"
 - Create: `src/state/use-ensure-battle-session.ts` (extracted hook)
 - Modify: `src/components/BattleSiteRoute.tsx`
 - Modify: `src/components/BattleSiteRoute.test.tsx`
+- Modify: `src/state/multiplayer-battle-context.tsx`
+
+> **Implementation note:** This task ships without a separate
+> `useMultiplayerSession` hook on `MultiplayerRoomGate`. Instead,
+> `MultiplayerBattleValue` exposes `database`, `roomId`, and `clientId`
+> directly so that `BattleSiteRoute`, `useEnsureBattleSession`, and the
+> reset/clear callsites all read them from `useMultiplayerBattle()`. The
+> code blocks below still reference `useMultiplayerSession` for context,
+> but the actual implementation skips Step 3 and reads from the battle
+> context instead.
 
 `useEnsureBattleSession` watches the multiplayer battle slot. When it is
 null (and the user is on a battle screen), it computes a `BattleInit`
