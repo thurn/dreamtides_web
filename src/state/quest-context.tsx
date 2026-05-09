@@ -70,7 +70,11 @@ export interface QuestMutations {
   ensureRewardSiteRuntime: (siteId: string) => void;
   acceptRewardSite: (siteId: string) => void;
   ensureDreamsignOfferRuntime: (siteId: string, optionCount: number) => void;
-  acceptDreamsignOffer: (siteId: string, dreamsign: Dreamsign) => void;
+  acceptDreamsignOffer: (
+    siteId: string,
+    dreamsign: Dreamsign,
+    purgeIndex?: number,
+  ) => void;
   ensureEssenceSiteRuntime: (siteId: string, isEnhanced: boolean) => void;
   acceptEssenceSite: (siteId: string) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
@@ -573,14 +577,22 @@ export function QuestProvider({
   );
 
   const acceptDreamsignOffer = useCallback(
-    (siteId: string, dreamsign: Dreamsign) => {
+    (siteId: string, dreamsign: Dreamsign, purgeIndex?: number) => {
       setState((prev) => {
         const runtime = prev.siteRuntime[siteId];
         if (
           runtime === undefined ||
           runtime.kind !== "dreamsignOffer" ||
-          runtime.accepted ||
-          prev.dreamsigns.length >= MAX_DREAMSIGNS
+          runtime.accepted
+        ) {
+          return prev;
+        }
+        const purgedDreamsign =
+          purgeIndex === undefined ? null : prev.dreamsigns[purgeIndex];
+        if (
+          (purgeIndex !== undefined && purgedDreamsign === null) ||
+          (prev.dreamsigns.length >= MAX_DREAMSIGNS &&
+            purgeIndex === undefined)
         ) {
           return prev;
         }
@@ -598,6 +610,19 @@ export function QuestProvider({
             ? "DreamsignDraft"
             : "DreamsignOffering";
 
+        const dreamsigns =
+          purgeIndex === undefined
+            ? [...prev.dreamsigns, dreamsign]
+            : prev.dreamsigns.map((existing, index) =>
+              index === purgeIndex ? dreamsign : existing,
+            );
+        if (purgedDreamsign !== null) {
+          logEvent("dreamsign_removed", {
+            name: purgedDreamsign.name,
+            imageName: purgedDreamsign.imageName ?? null,
+            reason: "purged_for_new_dreamsign",
+          });
+        }
         logEvent("dreamsign_acquired", {
           name: dreamsign.name,
           imageName: dreamsign.imageName ?? null,
@@ -613,7 +638,7 @@ export function QuestProvider({
           completeQuestSite(
             {
               ...prev,
-              dreamsigns: [...prev.dreamsigns, dreamsign],
+              dreamsigns,
               siteRuntime: {
                 ...prev.siteRuntime,
                 [siteId]: {

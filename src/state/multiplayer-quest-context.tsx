@@ -25,6 +25,7 @@ import type {
   DeckEntry,
   DreamAtlas,
   Dreamsign,
+  DreamsignOfferSiteRuntime,
   EssenceSiteRuntime,
   QuestFailureSummary,
   QuestState,
@@ -164,6 +165,16 @@ function dreamsignMatches(left: Dreamsign, right: Dreamsign): boolean {
     return left.id === right.id;
   }
   return left.name === right.name;
+}
+
+function arraysEqual<T>(
+  left: readonly T[],
+  right: readonly T[],
+): boolean {
+  return (
+    left.length === right.length &&
+    left.every((value, index) => Object.is(value, right[index]))
+  );
 }
 
 function completeSiteAndReturnToDreamscape(
@@ -566,6 +577,40 @@ export function MultiplayerQuestProvider({
 
   const ensureRewardSiteRuntime = useCallback((siteId: string) => {
     const current = currentRef.current;
+    const expectedRemainingDreamsignPool = [
+      ...current.state.remainingDreamsignPool,
+    ];
+    const expectedSelectedTides = [
+      ...(current.state.resolvedPackage?.selectedTides ?? []),
+    ];
+    const generated =
+      current.state.siteRuntime[siteId] === undefined
+        ? generateRewardSiteData({
+          cardDatabase: current.questContent.cardDatabase,
+          dreamsignTemplates: current.questContent.dreamsignTemplates,
+          remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
+          selectedPackageTides: expectedSelectedTides,
+        })
+        : null;
+    const runtime: RewardSiteRuntime | null =
+      generated === null
+        ? null
+        : {
+          kind: "reward",
+          reward: generated.reward,
+          remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+          accepted: false,
+        };
+    const remainingDreamsignPool =
+      generated === null
+        ? expectedRemainingDreamsignPool
+        : generated.spentDreamsignPoolIds.length > 0
+          ? generated.remainingDreamsignPoolIds
+          : expectedRemainingDreamsignPool;
+    const now = new Date().toISOString();
+    const actionId =
+      runtime === null ? null : crypto.randomUUID();
+
     writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
@@ -576,26 +621,20 @@ export function MultiplayerQuestProvider({
         if (room.questState.siteRuntime[siteId] !== undefined) {
           return room;
         }
-
-        const generated = generateRewardSiteData({
-          cardDatabase: current.questContent.cardDatabase,
-          dreamsignTemplates: current.questContent.dreamsignTemplates,
-          remainingDreamsignPoolIds: room.questState.remainingDreamsignPool,
-          selectedPackageTides:
+        if (
+          runtime === null ||
+          actionId === null ||
+          !arraysEqual(
+            room.questState.remainingDreamsignPool,
+            expectedRemainingDreamsignPool,
+          ) ||
+          !arraysEqual(
             room.questState.resolvedPackage?.selectedTides ?? [],
-        });
-        const runtime: RewardSiteRuntime = {
-          kind: "reward",
-          reward: generated.reward,
-          remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
-          accepted: false,
-        };
-        const remainingDreamsignPool =
-          generated.spentDreamsignPoolIds.length > 0
-            ? generated.remainingDreamsignPoolIds
-            : room.questState.remainingDreamsignPool;
-        const now = new Date().toISOString();
-        const actionId = crypto.randomUUID();
+            expectedSelectedTides,
+          )
+        ) {
+          return room;
+        }
 
         return {
           ...room,
@@ -620,7 +659,7 @@ export function MultiplayerQuestProvider({
               source: "site_reveal",
               summary: {
                 siteId,
-                rewardType: generated.reward.rewardType,
+                rewardType: runtime.reward.rewardType,
               },
             },
           },
@@ -728,6 +767,30 @@ export function MultiplayerQuestProvider({
   const ensureDreamsignOfferRuntime = useCallback(
     (siteId: string, optionCount: number) => {
       const current = currentRef.current;
+      const expectedRemainingDreamsignPool = [
+        ...current.state.remainingDreamsignPool,
+      ];
+      const revealed =
+        current.state.siteRuntime[siteId] === undefined
+          ? drawDreamsignOptions(
+            expectedRemainingDreamsignPool,
+            current.questContent.dreamsignTemplates,
+            optionCount,
+          )
+          : null;
+      const runtime: DreamsignOfferSiteRuntime | null =
+        revealed === null
+          ? null
+          : {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: revealed.offeredDreamsigns,
+            remainingDreamsignPool: revealed.remainingDreamsignPool,
+            accepted: false,
+          };
+      const now = new Date().toISOString();
+      const actionId =
+        runtime === null ? null : crypto.randomUUID();
+
       writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
@@ -738,27 +801,25 @@ export function MultiplayerQuestProvider({
           if (room.questState.siteRuntime[siteId] !== undefined) {
             return room;
           }
+          if (
+            runtime === null ||
+            actionId === null ||
+            !arraysEqual(
+              room.questState.remainingDreamsignPool,
+              expectedRemainingDreamsignPool,
+            )
+          ) {
+            return room;
+          }
 
-          const revealed = drawDreamsignOptions(
-            room.questState.remainingDreamsignPool,
-            current.questContent.dreamsignTemplates,
-            optionCount,
-          );
-          const now = new Date().toISOString();
-          const actionId = crypto.randomUUID();
           return {
             ...room,
             questState: {
               ...room.questState,
-              remainingDreamsignPool: revealed.remainingDreamsignPool,
+              remainingDreamsignPool: runtime.remainingDreamsignPool,
               siteRuntime: {
                 ...room.questState.siteRuntime,
-                [siteId]: {
-                  kind: "dreamsignOffer",
-                  offeredDreamsigns: revealed.offeredDreamsigns,
-                  remainingDreamsignPool: revealed.remainingDreamsignPool,
-                  accepted: false,
-                },
+                [siteId]: runtime,
               },
             },
             metadata: {
@@ -775,7 +836,7 @@ export function MultiplayerQuestProvider({
                 summary: {
                   siteId,
                   optionCount,
-                  offeredCount: revealed.offeredDreamsigns.length,
+                  offeredCount: runtime.offeredDreamsigns.length,
                 },
               },
             },
@@ -787,8 +848,10 @@ export function MultiplayerQuestProvider({
   );
 
   const acceptDreamsignOffer = useCallback(
-    (siteId: string, dreamsign: Dreamsign) => {
+    (siteId: string, dreamsign: Dreamsign, purgeIndex?: number) => {
       const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
       writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
@@ -801,18 +864,34 @@ export function MultiplayerQuestProvider({
             runtime === undefined ||
             runtime.kind !== "dreamsignOffer" ||
             runtime.accepted ||
-            room.questState.dreamsigns.length >= MAX_DREAMSIGNS ||
             !runtime.offeredDreamsigns.some((offered) =>
               dreamsignMatches(offered, dreamsign),
             )
           ) {
             return room;
           }
+          const purgedDreamsign =
+            purgeIndex === undefined
+              ? null
+              : room.questState.dreamsigns[purgeIndex];
+          if (
+            (purgeIndex !== undefined && purgedDreamsign === null) ||
+            (room.questState.dreamsigns.length >= MAX_DREAMSIGNS &&
+              purgeIndex === undefined)
+          ) {
+            return room;
+          }
+          const dreamsigns =
+            purgeIndex === undefined
+              ? [...room.questState.dreamsigns, dreamsign]
+              : room.questState.dreamsigns.map((existing, index) =>
+                index === purgeIndex ? dreamsign : existing,
+              );
 
           const next = completeSiteAndReturnToDreamscape(
             {
               ...room.questState,
-              dreamsigns: [...room.questState.dreamsigns, dreamsign],
+              dreamsigns,
               siteRuntime: {
                 ...room.questState.siteRuntime,
                 [siteId]: {
@@ -823,8 +902,6 @@ export function MultiplayerQuestProvider({
             },
             siteId,
           );
-          const now = new Date().toISOString();
-          const actionId = crypto.randomUUID();
           return {
             ...room,
             questState: next,
@@ -843,6 +920,7 @@ export function MultiplayerQuestProvider({
                   siteId,
                   dreamsignId: dreamsign.id ?? null,
                   dreamsignName: dreamsign.name,
+                  purgedDreamsignName: purgedDreamsign?.name ?? null,
                 },
               },
             },
@@ -856,6 +934,20 @@ export function MultiplayerQuestProvider({
   const ensureEssenceSiteRuntime = useCallback(
     (siteId: string, isEnhanced: boolean) => {
       const current = currentRef.current;
+      const runtime: EssenceSiteRuntime | null =
+        current.state.siteRuntime[siteId] === undefined
+          ? {
+            kind: "essence",
+            amount: isEnhanced
+              ? randomIntInRange(400, 600)
+              : randomIntInRange(200, 300),
+            accepted: false,
+          }
+          : null;
+      const now = new Date().toISOString();
+      const actionId =
+        runtime === null ? null : crypto.randomUUID();
+
       writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
@@ -866,16 +958,10 @@ export function MultiplayerQuestProvider({
           if (room.questState.siteRuntime[siteId] !== undefined) {
             return room;
           }
+          if (runtime === null || actionId === null) {
+            return room;
+          }
 
-          const runtime: EssenceSiteRuntime = {
-            kind: "essence",
-            amount: isEnhanced
-              ? randomIntInRange(400, 600)
-              : randomIntInRange(200, 300),
-            accepted: false,
-          };
-          const now = new Date().toISOString();
-          const actionId = crypto.randomUUID();
           return {
             ...room,
             questState: {

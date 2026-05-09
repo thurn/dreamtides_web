@@ -7,8 +7,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestContent } from "../data/quest-content";
 import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { CardData } from "../types/cards";
-import type { DreamcallerContent } from "../types/content";
-import type { QuestState } from "../types/quest";
+import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
+import type { Dreamsign, QuestState } from "../types/quest";
 import { useQuest, type QuestContextValue } from "./quest-context";
 import { createDefaultState } from "./quest-context";
 import { MultiplayerQuestProvider } from "./multiplayer-quest-context";
@@ -103,12 +103,34 @@ function makeCard(cardNumber: number): CardData {
   };
 }
 
+function makeDreamsignTemplate(id: string, name: string): DreamsignTemplate {
+  return {
+    id,
+    name,
+    effectDescription: `${name} effect.`,
+    packageTides: ["materialize_value"],
+  };
+}
+
+function makeDreamsign(id: string, name: string): Dreamsign {
+  return {
+    id,
+    name,
+    effectDescription: `${name} effect.`,
+    isBane: false,
+  };
+}
+
 function makeQuestContent(): QuestContent {
   return {
-    cardDatabase: new Map(),
+    cardDatabase: new Map([[101, makeCard(101)]]),
     cardsByPackageTide: new Map(),
     dreamcallers: [testDreamcaller],
-    dreamsignTemplates: [],
+    dreamsignTemplates: [
+      makeDreamsignTemplate("dreamsign-1", "Dreamsign One"),
+      makeDreamsignTemplate("dreamsign-2", "Dreamsign Two"),
+      makeDreamsignTemplate("dreamsign-3", "Dreamsign Three"),
+    ],
     resolvedPackagesByDreamcallerId: new Map([
       [
         testDreamcaller.id,
@@ -131,6 +153,15 @@ function makeQuestContent(): QuestContent {
       ],
     ]),
   };
+}
+
+function latestRoomTransactionUpdater():
+  | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
+  | undefined {
+  const calls = roomServiceMocks.runRoomTransaction.mock.calls;
+  return calls[calls.length - 1]?.[2] as
+    | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
+    | undefined;
 }
 
 function makeSession(questState: QuestState | null): RoomSession {
@@ -542,6 +573,281 @@ describe("MultiplayerQuestProvider", () => {
     expect(nextRoom).toBe(staleRoom);
     expect(nextRoom?.actionLog).toEqual({});
     expect(loggingMocks.logEvent).not.toHaveBeenCalled();
+  });
+
+  it("prepares dreamsign reveal candidates outside the transaction updater", () => {
+    const captured: QuestContextValue[] = [];
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);
+    const questState: QuestState = {
+      ...createDefaultState(),
+      remainingDreamsignPool: ["dreamsign-1", "dreamsign-2"],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.ensureDreamsignOfferRuntime(
+      "site-1",
+      2,
+    );
+    const randomCallsAfterPrepare = randomSpy.mock.calls.length;
+    const updater = latestRoomTransactionUpdater();
+    const nextRoom = updater?.(session.room);
+    const nextRoomFromRetry = updater?.(session.room);
+
+    expect(nextRoom).toEqual(nextRoomFromRetry);
+    expect(randomSpy).toHaveBeenCalledTimes(randomCallsAfterPrepare);
+    expect(randomUUIDMock).toHaveBeenCalledTimes(1);
+    const runtime = nextRoom?.questState?.siteRuntime["site-1"];
+    expect(runtime?.kind).toBe("dreamsignOffer");
+    expect(
+      runtime?.kind === "dreamsignOffer"
+        ? runtime.offeredDreamsigns.map((dreamsign) => dreamsign.id).sort()
+        : [],
+    ).toEqual(["dreamsign-1", "dreamsign-2"]);
+    expect(runtime).toEqual(
+      expect.objectContaining({
+        kind: "dreamsignOffer",
+        remainingDreamsignPool: [],
+        accepted: false,
+      }),
+    );
+    expect(nextRoom?.questState?.remainingDreamsignPool).toEqual([]);
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "ensureDreamsignOfferRuntime",
+      source: "site_reveal",
+      summary: {
+        siteId: "site-1",
+        optionCount: 2,
+        offeredCount: 2,
+      },
+    });
+
+    randomSpy.mockRestore();
+  });
+
+  it("prepares essence reveal candidates outside the transaction updater", () => {
+    const captured: QuestContextValue[] = [];
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);
+    const questState = createDefaultState();
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.ensureEssenceSiteRuntime(
+      "site-1",
+      true,
+    );
+    const randomCallsAfterPrepare = randomSpy.mock.calls.length;
+    const updater = latestRoomTransactionUpdater();
+    const nextRoom = updater?.(session.room);
+    const nextRoomFromRetry = updater?.(session.room);
+
+    expect(nextRoom).toEqual(nextRoomFromRetry);
+    expect(randomSpy).toHaveBeenCalledTimes(randomCallsAfterPrepare);
+    expect(randomUUIDMock).toHaveBeenCalledTimes(1);
+    expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
+      kind: "essence",
+      amount: 400,
+      accepted: false,
+    });
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "ensureEssenceSiteRuntime",
+      source: "site_reveal",
+      summary: {
+        siteId: "site-1",
+        amount: 400,
+        isEnhanced: true,
+      },
+    });
+
+    randomSpy.mockRestore();
+  });
+
+  it("skips reveal candidates for existing runtime or stale committed pool", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      remainingDreamsignPool: ["dreamsign-1", "dreamsign-2"],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.ensureDreamsignOfferRuntime(
+      "site-1",
+      2,
+    );
+    const updater = latestRoomTransactionUpdater();
+    const roomWithRuntime: MultiplayerRoom = {
+      ...session.room,
+      questState: {
+        ...questState,
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [makeDreamsign("dreamsign-1", "Dreamsign One")],
+            remainingDreamsignPool: ["dreamsign-2"],
+            accepted: false,
+          },
+        },
+      },
+    };
+    const stalePoolRoom: MultiplayerRoom = {
+      ...session.room,
+      questState: {
+        ...questState,
+        remainingDreamsignPool: ["dreamsign-2"],
+      },
+    };
+
+    expect(updater?.(roomWithRuntime)).toBe(roomWithRuntime);
+    expect(updater?.(stalePoolRoom)).toBe(stalePoolRoom);
+  });
+
+  it("accepts a full-capacity dreamsign offer with purge atomically", () => {
+    const captured: QuestContextValue[] = [];
+    const selectedDreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      dreamsigns: Array.from({ length: 12 }, (_, index) =>
+        makeDreamsign(`held-${String(index)}`, `Held ${String(index)}`),
+      ),
+      siteRuntime: {
+        "site-1": {
+          kind: "dreamsignOffer",
+          offeredDreamsigns: [selectedDreamsign],
+          remainingDreamsignPool: [],
+          accepted: false,
+        },
+      },
+      atlas: {
+        nodes: {
+          "node-1": {
+            id: "node-1",
+            biomeName: "Candle Mire",
+            biomeColor: "#abcdef",
+            sites: [
+              {
+                id: "site-1",
+                type: "DreamsignOffering",
+                isEnhanced: false,
+                isVisited: false,
+              },
+            ],
+            position: { x: 0, y: 0 },
+            status: "available",
+            enhancedSiteType: null,
+          },
+        },
+        edges: [],
+        nexusId: "node-1",
+      },
+      screen: { type: "site", siteId: "site-1" },
+      activeSiteId: "site-1",
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptDreamsignOffer(
+      "site-1",
+      selectedDreamsign,
+      0,
+    );
+    const updater = latestRoomTransactionUpdater();
+    const nextRoom = updater?.(session.room);
+
+    expect(nextRoom?.questState?.dreamsigns).toHaveLength(12);
+    expect(nextRoom?.questState?.dreamsigns[0]).toEqual(selectedDreamsign);
+    expect(nextRoom?.questState?.dreamsigns[1]).toEqual(
+      makeDreamsign("held-1", "Held 1"),
+    );
+    expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
+      kind: "dreamsignOffer",
+      offeredDreamsigns: [selectedDreamsign],
+      remainingDreamsignPool: [],
+      accepted: true,
+    });
+    expect(nextRoom?.questState?.visitedSites).toEqual(["site-1"]);
+    expect(nextRoom?.questState?.screen).toEqual({ type: "dreamscape" });
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "acceptDreamsignOffer",
+      source: "site_reveal",
+      summary: {
+        siteId: "site-1",
+        dreamsignId: "dreamsign-1",
+        dreamsignName: "Dreamsign One",
+        purgedDreamsignName: "Held 0",
+      },
+    });
+  });
+
+  it("skips duplicate dreamsign acceptance when runtime is already accepted", () => {
+    const captured: QuestContextValue[] = [];
+    const selectedDreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      siteRuntime: {
+        "site-1": {
+          kind: "dreamsignOffer",
+          offeredDreamsigns: [selectedDreamsign],
+          remainingDreamsignPool: [],
+          accepted: true,
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptDreamsignOffer(
+      "site-1",
+      selectedDreamsign,
+    );
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
   });
 
   it("completes a site through a room transaction", () => {

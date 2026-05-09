@@ -62,9 +62,8 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
 
   const handlePurge = useCallback(
     (index: number) => {
-      mutations.removeDreamsign(index, "purged_for_new_dreamsign");
       if (pendingDreamsign) {
-        mutations.acceptDreamsignOffer(site.id, pendingDreamsign);
+        mutations.acceptDreamsignOffer(site.id, pendingDreamsign, index);
       }
       setPurging(false);
       setPendingDreamsign(null);

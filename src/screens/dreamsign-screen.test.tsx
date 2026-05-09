@@ -261,13 +261,11 @@ describe("DreamsignOfferingScreen", () => {
     clickButton(container, "Accept");
     clickButton(container, "Held Sign 0");
 
-    expect(mutations.removeDreamsign).toHaveBeenCalledWith(
-      0,
-      "purged_for_new_dreamsign",
-    );
+    expect(mutations.removeDreamsign).not.toHaveBeenCalled();
     expect(mutations.acceptDreamsignOffer).toHaveBeenCalledWith(
       "site-1",
       expect.objectContaining({ name: "Ember's Whisper" }),
+      0,
     );
 
     act(() => {
