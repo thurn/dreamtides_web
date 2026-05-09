@@ -5,13 +5,15 @@ import type { Database } from "firebase/database";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestContent } from "../data/quest-content";
-import type { RoomSession } from "../multiplayer/room-types";
+import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
+import type { DreamcallerContent } from "../types/content";
 import type { QuestState } from "../types/quest";
 import { useQuest, type QuestContextValue } from "./quest-context";
 import { createDefaultState } from "./quest-context";
 import { MultiplayerQuestProvider } from "./multiplayer-quest-context";
 
 const roomServiceMocks = vi.hoisted(() => ({
+  runRoomTransaction: vi.fn(),
   writeRoomUpdate: vi.fn(),
 }));
 
@@ -30,6 +32,7 @@ const loggingMocks = vi.hoisted(() => ({
 }));
 
 vi.mock("../multiplayer/room-service", () => ({
+  runRoomTransaction: roomServiceMocks.runRoomTransaction,
   writeRoomUpdate: roomServiceMocks.writeRoomUpdate,
 }));
 
@@ -50,6 +53,18 @@ vi.mock("../logging", () => ({
 
 const database = { app: { name: "test-app" } } as Database;
 const roots: Root[] = [];
+const originalCrypto = globalThis.crypto;
+
+const testDreamcaller: DreamcallerContent = {
+  id: "caller-1",
+  name: "Mira of Lanterns",
+  title: "Keeper of the Threshold Flame",
+  awakening: 4,
+  renderedText: "First dreamcaller.",
+  imageNumber: "0009",
+  mandatoryTides: ["materialize_value"],
+  optionalTides: ["spirit_growth"],
+};
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -71,9 +86,29 @@ function makeQuestContent(): QuestContent {
   return {
     cardDatabase: new Map(),
     cardsByPackageTide: new Map(),
-    dreamcallers: [],
+    dreamcallers: [testDreamcaller],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map(),
+    resolvedPackagesByDreamcallerId: new Map([
+      [
+        testDreamcaller.id,
+        {
+          dreamcaller: testDreamcaller,
+          mandatoryTides: [...testDreamcaller.mandatoryTides],
+          optionalSubset: [...testDreamcaller.optionalTides],
+          selectedTides: [
+            ...testDreamcaller.mandatoryTides,
+            ...testDreamcaller.optionalTides,
+          ],
+          draftPoolCopiesByCard: {},
+          dreamsignPoolIds: ["dreamsign-1"],
+          mandatoryOnlyPoolSize: 0,
+          draftPoolSize: 0,
+          doubledCardCount: 0,
+          legalSubsetCount: 1,
+          preferredSubsetCount: 1,
+        },
+      ],
+    ]),
   };
 }
 
@@ -121,8 +156,21 @@ function CaptureQuest({
 }
 
 describe("MultiplayerQuestProvider", () => {
+  let actionIdCounter = 0;
+
   beforeEach(() => {
     roomServiceMocks.writeRoomUpdate.mockResolvedValue(undefined);
+    roomServiceMocks.runRoomTransaction.mockResolvedValue(undefined);
+    actionIdCounter = 0;
+    Object.defineProperty(globalThis, "crypto", {
+      configurable: true,
+      value: {
+        randomUUID: vi.fn(() => {
+          actionIdCounter += 1;
+          return `action-${String(actionIdCounter)}`;
+        }),
+      },
+    });
   });
 
   afterEach(() => {
@@ -132,6 +180,10 @@ describe("MultiplayerQuestProvider", () => {
       });
     }
     document.body.innerHTML = "";
+    Object.defineProperty(globalThis, "crypto", {
+      configurable: true,
+      value: originalCrypto,
+    });
     vi.clearAllMocks();
   });
 
@@ -277,5 +329,115 @@ describe("MultiplayerQuestProvider", () => {
         "rooms/ab12cd/questState": createDefaultState(),
       }),
     );
+  });
+
+  it("starts a quest through a room transaction", () => {
+    const captured: QuestContextValue[] = [];
+    const session = makeSession(createDefaultState());
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.startQuest(testDreamcaller);
+
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledWith(
+      database,
+      "ab12cd",
+      expect.any(Function),
+    );
+
+    const updater = roomServiceMocks.runRoomTransaction.mock.calls[0]?.[2] as
+      | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
+      | undefined;
+    const nextRoom = updater?.(session.room);
+
+    expect(nextRoom?.questState?.dreamcaller?.id).toBe(testDreamcaller.id);
+    expect(nextRoom?.questState?.draftState).toEqual(expect.any(Object));
+    expect(nextRoom?.questState?.atlas).toEqual(expect.any(Object));
+    expect(nextRoom?.metadata.updatedAt).toEqual(expect.any(String));
+    expect(nextRoom?.metadata.updatedAt).not.toBe(
+      "2026-05-08T12:00:00.000Z",
+    );
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "startQuest",
+      source: "quest_start",
+      summary: {
+        dreamcallerId: testDreamcaller.id,
+        dreamcallerName: testDreamcaller.name,
+      },
+    });
+  });
+
+  it("completes a site through a room transaction", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      atlas: {
+        nodes: {
+          "node-1": {
+            id: "node-1",
+            biomeName: "Candle Mire",
+            biomeColor: "#abcdef",
+            sites: [
+              {
+                id: "site-1",
+                type: "Draft",
+                isEnhanced: false,
+                isVisited: false,
+              },
+            ],
+            position: { x: 0, y: 0 },
+            status: "available",
+            enhancedSiteType: null,
+          },
+        },
+        edges: [],
+        nexusId: "node-1",
+      },
+      screen: { type: "site", siteId: "site-1" },
+      activeSiteId: "site-1",
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.completeSite("site-1", "draft");
+
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+
+    const updater = roomServiceMocks.runRoomTransaction.mock.calls[0]?.[2] as
+      | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
+      | undefined;
+    const nextRoom = updater?.(session.room);
+
+    expect(nextRoom?.questState?.visitedSites).toEqual(["site-1"]);
+    expect(
+      nextRoom?.questState?.atlas.nodes["node-1"]?.sites[0]?.isVisited,
+    ).toBe(true);
+    expect(nextRoom?.questState?.screen).toEqual({ type: "dreamscape" });
+    expect(nextRoom?.questState?.activeSiteId).toBeNull();
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "completeSite",
+      source: "draft",
+      summary: { siteId: "site-1" },
+    });
   });
 });

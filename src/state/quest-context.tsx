@@ -290,7 +290,8 @@ export function QuestProvider({
     [questContent],
   );
 
-  const completeSite = useCallback((siteId: string, _source: string) => {
+  const completeSite = useCallback((siteId: string, source: string) => {
+    logEvent("site_completed", { siteId, source });
     setState((prev) =>
       setQuestScreen(completeQuestSite(prev, siteId), { type: "dreamscape" }),
     );

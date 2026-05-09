@@ -4,7 +4,6 @@ import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import { dreamcallerTidesForDisplay } from "../data/structural-tides";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
-import { bootstrapQuestStart } from "./quest-start-bootstrap";
 import type { DreamcallerContent } from "../types/content";
 
 const DREAMCALLER_ACCENT = "#c084fc";
@@ -15,7 +14,7 @@ const TIDES_LABEL_HOVER_BLURB =
 
 /** Intro screen where the player picks a dreamcaller to start the quest. */
 export function QuestStartScreen() {
-  const { state, mutations, cardDatabase, questContent } = useQuest();
+  const { mutations, questContent } = useQuest();
 
   const offeredRef = useRef<DreamcallerContent[] | null>(null);
   if (offeredRef.current === null) {
@@ -25,29 +24,9 @@ export function QuestStartScreen() {
 
   const handlePickDreamcaller = useCallback(
     (dreamcaller: DreamcallerContent) => {
-      bootstrapQuestStart({
-        dreamcaller,
-        state: {
-          completionLevel: state.completionLevel,
-          deck: state.deck,
-          dreamsigns: state.dreamsigns,
-          essence: state.essence,
-        },
-        mutations,
-        cardDatabase,
-        questContent,
-      });
+      mutations.startQuest(dreamcaller);
     },
-    [
-      state.completionLevel,
-      state.deck,
-      state.dreamsigns,
-      state.essence,
-      mutations,
-      cardDatabase,
-      questContent.dreamsignTemplates,
-      questContent.resolvedPackagesByDreamcallerId,
-    ],
+    [mutations],
   );
 
   return (

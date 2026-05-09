@@ -8,14 +8,17 @@ import {
 import { resetBattleCompletionBridge } from "../battle/integration/battle-completion-bridge";
 import type { QuestContent } from "../data/quest-content";
 import { resetLog } from "../logging";
-import { writeRoomUpdate } from "../multiplayer/room-service";
+import {
+  runRoomTransaction,
+  writeRoomUpdate,
+} from "../multiplayer/room-service";
 import {
   buildQuestFieldUpdate,
   metadataUpdatedAtPath,
   questStatePath,
   type FirebaseUpdateMap,
 } from "../multiplayer/room-paths";
-import type { RoomSession } from "../multiplayer/room-types";
+import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { DreamcallerContent } from "../types/content";
 import type {
   CardSourceDebugState,
@@ -59,6 +62,20 @@ function writeUpdate(
   updateMap: FirebaseUpdateMap,
 ): void {
   void writeRoomUpdate(database, updateMap).catch((error: unknown) => {
+    console.error("Failed to write multiplayer quest update", error);
+  });
+}
+
+function writeRoomTransaction({
+  database,
+  roomId,
+  updater,
+}: {
+  database: Database;
+  roomId: string;
+  updater: (room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined;
+}): void {
+  void runRoomTransaction(database, roomId, updater).catch((error: unknown) => {
     console.error("Failed to write multiplayer quest update", error);
   });
 }
@@ -169,15 +186,48 @@ export function MultiplayerQuestProvider({
   const startQuest = useCallback(
     (dreamcaller: DreamcallerContent) => {
       const current = currentRef.current;
-      const next = startQuestFromDreamcaller({
-        prev: current.state,
-        dreamcaller,
-        questContent: current.questContent,
-      });
-      writeWholeQuestState({
+      writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
-        state: next,
+        updater: (room) => {
+          if (
+            room === null ||
+            (room.questState !== null && room.questState.dreamcaller !== null)
+          ) {
+            return room ?? undefined;
+          }
+
+          const questState = room.questState ?? createDefaultState();
+          const next = startQuestFromDreamcaller({
+            prev: questState,
+            dreamcaller,
+            questContent: current.questContent,
+          });
+          const now = new Date().toISOString();
+          const actionId = crypto.randomUUID();
+
+          return {
+            ...room,
+            questState: next,
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: {
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "startQuest",
+                source: "quest_start",
+                summary: {
+                  dreamcallerId: dreamcaller.id,
+                  dreamcallerName: dreamcaller.name,
+                },
+              },
+            },
+          };
+        },
       });
     },
     [],
@@ -370,37 +420,48 @@ export function MultiplayerQuestProvider({
   );
 
   const completeSite = useCallback(
-    (siteId: string, _source: string) => {
+    (siteId: string, source: string) => {
       const current = currentRef.current;
-      const next = setQuestScreen(completeQuestSite(current.state, siteId), {
-        type: "dreamscape",
-      });
-      const updatedAt = new Date().toISOString();
-      writeUpdate(current.database, {
-        ...buildQuestFieldUpdate(
-          current.session.roomId,
-          "visitedSites",
-          next.visitedSites,
-          updatedAt,
-        ),
-        ...buildQuestFieldUpdate(
-          current.session.roomId,
-          "atlas",
-          next.atlas,
-          updatedAt,
-        ),
-        ...buildQuestFieldUpdate(
-          current.session.roomId,
-          "screen",
-          next.screen,
-          updatedAt,
-        ),
-        ...buildQuestFieldUpdate(
-          current.session.roomId,
-          "activeSiteId",
-          next.activeSiteId,
-          updatedAt,
-        ),
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+
+          const next = setQuestScreen(
+            completeQuestSite(room.questState, siteId),
+            { type: "dreamscape" },
+          );
+          const now = new Date().toISOString();
+          const actionId = crypto.randomUUID();
+
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              visitedSites: next.visitedSites,
+              atlas: next.atlas,
+              screen: next.screen,
+              activeSiteId: next.activeSiteId,
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: {
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "completeSite",
+                source,
+                summary: { siteId },
+              },
+            },
+          };
+        },
       });
     },
     [],

@@ -11,7 +11,6 @@ import type { QuestState } from "../types/quest";
 import { QuestStartScreen } from "./QuestStartScreen";
 import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
-import { bootstrapQuestStart } from "./quest-start-bootstrap";
 
 const TIDES_LABEL_HOVER_BLURB =
   "The tidal pools are shuffled together to build the final draft pool.";
@@ -94,10 +93,6 @@ vi.mock("../data/dreamcaller-selection", () => ({
   selectDreamcallerOffer: vi.fn(),
 }));
 
-vi.mock("./quest-start-bootstrap", () => ({
-  bootstrapQuestStart: vi.fn(),
-}));
-
 const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
   {
     id: "caller-1",
@@ -130,6 +125,8 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     optionalTides: ["trigger_reuse", "character_chain", "void_setup"],
   },
 ] as const;
+
+let currentMutations: QuestMutations;
 
 const DISPLAYED_TIDES = [
   {
@@ -294,9 +291,10 @@ function makeState(): QuestState {
 }
 
 function setQuestContext(): void {
+  currentMutations = makeMutations();
   vi.mocked(useQuest).mockReturnValue({
     state: makeState(),
-    mutations: makeMutations(),
+    mutations: currentMutations,
     cardDatabase: new Map<number, CardData>(),
     questContent: {
       cardDatabase: new Map(),
@@ -445,10 +443,8 @@ describe("QuestStartScreen", () => {
       );
     });
 
-    expect(bootstrapQuestStart).toHaveBeenCalledWith(
-      expect.objectContaining({
-        dreamcaller: OFFERED_DREAMCALLERS[1],
-      }),
+    expect(currentMutations.startQuest).toHaveBeenCalledWith(
+      OFFERED_DREAMCALLERS[1],
     );
 
     act(() => {
