@@ -759,6 +759,73 @@ describe("MultiplayerQuestProvider", () => {
     expect(updater?.(nextRoom ?? null)).toBe(nextRoom);
   });
 
+  it("rejects stale shared shop purchases after the slot changes", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 250,
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    const committedRoom: MultiplayerRoom = {
+      ...session.room,
+      questState: {
+        ...questState,
+        siteRuntime: {
+          "site-1": {
+            kind: "shop",
+            slots: [
+              {
+                itemType: "card",
+                cardNumber: 102,
+                basePrice: 100,
+                discountPercent: 0,
+                purchased: false,
+              },
+            ],
+            rerollCount: 1,
+            remainingDreamsignPoolIds: [],
+          },
+        },
+      },
+    };
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={{
+          ...makeQuestContent(),
+          cardDatabase: new Map([
+            [101, makeCard(101)],
+            [102, makeCard(102)],
+          ]),
+        }}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
+
+    expect(latestRoomTransactionUpdater()?.(committedRoom)).toBe(committedRoom);
+    expect(committedRoom.actionLog).toEqual({});
+  });
+
   it("rejects unaffordable shared shop purchases", () => {
     const captured: QuestContextValue[] = [];
     const questState: QuestState = {
@@ -772,6 +839,194 @@ describe("MultiplayerQuestProvider", () => {
               itemType: "card",
               cardNumber: 101,
               basePrice: 100,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
+  it("rejects shared shop purchases after the site is visited", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 250,
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    const visitedRoom: MultiplayerRoom = {
+      ...session.room,
+      questState: {
+        ...questState,
+        visitedSites: ["site-1"],
+      },
+    };
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
+
+    expect(latestRoomTransactionUpdater()?.(visitedRoom)).toBe(visitedRoom);
+  });
+
+  it("buys a free shared shop card slot without changing essence", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 0,
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 0,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+
+    expect(nextRoom?.questState?.essence).toBe(0);
+    expect(nextRoom?.questState?.deck).toEqual([
+      {
+        entryId: "deck-1",
+        cardNumber: 101,
+        transfiguration: null,
+        isBane: false,
+      },
+    ]);
+  });
+
+  it("buys a shared shop Dreamsign slot", () => {
+    const captured: QuestContextValue[] = [];
+    const dreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 250,
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "dreamsign",
+              dreamsign,
+              basePrice: 150,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+
+    expect(nextRoom?.questState?.essence).toBe(100);
+    expect(nextRoom?.questState?.dreamsigns).toEqual([dreamsign]);
+    expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
+      kind: "shop",
+      slots: [
+        {
+          itemType: "dreamsign",
+          dreamsign,
+          basePrice: 150,
+          discountPercent: 0,
+          purchased: true,
+        },
+      ],
+      rerollCount: 0,
+      remainingDreamsignPoolIds: [],
+    });
+  });
+
+  it("rejects shared shop Dreamsign purchases at capacity", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 250,
+      dreamsigns: Array.from({ length: 12 }, (_, index) =>
+        makeDreamsign(`held-${String(index)}`, `Held ${String(index)}`),
+      ),
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "dreamsign",
+              dreamsign: makeDreamsign("dreamsign-1", "Dreamsign One"),
+              basePrice: 150,
               discountPercent: 0,
               purchased: false,
             },
@@ -894,6 +1149,64 @@ describe("MultiplayerQuestProvider", () => {
     });
 
     randomSpy.mockRestore();
+  });
+
+  it("rejects shared shop rerolls after the site is visited", () => {
+    const captured: QuestContextValue[] = [];
+    const site: SiteState = {
+      id: "site-1",
+      type: "Shop",
+      isEnhanced: false,
+      isVisited: false,
+    };
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 200,
+      remainingDreamsignPool: [],
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "reroll",
+              basePrice: 50,
+              discountPercent: 0,
+              purchased: false,
+            },
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    const visitedRoom: MultiplayerRoom = {
+      ...session.room,
+      questState: {
+        ...questState,
+        visitedSites: ["site-1"],
+      },
+    };
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.rerollShop(site, 0);
+
+    expect(latestRoomTransactionUpdater()?.(visitedRoom)).toBe(visitedRoom);
   });
 
   it("skips reveal candidates for existing runtime or stale committed pool", () => {

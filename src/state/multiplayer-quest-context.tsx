@@ -211,6 +211,32 @@ function runtimeShopSlotsEqual(
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
+function runtimeShopSlotEqual(
+  left: RuntimeShopSlot | undefined,
+  right: RuntimeShopSlot | undefined,
+): boolean {
+  if (
+    left === undefined ||
+    right === undefined ||
+    left.itemType !== right.itemType ||
+    left.basePrice !== right.basePrice ||
+    left.discountPercent !== right.discountPercent ||
+    left.purchased !== right.purchased
+  ) {
+    return false;
+  }
+
+  if (left.itemType === "card" && right.itemType === "card") {
+    return left.cardNumber === right.cardNumber;
+  }
+
+  if (left.itemType === "dreamsign" && right.itemType === "dreamsign") {
+    return dreamsignMatches(left.dreamsign, right.dreamsign);
+  }
+
+  return left.itemType === "reroll" && right.itemType === "reroll";
+}
+
 function completeSiteAndReturnToDreamscape(
   state: QuestState,
   siteId: string,
@@ -1219,6 +1245,23 @@ export function MultiplayerQuestProvider({
 
   const buyShopSlot = useCallback((siteId: string, slotIndex: number) => {
     const current = currentRef.current;
+    const expectedRuntime = current.state.siteRuntime[siteId];
+    if (
+      expectedRuntime === undefined ||
+      expectedRuntime.kind !== "shop" ||
+      current.state.visitedSites.includes(siteId)
+    ) {
+      return;
+    }
+    const expectedSlot = expectedRuntime.slots[slotIndex];
+    if (
+      expectedSlot === undefined ||
+      expectedSlot.purchased ||
+      expectedSlot.itemType === "reroll"
+    ) {
+      return;
+    }
+
     const now = new Date().toISOString();
     const actionId = crypto.randomUUID();
 
@@ -1229,8 +1272,20 @@ export function MultiplayerQuestProvider({
         if (room === null || room.questState === null) {
           return room ?? undefined;
         }
+        if (room.questState.visitedSites.includes(siteId)) {
+          return room;
+        }
         const runtime = room.questState.siteRuntime[siteId];
-        if (runtime === undefined || runtime.kind !== "shop") {
+        if (
+          runtime === undefined ||
+          runtime.kind !== "shop" ||
+          runtime.rerollCount !== expectedRuntime.rerollCount ||
+          !arraysEqual(
+            runtime.remainingDreamsignPoolIds,
+            expectedRuntime.remainingDreamsignPoolIds,
+          ) ||
+          !runtimeShopSlotEqual(runtime.slots[slotIndex], expectedSlot)
+        ) {
           return room;
         }
         const slot = runtime.slots[slotIndex];
@@ -1328,7 +1383,11 @@ export function MultiplayerQuestProvider({
   const rerollShop = useCallback((site: SiteState, slotIndex: number) => {
     const current = currentRef.current;
     const expectedRuntime = current.state.siteRuntime[site.id];
-    if (expectedRuntime === undefined || expectedRuntime.kind !== "shop") {
+    if (
+      expectedRuntime === undefined ||
+      expectedRuntime.kind !== "shop" ||
+      current.state.visitedSites.includes(site.id)
+    ) {
       return;
     }
     const expectedSlot = expectedRuntime.slots[slotIndex];
@@ -1387,6 +1446,9 @@ export function MultiplayerQuestProvider({
       updater: (room) => {
         if (room === null || room.questState === null) {
           return room ?? undefined;
+        }
+        if (room.questState.visitedSites.includes(site.id)) {
+          return room;
         }
         const runtime = room.questState.siteRuntime[site.id];
         if (

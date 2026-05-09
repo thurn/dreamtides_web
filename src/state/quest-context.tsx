@@ -820,6 +820,9 @@ export function QuestProvider({
   const buyShopSlot = useCallback(
     (siteId: string, slotIndex: number) => {
       setState((prev) => {
+        if (prev.visitedSites.includes(siteId)) {
+          return prev;
+        }
         const runtime = prev.siteRuntime[siteId];
         if (runtime === undefined || runtime.kind !== "shop") {
           return prev;
@@ -933,6 +936,9 @@ export function QuestProvider({
   const rerollShop = useCallback(
     (site: SiteState, slotIndex: number) => {
       setState((prev) => {
+        if (prev.visitedSites.includes(site.id)) {
+          return prev;
+        }
         const runtime = prev.siteRuntime[site.id];
         if (runtime === undefined || runtime.kind !== "shop") {
           return prev;
