@@ -175,6 +175,7 @@ function makeSession(questState: QuestState | null): RoomSession {
         updatedAt: "2026-05-08T12:00:00.000Z",
       },
       questState,
+      battleState: null,
       presence: {},
       actionLog: {},
     },

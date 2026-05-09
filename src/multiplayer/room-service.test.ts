@@ -80,11 +80,12 @@ describe("room service", () => {
   it("builds an empty room record with schema metadata", () => {
     expect(createRoomRecord(timestamp)).toEqual({
       metadata: {
-        schemaVersion: 1,
+        schemaVersion: 2,
         createdAt: timestamp,
         updatedAt: timestamp,
       },
       questState: null,
+      battleState: null,
       presence: {},
       actionLog: {},
     });
@@ -146,6 +147,7 @@ describe("room service", () => {
       room: {
         metadata: room.metadata,
         questState: null,
+        battleState: null,
         presence: {},
         actionLog: {},
       },
@@ -354,6 +356,7 @@ describe("room service", () => {
     expect(updater).toHaveBeenCalledWith({
       metadata: stripped.metadata,
       questState: null,
+      battleState: null,
       presence: {},
       actionLog: {},
     });

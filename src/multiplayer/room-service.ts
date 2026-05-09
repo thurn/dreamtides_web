@@ -97,6 +97,7 @@ function normalizeRoomSnapshot(room: MultiplayerRoom): MultiplayerRoom {
   return {
     ...room,
     questState: normalizeQuestState(room.questState),
+    battleState: room.battleState ?? null,
     presence: room.presence ?? {},
     actionLog: room.actionLog ?? {},
   };
@@ -112,6 +113,7 @@ export function createRoomRecord(nowIso: string = new Date().toISOString()): Mul
   return {
     metadata,
     questState: null,
+    battleState: null,
     presence: {},
     actionLog: {},
   };

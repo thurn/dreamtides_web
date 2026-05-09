@@ -40,6 +40,7 @@ vi.mock("./multiplayer/MultiplayerRoomGate", () => ({
           updatedAt: "2026-05-08T00:00:00.000Z",
         },
         questState: null,
+        battleState: null,
         presence: {
           "client-test": {
             connected: true,

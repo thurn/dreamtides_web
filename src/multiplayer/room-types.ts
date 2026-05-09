@@ -1,6 +1,7 @@
 import type { QuestState } from "../types/quest";
+import type { SharedBattleState } from "./battle-types";
 
-export const ROOM_SCHEMA_VERSION = 1;
+export const ROOM_SCHEMA_VERSION = 2;
 export const ACTION_LOG_LIMIT = 50;
 
 export interface RoomMetadata {
@@ -25,6 +26,7 @@ export interface ActionLogEntry {
 export interface MultiplayerRoom {
   metadata: RoomMetadata;
   questState: QuestState | null;
+  battleState: SharedBattleState | null;
   presence?: Record<string, PresenceEntry>;
   actionLog?: Record<string, ActionLogEntry>;
 }
