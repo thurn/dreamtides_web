@@ -3,6 +3,7 @@ import { useQuest } from "../state/quest-context";
 import { downloadLog } from "../logging";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { DreamcallerPopover } from "./DreamcallerPopover";
+import { HudDreamsignRow } from "./HudDreamsignRow";
 
 /** Duration in ms for the essence count animation. */
 const ESSENCE_ANIM_DURATION = 500;
@@ -191,21 +192,10 @@ export function HUD({
           )}
         </div>
 
-        {/* Dreamsign count */}
-        <div className="flex shrink-0 items-center gap-1.5">
-          <span
-            className="text-sm opacity-70 md:text-base"
-            aria-label="Dreamsigns"
-          >
-            {"\u2728"}
-          </span>
-          <span className="text-sm font-bold md:text-base">
-            {String(state.dreamsigns.length)}
-          </span>
-          <span className="hidden text-xs opacity-50 xl:inline">
-            {state.dreamsigns.length === 1 ? "Dreamsign" : "Dreamsigns"}
-          </span>
-        </div>
+        {/* Dreamsign row \u2014 one art thumbnail per owned dreamsign, hover for full
+            card. Renders nothing when the player has no dreamsigns so the HUD
+            does not reserve width for an empty list. */}
+        <HudDreamsignRow dreamsigns={state.dreamsigns} />
       </div>
 
       {/* Center: completion level (FIND-01-13: labelled so "0/7" is not ambiguous). */}

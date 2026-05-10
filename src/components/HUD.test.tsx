@@ -167,41 +167,36 @@ describe("HUD", () => {
     );
   }
 
-  it("labels an empty Dreamsign pool with the plural 'Dreamsigns'", () => {
+  it("renders no dreamsign row and no 'Signs' label when the pool is empty", () => {
     setQuestContext(makeState([]));
     const { container, root } = renderHud();
 
-    const label = container.querySelector('[aria-label="Dreamsigns"]');
-    expect(label).not.toBeNull();
-    expect(container.textContent).toContain("Dreamsigns");
-    expect(container.textContent).not.toMatch(/\bSigns\b/);
-    expect(container.textContent).not.toMatch(/\b0 Signs\b/);
+    expect(container.querySelector('[data-testid="hud-dreamsign-row"]')).toBeNull();
+    // Belt-and-braces: the obsolete "0 Signs" / "Dreamsign" counter copy
+    // must not creep back into the HUD when the player owns none.
+    expect(container.textContent).not.toMatch(/\bSigns?\b/);
+    expect(container.textContent).not.toContain("Dreamsign");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("uses the singular 'Dreamsign' when exactly one is held", () => {
-    setQuestContext(makeState([makeDreamsign("Night's Mark")]));
-    const { container, root } = renderHud();
-
-    expect(container.textContent).toContain("Dreamsign");
-    expect(container.textContent).not.toContain("Dreamsigns");
-    expect(container.textContent).not.toMatch(/\bSigns?\b(?!.*Mark)/);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("uses the plural 'Dreamsigns' for two or more", () => {
+  it("renders one dreamsign tile per owned dreamsign without text counter", () => {
     setQuestContext(
       makeState([makeDreamsign("Night's Mark"), makeDreamsign("Ashen Debt")]),
     );
     const { container, root } = renderHud();
 
-    expect(container.textContent).toContain("Dreamsigns");
+    const row = container.querySelector('[data-testid="hud-dreamsign-row"]');
+    expect(row).not.toBeNull();
+    const tiles = container.querySelectorAll('[data-testid="hud-dreamsign-icon"]');
+    expect(tiles.length).toBe(2);
+    // The textual "Dreamsigns" / "Signs" / count copy is gone in favor of
+    // the icon row. The dreamsign names only appear as aria labels on the
+    // tiles, not as visible HUD text, so a strict search must not find a
+    // counter word.
+    expect(container.textContent).not.toMatch(/\bSigns?\b/);
 
     act(() => {
       root.unmount();
