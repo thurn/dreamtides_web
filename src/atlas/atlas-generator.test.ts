@@ -161,6 +161,55 @@ describe("generateSiteComposition", () => {
     }
     expect(foundCleanse).toBe(true);
   });
+
+  it("first dreamscape always has exactly 2x Draft, 1x DreamsignDraft, 1x DreamJourney, 1x Battle regardless of seed", () => {
+    const seeds = [0, 0.123, 0.337, 0.5, 0.728, 0.999];
+    for (const seed of seeds) {
+      resetAtlasGenerator();
+      let counter = seed;
+      const randomSpy = vi.spyOn(Math, "random").mockImplementation(() => {
+        counter = (counter * 9301 + 49297) % 233280;
+        return counter / 233280;
+      });
+      try {
+        const sites = generateSiteComposition(0, true, defaultContext());
+        expect(sites).toHaveLength(5);
+        const counts: Record<string, number> = {};
+        for (const site of sites) {
+          counts[site.type] = (counts[site.type] ?? 0) + 1;
+        }
+        expect(counts).toEqual({
+          Draft: 2,
+          DreamsignDraft: 1,
+          DreamJourney: 1,
+          Battle: 1,
+        });
+        expect(sites[sites.length - 1].type).toBe("Battle");
+      } finally {
+        randomSpy.mockRestore();
+      }
+    }
+  });
+
+  it("first dreamscape composition is independent of completionLevel and banes", () => {
+    for (const level of [0, 1, 2, 3, 4, 5, 7]) {
+      for (const playerHasBanes of [false, true]) {
+        resetAtlasGenerator();
+        const sites = generateSiteComposition(
+          level,
+          true,
+          defaultContext({ playerHasBanes }),
+        );
+        expect(sites.map((s) => s.type)).toEqual([
+          "Draft",
+          "Draft",
+          "DreamsignDraft",
+          "DreamJourney",
+          "Battle",
+        ]);
+      }
+    }
+  });
 });
 
 describe("generateInitialAtlas", () => {

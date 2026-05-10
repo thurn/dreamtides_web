@@ -125,12 +125,35 @@ export function additionalSiteTypesForLevel(
   );
 }
 
+/**
+ * Fixed composition for the first dreamscape of a run. The opening encounter
+ * is hand-tuned for onboarding — drafts to seed the deck, a Dreamsign draft to
+ * introduce the sign mechanic, a Dream Journey to teach the world-effect
+ * cadence, and a Battle to close it out.
+ */
+const FIRST_DREAMSCAPE_SITE_TYPES: readonly SiteType[] = [
+  "Draft",
+  "Draft",
+  "DreamsignDraft",
+  "DreamJourney",
+  "Battle",
+];
+
 /** Generates the site composition for a dreamscape. Total: 3-6 sites. */
 export function generateSiteComposition(
   completionLevel: number,
-  _isFirstDreamscape: boolean,
+  isFirstDreamscape: boolean,
   context: SiteGenerationContext,
 ): SiteState[] {
+  if (isFirstDreamscape) {
+    return FIRST_DREAMSCAPE_SITE_TYPES.map((type) => ({
+      id: nextSiteId(),
+      type,
+      isEnhanced: false,
+      isVisited: false,
+    }));
+  }
+
   const sites: SiteState[] = [];
 
   // Draft sites based on completion level
