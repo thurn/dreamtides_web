@@ -77,7 +77,6 @@ export function SiteCard({
         border: `2px solid ${borderColor}`,
         background,
         opacity,
-        cursor: isInteractive ? "pointer" : "default",
       }}
       onClick={handleClick}
       disabled={!isInteractive}

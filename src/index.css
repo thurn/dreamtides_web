@@ -35,6 +35,23 @@ body {
   min-height: 100vh;
 }
 
+/*
+ * Default cursor styles for interactive controls. Tailwind v4 (Preflight)
+ * leaves `<button>` with the user-agent's auto cursor, which renders as an
+ * arrow in most browsers. Quest-prototype buttons are always meant to be
+ * clicked, so we promote them to the pointer cursor here. Disabled buttons
+ * get the `not-allowed` cursor so the affordance matches the visual
+ * disabled state. Individual components can still override either of these
+ * by setting `cursor:` inline or via a more specific Tailwind class.
+ */
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 @media (min-width: 1280px) {
   .draft-pack-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
