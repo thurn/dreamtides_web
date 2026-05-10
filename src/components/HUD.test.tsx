@@ -172,8 +172,8 @@ describe("HUD", () => {
     const { container, root } = renderHud();
 
     expect(container.querySelector('[data-testid="hud-dreamsign-row"]')).toBeNull();
-    // Belt-and-braces: the obsolete "0 Signs" / "Dreamsign" counter copy
-    // must not creep back into the HUD when the player owns none.
+    // Belt-and-braces: the HUD must not include "Signs" / "Dreamsign"
+    // counter text when the player owns no dreamsigns.
     expect(container.textContent).not.toMatch(/\bSigns?\b/);
     expect(container.textContent).not.toContain("Dreamsign");
 
