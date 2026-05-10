@@ -562,6 +562,68 @@ describe("QuestStartScreen", () => {
     }
   });
 
+  it("does not surface tide tags or names when hovering a Dreamcaller card", () => {
+    vi.useFakeTimers();
+    try {
+      const { container, root } = mount(<QuestStartScreen />);
+
+      const dreamcallerButtons = Array.from(
+        container.querySelectorAll("button"),
+      );
+      expect(dreamcallerButtons).toHaveLength(3);
+
+      for (const button of dreamcallerButtons) {
+        // The button (the visually-emphasized surface while hovering a
+        // Dreamcaller card) must not embed any tide chip, tide label,
+        // tide-info icon, or per-tide hover tooltip. Tide rows live in the
+        // static card body alongside the button, not inside it.
+        expect(
+          button.querySelectorAll("[data-dreamcaller-tide]"),
+        ).toHaveLength(0);
+        expect(
+          button.querySelectorAll("[data-dreamcaller-tide-tooltip]"),
+        ).toHaveLength(0);
+        expect(
+          button.querySelectorAll("[data-structural-tides-label]"),
+        ).toHaveLength(0);
+        expect(
+          button.querySelectorAll("[data-structural-tides-info-icon]"),
+        ).toHaveLength(0);
+        for (const tide of DISPLAYED_TIDES) {
+          expect(button.textContent).not.toContain(tide.displayName);
+        }
+      }
+
+      // Hovering a Dreamcaller card button must not portal any tide-related
+      // popover content into document.body. The only popover on this screen
+      // that portals to body is the (i) info icon's "tide pools will be
+      // shuffled" blurb, which is triggered by the icon, not the card.
+      const cardWrapper = dreamcallerButtons[0]?.parentElement;
+      expect(cardWrapper).not.toBeNull();
+      act(() => {
+        dreamcallerButtons[0]?.dispatchEvent(
+          new MouseEvent("mouseover", { bubbles: true }),
+        );
+      });
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+
+      // No portaled tides label tooltip should appear from a card hover.
+      expect(
+        document.body.querySelectorAll(
+          "[data-structural-tides-label-tooltip]",
+        ),
+      ).toHaveLength(0);
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("applies instant hover and tap transitions even with staggered entrance animation", () => {
     const { container, root } = mount(<QuestStartScreen />);
 
