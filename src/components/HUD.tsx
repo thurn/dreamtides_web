@@ -90,7 +90,8 @@ export function HUD({
       // dreamcaller subtitle truncate under pressure from the center
       // Battles counter. Switch to a 3-column grid so the left/center/right
       // sections do not shove each other at narrow viewports, and drop
-      // the dreamcaller subtitle below lg so it never collides with Signs.
+      // the dreamcaller subtitle below lg so it never collides with the
+      // Dreamsigns counter.
       className="fixed right-0 bottom-0 left-0 z-50 grid grid-cols-[1fr_auto_auto] items-center gap-3 px-3 py-2 md:gap-6 md:px-6"
       style={{
         background:
@@ -201,7 +202,9 @@ export function HUD({
           <span className="text-sm font-bold md:text-base">
             {String(state.dreamsigns.length)}
           </span>
-          <span className="hidden text-xs opacity-50 xl:inline">Signs</span>
+          <span className="hidden text-xs opacity-50 xl:inline">
+            {state.dreamsigns.length === 1 ? "Dreamsign" : "Dreamsigns"}
+          </span>
         </div>
       </div>
 

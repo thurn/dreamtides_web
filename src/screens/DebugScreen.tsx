@@ -133,11 +133,11 @@ export function DebugScreen({
                     value={String(packageDebugInfo.draftPoolSize)}
                   />
                   <StatBadge
-                    label="Signs Left"
+                    label="Dreamsigns Left"
                     value={String(packageDebugInfo.remainingDreamsigns.length)}
                   />
                   <StatBadge
-                    label="Signs Spent"
+                    label="Dreamsigns Spent"
                     value={String(packageDebugInfo.spentDreamsigns.length)}
                   />
                   {debugInfo !== null && (
