@@ -1056,4 +1056,225 @@ describe("DraftSiteScreen", () => {
       });
     },
   );
+
+  describe("Hearthstone-style deck rows", () => {
+    it("renders each row with the card art as a horizontal-cropped background", () => {
+      const mutations = makeMutations();
+      const cardDatabase = makeCardDatabase();
+      setQuestContext(makeState(), mutations, cardDatabase);
+
+      const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+      const row = container.querySelector<HTMLElement>(
+        "[data-testid='draft-deck-row-entry-1']",
+      );
+      expect(row).not.toBeNull();
+      const style = row?.getAttribute("style") ?? "";
+
+      // Background-image must be set and point at the card webp.
+      expect(style).toContain("background-image");
+      expect(style).toContain("/cards/1.webp");
+      // Cropped to a horizontal band via background-size: cover.
+      expect(style).toContain("background-size: cover");
+      // Background-position biased to the upper portion of the art so the
+      // focal point shows in the row band.
+      expect(style).toContain("background-position: center 25%");
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("renders the energy cost as a teal/cyan PipBadge on the left of the row", () => {
+      const mutations = makeMutations();
+      const cardDatabase = makeCardDatabase();
+      setQuestContext(makeState(), mutations, cardDatabase);
+
+      const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+      const row = container.querySelector<HTMLElement>(
+        "[data-testid='draft-deck-row-entry-1']",
+      );
+      expect(row).not.toBeNull();
+      const energyPip = row?.querySelector<HTMLElement>(
+        "[data-pip-variant='energy']",
+      );
+      expect(energyPip).not.toBeNull();
+      expect(energyPip?.textContent).toBe("1");
+
+      // Energy pip must appear before the name in document order, so it sits
+      // on the left of the row.
+      const spans = Array.from(
+        row?.querySelectorAll<HTMLElement>("span") ?? [],
+      );
+      const nameEl = spans.find(
+        (s) => s.textContent?.trim() === "Starter Lantern",
+      );
+      expect(nameEl).not.toBeNull();
+      if (nameEl && energyPip) {
+        expect(
+          energyPip.compareDocumentPosition(nameEl)
+            & Node.DOCUMENT_POSITION_FOLLOWING,
+        ).toBeGreaterThan(0);
+      }
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("renders the card name in white with a black text-shadow for legibility on art", () => {
+      const mutations = makeMutations();
+      const cardDatabase = makeCardDatabase();
+      setQuestContext(makeState(), mutations, cardDatabase);
+
+      const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+      const row = container.querySelector<HTMLElement>(
+        "[data-testid='draft-deck-row-entry-1']",
+      );
+      expect(row).not.toBeNull();
+      // The name span is the only descendant span carrying the card name.
+      const spans = Array.from(
+        row?.querySelectorAll<HTMLElement>("span") ?? [],
+      );
+      const nameSpan = spans.find(
+        (s) => s.textContent?.trim() === "Starter Lantern",
+      );
+      expect(nameSpan).not.toBeNull();
+      const nameStyle = nameSpan?.getAttribute("style") ?? "";
+      expect(nameStyle.toLowerCase()).toContain("color: rgb(255, 255, 255)");
+      expect(nameStyle.toLowerCase()).toContain("text-shadow");
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("omits the duplicate-count badge for singletons", () => {
+      const mutations = makeMutations();
+      const cardDatabase = makeCardDatabase();
+      setQuestContext(makeState(), mutations, cardDatabase);
+
+      const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+      // The starter Lantern deck has a single copy — no count badge.
+      expect(
+        container.querySelector("[data-testid='draft-deck-row-count-1']"),
+      ).toBeNull();
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("collapses duplicate cards into a single row with an Nx count on the right", () => {
+      const mutations = makeMutations();
+      const cardDatabase = makeCardDatabase();
+      // Two copies of cardNumber 101 (Arc Runner) plus one starter.
+      setQuestContext(
+        makeState({
+          deck: [
+            {
+              entryId: "entry-1",
+              cardNumber: 1,
+              transfiguration: null,
+              isBane: false,
+            },
+            {
+              entryId: "entry-2",
+              cardNumber: 101,
+              transfiguration: null,
+              isBane: false,
+            },
+            {
+              entryId: "entry-3",
+              cardNumber: 101,
+              transfiguration: null,
+              isBane: false,
+            },
+          ],
+        }),
+        mutations,
+        cardDatabase,
+      );
+
+      const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+      // Exactly one row for Arc Runner, with the count badge showing "2x".
+      const arcRunnerRows = container.querySelectorAll(
+        "[data-card-number='101']",
+      );
+      expect(arcRunnerRows).toHaveLength(1);
+      const countBadge = container.querySelector(
+        "[data-testid='draft-deck-row-count-101']",
+      );
+      expect(countBadge).not.toBeNull();
+      expect(countBadge?.textContent).toBe("2x");
+
+      // Total rows = unique cards = 2 (Starter Lantern + Arc Runner).
+      const allRows = container.querySelectorAll(
+        "[data-testid='draft-deck-rows'] [data-card-number]",
+      );
+      expect(allRows).toHaveLength(2);
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("sorts rows by energy cost ascending, then by name", () => {
+      const mutations = makeMutations();
+      const cardDatabase = makeCardDatabase();
+      setQuestContext(
+        makeState({
+          deck: [
+            {
+              entryId: "entry-2",
+              cardNumber: 104,
+              transfiguration: null,
+              isBane: false,
+            },
+            {
+              entryId: "entry-1",
+              cardNumber: 102,
+              transfiguration: null,
+              isBane: false,
+            },
+            {
+              entryId: "entry-3",
+              cardNumber: 1,
+              transfiguration: null,
+              isBane: false,
+            },
+            {
+              entryId: "entry-4",
+              cardNumber: 101,
+              transfiguration: null,
+              isBane: false,
+            },
+          ],
+        }),
+        mutations,
+        cardDatabase,
+      );
+
+      const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+      const rows = Array.from(
+        container.querySelectorAll<HTMLElement>(
+          "[data-testid='draft-deck-rows'] [data-card-number]",
+        ),
+      );
+      const orderedCardNumbers = rows.map(
+        (row) => row.getAttribute("data-card-number") ?? "",
+      );
+      // Costs: 1->1, 101->2, 102->3, 104->5. Ascending by cost.
+      expect(orderedCardNumbers).toEqual(["1", "101", "102", "104"]);
+
+      act(() => {
+        root.unmount();
+      });
+    });
+  });
 });

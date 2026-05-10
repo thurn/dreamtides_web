@@ -4,6 +4,7 @@ import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
 import { HoverPopover } from "../components/HoverPopover";
+import { PipBadge } from "../components/PipBadge";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
@@ -131,6 +132,41 @@ function DraftSummary({
   );
 }
 
+/**
+ * Hearthstone-style deck row. The row is a horizontal rectangle that uses
+ * the card's art as its background — cropped to a wide strip that focuses on
+ * the upper portion of the art (where character faces and event focal points
+ * tend to live). Energy cost sits on the left as the shared `<PipBadge>`,
+ * the name overlays the art in white with a thick text-shadow so it stays
+ * legible across varied art, and duplicate count sits on the right (omitted
+ * for singletons to keep the row clean).
+ *
+ * Designed to be scanned by art rather than read by name — a player who
+ * recognizes the art can identify the card without parsing the text.
+ */
+const DECK_ROW_HEIGHT_PX = 36;
+/**
+ * Background-position-y in % for `background-size: cover`. 25% biases the
+ * crop band toward the upper third of the art, which is where character
+ * faces and focal points usually live on the 3:4 portraits. Tunable as a
+ * per-card override later if specific cards need it; for now a single value
+ * works because the art was rendered consistently.
+ */
+const DECK_ROW_ART_FOCAL_Y = "25%";
+
+/** Stable identifier for a deck row — one row per unique card. */
+interface DeckRow {
+  cardNumber: number;
+  card: CardData;
+  count: number;
+  /**
+   * Entry ids of every deck entry that resolves to this row's card, in
+   * insertion order. Used by the post-pick highlight to flash the row that
+   * received the freshly-added copy.
+   */
+  entryIds: string[];
+}
+
 /** Compact deck sidebar showing all drafted cards sorted by energy cost. */
 function DeckSidebar({
   cardDatabase,
@@ -141,16 +177,29 @@ function DeckSidebar({
 }) {
   const { state } = useQuest();
 
-  const deckCards = useMemo(() => {
-    const cards: Array<{ entryId: string; card: CardData }> = [];
+  const deckRows = useMemo<DeckRow[]>(() => {
+    const rowsByCardNumber = new Map<number, DeckRow>();
     for (const entry of state.deck) {
       const card = cardDatabase.get(entry.cardNumber);
-      if (card) {
-        cards.push({ entryId: entry.entryId, card });
+      if (!card) {
+        continue;
+      }
+      const existing = rowsByCardNumber.get(entry.cardNumber);
+      if (existing) {
+        existing.count += 1;
+        existing.entryIds.push(entry.entryId);
+      } else {
+        rowsByCardNumber.set(entry.cardNumber, {
+          cardNumber: entry.cardNumber,
+          card,
+          count: 1,
+          entryIds: [entry.entryId],
+        });
       }
     }
-    return cards.sort((left, right) => {
-      const energyCostDelta = (left.card.energyCost ?? 0) - (right.card.energyCost ?? 0);
+    return Array.from(rowsByCardNumber.values()).sort((left, right) => {
+      const energyCostDelta =
+        (left.card.energyCost ?? 0) - (right.card.energyCost ?? 0);
       if (energyCostDelta !== 0) {
         return energyCostDelta;
       }
@@ -159,7 +208,7 @@ function DeckSidebar({
     });
   }, [state.deck, cardDatabase]);
 
-  if (deckCards.length === 0) {
+  if (deckRows.length === 0) {
     return (
       <div className="flex h-full items-center justify-center p-4">
         <p className="text-xs opacity-40">No cards drafted yet.</p>
@@ -167,22 +216,26 @@ function DeckSidebar({
     );
   }
 
-  // Group by energy cost
-  let lastCost = -1;
-
   return (
-    <div className="flex flex-col gap-0.5 overflow-y-auto p-2">
-      {deckCards.map(({ entryId, card }) => {
-        const cost = card.energyCost ?? 0;
-        const showDivider = cost !== lastCost;
-        lastCost = cost;
+    <div
+      data-testid="draft-deck-rows"
+      className="flex flex-col gap-1 overflow-y-auto p-2"
+    >
+      {deckRows.map(({ cardNumber, card, count, entryIds }) => {
         const accentColor =
-          card.cardType === "Event" ? "#c084fc" : "#a855f7";
-        const isHighlighted = highlightedEntryId === entryId;
+          card.cardType === "Event" ? "#c084fc" : "#facc15";
+        const isHighlighted = entryIds.includes(highlightedEntryId ?? "");
+        // Stable row identity: card number is unique per row. The hover
+        // popover is also keyed off the cardNumber so prior tests that
+        // inspect "draft-deck-row-<entryId>" continue to find the most
+        // recent entry's row via its first entry id (we still expose every
+        // entry id as a row attribute for highlight matching).
+        const rowTestId = `draft-deck-row-${entryIds[0] ?? String(cardNumber)}`;
+        const hoverTestId = `draft-deck-row-hover-card-${entryIds[0] ?? String(cardNumber)}`;
 
         return (
           <motion.div
-            key={entryId}
+            key={cardNumber}
             layout
             animate={
               isHighlighted
@@ -190,7 +243,7 @@ function DeckSidebar({
                     scale: [1, 1.04, 1],
                     boxShadow: [
                       "0 0 0 rgba(249, 115, 22, 0)",
-                      "0 0 18px rgba(249, 115, 22, 0.35)",
+                      "0 0 18px rgba(249, 115, 22, 0.45)",
                       "0 0 0 rgba(249, 115, 22, 0)",
                     ],
                   }
@@ -201,24 +254,6 @@ function DeckSidebar({
             }
             transition={{ duration: 0.35 }}
           >
-            {showDivider && (
-              <div className="flex items-center gap-1.5 px-1 pt-1.5 pb-0.5">
-                <span
-                  className="flex h-4 w-4 items-center justify-center rounded-full text-[9px] font-bold"
-                  style={{
-                    background: "rgba(251, 191, 36, 0.2)",
-                    color: "#fbbf24",
-                    border: "1px solid rgba(251, 191, 36, 0.3)",
-                  }}
-                >
-                  {String(cost)}
-                </span>
-                <div
-                  className="h-px flex-1"
-                  style={{ background: "rgba(251, 191, 36, 0.15)" }}
-                />
-              </div>
-            )}
             <HoverPopover
               triggerAs="div"
               placement="left"
@@ -226,7 +261,7 @@ function DeckSidebar({
               maxWidthPx={null}
               content={
                 <div
-                  data-testid={`draft-deck-row-hover-card-${entryId}`}
+                  data-testid={hoverTestId}
                   style={{ width: DECK_ROW_HOVER_CARD_WIDTH_PX }}
                 >
                   <CardDisplay card={card} />
@@ -234,57 +269,56 @@ function DeckSidebar({
               }
             >
               <div
-                data-testid={`draft-deck-row-${entryId}`}
+                data-testid={rowTestId}
+                data-card-number={String(cardNumber)}
+                data-entry-ids={entryIds.join(",")}
                 tabIndex={0}
-                aria-label={`Deck card: ${card.name}`}
-                className="relative flex items-center gap-2 overflow-hidden rounded px-2 py-1 outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                aria-label={`Deck card: ${card.name}${count > 1 ? ` (${String(count)} copies)` : ""}`}
+                className="relative flex items-center gap-2 overflow-hidden rounded-md px-2 outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
                 style={{
-                  background: isHighlighted
-                    ? `linear-gradient(90deg, ${accentColor}28 0%, rgba(249, 115, 22, 0.16) 38%, rgba(10, 6, 18, 0.72) 78%)`
-                    : `linear-gradient(90deg, ${accentColor}15 0%, rgba(10, 6, 18, 0.7) 70%)`,
-                  borderLeft: `2px solid ${accentColor}60`,
+                  height: `${String(DECK_ROW_HEIGHT_PX)}px`,
+                  // Two-layer background: a darkening gradient on top of the
+                  // card art. The gradient fades a strong dim near the left
+                  // (where the pip + start of the name live) into a much
+                  // lighter veil over the right so the art reads as the row's
+                  // identifier. A faint dim at the far right brings the
+                  // duplicate count back into legibility.
+                  backgroundImage: `linear-gradient(90deg, rgba(10, 6, 18, 0.85) 0%, rgba(10, 6, 18, 0.35) 35%, rgba(10, 6, 18, 0.05) 65%, rgba(10, 6, 18, 0.45) 100%), url("${cardImageUrl(cardNumber)}")`,
+                  backgroundSize: "cover",
+                  backgroundPosition: `center ${DECK_ROW_ART_FOCAL_Y}`,
+                  backgroundRepeat: "no-repeat",
+                  border: `1px solid ${accentColor}55`,
                 }}
               >
-                <div
-                  className="relative z-10 h-10 w-[1.75rem] shrink-0 overflow-hidden rounded-sm border"
-                  style={{
-                    borderColor: `${accentColor}66`,
-                    background: `linear-gradient(180deg, ${accentColor}30 0%, rgba(9, 6, 16, 0.9) 100%)`,
-                  }}
-                >
-                  <img
-                    src={cardImageUrl(card.cardNumber)}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <img
-                  src={cardImageUrl(card.cardNumber)}
-                  alt=""
-                  className="pointer-events-none absolute top-0 right-0 h-full object-cover"
-                  style={{
-                    width: "40%",
-                    maskImage: "linear-gradient(to right, transparent 0%, black 60%)",
-                    WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 60%)",
-                    opacity: 0.25,
-                  }}
+                <PipBadge
+                  variant="energy"
+                  value={card.energyCost !== null ? String(card.energyCost) : "X"}
+                  size="sm"
                 />
                 <span
-                  className="relative z-10 min-w-0 flex-1 truncate text-[11px] font-medium"
-                  style={{ color: "#e2e8f0" }}
+                  className="relative z-10 min-w-0 flex-1 truncate text-sm font-bold"
+                  style={{
+                    color: "#ffffff",
+                    textShadow:
+                      "0 1px 2px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.85), 1px 1px 0 rgba(0, 0, 0, 0.9)",
+                    letterSpacing: "0.01em",
+                  }}
                 >
                   {card.name}
                 </span>
-                <span
-                  className="relative z-10 flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[9px] font-bold"
-                  style={{
-                    background: "rgba(251, 191, 36, 0.2)",
-                    color: "#fbbf24",
-                    border: "1px solid rgba(251, 191, 36, 0.3)",
-                  }}
-                >
-                  {String(cost)}
-                </span>
+                {count > 1 && (
+                  <span
+                    data-testid={`draft-deck-row-count-${String(cardNumber)}`}
+                    className="relative z-10 shrink-0 text-sm font-bold tabular-nums"
+                    style={{
+                      color: "#fbbf24",
+                      textShadow:
+                        "0 1px 2px rgba(0, 0, 0, 0.95), 0 0 4px rgba(0, 0, 0, 0.85)",
+                    }}
+                  >
+                    {String(count)}x
+                  </span>
+                )}
               </div>
             </HoverPopover>
           </motion.div>
