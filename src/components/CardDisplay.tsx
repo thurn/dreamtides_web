@@ -53,6 +53,45 @@ function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
 }
 
 /**
+ * An inline glyph that surfaces a boolean card attribute on the type/subtype
+ * row (e.g. `↯ Explorer`). Chips read as part of the same typographic row as
+ * the type label — same font size, same opacity wrapper — and are colored to
+ * match the inline rules-text rendering for the same symbol.
+ *
+ * Adding a new attribute (unstoppable, deployed, ...) is two lines: extend
+ * `ATTRIBUTE_CHIPS` with another entry. The render code below picks them up
+ * automatically.
+ */
+interface AttributeChip {
+  /** Stable React key + `data-attribute-chip` hook for tests. */
+  key: string;
+  /** Glyph rendered inline at type-line typography. */
+  glyph: string;
+  /** Color applied to the glyph; matches the inline symbol color in rules text. */
+  color: string;
+  /** Accessible label so screen readers announce the attribute. */
+  ariaLabel: string;
+  /** Predicate that decides whether this chip applies to a card. */
+  applies(card: Pick<CardData, "isFast">): boolean;
+}
+
+const ATTRIBUTE_CHIPS: readonly AttributeChip[] = [
+  {
+    key: "fast",
+    glyph: "↯",
+    color: "#facc15",
+    ariaLabel: "fast",
+    applies: (card) => card.isFast,
+  },
+];
+
+function buildAttributeChips(
+  card: Pick<CardData, "isFast">,
+): AttributeChip[] {
+  return ATTRIBUTE_CHIPS.filter((chip) => chip.applies(card));
+}
+
+/**
  * Hover tooltip copy for the corner pip badges. Kept short and plain-language
  * so a new player can learn what each pip means after a 1-second hover.
  *
@@ -104,6 +143,7 @@ export function CardDisplay({
   const nameColor = "#f8fafc";
   const typeLine = formatTypeLine(card);
   const rarityStyle = rarityStyleFor(card);
+  const attributeChips = buildAttributeChips(card);
 
   // Compose the box-shadow: base soft chrome glow + optional rarity ring
   // (stacked as a wider outer glow) + selection overlay if set. The rarity
@@ -189,20 +229,6 @@ export function CardDisplay({
         />
       </div>
 
-      {/* Fast badge */}
-      {card.isFast && (
-        <div
-          className={`absolute ${large ? "top-2 right-2 px-2.5 py-1 text-base" : "top-1.5 right-1.5 px-1.5 py-0.5 text-xs"} z-10 flex items-center rounded-full font-bold shadow-md`}
-          style={{
-            background: "rgba(0, 0, 0, 0.75)",
-            border: "1px solid rgba(250, 204, 21, 0.5)",
-            color: "#facc15",
-          }}
-        >
-          {"\u21AF"}
-        </div>
-      )}
-
       {/* Card art area */}
       <div className="relative w-full" style={{ height: "45%" }}>
         {!imageError ? (
@@ -249,14 +275,25 @@ export function CardDisplay({
           {card.name}
         </h3>
 
-        {typeLine !== "" && (
-          <div className="mt-0.5 flex items-center gap-1.5">
-            <span
-              className={`truncate ${large ? "text-sm" : "text-[10px]"} opacity-50`}
-              style={{ color: "#e2e8f0" }}
-            >
-              {typeLine}
-            </span>
+        {(typeLine !== "" || attributeChips.length > 0) && (
+          <div
+            data-testid="card-type-line"
+            className={`mt-0.5 flex items-center gap-1 truncate ${large ? "text-sm" : "text-[10px]"} opacity-50`}
+            style={{ color: "#e2e8f0" }}
+          >
+            {attributeChips.map((chip) => (
+              <span
+                key={chip.key}
+                data-attribute-chip={chip.key}
+                aria-label={chip.ariaLabel}
+                style={{ color: chip.color }}
+              >
+                {chip.glyph}
+              </span>
+            ))}
+            {typeLine !== "" && (
+              <span className="truncate">{typeLine}</span>
+            )}
           </div>
         )}
 

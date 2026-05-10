@@ -335,6 +335,120 @@ describe("CardDisplay", () => {
     });
   });
 
+  it("renders the fast attribute inline on the type/subtype row, not as a top-right circled badge", () => {
+    const { container, root } = mount(
+      <CardDisplay
+        card={makeCard({
+          isFast: true,
+          cardType: "Character",
+          subtype: "Explorer",
+        })}
+      />,
+    );
+
+    // The chip lives on the type-line row.
+    const typeLine = container.querySelector<HTMLElement>(
+      "[data-testid=\"card-type-line\"]",
+    );
+    expect(typeLine).not.toBeNull();
+    expect(typeLine?.textContent).toBe("↯Explorer");
+
+    const chip = typeLine?.querySelector<HTMLElement>(
+      "[data-attribute-chip=\"fast\"]",
+    );
+    expect(chip).not.toBeNull();
+    expect(chip?.textContent).toBe("↯");
+    expect(chip?.getAttribute("aria-label")).toBe("fast");
+    // Same gold the inline rules-text fast symbol uses.
+    expect((chip?.getAttribute("style") ?? "").toLowerCase()).toContain(
+      "color: rgb(250, 204, 21)",
+    );
+
+    // The chip precedes the type label in DOM order.
+    const children = Array.from(typeLine?.children ?? []);
+    expect(children.length).toBe(2);
+    expect(children[0]?.getAttribute("data-attribute-chip")).toBe("fast");
+    expect(children[1]?.textContent).toBe("Explorer");
+
+    // No corner badge: there must be no element at the old top-right slot
+    // rendering the bolt.
+    const cornerBadges = Array.from(
+      container.querySelectorAll<HTMLElement>("div[class*='right-'][class*='rounded-full']"),
+    ).filter((el) => el.textContent === "↯");
+    expect(cornerBadges.length).toBe(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("omits the fast chip when the card is not fast", () => {
+    const { container, root } = mount(
+      <CardDisplay
+        card={makeCard({
+          isFast: false,
+          cardType: "Character",
+          subtype: "Explorer",
+        })}
+      />,
+    );
+
+    expect(
+      container.querySelector("[data-attribute-chip=\"fast\"]"),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the fast chip even when the card has no type-line text", () => {
+    // `formatTypeLine` returns "" for a Character with subtype "*". The
+    // attribute-chip slot must still render so the fast indicator is visible.
+    const { container, root } = mount(
+      <CardDisplay
+        card={makeCard({
+          isFast: true,
+          cardType: "Character",
+          subtype: "*",
+        })}
+      />,
+    );
+
+    const typeLine = container.querySelector<HTMLElement>(
+      "[data-testid=\"card-type-line\"]",
+    );
+    expect(typeLine).not.toBeNull();
+    expect(typeLine?.querySelector("[data-attribute-chip=\"fast\"]")).not.toBeNull();
+    expect(typeLine?.textContent).toBe("↯");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("still renders inline ↯fast in rules text as the existing colored glyph", () => {
+    const { container, root } = mount(
+      <CardDisplay
+        card={makeCard({
+          isFast: true,
+          renderedText: "↯fast",
+        })}
+      />,
+    );
+
+    // The chip on the type line.
+    expect(
+      container.querySelector("[data-attribute-chip=\"fast\"]"),
+    ).not.toBeNull();
+    // The inline rules-text reference also still renders (two bolts total).
+    expect((container.textContent?.match(/↯/g) ?? []).length).toBe(2);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("uses parallel outline treatment so Character and Event chrome share width and softness", () => {
     const characterMount = mount(
       <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
