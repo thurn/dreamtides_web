@@ -5,6 +5,7 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { RulesText } from "../components/RulesText";
 import { DREAMSIGN_REJECTION_ESSENCE } from "../state/quest-state-actions";
+import { DreamsignSourceOverlay } from "./DreamsignSourceOverlay";
 
 const MAX_DREAMSIGNS = 12;
 
@@ -17,19 +18,24 @@ interface DreamsignOfferingScreenProps {
 export function DreamsignOfferingScreen({
   site,
 }: DreamsignOfferingScreenProps) {
-  const { state, mutations } = useQuest();
+  const { state, mutations, questContent } = useQuest();
   const { dreamsigns: currentDreamsigns } = state;
 
   const optionCount = site.isEnhanced ? 3 : 1;
   const runtime = state.siteRuntime[site.id];
   const offerRuntime = runtime?.kind === "dreamsignOffer" ? runtime : null;
   const options = offerRuntime?.offeredDreamsigns ?? null;
+  const resolvedPackage = state.resolvedPackage;
+  const remainingPoolSize =
+    offerRuntime?.remainingDreamsignPool.length
+    ?? state.remainingDreamsignPool.length;
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
 
   const [purging, setPurging] = useState(false);
   const [pendingDreamsign, setPendingDreamsign] = useState<Dreamsign | null>(
     null,
   );
+  const [sourceOverlayOpen, setSourceOverlayOpen] = useState(false);
 
   useEffect(() => {
     if (runtime === undefined) {
@@ -211,18 +217,46 @@ export function DreamsignOfferingScreen({
         </div>
       )}
 
-      {/* Reject / Skip: refuses the offering and grants a consolation essence reward. */}
-      <button
-        className="mt-8 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-        style={{
-          background: "rgba(107, 114, 128, 0.2)",
-          border: "1px solid rgba(107, 114, 128, 0.4)",
-          color: "#9ca3af",
+      {/* Footer toolbar: Reject/Skip + Why Dreamsigns? */}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <button
+          className="rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
+          style={{
+            background: "rgba(107, 114, 128, 0.2)",
+            border: "1px solid rgba(107, 114, 128, 0.4)",
+            color: "#9ca3af",
+          }}
+          onClick={handleReject}
+        >
+          {`${options.length > 1 ? "Skip" : "Reject"} (+${String(DREAMSIGN_REJECTION_ESSENCE)} Essence)`}
+        </button>
+        <button
+          className="rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+          style={{
+            background: "rgba(168, 85, 247, 0.14)",
+            border: "1px solid rgba(168, 85, 247, 0.35)",
+            color: "#d8b4fe",
+          }}
+          onClick={() => {
+            setSourceOverlayOpen(true);
+          }}
+        >
+          Why Dreamsigns?
+        </button>
+      </div>
+
+      <DreamsignSourceOverlay
+        isOpen={sourceOverlayOpen}
+        onClose={() => {
+          setSourceOverlayOpen(false);
         }}
-        onClick={handleReject}
-      >
-        {`${options.length > 1 ? "Skip" : "Reject"} (+${String(DREAMSIGN_REJECTION_ESSENCE)} Essence)`}
-      </button>
+        screenLabel="Dreamsign Offering"
+        offeredDreamsigns={options}
+        dreamsignTemplates={questContent.dreamsignTemplates}
+        mandatoryTides={resolvedPackage?.mandatoryTides ?? []}
+        optionalTides={resolvedPackage?.optionalSubset ?? []}
+        remainingPoolSize={remainingPoolSize}
+      />
     </motion.div>
   );
 }

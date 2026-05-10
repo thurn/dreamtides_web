@@ -12,6 +12,7 @@ import { DreamsignOfferingScreen } from "./DreamsignOfferingScreen";
 import { useQuest } from "../state/quest-context";
 
 vi.mock("framer-motion", () => ({
+  AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
   motion: {
     div: ({
       animate: _animate,
@@ -27,6 +28,20 @@ vi.mock("framer-motion", () => ({
       initial?: unknown;
       transition?: unknown;
     } & HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
+    aside: ({
+      animate: _animate,
+      children,
+      exit: _exit,
+      initial: _initial,
+      transition: _transition,
+      ...props
+    }: {
+      animate?: unknown;
+      children: ReactNode;
+      exit?: unknown;
+      initial?: unknown;
+      transition?: unknown;
+    } & HTMLAttributes<HTMLElement>) => <aside {...props}>{children}</aside>,
   },
 }));
 
@@ -197,6 +212,229 @@ beforeEach(() => {
 
 afterEach(() => {
   document.body.innerHTML = "";
+});
+
+describe("DreamsignOfferingScreen Why Dreamsigns button", () => {
+  it("renders a Why Dreamsigns button when offered dreamsigns are revealed", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["glacial-insight"],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <DreamsignOfferingScreen site={makeSite()} />,
+    );
+
+    const button = Array.from(container.querySelectorAll("button")).find(
+      (candidate) => candidate.textContent?.includes("Why Dreamsigns"),
+    );
+    expect(button).toBeTruthy();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("opens the Why Dreamsigns overlay on click and closes it via the close button", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["glacial-insight"],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <DreamsignOfferingScreen site={makeSite()} />,
+    );
+
+    expect(container.textContent).not.toContain(
+      "Why am I seeing these dreamsigns?",
+    );
+
+    const openButton = Array.from(container.querySelectorAll("button")).find(
+      (candidate) => candidate.textContent?.includes("Why Dreamsigns"),
+    );
+    if (!openButton) {
+      throw new Error("Why Dreamsigns button missing");
+    }
+    act(() => {
+      openButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.textContent).toContain(
+      "Why am I seeing these dreamsigns?",
+    );
+
+    const closeButton = Array.from(container.querySelectorAll("button")).find(
+      (candidate) =>
+        candidate.getAttribute("aria-label") === "Close dreamsign source overlay",
+    );
+    if (!closeButton) {
+      throw new Error("close button missing");
+    }
+    act(() => {
+      closeButton.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.textContent).not.toContain(
+      "Why am I seeing these dreamsigns?",
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("does not render the Why Dreamsigns button while options are still being revealed", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({ remainingDreamsignPool: ["embers-whisper"] }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <DreamsignOfferingScreen site={makeSite()} />,
+    );
+
+    const button = Array.from(container.querySelectorAll("button")).find(
+      (candidate) => candidate.textContent?.includes("Why Dreamsigns"),
+    );
+    expect(button).toBeUndefined();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+});
+
+describe("DreamsignDraftScreen Why Dreamsigns button", () => {
+  it("renders a Why Dreamsigns button when offered dreamsigns are revealed", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+              {
+                id: "glacial-insight",
+                name: "Glacial Insight",
+                effectDescription: "Ice.",
+                isBane: false,
+              },
+              {
+                id: "verdant-accord",
+                name: "Verdant Accord",
+                effectDescription: "Growth.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["stormthread-sigil"],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <DreamsignDraftScreen site={makeSite({ type: "DreamsignDraft" })} />,
+    );
+
+    const button = Array.from(container.querySelectorAll("button")).find(
+      (candidate) => candidate.textContent?.includes("Why Dreamsigns"),
+    );
+    expect(button).toBeTruthy();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("opens the Why Dreamsigns overlay with offered dreamsigns and explanatory content", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["stormthread-sigil"],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <DreamsignDraftScreen site={makeSite({ type: "DreamsignDraft" })} />,
+    );
+
+    const openButton = Array.from(container.querySelectorAll("button")).find(
+      (candidate) => candidate.textContent?.includes("Why Dreamsigns"),
+    );
+    act(() => {
+      openButton?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.textContent).toContain(
+      "Why am I seeing these dreamsigns?",
+    );
+    expect(container.textContent).toContain("Ember's Whisper");
+    expect(container.textContent).toContain("Dreamsign Draft");
+    // remainingPoolSize from siteRuntime should be reflected
+    expect(container.textContent).toContain("Remaining in");
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
 
 describe("DreamsignOfferingScreen", () => {
@@ -445,7 +683,9 @@ describe("DreamsignDraftScreen", () => {
 
     expect(container.textContent).toContain("The Dreamsign pool is exhausted.");
     expect(container.textContent).not.toContain("Ember's Whisper");
-    expect(container.querySelectorAll("button")).toHaveLength(1);
+    // Skip + Why Dreamsigns footer buttons remain visible even when the pool
+    // is empty so the player can still inspect pool composition.
+    expect(container.querySelectorAll("button")).toHaveLength(2);
 
     clickButton(container, "Skip (discards both Dreamsigns)");
 

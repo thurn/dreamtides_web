@@ -4,6 +4,7 @@ import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { RulesText } from "../components/RulesText";
+import { DreamsignSourceOverlay } from "./DreamsignSourceOverlay";
 
 const MAX_DREAMSIGNS = 12;
 
@@ -14,19 +15,24 @@ interface DreamsignDraftScreenProps {
 
 /** Shows 3 (or 4 enhanced) dreamsign options. Pick 1 or skip. */
 export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
-  const { state, mutations } = useQuest();
+  const { state, mutations, questContent } = useQuest();
   const { dreamsigns: currentDreamsigns } = state;
 
   const optionCount = site.isEnhanced ? 4 : 3;
   const runtime = state.siteRuntime[site.id];
   const offerRuntime = runtime?.kind === "dreamsignOffer" ? runtime : null;
   const options = offerRuntime?.offeredDreamsigns ?? null;
+  const resolvedPackage = state.resolvedPackage;
+  const remainingPoolSize =
+    offerRuntime?.remainingDreamsignPool.length
+    ?? state.remainingDreamsignPool.length;
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
 
   const [purging, setPurging] = useState(false);
   const [pendingDreamsign, setPendingDreamsign] = useState<Dreamsign | null>(
     null,
   );
+  const [sourceOverlayOpen, setSourceOverlayOpen] = useState(false);
 
   useEffect(() => {
     if (runtime === undefined) {
@@ -213,19 +219,47 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
         </div>
       )}
 
-      {/* Skip — both offered Dreamsigns leave the run pool */}
-      <button
-        className="mt-8 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-        style={{
-          background: "rgba(148, 163, 184, 0.18)",
-          border: "1px solid rgba(203, 213, 225, 0.55)",
-          color: "#e2e8f0",
+      {/* Footer toolbar: Skip + Why Dreamsigns? */}
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <button
+          className="rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
+          style={{
+            background: "rgba(148, 163, 184, 0.18)",
+            border: "1px solid rgba(203, 213, 225, 0.55)",
+            color: "#e2e8f0",
+          }}
+          onClick={handleSkip}
+          title="Skips this offering. Both shown Dreamsigns are removed from this run's pool."
+        >
+          Skip (discards both Dreamsigns)
+        </button>
+        <button
+          className="rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+          style={{
+            background: "rgba(168, 85, 247, 0.14)",
+            border: "1px solid rgba(168, 85, 247, 0.35)",
+            color: "#d8b4fe",
+          }}
+          onClick={() => {
+            setSourceOverlayOpen(true);
+          }}
+        >
+          Why Dreamsigns?
+        </button>
+      </div>
+
+      <DreamsignSourceOverlay
+        isOpen={sourceOverlayOpen}
+        onClose={() => {
+          setSourceOverlayOpen(false);
         }}
-        onClick={handleSkip}
-        title="Skips this offering. Both shown Dreamsigns are removed from this run's pool."
-      >
-        Skip (discards both Dreamsigns)
-      </button>
+        screenLabel="Dreamsign Draft"
+        offeredDreamsigns={options}
+        dreamsignTemplates={questContent.dreamsignTemplates}
+        mandatoryTides={resolvedPackage?.mandatoryTides ?? []}
+        optionalTides={resolvedPackage?.optionalSubset ?? []}
+        remainingPoolSize={remainingPoolSize}
+      />
     </motion.div>
   );
 }
