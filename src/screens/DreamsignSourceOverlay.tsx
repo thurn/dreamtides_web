@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { TideChip } from "../components/TideChip";
 import type { Dreamsign } from "../types/quest";
 import type { DreamsignTemplate, PackageTideId } from "../types/content";
 
@@ -53,41 +54,6 @@ function buildEntry(
   };
 }
 
-function TideChip({
-  label,
-  variant,
-}: {
-  label: string;
-  variant: "required" | "optional" | "neutral";
-}) {
-  const colors =
-    variant === "required"
-      ? {
-        background: "rgba(251, 191, 36, 0.16)",
-        border: "1px solid rgba(251, 191, 36, 0.35)",
-        color: "#fbbf24",
-      }
-      : variant === "optional"
-        ? {
-          background: "rgba(96, 165, 250, 0.16)",
-          border: "1px solid rgba(96, 165, 250, 0.35)",
-          color: "#93c5fd",
-        }
-        : {
-          background: "rgba(148, 163, 184, 0.16)",
-          border: "1px solid rgba(148, 163, 184, 0.35)",
-          color: "#cbd5e1",
-        };
-  return (
-    <span
-      className="rounded-full px-2 py-0.5 text-[10px] font-bold tracking-wide uppercase"
-      style={colors}
-    >
-      {label}
-    </span>
-  );
-}
-
 function DreamsignExplanation({ entry }: { entry: DreamsignSourceEntry }) {
   return (
     <div
@@ -126,7 +92,7 @@ function DreamsignExplanation({ entry }: { entry: DreamsignSourceEntry }) {
         <p className="mt-3 text-xs opacity-70">
           {entry.hasTemplate
             ? "No selected tide overlap. This dreamsign is being shown as a broader-pool fallback."
-            : "This dreamsign is no longer in the loaded catalog; treating as a fallback."}
+            : "This dreamsign has no entry in the loaded catalog and is treated as a fallback."}
         </p>
       )}
 
@@ -202,68 +168,68 @@ export function DreamsignSourceOverlay({
             aria-hidden="true"
           />
           <motion.aside
-          key="dreamsign-source-overlay"
-          className="fixed top-4 right-4 left-4 z-[55] max-h-[70vh] overflow-hidden rounded-2xl md:left-auto md:w-[440px]"
-          onClick={(event) => {
-            event.stopPropagation();
-          }}
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(7, 10, 18, 0.96) 0%, rgba(11, 17, 30, 0.96) 100%)",
-            border: "1px solid rgba(168, 85, 247, 0.32)",
-            boxShadow: "0 20px 60px rgba(2, 6, 23, 0.5)",
-            backdropFilter: "blur(12px)",
-          }}
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ duration: 0.22 }}
-        >
-          <div
-            className="flex items-start justify-between gap-3 px-4 py-3"
-            style={{ borderBottom: "1px solid rgba(148, 163, 184, 0.14)" }}
+            key="dreamsign-source-overlay"
+            className="fixed top-4 right-4 left-4 z-[55] max-h-[70vh] overflow-hidden rounded-2xl md:left-auto md:w-[440px]"
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(7, 10, 18, 0.96) 0%, rgba(11, 17, 30, 0.96) 100%)",
+              border: "1px solid rgba(168, 85, 247, 0.32)",
+              boxShadow: "0 20px 60px rgba(2, 6, 23, 0.5)",
+              backdropFilter: "blur(12px)",
+            }}
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.22 }}
           >
-            <div>
-              <p className="text-xs font-bold tracking-[0.18em] uppercase opacity-60">
-                Why am I seeing these dreamsigns?
-              </p>
-              <h2 className="text-lg font-bold" style={{ color: "#f8fafc" }}>
-                {screenLabel}
-              </h2>
-              <p className="mt-1 text-xs opacity-70">
-                Dreamsigns are drawn from your Dreamcaller's pool. Each shown
-                dreamsign is removed from the run's shared pool. Remaining in
-                pool: {String(remainingPoolSize)}.
-              </p>
-            </div>
-            <button
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors"
-              style={{
-                background: "rgba(255, 255, 255, 0.08)",
-                color: "#e2e8f0",
-              }}
-              onClick={handleClose}
-              aria-label="Close dreamsign source overlay"
+            <div
+              className="flex items-start justify-between gap-3 px-4 py-3"
+              style={{ borderBottom: "1px solid rgba(148, 163, 184, 0.14)" }}
             >
-              {"✕"}
-            </button>
-          </div>
+              <div>
+                <p className="text-xs font-bold tracking-[0.18em] uppercase opacity-60">
+                  Why am I seeing these dreamsigns?
+                </p>
+                <h2 className="text-lg font-bold" style={{ color: "#f8fafc" }}>
+                  {screenLabel}
+                </h2>
+                <p className="mt-1 text-xs opacity-70">
+                  Dreamsigns are drawn from your Dreamcaller's pool. Each shown
+                  dreamsign is removed from the run's shared pool. Remaining in
+                  pool: {String(remainingPoolSize)}.
+                </p>
+              </div>
+              <button
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors"
+                style={{
+                  background: "rgba(255, 255, 255, 0.08)",
+                  color: "#e2e8f0",
+                }}
+                onClick={handleClose}
+                aria-label="Close dreamsign source overlay"
+              >
+                {"✕"}
+              </button>
+            </div>
 
-          <div className="max-h-[calc(70vh-92px)] space-y-3 overflow-y-auto p-4">
-            {entries.length === 0 ? (
-              <p className="text-sm opacity-70">
-                No dreamsigns are currently offered.
-              </p>
-            ) : (
-              entries.map((entry) => (
-                <DreamsignExplanation
-                  key={`${entry.id}-${entry.name}`}
-                  entry={entry}
-                />
-              ))
-            )}
-          </div>
-        </motion.aside>
+            <div className="max-h-[calc(70vh-92px)] space-y-3 overflow-y-auto p-4">
+              {entries.length === 0 ? (
+                <p className="text-sm opacity-70">
+                  No dreamsigns are currently offered.
+                </p>
+              ) : (
+                entries.map((entry) => (
+                  <DreamsignExplanation
+                    key={`${entry.id}-${entry.name}`}
+                    entry={entry}
+                  />
+                ))
+              )}
+            </div>
+          </motion.aside>
         </>
       )}
     </AnimatePresence>
