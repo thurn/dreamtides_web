@@ -11,10 +11,11 @@ import { createPortal } from "react-dom";
 /**
  * A reusable hover popover primitive.
  *
- * Renders `children` inline (typically a span of text). On `mouseenter` (or
- * keyboard focus), waits `delayMs` and then portals the `content` node into
- * the document body, positioned just above and centered on the trigger
- * element. Hides immediately on `mouseleave` or blur.
+ * Renders `children` inside a wrapper element (defaults to a `<span>` for
+ * inline triggers; pass `triggerAs="div"` for block-level triggers like
+ * deck rows). On `mouseenter` (or keyboard focus), waits `delayMs` and then
+ * portals the `content` node into the document body, anchored relative to
+ * the trigger element. Hides immediately on `mouseleave` or blur.
  *
  * The popover is portaled directly to `document.body` so it floats above
  * any framer-motion overlays (z-index conflicts in the prototype are
@@ -25,8 +26,10 @@ import { createPortal } from "react-dom";
  * intercepts clicks on what's underneath it.
  *
  * Used for glossary term definitions on card / Dreamcaller / Dreamsign
- * rules text.
+ * rules text, and for full-card previews on compact deck rows.
  */
+
+type Placement = "top" | "left";
 
 interface HoverPopoverProps {
   /** The element that triggers the popover on hover. */
@@ -35,28 +38,53 @@ interface HoverPopoverProps {
   content: ReactNode;
   /** Delay before showing the popover (ms). Defaults to 500ms. */
   delayMs?: number;
-  /** Additional class name for the inline trigger wrapper. */
+  /**
+   * Where to anchor the popover relative to the trigger.
+   * - `"top"` (default) centers the popover above the trigger.
+   * - `"left"` anchors the popover to the left of the trigger, vertically
+   *   centered. Useful for triggers on the right edge of the viewport
+   *   (e.g. the right-side deck sidebar) where a top-anchored popover
+   *   would clip or feel disconnected from the row.
+   */
+  placement?: Placement;
+  /**
+   * Override the popover's max-width cap (px). Defaults to 260px, which
+   * suits short glossary blurbs. Pass `null` to disable the cap entirely
+   * when `content` is a self-sizing element such as a card preview.
+   */
+  maxWidthPx?: number | null;
+  /**
+   * The DOM element type for the trigger wrapper. Defaults to `"span"` for
+   * inline use within text. Pass `"div"` for block-level triggers.
+   */
+  triggerAs?: "span" | "div";
+  /** Additional class name for the trigger wrapper. */
   className?: string;
-  /** Additional inline style for the inline trigger wrapper. */
+  /** Additional inline style for the trigger wrapper. */
   style?: CSSProperties;
 }
 
 const DEFAULT_DELAY_MS = 500;
 const POPOVER_GAP_PX = 8;
-const POPOVER_MAX_WIDTH_PX = 260;
+const POPOVER_DEFAULT_MAX_WIDTH_PX = 260;
 
 export function HoverPopover({
   children,
   content,
   delayMs = DEFAULT_DELAY_MS,
+  placement = "top",
+  maxWidthPx,
+  triggerAs = "span",
   className,
   style,
 }: HoverPopoverProps) {
-  const triggerRef = useRef<HTMLSpanElement | null>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [position, setPosition] = useState<{ left: number; top: number } | null>(
-    null,
-  );
+  const [position, setPosition] = useState<{
+    left: number;
+    top: number;
+    transform: string;
+  } | null>(null);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current !== null) {
@@ -71,12 +99,19 @@ export function HoverPopover({
       return null;
     }
     const rect = trigger.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
+    if (placement === "left") {
+      return {
+        left: rect.left - POPOVER_GAP_PX,
+        top: rect.top + rect.height / 2,
+        transform: "translate(-100%, -50%)",
+      };
+    }
     return {
-      left: centerX,
+      left: rect.left + rect.width / 2,
       top: rect.top - POPOVER_GAP_PX,
+      transform: "translate(-50%, -100%)",
     };
-  }, []);
+  }, [placement]);
 
   const show = useCallback(() => {
     clearTimer();
@@ -102,30 +137,40 @@ export function HoverPopover({
     };
   }, []);
 
+  const popoverStyle: CSSProperties = {
+    left: position?.left ?? 0,
+    top: position?.top ?? 0,
+    transform: position?.transform ?? "translate(-50%, -100%)",
+  };
+  if (maxWidthPx !== null) {
+    popoverStyle.maxWidth = maxWidthPx ?? POPOVER_DEFAULT_MAX_WIDTH_PX;
+  }
+
+  const triggerProps = {
+    ref: (element: HTMLElement | null) => {
+      triggerRef.current = element;
+    },
+    className,
+    style,
+    onMouseEnter: show,
+    onMouseLeave: hide,
+    onFocus: show,
+    onBlur: hide,
+  } as const;
+
   return (
     <>
-      <span
-        ref={triggerRef}
-        className={className}
-        style={style}
-        onMouseEnter={show}
-        onMouseLeave={hide}
-        onFocus={show}
-        onBlur={hide}
-      >
-        {children}
-      </span>
+      {triggerAs === "div" ? (
+        <div {...triggerProps}>{children}</div>
+      ) : (
+        <span {...triggerProps}>{children}</span>
+      )}
       {position !== null &&
         typeof document !== "undefined" &&
         createPortal(
           <div
             className="pointer-events-none fixed z-[1000]"
-            style={{
-              left: position.left,
-              top: position.top,
-              transform: "translate(-50%, -100%)",
-              maxWidth: POPOVER_MAX_WIDTH_PX,
-            }}
+            style={popoverStyle}
             role="tooltip"
           >
             {content}

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
+import { HoverPopover } from "../components/HoverPopover";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
@@ -19,6 +20,18 @@ import { logEvent } from "../logging";
 const NEXT_PACK_DELAY = 500;
 const DECK_FLY_DURATION = 0.45;
 const DECK_HIGHLIGHT_DURATION = 900;
+/**
+ * Delay before showing the hover-card preview on a deck row. Tighter than
+ * the glossary-tooltip default (500ms) because players are scanning a
+ * compact list and want quick previews while moving down the rail.
+ */
+const DECK_ROW_HOVER_DELAY_MS = 300;
+/**
+ * Width (px) of the card preview portaled by deck-row hover. Roughly the
+ * width of the draft cards themselves so players see the same render they
+ * would after picking.
+ */
+const DECK_ROW_HOVER_CARD_WIDTH_PX = 240;
 
 /** Animation phases during a pick. */
 type PickPhase = "idle" | "animating" | "waiting";
@@ -206,56 +219,74 @@ function DeckSidebar({
                 />
               </div>
             )}
-            <div
-              className="relative flex items-center gap-2 overflow-hidden rounded px-2 py-1"
-              style={{
-                background: isHighlighted
-                  ? `linear-gradient(90deg, ${accentColor}28 0%, rgba(249, 115, 22, 0.16) 38%, rgba(10, 6, 18, 0.72) 78%)`
-                  : `linear-gradient(90deg, ${accentColor}15 0%, rgba(10, 6, 18, 0.7) 70%)`,
-                borderLeft: `2px solid ${accentColor}60`,
-              }}
+            <HoverPopover
+              triggerAs="div"
+              placement="left"
+              delayMs={DECK_ROW_HOVER_DELAY_MS}
+              maxWidthPx={null}
+              content={
+                <div
+                  data-testid={`draft-deck-row-hover-card-${entryId}`}
+                  style={{ width: DECK_ROW_HOVER_CARD_WIDTH_PX }}
+                >
+                  <CardDisplay card={card} />
+                </div>
+              }
             >
               <div
-                className="relative z-10 h-10 w-[1.75rem] shrink-0 overflow-hidden rounded-sm border"
+                data-testid={`draft-deck-row-${entryId}`}
+                tabIndex={0}
+                aria-label={`Deck card: ${card.name}`}
+                className="relative flex items-center gap-2 overflow-hidden rounded px-2 py-1 outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
                 style={{
-                  borderColor: `${accentColor}66`,
-                  background: `linear-gradient(180deg, ${accentColor}30 0%, rgba(9, 6, 16, 0.9) 100%)`,
+                  background: isHighlighted
+                    ? `linear-gradient(90deg, ${accentColor}28 0%, rgba(249, 115, 22, 0.16) 38%, rgba(10, 6, 18, 0.72) 78%)`
+                    : `linear-gradient(90deg, ${accentColor}15 0%, rgba(10, 6, 18, 0.7) 70%)`,
+                  borderLeft: `2px solid ${accentColor}60`,
                 }}
               >
+                <div
+                  className="relative z-10 h-10 w-[1.75rem] shrink-0 overflow-hidden rounded-sm border"
+                  style={{
+                    borderColor: `${accentColor}66`,
+                    background: `linear-gradient(180deg, ${accentColor}30 0%, rgba(9, 6, 16, 0.9) 100%)`,
+                  }}
+                >
+                  <img
+                    src={cardImageUrl(card.cardNumber)}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                </div>
                 <img
                   src={cardImageUrl(card.cardNumber)}
                   alt=""
-                  className="h-full w-full object-cover"
+                  className="pointer-events-none absolute top-0 right-0 h-full object-cover"
+                  style={{
+                    width: "40%",
+                    maskImage: "linear-gradient(to right, transparent 0%, black 60%)",
+                    WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 60%)",
+                    opacity: 0.25,
+                  }}
                 />
+                <span
+                  className="relative z-10 min-w-0 flex-1 truncate text-[11px] font-medium"
+                  style={{ color: "#e2e8f0" }}
+                >
+                  {card.name}
+                </span>
+                <span
+                  className="relative z-10 flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[9px] font-bold"
+                  style={{
+                    background: "rgba(251, 191, 36, 0.2)",
+                    color: "#fbbf24",
+                    border: "1px solid rgba(251, 191, 36, 0.3)",
+                  }}
+                >
+                  {String(cost)}
+                </span>
               </div>
-              <img
-                src={cardImageUrl(card.cardNumber)}
-                alt=""
-                className="pointer-events-none absolute top-0 right-0 h-full object-cover"
-                style={{
-                  width: "40%",
-                  maskImage: "linear-gradient(to right, transparent 0%, black 60%)",
-                  WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 60%)",
-                  opacity: 0.25,
-                }}
-              />
-              <span
-                className="relative z-10 min-w-0 flex-1 truncate text-[11px] font-medium"
-                style={{ color: "#e2e8f0" }}
-              >
-                {card.name}
-              </span>
-              <span
-                className="relative z-10 flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-[9px] font-bold"
-                style={{
-                  background: "rgba(251, 191, 36, 0.2)",
-                  color: "#fbbf24",
-                  border: "1px solid rgba(251, 191, 36, 0.3)",
-                }}
-              >
-                {String(cost)}
-              </span>
-            </div>
+            </HoverPopover>
           </motion.div>
         );
       })}

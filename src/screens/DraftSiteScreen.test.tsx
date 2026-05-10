@@ -658,4 +658,138 @@ describe("DraftSiteScreen", () => {
       root.unmount();
     });
   });
+
+  it("portals a full card preview when a deck row is hovered", () => {
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    setQuestContext(makeState(), mutations, cardDatabase);
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    // No portaled card preview before hover.
+    expect(
+      document.body.querySelectorAll(
+        "[data-testid='draft-deck-row-hover-card-entry-1']",
+      ),
+    ).toHaveLength(0);
+
+    const row = container.querySelector(
+      "[data-testid='draft-deck-row-entry-1']",
+    );
+    expect(row).not.toBeNull();
+    const trigger = row?.parentElement;
+    expect(trigger).not.toBeNull();
+
+    act(() => {
+      trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+
+    // Popover only appears after the configured 300ms delay.
+    expect(
+      document.body.querySelectorAll(
+        "[data-testid='draft-deck-row-hover-card-entry-1']",
+      ),
+    ).toHaveLength(0);
+
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
+
+    expect(
+      document.body.querySelector(
+        "[data-testid='draft-deck-row-hover-card-entry-1']",
+      ),
+    ).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("hides the deck-row preview cleanly on mouse-out", () => {
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    setQuestContext(makeState(), mutations, cardDatabase);
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    const row = container.querySelector(
+      "[data-testid='draft-deck-row-entry-1']",
+    );
+    const trigger = row?.parentElement;
+
+    act(() => {
+      trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
+
+    expect(
+      document.body.querySelector(
+        "[data-testid='draft-deck-row-hover-card-entry-1']",
+      ),
+    ).not.toBeNull();
+
+    act(() => {
+      trigger?.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+    });
+
+    expect(
+      document.body.querySelectorAll(
+        "[data-testid='draft-deck-row-hover-card-entry-1']",
+      ),
+    ).toHaveLength(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("opens the deck-row preview when a row receives keyboard focus", () => {
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    setQuestContext(makeState(), mutations, cardDatabase);
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    const row = container.querySelector(
+      "[data-testid='draft-deck-row-entry-1']",
+    );
+    expect(row).not.toBeNull();
+    if (!(row instanceof HTMLElement)) {
+      throw new Error("Expected deck row to be an HTMLElement");
+    }
+
+    // The row must be keyboard-focusable so screen-reader / keyboard users
+    // can reveal the preview without a pointer.
+    expect(row.tabIndex).toBe(0);
+
+    act(() => {
+      row.focus();
+    });
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
+
+    expect(
+      document.body.querySelector(
+        "[data-testid='draft-deck-row-hover-card-entry-1']",
+      ),
+    ).not.toBeNull();
+
+    act(() => {
+      row.blur();
+    });
+
+    expect(
+      document.body.querySelectorAll(
+        "[data-testid='draft-deck-row-hover-card-entry-1']",
+      ),
+    ).toHaveLength(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
