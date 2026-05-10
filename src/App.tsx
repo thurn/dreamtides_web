@@ -149,6 +149,7 @@ export function QuestApp({
         resolvedPackage={state.resolvedPackage}
         remainingDreamsignPool={state.remainingDreamsignPool}
         dreamsignTemplates={questContent.dreamsignTemplates}
+        onForceLegendaryOffer={mutations.setDraftState}
       />
       <CardSourceOverlay
         cardSourceDebug={state.cardSourceDebug}

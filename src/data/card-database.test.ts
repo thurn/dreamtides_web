@@ -144,7 +144,26 @@ describe("loadCardDatabase integration (real card-data.json)", () => {
       expect(typeof card.renderedText).toBe("string");
       expect(typeof card.imageNumber).toBe("number");
       expect(typeof card.artOwned).toBe("boolean");
+      // Rarity is sourced from the TOML and propagates through setup-assets;
+      // every runtime card carries one of the five non-Special rarities.
+      const validRarities = new Set([
+        "Common",
+        "Uncommon",
+        "Rare",
+        "Legendary",
+        "Starter",
+      ]);
+      expect(card.rarity !== undefined).toBe(true);
+      expect(validRarities.has(card.rarity ?? "")).toBe(true);
     }
+  });
+
+  it("contains at least one Legendary card to drive the legendary frame", async () => {
+    const raw = await readCardDataJson();
+    if (raw === null) return;
+
+    const legendaries = raw.filter((card) => card.rarity === "Legendary");
+    expect(legendaries.length).toBeGreaterThan(0);
   });
 
   it("sample card lookup returns expected structure", async () => {

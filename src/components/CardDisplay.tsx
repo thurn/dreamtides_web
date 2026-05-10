@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { CardData, FrozenCardData } from "../types/cards";
+import type { CardData, FrozenCardData, Rarity } from "../types/cards";
 import { cardImageUrl } from "../data/card-database";
 import { formatTypeLine } from "./card-text";
 import { PipBadge } from "./PipBadge";
@@ -7,6 +7,50 @@ import { renderRulesText } from "./RulesText";
 
 const EVENT_CHROME_COLOR = "#c084fc";
 const CHARACTER_CHROME_COLOR = "#facc15";
+
+/**
+ * Visual treatment for a rarity bucket. A rarity adds an outer "frame layer"
+ * on top of the base card chrome — a colored ring stacked as a spread-only
+ * `box-shadow` so it composes with the existing 1px border and rounded
+ * corners, plus an optional shimmer overlay controlled via a CSS class
+ * defined in `index.css`. The shimmer keyframes honor
+ * `prefers-reduced-motion`: the sweep is paused and a static highlight
+ * gradient stays in place.
+ *
+ * The map is the single extension point for future rarities (Mythic /
+ * Ascendant / …). Add an entry here, and the frame, animation, and
+ * accessibility behavior fall out without further branching in render code.
+ */
+interface RarityStyle {
+  /** Outer accent ring color. */
+  outlineColor: string;
+  /** Soft glow color stacked beneath the outline. */
+  glowColor: string;
+  /** Width of the accent ring (px). 0 means no rarity frame. */
+  outlineWidthPx: number;
+  /** Test-id suffix and CSS hook for the shimmer overlay. */
+  cssClass: string | null;
+}
+
+const RARITY_STYLES: Readonly<Record<Rarity, RarityStyle | null>> = {
+  Common: null,
+  Uncommon: null,
+  Rare: null,
+  Starter: null,
+  Legendary: {
+    outlineColor: "#f5c542",
+    glowColor: "rgba(245, 197, 66, 0.55)",
+    outlineWidthPx: 2,
+    cssClass: "card-rarity-legendary",
+  },
+};
+
+function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
+  if (card.rarity === undefined) {
+    return null;
+  }
+  return RARITY_STYLES[card.rarity];
+}
 
 /**
  * Hover tooltip copy for the corner pip badges. Kept short and plain-language
@@ -59,21 +103,45 @@ export function CardDisplay({
   const borderColor = chromeColor;
   const nameColor = "#f8fafc";
   const typeLine = formatTypeLine(card);
+  const rarityStyle = rarityStyleFor(card);
 
-  const borderStyle = selected
-    ? { boxShadow: `0 0 0 3px ${selectionColor}, 0 0 12px ${selectionColor}` }
-    : { boxShadow: `0 0 18px ${chromeColor}26` };
+  // Compose the box-shadow: base soft chrome glow + optional rarity ring
+  // (stacked as a wider outer glow) + selection overlay if set. The rarity
+  // ring uses a spread-only box-shadow rather than `outline` so it composes
+  // cleanly with the existing border and rounded corners.
+  const shadowLayers: string[] = [];
+  if (selected) {
+    shadowLayers.push(
+      `0 0 0 3px ${selectionColor}`,
+      `0 0 12px ${selectionColor}`,
+    );
+  } else {
+    shadowLayers.push(`0 0 18px ${chromeColor}26`);
+  }
+  if (rarityStyle !== null && !selected) {
+    shadowLayers.push(
+      `0 0 0 ${String(rarityStyle.outlineWidthPx)}px ${rarityStyle.outlineColor}`,
+      `0 0 22px ${rarityStyle.glowColor}`,
+    );
+  }
 
   const isInteractive = onClick !== undefined;
 
+  const rarityClass =
+    rarityStyle !== null && rarityStyle.cssClass !== null
+      ? ` ${rarityStyle.cssClass}`
+      : "";
+  const rarityAttr = card.rarity !== undefined ? card.rarity : undefined;
+
   return (
     <div
-      className={`relative flex flex-col overflow-hidden rounded-lg transition-transform duration-200${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${className ? ` ${className}` : ""}`}
+      className={`relative flex flex-col overflow-hidden rounded-lg transition-transform duration-200${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}${className ? ` ${className}` : ""}`}
+      data-rarity={rarityAttr}
       style={{
         aspectRatio: "2 / 3",
         background: "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
         border: `1px solid ${borderColor}`,
-        ...borderStyle,
+        boxShadow: shadowLayers.join(", "),
       }}
       onClick={onClick}
       {...(isInteractive
@@ -95,6 +163,21 @@ export function CardDisplay({
           opacity: 0.8,
         }}
       />
+
+      {/*
+        Rarity shimmer overlay. Rendered only when the card has a rarity
+        treatment that defines a CSS hook; the keyframe animation lives in
+        `index.css` so `prefers-reduced-motion` can pause the sweep while
+        keeping the static highlight gradient visible. Pointer-events-none
+        keeps the overlay transparent to clicks.
+      */}
+      {rarityStyle?.cssClass !== undefined && rarityStyle?.cssClass !== null && (
+        <div
+          data-testid="card-rarity-shimmer"
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 rounded-lg ${rarityStyle.cssClass}__shimmer`}
+        />
+      )}
 
       {/* Energy cost badge */}
       <div className={`absolute ${large ? "top-2 left-2" : "top-1.5 left-1.5"} z-10 flex flex-col items-center gap-1`}>

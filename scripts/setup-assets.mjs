@@ -33,9 +33,6 @@ export function transformCard(card) {
   const result = {};
   for (const [key, value] of Object.entries(card)) {
     const camelKey = kebabToCamel(key);
-    if (camelKey === "rarity") {
-      continue;
-    }
     if (camelKey === "spark" || camelKey === "energyCost") {
       result[camelKey] = value === "" || value === "*" ? null : value;
     } else {

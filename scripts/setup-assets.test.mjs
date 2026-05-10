@@ -134,6 +134,7 @@ rendered-text = "Use the canonical Dreamsign text."
         id: "null-spark",
         cardNumber: 1,
         cardType: "Character",
+        rarity: "Common",
         subtype: "",
         isStarter: false,
         energyCost: null,
@@ -149,6 +150,7 @@ rendered-text = "Use the canonical Dreamsign text."
         id: "missing-subtype",
         cardNumber: 2,
         cardType: "Event",
+        rarity: "Rare",
         subtype: "",
         isStarter: false,
         energyCost: 2,
@@ -164,6 +166,7 @@ rendered-text = "Use the canonical Dreamsign text."
         id: "starter-card",
         cardNumber: 3,
         cardType: "Character",
+        rarity: "Starter",
         subtype: "Beast",
         isStarter: true,
         energyCost: 1,
@@ -286,5 +289,95 @@ rendered-text = ""
     );
     expect(dreamcallers[0].startingEssence).toBe(220);
     expect(dreamcallers[1].startingEssence).toBe(250);
+  });
+
+  it("retains the rarity field on each runtime card", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "quest-setup-assets-"));
+    const publicDir = join(tempRoot, "public");
+    const imageCacheDir = join(tempRoot, "image-cache");
+    const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
+    const dreamsignArtDir = join(tempRoot, "dreamsign-art");
+    const cardTomlPath = join(tempRoot, "rendered-cards.toml");
+    const dreamcallerTomlPath = join(tempRoot, "dreamcallers.toml");
+    const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
+
+    mkdirSync(imageCacheDir, { recursive: true });
+    mkdirSync(dreamcallerArtDir, { recursive: true });
+    mkdirSync(dreamsignArtDir, { recursive: true });
+    writeFileSync(join(dreamcallerArtDir, "0007.png"), "fake-png");
+    writeFileSync(
+      cardTomlPath,
+      `[[cards]]
+name = "Hero Card"
+id = "hero-card"
+card-number = 401
+card-type = "Character"
+subtype = "Warrior"
+rarity = "Legendary"
+energy-cost = 5
+spark = 5
+is-fast = false
+tides = ["core"]
+rendered-text = ""
+image-number = 401
+art-owned = true
+
+[[cards]]
+name = "Filler"
+id = "filler"
+card-number = 402
+card-type = "Event"
+rarity = "Common"
+energy-cost = 1
+spark = ""
+is-fast = false
+tides = ["core"]
+rendered-text = ""
+image-number = 402
+art-owned = true
+`,
+    );
+    writeFileSync(
+      dreamcallerTomlPath,
+      `[[dreamcaller]]
+id = "dc-1"
+name = "Caller"
+title = "Title"
+rendered-text = ""
+image-number = "0007"
+mandatory-tides = ["core"]
+optional-tides = ["a", "b", "c", "d"]
+`,
+    );
+    writeFileSync(
+      dreamsignTomlPath,
+      `[[dreamsign]]
+id = "sign-1"
+name = "Test Sign"
+image_name = "test-sign.png"
+tides = ["core"]
+rendered-text = ""
+`,
+    );
+    writeFileSync(join(dreamsignArtDir, "test-sign.png"), "fake-png");
+
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    setupAssets({
+      cardTomlPath,
+      dreamcallerTomlPath,
+      dreamsignTomlPath,
+      publicDir,
+      imageCacheDir,
+      dreamcallerArtDir,
+      dreamsignArtDir,
+    });
+
+    const cards = JSON.parse(
+      readFileSync(join(publicDir, "card-data.json"), "utf8"),
+    );
+    const byNumber = new Map(cards.map((c) => [c.cardNumber, c]));
+    expect(byNumber.get(401)?.rarity).toBe("Legendary");
+    expect(byNumber.get(402)?.rarity).toBe("Common");
   });
 });

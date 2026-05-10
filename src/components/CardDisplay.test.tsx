@@ -259,6 +259,82 @@ describe("CardDisplay", () => {
     });
   });
 
+  it("does not render the rarity shimmer overlay for non-Legendary rarities", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ rarity: "Common" })} />,
+    );
+
+    expect(
+      container.querySelector("[data-testid=\"card-rarity-shimmer\"]"),
+    ).toBeNull();
+    const cardRoot = container.firstElementChild as HTMLDivElement | null;
+    expect(cardRoot?.className.includes("card-rarity-legendary")).toBe(false);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("does not render the rarity shimmer overlay when rarity is omitted", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({})} />,
+    );
+
+    expect(
+      container.querySelector("[data-testid=\"card-rarity-shimmer\"]"),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders a Legendary card with a gold rarity frame ring and shimmer overlay", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ rarity: "Legendary" })} />,
+    );
+
+    const cardRoot = container.firstElementChild as HTMLDivElement | null;
+    if (!cardRoot) {
+      throw new Error("Missing card root");
+    }
+    // Frame ring: gold-tinted outer box-shadow.
+    expect(cardRoot.style.boxShadow.toLowerCase()).toContain("#f5c542");
+    // CSS hook for the keyframe animation lives on the root and the overlay.
+    expect(cardRoot.className.includes("card-rarity-legendary")).toBe(true);
+    expect(cardRoot.getAttribute("data-rarity")).toBe("Legendary");
+    const shimmer = container.querySelector<HTMLElement>(
+      "[data-testid=\"card-rarity-shimmer\"]",
+    );
+    expect(shimmer).not.toBeNull();
+    expect(
+      shimmer?.className.includes("card-rarity-legendary__shimmer"),
+    ).toBe(true);
+    // Overlay is decorative — aria-hidden so screen readers skip it.
+    expect(shimmer?.getAttribute("aria-hidden")).toBe("true");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("preserves the card-type chrome border on a Legendary card", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ rarity: "Legendary", cardType: "Character" })} />,
+    );
+
+    const cardRoot = container.firstElementChild as HTMLDivElement | null;
+    if (!cardRoot) {
+      throw new Error("Missing card root");
+    }
+    // Character chrome still drives the inner 1px border.
+    expect(cardRoot.style.border).toContain("rgb(250, 204, 21)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("uses parallel outline treatment so Character and Event chrome share width and softness", () => {
     const characterMount = mount(
       <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,

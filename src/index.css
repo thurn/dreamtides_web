@@ -43,3 +43,50 @@ body {
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
   }
 }
+
+/*
+ * Legendary card frame shimmer.
+ *
+ * The card's main border is set inline in `CardDisplay` per-rarity. This
+ * keyframe layer adds a slow diagonal gold sweep over the card so a
+ * legendary in a draft offer reads as a small event without being noisy.
+ * The animation is paused (and a static highlight gradient stays in
+ * place) when the user requests reduced motion, satisfying the
+ * accessibility contract.
+ */
+@keyframes card-rarity-legendary-shimmer {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 150% 0;
+  }
+}
+
+.card-rarity-legendary__shimmer {
+  background: linear-gradient(
+    115deg,
+    rgba(255, 232, 150, 0) 35%,
+    rgba(255, 232, 150, 0.28) 50%,
+    rgba(255, 232, 150, 0) 65%
+  );
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  background-position: -150% 0;
+  mix-blend-mode: screen;
+  animation: card-rarity-legendary-shimmer 2.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-rarity-legendary__shimmer {
+    animation: none;
+    background: linear-gradient(
+      115deg,
+      rgba(255, 232, 150, 0) 35%,
+      rgba(255, 232, 150, 0.2) 50%,
+      rgba(255, 232, 150, 0) 65%
+    );
+    background-size: 100% 100%;
+    background-position: 0 0;
+  }
+}

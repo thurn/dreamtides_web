@@ -20,6 +20,16 @@ interface DebugScreenProps {
   resolvedPackage: ResolvedDreamcallerPackage | null;
   remainingDreamsignPool: string[];
   dreamsignTemplates: readonly DreamsignTemplate[];
+  /**
+   * QA-only debug action: replace the current draft offer with up to four
+   * legendary cards drawn from the card database. Wired through `App.tsx`
+   * to `mutations.setDraftState`. Used to verify the legendary frame
+   * treatment surfaces correctly when an offer is filled with legendaries.
+   */
+  onForceLegendaryOffer?: (
+    draftState: DraftState,
+    source: string,
+  ) => void;
 }
 
 /** Full-screen overlay showing package and draft pool debug info. */
@@ -31,6 +41,7 @@ export function DebugScreen({
   resolvedPackage,
   remainingDreamsignPool,
   dreamsignTemplates,
+  onForceLegendaryOffer,
 }: DebugScreenProps) {
   const debugInfo = useMemo(
     () => extractDraftDebugInfo(draftState, cardDatabase),
@@ -256,6 +267,16 @@ export function DebugScreen({
                         label: card.name,
                       }))}
                     />
+                    {draftState !== null
+                      && onForceLegendaryOffer !== undefined
+                      && draftState.currentOffer.length > 0 && (
+                        <ForceLegendaryOfferButton
+                          draftState={draftState}
+                          cardDatabase={cardDatabase}
+                          onApply={onForceLegendaryOffer}
+                          onClose={handleClose}
+                        />
+                      )}
                   </InfoCard>
                 )}
 
@@ -352,5 +373,64 @@ function InfoCard({
       </p>
       {children}
     </div>
+  );
+}
+
+/**
+ * QA-only button that overrides the current draft offer with up to four
+ * legendary cards drawn from the live card database. Useful for verifying
+ * the legendary frame treatment without rerolling a draft until a
+ * legendary surfaces naturally.
+ */
+function ForceLegendaryOfferButton({
+  draftState,
+  cardDatabase,
+  onApply,
+  onClose,
+}: {
+  draftState: DraftState;
+  cardDatabase: Map<number, CardData>;
+  onApply: (draftState: DraftState, source: string) => void;
+  onClose: () => void;
+}) {
+  const legendaryCards = useMemo(
+    () =>
+      Array.from(cardDatabase.values()).filter(
+        (card) => card.rarity === "Legendary",
+      ),
+    [cardDatabase],
+  );
+  const canForce = legendaryCards.length >= 1;
+
+  const handleClick = useCallback(() => {
+    if (!canForce) return;
+    const offerCount = Math.min(4, legendaryCards.length);
+    const offer = legendaryCards
+      .slice(0, offerCount)
+      .map((card) => card.cardNumber);
+    const nextDraftState: DraftState = {
+      ...draftState,
+      currentOffer: offer,
+    };
+    onApply(nextDraftState, "debug_force_legendary_offer");
+    onClose();
+  }, [canForce, legendaryCards, draftState, onApply, onClose]);
+
+  if (!canForce) return null;
+
+  return (
+    <button
+      data-testid="debug-force-legendary-offer"
+      type="button"
+      onClick={handleClick}
+      className="mt-2 cursor-pointer rounded-md px-3 py-1 text-[11px] font-bold uppercase tracking-wider"
+      style={{
+        background: "linear-gradient(135deg, #d4a017 0%, #fbbf24 100%)",
+        color: "#1a1025",
+        border: "1px solid rgba(255, 232, 150, 0.6)",
+      }}
+    >
+      Force Legendary Offer (QA)
+    </button>
   );
 }
