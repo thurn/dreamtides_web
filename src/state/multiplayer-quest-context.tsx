@@ -52,6 +52,7 @@ import {
   changeQuestEssence,
   commitPreparedDraftCardPickInQuestState,
   completeQuestSite,
+  DREAMSIGN_REJECTION_ESSENCE,
   prepareDraftCardPickInQuestState,
   setQuestScreen,
   startQuestFromDreamcaller,
@@ -1611,6 +1612,69 @@ export function MultiplayerQuestProvider({
     [],
   );
 
+  const rejectDreamsignOffer = useCallback((siteId: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        if (room.questState.visitedSites.includes(siteId)) {
+          return room;
+        }
+        const runtime = room.questState.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "dreamsignOffer" ||
+          runtime.accepted
+        ) {
+          return room;
+        }
+
+        const next = completeSiteAndReturnToDreamscape(
+          {
+            ...room.questState,
+            essence:
+              room.questState.essence + DREAMSIGN_REJECTION_ESSENCE,
+            siteRuntime: {
+              ...room.questState.siteRuntime,
+              [siteId]: {
+                ...runtime,
+                accepted: true,
+              },
+            },
+          },
+          siteId,
+        );
+        return {
+          ...room,
+          questState: next,
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "rejectDreamsignOffer",
+              source: "site_reveal",
+              summary: {
+                siteId,
+                essenceReward: DREAMSIGN_REJECTION_ESSENCE,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
   const acceptDreamsignOffer = useCallback(
     (siteId: string, dreamsign: Dreamsign, purgeIndex?: number) => {
       const current = currentRef.current;
@@ -2839,6 +2903,7 @@ export function MultiplayerQuestProvider({
       acceptRewardSite,
       ensureDreamsignOfferRuntime,
       acceptDreamsignOffer,
+      rejectDreamsignOffer,
       ensureEssenceSiteRuntime,
       acceptEssenceSite,
       ensureShopRuntime,
@@ -2893,6 +2958,7 @@ export function MultiplayerQuestProvider({
       acceptRewardSite,
       ensureDreamsignOfferRuntime,
       acceptDreamsignOffer,
+      rejectDreamsignOffer,
       ensureEssenceSiteRuntime,
       acceptEssenceSite,
       ensureCardChoiceRuntime,

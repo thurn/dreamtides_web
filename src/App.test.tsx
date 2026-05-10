@@ -112,6 +112,7 @@ function makeMutations(): QuestMutations {
     acceptRewardSite: vi.fn(),
     ensureDreamsignOfferRuntime: vi.fn(),
     acceptDreamsignOffer: vi.fn(),
+    rejectDreamsignOffer: vi.fn(),
     ensureEssenceSiteRuntime: vi.fn(),
     acceptEssenceSite: vi.fn(),
     ensureShopRuntime: vi.fn(),

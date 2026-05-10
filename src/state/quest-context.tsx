@@ -51,6 +51,7 @@ import type { RuntimeConfig } from "../runtime/runtime-config";
 import { createStartInBattleState } from "../runtime/start-in-battle-state";
 import {
   completeQuestSite,
+  DREAMSIGN_REJECTION_ESSENCE,
   setQuestScreen,
   startQuestFromDreamcaller,
 } from "./quest-state-actions";
@@ -94,6 +95,12 @@ export interface QuestMutations {
     dreamsign: Dreamsign,
     purgeIndex?: number,
   ) => void;
+  /**
+   * Rejects the Dreamsign Offering at the given site. Grants
+   * `DREAMSIGN_REJECTION_ESSENCE` as a consolation reward, marks the
+   * runtime as resolved, and completes the site.
+   */
+  rejectDreamsignOffer: (siteId: string) => void;
   ensureEssenceSiteRuntime: (siteId: string, isEnhanced: boolean) => void;
   acceptEssenceSite: (siteId: string) => void;
   ensureShopRuntime: (site: SiteState, specialtyOnly: boolean) => void;
@@ -1079,6 +1086,55 @@ export function QuestProvider({
     },
     [],
   );
+
+  const rejectDreamsignOffer = useCallback((siteId: string) => {
+    setState((prev) => {
+      if (prev.visitedSites.includes(siteId)) {
+        return prev;
+      }
+      const runtime = prev.siteRuntime[siteId];
+      if (
+        runtime === undefined ||
+        runtime.kind !== "dreamsignOffer" ||
+        runtime.accepted
+      ) {
+        return prev;
+      }
+
+      const oldValue = prev.essence;
+      const newValue = oldValue + DREAMSIGN_REJECTION_ESSENCE;
+      logEvent("essence_changed", {
+        oldValue,
+        newValue,
+        delta: DREAMSIGN_REJECTION_ESSENCE,
+        source: "dreamsign_offering_rejected",
+      });
+      const site = findSite(prev, siteId);
+      logEvent("site_completed", {
+        siteType: "DreamsignOffering",
+        outcome: `Rejected for ${String(DREAMSIGN_REJECTION_ESSENCE)} essence`,
+        isEnhanced: site?.isEnhanced ?? false,
+      });
+
+      return setQuestScreen(
+        completeQuestSite(
+          {
+            ...prev,
+            essence: newValue,
+            siteRuntime: {
+              ...prev.siteRuntime,
+              [siteId]: {
+                ...runtime,
+                accepted: true,
+              },
+            },
+          },
+          siteId,
+        ),
+        { type: "dreamscape" },
+      );
+    });
+  }, []);
 
   const ensureEssenceSiteRuntime = useCallback(
     (siteId: string, isEnhanced: boolean) => {
@@ -2114,6 +2170,7 @@ export function QuestProvider({
       acceptRewardSite,
       ensureDreamsignOfferRuntime,
       acceptDreamsignOffer,
+      rejectDreamsignOffer,
       ensureEssenceSiteRuntime,
       acceptEssenceSite,
       ensureShopRuntime,
@@ -2154,6 +2211,7 @@ export function QuestProvider({
       acceptRewardSite,
       ensureDreamsignOfferRuntime,
       acceptDreamsignOffer,
+      rejectDreamsignOffer,
       ensureEssenceSiteRuntime,
       acceptEssenceSite,
       ensureShopRuntime,

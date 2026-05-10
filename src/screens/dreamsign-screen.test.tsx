@@ -78,6 +78,7 @@ function makeMutations(): QuestMutations {
     acceptRewardSite: vi.fn(),
     ensureDreamsignOfferRuntime: vi.fn(),
     acceptDreamsignOffer: vi.fn(),
+    rejectDreamsignOffer: vi.fn(),
     ensureEssenceSiteRuntime: vi.fn(),
     acceptEssenceSite: vi.fn(),
     ensureShopRuntime: vi.fn(),
@@ -199,7 +200,7 @@ afterEach(() => {
 });
 
 describe("DreamsignOfferingScreen", () => {
-  it("renders shared offered dreamsigns and completes when rejected", () => {
+  it("rejects the offering for 25 essence and labels the button accordingly", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
@@ -226,13 +227,18 @@ describe("DreamsignOfferingScreen", () => {
 
     expect(container.textContent).toContain("Ember's Whisper");
 
-    clickButton(container, "Reject");
+    const rejectButton = Array.from(
+      container.querySelectorAll("button"),
+    ).find((candidate) =>
+      candidate.textContent?.trim().startsWith("Reject"),
+    );
+    expect(rejectButton?.textContent).toContain("+25 Essence");
+
+    clickButton(container, rejectButton?.textContent?.trim() ?? "");
 
     expect(mutations.acceptDreamsignOffer).not.toHaveBeenCalled();
-    expect(mutations.completeSite).toHaveBeenCalledWith(
-      "site-1",
-      "dreamsign_offering",
-    );
+    expect(mutations.completeSite).not.toHaveBeenCalled();
+    expect(mutations.rejectDreamsignOffer).toHaveBeenCalledWith("site-1");
 
     act(() => {
       root.unmount();

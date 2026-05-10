@@ -1457,6 +1457,112 @@ describe("MultiplayerQuestProvider", () => {
     });
   });
 
+  it("rejecting a dreamsign offer grants 25 essence and completes the site", () => {
+    const captured: QuestContextValue[] = [];
+    const offeredDreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 200,
+      siteRuntime: {
+        "site-1": {
+          kind: "dreamsignOffer",
+          offeredDreamsigns: [offeredDreamsign],
+          remainingDreamsignPool: [],
+          accepted: false,
+        },
+      },
+      atlas: {
+        nodes: {
+          "node-1": {
+            id: "node-1",
+            biomeName: "Candle Mire",
+            biomeColor: "#abcdef",
+            sites: [
+              {
+                id: "site-1",
+                type: "DreamsignOffering",
+                isEnhanced: false,
+                isVisited: false,
+              },
+            ],
+            position: { x: 0, y: 0 },
+            status: "available",
+            enhancedSiteType: null,
+          },
+        },
+        edges: [],
+        nexusId: "node-1",
+      },
+      screen: { type: "site", siteId: "site-1" },
+      activeSiteId: "site-1",
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.rejectDreamsignOffer("site-1");
+    const updater = latestRoomTransactionUpdater();
+    const nextRoom = updater?.(session.room);
+
+    expect(nextRoom?.questState?.essence).toBe(225);
+    expect(nextRoom?.questState?.visitedSites).toEqual(["site-1"]);
+    expect(nextRoom?.questState?.screen).toEqual({ type: "dreamscape" });
+    expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
+      kind: "dreamsignOffer",
+      offeredDreamsigns: [offeredDreamsign],
+      remainingDreamsignPool: [],
+      accepted: true,
+    });
+    expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "rejectDreamsignOffer",
+      source: "site_reveal",
+      summary: {
+        siteId: "site-1",
+        essenceReward: 25,
+      },
+    });
+  });
+
+  it("ignores rejecting a dreamsign offer when the site is already visited", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 200,
+      visitedSites: ["site-1"],
+      siteRuntime: {
+        "site-1": {
+          kind: "dreamsignOffer",
+          offeredDreamsigns: [makeDreamsign("dreamsign-1", "Dreamsign One")],
+          remainingDreamsignPool: [],
+          accepted: false,
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.rejectDreamsignOffer("site-1");
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
   it("rejects reward acceptance when the site is already visited", () => {
     const captured: QuestContextValue[] = [];
     const questState: QuestState = {

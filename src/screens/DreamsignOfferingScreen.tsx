@@ -4,6 +4,7 @@ import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { RulesText } from "../components/RulesText";
+import { DREAMSIGN_REJECTION_ESSENCE } from "../state/quest-state-actions";
 
 const MAX_DREAMSIGNS = 12;
 
@@ -48,10 +49,6 @@ export function DreamsignOfferingScreen({
     });
   }, [site.isEnhanced, optionCount, options]);
 
-  const completeSite = useCallback(() => {
-    mutations.completeSite(site.id, "dreamsign_offering");
-  }, [site, mutations]);
-
   const handleAccept = useCallback(
     (dreamsign: Dreamsign) => {
       if (currentDreamsigns.length >= MAX_DREAMSIGNS) {
@@ -76,8 +73,8 @@ export function DreamsignOfferingScreen({
   );
 
   const handleReject = useCallback(() => {
-    completeSite();
-  }, [completeSite]);
+    mutations.rejectDreamsignOffer(site.id);
+  }, [mutations, site.id]);
 
   if (purging) {
     return (
@@ -214,7 +211,7 @@ export function DreamsignOfferingScreen({
         </div>
       )}
 
-      {/* Reject / Skip */}
+      {/* Reject / Skip: refuses the offering and grants a consolation essence reward. */}
       <button
         className="mt-8 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
         style={{
@@ -224,7 +221,7 @@ export function DreamsignOfferingScreen({
         }}
         onClick={handleReject}
       >
-        {options.length > 1 ? "Skip" : "Reject"}
+        {`${options.length > 1 ? "Skip" : "Reject"} (+${String(DREAMSIGN_REJECTION_ESSENCE)} Essence)`}
       </button>
     </motion.div>
   );
