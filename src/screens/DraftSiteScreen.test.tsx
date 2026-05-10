@@ -478,7 +478,7 @@ describe("DraftSiteScreen", () => {
       const text = element.textContent?.trim() ?? "";
       return (
         text !== ""
-        && !/Continue|Accept|Decline|Reject|Leave Shop|Skip|Return to Atlas|Battle|Miniboss|Final Boss/.test(
+        && !/Continue|Accept|Decline|Reject|Leave Shop|Skip|Battle|Miniboss|Final Boss/.test(
           text,
         )
       );

@@ -39,11 +39,6 @@ export function DreamscapeScreen() {
     [node, mutations],
   );
 
-  const handleReturnToAtlas = useCallback(() => {
-    mutations.setCurrentDreamscape(null);
-    mutations.setScreen({ type: "atlas" });
-  }, [mutations]);
-
   if (!node) {
     return (
       <div className="flex h-full items-center justify-center p-8">
@@ -95,21 +90,6 @@ export function DreamscapeScreen() {
             />
           );
         })}
-      </div>
-
-      {/* Escape hatch: return to atlas without completing */}
-      <div className="mt-6 flex gap-3 md:mt-8">
-        <button
-          className="rounded-lg px-4 py-2 text-sm font-medium transition-colors md:text-base"
-          style={{
-            background: "rgba(107, 114, 128, 0.2)",
-            border: "1px solid rgba(107, 114, 128, 0.4)",
-            color: "#9ca3af",
-          }}
-          onClick={handleReturnToAtlas}
-        >
-          Return to Atlas
-        </button>
       </div>
     </motion.div>
   );
