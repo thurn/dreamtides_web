@@ -1,7 +1,11 @@
 import { useEffect, useState, type ReactNode } from "react";
 import type { CardData, FrozenCardData } from "../types/cards";
 import { cardImageUrl } from "../data/card-database";
-import { tokenizeRulesText, formatTypeLine } from "./card-text";
+import {
+  tokenizeRulesText,
+  formatTypeLine,
+  type TextSegment,
+} from "./card-text";
 
 /** Color used for each symbol type when rendering rules text. */
 const SYMBOL_COLORS: Readonly<Record<string, string>> = {
@@ -29,32 +33,42 @@ interface CardDisplayProps {
   large?: boolean;
 }
 
-/** Renders styled rules text, replacing special symbols with colored spans. */
-function renderRulesText(text: string): ReactNode[] {
-  return tokenizeRulesText(text).map((segment, i) => {
-    if (segment.kind === "text") {
-      return <span key={i}>{segment.value}</span>;
-    }
-    if (segment.symbol === "energy") {
-      return (
-        <i
-          key={i}
-          aria-label="energy"
-          className={`${ENERGY_ICON_CLASS} align-middle`}
-          style={{ color: SYMBOL_COLORS.energy }}
-        />
-      );
-    }
+/** Renders a single tokenized segment as a React node. */
+function renderSegment(segment: TextSegment, key: number | string): ReactNode {
+  if (segment.kind === "text") {
+    return <span key={key}>{segment.value}</span>;
+  }
+  if (segment.kind === "nobreak") {
     return (
-      <span
-        key={i}
-        className="font-bold"
-        style={{ color: SYMBOL_COLORS[segment.symbol] }}
-      >
-        {segment.char}
+      <span key={key} style={{ whiteSpace: "nowrap" }}>
+        {segment.segments.map((inner, j) => renderSegment(inner, `${key}-${j}`))}
       </span>
     );
-  });
+  }
+  if (segment.symbol === "energy") {
+    return (
+      <i
+        key={key}
+        aria-label="energy"
+        className={`${ENERGY_ICON_CLASS} align-middle`}
+        style={{ color: SYMBOL_COLORS.energy }}
+      />
+    );
+  }
+  return (
+    <span
+      key={key}
+      className="font-bold"
+      style={{ color: SYMBOL_COLORS[segment.symbol] }}
+    >
+      {segment.char}
+    </span>
+  );
+}
+
+/** Renders styled rules text, replacing special symbols with colored spans. */
+function renderRulesText(text: string): ReactNode[] {
+  return tokenizeRulesText(text).map((segment, i) => renderSegment(segment, i));
 }
 
 /**

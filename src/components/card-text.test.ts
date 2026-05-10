@@ -45,7 +45,7 @@ describe("tokenizeRulesText", () => {
     ]);
   });
 
-  it("identifies the trigger prefix \u25B8", () => {
+  it("identifies the trigger prefix \u25B8 when not followed by a keyword", () => {
     const result = tokenizeRulesText("\u25B8When played:");
     expect(result).toEqual([
       { kind: "symbol", symbol: "trigger", char: "\u25B8" },
@@ -53,12 +53,87 @@ describe("tokenizeRulesText", () => {
     ]);
   });
 
-  it("identifies the fast/lightning symbol \u21AF", () => {
+  it("identifies the fast/lightning symbol \u21AF when surrounded by spaces", () => {
     const result = tokenizeRulesText("Cast at \u21AF speed.");
     expect(result).toEqual([
       { kind: "text", value: "Cast at " },
       { kind: "symbol", symbol: "fast", char: "\u21AF" },
       { kind: "text", value: " speed." },
+    ]);
+  });
+
+  // The trigger arrow `\u25B8` must never visually orphan from its
+  // following keyword (Judgment, Materialized, Dissolved, Banished, ...). The
+  // tokenizer groups them into a single `nobreak` segment so the renderer can
+  // wrap them in `white-space: nowrap`. See backlog task 005.
+  it("groups \u25B8 with a trailing colon-suffixed keyword as nobreak", () => {
+    const result = tokenizeRulesText("\u25B8 Judgment: Draw a card.");
+    expect(result).toEqual([
+      {
+        kind: "nobreak",
+        segments: [
+          { kind: "symbol", symbol: "trigger", char: "\u25B8" },
+          { kind: "text", value: " Judgment:" },
+        ],
+      },
+      { kind: "text", value: " Draw a card." },
+    ]);
+  });
+
+  it("groups \u25B8 with a trailing comma-suffixed keyword as nobreak", () => {
+    const result = tokenizeRulesText("\u25B8 Materialized, draw a card.");
+    expect(result).toEqual([
+      {
+        kind: "nobreak",
+        segments: [
+          { kind: "symbol", symbol: "trigger", char: "\u25B8" },
+          { kind: "text", value: " Materialized," },
+        ],
+      },
+      { kind: "text", value: " draw a card." },
+    ]);
+  });
+
+  it("groups \u25B8 + bare keyword (no punctuation) as nobreak", () => {
+    const result = tokenizeRulesText("trigger the \u25B8 Judgment ability");
+    expect(result).toEqual([
+      { kind: "text", value: "trigger the " },
+      {
+        kind: "nobreak",
+        segments: [
+          { kind: "symbol", symbol: "trigger", char: "\u25B8" },
+          { kind: "text", value: " Judgment" },
+        ],
+      },
+      { kind: "text", value: " ability" },
+    ]);
+  });
+
+  it("groups all known trigger keywords with the arrow", () => {
+    for (const keyword of ["Judgment", "Materialized", "Dissolved", "Banished"]) {
+      const result = tokenizeRulesText(`\u25B8 ${keyword}: Effect.`);
+      expect(result[0]).toEqual({
+        kind: "nobreak",
+        segments: [
+          { kind: "symbol", symbol: "trigger", char: "\u25B8" },
+          { kind: "text", value: ` ${keyword}:` },
+        ],
+      });
+    }
+  });
+
+  it("groups \u21AF with a directly attached lowercase keyword (e.g. \u21AFfast)", () => {
+    const result = tokenizeRulesText("Your cards have \u21AFfast.");
+    expect(result).toEqual([
+      { kind: "text", value: "Your cards have " },
+      {
+        kind: "nobreak",
+        segments: [
+          { kind: "symbol", symbol: "fast", char: "\u21AF" },
+          { kind: "text", value: "fast" },
+        ],
+      },
+      { kind: "text", value: "." },
     ]);
   });
 
