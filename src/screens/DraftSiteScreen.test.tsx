@@ -812,4 +812,113 @@ describe("DraftSiteScreen", () => {
       root.unmount();
     });
   });
+
+  // Regression for the visible "fade out / fade in" flicker on draft entry.
+  // Before the fix, the screen mounted with `state.draftState.activeSiteId`
+  // still pointing somewhere else (or null), painted an empty grid, then
+  // re-rendered once the RTDB write round-tripped — AnimatePresence saw the
+  // grid key change and animated the empty pack out / new pack in.
+  //
+  // Pin the invariant directly: when entered with un-entered draft state,
+  // the first render already shows the freshly-bootstrapped offer cards,
+  // and the subsequent live-state catch-up does not change which cards
+  // are on screen.
+  it(
+    "shows the bootstrapped offer on first render and does not swap offers"
+      + " when the live draft state catches up",
+    () => {
+      const mutations = makeMutations();
+      const cardDatabase = makeCardDatabase();
+      // Draft pool seeded with cards 101..104 only — bootstrap must select
+      // exactly these four numbers in some order.
+      const unEnteredDraftState: DraftState = {
+        remainingCopiesByCard: {
+          "101": 1,
+          "102": 1,
+          "103": 1,
+          "104": 1,
+        },
+        currentOffer: [],
+        activeSiteId: null,
+        pickNumber: 1,
+        sitePicksCompleted: 0,
+      };
+      setQuestContext(
+        makeState({ draftState: unEnteredDraftState }),
+        mutations,
+        cardDatabase,
+      );
+
+      const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+      // First render must already display the four offer cards. Before the
+      // fix this saw zero offer cards (the empty / fading-out grid).
+      const expectedNames = [
+        "Arc Runner",
+        "Alpha Warden",
+        "Beta Ledger",
+        "Gamma Echo",
+      ];
+      const draftRoot = container.querySelector(
+        "[data-testid='draft-site-screen']",
+      );
+      expect(draftRoot).not.toBeNull();
+      const text = draftRoot?.textContent ?? "";
+      for (const name of expectedNames) {
+        expect(text).toContain(name);
+      }
+
+      // The bootstrap effect must have written the new draft state once.
+      expect(mutations.setDraftState).toHaveBeenCalledTimes(1);
+      const writtenDraftState = (
+        mutations.setDraftState as ReturnType<typeof vi.fn>
+      ).mock.calls[0]?.[0] as DraftState;
+      expect(writtenDraftState.activeSiteId).toBe("site-1");
+      expect([...writtenDraftState.currentOffer].sort()).toEqual([
+        101, 102, 103, 104,
+      ]);
+
+      // Capture the offer-grid wrapper (motion.div with key `offer-...`)
+      // identity before catch-up — if AnimatePresence remounts on the live
+      // snapshot, the DOM node identity changes and so does the textContent
+      // ordering.
+      const offerGridBefore = draftRoot?.querySelector(".order-2");
+      expect(offerGridBefore).not.toBeNull();
+      const offerTextBefore = offerGridBefore?.textContent ?? "";
+
+      // Simulate the RTDB round-trip: the locally-bootstrapped draft state
+      // arrives back as the live `state.draftState`.
+      act(() => {
+        currentState = {
+          ...currentState,
+          draftState: writtenDraftState,
+        };
+        rerenderCurrent();
+      });
+
+      const offerGridAfter = draftRoot?.querySelector(".order-2");
+      expect(offerGridAfter).not.toBeNull();
+
+      // Offer must be unchanged — the same four cards in the same display
+      // order. Any swap here would manifest in the browser as the original
+      // fade-out / fade-in flicker.
+      expect(offerGridAfter?.textContent).toBe(offerTextBefore);
+      for (const name of expectedNames) {
+        expect(offerGridAfter?.textContent ?? "").toContain(name);
+      }
+
+      // Same DOM node identity: React preserves the motion.div across the
+      // catch-up because the AnimatePresence `key` (derived from the offer
+      // numbers) does not change. A different node here would mean the
+      // grid was unmounted and remounted — i.e. the original flicker.
+      expect(offerGridAfter).toBe(offerGridBefore);
+
+      // No follow-up bootstrap write once the live state matches.
+      expect(mutations.setDraftState).toHaveBeenCalledTimes(1);
+
+      act(() => {
+        root.unmount();
+      });
+    },
+  );
 });

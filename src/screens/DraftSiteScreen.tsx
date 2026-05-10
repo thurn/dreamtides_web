@@ -294,6 +294,32 @@ function DeckSidebar({
   );
 }
 
+/**
+ * Compute a locally-bootstrapped draft state for this site if the live
+ * `state.draftState` has not yet been advanced to it. Returns null when
+ * either the live state already targets this site (no override needed) or
+ * the inputs are not ready (no draft pool / empty card database).
+ *
+ * This is the synchronous companion to the RTDB write in the bootstrap
+ * effect: the first render uses this locally-computed offer so the screen
+ * never paints with `currentOffer = []` and then re-renders with the real
+ * offer once the snapshot round-trips. That double-render is what produced
+ * the visible "fade out / fade in" flicker on draft entry.
+ */
+function bootstrapLocalDraftState(
+  liveDraftState: DraftState | null,
+  siteId: string,
+  cardDatabase: Map<number, CardData>,
+): DraftState | null {
+  if (cardDatabase.size === 0) return null;
+  if (liveDraftState === null) return null;
+  if (liveDraftState.activeSiteId === siteId) return null;
+
+  const cloned = JSON.parse(JSON.stringify(liveDraftState)) as DraftState;
+  enterDraftSite(cloned, siteId, cardDatabase);
+  return cloned;
+}
+
 /** The draft site screen: 4-card pack display, card picking, and summary. */
 export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const { state, mutations, cardDatabase } = useQuest();
@@ -303,25 +329,44 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const [showDeckSidebar, setShowDeckSidebar] = useState(true);
   const [highlightedDeckEntryId, setHighlightedDeckEntryId] = useState<string | null>(null);
   const [flyingCard, setFlyingCard] = useState<FlyingCardAnimation | null>(null);
+  // Locally-bootstrapped draft state for this site. Populated lazily on the
+  // first render when the live `state.draftState` has not yet caught up to
+  // this site, so the screen has a real offer to show before the RTDB write
+  // round-trips. Cleared once the live state matches.
+  const [localDraftState, setLocalDraftState] = useState<DraftState | null>(
+    () => bootstrapLocalDraftState(state.draftState, siteId, cardDatabase),
+  );
   const draftStateRef = useRef<DraftState | null>(null);
+  // Latches the local draft state we have already pushed to RTDB so the
+  // bootstrap effect does not re-write the same value on every snapshot
+  // received before the live state catches up.
+  const writtenLocalDraftStateRef = useRef<DraftState | null>(null);
   const pendingPickedCardNumberRef = useRef<number | null>(null);
   const offerCardRefs = useRef<Record<number, HTMLDivElement | null>>({});
   const deckFlightTargetRef = useRef<HTMLDivElement | null>(null);
   const previousDeckEntryIdsRef = useRef(state.deck.map((entry) => entry.entryId));
 
+  // Prefer the live state when it has caught up to this site (so picks /
+  // resumed visits reflect the source of truth); otherwise fall back to the
+  // local bootstrap so the first render shows the real offer.
+  const liveTargetsThisSite = state.draftState?.activeSiteId === siteId;
+  const effectiveDraftState: DraftState | null = liveTargetsThisSite
+    ? state.draftState
+    : (localDraftState ?? state.draftState);
+
   // Multiplayer snapshots create a fresh state.draftState reference on every
   // RTDB update (the normalizer in room-service rebuilds objects via spread).
   // Derive everything from content-equal scalars so renders triggered by
   // unrelated room writes don't churn local state or AnimatePresence keys.
-  const isActiveDraftSite = state.draftState?.activeSiteId === siteId;
+  const isActiveDraftSite = effectiveDraftState?.activeSiteId === siteId;
   const draftSitePicksCompleted = isActiveDraftSite
-    ? state.draftState?.sitePicksCompleted ?? 0
+    ? effectiveDraftState?.sitePicksCompleted ?? 0
     : 0;
   const draftCurrentOfferKey = isActiveDraftSite
-    ? (state.draftState?.currentOffer ?? []).join(",")
+    ? (effectiveDraftState?.currentOffer ?? []).join(",")
     : "";
-  const draftRemainingTotal = state.draftState
-    ? countRemainingCards(state.draftState.remainingCopiesByCard)
+  const draftRemainingTotal = effectiveDraftState
+    ? countRemainingCards(effectiveDraftState.remainingCopiesByCard)
     : 0;
 
   const draftedCardNumbers = useMemo(() => {
@@ -366,21 +411,52 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
 
   // Initialize or resume draft state for this site. The body only writes when
   // we need to enter a different site — content-stable derivations above
-  // handle the steady-state display, so this effect must not call setState.
+  // handle the steady-state display, so this effect must not call setState
+  // on the live draft slice. It DOES set `localDraftState` so the first
+  // paint already shows the new offer (the synchronous useState initializer
+  // covers the very first render; this effect covers later siteId / draft
+  // state changes).
   useEffect(() => {
     if (cardDatabase.size === 0) return;
     if (state.draftState === null) return;
 
     if (state.draftState.activeSiteId === siteId) {
       draftStateRef.current = state.draftState;
+      // Live state has caught up; drop the local override so the live
+      // snapshot is the single source of truth for subsequent picks. Also
+      // release the write latch so a future re-entry can issue its own
+      // bootstrap write.
+      if (localDraftState !== null) {
+        setLocalDraftState(null);
+      }
+      writtenLocalDraftStateRef.current = null;
+      return;
+    }
+
+    // The local state initializer already bootstrapped and held a reference
+    // for this exact (siteId, liveDraftState). Avoid re-bootstrapping on
+    // every render — a fresh enterDraftSite() call rolls a new offer via
+    // Math.random() and would itself create a flicker. Issue the RTDB
+    // bootstrap write exactly once per local-state value.
+    if (
+      localDraftState !== null
+      && localDraftState.activeSiteId === siteId
+    ) {
+      draftStateRef.current = localDraftState;
+      if (writtenLocalDraftStateRef.current !== localDraftState) {
+        writtenLocalDraftStateRef.current = localDraftState;
+        mutations.setDraftState(localDraftState, "draft_site_enter");
+      }
       return;
     }
 
     const cloned = JSON.parse(JSON.stringify(state.draftState)) as DraftState;
     enterDraftSite(cloned, siteId, cardDatabase);
     draftStateRef.current = cloned;
+    setLocalDraftState(cloned);
+    writtenLocalDraftStateRef.current = cloned;
     mutations.setDraftState(cloned, "draft_site_enter");
-  }, [siteId, state.draftState, cardDatabase, mutations]);
+  }, [siteId, state.draftState, cardDatabase, mutations, localDraftState]);
 
   useEffect(() => {
     mutations.setCardSourceDebug(cardSourceDebugState, "draft_site_cards_shown");
