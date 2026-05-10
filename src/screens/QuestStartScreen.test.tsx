@@ -13,7 +13,7 @@ import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 
 const TIDES_LABEL_HOVER_BLURB =
-  "The tidal pools are shuffled together to build the final draft pool.";
+  "These tide pools will be shuffled together to form the draft pool.";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -365,8 +365,19 @@ describe("QuestStartScreen", () => {
       container.querySelectorAll("[data-structural-tides-label]"),
     ).toHaveLength(3);
     expect(
-      container.querySelectorAll("[data-structural-tides-label-tooltip]"),
+      container.querySelectorAll("[data-structural-tides-info-icon]"),
     ).toHaveLength(3);
+    for (const dreamcaller of OFFERED_DREAMCALLERS) {
+      const icon = container.querySelector(
+        `[data-structural-tides-info-icon="${dreamcaller.id}"]`,
+      );
+      expect(icon).not.toBeNull();
+      expect(icon?.className).toContain("bx-info-circle");
+      expect(icon?.getAttribute("aria-label")).toBe("About tides");
+      expect((icon as HTMLElement | null)?.style.color).toBe(
+        "rgb(148, 163, 184)",
+      );
+    }
     expect(
       container.querySelectorAll("[data-dreamcaller-tide]"),
     ).toHaveLength(DISPLAYED_TIDES.length);
@@ -388,11 +399,13 @@ describe("QuestStartScreen", () => {
       expect((label as HTMLElement | null)?.style.color).toBe(
         "rgb(148, 163, 184)",
       );
+      // The HoverPopover content is portaled to document.body only while
+      // the trigger is hovered, so it is not in the static DOM.
       expect(
         container.querySelector(
           `[data-structural-tides-label-tooltip="${dreamcaller.id}"]`,
-        )?.textContent,
-      ).toBe(TIDES_LABEL_HOVER_BLURB);
+        ),
+      ).toBeNull();
     }
 
     for (const tide of DISPLAYED_TIDES) {
@@ -489,6 +502,62 @@ describe("QuestStartScreen", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("portals the tides explanation popover into the body when the (i) icon is hovered", () => {
+    vi.useFakeTimers();
+    try {
+      const { container, root } = mount(<QuestStartScreen />);
+
+      const firstIcon = container.querySelector(
+        `[data-structural-tides-info-icon="${OFFERED_DREAMCALLERS[0].id}"]`,
+      );
+      expect(firstIcon).not.toBeNull();
+      // The HoverPopover wraps its child in a <span>; dispatch mouse events
+      // on that wrapper because that is where React attaches the listeners.
+      const triggerWrapper = firstIcon?.parentElement;
+      expect(triggerWrapper).not.toBeNull();
+
+      // No popover content is in the DOM before hover.
+      expect(
+        document.body.querySelectorAll(
+          "[data-structural-tides-label-tooltip]",
+        ),
+      ).toHaveLength(0);
+
+      act(() => {
+        triggerWrapper?.dispatchEvent(
+          new MouseEvent("mouseover", { bubbles: true }),
+        );
+      });
+      act(() => {
+        vi.advanceTimersByTime(600);
+      });
+
+      const tooltip = document.body.querySelector(
+        `[data-structural-tides-label-tooltip="${OFFERED_DREAMCALLERS[0].id}"]`,
+      );
+      expect(tooltip).not.toBeNull();
+      expect(tooltip?.textContent).toBe(TIDES_LABEL_HOVER_BLURB);
+
+      // Mouse leave hides the popover.
+      act(() => {
+        triggerWrapper?.dispatchEvent(
+          new MouseEvent("mouseout", { bubbles: true }),
+        );
+      });
+      expect(
+        document.body.querySelectorAll(
+          "[data-structural-tides-label-tooltip]",
+        ),
+      ).toHaveLength(0);
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("applies instant hover and tap transitions even with staggered entrance animation", () => {

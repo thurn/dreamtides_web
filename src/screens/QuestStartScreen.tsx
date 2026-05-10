@@ -4,6 +4,7 @@ import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import { dreamcallerTidesForDisplay } from "../data/structural-tides";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
 import type { DreamcallerContent } from "../types/content";
 
@@ -11,7 +12,7 @@ const DREAMCALLER_ACCENT = "#c084fc";
 const DREAMCALLER_HOVER_TRANSITION = { duration: 0.12, delay: 0 } as const;
 const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
 const TIDES_LABEL_HOVER_BLURB =
-  "The tidal pools are shuffled together to build the final draft pool.";
+  "These tide pools will be shuffled together to form the draft pool.";
 
 /** Intro screen where the player picks a dreamcaller to start the quest. */
 export function QuestStartScreen() {
@@ -160,7 +161,7 @@ export function QuestStartScreen() {
               {displayedTides.length > 0 && (
                 <div className="flex w-full flex-col gap-2 px-1">
                   <span
-                    className="group/tides-label relative inline-flex w-fit"
+                    className="inline-flex w-fit items-center gap-1.5"
                     data-structural-tides-label-wrapper={dreamcaller.id}
                   >
                     <span
@@ -170,17 +171,32 @@ export function QuestStartScreen() {
                     >
                       Tides:
                     </span>
-                    <span
-                      className="pointer-events-none absolute bottom-full left-0 z-20 mb-2 hidden w-64 rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl group-hover/tides-label:block"
-                      style={{
-                        background: "#000000",
-                        borderColor: "rgba(255, 255, 255, 0.16)",
-                        color: "#ffffff",
-                      }}
-                      data-structural-tides-label-tooltip={dreamcaller.id}
+                    <HoverPopover
+                      content={
+                        <span
+                          className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
+                          style={{
+                            background: "#000000",
+                            borderColor: "rgba(255, 255, 255, 0.16)",
+                            color: "#ffffff",
+                          }}
+                          data-structural-tides-label-tooltip={dreamcaller.id}
+                        >
+                          {TIDES_LABEL_HOVER_BLURB}
+                        </span>
+                      }
                     >
-                      {TIDES_LABEL_HOVER_BLURB}
-                    </span>
+                      <i
+                        aria-label="About tides"
+                        className="bx bx-info-circle text-sm leading-none"
+                        data-structural-tides-info-icon={dreamcaller.id}
+                        style={{
+                          color: "#94a3b8",
+                          cursor: "help",
+                          pointerEvents: "auto",
+                        }}
+                      />
+                    </HoverPopover>
                   </span>
                   <div className="flex w-full flex-col gap-2">
                     {displayedTides.map((tide) => (
