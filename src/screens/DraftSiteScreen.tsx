@@ -760,20 +760,11 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
                     ref={(element) => {
                       offerCardRefs.current[card.cardNumber] = element;
                     }}
-                    className="relative rounded-lg transition-shadow duration-200"
+                    data-testid={`draft-offer-card-wrapper-${String(card.cardNumber)}`}
+                    className="relative rounded-lg"
                     style={{
                       height: "calc((100vh - 48px - 80px) / 2)",
                       aspectRatio: "2 / 3",
-                      boxShadow: "none",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (pickPhase === "idle") {
-                        e.currentTarget.style.boxShadow =
-                          "0 0 0 3px #f97316, 0 0 16px rgba(249, 115, 22, 0.4)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.boxShadow = "none";
                     }}
                     onContextMenu={(e) => {
                       e.preventDefault();

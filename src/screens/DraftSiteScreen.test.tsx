@@ -690,6 +690,46 @@ describe("DraftSiteScreen", () => {
     });
   });
 
+  it("does not change a draft offer card's outline color on mouse hover for either card type", () => {
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    setQuestContext(makeState(), mutations, cardDatabase);
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    // The offer pack mixes Character cards (101, 102) with Event cards
+    // (103, 104). Hover should never re-color the card outline regardless of
+    // type — character cards must not gain an orange / amber glow that event
+    // cards lack.
+    const wrappers = [101, 102, 103, 104].map((cardNumber) => {
+      const wrapper = container.querySelector(
+        `[data-testid="draft-offer-card-wrapper-${String(cardNumber)}"]`,
+      );
+      if (!(wrapper instanceof HTMLElement)) {
+        throw new Error(
+          `Missing offer wrapper for card ${String(cardNumber)}`,
+        );
+      }
+      return wrapper;
+    });
+
+    for (const wrapper of wrappers) {
+      const before = wrapper.style.boxShadow;
+      act(() => {
+        wrapper.dispatchEvent(new MouseEvent("mouseenter", { bubbles: true }));
+      });
+      const after = wrapper.style.boxShadow;
+      expect(after).toBe(before);
+      // Sanity: the inline boxShadow must never carry a hover-applied color.
+      expect(after).not.toContain("249, 115, 22");
+      expect(after).not.toContain("#f97316");
+    }
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("constrains the draft layout to the viewport so no scroll is introduced", () => {
     const mutations = makeMutations();
     const cardDatabase = makeCardDatabase();
