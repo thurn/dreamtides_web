@@ -818,18 +818,6 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
                 transition={{ duration: 0.3 }}
               />
             </div>
-            <span
-              data-testid="draft-deck-count-badge"
-              aria-label={`${String(state.deck.length)} cards in deck`}
-              className="rounded px-2 py-1 text-xs font-medium"
-              style={{
-                background: "rgba(124, 58, 237, 0.15)",
-                border: "1px solid rgba(124, 58, 237, 0.3)",
-                color: "#c084fc",
-              }}
-            >
-              {"\uD83C\uDCCF"} {String(state.deck.length)}
-            </span>
           </div>
         </div>
       </div>

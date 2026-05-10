@@ -508,21 +508,20 @@ describe("DraftSiteScreen", () => {
     });
   });
 
-  it("toggles the deck sidebar via the chevron button without using the count badge", () => {
+  it("toggles the deck sidebar via the chevron button and omits the redundant count badge", () => {
     const mutations = makeMutations();
     const cardDatabase = makeCardDatabase();
     setQuestContext(makeState(), mutations, cardDatabase);
 
     const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
 
-    // The deck count badge is purely informational — a span, not a button —
-    // so it cannot accidentally fold the sidebar away when tapped.
-    const badge = container.querySelector(
-      '[data-testid="draft-deck-count-badge"]',
-    );
-    expect(badge).not.toBeNull();
-    expect(badge?.tagName).toBe("SPAN");
-    expect(badge?.getAttribute("onclick")).toBeNull();
+    // The redundant deck count badge in the draft header is gone — the deck
+    // count is communicated by the deck-panel header ("Deck (N)") and the
+    // bottom HUD ("N Cards"). A small card-shaped badge in the header would
+    // teach players to ignore real cards.
+    expect(
+      container.querySelector('[data-testid="draft-deck-count-badge"]'),
+    ).toBeNull();
 
     // Initial state: sidebar expanded, chevron points toward the edge it
     // folds into (right) and reports `aria-expanded="true"`.
@@ -573,19 +572,9 @@ describe("DraftSiteScreen", () => {
     );
     expect(collapsedToggle?.textContent).toBe("◀");
 
-    // The deck count badge stays visible while collapsed and still does not
-    // toggle anything when clicked.
-    const badgeAfterCollapse = container.querySelector(
-      '[data-testid="draft-deck-count-badge"]',
-    );
-    expect(badgeAfterCollapse).not.toBeNull();
-    act(() => {
-      badgeAfterCollapse?.dispatchEvent(
-        new MouseEvent("click", { bubbles: true }),
-      );
-    });
+    // The deck count badge remains absent while collapsed.
     expect(
-      container.querySelector('[data-testid="draft-deck-sidebar"]'),
+      container.querySelector('[data-testid="draft-deck-count-badge"]'),
     ).toBeNull();
 
     // Click chevron again: panel re-expands and chevron flips back.
