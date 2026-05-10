@@ -7,7 +7,7 @@ import { renderRulesText } from "./RulesText";
 /** Boxicons class used to render the energy symbol. */
 const ENERGY_ICON_CLASS = "bx bxs-flame";
 const EVENT_CHROME_COLOR = "#c084fc";
-const CHARACTER_CHROME_COLOR = "#a855f7";
+const CHARACTER_CHROME_COLOR = "#facc15";
 
 /** Props for the CardDisplay component. */
 interface CardDisplayProps {
@@ -44,16 +44,13 @@ export function CardDisplay({
   const accentColor = CHARACTER_CHROME_COLOR;
   const chromeColor =
     card.cardType === "Event" ? EVENT_CHROME_COLOR : accentColor;
-  const borderColor =
-    card.cardType === "Event" ? chromeColor : `${chromeColor}55`;
+  const borderColor = chromeColor;
   const nameColor = "#f8fafc";
   const typeLine = formatTypeLine(card);
 
   const borderStyle = selected
     ? { boxShadow: `0 0 0 3px ${selectionColor}, 0 0 12px ${selectionColor}` }
-    : card.cardType === "Event"
-      ? { boxShadow: `0 0 18px ${EVENT_CHROME_COLOR}26` }
-      : {};
+    : { boxShadow: `0 0 18px ${chromeColor}26` };
 
   const isInteractive = onClick !== undefined;
 

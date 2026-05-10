@@ -88,7 +88,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders Event cards with distinctive purple border chrome", () => {
+  it("renders Event cards with a distinctive purple border chrome", () => {
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
@@ -111,7 +111,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders character cards with the rarity-driven character chrome accent", () => {
+  it("renders Character cards with a distinctive yellow border chrome", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
     );
@@ -121,11 +121,46 @@ describe("CardDisplay", () => {
       throw new Error("Missing card root");
     }
 
-    expect(cardRoot.style.border).toContain("rgba(168, 85, 247");
-    expect(cardRoot.style.boxShadow).toBe("");
+    expect(cardRoot.style.border).toContain("rgb(250, 204, 21)");
+    expect(cardRoot.style.boxShadow).toContain("#facc15");
 
     act(() => {
       root.unmount();
+    });
+  });
+
+  it("uses parallel outline treatment so Character and Event chrome share width and softness", () => {
+    const characterMount = mount(
+      <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
+    );
+    const eventMount = mount(
+      <CardDisplay
+        card={makeCard({ cardType: "Event", spark: null })}
+      />,
+    );
+
+    const characterRoot =
+      characterMount.container.firstElementChild as HTMLDivElement | null;
+    const eventRoot =
+      eventMount.container.firstElementChild as HTMLDivElement | null;
+    if (!characterRoot || !eventRoot) {
+      throw new Error("Missing card root");
+    }
+
+    // Same border width (both render a 1px solid border).
+    expect(characterRoot.style.borderWidth).toBe(eventRoot.style.borderWidth);
+    expect(characterRoot.style.borderStyle).toBe(eventRoot.style.borderStyle);
+
+    // Same softness: identical box-shadow expression except for the color token.
+    const normalize = (shadow: string) =>
+      shadow.replace(/#[0-9a-f]{6}/gi, "<color>");
+    expect(normalize(characterRoot.style.boxShadow)).toBe(
+      normalize(eventRoot.style.boxShadow),
+    );
+
+    act(() => {
+      characterMount.root.unmount();
+      eventMount.root.unmount();
     });
   });
 });
