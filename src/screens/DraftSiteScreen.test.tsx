@@ -606,6 +606,26 @@ describe("DraftSiteScreen", () => {
     expect(screen.style.height).toContain("48px");
     expect(screen.className).toMatch(/\boverflow-hidden\b/);
 
+    // Each offer card wrapper sizes itself to half of (viewport - HUD -
+    // header chrome) so the 2x2 grid always fits two rows in the screen.
+    // Without this constraint the card defaults to its content height and
+    // the bottom row clips at 1280x633-style laptop sizes.
+    const offerWrappers = Array.from(screen.querySelectorAll("div")).filter(
+      (element) =>
+        element.style.aspectRatio === "2 / 3"
+        && element.style.height.startsWith("calc"),
+    );
+    expect(offerWrappers).toHaveLength(4);
+    for (const wrapper of offerWrappers) {
+      // The browser keeps `(… - 48px - 80px) / 2`; jsdom normalizes it to
+      // `0.5 * (… - 48px - 80px)`. Either form expresses "half of viewport
+      // minus HUD minus header chrome" — accept either.
+      expect(wrapper.style.height).toContain("100vh");
+      expect(wrapper.style.height).toContain("48px");
+      expect(wrapper.style.height).toContain("80px");
+      expect(wrapper.style.height).toMatch(/\/\s*2|0\.5\s*\*/);
+    }
+
     act(() => {
       root.unmount();
     });
