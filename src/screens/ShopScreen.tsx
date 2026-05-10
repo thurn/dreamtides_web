@@ -4,6 +4,7 @@ import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
+import { RulesText } from "../components/RulesText";
 import { SIZE_PRESETS } from "../components/card-size";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
@@ -305,7 +306,7 @@ function ShopSlotCard({
             className="text-center text-[10px] leading-tight opacity-70"
             style={{ color: "#e2e8f0" }}
           >
-            {ds.effectDescription}
+            <RulesText text={ds.effectDescription} />
           </p>
         </div>
         <PriceButton

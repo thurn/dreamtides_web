@@ -1,6 +1,7 @@
 import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { Dreamcaller } from "../types/quest";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
+import { RulesText } from "./RulesText";
 
 const ACCENT_COLOR = "#a855f7";
 
@@ -97,7 +98,7 @@ export function DreamcallerPopover({
           className="text-sm leading-relaxed"
           style={{ color: "#e2e8f0" }}
         >
-          {dreamcaller.renderedText}
+          <RulesText text={dreamcaller.renderedText} />
         </p>
       </div>
     </div>

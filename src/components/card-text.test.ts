@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { tokenizeRulesText, formatTypeLine } from "./card-text";
+import { lookupGlossaryTerm } from "../data/glossary";
 import type { CardData } from "../types/cards";
 
 describe("tokenizeRulesText", () => {
@@ -65,76 +66,150 @@ describe("tokenizeRulesText", () => {
   // The trigger arrow `\u25B8` must never visually orphan from its
   // following keyword (Judgment, Materialized, Dissolved, Banished, ...). The
   // tokenizer groups them into a single `nobreak` segment so the renderer can
-  // wrap them in `white-space: nowrap`. See backlog task 005.
-  it("groups \u25B8 with a trailing colon-suffixed keyword as nobreak", () => {
+  // wrap them in `white-space: nowrap`. See backlog task 005. Glossary
+  // keywords inside the nobreak are wrapped as `term` segments so the
+  // RulesText renderer can attach a hover popover (backlog task 006).
+  it("groups \u25B8 with a trailing colon-suffixed keyword as nobreak (with term)", () => {
     const result = tokenizeRulesText("\u25B8 Judgment: Draw a card.");
+    const judgmentEntry = lookupGlossaryTerm("Judgment");
+    expect(judgmentEntry).toBeDefined();
     expect(result).toEqual([
       {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "\u25B8" },
-          { kind: "text", value: " Judgment:" },
+          { kind: "text", value: " " },
+          { kind: "term", word: "Judgment", entry: judgmentEntry },
+          { kind: "text", value: ":" },
         ],
       },
       { kind: "text", value: " Draw a card." },
     ]);
   });
 
-  it("groups \u25B8 with a trailing comma-suffixed keyword as nobreak", () => {
+  it("groups \u25B8 with a trailing comma-suffixed keyword as nobreak (with term)", () => {
     const result = tokenizeRulesText("\u25B8 Materialized, draw a card.");
+    const materializedEntry = lookupGlossaryTerm("Materialized");
+    expect(materializedEntry).toBeDefined();
     expect(result).toEqual([
       {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "\u25B8" },
-          { kind: "text", value: " Materialized," },
+          { kind: "text", value: " " },
+          { kind: "term", word: "Materialized", entry: materializedEntry },
+          { kind: "text", value: "," },
         ],
       },
       { kind: "text", value: " draw a card." },
     ]);
   });
 
-  it("groups \u25B8 + bare keyword (no punctuation) as nobreak", () => {
+  it("groups \u25B8 + bare keyword (no punctuation) as nobreak (with term)", () => {
     const result = tokenizeRulesText("trigger the \u25B8 Judgment ability");
+    const judgmentEntry = lookupGlossaryTerm("Judgment");
+    expect(judgmentEntry).toBeDefined();
     expect(result).toEqual([
       { kind: "text", value: "trigger the " },
       {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "\u25B8" },
-          { kind: "text", value: " Judgment" },
+          { kind: "text", value: " " },
+          { kind: "term", word: "Judgment", entry: judgmentEntry },
         ],
       },
       { kind: "text", value: " ability" },
     ]);
   });
 
-  it("groups all known trigger keywords with the arrow", () => {
+  it("groups all known trigger keywords with the arrow and wraps them as terms", () => {
     for (const keyword of ["Judgment", "Materialized", "Dissolved", "Banished"]) {
       const result = tokenizeRulesText(`\u25B8 ${keyword}: Effect.`);
+      const entry = lookupGlossaryTerm(keyword);
+      expect(entry, `${keyword} should be in the glossary`).toBeDefined();
       expect(result[0]).toEqual({
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "\u25B8" },
-          { kind: "text", value: ` ${keyword}:` },
+          { kind: "text", value: " " },
+          { kind: "term", word: keyword, entry },
+          { kind: "text", value: ":" },
         ],
       });
     }
   });
 
-  it("groups \u21AF with a directly attached lowercase keyword (e.g. \u21AFfast)", () => {
+  it("groups \u21AF with a directly attached lowercase keyword (e.g. \u21AFfast) and wraps as term", () => {
     const result = tokenizeRulesText("Your cards have \u21AFfast.");
+    const fastEntry = lookupGlossaryTerm("fast");
+    expect(fastEntry).toBeDefined();
     expect(result).toEqual([
       { kind: "text", value: "Your cards have " },
       {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "fast", char: "\u21AF" },
-          { kind: "text", value: "fast" },
+          { kind: "term", word: "fast", entry: fastEntry },
         ],
       },
       { kind: "text", value: "." },
     ]);
+  });
+
+  // Glossary tokenization tests (backlog task 006). The tokenizer wraps
+  // recognized keywords in `term` segments so the renderer can attach a
+  // hover popover.
+  it("wraps a recognized lowercase glossary term", () => {
+    const result = tokenizeRulesText("Send to your void.");
+    const voidEntry = lookupGlossaryTerm("void");
+    expect(voidEntry).toBeDefined();
+    expect(result).toEqual([
+      { kind: "text", value: "Send to your " },
+      { kind: "term", word: "void", entry: voidEntry },
+      { kind: "text", value: "." },
+    ]);
+  });
+
+  it("wraps multiple glossary terms in the same string", () => {
+    const result = tokenizeRulesText("Discover an ally with reclaim.");
+    const discoverEntry = lookupGlossaryTerm("Discover");
+    const allyEntry = lookupGlossaryTerm("ally");
+    const reclaimEntry = lookupGlossaryTerm("reclaim");
+    expect(discoverEntry).toBeDefined();
+    expect(allyEntry).toBeDefined();
+    expect(reclaimEntry).toBeDefined();
+    expect(result).toEqual([
+      { kind: "term", word: "Discover", entry: discoverEntry },
+      { kind: "text", value: " an " },
+      { kind: "term", word: "ally", entry: allyEntry },
+      { kind: "text", value: " with " },
+      { kind: "term", word: "reclaim", entry: reclaimEntry },
+      { kind: "text", value: "." },
+    ]);
+  });
+
+  it("matches plural and past-tense variants", () => {
+    const result = tokenizeRulesText("allies are dissolved.");
+    const allyEntry = lookupGlossaryTerm("ally");
+    const dissolvedEntry = lookupGlossaryTerm("Dissolved");
+    expect(allyEntry).toBeDefined();
+    expect(dissolvedEntry).toBeDefined();
+    expect(result[0]).toEqual({
+      kind: "term",
+      word: "allies",
+      entry: allyEntry,
+    });
+    expect(result[2]).toEqual({
+      kind: "term",
+      word: "dissolved",
+      entry: dissolvedEntry,
+    });
+  });
+
+  it("does not wrap unknown words", () => {
+    const result = tokenizeRulesText("Deal 3 damage.");
+    expect(result).toEqual([{ kind: "text", value: "Deal 3 damage." }]);
   });
 
   it("handles multiple different symbols in one string", () => {

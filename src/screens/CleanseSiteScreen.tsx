@@ -4,6 +4,7 @@ import type { DeckEntry, Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { CardDisplay } from "../components/CardDisplay";
+import { RulesText } from "../components/RulesText";
 
 /** Props for the CleanseSiteScreen component. */
 interface CleanseSiteScreenProps {
@@ -317,7 +318,7 @@ function BaneDreamsignDisplay({ dreamsign }: { dreamsign: Dreamsign }) {
         className="text-center text-xs leading-relaxed opacity-60"
         style={{ color: "#e2e8f0" }}
       >
-        {dreamsign.effectDescription}
+        <RulesText text={dreamsign.effectDescription} />
       </p>
       {/* Tainted overlay */}
       <div

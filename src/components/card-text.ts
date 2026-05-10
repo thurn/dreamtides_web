@@ -1,4 +1,5 @@
 import type { CardData } from "../types/cards";
+import { lookupGlossaryTerm, type GlossaryEntry } from "../data/glossary";
 
 /** Symbol types recognized in card rules text. */
 export type SymbolType = "energy" | "spark" | "trigger" | "fast";
@@ -13,11 +14,16 @@ export type SymbolType = "energy" | "spark" | "trigger" | "fast";
  *   renderer wraps them in a `white-space: nowrap` span. Used to keep the
  *   trigger arrow `▸` glued to its keyword (e.g. `▸ Judgment:`) and the fast
  *   bolt `↯` glued to its trailing keyword (e.g. `↯fast`).
+ * - `term` is a glossary-recognized word that should render with a hover
+ *   popover showing its definition. Carries the matched word as written
+ *   (with its original capitalization and trailing punctuation) plus the
+ *   resolved glossary entry.
  */
 export type TextSegment =
   | { kind: "text"; value: string }
   | { kind: "symbol"; symbol: SymbolType; char: string }
-  | { kind: "nobreak"; segments: TextSegment[] };
+  | { kind: "nobreak"; segments: TextSegment[] }
+  | { kind: "term"; word: string; entry: GlossaryEntry };
 
 /** Maps special Unicode characters to their symbol type. */
 const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
@@ -45,15 +51,94 @@ const TRIGGER_GROUP_RE = /^▸ ([A-Z][A-Za-z]*)([:,])?/;
  */
 const FAST_GROUP_RE = /^↯([a-z]+)/;
 
-/** Parses rules text into segments of plain text and special symbols. */
+/**
+ * Matches the next "word" at position 0 of the slice — a run of ASCII
+ * letters. Consumed lazily; the loop only consults this when looking for a
+ * glossary term.
+ */
+const WORD_RE = /^[A-Za-z]+/;
+
+/**
+ * Splits the contents of a `nobreak` keyword text fragment (e.g. ` Judgment:`
+ * or ` Judgment` or `fast`) into a leading whitespace prefix, the bare word,
+ * and a trailing punctuation suffix. Used so the keyword itself can be
+ * tokenized as a glossary `term` while keeping the surrounding whitespace
+ * and punctuation intact.
+ */
+function splitKeywordFragment(fragment: string): {
+  prefix: string;
+  word: string;
+  suffix: string;
+} {
+  const match = /^(\s*)([A-Za-z]+)(.*)$/.exec(fragment);
+  if (match === null) {
+    return { prefix: fragment, word: "", suffix: "" };
+  }
+  return { prefix: match[1], word: match[2], suffix: match[3] };
+}
+
+/**
+ * Wraps the keyword inside a nobreak fragment in a `term` segment if the
+ * keyword is in the glossary, otherwise returns the original text segment.
+ */
+function maybeWrapKeyword(value: string): TextSegment[] {
+  const { prefix, word, suffix } = splitKeywordFragment(value);
+  if (word === "") {
+    return [{ kind: "text", value }];
+  }
+  const entry = lookupGlossaryTerm(word);
+  const segments: TextSegment[] = [];
+  if (prefix !== "") {
+    segments.push({ kind: "text", value: prefix });
+  }
+  if (entry !== undefined) {
+    segments.push({ kind: "term", word, entry });
+  } else {
+    segments.push({ kind: "text", value: word });
+  }
+  if (suffix !== "") {
+    segments.push({ kind: "text", value: suffix });
+  }
+  return segments;
+}
+
+/** Parses rules text into segments of plain text, symbols, and glossary terms. */
 export function tokenizeRulesText(text: string): TextSegment[] {
   const segments: TextSegment[] = [];
   let buffer = "";
 
-  function flushBuffer() {
-    if (buffer.length > 0) {
-      segments.push({ kind: "text", value: buffer });
-      buffer = "";
+  function flushBufferAndExtractTerms() {
+    if (buffer.length === 0) {
+      return;
+    }
+    const chunk = buffer;
+    buffer = "";
+    let cursor = 0;
+    let pending = "";
+    while (cursor < chunk.length) {
+      const tail = chunk.slice(cursor);
+      const wordMatch = WORD_RE.exec(tail);
+      if (wordMatch === null) {
+        pending += chunk[cursor];
+        cursor += 1;
+        continue;
+      }
+      const word = wordMatch[0];
+      const entry = lookupGlossaryTerm(word);
+      if (entry !== undefined) {
+        if (pending.length > 0) {
+          segments.push({ kind: "text", value: pending });
+          pending = "";
+        }
+        segments.push({ kind: "term", word, entry });
+        cursor += word.length;
+        continue;
+      }
+      pending += word;
+      cursor += word.length;
+    }
+    if (pending.length > 0) {
+      segments.push({ kind: "text", value: pending });
     }
   }
 
@@ -65,13 +150,13 @@ export function tokenizeRulesText(text: string): TextSegment[] {
       const rest = text.slice(i);
       const match = TRIGGER_GROUP_RE.exec(rest);
       if (match) {
-        flushBuffer();
+        flushBufferAndExtractTerms();
         const tail = match[2] ?? "";
         segments.push({
           kind: "nobreak",
           segments: [
             { kind: "symbol", symbol: "trigger", char: TRIGGER_CHAR },
-            { kind: "text", value: ` ${match[1]}${tail}` },
+            ...maybeWrapKeyword(` ${match[1]}${tail}`),
           ],
         });
         i += match[0].length;
@@ -83,12 +168,12 @@ export function tokenizeRulesText(text: string): TextSegment[] {
       const rest = text.slice(i);
       const match = FAST_GROUP_RE.exec(rest);
       if (match) {
-        flushBuffer();
+        flushBufferAndExtractTerms();
         segments.push({
           kind: "nobreak",
           segments: [
             { kind: "symbol", symbol: "fast", char: FAST_CHAR },
-            { kind: "text", value: match[1] },
+            ...maybeWrapKeyword(match[1]),
           ],
         });
         i += match[0].length;
@@ -98,7 +183,7 @@ export function tokenizeRulesText(text: string): TextSegment[] {
 
     const symbolType = char !== undefined ? SYMBOL_MAP[char] : undefined;
     if (symbolType !== undefined && char !== undefined) {
-      flushBuffer();
+      flushBufferAndExtractTerms();
       segments.push({ kind: "symbol", symbol: symbolType, char });
       i += 1;
       continue;
@@ -107,7 +192,7 @@ export function tokenizeRulesText(text: string): TextSegment[] {
     buffer += char;
     i += 1;
   }
-  flushBuffer();
+  flushBufferAndExtractTerms();
   return segments;
 }
 

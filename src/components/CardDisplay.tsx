@@ -1,19 +1,9 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import type { CardData, FrozenCardData } from "../types/cards";
 import { cardImageUrl } from "../data/card-database";
-import {
-  tokenizeRulesText,
-  formatTypeLine,
-  type TextSegment,
-} from "./card-text";
+import { formatTypeLine } from "./card-text";
+import { renderRulesText } from "./RulesText";
 
-/** Color used for each symbol type when rendering rules text. */
-const SYMBOL_COLORS: Readonly<Record<string, string>> = {
-  energy: "#fbbf24",
-  spark: "#c084fc",
-  trigger: "#f97316",
-  fast: "#facc15",
-};
 /** Boxicons class used to render the energy symbol. */
 const ENERGY_ICON_CLASS = "bx bxs-flame";
 const EVENT_CHROME_COLOR = "#c084fc";
@@ -31,44 +21,6 @@ interface CardDisplayProps {
   className?: string;
   /** Use larger text sizes for rules text, name, type line, and stats. */
   large?: boolean;
-}
-
-/** Renders a single tokenized segment as a React node. */
-function renderSegment(segment: TextSegment, key: number | string): ReactNode {
-  if (segment.kind === "text") {
-    return <span key={key}>{segment.value}</span>;
-  }
-  if (segment.kind === "nobreak") {
-    return (
-      <span key={key} style={{ whiteSpace: "nowrap" }}>
-        {segment.segments.map((inner, j) => renderSegment(inner, `${key}-${j}`))}
-      </span>
-    );
-  }
-  if (segment.symbol === "energy") {
-    return (
-      <i
-        key={key}
-        aria-label="energy"
-        className={`${ENERGY_ICON_CLASS} align-middle`}
-        style={{ color: SYMBOL_COLORS.energy }}
-      />
-    );
-  }
-  return (
-    <span
-      key={key}
-      className="font-bold"
-      style={{ color: SYMBOL_COLORS[segment.symbol] }}
-    >
-      {segment.char}
-    </span>
-  );
-}
-
-/** Renders styled rules text, replacing special symbols with colored spans. */
-function renderRulesText(text: string): ReactNode[] {
-  return tokenizeRulesText(text).map((segment, i) => renderSegment(segment, i));
 }
 
 /**

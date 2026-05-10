@@ -5,6 +5,7 @@ import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { CardDisplay } from "../components/CardDisplay";
+import { RulesText } from "../components/RulesText";
 import type { CardData } from "../types/cards";
 
 /** Props for the RewardSiteScreen component. */
@@ -269,7 +270,7 @@ function DreamsignRewardDisplay({
         className="text-center text-sm leading-relaxed opacity-70"
         style={{ color: "#e2e8f0" }}
       >
-        {effectDescription}
+        <RulesText text={effectDescription} />
       </p>
     </div>
   );

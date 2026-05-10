@@ -4,6 +4,7 @@ import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import { dreamcallerTidesForDisplay } from "../data/structural-tides";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { RulesText } from "../components/RulesText";
 import type { DreamcallerContent } from "../types/content";
 
 const DREAMCALLER_ACCENT = "#c084fc";
@@ -135,7 +136,7 @@ export function QuestStartScreen() {
                   className="flex flex-1 items-center justify-center px-2 text-center text-sm leading-relaxed opacity-80"
                   style={{ color: "#e2e8f0" }}
                 >
-                  {dreamcaller.renderedText}
+                  <RulesText text={dreamcaller.renderedText} />
                 </p>
                 <div
                   className="mt-3 flex items-baseline justify-center gap-1.5 text-sm font-semibold"

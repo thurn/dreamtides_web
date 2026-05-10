@@ -18,6 +18,7 @@ import { logEvent } from "../logging";
 import { TRANSFIGURATION_COLORS } from "../transfiguration/transfiguration-logic";
 import { computeDeckSummary } from "./deck-summary";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
+import { RulesText } from "./RulesText";
 
 /** Sort criteria options. */
 type SortCriteria =
@@ -629,7 +630,7 @@ export function DeckViewer({
                       className="mt-2 text-[11px] leading-relaxed opacity-70"
                       style={{ color: "#e2e8f0" }}
                     >
-                      {state.dreamcaller.renderedText}
+                      <RulesText text={state.dreamcaller.renderedText} />
                     </p>
                   </div>
                 ) : (
@@ -697,7 +698,7 @@ export function DeckViewer({
                           className="mt-1 text-[10px] leading-snug opacity-60"
                           style={{ color: "#e2e8f0" }}
                         >
-                          {sign.effectDescription}
+                          <RulesText text={sign.effectDescription} />
                         </p>
                       </div>
                     ))}
@@ -838,7 +839,7 @@ function MobileSidebar({
                         {dreamcaller.title}
                       </p>
                       <p className="mt-0.5 text-[10px] opacity-60">
-                        {dreamcaller.renderedText}
+                        <RulesText text={dreamcaller.renderedText} />
                       </p>
                     </div>
                   </div>
@@ -899,7 +900,7 @@ function MobileSidebar({
                         className="mt-1 text-[10px] leading-snug opacity-60"
                         style={{ color: "#e2e8f0" }}
                       >
-                        {sign.effectDescription}
+                        <RulesText text={sign.effectDescription} />
                       </p>
                     </div>
                   ))

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
+import { RulesText } from "../components/RulesText";
 
 const MAX_DREAMSIGNS = 12;
 
@@ -274,7 +275,7 @@ function DreamsignCard({ dreamsign }: { dreamsign: Dreamsign }) {
         className="text-center text-xs leading-relaxed opacity-70"
         style={{ color: "#e2e8f0" }}
       >
-        {dreamsign.effectDescription}
+        <RulesText text={dreamsign.effectDescription} />
       </p>
     </div>
   );
