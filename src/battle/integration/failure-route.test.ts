@@ -46,6 +46,7 @@ function makeMutableState(
 function makeMutations() {
   return {
     setFailureSummary: vi.fn(),
+    dismissStartingDeckPopup: vi.fn(),
     setScreen: vi.fn(),
   };
 }

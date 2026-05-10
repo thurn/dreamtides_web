@@ -345,6 +345,11 @@ describe("quest state actions", () => {
     expect(next.visitedSites).toEqual([]);
     expect(next.screen).toEqual({ type: "dreamscape" });
     expect(next.activeSiteId).toBeNull();
+    // The starter-deck reveal popup is gated entirely by the
+    // `hasSeenStartingDeckPopup` flag. A fresh quest start leaves the flag
+    // at the default `false` so the popup opens once when the dreamcaller
+    // is first picked.
+    expect(next.hasSeenStartingDeckPopup).toBe(false);
     expect(logSpy).not.toHaveBeenCalled();
   });
 

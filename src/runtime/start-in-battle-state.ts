@@ -60,5 +60,6 @@ export function createStartInBattleState(
     screen: { type: "site", siteId: battleSite.id },
     activeSiteId: battleSite.id,
     failureSummary: null,
+    hasSeenStartingDeckPopup: true,
   };
 }

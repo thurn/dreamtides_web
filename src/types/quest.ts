@@ -280,4 +280,12 @@ export interface QuestState {
   screen: Screen;
   activeSiteId: string | null;
   failureSummary: QuestFailureSummary | null;
+  /**
+   * Whether the player has dismissed the one-time starter-deck reveal popup
+   * shown immediately after picking a Dreamcaller. Persisted on the quest
+   * state so reloads of the same room (or other clients) do not see the
+   * popup again. Defaults to `false`; flipped to `true` when the player
+   * clicks the popup's "Continue" action.
+   */
+  hasSeenStartingDeckPopup: boolean;
 }

@@ -277,6 +277,7 @@ function makeMutations(): QuestMutations {
     updateAtlas: vi.fn(),
     setDraftState: vi.fn(),
     setFailureSummary: vi.fn(),
+    dismissStartingDeckPopup: vi.fn(),
     resetQuest: vi.fn(),
   };
 }
@@ -303,6 +304,7 @@ function makeState(): QuestState {
     screen: { type: "questStart" },
     activeSiteId: null,
     failureSummary: null,
+    hasSeenStartingDeckPopup: false,
   };
 }
 

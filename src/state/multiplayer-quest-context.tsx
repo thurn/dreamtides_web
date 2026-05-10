@@ -1024,6 +1024,19 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const dismissStartingDeckPopup = useCallback(() => {
+    const current = currentRef.current;
+    if (current.state.hasSeenStartingDeckPopup) {
+      return;
+    }
+    writeQuestField({
+      database: current.database,
+      roomId: current.session.roomId,
+      field: "hasSeenStartingDeckPopup",
+      value: true,
+    });
+  }, []);
+
   const setDreamcallerSelection = useCallback(
     (resolvedPackage: Parameters<QuestMutations["setDreamcallerSelection"]>[0]) => {
       const current = currentRef.current;
@@ -2866,6 +2879,7 @@ export function MultiplayerQuestProvider({
       updateAtlas,
       setDraftState,
       setFailureSummary,
+      dismissStartingDeckPopup,
       resetQuest,
     }),
     [
@@ -2874,6 +2888,7 @@ export function MultiplayerQuestProvider({
       buyShopSlot,
       changeEssence,
       completeSite,
+      dismissStartingDeckPopup,
       ensureRewardSiteRuntime,
       acceptRewardSite,
       ensureDreamsignOfferRuntime,

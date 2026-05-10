@@ -154,6 +154,8 @@ function normalizeQuestState(questState: QuestState | null | undefined): QuestSt
     screen: questState.screen ?? defaults.screen,
     activeSiteId: questState.activeSiteId ?? null,
     failureSummary: questState.failureSummary ?? null,
+    hasSeenStartingDeckPopup:
+      questState.hasSeenStartingDeckPopup ?? defaults.hasSeenStartingDeckPopup,
   };
 }
 

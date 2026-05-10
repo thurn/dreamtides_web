@@ -517,6 +517,7 @@ describe("Task 02 state transitions", () => {
       screen: { type: "questStart" },
       activeSiteId: null,
       failureSummary: null,
+      hasSeenStartingDeckPopup: false,
     });
     expect(populated.resolvedPackage).not.toBeNull();
   });

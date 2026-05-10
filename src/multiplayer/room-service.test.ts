@@ -223,9 +223,52 @@ describe("room service", () => {
           screen: { type: "questStart" },
           activeSiteId: null,
           failureSummary: null,
+          hasSeenStartingDeckPopup: false,
         },
       },
     });
+  });
+
+  it("defaults hasSeenStartingDeckPopup to false when RTDB strips the field, and preserves true", () => {
+    const stripped = {
+      essence: 250,
+      completionLevel: 0,
+      atlas: { nexusId: "nexus" },
+      screen: { type: "questStart" },
+      // hasSeenStartingDeckPopup intentionally missing — RTDB strips
+      // boolean defaults that were written as `false`.
+    };
+    const listener1 = vi.fn();
+    firebaseMocks.onValue.mockImplementationOnce(
+      (_entryRef, next: SnapshotListener) => {
+        next({
+          exists: () => true,
+          val: () => ({ ...createRoomRecord(timestamp), questState: stripped }),
+        });
+        return vi.fn();
+      },
+    );
+    subscribeToRoom(database, "ab12", listener1);
+    const ready1 = listener1.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready1.room.questState?.hasSeenStartingDeckPopup).toBe(false);
+
+    const dismissed = {
+      ...stripped,
+      hasSeenStartingDeckPopup: true,
+    };
+    const listener2 = vi.fn();
+    firebaseMocks.onValue.mockImplementationOnce(
+      (_entryRef, next: SnapshotListener) => {
+        next({
+          exists: () => true,
+          val: () => ({ ...createRoomRecord(timestamp), questState: dismissed }),
+        });
+        return vi.fn();
+      },
+    );
+    subscribeToRoom(database, "ab12", listener2);
+    const ready2 = listener2.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready2.room.questState?.hasSeenStartingDeckPopup).toBe(true);
   });
 
   it("restores stripped fields on nested draft state and dreamscape nodes", () => {

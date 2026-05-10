@@ -73,19 +73,26 @@ vi.mock("./components/HUD", () => ({
   HUD: () => <div data-testid="hud">HUD</div>,
 }));
 
-const deckViewerMock = vi.fn<
-  (props: { introMode?: boolean; isOpen: boolean }) => ReactNode
->(({ isOpen, introMode }) => (
-  <div
-    data-deck-intro={String(Boolean(introMode))}
-    data-deck-open={String(isOpen)}
-  >
-    Deck Viewer
-  </div>
-));
+interface DeckViewerMockProps {
+  isOpen: boolean;
+  introMode?: boolean;
+  onBeginQuest?: () => void;
+  onClose: () => void;
+}
+
+const deckViewerMock = vi.fn<(props: DeckViewerMockProps) => ReactNode>(
+  ({ isOpen, introMode }) => (
+    <div
+      data-deck-intro={String(Boolean(introMode))}
+      data-deck-open={String(isOpen)}
+    >
+      Deck Viewer
+    </div>
+  ),
+);
 
 vi.mock("./components/DeckViewer", () => ({
-  DeckViewer: (props: { isOpen: boolean }) => deckViewerMock(props),
+  DeckViewer: (props: DeckViewerMockProps) => deckViewerMock(props),
 }));
 
 vi.mock("./screens/DebugScreen", () => ({
@@ -134,6 +141,7 @@ function makeMutations(): QuestMutations {
     updateAtlas: vi.fn(),
     setDraftState: vi.fn(),
     setFailureSummary: vi.fn(),
+    dismissStartingDeckPopup: vi.fn(),
     resetQuest: vi.fn(),
   };
 }
@@ -160,6 +168,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     screen: { type: "questStart" },
     activeSiteId: null,
     failureSummary: null,
+    hasSeenStartingDeckPopup: false,
     ...overrides,
   };
 }
@@ -284,7 +293,29 @@ describe("App", () => {
 });
 
 describe("QuestApp", () => {
-  it("does not auto-open the deck viewer after leaving quest start (FIND-01-6)", () => {
+  const starterCallerState = (
+    overrides: Partial<QuestState> = {},
+  ): QuestState =>
+    makeState({
+      deck: Array.from({ length: 10 }, (_, index) => ({
+        entryId: `deck-${String(index + 1)}`,
+        cardNumber: 711 + index,
+        transfiguration: null,
+        isBane: false,
+      })),
+      dreamcaller: {
+        id: "caller-1",
+        name: "Starter Caller",
+        title: "Of the First Hand",
+        renderedText: "Pick your path.",
+        imageNumber: "0004",
+        startingEssence: 250,
+      },
+      screen: { type: "dreamscape" },
+      ...overrides,
+    });
+
+  it("keeps the deck viewer closed before any dreamcaller is selected", () => {
     setQuestState(makeState());
 
     const { root } = mount(
@@ -295,42 +326,88 @@ describe("QuestApp", () => {
     );
 
     expect(deckViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false }),
-    );
-
-    setQuestState(
-      makeState({
-        deck: Array.from({ length: 10 }, (_, index) => ({
-          entryId: `deck-${String(index + 1)}`,
-          cardNumber: 711 + index,
-          transfiguration: null,
-          isBane: false,
-        })),
-        dreamcaller: {
-          id: "caller-1",
-          name: "Starter Caller",
-          title: "Of the First Hand",
-          renderedText: "Pick your path.",
-          imageNumber: "0004",
-          startingEssence: 250,
-        },
-        screen: { type: "dreamscape" },
-      }),
+      expect.objectContaining({ isOpen: false, introMode: false }),
     );
 
     act(() => {
-      root.render(
-        <QuestApp
-          cardDatabase={new Map()}
-          runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
-        />,
-      );
+      root.unmount();
+    });
+  });
+
+  it("opens the starter-deck popup in intro mode immediately after a dreamcaller is picked", () => {
+    setQuestState(starterCallerState());
+
+    const { root } = mount(
+      <QuestApp
+        cardDatabase={new Map()}
+        runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
+      />,
+    );
+
+    expect(deckViewerMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isOpen: true, introMode: true }),
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("dispatches dismissStartingDeckPopup when the popup's Continue handler fires", () => {
+    const mutations = makeMutations();
+    vi.mocked(useQuest).mockReturnValue({
+      state: starterCallerState(),
+      mutations,
+      cardDatabase: new Map<number, CardData>(),
+      questContent: {
+        cardDatabase: new Map(),
+        cardsByPackageTide: new Map(),
+        dreamcallers: [],
+        dreamsignTemplates: [],
+        resolvedPackagesByDreamcallerId: new Map(),
+      },
     });
 
-    // FIND-01-6 (Stage 4): player lands on the site screen unobstructed.
-    // The deck viewer stays closed; View Deck on the HUD opens it on demand.
+    const { root } = mount(
+      <QuestApp
+        cardDatabase={new Map()}
+        runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
+      />,
+    );
+
+    const lastCall =
+      deckViewerMock.mock.calls[deckViewerMock.mock.calls.length - 1];
+    expect(lastCall).toBeDefined();
+    const props = lastCall?.[0];
+    expect(props).toBeDefined();
+    expect(typeof props?.onBeginQuest).toBe("function");
+    act(() => {
+      props?.onBeginQuest?.();
+    });
+    expect(mutations.dismissStartingDeckPopup).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      props?.onClose();
+    });
+    expect(mutations.dismissStartingDeckPopup).toHaveBeenCalledTimes(2);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("does not re-open the popup when hasSeenStartingDeckPopup is already true (reload case)", () => {
+    setQuestState(starterCallerState({ hasSeenStartingDeckPopup: true }));
+
+    const { root } = mount(
+      <QuestApp
+        cardDatabase={new Map()}
+        runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
+      />,
+    );
+
     expect(deckViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false }),
+      expect.objectContaining({ isOpen: false, introMode: false }),
     );
 
     act(() => {

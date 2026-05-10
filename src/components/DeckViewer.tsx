@@ -294,7 +294,7 @@ export function DeckViewer({
                   (onBeginQuest ?? handleClose)();
                 }}
               >
-                Begin Quest
+                Continue
               </button>
             </div>
           )}

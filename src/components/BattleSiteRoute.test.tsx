@@ -134,6 +134,7 @@ function setQuestState({
       screen,
       activeSiteId: "site-7",
       failureSummary: null,
+      hasSeenStartingDeckPopup: false,
     },
     mutations: {
       changeEssence: vi.fn(),
@@ -172,6 +173,7 @@ function setQuestState({
       updateAtlas: vi.fn(),
       setDraftState: vi.fn(),
       setFailureSummary: vi.fn(),
+      dismissStartingDeckPopup: vi.fn(),
       resetQuest: vi.fn(),
     },
     cardDatabase: new Map(),

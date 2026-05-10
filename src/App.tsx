@@ -27,10 +27,19 @@ export function QuestApp({
   runtimeConfig: RuntimeConfig;
 }) {
   const { state, mutations, questContent } = useQuest();
-  const showHud = state.screen.type !== "questStart"
-    && !isBattleSiteHudHidden(state);
+  // The starter-deck reveal popup is shown the first time a player picks a
+  // Dreamcaller. Visibility is driven entirely by persisted quest state
+  // (`dreamcaller` set + `hasSeenStartingDeckPopup` false) so a reload of the
+  // same `?game=` URL does not re-open the popup. The flag round-trips
+  // through `normalizeQuestState` so a fresh client joining the same room
+  // also sees the correct state.
+  const showStarterDeckIntro =
+    state.dreamcaller !== null && !state.hasSeenStartingDeckPopup;
+  const showHud =
+    state.screen.type !== "questStart"
+    && !isBattleSiteHudHidden(state)
+    && !showStarterDeckIntro;
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
-  const [starterDeckIntroOpen, setStarterDeckIntroOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
   const previousScreenTypeRef = useRef(state.screen.type);
@@ -84,18 +93,15 @@ export function QuestApp({
 
   const handleOpenDeckViewer = useCallback(() => {
     setDeckViewerOpen(true);
-    setStarterDeckIntroOpen(false);
   }, []);
 
   const handleCloseDeckViewer = useCallback(() => {
     setDeckViewerOpen(false);
-    setStarterDeckIntroOpen(false);
   }, []);
 
   const handleBeginQuest = useCallback(() => {
-    setDeckViewerOpen(false);
-    setStarterDeckIntroOpen(false);
-  }, []);
+    mutations.dismissStartingDeckPopup();
+  }, [mutations]);
 
   const handleOpenDebugScreen = useCallback(() => {
     setDebugScreenOpen(true);
@@ -127,10 +133,12 @@ export function QuestApp({
         />
       )}
       <DeckViewer
-        isOpen={deckViewerOpen}
-        onClose={handleCloseDeckViewer}
+        isOpen={deckViewerOpen || showStarterDeckIntro}
+        onClose={
+          showStarterDeckIntro ? handleBeginQuest : handleCloseDeckViewer
+        }
         cardDatabase={cardDatabase}
-        introMode={starterDeckIntroOpen}
+        introMode={showStarterDeckIntro}
         onBeginQuest={handleBeginQuest}
       />
       <DebugScreen

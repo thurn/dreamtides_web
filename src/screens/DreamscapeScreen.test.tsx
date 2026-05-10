@@ -111,6 +111,7 @@ function makeState(overrides?: Partial<QuestState>): QuestState {
     screen: { type: "dreamscape" },
     activeSiteId: null,
     failureSummary: null,
+    hasSeenStartingDeckPopup: false,
     ...overrides,
   };
 }
@@ -156,6 +157,7 @@ describe("DreamscapeScreen", () => {
         updateAtlas: vi.fn(),
         setDraftState: vi.fn(),
         setFailureSummary: vi.fn(),
+        dismissStartingDeckPopup: vi.fn(),
         resetQuest: vi.fn(),
       },
       cardDatabase: new Map(),
@@ -249,6 +251,7 @@ describe("DreamscapeScreen", () => {
         updateAtlas: vi.fn(),
         setDraftState: vi.fn(),
         setFailureSummary: vi.fn(),
+        dismissStartingDeckPopup: vi.fn(),
         resetQuest: vi.fn(),
       },
       cardDatabase: new Map(),

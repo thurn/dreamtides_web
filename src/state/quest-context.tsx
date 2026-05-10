@@ -155,6 +155,12 @@ export interface QuestMutations {
     failureSummary: QuestFailureSummary | null,
     source: string,
   ) => void;
+  /**
+   * Marks the one-time starter-deck reveal popup as dismissed. Called from
+   * the popup's "Continue" button so subsequent reloads of the same room
+   * land directly on the first dreamscape.
+   */
+  dismissStartingDeckPopup: () => void;
   resetQuest: () => void;
 }
 
@@ -603,6 +609,7 @@ export function createDefaultState(): QuestState {
     screen: { type: "questStart" },
     activeSiteId: null,
     failureSummary: null,
+    hasSeenStartingDeckPopup: false,
   };
 }
 
@@ -2067,6 +2074,18 @@ export function QuestProvider({
     [],
   );
 
+  const dismissStartingDeckPopup = useCallback(() => {
+    setState((prev) => {
+      if (prev.hasSeenStartingDeckPopup) {
+        return prev;
+      }
+      logEvent("starting_deck_popup_dismissed", {
+        deckSize: prev.deck.length,
+      });
+      return { ...prev, hasSeenStartingDeckPopup: true };
+    });
+  }, []);
+
   const resetQuest = useCallback(() => {
     // Ordering invariant: `resetLog()` clears the ring buffer before any
     // dependent reset hooks run so downstream subscribers (bridge, queries)
@@ -2124,6 +2143,7 @@ export function QuestProvider({
       updateAtlas,
       setDraftState,
       setFailureSummary,
+      dismissStartingDeckPopup,
       resetQuest,
     }),
     [
@@ -2163,6 +2183,7 @@ export function QuestProvider({
       updateAtlas,
       setDraftState,
       setFailureSummary,
+      dismissStartingDeckPopup,
       resetQuest,
     ],
   );

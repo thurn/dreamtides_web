@@ -305,6 +305,56 @@ describe("MultiplayerQuestProvider", () => {
     );
   });
 
+  it("writes hasSeenStartingDeckPopup=true when dismissStartingDeckPopup fires", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      hasSeenStartingDeckPopup: false,
+    };
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={makeSession(questState)}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.dismissStartingDeckPopup();
+
+    expect(roomServiceMocks.writeRoomUpdate).toHaveBeenCalledTimes(1);
+    expect(roomServiceMocks.writeRoomUpdate).toHaveBeenCalledWith(
+      database,
+      "ab12cd",
+      expect.objectContaining({
+        "rooms/ab12cd/questState/hasSeenStartingDeckPopup": true,
+      }),
+    );
+  });
+
+  it("does not double-write when dismissStartingDeckPopup fires after the popup is already dismissed", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      hasSeenStartingDeckPopup: true,
+    };
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={makeSession(questState)}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.dismissStartingDeckPopup();
+    captured[captured.length - 1]?.mutations.dismissStartingDeckPopup();
+
+    expect(roomServiceMocks.writeRoomUpdate).not.toHaveBeenCalled();
+  });
+
   it("throws for unsupported mutations without writing to Firebase", () => {
     const captured: QuestContextValue[] = [];
     mount(
