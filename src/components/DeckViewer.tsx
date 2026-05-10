@@ -801,7 +801,7 @@ function MobileSidebar({
             toggleTab("dreamsigns");
           }}
         >
-          Signs ({String(dreamsigns.length)}/12)
+          Dreamsigns ({String(dreamsigns.length)}/12)
         </button>
       </div>
 
