@@ -22,6 +22,7 @@ import type { QuestState, SiteState } from "../types/quest";
 export function useEnsureBattleSession(input: {
   database: Database;
   roomId: string;
+  clientId: string;
   battleState: SharedBattleState | null;
   battleEntryKey: string;
   site: SiteState;
@@ -71,6 +72,7 @@ export function useEnsureBattleSession(input: {
       roomId: input.roomId,
       init,
       initialMutable: initial,
+      actorId: input.clientId,
     }).catch((error: unknown) => {
       console.error("Failed to ensure battle session", error);
       inFlightKey.current = null;
@@ -79,6 +81,7 @@ export function useEnsureBattleSession(input: {
     input.battleEntryKey,
     input.battleState,
     input.cardDatabase,
+    input.clientId,
     input.database,
     input.dreamcallers,
     input.enableAi,

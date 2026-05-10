@@ -255,10 +255,21 @@ describe("normalizeBattleStateSnapshot", () => {
 });
 
 describe("ensureBattleSession", () => {
-  it("commits a new SharedBattleState when slot is null", async () => {
+  function buildEmptyRoom(): MultiplayerRoom {
+    return {
+      metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
+      questState: null,
+      battleState: null,
+      presence: {},
+      actionLog: {},
+    };
+  }
+
+  it("commits a new SharedBattleState and a battle:INIT action-log entry when slot is null", async () => {
     let captured: unknown;
+    const emptyRoom = buildEmptyRoom();
     mockedRunTransaction.mockImplementation(async (_ref, updater) => {
-      captured = updater(null);
+      captured = updater(emptyRoom);
     });
 
     await ensureBattleSession({
@@ -266,21 +277,33 @@ describe("ensureBattleSession", () => {
       roomId: "room-1",
       init: fakeInit,
       initialMutable: fakeInitial,
+      actorId: "client-a",
+      now: "2026-05-09T01:02:03.000Z",
+      actionId: "init-1",
     });
 
     expect(captured).toMatchObject({
-      init: fakeInit,
-      reducer: {
-        mutable: fakeInitial,
-        history: { past: [], future: [] },
-        lastTransition: null,
-        commandSerial: 0,
-        lastActivityKind: null,
+      battleState: {
+        init: fakeInit,
+        reducer: {
+          mutable: fakeInitial,
+          history: { past: [], future: [] },
+          lastTransition: null,
+          commandSerial: 0,
+          lastActivityKind: null,
+        },
       },
     });
+    const room = captured as MultiplayerRoom;
+    expect(room.actionLog?.["init-1"]).toBeDefined();
+    expect(room.actionLog!["init-1"].action).toBe("battle:INIT");
+    expect(room.actionLog!["init-1"].source).toBe("battle");
+    expect(room.actionLog!["init-1"].actorId).toBe("client-a");
+    expect(room.actionLog!["init-1"].summary.commandSerial).toBe(0);
+    expect(room.metadata.updatedAt).toBe("2026-05-09T01:02:03.000Z");
   });
 
-  it("aborts the transaction when slot already has init", async () => {
+  it("aborts the transaction when battleState already has init", async () => {
     let captured: unknown;
     const existing: SharedBattleState = {
       init: fakeInit,
@@ -292,8 +315,12 @@ describe("ensureBattleSession", () => {
         lastActivityKind: null,
       },
     };
+    const existingRoom: MultiplayerRoom = {
+      ...buildEmptyRoom(),
+      battleState: existing,
+    };
     mockedRunTransaction.mockImplementation(async (_ref, updater) => {
-      captured = updater(existing);
+      captured = updater(existingRoom);
     });
 
     await ensureBattleSession({
@@ -301,9 +328,18 @@ describe("ensureBattleSession", () => {
       roomId: "room-1",
       init: fakeInit,
       initialMutable: fakeInitial,
+      actorId: "client-a",
+      now: "2026-05-09T01:02:03.000Z",
+      actionId: "init-1",
     });
 
-    expect(captured).toBe(existing);
+    // The init transaction must not write a new action-log entry when an init
+    // already exists, and must preserve the prior commandSerial rather than
+    // resetting to 0.
+    const room = captured as MultiplayerRoom;
+    expect(room.actionLog?.["init-1"]).toBeUndefined();
+    expect(room.battleState?.reducer.commandSerial).toBe(7);
+    expect(room.metadata.updatedAt).toBe("0");
   });
 });
 

@@ -29,7 +29,7 @@ export function BattleSiteRoute({
   runtimeConfig: RuntimeConfig;
 }) {
   const { state, questContent } = useQuest();
-  const { database, roomId, battleState } = useMultiplayerBattle();
+  const { database, roomId, clientId, battleState } = useMultiplayerBattle();
 
   const battleEntryKey = createBattleEntryKey(
     state.currentDreamscape,
@@ -40,6 +40,7 @@ export function BattleSiteRoute({
   useEnsureBattleSession({
     database,
     roomId,
+    clientId,
     battleState,
     battleEntryKey,
     site,

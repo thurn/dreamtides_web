@@ -1,4 +1,4 @@
-import { ref, runTransaction, type Database } from "firebase/database";
+import type { Database } from "firebase/database";
 import type {
   BattleInit,
   BattleMutableState,
@@ -12,8 +12,6 @@ import { createBattleReducerState } from "../battle/state/reducer";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import { prepareInitialBattleState } from "../battle/engine/turn-flow";
 import type { BattleCommand } from "../battle/debug/commands";
-import type { SharedBattleState } from "./battle-types";
-import { battleStatePath } from "./battle-paths";
 import { buildActionLogEntry } from "./action-log";
 import { runRoomTransaction } from "./room-service";
 import type { MultiplayerRoom } from "./room-types";
@@ -23,18 +21,24 @@ export interface EnsureBattleSessionInput {
   roomId: string;
   init: BattleInit;
   initialMutable: BattleMutableState;
+  actorId: string;
+  now?: string;
+  actionId?: string;
 }
 
 export async function ensureBattleSession(
   input: EnsureBattleSessionInput,
 ): Promise<void> {
-  await runTransaction(
-    ref(input.database, battleStatePath(input.roomId)),
-    (current: SharedBattleState | null) => {
-      if (current !== null && current.init !== undefined) {
-        return current;
-      }
-      const fresh: SharedBattleState = {
+  const now = input.now ?? new Date().toISOString();
+  const actionId = input.actionId ?? crypto.randomUUID();
+  await runRoomTransaction(input.database, input.roomId, (room) => {
+    if (room === null) return undefined;
+    if (room.battleState !== null && room.battleState.init !== undefined) {
+      return room;
+    }
+    return {
+      ...room,
+      battleState: {
         init: input.init,
         reducer: {
           mutable: input.initialMutable,
@@ -43,10 +47,20 @@ export async function ensureBattleSession(
           commandSerial: 0,
           lastActivityKind: null,
         },
-      };
-      return fresh;
-    },
-  );
+      },
+      metadata: { ...room.metadata, updatedAt: now },
+      actionLog: {
+        ...(room.actionLog ?? {}),
+        [actionId]: buildActionLogEntry({
+          timestamp: now,
+          actorId: input.actorId,
+          action: "battle:INIT",
+          source: "battle",
+          summary: { commandSerial: 0 },
+        }),
+      },
+    };
+  });
 }
 
 export interface ApplyBattleCommandInput {
