@@ -22,6 +22,7 @@ import {
 import { createDefaultState } from "../state/quest-context";
 import type { DraftState } from "../types/draft";
 import type {
+  DeckEntry,
   DreamAtlas,
   DreamscapeNode,
   QuestState,
@@ -31,6 +32,21 @@ export type RoomSubscriptionSnapshot =
   | { status: "ready"; room: MultiplayerRoom }
   | { status: "missing" }
   | { status: "error"; message: string };
+
+function normalizeDeckEntry(entry: DeckEntry): DeckEntry {
+  return {
+    ...entry,
+    transfiguration: entry.transfiguration ?? null,
+    isBane: entry.isBane ?? false,
+  };
+}
+
+function normalizeDeck(deck: readonly DeckEntry[] | undefined): DeckEntry[] {
+  if (deck === undefined) {
+    return [];
+  }
+  return deck.map(normalizeDeckEntry);
+}
 
 function normalizeDreamscapeNode(node: DreamscapeNode): DreamscapeNode {
   return {
@@ -76,7 +92,7 @@ function normalizeQuestState(questState: QuestState | null | undefined): QuestSt
   const defaults = createDefaultState();
   return {
     essence: questState.essence ?? defaults.essence,
-    deck: questState.deck ?? defaults.deck,
+    deck: normalizeDeck(questState.deck),
     dreamcaller: questState.dreamcaller ?? null,
     resolvedPackage: questState.resolvedPackage ?? null,
     cardSourceDebug: questState.cardSourceDebug ?? null,

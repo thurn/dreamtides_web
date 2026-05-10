@@ -275,6 +275,33 @@ describe("room service", () => {
     });
   });
 
+  it("restores stripped transfiguration on deck entries round-tripped through RTDB", () => {
+    const listener = vi.fn();
+    const strippedQuestState = {
+      ...createDefaultState(),
+      deck: [
+        { entryId: "deck-1", cardNumber: 711, isBane: false },
+        { entryId: "deck-2", cardNumber: 712, isBane: false },
+      ],
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready.room.questState?.deck).toEqual([
+      { entryId: "deck-1", cardNumber: 711, isBane: false, transfiguration: null },
+      { entryId: "deck-2", cardNumber: 712, isBane: false, transfiguration: null },
+    ]);
+  });
+
   it("emits missing when the room snapshot does not exist", () => {
     const listener = vi.fn();
     firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
