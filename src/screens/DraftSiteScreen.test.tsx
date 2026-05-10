@@ -508,6 +508,112 @@ describe("DraftSiteScreen", () => {
     });
   });
 
+  it("toggles the deck sidebar via the chevron button without using the count badge", () => {
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    setQuestContext(makeState(), mutations, cardDatabase);
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    // The deck count badge is purely informational — a span, not a button —
+    // so it cannot accidentally fold the sidebar away when tapped.
+    const badge = container.querySelector(
+      '[data-testid="draft-deck-count-badge"]',
+    );
+    expect(badge).not.toBeNull();
+    expect(badge?.tagName).toBe("SPAN");
+    expect(badge?.getAttribute("onclick")).toBeNull();
+
+    // Initial state: sidebar expanded, chevron points toward the edge it
+    // folds into (right) and reports `aria-expanded="true"`.
+    expect(
+      container.querySelector('[data-testid="draft-deck-sidebar"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-testid="draft-deck-sidebar-collapsed-rail"]',
+      ),
+    ).toBeNull();
+    const expandedToggle = container.querySelector(
+      '[data-testid="draft-deck-toggle"]',
+    );
+    expect(expandedToggle).not.toBeNull();
+    expect(expandedToggle?.getAttribute("aria-expanded")).toBe("true");
+    expect(expandedToggle?.getAttribute("data-expanded")).toBe("true");
+    expect(expandedToggle?.getAttribute("aria-label")).toBe(
+      "Collapse deck panel",
+    );
+    expect(expandedToggle?.textContent).toBe("▶");
+
+    // Click chevron: panel folds away, the collapsed-rail toggle takes its
+    // place, and the chevron now points back toward where the panel will
+    // re-emerge from.
+    act(() => {
+      expandedToggle?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(
+      container.querySelector('[data-testid="draft-deck-sidebar"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector(
+        '[data-testid="draft-deck-sidebar-collapsed-rail"]',
+      ),
+    ).not.toBeNull();
+    const collapsedToggle = container.querySelector(
+      '[data-testid="draft-deck-toggle"]',
+    );
+    expect(collapsedToggle).not.toBeNull();
+    expect(collapsedToggle?.getAttribute("aria-expanded")).toBe("false");
+    expect(collapsedToggle?.getAttribute("data-expanded")).toBe("false");
+    expect(collapsedToggle?.getAttribute("aria-label")).toBe(
+      "Expand deck panel",
+    );
+    expect(collapsedToggle?.textContent).toBe("◀");
+
+    // The deck count badge stays visible while collapsed and still does not
+    // toggle anything when clicked.
+    const badgeAfterCollapse = container.querySelector(
+      '[data-testid="draft-deck-count-badge"]',
+    );
+    expect(badgeAfterCollapse).not.toBeNull();
+    act(() => {
+      badgeAfterCollapse?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    expect(
+      container.querySelector('[data-testid="draft-deck-sidebar"]'),
+    ).toBeNull();
+
+    // Click chevron again: panel re-expands and chevron flips back.
+    act(() => {
+      collapsedToggle?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(
+      container.querySelector('[data-testid="draft-deck-sidebar"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-testid="draft-deck-sidebar-collapsed-rail"]',
+      ),
+    ).toBeNull();
+    const reopenedToggle = container.querySelector(
+      '[data-testid="draft-deck-toggle"]',
+    );
+    expect(reopenedToggle?.getAttribute("aria-expanded")).toBe("true");
+    expect(reopenedToggle?.textContent).toBe("▶");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders a fly-to-deck animation after a draft pick updates the deck", () => {
     const mutations = makeMutations();
     const cardDatabase = makeCardDatabase();

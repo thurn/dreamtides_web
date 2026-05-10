@@ -295,6 +295,55 @@ function DeckSidebar({
 }
 
 /**
+ * Chevron toggle that docks at the deck panel edge and folds the drafted-
+ * card rail open/closed. The chevron always points toward the side the
+ * panel folds into so the affordance honestly previews the result of the
+ * click: when expanded it points right (panel will fold away to the right),
+ * when collapsed it points left (panel will fold back out to the left).
+ */
+function DeckSidebarToggle({
+  expanded,
+  onToggle,
+}: {
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const label = expanded ? "Collapse deck panel" : "Expand deck panel";
+  // Chevron arrow: ▶ points right (collapse), ◀ points left (expand).
+  const glyph = expanded ? "▶" : "◀";
+
+  return (
+    <button
+      type="button"
+      data-testid="draft-deck-toggle"
+      data-expanded={expanded ? "true" : "false"}
+      aria-label={label}
+      aria-expanded={expanded}
+      title={label}
+      onClick={onToggle}
+      className="group flex h-8 w-7 cursor-pointer items-center justify-center rounded text-base font-bold leading-none transition-colors"
+      style={{
+        background: "rgba(124, 58, 237, 0.12)",
+        border: "1px solid rgba(124, 58, 237, 0.35)",
+        color: "#c084fc",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.background = "rgba(124, 58, 237, 0.32)";
+        e.currentTarget.style.borderColor = "rgba(168, 85, 247, 0.7)";
+        e.currentTarget.style.color = "#e9d5ff";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.background = "rgba(124, 58, 237, 0.12)";
+        e.currentTarget.style.borderColor = "rgba(124, 58, 237, 0.35)";
+        e.currentTarget.style.color = "#c084fc";
+      }}
+    >
+      <span aria-hidden="true">{glyph}</span>
+    </button>
+  );
+}
+
+/**
  * Compute a locally-bootstrapped draft state for this site if the live
  * `state.draftState` has not yet been advanced to it. Returns null when
  * either the live state already targets this site (no override needed) or
@@ -778,27 +827,24 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
                 transition={{ duration: 0.3 }}
               />
             </div>
-            <button
-              className="cursor-pointer rounded px-2 py-1 text-xs font-medium transition-colors"
+            <span
+              data-testid="draft-deck-count-badge"
+              aria-label={`${String(state.deck.length)} cards in deck`}
+              className="rounded px-2 py-1 text-xs font-medium"
               style={{
-                background: showDeckSidebar
-                  ? "rgba(124, 58, 237, 0.3)"
-                  : "rgba(124, 58, 237, 0.15)",
-                border: `1px solid ${showDeckSidebar ? "rgba(124, 58, 237, 0.6)" : "rgba(124, 58, 237, 0.3)"}`,
-                color: showDeckSidebar ? "#c084fc" : "#9ca3af",
-              }}
-              onClick={() => {
-                setShowDeckSidebar((prev) => !prev);
+                background: "rgba(124, 58, 237, 0.15)",
+                border: "1px solid rgba(124, 58, 237, 0.3)",
+                color: "#c084fc",
               }}
             >
               {"\uD83C\uDCCF"} {String(state.deck.length)}
-            </button>
+            </span>
           </div>
         </div>
       </div>
 
       {/* Deck sidebar */}
-      {showDeckSidebar && (
+      {showDeckSidebar ? (
         <div
           data-testid="draft-deck-sidebar"
           // FIND-01-14 (Stage 4): widen the drafted-card rail so the card
@@ -812,9 +858,15 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
           }}
         >
           <div
-            className="flex items-center justify-between gap-3 px-3 py-2"
+            className="flex items-center justify-between gap-2 px-3 py-2"
             style={{ borderBottom: "1px solid rgba(124, 58, 237, 0.15)" }}
           >
+            <DeckSidebarToggle
+              expanded
+              onToggle={() => {
+                setShowDeckSidebar(false);
+              }}
+            />
             <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#a855f7" }}>
               Deck ({String(state.deck.length)})
             </span>
@@ -832,6 +884,22 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
           <DeckSidebar
             cardDatabase={cardDatabase}
             highlightedEntryId={highlightedDeckEntryId}
+          />
+        </div>
+      ) : (
+        <div
+          data-testid="draft-deck-sidebar-collapsed-rail"
+          className="flex shrink-0 items-start border-l"
+          style={{
+            borderColor: "rgba(124, 58, 237, 0.2)",
+            background: "rgba(5, 2, 10, 0.6)",
+          }}
+        >
+          <DeckSidebarToggle
+            expanded={false}
+            onToggle={() => {
+              setShowDeckSidebar(true);
+            }}
           />
         </div>
       )}
