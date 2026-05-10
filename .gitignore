@@ -12,3 +12,4 @@ logs/
 .env.local
 .env.*.local
 .firebase
+.claude/scheduled_tasks.lock
