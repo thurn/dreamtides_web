@@ -209,6 +209,42 @@ describe("CardDisplay", () => {
     });
   });
 
+  it("wraps the energy badge in a HoverPopover tooltip anchor", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ energyCost: 4 })} />,
+    );
+
+    const energyBadge = container.querySelector<HTMLElement>(
+      "[data-pip-variant=\"energy\"]",
+    );
+    expect(energyBadge).not.toBeNull();
+    // PipBadge wraps the badge in a span when a tooltip is set; without a
+    // tooltip the badge would be the direct child of the positioning div.
+    const wrapper = energyBadge?.parentElement;
+    expect(wrapper?.tagName.toLowerCase()).toBe("span");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("wraps the spark badge in a HoverPopover tooltip anchor", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ cardType: "Character", spark: 3 })} />,
+    );
+
+    const sparkBadge = container.querySelector<HTMLElement>(
+      "[data-pip-variant=\"spark\"]",
+    );
+    expect(sparkBadge).not.toBeNull();
+    const wrapper = sparkBadge?.parentElement;
+    expect(wrapper?.tagName.toLowerCase()).toBe("span");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("does not render a spark badge for Event cards", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ cardType: "Event", spark: null })} />,

@@ -3,7 +3,7 @@
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { PipBadge } from "./PipBadge";
 
 function mount(element: ReactElement): {
@@ -122,6 +122,159 @@ describe("PipBadge", () => {
 
     act(() => {
       root.unmount();
+    });
+  });
+
+  describe("tooltip hover behavior", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    /** Find the portaled tooltip body (role=tooltip) anywhere in the document. */
+    function findTooltip(): HTMLElement | null {
+      return document.body.querySelector<HTMLElement>("[role=\"tooltip\"]");
+    }
+
+    it("shows the tooltip after a 1000ms hover delay", () => {
+      const { root } = mount(
+        <PipBadge
+          variant="energy"
+          value="3"
+          tooltip="Energy cost. Spend this much energy to play the card."
+        />,
+      );
+
+      const trigger = document.body.querySelector<HTMLElement>(
+        "[data-pip-variant=\"energy\"]",
+      )?.parentElement;
+      expect(trigger).not.toBeNull();
+
+      // React 18 delegates events at the root, so `mouseenter` (which doesn't
+      // bubble) is delivered via a bubbling `mouseover` instead.
+      act(() => {
+        trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      });
+      expect(findTooltip()).toBeNull();
+
+      // Just before the 1000ms threshold — still no tooltip.
+      act(() => {
+        vi.advanceTimersByTime(999);
+      });
+      expect(findTooltip()).toBeNull();
+
+      // Cross the 1000ms threshold — tooltip appears with the description.
+      act(() => {
+        vi.advanceTimersByTime(1);
+      });
+      const tooltip = findTooltip();
+      expect(tooltip).not.toBeNull();
+      expect(tooltip?.textContent).toContain(
+        "Energy cost. Spend this much energy to play the card.",
+      );
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("hides the tooltip on mouse-out", () => {
+      const { root } = mount(
+        <PipBadge
+          variant="spark"
+          value="4"
+          tooltip="Spark. A character's combat power — higher spark wins combat."
+        />,
+      );
+
+      const trigger = document.body.querySelector<HTMLElement>(
+        "[data-pip-variant=\"spark\"]",
+      )?.parentElement;
+      expect(trigger).not.toBeNull();
+
+      // Hover and let the timer elapse so the tooltip is visible.
+      act(() => {
+        trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      });
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+      expect(findTooltip()).not.toBeNull();
+
+      // Mouse-out hides the tooltip immediately.
+      act(() => {
+        trigger?.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+      });
+      expect(findTooltip()).toBeNull();
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("cancels the pending tooltip if the cursor leaves before the delay", () => {
+      const { root } = mount(
+        <PipBadge variant="energy" value="2" tooltip="Energy cost." />,
+      );
+
+      const trigger = document.body.querySelector<HTMLElement>(
+        "[data-pip-variant=\"energy\"]",
+      )?.parentElement;
+      expect(trigger).not.toBeNull();
+
+      act(() => {
+        trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      });
+      act(() => {
+        vi.advanceTimersByTime(500);
+      });
+      act(() => {
+        trigger?.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+      });
+      act(() => {
+        // Drain any leftover scheduled timers.
+        vi.advanceTimersByTime(1000);
+      });
+      expect(findTooltip()).toBeNull();
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("also reveals the tooltip on keyboard focus of the trigger", () => {
+      const { root } = mount(
+        <PipBadge variant="spark" value="1" tooltip="Spark tooltip." />,
+      );
+
+      const trigger = document.body.querySelector<HTMLElement>(
+        "[data-pip-variant=\"spark\"]",
+      )?.parentElement;
+      expect(trigger).not.toBeNull();
+
+      // React's onFocus listens for the bubbling `focusin` event.
+      act(() => {
+        trigger?.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      });
+      act(() => {
+        vi.advanceTimersByTime(1000);
+      });
+      const tooltip = findTooltip();
+      expect(tooltip).not.toBeNull();
+      expect(tooltip?.textContent).toContain("Spark tooltip.");
+
+      // Blur hides the tooltip (React's onBlur fires from `focusout`).
+      act(() => {
+        trigger?.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
+      });
+      expect(findTooltip()).toBeNull();
+
+      act(() => {
+        root.unmount();
+      });
     });
   });
 });

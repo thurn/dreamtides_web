@@ -8,6 +8,19 @@ import { renderRulesText } from "./RulesText";
 const EVENT_CHROME_COLOR = "#c084fc";
 const CHARACTER_CHROME_COLOR = "#facc15";
 
+/**
+ * Hover tooltip copy for the corner pip badges. Kept short and plain-language
+ * so a new player can learn what each pip means after a 1-second hover.
+ *
+ * Phrasing intentionally mirrors the glossary entries for "Spark" and
+ * "Essence"/energy in `src/data/glossary.ts` so a player who hovers a pip
+ * sees the same wording they'd see hovering the term inline in rules text.
+ */
+const ENERGY_PIP_TOOLTIP =
+  "Energy cost. Spend this much energy to play the card.";
+const SPARK_PIP_TOOLTIP =
+  "Spark. A character's combat power — higher spark wins combat.";
+
 /** Props for the CardDisplay component. */
 interface CardDisplayProps {
   card: CardData | FrozenCardData;
@@ -89,6 +102,7 @@ export function CardDisplay({
           variant="energy"
           value={card.energyCost !== null ? String(card.energyCost) : "X"}
           size={large ? "md" : "sm"}
+          tooltip={ENERGY_PIP_TOOLTIP}
         />
       </div>
 
@@ -178,6 +192,7 @@ export function CardDisplay({
               variant="spark"
               value={String(card.spark)}
               size={large ? "md" : "sm"}
+              tooltip={SPARK_PIP_TOOLTIP}
             />
           </div>
         )}
