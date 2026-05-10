@@ -10,6 +10,8 @@ const SYMBOL_COLORS: Readonly<Record<string, string>> = {
   trigger: "#f97316",
   fast: "#facc15",
 };
+/** Boxicons class used to render the energy symbol. */
+const ENERGY_ICON_CLASS = "bx bxs-flame";
 const EVENT_CHROME_COLOR = "#c084fc";
 const CHARACTER_CHROME_COLOR = "#a855f7";
 
@@ -32,6 +34,16 @@ function renderRulesText(text: string): ReactNode[] {
   return tokenizeRulesText(text).map((segment, i) => {
     if (segment.kind === "text") {
       return <span key={i}>{segment.value}</span>;
+    }
+    if (segment.symbol === "energy") {
+      return (
+        <i
+          key={i}
+          aria-label="energy"
+          className={`${ENERGY_ICON_CLASS} align-middle`}
+          style={{ color: SYMBOL_COLORS.energy }}
+        />
+      );
     }
     return (
       <span
@@ -118,7 +130,11 @@ export function CardDisplay({
             border: "1px solid rgba(251, 191, 36, 0.5)",
           }}
         >
-          <span style={{ color: tintColor ?? "#fbbf24" }}>{"\u25CF"}</span>
+          <i
+            aria-label="energy cost"
+            className={`${ENERGY_ICON_CLASS} leading-none`}
+            style={{ color: tintColor ?? "#fbbf24" }}
+          />
           <span style={{ color: tintColor ?? "#ffffff" }}>
             {card.energyCost !== null ? String(card.energyCost) : "X"}
           </span>

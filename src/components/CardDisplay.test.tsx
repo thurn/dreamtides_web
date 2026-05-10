@@ -52,6 +52,42 @@ afterEach(() => {
 });
 
 describe("CardDisplay", () => {
+  it("renders the energy cost badge with the boxicons flame icon", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ energyCost: 4 })} />,
+    );
+
+    const flameIcon = container.querySelector("i.bx.bxs-flame");
+    expect(flameIcon).not.toBeNull();
+    expect(flameIcon?.getAttribute("aria-label")).toBe("energy cost");
+    expect(container.textContent).toContain("4");
+    expect(container.textContent).not.toContain("●");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders inline energy symbols in rules text as flame icons", () => {
+    const { container, root } = mount(
+      <CardDisplay
+        card={makeCard({ renderedText: "Pay ●2: draw a card." })}
+      />,
+    );
+
+    const inlineFlames = container.querySelectorAll(
+      "i.bx.bxs-flame[aria-label=\"energy\"]",
+    );
+    expect(inlineFlames.length).toBe(1);
+    expect(container.textContent).not.toContain("●");
+    expect(container.textContent).toContain("Pay ");
+    expect(container.textContent).toContain("2: draw a card.");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders Event cards with distinctive purple border chrome", () => {
     const { container, root } = mount(
       <CardDisplay

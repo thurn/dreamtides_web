@@ -65,7 +65,7 @@ export function BattlefieldCardTile({
     >
       <div className="flex items-start justify-between gap-1">
         <span className="inline-flex items-center gap-0.5 rounded-sm border border-amber-400/60 bg-black/60 px-1 py-[1px] text-[10px] font-bold leading-none text-[var(--color-gold-light)]">
-          <span aria-hidden="true">{"\u25CF"}</span>
+          <i aria-hidden="true" className="bx bxs-flame leading-none" />
           {String(cost)}
         </span>
         {card.definition.isFast ? (
