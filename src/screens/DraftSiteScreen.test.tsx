@@ -766,6 +766,76 @@ describe("DraftSiteScreen", () => {
     });
   });
 
+  it("scrolls the deck sidebar independently of the draft offers when it overflows", () => {
+    // Build a deck large enough that the row list cannot possibly fit inside
+    // the sidebar's flex remainder. The exact viewport height doesn't matter
+    // for the structural assertions below — they encode the layout invariants
+    // that produce in-panel scrolling regardless of how tall the viewport is.
+    const overflowingDeck = Array.from({ length: 30 }, (_, i) => ({
+      entryId: `deck-${String(i + 1)}`,
+      cardNumber: i % 4 === 0 ? 1 : i % 4 === 1 ? 101 : i % 4 === 2 ? 102 : 103,
+      transfiguration: null,
+      isBane: false,
+    }));
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    setQuestContext(
+      makeState({ deck: overflowingDeck }),
+      mutations,
+      cardDatabase,
+    );
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    // The sidebar wrapper must be a flex column constrained to the parent
+    // height; without `flex-col` + a height the inner rows list cannot
+    // claim a fixed share of the panel and overflow-y on the rows does
+    // nothing (the bug). `overflow-hidden` keeps the rows from spilling
+    // visually past the panel edges while the rows themselves scroll.
+    const sidebar = container.querySelector(
+      "[data-testid='draft-deck-sidebar']",
+    );
+    if (!(sidebar instanceof HTMLElement)) {
+      throw new Error("Expected draft-deck-sidebar wrapper");
+    }
+    expect(sidebar.className).toMatch(/\bflex\b/);
+    expect(sidebar.className).toMatch(/\bflex-col\b/);
+    expect(sidebar.className).toMatch(/\bh-full\b/);
+    expect(sidebar.className).toMatch(/\boverflow-hidden\b/);
+
+    // The rows container is the scroll region: it must claim the remaining
+    // flex height (`flex-1 min-h-0`) and own the vertical overflow. Without
+    // `min-h-0` the flex item refuses to shrink below its content height
+    // and rows clip past the panel without a scrollbar.
+    const rows = container.querySelector(
+      "[data-testid='draft-deck-rows']",
+    );
+    if (!(rows instanceof HTMLElement)) {
+      throw new Error("Expected draft-deck-rows scroll container");
+    }
+    expect(rows.className).toMatch(/\bflex-1\b/);
+    expect(rows.className).toMatch(/\bmin-h-0\b/);
+    expect(rows.className).toMatch(/\boverflow-y-auto\b/);
+
+    // The page-level wrapper itself still clips overflow so the draft
+    // offers stay anchored — page scroll is not the answer here.
+    const screen = container.querySelector(
+      "[data-testid='draft-site-screen']",
+    );
+    if (!(screen instanceof HTMLElement)) {
+      throw new Error("Expected draft-site-screen wrapper");
+    }
+    expect(screen.className).toMatch(/\boverflow-hidden\b/);
+
+    // The scroll region is opted into the dark-theme scrollbar class so the
+    // panel does not show a default OS scrollbar against the dark UI.
+    expect(rows.className).toMatch(/\bdraft-deck-rail-scroll\b/);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("completes the draft site from the committed summary", () => {
     const mutations = makeMutations();
     const cardDatabase = makeCardDatabase();

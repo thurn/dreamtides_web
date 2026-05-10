@@ -210,16 +210,23 @@ function DeckSidebar({
 
   if (deckRows.length === 0) {
     return (
-      <div className="flex h-full items-center justify-center p-4">
+      <div className="flex h-full min-h-0 flex-1 items-center justify-center p-4">
         <p className="text-xs opacity-40">No cards drafted yet.</p>
       </div>
     );
   }
 
+  // The rows container is the scroll region. It is given `flex-1 min-h-0` so
+  // the sidebar flex-column above hands it exactly the residual height after
+  // the header, and `overflow-y-auto` then produces an in-panel scrollbar
+  // rather than letting the rows spill past the sidebar. `min-h-0` is
+  // required: without it the flex item refuses to shrink below its content
+  // height, which is what produces the original bug where the rail clips
+  // past the viewport without scrolling.
   return (
     <div
       data-testid="draft-deck-rows"
-      className="flex flex-col gap-1 overflow-y-auto p-2"
+      className="draft-deck-rail-scroll flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto p-2"
     >
       {deckRows.map(({ cardNumber, card, count, entryIds }) => {
         const accentColor =
@@ -864,14 +871,21 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
           // name no longer overlaps the right-edge thumb image at 1728x930.
           // The thumb art is masked to 40% of the pill width; giving the
           // pill more horizontal space keeps the name clear of the thumb.
-          className="w-64 shrink-0 overflow-hidden border-l lg:w-80"
+          //
+          // The sidebar is a flex column constrained to the parent's
+          // `calc(100vh - 48px)` height. The header keeps its intrinsic
+          // height; the `DeckSidebar` rows container below claims the
+          // remaining height as `flex-1 min-h-0` and becomes the scroll
+          // region. That keeps the four draft offers stationary while the
+          // player browses a deck that overflows the panel.
+          className="flex h-full w-64 shrink-0 flex-col overflow-hidden border-l lg:w-80"
           style={{
             borderColor: "rgba(124, 58, 237, 0.2)",
             background: "rgba(5, 2, 10, 0.6)",
           }}
         >
           <div
-            className="flex items-center justify-between gap-2 px-3 py-2"
+            className="flex shrink-0 items-center justify-between gap-2 px-3 py-2"
             style={{ borderBottom: "1px solid rgba(124, 58, 237, 0.15)" }}
           >
             <DeckSidebarToggle
