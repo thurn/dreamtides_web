@@ -163,7 +163,24 @@ export function MultiplayerRoomGate({
 
     return (
       <>
-        <div data-connected-count>{connectedCount(gateState.room)} connected</div>
+        {/*
+          Presence pill is positioned fixed so it never contributes to flow
+          height. Without this, the 24px line of plain text added 24px to
+          document height on every screen, which broke any layout that tried
+          to size itself precisely against `100vh` (notably DraftSiteScreen,
+          which sized its 2x2 card grid against `calc(100vh - 48px)`).
+        */}
+        <div
+          data-connected-count
+          className="pointer-events-none fixed top-1 left-2 z-40 select-none rounded-sm px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider opacity-50"
+          style={{
+            color: "#94a3b8",
+            background: "rgba(10, 6, 18, 0.55)",
+            border: "1px solid rgba(124, 58, 237, 0.25)",
+          }}
+        >
+          {connectedCount(gateState.room)} connected
+        </div>
         {children(session)}
       </>
     );

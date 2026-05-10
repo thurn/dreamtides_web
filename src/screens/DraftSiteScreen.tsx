@@ -557,15 +557,18 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     Layout: full viewport minus HUD (48px). Cards use viewport-relative
     heights so the 2x2 grid fills the screen. Each card is ~42vh tall
     (two rows + gap + header ≈ 100vh - 48px). Width follows from the
-    2:3 aspect ratio.
+    2:3 aspect ratio. `overflow: hidden` keeps the screen from ever
+    contributing scroll height — if a card is briefly oversized during
+    layout, the wrapper clips rather than letting the page scroll.
   */}
   return (
     <div
-      className="flex"
+      data-testid="draft-site-screen"
+      className="flex overflow-hidden"
       style={{ height: "calc(100vh - 48px)" }}
     >
       {/* Main draft area */}
-      <div className="flex flex-1 flex-col items-center justify-center">
+      <div className="flex min-w-0 flex-1 flex-col items-center justify-center overflow-hidden">
         {/* 2x2 card grid, centered */}
         <AnimatePresence mode="wait">
           <motion.div

@@ -230,6 +230,16 @@ describe("MultiplayerRoomGate", () => {
       "client-client-uuid",
       expect.any(String),
     );
+
+    // The presence pill must be positioned out of normal flow so it does
+    // not add height to the document. Without `position: fixed` here, the
+    // pill's text added 24px to body height, which broke any screen
+    // (e.g. DraftSiteScreen) that sized itself precisely against `100vh`.
+    const presencePill = container.querySelector("[data-connected-count]");
+    if (!(presencePill instanceof HTMLElement)) {
+      throw new Error("Expected presence pill to be rendered");
+    }
+    expect(presencePill.className).toMatch(/\bfixed\b/);
   });
 
   it("writes presence once for repeated ready snapshots in the same room", async () => {

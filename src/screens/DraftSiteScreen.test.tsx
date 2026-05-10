@@ -582,6 +582,33 @@ describe("DraftSiteScreen", () => {
     });
   });
 
+  it("constrains the draft layout to the viewport so no scroll is introduced", () => {
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    setQuestContext(makeState(), mutations, cardDatabase);
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    const screen = container.querySelector(
+      "[data-testid=\"draft-site-screen\"]",
+    );
+    if (!(screen instanceof HTMLElement)) {
+      throw new Error("Expected draft site screen wrapper to be present");
+    }
+
+    // The wrapper sizes itself to viewport-minus-HUD and clips overflow so
+    // a slightly-too-tall card grid never pushes the document past the
+    // viewport. If either invariant regresses, common laptop sizes start
+    // showing a vertical scrollbar at the very first interactive screen.
+    expect(screen.style.height).toContain("100vh");
+    expect(screen.style.height).toContain("48px");
+    expect(screen.className).toMatch(/\boverflow-hidden\b/);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("completes the draft site from the committed summary", () => {
     const mutations = makeMutations();
     const cardDatabase = makeCardDatabase();
