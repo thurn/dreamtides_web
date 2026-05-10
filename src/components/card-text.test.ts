@@ -12,6 +12,11 @@ describe("tokenizeRulesText", () => {
     expect(tokenizeRulesText("")).toEqual([]);
   });
 
+  // The tokenizer continues to recognize U+25CF as the "energy" symbol; the
+  // rendering layer (CardDisplay) is what swaps the segment for the Boxicons
+  // `bxs-flame` icon. See backlog task 004 \u2014 these assertions lock that the
+  // tokenizer keeps emitting `symbol: "energy"` for `\u25CF`, which is the
+  // contract CardDisplay relies on to render the flame.
   it("identifies the energy symbol \u25CF", () => {
     const result = tokenizeRulesText("Pay \u25CF2.");
     expect(result).toEqual([
@@ -19,6 +24,16 @@ describe("tokenizeRulesText", () => {
       { kind: "symbol", symbol: "energy", char: "\u25CF" },
       { kind: "text", value: "2." },
     ]);
+  });
+
+  it("emits an energy symbol segment for a bare \u25CF (locks the flame-icon contract)", () => {
+    const result = tokenizeRulesText("\u25CF");
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual({
+      kind: "symbol",
+      symbol: "energy",
+      char: "\u25CF",
+    });
   });
 
   it("identifies the spark symbol \u234F", () => {
