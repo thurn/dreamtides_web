@@ -37,12 +37,36 @@ describe("tokenizeRulesText", () => {
     });
   });
 
-  it("identifies the spark symbol \u234F", () => {
+  // The spark glyph followed immediately by digits collapses into a
+  // `sparkPip` segment so the renderer can draw a circled-number `PipBadge`
+  // (matches the spark stat badge on character cards). See backlog task 021.
+  it("collapses \u234F followed by digits into a sparkPip segment", () => {
     const result = tokenizeRulesText("Gain \u234F1.");
     expect(result).toEqual([
       { kind: "text", value: "Gain " },
+      { kind: "sparkPip", value: "1" },
+      { kind: "text", value: "." },
+    ]);
+  });
+
+  it("collapses multi-digit spark values \u234F10 into a sparkPip segment", () => {
+    const result = tokenizeRulesText("Gain \u234F10.");
+    expect(result).toEqual([
+      { kind: "text", value: "Gain " },
+      { kind: "sparkPip", value: "10" },
+      { kind: "text", value: "." },
+    ]);
+  });
+
+  // A bare \u234F glyph without trailing digits remains a `symbol` segment so
+  // standalone references still render (rendered as a colored character by
+  // the existing renderer fallback).
+  it("treats a bare \u234F (no trailing digits) as a symbol segment", () => {
+    const result = tokenizeRulesText("Gain \u234F.");
+    expect(result).toEqual([
+      { kind: "text", value: "Gain " },
       { kind: "symbol", symbol: "spark", char: "\u234F" },
-      { kind: "text", value: "1." },
+      { kind: "text", value: "." },
     ]);
   });
 
@@ -214,7 +238,7 @@ describe("tokenizeRulesText", () => {
 
   it("handles multiple different symbols in one string", () => {
     const result = tokenizeRulesText("\u25B8Pay \u25CF3: gain \u234F2");
-    expect(result).toHaveLength(6);
+    expect(result).toHaveLength(5);
     expect(result[0]).toEqual({
       kind: "symbol",
       symbol: "trigger",
@@ -227,12 +251,7 @@ describe("tokenizeRulesText", () => {
       char: "\u25CF",
     });
     expect(result[3]).toEqual({ kind: "text", value: "3: gain " });
-    expect(result[4]).toEqual({
-      kind: "symbol",
-      symbol: "spark",
-      char: "\u234F",
-    });
-    expect(result[5]).toEqual({ kind: "text", value: "2" });
+    expect(result[4]).toEqual({ kind: "sparkPip", value: "2" });
   });
 
   it("handles consecutive symbols without text between them", () => {

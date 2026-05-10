@@ -4,6 +4,7 @@ import {
   type TextSegment,
 } from "./card-text";
 import { HoverPopover } from "./HoverPopover";
+import { PipBadge } from "./PipBadge";
 import type { GlossaryEntry } from "../data/glossary";
 
 /**
@@ -103,6 +104,13 @@ function renderSegment(segment: TextSegment, key: number | string): ReactNode {
       >
         {segment.word}
       </HoverPopover>
+    );
+  }
+  if (segment.kind === "sparkPip") {
+    return (
+      <span key={key} className="inline-flex align-middle">
+        <PipBadge variant="spark" value={segment.value} size="sm" />
+      </span>
     );
   }
   if (segment.symbol === "energy") {

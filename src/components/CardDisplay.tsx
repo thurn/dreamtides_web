@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { CardData, FrozenCardData } from "../types/cards";
 import { cardImageUrl } from "../data/card-database";
 import { formatTypeLine } from "./card-text";
+import { PipBadge } from "./PipBadge";
 import { renderRulesText } from "./RulesText";
 
 /** Boxicons class used to render the energy symbol. */
@@ -186,16 +187,11 @@ export function CardDisplay({
         {/* Spark badge for Characters */}
         {card.spark !== null && (
           <div className="mt-auto flex items-center justify-end pt-0.5">
-            <div
-              className={`flex items-center gap-0.5 rounded-full ${large ? "px-2.5 py-1 text-sm" : "px-1.5 py-0.5 text-[10px]"} font-bold`}
-              style={{
-                background: "rgba(0, 0, 0, 0.5)",
-                border: "1px solid rgba(192, 132, 252, 0.5)",
-              }}
-            >
-              <span style={{ color: tintColor ?? "#c084fc" }}>{"\u234F"}</span>
-              <span style={{ color: tintColor ?? "#ffffff" }}>{String(card.spark)}</span>
-            </div>
+            <PipBadge
+              variant="spark"
+              value={String(card.spark)}
+              size={large ? "md" : "sm"}
+            />
           </div>
         )}
       </div>

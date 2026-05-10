@@ -18,12 +18,16 @@ export type SymbolType = "energy" | "spark" | "trigger" | "fast";
  *   popover showing its definition. Carries the matched word as written
  *   (with its original capitalization and trailing punctuation) plus the
  *   resolved glossary entry.
+ * - `sparkPip` represents the spark glyph followed immediately by an integer
+ *   (e.g. `⍏2`). The renderer draws this as a circled-number `PipBadge` so
+ *   inline references match the spark stat badge on character cards.
  */
 export type TextSegment =
   | { kind: "text"; value: string }
   | { kind: "symbol"; symbol: SymbolType; char: string }
   | { kind: "nobreak"; segments: TextSegment[] }
-  | { kind: "term"; word: string; entry: GlossaryEntry };
+  | { kind: "term"; word: string; entry: GlossaryEntry }
+  | { kind: "sparkPip"; value: string };
 
 /** Maps special Unicode characters to their symbol type. */
 const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
@@ -35,6 +39,15 @@ const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
 
 const TRIGGER_CHAR = "▸";
 const FAST_CHAR = "↯";
+const SPARK_CHAR = "⍏";
+
+/**
+ * Matches the spark glyph followed immediately by one or more digits, e.g.
+ * `⍏2`, `⍏10`. The renderer collapses this to a single circled-number pip
+ * badge so inline references read as the same visual unit as the spark
+ * stat badge on character cards.
+ */
+const SPARK_PIP_RE = /^⍏(\d+)/;
 
 /**
  * Matches a trigger group at the start of a string: the `▸` arrow
@@ -176,6 +189,17 @@ export function tokenizeRulesText(text: string): TextSegment[] {
             ...maybeWrapKeyword(match[1]),
           ],
         });
+        i += match[0].length;
+        continue;
+      }
+    }
+
+    if (char === SPARK_CHAR) {
+      const rest = text.slice(i);
+      const match = SPARK_PIP_RE.exec(rest);
+      if (match) {
+        flushBufferAndExtractTerms();
+        segments.push({ kind: "sparkPip", value: match[1] });
         i += match[0].length;
         continue;
       }

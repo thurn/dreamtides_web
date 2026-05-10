@@ -129,6 +129,72 @@ describe("CardDisplay", () => {
     });
   });
 
+  it("renders the spark badge as a gold circular pip with no ⍏ glyph", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ cardType: "Character", spark: 4 })} />,
+    );
+
+    const sparkBadge = container.querySelector<HTMLElement>(
+      "[data-pip-variant=\"spark\"]",
+    );
+    expect(sparkBadge).not.toBeNull();
+    expect(sparkBadge?.textContent).toBe("4");
+    // No bare spark glyph anywhere on the card.
+    expect(container.textContent).not.toContain("⍏");
+    // Gold fill on the badge.
+    const style = sparkBadge?.getAttribute("style") ?? "";
+    expect(style.toLowerCase()).toContain("rgb(250, 204, 21)");
+    // White text with a black text-shadow outline.
+    expect(style.toLowerCase()).toContain("color: rgb(255, 255, 255)");
+    expect(style.toLowerCase()).toContain("text-shadow");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders inline ⍏N spark references in rules text as a gold pip badge", () => {
+    const { container, root } = mount(
+      <CardDisplay
+        card={makeCard({
+          cardType: "Character",
+          spark: 1,
+          renderedText: "An ally gains ⍏3 this turn.",
+        })}
+      />,
+    );
+
+    // The inline reference is its own pip badge in addition to the stat
+    // badge in the corner.
+    const sparkBadges = container.querySelectorAll(
+      "[data-pip-variant=\"spark\"]",
+    );
+    expect(sparkBadges.length).toBe(2);
+    // No bare ⍏ glyph anywhere — including inside the rules text.
+    expect(container.textContent).not.toContain("⍏");
+    // The inline pip displays the value from the rules text.
+    const inlineValues = Array.from(sparkBadges).map((b) => b.textContent);
+    expect(inlineValues).toContain("3");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("does not render a spark badge for Event cards", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ cardType: "Event", spark: null })} />,
+    );
+
+    expect(
+      container.querySelector("[data-pip-variant=\"spark\"]"),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("uses parallel outline treatment so Character and Event chrome share width and softness", () => {
     const characterMount = mount(
       <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
