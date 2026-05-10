@@ -20,11 +20,20 @@ import type { GlossaryEntry } from "../data/glossary";
  * than duplicate the JSX.
  */
 
-/** Color used for each symbol type when rendering rules text. */
+/**
+ * Color used for each symbol type when rendering rules text.
+ *
+ * The trigger arrow `▸` uses the muted slate (`#94a3b8`, slate-400) shared
+ * with secondary text elsewhere (Dreamcaller subtitle, room-gate hints). It
+ * marks the start of a triggered ability without competing for attention
+ * with the actual rules text or the glossary keyword that follows. Using
+ * the same accent orange as the draft selection ring or HUD warnings made
+ * the arrow read as a UI alert rather than a typographic guide.
+ */
 const SYMBOL_COLORS: Readonly<Record<string, string>> = {
   energy: "#fbbf24",
   spark: "#c084fc",
-  trigger: "#f97316",
+  trigger: "#94a3b8",
   fast: "#facc15",
 };
 
