@@ -21,6 +21,7 @@ function makeDreamcaller(): DreamcallerContent {
     title: "Caller of Beginnings",
     renderedText: "Test ability.",
     imageNumber: "0002",
+    startingEssence: 250,
     mandatoryTides: ["tide_alpha"],
     optionalTides: ["tide_beta", "tide_gamma", "tide_delta", "tide_zeta"],
   };
@@ -219,6 +220,7 @@ describe("runPlayableBattleBootstrapStep", () => {
           title: "T",
           renderedText: "",
           imageNumber: "0001",
+          startingEssence: 250,
         },
         atlas: makeAtlasWithBattleSite(),
         currentDreamscape: null,
@@ -242,6 +244,7 @@ describe("runPlayableBattleBootstrapStep", () => {
           title: "T",
           renderedText: "",
           imageNumber: "0001",
+          startingEssence: 250,
         },
         atlas: makeAtlasWithBattleSite(),
         currentDreamscape: "dreamscape-1",
@@ -270,6 +273,7 @@ describe("runPlayableBattleBootstrapStep", () => {
           title: "T",
           renderedText: "",
           imageNumber: "0001",
+          startingEssence: 250,
         },
         atlas: makeAtlasWithBattleSite(),
         currentDreamscape: "dreamscape-1",
@@ -295,6 +299,7 @@ describe("runPlayableBattleBootstrapStep", () => {
           title: "T",
           renderedText: "",
           imageNumber: "0001",
+          startingEssence: 250,
         },
         atlas: makeAtlasWithoutBattleSite(),
         currentDreamscape: "dreamscape-1",
@@ -338,6 +343,7 @@ describe("runPlayableBattleBootstrapStep", () => {
           title: "T",
           renderedText: "",
           imageNumber: "0001",
+          startingEssence: 250,
         },
         atlas: makeAtlasWithBattleSite(),
         currentDreamscape: "dreamscape-1",
@@ -387,6 +393,7 @@ describe("runPlayableBattleBootstrapStep", () => {
             title: resolvedPackage.dreamcaller.title,
             renderedText: resolvedPackage.dreamcaller.renderedText,
             imageNumber: resolvedPackage.dreamcaller.imageNumber,
+            startingEssence: resolvedPackage.dreamcaller.startingEssence,
           },
         };
       };
@@ -456,6 +463,7 @@ describe("createPlayableBattleBootstrapController", () => {
         title: "T",
         renderedText: "",
         imageNumber: "0001",
+        startingEssence: 250,
       },
       atlas: makeAtlasWithBattleSite(),
       currentDreamscape: "dreamscape-1",
@@ -490,6 +498,7 @@ describe("createPlayableBattleBootstrapController", () => {
       title: "T",
       renderedText: "",
       imageNumber: "0001",
+      startingEssence: 250,
     };
     const baseAtlas = makeAtlasWithBattleSite();
     // Oscillate the precondition fingerprint between two distinct shapes
@@ -596,6 +605,7 @@ describe("createPlayableBattleBootstrapController", () => {
           title: resolvedPackage.dreamcaller.title,
           renderedText: resolvedPackage.dreamcaller.renderedText,
           imageNumber: resolvedPackage.dreamcaller.imageNumber,
+          startingEssence: resolvedPackage.dreamcaller.startingEssence,
         },
       }));
     };

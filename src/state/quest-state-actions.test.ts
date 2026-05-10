@@ -51,6 +51,7 @@ function makeDreamcaller(): DreamcallerContent {
     title: "State Witness",
     renderedText: "Test ability.",
     imageNumber: "0006",
+    startingEssence: 275,
     mandatoryTides: ["core"],
     optionalTides: ["support-a", "support-b", "support-c", "support-d"],
   };
@@ -313,6 +314,9 @@ describe("quest state actions", () => {
     );
 
     expect(next.dreamcaller).toEqual(toQuestDreamcaller(dreamcaller));
+    expect(next.dreamcaller?.startingEssence).toBe(275);
+    expect(next.essence).toBe(dreamcaller.startingEssence);
+    expect(prev.essence).toBe(250);
     expect(next.resolvedPackage).toBe(resolvedPackage);
     expect(next.remainingDreamsignPool).toEqual(
       resolvedPackage.dreamsignPoolIds,

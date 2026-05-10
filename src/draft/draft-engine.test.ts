@@ -47,6 +47,7 @@ function buildResolvedPackage(
       title: "Draft Architect",
       renderedText: "Test rules text.",
       imageNumber: "0003",
+      startingEssence: 250,
       mandatoryTides: ["core"],
       optionalTides: ["support-a", "support-b", "support-c"],
     },

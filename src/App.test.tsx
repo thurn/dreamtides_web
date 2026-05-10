@@ -312,6 +312,7 @@ describe("QuestApp", () => {
           title: "Of the First Hand",
           renderedText: "Pick your path.",
           imageNumber: "0004",
+          startingEssence: 250,
         },
         screen: { type: "dreamscape" },
       }),
@@ -345,6 +346,7 @@ describe("QuestApp", () => {
       title: "Of Tests",
       renderedText: "Pick.",
       imageNumber: "0001",
+      startingEssence: 250,
       mandatoryTides: ["tide_alpha"],
       optionalTides: ["tide_beta", "tide_gamma", "tide_delta", "tide_zeta"],
     };

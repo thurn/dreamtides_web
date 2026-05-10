@@ -361,6 +361,57 @@ describe("room service", () => {
     expect(resolvedDreamcaller).not.toHaveProperty("awakening");
   });
 
+  it("defaults startingEssence on rehydrated dreamcaller and resolved package when stripped", () => {
+    const listener = vi.fn();
+    const strippedQuestState = {
+      ...createDefaultState(),
+      dreamcaller: {
+        id: "dc-old",
+        name: "Legacy Caller",
+        title: "Pre-essence Era",
+        renderedText: "Old caller without a tuned starting value.",
+        imageNumber: "0001",
+      },
+      resolvedPackage: {
+        dreamcaller: {
+          id: "dc-old",
+          name: "Legacy Caller",
+          title: "Pre-essence Era",
+          renderedText: "Old caller without a tuned starting value.",
+          imageNumber: "0001",
+          mandatoryTides: ["alpha"],
+          optionalTides: ["beta"],
+        },
+        mandatoryTides: ["alpha"],
+        optionalSubset: ["beta"],
+        selectedTides: ["alpha", "beta"],
+        draftPoolCopiesByCard: {},
+        dreamsignPoolIds: [],
+        mandatoryOnlyPoolSize: 0,
+        draftPoolSize: 0,
+        doubledCardCount: 0,
+        legalSubsetCount: 0,
+        preferredSubsetCount: 0,
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready.room.questState?.dreamcaller?.startingEssence).toBe(250);
+    expect(
+      ready.room.questState?.resolvedPackage?.dreamcaller.startingEssence,
+    ).toBe(250);
+  });
+
   it("emits missing when the room snapshot does not exist", () => {
     const listener = vi.fn();
     firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {

@@ -137,6 +137,24 @@ export function QuestStartScreen() {
                 >
                   {dreamcaller.renderedText}
                 </p>
+                <div
+                  className="mt-3 flex items-baseline justify-center gap-1.5 text-sm font-semibold"
+                  data-starting-essence={dreamcaller.id}
+                >
+                  <span
+                    className="text-xs uppercase tracking-wider opacity-70"
+                    style={{ color: "#94a3b8" }}
+                  >
+                    Starting Essence
+                  </span>
+                  <span
+                    className="text-base font-bold tabular-nums md:text-lg"
+                    style={{ color: "var(--color-essence)" }}
+                    data-starting-essence-value={dreamcaller.id}
+                  >
+                    {String(dreamcaller.startingEssence)}
+                  </span>
+                </div>
               </motion.button>
               {displayedTides.length > 0 && (
                 <div className="flex w-full flex-col gap-2 px-1">

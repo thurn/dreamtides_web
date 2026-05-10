@@ -60,6 +60,7 @@ const testDreamcaller: DreamcallerContent = {
   title: "Keeper of the Threshold Flame",
   renderedText: "First dreamcaller.",
   imageNumber: "0009",
+  startingEssence: 235,
   mandatoryTides: ["materialize_value"],
   optionalTides: ["spirit_growth"],
 };
@@ -468,6 +469,10 @@ describe("MultiplayerQuestProvider", () => {
     const retryRoom = updater?.(session.room);
 
     expect(nextRoom?.questState?.dreamcaller?.id).toBe(testDreamcaller.id);
+    expect(nextRoom?.questState?.dreamcaller?.startingEssence).toBe(
+      testDreamcaller.startingEssence,
+    );
+    expect(nextRoom?.questState?.essence).toBe(testDreamcaller.startingEssence);
     expect(nextRoom?.questState?.draftState).toEqual(expect.any(Object));
     expect(nextRoom?.questState?.atlas).toEqual(expect.any(Object));
     expect(nextRoom?.metadata.updatedAt).toEqual(expect.any(String));

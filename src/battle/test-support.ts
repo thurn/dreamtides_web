@@ -19,6 +19,7 @@ export function makeBattleTestDreamcallers(): DreamcallerContent[] {
       title: "Storm Archivist",
       renderedText: "Whenever the first event each turn resolves, gain momentum.",
       imageNumber: "001",
+      startingEssence: 250,
       mandatoryTides: ["alpha"],
       optionalTides: ["beta", "gamma"],
     },
@@ -28,6 +29,7 @@ export function makeBattleTestDreamcallers(): DreamcallerContent[] {
       title: "Verdant Witness",
       renderedText: "Your field grows harder to uproot with every turn passed.",
       imageNumber: "002",
+      startingEssence: 250,
       mandatoryTides: ["beta"],
       optionalTides: ["alpha", "delta"],
     },
@@ -114,6 +116,7 @@ function makeBattleTestDreamcaller(): Dreamcaller {
     title: "Storm Archivist",
     renderedText: "Gain a fleeting advantage whenever your line bends first.",
     imageNumber: "001",
+    startingEssence: 250,
   };
 }
 

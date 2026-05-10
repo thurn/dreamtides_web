@@ -281,6 +281,7 @@ export function startQuestFromDreamcaller({
 
   return {
     ...prev,
+    essence: dreamcaller.startingEssence,
     deck,
     dreamcaller: toQuestDreamcaller(dreamcaller),
     resolvedPackage,

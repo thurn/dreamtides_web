@@ -53,12 +53,24 @@ export function transformCard(card) {
 }
 
 /**
+ * Default starting essence used when a Dreamcaller TOML record omits a
+ * `starting-essence` value. Mirrors `DEFAULT_STARTING_ESSENCE` in
+ * `src/types/content.ts`.
+ */
+export const DEFAULT_STARTING_ESSENCE = 250;
+
+/**
  * Convert a TOML Dreamcaller record to its JSON representation with camelCase keys.
+ * Records without a `starting-essence` value are filled in with
+ * `DEFAULT_STARTING_ESSENCE` so the runtime always sees a number.
  */
 export function transformDreamcaller(dreamcaller) {
   const result = {};
   for (const [key, value] of Object.entries(dreamcaller)) {
     result[kebabToCamel(key)] = value;
+  }
+  if (typeof result.startingEssence !== "number") {
+    result.startingEssence = DEFAULT_STARTING_ESSENCE;
   }
   return result;
 }

@@ -21,7 +21,10 @@ import {
 } from "./room-types";
 import { createDefaultState } from "../state/quest-context";
 import type { DraftState } from "../types/draft";
-import type { ResolvedDreamcallerPackage } from "../types/content";
+import {
+  DEFAULT_STARTING_ESSENCE,
+  type ResolvedDreamcallerPackage,
+} from "../types/content";
 import type {
   DeckEntry,
   Dreamcaller,
@@ -89,6 +92,9 @@ function normalizeDraftState(draftState: DraftState | null | undefined): DraftSt
 /**
  * Drop any unrecognized `awakening` field from a Dreamcaller record so RTDB
  * rooms that carry it are silently sanitized into the current runtime shape.
+ * Also restores `startingEssence` to the default when missing — older rooms
+ * predate the field and Firebase strips numeric fields that match the
+ * default `0` if the writer ever set it that way.
  */
 function normalizeDreamcaller(
   dreamcaller: Dreamcaller | null | undefined,
@@ -99,7 +105,10 @@ function normalizeDreamcaller(
   const { awakening: _awakening, ...rest } = dreamcaller as Dreamcaller & {
     awakening?: unknown;
   };
-  return rest;
+  return {
+    ...rest,
+    startingEssence: rest.startingEssence ?? DEFAULT_STARTING_ESSENCE,
+  };
 }
 
 function normalizeResolvedPackage(
@@ -108,10 +117,14 @@ function normalizeResolvedPackage(
   if (resolvedPackage === null || resolvedPackage === undefined) {
     return null;
   }
-  const { awakening: _awakening, ...dreamcaller } =
+  const { awakening: _awakening, ...rawDreamcaller } =
     resolvedPackage.dreamcaller as ResolvedDreamcallerPackage["dreamcaller"] & {
       awakening?: unknown;
     };
+  const dreamcaller = {
+    ...rawDreamcaller,
+    startingEssence: rawDreamcaller.startingEssence ?? DEFAULT_STARTING_ESSENCE,
+  };
   return {
     ...resolvedPackage,
     dreamcaller,

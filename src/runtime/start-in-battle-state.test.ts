@@ -10,6 +10,7 @@ function makeDreamcaller(): DreamcallerContent {
     title: "Caller of Tests",
     renderedText: "Test ability.",
     imageNumber: "0001",
+    startingEssence: 250,
     mandatoryTides: ["tide_alpha"],
     optionalTides: ["tide_beta", "tide_gamma", "tide_delta", "tide_zeta"],
   };

@@ -182,6 +182,7 @@ rendered-text = "Use the canonical Dreamsign text."
         title: "Keeper of Test Cases",
         renderedText: "Choose tides.",
         imageNumber: "0007",
+        startingEssence: 250,
         mandatoryTides: ["core", "bridge"],
         optionalTides: ["support", "tempo", "finish", "value"],
       },
@@ -199,5 +200,91 @@ rendered-text = "Use the canonical Dreamsign text."
     expect(existsSync(join(publicDir, "cards", "1.webp"))).toBe(true);
     expect(existsSync(join(publicDir, "dreamcallers", "0007.png"))).toBe(true);
     expect(existsSync(join(publicDir, "dreamsigns", "test-sign.png"))).toBe(true);
+  });
+
+  it("passes through tuned starting-essence values from the TOML", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "quest-setup-assets-"));
+    const publicDir = join(tempRoot, "public");
+    const imageCacheDir = join(tempRoot, "image-cache");
+    const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
+    const dreamsignArtDir = join(tempRoot, "dreamsign-art");
+    const cardTomlPath = join(tempRoot, "rendered-cards.toml");
+    const dreamcallerTomlPath = join(tempRoot, "dreamcallers.toml");
+    const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
+
+    mkdirSync(imageCacheDir, { recursive: true });
+    mkdirSync(dreamcallerArtDir, { recursive: true });
+    mkdirSync(dreamsignArtDir, { recursive: true });
+    writeFileSync(join(dreamcallerArtDir, "0007.png"), "fake-png");
+    writeFileSync(join(dreamcallerArtDir, "0008.png"), "fake-png");
+    writeFileSync(cardTomlPath, "");
+    writeFileSync(
+      cardTomlPath,
+      `[[cards]]
+name = "Solo"
+id = "solo"
+card-number = 1
+card-type = "Event"
+rarity = "Starter"
+energy-cost = 1
+spark = 1
+is-fast = false
+tides = ["core"]
+rendered-text = ""
+image-number = 901
+art-owned = true
+`,
+    );
+    writeFileSync(
+      dreamcallerTomlPath,
+      `[[dreamcaller]]
+id = "dc-low"
+name = "Discount Caller"
+title = "Cheap Engine"
+rendered-text = "Strong opener."
+image-number = "0007"
+starting-essence = 220
+mandatory-tides = ["core"]
+optional-tides = ["a", "b", "c", "d"]
+
+[[dreamcaller]]
+id = "dc-default"
+name = "Steady Caller"
+title = "Average Engine"
+rendered-text = "Even keel."
+image-number = "0008"
+mandatory-tides = ["core"]
+optional-tides = ["a", "b", "c", "d"]
+`,
+    );
+    writeFileSync(
+      dreamsignTomlPath,
+      `[[dreamsign]]
+id = "sign-1"
+name = "Test Sign"
+image_name = "test-sign.png"
+tides = ["core"]
+rendered-text = ""
+`,
+    );
+    writeFileSync(join(dreamsignArtDir, "test-sign.png"), "fake-png");
+
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    setupAssets({
+      cardTomlPath,
+      dreamcallerTomlPath,
+      dreamsignTomlPath,
+      publicDir,
+      imageCacheDir,
+      dreamcallerArtDir,
+      dreamsignArtDir,
+    });
+
+    const dreamcallers = JSON.parse(
+      readFileSync(join(publicDir, "dreamcaller-data.json"), "utf8"),
+    );
+    expect(dreamcallers[0].startingEssence).toBe(220);
+    expect(dreamcallers[1].startingEssence).toBe(250);
   });
 });

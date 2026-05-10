@@ -49,6 +49,7 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       title: "Witness of Logs",
       renderedText: "Test",
       imageNumber: "0007",
+      startingEssence: 245,
       mandatoryTides: ["core"],
       optionalTides: ["support-a", "support-b", "support-c", "support-d"],
     },
@@ -152,6 +153,7 @@ describe("extractPackageDebugInfo", () => {
     );
 
     expect(result?.dreamcallerName).toBe("Caller of Depths");
+    expect(result?.startingEssence).toBe(245);
     expect(result?.initialDreamsignPoolSize).toBe(3);
     expect(result?.remainingDreamsigns).toEqual([
       { id: "sign-2", name: "Second Sign" },

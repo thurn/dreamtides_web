@@ -12,6 +12,7 @@ function makeDreamcaller(id: string): DreamcallerContent {
     title: `Title ${id}`,
     renderedText: `Rules text for ${id}.`,
     imageNumber: `00${id}`,
+    startingEssence: 250,
     mandatoryTides: ["tide_alpha"],
     optionalTides: ["support-a", "support-b", "support-c", "support-d"],
   };
@@ -59,6 +60,7 @@ describe("toQuestDreamcaller", () => {
       title: "Title a",
       renderedText: "Rules text for a.",
       imageNumber: "00a",
+      startingEssence: 250,
     });
   });
 });

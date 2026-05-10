@@ -54,6 +54,7 @@ function makeDreamcaller(
     title: "Speaker of Tests",
     renderedText: "Test rules text.",
     imageNumber: "0001",
+    startingEssence: 250,
     mandatoryTides: ["m1", "m2", "m3"],
     optionalTides,
   };

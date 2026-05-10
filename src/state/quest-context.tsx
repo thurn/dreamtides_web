@@ -779,7 +779,7 @@ export function QuestProvider({
         }
 
         logEvent("quest_started", {
-          initialEssence: prev.essence,
+          initialEssence: next.essence,
           startingDeckSize: next.deck.length,
           dreamcallerId: dreamcaller.id,
           dreamcallerName: dreamcaller.name,

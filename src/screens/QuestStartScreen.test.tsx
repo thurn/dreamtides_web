@@ -100,6 +100,7 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     title: "Keeper of the Threshold Flame",
     renderedText: "First dreamcaller.",
     imageNumber: "0009",
+    startingEssence: 230,
     mandatoryTides: ["materialize_value", "ally_formation", "cheap_curve"],
     optionalTides: ["spirit_growth", "topdeck_setup", "resource_burst"],
   },
@@ -109,6 +110,7 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     title: "The Ashen Cartographer",
     renderedText: "Second dreamcaller.",
     imageNumber: "0010",
+    startingEssence: 250,
     mandatoryTides: ["warrior_pressure", "ally_wide", "tempo_resets"],
     optionalTides: ["tempo_resets", "fast_tempo", "resource_burst"],
   },
@@ -118,6 +120,7 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     title: "Harbinger of the Ninth Current",
     renderedText: "Third dreamcaller.",
     imageNumber: "0011",
+    startingEssence: 285,
     mandatoryTides: ["void_recursion", "spark_tall", "trigger_reuse"],
     optionalTides: ["trigger_reuse", "character_chain", "void_setup"],
   },
@@ -459,6 +462,29 @@ describe("QuestStartScreen", () => {
     expect(currentMutations.startQuest).toHaveBeenCalledWith(
       OFFERED_DREAMCALLERS[1],
     );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders each Dreamcaller's tuned starting essence on its selection card", () => {
+    const { container, root } = mount(<QuestStartScreen />);
+
+    for (const dreamcaller of OFFERED_DREAMCALLERS) {
+      const valueNode = container.querySelector(
+        `[data-starting-essence-value="${dreamcaller.id}"]`,
+      );
+      expect(valueNode).not.toBeNull();
+      expect(valueNode?.textContent).toBe(String(dreamcaller.startingEssence));
+      expect((valueNode as HTMLElement | null)?.style.color).toBe(
+        "var(--color-essence)",
+      );
+      const row = container.querySelector(
+        `[data-starting-essence="${dreamcaller.id}"]`,
+      );
+      expect(row?.textContent).toContain("Starting Essence");
+    }
 
     act(() => {
       root.unmount();

@@ -42,6 +42,12 @@ export interface Dreamcaller {
   title: string;
   renderedText: string;
   imageNumber: string;
+  /**
+   * Starting essence the player begins the quest with. Captured on the
+   * Dreamcaller record so the HUD inspector and persisted state always know
+   * the chosen value, even after Firebase round-trips.
+   */
+  startingEssence: number;
 }
 
 /** A passive effect collected during the quest. */

@@ -9,6 +9,13 @@
   --color-primary-light: #a855f7;
   --color-gold: #d4a017;
   --color-gold-light: #fbbf24;
+  /*
+   * Essence color token. Currently aliases the gold pair so existing
+   * surfaces stay consistent; a follow-up task will retune this to the
+   * project's purple essence palette and every essence-bearing surface
+   * will inherit the change automatically.
+   */
+  --color-essence: var(--color-gold-light);
   --color-text: #e2e8f0;
   --color-text-dim: #94a3b8;
 }

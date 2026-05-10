@@ -33,6 +33,7 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       title: "Debug Witness",
       renderedText: "Test rules text.",
       imageNumber: "0009",
+      startingEssence: 250,
       mandatoryTides: ["core"],
       optionalTides: ["support-a", "support-b", "support-c"],
     },

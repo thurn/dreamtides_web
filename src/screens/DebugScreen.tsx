@@ -117,6 +117,10 @@ export function DebugScreen({
               <div className="mx-auto max-w-4xl space-y-4">
                 <div className="flex flex-wrap gap-3">
                   <StatBadge
+                    label="Starting Essence"
+                    value={String(packageDebugInfo.startingEssence)}
+                  />
+                  <StatBadge
                     label="Required"
                     value={String(packageDebugInfo.mandatoryTides.length)}
                   />

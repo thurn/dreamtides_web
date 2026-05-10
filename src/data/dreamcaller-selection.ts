@@ -32,5 +32,6 @@ export function toQuestDreamcaller(
     title: dreamcaller.title,
     renderedText: dreamcaller.renderedText,
     imageNumber: dreamcaller.imageNumber,
+    startingEssence: dreamcaller.startingEssence,
   };
 }

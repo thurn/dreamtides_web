@@ -31,6 +31,7 @@ export interface DreamsignPoolDebugEntry {
 
 export interface PackageDebugInfo {
   dreamcallerName: string;
+  startingEssence: number;
   mandatoryTides: string[];
   optionalSubset: string[];
   selectedTides: string[];
@@ -111,6 +112,7 @@ export function extractPackageDebugInfo(
 
   return {
     dreamcallerName: resolvedPackage.dreamcaller.name,
+    startingEssence: resolvedPackage.dreamcaller.startingEssence,
     mandatoryTides: [...resolvedPackage.mandatoryTides],
     optionalSubset: [...resolvedPackage.optionalSubset],
     selectedTides: [...resolvedPackage.selectedTides],

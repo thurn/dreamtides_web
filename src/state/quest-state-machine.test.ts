@@ -77,6 +77,7 @@ function makeDreamcaller(): Dreamcaller {
     title: "State Witness",
     renderedText: "Test ability.",
     imageNumber: "0006",
+    startingEssence: 250,
   };
 }
 
@@ -88,6 +89,7 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       title: "State Witness",
       renderedText: "Test rules text.",
       imageNumber: "0006",
+      startingEssence: 250,
       mandatoryTides: ["core"],
       optionalTides: ["support-a", "support-b", "support-c", "support-d"],
     },
@@ -317,6 +319,7 @@ describe("QuestProvider composed mutations", () => {
       (entry) => entry.event === "quest_started",
     );
     expect(questStartedEntry).toMatchObject({
+      initialEssence: resolvedPackage.dreamcaller.startingEssence,
       startingDeckSize: STARTER_CARD_NUMBERS.length,
       dreamcallerId: resolvedPackage.dreamcaller.id,
       dreamcallerName: resolvedPackage.dreamcaller.name,

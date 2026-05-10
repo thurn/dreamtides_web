@@ -125,6 +125,7 @@ function makeState(): QuestState {
       title: "Keeper of Lantern Glass",
       renderedText: "Dreamcaller rules.",
       imageNumber: "0005",
+      startingEssence: 250,
     },
     resolvedPackage: null,
     cardSourceDebug: null,

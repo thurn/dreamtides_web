@@ -1,9 +1,29 @@
+# Per-Dreamcaller starting essence
+# ---------------------------------
+# Each Dreamcaller begins a quest with a tuned `starting-essence` value to
+# compensate for differences in opening power, late-game scaling, and
+# activation cost. The cheaper a Dreamcaller's win condition is to assemble,
+# the lower the starting essence; the slower the engine ramps or the more it
+# costs to fire each turn, the higher it starts.
+#
+# Tier guide:
+#   * 220-235 — Strong, immediate, "free" abilities that need little setup.
+#                 Lower essence offsets the natural tempo lead.
+#   * 240-255 — Conditional or curve-dependent engines. The default band.
+#   * 260-275 — Slow openings, expensive activations, or fragile setups.
+#                 Extra essence covers the early shop/site bumps needed to
+#                 reach the payoff.
+#   * 280+   — Late-game scalers whose payoff requires several quest stops
+#                 of investment before it stabilizes.
+
 [[dreamcaller]]
 name = "Vaela"
 title = "Ember Among Remnants"
 id = "60BD584B-5BC8-4EE7-8A98-CBB304EB71AB"
 image-number = "0028"
 rendered-text = "When you play a card from your void, cards in your void gain reclaim this turn."
+# Strong recursion ceiling but requires void setup before it pays off.
+starting-essence = 260
 mandatory-tides = [
   "survivor_dissolve",
   "void_recursion",
@@ -28,6 +48,8 @@ title = "Strategos of the Phalanx"
 id = "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C"
 image-number = "0100"
 rendered-text = "When you trigger a \"▸ Materialized\" ability for the second time in a turn, gain 3●."
+# Resource generator, but the second-trigger condition gates the payoff.
+starting-essence = 245
 mandatory-tides = [
   "materialize_value",
   "ally_formation",
@@ -53,6 +75,8 @@ title = "The Dreaming"
 id = "3C4773E4-F8E1-4686-86CB-B407A42489D4"
 image-number = "0026"
 rendered-text = "▸Judgment: Banish an ally, then materialize it."
+# Free judgment-driven trigger reuse on every turn — premium engine.
+starting-essence = 225
 mandatory-tides = [
   "materialize_tempo",
   "character_chain",
@@ -78,6 +102,8 @@ title = "Chain Accelerant"
 id = "84E7020C-7384-4CC3-A20F-AB05F03CC375"
 image-number = "0106"
 rendered-text = "When you play your second event in a turn, your events cost 1● less this turn."
+# Cost reduction with a soft "two events per turn" prerequisite.
+starting-essence = 250
 mandatory-tides = [
   "event_chain",
   "prevent_control",
@@ -103,6 +129,8 @@ title = "Cantor of the Unreal"
 id = "9E19B3D1-12F2-43C1-9CB1-08DE7CD32E32"
 image-number = "0098"
 rendered-text = "Allied figments have +1 spark."
+# Passive figment buff — strong only after the wide board lands.
+starting-essence = 255
 mandatory-tides = [
   "figment_swarm",
   "warrior_pressure",
@@ -129,6 +157,8 @@ title = "the Invocant"
 id = "5E28154D-770A-4B84-8AAC-9DE44F5D7D02"
 image-number = "0080"
 rendered-text = "2●, once per turn: Trigger the ▸ Materialized: ability of an ally."
+# Powerful retrigger but the 2● per turn tax compounds across the quest.
+starting-essence = 265
 mandatory-tides = [
   "materialize_tempo",
   "ally_formation",
@@ -155,6 +185,8 @@ title = "Iron Sovereign"
 id = "6029BE40-75B9-4C07-912F-9718B6C5C747"
 image-number = "0003"
 rendered-text = "▸ Judgment: If you have exactly 1 deployed ally, it gains +2 spark and Unstoppable."
+# Conditional finisher; the "exactly one ally" clause is fragile.
+starting-essence = 270
 mandatory-tides = [
   "judgment_engines",
   "spark_tall",
@@ -180,6 +212,8 @@ title = "Recon Commander"
 id = "81954CA0-DA36-49DD-915C-1CCB1B2D7B05"
 image-number = "0007"
 rendered-text = "When an allied Survivor is dissolved, materialize a random Survivor from your deck."
+# Free dissolve-driven recursion within the Survivor tribe.
+starting-essence = 240
 mandatory-tides = [
   "survivor_dissolve",
   "void_recursion",
@@ -203,6 +237,8 @@ title = "the Reckoning Blade"
 id = "B9BF6D4B-907C-4750-B51C-811AFF29DE59"
 image-number = "0022"
 rendered-text = "▸Judgment: You may abandon an ally to gain ● equal to that ally's cost."
+# Free in-battle ramp; converts board into energy whenever judgment fires.
+starting-essence = 230
 mandatory-tides = [
   "abandon_value",
   "ally_formation",
@@ -229,6 +265,8 @@ title = "Daimyo of Lacquered Fury"
 id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 image-number = "0029"
 rendered-text = "Warriors cost you 1● less."
+# Universal Warrior discount — hits on every play with no setup.
+starting-essence = 220
 mandatory-tides = [
   "warrior_pressure",
   "warrior_bastion",
@@ -254,6 +292,8 @@ title = "Shrouded Inquisitor"
 id = "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4"
 image-number = "0112"
 rendered-text = "Abandon an ally, once per turn: Materialize a random character with cost 1● higher from your deck."
+# Self-fueling cost-ladder; needs a body but scales fast.
+starting-essence = 240
 mandatory-tides = [
   "abandon_ladder",
   "abandon_fodder",
@@ -279,6 +319,8 @@ title = "Scion of the Returning Tide"
 id = "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851"
 image-number = "0084"
 rendered-text = "2●: Return an ally to hand. Its cost is reduced by 2● and it gains +2 spark."
+# Net-neutral on energy each cycle, but splashy and repeatable.
+starting-essence = 255
 mandatory-tides = [
   "materialize_tempo",
   "spark_tall",
@@ -304,6 +346,8 @@ title = "Gleaner of Dust"
 id = "BA973428-6D90-4847-B779-CB7E25A5AC84"
 image-number = "0051"
 rendered-text = "When you discard a card, return another random card from your void to hand."
+# Card-flow engine that rewards discard density without spending energy.
+starting-essence = 250
 mandatory-tides = [
   "discard_velocity",
   "void_recursion",
@@ -328,6 +372,8 @@ title = "Spent-Blood Chieftain"
 id = "16B579FE-C15B-4DF6-8262-D45CE44732AE"
 image-number = "0064"
 rendered-text = "When you abandon an ally, the next character you play this turn costs 2● less."
+# Burst cost reduction — needs an abandon outlet but the discount is huge.
+starting-essence = 245
 mandatory-tides = [
   "abandon_value",
   "cost_reduction",
@@ -354,6 +400,8 @@ title = "Lector of the Receding Rite"
 id = "F6208407-C4E9-42AC-B533-346704F5E39E"
 image-number = "0078"
 rendered-text = "Once per turn, when you play an event, draw an event with lower cost."
+# Quiet card-flow engine that compounds across long games.
+starting-essence = 255
 mandatory-tides = [
   "event_chain",
   "prevent_control",
@@ -377,6 +425,8 @@ title = "the Dredger"
 id = "4D5E3933-7DD6-406B-922D-DD78ACFA044A"
 image-number = "0005"
 rendered-text = "When you reclaim a card, draw a card."
+# Reclaim becomes net-positive card flow once void density is online.
+starting-essence = 240
 mandatory-tides = [
   "void_recursion",
   "discard_velocity",
@@ -402,6 +452,8 @@ title = "Warhost Exemplar"
 id = "91D4C3B5-FD63-480B-9ED5-979109A227BB"
 image-number = "0056"
 rendered-text = "Deployed allies have +1 spark for each other deployed ally."
+# Quadratic scaling, but completely off in the early game until a board lands.
+starting-essence = 270
 mandatory-tides = [
   "ally_formation",
   "card_flow",
@@ -428,6 +480,8 @@ title = "Ashbroker"
 id = "86026206-1B11-4F38-A24E-FD3C697F5353"
 image-number = "0087"
 rendered-text = "Once per turn, when you discard a card, draw a card."
+# Free hand-cycling that turns rummage outlets into card draw.
+starting-essence = 240
 mandatory-tides = [
   "discard_velocity",
   "character_chain",
@@ -453,6 +507,8 @@ title = "Hegemon of Shattered Thrones"
 id = "3EBABA62-9000-429D-B203-2A5A9724389A"
 image-number = "0045"
 rendered-text = "2●, once per turn: Each ally gains +1 spark."
+# Cumulative anthem on a 2● tax; expensive to fire on early turns.
+starting-essence = 260
 mandatory-tides = [
   "ally_formation",
   "go_wide_enablers",
@@ -478,6 +534,8 @@ title = "The Hammer's Echo"
 id = "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB"
 image-number = "0108"
 rendered-text = "Once per turn, when you play a Warrior, materialize a copy of it with 1 spark."
+# Free Warrior copy tempo; tribe-locked so the early picks have to cooperate.
+starting-essence = 245
 mandatory-tides = [
   "warrior_pressure",
   "materialize_tempo",
@@ -503,6 +561,8 @@ title = "Twice-Mourned"
 id = "6488452D-4E9E-466C-96DF-716D4EC646B1"
 image-number = "0017"
 rendered-text = "Allied characters' \"▸ Dissolved\": abilities gain Echo."
+# Conditional doubler — only relevant once dissolve triggers populate the deck.
+starting-essence = 255
 mandatory-tides = [
   "survivor_dissolve",
   "figment_swarm",
@@ -528,6 +588,8 @@ title = "Cutthroat Admiral"
 id = "8A2FCD65-BBA7-459C-A6B0-F0391B9293FD"
 image-number = "0052"
 rendered-text = "When you discard a card, deployed allies gain +1 spark."
+# Permanent buff that compounds with discard outlets — needs a board already.
+starting-essence = 255
 mandatory-tides = [
   "discard_velocity",
   "ally_formation",
@@ -553,6 +615,8 @@ title = "Lord of the Radiant Court"
 id = "1CC5A88A-134F-42F7-A0AE-95ACE44B3745"
 image-number = "0035"
 rendered-text = "▸ Judgment: Each deployed ally gains +1 spark"
+# Cumulative anthem on judgment cadence — solid but board-dependent.
+starting-essence = 245
 mandatory-tides = [
   "ally_formation",
   "judgment_engines",
@@ -578,6 +642,8 @@ title = "Standing Orders"
 id = "C72CFD7B-408B-47F6-ADF1-1E486A7E20D3"
 image-number = "0071"
 rendered-text = "Once per turn, when you deploy an ally, trigger its \"▸ Materialized:\" ability."
+# Free Materialized double-up on every first ally — premium tempo every turn.
+starting-essence = 230
 mandatory-tides = [
   "materialize_value",
   "ally_formation",
@@ -601,6 +667,8 @@ title = "Breach Respondent"
 id = "9E4862FD-E18C-463E-9D5F-E5D73C29A66F"
 image-number = "0037"
 rendered-text = "Cards you play during the opponent's turn cost 1● less."
+# Discount only matters when fast/instant tools are already in hand.
+starting-essence = 250
 mandatory-tides = [
   "fast_tempo",
   "prevent_control",
@@ -627,6 +695,8 @@ title = "the Salvage-Born"
 id = "B8C1B0AB-0FE6-47D6-B576-0C2231AEB81E"
 image-number = "0044"
 rendered-text = "When you discard a card, it gains reclaim until end of turn."
+# Discard-to-reclaim tempo; needs a discard outlet to start firing.
+starting-essence = 255
 mandatory-tides = [
   "discard_velocity",
   "void_recursion",
@@ -651,6 +721,8 @@ title = "Whisperer of Wraiths"
 id = "F0F5449E-01C2-4635-BCE1-76B179FC2108"
 image-number = "0061"
 rendered-text = "Once per turn, when you discard a character, materialize a copy of it with 1 spark."
+# Free body off any discarded character — meaningful tempo every turn.
+starting-essence = 240
 mandatory-tides = [
   "discard_velocity",
   "character_chain",
@@ -674,6 +746,8 @@ title = "Wreckoner"
 id = "133E22DD-F81B-406D-B4E3-98C346D7FD4E"
 image-number = "0013"
 rendered-text = "Characters cost you 1● less for each 3 cards in your void."
+# Void-threshold cost discount — late-game ceiling, brutal early game.
+starting-essence = 285
 mandatory-tides = [
   "void_threshold",
   "void_recursion",
@@ -699,6 +773,8 @@ title = "Triumphator"
 id = "BDD3A3A7-242C-4D2B-8071-EBE56891A340"
 image-number = "0083"
 rendered-text = "When 2 or more allies score points, gain 1✪."
+# Win-condition accelerant; relies on a wide board scoring at once.
+starting-essence = 265
 mandatory-tides = [
   "ally_formation",
   "figment_swarm",
@@ -725,6 +801,8 @@ title = "Packmaster"
 id = "94E7C651-25E9-4A62-9DE4-EAF5BA20542C"
 image-number = "0095"
 rendered-text = "When you play a character, if you have played another character this turn, draw a card."
+# Free card-flow engine when the deck supports a two-character curve.
+starting-essence = 245
 mandatory-tides = [
   "ally_formation",
   "card_flow",
@@ -750,6 +828,8 @@ title = "the Resounding Wrath"
 id = "B99936CA-97F9-4930-AF5A-FA9EF92557EF"
 image-number = "0025"
 rendered-text = "2●, once per turn: An allied character's \"▸ Judgment:\" ability gains Echo."
+# Doubles a Judgment trigger but only after paying 2● — needs strong targets.
+starting-essence = 265
 mandatory-tides = [
   "judgment_engines",
   "ally_formation",
@@ -775,6 +855,8 @@ title = "Wearer of the Stolen Face"
 id = "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477"
 image-number = "0060"
 rendered-text = "When you prevent a card, add a copy of that card to your hand."
+# Card-stealing reactive engine, contingent on prevention tools landing.
+starting-essence = 270
 mandatory-tides = [
   "prevent_control",
   "fast_tempo",
@@ -810,6 +892,10 @@ width = 360
 [[metadata.columns]]
 key = "id"
 width = 140
+
+[[metadata.columns]]
+key = "starting-essence"
+width = 90
 
 [[metadata.columns]]
 key = "mandatory-tides"

@@ -74,6 +74,7 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       title: "Auditor of Debug Panels",
       renderedText: "Test rules text.",
       imageNumber: "0008",
+      startingEssence: 250,
       mandatoryTides: ["core"],
       optionalTides: ["support-a", "support-b", "support-c", "support-d"],
     },
