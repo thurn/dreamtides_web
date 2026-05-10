@@ -52,19 +52,61 @@ export interface PlayableBattleBootstrapController {
 }
 
 /**
+ * Computes a fingerprint of the precondition fields that drive
+ * `runPlayableBattleBootstrapStep`. When this fingerprint is unchanged
+ * between two calls, re-running the step would issue the exact same
+ * mutations against the exact same state — wasted work that floods Firebase
+ * with duplicate writes and burns the step budget on subscription churn
+ * rather than real stage progress (bug B-2).
+ */
+function preconditionFingerprint(state: QuestState): string {
+  const dreamcallerId = state.dreamcaller === null ? "null" : state.dreamcaller.id;
+  const currentDreamscape = state.currentDreamscape ?? "null";
+  const screenTag =
+    state.screen.type === "site"
+      ? `site:${state.screen.siteId}`
+      : state.screen.type;
+  return `${dreamcallerId}|${currentDreamscape}|${screenTag}`;
+}
+
+/**
  * Creates a stateful bootstrap controller. Tracks a step counter and the last
  * action so callers (App.tsx) don't need ad-hoc fire-key strings to dedup
- * effect reruns. After `MAX_BOOTSTRAP_STEPS` attempts without reaching
- * `complete`/`skipped`, the controller latches `stalled` so a stuck mutation
- * pipeline surfaces explicitly rather than looping silently (bug-027).
+ * effect reruns.
+ *
+ * Each Firebase write inside a stage (e.g. the ten `addCard` calls inside
+ * `bootstrapQuestStart`) round-trips through the room subscription and
+ * re-renders the host effect. Without dedup the controller would re-execute
+ * the same stage's mutations on every delivery while the deciding fields
+ * (`dreamcaller`, `currentDreamscape`, `screen`) are still unchanged. The
+ * fingerprint guard short-circuits those redundant calls: the previously
+ * returned in-progress step is replayed without re-running mutations or
+ * burning step budget. Step budget is only consumed when the precondition
+ * fingerprint actually advances. After `MAX_BOOTSTRAP_STEPS` distinct
+ * fingerprints without reaching `complete`/`skipped`, the controller
+ * latches `stalled` so a stuck mutation pipeline surfaces explicitly
+ * rather than looping silently (bug-027).
  */
 export function createPlayableBattleBootstrapController(): PlayableBattleBootstrapController {
   let steps = 0;
   let lastStep: PlayableBattleBootstrapStep | null = null;
+  let lastFingerprint: string | null = null;
   let done = false;
 
   function advance(args: PlayableBattleBootstrapArgs): PlayableBattleBootstrapStep {
     if (done && lastStep !== null) {
+      return lastStep;
+    }
+
+    const fingerprint = preconditionFingerprint(args.state);
+    if (
+      lastStep !== null &&
+      lastStep.stage === "in-progress" &&
+      lastFingerprint === fingerprint
+    ) {
+      // The previous stage's writes have not yet been observed locally;
+      // re-running would re-issue identical mutations and burn the budget
+      // on subscription churn. Replay the cached step as a no-op.
       return lastStep;
     }
 
@@ -86,6 +128,7 @@ export function createPlayableBattleBootstrapController(): PlayableBattleBootstr
 
     const step = runPlayableBattleBootstrapStep(args);
     lastStep = step;
+    lastFingerprint = fingerprint;
     if (isPlayableBattleBootstrapTerminal(step)) {
       done = true;
     }

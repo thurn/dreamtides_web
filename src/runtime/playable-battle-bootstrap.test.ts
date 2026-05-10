@@ -490,28 +490,38 @@ describe("createPlayableBattleBootstrapController", () => {
     expect(repeated).toEqual(result);
   });
 
-  it("latches stalled once MAX_BOOTSTRAP_STEPS is exceeded without progress", () => {
+  it("latches stalled once MAX_BOOTSTRAP_STEPS is exceeded across distinct preconditions", () => {
     const controller = createPlayableBattleBootstrapController();
-    const stalledState = makeState({
-      dreamcaller: {
-        id: "dreamcaller-1",
-        name: "Test",
-        title: "T",
-        awakening: 1,
-        renderedText: "",
-        imageNumber: "0001",
-      },
-      atlas: makeAtlasWithBattleSite(),
-      currentDreamscape: "dreamscape-1",
-      // Staying on dreamscape-type screen repeats the "enter-battle" action
-      // without ever advancing — simulating a stuck mutation pipeline.
-      screen: { type: "dreamscape" },
-    });
+    const dreamcaller = {
+      id: "dreamcaller-1",
+      name: "Test",
+      title: "T",
+      awakening: 1,
+      renderedText: "",
+      imageNumber: "0001",
+    };
+    const baseAtlas = makeAtlasWithBattleSite();
+    // Oscillate the precondition fingerprint between two distinct shapes
+    // every other call so the controller's dedup guard does not absorb
+    // them. Each iteration is `dreamcaller=null` -> `dreamcaller=set,
+    // currentDreamscape=null` -> `dreamcaller=null` -> ..., emulating a
+    // pathological subscription pipeline that keeps churning the relevant
+    // fields without ever advancing screen to the battle site.
+    const stalledStates: QuestState[] = [
+      makeState({ atlas: baseAtlas }),
+      makeState({
+        dreamcaller,
+        atlas: baseAtlas,
+        currentDreamscape: null,
+      }),
+    ];
 
     let lastStep = null as ReturnType<typeof controller.advance> | null;
     for (let i = 0; i < 64 && !controller.isDone(); i += 1) {
+      const slot = stalledStates[i % stalledStates.length];
+      if (slot === undefined) throw new Error("unreachable");
       lastStep = controller.advance({
-        state: stalledState,
+        state: slot,
         mutations: makeMutations(),
         questContent: makeQuestContent(),
         cardDatabase: new Map(),
@@ -531,5 +541,139 @@ describe("createPlayableBattleBootstrapController", () => {
         lastAction: "enter-battle",
       }),
     ).toBe(true);
+  });
+
+  it("reaches enter-battle through a realistic Firebase write+delivery storm", () => {
+    // Reproduces bug B-2: opening `?startInBattle=1` and clicking Create
+    // Game stalls at the dreamscape because each Firebase write inside
+    // `bootstrapQuestStart` round-trips through the room subscription and
+    // re-fires the host effect, which calls `controller.advance(...)`.
+    //
+    // The realistic storm:
+    //  1. quest-start runs once. Mutations issue ~10 addCard writes plus
+    //     setDreamcallerSelection / setDraftState / updateAtlas /
+    //     setCurrentDreamscape / setScreen({type:"dreamscape"}). Firebase
+    //     delivers one field per subscription tick.
+    //  2. Each delivery is a separate React render -> effect fire ->
+    //     advance() call. For most of those, dreamcaller is still null
+    //     locally because the dreamcaller delivery hasn't arrived yet.
+    //  3. select-dreamscape runs once when dreamcaller arrives. Another
+    //     burst of subscription deliveries follow, each firing advance().
+    //  4. enter-battle should run once currentDreamscape arrives; the
+    //     screen flips to {type:"site", siteId:battleSite}.
+    //
+    // Without the fingerprint guard the controller burns its 16-step
+    // budget on subscription churn during stage 1 and never reaches
+    // enter-battle. With the guard, redundant advance() calls on the
+    // same precondition fingerprint are no-ops and the controller
+    // makes real progress through the stages.
+    const controller = createPlayableBattleBootstrapController();
+    const atlasWithBattle = makeAtlasWithBattleSite();
+    let currentState = makeState({ atlas: atlasWithBattle });
+
+    function applyMutationLater(updater: (s: QuestState) => QuestState): void {
+      // Defer the application so that several `advance()` calls fire
+      // against the un-updated state first, modeling the Firebase
+      // round-trip latency between issuing a write and observing it.
+      pending.push(updater);
+    }
+
+    const pending: Array<(s: QuestState) => QuestState> = [];
+
+    const addCard: QuestMutations["addCard"] = (cardNumber) => {
+      applyMutationLater((s) => ({
+        ...s,
+        deck: [
+          ...s.deck,
+          {
+            entryId: `deck-${String(s.deck.length + 1)}`,
+            cardNumber,
+            isBane: false,
+            transfiguration: null,
+          },
+        ],
+      }));
+    };
+    const setDreamcallerSelection: QuestMutations["setDreamcallerSelection"] = (
+      resolvedPackage,
+    ) => {
+      applyMutationLater((s) => ({
+        ...s,
+        dreamcaller: {
+          id: resolvedPackage.dreamcaller.id,
+          name: resolvedPackage.dreamcaller.name,
+          title: resolvedPackage.dreamcaller.title,
+          awakening: resolvedPackage.dreamcaller.awakening,
+          renderedText: resolvedPackage.dreamcaller.renderedText,
+          imageNumber: resolvedPackage.dreamcaller.imageNumber,
+        },
+      }));
+    };
+    const setDraftState: QuestMutations["setDraftState"] = (draftState) => {
+      applyMutationLater((s) => ({ ...s, draftState }));
+    };
+    const updateAtlas: QuestMutations["updateAtlas"] = (atlas) => {
+      applyMutationLater((s) => ({ ...s, atlas }));
+    };
+    const setCurrentDreamscape: QuestMutations["setCurrentDreamscape"] = (
+      nodeId,
+    ) => {
+      applyMutationLater((s) => ({ ...s, currentDreamscape: nodeId }));
+    };
+    const setScreen: QuestMutations["setScreen"] = (screen) => {
+      applyMutationLater((s) => ({ ...s, screen }));
+    };
+
+    const mutations: QuestMutations = {
+      ...makeMutations(),
+      addCard: vi.fn(addCard),
+      setDreamcallerSelection: vi.fn(setDreamcallerSelection),
+      setDraftState: vi.fn(setDraftState),
+      updateAtlas: vi.fn(updateAtlas),
+      setCurrentDreamscape: vi.fn(setCurrentDreamscape),
+      setScreen: vi.fn(setScreen),
+      markSiteVisited: vi.fn(),
+    };
+
+    const observedActions: string[] = [];
+    const MAX_DELIVERIES = 200;
+
+    for (let i = 0; i < MAX_DELIVERIES && !controller.isDone(); i += 1) {
+      const result = controller.advance({
+        state: currentState,
+        mutations,
+        questContent: makeQuestContent(),
+        cardDatabase: new Map(),
+      });
+      if (result.stage === "in-progress") {
+        const last = observedActions[observedActions.length - 1];
+        if (last !== result.action) {
+          observedActions.push(result.action);
+        }
+      }
+      // Drain at most one pending delivery per advance to model RTDB
+      // delivering one field at a time.
+      const next = pending.shift();
+      if (next !== undefined) {
+        currentState = next(currentState);
+      }
+    }
+
+    expect(controller.isDone()).toBe(true);
+    expect(observedActions).toContain("quest-start");
+    expect(observedActions).toContain("select-dreamscape");
+    expect(observedActions).toContain("enter-battle");
+    // Dedup must hold: each in-progress action runs at most once.
+    const counts = new Map<string, number>();
+    for (const action of observedActions) {
+      counts.set(action, (counts.get(action) ?? 0) + 1);
+    }
+    expect(counts.get("quest-start")).toBe(1);
+    expect(counts.get("select-dreamscape")).toBe(1);
+    expect(counts.get("enter-battle")).toBe(1);
+    // The previously-observed bug would re-issue addCard repeatedly. With
+    // the fingerprint guard, the 10 starter addCards run in exactly one
+    // batch.
+    expect(vi.mocked(mutations.addCard).mock.calls.length).toBeLessThanOrEqual(10);
   });
 });
