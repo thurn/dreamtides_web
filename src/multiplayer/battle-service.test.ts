@@ -158,6 +158,100 @@ describe("normalizeBattleStateSnapshot", () => {
     const result = normalizeBattleStateSnapshot(raw);
     expect(result?.reducer.lastActivityKind).toBeNull();
   });
+
+  it("omits the metadata.payload key entirely when an RTDB-stripped history entry has no payload", () => {
+    // Simulates an entry that round-tripped through RTDB after being written
+    // with an empty `payload: {}` (e.g. END_TURN). RTDB drops empty objects on
+    // write, so the snapshot we read back has no `payload` key at all.
+    // Normalization must not re-introduce `payload: undefined`, because
+    // Firebase's runTransaction validator rejects any returned tree that
+    // contains `undefined`.
+    const stripped = makeRawSnapshot({
+      reducer: {
+        mutable: makeRawSnapshot({}).reducer.mutable,
+        history: {
+          past: [
+            {
+              metadata: {
+                commandId: "END_TURN",
+                label: "End turn",
+                kind: "command",
+                isComposite: false,
+                actor: "player",
+                sourceSurface: "action-bar",
+                targets: [],
+                timestamp: 0,
+                undoPayload: null,
+                // `payload` key intentionally absent (RTDB-stripped {}).
+              },
+              before: { mutable: makeRawSnapshot({}).reducer.mutable },
+              after: { mutable: makeRawSnapshot({}).reducer.mutable },
+            },
+          ],
+        },
+        commandSerial: 1,
+      },
+    });
+    const result = normalizeBattleStateSnapshot(stripped);
+    expect(result).not.toBeNull();
+    const entry = result!.reducer.history.past[0];
+    // The repaired metadata must not contain `payload` as an own property at
+    // all (an explicit `payload: undefined` would also fail this check, since
+    // Object.prototype.hasOwnProperty considers `undefined` values present).
+    expect(Object.prototype.hasOwnProperty.call(entry.metadata, "payload")).toBe(
+      false,
+    );
+  });
+
+  it("survives runTransaction's no-undefined validator after normalizing a payload-less history entry", () => {
+    // This is the integration check that would have caught bug #1: feed the
+    // normalized snapshot through a mock that mirrors firebase-database's
+    // runTransaction guard, which rejects any tree containing `undefined`.
+    const stripped = makeRawSnapshot({
+      reducer: {
+        mutable: makeRawSnapshot({}).reducer.mutable,
+        history: {
+          past: [
+            {
+              metadata: {
+                commandId: "END_TURN",
+                label: "End turn",
+                kind: "command",
+                isComposite: false,
+                actor: "player",
+                sourceSurface: "action-bar",
+                targets: [],
+                timestamp: 0,
+                undoPayload: null,
+              },
+              before: { mutable: makeRawSnapshot({}).reducer.mutable },
+              after: { mutable: makeRawSnapshot({}).reducer.mutable },
+            },
+          ],
+        },
+        commandSerial: 1,
+      },
+    });
+    const normalized = normalizeBattleStateSnapshot(stripped);
+    function assertNoUndefinedDeep(value: unknown, path: string): void {
+      if (value === undefined) {
+        throw new Error(`Data returned contains undefined in property '${path}'`);
+      }
+      if (value === null) return;
+      if (Array.isArray(value)) {
+        value.forEach((item, index) =>
+          assertNoUndefinedDeep(item, `${path}.${index}`),
+        );
+        return;
+      }
+      if (typeof value === "object") {
+        for (const [key, child] of Object.entries(value)) {
+          assertNoUndefinedDeep(child, `${path}.${key}`);
+        }
+      }
+    }
+    expect(() => assertNoUndefinedDeep(normalized, "rooms.r.battleState")).not.toThrow();
+  });
 });
 
 describe("ensureBattleSession", () => {

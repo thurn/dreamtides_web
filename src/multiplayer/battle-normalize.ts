@@ -92,7 +92,15 @@ function normalizeHistoryEntry(entry: BattleHistoryEntry): BattleHistoryEntry {
     metadata: {
       ...entry.metadata,
       targets: entry.metadata.targets ?? [],
-      payload: entry.metadata.payload ?? undefined,
+      // `payload` is genuinely optional on `BattleHistoryEntryMetadata`. RTDB
+      // strips empty objects on write, so a round-tripped entry can arrive
+      // here with no `payload` key at all. Assigning `payload: undefined`
+      // would re-introduce the field with an undefined value, and Firebase's
+      // `runTransaction` validator rejects any returned tree containing
+      // `undefined`. Omit the key entirely when the source value is missing.
+      ...(entry.metadata.payload !== undefined
+        ? { payload: entry.metadata.payload }
+        : {}),
       undoPayload: entry.metadata.undoPayload ?? null,
     },
     before: {
