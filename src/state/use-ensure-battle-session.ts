@@ -12,12 +12,21 @@ import type { QuestState, SiteState } from "../types/quest";
 /**
  * Ensures the room's `battleState` exists for the current `battleEntryKey`.
  *
- * - Fires only when `battleState === null` AND no in-flight request matches
- *   the same `battleEntryKey`. This makes StrictMode double-mounting and
- *   rapid rerenders idempotent on the client side, on top of the server-side
- *   transactional guard inside `ensureBattleSession`.
- * - Resets the in-flight tracker once the server confirms by populating
- *   `battleState`.
+ * - Fires only when `battleState === null` AND the most recent ensure attempt
+ *   on this mount was for a different `battleEntryKey`. The tracker latches
+ *   on the entry key and is *not* cleared when `battleState` becomes
+ *   non-null. That latch is what prevents a re-init race during the defeat
+ *   path: when `clearBattleStateInRoom` zeroes the slot before the screen
+ *   flip to `questFailed` has been delivered to this client, the route is
+ *   still mounted on the same `battleEntryKey`, but the latch keeps us from
+ *   re-firing `ensureBattleSession`. Once the screen flip arrives, the route
+ *   unmounts and the next mount starts with a fresh ref.
+ * - A different `battleEntryKey` (e.g. next dreamscape, next completion
+ *   level) bypasses the latch through the second guard below and triggers a
+ *   fresh ensure call.
+ * - On top of the server-side transactional guard inside
+ *   `ensureBattleSession`, the client-side latch makes StrictMode
+ *   double-mounting and rapid rerenders idempotent.
  */
 export function useEnsureBattleSession(input: {
   database: Database;
@@ -45,7 +54,6 @@ export function useEnsureBattleSession(input: {
 
   useEffect(() => {
     if (input.battleState !== null) {
-      inFlightKey.current = null;
       return;
     }
     if (inFlightKey.current === input.battleEntryKey) {
