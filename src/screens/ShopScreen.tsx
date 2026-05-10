@@ -245,7 +245,7 @@ function ShopSlotCard({
           </p>
         </div>
         <button
-          className="w-full rounded-lg px-3 py-2 text-sm font-bold transition-opacity"
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-bold transition-opacity"
           style={{
             background: canAffordReroll ? "#7c3aed" : "#4b5563",
             color: canAffordReroll ? "#ffffff" : "#9ca3af",
@@ -255,7 +255,19 @@ function ShopSlotCard({
           disabled={!canAffordReroll}
           onClick={() => onReroll(index)}
         >
-          {displayCost === 0 ? "Reroll (FREE)" : `Reroll · ${String(displayCost)} Essence`}
+          {displayCost === 0 ? (
+            <span>Reroll (FREE)</span>
+          ) : (
+            <>
+              <span>{`Reroll · ${String(displayCost)} `}</span>
+              <span
+                style={{ color: "var(--color-essence)" }}
+                data-shop-essence-label=""
+              >
+                Essence
+              </span>
+            </>
+          )}
         </button>
       </div>
     );
@@ -379,8 +391,20 @@ function PriceButton({
           {String(basePrice)}
         </span>
       )}
-      <span>{String(price)}</span>
-      <span className="text-xs opacity-70">Essence</span>
+      <span
+        style={{ color: "var(--color-essence)" }}
+        className="tabular-nums"
+        data-shop-essence-price=""
+      >
+        {String(price)}
+      </span>
+      <span
+        className="text-xs"
+        style={{ color: "var(--color-essence)" }}
+        data-shop-essence-label=""
+      >
+        Essence
+      </span>
     </button>
   );
 }

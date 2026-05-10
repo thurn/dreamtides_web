@@ -280,12 +280,13 @@ function DreamsignRewardDisplay({
 function EssenceRewardDisplay({ amount }: { amount: number }) {
   return (
     <div
+      data-essence-reward-display=""
       className="flex flex-col items-center gap-4 rounded-xl p-8"
       style={{
         background:
           "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
-        border: "1px solid rgba(251, 191, 36, 0.3)",
-        boxShadow: "0 0 30px rgba(251, 191, 36, 0.15)",
+        border: "1px solid var(--color-essence-border)",
+        boxShadow: "0 0 30px var(--color-essence-glow-soft)",
       }}
     >
       <p className="text-xs font-bold uppercase tracking-wider opacity-50">
@@ -295,27 +296,28 @@ function EssenceRewardDisplay({ amount }: { amount: number }) {
         className="flex h-24 w-24 items-center justify-center rounded-full"
         style={{
           background:
-            "radial-gradient(circle, rgba(251,191,36,0.2) 0%, rgba(251,191,36,0.05) 60%, transparent 100%)",
+            "radial-gradient(circle, var(--color-essence-glow-soft) 0%, rgba(216,180,254,0.05) 60%, transparent 100%)",
         }}
         animate={{
           boxShadow: [
-            "0 0 20px rgba(251, 191, 36, 0.3)",
-            "0 0 40px rgba(251, 191, 36, 0.5)",
-            "0 0 20px rgba(251, 191, 36, 0.3)",
+            "0 0 20px rgba(216, 180, 254, 0.3)",
+            "0 0 40px rgba(216, 180, 254, 0.5)",
+            "0 0 20px rgba(216, 180, 254, 0.3)",
           ],
         }}
         transition={{ duration: 1.5, repeat: Infinity }}
       >
         <span
-          className="text-4xl font-black"
-          style={{ color: "#fbbf24" }}
+          className="text-4xl font-black tabular-nums"
+          style={{ color: "var(--color-essence)" }}
+          data-essence-reward-value=""
         >
           +{String(amount)}
         </span>
       </motion.div>
       <p
         className="text-lg font-medium"
-        style={{ color: "#fbbf24" }}
+        style={{ color: "var(--color-essence)" }}
       >
         Essence
       </p>

@@ -103,22 +103,29 @@ export function HUD({
     >
       {/* Left section: essence, deck, dreamcaller */}
       <div className="flex min-w-0 items-center gap-3 md:gap-5">
-        {/* Essence counter */}
-        <div className="flex shrink-0 items-center gap-1.5">
+        {/* Essence counter. Color identity is the only marker for
+            essence across the prototype; no glyph is rendered so the
+            HUD stays consistent with shop / battle-reward surfaces.
+            The "Essence" label sits inline with the number at every
+            breakpoint so the purple value reads as currency rather
+            than as a free-floating count. */}
+        <div
+          className="flex shrink-0 items-baseline gap-1.5"
+          aria-label="Essence"
+          data-hud-essence=""
+        >
           <span
-            className="text-base md:text-lg"
-            style={{ color: "#fbbf24" }}
-            aria-label="Essence"
-          >
-            {"\u25C6"}
-          </span>
-          <span
-            className="text-sm font-bold md:text-base"
-            style={{ color: "#fbbf24" }}
+            className="text-sm font-bold tabular-nums md:text-base"
+            style={{ color: "var(--color-essence)" }}
           >
             {String(animatedEssence)}
           </span>
-          <span className="hidden text-xs opacity-50 xl:inline">Essence</span>
+          <span
+            className="text-xs md:text-sm"
+            style={{ color: "var(--color-essence)" }}
+          >
+            Essence
+          </span>
         </div>
 
         {/* Deck size */}

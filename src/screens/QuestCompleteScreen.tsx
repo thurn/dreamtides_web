@@ -140,24 +140,36 @@ export function QuestCompleteScreen() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.3 }}
       >
-        {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className="flex flex-col items-center rounded-lg px-6 py-4"
-            style={{
-              background: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid rgba(212, 160, 23, 0.3)",
-            }}
-          >
-            <span
-              className="text-3xl font-bold md:text-4xl"
-              style={{ color: "#fbbf24" }}
+        {stats.map((stat) => {
+          // Essence Remaining is the one currency value in the stat
+          // grid and adopts the prototype-wide purple identity. The
+          // other stats stay neutral gold so the grid still reads as
+          // a celebratory summary panel.
+          const isEssenceStat = stat.label === "Essence Remaining";
+          return (
+            <div
+              key={stat.label}
+              className="flex flex-col items-center rounded-lg px-6 py-4"
+              style={{
+                background: "rgba(255, 255, 255, 0.05)",
+                border: isEssenceStat
+                  ? "1px solid var(--color-essence-border)"
+                  : "1px solid rgba(212, 160, 23, 0.3)",
+              }}
+              data-quest-complete-stat={stat.label}
             >
-              {stat.value}
-            </span>
-            <span className="mt-1 text-sm opacity-60">{stat.label}</span>
-          </div>
-        ))}
+              <span
+                className="text-3xl font-bold tabular-nums md:text-4xl"
+                style={{
+                  color: isEssenceStat ? "var(--color-essence)" : "#fbbf24",
+                }}
+              >
+                {stat.value}
+              </span>
+              <span className="mt-1 text-sm opacity-60">{stat.label}</span>
+            </div>
+          );
+        })}
       </motion.div>
 
       {/* Deck viewer toggle */}

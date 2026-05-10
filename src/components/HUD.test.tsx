@@ -202,4 +202,30 @@ describe("HUD", () => {
       root.unmount();
     });
   });
+
+  it("renders the essence counter in the shared essence colour with no glyph", () => {
+    setQuestContext(makeState([]));
+    const { container, root } = renderHud();
+
+    const essenceBlock = container.querySelector('[data-hud-essence]');
+    expect(essenceBlock).not.toBeNull();
+
+    // The HUD must never carry the legacy gold diamond or hexagon
+    // glyphs for essence; the only marker for currency is purple
+    // colour applied to both the value and the "Essence" label.
+    expect(essenceBlock?.textContent).not.toContain("◆");
+    expect(essenceBlock?.textContent).not.toContain("⬢");
+    expect(essenceBlock?.textContent).toContain("100");
+    expect(essenceBlock?.textContent).toContain("Essence");
+
+    const spans = essenceBlock?.querySelectorAll("span") ?? [];
+    expect(spans.length).toBeGreaterThanOrEqual(2);
+    for (const span of spans) {
+      expect((span as HTMLElement).style.color).toBe("var(--color-essence)");
+    }
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });

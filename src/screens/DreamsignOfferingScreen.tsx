@@ -228,7 +228,14 @@ export function DreamsignOfferingScreen({
           }}
           onClick={handleReject}
         >
-          {`${options.length > 1 ? "Skip" : "Reject"} (+${String(DREAMSIGN_REJECTION_ESSENCE)} Essence)`}
+          {`${options.length > 1 ? "Skip" : "Reject"} (+`}
+          <span
+            style={{ color: "var(--color-essence)" }}
+            data-dreamsign-reject-essence=""
+          >
+            {`${String(DREAMSIGN_REJECTION_ESSENCE)} Essence`}
+          </span>
+          {")"}
         </button>
         <button
           className="rounded-lg px-4 py-2 text-sm font-medium transition-colors"

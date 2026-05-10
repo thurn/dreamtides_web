@@ -344,4 +344,50 @@ describe("RewardSiteScreen", () => {
       root.unmount();
     });
   });
+
+  it("paints the essence reward number in the shared essence colour with no glyph", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "reward",
+            reward: {
+              rewardType: "essence",
+              essenceAmount: 175,
+            },
+            remainingDreamsignPoolIds: [],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+      new Map(),
+    );
+
+    const { container, root } = mount(
+      <RewardSiteScreen
+        site={{ id: "site-1", type: "Reward", isEnhanced: false, isVisited: false }}
+      />,
+    );
+
+    // The essence reward capsule advertises essence purely by colour
+    // -- no diamond / hexagon glyph -- and the number itself is the
+    // single source of currency identity.
+    const value = container.querySelector("[data-essence-reward-value]");
+    expect(value).not.toBeNull();
+    expect(value?.textContent).toBe("+175");
+    expect((value as HTMLElement | null)?.style.color).toBe(
+      "var(--color-essence)",
+    );
+
+    const capsule = container.querySelector("[data-essence-reward-display]");
+    expect(capsule).not.toBeNull();
+    expect(capsule?.textContent).not.toContain("◆");
+    expect(capsule?.textContent).not.toContain("⬢");
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });

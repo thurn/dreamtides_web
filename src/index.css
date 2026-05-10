@@ -10,12 +10,25 @@
   --color-gold: #d4a017;
   --color-gold-light: #fbbf24;
   /*
-   * Essence color token. Currently aliases the gold pair so existing
-   * surfaces stay consistent; a follow-up task will retune this to the
-   * project's purple essence palette and every essence-bearing surface
-   * will inherit the change automatically.
+   * Essence color token. Currency identity for the prototype: a soft
+   * lavender that reads as purple but is lighter than the primary
+   * accent (`--color-primary-light: #a855f7`) so the essence number
+   * does not visually clash with purple event-card outlines and shop
+   * panel chrome. Every essence-bearing surface (HUD counter, battle
+   * reward, shop price, reward site, dreamcaller selection, quest
+   * complete stat) reads this token so the currency stays consistent.
    */
-  --color-essence: var(--color-gold-light);
+  --color-essence: #d8b4fe;
+  /*
+   * Subtle background tint used by surfaces that wrap an essence
+   * value (battle reward callout, reward-site capsule, essence-site
+   * glow). Keeps the purple identity around the number without
+   * pushing the panel into the same hue as the event-card outline.
+   */
+  --color-essence-glow-strong: rgba(216, 180, 254, 0.5);
+  --color-essence-glow-soft: rgba(216, 180, 254, 0.2);
+  --color-essence-bg: rgba(168, 85, 247, 0.1);
+  --color-essence-border: rgba(216, 180, 254, 0.35);
   --color-text: #e2e8f0;
   --color-text-dim: #94a3b8;
 }

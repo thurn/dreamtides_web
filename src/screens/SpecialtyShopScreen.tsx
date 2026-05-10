@@ -219,8 +219,20 @@ function SpecialtySlotCard({
         ) : (
           <>
             <span>Buy</span>
-            <span>{String(price)}</span>
-            <span className="text-xs opacity-70">Essence</span>
+            <span
+              style={{ color: "var(--color-essence)" }}
+              className="tabular-nums"
+              data-shop-essence-price=""
+            >
+              {String(price)}
+            </span>
+            <span
+              className="text-xs"
+              style={{ color: "var(--color-essence)" }}
+              data-shop-essence-label=""
+            >
+              Essence
+            </span>
           </>
         )}
       </button>

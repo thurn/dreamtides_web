@@ -94,28 +94,32 @@ export function EssenceSiteScreen({ site }: EssenceSiteScreenProps) {
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.3 }}
       >
-        {/* Gold particle effect */}
+        {/* Essence particle effect: the purple currency glow pulses
+            around the count-up number so the surface reads as
+            essence at a glance. */}
         <motion.div
+          data-essence-site-glow=""
           className="relative flex h-32 w-32 items-center justify-center"
           animate={{
             boxShadow: [
-              "0 0 20px rgba(251, 191, 36, 0.3)",
-              "0 0 60px rgba(251, 191, 36, 0.6)",
-              "0 0 20px rgba(251, 191, 36, 0.3)",
+              "0 0 20px rgba(216, 180, 254, 0.3)",
+              "0 0 60px rgba(216, 180, 254, 0.6)",
+              "0 0 20px rgba(216, 180, 254, 0.3)",
             ],
           }}
           transition={{ duration: 1.2, repeat: Infinity }}
           style={{
             borderRadius: "50%",
             background:
-              "radial-gradient(circle, rgba(251,191,36,0.2) 0%, rgba(251,191,36,0.05) 60%, transparent 100%)",
+              "radial-gradient(circle, var(--color-essence-glow-soft) 0%, rgba(216,180,254,0.05) 60%, transparent 100%)",
           }}
         >
           <motion.span
-            className="text-5xl font-black"
-            style={{ color: "#fbbf24" }}
+            className="text-5xl font-black tabular-nums"
+            style={{ color: "var(--color-essence)" }}
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 0.6, repeat: Infinity }}
+            data-essence-site-value=""
           >
             +{String(displayValue)}
           </motion.span>
@@ -123,7 +127,7 @@ export function EssenceSiteScreen({ site }: EssenceSiteScreenProps) {
 
         <motion.p
           className="text-lg font-medium"
-          style={{ color: "#fbbf24" }}
+          style={{ color: "var(--color-essence)" }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}

@@ -40,7 +40,11 @@ function EssenceCountUp({ target, duration }: { target: number; duration: number
   }, [target, duration]);
 
   return (
-    <span className="text-3xl font-bold md:text-4xl" style={{ color: "#fbbf24" }}>
+    <span
+      className="text-3xl font-bold tabular-nums md:text-4xl"
+      style={{ color: "var(--color-essence)" }}
+      data-battle-reward-essence-value=""
+    >
       +{String(value)}
     </span>
   );
@@ -255,28 +259,27 @@ export function BattleRewardSurface({
       ) : null}
 
       <motion.div
+        // Essence reward callout: a purple-tinted capsule that wraps
+        // the count-up number. Essence is identified by color across
+        // the prototype, so the callout does not render any currency
+        // glyph alongside the number.
+        data-battle-reward-essence-callout=""
         className="mb-6 flex flex-col items-center gap-2 rounded-md px-8 py-3"
         style={{
-          background: "rgba(212, 160, 23, 0.1)",
-          border: "1px solid rgba(251, 191, 36, 0.3)",
+          background: "var(--color-essence-bg)",
+          border: "1px solid var(--color-essence-border)",
         }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <span className={`${typography.caption} font-semibold uppercase tracking-[0.22em] text-amber-200/80`}>
+        <span
+          className={`${typography.caption} font-semibold uppercase tracking-[0.22em]`}
+          style={{ color: "var(--color-essence)" }}
+        >
           Essence Earned
         </span>
         <div className="flex items-center gap-2">
-          {/* FIND-08-11: use a faceted-gem glyph (hex block) to distinguish
-              essence from the diamond energy glyph. */}
-          <span
-            aria-hidden="true"
-            style={{ color: "#fbbf24" }}
-            className="text-2xl leading-none md:text-3xl"
-          >
-            {"\u2B22"}
-          </span>
           <EssenceCountUp target={essenceReward} duration={800} />
         </div>
       </motion.div>
