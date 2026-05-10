@@ -134,9 +134,53 @@ function renderSegment(segment: TextSegment, key: number | string): ReactNode {
   );
 }
 
+/**
+ * Splits rules text into ability paragraphs.
+ *
+ * Cards in `data/tabula/rendered-cards.toml` separate distinct abilities with
+ * a blank line (`\n\n`). Each chunk between blank lines is one ability and
+ * renders as its own paragraph block so the player can tell adjacent
+ * abilities apart. A single-ability card produces exactly one paragraph and
+ * no inter-ability gap. See backlog task 029.
+ *
+ * Surrounding whitespace and stray empty strings are trimmed so a leading
+ * newline (some TOML entries open with `"""\n`) does not produce an empty
+ * paragraph.
+ */
+function splitRulesTextIntoParagraphs(text: string): string[] {
+  return text
+    .split(/\n\s*\n/)
+    .map((chunk) => chunk.trim())
+    .filter((chunk) => chunk.length > 0);
+}
+
+/**
+ * Top margin applied to every ability paragraph after the first. Expressed
+ * in `em` so the gap scales with the surrounding font size — small card
+ * chrome (`text-[10px]`) gets a proportionally smaller gap than the large
+ * card or popover surfaces (`text-base`). The visual goal is "list items",
+ * not "essay paragraphs": generous-but-restrained spacing. See backlog
+ * task 029.
+ */
+const PARAGRAPH_GAP_EM = 0.5;
+
 /** Renders the parsed rules text segments to React nodes. */
 export function renderRulesText(text: string): ReactNode[] {
-  return tokenizeRulesText(text).map((segment, i) => renderSegment(segment, i));
+  const paragraphs = splitRulesTextIntoParagraphs(text);
+  return paragraphs.map((paragraph, p) => {
+    const segments = tokenizeRulesText(paragraph);
+    const style: CSSProperties =
+      p === 0 ? {} : { marginTop: `${String(PARAGRAPH_GAP_EM)}em` };
+    return (
+      <div
+        key={p}
+        data-rules-text-paragraph=""
+        style={style}
+      >
+        {segments.map((segment, i) => renderSegment(segment, `${p}-${i}`))}
+      </div>
+    );
+  });
 }
 
 /**
@@ -149,7 +193,10 @@ export function renderRulesText(text: string): ReactNode[] {
  */
 export function RulesText({ text, color }: RulesTextProps) {
   if (color !== undefined) {
-    return <span style={{ color }}>{renderRulesText(text)}</span>;
+    // The renderer produces `<div>` paragraph blocks (see `renderRulesText`),
+    // so the color wrapper is also a `<div>` to keep block-in-block HTML
+    // nesting valid.
+    return <div style={{ color }}>{renderRulesText(text)}</div>;
   }
   return <>{renderRulesText(text)}</>;
 }

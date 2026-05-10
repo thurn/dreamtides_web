@@ -116,4 +116,74 @@ describe("RulesText", () => {
       root.unmount();
     });
   });
+
+  // Backlog task 029: cards with multiple abilities use a blank-line `\n\n`
+  // separator in the source TOML. Each ability must render as its own block
+  // with a visible vertical gap so adjacent abilities do not run together.
+  it("renders each ability separated by `\\n\\n` as its own paragraph block", () => {
+    const { container, root } = mount(
+      <RulesText
+        text={
+          "▸ Materialized: Banish an enemy until this character leaves play.\n\nAbandon this character: Foresee 2."
+        }
+      />,
+    );
+
+    const paragraphs = container.querySelectorAll(
+      "[data-rules-text-paragraph]",
+    );
+    expect(paragraphs).toHaveLength(2);
+    expect(paragraphs[0]?.textContent).toContain("Materialized");
+    expect(paragraphs[1]?.textContent).toContain("Abandon this character");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  // The gap between abilities is set via `margin-top` (em-based) on every
+  // paragraph after the first, so the spacing scales with the surrounding
+  // font size (small card vs. large card).
+  it("applies a top-margin to non-first ability paragraphs", () => {
+    const { container, root } = mount(
+      <RulesText text={"Ability one.\n\nAbility two."} />,
+    );
+
+    const paragraphs = container.querySelectorAll(
+      "[data-rules-text-paragraph]",
+    );
+    expect(paragraphs).toHaveLength(2);
+
+    const firstStyle = paragraphs[0]?.getAttribute("style") ?? "";
+    const secondStyle = paragraphs[1]?.getAttribute("style") ?? "";
+
+    // First paragraph: no top margin.
+    expect(firstStyle).not.toContain("margin-top");
+    // Second paragraph: top margin in em so it scales with font size.
+    expect(secondStyle).toContain("margin-top");
+    expect(secondStyle).toContain("em");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  // Single-ability cards keep one paragraph and no inter-ability gap.
+  it("renders a single ability as one paragraph with no extra spacing", () => {
+    const { container, root } = mount(
+      <RulesText text="▸ Materialized: Foresee 1." />,
+    );
+
+    const paragraphs = container.querySelectorAll(
+      "[data-rules-text-paragraph]",
+    );
+    expect(paragraphs).toHaveLength(1);
+    expect(paragraphs[0]?.getAttribute("style") ?? "").not.toContain(
+      "margin-top",
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
