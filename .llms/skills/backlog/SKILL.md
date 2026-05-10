@@ -106,8 +106,30 @@ number matching the original input order.
 Use the **task template** below. Every task must be standalone — assume the
 implementer has not seen the input list, the user, or this conversation.
 
-After writing, print a summary to the user listing each created file with its
-title.
+The template intentionally omits universal boilerplate (standard acceptance
+criteria, the generic going-deeper checklist, QA blocker policy, UX
+expectations). That content is appended in phase 6 by a script. The
+sections in the template are reserved for **task-specific** extensions of
+those universal items — write only what is unique to this bug.
+
+### 6. Append general implementation instructions
+
+After all task files are written, run:
+
+```sh
+bash .claude/skills/backlog/append-general-instructions.sh /tmp/backlog/
+```
+
+This appends a `# How to Implement This Task` section to each task file
+containing the universal acceptance criteria, going-deeper checklist, QA
+blocker policy, and UX expectations. The script is idempotent — files that
+already contain the section are skipped, so it is safe to re-run.
+
+Do **not** stop without running this script. Implementers rely on the
+universal section being present.
+
+After the script completes, print a summary to the user listing each created
+file with its title.
 
 ## Task template
 
@@ -154,61 +176,52 @@ If the area is genuinely unknown, say so explicitly.>
 
 ## Acceptance criteria
 
-- [ ] Bug reproduced in agent-browser **before** the fix, with screenshot
-      saved under `/tmp/backlog/screenshots/`.
-- [ ] Fix verified in agent-browser **after** the change, with a second
-      screenshot for comparison.
-- [ ] `npm run typecheck`, `npm run lint`, and `npm test` all pass.
-- [ ] Targeted regression test added or updated where it would have caught
-      this bug.
-- [ ] <any task-specific acceptance criteria, e.g. "deck count updates
-      correctly across reload">
+<Only **task-specific** criteria. Do NOT include the standard items (repro
+screenshot, post-fix screenshot, typecheck/lint/test, regression test) —
+those are appended automatically. Examples of what belongs here:
+
+- [ ] Deck count updates correctly across reload.
+- [ ] Trigger arrow stays attached to its keyword at all card widths.
+
+If the task has no extra criteria beyond the standard set, omit this
+section.>
 
 ## Implementation notes
 
 <Anything the implementer needs that is not derivable from the code:
 constraints, related decisions, prior attempts, or design intent. Keep
-short.>
+short. Omit the section if there is nothing to add.>
 
 ## Going one level deeper
 
-The implementer is expected to think beyond the literal bug:
-
-- Does this same problem exist in adjacent surfaces? Search for the pattern.
-- Is this a symptom of an architectural issue (e.g. RTDB stripping, missing
-  normalization, screen-orchestration coupling)? If so, fix the root cause.
-- Could a logging or debug-surface improvement make this class of bug
-  cheaper to diagnose next time? Add it.
-- Are there related UX issues you noticed while testing that should become
-  follow-up tasks? File them as new task files in `/tmp/backlog/` using the
-  same template (load the `backlog` skill again to do this).
+<Task-specific deeper considerations the implementer should keep in mind
+while fixing this bug. Do NOT re-state the universal checklist (adjacent
+surfaces, architectural root causes, debug surfaces, follow-up tasks) —
+that is appended automatically. Use this section for issue-specific
+extensions, e.g. "Check other trigger glyphs (⍏ spark, ↯ fast) for the same
+wrapping problem." Omit if there is nothing task-specific to add.>
 
 ## QA blocker policy
 
-If you cannot reproduce this issue via agent-browser, that is a **hard
-blocker**, not a reason to skip the task. Options in order of preference:
-
-1. Re-read the steps above and try again with a fresh room.
-2. Inspect RTDB directly (`curl …/rooms/<id>.json | jq .`) to see whether
-   the underlying state is in the expected shape.
-3. Build a temporary debug surface (URL param, debug-overlay button, log
-   line) that exposes the relevant state, then reproduce.
-4. Ask the user for clarification only after 1-3 have failed.
-
-Do not declare the task complete without a post-fix screenshot showing the
-expected behavior.
+<Task-specific repro hints, e.g. "narrow the browser via `agent-browser
+eval window.resizeTo(900, 700)` before screenshotting" or "this only
+reproduces with two clients connected to the same room." Do NOT re-state
+the universal fallback ladder (fresh room → RTDB → debug surface → ask) —
+it is appended automatically. Omit if the reproduction steps above are
+sufficient.>
 
 ## UX expectations
 
-This is a prototype where UX quality matters. While fixing the literal bug:
-
-- View the final UI in screenshots and evaluate it as a designer, not just
-  as a coder.
-- Adjust spacing, copy, affordances, and adjacent components if the fix
-  exposes an awkward result.
-- Prefer changes that make the surface clearer for a first-time player over
-  micro-optimizations.
+<Task-specific UX considerations, e.g. "Sanity-check that other
+heavily-wrapped phrases still wrap naturally" or "the orphaned arrow makes
+cards look broken — prioritize visual continuity." Do NOT re-state the
+generic UX guidance — it is appended automatically. Omit if nothing
+task-specific applies.>
 ```
+
+Sections may be omitted entirely when they have no task-specific content.
+The appended `# How to Implement This Task` section will still cover the
+universal expectations.
 
 ## Conventions
 
@@ -238,6 +251,11 @@ This is a prototype where UX quality matters. While fixing the literal bug:
   discrete issue; the implementer can batch if they choose.
 - Using "no longer" / "removed" phrasing in task descriptions (per
   `AGENTS.md`). Describe the desired current state directly.
+- Re-stating the universal acceptance-criteria / going-deeper / QA-blocker
+  / UX-expectations boilerplate inside a task. The script appends it; you
+  only write task-specific extensions.
+- Forgetting to run `append-general-instructions.sh` before stopping.
+  Implementers expect the universal section to be present.
 
 ## Output
 
@@ -245,6 +263,7 @@ When done, print:
 
 - the count of tasks created
 - a one-line table of `NNN — title` for each file
+- confirmation that `append-general-instructions.sh` ran successfully
 - the path to `/tmp/backlog/` so the user can browse
 
 Then stop. Do not start implementing tasks unless the user asks.
