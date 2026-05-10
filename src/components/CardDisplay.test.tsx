@@ -52,16 +52,44 @@ afterEach(() => {
 });
 
 describe("CardDisplay", () => {
-  it("renders the energy cost badge with the boxicons flame icon", () => {
+  it("renders the energy cost badge as a teal/cyan circular pip with no flame icon", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ energyCost: 4 })} />,
     );
 
-    const flameIcon = container.querySelector("i.bx.bxs-flame");
-    expect(flameIcon).not.toBeNull();
-    expect(flameIcon?.getAttribute("aria-label")).toBe("energy cost");
-    expect(container.textContent).toContain("4");
+    const energyBadge = container.querySelector<HTMLElement>(
+      "[data-pip-variant=\"energy\"]",
+    );
+    expect(energyBadge).not.toBeNull();
+    expect(energyBadge?.textContent).toBe("4");
+    expect(energyBadge?.getAttribute("aria-label")).toBe("energy cost");
+    // The corner badge has no flame icon — only inline rules-text references do.
+    const cornerFlame = container.querySelector(
+      "i.bx.bxs-flame[aria-label=\"energy cost\"]",
+    );
+    expect(cornerFlame).toBeNull();
+    // Teal/cyan fill, white text, black outline.
+    const style = energyBadge?.getAttribute("style") ?? "";
+    expect(style.toLowerCase()).toContain("rgb(14, 165, 233)");
+    expect(style.toLowerCase()).toContain("color: rgb(255, 255, 255)");
+    expect(style.toLowerCase()).toContain("text-shadow");
+    // No bare ● glyph.
     expect(container.textContent).not.toContain("●");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the energy cost badge as 'X' for variable-cost (null) cards", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ energyCost: null })} />,
+    );
+
+    const energyBadge = container.querySelector<HTMLElement>(
+      "[data-pip-variant=\"energy\"]",
+    );
+    expect(energyBadge?.textContent).toBe("X");
 
     act(() => {
       root.unmount();

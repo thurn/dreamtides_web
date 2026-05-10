@@ -5,8 +5,6 @@ import { formatTypeLine } from "./card-text";
 import { PipBadge } from "./PipBadge";
 import { renderRulesText } from "./RulesText";
 
-/** Boxicons class used to render the energy symbol. */
-const ENERGY_ICON_CLASS = "bx bxs-flame";
 const EVENT_CHROME_COLOR = "#c084fc";
 const CHARACTER_CHROME_COLOR = "#facc15";
 
@@ -87,22 +85,11 @@ export function CardDisplay({
 
       {/* Energy cost badge */}
       <div className={`absolute ${large ? "top-2 left-2" : "top-1.5 left-1.5"} z-10 flex flex-col items-center gap-1`}>
-        <div
-          className={`flex items-center gap-0.5 rounded-full ${large ? "px-2.5 py-1 text-base" : "px-1.5 py-0.5 text-xs"} font-bold shadow-md`}
-          style={{
-            background: "rgba(0, 0, 0, 0.75)",
-            border: "1px solid rgba(251, 191, 36, 0.5)",
-          }}
-        >
-          <i
-            aria-label="energy cost"
-            className={`${ENERGY_ICON_CLASS} leading-none`}
-            style={{ color: tintColor ?? "#fbbf24" }}
-          />
-          <span style={{ color: tintColor ?? "#ffffff" }}>
-            {card.energyCost !== null ? String(card.energyCost) : "X"}
-          </span>
-        </div>
+        <PipBadge
+          variant="energy"
+          value={card.energyCost !== null ? String(card.energyCost) : "X"}
+          size={large ? "md" : "sm"}
+        />
       </div>
 
       {/* Fast badge */}
