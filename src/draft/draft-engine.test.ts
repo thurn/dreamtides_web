@@ -45,7 +45,6 @@ function buildResolvedPackage(
       id: "test-dreamcaller",
       name: "Test Dreamcaller",
       title: "Draft Architect",
-      awakening: 4,
       renderedText: "Test rules text.",
       imageNumber: "0003",
       mandatoryTides: ["core"],

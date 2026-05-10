@@ -8,7 +8,6 @@ function makeDreamcaller(): DreamcallerContent {
     id: "dreamcaller-1",
     name: "Test Dreamcaller",
     title: "Caller of Tests",
-    awakening: 4,
     renderedText: "Test ability.",
     imageNumber: "0001",
     mandatoryTides: ["tide_alpha"],

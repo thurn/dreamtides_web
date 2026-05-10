@@ -104,8 +104,8 @@ export function QuestStartScreen() {
                   handlePickDreamcaller(dreamcaller);
                 }}
               >
-                <div className="mb-3 flex min-h-[78px] items-start justify-between gap-3">
-                  <div className="min-w-0 pr-2">
+                <div className="mb-3 flex min-h-[78px] items-start gap-3">
+                  <div className="min-w-0">
                     <h3
                       className="text-xl font-bold leading-tight md:text-2xl"
                       style={{ color: "#f8fafc" }}
@@ -119,18 +119,6 @@ export function QuestStartScreen() {
                       {dreamcaller.title}
                     </p>
                   </div>
-                  <span
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold"
-                    style={{
-                      background: "rgba(5, 2, 10, 0.42)",
-                      color: accentColor,
-                      border: `2px solid ${accentColor}55`,
-                      boxShadow: `0 0 18px ${accentColor}22`,
-                    }}
-                    aria-label={`Awakening ${String(dreamcaller.awakening)}`}
-                  >
-                    {String(dreamcaller.awakening)}
-                  </span>
                 </div>
                 <DreamcallerPortrait
                   dreamcaller={dreamcaller}

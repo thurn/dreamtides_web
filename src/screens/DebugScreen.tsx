@@ -158,9 +158,6 @@ export function DebugScreen({
                   <p className="text-sm font-bold" style={{ color: "#e2e8f0" }}>
                     {packageDebugInfo.dreamcallerName}
                   </p>
-                  <p className="text-xs opacity-60">
-                    Awakening {String(packageDebugInfo.awakening)}
-                  </p>
                 </InfoCard>
 
                 <InfoCard title="Required Packages">

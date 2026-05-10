@@ -467,7 +467,6 @@ function freezeBattleDreamcallerSummary(
     id: dreamcaller.id,
     name: dreamcaller.name,
     title: dreamcaller.title,
-    awakening: dreamcaller.awakening,
     renderedText: dreamcaller.renderedText,
     imageNumber: dreamcaller.imageNumber,
   });

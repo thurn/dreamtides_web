@@ -75,7 +75,6 @@ function makeDreamcaller(): Dreamcaller {
     id: "dreamcaller-1",
     name: "Test Dreamcaller",
     title: "State Witness",
-    awakening: 4,
     renderedText: "Test ability.",
     imageNumber: "0006",
   };
@@ -87,7 +86,6 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       id: "dreamcaller-1",
       name: "Test Dreamcaller",
       title: "State Witness",
-      awakening: 4,
       renderedText: "Test rules text.",
       imageNumber: "0006",
       mandatoryTides: ["core"],

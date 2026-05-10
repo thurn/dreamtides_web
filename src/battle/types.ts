@@ -156,7 +156,6 @@ export interface BattleDreamcallerSummary {
   id: Dreamcaller["id"];
   name: Dreamcaller["name"];
   title: Dreamcaller["title"];
-  awakening: Dreamcaller["awakening"];
   renderedText: Dreamcaller["renderedText"];
   imageNumber: Dreamcaller["imageNumber"];
 }

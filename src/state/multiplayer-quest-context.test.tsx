@@ -58,7 +58,6 @@ const testDreamcaller: DreamcallerContent = {
   id: "caller-1",
   name: "Mira of Lanterns",
   title: "Keeper of the Threshold Flame",
-  awakening: 4,
   renderedText: "First dreamcaller.",
   imageNumber: "0009",
   mandatoryTides: ["materialize_value"],

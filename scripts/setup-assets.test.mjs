@@ -90,7 +90,6 @@ art-owned = true
 id = "dc-1"
 name = "Dreamcaller One"
 title = "Keeper of Test Cases"
-awakening = 4
 rendered-text = "Choose tides."
 image-number = "0007"
 mandatory-tides = ["core", "bridge"]
@@ -181,7 +180,6 @@ rendered-text = "Use the canonical Dreamsign text."
         id: "dc-1",
         name: "Dreamcaller One",
         title: "Keeper of Test Cases",
-        awakening: 4,
         renderedText: "Choose tides.",
         imageNumber: "0007",
         mandatoryTides: ["core", "bridge"],

@@ -17,7 +17,6 @@ function makeDreamcaller(): DreamcallerContent {
     id: "dreamcaller-1",
     name: "Test Dreamcaller",
     title: "Caller of Beginnings",
-    awakening: 4,
     renderedText: "Test ability.",
     imageNumber: "0002",
     mandatoryTides: ["tide_alpha"],

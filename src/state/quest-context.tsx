@@ -783,7 +783,6 @@ export function QuestProvider({
           startingDeckSize: next.deck.length,
           dreamcallerId: dreamcaller.id,
           dreamcallerName: dreamcaller.name,
-          dreamcallerAwakening: dreamcaller.awakening,
           packageSummary: {
             mandatoryTides: resolvedPackage.mandatoryTides,
             optionalSubset: resolvedPackage.optionalSubset,

@@ -623,12 +623,6 @@ export function DeckViewer({
                         >
                           {state.dreamcaller.title}
                         </p>
-                        <p
-                          className="mt-0.5 text-[10px] uppercase tracking-wider opacity-45"
-                          style={{ color: "#cbd5f5" }}
-                        >
-                          Awakening {String(state.dreamcaller.awakening)}
-                        </p>
                       </div>
                     </div>
                     <p
@@ -842,12 +836,6 @@ function MobileSidebar({
                         style={{ color: "#cbd5f5" }}
                       >
                         {dreamcaller.title}
-                      </p>
-                      <p
-                        className="mt-0.5 text-[9px] uppercase tracking-wider opacity-45"
-                        style={{ color: "#cbd5f5" }}
-                      >
-                        Awakening {String(dreamcaller.awakening)}
                       </p>
                       <p className="mt-0.5 text-[10px] opacity-60">
                         {dreamcaller.renderedText}

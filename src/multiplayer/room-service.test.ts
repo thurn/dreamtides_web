@@ -302,6 +302,65 @@ describe("room service", () => {
     ]);
   });
 
+  it("strips unrecognized awakening field from rehydrated dreamcaller and resolved package", () => {
+    const listener = vi.fn();
+    const strippedQuestState = {
+      ...createDefaultState(),
+      dreamcaller: {
+        id: "dc-1",
+        name: "Rael",
+        title: "Chain Accelerant",
+        renderedText: "Old card.",
+        imageNumber: "0001",
+        awakening: 3,
+      },
+      resolvedPackage: {
+        dreamcaller: {
+          id: "dc-1",
+          name: "Rael",
+          title: "Chain Accelerant",
+          renderedText: "Old card.",
+          imageNumber: "0001",
+          mandatoryTides: ["alpha"],
+          optionalTides: ["beta"],
+          awakening: 3,
+        },
+        mandatoryTides: ["alpha"],
+        optionalSubset: ["beta"],
+        selectedTides: ["alpha", "beta"],
+        draftPoolCopiesByCard: {},
+        dreamsignPoolIds: [],
+        mandatoryOnlyPoolSize: 0,
+        draftPoolSize: 0,
+        doubledCardCount: 0,
+        legalSubsetCount: 0,
+        preferredSubsetCount: 0,
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    const dreamcaller = ready.room.questState?.dreamcaller as Record<
+      string,
+      unknown
+    > | null;
+    expect(dreamcaller).not.toBeNull();
+    expect(dreamcaller).not.toHaveProperty("awakening");
+    const resolvedDreamcaller = (
+      ready.room.questState?.resolvedPackage as { dreamcaller: Record<string, unknown> } | null
+    )?.dreamcaller;
+    expect(resolvedDreamcaller).not.toHaveProperty("awakening");
+  });
+
   it("emits missing when the room snapshot does not exist", () => {
     const listener = vi.fn();
     firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {

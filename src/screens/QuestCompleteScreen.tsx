@@ -54,7 +54,6 @@ export function QuestCompleteScreen() {
 
   const dreamcallerName = state.dreamcaller?.name ?? "None";
   const dreamcallerTitle = state.dreamcaller?.title ?? "Unbound";
-  const dreamcallerAwakening = state.dreamcaller?.awakening ?? null;
   const dreamcallerColor =
     state.dreamcaller !== null ? "#f8fafc" : "#6b7280";
 
@@ -131,11 +130,6 @@ export function QuestCompleteScreen() {
           >
             {dreamcallerTitle}
           </span>
-          {dreamcallerAwakening !== null && (
-            <span className="text-xs opacity-50">
-              Awakening {String(dreamcallerAwakening)}
-            </span>
-          )}
         </div>
       </motion.div>
 

@@ -49,7 +49,6 @@ function makeDreamcaller(): DreamcallerContent {
     id: "dreamcaller-1",
     name: "Test Dreamcaller",
     title: "State Witness",
-    awakening: 4,
     renderedText: "Test ability.",
     imageNumber: "0006",
     mandatoryTides: ["core"],

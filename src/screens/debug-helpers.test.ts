@@ -47,7 +47,6 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       id: "dreamcaller-1",
       name: "Caller of Depths",
       title: "Witness of Logs",
-      awakening: 6,
       renderedText: "Test",
       imageNumber: "0007",
       mandatoryTides: ["core"],

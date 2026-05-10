@@ -31,7 +31,6 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       id: "caller-1",
       name: "Caller",
       title: "Debug Witness",
-      awakening: 5,
       renderedText: "Test rules text.",
       imageNumber: "0009",
       mandatoryTides: ["core"],

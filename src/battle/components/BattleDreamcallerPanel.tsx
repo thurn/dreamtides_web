@@ -39,10 +39,6 @@ export function BattleDreamcallerPanel({
             <div className="dreamcaller-summary">
               <div className="summary-grid">
                 <div className="summary-stat">
-                  <span className="label">Awakening</span>
-                  <span className="value">{String(dreamcaller.awakening)}</span>
-                </div>
-                <div className="summary-stat">
                   <span className="label">Image</span>
                   <span className="value">#{String(dreamcaller.imageNumber)}</span>
                 </div>

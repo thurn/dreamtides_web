@@ -17,7 +17,6 @@ export function makeBattleTestDreamcallers(): DreamcallerContent[] {
       id: "dreamcaller-arc",
       name: "Aeris, the Prism Guide",
       title: "Storm Archivist",
-      awakening: 2,
       renderedText: "Whenever the first event each turn resolves, gain momentum.",
       imageNumber: "001",
       mandatoryTides: ["alpha"],
@@ -27,7 +26,6 @@ export function makeBattleTestDreamcallers(): DreamcallerContent[] {
       id: "dreamcaller-bloom",
       name: "Talan, Keeper of Branches",
       title: "Verdant Witness",
-      awakening: 3,
       renderedText: "Your field grows harder to uproot with every turn passed.",
       imageNumber: "002",
       mandatoryTides: ["beta"],
@@ -114,7 +112,6 @@ function makeBattleTestDreamcaller(): Dreamcaller {
     id: "dreamcaller-arc",
     name: "Aeris",
     title: "Storm Archivist",
-    awakening: 2,
     renderedText: "Gain a fleeting advantage whenever your line bends first.",
     imageNumber: "001",
   };

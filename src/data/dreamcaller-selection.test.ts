@@ -10,7 +10,6 @@ function makeDreamcaller(id: string): DreamcallerContent {
     id,
     name: `Dreamcaller ${id}`,
     title: `Title ${id}`,
-    awakening: 3,
     renderedText: `Rules text for ${id}.`,
     imageNumber: `00${id}`,
     mandatoryTides: ["tide_alpha"],
@@ -58,7 +57,6 @@ describe("toQuestDreamcaller", () => {
       id: "a",
       name: "Dreamcaller a",
       title: "Title a",
-      awakening: 3,
       renderedText: "Rules text for a.",
       imageNumber: "00a",
     });

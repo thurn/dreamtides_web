@@ -21,8 +21,10 @@ import {
 } from "./room-types";
 import { createDefaultState } from "../state/quest-context";
 import type { DraftState } from "../types/draft";
+import type { ResolvedDreamcallerPackage } from "../types/content";
 import type {
   DeckEntry,
+  Dreamcaller,
   DreamAtlas,
   DreamscapeNode,
   QuestState,
@@ -84,6 +86,38 @@ function normalizeDraftState(draftState: DraftState | null | undefined): DraftSt
   };
 }
 
+/**
+ * Drop any unrecognized `awakening` field from a Dreamcaller record so RTDB
+ * rooms that carry it are silently sanitized into the current runtime shape.
+ */
+function normalizeDreamcaller(
+  dreamcaller: Dreamcaller | null | undefined,
+): Dreamcaller | null {
+  if (dreamcaller === null || dreamcaller === undefined) {
+    return null;
+  }
+  const { awakening: _awakening, ...rest } = dreamcaller as Dreamcaller & {
+    awakening?: unknown;
+  };
+  return rest;
+}
+
+function normalizeResolvedPackage(
+  resolvedPackage: ResolvedDreamcallerPackage | null | undefined,
+): ResolvedDreamcallerPackage | null {
+  if (resolvedPackage === null || resolvedPackage === undefined) {
+    return null;
+  }
+  const { awakening: _awakening, ...dreamcaller } =
+    resolvedPackage.dreamcaller as ResolvedDreamcallerPackage["dreamcaller"] & {
+      awakening?: unknown;
+    };
+  return {
+    ...resolvedPackage,
+    dreamcaller,
+  };
+}
+
 function normalizeQuestState(questState: QuestState | null | undefined): QuestState | null {
   if (questState === null || questState === undefined) {
     return null;
@@ -93,8 +127,8 @@ function normalizeQuestState(questState: QuestState | null | undefined): QuestSt
   return {
     essence: questState.essence ?? defaults.essence,
     deck: normalizeDeck(questState.deck),
-    dreamcaller: questState.dreamcaller ?? null,
-    resolvedPackage: questState.resolvedPackage ?? null,
+    dreamcaller: normalizeDreamcaller(questState.dreamcaller),
+    resolvedPackage: normalizeResolvedPackage(questState.resolvedPackage),
     cardSourceDebug: questState.cardSourceDebug ?? null,
     remainingDreamsignPool: questState.remainingDreamsignPool ?? defaults.remainingDreamsignPool,
     dreamsigns: questState.dreamsigns ?? defaults.dreamsigns,

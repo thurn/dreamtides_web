@@ -72,7 +72,6 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       id: "caller-1",
       name: "Caller of Lanterns",
       title: "Auditor of Debug Panels",
-      awakening: 5,
       renderedText: "Test rules text.",
       imageNumber: "0008",
       mandatoryTides: ["core"],

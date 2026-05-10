@@ -38,7 +38,7 @@ export function DreamcallerPopover({
               "linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 35%, transparent 65%, rgba(255, 255, 255, 0.08) 100%)",
           }}
         />
-        <div className="relative flex items-start justify-between gap-3">
+        <div className="relative flex items-start gap-3">
           <div>
             <p
               className="text-[10px] font-semibold uppercase tracking-[0.22em]"
@@ -59,16 +59,6 @@ export function DreamcallerPopover({
               {dreamcaller.title}
             </p>
           </div>
-          <span
-            className="shrink-0 rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wide"
-            style={{
-              background: "rgba(255, 255, 255, 0.14)",
-              border: "1px solid rgba(255, 255, 255, 0.18)",
-              color: "#f8fafc",
-            }}
-          >
-            Awakening {String(dreamcaller.awakening)}
-          </span>
         </div>
 
         <div className="relative mt-4">
