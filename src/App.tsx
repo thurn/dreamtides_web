@@ -13,6 +13,7 @@ import { HUD } from "./components/HUD";
 import { DeckViewer } from "./components/DeckViewer";
 import { DebugScreen } from "./screens/DebugScreen";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import { createPlayableBattleBootstrapController } from "./runtime/playable-battle-bootstrap";
@@ -121,41 +122,65 @@ export function QuestApp({
 
   return (
     <div style={{ paddingBottom: showHud ? "48px" : "0" }}>
-      <ScreenRouter runtimeConfig={runtimeConfig} />
-      {showHud && (
-        <HUD
-          onOpenDeckViewer={handleOpenDeckViewer}
-          onOpenDebugScreen={handleOpenDebugScreen}
-          onToggleCardSourceOverlay={handleToggleCardSourceOverlay}
-          hasDraftData={hasDraftData}
-          hasCardSourceDebug={hasCardSourceDebug}
-          isCardSourceOverlayOpen={cardSourceOverlayOpen}
-        />
-      )}
-      <DeckViewer
-        isOpen={deckViewerOpen || showStarterDeckIntro}
-        onClose={
-          showStarterDeckIntro ? handleBeginQuest : handleCloseDeckViewer
-        }
-        cardDatabase={cardDatabase}
-        introMode={showStarterDeckIntro}
-        onBeginQuest={handleBeginQuest}
-      />
-      <DebugScreen
-        isOpen={debugScreenOpen}
-        onClose={handleCloseDebugScreen}
-        draftState={state.draftState}
-        cardDatabase={cardDatabase}
-        resolvedPackage={state.resolvedPackage}
-        remainingDreamsignPool={state.remainingDreamsignPool}
-        dreamsignTemplates={questContent.dreamsignTemplates}
-        onForceLegendaryOffer={mutations.setDraftState}
-      />
-      <CardSourceOverlay
-        cardSourceDebug={state.cardSourceDebug}
-        isOpen={cardSourceOverlayOpen}
-        onClose={handleCloseCardSourceOverlay}
-      />
+      {/*
+        App-shell boundary: catches anything the screen router and HUD throw
+        before it reaches the React root. Without this, a render-time crash
+        produces a blank #root with no fallback UI.
+      */}
+      <ErrorBoundary scope="app-shell">
+        <ScreenRouter runtimeConfig={runtimeConfig} />
+        {showHud && (
+          <ErrorBoundary scope="overlay:hud">
+            <HUD
+              onOpenDeckViewer={handleOpenDeckViewer}
+              onOpenDebugScreen={handleOpenDebugScreen}
+              onToggleCardSourceOverlay={handleToggleCardSourceOverlay}
+              hasDraftData={hasDraftData}
+              hasCardSourceDebug={hasCardSourceDebug}
+              isCardSourceOverlayOpen={cardSourceOverlayOpen}
+            />
+          </ErrorBoundary>
+        )}
+        {/*
+          Per-overlay boundaries: each major modal/panel is isolated so that
+          a crash inside (for example) DeckViewer leaves the dreamscape screen
+          underneath interactive. `onClose` lets the user dismiss the overlay
+          from the fallback.
+        */}
+        <ErrorBoundary scope="overlay:deck-viewer" onClose={handleCloseDeckViewer}>
+          <DeckViewer
+            isOpen={deckViewerOpen || showStarterDeckIntro}
+            onClose={
+              showStarterDeckIntro ? handleBeginQuest : handleCloseDeckViewer
+            }
+            cardDatabase={cardDatabase}
+            introMode={showStarterDeckIntro}
+            onBeginQuest={handleBeginQuest}
+          />
+        </ErrorBoundary>
+        <ErrorBoundary scope="overlay:debug-screen" onClose={handleCloseDebugScreen}>
+          <DebugScreen
+            isOpen={debugScreenOpen}
+            onClose={handleCloseDebugScreen}
+            draftState={state.draftState}
+            cardDatabase={cardDatabase}
+            resolvedPackage={state.resolvedPackage}
+            remainingDreamsignPool={state.remainingDreamsignPool}
+            dreamsignTemplates={questContent.dreamsignTemplates}
+            onForceLegendaryOffer={mutations.setDraftState}
+          />
+        </ErrorBoundary>
+        <ErrorBoundary
+          scope="overlay:card-source"
+          onClose={handleCloseCardSourceOverlay}
+        >
+          <CardSourceOverlay
+            cardSourceDebug={state.cardSourceDebug}
+            isOpen={cardSourceOverlayOpen}
+            onClose={handleCloseCardSourceOverlay}
+          />
+        </ErrorBoundary>
+      </ErrorBoundary>
     </div>
   );
 }

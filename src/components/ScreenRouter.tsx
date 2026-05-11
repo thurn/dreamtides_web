@@ -24,6 +24,7 @@ import { logEvent } from "../logging";
 import type { Screen, SiteState } from "../types/quest";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { BattleSiteRoute } from "./BattleSiteRoute";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 /** Computes a stable key for AnimatePresence from the current screen. */
 function screenKey(screen: Screen): string {
@@ -59,6 +60,11 @@ export function ScreenRouter({
     }
   }
 
+  // Per-screen boundary: each screen route gets its own boundary keyed by
+  // screen identity. When `state.screen` changes, `resetKey` rotates and the
+  // boundary clears any captured error, giving the new screen a fresh
+  // render. A crash inside one screen produces a contained fallback while
+  // the HUD and app shell stay interactive.
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -69,7 +75,12 @@ export function ScreenRouter({
         exit={{ opacity: 0 }}
         transition={{ duration: 0.35 }}
       >
-        {renderScreen()}
+        <ErrorBoundary
+          scope={`screen:${screen.type}`}
+          resetKey={screenKey(screen)}
+        >
+          {renderScreen()}
+        </ErrorBoundary>
       </motion.div>
     </AnimatePresence>
   );
