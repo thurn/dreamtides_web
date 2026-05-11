@@ -3,10 +3,19 @@ import { motion } from "framer-motion";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
+import { DreamsignHoverCard } from "../components/DreamsignHoverCard";
+import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
 import { DreamsignSourceOverlay } from "./DreamsignSourceOverlay";
 
 const MAX_DREAMSIGNS = 12;
+/**
+ * Delay before showing the full-Dreamsign hover popover on an offering /
+ * draft card. Tighter than the glossary-tooltip default (500ms) because
+ * players are scanning a short list of dreamsigns and want quick previews
+ * while moving across them.
+ */
+const DREAMSIGN_HOVER_DELAY_MS = 300;
 
 /** Props for the DreamsignDraftScreen component. */
 interface DreamsignDraftScreenProps {
@@ -198,24 +207,41 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
         </p>
       ) : (
         <div className="flex max-w-4xl flex-wrap justify-center gap-5">
-          {options.map((dreamsign, index) => (
-            <motion.div
-              key={`draft-${dreamsign.name}`}
-              className="flex flex-col items-center gap-3"
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.12, duration: 0.4 }}
-            >
-              <DreamsignCard dreamsign={dreamsign} />
-              <button
-                className="w-full rounded-lg px-5 py-2.5 font-bold text-white transition-opacity"
-                style={{ backgroundColor: "#7c3aed" }}
-                onClick={() => handleSelect(dreamsign)}
+          {options.map((dreamsign, index) => {
+            const triggerId = dreamsign.id ?? dreamsign.name;
+            return (
+              <motion.div
+                key={`draft-${dreamsign.name}`}
+                className="flex flex-col items-center gap-3"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.12, duration: 0.4 }}
               >
-                Select
-              </button>
-            </motion.div>
-          ))}
+                <HoverPopover
+                  triggerAs="div"
+                  delayMs={DREAMSIGN_HOVER_DELAY_MS}
+                  maxWidthPx={null}
+                  content={<DreamsignHoverCard dreamsign={dreamsign} />}
+                >
+                  <div
+                    data-testid={`dreamsign-draft-hover-trigger-${triggerId}`}
+                    tabIndex={0}
+                    aria-label={`Dreamsign: ${dreamsign.name}`}
+                    className="outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+                  >
+                    <DreamsignCard dreamsign={dreamsign} />
+                  </div>
+                </HoverPopover>
+                <button
+                  className="w-full rounded-lg px-5 py-2.5 font-bold text-white transition-opacity"
+                  style={{ backgroundColor: "#7c3aed" }}
+                  onClick={() => handleSelect(dreamsign)}
+                >
+                  Select
+                </button>
+              </motion.div>
+            );
+          })}
         </div>
       )}
 

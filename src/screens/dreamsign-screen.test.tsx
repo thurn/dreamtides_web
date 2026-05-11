@@ -700,3 +700,294 @@ describe("DreamsignDraftScreen", () => {
     });
   });
 });
+
+describe("DreamsignOfferingScreen hover popover", () => {
+  it("shows a hover popover with the dreamsign's full effect after hovering its card", () => {
+    vi.useFakeTimers();
+    try {
+      const mutations = makeMutations();
+      setQuestContext(
+        makeState({
+          siteRuntime: {
+            "site-1": {
+              kind: "dreamsignOffer",
+              offeredDreamsigns: [
+                {
+                  id: "embers-whisper",
+                  name: "Ember's Whisper",
+                  effectDescription: "Burn 2 spark.",
+                  isBane: false,
+                },
+              ],
+              remainingDreamsignPool: ["glacial-insight"],
+              accepted: false,
+            },
+          },
+        }),
+        mutations,
+      );
+
+      const { container, root } = mount(
+        <DreamsignOfferingScreen site={makeSite()} />,
+      );
+
+      // Before hover the popover is not portaled.
+      expect(
+        document.body.querySelectorAll(
+          '[data-testid="dreamsign-hover-card"]',
+        ),
+      ).toHaveLength(0);
+
+      const trigger = container.querySelector(
+        '[data-testid="dreamsign-offering-hover-trigger-embers-whisper"]',
+      );
+      expect(trigger).not.toBeNull();
+
+      act(() => {
+        trigger?.dispatchEvent(
+          new MouseEvent("mouseover", { bubbles: true }),
+        );
+      });
+      act(() => {
+        vi.advanceTimersByTime(350);
+      });
+
+      const popover = document.body.querySelector(
+        '[data-testid="dreamsign-hover-card"]',
+      );
+      expect(popover).not.toBeNull();
+      expect(popover?.textContent).toContain("Ember's Whisper");
+      expect(popover?.textContent).toContain("Burn 2 spark.");
+
+      act(() => {
+        trigger?.dispatchEvent(
+          new MouseEvent("mouseout", { bubbles: true }),
+        );
+      });
+
+      expect(
+        document.body.querySelectorAll(
+          '[data-testid="dreamsign-hover-card"]',
+        ),
+      ).toHaveLength(0);
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("shows the hover popover on keyboard focus", () => {
+    vi.useFakeTimers();
+    try {
+      const mutations = makeMutations();
+      setQuestContext(
+        makeState({
+          siteRuntime: {
+            "site-1": {
+              kind: "dreamsignOffer",
+              offeredDreamsigns: [
+                {
+                  id: "embers-whisper",
+                  name: "Ember's Whisper",
+                  effectDescription: "Burn 2 spark.",
+                  isBane: false,
+                },
+              ],
+              remainingDreamsignPool: ["glacial-insight"],
+              accepted: false,
+            },
+          },
+        }),
+        mutations,
+      );
+
+      const { container, root } = mount(
+        <DreamsignOfferingScreen site={makeSite()} />,
+      );
+
+      const trigger = container.querySelector(
+        '[data-testid="dreamsign-offering-hover-trigger-embers-whisper"]',
+      );
+      expect(trigger).not.toBeNull();
+
+      act(() => {
+        trigger?.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      });
+      act(() => {
+        vi.advanceTimersByTime(350);
+      });
+
+      const popover = document.body.querySelector(
+        '[data-testid="dreamsign-hover-card"]',
+      );
+      expect(popover).not.toBeNull();
+      expect(popover?.textContent).toContain("Ember's Whisper");
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
+
+describe("DreamsignDraftScreen hover popover", () => {
+  it("shows a hover popover with the dreamsign's full effect after hovering its card", () => {
+    vi.useFakeTimers();
+    try {
+      const mutations = makeMutations();
+      setQuestContext(
+        makeState({
+          siteRuntime: {
+            "site-1": {
+              kind: "dreamsignOffer",
+              offeredDreamsigns: [
+                {
+                  id: "embers-whisper",
+                  name: "Ember's Whisper",
+                  effectDescription: "Burn 2 spark.",
+                  isBane: false,
+                },
+                {
+                  id: "glacial-insight",
+                  name: "Glacial Insight",
+                  effectDescription: "Chill the foe.",
+                  isBane: false,
+                },
+                {
+                  id: "verdant-accord",
+                  name: "Verdant Accord",
+                  effectDescription: "Grow a vine.",
+                  isBane: false,
+                },
+              ],
+              remainingDreamsignPool: ["stormthread-sigil"],
+              accepted: false,
+            },
+          },
+        }),
+        mutations,
+      );
+
+      const { container, root } = mount(
+        <DreamsignDraftScreen site={makeSite({ type: "DreamsignDraft" })} />,
+      );
+
+      expect(
+        document.body.querySelectorAll(
+          '[data-testid="dreamsign-hover-card"]',
+        ),
+      ).toHaveLength(0);
+
+      const trigger = container.querySelector(
+        '[data-testid="dreamsign-draft-hover-trigger-glacial-insight"]',
+      );
+      expect(trigger).not.toBeNull();
+
+      act(() => {
+        trigger?.dispatchEvent(
+          new MouseEvent("mouseover", { bubbles: true }),
+        );
+      });
+      act(() => {
+        vi.advanceTimersByTime(350);
+      });
+
+      const popover = document.body.querySelector(
+        '[data-testid="dreamsign-hover-card"]',
+      );
+      expect(popover).not.toBeNull();
+      expect(popover?.textContent).toContain("Glacial Insight");
+      expect(popover?.textContent).toContain("Chill the foe.");
+
+      act(() => {
+        trigger?.dispatchEvent(
+          new MouseEvent("mouseout", { bubbles: true }),
+        );
+      });
+
+      expect(
+        document.body.querySelectorAll(
+          '[data-testid="dreamsign-hover-card"]',
+        ),
+      ).toHaveLength(0);
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("shows the hover popover on keyboard focus", () => {
+    vi.useFakeTimers();
+    try {
+      const mutations = makeMutations();
+      setQuestContext(
+        makeState({
+          siteRuntime: {
+            "site-1": {
+              kind: "dreamsignOffer",
+              offeredDreamsigns: [
+                {
+                  id: "embers-whisper",
+                  name: "Ember's Whisper",
+                  effectDescription: "Burn 2 spark.",
+                  isBane: false,
+                },
+                {
+                  id: "glacial-insight",
+                  name: "Glacial Insight",
+                  effectDescription: "Chill the foe.",
+                  isBane: false,
+                },
+                {
+                  id: "verdant-accord",
+                  name: "Verdant Accord",
+                  effectDescription: "Grow a vine.",
+                  isBane: false,
+                },
+              ],
+              remainingDreamsignPool: ["stormthread-sigil"],
+              accepted: false,
+            },
+          },
+        }),
+        mutations,
+      );
+
+      const { container, root } = mount(
+        <DreamsignDraftScreen site={makeSite({ type: "DreamsignDraft" })} />,
+      );
+
+      const trigger = container.querySelector(
+        '[data-testid="dreamsign-draft-hover-trigger-embers-whisper"]',
+      );
+      expect(trigger).not.toBeNull();
+
+      act(() => {
+        trigger?.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      });
+      act(() => {
+        vi.advanceTimersByTime(350);
+      });
+
+      const popover = document.body.querySelector(
+        '[data-testid="dreamsign-hover-card"]',
+      );
+      expect(popover).not.toBeNull();
+      expect(popover?.textContent).toContain("Ember's Whisper");
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});
