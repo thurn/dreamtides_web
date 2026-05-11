@@ -549,7 +549,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("opens the victory reward surface from Force victory, supports dismiss/reopen, and confirms a reward", () => {
+  it("opens an essence-only victory reward surface from Force victory, supports dismiss/reopen, and finishes via Continue", () => {
     const { battleInit, container, root } = renderScreen();
 
     act(() => {
@@ -558,6 +558,16 @@ describe("PlayableBattleScreen", () => {
 
     expect(container.querySelector("[data-battle-reward-surface]")).not.toBeNull();
     expect(container.textContent).toContain("Essence Earned");
+
+    // Card-selection chrome must not appear anywhere on the reward surface.
+    expect(container.querySelector("[data-battle-reward-card]")).toBeNull();
+    expect(
+      container.querySelector('[data-battle-reward-action="select"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-battle-reward-action="confirm"]'),
+    ).toBeNull();
+    expect(container.textContent).not.toContain("Choose a Card Reward");
 
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-reward-action="cancel"]')?.click();
@@ -570,24 +580,27 @@ describe("PlayableBattleScreen", () => {
       [...container.querySelectorAll("button")].find((button) => button.textContent === "victory — reopen")?.click();
     });
 
-    act(() => {
-      container.querySelector<HTMLElement>('[data-battle-reward-card]')?.click();
-    });
-
-    expect(
-      container.querySelector<HTMLButtonElement>('[data-battle-reward-action="confirm"]')?.disabled,
-    ).toBe(false);
+    const continueButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-reward-action="continue"]',
+    );
+    expect(continueButton).not.toBeNull();
+    expect(continueButton?.disabled).toBe(false);
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-battle-reward-action="confirm"]')?.click();
+      continueButton?.click();
     });
 
     expect(battleCompletionBridge.completeBattleSiteVictory).toHaveBeenCalledTimes(1);
-    expect(battleCompletionBridge.completeBattleSiteVictory.mock.calls[0]?.[0]).toMatchObject({
+    const bridgeCall = battleCompletionBridge.completeBattleSiteVictory.mock.calls[0]?.[0] as
+      | Record<string, unknown>
+      | undefined;
+    expect(bridgeCall).toMatchObject({
       battleId: battleInit.battleId,
       siteId: battleInit.siteId,
-      selectedRewardCard: battleInit.rewardOptions[0],
+      essenceReward: battleInit.essenceReward,
     });
+    // Battle victory should never plumb a reward card through the bridge.
+    expect(bridgeCall).not.toHaveProperty("selectedRewardCard");
 
     act(() => {
       root.unmount();

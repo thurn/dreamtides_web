@@ -1,4 +1,3 @@
-import type { FrozenCardData } from "../types/cards";
 import type { PackageTideId } from "../types/content";
 import type { DreamAtlas, Dreamcaller, Dreamsign, TransfigurationType } from "../types/quest";
 import type { BattleDebugEdit } from "./debug/commands";
@@ -195,7 +194,6 @@ export interface BattleInit {
    * and direct `createBattleInit` callers that exercise AI behaviour.
    */
   enableAi: boolean;
-  rewardOptions: readonly FrozenCardData[];
   questDeckEntries: readonly BattleQuestDeckEntry[];
   playerDeckOrder: readonly BattleDeckCardDefinition[];
   enemyDescriptor: BattleEnemyDescriptor;

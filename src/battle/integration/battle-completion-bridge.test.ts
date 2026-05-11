@@ -20,7 +20,6 @@ vi.mock("../../logging", () => ({
 
 function makeMutations() {
   return {
-    addCard: vi.fn(),
     changeEssence: vi.fn(),
     incrementCompletionLevel: vi.fn(),
     markSiteVisited: vi.fn(),
@@ -66,21 +65,6 @@ function makeInput(
       edges: [],
       nexusId: "nexus",
     },
-    selectedRewardCard: {
-      name: "Test Reward",
-      id: "test-reward",
-      cardNumber: 404,
-      cardType: "Character",
-      subtype: "",
-      isStarter: false,
-      energyCost: 2,
-      spark: 1,
-      isFast: false,
-      tides: ["core"],
-      renderedText: "",
-      imageNumber: 404,
-      artOwned: true,
-    },
     essenceReward: 200,
     isMiniboss: false,
     isFinalBoss: false,
@@ -122,12 +106,11 @@ describe("completeBattleSiteVictory", () => {
       200,
       "battle_reward",
     );
-    expect(input.mutations.addCard).toHaveBeenCalledWith(404, "battle_reward");
     expect(input.mutations.markSiteVisited).toHaveBeenCalledWith("site-4");
     expect(input.mutations.incrementCompletionLevel).toHaveBeenCalledWith(
       200,
-      404,
-      "Test Reward",
+      null,
+      null,
       false,
     );
     expect(input.mutations.setScreen).not.toHaveBeenCalled();
@@ -157,7 +140,6 @@ describe("completeBattleSiteVictory", () => {
       expect.objectContaining({
         battleId: input.battleId,
         completionLevelAfterVictory: 3,
-        rewardCardNumber: 404,
         siteId: "site-4",
       }),
     );
@@ -197,21 +179,6 @@ describe("completeBattleSiteVictory", () => {
         edges: [],
         nexusId: "nexus",
       },
-      selectedRewardCard: {
-        name: "Final Reward",
-        id: "final-reward",
-        cardNumber: 999,
-        cardType: "Character",
-        subtype: "",
-        isStarter: false,
-        energyCost: 3,
-        spark: 2,
-        isFast: false,
-        tides: ["core"],
-        renderedText: "",
-        imageNumber: 999,
-        artOwned: true,
-      },
       essenceReward: 400,
       isFinalBoss: true,
       playerHasBanes: false,
@@ -246,7 +213,6 @@ describe("completeBattleSiteVictory", () => {
     completeBattleSiteVictory(input);
 
     expect(input.mutations.changeEssence).toHaveBeenCalledTimes(1);
-    expect(input.mutations.addCard).toHaveBeenCalledTimes(1);
     expect(input.mutations.markSiteVisited).toHaveBeenCalledTimes(1);
     expect(input.mutations.incrementCompletionLevel).toHaveBeenCalledTimes(1);
     expect(
@@ -283,7 +249,6 @@ describe("completeBattleSiteVictory", () => {
       makeInput({ battleId: recycledBattleId, mutations: postResetMutations }),
     );
     expect(postResetMutations.changeEssence).toHaveBeenCalledTimes(1);
-    expect(postResetMutations.addCard).toHaveBeenCalledTimes(1);
     expect(postResetMutations.markSiteVisited).toHaveBeenCalledTimes(1);
     expect(postResetMutations.incrementCompletionLevel).toHaveBeenCalledTimes(1);
   });

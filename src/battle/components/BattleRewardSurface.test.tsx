@@ -3,32 +3,12 @@
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { CardData } from "../../types/cards";
 import { BattleRewardSurface } from "./BattleRewardSurface";
 
 vi.mock("../../logging", () => ({
   logEvent: vi.fn(),
   logEventOnce: vi.fn(),
 }));
-
-function makeCard(cardNumber: number, name: string): CardData {
-  return {
-    cardNumber,
-    id: `card-${String(cardNumber)}`,
-    name,
-    imageNumber: cardNumber,
-    cardType: "Character",
-    subtype: "",
-    rarity: "Common",
-    isStarter: false,
-    energyCost: 2,
-    spark: 1,
-    isFast: false,
-    renderedText: `Card ${String(cardNumber)} text.`,
-    artOwned: true,
-    tides: [],
-  };
-}
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -57,12 +37,6 @@ afterEach(() => {
 
 describe("BattleRewardSurface", () => {
   it("renders the essence reward in the shared essence colour with no glyph", () => {
-    const rewardCards = [
-      makeCard(1, "Sample One"),
-      makeCard(2, "Sample Two"),
-      makeCard(3, "Sample Three"),
-      makeCard(4, "Sample Four"),
-    ];
     const { container, root } = mount(
       <BattleRewardSurface
         battleId="b-1"
@@ -71,12 +45,11 @@ describe("BattleRewardSurface", () => {
         essenceReward={50}
         playerScore={40}
         enemyScore={0}
-        rewardCards={rewardCards}
         rewardSource="battle"
-        selectedRewardIndex={null}
         turnNumber={3}
+        isLocked={false}
         onCancel={vi.fn()}
-        onSelectReward={vi.fn()}
+        onContinue={vi.fn()}
       />,
     );
 
@@ -104,6 +77,114 @@ describe("BattleRewardSurface", () => {
     expect((caption as HTMLElement | null)?.style.color).toBe(
       "var(--color-essence)",
     );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("only shows essence and a Continue button -- no card-selection UI", () => {
+    const { container, root } = mount(
+      <BattleRewardSurface
+        battleId="b-2"
+        canCancel={true}
+        enemyName="Test Enemy"
+        essenceReward={100}
+        playerScore={25}
+        enemyScore={0}
+        rewardSource="battle"
+        turnNumber={4}
+        isLocked={false}
+        onCancel={vi.fn()}
+        onContinue={vi.fn()}
+      />,
+    );
+
+    // The reward surface never renders any card-selection chrome.
+    expect(container.querySelector("[data-battle-reward-card]")).toBeNull();
+    expect(
+      container.querySelector('[data-battle-reward-action="select"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-battle-reward-action="confirm"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-battle-reward-action="change-selection"]'),
+    ).toBeNull();
+    expect(container.textContent).not.toContain("Choose a Card Reward");
+
+    // The only primary action is Continue.
+    const continueButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-reward-action="continue"]',
+    );
+    expect(continueButton).not.toBeNull();
+    expect(continueButton?.textContent).toBe("Continue");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("invokes onContinue when the Continue button is pressed", () => {
+    const onContinue = vi.fn();
+    const { container, root } = mount(
+      <BattleRewardSurface
+        battleId="b-3"
+        canCancel={true}
+        enemyName="Test Enemy"
+        essenceReward={150}
+        playerScore={25}
+        enemyScore={5}
+        rewardSource="battle"
+        turnNumber={5}
+        isLocked={false}
+        onCancel={vi.fn()}
+        onContinue={onContinue}
+      />,
+    );
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-battle-reward-action="continue"]',
+        )
+        ?.click();
+    });
+
+    expect(onContinue).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("disables Continue while locked so the handoff cannot be double-fired", () => {
+    const onContinue = vi.fn();
+    const { container, root } = mount(
+      <BattleRewardSurface
+        battleId="b-4"
+        canCancel={false}
+        enemyName="Test Enemy"
+        essenceReward={150}
+        playerScore={25}
+        enemyScore={5}
+        rewardSource="battle"
+        turnNumber={5}
+        isLocked={true}
+        onCancel={vi.fn()}
+        onContinue={onContinue}
+      />,
+    );
+
+    const continueButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-reward-action="continue"]',
+    );
+    expect(continueButton?.disabled).toBe(true);
+
+    act(() => {
+      continueButton?.click();
+    });
+    expect(onContinue).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();

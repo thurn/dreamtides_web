@@ -89,10 +89,3 @@ export function sampleRewardCards(
   );
 }
 
-export function selectBattleRewards(
-  cardDatabase: ReadonlyMap<number, CardData>,
-  selectedPackageTides: readonly PackageTideId[] = [],
-  random: () => number = Math.random,
-): CardData[] {
-  return sampleRewardCards(cardDatabase, 4, selectedPackageTides, random);
-}

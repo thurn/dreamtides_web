@@ -56,7 +56,6 @@ function makeRawSnapshot(overrides: Record<string, unknown>) {
       startingSide: "player",
       playerDrawSkipsTurnOne: true,
       enableAi: false,
-      rewardOptions: [],
       questDeckEntries: [],
       playerDeckOrder: [],
       enemyDescriptor: {

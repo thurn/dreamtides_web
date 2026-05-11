@@ -69,7 +69,6 @@ const DESKTOP_INSPECTOR_WIDTH = 1280;
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
 type RewardOverlayState = {
   rewardSource: string;
-  selectedRewardIndex: number | null;
   locked: boolean;
 } | null;
 type ContextMenuState = {
@@ -164,7 +163,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const historyCount = reducerState.history.past.length;
   const futureCount = reducerState.history.future.length;
   const failureResult = selectFailureOverlayResult(reducerState.mutable.result);
-  const showRewardOverlay = reducerState.mutable.result === "victory" && rewardOverlay !== null;
   const showResultOverlay = reducerState.mutable.result !== null &&
     !isResultOverlayDismissed &&
     !isInteractionLocked;
@@ -270,7 +268,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     if (reducerState.mutable.result === "victory" && rewardOverlay === null) {
       setRewardOverlay({
         rewardSource: reducerState.lastTransition?.metadata.commandId ?? "battle_result",
-        selectedRewardIndex: null,
         locked: false,
       });
       setOpenZoneBrowser(null);
@@ -520,30 +517,19 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     });
   }
 
-  function handleChooseReward(index: number): void {
-    setRewardOverlay((current) => current === null
-      ? null
-      : { ...current, selectedRewardIndex: index });
-  }
-
-  function handleConfirmReward(selectedRewardIndex = rewardOverlay?.selectedRewardIndex ?? null): void {
-    if (rewardOverlay === null || selectedRewardIndex === null || rewardOverlay.locked) {
-      return;
-    }
-    const selectedRewardCard = battleInit.rewardOptions[selectedRewardIndex];
-    if (selectedRewardCard === undefined) {
+  function handleContinueReward(): void {
+    if (rewardOverlay === null || rewardOverlay.locked) {
       return;
     }
     setRewardOverlay((current) => current === null
       ? null
-      : { ...current, locked: true, selectedRewardIndex });
+      : { ...current, locked: true });
     completeBattleSiteVictory({
       battleId: battleInit.battleId,
       siteId: battleInit.siteId,
       dreamscapeId: battleInit.dreamscapeId,
       completionLevelAtBattleStart: battleInit.completionLevelAtStart,
       atlasSnapshot: battleInit.atlasSnapshot,
-      selectedRewardCard,
       essenceReward: battleInit.essenceReward,
       isMiniboss: battleInit.isMiniboss,
       isFinalBoss: battleInit.isFinalBoss,
@@ -1032,24 +1018,15 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             essenceReward={battleInit.essenceReward}
             enemyScore={reducerState.mutable.sides.enemy.score}
             playerScore={reducerState.mutable.sides.player.score}
-            rewardCards={battleInit.rewardOptions}
             rewardSource={rewardOverlay.rewardSource}
-            selectedRewardIndex={rewardOverlay.selectedRewardIndex}
             turnNumber={reducerState.mutable.turnNumber}
+            isLocked={rewardOverlay.locked}
             onCancel={() => setIsResultOverlayDismissed(true)}
-            onSelectReward={(index) => {
-              handleChooseReward(index);
-              handleConfirmReward(index);
-            }}
+            onContinue={handleContinueReward}
           />
         ) : (
           <BattleResultOverlay
             result={reducerState.mutable.result!}
-            rewardCards={showRewardOverlay ? battleInit.rewardOptions : undefined}
-            selectedRewardIndex={rewardOverlay?.selectedRewardIndex ?? null}
-            rewardLocked={rewardOverlay?.locked ?? false}
-            onChooseReward={handleChooseReward}
-            onConfirmReward={handleConfirmReward}
             onDismissInspect={() => setIsResultOverlayDismissed(true)}
             onReset={handleFailureReset}
           />

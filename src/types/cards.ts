@@ -39,10 +39,9 @@ export interface CardData {
 }
 
 /**
- * A `CardData` value whose top-level and `tides` array are frozen at runtime
- * (see `freezeCardData` in `create-battle-init.ts`). Used for surface
- * snapshots (`BattleInit.rewardOptions`) so consumers that receive a frozen
- * value get compile-time feedback if they try to mutate it (bug-030).
+ * A `CardData` value whose top-level and `tides` array are frozen at runtime.
+ * Consumers that receive a frozen value get compile-time feedback if they try
+ * to mutate it (bug-030).
  */
 export interface FrozenCardData extends Omit<CardData, "tides"> {
   readonly tides: readonly PackageTideId[];

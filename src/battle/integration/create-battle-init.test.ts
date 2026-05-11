@@ -61,15 +61,12 @@ describe("createBattleInit", () => {
   });
 
   describe("seed determinism (B-10)", () => {
-    it("same seed produces identical enemy descriptor, deck orders, and reward options", () => {
+    it("same seed produces identical enemy descriptor and deck orders", () => {
       const input = makeBaseInput();
       const first = createBattleInit(input);
       const second = createBattleInit(input);
 
       expect(first.enemyDescriptor).toEqual(second.enemyDescriptor);
-      expect(first.rewardOptions.map((card) => card.cardNumber)).toEqual(
-        second.rewardOptions.map((card) => card.cardNumber),
-      );
       expect(first.playerDeckOrder.map((card) => card.sourceDeckEntryId)).toEqual(
         second.playerDeckOrder.map((card) => card.sourceDeckEntryId),
       );
@@ -98,12 +95,9 @@ describe("createBattleInit", () => {
       const sameEnemyDeck =
         JSON.stringify(a.enemyDeckDefinition.map((c) => c.cardNumber)) ===
         JSON.stringify(b.enemyDeckDefinition.map((c) => c.cardNumber));
-      const sameRewards =
-        JSON.stringify(a.rewardOptions.map((c) => c.cardNumber)) ===
-        JSON.stringify(b.rewardOptions.map((c) => c.cardNumber));
 
       expect(
-        sameEnemyDescriptor && samePlayerDeckOrder && sameEnemyDeck && sameRewards,
+        sameEnemyDescriptor && samePlayerDeckOrder && sameEnemyDeck,
       ).toBe(false);
     });
   });
@@ -209,22 +203,6 @@ describe("createBattleInit", () => {
       expect(finalInit.isFinalBoss).toBe(true);
       expect(ordinaryInit.isMiniboss).toBe(false);
       expect(ordinaryInit.isFinalBoss).toBe(false);
-    });
-  });
-
-  describe("rewardOptions", () => {
-    it("always returns exactly 4 reward options", () => {
-      const init = createBattleInit(makeBaseInput());
-      expect(init.rewardOptions).toHaveLength(4);
-    });
-
-    it("freezes the reward options array and each contained card", () => {
-      const init = createBattleInit(makeBaseInput());
-      expect(Object.isFrozen(init.rewardOptions)).toBe(true);
-      for (const card of init.rewardOptions) {
-        expect(Object.isFrozen(card)).toBe(true);
-        expect(Object.isFrozen(card.tides)).toBe(true);
-      }
     });
   });
 

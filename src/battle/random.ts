@@ -2,7 +2,6 @@ const HASH_OFFSET_BASIS = 2166136261;
 const HASH_PRIME = 16777619;
 
 export const BATTLE_RNG_STREAMS = [
-  "reward",
   "enemyDescriptor",
   "enemyDeckOrder",
   "playerDeckOrder",
@@ -58,7 +57,6 @@ export function createBattleRngStreams(
   seed: number,
 ): Record<BattleRngStreamName, BattleRng> {
   return {
-    reward: createBattleRng(seed, "reward"),
     enemyDescriptor: createBattleRng(seed, "enemyDescriptor"),
     enemyDeckOrder: createBattleRng(seed, "enemyDeckOrder"),
     playerDeckOrder: createBattleRng(seed, "playerDeckOrder"),

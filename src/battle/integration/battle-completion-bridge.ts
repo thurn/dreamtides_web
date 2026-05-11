@@ -1,7 +1,6 @@
 import { generateNewNodes } from "../../atlas/atlas-generator";
 import { logEvent } from "../../logging";
 import type { QuestMutations } from "../../state/quest-context";
-import type { CardData, FrozenCardData } from "../../types/cards";
 import type { DreamAtlas } from "../../types/quest";
 
 /**
@@ -29,14 +28,12 @@ export interface CompleteBattleSiteVictoryInput {
   dreamscapeId: string | null;
   completionLevelAtBattleStart: number;
   atlasSnapshot: DreamAtlas;
-  selectedRewardCard: CardData | FrozenCardData;
   essenceReward: number;
   isMiniboss: boolean;
   isFinalBoss: boolean;
   playerHasBanes: boolean;
   mutations: Pick<
     QuestMutations,
-    | "addCard"
     | "changeEssence"
     | "incrementCompletionLevel"
     | "markSiteVisited"
@@ -57,7 +54,6 @@ export function completeBattleSiteVictory(
     dreamscapeId,
     completionLevelAtBattleStart,
     atlasSnapshot,
-    selectedRewardCard,
     essenceReward,
     isMiniboss,
     isFinalBoss,
@@ -88,12 +84,11 @@ export function completeBattleSiteVictory(
     battleId,
     siteId,
   });
-  mutations.addCard(selectedRewardCard.cardNumber, "battle_reward");
   mutations.markSiteVisited(siteId);
   mutations.incrementCompletionLevel(
     essenceReward,
-    selectedRewardCard.cardNumber,
-    selectedRewardCard.name,
+    null,
+    null,
     isMiniboss,
   );
   logEvent("battle_proto_completion_applied", {
@@ -104,14 +99,12 @@ export function completeBattleSiteVictory(
     essenceReward,
     isFinalBoss,
     isMiniboss,
-    rewardCardName: selectedRewardCard.name,
-    rewardCardNumber: selectedRewardCard.cardNumber,
     siteId,
   });
 
   logEvent("site_completed", {
     siteType: "Battle",
-    outcome: `Victory - earned ${String(essenceReward)} essence, card #${String(selectedRewardCard.cardNumber)}`,
+    outcome: `Victory - earned ${String(essenceReward)} essence`,
   });
 
   const completeQuestHandoff = () => {

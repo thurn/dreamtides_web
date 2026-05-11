@@ -1,5 +1,4 @@
-import { selectBattleRewards } from "../../data/tide-weights";
-import type { CardData, FrozenCardData } from "../../types/cards";
+import type { CardData } from "../../types/cards";
 import type { DreamcallerContent, PackageTideId } from "../../types/content";
 import type { QuestState, SiteState } from "../../types/quest";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
@@ -71,11 +70,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   } = input;
   const seed = resolveSeed(battleEntryKey, seedOverride);
   const streams = createBattleRngStreams(seed);
-  const rewardOptions = selectBattleRewards(
-    cardDatabase,
-    state.resolvedPackage?.selectedTides ?? [],
-    streams.reward.nextFloat,
-  ).map(freezeCardData);
   const questDeckEntries: readonly BattleQuestDeckEntry[] = Object.freeze(
     state.deck.map((entry) => Object.freeze({
       entryId: entry.entryId,
@@ -135,7 +129,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     startingSide,
     playerDrawSkipsTurnOne,
     enableAi,
-    rewardOptions: Object.freeze(rewardOptions),
     questDeckEntries,
     playerDeckOrder: Object.freeze(playerDeckOrder),
     enemyDescriptor,
@@ -438,13 +431,6 @@ function freezeBattleDeckCardDefinition(
     ...definition,
     tides: Object.freeze([...definition.tides]),
   });
-}
-
-function freezeCardData(card: CardData): FrozenCardData {
-  return Object.freeze({
-    ...card,
-    tides: Object.freeze([...card.tides]),
-  }) as FrozenCardData;
 }
 
 function freezeBattleEnemyDescriptor(
