@@ -600,4 +600,191 @@ describe("ShopScreen", () => {
       root.unmount();
     });
   });
+
+  describe("card offer hover preview", () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("portals a full card preview when a card offer row is hovered after the 300ms delay", () => {
+      setQuestContext(
+        makeState([
+          {
+            itemType: "card",
+            cardNumber: 1,
+            basePrice: 100,
+            discountPercent: 0,
+            purchased: false,
+          },
+        ]),
+      );
+
+      const { container, root } = mount(
+        <ShopScreen
+          site={{
+            id: "shop-1",
+            type: "Shop",
+            isEnhanced: false,
+            isVisited: false,
+          }}
+        />,
+      );
+
+      // No portaled card preview before hover.
+      expect(
+        document.body.querySelectorAll(
+          "[data-testid='shop-offer-hover-card-0']",
+        ),
+      ).toHaveLength(0);
+
+      const trigger = container.querySelector<HTMLElement>(
+        "[data-testid='shop-offer-row-0']",
+      );
+      expect(trigger).not.toBeNull();
+
+      act(() => {
+        trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      });
+
+      // The popover only appears after the configured 300ms delay.
+      expect(
+        document.body.querySelectorAll(
+          "[data-testid='shop-offer-hover-card-0']",
+        ),
+      ).toHaveLength(0);
+
+      act(() => {
+        vi.advanceTimersByTime(350);
+      });
+
+      expect(
+        document.body.querySelector("[data-testid='shop-offer-hover-card-0']"),
+      ).not.toBeNull();
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("hides the shop offer preview cleanly on mouse-out", () => {
+      setQuestContext(
+        makeState([
+          {
+            itemType: "card",
+            cardNumber: 1,
+            basePrice: 100,
+            discountPercent: 0,
+            purchased: false,
+          },
+        ]),
+      );
+
+      const { container, root } = mount(
+        <ShopScreen
+          site={{
+            id: "shop-1",
+            type: "Shop",
+            isEnhanced: false,
+            isVisited: false,
+          }}
+        />,
+      );
+
+      const trigger = container.querySelector<HTMLElement>(
+        "[data-testid='shop-offer-row-0']",
+      );
+      expect(trigger).not.toBeNull();
+
+      act(() => {
+        trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+      });
+      act(() => {
+        vi.advanceTimersByTime(350);
+      });
+
+      expect(
+        document.body.querySelector("[data-testid='shop-offer-hover-card-0']"),
+      ).not.toBeNull();
+
+      act(() => {
+        trigger?.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+      });
+
+      expect(
+        document.body.querySelectorAll(
+          "[data-testid='shop-offer-hover-card-0']",
+        ),
+      ).toHaveLength(0);
+
+      act(() => {
+        root.unmount();
+      });
+    });
+
+    it("opens the shop offer preview when the offer's focusable surface receives keyboard focus", () => {
+      setQuestContext(
+        makeState([
+          {
+            itemType: "card",
+            cardNumber: 1,
+            basePrice: 100,
+            discountPercent: 0,
+            purchased: false,
+          },
+        ]),
+      );
+
+      const { container, root } = mount(
+        <ShopScreen
+          site={{
+            id: "shop-1",
+            type: "Shop",
+            isEnhanced: false,
+            isVisited: false,
+          }}
+        />,
+      );
+
+      const focusTarget = container.querySelector<HTMLElement>(
+        "[data-testid='shop-offer-row-0']",
+      );
+      expect(focusTarget).not.toBeNull();
+      if (!(focusTarget instanceof HTMLElement)) {
+        throw new Error("Expected shop offer row to be an HTMLElement");
+      }
+
+      // The focusable surface must be reachable by keyboard so screen-reader
+      // and keyboard-only users can reveal the preview without a pointer.
+      expect(focusTarget.tabIndex).toBe(0);
+
+      act(() => {
+        focusTarget.focus();
+      });
+      act(() => {
+        vi.advanceTimersByTime(350);
+      });
+
+      expect(
+        document.body.querySelector("[data-testid='shop-offer-hover-card-0']"),
+      ).not.toBeNull();
+
+      act(() => {
+        focusTarget.blur();
+      });
+
+      expect(
+        document.body.querySelectorAll(
+          "[data-testid='shop-offer-hover-card-0']",
+        ),
+      ).toHaveLength(0);
+
+      act(() => {
+        root.unmount();
+      });
+    });
+  });
 });

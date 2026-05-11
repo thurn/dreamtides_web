@@ -5,8 +5,23 @@ import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
 import { DreamsignArtTile } from "../components/DreamsignArtTile";
+import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
 import { SIZE_PRESETS } from "../components/card-size";
+
+/**
+ * Hover delay before the floating card preview portals in. Matches the
+ * 300ms cadence used by the draft-screen deck-row preview so the same
+ * hand-feel is shared across screens.
+ */
+const SHOP_OFFER_HOVER_DELAY_MS = 300;
+
+/**
+ * Width of the floating card preview rendered above (or beside) the shop
+ * offer tile. Sized to read full card art and rules text comfortably,
+ * matching the deck-row preview on the draft screen.
+ */
+const SHOP_OFFER_HOVER_CARD_WIDTH_PX = 240;
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import {
@@ -346,12 +361,32 @@ function ShopSlotCard({
 
   // Card slot
   if (slot.card) {
+    const card = slot.card;
     return (
       <div className="flex flex-col gap-2">
-        <CardDisplay
-          card={slot.card}
-          onClick={() => onCardClick(slot.card!)}
-        />
+        <HoverPopover
+          triggerAs="div"
+          placement="top"
+          delayMs={SHOP_OFFER_HOVER_DELAY_MS}
+          maxWidthPx={null}
+          content={
+            <div
+              data-testid={`shop-offer-hover-card-${String(index)}`}
+              style={{ width: SHOP_OFFER_HOVER_CARD_WIDTH_PX }}
+            >
+              <CardDisplay card={card} />
+            </div>
+          }
+        >
+          <div
+            data-testid={`shop-offer-row-${String(index)}`}
+            tabIndex={0}
+            aria-label={`Shop offer: ${card.name}`}
+            className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+          >
+            <CardDisplay card={card} onClick={() => onCardClick(card)} />
+          </div>
+        </HoverPopover>
         <PriceButton
           price={price}
           canAfford={canAfford}

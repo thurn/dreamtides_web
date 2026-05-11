@@ -106,6 +106,24 @@ export function HoverPopover({
         transform: "translate(-100%, -50%)",
       };
     }
+    // "top" placement: anchor above the trigger. When the trigger is so
+    // close to the viewport top that the popover would clip off-screen,
+    // flip to anchor below the trigger instead. This keeps the preview
+    // visible for grid cells in the top row of a screen (e.g. the shop).
+    const viewportHeight =
+      typeof window === "undefined" ? 0 : window.innerHeight;
+    const estimatedPopoverHeight = trigger.offsetHeight * 1.5;
+    const spaceAbove = rect.top;
+    const spaceBelow = viewportHeight - rect.bottom;
+    const flipToBottom =
+      spaceAbove < estimatedPopoverHeight && spaceBelow > spaceAbove;
+    if (flipToBottom) {
+      return {
+        left: rect.left + rect.width / 2,
+        top: rect.bottom + POPOVER_GAP_PX,
+        transform: "translate(-50%, 0)",
+      };
+    }
     return {
       left: rect.left + rect.width / 2,
       top: rect.top - POPOVER_GAP_PX,
