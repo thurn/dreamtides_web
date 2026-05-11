@@ -13,3 +13,4 @@ logs/
 .env.*.local
 .firebase
 .claude/scheduled_tasks.lock
+.DS_Store
