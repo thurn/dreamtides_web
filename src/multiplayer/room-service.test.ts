@@ -408,6 +408,108 @@ describe("room service", () => {
     ]);
   });
 
+  it("reconstructs a Dreamsign on reward runtimes that round-tripped through the legacy flat shape", () => {
+    const listener = vi.fn();
+    const strippedQuestState = {
+      ...createDefaultState(),
+      siteRuntime: {
+        "site-1": {
+          kind: "reward",
+          // Pre-restructure reward shape: flat dreamsign fields and no
+          // `dreamsign` object. The normalizer must rebuild a Dreamsign.
+          reward: {
+            rewardType: "dreamsign",
+            dreamsignId: "ds-legacy",
+            dreamsignName: "Legacy Sign",
+            dreamsignEffect: "Boost something.",
+          },
+          remainingDreamsignPoolIds: [],
+          // RTDB strips the `accepted: false` boolean default.
+        },
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    const runtime = ready.room.questState?.siteRuntime["site-1"];
+    expect(runtime?.kind).toBe("reward");
+    if (runtime?.kind !== "reward") {
+      throw new Error("expected reward runtime");
+    }
+    expect(runtime.reward).toEqual({
+      rewardType: "dreamsign",
+      dreamsign: {
+        id: "ds-legacy",
+        name: "Legacy Sign",
+        effectDescription: "Boost something.",
+        imageName: "",
+        imageAlt: "",
+        isBane: false,
+      },
+    });
+  });
+
+  it("restores isBane:false on reward runtimes whose Dreamsign was RTDB-stripped", () => {
+    const listener = vi.fn();
+    const strippedQuestState = {
+      ...createDefaultState(),
+      siteRuntime: {
+        "site-2": {
+          kind: "reward",
+          reward: {
+            rewardType: "dreamsign",
+            dreamsign: {
+              id: "ds-1",
+              name: "Tidewalker",
+              effectDescription: "Tides do something.",
+              imageName: "tidewalker.png",
+              imageAlt: "A wave",
+              // isBane: false was stripped by RTDB.
+            },
+          },
+          remainingDreamsignPoolIds: [],
+          accepted: false,
+        },
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    const runtime = ready.room.questState?.siteRuntime["site-2"];
+    if (runtime?.kind !== "reward") {
+      throw new Error("expected reward runtime");
+    }
+    if (runtime.reward.rewardType !== "dreamsign") {
+      throw new Error("expected dreamsign reward");
+    }
+    expect(runtime.reward.dreamsign).toEqual({
+      id: "ds-1",
+      name: "Tidewalker",
+      effectDescription: "Tides do something.",
+      imageName: "tidewalker.png",
+      imageAlt: "A wave",
+      isBane: false,
+    });
+  });
+
   it("strips unrecognized awakening field from rehydrated dreamcaller and resolved package", () => {
     const listener = vi.fn();
     const strippedQuestState = {

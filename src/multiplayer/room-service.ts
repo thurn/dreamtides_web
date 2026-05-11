@@ -31,8 +31,11 @@ import type {
   DeckEntry,
   Dreamcaller,
   DreamAtlas,
+  Dreamsign,
   DreamscapeNode,
   QuestState,
+  RewardSiteRuntime,
+  SiteRuntimeState,
 } from "../types/quest";
 
 export type RoomSubscriptionSnapshot =
@@ -165,6 +168,78 @@ function normalizeResolvedPackage(
   };
 }
 
+/**
+ * Build a valid `Dreamsign` for a reward runtime, reconstructing the record
+ * for snapshots written before reward runtimes carried the full `Dreamsign`
+ * object and coercing `isBane` to `false` when RTDB stripped a stored `false`.
+ *
+ * Pre-restructure reward snapshots stored only `dreamsignId`/`dreamsignName`/
+ * `dreamsignEffect`; this helper reconstructs the matching `Dreamsign`
+ * shape with conservative defaults so `DreamsignArtTile` can render its glyph
+ * fallback and the reward screen never crashes on undefined fields.
+ */
+function normalizeRewardDreamsign(
+  reward: Record<string, unknown>,
+): Dreamsign {
+  const candidate = reward.dreamsign as Partial<Dreamsign> | undefined;
+  if (candidate && typeof candidate === "object") {
+    return {
+      ...candidate,
+      name: candidate.name ?? "Unknown Dreamsign",
+      effectDescription: candidate.effectDescription ?? "",
+      isBane: candidate.isBane ?? false,
+    } as Dreamsign;
+  }
+  const legacyId = reward.dreamsignId;
+  const legacyName = reward.dreamsignName;
+  const legacyEffect = reward.dreamsignEffect;
+  return {
+    id: typeof legacyId === "string" ? legacyId : "unknown",
+    name: typeof legacyName === "string" ? legacyName : "Unknown Dreamsign",
+    effectDescription: typeof legacyEffect === "string" ? legacyEffect : "",
+    imageName: "",
+    imageAlt: "",
+    isBane: false,
+  };
+}
+
+/**
+ * Normalize one entry of `siteRuntime`. The reward branch reconstructs the
+ * `Dreamsign` object on dreamsign rewards so legacy snapshots (which stored
+ * flat `dreamsignId`/`dreamsignName`/`dreamsignEffect` fields) round-trip
+ * into the current shape. All other branches are passed through unchanged.
+ */
+function normalizeSiteRuntimeEntry(
+  entry: SiteRuntimeState,
+): SiteRuntimeState {
+  if (entry.kind !== "reward") {
+    return entry;
+  }
+  const reward = entry.reward as RewardSiteRuntime["reward"] &
+    Record<string, unknown>;
+  if (reward.rewardType !== "dreamsign") {
+    return entry;
+  }
+  const dreamsign = normalizeRewardDreamsign(reward);
+  return {
+    ...entry,
+    reward: { rewardType: "dreamsign", dreamsign },
+  };
+}
+
+function normalizeSiteRuntime(
+  siteRuntime: Record<string, SiteRuntimeState> | undefined,
+): Record<string, SiteRuntimeState> {
+  if (siteRuntime === undefined) {
+    return {};
+  }
+  const normalized: Record<string, SiteRuntimeState> = {};
+  for (const [id, entry] of Object.entries(siteRuntime)) {
+    normalized[id] = normalizeSiteRuntimeEntry(entry);
+  }
+  return normalized;
+}
+
 function normalizeQuestState(questState: QuestState | null | undefined): QuestState | null {
   if (questState === null || questState === undefined) {
     return null;
@@ -183,7 +258,7 @@ function normalizeQuestState(questState: QuestState | null | undefined): QuestSt
     atlas: normalizeAtlas(questState.atlas),
     currentDreamscape: questState.currentDreamscape ?? null,
     visitedSites: questState.visitedSites ?? defaults.visitedSites,
-    siteRuntime: questState.siteRuntime ?? defaults.siteRuntime,
+    siteRuntime: normalizeSiteRuntime(questState.siteRuntime),
     draftState: normalizeDraftState(questState.draftState),
     screen: questState.screen ?? defaults.screen,
     activeSiteId: questState.activeSiteId ?? null,
