@@ -5,7 +5,11 @@ import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
 import { DreamsignArtTile } from "../components/DreamsignArtTile";
-import { HoverPopover } from "../components/HoverPopover";
+import {
+  CARD_HOVER_PREVIEW_DELAY_MS,
+  CARD_HOVER_PREVIEW_WIDTH_PX,
+  HoverPopover,
+} from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
 import { SIZE_PRESETS } from "../components/card-size";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
@@ -16,20 +20,6 @@ import {
   runtimeSlotsToShopSlots,
   type ShopSlot,
 } from "../shop/shop-generator";
-
-/**
- * Hover delay before the floating card preview portals in. Matches the
- * 300ms cadence used by the draft-screen deck-row preview so the same
- * hand-feel is shared across screens.
- */
-const SHOP_OFFER_HOVER_DELAY_MS = 300;
-
-/**
- * Width of the floating card preview rendered above (or beside) the shop
- * offer tile. Sized to read full card art and rules text comfortably,
- * matching the deck-row preview on the draft screen.
- */
-const SHOP_OFFER_HOVER_CARD_WIDTH_PX = 240;
 
 /** Props for the ShopScreen component. */
 interface ShopScreenProps {
@@ -367,12 +357,12 @@ function ShopSlotCard({
         <HoverPopover
           triggerAs="div"
           placement="top"
-          delayMs={SHOP_OFFER_HOVER_DELAY_MS}
+          delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
           maxWidthPx={null}
           content={
             <div
               data-testid={`shop-offer-hover-card-${String(index)}`}
-              style={{ width: SHOP_OFFER_HOVER_CARD_WIDTH_PX }}
+              style={{ width: CARD_HOVER_PREVIEW_WIDTH_PX }}
             >
               <CardDisplay card={card} />
             </div>

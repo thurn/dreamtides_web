@@ -68,6 +68,23 @@ const DEFAULT_DELAY_MS = 500;
 const POPOVER_GAP_PX = 8;
 const POPOVER_DEFAULT_MAX_WIDTH_PX = 260;
 
+/**
+ * Shared delay (ms) before a full-card preview portals in over a compact
+ * card row. Used by the draft deck panel, shop offers, dreamsign offerings,
+ * and the deck viewer so the hand-feel is identical across screens.
+ *
+ * Tighter than the glossary-tooltip default (500ms) because players are
+ * scanning a compact list and want quick previews while moving down a rail.
+ */
+export const CARD_HOVER_PREVIEW_DELAY_MS = 300;
+
+/**
+ * Shared width (px) of the floating card preview rendered above (or beside)
+ * a compact card row. Sized to read full card art and rules text
+ * comfortably; matches the width of a draft card.
+ */
+export const CARD_HOVER_PREVIEW_WIDTH_PX = 240;
+
 export function HoverPopover({
   children,
   content,

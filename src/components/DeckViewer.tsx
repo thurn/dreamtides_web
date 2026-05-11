@@ -10,6 +10,11 @@ import { CardDisplay } from "./CardDisplay";
 import { CardOverlay } from "./CardOverlay";
 import { DreamsignArtTile } from "./DreamsignArtTile";
 import {
+  CARD_HOVER_PREVIEW_DELAY_MS,
+  CARD_HOVER_PREVIEW_WIDTH_PX,
+  HoverPopover,
+} from "./HoverPopover";
+import {
   getPersistedCardSize,
   persistCardSize,
   SIZE_PRESETS,
@@ -517,56 +522,24 @@ export function DeckViewer({
                     gap: SIZE_PRESETS[cardSize].gap,
                   }}
                 >
-                  {sortedEntries.map((resolved) => (
-                    <div
-                      key={resolved.entry.entryId}
-                      className="relative"
-                    >
-                      {/* Transfiguration indicator */}
-                      {resolved.entry.transfiguration !== null && (
-                        <div
-                          className="absolute -top-1 -right-1 z-10 rounded-full px-1.5 py-0.5 text-[9px] font-bold shadow-md"
-                          style={{
-                            background:
-                              TRANSFIGURATION_COLORS[
-                                resolved.entry.transfiguration
-                              ],
-                            color: "#fff",
-                            boxShadow: `0 0 6px ${TRANSFIGURATION_COLORS[resolved.entry.transfiguration]}80`,
-                          }}
-                        >
-                          {resolved.entry.transfiguration}
-                        </div>
-                      )}
-                      {/* Bane indicator */}
-                      {resolved.entry.isBane && (
-                        <div
-                          className="absolute -top-1 -left-1 z-10 flex h-5 w-5 items-center justify-center rounded-full text-[10px] shadow-md"
-                          style={{
-                            background: "#7f1d1d",
-                            border: "1px solid #ef4444",
-                            color: "#fca5a5",
-                          }}
-                          title="Bane"
-                        >
-                          {"\u2620"}
-                        </div>
-                      )}
+                  {sortedEntries.map((resolved) => {
+                    const cardTileBorderStyle =
+                      resolved.entry.transfiguration !== null
+                        ? {
+                            boxShadow: `0 0 8px ${TRANSFIGURATION_COLORS[resolved.entry.transfiguration]}40`,
+                            borderRadius: "0.5rem",
+                          }
+                        : resolved.entry.isBane
+                          ? {
+                              boxShadow:
+                                "0 0 8px rgba(239, 68, 68, 0.3)",
+                              borderRadius: "0.5rem",
+                            }
+                          : undefined;
+                    const cardTile = (
                       <div
-                        style={
-                          resolved.entry.transfiguration !== null
-                            ? {
-                                boxShadow: `0 0 8px ${TRANSFIGURATION_COLORS[resolved.entry.transfiguration]}40`,
-                                borderRadius: "0.5rem",
-                              }
-                            : resolved.entry.isBane
-                              ? {
-                                  boxShadow:
-                                    "0 0 8px rgba(239, 68, 68, 0.3)",
-                                  borderRadius: "0.5rem",
-                                }
-                              : undefined
-                        }
+                        data-testid={`deck-viewer-row-${resolved.entry.entryId}`}
+                        style={cardTileBorderStyle}
                       >
                         <CardDisplay
                           card={resolved.card}
@@ -576,8 +549,72 @@ export function DeckViewer({
                           }}
                         />
                       </div>
-                    </div>
-                  ))}
+                    );
+                    // Skip the hover preview at large size: the in-grid card
+                    // is already wide enough to read its full art and rules
+                    // text, so the popup would duplicate what's already on
+                    // screen. Small and medium tiles are compressed and
+                    // benefit from a floating full-size preview.
+                    const wrappedCardTile =
+                      cardSize === "large" ? (
+                        cardTile
+                      ) : (
+                        <HoverPopover
+                          triggerAs="div"
+                          placement="top"
+                          delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
+                          maxWidthPx={null}
+                          content={
+                            <div
+                              data-testid={`deck-viewer-row-hover-card-${resolved.entry.entryId}`}
+                              style={{ width: CARD_HOVER_PREVIEW_WIDTH_PX }}
+                            >
+                              <CardDisplay card={resolved.card} />
+                            </div>
+                          }
+                        >
+                          {cardTile}
+                        </HoverPopover>
+                      );
+                    return (
+                      <div
+                        key={resolved.entry.entryId}
+                        className="relative"
+                      >
+                        {/* Transfiguration indicator */}
+                        {resolved.entry.transfiguration !== null && (
+                          <div
+                            className="absolute -top-1 -right-1 z-10 rounded-full px-1.5 py-0.5 text-[9px] font-bold shadow-md"
+                            style={{
+                              background:
+                                TRANSFIGURATION_COLORS[
+                                  resolved.entry.transfiguration
+                                ],
+                              color: "#fff",
+                              boxShadow: `0 0 6px ${TRANSFIGURATION_COLORS[resolved.entry.transfiguration]}80`,
+                            }}
+                          >
+                            {resolved.entry.transfiguration}
+                          </div>
+                        )}
+                        {/* Bane indicator */}
+                        {resolved.entry.isBane && (
+                          <div
+                            className="absolute -top-1 -left-1 z-10 flex h-5 w-5 items-center justify-center rounded-full text-[10px] shadow-md"
+                            style={{
+                              background: "#7f1d1d",
+                              border: "1px solid #ef4444",
+                              color: "#fca5a5",
+                            }}
+                            title="Bane"
+                          >
+                            {"\u2620"}
+                          </div>
+                        )}
+                        {wrappedCardTile}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>

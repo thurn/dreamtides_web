@@ -59,7 +59,23 @@ vi.mock("../logging", () => ({
 }));
 
 vi.mock("./CardDisplay", () => ({
-  CardDisplay: ({ card }: { card: CardData }) => <div>{card.name}</div>,
+  // CardDisplay in production renders a focusable button when `onClick` is
+  // wired. The mock mirrors that so HoverPopover's `onFocus` / `onBlur`
+  // handlers can fire via the usual React event-bubbling path.
+  CardDisplay: ({
+    card,
+    onClick,
+  }: {
+    card: CardData;
+    onClick?: () => void;
+  }) =>
+    onClick ? (
+      <button type="button" onClick={onClick}>
+        {card.name}
+      </button>
+    ) : (
+      <div>{card.name}</div>
+    ),
 }));
 
 vi.mock("./CardOverlay", () => ({
@@ -191,6 +207,7 @@ function mount(element: ReactElement): {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.useFakeTimers();
   (
     globalThis as typeof globalThis & {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
@@ -200,6 +217,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   document.body.innerHTML = "";
 });
 
@@ -225,6 +243,66 @@ function makeStateWithArtSigns(): QuestState {
       },
     ],
   };
+}
+
+function makeStateWithFullDeck(): QuestState {
+  return {
+    ...makeState(),
+    deck: [
+      {
+        entryId: "entry-1",
+        cardNumber: 1,
+        transfiguration: null,
+        isBane: false,
+      },
+    ],
+  };
+}
+
+function makeFullCardDatabase(): Map<number, CardData> {
+  return new Map<number, CardData>([
+    [
+      1,
+      {
+        name: "Archive Sentry",
+        id: "archive-sentry",
+        cardNumber: 1,
+        cardType: "Character",
+        subtype: "",
+        isStarter: false,
+        energyCost: 3,
+        spark: 1,
+        isFast: false,
+        tides: ["package"],
+        renderedText: "Hold the line.",
+        imageNumber: 1,
+        artOwned: true,
+      },
+    ],
+  ]);
+}
+
+function mountWithFullDeck(initialSize: "small" | "medium" | "large") {
+  vi.mocked(useQuest).mockReturnValue({
+    state: makeStateWithFullDeck(),
+    mutations: makeMutations(),
+    cardDatabase: makeFullCardDatabase(),
+    questContent: {
+      cardDatabase: new Map(),
+      cardsByPackageTide: new Map(),
+      dreamcallers: [],
+      dreamsignTemplates: [],
+      resolvedPackagesByDreamcallerId: new Map(),
+    },
+  });
+  return mount(
+    <DeckViewer
+      isOpen
+      onClose={vi.fn()}
+      cardDatabase={makeFullCardDatabase()}
+      initialSize={initialSize}
+    />,
+  );
 }
 
 describe("DeckViewer", () => {
@@ -316,6 +394,162 @@ describe("DeckViewer", () => {
     expect(container.querySelector('img[alt="tide_alpha"]')).toBeNull();
     expect(container.querySelector('img[alt="tide_beta"]')).toBeNull();
     expect(container.querySelector('img[alt="tide_gamma"]')).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("portals a full card preview when a deck card is hovered at small size", () => {
+    const { container, root } = mountWithFullDeck("small");
+
+    // No portaled preview exists before hover.
+    expect(
+      document.body.querySelectorAll(
+        "[data-testid='deck-viewer-row-hover-card-entry-1']",
+      ),
+    ).toHaveLength(0);
+
+    const row = container.querySelector(
+      "[data-testid='deck-viewer-row-entry-1']",
+    );
+    expect(row).not.toBeNull();
+    const trigger = row?.parentElement;
+    expect(trigger).not.toBeNull();
+
+    act(() => {
+      trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+
+    // Popover only appears after the configured 300ms delay.
+    expect(
+      document.body.querySelectorAll(
+        "[data-testid='deck-viewer-row-hover-card-entry-1']",
+      ),
+    ).toHaveLength(0);
+
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
+
+    expect(
+      document.body.querySelector(
+        "[data-testid='deck-viewer-row-hover-card-entry-1']",
+      ),
+    ).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("hides the deck-card preview cleanly on mouse-out", () => {
+    const { container, root } = mountWithFullDeck("small");
+
+    const row = container.querySelector(
+      "[data-testid='deck-viewer-row-entry-1']",
+    );
+    const trigger = row?.parentElement;
+
+    act(() => {
+      trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
+
+    expect(
+      document.body.querySelector(
+        "[data-testid='deck-viewer-row-hover-card-entry-1']",
+      ),
+    ).not.toBeNull();
+
+    act(() => {
+      trigger?.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+    });
+
+    expect(
+      document.body.querySelectorAll(
+        "[data-testid='deck-viewer-row-hover-card-entry-1']",
+      ),
+    ).toHaveLength(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("opens the deck-card preview when the row receives keyboard focus", () => {
+    const { container, root } = mountWithFullDeck("small");
+
+    const row = container.querySelector(
+      "[data-testid='deck-viewer-row-entry-1']",
+    );
+    expect(row).not.toBeNull();
+    if (!(row instanceof HTMLElement)) {
+      throw new Error("Expected deck row to be an HTMLElement");
+    }
+
+    // The CardDisplay inside the row is a focusable button. Focusing it
+    // bubbles to the HoverPopover trigger wrapper through React's focus
+    // event delegation, opening the preview for keyboard users.
+    const focusTarget = row.querySelector("button");
+    expect(focusTarget).not.toBeNull();
+    if (!(focusTarget instanceof HTMLElement)) {
+      throw new Error("Expected an inner focusable element");
+    }
+
+    act(() => {
+      focusTarget.focus();
+    });
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
+
+    expect(
+      document.body.querySelector(
+        "[data-testid='deck-viewer-row-hover-card-entry-1']",
+      ),
+    ).not.toBeNull();
+
+    act(() => {
+      focusTarget.blur();
+    });
+
+    expect(
+      document.body.querySelectorAll(
+        "[data-testid='deck-viewer-row-hover-card-entry-1']",
+      ),
+    ).toHaveLength(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("skips the hover preview at large size where the card already reads at full legibility", () => {
+    const { container, root } = mountWithFullDeck("large");
+
+    const row = container.querySelector(
+      "[data-testid='deck-viewer-row-entry-1']",
+    );
+    expect(row).not.toBeNull();
+
+    // Large-size cards have no hover-popover wrapper, so hovering them never
+    // produces a portaled preview.
+    const trigger = row?.parentElement;
+    act(() => {
+      trigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+
+    expect(
+      document.body.querySelectorAll(
+        "[data-testid='deck-viewer-row-hover-card-entry-1']",
+      ),
+    ).toHaveLength(0);
 
     act(() => {
       root.unmount();

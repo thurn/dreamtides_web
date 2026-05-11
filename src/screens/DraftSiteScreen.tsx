@@ -3,7 +3,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
-import { HoverPopover } from "../components/HoverPopover";
+import {
+  CARD_HOVER_PREVIEW_DELAY_MS,
+  CARD_HOVER_PREVIEW_WIDTH_PX,
+  HoverPopover,
+} from "../components/HoverPopover";
 import { PipBadge } from "../components/PipBadge";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
@@ -21,18 +25,6 @@ import { logEvent } from "../logging";
 const NEXT_PACK_DELAY = 500;
 const DECK_FLY_DURATION = 0.45;
 const DECK_HIGHLIGHT_DURATION = 900;
-/**
- * Delay before showing the hover-card preview on a deck row. Tighter than
- * the glossary-tooltip default (500ms) because players are scanning a
- * compact list and want quick previews while moving down the rail.
- */
-const DECK_ROW_HOVER_DELAY_MS = 300;
-/**
- * Width (px) of the card preview portaled by deck-row hover. Roughly the
- * width of the draft cards themselves so players see the same render they
- * would after picking.
- */
-const DECK_ROW_HOVER_CARD_WIDTH_PX = 240;
 
 /** Animation phases during a pick. */
 type PickPhase = "idle" | "animating" | "waiting";
@@ -264,12 +256,12 @@ function DeckSidebar({
             <HoverPopover
               triggerAs="div"
               placement="left"
-              delayMs={DECK_ROW_HOVER_DELAY_MS}
+              delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
               maxWidthPx={null}
               content={
                 <div
                   data-testid={hoverTestId}
-                  style={{ width: DECK_ROW_HOVER_CARD_WIDTH_PX }}
+                  style={{ width: CARD_HOVER_PREVIEW_WIDTH_PX }}
                 >
                   <CardDisplay card={card} />
                 </div>
