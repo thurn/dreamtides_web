@@ -8,6 +8,14 @@ import { DreamsignArtTile } from "../components/DreamsignArtTile";
 import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
 import { SIZE_PRESETS } from "../components/card-size";
+import { buildCardSourceDebugState } from "../debug/card-source-debug";
+import { useQuest } from "../state/quest-context";
+import {
+  effectivePrice,
+  rerollCost,
+  runtimeSlotsToShopSlots,
+  type ShopSlot,
+} from "../shop/shop-generator";
 
 /**
  * Hover delay before the floating card preview portals in. Matches the
@@ -22,14 +30,6 @@ const SHOP_OFFER_HOVER_DELAY_MS = 300;
  * matching the deck-row preview on the draft screen.
  */
 const SHOP_OFFER_HOVER_CARD_WIDTH_PX = 240;
-import { buildCardSourceDebugState } from "../debug/card-source-debug";
-import { useQuest } from "../state/quest-context";
-import {
-  effectivePrice,
-  rerollCost,
-  runtimeSlotsToShopSlots,
-  type ShopSlot,
-} from "../shop/shop-generator";
 
 /** Props for the ShopScreen component. */
 interface ShopScreenProps {
