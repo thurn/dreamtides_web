@@ -109,7 +109,12 @@ export interface DreamscapeNode {
 export interface DreamAtlas {
   nodes: Record<string, DreamscapeNode>;
   edges: Array<[string, string]>;
-  nexusId: string;
+  /**
+   * The dreamscape the player started the run in. Rendered at the centre of
+   * the Atlas SVG and emphasised in `AtlasNode` so the player has a clear
+   * "you started here" anchor on the graph.
+   */
+  startingNodeId: string;
 }
 
 /** Terminal battle result stored on a frozen failure summary. */

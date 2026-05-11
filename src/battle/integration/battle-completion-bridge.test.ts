@@ -63,7 +63,7 @@ function makeInput(
         },
       },
       edges: [],
-      nexusId: "nexus",
+      startingNodeId: "dreamscape-1",
     },
     essenceReward: 200,
     isMiniboss: false,
@@ -89,7 +89,7 @@ describe("completeBattleSiteVictory", () => {
     const updatedAtlas = {
       nodes: {},
       edges: [],
-      nexusId: "updated",
+      startingNodeId: "updated",
     };
     const clearBattleStateForRoom = vi.fn();
     const input = makeInput({
@@ -177,7 +177,7 @@ describe("completeBattleSiteVictory", () => {
       atlasSnapshot: {
         nodes: {},
         edges: [],
-        nexusId: "nexus",
+        startingNodeId: "dreamscape-1",
       },
       essenceReward: 400,
       isFinalBoss: true,
@@ -199,7 +199,7 @@ describe("completeBattleSiteVictory", () => {
     const updatedAtlas = {
       nodes: {},
       edges: [],
-      nexusId: "updated",
+      startingNodeId: "updated",
     };
     const input = makeInput({
       battleId: "battle:dreamscape-1:site-4:3",
@@ -258,7 +258,7 @@ describe("completeBattleSiteVictory", () => {
     const updatedAtlas = {
       nodes: {},
       edges: [],
-      nexusId: "updated",
+      startingNodeId: "updated",
     };
     const input = makeInput({
       battleId: "battle:dreamscape-1:site-4:abort-cycle",

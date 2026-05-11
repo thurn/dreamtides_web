@@ -74,7 +74,7 @@ function normalizeAtlas(atlas: DreamAtlas | undefined): DreamAtlas {
   return {
     nodes,
     edges: atlas.edges ?? defaults.edges,
-    nexusId: atlas.nexusId ?? defaults.nexusId,
+    startingNodeId: atlas.startingNodeId ?? defaults.startingNodeId,
   };
 }
 

@@ -509,7 +509,7 @@ describe("Task 02 state transitions", () => {
       remainingDreamsignPool: [],
       dreamsigns: [],
       completionLevel: 0,
-      atlas: { nodes: {}, edges: [], nexusId: "" },
+      atlas: { nodes: {}, edges: [], startingNodeId: "" },
       currentDreamscape: null,
       visitedSites: [],
       siteRuntime: {},

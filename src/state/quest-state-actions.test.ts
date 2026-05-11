@@ -102,18 +102,9 @@ function makeQuestContent(
 
 function makeAtlas(): DreamAtlas {
   return {
-    nexusId: "nexus",
-    edges: [["nexus", "dreamscape-1"]],
+    startingNodeId: "dreamscape-1",
+    edges: [],
     nodes: {
-      nexus: {
-        id: "nexus",
-        biomeName: "Nexus",
-        biomeColor: "#7c3aed",
-        sites: [],
-        position: { x: 0, y: 0 },
-        status: "completed",
-        enhancedSiteType: null,
-      },
       "dreamscape-1": {
         id: "dreamscape-1",
         biomeName: "Test Biome",
@@ -370,7 +361,7 @@ describe("quest state actions", () => {
     const next = updateQuestAtlas(prev, atlas);
 
     expect(next.atlas).toBe(atlas);
-    expect(prev.atlas).toEqual({ nodes: {}, edges: [], nexusId: "" });
+    expect(prev.atlas).toEqual({ nodes: {}, edges: [], startingNodeId: "" });
   });
 
   it("completes a site while preserving unrelated site runtime", () => {

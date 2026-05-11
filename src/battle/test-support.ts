@@ -85,7 +85,7 @@ export function makeBattleTestState(): Pick<
         },
       },
       edges: [],
-      nexusId: "dreamscape-2",
+      startingNodeId: "dreamscape-2",
     },
     completionLevel: 2,
     currentDreamscape: "dreamscape-2",

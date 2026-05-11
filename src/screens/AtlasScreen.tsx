@@ -172,7 +172,7 @@ export function AtlasScreen() {
               <AtlasNode
                 key={node.id}
                 node={node}
-                isNexus={node.id === atlas.nexusId}
+                isStarting={node.id === atlas.startingNodeId}
                 onNodeClick={handleNodeClick}
               />
             ))}

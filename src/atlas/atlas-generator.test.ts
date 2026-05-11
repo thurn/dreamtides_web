@@ -215,51 +215,57 @@ describe("generateSiteComposition", () => {
 });
 
 describe("generateInitialAtlas", () => {
-  it("creates 2 dreamscape nodes plus the nexus", () => {
+  it("creates exactly 2 dreamscape nodes", () => {
     for (let i = 0; i < 20; i++) {
       const atlas = generateInitialAtlas(0, defaultContext());
       const nodeCount = Object.keys(atlas.nodes).length;
-      expect(nodeCount).toBe(3);
+      expect(nodeCount).toBe(2);
     }
   });
 
-  it("places the nexus at (0,0) with status completed", () => {
+  it("places the starting dreamscape at (0,0)", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
-    const nexus = atlas.nodes[atlas.nexusId];
-    expect(nexus).toBeDefined();
-    expect(nexus.position.x).toBe(0);
-    expect(nexus.position.y).toBe(0);
-    expect(nexus.status).toBe("completed");
+    const starting = atlas.nodes[atlas.startingNodeId];
+    expect(starting).toBeDefined();
+    expect(starting.position.x).toBe(0);
+    expect(starting.position.y).toBe(0);
   });
 
-  it("marks all non-nexus nodes as available", () => {
+  it("marks both initial dreamscapes as available so the player can begin", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
-    for (const [id, node] of Object.entries(atlas.nodes)) {
-      if (id !== atlas.nexusId) {
-        expect(node.status).toBe("available");
-      }
+    for (const node of Object.values(atlas.nodes)) {
+      expect(node.status).toBe("available");
     }
   });
 
-  it("creates edges from nexus to each dreamscape node", () => {
+  it("connects the starting dreamscape directly to the other starting dreamscape", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
-    const nonNexusIds = Object.keys(atlas.nodes).filter(
-      (id) => id !== atlas.nexusId,
+    const otherIds = Object.keys(atlas.nodes).filter(
+      (id) => id !== atlas.startingNodeId,
     );
-    for (const nodeId of nonNexusIds) {
+    expect(otherIds).toHaveLength(1);
+    for (const nodeId of otherIds) {
       const hasEdge = atlas.edges.some(
         ([a, b]) =>
-          (a === atlas.nexusId && b === nodeId) ||
-          (b === atlas.nexusId && a === nodeId),
+          (a === atlas.startingNodeId && b === nodeId) ||
+          (b === atlas.startingNodeId && a === nodeId),
       );
       expect(hasEdge).toBe(true);
     }
   });
 
-  it("positions dreamscape nodes at the base radius distance from nexus", () => {
+  it("does not generate any node labelled 'Nexus'", () => {
+    const atlas = generateInitialAtlas(0, defaultContext());
+    for (const node of Object.values(atlas.nodes)) {
+      expect(node.biomeName).not.toBe("Nexus");
+      expect(node.id).not.toBe("nexus");
+    }
+  });
+
+  it("positions the non-starting dreamscape at the base radius distance from the origin", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
     for (const [id, node] of Object.entries(atlas.nodes)) {
-      if (id === atlas.nexusId) continue;
+      if (id === atlas.startingNodeId) continue;
       const dist = Math.sqrt(
         node.position.x * node.position.x +
           node.position.y * node.position.y,
@@ -271,27 +277,31 @@ describe("generateInitialAtlas", () => {
 });
 
 describe("generateNewNodes", () => {
-  it("generates 1 new node after the first completed dreamscape", () => {
+  it("generates 1 new node after the starting dreamscape is completed", () => {
     for (let i = 0; i < 20; i++) {
       const atlas = generateInitialAtlas(0, defaultContext());
-      const completedId = Object.keys(atlas.nodes).find(
-        (id) => id !== atlas.nexusId,
-      )!;
-      const updated = generateNewNodes(atlas, completedId, 0, defaultContext());
+      const updated = generateNewNodes(
+        atlas,
+        atlas.startingNodeId,
+        0,
+        defaultContext(),
+      );
       const newNodeCount =
         Object.keys(updated.nodes).length - Object.keys(atlas.nodes).length;
       expect(newNodeCount).toBe(1);
     }
   });
 
-  it("leaves exactly 2 available choices after the first dreamscape", () => {
+  it("leaves exactly 2 available choices after the starting dreamscape is completed", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
-    const completedId = Object.keys(atlas.nodes).find(
-      (id) => id !== atlas.nexusId,
-    )!;
-    const updated = generateNewNodes(atlas, completedId, 0, defaultContext());
+    const updated = generateNewNodes(
+      atlas,
+      atlas.startingNodeId,
+      0,
+      defaultContext(),
+    );
     const availableNodes = Object.values(updated.nodes).filter(
-      (node) => node.id !== atlas.nexusId && node.status === "available",
+      (node) => node.status === "available",
     );
 
     expect(availableNodes).toHaveLength(2);
@@ -299,19 +309,34 @@ describe("generateNewNodes", () => {
 
   it("marks the completed node as completed", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
-    const completedId = Object.keys(atlas.nodes).find(
-      (id) => id !== atlas.nexusId,
-    )!;
-    const updated = generateNewNodes(atlas, completedId, 0, defaultContext());
-    expect(updated.nodes[completedId].status).toBe("completed");
+    const updated = generateNewNodes(
+      atlas,
+      atlas.startingNodeId,
+      0,
+      defaultContext(),
+    );
+    expect(updated.nodes[atlas.startingNodeId].status).toBe("completed");
+  });
+
+  it("preserves the starting node id on the updated atlas", () => {
+    const atlas = generateInitialAtlas(0, defaultContext());
+    const updated = generateNewNodes(
+      atlas,
+      atlas.startingNodeId,
+      0,
+      defaultContext(),
+    );
+    expect(updated.startingNodeId).toBe(atlas.startingNodeId);
   });
 
   it("sets correct availability on new nodes", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
-    const completedId = Object.keys(atlas.nodes).find(
-      (id) => id !== atlas.nexusId,
-    )!;
-    const updated = generateNewNodes(atlas, completedId, 0, defaultContext());
+    const updated = generateNewNodes(
+      atlas,
+      atlas.startingNodeId,
+      0,
+      defaultContext(),
+    );
 
     const completedIds = new Set(
       Object.values(updated.nodes)
@@ -489,8 +514,8 @@ describe("revealedAtlasSite", () => {
     expect(distinctTypes.size).toBeGreaterThan(1);
   });
 
-  it("returns null for nodes with no sites (e.g. the Nexus)", () => {
-    const node = makeNode("nexus", [], null);
+  it("returns null for nodes with no sites", () => {
+    const node = makeNode("empty-node", [], null);
     expect(revealedAtlasSite(node)).toBeNull();
   });
 

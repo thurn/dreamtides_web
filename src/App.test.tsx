@@ -160,7 +160,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     atlas: {
       nodes: {},
       edges: [],
-      nexusId: "",
+      startingNodeId: "",
     },
     currentDreamscape: null,
     visitedSites: [],
@@ -540,7 +540,7 @@ describe("QuestApp", () => {
             },
           },
           edges: [],
-          nexusId: "dreamscape-1",
+          startingNodeId: "dreamscape-1",
         },
         currentDreamscape: "dreamscape-1",
         screen: { type: "site", siteId: "site-1" },

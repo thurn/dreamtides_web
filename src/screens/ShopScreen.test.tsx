@@ -135,7 +135,7 @@ function makeState(slots: RuntimeShopSlot[]): QuestState {
     atlas: {
       nodes: {},
       edges: [],
-      nexusId: "",
+      startingNodeId: "",
     },
     currentDreamscape: null,
     visitedSites: [],

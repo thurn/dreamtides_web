@@ -607,7 +607,7 @@ export function createDefaultState(): QuestState {
     atlas: {
       nodes: {},
       edges: [],
-      nexusId: "",
+      startingNodeId: "",
     },
     currentDreamscape: null,
     visitedSites: [],

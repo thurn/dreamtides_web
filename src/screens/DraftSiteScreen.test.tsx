@@ -351,7 +351,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     atlas: {
       nodes: {},
       edges: [],
-      nexusId: "",
+      startingNodeId: "",
     },
     currentDreamscape: null,
     visitedSites: [],

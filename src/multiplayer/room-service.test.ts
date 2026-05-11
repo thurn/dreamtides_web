@@ -188,7 +188,7 @@ describe("room service", () => {
     const stripped = {
       essence: 250,
       completionLevel: 0,
-      atlas: { nexusId: "nexus" },
+      atlas: { startingNodeId: "dreamscape-1" },
       screen: { type: "questStart" },
     };
     const room = {
@@ -215,7 +215,7 @@ describe("room service", () => {
           remainingDreamsignPool: [],
           dreamsigns: [],
           completionLevel: 0,
-          atlas: { nodes: {}, edges: [], nexusId: "nexus" },
+          atlas: { nodes: {}, edges: [], startingNodeId: "dreamscape-1" },
           currentDreamscape: null,
           visitedSites: [],
           siteRuntime: {},
@@ -233,7 +233,7 @@ describe("room service", () => {
     const stripped = {
       essence: 250,
       completionLevel: 0,
-      atlas: { nexusId: "nexus" },
+      atlas: { startingNodeId: "dreamscape-1" },
       screen: { type: "questStart" },
       // hasSeenStartingDeckPopup intentionally missing — RTDB strips
       // boolean defaults that were written as `false`.
@@ -276,8 +276,8 @@ describe("room service", () => {
     const strippedQuestState = {
       ...createDefaultState(),
       atlas: {
-        nexusId: "nexus",
-        edges: [["nexus", "dreamscape-1"]],
+        startingNodeId: "dreamscape-1",
+        edges: [],
         nodes: {
           "dreamscape-1": {
             id: "dreamscape-1",

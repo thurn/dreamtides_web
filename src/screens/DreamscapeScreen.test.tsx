@@ -102,7 +102,7 @@ function makeState(overrides?: Partial<QuestState>): QuestState {
         },
       },
       edges: [],
-      nexusId: "nexus",
+      startingNodeId: "dreamscape-1",
     },
     currentDreamscape: "dreamscape-1",
     visitedSites: [],
@@ -212,7 +212,7 @@ describe("DreamscapeScreen", () => {
             },
           },
           edges: [],
-          nexusId: "nexus",
+          startingNodeId: "dreamscape-1",
         },
       }),
       mutations: {

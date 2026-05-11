@@ -70,7 +70,7 @@ function makeRawSnapshot(overrides: Record<string, unknown>) {
       enemyDeckDefinition: [],
       dreamcallerSummary: null,
       dreamsignSummaries: [],
-      atlasSnapshot: { nodes: {}, edges: {}, nexusId: "" },
+      atlasSnapshot: { nodes: {}, edges: {}, startingNodeId: "" },
     },
     reducer: {
       mutable: {

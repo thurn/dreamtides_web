@@ -269,7 +269,13 @@ function createNode(
   };
 }
 
-/** Creates the initial atlas with the Nexus and 2-3 starting dreamscapes. */
+/**
+ * Creates the initial atlas with 2 starting dreamscapes. The first dreamscape
+ * (the one the player is placed in) sits at the origin so the Atlas centres on
+ * the player's current location. The second dreamscape sits one base radius
+ * away at a random angle. The two starting dreamscapes are connected by an
+ * edge so the graph is reachable without a central hub node.
+ */
 export function generateInitialAtlas(
   completionLevel: number,
   context: SiteGenerationContext,
@@ -277,48 +283,42 @@ export function generateInitialAtlas(
 ): DreamAtlas {
   resetAtlasGenerator();
 
-  const nexusId = "nexus";
   const nodes: Record<string, DreamscapeNode> = {};
   const edges: Array<[string, string]> = [];
 
-  // Nexus at center
-  nodes[nexusId] = {
-    id: nexusId,
-    biomeName: "Nexus",
-    biomeColor: "#7c3aed",
-    sites: [],
-    position: { x: 0, y: 0 },
-    status: "completed",
-    enhancedSiteType: null,
-  };
-
-  const nodeCount = 2;
-  const baseAngle = randomFloat(0, Math.PI * 2);
-
   const usedBiomeNames = new Set<string>();
-  for (let i = 0; i < nodeCount; i++) {
-    const angle =
-      baseAngle +
-      (i * Math.PI * 2) / nodeCount +
-      randomFloat(-0.3, 0.3);
-    const x = Math.cos(angle) * BASE_RADIUS;
-    const y = Math.sin(angle) * BASE_RADIUS;
 
-    const node = createNode(
-      { x, y },
-      completionLevel,
-      true,
-      [nexusId],
-      context,
-      usedBiomeNames,
-      options,
-    );
-    usedBiomeNames.add(node.biomeName);
-    nodes[node.id] = node;
-    edges.push([nexusId, node.id]);
-  }
+  // First dreamscape: the player's starting position, placed at the origin.
+  const startingNode = createNode(
+    { x: 0, y: 0 },
+    completionLevel,
+    true,
+    [],
+    context,
+    usedBiomeNames,
+    options,
+  );
+  usedBiomeNames.add(startingNode.biomeName);
+  nodes[startingNode.id] = startingNode;
 
-  return { nodes, edges, nexusId };
+  // Second dreamscape: placed one base radius away at a random angle.
+  const secondAngle = randomFloat(0, Math.PI * 2);
+  const secondX = Math.cos(secondAngle) * BASE_RADIUS;
+  const secondY = Math.sin(secondAngle) * BASE_RADIUS;
+  const secondNode = createNode(
+    { x: secondX, y: secondY },
+    completionLevel,
+    true,
+    [startingNode.id],
+    context,
+    usedBiomeNames,
+    options,
+  );
+  usedBiomeNames.add(secondNode.biomeName);
+  nodes[secondNode.id] = secondNode;
+  edges.push([startingNode.id, secondNode.id]);
+
+  return { nodes, edges, startingNodeId: startingNode.id };
 }
 
 /**
@@ -346,25 +346,28 @@ export function generateNewNodes(
     status: "completed",
   };
 
-  // Determine the generation ring (how many levels deep)
+  // Determine the generation ring (how many levels deep). The starting
+  // dreamscape sits at the origin, so use a small floor to avoid `newRadius`
+  // collapsing into the centre when the player completes their first node.
   const completedDistance = distance(
     completedNode.position,
     { x: 0, y: 0 },
   );
-  const newRadius = completedDistance + RADIUS_INCREMENT;
+  const newRadius = Math.max(completedDistance, BASE_RADIUS) + RADIUS_INCREMENT;
 
-  // Angle from center to the completed node
-  const parentAngle = Math.atan2(
-    completedNode.position.y,
-    completedNode.position.x,
-  );
+  // Angle from center to the completed node. When the completed node is the
+  // starting dreamscape (sitting at the origin) atan2 is ill-defined, so pick
+  // a random angle so children fan out somewhere on the ring.
+  const parentAngle = completedDistance < 1
+    ? randomFloat(0, Math.PI * 2)
+    : Math.atan2(completedNode.position.y, completedNode.position.x);
 
-  const isFirstExpansion = completedDistance <= BASE_RADIUS + 1;
+  const isFirstExpansion = completedNode.id === atlas.startingNodeId;
   const newNodeCount = isFirstExpansion ? 1 : randomInt(2, 3);
   const spread = Math.PI / 3; // 60-degree spread for children
   const usedBiomeNames = new Set<string>(
     Object.values(updatedNodes)
-      .filter((node) => node.id !== atlas.nexusId && node.status !== "completed")
+      .filter((node) => node.status !== "completed")
       .map((node) => node.biomeName),
   );
 
@@ -381,7 +384,6 @@ export function generateNewNodes(
     const proximityThreshold = RADIUS_INCREMENT * 1.5;
     for (const [existingId, existingNode] of Object.entries(updatedNodes)) {
       if (existingId === completedNodeId) continue;
-      if (existingId === atlas.nexusId) continue;
       const dist = distance({ x, y }, existingNode.position);
       if (dist < proximityThreshold && !connections.includes(existingId)) {
         connections.push(existingId);
@@ -404,7 +406,8 @@ export function generateNewNodes(
     }
   }
 
-  // Update availability: a node is available if connected to nexus or any completed node
+  // Update availability: a node is available iff it is connected (directly or
+  // via the edge graph) to any completed node.
   const completedIds = new Set(
     Object.values(updatedNodes)
       .filter((n) => n.status === "completed")
@@ -427,7 +430,7 @@ export function generateNewNodes(
   return {
     nodes: updatedNodes,
     edges: updatedEdges,
-    nexusId: atlas.nexusId,
+    startingNodeId: atlas.startingNodeId,
   };
 }
 
@@ -564,7 +567,7 @@ function fnv1aHash(value: string): number {
  *    hash of the node id. The Battle site is always kept hidden so the
  *    player knows a battle is coming but not what surrounds it.
  *
- * Returns `null` only for nodes with no sites (e.g. the Nexus placeholder).
+ * Returns `null` only for nodes with no sites.
  */
 export function revealedAtlasSite(node: DreamscapeNode): SiteState | null {
   const candidates = node.sites.filter((s) => s.type !== "Battle");

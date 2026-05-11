@@ -98,14 +98,14 @@ function makeFakeBattleState(): SharedBattleState {
 }
 
 function setQuestState({
-  atlasNexusId = "",
+  atlasStartingNodeId = "",
   cardSourceDebug = null,
   completionLevel = 3,
   currentDreamscape = "dreamscape-2",
   screen = { type: "site", siteId: "site-7" } as Screen,
   visitedSites = [] as string[],
 }: {
-  atlasNexusId?: string;
+  atlasStartingNodeId?: string;
   cardSourceDebug?: CardSourceDebugState | null;
   completionLevel?: number;
   currentDreamscape?: string | null;
@@ -125,7 +125,7 @@ function setQuestState({
       atlas: {
         nodes: {},
         edges: [],
-        nexusId: atlasNexusId,
+        startingNodeId: atlasStartingNodeId,
       },
       currentDreamscape,
       visitedSites,

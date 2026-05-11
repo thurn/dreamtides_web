@@ -166,7 +166,7 @@ function makeState(
     atlas: {
       nodes: {},
       edges: [],
-      nexusId: "",
+      startingNodeId: "",
     },
     currentDreamscape: null,
     visitedSites: [],

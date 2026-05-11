@@ -630,18 +630,20 @@ Each dreamscape can be in one of three states:
   destination.
 - **Unavailable**: The player cannot choose this dreamscape yet.
 
-The player begins at the center of the Dream Atlas, called the **Nexus**. At the
-start, the run has exactly one starting dreamscape connected to the Nexus. The
-player views that dreamscape and enters it directly instead of choosing between
-multiple initial dreamscapes.
+The player begins inside the **starting dreamscape**, which sits at the centre
+of the Dream Atlas. A second starting dreamscape is generated alongside it and
+connected to the starting dreamscape by a single edge. The player enters the
+starting dreamscape directly when the run begins; the Atlas screen marks it
+"You started here" with a slight visual emphasis so the player keeps their
+bearings.
 
 After the player visits a dreamscape and completes its battle, that dreamscape
 becomes **Completed**. Any dreamscapes directly connected to it then also become
 **Available**. The number of dreamscapes the user has completed is called the
 'Completion Level' for that quest.
 
-In other words, a dreamscape is **Available** only if it is connected to the
-Nexus or to at least one **Completed** dreamscape.
+In other words, a dreamscape is **Available** only if it is connected to at
+least one **Completed** dreamscape.
 
 Each dreamscape displays exactly one site icon on the atlas to preview one site
 contained in that dreamscape. This icon is not a battle or draft site. If the

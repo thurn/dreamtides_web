@@ -99,7 +99,7 @@ function makeState(dreamsigns: Dreamsign[]): QuestState {
     atlas: {
       nodes: {},
       edges: [],
-      nexusId: "",
+      startingNodeId: "",
     },
     currentDreamscape: null,
     visitedSites: [],
