@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from "react";
+import { DreamsignHoverCard } from "./DreamsignHoverCard";
 import { HoverPopover } from "./HoverPopover";
 import { RulesText } from "./RulesText";
 import type { Dreamsign } from "../types/quest";
@@ -24,7 +25,6 @@ import type { Dreamsign } from "../types/quest";
 
 const MAX_VISIBLE_ICONS = 10;
 const ICON_SIZE_PX = 28;
-const POPOVER_ART_SIZE_PX = 96;
 
 interface HudDreamsignRowProps {
   dreamsigns: readonly Dreamsign[];
@@ -84,7 +84,12 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
       triggerAs="span"
       delayMs={250}
       maxWidthPx={null}
-      content={<HudDreamsignPopover dreamsign={dreamsign} />}
+      content={
+        <DreamsignHoverCard
+          dreamsign={dreamsign}
+          testid="hud-dreamsign-popover"
+        />
+      }
       className="inline-block"
     >
       <span
@@ -120,70 +125,6 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
         )}
       </span>
     </HoverPopover>
-  );
-}
-
-/** Hover popover showing the full dreamsign — name, effect, and large art. */
-function HudDreamsignPopover({ dreamsign }: { dreamsign: Dreamsign }) {
-  const [imageBroken, setImageBroken] = useState(false);
-  const showImage = Boolean(dreamsign.imageName) && !imageBroken;
-  const accent = dreamsign.isBane
-    ? "rgba(239, 68, 68, 0.55)"
-    : "rgba(168, 85, 247, 0.55)";
-
-  return (
-    <div
-      data-testid="hud-dreamsign-popover"
-      className="flex flex-col items-center gap-2 rounded-lg p-3 shadow-lg"
-      style={{
-        background: "rgba(15, 10, 24, 0.97)",
-        border: `1px solid ${accent}`,
-        boxShadow: "0 8px 22px rgba(0, 0, 0, 0.55)",
-        width: 240,
-      }}
-    >
-      {showImage && (
-        <img
-          src={`/dreamsigns/${String(dreamsign.imageName)}`}
-          alt={dreamsign.imageAlt ?? dreamsign.name}
-          className="object-contain"
-          style={{
-            height: POPOVER_ART_SIZE_PX,
-            width: POPOVER_ART_SIZE_PX,
-            filter: dreamsign.isBane ? "grayscale(0.5)" : "none",
-          }}
-          onError={() => {
-            setImageBroken(true);
-          }}
-        />
-      )}
-      <div className="flex items-center gap-1.5">
-        <span
-          className="text-sm font-bold"
-          style={{ color: dreamsign.isBane ? "#fca5a5" : "#f8fafc" }}
-        >
-          {dreamsign.name}
-        </span>
-        {dreamsign.isBane && (
-          <span
-            className="rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider"
-            style={{
-              background: "rgba(239, 68, 68, 0.18)",
-              color: "#fecaca",
-              border: "1px solid rgba(239, 68, 68, 0.45)",
-            }}
-          >
-            Bane
-          </span>
-        )}
-      </div>
-      <p
-        className="text-center text-xs leading-snug"
-        style={{ color: "#e2e8f0" }}
-      >
-        <RulesText text={dreamsign.effectDescription} />
-      </p>
-    </div>
   );
 }
 

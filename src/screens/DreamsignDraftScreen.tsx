@@ -3,19 +3,15 @@ import { motion } from "framer-motion";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { DreamsignHoverCard } from "../components/DreamsignHoverCard";
+import {
+  DREAMSIGN_HOVER_DELAY_MS,
+  DreamsignHoverCard,
+} from "../components/DreamsignHoverCard";
 import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
 import { DreamsignSourceOverlay } from "./DreamsignSourceOverlay";
 
 const MAX_DREAMSIGNS = 12;
-/**
- * Delay before showing the full-Dreamsign hover popover on an offering /
- * draft card. Tighter than the glossary-tooltip default (500ms) because
- * players are scanning a short list of dreamsigns and want quick previews
- * while moving across them.
- */
-const DREAMSIGN_HOVER_DELAY_MS = 300;
 
 /** Props for the DreamsignDraftScreen component. */
 interface DreamsignDraftScreenProps {

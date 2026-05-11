@@ -16,11 +16,29 @@ import type { Dreamsign } from "../types/quest";
 const POPOVER_ART_SIZE_PX = 96;
 const POPOVER_WIDTH_PX = 240;
 
+/**
+ * Delay before showing the full-Dreamsign hover popover on an offering /
+ * draft card. Tighter than the glossary-tooltip default (500ms) because
+ * players are scanning a short list of dreamsigns and want quick previews
+ * while moving across them.
+ */
+export const DREAMSIGN_HOVER_DELAY_MS = 300;
+
 interface DreamsignHoverCardProps {
   dreamsign: Dreamsign;
+  /**
+   * Override for the `data-testid` attribute on the root element. Callers
+   * that already had a distinct testid (e.g. the HUD row's compact tile
+   * popover) can keep that testid for stable test selectors. Defaults to
+   * `"dreamsign-hover-card"`.
+   */
+  testid?: string;
 }
 
-export function DreamsignHoverCard({ dreamsign }: DreamsignHoverCardProps) {
+export function DreamsignHoverCard({
+  dreamsign,
+  testid = "dreamsign-hover-card",
+}: DreamsignHoverCardProps) {
   const [imageBroken, setImageBroken] = useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
   const accent = dreamsign.isBane
@@ -29,7 +47,7 @@ export function DreamsignHoverCard({ dreamsign }: DreamsignHoverCardProps) {
 
   return (
     <div
-      data-testid="dreamsign-hover-card"
+      data-testid={testid}
       className="flex flex-col items-center gap-2 rounded-lg p-3 shadow-lg"
       style={{
         background: "rgba(15, 10, 24, 0.97)",
