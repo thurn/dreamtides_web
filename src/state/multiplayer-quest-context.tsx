@@ -1472,15 +1472,7 @@ export function MultiplayerQuestProvider({
           if (next.dreamsigns.length < MAX_DREAMSIGNS) {
             next = {
               ...next,
-              dreamsigns: [
-                ...next.dreamsigns,
-                {
-                  id: reward.dreamsignId,
-                  name: reward.dreamsignName,
-                  effectDescription: reward.dreamsignEffect,
-                  isBane: false,
-                },
-              ],
+              dreamsigns: [...next.dreamsigns, reward.dreamsign],
             };
           }
         } else {

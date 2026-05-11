@@ -232,9 +232,12 @@ describe("RewardSiteScreen", () => {
             kind: "reward",
             reward: {
               rewardType: "dreamsign",
-              dreamsignId: "dreamsign-1",
-              dreamsignName: "Dreamsign One",
-              dreamsignEffect: "First effect.",
+              dreamsign: {
+                id: "dreamsign-1",
+                name: "Dreamsign One",
+                effectDescription: "First effect.",
+                isBane: false,
+              },
             },
             remainingDreamsignPoolIds: [],
             accepted: false,
@@ -263,6 +266,61 @@ describe("RewardSiteScreen", () => {
       "reward_declined",
       expect.objectContaining({ rewardType: "dreamsign" }),
     );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the dreamsign's artwork through the shared DreamsignArtTile", () => {
+    // The reward site sits in the same family of dreamsign surfaces as the
+    // shop tile, deck viewer, and dreamsign offering -- all of which draw the
+    // dreamsign's `imageName` art through `DreamsignArtTile`. This guards
+    // that the reward site renders the same art treatment (including the
+    // bane red border + grayscale) instead of a placeholder glyph.
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "reward",
+            reward: {
+              rewardType: "dreamsign",
+              dreamsign: {
+                id: "dreamsign-bane",
+                name: "Black Horn",
+                effectDescription: "Bane effect.",
+                imageName: "black_horn.png",
+                imageAlt: "A curved black horn",
+                isBane: true,
+              },
+            },
+            remainingDreamsignPoolIds: [],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+      new Map(),
+    );
+
+    const { container, root } = mount(
+      <RewardSiteScreen
+        site={{ id: "site-1", type: "Reward", isEnhanced: false, isVisited: false }}
+      />,
+    );
+
+    const artImg = container.querySelector('img[src^="/dreamsigns/"]');
+    expect(artImg).not.toBeNull();
+    expect(artImg?.getAttribute("src")).toBe("/dreamsigns/black_horn.png");
+
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    expect(tile).not.toBeNull();
+    expect(tile?.dataset.isBane).toBe("true");
+    // Bane tiles carry the desaturation filter so the warning reads first.
+    expect(tile?.style.filter).toContain("grayscale");
 
     act(() => {
       root.unmount();

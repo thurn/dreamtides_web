@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import type { SiteState } from "../types/quest";
+import type { Dreamsign, SiteState } from "../types/quest";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { CardDisplay } from "../components/CardDisplay";
+import { DreamsignArtTile } from "../components/DreamsignArtTile";
 import { RulesText } from "../components/RulesText";
 import type { CardData } from "../types/cards";
 
@@ -143,10 +144,7 @@ export function RewardSiteScreen({ site }: RewardSiteScreenProps) {
           <CardRewardDisplay cardNumber={rewardData.cardNumber} />
         )}
         {rewardData.rewardType === "dreamsign" && (
-          <DreamsignRewardDisplay
-            name={rewardData.dreamsignName}
-            effectDescription={rewardData.dreamsignEffect}
-          />
+          <DreamsignRewardDisplay dreamsign={rewardData.dreamsign} />
         )}
         {rewardData.rewardType === "essence" && (
           <EssenceRewardDisplay
@@ -218,14 +216,13 @@ function CardRewardDisplay({ cardNumber }: { cardNumber: number }) {
   );
 }
 
-/** Renders a dreamsign reward with sigil, name, and effect. */
-function DreamsignRewardDisplay({
-  name,
-  effectDescription,
-}: {
-  name: string;
-  effectDescription: string;
-}) {
+/**
+ * Renders a dreamsign reward. The dreamsign's artwork comes from the shared
+ * `DreamsignArtTile`, so the reward site matches the shop tile, deck viewer,
+ * dreamsign draft, and dreamsign offering. The tile carries its own bane
+ * styling (red border + grayscale) and hover popover with the full card.
+ */
+function DreamsignRewardDisplay({ dreamsign }: { dreamsign: Dreamsign }) {
   return (
     <div
       className="flex w-64 flex-col items-center gap-3 rounded-xl p-6"
@@ -239,38 +236,32 @@ function DreamsignRewardDisplay({
       <p className="text-xs font-bold uppercase tracking-wider opacity-50">
         Dreamsign Reward
       </p>
-      <div
-        className="flex h-14 w-14 items-center justify-center rounded-full text-2xl"
-        style={{
-          background: "rgba(255, 255, 255, 0.08)",
-          border: "2px solid rgba(168, 85, 247, 0.35)",
-          color: "#cbd5f5",
-        }}
-        aria-label={`${name} sigil`}
-      >
-        {"\u2726"}
-      </div>
+      <DreamsignArtTile dreamsign={dreamsign} sizePx={96} />
       <span
         className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
         style={{
-          background: "rgba(168, 85, 247, 0.16)",
-          color: "#c4b5fd",
-          border: "1px solid rgba(168, 85, 247, 0.35)",
+          background: dreamsign.isBane
+            ? "rgba(239, 68, 68, 0.16)"
+            : "rgba(168, 85, 247, 0.16)",
+          color: dreamsign.isBane ? "#fecaca" : "#c4b5fd",
+          border: dreamsign.isBane
+            ? "1px solid rgba(239, 68, 68, 0.35)"
+            : "1px solid rgba(168, 85, 247, 0.35)",
         }}
       >
-        Dreamsign
+        {dreamsign.isBane ? "Bane Dreamsign" : "Dreamsign"}
       </span>
       <h3
         className="text-center text-lg font-bold"
         style={{ color: "#f8fafc" }}
       >
-        {name}
+        {dreamsign.name}
       </h3>
       <p
         className="text-center text-sm leading-relaxed opacity-70"
         style={{ color: "#e2e8f0" }}
       >
-        <RulesText text={effectDescription} />
+        <RulesText text={dreamsign.effectDescription} />
       </p>
     </div>
   );

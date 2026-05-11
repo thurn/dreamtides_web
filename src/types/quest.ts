@@ -181,9 +181,7 @@ export interface RewardSiteRuntime {
     | { rewardType: "card"; cardNumber: number; cardName: string }
     | {
         rewardType: "dreamsign";
-        dreamsignId: string;
-        dreamsignName: string;
-        dreamsignEffect: string;
+        dreamsign: Dreamsign;
       }
     | { rewardType: "essence"; essenceAmount: number };
   remainingDreamsignPoolIds: string[];

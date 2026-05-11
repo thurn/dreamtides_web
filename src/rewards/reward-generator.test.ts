@@ -32,6 +32,8 @@ const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
     name: "Dreamsign One",
     packageTides: ["alpha"],
     effectDescription: "First effect.",
+    imageName: "dreamsign_one.png",
+    imageAlt: "Dreamsign One art",
   },
   {
     id: "dreamsign-2",
@@ -102,9 +104,14 @@ describe("generateRewardSiteData", () => {
 
     expect(result.reward).toEqual({
       rewardType: "dreamsign",
-      dreamsignId: "dreamsign-1",
-      dreamsignName: "Dreamsign One",
-      dreamsignEffect: "First effect.",
+      dreamsign: {
+        id: "dreamsign-1",
+        name: "Dreamsign One",
+        effectDescription: "First effect.",
+        imageName: "dreamsign_one.png",
+        imageAlt: "Dreamsign One art",
+        isBane: false,
+      },
     });
     expect(result.spentDreamsignPoolIds).toEqual(["dreamsign-1"]);
     expect(result.remainingDreamsignPoolIds).toEqual(["dreamsign-2"]);
@@ -122,9 +129,14 @@ describe("generateRewardSiteData", () => {
 
     expect(result.reward).toEqual({
       rewardType: "dreamsign",
-      dreamsignId: "dreamsign-2",
-      dreamsignName: "Dreamsign Two",
-      dreamsignEffect: "Second effect.",
+      dreamsign: {
+        id: "dreamsign-2",
+        name: "Dreamsign Two",
+        effectDescription: "Second effect.",
+        imageName: undefined,
+        imageAlt: undefined,
+        isBane: false,
+      },
     });
     expect(result.remainingDreamsignPoolIds).toEqual([]);
   });

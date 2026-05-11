@@ -915,12 +915,7 @@ export function QuestProvider({
           next = { ...next, deck: [...next.deck, entry] };
         } else if (reward.rewardType === "dreamsign") {
           if (next.dreamsigns.length < MAX_DREAMSIGNS) {
-            const dreamsign: Dreamsign = {
-              id: reward.dreamsignId,
-              name: reward.dreamsignName,
-              effectDescription: reward.dreamsignEffect,
-              isBane: false,
-            };
+            const dreamsign: Dreamsign = reward.dreamsign;
             logEvent("dreamsign_acquired", {
               name: dreamsign.name,
               imageName: dreamsign.imageName ?? null,

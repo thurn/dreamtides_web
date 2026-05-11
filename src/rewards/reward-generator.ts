@@ -1,5 +1,6 @@
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate, PackageTideId } from "../types/content";
+import type { Dreamsign } from "../types/quest";
 import { isStarterCard } from "../data/card-database";
 import { pickPackageAdjacentItem } from "../data/tide-weights";
 import {
@@ -15,9 +16,7 @@ export type RewardSiteData =
     }
   | {
       rewardType: "dreamsign";
-      dreamsignId: string;
-      dreamsignName: string;
-      dreamsignEffect: string;
+      dreamsign: Dreamsign;
     }
   | {
       rewardType: "essence";
@@ -74,9 +73,14 @@ export function generateRewardSiteData({
     return {
       reward: {
         rewardType: "dreamsign",
-        dreamsignId: dreamsignTemplate.id,
-        dreamsignName: dreamsignTemplate.name,
-        dreamsignEffect: dreamsignTemplate.effectDescription,
+        dreamsign: {
+          id: dreamsignTemplate.id,
+          name: dreamsignTemplate.name,
+          effectDescription: dreamsignTemplate.effectDescription,
+          imageName: dreamsignTemplate.imageName,
+          imageAlt: dreamsignTemplate.imageAlt,
+          isBane: false,
+        },
       },
       remainingDreamsignPoolIds: availableDreamsignPool.availableIds.filter(
         (id) => id !== dreamsignTemplate.id,
