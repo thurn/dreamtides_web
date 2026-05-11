@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement, ReactNode } from "react";
+import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorBoundary } from "./ErrorBoundary";
@@ -189,8 +189,24 @@ describe("ErrorBoundary", () => {
       .toBe("Custom: hello-fallback");
   });
 
-  function _typeCheckNode(_: ReactNode): void {
-    // satisfies TS unused-import safety
-  }
-  void _typeCheckNode;
+  it("calls the onClose handler when the Close action is clicked", () => {
+    const onClose = vi.fn();
+    const { container, root } = mount(
+      <ErrorBoundary scope="overlay" onClose={onClose}>
+        <Bomb message="close-me" />
+      </ErrorBoundary>,
+    );
+
+    const closeButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="error-boundary-close"]',
+    );
+    expect(closeButton).not.toBeNull();
+    act(() => {
+      closeButton!.click();
+    });
+    expect(onClose).toHaveBeenCalledTimes(1);
+    act(() => {
+      root.unmount();
+    });
+  });
 });
