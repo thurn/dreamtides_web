@@ -5,11 +5,13 @@ import {
   generateNewNodes,
   assignBiome,
   previewSiteTypes,
+  revealedAtlasSite,
   rewardPreviewLabel,
   resetAtlasGenerator,
+  siteTypeDescription,
   type SiteGenerationContext,
 } from "./atlas-generator";
-import type { DreamscapeNode, SiteState } from "../types/quest";
+import type { DreamscapeNode, SiteState, SiteType } from "../types/quest";
 
 function defaultContext(
   overrides?: Partial<SiteGenerationContext>,
@@ -386,6 +388,151 @@ describe("previewSiteTypes", () => {
     };
     const preview = previewSiteTypes(node);
     expect(preview.length).toBeLessThanOrEqual(3);
+  });
+});
+
+describe("revealedAtlasSite", () => {
+  function makeSite(id: string, type: SiteType, isEnhanced = false): SiteState {
+    return { id, type, isEnhanced, isVisited: false };
+  }
+
+  function makeNode(
+    id: string,
+    sites: SiteState[],
+    enhancedSiteType: SiteType | null,
+  ): DreamscapeNode {
+    return {
+      id,
+      biomeName: "Test",
+      biomeColor: "#000",
+      sites,
+      position: { x: 0, y: 0 },
+      status: "available",
+      enhancedSiteType,
+    };
+  }
+
+  it("never reveals the Battle site even if it is the only marked-enhanced one", () => {
+    const node = makeNode(
+      "dreamscape-1",
+      [
+        makeSite("a", "Shop"),
+        makeSite("b", "Essence"),
+        makeSite("c", "Battle", true),
+      ],
+      "Battle",
+    );
+    const revealed = revealedAtlasSite(node);
+    expect(revealed).not.toBeNull();
+    expect(revealed?.type).not.toBe("Battle");
+  });
+
+  it("reveals the enhanced site when the dreamscape has one", () => {
+    const node = makeNode(
+      "dreamscape-1",
+      [
+        makeSite("a", "Shop"),
+        makeSite("b", "Essence", true),
+        makeSite("c", "Battle"),
+      ],
+      "Essence",
+    );
+    const revealed = revealedAtlasSite(node);
+    expect(revealed?.id).toBe("b");
+    expect(revealed?.type).toBe("Essence");
+  });
+
+  it("picks deterministically from non-battle sites when there is no enhanced site", () => {
+    const sites = [
+      makeSite("a", "Draft"),
+      makeSite("b", "Shop"),
+      makeSite("c", "Essence"),
+      makeSite("d", "Battle"),
+    ];
+    const node = makeNode("dreamscape-7", sites, null);
+    const first = revealedAtlasSite(node);
+    const second = revealedAtlasSite(node);
+    expect(first).not.toBeNull();
+    expect(first?.type).not.toBe("Battle");
+    expect(second?.id).toBe(first?.id);
+  });
+
+  it("returns the same site for the same node id across calls (reload-resilient)", () => {
+    const sites = [
+      makeSite("s1", "Draft"),
+      makeSite("s2", "Shop"),
+      makeSite("s3", "DreamJourney"),
+      makeSite("s4", "Essence"),
+      makeSite("s5", "Battle"),
+    ];
+    const nodeA = makeNode("dreamscape-42", sites, null);
+    const nodeAClone = makeNode("dreamscape-42", sites, null);
+    expect(revealedAtlasSite(nodeA)?.id).toBe(revealedAtlasSite(nodeAClone)?.id);
+  });
+
+  it("returns different reveals for different node ids (at least sometimes)", () => {
+    const sites: SiteState[] = [
+      makeSite("a", "Draft"),
+      makeSite("b", "Shop"),
+      makeSite("c", "Essence"),
+      makeSite("d", "DreamJourney"),
+      makeSite("e", "Battle"),
+    ];
+    const distinctTypes = new Set<SiteType>();
+    for (let i = 0; i < 50; i++) {
+      const node = makeNode(`dreamscape-${String(i)}`, sites, null);
+      const revealed = revealedAtlasSite(node);
+      if (revealed) distinctTypes.add(revealed.type);
+    }
+    // Different ids hash to different indices, so we should observe more
+    // than one distinct revealed type across 50 ids drawn from 4 candidates.
+    expect(distinctTypes.size).toBeGreaterThan(1);
+  });
+
+  it("returns null for nodes with no sites (e.g. the Nexus)", () => {
+    const node = makeNode("nexus", [], null);
+    expect(revealedAtlasSite(node)).toBeNull();
+  });
+
+  it("falls back to deterministic pick if enhancedSiteType is set but no site is marked isEnhanced", () => {
+    const node = makeNode(
+      "dreamscape-9",
+      [
+        makeSite("a", "Shop"),
+        makeSite("b", "Essence"),
+        makeSite("c", "Battle"),
+      ],
+      "Reward",
+    );
+    const revealed = revealedAtlasSite(node);
+    expect(revealed).not.toBeNull();
+    expect(revealed?.type).not.toBe("Battle");
+  });
+});
+
+describe("siteTypeDescription", () => {
+  it("returns a non-empty string for every site type", () => {
+    const types: SiteType[] = [
+      "Battle",
+      "Draft",
+      "Shop",
+      "SpecialtyShop",
+      "DreamsignOffering",
+      "DreamsignDraft",
+      "DreamJourney",
+      "TemptingOffer",
+      "Purge",
+      "Essence",
+      "Transfiguration",
+      "Duplication",
+      "Reward",
+      "Cleanse",
+    ];
+    for (const t of types) {
+      const desc = siteTypeDescription(t);
+      expect(typeof desc).toBe("string");
+      expect(desc.length).toBeGreaterThan(0);
+    }
   });
 });
 

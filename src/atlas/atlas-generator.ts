@@ -431,22 +431,81 @@ export function generateNewNodes(
   };
 }
 
-/** Metadata for each site type: icon and display name in one table. */
-const SITE_TYPE_META: Record<SiteType, { icon: string; name: string }> = {
-  Battle: { icon: "\u2694\uFE0F", name: "Battle" },
-  Draft: { icon: "\uD83C\uDCCF", name: "Draft" },
-  Shop: { icon: "\uD83C\uDFEA", name: "Shop" },
-  SpecialtyShop: { icon: "\u2B50", name: "Specialty Shop" },
-  DreamsignOffering: { icon: "\u2728", name: "Dreamsign Offering" },
-  DreamsignDraft: { icon: "\u2728", name: "Dreamsign Draft" },
-  DreamJourney: { icon: "\uD83C\uDF19", name: "Dream Journey" },
-  TemptingOffer: { icon: "\u2696\uFE0F", name: "Tempting Offer" },
-  Purge: { icon: "\uD83D\uDD25", name: "Purge" },
-  Essence: { icon: "\uD83D\uDC8E", name: "Essence" },
-  Transfiguration: { icon: "\u2697\uFE0F", name: "Transfiguration" },
-  Duplication: { icon: "\uD83D\uDCCB", name: "Duplication" },
-  Reward: { icon: "\uD83C\uDF81", name: "Reward" },
-  Cleanse: { icon: "\u2744\uFE0F", name: "Cleanse" },
+/** Metadata for each site type: icon, display name, and short description. */
+const SITE_TYPE_META: Record<
+  SiteType,
+  { icon: string; name: string; description: string }
+> = {
+  Battle: {
+    icon: "\u2694\uFE0F",
+    name: "Battle",
+    description: "Fight the dreamscape's keeper to clear it.",
+  },
+  Draft: {
+    icon: "\uD83C\uDCCF",
+    name: "Draft",
+    description: "Pick a card from a curated offer to add to your deck.",
+  },
+  Shop: {
+    icon: "\uD83C\uDFEA",
+    name: "Shop",
+    description: "Spend essence to buy cards, dreamsigns, or rerolls.",
+  },
+  SpecialtyShop: {
+    icon: "\u2B50",
+    name: "Specialty Shop",
+    description: "A rare shop with a focused, themed inventory.",
+  },
+  DreamsignOffering: {
+    icon: "\u2728",
+    name: "Dreamsign Offering",
+    description: "Accept a dreamsign passive, or refuse for essence.",
+  },
+  DreamsignDraft: {
+    icon: "\u2728",
+    name: "Dreamsign Draft",
+    description: "Choose one dreamsign from several offered options.",
+  },
+  DreamJourney: {
+    icon: "\uD83C\uDF19",
+    name: "Dream Journey",
+    description: "Pick a world-effect branch that shapes the run.",
+  },
+  TemptingOffer: {
+    icon: "\u2696\uFE0F",
+    name: "Tempting Offer",
+    description: "Trade something valuable for a powerful boon.",
+  },
+  Purge: {
+    icon: "\uD83D\uDD25",
+    name: "Purge",
+    description: "Remove a card from your deck.",
+  },
+  Essence: {
+    icon: "\uD83D\uDC8E",
+    name: "Essence",
+    description: "Collect a pile of essence.",
+  },
+  Transfiguration: {
+    icon: "\u2697\uFE0F",
+    name: "Transfiguration",
+    description: "Badge a card with a colored transfiguration.",
+  },
+  Duplication: {
+    icon: "\uD83D\uDCCB",
+    name: "Duplication",
+    description: "Make a copy of a card already in your deck.",
+  },
+  Reward: {
+    icon: "\uD83C\uDF81",
+    name: "Reward",
+    description: "Claim a card, dreamsign, or pile of essence.",
+  },
+  Cleanse: {
+    icon: "\u2744\uFE0F",
+    name: "Cleanse",
+    description: "Remove a bane from your deck.",
+  },
 };
 
 /** Returns an emoji icon for the given site type. */
@@ -457,6 +516,11 @@ export function siteTypeIcon(siteType: SiteType): string {
 /** Returns the display name for the given site type. */
 export function siteTypeName(siteType: SiteType): string {
   return SITE_TYPE_META[siteType].name;
+}
+
+/** Returns a one-line description for the given site type. */
+export function siteTypeDescription(siteType: SiteType): string {
+  return SITE_TYPE_META[siteType].description;
 }
 
 /**
@@ -472,6 +536,53 @@ export function previewSiteTypes(node: DreamscapeNode): SiteType[] {
     .filter((s) => !excluded.has(s.type))
     .map((s) => s.type)
     .slice(0, 3);
+}
+
+/**
+ * FNV-1a hash of a string. Used to derive deterministic per-node random
+ * selections on the Atlas (so the same dreamscape reveals the same site
+ * across reloads).
+ */
+function fnv1aHash(value: string): number {
+  const HASH_OFFSET_BASIS = 2166136261;
+  const HASH_PRIME = 16777619;
+  let hash = HASH_OFFSET_BASIS;
+  for (const char of value) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, HASH_PRIME) >>> 0;
+  }
+  return hash;
+}
+
+/**
+ * Returns the single site to reveal on the Atlas screen for the given
+ * dreamscape node. Selection rules:
+ *
+ * 1. If the dreamscape has a biome-enhanced site (other than Battle), reveal
+ *    it — the enhanced site is the visual signature of the biome.
+ * 2. Otherwise, pick deterministically from the non-Battle sites using a
+ *    hash of the node id. The Battle site is always kept hidden so the
+ *    player knows a battle is coming but not what surrounds it.
+ *
+ * Returns `null` only for nodes with no sites (e.g. the Nexus placeholder).
+ */
+export function revealedAtlasSite(node: DreamscapeNode): SiteState | null {
+  const candidates = node.sites.filter((s) => s.type !== "Battle");
+  if (candidates.length === 0) {
+    return null;
+  }
+
+  if (node.enhancedSiteType !== null && node.enhancedSiteType !== "Battle") {
+    const enhanced = candidates.find(
+      (s) => s.type === node.enhancedSiteType && s.isEnhanced,
+    );
+    if (enhanced) {
+      return enhanced;
+    }
+  }
+
+  const index = fnv1aHash(node.id) % candidates.length;
+  return candidates[index];
 }
 
 /**

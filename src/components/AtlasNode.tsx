@@ -2,8 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import type { DreamscapeNode } from "../types/quest";
 import {
-  previewSiteTypes,
-  rewardPreviewLabel,
+  revealedAtlasSite,
+  siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
 } from "../atlas/atlas-generator";
@@ -60,11 +60,19 @@ export function AtlasNode({ node, isNexus, onNodeClick }: AtlasNodeProps) {
     strokeColor = "#6b7280";
   }
 
-  const previewSites = previewSiteTypes(node);
+  // The one site we reveal inside the dreamscape circle. The Battle site is
+  // intentionally never revealed — the player should know a battle is coming
+  // but not always know what surrounds it. The remaining sites (including
+  // Battle) show as "?" placeholders in the hover popover.
+  const revealedSite = isNexus ? null : revealedAtlasSite(node);
+  const hiddenSiteCount = revealedSite
+    ? Math.max(node.sites.length - 1, 0)
+    : node.sites.length;
 
-  const rewardLabel = node.sites
-    .map((s) => rewardPreviewLabel(s))
-    .find((label) => label !== null) ?? null;
+  // Tooltip dimensions
+  const tooltipWidth = 240;
+  const tooltipHeight = 88;
+  const tooltipOffsetY = radius + 12;
 
   return (
     <g
@@ -80,7 +88,9 @@ export function AtlasNode({ node, isNexus, onNodeClick }: AtlasNodeProps) {
       aria-label={
         isNexus
           ? "Nexus"
-          : `${node.biomeName} dreamscape - ${node.status}`
+          : `${node.biomeName} dreamscape - ${node.status}${
+              revealedSite ? ` - ${siteTypeName(revealedSite.type)} revealed` : ""
+            }`
       }
     >
       {/* Glow effect for available nodes */}
@@ -126,6 +136,22 @@ export function AtlasNode({ node, isNexus, onNodeClick }: AtlasNodeProps) {
         />
       )}
 
+      {/* Revealed site icon centered inside the dreamscape circle. Completed
+          nodes overlay the checkmark on top, but we still show the icon as a
+          dim reminder of what the dreamscape contained. */}
+      {!isNexus && revealedSite && (
+        <text
+          x={0}
+          y={radius * 0.28}
+          textAnchor="middle"
+          fontSize={radius * 0.95}
+          opacity={isCompleted ? 0.35 : 1}
+          style={{ pointerEvents: "none" }}
+        >
+          {siteTypeIcon(revealedSite.type)}
+        </text>
+      )}
+
       {/* Checkmark for completed nodes */}
       {isCompleted && !isNexus && (
         <text
@@ -137,7 +163,7 @@ export function AtlasNode({ node, isNexus, onNodeClick }: AtlasNodeProps) {
           fontWeight="bold"
           style={{ pointerEvents: "none" }}
         >
-          {"\u2713"}
+          {"✓"}
         </text>
       )}
 
@@ -172,13 +198,13 @@ export function AtlasNode({ node, isNexus, onNodeClick }: AtlasNodeProps) {
       )}
 
       {/* Hover tooltip */}
-      {isHovered && (isAvailable || isCompleted) && !isNexus && (
-        <g transform={`translate(0, ${String(-(radius + 20))})`}>
+      {isHovered && (isAvailable || isCompleted) && !isNexus && revealedSite && (
+        <g transform={`translate(0, ${String(tooltipOffsetY)})`}>
           <rect
-            x={-115}
-            y={rewardLabel !== null ? -80 : -64}
-            width={230}
-            height={rewardLabel !== null ? 78 : 62}
+            x={-tooltipWidth / 2}
+            y={0}
+            width={tooltipWidth}
+            height={tooltipHeight}
             rx={8}
             fill="#1a1025"
             stroke={node.biomeColor}
@@ -188,49 +214,48 @@ export function AtlasNode({ node, isNexus, onNodeClick }: AtlasNodeProps) {
           {/* Biome name in tooltip */}
           <text
             x={0}
-            y={rewardLabel !== null ? -58 : -44}
+            y={16}
             textAnchor="middle"
             fill={node.biomeColor}
-            fontSize={12}
+            fontSize={11}
             fontWeight="bold"
           >
             {node.biomeName}
           </text>
-          {/* Site icons */}
+          {/* Revealed site name */}
           <text
             x={0}
-            y={rewardLabel !== null ? -36 : -22}
-            textAnchor="middle"
-            fontSize={18}
-          >
-            {previewSites.map((st, i) => (
-              <tspan key={i} dx={i > 0 ? 8 : 0}>
-                {siteTypeIcon(st)}
-              </tspan>
-            ))}
-          </text>
-          {/* Site names */}
-          <text
-            x={0}
-            y={rewardLabel !== null ? -18 : -4}
+            y={34}
             textAnchor="middle"
             fill="#e2e8f0"
-            fontSize={8}
-            opacity={0.7}
+            fontSize={11}
+            fontWeight="bold"
           >
-            {previewSites.map((st) => siteTypeName(st)).join(" \u00B7 ")}
+            {siteTypeIcon(revealedSite.type)} {siteTypeName(revealedSite.type)}
+            {revealedSite.isEnhanced ? " ★" : ""}
           </text>
-          {/* Reward preview label */}
-          {rewardLabel !== null && (
+          {/* Revealed site description */}
+          <text
+            x={0}
+            y={50}
+            textAnchor="middle"
+            fill="#cbd5e1"
+            fontSize={9}
+            opacity={0.85}
+          >
+            {siteTypeDescription(revealedSite.type)}
+          </text>
+          {/* "?" placeholders for the remaining hidden sites */}
+          {hiddenSiteCount > 0 && (
             <text
               x={0}
-              y={-4}
+              y={72}
               textAnchor="middle"
-              fill="#fbbf24"
-              fontSize={8}
-              fontWeight="bold"
+              fill="#94a3b8"
+              fontSize={11}
+              letterSpacing={4}
             >
-              {rewardLabel}
+              {Array.from({ length: hiddenSiteCount }, () => "?").join(" ")}
             </text>
           )}
         </g>
