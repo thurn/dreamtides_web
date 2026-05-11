@@ -5,7 +5,7 @@ import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CardSourceOverlay } from "./CardSourceOverlay";
-import type { CardSourceDebugState } from "../types/quest";
+import type { CardSourceDebugEntry, CardSourceDebugState } from "../types/quest";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -95,6 +95,74 @@ describe("CardSourceOverlay", () => {
     expect(container.textContent).toContain("support-a");
     expect(container.textContent).toContain("Driftbound Relic");
     expect(container.textContent).toContain("broader-pool fallback");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders without crashing when tide arrays are missing or empty", () => {
+    // Realtime Database silently drops empty arrays on write, so a
+    // round-tripped fallback entry arrives with `matchedMandatoryTides`,
+    // `matchedOptionalTides`, and `cardTides` set to `undefined`. The
+    // overlay coerces missing arrays to `[]` so a stale snapshot cannot
+    // crash the render with `is not iterable`.
+    const strippedFallback = {
+      cardNumber: 99,
+      cardName: "Stripped Fallback",
+      isFallback: true,
+    } as unknown as CardSourceDebugEntry;
+    const emptyArraysEntry: CardSourceDebugEntry = {
+      cardNumber: 100,
+      cardName: "Empty Arrays",
+      cardTides: [],
+      matchedMandatoryTides: [],
+      matchedOptionalTides: [],
+      isFallback: true,
+    };
+    const overlay: CardSourceDebugState = {
+      screenLabel: "Draft Picks",
+      surface: "Draft",
+      entries: [strippedFallback, emptyArraysEntry],
+    };
+
+    const { container, root } = mount(
+      <CardSourceOverlay
+        cardSourceDebug={overlay}
+        isOpen
+        onClose={vi.fn()}
+      />,
+    );
+
+    expect(container.textContent).toContain("Why am I seeing these cards?");
+    expect(container.textContent).toContain("Stripped Fallback");
+    expect(container.textContent).toContain("Empty Arrays");
+    expect(container.textContent).toContain("broader-pool fallback");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders without crashing when the entries field itself is missing", () => {
+    // Defence-in-depth: a manually crafted or upstream-mangled overlay
+    // state with `entries` set to `undefined` should still render its
+    // header rather than crash the app.
+    const overlay = {
+      screenLabel: "Draft Picks",
+      surface: "Draft",
+    } as unknown as CardSourceDebugState;
+
+    const { container, root } = mount(
+      <CardSourceOverlay
+        cardSourceDebug={overlay}
+        isOpen
+        onClose={vi.fn()}
+      />,
+    );
+
+    expect(container.textContent).toContain("Why am I seeing these cards?");
+    expect(container.textContent).toContain("Draft Picks");
 
     act(() => {
       root.unmount();

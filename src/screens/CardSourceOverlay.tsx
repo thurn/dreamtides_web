@@ -1,7 +1,11 @@
 import { useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { TideChip } from "../components/TideChip";
-import type { CardSourceDebugEntry, CardSourceDebugState } from "../types/quest";
+import type { PackageTideId } from "../types/content";
+import type {
+  CardSourceDebugEntry,
+  CardSourceDebugState,
+} from "../types/quest";
 
 interface CardSourceOverlayProps {
   cardSourceDebug: CardSourceDebugState | null;
@@ -9,8 +13,28 @@ interface CardSourceOverlayProps {
   onClose: () => void;
 }
 
+/**
+ * Read a tide array off a `CardSourceDebugEntry` defensively.
+ *
+ * Firebase Realtime Database silently drops empty arrays on write. A
+ * round-tripped fallback entry (no mandatory and no optional matches) will
+ * therefore arrive with `matchedMandatoryTides`, `matchedOptionalTides`, or
+ * `cardTides` set to `undefined`. The `room-service` normalizer restores
+ * them, but the overlay coerces to `[]` here too so a stale snapshot or a
+ * mis-shaped entry from any source cannot crash the render.
+ */
+function readTides(
+  entry: CardSourceDebugEntry,
+  field: "matchedMandatoryTides" | "matchedOptionalTides" | "cardTides",
+): PackageTideId[] {
+  return entry[field] ?? [];
+}
+
 function matchedTides(entry: CardSourceDebugEntry): string[] {
-  return [...entry.matchedMandatoryTides, ...entry.matchedOptionalTides];
+  return [
+    ...readTides(entry, "matchedMandatoryTides"),
+    ...readTides(entry, "matchedOptionalTides"),
+  ];
 }
 
 function surfaceCopy(surface: CardSourceDebugState["surface"]): string {
@@ -57,10 +81,10 @@ function CardExplanation({ entry }: { entry: CardSourceDebugEntry }) {
             Matching selected tides
           </p>
           <div className="mt-2 flex flex-wrap gap-1.5">
-            {entry.matchedMandatoryTides.map((tide) => (
+            {readTides(entry, "matchedMandatoryTides").map((tide) => (
               <TideChip key={`required-${tide}`} label={tide} variant="required" />
             ))}
-            {entry.matchedOptionalTides.map((tide) => (
+            {readTides(entry, "matchedOptionalTides").map((tide) => (
               <TideChip key={`optional-${tide}`} label={tide} variant="optional" />
             ))}
           </div>
@@ -76,7 +100,7 @@ function CardExplanation({ entry }: { entry: CardSourceDebugEntry }) {
         Card tide ids
       </p>
       <div className="mt-2 flex flex-wrap gap-1.5">
-        {entry.cardTides.map((tide) => (
+        {readTides(entry, "cardTides").map((tide) => (
           <TideChip key={`card-${tide}`} label={tide} variant="neutral" />
         ))}
       </div>
@@ -157,7 +181,7 @@ export function CardSourceOverlay({
           </div>
 
           <div className="max-h-[calc(70vh-92px)] space-y-3 overflow-y-auto p-4">
-            {cardSourceDebug.entries.map((entry) => (
+            {(cardSourceDebug.entries ?? []).map((entry) => (
               <CardExplanation
                 key={`${String(entry.cardNumber)}-${cardSourceDebug.surface}`}
                 entry={entry}

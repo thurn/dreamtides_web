@@ -26,6 +26,8 @@ import {
   type ResolvedDreamcallerPackage,
 } from "../types/content";
 import type {
+  CardSourceDebugEntry,
+  CardSourceDebugState,
   DeckEntry,
   Dreamcaller,
   DreamAtlas,
@@ -75,6 +77,38 @@ function normalizeAtlas(atlas: DreamAtlas | undefined): DreamAtlas {
     nodes,
     edges: atlas.edges ?? defaults.edges,
     startingNodeId: atlas.startingNodeId ?? defaults.startingNodeId,
+  };
+}
+
+/**
+ * Restore arrays on a `CardSourceDebugEntry` that RTDB silently dropped.
+ *
+ * A fallback entry has empty `matchedMandatoryTides` and `matchedOptionalTides`
+ * arrays; a card with no tides has an empty `cardTides` array. Realtime
+ * Database strips all three on write, so the round-tripped entry arrives
+ * with `undefined` fields and the overlay crashes when it iterates them.
+ */
+function normalizeCardSourceDebugEntry(
+  entry: CardSourceDebugEntry,
+): CardSourceDebugEntry {
+  return {
+    ...entry,
+    cardTides: entry.cardTides ?? [],
+    matchedMandatoryTides: entry.matchedMandatoryTides ?? [],
+    matchedOptionalTides: entry.matchedOptionalTides ?? [],
+    isFallback: entry.isFallback ?? false,
+  };
+}
+
+function normalizeCardSourceDebug(
+  cardSourceDebug: CardSourceDebugState | null | undefined,
+): CardSourceDebugState | null {
+  if (cardSourceDebug === null || cardSourceDebug === undefined) {
+    return null;
+  }
+  return {
+    ...cardSourceDebug,
+    entries: (cardSourceDebug.entries ?? []).map(normalizeCardSourceDebugEntry),
   };
 }
 
@@ -142,7 +176,7 @@ function normalizeQuestState(questState: QuestState | null | undefined): QuestSt
     deck: normalizeDeck(questState.deck),
     dreamcaller: normalizeDreamcaller(questState.dreamcaller),
     resolvedPackage: normalizeResolvedPackage(questState.resolvedPackage),
-    cardSourceDebug: questState.cardSourceDebug ?? null,
+    cardSourceDebug: normalizeCardSourceDebug(questState.cardSourceDebug),
     remainingDreamsignPool: questState.remainingDreamsignPool ?? defaults.remainingDreamsignPool,
     dreamsigns: questState.dreamsigns ?? defaults.dreamsigns,
     completionLevel: questState.completionLevel ?? defaults.completionLevel,

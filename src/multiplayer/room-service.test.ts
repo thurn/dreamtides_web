@@ -318,6 +318,69 @@ describe("room service", () => {
     });
   });
 
+  it("restores RTDB-stripped tide arrays on cardSourceDebug entries", () => {
+    const listener = vi.fn();
+    const strippedQuestState = {
+      ...createDefaultState(),
+      cardSourceDebug: {
+        screenLabel: "Draft Picks",
+        surface: "Draft",
+        entries: [
+          // Fallback entry: RTDB strips empty `matchedMandatoryTides` and
+          // `matchedOptionalTides`. Also strip `cardTides` so the
+          // normalizer must restore all three.
+          {
+            cardNumber: 711,
+            cardName: "Lonely Fallback",
+            isFallback: true,
+          },
+          // Selected entry: RTDB strips only the empty `matchedOptionalTides`.
+          {
+            cardNumber: 712,
+            cardName: "Required Match",
+            cardTides: ["core"],
+            matchedMandatoryTides: ["core"],
+            isFallback: false,
+          },
+        ],
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready.room.questState?.cardSourceDebug).toEqual({
+      screenLabel: "Draft Picks",
+      surface: "Draft",
+      entries: [
+        {
+          cardNumber: 711,
+          cardName: "Lonely Fallback",
+          cardTides: [],
+          matchedMandatoryTides: [],
+          matchedOptionalTides: [],
+          isFallback: true,
+        },
+        {
+          cardNumber: 712,
+          cardName: "Required Match",
+          cardTides: ["core"],
+          matchedMandatoryTides: ["core"],
+          matchedOptionalTides: [],
+          isFallback: false,
+        },
+      ],
+    });
+  });
+
   it("restores stripped transfiguration on deck entries round-tripped through RTDB", () => {
     const listener = vi.fn();
     const strippedQuestState = {
