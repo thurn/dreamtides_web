@@ -322,9 +322,7 @@ function ShopSlotCard({
           </p>
         </div>
         <PriceButton
-          basePrice={slot.basePrice}
           price={price}
-          hasDiscount={hasDiscount}
           canAfford={canAfford}
           onClick={() => onBuy(index)}
         />
@@ -342,9 +340,7 @@ function ShopSlotCard({
           onClick={() => onCardClick(slot.card!)}
         />
         <PriceButton
-          basePrice={slot.basePrice}
           price={price}
-          hasDiscount={hasDiscount}
           canAfford={canAfford}
           onClick={() => onBuy(index)}
         />
@@ -356,17 +352,13 @@ function ShopSlotCard({
   return null;
 }
 
-/** Renders the Buy button with price display, including discount styling. */
+/** Renders the Buy button with the effective (post-discount) price. */
 function PriceButton({
-  basePrice,
   price,
-  hasDiscount,
   canAfford,
   onClick,
 }: {
-  basePrice: number;
   price: number;
-  hasDiscount: boolean;
   canAfford: boolean;
   onClick: () => void;
 }) {
@@ -383,14 +375,6 @@ function PriceButton({
       onClick={onClick}
     >
       <span>Buy</span>
-      {hasDiscount && (
-        <span
-          className="text-xs line-through opacity-50"
-          style={{ color: "#9ca3af" }}
-        >
-          {String(basePrice)}
-        </span>
-      )}
       <span
         style={{ color: "var(--color-essence)" }}
         className="tabular-nums"

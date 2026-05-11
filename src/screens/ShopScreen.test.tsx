@@ -246,6 +246,88 @@ describe("ShopScreen", () => {
     });
   });
 
+  it("shows only the discounted price on sale items, with no strikethrough or original price", () => {
+    setQuestContext(
+      makeState([
+        {
+          itemType: "card",
+          cardNumber: 1,
+          basePrice: 100,
+          discountPercent: 30,
+          purchased: false,
+        },
+      ]),
+    );
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    // No strikethrough element anywhere in the rendered tree.
+    expect(container.querySelector(".line-through")).toBeNull();
+    expect(container.querySelector("s")).toBeNull();
+
+    // The Buy button surfaces only the discounted price (70), not the base
+    // price (100). The base price must not appear anywhere on the button.
+    const buyButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent?.startsWith("Buy"),
+    );
+    expect(buyButton).not.toBeUndefined();
+    expect(buyButton?.textContent).toContain("70");
+    expect(buyButton?.textContent).not.toContain("100");
+
+    // The SALE caption is still rendered below the button.
+    expect(container.textContent).toContain("Sale 30% Off");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the price button identically for non-sale items (regression: discount path must not alter base rendering)", () => {
+    setQuestContext(
+      makeState([
+        {
+          itemType: "card",
+          cardNumber: 1,
+          basePrice: 80,
+          discountPercent: 0,
+          purchased: false,
+        },
+      ]),
+    );
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    const buyButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent?.startsWith("Buy"),
+    );
+    expect(buyButton).not.toBeUndefined();
+    expect(buyButton?.textContent).toContain("80");
+    expect(container.querySelector(".line-through")).toBeNull();
+    expect(container.textContent).not.toContain("Sale");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("paints the Reroll button's essence cost in the shared essence colour", () => {
     setQuestContext(
       makeState([
