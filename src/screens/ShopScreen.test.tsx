@@ -425,12 +425,13 @@ describe("ShopScreen", () => {
     });
   });
 
-  it("paints the Reroll button's essence cost in the shared essence colour", () => {
+  it("always renders an active reroll affordance with a 50 essence cost when the reroll has not been used this visit", () => {
     setQuestContext(
       makeState([
         {
-          itemType: "reroll",
-          basePrice: 50,
+          itemType: "card",
+          cardNumber: 1,
+          basePrice: 100,
           discountPercent: 0,
           purchased: false,
         },
@@ -448,21 +449,152 @@ describe("ShopScreen", () => {
       />,
     );
 
-    const rerollLabel = container.querySelector("[data-shop-essence-label]");
-    expect(rerollLabel).not.toBeNull();
-    expect(rerollLabel?.textContent).toBe("Essence");
-    expect((rerollLabel as HTMLElement | null)?.style.color).toBe(
-      "var(--color-essence)",
+    const rerollButton = container.querySelector<HTMLButtonElement>(
+      "[data-shop-reroll-button]",
     );
-
-    // The button still surfaces the numeric cost alongside the word.
-    const rerollButton = Array.from(
-      container.querySelectorAll("button"),
-    ).find((button) => button.textContent?.includes("Reroll"));
-    expect(rerollButton).not.toBeUndefined();
+    expect(rerollButton).not.toBeNull();
+    expect(rerollButton?.disabled).toBe(false);
+    expect(rerollButton?.dataset.shopRerollUsed).toBe("false");
+    expect(rerollButton?.textContent).toContain("Reroll Shop");
     expect(rerollButton?.textContent).toContain("50");
     expect(rerollButton?.textContent).not.toContain("◆");
     expect(rerollButton?.textContent).not.toContain("⬢");
+
+    // The Essence label still carries the shared essence colour.
+    const labels = rerollButton?.querySelectorAll("[data-shop-essence-label]");
+    expect(labels?.length).toBeGreaterThan(0);
+    if (labels) {
+      expect((labels[0] as HTMLElement).style.color).toBe(
+        "var(--color-essence)",
+      );
+      expect(labels[0]?.textContent).toBe("Essence");
+    }
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("disables the reroll affordance and labels it 'Reroll Used' after the reroll has been used this visit", () => {
+    const slots: RuntimeShopSlot[] = [
+      {
+        itemType: "card",
+        cardNumber: 1,
+        basePrice: 100,
+        discountPercent: 0,
+        purchased: false,
+      },
+    ];
+    const state = makeState(slots);
+    const shopRuntime = state.siteRuntime["shop-1"];
+    if (shopRuntime !== undefined && shopRuntime.kind === "shop") {
+      shopRuntime.rerollCount = 1;
+    }
+    setQuestContext(state);
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    const rerollButton = container.querySelector<HTMLButtonElement>(
+      "[data-shop-reroll-button]",
+    );
+    expect(rerollButton).not.toBeNull();
+    expect(rerollButton?.disabled).toBe(true);
+    expect(rerollButton?.dataset.shopRerollUsed).toBe("true");
+    expect(rerollButton?.textContent).toBe("Reroll Used");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("invokes rerollShop without a slot index when the reroll affordance is clicked", () => {
+    const mutations = makeMutations();
+    vi.mocked(useQuest).mockReturnValue({
+      state: makeState([
+        {
+          itemType: "card",
+          cardNumber: 1,
+          basePrice: 100,
+          discountPercent: 0,
+          purchased: false,
+        },
+      ]),
+      mutations,
+      cardDatabase: makeCardDatabase(),
+      questContent: {
+        cardDatabase: makeCardDatabase(),
+        cardsByPackageTide: new Map(),
+        dreamcallers: [],
+        dreamsignTemplates: [],
+        resolvedPackagesByDreamcallerId: new Map(),
+      },
+    });
+
+    const site = {
+      id: "shop-1",
+      type: "Shop" as const,
+      isEnhanced: false,
+      isVisited: false,
+    };
+
+    const { container, root } = mount(<ShopScreen site={site} />);
+
+    const rerollButton = container.querySelector<HTMLButtonElement>(
+      "[data-shop-reroll-button]",
+    );
+    expect(rerollButton).not.toBeNull();
+    act(() => {
+      rerollButton?.click();
+    });
+
+    // Reroll is now keyed to the site, not a slot index in the grid. The
+    // mutation receives the SiteState exactly once, with no slot index.
+    expect(mutations.rerollShop).toHaveBeenCalledTimes(1);
+    expect(mutations.rerollShop).toHaveBeenCalledWith(site);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows the reroll affordance as FREE on an enhanced shop visit", () => {
+    setQuestContext(
+      makeState([
+        {
+          itemType: "card",
+          cardNumber: 1,
+          basePrice: 100,
+          discountPercent: 0,
+          purchased: false,
+        },
+      ]),
+    );
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: true,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    const rerollButton = container.querySelector<HTMLButtonElement>(
+      "[data-shop-reroll-button]",
+    );
+    expect(rerollButton?.textContent).toContain("FREE");
+    expect(rerollButton?.disabled).toBe(false);
 
     act(() => {
       root.unmount();

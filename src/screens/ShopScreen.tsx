@@ -21,7 +21,17 @@ interface ShopScreenProps {
   site: SiteState;
 }
 
-/** Renders the Shop site screen with a 2x3 item grid, purchasing, and rerolling. */
+/**
+ * Renders the Shop site screen with a 2x3 item grid, purchasing, and a
+ * single-use reroll affordance.
+ *
+ * Every visit to a Shop site exposes exactly one reroll. The reroll
+ * affordance lives outside the inventory grid so it is always visible.
+ * Triggering it refreshes all unsold slots and disables the affordance
+ * for the rest of the visit. Reroll state is scoped per Shop site via
+ * `rerollCount` on the site runtime, so each Shop in the atlas owns its
+ * own fresh reroll.
+ */
 export function ShopScreen({ site }: ShopScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
   const { essence } = state;
@@ -37,9 +47,13 @@ export function ShopScreen({ site }: ShopScreenProps) {
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
 
   const currentRerollCost = useMemo(
-    () => rerollCost(rerollCount, site.isEnhanced),
-    [rerollCount, site.isEnhanced],
+    () => rerollCost(0, site.isEnhanced),
+    [site.isEnhanced],
   );
+  const rerollUsed = rerollCount > 0;
+  const canAffordReroll = currentRerollCost <= essence;
+  const rerollAvailable = !rerollUsed && canAffordReroll;
+
   const visibleCardOffers = useMemo(
     () =>
       slots
@@ -83,12 +97,9 @@ export function ShopScreen({ site }: ShopScreenProps) {
     [mutations, site.id],
   );
 
-  const handleReroll = useCallback(
-    (index: number) => {
-      mutations.rerollShop(site, index);
-    },
-    [mutations, site],
-  );
+  const handleReroll = useCallback(() => {
+    mutations.rerollShop(site);
+  }, [mutations, site]);
 
   const handleLeave = useCallback(() => {
     mutations.completeSite(site.id, "shop_left");
@@ -133,7 +144,7 @@ export function ShopScreen({ site }: ShopScreenProps) {
               border: "1px solid rgba(168, 85, 247, 0.3)",
             }}
           >
-            Enhanced -- Free Rerolls
+            Enhanced -- Free Reroll
           </span>
         )}
       </div>
@@ -153,19 +164,23 @@ export function ShopScreen({ site }: ShopScreenProps) {
             slot={slot}
             index={index}
             canAfford={effectivePrice(slot) <= essence}
-            rerollCost={
-              slot.itemType === "reroll" ? currentRerollCost : undefined
-            }
             onBuy={handleBuy}
-            onReroll={handleReroll}
             onCardClick={setOverlayCard}
           />
         ))}
       </div>
 
+      {/* Reroll affordance: always rendered, single-use per visit */}
+      <RerollButton
+        cost={currentRerollCost}
+        used={rerollUsed}
+        available={rerollAvailable}
+        onClick={handleReroll}
+      />
+
       {/* Leave button */}
       <button
-        className="mt-8 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
+        className="mt-4 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
         style={{
           background: "rgba(107, 114, 128, 0.2)",
           border: "1px solid rgba(107, 114, 128, 0.4)",
@@ -181,14 +196,62 @@ export function ShopScreen({ site }: ShopScreenProps) {
   );
 }
 
+/** Props for the standalone reroll button. */
+interface RerollButtonProps {
+  cost: number;
+  used: boolean;
+  available: boolean;
+  onClick: () => void;
+}
+
+/**
+ * Renders the single-use reroll affordance below the shop grid. The
+ * button is always visible: it shows the cost when available, "Reroll
+ * Used" when the player has already rerolled this visit, and a faded
+ * cost when the player cannot afford it.
+ */
+function RerollButton({ cost, used, available, onClick }: RerollButtonProps) {
+  return (
+    <button
+      className="mt-8 flex items-center justify-center gap-2 rounded-lg px-6 py-2.5 text-base font-bold transition-opacity"
+      style={{
+        background: available ? "#7c3aed" : "#4b5563",
+        color: available ? "#ffffff" : "#9ca3af",
+        opacity: available ? 1 : 0.6,
+        cursor: available ? "pointer" : "not-allowed",
+        border: "1px solid rgba(168, 85, 247, 0.4)",
+        boxShadow: available ? "0 0 12px rgba(168, 85, 247, 0.25)" : "none",
+      }}
+      disabled={!available}
+      onClick={onClick}
+      data-shop-reroll-button=""
+      data-shop-reroll-used={used ? "true" : "false"}
+    >
+      {used ? (
+        <span>Reroll Used</span>
+      ) : cost === 0 ? (
+        <span>Reroll Shop (FREE)</span>
+      ) : (
+        <>
+          <span>{`Reroll Shop · ${String(cost)} `}</span>
+          <span
+            style={{ color: "var(--color-essence)" }}
+            data-shop-essence-label=""
+          >
+            Essence
+          </span>
+        </>
+      )}
+    </button>
+  );
+}
+
 /** Props for a single shop slot card. */
 interface ShopSlotCardProps {
   slot: ShopSlot;
   index: number;
   canAfford: boolean;
-  rerollCost?: number;
   onBuy: (index: number) => void;
-  onReroll: (index: number) => void;
   onCardClick: (card: CardData) => void;
 }
 
@@ -197,9 +260,7 @@ function ShopSlotCard({
   slot,
   index,
   canAfford,
-  rerollCost: rerollCostValue,
   onBuy,
-  onReroll,
   onCardClick,
 }: ShopSlotCardProps) {
   if (slot.purchased) {
@@ -218,61 +279,6 @@ function ShopSlotCard({
 
   const price = effectivePrice(slot);
   const hasDiscount = slot.discountPercent > 0;
-
-  if (slot.itemType === "reroll") {
-    const displayCost = rerollCostValue ?? slot.basePrice;
-    const canAffordReroll = displayCost <= 0 || canAfford;
-    return (
-      <div className="flex flex-col gap-2">
-        <div
-          className="flex flex-col items-center justify-center gap-3 rounded-lg p-4"
-          style={{
-            aspectRatio: "2 / 3",
-            background:
-              "linear-gradient(145deg, #1a1025 0%, #1a1030 60%, #0d0814 100%)",
-            border: "1px solid rgba(168, 85, 247, 0.4)",
-            boxShadow: "0 0 12px rgba(168, 85, 247, 0.15)",
-          }}
-        >
-          <div className="text-4xl">{"\u267B\uFE0F"}</div>
-          <h3
-            className="text-center text-lg font-bold"
-            style={{ color: "#a855f7" }}
-          >
-            Reroll Shop
-          </h3>
-          <p className="text-center text-xs opacity-50">
-            Refresh all unsold items with new stock
-          </p>
-        </div>
-        <button
-          className="flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-bold transition-opacity"
-          style={{
-            background: canAffordReroll ? "#7c3aed" : "#4b5563",
-            color: canAffordReroll ? "#ffffff" : "#9ca3af",
-            opacity: canAffordReroll ? 1 : 0.6,
-            cursor: canAffordReroll ? "pointer" : "not-allowed",
-          }}
-          disabled={!canAffordReroll}
-          onClick={() => onReroll(index)}
-        >
-          {displayCost === 0 ? (
-            <span>Reroll (FREE)</span>
-          ) : (
-            <>
-              <span>{`Reroll · ${String(displayCost)} `}</span>
-              <span
-                style={{ color: "var(--color-essence)" }}
-                data-shop-essence-label=""
-              >
-                Essence
-              </span>
-            </>
-          )}
-        </button>
-      </div>
-    );
-  }
 
   if (slot.itemType === "dreamsign" && slot.dreamsign) {
     const ds = slot.dreamsign;

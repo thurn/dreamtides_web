@@ -164,12 +164,6 @@ export type RuntimeShopSlot =
       basePrice: number;
       discountPercent: number;
       purchased: boolean;
-    }
-  | {
-      itemType: "reroll";
-      basePrice: number;
-      discountPercent: number;
-      purchased: boolean;
     };
 
 /** Runtime state for a shop site. */

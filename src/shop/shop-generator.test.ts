@@ -118,7 +118,7 @@ describe("rerollCost", () => {
 });
 
 describe("shop runtime conversion", () => {
-  it("round-trips card, Dreamsign, and reroll slots", () => {
+  it("round-trips card and Dreamsign slots", () => {
     const card = makeCard({ cardNumber: 7, name: "Seven Bells" });
     const dreamsign = {
       id: "dreamsign-1",
@@ -143,14 +143,6 @@ describe("shop runtime conversion", () => {
         discountPercent: 0,
         purchased: true,
       },
-      {
-        itemType: "reroll" as const,
-        card: null,
-        dreamsign: null,
-        basePrice: 50,
-        discountPercent: 0,
-        purchased: false,
-      },
     ];
 
     const runtime = shopSlotsToRuntime(slots);
@@ -169,12 +161,6 @@ describe("shop runtime conversion", () => {
         basePrice: 150,
         discountPercent: 0,
         purchased: true,
-      },
-      {
-        itemType: "reroll",
-        basePrice: 50,
-        discountPercent: 0,
-        purchased: false,
       },
     ]);
     expect(runtimeSlotsToShopSlots(runtime, makeDatabase([card]))).toEqual(slots);
@@ -227,23 +213,24 @@ describe("generateShopInventory", () => {
     }
   });
 
-  it("has at most one reroll slot", () => {
-    // Run multiple times to account for randomness
+  it("never includes a reroll slot in the grid inventory", () => {
+    // The reroll affordance lives outside the grid so every inventory
+    // slot is a card or Dreamsign.
     for (let i = 0; i < 20; i++) {
       const result = generateShopInventory(db, []);
-      const rerollSlots = result.slots.filter((s) => s.itemType === "reroll");
-      expect(rerollSlots.length).toBeLessThanOrEqual(1);
+      for (const slot of result.slots) {
+        expect(["card", "dreamsign"]).toContain(slot.itemType);
+      }
     }
   });
 
-  it("applies 1-2 discounts to non-reroll slots", () => {
+  it("applies 1-2 discounts to inventory slots", () => {
     for (let i = 0; i < 20; i++) {
       const result = generateShopInventory(db, []);
       const discounted = result.slots.filter((s) => s.discountPercent > 0);
       expect(discounted.length).toBeGreaterThanOrEqual(1);
       expect(discounted.length).toBeLessThanOrEqual(2);
       for (const slot of discounted) {
-        expect(slot.itemType).not.toBe("reroll");
         expect(slot.discountPercent).toBeGreaterThanOrEqual(30);
         expect(slot.discountPercent).toBeLessThanOrEqual(90);
       }

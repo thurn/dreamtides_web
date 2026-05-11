@@ -30,7 +30,7 @@ const REROLL_INCREMENT = 25;
 const DREAMSIGN_CHANCE = 1 / 6;
 
 /** The types of items that can appear in a shop slot. */
-export type ShopItemType = "card" | "dreamsign" | "reroll";
+export type ShopItemType = "card" | "dreamsign";
 
 /** A single slot in the shop inventory. */
 export interface ShopSlot {
@@ -87,21 +87,14 @@ export function shopSlotsToRuntime(
       };
     }
 
-    if (slot.itemType === "dreamsign") {
-      if (slot.dreamsign === null) {
-        throw new Error(
-          "Cannot convert a Dreamsign shop slot without a Dreamsign",
-        );
-      }
-      return {
-        itemType: "dreamsign",
-        dreamsign: slot.dreamsign,
-        ...base,
-      };
+    if (slot.dreamsign === null) {
+      throw new Error(
+        "Cannot convert a Dreamsign shop slot without a Dreamsign",
+      );
     }
-
     return {
-      itemType: "reroll",
+      itemType: "dreamsign",
+      dreamsign: slot.dreamsign,
       ...base,
     };
   });
@@ -127,19 +120,10 @@ export function runtimeSlotsToShopSlots(
       };
     }
 
-    if (slot.itemType === "dreamsign") {
-      return {
-        itemType: "dreamsign",
-        card: null,
-        dreamsign: slot.dreamsign,
-        ...base,
-      };
-    }
-
     return {
-      itemType: "reroll",
+      itemType: "dreamsign",
       card: null,
-      dreamsign: null,
+      dreamsign: slot.dreamsign,
       ...base,
     };
   });
@@ -245,8 +229,10 @@ function pickWeightedCard(
   return candidates[candidates.length - 1]?.card ?? null;
 }
 /**
- * Generates shop inventory with 6 slots. Each slot can be a card,
- * dreamsign, or reroll option.
+ * Generates shop inventory with 6 slots. Each slot is a card or dreamsign.
+ * The reroll affordance is rendered separately by `ShopScreen`, not as a
+ * grid slot, so every visit exposes exactly one reroll regardless of
+ * inventory composition.
  */
 export function generateShopInventory(
   cardDatabase: Map<number, CardData>,
@@ -262,25 +248,7 @@ export function generateShopInventory(
   let remainingDreamsignPoolIds = [...(options.remainingDreamsignPoolIds ?? [])];
   const spentDreamsignPoolIds: string[] = [];
 
-  // Decide if reroll slot appears (50% chance)
-  const hasRerollSlot = Math.random() < 0.5;
-  const rerollSlotIndex = hasRerollSlot
-    ? Math.floor(Math.random() * 6)
-    : -1;
-
   for (let i = 0; i < 6; i++) {
-    if (i === rerollSlotIndex) {
-      slots.push({
-        itemType: "reroll",
-        card: null,
-        dreamsign: null,
-        basePrice: REROLL_BASE_COST,
-        discountPercent: 0,
-        purchased: false,
-      });
-      continue;
-    }
-
     // Roll for dreamsign
     if (
       Math.random() < DREAMSIGN_CHANCE &&
@@ -337,10 +305,8 @@ export function generateShopInventory(
     }
   }
 
-  // Apply discounts to 1-2 random non-reroll slots
-  const discountableIndices = slots
-    .map((s, i) => (s.itemType !== "reroll" ? i : -1))
-    .filter((i) => i >= 0);
+  // Apply discounts to 1-2 random slots
+  const discountableIndices = slots.map((_, i) => i);
 
   const discountCount = Math.random() < 0.5 ? 1 : 2;
   const shuffled = discountableIndices.sort(() => Math.random() - 0.5);

@@ -286,7 +286,7 @@ function runtimeShopSlotEqual(
     return dreamsignMatches(left.dreamsign, right.dreamsign);
   }
 
-  return left.itemType === "reroll" && right.itemType === "reroll";
+  return false;
 }
 
 function completeSiteAndReturnToDreamscape(
@@ -2019,11 +2019,7 @@ export function MultiplayerQuestProvider({
       return;
     }
     const expectedSlot = expectedRuntime.slots[slotIndex];
-    if (
-      expectedSlot === undefined ||
-      expectedSlot.purchased ||
-      expectedSlot.itemType === "reroll"
-    ) {
+    if (expectedSlot === undefined || expectedSlot.purchased) {
       return;
     }
 
@@ -2054,11 +2050,7 @@ export function MultiplayerQuestProvider({
           return room;
         }
         const slot = runtime.slots[slotIndex];
-        if (
-          slot === undefined ||
-          slot.purchased ||
-          slot.itemType === "reroll"
-        ) {
+        if (slot === undefined || slot.purchased) {
           return room;
         }
 
@@ -2145,7 +2137,7 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
-  const rerollShop = useCallback((site: SiteState, slotIndex: number) => {
+  const rerollShop = useCallback((site: SiteState) => {
     const current = currentRef.current;
     const expectedRuntime = current.state.siteRuntime[site.id];
     if (
@@ -2155,17 +2147,12 @@ export function MultiplayerQuestProvider({
     ) {
       return;
     }
-    const expectedSlot = expectedRuntime.slots[slotIndex];
-    if (
-      expectedSlot === undefined ||
-      expectedSlot.itemType !== "reroll" ||
-      expectedSlot.purchased
-    ) {
+    if (expectedRuntime.rerollCount > 0) {
       return;
     }
 
     const expectedEssence = current.state.essence;
-    const cost = rerollCost(expectedRuntime.rerollCount, site.isEnhanced);
+    const cost = rerollCost(0, site.isEnhanced);
     if (cost > expectedEssence) {
       return;
     }
@@ -2184,20 +2171,11 @@ export function MultiplayerQuestProvider({
         dreamsignTemplates: current.questContent.dreamsignTemplates,
       },
     );
-    const replacements = shopSlotsToRuntime(
-      generated.slots.filter((candidate) => candidate.itemType !== "reroll"),
-    );
+    const replacements = shopSlotsToRuntime(generated.slots);
     let replacementIndex = 0;
     const rerollCount = expectedRuntime.rerollCount + 1;
-    const slots = expectedRuntime.slots.map((candidate, index) => {
+    const slots = expectedRuntime.slots.map((candidate) => {
       if (candidate.purchased) return candidate;
-      if (index === slotIndex) {
-        return {
-          ...candidate,
-          basePrice: rerollCost(rerollCount, site.isEnhanced),
-        };
-      }
-      if (candidate.itemType === "reroll") return candidate;
       const replacement = replacements[replacementIndex];
       replacementIndex += 1;
       return replacement ?? candidate;
@@ -2268,7 +2246,6 @@ export function MultiplayerQuestProvider({
               source: "shop_reroll",
               summary: {
                 siteId: site.id,
-                slotIndex,
                 rerollCost: cost,
                 rerollCount,
               },

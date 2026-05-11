@@ -1183,12 +1183,6 @@ describe("MultiplayerQuestProvider", () => {
           kind: "shop",
           slots: [
             {
-              itemType: "reroll",
-              basePrice: 50,
-              discountPercent: 0,
-              purchased: false,
-            },
-            {
               itemType: "card",
               cardNumber: 101,
               basePrice: 100,
@@ -1227,27 +1221,27 @@ describe("MultiplayerQuestProvider", () => {
       </MultiplayerQuestProvider>,
     );
 
-    captured[captured.length - 1]?.mutations.rerollShop(site, 0);
+    captured[captured.length - 1]?.mutations.rerollShop(site);
     const updater = latestRoomTransactionUpdater();
     const nextRoom = updater?.(session.room);
     const runtime = nextRoom?.questState?.siteRuntime["site-1"];
 
+    // Reroll costs 50 essence exactly once and advances rerollCount so the
+    // affordance disables for the rest of the visit.
     expect(nextRoom?.questState?.essence).toBe(150);
     expect(runtime?.kind).toBe("shop");
     expect(runtime?.kind === "shop" ? runtime.rerollCount : null).toBe(1);
+    // Purchased slots are preserved verbatim.
     expect(runtime?.kind === "shop" ? runtime.slots[0] : null).toEqual({
-      itemType: "reroll",
-      basePrice: 75,
-      discountPercent: 0,
-      purchased: false,
-    });
-    expect(runtime?.kind === "shop" ? runtime.slots[1] : null).toEqual({
       itemType: "card",
       cardNumber: 101,
       basePrice: 100,
       discountPercent: 0,
       purchased: true,
     });
+    // The unsold slot is replaced with fresh inventory.
+    const replacedSlot = runtime?.kind === "shop" ? runtime.slots[1] : null;
+    expect(replacedSlot?.itemType).toBe("card");
     expect(nextRoom?.actionLog?.["action-1"]).toEqual({
       timestamp: nextRoom?.metadata.updatedAt,
       actorId: "client-1",
@@ -1255,13 +1249,60 @@ describe("MultiplayerQuestProvider", () => {
       source: "shop_reroll",
       summary: {
         siteId: "site-1",
-        slotIndex: 0,
         rerollCost: 50,
         rerollCount: 1,
       },
     });
 
     randomSpy.mockRestore();
+  });
+
+  it("rejects a second reroll within the same shop visit", () => {
+    const captured: QuestContextValue[] = [];
+    const site: SiteState = {
+      id: "site-1",
+      type: "Shop",
+      isEnhanced: false,
+      isVisited: false,
+    };
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 200,
+      remainingDreamsignPool: [],
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          // Reroll already used this visit.
+          rerollCount: 1,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.rerollShop(site);
+
+    // A second reroll attempt within the same visit is a no-op: no
+    // transaction is scheduled, so the updater queue is empty.
+    expect(latestRoomTransactionUpdater()).toBeUndefined();
   });
 
   it("rejects shared shop rerolls after the site is visited", () => {
@@ -1280,12 +1321,6 @@ describe("MultiplayerQuestProvider", () => {
         "site-1": {
           kind: "shop",
           slots: [
-            {
-              itemType: "reroll",
-              basePrice: 50,
-              discountPercent: 0,
-              purchased: false,
-            },
             {
               itemType: "card",
               cardNumber: 101,
@@ -1317,7 +1352,7 @@ describe("MultiplayerQuestProvider", () => {
       </MultiplayerQuestProvider>,
     );
 
-    captured[captured.length - 1]?.mutations.rerollShop(site, 0);
+    captured[captured.length - 1]?.mutations.rerollShop(site);
 
     expect(latestRoomTransactionUpdater()?.(visitedRoom)).toBe(visitedRoom);
   });

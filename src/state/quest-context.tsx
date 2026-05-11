@@ -105,7 +105,7 @@ export interface QuestMutations {
   acceptEssenceSite: (siteId: string) => void;
   ensureShopRuntime: (site: SiteState, specialtyOnly: boolean) => void;
   buyShopSlot: (siteId: string, slotIndex: number) => void;
-  rerollShop: (site: SiteState, slotIndex: number) => void;
+  rerollShop: (site: SiteState) => void;
   ensureCardChoiceRuntime: (
     siteId: string,
     kind: "transfiguration" | "duplication",
@@ -1289,11 +1289,7 @@ export function QuestProvider({
           return prev;
         }
         const slot = runtime.slots[slotIndex];
-        if (
-          slot === undefined ||
-          slot.purchased ||
-          slot.itemType === "reroll"
-        ) {
+        if (slot === undefined || slot.purchased) {
           return prev;
         }
 
@@ -1395,7 +1391,7 @@ export function QuestProvider({
   );
 
   const rerollShop = useCallback(
-    (site: SiteState, slotIndex: number) => {
+    (site: SiteState) => {
       setState((prev) => {
         if (prev.visitedSites.includes(site.id)) {
           return prev;
@@ -1404,16 +1400,11 @@ export function QuestProvider({
         if (runtime === undefined || runtime.kind !== "shop") {
           return prev;
         }
-        const slot = runtime.slots[slotIndex];
-        if (
-          slot === undefined ||
-          slot.itemType !== "reroll" ||
-          slot.purchased
-        ) {
+        if (runtime.rerollCount > 0) {
           return prev;
         }
 
-        const cost = rerollCost(runtime.rerollCount, site.isEnhanced);
+        const cost = rerollCost(0, site.isEnhanced);
         if (cost > prev.essence) {
           return prev;
         }
@@ -1423,20 +1414,11 @@ export function QuestProvider({
           remainingDreamsignPoolIds: runtime.remainingDreamsignPoolIds,
           dreamsignTemplates: questContent.dreamsignTemplates,
         });
-        const replacements = shopSlotsToRuntime(
-          generated.slots.filter((candidate) => candidate.itemType !== "reroll"),
-        );
+        const replacements = shopSlotsToRuntime(generated.slots);
         let replacementIndex = 0;
         const rerollCount = runtime.rerollCount + 1;
-        const slots = runtime.slots.map((candidate, index) => {
+        const slots = runtime.slots.map((candidate) => {
           if (candidate.purchased) return candidate;
-          if (index === slotIndex) {
-            return {
-              ...candidate,
-              basePrice: rerollCost(rerollCount, site.isEnhanced),
-            };
-          }
-          if (candidate.itemType === "reroll") return candidate;
           const replacement = replacements[replacementIndex];
           replacementIndex += 1;
           return replacement ?? candidate;
