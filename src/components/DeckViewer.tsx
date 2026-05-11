@@ -8,6 +8,7 @@ import type {
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
 import { CardOverlay } from "./CardOverlay";
+import { DreamsignArtTile } from "./DreamsignArtTile";
 import {
   getPersistedCardSize,
   persistCardSize,
@@ -657,7 +658,7 @@ export function DeckViewer({
                     {state.dreamsigns.map((sign, i) => (
                       <div
                         key={`${sign.name}-${String(i)}`}
-                        className="rounded-lg p-2"
+                        className="flex items-start gap-2 rounded-lg p-2"
                         style={{
                           background: sign.isBane
                             ? "rgba(239, 68, 68, 0.1)"
@@ -665,41 +666,39 @@ export function DeckViewer({
                           border: `1px solid ${sign.isBane ? "rgba(239, 68, 68, 0.25)" : "rgba(124, 58, 237, 0.15)"}`,
                         }}
                       >
-                        <div className="flex items-center gap-1.5">
-                          <span
-                            className="flex h-4 w-4 items-center justify-center rounded-full text-[9px]"
-                            style={{
-                              background: sign.isBane
-                                ? "rgba(239, 68, 68, 0.15)"
-                                : "rgba(255, 255, 255, 0.08)",
-                              color: sign.isBane ? "#fca5a5" : "#cbd5f5",
-                            }}
-                            aria-hidden="true"
-                          >
-                            {sign.isBane ? "\u2620" : "\u2726"}
-                          </span>
-                          <span
-                            className="text-[11px] font-bold"
-                            style={{ color: "#f8fafc" }}
-                          >
-                            {sign.name}
-                          </span>
-                          {sign.isBane && (
+                        <DreamsignArtTile dreamsign={sign} sizePx={36} />
+                        <div className="flex flex-1 flex-col gap-1">
+                          <div className="flex items-center gap-1.5">
                             <span
-                              className="ml-auto text-[10px]"
-                              style={{ color: "#ef4444" }}
-                              title="Bane"
+                              className="text-[11px] font-bold"
+                              style={{
+                                color: sign.isBane ? "#fca5a5" : "#f8fafc",
+                              }}
                             >
-                              {"\u2620"}
+                              {sign.name}
                             </span>
-                          )}
+                            {sign.isBane && (
+                              <span
+                                className="ml-auto rounded-full px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider"
+                                style={{
+                                  background: "rgba(239, 68, 68, 0.18)",
+                                  color: "#fecaca",
+                                  border:
+                                    "1px solid rgba(239, 68, 68, 0.40)",
+                                }}
+                                title="Bane"
+                              >
+                                Bane
+                              </span>
+                            )}
+                          </div>
+                          <p
+                            className="text-[10px] leading-snug opacity-70"
+                            style={{ color: "#e2e8f0" }}
+                          >
+                            <RulesText text={sign.effectDescription} />
+                          </p>
                         </div>
-                        <p
-                          className="mt-1 text-[10px] leading-snug opacity-60"
-                          style={{ color: "#e2e8f0" }}
-                        >
-                          <RulesText text={sign.effectDescription} />
-                        </p>
                       </div>
                     ))}
                   </div>
@@ -860,7 +859,7 @@ function MobileSidebar({
                   dreamsigns.map((sign, i) => (
                     <div
                       key={`mobile-${sign.name}-${String(i)}`}
-                      className="rounded-lg p-2"
+                      className="flex items-start gap-2 rounded-lg p-2"
                       style={{
                         background: sign.isBane
                           ? "rgba(239, 68, 68, 0.1)"
@@ -868,40 +867,38 @@ function MobileSidebar({
                         border: `1px solid ${sign.isBane ? "rgba(239, 68, 68, 0.25)" : "rgba(124, 58, 237, 0.15)"}`,
                       }}
                     >
-                      <div className="flex items-center gap-1.5">
-                        <span
-                          className="flex h-3.5 w-3.5 items-center justify-center rounded-full text-[8px]"
-                          style={{
-                            background: sign.isBane
-                              ? "rgba(239, 68, 68, 0.15)"
-                              : "rgba(255, 255, 255, 0.08)",
-                            color: sign.isBane ? "#fca5a5" : "#cbd5f5",
-                          }}
-                          aria-hidden="true"
-                        >
-                          {sign.isBane ? "\u2620" : "\u2726"}
-                        </span>
-                        <span
-                          className="text-[10px] font-medium"
-                          style={{ color: "#f8fafc" }}
-                        >
-                          {sign.name}
-                        </span>
-                        {sign.isBane && (
+                      <DreamsignArtTile dreamsign={sign} sizePx={32} />
+                      <div className="flex flex-1 flex-col gap-0.5">
+                        <div className="flex items-center gap-1.5">
                           <span
-                            className="ml-auto text-[9px]"
-                            style={{ color: "#ef4444" }}
+                            className="text-[10px] font-medium"
+                            style={{
+                              color: sign.isBane ? "#fca5a5" : "#f8fafc",
+                            }}
                           >
-                            {"\u2620"}
+                            {sign.name}
                           </span>
-                        )}
+                          {sign.isBane && (
+                            <span
+                              className="ml-auto rounded-full px-1 py-0.5 text-[8px] font-bold uppercase tracking-wider"
+                              style={{
+                                background: "rgba(239, 68, 68, 0.18)",
+                                color: "#fecaca",
+                                border:
+                                  "1px solid rgba(239, 68, 68, 0.40)",
+                              }}
+                            >
+                              Bane
+                            </span>
+                          )}
+                        </div>
+                        <p
+                          className="text-[10px] leading-snug opacity-60"
+                          style={{ color: "#e2e8f0" }}
+                        >
+                          <RulesText text={sign.effectDescription} />
+                        </p>
                       </div>
-                      <p
-                        className="mt-1 text-[10px] leading-snug opacity-60"
-                        style={{ color: "#e2e8f0" }}
-                      >
-                        <RulesText text={sign.effectDescription} />
-                      </p>
                     </div>
                   ))
                 )}

@@ -328,6 +328,103 @@ describe("ShopScreen", () => {
     });
   });
 
+  it("renders dreamsign shop tiles using the dreamsign's artwork", () => {
+    setQuestContext(
+      makeState([
+        {
+          itemType: "dreamsign",
+          dreamsign: {
+            id: "clover",
+            name: "Clover",
+            effectDescription: "Each turn, gain 1 essence.",
+            imageName: "clover.png",
+            imageAlt: "A four-leaf clover",
+            isBane: false,
+          },
+          basePrice: 150,
+          discountPercent: 0,
+          purchased: false,
+        },
+      ]),
+    );
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    // The dreamsign tile renders its artwork from /dreamsigns/<imageName>
+    // so the shop tile matches the visual treatment used by the HUD,
+    // Deck Viewer, and dreamsign-pick screens.
+    const artImg = container.querySelector<HTMLImageElement>(
+      'img[src="/dreamsigns/clover.png"]',
+    );
+    expect(artImg).not.toBeNull();
+    expect(artImg?.getAttribute("alt")).toBe("A four-leaf clover");
+
+    // The art tile carries the shared boon styling.
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    expect(tile?.dataset.isBane).toBe("false");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("applies bane styling to a bane dreamsign shop tile without swapping the artwork", () => {
+    setQuestContext(
+      makeState([
+        {
+          itemType: "dreamsign",
+          dreamsign: {
+            id: "skull",
+            name: "Skull",
+            effectDescription: "When you draw a card, you lose 1 essence.",
+            imageName: "skull.png",
+            imageAlt: "A pale skull",
+            isBane: true,
+          },
+          basePrice: 150,
+          discountPercent: 0,
+          purchased: false,
+        },
+      ]),
+    );
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    // Bane dreamsigns still load the same artwork pipeline; the bane state
+    // is conveyed by the tile attribute and tint, not by an art swap.
+    expect(
+      container.querySelector('img[src="/dreamsigns/skull.png"]'),
+    ).not.toBeNull();
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    expect(tile?.dataset.isBane).toBe("true");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("paints the Reroll button's essence cost in the shared essence colour", () => {
     setQuestContext(
       makeState([

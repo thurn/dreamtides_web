@@ -4,6 +4,7 @@ import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
+import { DreamsignArtTile } from "../components/DreamsignArtTile";
 import { RulesText } from "../components/RulesText";
 import { SIZE_PRESETS } from "../components/card-size";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
@@ -275,6 +276,15 @@ function ShopSlotCard({
 
   if (slot.itemType === "dreamsign" && slot.dreamsign) {
     const ds = slot.dreamsign;
+    const baneStyling = ds.isBane
+      ? {
+          border: "1px solid rgba(239, 68, 68, 0.40)",
+          boxShadow: "0 0 8px rgba(239, 68, 68, 0.15)",
+        }
+      : {
+          border: "1px solid rgba(168, 85, 247, 0.3)",
+          boxShadow: "0 0 8px rgba(168, 85, 247, 0.12)",
+        };
     return (
       <div className="flex flex-col gap-2">
         <div
@@ -283,34 +293,31 @@ function ShopSlotCard({
             aspectRatio: "2 / 3",
             background:
               "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
-            border: "1px solid rgba(168, 85, 247, 0.3)",
-            boxShadow: "0 0 8px rgba(168, 85, 247, 0.12)",
+            ...baneStyling,
           }}
         >
-          <div
-            className="flex h-10 w-10 items-center justify-center rounded-full text-lg"
-            style={{
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "2px solid rgba(168, 85, 247, 0.35)",
-              color: "#cbd5f5",
-            }}
-            aria-label={`${ds.name} sigil`}
-          >
-            {"\u2726"}
-          </div>
+          <DreamsignArtTile dreamsign={ds} sizePx={96} />
           <span
             className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-            style={{
-              background: "rgba(168, 85, 247, 0.16)",
-              color: "#c4b5fd",
-              border: "1px solid rgba(168, 85, 247, 0.35)",
-            }}
+            style={
+              ds.isBane
+                ? {
+                    background: "rgba(239, 68, 68, 0.16)",
+                    color: "#fecaca",
+                    border: "1px solid rgba(239, 68, 68, 0.40)",
+                  }
+                : {
+                    background: "rgba(168, 85, 247, 0.16)",
+                    color: "#c4b5fd",
+                    border: "1px solid rgba(168, 85, 247, 0.35)",
+                  }
+            }
           >
-            Dreamsign
+            {ds.isBane ? "Bane Dreamsign" : "Dreamsign"}
           </span>
           <h3
             className="text-center text-sm font-bold"
-            style={{ color: "#f8fafc" }}
+            style={{ color: ds.isBane ? "#fca5a5" : "#f8fafc" }}
           >
             {ds.name}
           </h3>

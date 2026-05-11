@@ -203,7 +203,79 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
+function makeStateWithArtSigns(): QuestState {
+  return {
+    ...makeState(),
+    dreamsigns: [
+      {
+        id: "moonstone",
+        name: "Moonstone",
+        effectDescription: "Boon effect.",
+        imageName: "moonstone.png",
+        imageAlt: "Moonstone art",
+        isBane: false,
+      },
+      {
+        id: "skull",
+        name: "Skull",
+        effectDescription: "Bane effect.",
+        imageName: "skull.png",
+        imageAlt: "Skull art",
+        isBane: true,
+      },
+    ],
+  };
+}
+
 describe("DeckViewer", () => {
+  it("renders dreamsign artwork in the desktop sidebar, replacing the glyph placeholders", () => {
+    vi.mocked(useQuest).mockReturnValue({
+      state: makeStateWithArtSigns(),
+      mutations: makeMutations(),
+      cardDatabase: new Map<number, CardData>(),
+      questContent: {
+        cardDatabase: new Map(),
+        cardsByPackageTide: new Map(),
+        dreamcallers: [],
+        dreamsignTemplates: [],
+        resolvedPackagesByDreamcallerId: new Map(),
+      },
+    });
+
+    const { container, root } = mount(
+      <DeckViewer
+        isOpen
+        onClose={vi.fn()}
+        cardDatabase={new Map<number, CardData>()}
+      />,
+    );
+
+    // Each owned dreamsign renders one art tile sourced from
+    // /dreamsigns/<imageName>. The legacy glyph spans (✦ / ☠) must not
+    // appear anywhere in the dreamsign list since they are replaced by
+    // the artwork itself.
+    expect(
+      container.querySelector('img[src="/dreamsigns/moonstone.png"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('img[src="/dreamsigns/skull.png"]'),
+    ).not.toBeNull();
+
+    // Shared art tile carries bane/boon state via a data attribute.
+    const tiles = container.querySelectorAll<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    expect(tiles.length).toBeGreaterThanOrEqual(2);
+    const baneTile = Array.from(tiles).find(
+      (tile) => tile.dataset.isBane === "true",
+    );
+    expect(baneTile).not.toBeUndefined();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("shows neutral dreamcaller and dreamsign chrome on normal UI", () => {
     const cardDatabase = new Map<number, CardData>([
       [
