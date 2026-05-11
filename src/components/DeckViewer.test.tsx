@@ -555,4 +555,76 @@ describe("DeckViewer", () => {
       root.unmount();
     });
   });
+
+  it("renders dreamsign artwork inside the mobile Dreamsigns tab with bane styling preserved", () => {
+    // The deck viewer's mobile sidebar tab mirrors the HUD's dreamsign art-tile
+    // pattern: each owned dreamsign renders its `imageName` artwork via the
+    // shared `DreamsignArtTile`, with bane vs. boon conveyed by the tile's
+    // border/desaturation chrome rather than a circular text pip.
+    vi.mocked(useQuest).mockReturnValue({
+      state: makeStateWithArtSigns(),
+      mutations: makeMutations(),
+      cardDatabase: new Map<number, CardData>(),
+      questContent: {
+        cardDatabase: new Map(),
+        cardsByPackageTide: new Map(),
+        dreamcallers: [],
+        dreamsignTemplates: [],
+        resolvedPackagesByDreamcallerId: new Map(),
+      },
+    });
+
+    const { container, root } = mount(
+      <DeckViewer
+        isOpen
+        onClose={vi.fn()}
+        cardDatabase={new Map<number, CardData>()}
+      />,
+    );
+
+    // The mobile sidebar tab opens its content panel only after the user
+    // clicks the Dreamsigns tab button.
+    const tabButton = Array.from(
+      container.querySelectorAll<HTMLButtonElement>("button"),
+    ).find((b) => (b.textContent ?? "").startsWith("Dreamsigns ("));
+    expect(tabButton).toBeDefined();
+
+    act(() => {
+      tabButton?.click();
+    });
+
+    // Both sidebars live in the DOM regardless of viewport (CSS toggles
+    // their visibility), so scope the assertion to the mobile sidebar's
+    // collapsible panel by walking from its tab button to the sibling
+    // panel that AnimatePresence reveals.
+    const mobileSidebar = tabButton?.closest("div.lg\\:hidden");
+    expect(mobileSidebar).not.toBeNull();
+    const mobileTiles = mobileSidebar?.querySelectorAll<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    expect(mobileTiles?.length).toBe(2);
+
+    // Both `imageName` artworks must be rendered in the mobile tab, just like
+    // they are on the HUD row.
+    const mobileImages = Array.from(
+      mobileSidebar?.querySelectorAll<HTMLImageElement>("img") ?? [],
+    ).map((img) => img.getAttribute("src"));
+    expect(mobileImages).toContain("/dreamsigns/moonstone.png");
+    expect(mobileImages).toContain("/dreamsigns/skull.png");
+
+    // Bane styling is conveyed via the shared tile's `data-is-bane`
+    // attribute, matching the HUD row's accent treatment.
+    const banes = Array.from(mobileTiles ?? []).filter(
+      (tile) => tile.dataset.isBane === "true",
+    );
+    expect(banes).toHaveLength(1);
+    const boons = Array.from(mobileTiles ?? []).filter(
+      (tile) => tile.dataset.isBane === "false",
+    );
+    expect(boons).toHaveLength(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
