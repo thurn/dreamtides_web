@@ -3843,6 +3843,7 @@ id = "226addd8-f09a-4237-ba75-c40635fbdb3b"
 tides = ["judgment_engines", "void_recursion"]
 rendered-text = """
 ▸ Materialized: This character gains +1 spark.
+
 ▸ Judgment: Reclaim a character with cost up to this character's spark ●."""
 energy-cost = 5
 card-type = "Character"
@@ -4199,6 +4200,7 @@ id = "e1e7c403-251e-4db1-bd3b-5ee03124e681"
 tides = ["void_recursion", "abandon_value", "void_setup"]
 rendered-text = """
 ▸ Materialized: Put the top 3 cards of your deck into your void.
+
 2●, Abandon an ally: Reclaim a character with cost 3● or less."""
 energy-cost = 2
 card-type = "Character"
@@ -4900,6 +4902,7 @@ id = "cc5e770a-210d-4737-8aa7-6be7328b0dbd"
 tides = ["figment_swarm", "card_flow"]
 rendered-text = """
 ▸ Materialized: Materialize a Warrior figment.
+
 When you materialize a Figment, draw a card."""
 energy-cost = 3
 card-type = "Character"
@@ -5520,6 +5523,7 @@ id = "230d47b8-bc95-49d0-bbe5-a1cb5849fc05"
 tides = ["figment_swarm", "warrior_pressure"]
 rendered-text = """
 ▸ Materialized: Materialize a Warrior figment.
+
 This character's spark is equal to the number of allied Figments."""
 energy-cost = 3
 card-type = "Character"
@@ -6519,6 +6523,7 @@ id = "2fe66e67-6d99-472b-9edf-982bda562df7"
 tides = ["discard_velocity", "void_setup", "materialize_value"]
 rendered-text = """
 ▸ Materialized: Draw a card. Discard a card.
+
 When you discard a card, this character gains +1 spark."""
 energy-cost = 2
 card-type = "Character"
