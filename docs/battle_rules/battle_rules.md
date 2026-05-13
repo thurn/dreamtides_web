@@ -445,6 +445,8 @@ in a deployed lane is paired with a defender:
 - The defender's controller chooses any subset of the figments in the stack
   whose combined spark is at most the defender's spark. All chosen figments
   are dissolved.
-- The defender is dissolved only if the combined spark of all figments in
-  the stack **exceeds** the defender's spark. If the combined spark merely
-  equals the defender's spark, the defender survives.
+- The defender is dissolved if the combined spark of all figments in the
+  stack is greater than or equal to the defender's spark. As with any other
+  challenge, ties dissolve both sides — when the combined spark equals the
+  defender's spark, the defender is dissolved and the defender's controller
+  may choose figments totaling the full defender's spark to dissolve.
