@@ -205,6 +205,11 @@ priority to respond.
 Activated abilities use the same timing categories as cards: standard, Fast,
 or Interrupt. The same speed rules apply.
 
+**Only Interrupts can be played while the stack is non-empty.** Standard and
+Fast cards (and standard and Fast activated abilities) require the stack to
+be empty at the moment they are played. The only way to put something onto
+the stack in response to a card already on the stack is with an Interrupt.
+
 **Stack resolution:** Cards on the stack resolve last-in, first-out (LIFO).
 Only one pass is needed to resolve a card. Events resolve by applying their
 effects and moving to the void. Characters resolve by entering the
