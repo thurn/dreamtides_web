@@ -209,11 +209,49 @@ export function updateQuestAtlas(
   };
 }
 
+/**
+ * Returns whether the given site is a legal visit target for the current
+ * quest state. Enforces the design-document site rules at the state layer
+ * (not just the UI):
+ *
+ * - The site must exist and belong to the current dreamscape.
+ * - Each site can be visited exactly once.
+ * - The Battle site must be visited last: every non-Battle site in the same
+ *   dreamscape must already be visited.
+ */
+export function canVisitSite(prev: QuestState, siteId: string): boolean {
+  for (const node of Object.values(prev.atlas.nodes)) {
+    const site = node.sites.find((candidate) => candidate.id === siteId);
+    if (site === undefined) {
+      continue;
+    }
+    if (site.isVisited || prev.visitedSites.includes(siteId)) {
+      return false;
+    }
+    if (
+      prev.currentDreamscape !== null &&
+      node.id !== prev.currentDreamscape
+    ) {
+      return false;
+    }
+    if (site.type === "Battle") {
+      return node.sites.every(
+        (candidate) =>
+          candidate.type === "Battle" ||
+          candidate.isVisited ||
+          prev.visitedSites.includes(candidate.id),
+      );
+    }
+    return true;
+  }
+  return false;
+}
+
 export function completeQuestSite(
   prev: QuestState,
   siteId: string,
 ): QuestState {
-  if (prev.visitedSites.includes(siteId)) {
+  if (!canVisitSite(prev, siteId)) {
     return prev;
   }
 

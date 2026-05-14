@@ -7,7 +7,10 @@ export interface Biome {
   enhancedSiteType: SiteType;
 }
 
-/** The 9 biomes, one per enhanced site type. */
+/**
+ * The 6 biomes, one per enhanced site type from the design document: Shop,
+ * Dreamsign Offering/Draft, Purge, Essence, Transfiguration, and Duplication.
+ */
 export const BIOMES: readonly Biome[] = [
   {
     name: "Verdant Hollow",
@@ -18,16 +21,6 @@ export const BIOMES: readonly Biome[] = [
     name: "Starfall Glade",
     color: "#c084fc",
     enhancedSiteType: "DreamsignOffering",
-  },
-  {
-    name: "Wanderer's Threshold",
-    color: "#818cf8",
-    enhancedSiteType: "DreamJourney",
-  },
-  {
-    name: "The Gilded Maw",
-    color: "#fbbf24",
-    enhancedSiteType: "TemptingOffer",
   },
   {
     name: "Ashfall Basin",
@@ -48,10 +41,5 @@ export const BIOMES: readonly Biome[] = [
     name: "Hall of Echoes",
     color: "#34d399",
     enhancedSiteType: "Duplication",
-  },
-  {
-    name: "The Obsidian Bazaar",
-    color: "#fb923c",
-    enhancedSiteType: "SpecialtyShop",
   },
 ] as const;

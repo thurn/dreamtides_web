@@ -119,6 +119,30 @@ describe("generateSiteComposition", () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
+  it("never repeats a non-Draft site type within a dreamscape", () => {
+    for (let level = 0; level <= 7; level++) {
+      for (let i = 0; i < 50; i++) {
+        resetAtlasGenerator();
+        const sites = generateSiteComposition(
+          level,
+          false,
+          defaultContext({ playerHasBanes: true }),
+        );
+        const counts: Partial<Record<SiteType, number>> = {};
+        for (const site of sites) {
+          counts[site.type] = (counts[site.type] ?? 0) + 1;
+        }
+        for (const [type, count] of Object.entries(counts)) {
+          if (type === "Draft") {
+            expect(count).toBeLessThanOrEqual(2);
+          } else {
+            expect(count).toBeLessThanOrEqual(1);
+          }
+        }
+      }
+    }
+  });
+
   it("leaves Reward sites unresolved until the player enters them", () => {
     let foundReward = false;
     for (let i = 0; i < 100; i++) {
@@ -231,10 +255,14 @@ describe("generateInitialAtlas", () => {
     expect(starting.position.y).toBe(0);
   });
 
-  it("marks both initial dreamscapes as available so the player can begin", () => {
+  it("marks only the starting dreamscape available; the second begins unavailable", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
-    for (const node of Object.values(atlas.nodes)) {
-      expect(node.status).toBe("available");
+    for (const [id, node] of Object.entries(atlas.nodes)) {
+      if (id === atlas.startingNodeId) {
+        expect(node.status).toBe("available");
+      } else {
+        expect(node.status).toBe("unavailable");
+      }
     }
   });
 
@@ -277,8 +305,8 @@ describe("generateInitialAtlas", () => {
 });
 
 describe("generateNewNodes", () => {
-  it("generates 1 new node after the starting dreamscape is completed", () => {
-    for (let i = 0; i < 20; i++) {
+  it("generates 1-2 new nodes after a dreamscape is completed", () => {
+    for (let i = 0; i < 40; i++) {
       const atlas = generateInitialAtlas(0, defaultContext());
       const updated = generateNewNodes(
         atlas,
@@ -288,11 +316,12 @@ describe("generateNewNodes", () => {
       );
       const newNodeCount =
         Object.keys(updated.nodes).length - Object.keys(atlas.nodes).length;
-      expect(newNodeCount).toBe(1);
+      expect(newNodeCount).toBeGreaterThanOrEqual(1);
+      expect(newNodeCount).toBeLessThanOrEqual(2);
     }
   });
 
-  it("leaves exactly 2 available choices after the starting dreamscape is completed", () => {
+  it("makes the completed node's neighbour available; new nodes stay unavailable", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
     const updated = generateNewNodes(
       atlas,
@@ -303,8 +332,11 @@ describe("generateNewNodes", () => {
     const availableNodes = Object.values(updated.nodes).filter(
       (node) => node.status === "available",
     );
-
-    expect(availableNodes).toHaveLength(2);
+    // Only the second initial dreamscape (adjacent to the completed starting
+    // node) is available; the new dreamscapes attach to it and stay
+    // unavailable.
+    expect(availableNodes).toHaveLength(1);
+    expect(availableNodes[0].id).not.toBe(atlas.startingNodeId);
   });
 
   it("marks the completed node as completed", () => {
@@ -512,6 +544,25 @@ describe("revealedAtlasSite", () => {
     // Different ids hash to different indices, so we should observe more
     // than one distinct revealed type across 50 ids drawn from 4 candidates.
     expect(distinctTypes.size).toBeGreaterThan(1);
+  });
+
+  it("never reveals a Draft site", () => {
+    for (let i = 0; i < 50; i++) {
+      const node = makeNode(
+        `dreamscape-${String(i)}`,
+        [
+          makeSite("a", "Draft"),
+          makeSite("b", "Draft"),
+          makeSite("c", "Shop"),
+          makeSite("d", "Essence"),
+          makeSite("e", "Battle"),
+        ],
+        null,
+      );
+      const revealed = revealedAtlasSite(node);
+      expect(revealed?.type).not.toBe("Draft");
+      expect(revealed?.type).not.toBe("Battle");
+    }
   });
 
   it("returns null for nodes with no sites", () => {

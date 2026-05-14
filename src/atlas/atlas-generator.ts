@@ -180,15 +180,30 @@ export function generateSiteComposition(
   const minAdditional = Math.max(2, 3 - fixedCount);
   const maxAdditional = Math.max(minAdditional, 6 - fixedCount);
   const pool = buildAdditionalSitePool(completionLevel, context.playerHasBanes);
-  const additionalCount = randomInt(minAdditional, maxAdditional);
+  // Every non-Draft site type appears at most once per dreamscape, so the
+  // additional sites are sampled without replacement: a type is removed from
+  // the working pool once it is picked.
+  const remainingPool = [...pool];
+  const additionalCount = Math.min(
+    randomInt(minAdditional, maxAdditional),
+    remainingPool.length,
+  );
   for (let i = 0; i < additionalCount; i++) {
-    const siteType = weightedPick(pool);
+    if (remainingPool.length === 0) {
+      break;
+    }
+    const siteType = weightedPick(remainingPool);
     sites.push({
       id: nextSiteId(),
       type: siteType,
       isEnhanced: false,
       isVisited: false,
     });
+    for (let index = remainingPool.length - 1; index >= 0; index -= 1) {
+      if (remainingPool[index][0] === siteType) {
+        remainingPool.splice(index, 1);
+      }
+    }
   }
 
   // Battle site always last
@@ -272,9 +287,10 @@ function createNode(
 /**
  * Creates the initial atlas with 2 starting dreamscapes. The first dreamscape
  * (the one the player is placed in) sits at the origin so the Atlas centres on
- * the player's current location. The second dreamscape sits one base radius
- * away at a random angle. The two starting dreamscapes are connected by an
- * edge so the graph is reachable without a central hub node.
+ * the player's current location and is the only initially `available` node.
+ * The second dreamscape sits one base radius away at a random angle and starts
+ * `unavailable`: it only becomes reachable once the starting dreamscape's
+ * battle is completed.
  */
 export function generateInitialAtlas(
   completionLevel: number,
@@ -301,7 +317,8 @@ export function generateInitialAtlas(
   usedBiomeNames.add(startingNode.biomeName);
   nodes[startingNode.id] = startingNode;
 
-  // Second dreamscape: placed one base radius away at a random angle.
+  // Second dreamscape: placed one base radius away at a random angle. It is
+  // not adjacent to any completed dreamscape yet, so it begins unavailable.
   const secondAngle = randomFloat(0, Math.PI * 2);
   const secondX = Math.cos(secondAngle) * BASE_RADIUS;
   const secondY = Math.sin(secondAngle) * BASE_RADIUS;
@@ -315,16 +332,18 @@ export function generateInitialAtlas(
     options,
   );
   usedBiomeNames.add(secondNode.biomeName);
-  nodes[secondNode.id] = secondNode;
+  nodes[secondNode.id] = { ...secondNode, status: "unavailable" };
   edges.push([startingNode.id, secondNode.id]);
 
   return { nodes, edges, startingNodeId: startingNode.id };
 }
 
 /**
- * Generates 2-4 new nodes after completing a dreamscape.
- * New nodes connect to the completed node and any geometrically
- * nearby existing nodes (within 1.5x the radius increment).
+ * Expands the atlas after a dreamscape's battle is completed. The completed
+ * node is marked `completed`, its direct neighbours become the newly
+ * `available` dreamscapes, and 1-2 new `unavailable` dreamscapes are added
+ * adjacent to those newly-available nodes (never directly to the completed
+ * node, so they stay unavailable until their neighbour is itself completed).
  */
 export function generateNewNodes(
   atlas: DreamAtlas,
@@ -346,25 +365,32 @@ export function generateNewNodes(
     status: "completed",
   };
 
-  // Determine the generation ring (how many levels deep). The starting
-  // dreamscape sits at the origin, so use a small floor to avoid `newRadius`
-  // collapsing into the centre when the player completes their first node.
-  const completedDistance = distance(
-    completedNode.position,
-    { x: 0, y: 0 },
-  );
-  const newRadius = Math.max(completedDistance, BASE_RADIUS) + RADIUS_INCREMENT;
+  // The dreamscapes directly connected to the just-completed node (and not
+  // themselves completed) are the newly-available nodes. New dreamscapes are
+  // attached to these, per the design document.
+  const newlyAvailableIds: string[] = [];
+  for (const [a, b] of updatedEdges) {
+    const neighborId =
+      a === completedNodeId ? b : b === completedNodeId ? a : null;
+    if (neighborId === null) {
+      continue;
+    }
+    const neighbor = updatedNodes[neighborId];
+    if (
+      neighbor !== undefined &&
+      neighbor.status !== "completed" &&
+      !newlyAvailableIds.includes(neighborId)
+    ) {
+      newlyAvailableIds.push(neighborId);
+    }
+  }
 
-  // Angle from center to the completed node. When the completed node is the
-  // starting dreamscape (sitting at the origin) atan2 is ill-defined, so pick
-  // a random angle so children fan out somewhere on the ring.
-  const parentAngle = completedDistance < 1
-    ? randomFloat(0, Math.PI * 2)
-    : Math.atan2(completedNode.position.y, completedNode.position.x);
+  // Fall back to the completed node only if it has no eligible neighbours, so
+  // the atlas always keeps growing even at a dead end.
+  const attachPointIds =
+    newlyAvailableIds.length > 0 ? newlyAvailableIds : [completedNodeId];
 
-  const isFirstExpansion = completedNode.id === atlas.startingNodeId;
-  const newNodeCount = isFirstExpansion ? 1 : randomInt(2, 3);
-  const spread = Math.PI / 3; // 60-degree spread for children
+  const newNodeCount = randomInt(1, 2);
   const usedBiomeNames = new Set<string>(
     Object.values(updatedNodes)
       .filter((node) => node.status !== "completed")
@@ -372,18 +398,28 @@ export function generateNewNodes(
   );
 
   for (let i = 0; i < newNodeCount; i++) {
-    const angleOffset =
-      ((i - (newNodeCount - 1) / 2) * spread) / Math.max(newNodeCount - 1, 1);
-    const angle = parentAngle + angleOffset + randomFloat(-0.15, 0.15);
+    const attachId = attachPointIds[i % attachPointIds.length];
+    const attachNode = updatedNodes[attachId];
+    const attachDistance = distance(attachNode.position, { x: 0, y: 0 });
+    const newRadius =
+      Math.max(attachDistance, BASE_RADIUS) + RADIUS_INCREMENT;
+    const attachAngle =
+      attachDistance < 1
+        ? randomFloat(0, Math.PI * 2)
+        : Math.atan2(attachNode.position.y, attachNode.position.x);
+    const angle = attachAngle + randomFloat(-0.4, 0.4);
     const x = Math.cos(angle) * newRadius;
     const y = Math.sin(angle) * newRadius;
 
-    const connections = [completedNodeId];
+    const connections = [attachId];
 
-    // Connect to nearby existing nodes
+    // Connect to nearby non-completed nodes. Completed nodes are excluded so
+    // the new dreamscape does not become available immediately.
     const proximityThreshold = RADIUS_INCREMENT * 1.5;
     for (const [existingId, existingNode] of Object.entries(updatedNodes)) {
-      if (existingId === completedNodeId) continue;
+      if (existingId === attachId || existingNode.status === "completed") {
+        continue;
+      }
       const dist = distance({ x, y }, existingNode.position);
       if (dist < proximityThreshold && !connections.includes(existingId)) {
         connections.push(existingId);
@@ -406,8 +442,8 @@ export function generateNewNodes(
     }
   }
 
-  // Update availability: a node is available iff it is connected (directly or
-  // via the edge graph) to any completed node.
+  // Update availability: a node is available iff it is directly connected to
+  // any completed node.
   const completedIds = new Set(
     Object.values(updatedNodes)
       .filter((n) => n.status === "completed")
@@ -561,21 +597,27 @@ function fnv1aHash(value: string): number {
  * Returns the single site to reveal on the Atlas screen for the given
  * dreamscape node. Selection rules:
  *
- * 1. If the dreamscape has a biome-enhanced site (other than Battle), reveal
- *    it — the enhanced site is the visual signature of the biome.
- * 2. Otherwise, pick deterministically from the non-Battle sites using a
- *    hash of the node id. The Battle site is always kept hidden so the
- *    player knows a battle is coming but not what surrounds it.
+ * 1. If the dreamscape has a biome-enhanced site (other than Battle or Draft),
+ *    reveal it — the enhanced site is the visual signature of the biome.
+ * 2. Otherwise, pick deterministically from the non-Battle, non-Draft sites
+ *    using a hash of the node id. The Battle and Draft sites are always kept
+ *    hidden so the atlas preview never reveals them.
  *
- * Returns `null` only for nodes with no sites.
+ * Returns `null` only for nodes with no previewable sites.
  */
 export function revealedAtlasSite(node: DreamscapeNode): SiteState | null {
-  const candidates = node.sites.filter((s) => s.type !== "Battle");
+  const candidates = node.sites.filter(
+    (s) => s.type !== "Battle" && s.type !== "Draft",
+  );
   if (candidates.length === 0) {
     return null;
   }
 
-  if (node.enhancedSiteType !== null && node.enhancedSiteType !== "Battle") {
+  if (
+    node.enhancedSiteType !== null &&
+    node.enhancedSiteType !== "Battle" &&
+    node.enhancedSiteType !== "Draft"
+  ) {
     const enhanced = candidates.find(
       (s) => s.type === node.enhancedSiteType && s.isEnhanced,
     );
