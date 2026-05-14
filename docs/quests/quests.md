@@ -487,15 +487,15 @@ Icon: "Treasure Chest"
 
 ### Cleanse
 
-A Cleanse site allows the user to remove up to 3 [Banes](#banes) from their deck
-or dreamsigns.
+A Cleanse site allows the user to remove up to 3 chosen [Banes](#banes) from
+their deck or dreamsigns.
 
 **UI:** An NPC is shown who performs an animation and displays a speech bubble
-with some dialog when the camera arrives at this site. The randomly selected
-cards or dreamsigns to cleanse emerge from the quest deck or dreamsign display.
-A purple "cleanse" button is displayed, along with a gray "decline" button.
-Selecting "cleanse" causes the bane cards to play a dissolve animation, and then
-the camera pulls back to the map screen.
+with some dialog when the camera arrives at this site. The cards or dreamsigns
+to cleanse emerge from the quest deck or dreamsign display. A purple "cleanse"
+button is displayed, along with a gray "decline" button. Selecting "cleanse"
+causes the bane cards to play a dissolve animation, and then the camera pulls
+back to the map screen.
 
 Icon: "Snowflake"
 

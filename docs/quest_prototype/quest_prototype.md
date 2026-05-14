@@ -84,7 +84,6 @@ and spent Dreamsign pools.
 ## Hidden-Tides Behavior
 
 - Dreamcaller selection is a quest-start choice, not a mid-run site.
-- Card chrome is rarity-driven.
 - Draft sites reveal 4 unique cards when possible and consume the revealed cards
   from the fixed pool.
 - Dreamsign-bearing surfaces spend from a shared pool as soon as a sign is
