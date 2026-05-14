@@ -165,14 +165,20 @@ Each turn progresses through these seven phases in order:
    in response to opposing Interrupts. The active player explicitly passes to
    end this phase. Once Main ends, the active player cannot return to it this
    turn.
-5. **Response** — The opposing player may play Fast cards (including
-   Interrupts), activate Fast or Interrupt activated abilities, and reposition
-   their own characters between any of the 9 battlefield positions, subject
-   to the reserved restriction. Repositioning includes deploying reserved
-   characters into deployed lanes — this is the opposing player's window to
-   set up defenders after seeing the challengers. The active player retains
-   the ability to play Interrupts (cards or abilities) in response to cards
-   on the stack. The opposing player explicitly passes to end this phase.
+5. **Response** — The Response phase has two sub-phases. **First**, the
+   opposing player may reposition their characters between any of the 9
+   battlefield positions (subject to the reserved restriction), play Fast
+   cards, and activate Fast activated abilities. Repositioning includes
+   deploying reserved characters into deployed lanes — this is the opposing
+   player's window to set up defenders after seeing the challengers. The
+   opposing player explicitly passes to end this sub-phase. **Second**, the
+   active player may play Fast cards and activate Fast activated abilities,
+   but cannot reposition characters. The active player explicitly passes to
+   end the Response phase, after which the Challenge phase begins. Fast
+   cards and Fast abilities can only be played while the stack is empty.
+   Either player may play an Interrupt (card or activated ability) in
+   response to a card on the stack, or at any time they could play a Fast
+   card.
 6. **Challenge** — All of the active player's deployed characters become
    challengers, and opposing deployed characters in the same lanes become
    defenders. Lanes resolve sequentially from `D0` to `D3` as challenges or
