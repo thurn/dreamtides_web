@@ -318,7 +318,33 @@ describe("createBattleInit", () => {
 
       expect(init.enemyDescriptor.id).toBe("enemy:fallback");
       expect(init.enemyDescriptor.packageTides).toEqual([]);
-      expect(init.enemyDescriptor.dreamsignCount).toBeGreaterThanOrEqual(1);
+      expect(init.enemyDescriptor.dreamsigns).toEqual([]);
+    });
+
+    it("gives the opponent concrete dreamsigns drawn from the supplied templates", () => {
+      const init = createBattleInit({
+        ...makeBaseInput(),
+        dreamsignTemplates: [
+          {
+            id: "enemy-sign-1",
+            name: "Enemy Sign One",
+            effectDescription: "An opposing boon.",
+            packageTides: [],
+          },
+          {
+            id: "enemy-sign-2",
+            name: "Enemy Sign Two",
+            effectDescription: "Another opposing boon.",
+            packageTides: [],
+          },
+        ],
+      });
+
+      expect(init.enemyDescriptor.dreamsigns.length).toBeGreaterThanOrEqual(1);
+      for (const dreamsign of init.enemyDescriptor.dreamsigns) {
+        expect(typeof dreamsign.name).toBe("string");
+        expect(dreamsign.isBane).toBe(false);
+      }
     });
   });
 

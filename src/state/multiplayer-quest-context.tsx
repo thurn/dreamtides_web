@@ -1095,6 +1095,7 @@ export function MultiplayerQuestProvider({
   const incrementCompletionLevel = useCallback(
     (
       essenceReward: number,
+      omenReward: number,
       rewardCardNumber: number | null,
       rewardCardName: string | null,
       isMiniboss: boolean,
@@ -1119,6 +1120,7 @@ export function MultiplayerQuestProvider({
             questState: {
               ...room.questState,
               completionLevel: newLevel,
+              omens: room.questState.omens + omenReward,
               screen,
             },
             metadata: {
@@ -1134,6 +1136,7 @@ export function MultiplayerQuestProvider({
                 source: "battle_reward",
                 summary: {
                   essenceReward,
+                  omenReward,
                   rewardCardNumber,
                   rewardCardName,
                   isMiniboss,

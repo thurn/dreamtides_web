@@ -531,6 +531,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       completionLevelAtBattleStart: battleInit.completionLevelAtStart,
       atlasSnapshot: battleInit.atlasSnapshot,
       essenceReward: battleInit.essenceReward,
+      omenReward: battleInit.omenReward,
       isMiniboss: battleInit.isMiniboss,
       isFinalBoss: battleInit.isFinalBoss,
       playerHasBanes:
@@ -1016,6 +1017,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             canCancel={!rewardOverlay.locked}
             enemyName={battleInit.enemyDescriptor.name}
             essenceReward={battleInit.essenceReward}
+            omenReward={battleInit.omenReward}
             enemyScore={reducerState.mutable.sides.enemy.score}
             playerScore={reducerState.mutable.sides.player.score}
             rewardSource={rewardOverlay.rewardSource}

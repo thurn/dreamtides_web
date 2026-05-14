@@ -173,6 +173,7 @@ export interface QuestMutations {
   ) => void;
   incrementCompletionLevel: (
     essenceReward: number,
+    omenReward: number,
     rewardCardNumber: number | null,
     rewardCardName: string | null,
     isMiniboss: boolean,
@@ -1937,19 +1938,30 @@ export function QuestProvider({
   const incrementCompletionLevel = useCallback(
     (
       essenceReward: number,
+      omenReward: number,
       rewardCardNumber: number | null,
       rewardCardName: string | null,
       isMiniboss: boolean,
     ) => {
       setState((prev) => {
         const newLevel = prev.completionLevel + 1;
+        const newOmens = prev.omens + omenReward;
         logEvent("battle_won", {
           completionLevel: newLevel,
           essenceReward,
+          omenReward,
           rewardCardNumber,
           rewardCardName,
           isMiniboss,
         });
+        if (omenReward !== 0) {
+          logEvent("omens_changed", {
+            oldValue: prev.omens,
+            newValue: newOmens,
+            delta: omenReward,
+            source: "battle_reward",
+          });
+        }
         const screen: Screen =
           newLevel >= 7 ? { type: "questComplete" } : prev.screen;
         if (newLevel >= 7) {
@@ -1958,7 +1970,12 @@ export function QuestProvider({
             to: screenName(screen),
           });
         }
-        return { ...prev, completionLevel: newLevel, screen };
+        return {
+          ...prev,
+          completionLevel: newLevel,
+          omens: newOmens,
+          screen,
+        };
       });
     },
     [],

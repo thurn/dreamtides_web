@@ -47,6 +47,7 @@ export function BattleSiteRoute({
     questState: state,
     cardDatabase,
     dreamcallers: questContent.dreamcallers,
+    dreamsignTemplates: questContent.dreamsignTemplates,
     seedOverride: runtimeConfig.seedOverride,
     enableAi: runtimeConfig.enableAi,
   });

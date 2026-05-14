@@ -66,6 +66,7 @@ function makeInput(
       startingNodeId: "dreamscape-1",
     },
     essenceReward: 200,
+    omenReward: 2,
     isMiniboss: false,
     isFinalBoss: false,
     playerHasBanes: true,
@@ -109,6 +110,7 @@ describe("completeBattleSiteVictory", () => {
     expect(input.mutations.markSiteVisited).toHaveBeenCalledWith("site-4");
     expect(input.mutations.incrementCompletionLevel).toHaveBeenCalledWith(
       200,
+      2,
       null,
       null,
       false,

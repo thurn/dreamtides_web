@@ -148,7 +148,11 @@ export interface BattleEnemyDescriptor {
   portraitSeed: number;
   packageTides: readonly PackageTideId[];
   abilityText: string;
-  dreamsignCount: number;
+  /**
+   * The concrete Dreamsigns the opponent brings to the battle, shown before
+   * hands are dealt.
+   */
+  dreamsigns: readonly BattleDreamsignSummary[];
 }
 
 export interface BattleDreamcallerSummary {
@@ -175,6 +179,8 @@ export interface BattleInit {
   isMiniboss: boolean;
   isFinalBoss: boolean;
   essenceReward: number;
+  /** Omens granted on victory, 1-3, scaling with completed dreamscapes. */
+  omenReward: number;
   openingHandSize: number;
   scoreToWin: number;
   turnLimit: number;

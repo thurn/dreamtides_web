@@ -1,5 +1,9 @@
 import type { CardData } from "../../types/cards";
-import type { DreamcallerContent, PackageTideId } from "../../types/content";
+import type {
+  DreamcallerContent,
+  DreamsignTemplate,
+  PackageTideId,
+} from "../../types/content";
 import type { QuestState, SiteState } from "../../types/quest";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
@@ -75,6 +79,12 @@ export interface CreateBattleInitInput {
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
   dreamcallers: readonly DreamcallerContent[];
+  /**
+   * Dreamsign templates used to give the opponent concrete Dreamsigns.
+   * Optional so battle-engine tests can omit it; production always passes
+   * the run's templates.
+   */
+  dreamsignTemplates?: readonly DreamsignTemplate[];
   seedOverride?: number | null;
   /**
    * Opt-out switch for the heuristic opponent. Defaults to `true` so direct
@@ -93,6 +103,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     state,
     cardDatabase,
     dreamcallers,
+    dreamsignTemplates = [],
     seedOverride,
     enableAi = true,
   } = input;
@@ -120,7 +131,11 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       return freezeBattleDeckCardDefinition(normalizePlayerDeckCard(entry, card));
     });
   const enemyDescriptor = freezeBattleEnemyDescriptor(
-    createEnemyDescriptor(dreamcallers, streams.enemyDescriptor.nextFloat),
+    createEnemyDescriptor(
+      dreamcallers,
+      dreamsignTemplates,
+      streams.enemyDescriptor.nextFloat,
+    ),
   );
   const enemyDeckDefinition = createEnemyDeckDefinition(
     cardDatabase,
@@ -154,6 +169,8 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     isMiniboss: completionLevelAtStart === 3,
     isFinalBoss: completionLevelAtStart === 6,
     essenceReward: 100 + completionLevelAtStart * 50,
+    // Victory grants 1-3 omens, scaling with completed dreamscapes.
+    omenReward: Math.min(3, 1 + Math.floor(completionLevelAtStart / 2)),
     openingHandSize: 5,
     scoreToWin: 25,
     turnLimit: 50,
@@ -199,6 +216,7 @@ function resolveSeed(
 
 export function createEnemyDescriptor(
   dreamcallers: readonly DreamcallerContent[],
+  dreamsignTemplates: readonly DreamsignTemplate[],
   random: () => number,
 ): BattleEnemyDescriptor {
   if (dreamcallers.length === 0) {
@@ -209,16 +227,45 @@ export function createEnemyDescriptor(
       portraitSeed: 0,
       packageTides: Object.freeze([]),
       abilityText: "A synthetic opponent assembled for prototype combat.",
-      dreamsignCount: 1,
+      dreamsigns: Object.freeze([]),
     };
   }
 
   const template = pickRandom(dreamcallers, random);
   const prefix = pickRandom(ENEMY_PREFIXES, random);
   const subtitleSeed = pickRandom(ENEMY_SUBTITLES, random);
-  const dreamsignCount = Math.floor(random() * 5) + 1;
+  const dreamsignCount = Math.floor(random() * 3) + 1;
   const portraitSeed = Math.floor(random() * 1_000_000);
   const baseName = template.name.split(",")[0].split(" the ")[0];
+
+  // The opponent's Dreamsigns are concrete: drawn from the templates adjacent
+  // to the enemy's mandatory tides, so they can be shown before the battle.
+  const enemyTides = new Set(template.mandatoryTides);
+  const adjacentTemplates = dreamsignTemplates.filter((candidate) =>
+    candidate.packageTides.some((tide) => enemyTides.has(tide)),
+  );
+  const dreamsignPool =
+    adjacentTemplates.length > 0 ? adjacentTemplates : dreamsignTemplates;
+  const dreamsigns: BattleDreamsignSummary[] = [];
+  const usedDreamsignIds = new Set<string>();
+  let attempts = 0;
+  while (
+    dreamsigns.length < dreamsignCount &&
+    dreamsignPool.length > 0 &&
+    attempts < dreamsignPool.length * 4
+  ) {
+    attempts += 1;
+    const candidate = pickRandom(dreamsignPool, random);
+    if (usedDreamsignIds.has(candidate.id)) {
+      continue;
+    }
+    usedDreamsignIds.add(candidate.id);
+    dreamsigns.push({
+      name: candidate.name,
+      effectDescription: candidate.effectDescription,
+      isBane: false,
+    });
+  }
 
   return {
     id: `enemy:${template.id}:${String(portraitSeed)}`,
@@ -227,7 +274,7 @@ export function createEnemyDescriptor(
     portraitSeed,
     packageTides: Object.freeze([...template.mandatoryTides]),
     abilityText: template.renderedText,
-    dreamsignCount,
+    dreamsigns,
   };
 }
 
@@ -477,6 +524,9 @@ function freezeBattleEnemyDescriptor(
   return Object.freeze({
     ...descriptor,
     packageTides: Object.freeze([...descriptor.packageTides]),
+    dreamsigns: Object.freeze(
+      descriptor.dreamsigns.map((dreamsign) => Object.freeze({ ...dreamsign })),
+    ),
   });
 }
 
