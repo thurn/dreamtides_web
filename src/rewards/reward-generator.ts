@@ -1,19 +1,17 @@
-import type { CardData } from "../types/cards";
 import type { DreamsignTemplate, PackageTideId } from "../types/content";
 import type { Dreamsign } from "../types/quest";
-import { isStarterCard } from "../data/card-database";
 import { pickPackageAdjacentItem } from "../data/tide-weights";
 import {
   readDreamsignPool,
   resolveDreamsignTemplates,
 } from "../dreamsign/dreamsign-pool";
 
+/**
+ * A Dreamsign Reward Site always grants a known Dreamsign drawn from the run's
+ * shared pool. The `essence` variant is a defensive fallback used only if the
+ * pool somehow yields nothing even after regeneration.
+ */
 export type RewardSiteData =
-  | {
-      rewardType: "card";
-      cardNumber: number;
-      cardName: string;
-    }
   | {
       rewardType: "dreamsign";
       dreamsign: Dreamsign;
@@ -24,10 +22,14 @@ export type RewardSiteData =
     };
 
 export interface RewardGenerationOptions {
-  cardDatabase: ReadonlyMap<number, CardData>;
   dreamsignTemplates: readonly DreamsignTemplate[];
   remainingDreamsignPoolIds: readonly string[];
   selectedPackageTides: readonly PackageTideId[];
+  /**
+   * The run's full Dreamsign pool. When the remaining pool is exhausted it is
+   * recreated from this list so a Reward Site can still grant a Dreamsign.
+   */
+  regenerationPoolIds?: readonly string[];
 }
 
 export interface RewardGenerationResult {
@@ -37,37 +39,30 @@ export interface RewardGenerationResult {
 }
 
 export function generateRewardSiteData({
-  cardDatabase,
   dreamsignTemplates,
   remainingDreamsignPoolIds,
   selectedPackageTides,
+  regenerationPoolIds,
 }: RewardGenerationOptions): RewardGenerationResult {
-  const card = pickPackageAdjacentItem(
-    Array.from(cardDatabase.values()).filter((candidate) => !isStarterCard(candidate)),
-    (candidate) => candidate.tides,
-    selectedPackageTides,
-  );
-  const availableDreamsignPool = readDreamsignPool(remainingDreamsignPoolIds, dreamsignTemplates);
+  let availableIds = readDreamsignPool(
+    remainingDreamsignPoolIds,
+    dreamsignTemplates,
+  ).availableIds;
+
+  // Recreate the shared pool when it has run out, mirroring the Dreamsign
+  // Offering/Draft regeneration behaviour.
+  if (availableIds.length === 0 && regenerationPoolIds !== undefined) {
+    availableIds = readDreamsignPool(
+      regenerationPoolIds,
+      dreamsignTemplates,
+    ).availableIds;
+  }
+
   const dreamsignTemplate = pickPackageAdjacentItem(
-    resolveDreamsignTemplates(availableDreamsignPool.availableIds, dreamsignTemplates),
+    resolveDreamsignTemplates(availableIds, dreamsignTemplates),
     (candidate) => candidate.packageTides,
     selectedPackageTides,
   );
-
-  if (
-    card !== null &&
-    (dreamsignTemplate === null || Math.random() < 0.7)
-  ) {
-    return {
-      reward: {
-        rewardType: "card",
-        cardNumber: card.cardNumber,
-        cardName: card.name,
-      },
-      remainingDreamsignPoolIds: [...availableDreamsignPool.availableIds],
-      spentDreamsignPoolIds: [],
-    };
-  }
 
   if (dreamsignTemplate !== null) {
     return {
@@ -82,7 +77,7 @@ export function generateRewardSiteData({
           isBane: false,
         },
       },
-      remainingDreamsignPoolIds: availableDreamsignPool.availableIds.filter(
+      remainingDreamsignPoolIds: availableIds.filter(
         (id) => id !== dreamsignTemplate.id,
       ),
       spentDreamsignPoolIds: [dreamsignTemplate.id],
@@ -94,7 +89,7 @@ export function generateRewardSiteData({
       rewardType: "essence",
       essenceAmount: randomInt(150, 350),
     },
-    remainingDreamsignPoolIds: [...availableDreamsignPool.availableIds],
+    remainingDreamsignPoolIds: [...availableIds],
     spentDreamsignPoolIds: [],
   };
 }

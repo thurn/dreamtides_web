@@ -251,9 +251,9 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
             color: "#e2e8f0",
           }}
           onClick={handleSkip}
-          title="Skips this offering. Both shown Dreamsigns are removed from this run's pool."
+          title="Skips this offering. Every shown Dreamsign is removed from this run's pool."
         >
-          Skip (discards both Dreamsigns)
+          Skip (discards the shown Dreamsigns)
         </button>
         <button
           className="rounded-lg px-4 py-2 text-sm font-medium transition-colors"

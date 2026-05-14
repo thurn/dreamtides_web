@@ -55,19 +55,38 @@ export function readDreamsignPool(
   return canonicalizeDreamsignPool(remainingDreamsignPool, templates);
 }
 
-/** Draws unique Dreamsigns from the shared run pool and spends them immediately. */
+/**
+ * Draws unique Dreamsigns from the shared run pool and spends them
+ * immediately. When the remaining pool cannot fill a full offer, the multiset
+ * is recreated from `regenerationPoolIds` (the run's full Dreamsign pool) so
+ * the shared pool behaves as a renewable resource, as the design document
+ * describes.
+ */
 export function drawDreamsignOptions(
   remainingDreamsignPool: readonly string[],
   templates: readonly DreamsignTemplate[],
   count: number,
+  regenerationPoolIds?: readonly string[],
 ): DreamsignPoolDraw {
   const { availableIds, templatesById } = canonicalizeDreamsignPool(
     remainingDreamsignPool,
     templates,
   );
+
+  let workingIds = availableIds;
+  if (workingIds.length < count && regenerationPoolIds !== undefined) {
+    const regenerated = canonicalizeDreamsignPool(
+      regenerationPoolIds,
+      templates,
+    ).availableIds;
+    if (regenerated.length > workingIds.length) {
+      workingIds = regenerated;
+    }
+  }
+
   const offeredIds = shufflePick(
-    availableIds,
-    Math.min(count, availableIds.length),
+    workingIds,
+    Math.min(count, workingIds.length),
   );
 
   return {
@@ -77,8 +96,8 @@ export function drawDreamsignOptions(
     ),
     remainingDreamsignPool:
       offeredIds.length === 0
-        ? availableIds
-        : availableIds.filter((id) => !offeredIds.includes(id)),
+        ? workingIds
+        : workingIds.filter((id) => !offeredIds.includes(id)),
   };
 }
 

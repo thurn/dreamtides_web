@@ -52,7 +52,6 @@ import {
   changeQuestEssence,
   commitPreparedDraftCardPickInQuestState,
   completeQuestSite,
-  DREAMSIGN_REJECTION_ESSENCE,
   prepareDraftCardPickInQuestState,
   setQuestScreen,
   startQuestFromDreamcaller,
@@ -897,16 +896,29 @@ export function MultiplayerQuestProvider({
   );
 
   const addDreamsign = useCallback(
-    (dreamsign: Dreamsign, _sourceSiteType: string) => {
+    (dreamsign: Dreamsign, _sourceSiteType: string, purgeIndex?: number) => {
       const current = currentRef.current;
-      if (current.state.dreamsigns.length >= MAX_DREAMSIGNS) {
+      const purgedDreamsign =
+        purgeIndex === undefined
+          ? null
+          : current.state.dreamsigns[purgeIndex];
+      if (
+        (purgeIndex !== undefined && purgedDreamsign == null) ||
+        (purgeIndex === undefined &&
+          current.state.dreamsigns.length >= MAX_DREAMSIGNS)
+      ) {
         return;
       }
       writeQuestField({
         database: current.database,
         roomId: current.session.roomId,
         field: "dreamsigns",
-        value: [...current.state.dreamsigns, dreamsign],
+        value:
+          purgeIndex === undefined
+            ? [...current.state.dreamsigns, dreamsign]
+            : current.state.dreamsigns.map((existing, index) =>
+              index === purgeIndex ? dreamsign : existing,
+            ),
       });
     },
     [],
@@ -1398,10 +1410,11 @@ export function MultiplayerQuestProvider({
     const generated =
       current.state.siteRuntime[siteId] === undefined
         ? generateRewardSiteData({
-          cardDatabase: current.questContent.cardDatabase,
           dreamsignTemplates: current.questContent.dreamsignTemplates,
           remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
           selectedPackageTides: expectedSelectedTides,
+          regenerationPoolIds:
+            current.state.resolvedPackage?.dreamsignPoolIds ?? [],
         })
         : null;
     const runtime: RewardSiteRuntime | null =
@@ -1480,7 +1493,7 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
-  const acceptRewardSite = useCallback((siteId: string) => {
+  const acceptRewardSite = useCallback((siteId: string, purgeIndex?: number) => {
     const current = currentRef.current;
     const now = new Date().toISOString();
     const actionId = crypto.randomUUID();
@@ -1505,26 +1518,25 @@ export function MultiplayerQuestProvider({
 
         let next: QuestState = room.questState;
         const reward = runtime.reward;
-        if (reward.rewardType === "card") {
+        if (reward.rewardType === "dreamsign") {
+          const purgedDreamsign =
+            purgeIndex === undefined ? null : next.dreamsigns[purgeIndex];
+          if (
+            (purgeIndex !== undefined && purgedDreamsign == null) ||
+            (purgeIndex === undefined &&
+              next.dreamsigns.length >= MAX_DREAMSIGNS)
+          ) {
+            return room;
+          }
           next = {
             ...next,
-            deck: [
-              ...next.deck,
-              {
-                entryId: nextDeckEntryId(next.deck),
-                cardNumber: reward.cardNumber,
-                transfiguration: null,
-                isBane: false,
-              },
-            ],
+            dreamsigns:
+              purgeIndex === undefined
+                ? [...next.dreamsigns, reward.dreamsign]
+                : next.dreamsigns.map((existing, index) =>
+                  index === purgeIndex ? reward.dreamsign : existing,
+                ),
           };
-        } else if (reward.rewardType === "dreamsign") {
-          if (next.dreamsigns.length < MAX_DREAMSIGNS) {
-            next = {
-              ...next,
-              dreamsigns: [...next.dreamsigns, reward.dreamsign],
-            };
-          }
         } else {
           next = {
             ...next,
@@ -1583,6 +1595,7 @@ export function MultiplayerQuestProvider({
             expectedRemainingDreamsignPool,
             current.questContent.dreamsignTemplates,
             optionCount,
+            current.state.resolvedPackage?.dreamsignPoolIds ?? [],
           )
           : null;
       const runtime: DreamsignOfferSiteRuntime | null =
@@ -1680,8 +1693,6 @@ export function MultiplayerQuestProvider({
         const next = completeSiteAndReturnToDreamscape(
           {
             ...room.questState,
-            essence:
-              room.questState.essence + DREAMSIGN_REJECTION_ESSENCE,
             siteRuntime: {
               ...room.questState.siteRuntime,
               [siteId]: {
@@ -1708,7 +1719,6 @@ export function MultiplayerQuestProvider({
               source: "site_reveal",
               summary: {
                 siteId,
-                essenceReward: DREAMSIGN_REJECTION_ESSENCE,
               },
             }),
           },
@@ -2050,7 +2060,8 @@ export function MultiplayerQuestProvider({
     [],
   );
 
-  const buyShopSlot = useCallback((siteId: string, slotIndex: number) => {
+  const buyShopSlot = useCallback(
+    (siteId: string, slotIndex: number, purgeIndex?: number) => {
     const current = currentRef.current;
     const expectedRuntime = current.state.siteRuntime[siteId];
     if (
@@ -2100,9 +2111,15 @@ export function MultiplayerQuestProvider({
         if (price > room.questState.essence) {
           return room;
         }
+        const purgedDreamsign =
+          slot.itemType === "dreamsign" && purgeIndex !== undefined
+            ? room.questState.dreamsigns[purgeIndex]
+            : null;
         if (
           slot.itemType === "dreamsign" &&
-          room.questState.dreamsigns.length >= MAX_DREAMSIGNS
+          ((purgeIndex !== undefined && purgedDreamsign == null) ||
+            (purgeIndex === undefined &&
+              room.questState.dreamsigns.length >= MAX_DREAMSIGNS))
         ) {
           return room;
         }
@@ -2136,10 +2153,18 @@ export function MultiplayerQuestProvider({
         } else {
           next = {
             ...next,
-            dreamsigns: [...next.dreamsigns, slot.dreamsign],
+            dreamsigns:
+              purgeIndex === undefined
+                ? [...next.dreamsigns, slot.dreamsign]
+                : next.dreamsigns.map((existing, index) =>
+                  index === purgeIndex ? slot.dreamsign : existing,
+                ),
           };
           summary.dreamsignId = slot.dreamsign.id ?? null;
           summary.dreamsignName = slot.dreamsign.name;
+          if (purgedDreamsign != null) {
+            summary.purgedDreamsignName = purgedDreamsign.name;
+          }
         }
 
         next = {

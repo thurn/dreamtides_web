@@ -16,13 +16,6 @@ import type {
 } from "../types/quest";
 import { deriveEntryIdCounter } from "./deck-entry-ids";
 
-/**
- * Essence granted as a consolation reward when a player rejects a
- * Dreamsign Offering site. Surfaced in the Reject button label so the
- * payoff is visible before the click.
- */
-export const DREAMSIGN_REJECTION_ESSENCE = 25;
-
 export interface PreparedDraftPick {
   expected: {
     siteId: string;

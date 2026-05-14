@@ -439,7 +439,7 @@ describe("DreamsignDraftScreen Why Dreamsigns button", () => {
 });
 
 describe("DreamsignOfferingScreen", () => {
-  it("rejects the offering for 25 essence and labels the button accordingly", () => {
+  it("rejects the offering with no reward and a plain Reject label", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
@@ -471,7 +471,8 @@ describe("DreamsignOfferingScreen", () => {
     ).find((candidate) =>
       candidate.textContent?.trim().startsWith("Reject"),
     );
-    expect(rejectButton?.textContent).toContain("+25 Essence");
+    expect(rejectButton?.textContent?.trim()).toBe("Reject");
+    expect(rejectButton?.textContent).not.toContain("Essence");
 
     clickButton(container, rejectButton?.textContent?.trim() ?? "");
 
@@ -647,7 +648,7 @@ describe("DreamsignDraftScreen", () => {
     expect(container.textContent).toContain("Glacial Insight");
     expect(container.textContent).toContain("Verdant Accord");
 
-    clickButton(container, "Skip (discards both Dreamsigns)");
+    clickButton(container, "Skip (discards the shown Dreamsigns)");
 
     expect(mutations.acceptDreamsignOffer).not.toHaveBeenCalled();
     expect(mutations.completeSite).toHaveBeenCalledWith(
@@ -688,7 +689,7 @@ describe("DreamsignDraftScreen", () => {
     // is empty so the player can still inspect pool composition.
     expect(container.querySelectorAll("button")).toHaveLength(2);
 
-    clickButton(container, "Skip (discards both Dreamsigns)");
+    clickButton(container, "Skip (discards the shown Dreamsigns)");
 
     expect(mutations.acceptDreamsignOffer).not.toHaveBeenCalled();
     expect(mutations.completeSite).toHaveBeenCalledWith(

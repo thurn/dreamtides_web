@@ -51,7 +51,6 @@ import type { RuntimeConfig } from "../runtime/runtime-config";
 import { createStartInBattleState } from "../runtime/start-in-battle-state";
 import {
   completeQuestSite,
-  DREAMSIGN_REJECTION_ESSENCE,
   setQuestScreen,
   startQuestFromDreamcaller,
 } from "./quest-state-actions";
@@ -88,7 +87,12 @@ export interface QuestMutations {
   startQuest: (dreamcaller: DreamcallerContent) => void;
   completeSite: (siteId: string, source: string) => void;
   ensureRewardSiteRuntime: (siteId: string) => void;
-  acceptRewardSite: (siteId: string) => void;
+  /**
+   * Accepts the Dreamsign Reward at the given site. When the player is at the
+   * 12-Dreamsign cap, `purgeIndex` selects an existing Dreamsign to replace;
+   * without it the mutation no-ops at the cap so the UI can prompt a purge.
+   */
+  acceptRewardSite: (siteId: string, purgeIndex?: number) => void;
   ensureDreamsignOfferRuntime: (siteId: string, optionCount: number) => void;
   acceptDreamsignOffer: (
     siteId: string,
@@ -96,15 +100,24 @@ export interface QuestMutations {
     purgeIndex?: number,
   ) => void;
   /**
-   * Rejects the Dreamsign Offering at the given site. Grants
-   * `DREAMSIGN_REJECTION_ESSENCE` as a consolation reward, marks the
-   * runtime as resolved, and completes the site.
+   * Rejects the Dreamsign Offering at the given site. Rejecting carries no
+   * reward; it simply marks the runtime as resolved and completes the site.
    */
   rejectDreamsignOffer: (siteId: string) => void;
   ensureEssenceSiteRuntime: (siteId: string, isEnhanced: boolean) => void;
   acceptEssenceSite: (siteId: string) => void;
   ensureShopRuntime: (site: SiteState, specialtyOnly: boolean) => void;
-  buyShopSlot: (siteId: string, slotIndex: number) => void;
+  /**
+   * Buys the shop slot at `slotIndex`. For a Dreamsign slot when the player
+   * is at the 12-Dreamsign cap, `purgeIndex` selects an existing Dreamsign to
+   * replace; without it the mutation no-ops at the cap so the UI can prompt a
+   * purge.
+   */
+  buyShopSlot: (
+    siteId: string,
+    slotIndex: number,
+    purgeIndex?: number,
+  ) => void;
   rerollShop: (site: SiteState) => void;
   ensureCardChoiceRuntime: (
     siteId: string,
@@ -141,7 +154,16 @@ export interface QuestMutations {
     cardSourceDebug: CardSourceDebugState | null,
     source: string,
   ) => void;
-  addDreamsign: (dreamsign: Dreamsign, sourceSiteType: string) => void;
+  /**
+   * Adds a Dreamsign. When the player is at the 12-Dreamsign cap, `purgeIndex`
+   * selects an existing Dreamsign to replace; without it the mutation no-ops
+   * at the cap so the UI can prompt a purge.
+   */
+  addDreamsign: (
+    dreamsign: Dreamsign,
+    sourceSiteType: string,
+    purgeIndex?: number,
+  ) => void;
   removeDreamsign: (index: number, reason: string) => void;
   setRemainingDreamsignPool: (
     remainingDreamsignPool: string[],
@@ -854,10 +876,10 @@ export function QuestProvider({
         }
 
         const generated = generateRewardSiteData({
-          cardDatabase,
           dreamsignTemplates: questContent.dreamsignTemplates,
           remainingDreamsignPoolIds: prev.remainingDreamsignPool,
           selectedPackageTides: prev.resolvedPackage?.selectedTides ?? [],
+          regenerationPoolIds: prev.resolvedPackage?.dreamsignPoolIds ?? [],
         });
         const runtime: RewardSiteRuntime = {
           kind: "reward",
@@ -892,7 +914,7 @@ export function QuestProvider({
   );
 
   const acceptRewardSite = useCallback(
-    (siteId: string) => {
+    (siteId: string, purgeIndex?: number) => {
       setState((prev) => {
         const runtime = prev.siteRuntime[siteId];
         if (
@@ -905,32 +927,37 @@ export function QuestProvider({
 
         let next: QuestState = prev;
         const reward = runtime.reward;
-        if (reward.rewardType === "card") {
-          const card = cardDatabase.get(reward.cardNumber);
-          logEvent("card_added", {
-            cardNumber: reward.cardNumber,
-            cardName:
-              card?.name ?? `Unknown Card #${String(reward.cardNumber)}`,
-            source: "reward_site",
-          });
-          const entry: DeckEntry = {
-            entryId: nextEntryId(),
-            cardNumber: reward.cardNumber,
-            transfiguration: null,
-            isBane: false,
-          };
-          next = { ...next, deck: [...next.deck, entry] };
-        } else if (reward.rewardType === "dreamsign") {
-          if (next.dreamsigns.length < MAX_DREAMSIGNS) {
-            const dreamsign: Dreamsign = reward.dreamsign;
-            logEvent("dreamsign_acquired", {
-              name: dreamsign.name,
-              imageName: dreamsign.imageName ?? null,
-              isBane: dreamsign.isBane,
-              sourceSiteType: "Reward",
-            });
-            next = { ...next, dreamsigns: [...next.dreamsigns, dreamsign] };
+        if (reward.rewardType === "dreamsign") {
+          const purgedDreamsign =
+            purgeIndex === undefined ? null : prev.dreamsigns[purgeIndex];
+          if (
+            (purgeIndex !== undefined && purgedDreamsign == null) ||
+            (prev.dreamsigns.length >= MAX_DREAMSIGNS &&
+              purgeIndex === undefined)
+          ) {
+            return prev;
           }
+          const dreamsign: Dreamsign = reward.dreamsign;
+          if (purgedDreamsign !== null) {
+            logEvent("dreamsign_removed", {
+              name: purgedDreamsign.name,
+              imageName: purgedDreamsign.imageName ?? null,
+              reason: "purged_for_new_dreamsign",
+            });
+          }
+          logEvent("dreamsign_acquired", {
+            name: dreamsign.name,
+            imageName: dreamsign.imageName ?? null,
+            isBane: dreamsign.isBane,
+            sourceSiteType: "Reward",
+          });
+          const dreamsigns =
+            purgeIndex === undefined
+              ? [...next.dreamsigns, dreamsign]
+              : next.dreamsigns.map((existing, index) =>
+                index === purgeIndex ? dreamsign : existing,
+              );
+          next = { ...next, dreamsigns };
         } else {
           const oldValue = next.essence;
           const newValue = oldValue + reward.essenceAmount;
@@ -964,7 +991,7 @@ export function QuestProvider({
         };
       });
     },
-    [cardDatabase],
+    [],
   );
 
   const ensureDreamsignOfferRuntime = useCallback(
@@ -978,6 +1005,7 @@ export function QuestProvider({
           prev.remainingDreamsignPool,
           questContent.dreamsignTemplates,
           optionCount,
+          prev.resolvedPackage?.dreamsignPoolIds ?? [],
         );
         const site = findSite(prev, siteId);
         const source =
@@ -1103,18 +1131,10 @@ export function QuestProvider({
         return prev;
       }
 
-      const oldValue = prev.essence;
-      const newValue = oldValue + DREAMSIGN_REJECTION_ESSENCE;
-      logEvent("essence_changed", {
-        oldValue,
-        newValue,
-        delta: DREAMSIGN_REJECTION_ESSENCE,
-        source: "dreamsign_offering_rejected",
-      });
       const site = findSite(prev, siteId);
       logEvent("site_completed", {
         siteType: "DreamsignOffering",
-        outcome: `Rejected for ${String(DREAMSIGN_REJECTION_ESSENCE)} essence`,
+        outcome: "Rejected",
         isEnhanced: site?.isEnhanced ?? false,
       });
 
@@ -1122,7 +1142,6 @@ export function QuestProvider({
         completeQuestSite(
           {
             ...prev,
-            essence: newValue,
             siteRuntime: {
               ...prev.siteRuntime,
               [siteId]: {
@@ -1281,7 +1300,7 @@ export function QuestProvider({
   );
 
   const buyShopSlot = useCallback(
-    (siteId: string, slotIndex: number) => {
+    (siteId: string, slotIndex: number, purgeIndex?: number) => {
       setState((prev) => {
         if (prev.visitedSites.includes(siteId)) {
           return prev;
@@ -1299,9 +1318,15 @@ export function QuestProvider({
         if (price > prev.essence) {
           return prev;
         }
+        const purgedDreamsign =
+          slot.itemType === "dreamsign" && purgeIndex !== undefined
+            ? prev.dreamsigns[purgeIndex]
+            : null;
         if (
           slot.itemType === "dreamsign" &&
-          prev.dreamsigns.length >= MAX_DREAMSIGNS
+          ((purgeIndex !== undefined && purgedDreamsign == null) ||
+            (purgeIndex === undefined &&
+              prev.dreamsigns.length >= MAX_DREAMSIGNS))
         ) {
           return prev;
         }
@@ -1354,6 +1379,13 @@ export function QuestProvider({
             ],
           };
         } else {
+          if (purgedDreamsign !== null) {
+            logEvent("dreamsign_removed", {
+              name: purgedDreamsign.name,
+              imageName: purgedDreamsign.imageName ?? null,
+              reason: "purged_for_new_dreamsign",
+            });
+          }
           logEvent("dreamsign_acquired", {
             name: slot.dreamsign.name,
             imageName: slot.dreamsign.imageName ?? null,
@@ -1369,7 +1401,12 @@ export function QuestProvider({
           });
           next = {
             ...next,
-            dreamsigns: [...next.dreamsigns, slot.dreamsign],
+            dreamsigns:
+              purgeIndex === undefined
+                ? [...next.dreamsigns, slot.dreamsign]
+                : next.dreamsigns.map((existing, index) =>
+                  index === purgeIndex ? slot.dreamsign : existing,
+                ),
           };
         }
 
@@ -1955,16 +1992,37 @@ export function QuestProvider({
   );
 
   const addDreamsign = useCallback(
-    (dreamsign: Dreamsign, sourceSiteType: string) => {
+    (dreamsign: Dreamsign, sourceSiteType: string, purgeIndex?: number) => {
       setState((prev) => {
-        if (prev.dreamsigns.length >= MAX_DREAMSIGNS) return prev;
+        const purgedDreamsign =
+          purgeIndex === undefined ? null : prev.dreamsigns[purgeIndex];
+        if (
+          (purgeIndex !== undefined && purgedDreamsign == null) ||
+          (purgeIndex === undefined &&
+            prev.dreamsigns.length >= MAX_DREAMSIGNS)
+        ) {
+          return prev;
+        }
+        if (purgedDreamsign !== null) {
+          logEvent("dreamsign_removed", {
+            name: purgedDreamsign.name,
+            imageName: purgedDreamsign.imageName ?? null,
+            reason: "purged_for_new_dreamsign",
+          });
+        }
         logEvent("dreamsign_acquired", {
           name: dreamsign.name,
           imageName: dreamsign.imageName ?? null,
           isBane: dreamsign.isBane,
           sourceSiteType,
         });
-        return { ...prev, dreamsigns: [...prev.dreamsigns, dreamsign] };
+        const dreamsigns =
+          purgeIndex === undefined
+            ? [...prev.dreamsigns, dreamsign]
+            : prev.dreamsigns.map((existing, index) =>
+              index === purgeIndex ? dreamsign : existing,
+            );
+        return { ...prev, dreamsigns };
       });
     },
     [],

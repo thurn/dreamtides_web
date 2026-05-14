@@ -366,7 +366,7 @@ describe("RewardSiteScreen", () => {
     });
   });
 
-  it("accepts a shared card reward through the composed mutation", () => {
+  it("accepts a Dreamsign reward through the composed mutation", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
@@ -374,9 +374,13 @@ describe("RewardSiteScreen", () => {
           "site-1": {
             kind: "reward",
             reward: {
-              rewardType: "card",
-              cardNumber: 1,
-              cardName: "Card Reward",
+              rewardType: "dreamsign",
+              dreamsign: {
+                id: "dreamsign-1",
+                name: "Dreamsign Reward",
+                effectDescription: "A boon.",
+                isBane: false,
+              },
             },
             remainingDreamsignPoolIds: [],
             accepted: false,
@@ -392,7 +396,7 @@ describe("RewardSiteScreen", () => {
       />,
     );
 
-    expect(container.textContent).toContain("Card Reward");
+    expect(container.textContent).toContain("Dreamsign Reward");
 
     clickButton(container, "Accept");
 

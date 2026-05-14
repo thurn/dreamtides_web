@@ -1504,7 +1504,7 @@ describe("MultiplayerQuestProvider", () => {
     });
   });
 
-  it("rejecting a dreamsign offer grants 25 essence and completes the site", () => {
+  it("rejecting a dreamsign offer completes the site with no reward", () => {
     const captured: QuestContextValue[] = [];
     const offeredDreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
     const questState: QuestState = {
@@ -1558,7 +1558,7 @@ describe("MultiplayerQuestProvider", () => {
     const updater = latestRoomTransactionUpdater();
     const nextRoom = updater?.(session.room);
 
-    expect(nextRoom?.questState?.essence).toBe(225);
+    expect(nextRoom?.questState?.essence).toBe(200);
     expect(nextRoom?.questState?.visitedSites).toEqual(["site-1"]);
     expect(nextRoom?.questState?.screen).toEqual({ type: "dreamscape" });
     expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
@@ -1574,7 +1574,6 @@ describe("MultiplayerQuestProvider", () => {
       source: "site_reveal",
       summary: {
         siteId: "site-1",
-        essenceReward: 25,
       },
     });
   });
@@ -1619,9 +1618,8 @@ describe("MultiplayerQuestProvider", () => {
         "site-1": {
           kind: "reward",
           reward: {
-            rewardType: "card",
-            cardNumber: 101,
-            cardName: "Card 101",
+            rewardType: "dreamsign",
+            dreamsign: makeDreamsign("dreamsign-1", "Dreamsign One"),
           },
           remainingDreamsignPoolIds: [],
           accepted: false,

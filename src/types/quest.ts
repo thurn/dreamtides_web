@@ -174,11 +174,14 @@ export interface ShopSiteRuntime {
   remainingDreamsignPoolIds: string[];
 }
 
-/** Runtime state for a reward site. */
+/**
+ * Runtime state for a Dreamsign Reward site. The reward is always a known
+ * Dreamsign; the `essence` variant is a defensive fallback for the impossible
+ * case of an empty Dreamsign pool.
+ */
 export interface RewardSiteRuntime {
   kind: "reward";
   reward:
-    | { rewardType: "card"; cardNumber: number; cardName: string }
     | {
         rewardType: "dreamsign";
         dreamsign: Dreamsign;
