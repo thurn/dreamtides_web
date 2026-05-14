@@ -209,12 +209,25 @@ describe("createBattleInit", () => {
   describe("playerDeckOrder", () => {
     it("preserves entryId for every quest deck entry", () => {
       const init = createBattleInit(makeBaseInput());
-      const sourceIds = init.playerDeckOrder
-        .map((card) => card.sourceDeckEntryId)
-        .filter((id): id is string => id !== null)
-        .sort();
+      // The battle deck is padded up to the minimum size, so the same quest
+      // entry id can appear multiple times; the set of distinct ids still
+      // matches the quest deck exactly.
+      const sourceIds = [
+        ...new Set(
+          init.playerDeckOrder
+            .map((card) => card.sourceDeckEntryId)
+            .filter((id): id is string => id !== null),
+        ),
+      ].sort();
       const inputIds = makeBaseInput().state.deck.map((entry) => entry.entryId).sort();
       expect(sourceIds).toEqual(inputIds);
+    });
+
+    it("pads a small quest deck up to the minimum battle deck size", () => {
+      const init = createBattleInit(makeBaseInput());
+      // makeBattleTestState has an 8-card deck: padded to 32 (8 -> 16 -> 24 -> 32).
+      expect(init.playerDeckOrder.length).toBeGreaterThanOrEqual(25);
+      expect(init.questDeckEntries).toHaveLength(8);
     });
 
     it("freezes the player deck order and each card's tides array", () => {

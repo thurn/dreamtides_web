@@ -333,13 +333,7 @@ describe("battleReducer", () => {
 
   it("recomputes battle result after a committed play", () => {
     const { battleInit, state } = createTestBattle();
-    const battleCardId = state.sides.player.hand.find(
-      (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "event",
-    );
-
-    if (battleCardId === undefined) {
-      throw new Error("Missing player event card");
-    }
+    const battleCardId = findPlayerEventCardId(state);
 
     state.sides.player.score = battleInit.scoreToWin;
 
@@ -666,13 +660,6 @@ describe("battleReducer", () => {
 
     state.sides.player.score = battleInit.scoreToWin - 1;
     state.sides.enemy.score = 5;
-    const battleCardId = state.sides.player.hand.find(
-      (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "event",
-    );
-
-    if (battleCardId === undefined) {
-      throw new Error("Missing event card");
-    }
 
     // Force player over the score threshold via a score edit; then have the
     // result evaluation emit a result-changed event carrying the new fields.
@@ -1230,6 +1217,34 @@ function createTestBattle() {
     battleInit,
     state: createInitialBattleState(battleInit),
   };
+}
+
+/**
+ * Returns a player event card id. The opening hand is shuffled, so when no
+ * event happens to be in hand one is pulled from the deck into the hand.
+ */
+function findPlayerEventCardId(
+  state: ReturnType<typeof createTestBattle>["state"],
+): string {
+  let cardId = state.sides.player.hand.find(
+    (id) => state.cardInstances[id]?.definition.battleCardKind === "event",
+  );
+  if (cardId === undefined) {
+    const fromDeck = state.sides.player.deck.find(
+      (id) => state.cardInstances[id]?.definition.battleCardKind === "event",
+    );
+    if (fromDeck !== undefined) {
+      state.sides.player.deck = state.sides.player.deck.filter(
+        (id) => id !== fromDeck,
+      );
+      state.sides.player.hand = [...state.sides.player.hand, fromDeck];
+      cardId = fromDeck;
+    }
+  }
+  if (cardId === undefined) {
+    throw new Error("Missing player event card");
+  }
+  return cardId;
 }
 
 function deploy(

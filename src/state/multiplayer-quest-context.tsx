@@ -1204,6 +1204,93 @@ export function MultiplayerQuestProvider({
     [],
   );
 
+  const cleanseBanes = useCallback(
+    (
+      siteId: string,
+      cardEntryIds: string[],
+      dreamsignIndices: number[],
+    ) => {
+      const current = currentRef.current;
+      if (current.state.visitedSites.includes(siteId)) {
+        return;
+      }
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          if (room.questState.visitedSites.includes(siteId)) {
+            return room;
+          }
+          const cardIdSelection = new Set(cardEntryIds);
+          const baneCardEntryIds = room.questState.deck
+            .filter(
+              (entry) => entry.isBane && cardIdSelection.has(entry.entryId),
+            )
+            .map((entry) => entry.entryId);
+          const baneDreamsignIndices = [...new Set(dreamsignIndices)]
+            .filter(
+              (index) => room.questState?.dreamsigns[index]?.isBane === true,
+            )
+            .sort((a, b) => a - b);
+
+          // Up to 3 banes total may be removed at a Cleanse site.
+          const cappedCardEntryIds = baneCardEntryIds.slice(0, 3);
+          const cappedDreamsignIndices = baneDreamsignIndices.slice(
+            0,
+            Math.max(0, 3 - cappedCardEntryIds.length),
+          );
+          const cardIdSet = new Set(cappedCardEntryIds);
+          const dreamsignIndexSet = new Set(cappedDreamsignIndices);
+
+          const next = setQuestScreen(
+            completeQuestSite(
+              {
+                ...room.questState,
+                deck: room.questState.deck.filter(
+                  (entry) => !cardIdSet.has(entry.entryId),
+                ),
+                dreamsigns: room.questState.dreamsigns.filter(
+                  (_, index) => !dreamsignIndexSet.has(index),
+                ),
+              },
+              siteId,
+            ),
+            { type: "dreamscape" },
+          );
+
+          return {
+            ...room,
+            questState: next,
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "cleanseBanes",
+                source: "cleanse_site",
+                summary: {
+                  siteId,
+                  banesRemovedCount:
+                    cappedCardEntryIds.length + cappedDreamsignIndices.length,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const pickDraftCard = useCallback((siteId: string, cardNumber: number) => {
     const current = currentRef.current;
     let prepared: ReturnType<typeof prepareDraftCardPickInQuestState>;
@@ -2645,6 +2732,7 @@ export function MultiplayerQuestProvider({
       removeCard: (_entryId: string, _source: string) => {
         unavailableMutation("removeCard");
       },
+      cleanseBanes,
       transfigureCard: (
         _entryId: string,
         _type: TransfigurationType,
@@ -2675,6 +2763,7 @@ export function MultiplayerQuestProvider({
       bootstrapStartInBattle,
       buyShopSlot,
       changeEssence,
+      cleanseBanes,
       completeSite,
       dismissStartingDeckPopup,
       ensureRewardSiteRuntime,

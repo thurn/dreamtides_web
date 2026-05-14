@@ -8,7 +8,10 @@ export type TransfigurationType =
   | "Golden"
   | "Scarlet"
   | "Azure"
-  | "Bronze";
+  | "Bronze"
+  | "Magenta"
+  | "Rose"
+  | "Prismatic";
 
 /** All site types available in dreamscapes. */
 export type SiteType =

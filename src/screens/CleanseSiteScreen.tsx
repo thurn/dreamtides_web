@@ -6,6 +6,9 @@ import { logEvent } from "../logging";
 import { CardDisplay } from "../components/CardDisplay";
 import { RulesText } from "../components/RulesText";
 
+/** Maximum number of banes a Cleanse site can remove. */
+const MAX_CLEANSE = 3;
+
 /** Props for the CleanseSiteScreen component. */
 interface CleanseSiteScreenProps {
   site: SiteState;
@@ -13,15 +16,19 @@ interface CleanseSiteScreenProps {
 
 /** A bane item that can be cleansed: either a bane card or a bane dreamsign. */
 type BaneItem =
-  | { kind: "card"; entry: DeckEntry; cardName: string }
-  | { kind: "dreamsign"; dreamsign: Dreamsign; index: number };
+  | { kind: "card"; key: string; entry: DeckEntry; cardName: string }
+  | { kind: "dreamsign"; key: string; dreamsign: Dreamsign; index: number };
 
-/** Displays the cleanse site: removes bane-flagged items from the player's collection. */
+/**
+ * Displays the Cleanse site. The player sees every Bane card and Bane
+ * Dreamsign they hold and selects up to 3 to remove, then confirms.
+ */
 export function CleanseSiteScreen({ site }: CleanseSiteScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
   const { deck, dreamsigns } = state;
 
   const [autoClosed, setAutoClosed] = useState(false);
+  const [selectedKeys, setSelectedKeys] = useState<Set<string>>(new Set());
 
   const baneItems = useMemo<BaneItem[]>(() => {
     const items: BaneItem[] = [];
@@ -30,6 +37,7 @@ export function CleanseSiteScreen({ site }: CleanseSiteScreenProps) {
         const card = cardDatabase.get(entry.cardNumber);
         items.push({
           kind: "card",
+          key: `card-${entry.entryId}`,
           entry,
           cardName: card?.name ?? `Card #${String(entry.cardNumber)}`,
         });
@@ -39,12 +47,13 @@ export function CleanseSiteScreen({ site }: CleanseSiteScreenProps) {
       if (dreamsigns[i].isBane) {
         items.push({
           kind: "dreamsign",
+          key: `dreamsign-${String(i)}`,
           dreamsign: dreamsigns[i],
           index: i,
         });
       }
     }
-    return items.slice(0, 3);
+    return items;
   }, [deck, dreamsigns, cardDatabase]);
 
   const hasBanes = baneItems.length > 0;
@@ -76,42 +85,36 @@ export function CleanseSiteScreen({ site }: CleanseSiteScreenProps) {
     return undefined;
   }, [hasBanes, autoClosed, completeSite]);
 
-  const handleCleanseAll = useCallback(() => {
-    const removedCards: Array<{ cardNumber: number; cardName: string }> = [];
-    const removedDreamsigns: string[] = [];
-
-    // Remove bane dreamsigns first (by descending index to preserve indices)
-    const dreamsignIndices = baneItems
-      .filter((item): item is BaneItem & { kind: "dreamsign" } => item.kind === "dreamsign")
-      .map((item) => item.index)
-      .sort((a, b) => b - a);
-    for (const idx of dreamsignIndices) {
-      const ds = dreamsigns[idx];
-      if (ds) {
-        removedDreamsigns.push(ds.name);
+  const toggleSelected = useCallback((key: string) => {
+    setSelectedKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else if (next.size < MAX_CLEANSE) {
+        next.add(key);
       }
-      mutations.removeDreamsign(idx, "cleanse_site");
-    }
-
-    // Remove bane cards
-    for (const item of baneItems) {
-      if (item.kind === "card") {
-        removedCards.push({
-          cardNumber: item.entry.cardNumber,
-          cardName: item.cardName,
-        });
-        mutations.removeCard(item.entry.entryId, "cleanse_site");
-      }
-    }
-
-    logEvent("cleanse_completed", {
-      banesRemovedCount: removedCards.length + removedDreamsigns.length,
-      removedCards,
-      removedDreamsigns,
+      return next;
     });
+  }, []);
 
-    completeSite();
-  }, [baneItems, dreamsigns, mutations, completeSite]);
+  const handleCleanse = useCallback(() => {
+    const cardEntryIds: string[] = [];
+    const dreamsignIndices: number[] = [];
+    for (const item of baneItems) {
+      if (!selectedKeys.has(item.key)) {
+        continue;
+      }
+      if (item.kind === "card") {
+        cardEntryIds.push(item.entry.entryId);
+      } else {
+        dreamsignIndices.push(item.index);
+      }
+    }
+    if (cardEntryIds.length + dreamsignIndices.length === 0) {
+      return;
+    }
+    mutations.cleanseBanes(site.id, cardEntryIds, dreamsignIndices);
+  }, [baneItems, selectedKeys, mutations, site.id]);
 
   const handleDecline = useCallback(() => {
     logEvent("cleanse_declined", {
@@ -147,13 +150,10 @@ export function CleanseSiteScreen({ site }: CleanseSiteScreenProps) {
             transition={{ duration: 1.2, repeat: Infinity }}
           >
             <span className="text-4xl" style={{ color: "#10b981" }}>
-              {"\u2713"}
+              {"✓"}
             </span>
           </motion.div>
-          <p
-            className="text-xl font-bold"
-            style={{ color: "#10b981" }}
-          >
+          <p className="text-xl font-bold" style={{ color: "#10b981" }}>
             Nothing to cleanse.
           </p>
           <p className="text-sm opacity-50">
@@ -163,6 +163,8 @@ export function CleanseSiteScreen({ site }: CleanseSiteScreenProps) {
       </AnimatePresence>
     );
   }
+
+  const selectedCount = selectedKeys.size;
 
   return (
     <motion.div
@@ -181,28 +183,44 @@ export function CleanseSiteScreen({ site }: CleanseSiteScreenProps) {
           Cleanse
         </h2>
         <p className="mt-1 text-sm opacity-50">
-          Purify your collection of tainted items
+          Choose up to {String(MAX_CLEANSE)} banes to remove ({String(selectedCount)}/
+          {String(MAX_CLEANSE)})
         </p>
       </div>
 
       {/* Bane items display */}
       <div className="mb-8 flex flex-wrap justify-center gap-6">
-        {baneItems.map((item, index) => (
-          <motion.div
-            key={item.kind === "card" ? item.entry.entryId : `ds-${String(item.index)}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.15, duration: 0.4 }}
-          >
-            {item.kind === "card" ? (
-              <BaneCardDisplay
-                cardNumber={item.entry.cardNumber}
-              />
-            ) : (
-              <BaneDreamsignDisplay dreamsign={item.dreamsign} />
-            )}
-          </motion.div>
-        ))}
+        {baneItems.map((item, index) => {
+          const isSelected = selectedKeys.has(item.key);
+          const isDisabled = !isSelected && selectedCount >= MAX_CLEANSE;
+          return (
+            <motion.button
+              key={item.key}
+              type="button"
+              data-cleanse-bane-key={item.key}
+              data-cleanse-selected={isSelected ? "true" : "false"}
+              disabled={isDisabled}
+              className="rounded-xl outline-none transition-opacity focus-visible:ring-2 focus-visible:ring-red-400"
+              style={{
+                opacity: isDisabled ? 0.4 : 1,
+                cursor: isDisabled ? "not-allowed" : "pointer",
+                boxShadow: isSelected
+                  ? "0 0 0 3px #dc2626, 0 0 22px rgba(220, 38, 38, 0.45)"
+                  : "none",
+              }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: isDisabled ? 0.4 : 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
+              onClick={() => toggleSelected(item.key)}
+            >
+              {item.kind === "card" ? (
+                <BaneCardDisplay cardNumber={item.entry.cardNumber} />
+              ) : (
+                <BaneDreamsignDisplay dreamsign={item.dreamsign} />
+              )}
+            </motion.button>
+          );
+        })}
       </div>
 
       {/* Action buttons */}
@@ -210,14 +228,25 @@ export function CleanseSiteScreen({ site }: CleanseSiteScreenProps) {
         <motion.button
           className="rounded-lg px-8 py-3 text-lg font-bold text-white transition-opacity"
           style={{
-            background: "linear-gradient(135deg, #dc2626 0%, #991b1b 100%)",
-            boxShadow: "0 0 20px rgba(220, 38, 38, 0.3)",
+            background:
+              selectedCount > 0
+                ? "linear-gradient(135deg, #dc2626 0%, #991b1b 100%)"
+                : "#4b5563",
+            boxShadow:
+              selectedCount > 0
+                ? "0 0 20px rgba(220, 38, 38, 0.3)"
+                : "none",
+            opacity: selectedCount > 0 ? 1 : 0.6,
+            cursor: selectedCount > 0 ? "pointer" : "not-allowed",
           }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.97 }}
-          onClick={handleCleanseAll}
+          whileHover={selectedCount > 0 ? { scale: 1.05 } : undefined}
+          whileTap={selectedCount > 0 ? { scale: 0.97 } : undefined}
+          disabled={selectedCount === 0}
+          onClick={handleCleanse}
         >
-          Cleanse All
+          {selectedCount > 0
+            ? `Cleanse ${String(selectedCount)} ${selectedCount === 1 ? "Bane" : "Banes"}`
+            : "Cleanse"}
         </motion.button>
         <button
           className="rounded-lg px-8 py-3 text-lg font-medium transition-colors"

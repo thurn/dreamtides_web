@@ -1,6 +1,7 @@
 import type { CardData } from "../../types/cards";
 import type { DreamcallerContent, PackageTideId } from "../../types/content";
 import type { QuestState, SiteState } from "../../types/quest";
+import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
 import type {
@@ -31,6 +32,33 @@ const ENEMY_SUBTITLES = [
   "Storm-Bound Usurper",
 ] as const;
 const ENEMY_DECK_SIZE = 12;
+
+/**
+ * Minimum quest deck size for a battle. A deck below this is padded with
+ * whole-deck copies until it reaches the threshold, so a player who has not
+ * drafted much still has a workable battle deck.
+ */
+const MIN_BATTLE_DECK_SIZE = 25;
+
+/**
+ * Pads a quest deck up to `MIN_BATTLE_DECK_SIZE` for battle by repeating
+ * whole-deck copies (e.g. a 9-card deck becomes 27). Padded entries reuse the
+ * original entry references, so they share `sourceDeckEntryId` with the quest
+ * deck entry they copy. Decks at or above the threshold (and empty decks) are
+ * returned unchanged.
+ */
+function padBattleDeck(
+  deck: readonly QuestState["deck"][number][],
+): QuestState["deck"][number][] {
+  if (deck.length === 0 || deck.length >= MIN_BATTLE_DECK_SIZE) {
+    return [...deck];
+  }
+  const padded = [...deck];
+  while (padded.length < MIN_BATTLE_DECK_SIZE) {
+    padded.push(...deck);
+  }
+  return padded;
+}
 
 export interface CreateBattleInitInput {
   battleEntryKey: string;
@@ -78,8 +106,12 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       isBane: entry.isBane,
     })),
   );
+  // The quest deck is padded up to the minimum battle deck size before being
+  // shuffled into the battle draw order. `questDeckEntries` above still
+  // mirrors the unpadded quest deck.
+  const battleDeck = padBattleDeck(state.deck);
   const playerDeckOrder = streams.playerDeckOrder
-    .shuffle(state.deck)
+    .shuffle(battleDeck)
     .map((entry) => {
       const card = cardDatabase.get(entry.cardNumber);
       if (card === undefined) {
@@ -387,18 +419,24 @@ function normalizePlayerDeckCard(
   entry: QuestState["deck"][number],
   card: CardData,
 ): BattleDeckCardDefinition {
+  // Apply the deck entry's transfiguration so the battle card carries the
+  // modified cost, spark, and rules text rather than the printed base values.
+  const effectiveCard =
+    entry.transfiguration === null
+      ? card
+      : applyTransfigurationToCard(card, entry.transfiguration);
   return {
     sourceDeckEntryId: entry.entryId,
     cardNumber: card.cardNumber,
     name: card.name,
     battleCardKind: card.cardType === "Character" ? "character" : "event",
     subtype: card.subtype,
-    energyCost: card.energyCost ?? 0,
-    printedEnergyCost: card.energyCost,
-    printedSpark: card.spark ?? 0,
+    energyCost: effectiveCard.energyCost ?? 0,
+    printedEnergyCost: effectiveCard.energyCost,
+    printedSpark: effectiveCard.spark ?? 0,
     isFast: card.isFast,
     tides: [...card.tides],
-    renderedText: card.renderedText,
+    renderedText: effectiveCard.renderedText,
     imageNumber: card.imageNumber,
     transfiguration: entry.transfiguration,
     isBane: entry.isBane,

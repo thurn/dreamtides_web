@@ -135,6 +135,16 @@ export interface QuestMutations {
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
   removeCard: (entryId: string, source: string) => void;
+  /**
+   * Removes up to 3 chosen Bane cards / Bane Dreamsigns at a Cleanse site,
+   * then completes the site. Non-Bane selections are ignored and the total
+   * is capped at 3.
+   */
+  cleanseBanes: (
+    siteId: string,
+    cardEntryIds: string[],
+    dreamsignIndices: number[],
+  ) => void;
   transfigureCard: (
     entryId: string,
     type: TransfigurationType,
@@ -1744,6 +1754,71 @@ export function QuestProvider({
     [cardDatabase],
   );
 
+  const cleanseBanes = useCallback(
+    (
+      siteId: string,
+      cardEntryIds: string[],
+      dreamsignIndices: number[],
+    ) => {
+      setState((prev) => {
+        if (prev.visitedSites.includes(siteId)) {
+          return prev;
+        }
+        const cardIdSelection = new Set(cardEntryIds);
+        const baneCardEntryIds = prev.deck
+          .filter((entry) => entry.isBane && cardIdSelection.has(entry.entryId))
+          .map((entry) => entry.entryId);
+        const baneDreamsignIndices = [...new Set(dreamsignIndices)]
+          .filter((index) => prev.dreamsigns[index]?.isBane === true)
+          .sort((a, b) => a - b);
+
+        // Up to 3 banes total may be removed at a Cleanse site.
+        const cappedCardEntryIds = baneCardEntryIds.slice(0, 3);
+        const cappedDreamsignIndices = baneDreamsignIndices.slice(
+          0,
+          Math.max(0, 3 - cappedCardEntryIds.length),
+        );
+        const cardIdSet = new Set(cappedCardEntryIds);
+        const dreamsignIndexSet = new Set(cappedDreamsignIndices);
+
+        const removedCards = prev.deck
+          .filter((entry) => cardIdSet.has(entry.entryId))
+          .map((entry) => ({
+            cardNumber: entry.cardNumber,
+            cardName:
+              cardDatabase.get(entry.cardNumber)?.name
+              ?? `Unknown Card #${String(entry.cardNumber)}`,
+          }));
+        const removedDreamsigns = prev.dreamsigns
+          .filter((_, index) => dreamsignIndexSet.has(index))
+          .map((dreamsign) => dreamsign.name);
+
+        logEvent("cleanse_completed", {
+          banesRemovedCount: removedCards.length + removedDreamsigns.length,
+          removedCards,
+          removedDreamsigns,
+        });
+
+        return setQuestScreen(
+          completeQuestSite(
+            {
+              ...prev,
+              deck: prev.deck.filter(
+                (entry) => !cardIdSet.has(entry.entryId),
+              ),
+              dreamsigns: prev.dreamsigns.filter(
+                (_, index) => !dreamsignIndexSet.has(index),
+              ),
+            },
+            siteId,
+          ),
+          { type: "dreamscape" },
+        );
+      });
+    },
+    [cardDatabase],
+  );
+
   const transfigureCard = useCallback(
     (
       entryId: string,
@@ -2039,6 +2114,7 @@ export function QuestProvider({
       addCard,
       addBaneCard,
       removeCard,
+      cleanseBanes,
       transfigureCard,
       setDreamcallerSelection,
       setCardSourceDebug,
@@ -2079,6 +2155,7 @@ export function QuestProvider({
       addCard,
       addBaneCard,
       removeCard,
+      cleanseBanes,
       transfigureCard,
       setDreamcallerSelection,
       setCardSourceDebug,

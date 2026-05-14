@@ -162,6 +162,7 @@ function setQuestState({
       addCard: vi.fn(),
       addBaneCard: vi.fn(),
       removeCard: vi.fn(),
+    cleanseBanes: vi.fn(),
       transfigureCard: vi.fn(),
       setDreamcallerSelection: vi.fn(),
       setCardSourceDebug: vi.fn(),

@@ -10,6 +10,9 @@ export const TRANSFIGURATION_COLORS: Readonly<
   Scarlet: "#ef4444",
   Azure: "#3b82f6",
   Bronze: "#d97706",
+  Magenta: "#d946ef",
+  Rose: "#f43f5e",
+  Prismatic: "#a855f7",
 };
 
 /** A prepared transfiguration offer with pre-computed preview and description. */
@@ -44,28 +47,139 @@ export function isBronzeEligible(card: CardData): boolean {
   return card.cardType === "Event";
 }
 
-/** Map of transfiguration type to its eligibility check function. */
-const ELIGIBILITY_CHECKS: Readonly<
-  Record<TransfigurationType, (card: CardData) => boolean>
-> = {
-  Viridian: isViridianEligible,
-  Golden: isGoldenEligible,
-  Scarlet: isScarletEligible,
-  Azure: isAzureEligible,
-  Bronze: isBronzeEligible,
-};
+/**
+ * Returns true if the card has a named trigger (materialized, dawn, or
+ * once-per-turn) whose frequency Magenta can increase.
+ */
+export function isMagentaEligible(card: CardData): boolean {
+  return /materializ|\bdawn\b|once per turn/i.test(card.renderedText);
+}
+
+/**
+ * Returns true if the card has an activated ability whose energy cost Rose
+ * can reduce.
+ */
+export function isRoseEligible(card: CardData): boolean {
+  return /activated/i.test(card.renderedText);
+}
+
+/**
+ * Returns true if the card is eligible for two or more of the other
+ * transfigurations — the requirement for Prismatic.
+ */
+export function isPrismaticEligible(card: CardData): boolean {
+  return eligibleNonPrismaticTransfigurations(card).length >= 2;
+}
+
+/** Eligibility check functions for every non-Prismatic transfiguration. */
+const NON_PRISMATIC_CHECKS: ReadonlyArray<
+  [Exclude<TransfigurationType, "Prismatic">, (card: CardData) => boolean]
+> = [
+  ["Viridian", isViridianEligible],
+  ["Golden", isGoldenEligible],
+  ["Scarlet", isScarletEligible],
+  ["Azure", isAzureEligible],
+  ["Bronze", isBronzeEligible],
+  ["Magenta", isMagentaEligible],
+  ["Rose", isRoseEligible],
+];
+
+function eligibleNonPrismaticTransfigurations(
+  card: CardData,
+): Exclude<TransfigurationType, "Prismatic">[] {
+  return NON_PRISMATIC_CHECKS.filter(([, check]) => check(card)).map(
+    ([type]) => type,
+  );
+}
 
 /** Returns the list of transfiguration types the card is eligible for. */
 export function eligibleTransfigurations(
   card: CardData,
 ): TransfigurationType[] {
-  const types: TransfigurationType[] = [];
-  for (const [type, check] of Object.entries(ELIGIBILITY_CHECKS)) {
-    if (check(card)) {
-      types.push(type as TransfigurationType);
-    }
+  const types: TransfigurationType[] = eligibleNonPrismaticTransfigurations(
+    card,
+  );
+  if (isPrismaticEligible(card)) {
+    types.push("Prismatic");
   }
   return types;
+}
+
+/**
+ * Applies a transfiguration to a card, returning the modified card. This is
+ * deterministic so the same badge produces the same battle card every time.
+ * Prismatic applies every other transfiguration the card is eligible for.
+ */
+export function applyTransfigurationToCard(
+  card: CardData,
+  type: TransfigurationType,
+): CardData {
+  switch (type) {
+    case "Viridian": {
+      if (card.energyCost === null) {
+        return card;
+      }
+      return { ...card, energyCost: Math.round(card.energyCost / 2) };
+    }
+    case "Scarlet": {
+      const oldSpark = card.spark ?? 0;
+      return { ...card, spark: oldSpark === 0 ? 1 : oldSpark * 2 };
+    }
+    case "Azure":
+      return { ...card, renderedText: appendClause(card.renderedText, "Draw a card.") };
+    case "Bronze":
+      return { ...card, renderedText: appendClause(card.renderedText, "Reclaim.") };
+    case "Golden": {
+      const match = /\d+/.exec(card.renderedText);
+      if (match === null) {
+        return card;
+      }
+      const newNum = parseInt(match[0], 10) + 1;
+      return {
+        ...card,
+        renderedText: card.renderedText.replace(match[0], String(newNum)),
+      };
+    }
+    case "Magenta": {
+      if (/once per turn/i.test(card.renderedText)) {
+        return {
+          ...card,
+          renderedText: card.renderedText.replace(
+            /once per turn/gi,
+            "any number of times per turn",
+          ),
+        };
+      }
+      return {
+        ...card,
+        renderedText: appendClause(
+          card.renderedText,
+          "Its named trigger fires more often.",
+        ),
+      };
+    }
+    case "Rose":
+      return {
+        ...card,
+        renderedText: appendClause(
+          card.renderedText,
+          "Its activated ability costs 1 less.",
+        ),
+      };
+    case "Prismatic": {
+      let result = card;
+      for (const transfigurationType of eligibleNonPrismaticTransfigurations(
+        card,
+      )) {
+        result = applyTransfigurationToCard(result, transfigurationType);
+      }
+      return result;
+    }
+  }
+}
+
+function appendClause(text: string, clause: string): string {
+  return text + (text.length > 0 ? " " : "") + clause;
 }
 
 /** Builds the preview card and description for a given transfiguration type. */
@@ -73,68 +187,58 @@ function buildOffer(
   card: CardData,
   type: TransfigurationType,
 ): TransfigurationOffer {
+  const previewCard = applyTransfigurationToCard(card, type);
   switch (type) {
-    case "Viridian": {
-      const oldCost = card.energyCost ?? 0;
-      const newCost = Math.round(oldCost / 2);
+    case "Viridian":
       return {
         type,
-        description: `Energy cost: ${String(oldCost)} \u2192 ${String(newCost)}`,
-        previewCard: { ...card, energyCost: newCost },
+        description: `Energy cost: ${String(card.energyCost ?? 0)} → ${String(previewCard.energyCost ?? 0)}`,
+        previewCard,
       };
-    }
-    case "Scarlet": {
-      const oldSpark = card.spark ?? 0;
-      const newSpark = oldSpark === 0 ? 1 : oldSpark * 2;
+    case "Scarlet":
       return {
         type,
-        description: `Spark: ${String(oldSpark)} \u2192 ${String(newSpark)}`,
-        previewCard: { ...card, spark: newSpark },
+        description: `Spark: ${String(card.spark ?? 0)} → ${String(previewCard.spark ?? 0)}`,
+        previewCard,
       };
-    }
     case "Azure":
-      return {
-        type,
-        description: "Adds: Draw a card.",
-        previewCard: {
-          ...card,
-          renderedText:
-            card.renderedText +
-            (card.renderedText.length > 0 ? " " : "") +
-            "Draw a card.",
-        },
-      };
+      return { type, description: "Adds: Draw a card.", previewCard };
     case "Bronze":
-      return {
-        type,
-        description: "Adds: Reclaim.",
-        previewCard: {
-          ...card,
-          renderedText:
-            card.renderedText +
-            (card.renderedText.length > 0 ? " " : "") +
-            "Reclaim.",
-        },
-      };
+      return { type, description: "Adds: Reclaim.", previewCard };
     case "Golden": {
-      const match = card.renderedText.match(/\d+/);
-      if (!match) {
+      const match = /\d+/.exec(card.renderedText);
+      if (match === null) {
         return {
           type,
           description: "Modifies a number in rules text.",
-          previewCard: card,
+          previewCard,
         };
       }
       const num = parseInt(match[0], 10);
-      const delta = Math.random() < 0.5 ? -1 : 1;
-      const newNum = num + delta;
-      const newText = card.renderedText.replace(match[0], String(newNum));
       return {
         type,
-        description: `Number in text: ${String(num)} \u2192 ${String(newNum)}`,
-        previewCard: { ...card, renderedText: newText },
+        description: `Number in text: ${String(num)} → ${String(num + 1)}`,
+        previewCard,
       };
     }
+    case "Magenta":
+      return {
+        type,
+        description: "Its named triggers fire more often.",
+        previewCard,
+      };
+    case "Rose":
+      return {
+        type,
+        description: "Activated ability costs 1 less.",
+        previewCard,
+      };
+    case "Prismatic":
+      return {
+        type,
+        description: "Applies every available transfiguration.",
+        previewCard,
+      };
   }
 }
 

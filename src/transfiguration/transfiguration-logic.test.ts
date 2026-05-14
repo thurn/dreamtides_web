@@ -161,7 +161,8 @@ describe("assignTransfiguration", () => {
   });
 
   it("returns a valid offer for an Event with 0 cost and no numbers", () => {
-    // Events are always eligible for Azure and Bronze
+    // Events are always eligible for Azure and Bronze, which makes them
+    // eligible for Prismatic too.
     const card = makeCard({
       cardType: "Event",
       energyCost: 0,
@@ -169,7 +170,7 @@ describe("assignTransfiguration", () => {
     });
     const result = assignTransfiguration(card, null);
     expect(result).not.toBeNull();
-    expect(["Azure", "Bronze"]).toContain(result!.type);
+    expect(["Azure", "Bronze", "Prismatic"]).toContain(result!.type);
   });
 
   it("returns a valid offer with type, description, and previewCard", () => {
@@ -240,8 +241,9 @@ describe("assignTransfiguration", () => {
   });
 
   it("returns a Bronze offer that appends Reclaim", () => {
-    // Event with 0 cost and no numbers: Azure and Bronze eligible
-    vi.spyOn(Math, "random").mockReturnValue(0.99); // last = Bronze
+    // Event with 0 cost and no numbers: eligible = [Azure, Bronze, Prismatic];
+    // 0.5 * 3 = 1.5 -> floor 1 -> Bronze.
+    vi.spyOn(Math, "random").mockReturnValue(0.5);
     const card = makeCard({
       cardType: "Event",
       energyCost: 0,

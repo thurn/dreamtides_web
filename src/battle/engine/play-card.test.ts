@@ -192,9 +192,25 @@ function findPlayerHandCardId(
   state: ReturnType<typeof createTestBattle>,
   kind: "character" | "event",
 ): string {
-  const battleCardId = state.sides.player.hand.find(
+  let battleCardId = state.sides.player.hand.find(
     (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === kind,
   );
+
+  if (battleCardId === undefined) {
+    // The opening hand is shuffled; pull a card of the right kind from the
+    // deck into the hand when none was dealt.
+    const fromDeck = state.sides.player.deck.find(
+      (cardId) =>
+        state.cardInstances[cardId]?.definition.battleCardKind === kind,
+    );
+    if (fromDeck !== undefined) {
+      state.sides.player.deck = state.sides.player.deck.filter(
+        (cardId) => cardId !== fromDeck,
+      );
+      state.sides.player.hand = [...state.sides.player.hand, fromDeck];
+      battleCardId = fromDeck;
+    }
+  }
 
   if (battleCardId === undefined) {
     throw new Error(`Missing player hand card of kind: ${kind}`);
