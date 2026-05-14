@@ -144,17 +144,13 @@ describe("loadCardDatabase integration (real card-data.json)", () => {
       expect(typeof card.renderedText).toBe("string");
       expect(typeof card.imageNumber).toBe("number");
       expect(typeof card.artOwned).toBe("boolean");
-      // Rarity is sourced from the TOML and propagates through setup-assets;
-      // every runtime card carries one of the five non-Special rarities.
-      const validRarities = new Set([
-        "Common",
-        "Uncommon",
-        "Rare",
-        "Legendary",
-        "Starter",
-      ]);
-      expect(card.rarity !== undefined).toBe(true);
-      expect(validRarities.has(card.rarity ?? "")).toBe(true);
+      // Rarity is sourced from the TOML and propagates through setup-assets.
+      // Most cards have no rarity; only the Legendary and Starter buckets
+      // exist.
+      const validRarities = new Set(["Legendary", "Starter"]);
+      if (card.rarity !== undefined) {
+        expect(validRarities.has(card.rarity)).toBe(true);
+      }
     }
   });
 

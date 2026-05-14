@@ -117,7 +117,6 @@ function makeCardDatabase(): Map<number, CardData> {
         renderedText: "Test text.",
         imageNumber: 1,
         artOwned: true,
-        rarity: "Common",
       },
     ],
   ]);

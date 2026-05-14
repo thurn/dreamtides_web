@@ -33,9 +33,6 @@ interface RarityStyle {
 }
 
 const RARITY_STYLES: Readonly<Record<Rarity, RarityStyle | null>> = {
-  Common: null,
-  Uncommon: null,
-  Rare: null,
   Starter: null,
   Legendary: {
     outlineColor: "#f5c542",

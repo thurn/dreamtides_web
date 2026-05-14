@@ -46,7 +46,6 @@ name = "Null Spark"
 id = "null-spark"
 card-number = 1
 card-type = "Character"
-rarity = "Common"
 energy-cost = "*"
 is-fast = false
 tides = ["core", "ally_formation"]
@@ -59,7 +58,6 @@ name = "Missing Subtype"
 id = "missing-subtype"
 card-number = 2
 card-type = "Event"
-rarity = "Rare"
 energy-cost = 2
 spark = ""
 is-fast = true
@@ -134,7 +132,6 @@ rendered-text = "Use the canonical Dreamsign text."
         id: "null-spark",
         cardNumber: 1,
         cardType: "Character",
-        rarity: "Common",
         subtype: "",
         isStarter: false,
         energyCost: null,
@@ -150,7 +147,6 @@ rendered-text = "Use the canonical Dreamsign text."
         id: "missing-subtype",
         cardNumber: 2,
         cardType: "Event",
-        rarity: "Rare",
         subtype: "",
         isStarter: false,
         energyCost: 2,
@@ -291,7 +287,7 @@ rendered-text = ""
     expect(dreamcallers[1].startingEssence).toBe(250);
   });
 
-  it("retains the rarity field on each runtime card", () => {
+  it("retains the rarity field on Legendary cards and omits it otherwise", () => {
     const tempRoot = mkdtempSync(join(tmpdir(), "quest-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
@@ -327,7 +323,6 @@ name = "Filler"
 id = "filler"
 card-number = 402
 card-type = "Event"
-rarity = "Common"
 energy-cost = 1
 spark = ""
 is-fast = false
@@ -378,6 +373,6 @@ rendered-text = ""
     );
     const byNumber = new Map(cards.map((c) => [c.cardNumber, c]));
     expect(byNumber.get(401)?.rarity).toBe("Legendary");
-    expect(byNumber.get(402)?.rarity).toBe("Common");
+    expect(byNumber.get(402)?.rarity).toBe(undefined);
   });
 });

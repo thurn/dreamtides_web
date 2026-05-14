@@ -261,7 +261,7 @@ describe("CardDisplay", () => {
 
   it("does not render the rarity shimmer overlay for non-Legendary rarities", () => {
     const { container, root } = mount(
-      <CardDisplay card={makeCard({ rarity: "Common" })} />,
+      <CardDisplay card={makeCard({ rarity: "Starter" })} />,
     );
 
     expect(
