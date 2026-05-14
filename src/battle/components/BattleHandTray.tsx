@@ -1,9 +1,24 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 
+import { CardDisplay } from "../../components/CardDisplay";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleMutableState } from "../types";
-import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
+import { battleCardDisplayFromInstance } from "./BattleCardView";
 
+/**
+ * The hand tray renders the player's hand using the shared {@link CardDisplay}
+ * component so a card in hand looks identical to the same card in a draft
+ * offer, the deck viewer, the hover preview, or anywhere else in the quest
+ * prototype. The card is the natural size used everywhere else in the quest
+ * (aspect 2/3) — the tray's fixed width and `--hand-card-w` token size it
+ * down to fit the tray without changing the card's internal layout.
+ *
+ * The outer wrapper carries the same `data-battle-card-id`,
+ * `data-battle-hand-card`, `data-battle-card-variant`, and CSS class names
+ * (`playable`, `unaffordable`, `selected`, `battle-card`, `hand-card`) that
+ * the rest of the battle UI and tests rely on, so the visual swap is
+ * non-disruptive.
+ */
 export function BattleHandTray({
   canInteract,
   currentEnergy,
@@ -41,17 +56,31 @@ export function BattleHandTray({
           if (instance === undefined) {
             return null;
           }
+          const cost = instance.definition.energyCost;
+          const isPlayable = canInteract && cost <= currentEnergy;
+          const isUnaffordable = cost > currentEnergy;
+          const isSelected = selectedCardId === battleCardId;
+          const wrapperClass = [
+            "battle-card",
+            "hand-card",
+            "quest-card",
+            isPlayable ? "playable" : "",
+            isSelected ? "selected" : "",
+            isUnaffordable ? "unaffordable" : "",
+          ]
+            .filter((value) => value !== "")
+            .join(" ");
+
           return (
-            <BattleCardView
+            <div
               key={battleCardId}
-              battleCardId={battleCardId}
-              variant="hand"
-              dataBattleHandCard
-              data={battleCardVisualFromInstance(instance)}
-              playable={canInteract && instance.definition.energyCost <= currentEnergy}
-              selected={selectedCardId === battleCardId}
-              unaffordable={instance.definition.energyCost > currentEnergy}
-              draggable={canInteract && instance.definition.energyCost <= currentEnergy}
+              data-battle-card-id={battleCardId}
+              data-battle-card-variant="hand"
+              data-battle-hand-card=""
+              data-battle-card-playable={isPlayable ? "true" : "false"}
+              data-selected={String(isSelected)}
+              className={wrapperClass}
+              draggable={isPlayable}
               onClick={() => onCardClick(battleCardId)}
               onDoubleClick={() => onCardDoubleClick(battleCardId)}
               onContextMenu={(event) => {
@@ -60,7 +89,14 @@ export function BattleHandTray({
               }}
               onDragStart={() => onCardDragStart?.(battleCardId)}
               onDragEnd={() => onCardDragEnd?.()}
-            />
+            >
+              <CardDisplay
+                card={battleCardDisplayFromInstance(instance)}
+                selected={isSelected}
+                selectionColor="#a855f7"
+                className="h-full w-full"
+              />
+            </div>
           );
         })}
       </div>

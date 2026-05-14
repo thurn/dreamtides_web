@@ -1,18 +1,25 @@
 .battle-shell {
-  --bg-0: oklch(0.13 0.015 260);
-  --bg-1: oklch(0.17 0.015 260);
-  --bg-2: oklch(0.22 0.015 260);
-  --surface: oklch(0.2 0.015 260 / 0.7);
-  --surface-2: oklch(0.26 0.015 260 / 0.7);
-  --line: oklch(0.55 0.02 260 / 0.2);
-  --line-strong: oklch(0.65 0.02 260 / 0.35);
-  --text: oklch(0.96 0.005 260);
-  --text-dim: oklch(0.72 0.01 260);
-  --text-faint: oklch(0.5 0.01 260);
-  --accent: oklch(0.82 0.13 210);
-  --accent-soft: oklch(0.82 0.13 210 / 0.15);
-  --accent-edge: oklch(0.82 0.13 210 / 0.5);
-  --danger: oklch(0.7 0.17 25);
+  /* Aligned to the quest design system in src/index.css. The battle
+     surface shares the same near-black plum background and purple accent
+     identity as every other quest screen so the player never feels they
+     have left the prototype. */
+  --bg-0: #0a0612;
+  --bg-1: #14101f;
+  --bg-2: #1a1525;
+  --surface: rgba(26, 21, 37, 0.7);
+  --surface-2: rgba(42, 32, 64, 0.7);
+  --line: rgba(124, 58, 237, 0.22);
+  --line-strong: rgba(168, 85, 247, 0.45);
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --text-faint: #6b7280;
+  --accent: #a855f7;
+  --accent-strong: #c084fc;
+  --accent-soft: rgba(168, 85, 247, 0.15);
+  --accent-edge: rgba(168, 85, 247, 0.5);
+  --energy: #0ea5e9;
+  --spark: #facc15;
+  --danger: #ef4444;
   --inspector-width: clamp(280px, 24vw, 340px);
   --card-w: 78px;
   --card-h: 108px;
@@ -25,8 +32,9 @@
   inset: 0;
   overflow: hidden;
   color: var(--text);
-  background: linear-gradient(180deg, var(--bg-0), oklch(0.1 0.01 260));
-  font-family: "Inter", system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bg-0), #050208);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
 }
 
 .battle-shell * {
@@ -71,7 +79,8 @@
   gap: 16px;
   padding: 10px 20px;
   border-bottom: 1px solid var(--line);
-  background: oklch(0.1 0.01 260 / 0.6);
+  background: rgba(10, 6, 18, 0.85);
+  backdrop-filter: blur(8px);
   position: relative;
   z-index: 5;
 }
@@ -88,14 +97,14 @@
 }
 
 .turn-badge {
-  font-family: "Instrument Serif", serif;
   font-size: 22px;
   font-style: italic;
+  font-weight: 500;
   color: var(--text);
 }
 
 .turn-owner-pill {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   text-transform: uppercase;
   font-size: 10px;
   letter-spacing: 0.18em;
@@ -133,7 +142,7 @@
 }
 
 .status-focus-label {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -141,7 +150,7 @@
 }
 
 .status-focus-phase {
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-size: 24px;
   font-style: italic;
   font-weight: 400;
@@ -163,7 +172,7 @@
   border-radius: 999px;
   border: 1px solid var(--line);
   padding: 3px 9px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -177,7 +186,7 @@
 }
 
 .score-summary {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 14px;
   color: var(--text-dim);
 }
@@ -254,7 +263,7 @@
   display: flex;
   align-items: stretch;
   justify-content: stretch;
-  background: oklch(1 0 0 / 0.01);
+  background: rgba(255, 255, 255, 0.02);
   transition: border-color 0.12s ease, background 0.12s ease;
   cursor: pointer;
   padding: 0;
@@ -310,7 +319,7 @@
 }
 
 .status-strip .who {
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   font-size: 16px;
   color: var(--text-dim);
@@ -333,7 +342,7 @@
 .summary-trigger .summary-meta {
   display: block;
   max-width: 220px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -357,7 +366,7 @@
   display: flex;
   flex-wrap: nowrap;
   justify-content: flex-end;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 .stat {
@@ -403,7 +412,7 @@
   width: var(--card-w);
   height: var(--card-h);
   border-radius: 8px;
-  background: linear-gradient(160deg, oklch(0.24 0.015 260), oklch(0.16 0.01 260));
+  background: linear-gradient(160deg, #241b39, #15102a);
   border: 1px solid var(--line-strong);
   overflow: hidden;
   cursor: pointer;
@@ -411,7 +420,7 @@
   user-select: none;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 8px oklch(0 0 0 / 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .battle-card.hand-card {
@@ -420,23 +429,58 @@
   border-radius: 14px;
 }
 
+/* `quest-card` is the hand-card shell that delegates its chrome to the
+   shared CardDisplay component. The shell is a transparent wrapper that
+   only owns hit-testing, drag affordance, and the selected/unaffordable
+   visual cues — the card body itself comes from CardDisplay so cards in
+   hand look identical to cards everywhere else in the prototype. */
+.battle-card.hand-card.quest-card {
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  overflow: visible;
+  box-shadow: none;
+  padding: 0;
+}
+
+.battle-card.hand-card.quest-card:hover {
+  transform: translateY(-3px);
+  box-shadow: none;
+}
+
+.battle-card.hand-card.quest-card.unaffordable {
+  filter: brightness(0.65) saturate(0.6);
+}
+
+/* Playable affordance only — the selected ring is drawn by CardDisplay
+   itself (via its `selected` prop) so it stays identical to selection
+   highlighting everywhere else in the quest. */
+.battle-card.hand-card.quest-card.playable:not(.selected)::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 14px;
+  border: 1px solid var(--accent-edge);
+  pointer-events: none;
+}
+
 .battle-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px oklch(0 0 0 / 0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
 .battle-card.event {
-  background: linear-gradient(160deg, oklch(0.22 0.02 260), oklch(0.14 0.01 260));
+  background: linear-gradient(160deg, #1f1733, #120e20);
 }
 
 .battle-card.playable {
   border-color: var(--accent-edge);
-  box-shadow: 0 0 0 1px var(--accent-soft), 0 4px 12px oklch(0 0 0 / 0.35);
+  box-shadow: 0 0 0 1px var(--accent-soft), 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
 .battle-card.selected {
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-soft), 0 6px 20px oklch(0 0 0 / 0.5);
+  box-shadow: 0 0 0 2px var(--accent-soft), 0 6px 20px rgba(0, 0, 0, 0.5);
 }
 
 .battle-card.reserved::after {
@@ -455,7 +499,7 @@
 }
 
 .battle-card.hidden-enemy {
-  background: repeating-linear-gradient(45deg, oklch(0.18 0.01 260) 0 6px, oklch(0.15 0.015 260) 6px 12px);
+  background: repeating-linear-gradient(45deg, #16112a 0 6px, #120e21 6px 12px);
 }
 
 .battle-card.hidden-enemy::before {
@@ -465,7 +509,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   font-size: 38px;
   color: var(--text-faint);
@@ -484,55 +528,88 @@
   justify-content: space-between;
   align-items: center;
   padding: 5px 7px 0;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
 }
 
+/* Energy cost pip — matches PipBadge "energy" variant in
+   src/components/PipBadge.tsx so the circled cost on a battle card reads
+   identically to the one on a draft offer, deck viewer, or hover preview. */
 .battle-card .c-cost {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: oklch(0.28 0.015 260);
-  color: var(--text);
-  border: 1px solid var(--line-strong);
+  background: var(--energy);
+  color: #ffffff;
+  border: 1px solid #0c4a6e;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 10px;
+  font-weight: 700;
+  font-size: 11px;
+  text-shadow:
+    1px 0 0 #000,
+    -1px 0 0 #000,
+    0 1px 0 #000,
+    0 -1px 0 #000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
 .battle-card.playable .c-cost {
-  border-color: var(--accent-edge);
-  background: oklch(0.28 0.02 240);
+  box-shadow:
+    0 0 0 1px rgba(168, 85, 247, 0.45),
+    0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
+/* Spark pip — matches PipBadge "spark" variant. */
 .battle-card .c-spark {
-  color: var(--text);
-  font-weight: 600;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--spark);
+  color: #ffffff;
+  border: 1px solid #854d0e;
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 1;
+  text-shadow:
+    1px 0 0 #000,
+    -1px 0 0 #000,
+    0 1px 0 #000,
+    0 -1px 0 #000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
 .battle-card .c-spark.event {
+  background: transparent;
+  border-color: transparent;
   color: var(--text-dim);
+  box-shadow: none;
+  text-shadow: none;
 }
 
 .battle-card .c-spark.boosted {
-  color: var(--accent);
+  background: #34d399;
+  border-color: #064e3b;
 }
 
 .battle-card .c-spark.nerfed {
-  color: var(--danger);
+  background: var(--danger);
+  border-color: #7f1d1d;
 }
 
 .battle-card .c-art {
   flex: 1;
   margin: 4px 6px;
   border-radius: 5px;
-  background: oklch(0.1 0.01 260);
+  background: #0a0612;
   position: relative;
   overflow: hidden;
-  border: 1px solid oklch(1 0 0 / 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .battle-card .c-art-image,
@@ -551,12 +628,12 @@
   position: absolute;
   inset: auto 0 0;
   height: 35%;
-  background: linear-gradient(180deg, transparent, oklch(0.11 0.01 260 / 0.72));
+  background: linear-gradient(180deg, transparent, rgba(15, 10, 24, 0.72));
 }
 
 .battle-card .c-name {
   padding: 0 7px 2px;
-  font-family: "Inter", sans-serif;
+  font-family: system-ui, sans-serif;
   font-size: 11px;
   font-weight: 600;
   line-height: 1.1;
@@ -567,7 +644,7 @@
 
 .battle-card .c-type {
   padding: 0 7px 5px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 8px;
   color: var(--text-faint);
   text-transform: uppercase;
@@ -628,7 +705,7 @@
   align-items: flex-end;
   gap: 8px;
   border-top: 1px solid var(--line);
-  background: oklch(0.08 0.01 260 / 0.5);
+  background: rgba(5, 2, 10, 0.5);
   flex: 0 0 auto;
 }
 
@@ -650,7 +727,7 @@
   justify-content: space-between;
   gap: 12px;
   border-top: 1px solid var(--line);
-  background: oklch(0.08 0.01 260 / 0.6);
+  background: rgba(5, 2, 10, 0.6);
   flex: 0 0 auto;
 }
 
@@ -661,7 +738,7 @@
 }
 
 .btn {
-  font-family: "Inter", sans-serif;
+  font-family: system-ui, sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: var(--text);
@@ -687,12 +764,12 @@
 .btn.primary {
   background: var(--accent);
   border-color: var(--accent);
-  color: oklch(0.12 0.01 260);
+  color: #14101f;
   font-weight: 600;
 }
 
 .btn.primary:hover {
-  background: oklch(0.88 0.13 210);
+  background: #c084fc;
 }
 
 .btn.ghost {
@@ -709,11 +786,11 @@
 .btn.danger {
   background: transparent;
   color: var(--danger);
-  border-color: oklch(0.5 0.14 25 / 0.4);
+  border-color: rgba(239, 68, 68, 0.4);
 }
 
 .btn.danger:hover {
-  background: oklch(0.2 0.04 25 / 0.2);
+  background: rgba(239, 68, 68, 0.16);
 }
 
 .btn.sm {
@@ -728,7 +805,7 @@
   max-height: 100%;
   min-height: 0;
   transition: width 0.2s ease;
-  background: oklch(0.1 0.01 260 / 0.95);
+  background: rgba(10, 6, 18, 0.95);
   border-left: 1px solid var(--line);
   backdrop-filter: blur(12px);
   display: flex;
@@ -749,7 +826,7 @@
   transform: translateY(-50%);
   width: 26px;
   height: 62px;
-  background: oklch(0.12 0.01 260 / 0.95);
+  background: rgba(20, 16, 31, 0.95);
   border: 1px solid var(--line);
   border-right: none;
   border-radius: 6px 0 0 6px;
@@ -757,7 +834,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   color: var(--text-dim);
   writing-mode: vertical-rl;
@@ -794,7 +871,7 @@
 
 .inspector .head h3 {
   margin: 0;
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   font-size: 18px;
   font-weight: 400;
@@ -823,7 +900,7 @@
 .insp-section h4 {
   margin: 0 0 8px;
   font-size: 10px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   color: var(--text-faint);
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -862,7 +939,7 @@
   border: 1px solid var(--line);
   color: var(--text);
   cursor: pointer;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 11px;
   line-height: 1;
   padding: 0;
@@ -875,7 +952,7 @@
 .stepper .val {
   min-width: 30px;
   text-align: center;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 12px;
 }
 
@@ -886,7 +963,7 @@
 }
 
 .chip {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   padding: 4px 8px;
   border-radius: 4px;
@@ -917,13 +994,13 @@
 
 .chip.danger {
   color: var(--danger);
-  border-color: oklch(0.5 0.14 25 / 0.4);
+  border-color: rgba(239, 68, 68, 0.4);
 }
 
 .insp-card-preview {
   padding: 12px;
   border-radius: 8px;
-  background: oklch(0.08 0.01 260 / 0.6);
+  background: rgba(5, 2, 10, 0.6);
   border: 1px solid var(--line);
   display: flex;
   gap: 12px;
@@ -937,14 +1014,14 @@
 }
 
 .insp-card-preview .meta .n {
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-size: 16px;
   font-style: italic;
   line-height: 1.15;
 }
 
 .insp-card-preview .meta .t {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   color: var(--text-faint);
   text-transform: uppercase;
@@ -966,7 +1043,7 @@
 }
 
 .insp-card-preview .meta .badges span {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   padding: 2px 6px;
   border-radius: 3px;
@@ -1006,7 +1083,7 @@
 .insp-empty {
   padding: 22px 12px;
   text-align: center;
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   color: var(--text-faint);
   font-size: 13px;
@@ -1016,7 +1093,7 @@
 .modal-scrim {
   position: fixed;
   inset: 0;
-  background: oklch(0 0 0 / 0.7);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
@@ -1028,7 +1105,7 @@
 .floating-surface-scrim {
   position: fixed;
   inset: 0;
-  background: oklch(0 0 0 / 0.35);
+  background: rgba(0, 0, 0, 0.35);
   z-index: 45;
 }
 
@@ -1042,8 +1119,8 @@
   overflow-y: auto;
   border-radius: 12px;
   border: 1px solid var(--line-strong);
-  background: oklch(0.11 0.01 260 / 0.98);
-  box-shadow: 0 30px 80px oklch(0 0 0 / 0.6);
+  background: rgba(15, 10, 24, 0.98);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
   padding: 16px;
   z-index: 46;
 }
@@ -1068,7 +1145,7 @@
 
 .floating-header h3 {
   margin: 4px 0 0;
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   font-size: 24px;
   font-weight: 400;
@@ -1076,7 +1153,7 @@
 
 .eyebrow {
   margin: 0;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1095,7 +1172,7 @@
 
 .floating-section h4 {
   margin: 0 0 8px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1118,7 +1195,7 @@
 
 .summary-stat .label {
   display: block;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1178,7 +1255,7 @@
   border-radius: 999px;
   background: var(--accent-soft);
   color: var(--accent);
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
   padding: 3px 8px;
@@ -1186,21 +1263,21 @@
 }
 
 .dreamsign-badge.bane {
-  border-color: oklch(0.5 0.14 25 / 0.4);
-  background: oklch(0.2 0.04 25 / 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.16);
   color: var(--danger);
 }
 
 .modal {
   width: min(1100px, 100%);
   max-height: 90vh;
-  background: oklch(0.12 0.01 260 / 0.98);
+  background: rgba(20, 16, 31, 0.98);
   border: 1px solid var(--line-strong);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 30px 80px oklch(0 0 0 / 0.6);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
 }
 
 .m-head {
@@ -1213,14 +1290,14 @@
 
 .m-head h2 {
   margin: 0;
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   font-weight: 400;
   font-size: 22px;
 }
 
 .m-head .subhead {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   color: var(--text-faint);
   letter-spacing: 0.14em;
@@ -1242,7 +1319,7 @@
   color: var(--text);
   padding: 7px 10px;
   border-radius: 6px;
-  font-family: "Inter", sans-serif;
+  font-family: system-ui, sans-serif;
   font-size: 12px;
   flex: 1;
 }
@@ -1269,7 +1346,7 @@
 }
 
 .browse-cell .idx {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   color: var(--text-faint);
   letter-spacing: 0.12em;
@@ -1290,7 +1367,7 @@
 }
 
 .selected-label {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 11px;
   color: var(--text-dim);
   margin-right: auto;
@@ -1300,9 +1377,9 @@
   position: fixed;
   width: 240px;
   border-radius: 8px;
-  background: oklch(0.1 0.01 260 / 0.98);
+  background: rgba(10, 6, 18, 0.98);
   border: 1px solid var(--line-strong);
-  box-shadow: 0 20px 50px oklch(0 0 0 / 0.55);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(10px);
   z-index: 60;
   overflow: hidden;
@@ -1315,7 +1392,7 @@
 
 .ctx-name {
   display: block;
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   font-size: 14px;
 }
@@ -1323,7 +1400,7 @@
 .ctx-loc {
   display: block;
   margin-top: 2px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9.5px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -1358,7 +1435,7 @@
 }
 
 .ctx-caret {
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   color: var(--text-faint);
 }
 
@@ -1368,9 +1445,9 @@
   left: calc(100% + 6px);
   width: 220px;
   border-radius: 8px;
-  background: oklch(0.1 0.01 260 / 0.98);
+  background: rgba(10, 6, 18, 0.98);
   border: 1px solid var(--line-strong);
-  box-shadow: 0 20px 50px oklch(0 0 0 / 0.55);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
   padding: 6px;
 }
 
@@ -1380,13 +1457,13 @@
   max-width: min(320px, calc(100vw - 40px));
   pointer-events: none;
   z-index: 48;
-  filter: drop-shadow(0 24px 48px oklch(0 0 0 / 0.55));
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.55));
 }
 
 .result-overlay {
   position: fixed;
   inset: 0;
-  background: oklch(0 0 0 / 0.85);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -1396,16 +1473,16 @@
 
 .result-overlay .panel {
   width: min(680px, 90%);
-  background: oklch(0.11 0.01 260 / 0.98);
+  background: rgba(15, 10, 24, 0.98);
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   padding: 30px 36px;
   text-align: center;
-  box-shadow: 0 40px 100px oklch(0 0 0 / 0.7);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
 }
 
 .result-overlay .panel h1 {
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   font-weight: 400;
   font-size: 56px;
@@ -1431,7 +1508,7 @@
   position: fixed;
   inset: 0;
   z-index: 65;
-  background: oklch(0 0 0 / 0.88);
+  background: rgba(0, 0, 0, 0.88);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -1443,15 +1520,15 @@
   width: min(760px, 100%);
   border-radius: 16px;
   border: 1px solid var(--line-strong);
-  background: oklch(0.11 0.01 260 / 0.98);
-  box-shadow: 0 40px 100px oklch(0 0 0 / 0.7);
+  background: rgba(15, 10, 24, 0.98);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.7);
   padding: 28px 32px;
 }
 
 .judgment-pause-eyebrow {
   margin: 0;
   color: var(--accent);
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1459,7 +1536,7 @@
 
 .judgment-pause-panel h2 {
   margin: 10px 0 0;
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   font-size: 38px;
   font-weight: 400;
@@ -1495,7 +1572,7 @@
 
 .judgment-pause-slot {
   color: var(--accent);
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1525,7 +1602,7 @@
 
 .reward-picker .reward.chosen .battle-card {
   border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-soft), 0 6px 20px oklch(0 0 0 / 0.45);
+  box-shadow: 0 0 0 2px var(--accent-soft), 0 6px 20px rgba(0, 0, 0, 0.45);
 }
 
 .result-reopen-pill {
@@ -1536,11 +1613,11 @@
   z-index: 45;
   border-radius: 999px;
   border: 1px solid var(--line-strong);
-  background: oklch(0.1 0.01 260 / 0.92);
+  background: rgba(10, 6, 18, 0.92);
   color: var(--text-dim);
   backdrop-filter: blur(8px);
   padding: 6px 12px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
@@ -1560,15 +1637,15 @@
   pointer-events: none;
   border-radius: 16px;
   border: 1px solid var(--accent-edge);
-  background: linear-gradient(180deg, oklch(0.14 0.02 230 / 0.96), oklch(0.08 0.01 260 / 0.96));
-  box-shadow: 0 16px 40px oklch(0 0 0 / 0.45);
+  background: linear-gradient(180deg, rgba(22, 16, 38, 0.96), rgba(5, 2, 10, 0.96));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
   padding: 12px 18px;
   text-align: center;
 }
 
 .battle-turn-banner-label {
   display: block;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1578,7 +1655,7 @@
 .battle-turn-banner strong {
   display: block;
   margin-top: 4px;
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-size: 28px;
   font-style: italic;
   font-weight: 400;
@@ -1591,12 +1668,12 @@
   bottom: calc(env(safe-area-inset-bottom, 0px) + 120px);
   width: min(340px, calc(100vw - 40px));
   max-height: min(240px, calc(100vh - 220px));
-  background: oklch(0.1 0.01 260 / 0.98);
+  background: rgba(10, 6, 18, 0.98);
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 10px 12px;
   z-index: 20;
-  box-shadow: 0 20px 50px oklch(0 0 0 / 0.5);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
 }
@@ -1619,7 +1696,7 @@
 }
 
 .lg-head b {
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   font-weight: 400;
   font-size: 17px;
@@ -1649,7 +1726,7 @@
 .log-raw-section {
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: oklch(0.08 0.01 260 / 0.45);
+  background: rgba(5, 2, 10, 0.45);
   overflow: hidden;
 }
 
@@ -1667,7 +1744,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 12px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1693,7 +1770,7 @@
 
 .history-kind {
   color: var(--text-faint);
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1717,9 +1794,9 @@
   margin: 10px 0 0;
   padding: 10px;
   border-radius: 8px;
-  background: oklch(0.08 0.01 260 / 0.7);
+  background: rgba(5, 2, 10, 0.7);
   color: var(--text-dim);
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
   white-space: pre-wrap;
 }
@@ -1735,7 +1812,7 @@
   border-left: 2px solid var(--line-strong);
   padding-left: 8px;
   color: var(--text-faint);
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 10px;
 }
 
@@ -1749,7 +1826,7 @@
 .log-entry {
   border-left: 2px solid var(--line);
   padding-left: 8px;
-  font-family: "JetBrains Mono", monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 11px;
   color: var(--text);
   white-space: nowrap;
@@ -1771,7 +1848,7 @@
 }
 
 .log-entry.ai .lead {
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   margin-right: 4px;
   color: var(--text-dim);
@@ -1781,7 +1858,7 @@
   grid-column: 1 / -1;
   text-align: center;
   padding: 40px;
-  font-family: "Instrument Serif", serif;
+  font-family: system-ui, sans-serif;
   font-style: italic;
   color: var(--text-faint);
 }

@@ -163,9 +163,11 @@ export function BattleCardView({
       onMouseMove={onMouseMove}
     >
       <div className="c-top">
-        <div className="c-cost">{hidden ? "?" : String(data.cost)}</div>
+        <div className="c-cost" aria-label="energy cost">{hidden ? "?" : String(data.cost)}</div>
         {data.kind === "character" ? (
-          <div className={`c-spark ${sparkClassName}`}>{hidden ? "?" : `◆${String(effectiveSpark)}`}</div>
+          <div className={`c-spark ${sparkClassName}`} aria-label="spark">
+            {hidden ? "?" : String(effectiveSpark)}
+          </div>
         ) : (
           <div className="c-spark event">{hidden ? "?" : "•"}</div>
         )}
