@@ -11,8 +11,6 @@ import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
 import { DreamsignSourceOverlay } from "./DreamsignSourceOverlay";
 
-const MAX_DREAMSIGNS = 12;
-
 /** Props for the DreamsignDraftScreen component. */
 interface DreamsignDraftScreenProps {
   site: SiteState;
@@ -21,7 +19,7 @@ interface DreamsignDraftScreenProps {
 /** Shows 3 (or 4 enhanced) dreamsign options. Pick 1 or skip. */
 export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
   const { state, mutations, questContent } = useQuest();
-  const { dreamsigns: currentDreamsigns } = state;
+  const { dreamsigns: currentDreamsigns, maxDreamsigns } = state;
 
   const optionCount = site.isEnhanced ? 4 : 3;
   const runtime = state.siteRuntime[site.id];
@@ -63,7 +61,7 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
 
   const handleSelect = useCallback(
     (dreamsign: Dreamsign) => {
-      if (currentDreamsigns.length >= MAX_DREAMSIGNS) {
+      if (currentDreamsigns.length >= maxDreamsigns) {
         setPendingDreamsign(dreamsign);
         setPurging(true);
         return;
@@ -103,7 +101,7 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
           Dreamsign Limit Reached
         </h2>
         <p className="mb-6 text-sm opacity-70">
-          You have {String(MAX_DREAMSIGNS)} dreamsigns. Remove one to accept
+          You have {String(maxDreamsigns)} dreamsigns. Remove one to accept
           the new dreamsign.
         </p>
 

@@ -12,7 +12,6 @@ import { EssenceSiteScreen } from "../screens/EssenceSiteScreen";
 import { DreamsignOfferingScreen } from "../screens/DreamsignOfferingScreen";
 import { DreamsignDraftScreen } from "../screens/DreamsignDraftScreen";
 import { DreamJourneyScreen } from "../screens/DreamJourneyScreen";
-import { TemptingOfferScreen } from "../screens/TemptingOfferScreen";
 import { PurgeSiteScreen } from "../screens/PurgeSiteScreen";
 import { TransfigurationSiteScreen } from "../screens/TransfigurationSiteScreen";
 import { DuplicationSiteScreen } from "../screens/DuplicationSiteScreen";
@@ -141,10 +140,6 @@ function SiteScreen({
 
   if (site.type === "DreamJourney") {
     return <DreamJourneyScreen site={site} />;
-  }
-
-  if (site.type === "TemptingOffer") {
-    return <TemptingOfferScreen site={site} />;
   }
 
   if (site.type === "Purge") {

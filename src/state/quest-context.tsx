@@ -70,16 +70,10 @@ import {
   DREAM_JOURNEYS,
   type JourneyEffect,
 } from "../data/dream-journeys";
-import {
-  TEMPTING_OFFERS,
-  type OfferEffect,
-} from "../data/tempting-offers";
 import { sampleRewardCards } from "../data/tide-weights";
-import { createDreamsign } from "../data/dreamsigns";
 
 export { deriveEntryIdCounter };
 
-const MAX_DREAMSIGNS = 12;
 
 /** Mutation functions exposed by the quest context. */
 export interface QuestMutations {
@@ -137,8 +131,6 @@ export interface QuestMutations {
   ) => void;
   ensureDreamJourneyRuntime: (siteId: string) => void;
   completeDreamJourneyOption: (siteId: string, optionId: string) => void;
-  ensureTemptingOfferRuntime: (siteId: string) => void;
-  completeTemptingOfferOption: (siteId: string, optionId: string) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
@@ -256,20 +248,8 @@ function dreamJourneyOptionId(journey: (typeof DREAM_JOURNEYS)[number]): string 
   return journey.name;
 }
 
-function temptingOfferOptionId(index: number): string {
-  return `offer-${String(index)}`;
-}
-
 function findDreamJourneyOption(optionId: string) {
   return DREAM_JOURNEYS.find((journey) => dreamJourneyOptionId(journey) === optionId);
-}
-
-function findTemptingOfferOption(optionId: string) {
-  const match = /^offer-(\d+)$/.exec(optionId);
-  if (match === null) {
-    return undefined;
-  }
-  return TEMPTING_OFFERS[Number(match[1])];
 }
 
 function selectCardChoiceEntryIds({
@@ -440,6 +420,30 @@ function applyDreamJourneyEffect({
     };
   };
 
+  const addBaneCards = (state: QuestState, count: number): QuestState => {
+    const cards = sampleRewardCards(cardDatabase, count);
+    return {
+      ...state,
+      deck: [
+        ...state.deck,
+        ...cards.map((card) => {
+          logEvent("card_added", {
+            cardNumber: card.cardNumber,
+            cardName: card.name,
+            source: "dream_journey_bane",
+            isBane: true,
+          });
+          return {
+            entryId: nextEntryId(),
+            cardNumber: card.cardNumber,
+            transfiguration: null,
+            isBane: true,
+          };
+        }),
+      ],
+    };
+  };
+
   const changeEssence = (state: QuestState, delta: number): QuestState => {
     const newValue = clampEssence(state.essence + delta, state.essenceCap);
     logEvent("essence_changed", {
@@ -494,133 +498,23 @@ function applyDreamJourneyEffect({
         }),
       };
     }
-  }
-}
-
-function applyTemptingOfferEffect({
-  prev,
-  effect,
-  cardDatabase,
-  selectedPackageTides,
-  dreamsignTemplates,
-  nextEntryId,
-}: {
-  prev: QuestState;
-  effect: OfferEffect;
-  cardDatabase: Map<number, CardData>;
-  selectedPackageTides: readonly PackageTideId[];
-  dreamsignTemplates: QuestContent["dreamsignTemplates"];
-  nextEntryId: () => string;
-}): QuestState {
-  const addCards = (
-    state: QuestState,
-    count: number,
-    isBane: boolean,
-  ): QuestState => {
-    const cards = sampleRewardCards(
-      cardDatabase,
-      count,
-      isBane ? [] : selectedPackageTides,
-    );
-    return {
-      ...state,
-      deck: [
-        ...state.deck,
-        ...cards.map((card) => {
-          logEvent("card_added", {
-            cardNumber: card.cardNumber,
-            cardName: card.name,
-            source: "tempting_offer",
-            ...(isBane ? { isBane: true } : {}),
-          });
-          return {
-            entryId: nextEntryId(),
-            cardNumber: card.cardNumber,
-            transfiguration: null,
-            isBane,
-          };
-        }),
-      ],
-    };
-  };
-
-  const removeRandomCards = (state: QuestState, count: number): QuestState => {
-    const toRemove = shuffled(state.deck.filter((entry) => !entry.isBane)).slice(0, count);
-    if (toRemove.length === 0) {
-      return state;
-    }
-    const removedEntryIds = new Set(toRemove.map((entry) => entry.entryId));
-    for (const entry of toRemove) {
-      const card = cardDatabase.get(entry.cardNumber);
-      logEvent("card_removed", {
-        cardNumber: entry.cardNumber,
-        cardName: card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
-        source: "tempting_offer",
-      });
-    }
-    return {
-      ...state,
-      deck: state.deck.filter((entry) => !removedEntryIds.has(entry.entryId)),
-    };
-  };
-
-  switch (effect.type) {
-    case "addEssence":
-      logEvent("essence_changed", {
-        oldValue: prev.essence,
-        newValue: prev.essence + effect.amount,
-        delta: effect.amount,
-        source: "tempting_offer",
-      });
-      return { ...prev, essence: prev.essence + effect.amount };
-    case "addRandomCards":
-      return addCards(prev, effect.count, false);
     case "addBaneCards":
-      return addCards(prev, effect.count, true);
-    case "removeEssence":
-      logEvent("essence_changed", {
-        oldValue: prev.essence,
-        newValue: prev.essence - effect.amount,
-        delta: -effect.amount,
-        source: "tempting_offer",
-      });
-      return { ...prev, essence: prev.essence - effect.amount };
-    case "removeDreamsign": {
-      if (prev.dreamsigns.length === 0) {
-        return prev;
-      }
-      const index = Math.floor(Math.random() * prev.dreamsigns.length);
-      const dreamsign = prev.dreamsigns[index];
-      logEvent("dreamsign_removed", {
-        name: dreamsign.name,
-        imageName: dreamsign.imageName ?? null,
-        reason: "tempting_offer_cost",
-      });
+      return addBaneCards(prev, effect.count);
+    case "addEssenceAndAddBaneCards":
+      return addBaneCards(
+        changeEssence(prev, effect.essenceAmount),
+        effect.baneCount,
+      );
+    case "addRandomCardsAndAddBaneCards":
+      return addBaneCards(
+        addRandomCards(prev, effect.addCount),
+        effect.baneCount,
+      );
+    case "reduceMaxDreamsigns":
       return {
         ...prev,
-        dreamsigns: prev.dreamsigns.filter((_, dreamsignIndex) => dreamsignIndex !== index),
+        maxDreamsigns: Math.max(0, prev.maxDreamsigns - effect.amount),
       };
-    }
-    case "reduceMaxDreamsigns":
-      logEvent("max_dreamsigns_reduced", { amount: effect.amount });
-      return prev;
-    case "removeRandomCards":
-      return removeRandomCards(prev, effect.count);
-    case "addDreamsign": {
-      if (dreamsignTemplates.length === 0 || prev.dreamsigns.length >= MAX_DREAMSIGNS) {
-        return prev;
-      }
-      const template =
-        dreamsignTemplates[Math.floor(Math.random() * dreamsignTemplates.length)];
-      const dreamsign = createDreamsign(template, false);
-      logEvent("dreamsign_acquired", {
-        name: dreamsign.name,
-        imageName: dreamsign.imageName ?? null,
-        isBane: dreamsign.isBane,
-        sourceSiteType: "TemptingOffer",
-      });
-      return { ...prev, dreamsigns: [...prev.dreamsigns, dreamsign] };
-    }
   }
 }
 
@@ -936,7 +830,7 @@ export function QuestProvider({
             purgeIndex === undefined ? null : prev.dreamsigns[purgeIndex];
           if (
             (purgeIndex !== undefined && purgedDreamsign == null) ||
-            (prev.dreamsigns.length >= MAX_DREAMSIGNS &&
+            (prev.dreamsigns.length >= prev.maxDreamsigns &&
               purgeIndex === undefined)
           ) {
             return prev;
@@ -1058,7 +952,7 @@ export function QuestProvider({
           purgeIndex === undefined ? null : prev.dreamsigns[purgeIndex];
         if (
           (purgeIndex !== undefined && purgedDreamsign == null) ||
-          (prev.dreamsigns.length >= MAX_DREAMSIGNS &&
+          (prev.dreamsigns.length >= prev.maxDreamsigns &&
             purgeIndex === undefined)
         ) {
           return prev;
@@ -1314,7 +1208,7 @@ export function QuestProvider({
           slot.itemType === "dreamsign" &&
           ((purgeIndex !== undefined && purgedDreamsign == null) ||
             (purgeIndex === undefined &&
-              prev.dreamsigns.length >= MAX_DREAMSIGNS))
+              prev.dreamsigns.length >= prev.maxDreamsigns))
         ) {
           return prev;
         }
@@ -1774,103 +1668,6 @@ export function QuestProvider({
     [cardDatabase],
   );
 
-  const ensureTemptingOfferRuntime = useCallback((siteId: string) => {
-    setState((prev) => {
-      if (prev.siteRuntime[siteId] !== undefined) {
-        return prev;
-      }
-      const site = findSite(prev, siteId);
-      const optionCount = site?.isEnhanced ? 3 : 2;
-      const optionIds = shuffled(
-        TEMPTING_OFFERS.map((_, index) => temptingOfferOptionId(index)),
-      ).slice(0, optionCount);
-
-      return {
-        ...prev,
-        siteRuntime: {
-          ...prev.siteRuntime,
-          [siteId]: {
-            kind: "temptingOffer",
-            optionIds,
-            completed: false,
-          },
-        },
-      };
-    });
-  }, []);
-
-  const completeTemptingOfferOption = useCallback(
-    (siteId: string, optionId: string) => {
-      setState((prev) => {
-        if (prev.visitedSites.includes(siteId)) {
-          return prev;
-        }
-        const runtime = prev.siteRuntime[siteId];
-        if (
-          runtime === undefined ||
-          runtime.kind !== "temptingOffer" ||
-          runtime.completed ||
-          !runtime.optionIds.includes(optionId)
-        ) {
-          return prev;
-        }
-        const offer = findTemptingOfferOption(optionId);
-        if (offer === undefined) {
-          return prev;
-        }
-        const selectedPackageTides = prev.resolvedPackage?.selectedTides ?? [];
-        let next = applyTemptingOfferEffect({
-          prev,
-          effect: offer.benefit,
-          cardDatabase,
-          selectedPackageTides,
-          dreamsignTemplates: questContent.dreamsignTemplates,
-          nextEntryId,
-        });
-        next = applyTemptingOfferEffect({
-          prev: next,
-          effect: offer.cost,
-          cardDatabase,
-          selectedPackageTides,
-          dreamsignTemplates: questContent.dreamsignTemplates,
-          nextEntryId,
-        });
-
-        logEvent("tempting_offer_accepted", {
-          benefitDescription: offer.benefitDescription,
-          costDescription: offer.costDescription,
-          benefitEffect: offer.benefit.type,
-          costEffect: offer.cost.type,
-          baneCardsAdded:
-            offer.cost.type === "addBaneCards" ? offer.cost.count : 0,
-        });
-        const site = findSite(prev, siteId);
-        logEvent("site_completed", {
-          siteType: "TemptingOffer",
-          isEnhanced: site?.isEnhanced ?? false,
-        });
-
-        return setQuestScreen(
-          completeQuestSite(
-            {
-              ...next,
-              siteRuntime: {
-                ...next.siteRuntime,
-                [siteId]: {
-                  ...runtime,
-                  completed: true,
-                },
-              },
-            },
-            siteId,
-          ),
-          { type: "dreamscape" },
-        );
-      });
-    },
-    [cardDatabase, questContent.dreamsignTemplates],
-  );
-
   const pickDraftCard = useCallback(
     (_siteId: string, _cardNumber: number) => {
       throw new Error(
@@ -2005,7 +1802,7 @@ export function QuestProvider({
         if (
           (purgeIndex !== undefined && purgedDreamsign == null) ||
           (purgeIndex === undefined &&
-            prev.dreamsigns.length >= MAX_DREAMSIGNS)
+            prev.dreamsigns.length >= prev.maxDreamsigns)
         ) {
           return prev;
         }
@@ -2238,8 +2035,6 @@ export function QuestProvider({
       acceptDuplicationChoice,
       ensureDreamJourneyRuntime,
       completeDreamJourneyOption,
-      ensureTemptingOfferRuntime,
-      completeTemptingOfferOption,
       pickDraftCard,
       addCard,
       addBaneCard,
@@ -2280,8 +2075,6 @@ export function QuestProvider({
       acceptDuplicationChoice,
       ensureDreamJourneyRuntime,
       completeDreamJourneyOption,
-      ensureTemptingOfferRuntime,
-      completeTemptingOfferOption,
       pickDraftCard,
       addCard,
       addBaneCard,

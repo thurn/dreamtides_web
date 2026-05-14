@@ -158,8 +158,6 @@ function setQuestState({
       acceptDuplicationChoice: vi.fn(),
       ensureDreamJourneyRuntime: vi.fn(),
       completeDreamJourneyOption: vi.fn(),
-      ensureTemptingOfferRuntime: vi.fn(),
-      completeTemptingOfferOption: vi.fn(),
       pickDraftCard: vi.fn(),
       addCard: vi.fn(),
       addBaneCard: vi.fn(),

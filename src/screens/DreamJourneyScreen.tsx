@@ -27,6 +27,14 @@ function describeEffect(effect: JourneyEffect): string {
       return `Lost ${String(effect.removeCount)} cards, gained ${String(effect.addCount)} card${effect.addCount === 1 ? "" : "s"}`;
     case "upgradeRandomCards":
       return `Upgraded ${String(effect.count)} cards`;
+    case "addBaneCards":
+      return `Gained ${String(effect.count)} bane card${effect.count === 1 ? "" : "s"}`;
+    case "addEssenceAndAddBaneCards":
+      return `Gained ${String(effect.essenceAmount)} essence and ${String(effect.baneCount)} bane card${effect.baneCount === 1 ? "" : "s"}`;
+    case "addRandomCardsAndAddBaneCards":
+      return `Gained ${String(effect.addCount)} card${effect.addCount === 1 ? "" : "s"} and ${String(effect.baneCount)} bane card${effect.baneCount === 1 ? "" : "s"}`;
+    case "reduceMaxDreamsigns":
+      return `Maximum dreamsigns reduced by ${String(effect.amount)}`;
   }
 }
 

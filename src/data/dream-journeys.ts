@@ -14,7 +14,23 @@ export type JourneyEffect =
       removeCount: number;
       addCount: number;
     }
-  | { type: "upgradeRandomCards"; count: number };
+  | { type: "upgradeRandomCards"; count: number }
+  /**
+   * Bane cards. Dream Journeys are the source of Banes in the run — the
+   * negative cost side of a journey's bargain.
+   */
+  | { type: "addBaneCards"; count: number }
+  | {
+      type: "addEssenceAndAddBaneCards";
+      essenceAmount: number;
+      baneCount: number;
+    }
+  | {
+      type: "addRandomCardsAndAddBaneCards";
+      addCount: number;
+      baneCount: number;
+    }
+  | { type: "reduceMaxDreamsigns"; amount: number };
 
 /** A dramatic deck-altering event offered at journey sites. */
 export interface DreamJourney {
@@ -84,5 +100,41 @@ export const DREAM_JOURNEYS: readonly DreamJourney[] = [
     description:
       "A howling gale strips away everything inessential. Two cards are torn from your deck, but the wind deposits a single card in their place.",
     effect: { type: "removeCardsAndAddRandomCards", removeCount: 2, addCount: 1 },
+  },
+  {
+    name: "The Gilded Maw",
+    description:
+      "A river of liquid gold pours from a crack in the dream. You drink deep and gain essence, but the gold carries a curse — bane cards seep into your deck.",
+    effect: {
+      type: "addEssenceAndAddBaneCards",
+      essenceAmount: 300,
+      baneCount: 3,
+    },
+  },
+  {
+    name: "Pact of the Vault Guardian",
+    description:
+      "A spectral merchant offers two cards from a locked vault. The vault's guardian marks your soul in exchange — two bane cards join your deck.",
+    effect: {
+      type: "addRandomCardsAndAddBaneCards",
+      addCount: 2,
+      baneCount: 2,
+    },
+  },
+  {
+    name: "The Toxic Hoard",
+    description:
+      "The dreamscape peels back to reveal a trapped hoard of essence. You flee with the gold as four bane cards latch onto your deck.",
+    effect: {
+      type: "addEssenceAndAddBaneCards",
+      essenceAmount: 400,
+      baneCount: 4,
+    },
+  },
+  {
+    name: "The Weeping Idol",
+    description:
+      "A weeping idol grants a surge of raw power. Its corrosive tears narrow the mind — your maximum dreamsign capacity is reduced.",
+    effect: { type: "reduceMaxDreamsigns", amount: 2 },
   },
 ] as const;

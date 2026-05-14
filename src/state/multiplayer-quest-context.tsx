@@ -34,7 +34,6 @@ import type {
   Screen,
   ShopSiteRuntime,
   SiteState,
-  TemptingOfferSiteRuntime,
   TransfigurationType,
 } from "../types/quest";
 import type { DraftState } from "../types/draft";
@@ -74,15 +73,9 @@ import {
   DREAM_JOURNEYS,
   type JourneyEffect,
 } from "../data/dream-journeys";
-import {
-  TEMPTING_OFFERS,
-  type OfferEffect,
-} from "../data/tempting-offers";
 import { sampleRewardCards } from "../data/tide-weights";
-import { createDreamsign } from "../data/dreamsigns";
 import type { CardData } from "../types/cards";
 
-const MAX_DREAMSIGNS = 12;
 
 export interface MultiplayerQuestProviderProps {
   children: ReactNode;
@@ -225,17 +218,6 @@ function dreamsignMatches(left: Dreamsign, right: Dreamsign): boolean {
   return left.name === right.name;
 }
 
-function dreamsignDetailsEqual(left: Dreamsign, right: Dreamsign): boolean {
-  return (
-    left.id === right.id &&
-    left.name === right.name &&
-    left.effectDescription === right.effectDescription &&
-    left.imageName === right.imageName &&
-    left.imageAlt === right.imageAlt &&
-    left.isBane === right.isBane
-  );
-}
-
 function arraysEqual<T>(
   left: readonly T[],
   right: readonly T[],
@@ -306,17 +288,8 @@ function dreamJourneyOptionId(journey: (typeof DREAM_JOURNEYS)[number]): string 
   return journey.name;
 }
 
-function temptingOfferOptionId(index: number): string {
-  return `offer-${String(index)}`;
-}
-
 function findDreamJourneyOption(optionId: string) {
   return DREAM_JOURNEYS.find((journey) => dreamJourneyOptionId(journey) === optionId);
-}
-
-function findTemptingOfferOption(optionId: string) {
-  const match = /^offer-(\d+)$/.exec(optionId);
-  return match === null ? undefined : TEMPTING_OFFERS[Number(match[1])];
 }
 
 function selectCardChoiceEntryIds({
@@ -473,6 +446,7 @@ function applyPreparedDreamJourneyEffect({
   prepared: {
     removeEntryIds: string[];
     addCardNumbers: number[];
+    addBaneCardNumbers: number[];
     upgrades: Array<{ entryId: string; type: TransfigurationType }>;
   };
 }): QuestState | null {
@@ -509,6 +483,22 @@ function applyPreparedDreamJourneyEffect({
     return { ...state, deck };
   };
 
+  const addBaneCards = (state: QuestState, count: number): QuestState => {
+    let deck = state.deck;
+    for (const cardNumber of prepared.addBaneCardNumbers.slice(0, count)) {
+      deck = [
+        ...deck,
+        {
+          entryId: nextDeckEntryId(deck),
+          cardNumber,
+          transfiguration: null,
+          isBane: true,
+        },
+      ];
+    }
+    return { ...state, deck };
+  };
+
   switch (effect.type) {
     case "addEssence":
       return {
@@ -526,13 +516,39 @@ function applyPreparedDreamJourneyEffect({
       return addCards(prev, effect.count);
     case "addEssenceAndRemoveCards":
       return removeCards(
-        { ...prev, essence: prev.essence + effect.essenceAmount },
+        {
+          ...prev,
+          essence: clampEssence(
+            prev.essence + effect.essenceAmount,
+            prev.essenceCap,
+          ),
+        },
         effect.removeCount,
       );
     case "removeCardsAndAddRandomCards": {
       const removed = removeCards(prev, effect.removeCount);
       return removed === null ? null : addCards(removed, effect.addCount);
     }
+    case "addBaneCards":
+      return addBaneCards(prev, effect.count);
+    case "addEssenceAndAddBaneCards":
+      return addBaneCards(
+        {
+          ...prev,
+          essence: clampEssence(
+            prev.essence + effect.essenceAmount,
+            prev.essenceCap,
+          ),
+        },
+        effect.baneCount,
+      );
+    case "addRandomCardsAndAddBaneCards":
+      return addBaneCards(addCards(prev, effect.addCount), effect.baneCount);
+    case "reduceMaxDreamsigns":
+      return {
+        ...prev,
+        maxDreamsigns: Math.max(0, prev.maxDreamsigns - effect.amount),
+      };
     case "upgradeRandomCards": {
       const upgrades = prepared.upgrades.slice(0, effect.count);
       if (
@@ -579,7 +595,17 @@ function prepareDreamJourneyEffect({
       ? effect.count
       : effect.type === "removeCardsAndAddRandomCards"
         ? effect.addCount
-        : 0;
+        : effect.type === "addRandomCardsAndAddBaneCards"
+          ? effect.addCount
+          : 0;
+  const baneCount =
+    effect.type === "addBaneCards"
+      ? effect.count
+      : effect.type === "addEssenceAndAddBaneCards"
+        ? effect.baneCount
+        : effect.type === "addRandomCardsAndAddBaneCards"
+          ? effect.baneCount
+          : 0;
   const upgradeCount = effect.type === "upgradeRandomCards" ? effect.count : 0;
   const types = ["Viridian", "Golden", "Scarlet", "Azure", "Bronze"] as const;
 
@@ -592,173 +618,15 @@ function prepareDreamJourneyEffect({
       addCount,
       selectedPackageTides,
     ).map((card) => card.cardNumber),
+    addBaneCardNumbers: sampleRewardCards(cardDatabase, baneCount).map(
+      (card) => card.cardNumber,
+    ),
     upgrades: shuffled(state.deck.filter((entry) => entry.transfiguration === null))
       .slice(0, upgradeCount)
       .map((entry) => ({
         entryId: entry.entryId,
         type: types[Math.floor(Math.random() * types.length)],
       })),
-  };
-}
-
-function applyPreparedTemptingOfferEffect({
-  prev,
-  effect,
-  prepared,
-}: {
-  prev: QuestState;
-  effect: OfferEffect;
-  prepared: {
-    addCardNumbers: number[];
-    addBaneCardNumbers: number[];
-    removeEntryIds: string[];
-    removeDreamsign: { index: number; dreamsign: Dreamsign } | null;
-    addedDreamsign: Dreamsign | null;
-  };
-}): QuestState | null {
-  const addCards = (
-    state: QuestState,
-    cardNumbers: readonly number[],
-    isBane: boolean,
-  ): QuestState => {
-    let deck = state.deck;
-    for (const cardNumber of cardNumbers) {
-      deck = [
-        ...deck,
-        {
-          entryId: nextDeckEntryId(deck),
-          cardNumber,
-          transfiguration: null,
-          isBane,
-        },
-      ];
-    }
-    return { ...state, deck };
-  };
-  const removeCards = (state: QuestState, count: number): QuestState | null => {
-    const ids = prepared.removeEntryIds.slice(0, count);
-    if (
-      ids.some((entryId) => {
-        const entry = state.deck.find((candidate) => candidate.entryId === entryId);
-        return entry === undefined || entry.isBane;
-      })
-    ) {
-      return null;
-    }
-    const idSet = new Set(ids);
-    return {
-      ...state,
-      deck: state.deck.filter((entry) => !idSet.has(entry.entryId)),
-    };
-  };
-
-  switch (effect.type) {
-    case "addEssence":
-      return { ...prev, essence: prev.essence + effect.amount };
-    case "addRandomCards":
-      return addCards(prev, prepared.addCardNumbers.slice(0, effect.count), false);
-    case "addBaneCards":
-      return addCards(prev, prepared.addBaneCardNumbers.slice(0, effect.count), true);
-    case "removeEssence":
-      return { ...prev, essence: prev.essence - effect.amount };
-    case "removeDreamsign":
-      if (prepared.removeDreamsign === null) {
-        return prev;
-      }
-      if (
-        prev.dreamsigns[prepared.removeDreamsign.index] === undefined ||
-        !dreamsignDetailsEqual(
-          prev.dreamsigns[prepared.removeDreamsign.index],
-          prepared.removeDreamsign.dreamsign,
-        )
-      ) {
-        return null;
-      }
-      return {
-        ...prev,
-        dreamsigns: prev.dreamsigns.filter(
-          (_, index) => index !== prepared.removeDreamsign?.index,
-        ),
-      };
-    case "reduceMaxDreamsigns":
-      return prev;
-    case "removeRandomCards":
-      return removeCards(prev, effect.count);
-    case "addDreamsign":
-      if (prepared.addedDreamsign === null || prev.dreamsigns.length >= MAX_DREAMSIGNS) {
-        return prev;
-      }
-      return { ...prev, dreamsigns: [...prev.dreamsigns, prepared.addedDreamsign] };
-  }
-}
-
-function prepareTemptingOfferEffects({
-  state,
-  benefit,
-  cost,
-  cardDatabase,
-  selectedPackageTides,
-  dreamsignTemplates,
-}: {
-  state: QuestState;
-  benefit: OfferEffect;
-  cost: OfferEffect;
-  cardDatabase: Map<number, CardData>;
-  selectedPackageTides: readonly PackageTideId[];
-  dreamsignTemplates: QuestContent["dreamsignTemplates"];
-}) {
-  const effects = [benefit, cost];
-  const addCount = effects.reduce(
-    (sum, effect) =>
-      sum + (effect.type === "addRandomCards" ? effect.count : 0),
-    0,
-  );
-  const baneCount = effects.reduce(
-    (sum, effect) =>
-      sum + (effect.type === "addBaneCards" ? effect.count : 0),
-    0,
-  );
-  const removeCount = effects.reduce(
-    (sum, effect) =>
-      sum + (effect.type === "removeRandomCards" ? effect.count : 0),
-    0,
-  );
-  const shouldRemoveDreamsign = effects.some(
-    (effect) => effect.type === "removeDreamsign",
-  );
-  const shouldAddDreamsign = effects.some(
-    (effect) => effect.type === "addDreamsign",
-  );
-
-  return {
-    addCardNumbers: sampleRewardCards(
-      cardDatabase,
-      addCount,
-      selectedPackageTides,
-    ).map((card) => card.cardNumber),
-    addBaneCardNumbers: sampleRewardCards(cardDatabase, baneCount).map(
-      (card) => card.cardNumber,
-    ),
-    removeEntryIds: shuffled(state.deck.filter((entry) => !entry.isBane))
-      .slice(0, removeCount)
-      .map((entry) => entry.entryId),
-    removeDreamsign:
-      shouldRemoveDreamsign && state.dreamsigns.length > 0
-        ? (() => {
-          const index = Math.floor(Math.random() * state.dreamsigns.length);
-          return {
-            index,
-            dreamsign: { ...state.dreamsigns[index] },
-          };
-        })()
-        : null,
-    addedDreamsign:
-      shouldAddDreamsign && dreamsignTemplates.length > 0
-        ? createDreamsign(
-          dreamsignTemplates[Math.floor(Math.random() * dreamsignTemplates.length)],
-          false,
-        )
-        : null,
   };
 }
 
@@ -901,7 +769,7 @@ export function MultiplayerQuestProvider({
       if (
         (purgeIndex !== undefined && purgedDreamsign == null) ||
         (purgeIndex === undefined &&
-          current.state.dreamsigns.length >= MAX_DREAMSIGNS)
+          current.state.dreamsigns.length >= current.state.maxDreamsigns)
       ) {
         return;
       }
@@ -1520,7 +1388,7 @@ export function MultiplayerQuestProvider({
           if (
             (purgeIndex !== undefined && purgedDreamsign == null) ||
             (purgeIndex === undefined &&
-              next.dreamsigns.length >= MAX_DREAMSIGNS)
+              next.dreamsigns.length >= next.maxDreamsigns)
           ) {
             return room;
           }
@@ -1755,7 +1623,7 @@ export function MultiplayerQuestProvider({
               : room.questState.dreamsigns[purgeIndex];
           if (
             (purgeIndex !== undefined && purgedDreamsign == null) ||
-            (room.questState.dreamsigns.length >= MAX_DREAMSIGNS &&
+            (room.questState.dreamsigns.length >= room.questState.maxDreamsigns &&
               purgeIndex === undefined)
           ) {
             return room;
@@ -2102,7 +1970,7 @@ export function MultiplayerQuestProvider({
           slot.itemType === "dreamsign" &&
           ((purgeIndex !== undefined && purgedDreamsign == null) ||
             (purgeIndex === undefined &&
-              room.questState.dreamsigns.length >= MAX_DREAMSIGNS))
+              room.questState.dreamsigns.length >= room.questState.maxDreamsigns))
         ) {
           return room;
         }
@@ -2749,183 +2617,6 @@ export function MultiplayerQuestProvider({
     [],
   );
 
-  const ensureTemptingOfferRuntime = useCallback((siteId: string) => {
-    const current = currentRef.current;
-    const site = findSite(current.state, siteId);
-    const expectedSiteType = site?.type ?? null;
-    const expectedIsEnhanced = site?.isEnhanced ?? false;
-    const optionCount = site?.isEnhanced ? 3 : 2;
-    const runtime: TemptingOfferSiteRuntime | null =
-      current.state.siteRuntime[siteId] === undefined
-        ? {
-          kind: "temptingOffer",
-          optionIds: shuffled(
-            TEMPTING_OFFERS.map((_, index) => temptingOfferOptionId(index)),
-          ).slice(0, optionCount),
-          completed: false,
-        }
-        : null;
-    const now = new Date().toISOString();
-    const actionId = runtime === null ? null : crypto.randomUUID();
-
-    writeRoomTransaction({
-      database: current.database,
-      roomId: current.session.roomId,
-      updater: (room) => {
-        if (room === null || room.questState === null) {
-          return room ?? undefined;
-        }
-        if (room.questState.siteRuntime[siteId] !== undefined) {
-          return room;
-        }
-        if (
-          runtime === null ||
-          actionId === null ||
-          !siteRuntimeAssumptionMatches(
-            room.questState,
-            siteId,
-            expectedSiteType,
-            expectedIsEnhanced,
-          )
-        ) {
-          return room;
-        }
-
-        return {
-          ...room,
-          questState: {
-            ...room.questState,
-            siteRuntime: {
-              ...room.questState.siteRuntime,
-              [siteId]: runtime,
-            },
-          },
-          metadata: {
-            ...room.metadata,
-            updatedAt: now,
-          },
-          actionLog: {
-            ...(room.actionLog ?? {}),
-            [actionId]: buildActionLogEntry({
-              timestamp: now,
-              actorId: current.session.clientId,
-              action: "ensureTemptingOfferRuntime",
-              source: "site_reveal",
-              summary: {
-                siteId,
-                optionCount,
-              },
-            }),
-          },
-        };
-      },
-    });
-  }, []);
-
-  const completeTemptingOfferOption = useCallback(
-    (siteId: string, optionId: string) => {
-      const current = currentRef.current;
-      const offer = findTemptingOfferOption(optionId);
-      if (offer === undefined) {
-        return;
-      }
-      const selectedPackageTides = [
-        ...(current.state.resolvedPackage?.selectedTides ?? []),
-      ];
-      const prepared = prepareTemptingOfferEffects({
-        state: current.state,
-        benefit: offer.benefit,
-        cost: offer.cost,
-        cardDatabase: current.questContent.cardDatabase,
-        selectedPackageTides,
-        dreamsignTemplates: current.questContent.dreamsignTemplates,
-      });
-      const now = new Date().toISOString();
-      const actionId = crypto.randomUUID();
-
-      writeRoomTransaction({
-        database: current.database,
-        roomId: current.session.roomId,
-        updater: (room) => {
-          if (room === null || room.questState === null) {
-            return room ?? undefined;
-          }
-          if (room.questState.visitedSites.includes(siteId)) {
-            return room;
-          }
-          const runtime = room.questState.siteRuntime[siteId];
-          if (
-            runtime === undefined ||
-            runtime.kind !== "temptingOffer" ||
-            runtime.completed ||
-            !runtime.optionIds.includes(optionId) ||
-            !arraysEqual(
-              room.questState.resolvedPackage?.selectedTides ?? [],
-              selectedPackageTides,
-            )
-          ) {
-            return room;
-          }
-          let next: QuestState | null = applyPreparedTemptingOfferEffect({
-            prev: room.questState,
-            effect: offer.benefit,
-            prepared,
-          });
-          if (next === null) {
-            return room;
-          }
-          next = applyPreparedTemptingOfferEffect({
-            prev: next,
-            effect: offer.cost,
-            prepared,
-          });
-          if (next === null) {
-            return room;
-          }
-
-          next = completeSiteAndReturnToDreamscape(
-            {
-              ...next,
-              siteRuntime: {
-                ...next.siteRuntime,
-                [siteId]: {
-                  ...runtime,
-                  completed: true,
-                },
-              },
-            },
-            siteId,
-          );
-
-          return {
-            ...room,
-            questState: next,
-            metadata: {
-              ...room.metadata,
-              updatedAt: now,
-            },
-            actionLog: {
-              ...(room.actionLog ?? {}),
-              [actionId]: buildActionLogEntry({
-                timestamp: now,
-                actorId: current.session.clientId,
-                action: "completeTemptingOfferOption",
-                source: "tempting_offer",
-                summary: {
-                  siteId,
-                  optionId,
-                  benefitType: offer.benefit.type,
-                  costType: offer.cost.type,
-                },
-              }),
-            },
-          };
-        },
-      });
-    },
-    [],
-  );
-
   const mutations = useMemo<QuestMutations>(
     () => ({
       changeEssence,
@@ -2946,8 +2637,6 @@ export function MultiplayerQuestProvider({
       acceptDuplicationChoice,
       ensureDreamJourneyRuntime,
       completeDreamJourneyOption,
-      ensureTemptingOfferRuntime,
-      completeTemptingOfferOption,
       pickDraftCard,
       addCard,
       addBaneCard: (_cardNumber: number, _source: string) => {
@@ -3000,8 +2689,6 @@ export function MultiplayerQuestProvider({
       acceptDuplicationChoice,
       ensureDreamJourneyRuntime,
       completeDreamJourneyOption,
-      ensureTemptingOfferRuntime,
-      completeTemptingOfferOption,
       ensureShopRuntime,
       incrementCompletionLevel,
       markSiteVisited,

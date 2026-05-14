@@ -96,10 +96,9 @@ function buildAdditionalSitePool(
     pool.push(["Cleanse", 2]);
   }
 
-  // Mid game (level 3+): add DreamJourney, TemptingOffer
+  // Mid game (level 3+): add DreamJourney
   if (completionLevel >= 3) {
     pool.push(["DreamJourney", 2]);
-    pool.push(["TemptingOffer", 2]);
   }
 
   // Late game (level 5+): add Transfiguration, Purge, Duplication
@@ -509,11 +508,6 @@ const SITE_TYPE_META: Record<
     icon: "\uD83C\uDF19",
     name: "Dream Journey",
     description: "Pick a world-effect branch that shapes the run.",
-  },
-  TemptingOffer: {
-    icon: "\u2696\uFE0F",
-    name: "Tempting Offer",
-    description: "Trade something valuable for a powerful boon.",
   },
   Purge: {
     icon: "\uD83D\uDD25",

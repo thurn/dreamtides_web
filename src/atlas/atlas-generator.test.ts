@@ -596,7 +596,6 @@ describe("siteTypeDescription", () => {
       "DreamsignOffering",
       "DreamsignDraft",
       "DreamJourney",
-      "TemptingOffer",
       "Purge",
       "Essence",
       "Transfiguration",

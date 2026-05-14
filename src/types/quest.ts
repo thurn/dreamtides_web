@@ -19,7 +19,6 @@ export type SiteType =
   | "DreamsignOffering"
   | "DreamsignDraft"
   | "DreamJourney"
-  | "TemptingOffer"
   | "Purge"
   | "Essence"
   | "Transfiguration"
@@ -241,13 +240,6 @@ export interface DreamJourneySiteRuntime {
   completed: boolean;
 }
 
-/** Runtime state for a Tempting Offer site. */
-export interface TemptingOfferSiteRuntime {
-  kind: "temptingOffer";
-  optionIds: string[];
-  completed: boolean;
-}
-
 /** Serialized runtime state keyed by site id. */
 export type SiteRuntimeState =
   | ShopSiteRuntime
@@ -255,8 +247,7 @@ export type SiteRuntimeState =
   | DreamsignOfferSiteRuntime
   | EssenceSiteRuntime
   | CardChoiceSiteRuntime
-  | DreamJourneySiteRuntime
-  | TemptingOfferSiteRuntime;
+  | DreamJourneySiteRuntime;
 
 /** Discriminated union for the current screen. */
 export type Screen =
