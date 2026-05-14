@@ -125,6 +125,9 @@ function makeCardDatabase(): Map<number, CardData> {
 function makeState(slots: RuntimeShopSlot[]): QuestState {
   return {
     essence: 500,
+    essenceCap: 500,
+    omens: 5,
+    maxDreamsigns: 12,
     deck: [],
     dreamcaller: null,
     resolvedPackage: null,
@@ -142,6 +145,7 @@ function makeState(slots: RuntimeShopSlot[]): QuestState {
     siteRuntime: {
       "shop-1": {
         kind: "shop",
+        restrictedTide: null,
         slots,
         rerollCount: 0,
         remainingDreamsignPoolIds: [],
@@ -221,7 +225,7 @@ describe("ShopScreen", () => {
       />,
     );
 
-    const priceSpan = container.querySelector("[data-shop-essence-price]");
+    const priceSpan = container.querySelector("[data-shop-price]");
     expect(priceSpan).not.toBeNull();
     expect(priceSpan?.textContent).toBe("100");
     expect((priceSpan as HTMLElement | null)?.style.color).toBe(
@@ -230,7 +234,7 @@ describe("ShopScreen", () => {
 
     // The "Essence" label is the second purple span -- the verb
     // "Buy" stays neutral so only the cost reads as currency.
-    const labels = container.querySelectorAll("[data-shop-essence-label]");
+    const labels = container.querySelectorAll("[data-shop-currency-label]");
     expect(labels.length).toBeGreaterThan(0);
     expect((labels[0] as HTMLElement).style.color).toBe(
       "var(--color-essence)",
@@ -425,7 +429,7 @@ describe("ShopScreen", () => {
     });
   });
 
-  it("always renders an active reroll affordance with a 50 essence cost when the reroll has not been used this visit", () => {
+  it("always renders an active reroll affordance with a 1 omen cost when the reroll has not been used this visit", () => {
     setQuestContext(
       makeState([
         {
@@ -456,18 +460,15 @@ describe("ShopScreen", () => {
     expect(rerollButton?.disabled).toBe(false);
     expect(rerollButton?.dataset.shopRerollUsed).toBe("false");
     expect(rerollButton?.textContent).toContain("Reroll Shop");
-    expect(rerollButton?.textContent).toContain("50");
+    expect(rerollButton?.textContent).toContain("1");
     expect(rerollButton?.textContent).not.toContain("◆");
     expect(rerollButton?.textContent).not.toContain("⬢");
 
-    // The Essence label still carries the shared essence colour.
-    const labels = rerollButton?.querySelectorAll("[data-shop-essence-label]");
+    // Rerolls are paid for in omens.
+    const labels = rerollButton?.querySelectorAll("[data-shop-omens-label]");
     expect(labels?.length).toBeGreaterThan(0);
     if (labels) {
-      expect((labels[0] as HTMLElement).style.color).toBe(
-        "var(--color-essence)",
-      );
-      expect(labels[0]?.textContent).toBe("Essence");
+      expect(labels[0]?.textContent).toBe("Omens");
     }
 
     act(() => {

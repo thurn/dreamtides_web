@@ -172,6 +172,11 @@ export interface ShopSiteRuntime {
   slots: RuntimeShopSlot[];
   rerollCount: number;
   remainingDreamsignPoolIds: string[];
+  /**
+   * For a Specialty Shop, the single tide the inventory is restricted to;
+   * `null` for a regular Shop. Persisted so a reroll keeps the same tide.
+   */
+  restrictedTide: PackageTideId | null;
 }
 
 /**
@@ -265,6 +270,21 @@ export type Screen =
 /** The top-level quest state object. */
 export interface QuestState {
   essence: number;
+  /**
+   * Maximum essence the player can hold. Essence gained beyond this cap is
+   * lost. Defaults to 500; effects such as Dream Journey rewards can raise it.
+   */
+  essenceCap: number;
+  /**
+   * Omens currency. Spent only on shop Dreamsign purchases and shop rerolls.
+   * Uncapped.
+   */
+  omens: number;
+  /**
+   * Maximum number of Dreamsigns the player can hold at once. Defaults to 12;
+   * certain effects can reduce it.
+   */
+  maxDreamsigns: number;
   deck: DeckEntry[];
   dreamcaller: Dreamcaller | null;
   resolvedPackage: ResolvedDreamcallerPackage | null;

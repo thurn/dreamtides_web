@@ -341,6 +341,9 @@ function makeDraftState(): DraftState {
 function makeState(overrides: Partial<QuestState> = {}): QuestState {
   return {
     essence: 100,
+    essenceCap: 500,
+    omens: 0,
+    maxDreamsigns: 12,
     deck: [
       {
         entryId: "entry-1",

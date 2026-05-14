@@ -83,6 +83,9 @@ function makeDreamsign(name: string): Dreamsign {
 function makeState(dreamsigns: Dreamsign[]): QuestState {
   return {
     essence: 100,
+    essenceCap: 500,
+    omens: 0,
+    maxDreamsigns: 12,
     deck: [],
     dreamcaller: {
       id: "caller-1",

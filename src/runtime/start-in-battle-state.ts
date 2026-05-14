@@ -40,6 +40,9 @@ export function createStartInBattleState(
 
   return {
     essence: 250,
+    essenceCap: 500,
+    omens: 0,
+    maxDreamsigns: 12,
     deck: STARTER_CARD_NUMBERS.map((cardNumber, index) => ({
       entryId: `deck-${String(index + 1)}`,
       cardNumber,

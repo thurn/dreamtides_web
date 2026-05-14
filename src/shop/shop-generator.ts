@@ -1,15 +1,10 @@
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate, PackageTideId } from "../types/content";
-import type { DeckEntry, Dreamsign, RuntimeShopSlot } from "../types/quest";
+import type { DraftState } from "../types/draft";
+import type { Dreamsign, RuntimeShopSlot } from "../types/quest";
 
-import { isStarterCard } from "../data/card-database";
-import { countPackageOverlap } from "../data/quest-content";
-import { pickPackageAdjacentItem } from "../data/tide-weights";
-import {
-  readDreamsignPool,
-  resolveDreamsignTemplates,
-} from "../dreamsign/dreamsign-pool";
-import { createDreamsign } from "../data/dreamsigns";
+import { drawAndSpendUniqueCards } from "../draft/draft-engine";
+import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 
 /** Fixed price for standard card items. */
 const STANDARD_CARD_PRICE = 100;
@@ -17,17 +12,15 @@ const STANDARD_CARD_PRICE = 100;
 /** Fixed price for specialty-shop card items. */
 const SPECIALTY_CARD_PRICE = 200;
 
-/** Fixed price for dreamsign items. */
-const DREAMSIGN_PRICE = 150;
+/** Fixed price for dreamsign items, paid in omens. */
+const DREAMSIGN_OMEN_PRICE = 2;
 
-/** Base cost for a shop reroll. */
-const REROLL_BASE_COST = 50;
+/** Base cost for a shop reroll, paid in omens. */
+const REROLL_OMEN_COST = 1;
 
-/** Additional cost per previous reroll. */
-const REROLL_INCREMENT = 25;
-
-/** Chance (out of 6) for a slot to be a dreamsign. */
-const DREAMSIGN_CHANCE = 1 / 6;
+/** Standard shop composition: 3 cards and 2 dreamsigns to purchase. */
+const STANDARD_CARD_COUNT = 3;
+const STANDARD_DREAMSIGN_COUNT = 2;
 
 /** The types of items that can appear in a shop slot. */
 export type ShopItemType = "card" | "dreamsign";
@@ -43,15 +36,35 @@ export interface ShopSlot {
 }
 
 export interface ShopGenerationOptions {
-  selectedPackageTides?: readonly PackageTideId[];
+  cardDatabase: ReadonlyMap<number, CardData>;
+  /**
+   * The run draft state. Shop cards are drawn from — and spent against — the
+   * draft multiset, just like draft picks. The mutated draft state is returned
+   * on the result.
+   */
+  draftState: DraftState | null;
   remainingDreamsignPoolIds?: readonly string[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
+  /** The run's full Dreamsign pool, used to regenerate an exhausted pool. */
+  dreamsignRegenerationPoolIds?: readonly string[];
+  /**
+   * When provided and non-empty the shop is a Specialty Shop: a single tide is
+   * chosen from this list (the dreamcaller's mandatory tides) and the entire
+   * inventory is restricted to cards and Dreamsigns of that tide.
+   */
+  specialtyTides?: readonly PackageTideId[];
+  cardCount?: number;
+  dreamsignCount?: number;
 }
 
 export interface ShopInventoryResult {
   slots: ShopSlot[];
   remainingDreamsignPoolIds: string[];
   spentDreamsignPoolIds: string[];
+  /** The draft state after shop card slots were drawn and spent. */
+  draftState: DraftState | null;
+  /** The single tide this shop is restricted to, or null for a regular shop. */
+  restrictedTide: PackageTideId | null;
 }
 
 /** Returns the effective price of a slot after discount. */
@@ -60,10 +73,10 @@ export function effectivePrice(slot: ShopSlot): number {
   return Math.round(slot.basePrice * (1 - slot.discountPercent / 100));
 }
 
-/** Computes reroll cost given the number of previous rerolls. */
-export function rerollCost(rerollCount: number, isEnhanced: boolean): number {
+/** Computes the omen reroll cost. Enhanced shops reroll for free. */
+export function rerollCost(_rerollCount: number, isEnhanced: boolean): number {
   if (isEnhanced) return 0;
-  return REROLL_BASE_COST + REROLL_INCREMENT * rerollCount;
+  return REROLL_OMEN_COST;
 }
 
 export function shopSlotsToRuntime(
@@ -129,236 +142,150 @@ export function runtimeSlotsToShopSlots(
   });
 }
 
-function selectWeightedCard(
-  cardDatabase: ReadonlyMap<number, CardData>,
-  playerDeck: readonly DeckEntry[],
-  cards: readonly CardData[],
-  selectedPackageTides: readonly PackageTideId[] = [],
-  excludedCardNumbers: ReadonlySet<number> = new Set(),
-): CardData | null {
-  const availableCards = cards.filter(
-    (card) => !excludedCardNumbers.has(card.cardNumber),
-  );
-  const fallbackCards = availableCards.length > 0 ? availableCards : cards;
-
-  if (fallbackCards.length === 0) {
+/** Pick one random tide from the dreamcaller's mandatory tides. */
+function pickSpecialtyTide(
+  specialtyTides: readonly PackageTideId[],
+): PackageTideId | null {
+  if (specialtyTides.length === 0) {
     return null;
   }
-
-  const deckPackageWeights = buildDeckPackageWeights(cardDatabase, playerDeck);
-  const scoredCards = fallbackCards.map((card) => ({
-    card,
-    deckAffinity: card.tides.reduce(
-      (sum, tide) => sum + (deckPackageWeights.get(tide) ?? 0),
-      0,
-    ),
-    overlapCount: countPackageOverlap(card.tides, selectedPackageTides),
-  }));
-  const maxOverlapCount = Math.max(
-    ...scoredCards.map((candidate) => candidate.overlapCount),
-  );
-  const packageMatchedCards = maxOverlapCount > 0
-    ? scoredCards.filter((candidate) => candidate.overlapCount === maxOverlapCount)
-    : scoredCards;
-  const maxDeckAffinity = Math.max(
-    ...packageMatchedCards.map((candidate) => candidate.deckAffinity),
-  );
-  const deckMatchedCards = maxDeckAffinity > 0
-    ? packageMatchedCards.filter(
-      (candidate) => candidate.deckAffinity >= maxDeckAffinity - 1,
-    )
-    : packageMatchedCards;
-
-  return pickWeightedCard(deckMatchedCards);
+  return specialtyTides[Math.floor(Math.random() * specialtyTides.length)];
 }
 
-function buildDeckPackageWeights(
+/** Returns the draft-pool card numbers eligible for the restricted tide. */
+function eligibleCardNumbersForTide(
+  draftState: DraftState,
   cardDatabase: ReadonlyMap<number, CardData>,
-  playerDeck: readonly DeckEntry[],
-): Map<PackageTideId, number> {
-  const weights = new Map<PackageTideId, number>();
-
-  for (const entry of playerDeck) {
-    const card = cardDatabase.get(entry.cardNumber);
-    if (card === undefined) {
-      continue;
-    }
-
-    for (const tide of new Set(card.tides)) {
-      weights.set(tide, (weights.get(tide) ?? 0) + 1);
+  tide: PackageTideId,
+): Set<number> {
+  const eligible = new Set<number>();
+  for (const cardNumberText of Object.keys(draftState.remainingCopiesByCard)) {
+    const cardNumber = Number(cardNumberText);
+    const card = cardDatabase.get(cardNumber);
+    if (card !== undefined && card.tides.includes(tide)) {
+      eligible.add(cardNumber);
     }
   }
-
-  return weights;
+  for (const cardNumberText of Object.keys(draftState.draftPoolCopiesByCard)) {
+    const cardNumber = Number(cardNumberText);
+    const card = cardDatabase.get(cardNumber);
+    if (card !== undefined && card.tides.includes(tide)) {
+      eligible.add(cardNumber);
+    }
+  }
+  return eligible;
 }
 
-function pickWeightedCard(
-  candidates: ReadonlyArray<{
-    card: CardData;
-    deckAffinity: number;
-    overlapCount: number;
-  }>,
-): CardData | null {
-  const totalWeight = candidates.reduce(
-    (sum, candidate) =>
-      sum +
-      Math.max(
-        1,
-        candidate.overlapCount * 10 +
-        candidate.deckAffinity * 3,
-      ),
-    0,
-  );
-
-  if (totalWeight <= 0) {
-    return candidates[0]?.card ?? null;
-  }
-
-  let roll = Math.random() * totalWeight;
-  for (const candidate of candidates) {
-    roll -= Math.max(
-      1,
-      candidate.overlapCount * 10 +
-      candidate.deckAffinity * 3,
-    );
-    if (roll <= 0) {
-      return candidate.card;
-    }
-  }
-
-  return candidates[candidates.length - 1]?.card ?? null;
-}
 /**
- * Generates shop inventory with 6 slots. Each slot is a card or dreamsign.
- * The reroll affordance is rendered separately by `ShopScreen`, not as a
- * grid slot, so every visit exposes exactly one reroll regardless of
- * inventory composition.
+ * Generates shop inventory: 3 cards and 2 dreamsigns by default. Cards are
+ * drawn from — and spent against — the run draft multiset; dreamsigns are
+ * drawn from — and spent against — the run's shared Dreamsign pool. When
+ * `specialtyTides` is provided the whole inventory is restricted to a single
+ * randomly chosen mandatory tide (Specialty Shop).
  */
 export function generateShopInventory(
-  cardDatabase: Map<number, CardData>,
-  playerDeck: DeckEntry[],
-  options: ShopGenerationOptions = {},
+  options: ShopGenerationOptions,
 ): ShopInventoryResult {
-  const selectedPackageTides = options.selectedPackageTides ?? [];
-  const allCards = Array.from(cardDatabase.values()).filter(
-    (card) => !isStarterCard(card),
-  );
-  const slots: ShopSlot[] = [];
-  const selectedCardNumbers = new Set<number>();
-  let remainingDreamsignPoolIds = [...(options.remainingDreamsignPoolIds ?? [])];
-  const spentDreamsignPoolIds: string[] = [];
+  const {
+    cardDatabase,
+    draftState,
+    remainingDreamsignPoolIds = [],
+    dreamsignTemplates = [],
+    dreamsignRegenerationPoolIds,
+    specialtyTides = [],
+    cardCount = STANDARD_CARD_COUNT,
+    dreamsignCount = STANDARD_DREAMSIGN_COUNT,
+  } = options;
 
-  for (let i = 0; i < 6; i++) {
-    // Roll for dreamsign
-    if (
-      Math.random() < DREAMSIGN_CHANCE &&
-      options.dreamsignTemplates !== undefined &&
-      remainingDreamsignPoolIds.length > 0
-    ) {
-      const dreamsignPoolState = readDreamsignPool(
-        remainingDreamsignPoolIds,
-        options.dreamsignTemplates,
-      );
-      const template = pickPackageAdjacentItem(
-        resolveDreamsignTemplates(
-          dreamsignPoolState.availableIds,
-          options.dreamsignTemplates,
-        ),
-        (candidate) => candidate.packageTides,
-        selectedPackageTides,
-      );
-      if (template !== null) {
-        remainingDreamsignPoolIds = dreamsignPoolState.availableIds.filter(
-          (id) => id !== template.id,
+  const restrictedTide = pickSpecialtyTide(specialtyTides);
+  const isSpecialty = restrictedTide !== null;
+  const cardPrice = isSpecialty ? SPECIALTY_CARD_PRICE : STANDARD_CARD_PRICE;
+
+  // --- Card slots: drawn from the draft multiset and spent. ---
+  const nextDraftState =
+    draftState === null ? null : structuredClone(draftState);
+  const slots: ShopSlot[] = [];
+  if (nextDraftState !== null) {
+    const eligible =
+      restrictedTide === null
+        ? undefined
+        : eligibleCardNumbersForTide(
+          nextDraftState,
+          cardDatabase,
+          restrictedTide,
         );
-        spentDreamsignPoolIds.push(template.id);
-        slots.push({
-          itemType: "dreamsign",
-          card: null,
-          dreamsign: createDreamsign(template),
-          basePrice: DREAMSIGN_PRICE,
-          discountPercent: 0,
-          purchased: false,
-        });
+    const drawnCardNumbers = drawAndSpendUniqueCards(
+      nextDraftState,
+      cardCount,
+      eligible,
+    );
+    for (const cardNumber of drawnCardNumbers) {
+      const card = cardDatabase.get(cardNumber);
+      if (card === undefined) {
         continue;
       }
-    }
-
-    // Default: card slot
-    const card = selectWeightedCard(
-      cardDatabase,
-      playerDeck,
-      allCards,
-      selectedPackageTides,
-      selectedCardNumbers,
-    );
-    if (card) {
-      selectedCardNumbers.add(card.cardNumber);
       slots.push({
         itemType: "card",
         card,
         dreamsign: null,
-        basePrice: STANDARD_CARD_PRICE,
+        basePrice: cardPrice,
         discountPercent: 0,
         purchased: false,
       });
     }
   }
 
-  // Apply discounts to 1-2 random slots
-  const discountableIndices = slots.map((_, i) => i);
+  // --- Dreamsign slots: drawn from the shared Dreamsign pool and spent. ---
+  let remainingPool = [...remainingDreamsignPoolIds];
+  const spentDreamsignPoolIds: string[] = [];
+  if (dreamsignTemplates.length > 0 && dreamsignCount > 0) {
+    const templatesById = new Map(
+      dreamsignTemplates.map((template) => [template.id, template]),
+    );
+    // For a Specialty Shop, only Dreamsigns of the restricted tide are
+    // eligible to be drawn, but the remaining pool still drops every drawn id.
+    const eligiblePool =
+      restrictedTide === null
+        ? remainingPool
+        : remainingPool.filter((id) =>
+          templatesById.get(id)?.packageTides.includes(restrictedTide),
+        );
+    const draw = drawDreamsignOptions(
+      eligiblePool,
+      dreamsignTemplates,
+      dreamsignCount,
+      restrictedTide === null ? dreamsignRegenerationPoolIds : undefined,
+    );
+    for (const dreamsign of draw.offeredDreamsigns) {
+      slots.push({
+        itemType: "dreamsign",
+        card: null,
+        dreamsign,
+        basePrice: DREAMSIGN_OMEN_PRICE,
+        discountPercent: 0,
+        purchased: false,
+      });
+    }
+    spentDreamsignPoolIds.push(...draw.offeredIds);
+    remainingPool = remainingPool.filter(
+      (id) => !draw.offeredIds.includes(id),
+    );
+  }
 
+  // --- Discounts: 1-2 random slots between 30% and 90% off. ---
   const discountCount = Math.random() < 0.5 ? 1 : 2;
-  const shuffled = discountableIndices.sort(() => Math.random() - 0.5);
-  for (let d = 0; d < discountCount && d < shuffled.length; d++) {
-    const idx = shuffled[d];
-    // 30-90% discount in increments of 10
+  const indices = slots.map((_, index) => index).sort(() => Math.random() - 0.5);
+  for (let d = 0; d < discountCount && d < indices.length; d += 1) {
+    const idx = indices[d];
     const discount = 30 + Math.floor(Math.random() * 7) * 10;
     slots[idx] = { ...slots[idx], discountPercent: discount };
   }
 
   return {
     slots,
-    remainingDreamsignPoolIds,
+    remainingDreamsignPoolIds: remainingPool,
     spentDreamsignPoolIds,
+    draftState: nextDraftState,
+    restrictedTide,
   };
-}
-
-/**
- * Generates specialty shop inventory: 4 curated cards weighted
- * toward the player's drafted tides.
- */
-export function generateSpecialtyShopInventory(
-  cardDatabase: Map<number, CardData>,
-  playerDeck: DeckEntry[],
-  selectedPackageTides: readonly PackageTideId[] = [],
-): ShopSlot[] {
-  const specialtyCards = Array.from(cardDatabase.values()).filter(
-    (card) => !isStarterCard(card),
-  );
-  const slots: ShopSlot[] = [];
-  const selectedCardNumbers = new Set<number>();
-
-  for (let i = 0; i < 4; i += 1) {
-    const card = selectWeightedCard(
-      cardDatabase,
-      playerDeck,
-      specialtyCards,
-      selectedPackageTides,
-      selectedCardNumbers,
-    );
-    if (card) {
-      selectedCardNumbers.add(card.cardNumber);
-      slots.push({
-        itemType: "card",
-        card,
-        dreamsign: null,
-        basePrice: SPECIALTY_CARD_PRICE,
-        discountPercent: 0,
-        purchased: false,
-      });
-    }
-  }
-
-  return slots;
 }

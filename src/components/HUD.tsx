@@ -128,6 +128,23 @@ export function HUD({
           </span>
         </div>
 
+        {/* Omens counter. Spent only on shop Dreamsign purchases and rerolls. */}
+        <div
+          className="flex shrink-0 items-baseline gap-1.5"
+          aria-label="Omens"
+          data-hud-omens=""
+        >
+          <span
+            className="text-sm font-bold tabular-nums md:text-base"
+            style={{ color: "#fbbf24" }}
+          >
+            {String(state.omens)}
+          </span>
+          <span className="text-xs md:text-sm" style={{ color: "#fbbf24" }}>
+            Omens
+          </span>
+        </div>
+
         {/* Deck size */}
         <div className="flex shrink-0 items-center gap-1.5">
           <span className="text-sm opacity-70 md:text-base" aria-label="Deck">

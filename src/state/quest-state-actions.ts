@@ -34,13 +34,21 @@ export function nextDeckEntryId(deck: readonly DeckEntry[]): string {
   return `deck-${String(deriveEntryIdCounter(deck) + 1)}`;
 }
 
+/**
+ * Clamps an essence amount to `[0, cap]`. Essence gained above the run's
+ * essence cap is lost; essence never drops below zero.
+ */
+export function clampEssence(value: number, cap: number): number {
+  return Math.max(0, Math.min(value, cap));
+}
+
 export function changeQuestEssence(
   prev: QuestState,
   delta: number,
 ): QuestState {
   return {
     ...prev,
-    essence: prev.essence + delta,
+    essence: clampEssence(prev.essence + delta, prev.essenceCap),
   };
 }
 

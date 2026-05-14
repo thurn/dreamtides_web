@@ -8,7 +8,6 @@ import { QuestFailedScreen } from "../screens/QuestFailedScreen";
 import { DreamscapeScreen } from "../screens/DreamscapeScreen";
 import { DraftSiteScreen } from "../screens/DraftSiteScreen";
 import { ShopScreen } from "../screens/ShopScreen";
-import { SpecialtyShopScreen } from "../screens/SpecialtyShopScreen";
 import { EssenceSiteScreen } from "../screens/EssenceSiteScreen";
 import { DreamsignOfferingScreen } from "../screens/DreamsignOfferingScreen";
 import { DreamsignDraftScreen } from "../screens/DreamsignDraftScreen";
@@ -122,12 +121,10 @@ function SiteScreen({
     );
   }
 
-  if (site.type === "Shop") {
+  if (site.type === "Shop" || site.type === "SpecialtyShop") {
+    // The Specialty Shop uses identical UI to the regular Shop; ShopScreen
+    // detects the variant from `site.type`.
     return <ShopScreen site={site} />;
-  }
-
-  if (site.type === "SpecialtyShop") {
-    return <SpecialtyShopScreen site={site} />;
   }
 
   if (site.type === "Essence") {

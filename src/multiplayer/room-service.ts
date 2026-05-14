@@ -217,6 +217,13 @@ function normalizeRewardDreamsign(
 function normalizeSiteRuntimeEntry(
   entry: SiteRuntimeState,
 ): SiteRuntimeState {
+  if (entry.kind === "shop") {
+    // RTDB strips `restrictedTide: null`, so restore it for regular shops.
+    return {
+      ...entry,
+      restrictedTide: entry.restrictedTide ?? null,
+    };
+  }
   if (entry.kind !== "reward") {
     return entry;
   }
@@ -253,6 +260,9 @@ function normalizeQuestState(questState: QuestState | null | undefined): QuestSt
   const defaults = createDefaultState();
   return {
     essence: questState.essence ?? defaults.essence,
+    essenceCap: questState.essenceCap ?? defaults.essenceCap,
+    omens: questState.omens ?? defaults.omens,
+    maxDreamsigns: questState.maxDreamsigns ?? defaults.maxDreamsigns,
     deck: normalizeDeck(questState.deck),
     dreamcaller: normalizeDreamcaller(questState.dreamcaller),
     resolvedPackage: normalizeResolvedPackage(questState.resolvedPackage),

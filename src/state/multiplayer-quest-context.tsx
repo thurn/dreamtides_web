@@ -50,6 +50,7 @@ import {
 } from "./quest-context";
 import {
   changeQuestEssence,
+  clampEssence,
   commitPreparedDraftCardPickInQuestState,
   completeQuestSite,
   prepareDraftCardPickInQuestState,
@@ -62,7 +63,6 @@ import { generateRewardSiteData } from "../rewards/reward-generator";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
   generateShopInventory,
-  generateSpecialtyShopInventory,
   rerollCost,
   shopSlotsToRuntime,
 } from "../shop/shop-generator";
@@ -243,16 +243,6 @@ function arraysEqual<T>(
   return (
     left.length === right.length &&
     left.every((value, index) => Object.is(value, right[index]))
-  );
-}
-
-function deckCardNumbersEqual(
-  left: readonly DeckEntry[],
-  rightCardNumbers: readonly number[],
-): boolean {
-  return arraysEqual(
-    left.map((entry) => entry.cardNumber),
-    rightCardNumbers,
   );
 }
 
@@ -521,9 +511,15 @@ function applyPreparedDreamJourneyEffect({
 
   switch (effect.type) {
     case "addEssence":
-      return { ...prev, essence: prev.essence + effect.amount };
+      return {
+        ...prev,
+        essence: clampEssence(prev.essence + effect.amount, prev.essenceCap),
+      };
     case "removeEssence":
-      return { ...prev, essence: prev.essence - effect.amount };
+      return {
+        ...prev,
+        essence: clampEssence(prev.essence - effect.amount, prev.essenceCap),
+      };
     case "removeRandomCards":
       return removeCards(prev, effect.count);
     case "addRandomCards":
@@ -1905,7 +1901,10 @@ export function MultiplayerQuestProvider({
         const next = completeSiteAndReturnToDreamscape(
           {
             ...room.questState,
-            essence: room.questState.essence + runtime.amount,
+            essence: clampEssence(
+              room.questState.essence + runtime.amount,
+              room.questState.essenceCap,
+            ),
             siteRuntime: {
               ...room.questState.siteRuntime,
               [siteId]: {
@@ -1947,53 +1946,34 @@ export function MultiplayerQuestProvider({
       const expectedRemainingDreamsignPool = [
         ...current.state.remainingDreamsignPool,
       ];
-      const expectedSelectedTides = [
-        ...(current.state.resolvedPackage?.selectedTides ?? []),
-      ];
-      const expectedDeckCardNumbers = current.state.deck.map(
-        (entry) => entry.cardNumber,
+      const expectedDraftSignature = stableStringify(
+        current.state.draftState,
       );
       let runtime: ShopSiteRuntime | null = null;
       let remainingDreamsignPool = expectedRemainingDreamsignPool;
+      let nextDraftState: DraftState | null = current.state.draftState;
 
       if (current.state.siteRuntime[site.id] === undefined) {
-        if (specialtyOnly) {
-          const generated = generateSpecialtyShopInventory(
-            current.questContent.cardDatabase,
-            current.state.deck,
-            expectedSelectedTides,
-          );
-          const slots = site.isEnhanced
-            ? generated.map((slot) => ({
-              ...slot,
-              basePrice: 0,
-              discountPercent: 0,
-            }))
-            : generated;
-          runtime = {
-            kind: "shop",
-            slots: shopSlotsToRuntime(slots),
-            rerollCount: 0,
-            remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
-          };
-        } else {
-          const generated = generateShopInventory(
-            current.questContent.cardDatabase,
-            current.state.deck,
-            {
-              selectedPackageTides: expectedSelectedTides,
-              remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
-              dreamsignTemplates: current.questContent.dreamsignTemplates,
-            },
-          );
-          runtime = {
-            kind: "shop",
-            slots: shopSlotsToRuntime(generated.slots),
-            rerollCount: 0,
-            remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
-          };
-          remainingDreamsignPool = generated.remainingDreamsignPoolIds;
-        }
+        const generated = generateShopInventory({
+          cardDatabase: current.questContent.cardDatabase,
+          draftState: current.state.draftState,
+          remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
+          dreamsignTemplates: current.questContent.dreamsignTemplates,
+          dreamsignRegenerationPoolIds:
+            current.state.resolvedPackage?.dreamsignPoolIds ?? [],
+          specialtyTides: specialtyOnly
+            ? (current.state.resolvedPackage?.mandatoryTides ?? [])
+            : [],
+        });
+        runtime = {
+          kind: "shop",
+          slots: shopSlotsToRuntime(generated.slots),
+          rerollCount: 0,
+          remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+          restrictedTide: generated.restrictedTide,
+        };
+        remainingDreamsignPool = generated.remainingDreamsignPoolIds;
+        nextDraftState = generated.draftState;
       }
 
       const now = new Date().toISOString();
@@ -2016,11 +1996,8 @@ export function MultiplayerQuestProvider({
               room.questState.remainingDreamsignPool,
               expectedRemainingDreamsignPool,
             ) ||
-            !arraysEqual(
-              room.questState.resolvedPackage?.selectedTides ?? [],
-              expectedSelectedTides,
-            ) ||
-            !deckCardNumbersEqual(room.questState.deck, expectedDeckCardNumbers)
+            stableStringify(room.questState.draftState)
+              !== expectedDraftSignature
           ) {
             return room;
           }
@@ -2030,6 +2007,7 @@ export function MultiplayerQuestProvider({
             questState: {
               ...room.questState,
               remainingDreamsignPool,
+              draftState: nextDraftState,
               siteRuntime: {
                 ...room.questState.siteRuntime,
                 [site.id]: runtime,
@@ -2108,7 +2086,12 @@ export function MultiplayerQuestProvider({
         }
 
         const price = runtimeSlotPrice(slot);
-        if (price > room.questState.essence) {
+        // Cards cost essence; Dreamsigns cost omens.
+        const payInOmens = slot.itemType === "dreamsign";
+        const availableCurrency = payInOmens
+          ? room.questState.omens
+          : room.questState.essence;
+        if (price > availableCurrency) {
           return room;
         }
         const purgedDreamsign =
@@ -2124,16 +2107,25 @@ export function MultiplayerQuestProvider({
           return room;
         }
 
-        let next: QuestState = {
-          ...room.questState,
-          essence: room.questState.essence - price,
-        };
+        let next: QuestState = payInOmens
+          ? {
+            ...room.questState,
+            omens: room.questState.omens - price,
+          }
+          : {
+            ...room.questState,
+            essence: clampEssence(
+              room.questState.essence - price,
+              room.questState.essenceCap,
+            ),
+          };
         const summary: Record<string, unknown> = {
           siteId,
           slotIndex,
           itemType: slot.itemType,
           basePrice: slot.basePrice,
           discountedPrice: price,
+          currency: payInOmens ? "omens" : "essence",
         };
 
         if (slot.itemType === "card") {
@@ -2218,26 +2210,24 @@ export function MultiplayerQuestProvider({
       return;
     }
 
-    const expectedEssence = current.state.essence;
+    const expectedOmens = current.state.omens;
     const cost = rerollCost(0, site.isEnhanced);
-    if (cost > expectedEssence) {
+    if (cost > expectedOmens) {
       return;
     }
-    const expectedSelectedTides = [
-      ...(current.state.resolvedPackage?.selectedTides ?? []),
-    ];
-    const expectedDeckCardNumbers = current.state.deck.map(
-      (entry) => entry.cardNumber,
-    );
-    const generated = generateShopInventory(
-      current.questContent.cardDatabase,
-      current.state.deck,
-      {
-        selectedPackageTides: expectedSelectedTides,
-        remainingDreamsignPoolIds: expectedRuntime.remainingDreamsignPoolIds,
-        dreamsignTemplates: current.questContent.dreamsignTemplates,
-      },
-    );
+    const expectedDraftSignature = stableStringify(current.state.draftState);
+    const generated = generateShopInventory({
+      cardDatabase: current.questContent.cardDatabase,
+      draftState: current.state.draftState,
+      remainingDreamsignPoolIds: expectedRuntime.remainingDreamsignPoolIds,
+      dreamsignTemplates: current.questContent.dreamsignTemplates,
+      dreamsignRegenerationPoolIds:
+        current.state.resolvedPackage?.dreamsignPoolIds ?? [],
+      specialtyTides:
+        expectedRuntime.restrictedTide === null
+          ? []
+          : [expectedRuntime.restrictedTide],
+    });
     const replacements = shopSlotsToRuntime(generated.slots);
     let replacementIndex = 0;
     const rerollCount = expectedRuntime.rerollCount + 1;
@@ -2265,7 +2255,7 @@ export function MultiplayerQuestProvider({
           runtime === undefined ||
           runtime.kind !== "shop" ||
           runtime.rerollCount !== expectedRuntime.rerollCount ||
-          room.questState.essence !== expectedEssence ||
+          room.questState.omens !== expectedOmens ||
           !arraysEqual(
             runtime.remainingDreamsignPoolIds,
             expectedRuntime.remainingDreamsignPoolIds,
@@ -2275,11 +2265,8 @@ export function MultiplayerQuestProvider({
             room.questState.remainingDreamsignPool,
             expectedRuntime.remainingDreamsignPoolIds,
           ) ||
-          !arraysEqual(
-            room.questState.resolvedPackage?.selectedTides ?? [],
-            expectedSelectedTides,
-          ) ||
-          !deckCardNumbersEqual(room.questState.deck, expectedDeckCardNumbers)
+          stableStringify(room.questState.draftState)
+            !== expectedDraftSignature
         ) {
           return room;
         }
@@ -2288,8 +2275,9 @@ export function MultiplayerQuestProvider({
           ...room,
           questState: {
             ...room.questState,
-            essence: room.questState.essence - cost,
+            omens: room.questState.omens - cost,
             remainingDreamsignPool: generated.remainingDreamsignPoolIds,
+            draftState: generated.draftState,
             siteRuntime: {
               ...room.questState.siteRuntime,
               [site.id]: {

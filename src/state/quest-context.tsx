@@ -50,6 +50,7 @@ import { deriveEntryIdCounter } from "./deck-entry-ids";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { createStartInBattleState } from "../runtime/start-in-battle-state";
 import {
+  clampEssence,
   completeQuestSite,
   setQuestScreen,
   startQuestFromDreamcaller,
@@ -58,7 +59,6 @@ import { generateRewardSiteData } from "../rewards/reward-generator";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
   generateShopInventory,
-  generateSpecialtyShopInventory,
   rerollCost,
   shopSlotsToRuntime,
 } from "../shop/shop-generator";
@@ -441,13 +441,14 @@ function applyDreamJourneyEffect({
   };
 
   const changeEssence = (state: QuestState, delta: number): QuestState => {
+    const newValue = clampEssence(state.essence + delta, state.essenceCap);
     logEvent("essence_changed", {
       oldValue: state.essence,
-      newValue: state.essence + delta,
+      newValue,
       delta,
       source: "dream_journey",
     });
-    return { ...state, essence: state.essence + delta };
+    return { ...state, essence: newValue };
   };
 
   switch (effect.type) {
@@ -626,6 +627,9 @@ function applyTemptingOfferEffect({
 export function createDefaultState(): QuestState {
   return {
     essence: 250,
+    essenceCap: 500,
+    omens: 0,
+    maxDreamsigns: 12,
     deck: [],
     dreamcaller: null,
     resolvedPackage: null,
@@ -755,7 +759,7 @@ export function QuestProvider({
   const changeEssence = useCallback((delta: number, source: string) => {
     setState((prev) => {
       const oldValue = prev.essence;
-      const newValue = oldValue + delta;
+      const newValue = clampEssence(oldValue + delta, prev.essenceCap);
       logEvent("essence_changed", {
         oldValue,
         newValue,
@@ -960,7 +964,10 @@ export function QuestProvider({
           next = { ...next, dreamsigns };
         } else {
           const oldValue = next.essence;
-          const newValue = oldValue + reward.essenceAmount;
+          const newValue = clampEssence(
+            oldValue + reward.essenceAmount,
+            next.essenceCap,
+          );
           logEvent("essence_changed", {
             oldValue,
             newValue,
@@ -1196,7 +1203,7 @@ export function QuestProvider({
       }
 
       const oldValue = prev.essence;
-      const newValue = oldValue + runtime.amount;
+      const newValue = clampEssence(oldValue + runtime.amount, prev.essenceCap);
       logEvent("essence_changed", {
         oldValue,
         newValue,
@@ -1238,40 +1245,16 @@ export function QuestProvider({
           return prev;
         }
 
-        const selectedPackageTides = prev.resolvedPackage?.selectedTides ?? [];
-        if (specialtyOnly) {
-          const generated = generateSpecialtyShopInventory(
-            cardDatabase,
-            prev.deck,
-            selectedPackageTides,
-          );
-          const slots = site.isEnhanced
-            ? generated.map((slot) => ({
-              ...slot,
-              basePrice: 0,
-              discountPercent: 0,
-            }))
-            : generated;
-          const runtime: ShopSiteRuntime = {
-            kind: "shop",
-            slots: shopSlotsToRuntime(slots),
-            rerollCount: 0,
-            remainingDreamsignPoolIds: prev.remainingDreamsignPool,
-          };
-
-          return {
-            ...prev,
-            siteRuntime: {
-              ...prev.siteRuntime,
-              [site.id]: runtime,
-            },
-          };
-        }
-
-        const generated = generateShopInventory(cardDatabase, prev.deck, {
-          selectedPackageTides,
+        const generated = generateShopInventory({
+          cardDatabase,
+          draftState: prev.draftState,
           remainingDreamsignPoolIds: prev.remainingDreamsignPool,
           dreamsignTemplates: questContent.dreamsignTemplates,
+          dreamsignRegenerationPoolIds:
+            prev.resolvedPackage?.dreamsignPoolIds ?? [],
+          specialtyTides: specialtyOnly
+            ? (prev.resolvedPackage?.mandatoryTides ?? [])
+            : [],
         });
         logEvent("dreamsign_pool_updated", {
           source: "shop_inventory_revealed",
@@ -1284,11 +1267,13 @@ export function QuestProvider({
           slots: shopSlotsToRuntime(generated.slots),
           rerollCount: 0,
           remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+          restrictedTide: generated.restrictedTide,
         };
 
         return {
           ...prev,
           remainingDreamsignPool: generated.remainingDreamsignPoolIds,
+          draftState: generated.draftState,
           siteRuntime: {
             ...prev.siteRuntime,
             [site.id]: runtime,
@@ -1315,7 +1300,10 @@ export function QuestProvider({
         }
 
         const price = runtimeSlotPrice(slot);
-        if (price > prev.essence) {
+        // Cards cost essence; Dreamsigns cost omens.
+        const payInOmens = slot.itemType === "dreamsign";
+        const availableCurrency = payInOmens ? prev.omens : prev.essence;
+        if (price > availableCurrency) {
           return prev;
         }
         const purgedDreamsign =
@@ -1331,16 +1319,29 @@ export function QuestProvider({
           return prev;
         }
 
-        const oldValue = prev.essence;
-        const newValue = oldValue - price;
-        logEvent("essence_changed", {
-          oldValue,
-          newValue,
-          delta: -price,
-          source: "shop_purchase",
-        });
-
-        let next: QuestState = { ...prev, essence: newValue };
+        let next: QuestState = prev;
+        if (payInOmens) {
+          const newOmens = prev.omens - price;
+          logEvent("omens_changed", {
+            oldValue: prev.omens,
+            newValue: newOmens,
+            delta: -price,
+            source: "shop_purchase",
+          });
+          next = { ...next, omens: newOmens };
+        } else {
+          const newEssence = clampEssence(
+            prev.essence - price,
+            prev.essenceCap,
+          );
+          logEvent("essence_changed", {
+            oldValue: prev.essence,
+            newValue: newEssence,
+            delta: -price,
+            source: "shop_purchase",
+          });
+          next = { ...next, essence: newEssence };
+        }
         const site = findSite(prev, siteId);
         const isSpecialtyShop = site?.type === "SpecialtyShop";
         if (slot.itemType === "card") {
@@ -1359,7 +1360,7 @@ export function QuestProvider({
               card?.name ?? `Unknown Card #${String(slot.cardNumber)}`,
             basePrice: slot.basePrice,
             discountedPrice: price,
-            essenceRemaining: newValue,
+            essenceRemaining: next.essence,
           };
           if (isSpecialtyShop) {
             purchaseDetails.isSpecialtyShop = true;
@@ -1397,7 +1398,7 @@ export function QuestProvider({
             dreamsignName: slot.dreamsign.name,
             basePrice: slot.basePrice,
             discountedPrice: price,
-            essenceRemaining: newValue,
+            omensRemaining: next.omens,
           });
           next = {
             ...next,
@@ -1444,14 +1445,19 @@ export function QuestProvider({
         }
 
         const cost = rerollCost(0, site.isEnhanced);
-        if (cost > prev.essence) {
+        if (cost > prev.omens) {
           return prev;
         }
 
-        const generated = generateShopInventory(cardDatabase, prev.deck, {
-          selectedPackageTides: prev.resolvedPackage?.selectedTides ?? [],
+        const generated = generateShopInventory({
+          cardDatabase,
+          draftState: prev.draftState,
           remainingDreamsignPoolIds: runtime.remainingDreamsignPoolIds,
           dreamsignTemplates: questContent.dreamsignTemplates,
+          dreamsignRegenerationPoolIds:
+            prev.resolvedPackage?.dreamsignPoolIds ?? [],
+          specialtyTides:
+            runtime.restrictedTide === null ? [] : [runtime.restrictedTide],
         });
         const replacements = shopSlotsToRuntime(generated.slots);
         let replacementIndex = 0;
@@ -1462,11 +1468,10 @@ export function QuestProvider({
           replacementIndex += 1;
           return replacement ?? candidate;
         });
-        const oldValue = prev.essence;
-        const newValue = oldValue - cost;
-        logEvent("essence_changed", {
-          oldValue,
-          newValue,
+        const newOmens = prev.omens - cost;
+        logEvent("omens_changed", {
+          oldValue: prev.omens,
+          newValue: newOmens,
           delta: -cost,
           source: "shop_reroll",
         });
@@ -1483,8 +1488,9 @@ export function QuestProvider({
 
         return {
           ...prev,
-          essence: newValue,
+          omens: newOmens,
           remainingDreamsignPool: generated.remainingDreamsignPoolIds,
+          draftState: generated.draftState,
           siteRuntime: {
             ...prev.siteRuntime,
             [site.id]: {

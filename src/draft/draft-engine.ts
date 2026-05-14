@@ -45,6 +45,51 @@ function weightedSample(
   return selected;
 }
 
+/**
+ * Draws up to `count` unique card numbers from the run draft multiset,
+ * spending each drawn card from `state.remainingCopiesByCard`. When fewer than
+ * `count` eligible unique cards remain the multiset is first recreated from
+ * the run's fixed pool, mirroring `revealOffer`. Mutates `state`.
+ *
+ * `eligibleCardNumbers`, when provided, restricts the draw to that subset
+ * (used by Specialty Shops to feature a single tide).
+ */
+export function drawAndSpendUniqueCards(
+  state: DraftState,
+  count: number,
+  eligibleCardNumbers?: ReadonlySet<number>,
+): number[] {
+  const buildEntries = (
+    copies: Record<string, number>,
+  ): Array<{ cardNumber: number; weight: number }> => {
+    const entries: Array<{ cardNumber: number; weight: number }> = [];
+    for (const [cardNumberText, copies_] of Object.entries(copies)) {
+      const cardNumber = Number(cardNumberText);
+      if (!Number.isInteger(cardNumber) || copies_ <= 0) {
+        continue;
+      }
+      if (
+        eligibleCardNumbers !== undefined &&
+        !eligibleCardNumbers.has(cardNumber)
+      ) {
+        continue;
+      }
+      entries.push({ cardNumber, weight: copies_ });
+    }
+    return entries;
+  };
+
+  let entries = buildEntries(state.remainingCopiesByCard);
+  if (entries.length < count) {
+    state.remainingCopiesByCard = { ...state.draftPoolCopiesByCard };
+    entries = buildEntries(state.remainingCopiesByCard);
+  }
+
+  const drawn = weightedSample(entries, count);
+  spendShownOffer(state.remainingCopiesByCard, drawn);
+  return drawn;
+}
+
 /** Build a 4-unique-card offer weighted by remaining copies. */
 function buildOffer(ctx: PackContext): number[] {
   const entries: Array<{ cardNumber: number; weight: number }> = [];

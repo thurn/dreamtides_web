@@ -815,6 +815,7 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -855,6 +856,7 @@ describe("MultiplayerQuestProvider", () => {
     ]);
     expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
       kind: "shop",
+      restrictedTide: null,
       slots: [
         {
           itemType: "card",
@@ -878,6 +880,7 @@ describe("MultiplayerQuestProvider", () => {
         itemType: "card",
         basePrice: 100,
         discountedPrice: 50,
+        currency: "essence",
         cardNumber: 101,
       },
     });
@@ -892,6 +895,7 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -914,6 +918,7 @@ describe("MultiplayerQuestProvider", () => {
         siteRuntime: {
           "site-1": {
             kind: "shop",
+            restrictedTide: null,
             slots: [
               {
                 itemType: "card",
@@ -959,6 +964,7 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -997,6 +1003,7 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1042,6 +1049,7 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1081,20 +1089,22 @@ describe("MultiplayerQuestProvider", () => {
     ]);
   });
 
-  it("buys a shared shop Dreamsign slot", () => {
+  it("buys a shared shop Dreamsign slot with omens", () => {
     const captured: QuestContextValue[] = [];
     const dreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
     const questState: QuestState = {
       ...createDefaultState(),
       essence: 250,
+      omens: 5,
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "dreamsign",
               dreamsign,
-              basePrice: 150,
+              basePrice: 2,
               discountPercent: 0,
               purchased: false,
             },
@@ -1118,15 +1128,18 @@ describe("MultiplayerQuestProvider", () => {
     captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
     const nextRoom = latestRoomTransactionUpdater()?.(session.room);
 
-    expect(nextRoom?.questState?.essence).toBe(100);
+    // Dreamsigns are paid for in omens; essence is untouched.
+    expect(nextRoom?.questState?.essence).toBe(250);
+    expect(nextRoom?.questState?.omens).toBe(3);
     expect(nextRoom?.questState?.dreamsigns).toEqual([dreamsign]);
     expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
       kind: "shop",
+      restrictedTide: null,
       slots: [
         {
           itemType: "dreamsign",
           dreamsign,
-          basePrice: 150,
+          basePrice: 2,
           discountPercent: 0,
           purchased: true,
         },
@@ -1147,6 +1160,7 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "dreamsign",
@@ -1189,10 +1203,12 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       essence: 200,
+      omens: 3,
       remainingDreamsignPool: [],
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1238,9 +1254,10 @@ describe("MultiplayerQuestProvider", () => {
     const nextRoom = updater?.(session.room);
     const runtime = nextRoom?.questState?.siteRuntime["site-1"];
 
-    // Reroll costs 50 essence exactly once and advances rerollCount so the
-    // affordance disables for the rest of the visit.
-    expect(nextRoom?.questState?.essence).toBe(150);
+    // Reroll costs 1 omen exactly once and advances rerollCount so the
+    // affordance disables for the rest of the visit. Essence is untouched.
+    expect(nextRoom?.questState?.essence).toBe(200);
+    expect(nextRoom?.questState?.omens).toBe(2);
     expect(runtime?.kind).toBe("shop");
     expect(runtime?.kind === "shop" ? runtime.rerollCount : null).toBe(1);
     // Purchased slots are preserved verbatim.
@@ -1251,9 +1268,6 @@ describe("MultiplayerQuestProvider", () => {
       discountPercent: 0,
       purchased: true,
     });
-    // The unsold slot is replaced with fresh inventory.
-    const replacedSlot = runtime?.kind === "shop" ? runtime.slots[1] : null;
-    expect(replacedSlot?.itemType).toBe("card");
     expect(nextRoom?.actionLog?.["action-1"]).toEqual({
       timestamp: nextRoom?.metadata.updatedAt,
       actorId: "client-1",
@@ -1261,7 +1275,7 @@ describe("MultiplayerQuestProvider", () => {
       source: "shop_reroll",
       summary: {
         siteId: "site-1",
-        rerollCost: 50,
+        rerollCost: 1,
         rerollCount: 1,
       },
     });
@@ -1284,6 +1298,7 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1328,10 +1343,12 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       essence: 200,
+      omens: 3,
       remainingDreamsignPool: [],
       siteRuntime: {
         "site-1": {
           kind: "shop",
+          restrictedTide: null,
           slots: [
             {
               itemType: "card",

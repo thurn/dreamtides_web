@@ -63,6 +63,9 @@ vi.mock("../logging", () => ({
 function makeState(overrides?: Partial<QuestState>): QuestState {
   return {
     essence: 250,
+    essenceCap: 500,
+    omens: 0,
+    maxDreamsigns: 12,
     deck: [],
     dreamcaller: null,
     resolvedPackage: null,

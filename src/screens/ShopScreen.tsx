@@ -39,7 +39,8 @@ interface ShopScreenProps {
  */
 export function ShopScreen({ site }: ShopScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
-  const { essence } = state;
+  const { essence, omens } = state;
+  const isSpecialty = site.type === "SpecialtyShop";
   const runtime = state.siteRuntime[site.id];
   const slots = useMemo<ShopSlot[]>(
     () =>
@@ -56,7 +57,8 @@ export function ShopScreen({ site }: ShopScreenProps) {
     [site.isEnhanced],
   );
   const rerollUsed = rerollCount > 0;
-  const canAffordReroll = currentRerollCost <= essence;
+  // Rerolls are paid for in omens.
+  const canAffordReroll = currentRerollCost <= omens;
   const rerollAvailable = !rerollUsed && canAffordReroll;
 
   const visibleCardOffers = useMemo(
@@ -80,9 +82,9 @@ export function ShopScreen({ site }: ShopScreenProps) {
 
   useEffect(() => {
     if (runtime === undefined) {
-      mutations.ensureShopRuntime(site, false);
+      mutations.ensureShopRuntime(site, isSpecialty);
     }
-  }, [mutations, runtime, site]);
+  }, [isSpecialty, mutations, runtime, site]);
 
   useEffect(() => {
     mutations.setCardSourceDebug(cardSourceDebugState, "shop_cards_shown");
@@ -138,8 +140,13 @@ export function ShopScreen({ site }: ShopScreenProps) {
           className="text-2xl font-bold tracking-wide md:text-3xl"
           style={{ color: "#a855f7" }}
         >
-          Shop
+          {isSpecialty ? "Specialty Shop" : "Shop"}
         </h2>
+        {isSpecialty && runtime.restrictedTide !== null && (
+          <p className="mt-1 text-sm opacity-50">
+            {`Featuring the ${runtime.restrictedTide} tide`}
+          </p>
+        )}
         {site.isEnhanced && (
           <span
             className="mt-2 inline-block rounded-full px-3 py-1 text-sm font-bold"
@@ -168,7 +175,11 @@ export function ShopScreen({ site }: ShopScreenProps) {
             key={`shop-slot-${String(index)}`}
             slot={slot}
             index={index}
-            canAfford={effectivePrice(slot) <= essence}
+            canAfford={
+              slot.itemType === "dreamsign"
+                ? effectivePrice(slot) <= omens
+                : effectivePrice(slot) <= essence
+            }
             onBuy={handleBuy}
             onCardClick={setOverlayCard}
           />
@@ -239,11 +250,8 @@ function RerollButton({ cost, used, available, onClick }: RerollButtonProps) {
       ) : (
         <>
           <span>{`Reroll Shop · ${String(cost)} `}</span>
-          <span
-            style={{ color: "var(--color-essence)" }}
-            data-shop-essence-label=""
-          >
-            Essence
+          <span style={{ color: "#fbbf24" }} data-shop-omens-label="">
+            Omens
           </span>
         </>
       )}
@@ -341,6 +349,7 @@ function ShopSlotCard({
         </div>
         <PriceButton
           price={price}
+          currency="omens"
           canAfford={canAfford}
           onClick={() => onBuy(index)}
         />
@@ -379,6 +388,7 @@ function ShopSlotCard({
         </HoverPopover>
         <PriceButton
           price={price}
+          currency="essence"
           canAfford={canAfford}
           onClick={() => onBuy(index)}
         />
@@ -393,13 +403,17 @@ function ShopSlotCard({
 /** Renders the Buy button with the effective (post-discount) price. */
 function PriceButton({
   price,
+  currency,
   canAfford,
   onClick,
 }: {
   price: number;
+  currency: "essence" | "omens";
   canAfford: boolean;
   onClick: () => void;
 }) {
+  const currencyColor =
+    currency === "omens" ? "#fbbf24" : "var(--color-essence)";
   return (
     <button
       className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-bold transition-opacity"
@@ -414,18 +428,18 @@ function PriceButton({
     >
       <span>Buy</span>
       <span
-        style={{ color: "var(--color-essence)" }}
+        style={{ color: currencyColor }}
         className="tabular-nums"
-        data-shop-essence-price=""
+        data-shop-price=""
       >
         {String(price)}
       </span>
       <span
         className="text-xs"
-        style={{ color: "var(--color-essence)" }}
-        data-shop-essence-label=""
+        style={{ color: currencyColor }}
+        data-shop-currency-label=""
       >
-        Essence
+        {currency === "omens" ? "Omens" : "Essence"}
       </span>
     </button>
   );

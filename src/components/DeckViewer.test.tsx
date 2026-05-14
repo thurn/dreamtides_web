@@ -130,6 +130,9 @@ function makeMutations(): QuestMutations {
 function makeState(): QuestState {
   return {
     essence: 120,
+    essenceCap: 500,
+    omens: 0,
+    maxDreamsigns: 12,
     deck: [
       {
         entryId: "entry-1",
