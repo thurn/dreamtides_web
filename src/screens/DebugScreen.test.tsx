@@ -93,6 +93,7 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
 
 function makeDraftState(): DraftState {
   return {
+    draftPoolCopiesByCard: { "1": 3, "2": 1 },
     remainingCopiesByCard: { "1": 3, "2": 1 },
     currentOffer: [1, 2],
     activeSiteId: "site-1",

@@ -130,7 +130,7 @@ describe("completeBattleSiteVictory", () => {
     expect(mocks.generateNewNodes).toHaveBeenCalledWith(
       input.atlasSnapshot,
       "dreamscape-1",
-      2,
+      3,
       { playerHasBanes: true },
     );
     expect(input.mutations.updateAtlas).toHaveBeenCalledWith(updatedAtlas);

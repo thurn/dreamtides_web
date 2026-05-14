@@ -121,6 +121,11 @@ function normalizeDraftState(draftState: DraftState | null | undefined): DraftSt
   }
   return {
     ...draftState,
+    draftPoolCopiesByCard:
+      draftState.draftPoolCopiesByCard
+      ?? draftState.remainingCopiesByCard
+      ?? {},
+    remainingCopiesByCard: draftState.remainingCopiesByCard ?? {},
     currentOffer: draftState.currentOffer ?? [],
     activeSiteId: draftState.activeSiteId ?? null,
   };

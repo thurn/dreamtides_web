@@ -312,6 +312,7 @@ describe("room service", () => {
     expect(ready.room.questState?.draftState).toEqual({
       pickNumber: 1,
       sitePicksCompleted: 0,
+      draftPoolCopiesByCard: { "42": 2 },
       remainingCopiesByCard: { "42": 2 },
       currentOffer: [],
       activeSiteId: null,

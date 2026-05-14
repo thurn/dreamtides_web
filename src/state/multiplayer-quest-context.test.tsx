@@ -560,6 +560,12 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       draftState: {
+        draftPoolCopiesByCard: {
+          "201": 1,
+          "202": 1,
+          "203": 1,
+          "204": 1,
+        },
         remainingCopiesByCard: {
           "201": 1,
           "202": 1,
@@ -641,6 +647,12 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       draftState: {
+        draftPoolCopiesByCard: {
+          "201": 1,
+          "202": 1,
+          "203": 1,
+          "204": 1,
+        },
         remainingCopiesByCard: {
           "201": 1,
           "202": 1,

@@ -76,7 +76,8 @@ function buildResolvedPackage(
 function makeDraftState(
   overrides: Partial<DraftState> = {},
 ): DraftState {
-  return {
+  const base: DraftState = {
+    draftPoolCopiesByCard: {},
     remainingCopiesByCard: {},
     currentOffer: [],
     activeSiteId: null,
@@ -84,6 +85,12 @@ function makeDraftState(
     sitePicksCompleted: 0,
     ...overrides,
   };
+  // Default the immutable run pool to a copy of the remaining copies when a
+  // test only specifies the latter.
+  if (overrides.draftPoolCopiesByCard === undefined) {
+    base.draftPoolCopiesByCard = { ...base.remainingCopiesByCard };
+  }
+  return base;
 }
 
 beforeEach(() => {
@@ -251,26 +258,34 @@ describe("fixed multiset offer generation", () => {
     });
   });
 
-  it("ends the site cleanly when fewer than 4 unique names remain", () => {
+  it("recreates the multiset when fewer than 4 unique cards remain", () => {
     const cardDatabase = buildDB(
       Array.from({ length: 7 }, (_, index) => makeCard(index + 1)),
     );
     const state = makeDraftState({
-      remainingCopiesByCard: {
+      draftPoolCopiesByCard: {
         "1": 1,
         "2": 1,
         "3": 1,
+        "4": 1,
+        "5": 1,
+        "6": 1,
+        "7": 1,
+      },
+      remainingCopiesByCard: {
+        "1": 1,
+        "2": 1,
       },
     });
 
     enterDraftSite(state, "site-a", cardDatabase);
 
-    expect(state.currentOffer).toEqual([]);
-    expect(state.remainingCopiesByCard).toEqual({
-      "1": 1,
-      "2": 1,
-      "3": 1,
-    });
+    // The remaining copies held only 2 unique cards, so the multiset is
+    // recreated from the run's fixed pool and a fresh offer is revealed.
+    expect(state.currentOffer).toHaveLength(4);
+    expect(
+      getLogEntries().some((entry) => entry.event === "draft_pool_recreated"),
+    ).toBe(true);
   });
 
   it("still completes after SITE_PICKS picks when offers remain", () => {

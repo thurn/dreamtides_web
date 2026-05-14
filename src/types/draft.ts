@@ -16,6 +16,12 @@ export interface PackContext {
 
 /** Persistent draft state, survives across dreamscape visits. */
 export interface DraftState {
+  /**
+   * The full fixed run multiset, keyed by card number. Immutable for the run:
+   * when `remainingCopiesByCard` is exhausted the multiset is recreated from
+   * this snapshot.
+   */
+  draftPoolCopiesByCard: Record<string, number>;
   /** Remaining copies for each card number in the fixed run pool. */
   remainingCopiesByCard: Record<string, number>;
   /** Current 4-unique-card offer. */

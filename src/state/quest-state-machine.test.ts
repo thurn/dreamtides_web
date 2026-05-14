@@ -129,6 +129,10 @@ function makeCard(cardNumber: number, tides: CardData["tides"] = []): CardData {
 
 function makeDraftState(): DraftState {
   return {
+    draftPoolCopiesByCard: {
+      "101": 1,
+      "202": 2,
+    },
     remainingCopiesByCard: {
       "101": 1,
       "202": 2,
@@ -452,6 +456,10 @@ describe("Task 02 state transitions", () => {
     const next = applyDraftState(createDefaultState(), makeDraftState());
 
     expect(next.draftState).toEqual({
+      draftPoolCopiesByCard: {
+        "101": 1,
+        "202": 2,
+      },
       remainingCopiesByCard: {
         "101": 1,
         "202": 2,

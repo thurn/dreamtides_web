@@ -319,6 +319,12 @@ function makeCardDatabase(): Map<number, CardData> {
 
 function makeDraftState(): DraftState {
   return {
+    draftPoolCopiesByCard: {
+      "201": 1,
+      "202": 1,
+      "203": 1,
+      "204": 1,
+    },
     remainingCopiesByCard: {
       "201": 1,
       "202": 1,
@@ -858,6 +864,7 @@ describe("DraftSiteScreen", () => {
           },
         ],
         draftState: {
+          draftPoolCopiesByCard: {},
           remainingCopiesByCard: {},
           currentOffer: [],
           activeSiteId: "site-1",
@@ -1039,6 +1046,12 @@ describe("DraftSiteScreen", () => {
       // Draft pool seeded with cards 101..104 only — bootstrap must select
       // exactly these four numbers in some order.
       const unEnteredDraftState: DraftState = {
+        draftPoolCopiesByCard: {
+          "101": 1,
+          "102": 1,
+          "103": 1,
+          "104": 1,
+        },
         remainingCopiesByCard: {
           "101": 1,
           "102": 1,

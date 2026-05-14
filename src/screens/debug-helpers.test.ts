@@ -32,6 +32,7 @@ function makeDraftState(
   overrides: Partial<DraftState> = {},
 ): DraftState {
   return {
+    draftPoolCopiesByCard: {},
     remainingCopiesByCard: {},
     currentOffer: [],
     activeSiteId: null,

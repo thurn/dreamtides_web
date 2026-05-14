@@ -206,6 +206,12 @@ describe("quest state actions", () => {
     const prev: QuestState = {
       ...createDefaultState(),
       draftState: {
+        draftPoolCopiesByCard: {
+          "201": 1,
+          "202": 1,
+          "203": 1,
+          "204": 1,
+        },
         remainingCopiesByCard: {
           "201": 1,
           "202": 1,
@@ -253,6 +259,12 @@ describe("quest state actions", () => {
     const prev: QuestState = {
       ...createDefaultState(),
       draftState: {
+        draftPoolCopiesByCard: {
+          "201": 1,
+          "202": 1,
+          "203": 1,
+          "204": 1,
+        },
         remainingCopiesByCard: {
           "201": 1,
           "202": 1,
@@ -322,6 +334,10 @@ describe("quest state actions", () => {
       STARTER_CARD_NUMBERS.map((_, index) => `deck-${String(index + 1)}`),
     );
     expect(next.draftState).toEqual({
+      draftPoolCopiesByCard: {
+        "101": 2,
+        "202": 1,
+      },
       remainingCopiesByCard: {
         "101": 2,
         "202": 1,

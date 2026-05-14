@@ -262,8 +262,13 @@ export function resolveDreamcallerPackage(
       candidate.draftPoolSize >= PREFERRED_MIN_POOL_SIZE &&
       candidate.draftPoolSize <= PREFERRED_MAX_POOL_SIZE,
   );
+  const usePreferred = preferredCandidates.length > 0;
+  const targetCenter = usePreferred
+    ? (PREFERRED_MIN_POOL_SIZE + PREFERRED_MAX_POOL_SIZE) / 2
+    : (LEGAL_MIN_POOL_SIZE + LEGAL_MAX_POOL_SIZE) / 2;
   const selectedCandidate = chooseBestCandidate(
-    preferredCandidates.length > 0 ? preferredCandidates : legalCandidates,
+    usePreferred ? preferredCandidates : legalCandidates,
+    targetCenter,
   );
   const doubledCardCount = countDoubledCards(
     selectedCandidate.draftPoolCopiesByCard,
@@ -353,12 +358,19 @@ function buildCombinations<T>(values: readonly T[], size: number): T[][] {
   return combinations;
 }
 
+/**
+ * Picks the candidate whose draft pool size is closest to the centre of the
+ * target range. Ties (equal distance from centre) are broken lexicographically
+ * by optional-subset key so resolution stays deterministic.
+ */
 function chooseBestCandidate<
   T extends { optionalSubset: readonly PackageTideId[]; draftPoolSize: number },
->(candidates: readonly T[]): T {
+>(candidates: readonly T[], targetCenter: number): T {
   return [...candidates].sort((left, right) => {
-    if (right.draftPoolSize !== left.draftPoolSize) {
-      return right.draftPoolSize - left.draftPoolSize;
+    const leftDistance = Math.abs(left.draftPoolSize - targetCenter);
+    const rightDistance = Math.abs(right.draftPoolSize - targetCenter);
+    if (leftDistance !== rightDistance) {
+      return leftDistance - rightDistance;
     }
 
     return compareSubsetKeys(left.optionalSubset, right.optionalSubset);

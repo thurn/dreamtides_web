@@ -149,7 +149,7 @@ describe("resolveDreamcallerPackage", () => {
     ).toThrow(/no legal optional subset/);
   });
 
-  it("selects the highest-size preferred subset and caps overlap copies at 2", () => {
+  it("selects the preferred subset closest to the target centre and caps overlap copies at 2", () => {
     const cards = buildCards({
       m1: 40,
       m2: 40,
@@ -167,9 +167,11 @@ describe("resolveDreamcallerPackage", () => {
       DREAMSIGN_TEMPLATES,
     );
 
+    // Legal subset sizes are 196/200/205/210; the centre of the preferred
+    // 190-210 range is 200, so {o1,o2,o4} (200 cards) is chosen.
     expect(resolved.mandatoryOnlyPoolSize).toBe(121);
-    expect(resolved.optionalSubset).toEqual(["o2", "o3", "o4"]);
-    expect(resolved.draftPoolSize).toBe(210);
+    expect(resolved.optionalSubset).toEqual(["o1", "o2", "o4"]);
+    expect(resolved.draftPoolSize).toBe(200);
     expect(resolved.draftPoolCopiesByCard["999"]).toBe(2);
     expect(resolved.doubledCardCount).toBe(1);
   });
@@ -264,8 +266,8 @@ describe("loadQuestContent", () => {
     expect(content.dreamcallers).toHaveLength(1);
     expect(content.resolvedPackagesByDreamcallerId.get("dreamcaller-1"))
       .toMatchObject({
-        selectedTides: ["m1", "m2", "m3", "o2", "o3", "o4"],
-        draftPoolSize: 208,
+        selectedTides: ["m1", "m2", "m3", "o1", "o2", "o4"],
+        draftPoolSize: 198,
       });
   });
 

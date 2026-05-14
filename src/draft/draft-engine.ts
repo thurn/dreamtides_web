@@ -91,11 +91,32 @@ function revealOffer(
   config: DraftConfig,
   options: { logEvents: boolean } = { logEvents: true },
 ): boolean {
-  const offer = buildOffer({
+  let offer = buildOffer({
     remainingCopiesByCard: state.remainingCopiesByCard,
     pickNumber: state.pickNumber,
     packSize: config.packSize,
   });
+
+  // The draft multiset is finite. When fewer than a full offer's worth of
+  // unique cards remain, recreate the multiset from the run's fixed pool so
+  // the Draft site can keep producing offers.
+  if (offer.length < config.packSize) {
+    state.remainingCopiesByCard = { ...state.draftPoolCopiesByCard };
+    if (options.logEvents) {
+      logEvent("draft_pool_recreated", {
+        pickNumber: state.pickNumber,
+        poolSize: countRemainingCards(state.remainingCopiesByCard),
+        uniqueCardsRemaining: countRemainingUniqueCards(
+          state.remainingCopiesByCard,
+        ),
+      });
+    }
+    offer = buildOffer({
+      remainingCopiesByCard: state.remainingCopiesByCard,
+      pickNumber: state.pickNumber,
+      packSize: config.packSize,
+    });
+  }
 
   state.currentOffer = offer;
   if (offer.length < config.packSize) {
@@ -182,13 +203,14 @@ export function createInitialDraftState(
   cardDatabase: Map<number, CardData>,
   resolvedPackage: ResolvedDreamcallerPackage,
 ): DraftState {
-  const remainingCopiesByCard = sanitizeDraftPoolCopies(
+  const draftPoolCopiesByCard = sanitizeDraftPoolCopies(
     cardDatabase,
     resolvedPackage.draftPoolCopiesByCard,
   );
 
   return {
-    remainingCopiesByCard,
+    draftPoolCopiesByCard,
+    remainingCopiesByCard: { ...draftPoolCopiesByCard },
     currentOffer: [],
     activeSiteId: null,
     pickNumber: 1,
