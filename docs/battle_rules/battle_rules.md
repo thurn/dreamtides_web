@@ -38,37 +38,32 @@ without a winner, the game ends in a draw.
 
 **Character** — Permanent cards that enter the battlefield when they resolve.
 Each character has a spark value used during the Challenge phase. Characters
-enter your reserves as reserved characters and cannot be deployed on the turn
-they are played. Starting on the next turn (which may be the opponent's), they
-may be deployed at any action window their controller has — the opponent's
-Response phase counts. Characters remain on the battlefield until removed by
-an effect (Dissolve or Banish) or dissolved in a challenge. Surviving deployed
-characters remain where they are after the Challenge phase; they do not
-automatically return to your reserves. Characters can have triggered,
-activated, and static abilities. Characters have subtypes (Mage, Warrior,
-Robot, etc.) that other cards can reference. Characters may also be marked
-**Fast** or **Interrupt** (see Playing Cards and the Stack); this controls
-when they can be played outside the Main phase.
+enter play in your "reserves" (back rank) cannot be "deployed" (moved to the
+front rank) on the turn they are played. Starting with the opponent's next turn,
+they may be deployed (see Turn Structure below). Characters remain on the
+battlefield until removed by an effect (Dissolve or Banish) or dissolved in a
+challenge. Characters can have triggered, activated, and static abilities.
+Characters have a subtype (Spirit Animal, Warrior, Survivor, etc.) that other
+cards can reference. Characters may be marked **Fast** or **Interrupt** (see
+Playing Cards and the Stack); this controls when they can be played outside the
+Main phase.
 
 **Event** — One-shot cards that produce an effect when they resolve, then move
-to the void. Events can be marked **Fast** or **Interrupt**, which controls
+to the void. Events can also be marked **Fast** or **Interrupt**, which controls
 when they may be played outside the Main phase (see Playing Cards and the
 Stack).
 
-**Dreamcaller** — A player's identity card, an animated 3D character that
-starts each battle already in play. Dreamcallers provide powerful ongoing
-abilities (static, triggered, or activated) that define a player's playstyle.
-Dreamcaller abilities are active from the start of the battle. Primarily
-chosen during quest mode.
+**Dreamcaller** — A player's identity card, an animated 3D character that starts
+each battle already in play. Dreamcallers provide powerful ongoing abilities
+(static, triggered, or activated) that define a player's playstyle. Active
+throughout the battle.
 
-**Dreamsign** — A quest-layer card representing a 2D illustrated object that
-provides ongoing effects. Selected during quest mode and active throughout
-battles.
+**Dreamsign** — A card representing a 2D illustrated object that provides
+ongoing effects, typically triggered or static. Active throughout the battle.
 
 **Dreamwell** — Special shared cards drawn during the Dreamwell phase. Not
-part of either player's deck. They produce energy and can have bonus effects.
-
-In constructed decks, the main card types are Characters and Events.
+part of either player's deck. They produce energy and usually have bonus effects
+for the player who drew them.
 
 ## Zones
 
@@ -76,8 +71,8 @@ In constructed decks, the main card types are Characters and Events.
 the Draw phase and by card effects.
 
 **Hand** — Cards held by a player, hidden from the opponent. A player's hand
-can hold at most 10 cards. If a draw effect would exceed this limit, the
-player gains 1 energy instead of drawing.
+can hold any number of cards, but they must discard cards at the end of their
+turn if they have more than 10.
 
 **Stack** — A temporary zone for cards that have been played but not yet
 resolved. While a card is on the stack, the opponent may respond with
@@ -131,65 +126,62 @@ that both players draw from, one per turn.
   Foresee, gaining a point, gaining extra energy, or milling cards to the
   void.
 
-**Phases and cycling:**
 
-- Dreamwell cards have a phase number. Phase 0 cards only appear during the
-  first cycle through the deck, typically providing a larger early energy
-  boost. Higher-phase cards appear in every subsequent cycle, producing less
-  energy per card but with bonus effects attached.
-- When the deck cycles, it is reshuffled within phase groups so that
-  lower-phase cards always come first within a cycle, while cards of the same
-  phase remain randomized.
+**Dreamwell numbers and cycling:**
 
-For example, a phase 0 Dreamwell card might produce 2 energy with no bonus
-effect, while a phase 1 card might produce 1 energy and also let you Foresee
-1.
+- Dreamwell cards have dreamwell order numbers 0, 1, 2, 3, and 4. This controls
+  their order in the Dreamwell deck, all #1 cards are shuffled together and
+  placed on top of the shuffled #2 cards, etc.
+- #0 cards only appear during the first cycle through the deck, typically
+  providing a larger early energy boost. These are the starting cards for each
+  player.
+- When the deck cycles, it is reshuffled within numeric groups so that
+  lower-numbered cards always come first within a cycle, while cards of the same
+  number remain randomized.
 
 ## Turn Structure
 
 Each turn progresses through these seven phases in order:
 
-1. **Dreamwell** — The active player draws the next Dreamwell card,
-   permanently increasing their energy production. Their current energy then
-   resets to match that new total. Any bonus effect on the card is applied.
-   Auto-advances when resolution completes.
-2. **Draw** — The active player draws one card from their deck. (Skipped on
-   the very first turn of the game.) Auto-advances.
+1. **Dreamwell** — The active player draws the next Dreamwell card, permanently
+   increasing their energy production. Their current energy then resets to match
+   that new total. Any bonus effect on the card is applied. Auto-advances when
+   resolution completes.
+2. **Draw** — The active player draws one card from their deck. (Skipped on the
+   very first turn of the game.) Auto-advances.
 3. **Dawn** — Start-of-turn triggers fire. The active player's **Dawn**
    triggered abilities fire and resolve here. Auto-advances when the stack is
    empty.
 4. **Main** — The active player plays cards, deploys characters, repositions
-   characters, and activates abilities at Main-phase speed. The opposing
-   player may play Interrupt cards and Interrupt-speed activated abilities in
-   response to cards on the stack. The active player may also play Interrupts
-   in response to opposing Interrupts. The active player explicitly passes to
-   end this phase. Once Main ends, the active player cannot return to it this
-   turn.
-5. **Response** — The Response phase has two sub-phases. **First**, the
-   opposing player may reposition their characters between any of the 9
-   battlefield positions (subject to the reserved restriction), play Fast
-   cards, and activate Fast activated abilities. Repositioning includes
-   deploying reserved characters into deployed lanes — this is the opposing
-   player's window to set up defenders after seeing the challengers. The
-   opposing player explicitly passes to end this sub-phase. **Second**, the
-   active player may play Fast cards and activate Fast activated abilities,
-   but cannot reposition characters. The active player explicitly passes to
-   end the Response phase, after which the Challenge phase begins. Fast
-   cards and Fast abilities can only be played while the stack is empty.
-   Either player may play an Interrupt (card or activated ability) in
-   response to a card on the stack, or at any time they could play a Fast
-   card.
+   characters, and activates abilities. The opposing player may play Interrupt
+   cards and Interrupt-speed activated abilities in response to cards on the
+   stack. The active player may also play Interrupts in response to opposing
+   Interrupts. The active player explicitly passes to end this phase.
+5. **Response** — The Response phase has two sub-phases. **First**, the opposing
+   player may reposition their characters between any of the 9 battlefield
+   positions (subject to the reserved restriction), play Fast cards, and
+   activate Fast activated abilities. Repositioning includes deploying reserved
+   characters into deployed lanes — this is the opposing player's window to set
+   up defenders after seeing the challengers. The opposing player explicitly
+   passes to end this sub-phase. **Second**, the active player may play Fast
+   cards and activate Fast activated abilities, but cannot reposition
+   characters. The active player explicitly passes to end the Response phase,
+   after which the Challenge phase begins. Fast cards and Fast abilities can
+   only be played while the stack is empty. Either player may play an Interrupt
+   (card or activated ability) in response to a card on the stack, or at any
+   time they could play a Fast card.
 6. **Challenge** — All of the active player's deployed characters become
    challengers, and opposing deployed characters in the same lanes become
    defenders. Lanes resolve sequentially from `D0` to `D3` as challenges or
-   triumphs (see Spark and Scoring for full resolution rules). No cards may
-   be played during this phase, though triggered and static abilities still
+   triumphs (see Spark and Scoring for full resolution rules). No cards may be
+   played during this phase, though triggered and static abilities still
    function and can modify spark.
-7. **Dusk** — End-of-turn triggers fire. Auto-advances when the stack is
-   empty, after which the turn passes to the opponent.
+7. **Dusk** — End-of-turn triggers fire. If the active player has more than 10
+   cards in hand, they must discard until they have 10 cards. Auto-advances when
+   the stack is empty, after which the turn passes to the opponent.
 
 **Game start:** Each player draws 5 cards as their opening hand. The first
-turn skips the Draw phase.
+player's first turn skips the Draw phase.
 
 ## Playing Cards and the Stack
 
@@ -200,15 +192,17 @@ priority to respond.
 
 **Timing categories:**
 
-- **Standard cards** can be played by the active player during their Main
-  phase, only when the stack is empty.
+- **Standard cards** can be played by the active player during their Main phase,
+  only when the stack is empty.
 - **Fast cards** (marked with a single lightning bolt) can be played by the
-  controlling player during a Response phase, only when the stack is empty.
-- **Interrupt cards** (marked with two lightning bolts) are a subtype of
-  Fast — Interrupt cards count as Fast for all rules purposes. Interrupts can
-  be played in response to a card on the stack.
+  controlling player during their Main phase or the Response phase, only when the
+  stack is empty.
+- **Interrupt cards** (marked with two lightning bolts) are a subtype of Fast —
+  Interrupt cards count as Fast for all rules purposes. Interrupts can be played
+  in response to a card on the stack. They can also be played at any time a Fast
+  card could be played.
 
-Activated abilities use the same timing categories as cards: standard, Fast,
+Activated abilities use the same timing categories as cards: Standard, Fast,
 or Interrupt. The same speed rules apply.
 
 **Only Interrupts can be played while the stack is non-empty.** Standard and
@@ -230,22 +224,22 @@ toughness — spark is their only stat. When an effect modifies a character's
 spark, including support-based effects from other characters, that effective
 spark is what challenges, triumphs, scoring, and other game rules use.
 
-**Challengers and defenders:** When the Challenge phase begins, every
-deployed character belonging to the active player is automatically a
-challenger; the active player has no choice in this. Every deployed character
-belonging to the opposing player in the same lane as a challenger becomes a
-defender for that lane, and the challenger becomes defended.
+**Challengers and defenders:** When the Challenge phase begins, every deployed
+character belonging to the active player is automatically a challenger. Every
+deployed character belonging to the opposing player in the same lane as a
+challenger becomes a defender for that lane, and the challenger becomes
+defended.
 
 **Challenge phase resolution:** Each deployed lane (`D0` through `D3`) is
 resolved in turn:
 
-- **Defended challenger (challenge):** Compare the spark of the challenger
-  and the defender. The character with lower spark is dissolved. If both have
-  the same spark, both are dissolved. A defended challenger does **not**
-  score points unless it has Unstoppable. Dissolved triggers fire after each
-  lane is resolved.
-- **Unpaired challenger (triumph):** The challenger scores victory points
-  equal to its spark for the active player.
+- **Challenge (defended challenger):** Compare the spark of the challenger and
+  the defender. The character with lower spark is dissolved. If both have the
+  same spark, both are dissolved. The challenger does **not** score points
+  unless it has Unstoppable. Dissolved triggers fire after each lane is
+  resolved.
+- **Triumph (unpaired challenger):** The challenger scores victory points equal
+  to its spark for the active player.
 - **Only the opposing player has a deployed character in the lane:** Nothing
   happens in that lane.
 
@@ -258,13 +252,13 @@ participate in challenges or triumphs and do not score points, though their
 abilities can still affect deployed characters they support.
 
 **Reserved status:** When a character enters the battlefield, it is placed in
-your reserves and is reserved for the rest of the turn on which it was
-played. A reserved character cannot be deployed and cannot become a
-challenger or defender. The reserved status lasts only until the end of the
-current turn; starting on the next turn (which may be the opponent's), the
-character can be deployed by its controller at any action window the
-controller has — including the opponent's Response phase, when the
-controller is the opposing player.
+your reserves and is reserved for the rest of the turn on which it was played. A
+reserved character cannot be deployed and cannot become a challenger or
+defender. The reserved status lasts only until the end of the current turn;
+starting on the opponent's next turn, the character can be deployed by its
+controller. A character can also be reserved to pay a cost, e.g. for an
+activated ability. The same rule applies here, it cannot then be deployed until
+the opponent's next turn.
 
 **Repositioning:** Repositioning means moving a character between any of the
 9 battlefield positions (deployed lanes and reserve slots), subject to the
@@ -275,24 +269,14 @@ defenders are set up by deploying reserved characters into lanes opposite
 challengers.
 
 **Materializing new characters:** Characters enter the battlefield in the
-reserves. If all 5 reserve slots are occupied, no additional characters that
-would enter reserves can be played or materialized until a reserve slot is
-freed, even if the player has open deployed lanes.
-
-**Spark modification:** Spark may be modified by card effects up to the end
-of the Response phase. During the Challenge phase, no cards can be played,
-but triggered and static abilities still function and can continue to modify
-spark during lane resolution.
-
-**Character limit:** Each player can have at most 9 characters on the
-battlefield at once. If the battlefield is full, additional characters cannot
-be played.
+reserves. If all 5 reserve slots are occupied, no additional characters that can
+be played or materialized until a reserve slot is freed, even if the player has
+open deployed lanes.
 
 ## Keywords and Effects
 
 **Dissolve** — Destroy a target character, moving it from the battlefield to
-the void. Fires the "Dissolved" trigger. Can target any character (yours or
-the opponent's).
+the void.
 
 **Banish** — Permanently remove a card from the game by sending it to the
 Banished zone. Several variants exist: banish from the battlefield, banish
@@ -341,7 +325,7 @@ during the Response phase, only when the stack is empty.
 
 **Interrupt** — A subtype of Fast (Interrupt cards and abilities count as
 Fast for all rules purposes). Interrupts can be played in response to a card
-on the stack. Interrupts are marked with a doubled lightning bolt symbol.
+on the stack.
 
 **Discover** — Look at 3 cards from your deck that match a specified
 criteria, then choose one to add to your hand.
@@ -350,7 +334,7 @@ criteria, then choose one to add to your hand.
 character on the battlefield or copying the next card played.
 
 **Echo** — Copy an effect so it happens an additional time. If an effect says
-to echo something, that effect is copied and resolves again.
+something "gains Echo", that ability is copied and resolves again.
 
 **Gain Control** — Take control of an opponent's character, moving it to your
 side of the battlefield.
@@ -360,10 +344,6 @@ target character. The two characters compare spark as in a lane challenge —
 the character with lower spark is dissolved, and if both have the same spark,
 both are dissolved. No points are scored from this challenge.
 
-**Dread N** — During a challenge, this character dissolves opposing
-characters as though its spark were N higher. The bonus applies only to the
-challenge spark comparison, not to triumph points.
-
 **Preeminence** — This character wins spark ties during a challenge. If both
 characters in a challenge have Preeminence, both are dissolved as normal.
 
@@ -372,10 +352,10 @@ still enters your reserves on materialization, but the reserved restriction
 does not apply to it, so it can be moved to a deployed lane and act as a
 challenger or defender on that turn.
 
-**Unstoppable** — When this character is a defended challenger, the
-challenge resolves as normal **and** this character also triumphs (scoring
-victory points equal to its spark for its controller). The spark comparison
-still occurs as normal.
+**Unstoppable** — When this character is a defended challenger, the challenge
+resolves as normal **and** this character also triumphs if it survives the
+challenge (scoring victory points equal to its spark for its controller). The
+spark comparison still occurs as normal.
 
 **Veil X** — This character costs X additional energy for the opponent to
 target with cards or abilities.
@@ -385,37 +365,34 @@ be deployed and cannot become a challenger or defender. New characters enter
 reserved; the reserved restriction lasts until the end of the turn on which
 the character was played.
 
-**Other effect categories:** Effects also exist for drawing cards, gaining or
-losing energy, gaining or losing points, modifying spark values on
-characters, granting temporary abilities until end of turn, taking extra
-turns, triggering additional Challenge phases, and shuffling hands and voids
-back into decks.
-
 ## Ability Types
 
 **Event abilities** — Effects printed on event cards. They resolve when the
 event resolves from the stack, then the event moves to the void.
 
-**Triggered abilities** — Abilities that fire automatically when a specific
-game event occurs. Three keyword triggers can appear on characters:
+**Triggered abilities** — Abilities that fire automatically when a specific game
+event occurs. Four named keyword triggers can appear on characters:
 **Materialized** (fires when the character enters the battlefield), **Dawn**
 (fires during the controller's Dawn phase at the start of each turn the
-controller is the active player), and **Dissolved** (fires when the
-character is destroyed). Triggered abilities can also use descriptive
-conditions like "When you play a card" or "At end of turn." A character
-played from hand can satisfy both "when you play" and "Materialized"
-triggers, but a character put directly onto the battlefield without being
-played satisfies only "Materialized." Characters can have combined triggers
-such as "Materialized, Dawn" (fires both on entry and each Dawn phase).
-Triggered abilities cannot be responded to — they resolve directly when
-their trigger condition is met.
+controller is the active player), **Dusk** (fires during the controller's Dusk
+phase at the end of each turn the controller is the active player), and
+**Dissolved** (fires when the character is destroyed).
 
-**Activated abilities** — Abilities with a cost that a player chooses to
-use, written as "Cost: Effect" (e.g., "2 energy: Draw a card"). Can be once
-per turn or unlimited use. Activated abilities use the same timing
-categories as cards: standard activated abilities are Main-phase only when
-the stack is empty, Fast activated abilities follow the Fast timing rules,
-and Interrupt activated abilities follow the Interrupt timing rules.
+Triggered abilities can also use descriptive conditions like "When you play a
+card". A character played from hand can satisfy both "when you play" and
+"Materialized" triggers, but a character put directly onto the battlefield
+without being played satisfies only "Materialized." Characters can have combined
+triggers such as "Materialized, Dawn" (fires both on entry and each Dawn phase).
+Triggered abilities cannot be responded to — they resolve directly when their
+trigger condition is met.
+
+**Activated abilities** — Abilities with a cost that a player chooses to use,
+written as "Cost: Effect" (e.g., "2 energy: Draw a card"). These can be used any
+number of times per turn unless "Once per turn" appears in the cost line.
+Activated abilities use the same timing symbols as cards: standard activated
+abilities are Main-phase only when the stack is empty, Fast activated abilities
+follow the Fast timing rules, and Interrupt activated abilities follow the
+Interrupt timing rules.
 
 **Static abilities** — Always-on rule modifications that apply as long as
 the source is on the battlefield. Examples include cost reductions, spark
@@ -427,14 +404,14 @@ costs.
 
 ## Targeting
 
-Effects target cards using ownership and type predicates. Ownership
-predicates include your cards, enemy cards, any card, or another card (not
-the source). Type predicates include character, event, specific subtypes,
-characters with a minimum spark value, or cards with a specific energy cost.
+Effects target cards using ownership and type predicates. Ownership predicates
+include allies (characters you control), enemies (characters the opponent
+controls), any card, or another card (not the source). Type predicates include
+character, event, specific subtypes, characters with a minimum spark value, or
+cards with a specific energy cost.
 
-Targeting is specified when a card is played (for stack targets) or when an
-effect resolves (for pending effect targets). Players are prompted to select
-valid targets from the available options.
+Targeting is specified when a card is placed on the stack. Players are prompted
+to select valid targets from the available options.
 
 ## Figments
 
@@ -443,21 +420,27 @@ from a deck. Figments enter the battlefield through "Materialize Figments"
 effects and behave like regular characters — they have spark values, count
 toward the character limit, and can be targeted by effects.
 
-**Stacking:** Unlike other characters, any number of figments may occupy the
-same battlefield position. Figments sharing a position behave as a single
-combined entity whose effective spark for that position is the sum of the
-individual figments' sparks. Stacked figments also count their combined
-spark for triumphs (an unpaired stack scores points equal to the sum of its
-figments' sparks).
+Figments always have 1 base spark.
 
-**Stacked figments in a challenge:** When a stack of one or more figments
-in a deployed lane is paired with a defender:
+**Stacking:** Unlike other characters, any number of figments of the same type
+occupy the same battlefield position. Figments sharing a position behave as a
+single combined entity whose effective spark for that position is the sum of the
+individual figments' sparks. Stacked figments also count their combined spark
+for triumphs (an unpaired stack scores points equal to the sum of its figments'
+sparks). Stacking is mandatory and figments cannot be split.
 
-- The defender's controller chooses any subset of the figments in the stack
-  whose combined spark is at most the defender's spark. All chosen figments
-  are dissolved.
-- The defender is dissolved if the combined spark of all figments in the
-  stack is greater than or equal to the defender's spark. As with any other
-  challenge, ties dissolve both sides — when the combined spark equals the
-  defender's spark, the defender is dissolved and the defender's controller
-  may choose figments totaling the full defender's spark to dissolve.
+An extremely powerful aspect of figments is that spark bonuses apply to each
+figment in the stack. For example if a "supported characters gain +2 spark"
+character is supporting a stack of figments the overall aggregate gains +2 spark
+*per figment*. Something like the "kindle" operation, however, only applies to 1
+figment in the stack.
+
+**Stacked figments in a challenge:** When a stack of one or more figments in a
+deployed lane is paired in a challenge, either as a challenger or defender:
+
+- The smallest subset of the figments in the stack whose combined spark equals
+  or exceeds the opposing character's spark are dissolved.
+- The opposing character is dissolved if the combined spark of all figments in
+  the stack is greater than or equal to its spark. As with any other challenge,
+  ties dissolve both sides — when the combined spark equals the opposing
+  character's spark, all figments are dissolved alongside the tied character.
