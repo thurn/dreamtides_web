@@ -143,6 +143,7 @@ function makeMutations(): QuestMutations {
     setDraftState: vi.fn(),
     setFailureSummary: vi.fn(),
     dismissStartingDeckPopup: vi.fn(),
+    bootstrapStartInBattle: vi.fn(),
     resetQuest: vi.fn(),
   };
 }
@@ -416,31 +417,8 @@ describe("QuestApp", () => {
     });
   });
 
-  it("invokes the playable-battle bootstrap when startInBattle is set", () => {
+  it("invokes the start-in-battle bootstrap when startInBattle is set", () => {
     const mutations = makeMutations();
-    const dreamcaller = {
-      id: "caller-1",
-      name: "Test Caller",
-      title: "Of Tests",
-      renderedText: "Pick.",
-      imageNumber: "0001",
-      startingEssence: 250,
-      mandatoryTides: ["tide_alpha"],
-      optionalTides: ["tide_beta", "tide_gamma", "tide_delta", "tide_zeta"],
-    };
-    const resolvedPackage = {
-      dreamcaller,
-      mandatoryTides: ["tide_alpha"],
-      optionalSubset: ["tide_beta", "tide_gamma", "tide_delta"],
-      selectedTides: ["tide_alpha", "tide_beta", "tide_gamma", "tide_delta"],
-      draftPoolCopiesByCard: { "101": 2 },
-      dreamsignPoolIds: ["dreamsign-1"],
-      mandatoryOnlyPoolSize: 12,
-      draftPoolSize: 24,
-      doubledCardCount: 1,
-      legalSubsetCount: 4,
-      preferredSubsetCount: 2,
-    };
     vi.mocked(useQuest).mockReturnValue({
       state: makeState(),
       mutations,
@@ -448,18 +426,9 @@ describe("QuestApp", () => {
       questContent: {
         cardDatabase: new Map(),
         cardsByPackageTide: new Map(),
-        dreamcallers: [dreamcaller],
-        dreamsignTemplates: [
-          {
-            id: "dreamsign-1",
-            name: "Echo Sign",
-            effectDescription: "Test.",
-            packageTides: ["tide_alpha"],
-          },
-        ],
-        resolvedPackagesByDreamcallerId: new Map([
-          [dreamcaller.id, resolvedPackage],
-        ]),
+        dreamcallers: [],
+        dreamsignTemplates: [],
+        resolvedPackagesByDreamcallerId: new Map(),
       },
     });
 
@@ -475,7 +444,7 @@ describe("QuestApp", () => {
       />,
     );
 
-    expect(mutations.setDreamcallerSelection).toHaveBeenCalledOnce();
+    expect(mutations.bootstrapStartInBattle).toHaveBeenCalledOnce();
 
     act(() => {
       root.unmount();
@@ -509,7 +478,7 @@ describe("QuestApp", () => {
       />,
     );
 
-    expect(mutations.setDreamcallerSelection).not.toHaveBeenCalled();
+    expect(mutations.bootstrapStartInBattle).not.toHaveBeenCalled();
     expect(mutations.setScreen).not.toHaveBeenCalled();
 
     act(() => {

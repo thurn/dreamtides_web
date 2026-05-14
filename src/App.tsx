@@ -16,7 +16,6 @@ import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
 import type { RuntimeConfig } from "./runtime/runtime-config";
-import { createPlayableBattleBootstrapController } from "./runtime/playable-battle-bootstrap";
 import type { QuestState } from "./types/quest";
 
 /** Inner component that renders the screen router and HUD. */
@@ -44,29 +43,24 @@ export function QuestApp({
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
   const previousScreenTypeRef = useRef(state.screen.type);
-  const playableBattleBootstrapRef = useRef(createPlayableBattleBootstrapController());
+  const startInBattleFiredRef = useRef(false);
 
+  // `?startInBattle=1`: replace the freshly created room's empty quest state
+  // with a battle-ready state in a single atomic write. Firing once per mount
+  // is enough — the multiplayer mutation guards on `dreamcaller === null`, so
+  // a reload of the same room (state already initialized) is a no-op.
   useEffect(() => {
     if (
       !runtimeConfig.startInBattle ||
-      playableBattleBootstrapRef.current.isDone()
+      startInBattleFiredRef.current ||
+      state.dreamcaller !== null
     ) {
       return;
     }
 
-    playableBattleBootstrapRef.current.advance({
-      state,
-      mutations,
-      questContent,
-      cardDatabase,
-    });
-  }, [
-    runtimeConfig.startInBattle,
-    state,
-    mutations,
-    questContent,
-    cardDatabase,
-  ]);
+    startInBattleFiredRef.current = true;
+    mutations.bootstrapStartInBattle();
+  }, [runtimeConfig.startInBattle, state.dreamcaller, mutations]);
 
   const hasDraftData = state.resolvedPackage !== null;
   const hasCardSourceDebug = state.cardSourceDebug !== null;
@@ -119,6 +113,19 @@ export function QuestApp({
   const handleCloseCardSourceOverlay = useCallback(() => {
     setCardSourceOverlayOpen(false);
   }, []);
+
+  // `?startInBattle=1`: a freshly created room starts with the default
+  // `questStart` state. Hold a loading screen — rather than rendering the
+  // Dreamcaller selection screen — until `bootstrapStartInBattle` round-trips
+  // through Firebase, so the player drops straight into the battle.
+  if (runtimeConfig.startInBattle && state.dreamcaller === null) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
+        <p className="text-lg opacity-80">Entering battle...</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ paddingBottom: showHud ? "48px" : "0" }}>

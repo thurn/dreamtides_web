@@ -58,6 +58,7 @@ import {
   startQuestFromDreamcaller,
   updateQuestAtlas,
 } from "./quest-state-actions";
+import { createStartInBattleState } from "../runtime/start-in-battle-state";
 import { generateRewardSiteData } from "../rewards/reward-generator";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
@@ -1013,6 +1014,55 @@ export function MultiplayerQuestProvider({
     },
     [],
   );
+
+  const bootstrapStartInBattle = useCallback(() => {
+    const current = currentRef.current;
+    if (current.state.dreamcaller !== null) {
+      return;
+    }
+    const battleState = createStartInBattleState(current.questContent);
+    if (battleState === null) {
+      return;
+    }
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    const actionEntry = buildActionLogEntry({
+      timestamp: now,
+      actorId: current.session.clientId,
+      action: "bootstrapStartInBattle",
+      source: "start_in_battle",
+      summary: {
+        dreamcallerId: battleState.dreamcaller?.id ?? null,
+        screen: battleState.screen.type,
+      },
+    });
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (
+          room === null ||
+          (room.questState !== null && room.questState.dreamcaller !== null)
+        ) {
+          return room ?? undefined;
+        }
+
+        return {
+          ...room,
+          questState: battleState,
+          battleState: null,
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: actionEntry,
+          },
+        };
+      },
+    });
+  }, []);
 
   const resetQuest = useCallback(() => {
     const current = currentRef.current;
@@ -2914,11 +2964,13 @@ export function MultiplayerQuestProvider({
       setDraftState,
       setFailureSummary,
       dismissStartingDeckPopup,
+      bootstrapStartInBattle,
       resetQuest,
     }),
     [
       addCard,
       addDreamsign,
+      bootstrapStartInBattle,
       buyShopSlot,
       changeEssence,
       completeSite,

@@ -168,6 +168,13 @@ export interface QuestMutations {
    * land directly on the first dreamscape.
    */
   dismissStartingDeckPopup: () => void;
+  /**
+   * Replaces an uninitialized quest state with a battle-ready state, skipping
+   * Dreamcaller selection and the starter-deck popup. Drives the
+   * `?startInBattle=1` runtime flag. No-op once a Dreamcaller is selected so
+   * a reload of the same room does not clobber in-progress state.
+   */
+  bootstrapStartInBattle: () => void;
   resetQuest: () => void;
 }
 
@@ -2119,6 +2126,15 @@ export function QuestProvider({
     });
   }, []);
 
+  const bootstrapStartInBattle = useCallback(() => {
+    setState((prev) => {
+      if (prev.dreamcaller !== null) {
+        return prev;
+      }
+      return createStartInBattleState(questContent) ?? prev;
+    });
+  }, [questContent]);
+
   const resetQuest = useCallback(() => {
     // Ordering invariant: `resetLog()` clears the ring buffer before any
     // dependent reset hooks run so downstream subscribers (bridge, queries)
@@ -2178,6 +2194,7 @@ export function QuestProvider({
       setDraftState,
       setFailureSummary,
       dismissStartingDeckPopup,
+      bootstrapStartInBattle,
       resetQuest,
     }),
     [
@@ -2219,6 +2236,7 @@ export function QuestProvider({
       setDraftState,
       setFailureSummary,
       dismissStartingDeckPopup,
+      bootstrapStartInBattle,
       resetQuest,
     ],
   );
