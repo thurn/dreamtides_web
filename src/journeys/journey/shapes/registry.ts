@@ -39,9 +39,11 @@ import { randomTradesPlugin } from "./random_trades/index";
 import { rewardAfterTriggerPlugin } from "./reward_after_trigger/index";
 import { sameCostDifferentRewardsPlugin } from "./same_cost_different_rewards/index";
 import { sameRewardDifferentCostsPlugin } from "./same_reward_different_costs/index";
+import { shopRowPlugin } from "./shop_row/index";
 import { singleOfferPlugin } from "./single_offer/index";
 import { singleRandomOutcomePlugin } from "./single_random_outcome/index";
 import { singleWagerPlugin } from "./single_wager/index";
+import { takeAnyNumberPlugin } from "./take_any_number/index";
 
 const BUILTIN_SHAPE_PLUGINS = Object.freeze(
   [
@@ -61,6 +63,8 @@ const BUILTIN_SHAPE_PLUGINS = Object.freeze(
     nowVsLaterPlugin,
     commitNowFuturePayoffPlugin,
     rewardAfterTriggerPlugin,
+    shopRowPlugin,
+    takeAnyNumberPlugin,
     // Phase F populates this list. Add one `import { fooPlugin } from "./foo"`
     // line above and one `fooPlugin,` entry here per shape.
   ] satisfies readonly JourneyShapePlugin[],
