@@ -1,0 +1,554 @@
+// Reward template tests.
+//
+// Four suites pin the reward contract:
+//
+//   1. A property test asserting every entry in REWARDS has a `viable`
+//      function, and that on an "empty" context (no deck, no dreamsign pool,
+//      no active dreamsigns, no banes, zero resources) it returns false —
+//      unless the template id is on the always-viable allowlist (resource
+//      gains, route/shop modifiers, the always-viable `card_cost_reduction`).
+//      Bug class this catches: a deck-content reward that ships
+//      `viable: () => true` (or a catalog-scope leak) and would surface a
+//      no-op option to the player.
+//
+//   2. A discard-ability paired test: deck-scoped predicate rewards keyed on
+//      the `discard_text` predicate decline when the deck holds no card whose
+//      rendered text contains "discard" and admit when it does. Bug class:
+//      a regression that drops the substring search would let a discard-keyed
+//      reward fire against any non-empty deck.
+//
+//   3. A transfiguration-eligibility tabular test: for each of the eight
+//      transfigurations (Viridian, Golden, Scarlet, Azure, Bronze, Magenta,
+//      Rose, Prismatic), `apply_named_transfiguration_to_card_name` declines
+//      on a deck whose cards all fail the specific transfiguration's
+//      eligibility filter and admits when at least one deck card passes. Bug
+//      class: transfiguration rewards offered for unreachable cards.
+//
+//   4. A paired deck-scope test for `purge_chosen_predicate_cards`: the
+//      catalog has a Warrior, the deck does not — viable is false; deck
+//      contains a Warrior — viable is true. Pins the deck-source-scope
+//      correctness so a regression that reverts the helper to the CLI's
+//      catalog-leaking `cardMatches(ctx, predicate.cardPredicate)` form is
+//      caught.
+
+import { describe, expect, it } from "vitest";
+
+import type { CardContent, ContentBundle, DreamsignContent } from "../../content/types";
+import type { DrawContext } from "../../util/rng";
+import type { JourneyContext, QuestStateProjection } from "../context";
+
+import { REWARDS, getReward } from "./rewards";
+
+function card(overrides: Partial<CardContent> & { id: string; name: string }): CardContent {
+  return {
+    tides: overrides.tides ?? [],
+    rarity: overrides.rarity ?? "common",
+    cardType: overrides.cardType ?? "Event",
+    energyCost: overrides.energyCost ?? 3,
+    spark: overrides.spark ?? "",
+    cardNumber: overrides.cardNumber ?? 0,
+    raw: overrides.raw ?? {},
+    ...overrides,
+  };
+}
+
+function dreamsign(overrides: Partial<DreamsignContent> & { id: string; name: string }): DreamsignContent {
+  return {
+    kind: overrides.kind ?? "neutral",
+    renderedText: overrides.renderedText ?? "",
+    tides: overrides.tides ?? [],
+    raw: overrides.raw ?? {},
+    ...overrides,
+  };
+}
+
+const draw: DrawContext = {
+  seed: "rewards-test",
+  contentVersion: "v1",
+  rootJourneyIndex: 0,
+};
+
+function buildContext(overrides: {
+  essence?: number;
+  maxEssence?: number;
+  omens?: number;
+  deckEntries?: readonly { cardId: string; copies: number }[];
+  starterCards?: number;
+  activeDreamsigns?: readonly { dreamsignId: string }[];
+  dreamsignPoolIds?: readonly string[];
+  banes?: readonly { baneName: string }[];
+  cards?: readonly CardContent[];
+  dreamsigns?: readonly DreamsignContent[];
+} = {}): JourneyContext {
+  const deckEntries = overrides.deckEntries ?? [];
+  const totalCards = deckEntries.reduce((sum, e) => sum + e.copies, 0);
+  const quest: QuestStateProjection = {
+    seed: "rewards-test",
+    resources: {
+      essence: overrides.essence ?? 0,
+      maxEssence: overrides.maxEssence ?? 0,
+      omens: overrides.omens ?? 0,
+      dreamscape: 0,
+    },
+    selectedTides: [],
+    deck: {
+      entries: deckEntries.map((e) => ({ cardId: e.cardId, copies: e.copies })),
+      summary: {
+        totalCards,
+        starterCards: overrides.starterCards ?? 0,
+        uniqueCards: deckEntries.length,
+      },
+    },
+    draftPool: [],
+    activeDreamsigns: overrides.activeDreamsigns ?? [],
+    dreamsignPoolIds: [...(overrides.dreamsignPoolIds ?? [])],
+    banes: overrides.banes ?? [],
+    dreamcaller: { id: "" },
+  };
+  const content: ContentBundle = {
+    cards: [...(overrides.cards ?? [])],
+    dreamcallers: [],
+    dreamsigns: [...(overrides.dreamsigns ?? [])],
+  };
+  return { content, contentVersion: "test", state: { quest } };
+}
+
+// Reward ids that remain viable on the empty fixture. Resource gains never
+// consult deck/pool state; route/shop modifiers (add_site_*, replace_site_type,
+// shop_essence_discount, shop_omen_discount, next_X_shop_rerolls_free,
+// boost_site_appearance_chance, increase_max_essence) likewise read only the
+// quest scaffolding. `card_cost_reduction_for_X_battles` is "always viable in
+// kind" — the player accepts a temporary discount even with an empty deck.
+// `meta_gain_2_rewards` ANDs its sub-template viabilities and is exercised
+// directly in the compound suite below with hand-picked sub-template ids; the
+// property test skips it for that reason.
+const ALWAYS_VIABLE_ON_EMPTY: ReadonlySet<string> = new Set([
+  "gain_essence",
+  "gain_omens",
+  "set_essence_to_percent_of_max",
+  "gain_essence_random_range",
+  "gain_essence_to_max",
+  "increase_max_essence",
+  "add_site_to_dreamscape",
+  "add_site_to_next_dreamscape",
+  "next_X_shop_rerolls_free",
+  "boost_site_appearance_chance",
+  "replace_site_type",
+  "shop_essence_discount",
+  "shop_omen_discount",
+  "card_cost_reduction_for_X_battles",
+]);
+
+describe("REWARDS viability invariant", () => {
+  it("every template has a viable function", () => {
+    for (const t of REWARDS) {
+      expect(typeof t.viable, t.id).toBe("function");
+    }
+  });
+
+  it("every template either declines an empty context or is on the always-viable allowlist", () => {
+    const ctx = buildContext();
+    for (const t of REWARDS) {
+      // meta_gain_2_rewards is RNG-dependent (its rollParams picks two
+      // arbitrary non-meta sub-rewards and ANDs their viabilities). The
+      // compound suite below pins its empty-decline behaviour with hand-
+      // picked sub-reward ids.
+      if (t.id === "meta_gain_2_rewards") continue;
+      const params = t.rollParams(ctx, draw);
+      const viable = t.viable(params, ctx);
+      const allowed = ALWAYS_VIABLE_ON_EMPTY.has(t.id);
+      expect(!viable || allowed, `${t.id}: viable=${viable}, allowed=${allowed}`).toBe(true);
+    }
+  });
+
+  it("every always-viable template actually reports viable on an empty context", () => {
+    const ctx = buildContext();
+    for (const id of ALWAYS_VIABLE_ON_EMPTY) {
+      const t = getReward(id);
+      const params = t.rollParams(ctx, draw);
+      expect(t.viable(params, ctx), id).toBe(true);
+    }
+  });
+});
+
+describe("discard-ability deck-scope audit", () => {
+  // Paired fixture: catalog has the same shape in both, but only one deck
+  // actually contains a card whose rendered text mentions "discard". The
+  // deck-scoped predicate-keyed rewards must consult the deck (via
+  // `deckContainsPredicate`'s `source: "deck"` pin), not the catalog.
+  const DISCARD_CARD = card({
+    id: "discard-1",
+    name: "Discard Event",
+    cardType: "Event",
+    raw: { "rendered-text": "Discard a card from your hand." },
+  });
+  const PLAIN_CARD = card({
+    id: "plain-1",
+    name: "Plain Event",
+    cardType: "Event",
+    raw: { "rendered-text": "Draw a card." },
+  });
+
+  it("purge_chosen_predicate_cards keyed on discard_text declines when the deck has no discard card", () => {
+    const t = getReward("purge_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: [DISCARD_CARD, PLAIN_CARD],
+      deckEntries: [{ cardId: PLAIN_CARD.id, copies: 1 }],
+    });
+    expect(t.viable({ predicateId: "discard_text", count: 1 }, ctx)).toBe(false);
+  });
+
+  it("purge_chosen_predicate_cards keyed on discard_text admits when the deck has a discard card", () => {
+    const t = getReward("purge_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: [DISCARD_CARD, PLAIN_CARD],
+      deckEntries: [{ cardId: DISCARD_CARD.id, copies: 1 }],
+    });
+    expect(t.viable({ predicateId: "discard_text", count: 1 }, ctx)).toBe(true);
+  });
+});
+
+describe("transfiguration eligibility audit", () => {
+  // For each transfiguration, build one card that satisfies the eligibility
+  // filter and one that does not. `apply_named_transfiguration_to_card_name`
+  // routes through `transfigurationHasEligibleTarget`, which walks the deck
+  // and asks the eligibility filter per entry. The negative case asserts a
+  // deck of only ineligible cards declines; the positive case asserts a
+  // single eligible card admits the option.
+  //
+  // The filters (per `isCardEligibleForTransfiguration` in `effects.ts`):
+  // - Viridian: energyCost > 0
+  // - Golden: unrestricted at generation time
+  // - Scarlet: cardType === "Character"
+  // - Azure: cardType === "Event"
+  // - Bronze: cardType === "Event"
+  // - Magenta: rendered text matches /materialized|judgment|once per turn/i
+  // - Rose: rendered text matches /\d●[^:\n]*:/ (energy-cost activated)
+  // - Prismatic: unrestricted at generation time
+  const COST_ZERO_EVENT = card({
+    id: "cost0-event",
+    name: "Cost Zero Event",
+    cardType: "Event",
+    energyCost: 0,
+    raw: { "rendered-text": "Draw a card." },
+  });
+  const COST_TWO_EVENT = card({
+    id: "cost2-event",
+    name: "Cost Two Event",
+    cardType: "Event",
+    energyCost: 2,
+    raw: { "rendered-text": "Draw a card." },
+  });
+  const COST_TWO_CHARACTER = card({
+    id: "cost2-char",
+    name: "Cost Two Character",
+    cardType: "Character",
+    energyCost: 2,
+    raw: { "rendered-text": "Block." },
+  });
+  const MAGENTA_TRIGGER_CHARACTER = card({
+    id: "mag-char",
+    name: "Magenta Trigger Character",
+    cardType: "Character",
+    energyCost: 2,
+    raw: { "rendered-text": "Materialized: Draw a card." },
+  });
+  const ROSE_ACTIVATED_CHARACTER = card({
+    id: "rose-char",
+    name: "Rose Activated Character",
+    cardType: "Character",
+    energyCost: 2,
+    raw: { "rendered-text": "2●: Draw a card." },
+  });
+
+  const cases: ReadonlyArray<{
+    transfiguration: string;
+    eligible: CardContent;
+    ineligible: CardContent;
+  }> = [
+    // Viridian needs cost > 0. Cost-0 event fails; cost-2 event passes.
+    { transfiguration: "Viridian", eligible: COST_TWO_EVENT, ineligible: COST_ZERO_EVENT },
+    // Scarlet needs Character. Event fails; character passes.
+    { transfiguration: "Scarlet", eligible: COST_TWO_CHARACTER, ineligible: COST_TWO_EVENT },
+    // Azure needs Event. Character fails; event passes.
+    { transfiguration: "Azure", eligible: COST_TWO_EVENT, ineligible: COST_TWO_CHARACTER },
+    // Bronze needs Event. Same as Azure.
+    { transfiguration: "Bronze", eligible: COST_TWO_EVENT, ineligible: COST_TWO_CHARACTER },
+    // Magenta needs a materialized/judgment/once-per-turn trigger.
+    { transfiguration: "Magenta", eligible: MAGENTA_TRIGGER_CHARACTER, ineligible: COST_TWO_CHARACTER },
+    // Rose needs an N●...: activated ability.
+    { transfiguration: "Rose", eligible: ROSE_ACTIVATED_CHARACTER, ineligible: COST_TWO_CHARACTER },
+  ];
+
+  it.each(cases)(
+    "apply_named_transfiguration_to_card_name correctly gates on $transfiguration eligibility",
+    ({ transfiguration, eligible, ineligible }) => {
+      const t = getReward("apply_named_transfiguration_to_card_name");
+      const noMatch = buildContext({
+        cards: [eligible, ineligible],
+        deckEntries: [{ cardId: ineligible.id, copies: 1 }],
+      });
+      const hasMatch = buildContext({
+        cards: [eligible, ineligible],
+        deckEntries: [{ cardId: eligible.id, copies: 1 }],
+      });
+      expect(
+        t.viable({ transfiguration, cardName: eligible.name }, noMatch),
+        `${transfiguration} should decline when no deck card is eligible`,
+      ).toBe(false);
+      expect(
+        t.viable({ transfiguration, cardName: eligible.name }, hasMatch),
+        `${transfiguration} should admit when at least one deck card is eligible`,
+      ).toBe(true);
+    },
+  );
+
+  // Golden and Prismatic are unrestricted at generation time, so they admit
+  // any non-empty deck and decline only when the deck is empty.
+  it("Golden and Prismatic admit any non-empty deck and decline an empty deck", () => {
+    const t = getReward("apply_named_transfiguration_to_card_name");
+    const empty = buildContext({ cards: [COST_TWO_EVENT], deckEntries: [] });
+    const nonEmpty = buildContext({
+      cards: [COST_TWO_EVENT],
+      deckEntries: [{ cardId: COST_TWO_EVENT.id, copies: 1 }],
+    });
+    for (const transfiguration of ["Golden", "Prismatic"]) {
+      expect(
+        t.viable({ transfiguration, cardName: COST_TWO_EVENT.name }, empty),
+        transfiguration,
+      ).toBe(false);
+      expect(
+        t.viable({ transfiguration, cardName: COST_TWO_EVENT.name }, nonEmpty),
+        transfiguration,
+      ).toBe(true);
+    }
+  });
+});
+
+describe("deck-scope predicate audit", () => {
+  // Predicate-keyed deck-mutation rewards must consult the deck, not the
+  // catalog. A regression that reverted the helper to the CLI's leaky
+  // `cardMatches(ctx, predicate.cardPredicate)` would silently resolve over
+  // the content catalog, making this paired test essential: both fixtures
+  // share the same catalog, but only the second deck contains the matching
+  // card.
+  const WARRIOR_CARD = card({
+    id: "warrior-1",
+    name: "Test Warrior",
+    cardType: "Character",
+    raw: { subtype: "Warrior" },
+  });
+
+  it("purge_chosen_predicate_cards declines when the catalog has a match but the deck does not", () => {
+    const t = getReward("purge_chosen_predicate_cards");
+    const ctx = buildContext({ cards: [WARRIOR_CARD], deckEntries: [] });
+    expect(t.viable({ predicateId: "warriors", count: 1 }, ctx)).toBe(false);
+  });
+
+  it("purge_chosen_predicate_cards admits when the deck contains a matching card", () => {
+    const t = getReward("purge_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: [WARRIOR_CARD],
+      deckEntries: [{ cardId: WARRIOR_CARD.id, copies: 1 }],
+    });
+    expect(t.viable({ predicateId: "warriors", count: 1 }, ctx)).toBe(true);
+  });
+
+  it("duplicate_random_predicate declines when the deck does not contain matches", () => {
+    const t = getReward("duplicate_random_predicate");
+    const ctx = buildContext({ cards: [WARRIOR_CARD], deckEntries: [] });
+    expect(t.viable({ predicateId: "warriors", count: 1 }, ctx)).toBe(false);
+  });
+
+  it("duplicate_random_predicate admits when the deck contains enough matches", () => {
+    const t = getReward("duplicate_random_predicate");
+    const ctx = buildContext({
+      cards: [WARRIOR_CARD],
+      deckEntries: [{ cardId: WARRIOR_CARD.id, copies: 2 }],
+    });
+    expect(t.viable({ predicateId: "warriors", count: 1 }, ctx)).toBe(true);
+  });
+});
+
+describe("named-card deck-scope audit", () => {
+  // Templates whose params name a specific card route through
+  // `deckContainsCardByName`. A regression that reverts to a deck-non-empty
+  // check would surface a no-op option whenever the deck holds different
+  // cards.
+  const STEADY_BURN = card({ id: "steady-burn", name: "Steady Burn" });
+  const OTHER_CARD = card({ id: "other", name: "Other Card" });
+
+  // Each entry pairs a template id with its params shape (referencing
+  // "Steady Burn" as the named card). `apply_named_transfiguration_to_
+  // card_name` is intentionally excluded: that template gates on
+  // transfiguration eligibility ("any deck card eligible for the named
+  // transfiguration"), not on the specific named card being present, so it
+  // belongs in the transfiguration suite.
+  const NAMED_CARD_CASES = [
+    { id: "duplicate_named_card_X", params: { cardName: "Steady Burn", count: 1 } },
+    {
+      id: "transform_card_in_deck_into_named",
+      params: { oldCardName: "Steady Burn", newCardName: "Steady Burn" },
+    },
+    { id: "make_card_reclaim", params: { cardName: "Steady Burn", count: 1 } },
+    {
+      id: "opening_hand_grant_for_X_battles",
+      params: { cardName: "Steady Burn", battles: 3 },
+    },
+    {
+      id: "temporary_card_copy_for_X_battles",
+      params: { cardName: "Steady Burn", battles: 3 },
+    },
+    {
+      id: "change_card_to_become_type",
+      params: { cardName: "Steady Burn", cardTypePredicateId: "warriors" },
+    },
+  ] as const;
+
+  it("named-card templates decline when the deck lacks the named card", () => {
+    const ctx = buildContext({
+      cards: [STEADY_BURN, OTHER_CARD],
+      deckEntries: [{ cardId: OTHER_CARD.id, copies: 1 }],
+    });
+    for (const { id, params } of NAMED_CARD_CASES) {
+      const t = getReward(id);
+      expect(t.viable(params, ctx), id).toBe(false);
+    }
+  });
+
+  it("named-card templates admit when the deck contains the named card", () => {
+    const ctx = buildContext({
+      cards: [STEADY_BURN],
+      deckEntries: [{ cardId: STEADY_BURN.id, copies: 1 }],
+    });
+    for (const { id, params } of NAMED_CARD_CASES) {
+      const t = getReward(id);
+      expect(t.viable(params, ctx), id).toBe(true);
+    }
+  });
+
+  it("purge_named_starter declines when the deck lacks the named starter", () => {
+    const STARTER_A = card({
+      id: "starter-a",
+      name: "Starter A",
+      rarity: "Starter",
+    });
+    const ctx = buildContext({
+      cards: [STARTER_A],
+      deckEntries: [],
+      starterCards: 0,
+    });
+    expect(
+      getReward("purge_named_starter").viable({ cardName: "Starter A" }, ctx),
+    ).toBe(false);
+  });
+
+  it("purge_named_starter admits when the deck contains the named starter", () => {
+    const STARTER_A = card({
+      id: "starter-a",
+      name: "Starter A",
+      rarity: "Starter",
+    });
+    const ctx = buildContext({
+      cards: [STARTER_A],
+      deckEntries: [{ cardId: STARTER_A.id, copies: 1 }],
+      starterCards: 1,
+    });
+    expect(
+      getReward("purge_named_starter").viable({ cardName: "Starter A" }, ctx),
+    ).toBe(true);
+  });
+});
+
+describe("dreamsign pool audit", () => {
+  // Dreamsign-gain rewards (gain_random_dreamsign etc.) must check the
+  // dreamsign POOL, not the content catalog. CLI's
+  // `dreamsignMatches(ctx).length >= N` returns the full catalog when no
+  // predicate is supplied; a deck-fresh quest with an empty pool would
+  // therefore surface a "Gain a random Dreamsign" option that cannot pick a
+  // dreamsign.
+  const DREAMSIGN_DAWN = dreamsign({ id: "dawn", name: "Dawn" });
+
+  it("gain_random_dreamsign declines when the dreamsign pool is empty", () => {
+    const t = getReward("gain_random_dreamsign");
+    const ctx = buildContext({ dreamsigns: [DREAMSIGN_DAWN], dreamsignPoolIds: [] });
+    expect(t.viable({}, ctx)).toBe(false);
+  });
+
+  it("gain_random_dreamsign admits when the dreamsign pool has any entry", () => {
+    const t = getReward("gain_random_dreamsign");
+    const ctx = buildContext({
+      dreamsigns: [DREAMSIGN_DAWN],
+      dreamsignPoolIds: [DREAMSIGN_DAWN.id],
+    });
+    expect(t.viable({}, ctx)).toBe(true);
+  });
+
+  it("temporary_dreamsign_for_X_battles declines when the pool is empty", () => {
+    const t = getReward("temporary_dreamsign_for_X_battles");
+    const ctx = buildContext({ dreamsigns: [DREAMSIGN_DAWN], dreamsignPoolIds: [] });
+    expect(t.viable({ battles: 3 }, ctx)).toBe(false);
+  });
+
+  it("choose_1_of_X_dreamsigns declines when the pool has fewer than choices", () => {
+    const t = getReward("choose_1_of_X_dreamsigns");
+    const ctx = buildContext({
+      dreamsigns: [DREAMSIGN_DAWN],
+      dreamsignPoolIds: [DREAMSIGN_DAWN.id],
+    });
+    expect(t.viable({ choices: 3 }, ctx)).toBe(false);
+  });
+});
+
+describe("dreamwell-keyed rewards self-hide until content lands", () => {
+  // Mirrors the Task 8 pattern for `set_starting_dreamwell_negative` and
+  // `shuffle_negative_dreamwell_cards`. With the positive list still empty
+  // (Task 17 lands content), these templates must decline so they do not
+  // surface a "Placeholder Dreamwell Card" option.
+  it("set_starting_dreamwell_positive declines on the empty fixture", () => {
+    const t = getReward("set_starting_dreamwell_positive");
+    const ctx = buildContext();
+    const params = t.rollParams(ctx, draw);
+    expect(t.viable(params, ctx)).toBe(false);
+  });
+
+  it("shuffle_positive_dreamwell_cards declines on the empty fixture", () => {
+    const t = getReward("shuffle_positive_dreamwell_cards");
+    const ctx = buildContext();
+    const params = t.rollParams(ctx, draw);
+    expect(t.viable(params, ctx)).toBe(false);
+  });
+});
+
+describe("meta_gain_2_rewards (compound) viability", () => {
+  it("declines an empty context when both sub-rewards decline", () => {
+    // Hand-pick two sub-rewards that are guaranteed to decline on an empty
+    // fixture. `purge_X_banes` needs banes; `purge_all_banes` likewise. This
+    // pins the AND-of-sub-viabilities contract without depending on what
+    // rollParams happens to pick.
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext();
+    const params = {
+      subIds: ["purge_X_banes", "purge_all_banes"] as readonly [string, string],
+      subParams: [
+        { count: 1 },
+        {},
+      ] as readonly [Record<string, unknown>, Record<string, unknown>],
+    };
+    expect(t.viable(params, ctx)).toBe(false);
+  });
+
+  it("admits when both sub-rewards admit", () => {
+    // Two always-viable resource-gain rewards.
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext();
+    const params = {
+      subIds: ["gain_essence", "gain_omens"] as readonly [string, string],
+      subParams: [
+        { x: 100 },
+        { x: 2 },
+      ] as readonly [Record<string, unknown>, Record<string, unknown>],
+    };
+    expect(t.viable(params, ctx)).toBe(true);
+  });
+});
