@@ -173,12 +173,26 @@ The spec's "Shared viability helpers" subsection lists the seven helper names. T
 - Create: `src/journeys/journey/shared/costs.ts` (port of `/Users/dthurn/journeys/src/journey/shared/costs.ts`).
 - Create: `src/journeys/journey/shared/costs.test.ts`.
 
-This is the first place the port *extends* the CLI rather than copying it. Every cost template gets a `viable(ctx): boolean` function, even if the CLI's template didn't have one. Templates whose `viable` already exists keep theirs. The spec's "Viability audit" subsection lists the patterns:
-- "Lose X essence" / "Lose X omens" → always viable; `locked` checks affordability.
-- "Discard X cards" → viable iff deck size ≥ X.
-- "Sacrifice a Warrior" (or any predicate-filtered cost) → viable iff the predicate has matches in the deck.
+This is the first place the port *extends* the CLI rather than copying it. The CLI declares a `viable` on every cost template, but many are stand-ins: `viable: () => true` on a template that actually consumes a specific kind of deck card, or `cardMatches(...).length >= 1` on a template that operates on a specific named card. The audit's job is to upgrade these to honest checks. The implementer walks every entry in `COSTS`, categorizes it against the table below, and either keeps the existing `viable` (if it already matches the category's pattern) or rewrites it using the helpers from Task 7.
 
-While porting, replace any of the CLI's inline `viable`-like checks with calls to the shared helpers from Task 7.
+**Category table for costs:**
+
+| Category | Viability rule | Example templates from the CLI |
+| --- | --- | --- |
+| Resource cost | `() => true`; locked-only via affordability check. | `pay_essence`, `pay_omens`, `pay_max_essence`, `pay_essence_random_range`, `pay_percent_essence`, `pay_all_remaining_essence`, `lose_max_essence`. |
+| Deck non-empty | `deckHasMinSize(ctx, 1)`. | `purge_named_card`, `purge_random_predicate_card` (when the predicate is `any`), `purge_all_duplicate_cards` *(currently bare-bones — upgrade)*. |
+| Deck contains predicate match | `deckContainsPredicate(ctx, predicateId, count)`. | `purge_random_predicate_card`, `purge_chosen_predicate_card`, `remove_transfigurations_from_random_predicate`. |
+| Deck contains named card | `deckContainsCard(ctx, cardId)`. | `purge_named_card` (when the templated card name is parametric — verify against the CLI's parameter shape). |
+| Deck size ≥ N | `deckHasMinSize(ctx, N)`. | `discard_X_cards` patterns; `pay_essence_random_range` if it has a draw-X-cards companion. |
+| Active dreamsign required | `ctx.state.quest.activeDreamsigns.length >= N`. | `purge_named_dreamsign`, `purge_random_dreamsign`, `purge_chosen_dreamsign`, `transform_dreamsign_to_random`. |
+| Bane count ≥ N | `baneCount(ctx) >= N`. | `gain_random_banes`, `gain_named_banes` (these are bane-imposing, so they're always viable in kind; the "≥ N" pattern matters for "remove banes" rewards in Task 9, not for costs). |
+| Battle/shop/route modifier | `() => true`; the effect doesn't interrogate deck state. | `battle_reward_reduction_flat`, `battle_reward_reduction_percent`, `remove_shop_sites_from_next_dreamscapes`, `remove_dreamsign_sites_from_next_dreamscapes`, `set_starting_dreamwell_negative`, `shuffle_negative_dreamwell_cards`. |
+
+**Smell patterns to fix during the audit:**
+- `viable: () => true` on a template that actually requires a deck card, a specific dreamsign, or a bane. Upgrade to the matching category helper.
+- `cardMatches(ctx, { source: "deck" }).length >= 1` on a template whose effect operates on a specific predicate (e.g. "duplicate Warrior"). Upgrade to `deckContainsPredicate`.
+- `cardMatches(ctx, { source: "deck" }).length >= 1` on a template whose effect operates on a specific named card. Upgrade to `deckContainsCard`.
+- A `purge_all_*` template whose `viable` only checks deck non-empty rather than checking that at least one matching target exists. Upgrade to count the actual matches.
 
 The locked flag on `JourneyOption` is set by the template's render path when `locked(ctx, amount)` returns true. Shape `fill()` functions in Phase F read this flag and write it through to the option's `locked` field. The text prefix `[LOCKED]` continues to be applied by `withLockedPrefix` in `shared/text.ts`.
 
@@ -194,7 +208,31 @@ The locked flag on `JourneyOption` is set by the template's render path when `lo
 - Create: `src/journeys/journey/shared/rewards.ts` (port of `/Users/dthurn/journeys/src/journey/shared/rewards.ts`).
 - Create: `src/journeys/journey/shared/rewards.test.ts`.
 
-Same shape as Task 8 but for rewards. The spec's "Viability audit" subsection lists the concrete patterns to enforce: deck-content predicates (purge-warrior needs a warrior; duplicate-discard-ability needs a card whose `renderedText` contains "discard"), transfiguration eligibility (delegate to `isCardEligibleForTransfiguration`), dreamsign-pool checks (gain-dreamsign needs a non-empty pool; tide-filtered reward needs a matching dreamsign).
+Same shape as Task 8 but for rewards. The CLI ships viability functions on most reward templates already, but several are too permissive — e.g., a "duplicate this specific named card" reward whose `viable` only checks deck non-empty rather than checking that the named card is actually in the deck. The audit walks every entry in `REWARDS`, categorizes against the table below, and upgrades where needed.
+
+**Category table for rewards:**
+
+| Category | Viability rule | Example templates from the CLI |
+| --- | --- | --- |
+| Resource gain | `() => true`. | `gain_essence`, `gain_omens`, `set_essence_to_percent_of_max`, `gain_essence_random_range`, `gain_essence_to_max`, `increase_max_essence`. |
+| Deck predicate match required (≥ N) | `deckContainsPredicate(ctx, predicateId, N)`. | `gain_random_predicate_cards`, `draft_predicate_cards_from_4`, `take_any_from_predicate_choices`, `apply_named_transfiguration_to_chosen_predicate_cards`, `apply_named_transfiguration_to_random_predicate_cards`, `purge_chosen_predicate_cards`, `purge_chosen_predicate_with_replacement`, `transform_chosen_predicate_into_named`, `duplicate_random_predicate`, `draft_2_predicate_cards_from_4`, `draft_predicate_card_with_copies`, `draft_predicate_card_with_transfiguration`, `apply_named_transfiguration_to_all_predicate_cards`. |
+| Deck contains named card | `deckContainsCard(ctx, cardId)`. | `duplicate_named_card_X` *(currently checks only non-empty deck — upgrade)*, `apply_named_transfiguration_to_card_name`, `transform_card_in_deck_into_named`. |
+| Deck contains a discard-ability card | substring search `"discard"` (case-insensitive) over `card.renderedText` in `ctx.state.quest.deck`. | Any template whose effect references the discard mechanic. Grep `costs.ts`/`rewards.ts` for `discard` to find them. |
+| Transfiguration target available | `transfigurationHasEligibleTarget(ctx, transfigurationId)`. | `apply_chosen_transfiguration_to_chosen_card`, `apply_named_transfiguration_to_*` (re-check that the eligibility filter is enforced for the *named* transfiguration, not just any transfiguration), `transfigure_random_starters`, `transfigure_all_starters`, `transfigure_chosen_starters`, `apply_random_transfigurations_to_random_cards`. |
+| Starter cards in deck | `starterCardCount(ctx) >= N`. | `transfigure_random_starters`, `transfigure_all_starters`, `purge_named_starter`, `purge_random_starter`, `purge_random_starter_with_predicate_replacement`, `transform_starter_into_named_card`, `purge_chosen_starters`, `purge_all_starters`, `replace_starter_via_draft`. |
+| Dreamsign pool match required | `poolHasDreamsignWithTide(ctx, tide)` or `dreamsignMatches(ctx).length >= N` for the unfiltered form. | `gain_random_dreamsign`, `gain_named_dreamsign`, `choose_1_of_X_dreamsigns`, `temporary_dreamsign_for_X_battles`. |
+| Active dreamsign required | `ctx.state.quest.activeDreamsigns.length >= 1`. | `gain_copy_of_random_dreamsign`, `gain_copy_of_chosen_dreamsign`, `transform_dreamsign_to_named`. |
+| Bane count ≥ N | `baneCount(ctx) >= N`. | `purge_X_banes`, `purge_all_banes`. |
+| Route/shop modifier | `() => true`. | `add_site_to_dreamscape`, `add_site_to_next_dreamscape`, `replace_site_type`, `boost_site_appearance_chance`, `next_X_shop_rerolls_free`, `shop_essence_discount`, `shop_omen_discount`, `set_starting_dreamwell_positive`, `shuffle_positive_dreamwell_cards`. |
+| Deck size ≥ N (no predicate filter) | `ctx.state.quest.deck.summary.totalCards >= N`. | `duplicate_chosen_cards`, `draw_X_and_duplicate_chosen`, `make_random_cards_reclaim`, `make_random_cards_fast`, `apply_random_transfigurations_to_random_cards`, `change_card_to_become_type`, `make_card_reclaim`, `modify_random_cards_to_types`, `opening_hand_grant_for_X_battles`, `temporary_card_copy_for_X_battles`. |
+| Always viable in kind | `() => true`. | `card_cost_reduction_for_X_battles` (operates on future battles, not the current deck). |
+
+**Smell patterns to fix during the audit:**
+- A `*_named_*` reward whose `viable` only checks deck non-empty rather than checking the named card is actually in the deck. Upgrade to `deckContainsCard`.
+- A `*_predicate_*` reward whose `viable` checks deck non-empty rather than checking the predicate has matches. Upgrade to `deckContainsPredicate`.
+- A transfiguration reward whose `viable` returns true regardless of whether any deck card passes the *specific* transfiguration's eligibility filter. Upgrade to `transfigurationHasEligibleTarget` for that transfiguration id.
+- A "duplicate a card with a discard ability" reward whose `viable` doesn't search renderedText for "discard". Add the substring check.
+- A dreamsign-gain reward whose `viable` returns true regardless of pool emptiness. Upgrade to `poolHasDreamsignWithTide` or `dreamsignMatches(ctx).length >= 1`.
 
 - [ ] **Step 1: Write the viability invariant test** symmetric to Task 8's: every reward template has a `viable` function; on an empty fixture (no deck, no dreamsign pool, no eligible transfiguration targets), every reward whose `viable` could possibly fire on emptiness returns false. **Bug class:** missing eligibility check on deck-content rewards. This is the central guarantee the viability audit must deliver.
 - [ ] **Step 2: Write the discard-ability test.** Build two decks — one with a card whose `renderedText` contains "discard", one without — and assert `viable` returns true for the first and false for the second. **Bug class:** the substring search regressing to no-op or to over-strict (e.g., word-boundary issues).
@@ -220,21 +258,40 @@ The registry is initially empty (no plugins registered yet). Phase F populates i
 - [ ] **Step 4: Write the registry integrity test.** Two cases: (a) when the registry contains all 21 weighted shapes, validation passes; (b) when an entry is removed, validation throws with a clear message. **Bug class:** the registry getting out of sync with the score-weight table — the exact regression the CLI's `validatePlugins` is designed to catch.
 - [ ] **Step 5: Commit.** "Port shape registry, types, and shared plugin helpers."
 
-### Task 11: Port operation builders, assembly, and validators
+### Task 11a: Port operation builders
 
 **Files:**
 - Create: `src/journeys/journey/operationBuilders.ts` (port).
+
+This is ~2,000 LOC of mechanical translation: shape-fill outputs into typed `JourneyOperation` records, classified by `operationKind`, `role`, `visibility`, `timing`, and `value`. Pure logic; no Node-specific seams. No new tests at this layer — the operation-builder logic is fully exercised by Phase F's shape tests and Phase G's integration test.
+
+- [ ] **Step 1: Port `operationBuilders.ts`** verbatim. Watch for imports of `manifest.ts` types that may need extension for the `locked` flag (operations themselves don't carry it; the flag lives at the option/branch level).
+- [ ] **Step 2: Run `npm run typecheck`** to surface any import or type mismatch from the port.
+- [ ] **Step 3: Commit.** "Port operation builders."
+
+### Task 11b: Port the assembly layer
+
+**Files:**
 - Create: `src/journeys/journey/assembly.ts` (port).
-- Create: `src/journeys/journey/validate/` directory with one file per validator (`tree.ts`, `references.ts`, `topology.ts`, `randomOdds.ts`, etc., mirroring the CLI).
-- Create: `src/journeys/journey/validate/index.ts` that exports the top-level `validateJourneyManifest` function.
-- Tests: one test file per validator under `validate/`.
 
-The validators are the lifeline that makes shape regressions surface early. The CLI's validators port verbatim. Most are pure; the tree validator is the largest.
+`assembly.ts` is ~400 LOC: takes the shape's `FilledJourney`, combines it with shape-agnostic metadata, and produces a draft manifest. Includes `attachTargetResolutionMetadata`, which evaluates predicates against the live deck to record concrete target lists per operation. The `locked` flag flows through here when option costs are evaluated.
 
-- [ ] **Step 1: Port `operationBuilders.ts`** verbatim. This is large (~2,000 LOC) but mechanical. No new tests at this layer — the operation-builder logic is fully exercised by Phase F's shape tests and Phase G's integration test.
-- [ ] **Step 2: Port `assembly.ts`** verbatim, including `attachTargetResolutionMetadata`.
-- [ ] **Step 3: Port each validator file** into `validate/` and add a single positive-and-negative test for the most contract-heavy ones: tree (`decision_tree_invariants`), references (`references_are_resolvable`), topology (`options_match_shape_topology`). **Bug class:** a malformed manifest slipping past validation. Three tests at this layer, not one per rule.
-- [ ] **Step 4: Commit.** "Port operation builders, assembly, and validators."
+- [ ] **Step 1: Port `assembly.ts`** verbatim, with two small additions: after building each option, set `option.locked = options.some(cost => cost.locked === true)` (using the locked flag from Task 8's cost rendering); same logic for tree branches.
+- [ ] **Step 2: Run `npm run typecheck`.**
+- [ ] **Step 3: Commit.** "Port assembly layer; wire locked flag through to options and branches."
+
+### Task 11c: Port validators
+
+**Files:**
+- Create: `src/journeys/journey/validate/` directory with one file per validator (`tree.ts`, `references.ts`, `topology.ts`, `randomOdds.ts`, `envelopes.ts`, `sequenceMenus.ts`, `generatedObjects.ts`, etc., mirroring the CLI's `src/journey/validate/`).
+- Create: `src/journeys/journey/validate/index.ts` exporting `validateJourneyManifest`.
+- Tests: per-validator files only for the contract-heavy ones (see Step 2).
+
+The validators are the lifeline that surfaces shape regressions early. CLI validators port verbatim. Most are pure; the tree validator is the largest.
+
+- [ ] **Step 1: Port each validator file** into `validate/`. Confirm the index exports `validateJourneyManifest` with the same signature as the CLI.
+- [ ] **Step 2: Add positive-and-negative tests** for the three most contract-heavy validators: tree (`decision_tree_invariants`), references (`references_are_resolvable`), topology (`options_match_shape_topology`). **Bug class:** a malformed manifest slipping past validation. Three tests at this layer, not one per rule.
+- [ ] **Step 3: Commit.** "Port validators with positive-and-negative tests for the contract-heavy rules."
 
 ---
 
@@ -242,14 +299,27 @@ The validators are the lifeline that makes shape regressions surface early. The 
 
 Each shape directory contains one or more files (typically `index.ts` exporting the plugin, plus `fill.ts`, `validators.ts`, sometimes `text.ts`). The CLI's directory structure mirrors what the port should produce. Test design per task: one **contract test per shape** verifies the shape's structural promise (option count in range, role mix matches topology, every option has a non-empty text). No per-template tests, no per-magic-number tests.
 
-### Task 12: Port direct-menu shapes
+### Task 12a: Port direct-menu shapes (first batch)
 
-**Plugins (10):** `random_rewards`, `random_trades`, `one_operation_many_targets`, `one_target_many_operations`, `same_cost_different_rewards`, `same_reward_different_costs`, `heterogeneous_pair`, `choose_your_loss`, `alter_dreamscapes`, `flat_escalating_trade`.
+**Plugins (5):** `random_rewards`, `random_trades`, `one_operation_many_targets`, `one_target_many_operations`, `same_cost_different_rewards`.
 
-- [ ] **Step 1: Port each plugin directory** under `src/journeys/journey/shapes/<id>/`. As each plugin lands, uncomment its import in `registry.ts`.
-- [ ] **Step 2: Write the per-shape contract test.** For each shape, a single test that runs `plugin.fill(...)` on a populated fixture context (deck of ~10 cards, 1–2 active dreamsigns, modest essence/omens), then asserts: option count within `rootOptionCount` bounds, each option has non-empty `text`, each option's `locked` flag is a boolean, the shape's specific validators all pass. **Bug class:** silent regression in shape `fill()` that produces structurally valid but semantically malformed manifests. One test per shape, no enumeration of options.
-- [ ] **Step 3: Run; verify all 10 shape tests pass and registry integrity still holds.**
-- [ ] **Step 4: Commit.** "Port the 10 direct-menu journey shapes."
+The per-shape contract test described below is the standard test pattern reused throughout Tasks 12a, 12b, 13, 14, and 15. The "test design" subsection here applies to every shape task that follows.
+
+**Test design (applies to every shape task in Phase F):** For each shape, a single test that runs `plugin.fill(...)` on a populated fixture context (deck of ~10 cards, 1–2 active dreamsigns, modest essence/omens), then asserts: option (or branch) count within `rootOptionCount` bounds, each option has non-empty `text`, each option's `locked` flag is a boolean, the shape's specific validators all pass. **Bug class:** silent regression in shape `fill()` that produces structurally valid but semantically malformed manifests. One test per shape, no enumeration of options.
+
+- [ ] **Step 1: Port each of the 5 plugin directories** under `src/journeys/journey/shapes/<id>/`. As each plugin lands, uncomment its import in `registry.ts`.
+- [ ] **Step 2: Write per-shape contract tests** following the pattern above.
+- [ ] **Step 3: Run; verify all 5 shape tests pass and registry integrity still holds.**
+- [ ] **Step 4: Commit.** "Port direct-menu shapes (random_rewards, random_trades, one_operation_many_targets, one_target_many_operations, same_cost_different_rewards)."
+
+### Task 12b: Port direct-menu shapes (second batch)
+
+**Plugins (5):** `same_reward_different_costs`, `heterogeneous_pair`, `choose_your_loss`, `alter_dreamscapes`, `flat_escalating_trade`.
+
+- [ ] **Step 1: Port each of the 5 plugin directories.** Uncomment imports in `registry.ts` as you go.
+- [ ] **Step 2: Write per-shape contract tests** following the Task 12a pattern.
+- [ ] **Step 3: Run; verify all 5 shape tests pass.**
+- [ ] **Step 4: Commit.** "Port direct-menu shapes (same_reward_different_costs, heterogeneous_pair, choose_your_loss, alter_dreamscapes, flat_escalating_trade)."
 
 ### Task 13: Port single-offer, random-commit, and delayed-hook shapes
 
