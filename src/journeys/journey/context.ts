@@ -32,6 +32,9 @@ export type QuestStateProjection = {
   readonly activeDreamsigns: readonly { readonly dreamsignId: string }[];
   readonly dreamsignPoolIds: readonly string[];
   readonly banes: readonly { readonly baneName: string }[];
+  // Narrowed from the spec's full Dreamcaller projection because only the id
+  // is consumed (by `effects.ts` resolveTargetSelector for the dreamcaller
+  // source). Widen this if future consumers need other fields.
   readonly dreamcaller: { readonly id: string };
 };
 

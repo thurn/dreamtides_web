@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   buildJourneyContentBundle,
@@ -244,6 +244,88 @@ describe("buildJourneyContext bane derivation", () => {
       "Bane Alpha",
       "Bane Beta",
     ]);
+  });
+});
+
+describe("buildJourneyContext deck projection", () => {
+  // Bug class: duplicate-cardNumber rows arriving as separate entries with
+  // `copies: 1` each instead of collapsing into a single `{ cardId, copies: N }`
+  // row. The summary aggregation depends on this reshape, so a regression
+  // here cascades into wrong totalCards / uniqueCards / starterCards.
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("collapses duplicate cardNumber rows and aggregates the deck summary", () => {
+    const cards: CardData[] = [
+      makeCard({ cardNumber: 1, id: "card-1", name: "One" }),
+      makeCard({ cardNumber: 2, id: "card-2", name: "Two" }),
+      makeCard({
+        cardNumber: 3,
+        id: "card-3",
+        name: "Three",
+        rarity: "Starter",
+      }),
+    ];
+    const deck: DeckEntry[] = [
+      makeDeckEntry({ entryId: "e1", cardNumber: 1 }),
+      makeDeckEntry({ entryId: "e2", cardNumber: 1 }),
+      makeDeckEntry({ entryId: "e3", cardNumber: 1 }),
+      makeDeckEntry({ entryId: "e4", cardNumber: 2 }),
+      makeDeckEntry({ entryId: "e5", cardNumber: 3 }),
+    ];
+    const content = buildJourneyContentBundle({
+      cards,
+      dreamcallers: [],
+      dreamsignTemplates: [],
+    });
+    const questState = makeQuestState({ deck });
+
+    const context = buildJourneyContext(questState, content, makeSite("s"));
+
+    expect(context.state.quest.deck.entries).toHaveLength(3);
+    const card1Entry = context.state.quest.deck.entries.find(
+      (entry) => entry.cardId === "card-1",
+    );
+    const card2Entry = context.state.quest.deck.entries.find(
+      (entry) => entry.cardId === "card-2",
+    );
+    const card3Entry = context.state.quest.deck.entries.find(
+      (entry) => entry.cardId === "card-3",
+    );
+    expect(card1Entry?.copies).toBe(3);
+    expect(card2Entry?.copies).toBe(1);
+    expect(card3Entry?.copies).toBe(1);
+
+    expect(context.state.quest.deck.summary.totalCards).toBe(5);
+    expect(context.state.quest.deck.summary.uniqueCards).toBe(3);
+    expect(context.state.quest.deck.summary.starterCards).toBe(1);
+  });
+
+  it("warns and skips deck entries whose cardNumber is not in the content bundle", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    const cards: CardData[] = [
+      makeCard({ cardNumber: 1, id: "card-1", name: "One" }),
+    ];
+    const deck: DeckEntry[] = [
+      makeDeckEntry({ entryId: "e1", cardNumber: 1 }),
+      makeDeckEntry({ entryId: "e-orphan", cardNumber: 999 }),
+    ];
+    const content = buildJourneyContentBundle({
+      cards,
+      dreamcallers: [],
+      dreamsignTemplates: [],
+    });
+    const questState = makeQuestState({ deck });
+
+    const context = buildJourneyContext(questState, content, makeSite("s"));
+
+    expect(context.state.quest.deck.entries).toHaveLength(1);
+    expect(context.state.quest.deck.entries[0]?.cardId).toBe("card-1");
+
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("999"));
   });
 });
 

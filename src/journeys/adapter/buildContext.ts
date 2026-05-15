@@ -31,6 +31,13 @@ function projectDeck(
   for (const entry of deck) {
     const cardId = cardIdByNumber.get(entry.cardNumber);
     if (cardId === undefined) {
+      // Orphan: deck entry references a cardNumber missing from the content
+      // bundle. Skip it so generation can continue against a partial catalog
+      // (e.g. mid-migration card-database mismatches). Warn so a developer
+      // grepping the logs can find the source row.
+      console.warn(
+        `[journeys/adapter] Deck entry references unknown cardNumber=${entry.cardNumber}; skipping`,
+      );
       continue;
     }
     copiesById.set(cardId, (copiesById.get(cardId) ?? 0) + 1);
@@ -54,7 +61,16 @@ function projectBanes(
     .filter((entry) => entry.isBane)
     .map((entry) => {
       const name = cardNameByNumber.get(entry.cardNumber);
-      return name === undefined ? null : { baneName: name };
+      if (name === undefined) {
+        // Orphan: bane-flagged entry references a cardNumber missing from the
+        // content bundle. Mirror `projectDeck`'s graceful-degradation
+        // behaviour and warn so the orphan is greppable.
+        console.warn(
+          `[journeys/adapter] Bane deck entry references unknown cardNumber=${entry.cardNumber}; skipping`,
+        );
+        return null;
+      }
+      return { baneName: name };
     })
     .filter((value): value is { baneName: string } => value !== null);
 }
@@ -170,6 +186,10 @@ export function buildJourneyContext(
       essence: questState.essence,
       maxEssence: questState.essenceCap,
       omens: questState.omens,
+      // Spec specified `dreamscape: state.currentDreamscape?.number ?? 0`, but
+      // the prototype types `currentDreamscape` as `string | null` (a node id).
+      // `completionLevel` is the prototype's equivalent numeric dreamscape
+      // counter, so it fills the same role for downstream resolvers.
       dreamscape: questState.completionLevel,
     },
     selectedTides: [...selectedTides],
@@ -181,6 +201,9 @@ export function buildJourneyContext(
     activeDreamsigns,
     dreamsignPoolIds: [...questState.remainingDreamsignPool],
     banes,
+    // Empty-string sentinel when no dreamcaller is set: catalog dreamcaller
+    // ids are non-empty in practice, so `id === ""` cannot accidentally match
+    // a real dreamcaller in `effects.ts`'s `dreamcallerMatches` filter.
     dreamcaller: { id: questState.dreamcaller?.id ?? "" },
   };
 
