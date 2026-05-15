@@ -32,6 +32,7 @@ export type QuestStateProjection = {
   readonly activeDreamsigns: readonly { readonly dreamsignId: string }[];
   readonly dreamsignPoolIds: readonly string[];
   readonly banes: readonly { readonly baneName: string }[];
+  readonly dreamcaller: { readonly id: string };
 };
 
 export type JourneyContext = {

@@ -151,6 +151,7 @@ function fixtureContext(): JourneyContext {
         activeDreamsigns: [],
         dreamsignPoolIds: [],
         banes: [],
+        dreamcaller: { id: "" },
       },
     },
   };
