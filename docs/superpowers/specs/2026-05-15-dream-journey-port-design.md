@@ -11,9 +11,11 @@ CLI's plugin architecture (shape plugins, predicates, costs, rewards, value
 model, manifest contract), rewrites only the Node-specific seams for the
 browser, and renders the resulting manifest as 1–3 circular images in a row.
 
-Clicking Enter Dream does not apply any effect; it advances decision-tree state
-where applicable, then closes the journey screen and returns the player to the
-dreamscape. Journey generation does, however, query the live quest state to
+Clicking Enter Dream advances decision-tree state for tree shapes, or closes
+the journey screen for flat shapes. None of the manifest's mechanical effects
+(deck changes, resource changes, dreamsign gains, bane gains, etc.) are
+applied — closing returns the player to the dreamscape with their state
+untouched. Journey generation does, however, query the live quest state to
 determine which options are eligible to show and which are unaffordable.
 
 ## Non-goals
@@ -22,7 +24,9 @@ determine which options are eligible to show and which are unaffordable.
 - Porting the CLI's `--debug`, `--json`, or `--seed` flags. The journey module
   has no CLI surface.
 - Porting the CLI's terminal renderers (`human.ts`, `json.ts`, dream-art
-  iTerm2 image escapes). The browser UI replaces them.
+  iTerm2 image escapes). The browser UI replaces them. See the note under
+  "Where rendered text comes from" for what English-text logic does and
+  doesn't port from those files.
 - Porting the atomic state writer, the dormant `pick`/`new`/`state` commands,
   or the shape-distribution Monte Carlo script.
 - Landing real Dreamwell card content. Stubbed empty until Dreamwell content
@@ -353,6 +357,58 @@ and onClose respectively). Additional debug logging (selected shape id,
 manifest seed, option count) is gated behind a future debug flag and not
 required for the initial port.
 
+### Where rendered text comes from
+
+The CLI's `src/render/human.ts` is large (1,200+ lines, dozens of helpers
+like `predicateSummary`, `resourcePayloadText`, `committedOutcomeText`,
+`humanizeToken`, `pluralize`) and at first glance looks like a critical
+text-formatting layer. The port skips all of it, because none of the
+player-visible text actually originates there:
+
+- **`option.text`, `branch.text`, `terminal.text`, reward-pool entry text.**
+  Computed at fill time inside each shape's `fill()` function by calling
+  the cost/reward template's own `render(params): string` function, which
+  lives in `src/journey/shared/costs.ts` and `src/journey/shared/rewards.ts`.
+  Each template owns its own English-rendering logic
+  (`Gain 50 essence`, `Draft 1 of 4 characters`, `Apply Bronze to 'Card Name'`,
+  etc.). These rendering functions are pure string builders that depend on
+  `shared/text.ts` (`joinSnippets`, `withLockedPrefix`, `quoteName`),
+  `shared/predicates.ts` (`predicate.text.plural` for English noun phrases),
+  and the `quoteName` helper. **All of these are ported.**
+- **`human.ts` exclusively serves terminal layout.** Its functions handle
+  section orchestration (`Dream Journey` heading, resource lines, debug
+  blocks), ANSI color, and the design-review-only "Outcomes:" section that
+  humanizes precommitted random rolls (`committedOutcomeText` and friends).
+  None of these surfaces exists in the player UI: the player only sees the
+  per-option / per-branch / terminal text already on the manifest, and the
+  consequences of advancing through random branches arrive as the next
+  node's text rather than a "you rolled a 7" announcement.
+- **The decision-tree traversal does not narrate.** When `advanceTree`
+  walks through random or automatic branches via `precommitted.random`,
+  the UI silently advances to the next player-choice node or terminal.
+  No "you rolled X" text appears. The terminal's `text` is shown at the
+  end if the journey terminates.
+
+Concretely, the file-by-file picture:
+
+| CLI file | Ported? | Why / why not |
+|---|---|---|
+| `src/journey/shared/text.ts` | yes | 3 helpers used everywhere. |
+| `src/journey/shared/predicates.ts` | yes | Provides English `text.plural` for predicates. |
+| `src/journey/shared/costs.ts` | yes | Per-template `render` produces cost text. |
+| `src/journey/shared/rewards.ts` | yes | Per-template `render` produces reward text. |
+| `src/journey/shapes/<id>/...` | yes | Per-shape `fill()` assembles option/branch text. |
+| `src/render/human.ts` | **no** | Terminal layout, color, debug blocks, `committedOutcomeText`. Replaced by the React UI. |
+| `src/render/json.ts` | **no** | JSON dump format for the CLI; not needed. |
+| `src/render/dreamArt.ts` | partial | The matcher logic ports; the iTerm2 image escape rendering does not. |
+| `src/render/theme.ts` | **no** | ANSI color theme; the React UI uses its own styles. |
+| `src/render/errors.ts` | **no** | CLI error rendering with exit codes; the UI uses the in-screen fallback. |
+
+If during the port we discover a player-visible text path that does call
+into `human.ts` (the audit may surface one), the affected helper moves to
+`src/journeys/journey/shared/text.ts` rather than getting pulled in
+wholesale from the CLI's render layer.
+
 ## Eligibility and locking
 
 The CLI ships bare-bones viability gating: some predicates and some
@@ -380,8 +436,9 @@ Examples that must be enforced:
 
 - "Purge a random Warrior" reward → deck must contain at least one Warrior.
 - "Duplicate a card with a discard ability" reward → deck must contain at
-  least one card with discard-mechanic ability tags (or, fallback, whose
-  rendered text mentions the discard keyword).
+  least one card whose `renderedText` contains the substring "discard"
+  (case-insensitive). A tag-based predicate is a future refinement; the
+  string match is acceptable for the port.
 - "Transfigure a card to Bronze" (or any of Viridian, Golden, Scarlet,
   Azure, Bronze, Magenta, Rose, Prismatic) → at least one deck entry must
   pass that transfiguration's eligibility filter. The port shares the
