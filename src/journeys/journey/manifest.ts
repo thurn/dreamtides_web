@@ -6,22 +6,21 @@
 // the option/branch is unaffordable for the current quest state. The
 // `[LOCKED]` text prefix is unchanged.
 //
-// `JourneyShapeId` is the CLI's `string` alias (defined in `shapes/types.ts`
-// once Task 10 lands; forward-declared here as `string` to match).
-// `ValueBreakdown` is the canonical shape defined in `./value`; this module
-// re-exports it so the manifest contract remains the single import site for
-// downstream callers that historically reached for it here.
+// `JourneyShapeId` is re-exported from `./shapes/types`, where it is pinned
+// as the string-literal union of the 21 canonical shape ids. The CLI uses a
+// plain `string` alias; pinning the literal union here gives downstream
+// callers exhaustive switches without depending on a registry that is still
+// being populated. `ValueBreakdown` is the canonical shape defined in
+// `./value`; this module re-exports it so the manifest contract remains the
+// single import site for downstream callers that historically reached for
+// it here.
 //
 // Pure module: types only. No I/O, no Node imports. Browser-safe.
 
 import type { ValueBreakdown } from "./value";
+import type { JourneyShapeId } from "./shapes/types";
 
-// Forward declarations. `JourneyShapeId` mirrors the CLI definition
-// byte-for-byte. Task 10 will replace it with a re-export from
-// `shapes/types.ts`.
-export type JourneyShapeId = string;
-
-export type { ValueBreakdown };
+export type { JourneyShapeId, ValueBreakdown };
 
 export const MANIFEST_SCHEMA_VERSION = 2 as const;
 export const MANIFEST_CONTRACT_VERSION = "manifest:v2";
