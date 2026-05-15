@@ -172,21 +172,14 @@ function SiteScreen({
 
 /**
  * Wrapper that bridges the quest prototype's site state to the journeys
- * module. Ensures the simplified `dreamJourney` runtime slot exists, builds
- * the `JourneyContext` from live quest state + content via the adapter
- * boundary, and forwards `onClose` to the `completeDreamJourneySite`
- * mutation. The same `site_completed` log event the legacy screen produced
- * fires inside `completeDreamJourneySite` so analytics continue uninterrupted.
+ * module. Builds the `JourneyContext` from live quest state + content via
+ * the adapter boundary, and forwards `onClose` to the
+ * `completeDreamJourneySite` mutation. The `site_completed` log event the
+ * screen produces fires inside `completeDreamJourneySite` so analytics
+ * stay consistent with other site types.
  */
 function DreamJourneySiteScreen({ site }: { site: SiteState }) {
   const { state, mutations, questContent } = useQuest();
-  const runtime = state.siteRuntime[site.id];
-
-  useEffect(() => {
-    if (runtime === undefined) {
-      mutations.ensureDreamJourneyRuntime(site.id);
-    }
-  }, [mutations, runtime, site.id]);
 
   useEffect(() => {
     logEvent("site_entered", {
@@ -210,14 +203,6 @@ function DreamJourneySiteScreen({ site }: { site: SiteState }) {
     () => buildJourneyContext(state, contentBundle, site),
     [contentBundle, site, state],
   );
-
-  if (runtime === undefined) {
-    return (
-      <div className="flex h-full items-center justify-center p-8">
-        <p className="text-lg opacity-50">Revealing journey...</p>
-      </div>
-    );
-  }
 
   return <JourneyScreen context={journeyContext} onClose={handleClose} />;
 }

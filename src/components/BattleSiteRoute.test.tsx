@@ -156,8 +156,6 @@ function setQuestState({
       ensureCardChoiceRuntime: vi.fn(),
       acceptTransfigurationChoice: vi.fn(),
       acceptDuplicationChoice: vi.fn(),
-      ensureDreamJourneyRuntime: vi.fn(),
-      completeDreamJourneyOption: vi.fn(),
       completeDreamJourneySite: vi.fn(),
       pickDraftCard: vi.fn(),
       addCard: vi.fn(),

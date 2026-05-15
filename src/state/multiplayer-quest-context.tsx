@@ -16,7 +16,7 @@ import {
 } from "../multiplayer/room-paths";
 import { battleStatePath } from "../multiplayer/battle-paths";
 import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
-import type { DreamcallerContent, PackageTideId } from "../types/content";
+import type { DreamcallerContent } from "../types/content";
 import type {
   CardSourceDebugState,
   CardChoiceTransfigurationOffer,
@@ -69,11 +69,6 @@ import {
   assignTransfiguration,
   transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
-import {
-  DREAM_JOURNEYS,
-  type JourneyEffect,
-} from "../data/dream-journeys";
-import { sampleRewardCards } from "../data/tide-weights";
 import type { CardData } from "../types/cards";
 
 
@@ -284,14 +279,6 @@ function shuffled<T>(items: readonly T[]): T[] {
   return [...items].sort(() => Math.random() - 0.5);
 }
 
-function dreamJourneyOptionId(journey: (typeof DREAM_JOURNEYS)[number]): string {
-  return journey.name;
-}
-
-function findDreamJourneyOption(optionId: string) {
-  return DREAM_JOURNEYS.find((journey) => dreamJourneyOptionId(journey) === optionId);
-}
-
 function selectCardChoiceEntryIds({
   deck,
   cardDatabase,
@@ -434,200 +421,6 @@ function siteRuntimeAssumptionMatches(
     site?.type === expectedType &&
     site.isEnhanced === expectedIsEnhanced
   );
-}
-
-function applyPreparedDreamJourneyEffect({
-  prev,
-  effect,
-  prepared,
-}: {
-  prev: QuestState;
-  effect: JourneyEffect;
-  prepared: {
-    removeEntryIds: string[];
-    addCardNumbers: number[];
-    addBaneCardNumbers: number[];
-    upgrades: Array<{ entryId: string; type: TransfigurationType }>;
-  };
-}): QuestState | null {
-  const removeCards = (state: QuestState, count: number): QuestState | null => {
-    const ids = prepared.removeEntryIds.slice(0, count);
-    if (
-      ids.some((entryId) => {
-        const entry = state.deck.find((candidate) => candidate.entryId === entryId);
-        return entry === undefined || entry.isBane;
-      })
-    ) {
-      return null;
-    }
-    const idSet = new Set(ids);
-    return {
-      ...state,
-      deck: state.deck.filter((entry) => !idSet.has(entry.entryId)),
-    };
-  };
-
-  const addCards = (state: QuestState, count: number): QuestState => {
-    let deck = state.deck;
-    for (const cardNumber of prepared.addCardNumbers.slice(0, count)) {
-      deck = [
-        ...deck,
-        {
-          entryId: nextDeckEntryId(deck),
-          cardNumber,
-          transfiguration: null,
-          isBane: false,
-        },
-      ];
-    }
-    return { ...state, deck };
-  };
-
-  const addBaneCards = (state: QuestState, count: number): QuestState => {
-    let deck = state.deck;
-    for (const cardNumber of prepared.addBaneCardNumbers.slice(0, count)) {
-      deck = [
-        ...deck,
-        {
-          entryId: nextDeckEntryId(deck),
-          cardNumber,
-          transfiguration: null,
-          isBane: true,
-        },
-      ];
-    }
-    return { ...state, deck };
-  };
-
-  switch (effect.type) {
-    case "addEssence":
-      return {
-        ...prev,
-        essence: clampEssence(prev.essence + effect.amount, prev.essenceCap),
-      };
-    case "removeEssence":
-      return {
-        ...prev,
-        essence: clampEssence(prev.essence - effect.amount, prev.essenceCap),
-      };
-    case "removeRandomCards":
-      return removeCards(prev, effect.count);
-    case "addRandomCards":
-      return addCards(prev, effect.count);
-    case "addEssenceAndRemoveCards":
-      return removeCards(
-        {
-          ...prev,
-          essence: clampEssence(
-            prev.essence + effect.essenceAmount,
-            prev.essenceCap,
-          ),
-        },
-        effect.removeCount,
-      );
-    case "removeCardsAndAddRandomCards": {
-      const removed = removeCards(prev, effect.removeCount);
-      return removed === null ? null : addCards(removed, effect.addCount);
-    }
-    case "addBaneCards":
-      return addBaneCards(prev, effect.count);
-    case "addEssenceAndAddBaneCards":
-      return addBaneCards(
-        {
-          ...prev,
-          essence: clampEssence(
-            prev.essence + effect.essenceAmount,
-            prev.essenceCap,
-          ),
-        },
-        effect.baneCount,
-      );
-    case "addRandomCardsAndAddBaneCards":
-      return addBaneCards(addCards(prev, effect.addCount), effect.baneCount);
-    case "reduceMaxDreamsigns":
-      return {
-        ...prev,
-        maxDreamsigns: Math.max(0, prev.maxDreamsigns - effect.amount),
-      };
-    case "upgradeRandomCards": {
-      const upgrades = prepared.upgrades.slice(0, effect.count);
-      if (
-        upgrades.some(({ entryId }) => {
-          const entry = prev.deck.find((candidate) => candidate.entryId === entryId);
-          return entry === undefined || entry.transfiguration !== null;
-        })
-      ) {
-        return null;
-      }
-      const upgradeMap = new Map(upgrades.map((upgrade) => [upgrade.entryId, upgrade.type]));
-      return {
-        ...prev,
-        deck: prev.deck.map((entry) => {
-          const type = upgradeMap.get(entry.entryId);
-          return type === undefined ? entry : { ...entry, transfiguration: type };
-        }),
-      };
-    }
-  }
-}
-
-function prepareDreamJourneyEffect({
-  state,
-  effect,
-  cardDatabase,
-  selectedPackageTides,
-}: {
-  state: QuestState;
-  effect: JourneyEffect;
-  cardDatabase: Map<number, CardData>;
-  selectedPackageTides: readonly PackageTideId[];
-}) {
-  const removeCount =
-    effect.type === "removeRandomCards"
-      ? effect.count
-      : effect.type === "addEssenceAndRemoveCards"
-        ? effect.removeCount
-        : effect.type === "removeCardsAndAddRandomCards"
-          ? effect.removeCount
-          : 0;
-  const addCount =
-    effect.type === "addRandomCards"
-      ? effect.count
-      : effect.type === "removeCardsAndAddRandomCards"
-        ? effect.addCount
-        : effect.type === "addRandomCardsAndAddBaneCards"
-          ? effect.addCount
-          : 0;
-  const baneCount =
-    effect.type === "addBaneCards"
-      ? effect.count
-      : effect.type === "addEssenceAndAddBaneCards"
-        ? effect.baneCount
-        : effect.type === "addRandomCardsAndAddBaneCards"
-          ? effect.baneCount
-          : 0;
-  const upgradeCount = effect.type === "upgradeRandomCards" ? effect.count : 0;
-  const types = ["Viridian", "Golden", "Scarlet", "Azure", "Bronze"] as const;
-
-  return {
-    removeEntryIds: shuffled(state.deck.filter((entry) => !entry.isBane))
-      .slice(0, removeCount)
-      .map((entry) => entry.entryId),
-    addCardNumbers: sampleRewardCards(
-      cardDatabase,
-      addCount,
-      selectedPackageTides,
-    ).map((card) => card.cardNumber),
-    addBaneCardNumbers: sampleRewardCards(cardDatabase, baneCount).map(
-      (card) => card.cardNumber,
-    ),
-    upgrades: shuffled(state.deck.filter((entry) => entry.transfiguration === null))
-      .slice(0, upgradeCount)
-      .map((entry) => ({
-        entryId: entry.entryId,
-        type: types[Math.floor(Math.random() * types.length)],
-      })),
-  };
 }
 
 export function MultiplayerQuestProvider({
@@ -2541,166 +2334,6 @@ export function MultiplayerQuestProvider({
     [],
   );
 
-  const ensureDreamJourneyRuntime = useCallback((siteId: string) => {
-    const current = currentRef.current;
-    const site = findSite(current.state, siteId);
-    const expectedSiteType = site?.type ?? null;
-    const expectedIsEnhanced = site?.isEnhanced ?? false;
-    const runtime: DreamJourneySiteRuntime | null =
-      current.state.siteRuntime[siteId] === undefined
-        ? {
-          kind: "dreamJourney",
-          completed: false,
-        }
-        : null;
-    const now = new Date().toISOString();
-    const actionId = runtime === null ? null : crypto.randomUUID();
-
-    writeRoomTransaction({
-      database: current.database,
-      roomId: current.session.roomId,
-      updater: (room) => {
-        if (room === null || room.questState === null) {
-          return room ?? undefined;
-        }
-        if (room.questState.siteRuntime[siteId] !== undefined) {
-          return room;
-        }
-        if (
-          runtime === null ||
-          actionId === null ||
-          !siteRuntimeAssumptionMatches(
-            room.questState,
-            siteId,
-            expectedSiteType,
-            expectedIsEnhanced,
-          )
-        ) {
-          return room;
-        }
-
-        return {
-          ...room,
-          questState: {
-            ...room.questState,
-            siteRuntime: {
-              ...room.questState.siteRuntime,
-              [siteId]: runtime,
-            },
-          },
-          metadata: {
-            ...room.metadata,
-            updatedAt: now,
-          },
-          actionLog: {
-            ...(room.actionLog ?? {}),
-            [actionId]: buildActionLogEntry({
-              timestamp: now,
-              actorId: current.session.clientId,
-              action: "ensureDreamJourneyRuntime",
-              source: "site_reveal",
-              summary: {
-                siteId,
-              },
-            }),
-          },
-        };
-      },
-    });
-  }, []);
-
-  const completeDreamJourneyOption = useCallback(
-    (siteId: string, optionId: string) => {
-      const current = currentRef.current;
-      const journey = findDreamJourneyOption(optionId);
-      if (journey === undefined) {
-        return;
-      }
-      const selectedPackageTides = [
-        ...(current.state.resolvedPackage?.selectedTides ?? []),
-      ];
-      const prepared = prepareDreamJourneyEffect({
-        state: current.state,
-        effect: journey.effect,
-        cardDatabase: current.questContent.cardDatabase,
-        selectedPackageTides,
-      });
-      const now = new Date().toISOString();
-      const actionId = crypto.randomUUID();
-
-      writeRoomTransaction({
-        database: current.database,
-        roomId: current.session.roomId,
-        updater: (room) => {
-          if (room === null || room.questState === null) {
-            return room ?? undefined;
-          }
-          if (room.questState.visitedSites.includes(siteId)) {
-            return room;
-          }
-          const runtime = room.questState.siteRuntime[siteId];
-          if (
-            runtime === undefined ||
-            runtime.kind !== "dreamJourney" ||
-            runtime.completed ||
-            !arraysEqual(
-              room.questState.resolvedPackage?.selectedTides ?? [],
-              selectedPackageTides,
-            )
-          ) {
-            return room;
-          }
-
-          const applied = applyPreparedDreamJourneyEffect({
-            prev: room.questState,
-            effect: journey.effect,
-            prepared,
-          });
-          if (applied === null) {
-            return room;
-          }
-          const next = completeSiteAndReturnToDreamscape(
-            {
-              ...applied,
-              siteRuntime: {
-                ...applied.siteRuntime,
-                [siteId]: {
-                  ...runtime,
-                  completed: true,
-                },
-              },
-            },
-            siteId,
-          );
-
-          return {
-            ...room,
-            questState: next,
-            metadata: {
-              ...room.metadata,
-              updatedAt: now,
-            },
-            actionLog: {
-              ...(room.actionLog ?? {}),
-              [actionId]: buildActionLogEntry({
-                timestamp: now,
-                actorId: current.session.clientId,
-                action: "completeDreamJourneyOption",
-                source: "dream_journey",
-                summary: {
-                  siteId,
-                  optionId,
-                  effectType: journey.effect.type,
-                },
-              }),
-            },
-          };
-        },
-      });
-    },
-    [],
-  );
-
   const completeDreamJourneySite = useCallback((siteId: string) => {
     const current = currentRef.current;
     const site = findSite(current.state, siteId);
@@ -2718,14 +2351,17 @@ export function MultiplayerQuestProvider({
         if (room.questState.visitedSites.includes(siteId)) {
           return room;
         }
-        const runtime = room.questState.siteRuntime[siteId];
+        const existingRuntime = room.questState.siteRuntime[siteId];
         if (
-          runtime === undefined ||
-          runtime.kind !== "dreamJourney" ||
-          runtime.completed
+          existingRuntime !== undefined &&
+          (existingRuntime.kind !== "dreamJourney" || existingRuntime.completed)
         ) {
           return room;
         }
+        const runtime: DreamJourneySiteRuntime =
+          existingRuntime?.kind === "dreamJourney"
+            ? existingRuntime
+            : { kind: "dreamJourney", completed: false };
 
         const next = completeSiteAndReturnToDreamscape(
           {
@@ -2781,8 +2417,6 @@ export function MultiplayerQuestProvider({
       ensureCardChoiceRuntime,
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
-      ensureDreamJourneyRuntime,
-      completeDreamJourneyOption,
       completeDreamJourneySite,
       pickDraftCard,
       addCard,
@@ -2836,8 +2470,6 @@ export function MultiplayerQuestProvider({
       ensureCardChoiceRuntime,
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
-      ensureDreamJourneyRuntime,
-      completeDreamJourneyOption,
       completeDreamJourneySite,
       ensureShopRuntime,
       incrementCompletionLevel,

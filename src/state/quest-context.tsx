@@ -14,7 +14,6 @@ import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
 import type {
   DreamcallerContent,
-  PackageTideId,
   ResolvedDreamcallerPackage,
 } from "../types/content";
 import type {
@@ -23,6 +22,7 @@ import type {
   CardChoiceTransfigurationOffer,
   DeckEntry,
   DreamAtlas,
+  DreamJourneySiteRuntime,
   Dreamsign,
   EssenceSiteRuntime,
   QuestFailureSummary,
@@ -66,11 +66,6 @@ import {
   assignTransfiguration,
   transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
-import {
-  DREAM_JOURNEYS,
-  type JourneyEffect,
-} from "../data/dream-journeys";
-import { sampleRewardCards } from "../data/tide-weights";
 
 export { deriveEntryIdCounter };
 
@@ -129,13 +124,12 @@ export interface QuestMutations {
     entryId: string,
     copyCount: number,
   ) => void;
-  ensureDreamJourneyRuntime: (siteId: string) => void;
-  completeDreamJourneyOption: (siteId: string, optionId: string) => void;
   /**
    * Marks a Dream Journey site as completed and returns to the dreamscape.
    * The journey screen is responsible for any narrative interaction; the
-   * mutation itself applies no deck or resource changes — it only flips the
-   * runtime's `completed` flag and walks the visit-tracking bookkeeping.
+   * mutation itself applies no deck or resource changes — it lazily ensures
+   * a runtime slot exists, flips the `completed` flag, and walks the
+   * visit-tracking bookkeeping.
    */
   completeDreamJourneySite: (siteId: string) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
@@ -262,14 +256,6 @@ function shuffled<T>(items: readonly T[]): T[] {
   return [...items].sort(() => Math.random() - 0.5);
 }
 
-function dreamJourneyOptionId(journey: (typeof DREAM_JOURNEYS)[number]): string {
-  return journey.name;
-}
-
-function findDreamJourneyOption(optionId: string) {
-  return DREAM_JOURNEYS.find((journey) => dreamJourneyOptionId(journey) === optionId);
-}
-
 function selectCardChoiceEntryIds({
   deck,
   cardDatabase,
@@ -380,160 +366,6 @@ function buildCardChoiceRuntime({
     acceptedEntryIds: [],
     transfigurationOffers,
   };
-}
-
-function applyDreamJourneyEffect({
-  prev,
-  effect,
-  cardDatabase,
-  selectedPackageTides,
-  nextEntryId,
-}: {
-  prev: QuestState;
-  effect: JourneyEffect;
-  cardDatabase: Map<number, CardData>;
-  selectedPackageTides: readonly PackageTideId[];
-  nextEntryId: () => string;
-}): QuestState {
-  const removeRandomCards = (state: QuestState, count: number): QuestState => {
-    const toRemove = shuffled(state.deck.filter((entry) => !entry.isBane)).slice(0, count);
-    if (toRemove.length === 0) {
-      return state;
-    }
-    const removedEntryIds = new Set(toRemove.map((entry) => entry.entryId));
-    for (const entry of toRemove) {
-      const card = cardDatabase.get(entry.cardNumber);
-      logEvent("card_removed", {
-        cardNumber: entry.cardNumber,
-        cardName: card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
-        source: "dream_journey",
-      });
-    }
-    return {
-      ...state,
-      deck: state.deck.filter((entry) => !removedEntryIds.has(entry.entryId)),
-    };
-  };
-
-  const addRandomCards = (state: QuestState, count: number): QuestState => {
-    const cards = sampleRewardCards(cardDatabase, count, selectedPackageTides);
-    return {
-      ...state,
-      deck: [
-        ...state.deck,
-        ...cards.map((card) => {
-          logEvent("card_added", {
-            cardNumber: card.cardNumber,
-            cardName: card.name,
-            source: "dream_journey",
-          });
-          return {
-            entryId: nextEntryId(),
-            cardNumber: card.cardNumber,
-            transfiguration: null,
-            isBane: false,
-          };
-        }),
-      ],
-    };
-  };
-
-  const addBaneCards = (state: QuestState, count: number): QuestState => {
-    const cards = sampleRewardCards(cardDatabase, count);
-    return {
-      ...state,
-      deck: [
-        ...state.deck,
-        ...cards.map((card) => {
-          logEvent("card_added", {
-            cardNumber: card.cardNumber,
-            cardName: card.name,
-            source: "dream_journey_bane",
-            isBane: true,
-          });
-          return {
-            entryId: nextEntryId(),
-            cardNumber: card.cardNumber,
-            transfiguration: null,
-            isBane: true,
-          };
-        }),
-      ],
-    };
-  };
-
-  const changeEssence = (state: QuestState, delta: number): QuestState => {
-    const newValue = clampEssence(state.essence + delta, state.essenceCap);
-    logEvent("essence_changed", {
-      oldValue: state.essence,
-      newValue,
-      delta,
-      source: "dream_journey",
-    });
-    return { ...state, essence: newValue };
-  };
-
-  switch (effect.type) {
-    case "addEssence":
-      return changeEssence(prev, effect.amount);
-    case "removeEssence":
-      return changeEssence(prev, -effect.amount);
-    case "removeRandomCards":
-      return removeRandomCards(prev, effect.count);
-    case "addRandomCards":
-      return addRandomCards(prev, effect.count);
-    case "addEssenceAndRemoveCards":
-      return removeRandomCards(
-        changeEssence(prev, effect.essenceAmount),
-        effect.removeCount,
-      );
-    case "removeCardsAndAddRandomCards":
-      return addRandomCards(
-        removeRandomCards(prev, effect.removeCount),
-        effect.addCount,
-      );
-    case "upgradeRandomCards": {
-      const types = ["Viridian", "Golden", "Scarlet", "Azure", "Bronze"] as const;
-      const toUpgrade = shuffled(prev.deck.filter((entry) => entry.transfiguration === null)).slice(0, effect.count);
-      const upgrades = new Map<string, TransfigurationType>();
-      for (const entry of toUpgrade) {
-        const type = types[Math.floor(Math.random() * types.length)];
-        const card = cardDatabase.get(entry.cardNumber);
-        upgrades.set(entry.entryId, type);
-        logEvent("card_transfigured", {
-          cardNumber: entry.cardNumber,
-          cardName: card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
-          transfigurationType: type,
-          effectDescription: "Dream Journey upgrade",
-          modifiedFields: { source: "dreamJourney", type },
-        });
-      }
-      return {
-        ...prev,
-        deck: prev.deck.map((entry) => {
-          const type = upgrades.get(entry.entryId);
-          return type === undefined ? entry : { ...entry, transfiguration: type };
-        }),
-      };
-    }
-    case "addBaneCards":
-      return addBaneCards(prev, effect.count);
-    case "addEssenceAndAddBaneCards":
-      return addBaneCards(
-        changeEssence(prev, effect.essenceAmount),
-        effect.baneCount,
-      );
-    case "addRandomCardsAndAddBaneCards":
-      return addBaneCards(
-        addRandomCards(prev, effect.addCount),
-        effect.baneCount,
-      );
-    case "reduceMaxDreamsigns":
-      return {
-        ...prev,
-        maxDreamsigns: Math.max(0, prev.maxDreamsigns - effect.amount),
-      };
-  }
 }
 
 export function createDefaultState(): QuestState {
@@ -1603,94 +1435,22 @@ export function QuestProvider({
     [cardDatabase],
   );
 
-  const ensureDreamJourneyRuntime = useCallback((siteId: string) => {
-    setState((prev) => {
-      if (prev.siteRuntime[siteId] !== undefined) {
-        return prev;
-      }
-      return {
-        ...prev,
-        siteRuntime: {
-          ...prev.siteRuntime,
-          [siteId]: {
-            kind: "dreamJourney",
-            completed: false,
-          },
-        },
-      };
-    });
-  }, []);
-
-  const completeDreamJourneyOption = useCallback(
-    (siteId: string, optionId: string) => {
-      setState((prev) => {
-        if (prev.visitedSites.includes(siteId)) {
-          return prev;
-        }
-        const runtime = prev.siteRuntime[siteId];
-        if (
-          runtime === undefined ||
-          runtime.kind !== "dreamJourney" ||
-          runtime.completed
-        ) {
-          return prev;
-        }
-        const journey = findDreamJourneyOption(optionId);
-        if (journey === undefined) {
-          return prev;
-        }
-        const selectedPackageTides = prev.resolvedPackage?.selectedTides ?? [];
-        let next = applyDreamJourneyEffect({
-          prev,
-          effect: journey.effect,
-          cardDatabase,
-          selectedPackageTides,
-          nextEntryId,
-        });
-        logEvent("dream_journey_chosen", {
-          journeyName: journey.name,
-          effectType: journey.effect.type,
-        });
-        const site = findSite(prev, siteId);
-        logEvent("site_completed", {
-          siteType: "DreamJourney",
-          isEnhanced: site?.isEnhanced ?? false,
-        });
-        next = setQuestScreen(
-          completeQuestSite(
-            {
-              ...next,
-              siteRuntime: {
-                ...next.siteRuntime,
-                [siteId]: {
-                  ...runtime,
-                  completed: true,
-                },
-              },
-            },
-            siteId,
-          ),
-          { type: "dreamscape" },
-        );
-        return next;
-      });
-    },
-    [cardDatabase],
-  );
-
   const completeDreamJourneySite = useCallback((siteId: string) => {
     setState((prev) => {
       if (prev.visitedSites.includes(siteId)) {
         return prev;
       }
-      const runtime = prev.siteRuntime[siteId];
+      const existingRuntime = prev.siteRuntime[siteId];
       if (
-        runtime === undefined ||
-        runtime.kind !== "dreamJourney" ||
-        runtime.completed
+        existingRuntime !== undefined &&
+        (existingRuntime.kind !== "dreamJourney" || existingRuntime.completed)
       ) {
         return prev;
       }
+      const runtime: DreamJourneySiteRuntime =
+        existingRuntime?.kind === "dreamJourney"
+          ? existingRuntime
+          : { kind: "dreamJourney", completed: false };
       const site = findSite(prev, siteId);
       logEvent("site_completed", {
         siteType: "DreamJourney",
@@ -2158,8 +1918,6 @@ export function QuestProvider({
       ensureCardChoiceRuntime,
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
-      ensureDreamJourneyRuntime,
-      completeDreamJourneyOption,
       completeDreamJourneySite,
       pickDraftCard,
       addCard,
@@ -2200,8 +1958,6 @@ export function QuestProvider({
       ensureCardChoiceRuntime,
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
-      ensureDreamJourneyRuntime,
-      completeDreamJourneyOption,
       completeDreamJourneySite,
       pickDraftCard,
       addCard,
