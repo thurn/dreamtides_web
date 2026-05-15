@@ -1,4 +1,4 @@
-import { readFileSync, mkdirSync, rmSync, symlinkSync, existsSync } from "node:fs";
+import { readFileSync, mkdirSync, rmSync, symlinkSync, existsSync, readdirSync } from "node:fs";
 import { writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { resolve, join } from "node:path";
@@ -14,8 +14,20 @@ const DREAMCALLER_ART_DIR_CANDIDATES = [
   join(homedir(), "Documents", "sytny", "dreamcallers"),
 ];
 const DREAMSIGN_ART_DIR = join(homedir(), "Documents", "dreamsigns", "filtered");
+const JOURNEY_ART_DIR = join(homedir(), "Documents", "shutterstock", "images_journeys");
 
 const PUBLIC_DIR = join(ROOT, "public");
+
+/**
+ * Extract the trailing numeric image id from a shutterstock journey filename.
+ * The convention is `<arbitrary-prefix>-<digits>.<ext>`. Returns null if the
+ * filename does not match.
+ */
+export function journeyImageIdFromFilename(filename) {
+  const match = /-(\d+)\.([A-Za-z0-9]+)$/u.exec(filename);
+  if (!match) return null;
+  return { imageId: match[1], extension: match[2] };
+}
 
 /**
  * Convert a kebab-case string to camelCase.
@@ -144,13 +156,16 @@ export function setupAssets({
   imageCacheDir = IMAGE_CACHE_DIR,
   dreamcallerArtDir = defaultDreamcallerArtDir(),
   dreamsignArtDir = DREAMSIGN_ART_DIR,
+  journeyArtDir = JOURNEY_ART_DIR,
 } = {}) {
   const cardsDir = join(publicDir, "cards");
   const dreamcallersDir = join(publicDir, "dreamcallers");
   const dreamsignsDir = join(publicDir, "dreamsigns");
+  const journeysDir = join(publicDir, "journeys");
   const cardJsonPath = join(publicDir, "card-data.json");
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
+  const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
 
   console.log("Parsing rendered-cards.toml...");
   const cardTomlContent = readFileSync(cardTomlPath, "utf8");
@@ -281,6 +296,62 @@ export function setupAssets({
   console.log(
     `Linked ${linkedDreamsignArt} of ${jsonDreamsigns.length} dreamsign images (${missingDreamsignArt} missing)`,
   );
+
+  // Journey dream art. Source files live at
+  // `~/Documents/shutterstock/images_journeys/<arbitrary-prefix>-<imageId>.<ext>`;
+  // they get symlinked into `public/journeys/<imageId>.<ext>` so the matcher's
+  // `imageUrl` convention (`/journeys/<imageId>.<ext>`) resolves at runtime.
+  // A sibling `imageId-extension.json` records each id's extension so the
+  // browser-side matcher can build URLs without filesystem access. The TOML
+  // ledger (`src/journeys/data/reward-art-matches.toml`) is the catalog of
+  // which image_ids back which reward types.
+  recreateDir(journeysDir);
+  let linkedJourneyArt = 0;
+  let skippedJourneyArt = 0;
+  const journeyExtensionsByImageId = {};
+
+  if (existsSync(journeyArtDir)) {
+    for (const filename of readdirSync(journeyArtDir)) {
+      const parsed = journeyImageIdFromFilename(filename);
+      if (!parsed) {
+        skippedJourneyArt++;
+        continue;
+      }
+      const { imageId, extension } = parsed;
+      // If two files share an imageId (rare but possible), the first wins;
+      // record the warning so the catalog can be cleaned up.
+      if (journeyExtensionsByImageId[imageId] !== undefined) {
+        console.warn(
+          `  Warning: duplicate journey image id ${imageId} (keeping first); skipping ${filename}`,
+        );
+        skippedJourneyArt++;
+        continue;
+      }
+      const sourcePath = join(journeyArtDir, filename);
+      const symlinkPath = join(journeysDir, `${imageId}.${extension}`);
+      symlinkSync(sourcePath, symlinkPath);
+      journeyExtensionsByImageId[imageId] = extension;
+      linkedJourneyArt++;
+    }
+
+    writeFileSync(
+      journeyExtensionJsonPath,
+      JSON.stringify(journeyExtensionsByImageId, null, 2) + "\n",
+    );
+    console.log(
+      `Linked ${linkedJourneyArt} journey images (${skippedJourneyArt} skipped)`,
+    );
+  } else {
+    // Graceful degradation when the developer's machine has no shutterstock
+    // cache: the dream-art matcher still runs (the bundled TOML ledger is
+    // independent of the on-disk image files), it just produces URLs that
+    // 404. Mirrors the existing dreamcaller/dreamsign warn-and-continue
+    // behaviour. Write an empty extension map so the runtime fetch succeeds.
+    writeFileSync(journeyExtensionJsonPath, "{}\n");
+    console.warn(
+      `  Warning: journey art directory not found at ${journeyArtDir} — image URLs will 404`,
+    );
+  }
 
   console.log("Asset setup complete.");
 }

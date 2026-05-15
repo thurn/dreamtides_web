@@ -3,6 +3,7 @@ dist/
 public/cards/
 public/dreamcallers/
 public/dreamsigns/
+public/journeys/
 public/tides/
 public/card-data.json
 public/dreamcaller-data.json
