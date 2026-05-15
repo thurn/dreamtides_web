@@ -21,7 +21,17 @@ export type Reward<P extends TemplateParams = TemplateParams> = {
   render(params: P, ctx: JourneyContext): string;
 };
 
-export type Cost<P extends TemplateParams = TemplateParams> = Reward<P>;
+// A `Cost` extends `Reward` with a structural `locked` predicate. The CLI
+// inferred lock state from a `[LOCKED]` text prefix on the rendered string;
+// the port keeps that prefix (via `withLockedPrefix` inside `render`) and
+// surfaces the same boolean directly so assembly code can write it to
+// `JourneyOption.locked` without parsing rendered text. A cost is "locked"
+// when the player cannot pay it from current state (e.g. essence cost
+// exceeds current essence). Templates that never lock (battle/shop/route
+// modifiers, bane gains, etc.) return `false` from `locked`.
+export type Cost<P extends TemplateParams = TemplateParams> = Reward<P> & {
+  locked(params: P, ctx: JourneyContext): boolean;
+};
 
 // Predicate categories. Random-gain rewards (e.g. "Gain N random <plural>")
 // restrict themselves to `ability` and `card-type` predicates because grants
