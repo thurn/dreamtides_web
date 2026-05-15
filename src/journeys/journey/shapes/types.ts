@@ -8,9 +8,9 @@
 // switching without depending on a runtime registry that is still being
 // populated.
 //
-// `ValidationResult` is forward-declared inline because the validate/result
-// module has not been ported yet. Future tasks replace the inline union with
-// a re-export from `../validate/result`.
+// `ValidationResult` is re-exported from `../validate/result` so shape
+// plugins, validators, and downstream callers share a single canonical
+// definition.
 //
 // Pure module: types only. No I/O. Browser-safe.
 
@@ -28,15 +28,9 @@ import type {
   PrecommittedOutcomes,
   SequenceState,
 } from "../manifest";
+import type { ValidationResult } from "../validate/result";
 
-/**
- * Forward declaration for `ValidationResult`. The validate/result module is
- * ported in a later task; this matches the CLI's contract exactly so we can
- * swap to a re-export when the module lands without touching call sites.
- */
-export type ValidationResult =
-  | { ok: true }
-  | { ok: false; rule: string; message: string; debug?: Record<string, unknown> };
+export type { ValidationResult };
 
 /**
  * The canonical string-literal union of every Journey shape id. Pinned here

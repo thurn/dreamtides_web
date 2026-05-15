@@ -5,14 +5,12 @@
 // definition, looks up the score weight from `scoreWeights.ts`, and wraps the
 // plugin object so downstream callers can rely on structural immutability.
 //
-// `decisionTreeValidator` is exported as a stub for now. The CLI's
-// implementation delegates to `validateDecisionTree` in `validate/tree.ts`;
-// that module is ported alongside the decision-tree shapes (Task 15) and
-// generation pipeline (Task 16). Once the validate module lands the stub's
-// body swaps to a direct delegate without disturbing call sites.
+// `decisionTreeValidator` delegates to `validateDecisionTree` from
+// `validate/tree.ts`, exactly as the CLI wires it.
 //
 // Pure module: no I/O, no Node imports. Browser-safe.
 
+import { validateDecisionTree } from "../validate/tree";
 import { getShapeScoreWeight } from "./scoreWeights";
 import type {
   JourneyShapeDefinition,
@@ -20,7 +18,6 @@ import type {
   JourneyShapePlugin,
   JourneyTopology,
   ShapeValidator,
-  ValidationResult,
 } from "./types";
 
 export const JOURNEY_SHAPE_CATALOG_VERSION = "journey-shapes:v26";
@@ -141,17 +138,10 @@ export function defineShapePlugin(
   return Object.freeze(plugin);
 }
 
-/**
- * Stub `decisionTreeValidator`. The CLI delegates to
- * `validateDecisionTree(manifest, context, generatedObjects)` in
- * `validate/tree.ts`. The validate module is ported alongside the
- * decision-tree shapes (Task 15) and generation pipeline (Task 16); until
- * then this stub returns `{ ok: true }` so decision-tree shapes can declare
- * the validator without a hard dependency.
- */
 export const decisionTreeValidator: ShapeValidator = {
   ruleId: "decision_tree_invariants",
   passMessage:
     "Decision-tree topology is complete and legal when applicable.",
-  validate: (): ValidationResult => ({ ok: true }),
+  validate: ({ manifest, context, generatedObjects }) =>
+    validateDecisionTree(manifest, context, generatedObjects),
 };
