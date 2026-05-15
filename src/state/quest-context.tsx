@@ -131,6 +131,13 @@ export interface QuestMutations {
   ) => void;
   ensureDreamJourneyRuntime: (siteId: string) => void;
   completeDreamJourneyOption: (siteId: string, optionId: string) => void;
+  /**
+   * Marks a Dream Journey site as completed and returns to the dreamscape.
+   * The journey screen is responsible for any narrative interaction; the
+   * mutation itself applies no deck or resource changes — it only flips the
+   * runtime's `completed` flag and walks the visit-tracking bookkeeping.
+   */
+  completeDreamJourneySite: (siteId: string) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
@@ -1601,19 +1608,12 @@ export function QuestProvider({
       if (prev.siteRuntime[siteId] !== undefined) {
         return prev;
       }
-      const site = findSite(prev, siteId);
-      const optionCount = site?.isEnhanced ? 3 : 2;
-      const optionIds = shuffled(DREAM_JOURNEYS)
-        .slice(0, optionCount)
-        .map(dreamJourneyOptionId);
-
       return {
         ...prev,
         siteRuntime: {
           ...prev.siteRuntime,
           [siteId]: {
             kind: "dreamJourney",
-            optionIds,
             completed: false,
           },
         },
@@ -1631,8 +1631,7 @@ export function QuestProvider({
         if (
           runtime === undefined ||
           runtime.kind !== "dreamJourney" ||
-          runtime.completed ||
-          !runtime.optionIds.includes(optionId)
+          runtime.completed
         ) {
           return prev;
         }
@@ -1678,6 +1677,40 @@ export function QuestProvider({
     },
     [cardDatabase],
   );
+
+  const completeDreamJourneySite = useCallback((siteId: string) => {
+    setState((prev) => {
+      if (prev.visitedSites.includes(siteId)) {
+        return prev;
+      }
+      const runtime = prev.siteRuntime[siteId];
+      if (
+        runtime === undefined ||
+        runtime.kind !== "dreamJourney" ||
+        runtime.completed
+      ) {
+        return prev;
+      }
+      const site = findSite(prev, siteId);
+      logEvent("site_completed", {
+        siteType: "DreamJourney",
+        isEnhanced: site?.isEnhanced ?? false,
+      });
+      return setQuestScreen(
+        completeQuestSite(
+          {
+            ...prev,
+            siteRuntime: {
+              ...prev.siteRuntime,
+              [siteId]: { ...runtime, completed: true },
+            },
+          },
+          siteId,
+        ),
+        { type: "dreamscape" },
+      );
+    });
+  }, []);
 
   const pickDraftCard = useCallback(
     (_siteId: string, _cardNumber: number) => {
@@ -2127,6 +2160,7 @@ export function QuestProvider({
       acceptDuplicationChoice,
       ensureDreamJourneyRuntime,
       completeDreamJourneyOption,
+      completeDreamJourneySite,
       pickDraftCard,
       addCard,
       addBaneCard,
@@ -2168,6 +2202,7 @@ export function QuestProvider({
       acceptDuplicationChoice,
       ensureDreamJourneyRuntime,
       completeDreamJourneyOption,
+      completeDreamJourneySite,
       pickDraftCard,
       addCard,
       addBaneCard,

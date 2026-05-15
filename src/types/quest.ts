@@ -239,7 +239,6 @@ export type CardChoiceSiteRuntime = {
 /** Runtime state for a Dream Journey site. */
 export interface DreamJourneySiteRuntime {
   kind: "dreamJourney";
-  optionIds: string[];
   completed: boolean;
 }
 

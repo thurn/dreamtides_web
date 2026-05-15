@@ -110,6 +110,7 @@ function makeMutations(): QuestMutations {
     acceptDuplicationChoice: vi.fn(),
     ensureDreamJourneyRuntime: vi.fn(),
     completeDreamJourneyOption: vi.fn(),
+    completeDreamJourneySite: vi.fn(),
     pickDraftCard: vi.fn(),
     addCard: vi.fn(),
     addBaneCard: vi.fn(),

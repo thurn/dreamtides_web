@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { AtlasScreen } from "../screens/AtlasScreen";
@@ -11,12 +11,17 @@ import { ShopScreen } from "../screens/ShopScreen";
 import { EssenceSiteScreen } from "../screens/EssenceSiteScreen";
 import { DreamsignOfferingScreen } from "../screens/DreamsignOfferingScreen";
 import { DreamsignDraftScreen } from "../screens/DreamsignDraftScreen";
-import { DreamJourneyScreen } from "../screens/DreamJourneyScreen";
 import { PurgeSiteScreen } from "../screens/PurgeSiteScreen";
 import { TransfigurationSiteScreen } from "../screens/TransfigurationSiteScreen";
 import { DuplicationSiteScreen } from "../screens/DuplicationSiteScreen";
 import { RewardSiteScreen } from "../screens/RewardSiteScreen";
 import { CleanseSiteScreen } from "../screens/CleanseSiteScreen";
+import {
+  JourneyScreen,
+  buildJourneyContext,
+  buildJourneyContentBundle,
+} from "../journeys";
+import type { QuestContent } from "../data/quest-content";
 import { siteTypeName } from "../atlas/atlas-generator";
 import { logEvent } from "../logging";
 import type { Screen, SiteState } from "../types/quest";
@@ -139,7 +144,7 @@ function SiteScreen({
   }
 
   if (site.type === "DreamJourney") {
-    return <DreamJourneyScreen site={site} />;
+    return <DreamJourneySiteScreen site={site} />;
   }
 
   if (site.type === "Purge") {
@@ -163,6 +168,66 @@ function SiteScreen({
   }
 
   return <GenericSitePlaceholder site={site} />;
+}
+
+/**
+ * Wrapper that bridges the quest prototype's site state to the journeys
+ * module. Ensures the simplified `dreamJourney` runtime slot exists, builds
+ * the `JourneyContext` from live quest state + content via the adapter
+ * boundary, and forwards `onClose` to the `completeDreamJourneySite`
+ * mutation. The same `site_completed` log event the legacy screen produced
+ * fires inside `completeDreamJourneySite` so analytics continue uninterrupted.
+ */
+function DreamJourneySiteScreen({ site }: { site: SiteState }) {
+  const { state, mutations, questContent } = useQuest();
+  const runtime = state.siteRuntime[site.id];
+
+  useEffect(() => {
+    if (runtime === undefined) {
+      mutations.ensureDreamJourneyRuntime(site.id);
+    }
+  }, [mutations, runtime, site.id]);
+
+  useEffect(() => {
+    logEvent("site_entered", {
+      siteType: "DreamJourney",
+      isEnhanced: site.isEnhanced,
+    });
+  }, [site.id, site.isEnhanced]);
+
+  const handleClose = useCallback(() => {
+    mutations.completeDreamJourneySite(site.id);
+  }, [mutations, site.id]);
+
+  const contentBundle = useMemo(
+    () => buildContentBundleFor(questContent),
+    [questContent],
+  );
+
+  // Memoize the journey context on the inputs that actually feed it so React's
+  // strict-mode double render does not regenerate the manifest seed.
+  const journeyContext = useMemo(
+    () => buildJourneyContext(state, contentBundle, site),
+    [contentBundle, site, state],
+  );
+
+  if (runtime === undefined) {
+    return (
+      <div className="flex h-full items-center justify-center p-8">
+        <p className="text-lg opacity-50">Revealing journey...</p>
+      </div>
+    );
+  }
+
+  return <JourneyScreen context={journeyContext} onClose={handleClose} />;
+}
+
+function buildContentBundleFor(questContent: QuestContent) {
+  return buildJourneyContentBundle({
+    cards: Array.from(questContent.cardDatabase.values()),
+    dreamcallers: questContent.dreamcallers,
+    dreamsignTemplates: questContent.dreamsignTemplates,
+  });
 }
 
 /** Auto-complete placeholder for non-battle site types. */

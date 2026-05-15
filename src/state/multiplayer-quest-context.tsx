@@ -2546,14 +2546,10 @@ export function MultiplayerQuestProvider({
     const site = findSite(current.state, siteId);
     const expectedSiteType = site?.type ?? null;
     const expectedIsEnhanced = site?.isEnhanced ?? false;
-    const optionCount = site?.isEnhanced ? 3 : 2;
     const runtime: DreamJourneySiteRuntime | null =
       current.state.siteRuntime[siteId] === undefined
         ? {
           kind: "dreamJourney",
-          optionIds: shuffled(DREAM_JOURNEYS)
-            .slice(0, optionCount)
-            .map(dreamJourneyOptionId),
           completed: false,
         }
         : null;
@@ -2605,7 +2601,6 @@ export function MultiplayerQuestProvider({
               source: "site_reveal",
               summary: {
                 siteId,
-                optionCount,
               },
             }),
           },
@@ -2648,7 +2643,6 @@ export function MultiplayerQuestProvider({
             runtime === undefined ||
             runtime.kind !== "dreamJourney" ||
             runtime.completed ||
-            !runtime.optionIds.includes(optionId) ||
             !arraysEqual(
               room.questState.resolvedPackage?.selectedTides ?? [],
               selectedPackageTides,
@@ -2707,6 +2701,68 @@ export function MultiplayerQuestProvider({
     [],
   );
 
+  const completeDreamJourneySite = useCallback((siteId: string) => {
+    const current = currentRef.current;
+    const site = findSite(current.state, siteId);
+    const isEnhanced = site?.isEnhanced ?? false;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        if (room.questState.visitedSites.includes(siteId)) {
+          return room;
+        }
+        const runtime = room.questState.siteRuntime[siteId];
+        if (
+          runtime === undefined ||
+          runtime.kind !== "dreamJourney" ||
+          runtime.completed
+        ) {
+          return room;
+        }
+
+        const next = completeSiteAndReturnToDreamscape(
+          {
+            ...room.questState,
+            siteRuntime: {
+              ...room.questState.siteRuntime,
+              [siteId]: { ...runtime, completed: true },
+            },
+          },
+          siteId,
+        );
+
+        return {
+          ...room,
+          questState: next,
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "completeDreamJourneySite",
+              source: "dream_journey",
+              summary: {
+                siteId,
+                isEnhanced,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
   const mutations = useMemo<QuestMutations>(
     () => ({
       changeEssence,
@@ -2727,6 +2783,7 @@ export function MultiplayerQuestProvider({
       acceptDuplicationChoice,
       ensureDreamJourneyRuntime,
       completeDreamJourneyOption,
+      completeDreamJourneySite,
       pickDraftCard,
       addCard,
       addBaneCard: (_cardNumber: number, _source: string) => {
@@ -2781,6 +2838,7 @@ export function MultiplayerQuestProvider({
       acceptDuplicationChoice,
       ensureDreamJourneyRuntime,
       completeDreamJourneyOption,
+      completeDreamJourneySite,
       ensureShopRuntime,
       incrementCompletionLevel,
       markSiteVisited,

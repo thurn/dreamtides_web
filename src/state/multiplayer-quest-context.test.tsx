@@ -2111,4 +2111,96 @@ describe("MultiplayerQuestProvider", () => {
     expect(roomServiceMocks.runRoomTransaction).not.toHaveBeenCalled();
     expect(randomUUIDMock).not.toHaveBeenCalled();
   });
+
+  it(
+    "completeDreamJourneySite marks the site visited without mutating " +
+      "deck or resources",
+    () => {
+      // Contract: the new mutation walks visit-tracking bookkeeping only.
+      // Any deck or resource side effect would mean a journey effect leaked
+      // into a state slot that the new JourneyScreen owns, which is the
+      // central no-effects-applied invariant for this task.
+      const captured: QuestContextValue[] = [];
+      const initialDeck = [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ];
+      const initialDreamsigns = [makeDreamsign("dreamsign-1", "Dreamsign One")];
+      const questState: QuestState = {
+        ...createDefaultState(),
+        essence: 250,
+        omens: 5,
+        deck: initialDeck,
+        dreamsigns: initialDreamsigns,
+        siteRuntime: {
+          "site-1": { kind: "dreamJourney", completed: false },
+        },
+        atlas: {
+          nodes: {
+            "node-1": {
+              id: "node-1",
+              biomeName: "Candle Mire",
+              biomeColor: "#abcdef",
+              sites: [
+                {
+                  id: "site-1",
+                  type: "DreamJourney",
+                  isEnhanced: false,
+                  isVisited: false,
+                },
+              ],
+              position: { x: 0, y: 0 },
+              status: "available",
+              enhancedSiteType: null,
+            },
+          },
+          edges: [],
+          startingNodeId: "node-1",
+        },
+        screen: { type: "site", siteId: "site-1" },
+        activeSiteId: "site-1",
+      };
+      const session = makeSession(questState);
+      mount(
+        <MultiplayerQuestProvider
+          database={database}
+          session={session}
+          questContent={makeQuestContent()}
+        >
+          <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+        </MultiplayerQuestProvider>,
+      );
+
+      captured[captured.length - 1]?.mutations.completeDreamJourneySite(
+        "site-1",
+      );
+      const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+
+      expect(nextRoom?.questState?.visitedSites).toEqual(["site-1"]);
+      expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
+        kind: "dreamJourney",
+        completed: true,
+      });
+      // Deck and resources MUST be untouched.
+      expect(nextRoom?.questState?.deck).toEqual(initialDeck);
+      expect(nextRoom?.questState?.dreamsigns).toEqual(initialDreamsigns);
+      expect(nextRoom?.questState?.essence).toBe(250);
+      expect(nextRoom?.questState?.omens).toBe(5);
+      expect(nextRoom?.questState?.essenceCap).toBe(questState.essenceCap);
+      expect(nextRoom?.questState?.maxDreamsigns).toBe(questState.maxDreamsigns);
+      expect(nextRoom?.questState?.screen).toEqual({ type: "dreamscape" });
+      expect(nextRoom?.questState?.activeSiteId).toBeNull();
+      expect(nextRoom?.actionLog?.["action-1"]).toEqual({
+        timestamp: nextRoom?.metadata.updatedAt,
+        actorId: "client-1",
+        action: "completeDreamJourneySite",
+        source: "dream_journey",
+        summary: { siteId: "site-1", isEnhanced: false },
+      });
+    },
+  );
 });

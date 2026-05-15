@@ -57,6 +57,7 @@ function makeMutations(): QuestMutations {
     acceptDuplicationChoice: vi.fn(),
     ensureDreamJourneyRuntime: vi.fn(),
     completeDreamJourneyOption: vi.fn(),
+    completeDreamJourneySite: vi.fn(),
     pickDraftCard: vi.fn(),
     addCard: vi.fn(),
     addBaneCard: vi.fn(),
@@ -100,7 +101,6 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     siteRuntime: {
       "site-1": {
         kind: "dreamJourney",
-        optionIds: ["The Shattered Hourglass"],
         completed: false,
       },
     },
@@ -195,7 +195,7 @@ describe("DreamJourneyScreen", () => {
 
     expect(mutations.completeDreamJourneyOption).toHaveBeenCalledWith(
       "site-1",
-      "The Shattered Hourglass",
+      "The Drowning Library",
     );
     expect(mutations.changeEssence).not.toHaveBeenCalled();
     expect(mutations.removeCard).not.toHaveBeenCalled();

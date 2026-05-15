@@ -49,15 +49,8 @@ export function DreamJourneyScreen({ site }: DreamJourneyScreenProps) {
 
   const options = useMemo<DreamJourney[]>(
     () =>
-      dreamJourneyRuntime === null
-        ? []
-        : dreamJourneyRuntime.optionIds.flatMap((optionId) => {
-          const journey = DREAM_JOURNEYS.find(
-            (candidate) => candidate.name === optionId,
-          );
-          return journey === undefined ? [] : [journey];
-        }),
-    [dreamJourneyRuntime],
+      dreamJourneyRuntime === null ? [] : DREAM_JOURNEYS.slice(0, optionCount),
+    [dreamJourneyRuntime, optionCount],
   );
 
   const [resultMessage, setResultMessage] = useState<string | null>(null);
