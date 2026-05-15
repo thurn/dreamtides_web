@@ -7,57 +7,21 @@
 // `[LOCKED]` text prefix is unchanged.
 //
 // `JourneyShapeId` is the CLI's `string` alias (defined in `shapes/types.ts`
-// once Task 10 lands; forward-declared here as `string` to match). The
-// `ValueBreakdown` shape is the same as the CLI's `value.ts` definition;
-// Task 6 ports value.ts and will re-export the canonical type.
+// once Task 10 lands; forward-declared here as `string` to match).
+// `ValueBreakdown` is the canonical shape defined in `./value`; this module
+// re-exports it so the manifest contract remains the single import site for
+// downstream callers that historically reached for it here.
 //
 // Pure module: types only. No I/O, no Node imports. Browser-safe.
 
-// Forward declarations. These mirror the CLI definitions byte-for-byte.
-// Task 10 will replace `JourneyShapeId` with a re-export from
-// `shapes/types.ts`. Task 6 will replace `ValueBreakdown` with a re-export
-// from `value.ts`.
+import type { ValueBreakdown } from "./value";
+
+// Forward declarations. `JourneyShapeId` mirrors the CLI definition
+// byte-for-byte. Task 10 will replace it with a re-export from
+// `shapes/types.ts`.
 export type JourneyShapeId = string;
 
-export type ValueBreakdown = {
-  optionNumber: number;
-  cost: number;
-  effect: number;
-  burden: number;
-  uncertainty: number;
-  net: number;
-  components: {
-    kind:
-      | "cost"
-      | "effect"
-      | "burden"
-      | "uncertainty"
-      | "risk"
-      | "visibility"
-      | "duration"
-      | "target-quality"
-      | "object-quality"
-      | "named-card-quality"
-      | "named-dreamsign-quality"
-      | "random-target-uncertainty"
-      | "batch-operation"
-      | "temporary-duration"
-      | "delayed-trigger-risk"
-      | "route-scope"
-      | "route-polarity"
-      | "status-scope"
-      | "reward-replacement"
-      | "random-envelope-risk"
-      | "generated-object-confidence"
-      | "compound-bundle"
-      | "operation-arity"
-      | "value-band";
-    operationId?: string;
-    label: string;
-    value: number;
-  }[];
-  detail: string[];
-};
+export type { ValueBreakdown };
 
 export const MANIFEST_SCHEMA_VERSION = 2 as const;
 export const MANIFEST_CONTRACT_VERSION = "manifest:v2";
