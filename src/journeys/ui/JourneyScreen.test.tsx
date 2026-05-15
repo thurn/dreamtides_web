@@ -2,7 +2,7 @@
 
 // UI tests for `JourneyScreen`.
 //
-// Six tests, one per non-redundant branch in the screen's state machine.
+// Eight tests, one per non-redundant branch in the screen's state machine.
 // Each test owns its manifest: `generateNextJourney` is mocked at the module
 // boundary so tests never run the real generation pipeline (already covered
 // by Phase F's `generate.test.ts` and Phase G's shape suites).
@@ -24,6 +24,12 @@
 //      calling `onClose`.
 //   6. Error handling. A regression where a thrown generator stack-traces
 //      the screen instead of rendering the player-readable fallback.
+//   7. Auto-leave filter. A regression where `pickBehavior === "leave"`
+//      options leak through to the render loop and surface as extra circles
+//      (every shape except `choose_your_loss` appends an auto-leave option).
+//   8. Missing dream art is a hard error. A regression where a rendered
+//      option without a matching dream-art assignment falls through to
+//      placeholder visuals instead of the player-readable error fallback.
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -52,6 +58,7 @@ import {
 } from "../journey/manifest";
 import { generateNextJourney } from "../journey/generate";
 
+import * as dreamArtModule from "./dreamArt";
 import { JourneyScreen } from "./JourneyScreen";
 
 // Mock framer-motion so the rendered DOM matches the JSX one-to-one and we
@@ -442,6 +449,70 @@ describe("JourneyScreen", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("filters auto-leave options out of the flat render loop", () => {
+    // Three real options plus the auto-leave option appended by every shape
+    // except `choose_your_loss`. Render must show three circles, not four.
+    const leaveOption = makeUnlockedOption({
+      ...baseOptionFields(4),
+      pickBehavior: "leave",
+    });
+    const manifest = manifestSkeleton({
+      shapeId: "random_rewards",
+      options: [
+        makeUnlockedOption(baseOptionFields(1)),
+        makeUnlockedOption(baseOptionFields(2)),
+        makeUnlockedOption(baseOptionFields(3)),
+        leaveOption,
+      ],
+    });
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+
+    const { container, root } = mount(
+      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+    );
+
+    // CloseButton is also a <button>, so filter to Enter Dream buttons only.
+    const enterButtons = queryEnterDreamButtons(container);
+    expect(enterButtons).toHaveLength(3);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the error fallback when a rendered option has no dream art", () => {
+    mockedGenerate.mockReturnValue(makeFlatManifest(2));
+    // Force the matcher to return zero assignments so the render path sees a
+    // gap for every rendered option. The screen must surface the player-
+    // readable fallback rather than placeholder visuals.
+    const assignSpy = vi
+      .spyOn(dreamArtModule, "assignDreamArt")
+      .mockReturnValue({
+        assignments: [],
+        reviewFlags: [],
+        repeatFallbacks: [],
+      });
+
+    const onClose = vi.fn();
+    const { container, root } = mount(
+      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+    );
+
+    expect(container.textContent).toContain(
+      "This dream eludes you. Press × to leave.",
+    );
+    // No Enter Dream buttons rendered in the fallback.
+    expect(queryEnterDreamButtons(container)).toHaveLength(0);
+    // CloseButton is still enabled so the player is never stuck.
+    expect(queryCloseButton(container).disabled).toBe(false);
+
+    act(() => {
+      root.unmount();
+    });
+    assignSpy.mockRestore();
   });
 
   it("renders the error fallback when generateNextJourney throws", () => {

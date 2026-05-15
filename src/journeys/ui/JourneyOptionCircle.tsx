@@ -7,9 +7,10 @@
  * multiple circles share a single "which option is hovered" piece of state and
  * never light up two cards simultaneously.
  *
- * When `imageUrl` is missing (developer without the shutterstock cache, or a
- * ledger gap), the circle falls back to a purple gradient with a sparkle
- * glyph. Production builds bundle the images via `scripts/setup-assets.mjs`.
+ * `imageUrl` and `dreamName` are required: every rendered option has a
+ * resolved dream-art assignment. Missing art is an invariant violation handled
+ * upstream by `JourneyScreen` via the error fallback, so this component never
+ * needs a placeholder path.
  *
  * Isolation: imports React, framer-motion, and the sibling `JourneyHoverCard`.
  */
@@ -20,11 +21,8 @@ import { JourneyHoverCard } from "./JourneyHoverCard";
 
 /** Props for `JourneyOptionCircle`. */
 export interface JourneyOptionCircleProps {
-  /**
-   * Resolved dream-art URL (e.g. `/journeys/123.jpg`). When `null` or
-   * `undefined`, the circle renders a gradient sparkle placeholder.
-   */
-  readonly imageUrl: string | null | undefined;
+  /** Resolved dream-art URL (e.g. `/journeys/123.jpg`). */
+  readonly imageUrl: string;
   /** Dream name shown as the caption and the hover-card heading. */
   readonly dreamName: string;
   /** Full rendered option text passed through to the hover card. */
@@ -55,15 +53,12 @@ export function JourneyOptionCircle({
   onMouseLeave,
   onEnterDream,
 }: JourneyOptionCircleProps) {
-  const hasImage = typeof imageUrl === "string" && imageUrl.length > 0;
   return (
     <div className="relative flex w-56 flex-col items-center gap-3">
       <div
         className="relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-full text-3xl"
         style={{
-          background: hasImage
-            ? "#0d0814"
-            : "radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, rgba(168, 85, 247, 0.05) 100%)",
+          background: "#0d0814",
           border: "2px solid rgba(168, 85, 247, 0.45)",
           boxShadow: "0 0 18px rgba(168, 85, 247, 0.18)",
           cursor: "default",
@@ -71,16 +66,12 @@ export function JourneyOptionCircle({
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
-        {hasImage ? (
-          <img
-            src={imageUrl ?? undefined}
-            alt={dreamName}
-            className="h-full w-full object-cover"
-            draggable={false}
-          />
-        ) : (
-          <span aria-hidden="true">{"✨"}</span>
-        )}
+        <img
+          src={imageUrl}
+          alt={dreamName}
+          className="h-full w-full object-cover"
+          draggable={false}
+        />
       </div>
 
       <h3

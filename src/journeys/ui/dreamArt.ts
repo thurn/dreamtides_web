@@ -193,7 +193,13 @@ function flatOptionsToConsider(manifest: JourneyManifest): OptionLike[] {
     }));
 }
 
-function isLeaveBranch(branch: JourneyTreeBranch): boolean {
+/**
+ * Predicate identifying tree branches that represent the player leaving the
+ * journey. Leaves are bookkeeping for the journey state machine — they are not
+ * player-facing options and never receive dream art. Exported so the render
+ * layer can apply the same filter when listing branches.
+ */
+export function isLeaveBranch(branch: JourneyTreeBranch): boolean {
   if (branch.terminal?.outcome === "leave") return true;
   const trimmed = branch.text.trim();
   if (trimmed === "Leave." || trimmed === "Leave") return true;

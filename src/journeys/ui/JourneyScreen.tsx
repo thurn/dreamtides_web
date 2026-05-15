@@ -49,6 +49,7 @@ import { CloseButton } from "./CloseButton";
 import { JourneyOptionCircle } from "./JourneyOptionCircle";
 import {
   assignDreamArt,
+  isLeaveBranch,
   type DreamArtAssignment,
   type ExtensionMap,
 } from "./dreamArt";
@@ -205,9 +206,23 @@ function JourneyScreenInner({
   if (manifest.tree) {
     const currentNode =
       currentNodeId !== null ? findNodeById(manifest, currentNodeId) : null;
-    const branches = currentNode?.branches.filter(
-      (branch) => branch.kind === "player_choice",
-    ) ?? [];
+    // Drop leave-branches and non-player-choice branches: leaves are journey
+    // bookkeeping (the CloseButton is the player-facing affordance), and
+    // automatic/random branches are not rendered as circles.
+    const branches =
+      currentNode?.branches.filter(
+        (branch) => branch.kind === "player_choice" && !isLeaveBranch(branch),
+      ) ?? [];
+
+    // Every rendered branch must have a dream-art assignment. A gap is an
+    // invariant violation — render the error fallback instead of placeholder
+    // visuals.
+    const branchesHaveArt = branches.every((branch) =>
+      assignmentByLabel.has(`Branch ${branch.id}`),
+    );
+    if (!branchesHaveArt) {
+      return <JourneyErrorFallback onClose={onClose} />;
+    }
 
     return (
       <JourneyChrome
@@ -217,12 +232,15 @@ function JourneyScreenInner({
         <div className="flex max-w-5xl flex-wrap items-start justify-center gap-6">
           {branches.map((branch) => {
             const assignment = assignmentByLabel.get(`Branch ${branch.id}`);
+            // Non-null asserted by the `branchesHaveArt` guard above; narrow
+            // here so the props match the tightened circle contract.
+            if (!assignment) return null;
             const key = `branch-${branch.id}`;
             return (
               <JourneyOptionCircle
                 key={key}
-                imageUrl={assignment?.imageUrl}
-                dreamName={assignment?.dreamName ?? branch.label}
+                imageUrl={assignment.imageUrl}
+                dreamName={assignment.dreamName}
                 text={branch.text}
                 locked={branch.locked}
                 hovered={hoveredOptionKey === key}
@@ -240,14 +258,32 @@ function JourneyScreenInner({
   }
 
   // ---- Render options for flat manifests -----------------------------------
+  // Drop auto-leave options: every shape except `choose_your_loss` appends a
+  // `pickBehavior === "leave"` option, but the CloseButton is the player's
+  // leave affordance — the leave option must not render as a circle.
+  const renderedOptions = manifest.options.filter(
+    (option) => option.pickBehavior !== "leave",
+  );
+
+  // Every rendered option must have a dream-art assignment. A gap means the
+  // ledger or matcher is out of sync with the manifest — surface the error
+  // fallback instead of debug-tier placeholder visuals.
+  const optionsHaveArt = renderedOptions.every((option) =>
+    assignmentByLabel.has(`Option ${option.number}`),
+  );
+  if (!optionsHaveArt) {
+    return <JourneyErrorFallback onClose={onClose} />;
+  }
+
   return (
     <JourneyChrome
       closeDisabled={closeDisabled}
       onClose={closeDisabled ? noop : onClose}
     >
       <div className="flex max-w-5xl flex-wrap items-start justify-center gap-6">
-        {manifest.options.map((option) => {
+        {renderedOptions.map((option) => {
           const assignment = assignmentByLabel.get(`Option ${option.number}`);
+          if (!assignment) return null;
           const key = `option-${String(option.number)}`;
           // Defensive: prefer the option's own number when looking up via
           // `findOptionByNumber` to keep the prop wiring symmetric with the
@@ -257,10 +293,8 @@ function JourneyScreenInner({
           return (
             <JourneyOptionCircle
               key={key}
-              imageUrl={assignment?.imageUrl}
-              dreamName={
-                assignment?.dreamName ?? `Option ${String(option.number)}`
-              }
+              imageUrl={assignment.imageUrl}
+              dreamName={assignment.dreamName}
               text={resolved.text}
               locked={resolved.locked}
               hovered={hoveredOptionKey === key}
