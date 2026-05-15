@@ -1,0 +1,63 @@
+// Direct port from CLI `src/journey/shapes/choose_your_loss/fill.ts`.
+
+import { makeUnlockedOption, type JourneyOption } from "../../manifest";
+import type { FilledJourney, ShapeFillArgs } from "../types";
+import { chooseLosses, type RolledLoss } from "./losses";
+
+type SharedCostLossPayload = {
+  readonly kind: "shared_cost_template";
+  readonly templateId: string;
+  readonly params: unknown;
+  readonly text: string;
+  readonly convertedEssence: number;
+  readonly family: string;
+};
+
+function sentence(text: string): string {
+  return text.endsWith(".") ? text : `${text}.`;
+}
+
+function payloadFor(loss: RolledLoss): SharedCostLossPayload {
+  return {
+    kind: "shared_cost_template",
+    templateId: loss.template.id,
+    params: loss.params,
+    text: loss.text,
+    convertedEssence: loss.convertedEssence,
+    family: loss.family,
+  };
+}
+
+function lossOption(number: number, loss: RolledLoss): JourneyOption {
+  return makeUnlockedOption({
+    number,
+    symbols: ["loss", loss.family],
+    text: sentence(loss.text),
+    operations: [],
+    costs: [payloadFor(loss)],
+    effects: [],
+    burdens: [],
+    targets: [],
+    triggers: [],
+    routeEffects: [],
+    costConvertedEssence: loss.convertedEssence,
+    effectConvertedEssence: 0,
+    burdenConvertedEssence: 0,
+    uncertaintyConvertedEssence: 0,
+    netConvertedEssence: -loss.convertedEssence,
+    pickBehavior: "record_and_generate_next",
+    // Loss-only options grant no reward; the dream-art renderer borrows an
+    // arbitrary unused ledger dream for each of them so every option still
+    // gets distinct art.
+    rewardTemplateIds: [],
+  });
+}
+
+export function chooseYourLossFill(args: ShapeFillArgs): FilledJourney {
+  return {
+    options: chooseLosses(args.context, args.drawContext).map((loss, index) =>
+      lossOption(index + 1, loss)
+    ),
+    precommitted: {},
+  };
+}

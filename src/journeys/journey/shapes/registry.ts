@@ -26,11 +26,16 @@ import type {
   JourneyShapePlugin,
 } from "./types";
 
+import { alterDreamscapesPlugin } from "./alter_dreamscapes/index";
+import { chooseYourLossPlugin } from "./choose_your_loss/index";
+import { flatEscalatingTradePlugin } from "./flat_escalating_trade/index";
+import { heterogeneousPairPlugin } from "./heterogeneous_pair/index";
 import { oneOperationManyTargetsPlugin } from "./one_operation_many_targets/index";
 import { oneTargetManyOperationsPlugin } from "./one_target_many_operations/index";
 import { randomRewardsPlugin } from "./random_rewards/index";
 import { randomTradesPlugin } from "./random_trades/index";
 import { sameCostDifferentRewardsPlugin } from "./same_cost_different_rewards/index";
+import { sameRewardDifferentCostsPlugin } from "./same_reward_different_costs/index";
 
 const BUILTIN_SHAPE_PLUGINS = Object.freeze(
   [
@@ -39,6 +44,11 @@ const BUILTIN_SHAPE_PLUGINS = Object.freeze(
     oneOperationManyTargetsPlugin,
     oneTargetManyOperationsPlugin,
     sameCostDifferentRewardsPlugin,
+    sameRewardDifferentCostsPlugin,
+    heterogeneousPairPlugin,
+    chooseYourLossPlugin,
+    alterDreamscapesPlugin,
+    flatEscalatingTradePlugin,
     // Phase F populates this list. Add one `import { fooPlugin } from "./foo"`
     // line above and one `fooPlugin,` entry here per shape.
   ] satisfies readonly JourneyShapePlugin[],
