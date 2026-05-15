@@ -8,10 +8,8 @@
 //   3. Every id in the score-weight table is registered (strict coverage).
 //
 // Check (3) is gated by `STRICT_COVERAGE` below, which auto-derives from the
-// registry's length: once `BUILTIN_SHAPE_PLUGINS` contains an entry for every
-// id in `shapeScoreWeightIds()` (Phase F complete), strict coverage turns on
-// automatically. Until then, checks (1) and (2) still run on every load while
-// (3) stays off so partial registries don't trip on import.
+// registry's length: when `BUILTIN_SHAPE_PLUGINS` contains an entry for every
+// id in `shapeScoreWeightIds()`, strict coverage turns on automatically.
 //
 // Adding a shape is one collocated edit in this file: add an `import { fooPlugin }
 // from "./foo"` line at the top of this block, then drop `fooPlugin` into the
@@ -29,11 +27,14 @@ import type {
 import { alterDreamscapesPlugin } from "./alter_dreamscapes/index";
 import { chooseYourLossPlugin } from "./choose_your_loss/index";
 import { commitNowFuturePayoffPlugin } from "./commit_now_future_payoff/index";
+import { escalatingRewardChainPlugin } from "./escalating_reward_chain/index";
 import { flatEscalatingTradePlugin } from "./flat_escalating_trade/index";
 import { heterogeneousPairPlugin } from "./heterogeneous_pair/index";
 import { nowVsLaterPlugin } from "./now_vs_later/index";
 import { oneOperationManyTargetsPlugin } from "./one_operation_many_targets/index";
 import { oneTargetManyOperationsPlugin } from "./one_target_many_operations/index";
+import { pushYourLuckPlugin } from "./push_your_luck/index";
+import { randomPoolDrawsPlugin } from "./random_pool_draws/index";
 import { randomRewardsPlugin } from "./random_rewards/index";
 import { randomTradesPlugin } from "./random_trades/index";
 import { rewardAfterTriggerPlugin } from "./reward_after_trigger/index";
@@ -65,18 +66,19 @@ const BUILTIN_SHAPE_PLUGINS = Object.freeze(
     rewardAfterTriggerPlugin,
     shopRowPlugin,
     takeAnyNumberPlugin,
-    // Phase F populates this list. Add one `import { fooPlugin } from "./foo"`
-    // line above and one `fooPlugin,` entry here per shape.
+    pushYourLuckPlugin,
+    randomPoolDrawsPlugin,
+    escalatingRewardChainPlugin,
   ] satisfies readonly JourneyShapePlugin[],
 );
 
 /**
- * `true` once every shape in `shapeScoreWeightIds()` has a registered plugin
- * (i.e. Phase F has fully landed). When `true`, the module-load integrity
- * check throws if any weighted id is missing from the registry — the bug
- * class we want to pin against shape/score-table drift. The flag is derived
- * automatically from the registry length so it switches on the moment the
- * last plugin lands; there is no manual toggle to forget.
+ * `true` once every shape in `shapeScoreWeightIds()` has a registered plugin.
+ * When `true`, the module-load integrity check throws if any weighted id is
+ * missing from the registry — the bug class we want to pin against
+ * shape/score-table drift. The flag is derived automatically from the
+ * registry length so it switches on the moment the last plugin lands; there
+ * is no manual toggle to forget.
  */
 const STRICT_COVERAGE =
   BUILTIN_SHAPE_PLUGINS.length === shapeScoreWeightIds().length;
@@ -87,9 +89,9 @@ const STRICT_COVERAGE =
  * first violation with a message naming the offending id.
  *
  * `strictCoverage` controls check (3): when `true`, every id in the
- * score-weight table must be present in `plugins`. The CLI runs this strict;
- * during Phase F the flag stays `false` so partial registries don't trip the
- * check on every test run.
+ * score-weight table must be present in `plugins`. The CLI runs this strict,
+ * and `STRICT_COVERAGE` above auto-derives to `true` once the registry
+ * registers every weighted id.
  */
 export function validatePlugins(
   plugins: readonly JourneyShapePlugin[],
