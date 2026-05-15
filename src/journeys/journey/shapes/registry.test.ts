@@ -12,9 +12,12 @@
 //      feeding synthesized plugin pairs to `validatePlugins` directly.
 //
 // The "every weighted shape is registered" check (strict-coverage check
-// (3) in `registry.ts`) is currently relaxed because Phase F is still
-// landing the 21 plugins. The skipped test below pins the intent; flip
-// `STRICT_COVERAGE` and remove the `.skip` once every plugin lands.
+// (3) in `registry.ts`) is gated on `BUILTIN_SHAPE_PLUGINS.length` matching
+// `shapeScoreWeightIds().length`; while Phase F is still landing the 21
+// plugins, the registry sits below that threshold and the check stays off.
+// The skipped test below pins the intent and starts running automatically
+// the moment Phase F is complete and `STRICT_COVERAGE` auto-derives to
+// `true` — drop the `.skip` then.
 
 import { describe, expect, it } from "vitest";
 
@@ -121,17 +124,45 @@ describe("validatePlugins integrity checks", () => {
   });
 
   it.skip(
-    "throws when a weighted shape id has no registered plugin (re-enable once Phase F is complete)",
+    "throws when a weighted shape id has no registered plugin (auto-runs once Phase F is complete)",
     () => {
       // Phase F adds the 21 plugins one by one; until every weighted id has a
       // registered plugin, the strict-coverage branch in `validatePlugins`
-      // would fire on every load. Flip `STRICT_COVERAGE` in `registry.ts` and
-      // remove this `.skip` once the registry contains all 21 entries.
+      // would fire on every load. `STRICT_COVERAGE` in `registry.ts`
+      // auto-derives from the registry length, so this test starts running
+      // automatically the moment the registry contains all 21 entries — at
+      // that point, drop the `.skip` so the suite enforces the check.
       expect(() => validatePlugins([], true)).toThrow(
         /Score-weight table references unknown Journey shape/,
       );
     },
   );
+
+  it("throws when plugin.id differs from plugin.definition.id", () => {
+    // `defineShapePlugin` forces `plugin.id` to mirror `definition.id`, so
+    // exercising the mismatch branch in `validatePlugins` requires a raw
+    // hand-built plugin that bypasses the helper.
+    const mismatched: JourneyShapePlugin = {
+      id: "random_rewards" as JourneyShapeId,
+      definition: {
+        id: "random_trades" as JourneyShapeId,
+        topology: "direct_menu",
+        rootOptionCount: { min: 1, max: 1 },
+        supportedTags: [],
+        validationRules: [],
+        debugLabel: "fixture:mismatched",
+        versionContribution: { fixture: true },
+      },
+      scoreWeight: 1,
+      fill: () => {
+        throw new Error("fixture plugin has no fill implementation");
+      },
+    };
+
+    expect(() => validatePlugins([mismatched], false)).toThrow(
+      /definition ID does not match/,
+    );
+  });
 
   it("can be run with strictCoverage=true on a complete fixture registry", () => {
     const complete = CANONICAL_SHAPE_IDS.map((id) => makeFixturePlugin(id));

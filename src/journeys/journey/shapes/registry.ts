@@ -5,41 +5,18 @@
 //
 //   1. Plugin ids are unique.
 //   2. Every registered plugin's id is present in the score-weight table.
-//   3. (DEFERRED) Every id in the score-weight table is registered.
+//   3. Every id in the score-weight table is registered (strict coverage).
 //
-// Check (3) is gated by `STRICT_COVERAGE` below. The CLI runs it
-// unconditionally because all 21 plugins are present; in this port, plugins
-// arrive across Tasks 12-15. While the registry is empty (or partial), check
-// (3) would fire on every load. Setting `STRICT_COVERAGE = false` keeps
-// checks (1) and (2) live and skips (3) until Phase F finishes registering
-// every shape, at which point this flag flips back to `true`.
+// Check (3) is gated by `STRICT_COVERAGE` below, which auto-derives from the
+// registry's length: once `BUILTIN_SHAPE_PLUGINS` contains an entry for every
+// id in `shapeScoreWeightIds()` (Phase F complete), strict coverage turns on
+// automatically. Until then, checks (1) and (2) still run on every load while
+// (3) stays off so partial registries don't trip on import.
 //
-// Each plugin import below is commented out; Phase F (Tasks 12-15)
-// uncomments each in turn. Once all 21 are uncommented, set
-// `STRICT_COVERAGE = true` to re-enable the strict coverage check.
-
-// Phase F plugin imports. Uncomment as each shape is ported.
-// import { alterDreamscapesPlugin } from "./alter_dreamscapes";
-// import { chooseYourLossPlugin } from "./choose_your_loss";
-// import { commitNowFuturePayoffPlugin } from "./commit_now_future_payoff";
-// import { escalatingRewardChainPlugin } from "./escalating_reward_chain";
-// import { flatEscalatingTradePlugin } from "./flat_escalating_trade";
-// import { heterogeneousPairPlugin } from "./heterogeneous_pair";
-// import { randomTradesPlugin } from "./random_trades";
-// import { nowVsLaterPlugin } from "./now_vs_later";
-// import { oneOperationManyTargetsPlugin } from "./one_operation_many_targets";
-// import { oneTargetManyOperationsPlugin } from "./one_target_many_operations";
-// import { pushYourLuckPlugin } from "./push_your_luck";
-// import { randomRewardsPlugin } from "./random_rewards";
-// import { randomPoolDrawsPlugin } from "./random_pool_draws";
-// import { rewardAfterTriggerPlugin } from "./reward_after_trigger";
-// import { sameCostDifferentRewardsPlugin } from "./same_cost_different_rewards";
-// import { sameRewardDifferentCostsPlugin } from "./same_reward_different_costs";
-// import { shopRowPlugin } from "./shop_row";
-// import { singleOfferPlugin } from "./single_offer";
-// import { singleRandomOutcomePlugin } from "./single_random_outcome";
-// import { singleWagerPlugin } from "./single_wager";
-// import { takeAnyNumberPlugin } from "./take_any_number";
+// Adding a shape is one collocated edit in this file: add an `import { fooPlugin }
+// from "./foo"` line at the top of this block, then drop `fooPlugin` into the
+// `BUILTIN_SHAPE_PLUGINS` array below. TypeScript flags an unused import if
+// you add the import and forget the array entry, so the two stay in lockstep.
 
 import { shapeScoreWeightIds } from "./scoreWeights";
 import { cloneSerializable, JOURNEY_SHAPE_CATALOG_VERSION } from "./shared";
@@ -49,41 +26,23 @@ import type {
   JourneyShapePlugin,
 } from "./types";
 
-/**
- * Flip to `true` once every shape in `shapeScoreWeightIds()` has a registered
- * plugin (i.e. Phase F has fully landed). When `true`, the module-load
- * integrity check throws if any weighted id is missing from the registry —
- * the bug class we want to pin against shape/score-table drift.
- */
-const STRICT_COVERAGE = false;
-
 const BUILTIN_SHAPE_PLUGINS = Object.freeze(
   [
-    // Phase F populates this list. Uncomment each entry as the matching
-    // plugin import above is uncommented.
-    // randomRewardsPlugin,
-    // sameCostDifferentRewardsPlugin,
-    // sameRewardDifferentCostsPlugin,
-    // shopRowPlugin,
-    // heterogeneousPairPlugin,
-    // randomTradesPlugin,
-    // oneTargetManyOperationsPlugin,
-    // oneOperationManyTargetsPlugin,
-    // chooseYourLossPlugin,
-    // singleOfferPlugin,
-    // singleWagerPlugin,
-    // nowVsLaterPlugin,
-    // rewardAfterTriggerPlugin,
-    // takeAnyNumberPlugin,
-    // pushYourLuckPlugin,
-    // randomPoolDrawsPlugin,
-    // escalatingRewardChainPlugin,
-    // flatEscalatingTradePlugin,
-    // singleRandomOutcomePlugin,
-    // commitNowFuturePayoffPlugin,
-    // alterDreamscapesPlugin,
+    // Phase F populates this list. Add one `import { fooPlugin } from "./foo"`
+    // line above and one `fooPlugin,` entry here per shape.
   ] satisfies readonly JourneyShapePlugin[],
 );
+
+/**
+ * `true` once every shape in `shapeScoreWeightIds()` has a registered plugin
+ * (i.e. Phase F has fully landed). When `true`, the module-load integrity
+ * check throws if any weighted id is missing from the registry — the bug
+ * class we want to pin against shape/score-table drift. The flag is derived
+ * automatically from the registry length so it switches on the moment the
+ * last plugin lands; there is no manual toggle to forget.
+ */
+const STRICT_COVERAGE =
+  BUILTIN_SHAPE_PLUGINS.length === shapeScoreWeightIds().length;
 
 /**
  * Walks the plugin list and pins the integrity properties listed in the
