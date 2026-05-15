@@ -258,7 +258,16 @@ function normalizeQuestState(questState: QuestState | null | undefined): QuestSt
   }
 
   const defaults = createDefaultState();
+  // Per-quest seed. RTDB silently drops empty strings, so a snapshot whose
+  // writer left the seed unset arrives without the field. Backfill from
+  // `createDefaultState()` so the journey adapter always receives a non-empty
+  // string and downstream hashes do not collide on `undefined`.
+  const seed =
+    typeof questState.seed === "string" && questState.seed.length > 0
+      ? questState.seed
+      : defaults.seed;
   return {
+    seed,
     essence: questState.essence ?? defaults.essence,
     essenceCap: questState.essenceCap ?? defaults.essenceCap,
     omens: questState.omens ?? defaults.omens,

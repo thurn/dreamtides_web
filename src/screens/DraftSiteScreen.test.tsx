@@ -338,6 +338,7 @@ function makeDraftState(): DraftState {
 
 function makeState(overrides: Partial<QuestState> = {}): QuestState {
   return {
+    seed: "test-seed",
     essence: 100,
     essenceCap: 500,
     omens: 0,

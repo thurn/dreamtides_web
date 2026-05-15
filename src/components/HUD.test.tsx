@@ -80,6 +80,7 @@ function makeDreamsign(name: string): Dreamsign {
 
 function makeState(dreamsigns: Dreamsign[]): QuestState {
   return {
+    seed: "test-seed",
     essence: 100,
     essenceCap: 500,
     omens: 0,

@@ -62,6 +62,7 @@ vi.mock("../logging", () => ({
 
 function makeState(overrides?: Partial<QuestState>): QuestState {
   return {
+    seed: "test-seed",
     essence: 250,
     essenceCap: 500,
     omens: 0,

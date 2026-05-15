@@ -103,8 +103,10 @@ function makeQuestState(overrides: {
   omens?: number;
   completionLevel?: number;
   startingNodeId?: string;
+  seed?: string;
 } = {}): QuestState {
   return {
+    seed: overrides.seed ?? "test-seed",
     essence: overrides.essence ?? 100,
     essenceCap: overrides.essenceCap ?? 500,
     omens: overrides.omens ?? 5,
@@ -204,6 +206,26 @@ describe("journeySeedForSite", () => {
       journeySeedForSite(site, makeQuestState({ startingNodeId: "node-A" })),
     ).not.toBe(
       journeySeedForSite(site, makeQuestState({ startingNodeId: "node-B" })),
+    );
+  });
+
+  it("differs across distinct quest seeds for the same site and starting node", () => {
+    // Bug 2: two fresh games on the same atlas (same startingNodeId, same
+    // siteId) must produce different journey seeds so the player does not
+    // see the same shape and dream art on every new quest. The per-quest
+    // `seed` axis on `QuestState` is the entropy source.
+    const site = makeSite("site-1");
+
+    expect(
+      journeySeedForSite(
+        site,
+        makeQuestState({ startingNodeId: "node-A", seed: "quest-seed-1" }),
+      ),
+    ).not.toBe(
+      journeySeedForSite(
+        site,
+        makeQuestState({ startingNodeId: "node-A", seed: "quest-seed-2" }),
+      ),
     );
   });
 });

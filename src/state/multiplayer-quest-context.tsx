@@ -52,6 +52,7 @@ import {
   clampEssence,
   commitPreparedDraftCardPickInQuestState,
   completeQuestSite,
+  generateQuestSeed,
   prepareDraftCardPickInQuestState,
   setQuestScreen,
   startQuestFromDreamcaller,
@@ -467,6 +468,11 @@ export function MultiplayerQuestProvider({
       const current = currentRef.current;
       const now = new Date().toISOString();
       const actionId = crypto.randomUUID();
+      // Seed once, outside the transaction updater, so RTDB retries reuse the
+      // same per-quest seed instead of producing a new one on every retry.
+      // The same value is then passed into `startQuestFromDreamcaller` via
+      // the `seedOverride` so the resulting `QuestState.seed` is stable.
+      const seed = generateQuestSeed();
       const actionEntry = buildActionLogEntry({
         timestamp: now,
         actorId: current.session.clientId,
@@ -493,6 +499,7 @@ export function MultiplayerQuestProvider({
             prev: questState,
             dreamcaller,
             questContent: current.questContent,
+            seedOverride: seed,
           });
 
           return {

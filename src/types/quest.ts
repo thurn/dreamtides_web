@@ -262,6 +262,15 @@ export type Screen =
 
 /** The top-level quest state object. */
 export interface QuestState {
+  /**
+   * Per-quest random seed generated once at quest start. Mixed into derived
+   * generators that must vary across distinct quests but stay stable for the
+   * life of a single quest. The journey adapter hashes this together with the
+   * atlas starting node id and the site id when deriving a journey seed, so
+   * two fresh quests on the same atlas site land on different shapes and
+   * dream art, while the same quest reloaded keeps the manifest byte-stable.
+   */
+  readonly seed: string;
   essence: number;
   /**
    * Maximum essence the player can hold. Essence gained beyond this cap is

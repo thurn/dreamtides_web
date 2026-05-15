@@ -541,7 +541,12 @@ describe("MultiplayerQuestProvider", () => {
     });
     expect(retryRoom?.metadata.updatedAt).toBe(nextRoom?.metadata.updatedAt);
     expect(retryRoom?.actionLog).toEqual(nextRoom?.actionLog);
-    expect(randomUUIDMock).toHaveBeenCalledOnce();
+    // `randomUUID` is consumed twice in `startQuest`: once for the action-log
+    // entry id and once for the per-quest seed. Both are minted outside the
+    // RTDB transaction updater so retries do not re-mint either value, which
+    // is what `retryRoom`'s identical `actionLog` and seed verify.
+    expect(randomUUIDMock).toHaveBeenCalledTimes(2);
+    expect(nextRoom?.questState?.seed).toBe(retryRoom?.questState?.seed);
   });
 
   it("picks a draft card through a room transaction", () => {

@@ -127,6 +127,7 @@ function makeMutations(): QuestMutations {
 
 function makeState(): QuestState {
   return {
+    seed: "test-seed",
     essence: 120,
     essenceCap: 500,
     omens: 0,

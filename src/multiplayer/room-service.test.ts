@@ -183,6 +183,58 @@ describe("room service", () => {
     });
   });
 
+  it("backfills questState.seed when RTDB strips an empty string, preserves a written seed", () => {
+    // RTDB silently drops empty strings, so a snapshot whose writer left the
+    // per-quest seed unset arrives without the field. The normalizer must
+    // restore a non-empty string so `journeySeedForSite` does not hash on
+    // `undefined`.
+    const listener1 = vi.fn();
+    const strippedQuestState = {
+      essence: 250,
+      completionLevel: 0,
+      atlas: { startingNodeId: "dreamscape-1" },
+      screen: { type: "questStart" },
+      // `seed` intentionally missing — RTDB drops the empty string default.
+    };
+    firebaseMocks.onValue.mockImplementationOnce(
+      (_entryRef, next: SnapshotListener) => {
+        next({
+          exists: () => true,
+          val: () => ({
+            ...createRoomRecord(timestamp),
+            questState: strippedQuestState,
+          }),
+        });
+        return vi.fn();
+      },
+    );
+    subscribeToRoom(database, "ab12", listener1);
+    const ready1 = listener1.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready1.room.questState?.seed).toBe("default");
+
+    // A written non-empty seed must round-trip unchanged.
+    const listener2 = vi.fn();
+    const persistedQuestState = {
+      ...strippedQuestState,
+      seed: "abc-123-fresh-uuid",
+    };
+    firebaseMocks.onValue.mockImplementationOnce(
+      (_entryRef, next: SnapshotListener) => {
+        next({
+          exists: () => true,
+          val: () => ({
+            ...createRoomRecord(timestamp),
+            questState: persistedQuestState,
+          }),
+        });
+        return vi.fn();
+      },
+    );
+    subscribeToRoom(database, "ab12", listener2);
+    const ready2 = listener2.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready2.room.questState?.seed).toBe("abc-123-fresh-uuid");
+  });
+
   it("restores RTDB-stripped empty arrays and null fields on quest state", () => {
     const listener = vi.fn();
     const stripped = {
@@ -207,6 +259,7 @@ describe("room service", () => {
       room: {
         ...room,
         questState: {
+          seed: "default",
           essence: 250,
           essenceCap: 500,
           omens: 0,

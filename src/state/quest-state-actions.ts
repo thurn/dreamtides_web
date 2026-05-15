@@ -282,14 +282,46 @@ export function completeQuestSite(
   };
 }
 
+/**
+ * Generate a fresh per-quest seed. Uses `crypto.randomUUID()` when available
+ * (modern browsers, Node 19+, jsdom). Falls back to a `Math.random()`-derived
+ * hex string for the rare environment without `crypto.randomUUID`. The exact
+ * source does not matter for correctness — only that the value varies across
+ * fresh quests in the same browser session so the journey adapter cannot
+ * collide two distinct quests onto the same shape and dream art for a given
+ * atlas site.
+ */
+export function generateQuestSeed(): string {
+  const cryptoCandidate: { randomUUID?: () => string } | undefined =
+    typeof crypto === "undefined"
+      ? undefined
+      : (crypto as { randomUUID?: () => string });
+  if (cryptoCandidate?.randomUUID !== undefined) {
+    return cryptoCandidate.randomUUID();
+  }
+  const part = () =>
+    Math.floor(Math.random() * 0x1_0000_0000)
+      .toString(16)
+      .padStart(8, "0");
+  return `${part()}${part()}${part()}${part()}`;
+}
+
 export function startQuestFromDreamcaller({
   prev,
   dreamcaller,
   questContent,
+  seedOverride,
 }: {
   prev: QuestState;
   dreamcaller: DreamcallerContent;
   questContent: QuestContent;
+  /**
+   * Optional caller-supplied per-quest seed. The multiplayer provider passes
+   * a seed generated once outside the RTDB transaction updater so retries
+   * reuse the same value rather than minting a new one each attempt. When
+   * omitted, a fresh seed is generated via {@link generateQuestSeed}.
+   */
+  seedOverride?: string;
 }): QuestState {
   const resolvedPackage = questContent.resolvedPackagesByDreamcallerId.get(
     dreamcaller.id,
@@ -327,6 +359,7 @@ export function startQuestFromDreamcaller({
 
   return {
     ...prev,
+    seed: seedOverride ?? generateQuestSeed(),
     essence: dreamcaller.startingEssence,
     deck,
     dreamcaller: toQuestDreamcaller(dreamcaller),

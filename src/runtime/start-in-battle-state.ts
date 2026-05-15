@@ -4,6 +4,7 @@ import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import { initializeDraftState } from "../draft/draft-engine";
 import type { QuestContent } from "../data/quest-content";
 import type { QuestState } from "../types/quest";
+import { generateQuestSeed } from "../state/quest-state-actions";
 
 export function createStartInBattleState(
   questContent: QuestContent,
@@ -39,6 +40,7 @@ export function createStartInBattleState(
   }
 
   return {
+    seed: generateQuestSeed(),
     essence: 250,
     essenceCap: 500,
     omens: 0,

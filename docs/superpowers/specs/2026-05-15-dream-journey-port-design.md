@@ -186,11 +186,19 @@ matches the CLI's `JourneyContext`, with `pacingLedger` and `history` dropped
 `journeySeedForSite(site, questState)` returns:
 
 ```
-sha256(questState.atlas.startingNodeId + ":" + site.id).slice(0, 16)
+sha256(questState.seed + ":" + questState.atlas.startingNodeId + ":" + site.id).slice(0, 16)
 ```
 
-Stable per site for the life of a quest run; identical across page reloads;
-distinct per site and per quest.
+`questState.seed` is the per-quest random seed (a UUID string from
+`crypto.randomUUID()`) generated once at quest start by
+`startQuestFromDreamcaller` and persisted on `QuestState`. It supplies the
+per-game entropy axis: two fresh quests on the same atlas site land on
+different shapes and dream art. The `startingNodeId` and `siteId` axes keep
+seeds distinct across sites and across runs that share a seed in tests.
+
+Stable per site for the life of a quest run; identical across page reloads
+of the same quest room; distinct per site, per starting node, and per
+quest.
 
 ### Decision-tree progress
 

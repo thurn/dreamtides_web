@@ -114,6 +114,7 @@ function setQuestState({
 } = {}): void {
   vi.mocked(useQuest).mockReturnValue({
     state: {
+      seed: "test-seed",
       essence: 250,
       essenceCap: 500,
       omens: 0,
