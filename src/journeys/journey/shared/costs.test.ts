@@ -23,11 +23,24 @@
 
 import { describe, expect, it } from "vitest";
 
-import type { ContentBundle } from "../../content/types";
+import type { CardContent, ContentBundle } from "../../content/types";
 import type { DrawContext } from "../../util/rng";
 import type { JourneyContext, QuestStateProjection } from "../context";
 
 import { COSTS, getCost } from "./costs";
+
+function card(overrides: Partial<CardContent> & { id: string; name: string }): CardContent {
+  return {
+    tides: overrides.tides ?? [],
+    rarity: overrides.rarity ?? "common",
+    cardType: overrides.cardType ?? "Event",
+    energyCost: overrides.energyCost ?? 3,
+    spark: overrides.spark ?? "",
+    cardNumber: overrides.cardNumber ?? 0,
+    raw: overrides.raw ?? {},
+    ...overrides,
+  };
+}
 
 const draw: DrawContext = {
   seed: "costs-test",
@@ -84,7 +97,8 @@ function emptyContext(overrides: {
 // vanish. Card-pool gains (e.g. `gain_random_cards_from_pool`) read from the
 // content catalog rather than quest state, so the empty quest leaves them
 // available. `meta_pay_2_costs` ANDs its sub-cost viability and is exercised
-// directly in the compound suite below.
+// directly in the compound suite below with hand-picked sub-cost ids; the
+// general property test below skips it for that reason.
 const ALWAYS_VIABLE_ON_EMPTY: ReadonlySet<string> = new Set([
   "pay_essence",
   "pay_omens",
@@ -104,6 +118,14 @@ const ALWAYS_VIABLE_ON_EMPTY: ReadonlySet<string> = new Set([
   "remove_dreamsign_sites_from_next_dreamscapes",
 ]);
 
+// Sub-cost ids known to decline on an empty context. The compound suite uses
+// these directly to assert meta_pay_2_costs declines when both sub-costs
+// decline, removing the RNG dependency that previously gated the test.
+const NON_VIABLE_ON_EMPTY_SUB_IDS = [
+  "purge_named_card",
+  "draw_X_purge_chosen",
+] as const;
+
 describe("COSTS viability invariant", () => {
   it("every template has a viable function", () => {
     for (const t of COSTS) {
@@ -120,6 +142,11 @@ describe("COSTS viability invariant", () => {
   it("every template either declines an empty context or is on the always-viable allowlist", () => {
     const ctx = emptyContext();
     for (const t of COSTS) {
+      // meta_pay_2_costs is RNG-dependent on this fixture (its rollParams
+      // picks two arbitrary non-meta sub-costs, and viability ANDs them).
+      // The compound suite below exercises its empty-decline behaviour
+      // directly with hand-picked sub-cost ids.
+      if (t.id === "meta_pay_2_costs") continue;
       const params = t.rollParams(ctx, draw);
       const viable = t.viable(params, ctx);
       const allowed = ALWAYS_VIABLE_ON_EMPTY.has(t.id);
@@ -170,6 +197,25 @@ describe("locked propagation", () => {
     expect(t.locked(params, ctx)).toBe(true);
   });
 
+  it("pay_essence_random_range emits [LOCKED] and reports locked=true when min > essence", () => {
+    // Regression: the template's `render` previously omitted
+    // `withLockedPrefix`, so the text and structural flag fell out of sync
+    // when the minimum roll exceeded the purse.
+    const t = getCost("pay_essence_random_range");
+    const ctx = emptyContext({ essence: 0 });
+    const params = { min: 30, max: 60 };
+    expect(t.render(params, ctx).startsWith("[LOCKED] ")).toBe(true);
+    expect(t.locked(params, ctx)).toBe(true);
+  });
+
+  it("pay_essence_random_range does not lock when min <= essence", () => {
+    const t = getCost("pay_essence_random_range");
+    const ctx = emptyContext({ essence: 100 });
+    const params = { min: 30, max: 60 };
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+    expect(t.locked(params, ctx)).toBe(false);
+  });
+
   it("battle reward reductions never lock", () => {
     for (const id of ["battle_reward_reduction_flat", "battle_reward_reduction_percent"]) {
       const t = getCost(id);
@@ -186,6 +232,90 @@ describe("locked propagation", () => {
     const params = { amount: 25 };
     expect(t.locked(params, ctx)).toBe(true);
     expect(t.render(params, ctx).startsWith("[LOCKED] ")).toBe(true);
+  });
+});
+
+describe("deck-scope viability audits", () => {
+  // Predicate-keyed templates (e.g. purge_random_predicate_card) walk the
+  // deck through `deckContainsPredicate`, which pins `source: "deck"`. A
+  // regression that reverted the helper to the CLI's leaky
+  // `cardMatches(ctx, predicate.cardPredicate)` form would silently resolve
+  // over the content catalog, making this paired test essential. The empty-
+  // fixture property test cannot distinguish the two forms because both
+  // return zero matches on an empty catalog.
+  const WARRIOR_CARD = card({
+    id: "warrior-1",
+    name: "Test Warrior",
+    cardType: "Character",
+    raw: { subtype: "Warrior" },
+  });
+
+  it("purge_random_predicate_card declines when the catalog has a match but the deck does not", () => {
+    const t = getCost("purge_random_predicate_card");
+    const ctx = emptyContext({ cards: [WARRIOR_CARD], deckEntries: [] });
+    expect(t.viable({ predicateId: "warriors" }, ctx)).toBe(false);
+  });
+
+  it("purge_random_predicate_card admits when the deck contains a matching card", () => {
+    const t = getCost("purge_random_predicate_card");
+    const ctx = emptyContext({
+      cards: [WARRIOR_CARD],
+      deckEntries: [{ cardId: WARRIOR_CARD.id, copies: 1 }],
+    });
+    expect(t.viable({ predicateId: "warriors" }, ctx)).toBe(true);
+  });
+
+  it("purge_all_duplicate_cards declines when the deck has unique cards only", () => {
+    const t = getCost("purge_all_duplicate_cards");
+    const ctx = emptyContext({
+      deckEntries: [
+        { cardId: "a", copies: 1 },
+        { cardId: "b", copies: 1 },
+      ],
+    });
+    expect(t.viable({}, ctx)).toBe(false);
+  });
+
+  it("purge_all_duplicate_cards admits when the deck has a duplicate stack", () => {
+    const t = getCost("purge_all_duplicate_cards");
+    const ctx = emptyContext({ deckEntries: [{ cardId: "a", copies: 2 }] });
+    expect(t.viable({}, ctx)).toBe(true);
+  });
+
+  // Named-card templates resolve their params against the deck by name. A
+  // regression that reverted these to `deckHasMinSize(ctx, 1)` would surface
+  // a no-op option whenever the deck holds different cards.
+  it("named-card templates decline when the deck lacks the named card", () => {
+    const STEADY_BURN = card({ id: "steady-burn", name: "Steady Burn" });
+    const OTHER_CARD = card({ id: "other", name: "Other Card" });
+    const ctx = emptyContext({
+      cards: [STEADY_BURN, OTHER_CARD],
+      deckEntries: [{ cardId: OTHER_CARD.id, copies: 1 }],
+    });
+    for (const id of [
+      "purge_named_card",
+      "transform_card_to_random_pool",
+      "remove_transfiguration_from_card",
+    ]) {
+      const t = getCost(id);
+      expect(t.viable({ cardName: "Steady Burn" }, ctx), id).toBe(false);
+    }
+  });
+
+  it("named-card templates admit when the deck contains the named card", () => {
+    const STEADY_BURN = card({ id: "steady-burn", name: "Steady Burn" });
+    const ctx = emptyContext({
+      cards: [STEADY_BURN],
+      deckEntries: [{ cardId: STEADY_BURN.id, copies: 1 }],
+    });
+    for (const id of [
+      "purge_named_card",
+      "transform_card_to_random_pool",
+      "remove_transfiguration_from_card",
+    ]) {
+      const t = getCost(id);
+      expect(t.viable({ cardName: "Steady Burn" }, ctx), id).toBe(true);
+    }
   });
 });
 
@@ -222,5 +352,23 @@ describe("meta_pay_2_costs (compound) locking", () => {
     const rendered = t.render(params, ctx);
     expect(rendered.startsWith("[LOCKED]")).toBe(false);
     expect(t.locked(params, ctx)).toBe(false);
+  });
+
+  it("declines an empty context when both sub-costs decline", () => {
+    // Hand-picked sub-cost ids that are guaranteed to decline on an empty
+    // fixture (purge_named_card needs a deck; draw_X_purge_chosen needs
+    // drawCount cards in the deck). This pins the AND-of-sub-viabilities
+    // contract without depending on what rollParams happens to pick.
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext();
+    const [firstId, secondId] = NON_VIABLE_ON_EMPTY_SUB_IDS;
+    const params = {
+      subIds: [firstId, secondId] as const,
+      subParams: [
+        { cardName: "Whatever" },
+        { drawCount: 2 },
+      ] as const,
+    };
+    expect(t.viable(params, ctx)).toBe(false);
   });
 });

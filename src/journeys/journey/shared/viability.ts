@@ -10,6 +10,17 @@
 // the deck read `ctx.state.quest.deck`; helpers that operate on dreamsigns read
 // `ctx.state.quest.dreamsignPoolIds` against `ctx.content.dreamsigns`; resource
 // helpers read `ctx.state.quest.resources`.
+//
+// Deck-state helpers:
+//   - `deckContainsCard` — by cardId
+//   - `deckContainsCardByName` — by display name, resolving deck entries
+//     through the catalog (used when a template's params carry a card name
+//     rather than an id)
+//   - `deckContainsPredicate` — predicate-scoped, pins `source: "deck"`
+//   - `deckHasMinSize`
+//   - `deckHasDuplicateStack` — at least one cardId with copies >= 2
+//   - `deckContainsDiscardAbility`
+//   - `transfigurationHasEligibleTarget`
 
 import type { JourneyContext } from "../context";
 import { isCardEligibleForTransfiguration } from "../effects";
@@ -34,6 +45,27 @@ export function deckContainsPredicate(
 
 export function deckHasMinSize(ctx: JourneyContext, n: number): boolean {
   return ctx.state.quest.deck.summary.totalCards >= n;
+}
+
+// True iff the deck contains at least one card with copies >= 2. A deck of N
+// unique cards has no duplicate stack to purge, so templates that purge
+// duplicates gate on this rather than `totalCards >= 2`.
+export function deckHasDuplicateStack(ctx: JourneyContext): boolean {
+  return ctx.state.quest.deck.entries.some((entry) => entry.copies >= 2);
+}
+
+// Walks deck entries and resolves them against the content catalog, returning
+// true iff any deck card's display name matches `cardName`. Templates that
+// operate on a SPECIFIC named card (e.g. `purge_named_card`) gate on this
+// instead of mere deck non-emptiness — otherwise the template would offer a
+// no-op option whenever the deck happens to be non-empty but lacks the named
+// card.
+export function deckContainsCardByName(ctx: JourneyContext, cardName: string): boolean {
+  const cardsById = new Map(ctx.content.cards.map((card) => [card.id, card]));
+  return ctx.state.quest.deck.entries.some((entry) => {
+    const card = cardsById.get(entry.cardId);
+    return card !== undefined && card.name === cardName;
+  });
 }
 
 export function poolHasDreamsignWithTide(ctx: JourneyContext, tide: string): boolean {

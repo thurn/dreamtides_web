@@ -9,31 +9,34 @@
 // The viability audit (Task 8) walked every template and tightened `viable`
 // where the CLI shipped a stand-in:
 //
-//   - Deck non-empty templates (purge_named_card, transform_card_to_random_
-//     pool, remove_transfiguration_from_card, purge_all_duplicate_cards)
-//     route through `deckHasMinSize(ctx, 1)` instead of inline length
-//     checks. `purge_all_duplicate_cards` further requires an actual
-//     duplicate stack (a deck of N unique cards has nothing to purge).
+//   - Named-card templates (purge_named_card, transform_card_to_random_pool,
+//     remove_transfiguration_from_card) route through
+//     `deckContainsCardByName(ctx, p.cardName)`. The chosen card is rolled
+//     from the deck, but viability must independently verify the deck still
+//     holds a card with that name; otherwise a stale rollParams value would
+//     surface a no-op option.
+//   - `purge_all_duplicate_cards` gates on `deckHasDuplicateStack`. A deck
+//     of N unique cards has no duplicate stack to purge, so the CLI's
+//     `totalCards >= 2` smell offered a no-op option.
+//   - Deck-size-N templates (draw_X_purge_chosen) route through
+//     `deckHasMinSize(ctx, p.drawCount)`.
 //   - Predicate-keyed templates (purge_random_predicate_card,
 //     purge_chosen_predicate_card, remove_transfigurations_from_random_
 //     predicate) route through `deckContainsPredicate` and pin the
 //     `source: "deck"` scope, so a predicate that matches catalog-only
 //     cards no longer leaks a viable option.
-//   - Deck-size-N templates (draw_X_purge_chosen) route through
-//     `deckHasMinSize(ctx, p.drawCount)`.
-//   - Dreamsign templates already used the right helper
-//     (`activeDreamsignCount(ctx) >= 1`); they retain it via the existing
-//     `activeDreamsignCount` import.
+//   - Dreamsign templates use `activeDreamsignCount(ctx) >= 1` via the
+//     `activeDreamsignCount` import from content.
 //   - Dreamwell-keyed templates (set_starting_dreamwell_negative,
 //     shuffle_negative_dreamwell_cards) gate on
 //     `NEGATIVE_DREAMWELL_CARDS.length >= 1`. While dreamwell content is a
 //     stub list (Task 17), these templates correctly hide themselves until
 //     content lands.
-//   - `lose_max_essence` is reclassified as a Resource cost: viable is
+//   - `lose_max_essence` is classified as a Resource cost: viable is
 //     `() => true`, with `locked` flipping when the loss would consume the
 //     entire max-essence pool.
-//   - `meta_pay_2_costs` keeps its AND-of-sub-viabilities semantics; the
-//     port's compound test pins the [LOCKED]-prefix-exactly-once property.
+//   - `meta_pay_2_costs` ANDs its sub-cost viabilities; the port's compound
+//     test pins the [LOCKED]-prefix-exactly-once property.
 
 import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
@@ -53,7 +56,9 @@ import { PREDICATES, getPredicate } from "./predicates";
 import { quoteName, withLockedPrefix } from "./text";
 import type { Cost, Predicate } from "./types";
 import {
+  deckContainsCardByName,
   deckContainsPredicate,
+  deckHasDuplicateStack,
   deckHasMinSize,
 } from "./viability";
 
@@ -116,7 +121,11 @@ const payEssenceRandomRange: Cost<PayEssenceRangeParams> = {
   // paid — a guaranteed failure — to match the CLI's resource-cost stance
   // of "lock only on certain unaffordability".
   locked: (p, ctx) => p.min > essenceAmount(ctx),
-  render: (p) => `Lose ${p.min}-${p.max} essence (random roll)`,
+  render: (p, ctx) =>
+    withLockedPrefix(
+      `Lose ${p.min}-${p.max} essence (random roll)`,
+      p.min > essenceAmount(ctx),
+    ),
 };
 
 type PayPercentEssenceParams = { percent: number };
@@ -197,11 +206,12 @@ const purgeNamedCard: Cost<PurgeNamedCardParams> = {
     };
   },
   cec: () => CARD_CEC * 0.5,
-  // Purging a specific named card requires the deck to contain at least one
-  // card — the name parameter is rolled from the deck itself. Upgrades the
-  // CLI's `cardMatches(...).length >= 1` smell to a `deckHasMinSize`
-  // helper call.
-  viable: (_p, ctx) => deckHasMinSize(ctx, 1),
+  // The template purges a specific named card, so viability requires the deck
+  // to actually contain a card with that name. Using `deckHasMinSize(ctx, 1)`
+  // would surface a no-op option whenever the deck is non-empty but lacks the
+  // named card (e.g. after a state transition between rollParams and
+  // viable).
+  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   locked: () => false,
   render: (p) => `Purge ${quoteName(p.cardName)}`,
 };
@@ -258,16 +268,13 @@ const transformCardToRandomPool: Cost<TransformCardToRandomParams> = {
     };
   },
   cec: () => CARD_CEC * 0.5,
-  // Same smell as `purge_named_card`: the chosen card is drawn from the
-  // deck, so deck non-empty is the actual viability check.
-  viable: (_p, ctx) => deckHasMinSize(ctx, 1),
+  // The chosen card is named by params; viability requires the deck to
+  // contain a card with that name. `deckHasMinSize(ctx, 1)` would surface a
+  // no-op option whenever the deck holds different cards.
+  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   locked: () => false,
   render: (p) => `Transform ${quoteName(p.cardName)} into a random card from the pool`,
 };
-
-function deckHasDuplicateStack(ctx: JourneyContext): boolean {
-  return ctx.state.quest.deck.entries.some((entry) => entry.copies >= 2);
-}
 
 type PurgeAllDuplicatesParams = Record<string, never>;
 const purgeAllDuplicateCards: Cost<PurgeAllDuplicatesParams> = {
@@ -451,11 +458,11 @@ const removeTransfigurationFromCard: Cost<RemoveTransfigCardParams> = {
     };
   },
   cec: () => CARD_CEC * 0.6,
-  // The CLI used `cardMatches(...).length >= 1`. The chosen card is drawn
-  // from the deck, so deck non-empty is the honest check; cost remains
-  // weakly useful (a no-op if the named card has no transfiguration), but
-  // that is the CLI's existing intent.
-  viable: (_p, ctx) => deckHasMinSize(ctx, 1),
+  // The chosen card is named by params; viability requires the deck to
+  // contain a card with that name. The template remains weakly useful (a
+  // no-op if the named card has no transfiguration), but at least the named
+  // card must actually be in the deck.
+  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   locked: () => false,
   render: (p) => `Remove the transfiguration from ${quoteName(p.cardName)}`,
 };
