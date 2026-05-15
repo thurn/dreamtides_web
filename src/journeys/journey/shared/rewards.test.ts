@@ -368,6 +368,42 @@ describe("deck-scope predicate audit", () => {
     });
     expect(t.viable({ predicateId: "warriors", count: 1 }, ctx)).toBe(true);
   });
+
+  // The three transfiguration-applying predicate variants share the same
+  // deck-scope leak fix as `purge_chosen_predicate_cards` /
+  // `duplicate_random_predicate`. `Golden` is unrestricted at generation time,
+  // so the per-transfiguration eligibility check passes for any deck card and
+  // does not interfere with the deck-scope assertion.
+  const TRANSFIG_PREDICATE_VARIANTS = [
+    "apply_named_transfiguration_to_chosen_predicate_cards",
+    "apply_named_transfiguration_to_random_predicate_cards",
+    "apply_named_transfiguration_to_all_predicate_cards",
+  ] as const;
+
+  it.each(TRANSFIG_PREDICATE_VARIANTS)(
+    "%s declines when the catalog has a Warrior but the deck does not",
+    (id) => {
+      const t = getReward(id);
+      const ctx = buildContext({ cards: [WARRIOR_CARD], deckEntries: [] });
+      expect(
+        t.viable({ predicateId: "warriors", transfiguration: "Golden", count: 1 }, ctx),
+      ).toBe(false);
+    },
+  );
+
+  it.each(TRANSFIG_PREDICATE_VARIANTS)(
+    "%s admits when the deck contains a matching Warrior",
+    (id) => {
+      const t = getReward(id);
+      const ctx = buildContext({
+        cards: [WARRIOR_CARD],
+        deckEntries: [{ cardId: WARRIOR_CARD.id, copies: 1 }],
+      });
+      expect(
+        t.viable({ predicateId: "warriors", transfiguration: "Golden", count: 1 }, ctx),
+      ).toBe(true);
+    },
+  );
 });
 
 describe("named-card deck-scope audit", () => {
@@ -457,6 +493,44 @@ describe("named-card deck-scope audit", () => {
     expect(
       getReward("purge_named_starter").viable({ cardName: "Starter A" }, ctx),
     ).toBe(true);
+  });
+});
+
+describe("purge_random_starter_with_predicate_replacement viability", () => {
+  // The replacement card is rolled from the catalog via the chosen predicate.
+  // Both a starter to consume AND a catalog match for the predicate are
+  // required, otherwise the reward is non-fulfillable. A deck with a starter
+  // but no catalog Warrior must decline; a deck with both must admit.
+  const STARTER_A = card({
+    id: "starter-a",
+    name: "Starter A",
+    rarity: "Starter",
+  });
+  const WARRIOR_CARD = card({
+    id: "warrior-1",
+    name: "Catalog Warrior",
+    cardType: "Character",
+    raw: { subtype: "Warrior" },
+  });
+
+  it("declines when the deck has a starter but the catalog has no replacement match", () => {
+    const t = getReward("purge_random_starter_with_predicate_replacement");
+    const ctx = buildContext({
+      cards: [STARTER_A],
+      deckEntries: [{ cardId: STARTER_A.id, copies: 1 }],
+      starterCards: 1,
+    });
+    expect(t.viable({ predicateId: "warriors" }, ctx)).toBe(false);
+  });
+
+  it("admits when the deck has a starter and the catalog has a replacement match", () => {
+    const t = getReward("purge_random_starter_with_predicate_replacement");
+    const ctx = buildContext({
+      cards: [STARTER_A, WARRIOR_CARD],
+      deckEntries: [{ cardId: STARTER_A.id, copies: 1 }],
+      starterCards: 1,
+    });
+    expect(t.viable({ predicateId: "warriors" }, ctx)).toBe(true);
   });
 });
 

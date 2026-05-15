@@ -343,10 +343,16 @@ const applyChosenTransfigurationToChosenCard: Reward<ApplyChosenTransfigChosenCa
   weight: 1.0,
   rollParams: () => ({}),
   cec: () => CARD_CEC * 1.5,
-  // Player picks a card from their deck. CLI shipped
-  // `ctx.content.cards.length > 0`, which leaks the catalog. Upgraded to
-  // `deckHasMinSize(ctx, 1)`.
-  viable: (_p, ctx) => deckHasMinSize(ctx, 1),
+  // Player picks both the transfiguration AND the target card. The reward is
+  // only fulfillable if at least one (transfiguration, deck card) pair is
+  // eligible. Checking `transfigurationHasEligibleTarget` per transfiguration
+  // keeps this template honest if a future patch tightens Golden or Prismatic
+  // (currently unrestricted via `isCardEligibleForTransfiguration`'s default
+  // case in effects.ts); without the per-transfiguration sweep, the template
+  // would silently regress to a deck-non-empty check.
+  viable: (_p, ctx) =>
+    deckHasMinSize(ctx, 1)
+    && JOURNEY_TRANSFIGURATIONS.some((t) => transfigurationHasEligibleTarget(ctx, t)),
   render: () => "Apply a transfiguration of your choice to a chosen card",
 };
 
@@ -613,7 +619,13 @@ const purgeRandomStarterWithPredicateReplacement: Reward<PurgeRandomStarterReplP
     predicateId: rollCardAdditionPredicate(draw, "purge_starter_repl:p").id,
   }),
   cec: (p) => cardPoolCEC(CARD_CEC * 0.7, 1, getPredicate(p.predicateId)),
-  viable: (_p, ctx) => starterCardCount(ctx) >= 1,
+  // The replacement card is drawn from the catalog (intentional catalog scope:
+  // see `transformChosenPredicateIntoNamed` for the matching pattern). Both a
+  // starter to consume AND a catalog match for the replacement predicate are
+  // required, otherwise the reward is non-fulfillable.
+  viable: (p, ctx) =>
+    starterCardCount(ctx) >= 1
+    && cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 1,
   render: (p) =>
     `Transform a random starter card into a random ${getPredicate(p.predicateId).text.singular}`,
 };
