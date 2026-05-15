@@ -11,7 +11,6 @@
 // `ctx.state.quest.dreamsignPoolIds` against `ctx.content.dreamsigns`; resource
 // helpers read `ctx.state.quest.resources`.
 
-import type { CardContent } from "../../content/types";
 import type { JourneyContext } from "../context";
 import { isCardEligibleForTransfiguration } from "../effects";
 import { cardMatches } from "./content";
@@ -37,18 +36,13 @@ export function deckHasMinSize(ctx: JourneyContext, n: number): boolean {
   return ctx.state.quest.deck.summary.totalCards >= n;
 }
 
-export function poolHasDreamsignWithTide(
-  ctx: JourneyContext,
-  tide?: string | null,
-): boolean {
+export function poolHasDreamsignWithTide(ctx: JourneyContext, tide: string): boolean {
   const dreamsignsById = new Map(
     ctx.content.dreamsigns.map((dreamsign) => [dreamsign.id, dreamsign]),
   );
   return ctx.state.quest.dreamsignPoolIds.some((id) => {
     const dreamsign = dreamsignsById.get(id);
-    if (!dreamsign) return false;
-    if (tide === null || tide === undefined) return true;
-    return dreamsign.tides.includes(tide);
+    return dreamsign !== undefined && dreamsign.tides.includes(tide);
   });
 }
 
@@ -72,15 +66,5 @@ export function canAffordOmens(ctx: JourneyContext, amount: number): boolean {
 }
 
 export function deckContainsDiscardAbility(ctx: JourneyContext): boolean {
-  const cardsById = new Map(ctx.content.cards.map((card) => [card.id, card]));
-  return ctx.state.quest.deck.entries.some((entry) => {
-    const card = cardsById.get(entry.cardId);
-    return card !== undefined && cardRenderedTextIncludes(card, "discard");
-  });
-}
-
-function cardRenderedTextIncludes(card: CardContent, needle: string): boolean {
-  const raw = card.raw["rendered-text"] ?? card.raw.renderedText;
-  if (typeof raw !== "string") return false;
-  return raw.toLowerCase().includes(needle.toLowerCase());
+  return deckContainsPredicate(ctx, "discard_text");
 }

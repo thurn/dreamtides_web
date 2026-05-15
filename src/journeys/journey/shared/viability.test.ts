@@ -138,8 +138,12 @@ const CASES: readonly Case[] = [
         { cardId: CHARACTER_CARD.id, copies: 1 },
       ],
     }),
+    // The catalog includes the matching event, but the deck does not. The
+    // helper must scope to the deck — a regression that drops the
+    // `source: "deck"` merge would silently resolve over `content.cards`
+    // and incorrectly return true here.
     negative: buildContext({
-      cards: [CHARACTER_CARD],
+      cards: [EVENT_CARD, CHARACTER_CARD],
       deckEntries: [{ cardId: CHARACTER_CARD.id, copies: 1 }],
     }),
     run: (ctx) => deckContainsPredicate(ctx, "events"),
