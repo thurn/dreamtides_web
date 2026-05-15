@@ -89,7 +89,7 @@ The only substantive change vs. the CLI is replacing `crypto.createHash("sha256"
 - Create: `src/journeys/journey/manifest.ts` (port of `/Users/dthurn/journeys/src/journey/manifest.ts`).
 - Create: `src/journeys/journey/symbols.ts` (port).
 - Create: `src/journeys/journey/rewardArtTypes.ts` (port).
-- Create: `src/journeys/journey/effects.ts` (port — the effect catalog).
+- Extend: `src/journeys/journey/effects.ts` (added in Task 3 with predicate-resolution scaffolding — Task 4 layers the effect catalog and operation kind definitions on top).
 - Test: `src/journeys/journey/manifest.test.ts`.
 
 The only contract change is two added fields:
@@ -104,7 +104,7 @@ readonly locked: boolean;
 
 Both default to `false` where the CLI constructs an option/branch; cost-rendering paths in later tasks set them to `true` when any cost on that option/branch is unaffordable. The `[LOCKED]` text prefix is unchanged.
 
-- [ ] **Step 1: Port manifest.ts, symbols.ts, rewardArtTypes.ts, effects.ts** verbatim except for the two `locked` field additions on `JourneyOption` and `JourneyTreeBranch`.
+- [ ] **Step 1: Port manifest.ts, symbols.ts, rewardArtTypes.ts** verbatim, and **extend the existing effects.ts** (added in Task 3 with predicate-resolution scaffolding) with the effect catalog and operation kind definitions — verbatim except for the two `locked` field additions on `JourneyOption` and `JourneyTreeBranch`.
 - [ ] **Step 2: Update every CLI callsite that constructs a `JourneyOption` or `JourneyTreeBranch`** in the *ported* files to initialize `locked: false`. This is mechanical — but skipping it breaks downstream tests.
 - [ ] **Step 3: Write a contract test** asserting `JourneyOption.locked` and `JourneyTreeBranch.locked` are required (TypeScript-enforced) and default to `false` when constructed via any helper in the ported manifest module. **Bug class:** future regression that drops the structural flag in favor of parsing the text prefix.
 - [ ] **Step 4: Commit.** "Port manifest contract; add locked flag to options and branches."

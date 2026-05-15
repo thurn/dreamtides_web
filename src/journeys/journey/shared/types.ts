@@ -33,6 +33,9 @@ export type Predicate = {
   readonly id: string;
   readonly kind: PredicateKind;
   readonly multiplier: number;
-  readonly cardPredicate?: CardTargetPredicate;
+  // Required. Every entry in the predicate table must supply a card filter;
+  // the property test in `predicates.test.ts` branches on this presence, and
+  // making it optional would let a future row silently bypass the test.
+  readonly cardPredicate: CardTargetPredicate;
   readonly text: { readonly singular: string; readonly plural: string };
 };

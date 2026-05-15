@@ -1,20 +1,27 @@
 // Predicate table tests.
 //
-// Two tests:
+// Three tests:
 //   1. property test — for an 8-card fixture spanning the predicate axes,
 //      every predicate either matches the fixture cards that cover it or
 //      returns zero when no fixture card covers it. Bug class: silent
 //      regression in predicate filter logic during the port.
-//   2. structural test — every predicate row has a non-empty plural string
-//      and the table has no duplicate ids. Bug class: typo'd or missing
-//      predicate metadata.
+//   2. negative-match spot check — for three representative predicates
+//      (`warriors`, `low_cost`, `legendary`), assert that fixture cards
+//      which clearly should NOT match are absent from the result. Bug
+//      class: a predicate that broadens to also match the wrong cards
+//      (e.g. `warriors` accidentally matching Survivors), which the
+//      property test alone would miss because it only checks the
+//      ≥1 match / =0 match boundary.
+//   3. structural test — every predicate row has a non-empty plural
+//      string and the table has no duplicate ids. Bug class: typo'd
+//      or missing predicate metadata.
 
 import { describe, expect, it } from "vitest";
 
 import type { CardContent, ContentBundle } from "../../content/types";
 import type { JourneyContext } from "../context";
 import { cardMatches } from "./content";
-import { PREDICATES } from "./predicates";
+import { getPredicate, PREDICATES } from "./predicates";
 
 function card(overrides: Partial<CardContent> & { id: string }): CardContent {
   return {
@@ -154,7 +161,7 @@ describe("predicate table — property test", () => {
 
   it("matches every covered predicate and returns zero for uncovered predicates", () => {
     for (const p of PREDICATES) {
-      const matches = p.cardPredicate ? cardMatches(ctx, p.cardPredicate) : [];
+      const matches = cardMatches(ctx, p.cardPredicate);
 
       if (COVERED.has(p.id)) {
         expect(
@@ -171,11 +178,43 @@ describe("predicate table — property test", () => {
   });
 });
 
+describe("predicate table — negative-match spot checks", () => {
+  // The property test only checks the ≥1 / =0 boundary, so a regression that
+  // broadens a predicate to match the wrong cards (e.g. `warriors` matching
+  // Survivors) slips through. These spot checks pin specific non-matches for
+  // three representative predicates spanning the kinds: card-type (warriors),
+  // stat-bucket (low_cost), and card-type by rarity (legendary).
+  const ctx = fixtureContext();
+
+  it("warriors does not match Survivors, Spirit Animals, or Events", () => {
+    const predicate = getPredicate("warriors");
+    const matchedIds = cardMatches(ctx, predicate.cardPredicate).map((c) => c.id);
+    expect(matchedIds).not.toContain("char-survivor");
+    expect(matchedIds).not.toContain("char-spirit");
+    expect(matchedIds).not.toContain("event-mat");
+  });
+
+  it("low_cost does not match cards with cost 3 or more", () => {
+    const predicate = getPredicate("low_cost");
+    const matchedIds = cardMatches(ctx, predicate.cardPredicate).map((c) => c.id);
+    expect(matchedIds).not.toContain("char-survivor"); // cost 3
+    expect(matchedIds).not.toContain("char-spirit"); // cost 5
+  });
+
+  it("legendary does not match common-rarity or Starter cards", () => {
+    const predicate = getPredicate("legendary");
+    const matchedIds = cardMatches(ctx, predicate.cardPredicate).map((c) => c.id);
+    expect(matchedIds).not.toContain("char-warrior"); // common
+    expect(matchedIds).not.toContain("starter-card"); // Starter
+  });
+});
+
 describe("predicate table — structural invariants", () => {
-  it("every entry has a non-empty plural string and ids are unique", () => {
+  it("every entry has a non-empty plural string, defined cardPredicate, and unique id", () => {
     const seen = new Set<string>();
     for (const p of PREDICATES) {
       expect(p.text.plural.length, `predicate '${p.id}' plural is empty`).toBeGreaterThan(0);
+      expect(p.cardPredicate, `predicate '${p.id}' is missing a cardPredicate`).toBeDefined();
       expect(seen.has(p.id), `duplicate predicate id '${p.id}'`).toBe(false);
       seen.add(p.id);
     }

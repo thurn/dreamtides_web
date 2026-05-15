@@ -78,7 +78,7 @@ function predicate(
   kind: PredicateKind,
   multiplier: number,
   text: Predicate["text"],
-  cardPredicate?: Predicate["cardPredicate"],
+  cardPredicate: Predicate["cardPredicate"],
 ): Predicate {
   return Object.freeze({ id, kind, multiplier, text, cardPredicate });
 }

@@ -1,10 +1,11 @@
 // Effect-catalog scaffolding for journeys.
 //
-// This file holds the predicate types, target resolvers, bane / site type /
-// transfiguration vocabularies, and transfiguration eligibility logic that
-// every shape, template, and predicate consumes. Future tasks layer the full
-// effect catalog, operations, manifest contract, and validation on top of
-// this base.
+// Task 3 / Task 4 split: this file currently holds the minimal
+// predicate-resolution / target-resolver / vocabulary scaffolding that the
+// Task 3 shared helpers (`shared/content.ts`, `shared/predicates.ts`) depend
+// on. Task 4 EXTENDS this file with the full effect catalog and operation
+// kind definitions; it must not replace the existing exports, which
+// downstream modules already import.
 //
 // Pure module: no I/O, no Node imports. Browser-safe.
 
@@ -144,12 +145,26 @@ export function isCardEligibleForTransfiguration(
   }
 }
 
-function asString(value: unknown): string {
-  return typeof value === "string" ? value : "";
+// Coerce a raw TOML field to a string the way the CLI does: pass through
+// strings and finite numbers/booleans, drop nullish to "", and reject object
+// values (which would otherwise stringify as "[object Object]"). Matches the
+// CLI's `String(... ?? ... ?? "")` byte-for-byte for the TOML value types
+// these helpers consume.
+function rawString(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+  if (typeof value === "string") {
+    return value;
+  }
+  if (typeof value === "number" || typeof value === "boolean" || typeof value === "bigint") {
+    return String(value);
+  }
+  return "";
 }
 
 function cardRenderedText(card: CardContent): string {
-  return asString(card.raw["rendered-text"]) || asString(card.raw.renderedText);
+  return rawString(card.raw["rendered-text"] ?? card.raw.renderedText);
 }
 
 function cardHasEnergyCostActivatedAbility(card: CardContent): boolean {
@@ -220,7 +235,7 @@ function subtypeMatches(card: CardContent, subtype: string | undefined): boolean
   if (subtype === undefined) {
     return true;
   }
-  return asString(card.raw.subtype).toLowerCase() === subtype.toLowerCase();
+  return rawString(card.raw.subtype).toLowerCase() === subtype.toLowerCase();
 }
 
 function renderedTextMatches(
