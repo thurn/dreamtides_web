@@ -1,12 +1,20 @@
+import { sha256 } from "js-sha256";
+
+import type { QuestState, SiteState } from "../../types/quest";
+
 /**
- * Generates a stable seed for a Dream Journey based on the site and quest state.
- * The seed is used to initialize the RNG for deterministic journey generation.
+ * Derive the deterministic generation seed for a Dream Journey at the given
+ * site.
  *
- * Future tasks will implement the real seed generation logic using labeled-hash RNG.
+ * The seed is the first 16 hex digits of `sha256(startingNodeId + ":" + siteId)`.
+ * The startingNodeId axis varies the seed across distinct quest runs; the
+ * siteId axis varies it across distinct sites within the same run. Calling
+ * this with the same inputs always returns the same string, so the journey
+ * manifest is byte-identical across page reloads.
  */
 export function journeySeedForSite(
-  _site: unknown,
-  _questState: unknown
+  site: SiteState,
+  questState: QuestState,
 ): string {
-  return "placeholder-seed";
+  return sha256(`${questState.atlas.startingNodeId}:${site.id}`).slice(0, 16);
 }
