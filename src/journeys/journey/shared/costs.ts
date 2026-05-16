@@ -34,8 +34,8 @@
 //   - `lose_max_essence` is classified as a Resource cost: viable is
 //     `() => true`, with `locked` flipping when the loss would consume the
 //     entire max-essence pool.
-//   - `meta_pay_2_costs` ANDs its sub-cost viabilities and aggregates
-//     guaranteed finite-resource spend for compound locking; the port's
+//   - `meta_pay_2_costs` ANDs its sub-cost viabilities and projects
+//     guaranteed resource spend in sub-cost order for compound locking; the
 //     compound test pins the [LOCKED]-prefix-exactly-once property.
 
 import type { DrawContext } from "../../util/rng";
@@ -921,7 +921,13 @@ type OrderedSpendOperation =
   | { kind: "percent"; percent: number }
   | { kind: "exhaust" };
 
+type GuaranteedResourceOperation =
+  | ({ resource: "essence" } & OrderedSpendOperation)
+  | { resource: "omens"; kind: "finite"; amount: number }
+  | ({ resource: "maxEssence" } & OrderedSpendOperation);
+
 type GuaranteedResourceSpend = {
+  operations: readonly GuaranteedResourceOperation[];
   essence: readonly OrderedSpendOperation[];
   omens: number;
   maxEssence: readonly OrderedSpendOperation[];
@@ -943,6 +949,7 @@ function guaranteedResourceSpend(
   params: Record<string, unknown>,
 ): GuaranteedResourceSpend {
   const noSpend: GuaranteedResourceSpend = {
+    operations: [],
     essence: [],
     omens: 0,
     maxEssence: [],
@@ -952,26 +959,51 @@ function guaranteedResourceSpend(
     case "pay_essence":
       return {
         ...noSpend,
+        operations: [{ resource: "essence", kind: "finite", amount: numericParam(params, "x") }],
         essence: [{ kind: "finite", amount: numericParam(params, "x") }],
       };
     case "pay_essence_random_range":
       return {
         ...noSpend,
+        operations: [
+          { resource: "essence", kind: "finite", amount: numericParam(params, "min") },
+        ],
         essence: [{ kind: "finite", amount: numericParam(params, "min") }],
       };
     case "pay_percent_essence":
       return {
         ...noSpend,
+        operations: [
+          { resource: "essence", kind: "percent", percent: numericParam(params, "percent") },
+        ],
         essence: [{ kind: "percent", percent: numericParam(params, "percent") }],
       };
     case "pay_all_remaining_essence":
-      return { ...noSpend, essence: [{ kind: "exhaust" }] };
+      return {
+        ...noSpend,
+        operations: [{ resource: "essence", kind: "exhaust" }],
+        essence: [{ kind: "exhaust" }],
+      };
     case "pay_omens":
-      return { ...noSpend, omens: numericParam(params, "x") };
+      return {
+        ...noSpend,
+        operations: [{ resource: "omens", kind: "finite", amount: numericParam(params, "x") }],
+        omens: numericParam(params, "x"),
+      };
     case "pay_max_essence":
-      return { ...noSpend, maxEssence: [{ kind: "exhaust" }] };
+      return {
+        ...noSpend,
+        operations: [{ resource: "maxEssence", kind: "exhaust" }],
+        maxEssence: [{ kind: "exhaust" }],
+      };
     case "lose_max_essence":
-      return { ...noSpend, maxEssence: [{ kind: "finite", amount: numericParam(params, "amount") }] };
+      return {
+        ...noSpend,
+        operations: [
+          { resource: "maxEssence", kind: "finite", amount: numericParam(params, "amount") },
+        ],
+        maxEssence: [{ kind: "finite", amount: numericParam(params, "amount") }],
+      };
     default:
       return noSpend;
   }
@@ -990,39 +1022,84 @@ function addGuaranteedResourceSpend(
   second: GuaranteedResourceSpend,
 ): GuaranteedResourceSpend {
   return {
+    operations: [...first.operations, ...second.operations],
     essence: [...first.essence, ...second.essence],
     omens: first.omens + second.omens,
     maxEssence: [...first.maxEssence, ...second.maxEssence],
   };
 }
 
-function orderedSpendLocks(
-  initial: number,
-  operations: readonly OrderedSpendOperation[],
-  options: { finiteLocksOnExactExhaust: boolean },
-): boolean {
-  let remaining = initial;
+function clampProjectedEssence(value: number, max: number): number {
+  return Math.max(0, Math.min(value, max));
+}
 
-  for (const operation of operations) {
-    if (operation.kind === "finite") {
-      if (
-        operation.amount > remaining
-        || (options.finiteLocksOnExactExhaust && operation.amount >= remaining)
-      ) {
-        return true;
-      }
-      remaining -= operation.amount;
-      continue;
-    }
+function projectEssenceDelta(resources: ProjectedResources, delta: number): void {
+  resources.essence = clampProjectedEssence(resources.essence + delta, resources.maxEssence);
+}
 
-    if (operation.kind === "percent") {
-      remaining -= Math.floor((remaining * operation.percent) / 100);
-      continue;
-    }
+function projectMaxEssenceDelta(resources: ProjectedResources, delta: number): void {
+  resources.maxEssence = Math.max(0, resources.maxEssence + delta);
+  resources.essence = clampProjectedEssence(resources.essence, resources.maxEssence);
+}
 
-    remaining = 0;
+function projectEssenceSpendOperation(
+  resources: ProjectedResources,
+  operation: OrderedSpendOperation,
+): void {
+  if (operation.kind === "finite") {
+    projectEssenceDelta(resources, -operation.amount);
+    return;
   }
 
+  if (operation.kind === "percent") {
+    resources.essence = clampProjectedEssence(
+      resources.essence - Math.floor((resources.essence * operation.percent) / 100),
+      resources.maxEssence,
+    );
+    return;
+  }
+
+  resources.essence = 0;
+}
+
+function projectMaxEssenceSpendOperation(
+  resources: ProjectedResources,
+  operation: OrderedSpendOperation,
+): void {
+  if (operation.kind === "finite") {
+    projectMaxEssenceDelta(resources, -operation.amount);
+  } else if (operation.kind === "exhaust") {
+    projectMaxEssenceDelta(resources, -resources.maxEssence);
+  }
+}
+
+function guaranteedResourceOperationLocks(
+  resources: ProjectedResources,
+  operation: GuaranteedResourceOperation,
+): boolean {
+  if (operation.resource === "essence") {
+    if (operation.kind === "finite" && operation.amount > resources.essence) {
+      return true;
+    }
+
+    projectEssenceSpendOperation(resources, operation);
+    return false;
+  }
+
+  if (operation.resource === "omens") {
+    if (operation.amount > resources.omens) {
+      return true;
+    }
+
+    resources.omens = Math.max(0, resources.omens - operation.amount);
+    return false;
+  }
+
+  if (operation.kind === "finite" && operation.amount >= resources.maxEssence) {
+    return true;
+  }
+
+  projectMaxEssenceSpendOperation(resources, operation);
   return false;
 }
 
@@ -1035,22 +1112,13 @@ function combinedResourceSpendLocks(
     guaranteedResourceSpend(p.subIds[1], p.subParams[1]),
   ] as const;
   const spend = addGuaranteedResourceSpend(orderedSpend[0], orderedSpend[1]);
+  const resources: ProjectedResources = {
+    essence: essenceAmount(ctx),
+    omens: omenAmount(ctx),
+    maxEssence: maxEssence(ctx),
+  };
 
-  return orderedSpendLocks(
-    essenceAmount(ctx),
-    spend.essence,
-    { finiteLocksOnExactExhaust: false },
-  )
-    || spend.omens > omenAmount(ctx)
-    || orderedSpendLocks(
-      maxEssence(ctx),
-      spend.maxEssence,
-      { finiteLocksOnExactExhaust: true },
-    );
-}
-
-function clampProjectedEssence(value: number, max: number): number {
-  return Math.max(0, Math.min(value, max));
+  return spend.operations.some((operation) => guaranteedResourceOperationLocks(resources, operation));
 }
 
 function contextWithProjectedResources(
@@ -1082,7 +1150,7 @@ function projectResourceMutations(
     ...mut,
     changeEssence: (delta, source) => {
       mut.changeEssence(delta, source);
-      resources.essence = clampProjectedEssence(resources.essence + delta, resources.maxEssence);
+      projectEssenceDelta(resources, delta);
     },
     changeOmens: (delta, source) => {
       mut.changeOmens(delta, source);
@@ -1094,8 +1162,7 @@ function projectResourceMutations(
     },
     changeMaxEssence: (delta, source) => {
       mut.changeMaxEssence(delta, source);
-      resources.maxEssence = Math.max(0, resources.maxEssence + delta);
-      resources.essence = clampProjectedEssence(resources.essence, resources.maxEssence);
+      projectMaxEssenceDelta(resources, delta);
     },
   };
 }

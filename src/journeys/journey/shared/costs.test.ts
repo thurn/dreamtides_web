@@ -68,7 +68,7 @@ function emptyContext(overrides: {
     seed: "costs-test",
     resources: {
       essence: overrides.essence ?? 0,
-      maxEssence: overrides.maxEssence ?? 0,
+      maxEssence: overrides.maxEssence ?? overrides.essence ?? 0,
       omens: overrides.omens ?? 0,
       dreamscape: 0,
     },
@@ -597,7 +597,7 @@ describe("meta_pay_2_costs (compound) locking", () => {
     expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
   });
 
-  it("keeps pay_max_essence compounds unlocked with a harmless finite cost", () => {
+  it("locks pay_max_essence compounds with later finite essence cost", () => {
     const t = getCost("meta_pay_2_costs");
     const ctx = emptyContext({ essence: 100, maxEssence: 100 });
     const params = {
@@ -609,8 +609,24 @@ describe("meta_pay_2_costs (compound) locking", () => {
     };
     expect(getCost("pay_max_essence").locked(params.subParams[0], ctx)).toBe(false);
     expect(getCost("pay_essence").locked(params.subParams[1], ctx)).toBe(false);
-    expect(t.locked(params, ctx)).toBe(false);
-    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
+  it("locks max-essence loss compounds when clamped essence cannot pay a later finite cost", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100, maxEssence: 100 });
+    const params = {
+      subIds: ["lose_max_essence", "pay_essence"] as const,
+      subParams: [
+        { amount: 25 },
+        { x: 80 },
+      ] as const,
+    };
+    expect(getCost("lose_max_essence").locked(params.subParams[0], ctx)).toBe(false);
+    expect(getCost("pay_essence").locked(params.subParams[1], ctx)).toBe(false);
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
   });
 
   it("locks pay_max_essence compounds with additional max-essence loss", () => {
