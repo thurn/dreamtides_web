@@ -834,6 +834,73 @@ describe("Meta-compound cost apply", () => {
       { method: "changeOmens", args: [-2, "dream_journey:pay_omens"] },
     ]);
   });
+
+  it("meta_pay_2_costs applies percent essence costs to essence remaining after finite costs", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = buildContext({ essence: 100 });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      {
+        subIds: ["pay_essence", "pay_percent_essence"],
+        subParams: [{ x: 60 }, { percent: 75 }],
+      },
+      ctx,
+      mut,
+      undefined,
+    );
+
+    expect(calls).toEqual([
+      { method: "changeEssence", args: [-60, "dream_journey:pay_essence"] },
+      { method: "changeEssence", args: [-30, "dream_journey:pay_percent_essence"] },
+    ]);
+  });
+
+  it("meta_pay_2_costs applies percent essence costs to zero after all-remaining costs", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = buildContext({ essence: 100 });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      {
+        subIds: ["pay_all_remaining_essence", "pay_percent_essence"],
+        subParams: [{}, { percent: 75 }],
+      },
+      ctx,
+      mut,
+      undefined,
+    );
+
+    expect(calls).toHaveLength(2);
+    expect(calls[0]).toEqual({
+      method: "setEssence",
+      args: [0, "dream_journey:pay_all_remaining_essence"],
+    });
+    expect(calls[1].method).toBe("changeEssence");
+    expect(Object.is(calls[1].args[0], -0)).toBe(true);
+    expect(calls[1].args[1]).toBe("dream_journey:pay_percent_essence");
+  });
+
+  it("meta_pay_2_costs applies pay_max_essence to max essence remaining after max loss", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = buildContext({ maxEssence: 100 });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      {
+        subIds: ["lose_max_essence", "pay_max_essence"],
+        subParams: [{ amount: 25 }, {}],
+      },
+      ctx,
+      mut,
+      undefined,
+    );
+
+    expect(calls).toEqual([
+      { method: "changeMaxEssence", args: [-25, "dream_journey:lose_max_essence"] },
+      { method: "changeMaxEssence", args: [-75, "dream_journey:pay_max_essence"] },
+    ]);
+  });
 });
 
 describe("Visual and dreamwell cost apply no-ops", () => {

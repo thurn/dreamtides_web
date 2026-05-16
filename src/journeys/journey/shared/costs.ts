@@ -40,6 +40,7 @@
 
 import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
+import type { JourneyMutations } from "../../apply/JourneyMutations";
 import { logSkippedVisualTemplate } from "../../apply/skipLog";
 import type { CardContent } from "../../content/types";
 import type { JourneyContext } from "../context";
@@ -926,6 +927,12 @@ type GuaranteedResourceSpend = {
   maxEssence: readonly OrderedSpendOperation[];
 };
 
+type ProjectedResources = {
+  essence: number;
+  omens: number;
+  maxEssence: number;
+};
+
 function numericParam(params: Record<string, unknown>, key: string): number {
   const value = params[key];
   return typeof value === "number" && Number.isFinite(value) ? value : 0;
@@ -968,6 +975,14 @@ function guaranteedResourceSpend(
     default:
       return noSpend;
   }
+}
+
+function hasOrderedResourceSpend(
+  costId: string,
+  params: Record<string, unknown>,
+): boolean {
+  const spend = guaranteedResourceSpend(costId, params);
+  return spend.essence.length > 0 || spend.omens !== 0 || spend.maxEssence.length > 0;
 }
 
 function addGuaranteedResourceSpend(
@@ -1034,6 +1049,75 @@ function combinedResourceSpendLocks(
     );
 }
 
+function clampProjectedEssence(value: number, max: number): number {
+  return Math.max(0, Math.min(value, max));
+}
+
+function contextWithProjectedResources(
+  ctx: JourneyContext,
+  resources: ProjectedResources,
+): JourneyContext {
+  return {
+    ...ctx,
+    state: {
+      ...ctx.state,
+      quest: {
+        ...ctx.state.quest,
+        resources: {
+          ...ctx.state.quest.resources,
+          essence: resources.essence,
+          omens: resources.omens,
+          maxEssence: resources.maxEssence,
+        },
+      },
+    },
+  };
+}
+
+function projectResourceMutations(
+  mut: JourneyMutations,
+  resources: ProjectedResources,
+): JourneyMutations {
+  return {
+    ...mut,
+    changeEssence: (delta, source) => {
+      mut.changeEssence(delta, source);
+      resources.essence = clampProjectedEssence(resources.essence + delta, resources.maxEssence);
+    },
+    changeOmens: (delta, source) => {
+      mut.changeOmens(delta, source);
+      resources.omens = Math.max(0, resources.omens + delta);
+    },
+    setEssence: (value, source) => {
+      mut.setEssence(value, source);
+      resources.essence = clampProjectedEssence(value, resources.maxEssence);
+    },
+    changeMaxEssence: (delta, source) => {
+      mut.changeMaxEssence(delta, source);
+      resources.maxEssence = Math.max(0, resources.maxEssence + delta);
+      resources.essence = clampProjectedEssence(resources.essence, resources.maxEssence);
+    },
+  };
+}
+
+function applyMetaSubCost(
+  cost: Cost,
+  costId: string,
+  params: Record<string, unknown>,
+  ctx: JourneyContext,
+  mut: JourneyMutations,
+  resources: ProjectedResources,
+): void {
+  if (!hasOrderedResourceSpend(costId, params)) {
+    cost.apply(params, ctx, mut);
+    return;
+  }
+
+  const projectedCtx = contextWithProjectedResources(ctx, resources);
+  const projectedMut = projectResourceMutations(mut, resources);
+  cost.apply(params, projectedCtx, projectedMut);
+}
+
 function nonMetaCosts(): readonly Cost[] {
   return COSTS.filter((c) => !c.id.startsWith("meta_"));
 }
@@ -1098,8 +1182,13 @@ const metaPay2Costs: Cost<MetaPay2Params> = {
   apply: (p, ctx, mut) => {
     const a = getCost(p.subIds[0]);
     const b = getCost(p.subIds[1]);
-    a.apply(p.subParams[0], ctx, mut);
-    b.apply(p.subParams[1], ctx, mut);
+    const resources: ProjectedResources = {
+      essence: essenceAmount(ctx),
+      omens: omenAmount(ctx),
+      maxEssence: maxEssence(ctx),
+    };
+    applyMetaSubCost(a, p.subIds[0], p.subParams[0], ctx, mut, resources);
+    applyMetaSubCost(b, p.subIds[1], p.subParams[1], ctx, mut, resources);
   },
 };
 
