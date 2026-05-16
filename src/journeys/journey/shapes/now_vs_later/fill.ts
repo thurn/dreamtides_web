@@ -11,7 +11,7 @@ import {
 } from "../../manifest";
 import { buildPrecommittedOperations } from "../../operationBuilders";
 import { REWARDS } from "../../shared/rewards";
-import type { Reward } from "../../shared/types";
+import type { Reward, TemplateParams } from "../../shared/types";
 import type { FilledJourney, ShapeFillArgs } from "../types";
 
 const SHAPE_ID = "now_vs_later";
@@ -37,7 +37,7 @@ const DEFERRED_IMMEDIATE_REWARD_IDS = new Set([
 
 type RolledReward = {
   readonly template: Reward;
-  readonly params: unknown;
+  readonly params: TemplateParams;
   readonly cec: number;
   readonly text: string;
 };
@@ -258,6 +258,7 @@ function emptyOption(
   effectConvertedEssence: number,
   rewardTemplateIds: readonly string[],
   uncertaintyConvertedEssence = 0,
+  effects: readonly unknown[] = [],
 ): JourneyOption {
   const netConvertedEssence = effectConvertedEssence + uncertaintyConvertedEssence;
 
@@ -267,7 +268,7 @@ function emptyOption(
     text,
     operations: [],
     costs: [],
-    effects: [],
+    effects: [...effects],
     burdens: [],
     targets: [],
     triggers: [],
@@ -291,6 +292,7 @@ function rewardPayload(reward: RolledReward, timing: "immediate" | "delayed"): R
     params: reward.params,
     text,
     timing,
+    convertedEssence: reward.cec,
     expectedConvertedEssence: reward.cec,
   };
 }
@@ -371,6 +373,8 @@ export function nowVsLaterFill(args: ShapeFillArgs): FilledJourney {
         ["reward", "now"],
         immediate.cec,
         [immediate.template.id],
+        0,
+        [rewardPayload(immediate, "immediate")],
       ),
       emptyOption(
         2,

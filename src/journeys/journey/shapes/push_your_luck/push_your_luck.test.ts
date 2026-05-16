@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
 
+import {
+  narrowSharedCostPayload,
+  narrowSharedRewardPayload,
+} from "../../../apply/payloads";
 import { buildFixtureContext, FIXTURE_DRAW_CONTEXT } from "../__shared__/fixture";
 import { pushYourLuckPlugin } from "./index";
 
@@ -63,6 +67,46 @@ describe("push_your_luck shape", () => {
     );
     for (const attempt of attempts) {
       expect(branchIds.has(attempt.id)).toBe(true);
+    }
+  });
+
+  it("emits dispatchable pay-essence costs on visible attempt branches and precommit attempts", () => {
+    const ctx = buildFixtureContext();
+    const filled = pushYourLuckPlugin.fill({
+      context: ctx,
+      drawContext: FIXTURE_DRAW_CONTEXT,
+      stage: "mid",
+    });
+    const tree = filled.tree!;
+    const attempts = tree.nodes.map((node) => node.branches[1]);
+
+    for (const branch of attempts) {
+      const cost = narrowSharedCostPayload(branch.costs[0]);
+      expect(cost?.templateId).toBe("pay_essence");
+      expect(cost?.params).toEqual({ x: branch.costConvertedEssence });
+      expect(cost?.convertedEssence).toBe(branch.costConvertedEssence);
+
+      const reward = narrowSharedRewardPayload(branch.effects[0]);
+      expect(branch.rewardTemplateIds ?? []).toContain(reward?.templateId);
+      expect(reward?.convertedEssence).toBe(branch.effectConvertedEssence);
+
+      if (branch.terminal) {
+        expect(narrowSharedCostPayload(branch.terminal.costs[0])).toEqual(cost);
+        expect(narrowSharedRewardPayload(branch.terminal.effects[0])).toEqual(
+          reward,
+        );
+      }
+    }
+
+    const pushEnvelope = (filled.precommitted.random ?? []).find(
+      (entry) => entry.kind === "push_choice",
+    ) as { attempts: ReadonlyArray<{ costs: readonly unknown[]; effects: readonly unknown[] }> };
+
+    for (const attempt of pushEnvelope.attempts) {
+      expect(narrowSharedCostPayload(attempt.costs[0])?.templateId).toBe(
+        "pay_essence",
+      );
+      expect(narrowSharedRewardPayload(attempt.effects[0])).not.toBeNull();
     }
   });
 });

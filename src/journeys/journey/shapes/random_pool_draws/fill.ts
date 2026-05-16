@@ -129,6 +129,14 @@ type SharedRewardOutcome = {
   readonly convertedEssence: number;
 };
 
+type SharedCostOutcome = {
+  readonly kind: "shared_cost_template";
+  readonly templateId: "pay_essence";
+  readonly params: TemplateParams;
+  readonly text: string;
+  readonly convertedEssence: number;
+};
+
 type PoolCandidate = {
   readonly key: string;
   readonly poolIndex: number;
@@ -445,6 +453,21 @@ function roundCost(value: number): number {
   );
 }
 
+function payEssencePayload(
+  context: JourneyContext,
+  amount: number,
+): SharedCostOutcome {
+  const params = { x: amount };
+
+  return {
+    kind: "shared_cost_template",
+    templateId: "pay_essence",
+    params,
+    text: PAY_ESSENCE.render(params, context),
+    convertedEssence: PAY_ESSENCE.cec(params, context),
+  };
+}
+
 function costAmountsForDraws(
   context: JourneyContext,
   stage: JourneyStage,
@@ -595,14 +618,13 @@ function drawBranch(args: {
   readonly costAmount: number;
   readonly averageReward: number;
   readonly candidates: readonly PoolCandidate[];
+  readonly committedRewards: readonly SharedRewardOutcome[];
   readonly replacement: RandomPoolReplacementPolicy;
 }): JourneyTreeBranch {
   const final = args.level === args.levelCount;
   const text = `Pay ${args.costAmount} essence and gain one random reward from among:\n${inlinePoolRewardText(args.candidates)}`;
-  const costConvertedEssence = PAY_ESSENCE.cec(
-    { x: args.costAmount },
-    args.context,
-  );
+  const cost = payEssencePayload(args.context, args.costAmount);
+  const costConvertedEssence = cost.convertedEssence;
   const uncertaintyConvertedEssence = args.replacement === "with_replacement" ? -12 : -8;
   // The pool's candidate template ids describe every reward that could land
   // in this branch, so dream-art matching can pick from any of them.
@@ -620,8 +642,8 @@ function drawBranch(args: {
     kind: "player_choice",
     text,
     operations: [],
-    costs: [],
-    effects: [],
+    costs: [cost],
+    effects: [...args.committedRewards],
     burdens: [],
     targets: [],
     triggers: [],
@@ -645,6 +667,7 @@ function buildTree(args: {
   readonly costAmounts: readonly number[];
   readonly averageReward: number;
   readonly candidates: readonly PoolCandidate[];
+  readonly committedDraws: readonly (readonly SharedRewardOutcome[])[];
   readonly replacement: RandomPoolReplacementPolicy;
 }): JourneyTree {
   return {
@@ -664,6 +687,7 @@ function buildTree(args: {
             costAmount: args.costAmounts[index],
             averageReward: args.averageReward,
             candidates: args.candidates,
+            committedRewards: args.committedDraws[index] ?? [],
             replacement: args.replacement,
           }),
         ],
@@ -769,6 +793,7 @@ export function randomPoolDrawsFill(args: ShapeFillArgs): FilledJourney {
       costAmounts,
       averageReward,
       candidates,
+      committedDraws,
       replacement,
     }),
     rewardPool,

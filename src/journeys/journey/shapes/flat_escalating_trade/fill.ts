@@ -8,6 +8,7 @@ import {
   type JourneyStage,
   type JourneySymmetryContractDebug,
 } from "../../manifest";
+import { getCost } from "../../shared/costs";
 import { getReward } from "../../shared/rewards";
 import type { TemplateParams } from "../../shared/types";
 import { valueOmenGain } from "../../value";
@@ -241,11 +242,21 @@ function reclaimCardsProfile(
   };
 }
 
-function essenceCostPayload(price: number, escalationTier: string) {
+const PAY_ESSENCE = getCost("pay_essence");
+
+function essenceCostPayload(
+  context: JourneyContext,
+  price: number,
+  escalationTier: string,
+) {
+  const params = { x: price };
+
   return {
-    kind: "essence",
-    amount: price,
-    timing: "immediate",
+    kind: "shared_cost_template",
+    templateId: "pay_essence",
+    params,
+    text: PAY_ESSENCE.render(params, context),
+    convertedEssence: PAY_ESSENCE.cec(params, context),
     escalationTier,
   };
 }
@@ -267,55 +278,16 @@ function rewardPayload(
   params: TemplateParams,
   rendered: string,
   escalationTier: string,
+  convertedEssence: number,
 ) {
-  switch (profile.rewardId) {
-    case "gain_omens": {
-      const { x } = params as { x: number };
-      return {
-        kind: "gain_omens",
-        templateId: profile.rewardId,
-        amount: x,
-        rendered,
-        escalationTier,
-      };
-    }
-
-    case "increase_max_essence": {
-      const { amount } = params as { amount: number };
-      return {
-        kind: "resource_cap_change",
-        templateId: profile.rewardId,
-        resource: "maxEssence",
-        amount,
-        rendered,
-        escalationTier,
-      };
-    }
-
-    case "duplicate_chosen_cards": {
-      const { count } = params as { count: number };
-      return {
-        kind: "card_duplicate",
-        templateId: profile.rewardId,
-        count,
-        rendered,
-        escalationTier,
-      };
-    }
-
-    case "make_random_cards_reclaim": {
-      const { count, reclaim } = params as { count: number; reclaim: number };
-      return {
-        kind: "card_keyword_add",
-        templateId: profile.rewardId,
-        count,
-        reclaim,
-        keyword: "Reclaim",
-        rendered,
-        escalationTier,
-      };
-    }
-  }
+  return {
+    kind: "shared_reward_template",
+    templateId: profile.rewardId,
+    params,
+    text: rendered,
+    convertedEssence,
+    escalationTier,
+  };
 }
 
 function tradeOption(args: {
@@ -339,13 +311,14 @@ function tradeOption(args: {
     symbols: ["cost", "reward", "resource", "trade"],
     text: `Pay ${args.price} essence. ${rewardText}.`,
     operations: [],
-    costs: [essenceCostPayload(args.price, args.escalationTier)],
+    costs: [essenceCostPayload(args.context, args.price, args.escalationTier)],
     effects: [
       rewardPayload(
         args.profile,
         args.params,
         rewardText,
         args.escalationTier,
+        effectConvertedEssence,
       ),
     ],
     burdens: [],

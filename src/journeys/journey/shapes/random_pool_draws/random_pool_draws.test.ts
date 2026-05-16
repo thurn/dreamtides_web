@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
 
+import {
+  narrowSharedCostPayload,
+  narrowSharedRewardPayload,
+} from "../../../apply/payloads";
 import { buildFixtureContext, FIXTURE_DRAW_CONTEXT } from "../__shared__/fixture";
 import { randomPoolDrawsPlugin } from "./index";
 
@@ -77,5 +81,35 @@ describe("random_pool_draws shape", () => {
     // The reward pool is exposed alongside the tree.
     expect(filled.rewardPool).toBeDefined();
     expect(filled.rewardPool!.rewards.length).toBeGreaterThan(0);
+  });
+
+  it("emits dispatchable pay costs and committed reward effects on draw branches", () => {
+    const ctx = buildFixtureContext();
+    const filled = randomPoolDrawsPlugin.fill({
+      context: ctx,
+      drawContext: FIXTURE_DRAW_CONTEXT,
+      stage: "mid",
+    });
+    const tree = filled.tree!;
+    const repeated = (filled.precommitted.random ?? []).find(
+      (entry) => entry.kind === "repeated_pool_draws",
+    ) as {
+      committedDraws: readonly (readonly unknown[])[];
+    };
+
+    tree.nodes.forEach((node, index) => {
+      const draw = node.branches[1];
+      expect(draw.text).toContain(`Pay ${draw.costConvertedEssence} essence`);
+
+      const cost = narrowSharedCostPayload(draw.costs[0]);
+      expect(cost?.templateId).toBe("pay_essence");
+      expect(cost?.params).toEqual({ x: draw.costConvertedEssence });
+      expect(cost?.convertedEssence).toBe(draw.costConvertedEssence);
+
+      expect(draw.effects).toEqual(repeated.committedDraws[index]);
+      for (const effect of draw.effects) {
+        expect(narrowSharedRewardPayload(effect)).not.toBeNull();
+      }
+    });
   });
 });
