@@ -4,6 +4,23 @@ When making a *minor* revision to a commit which has not been pushed to remote, 
 
 Do not print a summary of changes.
 
+# Verification
+
+Run the core checks after code changes:
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+```
+
+Run the commands from the repository root. In a fresh worktree, run
+`npm install` before these checks because `node_modules` is not committed.
+
+For quest prototype UI work, run browser QA with `npx agent-browser` against a
+local Vite server and inspect the captured error buffer for render errors,
+unhandled rejections, and console errors.
+
 # Documentation style
 
 Do not describe what the system *no longer* does. Documentation should describe
