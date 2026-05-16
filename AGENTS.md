@@ -17,9 +17,15 @@ npm test
 Run the commands from the repository root. In a fresh worktree, run
 `npm install` before these checks because `node_modules` is not committed.
 
-For quest prototype UI work, run browser QA with `npx agent-browser` against a
-local Vite server and inspect the captured error buffer for render errors,
-unhandled rejections, and console errors.
+For quest prototype UI work, run browser QA with `/opt/homebrew/bin/agent-browser`
+against a local Vite server. `npx agent-browser` is an acceptable fallback when
+the Homebrew-installed binary is unavailable. Validate the feature through the
+normal player workflow, inspect the captured error buffer for render errors,
+unhandled rejections, and console errors, and check the UI state directly in
+the browser. Confirm controls are usable, expected state changes occur, text
+and controls are fully visible, layout spacing is stable, elements are free of
+clipping or overlap, and the resulting screen is visually coherent at the
+tested viewport sizes.
 
 # Documentation style
 
