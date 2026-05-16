@@ -424,6 +424,95 @@ describe("meta_pay_2_costs (compound) locking", () => {
     expect(t.locked(params, ctx)).toBe(false);
   });
 
+  it("locks when same-resource essence costs are individually affordable but unaffordable together", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_essence"] as const,
+      subParams: [
+        { x: 60 },
+        { x: 50 },
+      ] as const,
+    };
+    const rendered = t.render(params, ctx);
+    expect(rendered.match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+    expect(t.locked(params, ctx)).toBe(true);
+  });
+
+  it("locks essence range compounds by guaranteed minimum spend", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_essence_random_range"] as const,
+      subParams: [
+        { x: 80 },
+        { min: 30, max: 80 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
+  it("does not lock essence range compounds when the guaranteed minimum is affordable", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_essence_random_range"] as const,
+      subParams: [
+        { x: 70 },
+        { min: 30, max: 80 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("locks when same-resource omen costs are individually affordable but unaffordable together", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ omens: 1 });
+    const params = {
+      subIds: ["pay_omens", "pay_omens"] as const,
+      subParams: [
+        { x: 1 },
+        { x: 1 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
+  it("aggregates percentage and all-remaining essence costs", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    expect(t.locked({
+      subIds: ["pay_percent_essence", "pay_essence"] as const,
+      subParams: [
+        { percent: 75 },
+        { x: 30 },
+      ] as const,
+    }, ctx)).toBe(true);
+    expect(t.locked({
+      subIds: ["pay_all_remaining_essence", "pay_essence"] as const,
+      subParams: [
+        {},
+        { x: 1 },
+      ] as const,
+    }, ctx)).toBe(true);
+  });
+
+  it("aggregates max-essence costs using the max-essence lock threshold", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ maxEssence: 100 });
+    const params = {
+      subIds: ["lose_max_essence", "lose_max_essence"] as const,
+      subParams: [
+        { amount: 50 },
+        { amount: 50 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+  });
+
   it("declines an empty context when both sub-costs decline", () => {
     // Hand-picked sub-cost ids that are guaranteed to decline on an empty
     // fixture (purge_named_card needs a deck; draw_X_purge_chosen needs

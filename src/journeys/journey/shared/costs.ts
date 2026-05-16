@@ -34,8 +34,9 @@
 //   - `lose_max_essence` is classified as a Resource cost: viable is
 //     `() => true`, with `locked` flipping when the loss would consume the
 //     entire max-essence pool.
-//   - `meta_pay_2_costs` ANDs its sub-cost viabilities; the port's compound
-//     test pins the [LOCKED]-prefix-exactly-once property.
+//   - `meta_pay_2_costs` ANDs its sub-cost viabilities and aggregates
+//     guaranteed finite-resource spend for compound locking; the port's
+//     compound test pins the [LOCKED]-prefix-exactly-once property.
 
 import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
@@ -914,6 +915,71 @@ type MetaPay2Params = {
   subParams: readonly [Record<string, unknown>, Record<string, unknown>];
 };
 
+type FiniteResourceSpend = {
+  essence: number;
+  omens: number;
+  maxEssence: number;
+};
+
+function numericParam(params: Record<string, unknown>, key: string): number {
+  const value = params[key];
+  return typeof value === "number" && Number.isFinite(value) ? value : 0;
+}
+
+function guaranteedFiniteResourceSpend(
+  costId: string,
+  params: Record<string, unknown>,
+  ctx: JourneyContext,
+): FiniteResourceSpend {
+  switch (costId) {
+    case "pay_essence":
+      return { essence: numericParam(params, "x"), omens: 0, maxEssence: 0 };
+    case "pay_essence_random_range":
+      return { essence: numericParam(params, "min"), omens: 0, maxEssence: 0 };
+    case "pay_percent_essence":
+      return {
+        essence: Math.floor((essenceAmount(ctx) * numericParam(params, "percent")) / 100),
+        omens: 0,
+        maxEssence: 0,
+      };
+    case "pay_all_remaining_essence":
+      return { essence: essenceAmount(ctx), omens: 0, maxEssence: 0 };
+    case "pay_omens":
+      return { essence: 0, omens: numericParam(params, "x"), maxEssence: 0 };
+    case "pay_max_essence":
+      return { essence: 0, omens: 0, maxEssence: maxEssence(ctx) };
+    case "lose_max_essence":
+      return { essence: 0, omens: 0, maxEssence: numericParam(params, "amount") };
+    default:
+      return { essence: 0, omens: 0, maxEssence: 0 };
+  }
+}
+
+function addFiniteResourceSpend(
+  first: FiniteResourceSpend,
+  second: FiniteResourceSpend,
+): FiniteResourceSpend {
+  return {
+    essence: first.essence + second.essence,
+    omens: first.omens + second.omens,
+    maxEssence: first.maxEssence + second.maxEssence,
+  };
+}
+
+function combinedFiniteResourceSpendLocks(
+  p: MetaPay2Params,
+  ctx: JourneyContext,
+): boolean {
+  const spend = addFiniteResourceSpend(
+    guaranteedFiniteResourceSpend(p.subIds[0], p.subParams[0], ctx),
+    guaranteedFiniteResourceSpend(p.subIds[1], p.subParams[1], ctx),
+  );
+
+  return spend.essence > essenceAmount(ctx)
+    || spend.omens > omenAmount(ctx)
+    || (spend.maxEssence > 0 && spend.maxEssence >= maxEssence(ctx));
+}
+
 function nonMetaCosts(): readonly Cost[] {
   return COSTS.filter((c) => !c.id.startsWith("meta_"));
 }
@@ -961,18 +1027,18 @@ const metaPay2Costs: Cost<MetaPay2Params> = {
   locked: (p, ctx) => {
     const a = getCost(p.subIds[0]);
     const b = getCost(p.subIds[1]);
-    return a.locked(p.subParams[0], ctx) || b.locked(p.subParams[1], ctx);
+    return a.locked(p.subParams[0], ctx)
+      || b.locked(p.subParams[1], ctx)
+      || combinedFiniteResourceSpendLocks(p, ctx);
   },
   render: (p, ctx) => {
     const a = getCost(p.subIds[0]);
     const b = getCost(p.subIds[1]);
     const aText = a.render(p.subParams[0], ctx);
     const bText = b.render(p.subParams[1], ctx);
-    const aLocked = a.locked(p.subParams[0], ctx);
-    const bLocked = b.locked(p.subParams[1], ctx);
     return withLockedPrefix(
       `${stripLockedPrefix(aText)}. ${stripLockedPrefix(bText)}`,
-      aLocked || bLocked,
+      metaPay2Costs.locked(p, ctx),
     );
   },
   apply: (p, ctx, mut) => {

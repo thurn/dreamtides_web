@@ -1988,6 +1988,34 @@ function nonMetaRewards(): readonly Reward[] {
   return REWARDS.filter((r) => !r.id.startsWith("meta_"));
 }
 
+const META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS: ReadonlySet<string> = new Set([
+  metaRewardPairKey("purge_all_starters", "transfigure_all_starters"),
+  metaRewardPairKey("purge_all_banes", "purge_X_banes"),
+]);
+
+function metaRewardPairKey(firstId: string, secondId: string): string {
+  return [firstId, secondId].sort().join("\0");
+}
+
+function metaRewardPairCompatible(firstId: string, secondId: string): boolean {
+  return !META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS.has(metaRewardPairKey(firstId, secondId));
+}
+
+function orderedCompatibleRewardPairs(pool: readonly Reward[]): readonly (readonly [Reward, Reward])[] {
+  const pairs: (readonly [Reward, Reward])[] = [];
+  for (let firstIndex = 0; firstIndex < pool.length; firstIndex += 1) {
+    for (let secondIndex = 0; secondIndex < pool.length; secondIndex += 1) {
+      if (firstIndex === secondIndex) continue;
+      const first = pool[firstIndex];
+      const second = pool[secondIndex];
+      if (metaRewardPairCompatible(first.id, second.id)) {
+        pairs.push([first, second] as const);
+      }
+    }
+  }
+  return pairs;
+}
+
 const metaGain2Rewards: Reward<MetaGain2Params> = {
   id: "meta_gain_2_rewards",
   weight: 1.0,
@@ -2000,9 +2028,11 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
       const subParams = r.rollParams(ctx, subDraw);
       return r.viable(subParams, ctx);
     });
-    const usePool = pool.length >= 2 ? pool : allNonMeta;
-    if (usePool.length < 2) {
-      const first = usePool[0];
+    const viablePairs = orderedCompatibleRewardPairs(pool);
+    const allPairs = orderedCompatibleRewardPairs(allNonMeta);
+    const usePairs = viablePairs.length > 0 ? viablePairs : allPairs;
+    if (usePairs.length === 0) {
+      const first = allNonMeta[0];
       return {
         subIds: [first.id, first.id] as readonly [string, string],
         subParams: [
@@ -2011,11 +2041,7 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
         ] as readonly [TemplateParams, TemplateParams],
       };
     }
-    const firstIndex = drawInt(draw, "meta_gain_2:i1", 0, usePool.length - 1);
-    let secondIndex = drawInt(draw, "meta_gain_2:i2", 0, usePool.length - 2);
-    if (secondIndex >= firstIndex) secondIndex += 1;
-    const first = usePool[firstIndex];
-    const second = usePool[secondIndex];
+    const [first, second] = usePairs[drawInt(draw, "meta_gain_2:pair", 0, usePairs.length - 1)];
     return {
       subIds: [first.id, second.id] as readonly [string, string],
       subParams: [
@@ -2038,7 +2064,9 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
   viable: (p, ctx) => {
     const a = getReward(p.subIds[0]);
     const b = getReward(p.subIds[1]);
-    return a.viable(p.subParams[0], ctx) && b.viable(p.subParams[1], ctx);
+    return metaRewardPairCompatible(p.subIds[0], p.subIds[1])
+      && a.viable(p.subParams[0], ctx)
+      && b.viable(p.subParams[1], ctx);
   },
   render: (p, ctx) => {
     const a = getReward(p.subIds[0]);

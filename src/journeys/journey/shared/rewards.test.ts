@@ -789,6 +789,13 @@ describe("dreamwell-keyed rewards self-hide until content lands", () => {
 });
 
 describe("meta_gain_2_rewards (compound) viability", () => {
+  const STARTER_CARD = card({
+    id: "starter-meta",
+    name: "Starter Meta",
+    rarity: "Starter",
+    energyCost: 1,
+  });
+
   it("declines an empty context when both sub-rewards decline", () => {
     // Hand-pick two sub-rewards that are guaranteed to decline on an empty
     // fixture. `purge_X_banes` needs banes; `purge_all_banes` likewise. This
@@ -818,5 +825,69 @@ describe("meta_gain_2_rewards (compound) viability", () => {
       ] as readonly [Record<string, unknown>, Record<string, unknown>],
     };
     expect(t.viable(params, ctx)).toBe(true);
+  });
+
+  it("declines mutually invalidating starter rewards in either order", () => {
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext({
+      cards: [STARTER_CARD],
+      deckEntries: [{ cardId: STARTER_CARD.id, copies: 1 }],
+      starterCards: 1,
+    });
+    expect(getReward("purge_all_starters").viable({}, ctx)).toBe(true);
+    expect(getReward("transfigure_all_starters").viable({}, ctx)).toBe(true);
+    for (const subIds of [
+      ["purge_all_starters", "transfigure_all_starters"],
+      ["transfigure_all_starters", "purge_all_starters"],
+    ] as const) {
+      expect(t.viable({
+        subIds,
+        subParams: [{}, {}] as const,
+      }, ctx), subIds.join(" + ")).toBe(false);
+    }
+  });
+
+  it("declines mutually invalidating bane purge rewards in either order", () => {
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext({ banes: [{ baneName: "Doubt" }, { baneName: "Dread" }] });
+    expect(getReward("purge_X_banes").viable({ count: 1 }, ctx)).toBe(true);
+    expect(getReward("purge_all_banes").viable({}, ctx)).toBe(true);
+    for (const { subIds, subParams } of [
+      {
+        subIds: ["purge_all_banes", "purge_X_banes"] as const,
+        subParams: [{}, { count: 1 }] as const,
+      },
+      {
+        subIds: ["purge_X_banes", "purge_all_banes"] as const,
+        subParams: [{ count: 1 }, {}] as const,
+      },
+    ] as const) {
+      expect(t.viable({
+        subIds,
+        subParams,
+      }, ctx), subIds.join(" + ")).toBe(false);
+    }
+  });
+
+  it("rollParams filters explicitly incompatible reward pairs", () => {
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext({
+      cards: [STARTER_CARD],
+      deckEntries: [{ cardId: STARTER_CARD.id, copies: 1 }],
+      starterCards: 1,
+      banes: [{ baneName: "Doubt" }, { baneName: "Dread" }],
+    });
+    const incompatiblePairs = new Set([
+      "purge_all_starters+transfigure_all_starters",
+      "transfigure_all_starters+purge_all_starters",
+      "purge_all_banes+purge_X_banes",
+      "purge_X_banes+purge_all_banes",
+    ]);
+
+    for (let selectionAttempt = 0; selectionAttempt < 500; selectionAttempt += 1) {
+      const params = t.rollParams(ctx, { ...draw, selectionAttempt });
+      const subIds = (params as { subIds: readonly string[] }).subIds;
+      expect(incompatiblePairs.has(subIds.join("+"))).toBe(false);
+    }
   });
 });
