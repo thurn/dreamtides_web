@@ -650,19 +650,19 @@ wave1: apply bane templates.
 
 **Templates in scope:** `purge_named_dreamsign`, `purge_random_dreamsign` (costs); `gain_random_dreamsign`, `gain_named_dreamsign`, `gain_copy_of_random_dreamsign` (rewards). Chosen variants defer to Wave 2.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Per template, assert exact recorded calls. For `gain_random_dreamsign` with a 2-element `dreamsignPoolIds` fixture, the rolled dreamsign id matches the deterministic seed; the recorded call is `addDreamsign(<dreamsign>, "dream_journey:gain_random_dreamsign", undefined)`. For `purge_named_dreamsign`, the `index` argument matches the position of the named dreamsign in `activeDreamsigns`.
 
-- [ ] **Step 2: Run, confirm failure**
+- [x] **Step 2: Run, confirm failure**
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 For named-dreamsign lookups, resolve from the content bundle (use the existing `ctx.content.dreamsigns` lookup pattern from `costs.ts`). For random rolls, use the same `pickFromList` / `drawInt` helpers `rollParams` already uses; pin the labeled-RNG key prefix to the template id.
 
-- [ ] **Step 4: Run, confirm pass**
+- [x] **Step 4: Run, confirm pass**
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```
 wave1: apply dreamsign templates (non-choice).

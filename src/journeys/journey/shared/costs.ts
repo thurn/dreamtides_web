@@ -71,6 +71,14 @@ function nextBattlePhrase(battles: number): string {
   return battles === 1 ? "the next battle" : `the next ${battles} battles`;
 }
 
+function applyDrawContext(ctx: JourneyContext): DrawContext {
+  return {
+    seed: ctx.state.quest.seed,
+    contentVersion: ctx.contentVersion,
+    rootJourneyIndex: 0,
+  };
+}
+
 // Inclusive integer roll for resource-range apply. Wave 1 does not plumb a
 // deterministic RNG through the apply path; the option-level seed governs
 // rollParams (generation), and apply is a one-shot resolution event. A future
@@ -357,6 +365,22 @@ function activeDreamsignDisplayName(ctx: JourneyContext, dreamsignId: string): s
     ?? UNKNOWN_DREAMSIGN_NAME;
 }
 
+// Resolve a Dreamsign `name` against the player's active-dreamsign list,
+// returning the active-list index of the first match (which is the index
+// `JourneyMutations.removeDreamsign` expects). Returns `-1` when no active
+// dreamsign carries the requested name, so the caller can warn and skip.
+function findActiveDreamsignIndexByName(
+  ctx: JourneyContext,
+  name: string,
+): number {
+  const nameById = new Map(
+    ctx.content.dreamsigns.map((dreamsign) => [dreamsign.id, dreamsign.name]),
+  );
+  return ctx.state.quest.activeDreamsigns.findIndex(
+    (entry) => nameById.get(entry.dreamsignId) === name,
+  );
+}
+
 type PurgeNamedDreamsignParams = { name: string };
 const purgeNamedDreamsign: Cost<PurgeNamedDreamsignParams> = {
   id: "purge_named_dreamsign",
@@ -373,7 +397,16 @@ const purgeNamedDreamsign: Cost<PurgeNamedDreamsignParams> = {
   viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1,
   locked: () => false,
   render: (p) => `Purge ${quoteName(p.name)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const index = findActiveDreamsignIndexByName(ctx, p.name);
+    if (index < 0) {
+      console.warn(
+        `[dream-journey] purge_named_dreamsign: no active dreamsign matches name '${p.name}'`,
+      );
+      return;
+    }
+    mut.removeDreamsign(index, "dream_journey:purge_named_dreamsign");
+  },
 };
 
 type PurgeRandomDreamsignParams = Record<string, never>;
@@ -385,7 +418,22 @@ const purgeRandomDreamsign: Cost<PurgeRandomDreamsignParams> = {
   viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1,
   locked: () => false,
   render: () => "Purge a random Dreamsign",
-  apply: () => {},
+  apply: (_p, ctx, mut) => {
+    const count = ctx.state.quest.activeDreamsigns.length;
+    if (count === 0) {
+      console.warn(
+        "[dream-journey] purge_random_dreamsign: no active dreamsigns to purge",
+      );
+      return;
+    }
+    const index = drawInt(
+      applyDrawContext(ctx),
+      "purge_random_dreamsign:index",
+      0,
+      count - 1,
+    );
+    mut.removeDreamsign(index, "dream_journey:purge_random_dreamsign");
+  },
 };
 
 type PurgeChosenDreamsignParams = Record<string, never>;

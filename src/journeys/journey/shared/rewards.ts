@@ -60,6 +60,8 @@
 
 import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
+import type { JourneyMutations } from "../../apply/JourneyMutations";
+import type { DreamsignContent } from "../../content/types";
 import type { JourneyContext } from "../context";
 import { CARD_CEC, STAGE_MULTIPLIER, cardPoolCEC } from "./cec";
 import {
@@ -90,6 +92,16 @@ const POSITIVE_TEMPORARY_BATTLE_MIN = 3;
 const POSITIVE_TEMPORARY_BATTLE_MAX = 3;
 const BOOST_SITE_DURATION_DREAMSCAPES = 3;
 
+type DreamsignForApply = Parameters<JourneyMutations["addDreamsign"]>[0];
+
+function applyDrawContext(ctx: JourneyContext): DrawContext {
+  return {
+    seed: ctx.state.quest.seed,
+    contentVersion: ctx.contentVersion,
+    rootJourneyIndex: 0,
+  };
+}
+
 function rollPositiveTemporaryBattles(draw: DrawContext, label: string): number {
   return drawInt(draw, label, POSITIVE_TEMPORARY_BATTLE_MIN, POSITIVE_TEMPORARY_BATTLE_MAX);
 }
@@ -119,6 +131,34 @@ function poolDreamsignsById(ctx: JourneyContext) {
 function inactivePoolDreamsigns(ctx: JourneyContext) {
   const activeIds = new Set(ctx.state.quest.activeDreamsigns.map((entry) => entry.dreamsignId));
   return poolDreamsignsById(ctx).filter((dreamsign) => !activeIds.has(dreamsign.id));
+}
+
+// Pull a string off a DreamsignContent's `raw` payload when present. The
+// content bridge stores image fields conditionally (omitted when the source
+// template has no value), so the lookup must tolerate both missing keys and
+// non-string values.
+function rawString(raw: Record<string, unknown>, key: string): string | undefined {
+  const value = raw[key];
+  return typeof value === "string" ? value : undefined;
+}
+
+// Convert a journey-internal `DreamsignContent` into the quest-prototype's
+// `Dreamsign` shape that `JourneyMutations.addDreamsign` expects. The
+// `effectDescription` field maps from `renderedText` (which the content bridge
+// itself sourced from the prototype's `effectDescription`). Optional image
+// fields, if present in the source's `raw` payload, are forwarded; otherwise
+// they are left undefined to match the prototype's optional-field convention.
+function projectDreamsignForApply(source: DreamsignContent): DreamsignForApply {
+  const imageName = rawString(source.raw, "image-name");
+  const imageAlt = rawString(source.raw, "image-alt");
+  return {
+    id: source.id,
+    name: source.name,
+    effectDescription: source.renderedText,
+    ...(imageName === undefined ? {} : { imageName }),
+    ...(imageAlt === undefined ? {} : { imageAlt }),
+    isBane: false,
+  };
 }
 
 // Roll a transfiguration that is compatible with the given predicate's match
@@ -843,7 +883,25 @@ const gainRandomDreamsign: Reward<GainRandomDreamsignParams> = {
   // Dreamsign" option.
   viable: (_p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= 1,
   render: () => "Gain a random Dreamsign",
-  apply: () => {},
+  apply: (_p, ctx, mut) => {
+    const pool = poolDreamsignsById(ctx);
+    if (pool.length === 0) {
+      console.warn(
+        "[dream-journey] gain_random_dreamsign: dreamsign pool is empty",
+      );
+      return;
+    }
+    const source = pickFromList(
+      applyDrawContext(ctx),
+      "gain_random_dreamsign:dreamsign",
+      pool,
+    );
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:gain_random_dreamsign",
+      undefined,
+    );
+  },
 };
 
 type GainNamedDreamsignParams = { name: string };
@@ -862,7 +920,20 @@ const gainNamedDreamsign: Reward<GainNamedDreamsignParams> = {
   // Pool-scope fix.
   viable: (_p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= 1,
   render: (p) => `Gain ${quoteName(p.name)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const source = ctx.content.dreamsigns.find((dreamsign) => dreamsign.name === p.name);
+    if (source === undefined) {
+      console.warn(
+        `[dream-journey] gain_named_dreamsign: no content dreamsign matches name '${p.name}'`,
+      );
+      return;
+    }
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:gain_named_dreamsign",
+      undefined,
+    );
+  },
 };
 
 type Choose1OfXDreamsignsParams = { choices: number };
@@ -890,7 +961,32 @@ const gainCopyOfRandomDreamsign: Reward<GainCopyRandomDreamsignParams> = {
       ? `Gain a copy of ${quoteName(name)}`
       : "Gain a copy of one of your Dreamsigns chosen at random";
   },
-  apply: () => {},
+  apply: (_p, ctx, mut) => {
+    const active = ctx.state.quest.activeDreamsigns;
+    if (active.length === 0) {
+      console.warn(
+        "[dream-journey] gain_copy_of_random_dreamsign: no active dreamsigns to copy",
+      );
+      return;
+    }
+    const entry = pickFromList(
+      applyDrawContext(ctx),
+      "gain_copy_of_random_dreamsign:active",
+      active,
+    );
+    const source = ctx.content.dreamsigns.find((dreamsign) => dreamsign.id === entry.dreamsignId);
+    if (source === undefined) {
+      console.warn(
+        `[dream-journey] gain_copy_of_random_dreamsign: no content dreamsign matches id '${entry.dreamsignId}'`,
+      );
+      return;
+    }
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:gain_copy_of_random_dreamsign",
+      undefined,
+    );
+  },
 };
 
 type GainCopyChosenDreamsignParams = Record<string, never>;

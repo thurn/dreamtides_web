@@ -11,11 +11,12 @@
 // transfigurations, atlas/route, battle/shop, draft, meta-compound, visual)
 // lives in later per-task suites alongside Tasks 10-18.
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import type { ContentBundle } from "../../content/types";
+import type { ContentBundle, DreamsignContent } from "../../content/types";
 import { createRecordingMutations } from "../../apply/testing/recordingMutations";
 import type { JourneyContext, QuestStateProjection } from "../context";
+import type { Dreamsign } from "../../../types/quest";
 
 import { getReward } from "./rewards";
 
@@ -23,6 +24,9 @@ function buildContext(overrides: {
   essence?: number;
   maxEssence?: number;
   omens?: number;
+  dreamsigns?: readonly DreamsignContent[];
+  activeDreamsigns?: readonly { readonly dreamsignId: string }[];
+  dreamsignPoolIds?: readonly string[];
 } = {}): JourneyContext {
   const quest: QuestStateProjection = {
     seed: "rewards-apply-test",
@@ -38,17 +42,47 @@ function buildContext(overrides: {
       summary: { totalCards: 0, starterCards: 0, uniqueCards: 0 },
     },
     draftPool: [],
-    activeDreamsigns: [],
-    dreamsignPoolIds: [],
+    activeDreamsigns: overrides.activeDreamsigns ?? [],
+    dreamsignPoolIds: overrides.dreamsignPoolIds ?? [],
     banes: [],
     dreamcaller: { id: "" },
   };
   const content: ContentBundle = {
     cards: [],
     dreamcallers: [],
-    dreamsigns: [],
+    dreamsigns: [...(overrides.dreamsigns ?? [])],
   };
   return { content, contentVersion: "test", state: { quest } };
+}
+
+// Minimal dreamsign-content fixture mirroring `costs.apply.test.ts`. Tests
+// assert the quest-shape `Dreamsign` recorded against `addDreamsign` carries
+// the same `id`/`name`/`effectDescription` projected from these records.
+function dreamsignFixture(): readonly DreamsignContent[] {
+  return [
+    {
+      id: "ds-1",
+      name: "Name A",
+      kind: "neutral",
+      renderedText: "Effect A",
+      tides: [],
+      raw: {
+        id: "ds-1",
+        name: "Name A",
+        "effect-description": "Effect A",
+        "image-name": "img-a",
+        "image-alt": "alt-a",
+      },
+    },
+    {
+      id: "ds-2",
+      name: "Name B",
+      kind: "neutral",
+      renderedText: "Effect B",
+      tides: [],
+      raw: { id: "ds-2", name: "Name B", "effect-description": "Effect B" },
+    },
+  ];
 }
 
 describe("Resource reward apply", () => {
@@ -162,5 +196,162 @@ describe("Bane reward apply", () => {
     expect(calls).toEqual([
       { method: "purgeAllBaneCards", args: ["dream_journey:purge_all_banes"] },
     ]);
+  });
+});
+
+describe("Dreamsign reward apply (non-choice)", () => {
+  it("gain_random_dreamsign records the deterministically rolled pool Dreamsign", () => {
+    const t = getReward("gain_random_dreamsign");
+    const dreamsigns = dreamsignFixture();
+    const ctx = buildContext({
+      dreamsigns,
+      dreamsignPoolIds: ["ds-1", "ds-2"],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({}, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "addDreamsign",
+        args: [
+          {
+            id: "ds-2",
+            name: "Name B",
+            effectDescription: "Effect B",
+            isBane: false,
+          },
+          "dream_journey:gain_random_dreamsign",
+          undefined,
+        ],
+      },
+    ]);
+  });
+
+  it("gain_random_dreamsign warns and skips when the dreamsign pool is empty", () => {
+    const t = getReward("gain_random_dreamsign");
+    const ctx = buildContext({ dreamsigns: dreamsignFixture(), dreamsignPoolIds: [] });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({}, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("gain_named_dreamsign records addDreamsign with the named Dreamsign", () => {
+    const t = getReward("gain_named_dreamsign");
+    const dreamsigns = dreamsignFixture();
+    const ctx = buildContext({ dreamsigns, dreamsignPoolIds: ["ds-1", "ds-2"] });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ name: "Name A" }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "addDreamsign",
+        args: [
+          {
+            id: "ds-1",
+            name: "Name A",
+            effectDescription: "Effect A",
+            isBane: false,
+            imageName: "img-a",
+            imageAlt: "alt-a",
+          },
+          "dream_journey:gain_named_dreamsign",
+          undefined,
+        ],
+      },
+    ]);
+  });
+
+  it("gain_named_dreamsign forwards optional image fields from the content raw payload", () => {
+    // ds-1's raw carries image-name/image-alt; the conversion must surface
+    // those so the prototype's Dreamsign-card renderer has them available.
+    const t = getReward("gain_named_dreamsign");
+    const dreamsigns = dreamsignFixture();
+    const ctx = buildContext({ dreamsigns, dreamsignPoolIds: ["ds-1"] });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ name: "Name A" }, ctx, mut, undefined);
+    const dreamsign = calls[0].args[0] as Dreamsign;
+    expect(dreamsign.imageName).toBe("img-a");
+    expect(dreamsign.imageAlt).toBe("alt-a");
+  });
+
+  it("gain_named_dreamsign warns and skips when no content dreamsign matches the name", () => {
+    const t = getReward("gain_named_dreamsign");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      dreamsignPoolIds: ["ds-1", "ds-2"],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ name: "nope" }, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("gain_copy_of_random_dreamsign records the deterministically rolled active-list dreamsign", () => {
+    const t = getReward("gain_copy_of_random_dreamsign");
+    const dreamsigns = dreamsignFixture();
+    const ctx = buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-2" }, { dreamsignId: "ds-1" }],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({}, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "addDreamsign",
+        args: [
+          {
+            id: "ds-2",
+            name: "Name B",
+            effectDescription: "Effect B",
+            isBane: false,
+          },
+          "dream_journey:gain_copy_of_random_dreamsign",
+          undefined,
+        ],
+      },
+    ]);
+  });
+
+  it("gain_copy_of_random_dreamsign warns and skips when there are no active dreamsigns", () => {
+    const t = getReward("gain_copy_of_random_dreamsign");
+    const ctx = buildContext({ dreamsigns: dreamsignFixture(), activeDreamsigns: [] });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({}, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("gain_copy_of_random_dreamsign warns and skips when the active dreamsign's id is missing from content", () => {
+    // Defensive: an active dreamsign whose id is not in the content bundle
+    // cannot be projected into a quest-shape Dreamsign; apply should warn
+    // and skip rather than emit a malformed record.
+    const t = getReward("gain_copy_of_random_dreamsign");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-missing" }],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({}, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 });

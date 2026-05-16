@@ -23,7 +23,7 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import type { CardContent, ContentBundle } from "../../content/types";
+import type { CardContent, ContentBundle, DreamsignContent } from "../../content/types";
 import { createRecordingMutations } from "../../apply/testing/recordingMutations";
 import type { JourneyContext, QuestStateProjection } from "../context";
 
@@ -35,6 +35,9 @@ function buildContext(overrides: {
   maxEssence?: number;
   omens?: number;
   cards?: readonly CardContent[];
+  dreamsigns?: readonly DreamsignContent[];
+  activeDreamsigns?: readonly { readonly dreamsignId: string }[];
+  dreamsignPoolIds?: readonly string[];
 } = {}): JourneyContext {
   const quest: QuestStateProjection = {
     seed: "costs-apply-test",
@@ -50,17 +53,41 @@ function buildContext(overrides: {
       summary: { totalCards: 0, starterCards: 0, uniqueCards: 0 },
     },
     draftPool: [],
-    activeDreamsigns: [],
-    dreamsignPoolIds: [],
+    activeDreamsigns: overrides.activeDreamsigns ?? [],
+    dreamsignPoolIds: overrides.dreamsignPoolIds ?? [],
     banes: [],
     dreamcaller: { id: "" },
   };
   const content: ContentBundle = {
     cards: [...(overrides.cards ?? [])],
     dreamcallers: [],
-    dreamsigns: [],
+    dreamsigns: [...(overrides.dreamsigns ?? [])],
   };
   return { content, contentVersion: "test", state: { quest } };
+}
+
+// Minimal dreamsign-content fixture: two journey-internal `DreamsignContent`
+// records. Tests use these for both the named-lookup paths (matching `name`)
+// and active-list index resolution (matching `id`).
+function dreamsignFixture(): readonly DreamsignContent[] {
+  return [
+    {
+      id: "ds-1",
+      name: "Name A",
+      kind: "neutral",
+      renderedText: "Effect A",
+      tides: [],
+      raw: { id: "ds-1", name: "Name A", "effect-description": "Effect A" },
+    },
+    {
+      id: "ds-2",
+      name: "Name B",
+      kind: "neutral",
+      renderedText: "Effect B",
+      tides: [],
+      raw: { id: "ds-2", name: "Name B", "effect-description": "Effect B" },
+    },
+  ];
 }
 
 // Smallest possible bane content fixture: one card per BANE_NAMES entry. The
@@ -264,5 +291,85 @@ describe("Bane cost apply", () => {
         args: ["Despair", 1, 3, "dream_journey:gain_named_banes_for_X_battles"],
       },
     ]);
+  });
+});
+
+describe("Dreamsign cost apply (non-choice)", () => {
+  it("purge_named_dreamsign removes the matching active dreamsign by index", () => {
+    // active=[ds-1, ds-2] with ds-1.name = "Name A"; the named lookup must
+    // resolve to active-list index 0.
+    const t = getCost("purge_named_dreamsign");
+    const dreamsigns = dreamsignFixture();
+    const ctx = buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ name: "Name A" }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      { method: "removeDreamsign", args: [0, "dream_journey:purge_named_dreamsign"] },
+    ]);
+  });
+
+  it("purge_named_dreamsign resolves index against active list ordering", () => {
+    // The named dreamsign sits at active-list position 1; the recorded index
+    // must reflect that ordering rather than the content-bundle ordering.
+    const t = getCost("purge_named_dreamsign");
+    const dreamsigns = dreamsignFixture();
+    const ctx = buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-2" }, { dreamsignId: "ds-1" }],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ name: "Name A" }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      { method: "removeDreamsign", args: [1, "dream_journey:purge_named_dreamsign"] },
+    ]);
+  });
+
+  it("purge_named_dreamsign warns and skips when no active dreamsign matches", () => {
+    const t = getCost("purge_named_dreamsign");
+    const dreamsigns = dreamsignFixture();
+    const ctx = buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-2" }],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ name: "Name A" }, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("purge_random_dreamsign removes the deterministically rolled active dreamsign", () => {
+    const t = getCost("purge_random_dreamsign");
+    const dreamsigns = dreamsignFixture();
+    const ctx = buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({}, ctx, mut, undefined);
+    expect(calls).toEqual([
+      { method: "removeDreamsign", args: [1, "dream_journey:purge_random_dreamsign"] },
+    ]);
+  });
+
+  it("purge_random_dreamsign warns and skips when there are no active dreamsigns", () => {
+    const t = getCost("purge_random_dreamsign");
+    const ctx = buildContext({ dreamsigns: dreamsignFixture(), activeDreamsigns: [] });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({}, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 });
