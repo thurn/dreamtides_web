@@ -27,6 +27,12 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ["node_modules/", "dist/", "eslint.config.js", "vite.config.ts"],
+    ignores: [
+      "node_modules/",
+      "dist/",
+      ".claude/worktrees/",
+      "eslint.config.js",
+      "vite.config.ts",
+    ],
   }
 );

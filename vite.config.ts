@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import fs from "node:fs";
@@ -37,4 +37,16 @@ function questLogPlugin(): Plugin {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), questLogPlugin()],
+  test: {
+    include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/.git/**",
+      "**/.cache/**",
+      "**/.output/**",
+      "**/.temp/**",
+      "**/.claude/worktrees/**",
+    ],
+  },
 });
