@@ -80,6 +80,7 @@ const payEssence: Cost<PayEssenceParams> = {
   viable: () => true,
   locked: (p, ctx) => p.x > essenceAmount(ctx),
   render: (p, ctx) => withLockedPrefix(`Lose ${p.x} essence`, p.x > essenceAmount(ctx)),
+  apply: () => {},
 };
 
 type PayOmensParams = { x: number };
@@ -92,6 +93,7 @@ const payOmens: Cost<PayOmensParams> = {
   locked: (p, ctx) => p.x > omenAmount(ctx),
   render: (p, ctx) =>
     withLockedPrefix(`Lose ${p.x} omen${p.x === 1 ? "" : "s"}`, p.x > omenAmount(ctx)),
+  apply: () => {},
 };
 
 type PayMaxEssenceParams = Record<string, never>;
@@ -103,6 +105,7 @@ const payMaxEssence: Cost<PayMaxEssenceParams> = {
   viable: () => true,
   locked: () => false,
   render: () => "Lose maximum essence",
+  apply: () => {},
 };
 
 type PayEssenceRangeParams = { min: number; max: number };
@@ -126,6 +129,7 @@ const payEssenceRandomRange: Cost<PayEssenceRangeParams> = {
       `Lose ${p.min}-${p.max} essence (random roll)`,
       p.min > essenceAmount(ctx),
     ),
+  apply: () => {},
 };
 
 type PayPercentEssenceParams = { percent: number };
@@ -142,6 +146,7 @@ const payPercentEssence: Cost<PayPercentEssenceParams> = {
   // 50% of zero is zero); never lock.
   locked: () => false,
   render: (p) => `Lose ${p.percent}% of your essence`,
+  apply: () => {},
 };
 
 type PayAllRemainingParams = Record<string, never>;
@@ -153,6 +158,7 @@ const payAllRemainingEssence: Cost<PayAllRemainingParams> = {
   viable: () => true,
   locked: () => false,
   render: () => "Lose all remaining essence",
+  apply: () => {},
 };
 
 type BattleRedFlatParams = { amount: number; battles: number };
@@ -168,6 +174,7 @@ const battleRewardReductionFlat: Cost<BattleRedFlatParams> = {
   locked: () => false,
   render: (p) =>
     `Battle essence rewards are reduced by ${p.amount} for ${nextBattlePhrase(p.battles)}`,
+  apply: () => {},
 };
 
 type BattleRedPctParams = { percent: number; battles: number };
@@ -183,6 +190,7 @@ const battleRewardReductionPercent: Cost<BattleRedPctParams> = {
   locked: () => false,
   render: (p) =>
     `Battle essence rewards are reduced by ${p.percent}% for ${nextBattlePhrase(p.battles)}`,
+  apply: () => {},
 };
 
 function rollPredicate(draw: DrawContext, label: string): Predicate {
@@ -214,6 +222,7 @@ const purgeNamedCard: Cost<PurgeNamedCardParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   locked: () => false,
   render: (p) => `Purge ${quoteName(p.cardName)}`,
+  apply: () => {},
 };
 
 type PurgeRandomPredCardParams = { predicateId: string };
@@ -228,6 +237,7 @@ const purgeRandomPredicateCard: Cost<PurgeRandomPredCardParams> = {
   viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId),
   locked: () => false,
   render: (p) => `Purge a random ${getPredicate(p.predicateId).text.singular}`,
+  apply: () => {},
 };
 
 type PurgeChosenPredCardParams = { predicateId: string };
@@ -239,6 +249,7 @@ const purgeChosenPredicateCard: Cost<PurgeChosenPredCardParams> = {
   viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId),
   locked: () => false,
   render: (p) => `Purge a chosen ${getPredicate(p.predicateId).text.singular}`,
+  apply: () => {},
 };
 
 type GainRandomFromPoolParams = { count: number };
@@ -253,6 +264,7 @@ const gainRandomCardsFromPool: Cost<GainRandomFromPoolParams> = {
   viable: () => true,
   locked: () => false,
   render: (p) => `Gain ${p.count} random card${p.count === 1 ? "" : "s"} from the card pool`,
+  apply: () => {},
 };
 
 type TransformCardToRandomParams = { cardName: string };
@@ -274,6 +286,7 @@ const transformCardToRandomPool: Cost<TransformCardToRandomParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   locked: () => false,
   render: (p) => `Transform ${quoteName(p.cardName)} into a random card from the pool`,
+  apply: () => {},
 };
 
 type PurgeAllDuplicatesParams = Record<string, never>;
@@ -289,6 +302,7 @@ const purgeAllDuplicateCards: Cost<PurgeAllDuplicatesParams> = {
   viable: (_p, ctx) => deckHasDuplicateStack(ctx),
   locked: () => false,
   render: () => "Purge all duplicate cards from your deck",
+  apply: () => {},
 };
 
 const DREAMSIGN_CEC = 80;
@@ -316,6 +330,7 @@ const purgeNamedDreamsign: Cost<PurgeNamedDreamsignParams> = {
   viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1,
   locked: () => false,
   render: (p) => `Purge ${quoteName(p.name)}`,
+  apply: () => {},
 };
 
 type PurgeRandomDreamsignParams = Record<string, never>;
@@ -327,6 +342,7 @@ const purgeRandomDreamsign: Cost<PurgeRandomDreamsignParams> = {
   viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1,
   locked: () => false,
   render: () => "Purge a random Dreamsign",
+  apply: () => {},
 };
 
 type PurgeChosenDreamsignParams = Record<string, never>;
@@ -338,6 +354,7 @@ const purgeChosenDreamsign: Cost<PurgeChosenDreamsignParams> = {
   viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1,
   locked: () => false,
   render: () => "Purge a chosen Dreamsign",
+  apply: () => {},
 };
 
 type XformDreamsignParams = Record<string, never>;
@@ -349,6 +366,7 @@ const transformDreamsignToRandom: Cost<XformDreamsignParams> = {
   viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1,
   locked: () => false,
   render: () => "Transform a chosen dreamsign into a random dreamsign",
+  apply: () => {},
 };
 
 type GainRandomBanesParams = { count: number };
@@ -363,6 +381,7 @@ const gainRandomBanes: Cost<GainRandomBanesParams> = {
   viable: () => true,
   locked: () => false,
   render: (p) => `Gain ${p.count} random bane${p.count === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type GainNamedBanesParams = { baneName: string; count: number };
@@ -377,6 +396,7 @@ const gainNamedBanes: Cost<GainNamedBanesParams> = {
   viable: () => true,
   locked: () => false,
   render: (p) => `Gain ${p.count} ${quoteName(p.baneName)}`,
+  apply: () => {},
 };
 
 type GainNamedBanesXBattlesParams = { baneName: string; count: number; battles: number };
@@ -393,6 +413,7 @@ const gainNamedBanesForXBattles: Cost<GainNamedBanesXBattlesParams> = {
   locked: () => false,
   render: (p) =>
     `Gain ${p.count} ${quoteName(p.baneName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type GainAdditionalStartersParams = { count: number };
@@ -405,6 +426,7 @@ const gainAdditionalStarters: Cost<GainAdditionalStartersParams> = {
   locked: () => false,
   render: (p) =>
     p.count === 1 ? "Gain a random starter card" : `Gain ${p.count} random starter cards`,
+  apply: () => {},
 };
 
 type StartingDreamwellNegParams = { cardName: string; battles: number };
@@ -425,6 +447,7 @@ const setStartingDreamwellNegative: Cost<StartingDreamwellNegParams> = {
   locked: () => false,
   render: (p) =>
     `Your starting dreamwell card is ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type ShuffleNegDreamwellParams = { cardName: string; count: number; battles: number };
@@ -443,6 +466,7 @@ const shuffleNegativeDreamwellCards: Cost<ShuffleNegDreamwellParams> = {
   locked: () => false,
   render: (p) =>
     `Shuffle ${p.count} ${quoteName(p.cardName)} into your dreamwell for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type RemoveTransfigCardParams = { cardName: string };
@@ -465,6 +489,7 @@ const removeTransfigurationFromCard: Cost<RemoveTransfigCardParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   locked: () => false,
   render: (p) => `Remove the transfiguration from ${quoteName(p.cardName)}`,
+  apply: () => {},
 };
 
 type RemoveTransfigRandomPredParams = { predicateId: string; count: number };
@@ -486,6 +511,7 @@ const removeTransfigurationsFromRandomPredicate: Cost<RemoveTransfigRandomPredPa
       : getPredicate(p.predicateId).text.plural;
     return `Remove the transfiguration${p.count === 1 ? "" : "s"} from ${p.count} random ${noun}`;
   },
+  apply: () => {},
 };
 
 type DrawXPurgeChosenParams = { drawCount: number };
@@ -499,6 +525,7 @@ const drawXPurgeChosen: Cost<DrawXPurgeChosenParams> = {
   locked: () => false,
   render: (p) =>
     `Draw ${p.drawCount} cards from your deck and purge one of them of your choice`,
+  apply: () => {},
 };
 
 type RemoveShopSitesParams = { dreamscapes: number };
@@ -511,6 +538,7 @@ const removeShopSitesFromNextDreamscapes: Cost<RemoveShopSitesParams> = {
   locked: () => false,
   render: (p) =>
     `Remove all shop sites from the next ${p.dreamscapes} dreamscape${p.dreamscapes === 1 ? "" : "s"} you visit`,
+  apply: () => {},
 };
 
 type RemoveDsSitesParams = { dreamscapes: number };
@@ -523,6 +551,7 @@ const removeDreamsignSitesFromNextDreamscapes: Cost<RemoveDsSitesParams> = {
   locked: () => false,
   render: (p) =>
     `Remove all dreamsign sites from the next ${p.dreamscapes} dreamscape${p.dreamscapes === 1 ? "" : "s"} you visit`,
+  apply: () => {},
 };
 
 type LoseMaxEssenceParams = { amount: number };
@@ -538,6 +567,7 @@ const loseMaxEssence: Cost<LoseMaxEssenceParams> = {
   viable: () => true,
   locked: (p, ctx) => p.amount >= maxEssence(ctx),
   render: (p, ctx) => withLockedPrefix(`Lose ${p.amount} maximum essence`, p.amount >= maxEssence(ctx)),
+  apply: () => {},
 };
 
 type MetaPay2Params = {
@@ -606,6 +636,7 @@ const metaPay2Costs: Cost<MetaPay2Params> = {
       aLocked || bLocked,
     );
   },
+  apply: () => {},
 };
 
 export const COSTS: readonly Cost[] = Object.freeze([

@@ -162,6 +162,7 @@ const gainEssence: Reward<GainEssenceParams> = {
   cec: (p) => p.x * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Gain ${p.x} essence`,
+  apply: () => {},
 };
 
 type GainOmensParams = { x: number };
@@ -172,6 +173,7 @@ const gainOmens: Reward<GainOmensParams> = {
   cec: (p) => p.x * 40 * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Gain ${p.x} omen${p.x === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type SetEssencePctParams = { percent: number };
@@ -186,6 +188,7 @@ const setEssenceToPercentOfMax: Reward<SetEssencePctParams> = {
     Math.max(0, (maxEssence(ctx) * p.percent) / 100 - essenceAmount(ctx)) * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Set essence to ${p.percent}% of your maximum essence`,
+  apply: () => {},
 };
 
 type GainEssenceRangeParams = { min: number; max: number };
@@ -200,6 +203,7 @@ const gainEssenceRandomRange: Reward<GainEssenceRangeParams> = {
   cec: (p) => ((p.min + p.max) / 2) * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Gain ${p.min}-${p.max} essence (random roll)`,
+  apply: () => {},
 };
 
 type GainEssenceToMaxParams = Record<string, never>;
@@ -210,6 +214,7 @@ const gainEssenceToMax: Reward<GainEssenceToMaxParams> = {
   cec: (_p, ctx) => Math.max(0, maxEssence(ctx) - essenceAmount(ctx)) * STAGE_MULTIPLIER,
   viable: () => true,
   render: () => "Gain essence up to your maximum",
+  apply: () => {},
 };
 
 // `kinds` restricts the roll to predicates whose `kind` is in the allow-list.
@@ -283,6 +288,7 @@ const gainRandomPredicateCards: Reward<GainRandomCardsParams> = {
     const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
     return `Gain ${p.count} random ${noun}`;
   },
+  apply: () => {},
 };
 
 type DraftPredicateParams = { predicateId: string };
@@ -299,6 +305,7 @@ const draftPredicateCardsFrom4: Reward<DraftPredicateParams> = {
   viable: (p, ctx) =>
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4,
   render: (p) => `Draft 1 of 4 ${getPredicate(p.predicateId).text.plural}`,
+  apply: () => {},
 };
 
 type TakeAnyParams = { predicateId: string; choices: number };
@@ -318,6 +325,7 @@ const takeAnyFromPredicateChoices: Reward<TakeAnyParams> = {
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= p.choices,
   render: (p) =>
     `Take any number of ${getPredicate(p.predicateId).text.plural} from ${p.choices} choices`,
+  apply: () => {},
 };
 
 type GainNamedCardParams = { name: string };
@@ -333,6 +341,7 @@ const gainNamedCard: Reward<GainNamedCardParams> = {
   cec: () => CARD_CEC * STAGE_MULTIPLIER,
   viable: (_p, ctx) => namedCardGainPool(ctx).length > 0,
   render: (p) => `Gain ${quoteName(p.name)}`,
+  apply: () => {},
 };
 
 const CARD_TYPE_PREDICATE_IDS = ["warriors", "survivors", "spirit_animals"] as const;
@@ -354,6 +363,7 @@ const applyChosenTransfigurationToChosenCard: Reward<ApplyChosenTransfigChosenCa
     deckHasMinSize(ctx, 1)
     && JOURNEY_TRANSFIGURATIONS.some((t) => transfigurationHasEligibleTarget(ctx, t)),
   render: () => "Apply a transfiguration of your choice to a chosen card",
+  apply: () => {},
 };
 
 type ApplyNamedTransfigPredCardsParams = {
@@ -391,6 +401,7 @@ const applyNamedTransfigurationToChosenPredicateCards: Reward<ApplyNamedTransfig
       const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
       return `Apply ${p.transfiguration} to ${p.count} chosen ${noun}`;
     },
+    apply: () => {},
   };
 
 type ApplyNamedTransfigCardNameParams = { transfiguration: string; cardName: string };
@@ -425,6 +436,7 @@ const applyNamedTransfigurationToCardName: Reward<ApplyNamedTransfigCardNamePara
   // helper centralises the eligibility traversal so the rule cannot drift.
   viable: (p, ctx) => transfigurationHasEligibleTarget(ctx, p.transfiguration),
   render: (p) => `Apply ${p.transfiguration} to ${quoteName(p.cardName)}`,
+  apply: () => {},
 };
 
 type ApplyNamedTransfigRandomPredParams = {
@@ -459,6 +471,7 @@ const applyNamedTransfigurationToRandomPredicateCards: Reward<ApplyNamedTransfig
       const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
       return `Apply ${p.transfiguration} to ${p.count} random ${noun}`;
     },
+    apply: () => {},
   };
 
 type TransfigureRandomStartersParams = { count: number };
@@ -472,6 +485,7 @@ const transfigureRandomStarters: Reward<TransfigureRandomStartersParams> = {
     p.count === 1
       ? "Apply a random transfiguration to 1 random starter card"
       : `Apply random transfigurations to ${p.count} random starter cards`,
+  apply: () => {},
 };
 
 type TransfigureAllStartersParams = Record<string, never>;
@@ -482,6 +496,7 @@ const transfigureAllStarters: Reward<TransfigureAllStartersParams> = {
   cec: (_p, ctx) => CARD_CEC * 0.7 * Math.max(1, starterCardCount(ctx)),
   viable: (_p, ctx) => starterCardCount(ctx) >= 1,
   render: () => "Apply a random transfiguration to each starter card",
+  apply: () => {},
 };
 
 type ChangeCardBecomeTypeParams = { cardName: string; cardTypePredicateId: string };
@@ -507,6 +522,7 @@ const changeCardToBecomeType: Reward<ChangeCardBecomeTypeParams> = {
     const article = /^[aeiou]/i.test(singular) ? "an" : "a";
     return `Change ${quoteName(p.cardName)} to become ${article} ${singular}`;
   },
+  apply: () => {},
 };
 
 type ModifyRandomCardsToTypesParams = { count: number; cardTypePredicateId: string };
@@ -529,6 +545,7 @@ const modifyRandomCardsToTypes: Reward<ModifyRandomCardsToTypesParams> = {
     const article = p.count === 1 ? `${indefiniteArticleFor(typeName)} ` : "";
     return `Modify ${p.count} random ${noun} to become ${article}${typeName}`;
   },
+  apply: () => {},
 };
 
 type MakeRandomCardsFastParams = { count: number };
@@ -540,6 +557,7 @@ const makeRandomCardsFast: Reward<MakeRandomCardsFastParams> = {
   // Deck-scope leak: CLI used `ctx.content.cards.length >= count`.
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) => `Change ${p.count} random card${p.count === 1 ? "" : "s"} to have fast`,
+  apply: () => {},
 };
 
 type PurgeChosenPredCardsParams = { predicateId: string; count: number };
@@ -558,6 +576,7 @@ const purgeChosenPredicateCards: Reward<PurgeChosenPredCardsParams> = {
     const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
     return `Purge up to ${p.count} chosen ${noun}`;
   },
+  apply: () => {},
 };
 
 type PurgeChosenPredWithReplParams = { predicateId: string; count: number };
@@ -578,6 +597,7 @@ const purgeChosenPredicateWithReplacement: Reward<PurgeChosenPredWithReplParams>
     }
     return `Transform up to ${p.count} chosen ${pred.text.plural} into random ${pred.text.plural}`;
   },
+  apply: () => {},
 };
 
 type PurgeNamedStarterParams = { cardName: string };
@@ -599,6 +619,7 @@ const purgeNamedStarter: Reward<PurgeNamedStarterParams> = {
   // starter even if the specific named one was already purged.
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) => `Purge ${quoteName(p.cardName)}`,
+  apply: () => {},
 };
 
 type PurgeRandomStarterParams = Record<string, never>;
@@ -609,6 +630,7 @@ const purgeRandomStarter: Reward<PurgeRandomStarterParams> = {
   cec: () => CARD_CEC * 0.4,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1,
   render: () => "Purge a random starter card",
+  apply: () => {},
 };
 
 type PurgeRandomStarterReplParams = { predicateId: string };
@@ -628,6 +650,7 @@ const purgeRandomStarterWithPredicateReplacement: Reward<PurgeRandomStarterReplP
     && cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 1,
   render: (p) =>
     `Transform a random starter card into a random ${getPredicate(p.predicateId).text.singular}`,
+  apply: () => {},
 };
 
 type TransformStarterParams = { newCardName: string };
@@ -642,6 +665,7 @@ const transformStarterIntoNamedCard: Reward<TransformStarterParams> = {
   cec: () => CARD_CEC * 0.8,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1 && ctx.content.cards.length > 0,
   render: (p) => `Choose a starter card to transform into ${quoteName(p.newCardName)}`,
+  apply: () => {},
 };
 
 type TransformDeckCardParams = { oldCardName: string; newCardName: string };
@@ -665,6 +689,7 @@ const transformCardInDeckIntoNamed: Reward<TransformDeckCardParams> = {
   viable: (p, ctx) =>
     deckContainsCardByName(ctx, p.oldCardName) && ctx.content.cards.length > 0,
   render: (p) => `Transform ${quoteName(p.oldCardName)} into ${quoteName(p.newCardName)}`,
+  apply: () => {},
 };
 
 type TransformPredCardParams = { predicateId: string; newCardName: string };
@@ -682,6 +707,7 @@ const transformChosenPredicateIntoNamed: Reward<TransformPredCardParams> = {
   viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId) && ctx.content.cards.length > 0,
   render: (p) =>
     `Transform a chosen ${getPredicate(p.predicateId).text.singular} into ${quoteName(p.newCardName)}`,
+  apply: () => {},
 };
 
 type DupNamedCardParams = { cardName: string; count: number };
@@ -703,6 +729,7 @@ const duplicateNamedCardX: Reward<DupNamedCardParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) =>
     `Create ${p.count} duplicate${p.count === 1 ? "" : "s"} of ${quoteName(p.cardName)}`,
+  apply: () => {},
 };
 
 type DupChosenParams = { count: number };
@@ -714,6 +741,7 @@ const duplicateChosenCards: Reward<DupChosenParams> = {
   // Deck-size-N: inline upgraded to the helper.
   viable: (_p, ctx) => deckHasMinSize(ctx, 1),
   render: (p) => `Duplicate ${p.count} chosen card${p.count === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type DupRandomPredParams = { predicateId: string; count: number };
@@ -736,6 +764,7 @@ const duplicateRandomPredicate: Reward<DupRandomPredParams> = {
     const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
     return `Duplicate ${p.count} random ${noun}`;
   },
+  apply: () => {},
 };
 
 type DrawDupParams = { drawCount: number };
@@ -748,6 +777,7 @@ const drawXAndDuplicateChosen: Reward<DrawDupParams> = {
   viable: (p, ctx) => deckHasMinSize(ctx, p.drawCount),
   render: (p) =>
     `Draw ${p.drawCount} cards from your deck and duplicate one of them of your choice`,
+  apply: () => {},
 };
 
 type PurgeXBanesParams = { count: number };
@@ -758,6 +788,7 @@ const purgeXBanes: Reward<PurgeXBanesParams> = {
   cec: (p) => p.count * 30,
   viable: (p, ctx) => baneCount(ctx) >= p.count,
   render: (p) => `Purge ${p.count} bane card${p.count === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type PurgeAllBanesParams = Record<string, never>;
@@ -768,6 +799,7 @@ const purgeAllBanes: Reward<PurgeAllBanesParams> = {
   cec: (_p, ctx) => Math.max(1, baneCount(ctx)) * 30,
   viable: (_p, ctx) => baneCount(ctx) >= 1,
   render: () => "Purge all bane cards",
+  apply: () => {},
 };
 
 const DREAMSIGN_CEC = 80;
@@ -785,6 +817,7 @@ const gainRandomDreamsign: Reward<GainRandomDreamsignParams> = {
   // Dreamsign" option.
   viable: (_p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= 1,
   render: () => "Gain a random Dreamsign",
+  apply: () => {},
 };
 
 type GainNamedDreamsignParams = { name: string };
@@ -803,6 +836,7 @@ const gainNamedDreamsign: Reward<GainNamedDreamsignParams> = {
   // Pool-scope fix.
   viable: (_p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= 1,
   render: (p) => `Gain ${quoteName(p.name)}`,
+  apply: () => {},
 };
 
 type Choose1OfXDreamsignsParams = { choices: number };
@@ -814,6 +848,7 @@ const choose1OfXDreamsigns: Reward<Choose1OfXDreamsignsParams> = {
   // Pool-scope fix.
   viable: (p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= p.choices,
   render: (p) => `Choose 1 of ${p.choices} Dreamsigns to gain`,
+  apply: () => {},
 };
 
 type GainCopyRandomDreamsignParams = Record<string, never>;
@@ -829,6 +864,7 @@ const gainCopyOfRandomDreamsign: Reward<GainCopyRandomDreamsignParams> = {
       ? `Gain a copy of ${quoteName(name)}`
       : "Gain a copy of one of your Dreamsigns chosen at random";
   },
+  apply: () => {},
 };
 
 type GainCopyChosenDreamsignParams = Record<string, never>;
@@ -844,6 +880,7 @@ const gainCopyOfChosenDreamsign: Reward<GainCopyChosenDreamsignParams> = {
       ? `Gain a copy of ${quoteName(name)}`
       : "Gain a copy of one of your Dreamsigns of your choice";
   },
+  apply: () => {},
 };
 
 type AddSiteParams = { siteType: string };
@@ -857,6 +894,7 @@ const addSiteToDreamscape: Reward<AddSiteParams> = {
   viable: () => true,
   render: (p) =>
     `Add ${indefiniteArticleFor(p.siteType)} ${p.siteType} site to this dreamscape`,
+  apply: () => {},
 };
 
 const addSiteToNextDreamscape: Reward<AddSiteParams> = {
@@ -869,6 +907,7 @@ const addSiteToNextDreamscape: Reward<AddSiteParams> = {
   viable: () => true,
   render: (p) =>
     `Add ${indefiniteArticleFor(p.siteType)} ${p.siteType} site to the next dreamscape you visit`,
+  apply: () => {},
 };
 
 type StartingDreamwellPosParams = { cardName: string };
@@ -887,6 +926,7 @@ const setStartingDreamwellPositive: Reward<StartingDreamwellPosParams> = {
   // "Placeholder Dreamwell Card" option until content arrived.
   viable: () => POSITIVE_DREAMWELL_CARDS.length >= 1,
   render: (p) => `Your starting dreamwell card is ${quoteName(p.cardName)}`,
+  apply: () => {},
 };
 
 type ShufflePosDreamwellParams = { cardName: string; count: number };
@@ -903,6 +943,7 @@ const shufflePositiveDreamwellCards: Reward<ShufflePosDreamwellParams> = {
   viable: () => POSITIVE_DREAMWELL_CARDS.length >= 1,
   render: (p) =>
     `Shuffle ${p.count} ${quoteName(p.cardName)}${p.count === 1 ? "" : " copies"} into your dreamwell`,
+  apply: () => {},
 };
 
 type NextRerollsParams = { count: number };
@@ -914,6 +955,7 @@ const nextXShopRerollsFree: Reward<NextRerollsParams> = {
   viable: () => true,
   render: (p) =>
     `Your next ${p.count} shop reroll${p.count === 1 ? "" : "s"} ${p.count === 1 ? "is" : "are"} free`,
+  apply: () => {},
 };
 
 type IncreaseMaxEssenceParams = { amount: number };
@@ -924,6 +966,7 @@ const increaseMaxEssence: Reward<IncreaseMaxEssenceParams> = {
   cec: (p) => p.amount * 0.5 * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Increase your maximum essence by ${p.amount}`,
+  apply: () => {},
 };
 
 type Draft2PredicateParams = { predicateId: string };
@@ -940,6 +983,7 @@ const draft2PredicateCardsFrom4: Reward<Draft2PredicateParams> = {
   viable: (p, ctx) =>
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4,
   render: (p) => `Draft 2 of 4 ${getPredicate(p.predicateId).text.plural}`,
+  apply: () => {},
 };
 
 type DraftPredicateCardWithCopiesParams = { predicateId: string; copies: number };
@@ -958,6 +1002,7 @@ const draftPredicateCardWithCopies: Reward<DraftPredicateCardWithCopiesParams> =
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4,
   render: (p) =>
     `Draft 1 of 4 ${getPredicate(p.predicateId).text.plural} and gain ${p.copies} copies of it`,
+  apply: () => {},
 };
 
 type DraftPredicateCardWithTransfigurationParams = {
@@ -989,6 +1034,7 @@ const draftPredicateCardWithTransfiguration: Reward<DraftPredicateCardWithTransf
       && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
     render: (p) =>
       `Draft 1 of 4 ${getPredicate(p.predicateId).text.plural} and apply ${p.transfiguration} to it`,
+    apply: () => {},
   };
 
 type MakeCardReclaimParams = { cardName: string; count: number };
@@ -1008,6 +1054,7 @@ const makeCardReclaim: Reward<MakeCardReclaimParams> = {
   // Named-card smell.
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) => `Add Reclaim ${p.count} to ${quoteName(p.cardName)}`,
+  apply: () => {},
 };
 
 type MakeRandomCardsReclaimParams = { count: number; reclaim: number };
@@ -1023,6 +1070,7 @@ const makeRandomCardsReclaim: Reward<MakeRandomCardsReclaimParams> = {
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) =>
     `Add Reclaim ${p.reclaim} to ${p.count} random card${p.count === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type OpeningHandGrantParams = { cardName: string; battles: number };
@@ -1043,6 +1091,7 @@ const openingHandGrantForXBattles: Reward<OpeningHandGrantParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) =>
     `Your opening hand contains ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type TemporaryCardCopyParams = { cardName: string; battles: number };
@@ -1063,6 +1112,7 @@ const temporaryCardCopyForXBattles: Reward<TemporaryCardCopyParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) =>
     `Gain a temporary copy of ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type CostReductionParams = { predicateId: string; amount: number; battles: number };
@@ -1080,6 +1130,7 @@ const cardCostReductionForXBattles: Reward<CostReductionParams> = {
   viable: () => true,
   render: (p) =>
     `${sentenceCase(getPredicate(p.predicateId).text.plural)} cost ${p.amount} less for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type ApplyNamedTransfigAllPredParams = { transfiguration: string; predicateId: string };
@@ -1108,6 +1159,7 @@ const applyNamedTransfigurationToAllPredicateCards: Reward<ApplyNamedTransfigAll
     && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
   render: (p) =>
     `Apply ${p.transfiguration} to all ${getPredicate(p.predicateId).text.plural}`,
+  apply: () => {},
 };
 
 type TransfigureChosenStartersParams = { count: number };
@@ -1121,6 +1173,7 @@ const transfigureChosenStarters: Reward<TransfigureChosenStartersParams> = {
     p.count === 1
       ? "Apply a random transfiguration to 1 chosen starter card"
       : `Apply random transfigurations to ${p.count} chosen starter cards`,
+  apply: () => {},
 };
 
 type PurgeChosenStartersParams = { count: number };
@@ -1131,6 +1184,7 @@ const purgeChosenStarters: Reward<PurgeChosenStartersParams> = {
   cec: (p) => CARD_CEC * 0.45 * p.count,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1,
   render: (p) => `Purge up to ${p.count} chosen starter card${p.count === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type PurgeAllStartersParams = Record<string, never>;
@@ -1141,6 +1195,7 @@ const purgeAllStarters: Reward<PurgeAllStartersParams> = {
   cec: (_p, ctx) => CARD_CEC * 0.6 * Math.max(1, starterCardCount(ctx)),
   viable: (_p, ctx) => starterCardCount(ctx) >= 1,
   render: () => "Purge all starter cards",
+  apply: () => {},
 };
 
 type ReplaceStarterViaDraftParams = Record<string, never>;
@@ -1151,6 +1206,7 @@ const replaceStarterViaDraft: Reward<ReplaceStarterViaDraftParams> = {
   cec: () => CARD_CEC * 1.0,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1 && ctx.content.cards.length >= 4,
   render: () => "Replace a chosen starter card with 1 of 4 drafted cards",
+  apply: () => {},
 };
 
 type ApplyRandomTransfigurationsToRandomCardsParams = { count: number };
@@ -1166,6 +1222,7 @@ const applyRandomTransfigurationsToRandomCards: Reward<ApplyRandomTransfiguratio
       p.count === 1
         ? "Apply a random transfiguration to 1 random card"
         : `Apply random transfigurations to ${p.count} random cards`,
+    apply: () => {},
   };
 
 type TransformDreamsignToNamedParams = { name: string };
@@ -1186,6 +1243,7 @@ const transformDreamsignToNamed: Reward<TransformDreamsignToNamedParams> = {
   viable: (_p, ctx) =>
     ctx.state.quest.activeDreamsigns.length >= 1 && inactivePoolDreamsigns(ctx).length >= 1,
   render: (p) => `Transform a chosen Dreamsign into ${quoteName(p.name)}`,
+  apply: () => {},
 };
 
 type TemporaryDreamsignParams = { battles: number };
@@ -1198,6 +1256,7 @@ const temporaryDreamsignForXBattles: Reward<TemporaryDreamsignParams> = {
   viable: (_p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= 1,
   render: (p) =>
     `Gain a random Dreamsign for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {},
 };
 
 type ReplaceSiteTypeParams = { fromType: string; toType: string };
@@ -1216,6 +1275,7 @@ const replaceSiteType: Reward<ReplaceSiteTypeParams> = {
   viable: () => true,
   render: (p) =>
     `Replace ${indefiniteArticleFor(p.fromType)} ${p.fromType} site in this dreamscape with ${indefiniteArticleFor(p.toType)} ${p.toType} site`,
+  apply: () => {},
 };
 
 type ShopEssenceDiscountParams = { percent: number };
@@ -1226,6 +1286,7 @@ const shopEssenceDiscount: Reward<ShopEssenceDiscountParams> = {
   cec: (p) => p.percent * 1.0,
   viable: () => true,
   render: (p) => `Shop essence costs are permanently reduced by ${p.percent}%`,
+  apply: () => {},
 };
 
 type ShopOmenDiscountParams = { count: number };
@@ -1237,6 +1298,7 @@ const shopOmenDiscount: Reward<ShopOmenDiscountParams> = {
   viable: () => true,
   render: (p) =>
     `Your next ${p.count} shop purchase${p.count === 1 ? "" : "s"} cost${p.count === 1 ? "s" : ""} 1 fewer omen`,
+  apply: () => {},
 };
 
 const BOOST_SITE_TYPE_MULTIPLIER: Readonly<Record<string, number>> = Object.freeze({
@@ -1271,6 +1333,7 @@ const boostSiteAppearanceChance: Reward<BoostSiteParams> = {
     const dreamscapes = p.dreamscapes ?? BOOST_SITE_DURATION_DREAMSCAPES;
     return `${p.percent}% higher chance to see ${p.siteType} sites in the next ${dreamscapes} dreamscape${dreamscapes === 1 ? "" : "s"} you visit`;
   },
+  apply: () => {},
 };
 
 type MetaGain2Params = {
@@ -1339,6 +1402,7 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
     const b = getReward(p.subIds[1]);
     return [a.render(p.subParams[0], ctx), b.render(p.subParams[1], ctx)].join(". ");
   },
+  apply: () => {},
 };
 
 export const REWARDS: readonly Reward[] = Object.freeze([

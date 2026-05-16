@@ -9,6 +9,7 @@
 import type { JourneyContext } from "../context";
 import type { DrawContext } from "../../util/rng";
 import type { CardTargetPredicate } from "../effects";
+import type { JourneyMutations } from "../../apply/JourneyMutations";
 
 export type TemplateParams = Record<string, unknown>;
 
@@ -19,6 +20,7 @@ export type Reward<P extends TemplateParams = TemplateParams> = {
   cec(params: P, ctx: JourneyContext): number;
   viable(params: P, ctx: JourneyContext): boolean;
   render(params: P, ctx: JourneyContext): string;
+  apply(params: P, ctx: JourneyContext, mut: JourneyMutations): void;
 };
 
 // A `Cost` extends `Reward` with a structural `locked` predicate. The CLI
