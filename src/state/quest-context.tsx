@@ -149,9 +149,16 @@ export interface QuestMutations {
     cardEntryIds: string[],
     dreamsignIndices: number[],
   ) => void;
+  /**
+   * Apply a transfiguration to a deck entry, or clear it when `type` is
+   * `null`. The null variant supports Dream Journey reward templates that
+   * "remove transfiguration"; `effectDescription` is the upstream source
+   * string and `effectDetails` is forwarded into the `card_transfigured`
+   * log payload.
+   */
   transfigureCard: (
     entryId: string,
-    type: TransfigurationType,
+    type: TransfigurationType | null,
     effectDescription: string,
     effectDetails: Record<string, unknown>,
   ) => void;
@@ -227,6 +234,14 @@ export interface QuestMutations {
   removeDeckEntry: (entryId: string, source: string) => void;
   /** Add a duplicate of the deck entry with the given entryId. */
   duplicateDeckEntry: (entryId: string, source: string) => void;
+  /**
+   * Remove up to `count` bane cards from the deck via uniform random
+   * selection (using `Math.random`). When fewer banes exist than `count`,
+   * all of them are removed; non-positive counts no-op.
+   */
+  purgeRandomBaneCards: (count: number, source: string) => void;
+  /** Remove every bane card from the deck. */
+  purgeAllBaneCards: (source: string) => void;
   /**
    * Stack a battle-window reward-reduction modifier. Decremented per battle
    * in `incrementCompletionLevel`; entries at zero drop.
@@ -1797,7 +1812,7 @@ export function QuestProvider({
   const transfigureCard = useCallback(
     (
       entryId: string,
-      type: TransfigurationType,
+      type: TransfigurationType | null,
       effectDescription: string,
       effectDetails: Record<string, unknown>,
     ) => {
@@ -2285,6 +2300,70 @@ export function QuestProvider({
     [cardDatabase],
   );
 
+  const purgeRandomBaneCards = useCallback(
+    (count: number, source: string) => {
+      if (count <= 0) return;
+      setState((prev) => {
+        const baneIndices: number[] = [];
+        prev.deck.forEach((entry, index) => {
+          if (entry.isBane) {
+            baneIndices.push(index);
+          }
+        });
+        if (baneIndices.length === 0) return prev;
+        // Fisher-Yates partial shuffle to pick `min(count, baneIndices.length)`
+        // entries uniformly at random.
+        const target = Math.min(count, baneIndices.length);
+        for (let i = 0; i < target; i += 1) {
+          const j = i + Math.floor(Math.random() * (baneIndices.length - i));
+          [baneIndices[i], baneIndices[j]] = [baneIndices[j], baneIndices[i]];
+        }
+        const removed = new Set(baneIndices.slice(0, target));
+        const deck = prev.deck.filter((_, index) => !removed.has(index));
+        for (const index of removed) {
+          const entry = prev.deck[index];
+          if (entry === undefined) continue;
+          const card = cardDatabase.get(entry.cardNumber);
+          const cardName =
+            card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+          logEvent("card_removed", {
+            cardNumber: entry.cardNumber,
+            cardName,
+            source,
+            isBane: true,
+          });
+        }
+        return { ...prev, deck };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const purgeAllBaneCards = useCallback(
+    (source: string) => {
+      setState((prev) => {
+        if (!prev.deck.some((entry) => entry.isBane)) return prev;
+        for (const entry of prev.deck) {
+          if (!entry.isBane) continue;
+          const card = cardDatabase.get(entry.cardNumber);
+          const cardName =
+            card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+          logEvent("card_removed", {
+            cardNumber: entry.cardNumber,
+            cardName,
+            source,
+            isBane: true,
+          });
+        }
+        return {
+          ...prev,
+          deck: prev.deck.filter((entry) => !entry.isBane),
+        };
+      });
+    },
+    [cardDatabase],
+  );
+
   const pushBattleRewardModifier = useCallback(
     (
       kind: "flat" | "percent",
@@ -2667,6 +2746,8 @@ export function QuestProvider({
       addBaneCardById,
       removeDeckEntry,
       duplicateDeckEntry,
+      purgeRandomBaneCards,
+      purgeAllBaneCards,
       pushBattleRewardModifier,
       pushTemporaryBaneGrant,
       addSiteToDreamscape,
@@ -2723,6 +2804,8 @@ export function QuestProvider({
       addBaneCardById,
       removeDeckEntry,
       duplicateDeckEntry,
+      purgeRandomBaneCards,
+      purgeAllBaneCards,
       pushBattleRewardModifier,
       pushTemporaryBaneGrant,
       addSiteToDreamscape,

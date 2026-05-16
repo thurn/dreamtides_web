@@ -2437,7 +2437,7 @@ export function MultiplayerQuestProvider({
       cleanseBanes,
       transfigureCard: (
         _entryId: string,
-        _type: TransfigurationType,
+        _type: TransfigurationType | null,
         _effectDescription: string,
         _effectDetails: Record<string, unknown>,
       ) => {
@@ -2480,6 +2480,12 @@ export function MultiplayerQuestProvider({
       },
       duplicateDeckEntry: (_entryId: string, _source: string) => {
         unavailableMutation("duplicateDeckEntry");
+      },
+      purgeRandomBaneCards: (_count: number, _source: string) => {
+        unavailableMutation("purgeRandomBaneCards");
+      },
+      purgeAllBaneCards: (_source: string) => {
+        unavailableMutation("purgeAllBaneCards");
       },
       pushBattleRewardModifier: (
         _kind: "flat" | "percent",

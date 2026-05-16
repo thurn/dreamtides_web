@@ -38,12 +38,14 @@ export interface JourneyMutations {
   /** Add a duplicate of the deck entry with the given entryId. */
   duplicateDeckEntry(entryId: string, source: string): void;
 
-  /** Apply a transfiguration to the deck entry. Delegates to the existing
-   *  transfigureCard mutation, which already handles eligibility, source
-   *  logging, and the transfiguration effect-details payload. */
+  /** Apply a transfiguration to the deck entry, or pass `null` to clear an
+   *  existing transfiguration (the "remove transfiguration" reward variant).
+   *  Delegates to the underlying `transfigureCard` mutation, which handles
+   *  eligibility, source logging, and the transfiguration effect-details
+   *  payload. */
   transfigureDeckEntry(
     entryId: string,
-    type: TransfigurationType,
+    type: TransfigurationType | null,
     source: string,
   ): void;
 

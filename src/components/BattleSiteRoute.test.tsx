@@ -193,6 +193,8 @@ function setQuestState({
       addBaneCardById: vi.fn(),
       removeDeckEntry: vi.fn(),
       duplicateDeckEntry: vi.fn(),
+      purgeRandomBaneCards: vi.fn(),
+      purgeAllBaneCards: vi.fn(),
       pushBattleRewardModifier: vi.fn(),
       pushTemporaryBaneGrant: vi.fn(),
       addSiteToDreamscape: vi.fn(),
