@@ -33,10 +33,10 @@ vi.mock("../multiplayer/battle-service", async () => {
   );
   return {
     ...actual,
-    ensureBattleSession: vi.fn(async () => undefined),
-    dispatchBattleCommandToRoom: vi.fn(async () => undefined),
-    dispatchBattleHistoryNav: vi.fn(async () => undefined),
-    dispatchClearForcedResult: vi.fn(async () => undefined),
+    ensureBattleSession: vi.fn(() => Promise.resolve(undefined)),
+    dispatchBattleCommandToRoom: vi.fn(() => Promise.resolve(undefined)),
+    dispatchBattleHistoryNav: vi.fn(() => Promise.resolve(undefined)),
+    dispatchClearForcedResult: vi.fn(() => Promise.resolve(undefined)),
   };
 });
 
@@ -293,9 +293,9 @@ describe("BattleSiteRoute", () => {
     expect(ensureSpy).toHaveBeenCalled();
     const lastCall = ensureSpy.mock.calls[ensureSpy.mock.calls.length - 1];
     expect(lastCall).toBeDefined();
-    expect(lastCall![0].battleEntryKey).toBe("site-7::3::dreamscape-2");
-    expect(lastCall![0].roomId).toBe("room-1");
-    expect(lastCall![0].battleState).toBeNull();
+    expect(lastCall[0].battleEntryKey).toBe("site-7::3::dreamscape-2");
+    expect(lastCall[0].roomId).toBe("room-1");
+    expect(lastCall[0].battleState).toBeNull();
 
     expect(battleService.ensureBattleSession).toHaveBeenCalled();
   });

@@ -39,7 +39,7 @@ const failureRouteMock = vi.hoisted(() => ({
   >((input) => freezeQuestFailureSummary(input)),
 }));
 const battleServiceMock = vi.hoisted(() => ({
-  dispatchBattleReset: vi.fn(async () => undefined),
+  dispatchBattleReset: vi.fn(() => Promise.resolve(undefined)),
 }));
 
 vi.mock("../integration/battle-completion-bridge", () => ({

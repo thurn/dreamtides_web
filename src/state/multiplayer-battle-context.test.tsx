@@ -26,9 +26,9 @@ vi.mock("../multiplayer/battle-service", async () => {
   );
   return {
     ...actual,
-    dispatchBattleCommandToRoom: vi.fn(async () => undefined),
-    dispatchBattleHistoryNav: vi.fn(async () => undefined),
-    dispatchClearForcedResult: vi.fn(async () => undefined),
+    dispatchBattleCommandToRoom: vi.fn(() => Promise.resolve(undefined)),
+    dispatchBattleHistoryNav: vi.fn(() => Promise.resolve(undefined)),
+    dispatchClearForcedResult: vi.fn(() => Promise.resolve(undefined)),
   };
 });
 
@@ -114,10 +114,10 @@ describe("useMultiplayerBattle", () => {
 
     const value = captured[captured.length - 1];
     expect(value).toBeDefined();
-    expect(value!.battleState).not.toBeNull();
+    expect(value.battleState).not.toBeNull();
 
     await act(async () => {
-      value!.dispatch({
+      value.dispatch({
         type: "APPLY_COMMAND",
         command: {
           id: "PLAY_CARD",
@@ -128,13 +128,12 @@ describe("useMultiplayerBattle", () => {
       await Promise.resolve();
     });
 
-    expect(battleService.dispatchBattleCommandToRoom).toHaveBeenCalledWith(
-      expect.objectContaining({
-        roomId: "room-1",
-        actorId: "client-a",
-        command: expect.objectContaining({ id: "PLAY_CARD" }),
-      }),
-    );
+    const commandInput = vi.mocked(battleService.dispatchBattleCommandToRoom).mock
+      .calls[0]?.[0];
+    expect(commandInput).toBeDefined();
+    expect(commandInput?.roomId).toBe("room-1");
+    expect(commandInput?.actorId).toBe("client-a");
+    expect(commandInput?.command.id).toBe("PLAY_CARD");
   });
 
   it("returns null battleState when the room slot is null", () => {
@@ -151,8 +150,8 @@ describe("useMultiplayerBattle", () => {
     );
     const value = captured[captured.length - 1];
     expect(value).toBeDefined();
-    expect(value!.battleState).toBeNull();
-    expect(value!.reducerState).toBeNull();
+    expect(value.battleState).toBeNull();
+    expect(value.reducerState).toBeNull();
   });
 
   it("dispatches UNDO/REDO through dispatchBattleHistoryNav", async () => {
@@ -173,7 +172,7 @@ describe("useMultiplayerBattle", () => {
     expect(value).toBeDefined();
 
     await act(async () => {
-      value!.dispatch({ type: "UNDO" });
+      value.dispatch({ type: "UNDO" });
       await Promise.resolve();
     });
     expect(battleService.dispatchBattleHistoryNav).toHaveBeenCalledWith(
@@ -185,7 +184,7 @@ describe("useMultiplayerBattle", () => {
     );
 
     await act(async () => {
-      value!.dispatch({ type: "REDO" });
+      value.dispatch({ type: "REDO" });
       await Promise.resolve();
     });
     expect(battleService.dispatchBattleHistoryNav).toHaveBeenCalledWith(
@@ -240,10 +239,10 @@ describe("useMultiplayerBattle", () => {
 
     const value = captured[captured.length - 1];
     expect(value).toBeDefined();
-    expect(value!.reducerState).not.toBeNull();
-    expect(value!.reducerState!.lastActivity).not.toBeNull();
-    expect(value!.reducerState!.lastActivity!.kind).toBe("undo");
-    expect(value!.reducerState!.lastActivity!.metadata).toBe(stubMetadata);
+    expect(value.reducerState).not.toBeNull();
+    expect(value.reducerState!.lastActivity).not.toBeNull();
+    expect(value.reducerState!.lastActivity!.kind).toBe("undo");
+    expect(value.reducerState!.lastActivity!.metadata).toBe(stubMetadata);
   });
 
   it("leaves reducerState.lastActivity null when lastActivityKind is null", () => {
@@ -262,7 +261,7 @@ describe("useMultiplayerBattle", () => {
     );
     const value = captured[captured.length - 1];
     expect(value).toBeDefined();
-    expect(value!.reducerState!.lastActivity).toBeNull();
+    expect(value.reducerState!.lastActivity).toBeNull();
   });
 
   it("dispatches CLEAR_FORCED_RESULT through dispatchClearForcedResult", async () => {
@@ -283,7 +282,7 @@ describe("useMultiplayerBattle", () => {
     expect(value).toBeDefined();
 
     await act(async () => {
-      value!.dispatch({ type: "CLEAR_FORCED_RESULT" });
+      value.dispatch({ type: "CLEAR_FORCED_RESULT" });
       await Promise.resolve();
     });
     expect(battleService.dispatchClearForcedResult).toHaveBeenCalledWith(

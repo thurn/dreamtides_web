@@ -28,7 +28,16 @@ vi.mock("firebase/database", () => ({
   runTransaction: vi.fn(),
 }));
 
-const mockedRunTransaction = runTransaction as unknown as ReturnType<typeof vi.fn>;
+const mockedRunTransaction = runTransaction as unknown as ReturnType<
+  typeof vi.fn<
+    (
+      ref: unknown,
+      updater: (
+        current: MultiplayerRoom | null,
+      ) => MultiplayerRoom | null | undefined,
+    ) => Promise<void>
+  >
+>;
 
 const fakeInit = makeRawSnapshot({}).init as unknown as SharedBattleState["init"];
 const fakeInitial = makeRawSnapshot({}).reducer.mutable as unknown as SharedBattleState["reducer"]["mutable"];
@@ -267,8 +276,9 @@ describe("ensureBattleSession", () => {
   it("commits a new SharedBattleState and a battle:INIT action-log entry when slot is null", async () => {
     let captured: unknown;
     const emptyRoom = buildEmptyRoom();
-    mockedRunTransaction.mockImplementation(async (_ref, updater) => {
+    mockedRunTransaction.mockImplementation((_ref, updater) => {
       captured = updater(emptyRoom);
+      return Promise.resolve(undefined);
     });
 
     await ensureBattleSession({
@@ -318,8 +328,9 @@ describe("ensureBattleSession", () => {
       ...buildEmptyRoom(),
       battleState: existing,
     };
-    mockedRunTransaction.mockImplementation(async (_ref, updater) => {
+    mockedRunTransaction.mockImplementation((_ref, updater) => {
       captured = updater(existingRoom);
+      return Promise.resolve(undefined);
     });
 
     await ensureBattleSession({

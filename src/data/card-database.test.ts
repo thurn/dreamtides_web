@@ -73,7 +73,6 @@ describe("cardImageUrl", () => {
  * and verifies the loader produces a correct database from actual card data.
  * Uses dynamic imports for Node.js fs/path to avoid browser tsconfig errors.
  */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
 async function readCardDataJson(): Promise<CardData[] | null> {
   try {
     const fs = await import("node:fs");
@@ -87,8 +86,6 @@ async function readCardDataJson(): Promise<CardData[] | null> {
     return null;
   }
 }
-/* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument */
-
 describe("loadCardDatabase integration (real card-data.json)", () => {
   it("loads the generated card set and indexes it by cardNumber", async () => {
     const raw = await readCardDataJson();

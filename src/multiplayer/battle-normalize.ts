@@ -4,7 +4,6 @@ import {
   type BattleCardInstance,
   type BattleHistory,
   type BattleHistoryEntry,
-  type BattleInit,
   type BattleMutableState,
   type BattleReducerTransition,
   type BattleSideMutableState,
@@ -165,7 +164,7 @@ export function normalizeBattleStateSnapshot(
     return null;
   }
   return {
-    init: candidate.init as BattleInit,
+    init: candidate.init,
     reducer: normalizeReducer(candidate.reducer),
   };
 }
