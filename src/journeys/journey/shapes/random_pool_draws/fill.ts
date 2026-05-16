@@ -558,7 +558,11 @@ function pickCommittedDraws(args: {
   const available = [...args.candidates];
   const committed: SharedRewardOutcome[][] = [];
 
-  while (committed.length < args.drawCount && available.length > 0) {
+  while (committed.length < args.drawCount) {
+    if (available.length === 0) {
+      available.push(...args.candidates);
+    }
+
     const picked = weightedChoice(
       args.drawContext,
       `random_pool_draws:committed:${committed.length + 1}`,

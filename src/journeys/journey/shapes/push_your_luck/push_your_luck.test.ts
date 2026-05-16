@@ -4,6 +4,7 @@ import {
   narrowSharedCostPayload,
   narrowSharedRewardPayload,
 } from "../../../apply/payloads";
+import { advanceTree } from "../../../util/tree";
 import { buildFixtureContext, FIXTURE_DRAW_CONTEXT } from "../__shared__/fixture";
 import { pushYourLuckPlugin } from "./index";
 
@@ -89,13 +90,6 @@ describe("push_your_luck shape", () => {
       const reward = narrowSharedRewardPayload(branch.effects[0]);
       expect(branch.rewardTemplateIds ?? []).toContain(reward?.templateId);
       expect(reward?.convertedEssence).toBe(branch.effectConvertedEssence);
-
-      if (branch.terminal) {
-        expect(narrowSharedCostPayload(branch.terminal.costs[0])).toEqual(cost);
-        expect(narrowSharedRewardPayload(branch.terminal.effects[0])).toEqual(
-          reward,
-        );
-      }
     }
 
     const pushEnvelope = (filled.precommitted.random ?? []).find(
@@ -108,5 +102,30 @@ describe("push_your_luck shape", () => {
       );
       expect(narrowSharedRewardPayload(attempt.effects[0])).not.toBeNull();
     }
+  });
+
+  it("dispatches the final Attempt branch immediate envelopes once", () => {
+    const ctx = buildFixtureContext();
+    const filled = pushYourLuckPlugin.fill({
+      context: ctx,
+      drawContext: FIXTURE_DRAW_CONTEXT,
+      stage: "mid",
+    });
+    const tree = filled.tree!;
+    const finalAttempt = tree.nodes[tree.nodes.length - 1].branches[1];
+    const result = advanceTree(tree, finalAttempt.id, filled.precommitted);
+
+    expect(result.terminal).not.toBeNull();
+    const appliedCosts = [
+      ...finalAttempt.costs,
+      ...(result.terminal?.costs ?? []),
+    ].map(narrowSharedCostPayload);
+    const appliedRewards = [
+      ...finalAttempt.effects,
+      ...(result.terminal?.effects ?? []),
+    ].map(narrowSharedRewardPayload);
+
+    expect(appliedCosts.filter(Boolean)).toHaveLength(1);
+    expect(appliedRewards.filter(Boolean)).toHaveLength(1);
   });
 });

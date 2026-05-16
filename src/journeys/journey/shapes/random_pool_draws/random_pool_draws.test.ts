@@ -112,4 +112,37 @@ describe("random_pool_draws shape", () => {
       }
     });
   });
+
+  it("precommits a reward envelope for every 4-level draw without replacement", () => {
+    const ctx = buildFixtureContext();
+    const filled = randomPoolDrawsPlugin.fill({
+      context: ctx,
+      drawContext: {
+        seed: "seed-6",
+        contentVersion: "test",
+        rootJourneyIndex: 0,
+      },
+      stage: "mid",
+    });
+    const tree = filled.tree!;
+    const repeated = (filled.precommitted.random ?? []).find(
+      (entry) => entry.kind === "repeated_pool_draws",
+    ) as {
+      replacement: "with_replacement" | "without_replacement";
+      committedDraws: readonly (readonly unknown[])[];
+    };
+
+    expect(tree.nodes).toHaveLength(4);
+    expect(repeated.replacement).toBe("without_replacement");
+    expect(repeated.committedDraws).toHaveLength(4);
+
+    for (const node of tree.nodes) {
+      const draw = node.branches[1];
+      expect(draw.label).toBe("Draw");
+      expect(draw.effects.length).toBeGreaterThan(0);
+      for (const effect of draw.effects) {
+        expect(narrowSharedRewardPayload(effect)).not.toBeNull();
+      }
+    }
+  });
 });

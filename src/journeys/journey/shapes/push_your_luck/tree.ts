@@ -67,11 +67,11 @@ function treeBranch(args: TreeBranchArgs): JourneyTreeBranch {
         text: args.terminal.text,
         outcome: args.terminal.outcome,
         operations: [],
-        costs,
-        effects,
-        burdens,
-        targets,
-        routeEffects,
+        costs: [...(args.terminal.costs ?? [])],
+        effects: [...(args.terminal.effects ?? [])],
+        burdens: [...(args.terminal.burdens ?? [])],
+        targets: [...(args.terminal.targets ?? [])],
+        routeEffects: [...(args.terminal.routeEffects ?? [])],
         rewardTemplateIds: [...rewardTemplateIds],
       }
     : undefined;
@@ -279,8 +279,8 @@ export function buildPushYourLuckTree(
             terminal: {
               text: "End the Journey.",
               outcome: "claim",
-              costs: [attemptCost],
-              effects: reward.effects,
+              costs: [],
+              effects: [],
               burdens: [],
               targets: reward.targets ?? [],
               routeEffects: [],
