@@ -25,6 +25,14 @@
 import type { JourneyContext } from "../context";
 import { isCardEligibleForTransfiguration } from "../effects";
 import { cardMatches } from "./content";
+import {
+  findTransfiguredDeckEntriesByName,
+  findTransfiguredDeckEntriesByPredicate,
+  findUntransfiguredDeckEntriesByName,
+  findUntransfiguredDeckEntriesByPredicate,
+  findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration,
+  findUntransfiguredDeckEntryIds,
+} from "./deckEntries";
 import { getPredicate } from "./predicates";
 
 export function deckContainsCard(ctx: JourneyContext, cardId: string): boolean {
@@ -87,6 +95,55 @@ export function transfigurationHasEligibleTarget(
     const card = cardsById.get(entry.cardId);
     return card !== undefined && isCardEligibleForTransfiguration(transfigurationId, card);
   });
+}
+
+export function deckContainsUntransfiguredCardByName(
+  ctx: JourneyContext,
+  cardName: string,
+  transfigurationId?: string,
+): boolean {
+  return findUntransfiguredDeckEntriesByName(
+    ctx,
+    cardName,
+    transfigurationId === undefined
+      ? undefined
+      : (card) => isCardEligibleForTransfiguration(transfigurationId, card),
+  ).length >= 1;
+}
+
+export function deckContainsUntransfiguredPredicate(
+  ctx: JourneyContext,
+  predicateId: string,
+  minCount: number = 1,
+  transfigurationId?: string,
+): boolean {
+  const entryIds = transfigurationId === undefined
+    ? findUntransfiguredDeckEntriesByPredicate(ctx, predicateId)
+    : findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration(
+      ctx,
+      predicateId,
+      transfigurationId,
+    );
+  return entryIds.length >= minCount;
+}
+
+export function deckHasUntransfiguredMinSize(ctx: JourneyContext, minCount: number): boolean {
+  return findUntransfiguredDeckEntryIds(ctx).length >= minCount;
+}
+
+export function deckContainsTransfiguredCardByName(
+  ctx: JourneyContext,
+  cardName: string,
+): boolean {
+  return findTransfiguredDeckEntriesByName(ctx, cardName).length >= 1;
+}
+
+export function deckContainsTransfiguredPredicate(
+  ctx: JourneyContext,
+  predicateId: string,
+  minCount: number = 1,
+): boolean {
+  return findTransfiguredDeckEntriesByPredicate(ctx, predicateId).length >= minCount;
 }
 
 export function canAffordEssence(ctx: JourneyContext, amount: number): boolean {

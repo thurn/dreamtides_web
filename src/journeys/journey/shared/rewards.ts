@@ -23,13 +23,11 @@
 //     (or `starterCardCount >= 1`), which surfaced a no-op option when
 //     the deck held different cards.
 //   - Transfiguration eligibility: rewards applying a SPECIFIC
-//     transfiguration (apply_named_transfiguration_to_card_name) route
-//     through `transfigurationHasEligibleTarget(ctx, transfigurationId)`,
-//     checking the named transfiguration's per-card eligibility filter
-//     against the deck. Other apply_named_transfiguration_* rewards keep
-//     the CLI's `predicateAdmitsTransfiguration` (a soundness check at
-//     rollParams time) and additionally gate on
-//     `deckContainsPredicate(ctx, predicateId, count)`.
+//     transfiguration to a named card require an untransfigured named entry
+//     that passes the transfiguration's per-card eligibility filter. Predicate
+//     random/all apply rewards gate on the same eligible untransfigured
+//     concrete deck entries that apply mutates; choice paths keep the
+//     `predicateAdmitsTransfiguration` soundness check for player selection.
 //   - Random-cards-from-deck rewards (modify_random_cards_to_types,
 //     make_random_cards_fast): CLI used `ctx.content.cards.length >= N`
 //     (catalog). Upgraded to `deckHasMinSize(ctx, N)` so the option is
@@ -51,9 +49,10 @@
 //     content lands. Mirrors the Task 8 treatment of the negative-side
 //     dreamwell costs.
 //   - Deck-size-N rewards (duplicate_chosen_cards, draw_X_and_duplicate_
-//     chosen, make_random_cards_reclaim, apply_random_transfigurations_to_
-//     random_cards): inline `deck.summary.totalCards >= N` upgraded to
-//     `deckHasMinSize` for consistency with the audit helpers.
+//     chosen, make_random_cards_reclaim): inline `deck.summary.totalCards >=
+//     N` upgraded to `deckHasMinSize` for consistency with the audit helpers.
+//     apply_random_transfigurations_to_random_cards counts untransfigured
+//     concrete deck entries so viability matches the apply target set.
 //   - Resource and route/shop rewards: viable = `() => true`, matching the
 //     CLI's stance. card_cost_reduction_for_X_battles is "always viable in
 //     kind" — the discount applies even with an empty deck.
@@ -82,8 +81,13 @@ import {
   findDeckEntriesByPredicate,
   findFirstDeckEntryIdByCardName,
   findFirstStarterDeckEntryId,
-  pickUniqueCardIds,
-} from "./costs";
+  findProjectedDeckEntry,
+  findUntransfiguredDeckEntriesByName,
+  findUntransfiguredDeckEntriesByPredicate,
+  findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration,
+  findUntransfiguredDeckEntryIds,
+} from "./deckEntries";
+import { pickUniqueCardIds } from "./costs";
 import { POSITIVE_DREAMWELL_CARDS } from "./dreamwell";
 import { PREDICATES, getPredicate } from "./predicates";
 import { quoteName } from "./text";
@@ -91,6 +95,9 @@ import type { Predicate, PredicateKind, Reward, TemplateParams } from "./types";
 import {
   deckContainsCardByName,
   deckContainsPredicate,
+  deckContainsUntransfiguredCardByName,
+  deckContainsUntransfiguredPredicate,
+  deckHasUntransfiguredMinSize,
   deckHasMinSize,
   transfigurationHasEligibleTarget,
 } from "./viability";
@@ -100,6 +107,10 @@ const POSITIVE_TEMPORARY_BATTLE_MAX = 3;
 const BOOST_SITE_DURATION_DREAMSCAPES = 3;
 
 type DreamsignForApply = Parameters<JourneyMutations["addDreamsign"]>[0];
+type TransfigurationForApply = Exclude<
+  Parameters<JourneyMutations["transfigureDeckEntry"]>[1],
+  null
+>;
 
 function applyDrawContext(ctx: JourneyContext): DrawContext {
   return {
@@ -200,6 +211,39 @@ function pickUniqueDeckEntryIds(
   }
 
   return picked;
+}
+
+function transfigurationForApply(transfiguration: string): TransfigurationForApply {
+  return transfiguration as TransfigurationForApply;
+}
+
+function pickRandomTransfigurationForEntry(
+  ctx: JourneyContext,
+  draw: DrawContext,
+  templateId: string,
+  label: string,
+  entryId: string,
+): TransfigurationForApply | undefined {
+  const projected = findProjectedDeckEntry(ctx, entryId);
+  const card = projected?.card;
+  if (card === undefined) {
+    warnSkippedCardApply(
+      templateId,
+      `catalog card for deck entry ${JSON.stringify(entryId)} was not found`,
+    );
+    return undefined;
+  }
+  const eligible = JOURNEY_TRANSFIGURATIONS.filter((transfiguration) =>
+    isCardEligibleForTransfiguration(transfiguration, card),
+  );
+  if (eligible.length === 0) {
+    warnSkippedCardApply(
+      templateId,
+      `no eligible transfigurations for deck entry ${JSON.stringify(entryId)}`,
+    );
+    return undefined;
+  }
+  return transfigurationForApply(pickFromList(draw, label, eligible));
 }
 
 function predicateAdmitsTransfiguration(
@@ -554,12 +598,30 @@ const applyNamedTransfigurationToCardName: Reward<ApplyNamedTransfigCardNamePara
     };
   },
   cec: () => CARD_CEC * 0.8,
-  // Transfiguration-eligibility audit: any deck card eligible for the named
-  // transfiguration suffices. The CLI shipped the same check inline; the
-  // helper centralises the eligibility traversal so the rule cannot drift.
-  viable: (p, ctx) => transfigurationHasEligibleTarget(ctx, p.transfiguration),
+  // The named card must have an untransfigured concrete entry that can receive
+  // the requested transfiguration; viability mirrors the apply target filter.
+  viable: (p, ctx) =>
+    deckContainsUntransfiguredCardByName(ctx, p.cardName, p.transfiguration),
   render: (p) => `Apply ${p.transfiguration} to ${quoteName(p.cardName)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryId = findUntransfiguredDeckEntriesByName(
+      ctx,
+      p.cardName,
+      (card) => isCardEligibleForTransfiguration(p.transfiguration, card),
+    )[0];
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "apply_named_transfiguration_to_card_name",
+        `untransfigured deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    mut.transfigureDeckEntry(
+      entryId,
+      transfigurationForApply(p.transfiguration),
+      "dream_journey:apply_named_transfiguration_to_card_name",
+    );
+  },
 };
 
 type ApplyNamedTransfigRandomPredParams = {
@@ -585,16 +647,47 @@ const applyNamedTransfigurationToRandomPredicateCards: Reward<ApplyNamedTransfig
       };
     },
     cec: (p) => cardPoolCEC(CARD_CEC * 0.6, p.count, getPredicate(p.predicateId)),
-    // Deck-scope leak fix (see chosen variant above).
+    // Viability mirrors the concrete eligible entries used by apply.
     viable: (p, ctx) =>
-      deckContainsPredicate(ctx, p.predicateId, p.count)
-      && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
+      deckContainsUntransfiguredPredicate(ctx, p.predicateId, p.count, p.transfiguration),
     render: (p) => {
       const pred = getPredicate(p.predicateId);
       const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
       return `Apply ${p.transfiguration} to ${p.count} random ${noun}`;
     },
-    apply: () => {},
+    apply: (p, ctx, mut) => {
+      const entryIds = findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration(
+        ctx,
+        p.predicateId,
+        p.transfiguration,
+      );
+      if (entryIds.length === 0) {
+        warnSkippedCardApply(
+          "apply_named_transfiguration_to_random_predicate_cards",
+          `no untransfigured deck entries matched predicate ${JSON.stringify(p.predicateId)}`,
+        );
+        return;
+      }
+      const pickedEntryIds = pickUniqueDeckEntryIds(
+        applyDrawContext(ctx),
+        "apply_named_transfiguration_to_random_predicate_cards:entry",
+        entryIds,
+        p.count,
+      );
+      if (pickedEntryIds.length < p.count) {
+        warnSkippedCardApply(
+          "apply_named_transfiguration_to_random_predicate_cards",
+          `only ${pickedEntryIds.length} deck entries matched predicate ${JSON.stringify(p.predicateId)} for count=${p.count}`,
+        );
+      }
+      for (const entryId of pickedEntryIds) {
+        mut.transfigureDeckEntry(
+          entryId,
+          transfigurationForApply(p.transfiguration),
+          "dream_journey:apply_named_transfiguration_to_random_predicate_cards",
+        );
+      }
+    },
   };
 
 type TransfigureRandomStartersParams = { count: number };
@@ -603,12 +696,49 @@ const transfigureRandomStarters: Reward<TransfigureRandomStartersParams> = {
   weight: 1.0,
   rollParams: (_ctx, draw) => ({ count: drawInt(draw, "transfig_random_starters:n", 1, 3) }),
   cec: (p) => CARD_CEC * 0.7 * p.count,
-  viable: (p, ctx) => starterCardCount(ctx) >= p.count,
+  viable: (p, ctx) => deckContainsUntransfiguredPredicate(ctx, "starter", p.count),
   render: (p) =>
     p.count === 1
       ? "Apply a random transfiguration to 1 random starter card"
       : `Apply random transfigurations to ${p.count} random starter cards`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryIds = findUntransfiguredDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "transfigure_random_starters",
+        "untransfigured starter deck entries were not found",
+      );
+      return;
+    }
+    const draw = applyDrawContext(ctx);
+    const pickedEntryIds = pickUniqueDeckEntryIds(
+      draw,
+      "transfigure_random_starters:entry",
+      entryIds,
+      p.count,
+    );
+    if (pickedEntryIds.length < p.count) {
+      warnSkippedCardApply(
+        "transfigure_random_starters",
+        `only ${pickedEntryIds.length} starter deck entries available for count=${p.count}`,
+      );
+    }
+    pickedEntryIds.forEach((entryId, index) => {
+      const transfiguration = pickRandomTransfigurationForEntry(
+        ctx,
+        draw,
+        "transfigure_random_starters",
+        `transfigure_random_starters:transfiguration:${index}`,
+        entryId,
+      );
+      if (transfiguration === undefined) return;
+      mut.transfigureDeckEntry(
+        entryId,
+        transfiguration,
+        "dream_journey:transfigure_random_starters",
+      );
+    });
+  },
 };
 
 type TransfigureAllStartersParams = Record<string, never>;
@@ -617,9 +747,34 @@ const transfigureAllStarters: Reward<TransfigureAllStartersParams> = {
   weight: 1.0,
   rollParams: () => ({}),
   cec: (_p, ctx) => CARD_CEC * 0.7 * Math.max(1, starterCardCount(ctx)),
-  viable: (_p, ctx) => starterCardCount(ctx) >= 1,
+  viable: (_p, ctx) => deckContainsUntransfiguredPredicate(ctx, "starter"),
   render: () => "Apply a random transfiguration to each starter card",
-  apply: () => {},
+  apply: (_p, ctx, mut) => {
+    const entryIds = findUntransfiguredDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "transfigure_all_starters",
+        "untransfigured starter deck entries were not found",
+      );
+      return;
+    }
+    const draw = applyDrawContext(ctx);
+    entryIds.forEach((entryId, index) => {
+      const transfiguration = pickRandomTransfigurationForEntry(
+        ctx,
+        draw,
+        "transfigure_all_starters",
+        `transfigure_all_starters:transfiguration:${index}`,
+        entryId,
+      );
+      if (transfiguration === undefined) return;
+      mut.transfigureDeckEntry(
+        entryId,
+        transfiguration,
+        "dream_journey:transfigure_all_starters",
+      );
+    });
+  },
 };
 
 type ChangeCardBecomeTypeParams = { cardName: string; cardTypePredicateId: string };
@@ -1482,13 +1637,32 @@ const applyNamedTransfigurationToAllPredicateCards: Reward<ApplyNamedTransfigAll
     const matches = cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length;
     return CARD_CEC * 0.6 * Math.max(1, matches) * getPredicate(p.predicateId).multiplier;
   },
-  // Deck-scope leak fix.
+  // Viability mirrors the concrete eligible entries used by apply.
   viable: (p, ctx) =>
-    deckContainsPredicate(ctx, p.predicateId)
-    && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
+    deckContainsUntransfiguredPredicate(ctx, p.predicateId, 1, p.transfiguration),
   render: (p) =>
     `Apply ${p.transfiguration} to all ${getPredicate(p.predicateId).text.plural}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryIds = findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration(
+      ctx,
+      p.predicateId,
+      p.transfiguration,
+    );
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "apply_named_transfiguration_to_all_predicate_cards",
+        `no untransfigured deck entries matched predicate ${JSON.stringify(p.predicateId)}`,
+      );
+      return;
+    }
+    for (const entryId of entryIds) {
+      mut.transfigureDeckEntry(
+        entryId,
+        transfigurationForApply(p.transfiguration),
+        "dream_journey:apply_named_transfiguration_to_all_predicate_cards",
+      );
+    }
+  },
 };
 
 type TransfigureChosenStartersParams = { count: number };
@@ -1555,12 +1729,49 @@ const applyRandomTransfigurationsToRandomCards: Reward<ApplyRandomTransfiguratio
     rollParams: (_ctx, draw) => ({ count: drawInt(draw, "random_transfig_random:n", 1, 3) }),
     cec: (p) => CARD_CEC * 0.5 * p.count,
     // Deck-size-N.
-    viable: (p, ctx) => deckHasMinSize(ctx, p.count),
+    viable: (p, ctx) => deckHasUntransfiguredMinSize(ctx, p.count),
     render: (p) =>
       p.count === 1
         ? "Apply a random transfiguration to 1 random card"
         : `Apply random transfigurations to ${p.count} random cards`,
-    apply: () => {},
+    apply: (p, ctx, mut) => {
+      const entryIds = findUntransfiguredDeckEntryIds(ctx);
+      if (entryIds.length === 0) {
+        warnSkippedCardApply(
+          "apply_random_transfigurations_to_random_cards",
+          "untransfigured deck entries were not found",
+        );
+        return;
+      }
+      const draw = applyDrawContext(ctx);
+      const pickedEntryIds = pickUniqueDeckEntryIds(
+        draw,
+        "apply_random_transfigurations_to_random_cards:entry",
+        entryIds,
+        p.count,
+      );
+      if (pickedEntryIds.length < p.count) {
+        warnSkippedCardApply(
+          "apply_random_transfigurations_to_random_cards",
+          `only ${pickedEntryIds.length} deck entries available for count=${p.count}`,
+        );
+      }
+      pickedEntryIds.forEach((entryId, index) => {
+        const transfiguration = pickRandomTransfigurationForEntry(
+          ctx,
+          draw,
+          "apply_random_transfigurations_to_random_cards",
+          `apply_random_transfigurations_to_random_cards:transfiguration:${index}`,
+          entryId,
+        );
+        if (transfiguration === undefined) return;
+        mut.transfigureDeckEntry(
+          entryId,
+          transfiguration,
+          "dream_journey:apply_random_transfigurations_to_random_cards",
+        );
+      });
+    },
   };
 
 type TransformDreamsignToNamedParams = { name: string };

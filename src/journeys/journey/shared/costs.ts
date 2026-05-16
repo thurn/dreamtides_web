@@ -9,12 +9,12 @@
 // The viability audit (Task 8) walked every template and tightened `viable`
 // where the CLI shipped a stand-in:
 //
-//   - Named-card templates (purge_named_card, transform_card_to_random_pool,
-//     remove_transfiguration_from_card) route through
-//     `deckContainsCardByName(ctx, p.cardName)`. The chosen card is rolled
-//     from the deck, but viability must independently verify the deck still
-//     holds a card with that name; otherwise a stale rollParams value would
-//     surface a no-op option.
+//   - Named-card templates (purge_named_card, transform_card_to_random_pool)
+//     route through `deckContainsCardByName(ctx, p.cardName)`. The chosen card
+//     is rolled from the deck, but viability must independently verify the
+//     deck still holds a card with that name; otherwise a stale rollParams
+//     value would surface a no-op option. remove_transfiguration_from_card
+//     additionally requires a named entry with active transfiguration state.
 //   - `purge_all_duplicate_cards` gates on `deckHasDuplicateStack`. A deck
 //     of N unique cards has no duplicate stack to purge, so the CLI's
 //     `totalCards >= 2` smell offered a no-op option.
@@ -22,9 +22,8 @@
 //     `deckHasMinSize(ctx, p.drawCount)`.
 //   - Predicate-keyed templates (purge_random_predicate_card,
 //     purge_chosen_predicate_card, remove_transfigurations_from_random_
-//     predicate) route through `deckContainsPredicate` and pin the
-//     `source: "deck"` scope, so a predicate that matches catalog-only
-//     cards no longer leaks a viable option.
+//     predicate) route through deck-entry-aware predicate helpers and pin the
+//     `source: "deck"` scope, so catalog-only predicate matches are excluded.
 //   - Dreamsign templates use `activeDreamsignCount(ctx) >= 1` via the
 //     `activeDreamsignCount` import from content.
 //   - Dreamwell-keyed templates (set_starting_dreamwell_negative,
@@ -52,6 +51,12 @@ import {
   omenAmount,
   pickFromList,
 } from "./content";
+import {
+  findDeckEntriesByName,
+  findDeckEntriesByPredicate,
+  findDeckEntryTransfiguration,
+  findFirstDeckEntryIdByCardName,
+} from "./deckEntries";
 import { NEGATIVE_DREAMWELL_CARDS } from "./dreamwell";
 import { PREDICATES, getPredicate } from "./predicates";
 import { quoteName, withLockedPrefix } from "./text";
@@ -59,6 +64,8 @@ import type { Cost, Predicate } from "./types";
 import {
   deckContainsCardByName,
   deckContainsPredicate,
+  deckContainsTransfiguredCardByName,
+  deckContainsTransfiguredPredicate,
   deckHasDuplicateStack,
   deckHasMinSize,
 } from "./viability";
@@ -127,43 +134,22 @@ export function pickUniqueCardIds(
   return picked;
 }
 
-export function findFirstDeckEntryIdByCardName(
-  ctx: JourneyContext,
-  cardName: string,
-  filter: (card: CardContent) => boolean = () => true,
-): string | undefined {
-  return findDeckEntriesByName(ctx, cardName, filter)[0];
-}
-
-export function findDeckEntriesByName(
-  ctx: JourneyContext,
-  cardName: string,
-  filter: (card: CardContent) => boolean = () => true,
+function pickUniqueDeckEntryIds(
+  draw: DrawContext,
+  label: string,
+  entryIds: readonly string[],
+  count: number,
 ): string[] {
-  const matchingIds = new Set(
-    ctx.content.cards
-      .filter((card) => card.name === cardName && filter(card))
-      .map((card) => card.id),
-  );
-  return ctx.state.quest.deck.entries.flatMap((candidate) =>
-    matchingIds.has(candidate.cardId) ? [...(candidate.entryIds ?? [])] : [],
-  );
-}
+  const remaining = [...entryIds];
+  const picked: string[] = [];
 
-export function findDeckEntriesByPredicate(
-  ctx: JourneyContext,
-  predicateId: string,
-): string[] {
-  const predicate = getPredicate(predicateId);
-  const deckScopedPredicate = { ...predicate.cardPredicate, source: "deck" as const };
-  const matchingIds = new Set(cardMatches(ctx, deckScopedPredicate).map((card) => card.id));
-  return ctx.state.quest.deck.entries.flatMap((candidate) =>
-    matchingIds.has(candidate.cardId) ? [...(candidate.entryIds ?? [])] : [],
-  );
-}
+  for (let i = 0; i < count && remaining.length > 0; i += 1) {
+    const entryId = pickFromList(draw, `${label}:${i}`, remaining);
+    picked.push(entryId);
+    remaining.splice(remaining.indexOf(entryId), 1);
+  }
 
-export function findFirstStarterDeckEntryId(ctx: JourneyContext): string | undefined {
-  return findDeckEntriesByPredicate(ctx, "starter")[0];
+  return picked;
 }
 
 function warnSkippedCardApply(templateId: string, reason: string): void {
@@ -763,14 +749,25 @@ const removeTransfigurationFromCard: Cost<RemoveTransfigCardParams> = {
     };
   },
   cec: () => CARD_CEC * 0.6,
-  // The chosen card is named by params; viability requires the deck to
-  // contain a card with that name. The template remains weakly useful (a
-  // no-op if the named card has no transfiguration), but at least the named
-  // card must actually be in the deck.
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
+  viable: (p, ctx) => deckContainsTransfiguredCardByName(ctx, p.cardName),
   locked: () => false,
   render: (p) => `Remove the transfiguration from ${quoteName(p.cardName)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const matchingEntryIds = findDeckEntriesByName(ctx, p.cardName);
+    const entryId = matchingEntryIds.find((candidate) =>
+      findDeckEntryTransfiguration(ctx, candidate) != null
+    );
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "remove_transfiguration_from_card",
+        matchingEntryIds.length === 0
+          ? `deck entry for card name ${JSON.stringify(p.cardName)} was not found`
+          : `no named deck entries for card name ${JSON.stringify(p.cardName)} have a transfiguration`,
+      );
+      return;
+    }
+    mut.transfigureDeckEntry(entryId, null, "dream_journey:remove_transfiguration_from_card");
+  },
 };
 
 type RemoveTransfigRandomPredParams = { predicateId: string; count: number };
@@ -782,9 +779,7 @@ const removeTransfigurationsFromRandomPredicate: Cost<RemoveTransfigRandomPredPa
     count: drawInt(draw, "rem_transfig_rand:n", 1, 3),
   }),
   cec: (p) => cardPoolCEC(CARD_CEC * 0.5, p.count, getPredicate(p.predicateId)),
-  // Upgrade from the CLI's catalog-leaking `cardMatches(...) >= p.count` to
-  // the deck-scoped helper.
-  viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId, p.count),
+  viable: (p, ctx) => deckContainsTransfiguredPredicate(ctx, p.predicateId, p.count),
   locked: () => false,
   render: (p) => {
     const noun = p.count === 1
@@ -792,7 +787,37 @@ const removeTransfigurationsFromRandomPredicate: Cost<RemoveTransfigRandomPredPa
       : getPredicate(p.predicateId).text.plural;
     return `Remove the transfiguration${p.count === 1 ? "" : "s"} from ${p.count} random ${noun}`;
   },
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId).filter(
+      (entryId) => findDeckEntryTransfiguration(ctx, entryId) != null,
+    );
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "remove_transfigurations_from_random_predicate",
+        `no deck entries matched predicate ${JSON.stringify(p.predicateId)}`,
+      );
+      return;
+    }
+    const pickedEntryIds = pickUniqueDeckEntryIds(
+      applyDrawContext(ctx),
+      "remove_transfigurations_from_random_predicate:entry",
+      entryIds,
+      p.count,
+    );
+    if (pickedEntryIds.length < p.count) {
+      warnSkippedCardApply(
+        "remove_transfigurations_from_random_predicate",
+        `only ${pickedEntryIds.length} deck entries matched predicate ${JSON.stringify(p.predicateId)} for count=${p.count}`,
+      );
+    }
+    for (const entryId of pickedEntryIds) {
+      mut.transfigureDeckEntry(
+        entryId,
+        null,
+        "dream_journey:remove_transfigurations_from_random_predicate",
+      );
+    }
+  },
 };
 
 type DrawXPurgeChosenParams = { drawCount: number };

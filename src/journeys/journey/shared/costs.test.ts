@@ -52,7 +52,12 @@ function emptyContext(overrides: {
   essence?: number;
   maxEssence?: number;
   omens?: number;
-  deckEntries?: readonly { cardId: string; copies: number }[];
+  deckEntries?: readonly {
+    cardId: string;
+    copies: number;
+    entryIds?: readonly string[];
+    entryTransfigurations?: readonly (string | null)[];
+  }[];
   activeDreamsigns?: readonly { dreamsignId: string }[];
   banes?: readonly { baneName: string }[];
   cards?: ContentBundle["cards"];
@@ -69,7 +74,13 @@ function emptyContext(overrides: {
     },
     selectedTides: [],
     deck: {
-      entries: deckEntries.map((e) => ({ cardId: e.cardId, copies: e.copies })),
+      entries: deckEntries.map((e) => ({
+        cardId: e.cardId,
+        copies: e.copies,
+        entryIds: e.entryIds
+          ?? Array.from({ length: e.copies }, (_, index) => `${e.cardId}-${index + 1}`),
+        entryTransfigurations: e.entryTransfigurations,
+      })),
       summary: {
         totalCards,
         starterCards: 0,
@@ -311,11 +322,70 @@ describe("deck-scope viability audits", () => {
     for (const id of [
       "purge_named_card",
       "transform_card_to_random_pool",
-      "remove_transfiguration_from_card",
     ]) {
       const t = getCost(id);
       expect(t.viable({ cardName: "Steady Burn" }, ctx), id).toBe(true);
     }
+  });
+
+  it("remove_transfiguration_from_card requires a transfigured named entry", () => {
+    const STEADY_BURN = card({ id: "steady-burn", name: "Steady Burn" });
+    const t = getCost("remove_transfiguration_from_card");
+    const untransfigured = emptyContext({
+      cards: [STEADY_BURN],
+      deckEntries: [
+        {
+          cardId: STEADY_BURN.id,
+          copies: 1,
+          entryTransfigurations: [null],
+        },
+      ],
+    });
+    const partiallyTransfigured = emptyContext({
+      cards: [STEADY_BURN],
+      deckEntries: [
+        {
+          cardId: STEADY_BURN.id,
+          copies: 2,
+          entryTransfigurations: [null, "Viridian"],
+        },
+      ],
+    });
+    expect(t.viable({ cardName: "Steady Burn" }, untransfigured)).toBe(false);
+    expect(t.viable({ cardName: "Steady Burn" }, partiallyTransfigured)).toBe(true);
+  });
+
+  it("remove_transfigurations_from_random_predicate requires enough transfigured entries", () => {
+    const t = getCost("remove_transfigurations_from_random_predicate");
+    const ctx = emptyContext({
+      cards: [WARRIOR_CARD],
+      deckEntries: [
+        {
+          cardId: WARRIOR_CARD.id,
+          copies: 3,
+          entryTransfigurations: ["Golden", null, "Viridian"],
+        },
+      ],
+    });
+    expect(t.viable({ predicateId: "warriors", count: 3 }, ctx)).toBe(false);
+    expect(t.viable({ predicateId: "warriors", count: 2 }, ctx)).toBe(true);
+  });
+
+  it("remove_transfigurations_from_random_predicate resolves the transfigured predicate from entry state", () => {
+    const t = getCost("remove_transfigurations_from_random_predicate");
+    const ctx = emptyContext({
+      cards: [WARRIOR_CARD],
+      deckEntries: [
+        {
+          cardId: WARRIOR_CARD.id,
+          copies: 2,
+          entryTransfigurations: ["Golden", null],
+        },
+      ],
+    });
+
+    expect(t.viable({ predicateId: "transfigured", count: 2 }, ctx)).toBe(false);
+    expect(t.viable({ predicateId: "transfigured", count: 1 }, ctx)).toBe(true);
   });
 });
 
