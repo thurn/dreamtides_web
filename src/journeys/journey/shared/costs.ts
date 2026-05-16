@@ -40,6 +40,7 @@
 
 import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
+import type { CardContent } from "../../content/types";
 import type { JourneyContext } from "../context";
 import { CARD_CEC, STAGE_MULTIPLIER, cardPoolCEC } from "./cec";
 import {
@@ -106,6 +107,54 @@ function resolveBaneCardId(ctx: JourneyContext, baneName: string): string | unde
 // apply step). Future tasks may plumb a labeled-RNG through the apply path.
 function rollBaneName(): string {
   return BANE_NAMES[Math.floor(Math.random() * BANE_NAMES.length)];
+}
+
+export function pickUniqueCardIds(
+  draw: DrawContext,
+  label: string,
+  pool: readonly CardContent[],
+  count: number,
+): string[] {
+  const remaining = [...pool];
+  const picked: string[] = [];
+
+  for (let i = 0; i < count && remaining.length > 0; i += 1) {
+    const card = pickFromList(draw, `${label}:${i}`, remaining);
+    picked.push(card.id);
+    remaining.splice(remaining.findIndex((candidate) => candidate.id === card.id), 1);
+  }
+
+  return picked;
+}
+
+export function findFirstDeckEntryIdByCardName(
+  ctx: JourneyContext,
+  cardName: string,
+  filter: (card: CardContent) => boolean = () => true,
+): string | undefined {
+  const matchingIds = new Set(
+    ctx.content.cards
+      .filter((card) => card.name === cardName && filter(card))
+      .map((card) => card.id),
+  );
+  const entry = ctx.state.quest.deck.entries.find(
+    (candidate) => matchingIds.has(candidate.cardId) && (candidate.entryIds?.length ?? 0) > 0,
+  );
+  return entry?.entryIds?.[0];
+}
+
+export function findFirstStarterDeckEntryId(ctx: JourneyContext): string | undefined {
+  const starterIds = new Set(
+    ctx.content.cards.filter((card) => card.rarity === "Starter").map((card) => card.id),
+  );
+  const entry = ctx.state.quest.deck.entries.find(
+    (candidate) => starterIds.has(candidate.cardId) && (candidate.entryIds?.length ?? 0) > 0,
+  );
+  return entry?.entryIds?.[0];
+}
+
+function warnSkippedCardApply(templateId: string, reason: string): void {
+  console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
 }
 
 type PayEssenceParams = { x: number };
@@ -315,7 +364,24 @@ const gainRandomCardsFromPool: Cost<GainRandomFromPoolParams> = {
   viable: () => true,
   locked: () => false,
   render: (p) => `Gain ${p.count} random card${p.count === 1 ? "" : "s"} from the card pool`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const allCatalogCards = cardMatches(ctx, {});
+    const cardIds = pickUniqueCardIds(
+      applyDrawContext(ctx),
+      "gain_random_cards_from_pool:card",
+      allCatalogCards,
+      p.count,
+    );
+    if (cardIds.length < p.count) {
+      warnSkippedCardApply(
+        "gain_random_cards_from_pool",
+        `only ${cardIds.length} catalog cards available for count=${p.count}`,
+      );
+    }
+    for (const cardId of cardIds) {
+      mut.addCardById(cardId, "dream_journey:gain_random_cards_from_pool");
+    }
+  },
 };
 
 type TransformCardToRandomParams = { cardName: string };
@@ -337,7 +403,29 @@ const transformCardToRandomPool: Cost<TransformCardToRandomParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   locked: () => false,
   render: (p) => `Transform ${quoteName(p.cardName)} into a random card from the pool`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryId = findFirstDeckEntryIdByCardName(ctx, p.cardName);
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "transform_card_to_random_pool",
+        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    const allCatalogCards = cardMatches(ctx, {});
+    const cardId = pickUniqueCardIds(
+      applyDrawContext(ctx),
+      "transform_card_to_random_pool:card",
+      allCatalogCards,
+      1,
+    )[0];
+    if (cardId === undefined) {
+      warnSkippedCardApply("transform_card_to_random_pool", "catalog card pool is empty");
+      return;
+    }
+    mut.removeDeckEntry(entryId, "dream_journey:transform_card_to_random_pool");
+    mut.addCardById(cardId, "dream_journey:transform_card_to_random_pool");
+  },
 };
 
 type PurgeAllDuplicatesParams = Record<string, never>;
@@ -549,7 +637,24 @@ const gainAdditionalStarters: Cost<GainAdditionalStartersParams> = {
   locked: () => false,
   render: (p) =>
     p.count === 1 ? "Gain a random starter card" : `Gain ${p.count} random starter cards`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const starterCards = cardMatches(ctx, { rarity: "Starter" });
+    const cardIds = pickUniqueCardIds(
+      applyDrawContext(ctx),
+      "gain_additional_starters:card",
+      starterCards,
+      p.count,
+    );
+    if (cardIds.length < p.count) {
+      warnSkippedCardApply(
+        "gain_additional_starters",
+        `only ${cardIds.length} starter cards available for count=${p.count}`,
+      );
+    }
+    for (const cardId of cardIds) {
+      mut.addCardById(cardId, "dream_journey:gain_additional_starters");
+    }
+  },
 };
 
 type StartingDreamwellNegParams = { cardName: string; battles: number };

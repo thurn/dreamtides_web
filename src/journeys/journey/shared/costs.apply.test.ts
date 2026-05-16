@@ -35,10 +35,20 @@ function buildContext(overrides: {
   maxEssence?: number;
   omens?: number;
   cards?: readonly CardContent[];
+  deckEntries?: readonly {
+    readonly cardId: string;
+    readonly copies: number;
+    readonly entryIds?: readonly string[];
+  }[];
   dreamsigns?: readonly DreamsignContent[];
   activeDreamsigns?: readonly { readonly dreamsignId: string }[];
   dreamsignPoolIds?: readonly string[];
 } = {}): JourneyContext {
+  const deckEntries = [...(overrides.deckEntries ?? [])];
+  const totalCards = deckEntries.reduce((total, entry) => total + entry.copies, 0);
+  const starterIds = new Set(
+    (overrides.cards ?? []).filter((card) => card.rarity === "Starter").map((card) => card.id),
+  );
   const quest: QuestStateProjection = {
     seed: "costs-apply-test",
     resources: {
@@ -49,8 +59,14 @@ function buildContext(overrides: {
     },
     selectedTides: [],
     deck: {
-      entries: [],
-      summary: { totalCards: 0, starterCards: 0, uniqueCards: 0 },
+      entries: deckEntries,
+      summary: {
+        totalCards,
+        starterCards: deckEntries
+          .filter((entry) => starterIds.has(entry.cardId))
+          .reduce((total, entry) => total + entry.copies, 0),
+        uniqueCards: deckEntries.length,
+      },
     },
     draftPool: [],
     activeDreamsigns: overrides.activeDreamsigns ?? [],
@@ -64,6 +80,55 @@ function buildContext(overrides: {
     dreamsigns: [...(overrides.dreamsigns ?? [])],
   };
   return { content, contentVersion: "test", state: { quest } };
+}
+
+function cardFixture(): readonly CardContent[] {
+  return [
+    {
+      id: "starter-alpha",
+      name: "Starter Alpha",
+      tides: [],
+      rarity: "Starter",
+      cardType: "Event",
+      energyCost: 0,
+      spark: "",
+      cardNumber: 1,
+      raw: {},
+    },
+    {
+      id: "starter-beta",
+      name: "Starter Beta",
+      tides: [],
+      rarity: "Starter",
+      cardType: "Character",
+      energyCost: 0,
+      spark: "",
+      cardNumber: 2,
+      raw: {},
+    },
+    {
+      id: "event-alpha",
+      name: "Event Alpha",
+      tides: [],
+      rarity: "common",
+      cardType: "Event",
+      energyCost: 1,
+      spark: 1,
+      cardNumber: 3,
+      raw: {},
+    },
+    {
+      id: "event-beta",
+      name: "Event Beta",
+      tides: [],
+      rarity: "common",
+      cardType: "Event",
+      energyCost: 2,
+      spark: 2,
+      cardNumber: 4,
+      raw: {},
+    },
+  ];
 }
 
 // Minimal dreamsign-content fixture: two journey-internal `DreamsignContent`
@@ -291,6 +356,64 @@ describe("Bane cost apply", () => {
         args: ["Despair", 1, 3, "dream_journey:gain_named_banes_for_X_battles"],
       },
     ]);
+  });
+});
+
+describe("Card cost apply (non-choice)", () => {
+  it("gain_random_cards_from_pool records exactly count catalog card additions", () => {
+    const t = getCost("gain_random_cards_from_pool");
+    const cards = cardFixture();
+    const ctx = buildContext({ cards });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ count: 2 }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      { method: "addCardById", args: ["event-alpha", "dream_journey:gain_random_cards_from_pool"] },
+      { method: "addCardById", args: ["event-beta", "dream_journey:gain_random_cards_from_pool"] },
+    ]);
+    const catalogIds = new Set(cards.map((card) => card.id));
+    expect(calls.every((call) => catalogIds.has(call.args[0] as string))).toBe(true);
+  });
+
+  it("transform_card_to_random_pool removes the named deck entry before adding a rolled catalog card", () => {
+    const t = getCost("transform_card_to_random_pool");
+    const cards = cardFixture();
+    const ctx = buildContext({
+      cards,
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ cardName: "Event Alpha" }, ctx, mut, undefined);
+
+    expect(calls).toHaveLength(2);
+    expect(calls[0]).toEqual({
+      method: "removeDeckEntry",
+      args: ["deck-event-alpha", "dream_journey:transform_card_to_random_pool"],
+    });
+    expect(calls[1]).toEqual({
+      method: "addCardById",
+      args: ["starter-beta", "dream_journey:transform_card_to_random_pool"],
+    });
+    expect(new Set(cards.map((card) => card.id)).has(calls[1].args[0] as string)).toBe(true);
+  });
+
+  it("gain_additional_starters records one starter catalog card addition", () => {
+    const t = getCost("gain_additional_starters");
+    const cards = cardFixture();
+    const ctx = buildContext({ cards });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ count: 1 }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      { method: "addCardById", args: ["starter-beta", "dream_journey:gain_additional_starters"] },
+    ]);
+    const starterIds = new Set(
+      cards.filter((card) => card.rarity === "Starter").map((card) => card.id),
+    );
+    expect(starterIds.has(calls[0].args[0] as string)).toBe(true);
   });
 });
 

@@ -21,7 +21,11 @@ export type QuestStateProjection = {
   };
   readonly selectedTides: readonly string[];
   readonly deck: {
-    readonly entries: readonly { readonly cardId: string; readonly copies: number }[];
+    readonly entries: readonly {
+      readonly cardId: string;
+      readonly copies: number;
+      readonly entryIds?: readonly string[];
+    }[];
     readonly summary: {
       readonly totalCards: number;
       readonly starterCards: number;

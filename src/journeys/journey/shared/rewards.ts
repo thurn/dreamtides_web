@@ -77,6 +77,11 @@ import {
   starterCardCount,
   transfigurationsEligibleForPredicate,
 } from "./content";
+import {
+  findFirstDeckEntryIdByCardName,
+  findFirstStarterDeckEntryId,
+  pickUniqueCardIds,
+} from "./costs";
 import { POSITIVE_DREAMWELL_CARDS } from "./dreamwell";
 import { PREDICATES, getPredicate } from "./predicates";
 import { quoteName } from "./text";
@@ -192,6 +197,14 @@ function predicateAdmitsTransfiguration(
     return true;
   }
   return matches.every((card) => isCardEligibleForTransfiguration(transfiguration, card));
+}
+
+function resolveCardIdByName(ctx: JourneyContext, name: string): string | undefined {
+  return ctx.content.cards.find((card) => card.name === name)?.id;
+}
+
+function warnSkippedCardApply(templateId: string, reason: string): void {
+  console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
 }
 
 // Inclusive integer roll for resource-range apply. Wave 1 does not plumb a
@@ -350,7 +363,25 @@ const gainRandomPredicateCards: Reward<GainRandomCardsParams> = {
     const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
     return `Gain ${p.count} random ${noun}`;
   },
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const predicate = getPredicate(p.predicateId);
+    const pool = cardMatches(ctx, predicate.cardPredicate ?? {});
+    const cardIds = pickUniqueCardIds(
+      applyDrawContext(ctx),
+      "gain_random_predicate_cards:card",
+      pool,
+      p.count,
+    );
+    if (cardIds.length < p.count) {
+      warnSkippedCardApply(
+        "gain_random_predicate_cards",
+        `only ${cardIds.length} cards matched predicate ${JSON.stringify(p.predicateId)} for count=${p.count}`,
+      );
+    }
+    for (const cardId of cardIds) {
+      mut.addCardById(cardId, "dream_journey:gain_random_predicate_cards");
+    }
+  },
 };
 
 type DraftPredicateParams = { predicateId: string };
@@ -403,7 +434,17 @@ const gainNamedCard: Reward<GainNamedCardParams> = {
   cec: () => CARD_CEC * STAGE_MULTIPLIER,
   viable: (_p, ctx) => namedCardGainPool(ctx).length > 0,
   render: (p) => `Gain ${quoteName(p.name)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const cardId = resolveCardIdByName(ctx, p.name);
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        "gain_named_card",
+        `catalog card named ${JSON.stringify(p.name)} was not found`,
+      );
+      return;
+    }
+    mut.addCardById(cardId, "dream_journey:gain_named_card");
+  },
 };
 
 const CARD_TYPE_PREDICATE_IDS = ["warriors", "survivors", "spirit_animals"] as const;
@@ -727,7 +768,23 @@ const transformStarterIntoNamedCard: Reward<TransformStarterParams> = {
   cec: () => CARD_CEC * 0.8,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1 && ctx.content.cards.length > 0,
   render: (p) => `Choose a starter card to transform into ${quoteName(p.newCardName)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryId = findFirstStarterDeckEntryId(ctx);
+    if (entryId === undefined) {
+      warnSkippedCardApply("transform_starter_into_named_card", "starter deck entry was not found");
+      return;
+    }
+    const cardId = resolveCardIdByName(ctx, p.newCardName);
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        "transform_starter_into_named_card",
+        `catalog card named ${JSON.stringify(p.newCardName)} was not found`,
+      );
+      return;
+    }
+    mut.removeDeckEntry(entryId, "dream_journey:transform_starter_into_named_card");
+    mut.addCardById(cardId, "dream_journey:transform_starter_into_named_card");
+  },
 };
 
 type TransformDeckCardParams = { oldCardName: string; newCardName: string };
@@ -751,7 +808,26 @@ const transformCardInDeckIntoNamed: Reward<TransformDeckCardParams> = {
   viable: (p, ctx) =>
     deckContainsCardByName(ctx, p.oldCardName) && ctx.content.cards.length > 0,
   render: (p) => `Transform ${quoteName(p.oldCardName)} into ${quoteName(p.newCardName)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryId = findFirstDeckEntryIdByCardName(ctx, p.oldCardName);
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "transform_card_in_deck_into_named",
+        `deck entry for card name ${JSON.stringify(p.oldCardName)} was not found`,
+      );
+      return;
+    }
+    const cardId = resolveCardIdByName(ctx, p.newCardName);
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        "transform_card_in_deck_into_named",
+        `catalog card named ${JSON.stringify(p.newCardName)} was not found`,
+      );
+      return;
+    }
+    mut.removeDeckEntry(entryId, "dream_journey:transform_card_in_deck_into_named");
+    mut.addCardById(cardId, "dream_journey:transform_card_in_deck_into_named");
+  },
 };
 
 type TransformPredCardParams = { predicateId: string; newCardName: string };

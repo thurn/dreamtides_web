@@ -13,7 +13,7 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-import type { ContentBundle, DreamsignContent } from "../../content/types";
+import type { CardContent, ContentBundle, DreamsignContent } from "../../content/types";
 import { createRecordingMutations } from "../../apply/testing/recordingMutations";
 import type { JourneyContext, QuestStateProjection } from "../context";
 import type { Dreamsign } from "../../../types/quest";
@@ -24,10 +24,21 @@ function buildContext(overrides: {
   essence?: number;
   maxEssence?: number;
   omens?: number;
+  cards?: readonly CardContent[];
+  deckEntries?: readonly {
+    readonly cardId: string;
+    readonly copies: number;
+    readonly entryIds?: readonly string[];
+  }[];
   dreamsigns?: readonly DreamsignContent[];
   activeDreamsigns?: readonly { readonly dreamsignId: string }[];
   dreamsignPoolIds?: readonly string[];
 } = {}): JourneyContext {
+  const deckEntries = [...(overrides.deckEntries ?? [])];
+  const totalCards = deckEntries.reduce((total, entry) => total + entry.copies, 0);
+  const starterIds = new Set(
+    (overrides.cards ?? []).filter((card) => card.rarity === "Starter").map((card) => card.id),
+  );
   const quest: QuestStateProjection = {
     seed: "rewards-apply-test",
     resources: {
@@ -38,8 +49,14 @@ function buildContext(overrides: {
     },
     selectedTides: [],
     deck: {
-      entries: [],
-      summary: { totalCards: 0, starterCards: 0, uniqueCards: 0 },
+      entries: deckEntries,
+      summary: {
+        totalCards,
+        starterCards: deckEntries
+          .filter((entry) => starterIds.has(entry.cardId))
+          .reduce((total, entry) => total + entry.copies, 0),
+        uniqueCards: deckEntries.length,
+      },
     },
     draftPool: [],
     activeDreamsigns: overrides.activeDreamsigns ?? [],
@@ -48,11 +65,60 @@ function buildContext(overrides: {
     dreamcaller: { id: "" },
   };
   const content: ContentBundle = {
-    cards: [],
+    cards: [...(overrides.cards ?? [])],
     dreamcallers: [],
     dreamsigns: [...(overrides.dreamsigns ?? [])],
   };
   return { content, contentVersion: "test", state: { quest } };
+}
+
+function cardFixture(): readonly CardContent[] {
+  return [
+    {
+      id: "starter-alpha",
+      name: "Starter Alpha",
+      tides: [],
+      rarity: "Starter",
+      cardType: "Event",
+      energyCost: 0,
+      spark: "",
+      cardNumber: 1,
+      raw: {},
+    },
+    {
+      id: "starter-beta",
+      name: "Starter Beta",
+      tides: [],
+      rarity: "Starter",
+      cardType: "Character",
+      energyCost: 0,
+      spark: "",
+      cardNumber: 2,
+      raw: {},
+    },
+    {
+      id: "event-alpha",
+      name: "Event Alpha",
+      tides: [],
+      rarity: "common",
+      cardType: "Event",
+      energyCost: 1,
+      spark: 1,
+      cardNumber: 3,
+      raw: {},
+    },
+    {
+      id: "event-beta",
+      name: "Event Beta",
+      tides: [],
+      rarity: "common",
+      cardType: "Event",
+      energyCost: 2,
+      spark: 2,
+      cardNumber: 4,
+      raw: {},
+    },
+  ];
 }
 
 // Minimal dreamsign-content fixture mirroring `costs.apply.test.ts`. Tests
@@ -196,6 +262,177 @@ describe("Bane reward apply", () => {
     expect(calls).toEqual([
       { method: "purgeAllBaneCards", args: ["dream_journey:purge_all_banes"] },
     ]);
+  });
+});
+
+describe("Card reward apply (non-choice)", () => {
+  it("gain_random_predicate_cards records count distinct catalog card additions matching the predicate", () => {
+    const t = getReward("gain_random_predicate_cards");
+    const cards = cardFixture();
+    const ctx = buildContext({ cards });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ predicateId: "events", count: 2 }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "addCardById",
+        args: ["starter-alpha", "dream_journey:gain_random_predicate_cards"],
+      },
+      { method: "addCardById", args: ["event-beta", "dream_journey:gain_random_predicate_cards"] },
+    ]);
+    const ids = calls.map((call) => call.args[0] as string);
+    expect(new Set(ids).size).toBe(2);
+    const eventIds = new Set(
+      cards.filter((card) => card.cardType === "Event").map((card) => card.id),
+    );
+    expect(ids.every((id) => eventIds.has(id))).toBe(true);
+  });
+
+  it("gain_named_card resolves the literal card name to its catalog id", () => {
+    const t = getReward("gain_named_card");
+    const ctx = buildContext({ cards: cardFixture() });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ name: "Event Beta" }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      { method: "addCardById", args: ["event-beta", "dream_journey:gain_named_card"] },
+    ]);
+  });
+
+  it("transform_starter_into_named_card removes a starter deck entry before adding the target card", () => {
+    const t = getReward("transform_starter_into_named_card");
+    const cards = cardFixture();
+    const ctx = buildContext({
+      cards,
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ newCardName: "Event Beta" }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-alpha", "dream_journey:transform_starter_into_named_card"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-beta", "dream_journey:transform_starter_into_named_card"],
+      },
+    ]);
+  });
+
+  it("transform_starter_into_named_card warns and skips when no starter deck entry exists", () => {
+    const t = getReward("transform_starter_into_named_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ newCardName: "Event Beta" }, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("transform_starter_into_named_card warns and skips when the target card is missing", () => {
+    const t = getReward("transform_starter_into_named_card");
+    const ctx = buildContext({
+      cards: cardFixture().filter((card) => card.name !== "Event Beta"),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ newCardName: "Event Beta" }, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("transform_card_in_deck_into_named removes the named deck entry before adding the target card", () => {
+    const t = getReward("transform_card_in_deck_into_named");
+    const cards = cardFixture();
+    const ctx = buildContext({
+      cards,
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ oldCardName: "Event Alpha", newCardName: "Event Beta" }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:transform_card_in_deck_into_named"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-beta", "dream_journey:transform_card_in_deck_into_named"],
+      },
+    ]);
+  });
+
+  it("transform_card_in_deck_into_named warns and skips when the old deck entry is missing", () => {
+    const t = getReward("transform_card_in_deck_into_named");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply(
+        { oldCardName: "Event Alpha", newCardName: "Event Beta" },
+        ctx,
+        mut,
+        undefined,
+      );
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("transform_card_in_deck_into_named warns and skips when the target card is missing", () => {
+    const t = getReward("transform_card_in_deck_into_named");
+    const ctx = buildContext({
+      cards: cardFixture().filter((card) => card.name !== "Event Beta"),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply(
+        { oldCardName: "Event Alpha", newCardName: "Event Beta" },
+        ctx,
+        mut,
+        undefined,
+      );
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 });
 
