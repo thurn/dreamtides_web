@@ -10,6 +10,7 @@ import type { JourneyContext } from "../context";
 import type { DrawContext } from "../../util/rng";
 import type { CardTargetPredicate } from "../effects";
 import type { JourneyMutations } from "../../apply/JourneyMutations";
+import type { ChooserResolution } from "../../apply/chooserPlan";
 
 export type TemplateParams = Record<string, unknown>;
 
@@ -20,7 +21,15 @@ export type Reward<P extends TemplateParams = TemplateParams> = {
   cec(params: P, ctx: JourneyContext): number;
   viable(params: P, ctx: JourneyContext): boolean;
   render(params: P, ctx: JourneyContext): string;
-  apply(params: P, ctx: JourneyContext, mut: JourneyMutations): void;
+  // The 4th `chooserResolution` parameter is reserved for Wave 2 chosen-target
+  // templates. The Wave 1 dispatch loop always passes `undefined`; concrete
+  // resolution shapes land in `apply/chooserPlan.ts` alongside Task 20.
+  apply(
+    params: P,
+    ctx: JourneyContext,
+    mut: JourneyMutations,
+    chooserResolution?: ChooserResolution,
+  ): void;
 };
 
 // A `Cost` extends `Reward` with a structural `locked` predicate. The CLI

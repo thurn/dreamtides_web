@@ -1479,3 +1479,13 @@ export function getReward(id: string): Reward {
   if (!found) throw new Error(`Unknown reward template id: ${id}`);
   return found;
 }
+
+/**
+ * Lookup variant that returns `undefined` for unknown ids rather than
+ * throwing. The apply dispatch loop uses this to surface a `console.warn` and
+ * continue processing the remaining envelopes when an envelope references a
+ * templateId the catalog does not contain.
+ */
+export function findReward(id: string): Reward | undefined {
+  return BY_ID.get(id);
+}

@@ -680,3 +680,13 @@ export function getCost(id: string): Cost {
   if (!found) throw new Error(`Unknown cost template id: ${id}`);
   return found;
 }
+
+/**
+ * Lookup variant that returns `undefined` for unknown ids rather than
+ * throwing. The apply dispatch loop uses this to surface a `console.warn` and
+ * continue processing the remaining envelopes when an envelope references a
+ * templateId the catalog does not contain.
+ */
+export function findCost(id: string): Cost | undefined {
+  return BY_ID.get(id);
+}
