@@ -34,6 +34,10 @@
 
 import { useCallback, useMemo, useState } from "react";
 
+import { applyBranch } from "../apply/applyBranch";
+import { applyOption } from "../apply/applyOption";
+import type { ApplyMeta } from "../apply/applyShared";
+import type { JourneyMutations } from "../apply/JourneyMutations";
 import type { JourneyContext } from "../journey/context";
 import { generateNextJourney } from "../journey/generate";
 import type {
@@ -60,6 +64,18 @@ export interface JourneyScreenProps {
   readonly context: JourneyContext;
   /** Called to dismiss the screen and return to the site router. */
   readonly onClose: () => void;
+  /**
+   * The site this journey belongs to. Threaded into every `applyOption` /
+   * `applyBranch` call so per-template apply logs can be tied back to the
+   * originating dreamscape site.
+   */
+  readonly siteId: string;
+  /**
+   * Effect-application API. The screen calls `applyOption` / `applyBranch`
+   * through this when the player picks an option (Wave 1 = synchronous,
+   * Wave 2 = two-phase with choosers).
+   */
+  readonly mutations: JourneyMutations;
   /**
    * Optional per-id image-extension map (loaded from
    * `public/journeys/imageId-extension.json` at runtime). When absent the
@@ -107,6 +123,8 @@ function indexAssignments(
 export function JourneyScreen({
   context,
   onClose,
+  siteId,
+  mutations,
   extensionMap,
 }: JourneyScreenProps) {
   const manifestResult = useMemo<ManifestResult>(() => {
@@ -128,7 +146,10 @@ export function JourneyScreen({
   return (
     <JourneyScreenInner
       manifest={manifestResult.manifest}
+      context={context}
       onClose={onClose}
+      siteId={siteId}
+      mutations={mutations}
       extensionMap={extensionMap}
     />
   );
@@ -137,11 +158,17 @@ export function JourneyScreen({
 /** Inner body that assumes a successful manifest. */
 function JourneyScreenInner({
   manifest,
+  context,
   onClose,
+  siteId,
+  mutations,
   extensionMap,
 }: {
   readonly manifest: JourneyManifest;
+  readonly context: JourneyContext;
   readonly onClose: () => void;
+  readonly siteId: string;
+  readonly mutations: JourneyMutations;
   readonly extensionMap?: ExtensionMap;
 }) {
   // Resolve the initial player-choice node for tree manifests. The traversal
@@ -167,14 +194,27 @@ function JourneyScreenInner({
 
   const closeDisabled = manifest.shapeId === "choose_your_loss";
 
+  const applyMeta = useMemo<ApplyMeta>(
+    () => ({
+      siteId,
+      journeyId: manifest.journeyId,
+      shapeId: manifest.shapeId,
+    }),
+    [manifest.journeyId, manifest.shapeId, siteId],
+  );
+
   const handleEnterFlat = useCallback(
-    (_option: JourneyOption) => {
-      // Flat menus / single-offer / random-commit / delayed-hook: picking an
-      // option ends the screen. The pick itself is recorded by the caller's
-      // `onClose`.
-      onClose();
+    (option: JourneyOption) => {
+      // Apply the option's costs / effects through the recording mutations
+      // adapter. Wave 1 always returns `{ done: true }` so the screen closes
+      // on the same click; Wave 2 will short-circuit here when a chooser is
+      // required and wait for the player's resolution before closing.
+      const result = applyOption(option, applyMeta, context, mutations);
+      if (result.done) {
+        onClose();
+      }
     },
-    [onClose],
+    [applyMeta, context, mutations, onClose],
   );
 
   const handleEnterBranch = useCallback(
@@ -184,22 +224,40 @@ function JourneyScreenInner({
         return;
       }
 
+      // Apply the branch's own costs / effects first. Wave 1 always returns
+      // `{ done: true }`; Wave 2 will defer the tree advance when the branch
+      // needs a chooser.
+      const branchResult = applyBranch(branch, applyMeta, context, mutations);
+      if (!branchResult.done) {
+        return;
+      }
+
       const result = advanceTree(
         manifest.tree,
         branch.id,
         manifest.precommitted,
       );
 
-      if (result.terminal !== null || result.nextNode === null) {
+      if (result.terminal !== null) {
+        // The terminal carries its own costs / effects (failure penalties,
+        // claim rewards). Apply them through the same dispatch path before
+        // closing — the terminal record satisfies `ApplyableBranchLike`
+        // structurally so no separate entry point is needed.
+        applyBranch(result.terminal, applyMeta, context, mutations);
+        onClose();
+        return;
+      }
+
+      if (result.nextNode === null) {
         // Branch (or downstream automatic/random transition) reached a
-        // terminal. The screen is done.
+        // dead-end without a terminal. The screen is done.
         onClose();
         return;
       }
 
       setCurrentNodeId(result.nextNode.id);
     },
-    [manifest, onClose],
+    [applyMeta, context, manifest, mutations, onClose],
   );
 
   // ---- Render branches for tree manifests ----------------------------------

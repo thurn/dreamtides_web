@@ -20,6 +20,7 @@ import {
   JourneyScreen,
   buildJourneyContext,
   buildJourneyContentBundle,
+  createJourneyMutations,
 } from "../journeys";
 import type { QuestContent } from "../data/quest-content";
 import { siteTypeName } from "../atlas/atlas-generator";
@@ -204,7 +205,22 @@ function DreamJourneySiteScreen({ site }: { site: SiteState }) {
     [contentBundle, site, state],
   );
 
-  return <JourneyScreen context={journeyContext} onClose={handleClose} />;
+  // Bridge `QuestMutations` into the `JourneyMutations` surface the screen's
+  // apply pass uses. Catalog lookups (cards, banes) live inside the underlying
+  // reducer, so the adapter takes no extra content arg.
+  const journeyMutations = useMemo(
+    () => createJourneyMutations(mutations),
+    [mutations],
+  );
+
+  return (
+    <JourneyScreen
+      context={journeyContext}
+      onClose={handleClose}
+      siteId={site.id}
+      mutations={journeyMutations}
+    />
+  );
 }
 
 function buildContentBundleFor(questContent: QuestContent) {

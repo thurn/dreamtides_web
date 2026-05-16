@@ -44,6 +44,9 @@ import {
 } from "vitest";
 import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 
+import * as applyBranchModule from "../apply/applyBranch";
+import * as applyOptionModule from "../apply/applyOption";
+import { createRecordingMutations } from "../apply/testing/recordingMutations";
 import type { JourneyContext } from "../journey/context";
 import {
   makeUnlockedBranch,
@@ -287,6 +290,12 @@ function dummyContext(): JourneyContext {
   } as JourneyContext;
 }
 
+const TEST_SITE_ID = "site-test";
+
+function dummyMutations() {
+  return createRecordingMutations().mut;
+}
+
 function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
   const container = document.createElement("div");
   document.body.append(container);
@@ -325,7 +334,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     const enterButtons = queryEnterDreamButtons(container);
@@ -348,7 +362,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     const enterButtons = queryEnterDreamButtons(container);
@@ -365,7 +384,12 @@ describe("JourneyScreen", () => {
     const onCloseLoss = vi.fn();
     mockedGenerate.mockReturnValue(makeFlatManifest(1, "choose_your_loss"));
     const lossMount = mount(
-      <JourneyScreen context={dummyContext()} onClose={onCloseLoss} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onCloseLoss}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
     const lossClose = queryCloseButton(lossMount.container);
     expect(lossClose.disabled).toBe(true);
@@ -382,7 +406,12 @@ describe("JourneyScreen", () => {
     const onCloseOther = vi.fn();
     mockedGenerate.mockReturnValue(makeFlatManifest(1, "random_rewards"));
     const otherMount = mount(
-      <JourneyScreen context={dummyContext()} onClose={onCloseOther} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onCloseOther}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
     const otherClose = queryCloseButton(otherMount.container);
     expect(otherClose.disabled).toBe(false);
@@ -402,7 +431,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     // Root node has two player_choice branches. After Enter Dream on the
@@ -432,7 +466,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     const enterButtons = queryEnterDreamButtons(container);
@@ -471,7 +510,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     // CloseButton is also a <button>, so filter to Enter Dream buttons only.
@@ -498,7 +542,12 @@ describe("JourneyScreen", () => {
 
     const onClose = vi.fn();
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     expect(container.textContent).toContain(
@@ -522,7 +571,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     expect(container.textContent).toContain(
@@ -539,5 +593,145 @@ describe("JourneyScreen", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  // ---- Apply dispatch wiring ---------------------------------------------
+  //
+  // These three tests pin the cutover contract that "Enter Dream now
+  // dispatches through the apply pass". They spy on `applyOption` /
+  // `applyBranch` at the module boundary rather than asserting against the
+  // recording mutations directly — at this point in Wave 1 the per-template
+  // `apply` methods are still stubs, so a recording double would observe
+  // zero calls regardless of whether dispatch is wired correctly.
+
+  it("calls applyOption with screen meta and closes after a flat Enter Dream", () => {
+    const manifest = makeFlatManifest(1);
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const mut = createRecordingMutations().mut;
+    const applySpy = vi
+      .spyOn(applyOptionModule, "applyOption")
+      .mockReturnValue({ done: true });
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    const enterButtons = queryEnterDreamButtons(container);
+    expect(enterButtons).toHaveLength(1);
+
+    act(() => {
+      enterButtons[0].dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(applySpy).toHaveBeenCalledTimes(1);
+    const [option, meta, ctxArg, mutArg] = applySpy.mock.calls[0];
+    expect(option).toBe(manifest.options[0]);
+    expect(meta).toEqual({
+      siteId: TEST_SITE_ID,
+      journeyId: manifest.journeyId,
+      shapeId: manifest.shapeId,
+    });
+    expect(ctxArg).toBeDefined();
+    expect(mutArg).toBe(mut);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+    applySpy.mockRestore();
+  });
+
+  it("calls applyBranch on the chosen branch and advances when not terminal", () => {
+    const manifest = makeTwoNodeTreeManifest();
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const mut = createRecordingMutations().mut;
+    const branchSpy = vi
+      .spyOn(applyBranchModule, "applyBranch")
+      .mockReturnValue({ done: true });
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    const enterButtons = queryEnterDreamButtons(container);
+    expect(enterButtons).toHaveLength(2);
+
+    // Index 0 is the Advance branch (non-terminal, points at node-2).
+    act(() => {
+      enterButtons[0].dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(branchSpy).toHaveBeenCalledTimes(1);
+    const [branchArg, metaArg] = branchSpy.mock.calls[0];
+    // The first branch on the root node is the Advance branch.
+    const rootNode = manifest.tree?.nodes.find((node) => node.id === "node-1");
+    expect(branchArg).toBe(rootNode?.branches[0]);
+    expect(metaArg).toEqual({
+      siteId: TEST_SITE_ID,
+      journeyId: manifest.journeyId,
+      shapeId: manifest.shapeId,
+    });
+    expect(onClose).not.toHaveBeenCalled();
+    // Screen advanced — node-2 has a single player_choice branch.
+    expect(queryEnterDreamButtons(container)).toHaveLength(1);
+
+    act(() => {
+      root.unmount();
+    });
+    branchSpy.mockRestore();
+  });
+
+  it("applies the terminal then closes when a branch reaches a terminal", () => {
+    const manifest = makeTwoNodeTreeManifest();
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const mut = createRecordingMutations().mut;
+    const branchSpy = vi
+      .spyOn(applyBranchModule, "applyBranch")
+      .mockReturnValue({ done: true });
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    const enterButtons = queryEnterDreamButtons(container);
+    expect(enterButtons).toHaveLength(2);
+
+    // Index 1 is the Claim branch — it carries an inline terminal.
+    act(() => {
+      enterButtons[1].dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    // Two apply calls: one for the chosen branch, one for the terminal the
+    // branch resolves into.
+    expect(branchSpy).toHaveBeenCalledTimes(2);
+    const rootNode = manifest.tree?.nodes.find((node) => node.id === "node-1");
+    const claimBranch = rootNode?.branches[1];
+    expect(branchSpy.mock.calls[0][0]).toBe(claimBranch);
+    // The second call is on the terminal record itself.
+    expect(branchSpy.mock.calls[1][0]).toBe(claimBranch?.terminal);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+    branchSpy.mockRestore();
   });
 });
