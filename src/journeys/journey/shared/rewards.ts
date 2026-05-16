@@ -810,7 +810,9 @@ const purgeXBanes: Reward<PurgeXBanesParams> = {
   cec: (p) => p.count * 30,
   viable: (p, ctx) => baneCount(ctx) >= p.count,
   render: (p) => `Purge ${p.count} bane card${p.count === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.purgeRandomBaneCards(p.count, "dream_journey:purge_X_banes");
+  },
 };
 
 type PurgeAllBanesParams = Record<string, never>;
@@ -821,7 +823,9 @@ const purgeAllBanes: Reward<PurgeAllBanesParams> = {
   cec: (_p, ctx) => Math.max(1, baneCount(ctx)) * 30,
   viable: (_p, ctx) => baneCount(ctx) >= 1,
   render: () => "Purge all bane cards",
-  apply: () => {},
+  apply: (_p, _ctx, mut) => {
+    mut.purgeAllBaneCards("dream_journey:purge_all_banes");
+  },
 };
 
 const DREAMSIGN_CEC = 80;

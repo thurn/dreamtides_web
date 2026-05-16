@@ -81,6 +81,25 @@ function rollIntInclusive(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+// Resolve a bane name to its catalog cardId by scanning the content bundle.
+// Bane cards are identified by `name === baneName` because `CardContent` does
+// not carry an `isBane` flag — the per-deck-entry `isBane` boolean is set by
+// `addBaneCardById` at the QuestMutations layer. This mirrors
+// `pushTemporaryBaneGrant`'s name-based catalog scan in `quest-context.tsx`.
+// Returns `undefined` when no card with that name is present; the bane apply
+// bodies log a warn and skip the missing iteration.
+function resolveBaneCardId(ctx: JourneyContext, baneName: string): string | undefined {
+  return ctx.content.cards.find((card) => card.name === baneName)?.id;
+}
+
+// Roll a bane name from the controlled vocabulary. Wave 1's `gain_random_banes`
+// apply rolls per-iteration via `Math.random` for the same reason
+// `rollIntInclusive` does (the option-level seed governs rollParams, not the
+// apply step). Future tasks may plumb a labeled-RNG through the apply path.
+function rollBaneName(): string {
+  return BANE_NAMES[Math.floor(Math.random() * BANE_NAMES.length)];
+}
+
 type PayEssenceParams = { x: number };
 const payEssence: Cost<PayEssenceParams> = {
   id: "pay_essence",
@@ -405,7 +424,19 @@ const gainRandomBanes: Cost<GainRandomBanesParams> = {
   viable: () => true,
   locked: () => false,
   render: (p) => `Gain ${p.count} random bane${p.count === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    for (let i = 0; i < p.count; i += 1) {
+      const baneName = rollBaneName();
+      const cardId = resolveBaneCardId(ctx, baneName);
+      if (cardId === undefined) {
+        console.warn(
+          `[dream-journey] gain_random_banes: no content card matches bane name '${baneName}'`,
+        );
+        continue;
+      }
+      mut.addBaneCardById(cardId, "dream_journey:gain_random_banes");
+    }
+  },
 };
 
 type GainNamedBanesParams = { baneName: string; count: number };
@@ -420,7 +451,18 @@ const gainNamedBanes: Cost<GainNamedBanesParams> = {
   viable: () => true,
   locked: () => false,
   render: (p) => `Gain ${p.count} ${quoteName(p.baneName)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    for (let i = 0; i < p.count; i += 1) {
+      const cardId = resolveBaneCardId(ctx, p.baneName);
+      if (cardId === undefined) {
+        console.warn(
+          `[dream-journey] gain_named_banes: no content card matches bane name '${p.baneName}'`,
+        );
+        continue;
+      }
+      mut.addBaneCardById(cardId, "dream_journey:gain_named_banes");
+    }
+  },
 };
 
 type GainNamedBanesXBattlesParams = { baneName: string; count: number; battles: number };
@@ -437,7 +479,16 @@ const gainNamedBanesForXBattles: Cost<GainNamedBanesXBattlesParams> = {
   locked: () => false,
   render: (p) =>
     `Gain ${p.count} ${quoteName(p.baneName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    // The underlying mutation looks up the bane card by name AND records the
+    // battle-window modifier in one reducer; the apply layer is a passthrough.
+    mut.pushTemporaryBaneGrant(
+      p.baneName,
+      p.count,
+      p.battles,
+      "dream_journey:gain_named_banes_for_X_battles",
+    );
+  },
 };
 
 type GainAdditionalStartersParams = { count: number };

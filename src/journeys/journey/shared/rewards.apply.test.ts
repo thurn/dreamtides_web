@@ -139,3 +139,28 @@ describe("Resource reward apply", () => {
     ]);
   });
 });
+
+describe("Bane reward apply", () => {
+  it("purge_X_banes calls purgeRandomBaneCards(count, ...)", () => {
+    const t = getReward("purge_X_banes");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ count: 3 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "purgeRandomBaneCards",
+        args: [3, "dream_journey:purge_X_banes"],
+      },
+    ]);
+  });
+
+  it("purge_all_banes calls purgeAllBaneCards(...)", () => {
+    const t = getReward("purge_all_banes");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({}, ctx, mut, undefined);
+    expect(calls).toEqual([
+      { method: "purgeAllBaneCards", args: ["dream_journey:purge_all_banes"] },
+    ]);
+  });
+});

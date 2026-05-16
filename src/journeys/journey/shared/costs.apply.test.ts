@@ -21,18 +21,20 @@
 // cards, atlas/route, battle/shop, meta-compound, visual) lives in later
 // per-task suites alongside Tasks 10-18.
 
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
-import type { ContentBundle } from "../../content/types";
+import type { CardContent, ContentBundle } from "../../content/types";
 import { createRecordingMutations } from "../../apply/testing/recordingMutations";
 import type { JourneyContext, QuestStateProjection } from "../context";
 
+import { BANE_NAMES } from "./content";
 import { getCost } from "./costs";
 
 function buildContext(overrides: {
   essence?: number;
   maxEssence?: number;
   omens?: number;
+  cards?: readonly CardContent[];
 } = {}): JourneyContext {
   const quest: QuestStateProjection = {
     seed: "costs-apply-test",
@@ -54,11 +56,28 @@ function buildContext(overrides: {
     dreamcaller: { id: "" },
   };
   const content: ContentBundle = {
-    cards: [],
+    cards: [...(overrides.cards ?? [])],
     dreamcallers: [],
     dreamsigns: [],
   };
   return { content, contentVersion: "test", state: { quest } };
+}
+
+// Smallest possible bane content fixture: one card per BANE_NAMES entry. The
+// `id` is a synthetic UUID-shaped string so the apply tests can assert the
+// cardId routed through `addBaneCardById` corresponds to the named bane.
+function baneCardFixture(): readonly CardContent[] {
+  return BANE_NAMES.map((name, i) => ({
+    id: `bane-card-${name.toLowerCase()}-${String(i)}`,
+    name,
+    tides: [],
+    rarity: "common",
+    cardType: "Event",
+    energyCost: 0,
+    spark: "",
+    cardNumber: 9000 + i,
+    raw: {},
+  }));
 }
 
 describe("Resource cost apply", () => {
@@ -151,6 +170,99 @@ describe("Resource cost apply", () => {
     t.apply({ amount: 50 }, ctx, mut, undefined);
     expect(calls).toEqual([
       { method: "changeMaxEssence", args: [-50, "dream_journey:lose_max_essence"] },
+    ]);
+  });
+});
+
+describe("Bane cost apply", () => {
+  it("gain_random_banes makes exactly `count` addBaneCardById calls with bane-card ids", () => {
+    // Random selection from BANE_NAMES uses Math.random in Wave 1; the test
+    // contract is "made `count` calls, each cardId resolves to a CardContent
+    // whose name is in BANE_NAMES" rather than pinning a deterministic name.
+    const t = getCost("gain_random_banes");
+    const cards = baneCardFixture();
+    const ctx = buildContext({ cards });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ count: 2 }, ctx, mut, undefined);
+
+    expect(calls).toHaveLength(2);
+    const baneNameSet = new Set<string>(BANE_NAMES);
+    const byId = new Map(cards.map((c) => [c.id, c]));
+    for (const call of calls) {
+      expect(call.method).toBe("addBaneCardById");
+      expect(call.args[1]).toBe("dream_journey:gain_random_banes");
+      const cardId = call.args[0] as string;
+      const card = byId.get(cardId);
+      expect(card).toBeDefined();
+      expect(baneNameSet.has(card!.name)).toBe(true);
+    }
+  });
+
+  it("gain_named_banes makes one addBaneCardById call with the named bane's cardId", () => {
+    const t = getCost("gain_named_banes");
+    const cards = baneCardFixture();
+    const ctx = buildContext({ cards });
+    const despair = cards.find((c) => c.name === "Despair");
+    expect(despair).toBeDefined();
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ baneName: "Despair", count: 1 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "addBaneCardById",
+        args: [despair!.id, "dream_journey:gain_named_banes"],
+      },
+    ]);
+  });
+
+  it("gain_named_banes with count=3 makes three addBaneCardById calls for the named bane", () => {
+    const t = getCost("gain_named_banes");
+    const cards = baneCardFixture();
+    const ctx = buildContext({ cards });
+    const oblivion = cards.find((c) => c.name === "Oblivion");
+    expect(oblivion).toBeDefined();
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ baneName: "Oblivion", count: 3 }, ctx, mut, undefined);
+    expect(calls).toHaveLength(3);
+    for (const call of calls) {
+      expect(call).toEqual({
+        method: "addBaneCardById",
+        args: [oblivion!.id, "dream_journey:gain_named_banes"],
+      });
+    }
+  });
+
+  it("gain_named_banes warns and skips when the bane name is missing from content", () => {
+    // Missing-content path: bane card not present in the bundle, so each
+    // iteration should log a warn and skip the add call. The test asserts no
+    // calls were recorded.
+    const t = getCost("gain_named_banes");
+    const ctx = buildContext({ cards: [] });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ baneName: "Despair", count: 2 }, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("gain_named_banes_for_X_battles makes exactly one pushTemporaryBaneGrant call", () => {
+    // The temporary-bane template is the only bane cost that does NOT add
+    // bane cards at the apply layer; the underlying mutation handles the
+    // card-addition AND modifier-recording in a single reducer.
+    const t = getCost("gain_named_banes_for_X_battles");
+    const ctx = buildContext({ cards: baneCardFixture() });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ baneName: "Despair", count: 1, battles: 3 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "pushTemporaryBaneGrant",
+        args: ["Despair", 1, 3, "dream_journey:gain_named_banes_for_X_battles"],
+      },
     ]);
   });
 });
