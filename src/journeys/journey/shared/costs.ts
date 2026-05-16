@@ -132,25 +132,38 @@ export function findFirstDeckEntryIdByCardName(
   cardName: string,
   filter: (card: CardContent) => boolean = () => true,
 ): string | undefined {
+  return findDeckEntriesByName(ctx, cardName, filter)[0];
+}
+
+export function findDeckEntriesByName(
+  ctx: JourneyContext,
+  cardName: string,
+  filter: (card: CardContent) => boolean = () => true,
+): string[] {
   const matchingIds = new Set(
     ctx.content.cards
       .filter((card) => card.name === cardName && filter(card))
       .map((card) => card.id),
   );
-  const entry = ctx.state.quest.deck.entries.find(
-    (candidate) => matchingIds.has(candidate.cardId) && (candidate.entryIds?.length ?? 0) > 0,
+  return ctx.state.quest.deck.entries.flatMap((candidate) =>
+    matchingIds.has(candidate.cardId) ? [...(candidate.entryIds ?? [])] : [],
   );
-  return entry?.entryIds?.[0];
+}
+
+export function findDeckEntriesByPredicate(
+  ctx: JourneyContext,
+  predicateId: string,
+): string[] {
+  const predicate = getPredicate(predicateId);
+  const deckScopedPredicate = { ...predicate.cardPredicate, source: "deck" as const };
+  const matchingIds = new Set(cardMatches(ctx, deckScopedPredicate).map((card) => card.id));
+  return ctx.state.quest.deck.entries.flatMap((candidate) =>
+    matchingIds.has(candidate.cardId) ? [...(candidate.entryIds ?? [])] : [],
+  );
 }
 
 export function findFirstStarterDeckEntryId(ctx: JourneyContext): string | undefined {
-  const starterIds = new Set(
-    ctx.content.cards.filter((card) => card.rarity === "Starter").map((card) => card.id),
-  );
-  const entry = ctx.state.quest.deck.entries.find(
-    (candidate) => starterIds.has(candidate.cardId) && (candidate.entryIds?.length ?? 0) > 0,
-  );
-  return entry?.entryIds?.[0];
+  return findDeckEntriesByPredicate(ctx, "starter")[0];
 }
 
 function warnSkippedCardApply(templateId: string, reason: string): void {
@@ -322,7 +335,17 @@ const purgeNamedCard: Cost<PurgeNamedCardParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   locked: () => false,
   render: (p) => `Purge ${quoteName(p.cardName)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryId = findDeckEntriesByName(ctx, p.cardName)[0];
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "purge_named_card",
+        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    mut.removeDeckEntry(entryId, "dream_journey:purge_named_card");
+  },
 };
 
 type PurgeRandomPredCardParams = { predicateId: string };
@@ -337,7 +360,22 @@ const purgeRandomPredicateCard: Cost<PurgeRandomPredCardParams> = {
   viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId),
   locked: () => false,
   render: (p) => `Purge a random ${getPredicate(p.predicateId).text.singular}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "purge_random_predicate_card",
+        `no deck entries matched predicate ${JSON.stringify(p.predicateId)}`,
+      );
+      return;
+    }
+    const entryId = pickFromList(
+      applyDrawContext(ctx),
+      "purge_random_predicate_card:entry",
+      entryIds,
+    );
+    mut.removeDeckEntry(entryId, "dream_journey:purge_random_predicate_card");
+  },
 };
 
 type PurgeChosenPredCardParams = { predicateId: string };
@@ -441,7 +479,22 @@ const purgeAllDuplicateCards: Cost<PurgeAllDuplicatesParams> = {
   viable: (_p, ctx) => deckHasDuplicateStack(ctx),
   locked: () => false,
   render: () => "Purge all duplicate cards from your deck",
-  apply: () => {},
+  apply: (_p, ctx, mut) => {
+    let removed = 0;
+    for (const entry of ctx.state.quest.deck.entries) {
+      const entryIds = entry.entryIds ?? [];
+      for (const entryId of entryIds.slice(1)) {
+        mut.removeDeckEntry(entryId, "dream_journey:purge_all_duplicate_cards");
+        removed += 1;
+      }
+    }
+    if (removed === 0) {
+      warnSkippedCardApply(
+        "purge_all_duplicate_cards",
+        "no duplicate deck entry ids were available",
+      );
+    }
+  },
 };
 
 const DREAMSIGN_CEC = 80;

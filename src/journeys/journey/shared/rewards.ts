@@ -78,6 +78,8 @@ import {
   transfigurationsEligibleForPredicate,
 } from "./content";
 import {
+  findDeckEntriesByName,
+  findDeckEntriesByPredicate,
   findFirstDeckEntryIdByCardName,
   findFirstStarterDeckEntryId,
   pickUniqueCardIds,
@@ -722,7 +724,21 @@ const purgeNamedStarter: Reward<PurgeNamedStarterParams> = {
   // starter even if the specific named one was already purged.
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) => `Purge ${quoteName(p.cardName)}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryId = findDeckEntriesByName(
+      ctx,
+      p.cardName,
+      (card) => card.rarity === "Starter",
+    )[0];
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "purge_named_starter",
+        `starter deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    mut.removeDeckEntry(entryId, "dream_journey:purge_named_starter");
+  },
 };
 
 type PurgeRandomStarterParams = Record<string, never>;
@@ -733,7 +749,19 @@ const purgeRandomStarter: Reward<PurgeRandomStarterParams> = {
   cec: () => CARD_CEC * 0.4,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1,
   render: () => "Purge a random starter card",
-  apply: () => {},
+  apply: (_p, ctx, mut) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length === 0) {
+      warnSkippedCardApply("purge_random_starter", "starter deck entry was not found");
+      return;
+    }
+    const entryId = pickFromList(
+      applyDrawContext(ctx),
+      "purge_random_starter:entry",
+      entryIds,
+    );
+    mut.removeDeckEntry(entryId, "dream_journey:purge_random_starter");
+  },
 };
 
 type PurgeRandomStarterReplParams = { predicateId: string };
@@ -753,7 +781,39 @@ const purgeRandomStarterWithPredicateReplacement: Reward<PurgeRandomStarterReplP
     && cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 1,
   render: (p) =>
     `Transform a random starter card into a random ${getPredicate(p.predicateId).text.singular}`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const starterEntryIds = findDeckEntriesByPredicate(ctx, "starter");
+    if (starterEntryIds.length === 0) {
+      warnSkippedCardApply(
+        "purge_random_starter_with_predicate_replacement",
+        "starter deck entry was not found",
+      );
+      return;
+    }
+
+    const replacementPool = cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {});
+    if (replacementPool.length === 0) {
+      warnSkippedCardApply(
+        "purge_random_starter_with_predicate_replacement",
+        `catalog card for predicate ${JSON.stringify(p.predicateId)} was not found`,
+      );
+      return;
+    }
+
+    const draw = applyDrawContext(ctx);
+    const entryId = pickFromList(
+      draw,
+      "purge_random_starter_with_predicate_replacement:entry",
+      starterEntryIds,
+    );
+    const cardId = pickFromList(
+      draw,
+      "purge_random_starter_with_predicate_replacement:card",
+      replacementPool,
+    ).id;
+    mut.removeDeckEntry(entryId, "dream_journey:purge_random_starter_with_predicate_replacement");
+    mut.addCardById(cardId, "dream_journey:purge_random_starter_with_predicate_replacement");
+  },
 };
 
 type TransformStarterParams = { newCardName: string };
@@ -1395,7 +1455,16 @@ const purgeAllStarters: Reward<PurgeAllStartersParams> = {
   cec: (_p, ctx) => CARD_CEC * 0.6 * Math.max(1, starterCardCount(ctx)),
   viable: (_p, ctx) => starterCardCount(ctx) >= 1,
   render: () => "Purge all starter cards",
-  apply: () => {},
+  apply: (_p, ctx, mut) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length === 0) {
+      warnSkippedCardApply("purge_all_starters", "starter deck entries were not found");
+      return;
+    }
+    for (const entryId of entryIds) {
+      mut.removeDeckEntry(entryId, "dream_journey:purge_all_starters");
+    }
+  },
 };
 
 type ReplaceStarterViaDraftParams = Record<string, never>;

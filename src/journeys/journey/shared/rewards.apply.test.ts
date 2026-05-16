@@ -266,6 +266,101 @@ describe("Bane reward apply", () => {
 });
 
 describe("Card reward apply (non-choice)", () => {
+  it("purge_named_starter removes the first matching starter deck entry id", () => {
+    const t = getReward("purge_named_starter");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ cardName: "Starter Alpha" }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-alpha", "dream_journey:purge_named_starter"],
+      },
+    ]);
+  });
+
+  it("purge_random_starter removes the deterministically rolled starter deck entry", () => {
+    const t = getReward("purge_random_starter");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({}, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-beta", "dream_journey:purge_random_starter"],
+      },
+    ]);
+  });
+
+  it("purge_random_starter_with_predicate_replacement removes a starter before adding a predicate match", () => {
+    const t = getReward("purge_random_starter_with_predicate_replacement");
+    const cards = cardFixture();
+    const ctx = buildContext({
+      cards,
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ predicateId: "events" }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-beta", "dream_journey:purge_random_starter_with_predicate_replacement"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-alpha", "dream_journey:purge_random_starter_with_predicate_replacement"],
+      },
+    ]);
+  });
+
+  it("purge_all_starters removes every starter deck entry id", () => {
+    const t = getReward("purge_all_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        {
+          cardId: "starter-alpha",
+          copies: 2,
+          entryIds: ["deck-starter-alpha-1", "deck-starter-alpha-2"],
+        },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({}, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-alpha-1", "dream_journey:purge_all_starters"],
+      },
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-alpha-2", "dream_journey:purge_all_starters"],
+      },
+    ]);
+  });
+
   it("gain_random_predicate_cards records count distinct catalog card additions matching the predicate", () => {
     const t = getReward("gain_random_predicate_cards");
     const cards = cardFixture();

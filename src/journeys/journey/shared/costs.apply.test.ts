@@ -360,6 +360,75 @@ describe("Bane cost apply", () => {
 });
 
 describe("Card cost apply (non-choice)", () => {
+  it("purge_named_card removes the first matching deck entry id", () => {
+    const t = getCost("purge_named_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ cardName: "Event Alpha" }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:purge_named_card"],
+      },
+    ]);
+  });
+
+  it("purge_random_predicate_card removes the deterministically rolled matching deck entry", () => {
+    const t = getCost("purge_random_predicate_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ predicateId: "events" }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-beta", "dream_journey:purge_random_predicate_card"],
+      },
+    ]);
+  });
+
+  it("purge_all_duplicate_cards removes all but one entry id from each duplicate stack", () => {
+    const t = getCost("purge_all_duplicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        {
+          cardId: "event-alpha",
+          copies: 3,
+          entryIds: ["deck-event-alpha-1", "deck-event-alpha-2", "deck-event-alpha-3"],
+        },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({}, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-alpha-2", "dream_journey:purge_all_duplicate_cards"],
+      },
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-alpha-3", "dream_journey:purge_all_duplicate_cards"],
+      },
+    ]);
+  });
+
   it("gain_random_cards_from_pool records exactly count catalog card additions", () => {
     const t = getCost("gain_random_cards_from_pool");
     const cards = cardFixture();
