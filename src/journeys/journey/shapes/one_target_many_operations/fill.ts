@@ -1,6 +1,7 @@
 // Direct port from CLI `src/journey/shapes/one_target_many_operations/fill.ts`.
 
 import type { CardContent } from "../../../content/types";
+import type { SharedRewardPayload } from "../../../apply/payloads";
 import type { JourneyContext } from "../../context";
 import { drawInt, shuffleDeterministic, weightedChoice, type DrawContext } from "../../../util/rng";
 import {
@@ -89,6 +90,145 @@ function sentenceCase(text: string): string {
   return text.length === 0 ? text : `${text[0].toUpperCase()}${text.slice(1)}`;
 }
 
+function stringParam(params: TemplateParams, key: string): string | undefined {
+  const value = params[key];
+  return typeof value === "string" ? value : undefined;
+}
+
+function numberParam(params: TemplateParams, key: string): number | undefined {
+  const value = params[key];
+  return typeof value === "number" ? value : undefined;
+}
+
+function rewardParamsFor(
+  templateId: string,
+  params: TemplateParams,
+  target: SharedTarget,
+): TemplateParams | null {
+  switch (templateId) {
+    case "gain_named_card":
+      return target.card === undefined ? null : { name: target.card.name };
+    case "apply_named_transfiguration_to_card_name": {
+      const transfiguration = stringParam(params, "transfiguration");
+      return target.card === undefined || transfiguration === undefined
+        ? null
+        : { transfiguration, cardName: target.card.name };
+    }
+    case "change_card_to_become_type": {
+      const cardTypePredicateId = stringParam(params, "predicateId");
+      return target.card === undefined || cardTypePredicateId === undefined
+        ? null
+        : { cardName: target.card.name, cardTypePredicateId };
+    }
+    case "duplicate_named_card_X":
+    case "make_card_reclaim": {
+      const count = numberParam(params, "count");
+      return target.card === undefined || count === undefined
+        ? null
+        : { cardName: target.card.name, count };
+    }
+    case "opening_hand_grant_for_X_battles": {
+      const battles = numberParam(params, "battles");
+      return target.card === undefined || battles === undefined
+        ? null
+        : { cardName: target.card.name, battles };
+    }
+    case "gain_random_predicate_cards":
+    case "duplicate_random_predicate": {
+      const count = numberParam(params, "count");
+      return target.predicate === undefined || count === undefined
+        ? null
+        : { predicateId: target.predicate.id, count };
+    }
+    case "apply_named_transfiguration_to_random_predicate_cards": {
+      const count = numberParam(params, "count");
+      const transfiguration = stringParam(params, "transfiguration");
+      return target.predicate === undefined || count === undefined || transfiguration === undefined
+        ? null
+        : { transfiguration, predicateId: target.predicate.id, count };
+    }
+    case "card_cost_reduction_for_X_battles": {
+      const amount = numberParam(params, "reduction");
+      const battles = numberParam(params, "battles");
+      return target.predicate === undefined || amount === undefined || battles === undefined
+        ? null
+        : { predicateId: target.predicate.id, amount, battles };
+    }
+    case "transform_starter_into_named_card": {
+      const newCardName = stringParam(params, "cardName");
+      return newCardName === undefined ? null : { newCardName };
+    }
+    case "add_site_to_dreamscape":
+    case "add_site_to_next_dreamscape":
+      return target.siteType === undefined ? null : { siteType: target.siteType };
+    case "replace_site_type": {
+      const toType = stringParam(params, "replacementSiteType");
+      return target.siteType === undefined || toType === undefined
+        ? null
+        : { fromType: target.siteType, toType };
+    }
+    case "boost_site_appearance_chance": {
+      const percent = numberParam(params, "percent");
+      return target.siteType === undefined || percent === undefined
+        ? null
+        : { siteType: target.siteType, percent };
+    }
+    case "next_X_shop_rerolls_free": {
+      const count = numberParam(params, "count");
+      return count === undefined ? null : { count };
+    }
+    case "shop_essence_discount": {
+      const percent = numberParam(params, "percent");
+      return percent === undefined ? null : { percent };
+    }
+    case "shop_omen_discount": {
+      const count = numberParam(params, "count");
+      return count === undefined ? null : { count };
+    }
+    case "gain_essence":
+    case "gain_omens": {
+      const amount = numberParam(params, "amount");
+      return amount === undefined ? null : { x: amount };
+    }
+    case "set_essence_to_percent_of_max": {
+      const percent = numberParam(params, "percent");
+      return percent === undefined ? null : { percent };
+    }
+    case "gain_essence_random_range": {
+      const minimum = numberParam(params, "minimum");
+      const maximum = numberParam(params, "maximum");
+      return minimum === undefined || maximum === undefined
+        ? null
+        : { min: minimum, max: maximum };
+    }
+    case "gain_essence_to_max":
+      return {};
+    case "increase_max_essence": {
+      const amount = numberParam(params, "amount");
+      return amount === undefined ? null : { amount };
+    }
+    default:
+      return null;
+  }
+}
+
+function sharedRewardEnvelope(args: {
+  readonly operation: RolledOperation;
+  readonly target: SharedTarget;
+  readonly text: string;
+}): SharedRewardPayload | null {
+  const params = rewardParamsFor(args.operation.template.id, args.operation.params, args.target);
+  return params === null
+    ? null
+    : {
+        kind: "shared_reward_template",
+        templateId: args.operation.template.id,
+        params,
+        text: args.text,
+        convertedEssence: args.operation.cec,
+      };
+}
+
 function optionFor(
   number: number,
   target: SharedTarget,
@@ -97,14 +237,16 @@ function optionFor(
 ): JourneyOption {
   const symbols = Array.from(new Set([...target.symbols, ...operation.template.symbols]));
   const cec = operation.cec;
+  const text = operation.template.render(operation.params, ctx, target);
+  const rewardEnvelope = sharedRewardEnvelope({ operation, target, text });
 
   return makeUnlockedOption({
     number,
     symbols,
-    text: operation.template.render(operation.params, ctx, target),
+    text,
     operations: [],
     costs: [],
-    effects: [],
+    effects: rewardEnvelope === null ? [] : [rewardEnvelope],
     burdens: [],
     targets: [],
     triggers: [],
