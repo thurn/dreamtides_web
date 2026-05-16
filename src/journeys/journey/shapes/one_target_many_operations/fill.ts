@@ -100,7 +100,7 @@ function numberParam(params: TemplateParams, key: string): number | undefined {
   return typeof value === "number" ? value : undefined;
 }
 
-function rewardParamsFor(
+export function rewardParamsFor(
   templateId: string,
   params: TemplateParams,
   target: SharedTarget,
@@ -114,24 +114,11 @@ function rewardParamsFor(
         ? null
         : { transfiguration, cardName: target.card.name };
     }
-    case "change_card_to_become_type": {
-      const cardTypePredicateId = stringParam(params, "predicateId");
-      return target.card === undefined || cardTypePredicateId === undefined
-        ? null
-        : { cardName: target.card.name, cardTypePredicateId };
-    }
-    case "duplicate_named_card_X":
-    case "make_card_reclaim": {
+    case "duplicate_named_card_X": {
       const count = numberParam(params, "count");
       return target.card === undefined || count === undefined
         ? null
         : { cardName: target.card.name, count };
-    }
-    case "opening_hand_grant_for_X_battles": {
-      const battles = numberParam(params, "battles");
-      return target.card === undefined || battles === undefined
-        ? null
-        : { cardName: target.card.name, battles };
     }
     case "gain_random_predicate_cards":
     case "duplicate_random_predicate": {
@@ -146,17 +133,6 @@ function rewardParamsFor(
       return target.predicate === undefined || count === undefined || transfiguration === undefined
         ? null
         : { transfiguration, predicateId: target.predicate.id, count };
-    }
-    case "card_cost_reduction_for_X_battles": {
-      const amount = numberParam(params, "reduction");
-      const battles = numberParam(params, "battles");
-      return target.predicate === undefined || amount === undefined || battles === undefined
-        ? null
-        : { predicateId: target.predicate.id, amount, battles };
-    }
-    case "transform_starter_into_named_card": {
-      const newCardName = stringParam(params, "cardName");
-      return newCardName === undefined ? null : { newCardName };
     }
     case "add_site_to_dreamscape":
     case "add_site_to_next_dreamscape":

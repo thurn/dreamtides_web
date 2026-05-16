@@ -110,7 +110,7 @@ function metaRewardParams(
     : null;
 }
 
-function rewardParamsFor(
+export function rewardParamsFor(
   templateId: string,
   params: TemplateParams,
   target: TargetedRewardTarget,
@@ -130,15 +130,6 @@ function rewardParamsFor(
         ? null
         : { transfiguration, cardName };
     }
-    case "make_card_reclaim": {
-      const count = numberParam(params, "count");
-      return cardName === undefined || count === undefined ? null : { cardName, count };
-    }
-    case "opening_hand_grant_for_X_battles":
-    case "temporary_card_copy_for_X_battles": {
-      const battles = numberParam(params, "battles");
-      return cardName === undefined || battles === undefined ? null : { cardName, battles };
-    }
     case "gain_random_predicate_cards":
     case "duplicate_random_predicate": {
       const count = numberParam(params, "count");
@@ -150,24 +141,10 @@ function rewardParamsFor(
         ? null
         : { ...transfigPred, count };
     }
-    case "change_card_to_become_type": {
-      const cardTypePredicateId = stringParam(params, "cardTypePredicateId");
-      return cardName === undefined || cardTypePredicateId === undefined
-        ? null
-        : { cardName, cardTypePredicateId };
-    }
-    case "modify_random_cards_to_types": {
-      const count = numberParam(params, "count");
-      return predId === undefined || count === undefined
-        ? null
-        : { count, cardTypePredicateId: predId };
-    }
     case "purge_named_starter":
       return cardName === undefined ? null : { cardName };
     case "purge_random_starter_with_predicate_replacement":
       return predId === undefined ? null : { predicateId: predId };
-    case "transform_starter_into_named_card":
-      return cardName === undefined ? null : { newCardName: cardName };
     case "transform_card_in_deck_into_named": {
       const oldCardName = stringParam(params, "oldCardName");
       return cardName === undefined || oldCardName === undefined
@@ -181,22 +158,9 @@ function rewardParamsFor(
     case "add_site_to_dreamscape":
     case "add_site_to_next_dreamscape":
       return siteType === undefined ? null : { siteType };
-    case "set_starting_dreamwell_positive":
-      return cardName === undefined ? null : { cardName };
-    case "shuffle_positive_dreamwell_cards": {
-      const count = numberParam(params, "count");
-      return cardName === undefined || count === undefined ? null : { cardName, count };
-    }
     case "boost_site_appearance_chance": {
       const percent = numberParam(params, "percent");
       return siteType === undefined || percent === undefined ? null : { siteType, percent };
-    }
-    case "card_cost_reduction_for_X_battles": {
-      const amount = numberParam(params, "amount");
-      const battles = numberParam(params, "battles");
-      return predId === undefined || amount === undefined || battles === undefined
-        ? null
-        : { predicateId: predId, amount, battles };
     }
     case "apply_named_transfiguration_to_all_predicate_cards":
       return transfigPred === undefined ? null : transfigPred;
