@@ -1484,7 +1484,9 @@ const nextXShopRerollsFree: Reward<NextRerollsParams> = {
   viable: () => true,
   render: (p) =>
     `Your next ${p.count} shop reroll${p.count === 1 ? "" : "s"} ${p.count === 1 ? "is" : "are"} free`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.grantFreeShopRerolls(p.count, "dream_journey:next_X_shop_rerolls_free");
+  },
 };
 
 type IncreaseMaxEssenceParams = { amount: number };
@@ -1891,7 +1893,9 @@ const shopEssenceDiscount: Reward<ShopEssenceDiscountParams> = {
   cec: (p) => p.percent * 1.0,
   viable: () => true,
   render: (p) => `Shop essence costs are permanently reduced by ${p.percent}%`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.applyShopEssenceDiscount(p.percent, "dream_journey:shop_essence_discount");
+  },
 };
 
 type ShopOmenDiscountParams = { count: number };
@@ -1903,7 +1907,9 @@ const shopOmenDiscount: Reward<ShopOmenDiscountParams> = {
   viable: () => true,
   render: (p) =>
     `Your next ${p.count} shop purchase${p.count === 1 ? "" : "s"} cost${p.count === 1 ? "s" : ""} 1 fewer omen`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.grantShopOmenDiscounts(p.count, "dream_journey:shop_omen_discount");
+  },
 };
 
 const BOOST_SITE_TYPE_MULTIPLIER: Readonly<Record<string, number>> = Object.freeze({

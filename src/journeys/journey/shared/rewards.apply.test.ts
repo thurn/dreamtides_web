@@ -242,6 +242,47 @@ describe("Resource reward apply", () => {
   });
 });
 
+describe("Shop reward apply", () => {
+  it("next_X_shop_rerolls_free records free shop rerolls", () => {
+    const t = getReward("next_X_shop_rerolls_free");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ count: 2 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "grantFreeShopRerolls",
+        args: [2, "dream_journey:next_X_shop_rerolls_free"],
+      },
+    ]);
+  });
+
+  it("shop_essence_discount records the essence discount percent", () => {
+    const t = getReward("shop_essence_discount");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ percent: 30 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "applyShopEssenceDiscount",
+        args: [30, "dream_journey:shop_essence_discount"],
+      },
+    ]);
+  });
+
+  it("shop_omen_discount records shop omen discounts", () => {
+    const t = getReward("shop_omen_discount");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ count: 3 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "grantShopOmenDiscounts",
+        args: [3, "dream_journey:shop_omen_discount"],
+      },
+    ]);
+  });
+});
+
 describe("Bane reward apply", () => {
   it("purge_X_banes calls purgeRandomBaneCards(count, ...)", () => {
     const t = getReward("purge_X_banes");

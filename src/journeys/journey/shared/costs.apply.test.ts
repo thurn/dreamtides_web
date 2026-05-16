@@ -267,6 +267,34 @@ describe("Resource cost apply", () => {
   });
 });
 
+describe("Battle-window cost apply", () => {
+  it("battle_reward_reduction_flat records a flat battle reward modifier", () => {
+    const t = getCost("battle_reward_reduction_flat");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ amount: 30, battles: 2 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "pushBattleRewardModifier",
+        args: ["flat", 30, 2, "dream_journey:battle_reward_reduction_flat"],
+      },
+    ]);
+  });
+
+  it("battle_reward_reduction_percent records a percent battle reward modifier", () => {
+    const t = getCost("battle_reward_reduction_percent");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ percent: 40, battles: 3 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "pushBattleRewardModifier",
+        args: ["percent", 40, 3, "dream_journey:battle_reward_reduction_percent"],
+      },
+    ]);
+  });
+});
+
 describe("Bane cost apply", () => {
   it("gain_random_banes makes exactly `count` addBaneCardById calls with bane-card ids", () => {
     // Random selection from BANE_NAMES uses Math.random in Wave 1; the test

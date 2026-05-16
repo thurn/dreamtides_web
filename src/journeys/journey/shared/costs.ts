@@ -273,7 +273,14 @@ const battleRewardReductionFlat: Cost<BattleRedFlatParams> = {
   locked: () => false,
   render: (p) =>
     `Battle essence rewards are reduced by ${p.amount} for ${nextBattlePhrase(p.battles)}`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.pushBattleRewardModifier(
+      "flat",
+      p.amount,
+      p.battles,
+      "dream_journey:battle_reward_reduction_flat",
+    );
+  },
 };
 
 type BattleRedPctParams = { percent: number; battles: number };
@@ -289,7 +296,14 @@ const battleRewardReductionPercent: Cost<BattleRedPctParams> = {
   locked: () => false,
   render: (p) =>
     `Battle essence rewards are reduced by ${p.percent}% for ${nextBattlePhrase(p.battles)}`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.pushBattleRewardModifier(
+      "percent",
+      p.percent,
+      p.battles,
+      "dream_journey:battle_reward_reduction_percent",
+    );
+  },
 };
 
 function rollPredicate(draw: DrawContext, label: string): Predicate {
