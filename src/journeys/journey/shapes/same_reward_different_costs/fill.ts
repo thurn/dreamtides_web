@@ -8,6 +8,7 @@ import { COSTS, getCost } from "../../shared/costs";
 import { getPredicate } from "../../shared/predicates";
 import { REWARDS } from "../../shared/rewards";
 import type { Cost, Reward, TemplateParams } from "../../shared/types";
+import type { SharedCostPayload, SharedRewardPayload } from "../../../apply/payloads";
 import type { FilledJourney, ShapeFillArgs } from "../types";
 
 const SHAPE_LABEL = "same_reward_different_costs";
@@ -50,29 +51,56 @@ type RolledOffer = {
 function emptyOption(
   number: number,
   text: string,
-  effectCec: number,
-  costCec: number,
-  rewardTemplateIds: readonly string[],
+  cost: RolledCost,
+  reward: RolledReward,
+  ctx: JourneyContext,
 ): JourneyOption {
+  const costPayload = costEnvelope(cost);
+  const rewardPayload = rewardEnvelope(reward, ctx);
+
   return makeUnlockedOption({
     number,
     symbols: [],
     text,
     operations: [],
-    costs: [],
-    effects: [],
+    costs: [costPayload],
+    effects: [rewardPayload],
     burdens: [],
     targets: [],
     triggers: [],
     routeEffects: [],
-    costConvertedEssence: costCec,
-    effectConvertedEssence: effectCec,
+    costConvertedEssence: cost.cec,
+    effectConvertedEssence: reward.cec,
     burdenConvertedEssence: 0,
     uncertaintyConvertedEssence: 0,
-    netConvertedEssence: effectCec - costCec,
+    netConvertedEssence: reward.cec - cost.cec,
     pickBehavior: "record_and_generate_next",
-    rewardTemplateIds: [...rewardTemplateIds],
+    locked: hasLockedText(cost),
+    rewardTemplateIds: [reward.template.id],
   });
+}
+
+function costEnvelope(cost: RolledCost): SharedCostPayload {
+  return {
+    kind: "shared_cost_template",
+    templateId: cost.template.id,
+    params: cost.params,
+    text: cost.rendered,
+    convertedEssence: cost.cec,
+  };
+}
+
+function rewardEnvelope(
+  reward: RolledReward,
+  ctx: JourneyContext,
+): SharedRewardPayload {
+  return {
+    kind: "shared_reward_template",
+    templateId: reward.template.id,
+    params: reward.params,
+    text: reward.template.render(reward.params, ctx),
+    convertedEssence: reward.cec,
+  };
 }
 
 function normalizeDreamsignTerm(text: string): string {
@@ -380,15 +408,14 @@ export function sameRewardDifferentCostsFill(
     throw new Error(`${SHAPE_LABEL} fill could not roll a viable offer`);
   }
 
-  const sharedRewardTemplateIds = [offer.reward.template.id];
   return {
     options: offer.costs.map((cost, index) =>
       emptyOption(
         index + 1,
         renderOption(cost, offer.reward, args.context),
-        offer.reward.cec,
-        cost.cec,
-        sharedRewardTemplateIds,
+        cost,
+        offer.reward,
+        args.context,
       ),
     ),
     precommitted: {},
