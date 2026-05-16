@@ -5,6 +5,7 @@ import { makeUnlockedOption, type JourneyOption } from "../../manifest";
 import { REWARDS } from "../../shared/rewards";
 import { weightedChoice, type DrawContext } from "../../../util/rng";
 import type { Reward, TemplateParams } from "../../shared/types";
+import type { SharedRewardPayload } from "../../../apply/payloads";
 import type { FilledJourney, ShapeFillArgs } from "../types";
 
 const TOLERANCE_LO_INITIAL = 0.6;
@@ -17,28 +18,43 @@ function emptyOption(
   number: number,
   text: string,
   symbols: readonly string[],
-  cec: number,
-  rewardTemplateIds: readonly string[],
+  reward: RolledReward,
+  ctx: JourneyContext,
 ): JourneyOption {
+  const effectPayload = rewardEnvelope(reward, ctx);
+
   return makeUnlockedOption({
     number,
     symbols: [...symbols],
     text,
     operations: [],
     costs: [],
-    effects: [],
+    effects: [effectPayload],
     burdens: [],
     targets: [],
     triggers: [],
     routeEffects: [],
     costConvertedEssence: 0,
-    effectConvertedEssence: cec,
+    effectConvertedEssence: reward.cec,
     burdenConvertedEssence: 0,
     uncertaintyConvertedEssence: 0,
-    netConvertedEssence: cec,
+    netConvertedEssence: reward.cec,
     pickBehavior: "record_and_generate_next",
-    rewardTemplateIds: [...rewardTemplateIds],
+    rewardTemplateIds: [reward.template.id],
   });
+}
+
+function rewardEnvelope(
+  reward: RolledReward,
+  ctx: JourneyContext,
+): SharedRewardPayload {
+  return {
+    kind: "shared_reward_template",
+    templateId: reward.template.id,
+    params: reward.params,
+    text: reward.template.render(reward.params, ctx),
+    convertedEssence: reward.cec,
+  };
 }
 
 function subTemplateIdsOf(rolled: { template: Reward; params: TemplateParams }): readonly string[] {
@@ -132,9 +148,9 @@ export function randomRewardsFill(args: ShapeFillArgs): FilledJourney {
   const row3 = rollFurtherRow(3);
 
   const options: JourneyOption[] = [
-    emptyOption(1, row1.template.render(row1.params, context), ["reward"], row1.cec, [row1.template.id]),
-    emptyOption(2, row2.template.render(row2.params, context), ["reward"], row2.cec, [row2.template.id]),
-    emptyOption(3, row3.template.render(row3.params, context), ["reward"], row3.cec, [row3.template.id]),
+    emptyOption(1, row1.template.render(row1.params, context), ["reward"], row1, context),
+    emptyOption(2, row2.template.render(row2.params, context), ["reward"], row2, context),
+    emptyOption(3, row3.template.render(row3.params, context), ["reward"], row3, context),
   ];
 
   return { options, precommitted: {} };

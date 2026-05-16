@@ -3,6 +3,7 @@ import { makeUnlockedOption, type JourneyOption } from "../../manifest";
 import { COSTS } from "../../shared/costs";
 import { REWARDS } from "../../shared/rewards";
 import type { Cost, Reward, TemplateParams } from "../../shared/types";
+import type { SharedCostPayload, SharedRewardPayload } from "../../../apply/payloads";
 import type { FilledJourney, ShapeFillArgs } from "../types";
 
 const TAKE_OPTION_COUNT = 3;
@@ -194,13 +195,16 @@ function takeOption(
   reward: RolledReward,
   cost: RolledCost,
 ): JourneyOption {
+  const costPayload = costEnvelope(cost);
+  const rewardPayload = rewardEnvelope(reward);
+
   return makeUnlockedOption({
     number,
     symbols: [],
     text: `${sentence(cost.text)} ${sentence(reward.text)}`,
     operations: [],
-    costs: [],
-    effects: [],
+    costs: [costPayload],
+    effects: [rewardPayload],
     burdens: [],
     targets: [],
     triggers: [],
@@ -213,6 +217,26 @@ function takeOption(
     pickBehavior: "record_and_generate_next",
     rewardTemplateIds: [reward.template.id],
   });
+}
+
+function costEnvelope(cost: RolledCost): SharedCostPayload {
+  return {
+    kind: "shared_cost_template",
+    templateId: cost.template.id,
+    params: cost.params,
+    text: cost.text,
+    convertedEssence: cost.cec,
+  };
+}
+
+function rewardEnvelope(reward: RolledReward): SharedRewardPayload {
+  return {
+    kind: "shared_reward_template",
+    templateId: reward.template.id,
+    params: reward.params,
+    text: reward.text,
+    convertedEssence: reward.cec,
+  };
 }
 
 export function takeAnyNumberFill(args: ShapeFillArgs): FilledJourney {
