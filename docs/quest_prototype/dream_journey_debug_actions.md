@@ -195,29 +195,45 @@ for every Phase-1 template, then closes with a coverage audit.
 
 ### C. Deck root — right-click the "View Deck" HUD button or the deck count chip
 
-- **Add card by name** → typeahead over the full card pool. Inserts a
-  `DeckEntry` with no transfiguration. Handles `gain_named_card`,
-  `transform_card_in_deck_into_named` (combine with per-card "Purge"),
-  `transform_starter_into_named_card`, `transform_chosen_predicate_into_named`,
-  `gain_random_cards_from_pool` (use "Add random card from pool", below),
-  `gain_random_predicate_cards`, `gain_additional_starters` (filter to
-  `starter: true`), `take_any_from_predicate_choices`,
-  `draft_predicate_cards_from_4`, `draft_2_predicate_cards_from_4`,
-  `draft_predicate_card_with_copies`, `replace_starter_via_draft`.
-- **Add random card from pool** → optional predicate filter (drop-down
-  bound to `PREDICATES`), then "draw N" numeric input; pushes N random
-  cards into the deck. Handles `gain_random_cards_from_pool`,
-  `gain_random_predicate_cards`, `purge_random_starter_with_predicate_replacement`
-  (combine with per-card "Purge").
+Right-click menus never carry predicate-specific submenus. Anything
+that has to filter or randomize by a card predicate routes the tester
+through the Deck Viewer (Group D) or Card Pool Viewer (Group G), which
+own the filter + sort chrome.
+
 - **Add bane** → submenu listing `BANE_NAMES` plus a "Random" entry, then
-  a quantity input. Handles `gain_named_banes`, `gain_random_banes`,
+  a quantity input. `BANE_NAMES` is a closed vocabulary, not a card
+  predicate, so it stays on the right-click menu. Handles
+  `gain_named_banes`, `gain_random_banes`,
   `gain_named_banes_for_X_battles` (combine with "Add status note" below
   to remember the battle count).
-- **Open card pool viewer** → new screen documented in Group G. Provides
-  the "random from pool" + "search by name" + "duplicate-of-X" flows the
-  player-side prototype does not yet need.
+- **Open Deck Viewer** → opens Group D. The tester applies any
+  deck-targeting effect through the viewer's chrome (predicate filter,
+  randomize sort) plus per-row right-click actions.
+- **Open Card Pool Viewer** → opens Group G. The tester applies any
+  pool-targeting effect (gain, draft, transform-into-X) through the
+  viewer's chrome plus per-card right-click actions.
 
-### D. Per-card — right-click a card row in the Deck Viewer (`DeckViewer.tsx`)
+### D. Deck Viewer — chrome + per-card right-click (`DeckViewer.tsx`)
+
+**Viewer chrome (not right-click):**
+
+- **Predicate filter** → drop-down bound to `PREDICATES`. Narrows the
+  visible deck to predicate-matching entries before per-card actions.
+  Owns every "filter by predicate" step in the coverage table.
+- **Randomize sort order** → header button. Reshuffles the row order so
+  "first N cards displayed" reads off as the random target set. Handles
+  the random-target steps for
+  `remove_transfigurations_from_random_predicate`,
+  `apply_random_transfigurations_to_random_cards`,
+  `make_random_cards_reclaim`, `make_random_cards_fast`,
+  `modify_random_cards_to_types`, `purge_random_predicate_card`,
+  `duplicate_random_predicate`,
+  `apply_named_transfiguration_to_random_predicate_cards`,
+  `transfigure_random_starters`, `purge_random_starter`.
+- The existing All / Characters / Events filter, sort criteria, and
+  card-size chrome stay as-is.
+
+**Per-card right-click items:**
 
 - **Purge card** → removes the entry. Handles `purge_named_card`,
   `purge_random_predicate_card` (combined with deck-shuffle + first
@@ -229,14 +245,13 @@ for every Phase-1 template, then closes with a coverage audit.
   shortcut), `draw_X_purge_chosen`, `transform_card_in_deck_into_named`
   (combine with Group C "Add card by name"), `transform_card_to_random_pool`
   (combine with "Add random card from pool"),
-  `purge_random_starter_with_predicate_replacement` (combine with Group C),
-  `purge_chosen_predicate_with_replacement` (combine with Group C).
+  `purge_random_starter_with_predicate_replacement` (combine with Group G),
+  `purge_chosen_predicate_with_replacement` (combine with Group G).
 - **Duplicate card** → appends another `DeckEntry` with the same
   `cardNumber` and same transfiguration. Handles `duplicate_named_card_X`,
   `duplicate_chosen_cards`, `duplicate_random_predicate`,
-  `draw_X_and_duplicate_chosen`, `draft_predicate_card_with_copies`,
-  `gain_copy_of_random_dreamsign` (no — dreamsign equivalent lives in
-  Group E).
+  `draw_X_and_duplicate_chosen`, `draft_predicate_card_with_copies`.
+  (`gain_copy_of_random_dreamsign` is a dreamsign action — see Group E.)
 - **Add transfiguration** → submenu of `JOURNEY_TRANSFIGURATIONS` plus a
   "Random" entry. Sets `entry.transfiguration`. Handles
   `apply_chosen_transfiguration_to_chosen_card`,
@@ -265,16 +280,6 @@ for every Phase-1 template, then closes with a coverage audit.
   for starter classification (needed because the predicate `starter: true`
   drives several rewards/costs).
 - **Inspect** → opens the existing card inspector.
-
-The Deck Viewer also needs a header-level **Randomize Sort Order**
-button so "first 2 cards displayed" workflows from random-target effects
-work without manual scrolling. Handles
-`remove_transfigurations_from_random_predicate`,
-`apply_random_transfigurations_to_random_cards`,
-`make_random_cards_reclaim`, `make_random_cards_fast`,
-`modify_random_cards_to_types`, `purge_random_predicate_card`,
-`duplicate_random_predicate`, `apply_named_transfiguration_to_random_predicate_cards`,
-`transfigure_random_starters`, `purge_random_starter`.
 
 ### E. Dreamsigns — right-click the HudDreamsignRow tile (or its container)
 
@@ -314,31 +319,48 @@ work without manual scrolling. Handles
 - **Atlas screen → Mark dreamscape as visited / unvisited** → debug-only
   toggle for working through multi-dreamscape effects.
 
-### G. Card Pool Viewer — new screen, opened from "Show full card pool" on the deck context menu
+### G. Card Pool Viewer — new screen, opened from the deck-root right-click "Open Card Pool Viewer"
 
 The viewer renders every card in `ctx.content.cards` (or
-`cardDatabase.values()`), with:
+`cardDatabase.values()`). All filtering and randomization lives in the
+viewer chrome — never in a right-click menu. Per-card right-click items
+operate only on the focused card and carry no predicate awareness.
 
-- Filter rail: predicate picker (drop-down bound to `PREDICATES`),
-  rarity filter, starter toggle, dreamcaller-package filter.
-- Sort menu: alphabetical, cardNumber, rarity, energyCost, **Randomize**.
-- Per-card right-click:
-  - **Add to deck** → inserts a `DeckEntry`; sub-menu allows immediate
-    transfiguration / card-type override.
-  - **Add N copies to deck** → numeric input.
-- "Take first M" affordance: with the list randomized + filtered, the
-  tester reads off the first M cards as the "random" picks. This is the
-  mechanism for `gain_random_cards_from_pool`,
-  `gain_random_predicate_cards`, `transform_card_to_random_pool`,
-  `purge_chosen_predicate_with_replacement`,
-  `purge_random_starter_with_predicate_replacement`,
-  `transform_chosen_predicate_into_named` (when the destination is the
-  "random of predicate" branch),
-  `apply_named_transfiguration_to_random_predicate_cards` (target deck
-  cards), `duplicate_random_predicate`, `make_random_cards_fast` /
-  `make_random_cards_reclaim` (when applied to "random N from deck"
-  rather than "random predicate from pool" — for deck-side randomness,
-  use Group D's Randomize Sort).
+**Viewer chrome (not right-click):**
+
+- **Predicate filter** → drop-down bound to `PREDICATES`. Owns every
+  "filter by predicate" step that targets the card pool.
+- **Other filters** → rarity, starter toggle, dreamcaller-package
+  filter, free-form name search.
+- **Sort menu** → alphabetical, cardNumber, rarity, energyCost,
+  **Randomize**. Randomize is the mechanism for every "random card
+  from the pool" effect: filter to the desired predicate, randomize,
+  then take the first N rows via the per-card right-click.
+
+**Per-card right-click items:**
+
+- **Add to deck** → inserts a `DeckEntry`; sub-menu allows immediate
+  transfiguration / card-type override.
+- **Add N copies to deck** → numeric input.
+- **Inspect** → opens the existing card inspector.
+
+With filter + randomize set, the tester reads off the first M cards as
+the "random" picks. This is the mechanism for
+`gain_random_cards_from_pool`, `gain_random_predicate_cards`,
+`transform_card_to_random_pool`,
+`purge_chosen_predicate_with_replacement`,
+`purge_random_starter_with_predicate_replacement`,
+`transform_chosen_predicate_into_named` (when the destination is the
+"random of predicate" branch),
+`apply_named_transfiguration_to_random_predicate_cards` (target deck
+cards belong to Group D), `duplicate_random_predicate`. Effects whose
+random target is "N random cards from the deck" rather than "from the
+pool" — `make_random_cards_fast`, `make_random_cards_reclaim`,
+`modify_random_cards_to_types`, `apply_random_transfigurations_to_random_cards`,
+`remove_transfigurations_from_random_predicate`,
+`purge_random_predicate_card`, `purge_random_starter`,
+`transfigure_random_starters` — route through Group D's Randomize Sort
+on the Deck Viewer instead.
 
 ### H. Status Notes Overlay — new affordance, right-click HUD or atlas, "Add status note"
 
@@ -566,9 +588,13 @@ following net-new surfaces:
 1. **HUD right-click menus** on the essence chip, the omens chip, the
    deck count chip, the View-Deck button, and each Dreamsign tile (+
    the empty HudDreamsignRow container).
-2. **Deck Viewer per-row right-click menu** (Group D).
-3. **Card Pool Viewer screen** with predicate filter, randomize sort,
-   and per-card right-click (Group G).
+2. **Deck Viewer additions**: predicate-filter drop-down and
+   randomize-sort option in the header chrome, plus a per-row
+   right-click menu (Group D). Right-click items carry no predicate
+   awareness.
+3. **Card Pool Viewer screen** (Group G): predicate filter,
+   randomize sort, and per-card right-click. Right-click items carry
+   no predicate awareness.
 4. **Dreamscape per-site right-click menu** (Remove, Replace) and a
    **Dreamscape background right-click menu** (Add site).
 5. **Status Notes overlay** with free-form text and per-note dismissal
