@@ -39,6 +39,7 @@
 
 import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
+import { logSkippedVisualTemplate } from "../../apply/skipLog";
 import type { CardContent } from "../../content/types";
 import type { JourneyContext } from "../context";
 import { CARD_CEC, STAGE_MULTIPLIER, cardPoolCEC } from "./cec";
@@ -728,7 +729,9 @@ const setStartingDreamwellNegative: Cost<StartingDreamwellNegParams> = {
   locked: () => false,
   render: (p) =>
     `Your starting dreamwell card is ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("set_starting_dreamwell_negative", "dreamwell");
+  },
 };
 
 type ShuffleNegDreamwellParams = { cardName: string; count: number; battles: number };
@@ -747,7 +750,9 @@ const shuffleNegativeDreamwellCards: Cost<ShuffleNegDreamwellParams> = {
   locked: () => false,
   render: (p) =>
     `Shuffle ${p.count} ${quoteName(p.cardName)} into your dreamwell for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("shuffle_negative_dreamwell_cards", "dreamwell");
+  },
 };
 
 type RemoveTransfigCardParams = { cardName: string };
@@ -970,7 +975,12 @@ const metaPay2Costs: Cost<MetaPay2Params> = {
       aLocked || bLocked,
     );
   },
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const a = getCost(p.subIds[0]);
+    const b = getCost(p.subIds[1]);
+    a.apply(p.subParams[0], ctx, mut);
+    b.apply(p.subParams[1], ctx, mut);
+  },
 };
 
 export const COSTS: readonly Cost[] = Object.freeze([

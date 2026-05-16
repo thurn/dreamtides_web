@@ -11,15 +11,20 @@
 // transfigurations, atlas/route, battle/shop, draft, meta-compound, visual)
 // lives in later per-task suites alongside Tasks 10-18.
 
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { CardContent, ContentBundle, DreamsignContent } from "../../content/types";
 import { createRecordingMutations } from "../../apply/testing/recordingMutations";
+import { getLogEntries, resetLog } from "../../../logging";
 import type { JourneyContext, QuestStateProjection } from "../context";
 import type { Dreamsign } from "../../../types/quest";
 
 import { getReward } from "./rewards";
 import { isCardEligibleForTransfiguration } from "./content";
+
+beforeEach(() => {
+  resetLog();
+});
 
 function buildContext(overrides: {
   essence?: number;
@@ -1452,5 +1457,103 @@ describe("Dreamsign reward apply (non-choice)", () => {
     } finally {
       warnSpy.mockRestore();
     }
+  });
+});
+
+describe("Meta-compound reward apply", () => {
+  it("meta_gain_2_rewards applies both sub-rewards in order", () => {
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext({ maxEssence: 200 });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      {
+        subIds: ["gain_essence", "increase_max_essence"],
+        subParams: [{ x: 30 }, { amount: 25 }],
+      },
+      ctx,
+      mut,
+      undefined,
+    );
+
+    expect(calls).toEqual([
+      { method: "changeEssence", args: [30, "dream_journey:gain_essence"] },
+      { method: "changeMaxEssence", args: [25, "dream_journey:increase_max_essence"] },
+    ]);
+  });
+});
+
+describe("Visual, battle-window-only, and dreamwell reward apply no-ops", () => {
+  it.each([
+    {
+      id: "make_card_reclaim",
+      params: { cardName: "Event Alpha", count: 2 },
+      reason: "visual",
+    },
+    {
+      id: "make_random_cards_reclaim",
+      params: { count: 2, reclaim: 1 },
+      reason: "visual",
+    },
+    {
+      id: "change_card_to_become_type",
+      params: { cardName: "Event Alpha", cardTypePredicateId: "event" },
+      reason: "visual",
+    },
+    {
+      id: "modify_random_cards_to_types",
+      params: { count: 2, cardTypePredicateId: "event" },
+      reason: "visual",
+    },
+    {
+      id: "make_random_cards_fast",
+      params: { count: 2 },
+      reason: "visual",
+    },
+    {
+      id: "card_cost_reduction_for_X_battles",
+      params: { predicateId: "event", amount: 1, battles: 3 },
+      reason: "visual",
+    },
+    {
+      id: "opening_hand_grant_for_X_battles",
+      params: { cardName: "Event Alpha", battles: 3 },
+      reason: "battle_window",
+    },
+    {
+      id: "temporary_card_copy_for_X_battles",
+      params: { cardName: "Event Alpha", battles: 3 },
+      reason: "battle_window",
+    },
+    {
+      id: "temporary_dreamsign_for_X_battles",
+      params: { battles: 3 },
+      reason: "battle_window",
+    },
+    {
+      id: "set_starting_dreamwell_positive",
+      params: { cardName: "Bright Well" },
+      reason: "dreamwell",
+    },
+    {
+      id: "shuffle_positive_dreamwell_cards",
+      params: { cardName: "Bright Well", count: 2 },
+      reason: "dreamwell",
+    },
+  ])("$id records one skipped-visual log and no mutation calls", ({ id, params, reason }) => {
+    const t = getReward(id);
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(params, ctx, mut, undefined);
+
+    expect(calls).toEqual([]);
+    const logs = getLogEntries();
+    expect(logs).toHaveLength(1);
+    expect(logs[0]).toMatchObject({
+      event: "dream_journey_skipped_visual",
+      templateId: id,
+      reason,
+    });
   });
 });

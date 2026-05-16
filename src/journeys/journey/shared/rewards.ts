@@ -60,6 +60,7 @@
 import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
 import type { JourneyMutations } from "../../apply/JourneyMutations";
+import { logSkippedVisualTemplate } from "../../apply/skipLog";
 import type { DreamsignContent } from "../../content/types";
 import type { JourneyContext } from "../context";
 import { CARD_CEC, STAGE_MULTIPLIER, cardPoolCEC } from "./cec";
@@ -831,7 +832,9 @@ const changeCardToBecomeType: Reward<ChangeCardBecomeTypeParams> = {
     const article = /^[aeiou]/i.test(singular) ? "an" : "a";
     return `Change ${quoteName(p.cardName)} to become ${article} ${singular}`;
   },
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("change_card_to_become_type", "visual");
+  },
 };
 
 type ModifyRandomCardsToTypesParams = { count: number; cardTypePredicateId: string };
@@ -854,7 +857,9 @@ const modifyRandomCardsToTypes: Reward<ModifyRandomCardsToTypesParams> = {
     const article = p.count === 1 ? `${indefiniteArticleFor(typeName)} ` : "";
     return `Modify ${p.count} random ${noun} to become ${article}${typeName}`;
   },
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("modify_random_cards_to_types", "visual");
+  },
 };
 
 type MakeRandomCardsFastParams = { count: number };
@@ -866,7 +871,9 @@ const makeRandomCardsFast: Reward<MakeRandomCardsFastParams> = {
   // Deck-scope leak: CLI used `ctx.content.cards.length >= count`.
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) => `Change ${p.count} random card${p.count === 1 ? "" : "s"} to have fast`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("make_random_cards_fast", "visual");
+  },
 };
 
 type PurgeChosenPredCardsParams = { predicateId: string; count: number };
@@ -1455,7 +1462,9 @@ const setStartingDreamwellPositive: Reward<StartingDreamwellPosParams> = {
   // "Placeholder Dreamwell Card" option until content arrived.
   viable: () => POSITIVE_DREAMWELL_CARDS.length >= 1,
   render: (p) => `Your starting dreamwell card is ${quoteName(p.cardName)}`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("set_starting_dreamwell_positive", "dreamwell");
+  },
 };
 
 type ShufflePosDreamwellParams = { cardName: string; count: number };
@@ -1472,7 +1481,9 @@ const shufflePositiveDreamwellCards: Reward<ShufflePosDreamwellParams> = {
   viable: () => POSITIVE_DREAMWELL_CARDS.length >= 1,
   render: (p) =>
     `Shuffle ${p.count} ${quoteName(p.cardName)}${p.count === 1 ? "" : " copies"} into your dreamwell`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("shuffle_positive_dreamwell_cards", "dreamwell");
+  },
 };
 
 type NextRerollsParams = { count: number };
@@ -1587,7 +1598,9 @@ const makeCardReclaim: Reward<MakeCardReclaimParams> = {
   // Named-card smell.
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) => `Add Reclaim ${p.count} to ${quoteName(p.cardName)}`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("make_card_reclaim", "visual");
+  },
 };
 
 type MakeRandomCardsReclaimParams = { count: number; reclaim: number };
@@ -1603,7 +1616,9 @@ const makeRandomCardsReclaim: Reward<MakeRandomCardsReclaimParams> = {
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) =>
     `Add Reclaim ${p.reclaim} to ${p.count} random card${p.count === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("make_random_cards_reclaim", "visual");
+  },
 };
 
 type OpeningHandGrantParams = { cardName: string; battles: number };
@@ -1624,7 +1639,9 @@ const openingHandGrantForXBattles: Reward<OpeningHandGrantParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) =>
     `Your opening hand contains ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("opening_hand_grant_for_X_battles", "battle_window");
+  },
 };
 
 type TemporaryCardCopyParams = { cardName: string; battles: number };
@@ -1645,7 +1662,9 @@ const temporaryCardCopyForXBattles: Reward<TemporaryCardCopyParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) =>
     `Gain a temporary copy of ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("temporary_card_copy_for_X_battles", "battle_window");
+  },
 };
 
 type CostReductionParams = { predicateId: string; amount: number; battles: number };
@@ -1663,7 +1682,9 @@ const cardCostReductionForXBattles: Reward<CostReductionParams> = {
   viable: () => true,
   render: (p) =>
     `${sentenceCase(getPredicate(p.predicateId).text.plural)} cost ${p.amount} less for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("card_cost_reduction_for_X_battles", "visual");
+  },
 };
 
 type ApplyNamedTransfigAllPredParams = { transfiguration: string; predicateId: string };
@@ -1854,7 +1875,9 @@ const temporaryDreamsignForXBattles: Reward<TemporaryDreamsignParams> = {
   viable: (_p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= 1,
   render: (p) =>
     `Gain a random Dreamsign for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: () => {
+    logSkippedVisualTemplate("temporary_dreamsign_for_X_battles", "battle_window");
+  },
 };
 
 type ReplaceSiteTypeParams = { fromType: string; toType: string };
@@ -2022,7 +2045,12 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
     const b = getReward(p.subIds[1]);
     return [a.render(p.subParams[0], ctx), b.render(p.subParams[1], ctx)].join(". ");
   },
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const a = getReward(p.subIds[0]);
+    const b = getReward(p.subIds[1]);
+    a.apply(p.subParams[0], ctx, mut);
+    b.apply(p.subParams[1], ctx, mut);
+  },
 };
 
 export const REWARDS: readonly Reward[] = Object.freeze([

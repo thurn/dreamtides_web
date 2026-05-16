@@ -21,14 +21,19 @@
 // cards, atlas/route, battle/shop, meta-compound, visual) lives in later
 // per-task suites alongside Tasks 10-18.
 
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { CardContent, ContentBundle, DreamsignContent } from "../../content/types";
 import { createRecordingMutations } from "../../apply/testing/recordingMutations";
+import { getLogEntries, resetLog } from "../../../logging";
 import type { JourneyContext, QuestStateProjection } from "../context";
 
 import { BANE_NAMES } from "./content";
 import { getCost } from "./costs";
+
+beforeEach(() => {
+  resetLog();
+});
 
 function buildContext(overrides: {
   essence?: number;
@@ -805,5 +810,58 @@ describe("Dreamsign cost apply (non-choice)", () => {
         ],
       },
     ]);
+  });
+});
+
+describe("Meta-compound cost apply", () => {
+  it("meta_pay_2_costs applies both sub-costs in order", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = buildContext({ essence: 100, omens: 3 });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      {
+        subIds: ["pay_essence", "pay_omens"],
+        subParams: [{ x: 20 }, { x: 2 }],
+      },
+      ctx,
+      mut,
+      undefined,
+    );
+
+    expect(calls).toEqual([
+      { method: "changeEssence", args: [-20, "dream_journey:pay_essence"] },
+      { method: "changeOmens", args: [-2, "dream_journey:pay_omens"] },
+    ]);
+  });
+});
+
+describe("Visual and dreamwell cost apply no-ops", () => {
+  it.each([
+    {
+      id: "set_starting_dreamwell_negative",
+      params: { cardName: "Shadow Well", battles: 2 },
+      reason: "dreamwell",
+    },
+    {
+      id: "shuffle_negative_dreamwell_cards",
+      params: { cardName: "Shadow Well", count: 2, battles: 2 },
+      reason: "dreamwell",
+    },
+  ])("$id records one skipped-visual log and no mutation calls", ({ id, params, reason }) => {
+    const t = getCost(id);
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(params, ctx, mut, undefined);
+
+    expect(calls).toEqual([]);
+    const logs = getLogEntries();
+    expect(logs).toHaveLength(1);
+    expect(logs[0]).toMatchObject({
+      event: "dream_journey_skipped_visual",
+      templateId: id,
+      reason,
+    });
   });
 });
