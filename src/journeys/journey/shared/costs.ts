@@ -918,7 +918,8 @@ type MetaPay2Params = {
 type FiniteResourceSpend = {
   essence: number;
   omens: number;
-  maxEssence: number;
+  partialMaxEssence: number;
+  exhaustsMaxEssence: boolean;
 };
 
 function numericParam(params: Record<string, unknown>, key: string): number {
@@ -931,27 +932,33 @@ function guaranteedFiniteResourceSpend(
   params: Record<string, unknown>,
   ctx: JourneyContext,
 ): FiniteResourceSpend {
+  const noSpend: FiniteResourceSpend = {
+    essence: 0,
+    omens: 0,
+    partialMaxEssence: 0,
+    exhaustsMaxEssence: false,
+  };
+
   switch (costId) {
     case "pay_essence":
-      return { essence: numericParam(params, "x"), omens: 0, maxEssence: 0 };
+      return { ...noSpend, essence: numericParam(params, "x") };
     case "pay_essence_random_range":
-      return { essence: numericParam(params, "min"), omens: 0, maxEssence: 0 };
+      return { ...noSpend, essence: numericParam(params, "min") };
     case "pay_percent_essence":
       return {
+        ...noSpend,
         essence: Math.floor((essenceAmount(ctx) * numericParam(params, "percent")) / 100),
-        omens: 0,
-        maxEssence: 0,
       };
     case "pay_all_remaining_essence":
-      return { essence: essenceAmount(ctx), omens: 0, maxEssence: 0 };
+      return { ...noSpend, essence: essenceAmount(ctx) };
     case "pay_omens":
-      return { essence: 0, omens: numericParam(params, "x"), maxEssence: 0 };
+      return { ...noSpend, omens: numericParam(params, "x") };
     case "pay_max_essence":
-      return { essence: 0, omens: 0, maxEssence: maxEssence(ctx) };
+      return { ...noSpend, exhaustsMaxEssence: true };
     case "lose_max_essence":
-      return { essence: 0, omens: 0, maxEssence: numericParam(params, "amount") };
+      return { ...noSpend, partialMaxEssence: numericParam(params, "amount") };
     default:
-      return { essence: 0, omens: 0, maxEssence: 0 };
+      return noSpend;
   }
 }
 
@@ -962,7 +969,8 @@ function addFiniteResourceSpend(
   return {
     essence: first.essence + second.essence,
     omens: first.omens + second.omens,
-    maxEssence: first.maxEssence + second.maxEssence,
+    partialMaxEssence: first.partialMaxEssence + second.partialMaxEssence,
+    exhaustsMaxEssence: first.exhaustsMaxEssence || second.exhaustsMaxEssence,
   };
 }
 
@@ -977,7 +985,8 @@ function combinedFiniteResourceSpendLocks(
 
   return spend.essence > essenceAmount(ctx)
     || spend.omens > omenAmount(ctx)
-    || (spend.maxEssence > 0 && spend.maxEssence >= maxEssence(ctx));
+    || (spend.partialMaxEssence > 0
+      && (spend.exhaustsMaxEssence || spend.partialMaxEssence >= maxEssence(ctx)));
 }
 
 function nonMetaCosts(): readonly Cost[] {

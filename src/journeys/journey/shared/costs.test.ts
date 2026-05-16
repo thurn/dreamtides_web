@@ -513,6 +513,38 @@ describe("meta_pay_2_costs (compound) locking", () => {
     expect(t.locked(params, ctx)).toBe(true);
   });
 
+  it("keeps pay_max_essence compounds unlocked with a harmless finite cost", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100, maxEssence: 100 });
+    const params = {
+      subIds: ["pay_max_essence", "pay_essence"] as const,
+      subParams: [
+        {},
+        { x: 50 },
+      ] as const,
+    };
+    expect(getCost("pay_max_essence").locked(params.subParams[0], ctx)).toBe(false);
+    expect(getCost("pay_essence").locked(params.subParams[1], ctx)).toBe(false);
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("locks pay_max_essence compounds with additional max-essence loss", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ maxEssence: 100 });
+    const params = {
+      subIds: ["pay_max_essence", "lose_max_essence"] as const,
+      subParams: [
+        {},
+        { amount: 25 },
+      ] as const,
+    };
+    expect(getCost("pay_max_essence").locked(params.subParams[0], ctx)).toBe(false);
+    expect(getCost("lose_max_essence").locked(params.subParams[1], ctx)).toBe(false);
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
   it("declines an empty context when both sub-costs decline", () => {
     // Hand-picked sub-cost ids that are guaranteed to decline on an empty
     // fixture (purge_named_card needs a deck; draw_X_purge_chosen needs
