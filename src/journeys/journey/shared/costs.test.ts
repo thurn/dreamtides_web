@@ -500,6 +500,34 @@ describe("meta_pay_2_costs (compound) locking", () => {
     }, ctx)).toBe(true);
   });
 
+  it("keeps finite-then-percent essence compounds unlocked when the ordered percent is affordable", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_percent_essence"] as const,
+      subParams: [
+        { x: 60 },
+        { percent: 75 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("keeps all-remaining-then-percent essence compounds unlocked because percent applies to zero", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_all_remaining_essence", "pay_percent_essence"] as const,
+      subParams: [
+        {},
+        { percent: 75 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
   it("keeps finite-then-all-remaining essence compounds unlocked when the finite cost is affordable", () => {
     const t = getCost("meta_pay_2_costs");
     const ctx = emptyContext({ essence: 100 });
@@ -539,6 +567,34 @@ describe("meta_pay_2_costs (compound) locking", () => {
       ] as const,
     };
     expect(t.locked(params, ctx)).toBe(true);
+  });
+
+  it("keeps lose-max-then-pay-max compounds unlocked because pay max exhausts the remainder", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ maxEssence: 100 });
+    const params = {
+      subIds: ["lose_max_essence", "pay_max_essence"] as const,
+      subParams: [
+        { amount: 25 },
+        {},
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("locks pay-max-then-lose-max compounds because pay max exhausts first", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ maxEssence: 100 });
+    const params = {
+      subIds: ["pay_max_essence", "lose_max_essence"] as const,
+      subParams: [
+        {},
+        { amount: 25 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
   });
 
   it("keeps pay_max_essence compounds unlocked with a harmless finite cost", () => {

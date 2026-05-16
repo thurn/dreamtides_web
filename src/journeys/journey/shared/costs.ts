@@ -915,12 +915,15 @@ type MetaPay2Params = {
   subParams: readonly [Record<string, unknown>, Record<string, unknown>];
 };
 
-type FiniteResourceSpend = {
-  essence: number;
-  exhaustsEssence: boolean;
+type OrderedSpendOperation =
+  | { kind: "finite"; amount: number }
+  | { kind: "percent"; percent: number }
+  | { kind: "exhaust" };
+
+type GuaranteedResourceSpend = {
+  essence: readonly OrderedSpendOperation[];
   omens: number;
-  partialMaxEssence: number;
-  exhaustsMaxEssence: boolean;
+  maxEssence: readonly OrderedSpendOperation[];
 };
 
 function numericParam(params: Record<string, unknown>, key: string): number {
@@ -928,90 +931,107 @@ function numericParam(params: Record<string, unknown>, key: string): number {
   return typeof value === "number" && Number.isFinite(value) ? value : 0;
 }
 
-function guaranteedFiniteResourceSpend(
+function guaranteedResourceSpend(
   costId: string,
   params: Record<string, unknown>,
-  ctx: JourneyContext,
-): FiniteResourceSpend {
-  const noSpend: FiniteResourceSpend = {
-    essence: 0,
-    exhaustsEssence: false,
+): GuaranteedResourceSpend {
+  const noSpend: GuaranteedResourceSpend = {
+    essence: [],
     omens: 0,
-    partialMaxEssence: 0,
-    exhaustsMaxEssence: false,
+    maxEssence: [],
   };
 
   switch (costId) {
     case "pay_essence":
-      return { ...noSpend, essence: numericParam(params, "x") };
+      return {
+        ...noSpend,
+        essence: [{ kind: "finite", amount: numericParam(params, "x") }],
+      };
     case "pay_essence_random_range":
-      return { ...noSpend, essence: numericParam(params, "min") };
+      return {
+        ...noSpend,
+        essence: [{ kind: "finite", amount: numericParam(params, "min") }],
+      };
     case "pay_percent_essence":
       return {
         ...noSpend,
-        essence: Math.floor((essenceAmount(ctx) * numericParam(params, "percent")) / 100),
+        essence: [{ kind: "percent", percent: numericParam(params, "percent") }],
       };
     case "pay_all_remaining_essence":
-      return { ...noSpend, exhaustsEssence: true };
+      return { ...noSpend, essence: [{ kind: "exhaust" }] };
     case "pay_omens":
       return { ...noSpend, omens: numericParam(params, "x") };
     case "pay_max_essence":
-      return { ...noSpend, exhaustsMaxEssence: true };
+      return { ...noSpend, maxEssence: [{ kind: "exhaust" }] };
     case "lose_max_essence":
-      return { ...noSpend, partialMaxEssence: numericParam(params, "amount") };
+      return { ...noSpend, maxEssence: [{ kind: "finite", amount: numericParam(params, "amount") }] };
     default:
       return noSpend;
   }
 }
 
-function addFiniteResourceSpend(
-  first: FiniteResourceSpend,
-  second: FiniteResourceSpend,
-): FiniteResourceSpend {
+function addGuaranteedResourceSpend(
+  first: GuaranteedResourceSpend,
+  second: GuaranteedResourceSpend,
+): GuaranteedResourceSpend {
   return {
-    essence: first.essence + second.essence,
-    exhaustsEssence: first.exhaustsEssence || second.exhaustsEssence,
+    essence: [...first.essence, ...second.essence],
     omens: first.omens + second.omens,
-    partialMaxEssence: first.partialMaxEssence + second.partialMaxEssence,
-    exhaustsMaxEssence: first.exhaustsMaxEssence || second.exhaustsMaxEssence,
+    maxEssence: [...first.maxEssence, ...second.maxEssence],
   };
 }
 
-function orderedEssenceSpend(
-  spends: readonly [FiniteResourceSpend, FiniteResourceSpend],
-  ctx: JourneyContext,
-): number {
-  let remaining = essenceAmount(ctx);
-  let spent = 0;
+function orderedSpendLocks(
+  initial: number,
+  operations: readonly OrderedSpendOperation[],
+  options: { finiteLocksOnExactExhaust: boolean },
+): boolean {
+  let remaining = initial;
 
-  for (const spend of spends) {
-    spent += spend.essence;
-    remaining -= spend.essence;
-
-    if (spend.exhaustsEssence) {
-      const exhaustedEssence = Math.max(0, remaining);
-      spent += exhaustedEssence;
-      remaining = 0;
+  for (const operation of operations) {
+    if (operation.kind === "finite") {
+      if (
+        operation.amount > remaining
+        || (options.finiteLocksOnExactExhaust && operation.amount >= remaining)
+      ) {
+        return true;
+      }
+      remaining -= operation.amount;
+      continue;
     }
+
+    if (operation.kind === "percent") {
+      remaining -= Math.floor((remaining * operation.percent) / 100);
+      continue;
+    }
+
+    remaining = 0;
   }
 
-  return spent;
+  return false;
 }
 
-function combinedFiniteResourceSpendLocks(
+function combinedResourceSpendLocks(
   p: MetaPay2Params,
   ctx: JourneyContext,
 ): boolean {
   const orderedSpend = [
-    guaranteedFiniteResourceSpend(p.subIds[0], p.subParams[0], ctx),
-    guaranteedFiniteResourceSpend(p.subIds[1], p.subParams[1], ctx),
+    guaranteedResourceSpend(p.subIds[0], p.subParams[0]),
+    guaranteedResourceSpend(p.subIds[1], p.subParams[1]),
   ] as const;
-  const spend = addFiniteResourceSpend(orderedSpend[0], orderedSpend[1]);
+  const spend = addGuaranteedResourceSpend(orderedSpend[0], orderedSpend[1]);
 
-  return orderedEssenceSpend(orderedSpend, ctx) > essenceAmount(ctx)
+  return orderedSpendLocks(
+    essenceAmount(ctx),
+    spend.essence,
+    { finiteLocksOnExactExhaust: false },
+  )
     || spend.omens > omenAmount(ctx)
-    || (spend.partialMaxEssence > 0
-      && (spend.exhaustsMaxEssence || spend.partialMaxEssence >= maxEssence(ctx)));
+    || orderedSpendLocks(
+      maxEssence(ctx),
+      spend.maxEssence,
+      { finiteLocksOnExactExhaust: true },
+    );
 }
 
 function nonMetaCosts(): readonly Cost[] {
@@ -1063,7 +1083,7 @@ const metaPay2Costs: Cost<MetaPay2Params> = {
     const b = getCost(p.subIds[1]);
     return a.locked(p.subParams[0], ctx)
       || b.locked(p.subParams[1], ctx)
-      || combinedFiniteResourceSpendLocks(p, ctx);
+      || combinedResourceSpendLocks(p, ctx);
   },
   render: (p, ctx) => {
     const a = getCost(p.subIds[0]);
