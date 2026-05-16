@@ -529,6 +529,93 @@ describe("Card reward apply (non-choice)", () => {
       warnSpy.mockRestore();
     }
   });
+
+  it("duplicate_named_card_X duplicates the first matching named deck entry once per copy", () => {
+    const t = getReward("duplicate_named_card_X");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ name: "Event Alpha", copies: 2 }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "duplicateDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:duplicate_named_card_X"],
+      },
+      {
+        method: "duplicateDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:duplicate_named_card_X"],
+      },
+    ]);
+  });
+
+  it("duplicate_named_card_X warns and skips when the named deck entry is missing", () => {
+    const t = getReward("duplicate_named_card_X");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ name: "Event Alpha", copies: 2 }, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("duplicate_random_predicate duplicates deterministic matching deck entry ids", () => {
+    const t = getReward("duplicate_random_predicate");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ predicateId: "events", count: 2 }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "duplicateDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:duplicate_random_predicate"],
+      },
+      {
+        method: "duplicateDeckEntry",
+        args: ["deck-event-beta", "dream_journey:duplicate_random_predicate"],
+      },
+    ]);
+  });
+
+  it("duplicate_random_predicate warns and skips when no deck entries match", () => {
+    const t = getReward("duplicate_random_predicate");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ predicateId: "events", count: 2 }, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
 });
 
 describe("Dreamsign reward apply (non-choice)", () => {

@@ -184,6 +184,24 @@ function pickTransfigurationForPredicate(
   return pickFromList(draw, label, pool);
 }
 
+function pickUniqueDeckEntryIds(
+  draw: DrawContext,
+  label: string,
+  entryIds: readonly string[],
+  count: number,
+): string[] {
+  const remaining = [...entryIds];
+  const picked: string[] = [];
+
+  for (let i = 0; i < count && remaining.length > 0; i += 1) {
+    const entryId = pickFromList(draw, `${label}:${i}`, remaining);
+    picked.push(entryId);
+    remaining.splice(remaining.indexOf(entryId), 1);
+  }
+
+  return picked;
+}
+
 function predicateAdmitsTransfiguration(
   ctx: JourneyContext,
   predicateId: string,
@@ -908,7 +926,21 @@ const transformChosenPredicateIntoNamed: Reward<TransformPredCardParams> = {
   apply: () => {},
 };
 
-type DupNamedCardParams = { cardName: string; count: number };
+type DupNamedCardParams = {
+  cardName?: string;
+  count?: number;
+  name?: string;
+  copies?: number;
+};
+
+function duplicateNamedCardName(p: DupNamedCardParams): string {
+  return p.cardName ?? p.name ?? "";
+}
+
+function duplicateNamedCardCount(p: DupNamedCardParams): number {
+  return p.count ?? p.copies ?? 0;
+}
+
 const duplicateNamedCardX: Reward<DupNamedCardParams> = {
   id: "duplicate_named_card_X",
   weight: 1.0,
@@ -921,13 +953,26 @@ const duplicateNamedCardX: Reward<DupNamedCardParams> = {
       count: drawInt(draw, "dup_named:n", 1, 3),
     };
   },
-  cec: (p) => CARD_CEC * p.count,
+  cec: (p) => CARD_CEC * duplicateNamedCardCount(p),
   // Named-card smell. CLI shipped
   // `cardMatches(ctx, { source: "deck" }).length >= 1`.
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
+  viable: (p, ctx) => deckContainsCardByName(ctx, duplicateNamedCardName(p)),
   render: (p) =>
-    `Create ${p.count} duplicate${p.count === 1 ? "" : "s"} of ${quoteName(p.cardName)}`,
-  apply: () => {},
+    `Create ${duplicateNamedCardCount(p)} duplicate${duplicateNamedCardCount(p) === 1 ? "" : "s"} of ${quoteName(duplicateNamedCardName(p))}`,
+  apply: (p, ctx, mut) => {
+    const cardName = duplicateNamedCardName(p);
+    const entryId = findDeckEntriesByName(ctx, cardName)[0];
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "duplicate_named_card_X",
+        `deck entry for card name ${JSON.stringify(cardName)} was not found`,
+      );
+      return;
+    }
+    for (let i = 0; i < duplicateNamedCardCount(p); i += 1) {
+      mut.duplicateDeckEntry(entryId, "dream_journey:duplicate_named_card_X");
+    }
+  },
 };
 
 type DupChosenParams = { count: number };
@@ -962,7 +1007,31 @@ const duplicateRandomPredicate: Reward<DupRandomPredParams> = {
     const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
     return `Duplicate ${p.count} random ${noun}`;
   },
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "duplicate_random_predicate",
+        `no deck entries matched predicate ${JSON.stringify(p.predicateId)}`,
+      );
+      return;
+    }
+    const pickedEntryIds = pickUniqueDeckEntryIds(
+      applyDrawContext(ctx),
+      "duplicate_random_predicate:entry",
+      entryIds,
+      p.count,
+    );
+    if (pickedEntryIds.length < p.count) {
+      warnSkippedCardApply(
+        "duplicate_random_predicate",
+        `only ${pickedEntryIds.length} deck entries matched predicate ${JSON.stringify(p.predicateId)} for count=${p.count}`,
+      );
+    }
+    for (const entryId of pickedEntryIds) {
+      mut.duplicateDeckEntry(entryId, "dream_journey:duplicate_random_predicate");
+    }
+  },
 };
 
 type DrawDupParams = { drawCount: number };
