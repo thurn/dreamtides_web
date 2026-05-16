@@ -25,6 +25,14 @@ type RolledRouteReward = {
   readonly routeEffect: Record<string, unknown>;
 };
 
+type SharedRewardEnvelope = {
+  readonly kind: "shared_reward_template";
+  readonly templateId: string;
+  readonly params: TemplateParams;
+  readonly text: string;
+  readonly convertedEssence: number;
+};
+
 const SITE_UPGRADE_RANK: Readonly<Record<string, number>> = Object.freeze({
   "Dream Journey": 0,
   "Dreamsign Offering": 1,
@@ -379,6 +387,16 @@ function rollRouteRewards(
   }, []);
 }
 
+function sharedRewardEnvelope(reward: RolledRouteReward): SharedRewardEnvelope {
+  return {
+    kind: "shared_reward_template",
+    templateId: reward.template.id,
+    params: reward.params,
+    text: reward.text,
+    convertedEssence: reward.cec,
+  };
+}
+
 function optionFor(number: number, reward: RolledRouteReward): JourneyOption {
   return makeUnlockedOption({
     number,
@@ -386,7 +404,7 @@ function optionFor(number: number, reward: RolledRouteReward): JourneyOption {
     text: reward.text,
     operations: [],
     costs: [],
-    effects: [],
+    effects: [sharedRewardEnvelope(reward)],
     burdens: [],
     targets: [],
     triggers: [],
