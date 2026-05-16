@@ -4,9 +4,10 @@
  * Owns two pieces of UI state:
  *
  *   1. The memoized journey manifest produced by `generateNextJourney`. The
- *      memo keys on the `JourneyContext` so re-renders never re-run
- *      generation, and reloading the screen against an unchanged context
- *      produces a byte-identical manifest.
+ *      memo keys on the `JourneyContext` and current reroll index so
+ *      re-renders never re-run generation, reloading the screen against an
+ *      unchanged context produces the initial byte-identical manifest, and
+ *      pressing reroll advances to the next deterministic root journey.
  *   2. `currentNodeId` — the node the player is currently looking at when
  *      the manifest is a decision tree. Flat manifests leave this `null`.
  *      `initializeTree` runs once on mount to skip past root-level
@@ -22,6 +23,11 @@
  *   - Disabled when `manifest.shapeId === "choose_your_loss"` (the player is
  *     committed to one of the losses and cannot bail). Always enabled in the
  *     error fallback so the player is never stuck.
+ *
+ * On Reroll:
+ *   - Increment the root journey index while keeping the same quest/content
+ *     context. The inner journey body remounts so tree position and hover
+ *     state restart on the fresh manifest.
  *
  * Error fallback: if `generateNextJourney` throws (validation failure or any
  * runtime issue), the screen renders a single sentence plus an enabled Close
@@ -72,11 +78,14 @@ type ManifestResult =
   | { readonly ok: true; readonly manifest: JourneyManifest }
   | { readonly ok: false; readonly error: unknown };
 
-function drawContextFor(context: JourneyContext): DrawContext {
+function drawContextForReroll(
+  context: JourneyContext,
+  rootJourneyIndex: number,
+): DrawContext {
   return {
     seed: context.state.quest.seed,
     contentVersion: context.contentVersion,
-    rootJourneyIndex: 0,
+    rootJourneyIndex,
   };
 }
 
@@ -109,26 +118,33 @@ export function JourneyScreen({
   onClose,
   extensionMap,
 }: JourneyScreenProps) {
+  const [rerollIndex, setRerollIndex] = useState(0);
+  const handleReroll = useCallback(() => {
+    setRerollIndex((current) => current + 1);
+  }, []);
+
   const manifestResult = useMemo<ManifestResult>(() => {
     try {
       const manifest = generateNextJourney({
         context,
-        drawContext: drawContextFor(context),
+        drawContext: drawContextForReroll(context, rerollIndex),
       });
       return { ok: true, manifest };
     } catch (error) {
       return { ok: false, error };
     }
-  }, [context]);
+  }, [context, rerollIndex]);
 
   if (!manifestResult.ok) {
-    return <JourneyErrorFallback onClose={onClose} />;
+    return <JourneyErrorFallback onClose={onClose} onReroll={handleReroll} />;
   }
 
   return (
     <JourneyScreenInner
+      key={`${manifestResult.manifest.journeyId}:${manifestResult.manifest.rootJourneyIndex}`}
       manifest={manifestResult.manifest}
       onClose={onClose}
+      onReroll={handleReroll}
       extensionMap={extensionMap}
     />
   );
@@ -138,10 +154,12 @@ export function JourneyScreen({
 function JourneyScreenInner({
   manifest,
   onClose,
+  onReroll,
   extensionMap,
 }: {
   readonly manifest: JourneyManifest;
   readonly onClose: () => void;
+  readonly onReroll: () => void;
   readonly extensionMap?: ExtensionMap;
 }) {
   // Resolve the initial player-choice node for tree manifests. The traversal
@@ -221,13 +239,14 @@ function JourneyScreenInner({
       assignmentByLabel.has(`Branch ${branch.id}`),
     );
     if (!branchesHaveArt) {
-      return <JourneyErrorFallback onClose={onClose} />;
+      return <JourneyErrorFallback onClose={onClose} onReroll={onReroll} />;
     }
 
     return (
       <JourneyChrome
         closeDisabled={closeDisabled}
         onClose={closeDisabled ? noop : onClose}
+        onReroll={onReroll}
       >
         <div className="flex max-w-5xl flex-wrap items-start justify-center gap-6">
           {branches.map((branch) => {
@@ -272,13 +291,14 @@ function JourneyScreenInner({
     assignmentByLabel.has(`Option ${option.number}`),
   );
   if (!optionsHaveArt) {
-    return <JourneyErrorFallback onClose={onClose} />;
+    return <JourneyErrorFallback onClose={onClose} onReroll={onReroll} />;
   }
 
   return (
     <JourneyChrome
       closeDisabled={closeDisabled}
       onClose={closeDisabled ? noop : onClose}
+      onReroll={onReroll}
     >
       <div className="flex max-w-5xl flex-wrap items-start justify-center gap-6">
         {renderedOptions.map((option) => {
@@ -315,25 +335,35 @@ function JourneyScreenInner({
 function JourneyChrome({
   closeDisabled,
   onClose,
+  onReroll,
   children,
 }: {
   readonly closeDisabled: boolean;
   readonly onClose: () => void;
+  readonly onReroll: () => void;
   readonly children: React.ReactNode;
 }) {
   return (
     <div className="relative flex min-h-full flex-col items-center px-4 py-10 md:px-8">
       <CloseButton disabled={closeDisabled} onClick={onClose} />
+      <RerollButton onClick={onReroll} />
       {children}
     </div>
   );
 }
 
 /** Defensive fallback when generation fails. Close is always enabled here. */
-function JourneyErrorFallback({ onClose }: { readonly onClose: () => void }) {
+function JourneyErrorFallback({
+  onClose,
+  onReroll,
+}: {
+  readonly onClose: () => void;
+  readonly onReroll: () => void;
+}) {
   return (
     <div className="relative flex min-h-full flex-col items-center px-4 py-10 md:px-8">
       <CloseButton disabled={false} onClick={onClose} />
+      <RerollButton onClick={onReroll} />
       <p
         className="mt-16 text-center text-base"
         style={{ color: "#e2e8f0" }}
@@ -341,6 +371,27 @@ function JourneyErrorFallback({ onClose }: { readonly onClose: () => void }) {
         This dream eludes you. Press × to leave.
       </p>
     </div>
+  );
+}
+
+function RerollButton({ onClick }: { readonly onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-label="Reroll journey"
+      title="Reroll journey"
+      onClick={onClick}
+      className="absolute left-4 top-16 flex h-10 w-10 items-center justify-center rounded-full text-2xl leading-none transition-opacity"
+      style={{
+        backgroundColor: "#4b5563",
+        color: "#ffffff",
+        border: "1px solid rgba(255, 255, 255, 0.15)",
+        boxShadow: "0 0 10px rgba(75, 85, 99, 0.35)",
+        cursor: "pointer",
+      }}
+    >
+      <i className="bx bx-refresh" aria-hidden="true" />
+    </button>
   );
 }
 

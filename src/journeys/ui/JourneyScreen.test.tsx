@@ -2,7 +2,7 @@
 
 // UI tests for `JourneyScreen`.
 //
-// Eight tests, one per non-redundant branch in the screen's state machine.
+// Tests cover the non-redundant branches in the screen's state machine.
 // Each test owns its manifest: `generateNextJourney` is mocked at the module
 // boundary so tests never run the real generation pipeline (already covered
 // by Phase F's `generate.test.ts` and Phase G's shape suites).
@@ -311,6 +311,14 @@ function queryCloseButton(container: HTMLElement): HTMLButtonElement {
   return button;
 }
 
+function queryRerollButton(container: HTMLElement): HTMLButtonElement {
+  const button = container.querySelector<HTMLButtonElement>(
+    'button[aria-label="Reroll journey"]',
+  );
+  if (!button) throw new Error("Reroll button not rendered");
+  return button;
+}
+
 beforeEach(() => {
   mockedGenerate.mockReset();
 });
@@ -330,6 +338,50 @@ describe("JourneyScreen", () => {
 
     const enterButtons = queryEnterDreamButtons(container);
     expect(enterButtons).toHaveLength(3);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("rerolls with the same context and the next root journey index", () => {
+    mockedGenerate
+      .mockReturnValueOnce(makeFlatManifest(1))
+      .mockReturnValueOnce(makeFlatManifest(2));
+    const context = dummyContext();
+    const onClose = vi.fn();
+
+    const { container, root } = mount(
+      <JourneyScreen context={context} onClose={onClose} />,
+    );
+
+    expect(queryEnterDreamButtons(container)).toHaveLength(1);
+    expect(mockedGenerate.mock.calls[0]?.[0]).toMatchObject({
+      context,
+      drawContext: {
+        seed: "test-seed",
+        contentVersion: "test-content",
+        rootJourneyIndex: 0,
+      },
+    });
+
+    const reroll = queryRerollButton(container);
+    expect(reroll.className).toContain("h-10");
+    expect(reroll.className).toContain("w-10");
+
+    act(() => {
+      reroll.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(queryEnterDreamButtons(container)).toHaveLength(2);
+    expect(mockedGenerate.mock.calls[1]?.[0]).toMatchObject({
+      context,
+      drawContext: {
+        seed: "test-seed",
+        contentVersion: "test-content",
+        rootJourneyIndex: 1,
+      },
+    });
 
     act(() => {
       root.unmount();
