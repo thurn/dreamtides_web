@@ -844,7 +844,13 @@ const removeShopSitesFromNextDreamscapes: Cost<RemoveShopSitesParams> = {
   locked: () => false,
   render: (p) =>
     `Remove all shop sites from the next ${p.dreamscapes} dreamscape${p.dreamscapes === 1 ? "" : "s"} you visit`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.removeSiteTypeFromNextDreamscapes(
+      "Shop",
+      p.dreamscapes,
+      "dream_journey:remove_shop_sites_from_next_dreamscapes",
+    );
+  },
 };
 
 type RemoveDsSitesParams = { dreamscapes: number };
@@ -857,7 +863,13 @@ const removeDreamsignSitesFromNextDreamscapes: Cost<RemoveDsSitesParams> = {
   locked: () => false,
   render: (p) =>
     `Remove all dreamsign sites from the next ${p.dreamscapes} dreamscape${p.dreamscapes === 1 ? "" : "s"} you visit`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.removeSiteTypeFromNextDreamscapes(
+      "DreamsignOffering",
+      p.dreamscapes,
+      "dream_journey:remove_dreamsign_sites_from_next_dreamscapes",
+    );
+  },
 };
 
 type LoseMaxEssenceParams = { amount: number };

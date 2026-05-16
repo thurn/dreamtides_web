@@ -748,4 +748,34 @@ describe("Dreamsign cost apply (non-choice)", () => {
       warnSpy.mockRestore();
     }
   });
+
+  it("remove_shop_sites_from_next_dreamscapes records the route mutation", () => {
+    const t = getCost("remove_shop_sites_from_next_dreamscapes");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ dreamscapes: 2 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "removeSiteTypeFromNextDreamscapes",
+        args: ["Shop", 2, "dream_journey:remove_shop_sites_from_next_dreamscapes"],
+      },
+    ]);
+  });
+
+  it("remove_dreamsign_sites_from_next_dreamscapes records the route mutation", () => {
+    const t = getCost("remove_dreamsign_sites_from_next_dreamscapes");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ dreamscapes: 3 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "removeSiteTypeFromNextDreamscapes",
+        args: [
+          "DreamsignOffering",
+          3,
+          "dream_journey:remove_dreamsign_sites_from_next_dreamscapes",
+        ],
+      },
+    ]);
+  });
 });

@@ -1245,4 +1245,171 @@ describe("Dreamsign reward apply (non-choice)", () => {
       warnSpy.mockRestore();
     }
   });
+
+  it("add_site_to_dreamscape records the current-dreamscape route mutation", () => {
+    const t = getReward("add_site_to_dreamscape");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ siteType: "Shop" }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "addSiteToDreamscape",
+        args: ["current", "Shop", "dream_journey:add_site_to_dreamscape"],
+      },
+    ]);
+  });
+
+  it("add_site_to_dreamscape converts display site labels before recording", () => {
+    const t = getReward("add_site_to_dreamscape");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ siteType: "Specialty Shop" }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "addSiteToDreamscape",
+        args: ["current", "SpecialtyShop", "dream_journey:add_site_to_dreamscape"],
+      },
+    ]);
+  });
+
+  it("add_site_to_next_dreamscape records the next-dreamscape route mutation", () => {
+    const t = getReward("add_site_to_next_dreamscape");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ siteType: "Essence" }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "addSiteToDreamscape",
+        args: ["next", "Essence", "dream_journey:add_site_to_next_dreamscape"],
+      },
+    ]);
+  });
+
+  it("add_site_to_next_dreamscape converts display site labels before recording", () => {
+    const t = getReward("add_site_to_next_dreamscape");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ siteType: "Dreamsign Offering" }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "addSiteToDreamscape",
+        args: ["next", "DreamsignOffering", "dream_journey:add_site_to_next_dreamscape"],
+      },
+    ]);
+  });
+
+  it("replace_site_type records the route replacement mutation", () => {
+    const t = getReward("replace_site_type");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ fromType: "Shop", toType: "Essence" }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "replaceSiteType",
+        args: ["Shop", "Essence", "dream_journey:replace_site_type"],
+      },
+    ]);
+  });
+
+  it("replace_site_type converts display site labels before recording", () => {
+    const t = getReward("replace_site_type");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply(
+      { fromType: "Dreamsign Draft", toType: "Specialty Shop" },
+      ctx,
+      mut,
+      undefined,
+    );
+    expect(calls).toEqual([
+      {
+        method: "replaceSiteType",
+        args: ["DreamsignDraft", "SpecialtyShop", "dream_journey:replace_site_type"],
+      },
+    ]);
+  });
+
+  it("boost_site_appearance_chance records the route boost mutation", () => {
+    const t = getReward("boost_site_appearance_chance");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ siteType: "Purge", percent: 20, dreamscapes: 2 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "boostSiteAppearance",
+        args: ["Purge", 20, 2, "dream_journey:boost_site_appearance_chance"],
+      },
+    ]);
+  });
+
+  it("boost_site_appearance_chance converts display site labels before recording", () => {
+    const t = getReward("boost_site_appearance_chance");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ siteType: "Dreamsign Draft", percent: 20, dreamscapes: 2 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "boostSiteAppearance",
+        args: ["DreamsignDraft", 20, 2, "dream_journey:boost_site_appearance_chance"],
+      },
+    ]);
+  });
+
+  it("boost_site_appearance_chance defaults omitted dreamscapes to the spec duration", () => {
+    const t = getReward("boost_site_appearance_chance");
+    const ctx = buildContext();
+    const { mut, calls } = createRecordingMutations();
+    t.apply({ siteType: "Purge", percent: 30 }, ctx, mut, undefined);
+    expect(calls).toEqual([
+      {
+        method: "boostSiteAppearance",
+        args: ["Purge", 30, 3, "dream_journey:boost_site_appearance_chance"],
+      },
+    ]);
+  });
+
+  it("site label conversion warns and skips inherited property names", () => {
+    const t = getReward("boost_site_appearance_chance");
+    const ctx = buildContext();
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ siteType: "toString", percent: 20, dreamscapes: 2 }, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("toString"));
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it.each([
+    {
+      id: "add_site_to_dreamscape",
+      params: { siteType: "Unknown Site" },
+    },
+    {
+      id: "add_site_to_next_dreamscape",
+      params: { siteType: "Unknown Site" },
+    },
+    {
+      id: "replace_site_type",
+      params: { fromType: "Unknown Site", toType: "Shop" },
+    },
+    {
+      id: "boost_site_appearance_chance",
+      params: { siteType: "Unknown Site", percent: 20, dreamscapes: 2 },
+    },
+  ])("$id warns and skips unknown site labels", ({ id, params }) => {
+    const t = getReward(id);
+    const ctx = buildContext();
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply(params, ctx, mut, undefined);
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("Unknown Site"));
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
 });

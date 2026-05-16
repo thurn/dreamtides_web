@@ -107,6 +107,7 @@ const POSITIVE_TEMPORARY_BATTLE_MAX = 3;
 const BOOST_SITE_DURATION_DREAMSCAPES = 3;
 
 type DreamsignForApply = Parameters<JourneyMutations["addDreamsign"]>[0];
+type SiteTypeForApply = Parameters<JourneyMutations["addSiteToDreamscape"]>[1];
 type TransfigurationForApply = Exclude<
   Parameters<JourneyMutations["transfigureDeckEntry"]>[1],
   null
@@ -215,6 +216,36 @@ function pickUniqueDeckEntryIds(
 
 function transfigurationForApply(transfiguration: string): TransfigurationForApply {
   return transfiguration as TransfigurationForApply;
+}
+
+const SITE_TYPE_FOR_APPLY_BY_JOURNEY_LABEL: ReadonlyMap<string, SiteTypeForApply> = new Map([
+  ["Battle", "Battle"],
+  ["Draft", "Draft"],
+  ["Essence", "Essence"],
+  ["Shop", "Shop"],
+  ["Specialty Shop", "SpecialtyShop"],
+  ["SpecialtyShop", "SpecialtyShop"],
+  ["Purge", "Purge"],
+  ["Transfiguration", "Transfiguration"],
+  ["Dreamsign Offering", "DreamsignOffering"],
+  ["DreamsignOffering", "DreamsignOffering"],
+  ["Dreamsign Draft", "DreamsignDraft"],
+  ["DreamsignDraft", "DreamsignDraft"],
+  ["Dream Journey", "DreamJourney"],
+  ["DreamJourney", "DreamJourney"],
+  ["Duplication", "Duplication"],
+  ["Reward", "Reward"],
+  ["Cleanse", "Cleanse"],
+]);
+
+function siteTypeForApply(templateId: string, siteLabel: string): SiteTypeForApply | undefined {
+  const siteType = SITE_TYPE_FOR_APPLY_BY_JOURNEY_LABEL.get(siteLabel);
+  if (siteType === undefined) {
+    console.warn(
+      `[journeys/apply] ${templateId} skipped: unknown site type ${JSON.stringify(siteLabel)}`,
+    );
+  }
+  return siteType;
 }
 
 function pickRandomTransfigurationForEntry(
@@ -1376,7 +1407,15 @@ const addSiteToDreamscape: Reward<AddSiteParams> = {
   viable: () => true,
   render: (p) =>
     `Add ${indefiniteArticleFor(p.siteType)} ${p.siteType} site to this dreamscape`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    const siteType = siteTypeForApply("add_site_to_dreamscape", p.siteType);
+    if (siteType === undefined) return;
+    mut.addSiteToDreamscape(
+      "current",
+      siteType,
+      "dream_journey:add_site_to_dreamscape",
+    );
+  },
 };
 
 const addSiteToNextDreamscape: Reward<AddSiteParams> = {
@@ -1389,7 +1428,15 @@ const addSiteToNextDreamscape: Reward<AddSiteParams> = {
   viable: () => true,
   render: (p) =>
     `Add ${indefiniteArticleFor(p.siteType)} ${p.siteType} site to the next dreamscape you visit`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    const siteType = siteTypeForApply("add_site_to_next_dreamscape", p.siteType);
+    if (siteType === undefined) return;
+    mut.addSiteToDreamscape(
+      "next",
+      siteType,
+      "dream_journey:add_site_to_next_dreamscape",
+    );
+  },
 };
 
 type StartingDreamwellPosParams = { cardName: string };
@@ -1824,7 +1871,16 @@ const replaceSiteType: Reward<ReplaceSiteTypeParams> = {
   viable: () => true,
   render: (p) =>
     `Replace ${indefiniteArticleFor(p.fromType)} ${p.fromType} site in this dreamscape with ${indefiniteArticleFor(p.toType)} ${p.toType} site`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    const fromType = siteTypeForApply("replace_site_type", p.fromType);
+    const toType = siteTypeForApply("replace_site_type", p.toType);
+    if (fromType === undefined || toType === undefined) return;
+    mut.replaceSiteType(
+      fromType,
+      toType,
+      "dream_journey:replace_site_type",
+    );
+  },
 };
 
 type ShopEssenceDiscountParams = { percent: number };
@@ -1882,7 +1938,16 @@ const boostSiteAppearanceChance: Reward<BoostSiteParams> = {
     const dreamscapes = p.dreamscapes ?? BOOST_SITE_DURATION_DREAMSCAPES;
     return `${p.percent}% higher chance to see ${p.siteType} sites in the next ${dreamscapes} dreamscape${dreamscapes === 1 ? "" : "s"} you visit`;
   },
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    const siteType = siteTypeForApply("boost_site_appearance_chance", p.siteType);
+    if (siteType === undefined) return;
+    mut.boostSiteAppearance(
+      siteType,
+      p.percent,
+      p.dreamscapes ?? BOOST_SITE_DURATION_DREAMSCAPES,
+      "dream_journey:boost_site_appearance_chance",
+    );
+  },
 };
 
 type MetaGain2Params = {
