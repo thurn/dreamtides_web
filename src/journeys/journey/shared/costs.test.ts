@@ -500,6 +500,34 @@ describe("meta_pay_2_costs (compound) locking", () => {
     }, ctx)).toBe(true);
   });
 
+  it("keeps finite-then-all-remaining essence compounds unlocked when the finite cost is affordable", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_all_remaining_essence"] as const,
+      subParams: [
+        { x: 50 },
+        {},
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("locks all-remaining-then-finite essence compounds when the finite cost cannot be paid after exhaust", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_all_remaining_essence", "pay_essence"] as const,
+      subParams: [
+        {},
+        { x: 50 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
   it("aggregates max-essence costs using the max-essence lock threshold", () => {
     const t = getCost("meta_pay_2_costs");
     const ctx = emptyContext({ maxEssence: 100 });

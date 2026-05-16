@@ -917,6 +917,7 @@ type MetaPay2Params = {
 
 type FiniteResourceSpend = {
   essence: number;
+  exhaustsEssence: boolean;
   omens: number;
   partialMaxEssence: number;
   exhaustsMaxEssence: boolean;
@@ -934,6 +935,7 @@ function guaranteedFiniteResourceSpend(
 ): FiniteResourceSpend {
   const noSpend: FiniteResourceSpend = {
     essence: 0,
+    exhaustsEssence: false,
     omens: 0,
     partialMaxEssence: 0,
     exhaustsMaxEssence: false,
@@ -950,7 +952,7 @@ function guaranteedFiniteResourceSpend(
         essence: Math.floor((essenceAmount(ctx) * numericParam(params, "percent")) / 100),
       };
     case "pay_all_remaining_essence":
-      return { ...noSpend, essence: essenceAmount(ctx) };
+      return { ...noSpend, exhaustsEssence: true };
     case "pay_omens":
       return { ...noSpend, omens: numericParam(params, "x") };
     case "pay_max_essence":
@@ -968,22 +970,45 @@ function addFiniteResourceSpend(
 ): FiniteResourceSpend {
   return {
     essence: first.essence + second.essence,
+    exhaustsEssence: first.exhaustsEssence || second.exhaustsEssence,
     omens: first.omens + second.omens,
     partialMaxEssence: first.partialMaxEssence + second.partialMaxEssence,
     exhaustsMaxEssence: first.exhaustsMaxEssence || second.exhaustsMaxEssence,
   };
 }
 
+function orderedEssenceSpend(
+  spends: readonly [FiniteResourceSpend, FiniteResourceSpend],
+  ctx: JourneyContext,
+): number {
+  let remaining = essenceAmount(ctx);
+  let spent = 0;
+
+  for (const spend of spends) {
+    spent += spend.essence;
+    remaining -= spend.essence;
+
+    if (spend.exhaustsEssence) {
+      const exhaustedEssence = Math.max(0, remaining);
+      spent += exhaustedEssence;
+      remaining = 0;
+    }
+  }
+
+  return spent;
+}
+
 function combinedFiniteResourceSpendLocks(
   p: MetaPay2Params,
   ctx: JourneyContext,
 ): boolean {
-  const spend = addFiniteResourceSpend(
+  const orderedSpend = [
     guaranteedFiniteResourceSpend(p.subIds[0], p.subParams[0], ctx),
     guaranteedFiniteResourceSpend(p.subIds[1], p.subParams[1], ctx),
-  );
+  ] as const;
+  const spend = addFiniteResourceSpend(orderedSpend[0], orderedSpend[1]);
 
-  return spend.essence > essenceAmount(ctx)
+  return orderedEssenceSpend(orderedSpend, ctx) > essenceAmount(ctx)
     || spend.omens > omenAmount(ctx)
     || (spend.partialMaxEssence > 0
       && (spend.exhaustsMaxEssence || spend.partialMaxEssence >= maxEssence(ctx)));
