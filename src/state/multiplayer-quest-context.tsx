@@ -34,6 +34,7 @@ import type {
   Screen,
   ShopSiteRuntime,
   SiteState,
+  SiteType,
   TransfigurationType,
 } from "../types/quest";
 import type { DraftState } from "../types/draft";
@@ -2457,6 +2458,83 @@ export function MultiplayerQuestProvider({
       dismissStartingDeckPopup,
       bootstrapStartInBattle,
       resetQuest,
+      // Wave 1 Dream Journey effect plumbing. Single-player only for now;
+      // multiplayer composed actions land alongside their consumers.
+      changeOmens: (_delta: number, _source: string) => {
+        unavailableMutation("changeOmens");
+      },
+      setEssence: (_value: number, _source: string) => {
+        unavailableMutation("setEssence");
+      },
+      changeMaxEssence: (_delta: number, _source: string) => {
+        unavailableMutation("changeMaxEssence");
+      },
+      addCardById: (_cardId: string, _source: string) => {
+        unavailableMutation("addCardById");
+      },
+      addBaneCardById: (_cardId: string, _source: string) => {
+        unavailableMutation("addBaneCardById");
+      },
+      removeDeckEntry: (_entryId: string, _source: string) => {
+        unavailableMutation("removeDeckEntry");
+      },
+      duplicateDeckEntry: (_entryId: string, _source: string) => {
+        unavailableMutation("duplicateDeckEntry");
+      },
+      pushBattleRewardModifier: (
+        _kind: "flat" | "percent",
+        _amount: number,
+        _battles: number,
+        _source: string,
+      ) => {
+        unavailableMutation("pushBattleRewardModifier");
+      },
+      pushTemporaryBaneGrant: (
+        _baneName: string,
+        _count: number,
+        _battles: number,
+        _source: string,
+      ) => {
+        unavailableMutation("pushTemporaryBaneGrant");
+      },
+      addSiteToDreamscape: (
+        _placement: "current" | "next",
+        _siteType: SiteType,
+        _source: string,
+      ) => {
+        unavailableMutation("addSiteToDreamscape");
+      },
+      replaceSiteType: (
+        _from: SiteType,
+        _to: SiteType,
+        _source: string,
+      ) => {
+        unavailableMutation("replaceSiteType");
+      },
+      removeSiteTypeFromNextDreamscapes: (
+        _siteType: "Shop" | "DreamsignOffering",
+        _dreamscapes: number,
+        _source: string,
+      ) => {
+        unavailableMutation("removeSiteTypeFromNextDreamscapes");
+      },
+      grantFreeShopRerolls: (_count: number, _source: string) => {
+        unavailableMutation("grantFreeShopRerolls");
+      },
+      applyShopEssenceDiscount: (_percent: number, _source: string) => {
+        unavailableMutation("applyShopEssenceDiscount");
+      },
+      grantShopOmenDiscounts: (_count: number, _source: string) => {
+        unavailableMutation("grantShopOmenDiscounts");
+      },
+      boostSiteAppearance: (
+        _siteType: SiteType,
+        _percent: number,
+        _dreamscapes: number,
+        _source: string,
+      ) => {
+        unavailableMutation("boostSiteAppearance");
+      },
     }),
     [
       addCard,

@@ -260,6 +260,77 @@ export type Screen =
   | { type: "questComplete" }
   | { type: "questFailed" };
 
+/**
+ * A modifier that affects upcoming battle resolutions. Pushed by Dream Journey
+ * effects; decremented by `incrementCompletionLevel` each time a battle
+ * completes. Entries at `battlesRemaining === 0` drop on the same tick that
+ * brought them to zero. The battle resolver reads `battleModifiers` to apply
+ * reward reductions and any other per-battle effects when its consumer
+ * hookup lands.
+ */
+export type BattleModifier =
+  | {
+      kind: "reward_reduction_flat";
+      amount: number;
+      battlesRemaining: number;
+      source: string;
+    }
+  | {
+      kind: "reward_reduction_percent";
+      percent: number;
+      battlesRemaining: number;
+      source: string;
+    }
+  | {
+      kind: "temporary_bane_grant";
+      baneName: string;
+      count: number;
+      battlesRemaining: number;
+      /**
+       * The deck `entryId`s added when this modifier was pushed; removed when
+       * `battlesRemaining` hits 0 so the temporary banes leave the deck.
+       */
+      addedEntryIds: readonly string[];
+      source: string;
+    };
+
+/**
+ * A modifier that affects upcoming dreamscape generation or site appearance.
+ * Decremented by `setCurrentDreamscape` whenever the player advances to a
+ * new dreamscape; entries at `dreamscapesRemaining === 0` drop on the same
+ * tick.
+ */
+export type DreamscapeModifier =
+  | {
+      kind: "remove_shop_sites";
+      dreamscapesRemaining: number;
+      source: string;
+    }
+  | {
+      kind: "remove_dreamsign_sites";
+      dreamscapesRemaining: number;
+      source: string;
+    }
+  | {
+      kind: "boost_site_appearance";
+      siteType: SiteType;
+      percent: number;
+      dreamscapesRemaining: number;
+      source: string;
+    };
+
+/**
+ * Shop-side modifiers stacked by Dream Journey rewards. Free-reroll grants
+ * stack additively and are consumed by `rerollShop`; the omen-discount queue
+ * holds one-use −1-omen tokens; `essenceDiscountPercent` is a permanent
+ * additive discount on essence-priced shop slots.
+ */
+export interface ShopModifiers {
+  readonly freeRerolls: number;
+  readonly upcomingOmenDiscounts: number;
+  readonly essenceDiscountPercent: number;
+}
+
 /** The top-level quest state object. */
 export interface QuestState {
   /**
@@ -310,4 +381,21 @@ export interface QuestState {
    * clicks the popup's "Continue" action.
    */
   hasSeenStartingDeckPopup: boolean;
+  /**
+   * Modifiers consumed by future battles. Each modifier carries a remaining
+   * count of battles; `incrementCompletionLevel` decrements each entry and
+   * drops entries that reach zero.
+   */
+  readonly battleModifiers: readonly BattleModifier[];
+  /**
+   * Modifiers consumed at shop sites. Free-reroll grants stack additively,
+   * the omen-discount queue is FIFO, and the essence discount is a permanent
+   * additive percentage applied to every essence-priced shop purchase.
+   */
+  readonly shopModifiers: ShopModifiers;
+  /**
+   * Modifiers consumed by future dreamscapes. Each modifier decrements when
+   * a new dreamscape opens; entries at zero drop on the same tick.
+   */
+  readonly dreamscapeModifiers: readonly DreamscapeModifier[];
 }

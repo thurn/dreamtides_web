@@ -130,6 +130,22 @@ function makeMutations(): QuestMutations {
     dismissStartingDeckPopup: vi.fn(),
     bootstrapStartInBattle: vi.fn(),
     resetQuest: vi.fn(),
+    changeOmens: vi.fn(),
+    setEssence: vi.fn(),
+    changeMaxEssence: vi.fn(),
+    addCardById: vi.fn(),
+    addBaneCardById: vi.fn(),
+    removeDeckEntry: vi.fn(),
+    duplicateDeckEntry: vi.fn(),
+    pushBattleRewardModifier: vi.fn(),
+    pushTemporaryBaneGrant: vi.fn(),
+    addSiteToDreamscape: vi.fn(),
+    replaceSiteType: vi.fn(),
+    removeSiteTypeFromNextDreamscapes: vi.fn(),
+    grantFreeShopRerolls: vi.fn(),
+    applyShopEssenceDiscount: vi.fn(),
+    grantShopOmenDiscounts: vi.fn(),
+    boostSiteAppearance: vi.fn(),
   };
 }
 
@@ -179,6 +195,13 @@ function makeState(
     activeSiteId: null,
     failureSummary,
     hasSeenStartingDeckPopup: false,
+    battleModifiers: [],
+    shopModifiers: {
+      freeRerolls: 0,
+      upcomingOmenDiscounts: 0,
+      essenceDiscountPercent: 0,
+    },
+    dreamscapeModifiers: [],
   };
 }
 

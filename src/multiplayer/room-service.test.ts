@@ -280,6 +280,13 @@ describe("room service", () => {
           activeSiteId: null,
           failureSummary: null,
           hasSeenStartingDeckPopup: false,
+          battleModifiers: [],
+          shopModifiers: {
+            freeRerolls: 0,
+            upcomingOmenDiscounts: 0,
+            essenceDiscountPercent: 0,
+          },
+          dreamscapeModifiers: [],
         },
       },
     });

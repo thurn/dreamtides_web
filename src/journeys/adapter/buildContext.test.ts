@@ -131,6 +131,13 @@ function makeQuestState(overrides: {
     activeSiteId: null,
     failureSummary: null,
     hasSeenStartingDeckPopup: true,
+    battleModifiers: [],
+    shopModifiers: {
+      freeRerolls: 0,
+      upcomingOmenDiscounts: 0,
+      essenceDiscountPercent: 0,
+    },
+    dreamscapeModifiers: [],
   };
 }
 
