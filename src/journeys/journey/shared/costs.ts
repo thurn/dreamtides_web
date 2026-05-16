@@ -71,6 +71,16 @@ function nextBattlePhrase(battles: number): string {
   return battles === 1 ? "the next battle" : `the next ${battles} battles`;
 }
 
+// Inclusive integer roll for resource-range apply. Wave 1 does not plumb a
+// deterministic RNG through the apply path; the option-level seed governs
+// rollParams (generation), and apply is a one-shot resolution event. A future
+// task can swap this for a labeled-RNG roll if determinism at apply time
+// becomes a requirement; the surrounding tests assert the rolled value lies
+// in [min, max] rather than pinning a literal.
+function rollIntInclusive(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 type PayEssenceParams = { x: number };
 const payEssence: Cost<PayEssenceParams> = {
   id: "pay_essence",
@@ -80,7 +90,9 @@ const payEssence: Cost<PayEssenceParams> = {
   viable: () => true,
   locked: (p, ctx) => p.x > essenceAmount(ctx),
   render: (p, ctx) => withLockedPrefix(`Lose ${p.x} essence`, p.x > essenceAmount(ctx)),
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.changeEssence(-p.x, "dream_journey:pay_essence");
+  },
 };
 
 type PayOmensParams = { x: number };
@@ -93,7 +105,9 @@ const payOmens: Cost<PayOmensParams> = {
   locked: (p, ctx) => p.x > omenAmount(ctx),
   render: (p, ctx) =>
     withLockedPrefix(`Lose ${p.x} omen${p.x === 1 ? "" : "s"}`, p.x > omenAmount(ctx)),
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.changeOmens(-p.x, "dream_journey:pay_omens");
+  },
 };
 
 type PayMaxEssenceParams = Record<string, never>;
@@ -105,7 +119,9 @@ const payMaxEssence: Cost<PayMaxEssenceParams> = {
   viable: () => true,
   locked: () => false,
   render: () => "Lose maximum essence",
-  apply: () => {},
+  apply: (_p, ctx, mut) => {
+    mut.changeMaxEssence(-maxEssence(ctx), "dream_journey:pay_max_essence");
+  },
 };
 
 type PayEssenceRangeParams = { min: number; max: number };
@@ -129,7 +145,10 @@ const payEssenceRandomRange: Cost<PayEssenceRangeParams> = {
       `Lose ${p.min}-${p.max} essence (random roll)`,
       p.min > essenceAmount(ctx),
     ),
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    const roll = rollIntInclusive(p.min, p.max);
+    mut.changeEssence(-roll, "dream_journey:pay_essence_random_range");
+  },
 };
 
 type PayPercentEssenceParams = { percent: number };
@@ -146,7 +165,10 @@ const payPercentEssence: Cost<PayPercentEssenceParams> = {
   // 50% of zero is zero); never lock.
   locked: () => false,
   render: (p) => `Lose ${p.percent}% of your essence`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const cost = Math.floor((essenceAmount(ctx) * p.percent) / 100);
+    mut.changeEssence(-cost, "dream_journey:pay_percent_essence");
+  },
 };
 
 type PayAllRemainingParams = Record<string, never>;
@@ -158,7 +180,9 @@ const payAllRemainingEssence: Cost<PayAllRemainingParams> = {
   viable: () => true,
   locked: () => false,
   render: () => "Lose all remaining essence",
-  apply: () => {},
+  apply: (_p, _ctx, mut) => {
+    mut.setEssence(0, "dream_journey:pay_all_remaining_essence");
+  },
 };
 
 type BattleRedFlatParams = { amount: number; battles: number };
@@ -567,7 +591,9 @@ const loseMaxEssence: Cost<LoseMaxEssenceParams> = {
   viable: () => true,
   locked: (p, ctx) => p.amount >= maxEssence(ctx),
   render: (p, ctx) => withLockedPrefix(`Lose ${p.amount} maximum essence`, p.amount >= maxEssence(ctx)),
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.changeMaxEssence(-p.amount, "dream_journey:lose_max_essence");
+  },
 };
 
 type MetaPay2Params = {

@@ -154,6 +154,16 @@ function predicateAdmitsTransfiguration(
   return matches.every((card) => isCardEligibleForTransfiguration(transfiguration, card));
 }
 
+// Inclusive integer roll for resource-range apply. Wave 1 does not plumb a
+// deterministic RNG through the apply path; the option-level seed governs
+// rollParams (generation), and apply is a one-shot resolution event. A future
+// task can swap this for a labeled-RNG roll if determinism at apply time
+// becomes a requirement; the surrounding tests assert the rolled value lies
+// in [min, max] rather than pinning a literal.
+function rollIntInclusive(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 type GainEssenceParams = { x: number };
 const gainEssence: Reward<GainEssenceParams> = {
   id: "gain_essence",
@@ -162,7 +172,9 @@ const gainEssence: Reward<GainEssenceParams> = {
   cec: (p) => p.x * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Gain ${p.x} essence`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.changeEssence(p.x, "dream_journey:gain_essence");
+  },
 };
 
 type GainOmensParams = { x: number };
@@ -173,7 +185,9 @@ const gainOmens: Reward<GainOmensParams> = {
   cec: (p) => p.x * 40 * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Gain ${p.x} omen${p.x === 1 ? "" : "s"}`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.changeOmens(p.x, "dream_journey:gain_omens");
+  },
 };
 
 type SetEssencePctParams = { percent: number };
@@ -188,7 +202,10 @@ const setEssenceToPercentOfMax: Reward<SetEssencePctParams> = {
     Math.max(0, (maxEssence(ctx) * p.percent) / 100 - essenceAmount(ctx)) * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Set essence to ${p.percent}% of your maximum essence`,
-  apply: () => {},
+  apply: (p, ctx, mut) => {
+    const target = Math.floor((maxEssence(ctx) * p.percent) / 100);
+    mut.setEssence(target, "dream_journey:set_essence_to_percent_of_max");
+  },
 };
 
 type GainEssenceRangeParams = { min: number; max: number };
@@ -203,7 +220,10 @@ const gainEssenceRandomRange: Reward<GainEssenceRangeParams> = {
   cec: (p) => ((p.min + p.max) / 2) * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Gain ${p.min}-${p.max} essence (random roll)`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    const roll = rollIntInclusive(p.min, p.max);
+    mut.changeEssence(roll, "dream_journey:gain_essence_random_range");
+  },
 };
 
 type GainEssenceToMaxParams = Record<string, never>;
@@ -214,7 +234,9 @@ const gainEssenceToMax: Reward<GainEssenceToMaxParams> = {
   cec: (_p, ctx) => Math.max(0, maxEssence(ctx) - essenceAmount(ctx)) * STAGE_MULTIPLIER,
   viable: () => true,
   render: () => "Gain essence up to your maximum",
-  apply: () => {},
+  apply: (_p, ctx, mut) => {
+    mut.setEssence(maxEssence(ctx), "dream_journey:gain_essence_to_max");
+  },
 };
 
 // `kinds` restricts the roll to predicates whose `kind` is in the allow-list.
@@ -966,7 +988,9 @@ const increaseMaxEssence: Reward<IncreaseMaxEssenceParams> = {
   cec: (p) => p.amount * 0.5 * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Increase your maximum essence by ${p.amount}`,
-  apply: () => {},
+  apply: (p, _ctx, mut) => {
+    mut.changeMaxEssence(p.amount, "dream_journey:increase_max_essence");
+  },
 };
 
 type Draft2PredicateParams = { predicateId: string };
