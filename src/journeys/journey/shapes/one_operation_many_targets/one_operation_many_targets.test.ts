@@ -39,6 +39,16 @@ function predicateTarget(predicateId = "warriors"): RewardParamTarget {
   } as RewardParamTarget;
 }
 
+function cardTypeTarget(predicateId = "warriors"): RewardParamTarget {
+  return {
+    key: `card_type:${predicateId}`,
+    text: predicateId,
+    selector: {
+      selectorKind: "card",
+    },
+  } as RewardParamTarget;
+}
+
 function transfigurationPredicateTarget(
   transfiguration = "Bronze",
   predicateId = "warriors",
@@ -200,6 +210,42 @@ describe("one_operation_many_targets shape", () => {
       expected: { cardName: "Steady Burn", count: 2 },
     },
     {
+      templateId: "change_card_to_become_type",
+      params: { cardTypePredicateId: "warriors" },
+      target: namedCardTarget(),
+      expected: { cardName: "Steady Burn", cardTypePredicateId: "warriors" },
+    },
+    {
+      templateId: "modify_random_cards_to_types",
+      params: { count: 2 },
+      target: cardTypeTarget("spirit_animals"),
+      expected: { count: 2, cardTypePredicateId: "spirit_animals" },
+    },
+    {
+      templateId: "make_card_reclaim",
+      params: { count: 2 },
+      target: namedCardTarget(),
+      expected: { cardName: "Steady Burn", count: 2 },
+    },
+    {
+      templateId: "opening_hand_grant_for_X_battles",
+      params: { battles: 3 },
+      target: namedCardTarget(),
+      expected: { cardName: "Steady Burn", battles: 3 },
+    },
+    {
+      templateId: "temporary_card_copy_for_X_battles",
+      params: { battles: 3 },
+      target: namedCardTarget(),
+      expected: { cardName: "Steady Burn", battles: 3 },
+    },
+    {
+      templateId: "card_cost_reduction_for_X_battles",
+      params: { amount: 1, battles: 3 },
+      target: predicateTarget(),
+      expected: { predicateId: "warriors", amount: 1, battles: 3 },
+    },
+    {
       templateId: "add_site_to_dreamscape",
       params: {},
       target: routeTarget(),
@@ -222,6 +268,18 @@ describe("one_operation_many_targets shape", () => {
       params: {},
       target: transfigurationPredicateTarget(),
       expected: { transfiguration: "Bronze", predicateId: "warriors" },
+    },
+    {
+      templateId: "set_starting_dreamwell_positive",
+      params: {},
+      target: dreamwellTarget(),
+      expected: { cardName: "Bright Spark" },
+    },
+    {
+      templateId: "shuffle_positive_dreamwell_cards",
+      params: { count: 2 },
+      target: dreamwellTarget(),
+      expected: { cardName: "Bright Spark", count: 2 },
     },
     {
       templateId: "replace_site_type",
@@ -250,23 +308,15 @@ describe("one_operation_many_targets shape", () => {
   });
 
   it.each([
-    ["make_card_reclaim", { count: 2 }, namedCardTarget()],
-    ["opening_hand_grant_for_X_battles", { battles: 3 }, namedCardTarget()],
-    ["temporary_card_copy_for_X_battles", { battles: 3 }, namedCardTarget()],
-    ["change_card_to_become_type", { cardTypePredicateId: "warriors" }, namedCardTarget()],
-    ["modify_random_cards_to_types", { count: 2 }, predicateTarget()],
-    ["set_starting_dreamwell_positive", {}, dreamwellTarget()],
-    ["shuffle_positive_dreamwell_cards", { count: 2 }, dreamwellTarget()],
-    ["card_cost_reduction_for_X_battles", { amount: 1, battles: 3 }, predicateTarget()],
     ["transform_starter_into_named_card", {}, namedCardTarget()],
     ["draft_predicate_cards_from_4", {}, predicateTarget()],
     ["take_any_from_predicate_choices", { choices: 4 }, predicateTarget()],
     ["apply_named_transfiguration_to_chosen_predicate_cards", { count: 2 }, transfigurationPredicateTarget()],
-  ])("does not map deferred or visual-only template %s", (templateId, params, target) => {
+  ])("does not map chooser-only template %s", (templateId, params, target) => {
     expect(rewardParamsFor(templateId, params as TemplateParams, target)).toBeNull();
   });
 
-  it("leaves generated no-op and deferred template options without reward envelopes", () => {
+  it("attaches resolvable reward envelopes for generated visible no-op options", () => {
     const templateIds = [
       "make_card_reclaim",
       "opening_hand_grant_for_X_battles",
@@ -274,8 +324,22 @@ describe("one_operation_many_targets shape", () => {
       "change_card_to_become_type",
       "modify_random_cards_to_types",
       "card_cost_reduction_for_X_battles",
-      "transform_starter_into_named_card",
     ];
+    const observed = observedOptions(templateIds);
+
+    for (const templateId of templateIds) {
+      const options = observed.get(templateId) ?? [];
+      expect(options.length, `expected generated option for ${templateId}`).toBeGreaterThan(0);
+      for (const option of options) {
+        const entries = collectRewardEntries(option.effects);
+        expect(entries, templateId).toHaveLength(1);
+        expect(entries[0].payload.templateId).toBe(templateId);
+      }
+    }
+  });
+
+  it("leaves generated chooser-only template options without reward envelopes", () => {
+    const templateIds = ["transform_starter_into_named_card"];
     const observed = observedOptions(templateIds);
 
     for (const templateId of templateIds) {

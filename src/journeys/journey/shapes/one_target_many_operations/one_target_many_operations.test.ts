@@ -134,6 +134,24 @@ describe("one_target_many_operations shape", () => {
       expected: { cardName: "Steady Burn", count: 2 },
     },
     {
+      templateId: "change_card_to_become_type",
+      params: { predicateId: "warriors" },
+      target: cardTarget(),
+      expected: { cardName: "Steady Burn", cardTypePredicateId: "warriors" },
+    },
+    {
+      templateId: "make_card_reclaim",
+      params: { count: 2 },
+      target: cardTarget(),
+      expected: { cardName: "Steady Burn", count: 2 },
+    },
+    {
+      templateId: "opening_hand_grant_for_X_battles",
+      params: { battles: 3 },
+      target: cardTarget(),
+      expected: { cardName: "Steady Burn", battles: 3 },
+    },
+    {
       templateId: "gain_random_predicate_cards",
       params: { count: 2 },
       target: predicateTarget(),
@@ -150,6 +168,12 @@ describe("one_target_many_operations shape", () => {
       params: { transfiguration: "Bronze", count: 2 },
       target: predicateTarget(),
       expected: { transfiguration: "Bronze", predicateId: "warriors", count: 2 },
+    },
+    {
+      templateId: "card_cost_reduction_for_X_battles",
+      params: { reduction: 1, battles: 3 },
+      target: predicateTarget(),
+      expected: { predicateId: "warriors", amount: 1, battles: 3 },
     },
     {
       templateId: "add_site_to_dreamscape",
@@ -234,26 +258,36 @@ describe("one_target_many_operations shape", () => {
   });
 
   it.each([
-    ["change_card_to_become_type", { predicateId: "warriors" }, cardTarget()],
-    ["make_card_reclaim", { count: 2 }, cardTarget()],
-    ["opening_hand_grant_for_X_battles", { battles: 3 }, cardTarget()],
-    ["card_cost_reduction_for_X_battles", { reduction: 1, battles: 3 }, predicateTarget()],
     ["transform_starter_into_named_card", { cardName: "Steady Burn" }, fixedTarget("player_resources")],
     ["draft_predicate_cards_from_4", {}, predicateTarget()],
     ["take_any_from_predicate_choices", { choices: 4 }, predicateTarget()],
     ["apply_named_transfiguration_to_chosen_predicate_cards", { count: 2 }, predicateTarget()],
-  ])("does not map deferred or visual-only template %s", (templateId, params, target) => {
+  ])("does not map chooser-only template %s", (templateId, params, target) => {
     expect(rewardParamsFor(templateId, params as TemplateParams, target)).toBeNull();
   });
 
-  it("leaves generated no-op and deferred template options without reward envelopes", () => {
+  it("attaches resolvable reward envelopes for generated visible no-op options", () => {
     const templateIds = [
       "change_card_to_become_type",
       "make_card_reclaim",
       "opening_hand_grant_for_X_battles",
       "card_cost_reduction_for_X_battles",
-      "transform_starter_into_named_card",
     ];
+    const observed = observedOptions(templateIds);
+
+    for (const templateId of templateIds) {
+      const options = observed.get(templateId) ?? [];
+      expect(options.length, `expected generated option for ${templateId}`).toBeGreaterThan(0);
+      for (const option of options) {
+        const entries = collectRewardEntries(option.effects);
+        expect(entries, templateId).toHaveLength(1);
+        expect(entries[0].payload.templateId).toBe(templateId);
+      }
+    }
+  });
+
+  it("leaves generated chooser-only template options without reward envelopes", () => {
+    const templateIds = ["transform_starter_into_named_card"];
     const observed = observedOptions(templateIds);
 
     for (const templateId of templateIds) {

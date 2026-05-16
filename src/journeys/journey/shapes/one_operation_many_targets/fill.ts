@@ -58,6 +58,12 @@ function predicateId(target: TargetedRewardTarget): string | undefined {
   return target.key.startsWith("predicate:") ? target.key.replace("predicate:", "") : undefined;
 }
 
+function cardTypePredicateId(target: TargetedRewardTarget): string | undefined {
+  return target.key.startsWith("card_type:")
+    ? target.key.replace("card_type:", "")
+    : undefined;
+}
+
 function routeSiteType(target: TargetedRewardTarget): string | undefined {
   const selector = target.selector;
   if (selector.selectorKind === "route_site") {
@@ -117,6 +123,7 @@ export function rewardParamsFor(
 ): TemplateParams | null {
   const cardName = targetName(target);
   const predId = predicateId(target);
+  const cardTypePredId = cardTypePredicateId(target);
   const siteType = routeSiteType(target);
   const transfigPred = transfigurationPredicate(target);
 
@@ -155,6 +162,34 @@ export function rewardParamsFor(
       const count = numberParam(params, "count");
       return cardName === undefined || count === undefined ? null : { cardName, count };
     }
+    case "change_card_to_become_type": {
+      const cardTypePredicateId = stringParam(params, "cardTypePredicateId");
+      return cardName === undefined || cardTypePredicateId === undefined
+        ? null
+        : { cardName, cardTypePredicateId };
+    }
+    case "modify_random_cards_to_types": {
+      const count = numberParam(params, "count");
+      return cardTypePredId === undefined || count === undefined
+        ? null
+        : { count, cardTypePredicateId: cardTypePredId };
+    }
+    case "make_card_reclaim": {
+      const count = numberParam(params, "count");
+      return cardName === undefined || count === undefined ? null : { cardName, count };
+    }
+    case "opening_hand_grant_for_X_battles":
+    case "temporary_card_copy_for_X_battles": {
+      const battles = numberParam(params, "battles");
+      return cardName === undefined || battles === undefined ? null : { cardName, battles };
+    }
+    case "card_cost_reduction_for_X_battles": {
+      const amount = numberParam(params, "amount");
+      const battles = numberParam(params, "battles");
+      return predId === undefined || amount === undefined || battles === undefined
+        ? null
+        : { predicateId: predId, amount, battles };
+    }
     case "add_site_to_dreamscape":
     case "add_site_to_next_dreamscape":
       return siteType === undefined ? null : { siteType };
@@ -164,6 +199,12 @@ export function rewardParamsFor(
     }
     case "apply_named_transfiguration_to_all_predicate_cards":
       return transfigPred === undefined ? null : transfigPred;
+    case "set_starting_dreamwell_positive":
+      return cardName === undefined ? null : { cardName };
+    case "shuffle_positive_dreamwell_cards": {
+      const count = numberParam(params, "count");
+      return cardName === undefined || count === undefined ? null : { cardName, count };
+    }
     case "replace_site_type": {
       const fromType = stringParam(params, "fromType");
       return siteType === undefined || fromType === undefined
