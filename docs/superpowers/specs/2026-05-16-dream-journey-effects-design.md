@@ -843,18 +843,20 @@ Lands as a second worktree commit:
 Per user direction, all work happens on a dedicated git worktree; nothing
 pushes to master.
 
-- Create the worktree:
-  `git worktree add ../quest_prototype-dream-effects -b dream-journey-effects`.
-- All commits land on `dream-journey-effects`.
+- The worktree lives at
+  `/Users/dthurn/quest_prototype/.claude/worktrees/dream-journey-effects`
+  on branch `worktree-dream-journey-effects`, created via the
+  super-using-git-worktrees skill (which uses the harness's native
+  `EnterWorktree` tool — the harness prefixes the supplied name with
+  `worktree-`).
+- All commits land on `worktree-dream-journey-effects`.
 - Wave-1 commit message: `Apply Dream Journey effects (Wave 1: no-choice
   templates).`
 - Wave-2 commit message: `Apply Dream Journey effects (Wave 2: chooser
   overlay + chosen-target templates).`
-- Push is allowed to the worktree's branch on the remote
-  (`git push -u origin dream-journey-effects`) for backup, but never
-  merged into master without the user's explicit direction.
-- When complete, the user reviews `dream-journey-effects` and decides
-  whether to merge, rebase, or close.
+- Per the user's direction, the worktree branch is not pushed to the
+  remote during implementation; the user decides at completion whether
+  to push, merge, rebase, or close.
 
 ## Manual QA (run from the worktree)
 
