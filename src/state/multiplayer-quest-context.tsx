@@ -22,9 +22,11 @@ import type {
   CardChoiceTransfigurationOffer,
   DeckEntry,
   DreamAtlas,
+  DreamscapeModifier,
   Dreamsign,
   DreamsignOfferSiteRuntime,
   EssenceSiteRuntime,
+  BattleModifier,
   CardChoiceSiteRuntime,
   DreamJourneySiteRuntime,
   QuestFailureSummary,
@@ -72,7 +74,6 @@ import {
   transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
-
 
 export interface MultiplayerQuestProviderProps {
   children: ReactNode;
@@ -208,6 +209,88 @@ function nextDeckEntryId(deck: readonly DeckEntry[]): string {
   return `deck-${String(highest + 1)}`;
 }
 
+function nextSiteIdFromAtlas(atlas: DreamAtlas): string {
+  let max = 0;
+  for (const node of Object.values(atlas.nodes)) {
+    for (const site of node.sites) {
+      const match = /^site-(\d+)$/.exec(site.id);
+      if (match === null) {
+        continue;
+      }
+      const num = Number.parseInt(match[1], 10);
+      if (Number.isFinite(num) && num > max) {
+        max = num;
+      }
+    }
+  }
+  return `site-${String(max + 1)}`;
+}
+
+function findNextDreamscapeId(
+  atlas: DreamAtlas,
+  currentId: string | null,
+): string | null {
+  if (currentId === null) {
+    return null;
+  }
+  for (const [a, b] of atlas.edges) {
+    const other = a === currentId ? b : b === currentId ? a : null;
+    if (other === null) {
+      continue;
+    }
+    const node = atlas.nodes[other];
+    if (node !== undefined && node.status !== "completed") {
+      return other;
+    }
+  }
+  return null;
+}
+
+function atlasWithAddedSite(
+  atlas: DreamAtlas,
+  nodeId: string,
+  site: SiteState,
+): DreamAtlas {
+  const node = atlas.nodes[nodeId];
+  if (node === undefined) {
+    return atlas;
+  }
+  return {
+    ...atlas,
+    nodes: {
+      ...atlas.nodes,
+      [nodeId]: {
+        ...node,
+        sites: [...node.sites, site],
+      },
+    },
+  };
+}
+
+function resolveCardById(
+  cardDatabase: Map<number, CardData>,
+  cardId: string,
+): CardData | null {
+  for (const candidate of cardDatabase.values()) {
+    if (candidate.id === cardId) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
+function resolveCardByName(
+  cardDatabase: Map<number, CardData>,
+  cardName: string,
+): CardData | null {
+  for (const candidate of cardDatabase.values()) {
+    if (candidate.name === cardName) {
+      return candidate;
+    }
+  }
+  return null;
+}
+
 function dreamsignMatches(left: Dreamsign, right: Dreamsign): boolean {
   if (left.id !== undefined && right.id !== undefined) {
     return left.id === right.id;
@@ -215,10 +298,7 @@ function dreamsignMatches(left: Dreamsign, right: Dreamsign): boolean {
   return left.name === right.name;
 }
 
-function arraysEqual<T>(
-  left: readonly T[],
-  right: readonly T[],
-): boolean {
+function arraysEqual<T>(left: readonly T[], right: readonly T[]): boolean {
   return (
     left.length === right.length &&
     left.every((value, index) => Object.is(value, right[index]))
@@ -419,10 +499,7 @@ function siteRuntimeAssumptionMatches(
   expectedIsEnhanced: boolean,
 ): boolean {
   const site = findSite(state, siteId);
-  return (
-    site?.type === expectedType &&
-    site.isEnhanced === expectedIsEnhanced
-  );
+  return site?.type === expectedType && site.isEnhanced === expectedIsEnhanced;
 }
 
 export function MultiplayerQuestProvider({
@@ -450,88 +527,79 @@ export function MultiplayerQuestProvider({
     state,
   };
 
-  const changeEssence = useCallback(
-    (delta: number, _source: string) => {
-      const current = currentRef.current;
-      const next = changeQuestEssence(current.state, delta);
-      writeQuestField({
-        database: current.database,
-        roomId: current.session.roomId,
-        field: "essence",
-        value: next.essence,
-      });
-    },
-    [],
-  );
+  const changeEssence = useCallback((delta: number, _source: string) => {
+    const current = currentRef.current;
+    const next = changeQuestEssence(current.state, delta);
+    writeQuestField({
+      database: current.database,
+      roomId: current.session.roomId,
+      field: "essence",
+      value: next.essence,
+    });
+  }, []);
 
-  const startQuest = useCallback(
-    (dreamcaller: DreamcallerContent) => {
-      const current = currentRef.current;
-      const now = new Date().toISOString();
-      const actionId = crypto.randomUUID();
-      // Seed once, outside the transaction updater, so RTDB retries reuse the
-      // same per-quest seed instead of producing a new one on every retry.
-      // The same value is then passed into `startQuestFromDreamcaller` via
-      // the `seedOverride` so the resulting `QuestState.seed` is stable.
-      const seed = generateQuestSeed();
-      const actionEntry = buildActionLogEntry({
-        timestamp: now,
-        actorId: current.session.clientId,
-        action: "startQuest",
-        source: "quest_start",
-        summary: {
-          dreamcallerId: dreamcaller.id,
-          dreamcallerName: dreamcaller.name,
-        },
-      });
-      writeRoomTransaction({
-        database: current.database,
-        roomId: current.session.roomId,
-        updater: (room) => {
-          if (
-            room === null ||
-            (room.questState !== null && room.questState.dreamcaller !== null)
-          ) {
-            return room ?? undefined;
-          }
+  const startQuest = useCallback((dreamcaller: DreamcallerContent) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    // Seed once, outside the transaction updater, so RTDB retries reuse the
+    // same per-quest seed instead of producing a new one on every retry.
+    // The same value is then passed into `startQuestFromDreamcaller` via
+    // the `seedOverride` so the resulting `QuestState.seed` is stable.
+    const seed = generateQuestSeed();
+    const actionEntry = buildActionLogEntry({
+      timestamp: now,
+      actorId: current.session.clientId,
+      action: "startQuest",
+      source: "quest_start",
+      summary: {
+        dreamcallerId: dreamcaller.id,
+        dreamcallerName: dreamcaller.name,
+      },
+    });
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (
+          room === null ||
+          (room.questState !== null && room.questState.dreamcaller !== null)
+        ) {
+          return room ?? undefined;
+        }
 
-          const questState = room.questState ?? createDefaultState();
-          const next = startQuestFromDreamcaller({
-            prev: questState,
-            dreamcaller,
-            questContent: current.questContent,
-            seedOverride: seed,
-          });
+        const questState = room.questState ?? createDefaultState();
+        const next = startQuestFromDreamcaller({
+          prev: questState,
+          dreamcaller,
+          questContent: current.questContent,
+          seedOverride: seed,
+        });
 
-          return {
-            ...room,
-            questState: next,
-            metadata: {
-              ...room.metadata,
-              updatedAt: now,
-            },
-            actionLog: {
-              ...(room.actionLog ?? {}),
-              [actionId]: actionEntry,
-            },
-          };
-        },
-      });
-    },
-    [],
-  );
+        return {
+          ...room,
+          questState: next,
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: actionEntry,
+          },
+        };
+      },
+    });
+  }, []);
 
-  const setScreen = useCallback(
-    (screen: Screen) => {
-      const current = currentRef.current;
-      writeScreenUpdate({
-        database: current.database,
-        roomId: current.session.roomId,
-        state: setQuestScreen(current.state, screen),
-      });
-    },
-    [],
-  );
+  const setScreen = useCallback((screen: Screen) => {
+    const current = currentRef.current;
+    writeScreenUpdate({
+      database: current.database,
+      roomId: current.session.roomId,
+      state: setQuestScreen(current.state, screen),
+    });
+  }, []);
 
   const setCardSourceDebug = useCallback(
     (cardSourceDebug: CardSourceDebugState | null, _source: string) => {
@@ -564,9 +632,7 @@ export function MultiplayerQuestProvider({
     (dreamsign: Dreamsign, _sourceSiteType: string, purgeIndex?: number) => {
       const current = currentRef.current;
       const purgedDreamsign =
-        purgeIndex === undefined
-          ? null
-          : current.state.dreamsigns[purgeIndex];
+        purgeIndex === undefined ? null : current.state.dreamsigns[purgeIndex];
       if (
         (purgeIndex !== undefined && purgedDreamsign == null) ||
         (purgeIndex === undefined &&
@@ -582,30 +648,27 @@ export function MultiplayerQuestProvider({
           purgeIndex === undefined
             ? [...current.state.dreamsigns, dreamsign]
             : current.state.dreamsigns.map((existing, index) =>
-              index === purgeIndex ? dreamsign : existing,
-            ),
+                index === purgeIndex ? dreamsign : existing,
+              ),
       });
     },
     [],
   );
 
-  const removeDreamsign = useCallback(
-    (index: number, _reason: string) => {
-      const current = currentRef.current;
-      if (current.state.dreamsigns[index] === undefined) {
-        return;
-      }
-      writeQuestField({
-        database: current.database,
-        roomId: current.session.roomId,
-        field: "dreamsigns",
-        value: current.state.dreamsigns.filter(
-          (_, dreamsignIndex) => dreamsignIndex !== index,
-        ),
-      });
-    },
-    [],
-  );
+  const removeDreamsign = useCallback((index: number, _reason: string) => {
+    const current = currentRef.current;
+    if (current.state.dreamsigns[index] === undefined) {
+      return;
+    }
+    writeQuestField({
+      database: current.database,
+      roomId: current.session.roomId,
+      field: "dreamsigns",
+      value: current.state.dreamsigns.filter(
+        (_, dreamsignIndex) => dreamsignIndex !== index,
+      ),
+    });
+  }, []);
 
   const setRemainingDreamsignPool = useCallback(
     (remainingDreamsignPool: string[], _source: string) => {
@@ -624,46 +687,56 @@ export function MultiplayerQuestProvider({
     [],
   );
 
-  const setCurrentDreamscape = useCallback(
-    (nodeId: string | null) => {
-      const current = currentRef.current;
-      const next = {
-        ...current.state,
-        currentDreamscape: nodeId,
-        visitedSites: nodeId !== null ? [] : current.state.visitedSites,
-      };
-      const updatedAt = new Date().toISOString();
-      writeUpdate(current.database, current.session.roomId, {
-        ...buildQuestFieldUpdate(
-          current.session.roomId,
-          "currentDreamscape",
-          next.currentDreamscape,
-          updatedAt,
-        ),
-        ...buildQuestFieldUpdate(
-          current.session.roomId,
-          "visitedSites",
-          next.visitedSites,
-          updatedAt,
-        ),
-      });
-    },
-    [],
-  );
+  const setCurrentDreamscape = useCallback((nodeId: string | null) => {
+    const current = currentRef.current;
+    const isAdvancing =
+      nodeId !== null && nodeId !== current.state.currentDreamscape;
+    const next = {
+      ...current.state,
+      currentDreamscape: nodeId,
+      visitedSites: nodeId !== null ? [] : current.state.visitedSites,
+      dreamscapeModifiers: isAdvancing
+        ? current.state.dreamscapeModifiers
+            .map((modifier) => ({
+              ...modifier,
+              dreamscapesRemaining: modifier.dreamscapesRemaining - 1,
+            }))
+            .filter((modifier) => modifier.dreamscapesRemaining > 0)
+        : current.state.dreamscapeModifiers,
+    };
+    const updatedAt = new Date().toISOString();
+    writeUpdate(current.database, current.session.roomId, {
+      ...buildQuestFieldUpdate(
+        current.session.roomId,
+        "currentDreamscape",
+        next.currentDreamscape,
+        updatedAt,
+      ),
+      ...buildQuestFieldUpdate(
+        current.session.roomId,
+        "visitedSites",
+        next.visitedSites,
+        updatedAt,
+      ),
+      ...buildQuestFieldUpdate(
+        current.session.roomId,
+        "dreamscapeModifiers",
+        next.dreamscapeModifiers,
+        updatedAt,
+      ),
+    });
+  }, []);
 
-  const updateAtlas = useCallback(
-    (atlas: DreamAtlas) => {
-      const current = currentRef.current;
-      const next = updateQuestAtlas(current.state, atlas);
-      writeQuestField({
-        database: current.database,
-        roomId: current.session.roomId,
-        field: "atlas",
-        value: next.atlas,
-      });
-    },
-    [],
-  );
+  const updateAtlas = useCallback((atlas: DreamAtlas) => {
+    const current = currentRef.current;
+    const next = updateQuestAtlas(current.state, atlas);
+    writeQuestField({
+      database: current.database,
+      roomId: current.session.roomId,
+      field: "atlas",
+      value: next.atlas,
+    });
+  }, []);
 
   const setDraftState = useCallback(
     (draftState: DraftState, _source: string) => {
@@ -766,7 +839,9 @@ export function MultiplayerQuestProvider({
   }, []);
 
   const setDreamcallerSelection = useCallback(
-    (resolvedPackage: Parameters<QuestMutations["setDreamcallerSelection"]>[0]) => {
+    (
+      resolvedPackage: Parameters<QuestMutations["setDreamcallerSelection"]>[0],
+    ) => {
       const current = currentRef.current;
       const next = applyDreamcallerSelection(current.state, resolvedPackage);
       const updatedAt = new Date().toISOString();
@@ -794,51 +869,48 @@ export function MultiplayerQuestProvider({
     [],
   );
 
-  const addCard = useCallback(
-    (cardNumber: number, source: string) => {
-      const current = currentRef.current;
-      const now = new Date().toISOString();
-      const actionId = crypto.randomUUID();
-      writeRoomTransaction({
-        database: current.database,
-        roomId: current.session.roomId,
-        updater: (room) => {
-          if (room === null || room.questState === null) {
-            return room ?? undefined;
-          }
-          const entryId = nextDeckEntryId(room.questState.deck);
-          const entry: DeckEntry = {
-            entryId,
-            cardNumber,
-            transfiguration: null,
-            isBane: false,
-          };
-          return {
-            ...room,
-            questState: {
-              ...room.questState,
-              deck: [...room.questState.deck, entry],
-            },
-            metadata: {
-              ...room.metadata,
-              updatedAt: now,
-            },
-            actionLog: {
-              ...(room.actionLog ?? {}),
-              [actionId]: buildActionLogEntry({
-                timestamp: now,
-                actorId: current.session.clientId,
-                action: "addCard",
-                source,
-                summary: { cardNumber },
-              }),
-            },
-          };
-        },
-      });
-    },
-    [],
-  );
+  const addCard = useCallback((cardNumber: number, source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const entryId = nextDeckEntryId(room.questState.deck);
+        const entry: DeckEntry = {
+          entryId,
+          cardNumber,
+          transfiguration: null,
+          isBane: false,
+        };
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            deck: [...room.questState.deck, entry],
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "addCard",
+              source,
+              summary: { cardNumber },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
 
   const markSiteVisited = useCallback((siteId: string) => {
     const current = currentRef.current;
@@ -913,9 +985,27 @@ export function MultiplayerQuestProvider({
           }
           const newLevel = room.questState.completionLevel + 1;
           const screen: Screen =
-            newLevel >= 7
-              ? { type: "questComplete" }
-              : room.questState.screen;
+            newLevel >= 7 ? { type: "questComplete" } : room.questState.screen;
+          const droppedBaneEntryIds = new Set<string>();
+          const battleModifiers: BattleModifier[] = [];
+          for (const modifier of room.questState.battleModifiers) {
+            const battlesRemaining = modifier.battlesRemaining - 1;
+            if (battlesRemaining <= 0) {
+              if (modifier.kind === "temporary_bane_grant") {
+                for (const entryId of modifier.addedEntryIds) {
+                  droppedBaneEntryIds.add(entryId);
+                }
+              }
+              continue;
+            }
+            battleModifiers.push({ ...modifier, battlesRemaining });
+          }
+          const deck =
+            droppedBaneEntryIds.size === 0
+              ? room.questState.deck
+              : room.questState.deck.filter(
+                  (entry) => !droppedBaneEntryIds.has(entry.entryId),
+                );
           return {
             ...room,
             questState: {
@@ -923,6 +1013,8 @@ export function MultiplayerQuestProvider({
               completionLevel: newLevel,
               omens: room.questState.omens + omenReward,
               screen,
+              battleModifiers,
+              deck,
             },
             metadata: {
               ...room.metadata,
@@ -952,68 +1044,61 @@ export function MultiplayerQuestProvider({
     [],
   );
 
-  const completeSite = useCallback(
-    (siteId: string, source: string) => {
-      const current = currentRef.current;
-      if (current.state.visitedSites.includes(siteId)) {
-        return;
-      }
+  const completeSite = useCallback((siteId: string, source: string) => {
+    const current = currentRef.current;
+    if (current.state.visitedSites.includes(siteId)) {
+      return;
+    }
 
-      const now = new Date().toISOString();
-      const actionId = crypto.randomUUID();
-      const actionEntry = buildActionLogEntry({
-        timestamp: now,
-        actorId: current.session.clientId,
-        action: "completeSite",
-        source,
-        summary: { siteId },
-      });
-      writeRoomTransaction({
-        database: current.database,
-        roomId: current.session.roomId,
-        updater: (room) => {
-          if (room === null || room.questState === null) {
-            return room ?? undefined;
-          }
-          if (room.questState.visitedSites.includes(siteId)) {
-            return room;
-          }
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    const actionEntry = buildActionLogEntry({
+      timestamp: now,
+      actorId: current.session.clientId,
+      action: "completeSite",
+      source,
+      summary: { siteId },
+    });
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        if (room.questState.visitedSites.includes(siteId)) {
+          return room;
+        }
 
-          const next = setQuestScreen(
-            completeQuestSite(room.questState, siteId),
-            { type: "dreamscape" },
-          );
+        const next = setQuestScreen(
+          completeQuestSite(room.questState, siteId),
+          { type: "dreamscape" },
+        );
 
-          return {
-            ...room,
-            questState: {
-              ...room.questState,
-              visitedSites: next.visitedSites,
-              atlas: next.atlas,
-              screen: next.screen,
-              activeSiteId: next.activeSiteId,
-            },
-            metadata: {
-              ...room.metadata,
-              updatedAt: now,
-            },
-            actionLog: {
-              ...(room.actionLog ?? {}),
-              [actionId]: actionEntry,
-            },
-          };
-        },
-      });
-    },
-    [],
-  );
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            visitedSites: next.visitedSites,
+            atlas: next.atlas,
+            screen: next.screen,
+            activeSiteId: next.activeSiteId,
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: actionEntry,
+          },
+        };
+      },
+    });
+  }, []);
 
   const cleanseBanes = useCallback(
-    (
-      siteId: string,
-      cardEntryIds: string[],
-      dreamsignIndices: number[],
-    ) => {
+    (siteId: string, cardEntryIds: string[], dreamsignIndices: number[]) => {
       const current = currentRef.current;
       if (current.state.visitedSites.includes(siteId)) {
         return;
@@ -1165,22 +1250,22 @@ export function MultiplayerQuestProvider({
     const generated =
       current.state.siteRuntime[siteId] === undefined
         ? generateRewardSiteData({
-          dreamsignTemplates: current.questContent.dreamsignTemplates,
-          remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
-          selectedPackageTides: expectedSelectedTides,
-          regenerationPoolIds:
-            current.state.resolvedPackage?.dreamsignPoolIds ?? [],
-        })
+            dreamsignTemplates: current.questContent.dreamsignTemplates,
+            remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
+            selectedPackageTides: expectedSelectedTides,
+            regenerationPoolIds:
+              current.state.resolvedPackage?.dreamsignPoolIds ?? [],
+          })
         : null;
     const runtime: RewardSiteRuntime | null =
       generated === null
         ? null
         : {
-          kind: "reward",
-          reward: generated.reward,
-          remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
-          accepted: false,
-        };
+            kind: "reward",
+            reward: generated.reward,
+            remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+            accepted: false,
+          };
     const remainingDreamsignPool =
       generated === null
         ? expectedRemainingDreamsignPool
@@ -1188,8 +1273,7 @@ export function MultiplayerQuestProvider({
           ? generated.remainingDreamsignPoolIds
           : expectedRemainingDreamsignPool;
     const now = new Date().toISOString();
-    const actionId =
-      runtime === null ? null : crypto.randomUUID();
+    const actionId = runtime === null ? null : crypto.randomUUID();
 
     writeRoomTransaction({
       database: current.database,
@@ -1248,95 +1332,98 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
-  const acceptRewardSite = useCallback((siteId: string, purgeIndex?: number) => {
-    const current = currentRef.current;
-    const now = new Date().toISOString();
-    const actionId = crypto.randomUUID();
-    writeRoomTransaction({
-      database: current.database,
-      roomId: current.session.roomId,
-      updater: (room) => {
-        if (room === null || room.questState === null) {
-          return room ?? undefined;
-        }
-        if (room.questState.visitedSites.includes(siteId)) {
-          return room;
-        }
-        const runtime = room.questState.siteRuntime[siteId];
-        if (
-          runtime === undefined ||
-          runtime.kind !== "reward" ||
-          runtime.accepted
-        ) {
-          return room;
-        }
-
-        let next: QuestState = room.questState;
-        const reward = runtime.reward;
-        if (reward.rewardType === "dreamsign") {
-          const purgedDreamsign =
-            purgeIndex === undefined ? null : next.dreamsigns[purgeIndex];
+  const acceptRewardSite = useCallback(
+    (siteId: string, purgeIndex?: number) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          if (room.questState.visitedSites.includes(siteId)) {
+            return room;
+          }
+          const runtime = room.questState.siteRuntime[siteId];
           if (
-            (purgeIndex !== undefined && purgedDreamsign == null) ||
-            (purgeIndex === undefined &&
-              next.dreamsigns.length >= next.maxDreamsigns)
+            runtime === undefined ||
+            runtime.kind !== "reward" ||
+            runtime.accepted
           ) {
             return room;
           }
-          next = {
-            ...next,
-            dreamsigns:
-              purgeIndex === undefined
-                ? [...next.dreamsigns, reward.dreamsign]
-                : next.dreamsigns.map((existing, index) =>
-                  index === purgeIndex ? reward.dreamsign : existing,
-                ),
-          };
-        } else {
-          next = {
-            ...next,
-            essence: next.essence + reward.essenceAmount,
-          };
-        }
 
-        next = completeSiteAndReturnToDreamscape(
-          {
-            ...next,
-            siteRuntime: {
-              ...next.siteRuntime,
-              [siteId]: {
-                ...runtime,
-                accepted: true,
+          let next: QuestState = room.questState;
+          const reward = runtime.reward;
+          if (reward.rewardType === "dreamsign") {
+            const purgedDreamsign =
+              purgeIndex === undefined ? null : next.dreamsigns[purgeIndex];
+            if (
+              (purgeIndex !== undefined && purgedDreamsign == null) ||
+              (purgeIndex === undefined &&
+                next.dreamsigns.length >= next.maxDreamsigns)
+            ) {
+              return room;
+            }
+            next = {
+              ...next,
+              dreamsigns:
+                purgeIndex === undefined
+                  ? [...next.dreamsigns, reward.dreamsign]
+                  : next.dreamsigns.map((existing, index) =>
+                      index === purgeIndex ? reward.dreamsign : existing,
+                    ),
+            };
+          } else {
+            next = {
+              ...next,
+              essence: next.essence + reward.essenceAmount,
+            };
+          }
+
+          next = completeSiteAndReturnToDreamscape(
+            {
+              ...next,
+              siteRuntime: {
+                ...next.siteRuntime,
+                [siteId]: {
+                  ...runtime,
+                  accepted: true,
+                },
               },
             },
-          },
-          siteId,
-        );
+            siteId,
+          );
 
-        return {
-          ...room,
-          questState: next,
-          metadata: {
-            ...room.metadata,
-            updatedAt: now,
-          },
-          actionLog: {
-            ...(room.actionLog ?? {}),
-            [actionId]: buildActionLogEntry({
-              timestamp: now,
-              actorId: current.session.clientId,
-              action: "acceptRewardSite",
-              source: "site_reveal",
-              summary: {
-                siteId,
-                rewardType: reward.rewardType,
-              },
-            }),
-          },
-        };
-      },
-    });
-  }, []);
+          return {
+            ...room,
+            questState: next,
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "acceptRewardSite",
+                source: "site_reveal",
+                summary: {
+                  siteId,
+                  rewardType: reward.rewardType,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
 
   const ensureDreamsignOfferRuntime = useCallback(
     (siteId: string, optionCount: number) => {
@@ -1347,24 +1434,23 @@ export function MultiplayerQuestProvider({
       const revealed =
         current.state.siteRuntime[siteId] === undefined
           ? drawDreamsignOptions(
-            expectedRemainingDreamsignPool,
-            current.questContent.dreamsignTemplates,
-            optionCount,
-            current.state.resolvedPackage?.dreamsignPoolIds ?? [],
-          )
+              expectedRemainingDreamsignPool,
+              current.questContent.dreamsignTemplates,
+              optionCount,
+              current.state.resolvedPackage?.dreamsignPoolIds ?? [],
+            )
           : null;
       const runtime: DreamsignOfferSiteRuntime | null =
         revealed === null
           ? null
           : {
-            kind: "dreamsignOffer",
-            offeredDreamsigns: revealed.offeredDreamsigns,
-            remainingDreamsignPool: revealed.remainingDreamsignPool,
-            accepted: false,
-          };
+              kind: "dreamsignOffer",
+              offeredDreamsigns: revealed.offeredDreamsigns,
+              remainingDreamsignPool: revealed.remainingDreamsignPool,
+              accepted: false,
+            };
       const now = new Date().toISOString();
-      const actionId =
-        runtime === null ? null : crypto.randomUUID();
+      const actionId = runtime === null ? null : crypto.randomUUID();
 
       writeRoomTransaction({
         database: current.database,
@@ -1514,7 +1600,8 @@ export function MultiplayerQuestProvider({
               : room.questState.dreamsigns[purgeIndex];
           if (
             (purgeIndex !== undefined && purgedDreamsign == null) ||
-            (room.questState.dreamsigns.length >= room.questState.maxDreamsigns &&
+            (room.questState.dreamsigns.length >=
+              room.questState.maxDreamsigns &&
               purgeIndex === undefined)
           ) {
             return room;
@@ -1523,8 +1610,8 @@ export function MultiplayerQuestProvider({
             purgeIndex === undefined
               ? [...room.questState.dreamsigns, dreamsign]
               : room.questState.dreamsigns.map((existing, index) =>
-                index === purgeIndex ? dreamsign : existing,
-              );
+                  index === purgeIndex ? dreamsign : existing,
+                );
 
           const next = completeSiteAndReturnToDreamscape(
             {
@@ -1575,16 +1662,15 @@ export function MultiplayerQuestProvider({
       const runtime: EssenceSiteRuntime | null =
         current.state.siteRuntime[siteId] === undefined
           ? {
-            kind: "essence",
-            amount: isEnhanced
-              ? randomIntInRange(400, 600)
-              : randomIntInRange(200, 300),
-            accepted: false,
-          }
+              kind: "essence",
+              amount: isEnhanced
+                ? randomIntInRange(400, 600)
+                : randomIntInRange(200, 300),
+              accepted: false,
+            }
           : null;
       const now = new Date().toISOString();
-      const actionId =
-        runtime === null ? null : crypto.randomUUID();
+      const actionId = runtime === null ? null : crypto.randomUUID();
 
       writeRoomTransaction({
         database: current.database,
@@ -1705,9 +1791,7 @@ export function MultiplayerQuestProvider({
       const expectedRemainingDreamsignPool = [
         ...current.state.remainingDreamsignPool,
       ];
-      const expectedDraftSignature = stableStringify(
-        current.state.draftState,
-      );
+      const expectedDraftSignature = stableStringify(current.state.draftState);
       let runtime: ShopSiteRuntime | null = null;
       let remainingDreamsignPool = expectedRemainingDreamsignPool;
       let nextDraftState: DraftState | null = current.state.draftState;
@@ -1755,8 +1839,8 @@ export function MultiplayerQuestProvider({
               room.questState.remainingDreamsignPool,
               expectedRemainingDreamsignPool,
             ) ||
-            stableStringify(room.questState.draftState)
-              !== expectedDraftSignature
+            stableStringify(room.questState.draftState) !==
+              expectedDraftSignature
           ) {
             return room;
           }
@@ -1799,161 +1883,164 @@ export function MultiplayerQuestProvider({
 
   const buyShopSlot = useCallback(
     (siteId: string, slotIndex: number, purgeIndex?: number) => {
-    const current = currentRef.current;
-    const expectedRuntime = current.state.siteRuntime[siteId];
-    if (
-      expectedRuntime === undefined ||
-      expectedRuntime.kind !== "shop" ||
-      current.state.visitedSites.includes(siteId)
-    ) {
-      return;
-    }
-    const expectedSlot = expectedRuntime.slots[slotIndex];
-    if (expectedSlot === undefined || expectedSlot.purchased) {
-      return;
-    }
+      const current = currentRef.current;
+      const expectedRuntime = current.state.siteRuntime[siteId];
+      if (
+        expectedRuntime === undefined ||
+        expectedRuntime.kind !== "shop" ||
+        current.state.visitedSites.includes(siteId)
+      ) {
+        return;
+      }
+      const expectedSlot = expectedRuntime.slots[slotIndex];
+      if (expectedSlot === undefined || expectedSlot.purchased) {
+        return;
+      }
 
-    const now = new Date().toISOString();
-    const actionId = crypto.randomUUID();
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
 
-    writeRoomTransaction({
-      database: current.database,
-      roomId: current.session.roomId,
-      updater: (room) => {
-        if (room === null || room.questState === null) {
-          return room ?? undefined;
-        }
-        if (room.questState.visitedSites.includes(siteId)) {
-          return room;
-        }
-        const runtime = room.questState.siteRuntime[siteId];
-        if (
-          runtime === undefined ||
-          runtime.kind !== "shop" ||
-          runtime.rerollCount !== expectedRuntime.rerollCount ||
-          !arraysEqual(
-            runtime.remainingDreamsignPoolIds,
-            expectedRuntime.remainingDreamsignPoolIds,
-          ) ||
-          !runtimeShopSlotEqual(runtime.slots[slotIndex], expectedSlot)
-        ) {
-          return room;
-        }
-        const slot = runtime.slots[slotIndex];
-        if (slot === undefined || slot.purchased) {
-          return room;
-        }
-
-        const price = runtimeSlotPrice(slot);
-        // Cards cost essence; Dreamsigns cost omens.
-        const payInOmens = slot.itemType === "dreamsign";
-        const availableCurrency = payInOmens
-          ? room.questState.omens
-          : room.questState.essence;
-        if (price > availableCurrency) {
-          return room;
-        }
-        const purgedDreamsign =
-          slot.itemType === "dreamsign" && purgeIndex !== undefined
-            ? room.questState.dreamsigns[purgeIndex]
-            : null;
-        if (
-          slot.itemType === "dreamsign" &&
-          ((purgeIndex !== undefined && purgedDreamsign == null) ||
-            (purgeIndex === undefined &&
-              room.questState.dreamsigns.length >= room.questState.maxDreamsigns))
-        ) {
-          return room;
-        }
-
-        let next: QuestState = payInOmens
-          ? {
-            ...room.questState,
-            omens: room.questState.omens - price,
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
           }
-          : {
-            ...room.questState,
-            essence: clampEssence(
-              room.questState.essence - price,
-              room.questState.essenceCap,
-            ),
-          };
-        const summary: Record<string, unknown> = {
-          siteId,
-          slotIndex,
-          itemType: slot.itemType,
-          basePrice: slot.basePrice,
-          discountedPrice: price,
-          currency: payInOmens ? "omens" : "essence",
-        };
+          if (room.questState.visitedSites.includes(siteId)) {
+            return room;
+          }
+          const runtime = room.questState.siteRuntime[siteId];
+          if (
+            runtime === undefined ||
+            runtime.kind !== "shop" ||
+            runtime.rerollCount !== expectedRuntime.rerollCount ||
+            !arraysEqual(
+              runtime.remainingDreamsignPoolIds,
+              expectedRuntime.remainingDreamsignPoolIds,
+            ) ||
+            !runtimeShopSlotEqual(runtime.slots[slotIndex], expectedSlot)
+          ) {
+            return room;
+          }
+          const slot = runtime.slots[slotIndex];
+          if (slot === undefined || slot.purchased) {
+            return room;
+          }
 
-        if (slot.itemType === "card") {
-          next = {
-            ...next,
-            deck: [
-              ...next.deck,
-              {
-                entryId: nextDeckEntryId(next.deck),
-                cardNumber: slot.cardNumber,
-                transfiguration: null,
-                isBane: false,
-              },
-            ],
-          };
-          summary.cardNumber = slot.cardNumber;
-        } else {
-          next = {
-            ...next,
-            dreamsigns:
-              purgeIndex === undefined
-                ? [...next.dreamsigns, slot.dreamsign]
-                : next.dreamsigns.map((existing, index) =>
-                  index === purgeIndex ? slot.dreamsign : existing,
+          const price = runtimeSlotPrice(slot);
+          // Cards cost essence; Dreamsigns cost omens.
+          const payInOmens = slot.itemType === "dreamsign";
+          const availableCurrency = payInOmens
+            ? room.questState.omens
+            : room.questState.essence;
+          if (price > availableCurrency) {
+            return room;
+          }
+          const purgedDreamsign =
+            slot.itemType === "dreamsign" && purgeIndex !== undefined
+              ? room.questState.dreamsigns[purgeIndex]
+              : null;
+          if (
+            slot.itemType === "dreamsign" &&
+            ((purgeIndex !== undefined && purgedDreamsign == null) ||
+              (purgeIndex === undefined &&
+                room.questState.dreamsigns.length >=
+                  room.questState.maxDreamsigns))
+          ) {
+            return room;
+          }
+
+          let next: QuestState = payInOmens
+            ? {
+                ...room.questState,
+                omens: room.questState.omens - price,
+              }
+            : {
+                ...room.questState,
+                essence: clampEssence(
+                  room.questState.essence - price,
+                  room.questState.essenceCap,
                 ),
+              };
+          const summary: Record<string, unknown> = {
+            siteId,
+            slotIndex,
+            itemType: slot.itemType,
+            basePrice: slot.basePrice,
+            discountedPrice: price,
+            currency: payInOmens ? "omens" : "essence",
           };
-          summary.dreamsignId = slot.dreamsign.id ?? null;
-          summary.dreamsignName = slot.dreamsign.name;
-          if (purgedDreamsign != null) {
-            summary.purgedDreamsignName = purgedDreamsign.name;
+
+          if (slot.itemType === "card") {
+            next = {
+              ...next,
+              deck: [
+                ...next.deck,
+                {
+                  entryId: nextDeckEntryId(next.deck),
+                  cardNumber: slot.cardNumber,
+                  transfiguration: null,
+                  isBane: false,
+                },
+              ],
+            };
+            summary.cardNumber = slot.cardNumber;
+          } else {
+            next = {
+              ...next,
+              dreamsigns:
+                purgeIndex === undefined
+                  ? [...next.dreamsigns, slot.dreamsign]
+                  : next.dreamsigns.map((existing, index) =>
+                      index === purgeIndex ? slot.dreamsign : existing,
+                    ),
+            };
+            summary.dreamsignId = slot.dreamsign.id ?? null;
+            summary.dreamsignName = slot.dreamsign.name;
+            if (purgedDreamsign != null) {
+              summary.purgedDreamsignName = purgedDreamsign.name;
+            }
           }
-        }
 
-        next = {
-          ...next,
-          siteRuntime: {
-            ...next.siteRuntime,
-            [siteId]: {
-              ...runtime,
-              slots: runtime.slots.map((candidate, index) =>
-                index === slotIndex
-                  ? { ...candidate, purchased: true }
-                  : candidate,
-              ),
+          next = {
+            ...next,
+            siteRuntime: {
+              ...next.siteRuntime,
+              [siteId]: {
+                ...runtime,
+                slots: runtime.slots.map((candidate, index) =>
+                  index === slotIndex
+                    ? { ...candidate, purchased: true }
+                    : candidate,
+                ),
+              },
             },
-          },
-        };
+          };
 
-        return {
-          ...room,
-          questState: next,
-          metadata: {
-            ...room.metadata,
-            updatedAt: now,
-          },
-          actionLog: {
-            ...(room.actionLog ?? {}),
-            [actionId]: buildActionLogEntry({
-              timestamp: now,
-              actorId: current.session.clientId,
-              action: "buyShopSlot",
-              source: "shop_purchase",
-              summary,
-            }),
-          },
-        };
-      },
-    });
-  }, []);
+          return {
+            ...room,
+            questState: next,
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "buyShopSlot",
+                source: "shop_purchase",
+                summary,
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
 
   const rerollShop = useCallback((site: SiteState) => {
     const current = currentRef.current;
@@ -1970,8 +2057,10 @@ export function MultiplayerQuestProvider({
     }
 
     const expectedOmens = current.state.omens;
-    const cost = rerollCost(0, site.isEnhanced);
-    if (cost > expectedOmens) {
+    const expectedFreeRerolls = current.state.shopModifiers.freeRerolls;
+    const useFreeReroll = expectedFreeRerolls > 0;
+    const cost = useFreeReroll ? 0 : rerollCost(0, site.isEnhanced);
+    if (!useFreeReroll && cost > expectedOmens) {
       return;
     }
     const expectedDraftSignature = stableStringify(current.state.draftState);
@@ -2014,7 +2103,10 @@ export function MultiplayerQuestProvider({
           runtime === undefined ||
           runtime.kind !== "shop" ||
           runtime.rerollCount !== expectedRuntime.rerollCount ||
-          room.questState.omens !== expectedOmens ||
+          (!useFreeReroll && room.questState.omens !== expectedOmens) ||
+          (useFreeReroll &&
+            room.questState.shopModifiers.freeRerolls !==
+              expectedFreeRerolls) ||
           !arraysEqual(
             runtime.remainingDreamsignPoolIds,
             expectedRuntime.remainingDreamsignPoolIds,
@@ -2024,8 +2116,7 @@ export function MultiplayerQuestProvider({
             room.questState.remainingDreamsignPool,
             expectedRuntime.remainingDreamsignPoolIds,
           ) ||
-          stableStringify(room.questState.draftState)
-            !== expectedDraftSignature
+          stableStringify(room.questState.draftState) !== expectedDraftSignature
         ) {
           return room;
         }
@@ -2034,7 +2125,15 @@ export function MultiplayerQuestProvider({
           ...room,
           questState: {
             ...room.questState,
-            omens: room.questState.omens - cost,
+            omens: useFreeReroll
+              ? room.questState.omens
+              : room.questState.omens - cost,
+            shopModifiers: useFreeReroll
+              ? {
+                  ...room.questState.shopModifiers,
+                  freeRerolls: room.questState.shopModifiers.freeRerolls - 1,
+                }
+              : room.questState.shopModifiers,
             remainingDreamsignPool: generated.remainingDreamsignPoolIds,
             draftState: generated.draftState,
             siteRuntime: {
@@ -2062,6 +2161,7 @@ export function MultiplayerQuestProvider({
                 siteId: site.id,
                 rerollCost: cost,
                 rerollCount,
+                freeReroll: useFreeReroll,
               },
             }),
           },
@@ -2080,12 +2180,12 @@ export function MultiplayerQuestProvider({
       const runtime: CardChoiceSiteRuntime | null =
         current.state.siteRuntime[siteId] === undefined
           ? buildCardChoiceRuntime({
-            siteId,
+              siteId,
               deck: current.state.deck,
               cardDatabase: current.questContent.cardDatabase,
               kind,
               isEnhanced: site?.isEnhanced ?? false,
-          })
+            })
           : null;
       const now = new Date().toISOString();
       const actionId = runtime === null ? null : crypto.randomUUID();
@@ -2407,6 +2507,1021 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const changeOmens = useCallback((delta: number, source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const oldValue = room.questState.omens;
+        const newValue = Math.max(0, oldValue + delta);
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            omens: newValue,
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "changeOmens",
+              source,
+              summary: {
+                oldValue,
+                newValue,
+                delta,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const setEssence = useCallback((value: number, source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const oldValue = room.questState.essence;
+        const newValue = clampEssence(value, room.questState.essenceCap);
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            essence: newValue,
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "setEssence",
+              source,
+              summary: {
+                oldValue,
+                newValue,
+                delta: newValue - oldValue,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const changeMaxEssence = useCallback((delta: number, source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const oldValue = room.questState.essenceCap;
+        const newValue = Math.max(0, oldValue + delta);
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            essenceCap: newValue,
+            essence: clampEssence(room.questState.essence, newValue),
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "changeMaxEssence",
+              source,
+              summary: {
+                oldValue,
+                newValue,
+                delta,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const addCardById = useCallback((cardId: string, source: string) => {
+    const current = currentRef.current;
+    const card = resolveCardById(current.questContent.cardDatabase, cardId);
+    if (card === null) {
+      console.warn(
+        `[multiplayer-quest-context] addCardById: unknown cardId '${cardId}' (source: ${source})`,
+      );
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const entry: DeckEntry = {
+          entryId: nextDeckEntryId(room.questState.deck),
+          cardNumber: card.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        };
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            deck: [...room.questState.deck, entry],
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "addCardById",
+              source,
+              summary: {
+                cardId,
+                cardNumber: card.cardNumber,
+                cardName: card.name,
+                entryId: entry.entryId,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const addBaneCardById = useCallback((cardId: string, source: string) => {
+    const current = currentRef.current;
+    const card = resolveCardById(current.questContent.cardDatabase, cardId);
+    if (card === null) {
+      console.warn(
+        `[multiplayer-quest-context] addBaneCardById: unknown cardId '${cardId}' (source: ${source})`,
+      );
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const entry: DeckEntry = {
+          entryId: nextDeckEntryId(room.questState.deck),
+          cardNumber: card.cardNumber,
+          transfiguration: null,
+          isBane: true,
+        };
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            deck: [...room.questState.deck, entry],
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "addBaneCardById",
+              source,
+              summary: {
+                cardId,
+                cardNumber: card.cardNumber,
+                cardName: card.name,
+                entryId: entry.entryId,
+                isBane: true,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const removeDeckEntry = useCallback((entryId: string, source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const entry = room.questState.deck.find(
+          (candidate) => candidate.entryId === entryId,
+        );
+        if (entry === undefined) {
+          return room;
+        }
+        const card = current.questContent.cardDatabase.get(entry.cardNumber);
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            deck: room.questState.deck.filter(
+              (candidate) => candidate.entryId !== entryId,
+            ),
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "removeDeckEntry",
+              source,
+              summary: {
+                entryId,
+                cardNumber: entry.cardNumber,
+                cardName:
+                  card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
+                isBane: entry.isBane,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const duplicateDeckEntry = useCallback((entryId: string, source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const entry = room.questState.deck.find(
+          (candidate) => candidate.entryId === entryId,
+        );
+        if (entry === undefined) {
+          return room;
+        }
+        const card = current.questContent.cardDatabase.get(entry.cardNumber);
+        const copy: DeckEntry = {
+          entryId: nextDeckEntryId(room.questState.deck),
+          cardNumber: entry.cardNumber,
+          transfiguration: entry.transfiguration,
+          isBane: entry.isBane,
+        };
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            deck: [...room.questState.deck, copy],
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "duplicateDeckEntry",
+              source,
+              summary: {
+                entryId: copy.entryId,
+                duplicatedFrom: entryId,
+                cardNumber: entry.cardNumber,
+                cardName:
+                  card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
+                isBane: entry.isBane,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const purgeRandomBaneCards = useCallback((count: number, source: string) => {
+    if (count <= 0) {
+      return;
+    }
+    const current = currentRef.current;
+    const baneEntryIds = current.state.deck
+      .filter((entry) => entry.isBane)
+      .map((entry) => entry.entryId);
+    if (baneEntryIds.length === 0) {
+      return;
+    }
+    const target = Math.min(count, baneEntryIds.length);
+    const shuffledEntryIds = [...baneEntryIds];
+    for (let i = 0; i < target; i += 1) {
+      const j = i + Math.floor(Math.random() * (shuffledEntryIds.length - i));
+      [shuffledEntryIds[i], shuffledEntryIds[j]] = [
+        shuffledEntryIds[j],
+        shuffledEntryIds[i],
+      ];
+    }
+    const selectedEntryIds = shuffledEntryIds.slice(0, target);
+
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const selected = new Set(selectedEntryIds);
+        const removedEntries = room.questState.deck.filter(
+          (entry) => entry.isBane && selected.has(entry.entryId),
+        );
+        if (removedEntries.length === 0) {
+          return room;
+        }
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            deck: room.questState.deck.filter(
+              (entry) => !(entry.isBane && selected.has(entry.entryId)),
+            ),
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "purgeRandomBaneCards",
+              source,
+              summary: {
+                requestedCount: count,
+                removedEntryIds: removedEntries.map((entry) => entry.entryId),
+                removedCount: removedEntries.length,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const purgeAllBaneCards = useCallback((source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const removedEntries = room.questState.deck.filter(
+          (entry) => entry.isBane,
+        );
+        if (removedEntries.length === 0) {
+          return room;
+        }
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            deck: room.questState.deck.filter((entry) => !entry.isBane),
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "purgeAllBaneCards",
+              source,
+              summary: {
+                removedEntryIds: removedEntries.map((entry) => entry.entryId),
+                removedCount: removedEntries.length,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const pushBattleRewardModifier = useCallback(
+    (
+      kind: "flat" | "percent",
+      amount: number,
+      battles: number,
+      source: string,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const modifier: BattleModifier =
+        kind === "flat"
+          ? {
+              kind: "reward_reduction_flat",
+              amount,
+              battlesRemaining: battles,
+              source,
+            }
+          : {
+              kind: "reward_reduction_percent",
+              percent: amount,
+              battlesRemaining: battles,
+              source,
+            };
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              battleModifiers: [...room.questState.battleModifiers, modifier],
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "pushBattleRewardModifier",
+                source,
+                summary: {
+                  kind: modifier.kind,
+                  amount,
+                  battles,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const pushTemporaryBaneGrant = useCallback(
+    (baneName: string, count: number, battles: number, source: string) => {
+      const current = currentRef.current;
+      const card = resolveCardByName(
+        current.questContent.cardDatabase,
+        baneName,
+      );
+      if (card === null || count <= 0) {
+        console.warn(
+          `[multiplayer-quest-context] pushTemporaryBaneGrant: unknown bane '${baneName}' or non-positive count ${String(count)}`,
+        );
+        return;
+      }
+
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+
+          let deck = room.questState.deck;
+          const addedEntryIds: string[] = [];
+          for (let i = 0; i < count; i += 1) {
+            const entry: DeckEntry = {
+              entryId: nextDeckEntryId(deck),
+              cardNumber: card.cardNumber,
+              transfiguration: null,
+              isBane: true,
+            };
+            addedEntryIds.push(entry.entryId);
+            deck = [...deck, entry];
+          }
+          const modifier: BattleModifier = {
+            kind: "temporary_bane_grant",
+            baneName,
+            count,
+            battlesRemaining: battles,
+            addedEntryIds,
+            source,
+          };
+
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck,
+              battleModifiers: [...room.questState.battleModifiers, modifier],
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "pushTemporaryBaneGrant",
+                source,
+                summary: {
+                  baneName,
+                  count,
+                  battles,
+                  cardNumber: card.cardNumber,
+                  addedEntryIds,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const addSiteToDreamscape = useCallback(
+    (placement: "current" | "next", siteType: SiteType, source: string) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const targetId =
+            placement === "current"
+              ? room.questState.currentDreamscape
+              : findNextDreamscapeId(
+                  room.questState.atlas,
+                  room.questState.currentDreamscape,
+                );
+          if (
+            targetId === null ||
+            room.questState.atlas.nodes[targetId] === undefined
+          ) {
+            return room;
+          }
+          const site: SiteState = {
+            id: nextSiteIdFromAtlas(room.questState.atlas),
+            type: siteType,
+            isEnhanced: false,
+            isVisited: false,
+          };
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              atlas: atlasWithAddedSite(room.questState.atlas, targetId, site),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "addSiteToDreamscape",
+                source,
+                summary: {
+                  siteId: site.id,
+                  siteType,
+                  dreamscapeId: targetId,
+                  placement,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const replaceSiteType = useCallback(
+    (from: SiteType, to: SiteType, source: string) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const currentId = room.questState.currentDreamscape;
+          if (currentId === null) {
+            return room;
+          }
+          const node = room.questState.atlas.nodes[currentId];
+          if (node === undefined) {
+            return room;
+          }
+          const targetIndex = node.sites.findIndex(
+            (site) => site.type === from && !site.isVisited,
+          );
+          if (targetIndex === -1) {
+            return room;
+          }
+          const replacement: SiteState = {
+            id: nextSiteIdFromAtlas(room.questState.atlas),
+            type: to,
+            isEnhanced: false,
+            isVisited: false,
+          };
+          const nextSites = node.sites.map((site, index) =>
+            index === targetIndex ? replacement : site,
+          );
+          const oldSite = node.sites[targetIndex];
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              atlas: {
+                ...room.questState.atlas,
+                nodes: {
+                  ...room.questState.atlas.nodes,
+                  [currentId]: {
+                    ...node,
+                    sites: nextSites,
+                  },
+                },
+              },
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "replaceSiteType",
+                source,
+                summary: {
+                  oldSiteId: oldSite?.id ?? null,
+                  newSiteId: replacement.id,
+                  fromType: from,
+                  toType: to,
+                  dreamscapeId: currentId,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const removeSiteTypeFromNextDreamscapes = useCallback(
+    (
+      siteType: "Shop" | "DreamsignOffering",
+      dreamscapes: number,
+      source: string,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const modifier: DreamscapeModifier =
+        siteType === "Shop"
+          ? {
+              kind: "remove_shop_sites",
+              dreamscapesRemaining: dreamscapes,
+              source,
+            }
+          : {
+              kind: "remove_dreamsign_sites",
+              dreamscapesRemaining: dreamscapes,
+              source,
+            };
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              dreamscapeModifiers: [
+                ...room.questState.dreamscapeModifiers,
+                modifier,
+              ],
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "removeSiteTypeFromNextDreamscapes",
+                source,
+                summary: {
+                  kind: modifier.kind,
+                  dreamscapes,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const grantFreeShopRerolls = useCallback((count: number, source: string) => {
+    if (count <= 0) {
+      return;
+    }
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            shopModifiers: {
+              ...room.questState.shopModifiers,
+              freeRerolls: room.questState.shopModifiers.freeRerolls + count,
+            },
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "grantFreeShopRerolls",
+              source,
+              summary: {
+                count,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
+  const applyShopEssenceDiscount = useCallback(
+    (percent: number, source: string) => {
+      if (percent <= 0) {
+        return;
+      }
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              shopModifiers: {
+                ...room.questState.shopModifiers,
+                essenceDiscountPercent:
+                  room.questState.shopModifiers.essenceDiscountPercent +
+                  percent,
+              },
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "applyShopEssenceDiscount",
+                source,
+                summary: {
+                  percent,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const grantShopOmenDiscounts = useCallback(
+    (count: number, source: string) => {
+      if (count <= 0) {
+        return;
+      }
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              shopModifiers: {
+                ...room.questState.shopModifiers,
+                upcomingOmenDiscounts:
+                  room.questState.shopModifiers.upcomingOmenDiscounts + count,
+              },
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "grantShopOmenDiscounts",
+                source,
+                summary: {
+                  count,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const boostSiteAppearance = useCallback(
+    (
+      siteType: SiteType,
+      percent: number,
+      dreamscapes: number,
+      source: string,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const modifier: DreamscapeModifier = {
+        kind: "boost_site_appearance",
+        siteType,
+        percent,
+        dreamscapesRemaining: dreamscapes,
+        source,
+      };
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              dreamscapeModifiers: [
+                ...room.questState.dreamscapeModifiers,
+                modifier,
+              ],
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "boostSiteAppearance",
+                source,
+                summary: {
+                  siteType,
+                  percent,
+                  dreamscapes,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const mutations = useMemo<QuestMutations>(
     () => ({
       changeEssence,
@@ -2458,99 +3573,42 @@ export function MultiplayerQuestProvider({
       dismissStartingDeckPopup,
       bootstrapStartInBattle,
       resetQuest,
-      // Wave 1 Dream Journey effect plumbing. Single-player only for now;
-      // multiplayer composed actions land alongside their consumers.
-      changeOmens: (_delta: number, _source: string) => {
-        unavailableMutation("changeOmens");
-      },
-      setEssence: (_value: number, _source: string) => {
-        unavailableMutation("setEssence");
-      },
-      changeMaxEssence: (_delta: number, _source: string) => {
-        unavailableMutation("changeMaxEssence");
-      },
-      addCardById: (_cardId: string, _source: string) => {
-        unavailableMutation("addCardById");
-      },
-      addBaneCardById: (_cardId: string, _source: string) => {
-        unavailableMutation("addBaneCardById");
-      },
-      removeDeckEntry: (_entryId: string, _source: string) => {
-        unavailableMutation("removeDeckEntry");
-      },
-      duplicateDeckEntry: (_entryId: string, _source: string) => {
-        unavailableMutation("duplicateDeckEntry");
-      },
-      purgeRandomBaneCards: (_count: number, _source: string) => {
-        unavailableMutation("purgeRandomBaneCards");
-      },
-      purgeAllBaneCards: (_source: string) => {
-        unavailableMutation("purgeAllBaneCards");
-      },
-      pushBattleRewardModifier: (
-        _kind: "flat" | "percent",
-        _amount: number,
-        _battles: number,
-        _source: string,
-      ) => {
-        unavailableMutation("pushBattleRewardModifier");
-      },
-      pushTemporaryBaneGrant: (
-        _baneName: string,
-        _count: number,
-        _battles: number,
-        _source: string,
-      ) => {
-        unavailableMutation("pushTemporaryBaneGrant");
-      },
-      addSiteToDreamscape: (
-        _placement: "current" | "next",
-        _siteType: SiteType,
-        _source: string,
-      ) => {
-        unavailableMutation("addSiteToDreamscape");
-      },
-      replaceSiteType: (
-        _from: SiteType,
-        _to: SiteType,
-        _source: string,
-      ) => {
-        unavailableMutation("replaceSiteType");
-      },
-      removeSiteTypeFromNextDreamscapes: (
-        _siteType: "Shop" | "DreamsignOffering",
-        _dreamscapes: number,
-        _source: string,
-      ) => {
-        unavailableMutation("removeSiteTypeFromNextDreamscapes");
-      },
-      grantFreeShopRerolls: (_count: number, _source: string) => {
-        unavailableMutation("grantFreeShopRerolls");
-      },
-      applyShopEssenceDiscount: (_percent: number, _source: string) => {
-        unavailableMutation("applyShopEssenceDiscount");
-      },
-      grantShopOmenDiscounts: (_count: number, _source: string) => {
-        unavailableMutation("grantShopOmenDiscounts");
-      },
-      boostSiteAppearance: (
-        _siteType: SiteType,
-        _percent: number,
-        _dreamscapes: number,
-        _source: string,
-      ) => {
-        unavailableMutation("boostSiteAppearance");
-      },
+      changeOmens,
+      setEssence,
+      changeMaxEssence,
+      addCardById,
+      addBaneCardById,
+      removeDeckEntry,
+      duplicateDeckEntry,
+      purgeRandomBaneCards,
+      purgeAllBaneCards,
+      pushBattleRewardModifier,
+      pushTemporaryBaneGrant,
+      addSiteToDreamscape,
+      replaceSiteType,
+      removeSiteTypeFromNextDreamscapes,
+      grantFreeShopRerolls,
+      applyShopEssenceDiscount,
+      grantShopOmenDiscounts,
+      boostSiteAppearance,
     }),
     [
       addCard,
+      addCardById,
+      addBaneCardById,
       addDreamsign,
+      addSiteToDreamscape,
+      applyShopEssenceDiscount,
       bootstrapStartInBattle,
+      boostSiteAppearance,
       buyShopSlot,
       changeEssence,
+      changeMaxEssence,
+      changeOmens,
       cleanseBanes,
       completeSite,
       dismissStartingDeckPopup,
+      duplicateDeckEntry,
       ensureRewardSiteRuntime,
       acceptRewardSite,
       ensureDreamsignOfferRuntime,
@@ -2563,16 +3621,26 @@ export function MultiplayerQuestProvider({
       acceptDuplicationChoice,
       completeDreamJourneySite,
       ensureShopRuntime,
+      grantFreeShopRerolls,
+      grantShopOmenDiscounts,
       incrementCompletionLevel,
       markSiteVisited,
       pickDraftCard,
+      purgeAllBaneCards,
+      purgeRandomBaneCards,
+      pushBattleRewardModifier,
+      pushTemporaryBaneGrant,
       rerollShop,
+      removeDeckEntry,
       removeDreamsign,
+      removeSiteTypeFromNextDreamscapes,
       resetQuest,
+      replaceSiteType,
       setCardSourceDebug,
       setCurrentDreamscape,
       setDraftState,
       setDreamcallerSelection,
+      setEssence,
       setFailureSummary,
       setRemainingDreamsignPool,
       setScreen,
