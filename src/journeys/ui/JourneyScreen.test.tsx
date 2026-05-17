@@ -429,6 +429,48 @@ function contextWithDeck(): JourneyContext {
   } as JourneyContext;
 }
 
+function contextWithTransfiguredDeckEntries(): JourneyContext {
+  const base = contextWithDeck();
+  return {
+    ...base,
+    state: {
+      quest: {
+        ...base.state.quest,
+        deck: {
+          entries: [
+            {
+              cardId: "card-a",
+              copies: 2,
+              entryIds: ["plain-copy", "bronze-copy"],
+              entryTransfigurations: [null, "Bronze"],
+            },
+          ],
+          summary: { totalCards: 2, starterCards: 2, uniqueCards: 1 },
+        },
+      },
+    },
+    content: {
+      ...base.content,
+      cards: [
+        {
+          id: "card-a",
+          name: "Glimmer Knife",
+          tides: [],
+          rarity: "Starter",
+          cardType: "Event",
+          energyCost: 1,
+          spark: 1,
+          cardNumber: 1,
+          raw: {
+            renderedText: "Transfigured text marker on the base card.",
+            rulesText: "Transfigured text marker on the base card.",
+          },
+        },
+      ],
+    },
+  } as JourneyContext;
+}
+
 const TEST_SITE_ID = "site-test";
 
 function dummyMutations() {
@@ -881,6 +923,66 @@ describe("JourneyScreen", () => {
 
     expect(queryChooser(container)?.textContent).toContain("Glimmer Knife");
     expect(queryChooser(container)?.textContent).not.toContain("Amber Lantern");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("filters transfigured deck chooser candidates by deck entry state", () => {
+    const templateId = "choose_transfigured_card";
+    const request: ChooserRequest = {
+      ...cardChooserRequest("1:choose_transfigured_card:0"),
+      deckFilter: { predicateId: "transfigured" },
+    };
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        options: [
+          makeUnlockedOption({
+            ...baseOptionFields(1),
+            effects: [rewardEnvelope(templateId)],
+          }),
+        ],
+      }),
+    );
+    const { mut, calls } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithTransfiguredDeckEntries()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    const chooserButtons = Array.from(
+      queryChooser(container)?.querySelectorAll("button[aria-pressed]") ?? [],
+    );
+    expect(chooserButtons).toHaveLength(1);
+    act(() => {
+      getButtonByText(container, "Glimmer Knife").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Confirm").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: ["bronze-copy", "Bronze", "dream_journey:choose_transfigured_card"],
+      },
+    ]);
 
     act(() => {
       root.unmount();

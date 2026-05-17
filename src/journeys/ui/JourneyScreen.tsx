@@ -50,8 +50,10 @@ import type { JourneyMutations } from "../apply/JourneyMutations";
 import { logJourneyChooserCancelled } from "../logging";
 import type { JourneyContext } from "../journey/context";
 import { generateNextJourney } from "../journey/generate";
-import { cardMatches } from "../journey/shared/content";
-import { getPredicate } from "../journey/shared/predicates";
+import {
+  findDeckEntriesByPredicate,
+  projectedDeckEntries,
+} from "../journey/shared/deckEntries";
 import type {
   JourneyManifest,
   JourneyOption,
@@ -155,29 +157,24 @@ function buildCardChooserCandidates(
 ) {
   const cardsById = new Map(context.content.cards.map((card) => [card.id, card]));
   const starterOnly = request.deckFilter?.starterOnly === true;
-  const allowedDeckCardIds = deckPredicateCardIds(request, context);
 
   if (request.poolKind === "deck") {
-    return context.state.quest.deck.entries.flatMap((entry) => {
-      const card = cardsById.get(entry.cardId);
+    const predicateEntryIds = deckPredicateEntryIds(request, context);
+    return projectedDeckEntries(context).flatMap((entry) => {
       if (
-        !card ||
-        (starterOnly && card.rarity !== "Starter") ||
-        (allowedDeckCardIds !== null && !allowedDeckCardIds.has(card.id))
+        (starterOnly && entry.card.rarity !== "Starter") ||
+        (predicateEntryIds !== null && !predicateEntryIds.has(entry.entryId))
       ) {
         return [];
       }
-      const entryIds =
-        entry.entryIds ??
-        Array.from({ length: entry.copies }, (_unused, index) =>
-          `${entry.cardId}:${String(index)}`,
-        );
-      return entryIds.map((entryId) => ({
-        entryId,
-        cardId: card.id,
-        name: card.name,
-        rulesText: cardRulesText(card),
-      }));
+      return [
+        {
+          entryId: entry.entryId,
+          cardId: entry.card.id,
+          name: entry.card.name,
+          rulesText: cardRulesText(entry.card),
+        },
+      ];
     });
   }
 
@@ -200,7 +197,7 @@ function buildCardChooserCandidates(
   });
 }
 
-function deckPredicateCardIds(
+function deckPredicateEntryIds(
   request: CardChooserRequest,
   context: JourneyContext,
 ): ReadonlySet<string> | null {
@@ -209,12 +206,7 @@ function deckPredicateCardIds(
     return null;
   }
 
-  const predicate = getPredicate(predicateId);
-  return new Set(
-    cardMatches(context, { ...predicate.cardPredicate, source: "deck" }).map(
-      (card) => card.id,
-    ),
-  );
+  return new Set(findDeckEntriesByPredicate(context, predicateId));
 }
 
 function buildDreamsignChooserCandidates(
