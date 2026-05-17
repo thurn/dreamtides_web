@@ -21,6 +21,7 @@ import {
   type ApplyMeta,
   type ApplyResult,
 } from "./applyShared";
+import { requestIdFor } from "./chooserPlan";
 import type { ChooserResolution } from "./chooserPlan";
 import type { JourneyMutations } from "./JourneyMutations";
 
@@ -91,5 +92,5 @@ export function applyBranch(
  * Wave 2 templates that emit more than one chooser; Wave 1 always uses 0.
  */
 export function branchRequestIdFor(branchId: string, templateId: string): string {
-  return `${branchId}:${templateId}:0`;
+  return requestIdFor(branchId, templateId);
 }

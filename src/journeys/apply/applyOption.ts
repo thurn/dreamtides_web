@@ -41,6 +41,7 @@ import {
   type ApplyMeta,
   type ApplyResult,
 } from "./applyShared";
+import { requestIdFor } from "./chooserPlan";
 import type { ChooserResolution } from "./chooserPlan";
 import type { JourneyMutations } from "./JourneyMutations";
 
@@ -60,7 +61,6 @@ export function applyOption(
   const costEntries = collectCostEntries(option.costs);
   const rewardEntries = collectRewardEntries(option.effects);
 
-  // Locked re-check pass: any locked cost aborts before any mutation runs.
   for (const entry of costEntries) {
     if (entry.template.locked(entry.payload.params, ctx)) {
       logEvent("dream_journey_locked_at_apply", {
@@ -91,14 +91,4 @@ export function applyOption(
   });
 
   return { done: true };
-}
-
-/**
- * Stable identity for an (option, template, slot) tuple. Wave 1 always
- * resolves the slot to `0`; Wave 2 will widen the slot index for templates
- * that emit more than one chooser. Exported so future Wave 2 callers can
- * reconstruct the same identifier without re-deriving the format.
- */
-export function requestIdFor(optionNumber: number, templateId: string): string {
-  return `${optionNumber}:${templateId}:0`;
 }

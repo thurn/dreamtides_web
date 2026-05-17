@@ -12,7 +12,7 @@ import { findCost } from "../journey/shared/costs";
 import { findReward } from "../journey/shared/rewards";
 import type { Cost, Reward } from "../journey/shared/types";
 
-import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
+import type { ChooserResolution } from "./chooserPlan";
 import type { JourneyMutations } from "./JourneyMutations";
 import {
   narrowSharedCostPayload,
@@ -28,14 +28,7 @@ export interface ApplyMeta {
   readonly shapeId: string;
 }
 
-/**
- * Outcome of an apply pass. Wave 1 always returns `{ done: true }`; Wave 2
- * introduces a `{ done: false, needsChoice }` variant when a template
- * requests a chooser the caller must satisfy before retrying the apply.
- */
-export type ApplyResult =
-  | { done: true }
-  | { done: false; needsChoice: ChooserRequest };
+export type { ApplyResult } from "./chooserPlan";
 
 /** Narrowed + resolved cost envelope ready for the apply pass. */
 export interface CostEntry {

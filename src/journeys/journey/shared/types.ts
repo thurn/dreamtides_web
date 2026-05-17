@@ -10,7 +10,7 @@ import type { JourneyContext } from "../context";
 import type { DrawContext } from "../../util/rng";
 import type { CardTargetPredicate } from "../effects";
 import type { JourneyMutations } from "../../apply/JourneyMutations";
-import type { ChooserResolution } from "../../apply/chooserPlan";
+import type { ChooserRequest, ChooserResolution } from "../../apply/chooserPlan";
 
 export type TemplateParams = Record<string, unknown>;
 
@@ -21,6 +21,7 @@ export type Reward<P extends TemplateParams = TemplateParams> = {
   cec(params: P, ctx: JourneyContext): number;
   viable(params: P, ctx: JourneyContext): boolean;
   render(params: P, ctx: JourneyContext): string;
+  choosePlan?(params: P, ctx: JourneyContext): ChooserRequest | undefined;
   // The 4th `chooserResolution` parameter is reserved for Wave 2 chosen-target
   // templates. The Wave 1 dispatch loop always passes `undefined`; concrete
   // resolution shapes land in `apply/chooserPlan.ts` alongside Task 20.
