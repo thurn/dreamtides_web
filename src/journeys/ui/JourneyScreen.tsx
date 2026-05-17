@@ -34,9 +34,12 @@
 
 import { useCallback, useMemo, useState } from "react";
 
+import { logEvent } from "../../logging";
+
 import { applyBranch } from "../apply/applyBranch";
 import { applyOption } from "../apply/applyOption";
 import type { ApplyMeta } from "../apply/applyShared";
+import type { ChooserRequest, ChooserResolution } from "../apply/chooserPlan";
 import type { JourneyMutations } from "../apply/JourneyMutations";
 import type { JourneyContext } from "../journey/context";
 import { generateNextJourney } from "../journey/generate";
@@ -45,12 +48,16 @@ import type {
   JourneyOption,
   JourneyTreeBranch,
   JourneyTreeNode,
+  JourneyTreeTerminal,
 } from "../journey/manifest";
 import type { DrawContext } from "../util/rng";
 import { advanceTree, initializeTree } from "../util/tree";
 
 import { CloseButton } from "./CloseButton";
 import { JourneyOptionCircle } from "./JourneyOptionCircle";
+import { CardChooser } from "./chooser/CardChooser";
+import { DreamsignChooser } from "./chooser/DreamsignChooser";
+import { TransfigurationChooser } from "./chooser/TransfigurationChooser";
 import {
   assignDreamArt,
   isLeaveBranch,
@@ -119,6 +126,105 @@ function indexAssignments(
   return new Map(assignments.map((assignment) => [assignment.label, assignment]));
 }
 
+type CardChooserRequest = Extract<ChooserRequest, { kind: "card" }>;
+type DreamsignChooserRequest = Extract<ChooserRequest, { kind: "dreamsign" }>;
+
+function cardRulesText(
+  card: JourneyContext["content"]["cards"][number],
+): string | undefined {
+  const candidate =
+    card.raw.rulesText ?? card.raw.renderedText ?? card.raw.text ?? card.raw.description;
+  if (typeof candidate !== "string" || candidate.trim().length === 0) {
+    return undefined;
+  }
+  return candidate.length > 160 ? `${candidate.slice(0, 157)}...` : candidate;
+}
+
+function buildCardChooserCandidates(
+  request: CardChooserRequest,
+  context: JourneyContext,
+) {
+  const cardsById = new Map(context.content.cards.map((card) => [card.id, card]));
+  const starterOnly = request.deckFilter?.starterOnly === true;
+
+  if (request.poolKind === "deck") {
+    return context.state.quest.deck.entries.flatMap((entry) => {
+      const card = cardsById.get(entry.cardId);
+      if (!card || (starterOnly && card.rarity !== "Starter")) return [];
+      const entryIds =
+        entry.entryIds ??
+        Array.from({ length: entry.copies }, (_unused, index) =>
+          `${entry.cardId}:${String(index)}`,
+        );
+      return entryIds.map((entryId) => ({
+        entryId,
+        cardId: card.id,
+        name: card.name,
+        rulesText: cardRulesText(card),
+      }));
+    });
+  }
+
+  const cardIds =
+    request.poolKind === "rolled" && request.rolledCardIds !== undefined
+      ? request.rolledCardIds
+      : request.rolledCardIds ?? context.content.cards.map((card) => card.id);
+
+  return cardIds.flatMap((cardId, index) => {
+    const card = cardsById.get(cardId);
+    if (!card || (starterOnly && card.rarity !== "Starter")) return [];
+    return [
+      {
+        entryId: `${request.poolKind}:${card.id}:${String(index)}`,
+        cardId: card.id,
+        name: card.name,
+        rulesText: cardRulesText(card),
+      },
+    ];
+  });
+}
+
+function buildDreamsignChooserCandidates(
+  request: DreamsignChooserRequest,
+  context: JourneyContext,
+) {
+  const dreamsignsById = new Map(
+    context.content.dreamsigns.map((dreamsign) => [dreamsign.id, dreamsign]),
+  );
+
+  if (request.poolKind === "active") {
+    return context.state.quest.activeDreamsigns.map((entry, index) => {
+      const dreamsign = dreamsignsById.get(entry.dreamsignId);
+      return {
+        index,
+        id: entry.dreamsignId,
+        name: dreamsign?.name ?? entry.dreamsignId,
+        description: dreamsign?.renderedText ?? "",
+      };
+    });
+  }
+
+  const dreamsignIds =
+    request.poolKind === "rolled" && request.rolledDreamsignIds !== undefined
+      ? request.rolledDreamsignIds
+      : request.rolledDreamsignIds ??
+        context.state.quest.dreamsignPoolIds ??
+        context.content.dreamsigns.map((dreamsign) => dreamsign.id);
+
+  return dreamsignIds.flatMap((dreamsignId, index) => {
+    const dreamsign = dreamsignsById.get(dreamsignId);
+    if (!dreamsign) return [];
+    return [
+      {
+        index,
+        id: dreamsign.id,
+        name: dreamsign.name,
+        description: dreamsign.renderedText,
+      },
+    ];
+  });
+}
+
 /** The Dream Journey screen. */
 export function JourneyScreen({
   context,
@@ -182,6 +288,19 @@ function JourneyScreenInner({
 
   const [currentNodeId, setCurrentNodeId] = useState<string | null>(initialNodeId);
   const [hoveredOptionKey, setHoveredOptionKey] = useState<string | null>(null);
+  const [resolutions, setResolutions] = useState<
+    Map<string, ChooserResolution>
+  >(() => new Map());
+  const [pendingChooser, setPendingChooser] = useState<ChooserRequest | null>(
+    null,
+  );
+  const [committedOption, setCommittedOption] = useState<JourneyOption | null>(
+    null,
+  );
+  const [committedBranch, setCommittedBranch] =
+    useState<JourneyTreeBranch | null>(null);
+  const [committedTerminal, setCommittedTerminal] =
+    useState<JourneyTreeTerminal | null>(null);
 
   const dreamArt = useMemo(
     () => assignDreamArt(manifest, { extensionMap }),
@@ -203,32 +322,50 @@ function JourneyScreenInner({
     [manifest.journeyId, manifest.shapeId, siteId],
   );
 
-  const handleEnterFlat = useCallback(
-    (option: JourneyOption) => {
-      // Apply the option's costs / effects through the recording mutations
-      // adapter. Wave 1 always returns `{ done: true }` so the screen closes
-      // on the same click; Wave 2 will short-circuit here when a chooser is
-      // required and wait for the player's resolution before closing.
-      const result = applyOption(option, applyMeta, context, mutations);
-      if (result.done) {
-        onClose();
-      }
-    },
-    [applyMeta, context, mutations, onClose],
-  );
+  const clearCommittedApply = useCallback(() => {
+    setPendingChooser(null);
+    setCommittedOption(null);
+    setCommittedBranch(null);
+    setCommittedTerminal(null);
+    setResolutions(new Map());
+  }, []);
 
-  const handleEnterBranch = useCallback(
-    (branch: JourneyTreeBranch) => {
-      if (!manifest.tree) {
-        onClose();
+  const finishAndClose = useCallback(() => {
+    clearCommittedApply();
+    onClose();
+  }, [clearCommittedApply, onClose]);
+
+  const applyTerminalCommit = useCallback(
+    (
+      terminal: JourneyTreeTerminal,
+      resolutionMap: ReadonlyMap<string, ChooserResolution>,
+    ) => {
+      const terminalResult = applyBranch(
+        terminal,
+        applyMeta,
+        context,
+        mutations,
+        resolutionMap,
+      );
+      if (!terminalResult.done) {
+        setCommittedOption(null);
+        setCommittedBranch(null);
+        setCommittedTerminal(terminal);
+        setPendingChooser(terminalResult.needsChoice);
         return;
       }
+      finishAndClose();
+    },
+    [applyMeta, context, finishAndClose, mutations],
+  );
 
-      // Apply the branch's own costs / effects first. Wave 1 always returns
-      // `{ done: true }`; Wave 2 will defer the tree advance when the branch
-      // needs a chooser.
-      const branchResult = applyBranch(branch, applyMeta, context, mutations);
-      if (!branchResult.done) {
+  const continueAfterBranchCommit = useCallback(
+    (
+      branch: JourneyTreeBranch,
+      resolutionMap: ReadonlyMap<string, ChooserResolution>,
+    ) => {
+      if (!manifest.tree) {
+        finishAndClose();
         return;
       }
 
@@ -239,26 +376,142 @@ function JourneyScreenInner({
       );
 
       if (result.terminal !== null) {
-        // The terminal carries its own costs / effects (failure penalties,
-        // claim rewards). Apply them through the same dispatch path before
-        // closing — the terminal record satisfies `ApplyableBranchLike`
-        // structurally so no separate entry point is needed.
-        applyBranch(result.terminal, applyMeta, context, mutations);
-        onClose();
+        applyTerminalCommit(result.terminal, resolutionMap);
         return;
       }
 
       if (result.nextNode === null) {
-        // Branch (or downstream automatic/random transition) reached a
-        // dead-end without a terminal. The screen is done.
-        onClose();
+        finishAndClose();
         return;
       }
 
       setCurrentNodeId(result.nextNode.id);
+      clearCommittedApply();
     },
-    [applyMeta, context, manifest, mutations, onClose],
+    [applyTerminalCommit, clearCommittedApply, finishAndClose, manifest],
   );
+
+  const applyOptionCommit = useCallback(
+    (
+      option: JourneyOption,
+      resolutionMap: ReadonlyMap<string, ChooserResolution>,
+    ) => {
+      const result = applyOption(
+        option,
+        applyMeta,
+        context,
+        mutations,
+        resolutionMap,
+      );
+      if (!result.done) {
+        setPendingChooser(result.needsChoice);
+        return;
+      }
+      finishAndClose();
+    },
+    [applyMeta, context, finishAndClose, mutations],
+  );
+
+  const applyBranchCommit = useCallback(
+    (
+      branch: JourneyTreeBranch,
+      resolutionMap: ReadonlyMap<string, ChooserResolution>,
+    ) => {
+      const branchResult = applyBranch(
+        branch,
+        applyMeta,
+        context,
+        mutations,
+        resolutionMap,
+      );
+      if (!branchResult.done) {
+        setPendingChooser(branchResult.needsChoice);
+        return;
+      }
+      continueAfterBranchCommit(branch, resolutionMap);
+    },
+    [applyMeta, context, continueAfterBranchCommit, mutations],
+  );
+
+  const handleEnterFlat = useCallback(
+    (option: JourneyOption) => {
+      const freshResolutions = new Map<string, ChooserResolution>();
+      setResolutions(freshResolutions);
+      setPendingChooser(null);
+      setCommittedOption(option);
+      setCommittedBranch(null);
+      setCommittedTerminal(null);
+      applyOptionCommit(option, freshResolutions);
+    },
+    [applyOptionCommit],
+  );
+
+  const handleEnterBranch = useCallback(
+    (branch: JourneyTreeBranch) => {
+      const freshResolutions = new Map<string, ChooserResolution>();
+      setResolutions(freshResolutions);
+      setPendingChooser(null);
+      setCommittedOption(null);
+      setCommittedBranch(branch);
+      setCommittedTerminal(null);
+      applyBranchCommit(branch, freshResolutions);
+    },
+    [applyBranchCommit],
+  );
+
+  const handleChooserResolve = useCallback(
+    (resolution: ChooserResolution) => {
+      if (pendingChooser === null) return;
+      const nextResolutions = new Map(resolutions);
+      nextResolutions.set(pendingChooser.requestId, resolution);
+      setResolutions(nextResolutions);
+
+      if (committedOption !== null) {
+        applyOptionCommit(committedOption, nextResolutions);
+        return;
+      }
+
+      if (committedBranch !== null) {
+        applyBranchCommit(committedBranch, nextResolutions);
+        return;
+      }
+
+      if (committedTerminal !== null) {
+        applyTerminalCommit(committedTerminal, nextResolutions);
+      }
+    },
+    [
+      applyBranchCommit,
+      applyOptionCommit,
+      applyTerminalCommit,
+      committedBranch,
+      committedOption,
+      committedTerminal,
+      pendingChooser,
+      resolutions,
+    ],
+  );
+
+  const handleChooserCancel = useCallback(() => {
+    if (pendingChooser !== null) {
+      logEvent("dream_journey_chooser_cancelled", {
+        siteId,
+        journeyId: manifest.journeyId,
+        requestId: pendingChooser.requestId,
+      });
+    }
+    clearCommittedApply();
+  }, [clearCommittedApply, manifest.journeyId, pendingChooser, siteId]);
+
+  const chooser =
+    pendingChooser !== null ? (
+      <JourneyChooser
+        request={pendingChooser}
+        context={context}
+        onResolve={handleChooserResolve}
+        onCancel={handleChooserCancel}
+      />
+    ) : null;
 
   // ---- Render branches for tree manifests ----------------------------------
   if (manifest.tree) {
@@ -311,6 +564,7 @@ function JourneyScreenInner({
             );
           })}
         </div>
+        {chooser}
       </JourneyChrome>
     );
   }
@@ -365,8 +619,50 @@ function JourneyScreenInner({
           );
         })}
       </div>
+      {chooser}
     </JourneyChrome>
   );
+}
+
+function JourneyChooser({
+  request,
+  context,
+  onResolve,
+  onCancel,
+}: {
+  readonly request: ChooserRequest;
+  readonly context: JourneyContext;
+  readonly onResolve: (resolution: ChooserResolution) => void;
+  readonly onCancel: () => void;
+}) {
+  switch (request.kind) {
+    case "card":
+      return (
+        <CardChooser
+          request={request}
+          candidates={buildCardChooserCandidates(request, context)}
+          onResolve={onResolve}
+          onCancel={onCancel}
+        />
+      );
+    case "dreamsign":
+      return (
+        <DreamsignChooser
+          request={request}
+          candidates={buildDreamsignChooserCandidates(request, context)}
+          onResolve={onResolve}
+          onCancel={onCancel}
+        />
+      );
+    case "transfiguration":
+      return (
+        <TransfigurationChooser
+          request={request}
+          onResolve={onResolve}
+          onCancel={onCancel}
+        />
+      );
+  }
 }
 
 /** Surrounding layout: close button + content slot. */
