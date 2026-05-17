@@ -929,6 +929,48 @@ describe("JourneyScreen", () => {
     });
   });
 
+  it("filters deck chooser card candidates by explicit entry ids", () => {
+    const templateId = "choose_exact_entry_card";
+    const request: ChooserRequest = {
+      ...cardChooserRequest("1:choose_exact_entry_card:0"),
+      deckFilter: { entryIds: ["deck-2"] },
+    };
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        options: [
+          makeUnlockedOption({
+            ...baseOptionFields(1),
+            effects: [rewardEnvelope(templateId)],
+          }),
+        ],
+      }),
+    );
+    const { mut } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)?.textContent).not.toContain("Glimmer Knife");
+    expect(queryChooser(container)?.textContent).toContain("Amber Lantern");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("filters transfigured deck chooser candidates by deck entry state", () => {
     const templateId = "choose_transfigured_card";
     const request: ChooserRequest = {

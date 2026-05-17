@@ -327,20 +327,6 @@ function eligibleTransfigurationsForUntransfiguredDeck(
   ).map(transfigurationForApply);
 }
 
-function deckFilterForTransfiguration(
-  transfiguration: string,
-): { predicateId?: string; starterOnly?: boolean } | undefined {
-  switch (transfiguration) {
-    case "Azure":
-    case "Bronze":
-      return { predicateId: "events" };
-    case "Scarlet":
-      return { predicateId: "characters" };
-    default:
-      return undefined;
-  }
-}
-
 function selectedTransfiguration(
   templateId: string,
   ctx: JourneyContext,
@@ -705,9 +691,13 @@ const applyChosenTransfigurationToChosenCard: Reward<ApplyChosenTransfigChosenCa
 
     if (transfigurationResolution.kind !== "transfiguration") return undefined;
     const transfiguration = transfigurationResolution.type;
+    const eligibleEntryIds = untransfiguredDeckEntriesEligibleForTransfiguration(
+      ctx,
+      transfiguration,
+    );
     if (
       !isJourneyTransfiguration(transfiguration)
-      || untransfiguredDeckEntriesEligibleForTransfiguration(ctx, transfiguration).length === 0
+      || eligibleEntryIds.length === 0
     ) {
       return undefined;
     }
@@ -716,9 +706,7 @@ const applyChosenTransfigurationToChosenCard: Reward<ApplyChosenTransfigChosenCa
       kind: "card",
       requestId: planning.requestIdForSlot(1),
       poolKind: "deck",
-      ...(deckFilterForTransfiguration(transfiguration) === undefined
-        ? {}
-        : { deckFilter: deckFilterForTransfiguration(transfiguration) }),
+      deckFilter: { entryIds: eligibleEntryIds },
       minPicks: 1,
       maxPicks: 1,
       title: "Choose a card to transfigure",

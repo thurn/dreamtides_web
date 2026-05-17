@@ -157,12 +157,15 @@ function buildCardChooserCandidates(
 ) {
   const cardsById = new Map(context.content.cards.map((card) => [card.id, card]));
   const starterOnly = request.deckFilter?.starterOnly === true;
+  const explicitEntryIds =
+    request.deckFilter?.entryIds === undefined ? null : new Set(request.deckFilter.entryIds);
 
   if (request.poolKind === "deck") {
     const predicateEntryIds = deckPredicateEntryIds(request, context);
     return projectedDeckEntries(context).flatMap((entry) => {
       if (
         (starterOnly && entry.card.rarity !== "Starter") ||
+        (explicitEntryIds !== null && !explicitEntryIds.has(entry.entryId)) ||
         (predicateEntryIds !== null && !predicateEntryIds.has(entry.entryId))
       ) {
         return [];

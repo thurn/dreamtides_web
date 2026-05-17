@@ -543,7 +543,33 @@ describe("Card reward apply (non-choice)", () => {
       kind: "card",
       requestId: "request:1",
       poolKind: "deck",
-      deckFilter: { predicateId: "events" },
+      deckFilter: { entryIds: ["deck-starter-alpha", "deck-event-alpha"] },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to transfigure",
+    });
+  });
+
+  it("apply_chosen_transfiguration_to_chosen_card filters slot-1 cards to Viridian-eligible entries", () => {
+    const t = getReward("apply_chosen_transfiguration_to_chosen_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const resolutions = new Map<string, ChooserResolution>([
+      ["request:0", { kind: "transfiguration", type: "Viridian" }],
+    ]);
+
+    expect(t.choosePlan?.({}, ctx, planningContext(resolutions))).toEqual({
+      kind: "card",
+      requestId: "request:1",
+      poolKind: "deck",
+      deckFilter: { entryIds: ["deck-event-alpha", "deck-event-beta"] },
       minPicks: 1,
       maxPicks: 1,
       title: "Choose a card to transfigure",
@@ -618,6 +644,13 @@ describe("Card reward apply (non-choice)", () => {
       slot0: { kind: "transfiguration" as const, type: "Scarlet" as const },
       resolutions: new Map<string, ChooserResolution>([
         ["request:1", { kind: "card", entryIds: ["deck-event-alpha"] }],
+      ]),
+    },
+    {
+      name: "stale Viridian-ineligible card",
+      slot0: { kind: "transfiguration" as const, type: "Viridian" as const },
+      resolutions: new Map<string, ChooserResolution>([
+        ["request:1", { kind: "card", entryIds: ["deck-starter-alpha"] }],
       ]),
     },
   ])("apply_chosen_transfiguration_to_chosen_card skips $name", ({ slot0, resolutions }) => {

@@ -8,6 +8,7 @@ export type ChooserRequest =
       deckFilter?: {
         predicateId?: string;
         starterOnly?: boolean;
+        entryIds?: readonly string[];
       };
       rolledCardIds?: readonly string[];
       minPicks: number;
