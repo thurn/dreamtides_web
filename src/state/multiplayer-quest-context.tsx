@@ -51,7 +51,6 @@ import {
   type QuestContextValue,
 } from "./quest-context";
 import {
-  changeQuestEssence,
   clampEssence,
   commitPreparedDraftCardPickInQuestState,
   completeQuestSite,
@@ -527,14 +526,49 @@ export function MultiplayerQuestProvider({
     state,
   };
 
-  const changeEssence = useCallback((delta: number, _source: string) => {
+  const changeEssence = useCallback((delta: number, source: string) => {
     const current = currentRef.current;
-    const next = changeQuestEssence(current.state, delta);
-    writeQuestField({
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
-      field: "essence",
-      value: next.essence,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const oldValue = room.questState.essence;
+        const newValue = clampEssence(
+          oldValue + delta,
+          room.questState.essenceCap,
+        );
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            essence: newValue,
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "changeEssence",
+              source,
+              summary: {
+                oldValue,
+                newValue,
+                delta,
+              },
+            }),
+          },
+        };
+      },
     });
   }, []);
 
@@ -689,41 +723,60 @@ export function MultiplayerQuestProvider({
 
   const setCurrentDreamscape = useCallback((nodeId: string | null) => {
     const current = currentRef.current;
-    const isAdvancing =
-      nodeId !== null && nodeId !== current.state.currentDreamscape;
-    const next = {
-      ...current.state,
-      currentDreamscape: nodeId,
-      visitedSites: nodeId !== null ? [] : current.state.visitedSites,
-      dreamscapeModifiers: isAdvancing
-        ? current.state.dreamscapeModifiers
-            .map((modifier) => ({
-              ...modifier,
-              dreamscapesRemaining: modifier.dreamscapesRemaining - 1,
-            }))
-            .filter((modifier) => modifier.dreamscapesRemaining > 0)
-        : current.state.dreamscapeModifiers,
-    };
-    const updatedAt = new Date().toISOString();
-    writeUpdate(current.database, current.session.roomId, {
-      ...buildQuestFieldUpdate(
-        current.session.roomId,
-        "currentDreamscape",
-        next.currentDreamscape,
-        updatedAt,
-      ),
-      ...buildQuestFieldUpdate(
-        current.session.roomId,
-        "visitedSites",
-        next.visitedSites,
-        updatedAt,
-      ),
-      ...buildQuestFieldUpdate(
-        current.session.roomId,
-        "dreamscapeModifiers",
-        next.dreamscapeModifiers,
-        updatedAt,
-      ),
+    const now = new Date().toISOString();
+    const actionId = nodeId === null ? null : crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const isAdvancing =
+          nodeId !== null && nodeId !== room.questState.currentDreamscape;
+        const dreamscapeModifiers = isAdvancing
+          ? room.questState.dreamscapeModifiers
+              .map((modifier) => ({
+                ...modifier,
+                dreamscapesRemaining: modifier.dreamscapesRemaining - 1,
+              }))
+              .filter((modifier) => modifier.dreamscapesRemaining > 0)
+          : room.questState.dreamscapeModifiers;
+        const nextRoom: MultiplayerRoom = {
+          ...room,
+          questState: {
+            ...room.questState,
+            currentDreamscape: nodeId,
+            visitedSites: nodeId !== null ? [] : room.questState.visitedSites,
+            dreamscapeModifiers,
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+        };
+        if (nodeId === null || actionId === null) {
+          return nextRoom;
+        }
+        const node = room.questState.atlas.nodes[nodeId];
+        return {
+          ...nextRoom,
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "setCurrentDreamscape",
+              source: "dreamscape_navigation",
+              summary: {
+                dreamscapeId: nodeId,
+                biomeName: node?.biomeName ?? "unknown",
+              },
+            }),
+          },
+        };
+      },
     });
   }, []);
 
@@ -2442,6 +2495,71 @@ export function MultiplayerQuestProvider({
     [],
   );
 
+  const transfigureCard = useCallback(
+    (
+      entryId: string,
+      type: TransfigurationType | null,
+      effectDescription: string,
+      effectDetails: Record<string, unknown>,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const entry = room.questState.deck.find(
+            (candidate) => candidate.entryId === entryId,
+          );
+          if (entry === undefined) {
+            return room;
+          }
+          const card = current.questContent.cardDatabase.get(entry.cardNumber);
+
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck: room.questState.deck.map((candidate) =>
+                candidate.entryId === entryId
+                  ? { ...candidate, transfiguration: type }
+                  : candidate,
+              ),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "transfigureCard",
+                source: effectDescription,
+                summary: {
+                  entryId,
+                  cardNumber: entry.cardNumber,
+                  cardName:
+                    card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
+                  transfigurationType: type,
+                  effectDescription,
+                  modifiedFields: effectDetails,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const completeDreamJourneySite = useCallback((siteId: string) => {
     const current = currentRef.current;
     const site = findSite(current.state, siteId);
@@ -3550,14 +3668,7 @@ export function MultiplayerQuestProvider({
         unavailableMutation("removeCard");
       },
       cleanseBanes,
-      transfigureCard: (
-        _entryId: string,
-        _type: TransfigurationType | null,
-        _effectDescription: string,
-        _effectDetails: Record<string, unknown>,
-      ) => {
-        unavailableMutation("transfigureCard");
-      },
+      transfigureCard,
       setDreamcallerSelection,
       setCardSourceDebug,
       addDreamsign,
@@ -3645,6 +3756,7 @@ export function MultiplayerQuestProvider({
       setRemainingDreamsignPool,
       setScreen,
       startQuest,
+      transfigureCard,
       updateAtlas,
     ],
   );
