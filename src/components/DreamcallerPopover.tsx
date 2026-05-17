@@ -94,12 +94,12 @@ export function DreamcallerPopover({
             ))}
           </div>
         )}
-        <p
+        <div
           className="text-sm leading-relaxed"
           style={{ color: "#e2e8f0" }}
         >
           <RulesText text={dreamcaller.renderedText} />
-        </p>
+        </div>
       </div>
     </div>
   );

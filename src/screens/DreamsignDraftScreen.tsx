@@ -325,12 +325,12 @@ function DreamsignCard({ dreamsign }: { dreamsign: Dreamsign }) {
       >
         {dreamsign.name}
       </h3>
-      <p
+      <div
         className="text-center text-xs leading-relaxed opacity-70"
         style={{ color: "#e2e8f0" }}
       >
         <RulesText text={dreamsign.effectDescription} />
-      </p>
+      </div>
     </div>
   );
 }

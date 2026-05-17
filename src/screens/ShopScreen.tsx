@@ -340,12 +340,12 @@ function ShopSlotCard({
           >
             {ds.name}
           </h3>
-          <p
+          <div
             className="text-center text-[10px] leading-tight opacity-70"
             style={{ color: "#e2e8f0" }}
           >
             <RulesText text={ds.effectDescription} />
-          </p>
+          </div>
         </div>
         <PriceButton
           price={price}

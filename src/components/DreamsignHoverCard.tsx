@@ -91,12 +91,12 @@ export function DreamsignHoverCard({
           </span>
         )}
       </div>
-      <p
+      <div
         className="text-center text-xs leading-snug"
         style={{ color: "#e2e8f0" }}
       >
         <RulesText text={dreamsign.effectDescription} />
-      </p>
+      </div>
     </div>
   );
 }
