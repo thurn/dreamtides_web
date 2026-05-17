@@ -25,6 +25,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { CardContent, ContentBundle, DreamsignContent } from "../../content/types";
 import { createRecordingMutations } from "../../apply/testing/recordingMutations";
+import type { ChooserPlanningContext, ChooserResolution } from "../../apply/chooserPlan";
 import { getLogEntries, resetLog } from "../../../logging";
 import type { JourneyContext, QuestStateProjection } from "../context";
 
@@ -86,6 +87,15 @@ function buildContext(overrides: {
     dreamsigns: [...(overrides.dreamsigns ?? [])],
   };
   return { content, contentVersion: "test", state: { quest } };
+}
+
+function planningContext(
+  resolutions: ReadonlyMap<string, ChooserResolution> = new Map(),
+): ChooserPlanningContext {
+  return {
+    requestIdForSlot: (slot = 0) => `request:${String(slot)}`,
+    resolutions,
+  };
 }
 
 function cardFixture(): readonly CardContent[] {
@@ -157,6 +167,20 @@ function dreamsignFixture(): readonly DreamsignContent[] {
       renderedText: "Effect B",
       tides: [],
       raw: { id: "ds-2", name: "Name B", "effect-description": "Effect B" },
+    },
+    {
+      id: "ds-3",
+      name: "Name C",
+      kind: "neutral",
+      renderedText: "Effect C",
+      tides: [],
+      raw: {
+        id: "ds-3",
+        name: "Name C",
+        "effect-description": "Effect C",
+        "image-name": "name-c.png",
+        "image-alt": "Name C art",
+      },
     },
   ];
 }
@@ -703,6 +727,152 @@ describe("Card cost apply (non-choice)", () => {
   });
 });
 
+describe("Chosen card cost planning and apply", () => {
+  it("purge_chosen_predicate_card plans a single deck-card chooser filtered by predicate", () => {
+    const t = getCost("purge_chosen_predicate_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({ predicateId: "events" }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { predicateId: "events" },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to purge",
+    });
+  });
+
+  it("purge_chosen_predicate_card removes the chosen deck entry", () => {
+    const t = getCost("purge_chosen_predicate_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply({ predicateId: "events" }, ctx, mut, {
+      kind: "card",
+      entryIds: ["deck-event-alpha"],
+    });
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:purge_chosen_predicate_card"],
+      },
+    ]);
+  });
+
+  it("purge_chosen_predicate_card skips when chooser resolution is missing", () => {
+    const t = getCost("purge_chosen_predicate_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [{ cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] }],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply({ predicateId: "events" }, ctx, mut, undefined, planningContext());
+
+    expect(calls).toEqual([]);
+  });
+
+  it("draw_X_purge_chosen plans a rolled deterministic subset of concrete deck entries", () => {
+    const t = getCost("draw_X_purge_chosen");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({ drawCount: 3 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "rolled",
+      rolledCardIds: ["event-beta", "starter-beta", "starter-alpha"],
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a drawn card to purge",
+    });
+  });
+
+  it("draw_X_purge_chosen removes the chosen drawn deck entry", () => {
+    const t = getCost("draw_X_purge_chosen");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply({ drawCount: 2 }, ctx, mut, { kind: "card", entryIds: ["deck-event-beta"] });
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-beta", "dream_journey:draw_X_purge_chosen"],
+      },
+    ]);
+  });
+
+  it("draw_X_purge_chosen maps a rolled chooser selection back to the drawn deck entry", () => {
+    const t = getCost("draw_X_purge_chosen");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { drawCount: 3 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["rolled:starter-beta:1"], cardIds: ["starter-beta"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-beta", "dream_journey:draw_X_purge_chosen"],
+      },
+    ]);
+  });
+
+  it("draw_X_purge_chosen skips when chooser resolution is missing", () => {
+    const t = getCost("draw_X_purge_chosen");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [{ cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] }],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply({ drawCount: 1 }, ctx, mut, undefined, planningContext());
+
+    expect(calls).toEqual([]);
+  });
+});
+
 describe("Dreamsign cost apply (non-choice)", () => {
   it("purge_named_dreamsign removes the matching active dreamsign by index", () => {
     // active=[ds-1, ds-2] with ds-1.name = "Name A"; the named lookup must
@@ -810,6 +980,115 @@ describe("Dreamsign cost apply (non-choice)", () => {
         ],
       },
     ]);
+  });
+});
+
+describe("Chosen dreamsign cost planning and apply", () => {
+  it("purge_chosen_dreamsign plans a single active-dreamsign chooser", () => {
+    const t = getCost("purge_chosen_dreamsign");
+    const dreamsigns = dreamsignFixture();
+    const ctx = buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+    });
+
+    expect(t.choosePlan?.({}, ctx, planningContext())).toEqual({
+      kind: "dreamsign",
+      requestId: "request:0",
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to purge",
+    });
+  });
+
+  it("purge_chosen_dreamsign removes the chosen active dreamsign index", () => {
+    const t = getCost("purge_chosen_dreamsign");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply({}, ctx, mut, { kind: "dreamsign", indices: [1], dreamsignIds: ["ds-2"] });
+
+    expect(calls).toEqual([
+      { method: "removeDreamsign", args: [1, "dream_journey:purge_chosen_dreamsign"] },
+    ]);
+  });
+
+  it("purge_chosen_dreamsign skips when chooser resolution is missing", () => {
+    const t = getCost("purge_chosen_dreamsign");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply({}, ctx, mut, undefined, planningContext());
+
+    expect(calls).toEqual([]);
+  });
+
+  it("transform_dreamsign_to_random plans a single active-dreamsign chooser", () => {
+    const t = getCost("transform_dreamsign_to_random");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+    });
+
+    expect(t.choosePlan?.({}, ctx, planningContext())).toEqual({
+      kind: "dreamsign",
+      requestId: "request:0",
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to transform",
+    });
+  });
+
+  it("transform_dreamsign_to_random removes the chosen dreamsign then adds a rolled pool dreamsign", () => {
+    const t = getCost("transform_dreamsign_to_random");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+      dreamsignPoolIds: ["ds-3"],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply({}, ctx, mut, { kind: "dreamsign", indices: [0], dreamsignIds: ["ds-1"] });
+
+    expect(calls).toEqual([
+      { method: "removeDreamsign", args: [0, "dream_journey:transform_dreamsign_to_random"] },
+      {
+        method: "addDreamsign",
+        args: [
+          {
+            id: "ds-3",
+            name: "Name C",
+            effectDescription: "Effect C",
+            imageName: "name-c.png",
+            imageAlt: "Name C art",
+            isBane: false,
+          },
+          "dream_journey:transform_dreamsign_to_random",
+        ],
+      },
+    ]);
+  });
+
+  it("transform_dreamsign_to_random skips when chooser resolution is missing", () => {
+    const t = getCost("transform_dreamsign_to_random");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }],
+      dreamsignPoolIds: ["ds-2"],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply({}, ctx, mut, undefined, planningContext());
+
+    expect(calls).toEqual([]);
   });
 });
 

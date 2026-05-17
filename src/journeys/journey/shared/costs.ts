@@ -42,7 +42,7 @@ import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
 import type { JourneyMutations } from "../../apply/JourneyMutations";
 import { logSkippedVisualTemplate } from "../../apply/skipLog";
-import type { CardContent } from "../../content/types";
+import type { CardContent, DreamsignContent } from "../../content/types";
 import type { JourneyContext } from "../context";
 import { CARD_CEC, STAGE_MULTIPLIER, cardPoolCEC } from "./cec";
 import {
@@ -59,6 +59,7 @@ import {
   findDeckEntriesByPredicate,
   findDeckEntryTransfiguration,
   findFirstDeckEntryIdByCardName,
+  projectedDeckEntries,
 } from "./deckEntries";
 import { NEGATIVE_DREAMWELL_CARDS } from "./dreamwell";
 import { PREDICATES, getPredicate } from "./predicates";
@@ -77,6 +78,8 @@ const MINOR_RANDOM_TRADE_COST_WEIGHT = 1;
 const RARE_RANDOM_TRADE_COST_WEIGHT = 0.25;
 const RESOURCE_RANDOM_TRADE_COST_WEIGHT = 13;
 const BANE_GAIN_RANDOM_TRADE_COST_WEIGHT = 6;
+
+type DreamsignForApply = Parameters<JourneyMutations["addDreamsign"]>[0];
 
 function nextBattlePhrase(battles: number): string {
   return battles === 1 ? "the next battle" : `the next ${battles} battles`;
@@ -157,6 +160,147 @@ function pickUniqueDeckEntryIds(
 
 function warnSkippedCardApply(templateId: string, reason: string): void {
   console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
+}
+
+function warnSkippedDreamsignApply(templateId: string, reason: string): void {
+  console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
+}
+
+function selectedDeckEntryId(
+  templateId: string,
+  ctx: JourneyContext,
+  chooserResolution: Parameters<Cost["apply"]>[3],
+): string | undefined {
+  if (chooserResolution?.kind !== "card") {
+    warnSkippedCardApply(templateId, "missing card chooser resolution");
+    return undefined;
+  }
+
+  const entryId = chooserResolution.entryIds[0];
+  if (entryId === undefined) {
+    warnSkippedCardApply(templateId, "card chooser resolution did not include an entry id");
+    return undefined;
+  }
+
+  const availableEntryIds = new Set(projectedDeckEntries(ctx).map((entry) => entry.entryId));
+  if (!availableEntryIds.has(entryId)) {
+    warnSkippedCardApply(templateId, `deck entry ${JSON.stringify(entryId)} was not found`);
+    return undefined;
+  }
+
+  return entryId;
+}
+
+function selectedDreamsignIndex(
+  templateId: string,
+  ctx: JourneyContext,
+  chooserResolution: Parameters<Cost["apply"]>[3],
+): number | undefined {
+  if (chooserResolution?.kind !== "dreamsign") {
+    warnSkippedDreamsignApply(templateId, "missing dreamsign chooser resolution");
+    return undefined;
+  }
+
+  const index = chooserResolution.indices[0];
+  if (!Number.isInteger(index)) {
+    warnSkippedDreamsignApply(templateId, "dreamsign chooser resolution did not include an index");
+    return undefined;
+  }
+
+  if (ctx.state.quest.activeDreamsigns[index] === undefined) {
+    warnSkippedDreamsignApply(templateId, `active dreamsign index ${String(index)} was not found`);
+    return undefined;
+  }
+
+  return index;
+}
+
+function rawString(raw: Record<string, unknown>, key: string): string | undefined {
+  const value = raw[key];
+  return typeof value === "string" ? value : undefined;
+}
+
+function projectDreamsignForApply(source: DreamsignContent): DreamsignForApply {
+  const imageName = rawString(source.raw, "image-name");
+  const imageAlt = rawString(source.raw, "image-alt");
+  return {
+    id: source.id,
+    name: source.name,
+    effectDescription: source.renderedText,
+    ...(imageName === undefined ? {} : { imageName }),
+    ...(imageAlt === undefined ? {} : { imageAlt }),
+    isBane: false,
+  };
+}
+
+function poolDreamsignsById(ctx: JourneyContext): DreamsignContent[] {
+  const byId = new Map(ctx.content.dreamsigns.map((dreamsign) => [dreamsign.id, dreamsign]));
+  return ctx.state.quest.dreamsignPoolIds.flatMap((id) => {
+    const dreamsign = byId.get(id);
+    return dreamsign === undefined ? [] : [dreamsign];
+  });
+}
+
+function pickedDrawPurgeEntryIds(ctx: JourneyContext, drawCount: number): string[] {
+  return pickUniqueDeckEntryIds(
+    applyDrawContext(ctx),
+    "draw_X_purge_chosen:entry",
+    projectedDeckEntries(ctx).map((entry) => entry.entryId),
+    drawCount,
+  );
+}
+
+function resolveDrawPurgeEntryId(
+  ctx: JourneyContext,
+  drawCount: number,
+  chooserResolution: Parameters<Cost["apply"]>[3],
+): string | undefined {
+  if (chooserResolution?.kind !== "card") {
+    warnSkippedCardApply("draw_X_purge_chosen", "missing card chooser resolution");
+    return undefined;
+  }
+
+  const selectedEntryId = chooserResolution.entryIds[0];
+  if (selectedEntryId === undefined) {
+    warnSkippedCardApply("draw_X_purge_chosen", "card chooser resolution did not include an entry id");
+    return undefined;
+  }
+
+  const entries = projectedDeckEntries(ctx);
+  const concreteEntry = entries.find((entry) => entry.entryId === selectedEntryId);
+  if (concreteEntry !== undefined) return concreteEntry.entryId;
+
+  const rolledIndex = selectedEntryId.startsWith("rolled:")
+    ? Number.parseInt(selectedEntryId.split(":").slice(-1)[0] ?? "", 10)
+    : NaN;
+  if (!Number.isInteger(rolledIndex)) {
+    warnSkippedCardApply(
+      "draw_X_purge_chosen",
+      `deck entry ${JSON.stringify(selectedEntryId)} was not found`,
+    );
+    return undefined;
+  }
+
+  const entryId = pickedDrawPurgeEntryIds(ctx, drawCount)[rolledIndex];
+  if (entryId === undefined) {
+    warnSkippedCardApply(
+      "draw_X_purge_chosen",
+      `rolled chooser index ${String(rolledIndex)} was not found`,
+    );
+    return undefined;
+  }
+
+  const selectedCardId = chooserResolution.cardIds?.[0];
+  const entry = entries.find((candidate) => candidate.entryId === entryId);
+  if (selectedCardId !== undefined && entry?.card.id !== selectedCardId) {
+    warnSkippedCardApply(
+      "draw_X_purge_chosen",
+      `rolled chooser card ${JSON.stringify(selectedCardId)} did not match deck entry ${JSON.stringify(entryId)}`,
+    );
+    return undefined;
+  }
+
+  return entryId;
 }
 
 type PayEssenceParams = { x: number };
@@ -390,7 +534,27 @@ const purgeChosenPredicateCard: Cost<PurgeChosenPredCardParams> = {
   viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId),
   locked: () => false,
   render: (p) => `Purge a chosen ${getPredicate(p.predicateId).text.singular}`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    if (findDeckEntriesByPredicate(ctx, p.predicateId).length === 0) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { predicateId: p.predicateId },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to purge",
+    };
+  },
+  apply: (_p, ctx, mut, chooserResolution) => {
+    const entryId = selectedDeckEntryId(
+      "purge_chosen_predicate_card",
+      ctx,
+      chooserResolution,
+    );
+    if (entryId === undefined) return;
+    mut.removeDeckEntry(entryId, "dream_journey:purge_chosen_predicate_card");
+  },
 };
 
 type GainRandomFromPoolParams = { count: number };
@@ -589,7 +753,26 @@ const purgeChosenDreamsign: Cost<PurgeChosenDreamsignParams> = {
   viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1,
   locked: () => false,
   render: () => "Purge a chosen Dreamsign",
-  apply: () => {},
+  choosePlan: (_p, ctx, planning) => {
+    if (ctx.state.quest.activeDreamsigns.length === 0) return undefined;
+    return {
+      kind: "dreamsign",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to purge",
+    };
+  },
+  apply: (_p, ctx, mut, chooserResolution) => {
+    const index = selectedDreamsignIndex(
+      "purge_chosen_dreamsign",
+      ctx,
+      chooserResolution,
+    );
+    if (index === undefined) return;
+    mut.removeDreamsign(index, "dream_journey:purge_chosen_dreamsign");
+  },
 };
 
 type XformDreamsignParams = Record<string, never>;
@@ -601,7 +784,42 @@ const transformDreamsignToRandom: Cost<XformDreamsignParams> = {
   viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1,
   locked: () => false,
   render: () => "Transform a chosen dreamsign into a random dreamsign",
-  apply: () => {},
+  choosePlan: (_p, ctx, planning) => {
+    if (ctx.state.quest.activeDreamsigns.length === 0) return undefined;
+    return {
+      kind: "dreamsign",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to transform",
+    };
+  },
+  apply: (_p, ctx, mut, chooserResolution) => {
+    const index = selectedDreamsignIndex(
+      "transform_dreamsign_to_random",
+      ctx,
+      chooserResolution,
+    );
+    if (index === undefined) return;
+
+    const pool = poolDreamsignsById(ctx);
+    if (pool.length === 0) {
+      warnSkippedDreamsignApply("transform_dreamsign_to_random", "dreamsign pool is empty");
+      return;
+    }
+
+    const source = pickFromList(
+      applyDrawContext(ctx),
+      "transform_dreamsign_to_random:dreamsign",
+      pool,
+    );
+    mut.removeDreamsign(index, "dream_journey:transform_dreamsign_to_random");
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:transform_dreamsign_to_random",
+    );
+  },
 };
 
 type GainRandomBanesParams = { count: number };
@@ -852,7 +1070,30 @@ const drawXPurgeChosen: Cost<DrawXPurgeChosenParams> = {
   locked: () => false,
   render: (p) =>
     `Draw ${p.drawCount} cards from your deck and purge one of them of your choice`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const entries = projectedDeckEntries(ctx);
+    const pickedEntryIds = pickedDrawPurgeEntryIds(ctx, p.drawCount);
+    if (pickedEntryIds.length < p.drawCount) return undefined;
+
+    const cardIdByEntryId = new Map(entries.map((entry) => [entry.entryId, entry.card.id]));
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds: pickedEntryIds.flatMap((entryId) => {
+        const cardId = cardIdByEntryId.get(entryId);
+        return cardId === undefined ? [] : [cardId];
+      }),
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a drawn card to purge",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryId = resolveDrawPurgeEntryId(ctx, p.drawCount, chooserResolution);
+    if (entryId === undefined) return;
+    mut.removeDeckEntry(entryId, "dream_journey:draw_X_purge_chosen");
+  },
 };
 
 type RemoveShopSitesParams = { dreamscapes: number };
