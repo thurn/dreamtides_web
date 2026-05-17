@@ -1,7 +1,7 @@
 /**
  * The Dream Journey screen.
  *
- * Owns two pieces of UI state:
+ * Owns four pieces of UI state:
  *
  *   1. The memoized journey manifest produced by `generateNextJourney`. The
  *      memo keys on the `JourneyContext` so re-renders never re-run
@@ -11,12 +11,20 @@
  *      the manifest is a decision tree. Flat manifests leave this `null`.
  *      `initializeTree` runs once on mount to skip past root-level
  *      random/automatic transitions to the first player-choice frontier.
+ *   3. Chooser state: the pending request plus the resolution map gathered
+ *      during the active Enter Dream attempt.
+ *   4. Commit target state: the option, branch, and terminal records involved
+ *      in the active apply attempt, so chooser confirmation can re-enter the
+ *      same apply path with the updated resolution map.
  *
  * On Enter Dream:
- *   - Flat manifests (no `manifest.tree`): call `onClose()`.
- *   - Decision-tree, player-choice branch: call `advanceTree`. If the
- *     traversal lands on a terminal, call `onClose()`. Otherwise update
- *     `currentNodeId`.
+ *   - Flat manifests apply the selected option. If a chooser is required,
+ *     the screen renders the chooser and waits to commit until confirmation.
+ *   - Non-terminal tree branches apply the selected branch, then advance to
+ *     the next player-choice node or close at a dead-end.
+ *   - Terminal tree branches gather chooser requirements for the branch and
+ *     terminal before committing either record, then commit branch and terminal
+ *     in sequence and close.
  *
  * On Close:
  *   - Disabled when `manifest.shapeId === "choose_your_loss"` (the player is
@@ -34,15 +42,16 @@
 
 import { useCallback, useMemo, useState } from "react";
 
-import { logEvent } from "../../logging";
-
-import { applyBranch } from "../apply/applyBranch";
+import { applyBranch, planBranch } from "../apply/applyBranch";
 import { applyOption } from "../apply/applyOption";
 import type { ApplyMeta } from "../apply/applyShared";
 import type { ChooserRequest, ChooserResolution } from "../apply/chooserPlan";
 import type { JourneyMutations } from "../apply/JourneyMutations";
+import { logJourneyChooserCancelled } from "../logging";
 import type { JourneyContext } from "../journey/context";
 import { generateNextJourney } from "../journey/generate";
+import { cardMatches } from "../journey/shared/content";
+import { getPredicate } from "../journey/shared/predicates";
 import type {
   JourneyManifest,
   JourneyOption,
@@ -146,11 +155,18 @@ function buildCardChooserCandidates(
 ) {
   const cardsById = new Map(context.content.cards.map((card) => [card.id, card]));
   const starterOnly = request.deckFilter?.starterOnly === true;
+  const allowedDeckCardIds = deckPredicateCardIds(request, context);
 
   if (request.poolKind === "deck") {
     return context.state.quest.deck.entries.flatMap((entry) => {
       const card = cardsById.get(entry.cardId);
-      if (!card || (starterOnly && card.rarity !== "Starter")) return [];
+      if (
+        !card ||
+        (starterOnly && card.rarity !== "Starter") ||
+        (allowedDeckCardIds !== null && !allowedDeckCardIds.has(card.id))
+      ) {
+        return [];
+      }
       const entryIds =
         entry.entryIds ??
         Array.from({ length: entry.copies }, (_unused, index) =>
@@ -182,6 +198,23 @@ function buildCardChooserCandidates(
       },
     ];
   });
+}
+
+function deckPredicateCardIds(
+  request: CardChooserRequest,
+  context: JourneyContext,
+): ReadonlySet<string> | null {
+  const predicateId = request.deckFilter?.predicateId;
+  if (request.poolKind !== "deck" || predicateId === undefined) {
+    return null;
+  }
+
+  const predicate = getPredicate(predicateId);
+  return new Set(
+    cardMatches(context, { ...predicate.cardPredicate, source: "deck" }).map(
+      (card) => card.id,
+    ),
+  );
 }
 
 function buildDreamsignChooserCandidates(
@@ -335,7 +368,7 @@ function JourneyScreenInner({
     onClose();
   }, [clearCommittedApply, onClose]);
 
-  const applyTerminalCommit = useCallback(
+  const commitTerminal = useCallback(
     (
       terminal: JourneyTreeTerminal,
       resolutionMap: ReadonlyMap<string, ChooserResolution>,
@@ -359,6 +392,41 @@ function JourneyScreenInner({
     [applyMeta, context, finishAndClose, mutations],
   );
 
+  const planNextChoice = useCallback(
+    (
+      branch: JourneyTreeBranch,
+      resolutionMap: ReadonlyMap<string, ChooserResolution>,
+      terminal: JourneyTreeTerminal | null,
+    ): boolean => {
+      const branchChoice = planBranch(branch, context, resolutionMap).find(
+        (request) => !resolutionMap.has(request.requestId),
+      );
+      if (branchChoice !== undefined) {
+        setCommittedOption(null);
+        setCommittedBranch(branch);
+        setCommittedTerminal(terminal);
+        setPendingChooser(branchChoice);
+        return true;
+      }
+
+      if (terminal !== null) {
+        const terminalChoice = planBranch(terminal, context, resolutionMap).find(
+          (request) => !resolutionMap.has(request.requestId),
+        );
+        if (terminalChoice !== undefined) {
+          setCommittedOption(null);
+          setCommittedBranch(branch);
+          setCommittedTerminal(terminal);
+          setPendingChooser(terminalChoice);
+          return true;
+        }
+      }
+
+      return false;
+    },
+    [context],
+  );
+
   const continueAfterBranchCommit = useCallback(
     (
       branch: JourneyTreeBranch,
@@ -376,7 +444,7 @@ function JourneyScreenInner({
       );
 
       if (result.terminal !== null) {
-        applyTerminalCommit(result.terminal, resolutionMap);
+        commitTerminal(result.terminal, resolutionMap);
         return;
       }
 
@@ -388,7 +456,7 @@ function JourneyScreenInner({
       setCurrentNodeId(result.nextNode.id);
       clearCommittedApply();
     },
-    [applyTerminalCommit, clearCommittedApply, finishAndClose, manifest],
+    [clearCommittedApply, commitTerminal, finishAndClose, manifest],
   );
 
   const applyOptionCommit = useCallback(
@@ -417,6 +485,33 @@ function JourneyScreenInner({
       branch: JourneyTreeBranch,
       resolutionMap: ReadonlyMap<string, ChooserResolution>,
     ) => {
+      if (manifest.tree) {
+        const result = advanceTree(
+          manifest.tree,
+          branch.id,
+          manifest.precommitted,
+        );
+        if (result.terminal !== null) {
+          if (planNextChoice(branch, resolutionMap, result.terminal)) {
+            return;
+          }
+
+          const branchResult = applyBranch(
+            branch,
+            applyMeta,
+            context,
+            mutations,
+            resolutionMap,
+          );
+          if (!branchResult.done) {
+            setPendingChooser(branchResult.needsChoice);
+            return;
+          }
+          commitTerminal(result.terminal, resolutionMap);
+          return;
+        }
+      }
+
       const branchResult = applyBranch(
         branch,
         applyMeta,
@@ -430,7 +525,15 @@ function JourneyScreenInner({
       }
       continueAfterBranchCommit(branch, resolutionMap);
     },
-    [applyMeta, context, continueAfterBranchCommit, mutations],
+    [
+      applyMeta,
+      commitTerminal,
+      context,
+      continueAfterBranchCommit,
+      manifest,
+      mutations,
+      planNextChoice,
+    ],
   );
 
   const handleEnterFlat = useCallback(
@@ -477,13 +580,13 @@ function JourneyScreenInner({
       }
 
       if (committedTerminal !== null) {
-        applyTerminalCommit(committedTerminal, nextResolutions);
+        commitTerminal(committedTerminal, nextResolutions);
       }
     },
     [
       applyBranchCommit,
       applyOptionCommit,
-      applyTerminalCommit,
+      commitTerminal,
       committedBranch,
       committedOption,
       committedTerminal,
@@ -494,7 +597,7 @@ function JourneyScreenInner({
 
   const handleChooserCancel = useCallback(() => {
     if (pendingChooser !== null) {
-      logEvent("dream_journey_chooser_cancelled", {
+      logJourneyChooserCancelled({
         siteId,
         journeyId: manifest.journeyId,
         requestId: pendingChooser.requestId,

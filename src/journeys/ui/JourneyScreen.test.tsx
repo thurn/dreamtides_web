@@ -224,7 +224,10 @@ function rewardEnvelope(
   };
 }
 
-function cardChooserRequest(requestId: string, title = "Choose a card"): ChooserRequest {
+function cardChooserRequest(
+  requestId: string,
+  title = "Choose a card",
+): Extract<ChooserRequest, { kind: "card" }> {
   return {
     kind: "card",
     requestId,
@@ -253,6 +256,23 @@ function cardChooserReward(
       for (const entryId of resolution.entryIds) {
         mut.transfigureDeckEntry(entryId, type, `dream_journey:${id}`);
       }
+    },
+  };
+}
+
+function immediateEssenceReward(
+  id: string,
+  amount: number,
+): Reward<Record<string, unknown>> {
+  return {
+    id,
+    weight: 1,
+    rollParams: () => ({}),
+    cec: () => amount,
+    viable: () => true,
+    render: () => `Gain ${String(amount)} essence`,
+    apply: (_params, _ctx, mut) => {
+      mut.changeEssence(amount, `dream_journey:${id}`);
     },
   };
 }
@@ -387,22 +407,22 @@ function contextWithDeck(): JourneyContext {
           name: "Glimmer Knife",
           tides: [],
           rarity: "Starter",
-          cardType: "Action",
+          cardType: "Event",
           energyCost: 1,
           spark: 1,
           cardNumber: 1,
-          raw: { rulesText: "Deal 1 damage." },
+          raw: { renderedText: "Deal 1 damage.", rulesText: "Deal 1 damage." },
         },
         {
           id: "card-b",
           name: "Amber Lantern",
           tides: [],
           rarity: "Starter",
-          cardType: "Action",
+          cardType: "Character",
           energyCost: 1,
           spark: 1,
           cardNumber: 2,
-          raw: { rulesText: "Gain 1 block." },
+          raw: { renderedText: "Gain 1 block.", rulesText: "Gain 1 block." },
         },
       ],
     },
@@ -825,6 +845,48 @@ describe("JourneyScreen", () => {
     });
   });
 
+  it("filters deck chooser card candidates by predicateId", () => {
+    const templateId = "choose_event_card";
+    const request: ChooserRequest = {
+      ...cardChooserRequest("1:choose_event_card:0"),
+      deckFilter: { predicateId: "events" },
+    };
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        options: [
+          makeUnlockedOption({
+            ...baseOptionFields(1),
+            effects: [rewardEnvelope(templateId)],
+          }),
+        ],
+      }),
+    );
+    const { mut } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)?.textContent).toContain("Glimmer Knife");
+    expect(queryChooser(container)?.textContent).not.toContain("Amber Lantern");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("confirms a flat chooser, commits mutations, unmounts the overlay, and closes", () => {
     const templateId = "choose_card_then_transfigure";
     const request = cardChooserRequest("1:choose_card_then_transfigure:0");
@@ -1157,6 +1219,86 @@ describe("JourneyScreen", () => {
 
     expect(queryChooser(container)).toBeNull();
     expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: ["deck-1", "Bronze", "dream_journey:terminal_choose_card"],
+      },
+    ]);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("cancels a terminal chooser without committing branch mutations, then retries once", () => {
+    const branchTemplateId = "branch_gain_essence";
+    const terminalTemplateId = "terminal_choose_card";
+    stubRewards.set(branchTemplateId, immediateEssenceReward(branchTemplateId, 7));
+    stubRewards.set(
+      terminalTemplateId,
+      cardChooserReward(
+        terminalTemplateId,
+        cardChooserRequest("terminal:terminal_choose_card:0"),
+      ),
+    );
+    const manifest = makeTwoNodeTreeManifest();
+    const rootNode = manifest.tree?.nodes.find((node) => node.id === "node-1");
+    const terminalBranch = rootNode?.branches[1];
+    if (!terminalBranch?.terminal) throw new Error("missing terminal branch");
+    terminalBranch.effects = [rewardEnvelope(branchTemplateId)];
+    terminalBranch.terminal.effects = [rewardEnvelope(terminalTemplateId)];
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const { mut, calls } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[1].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    expect(queryChooser(container)?.textContent).toContain("Choose a card");
+    act(() => {
+      getButtonByText(container, "Cancel").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)).toBeNull();
+    expect(queryEnterDreamButtons(container)).toHaveLength(2);
+    expect(calls).toEqual([]);
+    expect(onClose).not.toHaveBeenCalled();
+
+    act(() => {
+      queryEnterDreamButtons(container)[1].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Glimmer Knife").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Confirm").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(calls).toEqual([
+      {
+        method: "changeEssence",
+        args: [7, "dream_journey:branch_gain_essence"],
+      },
       {
         method: "transfigureDeckEntry",
         args: ["deck-1", "Bronze", "dream_journey:terminal_choose_card"],
