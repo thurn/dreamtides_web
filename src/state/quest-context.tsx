@@ -226,7 +226,12 @@ export interface QuestMutations {
    * card database (the same pattern `pushTemporaryBaneGrant` uses). On a
    * miss this no-ops and logs a console warning.
    */
-  addCardById: (cardId: string, source: string) => string;
+  addCardById: (cardId: string, source: string) => string | null;
+  addCardByIdWithTransfiguration: (
+    cardId: string,
+    type: TransfigurationType,
+    source: string,
+  ) => string | null;
   /** Add a bane-flagged card to the deck by catalog `cardId`. Same lookup
    *  semantics as `addCardById`. */
   addBaneCardById: (cardId: string, source: string) => void;
@@ -2195,7 +2200,7 @@ export function QuestProvider({
         console.warn(
           `[quest-context] addCardById: unknown cardId '${cardId}' (source: ${source})`,
         );
-        return "";
+        return null;
       }
       const cardNumber = resolved.cardNumber;
       logEvent("card_added", {
@@ -2209,6 +2214,43 @@ export function QuestProvider({
           entryId,
           cardNumber,
           transfiguration: null,
+          isBane: false,
+        };
+        return { ...prev, deck: [...prev.deck, entry] };
+      });
+      return entryId;
+    },
+    [cardDatabase],
+  );
+
+  const addCardByIdWithTransfiguration = useCallback(
+    (cardId: string, type: TransfigurationType, source: string) => {
+      let resolved: CardData | null = null;
+      for (const candidate of cardDatabase.values()) {
+        if (candidate.id === cardId) {
+          resolved = candidate;
+          break;
+        }
+      }
+      if (resolved === null) {
+        console.warn(
+          `[quest-context] addCardByIdWithTransfiguration: unknown cardId '${cardId}' (source: ${source})`,
+        );
+        return null;
+      }
+      const cardNumber = resolved.cardNumber;
+      logEvent("card_added", {
+        cardNumber,
+        cardName: resolved.name,
+        source,
+        transfigurationType: type,
+      });
+      const entryId = nextEntryId();
+      setState((prev) => {
+        const entry: DeckEntry = {
+          entryId,
+          cardNumber,
+          transfiguration: type,
           isBane: false,
         };
         return { ...prev, deck: [...prev.deck, entry] };
@@ -2744,6 +2786,7 @@ export function QuestProvider({
       setEssence,
       changeMaxEssence,
       addCardById,
+      addCardByIdWithTransfiguration,
       addBaneCardById,
       removeDeckEntry,
       duplicateDeckEntry,
@@ -2802,6 +2845,7 @@ export function QuestProvider({
       setEssence,
       changeMaxEssence,
       addCardById,
+      addCardByIdWithTransfiguration,
       addBaneCardById,
       removeDeckEntry,
       duplicateDeckEntry,

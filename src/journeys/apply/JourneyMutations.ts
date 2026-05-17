@@ -27,7 +27,14 @@ export interface JourneyMutations {
 
   // ---- Deck (mechanical card movement; rules-text edits are not in scope) -
   /** Add a card by catalog id to the deck and return the new deck entry id. */
-  addCardById(cardId: string, source: string): string;
+  addCardById(cardId: string, source: string): string | null;
+
+  /** Add a card by catalog id with a transfiguration already applied. */
+  addCardByIdWithTransfiguration(
+    cardId: string,
+    type: TransfigurationType,
+    source: string,
+  ): string | null;
 
   /** Add a card by catalog id flagged as a bane card. */
   addBaneCardById(cardId: string, source: string): void;

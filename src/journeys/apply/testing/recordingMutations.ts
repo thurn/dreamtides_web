@@ -48,6 +48,11 @@ export function createRecordingMutations(): {
       addedCardCount += 1;
       return `recorded-add-card-${String(addedCardCount)}`;
     },
+    addCardByIdWithTransfiguration: (...args) => {
+      calls.push({ method: "addCardByIdWithTransfiguration", args });
+      addedCardCount += 1;
+      return `recorded-add-card-${String(addedCardCount)}`;
+    },
     addBaneCardById: record("addBaneCardById"),
     removeDeckEntry: record("removeDeckEntry"),
     duplicateDeckEntry: record("duplicateDeckEntry"),

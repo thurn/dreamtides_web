@@ -204,6 +204,10 @@ function nextDeckEntryId(deck: readonly DeckEntry[]): string {
   return `deck-${String(deriveDeckEntryCounter(deck) + 1)}`;
 }
 
+function generatedDeckEntryId(clientId: string): string {
+  return `deck-${clientId}-${crypto.randomUUID()}`;
+}
+
 function deriveDeckEntryCounter(deck: readonly DeckEntry[]): number {
   return deck.reduce((max, entry) => {
     const match = /^deck-(\d+)$/.exec(entry.entryId);
@@ -528,12 +532,6 @@ export function MultiplayerQuestProvider({
     questContent,
     state,
   };
-  const entryIdCounter = useRef(deriveDeckEntryCounter(state.deck));
-  entryIdCounter.current = Math.max(
-    entryIdCounter.current,
-    deriveDeckEntryCounter(state.deck),
-  );
-
   const changeEssence = useCallback((delta: number, source: string) => {
     const current = currentRef.current;
     const now = new Date().toISOString();
@@ -2770,13 +2768,12 @@ export function MultiplayerQuestProvider({
       console.warn(
         `[multiplayer-quest-context] addCardById: unknown cardId '${cardId}' (source: ${source})`,
       );
-      return "";
+      return null;
     }
 
     const now = new Date().toISOString();
+    const entryId = generatedDeckEntryId(current.session.clientId);
     const actionId = crypto.randomUUID();
-    entryIdCounter.current += 1;
-    const entryId = `deck-${String(entryIdCounter.current)}`;
     writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
@@ -2820,6 +2817,67 @@ export function MultiplayerQuestProvider({
     });
     return entryId;
   }, []);
+
+  const addCardByIdWithTransfiguration = useCallback(
+    (cardId: string, type: TransfigurationType, source: string) => {
+      const current = currentRef.current;
+      const card = resolveCardById(current.questContent.cardDatabase, cardId);
+      if (card === null) {
+        console.warn(
+          `[multiplayer-quest-context] addCardByIdWithTransfiguration: unknown cardId '${cardId}' (source: ${source})`,
+        );
+        return null;
+      }
+
+      const now = new Date().toISOString();
+      const entryId = generatedDeckEntryId(current.session.clientId);
+      const actionId = crypto.randomUUID();
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const entry: DeckEntry = {
+            entryId,
+            cardNumber: card.cardNumber,
+            transfiguration: type,
+            isBane: false,
+          };
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck: [...room.questState.deck, entry],
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "addCardByIdWithTransfiguration",
+                source,
+                summary: {
+                  cardId,
+                  cardNumber: card.cardNumber,
+                  cardName: card.name,
+                  entryId: entry.entryId,
+                  transfigurationType: type,
+                },
+              }),
+            },
+          };
+        },
+      });
+      return entryId;
+    },
+    [],
+  );
 
   const addBaneCardById = useCallback((cardId: string, source: string) => {
     const current = currentRef.current;
@@ -3699,6 +3757,7 @@ export function MultiplayerQuestProvider({
       setEssence,
       changeMaxEssence,
       addCardById,
+      addCardByIdWithTransfiguration,
       addBaneCardById,
       removeDeckEntry,
       duplicateDeckEntry,
@@ -3717,6 +3776,7 @@ export function MultiplayerQuestProvider({
     [
       addCard,
       addCardById,
+      addCardByIdWithTransfiguration,
       addBaneCardById,
       addDreamsign,
       addSiteToDreamscape,

@@ -2803,7 +2803,7 @@ describe("Draft and chosen dreamsign reward apply (Wave 2)", () => {
     ]);
   });
 
-  it("draft_predicate_card_with_transfiguration transfigures the entry returned by addCardById", () => {
+  it("draft_predicate_card_with_transfiguration calls the composed transfigured add mutation", () => {
     const t = getReward("draft_predicate_card_with_transfiguration");
     const ctx = buildContext({ cards: draftCardFixture() });
     const params = { predicateId: "events", transfiguration: "Bronze" };
@@ -2827,13 +2827,9 @@ describe("Draft and chosen dreamsign reward apply (Wave 2)", () => {
     );
     expect(calls).toEqual([
       {
-        method: "addCardById",
-        args: ["event-delta", "dream_journey:draft_predicate_card_with_transfiguration"],
-      },
-      {
-        method: "transfigureDeckEntry",
+        method: "addCardByIdWithTransfiguration",
         args: [
-          "recorded-add-card-1",
+          "event-delta",
           "Bronze",
           "dream_journey:draft_predicate_card_with_transfiguration",
         ],
@@ -2971,10 +2967,6 @@ describe("Draft and chosen dreamsign reward apply (Wave 2)", () => {
     );
     expect(calls).toEqual([
       {
-        method: "removeDreamsign",
-        args: [0, "dream_journey:transform_dreamsign_to_named"],
-      },
-      {
         method: "addDreamsign",
         args: [
           {
@@ -2984,7 +2976,7 @@ describe("Draft and chosen dreamsign reward apply (Wave 2)", () => {
             isBane: false,
           },
           "dream_journey:transform_dreamsign_to_named",
-          undefined,
+          0,
         ],
       },
     ]);

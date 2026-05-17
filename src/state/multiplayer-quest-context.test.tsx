@@ -2382,16 +2382,30 @@ describe("MultiplayerQuestProvider", () => {
       </MultiplayerQuestProvider>,
     );
 
-    captured[captured.length - 1]?.mutations.addCardById(
+    const addedEntryId = captured[captured.length - 1]?.mutations.addCardById(
       "card-102",
       "journey:gain_random_predicate_cards",
     );
     const addRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(addedEntryId).toMatch(/^deck-client-1-action-\d+$/);
+    expect(addedEntryId).not.toBe("deck-2");
     expect(addRoom?.questState?.deck[1]).toEqual({
-      entryId: "deck-2",
+      entryId: addedEntryId,
       cardNumber: 102,
       transfiguration: null,
       isBane: false,
+    });
+    expect(addRoom?.actionLog?.["action-2"]).toEqual({
+      timestamp: addRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "addCardById",
+      source: "journey:gain_random_predicate_cards",
+      summary: {
+        cardId: "card-102",
+        cardNumber: 102,
+        cardName: "Card 102",
+        entryId: addedEntryId,
+      },
     });
 
     captured[captured.length - 1]?.mutations.duplicateDeckEntry(
@@ -2511,16 +2525,63 @@ describe("MultiplayerQuestProvider", () => {
       </MultiplayerQuestProvider>,
     );
 
-    captured[captured.length - 1]?.mutations.addCardById(
+    const entryId = captured[captured.length - 1]?.mutations.addCardById(
       "card-missing",
       "journey:test",
     );
 
+    expect(entryId).toBeNull();
     expect(roomServiceMocks.runRoomTransaction).not.toHaveBeenCalled();
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining("addCardById: unknown cardId 'card-missing'"),
     );
     warnSpy.mockRestore();
+  });
+
+  it("adds a transfigured card entry through one multiplayer transaction", () => {
+    const captured: QuestContextValue[] = [];
+    const session = makeSession(createDefaultState());
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    const entryId =
+      captured[captured.length - 1]?.mutations.addCardByIdWithTransfiguration(
+        "card-101",
+        "Bronze",
+        "journey:transfigured_add",
+      );
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+    expect(entryId).toMatch(/^deck-client-1-action-\d+$/);
+    expect(nextRoom?.questState?.deck).toEqual([
+      {
+        entryId,
+        cardNumber: 101,
+        transfiguration: "Bronze",
+        isBane: false,
+      },
+    ]);
+    expect(nextRoom?.actionLog?.["action-2"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "addCardByIdWithTransfiguration",
+      source: "journey:transfigured_add",
+      summary: {
+        cardId: "card-101",
+        cardNumber: 101,
+        cardName: "Card 101",
+        entryId,
+        transfigurationType: "Bronze",
+      },
+    });
   });
 
   it("purges Wave 1 bane cards deterministically for transaction retries", () => {

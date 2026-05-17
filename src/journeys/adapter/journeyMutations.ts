@@ -47,6 +47,8 @@ export function createJourneyMutations(
 
     // ---- Deck ----------------------------------------------------------
     addCardById: (cardId, source) => mutations.addCardById(cardId, source),
+    addCardByIdWithTransfiguration: (cardId, type, source) =>
+      mutations.addCardByIdWithTransfiguration(cardId, type, source),
     addBaneCardById: (cardId, source) => {
       mutations.addBaneCardById(cardId, source);
     },

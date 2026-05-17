@@ -46,6 +46,12 @@ function createRecordingQuestMutations(): {
           return "quest-entry-1";
         };
       }
+      if (prop === "addCardByIdWithTransfiguration") {
+        return (...args: unknown[]): string => {
+          calls.push({ method: "addCardByIdWithTransfiguration", args });
+          return "quest-entry-transfigured-1";
+        };
+      }
       return record(prop as keyof QuestMutations);
     },
   };
@@ -73,6 +79,11 @@ describe("createJourneyMutations passthrough", () => {
     adapter.setEssence(0, "dream_journey:zero_essence");
     adapter.changeMaxEssence(10, "dream_journey:increase_max_essence");
     const addedEntryId = adapter.addCardById("card-501", "dream_journey:gain_card");
+    const transfiguredEntryId = adapter.addCardByIdWithTransfiguration(
+      "card-502",
+      "Bronze",
+      "dream_journey:gain_transfigured_card",
+    );
     adapter.addBaneCardById("bane-1", "dream_journey:gain_bane");
     adapter.removeDeckEntry("entry-7", "dream_journey:purge");
     adapter.duplicateDeckEntry("entry-7", "dream_journey:duplicate");
@@ -95,6 +106,10 @@ describe("createJourneyMutations passthrough", () => {
       { method: "setEssence", args: [0, "dream_journey:zero_essence"] },
       { method: "changeMaxEssence", args: [10, "dream_journey:increase_max_essence"] },
       { method: "addCardById", args: ["card-501", "dream_journey:gain_card"] },
+      {
+        method: "addCardByIdWithTransfiguration",
+        args: ["card-502", "Bronze", "dream_journey:gain_transfigured_card"],
+      },
       { method: "addBaneCardById", args: ["bane-1", "dream_journey:gain_bane"] },
       { method: "removeDeckEntry", args: ["entry-7", "dream_journey:purge"] },
       { method: "duplicateDeckEntry", args: ["entry-7", "dream_journey:duplicate"] },
@@ -112,6 +127,7 @@ describe("createJourneyMutations passthrough", () => {
       { method: "boostSiteAppearance", args: ["Shop", 20, 3, "dream_journey:boost_site"] },
     ]);
     expect(addedEntryId).toBe("quest-entry-1");
+    expect(transfiguredEntryId).toBe("quest-entry-transfigured-1");
   });
 });
 

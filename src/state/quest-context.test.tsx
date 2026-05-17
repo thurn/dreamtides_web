@@ -618,12 +618,14 @@ describe("addCardById", () => {
     ]);
     const quest = mountQuestContext({ cardDatabase });
 
+    let entryId: string | null = null;
     act(() => {
-      quest.mutations.addCardById("card-502", "journey:test");
+      entryId = quest.mutations.addCardById("card-502", "journey:test");
     });
 
     expect(quest.state.deck).toHaveLength(1);
     const entry = quest.state.deck[0];
+    expect(entryId).toBe(entry?.entryId);
     expect(entry?.cardNumber).toBe(502);
     expect(entry?.isBane).toBe(false);
   });
@@ -636,14 +638,40 @@ describe("addCardById", () => {
     const quest = mountQuestContext({ cardDatabase });
     const deckBefore = quest.state.deck;
 
+    let entryId: string | null = "not-null";
     act(() => {
-      quest.mutations.addCardById("card-999", "journey:test");
+      entryId = quest.mutations.addCardById("card-999", "journey:test");
     });
 
+    expect(entryId).toBeNull();
     expect(quest.state.deck).toBe(deckBefore);
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining("addCardById: unknown cardId 'card-999'"),
     );
+  });
+
+  it("adds a transfigured entry through the composed mutation", () => {
+    const cardDatabase = new Map<number, CardData>([
+      [501, makeCard(501, "Nightmare")],
+    ]);
+    const quest = mountQuestContext({ cardDatabase });
+
+    let entryId: string | null = null;
+    act(() => {
+      entryId = quest.mutations.addCardByIdWithTransfiguration(
+        "card-501",
+        "Bronze",
+        "journey:test",
+      );
+    });
+
+    expect(quest.state.deck).toHaveLength(1);
+    expect(quest.state.deck[0]).toEqual({
+      entryId,
+      cardNumber: 501,
+      transfiguration: "Bronze",
+      isBane: false,
+    });
   });
 });
 

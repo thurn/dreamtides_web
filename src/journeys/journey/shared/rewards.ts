@@ -2781,12 +2781,8 @@ const draftPredicateCardWithTransfiguration: Reward<DraftPredicateCardWithTransf
         return;
       }
 
-      const entryId = mut.addCardById(
+      mut.addCardByIdWithTransfiguration(
         selectedCardId,
-        "dream_journey:draft_predicate_card_with_transfiguration",
-      );
-      mut.transfigureDeckEntry(
-        entryId,
         transfigurationForApply(p.transfiguration),
         "dream_journey:draft_predicate_card_with_transfiguration",
       );
@@ -3230,11 +3226,10 @@ const transformDreamsignToNamed: Reward<TransformDreamsignToNamedParams> = {
     );
     if (index === undefined) return;
 
-    mut.removeDreamsign(index, "dream_journey:transform_dreamsign_to_named");
     mut.addDreamsign(
       projectDreamsignForApply(target),
       "dream_journey:transform_dreamsign_to_named",
-      undefined,
+      index,
     );
   },
 };
