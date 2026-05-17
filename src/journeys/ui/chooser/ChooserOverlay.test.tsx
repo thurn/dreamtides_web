@@ -1,0 +1,226 @@
+// @vitest-environment jsdom
+
+import { act } from "react";
+import { createRoot, type Root } from "react-dom/client";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { ReactElement } from "react";
+
+import type { ChooserRequest } from "../../apply/chooserPlan";
+
+import {
+  CardChooser,
+  type CardChooserCandidate,
+} from "./CardChooser";
+import {
+  DreamsignChooser,
+  type DreamsignChooserCandidate,
+} from "./DreamsignChooser";
+import { TransfigurationChooser } from "./TransfigurationChooser";
+
+function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+  const container = document.createElement("div");
+  document.body.append(container);
+  const root = createRoot(container);
+  act(() => {
+    root.render(element);
+  });
+  return { container, root };
+}
+
+function click(button: HTMLButtonElement): void {
+  act(() => {
+    button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+}
+
+function buttonByName(container: HTMLElement, name: string): HTMLButtonElement {
+  const button = Array.from(container.querySelectorAll("button")).find(
+    (candidate) => candidate.textContent?.includes(name),
+  );
+  if (!button) throw new Error(`Button not found: ${name}`);
+  return button;
+}
+
+function confirmButton(container: HTMLElement): HTMLButtonElement {
+  return buttonByName(container, "Confirm");
+}
+
+const cardRequest: ChooserRequest = {
+  kind: "card",
+  requestId: "choose-card",
+  poolKind: "deck",
+  minPicks: 1,
+  maxPicks: 2,
+  title: "Choose cards",
+};
+
+const cardCandidates: readonly CardChooserCandidate[] = [
+  { entryId: "e1", cardId: "c1", name: "Alpha", rulesText: "First card." },
+  { entryId: "e2", cardId: "c2", name: "Beta", rulesText: "Second card." },
+  { entryId: "e3", cardId: "c3", name: "Gamma", rulesText: "Third card." },
+  { entryId: "e4", cardId: "c4", name: "Delta", rulesText: "Fourth card." },
+];
+
+const dreamsignRequest: ChooserRequest = {
+  kind: "dreamsign",
+  requestId: "choose-dreamsign",
+  poolKind: "active",
+  minPicks: 1,
+  maxPicks: 1,
+  title: "Choose a dreamsign",
+};
+
+const dreamsignCandidates: readonly DreamsignChooserCandidate[] = [
+  {
+    index: 0,
+    id: "small-door",
+    name: "Small Door",
+    description: "A patient way through.",
+  },
+  {
+    index: 1,
+    id: "bright-key",
+    name: "Bright Key",
+    description: "It opens what is ready.",
+  },
+];
+
+afterEach(() => {
+  document.body.innerHTML = "";
+});
+
+describe("Chooser overlay components", () => {
+  it("gates card confirm by minPicks and maxPicks", () => {
+    const { container, root } = mount(
+      <CardChooser
+        request={cardRequest}
+        candidates={cardCandidates}
+        onResolve={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    const confirm = confirmButton(container);
+    expect(confirm.disabled).toBe(true);
+
+    click(buttonByName(container, "Alpha"));
+    expect(confirm.disabled).toBe(false);
+
+    click(buttonByName(container, "Beta"));
+    expect(confirm.disabled).toBe(false);
+
+    click(buttonByName(container, "Gamma"));
+    expect(confirm.disabled).toBe(true);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("resolves selected card entry ids when confirmed", () => {
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <CardChooser
+        request={cardRequest}
+        candidates={cardCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    click(buttonByName(container, "Alpha"));
+    click(buttonByName(container, "Gamma"));
+    click(confirmButton(container));
+
+    expect(onResolve).toHaveBeenCalledTimes(1);
+    expect(onResolve).toHaveBeenCalledWith({
+      kind: "card",
+      entryIds: ["e1", "e3"],
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("resolves selected dreamsign indices and ids when confirmed", () => {
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <DreamsignChooser
+        request={dreamsignRequest}
+        candidates={dreamsignCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    click(buttonByName(container, "Bright Key"));
+    click(confirmButton(container));
+
+    expect(onResolve).toHaveBeenCalledTimes(1);
+    expect(onResolve).toHaveBeenCalledWith({
+      kind: "dreamsign",
+      indices: [1],
+      dreamsignIds: ["bright-key"],
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("only allows eligible transfiguration tiles to be selected", () => {
+    const request: ChooserRequest = {
+      kind: "transfiguration",
+      requestId: "choose-transfiguration",
+      eligibleTransfigurations: ["Bronze", "Rose"],
+      title: "Choose a transfiguration",
+    };
+    const { container, root } = mount(
+      <TransfigurationChooser
+        request={request}
+        onResolve={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    const bronze = buttonByName(container, "Bronze");
+    const azure = buttonByName(container, "Azure");
+    expect(bronze.disabled).toBe(false);
+    expect(azure.disabled).toBe(true);
+    expect(azure.getAttribute("aria-disabled")).toBe("true");
+
+    click(azure);
+    expect(azure.getAttribute("aria-pressed")).toBe("false");
+
+    click(bronze);
+    expect(bronze.getAttribute("aria-pressed")).toBe("true");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("cancels without resolving", () => {
+    const onCancel = vi.fn();
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <CardChooser
+        request={cardRequest}
+        candidates={cardCandidates}
+        onResolve={onResolve}
+        onCancel={onCancel}
+      />,
+    );
+
+    click(buttonByName(container, "Alpha"));
+    click(buttonByName(container, "Cancel"));
+
+    expect(onCancel).toHaveBeenCalledTimes(1);
+    expect(onResolve).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+});
