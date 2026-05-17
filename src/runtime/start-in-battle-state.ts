@@ -66,5 +66,12 @@ export function createStartInBattleState(
     activeSiteId: battleSite.id,
     failureSummary: null,
     hasSeenStartingDeckPopup: true,
+    battleModifiers: [],
+    shopModifiers: {
+      freeRerolls: 0,
+      upcomingOmenDiscounts: 0,
+      essenceDiscountPercent: 0,
+    },
+    dreamscapeModifiers: [],
   };
 }

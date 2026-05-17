@@ -160,6 +160,17 @@ function latestRoomTransactionUpdater():
     | undefined;
 }
 
+function roomTransactionUpdaterAt(
+  index: number,
+):
+  | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
+  | undefined {
+  const calls = roomServiceMocks.runRoomTransaction.mock.calls;
+  return calls[index]?.[2] as
+    | ((room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined)
+    | undefined;
+}
+
 function makeSession(
   questState: QuestState | null,
   battleState: SharedBattleState | null = null,
@@ -201,6 +212,35 @@ function makeFakeBattleState(): SharedBattleState {
       commandSerial: 0,
       lastActivityKind: null,
     },
+  };
+}
+
+function makeNode(
+  id: string,
+  sites: SiteState[],
+  status: "completed" | "available" | "unavailable" = "available",
+): QuestState["atlas"]["nodes"][string] {
+  return {
+    id,
+    biomeName: "Candle Mire",
+    biomeColor: "#abcdef",
+    sites,
+    position: { x: 0, y: 0 },
+    status,
+    enhancedSiteType: null,
+  };
+}
+
+function makeSite(
+  id: string,
+  type: SiteState["type"],
+  isVisited = false,
+): SiteState {
+  return {
+    id,
+    type,
+    isEnhanced: false,
+    isVisited,
   };
 }
 
@@ -279,7 +319,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(container.textContent).toBe("300");
   });
 
-  it("writes a focused essence update", () => {
+  it("changes essence in a transaction", () => {
     const questState = { ...createDefaultState(), essence: 300 };
     const { container } = mount(
       <MultiplayerQuestProvider
@@ -295,14 +335,106 @@ describe("MultiplayerQuestProvider", () => {
       container.querySelector("button")?.click();
     });
 
-    expect(roomServiceMocks.writeRoomUpdate).toHaveBeenCalledTimes(1);
-    expect(roomServiceMocks.writeRoomUpdate).toHaveBeenCalledWith(
-      database,
-      "ab12cd",
-      expect.objectContaining({
-        "rooms/ab12cd/questState/essence": 325,
-      }),
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+    const nextRoom = latestRoomTransactionUpdater()?.(makeSession(questState).room);
+    expect(nextRoom?.questState?.essence).toBe(325);
+  });
+
+  it("replaces a dreamsign from the transaction snapshot", () => {
+    const captured: QuestContextValue[] = [];
+    const replacement = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      dreamsigns: [
+        makeDreamsign("provider-held-0", "Provider Held 0"),
+        makeDreamsign("provider-held-1", "Provider Held 1"),
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
     );
+
+    captured[captured.length - 1]?.mutations.addDreamsign(
+      replacement,
+      "test",
+      1,
+    );
+    const updater = latestRoomTransactionUpdater();
+    const transactionDreamsigns = [
+      makeDreamsign("transaction-held-0", "Transaction Held 0"),
+      makeDreamsign("transaction-held-1", "Transaction Held 1"),
+      makeDreamsign("transaction-held-2", "Transaction Held 2"),
+    ];
+    const transactionRoom: MultiplayerRoom = {
+      ...session.room,
+      questState: {
+        ...questState,
+        dreamsigns: transactionDreamsigns,
+      },
+    };
+    const roomWithoutPurgeIndex: MultiplayerRoom = {
+      ...transactionRoom,
+      questState: {
+        ...questState,
+        dreamsigns: [transactionDreamsigns[0]],
+      },
+    };
+
+    const nextRoom = updater?.(transactionRoom);
+
+    expect(nextRoom?.questState?.dreamsigns).toEqual([
+      transactionDreamsigns[0],
+      replacement,
+      transactionDreamsigns[2],
+    ]);
+    expect(nextRoom?.metadata.updatedAt).not.toBe(
+      transactionRoom.metadata.updatedAt,
+    );
+    expect(nextRoom?.actionLog).toBe(transactionRoom.actionLog);
+    expect(updater?.(roomWithoutPurgeIndex)).toBe(roomWithoutPurgeIndex);
+  });
+
+  it("composes sequential multiplayer essence deltas against committed state", () => {
+    const captured: QuestContextValue[] = [];
+    const questState = {
+      ...createDefaultState(),
+      essence: 300,
+      essenceCap: 500,
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.changeEssence(
+      -50,
+      "dream_journey:pay_essence",
+    );
+    captured[captured.length - 1]?.mutations.changeEssence(
+      30,
+      "dream_journey:gain_essence",
+    );
+
+    const afterCost = roomTransactionUpdaterAt(0)?.(session.room);
+    const afterReward = roomTransactionUpdaterAt(1)?.(
+      afterCost as MultiplayerRoom,
+    );
+
+    expect(afterCost?.questState?.essence).toBe(250);
+    expect(afterReward?.questState?.essence).toBe(280);
   });
 
   it("writes hasSeenStartingDeckPopup=true when dismissStartingDeckPopup fires", () => {
@@ -411,18 +543,19 @@ describe("MultiplayerQuestProvider", () => {
       .spyOn(console, "error")
       .mockImplementation(() => undefined);
     roomServiceMocks.writeRoomUpdate.mockRejectedValueOnce(error);
-    const { container } = mount(
+    const captured: QuestContextValue[] = [];
+    mount(
       <MultiplayerQuestProvider
         database={database}
         session={makeSession({ ...createDefaultState(), essence: 300 })}
         questContent={makeQuestContent()}
       >
-        <Probe />
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
       </MultiplayerQuestProvider>,
     );
 
     act(() => {
-      container.querySelector("button")?.click();
+      captured[captured.length - 1]?.mutations.dismissStartingDeckPopup();
     });
     await Promise.resolve();
 
@@ -526,9 +659,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(nextRoom?.questState?.draftState).toEqual(expect.any(Object));
     expect(nextRoom?.questState?.atlas).toEqual(expect.any(Object));
     expect(nextRoom?.metadata.updatedAt).toEqual(expect.any(String));
-    expect(nextRoom?.metadata.updatedAt).not.toBe(
-      "2026-05-08T12:00:00.000Z",
-    );
+    expect(nextRoom?.metadata.updatedAt).not.toBe("2026-05-08T12:00:00.000Z");
     expect(nextRoom?.actionLog?.["action-1"]).toEqual({
       timestamp: nextRoom?.metadata.updatedAt,
       actorId: "client-1",
@@ -617,10 +748,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(nextRoom?.questState?.draftState?.pickNumber).toBe(2);
     expect(nextRoom?.questState?.draftState?.sitePicksCompleted).toBe(1);
     expect(nextRoom?.questState?.draftState?.currentOffer).not.toEqual([
-      101,
-      102,
-      103,
-      104,
+      101, 102, 103, 104,
     ]);
     expect(nextRoomFromRetry).toEqual(nextRoom);
     expect(randomSpy).toHaveBeenCalledTimes(randomCallsAfterPrepare);
@@ -1282,6 +1410,7 @@ describe("MultiplayerQuestProvider", () => {
         siteId: "site-1",
         rerollCost: 1,
         rerollCount: 1,
+        freeReroll: false,
       },
     });
 
@@ -2196,7 +2325,9 @@ describe("MultiplayerQuestProvider", () => {
       expect(nextRoom?.questState?.essence).toBe(250);
       expect(nextRoom?.questState?.omens).toBe(5);
       expect(nextRoom?.questState?.essenceCap).toBe(questState.essenceCap);
-      expect(nextRoom?.questState?.maxDreamsigns).toBe(questState.maxDreamsigns);
+      expect(nextRoom?.questState?.maxDreamsigns).toBe(
+        questState.maxDreamsigns,
+      );
       expect(nextRoom?.questState?.screen).toEqual({ type: "dreamscape" });
       expect(nextRoom?.questState?.activeSiteId).toBeNull();
       expect(nextRoom?.actionLog?.["action-1"]).toEqual({
@@ -2208,4 +2339,677 @@ describe("MultiplayerQuestProvider", () => {
       });
     },
   );
+
+  it("applies Wave 1 resource mutations through room transactions", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 450,
+      essenceCap: 500,
+      omens: 1,
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.setEssence(
+      600,
+      "journey:gain_essence",
+    );
+    const essenceRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(essenceRoom?.questState?.essence).toBe(500);
+    expect(essenceRoom?.actionLog?.["action-1"]).toEqual({
+      timestamp: essenceRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "setEssence",
+      source: "journey:gain_essence",
+      summary: {
+        oldValue: 450,
+        newValue: 500,
+        delta: 50,
+      },
+    });
+
+    captured[captured.length - 1]?.mutations.changeOmens(
+      -10,
+      "journey:omen_cost",
+    );
+    const omenRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(omenRoom?.questState?.omens).toBe(0);
+
+    captured[captured.length - 1]?.mutations.changeMaxEssence(
+      -400,
+      "journey:cap_loss",
+    );
+    const capRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(capRoom?.questState?.essenceCap).toBe(100);
+    expect(capRoom?.questState?.essence).toBe(100);
+  });
+
+  it("safely no-ops Wave 1 resource updater when questState is null", () => {
+    const captured: QuestContextValue[] = [];
+    const session = makeSession(null);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.setEssence(100, "test");
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+    expect(latestRoomTransactionUpdater()?.(null)).toBeUndefined();
+  });
+
+  it("adds, duplicates, and removes Wave 1 deck entries by id", () => {
+    const captured: QuestContextValue[] = [];
+    const questContent = {
+      ...makeQuestContent(),
+      cardDatabase: new Map([
+        [101, makeCard(101)],
+        [102, makeCard(102)],
+      ]),
+    };
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: "Viridian",
+          isBane: false,
+        },
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={questContent}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    const addedEntryId = captured[captured.length - 1]?.mutations.addCardById(
+      "card-102",
+      "journey:gain_random_predicate_cards",
+    );
+    const addRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(addedEntryId).toMatch(/^deck-client-1-action-\d+$/);
+    expect(addedEntryId).not.toBe("deck-2");
+    expect(addRoom?.questState?.deck[1]).toEqual({
+      entryId: addedEntryId,
+      cardNumber: 102,
+      transfiguration: null,
+      isBane: false,
+    });
+    expect(addRoom?.actionLog?.["action-2"]).toEqual({
+      timestamp: addRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "addCardById",
+      source: "journey:gain_random_predicate_cards",
+      summary: {
+        cardId: "card-102",
+        cardNumber: 102,
+        cardName: "Card 102",
+        entryId: addedEntryId,
+      },
+    });
+
+    captured[captured.length - 1]?.mutations.duplicateDeckEntry(
+      "deck-1",
+      "journey:copy",
+    );
+    const duplicateRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(duplicateRoom?.questState?.deck[1]).toEqual({
+      entryId: "deck-2",
+      cardNumber: 101,
+      transfiguration: "Viridian",
+      isBane: false,
+    });
+
+    captured[captured.length - 1]?.mutations.removeDeckEntry(
+      "deck-1",
+      "journey:remove",
+    );
+    const removeRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(removeRoom?.questState?.deck).toEqual([]);
+  });
+
+  it("applies Wave 1 deck entry transfiguration by id", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.transfigureCard(
+      "deck-1",
+      "Viridian",
+      "journey:transfigure_deck_entry",
+      { energyCost: { from: 1, to: 0 } },
+    );
+
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(nextRoom?.questState?.deck).toEqual([
+      {
+        entryId: "deck-1",
+        cardNumber: 101,
+        transfiguration: "Viridian",
+        isBane: false,
+      },
+    ]);
+  });
+
+  it("clears Wave 1 deck entry transfiguration by id", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: "Scarlet",
+          isBane: false,
+        },
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.transfigureCard(
+      "deck-1",
+      null,
+      "journey:clear_transfiguration",
+      {},
+    );
+
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(nextRoom?.questState?.deck).toEqual([
+      {
+        entryId: "deck-1",
+        cardNumber: 101,
+        transfiguration: null,
+        isBane: false,
+      },
+    ]);
+  });
+
+  it("warns and skips unknown Wave 1 card ids before scheduling a write", () => {
+    const captured: QuestContextValue[] = [];
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={makeSession(createDefaultState())}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    const entryId = captured[captured.length - 1]?.mutations.addCardById(
+      "card-missing",
+      "journey:test",
+    );
+
+    expect(entryId).toBeNull();
+    expect(roomServiceMocks.runRoomTransaction).not.toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining("addCardById: unknown cardId 'card-missing'"),
+    );
+    warnSpy.mockRestore();
+  });
+
+  it("adds a transfigured card entry through one multiplayer transaction", () => {
+    const captured: QuestContextValue[] = [];
+    const session = makeSession(createDefaultState());
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    const entryId =
+      captured[captured.length - 1]?.mutations.addCardByIdWithTransfiguration(
+        "card-101",
+        "Bronze",
+        "journey:transfigured_add",
+      );
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+    expect(entryId).toMatch(/^deck-client-1-action-\d+$/);
+    expect(nextRoom?.questState?.deck).toEqual([
+      {
+        entryId,
+        cardNumber: 101,
+        transfiguration: "Bronze",
+        isBane: false,
+      },
+    ]);
+    expect(nextRoom?.actionLog?.["action-2"]).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "addCardByIdWithTransfiguration",
+      source: "journey:transfigured_add",
+      summary: {
+        cardId: "card-101",
+        cardNumber: 101,
+        cardName: "Card 101",
+        entryId,
+        transfigurationType: "Bronze",
+      },
+    });
+  });
+
+  it("purges Wave 1 bane cards deterministically for transaction retries", () => {
+    const captured: QuestContextValue[] = [];
+    const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0);
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: true,
+        },
+        {
+          entryId: "deck-2",
+          cardNumber: 102,
+          transfiguration: null,
+          isBane: true,
+        },
+        {
+          entryId: "deck-3",
+          cardNumber: 103,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={{
+          ...makeQuestContent(),
+          cardDatabase: new Map([
+            [101, makeCard(101)],
+            [102, makeCard(102)],
+            [103, makeCard(103)],
+          ]),
+        }}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.purgeRandomBaneCards(
+      1,
+      "journey:purge_1_banes",
+    );
+    const updater = latestRoomTransactionUpdater();
+    const nextRoom = updater?.(session.room);
+    const retryRoom = updater?.(session.room);
+
+    expect(nextRoom).toEqual(retryRoom);
+    expect(randomSpy).toHaveBeenCalledTimes(1);
+    expect(nextRoom?.questState?.deck.map((entry) => entry.entryId)).toEqual([
+      "deck-2",
+      "deck-3",
+    ]);
+
+    captured[captured.length - 1]?.mutations.purgeAllBaneCards(
+      "journey:purge_all_banes",
+    );
+    const purgeAllRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(
+      purgeAllRoom?.questState?.deck.map((entry) => entry.entryId),
+    ).toEqual(["deck-3"]);
+
+    randomSpy.mockRestore();
+  });
+
+  it("records Wave 1 battle modifiers and decays temporary banes on battle completion", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      omens: 1,
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={{
+          ...makeQuestContent(),
+          cardDatabase: new Map([
+            [101, makeCard(101)],
+            [501, { ...makeCard(501), name: "Nightmare" }],
+          ]),
+        }}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.pushBattleRewardModifier(
+      "flat",
+      10,
+      2,
+      "journey:battle_reward_reduction_flat",
+    );
+    const modifierRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(modifierRoom?.questState?.battleModifiers).toEqual([
+      {
+        kind: "reward_reduction_flat",
+        amount: 10,
+        battlesRemaining: 2,
+        source: "journey:battle_reward_reduction_flat",
+      },
+    ]);
+
+    captured[captured.length - 1]?.mutations.pushTemporaryBaneGrant(
+      "Nightmare",
+      1,
+      1,
+      "journey:temporary_bane",
+    );
+    const baneRoom = latestRoomTransactionUpdater()?.(session.room);
+    const addedBane = baneRoom?.questState?.deck.find((entry) => entry.isBane);
+    expect(addedBane).toMatchObject({
+      entryId: "deck-2",
+      cardNumber: 501,
+      isBane: true,
+    });
+    expect(baneRoom?.questState?.battleModifiers[0]).toEqual({
+      kind: "temporary_bane_grant",
+      baneName: "Nightmare",
+      count: 1,
+      battlesRemaining: 1,
+      addedEntryIds: ["deck-2"],
+      source: "journey:temporary_bane",
+    });
+
+    const committedRoom = baneRoom as MultiplayerRoom;
+    captured[captured.length - 1]?.mutations.incrementCompletionLevel(
+      0,
+      0,
+      null,
+      null,
+      false,
+    );
+    const decayedRoom = latestRoomTransactionUpdater()?.(committedRoom);
+    expect(decayedRoom?.questState?.battleModifiers).toEqual([]);
+    expect(decayedRoom?.questState?.deck).toEqual(questState.deck);
+  });
+
+  it("applies Wave 1 atlas and modifier mutations", () => {
+    const captured: QuestContextValue[] = [];
+    const current = makeNode("dreamscape-1", [makeSite("site-1", "Battle")]);
+    const next = makeNode("dreamscape-2", [makeSite("site-2", "Battle")]);
+    const questState: QuestState = {
+      ...createDefaultState(),
+      atlas: {
+        nodes: {
+          [current.id]: current,
+          [next.id]: next,
+        },
+        edges: [[current.id, next.id]],
+        startingNodeId: current.id,
+      },
+      currentDreamscape: current.id,
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.addSiteToDreamscape(
+      "next",
+      "Shop",
+      "journey:add_site_to_next_dreamscape",
+    );
+    const addSiteRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(
+      addSiteRoom?.questState?.atlas.nodes[next.id]?.sites.map(
+        (site) => site.type,
+      ),
+    ).toEqual(["Battle", "Shop"]);
+
+    captured[captured.length - 1]?.mutations.replaceSiteType(
+      "Battle",
+      "Essence",
+      "journey:replace_site",
+    );
+    const replaceRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(
+      replaceRoom?.questState?.atlas.nodes[current.id]?.sites.map(
+        (site) => site.type,
+      ),
+    ).toEqual(["Essence"]);
+
+    captured[captured.length - 1]?.mutations.removeSiteTypeFromNextDreamscapes(
+      "Shop",
+      2,
+      "journey:remove_shop",
+    );
+    const removeModifierRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(removeModifierRoom?.questState?.dreamscapeModifiers).toEqual([
+      {
+        kind: "remove_shop_sites",
+        dreamscapesRemaining: 2,
+        source: "journey:remove_shop",
+      },
+    ]);
+
+    captured[captured.length - 1]?.mutations.boostSiteAppearance(
+      "DreamsignOffering",
+      25,
+      3,
+      "journey:boost_site",
+    );
+    const boostRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(boostRoom?.questState?.dreamscapeModifiers).toEqual([
+      {
+        kind: "boost_site_appearance",
+        siteType: "DreamsignOffering",
+        percent: 25,
+        dreamscapesRemaining: 3,
+        source: "journey:boost_site",
+      },
+    ]);
+  });
+
+  it("decays committed dreamscape modifiers when entering a new dreamscape", () => {
+    const captured: QuestContextValue[] = [];
+    const current = makeNode("dreamscape-1", [makeSite("site-1", "Battle")]);
+    const next = makeNode("dreamscape-2", [makeSite("site-2", "Battle")]);
+    const questState: QuestState = {
+      ...createDefaultState(),
+      atlas: {
+        nodes: {
+          [current.id]: current,
+          [next.id]: next,
+        },
+        edges: [[current.id, next.id]],
+        startingNodeId: current.id,
+      },
+      currentDreamscape: current.id,
+      visitedSites: ["site-1"],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.boostSiteAppearance(
+      "Shop",
+      20,
+      2,
+      "journey:boost_site",
+    );
+    captured[captured.length - 1]?.mutations.setCurrentDreamscape(next.id);
+
+    const withModifier = roomTransactionUpdaterAt(0)?.(session.room);
+    const afterAdvance = roomTransactionUpdaterAt(1)?.(
+      withModifier as MultiplayerRoom,
+    );
+
+    expect(afterAdvance?.questState?.currentDreamscape).toBe(next.id);
+    expect(afterAdvance?.questState?.visitedSites).toEqual([]);
+    expect(afterAdvance?.questState?.dreamscapeModifiers).toEqual([
+      {
+        kind: "boost_site_appearance",
+        siteType: "Shop",
+        percent: 20,
+        dreamscapesRemaining: 1,
+        source: "journey:boost_site",
+      },
+    ]);
+  });
+
+  it("applies Wave 1 shop modifiers and consumes a free multiplayer reroll", () => {
+    const captured: QuestContextValue[] = [];
+    const site = makeSite("shop-site", "Shop");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      omens: 0,
+      remainingDreamsignPool: [],
+      siteRuntime: {
+        [site.id]: {
+          kind: "shop",
+          restrictedTide: null,
+          slots: [],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    const { root } = mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.grantFreeShopRerolls(
+      2,
+      "journey:free_reroll",
+    );
+    const freeRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(freeRoom?.questState?.shopModifiers.freeRerolls).toBe(2);
+
+    captured[captured.length - 1]?.mutations.applyShopEssenceDiscount(
+      15,
+      "journey:discount",
+    );
+    const essenceDiscountRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(
+      essenceDiscountRoom?.questState?.shopModifiers.essenceDiscountPercent,
+    ).toBe(15);
+
+    captured[captured.length - 1]?.mutations.grantShopOmenDiscounts(
+      1,
+      "journey:omen_discount",
+    );
+    const omenDiscountRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(
+      omenDiscountRoom?.questState?.shopModifiers.upcomingOmenDiscounts,
+    ).toBe(1);
+
+    const committedRoom = freeRoom as MultiplayerRoom;
+    const committedSession: RoomSession = {
+      ...session,
+      room: committedRoom,
+    };
+    act(() => {
+      root.render(
+        <MultiplayerQuestProvider
+          database={database}
+          session={committedSession}
+          questContent={makeQuestContent()}
+        >
+          <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+        </MultiplayerQuestProvider>,
+      );
+    });
+
+    captured[captured.length - 1]?.mutations.rerollShop(site);
+    const rerollRoom = latestRoomTransactionUpdater()?.(committedRoom);
+    expect(rerollRoom?.questState?.omens).toBe(0);
+    expect(rerollRoom?.questState?.shopModifiers.freeRerolls).toBe(1);
+    const runtime = rerollRoom?.questState?.siteRuntime[site.id];
+    expect(runtime?.kind).toBe("shop");
+    expect(runtime?.kind === "shop" ? runtime.rerollCount : null).toBe(1);
+  });
 });

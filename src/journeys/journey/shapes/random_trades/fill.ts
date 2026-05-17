@@ -8,6 +8,7 @@ import { drawInt, weightedChoice, type DrawContext } from "../../../util/rng";
 import { BANE_NAMES, essenceAmount } from "../../shared/content";
 import { withLockedPrefix } from "../../shared/text";
 import type { Cost, Reward, TemplateParams } from "../../shared/types";
+import type { SharedCostPayload, SharedRewardPayload } from "../../../apply/payloads";
 import type { FilledJourney, ShapeFillArgs } from "../types";
 
 const TOLERANCE_INITIAL = 15;
@@ -55,18 +56,21 @@ function emptyOption(
   number: number,
   text: string,
   symbols: readonly string[],
-  effectCec: number,
-  costCec: number,
-  rewardTemplateIds: readonly string[],
+  reward: RolledReward,
+  cost: RolledCost | undefined,
+  ctx: JourneyContext,
 ): JourneyOption {
+  const costCec = cost?.cec ?? 0;
+  const effectCec = reward.cec;
   const net = effectCec - costCec;
+
   return makeUnlockedOption({
     number,
     symbols: [...symbols],
     text,
     operations: [],
-    costs: [],
-    effects: [],
+    costs: cost ? [costEnvelope(cost)] : [],
+    effects: [rewardEnvelope(reward, ctx)],
     burdens: [],
     targets: [],
     triggers: [],
@@ -77,8 +81,31 @@ function emptyOption(
     uncertaintyConvertedEssence: 0,
     netConvertedEssence: net,
     pickBehavior: "record_and_generate_next",
-    rewardTemplateIds: [...rewardTemplateIds],
+    rewardTemplateIds: [reward.template.id],
   });
+}
+
+function costEnvelope(cost: RolledCost): SharedCostPayload {
+  return {
+    kind: "shared_cost_template",
+    templateId: cost.template.id,
+    params: cost.params,
+    text: cost.rendered,
+    convertedEssence: cost.cec,
+  };
+}
+
+function rewardEnvelope(
+  reward: RolledReward,
+  ctx: JourneyContext,
+): SharedRewardPayload {
+  return {
+    kind: "shared_reward_template",
+    templateId: reward.template.id,
+    params: reward.params,
+    text: reward.template.render(reward.params, ctx),
+    convertedEssence: reward.cec,
+  };
 }
 
 function rewardSubIds(rolled: RolledReward): readonly string[] {
@@ -476,9 +503,9 @@ export function randomTradesFill(args: ShapeFillArgs): FilledJourney {
       index + 1,
       finalText,
       row.cost ? ["cost", "reward"] : ["reward"],
-      row.reward.cec,
-      row.cost?.cec ?? 0,
-      [row.reward.template.id],
+      row.reward,
+      row.cost,
+      context,
     );
   });
 

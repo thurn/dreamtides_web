@@ -17,6 +17,7 @@ import type {
   ResolvedDreamcallerPackage,
 } from "../types/content";
 import type {
+  BattleModifier,
   CardSourceDebugState,
   CardChoiceSiteRuntime,
   CardChoiceTransfigurationOffer,
@@ -24,6 +25,7 @@ import type {
   DreamAtlas,
   DreamJourneySiteRuntime,
   Dreamsign,
+  DreamscapeModifier,
   EssenceSiteRuntime,
   QuestFailureSummary,
   QuestState,
@@ -31,6 +33,7 @@ import type {
   Screen,
   ShopSiteRuntime,
   SiteState,
+  SiteType,
   TransfigurationType,
 } from "../types/quest";
 import type { DraftState } from "../types/draft";
@@ -146,9 +149,16 @@ export interface QuestMutations {
     cardEntryIds: string[],
     dreamsignIndices: number[],
   ) => void;
+  /**
+   * Apply a transfiguration to a deck entry, or clear it when `type` is
+   * `null`. The null variant supports Dream Journey reward templates that
+   * "remove transfiguration"; `effectDescription` is the upstream source
+   * string and `effectDetails` is forwarded into the `card_transfigured`
+   * log payload.
+   */
   transfigureCard: (
     entryId: string,
-    type: TransfigurationType,
+    type: TransfigurationType | null,
     effectDescription: string,
     effectDetails: Record<string, unknown>,
   ) => void;
@@ -202,6 +212,111 @@ export interface QuestMutations {
    */
   bootstrapStartInBattle: () => void;
   resetQuest: () => void;
+
+  // ---- Dream Journey effect plumbing (Wave 1) ----
+  /** Adjust omens by `delta`; clamps at 0 (omens are uncapped above). */
+  changeOmens: (delta: number, source: string) => void;
+  /** Set essence to `value`, clamped to `[0, essenceCap]`. */
+  setEssence: (value: number, source: string) => void;
+  /** Add `delta` to `essenceCap`; current essence clamps to the new cap. */
+  changeMaxEssence: (delta: number, source: string) => void;
+  /**
+   * Add a non-bane card to the deck by catalog `cardId`. Mirrors `addCard`,
+   * but resolves the catalog id internally by linear-scanning the small
+   * card database (the same pattern `pushTemporaryBaneGrant` uses). On a
+   * miss this no-ops and logs a console warning.
+   */
+  addCardById: (cardId: string, source: string) => string | null;
+  addCardByIdWithTransfiguration: (
+    cardId: string,
+    type: TransfigurationType,
+    source: string,
+  ) => string | null;
+  /** Add a bane-flagged card to the deck by catalog `cardId`. Same lookup
+   *  semantics as `addCardById`. */
+  addBaneCardById: (cardId: string, source: string) => void;
+  /** Remove the deck entry with the given entryId. Mirrors `removeCard`. */
+  removeDeckEntry: (entryId: string, source: string) => void;
+  /** Add a duplicate of the deck entry with the given entryId. */
+  duplicateDeckEntry: (entryId: string, source: string) => void;
+  /**
+   * Remove up to `count` bane cards from the deck via uniform random
+   * selection (using `Math.random`). When fewer banes exist than `count`,
+   * all of them are removed; non-positive counts no-op.
+   */
+  purgeRandomBaneCards: (count: number, source: string) => void;
+  /** Remove every bane card from the deck. */
+  purgeAllBaneCards: (source: string) => void;
+  /**
+   * Stack a battle-window reward-reduction modifier. Decremented per battle
+   * in `incrementCompletionLevel`; entries at zero drop.
+   */
+  pushBattleRewardModifier: (
+    kind: "flat" | "percent",
+    amount: number,
+    battles: number,
+    source: string,
+  ) => void;
+  /**
+   * Add `count` bane cards by name to the deck immediately and stack a
+   * `temporary_bane_grant` modifier that removes the added entries when its
+   * `battlesRemaining` counter reaches zero. The bane's catalog cardNumber
+   * is resolved via `questContent.cardDatabase`; an unknown name no-ops.
+   */
+  pushTemporaryBaneGrant: (
+    baneName: string,
+    count: number,
+    battles: number,
+    source: string,
+  ) => void;
+  /**
+   * Add a fresh, unvisited site of `siteType` to either the current
+   * dreamscape (`"current"`) or the dreamscape adjacent to the current one
+   * via the atlas edge list (`"next"`). No-ops when the target dreamscape
+   * cannot be located.
+   */
+  addSiteToDreamscape: (
+    placement: "current" | "next",
+    siteType: SiteType,
+    source: string,
+  ) => void;
+  /**
+   * Swap one unvisited site of `from` for a fresh site of `to` in the
+   * current dreamscape. No-ops when no eligible site exists.
+   */
+  replaceSiteType: (
+    from: SiteType,
+    to: SiteType,
+    source: string,
+  ) => void;
+  /**
+   * Stack a dreamscape-window modifier that hides every site of `siteType`
+   * for the next `dreamscapes` dreamscapes the player enters. The atlas
+   * generator consumes the modifier when its hookup lands. Only `"Shop"`
+   * and `"DreamsignOffering"` map to a dreamscape-modifier kind; the type
+   * is narrowed here so unsupported site types fail at compile time.
+   */
+  removeSiteTypeFromNextDreamscapes: (
+    siteType: "Shop" | "DreamsignOffering",
+    dreamscapes: number,
+    source: string,
+  ) => void;
+  /** Increment `shopModifiers.freeRerolls` by `count`. */
+  grantFreeShopRerolls: (count: number, source: string) => void;
+  /** Add `percent` to `shopModifiers.essenceDiscountPercent`. */
+  applyShopEssenceDiscount: (percent: number, source: string) => void;
+  /** Increment `shopModifiers.upcomingOmenDiscounts` by `count`. */
+  grantShopOmenDiscounts: (count: number, source: string) => void;
+  /**
+   * Stack a `boost_site_appearance` modifier for the next `dreamscapes`
+   * dreamscapes; atlas generation consumes it when its hookup lands.
+   */
+  boostSiteAppearance: (
+    siteType: SiteType,
+    percent: number,
+    dreamscapes: number,
+    source: string,
+  ) => void;
 }
 
 /** The value provided by the quest context. */
@@ -254,6 +369,69 @@ function findSite(state: QuestState, siteId: string): SiteState | null {
 
 function shuffled<T>(items: readonly T[]): T[] {
   return [...items].sort(() => Math.random() - 0.5);
+}
+
+/**
+ * Walk every site in the atlas and synthesize a fresh `site-<n>` id whose
+ * numeric suffix exceeds every existing one. Used by Dream Journey effects
+ * that inject new sites into a live atlas; the prototype's atlas generator
+ * uses a module-scoped counter that is not safe to mix with player-driven
+ * mutations, so we derive the next id from current state instead.
+ */
+function nextSiteIdFromAtlas(atlas: DreamAtlas): string {
+  let max = 0;
+  for (const node of Object.values(atlas.nodes)) {
+    for (const site of node.sites) {
+      const match = /^site-(\d+)$/.exec(site.id);
+      if (match !== null) {
+        const num = Number.parseInt(match[1], 10);
+        if (Number.isFinite(num) && num > max) {
+          max = num;
+        }
+      }
+    }
+  }
+  return `site-${String(max + 1)}`;
+}
+
+/**
+ * Locate the dreamscape adjacent to the current one via the atlas edge list.
+ * Returns `null` when there is no current dreamscape, no forward-facing edges
+ * touch it, or the connected node id is missing from the atlas. Already-
+ * completed neighbours are skipped so the player never receives sites in
+ * dreamscapes they cannot re-enter. The first edge order wins so the choice
+ * is deterministic for the caller.
+ */
+function findNextDreamscapeId(atlas: DreamAtlas, currentId: string | null): string | null {
+  if (currentId === null) {
+    return null;
+  }
+  for (const [a, b] of atlas.edges) {
+    const other = a === currentId ? b : b === currentId ? a : null;
+    if (other === null) continue;
+    const neighbour = atlas.nodes[other];
+    if (neighbour !== undefined && neighbour.status !== "completed") {
+      return other;
+    }
+  }
+  return null;
+}
+
+/** Insert `site` into the node identified by `nodeId`. */
+function atlasWithAddedSite(
+  atlas: DreamAtlas,
+  nodeId: string,
+  site: SiteState,
+): DreamAtlas {
+  const node = atlas.nodes[nodeId];
+  if (node === undefined) return atlas;
+  return {
+    ...atlas,
+    nodes: {
+      ...atlas.nodes,
+      [nodeId]: { ...node, sites: [...node.sites, site] },
+    },
+  };
 }
 
 function selectCardChoiceEntryIds({
@@ -395,6 +573,13 @@ export function createDefaultState(): QuestState {
     activeSiteId: null,
     failureSummary: null,
     hasSeenStartingDeckPopup: false,
+    battleModifiers: [],
+    shopModifiers: {
+      freeRerolls: 0,
+      upcomingOmenDiscounts: 0,
+      essenceDiscountPercent: 0,
+    },
+    dreamscapeModifiers: [],
   };
 }
 
@@ -1189,8 +1374,12 @@ export function QuestProvider({
           return prev;
         }
 
-        const cost = rerollCost(0, site.isEnhanced);
-        if (cost > prev.omens) {
+        // Free-reroll grants from Dream Journey rewards consume before any
+        // omen cost would be charged; only fall back to omens when the
+        // free-reroll bank is empty.
+        const useFreeReroll = prev.shopModifiers.freeRerolls > 0;
+        const cost = useFreeReroll ? 0 : rerollCost(0, site.isEnhanced);
+        if (!useFreeReroll && cost > prev.omens) {
           return prev;
         }
 
@@ -1213,16 +1402,19 @@ export function QuestProvider({
           replacementIndex += 1;
           return replacement ?? candidate;
         });
-        const newOmens = prev.omens - cost;
-        logEvent("omens_changed", {
-          oldValue: prev.omens,
-          newValue: newOmens,
-          delta: -cost,
-          source: "shop_reroll",
-        });
+        const newOmens = useFreeReroll ? prev.omens : prev.omens - cost;
+        if (!useFreeReroll) {
+          logEvent("omens_changed", {
+            oldValue: prev.omens,
+            newValue: newOmens,
+            delta: -cost,
+            source: "shop_reroll",
+          });
+        }
         logEvent("shop_reroll", {
           rerollCost: cost,
           rerollCount,
+          freeReroll: useFreeReroll,
         });
         logEvent("dreamsign_pool_updated", {
           source: "shop_reroll_revealed",
@@ -1231,11 +1423,19 @@ export function QuestProvider({
           remainingDreamsignPool: generated.remainingDreamsignPoolIds,
         });
 
+        const nextShopModifiers = useFreeReroll
+          ? {
+            ...prev.shopModifiers,
+            freeRerolls: prev.shopModifiers.freeRerolls - 1,
+          }
+          : prev.shopModifiers;
+
         return {
           ...prev,
           omens: newOmens,
           remainingDreamsignPool: generated.remainingDreamsignPoolIds,
           draftState: generated.draftState,
+          shopModifiers: nextShopModifiers,
           siteRuntime: {
             ...prev.siteRuntime,
             [site.id]: {
@@ -1617,7 +1817,7 @@ export function QuestProvider({
   const transfigureCard = useCallback(
     (
       entryId: string,
-      type: TransfigurationType,
+      type: TransfigurationType | null,
       effectDescription: string,
       effectDetails: Record<string, unknown>,
     ) => {
@@ -1764,11 +1964,40 @@ export function QuestProvider({
             to: screenName(screen),
           });
         }
+
+        // Decay battle-window modifiers. `incrementCompletionLevel` only fires
+        // on a completed battle (see battle-completion-bridge), so an
+        // unconditional decrement here matches "drops at zero on the same
+        // tick" semantics. Temporary bane grants additionally purge the deck
+        // entries they brought in when their counter hits zero.
+        const droppedBaneEntryIds = new Set<string>();
+        const nextBattleModifiers: BattleModifier[] = [];
+        for (const modifier of prev.battleModifiers) {
+          const remaining = modifier.battlesRemaining - 1;
+          if (remaining <= 0) {
+            if (modifier.kind === "temporary_bane_grant") {
+              for (const entryId of modifier.addedEntryIds) {
+                droppedBaneEntryIds.add(entryId);
+              }
+            }
+            continue;
+          }
+          nextBattleModifiers.push({ ...modifier, battlesRemaining: remaining });
+        }
+        const nextDeck =
+          droppedBaneEntryIds.size === 0
+            ? prev.deck
+            : prev.deck.filter(
+              (entry) => !droppedBaneEntryIds.has(entry.entryId),
+            );
+
         return {
           ...prev,
           completionLevel: newLevel,
           omens: newOmens,
           screen,
+          battleModifiers: nextBattleModifiers,
+          deck: nextDeck,
         };
       });
     },
@@ -1819,10 +2048,25 @@ export function QuestProvider({
           biomeName: node?.biomeName ?? "unknown",
         });
       }
+
+      // Decay dreamscape-window modifiers when the player moves to a
+      // different dreamscape. Re-selecting the same dreamscape (a no-op
+      // navigation) does not decrement counters.
+      const isAdvancing = nodeId !== null && nodeId !== prev.currentDreamscape;
+      const nextDreamscapeModifiers = isAdvancing
+        ? prev.dreamscapeModifiers
+          .map((modifier) => ({
+            ...modifier,
+            dreamscapesRemaining: modifier.dreamscapesRemaining - 1,
+          }))
+          .filter((modifier) => modifier.dreamscapesRemaining > 0)
+        : prev.dreamscapeModifiers;
+
       return {
         ...prev,
         currentDreamscape: nodeId,
         visitedSites: nodeId !== null ? [] : prev.visitedSites,
+        dreamscapeModifiers: nextDreamscapeModifiers,
       };
     });
   }, []);
@@ -1881,6 +2125,603 @@ export function QuestProvider({
       return createStartInBattleState(questContent) ?? prev;
     });
   }, [questContent]);
+
+  // ---- Dream Journey effect plumbing (Wave 1) ---------------------------
+
+  const changeOmens = useCallback((delta: number, source: string) => {
+    setState((prev) => {
+      const oldValue = prev.omens;
+      const newValue = Math.max(0, oldValue + delta);
+      logEvent("omens_changed", {
+        oldValue,
+        newValue,
+        delta,
+        source,
+      });
+      return { ...prev, omens: newValue };
+    });
+  }, []);
+
+  const setEssence = useCallback((value: number, source: string) => {
+    setState((prev) => {
+      const oldValue = prev.essence;
+      const newValue = clampEssence(value, prev.essenceCap);
+      logEvent("essence_changed", {
+        oldValue,
+        newValue,
+        delta: newValue - oldValue,
+        source,
+      });
+      return { ...prev, essence: newValue };
+    });
+  }, []);
+
+  const changeMaxEssence = useCallback((delta: number, source: string) => {
+    setState((prev) => {
+      const oldCap = prev.essenceCap;
+      const newCap = Math.max(0, oldCap + delta);
+      const clampedEssence = clampEssence(prev.essence, newCap);
+      logEvent("max_essence_changed", {
+        oldValue: oldCap,
+        newValue: newCap,
+        delta,
+        source,
+      });
+      const next: QuestState = {
+        ...prev,
+        essenceCap: newCap,
+        essence: clampedEssence,
+      };
+      if (clampedEssence !== prev.essence) {
+        logEvent("essence_changed", {
+          oldValue: prev.essence,
+          newValue: clampedEssence,
+          delta: clampedEssence - prev.essence,
+          source: "max_essence_clamp",
+        });
+      }
+      return next;
+    });
+  }, []);
+
+  const addCardById = useCallback(
+    (cardId: string, source: string) => {
+      // Iterate the small cardDatabase to resolve `cardId` → `cardNumber`.
+      // This mirrors `pushTemporaryBaneGrant`; quest content is well under
+      // 1k entries so a parallel reverse index is unnecessary.
+      let resolved: CardData | null = null;
+      for (const candidate of cardDatabase.values()) {
+        if (candidate.id === cardId) {
+          resolved = candidate;
+          break;
+        }
+      }
+      if (resolved === null) {
+        console.warn(
+          `[quest-context] addCardById: unknown cardId '${cardId}' (source: ${source})`,
+        );
+        return null;
+      }
+      const cardNumber = resolved.cardNumber;
+      logEvent("card_added", {
+        cardNumber,
+        cardName: resolved.name,
+        source,
+      });
+      const entryId = nextEntryId();
+      setState((prev) => {
+        const entry: DeckEntry = {
+          entryId,
+          cardNumber,
+          transfiguration: null,
+          isBane: false,
+        };
+        return { ...prev, deck: [...prev.deck, entry] };
+      });
+      return entryId;
+    },
+    [cardDatabase],
+  );
+
+  const addCardByIdWithTransfiguration = useCallback(
+    (cardId: string, type: TransfigurationType, source: string) => {
+      let resolved: CardData | null = null;
+      for (const candidate of cardDatabase.values()) {
+        if (candidate.id === cardId) {
+          resolved = candidate;
+          break;
+        }
+      }
+      if (resolved === null) {
+        console.warn(
+          `[quest-context] addCardByIdWithTransfiguration: unknown cardId '${cardId}' (source: ${source})`,
+        );
+        return null;
+      }
+      const cardNumber = resolved.cardNumber;
+      logEvent("card_added", {
+        cardNumber,
+        cardName: resolved.name,
+        source,
+        transfigurationType: type,
+      });
+      const entryId = nextEntryId();
+      setState((prev) => {
+        const entry: DeckEntry = {
+          entryId,
+          cardNumber,
+          transfiguration: type,
+          isBane: false,
+        };
+        return { ...prev, deck: [...prev.deck, entry] };
+      });
+      return entryId;
+    },
+    [cardDatabase],
+  );
+
+  const addBaneCardById = useCallback(
+    (cardId: string, source: string) => {
+      let resolved: CardData | null = null;
+      for (const candidate of cardDatabase.values()) {
+        if (candidate.id === cardId) {
+          resolved = candidate;
+          break;
+        }
+      }
+      if (resolved === null) {
+        console.warn(
+          `[quest-context] addBaneCardById: unknown cardId '${cardId}' (source: ${source})`,
+        );
+        return;
+      }
+      const cardNumber = resolved.cardNumber;
+      logEvent("card_added", {
+        cardNumber,
+        cardName: resolved.name,
+        source,
+        isBane: true,
+      });
+      const entryId = nextEntryId();
+      setState((prev) => {
+        const entry: DeckEntry = {
+          entryId,
+          cardNumber,
+          transfiguration: null,
+          isBane: true,
+        };
+        return { ...prev, deck: [...prev.deck, entry] };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const removeDeckEntry = useCallback(
+    (entryId: string, source: string) => {
+      setState((prev) => {
+        const entry = prev.deck.find((e) => e.entryId === entryId);
+        if (!entry) return prev;
+        const card = cardDatabase.get(entry.cardNumber);
+        const cardName =
+          card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+        logEvent("card_removed", {
+          cardNumber: entry.cardNumber,
+          cardName,
+          source,
+        });
+        const deck = prev.deck.filter((e) => e.entryId !== entryId);
+        return { ...prev, deck };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const duplicateDeckEntry = useCallback(
+    (entryId: string, source: string) => {
+      const newEntryId = nextEntryId();
+      setState((prev) => {
+        const entry = prev.deck.find((e) => e.entryId === entryId);
+        if (!entry) return prev;
+        const card = cardDatabase.get(entry.cardNumber);
+        const cardName =
+          card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+        logEvent("card_added", {
+          cardNumber: entry.cardNumber,
+          cardName,
+          source,
+          duplicatedFrom: entryId,
+        });
+        const copy: DeckEntry = {
+          entryId: newEntryId,
+          cardNumber: entry.cardNumber,
+          transfiguration: entry.transfiguration,
+          isBane: entry.isBane,
+        };
+        return { ...prev, deck: [...prev.deck, copy] };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const purgeRandomBaneCards = useCallback(
+    (count: number, source: string) => {
+      if (count <= 0) return;
+      setState((prev) => {
+        const baneIndices: number[] = [];
+        prev.deck.forEach((entry, index) => {
+          if (entry.isBane) {
+            baneIndices.push(index);
+          }
+        });
+        if (baneIndices.length === 0) return prev;
+        // Fisher-Yates partial shuffle to pick `min(count, baneIndices.length)`
+        // entries uniformly at random.
+        const target = Math.min(count, baneIndices.length);
+        for (let i = 0; i < target; i += 1) {
+          const j = i + Math.floor(Math.random() * (baneIndices.length - i));
+          [baneIndices[i], baneIndices[j]] = [baneIndices[j], baneIndices[i]];
+        }
+        const removed = new Set(baneIndices.slice(0, target));
+        const deck = prev.deck.filter((_, index) => !removed.has(index));
+        for (const index of removed) {
+          const entry = prev.deck[index];
+          if (entry === undefined) continue;
+          const card = cardDatabase.get(entry.cardNumber);
+          const cardName =
+            card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+          logEvent("card_removed", {
+            cardNumber: entry.cardNumber,
+            cardName,
+            source,
+            isBane: true,
+          });
+        }
+        return { ...prev, deck };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const purgeAllBaneCards = useCallback(
+    (source: string) => {
+      setState((prev) => {
+        if (!prev.deck.some((entry) => entry.isBane)) return prev;
+        for (const entry of prev.deck) {
+          if (!entry.isBane) continue;
+          const card = cardDatabase.get(entry.cardNumber);
+          const cardName =
+            card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+          logEvent("card_removed", {
+            cardNumber: entry.cardNumber,
+            cardName,
+            source,
+            isBane: true,
+          });
+        }
+        return {
+          ...prev,
+          deck: prev.deck.filter((entry) => !entry.isBane),
+        };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const pushBattleRewardModifier = useCallback(
+    (
+      kind: "flat" | "percent",
+      amount: number,
+      battles: number,
+      source: string,
+    ) => {
+      setState((prev) => {
+        const modifier: BattleModifier =
+          kind === "flat"
+            ? {
+              kind: "reward_reduction_flat",
+              amount,
+              battlesRemaining: battles,
+              source,
+            }
+            : {
+              kind: "reward_reduction_percent",
+              percent: amount,
+              battlesRemaining: battles,
+              source,
+            };
+        logEvent("battle_modifier_pushed", {
+          kind: modifier.kind,
+          amount,
+          battles,
+          source,
+        });
+        return {
+          ...prev,
+          battleModifiers: [...prev.battleModifiers, modifier],
+        };
+      });
+    },
+    [],
+  );
+
+  const pushTemporaryBaneGrant = useCallback(
+    (baneName: string, count: number, battles: number, source: string) => {
+      // Resolve the bane name to a catalog cardNumber. Iterating the small
+      // cardDatabase map per call is fine — quest content has under 1k
+      // entries — and avoids maintaining a parallel name → number index just
+      // for the rare temporary-bane case.
+      let cardNumber: number | null = null;
+      for (const candidate of cardDatabase.values()) {
+        if (candidate.name === baneName) {
+          cardNumber = candidate.cardNumber;
+          break;
+        }
+      }
+      if (cardNumber === null || count <= 0) {
+        console.warn(
+          `[quest-context] pushTemporaryBaneGrant: unknown bane '${baneName}' or non-positive count ${String(count)}`,
+        );
+        return;
+      }
+
+      const resolvedCardNumber = cardNumber;
+      const addedEntryIds: string[] = [];
+      for (let i = 0; i < count; i += 1) {
+        addedEntryIds.push(nextEntryId());
+      }
+      setState((prev) => {
+        const card = cardDatabase.get(resolvedCardNumber);
+        const cardName =
+          card?.name ?? `Unknown Card #${String(resolvedCardNumber)}`;
+        const newEntries: DeckEntry[] = addedEntryIds.map((entryId) => ({
+          entryId,
+          cardNumber: resolvedCardNumber,
+          transfiguration: null,
+          isBane: true,
+        }));
+        for (const entryId of addedEntryIds) {
+          logEvent("card_added", {
+            cardNumber: resolvedCardNumber,
+            cardName,
+            source,
+            isBane: true,
+            entryId,
+            temporary: true,
+          });
+        }
+        const modifier: BattleModifier = {
+          kind: "temporary_bane_grant",
+          baneName,
+          count,
+          battlesRemaining: battles,
+          addedEntryIds,
+          source,
+        };
+        logEvent("battle_modifier_pushed", {
+          kind: modifier.kind,
+          baneName,
+          count,
+          battles,
+          source,
+        });
+        return {
+          ...prev,
+          deck: [...prev.deck, ...newEntries],
+          battleModifiers: [...prev.battleModifiers, modifier],
+        };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const addSiteToDreamscape = useCallback(
+    (placement: "current" | "next", siteType: SiteType, source: string) => {
+      setState((prev) => {
+        const targetId =
+          placement === "current"
+            ? prev.currentDreamscape
+            : findNextDreamscapeId(prev.atlas, prev.currentDreamscape);
+        if (targetId === null || prev.atlas.nodes[targetId] === undefined) {
+          return prev;
+        }
+        const newSite: SiteState = {
+          id: nextSiteIdFromAtlas(prev.atlas),
+          type: siteType,
+          isEnhanced: false,
+          isVisited: false,
+        };
+        logEvent("site_added", {
+          siteId: newSite.id,
+          siteType,
+          dreamscapeId: targetId,
+          placement,
+          source,
+        });
+        return {
+          ...prev,
+          atlas: atlasWithAddedSite(prev.atlas, targetId, newSite),
+        };
+      });
+    },
+    [],
+  );
+
+  const replaceSiteType = useCallback(
+    (from: SiteType, to: SiteType, source: string) => {
+      setState((prev) => {
+        const currentId = prev.currentDreamscape;
+        if (currentId === null) return prev;
+        const node = prev.atlas.nodes[currentId];
+        if (node === undefined) return prev;
+        const targetIndex = node.sites.findIndex(
+          (site) => site.type === from && !site.isVisited,
+        );
+        if (targetIndex === -1) return prev;
+        const replacement: SiteState = {
+          id: nextSiteIdFromAtlas(prev.atlas),
+          type: to,
+          isEnhanced: false,
+          isVisited: false,
+        };
+        const nextSites = node.sites.map((site, index) =>
+          index === targetIndex ? replacement : site,
+        );
+        logEvent("site_replaced", {
+          oldSiteId: node.sites[targetIndex].id,
+          newSiteId: replacement.id,
+          fromType: from,
+          toType: to,
+          dreamscapeId: currentId,
+          source,
+        });
+        return {
+          ...prev,
+          atlas: {
+            ...prev.atlas,
+            nodes: {
+              ...prev.atlas.nodes,
+              [currentId]: { ...node, sites: nextSites },
+            },
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  const removeSiteTypeFromNextDreamscapes = useCallback(
+    (
+      siteType: "Shop" | "DreamsignOffering",
+      dreamscapes: number,
+      source: string,
+    ) => {
+      setState((prev) => {
+        // Dreamscape generation hides shop and dreamsign-offering sites via
+        // discriminated modifier kinds; map the requested siteType to the
+        // matching kind. The parameter is narrowed to the two supported
+        // values so a future template typo fails at compile time rather than
+        // requiring a runtime warning here.
+        const modifier: DreamscapeModifier =
+          siteType === "Shop"
+            ? {
+                kind: "remove_shop_sites",
+                dreamscapesRemaining: dreamscapes,
+                source,
+              }
+            : {
+                kind: "remove_dreamsign_sites",
+                dreamscapesRemaining: dreamscapes,
+                source,
+              };
+        logEvent("dreamscape_modifier_pushed", {
+          kind: modifier.kind,
+          dreamscapes,
+          source,
+        });
+        return {
+          ...prev,
+          dreamscapeModifiers: [...prev.dreamscapeModifiers, modifier],
+        };
+      });
+    },
+    [],
+  );
+
+  const grantFreeShopRerolls = useCallback(
+    (count: number, source: string) => {
+      setState((prev) => {
+        if (count <= 0) return prev;
+        logEvent("shop_modifier_pushed", {
+          kind: "free_rerolls",
+          delta: count,
+          source,
+        });
+        return {
+          ...prev,
+          shopModifiers: {
+            ...prev.shopModifiers,
+            freeRerolls: prev.shopModifiers.freeRerolls + count,
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  const applyShopEssenceDiscount = useCallback(
+    (percent: number, source: string) => {
+      setState((prev) => {
+        if (percent <= 0) return prev;
+        logEvent("shop_modifier_pushed", {
+          kind: "essence_discount",
+          delta: percent,
+          source,
+        });
+        return {
+          ...prev,
+          shopModifiers: {
+            ...prev.shopModifiers,
+            essenceDiscountPercent:
+              prev.shopModifiers.essenceDiscountPercent + percent,
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  const grantShopOmenDiscounts = useCallback(
+    (count: number, source: string) => {
+      setState((prev) => {
+        if (count <= 0) return prev;
+        logEvent("shop_modifier_pushed", {
+          kind: "omen_discount_tokens",
+          delta: count,
+          source,
+        });
+        return {
+          ...prev,
+          shopModifiers: {
+            ...prev.shopModifiers,
+            upcomingOmenDiscounts:
+              prev.shopModifiers.upcomingOmenDiscounts + count,
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  const boostSiteAppearance = useCallback(
+    (
+      siteType: SiteType,
+      percent: number,
+      dreamscapes: number,
+      source: string,
+    ) => {
+      setState((prev) => {
+        const modifier: DreamscapeModifier = {
+          kind: "boost_site_appearance",
+          siteType,
+          percent,
+          dreamscapesRemaining: dreamscapes,
+          source,
+        };
+        logEvent("dreamscape_modifier_pushed", {
+          kind: modifier.kind,
+          siteType,
+          percent,
+          dreamscapes,
+          source,
+        });
+        return {
+          ...prev,
+          dreamscapeModifiers: [...prev.dreamscapeModifiers, modifier],
+        };
+      });
+    },
+    [],
+  );
 
   const resetQuest = useCallback(() => {
     // Ordering invariant: `resetLog()` clears the ring buffer before any
@@ -1941,6 +2782,25 @@ export function QuestProvider({
       dismissStartingDeckPopup,
       bootstrapStartInBattle,
       resetQuest,
+      changeOmens,
+      setEssence,
+      changeMaxEssence,
+      addCardById,
+      addCardByIdWithTransfiguration,
+      addBaneCardById,
+      removeDeckEntry,
+      duplicateDeckEntry,
+      purgeRandomBaneCards,
+      purgeAllBaneCards,
+      pushBattleRewardModifier,
+      pushTemporaryBaneGrant,
+      addSiteToDreamscape,
+      replaceSiteType,
+      removeSiteTypeFromNextDreamscapes,
+      grantFreeShopRerolls,
+      applyShopEssenceDiscount,
+      grantShopOmenDiscounts,
+      boostSiteAppearance,
     }),
     [
       changeEssence,
@@ -1981,6 +2841,25 @@ export function QuestProvider({
       dismissStartingDeckPopup,
       bootstrapStartInBattle,
       resetQuest,
+      changeOmens,
+      setEssence,
+      changeMaxEssence,
+      addCardById,
+      addCardByIdWithTransfiguration,
+      addBaneCardById,
+      removeDeckEntry,
+      duplicateDeckEntry,
+      purgeRandomBaneCards,
+      purgeAllBaneCards,
+      pushBattleRewardModifier,
+      pushTemporaryBaneGrant,
+      addSiteToDreamscape,
+      replaceSiteType,
+      removeSiteTypeFromNextDreamscapes,
+      grantFreeShopRerolls,
+      applyShopEssenceDiscount,
+      grantShopOmenDiscounts,
+      boostSiteAppearance,
     ],
   );
 

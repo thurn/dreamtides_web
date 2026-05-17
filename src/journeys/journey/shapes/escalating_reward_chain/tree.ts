@@ -18,6 +18,7 @@ import {
   buildTreeTerminalOperations,
 } from "../../operationBuilders";
 import type { JourneyContext } from "../../context";
+import { getCost } from "../../shared/costs";
 import { getReward } from "../../shared/rewards";
 import type { TemplateParams } from "../../shared/types";
 
@@ -75,6 +76,7 @@ const OMEN_COUNTS: Record<JourneyStage, readonly [number, number, number]> = {
   mid: [2, 4, 6],
   late: [3, 6, 9],
 };
+const PAY_ESSENCE = getCost("pay_essence");
 
 function omenRows(
   counts: readonly [number, number, number],
@@ -234,11 +236,11 @@ function treeBranch(args: TreeBranchArgs): JourneyTreeBranch {
         text: args.terminal.text,
         outcome: args.terminal.outcome,
         operations: [],
-        costs,
-        effects,
-        burdens: [],
-        targets: [],
-        routeEffects: [],
+        costs: [...(args.terminal.costs ?? [])],
+        effects: [...(args.terminal.effects ?? [])],
+        burdens: [...(args.terminal.burdens ?? [])],
+        targets: [...(args.terminal.targets ?? [])],
+        routeEffects: [...(args.terminal.routeEffects ?? [])],
         rewardTemplateIds: [...rewardTemplateIds],
       }
     : undefined;
@@ -289,11 +291,15 @@ function tree(nodes: JourneyTree["nodes"]): JourneyTree {
   };
 }
 
-function cost(amount: number): Record<string, unknown> {
+function cost(context: JourneyContext, amount: number): Record<string, unknown> {
+  const params = { x: amount };
+
   return {
-    kind: "essence",
-    amount,
-    timing: "immediate",
+    kind: "shared_cost_template",
+    templateId: "pay_essence",
+    params,
+    text: PAY_ESSENCE.render(params, context),
+    convertedEssence: PAY_ESSENCE.cec(params, context),
   };
 }
 
@@ -370,7 +376,7 @@ export function buildEscalatingRewardChainTree(
       const level = index + 1;
       const price = costs[index];
       const isFinal = level === rewards.length;
-      const takeCost = cost(price);
+      const takeCost = cost(context, price);
 
       return {
         id: `level-${level}`,
@@ -404,8 +410,8 @@ export function buildEscalatingRewardChainTree(
                   terminal: {
                     text: "End the Journey.",
                     outcome: "claim" as const,
-                    costs: [takeCost],
-                    effects: reward.effects,
+                    costs: [],
+                    effects: [],
                     burdens: [],
                     targets: [],
                     routeEffects: [],

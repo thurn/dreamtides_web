@@ -52,7 +52,12 @@ function emptyContext(overrides: {
   essence?: number;
   maxEssence?: number;
   omens?: number;
-  deckEntries?: readonly { cardId: string; copies: number }[];
+  deckEntries?: readonly {
+    cardId: string;
+    copies: number;
+    entryIds?: readonly string[];
+    entryTransfigurations?: readonly (string | null)[];
+  }[];
   activeDreamsigns?: readonly { dreamsignId: string }[];
   banes?: readonly { baneName: string }[];
   cards?: ContentBundle["cards"];
@@ -63,13 +68,19 @@ function emptyContext(overrides: {
     seed: "costs-test",
     resources: {
       essence: overrides.essence ?? 0,
-      maxEssence: overrides.maxEssence ?? 0,
+      maxEssence: overrides.maxEssence ?? overrides.essence ?? 0,
       omens: overrides.omens ?? 0,
       dreamscape: 0,
     },
     selectedTides: [],
     deck: {
-      entries: deckEntries.map((e) => ({ cardId: e.cardId, copies: e.copies })),
+      entries: deckEntries.map((e) => ({
+        cardId: e.cardId,
+        copies: e.copies,
+        entryIds: e.entryIds
+          ?? Array.from({ length: e.copies }, (_, index) => `${e.cardId}-${index + 1}`),
+        entryTransfigurations: e.entryTransfigurations,
+      })),
       summary: {
         totalCards,
         starterCards: 0,
@@ -311,11 +322,70 @@ describe("deck-scope viability audits", () => {
     for (const id of [
       "purge_named_card",
       "transform_card_to_random_pool",
-      "remove_transfiguration_from_card",
     ]) {
       const t = getCost(id);
       expect(t.viable({ cardName: "Steady Burn" }, ctx), id).toBe(true);
     }
+  });
+
+  it("remove_transfiguration_from_card requires a transfigured named entry", () => {
+    const STEADY_BURN = card({ id: "steady-burn", name: "Steady Burn" });
+    const t = getCost("remove_transfiguration_from_card");
+    const untransfigured = emptyContext({
+      cards: [STEADY_BURN],
+      deckEntries: [
+        {
+          cardId: STEADY_BURN.id,
+          copies: 1,
+          entryTransfigurations: [null],
+        },
+      ],
+    });
+    const partiallyTransfigured = emptyContext({
+      cards: [STEADY_BURN],
+      deckEntries: [
+        {
+          cardId: STEADY_BURN.id,
+          copies: 2,
+          entryTransfigurations: [null, "Viridian"],
+        },
+      ],
+    });
+    expect(t.viable({ cardName: "Steady Burn" }, untransfigured)).toBe(false);
+    expect(t.viable({ cardName: "Steady Burn" }, partiallyTransfigured)).toBe(true);
+  });
+
+  it("remove_transfigurations_from_random_predicate requires enough transfigured entries", () => {
+    const t = getCost("remove_transfigurations_from_random_predicate");
+    const ctx = emptyContext({
+      cards: [WARRIOR_CARD],
+      deckEntries: [
+        {
+          cardId: WARRIOR_CARD.id,
+          copies: 3,
+          entryTransfigurations: ["Golden", null, "Viridian"],
+        },
+      ],
+    });
+    expect(t.viable({ predicateId: "warriors", count: 3 }, ctx)).toBe(false);
+    expect(t.viable({ predicateId: "warriors", count: 2 }, ctx)).toBe(true);
+  });
+
+  it("remove_transfigurations_from_random_predicate resolves the transfigured predicate from entry state", () => {
+    const t = getCost("remove_transfigurations_from_random_predicate");
+    const ctx = emptyContext({
+      cards: [WARRIOR_CARD],
+      deckEntries: [
+        {
+          cardId: WARRIOR_CARD.id,
+          copies: 2,
+          entryTransfigurations: ["Golden", null],
+        },
+      ],
+    });
+
+    expect(t.viable({ predicateId: "transfigured", count: 2 }, ctx)).toBe(false);
+    expect(t.viable({ predicateId: "transfigured", count: 1 }, ctx)).toBe(true);
   });
 });
 
@@ -352,6 +422,227 @@ describe("meta_pay_2_costs (compound) locking", () => {
     const rendered = t.render(params, ctx);
     expect(rendered.startsWith("[LOCKED]")).toBe(false);
     expect(t.locked(params, ctx)).toBe(false);
+  });
+
+  it("locks when same-resource essence costs are individually affordable but unaffordable together", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_essence"] as const,
+      subParams: [
+        { x: 60 },
+        { x: 50 },
+      ] as const,
+    };
+    const rendered = t.render(params, ctx);
+    expect(rendered.match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+    expect(t.locked(params, ctx)).toBe(true);
+  });
+
+  it("locks essence range compounds by guaranteed minimum spend", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_essence_random_range"] as const,
+      subParams: [
+        { x: 80 },
+        { min: 30, max: 80 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
+  it("does not lock essence range compounds when the guaranteed minimum is affordable", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_essence_random_range"] as const,
+      subParams: [
+        { x: 70 },
+        { min: 30, max: 80 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("locks when same-resource omen costs are individually affordable but unaffordable together", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ omens: 1 });
+    const params = {
+      subIds: ["pay_omens", "pay_omens"] as const,
+      subParams: [
+        { x: 1 },
+        { x: 1 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
+  it("aggregates percentage and all-remaining essence costs", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    expect(t.locked({
+      subIds: ["pay_percent_essence", "pay_essence"] as const,
+      subParams: [
+        { percent: 75 },
+        { x: 30 },
+      ] as const,
+    }, ctx)).toBe(true);
+    expect(t.locked({
+      subIds: ["pay_all_remaining_essence", "pay_essence"] as const,
+      subParams: [
+        {},
+        { x: 1 },
+      ] as const,
+    }, ctx)).toBe(true);
+  });
+
+  it("keeps finite-then-percent essence compounds unlocked when the ordered percent is affordable", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_percent_essence"] as const,
+      subParams: [
+        { x: 60 },
+        { percent: 75 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("keeps all-remaining-then-percent essence compounds unlocked because percent applies to zero", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_all_remaining_essence", "pay_percent_essence"] as const,
+      subParams: [
+        {},
+        { percent: 75 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("keeps finite-then-all-remaining essence compounds unlocked when the finite cost is affordable", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_essence", "pay_all_remaining_essence"] as const,
+      subParams: [
+        { x: 50 },
+        {},
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("locks all-remaining-then-finite essence compounds when the finite cost cannot be paid after exhaust", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100 });
+    const params = {
+      subIds: ["pay_all_remaining_essence", "pay_essence"] as const,
+      subParams: [
+        {},
+        { x: 50 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
+  it("aggregates max-essence costs using the max-essence lock threshold", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ maxEssence: 100 });
+    const params = {
+      subIds: ["lose_max_essence", "lose_max_essence"] as const,
+      subParams: [
+        { amount: 50 },
+        { amount: 50 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+  });
+
+  it("keeps lose-max-then-pay-max compounds unlocked because pay max exhausts the remainder", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ maxEssence: 100 });
+    const params = {
+      subIds: ["lose_max_essence", "pay_max_essence"] as const,
+      subParams: [
+        { amount: 25 },
+        {},
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(false);
+    expect(t.render(params, ctx).startsWith("[LOCKED]")).toBe(false);
+  });
+
+  it("locks pay-max-then-lose-max compounds because pay max exhausts first", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ maxEssence: 100 });
+    const params = {
+      subIds: ["pay_max_essence", "lose_max_essence"] as const,
+      subParams: [
+        {},
+        { amount: 25 },
+      ] as const,
+    };
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
+  it("locks pay_max_essence compounds with later finite essence cost", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100, maxEssence: 100 });
+    const params = {
+      subIds: ["pay_max_essence", "pay_essence"] as const,
+      subParams: [
+        {},
+        { x: 50 },
+      ] as const,
+    };
+    expect(getCost("pay_max_essence").locked(params.subParams[0], ctx)).toBe(false);
+    expect(getCost("pay_essence").locked(params.subParams[1], ctx)).toBe(false);
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
+  it("locks max-essence loss compounds when clamped essence cannot pay a later finite cost", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ essence: 100, maxEssence: 100 });
+    const params = {
+      subIds: ["lose_max_essence", "pay_essence"] as const,
+      subParams: [
+        { amount: 25 },
+        { x: 80 },
+      ] as const,
+    };
+    expect(getCost("lose_max_essence").locked(params.subParams[0], ctx)).toBe(false);
+    expect(getCost("pay_essence").locked(params.subParams[1], ctx)).toBe(false);
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
+  });
+
+  it("locks pay_max_essence compounds with additional max-essence loss", () => {
+    const t = getCost("meta_pay_2_costs");
+    const ctx = emptyContext({ maxEssence: 100 });
+    const params = {
+      subIds: ["pay_max_essence", "lose_max_essence"] as const,
+      subParams: [
+        {},
+        { amount: 25 },
+      ] as const,
+    };
+    expect(getCost("pay_max_essence").locked(params.subParams[0], ctx)).toBe(false);
+    expect(getCost("lose_max_essence").locked(params.subParams[1], ctx)).toBe(false);
+    expect(t.locked(params, ctx)).toBe(true);
+    expect(t.render(params, ctx).match(/\[LOCKED\]/g)?.length ?? 0).toBe(1);
   });
 
   it("declines an empty context when both sub-costs decline", () => {

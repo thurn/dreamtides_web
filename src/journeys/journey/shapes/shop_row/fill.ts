@@ -9,7 +9,8 @@ import {
 import { getCost } from "../../shared/costs";
 import { REWARDS } from "../../shared/rewards";
 import { joinSnippets } from "../../shared/text";
-import type { Reward } from "../../shared/types";
+import type { Reward, TemplateParams } from "../../shared/types";
+import type { SharedCostPayload, SharedRewardPayload } from "../../../apply/payloads";
 import type { FilledJourney, ShapeFillArgs } from "../types";
 
 const SHAPE_LABEL = "shop_row";
@@ -39,7 +40,7 @@ const SHOP_ROW_EXCLUDED_REWARD_IDS = new Set([
 
 type RolledReward = {
   readonly template: Reward;
-  readonly params: unknown;
+  readonly params: TemplateParams;
   readonly cec: number;
   readonly rendered: string;
 };
@@ -483,6 +484,26 @@ function shopOperations(
   ];
 }
 
+function costEnvelope(priced: PricedReward): SharedCostPayload {
+  return {
+    kind: "shared_cost_template",
+    templateId: PAY_ESSENCE.id,
+    params: { x: priced.price },
+    text: `Pay ${priced.price} essence`,
+    convertedEssence: priced.costCec,
+  };
+}
+
+function rewardEnvelope(reward: RolledReward): SharedRewardPayload {
+  return {
+    kind: "shared_reward_template",
+    templateId: reward.template.id,
+    params: reward.params,
+    text: reward.rendered,
+    convertedEssence: reward.cec,
+  };
+}
+
 function shopOption(
   number: number,
   priced: PricedReward,
@@ -498,8 +519,8 @@ function shopOption(
     symbols: ["shop", "cost", "reward"],
     text,
     operations: shopOperations(number, priced),
-    costs: [],
-    effects: [],
+    costs: [costEnvelope(priced)],
+    effects: [rewardEnvelope(reward)],
     burdens: [],
     targets: [],
     triggers: [],

@@ -44,6 +44,11 @@ import {
 } from "vitest";
 import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 
+import * as applyBranchModule from "../apply/applyBranch";
+import * as applyOptionModule from "../apply/applyOption";
+import type { ChooserRequest, ChooserResolution } from "../apply/chooserPlan";
+import { createRecordingMutations } from "../apply/testing/recordingMutations";
+import type { Reward } from "../journey/shared/types";
 import type { JourneyContext } from "../journey/context";
 import {
   makeUnlockedBranch,
@@ -57,9 +62,14 @@ import {
   type PrecommittedOutcomes,
 } from "../journey/manifest";
 import { generateNextJourney } from "../journey/generate";
+import * as loggingModule from "../../logging";
 
 import * as dreamArtModule from "./dreamArt";
 import { JourneyScreen } from "./JourneyScreen";
+
+const { stubRewards } = vi.hoisted(() => ({
+  stubRewards: new Map<string, Reward>(),
+}));
 
 // Mock framer-motion so the rendered DOM matches the JSX one-to-one and we
 // can query buttons without animation wrappers swallowing them. The
@@ -88,6 +98,17 @@ vi.mock("framer-motion", () => ({
 vi.mock("../journey/generate", () => ({
   generateNextJourney: vi.fn(),
 }));
+
+vi.mock("../journey/shared/rewards", async () => {
+  const actual = await vi.importActual<typeof import("../journey/shared/rewards")>(
+    "../journey/shared/rewards",
+  );
+  return {
+    ...actual,
+    findReward: (id: string): Reward | undefined =>
+      stubRewards.get(id) ?? actual.findReward(id),
+  };
+});
 
 const mockedGenerate = generateNextJourney as unknown as Mock;
 
@@ -190,6 +211,72 @@ function makeFlatManifest(
   return manifestSkeleton({ shapeId, options });
 }
 
+function rewardEnvelope(
+  templateId: string,
+  params: Record<string, unknown> = {},
+): unknown {
+  return {
+    kind: "shared_reward_template",
+    templateId,
+    params,
+    text: `reward:${templateId}`,
+    convertedEssence: 0,
+  };
+}
+
+function cardChooserRequest(
+  requestId: string,
+  title = "Choose a card",
+): Extract<ChooserRequest, { kind: "card" }> {
+  return {
+    kind: "card",
+    requestId,
+    poolKind: "deck",
+    minPicks: 1,
+    maxPicks: 1,
+    title,
+  };
+}
+
+function cardChooserReward(
+  id: string,
+  request: ChooserRequest,
+  type: "Bronze" | "Golden" = "Bronze",
+): Reward<Record<string, unknown>> {
+  return {
+    id,
+    weight: 1,
+    rollParams: () => ({}),
+    cec: () => 0,
+    viable: () => true,
+    render: () => request.title,
+    choosePlan: () => request,
+    apply: (_params, _ctx, mut, resolution) => {
+      if (resolution?.kind !== "card") return;
+      for (const entryId of resolution.entryIds) {
+        mut.transfigureDeckEntry(entryId, type, `dream_journey:${id}`);
+      }
+    },
+  };
+}
+
+function immediateEssenceReward(
+  id: string,
+  amount: number,
+): Reward<Record<string, unknown>> {
+  return {
+    id,
+    weight: 1,
+    rollParams: () => ({}),
+    cec: () => amount,
+    viable: () => true,
+    render: () => `Gain ${String(amount)} essence`,
+    apply: (_params, _ctx, mut) => {
+      mut.changeEssence(amount, `dream_journey:${id}`);
+    },
+  };
+}
+
 /**
  * Build a two-node tree: root has two player_choice branches, one leading
  * to a second node (also player_choice) and one terminating. Used to
@@ -287,6 +374,109 @@ function dummyContext(): JourneyContext {
   } as JourneyContext;
 }
 
+function contextWithDeck(): JourneyContext {
+  return {
+    ...dummyContext(),
+    state: {
+      quest: {
+        ...dummyContext().state.quest,
+        deck: {
+          entries: [
+            {
+              cardId: "card-a",
+              copies: 1,
+              entryIds: ["deck-1"],
+              entryTransfigurations: [null],
+            },
+            {
+              cardId: "card-b",
+              copies: 1,
+              entryIds: ["deck-2"],
+              entryTransfigurations: [null],
+            },
+          ],
+          summary: { totalCards: 2, starterCards: 2, uniqueCards: 2 },
+        },
+      },
+    },
+    content: {
+      ...dummyContext().content,
+      cards: [
+        {
+          id: "card-a",
+          name: "Glimmer Knife",
+          tides: [],
+          rarity: "Starter",
+          cardType: "Event",
+          energyCost: 1,
+          spark: 1,
+          cardNumber: 1,
+          raw: { renderedText: "Deal 1 damage.", rulesText: "Deal 1 damage." },
+        },
+        {
+          id: "card-b",
+          name: "Amber Lantern",
+          tides: [],
+          rarity: "Starter",
+          cardType: "Character",
+          energyCost: 1,
+          spark: 1,
+          cardNumber: 2,
+          raw: { renderedText: "Gain 1 block.", rulesText: "Gain 1 block." },
+        },
+      ],
+    },
+  } as JourneyContext;
+}
+
+function contextWithTransfiguredDeckEntries(): JourneyContext {
+  const base = contextWithDeck();
+  return {
+    ...base,
+    state: {
+      quest: {
+        ...base.state.quest,
+        deck: {
+          entries: [
+            {
+              cardId: "card-a",
+              copies: 2,
+              entryIds: ["plain-copy", "bronze-copy"],
+              entryTransfigurations: [null, "Bronze"],
+            },
+          ],
+          summary: { totalCards: 2, starterCards: 2, uniqueCards: 1 },
+        },
+      },
+    },
+    content: {
+      ...base.content,
+      cards: [
+        {
+          id: "card-a",
+          name: "Glimmer Knife",
+          tides: [],
+          rarity: "Starter",
+          cardType: "Event",
+          energyCost: 1,
+          spark: 1,
+          cardNumber: 1,
+          raw: {
+            renderedText: "Transfigured text marker on the base card.",
+            rulesText: "Transfigured text marker on the base card.",
+          },
+        },
+      ],
+    },
+  } as JourneyContext;
+}
+
+const TEST_SITE_ID = "site-test";
+
+function dummyMutations() {
+  return createRecordingMutations().mut;
+}
+
 function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
   const container = document.createElement("div");
   document.body.append(container);
@@ -319,12 +509,28 @@ function queryRerollButton(container: HTMLElement): HTMLButtonElement {
   return button;
 }
 
+function getButtonByText(container: HTMLElement, text: string): HTMLButtonElement {
+  const button = Array.from(container.querySelectorAll("button")).find((candidate) =>
+    candidate.textContent?.includes(text),
+  );
+  if (!(button instanceof HTMLButtonElement)) {
+    throw new Error(`Button not found: ${text}`);
+  }
+  return button;
+}
+
+function queryChooser(container: HTMLElement): HTMLElement | null {
+  return container.querySelector('[role="dialog"]');
+}
+
 beforeEach(() => {
   mockedGenerate.mockReset();
+  stubRewards.clear();
 });
 
 afterEach(() => {
   document.body.innerHTML = "";
+  vi.restoreAllMocks();
 });
 
 describe("JourneyScreen", () => {
@@ -333,7 +539,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     const enterButtons = queryEnterDreamButtons(container);
@@ -352,7 +563,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={context} onClose={onClose} />,
+      <JourneyScreen
+        context={context}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     expect(queryEnterDreamButtons(container)).toHaveLength(1);
@@ -400,7 +616,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     const enterButtons = queryEnterDreamButtons(container);
@@ -417,7 +638,12 @@ describe("JourneyScreen", () => {
     const onCloseLoss = vi.fn();
     mockedGenerate.mockReturnValue(makeFlatManifest(1, "choose_your_loss"));
     const lossMount = mount(
-      <JourneyScreen context={dummyContext()} onClose={onCloseLoss} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onCloseLoss}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
     const lossClose = queryCloseButton(lossMount.container);
     expect(lossClose.disabled).toBe(true);
@@ -434,7 +660,12 @@ describe("JourneyScreen", () => {
     const onCloseOther = vi.fn();
     mockedGenerate.mockReturnValue(makeFlatManifest(1, "random_rewards"));
     const otherMount = mount(
-      <JourneyScreen context={dummyContext()} onClose={onCloseOther} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onCloseOther}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
     const otherClose = queryCloseButton(otherMount.container);
     expect(otherClose.disabled).toBe(false);
@@ -454,7 +685,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     // Root node has two player_choice branches. After Enter Dream on the
@@ -484,7 +720,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     const enterButtons = queryEnterDreamButtons(container);
@@ -523,7 +764,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     // CloseButton is also a <button>, so filter to Enter Dream buttons only.
@@ -550,7 +796,12 @@ describe("JourneyScreen", () => {
 
     const onClose = vi.fn();
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     expect(container.textContent).toContain(
@@ -574,7 +825,12 @@ describe("JourneyScreen", () => {
     const onClose = vi.fn();
 
     const { container, root } = mount(
-      <JourneyScreen context={dummyContext()} onClose={onClose} />,
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
     );
 
     expect(container.textContent).toContain(
@@ -591,5 +847,756 @@ describe("JourneyScreen", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  // ---- Apply dispatch wiring ---------------------------------------------
+  //
+  // These three tests pin the cutover contract that "Enter Dream now
+  // dispatches through the apply pass". They spy on `applyOption` /
+  // `applyBranch` at the module boundary rather than asserting against the
+  // recording mutations directly — at this point in Wave 1 the per-template
+  // `apply` methods are still stubs, so a recording double would observe
+  // zero calls regardless of whether dispatch is wired correctly.
+
+  it("calls applyOption with screen meta and closes after a flat Enter Dream", () => {
+    const manifest = makeFlatManifest(1);
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const mut = createRecordingMutations().mut;
+    const applySpy = vi
+      .spyOn(applyOptionModule, "applyOption")
+      .mockReturnValue({ done: true });
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    const enterButtons = queryEnterDreamButtons(container);
+    expect(enterButtons).toHaveLength(1);
+
+    act(() => {
+      enterButtons[0].dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(applySpy).toHaveBeenCalledTimes(1);
+    const [option, meta, ctxArg, mutArg] = applySpy.mock.calls[0];
+    expect(option).toBe(manifest.options[0]);
+    expect(meta).toEqual({
+      siteId: TEST_SITE_ID,
+      journeyId: manifest.journeyId,
+      shapeId: manifest.shapeId,
+    });
+    expect(ctxArg).toBeDefined();
+    expect(mutArg).toBe(mut);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+    applySpy.mockRestore();
+  });
+
+  it("mounts a card chooser without mutating when a flat option needs a choice", () => {
+    const templateId = "choose_card_then_transfigure";
+    const request = cardChooserRequest("1:choose_card_then_transfigure:0");
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    const manifest = manifestSkeleton({
+      options: [
+        makeUnlockedOption({
+          ...baseOptionFields(1),
+          effects: [rewardEnvelope(templateId)],
+        }),
+      ],
+    });
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const { mut, calls } = createRecordingMutations();
+    const applySpy = vi.spyOn(applyOptionModule, "applyOption");
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)?.textContent).toContain("Choose a card");
+    expect(calls).toEqual([]);
+    expect(onClose).not.toHaveBeenCalled();
+    expect(applySpy.mock.calls[0][4]).toBeInstanceOf(Map);
+    expect((applySpy.mock.calls[0][4] as Map<string, ChooserResolution>).size).toBe(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("filters deck chooser card candidates by predicateId", () => {
+    const templateId = "choose_event_card";
+    const request: ChooserRequest = {
+      ...cardChooserRequest("1:choose_event_card:0"),
+      deckFilter: { predicateId: "events" },
+    };
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        options: [
+          makeUnlockedOption({
+            ...baseOptionFields(1),
+            effects: [rewardEnvelope(templateId)],
+          }),
+        ],
+      }),
+    );
+    const { mut } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)?.textContent).toContain("Glimmer Knife");
+    expect(queryChooser(container)?.textContent).not.toContain("Amber Lantern");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("filters deck chooser card candidates by explicit entry ids", () => {
+    const templateId = "choose_exact_entry_card";
+    const request: ChooserRequest = {
+      ...cardChooserRequest("1:choose_exact_entry_card:0"),
+      deckFilter: { entryIds: ["deck-2"] },
+    };
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        options: [
+          makeUnlockedOption({
+            ...baseOptionFields(1),
+            effects: [rewardEnvelope(templateId)],
+          }),
+        ],
+      }),
+    );
+    const { mut } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)?.textContent).not.toContain("Glimmer Knife");
+    expect(queryChooser(container)?.textContent).toContain("Amber Lantern");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("filters transfigured deck chooser candidates by deck entry state", () => {
+    const templateId = "choose_transfigured_card";
+    const request: ChooserRequest = {
+      ...cardChooserRequest("1:choose_transfigured_card:0"),
+      deckFilter: { predicateId: "transfigured" },
+    };
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        options: [
+          makeUnlockedOption({
+            ...baseOptionFields(1),
+            effects: [rewardEnvelope(templateId)],
+          }),
+        ],
+      }),
+    );
+    const { mut, calls } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithTransfiguredDeckEntries()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    const chooserButtons = Array.from(
+      queryChooser(container)?.querySelectorAll("button[aria-pressed]") ?? [],
+    );
+    expect(chooserButtons).toHaveLength(1);
+    act(() => {
+      getButtonByText(container, "Glimmer Knife").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Confirm").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: ["bronze-copy", "Bronze", "dream_journey:choose_transfigured_card"],
+      },
+    ]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("confirms a flat chooser, commits mutations, unmounts the overlay, and closes", () => {
+    const templateId = "choose_card_then_transfigure";
+    const request = cardChooserRequest("1:choose_card_then_transfigure:0");
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        options: [
+          makeUnlockedOption({
+            ...baseOptionFields(1),
+            effects: [rewardEnvelope(templateId)],
+          }),
+        ],
+      }),
+    );
+    const onClose = vi.fn();
+    const { mut, calls } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Glimmer Knife").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Confirm").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)).toBeNull();
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-1",
+          "Bronze",
+          "dream_journey:choose_card_then_transfigure",
+        ],
+      },
+    ]);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("cancels a chooser without mutating and re-enters with a fresh resolutions map", () => {
+    const templateId = "choose_card_then_transfigure";
+    const request = cardChooserRequest("1:choose_card_then_transfigure:0");
+    stubRewards.set(templateId, cardChooserReward(templateId, request));
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        options: [
+          makeUnlockedOption({
+            ...baseOptionFields(1),
+            effects: [rewardEnvelope(templateId)],
+          }),
+        ],
+      }),
+    );
+    const onClose = vi.fn();
+    const { mut, calls } = createRecordingMutations();
+    const applySpy = vi.spyOn(applyOptionModule, "applyOption");
+    const logSpy = vi
+      .spyOn(loggingModule, "logEvent")
+      .mockImplementation(() => ({ event: "", seq: 0, timestamp: "" }) as never);
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    const firstMap = applySpy.mock.calls[0][4] as Map<string, ChooserResolution>;
+    act(() => {
+      getButtonByText(container, "Cancel").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)).toBeNull();
+    expect(queryEnterDreamButtons(container)).toHaveLength(1);
+    expect(calls).toEqual([]);
+    expect(onClose).not.toHaveBeenCalled();
+    expect(logSpy).toHaveBeenCalledWith("dream_journey_chooser_cancelled", {
+      siteId: TEST_SITE_ID,
+      journeyId: "test-journey",
+      requestId: request.requestId,
+    });
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    const secondMap = applySpy.mock.calls[1][4] as Map<string, ChooserResolution>;
+
+    expect(queryChooser(container)?.textContent).toContain("Choose a card");
+    expect(secondMap).toBeInstanceOf(Map);
+    expect(secondMap).not.toBe(firstMap);
+    expect(secondMap.size).toBe(0);
+    expect(calls).toEqual([]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("progresses sequential flat choosers before applying mutations", () => {
+    const firstTemplateId = "choose_first_card";
+    const secondTemplateId = "choose_second_card";
+    stubRewards.set(
+      firstTemplateId,
+      cardChooserReward(
+        firstTemplateId,
+        cardChooserRequest("1:choose_first_card:0", "Choose first card"),
+        "Bronze",
+      ),
+    );
+    stubRewards.set(
+      secondTemplateId,
+      cardChooserReward(
+        secondTemplateId,
+        cardChooserRequest("1:choose_second_card:0", "Choose second card"),
+        "Golden",
+      ),
+    );
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        options: [
+          makeUnlockedOption({
+            ...baseOptionFields(1),
+            effects: [
+              rewardEnvelope(firstTemplateId),
+              rewardEnvelope(secondTemplateId),
+            ],
+          }),
+        ],
+      }),
+    );
+    const onClose = vi.fn();
+    const { mut, calls } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    expect(queryChooser(container)?.textContent).toContain("Choose first card");
+    act(() => {
+      getButtonByText(container, "Glimmer Knife").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Confirm").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)?.textContent).toContain("Choose second card");
+    expect(calls).toEqual([]);
+    act(() => {
+      getButtonByText(container, "Amber Lantern").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Confirm").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)).toBeNull();
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: ["deck-1", "Bronze", "dream_journey:choose_first_card"],
+      },
+      {
+        method: "transfigureDeckEntry",
+        args: ["deck-2", "Golden", "dream_journey:choose_second_card"],
+      },
+    ]);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("mounts and confirms a branch-path chooser before advancing the tree", () => {
+    const templateId = "branch_choose_card";
+    stubRewards.set(
+      templateId,
+      cardChooserReward(
+        templateId,
+        cardChooserRequest("branch-advance:branch_choose_card:0"),
+      ),
+    );
+    const manifest = makeTwoNodeTreeManifest();
+    const rootNode = manifest.tree?.nodes.find((node) => node.id === "node-1");
+    const advanceBranch = rootNode?.branches[0];
+    if (!advanceBranch) throw new Error("missing advance branch");
+    advanceBranch.effects = [rewardEnvelope(templateId)];
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const { mut, calls } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[0].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    expect(queryChooser(container)?.textContent).toContain("Choose a card");
+    expect(calls).toEqual([]);
+
+    act(() => {
+      getButtonByText(container, "Glimmer Knife").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Confirm").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)).toBeNull();
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: ["deck-1", "Bronze", "dream_journey:branch_choose_card"],
+      },
+    ]);
+    expect(onClose).not.toHaveBeenCalled();
+    expect(queryEnterDreamButtons(container)).toHaveLength(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("mounts and confirms a terminal chooser before closing", () => {
+    const templateId = "terminal_choose_card";
+    stubRewards.set(
+      templateId,
+      cardChooserReward(
+        templateId,
+        cardChooserRequest("terminal:terminal_choose_card:0"),
+      ),
+    );
+    const manifest = makeTwoNodeTreeManifest();
+    const rootNode = manifest.tree?.nodes.find((node) => node.id === "node-1");
+    const terminalBranch = rootNode?.branches[1];
+    if (!terminalBranch?.terminal) throw new Error("missing terminal branch");
+    terminalBranch.terminal.effects = [rewardEnvelope(templateId)];
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const { mut, calls } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[1].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    expect(queryChooser(container)?.textContent).toContain("Choose a card");
+    expect(calls).toEqual([]);
+    expect(onClose).not.toHaveBeenCalled();
+
+    act(() => {
+      getButtonByText(container, "Glimmer Knife").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Confirm").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)).toBeNull();
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: ["deck-1", "Bronze", "dream_journey:terminal_choose_card"],
+      },
+    ]);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("cancels a terminal chooser without committing branch mutations, then retries once", () => {
+    const branchTemplateId = "branch_gain_essence";
+    const terminalTemplateId = "terminal_choose_card";
+    stubRewards.set(branchTemplateId, immediateEssenceReward(branchTemplateId, 7));
+    stubRewards.set(
+      terminalTemplateId,
+      cardChooserReward(
+        terminalTemplateId,
+        cardChooserRequest("terminal:terminal_choose_card:0"),
+      ),
+    );
+    const manifest = makeTwoNodeTreeManifest();
+    const rootNode = manifest.tree?.nodes.find((node) => node.id === "node-1");
+    const terminalBranch = rootNode?.branches[1];
+    if (!terminalBranch?.terminal) throw new Error("missing terminal branch");
+    terminalBranch.effects = [rewardEnvelope(branchTemplateId)];
+    terminalBranch.terminal.effects = [rewardEnvelope(terminalTemplateId)];
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const { mut, calls } = createRecordingMutations();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={contextWithDeck()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    act(() => {
+      queryEnterDreamButtons(container)[1].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    expect(queryChooser(container)?.textContent).toContain("Choose a card");
+    act(() => {
+      getButtonByText(container, "Cancel").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(queryChooser(container)).toBeNull();
+    expect(queryEnterDreamButtons(container)).toHaveLength(2);
+    expect(calls).toEqual([]);
+    expect(onClose).not.toHaveBeenCalled();
+
+    act(() => {
+      queryEnterDreamButtons(container)[1].dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Glimmer Knife").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+    act(() => {
+      getButtonByText(container, "Confirm").dispatchEvent(
+        new MouseEvent("click", { bubbles: true }),
+      );
+    });
+
+    expect(calls).toEqual([
+      {
+        method: "changeEssence",
+        args: [7, "dream_journey:branch_gain_essence"],
+      },
+      {
+        method: "transfigureDeckEntry",
+        args: ["deck-1", "Bronze", "dream_journey:terminal_choose_card"],
+      },
+    ]);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("calls applyBranch on the chosen branch and advances when not terminal", () => {
+    const manifest = makeTwoNodeTreeManifest();
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const mut = createRecordingMutations().mut;
+    const branchSpy = vi
+      .spyOn(applyBranchModule, "applyBranch")
+      .mockReturnValue({ done: true });
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    const enterButtons = queryEnterDreamButtons(container);
+    expect(enterButtons).toHaveLength(2);
+
+    // Index 0 is the Advance branch (non-terminal, points at node-2).
+    act(() => {
+      enterButtons[0].dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(branchSpy).toHaveBeenCalledTimes(1);
+    const [branchArg, metaArg] = branchSpy.mock.calls[0];
+    // The first branch on the root node is the Advance branch.
+    const rootNode = manifest.tree?.nodes.find((node) => node.id === "node-1");
+    expect(branchArg).toBe(rootNode?.branches[0]);
+    expect(metaArg).toEqual({
+      siteId: TEST_SITE_ID,
+      journeyId: manifest.journeyId,
+      shapeId: manifest.shapeId,
+    });
+    expect(onClose).not.toHaveBeenCalled();
+    // Screen advanced — node-2 has a single player_choice branch.
+    expect(queryEnterDreamButtons(container)).toHaveLength(1);
+
+    act(() => {
+      root.unmount();
+    });
+    branchSpy.mockRestore();
+  });
+
+  it("applies the terminal then closes when a branch reaches a terminal", () => {
+    const manifest = makeTwoNodeTreeManifest();
+    mockedGenerate.mockReturnValue(manifest);
+    const onClose = vi.fn();
+    const mut = createRecordingMutations().mut;
+    const branchSpy = vi
+      .spyOn(applyBranchModule, "applyBranch")
+      .mockReturnValue({ done: true });
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={mut}
+      />,
+    );
+
+    const enterButtons = queryEnterDreamButtons(container);
+    expect(enterButtons).toHaveLength(2);
+
+    // Index 1 is the Claim branch — it carries an inline terminal.
+    act(() => {
+      enterButtons[1].dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    // Two apply calls: one for the chosen branch, one for the terminal the
+    // branch resolves into.
+    expect(branchSpy).toHaveBeenCalledTimes(2);
+    const rootNode = manifest.tree?.nodes.find((node) => node.id === "node-1");
+    const claimBranch = rootNode?.branches[1];
+    expect(branchSpy.mock.calls[0][0]).toBe(claimBranch);
+    // The second call is on the terminal record itself.
+    expect(branchSpy.mock.calls[1][0]).toBe(claimBranch?.terminal);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+    branchSpy.mockRestore();
   });
 });

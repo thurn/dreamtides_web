@@ -72,7 +72,12 @@ function buildContext(overrides: {
   essence?: number;
   maxEssence?: number;
   omens?: number;
-  deckEntries?: readonly { cardId: string; copies: number }[];
+  deckEntries?: readonly {
+    cardId: string;
+    copies: number;
+    entryIds?: readonly string[];
+    entryTransfigurations?: readonly (string | null)[];
+  }[];
   starterCards?: number;
   activeDreamsigns?: readonly { dreamsignId: string }[];
   dreamsignPoolIds?: readonly string[];
@@ -92,7 +97,13 @@ function buildContext(overrides: {
     },
     selectedTides: [],
     deck: {
-      entries: deckEntries.map((e) => ({ cardId: e.cardId, copies: e.copies })),
+      entries: deckEntries.map((e) => ({
+        cardId: e.cardId,
+        copies: e.copies,
+        entryIds: e.entryIds
+          ?? Array.from({ length: e.copies }, (_, index) => `${e.cardId}-${index + 1}`),
+        entryTransfigurations: e.entryTransfigurations,
+      })),
       summary: {
         totalCards,
         starterCards: overrides.starterCards ?? 0,
@@ -406,6 +417,191 @@ describe("deck-scope predicate audit", () => {
   );
 });
 
+describe("transfiguration-state viability", () => {
+  const EVENT_CARD = card({
+    id: "event-card",
+    name: "Steady Burn",
+    cardType: "Event",
+    energyCost: 2,
+  });
+  const COST_ZERO_EVENT = card({
+    id: "cost-zero-event",
+    name: "Still Spark",
+    cardType: "Event",
+    energyCost: 0,
+  });
+  const WARRIOR_CARD = card({
+    id: "warrior-1",
+    name: "Test Warrior",
+    cardType: "Character",
+    raw: { subtype: "Warrior" },
+  });
+  const STARTER_CARD = card({
+    id: "starter-1",
+    name: "Starter One",
+    cardType: "Event",
+    rarity: "Starter",
+    energyCost: 1,
+  });
+
+  it("apply_named_transfiguration_to_card_name requires an untransfigured named eligible entry", () => {
+    const t = getReward("apply_named_transfiguration_to_card_name");
+    const fullyTransfigured = buildContext({
+      cards: [EVENT_CARD],
+      deckEntries: [
+        {
+          cardId: EVENT_CARD.id,
+          copies: 1,
+          entryTransfigurations: ["Viridian"],
+        },
+      ],
+    });
+    const partiallyTransfigured = buildContext({
+      cards: [EVENT_CARD],
+      deckEntries: [
+        {
+          cardId: EVENT_CARD.id,
+          copies: 2,
+          entryTransfigurations: ["Viridian", null],
+        },
+      ],
+    });
+    expect(
+      t.viable({ transfiguration: "Viridian", cardName: EVENT_CARD.name }, fullyTransfigured),
+    ).toBe(false);
+    expect(
+      t.viable({ transfiguration: "Viridian", cardName: EVENT_CARD.name }, partiallyTransfigured),
+    ).toBe(true);
+  });
+
+  it("predicate transfiguration rewards count untransfigured matching entries", () => {
+    const random = getReward("apply_named_transfiguration_to_random_predicate_cards");
+    const all = getReward("apply_named_transfiguration_to_all_predicate_cards");
+    const partial = buildContext({
+      cards: [WARRIOR_CARD],
+      deckEntries: [
+        {
+          cardId: WARRIOR_CARD.id,
+          copies: 2,
+          entryTransfigurations: ["Golden", null],
+        },
+      ],
+    });
+    const fullyTransfigured = buildContext({
+      cards: [WARRIOR_CARD],
+      deckEntries: [
+        {
+          cardId: WARRIOR_CARD.id,
+          copies: 1,
+          entryTransfigurations: ["Golden"],
+        },
+      ],
+    });
+    expect(
+      random.viable({ predicateId: "warriors", transfiguration: "Golden", count: 2 }, partial),
+    ).toBe(false);
+    expect(
+      random.viable({ predicateId: "warriors", transfiguration: "Golden", count: 1 }, partial),
+    ).toBe(true);
+    expect(
+      all.viable({ predicateId: "warriors", transfiguration: "Golden" }, fullyTransfigured),
+    ).toBe(false);
+    expect(
+      all.viable({ predicateId: "warriors", transfiguration: "Golden" }, partial),
+    ).toBe(true);
+  });
+
+  it("predicate transfiguration rewards require eligible untransfigured entries", () => {
+    const random = getReward("apply_named_transfiguration_to_random_predicate_cards");
+    const all = getReward("apply_named_transfiguration_to_all_predicate_cards");
+    const zeroCostEvent = card({
+      id: "zero-cost-event",
+      name: "Zero Cost Event",
+      cardType: "Event",
+      energyCost: 0,
+    });
+    const ctx = buildContext({
+      cards: [zeroCostEvent],
+      deckEntries: [{ cardId: zeroCostEvent.id, copies: 1 }],
+    });
+
+    expect(
+      random.viable({ predicateId: "events", transfiguration: "Viridian", count: 1 }, ctx),
+    ).toBe(false);
+    expect(
+      all.viable({ predicateId: "events", transfiguration: "Viridian" }, ctx),
+    ).toBe(false);
+  });
+
+  it("predicate transfiguration apply rewards admit eligible concrete deck entries when the catalog has ineligible matches", () => {
+    const random = getReward("apply_named_transfiguration_to_random_predicate_cards");
+    const all = getReward("apply_named_transfiguration_to_all_predicate_cards");
+    const ctx = buildContext({
+      cards: [EVENT_CARD, COST_ZERO_EVENT],
+      deckEntries: [{ cardId: EVENT_CARD.id, copies: 2 }],
+    });
+
+    expect(
+      random.viable({ predicateId: "events", transfiguration: "Viridian", count: 2 }, ctx),
+    ).toBe(true);
+    expect(
+      all.viable({ predicateId: "events", transfiguration: "Viridian" }, ctx),
+    ).toBe(true);
+  });
+
+  it("starter transfiguration rewards count untransfigured starter entries", () => {
+    const random = getReward("transfigure_random_starters");
+    const all = getReward("transfigure_all_starters");
+    const partial = buildContext({
+      cards: [STARTER_CARD],
+      starterCards: 2,
+      deckEntries: [
+        {
+          cardId: STARTER_CARD.id,
+          copies: 2,
+          entryTransfigurations: ["Golden", null],
+        },
+      ],
+    });
+    const fullyTransfigured = buildContext({
+      cards: [STARTER_CARD],
+      starterCards: 1,
+      deckEntries: [
+        {
+          cardId: STARTER_CARD.id,
+          copies: 1,
+          entryTransfigurations: ["Golden"],
+        },
+      ],
+    });
+    expect(random.viable({ count: 2 }, partial)).toBe(false);
+    expect(random.viable({ count: 1 }, partial)).toBe(true);
+    expect(all.viable({}, fullyTransfigured)).toBe(false);
+    expect(all.viable({}, partial)).toBe(true);
+  });
+
+  it("apply_random_transfigurations_to_random_cards counts untransfigured deck entries", () => {
+    const t = getReward("apply_random_transfigurations_to_random_cards");
+    const ctx = buildContext({
+      cards: [EVENT_CARD, STARTER_CARD],
+      deckEntries: [
+        {
+          cardId: EVENT_CARD.id,
+          copies: 1,
+          entryTransfigurations: ["Viridian"],
+        },
+        {
+          cardId: STARTER_CARD.id,
+          copies: 1,
+          entryTransfigurations: [null],
+        },
+      ],
+    });
+    expect(t.viable({ count: 2 }, ctx)).toBe(false);
+    expect(t.viable({ count: 1 }, ctx)).toBe(true);
+  });
+});
+
 describe("named-card deck-scope audit", () => {
   // Templates whose params name a specific card route through
   // `deckContainsCardByName`. A regression that reverts to a deck-non-empty
@@ -416,10 +612,8 @@ describe("named-card deck-scope audit", () => {
 
   // Each entry pairs a template id with its params shape (referencing
   // "Steady Burn" as the named card). `apply_named_transfiguration_to_
-  // card_name` is intentionally excluded: that template gates on
-  // transfiguration eligibility ("any deck card eligible for the named
-  // transfiguration"), not on the specific named card being present, so it
-  // belongs in the transfiguration suite.
+  // card_name` is covered in the transfiguration-state suite because it also
+  // depends on per-entry transfiguration state and per-card eligibility.
   const NAMED_CARD_CASES = [
     { id: "duplicate_named_card_X", params: { cardName: "Steady Burn", count: 1 } },
     {
@@ -595,6 +789,13 @@ describe("dreamwell-keyed rewards self-hide until content lands", () => {
 });
 
 describe("meta_gain_2_rewards (compound) viability", () => {
+  const STARTER_CARD = card({
+    id: "starter-meta",
+    name: "Starter Meta",
+    rarity: "Starter",
+    energyCost: 1,
+  });
+
   it("declines an empty context when both sub-rewards decline", () => {
     // Hand-pick two sub-rewards that are guaranteed to decline on an empty
     // fixture. `purge_X_banes` needs banes; `purge_all_banes` likewise. This
@@ -624,5 +825,69 @@ describe("meta_gain_2_rewards (compound) viability", () => {
       ] as readonly [Record<string, unknown>, Record<string, unknown>],
     };
     expect(t.viable(params, ctx)).toBe(true);
+  });
+
+  it("declines mutually invalidating starter rewards in either order", () => {
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext({
+      cards: [STARTER_CARD],
+      deckEntries: [{ cardId: STARTER_CARD.id, copies: 1 }],
+      starterCards: 1,
+    });
+    expect(getReward("purge_all_starters").viable({}, ctx)).toBe(true);
+    expect(getReward("transfigure_all_starters").viable({}, ctx)).toBe(true);
+    for (const subIds of [
+      ["purge_all_starters", "transfigure_all_starters"],
+      ["transfigure_all_starters", "purge_all_starters"],
+    ] as const) {
+      expect(t.viable({
+        subIds,
+        subParams: [{}, {}] as const,
+      }, ctx), subIds.join(" + ")).toBe(false);
+    }
+  });
+
+  it("declines mutually invalidating bane purge rewards in either order", () => {
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext({ banes: [{ baneName: "Doubt" }, { baneName: "Dread" }] });
+    expect(getReward("purge_X_banes").viable({ count: 1 }, ctx)).toBe(true);
+    expect(getReward("purge_all_banes").viable({}, ctx)).toBe(true);
+    for (const { subIds, subParams } of [
+      {
+        subIds: ["purge_all_banes", "purge_X_banes"] as const,
+        subParams: [{}, { count: 1 }] as const,
+      },
+      {
+        subIds: ["purge_X_banes", "purge_all_banes"] as const,
+        subParams: [{ count: 1 }, {}] as const,
+      },
+    ] as const) {
+      expect(t.viable({
+        subIds,
+        subParams,
+      }, ctx), subIds.join(" + ")).toBe(false);
+    }
+  });
+
+  it("rollParams filters explicitly incompatible reward pairs", () => {
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext({
+      cards: [STARTER_CARD],
+      deckEntries: [{ cardId: STARTER_CARD.id, copies: 1 }],
+      starterCards: 1,
+      banes: [{ baneName: "Doubt" }, { baneName: "Dread" }],
+    });
+    const incompatiblePairs = new Set([
+      "purge_all_starters+transfigure_all_starters",
+      "transfigure_all_starters+purge_all_starters",
+      "purge_all_banes+purge_X_banes",
+      "purge_X_banes+purge_all_banes",
+    ]);
+
+    for (let selectionAttempt = 0; selectionAttempt < 500; selectionAttempt += 1) {
+      const params = t.rollParams(ctx, { ...draw, selectionAttempt });
+      const subIds = (params as { subIds: readonly string[] }).subIds;
+      expect(incompatiblePairs.has(subIds.join("+"))).toBe(false);
+    }
   });
 });

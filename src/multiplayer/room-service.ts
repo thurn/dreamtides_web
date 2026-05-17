@@ -289,6 +289,10 @@ function normalizeQuestState(questState: QuestState | null | undefined): QuestSt
     failureSummary: questState.failureSummary ?? null,
     hasSeenStartingDeckPopup:
       questState.hasSeenStartingDeckPopup ?? defaults.hasSeenStartingDeckPopup,
+    battleModifiers: questState.battleModifiers ?? defaults.battleModifiers,
+    shopModifiers: questState.shopModifiers ?? defaults.shopModifiers,
+    dreamscapeModifiers:
+      questState.dreamscapeModifiers ?? defaults.dreamscapeModifiers,
   };
 }
 

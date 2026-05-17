@@ -664,12 +664,12 @@ export function DeckViewer({
                         </p>
                       </div>
                     </div>
-                    <p
+                    <div
                       className="mt-2 text-[11px] leading-relaxed opacity-70"
                       style={{ color: "#e2e8f0" }}
                     >
                       <RulesText text={state.dreamcaller.renderedText} />
-                    </p>
+                    </div>
                   </div>
                 ) : (
                   <p className="text-xs opacity-40">
@@ -729,12 +729,12 @@ export function DeckViewer({
                               </span>
                             )}
                           </div>
-                          <p
+                          <div
                             className="text-[10px] leading-snug opacity-70"
                             style={{ color: "#e2e8f0" }}
                           >
                             <RulesText text={sign.effectDescription} />
-                          </p>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -874,9 +874,9 @@ function MobileSidebar({
                       >
                         {dreamcaller.title}
                       </p>
-                      <p className="mt-0.5 text-[10px] opacity-60">
+                      <div className="mt-0.5 text-[10px] opacity-60">
                         <RulesText text={dreamcaller.renderedText} />
-                      </p>
+                      </div>
                     </div>
                   </div>
                 ) : (
@@ -929,12 +929,12 @@ function MobileSidebar({
                             </span>
                           )}
                         </div>
-                        <p
+                        <div
                           className="text-[10px] leading-snug opacity-60"
                           style={{ color: "#e2e8f0" }}
                         >
                           <RulesText text={sign.effectDescription} />
-                        </p>
+                        </div>
                       </div>
                     </div>
                   ))

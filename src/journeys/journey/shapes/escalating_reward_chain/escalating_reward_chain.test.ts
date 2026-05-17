@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
 
+import {
+  narrowSharedCostPayload,
+  narrowSharedRewardPayload,
+} from "../../../apply/payloads";
+import { advanceTree } from "../../../util/tree";
 import { buildFixtureContext, FIXTURE_DRAW_CONTEXT } from "../__shared__/fixture";
 import { escalatingRewardChainPlugin } from "./index";
 
@@ -52,5 +57,52 @@ describe("escalating_reward_chain shape", () => {
     // The chain's deterministic player choices leave the precommitted random
     // bundle empty — nothing to roll ahead of time.
     expect(filled.precommitted.random ?? []).toEqual([]);
+  });
+
+  it("emits dispatchable pay-essence costs and shared rewards on visible take branches", () => {
+    const ctx = buildFixtureContext();
+    const filled = escalatingRewardChainPlugin.fill({
+      context: ctx,
+      drawContext: FIXTURE_DRAW_CONTEXT,
+      stage: "mid",
+    });
+    const tree = filled.tree!;
+
+    for (const node of tree.nodes) {
+      const take = node.branches[1];
+      const cost = narrowSharedCostPayload(take.costs[0]);
+      expect(cost?.templateId).toBe("pay_essence");
+      expect(cost?.params).toEqual({ x: take.costConvertedEssence });
+      expect(cost?.convertedEssence).toBe(take.costConvertedEssence);
+
+      const reward = narrowSharedRewardPayload(take.effects[0]);
+      expect(take.rewardTemplateIds ?? []).toContain(reward?.templateId);
+      expect(reward?.convertedEssence).toBe(take.effectConvertedEssence);
+    }
+  });
+
+  it("dispatches the final Take branch immediate envelopes once", () => {
+    const ctx = buildFixtureContext();
+    const filled = escalatingRewardChainPlugin.fill({
+      context: ctx,
+      drawContext: FIXTURE_DRAW_CONTEXT,
+      stage: "mid",
+    });
+    const tree = filled.tree!;
+    const finalTake = tree.nodes[tree.nodes.length - 1].branches[1];
+    const result = advanceTree(tree, finalTake.id, filled.precommitted);
+
+    expect(result.terminal).not.toBeNull();
+    const appliedCosts = [
+      ...finalTake.costs,
+      ...(result.terminal?.costs ?? []),
+    ].map(narrowSharedCostPayload);
+    const appliedRewards = [
+      ...finalTake.effects,
+      ...(result.terminal?.effects ?? []),
+    ].map(narrowSharedRewardPayload);
+
+    expect(appliedCosts.filter(Boolean)).toHaveLength(1);
+    expect(appliedRewards.filter(Boolean)).toHaveLength(1);
   });
 });

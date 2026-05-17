@@ -14,6 +14,7 @@ import { buildPrecommittedOperations } from "../../operationBuilders";
 import { COSTS } from "../../shared/costs";
 import { REWARDS } from "../../shared/rewards";
 import type { Cost, Reward, TemplateParams } from "../../shared/types";
+import type { SharedCostPayload, SharedRewardPayload } from "../../../apply/payloads";
 import type { FilledJourney, ShapeFillArgs } from "../types";
 
 const SHAPE_ID = "commit_now_future_payoff";
@@ -158,23 +159,11 @@ type TimingProfile = {
   readonly expiration: HookExpirationPolicy;
 };
 
-type SharedRewardPayload = {
-  readonly kind: "shared_reward_template";
-  readonly templateId: string;
-  readonly params: TemplateParams;
-  readonly text: string;
-  readonly timing: "delayed";
-  readonly convertedEssence: number;
-};
-
-type SharedCostPayload = {
-  readonly kind: "shared_cost_template";
-  readonly templateId: string;
-  readonly params: TemplateParams;
-  readonly text: string;
-  readonly timing: "immediate";
-  readonly convertedEssence: number;
-};
+// The `timing` field stays local: `operationBuilders.timingFromPayload` reads
+// `payload.timing` to derive `OperationTiming` for the manifest, so we keep it
+// at runtime by intersecting the shared envelope type with the local extension.
+type CommitNowCostPayload = SharedCostPayload & { readonly timing: "immediate" };
+type CommitNowRewardPayload = SharedRewardPayload & { readonly timing: "delayed" };
 
 const TIMING_PROFILES: readonly TimingProfile[] = [
   {
@@ -597,7 +586,7 @@ function pickCommitmentRows(args: ShapeFillArgs): readonly CommitmentRow[] {
   return rows;
 }
 
-function costPayload(cost: RolledCost): SharedCostPayload {
+function costPayload(cost: RolledCost): CommitNowCostPayload {
   return {
     kind: "shared_cost_template",
     templateId: cost.template.id,
@@ -608,7 +597,7 @@ function costPayload(cost: RolledCost): SharedCostPayload {
   };
 }
 
-function rewardPayload(reward: RolledReward): SharedRewardPayload {
+function rewardPayload(reward: RolledReward): CommitNowRewardPayload {
   return {
     kind: "shared_reward_template",
     templateId: reward.template.id,

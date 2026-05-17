@@ -10,7 +10,7 @@
 
 **Spec:** `docs/superpowers/specs/2026-05-16-dream-journey-effects-design.md` is the source of truth for the `JourneyMutations` method list, `QuestState` field shapes, per-template apply behavior, chooser contract, and rollout boundaries. This plan references spec sections by name; **do not re-decide anything the spec already settled** — if the spec and this plan disagree, the spec wins.
 
-**Worktree rule:** All work executes on the dedicated worktree created in Task 0 on branch `dream-journey-effects`. **Nothing is pushed to master at any point.**
+**Worktree rule:** All work executes on the dedicated worktree at `/Users/dthurn/quest_prototype/.claude/worktrees/dream-journey-effects` on branch `worktree-dream-journey-effects` (created by the super-using-git-worktrees skill via the harness's native `EnterWorktree` tool — note the `worktree-` prefix the harness adds). **Nothing is pushed to master at any point.**
 
 ---
 
@@ -69,25 +69,18 @@
 
 - [ ] **Step 1: Create the worktree via the super-using-git-worktrees skill**
 
-The skill creates a sibling worktree at `../quest_prototype-dream-effects` on a new branch `dream-journey-effects` rooted at the current `master` commit. From here, every subsequent task runs in the worktree, not in the primary checkout.
-
-If executing manually instead of via the skill:
-
-```bash
-git worktree add ../quest_prototype-dream-effects -b dream-journey-effects
-cd ../quest_prototype-dream-effects
-```
+The skill uses the harness's native `EnterWorktree` tool, which creates the worktree at `.claude/worktrees/dream-journey-effects` on a branch named `worktree-dream-journey-effects` (the harness prefixes the supplied name with `worktree-`). From here, every subsequent task runs in the worktree, not in the primary checkout.
 
 - [ ] **Step 2: Verify environment**
 
 Run from inside the worktree:
 
 ```bash
-git branch --show-current   # → dream-journey-effects
+git branch --show-current   # → worktree-dream-journey-effects
 git rev-parse HEAD          # → matches master HEAD
-npm install                 # ensures node_modules in the worktree (or symlink the parent's, per repo policy)
+npm install                 # populate node_modules inside the worktree
 npm run typecheck           # baseline must pass
-npx vitest run              # baseline must pass
+npm test                    # baseline must pass (== `vitest run`)
 ```
 
 If `npm run typecheck` is not the right command, grep `package.json` for the script and update the command throughout the plan.
@@ -657,19 +650,19 @@ wave1: apply bane templates.
 
 **Templates in scope:** `purge_named_dreamsign`, `purge_random_dreamsign` (costs); `gain_random_dreamsign`, `gain_named_dreamsign`, `gain_copy_of_random_dreamsign` (rewards). Chosen variants defer to Wave 2.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Per template, assert exact recorded calls. For `gain_random_dreamsign` with a 2-element `dreamsignPoolIds` fixture, the rolled dreamsign id matches the deterministic seed; the recorded call is `addDreamsign(<dreamsign>, "dream_journey:gain_random_dreamsign", undefined)`. For `purge_named_dreamsign`, the `index` argument matches the position of the named dreamsign in `activeDreamsigns`.
 
-- [ ] **Step 2: Run, confirm failure**
+- [x] **Step 2: Run, confirm failure**
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 For named-dreamsign lookups, resolve from the content bundle (use the existing `ctx.content.dreamsigns` lookup pattern from `costs.ts`). For random rolls, use the same `pickFromList` / `drawInt` helpers `rollParams` already uses; pin the labeled-RNG key prefix to the template id.
 
-- [ ] **Step 4: Run, confirm pass**
+- [x] **Step 4: Run, confirm pass**
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```
 wave1: apply dreamsign templates (non-choice).
@@ -1344,7 +1337,7 @@ git tag wave2-complete
 - [ ] **Step 4: Inform the user**
 
 Report:
-- Branch: `dream-journey-effects` on the worktree at `../quest_prototype-dream-effects`.
+- Branch: `worktree-dream-journey-effects` on the worktree at `/Users/dthurn/quest_prototype/.claude/worktrees/dream-journey-effects`.
 - Local tags: `wave1-complete`, `wave2-complete`.
 - Commit count and a sketch of the final two-commit squash plan if/when the user wants to consolidate.
 - Reminder: nothing has been pushed to master; the user decides next steps.

@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
 
+import {
+  narrowSharedCostPayload,
+  narrowSharedRewardPayload,
+} from "../../../apply/payloads";
+import { advanceTree } from "../../../util/tree";
 import { buildFixtureContext, FIXTURE_DRAW_CONTEXT } from "../__shared__/fixture";
 import { pushYourLuckPlugin } from "./index";
 
@@ -64,5 +69,63 @@ describe("push_your_luck shape", () => {
     for (const attempt of attempts) {
       expect(branchIds.has(attempt.id)).toBe(true);
     }
+  });
+
+  it("emits dispatchable pay-essence costs on visible attempt branches and precommit attempts", () => {
+    const ctx = buildFixtureContext();
+    const filled = pushYourLuckPlugin.fill({
+      context: ctx,
+      drawContext: FIXTURE_DRAW_CONTEXT,
+      stage: "mid",
+    });
+    const tree = filled.tree!;
+    const attempts = tree.nodes.map((node) => node.branches[1]);
+
+    for (const branch of attempts) {
+      const cost = narrowSharedCostPayload(branch.costs[0]);
+      expect(cost?.templateId).toBe("pay_essence");
+      expect(cost?.params).toEqual({ x: branch.costConvertedEssence });
+      expect(cost?.convertedEssence).toBe(branch.costConvertedEssence);
+
+      const reward = narrowSharedRewardPayload(branch.effects[0]);
+      expect(branch.rewardTemplateIds ?? []).toContain(reward?.templateId);
+      expect(reward?.convertedEssence).toBe(branch.effectConvertedEssence);
+    }
+
+    const pushEnvelope = (filled.precommitted.random ?? []).find(
+      (entry) => entry.kind === "push_choice",
+    ) as { attempts: ReadonlyArray<{ costs: readonly unknown[]; effects: readonly unknown[] }> };
+
+    for (const attempt of pushEnvelope.attempts) {
+      expect(narrowSharedCostPayload(attempt.costs[0])?.templateId).toBe(
+        "pay_essence",
+      );
+      expect(narrowSharedRewardPayload(attempt.effects[0])).not.toBeNull();
+    }
+  });
+
+  it("dispatches the final Attempt branch immediate envelopes once", () => {
+    const ctx = buildFixtureContext();
+    const filled = pushYourLuckPlugin.fill({
+      context: ctx,
+      drawContext: FIXTURE_DRAW_CONTEXT,
+      stage: "mid",
+    });
+    const tree = filled.tree!;
+    const finalAttempt = tree.nodes[tree.nodes.length - 1].branches[1];
+    const result = advanceTree(tree, finalAttempt.id, filled.precommitted);
+
+    expect(result.terminal).not.toBeNull();
+    const appliedCosts = [
+      ...finalAttempt.costs,
+      ...(result.terminal?.costs ?? []),
+    ].map(narrowSharedCostPayload);
+    const appliedRewards = [
+      ...finalAttempt.effects,
+      ...(result.terminal?.effects ?? []),
+    ].map(narrowSharedRewardPayload);
+
+    expect(appliedCosts.filter(Boolean)).toHaveLength(1);
+    expect(appliedRewards.filter(Boolean)).toHaveLength(1);
   });
 });

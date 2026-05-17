@@ -139,6 +139,13 @@ function setQuestState({
       activeSiteId: "site-7",
       failureSummary: null,
       hasSeenStartingDeckPopup: false,
+      battleModifiers: [],
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 0,
+        essenceDiscountPercent: 0,
+      },
+      dreamscapeModifiers: [],
     },
     mutations: {
       changeEssence: vi.fn(),
@@ -179,6 +186,25 @@ function setQuestState({
       dismissStartingDeckPopup: vi.fn(),
       bootstrapStartInBattle: vi.fn(),
       resetQuest: vi.fn(),
+      changeOmens: vi.fn(),
+      setEssence: vi.fn(),
+      changeMaxEssence: vi.fn(),
+      addCardById: vi.fn(),
+      addCardByIdWithTransfiguration: vi.fn(),
+      addBaneCardById: vi.fn(),
+      removeDeckEntry: vi.fn(),
+      duplicateDeckEntry: vi.fn(),
+      purgeRandomBaneCards: vi.fn(),
+      purgeAllBaneCards: vi.fn(),
+      pushBattleRewardModifier: vi.fn(),
+      pushTemporaryBaneGrant: vi.fn(),
+      addSiteToDreamscape: vi.fn(),
+      replaceSiteType: vi.fn(),
+      removeSiteTypeFromNextDreamscapes: vi.fn(),
+      grantFreeShopRerolls: vi.fn(),
+      applyShopEssenceDiscount: vi.fn(),
+      grantShopOmenDiscounts: vi.fn(),
+      boostSiteAppearance: vi.fn(),
     },
     cardDatabase: new Map(),
     questContent: {
@@ -292,7 +318,9 @@ describe("BattleSiteRoute", () => {
 
     expect(ensureSpy).toHaveBeenCalled();
     const lastCall = ensureSpy.mock.calls[ensureSpy.mock.calls.length - 1];
-    expect(lastCall).toBeDefined();
+    if (lastCall === undefined) {
+      throw new Error("Expected ensureBattleSession to be called");
+    }
     expect(lastCall[0].battleEntryKey).toBe("site-7::3::dreamscape-2");
     expect(lastCall[0].roomId).toBe("room-1");
     expect(lastCall[0].battleState).toBeNull();

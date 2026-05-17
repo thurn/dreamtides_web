@@ -4,7 +4,8 @@ import type { JourneyContext } from "../../context";
 import { weightedChoice, type DrawContext } from "../../../util/rng";
 import { makeUnlockedOption, type JourneyOption, type JourneyStage } from "../../manifest";
 import { REWARDS } from "../../shared/rewards";
-import type { Reward } from "../../shared/types";
+import type { Reward, TemplateParams } from "../../shared/types";
+import type { SharedRewardPayload } from "../../../apply/payloads";
 import type { FilledJourney, ShapeFillArgs } from "../types";
 
 const SHAPE_LABEL = "heterogeneous_pair";
@@ -72,7 +73,7 @@ type RewardProfile = {
 
 type RolledReward = {
   readonly template: Reward;
-  readonly params: unknown;
+  readonly params: TemplateParams;
   readonly cec: number;
   readonly text: string;
   readonly axes: ReadonlySet<RewardAxis>;
@@ -86,6 +87,8 @@ function emptyOption(
   number: number,
   reward: RolledReward,
 ): JourneyOption {
+  const effectPayload = rewardEnvelope(reward);
+
   return makeUnlockedOption({
     number,
     symbols: [
@@ -98,7 +101,7 @@ function emptyOption(
     text: reward.text,
     operations: [],
     costs: [],
-    effects: [],
+    effects: [effectPayload],
     burdens: [],
     targets: [],
     triggers: [],
@@ -113,8 +116,18 @@ function emptyOption(
   });
 }
 
+function rewardEnvelope(reward: RolledReward): SharedRewardPayload {
+  return {
+    kind: "shared_reward_template",
+    templateId: reward.template.id,
+    params: reward.params,
+    text: reward.text,
+    convertedEssence: reward.cec,
+  };
+}
+
 function subTemplateIds(
-  rolled: { template: Reward; params: unknown },
+  rolled: { template: Reward; params: TemplateParams },
 ): readonly string[] {
   if (rolled.template.id === "meta_gain_2_rewards") {
     return (rolled.params as { subIds: readonly [string, string] }).subIds;
@@ -124,7 +137,7 @@ function subTemplateIds(
 }
 
 function consumedTemplateIds(
-  rolled: { template: Reward; params: unknown },
+  rolled: { template: Reward; params: TemplateParams },
 ): readonly string[] {
   return [rolled.template.id, ...subTemplateIds(rolled)];
 }

@@ -343,12 +343,12 @@ function BaneDreamsignDisplay({ dreamsign }: { dreamsign: Dreamsign }) {
       >
         {dreamsign.name}
       </h3>
-      <p
+      <div
         className="text-center text-xs leading-relaxed opacity-60"
         style={{ color: "#e2e8f0" }}
       >
         <RulesText text={dreamsign.effectDescription} />
-      </p>
+      </div>
       {/* Tainted overlay */}
       <div
         className="pointer-events-none absolute inset-0 rounded-xl"

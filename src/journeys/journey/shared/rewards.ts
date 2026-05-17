@@ -23,13 +23,11 @@
 //     (or `starterCardCount >= 1`), which surfaced a no-op option when
 //     the deck held different cards.
 //   - Transfiguration eligibility: rewards applying a SPECIFIC
-//     transfiguration (apply_named_transfiguration_to_card_name) route
-//     through `transfigurationHasEligibleTarget(ctx, transfigurationId)`,
-//     checking the named transfiguration's per-card eligibility filter
-//     against the deck. Other apply_named_transfiguration_* rewards keep
-//     the CLI's `predicateAdmitsTransfiguration` (a soundness check at
-//     rollParams time) and additionally gate on
-//     `deckContainsPredicate(ctx, predicateId, count)`.
+//     transfiguration to a named card require an untransfigured named entry
+//     that passes the transfiguration's per-card eligibility filter. Predicate
+//     random/all apply rewards gate on the same eligible untransfigured
+//     concrete deck entries that apply mutates; choice paths keep the
+//     `predicateAdmitsTransfiguration` soundness check for player selection.
 //   - Random-cards-from-deck rewards (modify_random_cards_to_types,
 //     make_random_cards_fast): CLI used `ctx.content.cards.length >= N`
 //     (catalog). Upgraded to `deckHasMinSize(ctx, N)` so the option is
@@ -51,15 +49,19 @@
 //     content lands. Mirrors the Task 8 treatment of the negative-side
 //     dreamwell costs.
 //   - Deck-size-N rewards (duplicate_chosen_cards, draw_X_and_duplicate_
-//     chosen, make_random_cards_reclaim, apply_random_transfigurations_to_
-//     random_cards): inline `deck.summary.totalCards >= N` upgraded to
-//     `deckHasMinSize` for consistency with the audit helpers.
+//     chosen, make_random_cards_reclaim): inline `deck.summary.totalCards >=
+//     N` upgraded to `deckHasMinSize` for consistency with the audit helpers.
+//     apply_random_transfigurations_to_random_cards counts untransfigured
+//     concrete deck entries so viability matches the apply target set.
 //   - Resource and route/shop rewards: viable = `() => true`, matching the
 //     CLI's stance. card_cost_reduction_for_X_battles is "always viable in
 //     kind" — the discount applies even with an empty deck.
 
 import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
+import type { JourneyMutations } from "../../apply/JourneyMutations";
+import { logSkippedVisualTemplate } from "../../apply/skipLog";
+import type { DreamsignContent } from "../../content/types";
 import type { JourneyContext } from "../context";
 import { CARD_CEC, STAGE_MULTIPLIER, cardPoolCEC } from "./cec";
 import {
@@ -75,6 +77,19 @@ import {
   starterCardCount,
   transfigurationsEligibleForPredicate,
 } from "./content";
+import {
+  findDeckEntriesByName,
+  findDeckEntriesByPredicate,
+  findFirstDeckEntryIdByCardName,
+  findFirstStarterDeckEntryId,
+  findProjectedDeckEntry,
+  findUntransfiguredDeckEntriesByName,
+  findUntransfiguredDeckEntriesByPredicate,
+  findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration,
+  findUntransfiguredDeckEntryIds,
+  projectedDeckEntries,
+} from "./deckEntries";
+import { pickUniqueCardIds } from "./costs";
 import { POSITIVE_DREAMWELL_CARDS } from "./dreamwell";
 import { PREDICATES, getPredicate } from "./predicates";
 import { quoteName } from "./text";
@@ -82,13 +97,30 @@ import type { Predicate, PredicateKind, Reward, TemplateParams } from "./types";
 import {
   deckContainsCardByName,
   deckContainsPredicate,
+  deckContainsUntransfiguredCardByName,
+  deckContainsUntransfiguredPredicate,
+  deckHasUntransfiguredMinSize,
   deckHasMinSize,
-  transfigurationHasEligibleTarget,
 } from "./viability";
 
 const POSITIVE_TEMPORARY_BATTLE_MIN = 3;
 const POSITIVE_TEMPORARY_BATTLE_MAX = 3;
 const BOOST_SITE_DURATION_DREAMSCAPES = 3;
+
+type DreamsignForApply = Parameters<JourneyMutations["addDreamsign"]>[0];
+type SiteTypeForApply = Parameters<JourneyMutations["addSiteToDreamscape"]>[1];
+type TransfigurationForApply = Exclude<
+  Parameters<JourneyMutations["transfigureDeckEntry"]>[1],
+  null
+>;
+
+function applyDrawContext(ctx: JourneyContext): DrawContext {
+  return {
+    seed: ctx.state.quest.seed,
+    contentVersion: ctx.contentVersion,
+    rootJourneyIndex: 0,
+  };
+}
 
 function rollPositiveTemporaryBattles(draw: DrawContext, label: string): number {
   return drawInt(draw, label, POSITIVE_TEMPORARY_BATTLE_MIN, POSITIVE_TEMPORARY_BATTLE_MAX);
@@ -121,6 +153,55 @@ function inactivePoolDreamsigns(ctx: JourneyContext) {
   return poolDreamsignsById(ctx).filter((dreamsign) => !activeIds.has(dreamsign.id));
 }
 
+function pickUniqueDreamsignIds(
+  draw: DrawContext,
+  label: string,
+  pool: readonly DreamsignContent[],
+  count: number,
+): string[] {
+  const remaining = [...pool];
+  const picked: string[] = [];
+
+  for (let i = 0; i < count && remaining.length > 0; i += 1) {
+    const dreamsign = pickFromList(draw, `${label}:${String(i)}`, remaining);
+    picked.push(dreamsign.id);
+    remaining.splice(
+      remaining.findIndex((candidate) => candidate.id === dreamsign.id),
+      1,
+    );
+  }
+
+  return picked;
+}
+
+// Pull a string off a DreamsignContent's `raw` payload when present. The
+// content bridge stores image fields conditionally (omitted when the source
+// template has no value), so the lookup must tolerate both missing keys and
+// non-string values.
+function rawString(raw: Record<string, unknown>, key: string): string | undefined {
+  const value = raw[key];
+  return typeof value === "string" ? value : undefined;
+}
+
+// Convert a journey-internal `DreamsignContent` into the quest-prototype's
+// `Dreamsign` shape that `JourneyMutations.addDreamsign` expects. The
+// `effectDescription` field maps from `renderedText` (which the content bridge
+// itself sourced from the prototype's `effectDescription`). Optional image
+// fields, if present in the source's `raw` payload, are forwarded; otherwise
+// they are left undefined to match the prototype's optional-field convention.
+function projectDreamsignForApply(source: DreamsignContent): DreamsignForApply {
+  const imageName = rawString(source.raw, "image-name");
+  const imageAlt = rawString(source.raw, "image-alt");
+  return {
+    id: source.id,
+    name: source.name,
+    effectDescription: source.renderedText,
+    ...(imageName === undefined ? {} : { imageName }),
+    ...(imageAlt === undefined ? {} : { imageAlt }),
+    isBane: false,
+  };
+}
+
 // Roll a transfiguration that is compatible with the given predicate's match
 // set. Falls back to the canonical set when no transfiguration is applicable;
 // the surrounding `viable` check filters out impossible combinations in that
@@ -135,6 +216,87 @@ function pickTransfigurationForPredicate(
   const eligible = transfigurationsEligibleForPredicate(ctx, predicate.cardPredicate ?? {});
   const pool = eligible.length > 0 ? eligible : JOURNEY_TRANSFIGURATIONS;
   return pickFromList(draw, label, pool);
+}
+
+function pickUniqueDeckEntryIds(
+  draw: DrawContext,
+  label: string,
+  entryIds: readonly string[],
+  count: number,
+): string[] {
+  const remaining = [...entryIds];
+  const picked: string[] = [];
+
+  for (let i = 0; i < count && remaining.length > 0; i += 1) {
+    const entryId = pickFromList(draw, `${label}:${i}`, remaining);
+    picked.push(entryId);
+    remaining.splice(remaining.indexOf(entryId), 1);
+  }
+
+  return picked;
+}
+
+function transfigurationForApply(transfiguration: string): TransfigurationForApply {
+  return transfiguration as TransfigurationForApply;
+}
+
+const SITE_TYPE_FOR_APPLY_BY_JOURNEY_LABEL: ReadonlyMap<string, SiteTypeForApply> = new Map([
+  ["Battle", "Battle"],
+  ["Draft", "Draft"],
+  ["Essence", "Essence"],
+  ["Shop", "Shop"],
+  ["Specialty Shop", "SpecialtyShop"],
+  ["SpecialtyShop", "SpecialtyShop"],
+  ["Purge", "Purge"],
+  ["Transfiguration", "Transfiguration"],
+  ["Dreamsign Offering", "DreamsignOffering"],
+  ["DreamsignOffering", "DreamsignOffering"],
+  ["Dreamsign Draft", "DreamsignDraft"],
+  ["DreamsignDraft", "DreamsignDraft"],
+  ["Dream Journey", "DreamJourney"],
+  ["DreamJourney", "DreamJourney"],
+  ["Duplication", "Duplication"],
+  ["Reward", "Reward"],
+  ["Cleanse", "Cleanse"],
+]);
+
+function siteTypeForApply(templateId: string, siteLabel: string): SiteTypeForApply | undefined {
+  const siteType = SITE_TYPE_FOR_APPLY_BY_JOURNEY_LABEL.get(siteLabel);
+  if (siteType === undefined) {
+    console.warn(
+      `[journeys/apply] ${templateId} skipped: unknown site type ${JSON.stringify(siteLabel)}`,
+    );
+  }
+  return siteType;
+}
+
+function pickRandomTransfigurationForEntry(
+  ctx: JourneyContext,
+  draw: DrawContext,
+  templateId: string,
+  label: string,
+  entryId: string,
+): TransfigurationForApply | undefined {
+  const projected = findProjectedDeckEntry(ctx, entryId);
+  const card = projected?.card;
+  if (card === undefined) {
+    warnSkippedCardApply(
+      templateId,
+      `catalog card for deck entry ${JSON.stringify(entryId)} was not found`,
+    );
+    return undefined;
+  }
+  const eligible = JOURNEY_TRANSFIGURATIONS.filter((transfiguration) =>
+    isCardEligibleForTransfiguration(transfiguration, card),
+  );
+  if (eligible.length === 0) {
+    warnSkippedCardApply(
+      templateId,
+      `no eligible transfigurations for deck entry ${JSON.stringify(entryId)}`,
+    );
+    return undefined;
+  }
+  return transfigurationForApply(pickFromList(draw, label, eligible));
 }
 
 function predicateAdmitsTransfiguration(
@@ -154,6 +316,579 @@ function predicateAdmitsTransfiguration(
   return matches.every((card) => isCardEligibleForTransfiguration(transfiguration, card));
 }
 
+function resolveCardIdByName(ctx: JourneyContext, name: string): string | undefined {
+  return ctx.content.cards.find((card) => card.name === name)?.id;
+}
+
+function warnSkippedCardApply(templateId: string, reason: string): void {
+  console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
+}
+
+function warnSkippedDreamsignApply(templateId: string, reason: string): void {
+  console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
+}
+
+function isJourneyTransfiguration(value: string): boolean {
+  return JOURNEY_TRANSFIGURATIONS.includes(
+    value as (typeof JOURNEY_TRANSFIGURATIONS)[number],
+  );
+}
+
+function untransfiguredDeckEntriesEligibleForTransfiguration(
+  ctx: JourneyContext,
+  transfiguration: string,
+): string[] {
+  return findUntransfiguredDeckEntryIds(ctx).filter((entryId) => {
+    const entry = findProjectedDeckEntry(ctx, entryId);
+    return entry !== undefined && isCardEligibleForTransfiguration(transfiguration, entry.card);
+  });
+}
+
+function eligibleTransfigurationsForUntransfiguredDeck(
+  ctx: JourneyContext,
+): TransfigurationForApply[] {
+  return JOURNEY_TRANSFIGURATIONS.filter(
+    (transfiguration) =>
+      untransfiguredDeckEntriesEligibleForTransfiguration(ctx, transfiguration).length > 0,
+  ).map(transfigurationForApply);
+}
+
+function selectedTransfiguration(
+  templateId: string,
+  ctx: JourneyContext,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+): TransfigurationForApply | undefined {
+  if (chooserResolution?.kind !== "transfiguration") {
+    warnSkippedCardApply(templateId, "missing transfiguration chooser resolution");
+    return undefined;
+  }
+
+  if (!isJourneyTransfiguration(chooserResolution.type)) {
+    warnSkippedCardApply(
+      templateId,
+      `unknown transfiguration ${JSON.stringify(chooserResolution.type)}`,
+    );
+    return undefined;
+  }
+
+  if (untransfiguredDeckEntriesEligibleForTransfiguration(ctx, chooserResolution.type).length === 0) {
+    warnSkippedCardApply(
+      templateId,
+      `no untransfigured deck entries are eligible for ${JSON.stringify(chooserResolution.type)}`,
+    );
+    return undefined;
+  }
+
+  return transfigurationForApply(chooserResolution.type);
+}
+
+function selectedExactDeckEntryIds(
+  templateId: string,
+  ctx: JourneyContext,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+  count: number,
+  eligibleEntryIds: readonly string[],
+): string[] | undefined {
+  if (chooserResolution?.kind !== "card") {
+    warnSkippedCardApply(templateId, "missing card chooser resolution");
+    return undefined;
+  }
+
+  if (chooserResolution.entryIds.length !== count) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly ${String(count)} selected card entries, got ${String(chooserResolution.entryIds.length)}`,
+    );
+    return undefined;
+  }
+
+  if (chooserResolution.cardIds !== undefined && chooserResolution.cardIds.length !== count) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly ${String(count)} selected card ids, got ${String(chooserResolution.cardIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const uniqueEntryIds = new Set(chooserResolution.entryIds);
+  if (uniqueEntryIds.size !== chooserResolution.entryIds.length) {
+    warnSkippedCardApply(templateId, "card chooser resolution included duplicate entries");
+    return undefined;
+  }
+
+  const eligible = new Set(eligibleEntryIds);
+  const selectedEntryIds: string[] = [];
+  for (const [index, entryId] of chooserResolution.entryIds.entries()) {
+    const entry = findProjectedDeckEntry(ctx, entryId);
+    if (entry === undefined) {
+      warnSkippedCardApply(templateId, `deck entry ${JSON.stringify(entryId)} was not found`);
+      return undefined;
+    }
+
+    const selectedCardId = chooserResolution.cardIds?.[index];
+    if (selectedCardId !== undefined && selectedCardId !== entry.card.id) {
+      warnSkippedCardApply(
+        templateId,
+        `chooser card ${JSON.stringify(selectedCardId)} did not match deck entry ${JSON.stringify(entryId)}`,
+      );
+      return undefined;
+    }
+
+    if (!eligible.has(entryId)) {
+      warnSkippedCardApply(
+        templateId,
+        `deck entry ${JSON.stringify(entryId)} was not eligible for this chooser`,
+      );
+      return undefined;
+    }
+
+    selectedEntryIds.push(entryId);
+  }
+
+  return selectedEntryIds;
+}
+
+function selectedBoundedDeckEntryIds(
+  templateId: string,
+  ctx: JourneyContext,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+  minCount: number,
+  maxCount: number,
+  eligibleEntryIds: readonly string[],
+): string[] | undefined {
+  if (chooserResolution?.kind !== "card") {
+    warnSkippedCardApply(templateId, "missing card chooser resolution");
+    return undefined;
+  }
+
+  if (
+    chooserResolution.entryIds.length < minCount
+    || chooserResolution.entryIds.length > maxCount
+  ) {
+    warnSkippedCardApply(
+      templateId,
+      `expected ${String(minCount)}-${String(maxCount)} selected card entries, got ${String(chooserResolution.entryIds.length)}`,
+    );
+    return undefined;
+  }
+
+  if (
+    chooserResolution.cardIds !== undefined
+    && chooserResolution.cardIds.length !== chooserResolution.entryIds.length
+  ) {
+    warnSkippedCardApply(
+      templateId,
+      `expected ${String(chooserResolution.entryIds.length)} selected card ids, got ${String(chooserResolution.cardIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const uniqueEntryIds = new Set(chooserResolution.entryIds);
+  if (uniqueEntryIds.size !== chooserResolution.entryIds.length) {
+    warnSkippedCardApply(templateId, "card chooser resolution included duplicate entries");
+    return undefined;
+  }
+
+  const eligible = new Set(eligibleEntryIds);
+  const selectedEntryIds: string[] = [];
+  for (const [index, entryId] of chooserResolution.entryIds.entries()) {
+    const entry = findProjectedDeckEntry(ctx, entryId);
+    if (entry === undefined) {
+      warnSkippedCardApply(templateId, `deck entry ${JSON.stringify(entryId)} was not found`);
+      return undefined;
+    }
+
+    const selectedCardId = chooserResolution.cardIds?.[index];
+    if (selectedCardId !== undefined && selectedCardId !== entry.card.id) {
+      warnSkippedCardApply(
+        templateId,
+        `chooser card ${JSON.stringify(selectedCardId)} did not match deck entry ${JSON.stringify(entryId)}`,
+      );
+      return undefined;
+    }
+
+    if (!eligible.has(entryId)) {
+      warnSkippedCardApply(
+        templateId,
+        `deck entry ${JSON.stringify(entryId)} was not eligible for this chooser`,
+      );
+      return undefined;
+    }
+
+    selectedEntryIds.push(entryId);
+  }
+
+  return selectedEntryIds;
+}
+
+function selectedExactRolledCardIds(
+  templateId: string,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+  count: number,
+  rolledCardIds: readonly string[],
+): string[] | undefined {
+  if (chooserResolution?.kind !== "card") {
+    warnSkippedCardApply(templateId, "missing card chooser resolution");
+    return undefined;
+  }
+
+  if (chooserResolution.entryIds.length !== count) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly ${String(count)} selected card entries, got ${String(chooserResolution.entryIds.length)}`,
+    );
+    return undefined;
+  }
+
+  if (chooserResolution.cardIds !== undefined && chooserResolution.cardIds.length !== count) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly ${String(count)} selected card ids, got ${String(chooserResolution.cardIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const uniqueEntryIds = new Set(chooserResolution.entryIds);
+  if (uniqueEntryIds.size !== chooserResolution.entryIds.length) {
+    warnSkippedCardApply(templateId, "card chooser resolution included duplicate entries");
+    return undefined;
+  }
+
+  const selectedCardIds: string[] = [];
+  for (const [resolutionIndex, selectedEntryId] of chooserResolution.entryIds.entries()) {
+    const rolledMatch = /^rolled:([^:]+):(\d+)$/.exec(selectedEntryId);
+    if (rolledMatch === null) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser entry ${JSON.stringify(selectedEntryId)} was malformed`,
+      );
+      return undefined;
+    }
+
+    const [, encodedCardId, rolledIndexText] = rolledMatch;
+    const rolledIndex = Number.parseInt(rolledIndexText, 10);
+    const cardId = rolledCardIds[rolledIndex];
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser index ${String(rolledIndex)} was not found`,
+      );
+      return undefined;
+    }
+
+    if (cardId !== encodedCardId) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser card ${JSON.stringify(encodedCardId)} did not match rolled index ${String(rolledIndex)}`,
+      );
+      return undefined;
+    }
+
+    const selectedCardId = chooserResolution.cardIds?.[resolutionIndex];
+    if (selectedCardId !== undefined && selectedCardId !== cardId) {
+      warnSkippedCardApply(
+        templateId,
+        `chooser card ${JSON.stringify(selectedCardId)} did not match rolled card ${JSON.stringify(cardId)}`,
+      );
+      return undefined;
+    }
+
+    selectedCardIds.push(cardId);
+  }
+
+  return selectedCardIds;
+}
+
+function selectedBoundedRolledCardIds(
+  templateId: string,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+  minCount: number,
+  maxCount: number,
+  rolledCardIds: readonly string[],
+): string[] | undefined {
+  if (chooserResolution?.kind !== "card") {
+    warnSkippedCardApply(templateId, "missing card chooser resolution");
+    return undefined;
+  }
+
+  if (
+    chooserResolution.entryIds.length < minCount
+    || chooserResolution.entryIds.length > maxCount
+  ) {
+    warnSkippedCardApply(
+      templateId,
+      `expected ${String(minCount)}-${String(maxCount)} selected card entries, got ${String(chooserResolution.entryIds.length)}`,
+    );
+    return undefined;
+  }
+
+  if (
+    chooserResolution.cardIds !== undefined
+    && chooserResolution.cardIds.length !== chooserResolution.entryIds.length
+  ) {
+    warnSkippedCardApply(
+      templateId,
+      `expected ${String(chooserResolution.entryIds.length)} selected card ids, got ${String(chooserResolution.cardIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const uniqueEntryIds = new Set(chooserResolution.entryIds);
+  if (uniqueEntryIds.size !== chooserResolution.entryIds.length) {
+    warnSkippedCardApply(templateId, "card chooser resolution included duplicate entries");
+    return undefined;
+  }
+
+  const selectedCardIds: string[] = [];
+  for (const [resolutionIndex, selectedEntryId] of chooserResolution.entryIds.entries()) {
+    const rolledMatch = /^rolled:([^:]+):(\d+)$/.exec(selectedEntryId);
+    if (rolledMatch === null) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser entry ${JSON.stringify(selectedEntryId)} was malformed`,
+      );
+      return undefined;
+    }
+
+    const [, encodedCardId, rolledIndexText] = rolledMatch;
+    const rolledIndex = Number.parseInt(rolledIndexText, 10);
+    const cardId = rolledCardIds[rolledIndex];
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser index ${String(rolledIndex)} was not found`,
+      );
+      return undefined;
+    }
+
+    if (cardId !== encodedCardId) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser card ${JSON.stringify(encodedCardId)} did not match rolled index ${String(rolledIndex)}`,
+      );
+      return undefined;
+    }
+
+    const selectedCardId = chooserResolution.cardIds?.[resolutionIndex];
+    if (selectedCardId !== undefined && selectedCardId !== cardId) {
+      warnSkippedCardApply(
+        templateId,
+        `chooser card ${JSON.stringify(selectedCardId)} did not match rolled card ${JSON.stringify(cardId)}`,
+      );
+      return undefined;
+    }
+
+    selectedCardIds.push(cardId);
+  }
+
+  return selectedCardIds;
+}
+
+function selectedRolledDreamsignIds(
+  templateId: string,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+  minCount: number,
+  maxCount: number,
+  rolledDreamsignIds: readonly string[],
+): string[] | undefined {
+  if (chooserResolution?.kind !== "dreamsign") {
+    warnSkippedDreamsignApply(templateId, "missing dreamsign chooser resolution");
+    return undefined;
+  }
+
+  if (
+    chooserResolution.indices.length < minCount
+    || chooserResolution.indices.length > maxCount
+  ) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected ${String(minCount)}-${String(maxCount)} selected dreamsign indices, got ${String(chooserResolution.indices.length)}`,
+    );
+    return undefined;
+  }
+
+  if (
+    chooserResolution.dreamsignIds !== undefined
+    && chooserResolution.dreamsignIds.length !== chooserResolution.indices.length
+  ) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected ${String(chooserResolution.indices.length)} selected dreamsign ids, got ${String(chooserResolution.dreamsignIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const uniqueIndices = new Set(chooserResolution.indices);
+  if (uniqueIndices.size !== chooserResolution.indices.length) {
+    warnSkippedDreamsignApply(templateId, "dreamsign chooser resolution included duplicate indices");
+    return undefined;
+  }
+
+  const selectedDreamsignIds: string[] = [];
+  for (const [resolutionIndex, selectedIndex] of chooserResolution.indices.entries()) {
+    if (!Number.isInteger(selectedIndex)) {
+      warnSkippedDreamsignApply(
+        templateId,
+        "dreamsign chooser resolution included a malformed index",
+      );
+      return undefined;
+    }
+
+    const dreamsignId = rolledDreamsignIds[selectedIndex];
+    if (dreamsignId === undefined) {
+      warnSkippedDreamsignApply(
+        templateId,
+        `rolled dreamsign index ${String(selectedIndex)} was not found`,
+      );
+      return undefined;
+    }
+
+    const selectedDreamsignId = chooserResolution.dreamsignIds?.[resolutionIndex];
+    if (selectedDreamsignId !== undefined && selectedDreamsignId !== dreamsignId) {
+      warnSkippedDreamsignApply(
+        templateId,
+        `chooser dreamsign ${JSON.stringify(selectedDreamsignId)} did not match rolled dreamsign ${JSON.stringify(dreamsignId)}`,
+      );
+      return undefined;
+    }
+
+    selectedDreamsignIds.push(dreamsignId);
+  }
+
+  return selectedDreamsignIds;
+}
+
+function selectedActiveDreamsignIndex(
+  templateId: string,
+  ctx: JourneyContext,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+): number | undefined {
+  if (chooserResolution?.kind !== "dreamsign") {
+    warnSkippedDreamsignApply(templateId, "missing dreamsign chooser resolution");
+    return undefined;
+  }
+
+  if (chooserResolution.indices.length !== 1) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected exactly one selected dreamsign index, got ${String(chooserResolution.indices.length)}`,
+    );
+    return undefined;
+  }
+
+  if (chooserResolution.dreamsignIds !== undefined && chooserResolution.dreamsignIds.length !== 1) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected exactly one selected dreamsign id, got ${String(chooserResolution.dreamsignIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const index = chooserResolution.indices[0];
+  if (!Number.isInteger(index)) {
+    warnSkippedDreamsignApply(templateId, "dreamsign chooser resolution did not include an index");
+    return undefined;
+  }
+
+  const activeDreamsign = ctx.state.quest.activeDreamsigns[index];
+  if (activeDreamsign === undefined) {
+    warnSkippedDreamsignApply(templateId, `active dreamsign index ${String(index)} was not found`);
+    return undefined;
+  }
+
+  const expectedDreamsignId = chooserResolution.dreamsignIds?.[0];
+  if (expectedDreamsignId !== undefined && activeDreamsign.dreamsignId !== expectedDreamsignId) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `active dreamsign index ${String(index)} is ${JSON.stringify(activeDreamsign.dreamsignId)}, not ${JSON.stringify(expectedDreamsignId)}`,
+    );
+    return undefined;
+  }
+
+  return index;
+}
+
+function pickedDrawDuplicateEntryIds(ctx: JourneyContext, drawCount: number): string[] {
+  return pickUniqueDeckEntryIds(
+    applyDrawContext(ctx),
+    "draw_X_and_duplicate_chosen:entry",
+    projectedDeckEntries(ctx).map((entry) => entry.entryId),
+    drawCount,
+  );
+}
+
+function resolveDrawDuplicateEntryId(
+  ctx: JourneyContext,
+  drawCount: number,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+): string | undefined {
+  const pickedEntryIds = pickedDrawDuplicateEntryIds(ctx, drawCount);
+  const cardIdByEntryId = new Map(
+    projectedDeckEntries(ctx).map((entry) => [entry.entryId, entry.card.id]),
+  );
+  const rolledCardIds = pickedEntryIds.flatMap((entryId) => {
+    const cardId = cardIdByEntryId.get(entryId);
+    return cardId === undefined ? [] : [cardId];
+  });
+  if (rolledCardIds.length < drawCount) {
+    warnSkippedCardApply(
+      "draw_X_and_duplicate_chosen",
+      `only ${String(rolledCardIds.length)} rolled deck entries were available for drawCount=${String(drawCount)}`,
+    );
+    return undefined;
+  }
+
+  const rolledCardIdsSelected = selectedExactRolledCardIds(
+    "draw_X_and_duplicate_chosen",
+    chooserResolution,
+    1,
+    rolledCardIds,
+  );
+  if (rolledCardIdsSelected === undefined) return undefined;
+
+  const selectedEntryId = chooserResolution?.kind === "card" ? chooserResolution.entryIds[0] : "";
+  const rolledMatch = /^rolled:[^:]+:(\d+)$/.exec(selectedEntryId ?? "");
+  const rolledIndex = rolledMatch === null ? -1 : Number.parseInt(rolledMatch[1], 10);
+  const entryId = pickedEntryIds[rolledIndex];
+  if (entryId === undefined) {
+    warnSkippedCardApply(
+      "draw_X_and_duplicate_chosen",
+      `rolled chooser index ${String(rolledIndex)} was not found`,
+    );
+    return undefined;
+  }
+
+  return entryId;
+}
+
+function pickedReplaceStarterEntryId(ctx: JourneyContext): string | undefined {
+  return pickUniqueDeckEntryIds(
+    applyDrawContext(ctx),
+    "replace_starter_via_draft:starter",
+    findDeckEntriesByPredicate(ctx, "starter"),
+    1,
+  )[0];
+}
+
+function pickedReplaceStarterDraftCardIds(ctx: JourneyContext): string[] {
+  return pickUniqueCardIds(
+    applyDrawContext(ctx),
+    "replace_starter_via_draft:draft",
+    ctx.content.cards,
+    4,
+  );
+}
+
+// Inclusive integer roll for resource-range apply. Wave 1 does not plumb a
+// deterministic RNG through the apply path; the option-level seed governs
+// rollParams (generation), and apply is a one-shot resolution event. A future
+// task can swap this for a labeled-RNG roll if determinism at apply time
+// becomes a requirement; the surrounding tests assert the rolled value lies
+// in [min, max] rather than pinning a literal.
+function rollIntInclusive(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 type GainEssenceParams = { x: number };
 const gainEssence: Reward<GainEssenceParams> = {
   id: "gain_essence",
@@ -162,6 +897,9 @@ const gainEssence: Reward<GainEssenceParams> = {
   cec: (p) => p.x * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Gain ${p.x} essence`,
+  apply: (p, _ctx, mut) => {
+    mut.changeEssence(p.x, "dream_journey:gain_essence");
+  },
 };
 
 type GainOmensParams = { x: number };
@@ -172,6 +910,9 @@ const gainOmens: Reward<GainOmensParams> = {
   cec: (p) => p.x * 40 * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Gain ${p.x} omen${p.x === 1 ? "" : "s"}`,
+  apply: (p, _ctx, mut) => {
+    mut.changeOmens(p.x, "dream_journey:gain_omens");
+  },
 };
 
 type SetEssencePctParams = { percent: number };
@@ -186,6 +927,10 @@ const setEssenceToPercentOfMax: Reward<SetEssencePctParams> = {
     Math.max(0, (maxEssence(ctx) * p.percent) / 100 - essenceAmount(ctx)) * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Set essence to ${p.percent}% of your maximum essence`,
+  apply: (p, ctx, mut) => {
+    const target = Math.floor((maxEssence(ctx) * p.percent) / 100);
+    mut.setEssence(target, "dream_journey:set_essence_to_percent_of_max");
+  },
 };
 
 type GainEssenceRangeParams = { min: number; max: number };
@@ -200,6 +945,10 @@ const gainEssenceRandomRange: Reward<GainEssenceRangeParams> = {
   cec: (p) => ((p.min + p.max) / 2) * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Gain ${p.min}-${p.max} essence (random roll)`,
+  apply: (p, _ctx, mut) => {
+    const roll = rollIntInclusive(p.min, p.max);
+    mut.changeEssence(roll, "dream_journey:gain_essence_random_range");
+  },
 };
 
 type GainEssenceToMaxParams = Record<string, never>;
@@ -210,6 +959,9 @@ const gainEssenceToMax: Reward<GainEssenceToMaxParams> = {
   cec: (_p, ctx) => Math.max(0, maxEssence(ctx) - essenceAmount(ctx)) * STAGE_MULTIPLIER,
   viable: () => true,
   render: () => "Gain essence up to your maximum",
+  apply: (_p, ctx, mut) => {
+    mut.setEssence(maxEssence(ctx), "dream_journey:gain_essence_to_max");
+  },
 };
 
 // `kinds` restricts the roll to predicates whose `kind` is in the allow-list.
@@ -260,6 +1012,31 @@ function isFlatDraftPredicate(predicateId: string): boolean {
   return FLAT_DRAFT_PREDICATE_IDS.has(predicateId);
 }
 
+function draftPredicatePool(
+  ctx: JourneyContext,
+  predicateId: string,
+  transfiguration?: string,
+) {
+  const pool = cardMatches(ctx, getPredicate(predicateId).cardPredicate ?? {});
+  if (transfiguration === undefined) return pool;
+  return pool.filter((card) => isCardEligibleForTransfiguration(transfiguration, card));
+}
+
+function pickedDraftPredicateCardIds(
+  ctx: JourneyContext,
+  predicateId: string,
+  label: string,
+  count: number,
+  transfiguration?: string,
+): string[] {
+  return pickUniqueCardIds(
+    applyDrawContext(ctx),
+    label,
+    draftPredicatePool(ctx, predicateId, transfiguration),
+    count,
+  );
+}
+
 type GainRandomCardsParams = { predicateId: string; count: number };
 const gainRandomPredicateCards: Reward<GainRandomCardsParams> = {
   id: "gain_random_predicate_cards",
@@ -283,6 +1060,25 @@ const gainRandomPredicateCards: Reward<GainRandomCardsParams> = {
     const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
     return `Gain ${p.count} random ${noun}`;
   },
+  apply: (p, ctx, mut) => {
+    const predicate = getPredicate(p.predicateId);
+    const pool = cardMatches(ctx, predicate.cardPredicate ?? {});
+    const cardIds = pickUniqueCardIds(
+      applyDrawContext(ctx),
+      "gain_random_predicate_cards:card",
+      pool,
+      p.count,
+    );
+    if (cardIds.length < p.count) {
+      warnSkippedCardApply(
+        "gain_random_predicate_cards",
+        `only ${cardIds.length} cards matched predicate ${JSON.stringify(p.predicateId)} for count=${p.count}`,
+      );
+    }
+    for (const cardId of cardIds) {
+      mut.addCardById(cardId, "dream_journey:gain_random_predicate_cards");
+    }
+  },
 };
 
 type DraftPredicateParams = { predicateId: string };
@@ -299,6 +1095,49 @@ const draftPredicateCardsFrom4: Reward<DraftPredicateParams> = {
   viable: (p, ctx) =>
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4,
   render: (p) => `Draft 1 of 4 ${getPredicate(p.predicateId).text.plural}`,
+  choosePlan: (p, ctx, planning) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_predicate_cards_from_4:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to draft",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_predicate_cards_from_4:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) {
+      warnSkippedCardApply(
+        "draft_predicate_cards_from_4",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardId = selectedExactRolledCardIds(
+      "draft_predicate_cards_from_4",
+      chooserResolution,
+      1,
+      rolledCardIds,
+    )?.[0];
+    if (selectedCardId === undefined) return;
+
+    mut.addCardById(selectedCardId, "dream_journey:draft_predicate_cards_from_4");
+  },
 };
 
 type TakeAnyParams = { predicateId: string; choices: number };
@@ -318,6 +1157,52 @@ const takeAnyFromPredicateChoices: Reward<TakeAnyParams> = {
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= p.choices,
   render: (p) =>
     `Take any number of ${getPredicate(p.predicateId).text.plural} from ${p.choices} choices`,
+  choosePlan: (p, ctx, planning) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "take_any_from_predicate_choices:card",
+      p.choices,
+    );
+    if (rolledCardIds.length < p.choices) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 0,
+      maxPicks: p.choices,
+      title: "Choose cards to take",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "take_any_from_predicate_choices:card",
+      p.choices,
+    );
+    if (rolledCardIds.length < p.choices) {
+      warnSkippedCardApply(
+        "take_any_from_predicate_choices",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardIds = selectedBoundedRolledCardIds(
+      "take_any_from_predicate_choices",
+      chooserResolution,
+      0,
+      p.choices,
+      rolledCardIds,
+    );
+    if (selectedCardIds === undefined) return;
+
+    for (const cardId of selectedCardIds) {
+      mut.addCardById(cardId, "dream_journey:take_any_from_predicate_choices");
+    }
+  },
 };
 
 type GainNamedCardParams = { name: string };
@@ -333,6 +1218,17 @@ const gainNamedCard: Reward<GainNamedCardParams> = {
   cec: () => CARD_CEC * STAGE_MULTIPLIER,
   viable: (_p, ctx) => namedCardGainPool(ctx).length > 0,
   render: (p) => `Gain ${quoteName(p.name)}`,
+  apply: (p, ctx, mut) => {
+    const cardId = resolveCardIdByName(ctx, p.name);
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        "gain_named_card",
+        `catalog card named ${JSON.stringify(p.name)} was not found`,
+      );
+      return;
+    }
+    mut.addCardById(cardId, "dream_journey:gain_named_card");
+  },
 };
 
 const CARD_TYPE_PREDICATE_IDS = ["warriors", "survivors", "spirit_animals"] as const;
@@ -343,17 +1239,75 @@ const applyChosenTransfigurationToChosenCard: Reward<ApplyChosenTransfigChosenCa
   weight: 1.0,
   rollParams: () => ({}),
   cec: () => CARD_CEC * 1.5,
-  // Player picks both the transfiguration AND the target card. The reward is
-  // only fulfillable if at least one (transfiguration, deck card) pair is
-  // eligible. Checking `transfigurationHasEligibleTarget` per transfiguration
-  // keeps this template honest if a future patch tightens Golden or Prismatic
-  // (currently unrestricted via `isCardEligibleForTransfiguration`'s default
-  // case in effects.ts); without the per-transfiguration sweep, the template
-  // would silently regress to a deck-non-empty check.
-  viable: (_p, ctx) =>
-    deckHasMinSize(ctx, 1)
-    && JOURNEY_TRANSFIGURATIONS.some((t) => transfigurationHasEligibleTarget(ctx, t)),
+  // Player picks both the transfiguration and the target card. The reward is
+  // fulfillable when a current untransfigured deck entry can receive at least
+  // one journey transfiguration.
+  viable: (_p, ctx) => eligibleTransfigurationsForUntransfiguredDeck(ctx).length > 0,
   render: () => "Apply a transfiguration of your choice to a chosen card",
+  choosePlan: (_p, ctx, planning) => {
+    const slot0RequestId = planning.requestIdForSlot(0);
+    const transfigurationResolution = planning.resolutions.get(slot0RequestId);
+    if (transfigurationResolution === undefined) {
+      const eligibleTransfigurations = eligibleTransfigurationsForUntransfiguredDeck(ctx);
+      if (eligibleTransfigurations.length === 0) return undefined;
+      return {
+        kind: "transfiguration",
+        requestId: slot0RequestId,
+        eligibleTransfigurations,
+        title: "Choose a transfiguration",
+      };
+    }
+
+    if (transfigurationResolution.kind !== "transfiguration") return undefined;
+    const transfiguration = transfigurationResolution.type;
+    const eligibleEntryIds = untransfiguredDeckEntriesEligibleForTransfiguration(
+      ctx,
+      transfiguration,
+    );
+    if (
+      !isJourneyTransfiguration(transfiguration)
+      || eligibleEntryIds.length === 0
+    ) {
+      return undefined;
+    }
+
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(1),
+      poolKind: "deck",
+      deckFilter: { entryIds: eligibleEntryIds },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to transfigure",
+    };
+  },
+  apply: (_p, ctx, mut, chooserResolution, chooserContext) => {
+    const transfiguration = selectedTransfiguration(
+      "apply_chosen_transfiguration_to_chosen_card",
+      ctx,
+      chooserResolution,
+    );
+    if (transfiguration === undefined) return;
+
+    const cardResolution = chooserContext?.resolutions.get(
+      chooserContext.requestIdForSlot(1),
+    );
+    const entryIds = selectedExactDeckEntryIds(
+      "apply_chosen_transfiguration_to_chosen_card",
+      ctx,
+      cardResolution,
+      1,
+      untransfiguredDeckEntriesEligibleForTransfiguration(ctx, transfiguration),
+    );
+    const entryId = entryIds?.[0];
+    if (entryId === undefined) return;
+
+    mut.transfigureDeckEntry(
+      entryId,
+      transfiguration,
+      "dream_journey:apply_chosen_transfiguration_to_chosen_card",
+    );
+  },
 };
 
 type ApplyNamedTransfigPredCardsParams = {
@@ -379,17 +1333,65 @@ const applyNamedTransfigurationToChosenPredicateCards: Reward<ApplyNamedTransfig
       };
     },
     cec: (p) => cardPoolCEC(CARD_CEC * 0.8, p.count, getPredicate(p.predicateId)),
-    // Deck-scope leak fix: the player chooses N predicate-matching cards
-    // from their DECK. CLI shipped `cardMatches(ctx, predicate.cardPredicate)`
-    // which leaks to the catalog. `predicateAdmitsTransfiguration` remains
-    // the soundness check that the rolled transfiguration is compatible.
     viable: (p, ctx) =>
-      deckContainsPredicate(ctx, p.predicateId, p.count)
-      && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
+      deckContainsUntransfiguredPredicate(
+        ctx,
+        p.predicateId,
+        p.count,
+        p.transfiguration,
+      ),
     render: (p) => {
       const pred = getPredicate(p.predicateId);
       const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
       return `Apply ${p.transfiguration} to ${p.count} chosen ${noun}`;
+    },
+    choosePlan: (p, ctx, planning) => {
+      if (!isJourneyTransfiguration(p.transfiguration)) return undefined;
+      const entryIds = findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration(
+        ctx,
+        p.predicateId,
+        p.transfiguration,
+      );
+      if (entryIds.length < p.count) return undefined;
+      return {
+        kind: "card",
+        requestId: planning.requestIdForSlot(0),
+        poolKind: "deck",
+        deckFilter: { predicateId: p.predicateId, entryIds },
+        minPicks: p.count,
+        maxPicks: p.count,
+        title: p.count === 1 ? "Choose a card to transfigure" : "Choose cards to transfigure",
+      };
+    },
+    apply: (p, ctx, mut, chooserResolution) => {
+      if (!isJourneyTransfiguration(p.transfiguration)) {
+        warnSkippedCardApply(
+          "apply_named_transfiguration_to_chosen_predicate_cards",
+          `unknown transfiguration ${JSON.stringify(p.transfiguration)}`,
+        );
+        return;
+      }
+
+      const entryIds = selectedExactDeckEntryIds(
+        "apply_named_transfiguration_to_chosen_predicate_cards",
+        ctx,
+        chooserResolution,
+        p.count,
+        findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration(
+          ctx,
+          p.predicateId,
+          p.transfiguration,
+        ),
+      );
+      if (entryIds === undefined) return;
+
+      for (const entryId of entryIds) {
+        mut.transfigureDeckEntry(
+          entryId,
+          transfigurationForApply(p.transfiguration),
+          "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
+        );
+      }
     },
   };
 
@@ -420,11 +1422,30 @@ const applyNamedTransfigurationToCardName: Reward<ApplyNamedTransfigCardNamePara
     };
   },
   cec: () => CARD_CEC * 0.8,
-  // Transfiguration-eligibility audit: any deck card eligible for the named
-  // transfiguration suffices. The CLI shipped the same check inline; the
-  // helper centralises the eligibility traversal so the rule cannot drift.
-  viable: (p, ctx) => transfigurationHasEligibleTarget(ctx, p.transfiguration),
+  // The named card must have an untransfigured concrete entry that can receive
+  // the requested transfiguration; viability mirrors the apply target filter.
+  viable: (p, ctx) =>
+    deckContainsUntransfiguredCardByName(ctx, p.cardName, p.transfiguration),
   render: (p) => `Apply ${p.transfiguration} to ${quoteName(p.cardName)}`,
+  apply: (p, ctx, mut) => {
+    const entryId = findUntransfiguredDeckEntriesByName(
+      ctx,
+      p.cardName,
+      (card) => isCardEligibleForTransfiguration(p.transfiguration, card),
+    )[0];
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "apply_named_transfiguration_to_card_name",
+        `untransfigured deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    mut.transfigureDeckEntry(
+      entryId,
+      transfigurationForApply(p.transfiguration),
+      "dream_journey:apply_named_transfiguration_to_card_name",
+    );
+  },
 };
 
 type ApplyNamedTransfigRandomPredParams = {
@@ -450,14 +1471,46 @@ const applyNamedTransfigurationToRandomPredicateCards: Reward<ApplyNamedTransfig
       };
     },
     cec: (p) => cardPoolCEC(CARD_CEC * 0.6, p.count, getPredicate(p.predicateId)),
-    // Deck-scope leak fix (see chosen variant above).
+    // Viability mirrors the concrete eligible entries used by apply.
     viable: (p, ctx) =>
-      deckContainsPredicate(ctx, p.predicateId, p.count)
-      && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
+      deckContainsUntransfiguredPredicate(ctx, p.predicateId, p.count, p.transfiguration),
     render: (p) => {
       const pred = getPredicate(p.predicateId);
       const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
       return `Apply ${p.transfiguration} to ${p.count} random ${noun}`;
+    },
+    apply: (p, ctx, mut) => {
+      const entryIds = findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration(
+        ctx,
+        p.predicateId,
+        p.transfiguration,
+      );
+      if (entryIds.length === 0) {
+        warnSkippedCardApply(
+          "apply_named_transfiguration_to_random_predicate_cards",
+          `no untransfigured deck entries matched predicate ${JSON.stringify(p.predicateId)}`,
+        );
+        return;
+      }
+      const pickedEntryIds = pickUniqueDeckEntryIds(
+        applyDrawContext(ctx),
+        "apply_named_transfiguration_to_random_predicate_cards:entry",
+        entryIds,
+        p.count,
+      );
+      if (pickedEntryIds.length < p.count) {
+        warnSkippedCardApply(
+          "apply_named_transfiguration_to_random_predicate_cards",
+          `only ${pickedEntryIds.length} deck entries matched predicate ${JSON.stringify(p.predicateId)} for count=${p.count}`,
+        );
+      }
+      for (const entryId of pickedEntryIds) {
+        mut.transfigureDeckEntry(
+          entryId,
+          transfigurationForApply(p.transfiguration),
+          "dream_journey:apply_named_transfiguration_to_random_predicate_cards",
+        );
+      }
     },
   };
 
@@ -467,11 +1520,49 @@ const transfigureRandomStarters: Reward<TransfigureRandomStartersParams> = {
   weight: 1.0,
   rollParams: (_ctx, draw) => ({ count: drawInt(draw, "transfig_random_starters:n", 1, 3) }),
   cec: (p) => CARD_CEC * 0.7 * p.count,
-  viable: (p, ctx) => starterCardCount(ctx) >= p.count,
+  viable: (p, ctx) => deckContainsUntransfiguredPredicate(ctx, "starter", p.count),
   render: (p) =>
     p.count === 1
       ? "Apply a random transfiguration to 1 random starter card"
       : `Apply random transfigurations to ${p.count} random starter cards`,
+  apply: (p, ctx, mut) => {
+    const entryIds = findUntransfiguredDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "transfigure_random_starters",
+        "untransfigured starter deck entries were not found",
+      );
+      return;
+    }
+    const draw = applyDrawContext(ctx);
+    const pickedEntryIds = pickUniqueDeckEntryIds(
+      draw,
+      "transfigure_random_starters:entry",
+      entryIds,
+      p.count,
+    );
+    if (pickedEntryIds.length < p.count) {
+      warnSkippedCardApply(
+        "transfigure_random_starters",
+        `only ${pickedEntryIds.length} starter deck entries available for count=${p.count}`,
+      );
+    }
+    pickedEntryIds.forEach((entryId, index) => {
+      const transfiguration = pickRandomTransfigurationForEntry(
+        ctx,
+        draw,
+        "transfigure_random_starters",
+        `transfigure_random_starters:transfiguration:${index}`,
+        entryId,
+      );
+      if (transfiguration === undefined) return;
+      mut.transfigureDeckEntry(
+        entryId,
+        transfiguration,
+        "dream_journey:transfigure_random_starters",
+      );
+    });
+  },
 };
 
 type TransfigureAllStartersParams = Record<string, never>;
@@ -480,8 +1571,34 @@ const transfigureAllStarters: Reward<TransfigureAllStartersParams> = {
   weight: 1.0,
   rollParams: () => ({}),
   cec: (_p, ctx) => CARD_CEC * 0.7 * Math.max(1, starterCardCount(ctx)),
-  viable: (_p, ctx) => starterCardCount(ctx) >= 1,
+  viable: (_p, ctx) => deckContainsUntransfiguredPredicate(ctx, "starter"),
   render: () => "Apply a random transfiguration to each starter card",
+  apply: (_p, ctx, mut) => {
+    const entryIds = findUntransfiguredDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "transfigure_all_starters",
+        "untransfigured starter deck entries were not found",
+      );
+      return;
+    }
+    const draw = applyDrawContext(ctx);
+    entryIds.forEach((entryId, index) => {
+      const transfiguration = pickRandomTransfigurationForEntry(
+        ctx,
+        draw,
+        "transfigure_all_starters",
+        `transfigure_all_starters:transfiguration:${index}`,
+        entryId,
+      );
+      if (transfiguration === undefined) return;
+      mut.transfigureDeckEntry(
+        entryId,
+        transfiguration,
+        "dream_journey:transfigure_all_starters",
+      );
+    });
+  },
 };
 
 type ChangeCardBecomeTypeParams = { cardName: string; cardTypePredicateId: string };
@@ -507,6 +1624,9 @@ const changeCardToBecomeType: Reward<ChangeCardBecomeTypeParams> = {
     const article = /^[aeiou]/i.test(singular) ? "an" : "a";
     return `Change ${quoteName(p.cardName)} to become ${article} ${singular}`;
   },
+  apply: () => {
+    logSkippedVisualTemplate("change_card_to_become_type", "visual");
+  },
 };
 
 type ModifyRandomCardsToTypesParams = { count: number; cardTypePredicateId: string };
@@ -529,6 +1649,9 @@ const modifyRandomCardsToTypes: Reward<ModifyRandomCardsToTypesParams> = {
     const article = p.count === 1 ? `${indefiniteArticleFor(typeName)} ` : "";
     return `Modify ${p.count} random ${noun} to become ${article}${typeName}`;
   },
+  apply: () => {
+    logSkippedVisualTemplate("modify_random_cards_to_types", "visual");
+  },
 };
 
 type MakeRandomCardsFastParams = { count: number };
@@ -540,6 +1663,9 @@ const makeRandomCardsFast: Reward<MakeRandomCardsFastParams> = {
   // Deck-scope leak: CLI used `ctx.content.cards.length >= count`.
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) => `Change ${p.count} random card${p.count === 1 ? "" : "s"} to have fast`,
+  apply: () => {
+    logSkippedVisualTemplate("make_random_cards_fast", "visual");
+  },
 };
 
 type PurgeChosenPredCardsParams = { predicateId: string; count: number };
@@ -551,12 +1677,41 @@ const purgeChosenPredicateCards: Reward<PurgeChosenPredCardsParams> = {
     count: drawInt(draw, "purge_chosen_pred:n", 1, 3),
   }),
   cec: (p) => cardPoolCEC(CARD_CEC * 0.3, p.count, getPredicate(p.predicateId)),
-  // Deck-scope leak fix.
-  viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId),
+  viable: (p, ctx) => findDeckEntriesByPredicate(ctx, p.predicateId).length >= 1,
   render: (p) => {
     const pred = getPredicate(p.predicateId);
     const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
-    return `Purge up to ${p.count} chosen ${noun}`;
+    return p.count === 1 ? `Purge a chosen ${noun}` : `Purge up to ${p.count} chosen ${noun}`;
+  },
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    const maxPicks = Math.min(p.count, entryIds.length);
+    if (maxPicks < 1) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { predicateId: p.predicateId, entryIds },
+      minPicks: 1,
+      maxPicks,
+      title: p.count === 1 ? "Choose a card to purge" : "Choose cards to purge",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const eligibleEntryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    const entryIds = selectedBoundedDeckEntryIds(
+      "purge_chosen_predicate_cards",
+      ctx,
+      chooserResolution,
+      1,
+      Math.min(p.count, eligibleEntryIds.length),
+      eligibleEntryIds,
+    );
+    if (entryIds === undefined) return;
+
+    for (const entryId of entryIds) {
+      mut.removeDeckEntry(entryId, "dream_journey:purge_chosen_predicate_cards");
+    }
   },
 };
 
@@ -569,14 +1724,65 @@ const purgeChosenPredicateWithReplacement: Reward<PurgeChosenPredWithReplParams>
     count: drawInt(draw, "purge_repl:n", 1, 2),
   }),
   cec: (p) => cardPoolCEC(CARD_CEC * 0.6, p.count, getPredicate(p.predicateId)),
-  // Deck-scope leak fix.
-  viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId),
+  viable: (p, ctx) =>
+    findDeckEntriesByPredicate(ctx, p.predicateId).length >= 1
+    && cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 1,
   render: (p) => {
     const pred = getPredicate(p.predicateId);
     if (p.count === 1) {
       return `Transform a chosen ${pred.text.singular} into a random ${pred.text.singular}`;
     }
     return `Transform up to ${p.count} chosen ${pred.text.plural} into random ${pred.text.plural}`;
+  },
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    const replacementPool = cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {});
+    const maxPicks = Math.min(p.count, entryIds.length, replacementPool.length);
+    if (maxPicks < 1) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { predicateId: p.predicateId, entryIds },
+      minPicks: 1,
+      maxPicks,
+      title: p.count === 1 ? "Choose a card to transform" : "Choose cards to transform",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const eligibleEntryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    const replacementPool = cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {});
+    const entryIds = selectedBoundedDeckEntryIds(
+      "purge_chosen_predicate_with_replacement",
+      ctx,
+      chooserResolution,
+      1,
+      Math.min(p.count, eligibleEntryIds.length, replacementPool.length),
+      eligibleEntryIds,
+    );
+    if (entryIds === undefined) return;
+
+    const replacementCardIds = pickUniqueCardIds(
+      applyDrawContext(ctx),
+      "purge_chosen_predicate_with_replacement:card",
+      replacementPool,
+      entryIds.length,
+    );
+    if (replacementCardIds.length < entryIds.length) {
+      warnSkippedCardApply(
+        "purge_chosen_predicate_with_replacement",
+        `only ${String(replacementCardIds.length)} cards matched predicate ${JSON.stringify(p.predicateId)} for count=${String(entryIds.length)}`,
+      );
+      return;
+    }
+
+    entryIds.forEach((entryId, index) => {
+      mut.removeDeckEntry(entryId, "dream_journey:purge_chosen_predicate_with_replacement");
+      mut.addCardById(
+        replacementCardIds[index],
+        "dream_journey:purge_chosen_predicate_with_replacement",
+      );
+    });
   },
 };
 
@@ -599,6 +1805,21 @@ const purgeNamedStarter: Reward<PurgeNamedStarterParams> = {
   // starter even if the specific named one was already purged.
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) => `Purge ${quoteName(p.cardName)}`,
+  apply: (p, ctx, mut) => {
+    const entryId = findDeckEntriesByName(
+      ctx,
+      p.cardName,
+      (card) => card.rarity === "Starter",
+    )[0];
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "purge_named_starter",
+        `starter deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    mut.removeDeckEntry(entryId, "dream_journey:purge_named_starter");
+  },
 };
 
 type PurgeRandomStarterParams = Record<string, never>;
@@ -609,6 +1830,19 @@ const purgeRandomStarter: Reward<PurgeRandomStarterParams> = {
   cec: () => CARD_CEC * 0.4,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1,
   render: () => "Purge a random starter card",
+  apply: (_p, ctx, mut) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length === 0) {
+      warnSkippedCardApply("purge_random_starter", "starter deck entry was not found");
+      return;
+    }
+    const entryId = pickFromList(
+      applyDrawContext(ctx),
+      "purge_random_starter:entry",
+      entryIds,
+    );
+    mut.removeDeckEntry(entryId, "dream_journey:purge_random_starter");
+  },
 };
 
 type PurgeRandomStarterReplParams = { predicateId: string };
@@ -628,6 +1862,39 @@ const purgeRandomStarterWithPredicateReplacement: Reward<PurgeRandomStarterReplP
     && cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 1,
   render: (p) =>
     `Transform a random starter card into a random ${getPredicate(p.predicateId).text.singular}`,
+  apply: (p, ctx, mut) => {
+    const starterEntryIds = findDeckEntriesByPredicate(ctx, "starter");
+    if (starterEntryIds.length === 0) {
+      warnSkippedCardApply(
+        "purge_random_starter_with_predicate_replacement",
+        "starter deck entry was not found",
+      );
+      return;
+    }
+
+    const replacementPool = cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {});
+    if (replacementPool.length === 0) {
+      warnSkippedCardApply(
+        "purge_random_starter_with_predicate_replacement",
+        `catalog card for predicate ${JSON.stringify(p.predicateId)} was not found`,
+      );
+      return;
+    }
+
+    const draw = applyDrawContext(ctx);
+    const entryId = pickFromList(
+      draw,
+      "purge_random_starter_with_predicate_replacement:entry",
+      starterEntryIds,
+    );
+    const cardId = pickFromList(
+      draw,
+      "purge_random_starter_with_predicate_replacement:card",
+      replacementPool,
+    ).id;
+    mut.removeDeckEntry(entryId, "dream_journey:purge_random_starter_with_predicate_replacement");
+    mut.addCardById(cardId, "dream_journey:purge_random_starter_with_predicate_replacement");
+  },
 };
 
 type TransformStarterParams = { newCardName: string };
@@ -642,6 +1909,23 @@ const transformStarterIntoNamedCard: Reward<TransformStarterParams> = {
   cec: () => CARD_CEC * 0.8,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1 && ctx.content.cards.length > 0,
   render: (p) => `Choose a starter card to transform into ${quoteName(p.newCardName)}`,
+  apply: (p, ctx, mut) => {
+    const entryId = findFirstStarterDeckEntryId(ctx);
+    if (entryId === undefined) {
+      warnSkippedCardApply("transform_starter_into_named_card", "starter deck entry was not found");
+      return;
+    }
+    const cardId = resolveCardIdByName(ctx, p.newCardName);
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        "transform_starter_into_named_card",
+        `catalog card named ${JSON.stringify(p.newCardName)} was not found`,
+      );
+      return;
+    }
+    mut.removeDeckEntry(entryId, "dream_journey:transform_starter_into_named_card");
+    mut.addCardById(cardId, "dream_journey:transform_starter_into_named_card");
+  },
 };
 
 type TransformDeckCardParams = { oldCardName: string; newCardName: string };
@@ -665,6 +1949,26 @@ const transformCardInDeckIntoNamed: Reward<TransformDeckCardParams> = {
   viable: (p, ctx) =>
     deckContainsCardByName(ctx, p.oldCardName) && ctx.content.cards.length > 0,
   render: (p) => `Transform ${quoteName(p.oldCardName)} into ${quoteName(p.newCardName)}`,
+  apply: (p, ctx, mut) => {
+    const entryId = findFirstDeckEntryIdByCardName(ctx, p.oldCardName);
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "transform_card_in_deck_into_named",
+        `deck entry for card name ${JSON.stringify(p.oldCardName)} was not found`,
+      );
+      return;
+    }
+    const cardId = resolveCardIdByName(ctx, p.newCardName);
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        "transform_card_in_deck_into_named",
+        `catalog card named ${JSON.stringify(p.newCardName)} was not found`,
+      );
+      return;
+    }
+    mut.removeDeckEntry(entryId, "dream_journey:transform_card_in_deck_into_named");
+    mut.addCardById(cardId, "dream_journey:transform_card_in_deck_into_named");
+  },
 };
 
 type TransformPredCardParams = { predicateId: string; newCardName: string };
@@ -682,9 +1986,59 @@ const transformChosenPredicateIntoNamed: Reward<TransformPredCardParams> = {
   viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId) && ctx.content.cards.length > 0,
   render: (p) =>
     `Transform a chosen ${getPredicate(p.predicateId).text.singular} into ${quoteName(p.newCardName)}`,
+  choosePlan: (p, ctx, planning) => {
+    if (resolveCardIdByName(ctx, p.newCardName) === undefined) return undefined;
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    if (entryIds.length < 1) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { predicateId: p.predicateId, entryIds },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to transform",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const targetCardId = resolveCardIdByName(ctx, p.newCardName);
+    if (targetCardId === undefined) {
+      warnSkippedCardApply(
+        "transform_chosen_predicate_into_named",
+        `catalog card named ${JSON.stringify(p.newCardName)} was not found`,
+      );
+      return;
+    }
+
+    const entryId = selectedExactDeckEntryIds(
+      "transform_chosen_predicate_into_named",
+      ctx,
+      chooserResolution,
+      1,
+      findDeckEntriesByPredicate(ctx, p.predicateId),
+    )?.[0];
+    if (entryId === undefined) return;
+
+    mut.removeDeckEntry(entryId, "dream_journey:transform_chosen_predicate_into_named");
+    mut.addCardById(targetCardId, "dream_journey:transform_chosen_predicate_into_named");
+  },
 };
 
-type DupNamedCardParams = { cardName: string; count: number };
+type DupNamedCardParams = {
+  cardName?: string;
+  count?: number;
+  name?: string;
+  copies?: number;
+};
+
+function duplicateNamedCardName(p: DupNamedCardParams): string {
+  return p.cardName ?? p.name ?? "";
+}
+
+function duplicateNamedCardCount(p: DupNamedCardParams): number {
+  return p.count ?? p.copies ?? 0;
+}
+
 const duplicateNamedCardX: Reward<DupNamedCardParams> = {
   id: "duplicate_named_card_X",
   weight: 1.0,
@@ -697,12 +2051,26 @@ const duplicateNamedCardX: Reward<DupNamedCardParams> = {
       count: drawInt(draw, "dup_named:n", 1, 3),
     };
   },
-  cec: (p) => CARD_CEC * p.count,
+  cec: (p) => CARD_CEC * duplicateNamedCardCount(p),
   // Named-card smell. CLI shipped
   // `cardMatches(ctx, { source: "deck" }).length >= 1`.
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
+  viable: (p, ctx) => deckContainsCardByName(ctx, duplicateNamedCardName(p)),
   render: (p) =>
-    `Create ${p.count} duplicate${p.count === 1 ? "" : "s"} of ${quoteName(p.cardName)}`,
+    `Create ${duplicateNamedCardCount(p)} duplicate${duplicateNamedCardCount(p) === 1 ? "" : "s"} of ${quoteName(duplicateNamedCardName(p))}`,
+  apply: (p, ctx, mut) => {
+    const cardName = duplicateNamedCardName(p);
+    const entryId = findDeckEntriesByName(ctx, cardName)[0];
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "duplicate_named_card_X",
+        `deck entry for card name ${JSON.stringify(cardName)} was not found`,
+      );
+      return;
+    }
+    for (let i = 0; i < duplicateNamedCardCount(p); i += 1) {
+      mut.duplicateDeckEntry(entryId, "dream_journey:duplicate_named_card_X");
+    }
+  },
 };
 
 type DupChosenParams = { count: number };
@@ -712,8 +2080,35 @@ const duplicateChosenCards: Reward<DupChosenParams> = {
   rollParams: (_ctx, draw) => ({ count: drawInt(draw, "dup_chosen:n", 1, 3) }),
   cec: (p) => CARD_CEC * 1.1 * p.count,
   // Deck-size-N: inline upgraded to the helper.
-  viable: (_p, ctx) => deckHasMinSize(ctx, 1),
+  viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) => `Duplicate ${p.count} chosen card${p.count === 1 ? "" : "s"}`,
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = projectedDeckEntries(ctx).map((entry) => entry.entryId);
+    if (entryIds.length < p.count) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { entryIds },
+      minPicks: p.count,
+      maxPicks: p.count,
+      title: p.count === 1 ? "Choose a card to duplicate" : "Choose cards to duplicate",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryIds = selectedExactDeckEntryIds(
+      "duplicate_chosen_cards",
+      ctx,
+      chooserResolution,
+      p.count,
+      projectedDeckEntries(ctx).map((entry) => entry.entryId),
+    );
+    if (entryIds === undefined) return;
+
+    for (const entryId of entryIds) {
+      mut.duplicateDeckEntry(entryId, "dream_journey:duplicate_chosen_cards");
+    }
+  },
 };
 
 type DupRandomPredParams = { predicateId: string; count: number };
@@ -736,6 +2131,31 @@ const duplicateRandomPredicate: Reward<DupRandomPredParams> = {
     const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
     return `Duplicate ${p.count} random ${noun}`;
   },
+  apply: (p, ctx, mut) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "duplicate_random_predicate",
+        `no deck entries matched predicate ${JSON.stringify(p.predicateId)}`,
+      );
+      return;
+    }
+    const pickedEntryIds = pickUniqueDeckEntryIds(
+      applyDrawContext(ctx),
+      "duplicate_random_predicate:entry",
+      entryIds,
+      p.count,
+    );
+    if (pickedEntryIds.length < p.count) {
+      warnSkippedCardApply(
+        "duplicate_random_predicate",
+        `only ${pickedEntryIds.length} deck entries matched predicate ${JSON.stringify(p.predicateId)} for count=${p.count}`,
+      );
+    }
+    for (const entryId of pickedEntryIds) {
+      mut.duplicateDeckEntry(entryId, "dream_journey:duplicate_random_predicate");
+    }
+  },
 };
 
 type DrawDupParams = { drawCount: number };
@@ -748,6 +2168,34 @@ const drawXAndDuplicateChosen: Reward<DrawDupParams> = {
   viable: (p, ctx) => deckHasMinSize(ctx, p.drawCount),
   render: (p) =>
     `Draw ${p.drawCount} cards from your deck and duplicate one of them of your choice`,
+  choosePlan: (p, ctx, planning) => {
+    const pickedEntryIds = pickedDrawDuplicateEntryIds(ctx, p.drawCount);
+    if (pickedEntryIds.length < p.drawCount) return undefined;
+
+    const cardIdByEntryId = new Map(
+      projectedDeckEntries(ctx).map((entry) => [entry.entryId, entry.card.id]),
+    );
+    const rolledCardIds = pickedEntryIds.flatMap((entryId) => {
+      const cardId = cardIdByEntryId.get(entryId);
+      return cardId === undefined ? [] : [cardId];
+    });
+    if (rolledCardIds.length < p.drawCount) return undefined;
+
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a drawn card to duplicate",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryId = resolveDrawDuplicateEntryId(ctx, p.drawCount, chooserResolution);
+    if (entryId === undefined) return;
+    mut.duplicateDeckEntry(entryId, "dream_journey:draw_X_and_duplicate_chosen");
+  },
 };
 
 type PurgeXBanesParams = { count: number };
@@ -758,6 +2206,9 @@ const purgeXBanes: Reward<PurgeXBanesParams> = {
   cec: (p) => p.count * 30,
   viable: (p, ctx) => baneCount(ctx) >= p.count,
   render: (p) => `Purge ${p.count} bane card${p.count === 1 ? "" : "s"}`,
+  apply: (p, _ctx, mut) => {
+    mut.purgeRandomBaneCards(p.count, "dream_journey:purge_X_banes");
+  },
 };
 
 type PurgeAllBanesParams = Record<string, never>;
@@ -768,6 +2219,9 @@ const purgeAllBanes: Reward<PurgeAllBanesParams> = {
   cec: (_p, ctx) => Math.max(1, baneCount(ctx)) * 30,
   viable: (_p, ctx) => baneCount(ctx) >= 1,
   render: () => "Purge all bane cards",
+  apply: (_p, _ctx, mut) => {
+    mut.purgeAllBaneCards("dream_journey:purge_all_banes");
+  },
 };
 
 const DREAMSIGN_CEC = 80;
@@ -785,6 +2239,25 @@ const gainRandomDreamsign: Reward<GainRandomDreamsignParams> = {
   // Dreamsign" option.
   viable: (_p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= 1,
   render: () => "Gain a random Dreamsign",
+  apply: (_p, ctx, mut) => {
+    const pool = poolDreamsignsById(ctx);
+    if (pool.length === 0) {
+      console.warn(
+        "[dream-journey] gain_random_dreamsign: dreamsign pool is empty",
+      );
+      return;
+    }
+    const source = pickFromList(
+      applyDrawContext(ctx),
+      "gain_random_dreamsign:dreamsign",
+      pool,
+    );
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:gain_random_dreamsign",
+      undefined,
+    );
+  },
 };
 
 type GainNamedDreamsignParams = { name: string };
@@ -803,6 +2276,20 @@ const gainNamedDreamsign: Reward<GainNamedDreamsignParams> = {
   // Pool-scope fix.
   viable: (_p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= 1,
   render: (p) => `Gain ${quoteName(p.name)}`,
+  apply: (p, ctx, mut) => {
+    const source = ctx.content.dreamsigns.find((dreamsign) => dreamsign.name === p.name);
+    if (source === undefined) {
+      console.warn(
+        `[dream-journey] gain_named_dreamsign: no content dreamsign matches name '${p.name}'`,
+      );
+      return;
+    }
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:gain_named_dreamsign",
+      undefined,
+    );
+  },
 };
 
 type Choose1OfXDreamsignsParams = { choices: number };
@@ -814,6 +2301,65 @@ const choose1OfXDreamsigns: Reward<Choose1OfXDreamsignsParams> = {
   // Pool-scope fix.
   viable: (p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= p.choices,
   render: (p) => `Choose 1 of ${p.choices} Dreamsigns to gain`,
+  choosePlan: (p, ctx, planning) => {
+    const pool = poolDreamsignsById(ctx);
+    const rolledDreamsignIds = pickUniqueDreamsignIds(
+      applyDrawContext(ctx),
+      "choose_1_of_X_dreamsigns:dreamsign",
+      pool,
+      p.choices,
+    );
+    if (rolledDreamsignIds.length < p.choices) return undefined;
+    return {
+      kind: "dreamsign",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledDreamsignIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to gain",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const pool = poolDreamsignsById(ctx);
+    const rolledDreamsignIds = pickUniqueDreamsignIds(
+      applyDrawContext(ctx),
+      "choose_1_of_X_dreamsigns:dreamsign",
+      pool,
+      p.choices,
+    );
+    if (rolledDreamsignIds.length < p.choices) {
+      warnSkippedDreamsignApply(
+        "choose_1_of_X_dreamsigns",
+        `only ${String(rolledDreamsignIds.length)} dreamsigns were available`,
+      );
+      return;
+    }
+
+    const selectedDreamsignId = selectedRolledDreamsignIds(
+      "choose_1_of_X_dreamsigns",
+      chooserResolution,
+      1,
+      1,
+      rolledDreamsignIds,
+    )?.[0];
+    if (selectedDreamsignId === undefined) return;
+
+    const source = ctx.content.dreamsigns.find((dreamsign) => dreamsign.id === selectedDreamsignId);
+    if (source === undefined) {
+      warnSkippedDreamsignApply(
+        "choose_1_of_X_dreamsigns",
+        `no content dreamsign matches id ${JSON.stringify(selectedDreamsignId)}`,
+      );
+      return;
+    }
+
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:choose_1_of_X_dreamsigns",
+      undefined,
+    );
+  },
 };
 
 type GainCopyRandomDreamsignParams = Record<string, never>;
@@ -828,6 +2374,32 @@ const gainCopyOfRandomDreamsign: Reward<GainCopyRandomDreamsignParams> = {
     return name
       ? `Gain a copy of ${quoteName(name)}`
       : "Gain a copy of one of your Dreamsigns chosen at random";
+  },
+  apply: (_p, ctx, mut) => {
+    const active = ctx.state.quest.activeDreamsigns;
+    if (active.length === 0) {
+      console.warn(
+        "[dream-journey] gain_copy_of_random_dreamsign: no active dreamsigns to copy",
+      );
+      return;
+    }
+    const entry = pickFromList(
+      applyDrawContext(ctx),
+      "gain_copy_of_random_dreamsign:active",
+      active,
+    );
+    const source = ctx.content.dreamsigns.find((dreamsign) => dreamsign.id === entry.dreamsignId);
+    if (source === undefined) {
+      console.warn(
+        `[dream-journey] gain_copy_of_random_dreamsign: no content dreamsign matches id '${entry.dreamsignId}'`,
+      );
+      return;
+    }
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:gain_copy_of_random_dreamsign",
+      undefined,
+    );
   },
 };
 
@@ -844,6 +2416,41 @@ const gainCopyOfChosenDreamsign: Reward<GainCopyChosenDreamsignParams> = {
       ? `Gain a copy of ${quoteName(name)}`
       : "Gain a copy of one of your Dreamsigns of your choice";
   },
+  choosePlan: (_p, ctx, planning) => {
+    if (ctx.state.quest.activeDreamsigns.length < 1) return undefined;
+    return {
+      kind: "dreamsign",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to copy",
+    };
+  },
+  apply: (_p, ctx, mut, chooserResolution) => {
+    const index = selectedActiveDreamsignIndex(
+      "gain_copy_of_chosen_dreamsign",
+      ctx,
+      chooserResolution,
+    );
+    if (index === undefined) return;
+
+    const entry = ctx.state.quest.activeDreamsigns[index];
+    const source = ctx.content.dreamsigns.find((dreamsign) => dreamsign.id === entry.dreamsignId);
+    if (source === undefined) {
+      warnSkippedDreamsignApply(
+        "gain_copy_of_chosen_dreamsign",
+        `no content dreamsign matches id ${JSON.stringify(entry.dreamsignId)}`,
+      );
+      return;
+    }
+
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:gain_copy_of_chosen_dreamsign",
+      undefined,
+    );
+  },
 };
 
 type AddSiteParams = { siteType: string };
@@ -857,6 +2464,15 @@ const addSiteToDreamscape: Reward<AddSiteParams> = {
   viable: () => true,
   render: (p) =>
     `Add ${indefiniteArticleFor(p.siteType)} ${p.siteType} site to this dreamscape`,
+  apply: (p, _ctx, mut) => {
+    const siteType = siteTypeForApply("add_site_to_dreamscape", p.siteType);
+    if (siteType === undefined) return;
+    mut.addSiteToDreamscape(
+      "current",
+      siteType,
+      "dream_journey:add_site_to_dreamscape",
+    );
+  },
 };
 
 const addSiteToNextDreamscape: Reward<AddSiteParams> = {
@@ -869,6 +2485,15 @@ const addSiteToNextDreamscape: Reward<AddSiteParams> = {
   viable: () => true,
   render: (p) =>
     `Add ${indefiniteArticleFor(p.siteType)} ${p.siteType} site to the next dreamscape you visit`,
+  apply: (p, _ctx, mut) => {
+    const siteType = siteTypeForApply("add_site_to_next_dreamscape", p.siteType);
+    if (siteType === undefined) return;
+    mut.addSiteToDreamscape(
+      "next",
+      siteType,
+      "dream_journey:add_site_to_next_dreamscape",
+    );
+  },
 };
 
 type StartingDreamwellPosParams = { cardName: string };
@@ -887,6 +2512,9 @@ const setStartingDreamwellPositive: Reward<StartingDreamwellPosParams> = {
   // "Placeholder Dreamwell Card" option until content arrived.
   viable: () => POSITIVE_DREAMWELL_CARDS.length >= 1,
   render: (p) => `Your starting dreamwell card is ${quoteName(p.cardName)}`,
+  apply: () => {
+    logSkippedVisualTemplate("set_starting_dreamwell_positive", "dreamwell");
+  },
 };
 
 type ShufflePosDreamwellParams = { cardName: string; count: number };
@@ -903,6 +2531,9 @@ const shufflePositiveDreamwellCards: Reward<ShufflePosDreamwellParams> = {
   viable: () => POSITIVE_DREAMWELL_CARDS.length >= 1,
   render: (p) =>
     `Shuffle ${p.count} ${quoteName(p.cardName)}${p.count === 1 ? "" : " copies"} into your dreamwell`,
+  apply: () => {
+    logSkippedVisualTemplate("shuffle_positive_dreamwell_cards", "dreamwell");
+  },
 };
 
 type NextRerollsParams = { count: number };
@@ -914,6 +2545,9 @@ const nextXShopRerollsFree: Reward<NextRerollsParams> = {
   viable: () => true,
   render: (p) =>
     `Your next ${p.count} shop reroll${p.count === 1 ? "" : "s"} ${p.count === 1 ? "is" : "are"} free`,
+  apply: (p, _ctx, mut) => {
+    mut.grantFreeShopRerolls(p.count, "dream_journey:next_X_shop_rerolls_free");
+  },
 };
 
 type IncreaseMaxEssenceParams = { amount: number };
@@ -924,6 +2558,9 @@ const increaseMaxEssence: Reward<IncreaseMaxEssenceParams> = {
   cec: (p) => p.amount * 0.5 * STAGE_MULTIPLIER,
   viable: () => true,
   render: (p) => `Increase your maximum essence by ${p.amount}`,
+  apply: (p, _ctx, mut) => {
+    mut.changeMaxEssence(p.amount, "dream_journey:increase_max_essence");
+  },
 };
 
 type Draft2PredicateParams = { predicateId: string };
@@ -940,6 +2577,51 @@ const draft2PredicateCardsFrom4: Reward<Draft2PredicateParams> = {
   viable: (p, ctx) =>
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4,
   render: (p) => `Draft 2 of 4 ${getPredicate(p.predicateId).text.plural}`,
+  choosePlan: (p, ctx, planning) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_2_predicate_cards_from_4:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 2,
+      maxPicks: 2,
+      title: "Choose cards to draft",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_2_predicate_cards_from_4:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) {
+      warnSkippedCardApply(
+        "draft_2_predicate_cards_from_4",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardIds = selectedExactRolledCardIds(
+      "draft_2_predicate_cards_from_4",
+      chooserResolution,
+      2,
+      rolledCardIds,
+    );
+    if (selectedCardIds === undefined) return;
+
+    for (const cardId of selectedCardIds) {
+      mut.addCardById(cardId, "dream_journey:draft_2_predicate_cards_from_4");
+    }
+  },
 };
 
 type DraftPredicateCardWithCopiesParams = { predicateId: string; copies: number };
@@ -958,6 +2640,51 @@ const draftPredicateCardWithCopies: Reward<DraftPredicateCardWithCopiesParams> =
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4,
   render: (p) =>
     `Draft 1 of 4 ${getPredicate(p.predicateId).text.plural} and gain ${p.copies} copies of it`,
+  choosePlan: (p, ctx, planning) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_predicate_card_with_copies:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to draft",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_predicate_card_with_copies:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) {
+      warnSkippedCardApply(
+        "draft_predicate_card_with_copies",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardId = selectedExactRolledCardIds(
+      "draft_predicate_card_with_copies",
+      chooserResolution,
+      1,
+      rolledCardIds,
+    )?.[0];
+    if (selectedCardId === undefined) return;
+
+    for (let i = 0; i < p.copies; i += 1) {
+      mut.addCardById(selectedCardId, "dream_journey:draft_predicate_card_with_copies");
+    }
+  },
 };
 
 type DraftPredicateCardWithTransfigurationParams = {
@@ -985,10 +2712,81 @@ const draftPredicateCardWithTransfiguration: Reward<DraftPredicateCardWithTransf
         ? FLAT_DRAFT_CEC
         : cardPoolCEC(CARD_CEC * 1.8, 1, getPredicate(p.predicateId)),
     viable: (p, ctx) =>
-      cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4
+      isJourneyTransfiguration(p.transfiguration)
+      && draftPredicatePool(ctx, p.predicateId, p.transfiguration).length >= 4
       && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
     render: (p) =>
       `Draft 1 of 4 ${getPredicate(p.predicateId).text.plural} and apply ${p.transfiguration} to it`,
+    choosePlan: (p, ctx, planning) => {
+      if (!isJourneyTransfiguration(p.transfiguration)) return undefined;
+      const rolledCardIds = pickedDraftPredicateCardIds(
+        ctx,
+        p.predicateId,
+        "draft_predicate_card_with_transfiguration:card",
+        4,
+        p.transfiguration,
+      );
+      if (rolledCardIds.length < 4) return undefined;
+      return {
+        kind: "card",
+        requestId: planning.requestIdForSlot(0),
+        poolKind: "rolled",
+        rolledCardIds,
+        minPicks: 1,
+        maxPicks: 1,
+        title: "Choose a card to draft",
+      };
+    },
+    apply: (p, ctx, mut, chooserResolution) => {
+      if (!isJourneyTransfiguration(p.transfiguration)) {
+        warnSkippedCardApply(
+          "draft_predicate_card_with_transfiguration",
+          `unknown transfiguration ${JSON.stringify(p.transfiguration)}`,
+        );
+        return;
+      }
+
+      const rolledCardIds = pickedDraftPredicateCardIds(
+        ctx,
+        p.predicateId,
+        "draft_predicate_card_with_transfiguration:card",
+        4,
+        p.transfiguration,
+      );
+      if (rolledCardIds.length < 4) {
+        warnSkippedCardApply(
+          "draft_predicate_card_with_transfiguration",
+          `only ${String(rolledCardIds.length)} draft cards were available`,
+        );
+        return;
+      }
+
+      const selectedCardId = selectedExactRolledCardIds(
+        "draft_predicate_card_with_transfiguration",
+        chooserResolution,
+        1,
+        rolledCardIds,
+      )?.[0];
+      if (selectedCardId === undefined) return;
+
+      const selectedCard = ctx.content.cards.find((card) => card.id === selectedCardId);
+      if (
+        selectedCard === undefined
+        || !isCardEligibleForTransfiguration(p.transfiguration, selectedCard)
+      ) {
+        warnSkippedCardApply(
+          "draft_predicate_card_with_transfiguration",
+          `selected card ${JSON.stringify(selectedCardId)} was not eligible for ${JSON.stringify(p.transfiguration)}`,
+        );
+        return;
+      }
+
+      mut.addCardByIdWithTransfiguration(
+        selectedCardId,
+        transfigurationForApply(p.transfiguration),
+        "dream_journey:draft_predicate_card_with_transfiguration",
+      );
+    },
   };
 
 type MakeCardReclaimParams = { cardName: string; count: number };
@@ -1008,6 +2806,9 @@ const makeCardReclaim: Reward<MakeCardReclaimParams> = {
   // Named-card smell.
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) => `Add Reclaim ${p.count} to ${quoteName(p.cardName)}`,
+  apply: () => {
+    logSkippedVisualTemplate("make_card_reclaim", "visual");
+  },
 };
 
 type MakeRandomCardsReclaimParams = { count: number; reclaim: number };
@@ -1023,6 +2824,9 @@ const makeRandomCardsReclaim: Reward<MakeRandomCardsReclaimParams> = {
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) =>
     `Add Reclaim ${p.reclaim} to ${p.count} random card${p.count === 1 ? "" : "s"}`,
+  apply: () => {
+    logSkippedVisualTemplate("make_random_cards_reclaim", "visual");
+  },
 };
 
 type OpeningHandGrantParams = { cardName: string; battles: number };
@@ -1043,6 +2847,9 @@ const openingHandGrantForXBattles: Reward<OpeningHandGrantParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) =>
     `Your opening hand contains ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {
+    logSkippedVisualTemplate("opening_hand_grant_for_X_battles", "battle_window");
+  },
 };
 
 type TemporaryCardCopyParams = { cardName: string; battles: number };
@@ -1063,6 +2870,9 @@ const temporaryCardCopyForXBattles: Reward<TemporaryCardCopyParams> = {
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) =>
     `Gain a temporary copy of ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {
+    logSkippedVisualTemplate("temporary_card_copy_for_X_battles", "battle_window");
+  },
 };
 
 type CostReductionParams = { predicateId: string; amount: number; battles: number };
@@ -1080,6 +2890,9 @@ const cardCostReductionForXBattles: Reward<CostReductionParams> = {
   viable: () => true,
   render: (p) =>
     `${sentenceCase(getPredicate(p.predicateId).text.plural)} cost ${p.amount} less for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {
+    logSkippedVisualTemplate("card_cost_reduction_for_X_battles", "visual");
+  },
 };
 
 type ApplyNamedTransfigAllPredParams = { transfiguration: string; predicateId: string };
@@ -1102,12 +2915,32 @@ const applyNamedTransfigurationToAllPredicateCards: Reward<ApplyNamedTransfigAll
     const matches = cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length;
     return CARD_CEC * 0.6 * Math.max(1, matches) * getPredicate(p.predicateId).multiplier;
   },
-  // Deck-scope leak fix.
+  // Viability mirrors the concrete eligible entries used by apply.
   viable: (p, ctx) =>
-    deckContainsPredicate(ctx, p.predicateId)
-    && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
+    deckContainsUntransfiguredPredicate(ctx, p.predicateId, 1, p.transfiguration),
   render: (p) =>
     `Apply ${p.transfiguration} to all ${getPredicate(p.predicateId).text.plural}`,
+  apply: (p, ctx, mut) => {
+    const entryIds = findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration(
+      ctx,
+      p.predicateId,
+      p.transfiguration,
+    );
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "apply_named_transfiguration_to_all_predicate_cards",
+        `no untransfigured deck entries matched predicate ${JSON.stringify(p.predicateId)}`,
+      );
+      return;
+    }
+    for (const entryId of entryIds) {
+      mut.transfigureDeckEntry(
+        entryId,
+        transfigurationForApply(p.transfiguration),
+        "dream_journey:apply_named_transfiguration_to_all_predicate_cards",
+      );
+    }
+  },
 };
 
 type TransfigureChosenStartersParams = { count: number };
@@ -1116,11 +2949,56 @@ const transfigureChosenStarters: Reward<TransfigureChosenStartersParams> = {
   weight: 1.0,
   rollParams: (_ctx, draw) => ({ count: drawInt(draw, "transfig_chosen_starters:n", 1, 2) }),
   cec: (p) => CARD_CEC * 0.9 * p.count,
-  viable: (p, ctx) => starterCardCount(ctx) >= p.count,
+  viable: (p, ctx) => deckContainsUntransfiguredPredicate(ctx, "starter", p.count),
   render: (p) =>
     p.count === 1
       ? "Apply a random transfiguration to 1 chosen starter card"
       : `Apply random transfigurations to ${p.count} chosen starter cards`,
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = findUntransfiguredDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length < p.count) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { starterOnly: true, entryIds },
+      minPicks: p.count,
+      maxPicks: p.count,
+      title: p.count === 1
+        ? "Choose a starter card to transfigure"
+        : "Choose starter cards to transfigure",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryIds = selectedExactDeckEntryIds(
+      "transfigure_chosen_starters",
+      ctx,
+      chooserResolution,
+      p.count,
+      findUntransfiguredDeckEntriesByPredicate(ctx, "starter"),
+    );
+    if (entryIds === undefined) return;
+
+    const draw = applyDrawContext(ctx);
+    const transfigurations = entryIds.map((entryId, index) =>
+      pickRandomTransfigurationForEntry(
+        ctx,
+        draw,
+        "transfigure_chosen_starters",
+        `transfigure_chosen_starters:transfiguration:${index}`,
+        entryId,
+      ),
+    );
+    if (transfigurations.some((transfiguration) => transfiguration === undefined)) return;
+
+    entryIds.forEach((entryId, index) => {
+      mut.transfigureDeckEntry(
+        entryId,
+        transfigurations[index]!,
+        "dream_journey:transfigure_chosen_starters",
+      );
+    });
+  },
 };
 
 type PurgeChosenStartersParams = { count: number };
@@ -1129,8 +3007,39 @@ const purgeChosenStarters: Reward<PurgeChosenStartersParams> = {
   weight: 1.0,
   rollParams: (_ctx, draw) => ({ count: drawInt(draw, "purge_chosen_starters:n", 1, 3) }),
   cec: (p) => CARD_CEC * 0.45 * p.count,
-  viable: (_p, ctx) => starterCardCount(ctx) >= 1,
-  render: (p) => `Purge up to ${p.count} chosen starter card${p.count === 1 ? "" : "s"}`,
+  viable: (_p, ctx) => findDeckEntriesByPredicate(ctx, "starter").length >= 1,
+  render: (p) =>
+    p.count === 1 ? "Purge a chosen starter card" : `Purge up to ${p.count} chosen starter cards`,
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, "starter");
+    const maxPicks = Math.min(p.count, entryIds.length);
+    if (maxPicks < 1) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { starterOnly: true, entryIds },
+      minPicks: 1,
+      maxPicks,
+      title: p.count === 1 ? "Choose a starter card to purge" : "Choose starter cards to purge",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const eligibleEntryIds = findDeckEntriesByPredicate(ctx, "starter");
+    const entryIds = selectedBoundedDeckEntryIds(
+      "purge_chosen_starters",
+      ctx,
+      chooserResolution,
+      1,
+      Math.min(p.count, eligibleEntryIds.length),
+      eligibleEntryIds,
+    );
+    if (entryIds === undefined) return;
+
+    for (const entryId of entryIds) {
+      mut.removeDeckEntry(entryId, "dream_journey:purge_chosen_starters");
+    }
+  },
 };
 
 type PurgeAllStartersParams = Record<string, never>;
@@ -1141,6 +3050,16 @@ const purgeAllStarters: Reward<PurgeAllStartersParams> = {
   cec: (_p, ctx) => CARD_CEC * 0.6 * Math.max(1, starterCardCount(ctx)),
   viable: (_p, ctx) => starterCardCount(ctx) >= 1,
   render: () => "Purge all starter cards",
+  apply: (_p, ctx, mut) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length === 0) {
+      warnSkippedCardApply("purge_all_starters", "starter deck entries were not found");
+      return;
+    }
+    for (const entryId of entryIds) {
+      mut.removeDeckEntry(entryId, "dream_journey:purge_all_starters");
+    }
+  },
 };
 
 type ReplaceStarterViaDraftParams = Record<string, never>;
@@ -1150,7 +3069,59 @@ const replaceStarterViaDraft: Reward<ReplaceStarterViaDraftParams> = {
   rollParams: () => ({}),
   cec: () => CARD_CEC * 1.0,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1 && ctx.content.cards.length >= 4,
-  render: () => "Replace a chosen starter card with 1 of 4 drafted cards",
+  render: () => "Replace a random starter card with 1 of 4 drafted cards",
+  choosePlan: (_p, ctx, planning) => {
+    const starterEntryId = pickedReplaceStarterEntryId(ctx);
+    if (starterEntryId === undefined) return undefined;
+
+    const rolledCardIds = pickedReplaceStarterDraftCardIds(ctx);
+    if (rolledCardIds.length < 4) return undefined;
+
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a replacement card",
+    };
+  },
+  apply: (_p, ctx, mut, chooserResolution) => {
+    const starterEntryId = pickedReplaceStarterEntryId(ctx);
+    if (starterEntryId === undefined) {
+      warnSkippedCardApply("replace_starter_via_draft", "starter deck entry was not found");
+      return;
+    }
+
+    const rolledCardIds = pickedReplaceStarterDraftCardIds(ctx);
+    if (rolledCardIds.length < 4) {
+      warnSkippedCardApply(
+        "replace_starter_via_draft",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardId = selectedExactRolledCardIds(
+      "replace_starter_via_draft",
+      chooserResolution,
+      1,
+      rolledCardIds,
+    )?.[0];
+    if (selectedCardId === undefined) return;
+
+    if (!ctx.content.cards.some((card) => card.id === selectedCardId)) {
+      warnSkippedCardApply(
+        "replace_starter_via_draft",
+        `catalog card ${JSON.stringify(selectedCardId)} was not found`,
+      );
+      return;
+    }
+
+    mut.removeDeckEntry(starterEntryId, "dream_journey:replace_starter_via_draft");
+    mut.addCardById(selectedCardId, "dream_journey:replace_starter_via_draft");
+  },
 };
 
 type ApplyRandomTransfigurationsToRandomCardsParams = { count: number };
@@ -1161,11 +3132,49 @@ const applyRandomTransfigurationsToRandomCards: Reward<ApplyRandomTransfiguratio
     rollParams: (_ctx, draw) => ({ count: drawInt(draw, "random_transfig_random:n", 1, 3) }),
     cec: (p) => CARD_CEC * 0.5 * p.count,
     // Deck-size-N.
-    viable: (p, ctx) => deckHasMinSize(ctx, p.count),
+    viable: (p, ctx) => deckHasUntransfiguredMinSize(ctx, p.count),
     render: (p) =>
       p.count === 1
         ? "Apply a random transfiguration to 1 random card"
         : `Apply random transfigurations to ${p.count} random cards`,
+    apply: (p, ctx, mut) => {
+      const entryIds = findUntransfiguredDeckEntryIds(ctx);
+      if (entryIds.length === 0) {
+        warnSkippedCardApply(
+          "apply_random_transfigurations_to_random_cards",
+          "untransfigured deck entries were not found",
+        );
+        return;
+      }
+      const draw = applyDrawContext(ctx);
+      const pickedEntryIds = pickUniqueDeckEntryIds(
+        draw,
+        "apply_random_transfigurations_to_random_cards:entry",
+        entryIds,
+        p.count,
+      );
+      if (pickedEntryIds.length < p.count) {
+        warnSkippedCardApply(
+          "apply_random_transfigurations_to_random_cards",
+          `only ${pickedEntryIds.length} deck entries available for count=${p.count}`,
+        );
+      }
+      pickedEntryIds.forEach((entryId, index) => {
+        const transfiguration = pickRandomTransfigurationForEntry(
+          ctx,
+          draw,
+          "apply_random_transfigurations_to_random_cards",
+          `apply_random_transfigurations_to_random_cards:transfiguration:${index}`,
+          entryId,
+        );
+        if (transfiguration === undefined) return;
+        mut.transfigureDeckEntry(
+          entryId,
+          transfiguration,
+          "dream_journey:apply_random_transfigurations_to_random_cards",
+        );
+      });
+    },
   };
 
 type TransformDreamsignToNamedParams = { name: string };
@@ -1186,6 +3195,43 @@ const transformDreamsignToNamed: Reward<TransformDreamsignToNamedParams> = {
   viable: (_p, ctx) =>
     ctx.state.quest.activeDreamsigns.length >= 1 && inactivePoolDreamsigns(ctx).length >= 1,
   render: (p) => `Transform a chosen Dreamsign into ${quoteName(p.name)}`,
+  choosePlan: (p, ctx, planning) => {
+    if (!inactivePoolDreamsigns(ctx).some((dreamsign) => dreamsign.name === p.name)) {
+      return undefined;
+    }
+    if (ctx.state.quest.activeDreamsigns.length < 1) return undefined;
+    return {
+      kind: "dreamsign",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to transform",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const target = inactivePoolDreamsigns(ctx).find((dreamsign) => dreamsign.name === p.name);
+    if (target === undefined) {
+      warnSkippedDreamsignApply(
+        "transform_dreamsign_to_named",
+        `no inactive pool dreamsign matches name ${JSON.stringify(p.name)}`,
+      );
+      return;
+    }
+
+    const index = selectedActiveDreamsignIndex(
+      "transform_dreamsign_to_named",
+      ctx,
+      chooserResolution,
+    );
+    if (index === undefined) return;
+
+    mut.addDreamsign(
+      projectDreamsignForApply(target),
+      "dream_journey:transform_dreamsign_to_named",
+      index,
+    );
+  },
 };
 
 type TemporaryDreamsignParams = { battles: number };
@@ -1198,6 +3244,9 @@ const temporaryDreamsignForXBattles: Reward<TemporaryDreamsignParams> = {
   viable: (_p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= 1,
   render: (p) =>
     `Gain a random Dreamsign for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+  apply: () => {
+    logSkippedVisualTemplate("temporary_dreamsign_for_X_battles", "battle_window");
+  },
 };
 
 type ReplaceSiteTypeParams = { fromType: string; toType: string };
@@ -1216,6 +3265,16 @@ const replaceSiteType: Reward<ReplaceSiteTypeParams> = {
   viable: () => true,
   render: (p) =>
     `Replace ${indefiniteArticleFor(p.fromType)} ${p.fromType} site in this dreamscape with ${indefiniteArticleFor(p.toType)} ${p.toType} site`,
+  apply: (p, _ctx, mut) => {
+    const fromType = siteTypeForApply("replace_site_type", p.fromType);
+    const toType = siteTypeForApply("replace_site_type", p.toType);
+    if (fromType === undefined || toType === undefined) return;
+    mut.replaceSiteType(
+      fromType,
+      toType,
+      "dream_journey:replace_site_type",
+    );
+  },
 };
 
 type ShopEssenceDiscountParams = { percent: number };
@@ -1226,6 +3285,9 @@ const shopEssenceDiscount: Reward<ShopEssenceDiscountParams> = {
   cec: (p) => p.percent * 1.0,
   viable: () => true,
   render: (p) => `Shop essence costs are permanently reduced by ${p.percent}%`,
+  apply: (p, _ctx, mut) => {
+    mut.applyShopEssenceDiscount(p.percent, "dream_journey:shop_essence_discount");
+  },
 };
 
 type ShopOmenDiscountParams = { count: number };
@@ -1237,6 +3299,9 @@ const shopOmenDiscount: Reward<ShopOmenDiscountParams> = {
   viable: () => true,
   render: (p) =>
     `Your next ${p.count} shop purchase${p.count === 1 ? "" : "s"} cost${p.count === 1 ? "s" : ""} 1 fewer omen`,
+  apply: (p, _ctx, mut) => {
+    mut.grantShopOmenDiscounts(p.count, "dream_journey:shop_omen_discount");
+  },
 };
 
 const BOOST_SITE_TYPE_MULTIPLIER: Readonly<Record<string, number>> = Object.freeze({
@@ -1271,6 +3336,16 @@ const boostSiteAppearanceChance: Reward<BoostSiteParams> = {
     const dreamscapes = p.dreamscapes ?? BOOST_SITE_DURATION_DREAMSCAPES;
     return `${p.percent}% higher chance to see ${p.siteType} sites in the next ${dreamscapes} dreamscape${dreamscapes === 1 ? "" : "s"} you visit`;
   },
+  apply: (p, _ctx, mut) => {
+    const siteType = siteTypeForApply("boost_site_appearance_chance", p.siteType);
+    if (siteType === undefined) return;
+    mut.boostSiteAppearance(
+      siteType,
+      p.percent,
+      p.dreamscapes ?? BOOST_SITE_DURATION_DREAMSCAPES,
+      "dream_journey:boost_site_appearance_chance",
+    );
+  },
 };
 
 type MetaGain2Params = {
@@ -1280,6 +3355,34 @@ type MetaGain2Params = {
 
 function nonMetaRewards(): readonly Reward[] {
   return REWARDS.filter((r) => !r.id.startsWith("meta_"));
+}
+
+const META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS: ReadonlySet<string> = new Set([
+  metaRewardPairKey("purge_all_starters", "transfigure_all_starters"),
+  metaRewardPairKey("purge_all_banes", "purge_X_banes"),
+]);
+
+function metaRewardPairKey(firstId: string, secondId: string): string {
+  return [firstId, secondId].sort().join("\0");
+}
+
+function metaRewardPairCompatible(firstId: string, secondId: string): boolean {
+  return !META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS.has(metaRewardPairKey(firstId, secondId));
+}
+
+function orderedCompatibleRewardPairs(pool: readonly Reward[]): readonly (readonly [Reward, Reward])[] {
+  const pairs: (readonly [Reward, Reward])[] = [];
+  for (let firstIndex = 0; firstIndex < pool.length; firstIndex += 1) {
+    for (let secondIndex = 0; secondIndex < pool.length; secondIndex += 1) {
+      if (firstIndex === secondIndex) continue;
+      const first = pool[firstIndex];
+      const second = pool[secondIndex];
+      if (metaRewardPairCompatible(first.id, second.id)) {
+        pairs.push([first, second] as const);
+      }
+    }
+  }
+  return pairs;
 }
 
 const metaGain2Rewards: Reward<MetaGain2Params> = {
@@ -1294,9 +3397,11 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
       const subParams = r.rollParams(ctx, subDraw);
       return r.viable(subParams, ctx);
     });
-    const usePool = pool.length >= 2 ? pool : allNonMeta;
-    if (usePool.length < 2) {
-      const first = usePool[0];
+    const viablePairs = orderedCompatibleRewardPairs(pool);
+    const allPairs = orderedCompatibleRewardPairs(allNonMeta);
+    const usePairs = viablePairs.length > 0 ? viablePairs : allPairs;
+    if (usePairs.length === 0) {
+      const first = allNonMeta[0];
       return {
         subIds: [first.id, first.id] as readonly [string, string],
         subParams: [
@@ -1305,11 +3410,7 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
         ] as readonly [TemplateParams, TemplateParams],
       };
     }
-    const firstIndex = drawInt(draw, "meta_gain_2:i1", 0, usePool.length - 1);
-    let secondIndex = drawInt(draw, "meta_gain_2:i2", 0, usePool.length - 2);
-    if (secondIndex >= firstIndex) secondIndex += 1;
-    const first = usePool[firstIndex];
-    const second = usePool[secondIndex];
+    const [first, second] = usePairs[drawInt(draw, "meta_gain_2:pair", 0, usePairs.length - 1)];
     return {
       subIds: [first.id, second.id] as readonly [string, string],
       subParams: [
@@ -1332,12 +3433,20 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
   viable: (p, ctx) => {
     const a = getReward(p.subIds[0]);
     const b = getReward(p.subIds[1]);
-    return a.viable(p.subParams[0], ctx) && b.viable(p.subParams[1], ctx);
+    return metaRewardPairCompatible(p.subIds[0], p.subIds[1])
+      && a.viable(p.subParams[0], ctx)
+      && b.viable(p.subParams[1], ctx);
   },
   render: (p, ctx) => {
     const a = getReward(p.subIds[0]);
     const b = getReward(p.subIds[1]);
     return [a.render(p.subParams[0], ctx), b.render(p.subParams[1], ctx)].join(". ");
+  },
+  apply: (p, ctx, mut) => {
+    const a = getReward(p.subIds[0]);
+    const b = getReward(p.subIds[1]);
+    a.apply(p.subParams[0], ctx, mut);
+    b.apply(p.subParams[1], ctx, mut);
   },
 };
 
@@ -1414,4 +3523,14 @@ export function getReward(id: string): Reward {
   const found = BY_ID.get(id);
   if (!found) throw new Error(`Unknown reward template id: ${id}`);
   return found;
+}
+
+/**
+ * Lookup variant that returns `undefined` for unknown ids rather than
+ * throwing. The apply dispatch loop uses this to surface a `console.warn` and
+ * continue processing the remaining envelopes when an envelope references a
+ * templateId the catalog does not contain.
+ */
+export function findReward(id: string): Reward | undefined {
+  return BY_ID.get(id);
 }

@@ -11,6 +11,8 @@
 
 import type { ContentBundle } from "../content/types";
 
+export type ProjectedDeckEntryTransfiguration = string | null;
+
 export type QuestStateProjection = {
   readonly seed: string;
   readonly resources: {
@@ -21,7 +23,12 @@ export type QuestStateProjection = {
   };
   readonly selectedTides: readonly string[];
   readonly deck: {
-    readonly entries: readonly { readonly cardId: string; readonly copies: number }[];
+    readonly entries: readonly {
+      readonly cardId: string;
+      readonly copies: number;
+      readonly entryIds?: readonly string[];
+      readonly entryTransfigurations?: readonly ProjectedDeckEntryTransfiguration[];
+    }[];
     readonly summary: {
       readonly totalCards: number;
       readonly starterCards: number;

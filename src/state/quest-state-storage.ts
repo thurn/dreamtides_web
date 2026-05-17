@@ -12,6 +12,15 @@ function normalizeQuestState(state: QuestState): QuestState {
   return {
     ...state,
     siteRuntime: state.siteRuntime ?? {},
+    // Backfill Dream Journey effect modifier fields so a snapshot persisted
+    // before they were introduced loads without runtime errors.
+    battleModifiers: state.battleModifiers ?? [],
+    shopModifiers: state.shopModifiers ?? {
+      freeRerolls: 0,
+      upcomingOmenDiscounts: 0,
+      essenceDiscountPercent: 0,
+    },
+    dreamscapeModifiers: state.dreamscapeModifiers ?? [],
   };
 }
 

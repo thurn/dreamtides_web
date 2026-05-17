@@ -19,6 +19,7 @@ import {
   buildTreeTerminalOperations,
 } from "../../operationBuilders";
 import type { JourneyContext } from "../../context";
+import { getCost } from "../../shared/costs";
 import { getReward } from "../../shared/rewards";
 import type { TemplateParams } from "../../shared/types";
 
@@ -31,6 +32,7 @@ type PushReward = {
 };
 
 const PUSH_REWARD_FAMILIES = ["essence", "omens"] as const;
+const PAY_ESSENCE = getCost("pay_essence");
 
 type TreeBranchArgs = {
   id: string;
@@ -65,11 +67,11 @@ function treeBranch(args: TreeBranchArgs): JourneyTreeBranch {
         text: args.terminal.text,
         outcome: args.terminal.outcome,
         operations: [],
-        costs,
-        effects,
-        burdens,
-        targets,
-        routeEffects,
+        costs: [...(args.terminal.costs ?? [])],
+        effects: [...(args.terminal.effects ?? [])],
+        burdens: [...(args.terminal.burdens ?? [])],
+        targets: [...(args.terminal.targets ?? [])],
+        routeEffects: [...(args.terminal.routeEffects ?? [])],
         rewardTemplateIds: [...rewardTemplateIds],
       }
     : undefined;
@@ -214,11 +216,18 @@ function repeatedPushReward(
   return sharedRewardPayload(context, "gain_essence", { x: amount });
 }
 
-function essenceCost(amount: number): Record<string, unknown> {
+function essenceCost(
+  context: JourneyContext,
+  amount: number,
+): Record<string, unknown> {
+  const params = { x: amount };
+
   return {
-    kind: "essence",
-    amount,
-    timing: "immediate",
+    kind: "shared_cost_template",
+    templateId: "pay_essence",
+    params,
+    text: PAY_ESSENCE.render(params, context),
+    convertedEssence: PAY_ESSENCE.cec(params, context),
   };
 }
 
@@ -235,6 +244,7 @@ export function buildPushYourLuckTree(
     [1, 2, 3].map((level) => {
       const successPercent = chances[level - 1];
       const nextNodeId = level === 3 ? undefined : `level-${level + 1}`;
+      const attemptCost = essenceCost(context, price);
 
       return {
         id: `level-${level}`,
@@ -259,7 +269,7 @@ export function buildPushYourLuckTree(
             label: "Attempt",
             text: `Pay ${price} essence. ${successPercent}% chance to ${reward.text}`,
             odds: odds(successPercent),
-            costs: [essenceCost(price)],
+            costs: [attemptCost],
             effects: reward.effects,
             targets: reward.targets ?? [],
             cost: price,
@@ -269,8 +279,8 @@ export function buildPushYourLuckTree(
             terminal: {
               text: "End the Journey.",
               outcome: "claim",
-              costs: [essenceCost(price)],
-              effects: reward.effects,
+              costs: [],
+              effects: [],
               burdens: [],
               targets: reward.targets ?? [],
               routeEffects: [],

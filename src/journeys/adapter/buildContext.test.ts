@@ -131,6 +131,13 @@ function makeQuestState(overrides: {
     activeSiteId: null,
     failureSummary: null,
     hasSeenStartingDeckPopup: true,
+    battleModifiers: [],
+    shopModifiers: {
+      freeRerolls: 0,
+      upcomingOmenDiscounts: 0,
+      essenceDiscountPercent: 0,
+    },
+    dreamscapeModifiers: [],
   };
 }
 
@@ -322,6 +329,37 @@ describe("buildJourneyContext deck projection", () => {
     expect(context.state.quest.deck.summary.totalCards).toBe(5);
     expect(context.state.quest.deck.summary.uniqueCards).toBe(3);
     expect(context.state.quest.deck.summary.starterCards).toBe(1);
+  });
+
+  it("preserves transfiguration state alongside projected deck entry ids", () => {
+    const cards: CardData[] = [
+      makeCard({ cardNumber: 1, id: "card-1", name: "One" }),
+    ];
+    const deck: DeckEntry[] = [
+      makeDeckEntry({
+        entryId: "e1",
+        cardNumber: 1,
+        transfiguration: "Viridian",
+      }),
+      makeDeckEntry({ entryId: "e2", cardNumber: 1, transfiguration: null }),
+    ];
+    const content = buildJourneyContentBundle({
+      cards,
+      dreamcallers: [],
+      dreamsignTemplates: [],
+    });
+    const questState = makeQuestState({ deck });
+
+    const context = buildJourneyContext(questState, content, makeSite("s"));
+
+    expect(context.state.quest.deck.entries).toEqual([
+      {
+        cardId: "card-1",
+        copies: 2,
+        entryIds: ["e1", "e2"],
+        entryTransfigurations: ["Viridian", null],
+      },
+    ]);
   });
 
   it("warns and skips deck entries whose cardNumber is not in the content bundle", () => {

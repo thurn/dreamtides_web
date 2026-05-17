@@ -169,12 +169,12 @@ function HudDreamsignOverflowPill({
               >
                 {dreamsign.name}
               </span>
-              <p
+              <div
                 className="mt-0.5 text-[10px] leading-snug opacity-75"
                 style={{ color: "#e2e8f0" }}
               >
                 <RulesText text={dreamsign.effectDescription} />
-              </p>
+              </div>
             </div>
           ))}
         </div>

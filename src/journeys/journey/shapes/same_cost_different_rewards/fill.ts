@@ -6,6 +6,7 @@ import { makeUnlockedOption, type JourneyOption, type JourneyStage } from "../..
 import { COSTS, getCost } from "../../shared/costs";
 import { REWARDS } from "../../shared/rewards";
 import type { Cost, Reward, TemplateParams } from "../../shared/types";
+import type { SharedCostPayload, SharedRewardPayload } from "../../../apply/payloads";
 import type { FilledJourney, ShapeFillArgs } from "../types";
 
 const SHAPE_LABEL = "same_cost_different_rewards";
@@ -46,29 +47,55 @@ type RolledOffer = {
 function emptyOption(
   number: number,
   text: string,
-  effectCec: number,
-  costCec: number,
-  rewardTemplateIds: readonly string[],
+  cost: RolledCost,
+  reward: RolledReward,
+  ctx: JourneyContext,
 ): JourneyOption {
+  const costPayload = costEnvelope(cost);
+  const rewardPayload = rewardEnvelope(reward, ctx);
+
   return makeUnlockedOption({
     number,
     symbols: [],
     text,
     operations: [],
-    costs: [],
-    effects: [],
+    costs: [costPayload],
+    effects: [rewardPayload],
     burdens: [],
     targets: [],
     triggers: [],
     routeEffects: [],
-    costConvertedEssence: costCec,
-    effectConvertedEssence: effectCec,
+    costConvertedEssence: cost.cec,
+    effectConvertedEssence: reward.cec,
     burdenConvertedEssence: 0,
     uncertaintyConvertedEssence: 0,
-    netConvertedEssence: effectCec - costCec,
+    netConvertedEssence: reward.cec - cost.cec,
     pickBehavior: "record_and_generate_next",
-    rewardTemplateIds: [...rewardTemplateIds],
+    rewardTemplateIds: [reward.template.id],
   });
+}
+
+function costEnvelope(cost: RolledCost): SharedCostPayload {
+  return {
+    kind: "shared_cost_template",
+    templateId: cost.template.id,
+    params: cost.params,
+    text: cost.rendered,
+    convertedEssence: cost.cec,
+  };
+}
+
+function rewardEnvelope(
+  reward: RolledReward,
+  ctx: JourneyContext,
+): SharedRewardPayload {
+  return {
+    kind: "shared_reward_template",
+    templateId: reward.template.id,
+    params: reward.params,
+    text: reward.template.render(reward.params, ctx),
+    convertedEssence: reward.cec,
+  };
 }
 
 function rewardSubIds(rolled: RolledReward): readonly string[] {
@@ -525,9 +552,9 @@ export function sameCostDifferentRewardsFill(
       emptyOption(
         index + 1,
         renderOption(bestOffer.sharedCost, reward, context),
-        reward.cec,
-        bestOffer.sharedCost.cec,
-        [reward.template.id],
+        bestOffer.sharedCost,
+        reward,
+        context,
       ),
     ),
     precommitted: {},

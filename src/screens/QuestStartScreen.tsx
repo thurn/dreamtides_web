@@ -133,12 +133,12 @@ export function QuestStartScreen() {
                     boxShadow: `0 14px 28px ${accentColor}16`,
                   }}
                 />
-                <p
+                <div
                   className="flex flex-1 items-center justify-center px-2 text-center text-sm leading-relaxed opacity-80"
                   style={{ color: "#e2e8f0" }}
                 >
                   <RulesText text={dreamcaller.renderedText} />
-                </p>
+                </div>
                 <div
                   className="mt-3 flex items-baseline justify-center gap-1.5 text-sm font-semibold"
                   data-starting-essence={dreamcaller.id}

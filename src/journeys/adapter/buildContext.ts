@@ -8,7 +8,11 @@
 import { sha256 } from "js-sha256";
 
 import type { ContentBundle } from "../content/types";
-import type { JourneyContext, QuestStateProjection } from "../journey/context";
+import type {
+  JourneyContext,
+  ProjectedDeckEntryTransfiguration,
+  QuestStateProjection,
+} from "../journey/context";
 import { EFFECT_CATALOG_VERSION } from "../journey/effects";
 import { MANIFEST_CONTRACT_VERSION, MANIFEST_SCHEMA_VERSION } from "../journey/manifest";
 import { stableStringify } from "../util/stableJson";
@@ -17,16 +21,25 @@ import type { DeckEntry, QuestState, SiteState } from "../../types/quest";
 
 /**
  * Project the quest-prototype deck into the journey's `deck.entries` shape.
- * Each deck entry surfaces as a `{ cardId, copies }` row where `cardId` is
- * the card's prototype id resolved from `cardNumber` via the supplied
- * lookup. Multiple deck entries that share a `cardNumber` collapse into a
- * single entry whose `copies` is the count.
+ * Each deck entry surfaces as a `{ cardId, copies, entryIds }` row where
+ * `cardId` is the card's prototype id resolved from `cardNumber` via the
+ * supplied lookup. Multiple deck entries that share a `cardNumber` collapse
+ * into a single entry whose `copies` is the count, while `entryIds` and
+ * `entryTransfigurations` preserve the concrete deck rows used by apply-time
+ * mutations.
  */
 function projectDeck(
   deck: readonly DeckEntry[],
   cardIdByNumber: ReadonlyMap<number, string>,
-): { readonly cardId: string; readonly copies: number }[] {
-  const copiesById = new Map<string, number>();
+): QuestStateProjection["deck"]["entries"] {
+  const entriesById = new Map<
+    string,
+    {
+      copies: number;
+      entryIds: string[];
+      entryTransfigurations: ProjectedDeckEntryTransfiguration[];
+    }
+  >();
 
   for (const entry of deck) {
     const cardId = cardIdByNumber.get(entry.cardNumber);
@@ -40,10 +53,23 @@ function projectDeck(
       );
       continue;
     }
-    copiesById.set(cardId, (copiesById.get(cardId) ?? 0) + 1);
+    const existing = entriesById.get(cardId) ?? {
+      copies: 0,
+      entryIds: [],
+      entryTransfigurations: [],
+    };
+    existing.copies += 1;
+    existing.entryIds.push(entry.entryId);
+    existing.entryTransfigurations.push(entry.transfiguration ?? null);
+    entriesById.set(cardId, existing);
   }
 
-  return Array.from(copiesById, ([cardId, copies]) => ({ cardId, copies }));
+  return Array.from(entriesById, ([cardId, entry]) => ({
+    cardId,
+    copies: entry.copies,
+    entryIds: entry.entryIds,
+    entryTransfigurations: entry.entryTransfigurations,
+  }));
 }
 
 /**
