@@ -150,6 +150,40 @@ describe("Chooser overlay components", () => {
     });
   });
 
+  it("replaces the previous card selection when maxPicks is one", () => {
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <CardChooser
+        request={{ ...cardRequest, maxPicks: 1 }}
+        candidates={cardCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    click(buttonByName(container, "Alpha"));
+    click(buttonByName(container, "Beta"));
+
+    expect(buttonByName(container, "Alpha").getAttribute("aria-pressed")).toBe(
+      "false",
+    );
+    expect(buttonByName(container, "Beta").getAttribute("aria-pressed")).toBe(
+      "true",
+    );
+
+    click(confirmButton(container));
+    expect(onResolve).toHaveBeenCalledTimes(1);
+    expect(onResolve).toHaveBeenCalledWith({
+      kind: "card",
+      entryIds: ["e2"],
+      cardIds: ["c2"],
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("resolves selected dreamsign indices and ids when confirmed", () => {
     const onResolve = vi.fn();
     const { container, root } = mount(
@@ -294,6 +328,55 @@ describe("Chooser overlay components", () => {
       "false",
     );
 
+    renderAgain(
+      root,
+      <CardChooser
+        request={cardRequest}
+        candidates={cardCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    expect(confirmButton(container).disabled).toBe(true);
+    expect(buttonByName(container, "Alpha").getAttribute("aria-pressed")).toBe(
+      "false",
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("resets stale card selection when same-request semantics change", () => {
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <CardChooser
+        request={cardRequest}
+        candidates={cardCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    click(buttonByName(container, "Alpha"));
+    expect(confirmButton(container).disabled).toBe(false);
+
+    renderAgain(
+      root,
+      <CardChooser
+        request={{ ...cardRequest, minPicks: 2, maxPicks: 3 }}
+        candidates={cardCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    expect(confirmButton(container).disabled).toBe(true);
+    expect(buttonByName(container, "Alpha").getAttribute("aria-pressed")).toBe(
+      "false",
+    );
+
     act(() => {
       root.unmount();
     });
@@ -317,6 +400,21 @@ describe("Chooser overlay components", () => {
       root,
       <DreamsignChooser
         request={{ ...dreamsignRequest, requestId: "choose-dreamsign-next" }}
+        candidates={dreamsignCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    expect(confirmButton(container).disabled).toBe(true);
+    expect(
+      buttonByName(container, "Bright Key").getAttribute("aria-pressed"),
+    ).toBe("false");
+
+    renderAgain(
+      root,
+      <DreamsignChooser
+        request={dreamsignRequest}
         candidates={dreamsignCandidates}
         onResolve={onResolve}
         onCancel={vi.fn()}
@@ -355,6 +453,20 @@ describe("Chooser overlay components", () => {
       root,
       <TransfigurationChooser
         request={{ ...request, requestId: "choose-transfiguration-next" }}
+        onResolve={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    expect(confirmButton(container).disabled).toBe(true);
+    expect(buttonByName(container, "Bronze").getAttribute("aria-pressed")).toBe(
+      "false",
+    );
+
+    renderAgain(
+      root,
+      <TransfigurationChooser
+        request={request}
         onResolve={vi.fn()}
         onCancel={vi.fn()}
       />,

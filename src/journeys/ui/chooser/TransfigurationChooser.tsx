@@ -33,34 +33,32 @@ export interface TransfigurationChooserProps {
   readonly onCancel: () => void;
 }
 
-interface TransfigurationSelectionState {
-  readonly identity: string;
-  readonly type: TransfigurationType | null;
-}
-
 function transfigurationChooserIdentity(
   request: Extract<ChooserRequest, { kind: "transfiguration" }>,
 ): string {
-  return [
+  return JSON.stringify([
     request.requestId,
-    ...request.eligibleTransfigurations,
-  ].join("|");
+    [...request.eligibleTransfigurations].sort(),
+  ]);
 }
 
-export function TransfigurationChooser({
+export function TransfigurationChooser(props: TransfigurationChooserProps) {
+  const resetKey = useMemo(
+    () => transfigurationChooserIdentity(props.request),
+    [props.request],
+  );
+
+  return <TransfigurationChooserInner key={resetKey} {...props} />;
+}
+
+function TransfigurationChooserInner({
   request,
   onResolve,
   onCancel,
 }: TransfigurationChooserProps) {
-  const chooserIdentity = useMemo(
-    () => transfigurationChooserIdentity(request),
-    [request],
+  const [selectedType, setSelectedType] = useState<TransfigurationType | null>(
+    null,
   );
-  const [selection, setSelection] = useState<TransfigurationSelectionState>({
-    identity: chooserIdentity,
-    type: null,
-  });
-  const selectedType = selection.identity === chooserIdentity ? selection.type : null;
 
   const eligibleSet = useMemo(
     () => new Set(request.eligibleTransfigurations),
@@ -90,11 +88,7 @@ export function TransfigurationChooser({
               disabled={!eligible}
               aria-disabled={!eligible}
               aria-pressed={selected}
-              onClick={
-                eligible
-                  ? () => setSelection({ identity: chooserIdentity, type })
-                  : undefined
-              }
+              onClick={eligible ? () => setSelectedType(type) : undefined}
               className="min-h-24 rounded-md border p-3 text-center text-sm font-semibold text-white transition-opacity enabled:hover:brightness-110 disabled:cursor-not-allowed"
               style={{
                 backgroundColor: TILE_COLORS[type],

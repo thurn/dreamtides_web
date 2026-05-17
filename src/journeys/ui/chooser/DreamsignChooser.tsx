@@ -18,11 +18,6 @@ export interface DreamsignChooserProps {
   readonly onCancel: () => void;
 }
 
-interface DreamsignSelectionState {
-  readonly identity: string;
-  readonly indices: readonly number[];
-}
-
 function isPickCountValid(
   request: Extract<ChooserRequest, { kind: "dreamsign" }>,
   count: number,
@@ -34,28 +29,34 @@ function dreamsignChooserIdentity(
   request: Extract<ChooserRequest, { kind: "dreamsign" }>,
   candidates: readonly DreamsignChooserCandidate[],
 ): string {
-  return [
+  return JSON.stringify([
     request.requestId,
-    ...candidates.map((candidate) => `${candidate.index}:${candidate.id ?? ""}`),
-  ].join("|");
+    request.poolKind,
+    request.rolledDreamsignIds ?? [],
+    request.minPicks,
+    request.maxPicks,
+    candidates.map((candidate) =>
+      [String(candidate.index), candidate.id ?? ""].join(":"),
+    ),
+  ]);
 }
 
-export function DreamsignChooser({
+export function DreamsignChooser(props: DreamsignChooserProps) {
+  const resetKey = useMemo(
+    () => dreamsignChooserIdentity(props.request, props.candidates),
+    [props.candidates, props.request],
+  );
+
+  return <DreamsignChooserInner key={resetKey} {...props} />;
+}
+
+function DreamsignChooserInner({
   request,
   candidates,
   onResolve,
   onCancel,
 }: DreamsignChooserProps) {
-  const chooserIdentity = useMemo(
-    () => dreamsignChooserIdentity(request, candidates),
-    [candidates, request],
-  );
-  const [selection, setSelection] = useState<DreamsignSelectionState>({
-    identity: chooserIdentity,
-    indices: [],
-  });
-  const selectedIndices =
-    selection.identity === chooserIdentity ? selection.indices : [];
+  const [selectedIndices, setSelectedIndices] = useState<readonly number[]>([]);
 
   const selectedIndexSet = useMemo(
     () => new Set(selectedIndices),
@@ -68,21 +69,16 @@ export function DreamsignChooser({
   );
 
   const toggleIndex = useCallback((index: number) => {
-    setSelection((current) => {
-      const currentIndices =
-        current.identity === chooserIdentity ? current.indices : [];
-      if (currentIndices.includes(index)) {
-        return {
-          identity: chooserIdentity,
-          indices: currentIndices.filter((selected) => selected !== index),
-        };
+    setSelectedIndices((current) => {
+      if (current.includes(index)) {
+        return current.filter((selected) => selected !== index);
       }
       if (request.maxPicks === 1) {
-        return { identity: chooserIdentity, indices: [index] };
+        return [index];
       }
-      return { identity: chooserIdentity, indices: [...currentIndices, index] };
+      return [...current, index];
     });
-  }, [chooserIdentity, request.maxPicks]);
+  }, [request.maxPicks]);
 
   const handleConfirm = useCallback(() => {
     if (!isPickCountValid(request, selectedIndices.length)) return;

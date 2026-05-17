@@ -18,11 +18,6 @@ export interface CardChooserProps {
   readonly onCancel: () => void;
 }
 
-interface CardSelectionState {
-  readonly identity: string;
-  readonly entryIds: readonly string[];
-}
-
 function isPickCountValid(
   request: Extract<ChooserRequest, { kind: "card" }>,
   count: number,
@@ -34,30 +29,35 @@ function cardChooserIdentity(
   request: Extract<ChooserRequest, { kind: "card" }>,
   candidates: readonly CardChooserCandidate[],
 ): string {
-  return [
+  return JSON.stringify([
     request.requestId,
-    ...candidates.map(
-      (candidate) => `${candidate.entryId}:${candidate.cardId ?? ""}`,
+    request.poolKind,
+    request.deckFilter ?? null,
+    request.rolledCardIds ?? [],
+    request.minPicks,
+    request.maxPicks,
+    candidates.map((candidate) =>
+      [candidate.entryId, candidate.cardId ?? ""].join(":"),
     ),
-  ].join("|");
+  ]);
 }
 
-export function CardChooser({
+export function CardChooser(props: CardChooserProps) {
+  const resetKey = useMemo(
+    () => cardChooserIdentity(props.request, props.candidates),
+    [props.candidates, props.request],
+  );
+
+  return <CardChooserInner key={resetKey} {...props} />;
+}
+
+function CardChooserInner({
   request,
   candidates,
   onResolve,
   onCancel,
 }: CardChooserProps) {
-  const chooserIdentity = useMemo(
-    () => cardChooserIdentity(request, candidates),
-    [candidates, request],
-  );
-  const [selection, setSelection] = useState<CardSelectionState>({
-    identity: chooserIdentity,
-    entryIds: [],
-  });
-  const selectedEntryIds =
-    selection.identity === chooserIdentity ? selection.entryIds : [];
+  const [selectedEntryIds, setSelectedEntryIds] = useState<readonly string[]>([]);
 
   const selectedEntrySet = useMemo(
     () => new Set(selectedEntryIds),
@@ -70,21 +70,16 @@ export function CardChooser({
   );
 
   const toggleEntry = useCallback((entryId: string) => {
-    setSelection((current) => {
-      const currentEntryIds =
-        current.identity === chooserIdentity ? current.entryIds : [];
-      if (currentEntryIds.includes(entryId)) {
-        return {
-          identity: chooserIdentity,
-          entryIds: currentEntryIds.filter((selected) => selected !== entryId),
-        };
+    setSelectedEntryIds((current) => {
+      if (current.includes(entryId)) {
+        return current.filter((selected) => selected !== entryId);
       }
       if (request.maxPicks === 1) {
-        return { identity: chooserIdentity, entryIds: [entryId] };
+        return [entryId];
       }
-      return { identity: chooserIdentity, entryIds: [...currentEntryIds, entryId] };
+      return [...current, entryId];
     });
-  }, [chooserIdentity, request.maxPicks]);
+  }, [request.maxPicks]);
 
   const handleConfirm = useCallback(() => {
     if (!isPickCountValid(request, selectedEntryIds.length)) return;
