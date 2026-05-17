@@ -764,13 +764,13 @@ const applyNamedTransfigurationToChosenPredicateCards: Reward<ApplyNamedTransfig
       };
     },
     cec: (p) => cardPoolCEC(CARD_CEC * 0.8, p.count, getPredicate(p.predicateId)),
-    // Deck-scope leak fix: the player chooses N predicate-matching cards
-    // from their DECK. CLI shipped `cardMatches(ctx, predicate.cardPredicate)`
-    // which leaks to the catalog. `predicateAdmitsTransfiguration` remains
-    // the soundness check that the rolled transfiguration is compatible.
     viable: (p, ctx) =>
-      deckContainsPredicate(ctx, p.predicateId, p.count)
-      && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
+      deckContainsUntransfiguredPredicate(
+        ctx,
+        p.predicateId,
+        p.count,
+        p.transfiguration,
+      ),
     render: (p) => {
       const pred = getPredicate(p.predicateId);
       const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
@@ -788,7 +788,7 @@ const applyNamedTransfigurationToChosenPredicateCards: Reward<ApplyNamedTransfig
         kind: "card",
         requestId: planning.requestIdForSlot(0),
         poolKind: "deck",
-        deckFilter: { predicateId: p.predicateId },
+        deckFilter: { predicateId: p.predicateId, entryIds },
         minPicks: p.count,
         maxPicks: p.count,
         title: p.count === 1 ? "Choose a card to transfigure" : "Choose cards to transfigure",
@@ -1976,7 +1976,7 @@ const transfigureChosenStarters: Reward<TransfigureChosenStartersParams> = {
       kind: "card",
       requestId: planning.requestIdForSlot(0),
       poolKind: "deck",
-      deckFilter: { starterOnly: true },
+      deckFilter: { starterOnly: true, entryIds },
       minPicks: p.count,
       maxPicks: p.count,
       title: p.count === 1

@@ -691,11 +691,68 @@ describe("Card reward apply (non-choice)", () => {
       kind: "card",
       requestId: "request:0",
       poolKind: "deck",
-      deckFilter: { predicateId: "events" },
+      deckFilter: { predicateId: "events", entryIds: ["deck-event-alpha", "deck-event-beta"] },
       minPicks: 2,
       maxPicks: 2,
       title: "Choose cards to transfigure",
     });
+  });
+
+  it("apply_named_transfiguration_to_chosen_predicate_cards plans only untransfigured eligible predicate entries", () => {
+    const t = getReward("apply_named_transfiguration_to_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        {
+          cardId: "event-alpha",
+          copies: 1,
+          entryIds: ["deck-event-alpha"],
+          entryTransfigurations: ["Golden"],
+        },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+
+    expect(
+      t.choosePlan?.(
+        { transfiguration: "Viridian", predicateId: "events", count: 1 },
+        ctx,
+        planningContext(),
+      ),
+    ).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { predicateId: "events", entryIds: ["deck-event-beta"] },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to transfigure",
+    });
+  });
+
+  it("apply_named_transfiguration_to_chosen_predicate_cards is not viable with too few untransfigured eligible predicate entries", () => {
+    const t = getReward("apply_named_transfiguration_to_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        {
+          cardId: "event-alpha",
+          copies: 1,
+          entryIds: ["deck-event-alpha"],
+          entryTransfigurations: ["Golden"],
+        },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+
+    expect(
+      t.viable({ transfiguration: "Viridian", predicateId: "events", count: 2 }, ctx),
+    ).toBe(false);
+    expect(
+      t.viable({ transfiguration: "Viridian", predicateId: "events", count: 1 }, ctx),
+    ).toBe(true);
   });
 
   it("apply_named_transfiguration_to_chosen_predicate_cards applies the named transfiguration to chosen entries", () => {
@@ -847,10 +904,39 @@ describe("Card reward apply (non-choice)", () => {
       kind: "card",
       requestId: "request:0",
       poolKind: "deck",
-      deckFilter: { starterOnly: true },
+      deckFilter: {
+        starterOnly: true,
+        entryIds: ["deck-starter-alpha", "deck-starter-beta"],
+      },
       minPicks: 2,
       maxPicks: 2,
       title: "Choose starter cards to transfigure",
+    });
+  });
+
+  it("transfigure_chosen_starters plans only untransfigured starter entries", () => {
+    const t = getReward("transfigure_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        {
+          cardId: "starter-alpha",
+          copies: 1,
+          entryIds: ["deck-starter-alpha"],
+          entryTransfigurations: ["Golden"],
+        },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({ count: 1 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { starterOnly: true, entryIds: ["deck-starter-beta"] },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a starter card to transfigure",
     });
   });
 
