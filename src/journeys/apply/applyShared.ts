@@ -46,6 +46,12 @@ export type ApplyEntry = CostEntry | RewardEntry;
 
 type RequestIdForEntry = (templateId: string, slot: number) => string;
 
+export interface CollectedApplyEntries {
+  readonly costEntries: readonly CostEntry[];
+  readonly rewardEntries: readonly RewardEntry[];
+  readonly entries: readonly ApplyEntry[];
+}
+
 /** Narrow a raw `costs[]` array into resolved template entries. Malformed
  *  envelopes and unknown templateIds warn and drop out of the result. */
 export function collectCostEntries(raw: readonly unknown[]): CostEntry[] {
@@ -87,6 +93,20 @@ export function collectRewardEntries(raw: readonly unknown[]): RewardEntry[] {
     out.push({ payload, template });
   }
   return out;
+}
+
+/** Collect costs and rewards once for a top-level apply operation. */
+export function collectApplyEntries(
+  rawCosts: readonly unknown[],
+  rawRewards: readonly unknown[],
+): CollectedApplyEntries {
+  const costEntries = collectCostEntries(rawCosts);
+  const rewardEntries = collectRewardEntries(rawRewards);
+  return {
+    costEntries,
+    rewardEntries,
+    entries: [...costEntries, ...rewardEntries],
+  };
 }
 
 /** Collect chooser requests from resolved entries without applying mutations. */

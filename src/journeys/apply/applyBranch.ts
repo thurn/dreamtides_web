@@ -16,12 +16,12 @@ import type { JourneyContext } from "../journey/context";
 import type { JourneyTreeBranch, JourneyTreeTerminal } from "../journey/manifest";
 
 import {
+  collectApplyEntries,
   commitEntries,
-  collectCostEntries,
-  collectRewardEntries,
   planEntries,
   type ApplyMeta,
   type ApplyResult,
+  type CollectedApplyEntries,
 } from "./applyShared";
 import { requestIdFor } from "./chooserPlan";
 import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
@@ -47,10 +47,17 @@ export function planBranch(
   ctx: JourneyContext,
 ): ChooserRequest[] {
   const branchId = branch.id ?? "terminal";
-  const costEntries = collectCostEntries(branch.costs);
-  const rewardEntries = collectRewardEntries(branch.effects);
+  const entries = collectApplyEntries(branch.costs, branch.effects);
+  return planBranchEntries(branchId, ctx, entries);
+}
+
+function planBranchEntries(
+  branchId: string,
+  ctx: JourneyContext,
+  entries: CollectedApplyEntries,
+): ChooserRequest[] {
   return planEntries(
-    [...costEntries, ...rewardEntries],
+    entries.entries,
     ctx,
     (templateId, slot) => branchRequestIdFor(branchId, templateId, slot),
   );
@@ -64,10 +71,19 @@ export function commitBranch(
   resolutions: ReadonlyMap<string, ChooserResolution>,
 ): void {
   const branchId = branch.id ?? "terminal";
-  const costEntries = collectCostEntries(branch.costs);
-  const rewardEntries = collectRewardEntries(branch.effects);
+  const entries = collectApplyEntries(branch.costs, branch.effects);
+  commitBranchEntries(branchId, ctx, mut, resolutions, entries);
+}
+
+function commitBranchEntries(
+  branchId: string,
+  ctx: JourneyContext,
+  mut: JourneyMutations,
+  resolutions: ReadonlyMap<string, ChooserResolution>,
+  entries: CollectedApplyEntries,
+): void {
   commitEntries(
-    [...costEntries, ...rewardEntries],
+    entries.entries,
     ctx,
     mut,
     resolutions,
@@ -88,16 +104,14 @@ export function applyBranch(
   resolutions?: ReadonlyMap<string, ChooserResolution>,
 ): ApplyResult {
   const branchId = branch.id ?? "terminal";
-  const plan = planBranch(branch, ctx);
+  const entries = collectApplyEntries(branch.costs, branch.effects);
+  const plan = planBranchEntries(branchId, ctx, entries);
   const nextMissing = plan.find((request) => !resolutions?.has(request.requestId));
   if (nextMissing !== undefined) {
     return { done: false, needsChoice: nextMissing };
   }
 
-  const costEntries = collectCostEntries(branch.costs);
-  const rewardEntries = collectRewardEntries(branch.effects);
-
-  for (const entry of costEntries) {
+  for (const entry of entries.costEntries) {
     if (entry.template.locked(entry.payload.params, ctx)) {
       logEvent("dream_journey_locked_at_apply", {
         siteId: meta.siteId,
@@ -110,7 +124,7 @@ export function applyBranch(
     }
   }
 
-  commitBranch(branch, ctx, mut, resolutions ?? new Map());
+  commitBranchEntries(branchId, ctx, mut, resolutions ?? new Map(), entries);
 
   logEvent("dream_journey_applied", {
     siteId: meta.siteId,
@@ -118,8 +132,8 @@ export function applyBranch(
     shapeId: meta.shapeId,
     branchId,
     templateIds: [
-      ...costEntries.map((e) => e.payload.templateId),
-      ...rewardEntries.map((e) => e.payload.templateId),
+      ...entries.costEntries.map((e) => e.payload.templateId),
+      ...entries.rewardEntries.map((e) => e.payload.templateId),
     ],
   });
 

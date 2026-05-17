@@ -247,6 +247,58 @@ describe("applyBranch", () => {
     });
   });
 
+  it("warns once and continues when a costs[] entry references an unknown templateId", () => {
+    stubRewards.set("gain_essence", gainEssenceStub());
+
+    const ctx = buildFixtureContext();
+    const { mut, calls } = createRecordingMutations();
+    const branch = makeBranch({
+      id: "node-root.C",
+      costs: [costEnvelope("does_not_exist_in_catalog", { x: 1 })],
+      effects: [rewardEnvelope("gain_essence", { x: 30 })],
+    });
+
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.spyOn(loggingModule, "logEvent").mockImplementation(
+      () => ({ event: "", seq: 0, timestamp: "" }) as never,
+    );
+
+    const result = applyBranch(branch, META, ctx, mut);
+
+    expect(result).toEqual({ done: true });
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(calls).toEqual([
+      { method: "changeEssence", args: [30, "dream_journey:gain_essence"] },
+    ]);
+  });
+
+  it("warns once and continues when a costs[] entry fails narrowing", () => {
+    stubCosts.set("pay_essence", payEssenceStub());
+
+    const ctx = buildFixtureContext();
+    const { mut, calls } = createRecordingMutations();
+    const branch = makeBranch({
+      id: "node-root.C",
+      costs: [
+        { kind: "shared_cost_template", params: {}, text: "x", convertedEssence: 0 },
+        costEnvelope("pay_essence", { x: 50 }),
+      ],
+    });
+
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.spyOn(loggingModule, "logEvent").mockImplementation(
+      () => ({ event: "", seq: 0, timestamp: "" }) as never,
+    );
+
+    const result = applyBranch(branch, META, ctx, mut);
+
+    expect(result).toEqual({ done: true });
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+    expect(calls).toEqual([
+      { method: "changeEssence", args: [-50, "dream_journey:pay_essence"] },
+    ]);
+  });
+
   it("returns a branch chooser request without mutating, then commits with the resolution", () => {
     const templateId = "apply_named_transfiguration_to_chosen_predicate_cards";
     const request = cardRequest(branchRequestIdFor("node-root.C", templateId));

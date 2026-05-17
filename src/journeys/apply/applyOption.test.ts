@@ -295,7 +295,7 @@ describe("applyOption", () => {
     const result = applyOption(option, META, ctx, mut);
 
     expect(result).toEqual({ done: true });
-    expect(warnSpy).toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledTimes(1);
     // Remaining well-formed reward still applied.
     expect(calls).toEqual([
       { method: "changeEssence", args: [30, "dream_journey:gain_essence"] },
@@ -322,7 +322,7 @@ describe("applyOption", () => {
 
     applyOption(option, META, ctx, mut);
 
-    expect(warnSpy).toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledTimes(1);
     // The well-formed cost after the malformed one still applies.
     expect(calls).toEqual([
       { method: "changeEssence", args: [-50, "dream_journey:pay_essence"] },

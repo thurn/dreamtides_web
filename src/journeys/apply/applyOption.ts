@@ -34,12 +34,12 @@ import type { JourneyContext } from "../journey/context";
 import type { JourneyOption } from "../journey/manifest";
 
 import {
+  collectApplyEntries,
   commitEntries,
-  collectCostEntries,
-  collectRewardEntries,
   planEntries,
   type ApplyMeta,
   type ApplyResult,
+  type CollectedApplyEntries,
 } from "./applyShared";
 import { requestIdFor } from "./chooserPlan";
 import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
@@ -52,10 +52,17 @@ export function planOption(
   option: JourneyOption,
   ctx: JourneyContext,
 ): ChooserRequest[] {
-  const costEntries = collectCostEntries(option.costs);
-  const rewardEntries = collectRewardEntries(option.effects);
+  const entries = collectApplyEntries(option.costs, option.effects);
+  return planOptionEntries(option, ctx, entries);
+}
+
+function planOptionEntries(
+  option: JourneyOption,
+  ctx: JourneyContext,
+  entries: CollectedApplyEntries,
+): ChooserRequest[] {
   return planEntries(
-    [...costEntries, ...rewardEntries],
+    entries.entries,
     ctx,
     (templateId, slot) => requestIdFor(option.number, templateId, slot),
   );
@@ -68,10 +75,19 @@ export function commitOption(
   mut: JourneyMutations,
   resolutions: ReadonlyMap<string, ChooserResolution>,
 ): void {
-  const costEntries = collectCostEntries(option.costs);
-  const rewardEntries = collectRewardEntries(option.effects);
+  const entries = collectApplyEntries(option.costs, option.effects);
+  commitOptionEntries(option, ctx, mut, resolutions, entries);
+}
+
+function commitOptionEntries(
+  option: JourneyOption,
+  ctx: JourneyContext,
+  mut: JourneyMutations,
+  resolutions: ReadonlyMap<string, ChooserResolution>,
+  entries: CollectedApplyEntries,
+): void {
   commitEntries(
-    [...costEntries, ...rewardEntries],
+    entries.entries,
     ctx,
     mut,
     resolutions,
@@ -90,16 +106,14 @@ export function applyOption(
   mut: JourneyMutations,
   resolutions?: ReadonlyMap<string, ChooserResolution>,
 ): ApplyResult {
-  const plan = planOption(option, ctx);
+  const entries = collectApplyEntries(option.costs, option.effects);
+  const plan = planOptionEntries(option, ctx, entries);
   const nextMissing = plan.find((request) => !resolutions?.has(request.requestId));
   if (nextMissing !== undefined) {
     return { done: false, needsChoice: nextMissing };
   }
 
-  const costEntries = collectCostEntries(option.costs);
-  const rewardEntries = collectRewardEntries(option.effects);
-
-  for (const entry of costEntries) {
+  for (const entry of entries.costEntries) {
     if (entry.template.locked(entry.payload.params, ctx)) {
       logEvent("dream_journey_locked_at_apply", {
         siteId: meta.siteId,
@@ -112,7 +126,7 @@ export function applyOption(
     }
   }
 
-  commitOption(option, ctx, mut, resolutions ?? new Map());
+  commitOptionEntries(option, ctx, mut, resolutions ?? new Map(), entries);
 
   logEvent("dream_journey_applied", {
     siteId: meta.siteId,
@@ -120,8 +134,8 @@ export function applyOption(
     shapeId: meta.shapeId,
     optionNumber: option.number,
     templateIds: [
-      ...costEntries.map((e) => e.payload.templateId),
-      ...rewardEntries.map((e) => e.payload.templateId),
+      ...entries.costEntries.map((e) => e.payload.templateId),
+      ...entries.rewardEntries.map((e) => e.payload.templateId),
     ],
   });
 
