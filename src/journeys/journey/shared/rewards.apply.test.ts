@@ -15,6 +15,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { CardContent, ContentBundle, DreamsignContent } from "../../content/types";
 import { createRecordingMutations } from "../../apply/testing/recordingMutations";
+import type { ChooserPlanningContext, ChooserResolution } from "../../apply/chooserPlan";
 import { getLogEntries, resetLog } from "../../../logging";
 import type { JourneyContext, QuestStateProjection } from "../context";
 import type { Dreamsign } from "../../../types/quest";
@@ -77,6 +78,15 @@ function buildContext(overrides: {
     dreamsigns: [...(overrides.dreamsigns ?? [])],
   };
   return { content, contentVersion: "test", state: { quest } };
+}
+
+function planningContext(
+  resolutions: ReadonlyMap<string, ChooserResolution> = new Map(),
+): ChooserPlanningContext {
+  return {
+    requestIdForSlot: (slot = 0) => `request:${String(slot)}`,
+    resolutions,
+  };
 }
 
 function cardFixture(): readonly CardContent[] {
@@ -487,6 +497,439 @@ describe("Card reward apply (non-choice)", () => {
         ],
       },
     ]);
+  });
+
+  it("apply_chosen_transfiguration_to_chosen_card first plans a transfiguration chooser", () => {
+    const t = getReward("apply_chosen_transfiguration_to_chosen_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({}, ctx, planningContext())).toEqual({
+      kind: "transfiguration",
+      requestId: "request:0",
+      eligibleTransfigurations: [
+        "Viridian",
+        "Golden",
+        "Scarlet",
+        "Azure",
+        "Bronze",
+        "Prismatic",
+      ],
+      title: "Choose a transfiguration",
+    });
+  });
+
+  it("apply_chosen_transfiguration_to_chosen_card then plans a card chooser for the selected transfiguration", () => {
+    const t = getReward("apply_chosen_transfiguration_to_chosen_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const resolutions = new Map<string, ChooserResolution>([
+      ["request:0", { kind: "transfiguration", type: "Bronze" }],
+    ]);
+
+    expect(t.choosePlan?.({}, ctx, planningContext(resolutions))).toEqual({
+      kind: "card",
+      requestId: "request:1",
+      poolKind: "deck",
+      deckFilter: { predicateId: "events" },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to transfigure",
+    });
+  });
+
+  it("apply_chosen_transfiguration_to_chosen_card applies both chooser resolutions", () => {
+    const t = getReward("apply_chosen_transfiguration_to_chosen_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+    const resolutions = new Map<string, ChooserResolution>([
+      ["request:0", { kind: "transfiguration", type: "Bronze" }],
+      ["request:1", { kind: "card", entryIds: ["deck-event-alpha"], cardIds: ["event-alpha"] }],
+    ]);
+
+    t.apply(
+      {},
+      ctx,
+      mut,
+      { kind: "transfiguration", type: "Bronze" },
+      planningContext(resolutions),
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-event-alpha",
+          "Bronze",
+          "dream_journey:apply_chosen_transfiguration_to_chosen_card",
+        ],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "missing slot-0 resolution",
+      slot0: undefined,
+      resolutions: new Map<string, ChooserResolution>([
+        ["request:1", { kind: "card", entryIds: ["deck-event-alpha"] }],
+      ]),
+    },
+    {
+      name: "wrong slot-0 kind",
+      slot0: { kind: "card" as const, entryIds: ["deck-event-alpha"] },
+      resolutions: new Map<string, ChooserResolution>([
+        ["request:1", { kind: "card", entryIds: ["deck-event-alpha"] }],
+      ]),
+    },
+    {
+      name: "missing slot-1 resolution",
+      slot0: { kind: "transfiguration" as const, type: "Bronze" as const },
+      resolutions: new Map<string, ChooserResolution>([
+        ["request:0", { kind: "transfiguration", type: "Bronze" }],
+      ]),
+    },
+    {
+      name: "wrong slot-1 kind",
+      slot0: { kind: "transfiguration" as const, type: "Bronze" as const },
+      resolutions: new Map<string, ChooserResolution>([
+        ["request:1", { kind: "transfiguration", type: "Bronze" }],
+      ]),
+    },
+    {
+      name: "stale ineligible card",
+      slot0: { kind: "transfiguration" as const, type: "Scarlet" as const },
+      resolutions: new Map<string, ChooserResolution>([
+        ["request:1", { kind: "card", entryIds: ["deck-event-alpha"] }],
+      ]),
+    },
+  ])("apply_chosen_transfiguration_to_chosen_card skips $name", ({ slot0, resolutions }) => {
+    const t = getReward("apply_chosen_transfiguration_to_chosen_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({}, ctx, mut, slot0, planningContext(resolutions));
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("apply_named_transfiguration_to_chosen_predicate_cards plans an exact-count predicate chooser", () => {
+    const t = getReward("apply_named_transfiguration_to_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+
+    expect(
+      t.choosePlan?.(
+        { transfiguration: "Viridian", predicateId: "events", count: 2 },
+        ctx,
+        planningContext(),
+      ),
+    ).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { predicateId: "events" },
+      minPicks: 2,
+      maxPicks: 2,
+      title: "Choose cards to transfigure",
+    });
+  });
+
+  it("apply_named_transfiguration_to_chosen_predicate_cards applies the named transfiguration to chosen entries", () => {
+    const t = getReward("apply_named_transfiguration_to_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { transfiguration: "Viridian", predicateId: "events", count: 2 },
+      ctx,
+      mut,
+      {
+        kind: "card",
+        entryIds: ["deck-event-alpha", "deck-event-beta"],
+        cardIds: ["event-alpha", "event-beta"],
+      },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-event-alpha",
+          "Viridian",
+          "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
+        ],
+      },
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-event-beta",
+          "Viridian",
+          "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
+        ],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "missing resolution",
+      resolution: undefined,
+    },
+    {
+      name: "wrong kind",
+      resolution: { kind: "transfiguration" as const, type: "Viridian" as const },
+    },
+    {
+      name: "wrong count",
+      resolution: { kind: "card" as const, entryIds: ["deck-event-alpha"] },
+    },
+    {
+      name: "nonmatching predicate entry",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-event-alpha", "deck-starter-beta"],
+      },
+    },
+    {
+      name: "optional card ids mismatch",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-event-alpha", "deck-event-beta"],
+        cardIds: ["event-alpha", "starter-beta"],
+      },
+    },
+    {
+      name: "entry ineligible for transfiguration",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-event-alpha", "deck-event-beta"],
+      },
+      transfiguration: "Scarlet",
+    },
+  ])("apply_named_transfiguration_to_chosen_predicate_cards skips $name", ({
+    resolution,
+    transfiguration = "Viridian",
+  }) => {
+    const t = getReward("apply_named_transfiguration_to_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply(
+        { transfiguration, predicateId: "events", count: 2 },
+        ctx,
+        mut,
+        resolution,
+      );
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("apply_named_transfiguration_to_chosen_predicate_cards skips an already-transfigured chosen entry", () => {
+    const t = getReward("apply_named_transfiguration_to_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        {
+          cardId: "event-alpha",
+          copies: 1,
+          entryIds: ["deck-event-alpha"],
+          entryTransfigurations: ["Golden"],
+        },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply(
+        { transfiguration: "Viridian", predicateId: "events", count: 2 },
+        ctx,
+        mut,
+        { kind: "card", entryIds: ["deck-event-alpha", "deck-event-beta"] },
+      );
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("transfigure_chosen_starters plans an exact-count starter chooser", () => {
+    const t = getReward("transfigure_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({ count: 2 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { starterOnly: true },
+      minPicks: 2,
+      maxPicks: 2,
+      title: "Choose starter cards to transfigure",
+    });
+  });
+
+  it("transfigure_chosen_starters applies deterministic random transfigurations to chosen starters", () => {
+    const t = getReward("transfigure_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { count: 2 },
+      ctx,
+      mut,
+      {
+        kind: "card",
+        entryIds: ["deck-starter-alpha", "deck-starter-beta"],
+        cardIds: ["starter-alpha", "starter-beta"],
+      },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: ["deck-starter-alpha", "Azure", "dream_journey:transfigure_chosen_starters"],
+      },
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-starter-beta",
+          "Golden",
+          "dream_journey:transfigure_chosen_starters",
+        ],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "missing resolution",
+      resolution: undefined,
+    },
+    {
+      name: "wrong count",
+      resolution: { kind: "card" as const, entryIds: ["deck-starter-alpha"] },
+    },
+    {
+      name: "nonstarter",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-starter-alpha", "deck-event-alpha"],
+      },
+    },
+    {
+      name: "optional card ids mismatch",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-starter-alpha", "deck-starter-beta"],
+        cardIds: ["starter-alpha", "event-alpha"],
+      },
+    },
+  ])("transfigure_chosen_starters skips $name", ({ resolution }) => {
+    const t = getReward("transfigure_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ count: 2 }, ctx, mut, resolution);
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("transfigure_chosen_starters skips an already-transfigured chosen starter", () => {
+    const t = getReward("transfigure_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        {
+          cardId: "starter-alpha",
+          copies: 1,
+          entryIds: ["deck-starter-alpha"],
+          entryTransfigurations: ["Golden"],
+        },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply(
+        { count: 2 },
+        ctx,
+        mut,
+        { kind: "card", entryIds: ["deck-starter-alpha", "deck-starter-beta"] },
+      );
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
   });
 
   it("apply_named_transfiguration_to_random_predicate_cards applies the named transfiguration to deterministic matching entries", () => {

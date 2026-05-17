@@ -100,7 +100,6 @@ import {
   deckContainsUntransfiguredPredicate,
   deckHasUntransfiguredMinSize,
   deckHasMinSize,
-  transfigurationHasEligibleTarget,
 } from "./viability";
 
 const POSITIVE_TEMPORARY_BATTLE_MIN = 3;
@@ -301,6 +300,140 @@ function resolveCardIdByName(ctx: JourneyContext, name: string): string | undefi
 
 function warnSkippedCardApply(templateId: string, reason: string): void {
   console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
+}
+
+function isJourneyTransfiguration(value: string): boolean {
+  return JOURNEY_TRANSFIGURATIONS.includes(
+    value as (typeof JOURNEY_TRANSFIGURATIONS)[number],
+  );
+}
+
+function untransfiguredDeckEntriesEligibleForTransfiguration(
+  ctx: JourneyContext,
+  transfiguration: string,
+): string[] {
+  return findUntransfiguredDeckEntryIds(ctx).filter((entryId) => {
+    const entry = findProjectedDeckEntry(ctx, entryId);
+    return entry !== undefined && isCardEligibleForTransfiguration(transfiguration, entry.card);
+  });
+}
+
+function eligibleTransfigurationsForUntransfiguredDeck(
+  ctx: JourneyContext,
+): TransfigurationForApply[] {
+  return JOURNEY_TRANSFIGURATIONS.filter(
+    (transfiguration) =>
+      untransfiguredDeckEntriesEligibleForTransfiguration(ctx, transfiguration).length > 0,
+  ).map(transfigurationForApply);
+}
+
+function deckFilterForTransfiguration(
+  transfiguration: string,
+): { predicateId?: string; starterOnly?: boolean } | undefined {
+  switch (transfiguration) {
+    case "Azure":
+    case "Bronze":
+      return { predicateId: "events" };
+    case "Scarlet":
+      return { predicateId: "characters" };
+    default:
+      return undefined;
+  }
+}
+
+function selectedTransfiguration(
+  templateId: string,
+  ctx: JourneyContext,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+): TransfigurationForApply | undefined {
+  if (chooserResolution?.kind !== "transfiguration") {
+    warnSkippedCardApply(templateId, "missing transfiguration chooser resolution");
+    return undefined;
+  }
+
+  if (!isJourneyTransfiguration(chooserResolution.type)) {
+    warnSkippedCardApply(
+      templateId,
+      `unknown transfiguration ${JSON.stringify(chooserResolution.type)}`,
+    );
+    return undefined;
+  }
+
+  if (untransfiguredDeckEntriesEligibleForTransfiguration(ctx, chooserResolution.type).length === 0) {
+    warnSkippedCardApply(
+      templateId,
+      `no untransfigured deck entries are eligible for ${JSON.stringify(chooserResolution.type)}`,
+    );
+    return undefined;
+  }
+
+  return transfigurationForApply(chooserResolution.type);
+}
+
+function selectedExactDeckEntryIds(
+  templateId: string,
+  ctx: JourneyContext,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+  count: number,
+  eligibleEntryIds: readonly string[],
+): string[] | undefined {
+  if (chooserResolution?.kind !== "card") {
+    warnSkippedCardApply(templateId, "missing card chooser resolution");
+    return undefined;
+  }
+
+  if (chooserResolution.entryIds.length !== count) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly ${String(count)} selected card entries, got ${String(chooserResolution.entryIds.length)}`,
+    );
+    return undefined;
+  }
+
+  if (chooserResolution.cardIds !== undefined && chooserResolution.cardIds.length !== count) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly ${String(count)} selected card ids, got ${String(chooserResolution.cardIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const uniqueEntryIds = new Set(chooserResolution.entryIds);
+  if (uniqueEntryIds.size !== chooserResolution.entryIds.length) {
+    warnSkippedCardApply(templateId, "card chooser resolution included duplicate entries");
+    return undefined;
+  }
+
+  const eligible = new Set(eligibleEntryIds);
+  const selectedEntryIds: string[] = [];
+  for (const [index, entryId] of chooserResolution.entryIds.entries()) {
+    const entry = findProjectedDeckEntry(ctx, entryId);
+    if (entry === undefined) {
+      warnSkippedCardApply(templateId, `deck entry ${JSON.stringify(entryId)} was not found`);
+      return undefined;
+    }
+
+    const selectedCardId = chooserResolution.cardIds?.[index];
+    if (selectedCardId !== undefined && selectedCardId !== entry.card.id) {
+      warnSkippedCardApply(
+        templateId,
+        `chooser card ${JSON.stringify(selectedCardId)} did not match deck entry ${JSON.stringify(entryId)}`,
+      );
+      return undefined;
+    }
+
+    if (!eligible.has(entryId)) {
+      warnSkippedCardApply(
+        templateId,
+        `deck entry ${JSON.stringify(entryId)} was not eligible for this chooser`,
+      );
+      return undefined;
+    }
+
+    selectedEntryIds.push(entryId);
+  }
+
+  return selectedEntryIds;
 }
 
 // Inclusive integer roll for resource-range apply. Wave 1 does not plumb a
@@ -551,18 +684,73 @@ const applyChosenTransfigurationToChosenCard: Reward<ApplyChosenTransfigChosenCa
   weight: 1.0,
   rollParams: () => ({}),
   cec: () => CARD_CEC * 1.5,
-  // Player picks both the transfiguration AND the target card. The reward is
-  // only fulfillable if at least one (transfiguration, deck card) pair is
-  // eligible. Checking `transfigurationHasEligibleTarget` per transfiguration
-  // keeps this template honest if a future patch tightens Golden or Prismatic
-  // (currently unrestricted via `isCardEligibleForTransfiguration`'s default
-  // case in effects.ts); without the per-transfiguration sweep, the template
-  // would silently regress to a deck-non-empty check.
-  viable: (_p, ctx) =>
-    deckHasMinSize(ctx, 1)
-    && JOURNEY_TRANSFIGURATIONS.some((t) => transfigurationHasEligibleTarget(ctx, t)),
+  // Player picks both the transfiguration and the target card. The reward is
+  // fulfillable when a current untransfigured deck entry can receive at least
+  // one journey transfiguration.
+  viable: (_p, ctx) => eligibleTransfigurationsForUntransfiguredDeck(ctx).length > 0,
   render: () => "Apply a transfiguration of your choice to a chosen card",
-  apply: () => {},
+  choosePlan: (_p, ctx, planning) => {
+    const slot0RequestId = planning.requestIdForSlot(0);
+    const transfigurationResolution = planning.resolutions.get(slot0RequestId);
+    if (transfigurationResolution === undefined) {
+      const eligibleTransfigurations = eligibleTransfigurationsForUntransfiguredDeck(ctx);
+      if (eligibleTransfigurations.length === 0) return undefined;
+      return {
+        kind: "transfiguration",
+        requestId: slot0RequestId,
+        eligibleTransfigurations,
+        title: "Choose a transfiguration",
+      };
+    }
+
+    if (transfigurationResolution.kind !== "transfiguration") return undefined;
+    const transfiguration = transfigurationResolution.type;
+    if (
+      !isJourneyTransfiguration(transfiguration)
+      || untransfiguredDeckEntriesEligibleForTransfiguration(ctx, transfiguration).length === 0
+    ) {
+      return undefined;
+    }
+
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(1),
+      poolKind: "deck",
+      ...(deckFilterForTransfiguration(transfiguration) === undefined
+        ? {}
+        : { deckFilter: deckFilterForTransfiguration(transfiguration) }),
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to transfigure",
+    };
+  },
+  apply: (_p, ctx, mut, chooserResolution, chooserContext) => {
+    const transfiguration = selectedTransfiguration(
+      "apply_chosen_transfiguration_to_chosen_card",
+      ctx,
+      chooserResolution,
+    );
+    if (transfiguration === undefined) return;
+
+    const cardResolution = chooserContext?.resolutions.get(
+      chooserContext.requestIdForSlot(1),
+    );
+    const entryIds = selectedExactDeckEntryIds(
+      "apply_chosen_transfiguration_to_chosen_card",
+      ctx,
+      cardResolution,
+      1,
+      untransfiguredDeckEntriesEligibleForTransfiguration(ctx, transfiguration),
+    );
+    const entryId = entryIds?.[0];
+    if (entryId === undefined) return;
+
+    mut.transfigureDeckEntry(
+      entryId,
+      transfiguration,
+      "dream_journey:apply_chosen_transfiguration_to_chosen_card",
+    );
+  },
 };
 
 type ApplyNamedTransfigPredCardsParams = {
@@ -600,7 +788,54 @@ const applyNamedTransfigurationToChosenPredicateCards: Reward<ApplyNamedTransfig
       const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
       return `Apply ${p.transfiguration} to ${p.count} chosen ${noun}`;
     },
-    apply: () => {},
+    choosePlan: (p, ctx, planning) => {
+      if (!isJourneyTransfiguration(p.transfiguration)) return undefined;
+      const entryIds = findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration(
+        ctx,
+        p.predicateId,
+        p.transfiguration,
+      );
+      if (entryIds.length < p.count) return undefined;
+      return {
+        kind: "card",
+        requestId: planning.requestIdForSlot(0),
+        poolKind: "deck",
+        deckFilter: { predicateId: p.predicateId },
+        minPicks: p.count,
+        maxPicks: p.count,
+        title: p.count === 1 ? "Choose a card to transfigure" : "Choose cards to transfigure",
+      };
+    },
+    apply: (p, ctx, mut, chooserResolution) => {
+      if (!isJourneyTransfiguration(p.transfiguration)) {
+        warnSkippedCardApply(
+          "apply_named_transfiguration_to_chosen_predicate_cards",
+          `unknown transfiguration ${JSON.stringify(p.transfiguration)}`,
+        );
+        return;
+      }
+
+      const entryIds = selectedExactDeckEntryIds(
+        "apply_named_transfiguration_to_chosen_predicate_cards",
+        ctx,
+        chooserResolution,
+        p.count,
+        findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration(
+          ctx,
+          p.predicateId,
+          p.transfiguration,
+        ),
+      );
+      if (entryIds === undefined) return;
+
+      for (const entryId of entryIds) {
+        mut.transfigureDeckEntry(
+          entryId,
+          transfigurationForApply(p.transfiguration),
+          "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
+        );
+      }
+    },
   };
 
 type ApplyNamedTransfigCardNameParams = { transfiguration: string; cardName: string };
@@ -1741,12 +1976,56 @@ const transfigureChosenStarters: Reward<TransfigureChosenStartersParams> = {
   weight: 1.0,
   rollParams: (_ctx, draw) => ({ count: drawInt(draw, "transfig_chosen_starters:n", 1, 2) }),
   cec: (p) => CARD_CEC * 0.9 * p.count,
-  viable: (p, ctx) => starterCardCount(ctx) >= p.count,
+  viable: (p, ctx) => deckContainsUntransfiguredPredicate(ctx, "starter", p.count),
   render: (p) =>
     p.count === 1
       ? "Apply a random transfiguration to 1 chosen starter card"
       : `Apply random transfigurations to ${p.count} chosen starter cards`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = findUntransfiguredDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length < p.count) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { starterOnly: true },
+      minPicks: p.count,
+      maxPicks: p.count,
+      title: p.count === 1
+        ? "Choose a starter card to transfigure"
+        : "Choose starter cards to transfigure",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryIds = selectedExactDeckEntryIds(
+      "transfigure_chosen_starters",
+      ctx,
+      chooserResolution,
+      p.count,
+      findUntransfiguredDeckEntriesByPredicate(ctx, "starter"),
+    );
+    if (entryIds === undefined) return;
+
+    const draw = applyDrawContext(ctx);
+    const transfigurations = entryIds.map((entryId, index) =>
+      pickRandomTransfigurationForEntry(
+        ctx,
+        draw,
+        "transfigure_chosen_starters",
+        `transfigure_chosen_starters:transfiguration:${index}`,
+        entryId,
+      ),
+    );
+    if (transfigurations.some((transfiguration) => transfiguration === undefined)) return;
+
+    entryIds.forEach((entryId, index) => {
+      mut.transfigureDeckEntry(
+        entryId,
+        transfigurations[index]!,
+        "dream_journey:transfigure_chosen_starters",
+      );
+    });
+  },
 };
 
 type PurgeChosenStartersParams = { count: number };
