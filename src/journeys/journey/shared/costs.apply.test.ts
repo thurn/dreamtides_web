@@ -754,7 +754,7 @@ describe("Chosen card cost planning and apply", () => {
     const ctx = buildContext({
       cards: cardFixture(),
       deckEntries: [
-        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
         { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
       ],
     });
@@ -802,6 +802,58 @@ describe("Chosen card cost planning and apply", () => {
       t.apply({ predicateId: "events" }, ctx, mut, {
         kind: "card",
         entryIds: ["deck-starter-beta"],
+      });
+
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("purge_chosen_predicate_card skips when chooser card id does not match the chosen entry", () => {
+    const t = getCost("purge_chosen_predicate_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+
+      t.apply({ predicateId: "events" }, ctx, mut, {
+        kind: "card",
+        entryIds: ["deck-event-alpha"],
+        cardIds: ["starter-alpha"],
+      });
+
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("purge_chosen_predicate_card skips when a single-pick chooser returns multiple entries", () => {
+    const t = getCost("purge_chosen_predicate_card");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+
+      t.apply({ predicateId: "events" }, ctx, mut, {
+        kind: "card",
+        entryIds: ["deck-event-alpha", "deck-event-beta"],
+        cardIds: ["event-alpha", "event-beta"],
       });
 
       expect(calls).toEqual([]);
@@ -905,6 +957,39 @@ describe("Chosen card cost planning and apply", () => {
         mut,
         { kind: "card", entryIds: ["deck-event-alpha"], cardIds: ["event-alpha"] },
       );
+
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it.each([
+    {
+      name: "malformed rolled chooser id",
+      resolution: { kind: "card" as const, entryIds: ["rolled:starter-beta:1junk"], cardIds: ["starter-beta"] },
+    },
+    {
+      name: "rolled chooser id with mismatched encoded card id",
+      resolution: { kind: "card" as const, entryIds: ["rolled:event-alpha:1"], cardIds: ["starter-beta"] },
+    },
+  ])("draw_X_purge_chosen skips $name", ({ resolution }) => {
+    const t = getCost("draw_X_purge_chosen");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+
+      t.apply({ drawCount: 3 }, ctx, mut, resolution);
 
       expect(calls).toEqual([]);
       expect(warnSpy).toHaveBeenCalled();
@@ -1103,6 +1188,29 @@ describe("Chosen dreamsign cost planning and apply", () => {
     }
   });
 
+  it("purge_chosen_dreamsign skips when a single-pick chooser returns multiple indices", () => {
+    const t = getCost("purge_chosen_dreamsign");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+
+      t.apply({}, ctx, mut, {
+        kind: "dreamsign",
+        indices: [0, 1],
+        dreamsignIds: ["ds-1", "ds-2"],
+      });
+
+      expect(calls).toEqual([]);
+      expect(warnSpy).toHaveBeenCalled();
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("transform_dreamsign_to_random plans a single active-dreamsign chooser", () => {
     const t = getCost("transform_dreamsign_to_random");
     const ctx = buildContext({
@@ -1148,6 +1256,27 @@ describe("Chosen dreamsign cost planning and apply", () => {
         ],
       },
     ]);
+  });
+
+  it("transform_dreamsign_to_random is not viable without a valid replacement pool entry", () => {
+    const t = getCost("transform_dreamsign_to_random");
+    const dreamsigns = dreamsignFixture();
+
+    expect(t.viable({}, buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-1" }],
+      dreamsignPoolIds: [],
+    }))).toBe(false);
+    expect(t.viable({}, buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-1" }],
+      dreamsignPoolIds: ["missing-ds"],
+    }))).toBe(false);
+    expect(t.viable({}, buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-1" }],
+      dreamsignPoolIds: ["ds-3"],
+    }))).toBe(true);
   });
 
   it("transform_dreamsign_to_random skips without partial mutation when chooser id does not match the chosen index", () => {

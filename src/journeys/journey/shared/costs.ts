@@ -177,15 +177,40 @@ function selectedDeckEntryId(
     return undefined;
   }
 
+  if (chooserResolution.entryIds.length !== 1) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly one selected card entry, got ${String(chooserResolution.entryIds.length)}`,
+    );
+    return undefined;
+  }
+
+  if (chooserResolution.cardIds !== undefined && chooserResolution.cardIds.length !== 1) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly one selected card id, got ${String(chooserResolution.cardIds.length)}`,
+    );
+    return undefined;
+  }
+
   const entryId = chooserResolution.entryIds[0];
   if (entryId === undefined) {
     warnSkippedCardApply(templateId, "card chooser resolution did not include an entry id");
     return undefined;
   }
 
-  const availableEntryIds = new Set(projectedDeckEntries(ctx).map((entry) => entry.entryId));
-  if (!availableEntryIds.has(entryId)) {
+  const entry = projectedDeckEntries(ctx).find((candidate) => candidate.entryId === entryId);
+  if (entry === undefined) {
     warnSkippedCardApply(templateId, `deck entry ${JSON.stringify(entryId)} was not found`);
+    return undefined;
+  }
+
+  const selectedCardId = chooserResolution.cardIds?.[0];
+  if (selectedCardId !== undefined && entry.card.id !== selectedCardId) {
+    warnSkippedCardApply(
+      templateId,
+      `chooser card ${JSON.stringify(selectedCardId)} did not match deck entry ${JSON.stringify(entryId)}`,
+    );
     return undefined;
   }
 
@@ -207,6 +232,22 @@ function selectedDreamsignIndex(
 ): number | undefined {
   if (chooserResolution?.kind !== "dreamsign") {
     warnSkippedDreamsignApply(templateId, "missing dreamsign chooser resolution");
+    return undefined;
+  }
+
+  if (chooserResolution.indices.length !== 1) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected exactly one selected dreamsign index, got ${String(chooserResolution.indices.length)}`,
+    );
+    return undefined;
+  }
+
+  if (chooserResolution.dreamsignIds !== undefined && chooserResolution.dreamsignIds.length !== 1) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected exactly one selected dreamsign id, got ${String(chooserResolution.dreamsignIds.length)}`,
+    );
     return undefined;
   }
 
@@ -279,6 +320,22 @@ function resolveDrawPurgeEntryId(
     return undefined;
   }
 
+  if (chooserResolution.entryIds.length !== 1) {
+    warnSkippedCardApply(
+      "draw_X_purge_chosen",
+      `expected exactly one selected card entry, got ${String(chooserResolution.entryIds.length)}`,
+    );
+    return undefined;
+  }
+
+  if (chooserResolution.cardIds !== undefined && chooserResolution.cardIds.length !== 1) {
+    warnSkippedCardApply(
+      "draw_X_purge_chosen",
+      `expected exactly one selected card id, got ${String(chooserResolution.cardIds.length)}`,
+    );
+    return undefined;
+  }
+
   const selectedEntryId = chooserResolution.entryIds[0];
   if (selectedEntryId === undefined) {
     warnSkippedCardApply("draw_X_purge_chosen", "card chooser resolution did not include an entry id");
@@ -309,10 +366,8 @@ function resolveDrawPurgeEntryId(
     return concreteEntry.entryId;
   }
 
-  const rolledIndex = selectedEntryId.startsWith("rolled:")
-    ? Number.parseInt(selectedEntryId.split(":").slice(-1)[0] ?? "", 10)
-    : NaN;
-  if (!Number.isInteger(rolledIndex)) {
+  const rolledMatch = /^rolled:([^:]+):(\d+)$/.exec(selectedEntryId);
+  if (rolledMatch === null) {
     warnSkippedCardApply(
       "draw_X_purge_chosen",
       `deck entry ${JSON.stringify(selectedEntryId)} was not found`,
@@ -320,6 +375,8 @@ function resolveDrawPurgeEntryId(
     return undefined;
   }
 
+  const [, encodedCardId, rolledIndexText] = rolledMatch;
+  const rolledIndex = Number.parseInt(rolledIndexText, 10);
   const entryId = pickedEntryIds[rolledIndex];
   if (entryId === undefined) {
     warnSkippedCardApply(
@@ -331,7 +388,21 @@ function resolveDrawPurgeEntryId(
 
   const selectedCardId = chooserResolution.cardIds?.[0];
   const entry = entries.find((candidate) => candidate.entryId === entryId);
-  if (selectedCardId !== undefined && entry?.card.id !== selectedCardId) {
+  if (entry === undefined) {
+    warnSkippedCardApply(
+      "draw_X_purge_chosen",
+      `rolled deck entry ${JSON.stringify(entryId)} was not found`,
+    );
+    return undefined;
+  }
+  if (entry.card.id !== encodedCardId) {
+    warnSkippedCardApply(
+      "draw_X_purge_chosen",
+      `rolled chooser card ${JSON.stringify(encodedCardId)} did not match deck entry ${JSON.stringify(entryId)}`,
+    );
+    return undefined;
+  }
+  if (selectedCardId !== undefined && entry.card.id !== selectedCardId) {
     warnSkippedCardApply(
       "draw_X_purge_chosen",
       `rolled chooser card ${JSON.stringify(selectedCardId)} did not match deck entry ${JSON.stringify(entryId)}`,
@@ -821,7 +892,7 @@ const transformDreamsignToRandom: Cost<XformDreamsignParams> = {
   weight: MINOR_RANDOM_TRADE_COST_WEIGHT,
   rollParams: () => ({}),
   cec: () => DREAMSIGN_CEC * 0.4,
-  viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1,
+  viable: (_p, ctx) => activeDreamsignCount(ctx) >= 1 && poolDreamsignsById(ctx).length >= 1,
   locked: () => false,
   render: () => "Transform a chosen dreamsign into a random dreamsign",
   choosePlan: (_p, ctx, planning) => {
