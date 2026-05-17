@@ -12,7 +12,11 @@ import { findCost } from "../journey/shared/costs";
 import { findReward } from "../journey/shared/rewards";
 import type { Cost, Reward } from "../journey/shared/types";
 
-import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
+import type {
+  ChooserPlanningContext,
+  ChooserRequest,
+  ChooserResolution,
+} from "./chooserPlan";
 import type { JourneyMutations } from "./JourneyMutations";
 import {
   narrowSharedCostPayload,
@@ -113,20 +117,24 @@ export function collectApplyEntries(
 export function planEntries(
   entries: ReadonlyArray<ApplyEntry>,
   ctx: JourneyContext,
+  resolutions: ReadonlyMap<string, ChooserResolution>,
   requestIdForEntry: RequestIdForEntry,
 ): ChooserRequest[] {
   const out: ChooserRequest[] = [];
   const slotsByTemplateId = new Map<string, number>();
   for (const { payload, template } of entries) {
-    const request = template.choosePlan?.(payload.params, ctx);
+    const baseSlot = slotsByTemplateId.get(payload.templateId) ?? 0;
+    const planning = planningContextForEntry(
+      payload.templateId,
+      baseSlot,
+      resolutions,
+      requestIdForEntry,
+    );
+    const request = template.choosePlan?.(payload.params, ctx, planning);
     if (request !== undefined) {
-      const slot = slotsByTemplateId.get(payload.templateId) ?? 0;
-      slotsByTemplateId.set(payload.templateId, slot + 1);
-      out.push({
-        ...request,
-        requestId: requestIdForEntry(payload.templateId, slot),
-      });
+      out.push(request);
     }
+    slotsByTemplateId.set(payload.templateId, baseSlot + 1);
   }
   return out;
 }
@@ -143,15 +151,27 @@ export function commitEntries(
 ): void {
   const slotsByTemplateId = new Map<string, number>();
   for (const { payload, template } of entries) {
-    const request = template.choosePlan?.(payload.params, ctx);
-    const slot = slotsByTemplateId.get(payload.templateId) ?? 0;
-    if (request !== undefined) {
-      slotsByTemplateId.set(payload.templateId, slot + 1);
-    }
-    const resolution =
-      request === undefined
-        ? undefined
-        : resolutions.get(requestIdForEntry(payload.templateId, slot));
-    template.apply(payload.params, ctx, mut, resolution);
+    const baseSlot = slotsByTemplateId.get(payload.templateId) ?? 0;
+    const planning = planningContextForEntry(
+      payload.templateId,
+      baseSlot,
+      resolutions,
+      requestIdForEntry,
+    );
+    const resolution = resolutions.get(planning.requestIdForSlot());
+    template.apply(payload.params, ctx, mut, resolution, planning);
+    slotsByTemplateId.set(payload.templateId, baseSlot + 1);
   }
+}
+
+function planningContextForEntry(
+  templateId: string,
+  baseSlot: number,
+  resolutions: ReadonlyMap<string, ChooserResolution>,
+  requestIdForEntry: RequestIdForEntry,
+): ChooserPlanningContext {
+  return {
+    requestIdForSlot: (slot = 0) => requestIdForEntry(templateId, baseSlot + slot),
+    resolutions,
+  };
 }

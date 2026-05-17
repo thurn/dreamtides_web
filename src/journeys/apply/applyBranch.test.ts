@@ -165,6 +165,55 @@ function transfigureChosenCardsStub(
   };
 }
 
+function chooseCardThenTransfigurationStub(id: string): Reward<Record<string, unknown>> {
+  return {
+    id,
+    weight: 1,
+    rollParams: () => ({}),
+    cec: () => 0,
+    viable: () => true,
+    render: () => "Apply chosen transfiguration",
+    choosePlan: (_params, _ctx, planning) => {
+      const cardRequestId = planning.requestIdForSlot(0);
+      if (!planning.resolutions.has(cardRequestId)) {
+        return {
+          ...cardRequest(cardRequestId),
+          title: "Choose card",
+        };
+      }
+      const transfigurationRequestId = planning.requestIdForSlot(1);
+      if (!planning.resolutions.has(transfigurationRequestId)) {
+        return {
+          kind: "transfiguration",
+          requestId: transfigurationRequestId,
+          eligibleTransfigurations: ["Azure", "Bronze"],
+          title: "Choose transfiguration",
+        };
+      }
+      return undefined;
+    },
+    apply: (_params, _ctx, mut, _resolution, planning) => {
+      const cardResolution = planning?.resolutions.get(planning.requestIdForSlot(0));
+      const transfigurationResolution = planning?.resolutions.get(
+        planning.requestIdForSlot(1),
+      );
+      if (
+        cardResolution?.kind !== "card" ||
+        transfigurationResolution?.kind !== "transfiguration"
+      ) {
+        return;
+      }
+      for (const entryId of cardResolution.entryIds) {
+        mut.transfigureDeckEntry(
+          entryId,
+          transfigurationResolution.type,
+          `dream_journey:${id}`,
+        );
+      }
+    },
+  };
+}
+
 beforeEach(() => {
   stubCosts.clear();
   stubRewards.clear();
@@ -334,6 +383,65 @@ describe("applyBranch", () => {
           "deck-entry-1",
           "Bronze",
           "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
+        ],
+      },
+    ]);
+  });
+
+  it("lets one branch template ask for a second slot after the first slot is resolved", () => {
+    const templateId = "apply_chosen_transfiguration_to_chosen_card";
+    const firstRequest = {
+      ...cardRequest(branchRequestIdFor("node-root.D", templateId, 0)),
+      title: "Choose card",
+    };
+    const secondRequest: ChooserRequest = {
+      kind: "transfiguration",
+      requestId: branchRequestIdFor("node-root.D", templateId, 1),
+      eligibleTransfigurations: ["Azure", "Bronze"],
+      title: "Choose transfiguration",
+    };
+    stubRewards.set(templateId, chooseCardThenTransfigurationStub(templateId));
+
+    const ctx = buildFixtureContext();
+    const { mut, calls } = createRecordingMutations();
+    const branch = makeBranch({
+      id: "node-root.D",
+      effects: [rewardEnvelope(templateId)],
+    });
+    const firstResolution = new Map<string, ChooserResolution>([
+      [firstRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+    ]);
+    const bothResolutions = new Map<string, ChooserResolution>([
+      [firstRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+      [secondRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+    ]);
+
+    vi.spyOn(loggingModule, "logEvent").mockImplementation(
+      () => ({ event: "", seq: 0, timestamp: "" }) as never,
+    );
+
+    expect(applyBranch(branch, META, ctx, mut)).toEqual({
+      done: false,
+      needsChoice: firstRequest,
+    });
+    expect(calls).toEqual([]);
+
+    expect(applyBranch(branch, META, ctx, mut, firstResolution)).toEqual({
+      done: false,
+      needsChoice: secondRequest,
+    });
+    expect(calls).toEqual([]);
+
+    expect(applyBranch(branch, META, ctx, mut, bothResolutions)).toEqual({
+      done: true,
+    });
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-1",
+          "Azure",
+          "dream_journey:apply_chosen_transfiguration_to_chosen_card",
         ],
       },
     ]);

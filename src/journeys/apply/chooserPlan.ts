@@ -39,6 +39,11 @@ export type ChooserResolution =
     }
   | { kind: "transfiguration"; type: TransfigurationType };
 
+export interface ChooserPlanningContext {
+  readonly requestIdForSlot: (slot?: number) => string;
+  readonly resolutions: ReadonlyMap<string, ChooserResolution>;
+}
+
 export type ApplyResult =
   | { done: true }
   | { done: false; needsChoice: ChooserRequest };

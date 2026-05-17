@@ -45,34 +45,25 @@ export type ApplyableBranchLike = Pick<
 export function planBranch(
   branch: ApplyableBranchLike,
   ctx: JourneyContext,
+  resolutions: ReadonlyMap<string, ChooserResolution> = new Map(),
 ): ChooserRequest[] {
   const branchId = branch.id ?? "terminal";
   const entries = collectApplyEntries(branch.costs, branch.effects);
-  return planBranchEntries(branchId, ctx, entries);
+  return planBranchEntries(branchId, ctx, resolutions, entries);
 }
 
 function planBranchEntries(
   branchId: string,
   ctx: JourneyContext,
+  resolutions: ReadonlyMap<string, ChooserResolution>,
   entries: CollectedApplyEntries,
 ): ChooserRequest[] {
   return planEntries(
     entries.entries,
     ctx,
+    resolutions,
     (templateId, slot) => branchRequestIdFor(branchId, templateId, slot),
   );
-}
-
-/** Apply `branch` after the caller has supplied every planned resolution. */
-export function commitBranch(
-  branch: ApplyableBranchLike,
-  ctx: JourneyContext,
-  mut: JourneyMutations,
-  resolutions: ReadonlyMap<string, ChooserResolution>,
-): void {
-  const branchId = branch.id ?? "terminal";
-  const entries = collectApplyEntries(branch.costs, branch.effects);
-  commitBranchEntries(branchId, ctx, mut, resolutions, entries);
 }
 
 function commitBranchEntries(
@@ -105,8 +96,9 @@ export function applyBranch(
 ): ApplyResult {
   const branchId = branch.id ?? "terminal";
   const entries = collectApplyEntries(branch.costs, branch.effects);
-  const plan = planBranchEntries(branchId, ctx, entries);
-  const nextMissing = plan.find((request) => !resolutions?.has(request.requestId));
+  const safeResolutions = resolutions ?? new Map();
+  const plan = planBranchEntries(branchId, ctx, safeResolutions, entries);
+  const nextMissing = plan.find((request) => !safeResolutions.has(request.requestId));
   if (nextMissing !== undefined) {
     return { done: false, needsChoice: nextMissing };
   }
@@ -124,7 +116,7 @@ export function applyBranch(
     }
   }
 
-  commitBranchEntries(branchId, ctx, mut, resolutions ?? new Map(), entries);
+  commitBranchEntries(branchId, ctx, mut, safeResolutions, entries);
 
   logEvent("dream_journey_applied", {
     siteId: meta.siteId,

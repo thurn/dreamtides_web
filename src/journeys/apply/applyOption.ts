@@ -51,32 +51,24 @@ export type { ApplyMeta, ApplyResult } from "./applyShared";
 export function planOption(
   option: JourneyOption,
   ctx: JourneyContext,
+  resolutions: ReadonlyMap<string, ChooserResolution> = new Map(),
 ): ChooserRequest[] {
   const entries = collectApplyEntries(option.costs, option.effects);
-  return planOptionEntries(option, ctx, entries);
+  return planOptionEntries(option, ctx, resolutions, entries);
 }
 
 function planOptionEntries(
   option: JourneyOption,
   ctx: JourneyContext,
+  resolutions: ReadonlyMap<string, ChooserResolution>,
   entries: CollectedApplyEntries,
 ): ChooserRequest[] {
   return planEntries(
     entries.entries,
     ctx,
+    resolutions,
     (templateId, slot) => requestIdFor(option.number, templateId, slot),
   );
-}
-
-/** Apply `option` after the caller has supplied every planned resolution. */
-export function commitOption(
-  option: JourneyOption,
-  ctx: JourneyContext,
-  mut: JourneyMutations,
-  resolutions: ReadonlyMap<string, ChooserResolution>,
-): void {
-  const entries = collectApplyEntries(option.costs, option.effects);
-  commitOptionEntries(option, ctx, mut, resolutions, entries);
 }
 
 function commitOptionEntries(
@@ -107,8 +99,9 @@ export function applyOption(
   resolutions?: ReadonlyMap<string, ChooserResolution>,
 ): ApplyResult {
   const entries = collectApplyEntries(option.costs, option.effects);
-  const plan = planOptionEntries(option, ctx, entries);
-  const nextMissing = plan.find((request) => !resolutions?.has(request.requestId));
+  const safeResolutions = resolutions ?? new Map();
+  const plan = planOptionEntries(option, ctx, safeResolutions, entries);
+  const nextMissing = plan.find((request) => !safeResolutions.has(request.requestId));
   if (nextMissing !== undefined) {
     return { done: false, needsChoice: nextMissing };
   }
@@ -126,7 +119,7 @@ export function applyOption(
     }
   }
 
-  commitOptionEntries(option, ctx, mut, resolutions ?? new Map(), entries);
+  commitOptionEntries(option, ctx, mut, safeResolutions, entries);
 
   logEvent("dream_journey_applied", {
     siteId: meta.siteId,

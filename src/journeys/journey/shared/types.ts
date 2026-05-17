@@ -10,7 +10,11 @@ import type { JourneyContext } from "../context";
 import type { DrawContext } from "../../util/rng";
 import type { CardTargetPredicate } from "../effects";
 import type { JourneyMutations } from "../../apply/JourneyMutations";
-import type { ChooserRequest, ChooserResolution } from "../../apply/chooserPlan";
+import type {
+  ChooserPlanningContext,
+  ChooserRequest,
+  ChooserResolution,
+} from "../../apply/chooserPlan";
 
 export type TemplateParams = Record<string, unknown>;
 
@@ -21,14 +25,19 @@ export type Reward<P extends TemplateParams = TemplateParams> = {
   cec(params: P, ctx: JourneyContext): number;
   viable(params: P, ctx: JourneyContext): boolean;
   render(params: P, ctx: JourneyContext): string;
-  choosePlan?(params: P, ctx: JourneyContext): ChooserRequest | undefined;
-  // Chosen-target templates receive a resolution only after the apply layer
-  // has planned every chooser required by the selected option or branch.
+  choosePlan?(
+    params: P,
+    ctx: JourneyContext,
+    planning: ChooserPlanningContext,
+  ): ChooserRequest | undefined;
+  // Chosen-target templates receive the slot-0 resolution for common single
+  // chooser cases and the full resolution context for multi-chooser cases.
   apply(
     params: P,
     ctx: JourneyContext,
     mut: JourneyMutations,
     chooserResolution?: ChooserResolution,
+    chooserContext?: ChooserPlanningContext,
   ): void;
 };
 
