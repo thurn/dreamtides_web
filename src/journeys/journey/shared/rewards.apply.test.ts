@@ -1137,7 +1137,7 @@ describe("Card reward apply (non-choice)", () => {
     const ctx = buildContext({
       cards: cardFixture(),
       deckEntries: [
-        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
         { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
         { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
       ],
@@ -1474,6 +1474,495 @@ describe("Card reward apply (non-choice)", () => {
     }
   });
 
+  it("purge_chosen_predicate_cards plans an exact-count predicate deck chooser", () => {
+    const t = getReward("purge_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({ predicateId: "events", count: 2 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { predicateId: "events", entryIds: ["deck-event-alpha", "deck-event-beta"] },
+      minPicks: 2,
+      maxPicks: 2,
+      title: "Choose cards to purge",
+    });
+  });
+
+  it("purge_chosen_predicate_cards removes chosen predicate entries", () => {
+    const t = getReward("purge_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { predicateId: "events", count: 2 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["deck-event-alpha", "deck-event-beta"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:purge_chosen_predicate_cards"],
+      },
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-beta", "dream_journey:purge_chosen_predicate_cards"],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "missing resolution",
+      resolution: undefined,
+    },
+    {
+      name: "wrong count",
+      resolution: { kind: "card" as const, entryIds: ["deck-event-alpha"] },
+    },
+    {
+      name: "stale nonmatching entry",
+      resolution: { kind: "card" as const, entryIds: ["deck-starter-beta", "deck-event-alpha"] },
+    },
+  ])("purge_chosen_predicate_cards skips $name", ({ resolution }) => {
+    const t = getReward("purge_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ predicateId: "events", count: 2 }, ctx, mut, resolution);
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("purge_chosen_predicate_with_replacement plans an exact-count predicate deck chooser", () => {
+    const t = getReward("purge_chosen_predicate_with_replacement");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({ predicateId: "events", count: 1 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { predicateId: "events", entryIds: ["deck-event-alpha"] },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to transform",
+    });
+  });
+
+  it("purge_chosen_predicate_with_replacement does not plan without enough replacement cards", () => {
+    const t = getReward("purge_chosen_predicate_with_replacement");
+    const ctx = buildContext({
+      cards: cardFixture().filter((card) =>
+        card.id === "event-alpha" || card.id === "starter-beta",
+      ),
+      deckEntries: [
+        {
+          cardId: "event-alpha",
+          copies: 2,
+          entryIds: ["deck-event-alpha-1", "deck-event-alpha-2"],
+        },
+      ],
+    });
+
+    expect(t.choosePlan?.({ predicateId: "events", count: 2 }, ctx, planningContext()))
+      .toBeUndefined();
+  });
+
+  it("purge_chosen_predicate_with_replacement removes the chosen entry and adds a matching replacement", () => {
+    const t = getReward("purge_chosen_predicate_with_replacement");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { predicateId: "events", count: 1 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["deck-event-alpha"], cardIds: ["event-alpha"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:purge_chosen_predicate_with_replacement"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-alpha", "dream_journey:purge_chosen_predicate_with_replacement"],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "stale selected entry",
+      cards: cardFixture(),
+      resolution: { kind: "card" as const, entryIds: ["deck-starter-beta"] },
+    },
+    {
+      name: "insufficient replacement pool",
+      cards: cardFixture().filter((card) =>
+        card.id === "event-alpha" || card.id === "starter-beta",
+      ),
+      deckEntries: [
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        {
+          cardId: "event-alpha",
+          copies: 2,
+          entryIds: ["deck-event-alpha-1", "deck-event-alpha-2"],
+        },
+      ],
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-event-alpha-1", "deck-event-alpha-2"],
+      },
+    },
+  ])("purge_chosen_predicate_with_replacement skips $name without partial mutation", ({
+    cards,
+    deckEntries = [
+      { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+    ],
+    resolution,
+  }) => {
+    const t = getReward("purge_chosen_predicate_with_replacement");
+    const ctx = buildContext({
+      cards,
+      deckEntries,
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply(
+        { predicateId: "events", count: resolution.entryIds.length },
+        ctx,
+        mut,
+        resolution,
+      );
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("transform_chosen_predicate_into_named plans a predicate deck chooser", () => {
+    const t = getReward("transform_chosen_predicate_into_named");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+
+    expect(
+      t.choosePlan?.(
+        { predicateId: "events", newCardName: "Starter Beta" },
+        ctx,
+        planningContext(),
+      ),
+    ).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { predicateId: "events", entryIds: ["deck-event-alpha"] },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to transform",
+    });
+  });
+
+  it("transform_chosen_predicate_into_named does not plan when the named target is missing", () => {
+    const t = getReward("transform_chosen_predicate_into_named");
+    const ctx = buildContext({
+      cards: cardFixture().filter((card) => card.name !== "Starter Beta"),
+      deckEntries: [{ cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] }],
+    });
+
+    expect(
+      t.choosePlan?.(
+        { predicateId: "events", newCardName: "Starter Beta" },
+        ctx,
+        planningContext(),
+      ),
+    ).toBeUndefined();
+  });
+
+  it("transform_chosen_predicate_into_named removes the chosen entry and adds the named target", () => {
+    const t = getReward("transform_chosen_predicate_into_named");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [{ cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] }],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { predicateId: "events", newCardName: "Starter Beta" },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["deck-event-alpha"], cardIds: ["event-alpha"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:transform_chosen_predicate_into_named"],
+      },
+      {
+        method: "addCardById",
+        args: ["starter-beta", "dream_journey:transform_chosen_predicate_into_named"],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "target card missing",
+      cards: cardFixture().filter((card) => card.name !== "Starter Beta"),
+      resolution: { kind: "card" as const, entryIds: ["deck-event-alpha"] },
+    },
+    {
+      name: "stale selected entry",
+      cards: cardFixture(),
+      resolution: { kind: "card" as const, entryIds: ["deck-starter-beta"] },
+    },
+  ])("transform_chosen_predicate_into_named skips $name without partial mutation", ({ cards, resolution }) => {
+    const t = getReward("transform_chosen_predicate_into_named");
+    const ctx = buildContext({
+      cards,
+      deckEntries: [
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply(
+        { predicateId: "events", newCardName: "Starter Beta" },
+        ctx,
+        mut,
+        resolution,
+      );
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("duplicate_chosen_cards plans an exact-count deck chooser over concrete entries", () => {
+    const t = getReward("duplicate_chosen_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({ count: 2 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { entryIds: ["deck-event-alpha", "deck-starter-alpha"] },
+      minPicks: 2,
+      maxPicks: 2,
+      title: "Choose cards to duplicate",
+    });
+  });
+
+  it("duplicate_chosen_cards duplicates each chosen entry", () => {
+    const t = getReward("duplicate_chosen_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { count: 2 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["deck-event-alpha", "deck-starter-alpha"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "duplicateDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:duplicate_chosen_cards"],
+      },
+      {
+        method: "duplicateDeckEntry",
+        args: ["deck-starter-alpha", "dream_journey:duplicate_chosen_cards"],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "missing resolution",
+      resolution: undefined,
+    },
+    {
+      name: "duplicate selected entry",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-event-alpha", "deck-event-alpha"],
+      },
+    },
+    {
+      name: "stale selected entry",
+      resolution: { kind: "card" as const, entryIds: ["deck-event-alpha", "missing-entry"] },
+    },
+  ])("duplicate_chosen_cards skips $name", ({ resolution }) => {
+    const t = getReward("duplicate_chosen_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ count: 2 }, ctx, mut, resolution);
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("draw_X_and_duplicate_chosen plans a rolled deterministic subset of concrete deck entries", () => {
+    const t = getReward("draw_X_and_duplicate_chosen");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({ drawCount: 3 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "rolled",
+      rolledCardIds: ["starter-alpha", "event-beta", "event-alpha"],
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a drawn card to duplicate",
+    });
+  });
+
+  it("draw_X_and_duplicate_chosen duplicates a chosen rolled deck entry", () => {
+    const t = getReward("draw_X_and_duplicate_chosen");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { drawCount: 2 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["rolled:event-beta:1"], cardIds: ["event-beta"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "duplicateDeckEntry",
+        args: ["deck-event-beta", "dream_journey:draw_X_and_duplicate_chosen"],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "missing resolution",
+      resolution: undefined,
+    },
+    {
+      name: "malformed rolled chooser id",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["rolled:event-beta:1junk"],
+        cardIds: ["event-beta"],
+      },
+    },
+    {
+      name: "mismatched rolled chooser card id",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["rolled:event-alpha:1"],
+        cardIds: ["event-alpha"],
+      },
+    },
+  ])("draw_X_and_duplicate_chosen skips $name", ({ resolution }) => {
+    const t = getReward("draw_X_and_duplicate_chosen");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ drawCount: 2 }, ctx, mut, resolution);
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
   it("transform_starter_into_named_card removes a starter deck entry before adding the target card", () => {
     const t = getReward("transform_starter_into_named_card");
     const cards = cardFixture();
@@ -1692,6 +2181,183 @@ describe("Card reward apply (non-choice)", () => {
       t.apply({ predicateId: "events", count: 2 }, ctx, mut, undefined);
       expect(calls).toEqual([]);
       expect(warnSpy).toHaveBeenCalledTimes(1);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("purge_chosen_starters plans an exact-count starter deck chooser", () => {
+    const t = getReward("purge_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({ count: 2 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: {
+        starterOnly: true,
+        entryIds: ["deck-starter-alpha", "deck-starter-beta"],
+      },
+      minPicks: 2,
+      maxPicks: 2,
+      title: "Choose starter cards to purge",
+    });
+  });
+
+  it("purge_chosen_starters removes each chosen starter entry", () => {
+    const t = getReward("purge_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { count: 2 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["deck-starter-alpha", "deck-starter-beta"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-alpha", "dream_journey:purge_chosen_starters"],
+      },
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-beta", "dream_journey:purge_chosen_starters"],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "wrong count",
+      resolution: { kind: "card" as const, entryIds: ["deck-starter-alpha"] },
+    },
+    {
+      name: "stale nonstarter entry",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-starter-alpha", "deck-event-alpha"],
+      },
+    },
+  ])("purge_chosen_starters skips $name", ({ resolution }) => {
+    const t = getReward("purge_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ count: 2 }, ctx, mut, resolution);
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("replace_starter_via_draft plans a rolled four-card draft chooser", () => {
+    const t = getReward("replace_starter_via_draft");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+
+    expect(t.choosePlan?.({}, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "rolled",
+      rolledCardIds: ["starter-alpha", "starter-beta", "event-alpha", "event-beta"],
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a replacement card",
+    });
+  });
+
+  it("replace_starter_via_draft removes the rolled starter and adds the chosen draft card", () => {
+    const t = getReward("replace_starter_via_draft");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      {},
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["rolled:event-beta:3"], cardIds: ["event-beta"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-alpha", "dream_journey:replace_starter_via_draft"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-beta", "dream_journey:replace_starter_via_draft"],
+      },
+    ]);
+  });
+
+  it.each([
+    {
+      name: "wrong rolled candidate",
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+      ],
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["rolled:event-alpha:1"],
+        cardIds: ["event-alpha"],
+      },
+    },
+    {
+      name: "missing starter",
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["rolled:event-beta:2"],
+        cardIds: ["event-beta"],
+      },
+    },
+  ])("replace_starter_via_draft skips $name without partial mutation", ({ deckEntries, resolution }) => {
+    const t = getReward("replace_starter_via_draft");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries,
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({}, ctx, mut, resolution);
+      expect(calls).toEqual([]);
     } finally {
       warnSpy.mockRestore();
     }

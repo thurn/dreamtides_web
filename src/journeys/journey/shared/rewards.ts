@@ -87,6 +87,7 @@ import {
   findUntransfiguredDeckEntriesByPredicate,
   findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration,
   findUntransfiguredDeckEntryIds,
+  projectedDeckEntries,
 } from "./deckEntries";
 import { pickUniqueCardIds } from "./costs";
 import { POSITIVE_DREAMWELL_CARDS } from "./dreamwell";
@@ -420,6 +421,155 @@ function selectedExactDeckEntryIds(
   }
 
   return selectedEntryIds;
+}
+
+function selectedExactRolledCardIds(
+  templateId: string,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+  count: number,
+  rolledCardIds: readonly string[],
+): string[] | undefined {
+  if (chooserResolution?.kind !== "card") {
+    warnSkippedCardApply(templateId, "missing card chooser resolution");
+    return undefined;
+  }
+
+  if (chooserResolution.entryIds.length !== count) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly ${String(count)} selected card entries, got ${String(chooserResolution.entryIds.length)}`,
+    );
+    return undefined;
+  }
+
+  if (chooserResolution.cardIds !== undefined && chooserResolution.cardIds.length !== count) {
+    warnSkippedCardApply(
+      templateId,
+      `expected exactly ${String(count)} selected card ids, got ${String(chooserResolution.cardIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const uniqueEntryIds = new Set(chooserResolution.entryIds);
+  if (uniqueEntryIds.size !== chooserResolution.entryIds.length) {
+    warnSkippedCardApply(templateId, "card chooser resolution included duplicate entries");
+    return undefined;
+  }
+
+  const selectedCardIds: string[] = [];
+  for (const [resolutionIndex, selectedEntryId] of chooserResolution.entryIds.entries()) {
+    const rolledMatch = /^rolled:([^:]+):(\d+)$/.exec(selectedEntryId);
+    if (rolledMatch === null) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser entry ${JSON.stringify(selectedEntryId)} was malformed`,
+      );
+      return undefined;
+    }
+
+    const [, encodedCardId, rolledIndexText] = rolledMatch;
+    const rolledIndex = Number.parseInt(rolledIndexText, 10);
+    const cardId = rolledCardIds[rolledIndex];
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser index ${String(rolledIndex)} was not found`,
+      );
+      return undefined;
+    }
+
+    if (cardId !== encodedCardId) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser card ${JSON.stringify(encodedCardId)} did not match rolled index ${String(rolledIndex)}`,
+      );
+      return undefined;
+    }
+
+    const selectedCardId = chooserResolution.cardIds?.[resolutionIndex];
+    if (selectedCardId !== undefined && selectedCardId !== cardId) {
+      warnSkippedCardApply(
+        templateId,
+        `chooser card ${JSON.stringify(selectedCardId)} did not match rolled card ${JSON.stringify(cardId)}`,
+      );
+      return undefined;
+    }
+
+    selectedCardIds.push(cardId);
+  }
+
+  return selectedCardIds;
+}
+
+function pickedDrawDuplicateEntryIds(ctx: JourneyContext, drawCount: number): string[] {
+  return pickUniqueDeckEntryIds(
+    applyDrawContext(ctx),
+    "draw_X_and_duplicate_chosen:entry",
+    projectedDeckEntries(ctx).map((entry) => entry.entryId),
+    drawCount,
+  );
+}
+
+function resolveDrawDuplicateEntryId(
+  ctx: JourneyContext,
+  drawCount: number,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+): string | undefined {
+  const pickedEntryIds = pickedDrawDuplicateEntryIds(ctx, drawCount);
+  const cardIdByEntryId = new Map(
+    projectedDeckEntries(ctx).map((entry) => [entry.entryId, entry.card.id]),
+  );
+  const rolledCardIds = pickedEntryIds.flatMap((entryId) => {
+    const cardId = cardIdByEntryId.get(entryId);
+    return cardId === undefined ? [] : [cardId];
+  });
+  if (rolledCardIds.length < drawCount) {
+    warnSkippedCardApply(
+      "draw_X_and_duplicate_chosen",
+      `only ${String(rolledCardIds.length)} rolled deck entries were available for drawCount=${String(drawCount)}`,
+    );
+    return undefined;
+  }
+
+  const rolledCardIdsSelected = selectedExactRolledCardIds(
+    "draw_X_and_duplicate_chosen",
+    chooserResolution,
+    1,
+    rolledCardIds,
+  );
+  if (rolledCardIdsSelected === undefined) return undefined;
+
+  const selectedEntryId = chooserResolution?.kind === "card" ? chooserResolution.entryIds[0] : "";
+  const rolledMatch = /^rolled:[^:]+:(\d+)$/.exec(selectedEntryId ?? "");
+  const rolledIndex = rolledMatch === null ? -1 : Number.parseInt(rolledMatch[1], 10);
+  const entryId = pickedEntryIds[rolledIndex];
+  if (entryId === undefined) {
+    warnSkippedCardApply(
+      "draw_X_and_duplicate_chosen",
+      `rolled chooser index ${String(rolledIndex)} was not found`,
+    );
+    return undefined;
+  }
+
+  return entryId;
+}
+
+function pickedReplaceStarterEntryId(ctx: JourneyContext): string | undefined {
+  return pickUniqueDeckEntryIds(
+    applyDrawContext(ctx),
+    "replace_starter_via_draft:starter",
+    findDeckEntriesByPredicate(ctx, "starter"),
+    1,
+  )[0];
+}
+
+function pickedReplaceStarterDraftCardIds(ctx: JourneyContext): string[] {
+  return pickUniqueCardIds(
+    applyDrawContext(ctx),
+    "replace_starter_via_draft:draft",
+    ctx.content.cards,
+    4,
+  );
 }
 
 // Inclusive integer roll for resource-range apply. Wave 1 does not plumb a
@@ -1108,14 +1258,39 @@ const purgeChosenPredicateCards: Reward<PurgeChosenPredCardsParams> = {
     count: drawInt(draw, "purge_chosen_pred:n", 1, 3),
   }),
   cec: (p) => cardPoolCEC(CARD_CEC * 0.3, p.count, getPredicate(p.predicateId)),
-  // Deck-scope leak fix.
-  viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId),
+  viable: (p, ctx) => findDeckEntriesByPredicate(ctx, p.predicateId).length >= p.count,
   render: (p) => {
     const pred = getPredicate(p.predicateId);
     const noun = p.count === 1 ? pred.text.singular : pred.text.plural;
-    return `Purge up to ${p.count} chosen ${noun}`;
+    return `Purge ${p.count} chosen ${noun}`;
   },
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    if (entryIds.length < p.count) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { predicateId: p.predicateId, entryIds },
+      minPicks: p.count,
+      maxPicks: p.count,
+      title: p.count === 1 ? "Choose a card to purge" : "Choose cards to purge",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryIds = selectedExactDeckEntryIds(
+      "purge_chosen_predicate_cards",
+      ctx,
+      chooserResolution,
+      p.count,
+      findDeckEntriesByPredicate(ctx, p.predicateId),
+    );
+    if (entryIds === undefined) return;
+
+    for (const entryId of entryIds) {
+      mut.removeDeckEntry(entryId, "dream_journey:purge_chosen_predicate_cards");
+    }
+  },
 };
 
 type PurgeChosenPredWithReplParams = { predicateId: string; count: number };
@@ -1127,16 +1302,64 @@ const purgeChosenPredicateWithReplacement: Reward<PurgeChosenPredWithReplParams>
     count: drawInt(draw, "purge_repl:n", 1, 2),
   }),
   cec: (p) => cardPoolCEC(CARD_CEC * 0.6, p.count, getPredicate(p.predicateId)),
-  // Deck-scope leak fix.
-  viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId),
+  viable: (p, ctx) =>
+    findDeckEntriesByPredicate(ctx, p.predicateId).length >= p.count
+    && cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= p.count,
   render: (p) => {
     const pred = getPredicate(p.predicateId);
     if (p.count === 1) {
       return `Transform a chosen ${pred.text.singular} into a random ${pred.text.singular}`;
     }
-    return `Transform up to ${p.count} chosen ${pred.text.plural} into random ${pred.text.plural}`;
+    return `Transform ${p.count} chosen ${pred.text.plural} into random ${pred.text.plural}`;
   },
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    if (entryIds.length < p.count) return undefined;
+    const replacementPool = cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {});
+    if (replacementPool.length < p.count) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { predicateId: p.predicateId, entryIds },
+      minPicks: p.count,
+      maxPicks: p.count,
+      title: p.count === 1 ? "Choose a card to transform" : "Choose cards to transform",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryIds = selectedExactDeckEntryIds(
+      "purge_chosen_predicate_with_replacement",
+      ctx,
+      chooserResolution,
+      p.count,
+      findDeckEntriesByPredicate(ctx, p.predicateId),
+    );
+    if (entryIds === undefined) return;
+
+    const replacementPool = cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {});
+    const replacementCardIds = pickUniqueCardIds(
+      applyDrawContext(ctx),
+      "purge_chosen_predicate_with_replacement:card",
+      replacementPool,
+      p.count,
+    );
+    if (replacementCardIds.length < p.count) {
+      warnSkippedCardApply(
+        "purge_chosen_predicate_with_replacement",
+        `only ${String(replacementCardIds.length)} cards matched predicate ${JSON.stringify(p.predicateId)} for count=${String(p.count)}`,
+      );
+      return;
+    }
+
+    entryIds.forEach((entryId, index) => {
+      mut.removeDeckEntry(entryId, "dream_journey:purge_chosen_predicate_with_replacement");
+      mut.addCardById(
+        replacementCardIds[index],
+        "dream_journey:purge_chosen_predicate_with_replacement",
+      );
+    });
+  },
 };
 
 type PurgeNamedStarterParams = { cardName: string };
@@ -1339,7 +1562,42 @@ const transformChosenPredicateIntoNamed: Reward<TransformPredCardParams> = {
   viable: (p, ctx) => deckContainsPredicate(ctx, p.predicateId) && ctx.content.cards.length > 0,
   render: (p) =>
     `Transform a chosen ${getPredicate(p.predicateId).text.singular} into ${quoteName(p.newCardName)}`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    if (resolveCardIdByName(ctx, p.newCardName) === undefined) return undefined;
+    const entryIds = findDeckEntriesByPredicate(ctx, p.predicateId);
+    if (entryIds.length < 1) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { predicateId: p.predicateId, entryIds },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to transform",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const targetCardId = resolveCardIdByName(ctx, p.newCardName);
+    if (targetCardId === undefined) {
+      warnSkippedCardApply(
+        "transform_chosen_predicate_into_named",
+        `catalog card named ${JSON.stringify(p.newCardName)} was not found`,
+      );
+      return;
+    }
+
+    const entryId = selectedExactDeckEntryIds(
+      "transform_chosen_predicate_into_named",
+      ctx,
+      chooserResolution,
+      1,
+      findDeckEntriesByPredicate(ctx, p.predicateId),
+    )?.[0];
+    if (entryId === undefined) return;
+
+    mut.removeDeckEntry(entryId, "dream_journey:transform_chosen_predicate_into_named");
+    mut.addCardById(targetCardId, "dream_journey:transform_chosen_predicate_into_named");
+  },
 };
 
 type DupNamedCardParams = {
@@ -1398,9 +1656,35 @@ const duplicateChosenCards: Reward<DupChosenParams> = {
   rollParams: (_ctx, draw) => ({ count: drawInt(draw, "dup_chosen:n", 1, 3) }),
   cec: (p) => CARD_CEC * 1.1 * p.count,
   // Deck-size-N: inline upgraded to the helper.
-  viable: (_p, ctx) => deckHasMinSize(ctx, 1),
+  viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) => `Duplicate ${p.count} chosen card${p.count === 1 ? "" : "s"}`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = projectedDeckEntries(ctx).map((entry) => entry.entryId);
+    if (entryIds.length < p.count) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { entryIds },
+      minPicks: p.count,
+      maxPicks: p.count,
+      title: p.count === 1 ? "Choose a card to duplicate" : "Choose cards to duplicate",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryIds = selectedExactDeckEntryIds(
+      "duplicate_chosen_cards",
+      ctx,
+      chooserResolution,
+      p.count,
+      projectedDeckEntries(ctx).map((entry) => entry.entryId),
+    );
+    if (entryIds === undefined) return;
+
+    for (const entryId of entryIds) {
+      mut.duplicateDeckEntry(entryId, "dream_journey:duplicate_chosen_cards");
+    }
+  },
 };
 
 type DupRandomPredParams = { predicateId: string; count: number };
@@ -1460,7 +1744,34 @@ const drawXAndDuplicateChosen: Reward<DrawDupParams> = {
   viable: (p, ctx) => deckHasMinSize(ctx, p.drawCount),
   render: (p) =>
     `Draw ${p.drawCount} cards from your deck and duplicate one of them of your choice`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const pickedEntryIds = pickedDrawDuplicateEntryIds(ctx, p.drawCount);
+    if (pickedEntryIds.length < p.drawCount) return undefined;
+
+    const cardIdByEntryId = new Map(
+      projectedDeckEntries(ctx).map((entry) => [entry.entryId, entry.card.id]),
+    );
+    const rolledCardIds = pickedEntryIds.flatMap((entryId) => {
+      const cardId = cardIdByEntryId.get(entryId);
+      return cardId === undefined ? [] : [cardId];
+    });
+    if (rolledCardIds.length < p.drawCount) return undefined;
+
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a drawn card to duplicate",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryId = resolveDrawDuplicateEntryId(ctx, p.drawCount, chooserResolution);
+    if (entryId === undefined) return;
+    mut.duplicateDeckEntry(entryId, "dream_journey:draw_X_and_duplicate_chosen");
+  },
 };
 
 type PurgeXBanesParams = { count: number };
@@ -2022,9 +2333,35 @@ const purgeChosenStarters: Reward<PurgeChosenStartersParams> = {
   weight: 1.0,
   rollParams: (_ctx, draw) => ({ count: drawInt(draw, "purge_chosen_starters:n", 1, 3) }),
   cec: (p) => CARD_CEC * 0.45 * p.count,
-  viable: (_p, ctx) => starterCardCount(ctx) >= 1,
-  render: (p) => `Purge up to ${p.count} chosen starter card${p.count === 1 ? "" : "s"}`,
-  apply: () => {},
+  viable: (p, ctx) => findDeckEntriesByPredicate(ctx, "starter").length >= p.count,
+  render: (p) => `Purge ${p.count} chosen starter card${p.count === 1 ? "" : "s"}`,
+  choosePlan: (p, ctx, planning) => {
+    const entryIds = findDeckEntriesByPredicate(ctx, "starter");
+    if (entryIds.length < p.count) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "deck",
+      deckFilter: { starterOnly: true, entryIds },
+      minPicks: p.count,
+      maxPicks: p.count,
+      title: p.count === 1 ? "Choose a starter card to purge" : "Choose starter cards to purge",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const entryIds = selectedExactDeckEntryIds(
+      "purge_chosen_starters",
+      ctx,
+      chooserResolution,
+      p.count,
+      findDeckEntriesByPredicate(ctx, "starter"),
+    );
+    if (entryIds === undefined) return;
+
+    for (const entryId of entryIds) {
+      mut.removeDeckEntry(entryId, "dream_journey:purge_chosen_starters");
+    }
+  },
 };
 
 type PurgeAllStartersParams = Record<string, never>;
@@ -2055,7 +2392,58 @@ const replaceStarterViaDraft: Reward<ReplaceStarterViaDraftParams> = {
   cec: () => CARD_CEC * 1.0,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1 && ctx.content.cards.length >= 4,
   render: () => "Replace a chosen starter card with 1 of 4 drafted cards",
-  apply: () => {},
+  choosePlan: (_p, ctx, planning) => {
+    const starterEntryId = pickedReplaceStarterEntryId(ctx);
+    if (starterEntryId === undefined) return undefined;
+
+    const rolledCardIds = pickedReplaceStarterDraftCardIds(ctx);
+    if (rolledCardIds.length < 4) return undefined;
+
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a replacement card",
+    };
+  },
+  apply: (_p, ctx, mut, chooserResolution) => {
+    const starterEntryId = pickedReplaceStarterEntryId(ctx);
+    if (starterEntryId === undefined) {
+      warnSkippedCardApply("replace_starter_via_draft", "starter deck entry was not found");
+      return;
+    }
+
+    const rolledCardIds = pickedReplaceStarterDraftCardIds(ctx);
+    if (rolledCardIds.length < 4) {
+      warnSkippedCardApply(
+        "replace_starter_via_draft",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardId = selectedExactRolledCardIds(
+      "replace_starter_via_draft",
+      chooserResolution,
+      1,
+      rolledCardIds,
+    )?.[0];
+    if (selectedCardId === undefined) return;
+
+    if (!ctx.content.cards.some((card) => card.id === selectedCardId)) {
+      warnSkippedCardApply(
+        "replace_starter_via_draft",
+        `catalog card ${JSON.stringify(selectedCardId)} was not found`,
+      );
+      return;
+    }
+
+    mut.removeDeckEntry(starterEntryId, "dream_journey:replace_starter_via_draft");
+    mut.addCardById(selectedCardId, "dream_journey:replace_starter_via_draft");
+  },
 };
 
 type ApplyRandomTransfigurationsToRandomCardsParams = { count: number };
