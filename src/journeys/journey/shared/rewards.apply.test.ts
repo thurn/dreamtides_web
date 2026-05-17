@@ -1474,7 +1474,7 @@ describe("Card reward apply (non-choice)", () => {
     }
   });
 
-  it("purge_chosen_predicate_cards plans an exact-count predicate deck chooser", () => {
+  it("purge_chosen_predicate_cards plans a bounded predicate deck chooser", () => {
     const t = getReward("purge_chosen_predicate_cards");
     const ctx = buildContext({
       cards: cardFixture(),
@@ -1490,8 +1490,33 @@ describe("Card reward apply (non-choice)", () => {
       requestId: "request:0",
       poolKind: "deck",
       deckFilter: { predicateId: "events", entryIds: ["deck-event-alpha", "deck-event-beta"] },
-      minPicks: 2,
+      minPicks: 1,
       maxPicks: 2,
+      title: "Choose cards to purge",
+    });
+  });
+
+  it("purge_chosen_predicate_cards caps maxPicks when fewer eligible targets exist", () => {
+    const t = getReward("purge_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+
+    expect(t.viable({ predicateId: "events", count: 3 }, ctx)).toBe(true);
+    expect(t.render({ predicateId: "events", count: 3 }, ctx)).toBe(
+      "Purge up to 3 chosen Event cards",
+    );
+    expect(t.choosePlan?.({ predicateId: "events", count: 3 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: { predicateId: "events", entryIds: ["deck-event-alpha"] },
+      minPicks: 1,
+      maxPicks: 1,
       title: "Choose cards to purge",
     });
   });
@@ -1526,20 +1551,58 @@ describe("Card reward apply (non-choice)", () => {
     ]);
   });
 
+  it("purge_chosen_predicate_cards accepts fewer than count and mutates only selected entries", () => {
+    const t = getReward("purge_chosen_predicate_cards");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { predicateId: "events", count: 3 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["deck-event-beta"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-beta", "dream_journey:purge_chosen_predicate_cards"],
+      },
+    ]);
+  });
+
   it.each([
     {
       name: "missing resolution",
       resolution: undefined,
     },
     {
-      name: "wrong count",
-      resolution: { kind: "card" as const, entryIds: ["deck-event-alpha"] },
+      name: "zero selections",
+      resolution: { kind: "card" as const, entryIds: [] },
+    },
+    {
+      name: "over-limit selections",
+      resolution: { kind: "card" as const, entryIds: ["deck-event-alpha", "deck-event-beta"] },
+      params: { predicateId: "events", count: 1 },
+    },
+    {
+      name: "duplicate selections",
+      resolution: { kind: "card" as const, entryIds: ["deck-event-alpha", "deck-event-alpha"] },
     },
     {
       name: "stale nonmatching entry",
       resolution: { kind: "card" as const, entryIds: ["deck-starter-beta", "deck-event-alpha"] },
     },
-  ])("purge_chosen_predicate_cards skips $name", ({ resolution }) => {
+  ])("purge_chosen_predicate_cards skips $name without mutation", ({
+    resolution,
+    params = { predicateId: "events", count: 2 },
+  }) => {
     const t = getReward("purge_chosen_predicate_cards");
     const ctx = buildContext({
       cards: cardFixture(),
@@ -1552,14 +1615,14 @@ describe("Card reward apply (non-choice)", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
       const { mut, calls } = createRecordingMutations();
-      t.apply({ predicateId: "events", count: 2 }, ctx, mut, resolution);
+      t.apply(params, ctx, mut, resolution);
       expect(calls).toEqual([]);
     } finally {
       warnSpy.mockRestore();
     }
   });
 
-  it("purge_chosen_predicate_with_replacement plans an exact-count predicate deck chooser", () => {
+  it("purge_chosen_predicate_with_replacement plans a bounded predicate deck chooser", () => {
     const t = getReward("purge_chosen_predicate_with_replacement");
     const ctx = buildContext({
       cards: cardFixture(),
@@ -1580,7 +1643,7 @@ describe("Card reward apply (non-choice)", () => {
     });
   });
 
-  it("purge_chosen_predicate_with_replacement does not plan without enough replacement cards", () => {
+  it("purge_chosen_predicate_with_replacement caps maxPicks by replacement availability", () => {
     const t = getReward("purge_chosen_predicate_with_replacement");
     const ctx = buildContext({
       cards: cardFixture().filter((card) =>
@@ -1595,8 +1658,22 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
 
-    expect(t.choosePlan?.({ predicateId: "events", count: 2 }, ctx, planningContext()))
-      .toBeUndefined();
+    expect(t.viable({ predicateId: "events", count: 2 }, ctx)).toBe(true);
+    expect(t.render({ predicateId: "events", count: 2 }, ctx)).toBe(
+      "Transform up to 2 chosen Event cards into random Event cards",
+    );
+    expect(t.choosePlan?.({ predicateId: "events", count: 2 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: {
+        predicateId: "events",
+        entryIds: ["deck-event-alpha-1", "deck-event-alpha-2"],
+      },
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose cards to transform",
+    });
   });
 
   it("purge_chosen_predicate_with_replacement removes the chosen entry and adds a matching replacement", () => {
@@ -1629,7 +1706,67 @@ describe("Card reward apply (non-choice)", () => {
     ]);
   });
 
+  it("purge_chosen_predicate_with_replacement rolls one replacement per selected entry", () => {
+    const t = getReward("purge_chosen_predicate_with_replacement");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { predicateId: "events", count: 3 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["deck-event-alpha", "deck-event-beta"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-alpha", "dream_journey:purge_chosen_predicate_with_replacement"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-alpha", "dream_journey:purge_chosen_predicate_with_replacement"],
+      },
+      {
+        method: "removeDeckEntry",
+        args: ["deck-event-beta", "dream_journey:purge_chosen_predicate_with_replacement"],
+      },
+      {
+        method: "addCardById",
+        args: ["starter-alpha", "dream_journey:purge_chosen_predicate_with_replacement"],
+      },
+    ]);
+  });
+
   it.each([
+    {
+      name: "zero selections",
+      cards: cardFixture(),
+      resolution: { kind: "card" as const, entryIds: [] },
+    },
+    {
+      name: "over-limit selections",
+      cards: cardFixture(),
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-event-alpha", "deck-event-beta"],
+      },
+      params: { predicateId: "events", count: 1 },
+    },
+    {
+      name: "duplicate selections",
+      cards: cardFixture(),
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["deck-event-alpha", "deck-event-alpha"],
+      },
+    },
     {
       name: "stale selected entry",
       cards: cardFixture(),
@@ -1660,6 +1797,7 @@ describe("Card reward apply (non-choice)", () => {
       { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
     ],
     resolution,
+    params = { predicateId: "events", count: resolution.entryIds.length },
   }) => {
     const t = getReward("purge_chosen_predicate_with_replacement");
     const ctx = buildContext({
@@ -1670,7 +1808,7 @@ describe("Card reward apply (non-choice)", () => {
     try {
       const { mut, calls } = createRecordingMutations();
       t.apply(
-        { predicateId: "events", count: resolution.entryIds.length },
+        params,
         ctx,
         mut,
         resolution,
@@ -2186,7 +2324,7 @@ describe("Card reward apply (non-choice)", () => {
     }
   });
 
-  it("purge_chosen_starters plans an exact-count starter deck chooser", () => {
+  it("purge_chosen_starters plans a bounded starter deck chooser", () => {
     const t = getReward("purge_chosen_starters");
     const ctx = buildContext({
       cards: cardFixture(),
@@ -2205,8 +2343,34 @@ describe("Card reward apply (non-choice)", () => {
         starterOnly: true,
         entryIds: ["deck-starter-alpha", "deck-starter-beta"],
       },
-      minPicks: 2,
+      minPicks: 1,
       maxPicks: 2,
+      title: "Choose starter cards to purge",
+    });
+  });
+
+  it("purge_chosen_starters caps maxPicks when fewer eligible targets exist", () => {
+    const t = getReward("purge_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+
+    expect(t.viable({ count: 3 }, ctx)).toBe(true);
+    expect(t.render({ count: 3 }, ctx)).toBe("Purge up to 3 chosen starter cards");
+    expect(t.choosePlan?.({ count: 3 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "deck",
+      deckFilter: {
+        starterOnly: true,
+        entryIds: ["deck-starter-alpha"],
+      },
+      minPicks: 1,
+      maxPicks: 1,
       title: "Choose starter cards to purge",
     });
   });
@@ -2241,10 +2405,45 @@ describe("Card reward apply (non-choice)", () => {
     ]);
   });
 
+  it("purge_chosen_starters accepts fewer than count and mutates only selected entries", () => {
+    const t = getReward("purge_chosen_starters");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { count: 3 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["deck-starter-beta"] },
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "removeDeckEntry",
+        args: ["deck-starter-beta", "dream_journey:purge_chosen_starters"],
+      },
+    ]);
+  });
+
   it.each([
     {
-      name: "wrong count",
-      resolution: { kind: "card" as const, entryIds: ["deck-starter-alpha"] },
+      name: "zero selections",
+      resolution: { kind: "card" as const, entryIds: [] },
+    },
+    {
+      name: "over-limit selections",
+      resolution: { kind: "card" as const, entryIds: ["deck-starter-alpha", "deck-starter-beta"] },
+      params: { count: 1 },
+    },
+    {
+      name: "duplicate selections",
+      resolution: { kind: "card" as const, entryIds: ["deck-starter-alpha", "deck-starter-alpha"] },
     },
     {
       name: "stale nonstarter entry",
@@ -2253,7 +2452,10 @@ describe("Card reward apply (non-choice)", () => {
         entryIds: ["deck-starter-alpha", "deck-event-alpha"],
       },
     },
-  ])("purge_chosen_starters skips $name", ({ resolution }) => {
+  ])("purge_chosen_starters skips $name without mutation", ({
+    resolution,
+    params = { count: 2 },
+  }) => {
     const t = getReward("purge_chosen_starters");
     const ctx = buildContext({
       cards: cardFixture(),
@@ -2266,14 +2468,14 @@ describe("Card reward apply (non-choice)", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
       const { mut, calls } = createRecordingMutations();
-      t.apply({ count: 2 }, ctx, mut, resolution);
+      t.apply(params, ctx, mut, resolution);
       expect(calls).toEqual([]);
     } finally {
       warnSpy.mockRestore();
     }
   });
 
-  it("replace_starter_via_draft plans a rolled four-card draft chooser", () => {
+  it("replace_starter_via_draft plans only a rolled replacement chooser", () => {
     const t = getReward("replace_starter_via_draft");
     const ctx = buildContext({
       cards: cardFixture(),
@@ -2283,6 +2485,7 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
 
+    expect(t.render({}, ctx)).toBe("Replace a random starter card with 1 of 4 drafted cards");
     expect(t.choosePlan?.({}, ctx, planningContext())).toEqual({
       kind: "card",
       requestId: "request:0",
