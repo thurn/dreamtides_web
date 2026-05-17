@@ -16,7 +16,7 @@ export function ChooserOverlay({
   onConfirm,
 }: ChooserOverlayProps) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-4 py-6">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/55 px-4 py-6">
       <section
         aria-modal="true"
         role="dialog"
