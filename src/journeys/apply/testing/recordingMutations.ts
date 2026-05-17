@@ -27,6 +27,7 @@ export function createRecordingMutations(): {
   calls: MutCall[];
 } {
   const calls: MutCall[] = [];
+  let addedCardCount = 0;
 
   const record =
     <M extends keyof JourneyMutations>(method: M) =>
@@ -42,7 +43,11 @@ export function createRecordingMutations(): {
     changeMaxEssence: record("changeMaxEssence"),
 
     // ---- Deck ------------------------------------------------------------
-    addCardById: record("addCardById"),
+    addCardById: (...args) => {
+      calls.push({ method: "addCardById", args });
+      addedCardCount += 1;
+      return `recorded-add-card-${String(addedCardCount)}`;
+    },
     addBaneCardById: record("addBaneCardById"),
     removeDeckEntry: record("removeDeckEntry"),
     duplicateDeckEntry: record("duplicateDeckEntry"),

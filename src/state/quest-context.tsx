@@ -226,7 +226,7 @@ export interface QuestMutations {
    * card database (the same pattern `pushTemporaryBaneGrant` uses). On a
    * miss this no-ops and logs a console warning.
    */
-  addCardById: (cardId: string, source: string) => void;
+  addCardById: (cardId: string, source: string) => string;
   /** Add a bane-flagged card to the deck by catalog `cardId`. Same lookup
    *  semantics as `addCardById`. */
   addBaneCardById: (cardId: string, source: string) => void;
@@ -2195,7 +2195,7 @@ export function QuestProvider({
         console.warn(
           `[quest-context] addCardById: unknown cardId '${cardId}' (source: ${source})`,
         );
-        return;
+        return "";
       }
       const cardNumber = resolved.cardNumber;
       logEvent("card_added", {
@@ -2213,6 +2213,7 @@ export function QuestProvider({
         };
         return { ...prev, deck: [...prev.deck, entry] };
       });
+      return entryId;
     },
     [cardDatabase],
   );

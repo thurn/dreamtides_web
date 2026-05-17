@@ -153,6 +153,27 @@ function inactivePoolDreamsigns(ctx: JourneyContext) {
   return poolDreamsignsById(ctx).filter((dreamsign) => !activeIds.has(dreamsign.id));
 }
 
+function pickUniqueDreamsignIds(
+  draw: DrawContext,
+  label: string,
+  pool: readonly DreamsignContent[],
+  count: number,
+): string[] {
+  const remaining = [...pool];
+  const picked: string[] = [];
+
+  for (let i = 0; i < count && remaining.length > 0; i += 1) {
+    const dreamsign = pickFromList(draw, `${label}:${String(i)}`, remaining);
+    picked.push(dreamsign.id);
+    remaining.splice(
+      remaining.findIndex((candidate) => candidate.id === dreamsign.id),
+      1,
+    );
+  }
+
+  return picked;
+}
+
 // Pull a string off a DreamsignContent's `raw` payload when present. The
 // content bridge stores image fields conditionally (omitted when the source
 // template has no value), so the lookup must tolerate both missing keys and
@@ -300,6 +321,10 @@ function resolveCardIdByName(ctx: JourneyContext, name: string): string | undefi
 }
 
 function warnSkippedCardApply(templateId: string, reason: string): void {
+  console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
+}
+
+function warnSkippedDreamsignApply(templateId: string, reason: string): void {
   console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
 }
 
@@ -574,6 +599,215 @@ function selectedExactRolledCardIds(
   return selectedCardIds;
 }
 
+function selectedBoundedRolledCardIds(
+  templateId: string,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+  minCount: number,
+  maxCount: number,
+  rolledCardIds: readonly string[],
+): string[] | undefined {
+  if (chooserResolution?.kind !== "card") {
+    warnSkippedCardApply(templateId, "missing card chooser resolution");
+    return undefined;
+  }
+
+  if (
+    chooserResolution.entryIds.length < minCount
+    || chooserResolution.entryIds.length > maxCount
+  ) {
+    warnSkippedCardApply(
+      templateId,
+      `expected ${String(minCount)}-${String(maxCount)} selected card entries, got ${String(chooserResolution.entryIds.length)}`,
+    );
+    return undefined;
+  }
+
+  if (
+    chooserResolution.cardIds !== undefined
+    && chooserResolution.cardIds.length !== chooserResolution.entryIds.length
+  ) {
+    warnSkippedCardApply(
+      templateId,
+      `expected ${String(chooserResolution.entryIds.length)} selected card ids, got ${String(chooserResolution.cardIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const uniqueEntryIds = new Set(chooserResolution.entryIds);
+  if (uniqueEntryIds.size !== chooserResolution.entryIds.length) {
+    warnSkippedCardApply(templateId, "card chooser resolution included duplicate entries");
+    return undefined;
+  }
+
+  const selectedCardIds: string[] = [];
+  for (const [resolutionIndex, selectedEntryId] of chooserResolution.entryIds.entries()) {
+    const rolledMatch = /^rolled:([^:]+):(\d+)$/.exec(selectedEntryId);
+    if (rolledMatch === null) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser entry ${JSON.stringify(selectedEntryId)} was malformed`,
+      );
+      return undefined;
+    }
+
+    const [, encodedCardId, rolledIndexText] = rolledMatch;
+    const rolledIndex = Number.parseInt(rolledIndexText, 10);
+    const cardId = rolledCardIds[rolledIndex];
+    if (cardId === undefined) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser index ${String(rolledIndex)} was not found`,
+      );
+      return undefined;
+    }
+
+    if (cardId !== encodedCardId) {
+      warnSkippedCardApply(
+        templateId,
+        `rolled chooser card ${JSON.stringify(encodedCardId)} did not match rolled index ${String(rolledIndex)}`,
+      );
+      return undefined;
+    }
+
+    const selectedCardId = chooserResolution.cardIds?.[resolutionIndex];
+    if (selectedCardId !== undefined && selectedCardId !== cardId) {
+      warnSkippedCardApply(
+        templateId,
+        `chooser card ${JSON.stringify(selectedCardId)} did not match rolled card ${JSON.stringify(cardId)}`,
+      );
+      return undefined;
+    }
+
+    selectedCardIds.push(cardId);
+  }
+
+  return selectedCardIds;
+}
+
+function selectedRolledDreamsignIds(
+  templateId: string,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+  minCount: number,
+  maxCount: number,
+  rolledDreamsignIds: readonly string[],
+): string[] | undefined {
+  if (chooserResolution?.kind !== "dreamsign") {
+    warnSkippedDreamsignApply(templateId, "missing dreamsign chooser resolution");
+    return undefined;
+  }
+
+  if (
+    chooserResolution.indices.length < minCount
+    || chooserResolution.indices.length > maxCount
+  ) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected ${String(minCount)}-${String(maxCount)} selected dreamsign indices, got ${String(chooserResolution.indices.length)}`,
+    );
+    return undefined;
+  }
+
+  if (
+    chooserResolution.dreamsignIds !== undefined
+    && chooserResolution.dreamsignIds.length !== chooserResolution.indices.length
+  ) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected ${String(chooserResolution.indices.length)} selected dreamsign ids, got ${String(chooserResolution.dreamsignIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const uniqueIndices = new Set(chooserResolution.indices);
+  if (uniqueIndices.size !== chooserResolution.indices.length) {
+    warnSkippedDreamsignApply(templateId, "dreamsign chooser resolution included duplicate indices");
+    return undefined;
+  }
+
+  const selectedDreamsignIds: string[] = [];
+  for (const [resolutionIndex, selectedIndex] of chooserResolution.indices.entries()) {
+    if (!Number.isInteger(selectedIndex)) {
+      warnSkippedDreamsignApply(
+        templateId,
+        "dreamsign chooser resolution included a malformed index",
+      );
+      return undefined;
+    }
+
+    const dreamsignId = rolledDreamsignIds[selectedIndex];
+    if (dreamsignId === undefined) {
+      warnSkippedDreamsignApply(
+        templateId,
+        `rolled dreamsign index ${String(selectedIndex)} was not found`,
+      );
+      return undefined;
+    }
+
+    const selectedDreamsignId = chooserResolution.dreamsignIds?.[resolutionIndex];
+    if (selectedDreamsignId !== undefined && selectedDreamsignId !== dreamsignId) {
+      warnSkippedDreamsignApply(
+        templateId,
+        `chooser dreamsign ${JSON.stringify(selectedDreamsignId)} did not match rolled dreamsign ${JSON.stringify(dreamsignId)}`,
+      );
+      return undefined;
+    }
+
+    selectedDreamsignIds.push(dreamsignId);
+  }
+
+  return selectedDreamsignIds;
+}
+
+function selectedActiveDreamsignIndex(
+  templateId: string,
+  ctx: JourneyContext,
+  chooserResolution: Parameters<Reward["apply"]>[3],
+): number | undefined {
+  if (chooserResolution?.kind !== "dreamsign") {
+    warnSkippedDreamsignApply(templateId, "missing dreamsign chooser resolution");
+    return undefined;
+  }
+
+  if (chooserResolution.indices.length !== 1) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected exactly one selected dreamsign index, got ${String(chooserResolution.indices.length)}`,
+    );
+    return undefined;
+  }
+
+  if (chooserResolution.dreamsignIds !== undefined && chooserResolution.dreamsignIds.length !== 1) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `expected exactly one selected dreamsign id, got ${String(chooserResolution.dreamsignIds.length)}`,
+    );
+    return undefined;
+  }
+
+  const index = chooserResolution.indices[0];
+  if (!Number.isInteger(index)) {
+    warnSkippedDreamsignApply(templateId, "dreamsign chooser resolution did not include an index");
+    return undefined;
+  }
+
+  const activeDreamsign = ctx.state.quest.activeDreamsigns[index];
+  if (activeDreamsign === undefined) {
+    warnSkippedDreamsignApply(templateId, `active dreamsign index ${String(index)} was not found`);
+    return undefined;
+  }
+
+  const expectedDreamsignId = chooserResolution.dreamsignIds?.[0];
+  if (expectedDreamsignId !== undefined && activeDreamsign.dreamsignId !== expectedDreamsignId) {
+    warnSkippedDreamsignApply(
+      templateId,
+      `active dreamsign index ${String(index)} is ${JSON.stringify(activeDreamsign.dreamsignId)}, not ${JSON.stringify(expectedDreamsignId)}`,
+    );
+    return undefined;
+  }
+
+  return index;
+}
+
 function pickedDrawDuplicateEntryIds(ctx: JourneyContext, drawCount: number): string[] {
   return pickUniqueDeckEntryIds(
     applyDrawContext(ctx),
@@ -778,6 +1012,31 @@ function isFlatDraftPredicate(predicateId: string): boolean {
   return FLAT_DRAFT_PREDICATE_IDS.has(predicateId);
 }
 
+function draftPredicatePool(
+  ctx: JourneyContext,
+  predicateId: string,
+  transfiguration?: string,
+) {
+  const pool = cardMatches(ctx, getPredicate(predicateId).cardPredicate ?? {});
+  if (transfiguration === undefined) return pool;
+  return pool.filter((card) => isCardEligibleForTransfiguration(transfiguration, card));
+}
+
+function pickedDraftPredicateCardIds(
+  ctx: JourneyContext,
+  predicateId: string,
+  label: string,
+  count: number,
+  transfiguration?: string,
+): string[] {
+  return pickUniqueCardIds(
+    applyDrawContext(ctx),
+    label,
+    draftPredicatePool(ctx, predicateId, transfiguration),
+    count,
+  );
+}
+
 type GainRandomCardsParams = { predicateId: string; count: number };
 const gainRandomPredicateCards: Reward<GainRandomCardsParams> = {
   id: "gain_random_predicate_cards",
@@ -836,7 +1095,49 @@ const draftPredicateCardsFrom4: Reward<DraftPredicateParams> = {
   viable: (p, ctx) =>
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4,
   render: (p) => `Draft 1 of 4 ${getPredicate(p.predicateId).text.plural}`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_predicate_cards_from_4:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to draft",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_predicate_cards_from_4:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) {
+      warnSkippedCardApply(
+        "draft_predicate_cards_from_4",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardId = selectedExactRolledCardIds(
+      "draft_predicate_cards_from_4",
+      chooserResolution,
+      1,
+      rolledCardIds,
+    )?.[0];
+    if (selectedCardId === undefined) return;
+
+    mut.addCardById(selectedCardId, "dream_journey:draft_predicate_cards_from_4");
+  },
 };
 
 type TakeAnyParams = { predicateId: string; choices: number };
@@ -856,7 +1157,52 @@ const takeAnyFromPredicateChoices: Reward<TakeAnyParams> = {
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= p.choices,
   render: (p) =>
     `Take any number of ${getPredicate(p.predicateId).text.plural} from ${p.choices} choices`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "take_any_from_predicate_choices:card",
+      p.choices,
+    );
+    if (rolledCardIds.length < p.choices) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 0,
+      maxPicks: p.choices,
+      title: "Choose cards to take",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "take_any_from_predicate_choices:card",
+      p.choices,
+    );
+    if (rolledCardIds.length < p.choices) {
+      warnSkippedCardApply(
+        "take_any_from_predicate_choices",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardIds = selectedBoundedRolledCardIds(
+      "take_any_from_predicate_choices",
+      chooserResolution,
+      0,
+      p.choices,
+      rolledCardIds,
+    );
+    if (selectedCardIds === undefined) return;
+
+    for (const cardId of selectedCardIds) {
+      mut.addCardById(cardId, "dream_journey:take_any_from_predicate_choices");
+    }
+  },
 };
 
 type GainNamedCardParams = { name: string };
@@ -1955,7 +2301,65 @@ const choose1OfXDreamsigns: Reward<Choose1OfXDreamsignsParams> = {
   // Pool-scope fix.
   viable: (p, ctx) => ctx.state.quest.dreamsignPoolIds.length >= p.choices,
   render: (p) => `Choose 1 of ${p.choices} Dreamsigns to gain`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const pool = poolDreamsignsById(ctx);
+    const rolledDreamsignIds = pickUniqueDreamsignIds(
+      applyDrawContext(ctx),
+      "choose_1_of_X_dreamsigns:dreamsign",
+      pool,
+      p.choices,
+    );
+    if (rolledDreamsignIds.length < p.choices) return undefined;
+    return {
+      kind: "dreamsign",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledDreamsignIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to gain",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const pool = poolDreamsignsById(ctx);
+    const rolledDreamsignIds = pickUniqueDreamsignIds(
+      applyDrawContext(ctx),
+      "choose_1_of_X_dreamsigns:dreamsign",
+      pool,
+      p.choices,
+    );
+    if (rolledDreamsignIds.length < p.choices) {
+      warnSkippedDreamsignApply(
+        "choose_1_of_X_dreamsigns",
+        `only ${String(rolledDreamsignIds.length)} dreamsigns were available`,
+      );
+      return;
+    }
+
+    const selectedDreamsignId = selectedRolledDreamsignIds(
+      "choose_1_of_X_dreamsigns",
+      chooserResolution,
+      1,
+      1,
+      rolledDreamsignIds,
+    )?.[0];
+    if (selectedDreamsignId === undefined) return;
+
+    const source = ctx.content.dreamsigns.find((dreamsign) => dreamsign.id === selectedDreamsignId);
+    if (source === undefined) {
+      warnSkippedDreamsignApply(
+        "choose_1_of_X_dreamsigns",
+        `no content dreamsign matches id ${JSON.stringify(selectedDreamsignId)}`,
+      );
+      return;
+    }
+
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:choose_1_of_X_dreamsigns",
+      undefined,
+    );
+  },
 };
 
 type GainCopyRandomDreamsignParams = Record<string, never>;
@@ -2012,7 +2416,41 @@ const gainCopyOfChosenDreamsign: Reward<GainCopyChosenDreamsignParams> = {
       ? `Gain a copy of ${quoteName(name)}`
       : "Gain a copy of one of your Dreamsigns of your choice";
   },
-  apply: () => {},
+  choosePlan: (_p, ctx, planning) => {
+    if (ctx.state.quest.activeDreamsigns.length < 1) return undefined;
+    return {
+      kind: "dreamsign",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to copy",
+    };
+  },
+  apply: (_p, ctx, mut, chooserResolution) => {
+    const index = selectedActiveDreamsignIndex(
+      "gain_copy_of_chosen_dreamsign",
+      ctx,
+      chooserResolution,
+    );
+    if (index === undefined) return;
+
+    const entry = ctx.state.quest.activeDreamsigns[index];
+    const source = ctx.content.dreamsigns.find((dreamsign) => dreamsign.id === entry.dreamsignId);
+    if (source === undefined) {
+      warnSkippedDreamsignApply(
+        "gain_copy_of_chosen_dreamsign",
+        `no content dreamsign matches id ${JSON.stringify(entry.dreamsignId)}`,
+      );
+      return;
+    }
+
+    mut.addDreamsign(
+      projectDreamsignForApply(source),
+      "dream_journey:gain_copy_of_chosen_dreamsign",
+      undefined,
+    );
+  },
 };
 
 type AddSiteParams = { siteType: string };
@@ -2139,7 +2577,51 @@ const draft2PredicateCardsFrom4: Reward<Draft2PredicateParams> = {
   viable: (p, ctx) =>
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4,
   render: (p) => `Draft 2 of 4 ${getPredicate(p.predicateId).text.plural}`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_2_predicate_cards_from_4:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 2,
+      maxPicks: 2,
+      title: "Choose cards to draft",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_2_predicate_cards_from_4:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) {
+      warnSkippedCardApply(
+        "draft_2_predicate_cards_from_4",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardIds = selectedExactRolledCardIds(
+      "draft_2_predicate_cards_from_4",
+      chooserResolution,
+      2,
+      rolledCardIds,
+    );
+    if (selectedCardIds === undefined) return;
+
+    for (const cardId of selectedCardIds) {
+      mut.addCardById(cardId, "dream_journey:draft_2_predicate_cards_from_4");
+    }
+  },
 };
 
 type DraftPredicateCardWithCopiesParams = { predicateId: string; copies: number };
@@ -2158,7 +2640,51 @@ const draftPredicateCardWithCopies: Reward<DraftPredicateCardWithCopiesParams> =
     cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4,
   render: (p) =>
     `Draft 1 of 4 ${getPredicate(p.predicateId).text.plural} and gain ${p.copies} copies of it`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_predicate_card_with_copies:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) return undefined;
+    return {
+      kind: "card",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "rolled",
+      rolledCardIds,
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to draft",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const rolledCardIds = pickedDraftPredicateCardIds(
+      ctx,
+      p.predicateId,
+      "draft_predicate_card_with_copies:card",
+      4,
+    );
+    if (rolledCardIds.length < 4) {
+      warnSkippedCardApply(
+        "draft_predicate_card_with_copies",
+        `only ${String(rolledCardIds.length)} draft cards were available`,
+      );
+      return;
+    }
+
+    const selectedCardId = selectedExactRolledCardIds(
+      "draft_predicate_card_with_copies",
+      chooserResolution,
+      1,
+      rolledCardIds,
+    )?.[0];
+    if (selectedCardId === undefined) return;
+
+    for (let i = 0; i < p.copies; i += 1) {
+      mut.addCardById(selectedCardId, "dream_journey:draft_predicate_card_with_copies");
+    }
+  },
 };
 
 type DraftPredicateCardWithTransfigurationParams = {
@@ -2186,11 +2712,85 @@ const draftPredicateCardWithTransfiguration: Reward<DraftPredicateCardWithTransf
         ? FLAT_DRAFT_CEC
         : cardPoolCEC(CARD_CEC * 1.8, 1, getPredicate(p.predicateId)),
     viable: (p, ctx) =>
-      cardMatches(ctx, getPredicate(p.predicateId).cardPredicate ?? {}).length >= 4
+      isJourneyTransfiguration(p.transfiguration)
+      && draftPredicatePool(ctx, p.predicateId, p.transfiguration).length >= 4
       && predicateAdmitsTransfiguration(ctx, p.predicateId, p.transfiguration),
     render: (p) =>
       `Draft 1 of 4 ${getPredicate(p.predicateId).text.plural} and apply ${p.transfiguration} to it`,
-    apply: () => {},
+    choosePlan: (p, ctx, planning) => {
+      if (!isJourneyTransfiguration(p.transfiguration)) return undefined;
+      const rolledCardIds = pickedDraftPredicateCardIds(
+        ctx,
+        p.predicateId,
+        "draft_predicate_card_with_transfiguration:card",
+        4,
+        p.transfiguration,
+      );
+      if (rolledCardIds.length < 4) return undefined;
+      return {
+        kind: "card",
+        requestId: planning.requestIdForSlot(0),
+        poolKind: "rolled",
+        rolledCardIds,
+        minPicks: 1,
+        maxPicks: 1,
+        title: "Choose a card to draft",
+      };
+    },
+    apply: (p, ctx, mut, chooserResolution) => {
+      if (!isJourneyTransfiguration(p.transfiguration)) {
+        warnSkippedCardApply(
+          "draft_predicate_card_with_transfiguration",
+          `unknown transfiguration ${JSON.stringify(p.transfiguration)}`,
+        );
+        return;
+      }
+
+      const rolledCardIds = pickedDraftPredicateCardIds(
+        ctx,
+        p.predicateId,
+        "draft_predicate_card_with_transfiguration:card",
+        4,
+        p.transfiguration,
+      );
+      if (rolledCardIds.length < 4) {
+        warnSkippedCardApply(
+          "draft_predicate_card_with_transfiguration",
+          `only ${String(rolledCardIds.length)} draft cards were available`,
+        );
+        return;
+      }
+
+      const selectedCardId = selectedExactRolledCardIds(
+        "draft_predicate_card_with_transfiguration",
+        chooserResolution,
+        1,
+        rolledCardIds,
+      )?.[0];
+      if (selectedCardId === undefined) return;
+
+      const selectedCard = ctx.content.cards.find((card) => card.id === selectedCardId);
+      if (
+        selectedCard === undefined
+        || !isCardEligibleForTransfiguration(p.transfiguration, selectedCard)
+      ) {
+        warnSkippedCardApply(
+          "draft_predicate_card_with_transfiguration",
+          `selected card ${JSON.stringify(selectedCardId)} was not eligible for ${JSON.stringify(p.transfiguration)}`,
+        );
+        return;
+      }
+
+      const entryId = mut.addCardById(
+        selectedCardId,
+        "dream_journey:draft_predicate_card_with_transfiguration",
+      );
+      mut.transfigureDeckEntry(
+        entryId,
+        transfigurationForApply(p.transfiguration),
+        "dream_journey:draft_predicate_card_with_transfiguration",
+      );
+    },
   };
 
 type MakeCardReclaimParams = { cardName: string; count: number };
@@ -2599,7 +3199,44 @@ const transformDreamsignToNamed: Reward<TransformDreamsignToNamedParams> = {
   viable: (_p, ctx) =>
     ctx.state.quest.activeDreamsigns.length >= 1 && inactivePoolDreamsigns(ctx).length >= 1,
   render: (p) => `Transform a chosen Dreamsign into ${quoteName(p.name)}`,
-  apply: () => {},
+  choosePlan: (p, ctx, planning) => {
+    if (!inactivePoolDreamsigns(ctx).some((dreamsign) => dreamsign.name === p.name)) {
+      return undefined;
+    }
+    if (ctx.state.quest.activeDreamsigns.length < 1) return undefined;
+    return {
+      kind: "dreamsign",
+      requestId: planning.requestIdForSlot(0),
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to transform",
+    };
+  },
+  apply: (p, ctx, mut, chooserResolution) => {
+    const target = inactivePoolDreamsigns(ctx).find((dreamsign) => dreamsign.name === p.name);
+    if (target === undefined) {
+      warnSkippedDreamsignApply(
+        "transform_dreamsign_to_named",
+        `no inactive pool dreamsign matches name ${JSON.stringify(p.name)}`,
+      );
+      return;
+    }
+
+    const index = selectedActiveDreamsignIndex(
+      "transform_dreamsign_to_named",
+      ctx,
+      chooserResolution,
+    );
+    if (index === undefined) return;
+
+    mut.removeDreamsign(index, "dream_journey:transform_dreamsign_to_named");
+    mut.addDreamsign(
+      projectDreamsignForApply(target),
+      "dream_journey:transform_dreamsign_to_named",
+      undefined,
+    );
+  },
 };
 
 type TemporaryDreamsignParams = { battles: number };

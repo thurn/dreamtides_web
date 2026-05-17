@@ -40,6 +40,12 @@ function createRecordingQuestMutations(): {
   const handler: ProxyHandler<QuestMutations> = {
     get(_target, prop: string | symbol) {
       if (typeof prop !== "string") return undefined;
+      if (prop === "addCardById") {
+        return (...args: unknown[]): string => {
+          calls.push({ method: "addCardById", args });
+          return "quest-entry-1";
+        };
+      }
       return record(prop as keyof QuestMutations);
     },
   };
@@ -66,7 +72,7 @@ describe("createJourneyMutations passthrough", () => {
     adapter.changeOmens(2, "dream_journey:gain_omens");
     adapter.setEssence(0, "dream_journey:zero_essence");
     adapter.changeMaxEssence(10, "dream_journey:increase_max_essence");
-    adapter.addCardById("card-501", "dream_journey:gain_card");
+    const addedEntryId = adapter.addCardById("card-501", "dream_journey:gain_card");
     adapter.addBaneCardById("bane-1", "dream_journey:gain_bane");
     adapter.removeDeckEntry("entry-7", "dream_journey:purge");
     adapter.duplicateDeckEntry("entry-7", "dream_journey:duplicate");
@@ -105,6 +111,7 @@ describe("createJourneyMutations passthrough", () => {
       { method: "grantShopOmenDiscounts", args: [3, "dream_journey:omen_disc"] },
       { method: "boostSiteAppearance", args: ["Shop", 20, 3, "dream_journey:boost_site"] },
     ]);
+    expect(addedEntryId).toBe("quest-entry-1");
   });
 });
 

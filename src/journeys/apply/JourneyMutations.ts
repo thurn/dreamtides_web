@@ -26,8 +26,8 @@ export interface JourneyMutations {
   changeMaxEssence(delta: number, source: string): void;
 
   // ---- Deck (mechanical card movement; rules-text edits are not in scope) -
-  /** Add a card by catalog id to the deck. */
-  addCardById(cardId: string, source: string): void;
+  /** Add a card by catalog id to the deck and return the new deck entry id. */
+  addCardById(cardId: string, source: string): string;
 
   /** Add a card by catalog id flagged as a bane card. */
   addBaneCardById(cardId: string, source: string): void;

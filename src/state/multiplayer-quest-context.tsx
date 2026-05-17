@@ -201,11 +201,14 @@ function runtimeSlotPrice(slot: {
 }
 
 function nextDeckEntryId(deck: readonly DeckEntry[]): string {
-  const highest = deck.reduce((max, entry) => {
+  return `deck-${String(deriveDeckEntryCounter(deck) + 1)}`;
+}
+
+function deriveDeckEntryCounter(deck: readonly DeckEntry[]): number {
+  return deck.reduce((max, entry) => {
     const match = /^deck-(\d+)$/.exec(entry.entryId);
     return match === null ? max : Math.max(max, Number(match[1]));
   }, 0);
-  return `deck-${String(highest + 1)}`;
 }
 
 function nextSiteIdFromAtlas(atlas: DreamAtlas): string {
@@ -525,6 +528,11 @@ export function MultiplayerQuestProvider({
     questContent,
     state,
   };
+  const entryIdCounter = useRef(deriveDeckEntryCounter(state.deck));
+  entryIdCounter.current = Math.max(
+    entryIdCounter.current,
+    deriveDeckEntryCounter(state.deck),
+  );
 
   const changeEssence = useCallback((delta: number, source: string) => {
     const current = currentRef.current;
@@ -2762,11 +2770,13 @@ export function MultiplayerQuestProvider({
       console.warn(
         `[multiplayer-quest-context] addCardById: unknown cardId '${cardId}' (source: ${source})`,
       );
-      return;
+      return "";
     }
 
     const now = new Date().toISOString();
     const actionId = crypto.randomUUID();
+    entryIdCounter.current += 1;
+    const entryId = `deck-${String(entryIdCounter.current)}`;
     writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
@@ -2775,7 +2785,7 @@ export function MultiplayerQuestProvider({
           return room ?? undefined;
         }
         const entry: DeckEntry = {
-          entryId: nextDeckEntryId(room.questState.deck),
+          entryId,
           cardNumber: card.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -2808,6 +2818,7 @@ export function MultiplayerQuestProvider({
         };
       },
     });
+    return entryId;
   }, []);
 
   const addBaneCardById = useCallback((cardId: string, source: string) => {

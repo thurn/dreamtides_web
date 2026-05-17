@@ -138,6 +138,55 @@ function cardFixture(): readonly CardContent[] {
   ];
 }
 
+function draftCardFixture(): readonly CardContent[] {
+  return [
+    {
+      id: "event-alpha",
+      name: "Event Alpha",
+      tides: [],
+      rarity: "common",
+      cardType: "Event",
+      energyCost: 1,
+      spark: 1,
+      cardNumber: 3,
+      raw: {},
+    },
+    {
+      id: "event-beta",
+      name: "Event Beta",
+      tides: [],
+      rarity: "common",
+      cardType: "Event",
+      energyCost: 2,
+      spark: 2,
+      cardNumber: 4,
+      raw: {},
+    },
+    {
+      id: "event-gamma",
+      name: "Event Gamma",
+      tides: [],
+      rarity: "common",
+      cardType: "Event",
+      energyCost: 3,
+      spark: 3,
+      cardNumber: 5,
+      raw: {},
+    },
+    {
+      id: "event-delta",
+      name: "Event Delta",
+      tides: [],
+      rarity: "common",
+      cardType: "Event",
+      energyCost: 4,
+      spark: 4,
+      cardNumber: 6,
+      raw: {},
+    },
+  ];
+}
+
 // Minimal dreamsign-content fixture mirroring `costs.apply.test.ts`. Tests
 // assert the quest-shape `Dreamsign` recorded against `addDreamsign` carries
 // the same `id`/`name`/`effectDescription` projected from these records.
@@ -2560,6 +2609,403 @@ describe("Card reward apply (non-choice)", () => {
     try {
       const { mut, calls } = createRecordingMutations();
       t.apply({}, ctx, mut, resolution);
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+});
+
+describe("Draft and chosen dreamsign reward apply (Wave 2)", () => {
+  it("draft_predicate_cards_from_4 plans rolled choices and adds the selected card", () => {
+    const t = getReward("draft_predicate_cards_from_4");
+    const ctx = buildContext({ cards: draftCardFixture() });
+
+    expect(t.choosePlan?.({ predicateId: "events" }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "rolled",
+      rolledCardIds: ["event-alpha", "event-beta", "event-delta", "event-gamma"],
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to draft",
+    });
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply(
+      { predicateId: "events" },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["rolled:event-delta:2"], cardIds: ["event-delta"] },
+    );
+    expect(calls).toEqual([
+      {
+        method: "addCardById",
+        args: ["event-delta", "dream_journey:draft_predicate_cards_from_4"],
+      },
+    ]);
+  });
+
+  it("draft_2_predicate_cards_from_4 plans rolled choices and adds both selected cards", () => {
+    const t = getReward("draft_2_predicate_cards_from_4");
+    const ctx = buildContext({ cards: draftCardFixture() });
+
+    expect(t.choosePlan?.({ predicateId: "events" }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "rolled",
+      rolledCardIds: ["event-alpha", "event-delta", "event-beta", "event-gamma"],
+      minPicks: 2,
+      maxPicks: 2,
+      title: "Choose cards to draft",
+    });
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply(
+      { predicateId: "events" },
+      ctx,
+      mut,
+      {
+        kind: "card",
+        entryIds: ["rolled:event-delta:1", "rolled:event-gamma:3"],
+        cardIds: ["event-delta", "event-gamma"],
+      },
+    );
+    expect(calls).toEqual([
+      {
+        method: "addCardById",
+        args: ["event-delta", "dream_journey:draft_2_predicate_cards_from_4"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-gamma", "dream_journey:draft_2_predicate_cards_from_4"],
+      },
+    ]);
+  });
+
+  it("take_any_from_predicate_choices plans optional rolled choices and adds selected cards only", () => {
+    const t = getReward("take_any_from_predicate_choices");
+    const ctx = buildContext({ cards: draftCardFixture() });
+
+    expect(t.choosePlan?.({ predicateId: "events", choices: 4 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "rolled",
+      rolledCardIds: ["event-alpha", "event-delta", "event-gamma", "event-beta"],
+      minPicks: 0,
+      maxPicks: 4,
+      title: "Choose cards to take",
+    });
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply(
+      { predicateId: "events", choices: 4 },
+      ctx,
+      mut,
+      {
+        kind: "card",
+        entryIds: ["rolled:event-alpha:0", "rolled:event-gamma:2"],
+        cardIds: ["event-alpha", "event-gamma"],
+      },
+    );
+    expect(calls).toEqual([
+      {
+        method: "addCardById",
+        args: ["event-alpha", "dream_journey:take_any_from_predicate_choices"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-gamma", "dream_journey:take_any_from_predicate_choices"],
+      },
+    ]);
+  });
+
+  it("take_any_from_predicate_choices accepts an empty confirmed selection", () => {
+    const t = getReward("take_any_from_predicate_choices");
+    const ctx = buildContext({ cards: draftCardFixture() });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { predicateId: "events", choices: 4 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: [], cardIds: [] },
+    );
+
+    expect(calls).toEqual([]);
+  });
+
+  it.each([
+    { name: "missing resolution", resolution: undefined },
+    {
+      name: "wrong rolled card id",
+      resolution: { kind: "card" as const, entryIds: ["rolled:event-alpha:1"], cardIds: ["event-alpha"] },
+    },
+    {
+      name: "duplicate rolled entry",
+      resolution: {
+        kind: "card" as const,
+        entryIds: ["rolled:event-alpha:0", "rolled:event-alpha:0"],
+        cardIds: ["event-alpha", "event-alpha"],
+      },
+    },
+    {
+      name: "malformed rolled entry",
+      resolution: { kind: "card" as const, entryIds: ["rolled:event-alpha:0junk"], cardIds: ["event-alpha"] },
+    },
+  ])("take_any_from_predicate_choices skips $name without mutation", ({ resolution }) => {
+    const t = getReward("take_any_from_predicate_choices");
+    const ctx = buildContext({ cards: draftCardFixture() });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ predicateId: "events", choices: 4 }, ctx, mut, resolution);
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("draft_predicate_card_with_copies plans one rolled pick and adds the selected card for each copy", () => {
+    const t = getReward("draft_predicate_card_with_copies");
+    const ctx = buildContext({ cards: draftCardFixture() });
+
+    expect(t.choosePlan?.({ predicateId: "events", copies: 3 }, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "rolled",
+      rolledCardIds: ["event-beta", "event-delta", "event-alpha", "event-gamma"],
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to draft",
+    });
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply(
+      { predicateId: "events", copies: 3 },
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["rolled:event-beta:0"], cardIds: ["event-beta"] },
+    );
+    expect(calls).toEqual([
+      {
+        method: "addCardById",
+        args: ["event-beta", "dream_journey:draft_predicate_card_with_copies"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-beta", "dream_journey:draft_predicate_card_with_copies"],
+      },
+      {
+        method: "addCardById",
+        args: ["event-beta", "dream_journey:draft_predicate_card_with_copies"],
+      },
+    ]);
+  });
+
+  it("draft_predicate_card_with_transfiguration transfigures the entry returned by addCardById", () => {
+    const t = getReward("draft_predicate_card_with_transfiguration");
+    const ctx = buildContext({ cards: draftCardFixture() });
+    const params = { predicateId: "events", transfiguration: "Bronze" };
+
+    expect(t.choosePlan?.(params, ctx, planningContext())).toEqual({
+      kind: "card",
+      requestId: "request:0",
+      poolKind: "rolled",
+      rolledCardIds: ["event-beta", "event-delta", "event-alpha", "event-gamma"],
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a card to draft",
+    });
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply(
+      params,
+      ctx,
+      mut,
+      { kind: "card", entryIds: ["rolled:event-delta:1"], cardIds: ["event-delta"] },
+    );
+    expect(calls).toEqual([
+      {
+        method: "addCardById",
+        args: ["event-delta", "dream_journey:draft_predicate_card_with_transfiguration"],
+      },
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "recorded-add-card-1",
+          "Bronze",
+          "dream_journey:draft_predicate_card_with_transfiguration",
+        ],
+      },
+    ]);
+  });
+
+  it("choose_1_of_X_dreamsigns plans rolled dreamsigns and adds the selected one", () => {
+    const t = getReward("choose_1_of_X_dreamsigns");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      dreamsignPoolIds: ["ds-1", "ds-2"],
+    });
+
+    expect(t.choosePlan?.({ choices: 2 }, ctx, planningContext())).toEqual({
+      kind: "dreamsign",
+      requestId: "request:0",
+      poolKind: "rolled",
+      rolledDreamsignIds: ["ds-1", "ds-2"],
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to gain",
+    });
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply(
+      { choices: 2 },
+      ctx,
+      mut,
+      { kind: "dreamsign", indices: [1], dreamsignIds: ["ds-2"] },
+    );
+    expect(calls).toEqual([
+      {
+        method: "addDreamsign",
+        args: [
+          {
+            id: "ds-2",
+            name: "Name B",
+            effectDescription: "Effect B",
+            isBane: false,
+          },
+          "dream_journey:choose_1_of_X_dreamsigns",
+          undefined,
+        ],
+      },
+    ]);
+  });
+
+  it("gain_copy_of_chosen_dreamsign plans active dreamsigns and adds a copy of the chosen one", () => {
+    const t = getReward("gain_copy_of_chosen_dreamsign");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+    });
+
+    expect(t.choosePlan?.({}, ctx, planningContext())).toEqual({
+      kind: "dreamsign",
+      requestId: "request:0",
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to copy",
+    });
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply({}, ctx, mut, { kind: "dreamsign", indices: [0], dreamsignIds: ["ds-1"] });
+    expect(calls).toEqual([
+      {
+        method: "addDreamsign",
+        args: [
+          {
+            id: "ds-1",
+            name: "Name A",
+            effectDescription: "Effect A",
+            isBane: false,
+            imageName: "img-a",
+            imageAlt: "alt-a",
+          },
+          "dream_journey:gain_copy_of_chosen_dreamsign",
+          undefined,
+        ],
+      },
+    ]);
+  });
+
+  it.each([
+    { name: "missing resolution", resolution: undefined },
+    {
+      name: "stale active index",
+      resolution: { kind: "dreamsign" as const, indices: [3], dreamsignIds: ["ds-2"] },
+    },
+    {
+      name: "wrong active dreamsign id",
+      resolution: { kind: "dreamsign" as const, indices: [1], dreamsignIds: ["ds-1"] },
+    },
+  ])("gain_copy_of_chosen_dreamsign skips $name without mutation", ({ resolution }) => {
+    const t = getReward("gain_copy_of_chosen_dreamsign");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply({}, ctx, mut, resolution);
+      expect(calls).toEqual([]);
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+
+  it("transform_dreamsign_to_named plans active dreamsigns and replaces the chosen one", () => {
+    const t = getReward("transform_dreamsign_to_named");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }],
+      dreamsignPoolIds: ["ds-1", "ds-2"],
+    });
+
+    expect(t.choosePlan?.({ name: "Name B" }, ctx, planningContext())).toEqual({
+      kind: "dreamsign",
+      requestId: "request:0",
+      poolKind: "active",
+      minPicks: 1,
+      maxPicks: 1,
+      title: "Choose a Dreamsign to transform",
+    });
+
+    const { mut, calls } = createRecordingMutations();
+    t.apply(
+      { name: "Name B" },
+      ctx,
+      mut,
+      { kind: "dreamsign", indices: [0], dreamsignIds: ["ds-1"] },
+    );
+    expect(calls).toEqual([
+      {
+        method: "removeDreamsign",
+        args: [0, "dream_journey:transform_dreamsign_to_named"],
+      },
+      {
+        method: "addDreamsign",
+        args: [
+          {
+            id: "ds-2",
+            name: "Name B",
+            effectDescription: "Effect B",
+            isBane: false,
+          },
+          "dream_journey:transform_dreamsign_to_named",
+          undefined,
+        ],
+      },
+    ]);
+  });
+
+  it("transform_dreamsign_to_named skips invalid target before removing the chosen dreamsign", () => {
+    const t = getReward("transform_dreamsign_to_named");
+    const ctx = buildContext({
+      dreamsigns: dreamsignFixture(),
+      activeDreamsigns: [{ dreamsignId: "ds-1" }],
+      dreamsignPoolIds: ["ds-1", "ds-2"],
+    });
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const { mut, calls } = createRecordingMutations();
+      t.apply(
+        { name: "Missing Dreamsign" },
+        ctx,
+        mut,
+        { kind: "dreamsign", indices: [0], dreamsignIds: ["ds-1"] },
+      );
       expect(calls).toEqual([]);
     } finally {
       warnSpy.mockRestore();
