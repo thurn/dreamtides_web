@@ -21,6 +21,7 @@ import { buildFixtureContext } from "../journey/shapes/__shared__/fixture";
 import type { Cost, Reward } from "../journey/shared/types";
 import { makeUnlockedBranch } from "../journey/manifest";
 import type { JourneyTreeBranch } from "../journey/manifest";
+import { requestIdFor } from "./chooserPlan";
 import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
 import { createRecordingMutations } from "./testing/recordingMutations";
 
@@ -441,6 +442,106 @@ describe("applyBranch", () => {
         args: [
           "deck-1",
           "Azure",
+          "dream_journey:apply_chosen_transfiguration_to_chosen_card",
+        ],
+      },
+    ]);
+  });
+
+  it("keeps repeated two-slot branch template occurrences from sharing request ids", () => {
+    const templateId = "apply_chosen_transfiguration_to_chosen_card";
+    const firstCardRequest = {
+      ...cardRequest(branchRequestIdFor("node-root.E", templateId, 0)),
+      title: "Choose card",
+    };
+    const firstTransfigurationRequest: ChooserRequest = {
+      kind: "transfiguration",
+      requestId: branchRequestIdFor("node-root.E", templateId, 1),
+      eligibleTransfigurations: ["Azure", "Bronze"],
+      title: "Choose transfiguration",
+    };
+    const secondCardRequest = {
+      ...cardRequest(requestIdFor("node-root.E:entry:1", templateId, 0)),
+      title: "Choose card",
+    };
+    const secondTransfigurationRequest: ChooserRequest = {
+      kind: "transfiguration",
+      requestId: requestIdFor("node-root.E:entry:1", templateId, 1),
+      eligibleTransfigurations: ["Azure", "Bronze"],
+      title: "Choose transfiguration",
+    };
+    stubRewards.set(templateId, chooseCardThenTransfigurationStub(templateId));
+
+    const ctx = buildFixtureContext();
+    const { mut, calls } = createRecordingMutations();
+    const branch = makeBranch({
+      id: "node-root.E",
+      effects: [
+        rewardEnvelope(templateId),
+        rewardEnvelope(templateId),
+      ],
+    });
+    const firstCardResolution = new Map<string, ChooserResolution>([
+      [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+    ]);
+    const firstCompleteResolution = new Map<string, ChooserResolution>([
+      [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+    ]);
+    const secondCardResolution = new Map<string, ChooserResolution>([
+      [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+      [secondCardRequest.requestId, { kind: "card", entryIds: ["deck-2"] }],
+    ]);
+    const allResolutions = new Map<string, ChooserResolution>([
+      [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+      [secondCardRequest.requestId, { kind: "card", entryIds: ["deck-2"] }],
+      [
+        secondTransfigurationRequest.requestId,
+        { kind: "transfiguration", type: "Bronze" },
+      ],
+    ]);
+
+    vi.spyOn(loggingModule, "logEvent").mockImplementation(
+      () => ({ event: "", seq: 0, timestamp: "" }) as never,
+    );
+
+    expect(applyBranch(branch, META, ctx, mut)).toEqual({
+      done: false,
+      needsChoice: firstCardRequest,
+    });
+    expect(applyBranch(branch, META, ctx, mut, firstCardResolution)).toEqual({
+      done: false,
+      needsChoice: firstTransfigurationRequest,
+    });
+    expect(applyBranch(branch, META, ctx, mut, firstCompleteResolution)).toEqual({
+      done: false,
+      needsChoice: secondCardRequest,
+    });
+    expect(applyBranch(branch, META, ctx, mut, secondCardResolution)).toEqual({
+      done: false,
+      needsChoice: secondTransfigurationRequest,
+    });
+    expect(calls).toEqual([]);
+
+    expect(applyBranch(branch, META, ctx, mut, allResolutions)).toEqual({
+      done: true,
+    });
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-1",
+          "Azure",
+          "dream_journey:apply_chosen_transfiguration_to_chosen_card",
+        ],
+      },
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-2",
+          "Bronze",
           "dream_journey:apply_chosen_transfiguration_to_chosen_card",
         ],
       },

@@ -48,7 +48,11 @@ export interface RewardEntry {
 
 export type ApplyEntry = CostEntry | RewardEntry;
 
-type RequestIdForEntry = (templateId: string, slot: number) => string;
+type RequestIdForEntry = (
+  templateId: string,
+  occurrenceIndex: number,
+  slot: number,
+) => string;
 
 export interface CollectedApplyEntries {
   readonly costEntries: readonly CostEntry[];
@@ -121,12 +125,12 @@ export function planEntries(
   requestIdForEntry: RequestIdForEntry,
 ): ChooserRequest[] {
   const out: ChooserRequest[] = [];
-  const slotsByTemplateId = new Map<string, number>();
+  const occurrenceByTemplateId = new Map<string, number>();
   for (const { payload, template } of entries) {
-    const baseSlot = slotsByTemplateId.get(payload.templateId) ?? 0;
+    const occurrenceIndex = occurrenceByTemplateId.get(payload.templateId) ?? 0;
     const planning = planningContextForEntry(
       payload.templateId,
-      baseSlot,
+      occurrenceIndex,
       resolutions,
       requestIdForEntry,
     );
@@ -134,44 +138,46 @@ export function planEntries(
     if (request !== undefined) {
       out.push(request);
     }
-    slotsByTemplateId.set(payload.templateId, baseSlot + 1);
+    occurrenceByTemplateId.set(payload.templateId, occurrenceIndex + 1);
   }
   return out;
 }
 
-/** Apply loop. Costs and rewards both flow through this with the same
- *  `(params, ctx, mut, resolution)` calling convention. Caller controls
- *  ordering through the `entries` array. */
-export function commitEntries(
+/**
+ * @internal Commits entries only after the safe apply surface has confirmed
+ * all planned choices are resolved and costs remain unlocked.
+ */
+export function commitPlannedEntries(
   entries: ReadonlyArray<ApplyEntry>,
   ctx: JourneyContext,
   mut: JourneyMutations,
   resolutions: ReadonlyMap<string, ChooserResolution>,
   requestIdForEntry: RequestIdForEntry,
 ): void {
-  const slotsByTemplateId = new Map<string, number>();
+  const occurrenceByTemplateId = new Map<string, number>();
   for (const { payload, template } of entries) {
-    const baseSlot = slotsByTemplateId.get(payload.templateId) ?? 0;
+    const occurrenceIndex = occurrenceByTemplateId.get(payload.templateId) ?? 0;
     const planning = planningContextForEntry(
       payload.templateId,
-      baseSlot,
+      occurrenceIndex,
       resolutions,
       requestIdForEntry,
     );
     const resolution = resolutions.get(planning.requestIdForSlot());
     template.apply(payload.params, ctx, mut, resolution, planning);
-    slotsByTemplateId.set(payload.templateId, baseSlot + 1);
+    occurrenceByTemplateId.set(payload.templateId, occurrenceIndex + 1);
   }
 }
 
 function planningContextForEntry(
   templateId: string,
-  baseSlot: number,
+  occurrenceIndex: number,
   resolutions: ReadonlyMap<string, ChooserResolution>,
   requestIdForEntry: RequestIdForEntry,
 ): ChooserPlanningContext {
   return {
-    requestIdForSlot: (slot = 0) => requestIdForEntry(templateId, baseSlot + slot),
+    requestIdForSlot: (slot = 0) =>
+      requestIdForEntry(templateId, occurrenceIndex, slot),
     resolutions,
   };
 }

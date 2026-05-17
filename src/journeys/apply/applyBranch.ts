@@ -17,7 +17,7 @@ import type { JourneyTreeBranch, JourneyTreeTerminal } from "../journey/manifest
 
 import {
   collectApplyEntries,
-  commitEntries,
+  commitPlannedEntries,
   planEntries,
   type ApplyMeta,
   type ApplyResult,
@@ -62,7 +62,8 @@ function planBranchEntries(
     entries.entries,
     ctx,
     resolutions,
-    (templateId, slot) => branchRequestIdFor(branchId, templateId, slot),
+    (templateId, occurrenceIndex, slot) =>
+      branchRequestIdForEntry(branchId, templateId, occurrenceIndex, slot),
   );
 }
 
@@ -73,12 +74,13 @@ function commitBranchEntries(
   resolutions: ReadonlyMap<string, ChooserResolution>,
   entries: CollectedApplyEntries,
 ): void {
-  commitEntries(
+  commitPlannedEntries(
     entries.entries,
     ctx,
     mut,
     resolutions,
-    (templateId, slot) => branchRequestIdFor(branchId, templateId, slot),
+    (templateId, occurrenceIndex, slot) =>
+      branchRequestIdForEntry(branchId, templateId, occurrenceIndex, slot),
   );
 }
 
@@ -142,4 +144,14 @@ export function branchRequestIdFor(
   slot: number = 0,
 ): string {
   return requestIdFor(branchId, templateId, slot);
+}
+
+function branchRequestIdForEntry(
+  branchId: string,
+  templateId: string,
+  occurrenceIndex: number,
+  slot: number,
+): string {
+  const scope = occurrenceIndex === 0 ? branchId : `${branchId}:entry:${occurrenceIndex}`;
+  return requestIdFor(scope, templateId, slot);
 }

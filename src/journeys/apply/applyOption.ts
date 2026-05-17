@@ -35,7 +35,7 @@ import type { JourneyOption } from "../journey/manifest";
 
 import {
   collectApplyEntries,
-  commitEntries,
+  commitPlannedEntries,
   planEntries,
   type ApplyMeta,
   type ApplyResult,
@@ -67,7 +67,8 @@ function planOptionEntries(
     entries.entries,
     ctx,
     resolutions,
-    (templateId, slot) => requestIdFor(option.number, templateId, slot),
+    (templateId, occurrenceIndex, slot) =>
+      requestIdForOptionEntry(option.number, templateId, occurrenceIndex, slot),
   );
 }
 
@@ -78,13 +79,24 @@ function commitOptionEntries(
   resolutions: ReadonlyMap<string, ChooserResolution>,
   entries: CollectedApplyEntries,
 ): void {
-  commitEntries(
+  commitPlannedEntries(
     entries.entries,
     ctx,
     mut,
     resolutions,
-    (templateId, slot) => requestIdFor(option.number, templateId, slot),
+    (templateId, occurrenceIndex, slot) =>
+      requestIdForOptionEntry(option.number, templateId, occurrenceIndex, slot),
   );
+}
+
+function requestIdForOptionEntry(
+  optionNumber: number,
+  templateId: string,
+  occurrenceIndex: number,
+  slot: number,
+): string {
+  const scope = occurrenceIndex === 0 ? optionNumber : `${optionNumber}:entry:${occurrenceIndex}`;
+  return requestIdFor(scope, templateId, slot);
 }
 
 /**

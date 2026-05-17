@@ -630,6 +630,106 @@ describe("applyOption", () => {
     ]);
   });
 
+  it("keeps repeated two-slot template occurrences from sharing request ids", () => {
+    const templateId = "apply_chosen_transfiguration_to_chosen_card";
+    const firstCardRequest = makeCardRequest(
+      requestIdFor(7, templateId, 0),
+      "Choose card",
+    );
+    const firstTransfigurationRequest: ChooserRequest = {
+      kind: "transfiguration",
+      requestId: requestIdFor(7, templateId, 1),
+      eligibleTransfigurations: ["Azure", "Bronze"],
+      title: "Choose transfiguration",
+    };
+    const secondCardRequest = makeCardRequest(
+      requestIdFor("7:entry:1", templateId, 0),
+      "Choose card",
+    );
+    const secondTransfigurationRequest: ChooserRequest = {
+      kind: "transfiguration",
+      requestId: requestIdFor("7:entry:1", templateId, 1),
+      eligibleTransfigurations: ["Azure", "Bronze"],
+      title: "Choose transfiguration",
+    };
+    stubRewards.set(templateId, stubChooseCardThenTransfiguration(templateId));
+
+    const ctx = buildFixtureContext();
+    const { mut, calls } = createRecordingMutations();
+    const option = makeOption({
+      number: 7,
+      effects: [
+        makeRewardEnvelope(templateId),
+        makeRewardEnvelope(templateId),
+      ],
+    });
+    const firstCardResolution = new Map<string, ChooserResolution>([
+      [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+    ]);
+    const firstCompleteResolution = new Map<string, ChooserResolution>([
+      [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+    ]);
+    const secondCardResolution = new Map<string, ChooserResolution>([
+      [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+      [secondCardRequest.requestId, { kind: "card", entryIds: ["deck-2"] }],
+    ]);
+    const allResolutions = new Map<string, ChooserResolution>([
+      [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
+      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+      [secondCardRequest.requestId, { kind: "card", entryIds: ["deck-2"] }],
+      [
+        secondTransfigurationRequest.requestId,
+        { kind: "transfiguration", type: "Bronze" },
+      ],
+    ]);
+
+    vi.spyOn(loggingModule, "logEvent").mockImplementation(
+      () => ({ event: "", seq: 0, timestamp: "" }) as never,
+    );
+
+    expect(applyOption(option, META, ctx, mut)).toEqual({
+      done: false,
+      needsChoice: firstCardRequest,
+    });
+    expect(applyOption(option, META, ctx, mut, firstCardResolution)).toEqual({
+      done: false,
+      needsChoice: firstTransfigurationRequest,
+    });
+    expect(applyOption(option, META, ctx, mut, firstCompleteResolution)).toEqual({
+      done: false,
+      needsChoice: secondCardRequest,
+    });
+    expect(applyOption(option, META, ctx, mut, secondCardResolution)).toEqual({
+      done: false,
+      needsChoice: secondTransfigurationRequest,
+    });
+    expect(calls).toEqual([]);
+
+    expect(applyOption(option, META, ctx, mut, allResolutions)).toEqual({
+      done: true,
+    });
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-1",
+          "Azure",
+          "dream_journey:apply_chosen_transfiguration_to_chosen_card",
+        ],
+      },
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-2",
+          "Bronze",
+          "dream_journey:apply_chosen_transfiguration_to_chosen_card",
+        ],
+      },
+    ]);
+  });
+
   it("returns a cost chooser before a reward chooser and waits to mutate until both are resolved", () => {
     const costTemplateId = "choose_cost_card";
     const rewardTemplateId = "choose_reward_card";
