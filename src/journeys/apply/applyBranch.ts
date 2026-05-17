@@ -1,9 +1,10 @@
-// applyBranch dispatch loop.
+// applyBranch two-phase dispatch loop.
 //
-// Tree-branch counterpart to `applyOption`. Same frame (locked re-check
-// before any mutation, costs-then-effects, malformed-envelope tolerance),
-// only indexed off `branch.id` so the log payload identifies the chosen
-// branch rather than a flat-option number.
+// Tree-branch counterpart to `applyOption`. Same two-phase frame
+// (plan chooser requests, wait for every resolution, locked re-check before
+// mutation, costs-then-effects, malformed-envelope tolerance), only indexed
+// off `branch.id` so the log payload identifies the chosen branch rather
+// than a flat-option number.
 //
 // `JourneyTreeTerminal` carries the same `costs[]` / `effects[]` shape as
 // `JourneyTreeBranch`, so a terminal can be applied through the same
@@ -15,14 +16,15 @@ import type { JourneyContext } from "../journey/context";
 import type { JourneyTreeBranch, JourneyTreeTerminal } from "../journey/manifest";
 
 import {
-  applyEntries,
+  commitEntries,
   collectCostEntries,
   collectRewardEntries,
+  planEntries,
   type ApplyMeta,
   type ApplyResult,
 } from "./applyShared";
 import { requestIdFor } from "./chooserPlan";
-import type { ChooserResolution } from "./chooserPlan";
+import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
 import type { JourneyMutations } from "./JourneyMutations";
 
 /**
@@ -39,6 +41,40 @@ export type ApplyableBranchLike = Pick<
   readonly id?: string;
 };
 
+/** Collect every chooser required by `branch`, in cost-then-effect order. */
+export function planBranch(
+  branch: ApplyableBranchLike,
+  ctx: JourneyContext,
+): ChooserRequest[] {
+  const branchId = branch.id ?? "terminal";
+  const costEntries = collectCostEntries(branch.costs);
+  const rewardEntries = collectRewardEntries(branch.effects);
+  return planEntries(
+    [...costEntries, ...rewardEntries],
+    ctx,
+    (templateId, slot) => branchRequestIdFor(branchId, templateId, slot),
+  );
+}
+
+/** Apply `branch` after the caller has supplied every planned resolution. */
+export function commitBranch(
+  branch: ApplyableBranchLike,
+  ctx: JourneyContext,
+  mut: JourneyMutations,
+  resolutions: ReadonlyMap<string, ChooserResolution>,
+): void {
+  const branchId = branch.id ?? "terminal";
+  const costEntries = collectCostEntries(branch.costs);
+  const rewardEntries = collectRewardEntries(branch.effects);
+  commitEntries(
+    [...costEntries, ...rewardEntries],
+    ctx,
+    mut,
+    resolutions,
+    (templateId, slot) => branchRequestIdFor(branchId, templateId, slot),
+  );
+}
+
 /**
  * Apply every cost and effect on `branch` against `mut`. See `applyOption`
  * for the contract; the only branch-specific detail is that the log payload
@@ -52,6 +88,12 @@ export function applyBranch(
   resolutions?: ReadonlyMap<string, ChooserResolution>,
 ): ApplyResult {
   const branchId = branch.id ?? "terminal";
+  const plan = planBranch(branch, ctx);
+  const nextMissing = plan.find((request) => !resolutions?.has(request.requestId));
+  if (nextMissing !== undefined) {
+    return { done: false, needsChoice: nextMissing };
+  }
+
   const costEntries = collectCostEntries(branch.costs);
   const rewardEntries = collectRewardEntries(branch.effects);
 
@@ -68,10 +110,7 @@ export function applyBranch(
     }
   }
 
-  const requestId = (templateId: string): string =>
-    branchRequestIdFor(branchId, templateId);
-  applyEntries(costEntries, ctx, mut, resolutions, requestId);
-  applyEntries(rewardEntries, ctx, mut, resolutions, requestId);
+  commitBranch(branch, ctx, mut, resolutions ?? new Map());
 
   logEvent("dream_journey_applied", {
     siteId: meta.siteId,
@@ -89,8 +128,12 @@ export function applyBranch(
 
 /**
  * Branch-scoped analogue of `requestIdFor`. The `:0` slot is reserved for
- * Wave 2 templates that emit more than one chooser; Wave 1 always uses 0.
+ * the first chooser emitted by a template in this branch.
  */
-export function branchRequestIdFor(branchId: string, templateId: string): string {
-  return requestIdFor(branchId, templateId);
+export function branchRequestIdFor(
+  branchId: string,
+  templateId: string,
+  slot: number = 0,
+): string {
+  return requestIdFor(branchId, templateId, slot);
 }

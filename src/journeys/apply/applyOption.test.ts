@@ -5,7 +5,7 @@
 //   2. Locked re-check aborts the apply before any mutation runs.
 //   3. Missing-template warn + continue.
 //   4. Malformed envelope warn + continue.
-//   5. Wave 1 returns `{ done: true }`.
+//   5. Chooser requests are planned before mutations are committed.
 //   6. The `source` string convention threaded into mutation calls.
 //   7. `dream_journey_applied` log payload (one event per successful apply;
 //      a locked-skip apply emits `dream_journey_locked_at_apply` instead).
@@ -19,6 +19,8 @@ import { buildFixtureContext } from "../journey/shapes/__shared__/fixture";
 import type { Cost, Reward } from "../journey/shared/types";
 import { makeUnlockedOption } from "../journey/manifest";
 import type { JourneyOption } from "../journey/manifest";
+import { requestIdFor } from "./chooserPlan";
+import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
 import { createRecordingMutations } from "./testing/recordingMutations";
 
 // Per-test stub registries. `vi.mock` factory wires `findCost` / `findReward`
@@ -128,6 +130,42 @@ function stubGainEssence(): Reward<{ x: number }> {
     render: (p) => `Gain ${p.x} essence`,
     apply: (p, _ctx, mut) => {
       mut.changeEssence(p.x, "dream_journey:gain_essence");
+    },
+  };
+}
+
+function makeCardRequest(requestId: string, title = "Choose cards"): ChooserRequest {
+  return {
+    kind: "card",
+    requestId,
+    poolKind: "deck",
+    deckFilter: { predicateId: "event" },
+    minPicks: 1,
+    maxPicks: 2,
+    title,
+  };
+}
+
+function stubTransfigureChosenCards(
+  id: string,
+  request: ChooserRequest,
+  type: "Bronze" | "Golden",
+): Reward<Record<string, unknown>> {
+  return {
+    id,
+    weight: 1,
+    rollParams: () => ({}),
+    cec: () => 0,
+    viable: () => true,
+    render: () => "Apply transfiguration",
+    choosePlan: () => request,
+    apply: (_params, _ctx, mut, resolution) => {
+      if (resolution?.kind !== "card") {
+        return;
+      }
+      for (const entryId of resolution.entryIds) {
+        mut.transfigureDeckEntry(entryId, type, `dream_journey:${id}`);
+      }
     },
   };
 }
@@ -302,6 +340,136 @@ describe("applyOption", () => {
     const result = applyOption(option, META, ctx, mut);
 
     expect(result).toEqual({ done: true });
+  });
+
+  it("returns the first chooser request without mutating when a chosen-target template needs resolution", () => {
+    const templateId = "apply_named_transfiguration_to_chosen_predicate_cards";
+    const request = makeCardRequest(requestIdFor(1, templateId));
+    stubRewards.set(templateId, stubTransfigureChosenCards(templateId, request, "Bronze"));
+
+    const ctx = buildFixtureContext();
+    const { mut, calls } = createRecordingMutations();
+    const option = makeOption({
+      effects: [makeRewardEnvelope(templateId)],
+    });
+
+    vi.spyOn(loggingModule, "logEvent").mockImplementation(
+      () => ({ event: "", seq: 0, timestamp: "" }) as never,
+    );
+
+    const result = applyOption(option, META, ctx, mut);
+
+    expect(result).toEqual({ done: false, needsChoice: request });
+    expect(calls).toEqual([]);
+  });
+
+  it("commits a chosen-target template when called with its resolution", () => {
+    const templateId = "apply_named_transfiguration_to_chosen_predicate_cards";
+    const request = makeCardRequest(requestIdFor(1, templateId));
+    stubRewards.set(templateId, stubTransfigureChosenCards(templateId, request, "Bronze"));
+
+    const ctx = buildFixtureContext();
+    const { mut, calls } = createRecordingMutations();
+    const option = makeOption({
+      effects: [makeRewardEnvelope(templateId)],
+    });
+    const resolutions = new Map<string, ChooserResolution>([
+      [request.requestId, { kind: "card", entryIds: ["deck-1", "deck-2"] }],
+    ]);
+
+    vi.spyOn(loggingModule, "logEvent").mockImplementation(
+      () => ({ event: "", seq: 0, timestamp: "" }) as never,
+    );
+
+    const result = applyOption(option, META, ctx, mut, resolutions);
+
+    expect(result).toEqual({ done: true });
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-1",
+          "Bronze",
+          "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
+        ],
+      },
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-2",
+          "Bronze",
+          "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
+        ],
+      },
+    ]);
+  });
+
+  it("walks multiple chosen-target templates one chooser at a time, then commits all mutations in order", () => {
+    const firstTemplateId = "choose_first_cards";
+    const secondTemplateId = "choose_second_cards";
+    const firstRequest = makeCardRequest(
+      requestIdFor(4, firstTemplateId),
+      "Choose first cards",
+    );
+    const secondRequest = makeCardRequest(
+      requestIdFor(4, secondTemplateId),
+      "Choose second cards",
+    );
+    stubRewards.set(
+      firstTemplateId,
+      stubTransfigureChosenCards(firstTemplateId, firstRequest, "Bronze"),
+    );
+    stubRewards.set(
+      secondTemplateId,
+      stubTransfigureChosenCards(secondTemplateId, secondRequest, "Golden"),
+    );
+
+    const ctx = buildFixtureContext();
+    const { mut, calls } = createRecordingMutations();
+    const option = makeOption({
+      number: 4,
+      effects: [
+        makeRewardEnvelope(firstTemplateId),
+        makeRewardEnvelope(secondTemplateId),
+      ],
+    });
+    const firstResolution = new Map<string, ChooserResolution>([
+      [firstRequest.requestId, { kind: "card", entryIds: ["first-entry"] }],
+    ]);
+    const bothResolutions = new Map<string, ChooserResolution>([
+      [firstRequest.requestId, { kind: "card", entryIds: ["first-entry"] }],
+      [secondRequest.requestId, { kind: "card", entryIds: ["second-entry"] }],
+    ]);
+
+    vi.spyOn(loggingModule, "logEvent").mockImplementation(
+      () => ({ event: "", seq: 0, timestamp: "" }) as never,
+    );
+
+    expect(applyOption(option, META, ctx, mut)).toEqual({
+      done: false,
+      needsChoice: firstRequest,
+    });
+    expect(calls).toEqual([]);
+
+    expect(applyOption(option, META, ctx, mut, firstResolution)).toEqual({
+      done: false,
+      needsChoice: secondRequest,
+    });
+    expect(calls).toEqual([]);
+
+    expect(applyOption(option, META, ctx, mut, bothResolutions)).toEqual({
+      done: true,
+    });
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: ["first-entry", "Bronze", "dream_journey:choose_first_cards"],
+      },
+      {
+        method: "transfigureDeckEntry",
+        args: ["second-entry", "Golden", "dream_journey:choose_second_cards"],
+      },
+    ]);
   });
 
   it("emits exactly one dream_journey_applied event listing cost+reward templateIds in encountered order", () => {

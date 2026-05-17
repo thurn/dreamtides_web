@@ -12,7 +12,7 @@ import { findCost } from "../journey/shared/costs";
 import { findReward } from "../journey/shared/rewards";
 import type { Cost, Reward } from "../journey/shared/types";
 
-import type { ChooserResolution } from "./chooserPlan";
+import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
 import type { JourneyMutations } from "./JourneyMutations";
 import {
   narrowSharedCostPayload,
@@ -41,6 +41,10 @@ export interface RewardEntry {
   payload: SharedRewardPayload;
   template: Reward;
 }
+
+export type ApplyEntry = CostEntry | RewardEntry;
+
+type RequestIdForEntry = (templateId: string, slot: number) => string;
 
 /** Narrow a raw `costs[]` array into resolved template entries. Malformed
  *  envelopes and unknown templateIds warn and drop out of the result. */
@@ -85,18 +89,49 @@ export function collectRewardEntries(raw: readonly unknown[]): RewardEntry[] {
   return out;
 }
 
+/** Collect chooser requests from resolved entries without applying mutations. */
+export function planEntries(
+  entries: ReadonlyArray<ApplyEntry>,
+  ctx: JourneyContext,
+  requestIdForEntry: RequestIdForEntry,
+): ChooserRequest[] {
+  const out: ChooserRequest[] = [];
+  const slotsByTemplateId = new Map<string, number>();
+  for (const { payload, template } of entries) {
+    const request = template.choosePlan?.(payload.params, ctx);
+    if (request !== undefined) {
+      const slot = slotsByTemplateId.get(payload.templateId) ?? 0;
+      slotsByTemplateId.set(payload.templateId, slot + 1);
+      out.push({
+        ...request,
+        requestId: requestIdForEntry(payload.templateId, slot),
+      });
+    }
+  }
+  return out;
+}
+
 /** Apply loop. Costs and rewards both flow through this with the same
  *  `(params, ctx, mut, resolution)` calling convention. Caller controls
- *  ordering by passing `costEntries` before `rewardEntries`. */
-export function applyEntries(
-  entries: ReadonlyArray<CostEntry | RewardEntry>,
+ *  ordering through the `entries` array. */
+export function commitEntries(
+  entries: ReadonlyArray<ApplyEntry>,
   ctx: JourneyContext,
   mut: JourneyMutations,
-  resolutions: ReadonlyMap<string, ChooserResolution> | undefined,
-  requestId: (templateId: string) => string,
+  resolutions: ReadonlyMap<string, ChooserResolution>,
+  requestIdForEntry: RequestIdForEntry,
 ): void {
+  const slotsByTemplateId = new Map<string, number>();
   for (const { payload, template } of entries) {
-    const resolution = resolutions?.get(requestId(payload.templateId));
+    const request = template.choosePlan?.(payload.params, ctx);
+    const slot = slotsByTemplateId.get(payload.templateId) ?? 0;
+    if (request !== undefined) {
+      slotsByTemplateId.set(payload.templateId, slot + 1);
+    }
+    const resolution =
+      request === undefined
+        ? undefined
+        : resolutions.get(requestIdForEntry(payload.templateId, slot));
     template.apply(payload.params, ctx, mut, resolution);
   }
 }

@@ -1,7 +1,10 @@
-// applyOption dispatch loop.
+// applyOption two-phase dispatch loop.
 //
-// Walks a `JourneyOption`'s `costs[]` and `effects[]` envelopes, dispatches
-// each on `templateId`, and calls the matching template's `apply` method.
+// Walks a `JourneyOption`'s `costs[]` and `effects[]` envelopes in two
+// phases. The plan phase collects chooser requests without mutation. The
+// commit phase runs after every chooser has a resolution, re-checks lock
+// state, and then calls matching template `apply` methods.
+//
 // The frame around the per-template work pins three invariants:
 //
 //   1. **Locked re-check before any mutation.** Every well-formed cost is
@@ -20,10 +23,6 @@
 //      `console.warn` and keep walking. Throwing here would leave the
 //      player stuck mid-apply with no recovery path.
 //
-// Wave 2 (Task 21) will widen this entry point into two phases
-// (`planOption` / `commitOption`) and start populating the `resolutions`
-// map. Wave 1 always returns `{ done: true }` and ignores the parameter.
-//
 // The screen owns the question of "which site / journey is this for", so
 // the apply meta arrives as an explicit struct rather than being pulled
 // from a manifest reference. Keeping the meta out of the option avoids
@@ -35,17 +34,50 @@ import type { JourneyContext } from "../journey/context";
 import type { JourneyOption } from "../journey/manifest";
 
 import {
-  applyEntries,
+  commitEntries,
   collectCostEntries,
   collectRewardEntries,
+  planEntries,
   type ApplyMeta,
   type ApplyResult,
 } from "./applyShared";
 import { requestIdFor } from "./chooserPlan";
-import type { ChooserResolution } from "./chooserPlan";
+import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
 import type { JourneyMutations } from "./JourneyMutations";
 
 export type { ApplyMeta, ApplyResult } from "./applyShared";
+
+/** Collect every chooser required by `option`, in cost-then-effect order. */
+export function planOption(
+  option: JourneyOption,
+  ctx: JourneyContext,
+): ChooserRequest[] {
+  const costEntries = collectCostEntries(option.costs);
+  const rewardEntries = collectRewardEntries(option.effects);
+  return planEntries(
+    [...costEntries, ...rewardEntries],
+    ctx,
+    (templateId, slot) => requestIdFor(option.number, templateId, slot),
+  );
+}
+
+/** Apply `option` after the caller has supplied every planned resolution. */
+export function commitOption(
+  option: JourneyOption,
+  ctx: JourneyContext,
+  mut: JourneyMutations,
+  resolutions: ReadonlyMap<string, ChooserResolution>,
+): void {
+  const costEntries = collectCostEntries(option.costs);
+  const rewardEntries = collectRewardEntries(option.effects);
+  commitEntries(
+    [...costEntries, ...rewardEntries],
+    ctx,
+    mut,
+    resolutions,
+    (templateId, slot) => requestIdFor(option.number, templateId, slot),
+  );
+}
 
 /**
  * Apply every cost and effect on `option` against `mut`. See the module
@@ -58,6 +90,12 @@ export function applyOption(
   mut: JourneyMutations,
   resolutions?: ReadonlyMap<string, ChooserResolution>,
 ): ApplyResult {
+  const plan = planOption(option, ctx);
+  const nextMissing = plan.find((request) => !resolutions?.has(request.requestId));
+  if (nextMissing !== undefined) {
+    return { done: false, needsChoice: nextMissing };
+  }
+
   const costEntries = collectCostEntries(option.costs);
   const rewardEntries = collectRewardEntries(option.effects);
 
@@ -74,10 +112,7 @@ export function applyOption(
     }
   }
 
-  const requestId = (templateId: string): string =>
-    requestIdFor(option.number, templateId);
-  applyEntries(costEntries, ctx, mut, resolutions, requestId);
-  applyEntries(rewardEntries, ctx, mut, resolutions, requestId);
+  commitOption(option, ctx, mut, resolutions ?? new Map());
 
   logEvent("dream_journey_applied", {
     siteId: meta.siteId,

@@ -21,6 +21,7 @@ import { buildFixtureContext } from "../journey/shapes/__shared__/fixture";
 import type { Cost, Reward } from "../journey/shared/types";
 import { makeUnlockedBranch } from "../journey/manifest";
 import type { JourneyTreeBranch } from "../journey/manifest";
+import type { ChooserRequest, ChooserResolution } from "./chooserPlan";
 import { createRecordingMutations } from "./testing/recordingMutations";
 
 const stubCosts = new Map<string, Cost>();
@@ -46,7 +47,7 @@ vi.mock("../journey/shared/rewards", async () => {
   };
 });
 
-const { applyBranch } = await import("./applyBranch");
+const { applyBranch, branchRequestIdFor } = await import("./applyBranch");
 const loggingModule = await import("../../logging");
 
 const META = {
@@ -125,6 +126,41 @@ function gainEssenceStub(): Reward<{ x: number }> {
     render: (p) => `Gain ${p.x} essence`,
     apply: (p, _ctx, mut) => {
       mut.changeEssence(p.x, "dream_journey:gain_essence");
+    },
+  };
+}
+
+function cardRequest(requestId: string): ChooserRequest {
+  return {
+    kind: "card",
+    requestId,
+    poolKind: "deck",
+    deckFilter: { predicateId: "event" },
+    minPicks: 1,
+    maxPicks: 2,
+    title: "Choose cards",
+  };
+}
+
+function transfigureChosenCardsStub(
+  id: string,
+  request: ChooserRequest,
+): Reward<Record<string, unknown>> {
+  return {
+    id,
+    weight: 1,
+    rollParams: () => ({}),
+    cec: () => 0,
+    viable: () => true,
+    render: () => "Apply transfiguration",
+    choosePlan: () => request,
+    apply: (_params, _ctx, mut, resolution) => {
+      if (resolution?.kind !== "card") {
+        return;
+      }
+      for (const entryId of resolution.entryIds) {
+        mut.transfigureDeckEntry(entryId, "Bronze", `dream_journey:${id}`);
+      }
     },
   };
 }
@@ -209,5 +245,45 @@ describe("applyBranch", () => {
       shapeId: META.shapeId,
       branchId: "node-root.B",
     });
+  });
+
+  it("returns a branch chooser request without mutating, then commits with the resolution", () => {
+    const templateId = "apply_named_transfiguration_to_chosen_predicate_cards";
+    const request = cardRequest(branchRequestIdFor("node-root.C", templateId));
+    stubRewards.set(templateId, transfigureChosenCardsStub(templateId, request));
+
+    const ctx = buildFixtureContext();
+    const { mut, calls } = createRecordingMutations();
+    const branch = makeBranch({
+      id: "node-root.C",
+      effects: [rewardEnvelope(templateId)],
+    });
+    const resolutions = new Map<string, ChooserResolution>([
+      [request.requestId, { kind: "card", entryIds: ["deck-entry-1"] }],
+    ]);
+
+    vi.spyOn(loggingModule, "logEvent").mockImplementation(
+      () => ({ event: "", seq: 0, timestamp: "" }) as never,
+    );
+
+    expect(applyBranch(branch, META, ctx, mut)).toEqual({
+      done: false,
+      needsChoice: request,
+    });
+    expect(calls).toEqual([]);
+
+    expect(applyBranch(branch, META, ctx, mut, resolutions)).toEqual({
+      done: true,
+    });
+    expect(calls).toEqual([
+      {
+        method: "transfigureDeckEntry",
+        args: [
+          "deck-entry-1",
+          "Bronze",
+          "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
+        ],
+      },
+    ]);
   });
 });

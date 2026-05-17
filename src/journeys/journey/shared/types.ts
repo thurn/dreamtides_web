@@ -22,9 +22,8 @@ export type Reward<P extends TemplateParams = TemplateParams> = {
   viable(params: P, ctx: JourneyContext): boolean;
   render(params: P, ctx: JourneyContext): string;
   choosePlan?(params: P, ctx: JourneyContext): ChooserRequest | undefined;
-  // The 4th `chooserResolution` parameter is reserved for Wave 2 chosen-target
-  // templates. The Wave 1 dispatch loop always passes `undefined`; concrete
-  // resolution shapes land in `apply/chooserPlan.ts` alongside Task 20.
+  // Chosen-target templates receive a resolution only after the apply layer
+  // has planned every chooser required by the selected option or branch.
   apply(
     params: P,
     ctx: JourneyContext,
