@@ -896,7 +896,9 @@ const transformDreamsignToRandom: Cost<XformDreamsignParams> = {
   locked: () => false,
   render: () => "Transform a chosen dreamsign into a random dreamsign",
   choosePlan: (_p, ctx, planning) => {
-    if (ctx.state.quest.activeDreamsigns.length === 0) return undefined;
+    if (ctx.state.quest.activeDreamsigns.length === 0 || poolDreamsignsById(ctx).length === 0) {
+      return undefined;
+    }
     return {
       kind: "dreamsign",
       requestId: planning.requestIdForSlot(0),
@@ -925,10 +927,10 @@ const transformDreamsignToRandom: Cost<XformDreamsignParams> = {
       "transform_dreamsign_to_random:dreamsign",
       pool,
     );
-    mut.removeDreamsign(index, "dream_journey:transform_dreamsign_to_random");
     mut.addDreamsign(
       projectDreamsignForApply(source),
       "dream_journey:transform_dreamsign_to_random",
+      index,
     );
   },
 };

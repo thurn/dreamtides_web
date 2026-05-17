@@ -791,7 +791,7 @@ describe("Chosen card cost planning and apply", () => {
     const ctx = buildContext({
       cards: cardFixture(),
       deckEntries: [
-        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
         { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
       ],
     });
@@ -1216,6 +1216,7 @@ describe("Chosen dreamsign cost planning and apply", () => {
     const ctx = buildContext({
       dreamsigns: dreamsignFixture(),
       activeDreamsigns: [{ dreamsignId: "ds-1" }, { dreamsignId: "ds-2" }],
+      dreamsignPoolIds: ["ds-3"],
     });
 
     expect(t.choosePlan?.({}, ctx, planningContext())).toEqual({
@@ -1228,7 +1229,7 @@ describe("Chosen dreamsign cost planning and apply", () => {
     });
   });
 
-  it("transform_dreamsign_to_random removes the chosen dreamsign then adds a rolled pool dreamsign", () => {
+  it("transform_dreamsign_to_random replaces the chosen dreamsign with a rolled pool dreamsign", () => {
     const t = getCost("transform_dreamsign_to_random");
     const ctx = buildContext({
       dreamsigns: dreamsignFixture(),
@@ -1240,7 +1241,6 @@ describe("Chosen dreamsign cost planning and apply", () => {
     t.apply({}, ctx, mut, { kind: "dreamsign", indices: [0], dreamsignIds: ["ds-1"] });
 
     expect(calls).toEqual([
-      { method: "removeDreamsign", args: [0, "dream_journey:transform_dreamsign_to_random"] },
       {
         method: "addDreamsign",
         args: [
@@ -1253,6 +1253,7 @@ describe("Chosen dreamsign cost planning and apply", () => {
             isBane: false,
           },
           "dream_journey:transform_dreamsign_to_random",
+          0,
         ],
       },
     ]);
@@ -1277,6 +1278,11 @@ describe("Chosen dreamsign cost planning and apply", () => {
       activeDreamsigns: [{ dreamsignId: "ds-1" }],
       dreamsignPoolIds: ["ds-3"],
     }))).toBe(true);
+    expect(t.choosePlan?.({}, buildContext({
+      dreamsigns,
+      activeDreamsigns: [{ dreamsignId: "ds-1" }],
+      dreamsignPoolIds: [],
+    }), planningContext())).toBeUndefined();
   });
 
   it("transform_dreamsign_to_random skips without partial mutation when chooser id does not match the chosen index", () => {
