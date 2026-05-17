@@ -33,14 +33,34 @@ export interface TransfigurationChooserProps {
   readonly onCancel: () => void;
 }
 
+interface TransfigurationSelectionState {
+  readonly identity: string;
+  readonly type: TransfigurationType | null;
+}
+
+function transfigurationChooserIdentity(
+  request: Extract<ChooserRequest, { kind: "transfiguration" }>,
+): string {
+  return [
+    request.requestId,
+    ...request.eligibleTransfigurations,
+  ].join("|");
+}
+
 export function TransfigurationChooser({
   request,
   onResolve,
   onCancel,
 }: TransfigurationChooserProps) {
-  const [selectedType, setSelectedType] = useState<TransfigurationType | null>(
-    null,
+  const chooserIdentity = useMemo(
+    () => transfigurationChooserIdentity(request),
+    [request],
   );
+  const [selection, setSelection] = useState<TransfigurationSelectionState>({
+    identity: chooserIdentity,
+    type: null,
+  });
+  const selectedType = selection.identity === chooserIdentity ? selection.type : null;
 
   const eligibleSet = useMemo(
     () => new Set(request.eligibleTransfigurations),
@@ -70,7 +90,11 @@ export function TransfigurationChooser({
               disabled={!eligible}
               aria-disabled={!eligible}
               aria-pressed={selected}
-              onClick={eligible ? () => setSelectedType(type) : undefined}
+              onClick={
+                eligible
+                  ? () => setSelection({ identity: chooserIdentity, type })
+                  : undefined
+              }
               className="min-h-24 rounded-md border p-3 text-center text-sm font-semibold text-white transition-opacity enabled:hover:brightness-110 disabled:cursor-not-allowed"
               style={{
                 backgroundColor: TILE_COLORS[type],

@@ -45,6 +45,12 @@ function confirmButton(container: HTMLElement): HTMLButtonElement {
   return buttonByName(container, "Confirm");
 }
 
+function renderAgain(root: Root, element: ReactElement): void {
+  act(() => {
+    root.render(element);
+  });
+}
+
 const cardRequest: ChooserRequest = {
   kind: "card",
   requestId: "choose-card",
@@ -136,6 +142,7 @@ describe("Chooser overlay components", () => {
     expect(onResolve).toHaveBeenCalledWith({
       kind: "card",
       entryIds: ["e1", "e3"],
+      cardIds: ["c1", "c3"],
     });
 
     act(() => {
@@ -169,6 +176,33 @@ describe("Chooser overlay components", () => {
     });
   });
 
+  it("aligns dreamsign indices and ids in click order for multi-pick choices", () => {
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <DreamsignChooser
+        request={{ ...dreamsignRequest, minPicks: 2, maxPicks: 2 }}
+        candidates={dreamsignCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    click(buttonByName(container, "Bright Key"));
+    click(buttonByName(container, "Small Door"));
+    click(confirmButton(container));
+
+    expect(onResolve).toHaveBeenCalledTimes(1);
+    expect(onResolve).toHaveBeenCalledWith({
+      kind: "dreamsign",
+      indices: [1, 0],
+      dreamsignIds: ["bright-key", "small-door"],
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("only allows eligible transfiguration tiles to be selected", () => {
     const request: ChooserRequest = {
       kind: "transfiguration",
@@ -195,6 +229,141 @@ describe("Chooser overlay components", () => {
 
     click(bronze);
     expect(bronze.getAttribute("aria-pressed")).toBe("true");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("resolves the selected transfiguration type when confirmed", () => {
+    const onResolve = vi.fn();
+    const request: ChooserRequest = {
+      kind: "transfiguration",
+      requestId: "confirm-transfiguration",
+      eligibleTransfigurations: ["Bronze", "Rose"],
+      title: "Choose a transfiguration",
+    };
+    const { container, root } = mount(
+      <TransfigurationChooser
+        request={request}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    click(buttonByName(container, "Rose"));
+    click(confirmButton(container));
+
+    expect(onResolve).toHaveBeenCalledTimes(1);
+    expect(onResolve).toHaveBeenCalledWith({
+      kind: "transfiguration",
+      type: "Rose",
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("resets stale card selection when the request changes", () => {
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <CardChooser
+        request={cardRequest}
+        candidates={cardCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    click(buttonByName(container, "Alpha"));
+    expect(confirmButton(container).disabled).toBe(false);
+
+    renderAgain(
+      root,
+      <CardChooser
+        request={{ ...cardRequest, requestId: "choose-card-next" }}
+        candidates={cardCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    expect(confirmButton(container).disabled).toBe(true);
+    expect(buttonByName(container, "Alpha").getAttribute("aria-pressed")).toBe(
+      "false",
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("resets stale dreamsign selection when the request changes", () => {
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <DreamsignChooser
+        request={dreamsignRequest}
+        candidates={dreamsignCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    click(buttonByName(container, "Bright Key"));
+    expect(confirmButton(container).disabled).toBe(false);
+
+    renderAgain(
+      root,
+      <DreamsignChooser
+        request={{ ...dreamsignRequest, requestId: "choose-dreamsign-next" }}
+        candidates={dreamsignCandidates}
+        onResolve={onResolve}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    expect(confirmButton(container).disabled).toBe(true);
+    expect(
+      buttonByName(container, "Bright Key").getAttribute("aria-pressed"),
+    ).toBe("false");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("resets stale transfiguration selection when the request changes", () => {
+    const request: ChooserRequest = {
+      kind: "transfiguration",
+      requestId: "choose-transfiguration",
+      eligibleTransfigurations: ["Bronze", "Rose"],
+      title: "Choose a transfiguration",
+    };
+    const { container, root } = mount(
+      <TransfigurationChooser
+        request={request}
+        onResolve={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    click(buttonByName(container, "Bronze"));
+    expect(confirmButton(container).disabled).toBe(false);
+
+    renderAgain(
+      root,
+      <TransfigurationChooser
+        request={{ ...request, requestId: "choose-transfiguration-next" }}
+        onResolve={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    expect(confirmButton(container).disabled).toBe(true);
+    expect(buttonByName(container, "Bronze").getAttribute("aria-pressed")).toBe(
+      "false",
+    );
 
     act(() => {
       root.unmount();

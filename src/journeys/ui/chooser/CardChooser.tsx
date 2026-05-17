@@ -18,11 +18,28 @@ export interface CardChooserProps {
   readonly onCancel: () => void;
 }
 
+interface CardSelectionState {
+  readonly identity: string;
+  readonly entryIds: readonly string[];
+}
+
 function isPickCountValid(
   request: Extract<ChooserRequest, { kind: "card" }>,
   count: number,
 ): boolean {
   return count >= request.minPicks && count <= request.maxPicks;
+}
+
+function cardChooserIdentity(
+  request: Extract<ChooserRequest, { kind: "card" }>,
+  candidates: readonly CardChooserCandidate[],
+): string {
+  return [
+    request.requestId,
+    ...candidates.map(
+      (candidate) => `${candidate.entryId}:${candidate.cardId ?? ""}`,
+    ),
+  ].join("|");
 }
 
 export function CardChooser({
@@ -31,26 +48,60 @@ export function CardChooser({
   onResolve,
   onCancel,
 }: CardChooserProps) {
-  const [selectedEntryIds, setSelectedEntryIds] = useState<readonly string[]>([]);
+  const chooserIdentity = useMemo(
+    () => cardChooserIdentity(request, candidates),
+    [candidates, request],
+  );
+  const [selection, setSelection] = useState<CardSelectionState>({
+    identity: chooserIdentity,
+    entryIds: [],
+  });
+  const selectedEntryIds =
+    selection.identity === chooserIdentity ? selection.entryIds : [];
 
   const selectedEntrySet = useMemo(
     () => new Set(selectedEntryIds),
     [selectedEntryIds],
   );
 
+  const candidateByEntryId = useMemo(
+    () => new Map(candidates.map((candidate) => [candidate.entryId, candidate])),
+    [candidates],
+  );
+
   const toggleEntry = useCallback((entryId: string) => {
-    setSelectedEntryIds((current) => {
-      if (current.includes(entryId)) {
-        return current.filter((selected) => selected !== entryId);
+    setSelection((current) => {
+      const currentEntryIds =
+        current.identity === chooserIdentity ? current.entryIds : [];
+      if (currentEntryIds.includes(entryId)) {
+        return {
+          identity: chooserIdentity,
+          entryIds: currentEntryIds.filter((selected) => selected !== entryId),
+        };
       }
-      return [...current, entryId];
+      if (request.maxPicks === 1) {
+        return { identity: chooserIdentity, entryIds: [entryId] };
+      }
+      return { identity: chooserIdentity, entryIds: [...currentEntryIds, entryId] };
     });
-  }, []);
+  }, [chooserIdentity, request.maxPicks]);
 
   const handleConfirm = useCallback(() => {
     if (!isPickCountValid(request, selectedEntryIds.length)) return;
-    onResolve({ kind: "card", entryIds: selectedEntryIds });
-  }, [onResolve, request, selectedEntryIds]);
+    const selectedCandidates = selectedEntryIds
+      .map((entryId) => candidateByEntryId.get(entryId))
+      .filter((candidate): candidate is CardChooserCandidate =>
+        candidate !== undefined,
+      );
+    const cardIds = selectedCandidates
+      .map((candidate) => candidate.cardId)
+      .filter((cardId): cardId is string => typeof cardId === "string");
+    onResolve({
+      kind: "card",
+      entryIds: selectedEntryIds,
+      ...(cardIds.length === selectedEntryIds.length ? { cardIds } : {}),
+    });
+  }, [candidateByEntryId, onResolve, request, selectedEntryIds]);
 
   return (
     <ChooserOverlay

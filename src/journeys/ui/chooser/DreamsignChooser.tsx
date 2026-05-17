@@ -18,11 +18,26 @@ export interface DreamsignChooserProps {
   readonly onCancel: () => void;
 }
 
+interface DreamsignSelectionState {
+  readonly identity: string;
+  readonly indices: readonly number[];
+}
+
 function isPickCountValid(
   request: Extract<ChooserRequest, { kind: "dreamsign" }>,
   count: number,
 ): boolean {
   return count >= request.minPicks && count <= request.maxPicks;
+}
+
+function dreamsignChooserIdentity(
+  request: Extract<ChooserRequest, { kind: "dreamsign" }>,
+  candidates: readonly DreamsignChooserCandidate[],
+): string {
+  return [
+    request.requestId,
+    ...candidates.map((candidate) => `${candidate.index}:${candidate.id ?? ""}`),
+  ].join("|");
 }
 
 export function DreamsignChooser({
@@ -31,36 +46,61 @@ export function DreamsignChooser({
   onResolve,
   onCancel,
 }: DreamsignChooserProps) {
-  const [selectedIndices, setSelectedIndices] = useState<readonly number[]>([]);
+  const chooserIdentity = useMemo(
+    () => dreamsignChooserIdentity(request, candidates),
+    [candidates, request],
+  );
+  const [selection, setSelection] = useState<DreamsignSelectionState>({
+    identity: chooserIdentity,
+    indices: [],
+  });
+  const selectedIndices =
+    selection.identity === chooserIdentity ? selection.indices : [];
 
   const selectedIndexSet = useMemo(
     () => new Set(selectedIndices),
     [selectedIndices],
   );
 
+  const candidateByIndex = useMemo(
+    () => new Map(candidates.map((candidate) => [candidate.index, candidate])),
+    [candidates],
+  );
+
   const toggleIndex = useCallback((index: number) => {
-    setSelectedIndices((current) => {
-      if (current.includes(index)) {
-        return current.filter((selected) => selected !== index);
+    setSelection((current) => {
+      const currentIndices =
+        current.identity === chooserIdentity ? current.indices : [];
+      if (currentIndices.includes(index)) {
+        return {
+          identity: chooserIdentity,
+          indices: currentIndices.filter((selected) => selected !== index),
+        };
       }
-      return [...current, index];
+      if (request.maxPicks === 1) {
+        return { identity: chooserIdentity, indices: [index] };
+      }
+      return { identity: chooserIdentity, indices: [...currentIndices, index] };
     });
-  }, []);
+  }, [chooserIdentity, request.maxPicks]);
 
   const handleConfirm = useCallback(() => {
     if (!isPickCountValid(request, selectedIndices.length)) return;
-    const selectedCandidates = candidates.filter((candidate) =>
-      selectedIndexSet.has(candidate.index),
-    );
+    const selectedCandidates = selectedIndices
+      .map((index) => candidateByIndex.get(index))
+      .filter((candidate): candidate is DreamsignChooserCandidate =>
+        candidate !== undefined,
+      );
+    const indices = selectedCandidates.map((candidate) => candidate.index);
     const dreamsignIds = selectedCandidates
       .map((candidate) => candidate.id)
       .filter((id): id is string => typeof id === "string");
     onResolve({
       kind: "dreamsign",
-      indices: selectedIndices,
-      dreamsignIds,
+      indices,
+      ...(dreamsignIds.length === indices.length ? { dreamsignIds } : {}),
     });
-  }, [candidates, onResolve, request, selectedIndexSet, selectedIndices]);
+  }, [candidateByIndex, onResolve, request, selectedIndices]);
 
   return (
     <ChooserOverlay
