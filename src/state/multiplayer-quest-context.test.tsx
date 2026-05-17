@@ -340,6 +340,67 @@ describe("MultiplayerQuestProvider", () => {
     expect(nextRoom?.questState?.essence).toBe(325);
   });
 
+  it("replaces a dreamsign from the transaction snapshot", () => {
+    const captured: QuestContextValue[] = [];
+    const replacement = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const questState: QuestState = {
+      ...createDefaultState(),
+      dreamsigns: [
+        makeDreamsign("provider-held-0", "Provider Held 0"),
+        makeDreamsign("provider-held-1", "Provider Held 1"),
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.addDreamsign(
+      replacement,
+      "test",
+      1,
+    );
+    const updater = latestRoomTransactionUpdater();
+    const transactionDreamsigns = [
+      makeDreamsign("transaction-held-0", "Transaction Held 0"),
+      makeDreamsign("transaction-held-1", "Transaction Held 1"),
+      makeDreamsign("transaction-held-2", "Transaction Held 2"),
+    ];
+    const transactionRoom: MultiplayerRoom = {
+      ...session.room,
+      questState: {
+        ...questState,
+        dreamsigns: transactionDreamsigns,
+      },
+    };
+    const roomWithoutPurgeIndex: MultiplayerRoom = {
+      ...transactionRoom,
+      questState: {
+        ...questState,
+        dreamsigns: [transactionDreamsigns[0]],
+      },
+    };
+
+    const nextRoom = updater?.(transactionRoom);
+
+    expect(nextRoom?.questState?.dreamsigns).toEqual([
+      transactionDreamsigns[0],
+      replacement,
+      transactionDreamsigns[2],
+    ]);
+    expect(nextRoom?.metadata.updatedAt).not.toBe(
+      transactionRoom.metadata.updatedAt,
+    );
+    expect(nextRoom?.actionLog).toBe(transactionRoom.actionLog);
+    expect(updater?.(roomWithoutPurgeIndex)).toBe(roomWithoutPurgeIndex);
+  });
+
   it("composes sequential multiplayer essence deltas against committed state", () => {
     const captured: QuestContextValue[] = [];
     const questState = {

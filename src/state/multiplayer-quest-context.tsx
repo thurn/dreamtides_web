@@ -671,25 +671,44 @@ export function MultiplayerQuestProvider({
   const addDreamsign = useCallback(
     (dreamsign: Dreamsign, _sourceSiteType: string, purgeIndex?: number) => {
       const current = currentRef.current;
-      const purgedDreamsign =
-        purgeIndex === undefined ? null : current.state.dreamsigns[purgeIndex];
-      if (
-        (purgeIndex !== undefined && purgedDreamsign == null) ||
-        (purgeIndex === undefined &&
-          current.state.dreamsigns.length >= current.state.maxDreamsigns)
-      ) {
+      if (purgeIndex === undefined) {
+        if (current.state.dreamsigns.length >= current.state.maxDreamsigns) {
+          return;
+        }
+        writeQuestField({
+          database: current.database,
+          roomId: current.session.roomId,
+          field: "dreamsigns",
+          value: [...current.state.dreamsigns, dreamsign],
+        });
         return;
       }
-      writeQuestField({
+
+      const now = new Date().toISOString();
+      writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
-        field: "dreamsigns",
-        value:
-          purgeIndex === undefined
-            ? [...current.state.dreamsigns, dreamsign]
-            : current.state.dreamsigns.map((existing, index) =>
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          if (room.questState.dreamsigns[purgeIndex] === undefined) {
+            return room;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              dreamsigns: room.questState.dreamsigns.map((existing, index) =>
                 index === purgeIndex ? dreamsign : existing,
               ),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+          };
+        },
       });
     },
     [],
