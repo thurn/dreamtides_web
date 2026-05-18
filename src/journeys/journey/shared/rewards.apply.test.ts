@@ -582,6 +582,53 @@ describe("Card reward apply (non-choice)", () => {
     ]);
   });
 
+  it("modify_random_cards_to_types changes the promised number of deterministic deck entries", () => {
+    const t = getReward("modify_random_cards_to_types");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const first = createRecordingMutations();
+    const second = createRecordingMutations();
+
+    t.apply(
+      { count: 3, cardTypePredicateId: "spirit_animals" },
+      ctx,
+      first.mut,
+      undefined,
+    );
+    t.apply(
+      { count: 3, cardTypePredicateId: "spirit_animals" },
+      ctx,
+      second.mut,
+      undefined,
+    );
+
+    expect(first.calls).toEqual(second.calls);
+    expect(first.calls).toHaveLength(3);
+    expect(new Set(first.calls.map((call) => call.args[0]))).toHaveLength(3);
+    expect(first.calls).toEqual(
+      first.calls.map((call) => ({
+        method: "changeDeckEntryType",
+        args: [
+          call.args[0],
+          {
+            predicateId: "spirit_animals",
+            cardType: "Character",
+            subtype: "Spirit Animal",
+            label: "Spirit Animal",
+          },
+          "dream_journey:modify_random_cards_to_types",
+        ],
+      })),
+    );
+  });
+
   it("apply_chosen_transfiguration_to_chosen_card first plans a transfiguration chooser", () => {
     const t = getReward("apply_chosen_transfiguration_to_chosen_card");
     const ctx = buildContext({
@@ -3396,11 +3443,6 @@ describe("Visual, battle-window-only, and dreamwell reward apply no-ops", () => 
     {
       id: "make_random_cards_reclaim",
       params: { count: 2, reclaim: 1 },
-      reason: "visual",
-    },
-    {
-      id: "modify_random_cards_to_types",
-      params: { count: 2, cardTypePredicateId: "event" },
       reason: "visual",
     },
     {

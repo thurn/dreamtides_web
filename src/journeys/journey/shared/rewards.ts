@@ -1686,8 +1686,36 @@ const modifyRandomCardsToTypes: Reward<ModifyRandomCardsToTypesParams> = {
     const article = p.count === 1 ? `${indefiniteArticleFor(typeName)} ` : "";
     return `Modify ${p.count} random ${noun} to become ${article}${typeName}`;
   },
-  apply: () => {
-    logSkippedVisualTemplate("modify_random_cards_to_types", "visual");
+  apply: (p, ctx, mut) => {
+    const typeChange = cardTypeChangeFromPredicate(p.cardTypePredicateId);
+    if (typeChange === undefined) {
+      warnSkippedCardApply(
+        "modify_random_cards_to_types",
+        `card type predicate ${JSON.stringify(p.cardTypePredicateId)} was not applicable`,
+      );
+      return;
+    }
+    const entryIds = projectedDeckEntries(ctx).map((entry) => entry.entryId);
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "modify_random_cards_to_types",
+        "deck entries were not found",
+      );
+      return;
+    }
+    const picked = pickUniqueDeckEntryIds(
+      applyDrawContext(ctx),
+      "modify_random_cards_to_types:entry",
+      entryIds,
+      p.count,
+    );
+    picked.forEach((entryId) => {
+      mut.changeDeckEntryType(
+        entryId,
+        typeChange,
+        "dream_journey:modify_random_cards_to_types",
+      );
+    });
   },
 };
 
