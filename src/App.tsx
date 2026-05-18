@@ -11,6 +11,7 @@ import { MultiplayerBattleProvider } from "./state/multiplayer-battle-context";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { HUD } from "./components/HUD";
 import { DeckViewer } from "./components/DeckViewer";
+import { StartingDeckModal } from "./components/StartingDeckModal";
 import { DebugScreen } from "./screens/DebugScreen";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
@@ -32,13 +33,14 @@ export function QuestApp({
   // (`dreamcaller` set + `hasSeenStartingDeckPopup` false) so a reload of the
   // same `?game=` URL does not re-open the popup. The flag round-trips
   // through `normalizeQuestState` so a fresh client joining the same room
-  // also sees the correct state.
+  // also sees the correct state. The modal is a centered overlay layered on
+  // top of the live dreamscape, so the HUD and screen behind remain visible
+  // and interactive once dismissed.
   const showStarterDeckIntro =
     state.dreamcaller !== null && !state.hasSeenStartingDeckPopup;
   const showHud =
     state.screen.type !== "questStart"
-    && !isBattleSiteHudHidden(state)
-    && !showStarterDeckIntro;
+    && !isBattleSiteHudHidden(state);
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
@@ -156,13 +158,19 @@ export function QuestApp({
         */}
         <ErrorBoundary scope="overlay:deck-viewer" onClose={handleCloseDeckViewer}>
           <DeckViewer
-            isOpen={deckViewerOpen || showStarterDeckIntro}
-            onClose={
-              showStarterDeckIntro ? handleBeginQuest : handleCloseDeckViewer
-            }
+            isOpen={deckViewerOpen}
+            onClose={handleCloseDeckViewer}
             cardDatabase={cardDatabase}
-            introMode={showStarterDeckIntro}
-            onBeginQuest={handleBeginQuest}
+          />
+        </ErrorBoundary>
+        <ErrorBoundary
+          scope="overlay:starting-deck-modal"
+          onClose={handleBeginQuest}
+        >
+          <StartingDeckModal
+            isOpen={showStarterDeckIntro}
+            onClose={handleBeginQuest}
+            cardDatabase={cardDatabase}
           />
         </ErrorBoundary>
         <ErrorBoundary scope="overlay:debug-screen" onClose={handleCloseDebugScreen}>

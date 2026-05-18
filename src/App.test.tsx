@@ -75,24 +75,33 @@ vi.mock("./components/HUD", () => ({
 
 interface DeckViewerMockProps {
   isOpen: boolean;
-  introMode?: boolean;
-  onBeginQuest?: () => void;
   onClose: () => void;
 }
 
 const deckViewerMock = vi.fn<(props: DeckViewerMockProps) => ReactNode>(
-  ({ isOpen, introMode }) => (
-    <div
-      data-deck-intro={String(Boolean(introMode))}
-      data-deck-open={String(isOpen)}
-    >
-      Deck Viewer
-    </div>
+  ({ isOpen }) => (
+    <div data-deck-open={String(isOpen)}>Deck Viewer</div>
   ),
 );
 
 vi.mock("./components/DeckViewer", () => ({
   DeckViewer: (props: DeckViewerMockProps) => deckViewerMock(props),
+}));
+
+interface StartingDeckModalMockProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const startingDeckModalMock = vi.fn<
+  (props: StartingDeckModalMockProps) => ReactNode
+>(({ isOpen }) => (
+  <div data-starting-deck-open={String(isOpen)}>Starting Deck Modal</div>
+));
+
+vi.mock("./components/StartingDeckModal", () => ({
+  StartingDeckModal: (props: StartingDeckModalMockProps) =>
+    startingDeckModalMock(props),
 }));
 
 vi.mock("./screens/DebugScreen", () => ({
@@ -347,10 +356,10 @@ describe("QuestApp", () => {
       ...overrides,
     });
 
-  it("keeps the deck viewer closed before any dreamcaller is selected", () => {
+  it("keeps the deck viewer and starting-deck modal closed before any dreamcaller is selected", () => {
     setQuestState(makeState());
 
-    const { root } = mount(
+    const { container, root } = mount(
       <QuestApp
         cardDatabase={new Map()}
         runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
@@ -358,34 +367,48 @@ describe("QuestApp", () => {
     );
 
     expect(deckViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false, introMode: false }),
+      expect.objectContaining({ isOpen: false }),
     );
+    expect(startingDeckModalMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isOpen: false }),
+    );
+    // The dreamcaller-selection screen suppresses the HUD; the deck button is
+    // therefore unavailable so neither overlay should be open here.
+    expect(container.querySelector("[data-testid='hud']")).toBeNull();
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("opens the starter-deck popup in intro mode immediately after a dreamcaller is picked", () => {
+  it("opens the starting-deck modal (not the full DeckViewer) immediately after a dreamcaller is picked", () => {
     setQuestState(starterCallerState());
 
-    const { root } = mount(
+    const { container, root } = mount(
       <QuestApp
         cardDatabase={new Map()}
         runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
       />,
     );
 
-    expect(deckViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: true, introMode: true }),
+    // The starter-deck reveal uses the lightweight modal overlay; the full
+    // DeckViewer stays closed so the dreamscape behind remains visible.
+    expect(startingDeckModalMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isOpen: true }),
     );
+    expect(deckViewerMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isOpen: false }),
+    );
+    // The HUD is layered behind the modal so the dreamscape remains visible
+    // alongside the starting-deck preview.
+    expect(container.querySelector("[data-testid='hud']")).not.toBeNull();
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("dispatches dismissStartingDeckPopup when the popup's Continue handler fires", () => {
+  it("dispatches dismissStartingDeckPopup when the starting-deck modal close handler fires", () => {
     const mutations = makeMutations();
     vi.mocked(useQuest).mockReturnValue({
       state: starterCallerState(),
@@ -408,27 +431,24 @@ describe("QuestApp", () => {
     );
 
     const lastCall =
-      deckViewerMock.mock.calls[deckViewerMock.mock.calls.length - 1];
+      startingDeckModalMock.mock.calls[
+        startingDeckModalMock.mock.calls.length - 1
+      ];
     expect(lastCall).toBeDefined();
     const props = lastCall?.[0];
     expect(props).toBeDefined();
-    expect(typeof props?.onBeginQuest).toBe("function");
-    act(() => {
-      props?.onBeginQuest?.();
-    });
-    expect(mutations.dismissStartingDeckPopup).toHaveBeenCalledTimes(1);
-
+    expect(typeof props?.onClose).toBe("function");
     act(() => {
       props?.onClose();
     });
-    expect(mutations.dismissStartingDeckPopup).toHaveBeenCalledTimes(2);
+    expect(mutations.dismissStartingDeckPopup).toHaveBeenCalledTimes(1);
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("does not re-open the popup when hasSeenStartingDeckPopup is already true (reload case)", () => {
+  it("does not re-open the starting-deck modal when hasSeenStartingDeckPopup is already true (reload case)", () => {
     setQuestState(starterCallerState({ hasSeenStartingDeckPopup: true }));
 
     const { root } = mount(
@@ -438,8 +458,11 @@ describe("QuestApp", () => {
       />,
     );
 
+    expect(startingDeckModalMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isOpen: false }),
+    );
     expect(deckViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false, introMode: false }),
+      expect.objectContaining({ isOpen: false }),
     );
 
     act(() => {
