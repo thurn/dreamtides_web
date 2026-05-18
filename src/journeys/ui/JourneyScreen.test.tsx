@@ -550,6 +550,13 @@ describe("JourneyScreen", () => {
     const enterButtons = queryEnterDreamButtons(container);
     expect(enterButtons).toHaveLength(3);
 
+    const optionImages = Array.from(container.querySelectorAll("img"));
+    expect(optionImages).toHaveLength(3);
+    for (const image of optionImages) {
+      expect(image.parentElement?.className).toContain("h-64");
+      expect(image.parentElement?.className).toContain("w-64");
+    }
+
     act(() => {
       root.unmount();
     });

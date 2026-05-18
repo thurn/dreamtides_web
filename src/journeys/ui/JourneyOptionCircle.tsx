@@ -54,9 +54,9 @@ export function JourneyOptionCircle({
   onEnterDream,
 }: JourneyOptionCircleProps) {
   return (
-    <div className="relative flex w-56 flex-col items-center gap-3">
+    <div className="relative flex w-72 flex-col items-center gap-3">
       <div
-        className="relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-full text-3xl"
+        className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-full text-3xl"
         style={{
           background: "#0d0814",
           border: "2px solid rgba(168, 85, 247, 0.45)",
