@@ -73,29 +73,36 @@ function projectDeck(
   }));
 }
 
-function typeChangedCardId(baseCardId: string, entryId: string): string {
-  return `${baseCardId}::deck-entry:${entryId}:type-change`;
+function modifiedCardId(baseCardId: string, entryId: string): string {
+  return `${baseCardId}::deck-entry:${entryId}:card-modification`;
 }
 
-function applyTypeChangeToJourneyCard(
+function applyDeckEntryModificationToJourneyCard(
   card: ContentBundle["cards"][number],
   entry: DeckEntry,
 ): ContentBundle["cards"][number] {
   const typeChange = entry.typeChange;
-  if (typeChange == null) {
+  const keywordModification = entry.keywordModification;
+  const hasFastModification = keywordModification?.fast === true;
+  if (typeChange == null && !hasFastModification) {
     return card;
   }
-  const id = typeChangedCardId(card.id, entry.entryId);
+  const id = modifiedCardId(card.id, entry.entryId);
+  const cardType = typeChange?.cardType ?? card.cardType;
+  const subtype = typeChange?.subtype ?? card.raw.subtype;
+  const isFast = hasFastModification ? true : card.raw["is-fast"];
   return {
     ...card,
     id,
-    cardType: typeChange.cardType,
+    cardType,
     raw: {
       ...card.raw,
       id,
-      "card-type": typeChange.cardType,
-      cardType: typeChange.cardType,
-      subtype: typeChange.subtype,
+      "card-type": cardType,
+      cardType,
+      subtype,
+      "is-fast": isFast,
+      isFast,
     },
   };
 }
@@ -229,14 +236,14 @@ export function buildJourneyContext(
   }
 
   for (const entry of questState.deck) {
-    if (entry.typeChange == null) {
+    if (entry.typeChange == null && entry.keywordModification?.fast !== true) {
       continue;
     }
     const card = cardsByNumber.get(entry.cardNumber);
     if (card === undefined) {
       continue;
     }
-    const changedCard = applyTypeChangeToJourneyCard(card, entry);
+    const changedCard = applyDeckEntryModificationToJourneyCard(card, entry);
     cardIdByEntryId.set(entry.entryId, changedCard.id);
     effectiveCards.push(changedCard);
     if (card.rarity === "Starter") {

@@ -110,6 +110,7 @@ function makeMutations(): QuestMutations {
     cleanseBanes: vi.fn(),
     transfigureCard: vi.fn(),
     changeDeckEntryType: vi.fn(),
+    changeDeckEntryKeywords: vi.fn(),
     setDreamcallerSelection: vi.fn(),
     setCardSourceDebug: vi.fn(),
     addDreamsign: vi.fn(),

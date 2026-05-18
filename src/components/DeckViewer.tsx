@@ -25,7 +25,7 @@ import { TRANSFIGURATION_COLORS } from "../transfiguration/transfiguration-logic
 import { computeDeckSummary } from "./deck-summary";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { RulesText } from "./RulesText";
-import { applyCardTypeChange } from "../card-type-change";
+import { applyDeckEntryCardModification } from "../card-type-change";
 
 /** Sort criteria options. */
 type SortCriteria =
@@ -137,7 +137,14 @@ export function DeckViewer({
       .map((entry, index) => {
         const card = cardDatabase.get(entry.cardNumber);
         if (!card) return null;
-        return { entry, card: applyCardTypeChange(card, entry.typeChange), index };
+        return {
+          entry,
+          card: applyDeckEntryCardModification(card, {
+            typeChange: entry.typeChange,
+            keywords: entry.keywordModification,
+          }),
+          index,
+        };
       })
       .filter((e): e is ResolvedEntry => e !== null);
   }, [state.deck, cardDatabase]);

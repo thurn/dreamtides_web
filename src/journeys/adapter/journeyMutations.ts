@@ -70,6 +70,9 @@ export function createJourneyMutations(
     changeDeckEntryType: (entryId, typeChange, source) => {
       mutations.changeDeckEntryType(entryId, typeChange, source);
     },
+    changeDeckEntryKeywords: (entryId, keywordModification, source) => {
+      mutations.changeDeckEntryKeywords(entryId, keywordModification, source);
+    },
 
     // ---- Dreamsigns ----------------------------------------------------
     addDreamsign: (dreamsign, source, purgeIndex) => {

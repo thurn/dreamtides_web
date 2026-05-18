@@ -1,5 +1,6 @@
 import type { PackageTideId } from "../types/content";
 import type {
+  CardKeywordModification,
   CardTypeChange,
   DreamAtlas,
   Dreamcaller,
@@ -128,6 +129,7 @@ export interface BattleQuestDeckEntry {
   cardNumber: number;
   transfiguration: TransfigurationType | null;
   typeChange?: CardTypeChange | null;
+  keywordModification?: CardKeywordModification | null;
   isBane: boolean;
 }
 
@@ -146,6 +148,7 @@ export interface BattleDeckCardDefinition {
   imageNumber: number;
   transfiguration: TransfigurationType | null;
   typeChange?: CardTypeChange | null;
+  keywordModification?: CardKeywordModification | null;
   isBane: boolean;
 }
 

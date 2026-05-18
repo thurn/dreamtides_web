@@ -1728,8 +1728,28 @@ const makeRandomCardsFast: Reward<MakeRandomCardsFastParams> = {
   // Deck-scope leak: CLI used `ctx.content.cards.length >= count`.
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) => `Change ${p.count} random card${p.count === 1 ? "" : "s"} to have fast`,
-  apply: () => {
-    logSkippedVisualTemplate("make_random_cards_fast", "visual");
+  apply: (p, ctx, mut) => {
+    const entryIds = projectedDeckEntries(ctx).map((entry) => entry.entryId);
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "make_random_cards_fast",
+        "deck entries were not found",
+      );
+      return;
+    }
+    const picked = pickUniqueDeckEntryIds(
+      applyDrawContext(ctx),
+      "make_random_cards_fast:entry",
+      entryIds,
+      p.count,
+    );
+    picked.forEach((entryId) => {
+      mut.changeDeckEntryKeywords(
+        entryId,
+        { fast: true },
+        "dream_journey:make_random_cards_fast",
+      );
+    });
   },
 };
 

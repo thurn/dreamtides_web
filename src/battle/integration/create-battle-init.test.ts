@@ -3,7 +3,7 @@ import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestS
 import { createBattleInit, type CreateBattleInitInput } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
 import type { CardData } from "../../types/cards";
-import type { CardTypeChange } from "../../types/quest";
+import type { CardKeywordModification, CardTypeChange } from "../../types/quest";
 
 const ENEMY_DECK_SIZE = 12;
 
@@ -315,6 +315,37 @@ describe("createBattleInit", () => {
         battleCardKind: "character",
         subtype: "Spirit Animal",
         typeChange,
+      });
+    });
+
+    it("applies quest deck entry keyword changes to player battle card definitions", () => {
+      const baseInput = makeBaseInput();
+      const changedEntryId = "deck-5";
+      const keywordModification: CardKeywordModification = { fast: true };
+      const stateWithKeywordChange = {
+        ...baseInput.state,
+        deck: baseInput.state.deck.map((entry) =>
+          entry.entryId === changedEntryId
+            ? {
+                ...entry,
+                keywordModification,
+              }
+            : entry,
+        ),
+      };
+
+      const init = createBattleInit({
+        ...baseInput,
+        state: stateWithKeywordChange,
+      });
+      const changedCard = init.playerDeckOrder.find(
+        (card) => card.sourceDeckEntryId === changedEntryId,
+      );
+
+      expect(changedCard).toMatchObject({
+        cardNumber: 106,
+        isFast: true,
+        keywordModification,
       });
     });
 

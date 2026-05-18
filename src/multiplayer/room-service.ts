@@ -48,6 +48,7 @@ function normalizeDeckEntry(entry: DeckEntry): DeckEntry {
     ...entry,
     transfiguration: entry.transfiguration ?? null,
     typeChange: entry.typeChange ?? null,
+    keywordModification: entry.keywordModification ?? null,
     isBane: entry.isBane ?? false,
   };
 }

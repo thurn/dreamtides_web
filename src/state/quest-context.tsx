@@ -18,6 +18,7 @@ import type {
 } from "../types/content";
 import type {
   BattleModifier,
+  CardKeywordModification,
   CardTypeChange,
   CardSourceDebugState,
   CardChoiceSiteRuntime,
@@ -243,6 +244,11 @@ export interface QuestMutations {
   changeDeckEntryType: (
     entryId: string,
     typeChange: CardTypeChange,
+    source: string,
+  ) => void;
+  changeDeckEntryKeywords: (
+    entryId: string,
+    keywordModification: CardKeywordModification,
     source: string,
   ) => void;
   /**
@@ -1876,6 +1882,40 @@ export function QuestProvider({
     [cardDatabase],
   );
 
+  const changeDeckEntryKeywords = useCallback(
+    (
+      entryId: string,
+      keywordModification: CardKeywordModification,
+      source: string,
+    ) => {
+      setState((prev) => {
+        const entry = prev.deck.find((e) => e.entryId === entryId);
+        if (!entry) return prev;
+        const card = cardDatabase.get(entry.cardNumber);
+        const cardName =
+          card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+        const nextKeywordModification = {
+          ...(entry.keywordModification ?? {}),
+          ...keywordModification,
+        };
+        logEvent("card_keywords_changed", {
+          cardNumber: entry.cardNumber,
+          cardName,
+          entryId,
+          source,
+          keywords: nextKeywordModification,
+        });
+        const deck = prev.deck.map((e) =>
+          e.entryId === entryId
+            ? { ...e, keywordModification: nextKeywordModification }
+            : e,
+        );
+        return { ...prev, deck };
+      });
+    },
+    [cardDatabase],
+  );
+
   const setDreamcallerSelection = useCallback(
     (resolvedPackage: ResolvedDreamcallerPackage) => {
       setState((prev) => applyDreamcallerSelection(prev, resolvedPackage));
@@ -2369,6 +2409,9 @@ export function QuestProvider({
           cardNumber: entry.cardNumber,
           transfiguration: entry.transfiguration,
           ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
+          ...(entry.keywordModification == null
+            ? {}
+            : { keywordModification: entry.keywordModification }),
           isBane: entry.isBane,
         };
         return { ...prev, deck: [...prev.deck, copy] };
@@ -2802,6 +2845,7 @@ export function QuestProvider({
       cleanseBanes,
       transfigureCard,
       changeDeckEntryType,
+      changeDeckEntryKeywords,
       setDreamcallerSelection,
       setCardSourceDebug,
       addDreamsign,
@@ -2862,6 +2906,7 @@ export function QuestProvider({
       cleanseBanes,
       transfigureCard,
       changeDeckEntryType,
+      changeDeckEntryKeywords,
       setDreamcallerSelection,
       setCardSourceDebug,
       addDreamsign,

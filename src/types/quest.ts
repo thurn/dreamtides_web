@@ -21,6 +21,17 @@ export interface CardTypeChange {
   label: string;
 }
 
+/** Persistent keyword overrides applied to one concrete deck entry. */
+export interface CardKeywordModification {
+  fast?: boolean;
+}
+
+/** Persistent card modifications applied to one concrete deck entry. */
+export interface DeckEntryCardModification {
+  typeChange?: CardTypeChange | null;
+  keywords?: CardKeywordModification | null;
+}
+
 /** All site types available in dreamscapes. */
 export type SiteType =
   | "Battle"
@@ -43,6 +54,7 @@ export interface DeckEntry {
   cardNumber: number;
   transfiguration: TransfigurationType | null;
   typeChange?: CardTypeChange | null;
+  keywordModification?: CardKeywordModification | null;
   isBane: boolean;
 }
 

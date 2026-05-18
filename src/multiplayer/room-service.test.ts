@@ -473,6 +473,7 @@ describe("room service", () => {
         isBane: false,
         transfiguration: null,
         typeChange: null,
+        keywordModification: null,
       },
       {
         entryId: "deck-2",
@@ -480,6 +481,7 @@ describe("room service", () => {
         isBane: false,
         transfiguration: null,
         typeChange: null,
+        keywordModification: null,
       },
     ]);
   });

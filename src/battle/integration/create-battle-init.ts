@@ -5,7 +5,7 @@ import type {
   PackageTideId,
 } from "../../types/content";
 import type { QuestState, SiteState } from "../../types/quest";
-import { applyCardTypeChange } from "../../card-type-change";
+import { applyDeckEntryCardModification } from "../../card-type-change";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
@@ -116,6 +116,9 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       cardNumber: entry.cardNumber,
       transfiguration: entry.transfiguration,
       ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
+      ...(entry.keywordModification == null
+        ? {}
+        : { keywordModification: entry.keywordModification }),
       isBane: entry.isBane,
     })),
   );
@@ -474,7 +477,10 @@ function normalizePlayerDeckCard(
     entry.transfiguration === null
       ? card
       : applyTransfigurationToCard(card, entry.transfiguration);
-  const effectiveCard = applyCardTypeChange(transfiguredCard, entry.typeChange);
+  const effectiveCard = applyDeckEntryCardModification(transfiguredCard, {
+    typeChange: entry.typeChange,
+    keywords: entry.keywordModification,
+  });
   return {
     sourceDeckEntryId: entry.entryId,
     cardNumber: card.cardNumber,
@@ -490,6 +496,9 @@ function normalizePlayerDeckCard(
     imageNumber: card.imageNumber,
     transfiguration: entry.transfiguration,
     ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
+    ...(entry.keywordModification == null
+      ? {}
+      : { keywordModification: entry.keywordModification }),
     isBane: entry.isBane,
   };
 }

@@ -629,6 +629,38 @@ describe("Card reward apply (non-choice)", () => {
     );
   });
 
+  it("make_random_cards_fast adds fast to the promised number of deterministic deck entries", () => {
+    const t = getReward("make_random_cards_fast");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const first = createRecordingMutations();
+    const second = createRecordingMutations();
+
+    t.apply({ count: 2 }, ctx, first.mut, undefined);
+    t.apply({ count: 2 }, ctx, second.mut, undefined);
+
+    expect(first.calls).toEqual(second.calls);
+    expect(first.calls).toHaveLength(2);
+    expect(new Set(first.calls.map((call) => call.args[0]))).toHaveLength(2);
+    expect(first.calls).toEqual(
+      first.calls.map((call) => ({
+        method: "changeDeckEntryKeywords",
+        args: [
+          call.args[0],
+          { fast: true },
+          "dream_journey:make_random_cards_fast",
+        ],
+      })),
+    );
+  });
+
   it("apply_chosen_transfiguration_to_chosen_card first plans a transfiguration chooser", () => {
     const t = getReward("apply_chosen_transfiguration_to_chosen_card");
     const ctx = buildContext({
@@ -3443,11 +3475,6 @@ describe("Visual, battle-window-only, and dreamwell reward apply no-ops", () => 
     {
       id: "make_random_cards_reclaim",
       params: { count: 2, reclaim: 1 },
-      reason: "visual",
-    },
-    {
-      id: "make_random_cards_fast",
-      params: { count: 2 },
       reason: "visual",
     },
     {

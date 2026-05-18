@@ -10,6 +10,7 @@
 // of `QuestMutations`.
 
 import type {
+  CardKeywordModification,
   CardTypeChange,
   Dreamsign,
   SiteType,
@@ -65,6 +66,13 @@ export interface JourneyMutations {
   changeDeckEntryType(
     entryId: string,
     typeChange: CardTypeChange,
+    source: string,
+  ): void;
+
+  /** Apply effective card keyword overrides for one concrete deck entry. */
+  changeDeckEntryKeywords(
+    entryId: string,
+    keywordModification: CardKeywordModification,
     source: string,
   ): void;
 

@@ -18,6 +18,7 @@ import { battleStatePath } from "../multiplayer/battle-paths";
 import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { DreamcallerContent } from "../types/content";
 import type {
+  CardKeywordModification,
   CardTypeChange,
   CardSourceDebugState,
   CardChoiceTransfigurationOffer,
@@ -494,6 +495,8 @@ function deckEntriesRuntimeCompatible(
         entry.cardNumber === other.cardNumber &&
         entry.transfiguration === other.transfiguration &&
         JSON.stringify(entry.typeChange ?? null) === JSON.stringify(other.typeChange ?? null) &&
+        JSON.stringify(entry.keywordModification ?? null) ===
+          JSON.stringify(other.keywordModification ?? null) &&
         entry.isBane === other.isBane
       );
     })
@@ -2648,6 +2651,75 @@ export function MultiplayerQuestProvider({
     [],
   );
 
+  const changeDeckEntryKeywords = useCallback(
+    (
+      entryId: string,
+      keywordModification: CardKeywordModification,
+      source: string,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const entry = room.questState.deck.find(
+            (candidate) => candidate.entryId === entryId,
+          );
+          if (entry === undefined) {
+            return room;
+          }
+          const card = current.questContent.cardDatabase.get(entry.cardNumber);
+          const nextKeywordModification = {
+            ...(entry.keywordModification ?? {}),
+            ...keywordModification,
+          };
+
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck: room.questState.deck.map((candidate) =>
+                candidate.entryId === entryId
+                  ? {
+                      ...candidate,
+                      keywordModification: nextKeywordModification,
+                    }
+                  : candidate,
+              ),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "changeDeckEntryKeywords",
+                source,
+                summary: {
+                  entryId,
+                  cardNumber: entry.cardNumber,
+                  cardName:
+                    card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
+                  keywords: nextKeywordModification,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const completeDreamJourneySite = useCallback((siteId: string) => {
     const current = currentRef.current;
     const site = findSite(current.state, siteId);
@@ -3093,6 +3165,9 @@ export function MultiplayerQuestProvider({
           cardNumber: entry.cardNumber,
           transfiguration: entry.transfiguration,
           ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
+          ...(entry.keywordModification == null
+            ? {}
+            : { keywordModification: entry.keywordModification }),
           isBane: entry.isBane,
         };
         return {
@@ -3822,6 +3897,7 @@ export function MultiplayerQuestProvider({
       cleanseBanes,
       transfigureCard,
       changeDeckEntryType,
+      changeDeckEntryKeywords,
       setDreamcallerSelection,
       setCardSourceDebug,
       addDreamsign,
@@ -3872,6 +3948,7 @@ export function MultiplayerQuestProvider({
       changeMaxEssence,
       changeOmens,
       changeDeckEntryType,
+      changeDeckEntryKeywords,
       cleanseBanes,
       completeSite,
       dismissStartingDeckPopup,
