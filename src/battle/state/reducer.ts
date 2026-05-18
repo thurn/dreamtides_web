@@ -97,18 +97,17 @@ export function battleReducer(
         metadata,
         (mutableState) => {
           // Spec E-16/H-1/H-16: player card play must never be blocked for
-          // affordability, timing, or active side. `resolvePlayCard` enforces
-          // only that the card exists and is in a hand, then emits a
-          // rejection log on any other mismatch (bug-048). The UI layer
-          // blocks further plays after victory via the reward surface; defeat
-          // and draw remain editable by spec.
+          // affordability, timing, or active side. `resolvePlayCard` owns
+          // zone validation for hand plays and Reclaim plays from void, then
+          // emits a rejection log on any other mismatch (bug-048). The UI
+          // layer blocks further plays after victory via the reward surface;
+          // defeat and draw remain editable by spec.
           const card = mutableState.cardInstances[action.battleCardId];
           const location = selectBattleCardLocation(mutableState, action.battleCardId);
 
           if (
             card === undefined ||
-            location === null ||
-            location.zone !== "hand"
+            location === null
           ) {
             return {
               state: mutableState,

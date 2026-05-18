@@ -1150,6 +1150,66 @@ describe("battleReducer permissive PLAY_CARD / MOVE_CARD (E-16, H-1, H-16)", () 
     expect(Object.values(reduced.mutable.sides.player.reserve)).toContain(battleCardId);
   });
 
+  it("dispatches PLAY_CARD for a quest-modified character reclaimed from void", () => {
+    const baseState = makeBattleTestState();
+    const stateWithReclaim = {
+      ...baseState,
+      deck: baseState.deck.map((entry) =>
+        entry.entryId === "deck-2"
+          ? {
+              ...entry,
+              keywordModification: { reclaim: 2 },
+            }
+          : entry,
+      ),
+    };
+    const battleInit = createBattleInit({
+      battleEntryKey: "site-7::2::dreamscape-2",
+      site: makeBattleTestSite(),
+      state: stateWithReclaim,
+      cardDatabase: makeBattleTestCardDatabase(),
+      dreamcallers: makeBattleTestDreamcallers(),
+    });
+    const state = createInitialBattleState(battleInit);
+    const battleCardId = Object.values(state.cardInstances).find(
+      (card) => card.definition.sourceDeckEntryId === "deck-2",
+    )?.battleCardId;
+    if (battleCardId === undefined) throw new Error("Missing modified character card");
+
+    state.sides.player.deck = state.sides.player.deck.filter((id) => id !== battleCardId);
+    state.sides.player.hand = state.sides.player.hand.filter((id) => id !== battleCardId);
+    state.sides.player.void = [battleCardId];
+    state.sides.player.currentEnergy = 2;
+
+    const reduced = applyBattleCommand(
+      createBattleReducerState(state),
+      {
+        id: "PLAY_CARD",
+        battleCardId,
+        sourceSurface: "zone-browser-void",
+      },
+      battleInit,
+    );
+
+    expect(state.cardInstances[battleCardId].definition).toMatchObject({
+      battleCardKind: "character",
+      keywordModification: { reclaim: 2 },
+      reclaimCost: 2,
+    });
+    expect(reduced.mutable.sides.player.void).not.toContain(battleCardId);
+    expect(reduced.mutable.sides.player.reserve.R0).toBe(battleCardId);
+    expect(reduced.mutable.sides.player.currentEnergy).toBe(0);
+    expect(reduced.lastTransition?.metadata).toMatchObject({
+      commandId: "PLAY_CARD",
+      sourceSurface: "zone-browser-void",
+    });
+    expect(reduced.lastTransition?.logEvents[0].fields).toMatchObject({
+      battleCardId,
+      sourceZone: "void",
+      targetZone: "reserve",
+    });
+  });
+
   it("permits a debug MOVE_CARD on the enemy battlefield during an enemy main phase", () => {
     const { battleInit, state } = createTestBattle();
     state.activeSide = "enemy";
