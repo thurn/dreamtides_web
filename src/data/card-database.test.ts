@@ -100,7 +100,7 @@ describe("loadCardDatabase integration (real card-data.json)", () => {
     );
 
     const db = await loadCardDatabase();
-    expect(db.size).toBe(592);
+    expect(db.size).toBe(593);
   });
 
   it("every card has all required fields with correct types", async () => {
@@ -133,7 +133,13 @@ describe("loadCardDatabase integration (real card-data.json)", () => {
       ).toBe(true);
       expect(typeof card.isFast).toBe("boolean");
       expect(Array.isArray(card.tides)).toBe(true);
-      expect(card.tides.length).toBeGreaterThan(0);
+      // Draftable cards belong to at least one package tide. Special-rarity
+      // cards (bane content like Nightmare) ship as referenceable content
+      // for dream-journey effects rather than as draftable cards, so their
+      // tides list is allowed to be empty.
+      if (card.rarity !== "Special") {
+        expect(card.tides.length).toBeGreaterThan(0);
+      }
       for (const packageTideId of card.tides) {
         expect(typeof packageTideId).toBe("string");
         expect(packageTideId.length).toBeGreaterThan(0);
@@ -142,9 +148,10 @@ describe("loadCardDatabase integration (real card-data.json)", () => {
       expect(typeof card.imageNumber).toBe("number");
       expect(typeof card.artOwned).toBe("boolean");
       // Rarity is sourced from the TOML and propagates through setup-assets.
-      // Most cards have no rarity; only the Legendary and Starter buckets
-      // exist.
-      const validRarities = new Set(["Legendary", "Starter"]);
+      // Most cards have no rarity; the Legendary and Starter buckets ship as
+      // playable runtime content, and Special covers bane cards (Nightmare
+      // and any future entries) that journey effects reference by name.
+      const validRarities = new Set(["Legendary", "Starter", "Special"]);
       if (card.rarity !== undefined) {
         expect(validRarities.has(card.rarity)).toBe(true);
       }

@@ -103,21 +103,24 @@ function emptyContext(overrides: {
 
 // Cost ids that remain viable on the empty fixture. Zero-cost percentage and
 // all-remaining essence costs are payable from an empty purse. Battle/shop/
-// route modifiers and bane gains do not consume from state, so they never
-// vanish. Card-pool gains (e.g. `gain_random_cards_from_pool`) read from the
-// content catalog rather than quest state, so the empty quest leaves them
-// available. `meta_pay_2_costs` ANDs its sub-cost viability and is exercised
-// directly in the compound suite below with hand-picked sub-cost ids; the
-// general property test below skips it for that reason.
+// route modifiers do not consume from state, so they never vanish. Card-pool
+// gains (e.g. `gain_random_cards_from_pool`) read from the content catalog
+// rather than quest state, so the empty quest leaves them available.
+// `meta_pay_2_costs` ANDs its sub-cost viability and is exercised directly in
+// the compound suite below with hand-picked sub-cost ids; the general property
+// test below skips it for that reason.
+//
+// Bane-gain templates (gain_random_banes, gain_named_banes,
+// gain_named_banes_for_X_battles) gate on `availableBaneNames(ctx)` so they
+// decline when the content bundle has no bane cards. They are tested in
+// costs.banes.viability.test.ts with a fixture that loads at least one bane
+// card.
 const ALWAYS_VIABLE_ON_EMPTY: ReadonlySet<string> = new Set([
   "pay_max_essence",
   "pay_percent_essence",
   "pay_all_remaining_essence",
   "battle_reward_reduction_flat",
   "battle_reward_reduction_percent",
-  "gain_random_banes",
-  "gain_named_banes",
-  "gain_named_banes_for_X_battles",
   "gain_random_cards_from_pool",
   "gain_additional_starters",
   "remove_shop_sites_from_next_dreamscapes",

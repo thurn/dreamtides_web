@@ -5,7 +5,7 @@ import { makeUnlockedOption, type JourneyOption } from "../../manifest";
 import { COSTS, getCost } from "../../shared/costs";
 import { REWARDS } from "../../shared/rewards";
 import { drawInt, weightedChoice, type DrawContext } from "../../../util/rng";
-import { BANE_NAMES, essenceAmount } from "../../shared/content";
+import { BANE_NAMES, availableBaneNames, essenceAmount } from "../../shared/content";
 import { withLockedPrefix } from "../../shared/text";
 import type { Cost, Reward, TemplateParams } from "../../shared/types";
 import type { SharedCostPayload, SharedRewardPayload } from "../../../apply/payloads";
@@ -214,8 +214,20 @@ function inCostRange(cec: number, range: CostRange): boolean {
   return cec >= range.floor && cec <= range.ceiling;
 }
 
-function pickBaneName(draw: DrawContext, label: string): string {
-  return BANE_NAMES[drawInt(draw, label, 0, BANE_NAMES.length - 1)];
+function pickBaneName(
+  ctx: JourneyContext,
+  draw: DrawContext,
+  label: string,
+): string {
+  // Filter to bane names whose card is present in the content catalog so the
+  // rolled name matches what `apply` will actually add to the deck. Production
+  // ships only `Nightmare`; fixture tests load every entry in `BANE_NAMES`.
+  // Falls back to BANE_NAMES[0] if the catalog has zero bane cards — the
+  // surrounding cost templates' `viable` predicate already gates that case,
+  // so reaching this fallback in production would be a content regression.
+  const pool = availableBaneNames(ctx);
+  const source = pool.length > 0 ? pool : BANE_NAMES;
+  return source[drawInt(draw, label, 0, source.length - 1)];
 }
 
 function snapPayFloor(value: number): number {
@@ -282,7 +294,7 @@ function rollCostParamsForRewardCap(
     const viable = [1, 2, 3].filter((count) => inCostRange(count * 30, range));
     if (viable.length === 0) return undefined;
     return {
-      baneName: pickBaneName(draw, "gain_named_banes:b"),
+      baneName: pickBaneName(ctx, draw, "gain_named_banes:b"),
       count: viable[drawInt(draw, "gain_named_banes:n", 0, viable.length - 1)],
     };
   }
@@ -298,7 +310,7 @@ function rollCostParamsForRewardCap(
     if (viable.length === 0) return undefined;
     const picked = viable[drawInt(draw, "gain_named_banes_t:i", 0, viable.length - 1)];
     return {
-      baneName: pickBaneName(draw, "gain_named_banes_t:b"),
+      baneName: pickBaneName(ctx, draw, "gain_named_banes_t:b"),
       count: picked.count,
       battles: picked.battles,
     };

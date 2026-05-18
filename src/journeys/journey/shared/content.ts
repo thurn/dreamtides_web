@@ -90,6 +90,24 @@ export function baneCount(ctx: JourneyContext): number {
   return ctx.state.quest.banes.length;
 }
 
+/**
+ * The subset of `BANE_NAMES` whose bane has a content card present in the
+ * loaded catalog. Bane-rolling code paths (`gain_random_banes`,
+ * `gain_named_banes`, `gain_named_banes_for_X_battles`) must roll from this
+ * list — rolling a bane that has no content card lands the apply step in a
+ * `console.warn` and a deck mutation that no-ops, leaving the player with no
+ * visible bane. The runtime catalog currently ships only `Nightmare`, so this
+ * filter narrows live play to `Nightmare`; fixture-based tests that load
+ * synthetic bane cards for every entry in `BANE_NAMES` see the full list.
+ *
+ * The lookup is a linear scan because the catalog has under 1k cards and the
+ * filter is invoked at most a handful of times per dream-journey roll.
+ */
+export function availableBaneNames(ctx: JourneyContext): readonly string[] {
+  const cardNames = new Set(ctx.content.cards.map((card) => card.name));
+  return BANE_NAMES.filter((name) => cardNames.has(name));
+}
+
 export function pickFromList<T>(
   draw: DrawContext,
   label: string,

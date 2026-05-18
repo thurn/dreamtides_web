@@ -415,6 +415,114 @@ describe("Bane cost apply", () => {
       },
     ]);
   });
+
+  // Regression: backlog/008. The runtime card catalog ships only `Nightmare`
+  // as a bane card; the other 10 names in `BANE_NAMES` are documented but not
+  // yet present as cards. The fix gates bane-rolling on `availableBaneNames`
+  // so every bane-cost roll lands on a name whose card the apply step can
+  // actually add. Without the fix, the random-roll path lands on a missing
+  // name ~91% of the time and silently no-ops.
+  describe("backlog/008: production-like catalog with only Nightmare as bane card", () => {
+    function nightmareOnlyCards(): readonly CardContent[] {
+      return [
+        {
+          id: "nightmare-card",
+          name: "Nightmare",
+          tides: [],
+          rarity: "Special",
+          cardType: "Event",
+          energyCost: 2,
+          spark: "",
+          cardNumber: 222,
+          raw: {},
+        },
+      ];
+    }
+
+    it("gain_random_banes: every iteration adds the Nightmare bane card (no skipped rolls)", () => {
+      const t = getCost("gain_random_banes");
+      const ctx = buildContext({ cards: nightmareOnlyCards() });
+      const { mut, calls } = createRecordingMutations();
+      t.apply({ count: 5 }, ctx, mut, undefined);
+
+      expect(calls).toHaveLength(5);
+      for (const call of calls) {
+        expect(call).toEqual({
+          method: "addBaneCardById",
+          args: ["nightmare-card", "dream_journey:gain_random_banes"],
+        });
+      }
+    });
+
+    it("gain_named_banes rollParams picks Nightmare when it is the only bane in the catalog", () => {
+      const t = getCost("gain_named_banes");
+      const ctx = buildContext({ cards: nightmareOnlyCards() });
+      const draw = {
+        seed: "regression-008",
+        contentVersion: "test",
+        rootJourneyIndex: 0,
+      };
+      const params = t.rollParams(ctx, draw) as {
+        baneName: string;
+        count: number;
+      };
+      expect(params.baneName).toBe("Nightmare");
+
+      const { mut, calls } = createRecordingMutations();
+      t.apply(params, ctx, mut, undefined);
+      expect(calls.length).toBe(params.count);
+      for (const call of calls) {
+        expect(call).toEqual({
+          method: "addBaneCardById",
+          args: ["nightmare-card", "dream_journey:gain_named_banes"],
+        });
+      }
+    });
+
+    it("gain_named_banes_for_X_battles rollParams picks Nightmare, apply forwards to pushTemporaryBaneGrant", () => {
+      const t = getCost("gain_named_banes_for_X_battles");
+      const ctx = buildContext({ cards: nightmareOnlyCards() });
+      const draw = {
+        seed: "regression-008",
+        contentVersion: "test",
+        rootJourneyIndex: 0,
+      };
+      const params = t.rollParams(ctx, draw) as {
+        baneName: string;
+        count: number;
+        battles: number;
+      };
+      expect(params.baneName).toBe("Nightmare");
+
+      const { mut, calls } = createRecordingMutations();
+      t.apply(params, ctx, mut, undefined);
+      expect(calls).toEqual([
+        {
+          method: "pushTemporaryBaneGrant",
+          args: [
+            "Nightmare",
+            params.count,
+            params.battles,
+            "dream_journey:gain_named_banes_for_X_battles",
+          ],
+        },
+      ]);
+    });
+
+    it("bane gain costs decline when the catalog has zero bane cards", () => {
+      const ctx = buildContext({ cards: [] });
+      for (const id of [
+        "gain_random_banes",
+        "gain_named_banes",
+        "gain_named_banes_for_X_battles",
+      ] as const) {
+        const t = getCost(id);
+        const draw = { seed: id, contentVersion: "test", rootJourneyIndex: 0 };
+        const params = t.rollParams(ctx, draw);
+        expect(t.viable(params, ctx), id).toBe(false);
+      }
+    });
+  });
 });
 
 describe("Card cost apply (non-choice)", () => {

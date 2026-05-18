@@ -48,6 +48,7 @@ import { CARD_CEC, STAGE_MULTIPLIER, cardPoolCEC } from "./cec";
 import {
   BANE_NAMES,
   activeDreamsignCount,
+  availableBaneNames,
   cardMatches,
   essenceAmount,
   maxEssence,
@@ -114,12 +115,22 @@ function resolveBaneCardId(ctx: JourneyContext, baneName: string): string | unde
   return ctx.content.cards.find((card) => card.name === baneName)?.id;
 }
 
-// Roll a bane name from the controlled vocabulary. Wave 1's `gain_random_banes`
-// apply rolls per-iteration via `Math.random` for the same reason
-// `rollIntInclusive` does (the option-level seed governs rollParams, not the
-// apply step). Future tasks may plumb a labeled-RNG through the apply path.
-function rollBaneName(): string {
-  return BANE_NAMES[Math.floor(Math.random() * BANE_NAMES.length)];
+// Roll a bane name from the subset of `BANE_NAMES` whose bane has a content
+// card present in the loaded catalog. Rolling outside that subset routes the
+// apply step into a `console.warn` and a no-op deck mutation, so the player
+// sees no bane card.
+//
+// Wave 1's `gain_random_banes` apply rolls per-iteration via `Math.random`
+// for the same reason `rollIntInclusive` does (the option-level seed governs
+// rollParams, not the apply step). Future tasks may plumb a labeled-RNG
+// through the apply path.
+//
+// Returns `undefined` when no bane in `BANE_NAMES` has a content card; the
+// caller treats that as "no bane to add this iteration".
+function rollBaneName(ctx: JourneyContext): string | undefined {
+  const available = availableBaneNames(ctx);
+  if (available.length === 0) return undefined;
+  return available[Math.floor(Math.random() * available.length)];
 }
 
 export function pickUniqueCardIds(
@@ -937,17 +948,29 @@ const gainRandomBanes: Cost<GainRandomBanesParams> = {
   weight: BANE_GAIN_RANDOM_TRADE_COST_WEIGHT,
   rollParams: (_ctx, draw) => ({ count: drawInt(draw, "gain_random_banes:n", 1, 3) }),
   cec: (p) => p.count * 30,
-  // Bane-gain costs never lock or vanish: BANE_NAMES is a controlled
-  // vocabulary that always has entries, and a player cannot refuse to
-  // accept a bane.
-  viable: () => true,
+  // Bane-gain costs gate on whether *any* bane in `BANE_NAMES` has a content
+  // card in the loaded catalog. With at least one available bane, the player
+  // cannot refuse to accept it, so `locked` stays false. The runtime catalog
+  // ships `Nightmare` (with the other 10 specialized banes documented in
+  // `docs/quests/banes.md` but not yet present as cards), so this is true in
+  // production.
+  viable: (_p, ctx) => availableBaneNames(ctx).length > 0,
   locked: () => false,
   render: (p) => `Gain ${p.count} random bane${p.count === 1 ? "" : "s"}`,
   apply: (p, ctx, mut) => {
     for (let i = 0; i < p.count; i += 1) {
-      const baneName = rollBaneName();
+      const baneName = rollBaneName(ctx);
+      if (baneName === undefined) {
+        console.warn(
+          "[dream-journey] gain_random_banes: no bane in BANE_NAMES has a content card",
+        );
+        continue;
+      }
       const cardId = resolveBaneCardId(ctx, baneName);
       if (cardId === undefined) {
+        // availableBaneNames filtered to names present in content; reaching
+        // here means the catalog changed between filter and resolve, which
+        // should not happen in a single apply call.
         console.warn(
           `[dream-journey] gain_random_banes: no content card matches bane name '${baneName}'`,
         );
@@ -962,12 +985,17 @@ type GainNamedBanesParams = { baneName: string; count: number };
 const gainNamedBanes: Cost<GainNamedBanesParams> = {
   id: "gain_named_banes",
   weight: BANE_GAIN_RANDOM_TRADE_COST_WEIGHT,
-  rollParams: (_ctx, draw) => ({
-    baneName: pickFromList(draw, "gain_named_banes:b", BANE_NAMES),
-    count: drawInt(draw, "gain_named_banes:n", 1, 3),
-  }),
+  rollParams: (ctx, draw) => {
+    const pool = availableBaneNames(ctx);
+    return {
+      baneName: pool.length > 0
+        ? pickFromList(draw, "gain_named_banes:b", pool)
+        : BANE_NAMES[0],
+      count: drawInt(draw, "gain_named_banes:n", 1, 3),
+    };
+  },
   cec: (p) => p.count * 30,
-  viable: () => true,
+  viable: (_p, ctx) => availableBaneNames(ctx).length > 0,
   locked: () => false,
   render: (p) => `Gain ${p.count} ${quoteName(p.baneName)}`,
   apply: (p, ctx, mut) => {
@@ -988,13 +1016,18 @@ type GainNamedBanesXBattlesParams = { baneName: string; count: number; battles: 
 const gainNamedBanesForXBattles: Cost<GainNamedBanesXBattlesParams> = {
   id: "gain_named_banes_for_X_battles",
   weight: BANE_GAIN_RANDOM_TRADE_COST_WEIGHT,
-  rollParams: (_ctx, draw) => ({
-    baneName: pickFromList(draw, "gain_named_banes_t:b", BANE_NAMES),
-    count: drawInt(draw, "gain_named_banes_t:n", 1, 2),
-    battles: drawInt(draw, "gain_named_banes_t:t", 1, 3),
-  }),
+  rollParams: (ctx, draw) => {
+    const pool = availableBaneNames(ctx);
+    return {
+      baneName: pool.length > 0
+        ? pickFromList(draw, "gain_named_banes_t:b", pool)
+        : BANE_NAMES[0],
+      count: drawInt(draw, "gain_named_banes_t:n", 1, 2),
+      battles: drawInt(draw, "gain_named_banes_t:t", 1, 3),
+    };
+  },
   cec: (p) => p.count * 25 * p.battles * 0.5,
-  viable: () => true,
+  viable: (_p, ctx) => availableBaneNames(ctx).length > 0,
   locked: () => false,
   render: (p) =>
     `Gain ${p.count} ${quoteName(p.baneName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,

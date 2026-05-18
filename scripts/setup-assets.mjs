@@ -69,6 +69,35 @@ export function transformCard(card) {
 export const DEFAULT_STARTING_ESSENCE = 250;
 
 /**
+ * Bane card names that must be retained in the runtime card catalog despite
+ * their `Special` rarity. Dream-journey effects (`gain_random_banes`,
+ * `gain_named_banes`, `gain_named_banes_for_X_battles`) resolve a bane name
+ * to a content card and add it to the player's deck; without these names in
+ * `card-data.json` the apply step finds no card and silently no-ops the deck
+ * mutation. The catalog currently ships `Nightmare`; other entries
+ * (Despair, Oblivion, ...) are documented in `docs/quests/banes.md` and will
+ * land as content cards in a future content drop.
+ *
+ * Mirrors `BANE_NAMES` in `src/journeys/journey/effects.ts`. Keep the two in
+ * sync; the runtime filter in `availableBaneNames` already gates rolling on
+ * "this name has a card in the bundle", so adding a new bane card to the
+ * TOML and to this set automatically lights it up in dream-journey rolls.
+ */
+export const BANE_NAMES = new Set([
+  "Nightmare",
+  "Despair",
+  "Oblivion",
+  "Betrayal",
+  "Envy",
+  "Doubt",
+  "Silence",
+  "Paranoia",
+  "Burden",
+  "Paralysis",
+  "Lethargy",
+]);
+
+/**
  * Convert a TOML Dreamcaller record to its JSON representation with camelCase keys.
  * Records without a `starting-essence` value are filled in with
  * `DEFAULT_STARTING_ESSENCE` so the runtime always sees a number.
@@ -178,8 +207,13 @@ export function setupAssets({
 
   console.log(`Found ${allCards.length} total cards`);
 
-  // Filter out Special cards from the runtime pool.
-  const cards = allCards.filter((c) => c.rarity !== "Special");
+  // Filter out Special-rarity cards from the runtime pool, except for bane
+  // cards: bane content (Nightmare and any future entries) is required by
+  // dream-journey effects that add bane cards to the deck. Non-bane Special
+  // cards (e.g. the Void Indicator placeholder) stay excluded.
+  const cards = allCards.filter(
+    (c) => c.rarity !== "Special" || BANE_NAMES.has(c.name),
+  );
   console.log(`Filtered to ${cards.length} runtime cards`);
 
   // Transform to camelCase JSON

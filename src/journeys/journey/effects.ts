@@ -880,7 +880,13 @@ function candidateCards(
     });
   }
 
-  return [...content.cards];
+  // Catalog-source candidates exclude Special-rarity content (bane cards like
+  // Nightmare): banes ship in `card-data.json` as referenceable content for
+  // `addBaneCardById` / `pushTemporaryBaneGrant` to add to the deck on demand,
+  // not as draftable / reward-pool candidates. Without this filter, a
+  // catalog-source predicate like "random Event card" would occasionally roll
+  // a bane card as a reward.
+  return content.cards.filter((card) => card.rarity !== "Special");
 }
 
 export function resolveCardTargets(

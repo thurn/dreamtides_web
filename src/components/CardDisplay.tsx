@@ -40,6 +40,9 @@ const RARITY_STYLES: Readonly<Record<Rarity, RarityStyle | null>> = {
     outlineWidthPx: 2,
     cssClass: "card-rarity-legendary",
   },
+  // Bane content (Special rarity) renders with the bane indicator chrome in
+  // the deck viewer rather than a rarity frame. No additional outline / glow.
+  Special: null,
 };
 
 function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {

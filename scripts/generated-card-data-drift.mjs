@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
-import { transformCard } from "./setup-assets.mjs";
+import { BANE_NAMES, transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 
@@ -76,8 +76,11 @@ export function expectedCardDataFromToml({ rootDir = ROOT } = {}) {
     throw new Error("Expected [[cards]] array in rendered-cards.toml");
   }
 
+  // Mirror the runtime filter in setup-assets.mjs: Special-rarity cards are
+  // excluded from the runtime pool, except for bane cards (their content is
+  // required by dream-journey bane-gain effects).
   return allCards
-    .filter((card) => card.rarity !== "Special")
+    .filter((card) => card.rarity !== "Special" || BANE_NAMES.has(card.name))
     .map(transformCard);
 }
 
