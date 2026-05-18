@@ -1,7 +1,5 @@
 import { useCallback, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { TideChip } from "../components/TideChip";
-import type { PackageTideId } from "../types/content";
 import type {
   CardSourceDebugEntry,
   CardSourceDebugState,
@@ -13,46 +11,20 @@ interface CardSourceOverlayProps {
   onClose: () => void;
 }
 
-/**
- * Read a tide array off a `CardSourceDebugEntry` defensively.
- *
- * Firebase Realtime Database silently drops empty arrays on write. A
- * round-tripped fallback entry (no mandatory and no optional matches) will
- * therefore arrive with `matchedMandatoryTides`, `matchedOptionalTides`, or
- * `cardTides` set to `undefined`. The `room-service` normalizer restores
- * them, but the overlay coerces to `[]` here too so a stale snapshot or a
- * mis-shaped entry from any source cannot crash the render.
- */
-function readTides(
-  entry: CardSourceDebugEntry,
-  field: "matchedMandatoryTides" | "matchedOptionalTides" | "cardTides",
-): PackageTideId[] {
-  return entry[field] ?? [];
-}
-
-function matchedTides(entry: CardSourceDebugEntry): string[] {
-  return [
-    ...readTides(entry, "matchedMandatoryTides"),
-    ...readTides(entry, "matchedOptionalTides"),
-  ];
-}
-
 function surfaceCopy(surface: CardSourceDebugState["surface"]): string {
   switch (surface) {
     case "Draft":
-      return "Draft cards come directly from your resolved package pool.";
+      return "Draft cards come directly from your dreamcaller's pool.";
     case "Shop":
     case "SpecialtyShop":
-      return "Shop cards prefer selected package tides and fall back to the broader pool only when needed.";
+      return "Shop cards prefer cards from your dreamcaller's pool, falling back to the broader pool only when needed.";
     case "BattleReward":
     case "Reward":
-      return "Rewards prefer selected package tides and fall back when no overlap is available.";
+      return "Rewards prefer cards from your dreamcaller's pool, falling back to the broader pool when none match.";
   }
 }
 
 function CardExplanation({ entry }: { entry: CardSourceDebugEntry }) {
-  const selectedTides = matchedTides(entry);
-
   return (
     <div
       className="rounded-xl p-3"
@@ -68,42 +40,29 @@ function CardExplanation({ entry }: { entry: CardSourceDebugEntry }) {
           </p>
           <p className="text-[11px] opacity-50">#{String(entry.cardNumber)}</p>
         </div>
-        {entry.isFallback ? (
-          <TideChip label="fallback" variant="neutral" />
-        ) : (
-          <TideChip label="selected" variant="required" />
-        )}
+        <span
+          className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+          style={{
+            background: entry.isFallback
+              ? "rgba(148, 163, 184, 0.22)"
+              : "rgba(168, 85, 247, 0.28)",
+            color: entry.isFallback ? "#cbd5e1" : "#f1f5f9",
+            border: `1px solid ${
+              entry.isFallback
+                ? "rgba(148, 163, 184, 0.4)"
+                : "rgba(168, 85, 247, 0.45)"
+            }`,
+          }}
+        >
+          {entry.isFallback ? "Fallback" : "On theme"}
+        </span>
       </div>
 
-      {selectedTides.length > 0 ? (
-        <>
-          <p className="mt-3 text-[11px] font-medium uppercase tracking-wide opacity-60">
-            Matching selected tides
-          </p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {readTides(entry, "matchedMandatoryTides").map((tide) => (
-              <TideChip key={`required-${tide}`} label={tide} variant="required" />
-            ))}
-            {readTides(entry, "matchedOptionalTides").map((tide) => (
-              <TideChip key={`optional-${tide}`} label={tide} variant="optional" />
-            ))}
-          </div>
-        </>
-      ) : (
-        <p className="mt-3 text-xs opacity-70">
-          No selected tide overlap. This card is being shown as a broader-pool
-          fallback.
-        </p>
-      )}
-
-      <p className="mt-3 text-[11px] font-medium uppercase tracking-wide opacity-60">
-        Card tide ids
+      <p className="mt-3 text-xs opacity-70">
+        {entry.isFallback
+          ? "Drawn from the broader pool because no on-theme match was available."
+          : "Matches your dreamcaller's pool."}
       </p>
-      <div className="mt-2 flex flex-wrap gap-1.5">
-        {readTides(entry, "cardTides").map((tide) => (
-          <TideChip key={`card-${tide}`} label={tide} variant="neutral" />
-        ))}
-      </div>
     </div>
   );
 }
@@ -176,7 +135,7 @@ export function CardSourceOverlay({
               onClick={handleClose}
               aria-label="Close card source overlay"
             >
-              {"\u2715"}
+              {"✕"}
             </button>
           </div>
 

@@ -208,10 +208,7 @@ export function HUD({
             <div
               className="pointer-events-none absolute bottom-full left-0 z-30 mb-3 hidden origin-bottom-left opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 lg:block"
             >
-              <DreamcallerPopover
-                dreamcaller={state.dreamcaller}
-                resolvedPackage={state.resolvedPackage}
-              />
+              <DreamcallerPopover dreamcaller={state.dreamcaller} />
             </div>
           )}
         </div>

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { TideChip } from "../components/TideChip";
 import type { Dreamsign } from "../types/quest";
 import type { DreamsignTemplate, PackageTideId } from "../types/content";
 
@@ -18,15 +17,8 @@ interface DreamsignSourceOverlayProps {
 interface DreamsignSourceEntry {
   id: string;
   name: string;
-  packageTides: PackageTideId[];
-  matchedMandatoryTides: PackageTideId[];
-  matchedOptionalTides: PackageTideId[];
   isFallback: boolean;
   hasTemplate: boolean;
-}
-
-function sortTides(tides: readonly string[]): string[] {
-  return [...tides].sort((a, b) => a.localeCompare(b));
 }
 
 function buildEntry(
@@ -36,20 +28,12 @@ function buildEntry(
   optionalTides: Set<PackageTideId>,
 ): DreamsignSourceEntry {
   const tides = template?.packageTides ?? [];
-  const matchedMandatoryTides = tides.filter((tide) =>
-    mandatoryTides.has(tide),
-  );
-  const matchedOptionalTides = tides.filter((tide) =>
-    optionalTides.has(tide),
-  );
+  const hasMandatoryMatch = tides.some((tide) => mandatoryTides.has(tide));
+  const hasOptionalMatch = tides.some((tide) => optionalTides.has(tide));
   return {
     id: dreamsign.id ?? dreamsign.name,
     name: dreamsign.name,
-    packageTides: sortTides(tides),
-    matchedMandatoryTides: sortTides(matchedMandatoryTides),
-    matchedOptionalTides: sortTides(matchedOptionalTides),
-    isFallback:
-      matchedMandatoryTides.length === 0 && matchedOptionalTides.length === 0,
+    isFallback: !hasMandatoryMatch && !hasOptionalMatch,
     hasTemplate: template !== undefined,
   };
 }
@@ -67,47 +51,31 @@ function DreamsignExplanation({ entry }: { entry: DreamsignSourceEntry }) {
         <p className="text-sm font-semibold" style={{ color: "#f8fafc" }}>
           {entry.name}
         </p>
-        {entry.isFallback ? (
-          <TideChip label="fallback" variant="neutral" />
-        ) : (
-          <TideChip label="selected" variant="required" />
-        )}
+        <span
+          className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+          style={{
+            background: entry.isFallback
+              ? "rgba(148, 163, 184, 0.22)"
+              : "rgba(168, 85, 247, 0.28)",
+            color: entry.isFallback ? "#cbd5e1" : "#f1f5f9",
+            border: `1px solid ${
+              entry.isFallback
+                ? "rgba(148, 163, 184, 0.4)"
+                : "rgba(168, 85, 247, 0.45)"
+            }`,
+          }}
+        >
+          {entry.isFallback ? "Fallback" : "On theme"}
+        </span>
       </div>
 
-      {entry.matchedMandatoryTides.length + entry.matchedOptionalTides.length > 0 ? (
-        <>
-          <p className="mt-3 text-[11px] font-medium uppercase tracking-wide opacity-60">
-            Matching selected tides
-          </p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {entry.matchedMandatoryTides.map((tide) => (
-              <TideChip key={`required-${tide}`} label={tide} variant="required" />
-            ))}
-            {entry.matchedOptionalTides.map((tide) => (
-              <TideChip key={`optional-${tide}`} label={tide} variant="optional" />
-            ))}
-          </div>
-        </>
-      ) : (
-        <p className="mt-3 text-xs opacity-70">
-          {entry.hasTemplate
-            ? "No selected tide overlap. This dreamsign is being shown as a broader-pool fallback."
-            : "This dreamsign has no entry in the loaded catalog and is treated as a fallback."}
-        </p>
-      )}
-
-      {entry.packageTides.length > 0 && (
-        <>
-          <p className="mt-3 text-[11px] font-medium uppercase tracking-wide opacity-60">
-            Dreamsign tide ids
-          </p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {entry.packageTides.map((tide) => (
-              <TideChip key={`tide-${tide}`} label={tide} variant="neutral" />
-            ))}
-          </div>
-        </>
-      )}
+      <p className="mt-3 text-xs opacity-70">
+        {entry.isFallback
+          ? entry.hasTemplate
+            ? "Drawn from the broader pool because no on-theme dreamsign was available."
+            : "This dreamsign has no entry in the loaded catalog and is treated as a fallback."
+          : "Matches your dreamcaller's dreamsign pool."}
+      </p>
     </div>
   );
 }

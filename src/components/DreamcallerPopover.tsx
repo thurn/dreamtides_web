@@ -1,4 +1,3 @@
-import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { Dreamcaller } from "../types/quest";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { RulesText } from "./RulesText";
@@ -7,15 +6,10 @@ const ACCENT_COLOR = "#a855f7";
 
 interface DreamcallerPopoverProps {
   dreamcaller: Dreamcaller;
-  resolvedPackage: ResolvedDreamcallerPackage | null;
 }
 
-export function DreamcallerPopover({
-  dreamcaller,
-  resolvedPackage,
-}: DreamcallerPopoverProps) {
+export function DreamcallerPopover({ dreamcaller }: DreamcallerPopoverProps) {
   const accentColor = ACCENT_COLOR;
-  const tideBadges = resolvedPackage?.selectedTides.slice(0, 3) ?? [];
 
   return (
     <div
@@ -41,14 +35,8 @@ export function DreamcallerPopover({
         />
         <div className="relative flex items-start gap-3">
           <div>
-            <p
-              className="text-[10px] font-semibold uppercase tracking-[0.22em]"
-              style={{ color: "#cbd5f5" }}
-            >
-              Dreamcaller
-            </p>
             <h3
-              className="mt-1 text-lg font-bold leading-tight"
+              className="text-lg font-bold leading-tight"
               style={{ color: "#f8fafc" }}
             >
               {dreamcaller.name}
@@ -77,23 +65,6 @@ export function DreamcallerPopover({
       </div>
 
       <div className="px-4 py-4">
-        {tideBadges.length > 0 && (
-          <div className="mb-3 flex flex-wrap gap-1.5">
-            {tideBadges.map((packageTideId) => (
-              <span
-                key={packageTideId}
-                className="rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide"
-                style={{
-                  background: `${accentColor}22`,
-                  border: `1px solid ${accentColor}44`,
-                  color: "#f1f5f9",
-                }}
-              >
-                {packageTideId.split("_").join(" ")}
-              </span>
-            ))}
-          </div>
-        )}
         <div
           className="text-sm leading-relaxed"
           style={{ color: "#e2e8f0" }}

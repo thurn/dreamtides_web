@@ -156,7 +156,7 @@ export function ShopScreen({ site }: ShopScreenProps) {
         </h2>
         {isSpecialty && runtime.restrictedTide !== null && (
           <p className="mt-1 text-sm opacity-50">
-            {`Featuring the ${runtime.restrictedTide} tide`}
+            Themed selection
           </p>
         )}
         {site.isEnhanced && (

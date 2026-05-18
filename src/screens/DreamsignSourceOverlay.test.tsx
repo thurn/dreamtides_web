@@ -119,7 +119,7 @@ describe("DreamsignSourceOverlay", () => {
     });
   });
 
-  it("labels dreamsigns matching a selected tide as selected and shows their matched tides", () => {
+  it("labels on-theme dreamsigns without exposing internal tide ids", () => {
     const { container, root } = mount(
       <DreamsignSourceOverlay
         isOpen
@@ -133,16 +133,17 @@ describe("DreamsignSourceOverlay", () => {
       />,
     );
 
-    expect(container.textContent).toContain("selected");
-    expect(container.textContent).toContain("core");
-    expect(container.textContent).toContain("support-a");
+    expect(container.textContent).toContain("On theme");
+    expect(container.textContent ?? "").not.toMatch(/tide/i);
+    expect(container.textContent ?? "").not.toContain("core");
+    expect(container.textContent ?? "").not.toContain("support-a");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("labels dreamsigns with no overlapping selected tide as fallback", () => {
+  it("labels dreamsigns with no overlapping selected tide as fallback without revealing tide ids", () => {
     const { container, root } = mount(
       <DreamsignSourceOverlay
         isOpen
@@ -156,8 +157,9 @@ describe("DreamsignSourceOverlay", () => {
       />,
     );
 
-    expect(container.textContent).toContain("fallback");
-    expect(container.textContent).toContain("outsider");
+    expect(container.textContent).toContain("Fallback");
+    expect(container.textContent ?? "").not.toMatch(/tide/i);
+    expect(container.textContent ?? "").not.toContain("outsider");
 
     act(() => {
       root.unmount();
@@ -346,8 +348,8 @@ describe("DreamsignSourceOverlay", () => {
     );
 
     expect(container.textContent).toContain("Mystery");
-    // missing-template entries should be shown as fallback (no tide overlap data)
-    expect(container.textContent).toContain("fallback");
+    // missing-template entries should be shown as fallback (no overlap data)
+    expect(container.textContent).toContain("Fallback");
 
     act(() => {
       root.unmount();

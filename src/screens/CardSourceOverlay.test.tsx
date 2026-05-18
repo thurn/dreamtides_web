@@ -79,7 +79,7 @@ afterEach(() => {
 });
 
 describe("CardSourceOverlay", () => {
-  it("renders matched tides and fallback explanations for visible cards", () => {
+  it("labels on-theme and fallback cards without exposing internal tide ids", () => {
     const { container, root } = mount(
       <CardSourceOverlay
         cardSourceDebug={makeOverlayState()}
@@ -91,10 +91,14 @@ describe("CardSourceOverlay", () => {
     expect(container.textContent).toContain("Why am I seeing these cards?");
     expect(container.textContent).toContain("Shop Offers");
     expect(container.textContent).toContain("Lantern Broker");
-    expect(container.textContent).toContain("core");
-    expect(container.textContent).toContain("support-a");
+    expect(container.textContent).toContain("On theme");
     expect(container.textContent).toContain("Driftbound Relic");
-    expect(container.textContent).toContain("broader-pool fallback");
+    expect(container.textContent).toContain("Fallback");
+    // The overlay must not surface internal tide taxonomy to the player.
+    expect(container.textContent ?? "").not.toMatch(/tide/i);
+    expect(container.textContent ?? "").not.toContain("core");
+    expect(container.textContent ?? "").not.toContain("support-a");
+    expect(container.textContent ?? "").not.toContain("outsider");
 
     act(() => {
       root.unmount();
@@ -105,8 +109,7 @@ describe("CardSourceOverlay", () => {
     // Realtime Database silently drops empty arrays on write, so a
     // round-tripped fallback entry arrives with `matchedMandatoryTides`,
     // `matchedOptionalTides`, and `cardTides` set to `undefined`. The
-    // overlay coerces missing arrays to `[]` so a stale snapshot cannot
-    // crash the render with `is not iterable`.
+    // overlay must still render its summary chip without crashing.
     const strippedFallback = {
       cardNumber: 99,
       cardName: "Stripped Fallback",
@@ -137,7 +140,7 @@ describe("CardSourceOverlay", () => {
     expect(container.textContent).toContain("Why am I seeing these cards?");
     expect(container.textContent).toContain("Stripped Fallback");
     expect(container.textContent).toContain("Empty Arrays");
-    expect(container.textContent).toContain("broader-pool fallback");
+    expect(container.textContent).toContain("Fallback");
 
     act(() => {
       root.unmount();
