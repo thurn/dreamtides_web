@@ -200,8 +200,11 @@ function runtimeSlotPrice(slot: {
   itemType: "card" | "dreamsign";
   basePrice: number;
   discountPercent: number;
-}, essenceDiscountPercent: number): number {
-  return effectivePrice(slot, { essenceDiscountPercent });
+}, modifiers: {
+  essenceDiscountPercent: number;
+  upcomingOmenDiscounts?: number;
+}): number {
+  return effectivePrice(slot, modifiers);
 }
 
 function nextDeckEntryId(deck: readonly DeckEntry[]): string {
@@ -2013,12 +2016,20 @@ export function MultiplayerQuestProvider({
             return room;
           }
 
-          const price = runtimeSlotPrice(
-            slot,
-            room.questState.shopModifiers.essenceDiscountPercent,
-          );
+          const priceBeforeOmenDiscount = runtimeSlotPrice(slot, {
+            essenceDiscountPercent:
+              room.questState.shopModifiers.essenceDiscountPercent,
+          });
+          const price = runtimeSlotPrice(slot, {
+            essenceDiscountPercent:
+              room.questState.shopModifiers.essenceDiscountPercent,
+            upcomingOmenDiscounts:
+              room.questState.shopModifiers.upcomingOmenDiscounts,
+          });
           // Cards cost essence; Dreamsigns cost omens.
           const payInOmens = slot.itemType === "dreamsign";
+          const omenDiscountApplied =
+            payInOmens && price < priceBeforeOmenDiscount;
           const availableCurrency = payInOmens
             ? room.questState.omens
             : room.questState.essence;
@@ -2039,10 +2050,18 @@ export function MultiplayerQuestProvider({
             return room;
           }
 
+          const upcomingOmenDiscounts =
+            payInOmens && omenDiscountApplied
+              ? room.questState.shopModifiers.upcomingOmenDiscounts - 1
+              : room.questState.shopModifiers.upcomingOmenDiscounts;
           let next: QuestState = payInOmens
             ? {
                 ...room.questState,
                 omens: room.questState.omens - price,
+                shopModifiers: {
+                  ...room.questState.shopModifiers,
+                  upcomingOmenDiscounts,
+                },
               }
             : {
                 ...room.questState,
@@ -2059,6 +2078,10 @@ export function MultiplayerQuestProvider({
             discountedPrice: price,
             currency: payInOmens ? "omens" : "essence",
           };
+          if (payInOmens) {
+            summary.omenDiscountApplied = omenDiscountApplied;
+            summary.upcomingOmenDiscountsRemaining = upcomingOmenDiscounts;
+          }
 
           if (slot.itemType === "card") {
             next = {

@@ -10,6 +10,7 @@ import type { ResolvedDreamcallerPackage } from "../types/content";
 import type {
   DreamAtlas,
   DreamscapeNode,
+  Dreamsign,
   QuestState,
   SiteState,
 } from "../types/quest";
@@ -37,6 +38,15 @@ function makeCard(cardNumber: number, name?: string): CardData {
     renderedText: "Test card.",
     imageNumber: cardNumber,
     artOwned: true,
+  };
+}
+
+function makeDreamsign(id: string, name: string): Dreamsign {
+  return {
+    id,
+    name,
+    effectDescription: `${name} effect.`,
+    isBane: false,
   };
 }
 
@@ -440,6 +450,94 @@ describe("buyShopSlot essence discounts", () => {
       throw new Error("Expected shop runtime");
     }
     expect(runtime.slots[0]?.purchased).toBe(true);
+  });
+});
+
+describe("buyShopSlot omen discounts", () => {
+  it("spends one upcoming omen discount on a positive Dreamsign omen price", () => {
+    const dreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const site = makeSite("shop-site", "Shop");
+    const node = makeNode("dreamscape-1", [site]);
+    const initialState: QuestState = {
+      ...createDefaultState(),
+      atlas: makeAtlasWithCurrent(node),
+      currentDreamscape: node.id,
+      omens: 2,
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 1,
+        essenceDiscountPercent: 0,
+      },
+      siteRuntime: {
+        [site.id]: {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "dreamsign",
+              dreamsign,
+              basePrice: 2,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+          restrictedTide: null,
+        },
+      },
+    };
+    const quest = mountQuestContext({ initialState });
+
+    act(() => {
+      quest.mutations.buyShopSlot(site.id, 0);
+    });
+
+    expect(quest.state.omens).toBe(1);
+    expect(quest.state.shopModifiers.upcomingOmenDiscounts).toBe(0);
+    expect(quest.state.dreamsigns).toEqual([dreamsign]);
+  });
+
+  it("keeps upcoming omen discounts when a free Dreamsign slot is purchased", () => {
+    const dreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const site = makeSite("shop-site", "Shop");
+    const node = makeNode("dreamscape-1", [site]);
+    const initialState: QuestState = {
+      ...createDefaultState(),
+      atlas: makeAtlasWithCurrent(node),
+      currentDreamscape: node.id,
+      omens: 0,
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 1,
+        essenceDiscountPercent: 0,
+      },
+      siteRuntime: {
+        [site.id]: {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "dreamsign",
+              dreamsign,
+              basePrice: 0,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+          restrictedTide: null,
+        },
+      },
+    };
+    const quest = mountQuestContext({ initialState });
+
+    act(() => {
+      quest.mutations.buyShopSlot(site.id, 0);
+    });
+
+    expect(quest.state.omens).toBe(0);
+    expect(quest.state.shopModifiers.upcomingOmenDiscounts).toBe(1);
+    expect(quest.state.dreamsigns).toEqual([dreamsign]);
   });
 });
 

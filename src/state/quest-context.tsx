@@ -367,8 +367,11 @@ function runtimeSlotPrice(slot: {
   itemType: "card" | "dreamsign";
   basePrice: number;
   discountPercent: number;
-}, essenceDiscountPercent: number): number {
-  return effectivePrice(slot, { essenceDiscountPercent });
+}, modifiers: {
+  essenceDiscountPercent: number;
+  upcomingOmenDiscounts?: number;
+}): number {
+  return effectivePrice(slot, modifiers);
 }
 
 function findSite(state: QuestState, siteId: string): SiteState | null {
@@ -1243,12 +1246,16 @@ export function QuestProvider({
           return prev;
         }
 
-        const price = runtimeSlotPrice(
-          slot,
-          prev.shopModifiers.essenceDiscountPercent,
-        );
+        const priceBeforeOmenDiscount = runtimeSlotPrice(slot, {
+          essenceDiscountPercent: prev.shopModifiers.essenceDiscountPercent,
+        });
+        const price = runtimeSlotPrice(slot, {
+          essenceDiscountPercent: prev.shopModifiers.essenceDiscountPercent,
+          upcomingOmenDiscounts: prev.shopModifiers.upcomingOmenDiscounts,
+        });
         // Cards cost essence; Dreamsigns cost omens.
         const payInOmens = slot.itemType === "dreamsign";
+        const omenDiscountApplied = payInOmens && price < priceBeforeOmenDiscount;
         const availableCurrency = payInOmens ? prev.omens : prev.essence;
         if (price > availableCurrency) {
           return prev;
@@ -1269,13 +1276,23 @@ export function QuestProvider({
         let next: QuestState = prev;
         if (payInOmens) {
           const newOmens = prev.omens - price;
+          const upcomingOmenDiscounts = omenDiscountApplied
+            ? prev.shopModifiers.upcomingOmenDiscounts - 1
+            : prev.shopModifiers.upcomingOmenDiscounts;
           logEvent("omens_changed", {
             oldValue: prev.omens,
             newValue: newOmens,
             delta: -price,
             source: "shop_purchase",
           });
-          next = { ...next, omens: newOmens };
+          next = {
+            ...next,
+            omens: newOmens,
+            shopModifiers: {
+              ...prev.shopModifiers,
+              upcomingOmenDiscounts,
+            },
+          };
         } else {
           const newEssence = clampEssence(
             prev.essence - price,
@@ -1345,6 +1362,9 @@ export function QuestProvider({
             dreamsignName: slot.dreamsign.name,
             basePrice: slot.basePrice,
             discountedPrice: price,
+            omenDiscountApplied,
+            upcomingOmenDiscountsRemaining:
+              next.shopModifiers.upcomingOmenDiscounts,
             omensRemaining: next.omens,
           });
           next = {

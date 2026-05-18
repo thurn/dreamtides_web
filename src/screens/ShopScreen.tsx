@@ -47,8 +47,12 @@ export function ShopScreen({ site }: ShopScreenProps) {
   const priceModifiers = useMemo<ShopPriceModifiers>(
     () => ({
       essenceDiscountPercent: state.shopModifiers.essenceDiscountPercent,
+      upcomingOmenDiscounts: state.shopModifiers.upcomingOmenDiscounts,
     }),
-    [state.shopModifiers.essenceDiscountPercent],
+    [
+      state.shopModifiers.essenceDiscountPercent,
+      state.shopModifiers.upcomingOmenDiscounts,
+    ],
   );
   const slots = useMemo<ShopSlot[]>(
     () =>

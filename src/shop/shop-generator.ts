@@ -37,6 +37,7 @@ export interface ShopSlot {
 
 export interface ShopPriceModifiers {
   essenceDiscountPercent?: number;
+  upcomingOmenDiscounts?: number;
 }
 
 type ShopPricedSlot = Pick<
@@ -95,8 +96,18 @@ export function effectivePrice(
   modifiers: ShopPriceModifiers = {},
 ): number {
   const discountPercent = effectiveDiscountPercent(slot, modifiers);
-  if (discountPercent === 0) return slot.basePrice;
-  return Math.round(slot.basePrice * (1 - discountPercent / 100));
+  const percentDiscountedPrice =
+    discountPercent === 0
+      ? slot.basePrice
+      : Math.round(slot.basePrice * (1 - discountPercent / 100));
+  if (
+    slot.itemType === "dreamsign" &&
+    percentDiscountedPrice > 0 &&
+    (modifiers.upcomingOmenDiscounts ?? 0) > 0
+  ) {
+    return percentDiscountedPrice - 1;
+  }
+  return percentDiscountedPrice;
 }
 
 /** Computes the omen reroll cost. Enhanced shops reroll for free. */

@@ -141,6 +141,46 @@ describe("effectivePrice", () => {
     );
     expect(result).toBe(2);
   });
+
+  it("applies one upcoming omen discount to positive Dreamsign omen prices", () => {
+    const result = effectivePrice(
+      {
+        itemType: "dreamsign",
+        card: null,
+        dreamsign: {
+          id: "dreamsign-1",
+          name: "Dreamsign One",
+          effectDescription: "First effect.",
+          isBane: false,
+        },
+        basePrice: 2,
+        discountPercent: 0,
+        purchased: false,
+      },
+      { upcomingOmenDiscounts: 1 },
+    );
+    expect(result).toBe(1);
+  });
+
+  it("leaves free Dreamsign slots free without spending an omen discount", () => {
+    const result = effectivePrice(
+      {
+        itemType: "dreamsign",
+        card: null,
+        dreamsign: {
+          id: "dreamsign-1",
+          name: "Dreamsign One",
+          effectDescription: "First effect.",
+          isBane: false,
+        },
+        basePrice: 0,
+        discountPercent: 0,
+        purchased: false,
+      },
+      { upcomingOmenDiscounts: 1 },
+    );
+    expect(result).toBe(0);
+  });
 });
 
 describe("rerollCost", () => {

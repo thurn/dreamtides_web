@@ -672,6 +672,51 @@ describe("ShopScreen", () => {
     });
   });
 
+  it("shows discounted Dreamsign prices when an upcoming omen discount is available", () => {
+    const state: QuestState = {
+      ...makeState([
+        {
+          itemType: "dreamsign",
+          dreamsign: {
+            id: "dreamsign-1",
+            name: "Dreamsign One",
+            effectDescription: "First effect.",
+            isBane: false,
+          },
+          basePrice: 2,
+          discountPercent: 0,
+          purchased: false,
+        },
+      ]),
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 1,
+        essenceDiscountPercent: 0,
+      },
+    };
+    setQuestContext(state);
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    const buyButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent?.includes("Omens"),
+    );
+    expect(buyButton?.textContent).toContain("Buy1Omens");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("shows the reroll affordance as FREE on an enhanced shop visit", () => {
     setQuestContext(
       makeState([
