@@ -955,13 +955,22 @@ export function QuestProvider({
           return prev;
         }
 
+        const site = findSite(prev, siteId);
+        // The Dreamsign Draft screen guarantees at least one offered
+        // dreamsign comes from a required structural tide of the active
+        // dreamcaller. Other dreamsign reveals (e.g. the 1-of-1 Dreamsign
+        // Offering) remain unconstrained.
+        const requiredTides =
+          site?.type === "DreamsignDraft"
+            ? (prev.resolvedPackage?.mandatoryTides ?? [])
+            : [];
         const revealed = drawDreamsignOptions(
           prev.remainingDreamsignPool,
           questContent.dreamsignTemplates,
           optionCount,
           prev.resolvedPackage?.dreamsignPoolIds ?? [],
+          requiredTides,
         );
-        const site = findSite(prev, siteId);
         const source =
           site?.type === "DreamsignDraft"
             ? "dreamsign_draft_revealed"
