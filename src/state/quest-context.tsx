@@ -11,6 +11,7 @@ import {
 import type { QuestContent } from "../data/quest-content";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
+import { mergeCardKeywordModification } from "../card-type-change";
 import type { CardData } from "../types/cards";
 import type {
   DreamcallerContent,
@@ -1894,10 +1895,10 @@ export function QuestProvider({
         const card = cardDatabase.get(entry.cardNumber);
         const cardName =
           card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
-        const nextKeywordModification = {
-          ...(entry.keywordModification ?? {}),
-          ...keywordModification,
-        };
+        const nextKeywordModification = mergeCardKeywordModification(
+          entry.keywordModification,
+          keywordModification,
+        );
         logEvent("card_keywords_changed", {
           cardNumber: entry.cardNumber,
           cardName,

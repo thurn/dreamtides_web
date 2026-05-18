@@ -143,6 +143,7 @@ export interface BattleDeckCardDefinition {
   printedEnergyCost: number | null;
   printedSpark: number;
   isFast: boolean;
+  reclaimCost: number | null;
   tides: readonly string[];
   renderedText: string;
   imageNumber: number;

@@ -193,6 +193,7 @@ describe("allocateBattleCardInstance", () => {
       printedEnergyCost: 2,
       printedSpark: 1,
       isFast: false,
+      reclaimCost: null,
       tides: ["alpha"],
       renderedText: "",
       imageNumber: cardNumber,

@@ -103,6 +103,26 @@ export function BattleContextMenu({
       result.push({ divider: true });
     }
 
+    if (
+      location.zone === "void" &&
+      location.side === "player" &&
+      card.definition.reclaimCost !== null
+    ) {
+      const isAffordable =
+        state.sides.player.currentEnergy >= card.definition.reclaimCost;
+      result.push({
+        label: isAffordable
+          ? `Reclaim for ${String(card.definition.reclaimCost)}`
+          : `Override reclaim ${String(card.definition.reclaimCost)}`,
+        action: () => onCommand({
+          id: "PLAY_CARD",
+          battleCardId,
+          sourceSurface,
+        }),
+      });
+      result.push({ divider: true });
+    }
+
     if (card.definition.battleCardKind === "character") {
       result.push({
         label: "Kindle",

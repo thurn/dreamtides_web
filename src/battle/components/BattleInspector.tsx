@@ -234,6 +234,11 @@ function CardInspector({
               </span>
             ) : null}
             {card.definition.isFast ? <span className="badge-accent">fast</span> : null}
+            {card.definition.reclaimCost !== null ? (
+              <span className="badge-accent">
+                Reclaim {String(card.definition.reclaimCost)}
+              </span>
+            ) : null}
             {location?.zone === "reserve" ? <span>reserved</span> : null}
           </div>
           <div className="t">{locationLabel}</div>

@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, type ReactNode } from "react";
 import type { Database } from "firebase/database";
+import { mergeCardKeywordModification } from "../card-type-change";
 import { resetBattleCompletionBridge } from "../battle/integration/battle-completion-bridge";
 import type { QuestContent } from "../data/quest-content";
 import { resetLog } from "../logging";
@@ -2675,10 +2676,10 @@ export function MultiplayerQuestProvider({
             return room;
           }
           const card = current.questContent.cardDatabase.get(entry.cardNumber);
-          const nextKeywordModification = {
-            ...(entry.keywordModification ?? {}),
-            ...keywordModification,
-          };
+          const nextKeywordModification = mergeCardKeywordModification(
+            entry.keywordModification,
+            keywordModification,
+          );
 
           return {
             ...room,

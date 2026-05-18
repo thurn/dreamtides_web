@@ -106,7 +106,25 @@ export function resolvePlayCard(
 } {
   const card = state.cardInstances[battleCardId];
   const location = selectBattleCardLocation(state, battleCardId);
-  if (card === undefined || location === null || location.zone !== "hand") {
+  const reclaimCost = card?.definition.reclaimCost ?? null;
+  const isReclaimPlay =
+    location?.zone === "void" && reclaimCost !== null && reclaimCost >= 0;
+  if (
+    card === undefined ||
+    location === null ||
+    (location.zone !== "hand" && !isReclaimPlay)
+  ) {
+    return {
+      state,
+      transition: buildPlayRejectedTransition(
+        state,
+        battleCardId,
+        "card_not_in_hand",
+        context,
+      ),
+    };
+  }
+  if (location.zone !== "hand" && location.zone !== "void") {
     return {
       state,
       transition: buildPlayRejectedTransition(
@@ -118,8 +136,19 @@ export function resolvePlayCard(
     };
   }
 
+  const playCost = isReclaimPlay ? reclaimCost : card.definition.energyCost;
+
   if (card.definition.battleCardKind === "character") {
-    return resolveCharacterPlay(state, battleCardId, location.side, location.index, target, context);
+    return resolveCharacterPlay(
+      state,
+      battleCardId,
+      location.side,
+      location.zone,
+      location.index,
+      playCost,
+      target,
+      context,
+    );
   }
 
   if (target !== undefined) {
@@ -134,14 +163,24 @@ export function resolvePlayCard(
     };
   }
 
-  return resolveNonCharacterPlay(state, battleCardId, location.side, location.index, context);
+  return resolveNonCharacterPlay(
+    state,
+    battleCardId,
+    location.side,
+    location.zone,
+    location.index,
+    playCost,
+    context,
+  );
 }
 
 function resolveCharacterPlay(
   state: BattleMutableState,
   battleCardId: string,
   side: "player" | "enemy",
-  handIndex: number,
+  sourceZone: "hand" | "void",
+  sourceIndex: number,
+  playCost: number,
   requestedTarget: BattleFieldSlotAddress | undefined,
   context: BattleEngineEmissionContext,
 ): {
@@ -175,8 +214,8 @@ function resolveCharacterPlay(
   }
 
   const nextState = cloneBattleMutableState(state);
-  nextState.sides[side].hand.splice(handIndex, 1);
-  nextState.sides[side].currentEnergy -= nextState.cardInstances[battleCardId].definition.energyCost;
+  nextState.sides[side][sourceZone].splice(sourceIndex, 1);
+  nextState.sides[side].currentEnergy -= playCost;
   setBattlefieldSlot(nextState, target, battleCardId);
   const cardContext: BattleEngineEmissionContext = {
     sourceSurface: context.sourceSurface,
@@ -207,7 +246,8 @@ function resolveCharacterPlay(
             cardName: nextState.cardInstances[battleCardId].definition.name,
             currentEnergy: nextState.sides[side].currentEnergy,
             side,
-            sourceHandIndex: handIndex,
+            sourceHandIndex: sourceZone === "hand" ? sourceIndex : null,
+            sourceZone,
             targetSlotId: target.slotId,
             targetZone: target.zone,
           },
@@ -234,16 +274,19 @@ function resolveNonCharacterPlay(
   state: BattleMutableState,
   battleCardId: string,
   side: "player" | "enemy",
-  handIndex: number,
+  sourceZone: "hand" | "void",
+  sourceIndex: number,
+  playCost: number,
   context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
   const nextState = cloneBattleMutableState(state);
-  nextState.sides[side].hand.splice(handIndex, 1);
-  nextState.sides[side].void.push(battleCardId);
-  nextState.sides[side].currentEnergy -= nextState.cardInstances[battleCardId].definition.energyCost;
+  nextState.sides[side][sourceZone].splice(sourceIndex, 1);
+  const targetZone = sourceZone === "void" ? "banished" : "void";
+  nextState.sides[side][targetZone].push(battleCardId);
+  nextState.sides[side].currentEnergy -= playCost;
   const cardContext: BattleEngineEmissionContext = {
     sourceSurface: context.sourceSurface,
     selectedCardId: battleCardId,
@@ -273,9 +316,10 @@ function resolveNonCharacterPlay(
             cardName: nextState.cardInstances[battleCardId].definition.name,
             currentEnergy: nextState.sides[side].currentEnergy,
             side,
-            sourceHandIndex: handIndex,
+            sourceHandIndex: sourceZone === "hand" ? sourceIndex : null,
+            sourceZone,
             targetSlotId: null,
-            targetZone: "void",
+            targetZone,
           },
         },
         {

@@ -24,6 +24,8 @@ export interface CardTypeChange {
 /** Persistent keyword overrides applied to one concrete deck entry. */
 export interface CardKeywordModification {
   fast?: boolean;
+  /** Added Reclaim cost. Repeated grants add to this value. */
+  reclaim?: number;
 }
 
 /** Persistent card modifications applied to one concrete deck entry. */

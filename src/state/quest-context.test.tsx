@@ -710,3 +710,42 @@ describe("addBaneCardById", () => {
     );
   });
 });
+
+describe("changeDeckEntryKeywords", () => {
+  it("adds repeated Reclaim grants together on one deck entry", () => {
+    const cardDatabase = new Map<number, CardData>([
+      [501, makeCard(501, "Reclaim Target")],
+    ]);
+    const initialState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-501",
+          cardNumber: 501,
+          transfiguration: null,
+          typeChange: null,
+          keywordModification: null,
+          isBane: false,
+        },
+      ],
+    };
+    const quest = mountQuestContext({ cardDatabase, initialState });
+
+    act(() => {
+      quest.mutations.changeDeckEntryKeywords(
+        "deck-501",
+        { reclaim: 2 },
+        "journey:first",
+      );
+    });
+    act(() => {
+      quest.mutations.changeDeckEntryKeywords(
+        "deck-501",
+        { reclaim: 3 },
+        "journey:second",
+      );
+    });
+
+    expect(quest.state.deck[0]?.keywordModification).toEqual({ reclaim: 5 });
+  });
+});

@@ -7,6 +7,7 @@
 
 import { sha256 } from "js-sha256";
 
+import { applyCardKeywordModification } from "../../card-type-change";
 import type { ContentBundle } from "../content/types";
 import type {
   JourneyContext,
@@ -77,6 +78,10 @@ function modifiedCardId(baseCardId: string, entryId: string): string {
   return `${baseCardId}::deck-entry:${entryId}:card-modification`;
 }
 
+function rawString(value: unknown): string {
+  return typeof value === "string" ? value : "";
+}
+
 function applyDeckEntryModificationToJourneyCard(
   card: ContentBundle["cards"][number],
   entry: DeckEntry,
@@ -84,13 +89,22 @@ function applyDeckEntryModificationToJourneyCard(
   const typeChange = entry.typeChange;
   const keywordModification = entry.keywordModification;
   const hasFastModification = keywordModification?.fast === true;
-  if (typeChange == null && !hasFastModification) {
+  const hasReclaimModification =
+    keywordModification?.reclaim !== undefined && keywordModification.reclaim > 0;
+  if (typeChange == null && !hasFastModification && !hasReclaimModification) {
     return card;
   }
   const id = modifiedCardId(card.id, entry.entryId);
   const cardType = typeChange?.cardType ?? card.cardType;
   const subtype = typeChange?.subtype ?? card.raw.subtype;
   const isFast = hasFastModification ? true : card.raw["is-fast"];
+  const renderedText = applyCardKeywordModification(
+    {
+      isFast: card.raw["is-fast"] === true || card.raw.isFast === true,
+      renderedText: rawString(card.raw["rendered-text"] ?? card.raw.renderedText),
+    },
+    keywordModification,
+  ).renderedText;
   return {
     ...card,
     id,
@@ -101,6 +115,8 @@ function applyDeckEntryModificationToJourneyCard(
       "card-type": cardType,
       cardType,
       subtype,
+      "rendered-text": renderedText,
+      renderedText,
       "is-fast": isFast,
       isFast,
     },
@@ -236,7 +252,12 @@ export function buildJourneyContext(
   }
 
   for (const entry of questState.deck) {
-    if (entry.typeChange == null && entry.keywordModification?.fast !== true) {
+    if (
+      entry.typeChange == null
+      && entry.keywordModification?.fast !== true
+      && (entry.keywordModification?.reclaim === undefined
+        || entry.keywordModification.reclaim <= 0)
+    ) {
       continue;
     }
     const card = cardsByNumber.get(entry.cardNumber);

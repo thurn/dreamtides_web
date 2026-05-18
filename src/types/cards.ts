@@ -28,6 +28,7 @@ export interface CardData {
   energyCost: number | null;
   spark: number | null;
   isFast: boolean;
+  reclaimCost?: number | null;
   tides: PackageTideId[];
   renderedText: string;
   imageNumber: number;

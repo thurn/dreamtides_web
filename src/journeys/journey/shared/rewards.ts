@@ -2891,8 +2891,20 @@ const makeCardReclaim: Reward<MakeCardReclaimParams> = {
   // Named-card smell.
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) => `Add Reclaim ${p.count} to ${quoteName(p.cardName)}`,
-  apply: () => {
-    logSkippedVisualTemplate("make_card_reclaim", "visual");
+  apply: (p, ctx, mut) => {
+    const entryId = findDeckEntriesByName(ctx, p.cardName)[0];
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "make_card_reclaim",
+        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    mut.changeDeckEntryKeywords(
+      entryId,
+      { reclaim: p.count },
+      "dream_journey:make_card_reclaim",
+    );
   },
 };
 
@@ -2909,8 +2921,28 @@ const makeRandomCardsReclaim: Reward<MakeRandomCardsReclaimParams> = {
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) =>
     `Add Reclaim ${p.reclaim} to ${p.count} random card${p.count === 1 ? "" : "s"}`,
-  apply: () => {
-    logSkippedVisualTemplate("make_random_cards_reclaim", "visual");
+  apply: (p, ctx, mut) => {
+    const entryIds = projectedDeckEntries(ctx).map((entry) => entry.entryId);
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "make_random_cards_reclaim",
+        "deck entries were not found",
+      );
+      return;
+    }
+    const picked = pickUniqueDeckEntryIds(
+      applyDrawContext(ctx),
+      "make_random_cards_reclaim:entry",
+      entryIds,
+      p.count,
+    );
+    picked.forEach((entryId) => {
+      mut.changeDeckEntryKeywords(
+        entryId,
+        { reclaim: p.reclaim },
+        "dream_journey:make_random_cards_reclaim",
+      );
+    });
   },
 };
 

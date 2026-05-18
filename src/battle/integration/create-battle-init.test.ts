@@ -321,7 +321,7 @@ describe("createBattleInit", () => {
     it("applies quest deck entry keyword changes to player battle card definitions", () => {
       const baseInput = makeBaseInput();
       const changedEntryId = "deck-5";
-      const keywordModification: CardKeywordModification = { fast: true };
+      const keywordModification: CardKeywordModification = { fast: true, reclaim: 2 };
       const stateWithKeywordChange = {
         ...baseInput.state,
         deck: baseInput.state.deck.map((entry) =>
@@ -345,8 +345,10 @@ describe("createBattleInit", () => {
       expect(changedCard).toMatchObject({
         cardNumber: 106,
         isFast: true,
+        reclaimCost: 2,
         keywordModification,
       });
+      expect(changedCard?.renderedText).toContain("Reclaim 2●");
     });
 
     it("throws when a quest deck entry references a missing card number", () => {
