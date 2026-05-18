@@ -16,12 +16,12 @@
 //   3. Close-button enabling. A regression in the `choose_your_loss` /
 //      everything-else dispatch (close locked on the wrong shape, or
 //      unlocked on `choose_your_loss`).
-//   4. Tree advancement state. A regression where Enter Dream on a
+//   4. Tree advancement state. A regression where the dream image control on a
 //      non-terminal branch fails to update `currentNodeId` (the screen
 //      either closes prematurely or rerenders the same node).
-//   5. Terminal detection. A regression where Enter Dream on a branch whose
-//      advancement reaches a terminal updates `currentNodeId` instead of
-//      calling `onClose`.
+//   5. Terminal detection. A regression where the dream image control on a
+//      branch whose advancement reaches a terminal updates `currentNodeId`
+//      instead of calling `onClose`.
 //   6. Error handling. A regression where a thrown generator stack-traces
 //      the screen instead of rendering the player-readable fallback.
 //   7. Auto-leave filter. A regression where `pickBehavior === "leave"`
@@ -487,9 +487,17 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   return { container, root };
 }
 
-function queryEnterDreamButtons(container: HTMLElement): HTMLButtonElement[] {
-  return Array.from(container.querySelectorAll("button")).filter((button) =>
-    button.textContent?.includes("Enter Dream"),
+function queryDreamImageControls(container: HTMLElement): HTMLButtonElement[] {
+  return Array.from(
+    container.querySelectorAll<HTMLButtonElement>(
+      'button[aria-label^="Enter dream:"], button[aria-label^="Locked dream:"]',
+    ),
+  );
+}
+
+function queryVisibleEnterDreamButtons(container: HTMLElement): HTMLButtonElement[] {
+  return Array.from(container.querySelectorAll("button")).filter(
+    (button) => button.textContent?.trim() === "Enter Dream",
   );
 }
 
@@ -547,8 +555,9 @@ describe("JourneyScreen", () => {
       />,
     );
 
-    const enterButtons = queryEnterDreamButtons(container);
+    const enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(3);
+    expect(queryVisibleEnterDreamButtons(container)).toHaveLength(0);
 
     const optionImages = Array.from(container.querySelectorAll("img"));
     expect(optionImages).toHaveLength(3);
@@ -578,7 +587,7 @@ describe("JourneyScreen", () => {
       />,
     );
 
-    expect(queryEnterDreamButtons(container)).toHaveLength(1);
+    expect(queryDreamImageControls(container)).toHaveLength(1);
     expect(mockedGenerate.mock.calls[0]?.[0]).toMatchObject({
       context,
       drawContext: {
@@ -596,7 +605,7 @@ describe("JourneyScreen", () => {
       reroll.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(queryEnterDreamButtons(container)).toHaveLength(2);
+    expect(queryDreamImageControls(container)).toHaveLength(2);
     expect(mockedGenerate.mock.calls[1]?.[0]).toMatchObject({
       context,
       drawContext: {
@@ -611,7 +620,7 @@ describe("JourneyScreen", () => {
     });
   });
 
-  it("disables Enter Dream for a locked option", () => {
+  it("marks locked image controls unavailable and keeps them inert", () => {
     const lockedManifest = manifestSkeleton({
       shapeId: "random_rewards",
       options: [
@@ -631,10 +640,25 @@ describe("JourneyScreen", () => {
       />,
     );
 
-    const enterButtons = queryEnterDreamButtons(container);
+    const enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(2);
-    expect(enterButtons[0].disabled).toBe(true);
-    expect(enterButtons[1].disabled).toBe(false);
+    const lockedControl = enterButtons.find((button) =>
+      button.getAttribute("aria-label")?.startsWith("Locked dream:"),
+    );
+    const enabledControl = enterButtons.find((button) =>
+      button.getAttribute("aria-label")?.startsWith("Enter dream:"),
+    );
+    expect(lockedControl).toBeDefined();
+    expect(enabledControl).toBeDefined();
+    expect(lockedControl?.getAttribute("aria-disabled")).toBe("true");
+    expect(lockedControl?.style.cursor).toBe("not-allowed");
+    expect(enabledControl?.getAttribute("aria-disabled")).toBeNull();
+    expect(queryVisibleEnterDreamButtons(container)).toHaveLength(0);
+
+    act(() => {
+      lockedControl?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(onClose).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();
@@ -687,7 +711,7 @@ describe("JourneyScreen", () => {
     });
   });
 
-  it("advances currentNodeId when Enter Dream picks a non-terminal branch", () => {
+  it("advances currentNodeId when the image control picks a non-terminal branch", () => {
     mockedGenerate.mockReturnValue(makeTwoNodeTreeManifest());
     const onClose = vi.fn();
 
@@ -700,10 +724,10 @@ describe("JourneyScreen", () => {
       />,
     );
 
-    // Root node has two player_choice branches. After Enter Dream on the
+    // Root node has two player_choice branches. After the image control on the
     // non-terminal branch, the screen advances to node-2, which has a
     // single player_choice branch.
-    let enterButtons = queryEnterDreamButtons(container);
+    let enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(2);
 
     // Click the Advance branch (index 0). It points at node-2.
@@ -714,7 +738,7 @@ describe("JourneyScreen", () => {
     // The screen should still be open (no terminal reached) and now render
     // exactly one branch — the single player_choice branch on node-2.
     expect(onClose).not.toHaveBeenCalled();
-    enterButtons = queryEnterDreamButtons(container);
+    enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(1);
 
     act(() => {
@@ -722,7 +746,7 @@ describe("JourneyScreen", () => {
     });
   });
 
-  it("calls onClose when Enter Dream picks a terminal branch", () => {
+  it("calls onClose when the image control picks a terminal branch", () => {
     mockedGenerate.mockReturnValue(makeTwoNodeTreeManifest());
     const onClose = vi.fn();
 
@@ -735,7 +759,7 @@ describe("JourneyScreen", () => {
       />,
     );
 
-    const enterButtons = queryEnterDreamButtons(container);
+    const enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(2);
 
     // Click the Claim branch (index 1) — it carries a terminal so the
@@ -779,8 +803,8 @@ describe("JourneyScreen", () => {
       />,
     );
 
-    // CloseButton is also a <button>, so filter to Enter Dream buttons only.
-    const enterButtons = queryEnterDreamButtons(container);
+    // CloseButton is also a <button>, so filter to dream image controls only.
+    const enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(3);
 
     act(() => {
@@ -814,8 +838,8 @@ describe("JourneyScreen", () => {
     expect(container.textContent).toContain(
       "This dream eludes you. Press × to leave.",
     );
-    // No Enter Dream buttons rendered in the fallback.
-    expect(queryEnterDreamButtons(container)).toHaveLength(0);
+    // No dream image controls rendered in the fallback.
+    expect(queryDreamImageControls(container)).toHaveLength(0);
     // CloseButton is still enabled so the player is never stuck.
     expect(queryCloseButton(container).disabled).toBe(false);
 
@@ -871,7 +895,7 @@ describe("JourneyScreen", () => {
 
     expect(container.textContent).toContain("Invalid debugJourneyReward");
     expect(container.textContent).toContain("missing_reward");
-    expect(queryEnterDreamButtons(container)).toHaveLength(0);
+    expect(queryDreamImageControls(container)).toHaveLength(0);
     expect(errorSpy).toHaveBeenCalledWith(
       expect.stringContaining("missing_reward"),
       expect.objectContaining({ attempts: [] }),
@@ -885,14 +909,14 @@ describe("JourneyScreen", () => {
 
   // ---- Apply dispatch wiring ---------------------------------------------
   //
-  // These three tests pin the cutover contract that "Enter Dream now
-  // dispatches through the apply pass". They spy on `applyOption` /
+  // These three tests pin the contract that the dream image control dispatches
+  // through the apply pass. They spy on `applyOption` /
   // `applyBranch` at the module boundary rather than asserting against the
   // recording mutations directly — at this point in Wave 1 the per-template
   // `apply` methods are still stubs, so a recording double would observe
   // zero calls regardless of whether dispatch is wired correctly.
 
-  it("calls applyOption with screen meta and closes after a flat Enter Dream", () => {
+  it("calls applyOption with screen meta and closes after a flat image control click", () => {
     const manifest = makeFlatManifest(1);
     mockedGenerate.mockReturnValue(manifest);
     const onClose = vi.fn();
@@ -910,7 +934,7 @@ describe("JourneyScreen", () => {
       />,
     );
 
-    const enterButtons = queryEnterDreamButtons(container);
+    const enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(1);
 
     act(() => {
@@ -962,7 +986,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[0].dispatchEvent(
+      queryDreamImageControls(container)[0].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1007,7 +1031,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[0].dispatchEvent(
+      queryDreamImageControls(container)[0].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1049,7 +1073,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[0].dispatchEvent(
+      queryDreamImageControls(container)[0].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1091,7 +1115,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[0].dispatchEvent(
+      queryDreamImageControls(container)[0].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1149,7 +1173,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[0].dispatchEvent(
+      queryDreamImageControls(container)[0].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1213,7 +1237,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[0].dispatchEvent(
+      queryDreamImageControls(container)[0].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1225,7 +1249,7 @@ describe("JourneyScreen", () => {
     });
 
     expect(queryChooser(container)).toBeNull();
-    expect(queryEnterDreamButtons(container)).toHaveLength(1);
+    expect(queryDreamImageControls(container)).toHaveLength(1);
     expect(calls).toEqual([]);
     expect(onClose).not.toHaveBeenCalled();
     expect(logSpy).toHaveBeenCalledWith("dream_journey_chooser_cancelled", {
@@ -1235,7 +1259,7 @@ describe("JourneyScreen", () => {
     });
 
     act(() => {
-      queryEnterDreamButtons(container)[0].dispatchEvent(
+      queryDreamImageControls(container)[0].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1297,7 +1321,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[0].dispatchEvent(
+      queryDreamImageControls(container)[0].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1372,7 +1396,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[0].dispatchEvent(
+      queryDreamImageControls(container)[0].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1398,7 +1422,7 @@ describe("JourneyScreen", () => {
       },
     ]);
     expect(onClose).not.toHaveBeenCalled();
-    expect(queryEnterDreamButtons(container)).toHaveLength(1);
+    expect(queryDreamImageControls(container)).toHaveLength(1);
 
     act(() => {
       root.unmount();
@@ -1433,7 +1457,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[1].dispatchEvent(
+      queryDreamImageControls(container)[1].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1497,7 +1521,7 @@ describe("JourneyScreen", () => {
     );
 
     act(() => {
-      queryEnterDreamButtons(container)[1].dispatchEvent(
+      queryDreamImageControls(container)[1].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1509,12 +1533,12 @@ describe("JourneyScreen", () => {
     });
 
     expect(queryChooser(container)).toBeNull();
-    expect(queryEnterDreamButtons(container)).toHaveLength(2);
+    expect(queryDreamImageControls(container)).toHaveLength(2);
     expect(calls).toEqual([]);
     expect(onClose).not.toHaveBeenCalled();
 
     act(() => {
-      queryEnterDreamButtons(container)[1].dispatchEvent(
+      queryDreamImageControls(container)[1].dispatchEvent(
         new MouseEvent("click", { bubbles: true }),
       );
     });
@@ -1564,7 +1588,7 @@ describe("JourneyScreen", () => {
       />,
     );
 
-    const enterButtons = queryEnterDreamButtons(container);
+    const enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(2);
 
     // Index 0 is the Advance branch (non-terminal, points at node-2).
@@ -1584,7 +1608,7 @@ describe("JourneyScreen", () => {
     });
     expect(onClose).not.toHaveBeenCalled();
     // Screen advanced — node-2 has a single player_choice branch.
-    expect(queryEnterDreamButtons(container)).toHaveLength(1);
+    expect(queryDreamImageControls(container)).toHaveLength(1);
 
     act(() => {
       root.unmount();
@@ -1610,7 +1634,7 @@ describe("JourneyScreen", () => {
       />,
     );
 
-    const enterButtons = queryEnterDreamButtons(container);
+    const enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(2);
 
     // Index 1 is the Claim branch — it carries an inline terminal.

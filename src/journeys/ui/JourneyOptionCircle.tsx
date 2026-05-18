@@ -1,6 +1,6 @@
 /**
  * One journey option as it appears on `JourneyScreen`: a circular dream-art
- * image with a dream-name caption and an Enter Dream button below.
+ * image control with a dream-name caption.
  *
  * Hovering the circle reveals a `JourneyHoverCard` showing the option's full
  * rendered text. Hover state is owned by the caller (`JourneyScreen`), so
@@ -28,8 +28,8 @@ export interface JourneyOptionCircleProps {
   /** Full rendered option text passed through to the hover card. */
   readonly text: string;
   /**
-   * When true, the Enter Dream button is disabled. The hover card and circle
-   * remain interactive so the player can still read the locked option's text.
+   * When true, the image control is unavailable. Preview interactions remain
+   * active so the player can still read the locked option's text.
    */
   readonly locked: boolean;
   /** True when this option is the one currently being hovered. */
@@ -38,11 +38,11 @@ export interface JourneyOptionCircleProps {
   readonly onMouseEnter: () => void;
   /** Fired when the pointer leaves the circle. */
   readonly onMouseLeave: () => void;
-  /** Fired when the Enter Dream button is clicked. */
+  /** Fired when the dream image control is clicked. */
   readonly onEnterDream: () => void;
 }
 
-/** Circular dream-art image + caption + Enter Dream button. */
+/** Circular dream-art image control + caption. */
 export function JourneyOptionCircle({
   imageUrl,
   dreamName,
@@ -53,26 +53,52 @@ export function JourneyOptionCircle({
   onMouseLeave,
   onEnterDream,
 }: JourneyOptionCircleProps) {
+  const controlLabel = locked
+    ? `Locked dream: ${dreamName}`
+    : `Enter dream: ${dreamName}`;
+
   return (
     <div className="relative flex w-72 flex-col items-center gap-3">
-      <div
-        className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-full text-3xl"
+      <button
+        type="button"
+        aria-disabled={locked ? "true" : undefined}
+        aria-label={controlLabel}
+        className="relative flex h-64 w-64 items-center justify-center overflow-hidden rounded-full border-0 p-0 text-3xl transition duration-150 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-fuchsia-300/70"
         style={{
           background: "#0d0814",
-          border: "2px solid rgba(168, 85, 247, 0.45)",
-          boxShadow: "0 0 18px rgba(168, 85, 247, 0.18)",
-          cursor: "default",
+          border: locked
+            ? "2px solid rgba(148, 163, 184, 0.45)"
+            : "2px solid rgba(168, 85, 247, 0.72)",
+          boxShadow: locked
+            ? "0 0 12px rgba(148, 163, 184, 0.12)"
+            : "0 0 22px rgba(168, 85, 247, 0.24)",
+          cursor: locked ? "not-allowed" : "pointer",
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        onFocus={onMouseEnter}
+        onBlur={onMouseLeave}
+        onClick={() => {
+          if (!locked) onEnterDream();
+        }}
       >
         <img
           src={imageUrl}
-          alt={dreamName}
-          className="h-full w-full object-cover"
+          alt=""
+          className="h-full w-full object-cover transition duration-150"
+          style={{
+            filter: locked ? "grayscale(0.7)" : "none",
+            opacity: locked ? 0.52 : 1,
+          }}
           draggable={false}
         />
-      </div>
+        {locked && (
+          <span
+            aria-hidden="true"
+            className="absolute h-1 w-40 rotate-45 rounded-full bg-slate-100/80"
+          />
+        )}
+      </button>
 
       <h3
         className="text-center text-base font-bold"
@@ -80,20 +106,6 @@ export function JourneyOptionCircle({
       >
         {dreamName}
       </h3>
-
-      <button
-        type="button"
-        disabled={locked}
-        onClick={locked ? undefined : onEnterDream}
-        className="w-full rounded-lg px-5 py-2.5 font-bold text-white transition-opacity"
-        style={{
-          backgroundColor: "#7c3aed",
-          opacity: locked ? 0.4 : 1,
-          cursor: locked ? "not-allowed" : "pointer",
-        }}
-      >
-        Enter Dream
-      </button>
 
       <AnimatePresence>
         {hovered && (
