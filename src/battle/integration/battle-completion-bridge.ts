@@ -1,7 +1,7 @@
 import { generateNewNodes } from "../../atlas/atlas-generator";
 import { logEvent } from "../../logging";
 import type { QuestMutations } from "../../state/quest-context";
-import type { DreamAtlas } from "../../types/quest";
+import type { DreamAtlas, DreamscapeModifier } from "../../types/quest";
 
 /**
  * Ownership note (spec K-5 / K-6, L-1):
@@ -33,6 +33,7 @@ export interface CompleteBattleSiteVictoryInput {
   isMiniboss: boolean;
   isFinalBoss: boolean;
   playerHasBanes: boolean;
+  dreamscapeModifiers?: readonly DreamscapeModifier[];
   mutations: Pick<
     QuestMutations,
     | "changeEssence"
@@ -60,6 +61,7 @@ export function completeBattleSiteVictory(
     isMiniboss,
     isFinalBoss,
     playerHasBanes,
+    dreamscapeModifiers = [],
     mutations,
     postVictoryHandoffDelayMs,
     clearBattleStateForRoom,
@@ -134,6 +136,7 @@ export function completeBattleSiteVictory(
         completionLevelAtBattleStart + 1,
         {
           playerHasBanes,
+          ...(dreamscapeModifiers.length > 0 ? { dreamscapeModifiers } : {}),
         },
       );
 

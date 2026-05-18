@@ -188,6 +188,59 @@ describe("generateSiteComposition", () => {
     expect(foundCleanse).toBe(true);
   });
 
+  it("uses active site appearance boosts as additive percentage weight increases", () => {
+    const randomSpy = vi
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.87)
+      .mockReturnValueOnce(0);
+
+    const sites = generateSiteComposition(0, false, defaultContext({
+      dreamscapeModifiers: [
+        {
+          kind: "boost_site_appearance",
+          siteType: "SpecialtyShop",
+          percent: 50,
+          dreamscapesRemaining: 2,
+          source: "test:boost-one",
+        },
+        {
+          kind: "boost_site_appearance",
+          siteType: "SpecialtyShop",
+          percent: 50,
+          dreamscapesRemaining: 1,
+          source: "test:boost-two",
+        },
+      ],
+    }));
+
+    randomSpy.mockRestore();
+    expect(sites.some((site) => site.type === "SpecialtyShop")).toBe(true);
+  });
+
+  it("does not apply a single lower boost as if it were already fully combined", () => {
+    const randomSpy = vi
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.87)
+      .mockReturnValueOnce(0);
+
+    const sites = generateSiteComposition(0, false, defaultContext({
+      dreamscapeModifiers: [
+        {
+          kind: "boost_site_appearance",
+          siteType: "SpecialtyShop",
+          percent: 50,
+          dreamscapesRemaining: 2,
+          source: "test:boost-one",
+        },
+      ],
+    }));
+
+    randomSpy.mockRestore();
+    expect(sites.some((site) => site.type === "SpecialtyShop")).toBe(false);
+  });
+
   it("first dreamscape always has exactly 2x Draft, 1x DreamsignDraft, 1x DreamJourney, 1x Battle regardless of seed", () => {
     const seeds = [0, 0.123, 0.337, 0.5, 0.728, 0.999];
     for (const seed of seeds) {

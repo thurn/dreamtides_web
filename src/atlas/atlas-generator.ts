@@ -1,5 +1,6 @@
 import type {
   DreamAtlas,
+  DreamscapeModifier,
   DreamscapeNode,
   SiteState,
   SiteType,
@@ -10,6 +11,12 @@ import { logEvent } from "../logging";
 /** Parameters for site generation that require external data. */
 export interface SiteGenerationContext {
   playerHasBanes: boolean;
+  /**
+   * Active dreamscape modifiers at generation time. Site appearance boosts
+   * increase the targeted site's base pool weight by their percentage; boosts
+   * for the same site type stack additively before the weight is recalculated.
+   */
+  dreamscapeModifiers?: readonly DreamscapeModifier[];
 }
 
 export interface AtlasGenerationOptions {
@@ -73,6 +80,42 @@ function weightedPick<T>(items: Array<[T, number]>): T {
     }
   }
   return items[items.length - 1][0];
+}
+
+function combinedSiteAppearanceBoosts(
+  modifiers: readonly DreamscapeModifier[] = [],
+): Map<SiteType, number> {
+  const boostsByType = new Map<SiteType, number>();
+  for (const modifier of modifiers) {
+    if (
+      modifier.kind !== "boost_site_appearance" ||
+      modifier.dreamscapesRemaining <= 0 ||
+      modifier.percent <= 0
+    ) {
+      continue;
+    }
+    boostsByType.set(
+      modifier.siteType,
+      (boostsByType.get(modifier.siteType) ?? 0) + modifier.percent,
+    );
+  }
+  return boostsByType;
+}
+
+function applySiteAppearanceBoosts(
+  pool: Array<[SiteType, number]>,
+  modifiers: readonly DreamscapeModifier[] = [],
+): Array<[SiteType, number]> {
+  const boostsByType = combinedSiteAppearanceBoosts(modifiers);
+
+  if (boostsByType.size === 0) {
+    return pool;
+  }
+
+  return pool.map(([siteType, weight]) => {
+    const boostPercent = boostsByType.get(siteType) ?? 0;
+    return [siteType, weight * (1 + boostPercent / 100)];
+  });
 }
 
 /** Builds the weighted site pool based on completion level. */
@@ -178,7 +221,10 @@ export function generateSiteComposition(
   const fixedCount = sites.length + 1;
   const minAdditional = Math.max(2, 3 - fixedCount);
   const maxAdditional = Math.max(minAdditional, 6 - fixedCount);
-  const pool = buildAdditionalSitePool(completionLevel, context.playerHasBanes);
+  const pool = applySiteAppearanceBoosts(
+    buildAdditionalSitePool(completionLevel, context.playerHasBanes),
+    context.dreamscapeModifiers,
+  );
   // Every non-Draft site type appears at most once per dreamscape, so the
   // additional sites are sampled without replacement: a type is removed from
   // the working pool once it is picked.
@@ -269,6 +315,10 @@ function createNode(
       biomeName: biome.name,
       siteTypes: sites.map((s) => s.type),
       enhancedSiteType,
+      siteAppearanceBoosts: Array.from(
+        combinedSiteAppearanceBoosts(context.dreamscapeModifiers),
+        ([siteType, percent]) => ({ siteType, percent }),
+      ),
     });
   }
 
