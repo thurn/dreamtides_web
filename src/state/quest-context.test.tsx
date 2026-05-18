@@ -365,6 +365,39 @@ describe("setCurrentDreamscape dreamscape modifier decay", () => {
       dreamscapesRemaining: 2,
     });
   });
+
+  it("expires a dreamsign-site removal modifier after its configured dreamscape move", () => {
+    const currentNode = makeNode("dreamscape-1", [makeSite("s-1", "Battle")]);
+    const nextNode = makeNode("dreamscape-2", [makeSite("s-2", "Battle")]);
+    const initialState: QuestState = {
+      ...createDefaultState(),
+      atlas: makeAtlasWithCurrent(currentNode, [nextNode]),
+      currentDreamscape: currentNode.id,
+    };
+    const quest = mountQuestContext({ initialState });
+
+    act(() => {
+      quest.mutations.removeSiteTypeFromNextDreamscapes(
+        "DreamsignOffering",
+        1,
+        "src-dreamsign",
+      );
+    });
+
+    expect(quest.state.dreamscapeModifiers).toEqual([
+      {
+        kind: "remove_dreamsign_sites",
+        dreamscapesRemaining: 1,
+        source: "src-dreamsign",
+      },
+    ]);
+
+    act(() => {
+      quest.mutations.setCurrentDreamscape(nextNode.id);
+    });
+
+    expect(quest.state.dreamscapeModifiers).toEqual([]);
+  });
 });
 
 describe("rerollShop free-reroll consumption", () => {

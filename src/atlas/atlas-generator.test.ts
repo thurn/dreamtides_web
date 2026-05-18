@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
+  additionalSiteTypesForLevel,
   generateSiteComposition,
   generateInitialAtlas,
   generateNewNodes,
@@ -268,6 +269,46 @@ describe("generateSiteComposition", () => {
     randomSpy.mockRestore();
     expect(sites.some((site) => site.type === "Shop")).toBe(false);
     expect(sites.some((site) => site.type === "SpecialtyShop")).toBe(false);
+  });
+
+  it("excludes DreamsignOffering and DreamsignDraft while a dreamsign-removal modifier is active", () => {
+    for (let i = 0; i < 50; i++) {
+      resetAtlasGenerator();
+      const sites = generateSiteComposition(
+        0,
+        false,
+        defaultContext({
+          dreamscapeModifiers: [
+            {
+              kind: "remove_dreamsign_sites",
+              dreamscapesRemaining: 1,
+              source: "test:remove-dreamsign",
+            },
+          ],
+        }),
+      );
+
+      expect(sites.some((site) => site.type === "DreamsignOffering")).toBe(false);
+      expect(sites.some((site) => site.type === "DreamsignDraft")).toBe(false);
+    }
+  });
+
+  it("keeps DreamsignOffering and DreamsignDraft eligible when the dreamsign-removal modifier has expired", () => {
+    const types = additionalSiteTypesForLevel(
+      0,
+      defaultContext({
+        dreamscapeModifiers: [
+          {
+            kind: "remove_dreamsign_sites",
+            dreamscapesRemaining: 0,
+            source: "test:expired-remove-dreamsign",
+          },
+        ],
+      }),
+    );
+
+    expect(types).toContain("DreamsignOffering");
+    expect(types).toContain("DreamsignDraft");
   });
 
   it("keeps Shop eligible when the shop-removal modifier has expired", () => {
