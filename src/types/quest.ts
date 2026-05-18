@@ -287,9 +287,8 @@ export type Screen =
  * A modifier that affects upcoming battle resolutions. Pushed by Dream Journey
  * effects; decremented by `incrementCompletionLevel` each time a battle
  * completes. Entries at `battlesRemaining === 0` drop on the same tick that
- * brought them to zero. The battle resolver reads `battleModifiers` to apply
- * reward reductions and any other per-battle effects when its consumer
- * hookup lands.
+ * brought them to zero. Battle initialization reads `battleModifiers` to apply
+ * reward reductions to the visible reward and the payout amount.
  */
 export type BattleModifier =
   | {

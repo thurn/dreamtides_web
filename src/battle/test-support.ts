@@ -64,6 +64,7 @@ export function makeBattleTestCardDatabase(): Map<number, CardData> {
 export function makeBattleTestState(): Pick<
   QuestState,
   | "atlas"
+  | "battleModifiers"
   | "completionLevel"
   | "currentDreamscape"
   | "deck"
@@ -87,6 +88,7 @@ export function makeBattleTestState(): Pick<
       edges: [],
       startingNodeId: "dreamscape-2",
     },
+    battleModifiers: [],
     completionLevel: 2,
     currentDreamscape: "dreamscape-2",
     deck: makeBattleTestDeckEntries(),

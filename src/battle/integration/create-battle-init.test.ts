@@ -183,6 +183,41 @@ describe("createBattleInit", () => {
       }
     });
 
+    it("applies active flat battle reward reductions and floors the reward at zero", () => {
+      const baseState = makeBattleTestState();
+      const reduced = createBattleInit({
+        ...makeBaseInput(),
+        state: {
+          ...baseState,
+          battleModifiers: [
+            {
+              kind: "reward_reduction_flat",
+              amount: 80,
+              battlesRemaining: 2,
+              source: "journey:test",
+            },
+          ],
+        },
+      });
+      const floored = createBattleInit({
+        ...makeBaseInput(),
+        state: {
+          ...baseState,
+          battleModifiers: [
+            {
+              kind: "reward_reduction_flat",
+              amount: 999,
+              battlesRemaining: 1,
+              source: "journey:test",
+            },
+          ],
+        },
+      });
+
+      expect(reduced.essenceReward).toBe(120);
+      expect(floored.essenceReward).toBe(0);
+    });
+
     it("flags miniboss at completion level 3 and final boss at completion level 6", () => {
       const baseState = makeBattleTestState();
       const minibossInit = createBattleInit({

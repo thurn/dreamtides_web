@@ -4,7 +4,7 @@ import type {
   DreamsignTemplate,
   PackageTideId,
 } from "../../types/content";
-import type { QuestState, SiteState } from "../../types/quest";
+import type { BattleModifier, QuestState, SiteState } from "../../types/quest";
 import { applyDeckEntryCardModification } from "../../card-type-change";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
@@ -71,6 +71,7 @@ export interface CreateBattleInitInput {
   state: Pick<
     QuestState,
     | "atlas"
+    | "battleModifiers"
     | "completionLevel"
     | "currentDreamscape"
     | "deck"
@@ -95,6 +96,34 @@ export interface CreateBattleInitInput {
    * browser.
    */
   enableAi?: boolean;
+}
+
+function applyBattleRewardModifiers(
+  baseReward: number,
+  modifiers: readonly BattleModifier[],
+): number {
+  let reward = baseReward;
+
+  for (const modifier of modifiers) {
+    if (modifier.battlesRemaining <= 0) {
+      continue;
+    }
+
+    switch (modifier.kind) {
+      case "reward_reduction_flat":
+        reward -= modifier.amount;
+        break;
+      case "reward_reduction_percent":
+        reward -= Math.floor((reward * modifier.percent) / 100);
+        break;
+      case "temporary_bane_grant":
+        break;
+    }
+
+    reward = Math.max(0, reward);
+  }
+
+  return reward;
 }
 
 export function createBattleInit(input: CreateBattleInitInput): BattleInit {
@@ -150,6 +179,10 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   const dreamcallerSummary = freezeBattleDreamcallerSummary(state.dreamcaller);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
   const completionLevelAtStart = state.completionLevel;
+  const essenceReward = applyBattleRewardModifiers(
+    100 + completionLevelAtStart * 50,
+    state.battleModifiers,
+  );
 
   // Phase 2 runtime invariants (B-6, C-10): the player always starts and
   // skips the round-one draw. The `BattleInit` field types are widened to
@@ -173,7 +206,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     completionLevelAtStart,
     isMiniboss: completionLevelAtStart === 3,
     isFinalBoss: completionLevelAtStart === 6,
-    essenceReward: 100 + completionLevelAtStart * 50,
+    essenceReward,
     // Victory grants 1-3 omens, scaling with completed dreamscapes.
     omenReward: Math.min(3, 1 + Math.floor(completionLevelAtStart / 2)),
     openingHandSize: 5,
