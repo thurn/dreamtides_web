@@ -869,6 +869,37 @@ describe("meta_gain_2_rewards (compound) viability", () => {
     }
   });
 
+  it("declines random starter purge paired with named Reclaim on a starter", () => {
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext({
+      cards: [STARTER_CARD],
+      deckEntries: [{ cardId: STARTER_CARD.id, copies: 1 }],
+      starterCards: 1,
+    });
+    expect(getReward("purge_random_starter").viable({}, ctx)).toBe(true);
+    expect(getReward("make_card_reclaim").viable({
+      cardName: STARTER_CARD.name,
+      count: 2,
+    }, ctx)).toBe(true);
+
+    for (const subIds of [
+      ["purge_random_starter", "make_card_reclaim"],
+      ["make_card_reclaim", "purge_random_starter"],
+    ] as const) {
+      expect(t.viable({
+        subIds,
+        subParams: [
+          subIds[0] === "make_card_reclaim"
+            ? { cardName: STARTER_CARD.name, count: 2 }
+            : {},
+          subIds[1] === "make_card_reclaim"
+            ? { cardName: STARTER_CARD.name, count: 2 }
+            : {},
+        ] as const,
+      }, ctx), subIds.join(" + ")).toBe(false);
+    }
+  });
+
   it("rollParams filters explicitly incompatible reward pairs", () => {
     const t = getReward("meta_gain_2_rewards");
     const ctx = buildContext({
@@ -882,6 +913,8 @@ describe("meta_gain_2_rewards (compound) viability", () => {
       "transfigure_all_starters+purge_all_starters",
       "purge_all_banes+purge_X_banes",
       "purge_X_banes+purge_all_banes",
+      "purge_random_starter+make_card_reclaim",
+      "make_card_reclaim+purge_random_starter",
     ]);
 
     for (let selectionAttempt = 0; selectionAttempt < 500; selectionAttempt += 1) {

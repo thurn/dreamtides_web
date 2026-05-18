@@ -3478,13 +3478,60 @@ const META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS: ReadonlySet<string> = new Set([
   metaRewardPairKey("purge_all_starters", "transfigure_all_starters"),
   metaRewardPairKey("purge_all_banes", "purge_X_banes"),
 ]);
+const RANDOM_STARTER_REMOVAL_REWARD_IDS: ReadonlySet<string> = new Set([
+  "purge_random_starter",
+  "purge_random_starter_with_predicate_replacement",
+]);
 
 function metaRewardPairKey(firstId: string, secondId: string): string {
   return [firstId, secondId].sort().join("\0");
 }
 
-function metaRewardPairCompatible(firstId: string, secondId: string): boolean {
-  return !META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS.has(metaRewardPairKey(firstId, secondId));
+function paramsTargetStarterCard(params: TemplateParams, ctx: JourneyContext): boolean {
+  const cardName = params.cardName;
+  return typeof cardName === "string"
+    && findDeckEntriesByName(ctx, cardName, (card) => card.rarity === "Starter").length > 0;
+}
+
+function randomStarterRemovalCanInvalidateNamedStarterTarget(
+  firstId: string,
+  firstParams: TemplateParams,
+  secondId: string,
+  secondParams: TemplateParams,
+  ctx: JourneyContext,
+): boolean {
+  return (
+    RANDOM_STARTER_REMOVAL_REWARD_IDS.has(firstId) && paramsTargetStarterCard(secondParams, ctx)
+  ) || (
+    RANDOM_STARTER_REMOVAL_REWARD_IDS.has(secondId) && paramsTargetStarterCard(firstParams, ctx)
+  );
+}
+
+function metaRewardPairCompatible(
+  firstId: string,
+  secondId: string,
+  firstParams?: TemplateParams,
+  secondParams?: TemplateParams,
+  ctx?: JourneyContext,
+): boolean {
+  if (META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS.has(metaRewardPairKey(firstId, secondId))) {
+    return false;
+  }
+  if (
+    firstParams !== undefined
+    && secondParams !== undefined
+    && ctx !== undefined
+    && randomStarterRemovalCanInvalidateNamedStarterTarget(
+      firstId,
+      firstParams,
+      secondId,
+      secondParams,
+      ctx,
+    )
+  ) {
+    return false;
+  }
+  return true;
 }
 
 function orderedCompatibleRewardPairs(pool: readonly Reward[]): readonly (readonly [Reward, Reward])[] {
@@ -3500,6 +3547,26 @@ function orderedCompatibleRewardPairs(pool: readonly Reward[]): readonly (readon
     }
   }
   return pairs;
+}
+
+function rollMetaSubParams(
+  first: Reward,
+  second: Reward,
+  ctx: JourneyContext,
+  draw: DrawContext,
+  offset: number,
+): readonly [TemplateParams, TemplateParams] {
+  const selectionAttempt = draw.selectionAttempt ?? 0;
+  return [
+    first.rollParams(ctx, {
+      ...draw,
+      selectionAttempt: selectionAttempt * 10 + 1 + offset * 2,
+    }),
+    second.rollParams(ctx, {
+      ...draw,
+      selectionAttempt: selectionAttempt * 10 + 2 + offset * 2,
+    }),
+  ] as const;
 }
 
 const metaGain2Rewards: Reward<MetaGain2Params> = {
@@ -3527,19 +3594,27 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
         ] as readonly [TemplateParams, TemplateParams],
       };
     }
-    const [first, second] = usePairs[drawInt(draw, "meta_gain_2:pair", 0, usePairs.length - 1)];
+    const startIndex = drawInt(draw, "meta_gain_2:pair", 0, usePairs.length - 1);
+    for (let offset = 0; offset < usePairs.length; offset += 1) {
+      const [first, second] = usePairs[(startIndex + offset) % usePairs.length];
+      const subParams = rollMetaSubParams(first, second, ctx, draw, offset);
+      if (
+        metaRewardPairCompatible(first.id, second.id, subParams[0], subParams[1], ctx)
+        && first.viable(subParams[0], ctx)
+        && second.viable(subParams[1], ctx)
+      ) {
+        return {
+          subIds: [first.id, second.id] as readonly [string, string],
+          subParams,
+        };
+      }
+    }
+
+    const [first, second] = usePairs[startIndex];
+    const subParams = rollMetaSubParams(first, second, ctx, draw, 0);
     return {
       subIds: [first.id, second.id] as readonly [string, string],
-      subParams: [
-        first.rollParams(ctx, {
-          ...draw,
-          selectionAttempt: (draw.selectionAttempt ?? 0) * 10 + 1,
-        }),
-        second.rollParams(ctx, {
-          ...draw,
-          selectionAttempt: (draw.selectionAttempt ?? 0) * 10 + 2,
-        }),
-      ] as readonly [TemplateParams, TemplateParams],
+      subParams,
     };
   },
   cec: (p, ctx) => {
@@ -3550,7 +3625,7 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
   viable: (p, ctx) => {
     const a = getReward(p.subIds[0]);
     const b = getReward(p.subIds[1]);
-    return metaRewardPairCompatible(p.subIds[0], p.subIds[1])
+    return metaRewardPairCompatible(p.subIds[0], p.subIds[1], p.subParams[0], p.subParams[1], ctx)
       && a.viable(p.subParams[0], ctx)
       && b.viable(p.subParams[1], ctx);
   },
