@@ -42,67 +42,26 @@ export interface GlossaryEntry {
 export const GLOSSARY: readonly GlossaryEntry[] = [
   // --- Card types -----------------------------------------------------
   {
-    term: "Character",
-    definition: "A creature card that stays in play once materialized.",
-    variants: ["character", "characters"],
-  },
-  {
-    term: "Event",
-    definition: "A one-shot card that resolves and goes to the void.",
-    variants: ["event", "events"],
-  },
-  {
     term: "Figment",
-    definition: "A temporary token character created by an effect.",
+    definition:
+      "A temporary token character with 1 spark created by an effect.",
     variants: ["figment", "figments"],
-  },
-  {
-    term: "Ally",
-    definition: "A character you control on the battlefield.",
-    variants: ["ally", "allies", "allied"],
-  },
-
-  // --- Zones & resources ---------------------------------------------
-  {
-    term: "Void",
-    definition: "Your discard pile. Played and discarded cards go here.",
-    variants: ["void"],
-  },
-  {
-    term: "Deck",
-    definition: "The face-down library you draw from.",
-    variants: ["deck"],
-  },
-  {
-    term: "Hand",
-    definition: "Cards in your hand, available to play.",
-    variants: ["hand"],
-  },
-  {
-    term: "Spark",
-    definition: "A character's power. Higher spark wins combat.",
-    variants: ["spark"],
-  },
-  {
-    term: "Essence",
-    definition: "Run currency spent at shops between battles.",
-    variants: ["essence"],
   },
 
   // --- Triggers & timing ---------------------------------------------
   {
     term: "Materialized",
-    definition: "Triggers when this character enters the battlefield.",
+    definition: "Triggers when this character enters play.",
     variants: ["materialized"],
   },
   {
     term: "Materialize",
-    definition: "Put a character onto the battlefield from anywhere.",
+    definition: "Put a character into play",
     variants: ["materialize", "materializes"],
   },
   {
     term: "Judgment",
-    definition: "Triggers at the start of your judgment phase each turn.",
+    definition: "Triggers at the start of your turn.",
     variants: ["judgment"],
   },
   {
@@ -112,7 +71,7 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   },
   {
     term: "Dissolve",
-    definition: "Destroy a character. It goes to its owner's void.",
+    definition: "Destroy a character. It goes to the void.",
     variants: ["dissolve", "dissolves"],
   },
   {
@@ -122,7 +81,7 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   },
   {
     term: "Banish",
-    definition: "Remove a card from the game entirely.",
+    definition: "Remove a card from the game.",
     variants: ["banish"],
   },
 
@@ -134,12 +93,13 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   },
   {
     term: "Foresee",
-    definition: "Look at the top N cards of your deck and reorder them.",
+    definition:
+      "Look at the top N cards of your deck, put any number into your void, and put the rest back in any order.",
     variants: ["foresee"],
   },
   {
     term: "Discover",
-    definition: "Reveal three matching cards. Add the chosen one to your hand.",
+    definition: "Reveal three matching cards. Draw the chosen one.",
     variants: ["discover"],
   },
   {
@@ -148,60 +108,40 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["fast"],
   },
   {
-    term: "Unstoppable",
-    definition: "This character cannot be blocked.",
-    variants: ["unstoppable"],
-  },
-  {
     term: "Unbound",
-    definition: "Cannot be dissolved by enemy abilities.",
+    definition: "Can be deployed on the same turn in which it is materialized.",
     variants: ["unbound"],
   },
   {
     term: "Echo",
-    definition: "Triggered abilities of this card trigger an extra time.",
+    definition: "Triggers an additional time.",
     variants: ["echo"],
   },
   {
     term: "Preeminence",
-    definition: "This character must be blocked when it attacks.",
+    definition: "Wins spark ties during challenges.",
     variants: ["preeminence"],
   },
   {
-    term: "Dread",
-    definition: "When attacking, an enemy with the lowest spark must block.",
-    variants: ["dread"],
-  },
-  {
     term: "Supported",
-    definition: "An ally is supported while another ally is in play.",
+    definition: "Characters directly in front of this character.",
     variants: ["supported", "supporting"],
   },
   {
     term: "Deployed",
-    definition: "An ally that is currently on the battlefield.",
+    definition: "In the front rank.",
     variants: ["deployed"],
-  },
-  {
-    term: "Focused",
-    definition: "An ally that did not attack or block this turn.",
-    variants: ["focused"],
   },
 
   // --- Verbs ----------------------------------------------------------
   {
-    term: "Abandon",
-    definition: "Send one of your own allies to your void.",
-    variants: ["abandon", "abandoned", "abandons"],
-  },
-  {
     term: "Kindle",
-    definition: "Give your allies a temporary spark boost this turn.",
+    definition: "Increase the spark of the ally with the highest spark",
     variants: ["kindle"],
   },
   {
     term: "Transfigure",
-    definition: "Permanently upgrade a card in your deck with a sigil.",
+    definition: "Permanently upgrade a card in your deck.",
     variants: ["transfigure", "transfigured", "transfigures"],
   },
   {
@@ -212,23 +152,8 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
 
   // --- Quest terms ----------------------------------------------------
   {
-    term: "Dreamcaller",
-    definition: "Your hero. Provides a starting deck and a passive ability.",
-    variants: ["dreamcaller", "dreamcallers"],
-  },
-  {
-    term: "Dreamsign",
-    definition: "A run-long modifier earned at dreamsign sites.",
-    variants: ["dreamsign", "dreamsigns"],
-  },
-  {
-    term: "Dreamscape",
-    definition: "A region containing several sites and a battle.",
-    variants: ["dreamscape", "dreamscapes"],
-  },
-  {
     term: "Bane",
-    definition: "A penalty card forced into your deck by a dreamsign.",
+    definition: "A penalty card forced into your deck.",
     variants: ["bane"],
   },
   {
@@ -240,22 +165,18 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   // --- Sigil colors (Transfigurations) -------------------------------
   {
     term: "Golden",
-    definition: "A transfiguration sigil that boosts essence rewards.",
+    definition:
+      "Improves the effect of the card by increasing or decreasing a number in its rules text by 1.",
     variants: ["golden"],
   },
   {
     term: "Prismatic",
-    definition: "A transfiguration sigil applying every color's bonus.",
+    definition: "A transfiguration applying all other eligible transfiguration",
     variants: ["prismatic"],
   },
   {
-    term: "Radiant",
-    definition: "A transfiguration sigil that buffs the card's spark.",
-    variants: ["radiant"],
-  },
-  {
     term: "Transfiguration",
-    definition: "A permanent sigil applied to a card at a transfiguration site.",
+    definition: "A permanent modification to a card.",
     variants: ["transfiguration", "transfigurations"],
   },
 ];
