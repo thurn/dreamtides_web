@@ -900,6 +900,34 @@ describe("meta_gain_2_rewards (compound) viability", () => {
     }
   });
 
+  it("declines random starter purge paired with named deck transform targeting a starter", () => {
+    const t = getReward("meta_gain_2_rewards");
+    const ctx = buildContext({
+      cards: [STARTER_CARD],
+      deckEntries: [{ cardId: STARTER_CARD.id, copies: 1 }],
+      starterCards: 1,
+    });
+    const transformParams = {
+      oldCardName: STARTER_CARD.name,
+      newCardName: STARTER_CARD.name,
+    };
+    expect(getReward("purge_random_starter").viable({}, ctx)).toBe(true);
+    expect(getReward("transform_card_in_deck_into_named").viable(transformParams, ctx)).toBe(true);
+
+    for (const subIds of [
+      ["purge_random_starter", "transform_card_in_deck_into_named"],
+      ["transform_card_in_deck_into_named", "purge_random_starter"],
+    ] as const) {
+      expect(t.viable({
+        subIds,
+        subParams: [
+          subIds[0] === "transform_card_in_deck_into_named" ? transformParams : {},
+          subIds[1] === "transform_card_in_deck_into_named" ? transformParams : {},
+        ] as const,
+      }, ctx), subIds.join(" + ")).toBe(false);
+    }
+  });
+
   it("rollParams filters explicitly incompatible reward pairs", () => {
     const t = getReward("meta_gain_2_rewards");
     const ctx = buildContext({

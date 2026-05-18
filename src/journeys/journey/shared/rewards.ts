@@ -3488,9 +3488,11 @@ function metaRewardPairKey(firstId: string, secondId: string): string {
 }
 
 function paramsTargetStarterCard(params: TemplateParams, ctx: JourneyContext): boolean {
-  const cardName = params.cardName;
-  return typeof cardName === "string"
-    && findDeckEntriesByName(ctx, cardName, (card) => card.rarity === "Starter").length > 0;
+  return [params.cardName, params.oldCardName].some(
+    (cardName) =>
+      typeof cardName === "string"
+      && findDeckEntriesByName(ctx, cardName, (card) => card.rarity === "Starter").length > 0,
+  );
 }
 
 function randomStarterRemovalCanInvalidateNamedStarterTarget(
