@@ -9,6 +9,8 @@ import {
   lookupGlossaryTerm,
 } from "./glossary";
 
+const SRC_DIR = join(__dirname, "..");
+
 interface RawCard {
   "rendered-text"?: string;
 }
@@ -468,6 +470,31 @@ describe("glossary", () => {
     expect(hasGlossaryTerm("Judgment")).toBe(true);
     expect(hasGlossaryTerm("judgment")).toBe(true);
     expect(hasGlossaryTerm("xxxxxxxx")).toBe(false);
+  });
+
+  // The card-text hover tooltip pathway (`card-text.ts` →
+  // `RulesText.tsx`) and the HUD glossary popup
+  // (`GlossaryPopup.tsx`) must consume the same data module. There
+  // is exactly one place that lists gameplay terms; both surfaces
+  // import from it.
+  it("is the single source of truth shared by the card-text tooltip and the glossary popup", () => {
+    const cardText = readFileSync(
+      join(SRC_DIR, "components", "card-text.ts"),
+      "utf8",
+    );
+    const popup = readFileSync(
+      join(SRC_DIR, "components", "GlossaryPopup.tsx"),
+      "utf8",
+    );
+    expect(
+      cardText,
+      "card-text.ts must look up terms from src/data/glossary",
+    ).toMatch(/from\s+"\.\.\/data\/glossary"/);
+    expect(
+      popup,
+      "GlossaryPopup.tsx must source its entries from src/data/glossary",
+    ).toMatch(/from\s+"\.\.\/data\/glossary"/);
+    expect(popup).toMatch(/\bGLOSSARY\b/);
   });
 
   // Completeness check: every distinct word that appears in the live

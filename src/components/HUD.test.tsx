@@ -185,12 +185,20 @@ afterEach(() => {
 });
 
 describe("HUD", () => {
-  function renderHud() {
+  function renderHud(overrides: Partial<{
+    onOpenDeckViewer: () => void;
+    onOpenGlossary: () => void;
+    onOpenDebugScreen: () => void;
+    onToggleCardSourceOverlay: () => void;
+  }> = {}) {
     return mount(
       <HUD
-        onOpenDeckViewer={vi.fn()}
-        onOpenDebugScreen={vi.fn()}
-        onToggleCardSourceOverlay={vi.fn()}
+        onOpenDeckViewer={overrides.onOpenDeckViewer ?? vi.fn()}
+        onOpenGlossary={overrides.onOpenGlossary ?? vi.fn()}
+        onOpenDebugScreen={overrides.onOpenDebugScreen ?? vi.fn()}
+        onToggleCardSourceOverlay={
+          overrides.onToggleCardSourceOverlay ?? vi.fn()
+        }
         hasDraftData={false}
         hasCardSourceDebug={false}
         isCardSourceOverlayOpen={false}
@@ -228,6 +236,37 @@ describe("HUD", () => {
     // tiles, not as visible HUD text, so a strict search must not find a
     // counter word.
     expect(container.textContent).not.toMatch(/\bSigns?\b/);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders a Glossary button beside View Deck and fires the callback on click", () => {
+    setQuestContext(makeState([]));
+    const onOpenGlossary = vi.fn();
+    const { container, root } = renderHud({ onOpenGlossary });
+
+    const glossaryButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="hud-glossary-button"]',
+    );
+    expect(glossaryButton).not.toBeNull();
+    expect(glossaryButton?.textContent).toContain("Glossary");
+
+    // The button sits in the same right-side button cluster as
+    // "View Deck" — both are inside the same flex container so the
+    // glossary entry point is always one click away from the deck
+    // viewer entry point.
+    const buttons = Array.from(
+      container.querySelectorAll("button"),
+    ).filter((b) => /Glossary|View Deck/.test(b.textContent ?? ""));
+    expect(buttons.length).toBeGreaterThanOrEqual(2);
+    expect(buttons[0]?.parentElement).toBe(buttons[1]?.parentElement);
+
+    act(() => {
+      glossaryButton?.click();
+    });
+    expect(onOpenGlossary).toHaveBeenCalledTimes(1);
 
     act(() => {
       root.unmount();

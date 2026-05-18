@@ -5,7 +5,7 @@ import {
 } from "./card-text";
 import { HoverPopover } from "./HoverPopover";
 import { ENERGY_PIP_COLOR, PipBadge } from "./PipBadge";
-import type { GlossaryEntry } from "../data/glossary";
+import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 
 /**
  * Renders rules text with:
@@ -60,34 +60,6 @@ interface RulesTextProps {
   text: string;
   /** Optional override color for plain text. */
   color?: string;
-}
-
-function GlossaryDefinitionCard({
-  entry,
-}: {
-  entry: GlossaryEntry;
-}) {
-  return (
-    <div
-      className="rounded-md px-3 py-2 text-xs leading-snug shadow-lg"
-      style={{
-        background: "rgba(15, 10, 24, 0.96)",
-        border: "1px solid rgba(168, 85, 247, 0.55)",
-        color: "#e2e8f0",
-        boxShadow: "0 8px 22px rgba(0, 0, 0, 0.55)",
-      }}
-    >
-      <p
-        className="text-[10px] font-bold uppercase tracking-[0.18em]"
-        style={{ color: "#c4b5fd" }}
-      >
-        {entry.term}
-      </p>
-      <p className="mt-1" style={{ color: "#f8fafc" }}>
-        {entry.definition}
-      </p>
-    </div>
-  );
 }
 
 function renderSegment(segment: TextSegment, key: number | string): ReactNode {

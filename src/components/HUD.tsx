@@ -48,6 +48,7 @@ function useAnimatedNumber(target: number, duration: number): number {
 /** Props for the HUD component. */
 interface HudProps {
   onOpenDeckViewer: () => void;
+  onOpenGlossary: () => void;
   onOpenDebugScreen: () => void;
   onToggleCardSourceOverlay: () => void;
   hasDraftData: boolean;
@@ -58,6 +59,7 @@ interface HudProps {
 /** Persistent HUD bar anchored to the bottom of the viewport. */
 export function HUD({
   onOpenDeckViewer,
+  onOpenGlossary,
   onOpenDebugScreen,
   onToggleCardSourceOverlay,
   hasDraftData,
@@ -239,6 +241,24 @@ export function HUD({
         >
           <span className="lg:hidden">{"\uD83C\uDCCF"}</span>
           <span className="hidden lg:inline">View Deck</span>
+        </button>
+        {/* Glossary opens a popup of every gameplay term that has a
+            card-text hover tooltip. Sits beside View Deck so the
+            reference is always one click from anywhere the HUD
+            renders. */}
+        <button
+          className={`${hudButtonBase} focus-visible:ring-violet-300`}
+          style={{
+            background: "rgba(124, 58, 237, 0.12)",
+            border: "1px solid rgba(124, 58, 237, 0.32)",
+            color: "#c4b5fd",
+          }}
+          onClick={onOpenGlossary}
+          data-testid="hud-glossary-button"
+        >
+          <span className="lg:hidden" aria-hidden="true">{"\uD83D\uDCD6"}</span>
+          <span className="hidden lg:inline">Glossary</span>
+          <span className="sr-only lg:hidden">Glossary</span>
         </button>
         {hasCardSourceDebug && (
           <button

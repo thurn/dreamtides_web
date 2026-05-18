@@ -12,6 +12,7 @@ import { ScreenRouter } from "./components/ScreenRouter";
 import { HUD } from "./components/HUD";
 import { DeckViewer } from "./components/DeckViewer";
 import { StartingDeckModal } from "./components/StartingDeckModal";
+import { GlossaryPopup } from "./components/GlossaryPopup";
 import { DebugScreen } from "./screens/DebugScreen";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
@@ -42,6 +43,7 @@ export function QuestApp({
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state);
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
+  const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
   const previousScreenTypeRef = useRef(state.screen.type);
@@ -96,6 +98,14 @@ export function QuestApp({
     setDeckViewerOpen(false);
   }, []);
 
+  const handleOpenGlossary = useCallback(() => {
+    setGlossaryOpen(true);
+  }, []);
+
+  const handleCloseGlossary = useCallback(() => {
+    setGlossaryOpen(false);
+  }, []);
+
   const handleBeginQuest = useCallback(() => {
     mutations.dismissStartingDeckPopup();
   }, [mutations]);
@@ -142,6 +152,7 @@ export function QuestApp({
           <ErrorBoundary scope="overlay:hud">
             <HUD
               onOpenDeckViewer={handleOpenDeckViewer}
+              onOpenGlossary={handleOpenGlossary}
               onOpenDebugScreen={handleOpenDebugScreen}
               onToggleCardSourceOverlay={handleToggleCardSourceOverlay}
               hasDraftData={hasDraftData}
@@ -172,6 +183,9 @@ export function QuestApp({
             onClose={handleBeginQuest}
             cardDatabase={cardDatabase}
           />
+        </ErrorBoundary>
+        <ErrorBoundary scope="overlay:glossary" onClose={handleCloseGlossary}>
+          <GlossaryPopup isOpen={glossaryOpen} onClose={handleCloseGlossary} />
         </ErrorBoundary>
         <ErrorBoundary scope="overlay:debug-screen" onClose={handleCloseDebugScreen}>
           <DebugScreen
