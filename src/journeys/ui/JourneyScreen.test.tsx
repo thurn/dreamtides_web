@@ -571,6 +571,42 @@ describe("JourneyScreen", () => {
     });
   });
 
+  it("keeps dream names off the option row while preserving accessible labels and hover headings", () => {
+    mockedGenerate.mockReturnValue(makeFlatManifest(3));
+    const onClose = vi.fn();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
+    );
+
+    const imageControls = queryDreamImageControls(container);
+    expect(imageControls).toHaveLength(3);
+    const firstLabel = imageControls[0].getAttribute("aria-label");
+    expect(firstLabel).toMatch(/^Enter dream: .+/);
+    const firstDreamName = firstLabel?.replace("Enter dream: ", "") ?? "";
+    expect(firstDreamName.length).toBeGreaterThan(0);
+    expect(container.textContent).not.toContain(firstDreamName);
+
+    act(() => {
+      imageControls[0].dispatchEvent(
+        new MouseEvent("mouseover", { bubbles: true }),
+      );
+    });
+
+    expect(container.querySelector('[role="tooltip"]')?.textContent).toContain(
+      firstDreamName,
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("rerolls with the same context and the next root journey index", () => {
     mockedGenerate
       .mockReturnValueOnce(makeFlatManifest(1))

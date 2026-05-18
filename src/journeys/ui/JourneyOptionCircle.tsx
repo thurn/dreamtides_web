@@ -1,6 +1,6 @@
 /**
  * One journey option as it appears on `JourneyScreen`: a circular dream-art
- * image control with a dream-name caption.
+ * image control with stable space beneath the circle for hover-card anchoring.
  *
  * Hovering the circle reveals a `JourneyHoverCard` showing the option's full
  * rendered text. Hover state is owned by the caller (`JourneyScreen`), so
@@ -23,7 +23,7 @@ import { JourneyHoverCard } from "./JourneyHoverCard";
 export interface JourneyOptionCircleProps {
   /** Resolved dream-art URL (e.g. `/journeys/123.jpg`). */
   readonly imageUrl: string;
-  /** Dream name shown as the caption and the hover-card heading. */
+  /** Dream name used by the image control label and hover-card heading. */
   readonly dreamName: string;
   /** Full rendered option text passed through to the hover card. */
   readonly text: string;
@@ -42,7 +42,7 @@ export interface JourneyOptionCircleProps {
   readonly onEnterDream: () => void;
 }
 
-/** Circular dream-art image control + caption. */
+/** Circular dream-art image control. */
 export function JourneyOptionCircle({
   imageUrl,
   dreamName,
@@ -100,12 +100,7 @@ export function JourneyOptionCircle({
         )}
       </button>
 
-      <h3
-        className="text-center text-base font-bold"
-        style={{ color: "#c084fc" }}
-      >
-        {dreamName}
-      </h3>
+      <div aria-hidden="true" className="h-6" />
 
       <AnimatePresence>
         {hovered && (
