@@ -218,6 +218,42 @@ describe("createBattleInit", () => {
       expect(floored.essenceReward).toBe(0);
     });
 
+    it("applies active percent battle reward reductions with final-reward floor rounding", () => {
+      const baseState = makeBattleTestState();
+      const reduced = createBattleInit({
+        ...makeBaseInput(),
+        state: {
+          ...baseState,
+          completionLevel: 1,
+          battleModifiers: [
+            {
+              kind: "reward_reduction_percent",
+              percent: 33,
+              battlesRemaining: 2,
+              source: "journey:test",
+            },
+          ],
+        },
+      });
+      const floored = createBattleInit({
+        ...makeBaseInput(),
+        state: {
+          ...baseState,
+          battleModifiers: [
+            {
+              kind: "reward_reduction_percent",
+              percent: 150,
+              battlesRemaining: 1,
+              source: "journey:test",
+            },
+          ],
+        },
+      });
+
+      expect(reduced.essenceReward).toBe(100);
+      expect(floored.essenceReward).toBe(0);
+    });
+
     it("flags miniboss at completion level 3 and final boss at completion level 6", () => {
       const baseState = makeBattleTestState();
       const minibossInit = createBattleInit({

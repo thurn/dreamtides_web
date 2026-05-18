@@ -114,7 +114,7 @@ function applyBattleRewardModifiers(
         reward -= modifier.amount;
         break;
       case "reward_reduction_percent":
-        reward -= Math.floor((reward * modifier.percent) / 100);
+        reward = Math.floor((reward * (100 - modifier.percent)) / 100);
         break;
       case "temporary_bane_grant":
         break;

@@ -280,7 +280,8 @@ describe("incrementCompletionLevel battle modifier decay", () => {
     act(() => {
       quest.mutations.pushBattleRewardModifier("flat", 10, 1, "src-1");
       quest.mutations.pushBattleRewardModifier("flat", 20, 2, "src-2");
-      quest.mutations.pushTemporaryBaneGrant("Nightmare", 1, 1, "src-3");
+      quest.mutations.pushBattleRewardModifier("percent", 25, 2, "src-3");
+      quest.mutations.pushTemporaryBaneGrant("Nightmare", 1, 1, "src-4");
     });
 
     const initialBanes = quest.state.deck
@@ -293,12 +294,17 @@ describe("incrementCompletionLevel battle modifier decay", () => {
     });
 
     const kinds = quest.state.battleModifiers.map((modifier) => modifier.kind);
-    expect(kinds).toEqual(["reward_reduction_flat"]);
-    const survivor = quest.state.battleModifiers[0];
-    expect(survivor).toMatchObject({
+    expect(kinds).toEqual(["reward_reduction_flat", "reward_reduction_percent"]);
+    expect(quest.state.battleModifiers[0]).toMatchObject({
       kind: "reward_reduction_flat",
       battlesRemaining: 1,
       source: "src-2",
+    });
+    expect(quest.state.battleModifiers[1]).toMatchObject({
+      kind: "reward_reduction_percent",
+      battlesRemaining: 1,
+      source: "src-3",
+      percent: 25,
     });
 
     // The temporary bane grant's deck entry should have been removed when its
