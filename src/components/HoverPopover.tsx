@@ -1,12 +1,17 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type CSSProperties,
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import {
+  computePopoverPlacement,
+  type PopoverPlacementSide,
+} from "./hover-popover-placement";
 
 /**
  * A reusable hover popover primitive.
@@ -19,11 +24,20 @@ import { createPortal } from "react-dom";
  *
  * The popover is portaled directly to `document.body` so it floats above
  * any framer-motion overlays (z-index conflicts in the prototype are
- * common).
+ * common) and escapes any ancestor `overflow: hidden` clipping.
  *
  * The trigger element receives `pointer-events: auto` styling so it remains
  * clickable. The popover itself uses `pointer-events: none` so it never
  * intercepts clicks on what's underneath it.
+ *
+ * Viewport awareness:
+ *
+ * After the popover mounts, the component measures its actual rendered size
+ * and then re-positions through `computePopoverPlacement` so the popover is
+ * fully on-screen. The chosen side is deterministic given the same anchor
+ * rect, popover size, and viewport: it flips when the preferred side does
+ * not fit and shifts along the perpendicular axis to stay inside the
+ * viewport. See `hover-popover-placement.ts` for the math.
  *
  * Used for glossary term definitions on card / Dreamcaller / Dreamsign
  * rules text, and for full-card previews on compact deck rows.
@@ -39,12 +53,17 @@ interface HoverPopoverProps {
   /** Delay before showing the popover (ms). Defaults to 500ms. */
   delayMs?: number;
   /**
-   * Where to anchor the popover relative to the trigger.
-   * - `"top"` (default) centers the popover above the trigger.
-   * - `"left"` anchors the popover to the left of the trigger, vertically
-   *   centered. Useful for triggers on the right edge of the viewport
-   *   (e.g. the right-side deck sidebar) where a top-anchored popover
-   *   would clip or feel disconnected from the row.
+   * Preferred side to anchor the popover relative to the trigger.
+   * - `"top"` (default) centers the popover above the trigger and flips to
+   *   the bottom when the trigger sits near the top edge of the viewport.
+   * - `"left"` anchors the popover to the left of the trigger and flips to
+   *   the right when the trigger sits near the left edge of the viewport.
+   *   Useful for triggers on the right edge of the viewport (e.g. the
+   *   right-side deck sidebar) where the popover would otherwise appear
+   *   detached above or below the row.
+   *
+   * In both cases the popover is shifted along the perpendicular axis as
+   * needed so it stays fully inside the viewport.
    */
   placement?: Placement;
   /**
@@ -65,7 +84,6 @@ interface HoverPopoverProps {
 }
 
 const DEFAULT_DELAY_MS = 500;
-const POPOVER_GAP_PX = 8;
 const POPOVER_DEFAULT_MAX_WIDTH_PX = 260;
 
 /**
@@ -85,6 +103,17 @@ export const CARD_HOVER_PREVIEW_DELAY_MS = 300;
  */
 export const CARD_HOVER_PREVIEW_WIDTH_PX = 240;
 
+interface ShownState {
+  /** Anchor (trigger) rect captured when the popover became visible. */
+  anchorRect: DOMRect;
+}
+
+interface ResolvedPlacement {
+  left: number;
+  top: number;
+  side: PopoverPlacementSide;
+}
+
 export function HoverPopover({
   children,
   content,
@@ -96,12 +125,10 @@ export function HoverPopover({
   style,
 }: HoverPopoverProps) {
   const triggerRef = useRef<HTMLElement | null>(null);
+  const popoverRef = useRef<HTMLDivElement | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [position, setPosition] = useState<{
-    left: number;
-    top: number;
-    transform: string;
-  } | null>(null);
+  const [shown, setShown] = useState<ShownState | null>(null);
+  const [resolved, setResolved] = useState<ResolvedPlacement | null>(null);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current !== null) {
@@ -110,57 +137,26 @@ export function HoverPopover({
     }
   }, []);
 
-  const computePosition = useCallback(() => {
-    const trigger = triggerRef.current;
-    if (trigger === null) {
-      return null;
-    }
-    const rect = trigger.getBoundingClientRect();
-    if (placement === "left") {
-      return {
-        left: rect.left - POPOVER_GAP_PX,
-        top: rect.top + rect.height / 2,
-        transform: "translate(-100%, -50%)",
-      };
-    }
-    // "top" placement: anchor above the trigger. When the trigger is so
-    // close to the viewport top that the popover would clip off-screen,
-    // flip to anchor below the trigger instead. This keeps the preview
-    // visible for grid cells in the top row of a screen (e.g. the shop).
-    const viewportHeight =
-      typeof window === "undefined" ? 0 : window.innerHeight;
-    const estimatedPopoverHeight = trigger.offsetHeight * 1.5;
-    const spaceAbove = rect.top;
-    const spaceBelow = viewportHeight - rect.bottom;
-    const flipToBottom =
-      spaceAbove < estimatedPopoverHeight && spaceBelow > spaceAbove;
-    if (flipToBottom) {
-      return {
-        left: rect.left + rect.width / 2,
-        top: rect.bottom + POPOVER_GAP_PX,
-        transform: "translate(-50%, 0)",
-      };
-    }
-    return {
-      left: rect.left + rect.width / 2,
-      top: rect.top - POPOVER_GAP_PX,
-      transform: "translate(-50%, -100%)",
-    };
-  }, [placement]);
-
   const show = useCallback(() => {
     clearTimer();
     timerRef.current = setTimeout(() => {
-      const next = computePosition();
-      if (next !== null) {
-        setPosition(next);
+      const trigger = triggerRef.current;
+      if (trigger === null) {
+        return;
       }
+      const anchorRect = trigger.getBoundingClientRect();
+      // Reset any previous resolved placement so the first render is at the
+      // off-screen sentinel position. The layout effect below measures the
+      // freshly-mounted popover and replaces this with the real placement.
+      setResolved(null);
+      setShown({ anchorRect });
     }, delayMs);
-  }, [clearTimer, computePosition, delayMs]);
+  }, [clearTimer, delayMs]);
 
   const hide = useCallback(() => {
     clearTimer();
-    setPosition(null);
+    setShown(null);
+    setResolved(null);
   }, [clearTimer]);
 
   useEffect(() => {
@@ -172,11 +168,54 @@ export function HoverPopover({
     };
   }, []);
 
-  const popoverStyle: CSSProperties = {
-    left: position?.left ?? 0,
-    top: position?.top ?? 0,
-    transform: position?.transform ?? "translate(-50%, -100%)",
-  };
+  // Measure the rendered popover and compute viewport-aware placement.
+  // Runs after the popover is mounted off-screen on the first frame, then
+  // commits the final position before the browser paints. Using
+  // `useLayoutEffect` avoids the visual flash that `useEffect` would
+  // produce between mount and the second render.
+  useLayoutEffect(() => {
+    if (shown === null) {
+      return;
+    }
+    const popover = popoverRef.current;
+    if (popover === null) {
+      return;
+    }
+    const popoverRect = popover.getBoundingClientRect();
+    const viewportWidth =
+      typeof window === "undefined" ? 0 : window.innerWidth;
+    const viewportHeight =
+      typeof window === "undefined" ? 0 : window.innerHeight;
+    const next = computePopoverPlacement({
+      anchor: shown.anchorRect,
+      popoverWidth: popoverRect.width,
+      popoverHeight: popoverRect.height,
+      viewportWidth,
+      viewportHeight,
+      preferred: placement,
+    });
+    setResolved(next);
+  }, [shown, placement]);
+
+  const popoverStyle: CSSProperties = (() => {
+    if (resolved !== null) {
+      return {
+        left: resolved.left,
+        top: resolved.top,
+        transform: "none",
+      };
+    }
+    // First render: park the popover off-screen at (0, 0) with no transform
+    // so we can measure its natural size without the user seeing it. We
+    // intentionally do not use `display: none` because that would zero the
+    // measured rect.
+    return {
+      left: 0,
+      top: 0,
+      transform: "none",
+      visibility: "hidden",
+    };
+  })();
   if (maxWidthPx !== null) {
     popoverStyle.maxWidth = maxWidthPx ?? POPOVER_DEFAULT_MAX_WIDTH_PX;
   }
@@ -200,13 +239,15 @@ export function HoverPopover({
       ) : (
         <span {...triggerProps}>{children}</span>
       )}
-      {position !== null &&
+      {shown !== null &&
         typeof document !== "undefined" &&
         createPortal(
           <div
+            ref={popoverRef}
             className="pointer-events-none fixed z-[1000]"
             style={popoverStyle}
             role="tooltip"
+            data-popover-side={resolved?.side ?? "pending"}
           >
             {content}
           </div>,
