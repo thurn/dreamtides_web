@@ -64,6 +64,7 @@ import {
 import { generateRewardSiteData } from "../rewards/reward-generator";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
+  effectivePrice,
   generateShopInventory,
   rerollCost,
   shopSlotsToRuntime,
@@ -363,11 +364,11 @@ function randomIntInRange(min: number, max: number): number {
 }
 
 function runtimeSlotPrice(slot: {
+  itemType: "card" | "dreamsign";
   basePrice: number;
   discountPercent: number;
-}): number {
-  if (slot.discountPercent === 0) return slot.basePrice;
-  return Math.round(slot.basePrice * (1 - slot.discountPercent / 100));
+}, essenceDiscountPercent: number): number {
+  return effectivePrice(slot, { essenceDiscountPercent });
 }
 
 function findSite(state: QuestState, siteId: string): SiteState | null {
@@ -1242,7 +1243,10 @@ export function QuestProvider({
           return prev;
         }
 
-        const price = runtimeSlotPrice(slot);
+        const price = runtimeSlotPrice(
+          slot,
+          prev.shopModifiers.essenceDiscountPercent,
+        );
         // Cards cost essence; Dreamsigns cost omens.
         const payInOmens = slot.itemType === "dreamsign";
         const availableCurrency = payInOmens ? prev.omens : prev.essence;

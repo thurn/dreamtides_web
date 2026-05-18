@@ -322,6 +322,84 @@ describe("ShopScreen", () => {
     });
   });
 
+  it("displays card prices with the permanent shop essence discount applied", () => {
+    const state = {
+      ...makeState([
+        {
+          itemType: "card",
+          cardNumber: 1,
+          basePrice: 100,
+          discountPercent: 30,
+          purchased: false,
+        },
+      ]),
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 0,
+        essenceDiscountPercent: 50,
+      },
+    };
+    setQuestContext(state);
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    const priceSpan = container.querySelector("[data-shop-price]");
+    expect(priceSpan?.textContent).toBe("20");
+    expect(container.textContent).toContain("Sale 80% Off");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("displays specialty shop card prices with the permanent shop essence discount applied", () => {
+    const state = {
+      ...makeState([
+        {
+          itemType: "card",
+          cardNumber: 1,
+          basePrice: 200,
+          discountPercent: 0,
+          purchased: false,
+        },
+      ]),
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 0,
+        essenceDiscountPercent: 50,
+      },
+    };
+    setQuestContext(state);
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "SpecialtyShop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    const priceSpan = container.querySelector("[data-shop-price]");
+    expect(container.textContent).toContain("Specialty Shop");
+    expect(priceSpan?.textContent).toBe("100");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the price button identically for non-sale items (regression: discount path must not alter base rendering)", () => {
     setQuestContext(
       makeState([

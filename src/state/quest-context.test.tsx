@@ -392,6 +392,57 @@ describe("rerollShop free-reroll consumption", () => {
   });
 });
 
+describe("buyShopSlot essence discounts", () => {
+  it("charges card slots with the permanent shop essence discount applied", () => {
+    const cardDatabase = new Map<number, CardData>([[101, makeCard(101)]]);
+    const site = makeSite("shop-site", "Shop");
+    const node = makeNode("dreamscape-1", [site]);
+    const initialState: QuestState = {
+      ...createDefaultState(),
+      atlas: makeAtlasWithCurrent(node),
+      currentDreamscape: node.id,
+      essence: 100,
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 0,
+        essenceDiscountPercent: 50,
+      },
+      siteRuntime: {
+        [site.id]: {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 30,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+          restrictedTide: null,
+        },
+      },
+    };
+    const quest = mountQuestContext({ cardDatabase, initialState });
+
+    act(() => {
+      quest.mutations.buyShopSlot(site.id, 0);
+    });
+
+    expect(quest.state.essence).toBe(80);
+    expect(quest.state.deck[quest.state.deck.length - 1]).toMatchObject({
+      cardNumber: 101,
+    });
+    const runtime = quest.state.siteRuntime[site.id];
+    if (runtime?.kind !== "shop") {
+      throw new Error("Expected shop runtime");
+    }
+    expect(runtime.slots[0]?.purchased).toBe(true);
+  });
+});
+
 describe("grantFreeShopRerolls", () => {
   it("increments shopModifiers.freeRerolls additively", () => {
     const quest = mountQuestContext();

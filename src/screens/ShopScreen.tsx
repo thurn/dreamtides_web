@@ -15,9 +15,11 @@ import { SIZE_PRESETS } from "../components/card-size";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import {
+  effectiveDiscountPercent,
   effectivePrice,
   rerollCost,
   runtimeSlotsToShopSlots,
+  type ShopPriceModifiers,
   type ShopSlot,
 } from "../shop/shop-generator";
 
@@ -42,6 +44,12 @@ export function ShopScreen({ site }: ShopScreenProps) {
   const { essence, omens } = state;
   const isSpecialty = site.type === "SpecialtyShop";
   const runtime = state.siteRuntime[site.id];
+  const priceModifiers = useMemo<ShopPriceModifiers>(
+    () => ({
+      essenceDiscountPercent: state.shopModifiers.essenceDiscountPercent,
+    }),
+    [state.shopModifiers.essenceDiscountPercent],
+  );
   const slots = useMemo<ShopSlot[]>(
     () =>
       runtime?.kind === "shop"
@@ -177,9 +185,10 @@ export function ShopScreen({ site }: ShopScreenProps) {
             index={index}
             canAfford={
               slot.itemType === "dreamsign"
-                ? effectivePrice(slot) <= omens
-                : effectivePrice(slot) <= essence
+                ? effectivePrice(slot, priceModifiers) <= omens
+                : effectivePrice(slot, priceModifiers) <= essence
             }
+            priceModifiers={priceModifiers}
             onBuy={handleBuy}
             onCardClick={setOverlayCard}
           />
@@ -264,6 +273,7 @@ interface ShopSlotCardProps {
   slot: ShopSlot;
   index: number;
   canAfford: boolean;
+  priceModifiers: ShopPriceModifiers;
   onBuy: (index: number) => void;
   onCardClick: (card: CardData) => void;
 }
@@ -273,6 +283,7 @@ function ShopSlotCard({
   slot,
   index,
   canAfford,
+  priceModifiers,
   onBuy,
   onCardClick,
 }: ShopSlotCardProps) {
@@ -290,8 +301,9 @@ function ShopSlotCard({
     );
   }
 
-  const price = effectivePrice(slot);
-  const hasDiscount = slot.discountPercent > 0;
+  const price = effectivePrice(slot, priceModifiers);
+  const discountPercent = effectiveDiscountPercent(slot, priceModifiers);
+  const hasDiscount = discountPercent > 0;
 
   if (slot.itemType === "dreamsign" && slot.dreamsign) {
     const ds = slot.dreamsign;
@@ -353,7 +365,7 @@ function ShopSlotCard({
           canAfford={canAfford}
           onClick={() => onBuy(index)}
         />
-        {hasDiscount && <ShopSaleText discountPercent={slot.discountPercent} />}
+        {hasDiscount && <ShopSaleText discountPercent={discountPercent} />}
       </div>
     );
   }
@@ -392,7 +404,7 @@ function ShopSlotCard({
           canAfford={canAfford}
           onClick={() => onBuy(index)}
         />
-        {hasDiscount && <ShopSaleText discountPercent={slot.discountPercent} />}
+        {hasDiscount && <ShopSaleText discountPercent={discountPercent} />}
       </div>
     );
   }

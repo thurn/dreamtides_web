@@ -1020,6 +1020,58 @@ describe("MultiplayerQuestProvider", () => {
     expect(updater?.(nextRoom ?? null)).toBe(nextRoom);
   });
 
+  it("charges shared shop card slots with the permanent essence discount applied", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 125,
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 0,
+        essenceDiscountPercent: 50,
+      },
+      siteRuntime: {
+        "site-1": {
+          kind: "shop",
+          restrictedTide: null,
+          slots: [
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 30,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+
+    expect(nextRoom?.questState?.essence).toBe(105);
+    expect(nextRoom?.actionLog?.["action-1"]?.summary).toMatchObject({
+      itemType: "card",
+      basePrice: 100,
+      discountedPrice: 20,
+      currency: "essence",
+      cardNumber: 101,
+    });
+  });
+
   it("rejects stale shared shop purchases after the slot changes", () => {
     const captured: QuestContextValue[] = [];
     const questState: QuestState = {

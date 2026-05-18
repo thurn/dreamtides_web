@@ -67,6 +67,7 @@ import { createStartInBattleState } from "../runtime/start-in-battle-state";
 import { generateRewardSiteData } from "../rewards/reward-generator";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
+  effectivePrice,
   generateShopInventory,
   rerollCost,
   shopSlotsToRuntime,
@@ -196,11 +197,11 @@ function stableStringify(value: unknown): string {
 }
 
 function runtimeSlotPrice(slot: {
+  itemType: "card" | "dreamsign";
   basePrice: number;
   discountPercent: number;
-}): number {
-  if (slot.discountPercent === 0) return slot.basePrice;
-  return Math.round(slot.basePrice * (1 - slot.discountPercent / 100));
+}, essenceDiscountPercent: number): number {
+  return effectivePrice(slot, { essenceDiscountPercent });
 }
 
 function nextDeckEntryId(deck: readonly DeckEntry[]): string {
@@ -2012,7 +2013,10 @@ export function MultiplayerQuestProvider({
             return room;
           }
 
-          const price = runtimeSlotPrice(slot);
+          const price = runtimeSlotPrice(
+            slot,
+            room.questState.shopModifiers.essenceDiscountPercent,
+          );
           // Cards cost essence; Dreamsigns cost omens.
           const payInOmens = slot.itemType === "dreamsign";
           const availableCurrency = payInOmens
