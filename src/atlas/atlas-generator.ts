@@ -102,6 +102,43 @@ function combinedSiteAppearanceBoosts(
   return boostsByType;
 }
 
+function removedSiteTypesFromModifiers(
+  modifiers: readonly DreamscapeModifier[] = [],
+): Set<SiteType> {
+  const removedTypes = new Set<SiteType>();
+
+  for (const modifier of modifiers) {
+    if (modifier.dreamscapesRemaining <= 0) {
+      continue;
+    }
+
+    if (modifier.kind === "remove_shop_sites") {
+      removedTypes.add("Shop");
+      removedTypes.add("SpecialtyShop");
+    }
+
+    if (modifier.kind === "remove_dreamsign_sites") {
+      removedTypes.add("DreamsignOffering");
+      removedTypes.add("DreamsignDraft");
+    }
+  }
+
+  return removedTypes;
+}
+
+function applySiteRemovalModifiers(
+  pool: Array<[SiteType, number]>,
+  modifiers: readonly DreamscapeModifier[] = [],
+): Array<[SiteType, number]> {
+  const removedTypes = removedSiteTypesFromModifiers(modifiers);
+
+  if (removedTypes.size === 0) {
+    return pool;
+  }
+
+  return pool.filter(([siteType]) => !removedTypes.has(siteType));
+}
+
 function applySiteAppearanceBoosts(
   pool: Array<[SiteType, number]>,
   modifiers: readonly DreamscapeModifier[] = [],
@@ -162,9 +199,10 @@ export function additionalSiteTypesForLevel(
   completionLevel: number,
   context: SiteGenerationContext,
 ): SiteType[] {
-  return buildAdditionalSitePool(completionLevel, context.playerHasBanes).map(
-    ([siteType]) => siteType,
-  );
+  return applySiteRemovalModifiers(
+    buildAdditionalSitePool(completionLevel, context.playerHasBanes),
+    context.dreamscapeModifiers,
+  ).map(([siteType]) => siteType);
 }
 
 /**
@@ -222,7 +260,10 @@ export function generateSiteComposition(
   const minAdditional = Math.max(2, 3 - fixedCount);
   const maxAdditional = Math.max(minAdditional, 6 - fixedCount);
   const pool = applySiteAppearanceBoosts(
-    buildAdditionalSitePool(completionLevel, context.playerHasBanes),
+    applySiteRemovalModifiers(
+      buildAdditionalSitePool(completionLevel, context.playerHasBanes),
+      context.dreamscapeModifiers,
+    ),
     context.dreamscapeModifiers,
   );
   // Every non-Draft site type appears at most once per dreamscape, so the
@@ -318,6 +359,9 @@ function createNode(
       siteAppearanceBoosts: Array.from(
         combinedSiteAppearanceBoosts(context.dreamscapeModifiers),
         ([siteType, percent]) => ({ siteType, percent }),
+      ),
+      removedSiteTypes: Array.from(
+        removedSiteTypesFromModifiers(context.dreamscapeModifiers),
       ),
     });
   }

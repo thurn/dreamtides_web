@@ -306,9 +306,9 @@ export interface QuestMutations {
   /**
    * Stack a dreamscape-window modifier that hides every site of `siteType`
    * for the next `dreamscapes` dreamscapes the player enters. The atlas
-   * generator consumes the modifier when its hookup lands. Only `"Shop"`
-   * and `"DreamsignOffering"` map to a dreamscape-modifier kind; the type
-   * is narrowed here so unsupported site types fail at compile time.
+   * generator consumes the modifier during future site composition. Only
+   * `"Shop"` and `"DreamsignOffering"` map to a dreamscape-modifier kind;
+   * the type is narrowed here so unsupported site types fail at compile time.
    */
   removeSiteTypeFromNextDreamscapes: (
     siteType: "Shop" | "DreamsignOffering",
@@ -323,7 +323,7 @@ export interface QuestMutations {
   grantShopOmenDiscounts: (count: number, source: string) => void;
   /**
    * Stack a `boost_site_appearance` modifier for the next `dreamscapes`
-   * dreamscapes; atlas generation consumes it when its hookup lands.
+   * dreamscapes; atlas generation consumes it during future site composition.
    */
   boostSiteAppearance: (
     siteType: SiteType,

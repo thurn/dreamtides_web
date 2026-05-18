@@ -241,6 +241,55 @@ describe("generateSiteComposition", () => {
     expect(sites.some((site) => site.type === "SpecialtyShop")).toBe(false);
   });
 
+  it("excludes Shop and SpecialtyShop while a shop-removal modifier is active", () => {
+    const randomSpy = vi
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0);
+
+    const sites = generateSiteComposition(5, false, defaultContext({
+      dreamscapeModifiers: [
+        {
+          kind: "remove_shop_sites",
+          dreamscapesRemaining: 1,
+          source: "test:remove-shop",
+        },
+      ],
+    }));
+
+    randomSpy.mockRestore();
+    expect(sites.some((site) => site.type === "Shop")).toBe(false);
+    expect(sites.some((site) => site.type === "SpecialtyShop")).toBe(false);
+  });
+
+  it("keeps Shop eligible when the shop-removal modifier has expired", () => {
+    const randomSpy = vi
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0);
+
+    const sites = generateSiteComposition(0, false, defaultContext({
+      dreamscapeModifiers: [
+        {
+          kind: "remove_shop_sites",
+          dreamscapesRemaining: 0,
+          source: "test:expired-remove-shop",
+        },
+      ],
+    }));
+
+    randomSpy.mockRestore();
+    expect(sites.some((site) => site.type === "Shop")).toBe(true);
+  });
+
   it("first dreamscape always has exactly 2x Draft, 1x DreamsignDraft, 1x DreamJourney, 1x Battle regardless of seed", () => {
     const seeds = [0, 0.123, 0.337, 0.5, 0.728, 0.999];
     for (const seed of seeds) {
