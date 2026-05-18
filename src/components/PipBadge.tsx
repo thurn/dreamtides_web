@@ -46,13 +46,27 @@ interface PipBadgeProps {
 }
 
 /**
- * Background fill per variant. Gold for spark (matches the character chrome
- * accent), teal/cyan for energy (distinct from gold so the two badges read
- * as different stats at a glance).
+ * Canonical resource color tokens. Single source of truth so the corner pip
+ * and any inline reference to the same resource (e.g. the energy flame
+ * inside rules text via `RulesText`) read as the same color and cannot
+ * drift apart over time. Importers should reference these constants
+ * directly rather than re-typing the hex value.
+ *
+ * - `SPARK_PIP_COLOR`: gold, matches the character chrome accent.
+ * - `ENERGY_PIP_COLOR`: teal/cyan, distinct from gold so the two badges
+ *   read as different stats at a glance.
+ */
+export const SPARK_PIP_COLOR = "#facc15";
+export const ENERGY_PIP_COLOR = "#0ea5e9";
+
+/**
+ * Background fill per variant. Read from the shared resource color tokens
+ * so the inline rules-text glyph (rendered by `RulesText`) and this pip
+ * badge always share a value.
  */
 const VARIANT_FILL: Readonly<Record<PipBadgeVariant, string>> = {
-  spark: "#facc15",
-  energy: "#0ea5e9",
+  spark: SPARK_PIP_COLOR,
+  energy: ENERGY_PIP_COLOR,
 };
 
 const VARIANT_BORDER: Readonly<Record<PipBadgeVariant, string>> = {

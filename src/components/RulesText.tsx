@@ -4,7 +4,7 @@ import {
   type TextSegment,
 } from "./card-text";
 import { HoverPopover } from "./HoverPopover";
-import { PipBadge } from "./PipBadge";
+import { ENERGY_PIP_COLOR, PipBadge } from "./PipBadge";
 import type { GlossaryEntry } from "../data/glossary";
 
 /**
@@ -24,6 +24,12 @@ import type { GlossaryEntry } from "../data/glossary";
 /**
  * Color used for each symbol type when rendering rules text.
  *
+ * The inline `energy` flame pulls from `ENERGY_PIP_COLOR` so the symbol
+ * inside rules text reads as the exact same teal as the corner energy-cost
+ * pip — the two anchors represent the same resource and must stay visually
+ * unified. Importing the constant rather than re-typing the hex value
+ * keeps the two from drifting again.
+ *
  * The trigger arrow `▸` uses the muted slate (`#94a3b8`, slate-400) shared
  * with secondary text elsewhere (Dreamcaller subtitle, room-gate hints). It
  * marks the start of a triggered ability without competing for attention
@@ -32,7 +38,7 @@ import type { GlossaryEntry } from "../data/glossary";
  * the arrow read as a UI alert rather than a typographic guide.
  */
 const SYMBOL_COLORS: Readonly<Record<string, string>> = {
-  energy: "#fbbf24",
+  energy: ENERGY_PIP_COLOR,
   spark: "#c084fc",
   trigger: "#94a3b8",
   fast: "#facc15",

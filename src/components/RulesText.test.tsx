@@ -4,6 +4,7 @@ import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { ENERGY_PIP_COLOR } from "./PipBadge";
 import { RulesText } from "./RulesText";
 
 function mount(element: ReactElement): {
@@ -57,6 +58,32 @@ describe("RulesText", () => {
     const flame = container.querySelector("i.bx.bxs-flame");
     expect(flame).not.toBeNull();
     expect(container.textContent).not.toContain("●");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  // Backlog task 001: the inline energy flame inside rules text must be
+  // rendered in the exact same teal as the corner energy-cost PipBadge
+  // (`ENERGY_PIP_COLOR`). They represent the same resource at two anchors
+  // on the card and must read as unified at normal viewing distance. Both
+  // sides pull from the same exported constant so they cannot drift again.
+  it("colors the inline energy flame with ENERGY_PIP_COLOR (matches the energy-cost pip)", () => {
+    const { container, root } = mount(<RulesText text="Pay ●2 to draw a card." />);
+
+    const flame = container.querySelector<HTMLElement>("i.bx.bxs-flame");
+    expect(flame).not.toBeNull();
+    const style = flame?.getAttribute("style") ?? "";
+    // jsdom serializes hex colors as `rgb(r, g, b)`. ENERGY_PIP_COLOR is
+    // `#0ea5e9` => `rgb(14, 165, 233)`.
+    expect(style.toLowerCase()).toContain("rgb(14, 165, 233)");
+    // Sanity-check ENERGY_PIP_COLOR itself: if the shared token ever
+    // changes hex value, this assertion makes the change explicit.
+    expect(ENERGY_PIP_COLOR.toLowerCase()).toBe("#0ea5e9");
+    // Guard against regression to the previous gold/amber fill `#fbbf24`
+    // = `rgb(251, 191, 36)`.
+    expect(style.toLowerCase()).not.toContain("rgb(251, 191, 36)");
 
     act(() => {
       root.unmount();
