@@ -12,7 +12,7 @@ import {
   siteTypeDescription,
   type SiteGenerationContext,
 } from "./atlas-generator";
-import type { DreamscapeNode, SiteState, SiteType } from "../types/quest";
+import type { DreamAtlas, DreamscapeNode, SiteState, SiteType } from "../types/quest";
 
 function defaultContext(
   overrides?: Partial<SiteGenerationContext>,
@@ -448,6 +448,12 @@ describe("generateInitialAtlas", () => {
 });
 
 describe("generateNewNodes", () => {
+  function allSiteIds(atlas: DreamAtlas): string[] {
+    return Object.values(atlas.nodes).flatMap((node) =>
+      node.sites.map((site) => site.id),
+    );
+  }
+
   it("generates 1-2 new nodes after a dreamscape is completed", () => {
     for (let i = 0; i < 40; i++) {
       const atlas = generateInitialAtlas(0, defaultContext());
@@ -491,6 +497,34 @@ describe("generateNewNodes", () => {
       defaultContext(),
     );
     expect(updated.nodes[atlas.startingNodeId].status).toBe("completed");
+  });
+
+  it("derives expansion ids from the persisted atlas after generator state resets", () => {
+    const atlas = generateInitialAtlas(0, defaultContext());
+    const originalNodeIds = Object.keys(atlas.nodes);
+    const originalSiteIds = allSiteIds(atlas);
+
+    resetAtlasGenerator();
+
+    const updated = generateNewNodes(
+      atlas,
+      atlas.startingNodeId,
+      0,
+      defaultContext(),
+    );
+    const updatedNodeIds = Object.keys(updated.nodes);
+    const updatedSiteIds = allSiteIds(updated);
+
+    expect(updatedNodeIds.length).toBeGreaterThan(originalNodeIds.length);
+    expect(new Set(updatedNodeIds).size).toBe(updatedNodeIds.length);
+    expect(new Set(updatedSiteIds).size).toBe(updatedSiteIds.length);
+    expect(updated.nodes[atlas.startingNodeId].status).toBe("completed");
+    for (const nodeId of originalNodeIds) {
+      expect(updated.nodes[nodeId]).toBeDefined();
+    }
+    for (const siteId of originalSiteIds) {
+      expect(updatedSiteIds).toContain(siteId);
+    }
   });
 
   it("preserves the starting node id on the updated atlas", () => {

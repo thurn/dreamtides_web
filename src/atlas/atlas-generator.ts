@@ -39,6 +39,46 @@ function nextSiteId(): string {
   return `site-${String(siteIdCounter)}`;
 }
 
+function numericSuffix(id: string, prefix: string): number | null {
+  const match = new RegExp(`^${prefix}-(\\d+)$`).exec(id);
+  if (match === null) {
+    return null;
+  }
+  const suffix = Number.parseInt(match[1], 10);
+  return Number.isFinite(suffix) ? suffix : null;
+}
+
+function maxNodeIdSuffix(atlas: DreamAtlas): number {
+  let max = 0;
+  for (const [key, node] of Object.entries(atlas.nodes)) {
+    for (const id of [key, node.id]) {
+      const suffix = numericSuffix(id, "dreamscape");
+      if (suffix !== null && suffix > max) {
+        max = suffix;
+      }
+    }
+  }
+  return max;
+}
+
+function maxSiteIdSuffix(atlas: DreamAtlas): number {
+  let max = 0;
+  for (const node of Object.values(atlas.nodes)) {
+    for (const site of node.sites) {
+      const suffix = numericSuffix(site.id, "site");
+      if (suffix !== null && suffix > max) {
+        max = suffix;
+      }
+    }
+  }
+  return max;
+}
+
+function syncAtlasGeneratorCounters(atlas: DreamAtlas): void {
+  nodeIdCounter = Math.max(nodeIdCounter, maxNodeIdSuffix(atlas));
+  siteIdCounter = Math.max(siteIdCounter, maxSiteIdSuffix(atlas));
+}
+
 /** Resets internal counters. Call when starting a new quest. */
 export function resetAtlasGenerator(): void {
   nodeIdCounter = 0;
@@ -448,6 +488,8 @@ export function generateNewNodes(
   if (!completedNode) {
     return atlas;
   }
+
+  syncAtlasGeneratorCounters(atlas);
 
   const updatedNodes = { ...atlas.nodes };
   const updatedEdges = [...atlas.edges];
