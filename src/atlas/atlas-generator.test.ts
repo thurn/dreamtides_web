@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import {
+  additionalSiteTypesForLevel,
   generateSiteComposition,
   generateInitialAtlas,
   generateNewNodes,
@@ -11,7 +12,7 @@ import {
   siteTypeDescription,
   type SiteGenerationContext,
 } from "./atlas-generator";
-import type { DreamscapeNode, SiteState, SiteType } from "../types/quest";
+import type { DreamAtlas, DreamscapeNode, SiteState, SiteType } from "../types/quest";
 
 function defaultContext(
   overrides?: Partial<SiteGenerationContext>,
@@ -188,6 +189,148 @@ describe("generateSiteComposition", () => {
     expect(foundCleanse).toBe(true);
   });
 
+  it("uses active site appearance boosts as additive percentage weight increases", () => {
+    const randomSpy = vi
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.87)
+      .mockReturnValueOnce(0);
+
+    const sites = generateSiteComposition(0, false, defaultContext({
+      dreamscapeModifiers: [
+        {
+          kind: "boost_site_appearance",
+          siteType: "SpecialtyShop",
+          percent: 50,
+          dreamscapesRemaining: 2,
+          source: "test:boost-one",
+        },
+        {
+          kind: "boost_site_appearance",
+          siteType: "SpecialtyShop",
+          percent: 50,
+          dreamscapesRemaining: 1,
+          source: "test:boost-two",
+        },
+      ],
+    }));
+
+    randomSpy.mockRestore();
+    expect(sites.some((site) => site.type === "SpecialtyShop")).toBe(true);
+  });
+
+  it("does not apply a single lower boost as if it were already fully combined", () => {
+    const randomSpy = vi
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.87)
+      .mockReturnValueOnce(0);
+
+    const sites = generateSiteComposition(0, false, defaultContext({
+      dreamscapeModifiers: [
+        {
+          kind: "boost_site_appearance",
+          siteType: "SpecialtyShop",
+          percent: 50,
+          dreamscapesRemaining: 2,
+          source: "test:boost-one",
+        },
+      ],
+    }));
+
+    randomSpy.mockRestore();
+    expect(sites.some((site) => site.type === "SpecialtyShop")).toBe(false);
+  });
+
+  it("excludes Shop and SpecialtyShop while a shop-removal modifier is active", () => {
+    const randomSpy = vi
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.99)
+      .mockReturnValueOnce(0);
+
+    const sites = generateSiteComposition(5, false, defaultContext({
+      dreamscapeModifiers: [
+        {
+          kind: "remove_shop_sites",
+          dreamscapesRemaining: 1,
+          source: "test:remove-shop",
+        },
+      ],
+    }));
+
+    randomSpy.mockRestore();
+    expect(sites.some((site) => site.type === "Shop")).toBe(false);
+    expect(sites.some((site) => site.type === "SpecialtyShop")).toBe(false);
+  });
+
+  it("excludes DreamsignOffering and DreamsignDraft while a dreamsign-removal modifier is active", () => {
+    for (let i = 0; i < 50; i++) {
+      resetAtlasGenerator();
+      const sites = generateSiteComposition(
+        0,
+        false,
+        defaultContext({
+          dreamscapeModifiers: [
+            {
+              kind: "remove_dreamsign_sites",
+              dreamscapesRemaining: 1,
+              source: "test:remove-dreamsign",
+            },
+          ],
+        }),
+      );
+
+      expect(sites.some((site) => site.type === "DreamsignOffering")).toBe(false);
+      expect(sites.some((site) => site.type === "DreamsignDraft")).toBe(false);
+    }
+  });
+
+  it("keeps DreamsignOffering and DreamsignDraft eligible when the dreamsign-removal modifier has expired", () => {
+    const types = additionalSiteTypesForLevel(
+      0,
+      defaultContext({
+        dreamscapeModifiers: [
+          {
+            kind: "remove_dreamsign_sites",
+            dreamscapesRemaining: 0,
+            source: "test:expired-remove-dreamsign",
+          },
+        ],
+      }),
+    );
+
+    expect(types).toContain("DreamsignOffering");
+    expect(types).toContain("DreamsignDraft");
+  });
+
+  it("keeps Shop eligible when the shop-removal modifier has expired", () => {
+    const randomSpy = vi
+      .spyOn(Math, "random")
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0);
+
+    const sites = generateSiteComposition(0, false, defaultContext({
+      dreamscapeModifiers: [
+        {
+          kind: "remove_shop_sites",
+          dreamscapesRemaining: 0,
+          source: "test:expired-remove-shop",
+        },
+      ],
+    }));
+
+    randomSpy.mockRestore();
+    expect(sites.some((site) => site.type === "Shop")).toBe(true);
+  });
+
   it("first dreamscape always has exactly 2x Draft, 1x DreamsignDraft, 1x DreamJourney, 1x Battle regardless of seed", () => {
     const seeds = [0, 0.123, 0.337, 0.5, 0.728, 0.999];
     for (const seed of seeds) {
@@ -305,6 +448,12 @@ describe("generateInitialAtlas", () => {
 });
 
 describe("generateNewNodes", () => {
+  function allSiteIds(atlas: DreamAtlas): string[] {
+    return Object.values(atlas.nodes).flatMap((node) =>
+      node.sites.map((site) => site.id),
+    );
+  }
+
   it("generates 1-2 new nodes after a dreamscape is completed", () => {
     for (let i = 0; i < 40; i++) {
       const atlas = generateInitialAtlas(0, defaultContext());
@@ -348,6 +497,34 @@ describe("generateNewNodes", () => {
       defaultContext(),
     );
     expect(updated.nodes[atlas.startingNodeId].status).toBe("completed");
+  });
+
+  it("derives expansion ids from the persisted atlas after generator state resets", () => {
+    const atlas = generateInitialAtlas(0, defaultContext());
+    const originalNodeIds = Object.keys(atlas.nodes);
+    const originalSiteIds = allSiteIds(atlas);
+
+    resetAtlasGenerator();
+
+    const updated = generateNewNodes(
+      atlas,
+      atlas.startingNodeId,
+      0,
+      defaultContext(),
+    );
+    const updatedNodeIds = Object.keys(updated.nodes);
+    const updatedSiteIds = allSiteIds(updated);
+
+    expect(updatedNodeIds.length).toBeGreaterThan(originalNodeIds.length);
+    expect(new Set(updatedNodeIds).size).toBe(updatedNodeIds.length);
+    expect(new Set(updatedSiteIds).size).toBe(updatedSiteIds.length);
+    expect(updated.nodes[atlas.startingNodeId].status).toBe("completed");
+    for (const nodeId of originalNodeIds) {
+      expect(updated.nodes[nodeId]).toBeDefined();
+    }
+    for (const siteId of originalSiteIds) {
+      expect(updatedSiteIds).toContain(siteId);
+    }
   });
 
   it("preserves the starting node id on the updated atlas", () => {

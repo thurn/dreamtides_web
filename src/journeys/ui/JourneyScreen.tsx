@@ -46,7 +46,7 @@
  * `JourneyContext` this screen receives.
  */
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { applyBranch, planBranch } from "../apply/applyBranch";
 import { applyOption } from "../apply/applyOption";
@@ -55,7 +55,12 @@ import type { ChooserRequest, ChooserResolution } from "../apply/chooserPlan";
 import type { JourneyMutations } from "../apply/JourneyMutations";
 import { logJourneyChooserCancelled } from "../logging";
 import type { JourneyContext } from "../journey/context";
-import { generateNextJourney } from "../journey/generate";
+import {
+  JourneyDebugHarnessError,
+  generateNextJourneyWithDebugHarness,
+  type JourneyDebugForcing,
+  type JourneyDebugHarnessAttempt,
+} from "../journey/debugHarness";
 import {
   findDeckEntriesByPredicate,
   projectedDeckEntries,
@@ -106,10 +111,15 @@ export interface JourneyScreenProps {
    * dream-art matcher falls back to a single shared default extension.
    */
   readonly extensionMap?: ExtensionMap;
+  readonly debugForcing?: JourneyDebugForcing;
 }
 
 type ManifestResult =
-  | { readonly ok: true; readonly manifest: JourneyManifest }
+  | {
+      readonly ok: true;
+      readonly manifest: JourneyManifest;
+      readonly attempts: readonly JourneyDebugHarnessAttempt[];
+    }
   | { readonly ok: false; readonly error: unknown };
 
 function drawContextForReroll(
@@ -269,6 +279,7 @@ export function JourneyScreen({
   siteId,
   mutations,
   extensionMap,
+  debugForcing,
 }: JourneyScreenProps) {
   const [rerollIndex, setRerollIndex] = useState(0);
   const handleReroll = useCallback(() => {
@@ -277,18 +288,48 @@ export function JourneyScreen({
 
   const manifestResult = useMemo<ManifestResult>(() => {
     try {
-      const manifest = generateNextJourney({
+      const result = generateNextJourneyWithDebugHarness({
         context,
         drawContext: drawContextForReroll(context, rerollIndex),
+        debugForcing,
       });
-      return { ok: true, manifest };
+      return { ok: true, manifest: result.manifest, attempts: result.attempts };
     } catch (error) {
       return { ok: false, error };
     }
-  }, [context, rerollIndex]);
+  }, [context, debugForcing, rerollIndex]);
+
+  useEffect(() => {
+    if (manifestResult.ok) {
+      if (manifestResult.attempts.length > 0) {
+        const selectedAttempt =
+          manifestResult.attempts[manifestResult.attempts.length - 1];
+        console.info("[journeys/debug-harness] generated forced journey", {
+          debugForcing,
+          journeyId: manifestResult.manifest.journeyId,
+          shapeId: manifestResult.manifest.shapeId,
+          selectedAttempt,
+          attempts: manifestResult.attempts,
+        });
+      }
+      return;
+    }
+
+    if (manifestResult.error instanceof JourneyDebugHarnessError) {
+      console.error(manifestResult.error.message, {
+        attempts: manifestResult.error.attempts,
+      });
+    }
+  }, [debugForcing, manifestResult]);
 
   if (!manifestResult.ok) {
-    return <JourneyErrorFallback onClose={onClose} onReroll={handleReroll} />;
+    return (
+      <JourneyErrorFallback
+        error={manifestResult.error}
+        onClose={onClose}
+        onReroll={handleReroll}
+      />
+    );
   }
 
   return (
@@ -648,7 +689,13 @@ function JourneyScreenInner({
       assignmentByLabel.has(`Branch ${branch.id}`),
     );
     if (!branchesHaveArt) {
-      return <JourneyErrorFallback onClose={onClose} onReroll={onReroll} />;
+      return (
+        <JourneyErrorFallback
+          error={new Error("Missing Journey tree node.")}
+          onClose={onClose}
+          onReroll={onReroll}
+        />
+      );
     }
 
     return (
@@ -701,7 +748,13 @@ function JourneyScreenInner({
     assignmentByLabel.has(`Option ${option.number}`),
   );
   if (!optionsHaveArt) {
-    return <JourneyErrorFallback onClose={onClose} onReroll={onReroll} />;
+    return (
+      <JourneyErrorFallback
+        error={new Error("Journey art assignment failed.")}
+        onClose={onClose}
+        onReroll={onReroll}
+      />
+    );
   }
 
   return (
@@ -806,22 +859,35 @@ function JourneyChrome({
 
 /** Defensive fallback when generation fails. Close is always enabled here. */
 function JourneyErrorFallback({
+  error,
   onClose,
   onReroll,
 }: {
+  readonly error: unknown;
   readonly onClose: () => void;
   readonly onReroll: () => void;
 }) {
+  const detail = error instanceof JourneyDebugHarnessError ? error.message : null;
+
   return (
     <div className="relative flex min-h-full flex-col items-center px-4 py-10 md:px-8">
       <CloseButton disabled={false} onClick={onClose} />
       <RerollButton onClick={onReroll} />
-      <p
-        className="mt-16 text-center text-base"
-        style={{ color: "#e2e8f0" }}
-      >
-        This dream eludes you. Press × to leave.
-      </p>
+      <div className="mt-16 max-w-2xl text-center" style={{ color: "#e2e8f0" }}>
+        <p className="text-base">This dream eludes you. Press × to leave.</p>
+        {detail ? (
+          <p
+            className="mt-4 rounded border px-4 py-3 text-sm"
+            style={{
+              borderColor: "rgba(248, 113, 113, 0.45)",
+              backgroundColor: "rgba(127, 29, 29, 0.3)",
+              color: "#fecaca",
+            }}
+          >
+            {detail}
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

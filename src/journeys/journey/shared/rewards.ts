@@ -113,6 +113,7 @@ type TransfigurationForApply = Exclude<
   Parameters<JourneyMutations["transfigureDeckEntry"]>[1],
   null
 >;
+type CardTypeChangeForApply = Parameters<JourneyMutations["changeDeckEntryType"]>[1];
 
 function applyDrawContext(ctx: JourneyContext): DrawContext {
   return {
@@ -322,6 +323,22 @@ function resolveCardIdByName(ctx: JourneyContext, name: string): string | undefi
 
 function warnSkippedCardApply(templateId: string, reason: string): void {
   console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
+}
+
+function cardTypeChangeFromPredicate(
+  predicateId: string,
+): CardTypeChangeForApply | undefined {
+  const predicate = getPredicate(predicateId);
+  const cardType = predicate.cardPredicate?.cardType;
+  if (cardType !== "Character" && cardType !== "Event") {
+    return undefined;
+  }
+  return {
+    predicateId,
+    cardType,
+    subtype: predicate.cardPredicate?.subtype ?? "",
+    label: predicate.text.singular,
+  };
 }
 
 function warnSkippedDreamsignApply(templateId: string, reason: string): void {
@@ -1624,8 +1641,28 @@ const changeCardToBecomeType: Reward<ChangeCardBecomeTypeParams> = {
     const article = /^[aeiou]/i.test(singular) ? "an" : "a";
     return `Change ${quoteName(p.cardName)} to become ${article} ${singular}`;
   },
-  apply: () => {
-    logSkippedVisualTemplate("change_card_to_become_type", "visual");
+  apply: (p, ctx, mut) => {
+    const entryId = findFirstDeckEntryIdByCardName(ctx, p.cardName);
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "change_card_to_become_type",
+        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    const typeChange = cardTypeChangeFromPredicate(p.cardTypePredicateId);
+    if (typeChange === undefined) {
+      warnSkippedCardApply(
+        "change_card_to_become_type",
+        `card type predicate ${JSON.stringify(p.cardTypePredicateId)} was not applicable`,
+      );
+      return;
+    }
+    mut.changeDeckEntryType(
+      entryId,
+      typeChange,
+      "dream_journey:change_card_to_become_type",
+    );
   },
 };
 
@@ -1649,8 +1686,36 @@ const modifyRandomCardsToTypes: Reward<ModifyRandomCardsToTypesParams> = {
     const article = p.count === 1 ? `${indefiniteArticleFor(typeName)} ` : "";
     return `Modify ${p.count} random ${noun} to become ${article}${typeName}`;
   },
-  apply: () => {
-    logSkippedVisualTemplate("modify_random_cards_to_types", "visual");
+  apply: (p, ctx, mut) => {
+    const typeChange = cardTypeChangeFromPredicate(p.cardTypePredicateId);
+    if (typeChange === undefined) {
+      warnSkippedCardApply(
+        "modify_random_cards_to_types",
+        `card type predicate ${JSON.stringify(p.cardTypePredicateId)} was not applicable`,
+      );
+      return;
+    }
+    const entryIds = projectedDeckEntries(ctx).map((entry) => entry.entryId);
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "modify_random_cards_to_types",
+        "deck entries were not found",
+      );
+      return;
+    }
+    const picked = pickUniqueDeckEntryIds(
+      applyDrawContext(ctx),
+      "modify_random_cards_to_types:entry",
+      entryIds,
+      p.count,
+    );
+    picked.forEach((entryId) => {
+      mut.changeDeckEntryType(
+        entryId,
+        typeChange,
+        "dream_journey:modify_random_cards_to_types",
+      );
+    });
   },
 };
 
@@ -1663,8 +1728,28 @@ const makeRandomCardsFast: Reward<MakeRandomCardsFastParams> = {
   // Deck-scope leak: CLI used `ctx.content.cards.length >= count`.
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) => `Change ${p.count} random card${p.count === 1 ? "" : "s"} to have fast`,
-  apply: () => {
-    logSkippedVisualTemplate("make_random_cards_fast", "visual");
+  apply: (p, ctx, mut) => {
+    const entryIds = projectedDeckEntries(ctx).map((entry) => entry.entryId);
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "make_random_cards_fast",
+        "deck entries were not found",
+      );
+      return;
+    }
+    const picked = pickUniqueDeckEntryIds(
+      applyDrawContext(ctx),
+      "make_random_cards_fast:entry",
+      entryIds,
+      p.count,
+    );
+    picked.forEach((entryId) => {
+      mut.changeDeckEntryKeywords(
+        entryId,
+        { fast: true },
+        "dream_journey:make_random_cards_fast",
+      );
+    });
   },
 };
 
@@ -2806,8 +2891,20 @@ const makeCardReclaim: Reward<MakeCardReclaimParams> = {
   // Named-card smell.
   viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
   render: (p) => `Add Reclaim ${p.count} to ${quoteName(p.cardName)}`,
-  apply: () => {
-    logSkippedVisualTemplate("make_card_reclaim", "visual");
+  apply: (p, ctx, mut) => {
+    const entryId = findDeckEntriesByName(ctx, p.cardName)[0];
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "make_card_reclaim",
+        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    mut.changeDeckEntryKeywords(
+      entryId,
+      { reclaim: p.count },
+      "dream_journey:make_card_reclaim",
+    );
   },
 };
 
@@ -2824,8 +2921,28 @@ const makeRandomCardsReclaim: Reward<MakeRandomCardsReclaimParams> = {
   viable: (p, ctx) => deckHasMinSize(ctx, p.count),
   render: (p) =>
     `Add Reclaim ${p.reclaim} to ${p.count} random card${p.count === 1 ? "" : "s"}`,
-  apply: () => {
-    logSkippedVisualTemplate("make_random_cards_reclaim", "visual");
+  apply: (p, ctx, mut) => {
+    const entryIds = projectedDeckEntries(ctx).map((entry) => entry.entryId);
+    if (entryIds.length === 0) {
+      warnSkippedCardApply(
+        "make_random_cards_reclaim",
+        "deck entries were not found",
+      );
+      return;
+    }
+    const picked = pickUniqueDeckEntryIds(
+      applyDrawContext(ctx),
+      "make_random_cards_reclaim:entry",
+      entryIds,
+      p.count,
+    );
+    picked.forEach((entryId) => {
+      mut.changeDeckEntryKeywords(
+        entryId,
+        { reclaim: p.reclaim },
+        "dream_journey:make_random_cards_reclaim",
+      );
+    });
   },
 };
 
@@ -3361,13 +3478,62 @@ const META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS: ReadonlySet<string> = new Set([
   metaRewardPairKey("purge_all_starters", "transfigure_all_starters"),
   metaRewardPairKey("purge_all_banes", "purge_X_banes"),
 ]);
+const RANDOM_STARTER_REMOVAL_REWARD_IDS: ReadonlySet<string> = new Set([
+  "purge_random_starter",
+  "purge_random_starter_with_predicate_replacement",
+]);
 
 function metaRewardPairKey(firstId: string, secondId: string): string {
   return [firstId, secondId].sort().join("\0");
 }
 
-function metaRewardPairCompatible(firstId: string, secondId: string): boolean {
-  return !META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS.has(metaRewardPairKey(firstId, secondId));
+function paramsTargetStarterCard(params: TemplateParams, ctx: JourneyContext): boolean {
+  return [params.cardName, params.oldCardName].some(
+    (cardName) =>
+      typeof cardName === "string"
+      && findDeckEntriesByName(ctx, cardName, (card) => card.rarity === "Starter").length > 0,
+  );
+}
+
+function randomStarterRemovalCanInvalidateNamedStarterTarget(
+  firstId: string,
+  firstParams: TemplateParams,
+  secondId: string,
+  secondParams: TemplateParams,
+  ctx: JourneyContext,
+): boolean {
+  return (
+    RANDOM_STARTER_REMOVAL_REWARD_IDS.has(firstId) && paramsTargetStarterCard(secondParams, ctx)
+  ) || (
+    RANDOM_STARTER_REMOVAL_REWARD_IDS.has(secondId) && paramsTargetStarterCard(firstParams, ctx)
+  );
+}
+
+function metaRewardPairCompatible(
+  firstId: string,
+  secondId: string,
+  firstParams?: TemplateParams,
+  secondParams?: TemplateParams,
+  ctx?: JourneyContext,
+): boolean {
+  if (META_REWARD_INCOMPATIBLE_UNORDERED_PAIRS.has(metaRewardPairKey(firstId, secondId))) {
+    return false;
+  }
+  if (
+    firstParams !== undefined
+    && secondParams !== undefined
+    && ctx !== undefined
+    && randomStarterRemovalCanInvalidateNamedStarterTarget(
+      firstId,
+      firstParams,
+      secondId,
+      secondParams,
+      ctx,
+    )
+  ) {
+    return false;
+  }
+  return true;
 }
 
 function orderedCompatibleRewardPairs(pool: readonly Reward[]): readonly (readonly [Reward, Reward])[] {
@@ -3383,6 +3549,26 @@ function orderedCompatibleRewardPairs(pool: readonly Reward[]): readonly (readon
     }
   }
   return pairs;
+}
+
+function rollMetaSubParams(
+  first: Reward,
+  second: Reward,
+  ctx: JourneyContext,
+  draw: DrawContext,
+  offset: number,
+): readonly [TemplateParams, TemplateParams] {
+  const selectionAttempt = draw.selectionAttempt ?? 0;
+  return [
+    first.rollParams(ctx, {
+      ...draw,
+      selectionAttempt: selectionAttempt * 10 + 1 + offset * 2,
+    }),
+    second.rollParams(ctx, {
+      ...draw,
+      selectionAttempt: selectionAttempt * 10 + 2 + offset * 2,
+    }),
+  ] as const;
 }
 
 const metaGain2Rewards: Reward<MetaGain2Params> = {
@@ -3410,19 +3596,27 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
         ] as readonly [TemplateParams, TemplateParams],
       };
     }
-    const [first, second] = usePairs[drawInt(draw, "meta_gain_2:pair", 0, usePairs.length - 1)];
+    const startIndex = drawInt(draw, "meta_gain_2:pair", 0, usePairs.length - 1);
+    for (let offset = 0; offset < usePairs.length; offset += 1) {
+      const [first, second] = usePairs[(startIndex + offset) % usePairs.length];
+      const subParams = rollMetaSubParams(first, second, ctx, draw, offset);
+      if (
+        metaRewardPairCompatible(first.id, second.id, subParams[0], subParams[1], ctx)
+        && first.viable(subParams[0], ctx)
+        && second.viable(subParams[1], ctx)
+      ) {
+        return {
+          subIds: [first.id, second.id] as readonly [string, string],
+          subParams,
+        };
+      }
+    }
+
+    const [first, second] = usePairs[startIndex];
+    const subParams = rollMetaSubParams(first, second, ctx, draw, 0);
     return {
       subIds: [first.id, second.id] as readonly [string, string],
-      subParams: [
-        first.rollParams(ctx, {
-          ...draw,
-          selectionAttempt: (draw.selectionAttempt ?? 0) * 10 + 1,
-        }),
-        second.rollParams(ctx, {
-          ...draw,
-          selectionAttempt: (draw.selectionAttempt ?? 0) * 10 + 2,
-        }),
-      ] as readonly [TemplateParams, TemplateParams],
+      subParams,
     };
   },
   cec: (p, ctx) => {
@@ -3433,7 +3627,7 @@ const metaGain2Rewards: Reward<MetaGain2Params> = {
   viable: (p, ctx) => {
     const a = getReward(p.subIds[0]);
     const b = getReward(p.subIds[1]);
-    return metaRewardPairCompatible(p.subIds[0], p.subIds[1])
+    return metaRewardPairCompatible(p.subIds[0], p.subIds[1], p.subParams[0], p.subParams[1], ctx)
       && a.viable(p.subParams[0], ctx)
       && b.viable(p.subParams[1], ctx);
   },

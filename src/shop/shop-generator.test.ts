@@ -91,6 +91,96 @@ describe("effectivePrice", () => {
     });
     expect(result).toBe(100);
   });
+
+  it("adds the permanent essence discount to card slot discounts", () => {
+    const result = effectivePrice(
+      {
+        itemType: "card",
+        card: null,
+        dreamsign: null,
+        basePrice: 100,
+        discountPercent: 30,
+        purchased: false,
+      },
+      { essenceDiscountPercent: 50 },
+    );
+    expect(result).toBe(20);
+  });
+
+  it("caps combined card discounts at free", () => {
+    const result = effectivePrice(
+      {
+        itemType: "card",
+        card: null,
+        dreamsign: null,
+        basePrice: 100,
+        discountPercent: 70,
+        purchased: false,
+      },
+      { essenceDiscountPercent: 50 },
+    );
+    expect(result).toBe(0);
+  });
+
+  it("does not apply the essence discount to Dreamsign omen prices", () => {
+    const result = effectivePrice(
+      {
+        itemType: "dreamsign",
+        card: null,
+        dreamsign: {
+          id: "dreamsign-1",
+          name: "Dreamsign One",
+          effectDescription: "First effect.",
+          isBane: false,
+        },
+        basePrice: 2,
+        discountPercent: 0,
+        purchased: false,
+      },
+      { essenceDiscountPercent: 50 },
+    );
+    expect(result).toBe(2);
+  });
+
+  it("applies one upcoming omen discount to positive Dreamsign omen prices", () => {
+    const result = effectivePrice(
+      {
+        itemType: "dreamsign",
+        card: null,
+        dreamsign: {
+          id: "dreamsign-1",
+          name: "Dreamsign One",
+          effectDescription: "First effect.",
+          isBane: false,
+        },
+        basePrice: 2,
+        discountPercent: 0,
+        purchased: false,
+      },
+      { upcomingOmenDiscounts: 1 },
+    );
+    expect(result).toBe(1);
+  });
+
+  it("leaves free Dreamsign slots free without spending an omen discount", () => {
+    const result = effectivePrice(
+      {
+        itemType: "dreamsign",
+        card: null,
+        dreamsign: {
+          id: "dreamsign-1",
+          name: "Dreamsign One",
+          effectDescription: "First effect.",
+          isBane: false,
+        },
+        basePrice: 0,
+        discountPercent: 0,
+        purchased: false,
+      },
+      { upcomingOmenDiscounts: 1 },
+    );
+    expect(result).toBe(0);
+  });
 });
 
 describe("rerollCost", () => {

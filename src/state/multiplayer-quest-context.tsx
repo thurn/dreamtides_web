@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, type ReactNode } from "react";
 import type { Database } from "firebase/database";
+import { mergeCardKeywordModification } from "../card-type-change";
 import { resetBattleCompletionBridge } from "../battle/integration/battle-completion-bridge";
 import type { QuestContent } from "../data/quest-content";
 import { resetLog } from "../logging";
@@ -18,6 +19,8 @@ import { battleStatePath } from "../multiplayer/battle-paths";
 import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { DreamcallerContent } from "../types/content";
 import type {
+  CardKeywordModification,
+  CardTypeChange,
   CardSourceDebugState,
   CardChoiceTransfigurationOffer,
   DeckEntry,
@@ -64,6 +67,7 @@ import { createStartInBattleState } from "../runtime/start-in-battle-state";
 import { generateRewardSiteData } from "../rewards/reward-generator";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
+  effectivePrice,
   generateShopInventory,
   rerollCost,
   shopSlotsToRuntime,
@@ -193,11 +197,14 @@ function stableStringify(value: unknown): string {
 }
 
 function runtimeSlotPrice(slot: {
+  itemType: "card" | "dreamsign";
   basePrice: number;
   discountPercent: number;
+}, modifiers: {
+  essenceDiscountPercent: number;
+  upcomingOmenDiscounts?: number;
 }): number {
-  if (slot.discountPercent === 0) return slot.basePrice;
-  return Math.round(slot.basePrice * (1 - slot.discountPercent / 100));
+  return effectivePrice(slot, modifiers);
 }
 
 function nextDeckEntryId(deck: readonly DeckEntry[]): string {
@@ -492,6 +499,9 @@ function deckEntriesRuntimeCompatible(
         entry.entryId === other.entryId &&
         entry.cardNumber === other.cardNumber &&
         entry.transfiguration === other.transfiguration &&
+        JSON.stringify(entry.typeChange ?? null) === JSON.stringify(other.typeChange ?? null) &&
+        JSON.stringify(entry.keywordModification ?? null) ===
+          JSON.stringify(other.keywordModification ?? null) &&
         entry.isBane === other.isBane
       );
     })
@@ -2006,9 +2016,20 @@ export function MultiplayerQuestProvider({
             return room;
           }
 
-          const price = runtimeSlotPrice(slot);
+          const priceBeforeOmenDiscount = runtimeSlotPrice(slot, {
+            essenceDiscountPercent:
+              room.questState.shopModifiers.essenceDiscountPercent,
+          });
+          const price = runtimeSlotPrice(slot, {
+            essenceDiscountPercent:
+              room.questState.shopModifiers.essenceDiscountPercent,
+            upcomingOmenDiscounts:
+              room.questState.shopModifiers.upcomingOmenDiscounts,
+          });
           // Cards cost essence; Dreamsigns cost omens.
           const payInOmens = slot.itemType === "dreamsign";
+          const omenDiscountApplied =
+            payInOmens && price < priceBeforeOmenDiscount;
           const availableCurrency = payInOmens
             ? room.questState.omens
             : room.questState.essence;
@@ -2029,10 +2050,18 @@ export function MultiplayerQuestProvider({
             return room;
           }
 
+          const upcomingOmenDiscounts =
+            payInOmens && omenDiscountApplied
+              ? room.questState.shopModifiers.upcomingOmenDiscounts - 1
+              : room.questState.shopModifiers.upcomingOmenDiscounts;
           let next: QuestState = payInOmens
             ? {
                 ...room.questState,
                 omens: room.questState.omens - price,
+                shopModifiers: {
+                  ...room.questState.shopModifiers,
+                  upcomingOmenDiscounts,
+                },
               }
             : {
                 ...room.questState,
@@ -2049,6 +2078,10 @@ export function MultiplayerQuestProvider({
             discountedPrice: price,
             currency: payInOmens ? "omens" : "essence",
           };
+          if (payInOmens) {
+            summary.omenDiscountApplied = omenDiscountApplied;
+            summary.upcomingOmenDiscountsRemaining = upcomingOmenDiscounts;
+          }
 
           if (slot.itemType === "card") {
             next = {
@@ -2585,6 +2618,136 @@ export function MultiplayerQuestProvider({
     [],
   );
 
+  const changeDeckEntryType = useCallback(
+    (entryId: string, typeChange: CardTypeChange, source: string) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const entry = room.questState.deck.find(
+            (candidate) => candidate.entryId === entryId,
+          );
+          if (entry === undefined) {
+            return room;
+          }
+          const card = current.questContent.cardDatabase.get(entry.cardNumber);
+
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck: room.questState.deck.map((candidate) =>
+                candidate.entryId === entryId
+                  ? { ...candidate, typeChange }
+                  : candidate,
+              ),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "changeDeckEntryType",
+                source,
+                summary: {
+                  entryId,
+                  cardNumber: entry.cardNumber,
+                  cardName:
+                    card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
+                  predicateId: typeChange.predicateId,
+                  cardType: typeChange.cardType,
+                  subtype: typeChange.subtype,
+                  label: typeChange.label,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const changeDeckEntryKeywords = useCallback(
+    (
+      entryId: string,
+      keywordModification: CardKeywordModification,
+      source: string,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const entry = room.questState.deck.find(
+            (candidate) => candidate.entryId === entryId,
+          );
+          if (entry === undefined) {
+            return room;
+          }
+          const card = current.questContent.cardDatabase.get(entry.cardNumber);
+          const nextKeywordModification = mergeCardKeywordModification(
+            entry.keywordModification,
+            keywordModification,
+          );
+
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck: room.questState.deck.map((candidate) =>
+                candidate.entryId === entryId
+                  ? {
+                      ...candidate,
+                      keywordModification: nextKeywordModification,
+                    }
+                  : candidate,
+              ),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "changeDeckEntryKeywords",
+                source,
+                summary: {
+                  entryId,
+                  cardNumber: entry.cardNumber,
+                  cardName:
+                    card?.name ?? `Unknown Card #${String(entry.cardNumber)}`,
+                  keywords: nextKeywordModification,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const completeDreamJourneySite = useCallback((siteId: string) => {
     const current = currentRef.current;
     const site = findSite(current.state, siteId);
@@ -3029,6 +3192,10 @@ export function MultiplayerQuestProvider({
           entryId: nextDeckEntryId(room.questState.deck),
           cardNumber: entry.cardNumber,
           transfiguration: entry.transfiguration,
+          ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
+          ...(entry.keywordModification == null
+            ? {}
+            : { keywordModification: entry.keywordModification }),
           isBane: entry.isBane,
         };
         return {
@@ -3757,6 +3924,8 @@ export function MultiplayerQuestProvider({
       },
       cleanseBanes,
       transfigureCard,
+      changeDeckEntryType,
+      changeDeckEntryKeywords,
       setDreamcallerSelection,
       setCardSourceDebug,
       addDreamsign,
@@ -3806,6 +3975,8 @@ export function MultiplayerQuestProvider({
       changeEssence,
       changeMaxEssence,
       changeOmens,
+      changeDeckEntryType,
+      changeDeckEntryKeywords,
       cleanseBanes,
       completeSite,
       dismissStartingDeckPopup,

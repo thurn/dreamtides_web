@@ -1,5 +1,6 @@
 import type {
   DreamAtlas,
+  DreamscapeModifier,
   DreamscapeNode,
   SiteState,
   SiteType,
@@ -10,6 +11,12 @@ import { logEvent } from "../logging";
 /** Parameters for site generation that require external data. */
 export interface SiteGenerationContext {
   playerHasBanes: boolean;
+  /**
+   * Active dreamscape modifiers at generation time. Site appearance boosts
+   * increase the targeted site's base pool weight by their percentage; boosts
+   * for the same site type stack additively before the weight is recalculated.
+   */
+  dreamscapeModifiers?: readonly DreamscapeModifier[];
 }
 
 export interface AtlasGenerationOptions {
@@ -30,6 +37,46 @@ function nextNodeId(): string {
 function nextSiteId(): string {
   siteIdCounter += 1;
   return `site-${String(siteIdCounter)}`;
+}
+
+function numericSuffix(id: string, prefix: string): number | null {
+  const match = new RegExp(`^${prefix}-(\\d+)$`).exec(id);
+  if (match === null) {
+    return null;
+  }
+  const suffix = Number.parseInt(match[1], 10);
+  return Number.isFinite(suffix) ? suffix : null;
+}
+
+function maxNodeIdSuffix(atlas: DreamAtlas): number {
+  let max = 0;
+  for (const [key, node] of Object.entries(atlas.nodes)) {
+    for (const id of [key, node.id]) {
+      const suffix = numericSuffix(id, "dreamscape");
+      if (suffix !== null && suffix > max) {
+        max = suffix;
+      }
+    }
+  }
+  return max;
+}
+
+function maxSiteIdSuffix(atlas: DreamAtlas): number {
+  let max = 0;
+  for (const node of Object.values(atlas.nodes)) {
+    for (const site of node.sites) {
+      const suffix = numericSuffix(site.id, "site");
+      if (suffix !== null && suffix > max) {
+        max = suffix;
+      }
+    }
+  }
+  return max;
+}
+
+function syncAtlasGeneratorCounters(atlas: DreamAtlas): void {
+  nodeIdCounter = Math.max(nodeIdCounter, maxNodeIdSuffix(atlas));
+  siteIdCounter = Math.max(siteIdCounter, maxSiteIdSuffix(atlas));
 }
 
 /** Resets internal counters. Call when starting a new quest. */
@@ -73,6 +120,79 @@ function weightedPick<T>(items: Array<[T, number]>): T {
     }
   }
   return items[items.length - 1][0];
+}
+
+function combinedSiteAppearanceBoosts(
+  modifiers: readonly DreamscapeModifier[] = [],
+): Map<SiteType, number> {
+  const boostsByType = new Map<SiteType, number>();
+  for (const modifier of modifiers) {
+    if (
+      modifier.kind !== "boost_site_appearance" ||
+      modifier.dreamscapesRemaining <= 0 ||
+      modifier.percent <= 0
+    ) {
+      continue;
+    }
+    boostsByType.set(
+      modifier.siteType,
+      (boostsByType.get(modifier.siteType) ?? 0) + modifier.percent,
+    );
+  }
+  return boostsByType;
+}
+
+function removedSiteTypesFromModifiers(
+  modifiers: readonly DreamscapeModifier[] = [],
+): Set<SiteType> {
+  const removedTypes = new Set<SiteType>();
+
+  for (const modifier of modifiers) {
+    if (modifier.dreamscapesRemaining <= 0) {
+      continue;
+    }
+
+    if (modifier.kind === "remove_shop_sites") {
+      removedTypes.add("Shop");
+      removedTypes.add("SpecialtyShop");
+    }
+
+    if (modifier.kind === "remove_dreamsign_sites") {
+      removedTypes.add("DreamsignOffering");
+      removedTypes.add("DreamsignDraft");
+    }
+  }
+
+  return removedTypes;
+}
+
+function applySiteRemovalModifiers(
+  pool: Array<[SiteType, number]>,
+  modifiers: readonly DreamscapeModifier[] = [],
+): Array<[SiteType, number]> {
+  const removedTypes = removedSiteTypesFromModifiers(modifiers);
+
+  if (removedTypes.size === 0) {
+    return pool;
+  }
+
+  return pool.filter(([siteType]) => !removedTypes.has(siteType));
+}
+
+function applySiteAppearanceBoosts(
+  pool: Array<[SiteType, number]>,
+  modifiers: readonly DreamscapeModifier[] = [],
+): Array<[SiteType, number]> {
+  const boostsByType = combinedSiteAppearanceBoosts(modifiers);
+
+  if (boostsByType.size === 0) {
+    return pool;
+  }
+
+  return pool.map(([siteType, weight]) => {
+    const boostPercent = boostsByType.get(siteType) ?? 0;
+    return [siteType, weight * (1 + boostPercent / 100)];
+  });
 }
 
 /** Builds the weighted site pool based on completion level. */
@@ -119,9 +239,10 @@ export function additionalSiteTypesForLevel(
   completionLevel: number,
   context: SiteGenerationContext,
 ): SiteType[] {
-  return buildAdditionalSitePool(completionLevel, context.playerHasBanes).map(
-    ([siteType]) => siteType,
-  );
+  return applySiteRemovalModifiers(
+    buildAdditionalSitePool(completionLevel, context.playerHasBanes),
+    context.dreamscapeModifiers,
+  ).map(([siteType]) => siteType);
 }
 
 /**
@@ -178,7 +299,13 @@ export function generateSiteComposition(
   const fixedCount = sites.length + 1;
   const minAdditional = Math.max(2, 3 - fixedCount);
   const maxAdditional = Math.max(minAdditional, 6 - fixedCount);
-  const pool = buildAdditionalSitePool(completionLevel, context.playerHasBanes);
+  const pool = applySiteAppearanceBoosts(
+    applySiteRemovalModifiers(
+      buildAdditionalSitePool(completionLevel, context.playerHasBanes),
+      context.dreamscapeModifiers,
+    ),
+    context.dreamscapeModifiers,
+  );
   // Every non-Draft site type appears at most once per dreamscape, so the
   // additional sites are sampled without replacement: a type is removed from
   // the working pool once it is picked.
@@ -269,6 +396,13 @@ function createNode(
       biomeName: biome.name,
       siteTypes: sites.map((s) => s.type),
       enhancedSiteType,
+      siteAppearanceBoosts: Array.from(
+        combinedSiteAppearanceBoosts(context.dreamscapeModifiers),
+        ([siteType, percent]) => ({ siteType, percent }),
+      ),
+      removedSiteTypes: Array.from(
+        removedSiteTypesFromModifiers(context.dreamscapeModifiers),
+      ),
     });
   }
 
@@ -354,6 +488,8 @@ export function generateNewNodes(
   if (!completedNode) {
     return atlas;
   }
+
+  syncAtlasGeneratorCounters(atlas);
 
   const updatedNodes = { ...atlas.nodes };
   const updatedEdges = [...atlas.edges];

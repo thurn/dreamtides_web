@@ -196,6 +196,41 @@ describe("completeBattleSiteVictory", () => {
     expect(clearBattleStateForRoom).toHaveBeenCalledTimes(1);
   });
 
+  it("passes active dreamscape modifiers into atlas expansion", () => {
+    vi.useFakeTimers();
+    const updatedAtlas = {
+      nodes: {},
+      edges: [],
+      startingNodeId: "updated",
+    };
+    const modifier = {
+      kind: "boost_site_appearance" as const,
+      siteType: "SpecialtyShop" as const,
+      percent: 50,
+      dreamscapesRemaining: 3,
+      source: "test:boost",
+    };
+    const input = makeInput({
+      battleId: "battle:dreamscape-1:site-4:modifier",
+      dreamscapeModifiers: [modifier],
+    });
+
+    mocks.generateNewNodes.mockReturnValue(updatedAtlas);
+
+    completeBattleSiteVictory(input);
+    vi.advanceTimersByTime(800);
+
+    expect(mocks.generateNewNodes).toHaveBeenCalledWith(
+      input.atlasSnapshot,
+      "dreamscape-1",
+      3,
+      {
+        playerHasBanes: true,
+        dreamscapeModifiers: [modifier],
+      },
+    );
+  });
+
   it("ignores duplicate completion for the same battle id", () => {
     vi.useFakeTimers();
     const updatedAtlas = {

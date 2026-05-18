@@ -38,6 +38,7 @@ export function useEnsureBattleSession(input: {
   questState: Pick<
     QuestState,
     | "atlas"
+    | "battleModifiers"
     | "completionLevel"
     | "currentDreamscape"
     | "deck"

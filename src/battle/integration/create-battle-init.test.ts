@@ -3,6 +3,7 @@ import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestS
 import { createBattleInit, type CreateBattleInitInput } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
 import type { CardData } from "../../types/cards";
+import type { CardKeywordModification, CardTypeChange } from "../../types/quest";
 
 const ENEMY_DECK_SIZE = 12;
 
@@ -182,6 +183,77 @@ describe("createBattleInit", () => {
       }
     });
 
+    it("applies active flat battle reward reductions and floors the reward at zero", () => {
+      const baseState = makeBattleTestState();
+      const reduced = createBattleInit({
+        ...makeBaseInput(),
+        state: {
+          ...baseState,
+          battleModifiers: [
+            {
+              kind: "reward_reduction_flat",
+              amount: 80,
+              battlesRemaining: 2,
+              source: "journey:test",
+            },
+          ],
+        },
+      });
+      const floored = createBattleInit({
+        ...makeBaseInput(),
+        state: {
+          ...baseState,
+          battleModifiers: [
+            {
+              kind: "reward_reduction_flat",
+              amount: 999,
+              battlesRemaining: 1,
+              source: "journey:test",
+            },
+          ],
+        },
+      });
+
+      expect(reduced.essenceReward).toBe(120);
+      expect(floored.essenceReward).toBe(0);
+    });
+
+    it("applies active percent battle reward reductions with final-reward floor rounding", () => {
+      const baseState = makeBattleTestState();
+      const reduced = createBattleInit({
+        ...makeBaseInput(),
+        state: {
+          ...baseState,
+          completionLevel: 1,
+          battleModifiers: [
+            {
+              kind: "reward_reduction_percent",
+              percent: 33,
+              battlesRemaining: 2,
+              source: "journey:test",
+            },
+          ],
+        },
+      });
+      const floored = createBattleInit({
+        ...makeBaseInput(),
+        state: {
+          ...baseState,
+          battleModifiers: [
+            {
+              kind: "reward_reduction_percent",
+              percent: 150,
+              battlesRemaining: 1,
+              source: "journey:test",
+            },
+          ],
+        },
+      });
+
+      expect(reduced.essenceReward).toBe(100);
+      expect(floored.essenceReward).toBe(0);
+    });
+
     it("flags miniboss at completion level 3 and final boss at completion level 6", () => {
       const baseState = makeBattleTestState();
       const minibossInit = createBattleInit({
@@ -281,6 +353,73 @@ describe("createBattleInit", () => {
           isBane: card.isBane,
         });
       }
+    });
+
+    it("applies quest deck entry type changes to player battle card definitions", () => {
+      const baseInput = makeBaseInput();
+      const changedEntryId = "deck-5";
+      const typeChange: CardTypeChange = {
+        predicateId: "spirit_animals",
+        cardType: "Character",
+        subtype: "Spirit Animal",
+        label: "Spirit Animal",
+      };
+      const stateWithTypeChange = {
+        ...baseInput.state,
+        deck: baseInput.state.deck.map((entry) =>
+          entry.entryId === changedEntryId
+            ? {
+                ...entry,
+                typeChange,
+              }
+            : entry,
+        ),
+      };
+
+      const init = createBattleInit({ ...baseInput, state: stateWithTypeChange });
+      const changedCard = init.playerDeckOrder.find(
+        (card) => card.sourceDeckEntryId === changedEntryId,
+      );
+
+      expect(changedCard).toMatchObject({
+        cardNumber: 106,
+        battleCardKind: "character",
+        subtype: "Spirit Animal",
+        typeChange,
+      });
+    });
+
+    it("applies quest deck entry keyword changes to player battle card definitions", () => {
+      const baseInput = makeBaseInput();
+      const changedEntryId = "deck-5";
+      const keywordModification: CardKeywordModification = { fast: true, reclaim: 2 };
+      const stateWithKeywordChange = {
+        ...baseInput.state,
+        deck: baseInput.state.deck.map((entry) =>
+          entry.entryId === changedEntryId
+            ? {
+                ...entry,
+                keywordModification,
+              }
+            : entry,
+        ),
+      };
+
+      const init = createBattleInit({
+        ...baseInput,
+        state: stateWithKeywordChange,
+      });
+      const changedCard = init.playerDeckOrder.find(
+        (card) => card.sourceDeckEntryId === changedEntryId,
+      );
+
+      expect(changedCard).toMatchObject({
+        cardNumber: 106,
+        isFast: true,
+        reclaimCost: 2,
+        keywordModification,
+      });
+      expect(changedCard?.renderedText).toContain("Reclaim 2●");
     });
 
     it("throws when a quest deck entry references a missing card number", () => {

@@ -1,5 +1,5 @@
 import type { PackageTideId, ResolvedDreamcallerPackage } from "./content";
-import type { CardData } from "./cards";
+import type { CardData, CardType } from "./cards";
 import type { DraftState } from "./draft";
 
 /** Badge applied to a card via a Transfiguration site. */
@@ -12,6 +12,27 @@ export type TransfigurationType =
   | "Magenta"
   | "Rose"
   | "Prismatic";
+
+/** Persistent card type/subtype override applied to one concrete deck entry. */
+export interface CardTypeChange {
+  predicateId: string;
+  cardType: CardType;
+  subtype: string;
+  label: string;
+}
+
+/** Persistent keyword overrides applied to one concrete deck entry. */
+export interface CardKeywordModification {
+  fast?: boolean;
+  /** Added Reclaim cost. Repeated grants add to this value. */
+  reclaim?: number;
+}
+
+/** Persistent card modifications applied to one concrete deck entry. */
+export interface DeckEntryCardModification {
+  typeChange?: CardTypeChange | null;
+  keywords?: CardKeywordModification | null;
+}
 
 /** All site types available in dreamscapes. */
 export type SiteType =
@@ -34,6 +55,8 @@ export interface DeckEntry {
   entryId: string;
   cardNumber: number;
   transfiguration: TransfigurationType | null;
+  typeChange?: CardTypeChange | null;
+  keywordModification?: CardKeywordModification | null;
   isBane: boolean;
 }
 
@@ -264,9 +287,8 @@ export type Screen =
  * A modifier that affects upcoming battle resolutions. Pushed by Dream Journey
  * effects; decremented by `incrementCompletionLevel` each time a battle
  * completes. Entries at `battlesRemaining === 0` drop on the same tick that
- * brought them to zero. The battle resolver reads `battleModifiers` to apply
- * reward reductions and any other per-battle effects when its consumer
- * hookup lands.
+ * brought them to zero. Battle initialization reads `battleModifiers` to apply
+ * reward reductions to the visible reward and the payout amount.
  */
 export type BattleModifier =
   | {

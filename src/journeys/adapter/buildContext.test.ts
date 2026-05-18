@@ -362,6 +362,47 @@ describe("buildJourneyContext deck projection", () => {
     ]);
   });
 
+  it("projects fast keyword modifications as entry-specific journey cards", () => {
+    const cards: CardData[] = [
+      makeCard({ cardNumber: 1, id: "card-1", name: "One", isFast: false }),
+    ];
+    const deck: DeckEntry[] = [
+      makeDeckEntry({
+        entryId: "e1",
+        cardNumber: 1,
+        keywordModification: { fast: true },
+      }),
+      makeDeckEntry({ entryId: "e2", cardNumber: 1 }),
+    ];
+    const content = buildJourneyContentBundle({
+      cards,
+      dreamcallers: [],
+      dreamsignTemplates: [],
+    });
+    const questState = makeQuestState({ deck });
+
+    const context = buildJourneyContext(questState, content, makeSite("s"));
+    const modifiedCard = context.content.cards.find(
+      (card) => card.id === "card-1::deck-entry:e1:card-modification",
+    );
+
+    expect(modifiedCard?.raw["is-fast"]).toBe(true);
+    expect(context.state.quest.deck.entries).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          cardId: "card-1::deck-entry:e1:card-modification",
+          copies: 1,
+          entryIds: ["e1"],
+        }),
+        expect.objectContaining({
+          cardId: "card-1",
+          copies: 1,
+          entryIds: ["e2"],
+        }),
+      ]),
+    );
+  });
+
   it("warns and skips deck entries whose cardNumber is not in the content bundle", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 

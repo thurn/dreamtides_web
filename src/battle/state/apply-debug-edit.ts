@@ -930,6 +930,7 @@ function createFigment(
     printedEnergyCost: 0,
     printedSpark: chosenSpark,
     isFast: false,
+    reclaimCost: null,
     tides: [],
     renderedText: "",
     imageNumber: 0,

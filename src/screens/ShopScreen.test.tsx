@@ -79,6 +79,8 @@ function makeMutations(): QuestMutations {
     removeCard: vi.fn(),
     cleanseBanes: vi.fn(),
     transfigureCard: vi.fn(),
+    changeDeckEntryType: vi.fn(),
+    changeDeckEntryKeywords: vi.fn(),
     setDreamcallerSelection: vi.fn(),
     setCardSourceDebug: vi.fn(),
     addDreamsign: vi.fn(),
@@ -314,6 +316,84 @@ describe("ShopScreen", () => {
 
     // The SALE caption is still rendered below the button.
     expect(container.textContent).toContain("Sale 30% Off");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("displays card prices with the permanent shop essence discount applied", () => {
+    const state = {
+      ...makeState([
+        {
+          itemType: "card",
+          cardNumber: 1,
+          basePrice: 100,
+          discountPercent: 30,
+          purchased: false,
+        },
+      ]),
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 0,
+        essenceDiscountPercent: 50,
+      },
+    };
+    setQuestContext(state);
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    const priceSpan = container.querySelector("[data-shop-price]");
+    expect(priceSpan?.textContent).toBe("20");
+    expect(container.textContent).toContain("Sale 80% Off");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("displays specialty shop card prices with the permanent shop essence discount applied", () => {
+    const state = {
+      ...makeState([
+        {
+          itemType: "card",
+          cardNumber: 1,
+          basePrice: 200,
+          discountPercent: 0,
+          purchased: false,
+        },
+      ]),
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 0,
+        essenceDiscountPercent: 50,
+      },
+    };
+    setQuestContext(state);
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "SpecialtyShop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    const priceSpan = container.querySelector("[data-shop-price]");
+    expect(container.textContent).toContain("Specialty Shop");
+    expect(priceSpan?.textContent).toBe("100");
 
     act(() => {
       root.unmount();
@@ -586,6 +666,51 @@ describe("ShopScreen", () => {
     // mutation receives the SiteState exactly once, with no slot index.
     expect(mutations.rerollShop).toHaveBeenCalledTimes(1);
     expect(mutations.rerollShop).toHaveBeenCalledWith(site);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows discounted Dreamsign prices when an upcoming omen discount is available", () => {
+    const state: QuestState = {
+      ...makeState([
+        {
+          itemType: "dreamsign",
+          dreamsign: {
+            id: "dreamsign-1",
+            name: "Dreamsign One",
+            effectDescription: "First effect.",
+            isBane: false,
+          },
+          basePrice: 2,
+          discountPercent: 0,
+          purchased: false,
+        },
+      ]),
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 1,
+        essenceDiscountPercent: 0,
+      },
+    };
+    setQuestContext(state);
+
+    const { container, root } = mount(
+      <ShopScreen
+        site={{
+          id: "shop-1",
+          type: "Shop",
+          isEnhanced: false,
+          isVisited: false,
+        }}
+      />,
+    );
+
+    const buyButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent?.includes("Omens"),
+    );
+    expect(buyButton?.textContent).toContain("Buy1Omens");
 
     act(() => {
       root.unmount();

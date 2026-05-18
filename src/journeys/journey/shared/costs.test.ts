@@ -101,9 +101,8 @@ function emptyContext(overrides: {
   return { content, contentVersion: "test", state: { quest } };
 }
 
-// Cost ids that remain viable on the empty fixture. Resource costs (essence/
-// omens/max essence) always offer the option and lock when unaffordable; the
-// `[LOCKED]` prefix is how the player learns they cannot pay. Battle/shop/
+// Cost ids that remain viable on the empty fixture. Zero-cost percentage and
+// all-remaining essence costs are payable from an empty purse. Battle/shop/
 // route modifiers and bane gains do not consume from state, so they never
 // vanish. Card-pool gains (e.g. `gain_random_cards_from_pool`) read from the
 // content catalog rather than quest state, so the empty quest leaves them
@@ -111,13 +110,9 @@ function emptyContext(overrides: {
 // directly in the compound suite below with hand-picked sub-cost ids; the
 // general property test below skips it for that reason.
 const ALWAYS_VIABLE_ON_EMPTY: ReadonlySet<string> = new Set([
-  "pay_essence",
-  "pay_omens",
   "pay_max_essence",
-  "pay_essence_random_range",
   "pay_percent_essence",
   "pay_all_remaining_essence",
-  "lose_max_essence",
   "battle_reward_reduction_flat",
   "battle_reward_reduction_percent",
   "gain_random_banes",
@@ -355,6 +350,31 @@ describe("deck-scope viability audits", () => {
     expect(t.viable({ cardName: "Steady Burn" }, partiallyTransfigured)).toBe(true);
   });
 
+  it("remove_transfiguration_from_card rolls only transfigured named entries", () => {
+    const STEADY_BURN = card({ id: "steady-burn", name: "Steady Burn" });
+    const RINGWATCHER = card({ id: "ringwatcher", name: "Ringwatcher" });
+    const t = getCost("remove_transfiguration_from_card");
+    const ctx = emptyContext({
+      cards: [STEADY_BURN, RINGWATCHER],
+      deckEntries: [
+        {
+          cardId: STEADY_BURN.id,
+          copies: 1,
+          entryTransfigurations: ["Viridian"],
+        },
+        {
+          cardId: RINGWATCHER.id,
+          copies: 1,
+          entryTransfigurations: [null],
+        },
+      ],
+    });
+
+    expect(t.rollParams(ctx, { ...draw, selectionAttempt: 1 })).toEqual({
+      cardName: "Steady Burn",
+    });
+  });
+
   it("remove_transfigurations_from_random_predicate requires enough transfigured entries", () => {
     const t = getCost("remove_transfigurations_from_random_predicate");
     const ctx = emptyContext({
@@ -386,6 +406,13 @@ describe("deck-scope viability audits", () => {
 
     expect(t.viable({ predicateId: "transfigured", count: 2 }, ctx)).toBe(false);
     expect(t.viable({ predicateId: "transfigured", count: 1 }, ctx)).toBe(true);
+  });
+
+  it("pay_omens requires enough current omens for the rolled cost", () => {
+    const t = getCost("pay_omens");
+
+    expect(t.viable({ x: 1 }, emptyContext({ omens: 0 }))).toBe(false);
+    expect(t.viable({ x: 1 }, emptyContext({ omens: 1 }))).toBe(true);
   });
 });
 

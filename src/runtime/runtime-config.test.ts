@@ -8,6 +8,31 @@ describe("parseRuntimeConfig", () => {
       startInBattle: false,
       enableAi: false,
       gameId: null,
+      debugJourneyShape: null,
+      debugJourneyReward: null,
+      debugJourneyCost: null,
+    });
+  });
+
+  describe("Dream Journey debug params", () => {
+    it("returns non-empty debug journey ids verbatim", () => {
+      const config = parseRuntimeConfig(
+        "?debugJourneyShape=single_offer&debugJourneyReward=gain_essence&debugJourneyCost=pay_essence",
+      );
+
+      expect(config.debugJourneyShape).toBe("single_offer");
+      expect(config.debugJourneyReward).toBe("gain_essence");
+      expect(config.debugJourneyCost).toBe("pay_essence");
+    });
+
+    it("returns null for empty debug journey params", () => {
+      const config = parseRuntimeConfig(
+        "?debugJourneyShape=&debugJourneyReward=&debugJourneyCost=",
+      );
+
+      expect(config.debugJourneyShape).toBeNull();
+      expect(config.debugJourneyReward).toBeNull();
+      expect(config.debugJourneyCost).toBeNull();
     });
   });
 

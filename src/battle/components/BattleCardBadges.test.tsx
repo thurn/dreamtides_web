@@ -110,6 +110,7 @@ function makeInstance(overrides: {
       printedEnergyCost: 1,
       printedSpark: 2,
       isFast: false,
+      reclaimCost: null,
       tides: [],
       renderedText: "",
       imageNumber: 1,

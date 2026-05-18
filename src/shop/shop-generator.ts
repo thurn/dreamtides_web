@@ -35,6 +35,16 @@ export interface ShopSlot {
   purchased: boolean;
 }
 
+export interface ShopPriceModifiers {
+  essenceDiscountPercent?: number;
+  upcomingOmenDiscounts?: number;
+}
+
+type ShopPricedSlot = Pick<
+  ShopSlot,
+  "itemType" | "basePrice" | "discountPercent"
+> & Partial<Pick<ShopSlot, "card" | "dreamsign" | "purchased">>;
+
 export interface ShopGenerationOptions {
   cardDatabase: ReadonlyMap<number, CardData>;
   /**
@@ -67,10 +77,37 @@ export interface ShopInventoryResult {
   restrictedTide: PackageTideId | null;
 }
 
+/** Returns the total discount for a slot after shop-wide modifiers. */
+export function effectiveDiscountPercent(
+  slot: ShopPricedSlot,
+  modifiers: ShopPriceModifiers = {},
+): number {
+  const slotDiscount = Math.max(0, slot.discountPercent);
+  const essenceDiscount =
+    slot.itemType === "card"
+      ? Math.max(0, modifiers.essenceDiscountPercent ?? 0)
+      : 0;
+  return Math.min(100, slotDiscount + essenceDiscount);
+}
+
 /** Returns the effective price of a slot after discount. */
-export function effectivePrice(slot: ShopSlot): number {
-  if (slot.discountPercent === 0) return slot.basePrice;
-  return Math.round(slot.basePrice * (1 - slot.discountPercent / 100));
+export function effectivePrice(
+  slot: ShopPricedSlot,
+  modifiers: ShopPriceModifiers = {},
+): number {
+  const discountPercent = effectiveDiscountPercent(slot, modifiers);
+  const percentDiscountedPrice =
+    discountPercent === 0
+      ? slot.basePrice
+      : Math.round(slot.basePrice * (1 - discountPercent / 100));
+  if (
+    slot.itemType === "dreamsign" &&
+    percentDiscountedPrice > 0 &&
+    (modifiers.upcomingOmenDiscounts ?? 0) > 0
+  ) {
+    return percentDiscountedPrice - 1;
+  }
+  return percentDiscountedPrice;
 }
 
 /** Computes the omen reroll cost. Enhanced shops reroll for free. */

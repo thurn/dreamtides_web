@@ -9,7 +9,13 @@
 // An adapter in `src/journeys/adapter/` implements this interface on top
 // of `QuestMutations`.
 
-import type { Dreamsign, SiteType, TransfigurationType } from "../../types/quest";
+import type {
+  CardKeywordModification,
+  CardTypeChange,
+  Dreamsign,
+  SiteType,
+  TransfigurationType,
+} from "../../types/quest";
 
 export interface JourneyMutations {
   // ---- Resources ---------------------------------------------------------
@@ -53,6 +59,20 @@ export interface JourneyMutations {
   transfigureDeckEntry(
     entryId: string,
     type: TransfigurationType | null,
+    source: string,
+  ): void;
+
+  /** Change the effective card type/subtype for one concrete deck entry. */
+  changeDeckEntryType(
+    entryId: string,
+    typeChange: CardTypeChange,
+    source: string,
+  ): void;
+
+  /** Apply effective card keyword overrides for one concrete deck entry. */
+  changeDeckEntryKeywords(
+    entryId: string,
+    keywordModification: CardKeywordModification,
     source: string,
   ): void;
 

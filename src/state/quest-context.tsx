@@ -11,6 +11,7 @@ import {
 import type { QuestContent } from "../data/quest-content";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
+import { mergeCardKeywordModification } from "../card-type-change";
 import type { CardData } from "../types/cards";
 import type {
   DreamcallerContent,
@@ -18,6 +19,8 @@ import type {
 } from "../types/content";
 import type {
   BattleModifier,
+  CardKeywordModification,
+  CardTypeChange,
   CardSourceDebugState,
   CardChoiceSiteRuntime,
   CardChoiceTransfigurationOffer,
@@ -61,6 +64,7 @@ import {
 import { generateRewardSiteData } from "../rewards/reward-generator";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
+  effectivePrice,
   generateShopInventory,
   rerollCost,
   shopSlotsToRuntime,
@@ -239,6 +243,16 @@ export interface QuestMutations {
   removeDeckEntry: (entryId: string, source: string) => void;
   /** Add a duplicate of the deck entry with the given entryId. */
   duplicateDeckEntry: (entryId: string, source: string) => void;
+  changeDeckEntryType: (
+    entryId: string,
+    typeChange: CardTypeChange,
+    source: string,
+  ) => void;
+  changeDeckEntryKeywords: (
+    entryId: string,
+    keywordModification: CardKeywordModification,
+    source: string,
+  ) => void;
   /**
    * Remove up to `count` bane cards from the deck via uniform random
    * selection (using `Math.random`). When fewer banes exist than `count`,
@@ -292,9 +306,9 @@ export interface QuestMutations {
   /**
    * Stack a dreamscape-window modifier that hides every site of `siteType`
    * for the next `dreamscapes` dreamscapes the player enters. The atlas
-   * generator consumes the modifier when its hookup lands. Only `"Shop"`
-   * and `"DreamsignOffering"` map to a dreamscape-modifier kind; the type
-   * is narrowed here so unsupported site types fail at compile time.
+   * generator consumes the modifier during future site composition. Only
+   * `"Shop"` and `"DreamsignOffering"` map to a dreamscape-modifier kind;
+   * the type is narrowed here so unsupported site types fail at compile time.
    */
   removeSiteTypeFromNextDreamscapes: (
     siteType: "Shop" | "DreamsignOffering",
@@ -309,7 +323,7 @@ export interface QuestMutations {
   grantShopOmenDiscounts: (count: number, source: string) => void;
   /**
    * Stack a `boost_site_appearance` modifier for the next `dreamscapes`
-   * dreamscapes; atlas generation consumes it when its hookup lands.
+   * dreamscapes; atlas generation consumes it during future site composition.
    */
   boostSiteAppearance: (
     siteType: SiteType,
@@ -350,11 +364,14 @@ function randomIntInRange(min: number, max: number): number {
 }
 
 function runtimeSlotPrice(slot: {
+  itemType: "card" | "dreamsign";
   basePrice: number;
   discountPercent: number;
+}, modifiers: {
+  essenceDiscountPercent: number;
+  upcomingOmenDiscounts?: number;
 }): number {
-  if (slot.discountPercent === 0) return slot.basePrice;
-  return Math.round(slot.basePrice * (1 - slot.discountPercent / 100));
+  return effectivePrice(slot, modifiers);
 }
 
 function findSite(state: QuestState, siteId: string): SiteState | null {
@@ -1229,9 +1246,16 @@ export function QuestProvider({
           return prev;
         }
 
-        const price = runtimeSlotPrice(slot);
+        const priceBeforeOmenDiscount = runtimeSlotPrice(slot, {
+          essenceDiscountPercent: prev.shopModifiers.essenceDiscountPercent,
+        });
+        const price = runtimeSlotPrice(slot, {
+          essenceDiscountPercent: prev.shopModifiers.essenceDiscountPercent,
+          upcomingOmenDiscounts: prev.shopModifiers.upcomingOmenDiscounts,
+        });
         // Cards cost essence; Dreamsigns cost omens.
         const payInOmens = slot.itemType === "dreamsign";
+        const omenDiscountApplied = payInOmens && price < priceBeforeOmenDiscount;
         const availableCurrency = payInOmens ? prev.omens : prev.essence;
         if (price > availableCurrency) {
           return prev;
@@ -1252,13 +1276,23 @@ export function QuestProvider({
         let next: QuestState = prev;
         if (payInOmens) {
           const newOmens = prev.omens - price;
+          const upcomingOmenDiscounts = omenDiscountApplied
+            ? prev.shopModifiers.upcomingOmenDiscounts - 1
+            : prev.shopModifiers.upcomingOmenDiscounts;
           logEvent("omens_changed", {
             oldValue: prev.omens,
             newValue: newOmens,
             delta: -price,
             source: "shop_purchase",
           });
-          next = { ...next, omens: newOmens };
+          next = {
+            ...next,
+            omens: newOmens,
+            shopModifiers: {
+              ...prev.shopModifiers,
+              upcomingOmenDiscounts,
+            },
+          };
         } else {
           const newEssence = clampEssence(
             prev.essence - price,
@@ -1328,6 +1362,9 @@ export function QuestProvider({
             dreamsignName: slot.dreamsign.name,
             basePrice: slot.basePrice,
             discountedPrice: price,
+            omenDiscountApplied,
+            upcomingOmenDiscountsRemaining:
+              next.shopModifiers.upcomingOmenDiscounts,
             omensRemaining: next.omens,
           });
           next = {
@@ -1843,6 +1880,67 @@ export function QuestProvider({
     [cardDatabase],
   );
 
+  const changeDeckEntryType = useCallback(
+    (entryId: string, typeChange: CardTypeChange, source: string) => {
+      setState((prev) => {
+        const entry = prev.deck.find((e) => e.entryId === entryId);
+        if (!entry) return prev;
+        const card = cardDatabase.get(entry.cardNumber);
+        const cardName =
+          card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+        logEvent("card_type_changed", {
+          cardNumber: entry.cardNumber,
+          cardName,
+          entryId,
+          source,
+          predicateId: typeChange.predicateId,
+          cardType: typeChange.cardType,
+          subtype: typeChange.subtype,
+          label: typeChange.label,
+        });
+        const deck = prev.deck.map((e) =>
+          e.entryId === entryId ? { ...e, typeChange } : e,
+        );
+        return { ...prev, deck };
+      });
+    },
+    [cardDatabase],
+  );
+
+  const changeDeckEntryKeywords = useCallback(
+    (
+      entryId: string,
+      keywordModification: CardKeywordModification,
+      source: string,
+    ) => {
+      setState((prev) => {
+        const entry = prev.deck.find((e) => e.entryId === entryId);
+        if (!entry) return prev;
+        const card = cardDatabase.get(entry.cardNumber);
+        const cardName =
+          card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+        const nextKeywordModification = mergeCardKeywordModification(
+          entry.keywordModification,
+          keywordModification,
+        );
+        logEvent("card_keywords_changed", {
+          cardNumber: entry.cardNumber,
+          cardName,
+          entryId,
+          source,
+          keywords: nextKeywordModification,
+        });
+        const deck = prev.deck.map((e) =>
+          e.entryId === entryId
+            ? { ...e, keywordModification: nextKeywordModification }
+            : e,
+        );
+        return { ...prev, deck };
+      });
+    },
+    [cardDatabase],
+  );
+
   const setDreamcallerSelection = useCallback(
     (resolvedPackage: ResolvedDreamcallerPackage) => {
       setState((prev) => applyDreamcallerSelection(prev, resolvedPackage));
@@ -2335,6 +2433,10 @@ export function QuestProvider({
           entryId: newEntryId,
           cardNumber: entry.cardNumber,
           transfiguration: entry.transfiguration,
+          ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
+          ...(entry.keywordModification == null
+            ? {}
+            : { keywordModification: entry.keywordModification }),
           isBane: entry.isBane,
         };
         return { ...prev, deck: [...prev.deck, copy] };
@@ -2767,6 +2869,8 @@ export function QuestProvider({
       removeCard,
       cleanseBanes,
       transfigureCard,
+      changeDeckEntryType,
+      changeDeckEntryKeywords,
       setDreamcallerSelection,
       setCardSourceDebug,
       addDreamsign,
@@ -2826,6 +2930,8 @@ export function QuestProvider({
       removeCard,
       cleanseBanes,
       transfigureCard,
+      changeDeckEntryType,
+      changeDeckEntryKeywords,
       setDreamcallerSelection,
       setCardSourceDebug,
       addDreamsign,

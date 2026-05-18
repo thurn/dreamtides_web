@@ -67,6 +67,12 @@ export function createJourneyMutations(
       // field when it receives null.
       mutations.transfigureCard(entryId, type, source, {});
     },
+    changeDeckEntryType: (entryId, typeChange, source) => {
+      mutations.changeDeckEntryType(entryId, typeChange, source);
+    },
+    changeDeckEntryKeywords: (entryId, keywordModification, source) => {
+      mutations.changeDeckEntryKeywords(entryId, keywordModification, source);
+    },
 
     // ---- Dreamsigns ----------------------------------------------------
     addDreamsign: (dreamsign, source, purgeIndex) => {

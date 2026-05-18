@@ -5,6 +5,9 @@ export interface RuntimeConfig {
   startInBattle: boolean;
   enableAi: boolean;
   gameId: string | null;
+  debugJourneyShape?: string | null;
+  debugJourneyReward?: string | null;
+  debugJourneyCost?: string | null;
 }
 
 export function parseRuntimeConfig(search: string): RuntimeConfig {
@@ -14,7 +17,18 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     startInBattle: params.get("startInBattle") === "1",
     enableAi: params.get("enableAi") === "1",
     gameId: normalizeRoomId(params.get("game")),
+    debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),
+    debugJourneyReward: parseDebugJourneyId(params.get("debugJourneyReward")),
+    debugJourneyCost: parseDebugJourneyId(params.get("debugJourneyCost")),
   };
+}
+
+function parseDebugJourneyId(rawId: string | null): string | null {
+  if (rawId === null || rawId.trim() === "") {
+    return null;
+  }
+
+  return rawId;
 }
 
 function parseSeedOverride(rawSeed: string | null): number | null {

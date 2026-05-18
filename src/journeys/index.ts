@@ -21,3 +21,4 @@ export { createJourneyMutations } from "./adapter/journeyMutations";
 export { journeySeedForSite } from "./adapter/seed";
 export { buildJourneyContext } from "./adapter/buildContext";
 export { buildJourneyContentBundle } from "./adapter/content-bridge";
+export type { JourneyDebugForcing } from "./journey/debugHarness";

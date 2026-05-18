@@ -31,9 +31,9 @@
 //     `NEGATIVE_DREAMWELL_CARDS.length >= 1`. While dreamwell content is a
 //     stub list (Task 17), these templates correctly hide themselves until
 //     content lands.
-//   - `lose_max_essence` is classified as a Resource cost: viable is
-//     `() => true`, with `locked` flipping when the loss would consume the
-//     entire max-essence pool.
+//   - Resource spend templates check the current resource amount in
+//     `viable`, with `locked` preserving the same affordability predicate for
+//     defensive render paths.
 //   - `meta_pay_2_costs` ANDs its sub-cost viabilities and projects
 //     guaranteed resource spend in sub-cost order for compound locking; the
 //     compound test pins the [LOCKED]-prefix-exactly-once property.
@@ -419,7 +419,7 @@ const payEssence: Cost<PayEssenceParams> = {
   weight: RESOURCE_RANDOM_TRADE_COST_WEIGHT,
   rollParams: (_ctx, draw) => ({ x: 50 + 5 * drawInt(draw, "pay_essence:x", 0, 30) }),
   cec: (p) => p.x * STAGE_MULTIPLIER,
-  viable: () => true,
+  viable: (p, ctx) => p.x <= essenceAmount(ctx),
   locked: (p, ctx) => p.x > essenceAmount(ctx),
   render: (p, ctx) => withLockedPrefix(`Lose ${p.x} essence`, p.x > essenceAmount(ctx)),
   apply: (p, _ctx, mut) => {
@@ -433,7 +433,7 @@ const payOmens: Cost<PayOmensParams> = {
   weight: RESOURCE_RANDOM_TRADE_COST_WEIGHT,
   rollParams: (_ctx, draw) => ({ x: drawInt(draw, "pay_omens:x", 1, 2) }),
   cec: (p) => p.x * 40 * STAGE_MULTIPLIER,
-  viable: () => true,
+  viable: (p, ctx) => p.x <= omenAmount(ctx),
   locked: (p, ctx) => p.x > omenAmount(ctx),
   render: (p, ctx) =>
     withLockedPrefix(`Lose ${p.x} omen${p.x === 1 ? "" : "s"}`, p.x > omenAmount(ctx)),
@@ -466,16 +466,12 @@ const payEssenceRandomRange: Cost<PayEssenceRangeParams> = {
     return { min: base, max: base + spread };
   },
   cec: (p) => ((p.min + p.max) / 2) * STAGE_MULTIPLIER,
-  viable: () => true,
-  // The range cost rolls randomly at resolve time; we cannot know the actual
-  // roll. Treat the option as locked only when even the minimum cannot be
-  // paid — a guaranteed failure — to match the CLI's resource-cost stance
-  // of "lock only on certain unaffordability".
-  locked: (p, ctx) => p.min > essenceAmount(ctx),
+  viable: (p, ctx) => p.max <= essenceAmount(ctx),
+  locked: (p, ctx) => p.max > essenceAmount(ctx),
   render: (p, ctx) =>
     withLockedPrefix(
       `Lose ${p.min}-${p.max} essence (random roll)`,
-      p.min > essenceAmount(ctx),
+      p.max > essenceAmount(ctx),
     ),
   apply: (p, _ctx, mut) => {
     const roll = rollIntInclusive(p.min, p.max);
@@ -1093,7 +1089,9 @@ const removeTransfigurationFromCard: Cost<RemoveTransfigCardParams> = {
   id: "remove_transfiguration_from_card",
   weight: MINOR_RANDOM_TRADE_COST_WEIGHT,
   rollParams: (ctx, draw) => {
-    const deckCards = cardMatches(ctx, { source: "deck" });
+    const deckCards = projectedDeckEntries(ctx)
+      .filter((entry) => entry.transfiguration != null)
+      .map((entry) => entry.card);
     return {
       cardName: deckCards.length > 0
         ? pickFromList(draw, "rem_transfig:c", deckCards).name
@@ -1253,11 +1251,7 @@ const loseMaxEssence: Cost<LoseMaxEssenceParams> = {
   weight: MINOR_RANDOM_TRADE_COST_WEIGHT,
   rollParams: (_ctx, draw) => ({ amount: 25 + 25 * drawInt(draw, "lose_max:a", 0, 4) }),
   cec: (p) => p.amount * 1.5 * STAGE_MULTIPLIER,
-  // Reclassified as a Resource cost. The CLI surfaced `maxEssence > amount`
-  // as `viable`, which silently hid the option when the cap was already at
-  // or below the loss amount. Resource costs are always offered and lock
-  // when the loss would zero or invert the cap.
-  viable: () => true,
+  viable: (p, ctx) => p.amount < maxEssence(ctx),
   locked: (p, ctx) => p.amount >= maxEssence(ctx),
   render: (p, ctx) => withLockedPrefix(`Lose ${p.amount} maximum essence`, p.amount >= maxEssence(ctx)),
   apply: (p, _ctx, mut) => {

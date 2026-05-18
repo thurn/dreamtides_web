@@ -10,6 +10,7 @@ import type { ResolvedDreamcallerPackage } from "../types/content";
 import type {
   DreamAtlas,
   DreamscapeNode,
+  Dreamsign,
   QuestState,
   SiteState,
 } from "../types/quest";
@@ -37,6 +38,15 @@ function makeCard(cardNumber: number, name?: string): CardData {
     renderedText: "Test card.",
     imageNumber: cardNumber,
     artOwned: true,
+  };
+}
+
+function makeDreamsign(id: string, name: string): Dreamsign {
+  return {
+    id,
+    name,
+    effectDescription: `${name} effect.`,
+    isBane: false,
   };
 }
 
@@ -270,7 +280,8 @@ describe("incrementCompletionLevel battle modifier decay", () => {
     act(() => {
       quest.mutations.pushBattleRewardModifier("flat", 10, 1, "src-1");
       quest.mutations.pushBattleRewardModifier("flat", 20, 2, "src-2");
-      quest.mutations.pushTemporaryBaneGrant("Nightmare", 1, 1, "src-3");
+      quest.mutations.pushBattleRewardModifier("percent", 25, 2, "src-3");
+      quest.mutations.pushTemporaryBaneGrant("Nightmare", 1, 1, "src-4");
     });
 
     const initialBanes = quest.state.deck
@@ -283,12 +294,17 @@ describe("incrementCompletionLevel battle modifier decay", () => {
     });
 
     const kinds = quest.state.battleModifiers.map((modifier) => modifier.kind);
-    expect(kinds).toEqual(["reward_reduction_flat"]);
-    const survivor = quest.state.battleModifiers[0];
-    expect(survivor).toMatchObject({
+    expect(kinds).toEqual(["reward_reduction_flat", "reward_reduction_percent"]);
+    expect(quest.state.battleModifiers[0]).toMatchObject({
       kind: "reward_reduction_flat",
       battlesRemaining: 1,
       source: "src-2",
+    });
+    expect(quest.state.battleModifiers[1]).toMatchObject({
+      kind: "reward_reduction_percent",
+      battlesRemaining: 1,
+      source: "src-3",
+      percent: 25,
     });
 
     // The temporary bane grant's deck entry should have been removed when its
@@ -349,6 +365,39 @@ describe("setCurrentDreamscape dreamscape modifier decay", () => {
       dreamscapesRemaining: 2,
     });
   });
+
+  it("expires a dreamsign-site removal modifier after its configured dreamscape move", () => {
+    const currentNode = makeNode("dreamscape-1", [makeSite("s-1", "Battle")]);
+    const nextNode = makeNode("dreamscape-2", [makeSite("s-2", "Battle")]);
+    const initialState: QuestState = {
+      ...createDefaultState(),
+      atlas: makeAtlasWithCurrent(currentNode, [nextNode]),
+      currentDreamscape: currentNode.id,
+    };
+    const quest = mountQuestContext({ initialState });
+
+    act(() => {
+      quest.mutations.removeSiteTypeFromNextDreamscapes(
+        "DreamsignOffering",
+        1,
+        "src-dreamsign",
+      );
+    });
+
+    expect(quest.state.dreamscapeModifiers).toEqual([
+      {
+        kind: "remove_dreamsign_sites",
+        dreamscapesRemaining: 1,
+        source: "src-dreamsign",
+      },
+    ]);
+
+    act(() => {
+      quest.mutations.setCurrentDreamscape(nextNode.id);
+    });
+
+    expect(quest.state.dreamscapeModifiers).toEqual([]);
+  });
 });
 
 describe("rerollShop free-reroll consumption", () => {
@@ -389,6 +438,145 @@ describe("rerollShop free-reroll consumption", () => {
       throw new Error("Expected shop runtime");
     }
     expect(runtime.rerollCount).toBe(1);
+  });
+});
+
+describe("buyShopSlot essence discounts", () => {
+  it("charges card slots with the permanent shop essence discount applied", () => {
+    const cardDatabase = new Map<number, CardData>([[101, makeCard(101)]]);
+    const site = makeSite("shop-site", "Shop");
+    const node = makeNode("dreamscape-1", [site]);
+    const initialState: QuestState = {
+      ...createDefaultState(),
+      atlas: makeAtlasWithCurrent(node),
+      currentDreamscape: node.id,
+      essence: 100,
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 0,
+        essenceDiscountPercent: 50,
+      },
+      siteRuntime: {
+        [site.id]: {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "card",
+              cardNumber: 101,
+              basePrice: 100,
+              discountPercent: 30,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+          restrictedTide: null,
+        },
+      },
+    };
+    const quest = mountQuestContext({ cardDatabase, initialState });
+
+    act(() => {
+      quest.mutations.buyShopSlot(site.id, 0);
+    });
+
+    expect(quest.state.essence).toBe(80);
+    expect(quest.state.deck[quest.state.deck.length - 1]).toMatchObject({
+      cardNumber: 101,
+    });
+    const runtime = quest.state.siteRuntime[site.id];
+    if (runtime?.kind !== "shop") {
+      throw new Error("Expected shop runtime");
+    }
+    expect(runtime.slots[0]?.purchased).toBe(true);
+  });
+});
+
+describe("buyShopSlot omen discounts", () => {
+  it("spends one upcoming omen discount on a positive Dreamsign omen price", () => {
+    const dreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const site = makeSite("shop-site", "Shop");
+    const node = makeNode("dreamscape-1", [site]);
+    const initialState: QuestState = {
+      ...createDefaultState(),
+      atlas: makeAtlasWithCurrent(node),
+      currentDreamscape: node.id,
+      omens: 2,
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 1,
+        essenceDiscountPercent: 0,
+      },
+      siteRuntime: {
+        [site.id]: {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "dreamsign",
+              dreamsign,
+              basePrice: 2,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+          restrictedTide: null,
+        },
+      },
+    };
+    const quest = mountQuestContext({ initialState });
+
+    act(() => {
+      quest.mutations.buyShopSlot(site.id, 0);
+    });
+
+    expect(quest.state.omens).toBe(1);
+    expect(quest.state.shopModifiers.upcomingOmenDiscounts).toBe(0);
+    expect(quest.state.dreamsigns).toEqual([dreamsign]);
+  });
+
+  it("keeps upcoming omen discounts when a free Dreamsign slot is purchased", () => {
+    const dreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
+    const site = makeSite("shop-site", "Shop");
+    const node = makeNode("dreamscape-1", [site]);
+    const initialState: QuestState = {
+      ...createDefaultState(),
+      atlas: makeAtlasWithCurrent(node),
+      currentDreamscape: node.id,
+      omens: 0,
+      shopModifiers: {
+        freeRerolls: 0,
+        upcomingOmenDiscounts: 1,
+        essenceDiscountPercent: 0,
+      },
+      siteRuntime: {
+        [site.id]: {
+          kind: "shop",
+          slots: [
+            {
+              itemType: "dreamsign",
+              dreamsign,
+              basePrice: 0,
+              discountPercent: 0,
+              purchased: false,
+            },
+          ],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+          restrictedTide: null,
+        },
+      },
+    };
+    const quest = mountQuestContext({ initialState });
+
+    act(() => {
+      quest.mutations.buyShopSlot(site.id, 0);
+    });
+
+    expect(quest.state.omens).toBe(0);
+    expect(quest.state.shopModifiers.upcomingOmenDiscounts).toBe(1);
+    expect(quest.state.dreamsigns).toEqual([dreamsign]);
   });
 });
 
@@ -708,5 +896,44 @@ describe("addBaneCardById", () => {
     expect(warnSpy).toHaveBeenCalledWith(
       expect.stringContaining("addBaneCardById: unknown cardId 'card-missing'"),
     );
+  });
+});
+
+describe("changeDeckEntryKeywords", () => {
+  it("adds repeated Reclaim grants together on one deck entry", () => {
+    const cardDatabase = new Map<number, CardData>([
+      [501, makeCard(501, "Reclaim Target")],
+    ]);
+    const initialState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-501",
+          cardNumber: 501,
+          transfiguration: null,
+          typeChange: null,
+          keywordModification: null,
+          isBane: false,
+        },
+      ],
+    };
+    const quest = mountQuestContext({ cardDatabase, initialState });
+
+    act(() => {
+      quest.mutations.changeDeckEntryKeywords(
+        "deck-501",
+        { reclaim: 2 },
+        "journey:first",
+      );
+    });
+    act(() => {
+      quest.mutations.changeDeckEntryKeywords(
+        "deck-501",
+        { reclaim: 3 },
+        "journey:second",
+      );
+    });
+
+    expect(quest.state.deck[0]?.keywordModification).toEqual({ reclaim: 5 });
   });
 });

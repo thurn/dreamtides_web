@@ -548,6 +548,176 @@ describe("Card reward apply (non-choice)", () => {
     ]);
   });
 
+  it("change_card_to_become_type changes the first matching named deck entry type", () => {
+    const t = getReward("change_card_to_become_type");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { cardName: "Event Alpha", cardTypePredicateId: "spirit_animals" },
+      ctx,
+      mut,
+      undefined,
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "changeDeckEntryType",
+        args: [
+          "deck-event-alpha",
+          {
+            predicateId: "spirit_animals",
+            cardType: "Character",
+            subtype: "Spirit Animal",
+            label: "Spirit Animal",
+          },
+          "dream_journey:change_card_to_become_type",
+        ],
+      },
+    ]);
+  });
+
+  it("modify_random_cards_to_types changes the promised number of deterministic deck entries", () => {
+    const t = getReward("modify_random_cards_to_types");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const first = createRecordingMutations();
+    const second = createRecordingMutations();
+
+    t.apply(
+      { count: 3, cardTypePredicateId: "spirit_animals" },
+      ctx,
+      first.mut,
+      undefined,
+    );
+    t.apply(
+      { count: 3, cardTypePredicateId: "spirit_animals" },
+      ctx,
+      second.mut,
+      undefined,
+    );
+
+    expect(first.calls).toEqual(second.calls);
+    expect(first.calls).toHaveLength(3);
+    expect(new Set(first.calls.map((call) => call.args[0]))).toHaveLength(3);
+    expect(first.calls).toEqual(
+      first.calls.map((call) => ({
+        method: "changeDeckEntryType",
+        args: [
+          call.args[0],
+          {
+            predicateId: "spirit_animals",
+            cardType: "Character",
+            subtype: "Spirit Animal",
+            label: "Spirit Animal",
+          },
+          "dream_journey:modify_random_cards_to_types",
+        ],
+      })),
+    );
+  });
+
+  it("make_random_cards_fast adds fast to the promised number of deterministic deck entries", () => {
+    const t = getReward("make_random_cards_fast");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const first = createRecordingMutations();
+    const second = createRecordingMutations();
+
+    t.apply({ count: 2 }, ctx, first.mut, undefined);
+    t.apply({ count: 2 }, ctx, second.mut, undefined);
+
+    expect(first.calls).toEqual(second.calls);
+    expect(first.calls).toHaveLength(2);
+    expect(new Set(first.calls.map((call) => call.args[0]))).toHaveLength(2);
+    expect(first.calls).toEqual(
+      first.calls.map((call) => ({
+        method: "changeDeckEntryKeywords",
+        args: [
+          call.args[0],
+          { fast: true },
+          "dream_journey:make_random_cards_fast",
+        ],
+      })),
+    );
+  });
+
+  it("make_card_reclaim adds the promised Reclaim value to the named deck entry", () => {
+    const t = getReward("make_card_reclaim");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply({ cardName: "Event Alpha", count: 2 }, ctx, mut, undefined);
+
+    expect(calls).toEqual([
+      {
+        method: "changeDeckEntryKeywords",
+        args: [
+          "deck-event-alpha",
+          { reclaim: 2 },
+          "dream_journey:make_card_reclaim",
+        ],
+      },
+    ]);
+  });
+
+  it("make_random_cards_reclaim adds Reclaim to the promised number of deterministic deck entries", () => {
+    const t = getReward("make_random_cards_reclaim");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
+        { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+        { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
+      ],
+    });
+    const first = createRecordingMutations();
+    const second = createRecordingMutations();
+
+    t.apply({ count: 2, reclaim: 1 }, ctx, first.mut, undefined);
+    t.apply({ count: 2, reclaim: 1 }, ctx, second.mut, undefined);
+
+    expect(first.calls).toEqual(second.calls);
+    expect(first.calls).toHaveLength(2);
+    expect(new Set(first.calls.map((call) => call.args[0]))).toHaveLength(2);
+    expect(first.calls).toEqual(
+      first.calls.map((call) => ({
+        method: "changeDeckEntryKeywords",
+        args: [
+          call.args[0],
+          { reclaim: 1 },
+          "dream_journey:make_random_cards_reclaim",
+        ],
+      })),
+    );
+  });
+
   it("apply_chosen_transfiguration_to_chosen_card first plans a transfiguration chooser", () => {
     const t = getReward("apply_chosen_transfiguration_to_chosen_card");
     const ctx = buildContext({
@@ -3354,31 +3524,6 @@ describe("Meta-compound reward apply", () => {
 
 describe("Visual, battle-window-only, and dreamwell reward apply no-ops", () => {
   it.each([
-    {
-      id: "make_card_reclaim",
-      params: { cardName: "Event Alpha", count: 2 },
-      reason: "visual",
-    },
-    {
-      id: "make_random_cards_reclaim",
-      params: { count: 2, reclaim: 1 },
-      reason: "visual",
-    },
-    {
-      id: "change_card_to_become_type",
-      params: { cardName: "Event Alpha", cardTypePredicateId: "event" },
-      reason: "visual",
-    },
-    {
-      id: "modify_random_cards_to_types",
-      params: { count: 2, cardTypePredicateId: "event" },
-      reason: "visual",
-    },
-    {
-      id: "make_random_cards_fast",
-      params: { count: 2 },
-      reason: "visual",
-    },
     {
       id: "card_cost_reduction_for_X_battles",
       params: { predicateId: "event", amount: 1, battles: 3 },

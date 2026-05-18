@@ -4,7 +4,8 @@ import type {
   DreamsignTemplate,
   PackageTideId,
 } from "../../types/content";
-import type { QuestState, SiteState } from "../../types/quest";
+import type { BattleModifier, QuestState, SiteState } from "../../types/quest";
+import { applyDeckEntryCardModification } from "../../card-type-change";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
@@ -70,6 +71,7 @@ export interface CreateBattleInitInput {
   state: Pick<
     QuestState,
     | "atlas"
+    | "battleModifiers"
     | "completionLevel"
     | "currentDreamscape"
     | "deck"
@@ -96,6 +98,34 @@ export interface CreateBattleInitInput {
   enableAi?: boolean;
 }
 
+function applyBattleRewardModifiers(
+  baseReward: number,
+  modifiers: readonly BattleModifier[],
+): number {
+  let reward = baseReward;
+
+  for (const modifier of modifiers) {
+    if (modifier.battlesRemaining <= 0) {
+      continue;
+    }
+
+    switch (modifier.kind) {
+      case "reward_reduction_flat":
+        reward -= modifier.amount;
+        break;
+      case "reward_reduction_percent":
+        reward = Math.floor((reward * (100 - modifier.percent)) / 100);
+        break;
+      case "temporary_bane_grant":
+        break;
+    }
+
+    reward = Math.max(0, reward);
+  }
+
+  return reward;
+}
+
 export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   const {
     battleEntryKey,
@@ -114,6 +144,10 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       entryId: entry.entryId,
       cardNumber: entry.cardNumber,
       transfiguration: entry.transfiguration,
+      ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
+      ...(entry.keywordModification == null
+        ? {}
+        : { keywordModification: entry.keywordModification }),
       isBane: entry.isBane,
     })),
   );
@@ -145,6 +179,10 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   const dreamcallerSummary = freezeBattleDreamcallerSummary(state.dreamcaller);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
   const completionLevelAtStart = state.completionLevel;
+  const essenceReward = applyBattleRewardModifiers(
+    100 + completionLevelAtStart * 50,
+    state.battleModifiers,
+  );
 
   // Phase 2 runtime invariants (B-6, C-10): the player always starts and
   // skips the round-one draw. The `BattleInit` field types are widened to
@@ -168,7 +206,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     completionLevelAtStart,
     isMiniboss: completionLevelAtStart === 3,
     isFinalBoss: completionLevelAtStart === 6,
-    essenceReward: 100 + completionLevelAtStart * 50,
+    essenceReward,
     // Victory grants 1-3 omens, scaling with completed dreamscapes.
     omenReward: Math.min(3, 1 + Math.floor(completionLevelAtStart / 2)),
     openingHandSize: 5,
@@ -468,24 +506,33 @@ function normalizePlayerDeckCard(
 ): BattleDeckCardDefinition {
   // Apply the deck entry's transfiguration so the battle card carries the
   // modified cost, spark, and rules text rather than the printed base values.
-  const effectiveCard =
+  const transfiguredCard =
     entry.transfiguration === null
       ? card
       : applyTransfigurationToCard(card, entry.transfiguration);
+  const effectiveCard = applyDeckEntryCardModification(transfiguredCard, {
+    typeChange: entry.typeChange,
+    keywords: entry.keywordModification,
+  });
   return {
     sourceDeckEntryId: entry.entryId,
     cardNumber: card.cardNumber,
     name: card.name,
-    battleCardKind: card.cardType === "Character" ? "character" : "event",
-    subtype: card.subtype,
+    battleCardKind: effectiveCard.cardType === "Character" ? "character" : "event",
+    subtype: effectiveCard.subtype,
     energyCost: effectiveCard.energyCost ?? 0,
     printedEnergyCost: effectiveCard.energyCost,
     printedSpark: effectiveCard.spark ?? 0,
-    isFast: card.isFast,
+    isFast: effectiveCard.isFast,
+    reclaimCost: effectiveCard.reclaimCost ?? null,
     tides: [...card.tides],
     renderedText: effectiveCard.renderedText,
     imageNumber: card.imageNumber,
     transfiguration: entry.transfiguration,
+    ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
+    ...(entry.keywordModification == null
+      ? {}
+      : { keywordModification: entry.keywordModification }),
     isBane: entry.isBane,
   };
 }
@@ -501,6 +548,7 @@ function normalizeEnemyDeckCard(card: CardData): BattleDeckCardDefinition {
     printedEnergyCost: card.energyCost,
     printedSpark: card.spark ?? 0,
     isFast: card.isFast,
+    reclaimCost: null,
     tides: [...card.tides],
     renderedText: card.renderedText,
     imageNumber: card.imageNumber,

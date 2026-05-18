@@ -537,6 +537,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       playerHasBanes:
         questState.deck.some((entry) => entry.isBane) ||
         questState.dreamsigns.some((dreamsign) => dreamsign.isBane),
+      dreamscapeModifiers: questState.dreamscapeModifiers,
       mutations,
       clearBattleStateForRoom: () => {
         void dispatchClearBattleState({

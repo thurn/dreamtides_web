@@ -65,6 +65,51 @@ describe("play-card engine", () => {
     expect(resolved.state.sides.player.void).toContain(battleCardId);
   });
 
+  it("plays a reclaimed event from the void for its Reclaim cost and banishes it", () => {
+    const state = createTestBattle();
+    const battleCardId = findPlayerHandCardId(state, "event");
+    state.sides.player.hand = state.sides.player.hand.filter(
+      (cardId) => cardId !== battleCardId,
+    );
+    state.sides.player.void = [battleCardId];
+    state.sides.player.currentEnergy = 5;
+    state.cardInstances[battleCardId].definition = {
+      ...state.cardInstances[battleCardId].definition,
+      reclaimCost: 2,
+    };
+
+    const resolved = resolvePlayCard(state, battleCardId);
+
+    expect(resolved.state.sides.player.void).not.toContain(battleCardId);
+    expect(resolved.state.sides.player.banished).toContain(battleCardId);
+    expect(resolved.state.sides.player.currentEnergy).toBe(3);
+  });
+
+  it("plays a reclaimed character from the void for its Reclaim cost into reserve", () => {
+    const state = createTestBattle();
+    const battleCardId = findPlayerHandCardId(state, "character");
+    state.sides.player.hand = state.sides.player.hand.filter(
+      (cardId) => cardId !== battleCardId,
+    );
+    state.sides.player.void = [battleCardId];
+    state.sides.player.currentEnergy = 5;
+    state.cardInstances[battleCardId].definition = {
+      ...state.cardInstances[battleCardId].definition,
+      reclaimCost: 2,
+    };
+
+    const resolved = resolvePlayCard(state, battleCardId);
+
+    expect(resolved.state.sides.player.void).not.toContain(battleCardId);
+    expect(resolved.state.sides.player.reserve.R0).toBe(battleCardId);
+    expect(resolved.state.sides.player.currentEnergy).toBe(3);
+    expect(resolved.transition.logEvents[0].fields).toMatchObject({
+      battleCardId,
+      sourceZone: "void",
+      targetZone: "reserve",
+    });
+  });
+
   it("allows player energy to go negative after a play", () => {
     const state = createTestBattle();
     const battleCardId = findPlayerHandCardId(state, "character");
