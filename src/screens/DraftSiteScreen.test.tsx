@@ -779,24 +779,25 @@ describe("DraftSiteScreen", () => {
     expect(screen.style.height).toContain("48px");
     expect(screen.className).toMatch(/\boverflow-hidden\b/);
 
-    // Each offer card wrapper sizes itself to half of (viewport - HUD -
-    // header chrome) so the 2x2 grid always fits two rows in the screen.
-    // Without this constraint the card defaults to its content height and
-    // the bottom row clips at 1280x633-style laptop sizes.
+    // Each offer card wrapper sizes itself from the smaller of half the
+    // draft-area width and one third of (viewport - HUD - header chrome),
+    // preserving the 2:3 card ratio while keeping both rows and columns in
+    // view beside the deck rail.
     const offerWrappers = Array.from(screen.querySelectorAll("div")).filter(
       (element) =>
         element.style.aspectRatio === "2 / 3"
-        && element.style.height.startsWith("calc"),
+        && element.style.getPropertyValue("--draft-offer-card-width").startsWith("min("),
     );
     expect(offerWrappers).toHaveLength(4);
     for (const wrapper of offerWrappers) {
-      // The browser keeps `(… - 48px - 80px) / 2`; jsdom normalizes it to
-      // `0.5 * (… - 48px - 80px)`. Either form expresses "half of viewport
-      // minus HUD minus header chrome" — accept either.
-      expect(wrapper.style.height).toContain("100vh");
-      expect(wrapper.style.height).toContain("48px");
-      expect(wrapper.style.height).toContain("80px");
-      expect(wrapper.style.height).toMatch(/\/\s*2|0\.5\s*\*/);
+      const width = wrapper.style.getPropertyValue("--draft-offer-card-width");
+      expect(width).toContain("100cqw");
+      expect(width).toContain("16px");
+      expect(width).toContain("100vh");
+      expect(width).toContain("48px");
+      expect(width).toContain("80px");
+      expect(width).toMatch(/\/\s*2/);
+      expect(width).toMatch(/\/\s*3/);
     }
 
     act(() => {

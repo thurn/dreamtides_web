@@ -65,6 +65,10 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.draft-offer-card-wrapper {
+  width: var(--draft-offer-card-width);
+}
+
 @media (min-width: 1280px) {
   .draft-pack-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr)) !important;

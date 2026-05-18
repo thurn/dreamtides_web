@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "../components/CardDisplay";
@@ -28,6 +29,12 @@ const DECK_HIGHLIGHT_DURATION = 900;
 
 /** Animation phases during a pick. */
 type PickPhase = "idle" | "animating" | "waiting";
+
+const DRAFT_OFFER_CARD_STYLE = {
+  "--draft-offer-card-width":
+    "min(calc((100cqw - 16px) / 2), calc((100vh - 48px - 80px) / 3))",
+  aspectRatio: "2 / 3",
+} as CSSProperties & Record<"--draft-offer-card-width", string>;
 
 interface RectSnapshot {
   left: number;
@@ -743,12 +750,10 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
   }
 
   {/*
-    Layout: full viewport minus HUD (48px). Cards use viewport-relative
-    heights so the 2x2 grid fills the screen. Each card is ~42vh tall
-    (two rows + gap + header ≈ 100vh - 48px). Width follows from the
-    2:3 aspect ratio. `overflow: hidden` keeps the screen from ever
-    contributing scroll height — if a card is briefly oversized during
-    layout, the wrapper clips rather than letting the page scroll.
+    Layout: full viewport minus HUD (48px). Cards use the smaller of the
+    available draft-area width and viewport-relative height so the 2x2 grid
+    fills the screen without spilling under the deck rail. `overflow: hidden`
+    keeps the screen from ever contributing scroll height.
   */}
   return (
     <div
@@ -757,7 +762,10 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
       style={{ height: "calc(100vh - 48px)" }}
     >
       {/* Main draft area */}
-      <div className="flex min-w-0 flex-1 flex-col items-center justify-center overflow-hidden">
+      <div
+        className="flex min-w-0 flex-1 flex-col items-center justify-center overflow-hidden"
+        style={{ containerType: "inline-size" }}
+      >
         {/* 2x2 card grid, centered */}
         <AnimatePresence mode="wait">
           <motion.div
@@ -794,11 +802,8 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
                       offerCardRefs.current[card.cardNumber] = element;
                     }}
                     data-testid={`draft-offer-card-wrapper-${String(card.cardNumber)}`}
-                    className="relative rounded-lg"
-                    style={{
-                      height: "calc((100vh - 48px - 80px) / 2)",
-                      aspectRatio: "2 / 3",
-                    }}
+                    className="draft-offer-card-wrapper relative rounded-lg"
+                    style={DRAFT_OFFER_CARD_STYLE}
                     onContextMenu={(e) => {
                       e.preventDefault();
                       handleCardInspect(card);
