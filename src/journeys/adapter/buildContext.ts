@@ -31,6 +31,7 @@ import type { DeckEntry, QuestState, SiteState } from "../../types/quest";
 function projectDeck(
   deck: readonly DeckEntry[],
   cardIdByNumber: ReadonlyMap<number, string>,
+  cardIdByEntryId: ReadonlyMap<string, string> = new Map(),
 ): QuestStateProjection["deck"]["entries"] {
   const entriesById = new Map<
     string,
@@ -42,7 +43,7 @@ function projectDeck(
   >();
 
   for (const entry of deck) {
-    const cardId = cardIdByNumber.get(entry.cardNumber);
+    const cardId = cardIdByEntryId.get(entry.entryId) ?? cardIdByNumber.get(entry.cardNumber);
     if (cardId === undefined) {
       // Orphan: deck entry references a cardNumber missing from the content
       // bundle. Skip it so generation can continue against a partial catalog
@@ -70,6 +71,33 @@ function projectDeck(
     entryIds: entry.entryIds,
     entryTransfigurations: entry.entryTransfigurations,
   }));
+}
+
+function typeChangedCardId(baseCardId: string, entryId: string): string {
+  return `${baseCardId}::deck-entry:${entryId}:type-change`;
+}
+
+function applyTypeChangeToJourneyCard(
+  card: ContentBundle["cards"][number],
+  entry: DeckEntry,
+): ContentBundle["cards"][number] {
+  const typeChange = entry.typeChange;
+  if (typeChange == null) {
+    return card;
+  }
+  const id = typeChangedCardId(card.id, entry.entryId);
+  return {
+    ...card,
+    id,
+    cardType: typeChange.cardType,
+    raw: {
+      ...card.raw,
+      id,
+      "card-type": typeChange.cardType,
+      cardType: typeChange.cardType,
+      subtype: typeChange.subtype,
+    },
+  };
 }
 
 /**
@@ -186,17 +214,42 @@ export function buildJourneyContext(
 ): JourneyContext {
   const cardIdByNumber = new Map<number, string>();
   const cardNameByNumber = new Map<number, string>();
+  const cardsByNumber = new Map<number, ContentBundle["cards"][number]>();
+  const cardIdByEntryId = new Map<string, string>();
   const starterCardIds = new Set<string>();
+  const effectiveCards = [...content.cards];
 
   for (const card of content.cards) {
     cardIdByNumber.set(card.cardNumber, card.id);
     cardNameByNumber.set(card.cardNumber, card.name);
+    cardsByNumber.set(card.cardNumber, card);
     if (card.rarity === "Starter") {
       starterCardIds.add(card.id);
     }
   }
 
-  const deckEntries = projectDeck(questState.deck, cardIdByNumber);
+  for (const entry of questState.deck) {
+    if (entry.typeChange == null) {
+      continue;
+    }
+    const card = cardsByNumber.get(entry.cardNumber);
+    if (card === undefined) {
+      continue;
+    }
+    const changedCard = applyTypeChangeToJourneyCard(card, entry);
+    cardIdByEntryId.set(entry.entryId, changedCard.id);
+    effectiveCards.push(changedCard);
+    if (card.rarity === "Starter") {
+      starterCardIds.add(changedCard.id);
+    }
+  }
+
+  const effectiveContent: ContentBundle = {
+    ...content,
+    cards: effectiveCards,
+  };
+
+  const deckEntries = projectDeck(questState.deck, cardIdByNumber, cardIdByEntryId);
   const banes = projectBanes(questState.deck, cardNameByNumber);
   const draftPool = projectDraftPool(
     questState.resolvedPackage?.draftPoolCopiesByCard ?? {},
@@ -235,7 +288,7 @@ export function buildJourneyContext(
 
   return {
     state: { quest: projection },
-    content,
-    contentVersion: computeContentVersion(content),
+    content: effectiveContent,
+    contentVersion: computeContentVersion(effectiveContent),
   };
 }

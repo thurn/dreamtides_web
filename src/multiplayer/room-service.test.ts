@@ -467,8 +467,20 @@ describe("room service", () => {
 
     const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
     expect(ready.room.questState?.deck).toEqual([
-      { entryId: "deck-1", cardNumber: 711, isBane: false, transfiguration: null },
-      { entryId: "deck-2", cardNumber: 712, isBane: false, transfiguration: null },
+      {
+        entryId: "deck-1",
+        cardNumber: 711,
+        isBane: false,
+        transfiguration: null,
+        typeChange: null,
+      },
+      {
+        entryId: "deck-2",
+        cardNumber: 712,
+        isBane: false,
+        transfiguration: null,
+        typeChange: null,
+      },
     ]);
   });
 

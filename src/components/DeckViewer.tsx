@@ -25,6 +25,7 @@ import { TRANSFIGURATION_COLORS } from "../transfiguration/transfiguration-logic
 import { computeDeckSummary } from "./deck-summary";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { RulesText } from "./RulesText";
+import { applyCardTypeChange } from "../card-type-change";
 
 /** Sort criteria options. */
 type SortCriteria =
@@ -136,7 +137,7 @@ export function DeckViewer({
       .map((entry, index) => {
         const card = cardDatabase.get(entry.cardNumber);
         if (!card) return null;
-        return { entry, card, index };
+        return { entry, card: applyCardTypeChange(card, entry.typeChange), index };
       })
       .filter((e): e is ResolvedEntry => e !== null);
   }, [state.deck, cardDatabase]);
@@ -595,6 +596,14 @@ export function DeckViewer({
                             }}
                           >
                             {resolved.entry.transfiguration}
+                          </div>
+                        )}
+                        {resolved.entry.typeChange != null && (
+                          <div
+                            className="absolute -bottom-1 -right-1 z-10 rounded-full border border-emerald-200 bg-emerald-700 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-md"
+                            title={`Becomes ${resolved.entry.typeChange.label}`}
+                          >
+                            {resolved.entry.typeChange.label}
                           </div>
                         )}
                         {/* Bane indicator */}

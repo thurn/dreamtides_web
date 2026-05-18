@@ -113,6 +113,7 @@ type TransfigurationForApply = Exclude<
   Parameters<JourneyMutations["transfigureDeckEntry"]>[1],
   null
 >;
+type CardTypeChangeForApply = Parameters<JourneyMutations["changeDeckEntryType"]>[1];
 
 function applyDrawContext(ctx: JourneyContext): DrawContext {
   return {
@@ -322,6 +323,22 @@ function resolveCardIdByName(ctx: JourneyContext, name: string): string | undefi
 
 function warnSkippedCardApply(templateId: string, reason: string): void {
   console.warn(`[journeys/apply] ${templateId} skipped: ${reason}`);
+}
+
+function cardTypeChangeFromPredicate(
+  predicateId: string,
+): CardTypeChangeForApply | undefined {
+  const predicate = getPredicate(predicateId);
+  const cardType = predicate.cardPredicate?.cardType;
+  if (cardType !== "Character" && cardType !== "Event") {
+    return undefined;
+  }
+  return {
+    predicateId,
+    cardType,
+    subtype: predicate.cardPredicate?.subtype ?? "",
+    label: predicate.text.singular,
+  };
 }
 
 function warnSkippedDreamsignApply(templateId: string, reason: string): void {
@@ -1624,8 +1641,28 @@ const changeCardToBecomeType: Reward<ChangeCardBecomeTypeParams> = {
     const article = /^[aeiou]/i.test(singular) ? "an" : "a";
     return `Change ${quoteName(p.cardName)} to become ${article} ${singular}`;
   },
-  apply: () => {
-    logSkippedVisualTemplate("change_card_to_become_type", "visual");
+  apply: (p, ctx, mut) => {
+    const entryId = findFirstDeckEntryIdByCardName(ctx, p.cardName);
+    if (entryId === undefined) {
+      warnSkippedCardApply(
+        "change_card_to_become_type",
+        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+      );
+      return;
+    }
+    const typeChange = cardTypeChangeFromPredicate(p.cardTypePredicateId);
+    if (typeChange === undefined) {
+      warnSkippedCardApply(
+        "change_card_to_become_type",
+        `card type predicate ${JSON.stringify(p.cardTypePredicateId)} was not applicable`,
+      );
+      return;
+    }
+    mut.changeDeckEntryType(
+      entryId,
+      typeChange,
+      "dream_journey:change_card_to_become_type",
+    );
   },
 };
 

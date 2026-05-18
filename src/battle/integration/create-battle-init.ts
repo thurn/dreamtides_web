@@ -5,6 +5,7 @@ import type {
   PackageTideId,
 } from "../../types/content";
 import type { QuestState, SiteState } from "../../types/quest";
+import { applyCardTypeChange } from "../../card-type-change";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
@@ -114,6 +115,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       entryId: entry.entryId,
       cardNumber: entry.cardNumber,
       transfiguration: entry.transfiguration,
+      ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
       isBane: entry.isBane,
     })),
   );
@@ -468,24 +470,26 @@ function normalizePlayerDeckCard(
 ): BattleDeckCardDefinition {
   // Apply the deck entry's transfiguration so the battle card carries the
   // modified cost, spark, and rules text rather than the printed base values.
-  const effectiveCard =
+  const transfiguredCard =
     entry.transfiguration === null
       ? card
       : applyTransfigurationToCard(card, entry.transfiguration);
+  const effectiveCard = applyCardTypeChange(transfiguredCard, entry.typeChange);
   return {
     sourceDeckEntryId: entry.entryId,
     cardNumber: card.cardNumber,
     name: card.name,
-    battleCardKind: card.cardType === "Character" ? "character" : "event",
-    subtype: card.subtype,
+    battleCardKind: effectiveCard.cardType === "Character" ? "character" : "event",
+    subtype: effectiveCard.subtype,
     energyCost: effectiveCard.energyCost ?? 0,
     printedEnergyCost: effectiveCard.energyCost,
     printedSpark: effectiveCard.spark ?? 0,
-    isFast: card.isFast,
+    isFast: effectiveCard.isFast,
     tides: [...card.tides],
     renderedText: effectiveCard.renderedText,
     imageNumber: card.imageNumber,
     transfiguration: entry.transfiguration,
+    ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
     isBane: entry.isBane,
   };
 }

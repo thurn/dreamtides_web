@@ -8,7 +8,7 @@ import type { QuestContent } from "../data/quest-content";
 import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
-import type { Dreamsign, QuestState, SiteState } from "../types/quest";
+import type { CardTypeChange, Dreamsign, QuestState, SiteState } from "../types/quest";
 import { useQuest, type QuestContextValue } from "./quest-context";
 import { createDefaultState } from "./quest-context";
 import { MultiplayerQuestProvider } from "./multiplayer-quest-context";
@@ -2529,6 +2529,66 @@ describe("MultiplayerQuestProvider", () => {
         isBane: false,
       },
     ]);
+  });
+
+  it("applies a deck entry type change by id", () => {
+    const captured: QuestContextValue[] = [];
+    const typeChange: CardTypeChange = {
+      predicateId: "warriors",
+      cardType: "Character",
+      subtype: "Warrior",
+      label: "Warrior",
+    };
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.changeDeckEntryType(
+      "deck-1",
+      typeChange,
+      "journey:change_card_to_become_type",
+    );
+
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+    expect(nextRoom?.questState?.deck).toEqual([
+      {
+        entryId: "deck-1",
+        cardNumber: 101,
+        transfiguration: null,
+        typeChange,
+        isBane: false,
+      },
+    ]);
+    expect(Object.values(nextRoom?.actionLog ?? {})[0]).toMatchObject({
+      action: "changeDeckEntryType",
+      source: "journey:change_card_to_become_type",
+      summary: {
+        entryId: "deck-1",
+        cardNumber: 101,
+        predicateId: "warriors",
+        cardType: "Character",
+        subtype: "Warrior",
+        label: "Warrior",
+      },
+    });
   });
 
   it("clears Wave 1 deck entry transfiguration by id", () => {

@@ -1,5 +1,5 @@
 import type { PackageTideId, ResolvedDreamcallerPackage } from "./content";
-import type { CardData } from "./cards";
+import type { CardData, CardType } from "./cards";
 import type { DraftState } from "./draft";
 
 /** Badge applied to a card via a Transfiguration site. */
@@ -12,6 +12,14 @@ export type TransfigurationType =
   | "Magenta"
   | "Rose"
   | "Prismatic";
+
+/** Persistent card type/subtype override applied to one concrete deck entry. */
+export interface CardTypeChange {
+  predicateId: string;
+  cardType: CardType;
+  subtype: string;
+  label: string;
+}
 
 /** All site types available in dreamscapes. */
 export type SiteType =
@@ -34,6 +42,7 @@ export interface DeckEntry {
   entryId: string;
   cardNumber: number;
   transfiguration: TransfigurationType | null;
+  typeChange?: CardTypeChange | null;
   isBane: boolean;
 }
 

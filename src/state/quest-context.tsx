@@ -18,6 +18,7 @@ import type {
 } from "../types/content";
 import type {
   BattleModifier,
+  CardTypeChange,
   CardSourceDebugState,
   CardChoiceSiteRuntime,
   CardChoiceTransfigurationOffer,
@@ -239,6 +240,11 @@ export interface QuestMutations {
   removeDeckEntry: (entryId: string, source: string) => void;
   /** Add a duplicate of the deck entry with the given entryId. */
   duplicateDeckEntry: (entryId: string, source: string) => void;
+  changeDeckEntryType: (
+    entryId: string,
+    typeChange: CardTypeChange,
+    source: string,
+  ) => void;
   /**
    * Remove up to `count` bane cards from the deck via uniform random
    * selection (using `Math.random`). When fewer banes exist than `count`,
@@ -1843,6 +1849,33 @@ export function QuestProvider({
     [cardDatabase],
   );
 
+  const changeDeckEntryType = useCallback(
+    (entryId: string, typeChange: CardTypeChange, source: string) => {
+      setState((prev) => {
+        const entry = prev.deck.find((e) => e.entryId === entryId);
+        if (!entry) return prev;
+        const card = cardDatabase.get(entry.cardNumber);
+        const cardName =
+          card?.name ?? `Unknown Card #${String(entry.cardNumber)}`;
+        logEvent("card_type_changed", {
+          cardNumber: entry.cardNumber,
+          cardName,
+          entryId,
+          source,
+          predicateId: typeChange.predicateId,
+          cardType: typeChange.cardType,
+          subtype: typeChange.subtype,
+          label: typeChange.label,
+        });
+        const deck = prev.deck.map((e) =>
+          e.entryId === entryId ? { ...e, typeChange } : e,
+        );
+        return { ...prev, deck };
+      });
+    },
+    [cardDatabase],
+  );
+
   const setDreamcallerSelection = useCallback(
     (resolvedPackage: ResolvedDreamcallerPackage) => {
       setState((prev) => applyDreamcallerSelection(prev, resolvedPackage));
@@ -2335,6 +2368,7 @@ export function QuestProvider({
           entryId: newEntryId,
           cardNumber: entry.cardNumber,
           transfiguration: entry.transfiguration,
+          ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
           isBane: entry.isBane,
         };
         return { ...prev, deck: [...prev.deck, copy] };
@@ -2767,6 +2801,7 @@ export function QuestProvider({
       removeCard,
       cleanseBanes,
       transfigureCard,
+      changeDeckEntryType,
       setDreamcallerSelection,
       setCardSourceDebug,
       addDreamsign,
@@ -2826,6 +2861,7 @@ export function QuestProvider({
       removeCard,
       cleanseBanes,
       transfigureCard,
+      changeDeckEntryType,
       setDreamcallerSelection,
       setCardSourceDebug,
       addDreamsign,

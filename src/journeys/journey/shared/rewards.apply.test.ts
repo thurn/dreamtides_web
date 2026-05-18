@@ -548,6 +548,40 @@ describe("Card reward apply (non-choice)", () => {
     ]);
   });
 
+  it("change_card_to_become_type changes the first matching named deck entry type", () => {
+    const t = getReward("change_card_to_become_type");
+    const ctx = buildContext({
+      cards: cardFixture(),
+      deckEntries: [
+        { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
+      ],
+    });
+    const { mut, calls } = createRecordingMutations();
+
+    t.apply(
+      { cardName: "Event Alpha", cardTypePredicateId: "spirit_animals" },
+      ctx,
+      mut,
+      undefined,
+    );
+
+    expect(calls).toEqual([
+      {
+        method: "changeDeckEntryType",
+        args: [
+          "deck-event-alpha",
+          {
+            predicateId: "spirit_animals",
+            cardType: "Character",
+            subtype: "Spirit Animal",
+            label: "Spirit Animal",
+          },
+          "dream_journey:change_card_to_become_type",
+        ],
+      },
+    ]);
+  });
+
   it("apply_chosen_transfiguration_to_chosen_card first plans a transfiguration chooser", () => {
     const t = getReward("apply_chosen_transfiguration_to_chosen_card");
     const ctx = buildContext({
@@ -3362,11 +3396,6 @@ describe("Visual, battle-window-only, and dreamwell reward apply no-ops", () => 
     {
       id: "make_random_cards_reclaim",
       params: { count: 2, reclaim: 1 },
-      reason: "visual",
-    },
-    {
-      id: "change_card_to_become_type",
-      params: { cardName: "Event Alpha", cardTypePredicateId: "event" },
       reason: "visual",
     },
     {

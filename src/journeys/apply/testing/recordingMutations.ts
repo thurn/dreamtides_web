@@ -57,6 +57,7 @@ export function createRecordingMutations(): {
     removeDeckEntry: record("removeDeckEntry"),
     duplicateDeckEntry: record("duplicateDeckEntry"),
     transfigureDeckEntry: record("transfigureDeckEntry"),
+    changeDeckEntryType: record("changeDeckEntryType"),
 
     // ---- Dreamsigns ------------------------------------------------------
     addDreamsign: record("addDreamsign"),

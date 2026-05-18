@@ -1,5 +1,11 @@
 import type { PackageTideId } from "../types/content";
-import type { DreamAtlas, Dreamcaller, Dreamsign, TransfigurationType } from "../types/quest";
+import type {
+  CardTypeChange,
+  DreamAtlas,
+  Dreamcaller,
+  Dreamsign,
+  TransfigurationType,
+} from "../types/quest";
 import type { BattleDebugEdit } from "./debug/commands";
 
 export const RESERVE_SLOT_IDS = ["R0", "R1", "R2", "R3", "R4"] as const;
@@ -121,6 +127,7 @@ export interface BattleQuestDeckEntry {
   entryId: string;
   cardNumber: number;
   transfiguration: TransfigurationType | null;
+  typeChange?: CardTypeChange | null;
   isBane: boolean;
 }
 
@@ -138,6 +145,7 @@ export interface BattleDeckCardDefinition {
   renderedText: string;
   imageNumber: number;
   transfiguration: TransfigurationType | null;
+  typeChange?: CardTypeChange | null;
   isBane: boolean;
 }
 

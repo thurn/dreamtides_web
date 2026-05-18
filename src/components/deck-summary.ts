@@ -1,5 +1,6 @@
 import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
+import { applyCardTypeChange } from "../card-type-change";
 
 export interface DeckSummary {
   total: number;
@@ -24,10 +25,11 @@ export function computeDeckSummary(
     if (card === undefined) {
       continue;
     }
+    const effectiveCard = applyCardTypeChange(card, entry.typeChange);
 
     total += 1;
 
-    if (card.cardType === "Character") {
+    if (effectiveCard.cardType === "Character") {
       characterCount += 1;
     } else {
       eventCount += 1;

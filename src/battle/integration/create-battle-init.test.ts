@@ -3,6 +3,7 @@ import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestS
 import { createBattleInit, type CreateBattleInitInput } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
 import type { CardData } from "../../types/cards";
+import type { CardTypeChange } from "../../types/quest";
 
 const ENEMY_DECK_SIZE = 12;
 
@@ -281,6 +282,40 @@ describe("createBattleInit", () => {
           isBane: card.isBane,
         });
       }
+    });
+
+    it("applies quest deck entry type changes to player battle card definitions", () => {
+      const baseInput = makeBaseInput();
+      const changedEntryId = "deck-5";
+      const typeChange: CardTypeChange = {
+        predicateId: "spirit_animals",
+        cardType: "Character",
+        subtype: "Spirit Animal",
+        label: "Spirit Animal",
+      };
+      const stateWithTypeChange = {
+        ...baseInput.state,
+        deck: baseInput.state.deck.map((entry) =>
+          entry.entryId === changedEntryId
+            ? {
+                ...entry,
+                typeChange,
+              }
+            : entry,
+        ),
+      };
+
+      const init = createBattleInit({ ...baseInput, state: stateWithTypeChange });
+      const changedCard = init.playerDeckOrder.find(
+        (card) => card.sourceDeckEntryId === changedEntryId,
+      );
+
+      expect(changedCard).toMatchObject({
+        cardNumber: 106,
+        battleCardKind: "character",
+        subtype: "Spirit Animal",
+        typeChange,
+      });
     });
 
     it("throws when a quest deck entry references a missing card number", () => {
