@@ -5,7 +5,7 @@ like Magic: The Gathering. Players build decks of character and event cards,
 then compete to score victory points by resolving challenges on a staggered
 battlefield. Two key differences from traditional card games: the shared
 Dreamwell system replaces lands for energy production, and challenges are
-resolved positionally — during the Challenge phase of each turn, the active
+resolved positionally — during the Night phase of each turn, the active
 player's deployed characters become challengers, the opposing player's
 deployed characters become defenders if they are in the same lane as a
 challenger, and each lane is resolved as a challenge (spark comparison, lower
@@ -30,14 +30,14 @@ spark).
 
 The first player to reach the victory point threshold wins the game. The
 default threshold is 25 points, but this is configurable per battle. Most
-points are scored during the Challenge phase, when unpaired challengers
+points are scored during the Night phase, when unpaired challengers
 triumph and score victory points equal to their spark. If 50 turns pass
 without a winner, the game ends in a draw.
 
 ## Card Types
 
 **Character** — Permanent cards that enter the battlefield when they resolve.
-Each character has a spark value used during the Challenge phase. Characters
+Each character has a spark value used during the Night phase. Characters
 enter play in your "reserves" (back rank) cannot be "deployed" (moved to the
 front rank) on the turn they are played. Starting with the opponent's next turn,
 they may be deployed (see Turn Structure below). Characters remain on the
@@ -46,11 +46,11 @@ challenge. Characters can have triggered, activated, and static abilities.
 Characters have a subtype (Spirit Animal, Warrior, Survivor, etc.) that other
 cards can reference. Characters may be marked **Fast** or **Interrupt** (see
 Playing Cards and the Stack); this controls when they can be played outside the
-Main phase.
+Day phase.
 
 **Event** — One-shot cards that produce an effect when they resolve, then move
 to the void. Events can also be marked **Fast** or **Interrupt**, which controls
-when they may be played outside the Main phase (see Playing Cards and the
+when they may be played outside the Day phase (see Playing Cards and the
 Stack).
 
 **Dreamcaller** — A player's identity card, an animated 3D character that starts
@@ -94,7 +94,7 @@ either.
 - `R3` supports `D2` and `D3`
 - `R4` supports `D3`
 
-Only deployed characters participate directly in the Challenge phase. A player
+Only deployed characters participate directly in the Night phase. A player
 can have at most 9 total characters on the battlefield, and new characters
 always enter the reserves as reserved characters.
 
@@ -141,7 +141,9 @@ that both players draw from, one per turn.
 
 ## Turn Structure
 
-Each turn progresses through these seven phases in order:
+Each turn progresses through these seven phases in order. Only the four main
+phases — Dawn, Day, Dusk, and Night — are surfaced in the UI; the surrounding
+Dreamwell, Draw, and Ending phases run as automatic bookends.
 
 1. **Dreamwell** — The active player draws the next Dreamwell card, permanently
    increasing their energy production. Their current energy then resets to match
@@ -152,33 +154,34 @@ Each turn progresses through these seven phases in order:
 3. **Dawn** — Start-of-turn triggers fire. The active player's **Dawn**
    triggered abilities fire and resolve here. Auto-advances when the stack is
    empty.
-4. **Main** — The active player plays cards, deploys characters, repositions
+4. **Day** — The active player plays cards, deploys characters, repositions
    characters, and activates abilities. The opposing player may play Interrupt
    cards and Interrupt-speed activated abilities in response to cards on the
    stack. The active player may also play Interrupts in response to opposing
    Interrupts. The active player explicitly passes to end this phase.
-5. **Response** — The Response phase has two sub-phases. **First**, the opposing
-   player may reposition their characters between any of the 9 battlefield
-   positions (subject to the reserved restriction), play Fast cards, and
-   activate Fast activated abilities. Repositioning includes deploying reserved
-   characters into deployed lanes — this is the opposing player's window to set
-   up defenders after seeing the challengers. The opposing player explicitly
-   passes to end this sub-phase. **Second**, the active player may play Fast
-   cards and activate Fast activated abilities, but cannot reposition
-   characters. The active player explicitly passes to end the Response phase,
-   after which the Challenge phase begins. Fast cards and Fast abilities can
-   only be played while the stack is empty. Either player may play an Interrupt
-   (card or activated ability) in response to a card on the stack, or at any
-   time they could play a Fast card.
-6. **Challenge** — All of the active player's deployed characters become
+5. **Dusk** — The active player's **Dusk** triggered abilities fire and resolve
+   here. The Dusk phase then has two sub-phases. **First**, the opposing player
+   may reposition their characters between any of the 9 battlefield positions
+   (subject to the reserved restriction), play Fast cards, and activate Fast
+   activated abilities. Repositioning includes deploying reserved characters
+   into deployed lanes — this is the opposing player's window to set up
+   defenders after seeing the challengers. The opposing player explicitly passes
+   to end this sub-phase. **Second**, the active player may play Fast cards and
+   activate Fast activated abilities, but cannot reposition characters. The
+   active player explicitly passes to end the Dusk phase, after which the Night
+   phase begins. Fast cards and Fast abilities can only be played while the
+   stack is empty. Either player may play an Interrupt (card or activated
+   ability) in response to a card on the stack, or at any time they could play
+   a Fast card.
+6. **Night** — All of the active player's deployed characters become
    challengers, and opposing deployed characters in the same lanes become
    defenders. Lanes resolve sequentially from `D0` to `D3` as challenges or
    triumphs (see Spark and Scoring for full resolution rules). No cards may be
    played during this phase, though triggered and static abilities still
    function and can modify spark.
-7. **Dusk** — End-of-turn triggers fire. If the active player has more than 10
-   cards in hand, they must discard until they have 10 cards. Auto-advances when
-   the stack is empty, after which the turn passes to the opponent.
+7. **Ending** — If the active player has more than 10 cards in hand, they must
+   discard until they have 10 cards. Auto-advances when the stack is empty,
+   after which the turn passes to the opponent.
 
 **Game start:** Each player draws 5 cards as their opening hand. The first
 player's first turn skips the Draw phase.
@@ -192,10 +195,10 @@ priority to respond.
 
 **Timing categories:**
 
-- **Standard cards** can be played by the active player during their Main phase,
+- **Standard cards** can be played by the active player during their Day phase,
   only when the stack is empty.
 - **Fast cards** (marked with a single lightning bolt) can be played by the
-  controlling player during their Main phase or the Response phase, only when the
+  controlling player during their Day phase or the Dusk phase, only when the
   stack is empty.
 - **Interrupt cards** (marked with two lightning bolts) are a subtype of Fast —
   Interrupt cards count as Fast for all rules purposes. Interrupts can be played
@@ -224,13 +227,13 @@ toughness — spark is their only stat. When an effect modifies a character's
 spark, including support-based effects from other characters, that effective
 spark is what challenges, triumphs, scoring, and other game rules use.
 
-**Challengers and defenders:** When the Challenge phase begins, every deployed
+**Challengers and defenders:** When the Night phase begins, every deployed
 character belonging to the active player is automatically a challenger. Every
 deployed character belonging to the opposing player in the same lane as a
 challenger becomes a defender for that lane, and the challenger becomes
 defended.
 
-**Challenge phase resolution:** Each deployed lane (`D0` through `D3`) is
+**Night phase resolution:** Each deployed lane (`D0` through `D3`) is
 resolved in turn:
 
 - **Challenge (defended challenger):** Compare the spark of the challenger and
@@ -243,11 +246,11 @@ resolved in turn:
 - **Only the opposing player has a deployed character in the lane:** Nothing
   happens in that lane.
 
-**After the Challenge phase:** Surviving deployed characters remain where
+**After the Night phase:** Surviving deployed characters remain where
 they are. A surviving challenger or defender stays in its lane until
 repositioned or removed.
 
-Reserves are safe during the Challenge phase — reserved characters do not
+Reserves are safe during the Night phase — reserved characters do not
 participate in challenges or triumphs and do not score points, though their
 abilities can still affect deployed characters they support.
 
@@ -263,8 +266,8 @@ the opponent's next turn.
 **Repositioning:** Repositioning means moving a character between any of the
 9 battlefield positions (deployed lanes and reserve slots), subject to the
 reserved restriction. Moving a character onto an occupied position swaps the
-two characters. The active player repositions during their Main phase. The
-opposing player repositions during the Response phase; this is when
+two characters. The active player repositions during their Day phase. The
+opposing player repositions during the Dusk phase; this is when
 defenders are set up by deploying reserved characters into lanes opposite
 challengers.
 
@@ -281,7 +284,7 @@ the void.
 **Banish** — Permanently remove a card from the game by sending it to the
 Banished zone. Several variants exist: banish from the battlefield, banish
 from the void, banish until the banishing card leaves play, and banish until
-the next Main phase.
+the next Day phase.
 
 **Materialize** — Put a character onto the battlefield, into your reserves.
 This is the term for a character entering play, whether from hand (played
@@ -321,7 +324,7 @@ the void). When a reclaimed card would later leave the stack or battlefield,
 it is banished instead of returning to the void.
 
 **Fast** — A property on cards and abilities indicating they can be played
-during the Response phase, only when the stack is empty.
+during the Dusk phase, only when the stack is empty.
 
 **Interrupt** — A subtype of Fast (Interrupt cards and abilities count as
 Fast for all rules purposes). Interrupts can be played in response to a card
@@ -373,10 +376,11 @@ event resolves from the stack, then the event moves to the void.
 **Triggered abilities** — Abilities that fire automatically when a specific game
 event occurs. Four named keyword triggers can appear on characters:
 **Materialized** (fires when the character enters the battlefield), **Dawn**
-(fires during the controller's Dawn phase at the start of each turn the
+(fires during the controller's Dawn phase, at the start of each turn the
 controller is the active player), **Dusk** (fires during the controller's Dusk
-phase at the end of each turn the controller is the active player), and
-**Dissolved** (fires when the character is destroyed).
+phase, after the Day phase and before the Night phase on each turn the
+controller is the active player), and **Dissolved** (fires when the character
+is destroyed).
 
 Triggered abilities can also use descriptive conditions like "When you play a
 card". A character played from hand can satisfy both "when you play" and
@@ -390,7 +394,7 @@ trigger condition is met.
 written as "Cost: Effect" (e.g., "2 energy: Draw a card"). These can be used any
 number of times per turn unless "Once per turn" appears in the cost line.
 Activated abilities use the same timing symbols as cards: standard activated
-abilities are Main-phase only when the stack is empty, Fast activated abilities
+abilities are Day-phase only when the stack is empty, Fast activated abilities
 follow the Fast timing rules, and Interrupt activated abilities follow the
 Interrupt timing rules.
 
