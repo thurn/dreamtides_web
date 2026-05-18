@@ -836,7 +836,7 @@ function JourneyChooser({
   }
 }
 
-/** Surrounding layout: close button + content slot. */
+/** Surrounding layout: close button + screen heading + content slot. */
 function JourneyChrome({
   closeDisabled,
   onClose,
@@ -852,8 +852,34 @@ function JourneyChrome({
     <div className="relative flex min-h-full flex-col items-center px-4 py-10 md:px-8">
       <CloseButton disabled={closeDisabled} onClick={onClose} />
       <RerollButton onClick={onReroll} />
+      <JourneyScreenHeading />
       {children}
     </div>
+  );
+}
+
+/**
+ * Primary screen heading. Sits above the dream options so the player has a
+ * clear top-of-screen prompt explaining the choice they are being asked to
+ * make. White text with a soft drop-shadow keeps the heading readable over
+ * variable dreamscape backgrounds without introducing a heavy panel that
+ * would compete visually with the option circles below.
+ */
+function JourneyScreenHeading() {
+  // `px-16` reserves horizontal room for the absolutely-positioned close and
+  // reroll buttons at `left-4` / `top-4` / `top-16`, so the heading never
+  // overlaps them at narrow viewport widths.
+  return (
+    <h1
+      className="mb-6 px-16 text-center text-2xl font-bold tracking-wide md:mb-8 md:px-4 md:text-4xl lg:text-5xl"
+      style={{
+        color: "#ffffff",
+        textShadow:
+          "0 2px 12px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 0, 0, 0.65)",
+      }}
+    >
+      Choose a dream to enter
+    </h1>
   );
 }
 

@@ -542,6 +542,42 @@ afterEach(() => {
 });
 
 describe("JourneyScreen", () => {
+  it("renders the primary 'Choose a dream to enter' heading above the options", () => {
+    mockedGenerate.mockReturnValue(makeFlatManifest(3));
+    const onClose = vi.fn();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={onClose}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+      />,
+    );
+
+    const heading = container.querySelector("h1");
+    if (heading === null) throw new Error("Heading not rendered");
+    expect(heading.textContent).toBe("Choose a dream to enter");
+
+    // The heading must precede the option circles in the rendered DOM order
+    // so it reads as a top-of-screen header rather than a caption beneath
+    // the choices.
+    const firstImageControl = container.querySelector<HTMLButtonElement>(
+      'button[aria-label^="Enter dream:"], button[aria-label^="Locked dream:"]',
+    );
+    if (firstImageControl === null) {
+      throw new Error("Expected at least one option circle to be rendered");
+    }
+    expect(
+      heading.compareDocumentPosition(firstImageControl) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeGreaterThan(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders one circle per option for a flat manifest", () => {
     mockedGenerate.mockReturnValue(makeFlatManifest(3));
     const onClose = vi.fn();
