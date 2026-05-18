@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin } from "vite";
+import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -35,10 +36,61 @@ function questLogPlugin(): Plugin {
   };
 }
 
+/** Vite plugin that detects stale generated card data during development. */
+function generatedCardDataDriftPlugin(): Plugin {
+  const watchedPaths = new Set([
+    path.join(__dirname, "data", "tabula", "rendered-cards.toml"),
+    path.join(__dirname, "public", "card-data.json"),
+  ].map((filePath) => path.resolve(filePath)));
+
+  const runCheck = (): ReturnType<typeof checkGeneratedCardData> =>
+    checkGeneratedCardData({ rootDir: __dirname });
+
+  return {
+    name: "generated-card-data-drift-guard",
+    apply: "serve",
+    configureServer(server) {
+      for (const watchedPath of watchedPaths) {
+        server.watcher.add(watchedPath);
+      }
+
+      const initialResult = runCheck();
+      if (!initialResult.ok) {
+        throw new Error(initialResult.message);
+      }
+      console.info(`[card-data] ${initialResult.message}`);
+
+      server.watcher.on("change", (changedPath) => {
+        if (!watchedPaths.has(path.resolve(changedPath))) {
+          return;
+        }
+
+        const result = runCheck();
+        if (result.ok) {
+          console.info(`[card-data] ${result.message}`);
+          return;
+        }
+
+        console.error(`[card-data] ${result.message}`);
+        server.ws.send({
+          type: "error",
+          err: {
+            message: "Generated card data is out of date",
+            stack: result.message,
+          },
+        });
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), tailwindcss(), questLogPlugin()],
+  plugins: [react(), tailwindcss(), questLogPlugin(), generatedCardDataDriftPlugin()],
   test: {
-    include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    include: [
+      "src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+      "scripts/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
+    ],
     exclude: [
       "**/node_modules/**",
       "**/dist/**",
