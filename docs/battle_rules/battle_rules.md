@@ -185,6 +185,14 @@ Dreamwell, Draw, and Ending phases run as automatic bookends.
 **Game start:** Each player draws 5 cards as their opening hand. The first
 player's first turn skips the Draw phase.
 
+**Exhaustion:** The first time a player attempts to draw from an empty deck
+during their turn, no card is drawn and the opponent gains 5 victory points
+instead. The penalty doubles on each of that player's subsequent turns on
+which they would draw from their empty deck — 10 points on the next turn, 20
+on the one after, and so on. This is called **exhaustion**. Only the first
+failed draw of the turn awards points; further failed draws on the same turn
+have no additional effect.
+
 ## Playing Cards and the Stack
 
 To play a card, the controlling player must have enough current energy to pay
