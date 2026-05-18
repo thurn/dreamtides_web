@@ -2,8 +2,8 @@
 
 Dreamtides is a two-player card game in the tradition of collectible card games
 like Magic: The Gathering. Players build decks of character and event cards,
-then compete to score victory points by resolving challenges on a staggered
-battlefield. Two key differences from traditional card games: the shared
+then compete to score victory points by resolving challenges across a staggered
+play area. Two key differences from traditional card games: the shared
 Dreamwell system replaces lands for energy production, and challenges are
 resolved positionally — during the Night phase of each turn, the active
 player's deployed characters become challengers, the opposing player's
@@ -36,17 +36,16 @@ without a winner, the game ends in a draw.
 
 ## Card Types
 
-**Character** — Permanent cards that enter the battlefield when they resolve.
-Each character has a spark value used during the Night phase. Characters
-enter play in your "reserves" (back rank) cannot be "deployed" (moved to the
-front rank) on the turn they are played. Starting with the opponent's next turn,
-they may be deployed (see Turn Structure below). Characters remain on the
-battlefield until removed by an effect (Dissolve or Banish) or dissolved in a
-challenge. Characters can have triggered, activated, and static abilities.
-Characters have a subtype (Spirit Animal, Warrior, Survivor, etc.) that other
-cards can reference. Characters may be marked **Fast** or **Interrupt** (see
-Playing Cards and the Stack); this controls when they can be played outside the
-Day phase.
+**Character** — Permanent cards that enter play when they resolve.
+Each character has a spark value used during the Night phase. Characters enter
+play in your "reserves" (back rank) and cannot be "deployed" (moved to the front
+rank) on the turn they are played. Starting with the opponent's next turn, they
+may be deployed (see Turn Structure below). Characters remain in play until
+removed by an effect (Dissolve or Banish) or dissolved in a challenge.
+Characters can have triggered, activated, and static abilities. Characters have
+a subtype (Spirit Animal, Warrior, Survivor, etc.) that other cards can
+reference. Characters may be marked **Fast** or **Interrupt** (see Playing Cards
+and the Stack); this controls when they can be played outside the Day phase.
 
 **Event** — One-shot cards that produce an effect when they resolve, then move
 to the void. Events can also be marked **Fast** or **Interrupt**, which controls
@@ -76,11 +75,11 @@ turn if they have more than 10.
 
 **Stack** — A temporary zone for cards that have been played but not yet
 resolved. While a card is on the stack, the opponent may respond with
-Interrupts. Characters move to the battlefield when they resolve; events move
-to the void.
+Interrupts. Characters move into play when they resolve; events move to the
+void.
 
-**Battlefield** — Where characters reside. Each player has a staggered
-battlefield with 4 deployed lanes (`D0-D3`) in front and 5 reserve slots
+**In Play** — Where characters reside. Each player has a staggered play area
+with 4 deployed lanes (`D0-D3`) in front and 5 reserve slots
 (`R0-R4`) behind, for 9 total positions. Dreamtides does **not** use columns.
 Because the grid is staggered, a deployed lane sits in front of one or two
 reserve slots: `D0` is in front of `R0` and `R1`, `D1` is in front of `R1` and
@@ -95,8 +94,8 @@ either.
 - `R4` supports `D3`
 
 Only deployed characters participate directly in the Night phase. A player
-can have at most 9 total characters on the battlefield, and new characters
-always enter the reserves as reserved characters.
+can have at most 9 total characters in play, and new characters always enter
+the reserves as reserved characters.
 
 **Void** — The discard pile. Events go here after resolving. Characters go
 here when dissolved. Some cards can interact with cards in the void (notably
@@ -161,7 +160,7 @@ Dreamwell, Draw, and Ending phases run as automatic bookends.
    Interrupts. The active player explicitly passes to end this phase.
 5. **Dusk** — The active player's **Dusk** triggered abilities fire and resolve
    here. The Dusk phase then has two sub-phases. **First**, the opposing player
-   may reposition their characters between any of the 9 battlefield positions
+   may reposition their characters between any of the 9 in-play positions
    (subject to the reserved restriction), play Fast cards, and activate Fast
    activated abilities. Repositioning includes deploying reserved characters
    into deployed lanes — this is the opposing player's window to set up
@@ -215,8 +214,8 @@ the stack in response to a card already on the stack is with an Interrupt.
 
 **Stack resolution:** Cards on the stack resolve last-in, first-out (LIFO).
 Only one pass is needed to resolve a card. Events resolve by applying their
-effects and moving to the void. Characters resolve by entering the
-battlefield. After a card resolves, if the stack is not empty, the card's
+effects and moving to the void. Characters resolve by entering play. After a
+card resolves, if the stack is not empty, the card's
 controller receives priority. Triggered abilities cannot be responded to in
 Dreamtides — they resolve directly when their trigger condition is met.
 
@@ -254,8 +253,8 @@ Reserves are safe during the Night phase — reserved characters do not
 participate in challenges or triumphs and do not score points, though their
 abilities can still affect deployed characters they support.
 
-**Reserved status:** When a character enters the battlefield, it is placed in
-your reserves and is reserved for the rest of the turn on which it was played. A
+**Reserved status:** When a character enters play, it is placed in your
+reserves and is reserved for the rest of the turn on which it was played. A
 reserved character cannot be deployed and cannot become a challenger or
 defender. The reserved status lasts only until the end of the current turn;
 starting on the opponent's next turn, the character can be deployed by its
@@ -264,29 +263,27 @@ activated ability. The same rule applies here, it cannot then be deployed until
 the opponent's next turn.
 
 **Repositioning:** Repositioning means moving a character between any of the
-9 battlefield positions (deployed lanes and reserve slots), subject to the
+9 in-play positions (deployed lanes and reserve slots), subject to the
 reserved restriction. Moving a character onto an occupied position swaps the
 two characters. The active player repositions during their Day phase. The
 opposing player repositions during the Dusk phase; this is when
 defenders are set up by deploying reserved characters into lanes opposite
 challengers.
 
-**Materializing new characters:** Characters enter the battlefield in the
-reserves. If all 5 reserve slots are occupied, no additional characters that can
+**Materializing new characters:** Characters enter play in the reserves. If all 5 reserve slots are occupied, no additional characters that can
 be played or materialized until a reserve slot is freed, even if the player has
 open deployed lanes.
 
 ## Keywords and Effects
 
-**Dissolve** — Destroy a target character, moving it from the battlefield to
-the void.
+**Dissolve** — Destroy a target character, moving it from play to the void.
 
 **Banish** — Permanently remove a card from the game by sending it to the
-Banished zone. Several variants exist: banish from the battlefield, banish
-from the void, banish until the banishing card leaves play, and banish until
-the next Day phase.
+Banished zone. Several variants exist: banish from play, banish from the
+void, banish until the banishing card leaves play, and banish until the next
+Day phase.
 
-**Materialize** — Put a character onto the battlefield, into your reserves.
+**Materialize** — Put a character into play, into your reserves.
 This is the term for a character entering play, whether from hand (played
 normally), from the void (via Reclaim or effects), from the deck (via
 effects), or as a token (Figments). Characters enter reserved and cannot be
@@ -297,7 +294,7 @@ reserve slot.
 between the 5 reserve slots and 4 deployed lanes. A reserved character's
 **supported** characters are the deployed characters in the lanes its slot
 supports. A deployed character's **supporting** characters are the reserved
-characters behind it. On the standard battlefield, `R0` supports `D0`, `R1`
+characters behind it. On the standard layout, `R0` supports `D0`, `R1`
 supports `D0/D1`, `R2` supports `D1/D2`, `R3` supports `D2/D3`, and `R4`
 supports `D3`; equivalently, `D0` is supported by `R0/R1`, `D1` by `R1/R2`,
 `D2` by `R2/R3`, and `D3` by `R3/R4`. Support has no built-in effect by
@@ -307,8 +304,7 @@ itself, but abilities can reference these relationships.
 resolving. Prevent effects are always Interrupts (they respond to a card on
 the stack).
 
-**Abandon** — Move one of your own characters from the battlefield to the
-void. Cannot be prevented and only targets your own characters. Fires the
+**Abandon** — Move one of your own characters from play to the void. Cannot be prevented and only targets your own characters. Fires the
 "Dissolved" trigger. Often used as a cost for abilities.
 
 **Kindle N** — Add N spark to your character with the highest spark value. If
@@ -320,8 +316,8 @@ any order and optionally send any of them to the void.
 **Reclaim** — A named ability that allows you to play a card from your void
 instead of from your hand. The card is played at its normal cost (or at a
 specified alternate cost: Reclaim N means it costs N energy when played from
-the void). When a reclaimed card would later leave the stack or battlefield,
-it is banished instead of returning to the void.
+the void). When a reclaimed card would later leave the stack or play, it is
+banished instead of returning to the void.
 
 **Fast** — A property on cards and abilities indicating they can be played
 during the Dusk phase, only when the stack is empty.
@@ -334,13 +330,13 @@ on the stack.
 criteria, then choose one to add to your hand.
 
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
-character on the battlefield or copying the next card played.
+character in play or copying the next card played.
 
 **Echo** — Copy an effect so it happens an additional time. If an effect says
 something "gains Echo", that ability is copied and resolves again.
 
 **Gain Control** — Take control of an opponent's character, moving it to your
-side of the battlefield.
+side of play.
 
 **Challenge** — Initiate a one-on-one challenge between your character and a
 target character. The two characters compare spark as in a lane challenge —
@@ -375,7 +371,7 @@ event resolves from the stack, then the event moves to the void.
 
 **Triggered abilities** — Abilities that fire automatically when a specific game
 event occurs. Four named keyword triggers can appear on characters:
-**Materialized** (fires when the character enters the battlefield), **Dawn**
+**Materialized** (fires when the character enters play), **Dawn**
 (fires during the controller's Dawn phase, at the start of each turn the
 controller is the active player), **Dusk** (fires during the controller's Dusk
 phase, after the Day phase and before the Night phase on each turn the
@@ -384,8 +380,8 @@ is destroyed).
 
 Triggered abilities can also use descriptive conditions like "When you play a
 card". A character played from hand can satisfy both "when you play" and
-"Materialized" triggers, but a character put directly onto the battlefield
-without being played satisfies only "Materialized." Characters can have combined
+"Materialized" triggers, but a character put directly into play without being
+played satisfies only "Materialized." Characters can have combined
 triggers such as "Materialized, Dawn" (fires both on entry and each Dawn phase).
 Triggered abilities cannot be responded to — they resolve directly when their
 trigger condition is met.
@@ -399,7 +395,7 @@ follow the Fast timing rules, and Interrupt activated abilities follow the
 Interrupt timing rules.
 
 **Static abilities** — Always-on rule modifications that apply as long as
-the source is on the battlefield. Examples include cost reductions, spark
+the source is in play. Examples include cost reductions, spark
 bonuses for matching characters, or modifications to game rules.
 
 **Modal abilities** — Abilities that present multiple options to choose
@@ -420,14 +416,14 @@ to select valid targets from the available options.
 ## Figments
 
 Figments are token characters created by card effects rather than played
-from a deck. Figments enter the battlefield through "Materialize Figments"
-effects and behave like regular characters — they have spark values, count
+from a deck. Figments enter play through "Materialize Figments" effects and
+behave like regular characters — they have spark values, count
 toward the character limit, and can be targeted by effects.
 
 Figments always have 1 base spark.
 
 **Stacking:** Unlike other characters, any number of figments of the same type
-occupy the same battlefield position. Figments sharing a position behave as a
+occupy the same in-play position. Figments sharing a position behave as a
 single combined entity whose effective spark for that position is the sum of the
 individual figments' sparks. Stacked figments also count their combined spark
 for triumphs (an unpaired stack scores points equal to the sum of its figments'
