@@ -849,6 +849,33 @@ describe("JourneyScreen", () => {
     });
   });
 
+  it("renders the debug harness failure detail when a forced id is invalid", () => {
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+        debugForcing={{ rewardTemplateId: "missing_reward" }}
+      />,
+    );
+
+    expect(container.textContent).toContain("Invalid debugJourneyReward");
+    expect(container.textContent).toContain("missing_reward");
+    expect(queryEnterDreamButtons(container)).toHaveLength(0);
+    expect(errorSpy).toHaveBeenCalledWith(
+      expect.stringContaining("missing_reward"),
+      expect.objectContaining({ attempts: [] }),
+    );
+
+    act(() => {
+      root.unmount();
+    });
+    errorSpy.mockRestore();
+  });
+
   // ---- Apply dispatch wiring ---------------------------------------------
   //
   // These three tests pin the cutover contract that "Enter Dream now

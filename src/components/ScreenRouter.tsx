@@ -21,6 +21,7 @@ import {
   buildJourneyContext,
   buildJourneyContentBundle,
   createJourneyMutations,
+  type JourneyDebugForcing,
 } from "../journeys";
 import type { QuestContent } from "../data/quest-content";
 import { siteTypeName } from "../atlas/atlas-generator";
@@ -145,7 +146,7 @@ function SiteScreen({
   }
 
   if (site.type === "DreamJourney") {
-    return <DreamJourneySiteScreen site={site} />;
+    return <DreamJourneySiteScreen site={site} runtimeConfig={runtimeConfig} />;
   }
 
   if (site.type === "Purge") {
@@ -179,7 +180,13 @@ function SiteScreen({
  * screen produces fires inside `completeDreamJourneySite` so analytics
  * stay consistent with other site types.
  */
-function DreamJourneySiteScreen({ site }: { site: SiteState }) {
+function DreamJourneySiteScreen({
+  site,
+  runtimeConfig,
+}: {
+  site: SiteState;
+  runtimeConfig: RuntimeConfig;
+}) {
   const { state, mutations, questContent } = useQuest();
 
   useEffect(() => {
@@ -212,6 +219,10 @@ function DreamJourneySiteScreen({ site }: { site: SiteState }) {
     () => createJourneyMutations(mutations),
     [mutations],
   );
+  const debugForcing = useMemo(
+    () => debugJourneyForcingFor(runtimeConfig),
+    [runtimeConfig],
+  );
 
   return (
     <JourneyScreen
@@ -219,8 +230,33 @@ function DreamJourneySiteScreen({ site }: { site: SiteState }) {
       onClose={handleClose}
       siteId={site.id}
       mutations={journeyMutations}
+      debugForcing={debugForcing}
     />
   );
+}
+
+function debugJourneyForcingFor(
+  runtimeConfig: RuntimeConfig,
+): JourneyDebugForcing | undefined {
+  if (!import.meta.env.DEV) {
+    return undefined;
+  }
+
+  const debugForcing = {
+    shapeId: runtimeConfig.debugJourneyShape ?? null,
+    rewardTemplateId: runtimeConfig.debugJourneyReward ?? null,
+    costTemplateId: runtimeConfig.debugJourneyCost ?? null,
+  };
+
+  if (
+    !debugForcing.shapeId &&
+    !debugForcing.rewardTemplateId &&
+    !debugForcing.costTemplateId
+  ) {
+    return undefined;
+  }
+
+  return debugForcing;
 }
 
 function buildContentBundleFor(questContent: QuestContent) {

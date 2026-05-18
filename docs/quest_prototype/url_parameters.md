@@ -35,6 +35,29 @@ commands (e.g. `PLAY_CARD`, `MOVE_CARD`, `DEBUG_EDIT`, or another `END_TURN`).
 The flag is read once at boot and bound onto the cached `BattleInit` for each
 session, so toggling it requires a page reload.
 
+## Dream Journey Debug Harness
+
+In local development, Dream Journey QA can force selected generation inputs:
+
+- `debugJourneyShape=<shape_id>` pins generation to a registered Journey shape.
+- `debugJourneyReward=<reward_id>` searches deterministic generation attempts
+  until the manifest includes that reward template.
+- `debugJourneyCost=<cost_id>` searches deterministic generation attempts until
+  the manifest includes that cost template.
+
+Invalid ids and unviable combinations render a visible QA failure state and log
+the failed debug request to the browser console. These parameters are read at
+page load with the rest of the runtime config.
+
+Examples:
+
+```
+http://localhost:5173/?debugJourneyShape=single_offer
+http://localhost:5173/?debugJourneyReward=gain_essence
+http://localhost:5173/?debugJourneyCost=pay_essence
+http://localhost:5173/?debugJourneyShape=single_offer&debugJourneyReward=gain_omens&debugJourneyCost=gain_named_banes
+```
+
 ## `game`
 
 Parses a Firebase multiplayer room id into `runtimeConfig.gameId`. The value is
@@ -57,6 +80,9 @@ http://localhost:5173/?seed=42                  # fixed seed
 http://localhost:5173/?startInBattle=1          # boot straight into battle
 http://localhost:5173/?enableAi=1               # heuristic opponent enabled
 http://localhost:5173/?game=quest42             # parsed multiplayer room id
+http://localhost:5173/?debugJourneyShape=single_offer
+http://localhost:5173/?debugJourneyReward=gain_essence
+http://localhost:5173/?debugJourneyCost=pay_essence
 http://localhost:5173/?startInBattle=1&enableAi=1
 http://localhost:5173/?seed=7&startInBattle=1
 ```
