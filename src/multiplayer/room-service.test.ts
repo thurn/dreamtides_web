@@ -4,9 +4,11 @@ import type { MultiplayerRoom } from "./room-types";
 import { buildActionLogEntry } from "./action-log";
 import {
   createRoom,
+  createRoomEvictingStale,
   createRoomRecord,
-  createRoomReplacingAll,
+  isRoomStale,
   pruneRoomActionLog,
+  ROOM_PRESERVATION_WINDOW_MS,
   runRoomTransaction,
   subscribeToRoom,
   writePresence,
@@ -26,6 +28,7 @@ const firebaseMocks = vi.hoisted(() => {
   const remove = vi.fn();
 
   return {
+    get: vi.fn(),
     onDisconnect: vi.fn(() => ({ remove })),
     onValue: vi.fn(),
     ref: vi.fn((database: Database, path?: string) => ({ database, path })),
@@ -37,6 +40,7 @@ const firebaseMocks = vi.hoisted(() => {
 });
 
 vi.mock("firebase/database", () => ({
+  get: firebaseMocks.get,
   onDisconnect: firebaseMocks.onDisconnect,
   onValue: firebaseMocks.onValue,
   ref: firebaseMocks.ref,
@@ -71,6 +75,7 @@ function makeActionLog(count: number): NonNullable<MultiplayerRoom["actionLog"]>
 describe("room service", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    firebaseMocks.get.mockResolvedValue({ exists: () => false, val: () => null });
     firebaseMocks.remove.mockResolvedValue(undefined);
     firebaseMocks.runTransaction.mockResolvedValue({ committed: true, snapshot: null });
     firebaseMocks.set.mockResolvedValue(undefined);
@@ -101,14 +106,155 @@ describe("room service", () => {
     );
   });
 
-  it("replaces the entire rooms tree when creating-and-replacing", async () => {
-    await createRoomReplacingAll(database, "ab12", timestamp);
+  it("writes only the new room when no other rooms exist", async () => {
+    firebaseMocks.get.mockResolvedValue({ exists: () => false, val: () => null });
+
+    await createRoomEvictingStale(database, "ab12", timestamp);
 
     expect(firebaseMocks.ref).toHaveBeenCalledWith(database, "rooms");
-    expect(firebaseMocks.set).toHaveBeenCalledWith(
+    expect(firebaseMocks.get).toHaveBeenCalledWith({ database, path: "rooms" });
+    expect(firebaseMocks.update).toHaveBeenCalledWith(
       { database, path: "rooms" },
       { ab12: createRoomRecord(timestamp) },
     );
+    expect(firebaseMocks.set).not.toHaveBeenCalled();
+  });
+
+  it("preserves sibling rooms created within the last 24 hours", async () => {
+    // Sibling room created 12 hours before `timestamp`. It must survive.
+    const recentSiblingCreatedAt = "2026-05-08T00:00:00.000Z";
+    const recentSibling = {
+      ...createRoomRecord(recentSiblingCreatedAt),
+      questState: { essence: 42 },
+    };
+    firebaseMocks.get.mockResolvedValue({
+      exists: () => true,
+      val: () => ({ recent: recentSibling }),
+    });
+
+    await createRoomEvictingStale(database, "ab12", timestamp);
+
+    expect(firebaseMocks.update).toHaveBeenCalledWith(
+      { database, path: "rooms" },
+      { ab12: createRoomRecord(timestamp) },
+    );
+    const updateCall = firebaseMocks.update.mock.calls[0][1] as Record<string, unknown>;
+    expect(updateCall).not.toHaveProperty("recent");
+  });
+
+  it("evicts sibling rooms older than the 24-hour preservation window", async () => {
+    // Sibling room created 25 hours before `timestamp`. It must be evicted
+    // by being written as `null` in the multi-path update.
+    const staleCreatedAt = "2026-05-07T11:00:00.000Z";
+    const staleRoom = createRoomRecord(staleCreatedAt);
+    firebaseMocks.get.mockResolvedValue({
+      exists: () => true,
+      val: () => ({ stale: staleRoom }),
+    });
+
+    await createRoomEvictingStale(database, "ab12", timestamp);
+
+    expect(firebaseMocks.update).toHaveBeenCalledWith(
+      { database, path: "rooms" },
+      {
+        ab12: createRoomRecord(timestamp),
+        stale: null,
+      },
+    );
+  });
+
+  it("preserves sibling rooms whose createdAt is missing or unparseable", async () => {
+    // Backwards compatibility: legacy rooms predating room metadata, or
+    // rooms whose `createdAt` got stripped by RTDB, must not be silently
+    // wiped by the eviction policy.
+    const legacyMissingMetadata = { questState: null, presence: {}, actionLog: {} };
+    const legacyEmptyCreatedAt = {
+      metadata: { schemaVersion: 1, createdAt: "", updatedAt: "" },
+    };
+    const legacyUnparseable = {
+      metadata: { schemaVersion: 1, createdAt: "not-an-iso-date", updatedAt: "" },
+    };
+    firebaseMocks.get.mockResolvedValue({
+      exists: () => true,
+      val: () => ({
+        legacyA: legacyMissingMetadata,
+        legacyB: legacyEmptyCreatedAt,
+        legacyC: legacyUnparseable,
+      }),
+    });
+
+    await createRoomEvictingStale(database, "ab12", timestamp);
+
+    expect(firebaseMocks.update).toHaveBeenCalledWith(
+      { database, path: "rooms" },
+      { ab12: createRoomRecord(timestamp) },
+    );
+    const updateCall = firebaseMocks.update.mock.calls[0][1] as Record<string, unknown>;
+    expect(updateCall).not.toHaveProperty("legacyA");
+    expect(updateCall).not.toHaveProperty("legacyB");
+    expect(updateCall).not.toHaveProperty("legacyC");
+  });
+
+  it("evicts only the stale rooms in a mixed sibling set", async () => {
+    const recent = createRoomRecord("2026-05-08T11:00:00.000Z"); // 1h old
+    const borderline = createRoomRecord("2026-05-07T13:00:00.000Z"); // 23h old, preserve
+    const stale = createRoomRecord("2026-05-07T11:00:00.000Z"); // 25h old, evict
+    firebaseMocks.get.mockResolvedValue({
+      exists: () => true,
+      val: () => ({ recent, borderline, stale }),
+    });
+
+    await createRoomEvictingStale(database, "ab12", timestamp);
+
+    expect(firebaseMocks.update).toHaveBeenCalledWith(
+      { database, path: "rooms" },
+      {
+        ab12: createRoomRecord(timestamp),
+        stale: null,
+      },
+    );
+  });
+
+  it("never evicts itself if the new roomId already exists in the snapshot", async () => {
+    // Defensive: if a Create Game race re-uses an existing roomId, the
+    // multi-path update must not also `null` it out.
+    const existing = createRoomRecord("2026-05-07T11:00:00.000Z"); // stale
+    firebaseMocks.get.mockResolvedValue({
+      exists: () => true,
+      val: () => ({ ab12: existing }),
+    });
+
+    await createRoomEvictingStale(database, "ab12", timestamp);
+
+    expect(firebaseMocks.update).toHaveBeenCalledWith(
+      { database, path: "rooms" },
+      { ab12: createRoomRecord(timestamp) },
+    );
+    const updateCall = firebaseMocks.update.mock.calls[0][1] as Record<string, unknown>;
+    expect(updateCall.ab12).not.toBeNull();
+  });
+
+  it("exposes a 24-hour preservation window constant", () => {
+    expect(ROOM_PRESERVATION_WINDOW_MS).toBe(24 * 60 * 60 * 1000);
+  });
+
+  it("classifies rooms as stale only when createdAt is older than the window", () => {
+    const now = Date.parse("2026-05-08T12:00:00.000Z");
+    expect(isRoomStale({ metadata: { createdAt: "2026-05-07T11:00:00.000Z" } }, now)).toBe(true);
+    expect(isRoomStale({ metadata: { createdAt: "2026-05-07T13:00:00.000Z" } }, now)).toBe(false);
+    expect(isRoomStale({ metadata: { createdAt: "" } }, now)).toBe(false);
+    expect(isRoomStale({ metadata: { createdAt: "not-a-date" } }, now)).toBe(false);
+    expect(isRoomStale({ metadata: {} }, now)).toBe(false);
+    expect(isRoomStale({}, now)).toBe(false);
+    expect(isRoomStale(null, now)).toBe(false);
+  });
+
+  it("preserves a room whose createdAt is exactly the window boundary", () => {
+    const now = Date.parse("2026-05-08T12:00:00.000Z");
+    const boundaryIso = new Date(now - ROOM_PRESERVATION_WINDOW_MS).toISOString();
+    expect(isRoomStale({ metadata: { createdAt: boundaryIso } }, now)).toBe(false);
+    const oneMsOlderIso = new Date(now - ROOM_PRESERVATION_WINDOW_MS - 1).toISOString();
+    expect(isRoomStale({ metadata: { createdAt: oneMsOlderIso } }, now)).toBe(true);
   });
 
   it("subscribes to room snapshots and emits ready records", () => {

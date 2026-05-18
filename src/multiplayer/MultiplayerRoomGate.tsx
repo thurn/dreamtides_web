@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import type { Database, Unsubscribe } from "firebase/database";
 import { generateRoomId } from "./room-id";
 import {
-  createRoomReplacingAll,
+  createRoomEvictingStale,
   pruneRoomActionLog,
   subscribeToRoom,
   writePresence,
@@ -142,7 +142,7 @@ export function MultiplayerRoomGate({
     setGateState({ status: "creating" });
 
     try {
-      await createRoomReplacingAll(database, roomId, timestamp());
+      await createRoomEvictingStale(database, roomId, timestamp());
       navigateToRoom(roomId);
       setActiveRoomId(roomId);
       setGateState({ status: "loading", roomId });

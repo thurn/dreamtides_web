@@ -1,4 +1,5 @@
 import {
+  get,
   onDisconnect,
   onValue,
   ref,
@@ -353,14 +354,90 @@ export async function createRoom(
   );
 }
 
-export async function createRoomReplacingAll(
+/**
+ * How long a room is preserved after creation, in milliseconds.
+ *
+ * Rooms older than this window are evicted by `createRoomEvictingStale`
+ * whenever a fresh room is created. Rooms whose `metadata.createdAt` is
+ * within the window — or whose `metadata.createdAt` is missing or
+ * unparseable — are preserved. This lets concurrent QA sessions and
+ * sibling backlog tasks coexist without clobbering each other's rooms,
+ * while still trimming long-abandoned rooms over time.
+ */
+export const ROOM_PRESERVATION_WINDOW_MS = 24 * 60 * 60 * 1000;
+
+/**
+ * Decide whether a sibling room should be evicted when a new room is
+ * being created. A room is stale (and therefore evictable) only when its
+ * `metadata.createdAt` parses as a finite timestamp older than the
+ * 24-hour preservation window. Rooms missing or carrying an unparseable
+ * `metadata.createdAt` are preserved so legacy rooms predating this
+ * eviction policy are not silently wiped.
+ */
+export function isRoomStale(
+  room: unknown,
+  nowMs: number,
+  windowMs: number = ROOM_PRESERVATION_WINDOW_MS,
+): boolean {
+  if (room === null || typeof room !== "object") {
+    return false;
+  }
+  const metadata = (room as { metadata?: { createdAt?: unknown } }).metadata;
+  if (metadata === null || metadata === undefined) {
+    return false;
+  }
+  const createdAt = metadata.createdAt;
+  if (typeof createdAt !== "string" || createdAt.length === 0) {
+    return false;
+  }
+  const createdAtMs = Date.parse(createdAt);
+  if (!Number.isFinite(createdAtMs)) {
+    return false;
+  }
+  return nowMs - createdAtMs > windowMs;
+}
+
+/**
+ * Create a new room while preserving every other room created within the
+ * last 24 hours.
+ *
+ * Implementation: read the current `/rooms` snapshot, build a single
+ * multi-path `update()` that writes the new room at `rooms/<id>` and
+ * `null`s out only the sibling rooms whose `metadata.createdAt` is older
+ * than `ROOM_PRESERVATION_WINDOW_MS`. Rooms inside the preservation
+ * window — and any room whose `createdAt` is missing or unparseable —
+ * are left untouched.
+ */
+export async function createRoomEvictingStale(
   database: Database,
   roomId: string,
   nowIso: string = new Date().toISOString(),
 ): Promise<void> {
-  await enqueueRoomWrite(roomId, () =>
-    set(ref(database, "rooms"), { [roomId]: createRoomRecord(nowIso) }),
-  );
+  await enqueueRoomWrite(roomId, async () => {
+    const roomsRef = ref(database, "rooms");
+    const snapshot = await get(roomsRef);
+    const existingRooms = snapshot.exists()
+      ? (snapshot.val() as Record<string, unknown> | null)
+      : null;
+    const nowMs = Date.parse(nowIso);
+    const cutoffMs = Number.isFinite(nowMs) ? nowMs : Date.now();
+
+    const updateMap: Record<string, unknown> = {
+      [roomId]: createRoomRecord(nowIso),
+    };
+    if (existingRooms !== null) {
+      for (const [existingId, existingRoom] of Object.entries(existingRooms)) {
+        if (existingId === roomId) {
+          continue;
+        }
+        if (isRoomStale(existingRoom, cutoffMs)) {
+          updateMap[existingId] = null;
+        }
+      }
+    }
+
+    await update(roomsRef, updateMap);
+  });
 }
 
 export function subscribeToRoom(

@@ -16,7 +16,7 @@ type RoomSubscriptionSnapshot =
 type RoomListener = (snapshot: RoomSubscriptionSnapshot) => void;
 
 const serviceMocks = vi.hoisted(() => ({
-  createRoomReplacingAll: vi.fn(),
+  createRoomEvictingStale: vi.fn(),
   pruneRoomActionLog: vi.fn(),
   subscribeToRoom: vi.fn(),
   writePresence: vi.fn(),
@@ -27,7 +27,7 @@ const roomIdMocks = vi.hoisted(() => ({
 }));
 
 vi.mock("./room-service", () => ({
-  createRoomReplacingAll: serviceMocks.createRoomReplacingAll,
+  createRoomEvictingStale: serviceMocks.createRoomEvictingStale,
   pruneRoomActionLog: serviceMocks.pruneRoomActionLog,
   subscribeToRoom: serviceMocks.subscribeToRoom,
   writePresence: serviceMocks.writePresence,
@@ -139,7 +139,7 @@ function createButton(container: HTMLElement): HTMLButtonElement {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  serviceMocks.createRoomReplacingAll.mockResolvedValue(undefined);
+  serviceMocks.createRoomEvictingStale.mockResolvedValue(undefined);
   serviceMocks.pruneRoomActionLog.mockResolvedValue(undefined);
   serviceMocks.subscribeToRoom.mockReturnValue(vi.fn());
   serviceMocks.writePresence.mockResolvedValue(undefined);
@@ -189,7 +189,7 @@ describe("MultiplayerRoomGate", () => {
     });
 
     expect(roomIdMocks.generateRoomId).toHaveBeenCalledOnce();
-    expect(serviceMocks.createRoomReplacingAll).toHaveBeenCalledWith(
+    expect(serviceMocks.createRoomEvictingStale).toHaveBeenCalledWith(
       database,
       "ab12cd",
       expect.any(String),
