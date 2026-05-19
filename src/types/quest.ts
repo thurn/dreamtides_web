@@ -86,12 +86,26 @@ export interface Dreamsign {
 }
 
 /** One card currently being explained by the provenance debug overlay. */
+export type CardSourceDebugTideRole =
+  | "structural"
+  | "supporting"
+  | "utility"
+  | "unclassified";
+
+export interface CardSourceDebugTideSource {
+  tideId: PackageTideId;
+  displayName: string;
+  requirement: "required" | "optional";
+  role: CardSourceDebugTideRole;
+}
+
 export interface CardSourceDebugEntry {
   cardNumber: number;
   cardName: string;
   cardTides: PackageTideId[];
   matchedMandatoryTides: PackageTideId[];
   matchedOptionalTides: PackageTideId[];
+  sourceTides: CardSourceDebugTideSource[];
   isFallback: boolean;
 }
 

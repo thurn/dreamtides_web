@@ -38,6 +38,20 @@ function makeOverlayState(): CardSourceDebugState {
         cardTides: ["core", "support-a"],
         matchedMandatoryTides: ["core"],
         matchedOptionalTides: ["support-a"],
+        sourceTides: [
+          {
+            tideId: "core",
+            displayName: "Core Engine",
+            requirement: "required",
+            role: "structural",
+          },
+          {
+            tideId: "support-a",
+            displayName: "Lantern Support",
+            requirement: "optional",
+            role: "supporting",
+          },
+        ],
         isFallback: false,
       },
       {
@@ -46,6 +60,7 @@ function makeOverlayState(): CardSourceDebugState {
         cardTides: ["outsider"],
         matchedMandatoryTides: [],
         matchedOptionalTides: [],
+        sourceTides: [],
         isFallback: true,
       },
     ],
@@ -79,7 +94,7 @@ afterEach(() => {
 });
 
 describe("CardSourceOverlay", () => {
-  it("labels on-theme and fallback cards without exposing internal tide ids", () => {
+  it("renders per-card source tides with requirement and role labels", () => {
     const { container, root } = mount(
       <CardSourceOverlay
         cardSourceDebug={makeOverlayState()}
@@ -92,10 +107,14 @@ describe("CardSourceOverlay", () => {
     expect(container.textContent).toContain("Shop Offers");
     expect(container.textContent).toContain("Lantern Broker");
     expect(container.textContent).toContain("On theme");
+    expect(container.textContent).toContain("Core Engine");
+    expect(container.textContent).toContain("Required");
+    expect(container.textContent).toContain("Structural");
+    expect(container.textContent).toContain("Lantern Support");
+    expect(container.textContent).toContain("Optional");
+    expect(container.textContent).toContain("Supporting");
     expect(container.textContent).toContain("Driftbound Relic");
     expect(container.textContent).toContain("Fallback");
-    // The overlay must not surface internal tide taxonomy to the player.
-    expect(container.textContent ?? "").not.toMatch(/tide/i);
     expect(container.textContent ?? "").not.toContain("core");
     expect(container.textContent ?? "").not.toContain("support-a");
     expect(container.textContent ?? "").not.toContain("outsider");
@@ -121,6 +140,7 @@ describe("CardSourceOverlay", () => {
       cardTides: [],
       matchedMandatoryTides: [],
       matchedOptionalTides: [],
+      sourceTides: [],
       isFallback: true,
     };
     const overlay: CardSourceDebugState = {

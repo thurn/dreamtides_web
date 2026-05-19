@@ -15,12 +15,40 @@ export interface DreamcallerTideDisplay {
   kind: "structural" | "support";
 }
 
+export type PackageTideDisplayRole = "structural" | "supporting" | "utility";
+
+export interface PackageTideDisplayMeta {
+  displayName: string;
+  hoverBlurb: string;
+  iconClass: string;
+  role: PackageTideDisplayRole;
+}
+
 interface SupportTideMeta {
   displayName: string;
   hoverBlurb: string;
 }
 
 const MIN_DREAMCALLER_TIDE_DISPLAY_COUNT = 4;
+
+const UTILITY_TIDE_IDS = new Set<PackageTideId>([
+  "card_flow",
+  "cheap_curve",
+  "cheap_removal",
+  "defensive_curve",
+  "discover_toolbox",
+  "fast_interaction",
+  "finishers",
+  "foresee_selection",
+  "hand_disruption",
+  "judgment_bodies",
+  "materialized_staples",
+  "point_pressure",
+  "premium_removal",
+  "resource_burst",
+  "tempo_resets",
+  "void_denial",
+]);
 
 export const STRUCTURAL_TIDE_META: Readonly<
   Partial<Record<PackageTideId, StructuralTideMeta>>
@@ -395,6 +423,31 @@ export function structuralTidesForPackageTides(
   });
 }
 
+export function packageTideDisplayMeta(
+  packageTideId: PackageTideId,
+): PackageTideDisplayMeta {
+  const structuralTide = STRUCTURAL_TIDE_META[packageTideId];
+  if (structuralTide !== undefined) {
+    return {
+      ...structuralTide,
+      role: "structural",
+    };
+  }
+
+  const supportTide = SUPPORT_TIDE_META[packageTideId];
+  const displayName = supportTide?.displayName ?? packageTideDisplayName(packageTideId);
+  const role = UTILITY_TIDE_IDS.has(packageTideId) ? "utility" : "supporting";
+
+  return {
+    displayName,
+    hoverBlurb:
+      supportTide?.hoverBlurb ??
+      `${role === "utility" ? "Utility" : "Support"} cards that reinforce ${displayName.toLowerCase()}.`,
+    iconClass: "bxs-circle",
+    role,
+  };
+}
+
 export function dreamcallerTidesForDisplay(
   mandatoryTides: readonly PackageTideId[],
   optionalTides: readonly PackageTideId[],
@@ -470,15 +523,12 @@ function supportTidesForDisplay(
     }
 
     displayedIds.add(packageTideId);
+    const meta = packageTideDisplayMeta(packageTideId);
     return [
       {
         appearance,
-        displayName:
-          SUPPORT_TIDE_META[packageTideId]?.displayName ??
-          packageTideDisplayName(packageTideId),
-        hoverBlurb:
-          SUPPORT_TIDE_META[packageTideId]?.hoverBlurb ??
-          `Support cards that reinforce ${packageTideDisplayName(packageTideId).toLowerCase()}.`,
+        displayName: meta.displayName,
+        hoverBlurb: meta.hoverBlurb,
         iconClass: "bxs-circle",
         id: packageTideId,
         kind: "support",

@@ -550,6 +550,14 @@ describe("room service", () => {
             cardName: "Required Match",
             cardTides: ["core"],
             matchedMandatoryTides: ["core"],
+            sourceTides: [
+              {
+                tideId: "core",
+                displayName: "Core",
+                requirement: "required",
+                role: "supporting",
+              },
+            ],
             isFallback: false,
           },
         ],
@@ -577,6 +585,7 @@ describe("room service", () => {
           cardTides: [],
           matchedMandatoryTides: [],
           matchedOptionalTides: [],
+          sourceTides: [],
           isFallback: true,
         },
         {
@@ -585,6 +594,14 @@ describe("room service", () => {
           cardTides: ["core"],
           matchedMandatoryTides: ["core"],
           matchedOptionalTides: [],
+          sourceTides: [
+            {
+              tideId: "core",
+              displayName: "Core",
+              requirement: "required",
+              role: "supporting",
+            },
+          ],
           isFallback: false,
         },
       ],

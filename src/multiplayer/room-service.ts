@@ -90,8 +90,9 @@ function normalizeAtlas(atlas: DreamAtlas | undefined): DreamAtlas {
  * Restore arrays on a `CardSourceDebugEntry` that RTDB silently dropped.
  *
  * A fallback entry has empty `matchedMandatoryTides` and `matchedOptionalTides`
- * arrays; a card with no tides has an empty `cardTides` array. Realtime
- * Database strips all three on write, so the round-tripped entry arrives
+ * arrays; a card with no tides has an empty `cardTides` array; legacy and
+ * fallback entries can have an empty `sourceTides` array. Realtime
+ * Database strips all four on write, so the round-tripped entry arrives
  * with `undefined` fields and the overlay crashes when it iterates them.
  */
 function normalizeCardSourceDebugEntry(
@@ -102,6 +103,7 @@ function normalizeCardSourceDebugEntry(
     cardTides: entry.cardTides ?? [],
     matchedMandatoryTides: entry.matchedMandatoryTides ?? [],
     matchedOptionalTides: entry.matchedOptionalTides ?? [],
+    sourceTides: entry.sourceTides ?? [],
     isFallback: entry.isFallback ?? false,
   };
 }

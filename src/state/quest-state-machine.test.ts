@@ -164,6 +164,14 @@ function makeCardSourceDebugState(): CardSourceDebugState {
         cardTides: ["core", "support-a"],
         matchedMandatoryTides: ["core"],
         matchedOptionalTides: ["support-a"],
+        sourceTides: [
+          {
+            tideId: "core",
+            displayName: "Core",
+            requirement: "required",
+            role: "supporting",
+          },
+        ],
         isFallback: false,
       },
     ],
@@ -486,6 +494,14 @@ describe("Task 02 state transitions", () => {
       cardTides: ["support-b"],
       matchedMandatoryTides: [],
       matchedOptionalTides: ["support-b"],
+      sourceTides: [
+        {
+          tideId: "support-b",
+          displayName: "Support B",
+          requirement: "optional",
+          role: "supporting",
+        },
+      ],
       isFallback: false,
     });
 

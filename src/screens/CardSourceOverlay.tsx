@@ -24,10 +24,16 @@ function surfaceCopy(surface: CardSourceDebugState["surface"]): string {
   }
 }
 
+function labelize(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
 function CardExplanation({ entry }: { entry: CardSourceDebugEntry }) {
+  const sourceTides = entry.sourceTides ?? [];
+
   return (
     <div
-      className="rounded-xl p-3"
+      className="rounded-lg p-3"
       style={{
         background: "rgba(15, 23, 42, 0.5)",
         border: "1px solid rgba(148, 163, 184, 0.18)",
@@ -58,11 +64,39 @@ function CardExplanation({ entry }: { entry: CardSourceDebugEntry }) {
         </span>
       </div>
 
-      <p className="mt-3 text-xs opacity-70">
-        {entry.isFallback
-          ? "Drawn from the broader pool because no on-theme match was available."
-          : "Matches your dreamcaller's pool."}
-      </p>
+      {sourceTides.length > 0 ? (
+        <div className="mt-3 space-y-2">
+          {sourceTides.map((tide) => (
+            <div
+              key={`${entry.cardNumber}-${tide.requirement}-${tide.tideId}`}
+              className="rounded-md px-2.5 py-2 text-xs"
+              style={{
+                background: "rgba(30, 41, 59, 0.62)",
+                border: "1px solid rgba(148, 163, 184, 0.16)",
+              }}
+            >
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="font-semibold" style={{ color: "#e0f2fe" }}>
+                  {tide.displayName}
+                </span>
+                <span className="opacity-55">•</span>
+                <span className="opacity-80">{labelize(tide.requirement)}</span>
+                <span className="opacity-55">•</span>
+                <span className="opacity-80">{labelize(tide.role)}</span>
+              </div>
+              <p className="mt-1 opacity-65">
+                This card entered the pool through {tide.displayName}.
+              </p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-3 text-xs opacity-70">
+          {entry.isFallback
+            ? "Drawn from the broader pool because no selected tide matched this card."
+            : "Selected package match; source details are unavailable for this entry."}
+        </p>
+      )}
     </div>
   );
 }

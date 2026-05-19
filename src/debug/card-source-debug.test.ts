@@ -69,6 +69,20 @@ describe("buildCardSourceDebugState", () => {
           cardTides: ["core", "outsider", "support-a"],
           matchedMandatoryTides: ["core"],
           matchedOptionalTides: ["support-a"],
+          sourceTides: [
+            {
+              tideId: "core",
+              displayName: "Core",
+              requirement: "required",
+              role: "supporting",
+            },
+            {
+              tideId: "support-a",
+              displayName: "Support A",
+              requirement: "optional",
+              role: "supporting",
+            },
+          ],
           isFallback: false,
         },
       ],
@@ -89,8 +103,50 @@ describe("buildCardSourceDebugState", () => {
       cardTides: ["outsider"],
       matchedMandatoryTides: [],
       matchedOptionalTides: [],
+      sourceTides: [],
       isFallback: true,
     });
+  });
+
+  it("labels source tide roles from configured tide metadata", () => {
+    const result = buildCardSourceDebugState(
+      "Draft Picks",
+      "Draft",
+      [
+        makeCard(2, "Banner Patrol", [
+          "ally_formation",
+          "cheap_curve",
+          "fast_setup",
+        ]),
+      ],
+      {
+        ...makeResolvedPackage(),
+        mandatoryTides: ["ally_formation"],
+        optionalSubset: ["cheap_curve", "fast_setup"],
+        selectedTides: ["ally_formation", "cheap_curve", "fast_setup"],
+      },
+    );
+
+    expect(result?.entries[0]?.sourceTides).toEqual([
+      {
+        tideId: "ally_formation",
+        displayName: "Banner Formation",
+        requirement: "required",
+        role: "structural",
+      },
+      {
+        tideId: "cheap_curve",
+        displayName: "First-Light Muster",
+        requirement: "optional",
+        role: "utility",
+      },
+      {
+        tideId: "fast_setup",
+        displayName: "Quick Lattice",
+        requirement: "optional",
+        role: "supporting",
+      },
+    ]);
   });
 
   it("returns null when no cards are visible", () => {
