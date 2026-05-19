@@ -162,22 +162,58 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["nightmare", "nightmares"],
   },
 
-  // --- Sigil colors (Transfigurations) -------------------------------
-  {
-    term: "Golden",
-    definition:
-      "Improves the effect of the card by increasing or decreasing a number in its rules text by 1.",
-    variants: ["golden"],
-  },
-  {
-    term: "Prismatic",
-    definition: "A transfiguration applying all other eligible transfiguration",
-    variants: ["prismatic"],
-  },
+  // --- Transfiguration colors ---------------------------------------
+  // Each transfiguration is named after a color. The card's name and any
+  // modified rules text display in that color to mark the transfiguration.
+  // Definitions track docs/quests/quests.md (Transfiguration site).
   {
     term: "Transfiguration",
     definition: "A permanent modification to a card.",
     variants: ["transfiguration", "transfigurations"],
+  },
+  {
+    term: "Viridian",
+    definition:
+      "Transfiguration: reduces this card's energy cost by 50%, rounded to the nearest whole number.",
+    variants: ["viridian"],
+  },
+  {
+    term: "Golden",
+    definition:
+      "Transfiguration: increases or decreases a number in this card's rules text by 1.",
+    variants: ["golden"],
+  },
+  {
+    term: "Scarlet",
+    definition:
+      "Transfiguration: doubles a character's base spark, or sets it to 1 if zero.",
+    variants: ["scarlet"],
+  },
+  {
+    term: "Magenta",
+    definition:
+      "Transfiguration: increases the frequency of named triggers on this card.",
+    variants: ["magenta"],
+  },
+  {
+    term: "Azure",
+    definition: "Transfiguration: appends \"draw a card\" to this event card's text.",
+    variants: ["azure"],
+  },
+  {
+    term: "Bronze",
+    definition: "Transfiguration: adds \"reclaim\" to this event card's text.",
+    variants: ["bronze"],
+  },
+  {
+    term: "Rose",
+    definition: "Transfiguration: reduces an activated ability's energy cost by 1.",
+    variants: ["rose"],
+  },
+  {
+    term: "Prismatic",
+    definition: "Transfiguration: applies every other eligible transfiguration to a card.",
+    variants: ["prismatic"],
   },
 ];
 

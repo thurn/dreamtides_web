@@ -8,6 +8,7 @@ import {
   hasGlossaryTerm,
   lookupGlossaryTerm,
 } from "./glossary";
+import { tokenizeRulesText } from "../components/card-text";
 
 const SRC_DIR = join(__dirname, "..");
 
@@ -495,6 +496,82 @@ describe("glossary", () => {
       "GlossaryPopup.tsx must source its entries from src/data/glossary",
     ).toMatch(/from\s+"\.\.\/data\/glossary"/);
     expect(popup).toMatch(/\bGLOSSARY\b/);
+  });
+
+  // Every transfiguration color named in docs/quests/quests.md must have
+  // its own glossary entry so card-text tooltips and the glossary popup
+  // both teach the player what each color does.
+  //
+  // The list is parsed directly out of quests.md to avoid drifting from
+  // the design doc. If quests.md adds, removes, or renames a color, this
+  // test fails until the glossary catches up.
+  it("includes every transfiguration color named in docs/quests/quests.md", () => {
+    const quests = readFileSync(
+      join(SRC_DIR, "..", "docs", "quests", "quests.md"),
+      "utf8",
+    );
+    // Lines like:
+    //   "- Viridian Transfiguration: Reduces ..."
+    //   "- Golden Transfiguration: Improves ..."
+    const colorLine = /^- ([A-Z][a-z]+) Transfiguration:/gm;
+    const colorsFromDoc: string[] = [];
+    let match: RegExpExecArray | null;
+    while ((match = colorLine.exec(quests)) !== null) {
+      colorsFromDoc.push(match[1]);
+    }
+    expect(
+      colorsFromDoc.length,
+      "Failed to parse any transfiguration colors out of docs/quests/quests.md",
+    ).toBeGreaterThan(0);
+
+    const missing: string[] = [];
+    for (const color of colorsFromDoc) {
+      if (!hasGlossaryTerm(color)) {
+        missing.push(color);
+      }
+    }
+    expect(
+      missing,
+      `Transfiguration colors from docs/quests/quests.md missing a glossary entry: ${missing.join(", ")}`,
+    ).toEqual([]);
+  });
+
+  // The card-text tooltip and the glossary popup must show the same
+  // definition string for each transfiguration color. Both surfaces
+  // render `GlossaryDefinitionCard` directly from a `GlossaryEntry`, so
+  // matching the resolved entry is sufficient: tokenization yields the
+  // same entry the popup iterates.
+  it("uses one definition per transfiguration color across tooltip and popup", () => {
+    const colors = [
+      "Viridian",
+      "Golden",
+      "Scarlet",
+      "Magenta",
+      "Azure",
+      "Bronze",
+      "Rose",
+      "Prismatic",
+    ];
+    for (const color of colors) {
+      const entry = lookupGlossaryTerm(color);
+      expect(entry, `Missing glossary entry for ${color}`).toBeDefined();
+
+      // Tokenize a representative card-text usage and confirm the
+      // resolved entry is the same object the popup iterates over.
+      const segments = tokenizeRulesText(`${color} Transfiguration`);
+      const termSegment = segments.find(
+        (s) => s.kind === "term" && s.word === color,
+      );
+      expect(
+        termSegment,
+        `Tokenizer did not wrap "${color}" as a glossary term`,
+      ).toBeDefined();
+      if (termSegment !== undefined && termSegment.kind === "term") {
+        expect(termSegment.entry.definition).toBe(entry?.definition);
+        // Popup renders by reference equality of GLOSSARY entries.
+        expect(GLOSSARY).toContain(termSegment.entry);
+      }
+    }
   });
 
   // Completeness check: every distinct word that appears in the live
