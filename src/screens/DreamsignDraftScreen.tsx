@@ -139,13 +139,15 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
             return (
               <motion.div
                 key={`draft-${dreamsign.name}`}
-                className="flex flex-col items-center gap-3"
+                data-testid={`dreamsign-draft-option-${triggerId}`}
+                className="flex w-[224px] flex-col items-center gap-3 self-stretch"
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.12, duration: 0.4 }}
               >
                 <HoverPopover
                   triggerAs="div"
+                  className="flex w-full flex-1"
                   delayMs={DREAMSIGN_HOVER_DELAY_MS}
                   maxWidthPx={null}
                   content={<DreamsignHoverCard dreamsign={dreamsign} />}
@@ -154,9 +156,9 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
                     data-testid={`dreamsign-draft-hover-trigger-${triggerId}`}
                     tabIndex={0}
                     aria-label={`Dreamsign: ${dreamsign.name}`}
-                    className="outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+                    className="flex h-full w-full outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
                   >
-                    <OfferingCardFrame>
+                    <OfferingCardFrame className="h-full flex-1">
                       <OfferingDreamsignBody dreamsign={dreamsign} />
                     </OfferingCardFrame>
                   </div>

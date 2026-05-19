@@ -769,6 +769,74 @@ describe("DreamsignDraftScreen", () => {
     });
   });
 
+  it("stretches each draft option slot so actions share the row baseline", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+              {
+                id: "glacial-insight",
+                name: "Glacial Insight",
+                effectDescription:
+                  "A longer Dreamsign effect that wraps over several lines, exercising the comparison layout without moving the Select button.",
+                isBane: false,
+              },
+              {
+                id: "verdant-accord",
+                name: "Verdant Accord",
+                effectDescription: "Growth.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["stormthread-sigil"],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <DreamsignDraftScreen
+        site={makeSite({ type: "DreamsignDraft" })}
+      />,
+    );
+
+    const optionSlots = container.querySelectorAll(
+      '[data-testid^="dreamsign-draft-option-"]',
+    );
+    expect(optionSlots).toHaveLength(3);
+    optionSlots.forEach((slot) => {
+      expect(slot.className).toContain("self-stretch");
+      expect(slot.className).toContain("w-[224px]");
+    });
+
+    const hoverTriggers = container.querySelectorAll(
+      '[data-testid^="dreamsign-draft-hover-trigger-"]',
+    );
+    expect(hoverTriggers).toHaveLength(3);
+    hoverTriggers.forEach((trigger) => {
+      expect(trigger.className).toContain("h-full");
+      expect(trigger.className).toContain("w-full");
+      expect(trigger.querySelector('[data-offering-card]')?.className).toContain(
+        "h-full",
+      );
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("degrades to an exhausted-pool fallback without rerolling from the global catalog", () => {
     const mutations = makeMutations();
     setQuestContext(
