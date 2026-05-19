@@ -2,7 +2,11 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import type { MouseEvent as ReactPointerMouseEvent } from "react";
 
 import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
-import { selectBattleCardLocation, selectBattlefieldSlotOccupant } from "../state/selectors";
+import {
+  selectBattleCardLocation,
+  selectBattlefieldSlotOccupant,
+  selectIsBattleCardReservedThisTurn,
+} from "../state/selectors";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 import type {
   BattleCardKind,
@@ -131,7 +135,7 @@ export function BattlefieldGrid({
                 <BattleCardView
                   battleCardId={instance.battleCardId}
                   data={battleCardVisualFromInstance(instance)}
-                  reserved={zone === "reserve"}
+                  reserved={selectIsBattleCardReservedThisTurn(state, instance.battleCardId)}
                   selected={isSelectedCard}
                   draggable={canInteract}
                   onClick={(event) => {

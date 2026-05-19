@@ -18,7 +18,26 @@ describe("play-card engine", () => {
 
     expect(resolved.state.sides.player.reserve.R0).toBe(battleCardId);
     expect(resolved.state.sides.player.hand).not.toContain(battleCardId);
+    expect(resolved.state.cardInstances[battleCardId].enteredReserveTurnNumber).toBe(
+      state.turnNumber,
+    );
     expect(resolved.transition.energyChanges).toHaveLength(1);
+  });
+
+  it("prevents a newly reserved character from deploying on the same turn", () => {
+    const state = createTestBattle();
+    const battleCardId = findPlayerHandCardId(state, "character");
+
+    const played = resolvePlayCard(state, battleCardId);
+    const moved = resolveMoveCard(played.state, battleCardId, {
+      side: "player",
+      zone: "deployed",
+      slotId: "D0",
+    });
+
+    expect(moved.state).toBe(played.state);
+    expect(moved.state.sides.player.reserve.R0).toBe(battleCardId);
+    expect(moved.state.sides.player.deployed.D0).toBeNull();
   });
 
   it("rejects a bound character when the reserve row is full", () => {

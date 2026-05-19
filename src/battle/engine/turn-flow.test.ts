@@ -9,6 +9,7 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import type { BattleTransitionData } from "../types";
+import { resolveMoveCard } from "./play-card";
 import { AUTO_SYSTEM_EMISSION_CONTEXT } from "./result";
 import {
   advanceAfterEndTurn,
@@ -148,6 +149,38 @@ describe("advanceAfterEndTurn", () => {
     state.sides.enemy.deck = [];
 
     expect(() => advanceAfterEndTurn(state, battleInit)).not.toThrow();
+  });
+
+  it("clears reserve restrictions before the opponent's next turn", () => {
+    const { battleInit, state } = createTestBattle();
+    const battleCardId = state.sides.player.hand.find(
+      (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "character",
+    ) ?? state.sides.player.deck.find(
+      (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "character",
+    );
+    if (battleCardId === undefined) {
+      throw new Error("expected player character");
+    }
+    state.activeSide = "player";
+    state.phase = "night";
+    state.sides.player.hand = state.sides.player.hand.filter((cardId) => cardId !== battleCardId);
+    state.sides.player.deck = state.sides.player.deck.filter((cardId) => cardId !== battleCardId);
+    state.sides.player.reserve.R0 = battleCardId;
+    state.cardInstances[battleCardId].enteredReserveTurnNumber = state.turnNumber;
+
+    const advanced = advanceAfterEndTurn(state, battleInit).state;
+
+    expect(advanced.activeSide).toBe("enemy");
+    expect(advanced.phase).toBe("day");
+    expect(advanced.cardInstances[battleCardId].enteredReserveTurnNumber).toBeNull();
+
+    const deployed = resolveMoveCard(advanced, battleCardId, {
+      side: "player",
+      zone: "deployed",
+      slotId: "D0",
+    }).state;
+    expect(deployed.sides.player.reserve.R0).toBeNull();
+    expect(deployed.sides.player.deployed.D0).toBe(battleCardId);
   });
 
   it("consumes one pendingExtraTurn and keeps active side", () => {

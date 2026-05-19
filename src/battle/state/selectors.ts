@@ -111,6 +111,14 @@ export function selectCardHasNotes(instance: BattleCardInstance): boolean {
   return instance.notes.length > 0;
 }
 
+export function selectIsBattleCardReservedThisTurn(
+  state: BattleMutableState,
+  battleCardId: string | null,
+): boolean {
+  const instance = selectBattleCardInstance(state, battleCardId);
+  return instance?.enteredReserveTurnNumber === state.turnNumber;
+}
+
 /**
  * Returns the effective spark for a card instance, or `null` when the id
  * is missing or not resolvable. Prefer this over `selectEffectiveSparkOrZero`

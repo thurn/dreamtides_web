@@ -8,6 +8,7 @@ import {
   selectBattlefieldCardLocation,
   selectBattlefieldSlotOccupant,
   selectDefaultCharacterPlaySlot,
+  selectIsBattleCardReservedThisTurn,
 } from "../state/selectors";
 import {
   AUTO_SYSTEM_EMISSION_CONTEXT,
@@ -61,7 +62,8 @@ export function resolveMoveCard(
   if (
     source.zone === "reserve" &&
     target.zone === "deployed" &&
-    movingCard?.enteredReserveTurnNumber === state.turnNumber &&
+    selectIsBattleCardReservedThisTurn(state, battleCardId) &&
+    movingCard !== undefined &&
     !isUnboundCard(movingCard)
   ) {
     return {

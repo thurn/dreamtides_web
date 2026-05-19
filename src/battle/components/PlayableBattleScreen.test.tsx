@@ -265,6 +265,64 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("deploys a player reserve character during the opponent-turn Dusk defender setup", () => {
+    let reserveCardId = "";
+    const { container, root } = renderScreen((state) => {
+      const battleCardId = state.sides.player.hand.find(
+        (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "character",
+      ) ?? state.sides.player.deck.find(
+        (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "character",
+      );
+      if (battleCardId === undefined) {
+        throw new Error("expected player character");
+      }
+      reserveCardId = battleCardId;
+      state.activeSide = "player";
+      state.phase = "dusk";
+      state.turnNumber = 1;
+      state.sides.player.hand = state.sides.player.hand.filter((cardId) => cardId !== battleCardId);
+      state.sides.player.deck = state.sides.player.deck.filter((cardId) => cardId !== battleCardId);
+      state.sides.player.reserve.R0 = battleCardId;
+      state.cardInstances[battleCardId].enteredReserveTurnNumber = null;
+    });
+    const reserveCard = container.querySelector<HTMLElement>(
+      `[data-slot-id="player-reserve-R0"] [data-battle-card-id="${reserveCardId}"]`,
+    );
+    if (reserveCard === null) {
+      throw new Error("expected reserve card");
+    }
+
+    act(() => {
+      reserveCard.dispatchEvent(new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 280,
+        clientY: 520,
+      }));
+    });
+
+    const menu = container.querySelector("[data-battle-context-menu]");
+    expect(menu?.textContent).not.toContain("Clear reserved");
+    expect(menu?.textContent).toContain("→ Deployed");
+
+    act(() => {
+      reserveCard.click();
+    });
+
+    expect(container.querySelector(".inspector")?.textContent).not.toContain("Reserved");
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-slot-id="player-deployed-D0"]')?.click();
+    });
+
+    expect(container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id")).toBeNull();
+    expect(container.querySelector('[data-slot-id="player-deployed-D0"]')?.getAttribute("data-slot-card-id")).toBe(reserveCardId);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("opens the zone browser from the status strip with the mockup controls", () => {
     const { container, root } = renderScreen();
 

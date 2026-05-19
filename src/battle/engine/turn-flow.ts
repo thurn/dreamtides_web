@@ -219,6 +219,7 @@ export function advanceAfterEndTurn(
       transition,
     };
   }
+  clearReserveRestrictions(nextState);
 
   const endingSidePendingExtraTurns = nextState.sides[endingSide].pendingExtraTurns;
   if (endingSidePendingExtraTurns > 0) {
@@ -302,6 +303,14 @@ function shouldPreserveOpeningEnergy(
   return state.turnNumber === 1 &&
     sideState.currentEnergy === OPENING_ENERGY &&
     sideState.maxEnergy === OPENING_ENERGY;
+}
+
+function clearReserveRestrictions(state: BattleMutableState): void {
+  for (const card of Object.values(state.cardInstances)) {
+    if (card.enteredReserveTurnNumber !== null) {
+      card.enteredReserveTurnNumber = null;
+    }
+  }
 }
 
 /**

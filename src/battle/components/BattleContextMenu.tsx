@@ -3,7 +3,10 @@ import type {
   BattleCommand,
   BattleDebugZoneDestination,
 } from "../debug/commands";
-import { selectBattleCardLocation } from "../state/selectors";
+import {
+  selectBattleCardLocation,
+  selectIsBattleCardReservedThisTurn,
+} from "../state/selectors";
 import type {
   BattleCommandSourceSurface,
   BattleFieldSlotAddress,
@@ -148,7 +151,10 @@ export function BattleContextMenu({
           },
         ],
       });
-      if (location.zone === "deployed" || location.zone === "reserve") {
+      if (
+        location.zone === "deployed" ||
+        (location.zone === "reserve" && selectIsBattleCardReservedThisTurn(state, battleCardId))
+      ) {
         result.push({
           label: location.zone === "reserve" ? "Clear reserved" : "Mark reserved",
           action: () => {

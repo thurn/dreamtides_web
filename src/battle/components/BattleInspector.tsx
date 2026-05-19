@@ -1,7 +1,11 @@
 import type { CSSProperties } from "react";
 import { useMemo } from "react";
 import type { BattleCommand } from "../debug/commands";
-import { selectBattleCardLocation, selectBattlefieldSlotOccupant } from "../state/selectors";
+import {
+  selectBattleCardLocation,
+  selectBattlefieldSlotOccupant,
+  selectIsBattleCardReservedThisTurn,
+} from "../state/selectors";
 import type {
   BattleInit,
   BattleMutableState,
@@ -102,6 +106,7 @@ export function BattleInspector({
               <CardInspector
                 card={selectedCard}
                 location={selectedCardLocation}
+                state={state}
               />
             ) : selection?.kind === "slot" ? (
               <SlotInspector
@@ -198,12 +203,15 @@ export function BattleInspector({
 function CardInspector({
   card,
   location,
+  state,
 }: {
   card: BattleMutableState["cardInstances"][string];
   location: ReturnType<typeof selectBattleCardLocation>;
+  state: BattleMutableState;
 }) {
   const side = location?.side ?? card.controller;
   const effectiveSpark = Math.max(0, card.definition.printedSpark + card.sparkDelta);
+  const isReservedThisTurn = selectIsBattleCardReservedThisTurn(state, card.battleCardId);
   const locationLabel = location === null
     ? "UNKNOWN"
     : location.zone === "reserve" || location.zone === "deployed"
@@ -216,7 +224,7 @@ function CardInspector({
         <div style={{ "--card-w": "70px", "--card-h": "96px" } as CSSProperties}>
           <BattleCardView
             data={battleCardVisualFromInstance(card)}
-            reserved={location?.zone === "reserve"}
+            reserved={isReservedThisTurn}
           />
         </div>
         <div className="meta">
@@ -239,7 +247,7 @@ function CardInspector({
                 Reclaim {String(card.definition.reclaimCost)}
               </span>
             ) : null}
-            {location?.zone === "reserve" ? <span>reserved</span> : null}
+            {isReservedThisTurn ? <span>reserved</span> : null}
           </div>
           <div className="t">{locationLabel}</div>
         </div>
@@ -252,7 +260,7 @@ function CardInspector({
       <div className="insp-section">
         <h4>Card State</h4>
         <div className="chip-row">
-          {location?.zone === "reserve" ? <span className="chip active">Reserved</span> : null}
+          {isReservedThisTurn ? <span className="chip active">Reserved</span> : null}
           {card.markers.isPrevented ? <span className="chip active">Prevented</span> : null}
           {card.markers.isCopied ? <span className="chip active">Copied</span> : null}
           <span className="chip">{card.notes.length} Notes</span>
