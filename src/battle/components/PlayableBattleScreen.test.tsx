@@ -1166,9 +1166,12 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("pauses on judgment results until the player continues", () => {
+  it("keeps turn changes and judgment results in the persistent battle UI", () => {
     const { container, root } = renderScreen();
 
+    expect(container.textContent).toContain("Player Turn 1 Day");
+    expect(container.textContent).not.toContain("Your Turn");
+
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-action="end-turn"]')?.click();
     });
@@ -1179,13 +1182,16 @@ describe("PlayableBattleScreen", () => {
       container.querySelector<HTMLElement>('[data-battle-action="end-turn"]')?.click();
     });
 
-    expect(container.querySelector("[data-battle-judgment-overlay]")?.textContent).toContain("Challenge Resolved");
-    expect(container.querySelector("[data-battle-judgment-overlay]")?.textContent).toContain("Turn 2 results");
+    expect(container.querySelector("[data-battle-judgment-overlay]")).toBeNull();
+    expect(container.textContent).not.toContain("Challenge Resolved");
+    expect(container.textContent).not.toContain("Turn 2 results");
+    expect(container.textContent).toContain("Player Turn 2 Day");
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-battle-judgment-action="continue"]')?.click();
+      container.querySelector<HTMLElement>('[data-battle-action="end-turn"]')?.click();
     });
 
+    expect(container.textContent).toContain("Enemy Turn 2 Dusk");
     expect(container.querySelector("[data-battle-judgment-overlay]")).toBeNull();
 
     act(() => {

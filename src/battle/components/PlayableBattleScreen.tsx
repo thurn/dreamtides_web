@@ -36,9 +36,7 @@ import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type {
   BattleCardKind,
   BattleCommandSourceSurface,
-  BattleDeferredLogEvent,
   BattleFieldSlotAddress,
-  BattleJudgmentResolution,
   BattleMutableState,
   BattleReducerState,
   BattleSelection,
@@ -57,7 +55,6 @@ import { BattleHandTray } from "./BattleHandTray";
 import { BattleInspector } from "./BattleInspector";
 import { BattleCardNoteEditor } from "./BattleCardNoteEditor";
 import { BattleLogDrawer } from "./BattleLogDrawer";
-import { BattleJudgmentPauseOverlay } from "./BattleJudgmentPauseOverlay";
 import { BattleOpponentHandTray } from "./BattleOpponentHandTray";
 import { BattleResultOverlay } from "./BattleResultOverlay";
 import { BattleRewardSurface } from "./BattleRewardSurface";
@@ -95,16 +92,6 @@ type HoverPreviewState = {
   battleCardId: string;
   x: number;
   y: number;
-} | null;
-type JudgmentPauseState = {
-  dissolvedCardNames: readonly string[];
-  judgment: BattleJudgmentResolution;
-  result: BattleMutableState["result"];
-  scoreChanges: readonly {
-    delta: number;
-    side: BattleSide;
-  }[];
-  turnNumber: number;
 } | null;
 
 export function PlayableBattleScreen({ site }: { site: SiteState }) {
@@ -157,15 +144,9 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const [isDreamcallerPanelOpen, setIsDreamcallerPanelOpen] = useState(false);
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
-  const [judgmentPause, setJudgmentPause] = useState<JudgmentPauseState>(null);
-  const [turnBannerTurnNumber, setTurnBannerTurnNumber] = useState<number | null>(
-    initialState.activeSide === "player" ? initialState.turnNumber : null,
-  );
   const loggedCommandSerialRef = useRef(0);
-  const judgmentPauseSerialRef = useRef(0);
-  const isInteractionLocked = judgmentPause !== null;
-  const canEndTurn = rewardOverlay === null && !isInteractionLocked && selectCanEndTurn(reducerState.mutable);
-  const canPlayerAct = rewardOverlay === null && !isInteractionLocked &&
+  const canEndTurn = rewardOverlay === null && selectCanEndTurn(reducerState.mutable);
+  const canPlayerAct = rewardOverlay === null &&
     selectCanTakeMainPhaseActions(reducerState.mutable, "player");
   const canPlayerReposition = canBattlefieldSideReposition("player");
   const canEnemyReposition = canBattlefieldSideReposition("enemy");
@@ -173,11 +154,9 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const futureCount = reducerState.history.future.length;
   const failureResult = selectFailureOverlayResult(reducerState.mutable.result);
   const showResultOverlay = reducerState.mutable.result !== null &&
-    !isResultOverlayDismissed &&
-    !isInteractionLocked;
+    !isResultOverlayDismissed;
   const showReopenPill = reducerState.mutable.result !== null &&
-    isResultOverlayDismissed &&
-    !isInteractionLocked;
+    isResultOverlayDismissed;
   useAutoClearForcedResult(reducerState, battleInit, dispatch);
   useAiTurnDriver(reducerState, dispatch, battleInit.enableAi);
 
@@ -230,7 +209,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
 
   function canBattlefieldSideReposition(side: BattleSide): boolean {
     return rewardOverlay === null &&
-      !isInteractionLocked &&
       selectCanRepositionInCurrentPhase(reducerState.mutable, side);
   }
 
@@ -316,31 +294,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   }, [reducerState.lastTransition, reducerState.mutable.result, rewardOverlay]);
 
   useEffect(() => {
-    const serial = battleState.reducer.commandSerial;
-    if (serial === judgmentPauseSerialRef.current) {
-      return;
-    }
-    judgmentPauseSerialRef.current = serial;
-
-    const nextJudgmentPause = readJudgmentPause(reducerState);
-    if (nextJudgmentPause === null) {
-      return;
-    }
-
-    setJudgmentPause(nextJudgmentPause);
-    setOpenZoneBrowser(null);
-    setContextMenu(null);
-    setOpenForeseeOverlay(null);
-    setOpenDeckOrderPicker(null);
-    setOpenFigmentCreator(null);
-    setOpenNoteEditor(null);
-    setOpenSideSummary(null);
-    setIsDreamcallerPanelOpen(false);
-    setIsBattleLogOpen(false);
-    setHoverPreview(null);
-  }, [battleState.reducer.commandSerial, reducerState]);
-
-  useEffect(() => {
     if (selection?.kind !== "card") {
       return;
     }
@@ -363,23 +316,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     }
     setIsInspectorDrawerOpen(true);
   }, [isDesktopInspectorLayout]);
-
-  useEffect(() => {
-    if (reducerState.mutable.result !== null || reducerState.mutable.activeSide !== "player") {
-      setTurnBannerTurnNumber(null);
-      return;
-    }
-
-    setTurnBannerTurnNumber(reducerState.mutable.turnNumber);
-    const timeoutId = window.setTimeout(() => {
-      setTurnBannerTurnNumber((current) =>
-        current === reducerState.mutable.turnNumber ? null : current
-      );
-    }, 1000);
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [reducerState.mutable.activeSide, reducerState.mutable.result, reducerState.mutable.turnNumber]);
 
   function handleHandCardClick(battleCardId: string): void {
     setSelection({ kind: "card", battleCardId });
@@ -561,7 +497,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     setRewardOverlay(null);
     setIsOpponentHandRevealed(false);
     setIsResultOverlayDismissed(false);
-    setJudgmentPause(null);
     setIsBattleLogOpen(false);
 
     void dispatchBattleReset({
@@ -864,9 +799,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       ) : null}
       <div className="battle-app-shell">
         <div className="battle-main">
-          {turnBannerTurnNumber !== null ? (
-            <BattleTurnBanner turnNumber={turnBannerTurnNumber} />
-          ) : null}
           <BattleStatusBar
             activeSide={reducerState.mutable.activeSide}
             battleId={battleInit.battleId}
@@ -1083,7 +1015,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             canEndTurn={canEndTurn}
             futureCount={futureCount}
             historyCount={historyCount}
-            isInteractionLocked={isInteractionLocked}
             isBattleLogOpen={isBattleLogOpen}
             isDesktopInspectorLayout={isDesktopInspectorLayout}
             isInspectorDrawerOpen={isInspectorDrawerOpen}
@@ -1160,16 +1091,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
         lastTransition={reducerState.lastTransition}
         onClose={() => setIsBattleLogOpen(false)}
       />
-      {judgmentPause !== null ? (
-        <BattleJudgmentPauseOverlay
-          dissolvedCardNames={judgmentPause.dissolvedCardNames}
-          judgment={judgmentPause.judgment}
-          result={judgmentPause.result}
-          scoreChanges={judgmentPause.scoreChanges}
-          turnNumber={judgmentPause.turnNumber}
-          onContinue={() => setJudgmentPause(null)}
-        />
-      ) : null}
       {showResultOverlay ? (
         reducerState.mutable.result === "victory" && rewardOverlay !== null ? (
           <BattleRewardSurface
@@ -1311,92 +1232,6 @@ function resolveDragSourceSurface(
   return "battlefield";
 }
 
-// In multiplayer the shared reducer slice does not carry `lastActivity`
-// (per the V2 design spec), so the judgment-pause overlay fires whenever a
-// new commandSerial yields a transition with a non-null `judgment`. This
-// includes undoing or redoing into a snapshot whose `lastTransition`
-// captured a judgment, by design.
-function readJudgmentPause(
-  reducerState: BattleReducerState,
-): JudgmentPauseState {
-  const lastTransition = reducerState.lastTransition;
-
-  if (lastTransition === null) {
-    return null;
-  }
-  const judgment = lastTransition.judgment ?? readJudgmentFromTransitionLogs(lastTransition.logEvents);
-  if (judgment === null) {
-    return null;
-  }
-
-  return {
-    dissolvedCardNames: readJudgmentDissolvedCardNames(reducerState),
-    judgment,
-    result: reducerState.mutable.result,
-    scoreChanges: lastTransition.scoreChanges.map((change) => ({
-      delta: change.delta,
-      side: change.side,
-    })),
-    turnNumber: reducerState.mutable.turnNumber,
-  };
-}
-
-function readJudgmentFromTransitionLogs(
-  logEvents: readonly BattleDeferredLogEvent[],
-): BattleJudgmentResolution | null {
-  const event = logEvents.find((entry) => entry.event === "battle_proto_judgment");
-  const fields = event?.fields;
-  if (fields === undefined || !Array.isArray(fields.lanes)) {
-    return null;
-  }
-  return {
-    lanes: fields.lanes.map((lane) => {
-      const candidate = lane as Partial<{
-        enemySpark: number;
-        playerSpark: number;
-        scoreDelta: number;
-        slotId: "D0" | "D1" | "D2" | "D3";
-        winner: BattleSide | null;
-      }>;
-      return {
-        enemySpark: candidate.enemySpark ?? 0,
-        playerSpark: candidate.playerSpark ?? 0,
-        scoreDelta: candidate.scoreDelta ?? 0,
-        slotId: candidate.slotId ?? "D0",
-        winner: candidate.winner ?? null,
-      };
-    }),
-    enemyScoreDelta: typeof fields.enemyScoreDelta === "number" ? fields.enemyScoreDelta : 0,
-    playerScoreDelta: typeof fields.playerScoreDelta === "number" ? fields.playerScoreDelta : 0,
-  };
-}
-
-function readJudgmentDissolvedCardNames(
-  reducerState: BattleReducerState,
-): readonly string[] {
-  const lastEntry = reducerState.history.past[reducerState.history.past.length - 1];
-
-  if (lastEntry === undefined) {
-    return [];
-  }
-
-  const dissolvedCardIds: string[] = [];
-  for (const slotId of ["D0", "D1", "D2", "D3"] as const) {
-    const playerBefore = lastEntry.before.mutable.sides.player.deployed[slotId];
-    if (playerBefore !== null && lastEntry.after.mutable.sides.player.deployed[slotId] === null) {
-      dissolvedCardIds.push(playerBefore);
-    }
-    const enemyBefore = lastEntry.before.mutable.sides.enemy.deployed[slotId];
-    if (enemyBefore !== null && lastEntry.after.mutable.sides.enemy.deployed[slotId] === null) {
-      dissolvedCardIds.push(enemyBefore);
-    }
-  }
-
-  return dissolvedCardIds.map(
-    (battleCardId) => lastEntry.before.mutable.cardInstances[battleCardId]?.definition.name ?? battleCardId,
-  );
-}
-
 function BattleLiveRegion({
   activeSide,
   phase,
@@ -1438,15 +1273,6 @@ function BattleLiveRegion({
   return (
     <div aria-atomic="true" aria-live="polite" className="sr-only">
       {announcement}
-    </div>
-  );
-}
-
-function BattleTurnBanner({ turnNumber }: { turnNumber: number }) {
-  return (
-    <div className="battle-turn-banner" aria-hidden="true">
-      <span className="battle-turn-banner-label">Your Turn</span>
-      <strong>Turn {String(turnNumber)}</strong>
     </div>
   );
 }
