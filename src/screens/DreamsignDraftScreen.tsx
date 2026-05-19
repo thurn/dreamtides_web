@@ -8,8 +8,19 @@ import {
   DreamsignHoverCard,
 } from "../components/DreamsignHoverCard";
 import { HoverPopover } from "../components/HoverPopover";
-import { RulesText } from "../components/RulesText";
 import { DreamsignSourceOverlay } from "./DreamsignSourceOverlay";
+import {
+  OFFERING_NEUTRAL,
+  OfferingAcceptButton,
+  OfferingCardFrame,
+  OfferingDreamsignBody,
+  OfferingFooter,
+  OfferingGrid,
+  OfferingScreenHeader,
+  OfferingScreenLayout,
+  OfferingSecondaryButton,
+  OfferingSkipButton,
+} from "../components/OfferingScreen";
 
 /** Props for the DreamsignDraftScreen component. */
 interface DreamsignDraftScreenProps {
@@ -88,68 +99,16 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
 
   if (purging) {
     return (
-      <motion.div
-        className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-      >
-        <h2
-          className="mb-2 text-2xl font-bold"
-          style={{ color: "#ef4444" }}
-        >
-          Dreamsign Limit Reached
-        </h2>
-        <p className="mb-6 text-sm opacity-70">
-          You have {String(maxDreamsigns)} dreamsigns. Remove one to accept
-          the new dreamsign.
-        </p>
-
-        {pendingDreamsign && (
-          <div className="mb-6">
-            <p className="mb-2 text-center text-xs font-bold uppercase tracking-wider opacity-50">
-              New Dreamsign
-            </p>
-            <DreamsignCard dreamsign={pendingDreamsign} />
-          </div>
-        )}
-
-        <p className="mb-3 text-xs font-bold uppercase tracking-wider opacity-50">
-          Select one to remove
-        </p>
-        <div className="grid max-w-3xl grid-cols-3 gap-3 md:grid-cols-4">
-          {currentDreamsigns.map((sign, index) => (
-            <button
-              key={`purge-${sign.name}-${String(index)}`}
-              className="cursor-pointer rounded-lg p-2 text-left transition-colors"
-              style={{
-                background: "rgba(239, 68, 68, 0.05)",
-                border: "1px solid rgba(239, 68, 68, 0.2)",
-              }}
-              onClick={() => handlePurge(index)}
-            >
-              <span className="text-xs font-bold text-slate-200">
-                {sign.name}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        <button
-          className="mt-6 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-          style={{
-            background: "rgba(107, 114, 128, 0.2)",
-            border: "1px solid rgba(107, 114, 128, 0.4)",
-            color: "#9ca3af",
-          }}
-          onClick={() => {
-            setPurging(false);
-            setPendingDreamsign(null);
-          }}
-        >
-          Cancel
-        </button>
-      </motion.div>
+      <DreamsignPurgeOverlay
+        maxDreamsigns={maxDreamsigns}
+        pendingDreamsign={pendingDreamsign}
+        currentDreamsigns={currentDreamsigns}
+        onPurge={handlePurge}
+        onCancel={() => {
+          setPurging(false);
+          setPendingDreamsign(null);
+        }}
+      />
     );
   }
 
@@ -162,45 +121,19 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
   }
 
   return (
-    <motion.div
-      className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4 }}
-    >
-      {/* Header */}
-      <div className="mb-6 text-center">
-        <h2
-          className="text-2xl font-bold tracking-wide md:text-3xl"
-          style={{ color: "#a855f7" }}
-        >
-          Dreamsign Draft
-        </h2>
-        <p className="mt-1 text-sm opacity-50">
-          Choose one dreamsign or skip
-        </p>
-        {site.isEnhanced && (
-          <span
-            className="mt-2 inline-block rounded-full px-3 py-1 text-sm font-bold"
-            style={{
-              background: "rgba(168, 85, 247, 0.15)",
-              color: "#c084fc",
-              border: "1px solid rgba(168, 85, 247, 0.3)",
-            }}
-          >
-            Enhanced -- 4 Options
-          </span>
-        )}
-      </div>
+    <OfferingScreenLayout testId="dreamsign-draft-screen">
+      <OfferingScreenHeader
+        title="Dreamsign Draft"
+        subtitle="Choose one dreamsign or skip"
+        enhancedLabel={site.isEnhanced ? "Enhanced -- 4 Options" : undefined}
+      />
 
-      {/* Dreamsign options */}
       {options.length === 0 ? (
         <p className="text-sm opacity-60">
           The Dreamsign pool is exhausted.
         </p>
       ) : (
-        <div className="flex max-w-4xl flex-wrap justify-center gap-5">
+        <OfferingGrid>
           {options.map((dreamsign, index) => {
             const triggerId = dreamsign.id ?? dreamsign.name;
             return (
@@ -223,50 +156,38 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
                     aria-label={`Dreamsign: ${dreamsign.name}`}
                     className="outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
                   >
-                    <DreamsignCard dreamsign={dreamsign} />
+                    <OfferingCardFrame>
+                      <OfferingDreamsignBody dreamsign={dreamsign} />
+                    </OfferingCardFrame>
                   </div>
                 </HoverPopover>
-                <button
-                  className="w-full rounded-lg px-5 py-2.5 font-bold text-white transition-opacity"
-                  style={{ backgroundColor: "#7c3aed" }}
+                <OfferingAcceptButton
                   onClick={() => handleSelect(dreamsign)}
+                  testId={`dreamsign-draft-select-${triggerId}`}
                 >
                   Select
-                </button>
+                </OfferingAcceptButton>
               </motion.div>
             );
           })}
-        </div>
+        </OfferingGrid>
       )}
 
-      {/* Footer toolbar: Skip + Why Dreamsigns? */}
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <button
-          className="rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-          style={{
-            background: "rgba(148, 163, 184, 0.18)",
-            border: "1px solid rgba(203, 213, 225, 0.55)",
-            color: "#e2e8f0",
-          }}
+      <OfferingFooter>
+        <OfferingSkipButton
           onClick={handleSkip}
           title="Skips this offering. Every shown Dreamsign is removed from this run's pool."
         >
           Skip (discards the shown Dreamsigns)
-        </button>
-        <button
-          className="rounded-lg px-4 py-2 text-sm font-medium transition-colors"
-          style={{
-            background: "rgba(168, 85, 247, 0.14)",
-            border: "1px solid rgba(168, 85, 247, 0.35)",
-            color: "#d8b4fe",
-          }}
+        </OfferingSkipButton>
+        <OfferingSecondaryButton
           onClick={() => {
             setSourceOverlayOpen(true);
           }}
         >
           Why Dreamsigns?
-        </button>
-      </div>
+        </OfferingSecondaryButton>
+      </OfferingFooter>
 
       <DreamsignSourceOverlay
         isOpen={sourceOverlayOpen}
@@ -280,47 +201,89 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
         optionalTides={resolvedPackage?.optionalSubset ?? []}
         remainingPoolSize={remainingPoolSize}
       />
-    </motion.div>
+    </OfferingScreenLayout>
   );
 }
 
-/** Renders a dreamsign card with image, name and effect description. */
-function DreamsignCard({ dreamsign }: { dreamsign: Dreamsign }) {
-  const [imageBroken, setImageBroken] = useState(false);
-  const showImage = Boolean(dreamsign.imageName) && !imageBroken;
+/**
+ * Purge overlay shown when the player accepts a dreamsign at the cap. Uses
+ * the offering palette but switches the primary border tone to red so the
+ * destructive intent reads at a glance.
+ */
+function DreamsignPurgeOverlay({
+  maxDreamsigns,
+  pendingDreamsign,
+  currentDreamsigns,
+  onPurge,
+  onCancel,
+}: {
+  readonly maxDreamsigns: number;
+  readonly pendingDreamsign: Dreamsign | null;
+  readonly currentDreamsigns: readonly Dreamsign[];
+  readonly onPurge: (index: number) => void;
+  readonly onCancel: () => void;
+}) {
   return (
-    <div
-      className="flex w-52 flex-1 flex-col items-center gap-2 rounded-lg p-4"
-      style={{
-        background:
-          "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
-        border: "1px solid rgba(168, 85, 247, 0.35)",
-        boxShadow: "0 0 12px rgba(168, 85, 247, 0.16)",
-      }}
+    <motion.div
+      className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
     >
-      {showImage && (
-        <img
-          src={`/dreamsigns/${String(dreamsign.imageName)}`}
-          alt={dreamsign.imageAlt ?? dreamsign.name}
-          className="h-20 w-20 object-contain"
-          style={{ filter: "drop-shadow(0 2px 6px rgba(168, 85, 247, 0.25))" }}
-          onError={() => {
-            setImageBroken(true);
-          }}
-        />
+      <h2
+        className="mb-2 text-2xl font-bold"
+        style={{ color: "#ef4444" }}
+      >
+        Dreamsign Limit Reached
+      </h2>
+      <p className="mb-6 text-sm opacity-70">
+        You have {String(maxDreamsigns)} dreamsigns. Remove one to accept
+        the new dreamsign.
+      </p>
+
+      {pendingDreamsign && (
+        <div className="mb-6">
+          <p className="mb-2 text-center text-xs font-bold uppercase tracking-wider opacity-50">
+            New Dreamsign
+          </p>
+          <OfferingCardFrame>
+            <OfferingDreamsignBody dreamsign={pendingDreamsign} />
+          </OfferingCardFrame>
+        </div>
       )}
-      <h3
-        className="text-center text-sm font-bold"
-        style={{ color: "#f8fafc" }}
-      >
-        {dreamsign.name}
-      </h3>
-      <div
-        className="text-center text-xs leading-relaxed opacity-70"
-        style={{ color: "#e2e8f0" }}
-      >
-        <RulesText text={dreamsign.effectDescription} />
+
+      <p className="mb-3 text-xs font-bold uppercase tracking-wider opacity-50">
+        Select one to remove
+      </p>
+      <div className="grid max-w-3xl grid-cols-3 gap-3 md:grid-cols-4">
+        {currentDreamsigns.map((sign, index) => (
+          <button
+            key={`purge-${sign.name}-${String(index)}`}
+            className="cursor-pointer rounded-lg p-2 text-left transition-colors"
+            style={{
+              background: "rgba(239, 68, 68, 0.05)",
+              border: "1px solid rgba(239, 68, 68, 0.2)",
+            }}
+            onClick={() => onPurge(index)}
+          >
+            <span className="text-xs font-bold text-slate-200">
+              {sign.name}
+            </span>
+          </button>
+        ))}
       </div>
-    </div>
+
+      <button
+        className="mt-6 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
+        style={{
+          background: OFFERING_NEUTRAL.background,
+          border: `1px solid ${OFFERING_NEUTRAL.border}`,
+          color: OFFERING_NEUTRAL.text,
+        }}
+        onClick={onCancel}
+      >
+        Cancel
+      </button>
+    </motion.div>
   );
 }

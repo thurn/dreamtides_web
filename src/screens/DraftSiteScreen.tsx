@@ -9,6 +9,11 @@ import {
   CARD_HOVER_PREVIEW_WIDTH_PX,
   HoverPopover,
 } from "../components/HoverPopover";
+import {
+  OFFERING_ACCENT,
+  OfferingAcceptButton,
+  OfferingScreenHeader,
+} from "../components/OfferingScreen";
 import { PipBadge } from "../components/PipBadge";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
@@ -91,15 +96,10 @@ function DraftSummary({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
     >
-      <h2
-        className="text-2xl font-bold tracking-wide"
-        style={{ color: "#a855f7" }}
-      >
-        Draft Complete
-      </h2>
-      <p className="text-sm opacity-60">
-        {String(draftedCards.length)} cards added to your deck
-      </p>
+      <OfferingScreenHeader
+        title="Draft Complete"
+        subtitle={`${String(draftedCards.length)} cards added to your deck`}
+      />
 
       <div
         className="draft-summary-grid grid w-full max-w-4xl gap-3 md:gap-4"
@@ -117,16 +117,13 @@ function DraftSummary({
         ))}
       </div>
 
-      <button
-        className="mt-4 rounded-lg px-6 py-3 font-bold text-white transition-colors"
-        style={{
-          background: "linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)",
-          border: "1px solid rgba(168, 85, 247, 0.5)",
-        }}
+      <OfferingAcceptButton
+        className="mt-4 px-6 py-3 text-base"
         onClick={onContinue}
+        testId="draft-summary-continue"
       >
         Continue
-      </button>
+      </OfferingAcceptButton>
     </motion.div>
   );
 }
@@ -828,35 +825,33 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
           </motion.div>
         </AnimatePresence>
 
-        {/* Compact header */}
-        <div className="order-1 flex w-full items-center justify-between px-4 py-1 md:px-8">
-          <div className="flex items-center gap-3">
-            <h2
-              className="text-lg font-bold tracking-wide"
-              style={{ color: "#a855f7" }}
-            >
-              Draft
-            </h2>
-            <span className="text-xs opacity-50">
-              Pick {String(Math.min(pickNumber, SITE_PICKS))}/{String(SITE_PICKS)}
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <div
-              className="h-1.5 w-24 overflow-hidden rounded-full md:w-32"
-              style={{ background: "rgba(124, 58, 237, 0.2)" }}
-            >
-              <motion.div
-                className="h-full rounded-full"
-                style={{ background: "#f97316" }}
-                initial={false}
-                animate={{
-                  width: `${String((draftedCardNumbers.length / SITE_PICKS) * 100)}%`,
-                }}
-                transition={{ duration: 0.3 }}
-              />
-            </div>
-          </div>
+        {/* Compact header — uses the shared offering header tokens so it
+            stays visually aligned with the dreamsign draft / offering / journey
+            chooser surfaces. */}
+        <div className="order-1 w-full px-4 py-1 md:px-8">
+          <OfferingScreenHeader
+            compact
+            title="Draft"
+            subtitle={`Pick ${String(Math.min(pickNumber, SITE_PICKS))}/${String(SITE_PICKS)}`}
+            rightSlot={
+              <div className="flex items-center gap-3">
+                <div
+                  className="h-1.5 w-24 overflow-hidden rounded-full md:w-32"
+                  style={{ background: "rgba(124, 58, 237, 0.2)" }}
+                >
+                  <motion.div
+                    className="h-full rounded-full"
+                    style={{ background: "#f97316" }}
+                    initial={false}
+                    animate={{
+                      width: `${String((draftedCardNumbers.length / SITE_PICKS) * 100)}%`,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </div>
+              </div>
+            }
+          />
         </div>
       </div>
 
@@ -891,7 +886,10 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
                 setShowDeckSidebar(false);
               }}
             />
-            <span className="text-xs font-bold uppercase tracking-wider" style={{ color: "#a855f7" }}>
+            <span
+              className="text-xs font-bold uppercase tracking-wider"
+              style={{ color: OFFERING_ACCENT.primary }}
+            >
               Deck ({String(state.deck.length)})
             </span>
             <div

@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import type { ChooserRequest, ChooserResolution } from "../../apply/chooserPlan";
 
 import { ChooserOverlay } from "./ChooserOverlay";
+import { OFFERING_ACCENT } from "./offering-tokens";
 
 export interface CardChooserCandidate {
   readonly entryId: string;
@@ -112,23 +113,31 @@ function CardChooserInner({
             <button
               key={candidate.entryId}
               type="button"
+              data-offering-card=""
+              data-offering-card-selected={selected ? "true" : "false"}
               aria-pressed={selected}
               onClick={() => toggleEntry(candidate.entryId)}
-              className="min-h-28 rounded-md border bg-zinc-900/80 p-4 text-left transition-colors hover:bg-zinc-800"
+              className="min-h-28 rounded-lg p-4 text-left transition-colors hover:brightness-125"
               style={{
-                borderColor: selected
-                  ? "rgba(252, 211, 77, 0.95)"
-                  : "rgba(255, 255, 255, 0.14)",
+                background:
+                  "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
+                border: `1px solid ${selected ? OFFERING_ACCENT.borderStrong : OFFERING_ACCENT.border}`,
                 boxShadow: selected
-                  ? "0 0 0 2px rgba(245, 158, 11, 0.35)"
-                  : "none",
+                  ? `0 0 0 2px ${OFFERING_ACCENT.border}, 0 0 18px ${OFFERING_ACCENT.glow}`
+                  : `0 0 12px ${OFFERING_ACCENT.glow}`,
               }}
             >
-              <span className="block text-base font-semibold text-amber-100">
+              <span
+                className="block text-base font-bold"
+                style={{ color: "#f8fafc" }}
+              >
                 {candidate.name}
               </span>
               {candidate.rulesText ? (
-                <span className="mt-2 block text-sm leading-snug text-zinc-300">
+                <span
+                  className="mt-2 block text-sm leading-snug opacity-80"
+                  style={{ color: "#e2e8f0" }}
+                >
                   {candidate.rulesText}
                 </span>
               ) : null}
