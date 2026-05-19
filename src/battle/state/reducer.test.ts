@@ -157,7 +157,7 @@ describe("battleReducer", () => {
     });
   });
 
-  it("detects simultaneous score targets from judgment scoring", () => {
+  it("detects a score target from active-side judgment scoring", () => {
     const { battleInit, state } = createTestBattle();
     const playerD0 = state.sides.player.hand[0];
     const enemyD1 = state.sides.enemy.hand[0];
@@ -180,7 +180,7 @@ describe("battleReducer", () => {
     expect(reduced.mutable.result).toBe("victory");
     expect(reduced.mutable.phase).toBe("challenge");
     expect(reduced.mutable.sides.player.score).toBe(26);
-    expect(reduced.mutable.sides.enemy.score).toBe(25);
+    expect(reduced.mutable.sides.enemy.score).toBe(24);
   });
 
   it("treats END_TURN as a no-op once a natural result already exists", () => {
@@ -948,18 +948,14 @@ describe("battleReducer", () => {
     expect(reduced.lastTransition?.steps).toEqual([
       { side: "player", phase: "challenge" },
     ]);
-    expect(reduced.lastTransition?.scoreChanges).toHaveLength(1);
-    expect(reduced.lastTransition?.scoreChanges[0]).toMatchObject({
-      side: "player",
-      delta: 9,
-    });
+    expect(reduced.lastTransition?.scoreChanges).toHaveLength(0);
     const extraJudgmentEvent = reduced.lastTransition?.logEvents.find(
       (entry) => entry.event === "battle_proto_extra_judgment",
     );
     expect(extraJudgmentEvent?.fields).toMatchObject({
       resolvedSide: "player",
       forced: true,
-      scoreChange: 9,
+      scoreChange: 0,
     });
     expect(extraJudgmentEvent?.fields.dissolvedCardIds).toEqual([enemyCharacter]);
   });

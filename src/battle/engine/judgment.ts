@@ -5,6 +5,29 @@ export function resolveJudgment(state: BattleMutableState): BattleJudgmentResolu
   const lanes: BattleLaneJudgment[] = DEPLOY_SLOT_IDS.map((slotId) => {
     const playerSpark = selectDeployedSpark(state, "player", slotId);
     const enemySpark = selectDeployedSpark(state, "enemy", slotId);
+    const activeCardId = state.sides[state.activeSide].deployed[slotId];
+    const opposingSide = state.activeSide === "player" ? "enemy" : "player";
+    const opposingCardId = state.sides[opposingSide].deployed[slotId];
+
+    if (activeCardId === null) {
+      return {
+        slotId,
+        playerSpark,
+        enemySpark,
+        winner: null,
+        scoreDelta: 0,
+      };
+    }
+
+    if (opposingCardId === null) {
+      return {
+        slotId,
+        playerSpark,
+        enemySpark,
+        winner: state.activeSide,
+        scoreDelta: state.activeSide === "player" ? playerSpark : enemySpark,
+      };
+    }
 
     if (playerSpark === enemySpark) {
       return {
@@ -21,7 +44,7 @@ export function resolveJudgment(state: BattleMutableState): BattleJudgmentResolu
       playerSpark,
       enemySpark,
       winner: playerSpark > enemySpark ? "player" : "enemy",
-      scoreDelta: Math.abs(playerSpark - enemySpark),
+      scoreDelta: 0,
     };
   });
 

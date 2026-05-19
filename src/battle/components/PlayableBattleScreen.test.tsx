@@ -28,7 +28,7 @@ import {
 } from "../test-support";
 import type { SharedBattleState } from "../../multiplayer/battle-types";
 import type { BattleInit, BattleMutableState } from "../types";
-import { PlayableBattleScreen } from "./PlayableBattleScreen";
+import { PlayableBattleScreen, computeBattlefieldScale } from "./PlayableBattleScreen";
 
 const battleCompletionBridge = vi.hoisted(() => ({
   completeBattleSiteVictory: vi.fn(),
@@ -204,6 +204,25 @@ afterEach(() => {
 });
 
 describe("PlayableBattleScreen", () => {
+  it("keeps battlefield scaling unset until the wrapper has measurable space", () => {
+    expect(
+      computeBattlefieldScale({
+        naturalHeight: 450,
+        naturalWidth: 430,
+        wrapHeight: 0,
+        wrapWidth: 700,
+      }),
+    ).toBeNull();
+    expect(
+      computeBattlefieldScale({
+        naturalHeight: 450,
+        naturalWidth: 430,
+        wrapHeight: 220,
+        wrapWidth: 700,
+      }),
+    ).toBeGreaterThan(0);
+  });
+
   it("renders the new battle shell in the required region order with minimal controls", () => {
     const { container, root } = renderScreen();
 
@@ -319,6 +338,63 @@ describe("PlayableBattleScreen", () => {
 
     expect(container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id")).toBeNull();
     expect(container.querySelector('[data-slot-id="player-deployed-D0"]')?.getAttribute("data-slot-card-id")).toBe(reserveCardId);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("deploys an enemy reserve character through the Dusk battlefield controls", () => {
+    let reserveCardId = "";
+    const { container, root } = renderScreen((state) => {
+      const battleCardId = state.sides.enemy.hand.find(
+        (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "character",
+      ) ?? state.sides.enemy.deck.find(
+        (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "character",
+      );
+      if (battleCardId === undefined) {
+        throw new Error("expected enemy character");
+      }
+      reserveCardId = battleCardId;
+      state.activeSide = "enemy";
+      state.phase = "dusk";
+      state.turnNumber = 2;
+      state.sides.enemy.hand = state.sides.enemy.hand.filter((cardId) => cardId !== battleCardId);
+      state.sides.enemy.deck = state.sides.enemy.deck.filter((cardId) => cardId !== battleCardId);
+      state.sides.enemy.reserve.R0 = battleCardId;
+      state.cardInstances[battleCardId].enteredReserveTurnNumber = null;
+    });
+    const reserveSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-reserve-R0"]');
+    const deployedSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-deployed-D0"]');
+    const reserveCard = container.querySelector<HTMLElement>(
+      `[data-slot-id="enemy-reserve-R0"] [data-battle-card-id="${reserveCardId}"]`,
+    );
+    if (reserveSlot === null || deployedSlot === null || reserveCard === null) {
+      throw new Error("expected enemy battlefield card and target slot");
+    }
+
+    act(() => {
+      reserveSlot.dispatchEvent(new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 280,
+        clientY: 300,
+      }));
+    });
+
+    const menu = container.querySelector("[data-battle-context-menu]");
+    expect(menu?.textContent).toContain("→ Deployed");
+
+    act(() => {
+      reserveCard.click();
+    });
+
+    act(() => {
+      deployedSlot.click();
+    });
+
+    expect(reserveSlot.getAttribute("data-slot-card-id")).toBeNull();
+    expect(deployedSlot.getAttribute("data-slot-card-id")).toBe(reserveCardId);
 
     act(() => {
       root.unmount();
@@ -906,6 +982,53 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(container.querySelector("[data-battle-dreamcaller-panel]")?.textContent).toContain("Dreamsigns");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("creates an enemy Shadow Figment from the enemy state summary into an open reserve slot", () => {
+    const { container, initialState, root } = renderScreen((state) => {
+      const enemyCardId = state.sides.enemy.hand[0];
+      if (enemyCardId === undefined) {
+        throw new Error("expected enemy hand card");
+      }
+      state.sides.enemy.hand = state.sides.enemy.hand.filter((id) => id !== enemyCardId);
+      state.sides.enemy.reserve.R0 = enemyCardId;
+    });
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-side-summary="enemy"]')?.click();
+    });
+    act(() => {
+      clickChip(container, "Create Figment");
+    });
+
+    expect(container.querySelector("[data-battle-figment-creator]")).not.toBeNull();
+    expect(
+      container.querySelector<HTMLInputElement>('[data-battle-figment-field="subtype"]')?.value,
+    ).toBe("Shadow");
+    expect(
+      container.querySelector<HTMLInputElement>(
+        'input[name="battle-figment-slot"][value="R1"]',
+      )?.checked,
+    ).toBe(true);
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-battle-figment-action="submit"]')
+        ?.click();
+    });
+
+    const r1CardId = container
+      .querySelector('[data-slot-id="enemy-reserve-R1"]')
+      ?.getAttribute("data-slot-card-id");
+    expect(r1CardId).toMatch(/^bc_/);
+    expect(r1CardId).not.toBe(initialState.sides.enemy.reserve.R0);
+    expect(container.querySelector('[data-slot-id="enemy-reserve-R1"]')?.textContent).toContain(
+      "Shadow Figment",
+    );
 
     act(() => {
       root.unmount();

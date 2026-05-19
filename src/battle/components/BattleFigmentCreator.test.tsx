@@ -80,6 +80,7 @@ afterEach(() => {
 describe("BattleFigmentCreator", () => {
   it("blocks submit when subtype is empty", () => {
     const { root, submits } = mount();
+    setInputValue('[data-battle-figment-field="subtype"]', "");
 
     const submitButton = document.querySelector<HTMLButtonElement>(
       '[data-battle-figment-action="submit"]',
@@ -109,6 +110,83 @@ describe("BattleFigmentCreator", () => {
       submitButton?.click();
     });
     expect(submits).toHaveLength(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("defaults to a Shadow Figment in the first open reserve slot for the selected side", () => {
+    vi.spyOn(Date, "now").mockReturnValue(777);
+    const state = buildBattleState();
+    const occupantId = Object.values(state.cardInstances)
+      .find((instance) => instance.owner === "enemy")?.battleCardId;
+    if (occupantId === undefined) {
+      throw new Error("expected at least one enemy-owned card in test state");
+    }
+    state.sides.enemy.reserve.R0 = occupantId;
+
+    const submits: BattleDebugEdit[] = [];
+    const closes = { count: 0 };
+    const cardDatabase = new Map<number, CardData>([
+      [1, makeCardStub({ subtype: "Seeker" })],
+    ]);
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <BattleFigmentCreator
+          cardDatabase={cardDatabase}
+          initialSide="enemy"
+          onClose={() => {
+            closes.count += 1;
+          }}
+          onSubmit={(edit) => submits.push(edit)}
+          state={state}
+        />,
+      );
+    });
+
+    expect(
+      document.querySelector<HTMLInputElement>('[data-battle-figment-field="name"]')?.value,
+    ).toBe("Shadow Figment");
+    expect(
+      document.querySelector<HTMLInputElement>('[data-battle-figment-field="subtype"]')?.value,
+    ).toBe("Shadow");
+    expect(
+      document.querySelector<HTMLInputElement>('[data-battle-figment-field="spark"]')?.value,
+    ).toBe("1");
+    expect(
+      document.querySelector<HTMLInputElement>(
+        'input[name="battle-figment-slot"][value="R1"]',
+      )?.checked,
+    ).toBe(true);
+
+    const submitButton = document.querySelector<HTMLButtonElement>(
+      '[data-battle-figment-action="submit"]',
+    );
+    expect(submitButton?.disabled).toBe(false);
+    act(() => {
+      submitButton?.click();
+    });
+
+    expect(submits).toHaveLength(1);
+    const edit = submits[0];
+    if (edit.kind !== "CREATE_FIGMENT") {
+      throw new Error("expected CREATE_FIGMENT edit");
+    }
+    expect(edit.side).toBe("enemy");
+    expect(edit.chosenSubtype).toBe("Shadow");
+    expect(edit.chosenSpark).toBe(1);
+    expect(edit.name).toBe("Shadow Figment");
+    expect(edit.destination).toEqual({
+      side: "enemy",
+      zone: "reserve",
+      slotId: "R1",
+    });
+    expect(edit.createdAtMs).toBe(777);
+    expect(closes.count).toBe(1);
 
     act(() => {
       root.unmount();
@@ -173,7 +251,20 @@ describe("BattleFigmentCreator", () => {
       '[data-battle-figment-action="submit"]',
     );
     expect(submitButton).not.toBeNull();
-    expect(submitButton?.disabled).toBe(true);
+    expect(submitButton?.disabled).toBe(false);
+
+    const r0Radio = document.querySelector<HTMLInputElement>(
+      'input[name="battle-figment-slot"][value="R0"]',
+    );
+    expect(r0Radio).not.toBeNull();
+    act(() => {
+      r0Radio!.click();
+    });
+
+    const submitButtonAfterOccupiedSlot = document.querySelector<HTMLButtonElement>(
+      '[data-battle-figment-action="submit"]',
+    );
+    expect(submitButtonAfterOccupiedSlot?.disabled).toBe(true);
 
     const hint = document.querySelector<HTMLElement>(
       "[data-battle-figment-submit-hint]",
@@ -181,7 +272,7 @@ describe("BattleFigmentCreator", () => {
     expect(hint?.textContent).toContain("R0 is occupied");
 
     act(() => {
-      submitButton?.click();
+      submitButtonAfterOccupiedSlot?.click();
     });
     expect(submits).toHaveLength(0);
 
@@ -228,6 +319,7 @@ describe("BattleFigmentCreator", () => {
     const values = Array.from(datalist?.querySelectorAll("option") ?? [])
       .map((option) => option.getAttribute("value"));
     expect(values).toContain("Seeker");
+    expect(values).toContain("Shadow");
     expect(values).toContain("Wisp");
     expect(values).not.toContain("*");
     expect(values).not.toContain("");

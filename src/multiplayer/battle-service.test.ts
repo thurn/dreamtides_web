@@ -148,6 +148,10 @@ describe("normalizeBattleStateSnapshot", () => {
     expect(reducer.mutable.sides.player.hand).toEqual([]);
     expect(reducer.mutable.sides.player.void).toEqual([]);
     expect(reducer.mutable.sides.player.banished).toEqual([]);
+    expect(reducer.mutable.sides.player.exhaustionPenaltyNext).toBe(5);
+    expect(reducer.mutable.sides.player.exhaustionPenaltyAppliedThisTurn).toBe(false);
+    expect(reducer.mutable.sides.enemy.exhaustionPenaltyNext).toBe(5);
+    expect(reducer.mutable.sides.enemy.exhaustionPenaltyAppliedThisTurn).toBe(false);
     expect(reducer.commandSerial).toBe(3);
   });
 

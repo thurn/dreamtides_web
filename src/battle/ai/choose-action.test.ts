@@ -70,6 +70,7 @@ describe("chooseAiAction", () => {
     const reserveCharacter = moveEnemyHandCardToSlot(state, "character", "reserve", "R1");
     const affordableEvent = ensureEnemyCardInHand(state, "event", 5);
 
+    state.activeSide = "enemy";
     state.sides.enemy.currentEnergy = 5;
 
     const decision = chooseAiAction(state, {
@@ -176,6 +177,7 @@ describe("evaluatePredictedJudgmentDifferential", () => {
     const state = createTestBattleState();
     const enemyCharacter = moveEnemyHandCardToSlot(state, "character", "deployed", "D1");
     const enemyDef = state.cardInstances[enemyCharacter].definition;
+    state.activeSide = "enemy";
     state.cardInstances[enemyCharacter].sparkDelta = 10 - enemyDef.printedSpark;
 
     expect(evaluatePredictedJudgmentDifferential(state)).toBeGreaterThan(0);

@@ -13,6 +13,7 @@ import { resolveMoveCard } from "./play-card";
 import { AUTO_SYSTEM_EMISSION_CONTEXT } from "./result";
 import {
   advanceAfterEndTurn,
+  drawTopCardForTurn,
   drawTopCard,
   expireBattleNotes,
   nextStartOfTurnPair,
@@ -109,19 +110,89 @@ describe("runStartOfTurnComposite energy refresh", () => {
     expect(advanced.sides.player.currentEnergy).toBe(battleInit.maxEnergyCap);
   });
 
-  it("skips drawing when the deck is empty at start of turn", () => {
+  it("awards the opponent 5 when the automatic turn draw finds an empty deck", () => {
     const { battleInit, state } = createTestBattle();
     state.turnNumber = 2;
     state.sides.enemy.deck = [];
     const handBefore = [...state.sides.enemy.hand];
 
-    const advanced = runStartOfTurnComposite(state, battleInit, {
+    const result = runStartOfTurnComposite(state, battleInit, {
+      side: "enemy",
+      incrementTurnNumber: false,
+    });
+    const { state: advanced } = result;
+
+    expect(advanced.sides.enemy.hand).toEqual(handBefore);
+    expect(advanced.sides.enemy.deck).toEqual([]);
+    expect(advanced.sides.player.score).toBe(5);
+    expect(advanced.sides.enemy.exhaustionPenaltyNext).toBe(10);
+    expect(advanced.sides.enemy.exhaustionPenaltyAppliedThisTurn).toBe(true);
+    expect(result.transition.scoreChanges).toEqual([
+      {
+        at: { side: "enemy", phase: "dawn" },
+        side: "player",
+        previousScore: 0,
+        score: 5,
+        delta: 5,
+      },
+    ]);
+    const scoreEvent = result.transition.logEvents.find(
+      (entry) => entry.event === "battle_proto_score_changed",
+    );
+    expect(scoreEvent?.fields).toMatchObject({
+      activeSide: "enemy",
+      delta: 5,
+      phase: "dawn",
+      previousScore: 0,
+      score: 5,
+      side: "player",
+    });
+  });
+
+  it("does not duplicate the exhaustion penalty for a second failed draw in the same turn", () => {
+    const { battleInit, state } = createTestBattle();
+    state.turnNumber = 2;
+    state.sides.enemy.deck = [];
+
+    const result = runStartOfTurnComposite(state, battleInit, {
+      side: "enemy",
+      incrementTurnNumber: false,
+    });
+    const secondDraw = drawTopCardForTurn(
+      result.state,
+      result.transition,
+      "enemy",
+      { side: "enemy", phase: "day" },
+      AUTO_SYSTEM_EMISSION_CONTEXT,
+    );
+
+    expect(secondDraw).toBeNull();
+    expect(result.state.sides.player.score).toBe(5);
+    expect(result.state.sides.enemy.exhaustionPenaltyNext).toBe(10);
+    expect(result.transition.scoreChanges).toHaveLength(1);
+  });
+
+  it("doubles the exhaustion penalty on the next turn with an empty deck", () => {
+    const { battleInit, state } = createTestBattle();
+    state.turnNumber = 2;
+    state.sides.enemy.deck = [];
+
+    const first = runStartOfTurnComposite(state, battleInit, {
+      side: "enemy",
+      incrementTurnNumber: false,
+    }).state;
+    const nextTurn = {
+      ...first,
+      turnNumber: first.turnNumber + 1,
+    };
+    const second = runStartOfTurnComposite(nextTurn, battleInit, {
       side: "enemy",
       incrementTurnNumber: false,
     }).state;
 
-    expect(advanced.sides.enemy.hand).toEqual(handBefore);
-    expect(advanced.sides.enemy.deck).toEqual([]);
+    expect(first.sides.player.score).toBe(5);
+    expect(second.sides.player.score).toBe(15);
+    expect(second.sides.enemy.exhaustionPenaltyNext).toBe(20);
   });
 
   it("keeps enemy cards drawn into hand hidden during the start-of-turn draw", () => {

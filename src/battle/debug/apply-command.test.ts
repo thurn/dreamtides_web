@@ -919,7 +919,7 @@ describe("applyBattleCommand", () => {
     expect(applied.history.past).toHaveLength(1);
     expect(applied.mutable.sides.enemy.deployed.D0).toBeNull();
     expect(applied.mutable.sides.enemy.void).toContain(enemyCharacter);
-    expect(applied.mutable.sides.player.score).toBeGreaterThan(state.sides.player.score);
+    expect(applied.mutable.sides.player.score).toBe(state.sides.player.score);
 
     const extraJudgmentEvent = applied.lastTransition?.logEvents.find(
       (entry) => entry.event === "battle_proto_extra_judgment",
@@ -927,6 +927,7 @@ describe("applyBattleCommand", () => {
     expect(extraJudgmentEvent?.fields).toMatchObject({
       resolvedSide: "player",
       forced: true,
+      scoreChange: 0,
     });
     expect(extraJudgmentEvent?.fields.dissolvedCardIds).toEqual([enemyCharacter]);
   });

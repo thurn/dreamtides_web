@@ -118,7 +118,8 @@ export function BattleForeseeOverlay({
       // top of the zone browser (z-50). Raise to z-[60] so backdrop clicks on
       // the Foresee scrim don't reach the underlying browser, and so
       // clicking outside the Foresee dialog only closes Foresee.
-      className="fixed inset-0 z-[60] bg-slate-950/85 p-3 backdrop-blur"
+      className="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/85 p-3 backdrop-blur"
+      data-battle-foresee-scrim=""
       onClick={(event) => {
         if (event.target === event.currentTarget) {
           event.stopPropagation();
@@ -135,7 +136,7 @@ export function BattleForeseeOverlay({
         data-battle-foresee-overlay=""
         data-battle-foresee-side={side}
         data-battle-foresee-count={String(count)}
-        className="pointer-events-auto mx-auto flex w-full max-w-4xl flex-col gap-4 rounded-[2rem] border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
+        className="pointer-events-auto mx-auto flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col gap-4 overflow-y-auto rounded-[2rem] border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
         onClick={(event) => event.stopPropagation()}
       >
         <header className="flex flex-col gap-2 border-b border-slate-800 pb-3 md:flex-row md:items-start md:justify-between">
@@ -221,7 +222,10 @@ export function BattleForeseeOverlay({
                   <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
                     Position {String(index + 1)}
                   </p>
-                  <div className="max-w-[20rem]">
+                  <div
+                    className="max-h-[17rem] max-w-[20rem] overflow-y-auto"
+                    data-battle-foresee-card-scroll=""
+                  >
                     <CardDisplay
                       card={battleCardDisplayFromInstance(instance)}
                       className="w-full"

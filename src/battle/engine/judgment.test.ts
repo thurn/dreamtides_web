@@ -23,7 +23,7 @@ import { buildJudgmentTransition } from "./turn-flow";
  * layers on top so lane assertions stay focused on the judgment step.
  */
 describe("challenge", () => {
-  it("scores deployed lanes by effective spark differences", () => {
+  it("resolves paired deployed lanes by spark without scoring", () => {
     const { battleInit, state } = createTestBattle();
     const playerD0 = state.sides.player.hand[0];
     const playerD1 = state.sides.player.hand[1];
@@ -48,14 +48,14 @@ describe("challenge", () => {
         playerSpark: 6,
         enemySpark: 2,
         winner: "player",
-        scoreDelta: 4,
+        scoreDelta: 0,
       },
       {
         slotId: "D1",
         playerSpark: 1,
         enemySpark: 5,
         winner: "enemy",
-        scoreDelta: 4,
+        scoreDelta: 0,
       },
       {
         slotId: "D2",
@@ -72,14 +72,14 @@ describe("challenge", () => {
         scoreDelta: 0,
       },
     ]);
-    expect(resolution.playerScoreDelta).toBe(4);
-    expect(resolution.enemyScoreDelta).toBe(4);
+    expect(resolution.playerScoreDelta).toBe(0);
+    expect(resolution.enemyScoreDelta).toBe(0);
 
     const applied = runJudgmentForSide(state, battleInit, "player");
 
     expect(applied.transition.judgment).toEqual(resolution);
-    expect(applied.state.sides.player.score).toBe(4);
-    expect(applied.state.sides.enemy.score).toBe(4);
+    expect(applied.state.sides.player.score).toBe(0);
+    expect(applied.state.sides.enemy.score).toBe(0);
   });
 
   it("leaves unblocked attackers in their slot and does not dissolve them", () => {
@@ -102,6 +102,38 @@ describe("challenge", () => {
     expect(applied.state.sides.player.void).not.toContain(playerD0);
     expect(applied.state.sides.enemy.void).toHaveLength(0);
     expect(applied.state.sides.player.score).toBe(4);
+  });
+
+  it("does not score opposing-only deployed characters during the active player's Night", () => {
+    const { battleInit, state } = createTestBattle();
+    const enemyD0 = state.sides.enemy.hand[0];
+    const enemyD1 = state.sides.enemy.hand[1];
+
+    deploy(state, "enemy", "D0", enemyD0);
+    deploy(state, "enemy", "D1", enemyD1);
+    setEffectiveSpark(state, enemyD0, 2);
+    setEffectiveSpark(state, enemyD1, 3);
+
+    const applied = runJudgmentForSide(state, battleInit, "player");
+
+    expect(applied.transition.judgment?.lanes[0]).toEqual({
+      slotId: "D0",
+      playerSpark: 0,
+      enemySpark: 2,
+      winner: null,
+      scoreDelta: 0,
+    });
+    expect(applied.transition.judgment?.lanes[1]).toEqual({
+      slotId: "D1",
+      playerSpark: 0,
+      enemySpark: 3,
+      winner: null,
+      scoreDelta: 0,
+    });
+    expect(applied.state.sides.player.score).toBe(0);
+    expect(applied.state.sides.enemy.score).toBe(0);
+    expect(applied.state.sides.enemy.deployed.D0).toBe(enemyD0);
+    expect(applied.state.sides.enemy.deployed.D1).toBe(enemyD1);
   });
 
   it("dissolves the weaker paired card into its owner's void and keeps the survivor in place", () => {
@@ -186,13 +218,13 @@ describe("challenge", () => {
       playerSpark: 0,
       enemySpark: 3,
       winner: "enemy",
-      scoreDelta: 3,
+      scoreDelta: 0,
     });
     expect(resolution.playerScoreDelta).toBe(0);
-    expect(resolution.enemyScoreDelta).toBe(3);
+    expect(resolution.enemyScoreDelta).toBe(0);
 
     const applied = runJudgmentForSide(state, battleInit, "player");
-    expect(applied.state.sides.enemy.score).toBe(3);
+    expect(applied.state.sides.enemy.score).toBe(0);
     expect(applied.state.sides.player.score).toBe(0);
     // The overmatched player card dissolves into its owner's void.
     expect(applied.state.sides.player.deployed.D0).toBeNull();
@@ -229,8 +261,8 @@ describe("challenge", () => {
       slotId: "D1",
       playerSpark: 0,
       enemySpark: 2,
-      winner: "enemy",
-      scoreDelta: 2,
+      winner: null,
+      scoreDelta: 0,
     });
     expect(fieldsByLane.get("D2")).toMatchObject({
       slotId: "D2",

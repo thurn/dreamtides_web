@@ -58,7 +58,7 @@ export function BattlefieldGrid({
   canInteract: boolean;
   handSelectionSide?: BattleSide | null;
   onCardClick: (battleCardId: string) => void;
-  onCardContextMenu?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
+  onCardContextMenu?: (battleCardId: string, event: ReactMouseEvent<HTMLElement>) => void;
   onCardDragEnd?: () => void;
   onCardDragStart?: (battleCardId: string) => void;
   onCardHoverEnd?: () => void;
@@ -120,6 +120,13 @@ export function BattlefieldGrid({
                   return;
                 }
                 onSlotClick(target, battleCardId !== null);
+              }}
+              onContextMenu={(event) => {
+                if (battleCardId === null) {
+                  return;
+                }
+                event.preventDefault();
+                onCardContextMenu?.(battleCardId, event);
               }}
               onDragOver={(event) => {
                 if (pendingDragCardId !== null) {

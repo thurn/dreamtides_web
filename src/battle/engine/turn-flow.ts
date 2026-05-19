@@ -24,6 +24,7 @@ import {
 } from "../../logging";
 
 const OPENING_ENERGY = 2;
+const INITIAL_EXHAUSTION_PENALTY = 5;
 
 /**
  * Prepares a freshly-initialized battle state for turn 1 by running the
@@ -81,6 +82,7 @@ export function runStartOfTurnComposite(
     turnNumber: nextState.turnNumber,
   });
   const sideState = nextState.sides[options.side];
+  sideState.exhaustionPenaltyAppliedThisTurn = false;
   const previousCurrentEnergy = sideState.currentEnergy;
   const previousMaxEnergy = sideState.maxEnergy;
   if (!shouldPreserveOpeningEnergy(nextState, options.side)) {
@@ -113,7 +115,7 @@ export function runStartOfTurnComposite(
   });
 
   if (!shouldSkipDraw(nextState, battleInit, options.side)) {
-    drawTopCard(nextState, options.side);
+    drawTopCardForTurn(nextState, transition, options.side, dawnStep, context);
   }
 
   if (applyEvaluatedResult(nextState, battleInit, transition, dawnStep, context)) {
@@ -338,6 +340,65 @@ export function drawTopCard(state: BattleMutableState, side: BattleSide): string
   }
 
   return battleCardId;
+}
+
+export function drawTopCardForTurn(
+  state: BattleMutableState,
+  transition: BattleTransitionData,
+  side: BattleSide,
+  at: ReturnType<typeof createFlowStep>,
+  context: BattleEngineEmissionContext,
+): string | null {
+  const drawn = drawTopCard(state, side);
+  if (drawn !== null) {
+    return drawn;
+  }
+
+  applyExhaustionPenalty(state, transition, side, at, context);
+  return null;
+}
+
+function applyExhaustionPenalty(
+  state: BattleMutableState,
+  transition: BattleTransitionData,
+  exhaustedSide: BattleSide,
+  at: ReturnType<typeof createFlowStep>,
+  context: BattleEngineEmissionContext,
+): void {
+  const exhaustedSideState = state.sides[exhaustedSide];
+  if (exhaustedSideState.exhaustionPenaltyAppliedThisTurn === true) {
+    return;
+  }
+
+  const scoringSide = getOpposingSide(exhaustedSide);
+  const scoringSideState = state.sides[scoringSide];
+  const penalty = exhaustedSideState.exhaustionPenaltyNext ?? INITIAL_EXHAUSTION_PENALTY;
+  const previousScore = scoringSideState.score;
+  scoringSideState.score += penalty;
+  exhaustedSideState.exhaustionPenaltyNext = penalty * 2;
+  exhaustedSideState.exhaustionPenaltyAppliedThisTurn = true;
+
+  const scoreChange = {
+    at,
+    side: scoringSide,
+    previousScore,
+    score: scoringSideState.score,
+    delta: penalty,
+  };
+  transition.scoreChanges.push(scoreChange);
+  transition.logEvents.push({
+    event: "battle_proto_score_changed",
+    fields: {
+      ...createBattleLogBaseFields(
+        { ...state, phase: at.phase },
+        context,
+      ),
+      delta: scoreChange.delta,
+      previousScore: scoreChange.previousScore,
+      score: scoreChange.score,
+      side: scoreChange.side,
+    },
+  });
 }
 
 export function expireBattleNotes(

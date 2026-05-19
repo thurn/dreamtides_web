@@ -7,6 +7,10 @@ import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 type FigmentZone = "hand" | "reserve" | "deployed" | "void" | "banished" | "deck";
 type FigmentDeckPosition = "top" | "bottom";
 type FigmentBattlefieldSlotId = ReserveSlotId | DeploySlotId;
+const DEFAULT_FIGMENT_NAME = "Shadow Figment";
+const DEFAULT_FIGMENT_SUBTYPE = "Shadow";
+const DEFAULT_FIGMENT_SPARK = "1";
+const BUILT_IN_FIGMENT_SUBTYPES = [DEFAULT_FIGMENT_SUBTYPE] as const;
 
 export function BattleFigmentCreator({
   cardDatabase,
@@ -21,13 +25,15 @@ export function BattleFigmentCreator({
   onSubmit: (edit: BattleDebugEdit) => void;
   state: BattleMutableState;
 }) {
-  const [name, setName] = useState("Figment");
-  const [subtype, setSubtype] = useState("");
-  const [sparkText, setSparkText] = useState("1");
+  const [name, setName] = useState(DEFAULT_FIGMENT_NAME);
+  const [subtype, setSubtype] = useState(DEFAULT_FIGMENT_SUBTYPE);
+  const [sparkText, setSparkText] = useState(DEFAULT_FIGMENT_SPARK);
   const [side, setSide] = useState<BattleSide>(initialSide);
   const [zone, setZone] = useState<FigmentZone>("reserve");
   const [position, setPosition] = useState<FigmentDeckPosition>("top");
-  const [slot, setSlot] = useState<FigmentBattlefieldSlotId>("R0");
+  const [slot, setSlot] = useState<FigmentBattlefieldSlotId>(
+    () => findFirstOpenReserveSlot(state, initialSide) ?? "R0",
+  );
   const nameInputRef = useRef<HTMLInputElement | null>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
 
@@ -47,11 +53,11 @@ export function BattleFigmentCreator({
     // bug-110: reset slot when side changes so the previously highlighted
     // slot on the other side doesn't carry forward as a stale selection.
     if (zone === "reserve") {
-      setSlot("R0");
+      setSlot(findFirstOpenReserveSlot(state, side) ?? "R0");
     } else if (zone === "deployed") {
-      setSlot("D0");
+      setSlot(findFirstOpenDeploySlot(state, side) ?? "D0");
     }
-  }, [side, zone]);
+  }, [side, state, zone]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent): void {
@@ -371,7 +377,7 @@ function buildDestination({
 function collectFigmentSubtypeOptions(
   cardDatabase: ReadonlyMap<number, CardData>,
 ): string[] {
-  const options = new Set<string>();
+  const options = new Set<string>(BUILT_IN_FIGMENT_SUBTYPES);
   for (const card of cardDatabase.values()) {
     if (card.subtype !== "" && card.subtype !== "*") {
       options.add(card.subtype);
@@ -420,4 +426,18 @@ function isBattlefieldSlotOccupied(
     return state.sides[side].deployed[slot] !== null;
   }
   return false;
+}
+
+function findFirstOpenReserveSlot(
+  state: BattleMutableState,
+  side: BattleSide,
+): ReserveSlotId | null {
+  return RESERVE_SLOT_IDS.find((slotId) => state.sides[side].reserve[slotId] === null) ?? null;
+}
+
+function findFirstOpenDeploySlot(
+  state: BattleMutableState,
+  side: BattleSide,
+): DeploySlotId | null {
+  return DEPLOY_SLOT_IDS.find((slotId) => state.sides[side].deployed[slotId] === null) ?? null;
 }

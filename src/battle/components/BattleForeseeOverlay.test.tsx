@@ -236,6 +236,9 @@ describe("BattleForeseeOverlay", () => {
     expect(
       container.querySelector(`img[alt="${topCard.definition.name}"]`),
     ).not.toBeNull();
+    expect(
+      container.querySelector("[data-battle-foresee-card-scroll]")?.className,
+    ).toContain("max-h-[17rem]");
 
     act(() => {
       root.unmount();
@@ -268,6 +271,40 @@ describe("BattleForeseeOverlay", () => {
     const labelledBy = dialog?.getAttribute("aria-labelledby");
     expect(labelledBy).not.toBeNull();
     expect(document.getElementById(labelledBy ?? "")).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps the Foresee surface scrollable when revealed card controls exceed the viewport", () => {
+    const state = createTestState();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <BattleForeseeOverlay
+          initialCount={1}
+          onClose={() => {}}
+          onDispatch={() => {}}
+          side="player"
+          state={state}
+        />,
+      );
+    });
+
+    const scrim = document.querySelector<HTMLElement>(
+      "[data-battle-foresee-scrim]",
+    );
+    const dialog = document.querySelector<HTMLElement>(
+      "[data-battle-foresee-overlay]",
+    );
+
+    expect(scrim?.className).toContain("overflow-y-auto");
+    expect(dialog?.className).toContain("max-h-[calc(100vh-1.5rem)]");
+    expect(dialog?.className).toContain("overflow-y-auto");
 
     act(() => {
       root.unmount();

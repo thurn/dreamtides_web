@@ -167,8 +167,8 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const canEndTurn = rewardOverlay === null && !isInteractionLocked && selectCanEndTurn(reducerState.mutable);
   const canPlayerAct = rewardOverlay === null && !isInteractionLocked &&
     selectCanTakeMainPhaseActions(reducerState.mutable, "player");
-  const canPlayerReposition = rewardOverlay === null && !isInteractionLocked &&
-    selectCanRepositionInCurrentPhase(reducerState.mutable, "player");
+  const canPlayerReposition = canBattlefieldSideReposition("player");
+  const canEnemyReposition = canBattlefieldSideReposition("enemy");
   const historyCount = reducerState.history.past.length;
   const futureCount = reducerState.history.future.length;
   const failureResult = selectFailureOverlayResult(reducerState.mutable.result);
@@ -226,6 +226,12 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       card !== undefined &&
       reducerState.mutable.sides.player.currentEnergy >= card.definition.energyCost &&
       selectCanPlayCardInCurrentPhase(reducerState.mutable, battleCardId);
+  }
+
+  function canBattlefieldSideReposition(side: BattleSide): boolean {
+    return rewardOverlay === null &&
+      !isInteractionLocked &&
+      selectCanRepositionInCurrentPhase(reducerState.mutable, side);
   }
 
   function isOpponentHandCardLocallyHidden(battleCardId: string): boolean {
@@ -401,7 +407,8 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   }
 
   function handleBattlefieldSlotClick(target: BattleFieldSlotAddress, isOccupied: boolean): void {
-    if (target.side === "player" && canPlayerAct && handleSelectedBattlefieldTargetClick(target, !isOccupied)) {
+    const allowPlayCard = target.side === "player" && canPlayerAct && !isOccupied;
+    if (handleSelectedBattlefieldTargetClick(target, allowPlayCard)) {
       return;
     }
     setSelection({ kind: "slot", target });
@@ -455,9 +462,9 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     }
 
     if (
-      canPlayerReposition &&
       location?.side === target.side &&
-      (location.zone === "reserve" || location.zone === "deployed")
+      (location.zone === "reserve" || location.zone === "deployed") &&
+      canBattlefieldSideReposition(location.side)
     ) {
       if (location.zone !== target.zone) {
         handleCommand({
@@ -613,7 +620,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
 
   function handleCardContextMenu(
     battleCardId: string,
-    event: ReactMouseEvent<HTMLDivElement>,
+    event: ReactMouseEvent<HTMLElement>,
     sourceSurface: BattleCommandSourceSurface,
   ): void {
     event.preventDefault();
@@ -931,7 +938,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   side="enemy"
                   zone="reserve"
                   state={reducerState.mutable}
-                  canInteract
+                  canInteract={canEnemyReposition}
                   selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
                   selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
                   selectionAnchor={battlefieldSelectionAnchor}
@@ -952,7 +959,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   side="enemy"
                   zone="deployed"
                   state={reducerState.mutable}
-                  canInteract
+                  canInteract={canEnemyReposition}
                   selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
                   selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
                   selectionAnchor={battlefieldSelectionAnchor}
@@ -1459,7 +1466,15 @@ function ScaledBattlefield({ children }: { children: ReactNode }) {
       if (naturalWidth === 0 || naturalHeight === 0) {
         return;
       }
-      const scale = Math.min(1, wrap.clientWidth / naturalWidth, wrap.clientHeight / naturalHeight);
+      const scale = computeBattlefieldScale({
+        naturalHeight,
+        naturalWidth,
+        wrapHeight: wrap.clientHeight,
+        wrapWidth: wrap.clientWidth,
+      });
+      if (scale === null) {
+        return;
+      }
       inner.style.transform = `scale(${String(scale)})`;
     }
 
@@ -1492,6 +1507,24 @@ function ScaledBattlefield({ children }: { children: ReactNode }) {
       </div>
     </div>
   );
+}
+
+export function computeBattlefieldScale({
+  naturalHeight,
+  naturalWidth,
+  wrapHeight,
+  wrapWidth,
+}: {
+  naturalHeight: number;
+  naturalWidth: number;
+  wrapHeight: number;
+  wrapWidth: number;
+}): number | null {
+  if (naturalWidth <= 0 || naturalHeight <= 0 || wrapWidth <= 0 || wrapHeight <= 0) {
+    return null;
+  }
+
+  return Math.min(1, wrapWidth / naturalWidth, wrapHeight / naturalHeight);
 }
 
 function useIsDesktopInspectorLayout(): boolean {

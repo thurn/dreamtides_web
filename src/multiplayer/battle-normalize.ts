@@ -39,6 +39,8 @@ function normalizeSide(
     maxEnergy: raw?.maxEnergy ?? 0,
     score: raw?.score ?? 0,
     pendingExtraTurns: raw?.pendingExtraTurns ?? 0,
+    exhaustionPenaltyNext: raw?.exhaustionPenaltyNext ?? 5,
+    exhaustionPenaltyAppliedThisTurn: raw?.exhaustionPenaltyAppliedThisTurn ?? false,
     visibility: raw?.visibility ?? {},
     deck: raw?.deck ?? [],
     hand: raw?.hand ?? [],
