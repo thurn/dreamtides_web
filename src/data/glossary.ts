@@ -154,12 +154,12 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   {
     term: "Bane",
     definition: "A penalty card forced into your deck.",
-    variants: ["bane"],
+    variants: ["bane", "banes"],
   },
   {
     term: "Nightmare",
     definition: "A bane card that disrupts your deck when drawn.",
-    variants: ["nightmare"],
+    variants: ["nightmare", "nightmares"],
   },
 
   // --- Sigil colors (Transfigurations) -------------------------------
