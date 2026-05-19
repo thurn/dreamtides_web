@@ -913,139 +913,141 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 onCardDragEnd={() => setPendingDrag(null)}
               />
             ) : null}
-            <ScaledBattlefield>
-              <div
-                className="battlefield"
-                onDragOver={(event) => {
-                  if (pendingDrag?.kind === "event") {
-                    event.preventDefault();
-                  }
-                }}
-                onDrop={(event) => {
-                  if (pendingDrag?.kind !== "event") {
-                    return;
-                  }
-                  event.preventDefault();
-                  handleCommand({
-                    id: "PLAY_CARD",
-                    battleCardId: pendingDrag.battleCardId,
-                    sourceSurface: "battlefield",
-                  });
-                  setPendingDrag(null);
-                }}
-              >
-                <BattlefieldGrid
-                  side="enemy"
-                  zone="reserve"
-                  state={reducerState.mutable}
-                  canInteract={canEnemyReposition}
-                  selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
-                  selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
-                  selectionAnchor={battlefieldSelectionAnchor}
-                  handSelectionSide={handSelectionSide}
-                  pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                  pendingDragCardKind={pendingDrag?.kind ?? null}
-                  onCardClick={handleBattlefieldCardClick}
-                  onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-                  onCardDragStart={handleCardDragStart}
-                  onCardDragEnd={() => setPendingDrag(null)}
-                  onCardHoverStart={handleBattlefieldCardHoverStart}
-                  onCardHoverMove={handleBattlefieldCardHoverMove}
-                  onCardHoverEnd={handleBattlefieldCardHoverEnd}
-                  onSlotClick={handleBattlefieldSlotClick}
-                  onSlotDrop={handleSlotDrop}
-                />
-                <BattlefieldGrid
-                  side="enemy"
-                  zone="deployed"
-                  state={reducerState.mutable}
-                  canInteract={canEnemyReposition}
-                  selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
-                  selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
-                  selectionAnchor={battlefieldSelectionAnchor}
-                  handSelectionSide={handSelectionSide}
-                  pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                  pendingDragCardKind={pendingDrag?.kind ?? null}
-                  onCardClick={handleBattlefieldCardClick}
-                  onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-                  onCardDragStart={handleCardDragStart}
-                  onCardDragEnd={() => setPendingDrag(null)}
-                  onCardHoverStart={handleBattlefieldCardHoverStart}
-                  onCardHoverMove={handleBattlefieldCardHoverMove}
-                  onCardHoverEnd={handleBattlefieldCardHoverEnd}
-                  onSlotClick={handleBattlefieldSlotClick}
-                  onSlotDrop={handleSlotDrop}
-                />
+            <div className="battlefield-zone-layout">
+              <BattleStackZone
+                state={reducerState.mutable}
+                selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
+                pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                onDrop={handleStackDrop}
+                onCardClick={handleBattlefieldCardClick}
+                onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
+                onCardDragStart={handleCardDragStart}
+                onCardDragEnd={() => setPendingDrag(null)}
+                onResolveToBanished={(battleCardId, side) => handleCommand({
+                  id: "MOVE_STACK_CARD",
+                  battleCardId,
+                  target: { side, zone: "banished" },
+                  sourceSurface: "battlefield",
+                })}
+                onResolveToVoid={(battleCardId, side) => handleCommand({
+                  id: "MOVE_STACK_CARD",
+                  battleCardId,
+                  target: { side, zone: "void" },
+                  sourceSurface: "battlefield",
+                })}
+              />
+              <ScaledBattlefield>
                 <div
-                  data-battle-region="judgment-divider"
-                  className={`judgment-divider ${reducerState.mutable.phase === "judgment" ? "active" : ""}`}
-                />
-                <BattlefieldGrid
-                  side="player"
-                  zone="deployed"
-                  state={reducerState.mutable}
-                  canInteract={canPlayerReposition}
-                  selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
-                  selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
-                  selectionAnchor={battlefieldSelectionAnchor}
-                  handSelectionSide={handSelectionSide}
-                  pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                  pendingDragCardKind={pendingDrag?.kind ?? null}
-                  onCardClick={handleBattlefieldCardClick}
-                  onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-                  onCardDragStart={handleCardDragStart}
-                  onCardDragEnd={() => setPendingDrag(null)}
-                  onCardHoverStart={handleBattlefieldCardHoverStart}
-                  onCardHoverMove={handleBattlefieldCardHoverMove}
-                  onCardHoverEnd={handleBattlefieldCardHoverEnd}
-                  onSlotClick={handleBattlefieldSlotClick}
-                  onSlotDrop={handleSlotDrop}
-                />
-                <BattlefieldGrid
-                  side="player"
-                  zone="reserve"
-                  state={reducerState.mutable}
-                  canInteract={canPlayerReposition}
-                  selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
-                  selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
-                  selectionAnchor={battlefieldSelectionAnchor}
-                  handSelectionSide={handSelectionSide}
-                  pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                  pendingDragCardKind={pendingDrag?.kind ?? null}
-                  onCardClick={handleBattlefieldCardClick}
-                  onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-                  onCardDragStart={handleCardDragStart}
-                  onCardDragEnd={() => setPendingDrag(null)}
-                  onCardHoverStart={handleBattlefieldCardHoverStart}
-                  onCardHoverMove={handleBattlefieldCardHoverMove}
-                  onCardHoverEnd={handleBattlefieldCardHoverEnd}
-                  onSlotClick={handleBattlefieldSlotClick}
-                  onSlotDrop={handleSlotDrop}
-                />
-              </div>
-            </ScaledBattlefield>
-            <BattleStackZone
-              state={reducerState.mutable}
-              selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
-              pendingDragCardId={pendingDrag?.battleCardId ?? null}
-              onDrop={handleStackDrop}
-              onCardClick={handleBattlefieldCardClick}
-              onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
-              onCardDragStart={handleCardDragStart}
-              onCardDragEnd={() => setPendingDrag(null)}
-              onResolveToBanished={(battleCardId, side) => handleCommand({
-                id: "MOVE_STACK_CARD",
-                battleCardId,
-                target: { side, zone: "banished" },
-                sourceSurface: "battlefield",
-              })}
-              onResolveToVoid={(battleCardId, side) => handleCommand({
-                id: "MOVE_STACK_CARD",
-                battleCardId,
-                target: { side, zone: "void" },
-                sourceSurface: "battlefield",
-              })}
-            />
+                  className="battlefield"
+                  onDragOver={(event) => {
+                    if (pendingDrag?.kind === "event") {
+                      event.preventDefault();
+                    }
+                  }}
+                  onDrop={(event) => {
+                    if (pendingDrag?.kind !== "event") {
+                      return;
+                    }
+                    event.preventDefault();
+                    handleCommand({
+                      id: "PLAY_CARD",
+                      battleCardId: pendingDrag.battleCardId,
+                      sourceSurface: "battlefield",
+                    });
+                    setPendingDrag(null);
+                  }}
+                >
+                  <BattlefieldGrid
+                    side="enemy"
+                    zone="reserve"
+                    state={reducerState.mutable}
+                    canInteract={canEnemyReposition}
+                    selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
+                    selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
+                    selectionAnchor={battlefieldSelectionAnchor}
+                    handSelectionSide={handSelectionSide}
+                    pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                    pendingDragCardKind={pendingDrag?.kind ?? null}
+                    onCardClick={handleBattlefieldCardClick}
+                    onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
+                    onCardDragStart={handleCardDragStart}
+                    onCardDragEnd={() => setPendingDrag(null)}
+                    onCardHoverStart={handleBattlefieldCardHoverStart}
+                    onCardHoverMove={handleBattlefieldCardHoverMove}
+                    onCardHoverEnd={handleBattlefieldCardHoverEnd}
+                    onSlotClick={handleBattlefieldSlotClick}
+                    onSlotDrop={handleSlotDrop}
+                  />
+                  <BattlefieldGrid
+                    side="enemy"
+                    zone="deployed"
+                    state={reducerState.mutable}
+                    canInteract={canEnemyReposition}
+                    selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
+                    selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
+                    selectionAnchor={battlefieldSelectionAnchor}
+                    handSelectionSide={handSelectionSide}
+                    pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                    pendingDragCardKind={pendingDrag?.kind ?? null}
+                    onCardClick={handleBattlefieldCardClick}
+                    onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
+                    onCardDragStart={handleCardDragStart}
+                    onCardDragEnd={() => setPendingDrag(null)}
+                    onCardHoverStart={handleBattlefieldCardHoverStart}
+                    onCardHoverMove={handleBattlefieldCardHoverMove}
+                    onCardHoverEnd={handleBattlefieldCardHoverEnd}
+                    onSlotClick={handleBattlefieldSlotClick}
+                    onSlotDrop={handleSlotDrop}
+                  />
+                  <div
+                    data-battle-region="judgment-divider"
+                    className={`judgment-divider ${reducerState.mutable.phase === "judgment" ? "active" : ""}`}
+                  />
+                  <BattlefieldGrid
+                    side="player"
+                    zone="deployed"
+                    state={reducerState.mutable}
+                    canInteract={canPlayerReposition}
+                    selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
+                    selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
+                    selectionAnchor={battlefieldSelectionAnchor}
+                    handSelectionSide={handSelectionSide}
+                    pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                    pendingDragCardKind={pendingDrag?.kind ?? null}
+                    onCardClick={handleBattlefieldCardClick}
+                    onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
+                    onCardDragStart={handleCardDragStart}
+                    onCardDragEnd={() => setPendingDrag(null)}
+                    onCardHoverStart={handleBattlefieldCardHoverStart}
+                    onCardHoverMove={handleBattlefieldCardHoverMove}
+                    onCardHoverEnd={handleBattlefieldCardHoverEnd}
+                    onSlotClick={handleBattlefieldSlotClick}
+                    onSlotDrop={handleSlotDrop}
+                  />
+                  <BattlefieldGrid
+                    side="player"
+                    zone="reserve"
+                    state={reducerState.mutable}
+                    canInteract={canPlayerReposition}
+                    selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
+                    selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
+                    selectionAnchor={battlefieldSelectionAnchor}
+                    handSelectionSide={handSelectionSide}
+                    pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                    pendingDragCardKind={pendingDrag?.kind ?? null}
+                    onCardClick={handleBattlefieldCardClick}
+                    onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
+                    onCardDragStart={handleCardDragStart}
+                    onCardDragEnd={() => setPendingDrag(null)}
+                    onCardHoverStart={handleBattlefieldCardHoverStart}
+                    onCardHoverMove={handleBattlefieldCardHoverMove}
+                    onCardHoverEnd={handleBattlefieldCardHoverEnd}
+                    onSlotClick={handleBattlefieldSlotClick}
+                    onSlotDrop={handleSlotDrop}
+                  />
+                </div>
+              </ScaledBattlefield>
+            </div>
             <BattleStatusStrip
               side="player"
               sideState={reducerState.mutable.sides.player}

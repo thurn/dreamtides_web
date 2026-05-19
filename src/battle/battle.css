@@ -229,9 +229,21 @@
   overflow: hidden;
 }
 
+.battlefield-zone-layout {
+  flex: 1 1 180px;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  overflow: hidden;
+}
+
 .bf-wrap {
-  flex: 1 1 220px;
-  min-height: min(220px, 42vh);
+  flex: 0 1 var(--battlefield-row-width);
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -320,16 +332,18 @@
 }
 
 .battle-stack-zone {
-  display: grid;
-  grid-template-columns: minmax(88px, 0.2fr) minmax(0, 1fr);
-  align-items: center;
-  gap: 10px;
-  min-height: 82px;
-  margin: 6px 0;
-  padding: 8px 12px;
+  flex: 0 0 clamp(118px, 14vw, 148px);
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  height: min(100%, clamp(72px, 18vh, 132px));
+  padding: 9px 10px;
   border: 1px dashed var(--line);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
 }
 
 .battle-stack-zone.drop-target {
@@ -352,15 +366,18 @@
 
 .battle-stack-zone-cards {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
   min-width: 0;
-  overflow-x: auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .battle-stack-empty {
   color: var(--text-faint);
-  font-size: 12px;
+  font-size: 11px;
+  line-height: 1.25;
 }
 
 .battle-stack-entry {
@@ -379,6 +396,7 @@
 .battle-stack-entry-actions {
   display: grid;
   gap: 4px;
+  min-width: 0;
 }
 
 .status-strip {

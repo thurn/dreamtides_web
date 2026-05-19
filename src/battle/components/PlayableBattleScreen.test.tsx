@@ -232,16 +232,18 @@ describe("PlayableBattleScreen", () => {
     ).toEqual([
       "status-bar",
       "enemy-status-strip",
+      "stack-zone",
       "enemy-reserve-row",
       "enemy-deployed-row",
       "judgment-divider",
       "player-deployed-row",
       "player-reserve-row",
-      "stack-zone",
       "player-status-strip",
       "player-hand-tray",
       "action-bar",
     ]);
+    expect(container.querySelector('[data-battle-region="stack-zone"]')?.parentElement?.className)
+      .toContain("battlefield-zone-layout");
     expect(container.textContent).toContain("You");
     expect(container.textContent).toContain("Enemy");
     expect(container.textContent).toContain("Undo");
@@ -250,6 +252,35 @@ describe("PlayableBattleScreen", () => {
     expect(container.textContent).toContain("Skip to rewards");
     expect(container.textContent).toContain("End Phase");
     expect(container.querySelector(".inspector.open")).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps stack count and resolution controls available in the compact side zone", () => {
+    const { container, root } = renderScreen((state) => {
+      const [stackedCardId] = state.sides.player.hand;
+      if (stackedCardId === undefined) {
+        throw new Error("expected player hand card");
+      }
+      state.sides.player.hand = state.sides.player.hand.filter((battleCardId) => battleCardId !== stackedCardId);
+      state.stack ??= [];
+      state.stack.push({
+        stackEntryId: "stack_test_0001",
+        battleCardId: stackedCardId,
+        side: "player",
+        paidCost: 0,
+      });
+    });
+    const stackZone = container.querySelector<HTMLElement>('[data-battle-region="stack-zone"]');
+
+    expect(stackZone).not.toBeNull();
+    expect(stackZone?.textContent).toContain("Stack");
+    expect(stackZone?.textContent).toContain("1");
+    expect(stackZone?.querySelector("[data-battle-card-id]")).not.toBeNull();
+    expect(stackZone?.textContent).toContain("Void");
+    expect(stackZone?.textContent).toContain("Banish");
 
     act(() => {
       root.unmount();
