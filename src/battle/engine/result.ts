@@ -213,7 +213,7 @@ function isTurnLimitReached(
 
   return (
     state.activeSide === "enemy" &&
-    state.phase === "endOfTurn" &&
+    (state.phase === "ending" || state.phase === "endOfTurn") &&
     state.turnNumber >= battleInit.turnLimit
   );
 }

@@ -634,7 +634,7 @@ export const EFFECT_CATALOG: readonly EffectEntry[] = Object.freeze(
 // - `Bronze`: events only (adds Reclaim).
 // - `Azure`: events only (appends "draw a card").
 // - `Rose`: cards with an energy-cost activated ability (`N●...:` pattern).
-// - `Magenta`: cards with a `materialized`, `judgment`, or `once per turn`
+// - `Magenta`: cards with a `materialized`, `challenge`, or `once per turn`
 //   trigger.
 // - `Prismatic`: applies to any card eligible for 2 or more other
 //   transfigurations; conservatively treated as unrestricted at generation
@@ -691,13 +691,13 @@ function cardHasEnergyCostActivatedAbility(card: CardContent): boolean {
 }
 
 function cardHasMagentaTrigger(card: CardContent): boolean {
-  // Magenta increases the frequency of `materialized`, `judgment`, and `once
+  // Magenta increases the frequency of `materialized`, `challenge`, and `once
   // per turn` triggers, so a card is eligible if any of those phrases appear
   // in its rendered text.
   const text = cardRenderedText(card).toLowerCase();
   return (
     text.includes("materialized") ||
-    text.includes("judgment") ||
+    text.includes("challenge") ||
     text.includes("once per turn")
   );
 }

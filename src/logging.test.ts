@@ -147,7 +147,7 @@ describe("createBattleLogBaseFields", () => {
 
     expect(fields.battleId).toBe("battle-fixture");
     expect(fields.turnNumber).toBe(3);
-    expect(fields.phase).toBe("main");
+    expect(fields.phase).toBe("day");
     expect(fields.activeSide).toBe("enemy");
     expect(fields.sourceSurface).toBe("action-bar");
     expect(fields.selectedCardId).toBe("card-42");
@@ -270,7 +270,7 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
       expect(payload.event).toBe(helper.event);
       expect(payload.fields.battleId).toBe("battle-fixture");
       expect(payload.fields.turnNumber).toBe(3);
-      expect(payload.fields.phase).toBe("main");
+      expect(payload.fields.phase).toBe("day");
       expect(payload.fields.activeSide).toBe("enemy");
       expect(payload.fields.sourceSurface).toBe("inspector");
       expect(payload.fields.selectedCardId).toBeNull();
@@ -285,7 +285,7 @@ function makeBattleStateFixture(): Pick<
   return {
     battleId: "battle-fixture",
     turnNumber: 3,
-    phase: "main",
+    phase: "day",
     activeSide: "enemy",
   };
 }

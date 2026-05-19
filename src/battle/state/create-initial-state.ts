@@ -17,10 +17,12 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
     battleId: battleInit.battleId,
     activeSide: "player",
     turnNumber: 1,
-    phase: "main",
+    phase: "day",
     result: null,
     forcedResult: null,
     nextBattleCardOrdinal: 1,
+    nextStackEntryOrdinal: 1,
+    stack: [],
     sides: {
       player: createInitialSideState(OPENING_ENERGY, OPENING_ENERGY, [], []),
       enemy: createInitialSideState(OPENING_ENERGY, OPENING_ENERGY, [], []),
@@ -61,6 +63,8 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
     result: state.result,
     forcedResult: state.forcedResult,
     nextBattleCardOrdinal: state.nextBattleCardOrdinal,
+    nextStackEntryOrdinal: state.nextStackEntryOrdinal ?? 1,
+    stack: (state.stack ?? []).map((entry) => ({ ...entry })),
     sides: {
       player: cloneBattleSideMutableState(state.sides.player),
       enemy: cloneBattleSideMutableState(state.sides.enemy),
@@ -118,6 +122,7 @@ export function allocateBattleCardInstance(
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: params.provenance,
+    enteredReserveTurnNumber: null,
   };
   return battleCardId;
 }
@@ -200,4 +205,11 @@ function createEmptyDeployed(): Record<DeploySlotId, string | null> {
 
 export function formatBattleCardId(ordinal: number): string {
   return `bc_${String(ordinal).padStart(4, "0")}`;
+}
+
+export function allocateBattleStackEntryId(state: BattleMutableState): string {
+  const ordinal = state.nextStackEntryOrdinal ?? 1;
+  const stackEntryId = `stack_${String(ordinal).padStart(4, "0")}`;
+  state.nextStackEntryOrdinal = ordinal + 1;
+  return stackEntryId;
 }

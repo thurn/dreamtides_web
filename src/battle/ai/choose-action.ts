@@ -93,7 +93,7 @@ function chooseBestAffordableCharacterPlay(
       // differential after play is weakly worse than the current board — this
       // makes the gate symmetric with `chooseImprovingReposition`.
       const heuristicAfter = evaluatePredictedJudgmentDifferential(resolved.state);
-      if (heuristicAfter <= currentHeuristic) {
+      if (target.zone === "deployed" && heuristicAfter <= currentHeuristic) {
         continue;
       }
       const candidate: BattleAiDecision = {
@@ -229,14 +229,14 @@ function listCharacterPlayTargets(state: BattleMutableState): BattleFieldSlotAdd
   const targets: BattleFieldSlotAddress[] = [];
 
   for (const target of [
-    ...DEPLOY_SLOT_IDS.map((slotId) => ({
-      side: "enemy" as const,
-      zone: "deployed" as const,
-      slotId,
-    })),
     ...RESERVE_SLOT_IDS.map((slotId) => ({
       side: "enemy" as const,
       zone: "reserve" as const,
+      slotId,
+    })),
+    ...DEPLOY_SLOT_IDS.map((slotId) => ({
+      side: "enemy" as const,
+      zone: "deployed" as const,
       slotId,
     })),
   ]) {

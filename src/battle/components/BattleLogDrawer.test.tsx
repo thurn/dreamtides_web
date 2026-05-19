@@ -42,13 +42,13 @@ function createFixture() {
   logEvent("battle_proto_command_applied", {
     battleId: battleInit.battleId,
     turnNumber: 1,
-    phase: "main",
+    phase: "day",
     label: "Play to reserve",
   });
   logEvent("battle_proto_ai_choice", {
     battleId: battleInit.battleId,
     turnNumber: 1,
-    phase: "main",
+    phase: "day",
     label: "Enemy passed",
   });
   return { battleInit, history: controllerState.history };

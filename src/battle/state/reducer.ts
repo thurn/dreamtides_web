@@ -24,8 +24,10 @@ import {
 import {
   resolveMoveCard,
   resolvePlayCard,
+  resolvePlayCardToStack,
+  resolveStackCardMove,
 } from "../engine/play-card";
-import { advanceAfterEndTurn } from "../engine/turn-flow";
+import { advanceAfterEndTurn, passBattlePhase } from "../engine/turn-flow";
 import { runAiTurn } from "../ai/run-ai-turn";
 import {
   selectBattleCardLocation,
@@ -69,6 +71,14 @@ export function battleReducer(
         state,
         metadata,
         (mutableState) => endTurnWithAiFollowup(mutableState, battleInit, context),
+      );
+    }
+    case "PASS_PHASE": {
+      const context = createEngineEmissionContext(action.metadata);
+      return commitReducerTransition(
+        state,
+        action.metadata,
+        (mutableState) => passPhaseWithAiFollowup(mutableState, battleInit, context),
       );
     }
     case "RUN_AI_TURN": {
@@ -117,6 +127,26 @@ export function battleReducer(
 
           return resolvePlayCard(mutableState, action.battleCardId, action.target, context);
         },
+        battleInit,
+        context,
+      );
+    }
+    case "PLAY_CARD_TO_STACK": {
+      const context = createEngineEmissionContext(action.metadata);
+      return commitGameplayTransition(
+        state,
+        action.metadata,
+        (mutableState) => resolvePlayCardToStack(mutableState, action.battleCardId, context),
+        battleInit,
+        context,
+      );
+    }
+    case "MOVE_STACK_CARD": {
+      const context = createEngineEmissionContext(action.metadata);
+      return commitGameplayTransition(
+        state,
+        action.metadata,
+        (mutableState) => resolveStackCardMove(mutableState, action.battleCardId, action.target, context),
         battleInit,
         context,
       );
@@ -316,7 +346,7 @@ function endTurnWithAiFollowup(
     afterEndTurn.state === state ||
     afterEndTurn.state.result !== null ||
     afterEndTurn.state.activeSide !== "enemy" ||
-    afterEndTurn.state.phase !== "main" ||
+    afterEndTurn.state.phase !== "day" ||
     !battleInit.enableAi
   ) {
     // When `enableAi` is false the enemy's main phase is left intact for the
@@ -329,6 +359,35 @@ function endTurnWithAiFollowup(
   return {
     state: aiTurn.state,
     transition: mergeTransitions(afterEndTurn.transition, aiTurn.transition),
+  };
+}
+
+function passPhaseWithAiFollowup(
+  state: BattleMutableState,
+  battleInit: Pick<
+    BattleInit,
+    "enableAi" | "maxEnergyCap" | "playerDrawSkipsTurnOne" | "scoreToWin" | "turnLimit"
+  >,
+  context: BattleEngineEmissionContext,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const advanced = passBattlePhase(state, battleInit, context);
+  if (
+    advanced.state === state ||
+    advanced.state.result !== null ||
+    advanced.state.activeSide !== "enemy" ||
+    advanced.state.phase !== "day" ||
+    !battleInit.enableAi
+  ) {
+    return advanced;
+  }
+
+  const aiTurn = runAiTurn(advanced.state, battleInit);
+  return {
+    state: aiTurn.state,
+    transition: mergeTransitions(advanced.transition, aiTurn.transition),
   };
 }
 

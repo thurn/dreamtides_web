@@ -11,7 +11,7 @@ export function BattleActionBar({
   isBattleLogOpen: _isBattleLogOpen,
   isDesktopInspectorLayout: _isDesktopInspectorLayout,
   isInspectorDrawerOpen: _isInspectorDrawerOpen,
-  state: _state,
+  state,
   onCommand,
   onOpenForesee: _onOpenForesee,
   onRedo,
@@ -35,6 +35,8 @@ export function BattleActionBar({
   onToggleInspector: () => void;
   onUndo: () => void;
 }) {
+  const phaseButtonLabel = getPhaseButtonLabel(state);
+
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent): void {
       const target = event.target as HTMLElement | null;
@@ -51,7 +53,7 @@ export function BattleActionBar({
           return;
         }
         event.preventDefault();
-        onCommand({ id: "END_TURN", sourceSurface: "action-bar" });
+        onCommand({ id: "PASS_PHASE", sourceSurface: "action-bar" });
         return;
       }
       if (mod && !event.shiftKey && event.key.toLowerCase() === "z") {
@@ -120,12 +122,22 @@ export function BattleActionBar({
           type="button"
           data-battle-action="end-turn"
           className="btn primary"
-          onClick={() => onCommand({ id: "END_TURN", sourceSurface: "action-bar" })}
+          onClick={() => onCommand({ id: "PASS_PHASE", sourceSurface: "action-bar" })}
           disabled={!canEndTurn}
         >
-          End turn
+          {phaseButtonLabel}
         </button>
       </div>
     </section>
   );
+}
+
+function getPhaseButtonLabel(state: BattleMutableState): string {
+  if (state.phase === "day" || state.phase === "dusk") {
+    return "End Phase";
+  }
+  if (state.phase === "night" && state.activeSide === "player") {
+    return "End Turn";
+  }
+  return "Next Turn";
 }

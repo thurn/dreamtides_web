@@ -34,7 +34,7 @@ afterEach(() => {
 });
 
 describe("battleReducer", () => {
-  it("advances from main through the AI's full turn as one composite history entry", () => {
+  it("advances from Day through the AI's full turn as one composite history entry", () => {
     const { battleInit, state } = createTestBattle();
 
     state.sides.enemy.currentEnergy = 0;
@@ -47,7 +47,7 @@ describe("battleReducer", () => {
     );
 
     expect(reduced.mutable.activeSide).toBe("player");
-    expect(reduced.mutable.phase).toBe("main");
+    expect(reduced.mutable.phase).toBe("day");
     expect(reduced.mutable.turnNumber).toBe(2);
     expect(reduced.history.past).toHaveLength(1);
     expect(reduced.lastTransition?.metadata).toMatchObject({
@@ -63,20 +63,22 @@ describe("battleReducer", () => {
     expect(typeof reduced.lastTransition?.metadata.timestamp).toBe("number");
     const stepsWithoutPlayerStartOfTurn = reduced.lastTransition?.steps.slice(0, 5) ?? [];
     expect(stepsWithoutPlayerStartOfTurn).toEqual([
-      { side: "player", phase: "endOfTurn" },
-      { side: "enemy", phase: "startOfTurn" },
-      { side: "enemy", phase: "judgment" },
-      { side: "enemy", phase: "draw" },
-      { side: "enemy", phase: "main" },
+      { side: "player", phase: "challenge" },
+      { side: "player", phase: "ending" },
+      { side: "enemy", phase: "dawn" },
+      { side: "enemy", phase: "day" },
+      { side: "enemy", phase: "challenge" },
     ]);
     // The AI turn also appears in the same composite's step list.
-    expect(reduced.lastTransition?.steps.some((step) => step.side === "player" && step.phase === "main")).toBe(true);
+    expect(reduced.lastTransition?.steps.some((step) => step.side === "player" && step.phase === "day")).toBe(true);
     expect(
       reduced.lastTransition?.energyChanges.some(
         (change) => change.side === "enemy" && change.previousMaxEnergy === 0 && change.maxEnergy === 1,
       ),
     ).toBe(true);
-    expect(reduced.lastTransition?.judgment).not.toBeNull();
+    expect(
+      reduced.lastTransition?.logEvents.some((entry) => entry.event === "battle_proto_judgment"),
+    ).toBe(true);
     expect(reduced.lastTransition?.resultChange).toBeNull();
     expect(reduced.lastTransition?.aiChoices.length).toBeGreaterThan(0);
     expect(reduced.lastTransition?.logEvents.map((event) => event.event)).toEqual(
@@ -108,7 +110,7 @@ describe("battleReducer", () => {
 
     expect(advanced.sides.player.maxEnergy).toBe(5);
     expect(advanced.sides.player.currentEnergy).toBe(5);
-    expect(advanced.phase).toBe("main");
+    expect(advanced.phase).toBe("day");
   });
 
   it("skips the player draw on round one", () => {
@@ -129,7 +131,7 @@ describe("battleReducer", () => {
     const { battleInit, state } = createTestBattle();
 
     state.activeSide = "enemy";
-    state.phase = "endOfTurn";
+    state.phase = "ending";
     state.turnNumber = battleInit.turnLimit;
     state.sides.player.score = 12;
     state.sides.enemy.score = 10;
@@ -148,7 +150,7 @@ describe("battleReducer", () => {
     expect(reduced.mutable.result).toBe("draw");
     expect(reduced.history.past).toHaveLength(1);
     expect(reduced.lastTransition?.resultChange).toEqual({
-      at: { side: "enemy", phase: "endOfTurn" },
+      at: { side: "enemy", phase: "ending" },
       previousResult: null,
       result: "draw",
       reason: "turn_limit_reached",
@@ -167,7 +169,7 @@ describe("battleReducer", () => {
     state.sides.player.score = 24;
     state.sides.enemy.score = 24;
     state.activeSide = "player";
-    state.phase = "main";
+    state.phase = "day";
 
     const reduced = battleReducer(
       createBattleReducerState(state),
@@ -176,7 +178,7 @@ describe("battleReducer", () => {
     );
 
     expect(reduced.mutable.result).toBe("victory");
-    expect(reduced.mutable.phase).toBe("judgment");
+    expect(reduced.mutable.phase).toBe("challenge");
     expect(reduced.mutable.sides.player.score).toBe(26);
     expect(reduced.mutable.sides.enemy.score).toBe(25);
   });
@@ -195,7 +197,7 @@ describe("battleReducer", () => {
 
     expect(reduced).toBe(reducerState);
     expect(reduced.history.past).toHaveLength(0);
-    expect(reduced.mutable.phase).toBe("main");
+    expect(reduced.mutable.phase).toBe("day");
     expect(reduced.mutable.result).toBeNull();
   });
 
@@ -213,7 +215,7 @@ describe("battleReducer", () => {
 
     expect(reduced).toBe(reducerState);
     expect(reduced.history.past).toHaveLength(0);
-    expect(reduced.mutable.phase).toBe("main");
+    expect(reduced.mutable.phase).toBe("day");
     expect(reduced.mutable.result).toBeNull();
   });
 
@@ -244,7 +246,7 @@ describe("battleReducer", () => {
     expect(reduced.history.past).toHaveLength(1);
     expect(reduced.history.past[0].metadata.commandId).toBe("FORCE_RESULT");
     expect(reduced.lastTransition?.resultChange).toEqual({
-      at: { side: "player", phase: "main" },
+      at: { side: "player", phase: "day" },
       previousResult: null,
       result: "defeat",
       reason: "forced_result",
@@ -288,7 +290,7 @@ describe("battleReducer", () => {
     const { battleInit, state } = createTestBattle();
 
     state.activeSide = "enemy";
-    state.phase = "main";
+    state.phase = "day";
     state.turnNumber = battleInit.turnLimit;
     state.sides.player.score = 12;
     state.sides.enemy.score = 10;
@@ -300,10 +302,10 @@ describe("battleReducer", () => {
     );
 
     expect(reduced.mutable.result).toBe("draw");
-    expect(reduced.mutable.phase).toBe("endOfTurn");
+    expect(reduced.mutable.phase).toBe("ending");
     expect(reduced.mutable.activeSide).toBe("enemy");
     expect(reduced.lastTransition?.resultChange).toEqual({
-      at: { side: "enemy", phase: "endOfTurn" },
+      at: { side: "enemy", phase: "ending" },
       previousResult: null,
       result: "draw",
       reason: "turn_limit_reached",
@@ -347,6 +349,37 @@ describe("battleReducer", () => {
     expect(reduced.mutable.sides.player.void).toContain(battleCardId);
     expect(reduced.history.past).toHaveLength(1);
     expect(reduced.lastTransition?.resultChange?.result).toBe("victory");
+  });
+
+  it("moves a hand card to the manual stack, pays cost, and resolves it to void", () => {
+    const { battleInit, state } = createTestBattle();
+    const battleCardId = findPlayerEventCardId(state);
+    const startingEnergy = state.sides.player.currentEnergy;
+    const cost = state.cardInstances[battleCardId].definition.energyCost;
+
+    const stacked = applyBattleCommand(
+      createBattleReducerState(state),
+      { id: "PLAY_CARD_TO_STACK", battleCardId },
+      battleInit,
+    );
+
+    expect(stacked.mutable.sides.player.hand).not.toContain(battleCardId);
+    expect(stacked.mutable.sides.player.currentEnergy).toBe(startingEnergy - cost);
+    expect(stacked.mutable.stack?.map((entry) => entry.battleCardId)).toEqual([battleCardId]);
+
+    const resolved = applyBattleCommand(
+      stacked,
+      {
+        id: "MOVE_STACK_CARD",
+        battleCardId,
+        target: { side: "player", zone: "void" },
+      },
+      battleInit,
+    );
+
+    expect(resolved.mutable.stack).toEqual([]);
+    expect(resolved.mutable.sides.player.void).toContain(battleCardId);
+    expect(resolved.history.past).toHaveLength(2);
   });
 
   it("resolves PLAY_CARD from the active side's hand without assuming player.hand", () => {
@@ -419,7 +452,7 @@ describe("battleReducer", () => {
     expect(playReduced.history.past).toHaveLength(1);
 
     state.activeSide = "player";
-    state.phase = "judgment";
+    state.phase = "challenge";
     const moveReduced = battleReducer(
       createBattleReducerState(state),
       {
@@ -445,7 +478,7 @@ describe("battleReducer", () => {
     const reserveCardId = state.sides.enemy.hand[0];
 
     state.activeSide = "enemy";
-    state.phase = "main";
+    state.phase = "day";
     state.sides.enemy.currentEnergy = 5;
     state.sides.enemy.maxEnergy = 5;
     state.sides.enemy.hand = state.sides.enemy.hand.slice(1);
@@ -467,7 +500,7 @@ describe("battleReducer", () => {
       sourceSurface: "auto-ai",
     });
     expect(reduced.mutable.activeSide).toBe("player");
-    expect(reduced.mutable.phase).toBe("main");
+    expect(reduced.mutable.phase).toBe("day");
     expect(reduced.lastTransition?.metadata.commandId).toBe("RUN_AI_TURN");
   });
 
@@ -614,7 +647,7 @@ describe("battleReducer", () => {
     // under the player's `action-bar` source surface before the AI composite
     // kicks in under `auto-ai`.
     const endOfTurnPlayerEvent = phaseEvents.find(
-      (entry) => entry.fields.phase === "endOfTurn" && entry.fields.activeSide === "player",
+      (entry) => entry.fields.phase === "ending" && entry.fields.activeSide === "player",
     );
     expect(endOfTurnPlayerEvent?.fields.sourceSurface).toBe("action-bar");
   });
@@ -864,7 +897,7 @@ describe("battleReducer", () => {
 
     expect(reduced.history.past).toHaveLength(1);
     expect(reduced.mutable.activeSide).toBe("player");
-    expect(reduced.mutable.phase).toBe("main");
+    expect(reduced.mutable.phase).toBe("day");
     expect(reduced.mutable.sides.player.pendingExtraTurns).toBe(0);
     const consumedEvent = reduced.lastTransition?.logEvents.find(
       (entry) => entry.event === "battle_proto_extra_turn_consumed",
@@ -913,7 +946,7 @@ describe("battleReducer", () => {
     expect(reduced.history.past[0].metadata.commandId).toBe("FORCE_JUDGMENT");
     expect(reduced.history.past[0].metadata.kind).toBe("battle-flow");
     expect(reduced.lastTransition?.steps).toEqual([
-      { side: "player", phase: "judgment" },
+      { side: "player", phase: "challenge" },
     ]);
     expect(reduced.lastTransition?.scoreChanges).toHaveLength(1);
     expect(reduced.lastTransition?.scoreChanges[0]).toMatchObject({
@@ -950,7 +983,7 @@ describe("battleReducer", () => {
     // Draw step on the enemy's start-of-turn is a no-op against an empty deck.
     expect(reduced.mutable.sides.enemy.deck).toEqual([]);
     // Composite lands back on the player's main phase with a single history entry.
-    expect(reduced.mutable.phase).toBe("main");
+    expect(reduced.mutable.phase).toBe("day");
     expect(reduced.mutable.activeSide).toBe("player");
     expect(reduced.history.past).toHaveLength(1);
   });
@@ -1080,7 +1113,7 @@ describe("battleReducer", () => {
     const { battleInit, state } = createTestBattle();
 
     state.activeSide = "enemy";
-    state.phase = "endOfTurn";
+    state.phase = "ending";
     state.turnNumber = battleInit.turnLimit;
     state.sides.player.score = 12;
     state.sides.enemy.score = 10;
@@ -1113,7 +1146,7 @@ describe("battleReducer", () => {
 describe("battleReducer permissive PLAY_CARD / MOVE_CARD (E-16, H-1, H-16)", () => {
   it("permits PLAY_CARD while the phase is endOfTurn", () => {
     const { battleInit, state } = createTestBattle();
-    state.phase = "endOfTurn";
+    state.phase = "ending";
     state.sides.player.currentEnergy = 5;
     const battleCardId = state.sides.player.hand.find(
       (cardId) => state.cardInstances[cardId].definition.battleCardKind === "character",
@@ -1133,7 +1166,7 @@ describe("battleReducer permissive PLAY_CARD / MOVE_CARD (E-16, H-1, H-16)", () 
   it("permits PLAY_CARD during the enemy's active turn for a player hand card", () => {
     const { battleInit, state } = createTestBattle();
     state.activeSide = "enemy";
-    state.phase = "main";
+    state.phase = "day";
     state.sides.player.currentEnergy = 5;
     const battleCardId = state.sides.player.hand.find(
       (cardId) => state.cardInstances[cardId].definition.battleCardKind === "character",
@@ -1213,7 +1246,7 @@ describe("battleReducer permissive PLAY_CARD / MOVE_CARD (E-16, H-1, H-16)", () 
   it("permits a debug MOVE_CARD on the enemy battlefield during an enemy main phase", () => {
     const { battleInit, state } = createTestBattle();
     state.activeSide = "enemy";
-    state.phase = "main";
+    state.phase = "day";
     const enemyCardId = state.sides.enemy.hand[0];
     state.sides.enemy.hand = state.sides.enemy.hand.filter((id) => id !== enemyCardId);
     state.sides.enemy.reserve.R0 = enemyCardId;

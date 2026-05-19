@@ -48,7 +48,7 @@ describe("chooseAiAction", () => {
       state.cardInstances[decision.battleCardId]?.definition.battleCardKind;
     expect(playedCardKind).toBe("character");
     expect(decision.battleCardId).not.toBe(affordableEvent);
-    expect(decision.target?.zone).toBe("deployed");
+    expect(decision.target?.zone).toBe("reserve");
   });
 
   it("ends turn when nothing affordable or improving exists", () => {
@@ -361,14 +361,12 @@ describe("shouldPreferMoveChoice (J-9 cycle guard via tiebreaker)", () => {
 });
 
 describe("chooseAiAction event-play reevaluation (J-10 / J-11)", () => {
-  it("refuses a neutral-heuristic character play when only reserve slots are open", () => {
+  it("accepts a reserve character play when only reserve slots are open", () => {
     const state = createTestBattleState();
     const attacker = ensureEnemyCardInHand(state, "character", 1);
     state.sides.enemy.currentEnergy = 5;
     // Fill every deployed slot for both sides so the only open targets are
-    // reserve slots. Characters played to reserve never change the judgment
-    // differential — the strict improvement gate should make the AI skip the
-    // play and (with no other options) END_TURN.
+    // reserve slots. Reserve plays are setup actions under the revised flow.
     const deployedIds = Object.keys(state.cardInstances)
       .filter((cardId) =>
         state.cardInstances[cardId]?.definition.battleCardKind === "character"
@@ -389,7 +387,7 @@ describe("chooseAiAction event-play reevaluation (J-10 / J-11)", () => {
     }
 
     // Remove all events from hand so the character branch is the only
-    // affordable option; with the strict improvement gate we expect END_TURN.
+    // affordable option.
     state.sides.enemy.hand = [attacker];
 
     const decision = chooseAiAction(state, {
@@ -398,7 +396,10 @@ describe("chooseAiAction event-play reevaluation (J-10 / J-11)", () => {
       hasRepositioned: false,
     });
 
-    expect(decision.type).toBe("END_TURN");
+    expect(decision.type).toBe("PLAY_CARD");
+    if (decision.type !== "PLAY_CARD") throw new Error("Expected reserve character play");
+    expect(decision.battleCardId).toBe(attacker);
+    expect(decision.target?.zone).toBe("reserve");
   });
 
   it("plays exactly one event when only an event is affordable (J-10)", () => {

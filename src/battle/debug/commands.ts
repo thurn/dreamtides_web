@@ -15,7 +15,10 @@ import type {
 
 export type BattleCommandId =
   | "END_TURN"
+  | "PASS_PHASE"
   | "PLAY_CARD"
+  | "PLAY_CARD_TO_STACK"
+  | "MOVE_STACK_CARD"
   | "MOVE_CARD"
   | "DEBUG_EDIT"
   | "FORCE_RESULT"
@@ -210,9 +213,21 @@ export type BattleCommand =
     id: "END_TURN";
   } & BattleCommandEnvelope)
   | ({
+    id: "PASS_PHASE";
+  } & BattleCommandEnvelope)
+  | ({
     id: "PLAY_CARD";
     battleCardId: string;
     target?: BattleFieldSlotAddress;
+  } & BattleCommandEnvelope)
+  | ({
+    id: "PLAY_CARD_TO_STACK";
+    battleCardId: string;
+  } & BattleCommandEnvelope)
+  | ({
+    id: "MOVE_STACK_CARD";
+    battleCardId: string;
+    target: BattleFieldSlotAddress | { side: BattleSide; zone: "void" | "banished" };
   } & BattleCommandEnvelope)
   | ({
     id: "MOVE_CARD";
@@ -248,8 +263,14 @@ export function createBattleCommandMetadata(
     switch (command.id) {
       case "END_TURN":
         return createEndTurnHistoryMetadata(envelope);
+      case "PASS_PHASE":
+        return createPassPhaseHistoryMetadata(state, envelope);
       case "PLAY_CARD":
         return createPlayCardHistoryMetadata(state, command.battleCardId, envelope);
+      case "PLAY_CARD_TO_STACK":
+        return createPlayCardToStackHistoryMetadata(state, command.battleCardId, envelope);
+      case "MOVE_STACK_CARD":
+        return createMoveStackCardHistoryMetadata(state, command.battleCardId, envelope);
       case "MOVE_CARD":
         return createMoveCardHistoryMetadata(
           state,
@@ -274,12 +295,20 @@ function buildCommandPayload(
 ): Record<string, unknown> {
   switch (command.id) {
     case "END_TURN":
+    case "PASS_PHASE":
     case "SKIP_TO_REWARDS":
       return {};
     case "PLAY_CARD":
       return {
         battleCardId: command.battleCardId,
         target: command.target ?? null,
+      };
+    case "PLAY_CARD_TO_STACK":
+      return { battleCardId: command.battleCardId };
+    case "MOVE_STACK_CARD":
+      return {
+        battleCardId: command.battleCardId,
+        target: command.target,
       };
     case "MOVE_CARD":
       return {
@@ -307,6 +336,21 @@ export function createEndTurnHistoryMetadata(
   });
 }
 
+export function createPassPhaseHistoryMetadata(
+  state: BattleMutableState,
+  envelope: BattleCommandMetadataEnvelope = {},
+): BattleHistoryEntryMetadata {
+  return createMetadata({
+    commandId: "PASS_PHASE",
+    label: state.phase === "night" ? "End Turn" : "End Phase",
+    kind: "battle-flow",
+    isComposite: state.phase === "night",
+    targets: [],
+    envelope,
+    defaultActor: "player",
+  });
+}
+
 export function createPlayCardHistoryMetadata(
   state: BattleMutableState,
   battleCardId: string,
@@ -319,6 +363,38 @@ export function createPlayCardHistoryMetadata(
   return createMetadata({
     commandId: "PLAY_CARD",
     label: `Play ${readCardName(state, battleCardId)}`,
+    kind: "zone-move",
+    isComposite: false,
+    targets: [makeCardTarget(battleCardId)],
+    envelope,
+    defaultActor: "player",
+  });
+}
+
+export function createPlayCardToStackHistoryMetadata(
+  state: BattleMutableState,
+  battleCardId: string,
+  envelope: BattleCommandMetadataEnvelope = {},
+): BattleHistoryEntryMetadata {
+  return createMetadata({
+    commandId: "PLAY_CARD_TO_STACK",
+    label: `Stack ${readCardName(state, battleCardId)}`,
+    kind: "zone-move",
+    isComposite: false,
+    targets: [makeCardTarget(battleCardId)],
+    envelope,
+    defaultActor: "player",
+  });
+}
+
+export function createMoveStackCardHistoryMetadata(
+  state: BattleMutableState,
+  battleCardId: string,
+  envelope: BattleCommandMetadataEnvelope = {},
+): BattleHistoryEntryMetadata {
+  return createMetadata({
+    commandId: "MOVE_STACK_CARD",
+    label: `Resolve ${readCardName(state, battleCardId)}`,
     kind: "zone-move",
     isComposite: false,
     targets: [makeCardTarget(battleCardId)],
@@ -490,7 +566,10 @@ function createMetadata({
 function inferCommandActor(command: BattleCommand): BattleCommandActor {
   switch (command.id) {
     case "END_TURN":
+    case "PASS_PHASE":
     case "PLAY_CARD":
+    case "PLAY_CARD_TO_STACK":
+    case "MOVE_STACK_CARD":
     case "MOVE_CARD":
       return "player";
     case "DEBUG_EDIT":

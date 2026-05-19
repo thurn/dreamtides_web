@@ -33,9 +33,27 @@ function createBattleReducerAction(
         type: "END_TURN",
         metadata,
       };
+    case "PASS_PHASE":
+      return {
+        type: "PASS_PHASE",
+        metadata,
+      };
     case "PLAY_CARD":
       return {
         type: "PLAY_CARD",
+        battleCardId: command.battleCardId,
+        target: command.target,
+        metadata,
+      };
+    case "PLAY_CARD_TO_STACK":
+      return {
+        type: "PLAY_CARD_TO_STACK",
+        battleCardId: command.battleCardId,
+        metadata,
+      };
+    case "MOVE_STACK_CARD":
+      return {
+        type: "MOVE_STACK_CARD",
         battleCardId: command.battleCardId,
         target: command.target,
         metadata,

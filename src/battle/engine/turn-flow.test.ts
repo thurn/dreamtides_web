@@ -76,7 +76,7 @@ describe("prepareInitialBattleState (E-2/E-3 initial flow)", () => {
     expect(prepared.state.sides.player.maxEnergy).toBe(2);
     expect(prepared.state.sides.enemy.currentEnergy).toBe(2);
     expect(prepared.state.sides.enemy.maxEnergy).toBe(2);
-    expect(prepared.state.phase).toBe("main");
+    expect(prepared.state.phase).toBe("day");
     expect(prepared.state.turnNumber).toBe(1);
     const energyEvent = prepared.transition.logEvents.find(
       (entry) => entry.event === "battle_proto_energy_changed",

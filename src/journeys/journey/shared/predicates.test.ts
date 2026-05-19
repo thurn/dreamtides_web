@@ -38,7 +38,7 @@ function card(overrides: Partial<CardContent> & { id: string }): CardContent {
 }
 
 // 8 cards covering: events, characters, warriors, survivors, spirit_animals,
-// low_cost, high_cost, low_spark, high_spark, materialized, judgment, fast,
+// low_cost, high_cost, low_spark, high_spark, materialized, challenge, fast,
 // starter, legendary, transfigured, discard_text, abandon.
 // Intentionally NOT covered: event_copying, energy_generation, dissolve,
 // reclaim — those predicates must return zero matches on this fixture.
@@ -75,12 +75,12 @@ const FIXTURE_CARDS: readonly CardContent[] = [
     spark: 4,
     raw: { subtype: "Spirit Animal" },
   }),
-  // 5: Event with Judgment + Fast
+  // 5: Event with Challenge + Fast
   card({
     id: "event-judg-fast",
     cardType: "Event",
     energyCost: 3,
-    raw: { "rendered-text": "Judgment: discard a card.", "is-fast": true },
+    raw: { "rendered-text": "Challenge: discard a card.", "is-fast": true },
   }),
   // 6: Starter card (Character)
   card({
@@ -120,7 +120,7 @@ const COVERED: ReadonlySet<string> = new Set([
   "low_spark",
   "high_spark",
   "materialized",
-  "judgment",
+  "challenge",
   "fast",
   "starter",
   "legendary",

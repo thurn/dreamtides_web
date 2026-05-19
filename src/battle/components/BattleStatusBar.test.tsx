@@ -23,7 +23,7 @@ function mount(): {
         futureCount={1}
         hasAiOpponent
         historyCount={3}
-        phase="main"
+        phase="day"
         playerScore={12}
         result={null}
         roundNumber={4}
@@ -46,7 +46,7 @@ describe("BattleStatusBar", () => {
     expect(
       container.querySelector('[data-battle-region="status-bar"]')?.textContent,
     ).toContain("Turn 4");
-    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Main");
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Day");
     expect(container.querySelector('[data-battle-stat="score-summary"]')?.textContent).toContain("12");
     expect(container.querySelector('[data-battle-stat="score-summary"]')?.textContent).toContain("7");
     expect(

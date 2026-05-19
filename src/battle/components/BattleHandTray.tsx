@@ -28,6 +28,7 @@ export function BattleHandTray({
   playerDrawSkipsTurnOne: _playerDrawSkipsTurnOne,
   selectedCardId,
   state,
+  isCardPlayable,
   onCardClick,
   onCardContextMenu,
   onCardDoubleClick,
@@ -42,6 +43,7 @@ export function BattleHandTray({
   playerDrawSkipsTurnOne: boolean;
   selectedCardId: string | null;
   state: BattleMutableState;
+  isCardPlayable?: (battleCardId: string) => boolean;
   onCardClick: (battleCardId: string) => void;
   onCardContextMenu?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
   onCardDoubleClick: (battleCardId: string) => void;
@@ -57,7 +59,7 @@ export function BattleHandTray({
             return null;
           }
           const cost = instance.definition.energyCost;
-          const isPlayable = canInteract && cost <= currentEnergy;
+          const isPlayable = canInteract && cost <= currentEnergy && (isCardPlayable?.(battleCardId) ?? true);
           const isUnaffordable = cost > currentEnergy;
           const isSelected = selectedCardId === battleCardId;
           const wrapperClass = [

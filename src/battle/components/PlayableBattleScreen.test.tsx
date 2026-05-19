@@ -216,6 +216,7 @@ describe("PlayableBattleScreen", () => {
       "judgment-divider",
       "player-deployed-row",
       "player-reserve-row",
+      "stack-zone",
       "player-status-strip",
       "player-hand-tray",
       "action-bar",
@@ -226,7 +227,7 @@ describe("PlayableBattleScreen", () => {
     expect(container.textContent).toContain("Redo");
     expect(container.textContent).toContain("Log");
     expect(container.textContent).toContain("Skip to rewards");
-    expect(container.textContent).toContain("End turn");
+    expect(container.textContent).toContain("End Phase");
     expect(container.querySelector(".inspector.open")).not.toBeNull();
 
     act(() => {
@@ -534,8 +535,14 @@ describe("PlayableBattleScreen", () => {
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-action="end-turn"]')?.click();
     });
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="end-turn"]')?.click();
+    });
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="end-turn"]')?.click();
+    });
 
-    expect(container.querySelector("[data-battle-judgment-overlay]")?.textContent).toContain("Judgment Resolved");
+    expect(container.querySelector("[data-battle-judgment-overlay]")?.textContent).toContain("Challenge Resolved");
     expect(container.querySelector("[data-battle-judgment-overlay]")?.textContent).toContain("Turn 2 results");
 
     act(() => {

@@ -29,7 +29,7 @@ export function BattleJudgmentPauseOverlay({
   return (
     <div className="judgment-pause-overlay">
       <div className="judgment-pause-panel" data-battle-judgment-overlay="">
-        <p className="judgment-pause-eyebrow">Judgment Resolved</p>
+        <p className="judgment-pause-eyebrow">Challenge Resolved</p>
         <h2>Turn {String(turnNumber)} results</h2>
         <p className="judgment-pause-summary">{scoreSummary}</p>
         <div className="judgment-pause-lanes">

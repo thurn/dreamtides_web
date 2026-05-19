@@ -233,7 +233,7 @@ describe("transfiguration eligibility audit", () => {
   // - Scarlet: cardType === "Character"
   // - Azure: cardType === "Event"
   // - Bronze: cardType === "Event"
-  // - Magenta: rendered text matches /materialized|judgment|once per turn/i
+  // - Magenta: rendered text matches /materialized|challenge|once per turn/i
   // - Rose: rendered text matches /\d●[^:\n]*:/ (energy-cost activated)
   // - Prismatic: unrestricted at generation time
   const COST_ZERO_EVENT = card({
@@ -285,7 +285,7 @@ describe("transfiguration eligibility audit", () => {
     { transfiguration: "Azure", eligible: COST_TWO_EVENT, ineligible: COST_TWO_CHARACTER },
     // Bronze needs Event. Same as Azure.
     { transfiguration: "Bronze", eligible: COST_TWO_EVENT, ineligible: COST_TWO_CHARACTER },
-    // Magenta needs a materialized/judgment/once-per-turn trigger.
+    // Magenta needs a materialized/challenge/once-per-turn trigger.
     { transfiguration: "Magenta", eligible: MAGENTA_TRIGGER_CHARACTER, ineligible: COST_TWO_CHARACTER },
     // Rose needs an N●...: activated ability.
     { transfiguration: "Rose", eligible: ROSE_ACTIVATED_CHARACTER, ineligible: COST_TWO_CHARACTER },

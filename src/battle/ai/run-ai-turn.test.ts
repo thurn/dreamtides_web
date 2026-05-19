@@ -18,7 +18,7 @@ describe("runAiTurn", () => {
     const affordableEvent = ensureEnemyCardInHand(state, "event", 5);
 
     state.activeSide = "enemy";
-    state.phase = "main";
+    state.phase = "day";
     state.sides.enemy.currentEnergy = 5;
     state.sides.enemy.maxEnergy = 5;
     state.sides.enemy.hand = [
@@ -33,7 +33,7 @@ describe("runAiTurn", () => {
     const resolved = runAiTurn(state, battleInit);
 
     expect(resolved.state.activeSide).toBe("player");
-    expect(resolved.state.phase).toBe("main");
+    expect(resolved.state.phase).toBe("day");
     expect(resolved.state.turnNumber).toBe(2);
     expect(resolved.state.sides.enemy.currentEnergy).toBeGreaterThanOrEqual(0);
     expect(resolved.transition.aiChoices).toHaveLength(MAX_AI_ACTIONS_PER_TURN + 1);
@@ -55,7 +55,7 @@ describe("runAiTurn", () => {
     const { battleInit, state } = createTestBattle();
     // Player main phase — runAiTurn must no-op.
     expect(state.activeSide).toBe("player");
-    expect(state.phase).toBe("main");
+    expect(state.phase).toBe("day");
 
     const resolved = runAiTurn(state, battleInit);
 
@@ -67,7 +67,7 @@ describe("runAiTurn", () => {
   it("ends the turn when the enemy has no affordable plays or moves (bug-095)", () => {
     const { battleInit, state } = createTestBattle();
     state.activeSide = "enemy";
-    state.phase = "main";
+    state.phase = "day";
     state.sides.enemy.currentEnergy = 0;
     state.sides.enemy.maxEnergy = 0;
 
@@ -91,7 +91,7 @@ describe("runAiTurn", () => {
   it("noop-returns when the battle has already resolved (bug-095)", () => {
     const { battleInit, state } = createTestBattle();
     state.activeSide = "enemy";
-    state.phase = "main";
+    state.phase = "day";
     state.result = "victory";
 
     const resolved = runAiTurn(state, battleInit);

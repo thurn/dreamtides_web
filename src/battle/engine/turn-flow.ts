@@ -27,10 +27,8 @@ const OPENING_ENERGY = 2;
 
 /**
  * Prepares a freshly-initialized battle state for turn 1 by running the
- * start-of-turn composite for the starting side without incrementing the turn
- * number. Passes through the judgment phase, skips the draw on turn 1 per
- * C-10, and lands in `main`, emitting the corresponding phase-change and
- * energy log events.
+ * Dawn composite for the starting side without incrementing the turn number.
+ * Dawn refreshes energy, performs the draw step, and lands in Day.
  */
 export function prepareInitialBattleState(
   state: BattleMutableState,
@@ -77,7 +75,7 @@ export function runStartOfTurnComposite(
     nextState.turnNumber += 1;
   }
 
-  const startOfTurnStep = setStep(nextState, transition, options.side, "startOfTurn", context);
+  const dawnStep = setStep(nextState, transition, options.side, "dawn", context);
   expireBattleNotes(nextState, transition, context, {
     side: options.side,
     turnNumber: nextState.turnNumber,
@@ -90,7 +88,7 @@ export function runStartOfTurnComposite(
     sideState.currentEnergy = sideState.maxEnergy;
   }
   transition.energyChanges.push({
-    at: startOfTurnStep,
+    at: dawnStep,
     side: options.side,
     previousCurrentEnergy,
     currentEnergy: sideState.currentEnergy,
@@ -101,7 +99,7 @@ export function runStartOfTurnComposite(
     event: "battle_proto_energy_changed",
     fields: {
       ...createBattleLogBaseFields(
-        { ...nextState, phase: startOfTurnStep.phase },
+        { ...nextState, phase: dawnStep.phase },
         context,
       ),
       currentEnergy: sideState.currentEnergy,
@@ -114,38 +112,63 @@ export function runStartOfTurnComposite(
     },
   });
 
-  const judgmentResult = buildJudgmentTransition(
-    nextState,
-    transition,
-    options.side,
-    context,
-    { advancePhase: true },
-  );
-  transition.judgment = judgmentResult.judgment;
-  transition.scoreChanges = judgmentResult.scoreChanges;
-  if (applyEvaluatedResult(nextState, battleInit, transition, judgmentResult.judgmentStep, context)) {
-    return {
-      state: nextState,
-      transition,
-    };
-  }
-
-  const drawStep = setStep(nextState, transition, options.side, "draw", context);
   if (!shouldSkipDraw(nextState, battleInit, options.side)) {
     drawTopCard(nextState, options.side);
   }
 
-  if (applyEvaluatedResult(nextState, battleInit, transition, drawStep, context)) {
+  if (applyEvaluatedResult(nextState, battleInit, transition, dawnStep, context)) {
     return {
       state: nextState,
       transition,
     };
   }
 
-  setStep(nextState, transition, options.side, "main", context);
+  setStep(nextState, transition, options.side, "day", context);
   return {
     state: nextState,
     transition,
+  };
+}
+
+export function passBattlePhase(
+  state: BattleMutableState,
+  battleInit: Pick<
+    BattleInit,
+    "maxEnergyCap" | "playerDrawSkipsTurnOne" | "scoreToWin" | "turnLimit"
+  >,
+  context: BattleEngineEmissionContext = AUTO_SYSTEM_EMISSION_CONTEXT,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  if (evaluateBattleResult(state, battleInit).result !== null) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  if (state.phase === "day" || state.phase === "main") {
+    const nextState = cloneBattleMutableState(state);
+    const transition = createEmptyTransitionData();
+    setStep(nextState, transition, getOpposingSide(state.activeSide), "dusk", context);
+    return { state: nextState, transition };
+  }
+
+  if (state.phase === "dusk") {
+    const nextState = cloneBattleMutableState(state);
+    const transition = createEmptyTransitionData();
+    setStep(nextState, transition, getOpposingSide(state.activeSide), "night", context);
+    return { state: nextState, transition };
+  }
+
+  if (state.phase === "night") {
+    return advanceAfterEndTurn(state, battleInit, context);
+  }
+
+  return {
+    state,
+    transition: createEmptyTransitionData(),
   };
 }
 
@@ -169,10 +192,28 @@ export function advanceAfterEndTurn(
 
   const nextState = cloneBattleMutableState(state);
   const transition = createEmptyTransitionData();
-  const endingSide = nextState.activeSide;
+  const endingSide = state.phase === "dusk"
+    ? getOpposingSide(nextState.activeSide)
+    : nextState.activeSide;
 
-  const endOfTurnStep = setStep(nextState, transition, endingSide, "endOfTurn", context);
-  if (applyEvaluatedResult(nextState, battleInit, transition, endOfTurnStep, context)) {
+  const challengeResult = buildJudgmentTransition(
+    nextState,
+    transition,
+    endingSide,
+    context,
+    { advancePhase: true },
+  );
+  transition.judgment = challengeResult.judgment;
+  transition.scoreChanges = challengeResult.scoreChanges;
+  if (applyEvaluatedResult(nextState, battleInit, transition, challengeResult.judgmentStep, context)) {
+    return {
+      state: nextState,
+      transition,
+    };
+  }
+
+  const endingStep = setStep(nextState, transition, endingSide, "ending", context);
+  if (applyEvaluatedResult(nextState, battleInit, transition, endingStep, context)) {
     return {
       state: nextState,
       transition,
@@ -348,11 +389,11 @@ export function expireBattleNotes(
 }
 
 /**
- * Resolves a judgment step and pushes its transition artifacts onto `transition`.
+ * Resolves a Challenge step and pushes its transition artifacts onto `transition`.
  *
- * Shared between natural judgment inside `runStartOfTurnComposite` and the
- * `FORCE_JUDGMENT` debug edit. Mutates `nextState` (applies score deltas and
- * dissolutions), appends the judgment step to `transition.steps`, and emits
+ * Shared between natural Challenge and the `FORCE_JUDGMENT` debug edit.
+ * Mutates `nextState` (applies score deltas and dissolutions), appends the step
+ * to `transition.steps`, and emits
  * the `battle_proto_judgment` + per-side `battle_proto_score_changed` log
  * events. When `options.advancePhase` is true, also mutates
  * `nextState.phase`/`nextState.activeSide` and emits `battle_proto_phase_changed`;
@@ -376,9 +417,9 @@ export function buildJudgmentTransition(
   dissolvedCardIds: string[];
 } {
   const judgmentStep = options.advancePhase
-    ? setStep(nextState, transition, side, "judgment", context)
+    ? setStep(nextState, transition, side, "challenge", context)
     : (() => {
-        const step = createFlowStep(side, "judgment");
+        const step = createFlowStep(side, "challenge");
         transition.steps.push(step);
         return step;
       })();

@@ -130,7 +130,7 @@ export const STRUCTURAL_TIDE_META: Readonly<
   judgment_engines: {
     displayName: "Turning Hourglass",
     hoverBlurb:
-      "This tide wins by tampering with the hour of reckoning. Judgment arrives heavier, repeats itself, and turns the scoring phase into a weapon.",
+      "This tide wins by tampering with the hour of reckoning. Challenge arrives heavier, repeats itself, and turns the scoring phase into a weapon.",
     iconClass: "bx-hourglass",
   },
   character_chain: {
@@ -284,13 +284,13 @@ const SUPPORT_TIDE_META: Readonly<Partial<Record<PackageTideId, SupportTideMeta>
     {
       displayName: "Weighted Witnesses",
       hoverBlurb:
-        "Characters that contribute meaningfully once judgment matters and help carry that phase.",
+        "Characters that contribute meaningfully once challenge matters and help carry that phase.",
     },
   judgment_repeaters:
     {
       displayName: "Second Verdict",
       hoverBlurb:
-        "Effects that make judgment triggers happen again or hit harder than usual.",
+        "Effects that make challenge triggers happen again or hit harder than usual.",
     },
   leave_play_enablers:
     {

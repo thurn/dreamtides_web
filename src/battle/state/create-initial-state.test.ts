@@ -67,13 +67,13 @@ describe("createInitialBattleState", () => {
     const prepared = prepareInitialBattleState(raw, battleInit);
 
     expect(prepared.state.activeSide).toBe("player");
-    expect(prepared.state.phase).toBe("main");
+    expect(prepared.state.phase).toBe("day");
     expect(prepared.state.turnNumber).toBe(1);
     expect(prepared.state.sides.player.currentEnergy).toBe(2);
     expect(prepared.state.sides.player.maxEnergy).toBe(2);
     expect(prepared.state.sides.enemy.currentEnergy).toBe(2);
     expect(prepared.state.sides.enemy.maxEnergy).toBe(2);
-    // Turn 1 skips the actual draw but still passes through the draw phase.
+    // Turn 1 skips the Dawn draw.
     expect(prepared.state.sides.player.hand).toEqual(initialPlayerHand);
     expect(prepared.state.sides.player.deck).toEqual(initialPlayerDeck);
 
@@ -81,16 +81,11 @@ describe("createInitialBattleState", () => {
       (entry) => entry.event === "battle_proto_phase_changed",
     );
     expect(phaseChangedEvents.map((entry) => entry.fields.phase)).toEqual([
-      "startOfTurn",
-      "judgment",
-      "draw",
-      "main",
+      "dawn",
+      "day",
     ]);
     expect(
       prepared.transition.logEvents.some((entry) => entry.event === "battle_proto_energy_changed"),
-    ).toBe(true);
-    expect(
-      prepared.transition.logEvents.some((entry) => entry.event === "battle_proto_judgment"),
     ).toBe(true);
   });
 
@@ -168,13 +163,13 @@ describe("cloneBattleMutableState", () => {
   it("preserves scalar fields, activeSide, and nextBattleCardOrdinal exactly", () => {
     const state = makeBattleState();
     state.turnNumber = 5;
-    state.phase = "main";
+    state.phase = "day";
     state.activeSide = "enemy";
     state.nextBattleCardOrdinal = 42;
     const clone = cloneBattleMutableState(state);
 
     expect(clone.turnNumber).toBe(5);
-    expect(clone.phase).toBe("main");
+    expect(clone.phase).toBe("day");
     expect(clone.activeSide).toBe("enemy");
     expect(clone.nextBattleCardOrdinal).toBe(42);
     expect(clone.battleId).toBe(state.battleId);

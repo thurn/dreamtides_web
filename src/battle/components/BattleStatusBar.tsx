@@ -32,12 +32,12 @@ export function BattleStatusBar({
   const phaseLabel = formatPhaseLabel(phase);
   const sideLabel = result === null ? formatSideLabel(activeSide) : "Battle Over";
   const phaseSteps = [
-    { id: "startOfTurn", label: "Start" },
-    { id: "judgment", label: "Judgment" },
-    { id: "draw", label: "Draw" },
-    { id: "main", label: "Main" },
-    { id: "endOfTurn", label: "End" },
+    { id: "dawn", label: "Dawn", icon: "bxs-sun phase-icon-sunrise" },
+    { id: "day", label: "Day", icon: "bxs-sun" },
+    { id: "dusk", label: "Dusk", icon: "bxs-sun phase-icon-sunset" },
+    { id: "night", label: "Night", icon: "bxs-moon" },
   ] as const;
+  const visiblePhase = normalizeVisiblePhase(phase);
 
   return (
     <section data-battle-region="status-bar" className="topbar">
@@ -60,12 +60,16 @@ export function BattleStatusBar({
             {phaseLabel}
           </strong>
         </div>
-        <div className="phase-track" aria-hidden="true">
+        <div className="phase-track" aria-label="Battle phases">
           {phaseSteps.map((step) => (
             <span
               key={step.id}
-              className={`phase-track-step ${phase === step.id ? "active" : ""}`}
+              aria-label={`${step.label}${visiblePhase === step.id ? " active" : ""}`}
+              className={`phase-track-step ${visiblePhase === step.id ? "active" : ""}`}
+              data-battle-phase-chip={step.id}
+              data-active={String(visiblePhase === step.id)}
             >
+              <i className={`bx ${step.icon}`} aria-hidden="true" />
               {step.label}
             </span>
           ))}
@@ -103,4 +107,21 @@ export function BattleStatusBar({
       </div>
     </section>
   );
+}
+
+function normalizeVisiblePhase(phase: BattleMutableState["phase"]) {
+  switch (phase) {
+    case "startOfTurn":
+    case "draw":
+      return "dawn";
+    case "main":
+      return "day";
+    case "judgment":
+    case "challenge":
+    case "endOfTurn":
+    case "ending":
+      return "night";
+    default:
+      return phase;
+  }
 }

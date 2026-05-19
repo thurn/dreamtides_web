@@ -16,7 +16,7 @@ import type {
 import { createBattleLogBaseFields } from "../../logging";
 
 /**
- * Spec "AI Detail" loop guard cap. The AI evaluates main-phase actions in a
+ * Spec "AI Detail" loop guard cap. The AI evaluates Day actions in a
  * fixed four-stage pipeline (`choose-action.ts:chooseAiAction`): character
  * play → reposition → single event → end turn. Three distinct productive
  * actions can fire in a single turn (character play, reposition, and the one
@@ -37,7 +37,11 @@ export function runAiTurn(
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
-  if (state.result !== null || state.activeSide !== "enemy" || state.phase !== "main") {
+  if (
+    state.result !== null ||
+    state.activeSide !== "enemy" ||
+    (state.phase !== "day" && state.phase !== "main")
+  ) {
     return {
       state,
       transition: createEmptyTransitionData(),

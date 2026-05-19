@@ -1,4 +1,7 @@
-import { cloneBattleMutableState } from "../state/create-initial-state";
+import {
+  allocateBattleStackEntryId,
+  cloneBattleMutableState,
+} from "../state/create-initial-state";
 import {
   isBattleFieldSlotAddressValid,
   selectBattleCardLocation,
@@ -13,6 +16,7 @@ import {
 } from "./result";
 import type {
   BattleEngineEmissionContext,
+  BattleCardInstance,
   BattleFieldSlotAddress,
   BattleMutableState,
   BattleTransitionData,
@@ -53,10 +57,25 @@ export function resolveMoveCard(
   }
 
   const targetOccupant = selectBattlefieldSlotOccupant(state, target);
+  const movingCard = state.cardInstances[battleCardId];
+  if (
+    source.zone === "reserve" &&
+    target.zone === "deployed" &&
+    movingCard?.enteredReserveTurnNumber === state.turnNumber &&
+    !isUnboundCard(movingCard)
+  ) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
   const nextState = cloneBattleMutableState(state);
 
   setBattlefieldSlot(nextState, source, targetOccupant);
   setBattlefieldSlot(nextState, target, battleCardId);
+  if (target.zone === "deployed") {
+    nextState.cardInstances[battleCardId].enteredReserveTurnNumber = null;
+  }
 
   // Spec §L-4 (bug-094): the design doc mentions "cardId, from, to" as the
   // conceptual fields for movement events. The implementation uses the
@@ -174,6 +193,173 @@ export function resolvePlayCard(
   );
 }
 
+export function resolvePlayCardToStack(
+  state: BattleMutableState,
+  battleCardId: string,
+  context: BattleEngineEmissionContext = AUTO_SYSTEM_EMISSION_CONTEXT,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const card = state.cardInstances[battleCardId];
+  const location = selectBattleCardLocation(state, battleCardId);
+  const reclaimCost = card?.definition.reclaimCost ?? null;
+  const isReclaimPlay =
+    location?.zone === "void" && reclaimCost !== null && reclaimCost >= 0;
+  if (
+    card === undefined ||
+    location === null ||
+    (location.zone !== "hand" && !isReclaimPlay)
+  ) {
+    return {
+      state,
+      transition: buildPlayRejectedTransition(state, battleCardId, "card_not_in_hand", context),
+    };
+  }
+
+  const playCost = isReclaimPlay ? reclaimCost : card.definition.energyCost;
+  const nextState = cloneBattleMutableState(state);
+  const stackEntryId = allocateBattleStackEntryId(nextState);
+  if (location.zone === "hand" || location.zone === "void") {
+    nextState.sides[location.side][location.zone].splice(location.index, 1);
+  }
+  nextState.sides[location.side].currentEnergy -= playCost;
+  nextState.stack ??= [];
+  nextState.stack.push({
+    stackEntryId,
+    battleCardId,
+    side: location.side,
+    paidCost: playCost,
+  });
+
+  const cardContext: BattleEngineEmissionContext = {
+    sourceSurface: context.sourceSurface,
+    selectedCardId: battleCardId,
+  };
+  return {
+    state: nextState,
+    transition: {
+      ...createEmptyTransitionData(),
+      energyChanges: [
+        {
+          at: createFlowStep(state.activeSide, state.phase),
+          side: location.side,
+          previousCurrentEnergy: state.sides[location.side].currentEnergy,
+          currentEnergy: nextState.sides[location.side].currentEnergy,
+          previousMaxEnergy: state.sides[location.side].maxEnergy,
+          maxEnergy: nextState.sides[location.side].maxEnergy,
+        },
+      ],
+      logEvents: [
+        {
+          event: "battle_proto_stack_card",
+          fields: {
+            ...createBattleLogBaseFields(state, cardContext),
+            battleCardId,
+            cardKind: card.definition.battleCardKind,
+            cardName: card.definition.name,
+            currentEnergy: nextState.sides[location.side].currentEnergy,
+            paidCost: playCost,
+            side: location.side,
+            sourceHandIndex: location.zone === "hand" ? location.index : null,
+            sourceZone: location.zone,
+            stackEntryId,
+          },
+        },
+        {
+          event: "battle_proto_energy_changed",
+          fields: {
+            ...createBattleLogBaseFields(state, cardContext),
+            currentEnergy: nextState.sides[location.side].currentEnergy,
+            currentEnergyDelta: nextState.sides[location.side].currentEnergy - state.sides[location.side].currentEnergy,
+            maxEnergy: nextState.sides[location.side].maxEnergy,
+            maxEnergyDelta: nextState.sides[location.side].maxEnergy - state.sides[location.side].maxEnergy,
+            previousCurrentEnergy: state.sides[location.side].currentEnergy,
+            previousMaxEnergy: state.sides[location.side].maxEnergy,
+            side: location.side,
+          },
+        },
+      ],
+    },
+  };
+}
+
+export function resolveStackCardMove(
+  state: BattleMutableState,
+  battleCardId: string,
+  target: BattleFieldSlotAddress | { side: "player" | "enemy"; zone: "void" | "banished" },
+  context: BattleEngineEmissionContext = AUTO_SYSTEM_EMISSION_CONTEXT,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const stack = state.stack ?? [];
+  const stackIndex = stack.findIndex((entry) => entry.battleCardId === battleCardId);
+  const stackEntry = stackIndex < 0 ? null : stack[stackIndex];
+  const card = state.cardInstances[battleCardId];
+  if (stackEntry === null || card === undefined || target.side !== stackEntry.side) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  const nextState = cloneBattleMutableState(state);
+  nextState.stack ??= [];
+  nextState.stack.splice(stackIndex, 1);
+  if ("slotId" in target && card.definition.battleCardKind === "character") {
+    if (
+      !isBattleFieldSlotAddressValid(target) ||
+      selectBattlefieldSlotOccupant(state, target) !== null ||
+      (target.zone === "deployed" && !isUnboundCard(card))
+    ) {
+      return {
+        state,
+        transition: createEmptyTransitionData(),
+      };
+    }
+    setBattlefieldSlot(nextState, target, battleCardId);
+    if (target.zone === "reserve") {
+      nextState.cardInstances[battleCardId].enteredReserveTurnNumber =
+        isUnboundCard(card) ? null : state.turnNumber;
+    }
+  } else {
+    const targetZone = "zone" in target && (target.zone === "void" || target.zone === "banished")
+      ? target.zone
+      : "void";
+    nextState.sides[stackEntry.side][targetZone].push(battleCardId);
+  }
+
+  return {
+    state: nextState,
+    transition: {
+      ...createEmptyTransitionData(),
+      logEvents: [
+        {
+          event: "battle_proto_resolve_stack_card",
+          fields: {
+            ...createBattleLogBaseFields(state, {
+              sourceSurface: context.sourceSurface,
+              selectedCardId: battleCardId,
+            }),
+            battleCardId,
+            cardKind: card.definition.battleCardKind,
+            cardName: card.definition.name,
+            side: stackEntry.side,
+            stackEntryId: stackEntry.stackEntryId,
+            targetSlotId: "slotId" in target && card.definition.battleCardKind === "character"
+              ? target.slotId
+              : null,
+            targetZone: "slotId" in target && card.definition.battleCardKind === "character"
+              ? target.zone
+              : ("zone" in target ? target.zone : "void"),
+          },
+        },
+      ],
+    },
+  };
+}
+
 function resolveCharacterPlay(
   state: BattleMutableState,
   battleCardId: string,
@@ -187,7 +373,13 @@ function resolveCharacterPlay(
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
-  const target = requestedTarget ?? selectDefaultCharacterPlaySlot(state, side);
+  const card = state.cardInstances[battleCardId];
+  const isUnbound = card !== undefined && isUnboundCard(card);
+  const target = isUnbound
+    ? requestedTarget ?? selectDefaultCharacterPlaySlot(state, side)
+    : requestedTarget?.zone === "reserve"
+      ? requestedTarget
+      : selectDefaultReservePlaySlot(state, side);
   if (target === null) {
     return {
       state,
@@ -217,6 +409,9 @@ function resolveCharacterPlay(
   nextState.sides[side][sourceZone].splice(sourceIndex, 1);
   nextState.sides[side].currentEnergy -= playCost;
   setBattlefieldSlot(nextState, target, battleCardId);
+  if (target.zone === "reserve") {
+    nextState.cardInstances[battleCardId].enteredReserveTurnNumber = isUnbound ? null : state.turnNumber;
+  }
   const cardContext: BattleEngineEmissionContext = {
     sourceSurface: context.sourceSurface,
     selectedCardId: battleCardId,
@@ -351,6 +546,26 @@ function setBattlefieldSlot(
   }
 
   state.sides[target.side].deployed[target.slotId as DeploySlotId] = battleCardId;
+}
+
+function selectDefaultReservePlaySlot(
+  state: BattleMutableState,
+  side: "player" | "enemy",
+): BattleFieldSlotAddress | null {
+  for (const slotId of ["R0", "R1", "R2", "R3", "R4"] as const) {
+    if (state.sides[side].reserve[slotId] === null) {
+      return {
+        side,
+        zone: "reserve",
+        slotId,
+      };
+    }
+  }
+  return null;
+}
+
+function isUnboundCard(card: BattleCardInstance): boolean {
+  return card.definition.renderedText.toLowerCase().includes("unbound");
 }
 
 function buildPlayRejectedTransition(

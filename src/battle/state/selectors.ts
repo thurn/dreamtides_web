@@ -155,11 +155,53 @@ export function selectCanTakeMainPhaseActions(
   state: BattleMutableState,
   side: BattleSide,
 ): boolean {
-  return state.result === null && state.activeSide === side && state.phase === "main";
+  return state.result === null &&
+    state.activeSide === side &&
+    (state.phase === "day" || state.phase === "dusk" || state.phase === "night" || state.phase === "main");
 }
 
 export function selectCanEndTurn(state: BattleMutableState): boolean {
-  return state.result === null && state.activeSide === "player" && state.phase === "main";
+  return state.result === null &&
+    state.phase !== "dawn" &&
+    state.phase !== "challenge" &&
+    state.phase !== "ending" &&
+    state.phase !== "startOfTurn" &&
+    state.phase !== "draw" &&
+    state.phase !== "judgment";
+}
+
+export function selectCanPlayCardInCurrentPhase(
+  state: BattleMutableState,
+  battleCardId: string,
+): boolean {
+  const location = selectBattleCardLocation(state, battleCardId);
+  const card = state.cardInstances[battleCardId];
+  if (location === null || card === undefined || state.result !== null) {
+    return false;
+  }
+  if (location.zone !== "hand" && location.zone !== "void") {
+    return false;
+  }
+  if (location.side !== state.activeSide) {
+    return false;
+  }
+  if (state.phase === "day" || state.phase === "dusk" || state.phase === "main") {
+    return true;
+  }
+  if (state.phase === "night") {
+    const timing = card.definition.timing ?? (card.definition.isFast ? "fast" : "standard");
+    return timing === "fast" || timing === "interrupt";
+  }
+  return false;
+}
+
+export function selectCanRepositionInCurrentPhase(
+  state: BattleMutableState,
+  side: BattleSide,
+): boolean {
+  return state.result === null &&
+    state.activeSide === side &&
+    (state.phase === "day" || state.phase === "dusk" || state.phase === "main");
 }
 
 export function selectNaturalBattleResult(
@@ -254,6 +296,17 @@ export function selectBattleCardLocation(
         side,
         zone: "banished",
         index: banishedIndex,
+      };
+    }
+
+    const stackIndex = (state.stack ?? []).findIndex((entry) =>
+      entry.side === side && entry.battleCardId === battleCardId
+    );
+    if (stackIndex >= 0) {
+      return {
+        side,
+        zone: "stack",
+        index: stackIndex,
       };
     }
 

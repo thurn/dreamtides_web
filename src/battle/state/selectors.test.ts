@@ -21,7 +21,7 @@ import type {
 } from "../types";
 
 describe("selectCanEndTurn", () => {
-  it("only allows manually ending the player's main phase", () => {
+  it("allows manual phase advancement during visible player-facing phases", () => {
     const state = createInitialBattleState(
       createBattleInit({
         battleEntryKey: "site-7::2::dreamscape-2",
@@ -35,13 +35,13 @@ describe("selectCanEndTurn", () => {
     expect(selectCanEndTurn(state)).toBe(true);
 
     state.activeSide = "enemy";
-    expect(selectCanEndTurn(state)).toBe(false);
+    expect(selectCanEndTurn(state)).toBe(true);
 
     state.activeSide = "player";
-    state.phase = "judgment";
+    state.phase = "challenge";
     expect(selectCanEndTurn(state)).toBe(false);
 
-    state.phase = "main";
+    state.phase = "day";
     state.result = "victory";
     expect(selectCanEndTurn(state)).toBe(false);
   });

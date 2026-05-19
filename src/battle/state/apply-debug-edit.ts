@@ -1318,6 +1318,9 @@ function isSameLocation(
   }
 
   if (destination.zone === "deck") {
+    if (source.zone === "stack") {
+      return false;
+    }
     if (source.zone !== "deck" || source.side !== destination.side) {
       return false;
     }
@@ -1342,6 +1345,9 @@ function removeBattleCardFromLocation(
     case "void":
     case "banished":
       state.sides[source.side][source.zone].splice(source.index, 1);
+      return;
+    case "stack":
+      state.stack?.splice(source.index, 1);
       return;
     case "reserve":
     case "deployed":

@@ -57,6 +57,7 @@ function normalizeCardInstance(
     notes: raw.notes ?? [],
     definition: {
       ...raw.definition,
+      timing: raw.definition.timing ?? (raw.definition.isFast ? "fast" : "standard"),
       tides: raw.definition.tides ?? [],
     },
   };
@@ -74,10 +75,12 @@ function normalizeMutable(
     battleId: raw?.battleId ?? "",
     activeSide: raw?.activeSide ?? "player",
     turnNumber: raw?.turnNumber ?? 1,
-    phase: raw?.phase ?? "main",
+    phase: raw?.phase ?? "day",
     result: raw?.result ?? null,
     forcedResult: raw?.forcedResult ?? null,
     nextBattleCardOrdinal: raw?.nextBattleCardOrdinal ?? 0,
+    nextStackEntryOrdinal: raw?.nextStackEntryOrdinal ?? 1,
+    stack: raw?.stack ?? [],
     sides: {
       player: normalizeSide(raw?.sides?.player),
       enemy: normalizeSide(raw?.sides?.enemy),

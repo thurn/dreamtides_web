@@ -11,7 +11,8 @@ import {
 } from "../test-support";
 import type { BattleInit, BattleMutableState } from "../types";
 import { resolveJudgment } from "./judgment";
-import { runStartOfTurnComposite } from "./turn-flow";
+import { createEmptyTransitionData } from "./result";
+import { buildJudgmentTransition } from "./turn-flow";
 
 /**
  * Tests the production judgment pipeline by driving a start-of-turn
@@ -21,7 +22,7 @@ import { runStartOfTurnComposite } from "./turn-flow";
  * behaviour (bug-017). Skips the AI main phase that `advanceAfterEndTurn`
  * layers on top so lane assertions stay focused on the judgment step.
  */
-describe("judgment", () => {
+describe("challenge", () => {
   it("scores deployed lanes by effective spark differences", () => {
     const { battleInit, state } = createTestBattle();
     const playerD0 = state.sides.player.hand[0];
@@ -320,11 +321,20 @@ function setEffectiveSpark(
 
 function runJudgmentForSide(
   state: BattleMutableState,
-  battleInit: BattleInit,
+  _battleInit: BattleInit,
   side: "player" | "enemy",
 ) {
-  return runStartOfTurnComposite(state, battleInit, {
+  state.activeSide = side;
+  state.phase = "challenge";
+  const transition = createEmptyTransitionData();
+  const judgmentResult = buildJudgmentTransition(
+    state,
+    transition,
     side,
-    incrementTurnNumber: false,
-  });
+    { sourceSurface: "auto-system", selectedCardId: null },
+    { advancePhase: true },
+  );
+  transition.judgment = judgmentResult.judgment;
+  transition.scoreChanges = judgmentResult.scoreChanges;
+  return { state, transition };
 }

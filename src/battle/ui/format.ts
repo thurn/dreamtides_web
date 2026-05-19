@@ -6,16 +6,28 @@ export function formatSideLabel(side: BattleSide): string {
 
 export function formatPhaseLabel(phase: BattlePhase): string {
   switch (phase) {
+    case "dawn":
+      return "Dawn";
+    case "day":
+      return "Day";
+    case "dusk":
+      return "Dusk";
+    case "night":
+      return "Night";
+    case "challenge":
+      return "Challenge";
+    case "ending":
+      return "Ending";
     case "startOfTurn":
-      return "Start Of Turn";
+      return "Dawn";
     case "judgment":
-      return "Judgment";
+      return "Challenge";
     case "draw":
-      return "Draw";
+      return "Dawn";
     case "main":
-      return "Main";
+      return "Day";
     case "endOfTurn":
-      return "End Of Turn";
+      return "Ending";
   }
 }
 
@@ -47,6 +59,8 @@ export function formatZoneLabel(zone: BattleZoneId): string {
       return "Reserve";
     case "deployed":
       return "Deployed";
+    case "stack":
+      return "Stack";
   }
 }
 

@@ -40,7 +40,7 @@ export function useAiTurnDriver(
       !enableAi ||
       reducerState.mutable.result !== null ||
       reducerState.mutable.activeSide !== "enemy" ||
-      reducerState.mutable.phase !== "main" ||
+      (reducerState.mutable.phase !== "day" && reducerState.mutable.phase !== "main") ||
       reducerState.history.past.length > 0
     ) {
       hasDrainedRef.current = true;

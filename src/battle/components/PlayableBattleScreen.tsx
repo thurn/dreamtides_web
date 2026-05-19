@@ -25,6 +25,8 @@ import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
   selectCanEndTurn,
+  selectCanPlayCardInCurrentPhase,
+  selectCanRepositionInCurrentPhase,
   selectCanTakeMainPhaseActions,
   selectFailureOverlayResult,
   selectIsOpponentHandCardHidden,
@@ -35,6 +37,7 @@ import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type {
   BattleCardKind,
   BattleCommandSourceSurface,
+  BattleDeferredLogEvent,
   BattleFieldSlotAddress,
   BattleJudgmentResolution,
   BattleMutableState,
@@ -61,6 +64,7 @@ import { BattleRewardSurface } from "./BattleRewardSurface";
 import { BattleSideSummaryPopover } from "./BattleSideSummaryPopover";
 import { BattleStatusBar } from "./BattleStatusBar";
 import { BattleStatusStrip } from "./BattleStatusStrip";
+import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
 import { BattlefieldGrid, resolveBattlefieldSelectionAnchor } from "./BattlefieldGrid";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
 
@@ -160,6 +164,8 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const canEndTurn = rewardOverlay === null && !isInteractionLocked && selectCanEndTurn(reducerState.mutable);
   const canPlayerAct = rewardOverlay === null && !isInteractionLocked &&
     selectCanTakeMainPhaseActions(reducerState.mutable, "player");
+  const canPlayerReposition = rewardOverlay === null && !isInteractionLocked &&
+    selectCanRepositionInCurrentPhase(reducerState.mutable, "player");
   const historyCount = reducerState.history.past.length;
   const futureCount = reducerState.history.future.length;
   const failureResult = selectFailureOverlayResult(reducerState.mutable.result);
@@ -213,9 +219,10 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     const card = reducerState.mutable.cardInstances[battleCardId];
 
     return location?.side === "player" &&
-      location.zone === "hand" &&
+      (location.zone === "hand" || location.zone === "void") &&
       card !== undefined &&
-      reducerState.mutable.sides.player.currentEnergy >= card.definition.energyCost;
+      reducerState.mutable.sides.player.currentEnergy >= card.definition.energyCost &&
+      selectCanPlayCardInCurrentPhase(reducerState.mutable, battleCardId);
   }
 
   function handleCommand(command: BattleCommand): void {
@@ -410,7 +417,21 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       return true;
     }
 
-    if (location?.side === target.side && (location.zone === "reserve" || location.zone === "deployed")) {
+    if (location?.zone === "stack") {
+      handleCommand({
+        id: "MOVE_STACK_CARD",
+        battleCardId: selection.battleCardId,
+        target,
+        sourceSurface: "battlefield",
+      });
+      return true;
+    }
+
+    if (
+      canPlayerReposition &&
+      location?.side === target.side &&
+      (location.zone === "reserve" || location.zone === "deployed")
+    ) {
       if (location.zone !== target.zone) {
         handleCommand({
           id: "MOVE_CARD",
@@ -599,6 +620,17 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   }
 
   function handleSlotDrop(target: BattleFieldSlotAddress): void {
+    const draggedLocation = selectBattleCardLocation(reducerState.mutable, pendingDrag?.battleCardId ?? null);
+    if (draggedLocation?.zone === "stack" && pendingDrag !== null) {
+      handleCommand({
+        id: "MOVE_STACK_CARD",
+        battleCardId: pendingDrag.battleCardId,
+        target,
+        sourceSurface: "battlefield",
+      });
+      setPendingDrag(null);
+      return;
+    }
     if (pendingDrag?.kind === "event") {
       handleCommand({
         id: "PLAY_CARD",
@@ -609,6 +641,22 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       return;
     }
     handleSelectedBattlefieldTargetClick(target, true);
+    setPendingDrag(null);
+  }
+
+  function handleStackDrop(): void {
+    const location = selectBattleCardLocation(reducerState.mutable, pendingDrag?.battleCardId ?? null);
+    if (pendingDrag === null || location?.zone !== "hand") {
+      return;
+    }
+    if (!canPlayHandCardWithoutOverride(pendingDrag.battleCardId)) {
+      return;
+    }
+    handleCommand({
+      id: "PLAY_CARD_TO_STACK",
+      battleCardId: pendingDrag.battleCardId,
+      sourceSurface: "battlefield",
+    });
     setPendingDrag(null);
   }
 
@@ -856,7 +904,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   side="player"
                   zone="deployed"
                   state={reducerState.mutable}
-                  canInteract={canPlayerAct}
+                  canInteract={canPlayerReposition}
                   selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
                   selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
                   selectionAnchor={battlefieldSelectionAnchor}
@@ -877,7 +925,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   side="player"
                   zone="reserve"
                   state={reducerState.mutable}
-                  canInteract={canPlayerAct}
+                  canInteract={canPlayerReposition}
                   selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
                   selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
                   selectionAnchor={battlefieldSelectionAnchor}
@@ -896,6 +944,28 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 />
               </div>
             </ScaledBattlefield>
+            <BattleStackZone
+              state={reducerState.mutable}
+              selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
+              pendingDragCardId={pendingDrag?.battleCardId ?? null}
+              onDrop={handleStackDrop}
+              onCardClick={handleBattlefieldCardClick}
+              onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
+              onCardDragStart={handleCardDragStart}
+              onCardDragEnd={() => setPendingDrag(null)}
+              onResolveToBanished={(battleCardId, side) => handleCommand({
+                id: "MOVE_STACK_CARD",
+                battleCardId,
+                target: { side, zone: "banished" },
+                sourceSurface: "battlefield",
+              })}
+              onResolveToVoid={(battleCardId, side) => handleCommand({
+                id: "MOVE_STACK_CARD",
+                battleCardId,
+                target: { side, zone: "void" },
+                sourceSurface: "battlefield",
+              })}
+            />
             <BattleStatusStrip
               side="player"
               sideState={reducerState.mutable.sides.player}
@@ -922,6 +992,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             onCardDoubleClick={handleHandCardDoubleClick}
             onCardDragStart={handleCardDragStart}
             onCardDragEnd={() => setPendingDrag(null)}
+            isCardPlayable={(battleCardId) => selectCanPlayCardInCurrentPhase(reducerState.mutable, battleCardId)}
           />
           <BattleActionBar
             canEndTurn={canEndTurn}
@@ -1049,6 +1120,99 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   );
 }
 
+function BattleStackZone({
+  state,
+  selectedCardId,
+  pendingDragCardId,
+  onDrop,
+  onCardClick,
+  onCardContextMenu,
+  onCardDragStart,
+  onCardDragEnd,
+  onResolveToBanished,
+  onResolveToVoid,
+}: {
+  state: BattleMutableState;
+  selectedCardId: string | null;
+  pendingDragCardId: string | null;
+  onDrop: () => void;
+  onCardClick: (battleCardId: string) => void;
+  onCardContextMenu: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
+  onCardDragStart: (battleCardId: string) => void;
+  onCardDragEnd: () => void;
+  onResolveToBanished: (battleCardId: string, side: BattleSide) => void;
+  onResolveToVoid: (battleCardId: string, side: BattleSide) => void;
+}) {
+  return (
+    <section
+      data-battle-region="stack-zone"
+      className={`battle-stack-zone ${pendingDragCardId !== null ? "drop-target" : ""}`}
+      onDragOver={(event) => {
+        if (pendingDragCardId !== null) {
+          event.preventDefault();
+        }
+      }}
+      onDrop={(event) => {
+        event.preventDefault();
+        onDrop();
+      }}
+    >
+      <div className="battle-stack-zone-header">
+        <span>Stack</span>
+        <strong>{String((state.stack ?? []).length)}</strong>
+      </div>
+      <div className="battle-stack-zone-cards">
+        {(state.stack ?? []).length === 0 ? (
+          <span className="battle-stack-empty">Drag a card here to hold it.</span>
+        ) : (state.stack ?? []).map((entry) => {
+          const instance = state.cardInstances[entry.battleCardId];
+          if (instance === undefined) {
+            return null;
+          }
+          return (
+            <div key={entry.stackEntryId} className="battle-stack-entry">
+              <BattleCardView
+                battleCardId={entry.battleCardId}
+                data={battleCardVisualFromInstance(instance)}
+                reserved={false}
+                selected={selectedCardId === entry.battleCardId}
+                draggable
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onCardClick(entry.battleCardId);
+                }}
+                onContextMenu={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  onCardContextMenu(entry.battleCardId, event);
+                }}
+                onDragStart={() => onCardDragStart(entry.battleCardId)}
+                onDragEnd={onCardDragEnd}
+              />
+              <div className="battle-stack-entry-actions">
+                <button
+                  type="button"
+                  className="btn ghost sm"
+                  onClick={() => onResolveToVoid(entry.battleCardId, entry.side)}
+                >
+                  Void
+                </button>
+                <button
+                  type="button"
+                  className="btn ghost sm"
+                  onClick={() => onResolveToBanished(entry.battleCardId, entry.side)}
+                >
+                  Banish
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 // In multiplayer the shared reducer slice does not carry `lastActivity`
 // (per the V2 design spec), so the judgment-pause overlay fires whenever a
 // new commandSerial yields a transition with a non-null `judgment`. This
@@ -1059,19 +1223,53 @@ function readJudgmentPause(
 ): JudgmentPauseState {
   const lastTransition = reducerState.lastTransition;
 
-  if (lastTransition === null || lastTransition.judgment === null) {
+  if (lastTransition === null) {
+    return null;
+  }
+  const judgment = lastTransition.judgment ?? readJudgmentFromTransitionLogs(lastTransition.logEvents);
+  if (judgment === null) {
     return null;
   }
 
   return {
     dissolvedCardNames: readJudgmentDissolvedCardNames(reducerState),
-    judgment: lastTransition.judgment,
+    judgment,
     result: reducerState.mutable.result,
     scoreChanges: lastTransition.scoreChanges.map((change) => ({
       delta: change.delta,
       side: change.side,
     })),
     turnNumber: reducerState.mutable.turnNumber,
+  };
+}
+
+function readJudgmentFromTransitionLogs(
+  logEvents: readonly BattleDeferredLogEvent[],
+): BattleJudgmentResolution | null {
+  const event = logEvents.find((entry) => entry.event === "battle_proto_judgment");
+  const fields = event?.fields;
+  if (fields === undefined || !Array.isArray(fields.lanes)) {
+    return null;
+  }
+  return {
+    lanes: fields.lanes.map((lane) => {
+      const candidate = lane as Partial<{
+        enemySpark: number;
+        playerSpark: number;
+        scoreDelta: number;
+        slotId: "D0" | "D1" | "D2" | "D3";
+        winner: BattleSide | null;
+      }>;
+      return {
+        enemySpark: candidate.enemySpark ?? 0,
+        playerSpark: candidate.playerSpark ?? 0,
+        scoreDelta: candidate.scoreDelta ?? 0,
+        slotId: candidate.slotId ?? "D0",
+        winner: candidate.winner ?? null,
+      };
+    }),
+    enemyScoreDelta: typeof fields.enemyScoreDelta === "number" ? fields.enemyScoreDelta : 0,
+    playerScoreDelta: typeof fields.playerScoreDelta === "number" ? fields.playerScoreDelta : 0,
   };
 }
 

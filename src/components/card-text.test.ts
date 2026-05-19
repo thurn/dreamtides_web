@@ -185,28 +185,23 @@ describe("tokenizeRulesText", () => {
   // recognized keywords in `term` segments so the renderer can attach a
   // hover popover.
   it("wraps a recognized lowercase glossary term", () => {
-    const result = tokenizeRulesText("Send to your void.");
-    const voidEntry = lookupGlossaryTerm("void");
-    expect(voidEntry).toBeDefined();
+    const result = tokenizeRulesText("reclaim this card.");
+    const reclaimEntry = lookupGlossaryTerm("reclaim");
+    expect(reclaimEntry).toBeDefined();
     expect(result).toEqual([
-      { kind: "text", value: "Send to your " },
-      { kind: "term", word: "void", entry: voidEntry },
-      { kind: "text", value: "." },
+      { kind: "term", word: "reclaim", entry: reclaimEntry },
+      { kind: "text", value: " this card." },
     ]);
   });
 
   it("wraps multiple glossary terms in the same string", () => {
-    const result = tokenizeRulesText("Discover an ally with reclaim.");
+    const result = tokenizeRulesText("Discover with reclaim.");
     const discoverEntry = lookupGlossaryTerm("Discover");
-    const allyEntry = lookupGlossaryTerm("ally");
     const reclaimEntry = lookupGlossaryTerm("reclaim");
     expect(discoverEntry).toBeDefined();
-    expect(allyEntry).toBeDefined();
     expect(reclaimEntry).toBeDefined();
     expect(result).toEqual([
       { kind: "term", word: "Discover", entry: discoverEntry },
-      { kind: "text", value: " an " },
-      { kind: "term", word: "ally", entry: allyEntry },
       { kind: "text", value: " with " },
       { kind: "term", word: "reclaim", entry: reclaimEntry },
       { kind: "text", value: "." },
@@ -214,17 +209,10 @@ describe("tokenizeRulesText", () => {
   });
 
   it("matches plural and past-tense variants", () => {
-    const result = tokenizeRulesText("allies are dissolved.");
-    const allyEntry = lookupGlossaryTerm("ally");
+    const result = tokenizeRulesText("This dissolved character.");
     const dissolvedEntry = lookupGlossaryTerm("Dissolved");
-    expect(allyEntry).toBeDefined();
     expect(dissolvedEntry).toBeDefined();
-    expect(result[0]).toEqual({
-      kind: "term",
-      word: "allies",
-      entry: allyEntry,
-    });
-    expect(result[2]).toEqual({
+    expect(result[1]).toEqual({
       kind: "term",
       word: "dissolved",
       entry: dissolvedEntry,

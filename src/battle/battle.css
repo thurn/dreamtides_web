@@ -169,14 +169,33 @@
 }
 
 .phase-track-step {
-  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-width: 82px;
+  min-height: 28px;
+  border-radius: 8px;
   border: 1px solid var(--line);
-  padding: 3px 9px;
+  padding: 4px 8px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 9px;
-  letter-spacing: 0.12em;
+  font-size: 10px;
+  letter-spacing: 0;
   text-transform: uppercase;
   color: var(--text-faint);
+}
+
+.phase-track-step .bx {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.phase-icon-sunrise {
+  color: #fbbf24;
+}
+
+.phase-icon-sunset {
+  color: #f97316;
 }
 
 .phase-track-step.active {
@@ -298,6 +317,68 @@
 
 .judgment-divider.active {
   background: linear-gradient(90deg, transparent, var(--accent) 25%, var(--accent) 75%, transparent);
+}
+
+.battle-stack-zone {
+  display: grid;
+  grid-template-columns: minmax(88px, 0.2fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 82px;
+  margin: 6px 0;
+  padding: 8px 12px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.battle-stack-zone.drop-target {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.battle-stack-zone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.battle-stack-zone-cards {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.battle-stack-empty {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+.battle-stack-entry {
+  display: grid;
+  grid-template-columns: 44px auto;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.battle-stack-entry .battle-card {
+  width: 44px;
+  height: 66px;
+}
+
+.battle-stack-entry-actions {
+  display: grid;
+  gap: 4px;
 }
 
 .status-strip {

@@ -34,14 +34,14 @@ afterEach(() => {
 describe("RulesText", () => {
   it("wraps recognized glossary terms with role=tooltip-able trigger spans", () => {
     const { container, root } = mount(
-      <RulesText text="Send a card to your void." />,
+      <RulesText text="Reclaim this card." />,
     );
 
-    // The "void" word should be rendered inside an interactive trigger span
+    // The "Reclaim" word should be rendered inside an interactive trigger span
     // (the underline styling indicates a glossary-recognized term).
     const allSpans = container.querySelectorAll("span");
     const triggerSpan = Array.from(allSpans).find(
-      (s) => s.textContent === "void",
+      (s) => s.textContent === "Reclaim",
     );
     expect(triggerSpan).toBeDefined();
     expect(triggerSpan?.getAttribute("style")).toContain("text-decoration");

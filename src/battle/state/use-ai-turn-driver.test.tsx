@@ -118,7 +118,7 @@ describe("useAiTurnDriver", () => {
   it("drains the opening enemy turn exactly once when the enemy starts on main phase", () => {
     const { battleInit, initialState } = createTestBattle();
     initialState.activeSide = "enemy";
-    initialState.phase = "main";
+    initialState.phase = "day";
 
     let latest: HarnessSnapshot | null = null;
     const { root } = mountHarness({
@@ -141,7 +141,7 @@ describe("useAiTurnDriver", () => {
   it("does not drain the opening enemy turn when enableAi is false", () => {
     const { battleInit, initialState } = createTestBattle({ enableAi: false });
     initialState.activeSide = "enemy";
-    initialState.phase = "main";
+    initialState.phase = "day";
 
     let latest: HarnessSnapshot | null = null;
     const { root } = mountHarness({
@@ -155,7 +155,7 @@ describe("useAiTurnDriver", () => {
     const snapshot = readLatestSnapshot(latest);
     expect(snapshot.state.history.past).toHaveLength(0);
     expect(snapshot.state.mutable.activeSide).toBe("enemy");
-    expect(snapshot.state.mutable.phase).toBe("main");
+    expect(snapshot.state.mutable.phase).toBe("day");
 
     act(() => {
       root.unmount();

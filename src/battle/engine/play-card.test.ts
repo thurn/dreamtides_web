@@ -21,38 +21,34 @@ describe("play-card engine", () => {
     expect(resolved.transition.energyChanges).toHaveLength(1);
   });
 
-  it("falls back to the leftmost empty deployed slot when the reserve row is full (E-16)", () => {
+  it("rejects a bound character when the reserve row is full", () => {
     const state = createTestBattle();
     const battleCardId = findPlayerHandCardId(state, "character");
 
     occupyPlayerReserve(state);
     const resolved = resolvePlayCard(state, battleCardId);
 
-    expect(resolved.state.sides.player.hand).not.toContain(battleCardId);
-    expect(resolved.state.sides.player.deployed.D0).toBe(battleCardId);
-    expect(resolved.transition.energyChanges).toHaveLength(1);
+    expect(resolved.state.sides.player.hand).toContain(battleCardId);
+    expect(resolved.state.sides.player.deployed.D0).toBeNull();
+    expect(resolved.transition.energyChanges).toHaveLength(0);
   });
 
-  it("falls through to the next deployed slot when D0 is already occupied", () => {
+  it("allows an Unbound character to materialize directly deployed", () => {
     const state = createTestBattle();
     const battleCardId = findPlayerHandCardId(state, "character");
+    state.cardInstances[battleCardId].definition = {
+      ...state.cardInstances[battleCardId].definition,
+      renderedText: "Unbound.",
+    };
 
-    occupyPlayerReserve(state);
-    // Also occupy D0 so the fallback has to pick a later deployed slot.
-    const existingDeployedCardId = Object.keys(state.cardInstances).find(
-      (cardId) => cardId !== battleCardId &&
-        !Object.values(state.sides.player.reserve).includes(cardId) &&
-        state.sides.player.hand.every((handCardId) => handCardId !== cardId),
-    );
-    if (existingDeployedCardId === undefined) {
-      throw new Error("Expected a spare card instance for D0 fill");
-    }
-    state.sides.player.deployed.D0 = existingDeployedCardId;
+    const resolved = resolvePlayCard(state, battleCardId, {
+      side: "player",
+      zone: "deployed",
+      slotId: "D0",
+    });
 
-    const resolved = resolvePlayCard(state, battleCardId);
-
-    expect(resolved.state.sides.player.deployed.D0).toBe(existingDeployedCardId);
-    expect(resolved.state.sides.player.deployed.D1).toBe(battleCardId);
+    expect(resolved.state.sides.player.deployed.D0).toBe(battleCardId);
+    expect(resolved.state.sides.player.hand).not.toContain(battleCardId);
   });
 
   it("moves a non-character play directly from hand to void", () => {

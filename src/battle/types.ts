@@ -16,7 +16,7 @@ export type BattleSide = "player" | "enemy";
 export type ReserveSlotId = (typeof RESERVE_SLOT_IDS)[number];
 export type DeploySlotId = (typeof DEPLOY_SLOT_IDS)[number];
 export type BattlefieldSlotId = ReserveSlotId | DeploySlotId;
-export type BattleZoneId = "deck" | "hand" | "void" | "banished" | "reserve" | "deployed";
+export type BattleZoneId = "deck" | "hand" | "void" | "banished" | "reserve" | "deployed" | "stack";
 export type BattlefieldZone = "reserve" | "deployed";
 export type BrowseableZone = "deck" | "hand" | "void" | "banished";
 export type MarkerDiffState = "set" | "cleared" | "unchanged";
@@ -40,9 +40,21 @@ export type BattleSelection =
     side: BattleSide;
   }
   | null;
-export type BattlePhase = "startOfTurn" | "judgment" | "draw" | "main" | "endOfTurn";
+export type BattlePhase =
+  | "dawn"
+  | "day"
+  | "dusk"
+  | "night"
+  | "challenge"
+  | "ending"
+  | "startOfTurn"
+  | "judgment"
+  | "draw"
+  | "main"
+  | "endOfTurn";
 export type BattleResult = "victory" | "defeat" | "draw";
 export type BattleCardKind = "character" | "event";
+export type BattleCardTiming = "standard" | "fast" | "interrupt";
 export type BattleHistoryEntryKind =
   | "numeric-state"
   | "card-instance"
@@ -143,6 +155,7 @@ export interface BattleDeckCardDefinition {
   printedEnergyCost: number | null;
   printedSpark: number;
   isFast: boolean;
+  timing?: BattleCardTiming;
   reclaimCost: number | null;
   tides: readonly string[];
   renderedText: string;
@@ -270,6 +283,7 @@ export interface BattleCardInstance {
   markers: BattleCardMarkers;
   notes: readonly BattleCardNote[];
   provenance: BattleCardProvenance;
+  enteredReserveTurnNumber?: number | null;
 }
 
 export interface BattleSideMutableState {
@@ -284,6 +298,13 @@ export interface BattleSideMutableState {
   banished: string[];
   reserve: Record<ReserveSlotId, string | null>;
   deployed: Record<DeploySlotId, string | null>;
+}
+
+export interface BattleStackEntry {
+  stackEntryId: string;
+  battleCardId: string;
+  side: BattleSide;
+  paidCost: number;
 }
 
 /**
@@ -308,6 +329,8 @@ export interface BattleMutableState {
   result: BattleResult | null;
   forcedResult: BattleResult | null;
   nextBattleCardOrdinal: number;
+  nextStackEntryOrdinal?: number;
+  stack?: BattleStackEntry[];
   sides: Record<BattleSide, BattleSideMutableState>;
   cardInstances: Record<string, BattleCardInstance>;
 }
@@ -333,7 +356,13 @@ export interface BattleHandCardLocation {
 
 export interface BattleZoneCardLocation {
   side: BattleSide;
-  zone: Exclude<BattleZoneId, "hand" | "reserve" | "deployed">;
+  zone: Exclude<BattleZoneId, "hand" | "reserve" | "deployed" | "stack">;
+  index: number;
+}
+
+export interface BattleStackCardLocation {
+  side: BattleSide;
+  zone: "stack";
   index: number;
 }
 
@@ -346,6 +375,7 @@ export interface BattleFieldCardLocation {
 export type BattleCardLocation =
   | BattleHandCardLocation
   | BattleZoneCardLocation
+  | BattleStackCardLocation
   | BattleFieldCardLocation;
 
 export interface BattleLaneJudgment {
@@ -495,12 +525,27 @@ export type BattleReducerAction =
     type: "END_TURN";
     metadata?: BattleHistoryEntryMetadata;
   }
+  | {
+    type: "PASS_PHASE";
+    metadata: BattleHistoryEntryMetadata;
+  }
   | { type: "RUN_AI_TURN" }
   | {
     type: "PLAY_CARD";
     battleCardId: string;
     target?: BattleFieldSlotAddress;
     metadata?: BattleHistoryEntryMetadata;
+  }
+  | {
+    type: "PLAY_CARD_TO_STACK";
+    battleCardId: string;
+    metadata: BattleHistoryEntryMetadata;
+  }
+  | {
+    type: "MOVE_STACK_CARD";
+    battleCardId: string;
+    target: BattleFieldSlotAddress | { side: BattleSide; zone: "void" | "banished" };
+    metadata: BattleHistoryEntryMetadata;
   }
   | {
     type: "MOVE_CARD";

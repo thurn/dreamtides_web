@@ -59,7 +59,7 @@ describe("evaluateBattleResult", () => {
         ...makeTurnLimitState(12, 10),
         activeSide: "player" as const,
         turnNumber: 51,
-        phase: "main" as const,
+        phase: "day" as const,
       },
       { scoreToWin: 25, turnLimit: 50 },
     );
@@ -76,7 +76,7 @@ function makeResultState(playerScore: number, enemyScore: number) {
     battleId: "battle-1",
     activeSide: "player" as const,
     turnNumber: 1,
-    phase: "main" as const,
+    phase: "day" as const,
     result: null,
     forcedResult: null,
     nextBattleCardOrdinal: 1,
@@ -139,6 +139,6 @@ function makeTurnLimitState(playerScore: number, enemyScore: number) {
     ...makeResultState(playerScore, enemyScore),
     activeSide: "enemy" as const,
     turnNumber: 50,
-    phase: "endOfTurn" as const,
+    phase: "ending" as const,
   };
 }
