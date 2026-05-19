@@ -1115,6 +1115,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       </div>
       {contextMenu !== null ? (
         <BattleContextMenu
+          key={`${contextMenu.battleCardId}:${contextMenu.sourceSurface}:${String(contextMenu.x)}:${String(contextMenu.y)}`}
           battleCardId={contextMenu.battleCardId}
           onOpenNoteEditor={(battleCardId) => setOpenNoteEditor(battleCardId)}
           sourceSurface={contextMenu.sourceSurface}

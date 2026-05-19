@@ -73,10 +73,11 @@ export function BattleContextMenu({
 
     const result: ContextMenuItem[] = [];
 
-    if (location.zone === "hand" && location.side === "player") {
-      const isAffordable = state.sides.player.currentEnergy >= card.definition.energyCost;
+    if (location.zone === "hand") {
+      const isAffordable = state.sides[location.side].currentEnergy >= card.definition.energyCost;
+      const playDestination = card.definition.battleCardKind === "character" ? "reserve" : "void";
       result.push({
-        label: isAffordable ? "Play to reserve" : "Override cost → reserve",
+        label: isAffordable ? `Play to ${playDestination}` : `Override cost → ${playDestination}`,
         action: () => onCommand({
           id: "PLAY_CARD",
           battleCardId,
@@ -87,7 +88,7 @@ export function BattleContextMenu({
         const deployedTarget = createMoveCardToRowCommand(
           state,
           battleCardId,
-          "player",
+          location.side,
           "deployed",
           sourceSurface,
         );

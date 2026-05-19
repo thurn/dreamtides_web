@@ -449,6 +449,213 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("plays revealed opponent hand events through the context menu play action", () => {
+    const { container, initialState, root } = renderScreen((state) => {
+      state.activeSide = "player";
+      state.phase = "day";
+      state.sides.enemy.currentEnergy = 10;
+      state.sides.enemy.maxEnergy = 10;
+      if (
+        state.sides.enemy.hand.every((battleCardId) =>
+          state.cardInstances[battleCardId]?.definition.battleCardKind !== "event")
+      ) {
+        const deckEventId = state.sides.enemy.deck.find((battleCardId) =>
+          state.cardInstances[battleCardId]?.definition.battleCardKind === "event");
+        if (deckEventId !== undefined) {
+          state.sides.enemy.deck = state.sides.enemy.deck.filter((battleCardId) => battleCardId !== deckEventId);
+          state.sides.enemy.hand = [...state.sides.enemy.hand, deckEventId];
+        }
+      }
+    });
+    const initialEnemyHandCount = initialState.sides.enemy.hand.length;
+    const initialEnemyVoidCount = initialState.sides.enemy.void.length;
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+
+    const opponentCard = [...container.querySelectorAll<HTMLElement>(
+      '[data-battle-region="opponent-hand-tray"] [data-battle-card-id]',
+    )].find((element) => {
+      const battleCardId = element.getAttribute("data-battle-card-id");
+      return battleCardId !== null &&
+        initialState.cardInstances[battleCardId]?.definition.battleCardKind === "event";
+    });
+    if (opponentCard === undefined) {
+      throw new Error("expected opponent event card");
+    }
+    const opponentEventId = opponentCard.getAttribute("data-battle-card-id");
+    if (opponentEventId === null) {
+      throw new Error("expected opponent event id");
+    }
+    const eventCost = initialState.cardInstances[opponentEventId].definition.energyCost;
+
+    act(() => {
+      opponentCard.dispatchEvent(new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 220,
+        clientY: 160,
+      }));
+    });
+
+    const menu = container.querySelector("[data-battle-context-menu]");
+    expect(menu?.textContent).toContain("Play to void");
+    const playItem = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
+      .find((element) => element.textContent === "Play to void");
+    if (playItem === undefined) {
+      throw new Error("expected enemy event play item");
+    }
+
+    act(() => {
+      playItem.click();
+    });
+
+    expect(
+      container.querySelector(
+        `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${opponentEventId}"]`,
+      ),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count"),
+    ).toBe(String(initialEnemyHandCount - 1));
+    expect(
+      container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-current-energy"),
+    ).toBe(String(10 - eventCost));
+    expect(
+      container.querySelector('[data-battle-stat="enemy:void"]')?.getAttribute("data-battle-zone-count"),
+    ).toBe(String(initialEnemyVoidCount + 1));
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-zone-open="enemy:void"]')?.click();
+    });
+
+    expect(container.querySelector(`[data-zone-browser-card-id="${opponentEventId}"]`)).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("plays a revealed opponent hand character even after a stale player reserve selection", () => {
+    let stalePlayerCardId = "";
+    let opponentCharacterId = "";
+    let opponentCharacterCost = 0;
+    const { container, initialState, root } = renderScreen((state) => {
+      state.activeSide = "enemy";
+      state.phase = "day";
+      state.sides.enemy.currentEnergy = 2;
+      state.sides.enemy.maxEnergy = 2;
+
+      const playerCardId = state.sides.player.hand.find((battleCardId) =>
+        state.cardInstances[battleCardId]?.definition.battleCardKind === "character");
+      if (playerCardId === undefined) {
+        throw new Error("expected player character");
+      }
+      state.sides.player.hand = state.sides.player.hand.filter((battleCardId) => battleCardId !== playerCardId);
+      state.sides.player.reserve.R0 = playerCardId;
+      state.cardInstances[playerCardId].enteredReserveTurnNumber = state.turnNumber;
+      stalePlayerCardId = playerCardId;
+
+      let enemyCardId = state.sides.enemy.hand.find((battleCardId) => {
+        const card = state.cardInstances[battleCardId];
+        return card?.definition.battleCardKind === "character" && card.definition.energyCost <= 2;
+      });
+      if (enemyCardId === undefined) {
+        enemyCardId = state.sides.enemy.deck.find((battleCardId) => {
+          const card = state.cardInstances[battleCardId];
+          return card?.definition.battleCardKind === "character" && card.definition.energyCost <= 2;
+        });
+        if (enemyCardId !== undefined) {
+          state.sides.enemy.deck = state.sides.enemy.deck.filter((battleCardId) => battleCardId !== enemyCardId);
+          state.sides.enemy.hand = [...state.sides.enemy.hand, enemyCardId];
+        }
+      }
+      if (enemyCardId === undefined) {
+        throw new Error("expected affordable enemy character");
+      }
+      opponentCharacterId = enemyCardId;
+      opponentCharacterCost = state.cardInstances[enemyCardId].definition.energyCost ?? 0;
+    });
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+
+    const stalePlayerCard = container.querySelector<HTMLElement>(
+      `[data-slot-id="player-reserve-R0"] [data-battle-card-id="${stalePlayerCardId}"]`,
+    );
+    const opponentCard = container.querySelector<HTMLElement>(
+      `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${opponentCharacterId}"]`,
+    );
+    if (stalePlayerCard === null || opponentCard === null) {
+      throw new Error("expected stale player reserve card and opponent hand card");
+    }
+
+    act(() => {
+      stalePlayerCard.dispatchEvent(new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 520,
+        clientY: 420,
+      }));
+    });
+    expect(container.querySelector("[data-battle-context-menu]")?.textContent).toContain("→ Void");
+
+    act(() => {
+      opponentCard.dispatchEvent(new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 220,
+        clientY: 160,
+      }));
+    });
+
+    const menu = container.querySelector("[data-battle-context-menu]");
+    expect(menu?.textContent).toContain(initialState.cardInstances[opponentCharacterId].definition.name);
+    const playItem = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
+      .find((element) =>
+        element.textContent === "Play to reserve" ||
+        element.textContent === "Override cost → reserve"
+      );
+    if (playItem === undefined) {
+      throw new Error("expected enemy character play item");
+    }
+    const enemyHandCountBeforePlay = Number(
+      container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
+    );
+    const enemyEnergyBeforePlay = Number(
+      container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-current-energy") ?? "0",
+    );
+
+    act(() => {
+      playItem.click();
+    });
+
+    expect(
+      container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id"),
+    ).toBe(stalePlayerCardId);
+    expect(
+      [...container.querySelectorAll("[data-slot-id^='enemy-reserve-']")]
+        .some((slot) => slot.getAttribute("data-slot-card-id") === opponentCharacterId),
+    ).toBe(true);
+    expect(
+      container.querySelector(
+        `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${opponentCharacterId}"]`,
+      ),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count"),
+    ).toBe(String(enemyHandCountBeforePlay - 1));
+    expect(
+      container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-current-energy"),
+    ).toBe(String(enemyEnergyBeforePlay - opponentCharacterCost));
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("drops opponent hand cards onto status-strip zone targets through debug movement", () => {
     const { container, root } = renderScreen();
 
