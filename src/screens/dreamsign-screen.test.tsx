@@ -1023,3 +1023,104 @@ describe("DreamsignDraftScreen hover popover", () => {
     }
   });
 });
+
+describe("Dreamsign card type label", () => {
+  // Dreamsign cards do not render the literal word "Dreamsign" as a type
+  // badge under the art. The frame, art treatment, and surrounding context
+  // already communicate that the card is a dreamsign, so the redundant text
+  // label is omitted. See backlog task 010-remove-dreamsign-label.
+  it("does not render the literal 'Dreamsign' label on draft cards", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+              {
+                id: "glacial-insight",
+                name: "Glacial Insight",
+                effectDescription: "Ice.",
+                isBane: false,
+              },
+              {
+                id: "verdant-accord",
+                name: "Verdant Accord",
+                effectDescription: "Growth.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["stormthread-sigil"],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <DreamsignDraftScreen site={makeSite({ type: "DreamsignDraft" })} />,
+    );
+
+    // The dreamsign hover trigger wraps the card content. The card itself
+    // must not contain a "Dreamsign" type label badge -- only the dreamsign
+    // name, effect text, and art.
+    const triggers = container.querySelectorAll(
+      '[data-testid^="dreamsign-draft-hover-trigger-"]',
+    );
+    expect(triggers.length).toBeGreaterThan(0);
+    triggers.forEach((trigger) => {
+      const cardText = trigger.textContent ?? "";
+      expect(cardText).not.toMatch(/\bDreamsign\b/);
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("does not render the literal 'Dreamsign' label on offering cards", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["glacial-insight"],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <DreamsignOfferingScreen site={makeSite()} />,
+    );
+
+    // The screen heading still says "Dreamsign Offering" -- scope the
+    // assertion to the badge spans on the card itself.
+    const labelBadges = Array.from(container.querySelectorAll("span")).filter(
+      (span) => span.textContent?.trim() === "Dreamsign",
+    );
+    expect(labelBadges).toHaveLength(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+});

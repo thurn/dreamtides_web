@@ -483,4 +483,49 @@ describe("RewardSiteScreen", () => {
       root.unmount();
     });
   });
+
+  it("omits the redundant 'Dreamsign Reward' label inside the dreamsign reward card body", () => {
+    // The screen-level header carries the "Dreamsign Reward" title and
+    // disambiguates from essence rewards. The dreamsign card body itself
+    // renders only the art, optional Bane badge, name, and rules text -- the
+    // surrounding chrome establishes the reward type.
+    // See backlog task 010-remove-dreamsign-label.
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "reward",
+            reward: {
+              rewardType: "dreamsign",
+              dreamsign: {
+                id: "dreamsign-1",
+                name: "Ember's Whisper",
+                effectDescription: "A boon.",
+                isBane: false,
+              },
+            },
+            remainingDreamsignPoolIds: [],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const { container, root } = mount(
+      <RewardSiteScreen
+        site={{ id: "site-1", type: "Reward", isEnhanced: false, isVisited: false }}
+      />,
+    );
+
+    const card = container.querySelector("[data-dreamsign-reward-display]");
+    expect(card).not.toBeNull();
+    expect(card?.textContent).toContain("Ember's Whisper");
+    expect(card?.textContent).not.toMatch(/\bDreamsign\b/);
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });

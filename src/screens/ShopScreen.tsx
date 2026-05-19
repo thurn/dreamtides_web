@@ -332,24 +332,18 @@ function ShopSlotCard({
           }}
         >
           <DreamsignArtTile dreamsign={ds} sizePx={96} />
-          <span
-            className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-            style={
-              ds.isBane
-                ? {
-                    background: "rgba(239, 68, 68, 0.16)",
-                    color: "#fecaca",
-                    border: "1px solid rgba(239, 68, 68, 0.40)",
-                  }
-                : {
-                    background: "rgba(168, 85, 247, 0.16)",
-                    color: "#c4b5fd",
-                    border: "1px solid rgba(168, 85, 247, 0.35)",
-                  }
-            }
-          >
-            {ds.isBane ? "Bane Dreamsign" : "Dreamsign"}
-          </span>
+          {ds.isBane && (
+            <span
+              className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+              style={{
+                background: "rgba(239, 68, 68, 0.16)",
+                color: "#fecaca",
+                border: "1px solid rgba(239, 68, 68, 0.40)",
+              }}
+            >
+              Bane
+            </span>
+          )}
           <h3
             className="text-center text-sm font-bold"
             style={{ color: ds.isBane ? "#fca5a5" : "#f8fafc" }}
