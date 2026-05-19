@@ -7,6 +7,7 @@ import type {
 } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
+import { CardHoverPreview } from "./CardHoverPreview";
 import { CardOverlay } from "./CardOverlay";
 import { DreamsignArtTile } from "./DreamsignArtTile";
 import {
@@ -528,13 +529,14 @@ export function DeckViewer({
                           placement="top"
                           delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
                           maxWidthPx={null}
-                          content={
-                            <div
-                              data-testid={`deck-viewer-row-hover-card-${resolved.entry.entryId}`}
-                              style={{ width: CARD_HOVER_PREVIEW_WIDTH_PX }}
-                            >
-                              <CardDisplay card={resolved.card} />
-                            </div>
+                          content={({ anchorRect, side }) =>
+                            <CardHoverPreview
+                              card={resolved.card}
+                              testId={`deck-viewer-row-hover-card-${resolved.entry.entryId}`}
+                              widthPx={CARD_HOVER_PREVIEW_WIDTH_PX}
+                              popoverSide={side}
+                              anchorRect={anchorRect}
+                            />
                           }
                         >
                           {cardTile}

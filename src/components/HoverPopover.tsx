@@ -45,11 +45,18 @@ import {
 
 type Placement = "top" | "left";
 
+export interface HoverPopoverContentContext {
+  /** The side selected by the viewport-aware placement pass. */
+  side: PopoverPlacementSide;
+  /** Anchor rect captured from the trigger when the popover opened. */
+  anchorRect: DOMRect;
+}
+
 interface HoverPopoverProps {
   /** The element that triggers the popover on hover. */
   children: ReactNode;
   /** The popover body. Rendered into a portal when visible. */
-  content: ReactNode;
+  content: ReactNode | ((context: HoverPopoverContentContext) => ReactNode);
   /** Delay before showing the popover (ms). Defaults to 500ms. */
   delayMs?: number;
   /**
@@ -220,6 +227,18 @@ export function HoverPopover({
     popoverStyle.maxWidth = maxWidthPx ?? POPOVER_DEFAULT_MAX_WIDTH_PX;
   }
 
+  let contentNode: ReactNode;
+  if (typeof content === "function" && shown !== null) {
+    contentNode = content({
+      anchorRect: shown.anchorRect,
+      side: resolved?.side ?? (placement === "left" ? "left" : "top"),
+    });
+  } else if (typeof content === "function") {
+    contentNode = null;
+  } else {
+    contentNode = content;
+  }
+
   const triggerProps = {
     ref: (element: HTMLElement | null) => {
       triggerRef.current = element;
@@ -249,7 +268,7 @@ export function HoverPopover({
             role="tooltip"
             data-popover-side={resolved?.side ?? "pending"}
           >
-            {content}
+            {contentNode}
           </div>,
           document.body,
         )}

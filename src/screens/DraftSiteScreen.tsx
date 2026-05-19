@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "../components/CardDisplay";
+import { CardHoverPreview } from "../components/CardHoverPreview";
 import { CardOverlay } from "../components/CardOverlay";
 import {
   CARD_HOVER_PREVIEW_DELAY_MS,
@@ -262,13 +263,14 @@ function DeckSidebar({
               placement="left"
               delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
               maxWidthPx={null}
-              content={
-                <div
-                  data-testid={hoverTestId}
-                  style={{ width: CARD_HOVER_PREVIEW_WIDTH_PX }}
-                >
-                  <CardDisplay card={card} />
-                </div>
+              content={({ anchorRect, side }) =>
+                <CardHoverPreview
+                  card={card}
+                  testId={hoverTestId}
+                  widthPx={CARD_HOVER_PREVIEW_WIDTH_PX}
+                  popoverSide={side}
+                  anchorRect={anchorRect}
+                />
               }
             >
               <div

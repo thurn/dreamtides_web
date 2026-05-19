@@ -971,6 +971,62 @@ describe("DraftSiteScreen", () => {
     });
   });
 
+  it("shows referenced glossary definitions beside a deck-row hover preview", () => {
+    const mutations = makeMutations();
+    const cardDatabase = makeCardDatabase();
+    const starter = cardDatabase.get(1);
+    if (starter === undefined) {
+      throw new Error("Missing starter card fixture");
+    }
+    cardDatabase.set(1, {
+      ...starter,
+      renderedText: "Gain a Bane. Reclaim a bane.",
+    });
+    setQuestContext(makeState(), mutations, cardDatabase);
+
+    const { container, root } = mount(<DraftSiteScreen siteId="site-1" />);
+
+    const row = container.querySelector(
+      "[data-testid='draft-deck-row-entry-1']",
+    );
+    const trigger = row?.parentElement;
+    if (!(trigger instanceof HTMLElement)) {
+      throw new Error("Expected deck row trigger to be an HTMLElement");
+    }
+    vi.spyOn(trigger, "getBoundingClientRect").mockReturnValue({
+      left: 1000,
+      right: 1200,
+      top: 400,
+      bottom: 436,
+      width: 200,
+      height: 36,
+      x: 1000,
+      y: 400,
+      toJSON: () => ({}),
+    });
+
+    act(() => {
+      trigger.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+    act(() => {
+      vi.advanceTimersByTime(350);
+    });
+
+    const stack = document.body.querySelector(
+      "[data-testid='draft-deck-row-hover-card-entry-1-definition-stack']",
+    );
+    expect(stack).not.toBeNull();
+    expect(stack?.getAttribute("data-definition-side")).toBe("left");
+    const terms = Array.from(
+      stack?.querySelectorAll("p:first-child") ?? [],
+    ).map((term) => term.textContent);
+    expect(terms).toEqual(["Bane", "Reclaim"]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("hides the deck-row preview cleanly on mouse-out", () => {
     const mutations = makeMutations();
     const cardDatabase = makeCardDatabase();
