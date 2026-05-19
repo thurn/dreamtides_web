@@ -55,6 +55,11 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["materialized"],
   },
   {
+    term: "Dawn",
+    definition: "Triggers at the start of your turn.",
+    variants: ["dawn"],
+  },
+  {
     term: "Materialize",
     definition: "Put a character into play",
     variants: ["materialize", "materializes"],

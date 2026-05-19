@@ -74,7 +74,7 @@ name = "Kaleth"
 title = "The Dreaming"
 id = "3C4773E4-F8E1-4686-86CB-B407A42489D4"
 image-number = "0026"
-rendered-text = "▸Challenge: Banish an ally, then materialize it."
+rendered-text = "▸ Dawn: Banish an ally, then materialize it."
 # Free challenge-driven trigger reuse on every turn — premium engine.
 starting-essence = 225
 mandatory-tides = [
@@ -184,7 +184,7 @@ name = "Korrax"
 title = "Iron Sovereign"
 id = "6029BE40-75B9-4C07-912F-9718B6C5C747"
 image-number = "0003"
-rendered-text = "▸ Challenge: If you have exactly 1 deployed ally, it gains +2 spark and Unstoppable."
+rendered-text = "▸ Dawn: If you have exactly 1 deployed ally, it gains +2 spark and Unstoppable."
 # Conditional finisher; the "exactly one ally" clause is fragile.
 starting-essence = 270
 mandatory-tides = [
@@ -236,7 +236,7 @@ name = "Ossian"
 title = "the Reckoning Blade"
 id = "B9BF6D4B-907C-4750-B51C-811AFF29DE59"
 image-number = "0022"
-rendered-text = "▸Challenge: You may abandon an ally to gain ● equal to that ally's cost."
+rendered-text = "▸ Dawn: You may abandon an ally to gain ● equal to that ally's cost."
 # Free in-battle ramp; converts board into energy whenever challenge fires.
 starting-essence = 230
 mandatory-tides = [
@@ -614,7 +614,7 @@ name = "Senemhet"
 title = "Lord of the Radiant Court"
 id = "1CC5A88A-134F-42F7-A0AE-95ACE44B3745"
 image-number = "0035"
-rendered-text = "▸ Challenge: Each deployed ally gains +1 spark"
+rendered-text = "▸ Dawn: Each deployed ally gains +1 spark"
 # Cumulative anthem on challenge cadence — solid but board-dependent.
 starting-essence = 245
 mandatory-tides = [
@@ -827,8 +827,8 @@ name = "Threxan"
 title = "the Resounding Wrath"
 id = "B99936CA-97F9-4930-AF5A-FA9EF92557EF"
 image-number = "0025"
-rendered-text = "2●, once per turn: An allied character's \"▸ Challenge:\" ability gains Echo."
-# Doubles a Challenge trigger but only after paying 2● — needs strong targets.
+rendered-text = "2●, once per turn: An allied character's \"▸ Dawn:\" ability gains Echo."
+# Doubles a Dawn trigger but only after paying 2● — needs strong targets.
 starting-essence = 265
 mandatory-tides = [
   "judgment_engines",
