@@ -1544,7 +1544,7 @@
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(10px);
   z-index: 60;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .ctx-header {
@@ -1604,13 +1604,14 @@
 .ctx-submenu {
   position: absolute;
   top: 0;
-  left: calc(100% + 6px);
+  left: 100%;
   width: 220px;
   border-radius: 8px;
   background: rgba(10, 6, 18, 0.98);
   border: 1px solid var(--line-strong);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
   padding: 6px;
+  z-index: 61;
 }
 
 .battle-hover-preview {

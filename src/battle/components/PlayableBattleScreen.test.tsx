@@ -6,6 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import type { Database } from "firebase/database";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { QuestProvider } from "../../state/quest-context";
+import { getLogEntries, resetLog } from "../../logging";
 import {
   MultiplayerBattleContext,
   type MultiplayerBattleValue,
@@ -181,6 +182,7 @@ function renderScreen(
 }
 
 beforeEach(() => {
+  resetLog();
   battleCompletionBridge.completeBattleSiteVictory.mockClear();
   failureRouteMock.beginQuestFailureRoute.mockClear();
   battleServiceMock.dispatchBattleReset.mockClear();
@@ -729,6 +731,84 @@ describe("PlayableBattleScreen", () => {
     expect(menu?.textContent).toContain("Markers");
     expect(menu?.textContent).toContain("Add Note");
     expect(menu?.textContent).toContain("Inspect");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("applies Kindle submenu actions to a deployed card through the context menu", () => {
+    let deployedCardId: string | null = null;
+    let printedSpark = 0;
+    const { container, root } = renderScreen((state) => {
+      const characterCardId = state.sides.player.hand.find(
+        (battleCardId) => state.cardInstances[battleCardId]?.definition.battleCardKind === "character",
+      );
+      if (characterCardId === undefined) {
+        throw new Error("expected player character hand card");
+      }
+      deployedCardId = characterCardId;
+      printedSpark = state.cardInstances[characterCardId]?.definition.printedSpark ?? 0;
+      state.sides.player.hand = state.sides.player.hand.filter(
+        (battleCardId) => battleCardId !== characterCardId,
+      );
+      state.sides.player.deployed.D0 = characterCardId;
+    });
+
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '[data-slot-id="player-deployed-D0"] [data-battle-card-id]',
+    );
+    if (battlefieldCard === null || deployedCardId === null) {
+      throw new Error("expected deployed battlefield card");
+    }
+
+    act(() => {
+      battlefieldCard.dispatchEvent(new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 280,
+        clientY: 300,
+      }));
+    });
+
+    const kindleTrigger = [...container.querySelectorAll<HTMLElement>(".ctx-item")].find(
+      (element) => element.textContent?.includes("Kindle"),
+    );
+    if (kindleTrigger === undefined) {
+      throw new Error("expected Kindle submenu trigger");
+    }
+
+    act(() => {
+      kindleTrigger.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+
+    const kindlePlusThree = [...container.querySelectorAll<HTMLElement>(".ctx-submenu .ctx-item")].find(
+      (element) => element.textContent?.trim() === "Kindle +3",
+    );
+    if (kindlePlusThree === undefined) {
+      throw new Error("expected Kindle +3 submenu item");
+    }
+
+    act(() => {
+      kindlePlusThree.click();
+    });
+
+    const sparkBadge = [...container.querySelectorAll<HTMLElement>(
+      "[data-battle-card-id] .c-spark[aria-label=\"spark\"]",
+    )].find(
+      (element) => element.closest("[data-battle-card-id]")?.getAttribute("data-battle-card-id") === deployedCardId,
+    );
+    expect(sparkBadge?.textContent).toBe(String(printedSpark + 3));
+    expect(container.querySelector('[data-battle-stat="player:spark"]')?.textContent).toContain(
+      String(printedSpark + 3),
+    );
+    expect(
+      getLogEntries().some((entry) =>
+        entry.event === "battle_proto_command_applied" &&
+        entry.commandId === "KINDLE" &&
+        String(entry.label).includes("Kindle 3")
+      ),
+    ).toBe(true);
 
     act(() => {
       root.unmount();
