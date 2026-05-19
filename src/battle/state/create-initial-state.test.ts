@@ -49,7 +49,7 @@ describe("createInitialBattleState", () => {
     ).toBe(battleInit.playerDeckOrder[0].sourceDeckEntryId);
     expect(
       state.sides.enemy.hand.every((battleCardId) => state.cardInstances[battleCardId]?.isRevealedToPlayer),
-    ).toBe(true);
+    ).toBe(false);
   });
 
   it("runs the turn-1 start-of-turn composite via prepareInitialBattleState without changing the opening 2/2 energy", () => {

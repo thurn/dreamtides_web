@@ -4,7 +4,6 @@ import type {
 } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { BattleCommand } from "../debug/commands";
-import { selectIsOpponentHandCardHidden } from "../state/selectors";
 import type {
   BattleCommandSourceSurface,
   BattleMutableState,
@@ -23,6 +22,7 @@ type BattleZoneBrowserTypeFilter = "all" | "character" | "event";
 
 export function BattleZoneBrowser({
   browser,
+  isOpponentHandRevealed = false,
   state,
   selectedBattleCardId,
   onClose,
@@ -36,6 +36,7 @@ export function BattleZoneBrowser({
     side: BattleSide;
     zone: BrowseableZone;
   };
+  isOpponentHandRevealed?: boolean;
   state: BattleMutableState;
   selectedBattleCardId: string | null;
   onClose: () => void;
@@ -57,13 +58,16 @@ export function BattleZoneBrowser({
   const listRef = useRef<HTMLDivElement | null>(null);
   const cardIds = state.sides[browser.side][browser.zone];
   const sourceSurface = sourceSurfaceForZoneBrowser(browser.zone);
+  const isEnemyHandLocallyHidden = browser.zone === "hand" &&
+    browser.side === "enemy" &&
+    !isOpponentHandRevealed;
   const visibleCardIds = useMemo(
     () => applyBrowserFilters(cardIds, state, query, sortMode, typeFilter),
     [cardIds, query, sortMode, state, typeFilter],
   );
-  const selectedCardId = localSelectedCardId !== null && cardIds.includes(localSelectedCardId)
+  const selectedCardId = !isEnemyHandLocallyHidden && localSelectedCardId !== null && cardIds.includes(localSelectedCardId)
     ? localSelectedCardId
-    : selectedBattleCardId !== null && cardIds.includes(selectedBattleCardId)
+    : !isEnemyHandLocallyHidden && selectedBattleCardId !== null && cardIds.includes(selectedBattleCardId)
       ? selectedBattleCardId
       : null;
   const selectedCard = selectedCardId === null ? null : state.cardInstances[selectedCardId] ?? null;
@@ -185,9 +189,7 @@ export function BattleZoneBrowser({
               if (instance === undefined) {
                 return null;
               }
-              const isHidden = browser.zone === "hand" &&
-                browser.side === "enemy" &&
-                selectIsOpponentHandCardHidden(state, battleCardId);
+              const isHidden = isEnemyHandLocallyHidden;
               return (
                 <button
                   key={battleCardId}
@@ -196,6 +198,10 @@ export function BattleZoneBrowser({
                   data-selected={String(selectedCardId === battleCardId)}
                   className={`browse-cell ${selectedCardId === battleCardId ? "selected" : ""}`}
                   onClick={() => {
+                    if (isHidden) {
+                      setLocalSelectedCardId(null);
+                      return;
+                    }
                     setLocalSelectedCardId(battleCardId);
                     onSelectBattleCard(battleCardId);
                   }}
@@ -207,14 +213,14 @@ export function BattleZoneBrowser({
                     selected={selectedCardId === battleCardId}
                     onContextMenu={(event) => {
                       event.preventDefault();
+                      if (isHidden) {
+                        return;
+                      }
                       onCardContextMenu?.(battleCardId, event, sourceSurface);
                     }}
                   />
                   <div className="idx">
                     {browser.zone === "deck" ? `#${String(index + 1)}` : ""}
-                    {browser.zone === "hand" && browser.side === "enemy" && instance.isRevealedToPlayer
-                      ? " · REVEALED"
-                      : ""}
                   </div>
                 </button>
               );
@@ -298,42 +304,6 @@ export function BattleZoneBrowser({
               </button>
             </>
           ) : null}
-          {browser.zone === "hand" && browser.side === "enemy" ? (
-            <>
-              <button
-                type="button"
-                data-zone-browser-action="reveal-all"
-                className="chip"
-                onClick={() => onCommand({
-                  id: "DEBUG_EDIT",
-                  edit: {
-                    kind: "SET_SIDE_HAND_VISIBILITY",
-                    side: browser.side,
-                    isRevealedToPlayer: true,
-                  },
-                  sourceSurface,
-                })}
-              >
-                Reveal All
-              </button>
-              <button
-                type="button"
-                data-zone-browser-action="hide-all"
-                className="chip"
-                onClick={() => onCommand({
-                  id: "DEBUG_EDIT",
-                  edit: {
-                    kind: "SET_SIDE_HAND_VISIBILITY",
-                    side: browser.side,
-                    isRevealedToPlayer: false,
-                  },
-                  sourceSurface,
-                })}
-              >
-                Hide All
-              </button>
-            </>
-          ) : null}
           {selectedCard !== null ? (
             <>
               <button
@@ -389,24 +359,6 @@ export function BattleZoneBrowser({
               >
                 → Deck bot.
               </button>
-              {browser.zone === "hand" && browser.side === "enemy" ? (
-                <button
-                  type="button"
-                  data-zone-browser-action={selectedCard.isRevealedToPlayer ? "hide" : "reveal"}
-                  className="chip"
-                  onClick={() => onCommand({
-                    id: "DEBUG_EDIT",
-                    edit: {
-                      kind: "SET_CARD_VISIBILITY",
-                      battleCardId: selectedCard.battleCardId,
-                      isRevealedToPlayer: !selectedCard.isRevealedToPlayer,
-                    },
-                    sourceSurface,
-                  })}
-                >
-                  {selectedCard.isRevealedToPlayer ? "Hide" : "Reveal"}
-                </button>
-              ) : null}
             </>
           ) : null}
         </div>

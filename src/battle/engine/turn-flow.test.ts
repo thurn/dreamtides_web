@@ -123,7 +123,7 @@ describe("runStartOfTurnComposite energy refresh", () => {
     expect(advanced.sides.enemy.deck).toEqual([]);
   });
 
-  it("reveals enemy cards drawn into hand during the start-of-turn draw", () => {
+  it("keeps enemy cards drawn into hand hidden during the start-of-turn draw", () => {
     const { battleInit, state } = createTestBattle();
     state.turnNumber = 2;
     const drawnCardId = state.sides.enemy.deck[0];
@@ -138,7 +138,7 @@ describe("runStartOfTurnComposite energy refresh", () => {
     }).state;
 
     expect(advanced.sides.enemy.hand).toContain(drawnCardId);
-    expect(advanced.cardInstances[drawnCardId].isRevealedToPlayer).toBe(true);
+    expect(advanced.cardInstances[drawnCardId].isRevealedToPlayer).toBe(false);
   });
 });
 

@@ -11,12 +11,14 @@ export function BattleActionBar({
   isBattleLogOpen: _isBattleLogOpen,
   isDesktopInspectorLayout: _isDesktopInspectorLayout,
   isInspectorDrawerOpen: _isInspectorDrawerOpen,
+  isOpponentHandRevealed,
   state,
   onCommand,
   onOpenForesee: _onOpenForesee,
   onRedo,
   onToggleBattleLog,
   onToggleInspector: _onToggleInspector,
+  onToggleOpponentHand,
   onUndo,
 }: {
   canEndTurn: boolean;
@@ -27,12 +29,14 @@ export function BattleActionBar({
   isBattleLogOpen: boolean;
   isDesktopInspectorLayout: boolean;
   isInspectorDrawerOpen: boolean;
+  isOpponentHandRevealed: boolean;
   state: BattleMutableState;
   onCommand: (command: BattleCommand) => void;
   onOpenForesee: (side: BattleSide, count: number) => void;
   onRedo: () => void;
   onToggleBattleLog: () => void;
   onToggleInspector: () => void;
+  onToggleOpponentHand: () => void;
   onUndo: () => void;
 }) {
   const phaseButtonLabel = getPhaseButtonLabel(state);
@@ -107,6 +111,14 @@ export function BattleActionBar({
           onClick={onToggleBattleLog}
         >
           Log
+        </button>
+        <button
+          type="button"
+          data-battle-action="toggle-opponent-hand"
+          className={`btn ghost sm ${isOpponentHandRevealed ? "active" : ""}`}
+          onClick={onToggleOpponentHand}
+        >
+          {isOpponentHandRevealed ? "Hide enemy hand" : "Show enemy hand"}
         </button>
       </div>
       <div className="group">

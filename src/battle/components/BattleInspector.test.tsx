@@ -118,10 +118,12 @@ describe("BattleInspector", () => {
     });
   });
 
-  it("shows enemy-hand visibility state as read-only card metadata", () => {
+  it("shows enemy-hand card metadata without visibility badges", () => {
     const { container, onCommand, root } = mount("enemy-hand");
 
-    expect(container.textContent).toContain("Revealed");
+    expect(container.textContent).toContain("Card State");
+    expect(container.textContent).not.toContain("Revealed");
+    expect(container.textContent).not.toContain("Hidden");
     expect(onCommand).not.toHaveBeenCalled();
 
     act(() => {

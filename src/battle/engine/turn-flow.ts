@@ -326,9 +326,6 @@ export function drawTopCard(state: BattleMutableState, side: BattleSide): string
   const battleCardId = state.sides[side].deck.shift() ?? null;
   if (battleCardId !== null) {
     state.sides[side].hand.push(battleCardId);
-    if (side === "enemy") {
-      state.cardInstances[battleCardId].isRevealedToPlayer = true;
-    }
   }
 
   return battleCardId;

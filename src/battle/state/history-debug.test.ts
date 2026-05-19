@@ -319,7 +319,7 @@ function casesFromFactory(): DebugUndoCase[] {
         edit: {
           kind: "SET_CARD_VISIBILITY",
           battleCardId: enemyHandCardId,
-          isRevealedToPlayer: false,
+          isRevealedToPlayer: true,
         },
       },
     },
@@ -331,7 +331,7 @@ function casesFromFactory(): DebugUndoCase[] {
         edit: {
           kind: "SET_SIDE_HAND_VISIBILITY",
           side: "enemy",
-          isRevealedToPlayer: false,
+          isRevealedToPlayer: true,
         },
       },
     },

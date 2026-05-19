@@ -288,10 +288,26 @@ describe("applyBattleCommand", () => {
     const { battleInit, state } = createTestBattle();
     const enemyHandCardId = state.sides.enemy.hand[0];
 
-    expect(state.cardInstances[enemyHandCardId].isRevealedToPlayer).toBe(true);
+    expect(state.cardInstances[enemyHandCardId].isRevealedToPlayer).toBe(false);
+
+    const revealed = applyBattleCommand(
+      createBattleReducerState(state),
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "SET_CARD_VISIBILITY",
+          battleCardId: enemyHandCardId,
+          isRevealedToPlayer: true,
+        },
+      },
+      battleInit,
+    );
+
+    expect(revealed.mutable.cardInstances[enemyHandCardId].isRevealedToPlayer).toBe(true);
+    expect(revealed.history.past[0].metadata.commandId).toBe("REVEAL_OPPONENT_HAND_CARD");
 
     const hidden = applyBattleCommand(
-      createBattleReducerState(state),
+      revealed,
       {
         id: "DEBUG_EDIT",
         edit: {
@@ -304,23 +320,7 @@ describe("applyBattleCommand", () => {
     );
 
     expect(hidden.mutable.cardInstances[enemyHandCardId].isRevealedToPlayer).toBe(false);
-    expect(hidden.history.past[0].metadata.commandId).toBe("HIDE_OPPONENT_HAND_CARD");
-
-    const revealedAgain = applyBattleCommand(
-      hidden,
-      {
-        id: "DEBUG_EDIT",
-        edit: {
-          kind: "SET_CARD_VISIBILITY",
-          battleCardId: enemyHandCardId,
-          isRevealedToPlayer: true,
-        },
-      },
-      battleInit,
-    );
-
-    expect(revealedAgain.mutable.cardInstances[enemyHandCardId].isRevealedToPlayer).toBe(true);
-    expect(revealedAgain.history.past[1].metadata.commandId).toBe("REVEAL_OPPONENT_HAND_CARD");
+    expect(hidden.history.past[1].metadata.commandId).toBe("HIDE_OPPONENT_HAND_CARD");
   });
 
   it("stamps the spec-recommended command envelope on dispatched commands", () => {
@@ -350,6 +350,7 @@ describe("applyBattleCommand", () => {
     expect(metadata.timestamp).toBeLessThanOrEqual(after);
 
     const enemyCardId = state.sides.enemy.hand[0];
+    state.cardInstances[enemyCardId].isRevealedToPlayer = true;
     const visibilityCommand = applyBattleCommand(
       createBattleReducerState(state),
       {
@@ -968,6 +969,9 @@ describe("applyBattleCommand", () => {
   it("commits SET_SIDE_HAND_VISIBILITY metadata and emits a bulk visibility log event", () => {
     const { battleInit, state } = createTestBattle();
     const enemyHand = [...state.sides.enemy.hand];
+    for (const battleCardId of enemyHand) {
+      state.cardInstances[battleCardId].isRevealedToPlayer = true;
+    }
     const applied = applyBattleCommand(
       createBattleReducerState(state),
       {
@@ -1005,7 +1009,7 @@ describe("applyBattleCommand", () => {
     });
   });
 
-  it("reveals enemy cards drawn through the debug draw action", () => {
+  it("keeps enemy cards drawn through the debug draw action hidden", () => {
     const { battleInit, state } = createTestBattle();
     const drawnCardId = state.sides.enemy.deck[0];
     if (drawnCardId === undefined) {
@@ -1027,7 +1031,7 @@ describe("applyBattleCommand", () => {
     );
 
     expect(applied.mutable.sides.enemy.hand).toContain(drawnCardId);
-    expect(applied.mutable.cardInstances[drawnCardId].isRevealedToPlayer).toBe(true);
+    expect(applied.mutable.cardInstances[drawnCardId].isRevealedToPlayer).toBe(false);
   });
 
   it("routes each debug edit to its spec history-kind category", () => {

@@ -48,9 +48,6 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
   state.sides.player.deck = playerDeckCardIds.slice(playerOpeningHand.length);
   state.sides.enemy.hand = enemyOpeningHand;
   state.sides.enemy.deck = enemyDeckCardIds.slice(enemyOpeningHand.length);
-  for (const battleCardId of enemyOpeningHand) {
-    state.cardInstances[battleCardId].isRevealedToPlayer = true;
-  }
   return state;
 }
 

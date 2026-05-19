@@ -25,7 +25,10 @@ function createState() {
   return state;
 }
 
-function mount(browser: { side: "player" | "enemy"; zone: "deck" | "hand" | "void" | "banished" }): {
+function mount(
+  browser: { side: "player" | "enemy"; zone: "deck" | "hand" | "void" | "banished" },
+  options: { isOpponentHandRevealed?: boolean } = {},
+): {
   container: HTMLDivElement;
   onCommand: ReturnType<typeof vi.fn>;
   onOpenForesee: ReturnType<typeof vi.fn>;
@@ -47,6 +50,7 @@ function mount(browser: { side: "player" | "enemy"; zone: "deck" | "hand" | "voi
     root.render(
       <BattleZoneBrowser
         browser={browser}
+        isOpponentHandRevealed={options.isOpponentHandRevealed}
         state={state}
         selectedBattleCardId={browser.zone === "hand" ? state.sides[browser.side].hand[0] ?? null : null}
         onClose={() => undefined}
@@ -126,50 +130,57 @@ describe("BattleZoneBrowser", () => {
     });
   });
 
-  it("exposes per-card reveal toggles for enemy hand cards", () => {
-    const { container, onCommand, root } = mount({ side: "enemy", zone: "hand" });
+  it("uses the local opponent-hand flag for enemy hand browsing and movement controls", () => {
+    const hidden = mount({ side: "enemy", zone: "hand" });
+
+    expect(hidden.container.querySelector(".hidden-enemy")).not.toBeNull();
+
+    act(() => {
+      hidden.container.querySelector<HTMLElement>('[data-zone-browser-card-id]')?.click();
+    });
+
+    expect(hidden.onSelectBattleCard).not.toHaveBeenCalled();
+    expect(hidden.container.querySelector('[data-zone-browser-action="move-void"]')).toBeNull();
+    expect(hidden.container.textContent).not.toContain("Reveal All");
+    expect(hidden.container.textContent).not.toContain("Hide All");
+
+    act(() => {
+      hidden.root.unmount();
+    });
+
+    const { container, onCommand, onSelectBattleCard, root } = mount(
+      { side: "enemy", zone: "hand" },
+      { isOpponentHandRevealed: true },
+    );
+
+    expect(container.querySelector(".hidden-enemy")).toBeNull();
 
     act(() => {
       container.querySelector<HTMLElement>('[data-zone-browser-card-id]')?.click();
     });
 
-    expect(container.textContent).toContain("Hide");
+    expect(onSelectBattleCard).toHaveBeenCalledTimes(1);
+    expect(container.textContent).toContain("→ Void");
+    expect(container.textContent).toContain("→ Deck top");
+    expect(container.textContent).not.toContain("Reveal All");
+    expect(container.textContent).not.toContain("Hide All");
+    expect(container.textContent).not.toContain("Reveal");
+    expect(container.textContent).not.toContain("Hide");
 
     act(() => {
-      const reveal = [...container.querySelectorAll<HTMLElement>(".chip")].find(
-        (element) => element.textContent?.trim() === "Hide",
-      );
-      reveal?.click();
+      container.querySelector<HTMLElement>('[data-zone-browser-action="move-void"]')?.click();
     });
 
     expect(onCommand.mock.calls[0]?.[0]).toMatchObject({
       id: "DEBUG_EDIT",
       edit: {
-        kind: "SET_CARD_VISIBILITY",
-        isRevealedToPlayer: false,
+        kind: "MOVE_CARD_TO_ZONE",
+        destination: {
+          side: "enemy",
+          zone: "void",
+        },
       },
-    });
-
-    act(() => {
-      container.querySelector<HTMLElement>('[data-zone-browser-action="reveal-all"]')?.click();
-      container.querySelector<HTMLElement>('[data-zone-browser-action="hide-all"]')?.click();
-    });
-
-    expect(onCommand.mock.calls[1]?.[0]).toMatchObject({
-      id: "DEBUG_EDIT",
-      edit: {
-        kind: "SET_SIDE_HAND_VISIBILITY",
-        side: "enemy",
-        isRevealedToPlayer: true,
-      },
-    });
-    expect(onCommand.mock.calls[2]?.[0]).toMatchObject({
-      id: "DEBUG_EDIT",
-      edit: {
-        kind: "SET_SIDE_HAND_VISIBILITY",
-        side: "enemy",
-        isRevealedToPlayer: false,
-      },
+      sourceSurface: "zone-browser-hand",
     });
 
     act(() => {

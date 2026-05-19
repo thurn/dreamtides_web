@@ -29,7 +29,6 @@ import {
   selectCanRepositionInCurrentPhase,
   selectCanTakeMainPhaseActions,
   selectFailureOverlayResult,
-  selectIsOpponentHandCardHidden,
 } from "../state/selectors";
 import { useAiTurnDriver } from "../state/use-ai-turn-driver";
 import { useAutoClearForcedResult } from "../state/use-auto-clear-forced-result";
@@ -59,6 +58,7 @@ import { BattleInspector } from "./BattleInspector";
 import { BattleCardNoteEditor } from "./BattleCardNoteEditor";
 import { BattleLogDrawer } from "./BattleLogDrawer";
 import { BattleJudgmentPauseOverlay } from "./BattleJudgmentPauseOverlay";
+import { BattleOpponentHandTray } from "./BattleOpponentHandTray";
 import { BattleResultOverlay } from "./BattleResultOverlay";
 import { BattleRewardSurface } from "./BattleRewardSurface";
 import { BattleSideSummaryPopover } from "./BattleSideSummaryPopover";
@@ -67,6 +67,7 @@ import { BattleStatusStrip } from "./BattleStatusStrip";
 import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
 import { BattlefieldGrid, resolveBattlefieldSelectionAnchor } from "./BattlefieldGrid";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
+import { createMoveCardToDeckCommand, createMoveCardToZoneCommand } from "./battle-ui-commands";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
 
@@ -88,6 +89,7 @@ type ForeseeOverlayState = {
 type PendingDragState = {
   battleCardId: string;
   kind: BattleCardKind;
+  sourceSurface: BattleCommandSourceSurface;
 } | null;
 type HoverPreviewState = {
   battleCardId: string;
@@ -141,6 +143,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const isDesktopInspectorLayout = useIsDesktopInspectorLayout();
   const [isInspectorDrawerOpen, setIsInspectorDrawerOpen] = useState(readIsDesktopInspectorLayout());
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
+  const [isOpponentHandRevealed, setIsOpponentHandRevealed] = useState(false);
   const [openZoneBrowser, setOpenZoneBrowser] = useState<ZoneBrowserState>(null);
   const [selection, setSelection] = useState<BattleSelection>(null);
   const [pendingDrag, setPendingDrag] = useState<PendingDragState>(null);
@@ -196,7 +199,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
 
   const inspectorSelection = (
     selection?.kind === "card" &&
-    selectIsOpponentHandCardHidden(reducerState.mutable, selection.battleCardId)
+    isOpponentHandCardLocallyHidden(selection.battleCardId)
   )
     ? null
     : selection;
@@ -223,6 +226,13 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       card !== undefined &&
       reducerState.mutable.sides.player.currentEnergy >= card.definition.energyCost &&
       selectCanPlayCardInCurrentPhase(reducerState.mutable, battleCardId);
+  }
+
+  function isOpponentHandCardLocallyHidden(battleCardId: string): boolean {
+    const location = selectBattleCardLocation(reducerState.mutable, battleCardId);
+    return location?.side === "enemy" &&
+      location.zone === "hand" &&
+      !isOpponentHandRevealed;
   }
 
   function handleCommand(command: BattleCommand): void {
@@ -330,12 +340,16 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     }
     if (
       selectBattleCardLocation(reducerState.mutable, selection.battleCardId) === null ||
-      selectIsOpponentHandCardHidden(reducerState.mutable, selection.battleCardId)
+      isOpponentHandCardLocallyHidden(selection.battleCardId)
     ) {
       setSelection(null);
       setHoverPreview((current) => current?.battleCardId === selection.battleCardId ? null : current);
     }
-  }, [reducerState.mutable, selection]);
+  }, [isOpponentHandRevealed, reducerState.mutable, selection]);
+
+  useEffect(() => {
+    setIsOpponentHandRevealed(false);
+  }, [battleInit.battleId]);
 
   useEffect(() => {
     if (!isDesktopInspectorLayout) {
@@ -404,6 +418,19 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     }
 
     const location = selectBattleCardLocation(reducerState.mutable, selection.battleCardId);
+    if (location?.zone === "hand" && location.side === "enemy") {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: selection.battleCardId,
+          destination: target,
+        },
+        sourceSurface: "opponent-hand-tray",
+      });
+      return true;
+    }
+
     if (allowPlayCard && location?.zone === "hand" && location.side === target.side) {
       if (!canPlayHandCardWithoutOverride(selection.battleCardId)) {
         return false;
@@ -525,6 +552,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     setOpenSideSummary(null);
     setIsDreamcallerPanelOpen(false);
     setRewardOverlay(null);
+    setIsOpponentHandRevealed(false);
     setIsResultOverlayDismissed(false);
     setJudgmentPause(null);
     setIsBattleLogOpen(false);
@@ -613,6 +641,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       setPendingDrag({
         battleCardId,
         kind: instance.definition.battleCardKind,
+        sourceSurface: resolveDragSourceSurface(location),
       });
     }
     setSelection({ kind: "card", battleCardId });
@@ -621,6 +650,19 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
 
   function handleSlotDrop(target: BattleFieldSlotAddress): void {
     const draggedLocation = selectBattleCardLocation(reducerState.mutable, pendingDrag?.battleCardId ?? null);
+    if (draggedLocation?.zone === "hand" && draggedLocation.side === "enemy" && pendingDrag !== null) {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: pendingDrag.battleCardId,
+          destination: target,
+        },
+        sourceSurface: pendingDrag.sourceSurface,
+      });
+      setPendingDrag(null);
+      return;
+    }
     if (draggedLocation?.zone === "stack" && pendingDrag !== null) {
       handleCommand({
         id: "MOVE_STACK_CARD",
@@ -641,6 +683,22 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       return;
     }
     handleSelectedBattlefieldTargetClick(target, true);
+    setPendingDrag(null);
+  }
+
+  function handleZoneDrop(
+    side: BattleSide,
+    zone: BrowseableZone,
+    sourceSurface: BattleCommandSourceSurface,
+  ): void {
+    if (pendingDrag === null) {
+      return;
+    }
+
+    const command = zone === "deck"
+      ? createMoveCardToDeckCommand(pendingDrag.battleCardId, side, "top", sourceSurface)
+      : createMoveCardToZoneCommand(pendingDrag.battleCardId, side, zone, sourceSurface);
+    handleCommand(command);
     setPendingDrag(null);
   }
 
@@ -696,6 +754,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       {openZoneBrowser !== null ? (
         <BattleZoneBrowser
           browser={openZoneBrowser}
+          isOpponentHandRevealed={isOpponentHandRevealed}
           state={reducerState.mutable}
           selectedBattleCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
           onClose={() => setOpenZoneBrowser(null)}
@@ -831,8 +890,22 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               isActive={reducerState.mutable.activeSide === "enemy"}
               isSummarySelected={openSideSummary === "enemy"}
               onOpenZone={(zone) => handleOpenZoneBrowser("enemy", zone)}
+              onZoneDrop={handleZoneDrop}
+              pendingDragCardId={pendingDrag?.battleCardId ?? null}
+              pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
               onSelectSummary={() => handleSelectSummary("enemy")}
             />
+            {isOpponentHandRevealed ? (
+              <BattleOpponentHandTray
+                hand={reducerState.mutable.sides.enemy.hand}
+                selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
+                state={reducerState.mutable}
+                onCardClick={handleHandCardClick}
+                onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "opponent-hand-tray")}
+                onCardDragStart={handleCardDragStart}
+                onCardDragEnd={() => setPendingDrag(null)}
+              />
+            ) : null}
             <ScaledBattlefield>
               <div
                 className="battlefield"
@@ -975,6 +1048,9 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               isActive={reducerState.mutable.activeSide === "player"}
               isSummarySelected={openSideSummary === "player"}
               onOpenZone={(zone) => handleOpenZoneBrowser("player", zone)}
+              onZoneDrop={handleZoneDrop}
+              pendingDragCardId={pendingDrag?.battleCardId ?? null}
+              pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
               onSelectSummary={() => handleSelectSummary("player")}
             />
           </div>
@@ -1002,12 +1078,14 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             isBattleLogOpen={isBattleLogOpen}
             isDesktopInspectorLayout={isDesktopInspectorLayout}
             isInspectorDrawerOpen={isInspectorDrawerOpen}
+            isOpponentHandRevealed={isOpponentHandRevealed}
             state={reducerState.mutable}
             onCommand={handleCommand}
             onOpenForesee={(_side, _count) => undefined}
             onRedo={() => dispatch({ type: "REDO" })}
             onToggleBattleLog={() => setIsBattleLogOpen((value) => !value)}
             onToggleInspector={() => setIsInspectorDrawerOpen((value) => !value)}
+            onToggleOpponentHand={() => setIsOpponentHandRevealed((value) => !value)}
             onUndo={() => dispatch({ type: "UNDO" })}
           />
         </div>
@@ -1211,6 +1289,16 @@ function BattleStackZone({
       </div>
     </section>
   );
+}
+
+function resolveDragSourceSurface(
+  location: ReturnType<typeof selectBattleCardLocation>,
+): BattleCommandSourceSurface {
+  if (location?.zone === "hand") {
+    return location.side === "enemy" ? "opponent-hand-tray" : "hand-tray";
+  }
+
+  return "battlefield";
 }
 
 // In multiplayer the shared reducer slice does not carry `lastActivity`

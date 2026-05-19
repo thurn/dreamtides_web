@@ -290,6 +290,144 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("locally toggles the opponent hand tray without adding battle history", () => {
+    const { container, initialState, root } = renderScreen();
+    const firstEnemyHandCardId = initialState.sides.enemy.hand[0];
+
+    expect(container.querySelector('[data-battle-region="opponent-hand-tray"]')).toBeNull();
+    expect(initialState.cardInstances[firstEnemyHandCardId].isRevealedToPlayer).toBe(false);
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+
+    expect(container.querySelector('[data-battle-region="opponent-hand-tray"]')).not.toBeNull();
+    expect(
+      container.querySelector<HTMLButtonElement>('[data-battle-action="undo"]')?.disabled,
+    ).toBe(true);
+    expect(initialState.cardInstances[firstEnemyHandCardId].isRevealedToPlayer).toBe(false);
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+
+    expect(container.querySelector('[data-battle-region="opponent-hand-tray"]')).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("selects, inspects, right-clicks, and drags revealed opponent hand cards to enemy battlefield slots", () => {
+    const { container, initialState, root } = renderScreen();
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+
+    const opponentCard = [...container.querySelectorAll<HTMLElement>(
+      '[data-battle-region="opponent-hand-tray"] [data-battle-card-id]',
+    )].find((element) => {
+      const battleCardId = element.getAttribute("data-battle-card-id");
+      return battleCardId !== null &&
+        initialState.cardInstances[battleCardId]?.definition.battleCardKind === "character";
+    });
+    if (opponentCard === undefined) {
+      throw new Error("expected opponent character hand card");
+    }
+    const opponentCardId = opponentCard.getAttribute("data-battle-card-id");
+    if (opponentCardId === null) {
+      throw new Error("expected opponent card id");
+    }
+    const opponentCardName = initialState.cardInstances[opponentCardId]?.definition.name;
+
+    act(() => {
+      opponentCard.click();
+    });
+
+    expect(container.querySelector(".inspector")?.textContent).toContain(opponentCardName);
+
+    act(() => {
+      opponentCard.dispatchEvent(new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 220,
+        clientY: 160,
+      }));
+    });
+
+    const menu = container.querySelector("[data-battle-context-menu]");
+    expect(menu?.textContent).toContain("Inspect");
+    expect(menu?.textContent).not.toContain("Reveal");
+    expect(menu?.textContent).not.toContain("Hide");
+
+    const enemyReserveSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-reserve-R0"]');
+    if (enemyReserveSlot === null) {
+      throw new Error("expected enemy reserve slot");
+    }
+
+    act(() => {
+      opponentCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(
+      container.querySelector<HTMLElement>('[data-slot-id="enemy-reserve-R0"]')
+        ?.getAttribute("data-battle-drop-target"),
+    ).toBe("true");
+
+    act(() => {
+      enemyReserveSlot.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    expect(enemyReserveSlot.getAttribute("data-slot-card-id")).toBe(opponentCardId);
+    expect(
+      container.querySelector(
+        `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${opponentCardId}"]`,
+      ),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("drops opponent hand cards onto status-strip zone targets through debug movement", () => {
+    const { container, root } = renderScreen();
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+
+    const opponentCard = container.querySelector<HTMLElement>(
+      '[data-battle-region="opponent-hand-tray"] [data-battle-card-id]',
+    );
+    const enemyVoidButton = container.querySelector<HTMLElement>('[data-battle-zone-open="enemy:void"]');
+    if (opponentCard === null || enemyVoidButton === null) {
+      throw new Error("expected opponent card and enemy void zone");
+    }
+    const opponentCardId = opponentCard.getAttribute("data-battle-card-id");
+
+    act(() => {
+      opponentCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(enemyVoidButton.getAttribute("data-battle-zone-drop-target")).toBe("enemy:void");
+
+    act(() => {
+      enemyVoidButton.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-zone-open="enemy:void"]')?.click();
+    });
+
+    expect(container.querySelector(`[data-zone-browser-card-id="${opponentCardId}"]`)).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("opens the right-click context menu with the mockup action labels", () => {
     const { container, root } = renderScreen((state) => {
       state.sides.player.currentEnergy = 10;

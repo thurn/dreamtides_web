@@ -83,6 +83,7 @@ export type BattleCommandSourceSurface =
   | "action-bar"
   | "battlefield"
   | "hand-tray"
+  | "opponent-hand-tray"
   | "inspector"
   | "zone-browser-deck"
   | "zone-browser-hand"

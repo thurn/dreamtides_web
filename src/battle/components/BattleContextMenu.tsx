@@ -293,22 +293,6 @@ export function BattleContextMenu({
 
     result.push({ divider: true });
 
-    if (location.zone === "hand" && location.side === "enemy") {
-      result.push({
-        label: card.isRevealedToPlayer ? "Hide from me" : "Reveal to me",
-        action: () => onCommand({
-          id: "DEBUG_EDIT",
-          edit: {
-            kind: "SET_CARD_VISIBILITY",
-            battleCardId,
-            isRevealedToPlayer: !card.isRevealedToPlayer,
-          },
-          sourceSurface,
-        }),
-      });
-      result.push({ divider: true });
-    }
-
     result.push({
       label: "Inspect",
       action: () => onInspect(battleCardId),

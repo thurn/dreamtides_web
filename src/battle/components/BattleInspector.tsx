@@ -246,18 +246,13 @@ function CardInspector({
       </div>
 
       <div className="insp-note card-action-hint">
-        Right-click this card for play, move, note, marker, reveal, and copy actions.
+        Right-click this card for play, move, note, marker, and copy actions.
       </div>
 
       <div className="insp-section">
         <h4>Card State</h4>
         <div className="chip-row">
           {location?.zone === "reserve" ? <span className="chip active">Reserved</span> : null}
-          {location?.zone === "hand" && side === "enemy" ? (
-            <span className={`chip ${card.isRevealedToPlayer ? "active" : ""}`}>
-              {card.isRevealedToPlayer ? "Revealed" : "Hidden"}
-            </span>
-          ) : null}
           {card.markers.isPrevented ? <span className="chip active">Prevented</span> : null}
           {card.markers.isCopied ? <span className="chip active">Copied</span> : null}
           <span className="chip">{card.notes.length} Notes</span>

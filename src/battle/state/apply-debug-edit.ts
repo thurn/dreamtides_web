@@ -1146,9 +1146,6 @@ function drawCardToHand(
   nextState.sides[side].deck.shift();
   nextState.sides[side].hand.push(battleCardId);
   nextState.cardInstances[battleCardId].controller = side;
-  if (side === "enemy") {
-    nextState.cardInstances[battleCardId].isRevealedToPlayer = true;
-  }
 
   return {
     state: nextState,
