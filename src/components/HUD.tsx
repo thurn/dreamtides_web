@@ -91,7 +91,7 @@ export function HUD({
       // sections do not shove each other at narrow viewports, and drop
       // the dreamcaller subtitle below lg so it never collides with the
       // Dreamsigns counter.
-      className="fixed right-0 bottom-0 left-0 z-50 grid grid-cols-[1fr_auto_auto] items-center gap-3 px-3 py-2 md:gap-6 md:px-6"
+      className="fixed right-0 bottom-0 left-0 z-50 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-3 py-2 md:gap-x-6 md:px-6 lg:grid-cols-[minmax(0,1fr)_auto_auto]"
       style={{
         background:
           "linear-gradient(180deg, rgba(10, 6, 18, 0.85) 0%, rgba(10, 6, 18, 0.95) 100%)",
@@ -225,7 +225,7 @@ export function HUD({
       </div>
 
       {/* Right section: buttons */}
-      <div className="flex shrink-0 items-center gap-2 md:gap-3">
+      <div className="col-span-2 flex min-w-0 flex-wrap items-center justify-end gap-2 md:gap-3 lg:col-span-1">
         <button
           className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-fuchsia-300`}
           style={{

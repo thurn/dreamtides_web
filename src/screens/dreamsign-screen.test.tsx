@@ -11,6 +11,7 @@ import { DreamsignDraftScreen } from "./DreamsignDraftScreen";
 import { DreamsignOfferingScreen } from "./DreamsignOfferingScreen";
 import { useQuest } from "../state/quest-context";
 import { HUD_DREAMSIGN_DEBUG_SLOT_ID } from "../components/hud-button-styles";
+import { HUD } from "../components/HUD";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -51,6 +52,7 @@ vi.mock("../state/quest-context", () => ({
 }));
 
 vi.mock("../logging", () => ({
+  downloadLog: vi.fn(),
   logEvent: vi.fn(),
 }));
 
@@ -349,7 +351,7 @@ describe("DreamsignOfferingScreen Why Dreamsigns button", () => {
     });
   });
 
-  it("renders the Why Dreamsigns button in the HUD utility slot next to Debug", () => {
+  it("renders the Why Dreamsigns button in the real HUD utility slot next to Debug", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
@@ -372,27 +374,44 @@ describe("DreamsignOfferingScreen Why Dreamsigns button", () => {
       mutations,
     );
 
-    const hud = document.createElement("div");
-    document.body.append(hud);
-    const slot = document.createElement("span");
-    slot.id = HUD_DREAMSIGN_DEBUG_SLOT_ID;
-    slot.setAttribute("data-testid", "hud-dreamsign-debug-slot");
-    const debugButton = document.createElement("button");
-    debugButton.textContent = "Debug";
-    hud.append(slot, debugButton);
-
     const { container, root } = mount(
-      <DreamsignOfferingScreen site={makeSite()} />,
+      <>
+        <DreamsignOfferingScreen site={makeSite()} />
+        <HUD
+          onOpenDeckViewer={vi.fn()}
+          onOpenGlossary={vi.fn()}
+          onOpenDebugScreen={vi.fn()}
+          onToggleCardSourceOverlay={vi.fn()}
+          hasDraftData={true}
+          hasCardSourceDebug={true}
+          isCardSourceOverlayOpen={false}
+        />
+      </>,
     );
 
+    const slot = document.getElementById(HUD_DREAMSIGN_DEBUG_SLOT_ID);
+    const debugButton = Array.from(document.querySelectorAll("button")).find(
+      (candidate) => candidate.textContent?.includes("Debug"),
+    );
     const whyButton = document.querySelector<HTMLButtonElement>(
       '[data-testid="hud-why-dreamsigns-button"]',
     );
+    expect(slot).not.toBeNull();
+    if (slot === null) {
+      throw new Error("HUD dreamsign slot missing");
+    }
     expect(whyButton).not.toBeNull();
+    expect(debugButton).not.toBeUndefined();
     expect(slot.contains(whyButton)).toBe(true);
     expect(slot.nextElementSibling).toBe(debugButton);
-    expect(container.querySelector('[data-testid="hud-why-dreamsigns-button"]'))
-      .toBeNull();
+    expect(slot.parentElement?.className).toContain("flex-wrap");
+    expect(slot.parentElement?.className).toContain("col-span-2");
+    expect(slot.parentElement?.className).toContain("lg:col-span-1");
+    expect(
+      container.querySelector(
+        '[data-offering-footer] [data-testid="hud-why-dreamsigns-button"]',
+      ),
+    ).toBeNull();
 
     act(() => {
       whyButton?.dispatchEvent(new MouseEvent("click", { bubbles: true }));

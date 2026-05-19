@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "boxicons/css/boxicons.min.css";
 import App from "./App.tsx";
 import "./index.css";
+import { HudDreamsignLayoutDemo } from "./components/HudDreamsignLayoutDemo";
 import { JourneyHoverCardDemo } from "./journeys/ui/JourneyHoverCardDemo";
 import { parseRuntimeConfig } from "./runtime/runtime-config";
 
@@ -15,7 +16,9 @@ const demoParam = new URLSearchParams(window.location.search).get("demo");
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {demoParam === "journey-hover" ? (
+    {demoParam === "hud-dreamsign-layout" ? (
+      <HudDreamsignLayoutDemo />
+    ) : demoParam === "journey-hover" ? (
       <JourneyHoverCardDemo />
     ) : (
       <App runtimeConfig={runtimeConfig} />
