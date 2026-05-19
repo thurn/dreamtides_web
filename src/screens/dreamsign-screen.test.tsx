@@ -10,6 +10,7 @@ import type { QuestState, SiteState } from "../types/quest";
 import { DreamsignDraftScreen } from "./DreamsignDraftScreen";
 import { DreamsignOfferingScreen } from "./DreamsignOfferingScreen";
 import { useQuest } from "../state/quest-context";
+import { HUD_DREAMSIGN_DEBUG_SLOT_ID } from "../components/hud-button-styles";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -340,6 +341,64 @@ describe("DreamsignOfferingScreen Why Dreamsigns button", () => {
     });
 
     expect(container.textContent).not.toContain(
+      "Why am I seeing these dreamsigns?",
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the Why Dreamsigns button in the HUD utility slot next to Debug", () => {
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "dreamsignOffer",
+            offeredDreamsigns: [
+              {
+                id: "embers-whisper",
+                name: "Ember's Whisper",
+                effectDescription: "Fire.",
+                isBane: false,
+              },
+            ],
+            remainingDreamsignPool: ["glacial-insight"],
+            accepted: false,
+          },
+        },
+      }),
+      mutations,
+    );
+
+    const hud = document.createElement("div");
+    document.body.append(hud);
+    const slot = document.createElement("span");
+    slot.id = HUD_DREAMSIGN_DEBUG_SLOT_ID;
+    slot.setAttribute("data-testid", "hud-dreamsign-debug-slot");
+    const debugButton = document.createElement("button");
+    debugButton.textContent = "Debug";
+    hud.append(slot, debugButton);
+
+    const { container, root } = mount(
+      <DreamsignOfferingScreen site={makeSite()} />,
+    );
+
+    const whyButton = document.querySelector<HTMLButtonElement>(
+      '[data-testid="hud-why-dreamsigns-button"]',
+    );
+    expect(whyButton).not.toBeNull();
+    expect(slot.contains(whyButton)).toBe(true);
+    expect(slot.nextElementSibling).toBe(debugButton);
+    expect(container.querySelector('[data-testid="hud-why-dreamsigns-button"]'))
+      .toBeNull();
+
+    act(() => {
+      whyButton?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.textContent).toContain(
       "Why am I seeing these dreamsigns?",
     );
 

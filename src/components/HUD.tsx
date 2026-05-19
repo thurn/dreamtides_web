@@ -4,6 +4,10 @@ import { downloadLog } from "../logging";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { DreamcallerPopover } from "./DreamcallerPopover";
 import { HudDreamsignRow } from "./HudDreamsignRow";
+import {
+  HUD_BUTTON_BASE_CLASS,
+  HUD_DREAMSIGN_DEBUG_SLOT_ID,
+} from "./hud-button-styles";
 
 /** Duration in ms for the essence count animation. */
 const ESSENCE_ANIM_DURATION = 500;
@@ -78,14 +82,6 @@ export function HUD({
 
   const dreamcallerName = state.dreamcaller?.name ?? null;
   const dreamcallerColor = dreamcallerName !== null ? "#e2e8f0" : "#6b7280";
-
-  // FIND-10-11 / FIND-10-12 (Stage 4): shared class for right-side HUD
-  // buttons. Gives every button ≥36px height, visible hover/focus rings,
-  // and rounded design-token chrome.
-  const hudButtonBase =
-    "flex min-h-[36px] cursor-pointer items-center gap-1 rounded-md px-3 py-1.5 text-[12px] font-medium transition-colors md:text-sm "
-    + "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 "
-    + "disabled:cursor-not-allowed disabled:opacity-50";
 
   return (
     <div
@@ -231,7 +227,7 @@ export function HUD({
       {/* Right section: buttons */}
       <div className="flex shrink-0 items-center gap-2 md:gap-3">
         <button
-          className={`${hudButtonBase} focus-visible:ring-fuchsia-300`}
+          className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-fuchsia-300`}
           style={{
             background: "rgba(124, 58, 237, 0.2)",
             border: "1px solid rgba(124, 58, 237, 0.4)",
@@ -247,7 +243,7 @@ export function HUD({
             reference is always one click from anywhere the HUD
             renders. */}
         <button
-          className={`${hudButtonBase} focus-visible:ring-violet-300`}
+          className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-violet-300`}
           style={{
             background: "rgba(124, 58, 237, 0.12)",
             border: "1px solid rgba(124, 58, 237, 0.32)",
@@ -262,7 +258,7 @@ export function HUD({
         </button>
         {hasCardSourceDebug && (
           <button
-            className={`${hudButtonBase} focus-visible:ring-sky-300`}
+            className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-sky-300`}
             style={{
               background: isCardSourceOverlayOpen
                 ? "rgba(96, 165, 250, 0.24)"
@@ -276,9 +272,14 @@ export function HUD({
             <span className="hidden lg:inline">Why Cards</span>
           </button>
         )}
+        <span
+          id={HUD_DREAMSIGN_DEBUG_SLOT_ID}
+          data-testid="hud-dreamsign-debug-slot"
+          className="contents"
+        />
         {hasDraftData && (
           <button
-            className={`${hudButtonBase} focus-visible:ring-rose-300`}
+            className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-rose-300`}
             style={{
               background: "rgba(239, 68, 68, 0.15)",
               border: "1px solid rgba(239, 68, 68, 0.3)",
@@ -291,7 +292,7 @@ export function HUD({
           </button>
         )}
         <button
-          className={`${hudButtonBase} focus-visible:ring-amber-300`}
+          className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-amber-300`}
           style={{
             background: "rgba(212, 160, 23, 0.15)",
             border: "1px solid rgba(212, 160, 23, 0.3)",

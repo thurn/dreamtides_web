@@ -8,6 +8,7 @@ import {
   DreamsignHoverCard,
 } from "../components/DreamsignHoverCard";
 import { HoverPopover } from "../components/HoverPopover";
+import { DreamsignSourceButton } from "../components/DreamsignSourceButton";
 import { DreamsignSourceOverlay } from "./DreamsignSourceOverlay";
 import {
   OFFERING_NEUTRAL,
@@ -18,7 +19,6 @@ import {
   OfferingGrid,
   OfferingScreenHeader,
   OfferingScreenLayout,
-  OfferingSecondaryButton,
   OfferingSkipButton,
 } from "../components/OfferingScreen";
 
@@ -180,13 +180,11 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
         >
           Skip (discards the shown Dreamsigns)
         </OfferingSkipButton>
-        <OfferingSecondaryButton
+        <DreamsignSourceButton
           onClick={() => {
             setSourceOverlayOpen(true);
           }}
-        >
-          Why Dreamsigns?
-        </OfferingSecondaryButton>
+        />
       </OfferingFooter>
 
       <DreamsignSourceOverlay
