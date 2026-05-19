@@ -291,6 +291,26 @@ describe("StartingDeckModal", () => {
     });
   });
 
+  it("keeps the click-outside backdrop visually transparent", () => {
+    const { container, root } = mount(
+      <StartingDeckModal
+        isOpen
+        onClose={vi.fn()}
+        cardDatabase={makeCardDatabase()}
+      />,
+    );
+
+    const backdrop = container.querySelector<HTMLElement>(
+      "[data-testid='starting-deck-modal-backdrop']",
+    );
+    expect(backdrop).not.toBeNull();
+    expect(backdrop?.style.backgroundColor).toBe("transparent");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("exposes only a close button (no Continue, sort, filter, or summary chrome)", () => {
     const { container, root } = mount(
       <StartingDeckModal

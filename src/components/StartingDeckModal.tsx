@@ -92,7 +92,7 @@ export function StartingDeckModal({
         <motion.div
           key="starting-deck-modal-backdrop"
           className="fixed inset-0 z-[60] flex items-center justify-center p-4"
-          style={{ backgroundColor: "rgba(5, 2, 10, 0.55)" }}
+          style={{ backgroundColor: "transparent" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
