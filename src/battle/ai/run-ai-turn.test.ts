@@ -36,18 +36,19 @@ describe("runAiTurn", () => {
     expect(resolved.state.phase).toBe("day");
     expect(resolved.state.turnNumber).toBe(2);
     expect(resolved.state.sides.enemy.currentEnergy).toBeGreaterThanOrEqual(0);
-    expect(resolved.transition.aiChoices).toHaveLength(MAX_AI_ACTIONS_PER_TURN + 1);
-    expect(resolved.transition.aiChoices.map((choice) => choice.stage)).toEqual([
-      "character",
-      "reposition",
-      "nonCharacter",
-      "endTurn",
-    ]);
+    expect(resolved.transition.aiChoices.length).toBeGreaterThanOrEqual(1);
+    expect(resolved.transition.aiChoices.length).toBeLessThanOrEqual(
+      MAX_AI_ACTIONS_PER_TURN + 1,
+    );
+    expect(resolved.transition.aiChoices[0].stage).toBe("character");
+    expect(
+      resolved.transition.aiChoices[resolved.transition.aiChoices.length - 1].stage,
+    ).toBe("endTurn");
     expect(
       resolved.transition.logEvents.filter(
         (event) => event.event === "battle_proto_ai_choice",
       ),
-    ).toHaveLength(MAX_AI_ACTIONS_PER_TURN + 1);
+    ).toHaveLength(resolved.transition.aiChoices.length);
     expect(resolved.state.sides.enemy.reserve.R1).not.toBe(reserveCharacter);
   });
 

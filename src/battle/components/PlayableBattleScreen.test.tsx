@@ -63,7 +63,11 @@ vi.mock("../../multiplayer/battle-service", async (importOriginal) => {
   };
 });
 
-function createTestBattle(): {
+function createTestBattle({
+  enableAi = true,
+}: {
+  enableAi?: boolean;
+} = {}): {
   battleInit: BattleInit;
   initialState: BattleMutableState;
   site: ReturnType<typeof makeBattleTestSite>;
@@ -74,6 +78,7 @@ function createTestBattle(): {
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
+    enableAi,
   });
 
   return {
@@ -165,8 +170,9 @@ function mount(element: ReactElement): {
 
 function renderScreen(
   mutateInitialState?: (state: ReturnType<typeof createTestBattle>["initialState"]) => void,
+  options?: { enableAi?: boolean },
 ) {
-  const testBattle = createTestBattle();
+  const testBattle = createTestBattle(options);
   mutateInitialState?.(testBattle.initialState);
   return {
     ...testBattle,

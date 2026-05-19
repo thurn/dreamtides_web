@@ -36,7 +36,12 @@ const ENEMY_SUBTITLES = [
   "False Pilgrim",
   "Storm-Bound Usurper",
 ] as const;
-const ENEMY_DECK_SIZE = 12;
+const ENEMY_DECK_SIZE = 50;
+const ENEMY_CHEAP_CHARACTER_COUNT = 13;
+const ENEMY_MID_CHARACTER_COUNT = 13;
+const ENEMY_EXPENSIVE_CHARACTER_COUNT = 8;
+const ENEMY_CHEAP_OR_MID_EVENT_COUNT = 8;
+const ENEMY_ANY_EVENT_COUNT = 8;
 
 /**
  * Minimum quest deck size for a battle. A deck below this is padded with
@@ -333,7 +338,7 @@ function createEnemyDeckDefinition(
     filterByCostBand(filterByPackage(characters, enemyPackageTides), "cheap"),
     filterByCostBand(characters, "cheap"),
     numericCards,
-    3,
+    ENEMY_CHEAP_CHARACTER_COUNT,
     rng,
   );
   addEnemyCards(
@@ -341,7 +346,7 @@ function createEnemyDeckDefinition(
     filterByCostBand(filterByPackage(characters, enemyPackageTides), "mid"),
     filterByCostBand(characters, "mid"),
     numericCards,
-    3,
+    ENEMY_MID_CHARACTER_COUNT,
     rng,
   );
   addEnemyCards(
@@ -349,7 +354,7 @@ function createEnemyDeckDefinition(
     filterByCostBand(filterByPackage(characters, enemyPackageTides), "expensive"),
     filterByCostBand(characters, "expensive"),
     numericCards,
-    2,
+    ENEMY_EXPENSIVE_CHARACTER_COUNT,
     rng,
   );
   addEnemyCards(
@@ -357,7 +362,7 @@ function createEnemyDeckDefinition(
     filterByCostBand(filterByPackage(events, enemyPackageTides), "cheapOrMid"),
     filterByCostBand(events, "cheapOrMid"),
     numericCards,
-    2,
+    ENEMY_CHEAP_OR_MID_EVENT_COUNT,
     rng,
   );
   addEnemyCards(
@@ -365,7 +370,7 @@ function createEnemyDeckDefinition(
     filterByPackage(events, enemyPackageTides),
     events,
     numericCards,
-    2,
+    ENEMY_ANY_EVENT_COUNT,
     rng,
   );
 
