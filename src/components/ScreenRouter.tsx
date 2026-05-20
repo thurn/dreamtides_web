@@ -21,6 +21,7 @@ import {
   buildJourneyContext,
   buildJourneyContentBundle,
   createJourneyMutations,
+  type JourneyExplanation,
   type JourneyDebugForcing,
 } from "../journeys";
 import type { QuestContent } from "../data/quest-content";
@@ -42,8 +43,10 @@ function screenKey(screen: Screen): string {
 /** Routes to the correct screen component based on quest state. */
 export function ScreenRouter({
   runtimeConfig,
+  onJourneyExplanationChange,
 }: {
   runtimeConfig: RuntimeConfig;
+  onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
 }) {
   const { state } = useQuest();
   const { screen } = state;
@@ -57,7 +60,13 @@ export function ScreenRouter({
       case "dreamscape":
         return <DreamscapeScreen />;
       case "site":
-        return <SiteScreen siteId={screen.siteId} runtimeConfig={runtimeConfig} />;
+        return (
+          <SiteScreen
+            siteId={screen.siteId}
+            runtimeConfig={runtimeConfig}
+            onJourneyExplanationChange={onJourneyExplanationChange}
+          />
+        );
       case "questComplete":
         return <QuestCompleteScreen />;
       case "questFailed":
@@ -95,9 +104,11 @@ export function ScreenRouter({
 function SiteScreen({
   siteId,
   runtimeConfig,
+  onJourneyExplanationChange,
 }: {
   siteId: string;
   runtimeConfig: RuntimeConfig;
+  onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
 }) {
   const { state, cardDatabase } = useQuest();
   const { atlas, currentDreamscape } = state;
@@ -146,7 +157,13 @@ function SiteScreen({
   }
 
   if (site.type === "DreamJourney") {
-    return <DreamJourneySiteScreen site={site} runtimeConfig={runtimeConfig} />;
+    return (
+      <DreamJourneySiteScreen
+        site={site}
+        runtimeConfig={runtimeConfig}
+        onJourneyExplanationChange={onJourneyExplanationChange}
+      />
+    );
   }
 
   if (site.type === "Purge") {
@@ -183,9 +200,11 @@ function SiteScreen({
 function DreamJourneySiteScreen({
   site,
   runtimeConfig,
+  onJourneyExplanationChange,
 }: {
   site: SiteState;
   runtimeConfig: RuntimeConfig;
+  onJourneyExplanationChange?: (explanation: JourneyExplanation | null) => void;
 }) {
   const { state, mutations, questContent } = useQuest();
 
@@ -231,6 +250,7 @@ function DreamJourneySiteScreen({
       siteId={site.id}
       mutations={journeyMutations}
       debugForcing={debugForcing}
+      onExplanationChange={onJourneyExplanationChange}
     />
   );
 }

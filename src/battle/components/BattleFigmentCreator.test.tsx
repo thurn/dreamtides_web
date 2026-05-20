@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import type { BattleDebugEdit } from "../debug/commands";
 import { createBattleInit } from "../integration/create-battle-init";
-import { createInitialBattleState } from "../state/create-initial-state";
+import { allocateBattleCardInstance, createInitialBattleState } from "../state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
@@ -302,6 +302,75 @@ describe("BattleFigmentCreator", () => {
       side: "player",
       zone: "reserve",
       slotId: "R1",
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("allows submitting into an occupied slot when it contains the matching figment stack", () => {
+    const state = buildBattleState();
+    const stackId = allocateBattleCardInstance(state, {
+      definition: {
+        sourceDeckEntryId: null,
+        cardNumber: 0,
+        name: "Shadow Figment",
+        battleCardKind: "character",
+        subtype: "Shadow",
+        energyCost: 0,
+        printedEnergyCost: 0,
+        printedSpark: 1,
+        isFast: false,
+        reclaimCost: null,
+        tides: [],
+        renderedText: "",
+        imageNumber: 0,
+        transfiguration: null,
+        isBane: false,
+      },
+      owner: "player",
+      controller: "player",
+      isRevealedToPlayer: true,
+      provenance: {
+        kind: "generated-figment",
+        sourceBattleCardId: null,
+        chosenSpark: 1,
+        chosenSubtype: "Shadow",
+        createdAtTurnNumber: state.turnNumber,
+        createdAtSide: "player",
+        createdAtMs: 1,
+      },
+    });
+    state.sides.player.reserve.R0 = stackId;
+
+    const { root, submits } = mount({ state });
+    const r0Radio = document.querySelector<HTMLInputElement>(
+      'input[name="battle-figment-slot"][value="R0"]',
+    );
+    expect(r0Radio).not.toBeNull();
+    act(() => {
+      r0Radio!.click();
+    });
+    setInputValue('[data-battle-figment-field="subtype"]', "Shadow");
+
+    const submitButton = document.querySelector<HTMLButtonElement>(
+      '[data-battle-figment-action="submit"]',
+    );
+    expect(submitButton?.disabled).toBe(false);
+
+    act(() => {
+      submitButton?.click();
+    });
+    expect(submits).toHaveLength(1);
+    const edit = submits[0];
+    if (edit.kind !== "CREATE_FIGMENT") {
+      throw new Error("expected CREATE_FIGMENT edit");
+    }
+    expect(edit.destination).toEqual({
+      side: "player",
+      zone: "reserve",
+      slotId: "R0",
     });
 
     act(() => {

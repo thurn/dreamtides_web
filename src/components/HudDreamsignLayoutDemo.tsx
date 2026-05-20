@@ -205,9 +205,12 @@ export function HudDreamsignLayoutDemo() {
           onOpenGlossary={noop}
           onOpenDebugScreen={noop}
           onToggleCardSourceOverlay={noop}
+          onToggleJourneyExplanation={noop}
           hasDraftData={true}
           hasCardSourceDebug={true}
+          hasJourneyExplanation={false}
           isCardSourceOverlayOpen={false}
+          isJourneyExplanationOpen={false}
         />
       </div>
     </QuestContextProvider>

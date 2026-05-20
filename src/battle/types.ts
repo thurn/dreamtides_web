@@ -279,6 +279,7 @@ export interface BattleCardInstance {
   definition: BattleDeckCardDefinition;
   owner: BattleSide;
   controller: BattleSide;
+  figmentCount?: number;
   sparkDelta: number;
   isRevealedToPlayer: boolean;
   markers: BattleCardMarkers;

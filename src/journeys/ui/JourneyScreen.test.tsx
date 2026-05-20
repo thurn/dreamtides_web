@@ -66,6 +66,7 @@ import * as loggingModule from "../../logging";
 
 import * as dreamArtModule from "./dreamArt";
 import { JourneyScreen } from "./JourneyScreen";
+import type { JourneyExplanation } from "./journeyExplanation";
 
 const { stubRewards } = vi.hoisted(() => ({
   stubRewards: new Map<string, Reward>(),
@@ -607,6 +608,72 @@ describe("JourneyScreen", () => {
     });
   });
 
+  it("publishes a structured journey explanation for the active manifest", () => {
+    const option = makeUnlockedOption({
+      ...baseOptionFields(1),
+      text: "Pay essence for a reward.",
+      costs: [
+        {
+          kind: "shared_cost_template",
+          templateId: "pay_essence",
+          text: "Pay 25 essence",
+          convertedEssence: 25,
+        },
+      ],
+      effects: [
+        {
+          kind: "shared_reward_template",
+          templateId: "gain_essence",
+          text: "Gain 80 essence",
+          convertedEssence: 80,
+        },
+      ],
+      costConvertedEssence: 25,
+      effectConvertedEssence: 80,
+      netConvertedEssence: 55,
+    });
+    mockedGenerate.mockReturnValue(
+      manifestSkeleton({
+        shapeId: "single_offer",
+        options: [option],
+      }),
+    );
+    const onExplanationChange = vi.fn<
+      (explanation: JourneyExplanation | null) => void
+    >();
+
+    const { root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+        onExplanationChange={onExplanationChange}
+      />,
+    );
+
+    const explanation = onExplanationChange.mock.calls.find(
+      (call) => call[0] !== null,
+    )?.[0];
+    expect(explanation?.shapeId).toBe("single_offer");
+    expect(explanation?.shapeLabel).toBe("Single offer");
+    expect(explanation?.progress.detail).toContain("1 visible choices");
+    expect(explanation?.choices[0]?.cec).toEqual({
+      cost: 25,
+      reward: 80,
+      burden: 0,
+      uncertainty: 0,
+      net: 55,
+    });
+    expect(explanation?.choices[0]?.costs[0]?.label).toBe("Pay 25 essence");
+    expect(explanation?.choices[0]?.rewards[0]?.label).toBe("Gain 80 essence");
+
+    act(() => {
+      root.unmount();
+    });
+    expect(onExplanationChange).toHaveBeenLastCalledWith(null);
+  });
+
   it("keeps dream names off the option row while preserving accessible labels and hover headings", () => {
     mockedGenerate.mockReturnValue(makeFlatManifest(3));
     const onClose = vi.fn();
@@ -812,6 +879,44 @@ describe("JourneyScreen", () => {
     expect(onClose).not.toHaveBeenCalled();
     enterButtons = queryDreamImageControls(container);
     expect(enterButtons).toHaveLength(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("updates the journey explanation progress as tree journeys advance", () => {
+    mockedGenerate.mockReturnValue(makeTwoNodeTreeManifest());
+    const onExplanationChange = vi.fn<
+      (explanation: JourneyExplanation | null) => void
+    >();
+
+    const { container, root } = mount(
+      <JourneyScreen
+        context={dummyContext()}
+        onClose={vi.fn()}
+        siteId={TEST_SITE_ID}
+        mutations={dummyMutations()}
+        onExplanationChange={onExplanationChange}
+      />,
+    );
+
+    expect(
+      onExplanationChange.mock.calls.find((call) => call[0] !== null)?.[0]
+        ?.progress.detail,
+    ).toContain("node-1");
+
+    const enterButtons = queryDreamImageControls(container);
+    act(() => {
+      enterButtons[0].dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    const explanationCalls = onExplanationChange.mock.calls
+      .map((call) => call[0])
+      .filter((entry): entry is JourneyExplanation => entry !== null);
+    const latestExplanation = explanationCalls[explanationCalls.length - 1];
+    expect(latestExplanation?.progress.detail).toContain("node-2");
+    expect(latestExplanation?.choices).toHaveLength(1);
 
     act(() => {
       root.unmount();

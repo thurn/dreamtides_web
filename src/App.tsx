@@ -19,6 +19,10 @@ import { ErrorBoundary } from "./components/ErrorBoundary";
 import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import type { QuestState } from "./types/quest";
+import {
+  JourneyExplanationOverlay,
+  type JourneyExplanation,
+} from "./journeys";
 
 /** Inner component that renders the screen router and HUD. */
 export function QuestApp({
@@ -46,6 +50,9 @@ export function QuestApp({
   const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
+  const [journeyExplanationOpen, setJourneyExplanationOpen] = useState(false);
+  const [journeyExplanation, setJourneyExplanation] =
+    useState<JourneyExplanation | null>(null);
   const previousScreenTypeRef = useRef(state.screen.type);
   const startInBattleFiredRef = useRef(false);
 
@@ -90,6 +97,12 @@ export function QuestApp({
     }
   }, [hasCardSourceDebug]);
 
+  useEffect(() => {
+    if (journeyExplanation === null) {
+      setJourneyExplanationOpen(false);
+    }
+  }, [journeyExplanation]);
+
   const handleOpenDeckViewer = useCallback(() => {
     setDeckViewerOpen(true);
   }, []);
@@ -126,6 +139,14 @@ export function QuestApp({
     setCardSourceOverlayOpen(false);
   }, []);
 
+  const handleToggleJourneyExplanation = useCallback(() => {
+    setJourneyExplanationOpen((prev) => !prev);
+  }, []);
+
+  const handleCloseJourneyExplanation = useCallback(() => {
+    setJourneyExplanationOpen(false);
+  }, []);
+
   // `?startInBattle=1`: a freshly created room starts with the default
   // `questStart` state. Hold a loading screen — rather than rendering the
   // Dreamcaller selection screen — until `bootstrapStartInBattle` round-trips
@@ -147,7 +168,10 @@ export function QuestApp({
         produces a blank #root with no fallback UI.
       */}
       <ErrorBoundary scope="app-shell">
-        <ScreenRouter runtimeConfig={runtimeConfig} />
+        <ScreenRouter
+          runtimeConfig={runtimeConfig}
+          onJourneyExplanationChange={setJourneyExplanation}
+        />
         {showHud && (
           <ErrorBoundary scope="overlay:hud">
             <HUD
@@ -158,6 +182,9 @@ export function QuestApp({
               hasDraftData={hasDraftData}
               hasCardSourceDebug={hasCardSourceDebug}
               isCardSourceOverlayOpen={cardSourceOverlayOpen}
+              hasJourneyExplanation={journeyExplanation !== null}
+              isJourneyExplanationOpen={journeyExplanationOpen}
+              onToggleJourneyExplanation={handleToggleJourneyExplanation}
             />
           </ErrorBoundary>
         )}
@@ -207,6 +234,16 @@ export function QuestApp({
             cardSourceDebug={state.cardSourceDebug}
             isOpen={cardSourceOverlayOpen}
             onClose={handleCloseCardSourceOverlay}
+          />
+        </ErrorBoundary>
+        <ErrorBoundary
+          scope="overlay:journey-explanation"
+          onClose={handleCloseJourneyExplanation}
+        >
+          <JourneyExplanationOverlay
+            explanation={journeyExplanation}
+            isOpen={journeyExplanationOpen}
+            onClose={handleCloseJourneyExplanation}
           />
         </ErrorBoundary>
       </ErrorBoundary>

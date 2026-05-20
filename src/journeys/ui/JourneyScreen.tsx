@@ -88,6 +88,10 @@ import {
   type DreamArtAssignment,
   type ExtensionMap,
 } from "./dreamArt";
+import {
+  buildJourneyExplanation,
+  type JourneyExplanation,
+} from "./journeyExplanation";
 
 /** Props for `JourneyScreen`. */
 export interface JourneyScreenProps {
@@ -114,6 +118,7 @@ export interface JourneyScreenProps {
    */
   readonly extensionMap?: ExtensionMap;
   readonly debugForcing?: JourneyDebugForcing;
+  readonly onExplanationChange?: (explanation: JourneyExplanation | null) => void;
 }
 
 type ManifestResult =
@@ -365,6 +370,7 @@ export function JourneyScreen({
   mutations,
   extensionMap,
   debugForcing,
+  onExplanationChange,
 }: JourneyScreenProps) {
   const [rerollIndex, setRerollIndex] = useState(0);
   const handleReroll = useCallback(() => {
@@ -427,6 +433,7 @@ export function JourneyScreen({
       siteId={siteId}
       mutations={mutations}
       extensionMap={extensionMap}
+      onExplanationChange={onExplanationChange}
     />
   );
 }
@@ -440,6 +447,7 @@ function JourneyScreenInner({
   siteId,
   mutations,
   extensionMap,
+  onExplanationChange,
 }: {
   readonly manifest: JourneyManifest;
   readonly context: JourneyContext;
@@ -448,6 +456,7 @@ function JourneyScreenInner({
   readonly siteId: string;
   readonly mutations: JourneyMutations;
   readonly extensionMap?: ExtensionMap;
+  readonly onExplanationChange?: (explanation: JourneyExplanation | null) => void;
 }) {
   // Resolve the initial player-choice node for tree manifests. The traversal
   // may have to skip over a non-player-choice root (random / automatic
@@ -473,6 +482,21 @@ function JourneyScreenInner({
     useState<JourneyTreeBranch | null>(null);
   const [committedTerminal, setCommittedTerminal] =
     useState<JourneyTreeTerminal | null>(null);
+
+  const explanation = useMemo(
+    () => buildJourneyExplanation({ manifest, context, currentNodeId }),
+    [context, currentNodeId, manifest],
+  );
+
+  useEffect(() => {
+    onExplanationChange?.(explanation);
+  }, [explanation, onExplanationChange]);
+
+  useEffect(() => {
+    return () => {
+      onExplanationChange?.(null);
+    };
+  }, [onExplanationChange]);
 
   const dreamArt = useMemo(
     () => assignDreamArt(manifest, { extensionMap }),

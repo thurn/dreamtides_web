@@ -16,6 +16,7 @@ import type {
 } from "../types";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 import { evaluateBattleResult } from "../engine/result";
+import { selectEffectiveSparkForInstance } from "./figments";
 
 /**
  * Summary of B-5 quest deck metadata captured at battle-init time. The
@@ -136,7 +137,7 @@ export function selectEffectiveSpark(
     return null;
   }
 
-  return Math.max(0, instance.definition.printedSpark + instance.sparkDelta);
+  return selectEffectiveSparkForInstance(instance);
 }
 
 /**
@@ -201,6 +202,34 @@ export function selectCanPlayCardInCurrentPhase(
     return timing === "fast" || timing === "interrupt";
   }
   return false;
+}
+
+export function selectHasAffordableFastSpeedHandPlay(
+  state: BattleMutableState,
+  side: BattleSide,
+): boolean {
+  if (state.result !== null) {
+    return false;
+  }
+
+  const sideState = state.sides[side];
+  const nightState: BattleMutableState = {
+    ...state,
+    activeSide: side,
+    phase: "night",
+  };
+
+  return sideState.hand.some((battleCardId) => {
+    const card = state.cardInstances[battleCardId];
+    return card !== undefined &&
+      card.definition.energyCost <= sideState.currentEnergy &&
+      selectCanPlayCardInCurrentPhase(nightState, battleCardId);
+  });
+}
+
+export function selectShouldEndTurnFromDay(state: BattleMutableState): boolean {
+  return state.phase === "day" &&
+    !selectHasAffordableFastSpeedHandPlay(state, state.activeSide);
 }
 
 export function selectCanRepositionInCurrentPhase(

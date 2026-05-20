@@ -1,5 +1,10 @@
 import { DEPLOY_SLOT_IDS, type BattleJudgmentResolution, type BattleLaneJudgment, type BattleMutableState, type BattleSide, type DeploySlotId } from "../types";
 import { selectDeployedSpark } from "../state/selectors";
+import {
+  dissolveFigmentsFromStackInPlace,
+  isFigmentInstance,
+  selectFigmentChallengeLossCount,
+} from "../state/figments";
 
 export function resolveJudgment(state: BattleMutableState): BattleJudgmentResolution {
   const lanes: BattleLaneJudgment[] = DEPLOY_SLOT_IDS.map((slotId) => {
@@ -76,18 +81,36 @@ function dissolveLaneInPlace(state: BattleMutableState, slotId: DeploySlotId): v
   const playerSpark = selectDeployedSpark(state, "player", slotId);
   const enemySpark = selectDeployedSpark(state, "enemy", slotId);
 
-  if (playerSpark === enemySpark) {
-    dissolveCardInPlace(state, "player", slotId, playerCardId);
-    dissolveCardInPlace(state, "enemy", slotId, enemyCardId);
+  applyChallengeLossInPlace(state, "player", slotId, playerCardId, playerSpark, enemySpark);
+  applyChallengeLossInPlace(state, "enemy", slotId, enemyCardId, enemySpark, playerSpark);
+}
+
+function applyChallengeLossInPlace(
+  state: BattleMutableState,
+  side: BattleSide,
+  slotId: DeploySlotId,
+  battleCardId: string,
+  ownSpark: number,
+  opposingSpark: number,
+): void {
+  const instance = state.cardInstances[battleCardId];
+  if (!isFigmentInstance(instance)) {
+    if (ownSpark <= opposingSpark) {
+      dissolveCardInPlace(state, side, slotId, battleCardId);
+    }
     return;
   }
 
-  if (playerSpark > enemySpark) {
-    dissolveCardInPlace(state, "enemy", slotId, enemyCardId);
+  const countToDissolve = ownSpark <= opposingSpark
+    ? Number.POSITIVE_INFINITY
+    : selectFigmentChallengeLossCount(instance, opposingSpark);
+  if (countToDissolve <= 0) {
     return;
   }
 
-  dissolveCardInPlace(state, "player", slotId, playerCardId);
+  if (dissolveFigmentsFromStackInPlace(state, battleCardId, countToDissolve)) {
+    dissolveCardInPlace(state, side, slotId, battleCardId);
+  }
 }
 
 function dissolveCardInPlace(

@@ -16,6 +16,10 @@
  */
 
 export { JourneyScreen } from "./ui/JourneyScreen";
+export {
+  JourneyExplanationOverlay,
+  type JourneyExplanation,
+} from "./ui/JourneyExplanationOverlay";
 export type { JourneyMutations } from "./apply/JourneyMutations";
 export { createJourneyMutations } from "./adapter/journeyMutations";
 export { journeySeedForSite } from "./adapter/seed";

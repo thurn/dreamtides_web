@@ -1,12 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { createBattleInit } from "../integration/create-battle-init";
-import { createInitialBattleState } from "../state/create-initial-state";
+import {
+  allocateBattleCardInstance,
+  createInitialBattleState,
+} from "../state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
+import type { BattleDeckCardDefinition, BattleSide } from "../types";
 import { resolveMoveCard, resolvePlayCard } from "./play-card";
 
 describe("play-card engine", () => {
@@ -121,6 +125,31 @@ describe("play-card engine", () => {
     expect(resolved.transition.logEvents[0].fields).toMatchObject({
       battleCardId,
       sourceZone: "void",
+      targetZone: "reserve",
+    });
+  });
+
+  it("merges a reclaimed generated figment into an existing same-type stack", () => {
+    const state = createTestBattle();
+    const stackCardId = createGeneratedFigment(state, "player", "Shadow", "reserve");
+    const reclaimedCardId = createGeneratedFigment(state, "player", "Shadow", "void");
+
+    const resolved = resolvePlayCard(state, reclaimedCardId, {
+      side: "player",
+      zone: "reserve",
+      slotId: "R0",
+    });
+
+    expect(resolved.state.sides.player.reserve.R0).toBe(stackCardId);
+    expect(resolved.state.sides.player.void).not.toContain(reclaimedCardId);
+    expect(resolved.state.cardInstances[stackCardId].figmentCount).toBe(2);
+    expect(resolved.state.cardInstances[reclaimedCardId]).toBeUndefined();
+    expect(resolved.transition.logEvents[0].fields).toMatchObject({
+      battleCardId: reclaimedCardId,
+      cardKind: "character",
+      cardName: "Shadow Figment",
+      sourceZone: "void",
+      targetSlotId: "R0",
       targetZone: "reserve",
     });
   });
@@ -306,4 +335,55 @@ function occupyPlayerReserve(state: ReturnType<typeof createTestBattle>): void {
   for (const [index, slotId] of reserveSlotIds.entries()) {
     state.sides.player.reserve[slotId] = fillerCardIds[index] ?? null;
   }
+}
+
+function createGeneratedFigment(
+  state: ReturnType<typeof createTestBattle>,
+  side: BattleSide,
+  subtype: string,
+  zone: "reserve" | "void",
+): string {
+  const battleCardId = allocateBattleCardInstance(state, {
+    definition: makeGeneratedFigmentDefinition(subtype),
+    owner: side,
+    controller: side,
+    isRevealedToPlayer: true,
+    provenance: {
+      kind: "generated-figment",
+      sourceBattleCardId: null,
+      chosenSpark: 1,
+      chosenSubtype: subtype,
+      createdAtTurnNumber: state.turnNumber,
+      createdAtSide: side,
+      createdAtMs: 1,
+    },
+  });
+
+  if (zone === "reserve") {
+    state.sides[side].reserve.R0 = battleCardId;
+  } else {
+    state.sides[side].void.push(battleCardId);
+  }
+
+  return battleCardId;
+}
+
+function makeGeneratedFigmentDefinition(subtype: string): BattleDeckCardDefinition {
+  return {
+    sourceDeckEntryId: null,
+    cardNumber: 0,
+    name: `${subtype} Figment`,
+    battleCardKind: "character",
+    subtype,
+    energyCost: 0,
+    printedEnergyCost: 0,
+    printedSpark: 1,
+    isFast: false,
+    reclaimCost: 0,
+    tides: [],
+    renderedText: "",
+    imageNumber: 0,
+    transfiguration: null,
+    isBane: false,
+  };
 }

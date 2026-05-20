@@ -3,7 +3,7 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import { CardDisplay } from "../../components/CardDisplay";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleMutableState } from "../types";
-import { battleCardDisplayFromInstance } from "./BattleCardView";
+import { BattleCardView, battleCardDisplayFromInstance, battleCardVisualFromInstance } from "./BattleCardView";
 
 /**
  * The hand tray renders the player's hand using the shared {@link CardDisplay}
@@ -34,8 +34,13 @@ export function BattleHandTray({
   onCardDoubleClick,
   onCardDragEnd,
   onCardDragStart,
+  onCardHoverEnd,
+  onCardHoverMove,
+  onCardHoverStart,
+  compact = false,
 }: {
   canInteract: boolean;
+  compact?: boolean;
   currentEnergy: number;
   hand: string[];
   onHandCardAction: (command: BattleCommand) => void;
@@ -49,9 +54,21 @@ export function BattleHandTray({
   onCardDoubleClick: (battleCardId: string) => void;
   onCardDragEnd?: () => void;
   onCardDragStart?: (battleCardId: string) => void;
+  onCardHoverEnd?: () => void;
+  onCardHoverMove?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
+  onCardHoverStart?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
 }) {
   return (
-    <section data-battle-region="player-hand-tray" className="hand-row">
+    <section
+      data-battle-region="player-hand-tray"
+      className={`hand-row ${compact ? "compact" : ""}`}
+    >
+      {compact ? (
+        <div className="hand-row-label">
+          <span>Your hand</span>
+          <strong>{String(hand.length)}</strong>
+        </div>
+      ) : null}
       <div className="hand-cards">
         {hand.map((battleCardId) => {
           const instance = state.cardInstances[battleCardId];
@@ -73,6 +90,41 @@ export function BattleHandTray({
             .filter((value) => value !== "")
             .join(" ");
 
+          if (compact) {
+            return (
+              <BattleCardView
+                key={battleCardId}
+                battleCardId={battleCardId}
+                className="revealed-hand-card player"
+                dataBattleHandCard
+                data={battleCardVisualFromInstance(instance)}
+                playable={isPlayable}
+                selected={isSelected}
+                unaffordable={isUnaffordable}
+                reserved={false}
+                draggable={isPlayable}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onCardClick(battleCardId);
+                }}
+                onDoubleClick={(event) => {
+                  event.stopPropagation();
+                  onCardDoubleClick(battleCardId);
+                }}
+                onContextMenu={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  onCardContextMenu?.(battleCardId, event);
+                }}
+                onDragStart={() => onCardDragStart?.(battleCardId)}
+                onDragEnd={() => onCardDragEnd?.()}
+                onMouseEnter={(event) => onCardHoverStart?.(battleCardId, event)}
+                onMouseMove={(event) => onCardHoverMove?.(battleCardId, event)}
+                onMouseLeave={() => onCardHoverEnd?.()}
+              />
+            );
+          }
+
           return (
             <div
               key={battleCardId}
@@ -91,6 +143,9 @@ export function BattleHandTray({
               }}
               onDragStart={() => onCardDragStart?.(battleCardId)}
               onDragEnd={() => onCardDragEnd?.()}
+              onMouseEnter={(event) => onCardHoverStart?.(battleCardId, event)}
+              onMouseMove={(event) => onCardHoverMove?.(battleCardId, event)}
+              onMouseLeave={() => onCardHoverEnd?.()}
             >
               <CardDisplay
                 card={battleCardDisplayFromInstance(instance)}

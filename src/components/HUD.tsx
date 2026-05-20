@@ -55,9 +55,12 @@ interface HudProps {
   onOpenGlossary: () => void;
   onOpenDebugScreen: () => void;
   onToggleCardSourceOverlay: () => void;
+  onToggleJourneyExplanation: () => void;
   hasDraftData: boolean;
   hasCardSourceDebug: boolean;
   isCardSourceOverlayOpen: boolean;
+  hasJourneyExplanation: boolean;
+  isJourneyExplanationOpen: boolean;
 }
 
 /** Persistent HUD bar anchored to the bottom of the viewport. */
@@ -66,9 +69,12 @@ export function HUD({
   onOpenGlossary,
   onOpenDebugScreen,
   onToggleCardSourceOverlay,
+  onToggleJourneyExplanation,
   hasDraftData,
   hasCardSourceDebug,
   isCardSourceOverlayOpen,
+  hasJourneyExplanation,
+  isJourneyExplanationOpen,
 }: HudProps) {
   const { state } = useQuest();
   const animatedEssence = useAnimatedNumber(
@@ -100,7 +106,7 @@ export function HUD({
       }}
     >
       {/* Left section: essence, deck, dreamcaller */}
-      <div className="flex min-w-0 items-center gap-3 md:gap-5">
+      <div className="flex min-w-0 items-center gap-2 overflow-hidden md:gap-5">
         {/* Essence counter. Color identity is the only marker for
             essence across the prototype; no glyph is rendered so the
             HUD stays consistent with shop / battle-reward surfaces.
@@ -218,7 +224,7 @@ export function HUD({
       </div>
 
       {/* Center: completion level (FIND-01-13: labelled so "0/7" is not ambiguous). */}
-      <div className="flex shrink-0 items-center whitespace-nowrap">
+      <div className="hidden shrink-0 items-center whitespace-nowrap sm:flex">
         <span className="text-xs font-medium opacity-70 md:text-sm">
           Battles won {String(state.completionLevel)}/7
         </span>
@@ -278,18 +284,43 @@ export function HUD({
           className="contents"
         />
         {hasDraftData && (
-          <button
-            className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-rose-300`}
-            style={{
-              background: "rgba(239, 68, 68, 0.15)",
-              border: "1px solid rgba(239, 68, 68, 0.3)",
-              color: "#f87171",
-            }}
-            onClick={onOpenDebugScreen}
-          >
-            <span className="lg:hidden">{"\uD83D\uDC1B"}</span>
-            <span className="hidden lg:inline">Debug</span>
-          </button>
+          <>
+            {hasJourneyExplanation && (
+              <button
+                className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-cyan-300`}
+                style={{
+                  background: isJourneyExplanationOpen
+                    ? "rgba(34, 211, 238, 0.24)"
+                    : "rgba(34, 211, 238, 0.14)",
+                  border: `1px solid ${
+                    isJourneyExplanationOpen
+                      ? "rgba(34, 211, 238, 0.52)"
+                      : "rgba(34, 211, 238, 0.3)"
+                  }`,
+                  color: isJourneyExplanationOpen ? "#cffafe" : "#67e8f9",
+                }}
+                onClick={onToggleJourneyExplanation}
+                data-testid="hud-why-journey-button"
+                aria-pressed={isJourneyExplanationOpen}
+              >
+                <span className="lg:hidden" aria-hidden="true">{"?"}</span>
+                <span className="hidden lg:inline">Why Journey</span>
+                <span className="sr-only lg:hidden">Why Journey</span>
+              </button>
+            )}
+            <button
+              className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-rose-300`}
+              style={{
+                background: "rgba(239, 68, 68, 0.15)",
+                border: "1px solid rgba(239, 68, 68, 0.3)",
+                color: "#f87171",
+              }}
+              onClick={onOpenDebugScreen}
+            >
+              <span className="lg:hidden">{"\uD83D\uDC1B"}</span>
+              <span className="hidden lg:inline">Debug</span>
+            </button>
+          </>
         )}
         <button
           className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-amber-300`}

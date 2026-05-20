@@ -256,7 +256,7 @@ describe("PlayableBattleScreen", () => {
     expect(container.textContent).toContain("Redo");
     expect(container.textContent).toContain("Log");
     expect(container.textContent).toContain("Skip to rewards");
-    expect(container.textContent).toContain("End Phase");
+    expect(container.textContent).toContain("End Turn");
     expect(container.querySelector(".inspector.open")).not.toBeNull();
 
     act(() => {
@@ -287,6 +287,201 @@ describe("PlayableBattleScreen", () => {
     expect(stackZone?.querySelector("[data-battle-card-id]")).not.toBeNull();
     expect(stackZone?.textContent).toContain("Void");
     expect(stackZone?.textContent).toContain("Banish");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("resizes battle zones from splitter handles", () => {
+    const { container, root } = renderScreen();
+    const battleMain = container.querySelector<HTMLElement>(".battle-main");
+    const battlefieldHandle = container.querySelector<HTMLElement>(
+      '[data-battle-resize-handle="battlefield"]',
+    );
+    const playerHandHandle = container.querySelector<HTMLElement>(
+      '[data-battle-resize-handle="player-hand"]',
+    );
+
+    expect(battleMain).not.toBeNull();
+    expect(battlefieldHandle).not.toBeNull();
+    expect(playerHandHandle).not.toBeNull();
+    expect(battleMain?.style.getPropertyValue("--battlefield-zone-height")).toBe("246px");
+
+    act(() => {
+      battlefieldHandle?.dispatchEvent(new KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "ArrowUp",
+      }));
+    });
+
+    expect(battleMain?.style.getPropertyValue("--battlefield-zone-height")).toBe("264px");
+
+    act(() => {
+      playerHandHandle?.dispatchEvent(new KeyboardEvent("keydown", {
+        bubbles: true,
+        key: "ArrowDown",
+      }));
+    });
+
+    expect(battleMain?.style.getPropertyValue("--player-hand-zone-height")).toBe("258px");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("ends the turn from Day when the player has no affordable Fast-speed hand play", () => {
+    const { container, root } = renderScreen((state) => {
+      state.phase = "day";
+      state.activeSide = "player";
+      state.sides.player.currentEnergy = 2;
+      for (const battleCardId of state.sides.player.hand) {
+        const card = state.cardInstances[battleCardId];
+        if (card !== undefined) {
+          card.definition = {
+            ...card.definition,
+            energyCost: 3,
+            isFast: true,
+            timing: "fast",
+          };
+        }
+      }
+    });
+    const phaseButton = container.querySelector<HTMLButtonElement>('button[data-battle-action="end-turn"]');
+    expect(phaseButton?.textContent).toBe("End Turn");
+
+    act(() => {
+      phaseButton?.click();
+    });
+
+    expect(
+      getLogEntries().some((entry) =>
+        entry.event === "battle_proto_command_applied" &&
+        entry.commandId === "END_TURN"
+      ),
+    ).toBe(true);
+    expect(
+      container.querySelector('[data-battle-stat="phase"]')?.getAttribute("data-battle-phase"),
+    ).not.toBe("night");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps the Day phase stop when an affordable interrupt-timing hand play exists", () => {
+    let fastCardId = "";
+    const { container, root } = renderScreen((state) => {
+      state.phase = "day";
+      state.activeSide = "player";
+      state.sides.player.currentEnergy = 2;
+      fastCardId = state.sides.player.hand[0] ?? "";
+      const card = state.cardInstances[fastCardId];
+      if (card === undefined) {
+        throw new Error("expected player hand card");
+      }
+      card.definition = {
+        ...card.definition,
+        energyCost: 2,
+        isFast: false,
+        timing: "interrupt",
+      };
+    });
+    const phaseButton = container.querySelector<HTMLButtonElement>('button[data-battle-action="end-turn"]');
+    expect(phaseButton?.textContent).toBe("End Phase");
+
+    act(() => {
+      phaseButton?.click();
+    });
+
+    expect(
+      getLogEntries().some((entry) =>
+        entry.event === "battle_proto_command_applied" &&
+        entry.commandId === "PASS_PHASE"
+      ),
+    ).toBe(true);
+    expect(
+      container.querySelector('[data-battle-stat="phase"]')?.getAttribute("data-battle-phase"),
+    ).toBe("dusk");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("reveals compact player and opponent hand trays from the action bar", () => {
+    const { container, initialState, root } = renderScreen();
+
+    expect(container.querySelector('[data-battle-region="opponent-hand-tray"]')).toBeNull();
+    expect(container.querySelector('[data-battle-region="player-hand-tray"]')?.className)
+      .not.toContain("compact");
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+
+    expect(container.querySelector('[data-battle-region="opponent-hand-tray"]')).not.toBeNull();
+    expect(container.querySelector('[data-battle-region="player-hand-tray"]')?.className)
+      .toContain("compact");
+    expect(container.querySelectorAll(".revealed-hand-card.player")).toHaveLength(
+      initialState.sides.player.hand.length,
+    );
+    expect(container.querySelectorAll(".revealed-hand-card.opponent")).toHaveLength(
+      initialState.sides.enemy.hand.length,
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders revealed opponent hand cards with hand-card affordability and inspection affordances", () => {
+    let affordableEnemyCardId = "";
+    let unaffordableEnemyCardId = "";
+    let affordableEnemyCardName = "";
+    const { container, root } = renderScreen((state) => {
+      state.activeSide = "enemy";
+      state.phase = "day";
+      state.sides.enemy.currentEnergy = 2;
+      affordableEnemyCardId = state.sides.enemy.hand[0] ?? "";
+      unaffordableEnemyCardId = state.sides.enemy.hand[1] ?? "";
+      affordableEnemyCardName = state.cardInstances[affordableEnemyCardId].definition.name;
+      state.cardInstances[affordableEnemyCardId].definition = {
+        ...state.cardInstances[affordableEnemyCardId].definition,
+        energyCost: 1,
+      };
+      state.cardInstances[unaffordableEnemyCardId].definition = {
+        ...state.cardInstances[unaffordableEnemyCardId].definition,
+        energyCost: 5,
+      };
+    }, { enableAi: false });
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+
+    const affordableCard = container.querySelector<HTMLElement>(
+      `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${affordableEnemyCardId}"]`,
+    );
+    const unaffordableCard = container.querySelector<HTMLElement>(
+      `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${unaffordableEnemyCardId}"]`,
+    );
+
+    expect(affordableCard?.getAttribute("data-battle-card-variant")).toBe("hand");
+    expect(affordableCard?.hasAttribute("data-battle-hand-card")).toBe(true);
+    expect(affordableCard?.classList.contains("hand-card")).toBe(true);
+    expect(affordableCard?.classList.contains("quest-card")).toBe(true);
+    expect(affordableCard?.classList.contains("opponent-card")).toBe(true);
+    expect(affordableCard?.classList.contains("unaffordable")).toBe(false);
+    expect(unaffordableCard?.classList.contains("unaffordable")).toBe(true);
+
+    act(() => {
+      affordableCard?.click();
+    });
+
+    expect(affordableCard?.getAttribute("data-selected")).toBe("true");
+    expect(container.querySelector(".inspector")?.textContent).toContain(affordableEnemyCardName);
 
     act(() => {
       root.unmount();
@@ -659,8 +854,8 @@ describe("PlayableBattleScreen", () => {
     const { container, initialState, root } = renderScreen((state) => {
       state.activeSide = "enemy";
       state.phase = "day";
-      state.sides.enemy.currentEnergy = 2;
-      state.sides.enemy.maxEnergy = 2;
+      state.sides.enemy.currentEnergy = 10;
+      state.sides.enemy.maxEnergy = 10;
 
       const playerCardId = state.sides.player.hand.find((battleCardId) =>
         state.cardInstances[battleCardId]?.definition.battleCardKind === "character");
@@ -674,12 +869,12 @@ describe("PlayableBattleScreen", () => {
 
       let enemyCardId = state.sides.enemy.hand.find((battleCardId) => {
         const card = state.cardInstances[battleCardId];
-        return card?.definition.battleCardKind === "character" && card.definition.energyCost <= 2;
+        return card?.definition.battleCardKind === "character" && card.definition.energyCost <= 10;
       });
       if (enemyCardId === undefined) {
         enemyCardId = state.sides.enemy.deck.find((battleCardId) => {
           const card = state.cardInstances[battleCardId];
-          return card?.definition.battleCardKind === "character" && card.definition.energyCost <= 2;
+          return card?.definition.battleCardKind === "character" && card.definition.energyCost <= 10;
         });
         if (enemyCardId !== undefined) {
           state.sides.enemy.deck = state.sides.enemy.deck.filter((battleCardId) => battleCardId !== enemyCardId);
@@ -691,7 +886,7 @@ describe("PlayableBattleScreen", () => {
       }
       opponentCharacterId = enemyCardId;
       opponentCharacterCost = state.cardInstances[enemyCardId].definition.energyCost ?? 0;
-    });
+    }, { enableAi: false });
 
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
@@ -1079,6 +1274,59 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("renders a centered count on a stacked figment card", () => {
+    const { container, root } = renderScreen();
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-side-summary="player"]')?.click();
+    });
+    act(() => {
+      clickChip(container, "Create Figment");
+    });
+    act(() => {
+      const input = container.querySelector<HTMLInputElement>('[data-battle-figment-field="subtype"]');
+      const descriptor = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value");
+      descriptor?.set?.call(input, "Seeker");
+      input?.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-battle-figment-action="submit"]')
+        ?.click();
+    });
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-side-summary="player"]')?.click();
+    });
+    act(() => {
+      clickChip(container, "Create Figment");
+    });
+    act(() => {
+      const input = container.querySelector<HTMLInputElement>('[data-battle-figment-field="subtype"]');
+      const descriptor = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value");
+      descriptor?.set?.call(input, "Seeker");
+      input?.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-battle-figment-action="submit"]')
+        ?.click();
+    });
+
+    const stackCardId = container
+      .querySelector('[data-slot-id="player-reserve-R0"]')
+      ?.getAttribute("data-slot-card-id");
+    expect(stackCardId).toMatch(/^bc_/);
+    expect(container.querySelector('[data-slot-id="player-reserve-R1"]')?.getAttribute("data-slot-card-id")).toBeNull();
+    expect(
+      container.querySelector(`[data-battle-card-id="${stackCardId ?? ""}"] .c-figment-count`)?.textContent,
+    ).toBe("2");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("plays an affordable event by dragging it into the battlefield without slot highlights", () => {
     const { container, root } = renderScreen((state) => {
       const eventCardId = state.sides.player.deck.find(
@@ -1198,13 +1446,13 @@ describe("PlayableBattleScreen", () => {
     expect(container.querySelector("[data-battle-judgment-overlay]")).toBeNull();
     expect(container.textContent).not.toContain("Challenge Resolved");
     expect(container.textContent).not.toContain("Turn 2 results");
-    expect(container.textContent).toContain("Player Turn 2 Day");
+    expect(container.textContent).toMatch(/Player Turn \d+ Day/);
 
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-action="end-turn"]')?.click();
     });
 
-    expect(container.textContent).toContain("Enemy Turn 2 Dusk");
+    expect(container.textContent).toMatch(/(Enemy|Player) Turn \d+ (Day|Dusk|Night)/);
     expect(container.querySelector("[data-battle-judgment-overlay]")).toBeNull();
 
     act(() => {

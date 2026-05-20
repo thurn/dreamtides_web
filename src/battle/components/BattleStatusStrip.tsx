@@ -1,8 +1,8 @@
 import { selectEffectiveSparkOrZero } from "../state/selectors";
 import { DEPLOY_SLOT_IDS } from "../types";
 import type {
-  BattleMutableState,
   BattleCommandSourceSurface,
+  BattleMutableState,
   BattleSide,
   BattleSideMutableState,
   BrowseableZone,
@@ -95,103 +95,102 @@ export function BattleStatusStrip({
           <span className="label">◆</span>
           <span className="val">{String(totalDeployedSpark)}</span>
         </div>
-        <button
-          type="button"
-          data-battle-zone-open={`${side}:hand`}
-          data-battle-stat={`${side}:hand`}
-          data-battle-zone-count={String(sideState.hand.length)}
-          data-battle-zone-drop-target={pendingDragCardId !== null ? `${side}:hand` : undefined}
-          className={`stat clickable ${pendingDragCardId !== null ? "drop-target" : ""}`}
-          onClick={() => onOpenZone("hand")}
-          onDragOver={(event) => {
-            if (pendingDragCardId !== null) {
-              event.preventDefault();
-            }
-          }}
-          onDrop={(event) => {
-            if (pendingDragSourceSurface === null) {
-              return;
-            }
-            event.preventDefault();
-            onZoneDrop?.(side, "hand", pendingDragSourceSurface);
-          }}
-        >
-          <span className="label">H</span>
-          <span className="val">{String(sideState.hand.length)}</span>
-        </button>
-        <button
-          type="button"
-          data-battle-zone-open={`${side}:deck`}
-          data-battle-stat={`${side}:deck`}
-          data-battle-zone-count={String(sideState.deck.length)}
-          data-battle-zone-drop-target={pendingDragCardId !== null ? `${side}:deck` : undefined}
-          className={`stat clickable ${pendingDragCardId !== null ? "drop-target" : ""}`}
-          onClick={() => onOpenZone("deck")}
-          onDragOver={(event) => {
-            if (pendingDragCardId !== null) {
-              event.preventDefault();
-            }
-          }}
-          onDrop={(event) => {
-            if (pendingDragSourceSurface === null) {
-              return;
-            }
-            event.preventDefault();
-            onZoneDrop?.(side, "deck", pendingDragSourceSurface);
-          }}
-        >
-          <span className="label">D</span>
-          <span className="val">{String(sideState.deck.length)}</span>
-        </button>
-        <button
-          type="button"
-          data-battle-zone-open={`${side}:void`}
-          data-battle-stat={`${side}:void`}
-          data-battle-zone-count={String(sideState.void.length)}
-          data-battle-zone-drop-target={pendingDragCardId !== null ? `${side}:void` : undefined}
-          className={`stat clickable ${pendingDragCardId !== null ? "drop-target" : ""}`}
-          onClick={() => onOpenZone("void")}
-          onDragOver={(event) => {
-            if (pendingDragCardId !== null) {
-              event.preventDefault();
-            }
-          }}
-          onDrop={(event) => {
-            if (pendingDragSourceSurface === null) {
-              return;
-            }
-            event.preventDefault();
-            onZoneDrop?.(side, "void", pendingDragSourceSurface);
-          }}
-        >
-          <span className="label">V</span>
-          <span className="val">{String(sideState.void.length)}</span>
-        </button>
-        <button
-          type="button"
-          data-battle-zone-open={`${side}:banished`}
-          data-battle-stat={`${side}:banished`}
-          data-battle-zone-count={String(sideState.banished.length)}
-          data-battle-zone-drop-target={pendingDragCardId !== null ? `${side}:banished` : undefined}
-          className={`stat clickable ${pendingDragCardId !== null ? "drop-target" : ""}`}
-          onClick={() => onOpenZone("banished")}
-          onDragOver={(event) => {
-            if (pendingDragCardId !== null) {
-              event.preventDefault();
-            }
-          }}
-          onDrop={(event) => {
-            if (pendingDragSourceSurface === null) {
-              return;
-            }
-            event.preventDefault();
-            onZoneDrop?.(side, "banished", pendingDragSourceSurface);
-          }}
-        >
-          <span className="label">B</span>
-          <span className="val">{String(sideState.banished.length)}</span>
-        </button>
+        <ZoneButton
+          count={sideState.hand.length}
+          label="H"
+          pendingDragCardId={pendingDragCardId}
+          pendingDragSourceSurface={pendingDragSourceSurface}
+          side={side}
+          stat="hand"
+          onOpenZone={onOpenZone}
+          onZoneDrop={onZoneDrop}
+        />
+        <ZoneButton
+          count={sideState.deck.length}
+          label="D"
+          pendingDragCardId={pendingDragCardId}
+          pendingDragSourceSurface={pendingDragSourceSurface}
+          side={side}
+          stat="deck"
+          onOpenZone={onOpenZone}
+          onZoneDrop={onZoneDrop}
+        />
+        <ZoneButton
+          count={sideState.void.length}
+          label="V"
+          pendingDragCardId={pendingDragCardId}
+          pendingDragSourceSurface={pendingDragSourceSurface}
+          side={side}
+          stat="void"
+          onOpenZone={onOpenZone}
+          onZoneDrop={onZoneDrop}
+        />
+        <ZoneButton
+          count={sideState.banished.length}
+          label="B"
+          pendingDragCardId={pendingDragCardId}
+          pendingDragSourceSurface={pendingDragSourceSurface}
+          side={side}
+          stat="banished"
+          onOpenZone={onOpenZone}
+          onZoneDrop={onZoneDrop}
+        />
       </div>
     </section>
+  );
+}
+
+function ZoneButton({
+  count,
+  label,
+  pendingDragCardId,
+  pendingDragSourceSurface,
+  side,
+  stat,
+  onOpenZone,
+  onZoneDrop,
+}: {
+  count: number;
+  label: string;
+  pendingDragCardId: string | null;
+  pendingDragSourceSurface: BattleCommandSourceSurface | null;
+  side: BattleSide;
+  stat: BrowseableZone;
+  onOpenZone: (zone: BrowseableZone) => void;
+  onZoneDrop?: (
+    side: BattleSide,
+    zone: BrowseableZone,
+    sourceSurface: BattleCommandSourceSurface,
+  ) => void;
+}) {
+  const isDropTarget = pendingDragCardId !== null &&
+    pendingDragSourceSurface !== null &&
+    onZoneDrop !== undefined;
+
+  return (
+    <button
+      type="button"
+      data-battle-zone-open={`${side}:${stat}`}
+      data-battle-stat={`${side}:${stat}`}
+      data-battle-zone-count={String(count)}
+      data-battle-zone-drop-target={isDropTarget ? `${side}:${stat}` : undefined}
+      className={`stat clickable ${isDropTarget ? "drop-target" : ""}`}
+      onClick={() => onOpenZone(stat)}
+      onDragOver={(event) => {
+        if (isDropTarget) {
+          event.preventDefault();
+        }
+      }}
+      onDrop={(event) => {
+        if (!isDropTarget || pendingDragSourceSurface === null) {
+          return;
+        }
+        event.preventDefault();
+        onZoneDrop?.(side, stat, pendingDragSourceSurface);
+      }}
+    >
+      <span className="label">{label}</span>
+      <span className="val">{String(count)}</span>
+    </button>
   );
 }

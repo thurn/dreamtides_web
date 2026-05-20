@@ -184,6 +184,7 @@ function areCardInstanceDictionariesEqual(
       leftInstance.battleCardId !== rightInstance.battleCardId ||
       leftInstance.owner !== rightInstance.owner ||
       leftInstance.controller !== rightInstance.controller ||
+      (leftInstance.figmentCount ?? 1) !== (rightInstance.figmentCount ?? 1) ||
       leftInstance.sparkDelta !== rightInstance.sparkDelta ||
       leftInstance.isRevealedToPlayer !== rightInstance.isRevealedToPlayer ||
       leftInstance.markers.isPrevented !== rightInstance.markers.isPrevented ||

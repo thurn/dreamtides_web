@@ -11,6 +11,13 @@ import {
   selectIsBattleCardReservedThisTurn,
 } from "../state/selectors";
 import {
+  addFigmentsToStackInPlace,
+  canMergeFigments,
+  findBattlefieldFigmentStack,
+  isFigmentInstance,
+  selectFigmentCount,
+} from "../state/figments";
+import {
   AUTO_SYSTEM_EMISSION_CONTEXT,
   createEmptyTransitionData,
   createFlowStep,
@@ -59,6 +66,24 @@ export function resolveMoveCard(
 
   const targetOccupant = selectBattlefieldSlotOccupant(state, target);
   const movingCard = state.cardInstances[battleCardId];
+  if (
+    targetOccupant !== null &&
+    canMergeFigments(movingCard, state.cardInstances[targetOccupant])
+  ) {
+    const nextState = cloneBattleMutableState(state);
+    setBattlefieldSlot(nextState, source, null);
+    addFigmentsToStackInPlace(
+      nextState,
+      targetOccupant,
+      selectFigmentCount(nextState.cardInstances[battleCardId]),
+    );
+    delete nextState.cardInstances[battleCardId];
+
+    return {
+      state: nextState,
+      transition: createEmptyTransitionData(),
+    };
+  }
   if (
     source.zone === "reserve" &&
     target.zone === "deployed" &&
@@ -310,18 +335,28 @@ export function resolveStackCardMove(
   nextState.stack ??= [];
   nextState.stack.splice(stackIndex, 1);
   if ("slotId" in target && card.definition.battleCardKind === "character") {
+    const targetOccupant = selectBattlefieldSlotOccupant(state, target);
+    const targetInstance = targetOccupant === null ? null : state.cardInstances[targetOccupant];
+    const matchingStack = isFigmentInstance(card)
+      ? findBattlefieldFigmentStack(nextState, target.side, card.definition.subtype, battleCardId)
+      : null;
     if (
       !isBattleFieldSlotAddressValid(target) ||
-      selectBattlefieldSlotOccupant(state, target) !== null ||
-      (target.zone === "deployed" && !isUnboundCard(card))
+      (targetOccupant !== null && !canMergeFigments(card, targetInstance)) ||
+      (target.zone === "deployed" && !isUnboundCard(card) && matchingStack === null)
     ) {
       return {
         state,
         transition: createEmptyTransitionData(),
       };
     }
-    setBattlefieldSlot(nextState, target, battleCardId);
-    if (target.zone === "reserve") {
+    if (matchingStack !== null) {
+      addFigmentsToStackInPlace(nextState, matchingStack.battleCardId, selectFigmentCount(card));
+      delete nextState.cardInstances[battleCardId];
+    } else {
+      setBattlefieldSlot(nextState, target, battleCardId);
+    }
+    if (target.zone === "reserve" && nextState.cardInstances[battleCardId] !== undefined) {
       nextState.cardInstances[battleCardId].enteredReserveTurnNumber =
         isUnboundCard(card) ? null : state.turnNumber;
     }
@@ -401,23 +436,35 @@ function resolveCharacterPlay(
     };
   }
   if (selectBattlefieldSlotOccupant(state, target) !== null) {
-    return {
-      state,
-      transition: buildPlayRejectedTransition(state, battleCardId, "slot_occupied", context),
-    };
+    const targetOccupant = selectBattlefieldSlotOccupant(state, target);
+    if (!canMergeFigments(card, targetOccupant === null ? null : state.cardInstances[targetOccupant])) {
+      return {
+        state,
+        transition: buildPlayRejectedTransition(state, battleCardId, "slot_occupied", context),
+      };
+    }
   }
 
   const nextState = cloneBattleMutableState(state);
   nextState.sides[side][sourceZone].splice(sourceIndex, 1);
   nextState.sides[side].currentEnergy -= playCost;
-  setBattlefieldSlot(nextState, target, battleCardId);
-  if (target.zone === "reserve") {
+  const stack = isFigmentInstance(card)
+    ? findBattlefieldFigmentStack(nextState, target.side, card.definition.subtype, battleCardId)
+    : null;
+  if (stack !== null) {
+    addFigmentsToStackInPlace(nextState, stack.battleCardId, selectFigmentCount(card));
+    delete nextState.cardInstances[battleCardId];
+  } else {
+    setBattlefieldSlot(nextState, target, battleCardId);
+  }
+  if (target.zone === "reserve" && nextState.cardInstances[battleCardId] !== undefined) {
     nextState.cardInstances[battleCardId].enteredReserveTurnNumber = isUnbound ? null : state.turnNumber;
   }
   const cardContext: BattleEngineEmissionContext = {
     sourceSurface: context.sourceSurface,
     selectedCardId: battleCardId,
   };
+  const resolvedTarget = stack?.location ?? target;
 
   return {
     state: nextState,
@@ -439,14 +486,14 @@ function resolveCharacterPlay(
           fields: {
             ...createBattleLogBaseFields(state, cardContext),
             battleCardId,
-            cardKind: nextState.cardInstances[battleCardId].definition.battleCardKind,
-            cardName: nextState.cardInstances[battleCardId].definition.name,
+            cardKind: card.definition.battleCardKind,
+            cardName: card.definition.name,
             currentEnergy: nextState.sides[side].currentEnergy,
             side,
             sourceHandIndex: sourceZone === "hand" ? sourceIndex : null,
             sourceZone,
-            targetSlotId: target.slotId,
-            targetZone: target.zone,
+            targetSlotId: resolvedTarget.slotId,
+            targetZone: resolvedTarget.zone,
           },
         },
         {

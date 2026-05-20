@@ -115,6 +115,7 @@ export function allocateBattleCardInstance(
     definition: params.definition,
     owner: params.owner,
     controller: params.controller,
+    ...(params.provenance.kind === "generated-figment" ? { figmentCount: 1 } : {}),
     sparkDelta: 0,
     isRevealedToPlayer: params.isRevealedToPlayer,
     markers: { isPrevented: false, isCopied: false },

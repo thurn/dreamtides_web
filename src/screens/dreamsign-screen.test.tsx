@@ -382,9 +382,12 @@ describe("DreamsignOfferingScreen Why Dreamsigns button", () => {
           onOpenGlossary={vi.fn()}
           onOpenDebugScreen={vi.fn()}
           onToggleCardSourceOverlay={vi.fn()}
+          onToggleJourneyExplanation={vi.fn()}
           hasDraftData={true}
           hasCardSourceDebug={true}
+          hasJourneyExplanation={false}
           isCardSourceOverlayOpen={false}
+          isJourneyExplanationOpen={false}
         />
       </>,
     );

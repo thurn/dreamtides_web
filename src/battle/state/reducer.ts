@@ -32,6 +32,7 @@ import { runAiTurn } from "../ai/run-ai-turn";
 import {
   selectBattleCardLocation,
   selectBattlefieldCardLocation,
+  selectShouldEndTurnFromDay,
 } from "./selectors";
 import {
   commitBattleHistoryEntry,
@@ -373,6 +374,10 @@ function passPhaseWithAiFollowup(
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
+  if (selectShouldEndTurnFromDay(state)) {
+    return endTurnWithAiFollowup(state, battleInit, context);
+  }
+
   const advanced = passBattlePhase(state, battleInit, context);
   if (
     advanced.state === state ||

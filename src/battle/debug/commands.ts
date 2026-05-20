@@ -1,4 +1,7 @@
-import { selectKindleTargetBattleCardId } from "../state/selectors";
+import {
+  selectKindleTargetBattleCardId,
+  selectShouldEndTurnFromDay,
+} from "../state/selectors";
 import type {
   BattleCardMarkers,
   BattleCardNoteExpiry,
@@ -340,11 +343,12 @@ export function createPassPhaseHistoryMetadata(
   state: BattleMutableState,
   envelope: BattleCommandMetadataEnvelope = {},
 ): BattleHistoryEntryMetadata {
+  const isEndTurnComposite = state.phase === "night" || selectShouldEndTurnFromDay(state);
   return createMetadata({
     commandId: "PASS_PHASE",
-    label: state.phase === "night" ? "End Turn" : "End Phase",
+    label: isEndTurnComposite ? "End Turn" : "End Phase",
     kind: "battle-flow",
-    isComposite: state.phase === "night",
+    isComposite: isEndTurnComposite,
     targets: [],
     envelope,
     defaultActor: "player",

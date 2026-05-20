@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { BattleCommand } from "../debug/commands";
+import { selectShouldEndTurnFromDay } from "../state/selectors";
 import type { BattleMutableState, BattleSide } from "../types";
 
 export function BattleActionBar({
@@ -11,7 +12,7 @@ export function BattleActionBar({
   isBattleLogOpen: _isBattleLogOpen,
   isDesktopInspectorLayout: _isDesktopInspectorLayout,
   isInspectorDrawerOpen: _isInspectorDrawerOpen,
-  isOpponentHandRevealed,
+  isOpponentHandRevealed = false,
   state,
   onCommand,
   onOpenForesee: _onOpenForesee,
@@ -29,17 +30,18 @@ export function BattleActionBar({
   isBattleLogOpen: boolean;
   isDesktopInspectorLayout: boolean;
   isInspectorDrawerOpen: boolean;
-  isOpponentHandRevealed: boolean;
+  isOpponentHandRevealed?: boolean;
   state: BattleMutableState;
   onCommand: (command: BattleCommand) => void;
   onOpenForesee: (side: BattleSide, count: number) => void;
   onRedo: () => void;
   onToggleBattleLog: () => void;
   onToggleInspector: () => void;
-  onToggleOpponentHand: () => void;
+  onToggleOpponentHand?: () => void;
   onUndo: () => void;
 }) {
   const phaseButtonLabel = getPhaseButtonLabel(state);
+  const phaseActionCommand = createPhaseActionCommand(state);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent): void {
@@ -57,7 +59,7 @@ export function BattleActionBar({
           return;
         }
         event.preventDefault();
-        onCommand({ id: "PASS_PHASE", sourceSurface: "action-bar" });
+        onCommand(phaseActionCommand);
         return;
       }
       if (mod && !event.shiftKey && event.key.toLowerCase() === "z") {
@@ -81,7 +83,16 @@ export function BattleActionBar({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [canEndTurn, futureCount, historyCount, isInteractionLocked, onCommand, onRedo, onUndo]);
+  }, [
+    canEndTurn,
+    futureCount,
+    historyCount,
+    isInteractionLocked,
+    onCommand,
+    onRedo,
+    onUndo,
+    phaseActionCommand,
+  ]);
 
   return (
     <section data-battle-region="action-bar" className="actionbar">
@@ -112,14 +123,16 @@ export function BattleActionBar({
         >
           Log
         </button>
-        <button
-          type="button"
-          data-battle-action="toggle-opponent-hand"
-          className={`btn ghost sm ${isOpponentHandRevealed ? "active" : ""}`}
-          onClick={onToggleOpponentHand}
-        >
-          {isOpponentHandRevealed ? "Hide enemy hand" : "Show enemy hand"}
-        </button>
+        {onToggleOpponentHand !== undefined ? (
+          <button
+            type="button"
+            data-battle-action="toggle-opponent-hand"
+            className={`btn ghost sm ${isOpponentHandRevealed ? "active" : ""}`}
+            onClick={onToggleOpponentHand}
+          >
+            {isOpponentHandRevealed ? "Hide enemy hand" : "Show enemy hand"}
+          </button>
+        ) : null}
       </div>
       <div className="group">
         <button
@@ -134,7 +147,7 @@ export function BattleActionBar({
           type="button"
           data-battle-action="end-turn"
           className="btn primary"
-          onClick={() => onCommand({ id: "PASS_PHASE", sourceSurface: "action-bar" })}
+          onClick={() => onCommand(phaseActionCommand)}
           disabled={!canEndTurn}
         >
           {phaseButtonLabel}
@@ -145,6 +158,9 @@ export function BattleActionBar({
 }
 
 function getPhaseButtonLabel(state: BattleMutableState): string {
+  if (selectShouldEndTurnFromDay(state)) {
+    return "End Turn";
+  }
   if (state.phase === "day" || state.phase === "dusk") {
     return "End Phase";
   }
@@ -152,4 +168,11 @@ function getPhaseButtonLabel(state: BattleMutableState): string {
     return "End Turn";
   }
   return "Next Turn";
+}
+
+function createPhaseActionCommand(state: BattleMutableState): BattleCommand {
+  if (selectShouldEndTurnFromDay(state)) {
+    return { id: "END_TURN", sourceSurface: "action-bar" };
+  }
+  return { id: "PASS_PHASE", sourceSurface: "action-bar" };
 }

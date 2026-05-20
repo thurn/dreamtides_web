@@ -736,11 +736,113 @@ describe("applyBattleCommand", () => {
       provenanceKind: "generated-figment",
       sourceBattleCardId: null,
       destinationZone: "player:reserve:R0",
+      figmentCount: 1,
       name: "Test Figment",
       ownerSide: "player",
       printedSpark: 3,
       subtype: "Wisp",
     });
+  });
+
+  it("stacks matching figments for the same side instead of creating a second battlefield card", () => {
+    const { battleInit, state } = createTestBattle();
+    const first = applyBattleCommand(
+      createBattleReducerState(state),
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_FIGMENT",
+          side: "player",
+          chosenSubtype: "Shadow",
+          chosenSpark: 1,
+          name: "Shadow Figment",
+          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          createdAtMs: 1,
+        },
+        sourceSurface: "figment-creator",
+      },
+      battleInit,
+    );
+    const firstFigmentId = first.mutable.sides.player.reserve.R0;
+    if (firstFigmentId === null) {
+      throw new Error("Expected first Shadow Figment in R0");
+    }
+
+    const second = applyBattleCommand(
+      first,
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_FIGMENT",
+          side: "player",
+          chosenSubtype: "Shadow",
+          chosenSpark: 1,
+          name: "Shadow Figment",
+          destination: { side: "player", zone: "reserve", slotId: "R1" },
+          createdAtMs: 2,
+        },
+        sourceSurface: "figment-creator",
+      },
+      battleInit,
+    );
+
+    expect(second.mutable.sides.player.reserve.R0).toBe(firstFigmentId);
+    expect(second.mutable.sides.player.reserve.R1).toBeNull();
+    expect(second.mutable.cardInstances[firstFigmentId].figmentCount).toBe(2);
+    expect(Object.values(second.mutable.sides.player.reserve).filter((cardId) => {
+      if (cardId === null) return false;
+      return second.mutable.cardInstances[cardId].definition.subtype === "Shadow";
+    })).toHaveLength(1);
+    expect(second.lastTransition?.logEvents.find(
+      (entry) => entry.event === "battle_proto_card_created",
+    )?.fields).toMatchObject({
+      battleCardId: firstFigmentId,
+      destinationZone: "player:reserve:R0",
+      figmentCount: 2,
+      subtype: "Shadow",
+    });
+  });
+
+  it("keeps different figment types as separate battlefield cards", () => {
+    const { battleInit, state } = createTestBattle();
+    const first = applyBattleCommand(
+      createBattleReducerState(state),
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_FIGMENT",
+          side: "player",
+          chosenSubtype: "Shadow",
+          chosenSpark: 1,
+          name: "Shadow Figment",
+          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          createdAtMs: 1,
+        },
+      },
+      battleInit,
+    );
+    const second = applyBattleCommand(
+      first,
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_FIGMENT",
+          side: "player",
+          chosenSubtype: "Warrior",
+          chosenSpark: 1,
+          name: "Warrior Figment",
+          destination: { side: "player", zone: "reserve", slotId: "R1" },
+          createdAtMs: 2,
+        },
+      },
+      battleInit,
+    );
+
+    expect(second.mutable.sides.player.reserve.R0).toMatch(/^bc_/);
+    expect(second.mutable.sides.player.reserve.R1).toMatch(/^bc_/);
+    expect(second.mutable.sides.player.reserve.R1).not.toBe(second.mutable.sides.player.reserve.R0);
+    expect(second.mutable.cardInstances[second.mutable.sides.player.reserve.R0 ?? ""].definition.subtype).toBe("Shadow");
+    expect(second.mutable.cardInstances[second.mutable.sides.player.reserve.R1 ?? ""].definition.subtype).toBe("Warrior");
   });
 
   it("commits REORDER_DECK metadata and emits a deck-reordered log event", () => {

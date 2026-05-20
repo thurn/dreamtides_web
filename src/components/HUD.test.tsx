@@ -190,6 +190,10 @@ describe("HUD", () => {
     onOpenGlossary: () => void;
     onOpenDebugScreen: () => void;
     onToggleCardSourceOverlay: () => void;
+    onToggleJourneyExplanation: () => void;
+    hasDraftData: boolean;
+    hasJourneyExplanation: boolean;
+    isJourneyExplanationOpen: boolean;
   }> = {}) {
     return mount(
       <HUD
@@ -199,9 +203,14 @@ describe("HUD", () => {
         onToggleCardSourceOverlay={
           overrides.onToggleCardSourceOverlay ?? vi.fn()
         }
-        hasDraftData={false}
+        onToggleJourneyExplanation={
+          overrides.onToggleJourneyExplanation ?? vi.fn()
+        }
+        hasDraftData={overrides.hasDraftData ?? false}
         hasCardSourceDebug={false}
         isCardSourceOverlayOpen={false}
+        hasJourneyExplanation={overrides.hasJourneyExplanation ?? false}
+        isJourneyExplanationOpen={overrides.isJourneyExplanationOpen ?? false}
       />,
     );
   }
@@ -267,6 +276,41 @@ describe("HUD", () => {
       glossaryButton?.click();
     });
     expect(onOpenGlossary).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders Why Journey beside Debug when journey explanation data is active", () => {
+    setQuestContext(makeState([]));
+    const onToggleJourneyExplanation = vi.fn();
+    const { container, root } = renderHud({
+      hasDraftData: true,
+      hasJourneyExplanation: true,
+      onToggleJourneyExplanation,
+    });
+
+    const whyJourneyButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="hud-why-journey-button"]',
+    );
+    expect(whyJourneyButton).not.toBeNull();
+    expect(whyJourneyButton?.textContent).toContain("Why Journey");
+
+    const rightButtons = Array.from(container.querySelectorAll("button"));
+    const whyIndex = rightButtons.findIndex(
+      (button) => button === whyJourneyButton,
+    );
+    const debugIndex = rightButtons.findIndex((button) =>
+      button.textContent?.includes("Debug"),
+    );
+    expect(whyIndex).toBeGreaterThanOrEqual(0);
+    expect(debugIndex).toBe(whyIndex + 1);
+
+    act(() => {
+      whyJourneyButton?.click();
+    });
+    expect(onToggleJourneyExplanation).toHaveBeenCalledTimes(1);
 
     act(() => {
       root.unmount();

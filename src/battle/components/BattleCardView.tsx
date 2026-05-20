@@ -7,11 +7,13 @@ import { useEffect, useState } from "react";
 import { cardImageUrl } from "../../data/card-database";
 import type { CardData, FrozenCardData } from "../../types/cards";
 import type { BattleCardInstance } from "../types";
+import { selectEffectiveSparkForInstance, selectFigmentCount } from "../state/figments";
 
 export interface BattleCardVisualData {
   artUrl: string | null;
   cost: number;
   isFast: boolean;
+  figmentCount: number;
   kind: "character" | "event";
   name: string;
   printedSpark: number;
@@ -28,6 +30,7 @@ export function battleCardVisualFromInstance(
   return {
     artUrl: instance.definition.imageNumber > 0 ? cardImageUrl(instance.definition.cardNumber) : null,
     cost: instance.definition.energyCost,
+    figmentCount: selectFigmentCount(instance),
     isFast: instance.definition.isFast,
     kind: instance.definition.battleCardKind,
     name: instance.definition.name,
@@ -46,6 +49,7 @@ export function battleCardVisualFromReward(
   return {
     artUrl: card.artOwned ? cardImageUrl(card.cardNumber) : null,
     cost: card.energyCost ?? 0,
+    figmentCount: 1,
     isFast: card.isFast,
     kind: card.cardType === "Character" ? "character" : "event",
     name: card.name,
@@ -70,7 +74,7 @@ export function battleCardDisplayFromInstance(
     isStarter: false,
     energyCost: instance.definition.printedEnergyCost,
     spark: instance.definition.battleCardKind === "character"
-      ? Math.max(0, instance.definition.printedSpark + instance.sparkDelta)
+      ? selectEffectiveSparkForInstance(instance)
       : null,
     isFast: instance.definition.isFast,
     tides: [...instance.definition.tides],
@@ -123,7 +127,9 @@ export function BattleCardView({
   onMouseLeave?: MouseEventHandler<HTMLDivElement>;
   onMouseMove?: MouseEventHandler<HTMLDivElement>;
 }) {
-  const effectiveSpark = Math.max(0, data.printedSpark + data.sparkDelta);
+  const effectiveSpark = data.kind === "character"
+    ? Math.max(0, data.printedSpark * Math.max(1, data.figmentCount) + data.sparkDelta)
+    : 0;
   const sparkClassName = data.sparkDelta > 0
     ? "boosted"
     : data.sparkDelta < 0
@@ -175,6 +181,11 @@ export function BattleCardView({
       <div className="c-art">
         {hidden ? null : <BattleCardArt data={data} />}
       </div>
+      {!hidden && data.kind === "character" && data.figmentCount > 1 ? (
+        <div className="c-figment-count" aria-label="figment count">
+          {String(data.figmentCount)}
+        </div>
+      ) : null}
       <div className="c-name">{hidden ? "?" : data.name}</div>
       <div className="c-type">
         <span>{hidden ? "?" : data.subtype}</span>

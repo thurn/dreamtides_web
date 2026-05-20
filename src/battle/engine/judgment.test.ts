@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createBattleInit } from "../integration/create-battle-init";
 import {
+  allocateBattleCardInstance,
   createInitialBattleState,
 } from "../state/create-initial-state";
 import {
@@ -136,6 +137,23 @@ describe("challenge", () => {
     expect(applied.state.sides.enemy.deployed.D1).toBe(enemyD1);
   });
 
+  it("uses stacked figment count for triumph scoring", () => {
+    const { battleInit, state } = createTestBattle();
+    const figmentStackId = createFigmentStack(state, "player", "D0", "Shadow", 3);
+
+    const applied = runJudgmentForSide(state, battleInit, "player");
+
+    expect(applied.transition.judgment?.lanes[0]).toEqual({
+      slotId: "D0",
+      playerSpark: 3,
+      enemySpark: 0,
+      winner: "player",
+      scoreDelta: 3,
+    });
+    expect(applied.state.sides.player.deployed.D0).toBe(figmentStackId);
+    expect(applied.state.sides.player.score).toBe(3);
+  });
+
   it("dissolves the weaker paired card into its owner's void and keeps the survivor in place", () => {
     const { battleInit, state } = createTestBattle();
     const playerD1 = state.sides.player.hand[0];
@@ -152,6 +170,23 @@ describe("challenge", () => {
     expect(applied.state.sides.enemy.deployed.D1).toBeNull();
     expect(applied.state.sides.enemy.void).toContain(enemyD1);
     expect(applied.state.sides.player.void).not.toContain(playerD1);
+  });
+
+  it("dissolves only the needed subset from a winning figment stack in a challenge", () => {
+    const { battleInit, state } = createTestBattle();
+    const figmentStackId = createFigmentStack(state, "player", "D0", "Shadow", 3);
+    const enemyD0 = state.sides.enemy.hand[0];
+
+    deploy(state, "enemy", "D0", enemyD0);
+    setEffectiveSpark(state, enemyD0, 2);
+
+    const applied = runJudgmentForSide(state, battleInit, "player");
+
+    expect(applied.state.sides.player.deployed.D0).toBe(figmentStackId);
+    expect(applied.state.cardInstances[figmentStackId].figmentCount).toBe(1);
+    expect(applied.state.sides.player.void).not.toContain(figmentStackId);
+    expect(applied.state.sides.enemy.deployed.D0).toBeNull();
+    expect(applied.state.sides.enemy.void).toContain(enemyD0);
   });
 
   it("dissolves the player's weaker paired card when the enemy outsparks it", () => {
@@ -340,6 +375,49 @@ function deploy(
 ): void {
   state.sides[side].hand = state.sides[side].hand.filter((cardId) => cardId !== battleCardId);
   state.sides[side].deployed[slotId] = battleCardId;
+}
+
+function createFigmentStack(
+  state: BattleMutableState,
+  side: "player" | "enemy",
+  slotId: "D0" | "D1" | "D2" | "D3",
+  subtype: string,
+  count: number,
+): string {
+  const battleCardId = allocateBattleCardInstance(state, {
+    definition: {
+      sourceDeckEntryId: null,
+      cardNumber: 0,
+      name: `${subtype} Figment`,
+      battleCardKind: "character",
+      subtype,
+      energyCost: 0,
+      printedEnergyCost: 0,
+      printedSpark: 1,
+      isFast: false,
+      reclaimCost: null,
+      tides: [],
+      renderedText: "",
+      imageNumber: 0,
+      transfiguration: null,
+      isBane: false,
+    },
+    owner: side,
+    controller: side,
+    isRevealedToPlayer: true,
+    provenance: {
+      kind: "generated-figment",
+      sourceBattleCardId: null,
+      chosenSpark: 1,
+      chosenSubtype: subtype,
+      createdAtTurnNumber: state.turnNumber,
+      createdAtSide: side,
+      createdAtMs: 1,
+    },
+  });
+  state.cardInstances[battleCardId].figmentCount = count;
+  state.sides[side].deployed[slotId] = battleCardId;
+  return battleCardId;
 }
 
 function setEffectiveSpark(

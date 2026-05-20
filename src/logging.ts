@@ -255,6 +255,7 @@ export function createBattleProtoCardCreatedLogEvent(
     printedSpark: number;
     ownerSide: BattleSide;
     destinationZone: string;
+    figmentCount?: number;
   },
   context: {
     sourceSurface: BattleCommandSourceSurface;
@@ -267,6 +268,7 @@ export function createBattleProtoCardCreatedLogEvent(
       ...createBattleLogBaseFields(state, context),
       battleCardId: payload.battleCardId,
       destinationZone: payload.destinationZone,
+      ...(payload.figmentCount === undefined ? {} : { figmentCount: payload.figmentCount }),
       name: payload.name,
       ownerSide: payload.ownerSide,
       printedSpark: payload.printedSpark,

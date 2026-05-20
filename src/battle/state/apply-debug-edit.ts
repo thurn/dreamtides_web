@@ -42,6 +42,13 @@ import {
   selectBattlefieldSlotOccupant,
   selectKindleTargetBattleCardId,
 } from "./selectors";
+import {
+  addFigmentsToStackInPlace,
+  canMergeFigments,
+  findBattlefieldFigmentStack,
+  isFigmentInstance,
+  selectFigmentCount,
+} from "./figments";
 
 export function applyDebugEdit(
   state: BattleMutableState,
@@ -913,6 +920,41 @@ function createFigment(
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
+  if ("slotId" in destination) {
+    const existingStack = findBattlefieldFigmentStack(
+      nextState,
+      destination.side,
+      chosenSubtype,
+    );
+    if (existingStack !== null) {
+      addFigmentsToStackInPlace(nextState, existingStack.battleCardId, 1);
+      const stack = nextState.cardInstances[existingStack.battleCardId];
+      return {
+        state: nextState,
+        transition: {
+          ...createEmptyTransitionData(),
+          logEvents: [
+            createBattleProtoCardCreatedLogEvent(
+              nextState,
+              {
+                battleCardId: existingStack.battleCardId,
+                destinationZone: formatDestinationZoneLabel(existingStack.location),
+                figmentCount: stack?.figmentCount ?? 1,
+                name: stack?.definition.name ?? name,
+                ownerSide: side,
+                printedSpark: stack?.definition.printedSpark ?? chosenSpark,
+                provenanceKind: "generated-figment",
+                sourceBattleCardId: null,
+                subtype: chosenSubtype,
+              },
+              context,
+            ),
+          ],
+        },
+      };
+    }
+  }
+
   if (!isDestinationAvailable(nextState, destination)) {
     return {
       state,
@@ -966,6 +1008,7 @@ function createFigment(
           {
             battleCardId,
             destinationZone: formatDestinationZoneLabel(destination),
+            figmentCount: nextState.cardInstances[battleCardId].figmentCount ?? 1,
             name,
             ownerSide: side,
             printedSpark: chosenSpark,
@@ -1063,17 +1106,51 @@ function moveCardToDebugZone(
     };
   }
 
+  const sourceInstance = state.cardInstances[battleCardId];
+  const destinationStack = "slotId" in destination && isFigmentInstance(sourceInstance)
+    ? findBattlefieldFigmentStack(state, destination.side, sourceInstance.definition.subtype, battleCardId)
+    : null;
+  const destinationOccupant = "slotId" in destination
+    ? selectBattlefieldSlotOccupant(state, destination)
+    : null;
+  const canMergeIntoDestination = destinationStack !== null ||
+    (
+      destinationOccupant !== null &&
+      canMergeFigments(sourceInstance, state.cardInstances[destinationOccupant])
+    );
+
   if (!isDebugDestinationPlaceable(state, destination)) {
-    return {
-      state,
-      transition: createEmptyTransitionData(),
-    };
+    if (!canMergeIntoDestination) {
+      return {
+        state,
+        transition: createEmptyTransitionData(),
+      };
+    }
   }
 
   const nextState = cloneBattleMutableState(state);
   removeBattleCardFromLocation(nextState, source);
-  insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
-  nextState.cardInstances[battleCardId].controller = destination.side;
+  if (destinationStack !== null) {
+    addFigmentsToStackInPlace(
+      nextState,
+      destinationStack.battleCardId,
+      selectFigmentCount(sourceInstance),
+    );
+    delete nextState.cardInstances[battleCardId];
+  } else if (
+    destinationOccupant !== null &&
+    canMergeFigments(sourceInstance, state.cardInstances[destinationOccupant])
+  ) {
+    addFigmentsToStackInPlace(
+      nextState,
+      destinationOccupant,
+      selectFigmentCount(sourceInstance),
+    );
+    delete nextState.cardInstances[battleCardId];
+  } else {
+    insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
+    nextState.cardInstances[battleCardId].controller = destination.side;
+  }
 
   return {
     state: nextState,
