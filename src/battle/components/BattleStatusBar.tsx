@@ -1,6 +1,13 @@
 import type { SiteState } from "../../types/quest";
 import { formatPhaseLabel, formatSideLabel } from "../ui/format";
-import type { BattleMutableState, BattleResult, BattleSide } from "../types";
+import type { BattleMutableState, BattlePhase, BattleResult, BattleSide } from "../types";
+
+const PHASE_STEPS = [
+  { id: "dawn", label: "Dawn", icon: "bxs-sun phase-icon-sunrise" },
+  { id: "day", label: "Day", icon: "bxs-sun" },
+  { id: "dusk", label: "Dusk", icon: "bxs-sun phase-icon-sunset" },
+  { id: "night", label: "Night", icon: "bxs-moon" },
+] as const;
 
 export function BattleStatusBar({
   activeSide,
@@ -15,6 +22,7 @@ export function BattleStatusBar({
   result,
   roundNumber,
   siteType,
+  onSetPhase,
 }: {
   activeSide: BattleSide;
   battleId: string;
@@ -28,16 +36,14 @@ export function BattleStatusBar({
   result: BattleResult | null;
   roundNumber: number;
   siteType: SiteState["type"];
+  onSetPhase?: (phase: BattlePhase) => void;
 }) {
   const phaseLabel = formatPhaseLabel(phase);
   const sideLabel = result === null ? formatSideLabel(activeSide) : "Battle Over";
-  const phaseSteps = [
-    { id: "dawn", label: "Dawn", icon: "bxs-sun phase-icon-sunrise" },
-    { id: "day", label: "Day", icon: "bxs-sun" },
-    { id: "dusk", label: "Dusk", icon: "bxs-sun phase-icon-sunset" },
-    { id: "night", label: "Night", icon: "bxs-moon" },
-  ] as const;
+  const phaseSteps = PHASE_STEPS;
   const visiblePhase = normalizeVisiblePhase(phase);
+  const currentStepIndex = phaseSteps.findIndex((step) => step.id === visiblePhase);
+  const nextPhase = phaseSteps[(currentStepIndex + 1) % phaseSteps.length].id;
 
   return (
     <section data-battle-region="status-bar" className="topbar">
@@ -59,19 +65,32 @@ export function BattleStatusBar({
           >
             {phaseLabel}
           </strong>
+          <button
+            type="button"
+            className="phase-increment"
+            data-battle-phase-increment={nextPhase}
+            aria-label={`Advance phase to ${formatPhaseLabel(nextPhase)}`}
+            title={`Advance phase to ${formatPhaseLabel(nextPhase)}`}
+            onClick={() => onSetPhase?.(nextPhase)}
+          >
+            <i className="bx bx-skip-next" aria-hidden="true" />
+          </button>
         </div>
         <div className="phase-track" aria-label="Battle phases">
           {phaseSteps.map((step) => (
-            <span
+            <button
               key={step.id}
-              aria-label={`${step.label}${visiblePhase === step.id ? " active" : ""}`}
+              type="button"
+              aria-label={`Set phase to ${step.label}${visiblePhase === step.id ? " (active)" : ""}`}
+              aria-pressed={visiblePhase === step.id}
               className={`phase-track-step ${visiblePhase === step.id ? "active" : ""}`}
               data-battle-phase-chip={step.id}
               data-active={String(visiblePhase === step.id)}
+              onClick={() => onSetPhase?.(step.id)}
             >
               <i className={`bx ${step.icon}`} aria-hidden="true" />
               {step.label}
-            </span>
+            </button>
           ))}
         </div>
       </div>

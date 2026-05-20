@@ -827,6 +827,13 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             result={reducerState.mutable.result}
             roundNumber={reducerState.mutable.turnNumber}
             siteType={site.type}
+            onSetPhase={(phase) => {
+              handleCommand({
+                id: "DEBUG_EDIT",
+                edit: { kind: "SET_PHASE", phase },
+                sourceSurface: "action-bar",
+              });
+            }}
           />
           <BattleLiveRegion
             activeSide={reducerState.mutable.activeSide}

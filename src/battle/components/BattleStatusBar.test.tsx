@@ -2,10 +2,16 @@
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { BattlePhase } from "../types";
 import { BattleStatusBar } from "./BattleStatusBar";
 
-function mount(): {
+function mount(
+  overrides: {
+    phase?: BattlePhase;
+    onSetPhase?: (phase: BattlePhase) => void;
+  } = {},
+): {
   container: HTMLDivElement;
   root: Root;
 } {
@@ -23,11 +29,12 @@ function mount(): {
         futureCount={1}
         hasAiOpponent
         historyCount={3}
-        phase="day"
+        phase={overrides.phase ?? "day"}
         playerScore={12}
         result={null}
         roundNumber={4}
         siteType="Battle"
+        onSetPhase={overrides.onSetPhase}
       />,
     );
   });
@@ -67,6 +74,46 @@ describe("BattleStatusBar", () => {
     expect(container.querySelector('[data-battle-status-meta="history"]')?.textContent).toBe("3");
     expect(container.querySelector('[data-battle-status-meta="future"]')?.textContent).toBe("1");
     expect(container.querySelector('[data-battle-status-meta="result"]')?.textContent).toBe("none");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("sets the clicked phase directly via the phase-track chip", () => {
+    const onSetPhase = vi.fn();
+    const { container, root } = mount({ onSetPhase });
+
+    const chip = container.querySelector<HTMLButtonElement>(
+      '[data-battle-phase-chip="dusk"]',
+    );
+    expect(chip).not.toBeNull();
+    act(() => {
+      chip?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(onSetPhase).toHaveBeenCalledTimes(1);
+    expect(onSetPhase).toHaveBeenCalledWith("dusk");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("cycles night back to dawn through the increment arrow", () => {
+    const onSetPhase = vi.fn();
+    const { container, root } = mount({ phase: "night", onSetPhase });
+
+    const arrow = container.querySelector<HTMLButtonElement>(
+      '[data-battle-phase-increment]',
+    );
+    expect(arrow).not.toBeNull();
+    act(() => {
+      arrow?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(onSetPhase).toHaveBeenCalledTimes(1);
+    expect(onSetPhase).toHaveBeenCalledWith("dawn");
 
     act(() => {
       root.unmount();
