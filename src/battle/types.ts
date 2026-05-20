@@ -76,8 +76,8 @@ export type BattleCommandActor = "player" | "enemy" | "debug" | "system";
 /**
  * UI surface or auto-emitter that produced a command. The union is closed so the
  * metadata envelope stays self-describing for logs, selectors, and the compact
- * log drawer. `auto-system` and `auto-ai` are reserved for engine-internal
- * emissions that don't originate from a click.
+ * log drawer. `auto-system` is reserved for engine-internal emissions that don't
+ * originate from a click.
  */
 export type BattleCommandSourceSurface =
   | "action-bar"
@@ -89,7 +89,6 @@ export type BattleCommandSourceSurface =
   | "zone-browser-hand"
   | "zone-browser-void"
   | "zone-browser-banished"
-  | "auto-ai"
   | "auto-system"
   | "foresee-overlay"
   | "deck-order-picker"

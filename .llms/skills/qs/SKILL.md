@@ -124,7 +124,7 @@ typecheck, lint, tests, or browser QA in a fresh worktree.
 | `src/atlas/atlas-generator.ts` | Atlas generation, site pools, site metadata, dreamscape creation |
 | `src/draft/draft-engine.ts` | Fixed-pool draft logic with 4-card offers and persisted draft state |
 | `src/firebase/app-config.ts` | Reads `VITE_FIREBASE_*` env vars and initializes the Firebase app + database |
-| `src/runtime/runtime-config.ts` | Parses URL params (`game`, `seed`, `startInBattle`, `enableAi`) |
+| `src/runtime/runtime-config.ts` | Parses URL params (`game`, `seed`, `startInBattle`) |
 
 ## Adding a New Site Type
 

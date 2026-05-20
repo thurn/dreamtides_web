@@ -82,7 +82,7 @@ describe("createInitialBattleState", () => {
     expect(state.stack ?? []).toEqual([]);
   });
 
-  it("initializes per-side pending extra turns and visibility flags required by the spec state model", () => {
+  it("initializes per-side visibility flags required by the spec state model", () => {
     const battleInit = createBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
