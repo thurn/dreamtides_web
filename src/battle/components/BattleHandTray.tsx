@@ -2,7 +2,7 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 
 import { CardDisplay } from "../../components/CardDisplay";
 import type { BattleCommand } from "../debug/commands";
-import type { BattleMutableState } from "../types";
+import type { BattleCommandSourceSurface, BattleMutableState } from "../types";
 import { BattleCardView, battleCardDisplayFromInstance, battleCardVisualFromInstance } from "./BattleCardView";
 
 /**
@@ -34,9 +34,12 @@ export function BattleHandTray({
   onCardDoubleClick,
   onCardDragEnd,
   onCardDragStart,
+  onCardDropToHand,
   onCardHoverEnd,
   onCardHoverMove,
   onCardHoverStart,
+  pendingDragCardId = null,
+  pendingDragSourceSurface = null,
   compact = false,
 }: {
   canInteract: boolean;
@@ -54,14 +57,34 @@ export function BattleHandTray({
   onCardDoubleClick: (battleCardId: string) => void;
   onCardDragEnd?: () => void;
   onCardDragStart?: (battleCardId: string) => void;
+  onCardDropToHand?: (sourceSurface: BattleCommandSourceSurface) => void;
   onCardHoverEnd?: () => void;
   onCardHoverMove?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
   onCardHoverStart?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
+  pendingDragCardId?: string | null;
+  pendingDragSourceSurface?: BattleCommandSourceSurface | null;
 }) {
+  const isDropTarget = pendingDragCardId !== null &&
+    pendingDragSourceSurface !== null &&
+    onCardDropToHand !== undefined;
+
   return (
     <section
       data-battle-region="player-hand-tray"
-      className={`hand-row ${compact ? "compact" : ""}`}
+      data-battle-zone-drop-target={isDropTarget ? "player:hand" : undefined}
+      className={`hand-row ${compact ? "compact" : ""} ${isDropTarget ? "drop-target" : ""}`}
+      onDragOver={(event) => {
+        if (isDropTarget) {
+          event.preventDefault();
+        }
+      }}
+      onDrop={(event) => {
+        if (!isDropTarget || pendingDragSourceSurface === null) {
+          return;
+        }
+        event.preventDefault();
+        onCardDropToHand(pendingDragSourceSurface);
+      }}
     >
       {compact ? (
         <div className="hand-row-label">

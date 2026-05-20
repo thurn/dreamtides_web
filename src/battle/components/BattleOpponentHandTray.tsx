@@ -1,7 +1,7 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 
 import { CardDisplay } from "../../components/CardDisplay";
-import type { BattleMutableState } from "../types";
+import type { BattleCommandSourceSurface, BattleMutableState } from "../types";
 import { battleCardDisplayFromInstance } from "./BattleCardView";
 
 export function BattleOpponentHandTray({
@@ -15,9 +15,12 @@ export function BattleOpponentHandTray({
   onCardContextMenu,
   onCardDragEnd,
   onCardDragStart,
+  onCardDropToHand,
   onCardHoverEnd,
   onCardHoverMove,
   onCardHoverStart,
+  pendingDragCardId = null,
+  pendingDragSourceSurface = null,
 }: {
   canInteract: boolean;
   currentEnergy: number;
@@ -29,12 +32,35 @@ export function BattleOpponentHandTray({
   onCardContextMenu?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
   onCardDragEnd?: () => void;
   onCardDragStart?: (battleCardId: string) => void;
+  onCardDropToHand?: (sourceSurface: BattleCommandSourceSurface) => void;
   onCardHoverEnd?: () => void;
   onCardHoverMove?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
   onCardHoverStart?: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
+  pendingDragCardId?: string | null;
+  pendingDragSourceSurface?: BattleCommandSourceSurface | null;
 }) {
+  const isDropTarget = pendingDragCardId !== null &&
+    pendingDragSourceSurface !== null &&
+    onCardDropToHand !== undefined;
+
   return (
-    <section data-battle-region="opponent-hand-tray" className="opponent-hand-tray">
+    <section
+      data-battle-region="opponent-hand-tray"
+      data-battle-zone-drop-target={isDropTarget ? "enemy:hand" : undefined}
+      className={`opponent-hand-tray ${isDropTarget ? "drop-target" : ""}`}
+      onDragOver={(event) => {
+        if (isDropTarget) {
+          event.preventDefault();
+        }
+      }}
+      onDrop={(event) => {
+        if (!isDropTarget || pendingDragSourceSurface === null) {
+          return;
+        }
+        event.preventDefault();
+        onCardDropToHand(pendingDragSourceSurface);
+      }}
+    >
       <div className="opponent-hand-tray-label">
         <span>Enemy hand</span>
         <strong>{String(hand.length)}</strong>

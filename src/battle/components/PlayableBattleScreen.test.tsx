@@ -1687,6 +1687,119 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("drops a battlefield card onto the player hand tray via the unrestricted move", () => {
+    let deployedCardId = "";
+    const { container, root } = renderScreen((state) => {
+      const characterId = state.sides.player.hand.find(
+        (battleCardId) => state.cardInstances[battleCardId]?.definition.battleCardKind === "character",
+      ) ?? state.sides.player.deck.find(
+        (battleCardId) => state.cardInstances[battleCardId]?.definition.battleCardKind === "character",
+      );
+      if (characterId === undefined) {
+        throw new Error("expected player character");
+      }
+      deployedCardId = characterId;
+      state.sides.player.hand = state.sides.player.hand.filter((id) => id !== characterId);
+      state.sides.player.deck = state.sides.player.deck.filter((id) => id !== characterId);
+      state.sides.player.deployed.D0 = characterId;
+    });
+
+    const deployedCard = container.querySelector<HTMLElement>(
+      `[data-slot-id="player-deployed-D0"] [data-battle-card-id="${deployedCardId}"]`,
+    );
+    const handTray = container.querySelector<HTMLElement>('[data-battle-region="player-hand-tray"]');
+    if (deployedCard === null || handTray === null) {
+      throw new Error("expected deployed card and player hand tray");
+    }
+    const handCountBefore = Number(
+      container.querySelector('[data-battle-stat="player:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
+    );
+
+    act(() => {
+      deployedCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+    expect(handTray.getAttribute("data-battle-zone-drop-target")).toBe("player:hand");
+    act(() => {
+      handTray.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    expect(
+      container.querySelector('[data-slot-id="player-deployed-D0"]')?.getAttribute("data-slot-card-id"),
+    ).toBeNull();
+    expect(
+      container.querySelector(
+        `[data-battle-region="player-hand-tray"] [data-battle-card-id="${deployedCardId}"]`,
+      ),
+    ).not.toBeNull();
+    expect(
+      Number(
+        container.querySelector('[data-battle-stat="player:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
+      ),
+    ).toBe(handCountBefore + 1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("drops a battlefield card onto the revealed enemy hand tray via the unrestricted move", () => {
+    let deployedCardId = "";
+    const { container, root } = renderScreen((state) => {
+      const characterId = state.sides.player.hand.find(
+        (battleCardId) => state.cardInstances[battleCardId]?.definition.battleCardKind === "character",
+      ) ?? state.sides.player.deck.find(
+        (battleCardId) => state.cardInstances[battleCardId]?.definition.battleCardKind === "character",
+      );
+      if (characterId === undefined) {
+        throw new Error("expected player character");
+      }
+      deployedCardId = characterId;
+      state.sides.player.hand = state.sides.player.hand.filter((id) => id !== characterId);
+      state.sides.player.deck = state.sides.player.deck.filter((id) => id !== characterId);
+      state.sides.player.deployed.D0 = characterId;
+    });
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+    const deployedCard = container.querySelector<HTMLElement>(
+      `[data-slot-id="player-deployed-D0"] [data-battle-card-id="${deployedCardId}"]`,
+    );
+    const enemyHandTray = container.querySelector<HTMLElement>('[data-battle-region="opponent-hand-tray"]');
+    if (deployedCard === null || enemyHandTray === null) {
+      throw new Error("expected deployed card and revealed enemy hand tray");
+    }
+    const enemyHandCountBefore = Number(
+      container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
+    );
+
+    act(() => {
+      deployedCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+    expect(enemyHandTray.getAttribute("data-battle-zone-drop-target")).toBe("enemy:hand");
+    act(() => {
+      enemyHandTray.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    expect(
+      container.querySelector('[data-slot-id="player-deployed-D0"]')?.getAttribute("data-slot-card-id"),
+    ).toBeNull();
+    expect(
+      container.querySelector(
+        `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${deployedCardId}"]`,
+      ),
+    ).not.toBeNull();
+    expect(
+      Number(
+        container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
+      ),
+    ).toBe(enemyHandCountBefore + 1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("has no end-turn button and pressing e dispatches nothing", () => {
     const { container, root } = renderScreen();
 

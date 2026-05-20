@@ -658,9 +658,12 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "opponent-hand-tray")}
                   onCardDragStart={handleCardDragStart}
                   onCardDragEnd={() => setPendingDrag(null)}
+                  onCardDropToHand={(sourceSurface) => handleZoneDrop("enemy", "hand", sourceSurface)}
                   onCardHoverStart={handleBattlefieldCardHoverStart}
                   onCardHoverMove={handleBattlefieldCardHoverMove}
                   onCardHoverEnd={handleBattlefieldCardHoverEnd}
+                  pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                  pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
                 />
               </div>
             ) : null}
@@ -814,9 +817,12 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               onCardDoubleClick={handleHandCardDoubleClick}
               onCardDragStart={handleCardDragStart}
               onCardDragEnd={() => setPendingDrag(null)}
+              onCardDropToHand={(sourceSurface) => handleZoneDrop("player", "hand", sourceSurface)}
               onCardHoverStart={handleBattlefieldCardHoverStart}
               onCardHoverMove={handleBattlefieldCardHoverMove}
               onCardHoverEnd={handleBattlefieldCardHoverEnd}
+              pendingDragCardId={pendingDrag?.battleCardId ?? null}
+              pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
               isCardPlayable={undefined}
             />
           </div>
