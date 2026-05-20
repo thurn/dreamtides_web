@@ -93,14 +93,6 @@ export interface CreateBattleInitInput {
    */
   dreamsignTemplates?: readonly DreamsignTemplate[];
   seedOverride?: number | null;
-  /**
-   * Opt-out switch for the heuristic opponent. Defaults to `true` so direct
-   * test callers (which assert AI-driven composites) keep their previous
-   * behaviour; the production `BattleSiteRoute` passes the value of the
-   * `?enableAi=1` URL parameter and therefore defaults to `false` in the
-   * browser.
-   */
-  enableAi?: boolean;
 }
 
 function applyBattleRewardModifiers(
@@ -140,7 +132,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     dreamcallers,
     dreamsignTemplates = [],
     seedOverride,
-    enableAi = true,
   } = input;
   const seed = resolveSeed(battleEntryKey, seedOverride);
   const streams = createBattleRngStreams(seed);
@@ -220,7 +211,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     maxEnergyCap: 10,
     startingSide,
     playerDrawSkipsTurnOne,
-    enableAi,
     questDeckEntries,
     playerDeckOrder: Object.freeze(playerDeckOrder),
     enemyDescriptor,

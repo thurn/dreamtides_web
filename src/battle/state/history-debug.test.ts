@@ -33,7 +33,7 @@ import { createInitialBattleState } from "./create-initial-state";
  */
 describe("undo/redo redo-stack coverage (bug-003)", () => {
   it("redo restores the second command after a single undo", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const initial = createBattleControllerState(state);
     const playerHandCardId = initial.mutable.sides.player.hand[0];
 
@@ -51,7 +51,6 @@ describe("undo/redo redo-stack coverage (bug-003)", () => {
           },
         },
       },
-      battleInit,
     );
     expect(afterPlay.history.past.length).toBe(1);
 
@@ -65,7 +64,6 @@ describe("undo/redo redo-stack coverage (bug-003)", () => {
           edit: { kind: "SET_PHASE", phase: "dusk" },
         },
       },
-      battleInit,
     );
     expect(afterSetPhase.history.past.length).toBe(2);
     expect(afterSetPhase.history.future.length).toBe(0);
@@ -74,7 +72,6 @@ describe("undo/redo redo-stack coverage (bug-003)", () => {
     const afterUndo = battleControllerReducer(
       afterSetPhase,
       { type: "UNDO" },
-      battleInit,
     );
 
     expect(afterUndo.history.past.length).toBe(1);
@@ -88,7 +85,6 @@ describe("undo/redo redo-stack coverage (bug-003)", () => {
     const afterRedo = battleControllerReducer(
       afterUndo,
       { type: "REDO" },
-      battleInit,
     );
 
     expect(afterRedo.history.past.length).toBe(2);
@@ -100,13 +96,12 @@ describe("undo/redo redo-stack coverage (bug-003)", () => {
 describe("Debug command undo round-trips (M-10, M-11)", () => {
   for (const { name, buildState, command } of casesFromFactory()) {
     it(`round-trips through UNDO for ${name}`, () => {
-      const { battleInit, state } = buildState();
+      const { state } = buildState();
       const initial = createBattleControllerState(state);
 
       const applied = battleControllerReducer(
         initial,
         { type: "APPLY_COMMAND", command },
-        battleInit,
       );
       // Some commands (kindle with no valid target, for example) become a
       // no-op. Assert we have actual history to undo when the test names
@@ -126,7 +121,6 @@ describe("Debug command undo round-trips (M-10, M-11)", () => {
       const undone = battleControllerReducer(
         applied,
         { type: "UNDO" },
-        battleInit,
       );
 
       expect(undone.mutable).toEqual(initial.mutable);
@@ -145,20 +139,18 @@ describe("Debug command undo round-trips (M-10, M-11)", () => {
     });
 
     it(`round-trips through UNDO + REDO for ${name} (bug-021, H-10, M-11)`, () => {
-      const { battleInit, state } = buildState();
+      const { state } = buildState();
       const initial = createBattleControllerState(state);
 
       const applied = battleControllerReducer(
         initial,
         { type: "APPLY_COMMAND", command },
-        battleInit,
       );
       expect(applied.history.past.length).toBeGreaterThan(0);
 
       const undone = battleControllerReducer(
         applied,
         { type: "UNDO" },
-        battleInit,
       );
       expect(undone.mutable).toEqual(initial.mutable);
       expect(undone.history.future.length).toBeGreaterThan(0);
@@ -166,7 +158,6 @@ describe("Debug command undo round-trips (M-10, M-11)", () => {
       const redone = battleControllerReducer(
         undone,
         { type: "REDO" },
-        battleInit,
       );
       // Bug 021 / H-10: redo replays the recorded post-state verbatim,
       // not a fresh recomputation — so the minted card ids, scores, and

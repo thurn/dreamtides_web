@@ -662,7 +662,6 @@ export function QuestProvider({
   runtimeConfig = {
     seedOverride: null,
     startInBattle: false,
-    enableAi: false,
     gameId: null,
   },
 }: {

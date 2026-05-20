@@ -200,7 +200,6 @@ function makeFakeBattleState(): SharedBattleState {
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
     seedOverride: 1,
-    enableAi: false,
   });
   const initial = createInitialBattleState(init);
   return {

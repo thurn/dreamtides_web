@@ -287,7 +287,6 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
-          enableAi: false,
           gameId: "ab12cd",
         }}
       />,
@@ -313,7 +312,6 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
-          enableAi: false,
           gameId: null,
         }}
       />,
@@ -362,7 +360,7 @@ describe("QuestApp", () => {
     const { container, root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
+        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
       />,
     );
 
@@ -387,7 +385,7 @@ describe("QuestApp", () => {
     const { container, root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
+        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
       />,
     );
 
@@ -426,7 +424,7 @@ describe("QuestApp", () => {
     const { root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
+        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
       />,
     );
 
@@ -454,7 +452,7 @@ describe("QuestApp", () => {
     const { root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
+        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
       />,
     );
 
@@ -491,7 +489,6 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: true,
-          enableAi: false,
           gameId: null,
         }}
       />,
@@ -525,7 +522,6 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
-          enableAi: false,
           gameId: null,
         }}
       />,
@@ -573,7 +569,7 @@ describe("QuestApp", () => {
     const { container, root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, enableAi: false, gameId: null }}
+        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
       />,
     );
 

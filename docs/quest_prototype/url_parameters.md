@@ -21,20 +21,6 @@ When set to exactly `1`, the prototype boots directly into a battle instead of
 the normal Dreamcaller selection flow. Any other value (including `0`, `true`,
 empty, or absent) leaves the normal start flow in place.
 
-## `enableAi`
-
-When set to exactly `1`, the heuristic battle-mode AI takes opponent actions
-during battles: the opening enemy turn is drained on mount, and each player
-`END_TURN` folds an AI follow-up turn into the same history entry.
-
-For any other value (including `0`, `true`, empty, or absent) the heuristic
-opponent is disabled. Battle mode then performs no automatic opponent actions:
-the enemy main phase sits idle until the player advances state via the debug
-commands (e.g. `PLAY_CARD`, `MOVE_CARD`, `DEBUG_EDIT`, or another `END_TURN`).
-
-The flag is read once at boot and bound onto the cached `BattleInit` for each
-session, so toggling it requires a page reload.
-
 ## Dream Journey Debug Harness
 
 In local development, Dream Journey QA can force selected generation inputs:
@@ -78,11 +64,9 @@ http://localhost:5173/?game=quest42
 http://localhost:5173/                          # default
 http://localhost:5173/?seed=42                  # fixed seed
 http://localhost:5173/?startInBattle=1          # boot straight into battle
-http://localhost:5173/?enableAi=1               # heuristic opponent enabled
 http://localhost:5173/?game=quest42             # parsed multiplayer room id
 http://localhost:5173/?debugJourneyShape=single_offer
 http://localhost:5173/?debugJourneyReward=gain_essence
 http://localhost:5173/?debugJourneyCost=pay_essence
-http://localhost:5173/?startInBattle=1&enableAi=1
 http://localhost:5173/?seed=7&startInBattle=1
 ```

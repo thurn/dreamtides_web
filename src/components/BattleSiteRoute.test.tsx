@@ -81,7 +81,6 @@ function makeFakeBattleState(): SharedBattleState {
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
     seedOverride: 1234,
-    enableAi: false,
   });
   const initial = createInitialBattleState(init);
   return {
@@ -289,7 +288,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
-          enableAi: false,
           gameId: null,
         }}
       />,
@@ -310,7 +308,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
-          enableAi: false,
           gameId: null,
         }}
       />,
@@ -338,7 +335,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
-          enableAi: false,
           gameId: null,
         }}
       />,
@@ -366,7 +362,6 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
-          enableAi: false,
           gameId: null,
         }}
       />,
@@ -389,7 +384,6 @@ describe("BattleSiteRoute", () => {
             runtimeConfig={{
               seedOverride: null,
               startInBattle: false,
-              enableAi: false,
               gameId: null,
             }}
           />,

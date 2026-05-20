@@ -49,7 +49,6 @@ export function BattleSiteRoute({
     dreamcallers: questContent.dreamcallers,
     dreamsignTemplates: questContent.dreamsignTemplates,
     seedOverride: runtimeConfig.seedOverride,
-    enableAi: runtimeConfig.enableAi,
   });
 
   if (battleState === null) {

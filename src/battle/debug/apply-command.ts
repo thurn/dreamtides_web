@@ -3,7 +3,6 @@ import { createBattleCommandMetadata } from "./commands";
 import { battleReducer } from "../state/reducer";
 import type {
   BattleHistoryEntryMetadata,
-  BattleInit,
   BattleReducerAction,
   BattleReducerState,
 } from "../types";
@@ -11,15 +10,10 @@ import type {
 export function applyBattleCommand(
   state: BattleReducerState,
   command: BattleCommand,
-  battleInit: Pick<
-    BattleInit,
-    "enableAi" | "maxEnergyCap" | "playerDrawSkipsTurnOne" | "scoreToWin" | "turnLimit"
-  >,
 ): BattleReducerState {
   return battleReducer(
     state,
     createBattleReducerAction(command, createBattleCommandMetadata(command, state.mutable)),
-    battleInit,
   );
 }
 

@@ -31,7 +31,7 @@ afterEach(() => {
 
 describe("battleReducer", () => {
   it("changes only the phase label for a SET_PHASE debug edit", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const before = createBattleReducerState(state).mutable;
 
     const reduced = applyBattleCommand(
@@ -40,7 +40,6 @@ describe("battleReducer", () => {
         id: "DEBUG_EDIT",
         edit: { kind: "SET_PHASE", phase: "dusk" },
       },
-      battleInit,
     );
 
     expect(reduced.mutable.phase).toBe("dusk");
@@ -63,7 +62,7 @@ describe("battleReducer", () => {
   });
 
   it("drives the phase label through dawn->day->dusk->night without touching score, board, or result", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     // Seed deployed characters and scores so any residual judgment/exhaustion
     // would be visible in the assertions below.
     const playerD0 = state.sides.player.hand[0];
@@ -85,7 +84,6 @@ describe("battleReducer", () => {
           id: "DEBUG_EDIT",
           edit: { kind: "SET_PHASE", phase },
         },
-        battleInit,
       );
     }
 
@@ -121,7 +119,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     expect(reduced.mutable.sides.player.score).toBe(battleInit.scoreToWin + 10);
@@ -131,7 +128,7 @@ describe("battleReducer", () => {
   });
 
   it("forces a result immediately and preserves the chosen forced-result marker", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const reduced = battleReducer(
       createBattleReducerState(state),
       {
@@ -149,7 +146,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     expect(reduced.mutable.forcedResult).toBe("defeat");
@@ -165,7 +161,7 @@ describe("battleReducer", () => {
   });
 
   it("sets both result and forcedResult to victory on FORCE_RESULT victory", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const reduced = battleReducer(
       createBattleReducerState(state),
       {
@@ -183,7 +179,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     expect(reduced.mutable.forcedResult).toBe("victory");
@@ -192,7 +187,7 @@ describe("battleReducer", () => {
   });
 
   it("keeps a forced defeat sticky through an unrelated debug edit", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
 
     const forced = battleReducer(
@@ -212,7 +207,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     expect(forced.mutable.result).toBe("defeat");
@@ -239,7 +233,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     // The forced outcome must stick: the unrelated edit does not recompute or
@@ -250,7 +243,7 @@ describe("battleReducer", () => {
   });
 
   it("keeps SKIP_TO_REWARDS distinct in history metadata while using forced victory semantics", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const reduced = battleReducer(
       createBattleReducerState(state),
       {
@@ -268,7 +261,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     expect(reduced.mutable.forcedResult).toBe("victory");
@@ -283,14 +275,13 @@ describe("battleReducer", () => {
   });
 
   it("supports exact undo and redo through history snapshots", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const reduced = applyBattleCommand(
       createBattleReducerState(state),
       {
         id: "DEBUG_EDIT",
         edit: { kind: "SET_PHASE", phase: "night" },
       },
-      battleInit,
     );
     const undone = undoBattleHistory(reduced.history);
 
@@ -319,7 +310,6 @@ describe("battleReducer", () => {
           destination: { side: "player", zone: "void" },
         },
       },
-      battleInit,
     );
 
     expect(reduced.mutable.result).toBeNull();
@@ -330,7 +320,7 @@ describe("battleReducer", () => {
   });
 
   it("treats same-slot MOVE_CARD_TO_ZONE moves as a no-op without creating history", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
 
     state.sides.player.hand = state.sides.player.hand.slice(1);
@@ -347,7 +337,6 @@ describe("battleReducer", () => {
           destination: { side: "player", zone: "reserve", slotId: "R0" },
         },
       },
-      battleInit,
     );
 
     expect(reduced).toBe(reducerState);
@@ -355,7 +344,7 @@ describe("battleReducer", () => {
   });
 
   it("permits MOVE_CARD_TO_ZONE moves regardless of phase or active side (E-16, H-1)", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const handCardId = state.sides.player.hand[0];
     const fieldCardId = state.sides.player.hand[1];
 
@@ -374,7 +363,6 @@ describe("battleReducer", () => {
           destination: { side: "player", zone: "reserve", slotId: "R1" },
         },
       },
-      battleInit,
     );
 
     expect(playReduced.mutable.sides.player.hand).not.toContain(handCardId);
@@ -392,7 +380,6 @@ describe("battleReducer", () => {
           destination: { side: "player", zone: "deployed", slotId: "D0" },
         },
       },
-      battleInit,
     );
 
     // The move is permitted during the challenge phase per H-1.
@@ -402,7 +389,7 @@ describe("battleReducer", () => {
   });
 
   it("records stable history metadata fields for command entries", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
     const reduced = applyBattleCommand(
       createBattleReducerState(state),
@@ -414,7 +401,6 @@ describe("battleReducer", () => {
           destination: { side: "player", zone: "reserve", slotId: "R0" },
         },
       },
-      battleInit,
     );
 
     expect(reduced.history.past[0].metadata.commandId).toBe("MOVE_CARD_TO_ZONE");
@@ -430,7 +416,7 @@ describe("battleReducer", () => {
   });
 
   it("threads sourceSurface and selectedCardId onto numeric edits through the command-applied log", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
 
     const reduced = battleReducer(
@@ -454,7 +440,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     expect(reduced.history.past).toHaveLength(1);
@@ -488,7 +473,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     const resultEvent = reduced.lastTransition?.logEvents.find(
@@ -531,7 +515,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     const resultEvent = reduced.lastTransition?.logEvents.find(
@@ -547,7 +530,7 @@ describe("battleReducer", () => {
   });
 
   it("includes the six common fields on every battle_proto_* event emitted by a command", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
 
     resetLog();
     const adjusted = battleReducer(
@@ -567,7 +550,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
     emitBattleTransitionLogEvents(adjusted.lastTransition);
 
@@ -587,7 +569,7 @@ describe("battleReducer", () => {
   });
 
   it("leaves the state unchanged for a DEBUG_EDIT DRAW_CARD on an empty deck (M-6)", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     state.sides.player.deck = [];
     const handBefore = [...state.sides.player.hand];
 
@@ -609,7 +591,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     expect(reduced).toBe(reducerState);
@@ -619,7 +600,7 @@ describe("battleReducer", () => {
   });
 
   it("PLAY_FROM_DECK_TOP places the top deck card on the first open reserve slot with no energy change", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const character = state.sides.player.hand.find((battleCardId) =>
       state.cardInstances[battleCardId].definition.battleCardKind === "character",
     );
@@ -642,7 +623,6 @@ describe("battleReducer", () => {
         },
         sourceSurface: "foresee-overlay",
       },
-      battleInit,
     );
 
     expect(reduced.history.past).toHaveLength(1);
@@ -656,7 +636,7 @@ describe("battleReducer", () => {
   });
 
   it("records a same-zone reserve swap via SWAP_BATTLEFIELD_SLOTS (bug-006, M-9)", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const cardA = state.sides.player.hand[0];
     const cardB = state.sides.player.hand[1];
     state.sides.player.hand = state.sides.player.hand.filter(
@@ -675,7 +655,6 @@ describe("battleReducer", () => {
           target: { side: "player", zone: "reserve", slotId: "R2" },
         },
       },
-      battleInit,
     );
 
     expect(reduced.mutable.sides.player.reserve.R0).toBe(cardB);
@@ -684,7 +663,7 @@ describe("battleReducer", () => {
   });
 
   it("permits MOVE_CARD_TO_ZONE on the enemy battlefield for cross-zone moves (H-1)", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const enemyCardId = state.sides.enemy.hand[0];
     state.sides.enemy.hand = state.sides.enemy.hand.filter(
       (cardId) => cardId !== enemyCardId,
@@ -701,7 +680,6 @@ describe("battleReducer", () => {
           destination: { side: "enemy", zone: "reserve", slotId: "R3" },
         },
       },
-      battleInit,
     );
 
     expect(reduced.mutable.sides.enemy.deployed.D1).toBeNull();
@@ -711,7 +689,7 @@ describe("battleReducer", () => {
 
   it("emits battle_proto_result_changed with reason 'forced_result' on FORCE_RESULT (L-7, bug-044)", () => {
     for (const result of ["victory", "defeat", "draw"] as const) {
-      const { battleInit, state } = createTestBattle();
+      const { state } = createTestBattle();
       const reduced = battleReducer(
         createBattleReducerState(state),
         {
@@ -729,7 +707,6 @@ describe("battleReducer", () => {
             undoPayload: null,
           },
         },
-        battleInit,
       );
       const resultEvent = reduced.lastTransition?.logEvents.find(
         (entry) => entry.event === "battle_proto_result_changed",
@@ -742,7 +719,7 @@ describe("battleReducer", () => {
   });
 
   it("emits winner null on battle_proto_result_changed for a forced draw", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
 
     state.sides.player.score = 12;
     state.sides.enemy.score = 10;
@@ -764,7 +741,6 @@ describe("battleReducer", () => {
           undoPayload: null,
         },
       },
-      battleInit,
     );
 
     const resultEvent = reduced.lastTransition?.logEvents.find(

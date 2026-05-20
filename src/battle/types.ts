@@ -216,16 +216,6 @@ export interface BattleInit {
   // invariants (B-6, C-10) are still enforced in `create-battle-init.ts`.
   startingSide: BattleSide;
   playerDrawSkipsTurnOne: boolean;
-  /**
-   * When `false`, the heuristic opponent never takes automatic actions: the
-   * opening enemy turn is not drained, and `END_TURN` does not fold an AI
-   * follow-up into its composite. The enemy's main phase sits idle until the
-   * player advances state via debug commands. Toggled by the `?enableAi=1`
-   * URL parameter (see `runtime-config.ts` and
-   * `docs/quest_prototype/url_parameters.md`); defaults to `true` for tests
-   * and direct `createBattleInit` callers that exercise AI behaviour.
-   */
-  enableAi: boolean;
   questDeckEntries: readonly BattleQuestDeckEntry[];
   playerDeckOrder: readonly BattleDeckCardDefinition[];
   enemyDescriptor: BattleEnemyDescriptor;

@@ -36,7 +36,6 @@ function makeFakeBattleState(): SharedBattleState {
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
     seedOverride: 1234,
-    enableAi: false,
   });
   const initial = createInitialBattleState(init);
   return {
@@ -68,7 +67,6 @@ function Host({ battleState, battleEntryKey }: HostProps): ReactNode {
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
     seedOverride: 1234,
-    enableAi: false,
   });
   return null;
 }

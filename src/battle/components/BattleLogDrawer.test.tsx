@@ -37,7 +37,6 @@ function createFixture() {
         sourceSurface: "side-summary",
       },
     },
-    battleInit,
   );
   logEvent("battle_proto_command_applied", {
     battleId: battleInit.battleId,

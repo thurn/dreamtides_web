@@ -16,7 +16,6 @@ import {
 } from "./reducer";
 import type {
   BattleHistoryEntry,
-  BattleInit,
   BattleMutableState,
   BattleReducerState,
 } from "../types";
@@ -38,16 +37,12 @@ export function createBattleControllerState(
 export function battleControllerReducer(
   state: BattleReducerState,
   action: BattleControllerAction,
-  battleInit: Pick<
-    BattleInit,
-    "enableAi" | "maxEnergyCap" | "playerDrawSkipsTurnOne" | "scoreToWin" | "turnLimit"
-  >,
 ): BattleReducerState {
   switch (action.type) {
     case "APPLY_COMMAND":
       return applyCommandStateChange(
         state,
-        applyBattleCommand(state, action.command, battleInit),
+        applyBattleCommand(state, action.command),
       );
     case "UNDO":
       return applyHistoryStateChange(state, "undo", undoBattleHistory(state.history));
@@ -58,10 +53,6 @@ export function battleControllerReducer(
 
 export function useBattleController(
   initialState: BattleMutableState,
-  battleInit: Pick<
-    BattleInit,
-    "enableAi" | "maxEnergyCap" | "playerDrawSkipsTurnOne" | "scoreToWin" | "turnLimit"
-  >,
 ): readonly [BattleReducerState, Dispatch<BattleControllerAction>] {
   const loggedActivityIdRef = useRef(0);
   const loggedTransitionIdRef = useRef(0);
@@ -69,7 +60,7 @@ export function useBattleController(
     (
       reducerState: BattleReducerState,
       action: BattleControllerAction,
-    ) => battleControllerReducer(reducerState, action, battleInit),
+    ) => battleControllerReducer(reducerState, action),
     initialState,
     createBattleControllerState,
   );

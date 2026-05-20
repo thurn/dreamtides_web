@@ -12,7 +12,7 @@ import { applyBattleCommand } from "./apply-command";
 
 describe("applyBattleCommand", () => {
   it("routes typed gameplay commands into reducer history metadata", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
     const reduced = applyBattleCommand(
       createBattleReducerState(state),
@@ -24,7 +24,6 @@ describe("applyBattleCommand", () => {
           destination: { side: "player", zone: "reserve", slotId: "R0" },
         },
       },
-      battleInit,
     );
 
     expect(reduced.history.past).toHaveLength(1);
@@ -40,11 +39,10 @@ describe("applyBattleCommand", () => {
   });
 
   it("preserves SKIP_TO_REWARDS identity while forcing a victory result", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const reduced = applyBattleCommand(
       createBattleReducerState(state),
       { id: "SKIP_TO_REWARDS" },
-      battleInit,
     );
 
     expect(reduced.mutable.forcedResult).toBe("victory");
@@ -62,7 +60,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("supports representative zone transfers through the typed debug command model", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
 
     const toVoid = applyBattleCommand(
@@ -78,7 +76,6 @@ describe("applyBattleCommand", () => {
           },
         },
       },
-      battleInit,
     );
 
     expect(toVoid.mutable.sides.player.hand).not.toContain(battleCardId);
@@ -99,7 +96,6 @@ describe("applyBattleCommand", () => {
           },
         },
       },
-      battleInit,
     );
 
     expect(toReserve.mutable.sides.player.void).not.toContain(battleCardId);
@@ -107,7 +103,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("moves a hand card onto the stack as a zero-cost stack entry", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
 
     const toStack = applyBattleCommand(
@@ -123,7 +119,6 @@ describe("applyBattleCommand", () => {
           },
         },
       },
-      battleInit,
     );
 
     expect(toStack.mutable.sides.player.hand).not.toContain(battleCardId);
@@ -147,7 +142,6 @@ describe("applyBattleCommand", () => {
           },
         },
       },
-      battleInit,
     );
 
     expect(toVoid.mutable.stack).toEqual([]);
@@ -155,7 +149,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("places debug-moved cards on the top or bottom of the deck in the requested order", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const topMover = state.sides.player.hand[0];
     const bottomMover = state.sides.player.hand[1];
     const initialDeck = [...state.sides.player.deck];
@@ -174,7 +168,6 @@ describe("applyBattleCommand", () => {
           },
         },
       },
-      battleInit,
     );
 
     expect(toTop.mutable.sides.player.deck[0]).toBe(topMover);
@@ -193,7 +186,6 @@ describe("applyBattleCommand", () => {
           },
         },
       },
-      battleInit,
     );
 
     expect(toBottom.mutable.sides.player.deck[0]).toBe(topMover);
@@ -208,7 +200,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("applies numeric debug edits for score, current energy, and max energy", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     state.sides.player.currentEnergy = 2;
     state.sides.player.maxEnergy = 3;
     state.sides.enemy.score = 4;
@@ -223,7 +215,6 @@ describe("applyBattleCommand", () => {
           amount: -3,
         },
       },
-      battleInit,
     );
 
     const maxAdjusted = applyBattleCommand(
@@ -236,7 +227,6 @@ describe("applyBattleCommand", () => {
           amount: 2,
         },
       },
-      battleInit,
     );
 
     const scoreAdjusted = applyBattleCommand(
@@ -249,7 +239,6 @@ describe("applyBattleCommand", () => {
           amount: 3,
         },
       },
-      battleInit,
     );
 
     expect(scoreAdjusted.mutable.sides.player.currentEnergy).toBe(-1);
@@ -258,7 +247,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("uses the documented kindle fallback targeting order", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const preferredReserveCardId = state.sides.player.hand[0];
     const leftmostDeployedCardId = state.sides.player.hand[1];
     const leftmostReserveCardId = state.sides.player.hand[2];
@@ -279,7 +268,6 @@ describe("applyBattleCommand", () => {
           preferredBattleCardId: preferredReserveCardId,
         },
       },
-      battleInit,
     );
 
     expect(preferredKindle.mutable.cardInstances[preferredReserveCardId].sparkDelta).toBe(2);
@@ -295,7 +283,6 @@ describe("applyBattleCommand", () => {
           preferredBattleCardId: state.sides.enemy.hand[0],
         },
       },
-      battleInit,
     );
 
     expect(deployedFallback.mutable.cardInstances[leftmostDeployedCardId].sparkDelta).toBe(1);
@@ -312,7 +299,6 @@ describe("applyBattleCommand", () => {
           amount: 3,
         },
       },
-      battleInit,
     );
 
     expect(reserveFallback.mutable.cardInstances[leftmostReserveCardId].sparkDelta).toBe(3);
@@ -329,14 +315,13 @@ describe("applyBattleCommand", () => {
           amount: 4,
         },
       },
-      battleInit,
     );
 
     expect(noOp.history.past).toHaveLength(0);
   });
 
   it("reveals and hides opponent hand cards through visibility debug edits", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const enemyHandCardId = state.sides.enemy.hand[0];
 
     expect(state.cardInstances[enemyHandCardId].isRevealedToPlayer).toBe(false);
@@ -351,7 +336,6 @@ describe("applyBattleCommand", () => {
           isRevealedToPlayer: true,
         },
       },
-      battleInit,
     );
 
     expect(revealed.mutable.cardInstances[enemyHandCardId].isRevealedToPlayer).toBe(true);
@@ -367,7 +351,6 @@ describe("applyBattleCommand", () => {
           isRevealedToPlayer: false,
         },
       },
-      battleInit,
     );
 
     expect(hidden.mutable.cardInstances[enemyHandCardId].isRevealedToPlayer).toBe(false);
@@ -375,7 +358,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("stamps the spec-recommended command envelope on dispatched commands", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
 
     const before = Date.now();
@@ -390,7 +373,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "hand-tray",
       },
-      battleInit,
     );
     const after = Date.now();
 
@@ -417,7 +399,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "zone-browser-hand",
       },
-      battleInit,
     );
     const visibilityMetadata = visibilityCommand.history.past[0].metadata;
     expect(visibilityMetadata.kind).toBe("visibility");
@@ -438,7 +419,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "inspector",
       },
-      battleInit,
     );
     const energyMetadata = energyCommand.history.past[0].metadata;
     expect(energyMetadata.kind).toBe("numeric-state");
@@ -448,7 +428,6 @@ describe("applyBattleCommand", () => {
     const forceCommand = applyBattleCommand(
       createBattleReducerState(state),
       { id: "FORCE_RESULT", result: "defeat" },
-      battleInit,
     );
     const forceMetadata = forceCommand.history.past[0].metadata;
     expect(forceMetadata.kind).toBe("result");
@@ -458,7 +437,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits ADD_CARD_NOTE metadata and emits a note-added log event", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
     const cardName = state.cardInstances[battleCardId].definition.name;
     const applied = applyBattleCommand(
@@ -475,7 +454,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "note-editor",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[0].metadata;
@@ -507,7 +485,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits DISMISS_CARD_NOTE metadata and removes the targeted note", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
     const cardName = state.cardInstances[battleCardId].definition.name;
     const withNote = applyBattleCommand(
@@ -523,7 +501,6 @@ describe("applyBattleCommand", () => {
           expiry: { kind: "manual" },
         },
       },
-      battleInit,
     );
 
     const applied = applyBattleCommand(
@@ -537,7 +514,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "inspector",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[1].metadata;
@@ -561,7 +537,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits CLEAR_CARD_NOTES metadata with the pre-clear note count", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
     const cardName = state.cardInstances[battleCardId].definition.name;
     let current = createBattleReducerState(state);
@@ -578,7 +554,6 @@ describe("applyBattleCommand", () => {
           expiry: { kind: "manual" },
         },
       },
-      battleInit,
     );
     current = applyBattleCommand(
       current,
@@ -593,7 +568,6 @@ describe("applyBattleCommand", () => {
           expiry: { kind: "manual" },
         },
       },
-      battleInit,
     );
 
     const cleared = applyBattleCommand(
@@ -606,7 +580,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "inspector",
       },
-      battleInit,
     );
 
     const metadata = cleared.history.past[2].metadata;
@@ -630,7 +603,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits SET_CARD_MARKERS metadata with a diff payload", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
     const cardName = state.cardInstances[battleCardId].definition.name;
     const applied = applyBattleCommand(
@@ -644,7 +617,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "inspector",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[0].metadata;
@@ -672,7 +644,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits CREATE_CARD_COPY metadata and emits a card-created log event", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const sourceBattleCardId = state.sides.player.hand[0];
     const sourceName = state.cardInstances[sourceBattleCardId].definition.name;
     const previousOrdinal = state.nextBattleCardOrdinal;
@@ -688,7 +660,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "inspector",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[0].metadata;
@@ -732,7 +703,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits CREATE_FIGMENT metadata and emits a figment-created log event", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const previousOrdinal = state.nextBattleCardOrdinal;
     const applied = applyBattleCommand(
       createBattleReducerState(state),
@@ -749,7 +720,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "figment-creator",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[0].metadata;
@@ -800,7 +770,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("stacks matching figments for the same side instead of creating a second battlefield card", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const first = applyBattleCommand(
       createBattleReducerState(state),
       {
@@ -816,7 +786,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "figment-creator",
       },
-      battleInit,
     );
     const firstFigmentId = first.mutable.sides.player.reserve.R0;
     if (firstFigmentId === null) {
@@ -838,7 +807,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "figment-creator",
       },
-      battleInit,
     );
 
     expect(second.mutable.sides.player.reserve.R0).toBe(firstFigmentId);
@@ -859,7 +827,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("keeps different figment types as separate battlefield cards", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const first = applyBattleCommand(
       createBattleReducerState(state),
       {
@@ -874,7 +842,6 @@ describe("applyBattleCommand", () => {
           createdAtMs: 1,
         },
       },
-      battleInit,
     );
     const second = applyBattleCommand(
       first,
@@ -890,7 +857,6 @@ describe("applyBattleCommand", () => {
           createdAtMs: 2,
         },
       },
-      battleInit,
     );
 
     expect(second.mutable.sides.player.reserve.R0).toMatch(/^bc_/);
@@ -901,7 +867,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits REORDER_DECK metadata and emits a deck-reordered log event", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const originalDeck = [...state.sides.player.deck];
     const reorderedDeck = [...originalDeck];
     const lastIndex = reorderedDeck.length - 1;
@@ -920,7 +886,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "deck-order-picker",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[0].metadata;
@@ -948,7 +913,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits REVEAL_DECK_TOP metadata and flips the deck-top isRevealedToPlayer flag", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const topOne = state.sides.enemy.deck[0];
     const topTwo = state.sides.enemy.deck[1];
     expect(state.cardInstances[topOne].isRevealedToPlayer).toBe(false);
@@ -965,7 +930,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "foresee-overlay",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[0].metadata;
@@ -986,7 +950,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits PLAY_FROM_DECK_TOP as one composite entry and materialises the top card", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const characterBattleCardId = state.sides.player.hand.find((cardId) =>
       state.cardInstances[cardId].definition.battleCardKind === "character",
     );
@@ -1008,7 +972,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "foresee-overlay",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[0].metadata;
@@ -1030,7 +993,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits SET_PHASE metadata and changes only the phase label", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const before = createBattleReducerState(state).mutable;
     const applied = applyBattleCommand(
       createBattleReducerState(state),
@@ -1042,7 +1005,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "action-bar",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[0].metadata;
@@ -1073,7 +1035,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("commits SET_SIDE_HAND_VISIBILITY metadata and emits a bulk visibility log event", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const enemyHand = [...state.sides.enemy.hand];
     for (const battleCardId of enemyHand) {
       state.cardInstances[battleCardId].isRevealedToPlayer = true;
@@ -1089,7 +1051,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "side-summary",
       },
-      battleInit,
     );
 
     const metadata = applied.history.past[0].metadata;
@@ -1116,7 +1077,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("keeps enemy cards drawn through the debug draw action hidden", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const drawnCardId = state.sides.enemy.deck[0];
     if (drawnCardId === undefined) {
       throw new Error("expected enemy deck to contain a card");
@@ -1133,7 +1094,6 @@ describe("applyBattleCommand", () => {
         },
         sourceSurface: "inspector",
       },
-      battleInit,
     );
 
     expect(applied.mutable.sides.enemy.hand).toContain(drawnCardId);
@@ -1141,7 +1101,7 @@ describe("applyBattleCommand", () => {
   });
 
   it("routes each debug edit to its spec history-kind category", () => {
-    const { battleInit, state } = createTestBattle();
+    const { state } = createTestBattle();
     const moveCardId = state.sides.player.hand[0];
     const battlefieldCardA = state.sides.player.hand[1];
     const battlefieldCardB = state.sides.enemy.hand[0];
@@ -1164,7 +1124,6 @@ describe("applyBattleCommand", () => {
           destination: { side: "player", zone: "void" },
         },
       },
-      battleInit,
     );
     expect(zoneMove.history.past[0].metadata.kind).toBe("zone-move");
 
@@ -1178,7 +1137,6 @@ describe("applyBattleCommand", () => {
           target: { side: "enemy", zone: "deployed", slotId: "D0" },
         },
       },
-      battleInit,
     );
     expect(swap.history.past[0].metadata.kind).toBe("battlefield-position");
 
@@ -1192,7 +1150,6 @@ describe("applyBattleCommand", () => {
           value: 3,
         },
       },
-      battleInit,
     );
     expect(spark.history.past[0].metadata.kind).toBe("card-instance");
   });

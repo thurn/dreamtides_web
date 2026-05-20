@@ -63,7 +63,6 @@ function makeRawSnapshot(overrides: Record<string, unknown>) {
       maxEnergyCap: 10,
       startingSide: "player",
       playerDrawSkipsTurnOne: true,
-      enableAi: false,
       questDeckEntries: [],
       playerDeckOrder: [],
       enemyDescriptor: {
@@ -374,7 +373,6 @@ describe("applyBattleCommandToRoom", () => {
       cardDatabase: makeBattleTestCardDatabase(),
       dreamcallers: makeBattleTestDreamcallers(),
       seedOverride: 1,
-      enableAi: false,
     });
     const initial = createInitialBattleState(init);
     const initialRoom: MultiplayerRoom = {
@@ -429,7 +427,6 @@ describe("applyBattleCommandToRoom", () => {
       cardDatabase: makeBattleTestCardDatabase(),
       dreamcallers: makeBattleTestDreamcallers(),
       seedOverride: 1,
-      enableAi: false,
     });
     const initial = createInitialBattleState(init);
     const initialRoom: MultiplayerRoom = {
@@ -496,7 +493,6 @@ function buildFreshRoom(): MultiplayerRoom {
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
     seedOverride: 1,
-    enableAi: false,
   });
   const initial = createInitialBattleState(init);
   return {

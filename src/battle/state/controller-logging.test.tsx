@@ -11,7 +11,7 @@ import {
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
-import type { BattleInit, BattleMutableState, BattleReducerState } from "../types";
+import type { BattleMutableState, BattleReducerState } from "../types";
 import {
   type BattleControllerAction,
   useBattleController,
@@ -19,11 +19,9 @@ import {
 import { createInitialBattleState } from "./create-initial-state";
 
 function mountControllerHarness({
-  battleInit,
   initialState,
   onStateChange,
 }: {
-  battleInit: BattleInit;
   initialState: BattleMutableState;
   onStateChange: (
     value: {
@@ -39,7 +37,6 @@ function mountControllerHarness({
   act(() => {
     root.render(
       <ControllerHarness
-        battleInit={battleInit}
         initialState={initialState}
         onStateChange={onStateChange}
       />,
@@ -50,11 +47,9 @@ function mountControllerHarness({
 }
 
 function ControllerHarness({
-  battleInit,
   initialState,
   onStateChange,
 }: {
-  battleInit: BattleInit;
   initialState: BattleMutableState;
   onStateChange: (
     value: {
@@ -63,7 +58,7 @@ function ControllerHarness({
     },
   ) => void;
 }) {
-  const [state, dispatch] = useBattleController(initialState, battleInit);
+  const [state, dispatch] = useBattleController(initialState);
 
   useEffect(() => {
     onStateChange({ dispatch, state });
@@ -97,7 +92,6 @@ describe("useBattleController", () => {
       }
       | null = null;
     const { root } = mountControllerHarness({
-      battleInit,
       initialState,
       onStateChange: (value) => {
         latest = value;
@@ -147,7 +141,7 @@ describe("useBattleController", () => {
   it(
     "emits exactly one battle_proto_command_applied per user command",
     () => {
-      const { battleInit, initialState } = createTestBattle();
+      const { initialState } = createTestBattle();
       let latest:
         | {
           dispatch: Dispatch<BattleControllerAction>;
@@ -155,7 +149,6 @@ describe("useBattleController", () => {
         }
         | null = null;
       const { root } = mountControllerHarness({
-        battleInit,
         initialState,
         onStateChange: (value) => {
           latest = value;

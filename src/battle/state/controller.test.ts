@@ -38,7 +38,6 @@ describe("battleControllerReducer", () => {
           },
         },
       },
-      battleInit,
     );
 
     expect(reduced.history.past).toHaveLength(1);
@@ -75,17 +74,14 @@ describe("battleControllerReducer", () => {
           edit: { kind: "SET_PHASE", phase: "dusk" },
         },
       },
-      battleInit,
     );
     const undone = battleControllerReducer(
       afterSetPhase,
       { type: "UNDO" },
-      battleInit,
     );
     const redone = battleControllerReducer(
       undone,
       { type: "REDO" },
-      battleInit,
     );
 
     // The phase label changes; nothing else does. Undo/redo reproduce exact
@@ -117,27 +113,22 @@ describe("battleControllerReducer", () => {
     const afterForcedVictory = battleControllerReducer(
       initialState,
       { type: "APPLY_COMMAND", command: { id: "FORCE_RESULT", result: "victory" } },
-      battleInit,
     );
     const afterUndo = battleControllerReducer(
       afterForcedVictory,
       { type: "UNDO" },
-      battleInit,
     );
     const afterSkipToRewards = battleControllerReducer(
       afterUndo,
       { type: "APPLY_COMMAND", command: { id: "SKIP_TO_REWARDS" } },
-      battleInit,
     );
     const undone = battleControllerReducer(
       afterSkipToRewards,
       { type: "UNDO" },
-      battleInit,
     );
     const redone = battleControllerReducer(
       undone,
       { type: "REDO" },
-      battleInit,
     );
 
     expect(afterSkipToRewards.lastTransition?.metadata).toMatchObject({

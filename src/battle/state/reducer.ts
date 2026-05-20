@@ -2,7 +2,6 @@ import type {
   BattleEngineEmissionContext,
   BattleHistory,
   BattleHistoryEntryMetadata,
-  BattleInit,
   BattleMutableState,
   BattleReducerAction,
   BattleReducerTransition,
@@ -34,13 +33,6 @@ export function createBattleReducerState(
 export function battleReducer(
   state: BattleReducerState,
   action: BattleReducerAction,
-  // Battle outcome is manual: DEBUG_EDIT and FORCE_RESULT do not consult init
-  // config. The parameter is retained so callers can keep threading the shared
-  // `battleInit` through the reducer/controller chain.
-  _battleInit: Pick<
-    BattleInit,
-    "enableAi" | "maxEnergyCap" | "playerDrawSkipsTurnOne" | "scoreToWin" | "turnLimit"
-  >,
 ): BattleReducerState {
   switch (action.type) {
     case "DEBUG_EDIT": {

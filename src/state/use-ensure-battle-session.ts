@@ -49,7 +49,6 @@ export function useEnsureBattleSession(input: {
   dreamcallers: readonly DreamcallerContent[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
   seedOverride: number | null;
-  enableAi: boolean;
 }): void {
   const inFlightKey = useRef<string | null>(null);
 
@@ -70,7 +69,6 @@ export function useEnsureBattleSession(input: {
       dreamcallers: input.dreamcallers,
       dreamsignTemplates: input.dreamsignTemplates,
       seedOverride: input.seedOverride,
-      enableAi: input.enableAi,
     });
     const initial = createInitialBattleState(init);
 
@@ -92,7 +90,6 @@ export function useEnsureBattleSession(input: {
     input.database,
     input.dreamcallers,
     input.dreamsignTemplates,
-    input.enableAi,
     input.questState,
     input.roomId,
     input.seedOverride,

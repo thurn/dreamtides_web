@@ -87,7 +87,6 @@ export function applyBattleCommandToRoom(
   const next = battleControllerReducer(
     reducerState,
     { type: "APPLY_COMMAND", command },
-    room.battleState.init,
   );
   if (next === reducerState) {
     return room;

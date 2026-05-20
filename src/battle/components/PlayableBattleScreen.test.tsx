@@ -63,11 +63,7 @@ vi.mock("../../multiplayer/battle-service", async (importOriginal) => {
   };
 });
 
-function createTestBattle({
-  enableAi = true,
-}: {
-  enableAi?: boolean;
-} = {}): {
+function createTestBattle(): {
   battleInit: BattleInit;
   initialState: BattleMutableState;
   site: ReturnType<typeof makeBattleTestSite>;
@@ -78,7 +74,6 @@ function createTestBattle({
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
-    enableAi,
   });
 
   return {
@@ -106,7 +101,7 @@ function TestMultiplayerBattleHost({
     (
       reducerState: ReturnType<typeof createBattleControllerState>,
       action: BattleControllerAction,
-    ) => battleControllerReducer(reducerState, action, battleInit),
+    ) => battleControllerReducer(reducerState, action),
     initialState,
     createBattleControllerState,
   );
@@ -170,9 +165,8 @@ function mount(element: ReactElement): {
 
 function renderScreen(
   mutateInitialState?: (state: ReturnType<typeof createTestBattle>["initialState"]) => void,
-  options?: { enableAi?: boolean },
 ) {
-  const testBattle = createTestBattle(options);
+  const testBattle = createTestBattle();
   mutateInitialState?.(testBattle.initialState);
   return {
     ...testBattle,
@@ -387,7 +381,7 @@ describe("PlayableBattleScreen", () => {
           energyCost: 99,
         };
       }
-    }, { enableAi: false });
+    });
 
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
@@ -813,7 +807,7 @@ describe("PlayableBattleScreen", () => {
         throw new Error("expected affordable enemy character");
       }
       opponentCharacterId = enemyCardId;
-    }, { enableAi: false });
+    });
 
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
@@ -1468,7 +1462,7 @@ describe("PlayableBattleScreen", () => {
         ...state.cardInstances[overpriceCardId].definition,
         energyCost: 99,
       };
-    }, { enableAi: false });
+    });
 
     const handCard = container.querySelector<HTMLElement>(
       `[data-battle-region="player-hand-tray"] [data-battle-card-id="${overpriceCardId}"]`,
@@ -1503,7 +1497,7 @@ describe("PlayableBattleScreen", () => {
       }
       // Clear an enemy deployed slot so the move lands on an empty target.
       state.sides.enemy.deployed.D0 = null;
-    }, { enableAi: false });
+    });
 
     const handCard = container.querySelector<HTMLElement>(
       `[data-battle-region="player-hand-tray"] [data-battle-card-id="${playerCardId}"]`,
@@ -1547,7 +1541,7 @@ describe("PlayableBattleScreen", () => {
       if (playerCardId === "") {
         throw new Error("expected player hand card");
       }
-    }, { enableAi: false });
+    });
 
     const readEnergy = (side: string): string | null | undefined =>
       container.querySelector(`[data-battle-stat="${side}:energy"]`)?.getAttribute("data-battle-current-energy");
@@ -1594,7 +1588,7 @@ describe("PlayableBattleScreen", () => {
       state.sides.player.hand = state.sides.player.hand.filter((id) => id !== characterId);
       state.sides.player.deck = state.sides.player.deck.filter((id) => id !== characterId);
       state.sides.player.deployed.D0 = characterId;
-    }, { enableAi: false });
+    });
 
     const deployedCard = container.querySelector<HTMLElement>(
       `[data-slot-id="player-deployed-D0"] [data-battle-card-id="${deployedCardId}"]`,
