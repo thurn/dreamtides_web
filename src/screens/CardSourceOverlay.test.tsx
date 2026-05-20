@@ -35,19 +35,19 @@ function makeOverlayState(): CardSourceDebugState {
       {
         cardNumber: 11,
         cardName: "Lantern Broker",
-        cardTides: ["core", "support-a"],
-        matchedMandatoryTides: ["core"],
-        matchedOptionalTides: ["support-a"],
+        cardTides: ["warrior_pressure", "big_energy"],
+        matchedMandatoryTides: ["warrior_pressure"],
+        matchedOptionalTides: ["big_energy"],
         sourceTides: [
           {
-            tideId: "core",
-            displayName: "Core Engine",
+            tideId: "warrior_pressure",
+            displayName: "Iron Charge",
             requirement: "required",
             role: "structural",
           },
           {
-            tideId: "support-a",
-            displayName: "Lantern Support",
+            tideId: "big_energy",
+            displayName: "Stormwell Surge",
             requirement: "optional",
             role: "supporting",
           },
@@ -107,21 +107,71 @@ describe("CardSourceOverlay", () => {
     expect(container.textContent).toContain("Shop Offers");
     expect(container.textContent).toContain("Lantern Broker");
     expect(container.textContent).toContain("On theme");
-    expect(container.textContent).toContain("Core Engine");
+    expect(container.textContent).toContain("Iron Charge");
     expect(container.textContent).toContain("Required");
     expect(container.textContent).toContain("Structural");
-    expect(container.textContent).toContain("Lantern Support");
+    expect(container.textContent).toContain("Stormwell Surge");
     expect(container.textContent).toContain("Optional");
     expect(container.textContent).toContain("Supporting");
     expect(container.textContent).toContain("Driftbound Relic");
     expect(container.textContent).toContain("Fallback");
-    expect(container.textContent ?? "").not.toContain("core");
-    expect(container.textContent ?? "").not.toContain("support-a");
+    expect(container.textContent ?? "").not.toContain("warrior_pressure");
+    expect(container.textContent ?? "").not.toContain("big_energy");
     expect(container.textContent ?? "").not.toContain("outsider");
 
     act(() => {
       root.unmount();
     });
+  });
+
+  it("shows literal tide documentation when a source tide is hovered", () => {
+    vi.useFakeTimers();
+    try {
+      const { container, root } = mount(
+        <CardSourceOverlay
+          cardSourceDebug={makeOverlayState()}
+          isOpen
+          onClose={vi.fn()}
+        />,
+      );
+
+      expect(
+        document.body.querySelector("[data-tide-doc-popover='warrior_pressure']"),
+      ).toBeNull();
+
+      const tideTrigger = container.querySelector<HTMLElement>(
+        "[data-tide-doc-trigger='warrior_pressure']",
+      );
+      expect(tideTrigger).not.toBeNull();
+      const triggerWrapper = tideTrigger?.parentElement ?? null;
+      expect(triggerWrapper).not.toBeNull();
+
+      act(() => {
+        triggerWrapper?.dispatchEvent(
+          new MouseEvent("mouseover", { bubbles: true }),
+        );
+      });
+      act(() => {
+        vi.advanceTimersByTime(300);
+      });
+
+      const popover = document.body.querySelector(
+        "[data-tide-doc-popover='warrior_pressure']",
+      );
+      expect(popover?.textContent).toContain("Display name: Iron Charge.");
+      expect(popover?.textContent).toContain(
+        "Mechanical identity: Low-curve Warriors, direct spark buffs, point racing, and aggressive battlefield snowball.",
+      );
+      expect(popover?.textContent).not.toContain(
+        "A war drum beat made into doctrine.",
+      );
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("renders without crashing when tide arrays are missing or empty", () => {

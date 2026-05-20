@@ -2,10 +2,12 @@ import { useCallback, useEffect, useMemo, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CardData } from "../types/cards";
 import type {
+  PackageTideId,
   DreamsignTemplate,
   ResolvedDreamcallerPackage,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
+import { TideDocumentationHover } from "../components/TideDocumentationHover";
 import {
   extractDraftDebugInfo,
   extractPackageDebugInfo,
@@ -184,6 +186,7 @@ export function DebugScreen({
                     items={packageDebugInfo.mandatoryTides.map((packageTideId) => ({
                       key: packageTideId,
                       label: packageTideId,
+                      tideId: packageTideId,
                     }))}
                   />
                 </InfoCard>
@@ -197,6 +200,7 @@ export function DebugScreen({
                     items={packageDebugInfo.optionalSubset.map((packageTideId) => ({
                       key: packageTideId,
                       label: packageTideId,
+                      tideId: packageTideId,
                     }))}
                   />
                 </InfoCard>
@@ -210,6 +214,7 @@ export function DebugScreen({
                     items={packageDebugInfo.selectedTides.map((packageTideId) => ({
                       key: packageTideId,
                       label: packageTideId,
+                      tideId: packageTideId,
                     }))}
                   />
                 </InfoCard>
@@ -305,7 +310,7 @@ function DebugChipList({
   items,
 }: {
   emptyLabel: string;
-  items: Array<{ key: string; label: string }>;
+  items: Array<{ key: string; label: string; tideId?: PackageTideId }>;
 }) {
   if (items.length === 0) {
     return <p className="text-sm opacity-50">{emptyLabel}</p>;
@@ -323,7 +328,13 @@ function DebugChipList({
             color: "#c084fc",
           }}
         >
-          {item.label}
+          {item.tideId === undefined ? (
+            item.label
+          ) : (
+            <TideDocumentationHover tideId={item.tideId}>
+              {item.label}
+            </TideDocumentationHover>
+          )}
         </span>
       ))}
     </div>

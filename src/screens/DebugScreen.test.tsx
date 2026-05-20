@@ -75,12 +75,17 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       renderedText: "Test rules text.",
       imageNumber: "0008",
       startingEssence: 250,
-      mandatoryTides: ["core"],
-      optionalTides: ["support-a", "support-b", "support-c", "support-d"],
+      mandatoryTides: ["warrior_pressure"],
+      optionalTides: ["big_energy", "fast_setup", "hand_cycling", "void_setup"],
     },
-    mandatoryTides: ["core"],
-    optionalSubset: ["support-a", "support-b", "support-c"],
-    selectedTides: ["core", "support-a", "support-b", "support-c"],
+    mandatoryTides: ["warrior_pressure"],
+    optionalSubset: ["big_energy", "fast_setup", "hand_cycling"],
+    selectedTides: [
+      "warrior_pressure",
+      "big_energy",
+      "fast_setup",
+      "hand_cycling",
+    ],
     draftPoolCopiesByCard: { "1": 2, "2": 1 },
     dreamsignPoolIds: ["sign-1", "sign-2", "sign-3"],
     mandatoryOnlyPoolSize: 120,
@@ -106,19 +111,19 @@ const DREAMSIGN_TEMPLATES: readonly DreamsignTemplate[] = [
   {
     id: "sign-1",
     name: "First Sign",
-    packageTides: ["core"],
+    packageTides: ["warrior_pressure"],
     effectDescription: "First.",
   },
   {
     id: "sign-2",
     name: "Second Sign",
-    packageTides: ["support-a"],
+    packageTides: ["big_energy"],
     effectDescription: "Second.",
   },
   {
     id: "sign-3",
     name: "Third Sign",
-    packageTides: ["support-b"],
+    packageTides: ["fast_setup"],
     effectDescription: "Third.",
   },
 ] as const;
@@ -171,13 +176,13 @@ describe("DebugScreen", () => {
     expect(container.textContent).toContain("Debug: Package State");
     expect(container.textContent).toContain("Caller of Lanterns");
     expect(container.textContent).toContain("Required Packages");
-    expect(container.textContent).toContain("core");
+    expect(container.textContent).toContain("warrior_pressure");
     expect(container.textContent).toContain("Selected Optional Packages");
-    expect(container.textContent).toContain("support-a");
-    expect(container.textContent).toContain("support-b");
-    expect(container.textContent).toContain("support-c");
+    expect(container.textContent).toContain("big_energy");
+    expect(container.textContent).toContain("fast_setup");
+    expect(container.textContent).toContain("hand_cycling");
     expect(container.textContent).toContain("Full Draft Pool Packages");
-    expect(container.textContent).toContain("core");
+    expect(container.textContent).toContain("warrior_pressure");
     expect(container.textContent).toContain("First Sign");
     expect(container.textContent).toContain("Second Sign");
     expect(container.textContent).toContain("Lantern Sprite");
@@ -185,5 +190,60 @@ describe("DebugScreen", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("shows literal tide documentation when a package chip is hovered", () => {
+    vi.useFakeTimers();
+    try {
+      const { container, root } = mount(
+        <DebugScreen
+          isOpen
+          onClose={vi.fn()}
+          draftState={makeDraftState()}
+          cardDatabase={
+            new Map<number, CardData>([
+              [1, makeCard(1, "Lantern Sprite")],
+              [2, makeCard(2, "Archive Sentry")],
+            ])
+          }
+          resolvedPackage={makeResolvedPackage()}
+          remainingDreamsignPool={["sign-2"]}
+          dreamsignTemplates={DREAMSIGN_TEMPLATES}
+        />,
+      );
+
+      const tideTrigger = container.querySelector<HTMLElement>(
+        "[data-tide-doc-trigger='warrior_pressure']",
+      );
+      expect(tideTrigger).not.toBeNull();
+      const triggerWrapper = tideTrigger?.parentElement ?? null;
+      expect(triggerWrapper).not.toBeNull();
+
+      act(() => {
+        triggerWrapper?.dispatchEvent(
+          new MouseEvent("mouseover", { bubbles: true }),
+        );
+      });
+      act(() => {
+        vi.advanceTimersByTime(300);
+      });
+
+      const popover = document.body.querySelector(
+        "[data-tide-doc-popover='warrior_pressure']",
+      );
+      expect(popover?.textContent).toContain("Display name: Iron Charge.");
+      expect(popover?.textContent).toContain(
+        "Apply to cards that build early Warrior boards, push damage immediately, or turn Warrior density into pressure.",
+      );
+      expect(popover?.textContent).not.toContain(
+        "A war drum beat made into doctrine.",
+      );
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

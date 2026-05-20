@@ -4,6 +4,7 @@ import type {
   CardSourceDebugEntry,
   CardSourceDebugState,
 } from "../types/quest";
+import { TideDocumentationHover } from "../components/TideDocumentationHover";
 
 interface CardSourceOverlayProps {
   cardSourceDebug: CardSourceDebugState | null;
@@ -77,7 +78,9 @@ function CardExplanation({ entry }: { entry: CardSourceDebugEntry }) {
             >
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                 <span className="font-semibold" style={{ color: "#e0f2fe" }}>
-                  {tide.displayName}
+                  <TideDocumentationHover tideId={tide.tideId}>
+                    {tide.displayName}
+                  </TideDocumentationHover>
                 </span>
                 <span className="opacity-55">•</span>
                 <span className="opacity-80">{labelize(tide.requirement)}</span>

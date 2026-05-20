@@ -2,6 +2,8 @@ import { useCallback, useEffect, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { Dreamsign } from "../types/quest";
 import type { DreamsignTemplate, PackageTideId } from "../types/content";
+import { packageTideDisplayMeta } from "../data/structural-tides";
+import { TideDocumentationHover } from "../components/TideDocumentationHover";
 
 interface DreamsignSourceOverlayProps {
   isOpen: boolean;
@@ -30,6 +32,14 @@ interface DreamsignSourceEntry {
   inCandidatePool: boolean;
   effectDescription: string;
   statusLabel: string;
+  sourceTides: DreamsignSourceTide[];
+}
+
+interface DreamsignSourceTide {
+  tideId: PackageTideId;
+  displayName: string;
+  requirement: "required" | "optional";
+  role: string;
 }
 
 interface CandidatePoolDebug {
@@ -93,6 +103,26 @@ function buildEntry(
     mandatoryMatches,
     optionalMatches,
   });
+  const sourceTides = tides.flatMap((tide): DreamsignSourceTide[] => {
+    const requirement = mandatoryTides.has(tide)
+      ? "required"
+      : optionalTides.has(tide)
+        ? "optional"
+        : null;
+    if (requirement === null) {
+      return [];
+    }
+
+    const meta = packageTideDisplayMeta(tide);
+    return [
+      {
+        tideId: tide,
+        displayName: meta.displayName,
+        requirement,
+        role: meta.role,
+      },
+    ];
+  });
   return {
     id,
     name: dreamsign.name,
@@ -105,7 +135,12 @@ function buildEntry(
     inCandidatePool: candidatePoolIds.has(id),
     effectDescription: template?.effectDescription ?? dreamsign.effectDescription,
     statusLabel,
+    sourceTides,
   };
+}
+
+function labelize(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 function DreamsignExplanation({ entry }: { entry: DreamsignSourceEntry }) {
@@ -144,15 +179,50 @@ function DreamsignExplanation({ entry }: { entry: DreamsignSourceEntry }) {
         </span>
       </div>
 
+      {entry.sourceTides.length > 0 && (
+        <div className="mt-3 space-y-2">
+          {entry.sourceTides.map((tide) => (
+            <div
+              key={`${entry.id}-${tide.requirement}-${tide.tideId}`}
+              className="rounded-md px-2.5 py-2 text-xs"
+              style={{
+                background: "rgba(30, 41, 59, 0.62)",
+                border: "1px solid rgba(168, 85, 247, 0.16)",
+              }}
+            >
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="font-semibold" style={{ color: "#e9d5ff" }}>
+                  <TideDocumentationHover tideId={tide.tideId}>
+                    {tide.displayName}
+                  </TideDocumentationHover>
+                </span>
+                <span className="opacity-55">•</span>
+                <span className="opacity-80">{labelize(tide.requirement)}</span>
+                <span className="opacity-55">•</span>
+                <span className="opacity-80">{labelize(tide.role)}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="mt-3 space-y-2 text-xs">
         <DebugRow label="template id" value={entry.id} />
         <DebugRow
           label="source pool"
-          value={entry.inSourcePool ? "present in resolved package pool" : "not present in resolved package pool"}
+          value={
+            entry.inSourcePool
+              ? "present in resolved package pool"
+              : "not present in resolved package pool"
+          }
         />
         <DebugRow
           label="candidate pool"
-          value={entry.inCandidatePool ? "present before this reveal" : "not present before this reveal"}
+          value={
+            entry.inCandidatePool
+              ? "present before this reveal"
+              : "not present before this reveal"
+          }
         />
         <DebugRow label="template tides" value={formatList(entry.packageTides)} />
         <DebugRow
@@ -288,22 +358,22 @@ export function DreamsignSourceOverlay({
     const offeredIds = new Set(
       offeredDreamsigns.map((dreamsign) => dreamsign.id ?? dreamsign.name),
     );
-    const candidateIds = uniqueIds([
-      ...offeredIds,
-      ...remainingDreamsignPool,
-    ]);
-    const sourcePoolIds = initialDreamsignPoolIds.length > 0
-      ? uniqueIds(initialDreamsignPoolIds)
-      : candidateIds;
+    const candidateIds = uniqueIds([...offeredIds, ...remainingDreamsignPool]);
+    const sourcePoolIds =
+      initialDreamsignPoolIds.length > 0
+        ? uniqueIds(initialDreamsignPoolIds)
+        : candidateIds;
     const sourcePoolSet = new Set(sourcePoolIds);
     const candidatePoolSet = new Set(candidateIds);
     return {
       entries: offeredDreamsigns.map((dreamsign) =>
         buildEntry(
-        dreamsign,
-        dreamsign.id !== undefined ? templatesById.get(dreamsign.id) : undefined,
-        mandatorySet,
-        optionalSet,
+          dreamsign,
+          dreamsign.id !== undefined
+            ? templatesById.get(dreamsign.id)
+            : undefined,
+          mandatorySet,
+          optionalSet,
           sourcePoolSet,
           candidatePoolSet,
         ),

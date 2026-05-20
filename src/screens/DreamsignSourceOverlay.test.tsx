@@ -51,7 +51,7 @@ function makeTemplates(): DreamsignTemplate[] {
       id: "embers-whisper",
       name: "Ember's Whisper",
       effectDescription: "Fire.",
-      packageTides: ["core", "support-a"],
+      packageTides: ["warrior_pressure", "big_energy"],
     },
     {
       id: "drifter-mark",
@@ -63,7 +63,7 @@ function makeTemplates(): DreamsignTemplate[] {
       id: "glacial-insight",
       name: "Glacial Insight",
       effectDescription: "Ice.",
-      packageTides: ["core"],
+      packageTides: ["warrior_pressure"],
     },
   ];
 }
@@ -103,8 +103,8 @@ describe("DreamsignSourceOverlay", () => {
         screenLabel="Dreamsign Draft"
         offeredDreamsigns={makeOfferedDreamsigns()}
         dreamsignTemplates={makeTemplates()}
-        mandatoryTides={["core"]}
-        optionalTides={["support-a"]}
+        mandatoryTides={["warrior_pressure"]}
+        optionalTides={["big_energy"]}
         remainingPoolSize={3}
       />,
     );
@@ -127,8 +127,8 @@ describe("DreamsignSourceOverlay", () => {
         screenLabel="Dreamsign Draft"
         offeredDreamsigns={[makeOfferedDreamsigns()[0]]}
         dreamsignTemplates={makeTemplates()}
-        mandatoryTides={["core"]}
-        optionalTides={["support-a"]}
+        mandatoryTides={["warrior_pressure"]}
+        optionalTides={["big_energy"]}
         remainingPoolSize={3}
         initialDreamsignPoolIds={[
           "embers-whisper",
@@ -144,10 +144,12 @@ describe("DreamsignSourceOverlay", () => {
     expect(container.textContent).toContain("mandatory tide match");
     expect(container.textContent).toContain("template id");
     expect(container.textContent).toContain("embers-whisper");
+    expect(container.textContent).toContain("Iron Charge");
+    expect(container.textContent).toContain("Stormwell Surge");
     expect(container.textContent).toContain("mandatory matches");
-    expect(container.textContent).toContain("core");
+    expect(container.textContent).toContain("warrior_pressure");
     expect(container.textContent).toContain("optional matches");
-    expect(container.textContent).toContain("support-a");
+    expect(container.textContent).toContain("big_energy");
     expect(container.textContent).toContain("source pool");
     expect(container.textContent).toContain("resolved package dreamsignPoolIds");
     expect(container.textContent).toContain("candidate tides");
@@ -168,8 +170,8 @@ describe("DreamsignSourceOverlay", () => {
         screenLabel="Dreamsign Offering"
         offeredDreamsigns={[makeOfferedDreamsigns()[1]]}
         dreamsignTemplates={makeTemplates()}
-        mandatoryTides={["core"]}
-        optionalTides={["support-a"]}
+        mandatoryTides={["warrior_pressure"]}
+        optionalTides={["big_energy"]}
         remainingPoolSize={2}
         initialDreamsignPoolIds={["drifter-mark"]}
         remainingDreamsignPool={[]}
@@ -193,7 +195,7 @@ describe("DreamsignSourceOverlay", () => {
         screenLabel="Dreamsign Offering"
         offeredDreamsigns={makeOfferedDreamsigns()}
         dreamsignTemplates={makeTemplates()}
-        mandatoryTides={["core"]}
+        mandatoryTides={["warrior_pressure"]}
         optionalTides={[]}
         remainingPoolSize={7}
       />,
@@ -360,7 +362,7 @@ describe("DreamsignSourceOverlay", () => {
           { id: "unknown-id", name: "Mystery", effectDescription: "?", isBane: false },
         ]}
         dreamsignTemplates={makeTemplates()}
-        mandatoryTides={["core"]}
+        mandatoryTides={["warrior_pressure"]}
         optionalTides={[]}
         remainingPoolSize={1}
       />,
@@ -372,5 +374,56 @@ describe("DreamsignSourceOverlay", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("shows literal tide documentation when a source tide is hovered", () => {
+    vi.useFakeTimers();
+    try {
+      const { container, root } = mount(
+        <DreamsignSourceOverlay
+          isOpen
+          onClose={vi.fn()}
+          screenLabel="Dreamsign Draft"
+          offeredDreamsigns={[makeOfferedDreamsigns()[0]]}
+          dreamsignTemplates={makeTemplates()}
+          mandatoryTides={["warrior_pressure"]}
+          optionalTides={["big_energy"]}
+          remainingPoolSize={3}
+        />,
+      );
+
+      const tideTrigger = container.querySelector<HTMLElement>(
+        "[data-tide-doc-trigger='warrior_pressure']",
+      );
+      expect(tideTrigger).not.toBeNull();
+      const triggerWrapper = tideTrigger?.parentElement ?? null;
+      expect(triggerWrapper).not.toBeNull();
+
+      act(() => {
+        triggerWrapper?.dispatchEvent(
+          new MouseEvent("mouseover", { bubbles: true }),
+        );
+      });
+      act(() => {
+        vi.advanceTimersByTime(300);
+      });
+
+      const popover = document.body.querySelector(
+        "[data-tide-doc-popover='warrior_pressure']",
+      );
+      expect(popover?.textContent).toContain("Display name: Iron Charge.");
+      expect(popover?.textContent).toContain(
+        "Mechanical identity: Low-curve Warriors, direct spark buffs, point racing, and aggressive battlefield snowball.",
+      );
+      expect(popover?.textContent).not.toContain(
+        "A war drum beat made into doctrine.",
+      );
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

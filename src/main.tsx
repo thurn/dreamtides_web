@@ -4,6 +4,7 @@ import "boxicons/css/boxicons.min.css";
 import App from "./App.tsx";
 import "./index.css";
 import { HudDreamsignLayoutDemo } from "./components/HudDreamsignLayoutDemo";
+import { TideDocumentationHoverDemo } from "./components/TideDocumentationHoverDemo";
 import { JourneyHoverCardDemo } from "./journeys/ui/JourneyHoverCardDemo";
 import { parseRuntimeConfig } from "./runtime/runtime-config";
 
@@ -18,6 +19,8 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     {demoParam === "hud-dreamsign-layout" ? (
       <HudDreamsignLayoutDemo />
+    ) : demoParam === "tide-doc-hover" ? (
+      <TideDocumentationHoverDemo />
     ) : demoParam === "journey-hover" ? (
       <JourneyHoverCardDemo />
     ) : (
