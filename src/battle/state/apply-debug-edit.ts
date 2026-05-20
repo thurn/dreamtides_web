@@ -32,6 +32,7 @@ import type {
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 import {
   allocateBattleCardInstance,
+  allocateBattleStackEntryId,
   cloneBattleDeckCardDefinition,
   cloneBattleMutableState,
 } from "./create-initial-state";
@@ -1406,6 +1407,13 @@ function isSameLocation(
     return source.index === state.sides[destination.side].deck.length - 1;
   }
 
+  if (destination.zone === "stack") {
+    // A card already on the stack stays put when re-targeted at the stack;
+    // re-pushing would mint a duplicate entry. Side is irrelevant — the stack
+    // is a single shared pile.
+    return source.zone === "stack";
+  }
+
   return source.side === destination.side && source.zone === destination.zone;
 }
 
@@ -1455,6 +1463,18 @@ function insertBattleCardAtDebugDestination(
     }
 
     state.sides[destination.side].deck.push(battleCardId);
+    return;
+  }
+
+  if (destination.zone === "stack") {
+    const stackEntryId = allocateBattleStackEntryId(state);
+    state.stack ??= [];
+    state.stack.push({
+      stackEntryId,
+      battleCardId,
+      side: destination.side,
+      paidCost: 0,
+    });
     return;
   }
 

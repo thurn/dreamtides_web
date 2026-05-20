@@ -31,7 +31,7 @@ export type BattleDebugZoneDestination =
   | BattleFieldSlotAddress
   | {
     side: BattleSide;
-    zone: "hand" | "void" | "banished";
+    zone: "hand" | "void" | "banished" | "stack";
   }
   | {
     side: BattleSide;
@@ -606,7 +606,7 @@ function makeSideTarget(side: BattleSide): BattleCommandTarget {
 
 function makeZoneTarget(
   side: BattleSide,
-  zone: "deck" | "hand" | "void" | "banished" | "reserve" | "deployed",
+  zone: "deck" | "hand" | "void" | "banished" | "reserve" | "deployed" | "stack",
 ): BattleCommandTarget {
   return {
     kind: "zone",
@@ -918,7 +918,7 @@ function formatSlotLabel(slot: BattleFieldSlotAddress): string {
   return `${formatSideLabel(slot.side)} ${formatZoneLabel(slot.zone)} ${slot.slotId}`;
 }
 
-function formatZoneLabel(zone: "reserve" | "deployed" | "deck" | "hand" | "void" | "banished"): string {
+function formatZoneLabel(zone: "reserve" | "deployed" | "deck" | "hand" | "void" | "banished" | "stack"): string {
   switch (zone) {
     case "reserve":
       return "Reserve";
@@ -932,6 +932,8 @@ function formatZoneLabel(zone: "reserve" | "deployed" | "deck" | "hand" | "void"
       return "Void";
     case "banished":
       return "Banished";
+    case "stack":
+      return "Stack";
   }
 }
 

@@ -103,6 +103,54 @@ describe("applyBattleCommand", () => {
     expect(toReserve.mutable.sides.player.reserve.R0).toBe(battleCardId);
   });
 
+  it("moves a hand card onto the stack as a zero-cost stack entry", () => {
+    const { battleInit, state } = createTestBattle();
+    const battleCardId = state.sides.player.hand[0];
+
+    const toStack = applyBattleCommand(
+      createBattleReducerState(state),
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: {
+            side: "player",
+            zone: "stack",
+          },
+        },
+      },
+      battleInit,
+    );
+
+    expect(toStack.mutable.sides.player.hand).not.toContain(battleCardId);
+    expect(toStack.mutable.stack).toHaveLength(1);
+    const stackEntry = toStack.mutable.stack?.[0];
+    expect(stackEntry?.battleCardId).toBe(battleCardId);
+    expect(stackEntry?.side).toBe("player");
+    expect(stackEntry?.paidCost).toBe(0);
+    expect(typeof stackEntry?.stackEntryId).toBe("string");
+
+    const toVoid = applyBattleCommand(
+      toStack,
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: {
+            side: "player",
+            zone: "void",
+          },
+        },
+      },
+      battleInit,
+    );
+
+    expect(toVoid.mutable.stack).toEqual([]);
+    expect(toVoid.mutable.sides.player.void).toContain(battleCardId);
+  });
+
   it("places debug-moved cards on the top or bottom of the deck in the requested order", () => {
     const { battleInit, state } = createTestBattle();
     const topMover = state.sides.player.hand[0];
