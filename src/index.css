@@ -154,3 +154,67 @@ button:disabled {
 .draft-deck-rail-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(168, 85, 247, 0.8);
 }
+
+.dreamsign-draft-screen {
+  padding-bottom: 6rem;
+}
+
+@media (max-height: 480px) and (orientation: landscape) {
+  .dreamsign-draft-screen {
+    padding-top: 0.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-header] {
+    margin-bottom: 0.5rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-header] h2 {
+    font-size: 1.75rem;
+    line-height: 2rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-header] p {
+    margin-top: 0;
+  }
+
+  .dreamsign-draft-option {
+    gap: 0.5rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-card] {
+    gap: 0.25rem;
+    padding: 0.5rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-dreamsign-art],
+  .dreamsign-draft-screen [data-offering-dreamsign-art-fallback] {
+    height: 3.5rem;
+    width: 3.5rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-dreamsign-name] {
+    font-size: 0.95rem;
+    line-height: 1.1rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-dreamsign-text] {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-accept] {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-footer] {
+    margin-top: 0.5rem;
+  }
+
+  .dreamsign-draft-screen [data-offering-skip],
+  .dreamsign-draft-screen [data-offering-secondary] {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+}

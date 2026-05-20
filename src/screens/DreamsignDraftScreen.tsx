@@ -121,7 +121,10 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
   }
 
   return (
-    <OfferingScreenLayout testId="dreamsign-draft-screen">
+    <OfferingScreenLayout
+      testId="dreamsign-draft-screen"
+      className="dreamsign-draft-screen"
+    >
       <OfferingScreenHeader
         title="Dreamsign Draft"
         subtitle="Choose one dreamsign or skip"
@@ -140,7 +143,7 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
               <motion.div
                 key={`draft-${dreamsign.name}`}
                 data-testid={`dreamsign-draft-option-${triggerId}`}
-                className="flex w-[224px] flex-col items-center gap-3 self-stretch"
+                className="dreamsign-draft-option flex w-[224px] flex-col items-center gap-3 self-stretch"
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.12, duration: 0.4 }}
@@ -149,6 +152,7 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
                   triggerAs="div"
                   className="flex w-full flex-1"
                   delayMs={DREAMSIGN_HOVER_DELAY_MS}
+                  placement="left"
                   maxWidthPx={null}
                   content={<DreamsignHoverCard dreamsign={dreamsign} />}
                 >

@@ -140,7 +140,7 @@ export function QuestApp({
   }
 
   return (
-    <div style={{ paddingBottom: showHud ? "48px" : "0" }}>
+    <div style={{ paddingBottom: showHud ? "64px" : "0" }}>
       {/*
         App-shell boundary: catches anything the screen router and HUD throw
         before it reaches the React root. Without this, a render-time crash

@@ -61,15 +61,17 @@ export const OFFERING_CARD_BACKGROUND =
 export function OfferingScreenLayout({
   children,
   testId,
+  className = "",
 }: {
   readonly children: ReactNode;
   readonly testId?: string;
+  readonly className?: string;
 }) {
   return (
     <motion.div
       data-testid={testId}
       data-offering-screen=""
-      className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
+      className={`flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8 ${className}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
