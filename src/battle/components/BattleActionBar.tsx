@@ -1,10 +1,8 @@
 import { useEffect } from "react";
 import type { BattleCommand } from "../debug/commands";
-import { selectShouldEndTurnFromDay } from "../state/selectors";
-import type { BattleMutableState, BattleSide } from "../types";
+import type { BattleSide } from "../types";
 
 export function BattleActionBar({
-  canEndTurn,
   futureCount,
   hideDebugSection: _hideDebugSection = false,
   historyCount,
@@ -13,8 +11,7 @@ export function BattleActionBar({
   isDesktopInspectorLayout: _isDesktopInspectorLayout,
   isInspectorDrawerOpen: _isInspectorDrawerOpen,
   isOpponentHandRevealed = false,
-  state,
-  onCommand,
+  onCommand: _onCommand,
   onOpenForesee: _onOpenForesee,
   onRedo,
   onToggleBattleLog,
@@ -22,7 +19,6 @@ export function BattleActionBar({
   onToggleOpponentHand,
   onUndo,
 }: {
-  canEndTurn: boolean;
   futureCount: number;
   hideDebugSection?: boolean;
   historyCount: number;
@@ -31,7 +27,6 @@ export function BattleActionBar({
   isDesktopInspectorLayout: boolean;
   isInspectorDrawerOpen: boolean;
   isOpponentHandRevealed?: boolean;
-  state: BattleMutableState;
   onCommand: (command: BattleCommand) => void;
   onOpenForesee: (side: BattleSide, count: number) => void;
   onRedo: () => void;
@@ -40,9 +35,6 @@ export function BattleActionBar({
   onToggleOpponentHand?: () => void;
   onUndo: () => void;
 }) {
-  const phaseButtonLabel = getPhaseButtonLabel(state);
-  const phaseActionCommand = createPhaseActionCommand(state);
-
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent): void {
       const target = event.target as HTMLElement | null;
@@ -54,14 +46,6 @@ export function BattleActionBar({
         return;
       }
       const mod = event.metaKey || event.ctrlKey;
-      if (!mod && event.key.toLowerCase() === "e") {
-        if (!canEndTurn) {
-          return;
-        }
-        event.preventDefault();
-        onCommand(phaseActionCommand);
-        return;
-      }
       if (mod && !event.shiftKey && event.key.toLowerCase() === "z") {
         if (historyCount === 0) {
           return;
@@ -84,14 +68,11 @@ export function BattleActionBar({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [
-    canEndTurn,
     futureCount,
     historyCount,
     isInteractionLocked,
-    onCommand,
     onRedo,
     onUndo,
-    phaseActionCommand,
   ]);
 
   return (
@@ -139,40 +120,11 @@ export function BattleActionBar({
           type="button"
           data-battle-action="skip-to-rewards"
           className="btn ghost sm"
-          onClick={() => onCommand({ id: "SKIP_TO_REWARDS", sourceSurface: "action-bar" })}
+          onClick={() => _onCommand({ id: "SKIP_TO_REWARDS", sourceSurface: "action-bar" })}
         >
           Skip to rewards
-        </button>
-        <button
-          type="button"
-          data-battle-action="end-turn"
-          className="btn primary"
-          onClick={() => onCommand(phaseActionCommand)}
-          disabled={!canEndTurn}
-        >
-          {phaseButtonLabel}
         </button>
       </div>
     </section>
   );
-}
-
-function getPhaseButtonLabel(state: BattleMutableState): string {
-  if (selectShouldEndTurnFromDay(state)) {
-    return "End Turn";
-  }
-  if (state.phase === "day" || state.phase === "dusk") {
-    return "End Phase";
-  }
-  if (state.phase === "night" && state.activeSide === "player") {
-    return "End Turn";
-  }
-  return "Next Turn";
-}
-
-function createPhaseActionCommand(state: BattleMutableState): BattleCommand {
-  if (selectShouldEndTurnFromDay(state)) {
-    return { id: "END_TURN", sourceSurface: "action-bar" };
-  }
-  return { id: "PASS_PHASE", sourceSurface: "action-bar" };
 }

@@ -202,7 +202,7 @@ export function BattleInspector({
 function CardInspector({
   card,
   location,
-  state,
+  state: _state,
 }: {
   card: BattleMutableState["cardInstances"][string];
   location: ReturnType<typeof selectBattleCardLocation>;

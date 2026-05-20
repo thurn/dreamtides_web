@@ -27,7 +27,6 @@ import { formatBattleCardId } from "../state/create-initial-state";
 import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
-  selectCanEndTurn,
   selectCanPlayCardInCurrentPhase,
   selectCanRepositionInCurrentPhase,
   selectCanTakeMainPhaseActions,
@@ -165,7 +164,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
   const loggedCommandSerialRef = useRef(0);
-  const canEndTurn = rewardOverlay === null && selectCanEndTurn(reducerState.mutable);
   const canPlayerAct = rewardOverlay === null &&
     selectCanTakeMainPhaseActions(reducerState.mutable, "player");
   const canPlayerReposition = canBattlefieldSideReposition("player");
@@ -1113,14 +1111,12 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             />
           </div>
           <BattleActionBar
-            canEndTurn={canEndTurn}
             futureCount={futureCount}
             historyCount={historyCount}
             isBattleLogOpen={isBattleLogOpen}
             isDesktopInspectorLayout={isDesktopInspectorLayout}
             isInspectorDrawerOpen={isInspectorDrawerOpen}
             isOpponentHandRevealed={isOpponentHandRevealed}
-            state={reducerState.mutable}
             onCommand={handleCommand}
             onOpenForesee={(_side, _count) => undefined}
             onRedo={() => dispatch({ type: "REDO" })}
