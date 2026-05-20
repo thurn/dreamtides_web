@@ -435,16 +435,29 @@
 }
 
 .status-strip {
+  flex: 0 0 clamp(116px, 12vw, 142px);
+  width: clamp(116px, 12vw, 142px);
+  max-height: calc(100% - 12px);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 6px 14px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 10px;
   border-radius: 8px;
   background: var(--surface);
   border: 1px solid var(--line);
   font-size: 12px;
-  margin: 6px 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.status-strip.enemy {
+  align-self: flex-start;
+}
+
+.status-strip.player {
+  align-self: flex-end;
 }
 
 .status-strip .summary-trigger.active,
@@ -457,11 +470,11 @@
   font-style: italic;
   font-size: 16px;
   color: var(--text-dim);
-  min-width: 50px;
 }
 
 .summary-trigger {
-  min-width: 50px;
+  width: 100%;
+  min-width: 0;
   border: none;
   background: transparent;
   padding: 0;
@@ -475,7 +488,7 @@
 
 .summary-trigger .summary-meta {
   display: block;
-  max-width: 220px;
+  max-width: 100%;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 9px;
   letter-spacing: 0.08em;
@@ -497,26 +510,45 @@
 }
 
 .status-strip .stats {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
+.status-strip .stats.incidental {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height 0.16s ease, opacity 0.16s ease;
+}
+
+.status-strip:hover .stats.incidental,
+.status-strip:focus-within .stats.incidental {
+  max-height: 160px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .stat {
-  padding: 2px 12px;
-  border-left: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
   font-size: 11px;
   color: var(--text-dim);
   user-select: none;
   background: transparent;
-  border-top: none;
-  border-right: none;
-  border-bottom: none;
 }
 
 .stat:first-child {
-  border-left: none;
+  border-left: 1px solid var(--line);
 }
 
 .stat.clickable {
@@ -538,7 +570,6 @@
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--text-faint);
-  margin-right: 6px;
 }
 
 .stat .val {

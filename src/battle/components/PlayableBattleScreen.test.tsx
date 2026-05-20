@@ -231,18 +231,22 @@ describe("PlayableBattleScreen", () => {
         .map((element) => element.getAttribute("data-battle-region")),
     ).toEqual([
       "status-bar",
-      "enemy-status-strip",
       "stack-zone",
+      "player-status-strip",
       "enemy-reserve-row",
       "enemy-deployed-row",
       "judgment-divider",
       "player-deployed-row",
       "player-reserve-row",
-      "player-status-strip",
+      "enemy-status-strip",
       "player-hand-tray",
       "action-bar",
     ]);
     expect(container.querySelector('[data-battle-region="stack-zone"]')?.parentElement?.className)
+      .toContain("battlefield-zone-layout");
+    expect(container.querySelector('[data-battle-region="player-status-strip"]')?.parentElement?.className)
+      .toContain("battlefield-zone-layout");
+    expect(container.querySelector('[data-battle-region="enemy-status-strip"]')?.parentElement?.className)
       .toContain("battlefield-zone-layout");
     expect(container.textContent).toContain("You");
     expect(container.textContent).toContain("Enemy");

@@ -776,20 +776,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             turnNumber={reducerState.mutable.turnNumber}
           />
           <div className="stage">
-            <BattleStatusStrip
-              side="enemy"
-              sideState={reducerState.mutable.sides.enemy}
-              state={reducerState.mutable}
-              subtitle={battleInit.enemyDescriptor.subtitle}
-              title={battleInit.enemyDescriptor.name}
-              isActive={reducerState.mutable.activeSide === "enemy"}
-              isSummarySelected={openSideSummary === "enemy"}
-              onOpenZone={(zone) => handleOpenZoneBrowser("enemy", zone)}
-              onZoneDrop={handleZoneDrop}
-              pendingDragCardId={pendingDrag?.battleCardId ?? null}
-              pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-              onSelectSummary={() => handleSelectSummary("enemy")}
-            />
             {isOpponentHandRevealed ? (
               <div className="opponent-hand-zone">
                 <BattleOpponentHandTray
@@ -825,6 +811,20 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 onResolveToVoid={(battleCardId, side) => handleCommand(
                   createMoveCardToZoneCommand(battleCardId, side, "void", "battlefield"),
                 )}
+              />
+              <BattleStatusStrip
+                side="player"
+                sideState={reducerState.mutable.sides.player}
+                state={reducerState.mutable}
+                subtitle={battleInit.dreamcallerSummary?.title ?? ""}
+                title={battleInit.dreamcallerSummary?.name ?? "Player"}
+                isActive={reducerState.mutable.activeSide === "player"}
+                isSummarySelected={openSideSummary === "player"}
+                onOpenZone={(zone) => handleOpenZoneBrowser("player", zone)}
+                onZoneDrop={handleZoneDrop}
+                pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
+                onSelectSummary={() => handleSelectSummary("player")}
               />
               <ScaledBattlefield>
                 <div className="battlefield">
@@ -914,21 +914,21 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   />
                 </div>
               </ScaledBattlefield>
+              <BattleStatusStrip
+                side="enemy"
+                sideState={reducerState.mutable.sides.enemy}
+                state={reducerState.mutable}
+                subtitle={battleInit.enemyDescriptor.subtitle}
+                title={battleInit.enemyDescriptor.name}
+                isActive={reducerState.mutable.activeSide === "enemy"}
+                isSummarySelected={openSideSummary === "enemy"}
+                onOpenZone={(zone) => handleOpenZoneBrowser("enemy", zone)}
+                onZoneDrop={handleZoneDrop}
+                pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
+                onSelectSummary={() => handleSelectSummary("enemy")}
+              />
             </div>
-            <BattleStatusStrip
-              side="player"
-              sideState={reducerState.mutable.sides.player}
-              state={reducerState.mutable}
-              subtitle={battleInit.dreamcallerSummary?.title ?? ""}
-              title={battleInit.dreamcallerSummary?.name ?? "Player"}
-              isActive={reducerState.mutable.activeSide === "player"}
-              isSummarySelected={openSideSummary === "player"}
-              onOpenZone={(zone) => handleOpenZoneBrowser("player", zone)}
-              onZoneDrop={handleZoneDrop}
-              pendingDragCardId={pendingDrag?.battleCardId ?? null}
-              pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-              onSelectSummary={() => handleSelectSummary("player")}
-            />
           </div>
           <div className="player-hand-zone">
             <BattleHandTray

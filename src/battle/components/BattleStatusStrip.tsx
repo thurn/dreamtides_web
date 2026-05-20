@@ -66,7 +66,7 @@ export function BattleStatusStrip({
           {subtitle === "" ? "" : ` · ${subtitle}`}
         </span>
       </button>
-      <div className="stats">
+      <div className="stats" data-battle-status-primary={side}>
         <div
           data-battle-stat={`${side}:score`}
           data-battle-value={String(sideState.score)}
@@ -87,6 +87,8 @@ export function BattleStatusStrip({
             {String(sideState.currentEnergy)}/{String(sideState.maxEnergy)}
           </span>
         </div>
+      </div>
+      <div className="stats incidental" data-battle-status-incidental={side}>
         <div
           data-battle-stat={`${side}:spark`}
           data-battle-value={String(totalDeployedSpark)}

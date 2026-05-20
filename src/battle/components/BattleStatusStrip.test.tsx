@@ -80,20 +80,26 @@ afterEach(() => {
 });
 
 describe("BattleStatusStrip", () => {
-  it("renders the mockup labels and opens the visible browseable zones", () => {
+  it("renders compact combat state and keeps browseable zones in incidental details", () => {
     const { container, onOpenZone, onSelectSummary, root } = mount();
+    const primaryStats = container.querySelector('[data-battle-status-primary="player"]');
+    const incidentalStats = container.querySelector('[data-battle-status-incidental="player"]');
 
     expect(container.textContent).toContain("You");
-    expect(container.textContent).toContain("PTS");
-    expect(container.textContent).toContain("E");
-    expect(container.textContent).toContain("◆");
-    expect(container.textContent).toContain("H");
-    expect(container.textContent).toContain("D");
-    expect(container.textContent).toContain("V");
-    expect(container.textContent).toContain("B");
-    expect(container.textContent).toContain("9");
-    expect(container.textContent).toContain("2/4");
-    expect(container.textContent).toContain("3");
+    expect(primaryStats?.textContent).toContain("PTS");
+    expect(primaryStats?.textContent).toContain("E");
+    expect(primaryStats?.textContent).toContain("9");
+    expect(primaryStats?.textContent).toContain("2/4");
+    expect(primaryStats?.textContent).not.toContain("H");
+    expect(primaryStats?.textContent).not.toContain("D");
+    expect(primaryStats?.textContent).not.toContain("V");
+    expect(primaryStats?.textContent).not.toContain("B");
+    expect(incidentalStats?.textContent).toContain("◆");
+    expect(incidentalStats?.textContent).toContain("H");
+    expect(incidentalStats?.textContent).toContain("D");
+    expect(incidentalStats?.textContent).toContain("V");
+    expect(incidentalStats?.textContent).toContain("B");
+    expect(incidentalStats?.textContent).toContain("3");
 
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-side-summary="player"]')?.click();
