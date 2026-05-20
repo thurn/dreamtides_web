@@ -27,9 +27,6 @@ import { formatBattleCardId } from "../state/create-initial-state";
 import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
-  selectCanPlayCardInCurrentPhase,
-  selectCanRepositionInCurrentPhase,
-  selectCanTakeMainPhaseActions,
   selectFailureOverlayResult,
   selectIsOpponentHandCardHidden,
 } from "../state/selectors";
@@ -164,10 +161,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
   const loggedCommandSerialRef = useRef(0);
-  const canPlayerAct = rewardOverlay === null &&
-    selectCanTakeMainPhaseActions(reducerState.mutable, "player");
-  const canPlayerReposition = canBattlefieldSideReposition("player");
-  const canEnemyReposition = canBattlefieldSideReposition("enemy");
+  const canPlayerAct = true;
   const historyCount = reducerState.history.past.length;
   const futureCount = reducerState.history.future.length;
   const failureResult = selectFailureOverlayResult(reducerState.mutable.result);
@@ -218,22 +212,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       ? selectBattleCardLocation(reducerState.mutable, inspectorSelection.battleCardId)?.side ?? null
       : null
     : null;
-
-  function canPlayHandCardWithoutOverride(battleCardId: string): boolean {
-    const location = selectBattleCardLocation(reducerState.mutable, battleCardId);
-    const card = reducerState.mutable.cardInstances[battleCardId];
-
-    return location?.side === "player" &&
-      (location.zone === "hand" || location.zone === "void") &&
-      card !== undefined &&
-      reducerState.mutable.sides.player.currentEnergy >= card.definition.energyCost &&
-      selectCanPlayCardInCurrentPhase(reducerState.mutable, battleCardId);
-  }
-
-  function canBattlefieldSideReposition(side: BattleSide): boolean {
-    return rewardOverlay === null &&
-      selectCanRepositionInCurrentPhase(reducerState.mutable, side);
-  }
 
   function isOpponentHandCardLocallyHidden(battleCardId: string): boolean {
     const location = selectBattleCardLocation(reducerState.mutable, battleCardId);
@@ -348,9 +326,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   }
 
   function handleHandCardDoubleClick(battleCardId: string): void {
-    if (!canPlayerAct || !canPlayHandCardWithoutOverride(battleCardId)) {
-      return;
-    }
     setSelection({ kind: "card", battleCardId });
     setIsInspectorDrawerOpen(true);
     handleCommand({
@@ -367,7 +342,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   }
 
   function handleBattlefieldSlotClick(target: BattleFieldSlotAddress, isOccupied: boolean): void {
-    const allowPlayCard = target.side === "player" && canPlayerAct && !isOccupied;
+    const allowPlayCard = target.side === "player" && !isOccupied;
     if (handleSelectedBattlefieldTargetClick(target, allowPlayCard)) {
       return;
     }
@@ -399,9 +374,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     }
 
     if (allowPlayCard && location?.zone === "hand" && location.side === target.side) {
-      if (!canPlayHandCardWithoutOverride(selection.battleCardId)) {
-        return false;
-      }
       handleCommand({
         id: "PLAY_CARD",
         battleCardId: selection.battleCardId,
@@ -423,8 +395,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
 
     if (
       location?.side === target.side &&
-      (location.zone === "reserve" || location.zone === "deployed") &&
-      canBattlefieldSideReposition(location.side)
+      (location.zone === "reserve" || location.zone === "deployed")
     ) {
       if (location.zone !== target.zone) {
         handleCommand({
@@ -597,12 +568,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   function handleCardDragStart(battleCardId: string): void {
     const location = selectBattleCardLocation(reducerState.mutable, battleCardId);
     const instance = reducerState.mutable.cardInstances[battleCardId];
-    if (location?.side === "player" && location.zone === "hand" && !canPlayHandCardWithoutOverride(battleCardId)) {
-      setSelection({ kind: "card", battleCardId });
-      setIsInspectorDrawerOpen(true);
-      setContextMenu(null);
-      return;
-    }
     if (instance !== undefined) {
       setPendingDrag({
         battleCardId,
@@ -671,9 +636,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   function handleStackDrop(): void {
     const location = selectBattleCardLocation(reducerState.mutable, pendingDrag?.battleCardId ?? null);
     if (pendingDrag === null || location?.zone !== "hand") {
-      return;
-    }
-    if (!canPlayHandCardWithoutOverride(pendingDrag.battleCardId)) {
       return;
     }
     handleCommand({
@@ -898,11 +860,10 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             {isOpponentHandRevealed ? (
               <div className="opponent-hand-zone">
                 <BattleOpponentHandTray
-                  canInteract={rewardOverlay === null &&
-                    selectCanTakeMainPhaseActions(reducerState.mutable, "enemy")}
+                  canInteract={true}
                   currentEnergy={reducerState.mutable.sides.enemy.currentEnergy}
                   hand={reducerState.mutable.sides.enemy.hand}
-                  isCardPlayable={(battleCardId) => selectCanPlayCardInCurrentPhase(reducerState.mutable, battleCardId)}
+                  isCardPlayable={undefined}
                   selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
                   state={reducerState.mutable}
                   onCardClick={handleHandCardClick}
@@ -979,7 +940,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     side="enemy"
                     zone="reserve"
                     state={reducerState.mutable}
-                    canInteract={canEnemyReposition}
+                    canInteract={true}
                     selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
                     selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
                     selectionAnchor={battlefieldSelectionAnchor}
@@ -1000,7 +961,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     side="enemy"
                     zone="deployed"
                     state={reducerState.mutable}
-                    canInteract={canEnemyReposition}
+                    canInteract={true}
                     selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
                     selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
                     selectionAnchor={battlefieldSelectionAnchor}
@@ -1025,7 +986,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     side="player"
                     zone="deployed"
                     state={reducerState.mutable}
-                    canInteract={canPlayerReposition}
+                    canInteract={true}
                     selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
                     selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
                     selectionAnchor={battlefieldSelectionAnchor}
@@ -1046,7 +1007,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     side="player"
                     zone="reserve"
                     state={reducerState.mutable}
-                    canInteract={canPlayerReposition}
+                    canInteract={true}
                     selectedCardId={inspectorSelection?.kind === "card" ? inspectorSelection.battleCardId : null}
                     selectedSlot={inspectorSelection?.kind === "slot" ? inspectorSelection.target : null}
                     selectionAnchor={battlefieldSelectionAnchor}
@@ -1090,7 +1051,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           />
           <div className="player-hand-zone">
             <BattleHandTray
-              canInteract={canPlayerAct}
+              canInteract={true}
               compact={isOpponentHandRevealed}
               currentEnergy={reducerState.mutable.sides.player.currentEnergy}
               hand={reducerState.mutable.sides.player.hand}
@@ -1107,7 +1068,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               onCardHoverStart={handleBattlefieldCardHoverStart}
               onCardHoverMove={handleBattlefieldCardHoverMove}
               onCardHoverEnd={handleBattlefieldCardHoverEnd}
-              isCardPlayable={(battleCardId) => selectCanPlayCardInCurrentPhase(reducerState.mutable, battleCardId)}
+              isCardPlayable={undefined}
             />
           </div>
           <BattleActionBar

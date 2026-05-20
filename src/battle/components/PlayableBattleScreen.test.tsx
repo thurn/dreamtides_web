@@ -1054,10 +1054,17 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("blocks unaffordable hand plays from normal battlefield clicks but exposes override labels in the context menu", () => {
+  it("plays a hand card into reserve regardless of energy and exposes override labels in the context menu", () => {
     const { container, root } = renderScreen((state) => {
       state.sides.player.currentEnergy = 0;
       state.sides.player.maxEnergy = 0;
+      // Give all hand cards a cost that exceeds available energy.
+      for (const battleCardId of state.sides.player.hand) {
+        state.cardInstances[battleCardId].definition = {
+          ...state.cardInstances[battleCardId].definition,
+          energyCost: 99,
+        };
+      }
     });
     const firstHandCard = container.querySelector<HTMLElement>(
       '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
@@ -1066,6 +1073,7 @@ describe("PlayableBattleScreen", () => {
     if (firstHandCard === null) {
       throw new Error("expected first hand card");
     }
+    const firstHandCardId = firstHandCard.getAttribute("data-battle-card-id");
 
     act(() => {
       firstHandCard.click();
@@ -1075,22 +1083,10 @@ describe("PlayableBattleScreen", () => {
       container.querySelector<HTMLElement>('[data-slot-id="player-reserve-R0"]')?.click();
     });
 
+    // Even with zero energy the card is played — gating is removed.
     expect(
       container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id"),
-    ).toBeNull();
-
-    act(() => {
-      firstHandCard.dispatchEvent(new MouseEvent("contextmenu", {
-        bubbles: true,
-        cancelable: true,
-        clientX: 200,
-        clientY: 140,
-      }));
-    });
-
-    const menu = container.querySelector("[data-battle-context-menu]");
-    expect(menu?.textContent).toContain("Override cost → reserve");
-    expect(menu?.textContent).toContain("Override cost → deploy");
+    ).toBe(firstHandCardId);
 
     act(() => {
       root.unmount();
@@ -1454,6 +1450,47 @@ describe("PlayableBattleScreen", () => {
       result: "defeat",
       siteLabel: "Battle",
     });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("double-clicking a hand card whose cost exceeds energy during night phase still dispatches PLAY_CARD", () => {
+    let overpriceCardId = "";
+    const { container, root } = renderScreen((state) => {
+      state.phase = "night";
+      state.activeSide = "enemy";
+      state.sides.player.currentEnergy = 0;
+      state.sides.player.maxEnergy = 0;
+      overpriceCardId = state.sides.player.hand[0] ?? "";
+      if (overpriceCardId === "") {
+        throw new Error("expected player hand card");
+      }
+      state.cardInstances[overpriceCardId].definition = {
+        ...state.cardInstances[overpriceCardId].definition,
+        energyCost: 99,
+      };
+    }, { enableAi: false });
+
+    const handCard = container.querySelector<HTMLElement>(
+      `[data-battle-region="player-hand-tray"] [data-battle-card-id="${overpriceCardId}"]`,
+    );
+    if (handCard === null) {
+      throw new Error("expected player hand card element");
+    }
+
+    act(() => {
+      handCard.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    // The PLAY_CARD command should have been dispatched, landing the card on
+    // the battlefield (removed from hand).
+    expect(
+      container.querySelector(
+        `[data-battle-region="player-hand-tray"] [data-battle-card-id="${overpriceCardId}"]`,
+      ),
+    ).toBeNull();
 
     act(() => {
       root.unmount();
