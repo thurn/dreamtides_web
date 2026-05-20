@@ -1,11 +1,8 @@
 import "../battle.css";
 
 import type {
-  CSSProperties,
-  KeyboardEvent as ReactKeyboardEvent,
   MouseEvent as ReactMouseEvent,
   MouseEvent as ReactPointerMouseEvent,
-  PointerEvent as ReactPointerEvent,
   ReactNode,
 } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -68,20 +65,6 @@ import {
 } from "./battle-ui-commands";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
-const DEFAULT_BATTLE_ZONE_LAYOUT = {
-  battlefieldHeight: 246,
-  opponentHandHeight: 126,
-  playerHandHeight: 276,
-};
-const BATTLE_ZONE_LAYOUT_LIMITS = {
-  battlefield: { min: 196, max: 430 },
-  opponentHand: { min: 70, max: 180 },
-  playerHand: { min: 150, max: 380 },
-};
-const BATTLE_ZONE_KEYBOARD_STEP = 18;
-
-type BattleZoneLayout = typeof DEFAULT_BATTLE_ZONE_LAYOUT;
-type BattleZoneResizeTarget = "battlefield" | "opponent-hand" | "player-hand";
 
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
 type RewardOverlayState = {
@@ -145,8 +128,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const [isInspectorDrawerOpen, setIsInspectorDrawerOpen] = useState(readIsDesktopInspectorLayout());
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
   const [isOpponentHandRevealed, setIsOpponentHandRevealed] = useState(false);
-  const [battleZoneLayout, setBattleZoneLayout] = useState<BattleZoneLayout>(DEFAULT_BATTLE_ZONE_LAYOUT);
-  const [activeResizeTarget, setActiveResizeTarget] = useState<BattleZoneResizeTarget | null>(null);
   const [openZoneBrowser, setOpenZoneBrowser] = useState<ZoneBrowserState>(null);
   const [selection, setSelection] = useState<BattleSelection>(null);
   const [pendingDrag, setPendingDrag] = useState<PendingDragState>(null);
@@ -169,11 +150,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     !isResultOverlayDismissed;
   const showReopenPill = reducerState.mutable.result !== null &&
     isResultOverlayDismissed;
-  const battleZoneStyle = {
-    "--battlefield-zone-height": `${String(battleZoneLayout.battlefieldHeight)}px`,
-    "--opponent-hand-zone-height": `${String(battleZoneLayout.opponentHandHeight)}px`,
-    "--player-hand-zone-height": `${String(battleZoneLayout.playerHandHeight)}px`,
-  } as CSSProperties;
 
   useEffect(() => {
     const serial = battleState.reducer.commandSerial;
@@ -660,45 +636,9 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     setHoverPreview(null);
   }
 
-  function handleZoneResizePointerDown(
-    target: BattleZoneResizeTarget,
-    event: ReactPointerEvent<HTMLDivElement>,
-  ): void {
-    event.preventDefault();
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-    const startY = event.clientY;
-    const startLayout = battleZoneLayout;
-    setActiveResizeTarget(target);
-
-    function handlePointerMove(moveEvent: PointerEvent): void {
-      setBattleZoneLayout(resizeBattleZoneLayout(startLayout, target, moveEvent.clientY - startY));
-    }
-
-    function handlePointerUp(): void {
-      setActiveResizeTarget(null);
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", handlePointerUp);
-    }
-
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerup", handlePointerUp, { once: true });
-  }
-
-  function handleZoneResizeKeyboard(
-    target: BattleZoneResizeTarget,
-    event: ReactKeyboardEvent<HTMLDivElement>,
-  ): void {
-    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
-      return;
-    }
-    event.preventDefault();
-    const deltaY = event.key === "ArrowDown" ? BATTLE_ZONE_KEYBOARD_STEP : -BATTLE_ZONE_KEYBOARD_STEP;
-    setBattleZoneLayout((current) => resizeBattleZoneLayout(current, target, deltaY));
-  }
-
   return (
     <div
-      className={`battle-shell ${activeResizeTarget !== null ? "resizing-battle-zone" : ""}`}
+      className="battle-shell"
       data-battle-inspector-open={isInspectorDrawerOpen ? "true" : "false"}
       data-battle-opponent-hand-revealed={isOpponentHandRevealed ? "true" : "false"}
     >
@@ -807,7 +747,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
         />
       ) : null}
       <div className="battle-app-shell">
-        <div className="battle-main" style={battleZoneStyle}>
+        <div className="battle-main">
           <BattleStatusBar
             activeSide={reducerState.mutable.activeSide}
             battleId={battleInit.battleId}
@@ -869,22 +809,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 />
               </div>
             ) : null}
-            {isOpponentHandRevealed ? (
-              <BattleZoneResizeHandle
-                target="opponent-hand"
-                label="Resize opponent hand zone"
-                isActive={activeResizeTarget === "opponent-hand"}
-                onKeyDown={handleZoneResizeKeyboard}
-                onPointerDown={handleZoneResizePointerDown}
-              />
-            ) : null}
-            <BattleZoneResizeHandle
-              target="battlefield"
-              label="Resize battlefield zone"
-              isActive={activeResizeTarget === "battlefield"}
-              onKeyDown={handleZoneResizeKeyboard}
-              onPointerDown={handleZoneResizePointerDown}
-            />
             <div className="battlefield-zone-layout">
               <BattleStackZone
                 state={reducerState.mutable}
@@ -1006,13 +930,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               onSelectSummary={() => handleSelectSummary("player")}
             />
           </div>
-          <BattleZoneResizeHandle
-            target="player-hand"
-            label="Resize player hand zone"
-            isActive={activeResizeTarget === "player-hand"}
-            onKeyDown={handleZoneResizeKeyboard}
-            onPointerDown={handleZoneResizePointerDown}
-          />
           <div className="player-hand-zone">
             <BattleHandTray
               canInteract={true}
@@ -1242,73 +1159,6 @@ function BattleStackZone({
       </div>
     </section>
   );
-}
-
-function BattleZoneResizeHandle({
-  target,
-  label,
-  isActive,
-  onKeyDown,
-  onPointerDown,
-}: {
-  target: BattleZoneResizeTarget;
-  label: string;
-  isActive: boolean;
-  onKeyDown: (target: BattleZoneResizeTarget, event: ReactKeyboardEvent<HTMLDivElement>) => void;
-  onPointerDown: (target: BattleZoneResizeTarget, event: ReactPointerEvent<HTMLDivElement>) => void;
-}) {
-  return (
-    <div
-      aria-label={label}
-      aria-orientation="horizontal"
-      className={`battle-zone-resize-handle ${isActive ? "active" : ""}`}
-      data-battle-resize-handle={target}
-      role="separator"
-      tabIndex={0}
-      onKeyDown={(event) => onKeyDown(target, event)}
-      onPointerDown={(event) => onPointerDown(target, event)}
-    />
-  );
-}
-
-function resizeBattleZoneLayout(
-  layout: BattleZoneLayout,
-  target: BattleZoneResizeTarget,
-  deltaY: number,
-): BattleZoneLayout {
-  switch (target) {
-    case "battlefield":
-      return {
-        ...layout,
-        battlefieldHeight: clamp(
-          layout.battlefieldHeight - deltaY,
-          BATTLE_ZONE_LAYOUT_LIMITS.battlefield.min,
-          BATTLE_ZONE_LAYOUT_LIMITS.battlefield.max,
-        ),
-      };
-    case "opponent-hand":
-      return {
-        ...layout,
-        opponentHandHeight: clamp(
-          layout.opponentHandHeight + deltaY,
-          BATTLE_ZONE_LAYOUT_LIMITS.opponentHand.min,
-          BATTLE_ZONE_LAYOUT_LIMITS.opponentHand.max,
-        ),
-      };
-    case "player-hand":
-      return {
-        ...layout,
-        playerHandHeight: clamp(
-          layout.playerHandHeight - deltaY,
-          BATTLE_ZONE_LAYOUT_LIMITS.playerHand.min,
-          BATTLE_ZONE_LAYOUT_LIMITS.playerHand.max,
-        ),
-      };
-  }
-}
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, Math.round(value)));
 }
 
 function BattleLiveRegion({

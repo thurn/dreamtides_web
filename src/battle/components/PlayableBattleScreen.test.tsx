@@ -287,38 +287,15 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("resizes battle zones from splitter handles", () => {
+  it("uses fixed battle zone sizing without splitter handles", () => {
     const { container, root } = renderScreen();
     const battleMain = container.querySelector<HTMLElement>(".battle-main");
-    const battlefieldHandle = container.querySelector<HTMLElement>(
-      '[data-battle-resize-handle="battlefield"]',
-    );
-    const playerHandHandle = container.querySelector<HTMLElement>(
-      '[data-battle-resize-handle="player-hand"]',
-    );
 
     expect(battleMain).not.toBeNull();
-    expect(battlefieldHandle).not.toBeNull();
-    expect(playerHandHandle).not.toBeNull();
-    expect(battleMain?.style.getPropertyValue("--battlefield-zone-height")).toBe("246px");
-
-    act(() => {
-      battlefieldHandle?.dispatchEvent(new KeyboardEvent("keydown", {
-        bubbles: true,
-        key: "ArrowUp",
-      }));
-    });
-
-    expect(battleMain?.style.getPropertyValue("--battlefield-zone-height")).toBe("264px");
-
-    act(() => {
-      playerHandHandle?.dispatchEvent(new KeyboardEvent("keydown", {
-        bubbles: true,
-        key: "ArrowDown",
-      }));
-    });
-
-    expect(battleMain?.style.getPropertyValue("--player-hand-zone-height")).toBe("258px");
+    expect(container.querySelector("[data-battle-resize-handle]")).toBeNull();
+    expect(container.querySelector('[role="separator"]')).toBeNull();
+    expect(battleMain?.style.getPropertyValue("--battlefield-zone-height")).toBe("");
+    expect(battleMain?.style.getPropertyValue("--player-hand-zone-height")).toBe("");
 
     act(() => {
       root.unmount();

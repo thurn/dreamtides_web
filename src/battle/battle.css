@@ -957,29 +957,6 @@
   display: none;
 }
 
-.battle-zone-resize-handle {
-  flex: 0 0 8px;
-  min-height: 8px;
-  margin: 1px 22px;
-  border-radius: 999px;
-  background: rgba(124, 58, 237, 0.18);
-  border: 1px solid transparent;
-  cursor: row-resize;
-}
-
-.battle-zone-resize-handle:hover,
-.battle-zone-resize-handle:focus-visible,
-.battle-zone-resize-handle.active {
-  border-color: var(--line-strong);
-  background: rgba(168, 85, 247, 0.34);
-  outline: none;
-}
-
-.battle-shell.resizing-battle-zone {
-  user-select: none;
-  cursor: row-resize;
-}
-
 .actionbar {
   padding: 8px 22px 12px;
   display: flex;
