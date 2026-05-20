@@ -91,6 +91,28 @@ and spent Dreamsign pools.
 - Shops, battle rewards, and similar generators prefer package-adjacent content
   but fall back to the broader pool if nothing overlaps.
 
+## Battle Prototype Behavior
+
+The playable battle screen (`src/battle/`) is a manual control sandbox. The
+player drives every piece of battle state directly, and the engine performs
+no automatic resolution.
+
+- **Phase** is a display-only label. The player advances it with the phase
+  increment control or sets it directly by clicking a phase chip; the chosen
+  phase has no mechanical effect.
+- **Energy, score, and draws** are manual. The player adjusts current and max
+  energy, score, and card draws through the battle inspector debug edits.
+  Playing a card costs no energy, and energy never changes on its own.
+- **Cards drag freely between any zones on either side.** A single
+  unrestricted move handles every card gesture, with no affordability,
+  timing, ownership, or active-side checks. Cards can cross between the player
+  and enemy sides.
+- **The battle outcome is manual.** The result is set with the Force Result
+  and Skip to Rewards controls. There is no automatic judgment or Challenge
+  resolution and no victory, defeat, or draw detection.
+
+The full battle design lives in `docs/battle_rules/battle_rules.md`.
+
 ## Card Data Normalization
 
 The TOML source has a few field variants that `setup-assets.mjs` normalizes to

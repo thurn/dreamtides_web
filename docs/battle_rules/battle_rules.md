@@ -12,6 +12,15 @@ challenger, and each lane is resolved as a challenge (spark comparison, lower
 dissolves) or a triumph (unpaired challenger scores points equal to its
 spark).
 
+This document describes the design of the full game. The quest prototype in
+this repository currently implements battle mode as a manual control sandbox:
+the player drives phase, energy, score, draws, card movement, and the battle
+outcome by hand through the battle inspector and the Force Result / Skip to
+Rewards controls, and the engine applies no automatic energy changes,
+judgment or Challenge resolution, or victory detection. See
+`docs/quest_prototype/quest_prototype.md` for the prototype's current battle
+behavior.
+
 ## Table of Contents
 
 - [Objective](#objective)
