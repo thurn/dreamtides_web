@@ -44,9 +44,12 @@ describe("END_TURN undo/redo redo-stack coverage (bug-003)", () => {
       {
         type: "APPLY_COMMAND",
         command: {
-          id: "PLAY_CARD",
-          battleCardId: playerHandCardId,
-          target: { side: "player", zone: "reserve", slotId: "R0" },
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "MOVE_CARD_TO_ZONE",
+            battleCardId: playerHandCardId,
+            destination: { side: "player", zone: "reserve", slotId: "R0" },
+          },
         },
       },
       battleInit,
@@ -356,9 +359,16 @@ function casesFromFactory(): DebugUndoCase[] {
       },
     },
     {
-      name: "PLAY_CARD",
+      name: "MOVE_CARD_TO_ZONE (hand to reserve)",
       buildState: createTestBattle,
-      command: { id: "PLAY_CARD", battleCardId: playerHandCardId },
+      command: {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: playerHandCardId,
+          destination: { side: "player", zone: "reserve", slotId: "R0" },
+        },
+      },
     },
     {
       name: "ADD_CARD_NOTE",
@@ -474,14 +484,14 @@ function casesFromFactory(): DebugUndoCase[] {
       },
     },
     {
-      name: "MOVE_CARD",
+      name: "MOVE_CARD_TO_ZONE (reserve to deployed)",
       buildState: () => {
         const fresh = createTestBattle();
         const character = fresh.state.sides.player.hand.find((battleCardId) =>
           fresh.state.cardInstances[battleCardId].definition.battleCardKind === "character",
         );
         if (character === undefined) {
-          throw new Error("No character in hand to seed MOVE_CARD reserve");
+          throw new Error("No character in hand to seed reserve repositioning");
         }
         fresh.state.sides.player.hand = fresh.state.sides.player.hand.filter(
           (battleCardId) => battleCardId !== character,
@@ -490,11 +500,14 @@ function casesFromFactory(): DebugUndoCase[] {
         return fresh;
       },
       command: {
-        id: "MOVE_CARD",
-        battleCardId: seed.state.sides.player.hand.find((battleCardId) =>
-          seed.state.cardInstances[battleCardId].definition.battleCardKind === "character",
-        ) ?? playerHandCardId,
-        target: { side: "player", zone: "deployed", slotId: "D0" },
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: seed.state.sides.player.hand.find((battleCardId) =>
+            seed.state.cardInstances[battleCardId].definition.battleCardKind === "character",
+          ) ?? playerHandCardId,
+          destination: { side: "player", zone: "deployed", slotId: "D0" },
+        },
       },
     },
     {

@@ -333,15 +333,22 @@ describe("battleReducer", () => {
     expect(redone?.restored.mutable).toEqual(expectedWithAi);
   });
 
-  it("recomputes battle result after a committed play", () => {
+  it("recomputes battle result after a committed move edit", () => {
     const { battleInit, state } = createTestBattle();
     const battleCardId = findPlayerEventCardId(state);
 
     state.sides.player.score = battleInit.scoreToWin;
 
-    const reduced = battleReducer(
+    const reduced = applyBattleCommand(
       createBattleReducerState(state),
-      { type: "PLAY_CARD", battleCardId },
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: { side: "player", zone: "void" },
+        },
+      },
       battleInit,
     );
 
@@ -351,61 +358,7 @@ describe("battleReducer", () => {
     expect(reduced.lastTransition?.resultChange?.result).toBe("victory");
   });
 
-  it("moves a hand card to the manual stack, pays cost, and resolves it to void", () => {
-    const { battleInit, state } = createTestBattle();
-    const battleCardId = findPlayerEventCardId(state);
-    const startingEnergy = state.sides.player.currentEnergy;
-    const cost = state.cardInstances[battleCardId].definition.energyCost;
-
-    const stacked = applyBattleCommand(
-      createBattleReducerState(state),
-      { id: "PLAY_CARD_TO_STACK", battleCardId },
-      battleInit,
-    );
-
-    expect(stacked.mutable.sides.player.hand).not.toContain(battleCardId);
-    expect(stacked.mutable.sides.player.currentEnergy).toBe(startingEnergy - cost);
-    expect(stacked.mutable.stack?.map((entry) => entry.battleCardId)).toEqual([battleCardId]);
-
-    const resolved = applyBattleCommand(
-      stacked,
-      {
-        id: "MOVE_STACK_CARD",
-        battleCardId,
-        target: { side: "player", zone: "void" },
-      },
-      battleInit,
-    );
-
-    expect(resolved.mutable.stack).toEqual([]);
-    expect(resolved.mutable.sides.player.void).toContain(battleCardId);
-    expect(resolved.history.past).toHaveLength(2);
-  });
-
-  it("resolves PLAY_CARD from the active side's hand without assuming player.hand", () => {
-    const { battleInit, state } = createTestBattle();
-    const battleCardId = state.sides.enemy.hand.find(
-      (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "character",
-    );
-
-    if (battleCardId === undefined) {
-      throw new Error("Missing enemy character card");
-    }
-
-    state.activeSide = "enemy";
-
-    const reduced = battleReducer(
-      createBattleReducerState(state),
-      { type: "PLAY_CARD", battleCardId },
-      battleInit,
-    );
-
-    expect(reduced.mutable.sides.enemy.hand).not.toContain(battleCardId);
-    expect(reduced.mutable.sides.enemy.reserve.R0).toBe(battleCardId);
-    expect(reduced.history.past).toHaveLength(1);
-  });
-
-  it("treats same-slot moves as a no-op without creating history", () => {
+  it("treats same-slot MOVE_CARD_TO_ZONE moves as a no-op without creating history", () => {
     const { battleInit, state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
 
@@ -413,15 +366,14 @@ describe("battleReducer", () => {
     state.sides.player.reserve.R0 = battleCardId;
 
     const reducerState = createBattleReducerState(state);
-    const reduced = battleReducer(
+    const reduced = applyBattleCommand(
       reducerState,
       {
-        type: "MOVE_CARD",
-        battleCardId,
-        target: {
-          side: "player",
-          zone: "reserve",
-          slotId: "R0",
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: { side: "player", zone: "reserve", slotId: "R0" },
         },
       },
       battleInit,
@@ -431,43 +383,48 @@ describe("battleReducer", () => {
     expect(reduced.history.past).toHaveLength(0);
   });
 
-  it("permits gameplay actions outside the active side's main phase (E-16, H-1)", () => {
+  it("permits MOVE_CARD_TO_ZONE moves outside the active side's main phase (E-16, H-1)", () => {
     const { battleInit, state } = createTestBattle();
     const handCardId = state.sides.player.hand[0];
     const fieldCardId = state.sides.player.hand[1];
 
     state.activeSide = "enemy";
-    state.sides.player.currentEnergy = 5;
     state.sides.player.hand = state.sides.player.hand.filter((cardId) => cardId !== fieldCardId);
     state.sides.player.reserve.R0 = fieldCardId;
 
-    const playReduced = battleReducer(
-      createBattleReducerState(state),
-      { type: "PLAY_CARD", battleCardId: handCardId },
-      battleInit,
-    );
-
-    // PLAY_CARD goes through even though the enemy is the active side.
-    expect(playReduced.mutable.sides.player.hand).not.toContain(handCardId);
-    expect(playReduced.history.past).toHaveLength(1);
-
-    state.activeSide = "player";
-    state.phase = "challenge";
-    const moveReduced = battleReducer(
+    // Moving a player hand card goes through even though the enemy is active.
+    const playReduced = applyBattleCommand(
       createBattleReducerState(state),
       {
-        type: "MOVE_CARD",
-        battleCardId: fieldCardId,
-        target: {
-          side: "player",
-          zone: "deployed",
-          slotId: "D0",
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: handCardId,
+          destination: { side: "player", zone: "reserve", slotId: "R1" },
         },
       },
       battleInit,
     );
 
-    // MOVE_CARD is permitted during judgment phase per H-1.
+    expect(playReduced.mutable.sides.player.hand).not.toContain(handCardId);
+    expect(playReduced.history.past).toHaveLength(1);
+
+    state.activeSide = "player";
+    state.phase = "challenge";
+    const moveReduced = applyBattleCommand(
+      createBattleReducerState(state),
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: fieldCardId,
+          destination: { side: "player", zone: "deployed", slotId: "D0" },
+        },
+      },
+      battleInit,
+    );
+
+    // The move is permitted during the challenge phase per H-1.
     expect(moveReduced.mutable.sides.player.reserve.R0).toBeNull();
     expect(moveReduced.mutable.sides.player.deployed.D0).toBe(fieldCardId);
     expect(moveReduced.history.past).toHaveLength(1);
@@ -506,31 +463,16 @@ describe("battleReducer", () => {
 
   it("emits representative battle_proto events through the logger", () => {
     const { battleInit, state } = createTestBattle();
-    const battleCardId = state.sides.player.hand.find(
-      (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "character",
-    );
 
-    if (battleCardId === undefined) {
-      throw new Error("Missing player character card");
-    }
-
-    const played = battleReducer(
-      createBattleReducerState(state),
-      { type: "PLAY_CARD", battleCardId },
-      battleInit,
-    );
     const endedTurn = battleReducer(
       createBattleReducerState(state),
       { type: "END_TURN" },
       battleInit,
     );
-    emitBattleTransitionLogEvents(played.lastTransition);
     emitBattleTransitionLogEvents(endedTurn.lastTransition);
 
     expect(getLogEntries().map((entry) => entry.event)).toEqual(
       expect.arrayContaining([
-        "battle_proto_play_card",
-        "battle_proto_energy_changed",
         "battle_proto_phase_changed",
         "battle_proto_judgment",
       ]),
@@ -540,71 +482,29 @@ describe("battleReducer", () => {
   it("records stable history metadata fields for command entries", () => {
     const { battleInit, state } = createTestBattle();
     const battleCardId = state.sides.player.hand[0];
-    const reduced = battleReducer(
+    const reduced = applyBattleCommand(
       createBattleReducerState(state),
       {
-        type: "PLAY_CARD",
-        battleCardId,
-      },
-      battleInit,
-    );
-
-    expect(reduced.history.past[0].metadata.commandId).toBe("PLAY_CARD");
-    expect(reduced.history.past[0].metadata.label.length).toBeGreaterThan(0);
-    expect(reduced.history.past[0].metadata.kind).toBe("zone-move");
-    expect(reduced.history.past[0].metadata.isComposite).toBe(false);
-    expect(reduced.history.past[0].metadata.actor).toBe("player");
-    expect(reduced.history.past[0].metadata.targets).toEqual([
-      { kind: "card", ref: battleCardId },
-    ]);
-    expect(typeof reduced.history.past[0].metadata.timestamp).toBe("number");
-    expect(reduced.history.past[0].metadata.undoPayload).toBeNull();
-    expect(reduced.history.past[0].metadata.sourceSurface.length).toBeGreaterThan(0);
-  });
-
-  it("threads sourceSurface and selectedCardId onto battle_proto_play_card", () => {
-    const { battleInit, state } = createTestBattle();
-    const battleCardId = state.sides.player.hand.find(
-      (cardId) => state.cardInstances[cardId]?.definition.battleCardKind === "character",
-    );
-
-    if (battleCardId === undefined) {
-      throw new Error("Missing player character card");
-    }
-
-    const reduced = battleReducer(
-      createBattleReducerState(state),
-      {
-        type: "PLAY_CARD",
-        battleCardId,
-        metadata: {
-          commandId: "PLAY_CARD",
-          label: "Play Test",
-          kind: "zone-move",
-          isComposite: false,
-          actor: "player",
-          sourceSurface: "hand-tray",
-          targets: [{ kind: "card", ref: battleCardId }],
-          timestamp: 0,
-          undoPayload: null,
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: { side: "player", zone: "reserve", slotId: "R0" },
         },
       },
       battleInit,
     );
 
-    const playEvent = reduced.lastTransition?.logEvents.find(
-      (entry) => entry.event === "battle_proto_play_card",
+    expect(reduced.history.past[0].metadata.commandId).toBe("MOVE_CARD_TO_ZONE");
+    expect(reduced.history.past[0].metadata.label.length).toBeGreaterThan(0);
+    expect(reduced.history.past[0].metadata.kind).toBe("zone-move");
+    expect(reduced.history.past[0].metadata.actor).toBe("debug");
+    expect(reduced.history.past[0].metadata.targets[0]).toEqual(
+      { kind: "card", ref: battleCardId },
     );
-
-    expect(playEvent).toBeDefined();
-    expect(playEvent?.fields).toMatchObject({
-      battleId: battleInit.battleId,
-      turnNumber: state.turnNumber,
-      phase: state.phase,
-      activeSide: state.activeSide,
-      sourceSurface: "hand-tray",
-      selectedCardId: battleCardId,
-    });
+    expect(typeof reduced.history.past[0].metadata.timestamp).toBe("number");
+    expect(reduced.history.past[0].metadata.undoPayload).toBeNull();
+    expect(reduced.history.past[0].metadata.sourceSurface.length).toBeGreaterThan(0);
   });
 
   it("threads sourceSurface onto battle_proto_phase_changed for end-turn", () => {
@@ -790,9 +690,16 @@ describe("battleReducer", () => {
     }
 
     resetLog();
-    const played = battleReducer(
+    const played = applyBattleCommand(
       createBattleReducerState(state),
-      { type: "PLAY_CARD", battleCardId },
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: { side: "player", zone: "reserve", slotId: "R0" },
+        },
+      },
       battleInit,
     );
     const endedTurn = battleReducer(
@@ -1017,9 +924,7 @@ describe("battleReducer", () => {
     });
   });
 
-  it("records a same-side same-zone reserve swap via MOVE_CARD (bug-006, M-9)", () => {
-    // Bug 018 / bug-006: intra-zone reserve→reserve swap through the reducer
-    // must commit a history entry (resolveMoveCard no longer blocks it).
+  it("records a same-zone reserve swap via SWAP_BATTLEFIELD_SLOTS (bug-006, M-9)", () => {
     const { battleInit, state } = createTestBattle();
     const cardA = state.sides.player.hand[0];
     const cardB = state.sides.player.hand[1];
@@ -1029,12 +934,15 @@ describe("battleReducer", () => {
     state.sides.player.reserve.R0 = cardA;
     state.sides.player.reserve.R2 = cardB;
 
-    const reduced = battleReducer(
+    const reduced = applyBattleCommand(
       createBattleReducerState(state),
       {
-        type: "MOVE_CARD",
-        battleCardId: cardA,
-        target: { side: "player", zone: "reserve", slotId: "R2" },
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "SWAP_BATTLEFIELD_SLOTS",
+          source: { side: "player", zone: "reserve", slotId: "R0" },
+          target: { side: "player", zone: "reserve", slotId: "R2" },
+        },
       },
       battleInit,
     );
@@ -1044,9 +952,9 @@ describe("battleReducer", () => {
     expect(reduced.history.past).toHaveLength(1);
   });
 
-  it("permits MOVE_CARD on the enemy battlefield for cross-zone debug moves (H-1)", () => {
-    // Bug 018 / M-9: the reducer must permit enemy-side cross-zone MOVE_CARD
-    // even while the player is the active side (debug tooling, H-1).
+  it("permits MOVE_CARD_TO_ZONE on the enemy battlefield for cross-zone moves (H-1)", () => {
+    // M-9 / H-1: the move must apply on the enemy side even while the player
+    // is the active side (debug-style editing).
     const { battleInit, state } = createTestBattle();
     const enemyCardId = state.sides.enemy.hand[0];
     state.sides.enemy.hand = state.sides.enemy.hand.filter(
@@ -1054,12 +962,15 @@ describe("battleReducer", () => {
     );
     state.sides.enemy.deployed.D1 = enemyCardId;
 
-    const reduced = battleReducer(
+    const reduced = applyBattleCommand(
       createBattleReducerState(state),
       {
-        type: "MOVE_CARD",
-        battleCardId: enemyCardId,
-        target: { side: "enemy", zone: "reserve", slotId: "R3" },
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: enemyCardId,
+          destination: { side: "enemy", zone: "reserve", slotId: "R3" },
+        },
       },
       battleInit,
     );
@@ -1135,160 +1046,6 @@ describe("battleReducer", () => {
       winner: null,
       playerScore: 12,
       enemyScore: 10,
-    });
-  });
-});
-
-describe("battleReducer permissive PLAY_CARD / MOVE_CARD (E-16, H-1, H-16)", () => {
-  it("permits PLAY_CARD while the phase is endOfTurn", () => {
-    const { battleInit, state } = createTestBattle();
-    state.phase = "ending";
-    state.sides.player.currentEnergy = 5;
-    const battleCardId = state.sides.player.hand.find(
-      (cardId) => state.cardInstances[cardId].definition.battleCardKind === "character",
-    );
-    if (battleCardId === undefined) throw new Error("Missing character card");
-
-    const reduced = battleReducer(
-      createBattleReducerState(state),
-      { type: "PLAY_CARD", battleCardId },
-      battleInit,
-    );
-
-    expect(reduced.mutable.sides.player.hand).not.toContain(battleCardId);
-    expect(Object.values(reduced.mutable.sides.player.reserve)).toContain(battleCardId);
-  });
-
-  it("permits PLAY_CARD during the enemy's active turn for a player hand card", () => {
-    const { battleInit, state } = createTestBattle();
-    state.activeSide = "enemy";
-    state.phase = "day";
-    state.sides.player.currentEnergy = 5;
-    const battleCardId = state.sides.player.hand.find(
-      (cardId) => state.cardInstances[cardId].definition.battleCardKind === "character",
-    );
-    if (battleCardId === undefined) throw new Error("Missing character card");
-
-    const reduced = battleReducer(
-      createBattleReducerState(state),
-      { type: "PLAY_CARD", battleCardId },
-      battleInit,
-    );
-
-    expect(reduced.mutable.sides.player.hand).not.toContain(battleCardId);
-    expect(Object.values(reduced.mutable.sides.player.reserve)).toContain(battleCardId);
-  });
-
-  it("dispatches PLAY_CARD for a quest-modified character reclaimed from void", () => {
-    const baseState = makeBattleTestState();
-    const stateWithReclaim = {
-      ...baseState,
-      deck: baseState.deck.map((entry) =>
-        entry.entryId === "deck-2"
-          ? {
-              ...entry,
-              keywordModification: { reclaim: 2 },
-            }
-          : entry,
-      ),
-    };
-    const battleInit = createBattleInit({
-      battleEntryKey: "site-7::2::dreamscape-2",
-      site: makeBattleTestSite(),
-      state: stateWithReclaim,
-      cardDatabase: makeBattleTestCardDatabase(),
-      dreamcallers: makeBattleTestDreamcallers(),
-    });
-    const state = createInitialBattleState(battleInit);
-    const battleCardId = Object.values(state.cardInstances).find(
-      (card) => card.definition.sourceDeckEntryId === "deck-2",
-    )?.battleCardId;
-    if (battleCardId === undefined) throw new Error("Missing modified character card");
-
-    state.sides.player.deck = state.sides.player.deck.filter((id) => id !== battleCardId);
-    state.sides.player.hand = state.sides.player.hand.filter((id) => id !== battleCardId);
-    state.sides.player.void = [battleCardId];
-    state.sides.player.currentEnergy = 2;
-
-    const reduced = applyBattleCommand(
-      createBattleReducerState(state),
-      {
-        id: "PLAY_CARD",
-        battleCardId,
-        sourceSurface: "zone-browser-void",
-      },
-      battleInit,
-    );
-
-    expect(state.cardInstances[battleCardId].definition).toMatchObject({
-      battleCardKind: "character",
-      keywordModification: { reclaim: 2 },
-      reclaimCost: 2,
-    });
-    expect(reduced.mutable.sides.player.void).not.toContain(battleCardId);
-    expect(reduced.mutable.sides.player.reserve.R0).toBe(battleCardId);
-    expect(reduced.mutable.sides.player.currentEnergy).toBe(0);
-    expect(reduced.lastTransition?.metadata).toMatchObject({
-      commandId: "PLAY_CARD",
-      sourceSurface: "zone-browser-void",
-    });
-    expect(reduced.lastTransition?.logEvents[0].fields).toMatchObject({
-      battleCardId,
-      sourceZone: "void",
-      targetZone: "reserve",
-    });
-  });
-
-  it("permits a debug MOVE_CARD on the enemy battlefield during an enemy main phase", () => {
-    const { battleInit, state } = createTestBattle();
-    state.activeSide = "enemy";
-    state.phase = "day";
-    const enemyCardId = state.sides.enemy.hand[0];
-    state.sides.enemy.hand = state.sides.enemy.hand.filter((id) => id !== enemyCardId);
-    state.sides.enemy.reserve.R0 = enemyCardId;
-
-    const reduced = battleReducer(
-      createBattleReducerState(state),
-      {
-        type: "MOVE_CARD",
-        battleCardId: enemyCardId,
-        target: { side: "enemy", zone: "deployed", slotId: "D0" },
-      },
-      battleInit,
-    );
-
-    expect(reduced.mutable.sides.enemy.reserve.R0).toBeNull();
-    expect(reduced.mutable.sides.enemy.deployed.D0).toBe(enemyCardId);
-  });
-
-  it("emits a battle_proto_play_rejected log for a cross-side PLAY_CARD target (bug-048)", () => {
-    const { battleInit, state } = createTestBattle();
-    state.sides.player.currentEnergy = 5;
-    const battleCardId = state.sides.player.hand.find(
-      (cardId) => state.cardInstances[cardId].definition.battleCardKind === "character",
-    );
-    if (battleCardId === undefined) throw new Error("Missing character card");
-
-    const reduced = battleReducer(
-      createBattleReducerState(state),
-      {
-        type: "PLAY_CARD",
-        battleCardId,
-        target: { side: "enemy", zone: "reserve", slotId: "R0" },
-      },
-      battleInit,
-    );
-
-    // The play is rejected (card stays in hand) and a rejection log is emitted
-    // directly via `logEvent` since the reducer suppresses transitions for
-    // unchanged states (bug-048).
-    expect(reduced.mutable.sides.player.hand).toContain(battleCardId);
-    const rejectionEntry = getLogEntries().find(
-      (entry) => entry.event === "battle_proto_play_rejected",
-    );
-    expect(rejectionEntry).toMatchObject({
-      battleCardId,
-      reason: "cross_side_target",
     });
   });
 });

@@ -160,25 +160,6 @@ export function selectDeployedSpark(
   return selectEffectiveSparkOrZero(state, state.sides[side].deployed[slotId]);
 }
 
-export function selectCanTakeMainPhaseActions(
-  state: BattleMutableState,
-  side: BattleSide,
-): boolean {
-  return state.result === null &&
-    state.activeSide === side &&
-    (state.phase === "day" || state.phase === "dusk" || state.phase === "night" || state.phase === "main");
-}
-
-export function selectCanEndTurn(state: BattleMutableState): boolean {
-  return state.result === null &&
-    state.phase !== "dawn" &&
-    state.phase !== "challenge" &&
-    state.phase !== "ending" &&
-    state.phase !== "startOfTurn" &&
-    state.phase !== "draw" &&
-    state.phase !== "judgment";
-}
-
 export function selectCanPlayCardInCurrentPhase(
   state: BattleMutableState,
   battleCardId: string,
@@ -230,15 +211,6 @@ export function selectHasAffordableFastSpeedHandPlay(
 export function selectShouldEndTurnFromDay(state: BattleMutableState): boolean {
   return state.phase === "day" &&
     !selectHasAffordableFastSpeedHandPlay(state, state.activeSide);
-}
-
-export function selectCanRepositionInCurrentPhase(
-  state: BattleMutableState,
-  side: BattleSide,
-): boolean {
-  return state.result === null &&
-    state.activeSide === side &&
-    (state.phase === "day" || state.phase === "dusk" || state.phase === "main");
 }
 
 export function selectNaturalBattleResult(

@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { createBattleInit } from "../integration/create-battle-init";
 import { createInitialBattleState } from "./create-initial-state";
 import {
-  selectCanEndTurn,
   selectEffectiveSpark,
   selectEffectiveSparkOrZero,
   selectFailureOverlayResult,
@@ -19,33 +18,6 @@ import type {
   BattleHistoryEntryKind,
   BattleHistoryEntryMetadata,
 } from "../types";
-
-describe("selectCanEndTurn", () => {
-  it("allows manual phase advancement during visible player-facing phases", () => {
-    const state = createInitialBattleState(
-      createBattleInit({
-        battleEntryKey: "site-7::2::dreamscape-2",
-        site: makeBattleTestSite(),
-        state: makeBattleTestState(),
-        cardDatabase: makeBattleTestCardDatabase(),
-        dreamcallers: makeBattleTestDreamcallers(),
-      }),
-    );
-
-    expect(selectCanEndTurn(state)).toBe(true);
-
-    state.activeSide = "enemy";
-    expect(selectCanEndTurn(state)).toBe(true);
-
-    state.activeSide = "player";
-    state.phase = "challenge";
-    expect(selectCanEndTurn(state)).toBe(false);
-
-    state.phase = "day";
-    state.result = "victory";
-    expect(selectCanEndTurn(state)).toBe(false);
-  });
-});
 
 describe("selectEffectiveSpark", () => {
   it("clamps negative printedSpark + sparkDelta to zero per spec E-5", () => {

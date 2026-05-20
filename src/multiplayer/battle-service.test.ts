@@ -398,8 +398,12 @@ describe("applyBattleCommandToRoom", () => {
     const next = applyBattleCommandToRoom({
       room: initialRoom,
       command: {
-        id: "PLAY_CARD",
-        battleCardId: initial.sides.player.hand[0],
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: initial.sides.player.hand[0],
+          destination: { side: "player", zone: "reserve", slotId: "R0" },
+        },
         sourceSurface: "hand-tray",
       },
       now: "2026-05-09T00:00:00.000Z",
@@ -412,7 +416,7 @@ describe("applyBattleCommandToRoom", () => {
     expect(updatedBattle.reducer.commandSerial).toBe(1);
     expect(updatedBattle.reducer.history.past.length).toBe(1);
     expect(updatedBattle.reducer.lastActivityKind).toBe("command");
-    expect(next.actionLog!["action-1"].action).toBe("battle:PLAY_CARD");
+    expect(next.actionLog!["action-1"].action).toBe("battle:DEBUG_EDIT");
     expect(next.actionLog!["action-1"].source).toBe("hand-tray");
     expect(next.actionLog!["action-1"].summary.commandSerial).toBe(1);
     expect(next.metadata.updatedAt).toBe("2026-05-09T00:00:00.000Z");
@@ -518,8 +522,12 @@ function buildRoomWithOneCommittedCommand() {
   return applyBattleCommandToRoom({
     room: initialRoom,
     command: {
-      id: "PLAY_CARD",
-      battleCardId: initial.sides.player.hand[0],
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: initial.sides.player.hand[0],
+        destination: { side: "player", zone: "reserve", slotId: "R0" },
+      },
       sourceSurface: "hand-tray",
     },
     now: "2026-05-09T00:00:00.000Z",
@@ -623,7 +631,7 @@ describe("undoBattleInRoom and redoBattleInRoom", () => {
 describe("resetBattleInRoom", () => {
   it("clears history and resets mutable to the prepared initial state", () => {
     // Reuse the seeded helper from the undo/redo tests — that helper builds
-    // a room with one committed PLAY_CARD in history.past.
+    // a room with one committed move command in history.past.
     const seeded = buildRoomWithOneCommittedCommand();
     const next = resetBattleInRoom({
       room: seeded,

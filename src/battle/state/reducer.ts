@@ -1,7 +1,5 @@
 import {
   createEndTurnHistoryMetadata,
-  createMoveCardHistoryMetadata,
-  createPlayCardHistoryMetadata,
   createRecomputeResultHistoryMetadata,
   createRunAiTurnHistoryMetadata,
 } from "../debug/commands";
@@ -18,20 +16,11 @@ import type {
 } from "../types";
 import {
   applyBattleResult,
-  createEmptyTransitionData,
   evaluateBattleResult,
 } from "../engine/result";
-import {
-  resolveMoveCard,
-  resolvePlayCard,
-  resolvePlayCardToStack,
-  resolveStackCardMove,
-} from "../engine/play-card";
 import { advanceAfterEndTurn, passBattlePhase } from "../engine/turn-flow";
 import { runAiTurn } from "../ai/run-ai-turn";
 import {
-  selectBattleCardLocation,
-  selectBattlefieldCardLocation,
   selectShouldEndTurnFromDay,
 } from "./selectors";
 import {
@@ -97,86 +86,6 @@ export function battleReducer(
         state,
         metadata,
         (mutableState) => runAiTurn(mutableState, battleInit),
-      );
-    }
-    case "PLAY_CARD": {
-      const metadata = action.metadata
-        ?? createPlayCardHistoryMetadata(state.mutable, action.battleCardId);
-      const context = createEngineEmissionContext(metadata);
-      return commitGameplayTransition(
-        state,
-        metadata,
-        (mutableState) => {
-          // Spec E-16/H-1/H-16: player card play must never be blocked for
-          // affordability, timing, or active side. `resolvePlayCard` owns
-          // zone validation for hand plays and Reclaim plays from void, then
-          // emits a rejection log on any other mismatch (bug-048). The UI
-          // layer blocks further plays after victory via the reward surface;
-          // defeat and draw remain editable by spec.
-          const card = mutableState.cardInstances[action.battleCardId];
-          const location = selectBattleCardLocation(mutableState, action.battleCardId);
-
-          if (
-            card === undefined ||
-            location === null
-          ) {
-            return {
-              state: mutableState,
-              transition: createEmptyTransitionData(),
-            };
-          }
-
-          return resolvePlayCard(mutableState, action.battleCardId, action.target, context);
-        },
-        battleInit,
-        context,
-      );
-    }
-    case "PLAY_CARD_TO_STACK": {
-      const context = createEngineEmissionContext(action.metadata);
-      return commitGameplayTransition(
-        state,
-        action.metadata,
-        (mutableState) => resolvePlayCardToStack(mutableState, action.battleCardId, context),
-        battleInit,
-        context,
-      );
-    }
-    case "MOVE_STACK_CARD": {
-      const context = createEngineEmissionContext(action.metadata);
-      return commitGameplayTransition(
-        state,
-        action.metadata,
-        (mutableState) => resolveStackCardMove(mutableState, action.battleCardId, action.target, context),
-        battleInit,
-        context,
-      );
-    }
-    case "MOVE_CARD": {
-      const metadata = action.metadata
-        ?? createMoveCardHistoryMetadata(state.mutable, action.battleCardId, action.target);
-      const context = createEngineEmissionContext(metadata);
-      return commitGameplayTransition(
-        state,
-        metadata,
-        (mutableState) => {
-          // Spec H-1: debug operations can edit both player and opponent
-          // state, so battlefield MOVE_CARD is permitted regardless of the
-          // active side or current phase. Validity is handled inside
-          // `resolveMoveCard` (valid slot address, same-side move, etc.).
-          const location = selectBattlefieldCardLocation(mutableState, action.battleCardId);
-
-          if (location === null) {
-            return {
-              state: mutableState,
-              transition: createEmptyTransitionData(),
-            };
-          }
-
-          return resolveMoveCard(mutableState, action.battleCardId, action.target, context);
-        },
-        battleInit,
-        context,
       );
     }
     case "DEBUG_EDIT": {

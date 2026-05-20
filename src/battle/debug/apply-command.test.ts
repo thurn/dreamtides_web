@@ -17,21 +17,24 @@ describe("applyBattleCommand", () => {
     const reduced = applyBattleCommand(
       createBattleReducerState(state),
       {
-        id: "PLAY_CARD",
-        battleCardId,
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: { side: "player", zone: "reserve", slotId: "R0" },
+        },
       },
       battleInit,
     );
 
     expect(reduced.history.past).toHaveLength(1);
-    expect(reduced.history.past[0].metadata.commandId).toBe("PLAY_CARD");
-    expect(reduced.history.past[0].metadata.label).toContain("Play ");
+    expect(reduced.history.past[0].metadata.commandId).toBe("MOVE_CARD_TO_ZONE");
+    expect(reduced.history.past[0].metadata.label).toContain("Move ");
     expect(reduced.history.past[0].metadata.kind).toBe("zone-move");
-    expect(reduced.history.past[0].metadata.isComposite).toBe(false);
-    expect(reduced.history.past[0].metadata.actor).toBe("player");
-    expect(reduced.history.past[0].metadata.targets).toEqual([
+    expect(reduced.history.past[0].metadata.actor).toBe("debug");
+    expect(reduced.history.past[0].metadata.targets[0]).toEqual(
       { kind: "card", ref: battleCardId },
-    ]);
+    );
     expect(typeof reduced.history.past[0].metadata.timestamp).toBe("number");
     expect(reduced.history.past[0].metadata.undoPayload).toBeNull();
   });
@@ -379,8 +382,12 @@ describe("applyBattleCommand", () => {
     const handCommand = applyBattleCommand(
       createBattleReducerState(state),
       {
-        id: "PLAY_CARD",
-        battleCardId,
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: { side: "player", zone: "reserve", slotId: "R0" },
+        },
         sourceSurface: "hand-tray",
       },
       battleInit,
@@ -388,11 +395,11 @@ describe("applyBattleCommand", () => {
     const after = Date.now();
 
     const metadata = handCommand.history.past[0].metadata;
-    expect(metadata.commandId).toBe("PLAY_CARD");
+    expect(metadata.commandId).toBe("MOVE_CARD_TO_ZONE");
     expect(metadata.kind).toBe("zone-move");
-    expect(metadata.actor).toBe("player");
+    expect(metadata.actor).toBe("debug");
     expect(metadata.sourceSurface).toBe("hand-tray");
-    expect(metadata.targets).toEqual([{ kind: "card", ref: battleCardId }]);
+    expect(metadata.targets[0]).toEqual({ kind: "card", ref: battleCardId });
     expect(metadata.undoPayload).toBeNull();
     expect(metadata.timestamp).toBeGreaterThanOrEqual(before);
     expect(metadata.timestamp).toBeLessThanOrEqual(after);

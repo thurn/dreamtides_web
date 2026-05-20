@@ -19,10 +19,6 @@ import type {
 export type BattleCommandId =
   | "END_TURN"
   | "PASS_PHASE"
-  | "PLAY_CARD"
-  | "PLAY_CARD_TO_STACK"
-  | "MOVE_STACK_CARD"
-  | "MOVE_CARD"
   | "DEBUG_EDIT"
   | "FORCE_RESULT"
   | "SKIP_TO_REWARDS";
@@ -219,25 +215,6 @@ export type BattleCommand =
     id: "PASS_PHASE";
   } & BattleCommandEnvelope)
   | ({
-    id: "PLAY_CARD";
-    battleCardId: string;
-    target?: BattleFieldSlotAddress;
-  } & BattleCommandEnvelope)
-  | ({
-    id: "PLAY_CARD_TO_STACK";
-    battleCardId: string;
-  } & BattleCommandEnvelope)
-  | ({
-    id: "MOVE_STACK_CARD";
-    battleCardId: string;
-    target: BattleFieldSlotAddress | { side: BattleSide; zone: "void" | "banished" };
-  } & BattleCommandEnvelope)
-  | ({
-    id: "MOVE_CARD";
-    battleCardId: string;
-    target: BattleFieldSlotAddress;
-  } & BattleCommandEnvelope)
-  | ({
     id: "DEBUG_EDIT";
     edit: BattleDebugEdit;
   } & BattleCommandEnvelope)
@@ -268,19 +245,6 @@ export function createBattleCommandMetadata(
         return createEndTurnHistoryMetadata(envelope);
       case "PASS_PHASE":
         return createPassPhaseHistoryMetadata(state, envelope);
-      case "PLAY_CARD":
-        return createPlayCardHistoryMetadata(state, command.battleCardId, envelope);
-      case "PLAY_CARD_TO_STACK":
-        return createPlayCardToStackHistoryMetadata(state, command.battleCardId, envelope);
-      case "MOVE_STACK_CARD":
-        return createMoveStackCardHistoryMetadata(state, command.battleCardId, envelope);
-      case "MOVE_CARD":
-        return createMoveCardHistoryMetadata(
-          state,
-          command.battleCardId,
-          command.target,
-          envelope,
-        );
       case "DEBUG_EDIT":
         return createDebugEditHistoryMetadata(command.edit, state, envelope);
       case "FORCE_RESULT":
@@ -301,23 +265,6 @@ function buildCommandPayload(
     case "PASS_PHASE":
     case "SKIP_TO_REWARDS":
       return {};
-    case "PLAY_CARD":
-      return {
-        battleCardId: command.battleCardId,
-        target: command.target ?? null,
-      };
-    case "PLAY_CARD_TO_STACK":
-      return { battleCardId: command.battleCardId };
-    case "MOVE_STACK_CARD":
-      return {
-        battleCardId: command.battleCardId,
-        target: command.target,
-      };
-    case "MOVE_CARD":
-      return {
-        battleCardId: command.battleCardId,
-        target: command.target,
-      };
     case "DEBUG_EDIT":
       return { edit: command.edit };
     case "FORCE_RESULT":
@@ -350,79 +297,6 @@ export function createPassPhaseHistoryMetadata(
     kind: "battle-flow",
     isComposite: isEndTurnComposite,
     targets: [],
-    envelope,
-    defaultActor: "player",
-  });
-}
-
-export function createPlayCardHistoryMetadata(
-  state: BattleMutableState,
-  battleCardId: string,
-  envelope: BattleCommandMetadataEnvelope = {},
-): BattleHistoryEntryMetadata {
-  // Actor default is "player" to align with `inferCommandActor` used by
-  // `createBattleCommandMetadata`. Both paths now agree that PLAY/MOVE
-  // originate from the player surface by default; actors wanting to record
-  // an enemy/debug dispatch must set `envelope.actor` explicitly (bug-078).
-  return createMetadata({
-    commandId: "PLAY_CARD",
-    label: `Play ${readCardName(state, battleCardId)}`,
-    kind: "zone-move",
-    isComposite: false,
-    targets: [makeCardTarget(battleCardId)],
-    envelope,
-    defaultActor: "player",
-  });
-}
-
-export function createPlayCardToStackHistoryMetadata(
-  state: BattleMutableState,
-  battleCardId: string,
-  envelope: BattleCommandMetadataEnvelope = {},
-): BattleHistoryEntryMetadata {
-  return createMetadata({
-    commandId: "PLAY_CARD_TO_STACK",
-    label: `Stack ${readCardName(state, battleCardId)}`,
-    kind: "zone-move",
-    isComposite: false,
-    targets: [makeCardTarget(battleCardId)],
-    envelope,
-    defaultActor: "player",
-  });
-}
-
-export function createMoveStackCardHistoryMetadata(
-  state: BattleMutableState,
-  battleCardId: string,
-  envelope: BattleCommandMetadataEnvelope = {},
-): BattleHistoryEntryMetadata {
-  return createMetadata({
-    commandId: "MOVE_STACK_CARD",
-    label: `Resolve ${readCardName(state, battleCardId)}`,
-    kind: "zone-move",
-    isComposite: false,
-    targets: [makeCardTarget(battleCardId)],
-    envelope,
-    defaultActor: "player",
-  });
-}
-
-export function createMoveCardHistoryMetadata(
-  state: BattleMutableState,
-  battleCardId: string,
-  target: BattleFieldSlotAddress,
-  envelope: BattleCommandMetadataEnvelope = {},
-): BattleHistoryEntryMetadata {
-  // See `createPlayCardHistoryMetadata`: default actor is "player" (bug-078).
-  // The previous `inferOwnerActor` default caused MOVE_CARD dispatched
-  // against an enemy-controlled card to log `actor: "enemy"` even though
-  // every user-facing MOVE_CARD originates from the player surface.
-  return createMetadata({
-    commandId: "MOVE_CARD",
-    label: `Move ${readCardName(state, battleCardId)}`,
-    kind: "battlefield-position",
-    isComposite: false,
-    targets: [makeCardTarget(battleCardId), makeSlotTarget(target)],
     envelope,
     defaultActor: "player",
   });
@@ -571,10 +445,6 @@ function inferCommandActor(command: BattleCommand): BattleCommandActor {
   switch (command.id) {
     case "END_TURN":
     case "PASS_PHASE":
-    case "PLAY_CARD":
-    case "PLAY_CARD_TO_STACK":
-    case "MOVE_STACK_CARD":
-    case "MOVE_CARD":
       return "player";
     case "DEBUG_EDIT":
     case "FORCE_RESULT":

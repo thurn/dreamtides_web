@@ -30,8 +30,12 @@ describe("battleControllerReducer", () => {
       {
         type: "APPLY_COMMAND",
         command: {
-          id: "PLAY_CARD",
-          battleCardId,
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "MOVE_CARD_TO_ZONE",
+            battleCardId,
+            destination: { side: "player", zone: "reserve", slotId: "R0" },
+          },
         },
       },
       battleInit,
@@ -39,14 +43,13 @@ describe("battleControllerReducer", () => {
 
     expect(reduced.history.past).toHaveLength(1);
     expect(reduced.lastActivity?.kind).toBe("command");
-    expect(reduced.lastActivity?.metadata.commandId).toBe("PLAY_CARD");
-    expect(reduced.lastActivity?.metadata.label).toContain("Play ");
+    expect(reduced.lastActivity?.metadata.commandId).toBe("MOVE_CARD_TO_ZONE");
+    expect(reduced.lastActivity?.metadata.label).toContain("Move ");
     expect(reduced.lastActivity?.metadata.kind).toBe("zone-move");
-    expect(reduced.lastActivity?.metadata.isComposite).toBe(false);
-    expect(reduced.lastActivity?.metadata.actor).toBe("player");
-    expect(reduced.lastActivity?.metadata.targets).toEqual([
+    expect(reduced.lastActivity?.metadata.actor).toBe("debug");
+    expect(reduced.lastActivity?.metadata.targets[0]).toEqual(
       { kind: "card", ref: battleCardId },
-    ]);
+    );
     expect(reduced.lastActivity?.metadata.undoPayload).toBeNull();
     expect(reduced.activityId).toBe(1);
   });
@@ -111,7 +114,14 @@ describe("battleControllerReducer", () => {
       initialState,
       {
         type: "APPLY_COMMAND",
-        command: { id: "PLAY_CARD", battleCardId: playerCardId },
+        command: {
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "MOVE_CARD_TO_ZONE",
+            battleCardId: playerCardId,
+            destination: { side: "player", zone: "reserve", slotId: "R0" },
+          },
+        },
       },
       battleInit,
     );

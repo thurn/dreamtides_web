@@ -120,8 +120,12 @@ describe("useMultiplayerBattle", () => {
       value.dispatch({
         type: "APPLY_COMMAND",
         command: {
-          id: "PLAY_CARD",
-          battleCardId: "p#0",
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "MOVE_CARD_TO_ZONE",
+            battleCardId: "p#0",
+            destination: { side: "player", zone: "reserve", slotId: "R0" },
+          },
           sourceSurface: "hand-tray",
         },
       });
@@ -133,7 +137,7 @@ describe("useMultiplayerBattle", () => {
     expect(commandInput).toBeDefined();
     expect(commandInput?.roomId).toBe("room-1");
     expect(commandInput?.actorId).toBe("client-a");
-    expect(commandInput?.command.id).toBe("PLAY_CARD");
+    expect(commandInput?.command.id).toBe("DEBUG_EDIT");
   });
 
   it("returns null battleState when the room slot is null", () => {
@@ -201,7 +205,7 @@ describe("useMultiplayerBattle", () => {
     // Inject a stand-in past entry so the hydrator has metadata to attach.
     const stubMetadata = {
       label: "Test command",
-      commandId: "PLAY_CARD",
+      commandId: "MOVE_CARD_TO_ZONE",
       targets: [],
       undoPayload: null,
     } as unknown as SharedBattleState["reducer"]["history"]["past"][number]["metadata"];

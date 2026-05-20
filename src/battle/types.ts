@@ -535,29 +535,6 @@ export type BattleReducerAction =
   }
   | { type: "RUN_AI_TURN" }
   | {
-    type: "PLAY_CARD";
-    battleCardId: string;
-    target?: BattleFieldSlotAddress;
-    metadata?: BattleHistoryEntryMetadata;
-  }
-  | {
-    type: "PLAY_CARD_TO_STACK";
-    battleCardId: string;
-    metadata: BattleHistoryEntryMetadata;
-  }
-  | {
-    type: "MOVE_STACK_CARD";
-    battleCardId: string;
-    target: BattleFieldSlotAddress | { side: BattleSide; zone: "void" | "banished" };
-    metadata: BattleHistoryEntryMetadata;
-  }
-  | {
-    type: "MOVE_CARD";
-    battleCardId: string;
-    target: BattleFieldSlotAddress;
-    metadata?: BattleHistoryEntryMetadata;
-  }
-  | {
     type: "DEBUG_EDIT";
     edit: BattleDebugEdit;
     metadata: BattleHistoryEntryMetadata;
