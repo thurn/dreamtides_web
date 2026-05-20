@@ -10,7 +10,6 @@ import {
 } from "../battle/state/history";
 import { createBattleReducerState } from "../battle/state/reducer";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
-import { prepareInitialBattleState } from "../battle/engine/turn-flow";
 import type { BattleCommand } from "../battle/debug/commands";
 import { buildActionLogEntry } from "./action-log";
 import { runRoomTransaction } from "./room-service";
@@ -258,10 +257,7 @@ export function resetBattleInRoom(
   if (room.battleState === null) return room;
 
   const init = room.battleState.init;
-  const initial = prepareInitialBattleState(
-    createInitialBattleState(init),
-    init,
-  ).state;
+  const initial = createInitialBattleState(init);
 
   return {
     ...room,

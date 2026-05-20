@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { BattleDebugEdit } from "../debug/commands";
 import { buttonVariant, typography } from "../design-tokens";
-import { nextStartOfTurnPair } from "../engine/turn-flow";
+import { nextStartOfTurnPair } from "../state/turn-utils";
 import { createNextTurnExpiry } from "../state/notes-utils";
 import type { BattleCardNoteExpiry, BattleMutableState } from "../types";
 

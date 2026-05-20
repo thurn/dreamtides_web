@@ -4,7 +4,6 @@ import { ensureBattleSession } from "../multiplayer/battle-service";
 import type { SharedBattleState } from "../multiplayer/battle-types";
 import { createBattleInit } from "../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
-import { prepareInitialBattleState } from "../battle/engine/turn-flow";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
 import type { QuestState, SiteState } from "../types/quest";
@@ -73,10 +72,7 @@ export function useEnsureBattleSession(input: {
       seedOverride: input.seedOverride,
       enableAi: input.enableAi,
     });
-    const initial = prepareInitialBattleState(
-      createInitialBattleState(init),
-      init,
-    ).state;
+    const initial = createInitialBattleState(init);
 
     ensureBattleSession({
       database: input.database,

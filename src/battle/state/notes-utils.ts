@@ -1,4 +1,4 @@
-import { nextStartOfTurnPair } from "../engine/turn-flow";
+import { nextStartOfTurnPair } from "./turn-utils";
 import { formatSideLabel } from "../ui/format";
 import type { BattleCardNote, BattleCardNoteExpiry, BattleMutableState } from "../types";
 

@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { prepareInitialBattleState } from "../engine/turn-flow";
 import { createBattleInit } from "../integration/create-battle-init";
 import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import type { BattleDeckCardDefinition } from "../types";
@@ -52,7 +51,7 @@ describe("createInitialBattleState", () => {
     ).toBe(false);
   });
 
-  it("runs the turn-1 start-of-turn composite via prepareInitialBattleState without changing the opening 2/2 energy", () => {
+  it("seeds the raw initial state with empty board and no automatic draw or refresh", () => {
     const battleInit = createBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
@@ -60,33 +59,27 @@ describe("createInitialBattleState", () => {
       cardDatabase: makeBattleTestCardDatabase(),
       dreamcallers: makeBattleTestDreamcallers(),
     });
-    const raw = createInitialBattleState(battleInit);
-    const initialPlayerHand = [...raw.sides.player.hand];
-    const initialPlayerDeck = [...raw.sides.player.deck];
 
-    const prepared = prepareInitialBattleState(raw, battleInit);
+    const state = createInitialBattleState(battleInit);
 
-    expect(prepared.state.activeSide).toBe("player");
-    expect(prepared.state.phase).toBe("day");
-    expect(prepared.state.turnNumber).toBe(1);
-    expect(prepared.state.sides.player.currentEnergy).toBe(2);
-    expect(prepared.state.sides.player.maxEnergy).toBe(2);
-    expect(prepared.state.sides.enemy.currentEnergy).toBe(2);
-    expect(prepared.state.sides.enemy.maxEnergy).toBe(2);
-    // Turn 1 skips the Dawn draw.
-    expect(prepared.state.sides.player.hand).toEqual(initialPlayerHand);
-    expect(prepared.state.sides.player.deck).toEqual(initialPlayerDeck);
-
-    const phaseChangedEvents = prepared.transition.logEvents.filter(
-      (entry) => entry.event === "battle_proto_phase_changed",
-    );
-    expect(phaseChangedEvents.map((entry) => entry.fields.phase)).toEqual([
-      "dawn",
-      "day",
-    ]);
-    expect(
-      prepared.transition.logEvents.some((entry) => entry.event === "battle_proto_energy_changed"),
-    ).toBe(true);
+    expect(state.activeSide).toBe("player");
+    expect(state.phase).toBe("day");
+    expect(state.turnNumber).toBe(1);
+    // Opening 2/2 energy on both sides, applied directly with no refresh step.
+    expect(state.sides.player.currentEnergy).toBe(2);
+    expect(state.sides.player.maxEnergy).toBe(2);
+    expect(state.sides.enemy.currentEnergy).toBe(2);
+    expect(state.sides.enemy.maxEnergy).toBe(2);
+    // Opening hand dealt by createInitialBattleState; no extra Dawn draw runs.
+    expect(state.sides.player.hand).toHaveLength(4);
+    // Empty board on both sides.
+    for (const side of ["player", "enemy"] as const) {
+      expect(state.sides[side].void).toEqual([]);
+      expect(state.sides[side].banished).toEqual([]);
+      expect(Object.values(state.sides[side].reserve).every((slot) => slot === null)).toBe(true);
+      expect(Object.values(state.sides[side].deployed).every((slot) => slot === null)).toBe(true);
+    }
+    expect(state.stack ?? []).toEqual([]);
   });
 
   it("initializes per-side pending extra turns and visibility flags required by the spec state model", () => {
