@@ -30,7 +30,7 @@ export function GlossaryDefinitionCard({
       }}
     >
       <p
-        className="text-[10px] font-bold uppercase tracking-[0.18em]"
+        className="text-xs font-bold"
         style={{ color: "#c4b5fd" }}
       >
         {entry.term}

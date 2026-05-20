@@ -131,12 +131,12 @@ export function StartingDeckModal({
               }}
             >
               <div>
-                <p
-                  className="text-[11px] font-semibold uppercase tracking-[0.24em]"
+                <h2
+                  className="text-xl font-bold leading-tight md:text-2xl"
                   style={{ color: "#c4b5fd" }}
                 >
                   Starting Deck
-                </p>
+                </h2>
                 <p
                   className="mt-1 text-sm leading-relaxed"
                   style={{ color: "#e2e8f0" }}

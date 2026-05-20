@@ -278,6 +278,11 @@ describe("StartingDeckModal", () => {
     expect(modal?.textContent).toContain(
       "These are the cards you begin the quest with.",
     );
+    const title = modal?.querySelector("h2");
+    expect(title?.textContent).toBe("Starting Deck");
+    expect(title?.className).toContain("text-xl");
+    expect(title?.className).not.toContain("uppercase");
+    expect(title?.className).not.toContain("tracking-");
     // Both starting cards render.
     expect(
       container.querySelector("[data-testid='starting-deck-modal-card-entry-1']"),

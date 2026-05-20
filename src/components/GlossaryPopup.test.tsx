@@ -169,4 +169,21 @@ describe("GlossaryPopup", () => {
       root.unmount();
     });
   });
+
+  it("renders entry headings with natural capitalization and normal tracking", () => {
+    const { container, root } = mount(
+      <GlossaryPopup isOpen={true} onClose={vi.fn()} />,
+    );
+    const firstHeading = container.querySelector(
+      '[data-testid="glossary-popup-entry"] p',
+    );
+    expect(firstHeading).not.toBeNull();
+    expect(firstHeading?.textContent).toBe(GLOSSARY[0]?.term);
+    expect(firstHeading?.className).not.toContain("uppercase");
+    expect(firstHeading?.className).not.toContain("tracking-");
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
