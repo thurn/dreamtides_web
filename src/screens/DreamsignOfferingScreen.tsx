@@ -196,6 +196,12 @@ export function DreamsignOfferingScreen({
         mandatoryTides={resolvedPackage?.mandatoryTides ?? []}
         optionalTides={resolvedPackage?.optionalSubset ?? []}
         remainingPoolSize={remainingPoolSize}
+        initialDreamsignPoolIds={resolvedPackage?.dreamsignPoolIds ?? []}
+        remainingDreamsignPool={
+          offerRuntime?.remainingDreamsignPool ?? state.remainingDreamsignPool
+        }
+        requestedOptionCount={optionCount}
+        requiredTideGuarantee={false}
       />
     </OfferingScreenLayout>
   );

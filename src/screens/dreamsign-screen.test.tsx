@@ -540,8 +540,8 @@ describe("DreamsignDraftScreen Why Dreamsigns button", () => {
     );
     expect(container.textContent).toContain("Ember's Whisper");
     expect(container.textContent).toContain("Dreamsign Draft");
-    // remainingPoolSize from siteRuntime should be reflected
-    expect(container.textContent).toContain("Remaining in");
+    expect(container.textContent).toContain("candidate set");
+    expect(container.textContent).toContain("1 remaining after reveal");
 
     act(() => {
       root.unmount();

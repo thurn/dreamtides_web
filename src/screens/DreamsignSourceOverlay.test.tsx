@@ -119,7 +119,7 @@ describe("DreamsignSourceOverlay", () => {
     });
   });
 
-  it("labels on-theme dreamsigns without exposing internal tide ids", () => {
+  it("renders concrete tide matches and source pool details for matched dreamsigns", () => {
     const { container, root } = mount(
       <DreamsignSourceOverlay
         isOpen
@@ -130,20 +130,37 @@ describe("DreamsignSourceOverlay", () => {
         mandatoryTides={["core"]}
         optionalTides={["support-a"]}
         remainingPoolSize={3}
+        initialDreamsignPoolIds={[
+          "embers-whisper",
+          "drifter-mark",
+          "glacial-insight",
+        ]}
+        remainingDreamsignPool={["drifter-mark", "glacial-insight"]}
+        requestedOptionCount={3}
+        requiredTideGuarantee
       />,
     );
 
-    expect(container.textContent).toContain("On theme");
-    expect(container.textContent ?? "").not.toMatch(/tide/i);
-    expect(container.textContent ?? "").not.toContain("core");
-    expect(container.textContent ?? "").not.toContain("support-a");
+    expect(container.textContent).toContain("mandatory tide match");
+    expect(container.textContent).toContain("template id");
+    expect(container.textContent).toContain("embers-whisper");
+    expect(container.textContent).toContain("mandatory matches");
+    expect(container.textContent).toContain("core");
+    expect(container.textContent).toContain("optional matches");
+    expect(container.textContent).toContain("support-a");
+    expect(container.textContent).toContain("source pool");
+    expect(container.textContent).toContain("resolved package dreamsignPoolIds");
+    expect(container.textContent).toContain("candidate tides");
+    expect(container.textContent).toContain(
+      "Dreamsign Draft applies required-tide coverage",
+    );
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("labels dreamsigns with no overlapping selected tide as fallback without revealing tide ids", () => {
+  it("shows unmatched template tides for dreamsigns with no selected tide match", () => {
     const { container, root } = mount(
       <DreamsignSourceOverlay
         isOpen
@@ -154,12 +171,14 @@ describe("DreamsignSourceOverlay", () => {
         mandatoryTides={["core"]}
         optionalTides={["support-a"]}
         remainingPoolSize={2}
+        initialDreamsignPoolIds={["drifter-mark"]}
+        remainingDreamsignPool={[]}
       />,
     );
 
-    expect(container.textContent).toContain("Fallback");
-    expect(container.textContent ?? "").not.toMatch(/tide/i);
-    expect(container.textContent ?? "").not.toContain("outsider");
+    expect(container.textContent).toContain("no selected tide match");
+    expect(container.textContent).toContain("other tides");
+    expect(container.textContent).toContain("outsider");
 
     act(() => {
       root.unmount();
@@ -348,8 +367,7 @@ describe("DreamsignSourceOverlay", () => {
     );
 
     expect(container.textContent).toContain("Mystery");
-    // missing-template entries should be shown as fallback (no overlap data)
-    expect(container.textContent).toContain("Fallback");
+    expect(container.textContent).toContain("missing template");
 
     act(() => {
       root.unmount();
