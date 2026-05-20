@@ -4,7 +4,6 @@ import type { BattleCommand } from "../debug/commands";
 import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
-  selectIsBattleCardReservedThisTurn,
 } from "../state/selectors";
 import type {
   BattleInit,
@@ -211,7 +210,6 @@ function CardInspector({
 }) {
   const side = location?.side ?? card.controller;
   const effectiveSpark = Math.max(0, card.definition.printedSpark + card.sparkDelta);
-  const isReservedThisTurn = selectIsBattleCardReservedThisTurn(state, card.battleCardId);
   const locationLabel = location === null
     ? "UNKNOWN"
     : location.zone === "reserve" || location.zone === "deployed"
@@ -224,7 +222,7 @@ function CardInspector({
         <div style={{ "--card-w": "70px", "--card-h": "96px" } as CSSProperties}>
           <BattleCardView
             data={battleCardVisualFromInstance(card)}
-            reserved={isReservedThisTurn}
+            reserved={false}
           />
         </div>
         <div className="meta">
@@ -247,7 +245,6 @@ function CardInspector({
                 Reclaim {String(card.definition.reclaimCost)}
               </span>
             ) : null}
-            {isReservedThisTurn ? <span>reserved</span> : null}
           </div>
           <div className="t">{locationLabel}</div>
         </div>
@@ -260,7 +257,6 @@ function CardInspector({
       <div className="insp-section">
         <h4>Card State</h4>
         <div className="chip-row">
-          {isReservedThisTurn ? <span className="chip active">Reserved</span> : null}
           {card.markers.isPrevented ? <span className="chip active">Prevented</span> : null}
           {card.markers.isCopied ? <span className="chip active">Copied</span> : null}
           <span className="chip">{card.notes.length} Notes</span>

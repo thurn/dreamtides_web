@@ -82,6 +82,42 @@ afterEach(() => {
 });
 
 describe("BattlefieldGrid", () => {
+  it("makes every battlefield card tile draggable and free of the reserved class even when canInteract is false", () => {
+    const state = createState();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <BattlefieldGrid
+          side="player"
+          zone="reserve"
+          state={state}
+          canInteract={false}
+          handSelectionSide={null}
+          pendingDragCardId={null}
+          selectedCardId={null}
+          selectedSlot={null}
+          selectionAnchor={null}
+          onCardClick={() => undefined}
+          onSlotClick={() => undefined}
+        />,
+      );
+    });
+
+    const cards = [...container.querySelectorAll<HTMLElement>("[data-battle-card-id]")];
+    expect(cards.length).toBeGreaterThan(0);
+    for (const card of cards) {
+      expect(card.getAttribute("draggable")).toBe("true");
+      expect(card.classList.contains("reserved")).toBe(false);
+    }
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the row shell, slot ids, selected card state, and support highlights", () => {
     const { container, root, state } = mount("deployed");
     const deployedCardId = state.sides.player.deployed.D0;

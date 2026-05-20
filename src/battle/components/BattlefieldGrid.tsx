@@ -5,7 +5,6 @@ import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
 import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
-  selectIsBattleCardReservedThisTurn,
 } from "../state/selectors";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 import type {
@@ -142,9 +141,9 @@ export function BattlefieldGrid({
                 <BattleCardView
                   battleCardId={instance.battleCardId}
                   data={battleCardVisualFromInstance(instance)}
-                  reserved={selectIsBattleCardReservedThisTurn(state, instance.battleCardId)}
+                  reserved={false}
                   selected={isSelectedCard}
-                  draggable={canInteract}
+                  draggable={true}
                   onClick={(event) => {
                     event.stopPropagation();
                     onCardClick(instance.battleCardId);
