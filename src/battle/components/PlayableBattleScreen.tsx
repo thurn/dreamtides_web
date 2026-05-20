@@ -524,12 +524,10 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           browser={openZoneBrowser}
           isOpponentHandRevealed={isOpponentHandRevealed}
           state={reducerState.mutable}
-          selectedBattleCardId={null}
           onClose={() => setOpenZoneBrowser(null)}
           onCommand={handleCommand}
           onOpenForesee={(side, count) => setOpenForeseeOverlay({ side, count })}
           onOpenReorderMultiple={(side) => setOpenDeckOrderPicker(side)}
-          onSelectBattleCard={() => undefined}
           onCardContextMenu={handleCardContextMenu}
         />
       ) : null}

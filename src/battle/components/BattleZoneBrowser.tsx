@@ -11,11 +11,6 @@ import type {
   BrowseableZone,
 } from "../types";
 import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
-import {
-  createMoveCardToBattlefieldCommand,
-  createMoveCardToDeckCommand,
-  createMoveCardToZoneCommand,
-} from "./battle-ui-commands";
 
 type BattleZoneBrowserSortMode = "current" | "cost" | "spark" | "name";
 type BattleZoneBrowserTypeFilter = "all" | "character" | "event";
@@ -24,12 +19,10 @@ export function BattleZoneBrowser({
   browser,
   isOpponentHandRevealed = false,
   state,
-  selectedBattleCardId,
   onClose,
   onCommand,
   onOpenForesee,
   onOpenReorderMultiple,
-  onSelectBattleCard,
   onCardContextMenu,
 }: {
   browser: {
@@ -38,12 +31,10 @@ export function BattleZoneBrowser({
   };
   isOpponentHandRevealed?: boolean;
   state: BattleMutableState;
-  selectedBattleCardId: string | null;
   onClose: () => void;
   onCommand: (command: BattleCommand) => void;
   onOpenForesee?: (side: BattleSide, count: number) => void;
   onOpenReorderMultiple?: (side: BattleSide) => void;
-  onSelectBattleCard: (battleCardId: string) => void;
   onCardContextMenu?: (
     battleCardId: string,
     event: ReactMouseEvent<HTMLDivElement>,
@@ -53,7 +44,6 @@ export function BattleZoneBrowser({
   const [query, setQuery] = useState("");
   const [sortMode, setSortMode] = useState<BattleZoneBrowserSortMode>("current");
   const [typeFilter, setTypeFilter] = useState<BattleZoneBrowserTypeFilter>("all");
-  const [localSelectedCardId, setLocalSelectedCardId] = useState<string | null>(selectedBattleCardId);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
   const cardIds = state.sides[browser.side][browser.zone];
@@ -64,26 +54,6 @@ export function BattleZoneBrowser({
   const visibleCardIds = useMemo(
     () => applyBrowserFilters(cardIds, state, query, sortMode, typeFilter),
     [cardIds, query, sortMode, state, typeFilter],
-  );
-  const selectedCardId = !isEnemyHandLocallyHidden && localSelectedCardId !== null && cardIds.includes(localSelectedCardId)
-    ? localSelectedCardId
-    : !isEnemyHandLocallyHidden && selectedBattleCardId !== null && cardIds.includes(selectedBattleCardId)
-      ? selectedBattleCardId
-      : null;
-  const selectedCard = selectedCardId === null ? null : state.cardInstances[selectedCardId] ?? null;
-  const moveToBattlefieldCommand = useMemo(
-    () => {
-      if (selectedCard === null) {
-        return null;
-      }
-      return createMoveCardToBattlefieldCommand(
-        state,
-        selectedCard.battleCardId,
-        browser.side,
-        sourceSurface,
-      );
-    },
-    [browser.side, selectedCard, sourceSurface, state],
   );
   const topDeckCount = Math.min(3, cardIds.length);
 
@@ -195,22 +165,12 @@ export function BattleZoneBrowser({
                   key={battleCardId}
                   type="button"
                   data-zone-browser-card-id={battleCardId}
-                  data-selected={String(selectedCardId === battleCardId)}
-                  className={`browse-cell ${selectedCardId === battleCardId ? "selected" : ""}`}
-                  onClick={() => {
-                    if (isHidden) {
-                      setLocalSelectedCardId(null);
-                      return;
-                    }
-                    setLocalSelectedCardId(battleCardId);
-                    onSelectBattleCard(battleCardId);
-                  }}
+                  className="browse-cell"
                 >
                   <BattleCardView
                     battleCardId={battleCardId}
                     data={battleCardVisualFromInstance(instance)}
                     hidden={isHidden}
-                    selected={selectedCardId === battleCardId}
                     onContextMenu={(event) => {
                       event.preventDefault();
                       if (isHidden) {
@@ -229,9 +189,6 @@ export function BattleZoneBrowser({
           </div>
         </div>
         <div className="m-foot">
-          <div className="selected-label">
-            {selectedCard === null ? "Click a card to select." : `Selected: ${selectedCard.definition.name}`}
-          </div>
           {browser.zone === "deck" ? (
             <>
               <button
@@ -301,63 +258,6 @@ export function BattleZoneBrowser({
                 onClick={() => onOpenReorderMultiple?.(browser.side)}
               >
                 Reorder Full Deck
-              </button>
-            </>
-          ) : null}
-          {selectedCard !== null ? (
-            <>
-              <button
-                type="button"
-                data-zone-browser-action="move-hand"
-                className="chip"
-                onClick={() => onCommand(createMoveCardToZoneCommand(selectedCard.battleCardId, browser.side, "hand", sourceSurface))}
-              >
-                → Hand
-              </button>
-              <button
-                type="button"
-                data-zone-browser-action="move-battlefield"
-                className="chip"
-                onClick={() => {
-                  if (moveToBattlefieldCommand !== null) {
-                    onCommand(moveToBattlefieldCommand);
-                  }
-                }}
-                disabled={moveToBattlefieldCommand === null}
-              >
-                → Battlefield
-              </button>
-              <button
-                type="button"
-                data-zone-browser-action="move-void"
-                className="chip"
-                onClick={() => onCommand(createMoveCardToZoneCommand(selectedCard.battleCardId, browser.side, "void", sourceSurface))}
-              >
-                → Void
-              </button>
-              <button
-                type="button"
-                data-zone-browser-action="move-banished"
-                className="chip"
-                onClick={() => onCommand(createMoveCardToZoneCommand(selectedCard.battleCardId, browser.side, "banished", sourceSurface))}
-              >
-                → Banished
-              </button>
-              <button
-                type="button"
-                data-zone-browser-action="move-deck-top"
-                className="chip"
-                onClick={() => onCommand(createMoveCardToDeckCommand(selectedCard.battleCardId, browser.side, "top", sourceSurface))}
-              >
-                → Deck top
-              </button>
-              <button
-                type="button"
-                data-zone-browser-action="move-deck-bottom"
-                className="chip"
-                onClick={() => onCommand(createMoveCardToDeckCommand(selectedCard.battleCardId, browser.side, "bottom", sourceSurface))}
-              >
-                → Deck bot.
               </button>
             </>
           ) : null}

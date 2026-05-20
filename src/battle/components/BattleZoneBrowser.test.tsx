@@ -31,17 +31,17 @@ function mount(
 ): {
   container: HTMLDivElement;
   onCommand: ReturnType<typeof vi.fn>;
+  onCardContextMenu: ReturnType<typeof vi.fn>;
   onOpenForesee: ReturnType<typeof vi.fn>;
   onOpenReorderMultiple: ReturnType<typeof vi.fn>;
-  onSelectBattleCard: ReturnType<typeof vi.fn>;
   root: Root;
   state: ReturnType<typeof createState>;
 } {
   const state = createState();
   const onCommand = vi.fn();
+  const onCardContextMenu = vi.fn();
   const onOpenForesee = vi.fn();
   const onOpenReorderMultiple = vi.fn();
-  const onSelectBattleCard = vi.fn();
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -52,17 +52,25 @@ function mount(
         browser={browser}
         isOpponentHandRevealed={options.isOpponentHandRevealed}
         state={state}
-        selectedBattleCardId={browser.zone === "hand" ? state.sides[browser.side].hand[0] ?? null : null}
         onClose={() => undefined}
         onCommand={onCommand}
         onOpenForesee={onOpenForesee}
         onOpenReorderMultiple={onOpenReorderMultiple}
-        onSelectBattleCard={onSelectBattleCard}
+        onCardContextMenu={onCardContextMenu}
       />,
     );
   });
 
-  return { container, onCommand, onOpenForesee, onOpenReorderMultiple, onSelectBattleCard, root, state };
+  return { container, onCommand, onCardContextMenu, onOpenForesee, onOpenReorderMultiple, root, state };
+}
+
+function dispatchContextMenu(element: Element): MouseEvent {
+  const event = new MouseEvent("contextmenu", {
+    bubbles: true,
+    cancelable: true,
+  });
+  element.dispatchEvent(event);
+  return event;
 }
 
 afterEach(() => {
@@ -79,7 +87,7 @@ beforeEach(() => {
 
 describe("BattleZoneBrowser", () => {
   it("renders the exact mockup header and controls for the deck browser", () => {
-    const { container, onOpenForesee, onOpenReorderMultiple, onSelectBattleCard, root } = mount({ side: "player", zone: "deck" });
+    const { container, onOpenForesee, onOpenReorderMultiple, root } = mount({ side: "player", zone: "deck" });
 
     expect(container.textContent).toContain("Your Deck");
     expect(
@@ -103,19 +111,19 @@ describe("BattleZoneBrowser", () => {
       container.querySelector<HTMLElement>('[data-zone-browser-card-id]')?.click();
     });
 
-    expect(onSelectBattleCard).toHaveBeenCalledTimes(1);
-    expect(container.textContent).toContain("Selected:");
     expect(container.textContent).toContain("Reveal Top");
     expect(container.textContent).toContain("Play From Top");
     expect(container.textContent).toContain("Hide Top");
     expect(container.textContent).toContain("Foresee");
     expect(container.textContent).toContain("Reorder Full Deck");
-    expect(container.textContent).toContain("→ Hand");
-    expect(container.textContent).toContain("→ Battlefield");
-    expect(container.textContent).toContain("→ Void");
-    expect(container.textContent).toContain("→ Banished");
-    expect(container.textContent).toContain("→ Deck top");
-    expect(container.textContent).toContain("→ Deck bot.");
+    expect(container.textContent).not.toContain("Selected:");
+    expect(container.textContent).not.toContain("Click a card to select.");
+    expect(container.textContent).not.toContain("→ Hand");
+    expect(container.textContent).not.toContain("→ Battlefield");
+    expect(container.textContent).not.toContain("→ Void");
+    expect(container.textContent).not.toContain("→ Banished");
+    expect(container.textContent).not.toContain("→ Deck top");
+    expect(container.textContent).not.toContain("→ Deck bot.");
 
     act(() => {
       container.querySelector<HTMLElement>('[data-zone-browser-action="foresee"]')?.click();
@@ -130,7 +138,7 @@ describe("BattleZoneBrowser", () => {
     });
   });
 
-  it("uses the local opponent-hand flag for enemy hand browsing and movement controls", () => {
+  it("uses the local opponent-hand flag for enemy hand browsing and card context menus", () => {
     const hidden = mount({ side: "enemy", zone: "hand" });
 
     expect(hidden.container.querySelector(".hidden-enemy")).not.toBeNull();
@@ -139,16 +147,25 @@ describe("BattleZoneBrowser", () => {
       hidden.container.querySelector<HTMLElement>('[data-zone-browser-card-id]')?.click();
     });
 
-    expect(hidden.onSelectBattleCard).not.toHaveBeenCalled();
     expect(hidden.container.querySelector('[data-zone-browser-action="move-void"]')).toBeNull();
     expect(hidden.container.textContent).not.toContain("Reveal All");
     expect(hidden.container.textContent).not.toContain("Hide All");
+    expect(hidden.container.textContent).not.toContain("Selected:");
+
+    const hiddenCard = hidden.container.querySelector<HTMLElement>("[data-battle-card-id]");
+    expect(hiddenCard).not.toBeNull();
+    if (hiddenCard !== null) {
+      act(() => {
+        dispatchContextMenu(hiddenCard);
+      });
+    }
+    expect(hidden.onCardContextMenu).not.toHaveBeenCalled();
 
     act(() => {
       hidden.root.unmount();
     });
 
-    const { container, onCommand, onSelectBattleCard, root } = mount(
+    const { container, onCardContextMenu, root, state } = mount(
       { side: "enemy", zone: "hand" },
       { isOpponentHandRevealed: true },
     );
@@ -159,29 +176,29 @@ describe("BattleZoneBrowser", () => {
       container.querySelector<HTMLElement>('[data-zone-browser-card-id]')?.click();
     });
 
-    expect(onSelectBattleCard).toHaveBeenCalledTimes(1);
-    expect(container.textContent).toContain("→ Void");
-    expect(container.textContent).toContain("→ Deck top");
+    expect(container.textContent).not.toContain("Selected:");
+    expect(container.textContent).not.toContain("→ Void");
+    expect(container.textContent).not.toContain("→ Deck top");
     expect(container.textContent).not.toContain("Reveal All");
     expect(container.textContent).not.toContain("Hide All");
     expect(container.textContent).not.toContain("Reveal");
     expect(container.textContent).not.toContain("Hide");
 
+    const visibleCard = container.querySelector<HTMLElement>("[data-battle-card-id]");
+    expect(visibleCard).not.toBeNull();
+    let contextMenuDefaultPrevented = false;
     act(() => {
-      container.querySelector<HTMLElement>('[data-zone-browser-action="move-void"]')?.click();
+      if (visibleCard !== null) {
+        contextMenuDefaultPrevented = dispatchContextMenu(visibleCard).defaultPrevented;
+      }
     });
 
-    expect(onCommand.mock.calls[0]?.[0]).toMatchObject({
-      id: "DEBUG_EDIT",
-      edit: {
-        kind: "MOVE_CARD_TO_ZONE",
-        destination: {
-          side: "enemy",
-          zone: "void",
-        },
-      },
-      sourceSurface: "zone-browser-hand",
-    });
+    expect(contextMenuDefaultPrevented).toBe(true);
+    expect(onCardContextMenu).toHaveBeenCalledWith(
+      state.sides.enemy.hand[0],
+      expect.any(Object),
+      "zone-browser-hand",
+    );
 
     act(() => {
       root.unmount();
