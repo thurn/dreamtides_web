@@ -264,8 +264,8 @@
 }
 
 .battlefield-zone-layout {
-  flex: 0 0 var(--battlefield-zone-height, 246px);
-  height: var(--battlefield-zone-height, 246px);
+  flex: 1 1 auto;
+  height: auto;
   min-height: 0;
   display: flex;
   align-items: center;
@@ -275,7 +275,7 @@
 }
 
 .bf-wrap {
-  flex: 0 1 var(--battlefield-row-width);
+  flex: 1 1 var(--battlefield-row-width);
   min-width: 0;
   height: 100%;
   min-height: 0;

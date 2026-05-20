@@ -1141,7 +1141,7 @@ export function computeBattlefieldScale({
     return null;
   }
 
-  return Math.min(1, wrapWidth / naturalWidth, wrapHeight / naturalHeight);
+  return Math.min(wrapWidth / naturalWidth, wrapHeight / naturalHeight);
 }
 
 function useIsDesktopInspectorLayout(): boolean {

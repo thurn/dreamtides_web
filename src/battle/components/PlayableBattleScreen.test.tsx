@@ -1,5 +1,7 @@
 // @vitest-environment jsdom
 
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { act, useReducer, useMemo } from "react";
 import type { ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -29,6 +31,8 @@ import {
 import type { SharedBattleState } from "../../multiplayer/battle-types";
 import type { BattleInit, BattleMutableState } from "../types";
 import { PlayableBattleScreen, computeBattlefieldScale } from "./PlayableBattleScreen";
+
+const BATTLE_CSS = readFileSync(join(process.cwd(), "src/battle/battle.css"), "utf8");
 
 const battleCompletionBridge = vi.hoisted(() => ({
   completeBattleSiteVictory: vi.fn(),
@@ -204,7 +208,7 @@ afterEach(() => {
 });
 
 describe("PlayableBattleScreen", () => {
-  it("keeps battlefield scaling unset until the wrapper has measurable space", () => {
+  it("keeps battlefield scaling unset until the wrapper has measurable space and grows into available room", () => {
     expect(
       computeBattlefieldScale({
         naturalHeight: 450,
@@ -221,6 +225,14 @@ describe("PlayableBattleScreen", () => {
         wrapWidth: 700,
       }),
     ).toBeGreaterThan(0);
+    expect(
+      computeBattlefieldScale({
+        naturalHeight: 300,
+        naturalWidth: 300,
+        wrapHeight: 600,
+        wrapWidth: 600,
+      }),
+    ).toBe(2);
   });
 
   it("renders the new battle shell in the required region order with minimal controls", () => {
@@ -366,6 +378,12 @@ describe("PlayableBattleScreen", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("lets the battlefield region expand into the space above the hand tray", () => {
+    expect(BATTLE_CSS).toMatch(/\.stage\s*{[^}]*flex:\s*1 1 auto;/s);
+    expect(BATTLE_CSS).toMatch(/\.battlefield-zone-layout\s*{[^}]*flex:\s*1 1 auto;/s);
+    expect(BATTLE_CSS).toMatch(/\.bf-wrap\s*{[^}]*flex:\s*1 1 var\(--battlefield-row-width\);/s);
   });
 
   it("has no phase-action button in the action bar", () => {
