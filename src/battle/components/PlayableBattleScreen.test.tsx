@@ -254,6 +254,11 @@ describe("PlayableBattleScreen", () => {
     expect(container.textContent).toContain("Redo");
     expect(container.textContent).toContain("Log");
     expect(container.textContent).toContain("Skip to rewards");
+    expect(container.textContent).toContain("Show enemy hand");
+    expect(container.querySelector('[data-battle-region="action-bar"]')?.textContent).not.toContain("Skip to rewards");
+    expect(container.querySelector('[data-battle-region="action-bar"]')?.textContent).not.toContain("Show enemy hand");
+    expect(container.querySelector(".inspector.open")?.textContent).toContain("Skip to rewards");
+    expect(container.querySelector(".inspector.open")?.textContent).toContain("Show enemy hand");
     expect(container.querySelector('[data-battle-action="end-turn"]')).toBeNull();
     expect(container.querySelector(".inspector.open")).not.toBeNull();
 
@@ -1370,7 +1375,7 @@ describe("PlayableBattleScreen", () => {
     const { battleInit, container, root } = renderScreen();
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-battle-action="force-victory"]')?.click();
+      container.querySelector<HTMLElement>('[data-battle-action="skip-to-rewards"]')?.click();
     });
 
     expect(container.querySelector("[data-battle-reward-surface]")).not.toBeNull();

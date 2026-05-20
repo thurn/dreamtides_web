@@ -21,6 +21,7 @@ export function BattleInspector({
   futureCount,
   historyCount,
   isDesktopLayout: _isDesktopLayout,
+  isOpponentHandRevealed,
   isOpen,
   lastTransition: _lastTransition,
   selection,
@@ -36,6 +37,7 @@ export function BattleInspector({
   onResetBattle,
   onRedo,
   onSelectBattleCard: _onSelectBattleCard,
+  onToggleOpponentHand,
   onUndo,
 }: {
   battleInit: BattleInit;
@@ -43,6 +45,7 @@ export function BattleInspector({
   futureCount: number;
   historyCount: number;
   isDesktopLayout: boolean;
+  isOpponentHandRevealed: boolean;
   isOpen: boolean;
   lastTransition: unknown;
   selection: BattleSelection;
@@ -58,6 +61,7 @@ export function BattleInspector({
   onResetBattle?: () => void;
   onRedo?: () => void;
   onSelectBattleCard: (battleCardId: string) => void;
+  onToggleOpponentHand: () => void;
   onUndo?: () => void;
 }) {
   const selectedCard = selection?.kind === "card"
@@ -115,35 +119,30 @@ export function BattleInspector({
               <div className="insp-empty">Select a card or slot to edit.</div>
             )}
 
-            <SideEditor
-              side="player"
-              state={state}
-              onOpenFigmentCreator={onOpenFigmentCreator}
-              onOpenForesee={onOpenForesee}
-              onOpenZone={onOpenZone}
-              onCommand={onCommand}
-              discardCommand={playerDiscardCommand}
-            />
-            <SideEditor
-              side="enemy"
-              state={state}
-              onOpenFigmentCreator={onOpenFigmentCreator}
-              onOpenForesee={onOpenForesee}
-              onOpenZone={onOpenZone}
-              onCommand={onCommand}
-              discardCommand={enemyDiscardCommand}
-            />
+            <div className="insp-section">
+              <h4>Visibility</h4>
+              <div className="chip-row">
+                <button
+                  type="button"
+                  data-battle-action="toggle-opponent-hand"
+                  className={`chip ${isOpponentHandRevealed ? "active" : ""}`}
+                  onClick={onToggleOpponentHand}
+                >
+                  {isOpponentHandRevealed ? "Hide enemy hand" : "Show enemy hand"}
+                </button>
+              </div>
+            </div>
 
             <div className="insp-section">
               <h4>Result</h4>
               <div className="chip-row">
                 <button
                   type="button"
-                  data-battle-action="force-victory"
+                  data-battle-action="skip-to-rewards"
                   className="chip"
                   onClick={() => onCommand({ id: "SKIP_TO_REWARDS", sourceSurface: "inspector" })}
                 >
-                  Force victory
+                  Skip to rewards
                 </button>
                 <button
                   type="button"
@@ -166,6 +165,25 @@ export function BattleInspector({
                 </button>
               </div>
             </div>
+
+            <SideEditor
+              side="player"
+              state={state}
+              onOpenFigmentCreator={onOpenFigmentCreator}
+              onOpenForesee={onOpenForesee}
+              onOpenZone={onOpenZone}
+              onCommand={onCommand}
+              discardCommand={playerDiscardCommand}
+            />
+            <SideEditor
+              side="enemy"
+              state={state}
+              onOpenFigmentCreator={onOpenFigmentCreator}
+              onOpenForesee={onOpenForesee}
+              onOpenZone={onOpenZone}
+              onCommand={onCommand}
+              discardCommand={enemyDiscardCommand}
+            />
 
             <div className="insp-section">
               <h4>History</h4>

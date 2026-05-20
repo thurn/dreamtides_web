@@ -33,6 +33,7 @@ function mount(selection: "player-hand" | "enemy-hand"): {
   container: HTMLDivElement;
   onClearSelection: ReturnType<typeof vi.fn>;
   onCommand: ReturnType<typeof vi.fn>;
+  onToggleOpponentHand: ReturnType<typeof vi.fn>;
   root: Root;
   selectedBattleCardId: string;
 } {
@@ -49,6 +50,7 @@ function mount(selection: "player-hand" | "enemy-hand"): {
 
   const onClearSelection = vi.fn();
   const onCommand = vi.fn();
+  const onToggleOpponentHand = vi.fn();
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -61,6 +63,7 @@ function mount(selection: "player-hand" | "enemy-hand"): {
         futureCount={1}
         historyCount={2}
         isDesktopLayout
+        isOpponentHandRevealed={false}
         isOpen
         lastTransition={null}
         selection={activeSelection}
@@ -76,12 +79,13 @@ function mount(selection: "player-hand" | "enemy-hand"): {
         onResetBattle={() => undefined}
         onRedo={() => undefined}
         onSelectBattleCard={() => undefined}
+        onToggleOpponentHand={onToggleOpponentHand}
         onUndo={() => undefined}
       />,
     );
   });
 
-  return { container, onClearSelection, onCommand, root, selectedBattleCardId };
+  return { container, onClearSelection, onCommand, onToggleOpponentHand, root, selectedBattleCardId };
 }
 
 afterEach(() => {
@@ -90,18 +94,22 @@ afterEach(() => {
 
 describe("BattleInspector", () => {
   it("renders the slimmed inspector with card summary and side controls", () => {
-    const { container, onClearSelection, onCommand, root, selectedBattleCardId } = mount("player-hand");
+    const { container, onClearSelection, onCommand, onToggleOpponentHand, root, selectedBattleCardId } = mount("player-hand");
 
     expect(container.textContent).toContain("Right-click this card");
     expect(container.textContent).toContain("Card State");
     expect(container.textContent).toContain("Your state");
     expect(container.textContent).toContain("Enemy state");
+    expect(container.textContent).toContain("Visibility");
+    expect(container.textContent).toContain("Show enemy hand");
     expect(container.textContent).toContain("Result");
+    expect(container.textContent).toContain("Skip to rewards");
     expect(container.textContent).toContain("History");
     expect(container.querySelector('[data-battle-inspector-handle]')?.textContent).toContain("CLOSE");
 
     act(() => {
       clickChip(container, "+1 Draw");
+      clickChip(container, "Show enemy hand");
       clickChip(container, "Clear");
     });
 
@@ -111,6 +119,7 @@ describe("BattleInspector", () => {
       edit: { kind: "DRAW_CARD", side: "player" },
       sourceSurface: "inspector",
     });
+    expect(onToggleOpponentHand).toHaveBeenCalledTimes(1);
     expect(onClearSelection).toHaveBeenCalledTimes(1);
 
     act(() => {

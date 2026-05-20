@@ -958,13 +958,10 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             isBattleLogOpen={isBattleLogOpen}
             isDesktopInspectorLayout={isDesktopInspectorLayout}
             isInspectorDrawerOpen={isInspectorDrawerOpen}
-            isOpponentHandRevealed={isOpponentHandRevealed}
-            onCommand={handleCommand}
             onOpenForesee={(_side, _count) => undefined}
             onRedo={() => dispatch({ type: "REDO" })}
             onToggleBattleLog={() => setIsBattleLogOpen((value) => !value)}
             onToggleInspector={() => setIsInspectorDrawerOpen((value) => !value)}
-            onToggleOpponentHand={() => setIsOpponentHandRevealed((value) => !value)}
             onUndo={() => dispatch({ type: "UNDO" })}
           />
         </div>
@@ -974,6 +971,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           futureCount={futureCount}
           historyCount={historyCount}
           isDesktopLayout={isDesktopInspectorLayout}
+          isOpponentHandRevealed={isOpponentHandRevealed}
           isOpen={isInspectorDrawerOpen}
           lastTransition={reducerState.lastTransition}
           selection={inspectorSelection}
@@ -989,6 +987,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           onResetBattle={handleResetBattle}
           onRedo={() => dispatch({ type: "REDO" })}
           onSelectBattleCard={(battleCardId) => setSelection({ kind: "card", battleCardId })}
+          onToggleOpponentHand={() => setIsOpponentHandRevealed((value) => !value)}
           onUndo={() => dispatch({ type: "UNDO" })}
         />
       </div>
