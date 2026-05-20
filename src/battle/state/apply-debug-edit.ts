@@ -296,6 +296,18 @@ export function applyDebugEdit(
       return forceJudgment(nextState, edit.side, context);
     case "GRANT_EXTRA_TURN":
       return grantExtraTurn(nextState, edit.side, context);
+    case "SET_PHASE":
+      if (nextState.phase === edit.phase) {
+        return {
+          state,
+          transition: createEmptyTransitionData(),
+        };
+      }
+      nextState.phase = edit.phase;
+      return {
+        state: nextState,
+        transition: createEmptyTransitionData(),
+      };
   }
 }
 

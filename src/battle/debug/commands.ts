@@ -2,6 +2,7 @@ import {
   selectKindleTargetBattleCardId,
   selectShouldEndTurnFromDay,
 } from "../state/selectors";
+import { formatPhaseLabel } from "../ui/format";
 import type {
   BattleCardMarkers,
   BattleCardNoteExpiry,
@@ -12,6 +13,7 @@ import type {
   BattleHistoryEntryKind,
   BattleHistoryEntryMetadata,
   BattleMutableState,
+  BattlePhase,
   BattleResult,
   BattleSide,
 } from "../types";
@@ -177,6 +179,10 @@ export type BattleDebugEdit =
   | {
     kind: "GRANT_EXTRA_TURN";
     side: BattleSide;
+  }
+  | {
+    kind: "SET_PHASE";
+    phase: BattlePhase;
   };
 
 export interface BattleCommandEnvelope {
@@ -518,6 +524,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
       return "visibility";
     case "FORCE_JUDGMENT":
     case "GRANT_EXTRA_TURN":
+    case "SET_PHASE":
       return "battle-flow";
   }
 }
@@ -631,6 +638,8 @@ function collectDebugEditTargets(
     case "FORCE_JUDGMENT":
     case "GRANT_EXTRA_TURN":
       return [makeSideTarget(edit.side)];
+    case "SET_PHASE":
+      return [];
   }
 }
 
@@ -702,6 +711,8 @@ function createDebugEditLabel(
       return `Force Judgment (${formatSideLabel(edit.side)})`;
     case "GRANT_EXTRA_TURN":
       return `Grant Extra Turn to ${formatSideLabel(edit.side)}`;
+    case "SET_PHASE":
+      return `Set Phase to ${formatPhaseLabel(edit.phase)}`;
   }
 }
 

@@ -1029,34 +1029,16 @@ describe("applyBattleCommand", () => {
     expect(applied.mutable.sides.player.reserve.R0).toBe(characterBattleCardId);
   });
 
-  it("commits FORCE_JUDGMENT as one composite entry and bakes in judgment resolution", () => {
+  it("commits SET_PHASE metadata and changes only the phase label", () => {
     const { battleInit, state } = createTestBattle();
-    const playerCharacter = state.sides.player.hand.find((cardId) =>
-      state.cardInstances[cardId].definition.battleCardKind === "character",
-    );
-    const enemyCharacter = state.sides.enemy.hand.find((cardId) =>
-      state.cardInstances[cardId].definition.battleCardKind === "character",
-    );
-    if (playerCharacter === undefined || enemyCharacter === undefined) {
-      throw new Error("Missing characters for force-judgment seed");
-    }
-    state.sides.player.hand = state.sides.player.hand.filter((cardId) => cardId !== playerCharacter);
-    state.sides.enemy.hand = state.sides.enemy.hand.filter((cardId) => cardId !== enemyCharacter);
-    state.sides.player.deployed.D0 = playerCharacter;
-    state.sides.enemy.deployed.D0 = enemyCharacter;
-    // Give player higher spark so judgment dissolves the enemy character.
-    state.cardInstances[playerCharacter].sparkDelta =
-      10 - state.cardInstances[playerCharacter].definition.printedSpark;
-    state.cardInstances[enemyCharacter].sparkDelta =
-      1 - state.cardInstances[enemyCharacter].definition.printedSpark;
-
+    const before = createBattleReducerState(state).mutable;
     const applied = applyBattleCommand(
       createBattleReducerState(state),
       {
         id: "DEBUG_EDIT",
         edit: {
-          kind: "FORCE_JUDGMENT",
-          side: "player",
+          kind: "SET_PHASE",
+          phase: "dusk",
         },
         sourceSurface: "action-bar",
       },
@@ -1064,64 +1046,30 @@ describe("applyBattleCommand", () => {
     );
 
     const metadata = applied.history.past[0].metadata;
-    expect(metadata.commandId).toBe("FORCE_JUDGMENT");
-    expect(metadata.label).toBe("Force Judgment (Player)");
-    expect(metadata.kind).toBe("battle-flow");
-    expect(metadata.isComposite).toBe(true);
-    expect(metadata.actor).toBe("debug");
-    expect(metadata.sourceSurface).toBe("action-bar");
-    expect(metadata.targets).toEqual([{ kind: "side", ref: "player" }]);
-    expect(metadata.undoPayload).toBeNull();
-
-    expect(applied.history.past).toHaveLength(1);
-    expect(applied.mutable.sides.enemy.deployed.D0).toBeNull();
-    expect(applied.mutable.sides.enemy.void).toContain(enemyCharacter);
-    expect(applied.mutable.sides.player.score).toBe(state.sides.player.score);
-
-    const extraJudgmentEvent = applied.lastTransition?.logEvents.find(
-      (entry) => entry.event === "battle_proto_extra_judgment",
-    );
-    expect(extraJudgmentEvent?.fields).toMatchObject({
-      resolvedSide: "player",
-      forced: true,
-      scoreChange: 0,
-    });
-    expect(extraJudgmentEvent?.fields.dissolvedCardIds).toEqual([enemyCharacter]);
-  });
-
-  it("commits GRANT_EXTRA_TURN metadata and increments pendingExtraTurns", () => {
-    const { battleInit, state } = createTestBattle();
-    const applied = applyBattleCommand(
-      createBattleReducerState(state),
-      {
-        id: "DEBUG_EDIT",
-        edit: {
-          kind: "GRANT_EXTRA_TURN",
-          side: "player",
-        },
-        sourceSurface: "inspector",
-      },
-      battleInit,
-    );
-
-    const metadata = applied.history.past[0].metadata;
-    expect(metadata.commandId).toBe("GRANT_EXTRA_TURN");
-    expect(metadata.label).toBe("Grant Extra Turn to Player");
+    expect(metadata.commandId).toBe("SET_PHASE");
+    expect(metadata.label).toBe("Set Phase to Dusk");
     expect(metadata.kind).toBe("battle-flow");
     expect(metadata.isComposite).toBe(false);
     expect(metadata.actor).toBe("debug");
-    expect(metadata.sourceSurface).toBe("inspector");
-    expect(metadata.targets).toEqual([{ kind: "side", ref: "player" }]);
+    expect(metadata.sourceSurface).toBe("action-bar");
+    expect(metadata.targets).toEqual([]);
     expect(metadata.undoPayload).toBeNull();
 
-    expect(applied.mutable.sides.player.pendingExtraTurns).toBe(1);
-    const event = applied.lastTransition?.logEvents.find(
-      (entry) => entry.event === "battle_proto_extra_turn_granted",
-    );
-    expect(event?.fields).toMatchObject({
-      grantedSide: "player",
-      pendingExtraTurnsAfter: 1,
-    });
+    expect(applied.history.past).toHaveLength(1);
+    // SET_PHASE touches nothing but the phase label.
+    expect(applied.mutable.phase).toBe("dusk");
+    expect(applied.mutable.activeSide).toBe(before.activeSide);
+    expect(applied.mutable.turnNumber).toBe(before.turnNumber);
+    expect(applied.mutable.result).toBe(before.result);
+    expect(applied.mutable.sides.player.currentEnergy).toBe(before.sides.player.currentEnergy);
+    expect(applied.mutable.sides.player.maxEnergy).toBe(before.sides.player.maxEnergy);
+    expect(applied.mutable.sides.player.score).toBe(before.sides.player.score);
+    expect(applied.mutable.sides.player.hand).toEqual(before.sides.player.hand);
+    expect(applied.mutable.sides.player.deck).toEqual(before.sides.player.deck);
+    expect(applied.mutable.sides.player.deployed).toEqual(before.sides.player.deployed);
+    expect(applied.mutable.sides.player.reserve).toEqual(before.sides.player.reserve);
+    expect(applied.mutable.sides.enemy.deployed).toEqual(before.sides.enemy.deployed);
+    expect(applied.lastTransition?.logEvents).toEqual([]);
   });
 
   it("commits SET_SIDE_HAND_VISIBILITY metadata and emits a bulk visibility log event", () => {
