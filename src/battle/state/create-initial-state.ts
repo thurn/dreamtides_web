@@ -11,7 +11,6 @@ import type {
 } from "../types";
 
 const OPENING_ENERGY = 2;
-const INITIAL_EXHAUSTION_PENALTY = 5;
 
 export function createInitialBattleState(battleInit: BattleInit): BattleMutableState {
   const state: BattleMutableState = {
@@ -160,8 +159,6 @@ export function cloneBattleDeckCardDefinition(
 function cloneBattleSideMutableState(side: BattleSideMutableState): BattleSideMutableState {
   return {
     ...side,
-    exhaustionPenaltyNext: side.exhaustionPenaltyNext ?? INITIAL_EXHAUSTION_PENALTY,
-    exhaustionPenaltyAppliedThisTurn: side.exhaustionPenaltyAppliedThisTurn ?? false,
     visibility: { ...side.visibility },
     deck: [...side.deck],
     hand: [...side.hand],
@@ -182,9 +179,6 @@ function createInitialSideState(
     currentEnergy,
     maxEnergy,
     score: 0,
-    pendingExtraTurns: 0,
-    exhaustionPenaltyNext: INITIAL_EXHAUSTION_PENALTY,
-    exhaustionPenaltyAppliedThisTurn: false,
     visibility: {},
     deck,
     hand,

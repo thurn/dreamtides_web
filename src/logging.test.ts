@@ -3,14 +3,10 @@ import {
   createBattleLogBaseFields,
   createBattleProtoCardCreatedLogEvent,
   createBattleProtoDeckReorderedLogEvent,
-  createBattleProtoExtraJudgmentLogEvent,
-  createBattleProtoExtraTurnConsumedLogEvent,
-  createBattleProtoExtraTurnGrantedLogEvent,
   createBattleProtoMarkerSetLogEvent,
   createBattleProtoNoteAddedLogEvent,
   createBattleProtoNoteClearedLogEvent,
   createBattleProtoNoteDismissedLogEvent,
-  createBattleProtoNoteExpiredLogEvent,
   getLogEntries,
   logEvent,
   logEventOnce,
@@ -195,16 +191,6 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
       }, context),
     },
     {
-      name: "createBattleProtoNoteExpiredLogEvent",
-      event: "battle_proto_note_expired",
-      build: () => createBattleProtoNoteExpiredLogEvent(state, {
-        battleCardId: "card-1",
-        noteId: "note-1",
-        expirySide: "player",
-        expiryTurnNumber: 2,
-      }, context),
-    },
-    {
       name: "createBattleProtoCardCreatedLogEvent",
       event: "battle_proto_card_created",
       build: () => createBattleProtoCardCreatedLogEvent(state, {
@@ -234,32 +220,6 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
         battleCardId: "card-1",
         markers: { isPrevented: true, isCopied: false },
         diff: { prevented: "set", copied: "unchanged" },
-      }, context),
-    },
-    {
-      name: "createBattleProtoExtraTurnGrantedLogEvent",
-      event: "battle_proto_extra_turn_granted",
-      build: () => createBattleProtoExtraTurnGrantedLogEvent(state, {
-        grantedSide: "player",
-        pendingExtraTurnsAfter: 1,
-      }, context),
-    },
-    {
-      name: "createBattleProtoExtraTurnConsumedLogEvent",
-      event: "battle_proto_extra_turn_consumed",
-      build: () => createBattleProtoExtraTurnConsumedLogEvent(state, {
-        consumedSide: "player",
-        pendingExtraTurnsAfter: 0,
-      }, context),
-    },
-    {
-      name: "createBattleProtoExtraJudgmentLogEvent",
-      event: "battle_proto_extra_judgment",
-      build: () => createBattleProtoExtraJudgmentLogEvent(state, {
-        resolvedSide: "player",
-        dissolvedCardIds: ["card-1"],
-        scoreChange: 1,
-        forced: true,
       }, context),
     },
   ];

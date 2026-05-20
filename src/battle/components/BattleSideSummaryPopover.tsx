@@ -95,10 +95,6 @@ export function BattleSideSummaryPopover({
           <span className="label">Deployed</span>
           <span className="value">{String(deployedCount)}/4</span>
         </div>
-        <div className="summary-stat">
-          <span className="label">Extra Turns</span>
-          <span className="value">{String(sideState.pendingExtraTurns)}</span>
-        </div>
       </div>
 
       <div className="floating-section">

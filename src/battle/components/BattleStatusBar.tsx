@@ -40,10 +40,9 @@ export function BattleStatusBar({
 }) {
   const phaseLabel = formatPhaseLabel(phase);
   const sideLabel = result === null ? formatSideLabel(activeSide) : "Battle Over";
-  const phaseSteps = PHASE_STEPS;
   const visiblePhase = normalizeVisiblePhase(phase);
-  const currentStepIndex = phaseSteps.findIndex((step) => step.id === visiblePhase);
-  const nextPhase = phaseSteps[(currentStepIndex + 1) % phaseSteps.length].id;
+  const currentStepIndex = PHASE_STEPS.findIndex((step) => step.id === visiblePhase);
+  const nextPhase = PHASE_STEPS[(currentStepIndex + 1) % PHASE_STEPS.length].id;
 
   return (
     <section data-battle-region="status-bar" className="topbar">
@@ -77,7 +76,7 @@ export function BattleStatusBar({
           </button>
         </div>
         <div className="phase-track" aria-label="Battle phases">
-          {phaseSteps.map((step) => (
+          {PHASE_STEPS.map((step) => (
             <button
               key={step.id}
               type="button"

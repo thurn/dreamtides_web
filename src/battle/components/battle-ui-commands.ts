@@ -1,9 +1,6 @@
 import type { BattleCommand } from "../debug/commands";
 import type { BattleDebugZoneDestination } from "../debug/commands";
-import {
-  selectBattleCardLocation,
-  selectDefaultCharacterPlaySlot,
-} from "../state/selectors";
+import { selectDefaultCharacterPlaySlot } from "../state/selectors";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 import type {
   BattleCommandSourceSurface,
@@ -136,13 +133,6 @@ export function createDiscardMostRecentHandCardCommand(
     },
     sourceSurface,
   };
-}
-
-export function resolveSelectionSide(
-  state: BattleMutableState,
-  battleCardId: string,
-): BattleSide | null {
-  return selectBattleCardLocation(state, battleCardId)?.side ?? null;
 }
 
 function findFirstOpenBattlefieldSlot(

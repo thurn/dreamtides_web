@@ -130,8 +130,7 @@ function areBattleSideStatesEqual(
   if (
     left.currentEnergy !== right.currentEnergy ||
     left.maxEnergy !== right.maxEnergy ||
-    left.score !== right.score ||
-    left.pendingExtraTurns !== right.pendingExtraTurns
+    left.score !== right.score
   ) {
     return false;
   }

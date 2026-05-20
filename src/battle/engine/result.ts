@@ -7,11 +7,6 @@ import type {
 } from "../types";
 import { createBattleLogBaseFields } from "../../logging";
 
-export const AUTO_AI_EMISSION_CONTEXT: BattleEngineEmissionContext = {
-  sourceSurface: "auto-ai",
-  selectedCardId: null,
-};
-
 /**
  * Builds the `battle_proto_result_changed` payload. Carries the six common
  * log fields (per spec §L L-4) plus the result-specific `winner`,

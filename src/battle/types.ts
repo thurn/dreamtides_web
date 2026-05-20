@@ -281,9 +281,6 @@ export interface BattleSideMutableState {
   currentEnergy: number;
   maxEnergy: number;
   score: number;
-  pendingExtraTurns: number;
-  exhaustionPenaltyNext?: number;
-  exhaustionPenaltyAppliedThisTurn?: boolean;
   visibility: BattleSideVisibilityFlags;
   deck: string[];
   hand: string[];

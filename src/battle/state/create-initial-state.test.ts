@@ -92,8 +92,6 @@ describe("createInitialBattleState", () => {
     });
     const state = createInitialBattleState(battleInit);
 
-    expect(state.sides.player.pendingExtraTurns).toBe(0);
-    expect(state.sides.enemy.pendingExtraTurns).toBe(0);
     expect(state.sides.player.visibility).toEqual({});
     expect(state.sides.enemy.visibility).toEqual({});
   });

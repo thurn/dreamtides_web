@@ -218,32 +218,6 @@ export function createBattleProtoNoteClearedLogEvent(
   };
 }
 
-export function createBattleProtoNoteExpiredLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
-  payload: {
-    battleCardId: string;
-    noteId: string;
-    expirySide: BattleSide;
-    expiryTurnNumber: number;
-  },
-  context: {
-    sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
-  },
-): BattleDeferredLogEvent {
-  return {
-    event: "battle_proto_note_expired",
-    fields: {
-      ...createBattleLogBaseFields(state, context),
-      battleCardId: payload.battleCardId,
-      expiryKind: "atStartOfTurn",
-      expirySide: payload.expirySide,
-      expiryTurnNumber: payload.expiryTurnNumber,
-      noteId: payload.noteId,
-    },
-  };
-}
-
 export function createBattleProtoCardCreatedLogEvent(
   state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
   payload: {
@@ -324,73 +298,6 @@ export function createBattleProtoMarkerSetLogEvent(
       battleCardId: payload.battleCardId,
       diff: payload.diff,
       markers: payload.markers,
-    },
-  };
-}
-
-export function createBattleProtoExtraTurnGrantedLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
-  payload: {
-    grantedSide: BattleSide;
-    pendingExtraTurnsAfter: number;
-  },
-  context: {
-    sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
-  },
-): BattleDeferredLogEvent {
-  return {
-    event: "battle_proto_extra_turn_granted",
-    fields: {
-      ...createBattleLogBaseFields(state, context),
-      grantedSide: payload.grantedSide,
-      pendingExtraTurnsAfter: payload.pendingExtraTurnsAfter,
-    },
-  };
-}
-
-export function createBattleProtoExtraTurnConsumedLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
-  payload: {
-    consumedSide: BattleSide;
-    pendingExtraTurnsAfter: number;
-  },
-  context: {
-    sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
-  },
-): BattleDeferredLogEvent {
-  return {
-    event: "battle_proto_extra_turn_consumed",
-    fields: {
-      ...createBattleLogBaseFields(state, context),
-      consumedSide: payload.consumedSide,
-      pendingExtraTurnsAfter: payload.pendingExtraTurnsAfter,
-    },
-  };
-}
-
-export function createBattleProtoExtraJudgmentLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
-  payload: {
-    resolvedSide: BattleSide;
-    dissolvedCardIds: readonly string[];
-    scoreChange: number;
-    forced: true;
-  },
-  context: {
-    sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
-  },
-): BattleDeferredLogEvent {
-  return {
-    event: "battle_proto_extra_judgment",
-    fields: {
-      ...createBattleLogBaseFields(state, context),
-      resolvedSide: payload.resolvedSide,
-      dissolvedCardIds: payload.dissolvedCardIds,
-      scoreChange: payload.scoreChange,
-      forced: payload.forced,
     },
   };
 }

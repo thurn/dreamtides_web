@@ -1447,7 +1447,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("double-clicking a hand card whose cost exceeds energy during night phase still dispatches PLAY_CARD", () => {
+  it("double-clicking an over-cost hand card during night phase plays it onto the battlefield with no energy gating", () => {
     let overpriceCardId = "";
     const { container, root } = renderScreen((state) => {
       state.phase = "night";
@@ -1475,8 +1475,8 @@ describe("PlayableBattleScreen", () => {
       handCard.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
     });
 
-    // The PLAY_CARD command should have been dispatched, landing the card on
-    // the battlefield (removed from hand).
+    // The double-click plays the card onto the battlefield (removed from
+    // hand) without any energy or phase gating.
     expect(
       container.querySelector(
         `[data-battle-region="player-hand-tray"] [data-battle-card-id="${overpriceCardId}"]`,
