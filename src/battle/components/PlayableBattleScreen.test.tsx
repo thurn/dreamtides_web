@@ -729,7 +729,6 @@ describe("PlayableBattleScreen", () => {
     if (opponentEventId === null) {
       throw new Error("expected opponent event id");
     }
-    const eventCost = initialState.cardInstances[opponentEventId].definition.energyCost;
 
     act(() => {
       opponentCard.dispatchEvent(new MouseEvent("contextmenu", {
@@ -760,9 +759,11 @@ describe("PlayableBattleScreen", () => {
     expect(
       container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count"),
     ).toBe(String(initialEnemyHandCount - 1));
+    // The play is now an unrestricted move: the event lands in void without
+    // spending energy.
     expect(
       container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-current-energy"),
-    ).toBe(String(10 - eventCost));
+    ).toBe("10");
     expect(
       container.querySelector('[data-battle-stat="enemy:void"]')?.getAttribute("data-battle-zone-count"),
     ).toBe(String(initialEnemyVoidCount + 1));
@@ -781,7 +782,6 @@ describe("PlayableBattleScreen", () => {
   it("plays a revealed opponent hand character even after a stale player reserve selection", () => {
     let stalePlayerCardId = "";
     let opponentCharacterId = "";
-    let opponentCharacterCost = 0;
     const { container, initialState, root } = renderScreen((state) => {
       state.activeSide = "enemy";
       state.phase = "day";
@@ -816,7 +816,6 @@ describe("PlayableBattleScreen", () => {
         throw new Error("expected affordable enemy character");
       }
       opponentCharacterId = enemyCardId;
-      opponentCharacterCost = state.cardInstances[enemyCardId].definition.energyCost ?? 0;
     }, { enableAi: false });
 
     act(() => {
@@ -855,10 +854,7 @@ describe("PlayableBattleScreen", () => {
     const menu = container.querySelector("[data-battle-context-menu]");
     expect(menu?.textContent).toContain(initialState.cardInstances[opponentCharacterId].definition.name);
     const playItem = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
-      .find((element) =>
-        element.textContent === "Play to reserve" ||
-        element.textContent === "Override cost → reserve"
-      );
+      .find((element) => element.textContent === "Play to reserve");
     if (playItem === undefined) {
       throw new Error("expected enemy character play item");
     }
@@ -888,9 +884,11 @@ describe("PlayableBattleScreen", () => {
     expect(
       container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count"),
     ).toBe(String(enemyHandCountBeforePlay - 1));
+    // The play is now an unrestricted move: placing the character costs no
+    // energy.
     expect(
       container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-current-energy"),
-    ).toBe(String(enemyEnergyBeforePlay - opponentCharacterCost));
+    ).toBe(String(enemyEnergyBeforePlay));
 
     act(() => {
       root.unmount();
@@ -1254,7 +1252,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("plays an affordable event by dragging it into the battlefield without slot highlights", () => {
+  it("drags an event hand card onto a battlefield slot like any other card", () => {
     const { container, root } = renderScreen((state) => {
       const eventCardId = state.sides.player.deck.find(
         (battleCardId) => state.cardInstances[battleCardId]?.definition.battleCardKind === "event",
@@ -1264,8 +1262,6 @@ describe("PlayableBattleScreen", () => {
       }
       state.sides.player.deck = state.sides.player.deck.filter((battleCardId) => battleCardId !== eventCardId);
       state.sides.player.hand = [...state.sides.player.hand, eventCardId];
-      state.sides.player.currentEnergy = 10;
-      state.sides.player.maxEnergy = 10;
     });
 
     const eventCard = [...container.querySelectorAll<HTMLElement>(
@@ -1287,18 +1283,23 @@ describe("PlayableBattleScreen", () => {
       eventCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
     });
 
-    expect(container.querySelector('[data-battle-drop-target="true"]')).toBeNull();
+    // Events are no longer special-cased: any dragged card highlights every
+    // battlefield slot as a drop target.
+    expect(reserveSlot.getAttribute("data-battle-drop-target")).toBe("true");
 
     act(() => {
       reserveSlot.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
     });
 
+    // The event lands directly on the slot via the unrestricted move.
     expect(
       container.querySelector(
         `[data-battle-region="player-hand-tray"] [data-battle-card-id="${eventCardId}"]`,
       ),
     ).toBeNull();
-    expect(container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id")).not.toBe(eventCardId);
+    expect(
+      container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id"),
+    ).toBe(eventCardId);
 
     act(() => {
       root.unmount();
@@ -1491,6 +1492,140 @@ describe("PlayableBattleScreen", () => {
         `[data-battle-region="player-hand-tray"] [data-battle-card-id="${overpriceCardId}"]`,
       ),
     ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("drops a player hand card onto an enemy deployed slot via the cross-side unrestricted move", () => {
+    let playerCardId = "";
+    const { container, root } = renderScreen((state) => {
+      playerCardId = state.sides.player.hand[0] ?? "";
+      if (playerCardId === "") {
+        throw new Error("expected player hand card");
+      }
+      // Clear an enemy deployed slot so the move lands on an empty target.
+      state.sides.enemy.deployed.D0 = null;
+    }, { enableAi: false });
+
+    const handCard = container.querySelector<HTMLElement>(
+      `[data-battle-region="player-hand-tray"] [data-battle-card-id="${playerCardId}"]`,
+    );
+    const enemyDeployedSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-deployed-D0"]');
+    if (handCard === null || enemyDeployedSlot === null) {
+      throw new Error("expected player hand card and enemy deployed slot");
+    }
+
+    act(() => {
+      handCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+    act(() => {
+      enemyDeployedSlot.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    // MOVE_CARD_TO_ZONE with destination.side === "enemy": the player card is
+    // now controlled by the enemy and occupies their deployed slot.
+    expect(
+      container.querySelector('[data-slot-id="enemy-deployed-D0"]')?.getAttribute("data-slot-card-id"),
+    ).toBe(playerCardId);
+    expect(
+      container.querySelector(
+        `[data-battle-region="player-hand-tray"] [data-battle-card-id="${playerCardId}"]`,
+      ),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("double-clicks a hand card into reserve without changing either side's current energy", () => {
+    let playerCardId = "";
+    const { container, root } = renderScreen((state) => {
+      state.sides.player.currentEnergy = 4;
+      state.sides.player.maxEnergy = 7;
+      state.sides.enemy.currentEnergy = 5;
+      state.sides.enemy.maxEnergy = 9;
+      playerCardId = state.sides.player.hand[0] ?? "";
+      if (playerCardId === "") {
+        throw new Error("expected player hand card");
+      }
+    }, { enableAi: false });
+
+    const readEnergy = (side: string): string | null | undefined =>
+      container.querySelector(`[data-battle-stat="${side}:energy"]`)?.getAttribute("data-battle-current-energy");
+    const playerEnergyBefore = readEnergy("player");
+    const enemyEnergyBefore = readEnergy("enemy");
+
+    const handCard = container.querySelector<HTMLElement>(
+      `[data-battle-region="player-hand-tray"] [data-battle-card-id="${playerCardId}"]`,
+    );
+    if (handCard === null) {
+      throw new Error("expected player hand card element");
+    }
+
+    act(() => {
+      handCard.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    // The card lands in the first open reserve slot...
+    expect(
+      [...container.querySelectorAll("[data-slot-id^='player-reserve-']")]
+        .some((slot) => slot.getAttribute("data-slot-card-id") === playerCardId),
+    ).toBe(true);
+    // ...and neither side's current energy changed (a move never pays a cost).
+    expect(readEnergy("player")).toBe(playerEnergyBefore);
+    expect(readEnergy("enemy")).toBe(enemyEnergyBefore);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("drops a deployed card onto the void zone via the unrestricted move", () => {
+    let deployedCardId = "";
+    const { container, root } = renderScreen((state) => {
+      const characterId = state.sides.player.hand.find(
+        (battleCardId) => state.cardInstances[battleCardId]?.definition.battleCardKind === "character",
+      ) ?? state.sides.player.deck.find(
+        (battleCardId) => state.cardInstances[battleCardId]?.definition.battleCardKind === "character",
+      );
+      if (characterId === undefined) {
+        throw new Error("expected player character");
+      }
+      deployedCardId = characterId;
+      state.sides.player.hand = state.sides.player.hand.filter((id) => id !== characterId);
+      state.sides.player.deck = state.sides.player.deck.filter((id) => id !== characterId);
+      state.sides.player.deployed.D0 = characterId;
+    }, { enableAi: false });
+
+    const deployedCard = container.querySelector<HTMLElement>(
+      `[data-slot-id="player-deployed-D0"] [data-battle-card-id="${deployedCardId}"]`,
+    );
+    const voidButton = container.querySelector<HTMLElement>('[data-battle-stat="player:void"]');
+    if (deployedCard === null || voidButton === null) {
+      throw new Error("expected deployed card and player void zone button");
+    }
+
+    const voidCountBefore = Number(voidButton.getAttribute("data-battle-zone-count") ?? "0");
+
+    act(() => {
+      deployedCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+    act(() => {
+      voidButton.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    // The card left the battlefield and the void count grew by one.
+    expect(
+      container.querySelector('[data-slot-id="player-deployed-D0"]')?.getAttribute("data-slot-card-id"),
+    ).toBeNull();
+    expect(
+      Number(
+        container.querySelector('[data-battle-stat="player:void"]')?.getAttribute("data-battle-zone-count") ?? "0",
+      ),
+    ).toBe(voidCountBefore + 1);
 
     act(() => {
       root.unmount();

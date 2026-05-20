@@ -8,7 +8,6 @@ import {
 } from "../state/selectors";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 import type {
-  BattleCardKind,
   BattleFieldSlotAddress,
   BattleMutableState,
   BattleSide,
@@ -46,7 +45,6 @@ export function BattlefieldGrid({
   onSlotClick,
   onSlotDrop,
   pendingDragCardId = null,
-  pendingDragCardKind = null,
   selectedCardId,
   selectedSlot,
   selectionAnchor,
@@ -66,7 +64,6 @@ export function BattlefieldGrid({
   onSlotClick: (target: BattleFieldSlotAddress, isOccupied: boolean) => void;
   onSlotDrop?: (target: BattleFieldSlotAddress) => void;
   pendingDragCardId?: string | null;
-  pendingDragCardKind?: BattleCardKind | null;
   selectedCardId: string | null;
   selectedSlot: BattleFieldSlotAddress | null;
   selectionAnchor: BattleFieldSlotAddress | null;
@@ -90,10 +87,12 @@ export function BattlefieldGrid({
             selectedSlot.zone === zone &&
             selectedSlot.slotId === slotId;
           const isSupportHighlighted = supportHighlights.has(slotId);
-          const isDropTarget = pendingDragCardKind !== "event" && (
+          // Any dragged card — from any source zone, of any kind — can land on
+          // any battlefield slot; drop-target highlighting is never gated on
+          // card kind or source.
+          const isDropTarget =
             pendingDragCardId !== null ||
-            (handSelectionSide === side && battleCardId === null && canInteract)
-          );
+            (handSelectionSide === side && battleCardId === null && canInteract);
 
           return (
             <button

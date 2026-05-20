@@ -5,7 +5,6 @@ import type {
 } from "../debug/commands";
 import {
   selectBattleCardLocation,
-  selectIsBattleCardReservedThisTurn,
 } from "../state/selectors";
 import type {
   BattleCommandSourceSurface,
@@ -13,6 +12,7 @@ import type {
   BattleMutableState,
 } from "../types";
 import {
+  createMoveCardToBattlefieldCommand,
   createMoveCardToDeckCommand,
   createMoveCardToRowCommand,
   createMoveCardToZoneCommand,
@@ -74,16 +74,16 @@ export function BattleContextMenu({
     const result: ContextMenuItem[] = [];
 
     if (location.zone === "hand") {
-      const isAffordable = state.sides[location.side].currentEnergy >= card.definition.energyCost;
       const playDestination = card.definition.battleCardKind === "character" ? "reserve" : "void";
-      result.push({
-        label: isAffordable ? `Play to ${playDestination}` : `Override cost → ${playDestination}`,
-        action: () => onCommand({
-          id: "PLAY_CARD",
-          battleCardId,
-          sourceSurface,
-        }),
-      });
+      const playCommand = card.definition.battleCardKind === "character"
+        ? createMoveCardToBattlefieldCommand(state, battleCardId, location.side, sourceSurface)
+        : createMoveCardToZoneCommand(battleCardId, location.side, "void", sourceSurface);
+      if (playCommand !== null) {
+        result.push({
+          label: `Play to ${playDestination}`,
+          action: () => onCommand(playCommand),
+        });
+      }
       if (card.definition.battleCardKind === "character") {
         const deployedTarget = createMoveCardToRowCommand(
           state,
@@ -94,13 +94,8 @@ export function BattleContextMenu({
         );
         if (deployedTarget !== null) {
           result.push({
-            label: isAffordable ? "Play, deploy" : "Override cost → deploy",
-            action: () => onCommand({
-              id: "PLAY_CARD",
-              battleCardId,
-              target: deployedTarget.edit.destination as BattleFieldSlotAddress,
-              sourceSurface,
-            }),
+            label: "Play, deploy",
+            action: () => onCommand(deployedTarget),
           });
         }
       }
@@ -112,19 +107,16 @@ export function BattleContextMenu({
       location.side === "player" &&
       card.definition.reclaimCost !== null
     ) {
-      const isAffordable =
-        state.sides.player.currentEnergy >= card.definition.reclaimCost;
-      result.push({
-        label: isAffordable
-          ? `Reclaim for ${String(card.definition.reclaimCost)}`
-          : `Override reclaim ${String(card.definition.reclaimCost)}`,
-        action: () => onCommand({
-          id: "PLAY_CARD",
-          battleCardId,
-          sourceSurface,
-        }),
-      });
-      result.push({ divider: true });
+      const reclaimCommand = card.definition.battleCardKind === "character"
+        ? createMoveCardToBattlefieldCommand(state, battleCardId, location.side, sourceSurface)
+        : createMoveCardToZoneCommand(battleCardId, location.side, "banished", sourceSurface);
+      if (reclaimCommand !== null) {
+        result.push({
+          label: "Reclaim",
+          action: () => onCommand(reclaimCommand),
+        });
+        result.push({ divider: true });
+      }
     }
 
     if (card.definition.battleCardKind === "character") {
@@ -152,27 +144,6 @@ export function BattleContextMenu({
           },
         ],
       });
-      if (
-        location.zone === "deployed" ||
-        (location.zone === "reserve" && selectIsBattleCardReservedThisTurn(state, battleCardId))
-      ) {
-        result.push({
-          label: location.zone === "reserve" ? "Clear reserved" : "Mark reserved",
-          action: () => {
-            const nextZone = location.zone === "reserve" ? "deployed" : "reserve";
-            const command = createMoveCardToRowCommand(
-              state,
-              battleCardId,
-              location.side,
-              nextZone,
-              sourceSurface,
-            );
-            if (command !== null) {
-              onCommand(command);
-            }
-          },
-        });
-      }
       result.push({ divider: true });
     }
 

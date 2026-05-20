@@ -34,7 +34,6 @@ import { useAiTurnDriver } from "../state/use-ai-turn-driver";
 import { useAutoClearForcedResult } from "../state/use-auto-clear-forced-result";
 import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type {
-  BattleCardKind,
   BattleCommandSourceSurface,
   BattleFieldSlotAddress,
   BattleMutableState,
@@ -64,7 +63,12 @@ import { BattleStatusStrip } from "./BattleStatusStrip";
 import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
 import { BattlefieldGrid, resolveBattlefieldSelectionAnchor } from "./BattlefieldGrid";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
-import { createMoveCardToDeckCommand, createMoveCardToZoneCommand } from "./battle-ui-commands";
+import {
+  createMoveCardToBattlefieldCommand,
+  createMoveCardToDeckCommand,
+  createMoveCardToStackCommand,
+  createMoveCardToZoneCommand,
+} from "./battle-ui-commands";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
 const DEFAULT_BATTLE_ZONE_LAYOUT = {
@@ -99,7 +103,6 @@ type ForeseeOverlayState = {
 } | null;
 type PendingDragState = {
   battleCardId: string;
-  kind: BattleCardKind;
   sourceSurface: BattleCommandSourceSurface;
 } | null;
 type HoverPreviewState = {
@@ -328,11 +331,16 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   function handleHandCardDoubleClick(battleCardId: string): void {
     setSelection({ kind: "card", battleCardId });
     setIsInspectorDrawerOpen(true);
-    handleCommand({
-      id: "PLAY_CARD",
+    const side = selectBattleCardLocation(reducerState.mutable, battleCardId)?.side ?? "player";
+    const command = createMoveCardToBattlefieldCommand(
+      reducerState.mutable,
       battleCardId,
-      sourceSurface: "hand-tray",
-    });
+      side,
+      "hand-tray",
+    );
+    if (command !== null) {
+      handleCommand(command);
+    }
   }
 
   function handleBattlefieldCardClick(battleCardId: string): void {
@@ -342,8 +350,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   }
 
   function handleBattlefieldSlotClick(target: BattleFieldSlotAddress, isOccupied: boolean): void {
-    const allowPlayCard = target.side === "player" && !isOccupied;
-    if (handleSelectedBattlefieldTargetClick(target, allowPlayCard)) {
+    if (handleSelectedBattlefieldTargetClick(target, isOccupied)) {
       return;
     }
     setSelection({ kind: "slot", target });
@@ -351,94 +358,60 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     setContextMenu(null);
   }
 
+  // Clicking a battlefield slot while a card is selected funnels through the
+  // same unrestricted-move routing as drag/drop (see handleSlotDrop). The slot
+  // SIDE comes from the clicked target, enabling cross-side placement.
   function handleSelectedBattlefieldTargetClick(
     target: BattleFieldSlotAddress,
-    allowPlayCard: boolean,
+    isOccupied: boolean,
   ): boolean {
     if (selection === null || selection.kind !== "card") {
       return false;
     }
 
     const location = selectBattleCardLocation(reducerState.mutable, selection.battleCardId);
-    if (location?.zone === "hand" && location.side === "enemy" && target.side === "enemy") {
+    const sourceSurface: BattleCommandSourceSurface =
+      location?.zone === "hand" && location.side === "enemy"
+        ? "opponent-hand-tray"
+        : "battlefield";
+
+    if (isOccupied) {
+      const sourceIsBattlefield =
+        location?.zone === "reserve" || location?.zone === "deployed";
+      if (!sourceIsBattlefield) {
+        // Dropping a non-battlefield card onto an occupied slot is a no-op:
+        // only battlefield-to-battlefield moves can swap.
+        return false;
+      }
+      if (location.zone === target.zone && location.slotId === target.slotId) {
+        return false;
+      }
       handleCommand({
         id: "DEBUG_EDIT",
         edit: {
-          kind: "MOVE_CARD_TO_ZONE",
-          battleCardId: selection.battleCardId,
-          destination: target,
-        },
-        sourceSurface: "opponent-hand-tray",
-      });
-      return true;
-    }
-
-    if (allowPlayCard && location?.zone === "hand" && location.side === target.side) {
-      handleCommand({
-        id: "PLAY_CARD",
-        battleCardId: selection.battleCardId,
-        target,
-        sourceSurface: "battlefield",
-      });
-      return true;
-    }
-
-    if (location?.zone === "stack") {
-      handleCommand({
-        id: "MOVE_STACK_CARD",
-        battleCardId: selection.battleCardId,
-        target,
-        sourceSurface: "battlefield",
-      });
-      return true;
-    }
-
-    if (
-      location?.side === target.side &&
-      (location.zone === "reserve" || location.zone === "deployed")
-    ) {
-      if (location.zone !== target.zone) {
-        handleCommand({
-          id: "MOVE_CARD",
-          battleCardId: selection.battleCardId,
-          target,
-          sourceSurface: "battlefield",
-        });
-        return true;
-      }
-
-      if (location.slotId === target.slotId) {
-        return false;
-      }
-
-      const targetOccupant = selectBattlefieldSlotOccupant(reducerState.mutable, target);
-      if (targetOccupant !== null) {
-        handleCommand({
-          id: "DEBUG_EDIT",
-          edit: {
-            kind: "SWAP_BATTLEFIELD_SLOTS",
-            source: {
-              side: location.side,
-              zone: location.zone,
-              slotId: location.slotId,
-            },
-            target,
+          kind: "SWAP_BATTLEFIELD_SLOTS",
+          source: {
+            side: location.side,
+            zone: location.zone,
+            slotId: location.slotId,
           },
-          sourceSurface: "battlefield",
-        });
-        return true;
-      }
-
-      handleCommand({
-        id: "MOVE_CARD",
-        battleCardId: selection.battleCardId,
-        target,
-        sourceSurface: "battlefield",
+          target,
+        },
+        sourceSurface,
       });
       return true;
     }
 
-    return false;
+    handleCommand({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: selection.battleCardId,
+        destination: target,
+      },
+      sourceSurface,
+    });
+    return true;
   }
 
   function handleOpenZoneBrowser(side: BattleSide, zone: BrowseableZone): void {
@@ -571,7 +544,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     if (instance !== undefined) {
       setPendingDrag({
         battleCardId,
-        kind: instance.definition.battleCardKind,
         sourceSurface: resolveDragSourceSurface(location),
       });
     }
@@ -579,41 +551,63 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     setContextMenu(null);
   }
 
+  // Every card-movement gesture funnels through the single unrestricted move
+  // (MOVE_CARD_TO_ZONE) — or SWAP_BATTLEFIELD_SLOTS for a battlefield-to-
+  // battlefield swap. A move never changes energy, and any card can travel to
+  // any zone or side. The drop SIDE always comes from the drop target, so
+  // dropping on an enemy slot/zone moves the card cross-side.
+  //
+  // | Gesture                                                  | Destination                       | Command dispatched                          |
+  // |----------------------------------------------------------|-----------------------------------|---------------------------------------------|
+  // | Drop onto EMPTY battlefield slot                         | that slot                         | MOVE_CARD_TO_ZONE (destination = slot)      |
+  // | Drop onto OCCUPIED slot, source IS a battlefield slot    | swap                              | SWAP_BATTLEFIELD_SLOTS                       |
+  // | Drop onto OCCUPIED slot, source NOT a battlefield slot   | —                                 | no-op (physical restriction)                |
+  // | Drop onto hand/void/banished zone button                 | that zone                         | MOVE_CARD_TO_ZONE ({ side, zone })          |
+  // | Drop onto deck zone                                      | deck top                          | MOVE_CARD_TO_ZONE ({ side, zone:"deck"... })|
+  // | Drop onto stack zone                                     | stack                             | MOVE_CARD_TO_ZONE ({ side, zone:"stack" })  |
+  // | Double-click a hand card                                 | first open reserve, else deployed | MOVE_CARD_TO_ZONE via battlefield helper    |
   function handleSlotDrop(target: BattleFieldSlotAddress): void {
-    const draggedLocation = selectBattleCardLocation(reducerState.mutable, pendingDrag?.battleCardId ?? null);
-    if (draggedLocation?.zone === "hand" && draggedLocation.side === "enemy" && pendingDrag !== null) {
-      handleCommand({
-        id: "DEBUG_EDIT",
-        edit: {
-          kind: "MOVE_CARD_TO_ZONE",
-          battleCardId: pendingDrag.battleCardId,
-          destination: target,
-        },
-        sourceSurface: pendingDrag.sourceSurface,
-      });
+    if (pendingDrag === null) {
+      return;
+    }
+
+    const draggedLocation = selectBattleCardLocation(reducerState.mutable, pendingDrag.battleCardId);
+    const targetOccupant = selectBattlefieldSlotOccupant(reducerState.mutable, target);
+
+    if (targetOccupant !== null) {
+      const sourceIsBattlefield =
+        draggedLocation?.zone === "reserve" || draggedLocation?.zone === "deployed";
+      if (sourceIsBattlefield) {
+        handleCommand({
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "SWAP_BATTLEFIELD_SLOTS",
+            source: {
+              side: draggedLocation.side,
+              zone: draggedLocation.zone,
+              slotId: draggedLocation.slotId,
+            },
+            target,
+          },
+          sourceSurface: "battlefield",
+        });
+      }
+      // Dropping a non-battlefield card onto an occupied slot is a no-op: a
+      // physical card cannot share a slot, and only battlefield-to-battlefield
+      // drags can swap.
       setPendingDrag(null);
       return;
     }
-    if (draggedLocation?.zone === "stack" && pendingDrag !== null) {
-      handleCommand({
-        id: "MOVE_STACK_CARD",
+
+    handleCommand({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "MOVE_CARD_TO_ZONE",
         battleCardId: pendingDrag.battleCardId,
-        target,
-        sourceSurface: "battlefield",
-      });
-      setPendingDrag(null);
-      return;
-    }
-    if (pendingDrag?.kind === "event") {
-      handleCommand({
-        id: "PLAY_CARD",
-        battleCardId: pendingDrag.battleCardId,
-        sourceSurface: "battlefield",
-      });
-      setPendingDrag(null);
-      return;
-    }
-    handleSelectedBattlefieldTargetClick(target, true);
+        destination: target,
+      },
+      sourceSurface: pendingDrag.sourceSurface,
+    });
     setPendingDrag(null);
   }
 
@@ -634,15 +628,13 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   }
 
   function handleStackDrop(): void {
-    const location = selectBattleCardLocation(reducerState.mutable, pendingDrag?.battleCardId ?? null);
-    if (pendingDrag === null || location?.zone !== "hand") {
+    if (pendingDrag === null) {
       return;
     }
-    handleCommand({
-      id: "PLAY_CARD_TO_STACK",
-      battleCardId: pendingDrag.battleCardId,
-      sourceSurface: "battlefield",
-    });
+    const side = selectBattleCardLocation(reducerState.mutable, pendingDrag.battleCardId)?.side ?? "player";
+    handleCommand(
+      createMoveCardToStackCommand(pendingDrag.battleCardId, side, pendingDrag.sourceSurface),
+    );
     setPendingDrag(null);
   }
 
@@ -902,40 +894,15 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                 onCardDragStart={handleCardDragStart}
                 onCardDragEnd={() => setPendingDrag(null)}
-                onResolveToBanished={(battleCardId, side) => handleCommand({
-                  id: "MOVE_STACK_CARD",
-                  battleCardId,
-                  target: { side, zone: "banished" },
-                  sourceSurface: "battlefield",
-                })}
-                onResolveToVoid={(battleCardId, side) => handleCommand({
-                  id: "MOVE_STACK_CARD",
-                  battleCardId,
-                  target: { side, zone: "void" },
-                  sourceSurface: "battlefield",
-                })}
+                onResolveToBanished={(battleCardId, side) => handleCommand(
+                  createMoveCardToZoneCommand(battleCardId, side, "banished", "battlefield"),
+                )}
+                onResolveToVoid={(battleCardId, side) => handleCommand(
+                  createMoveCardToZoneCommand(battleCardId, side, "void", "battlefield"),
+                )}
               />
               <ScaledBattlefield>
-                <div
-                  className="battlefield"
-                  onDragOver={(event) => {
-                    if (pendingDrag?.kind === "event") {
-                      event.preventDefault();
-                    }
-                  }}
-                  onDrop={(event) => {
-                    if (pendingDrag?.kind !== "event") {
-                      return;
-                    }
-                    event.preventDefault();
-                    handleCommand({
-                      id: "PLAY_CARD",
-                      battleCardId: pendingDrag.battleCardId,
-                      sourceSurface: "battlefield",
-                    });
-                    setPendingDrag(null);
-                  }}
-                >
+                <div className="battlefield">
                   <BattlefieldGrid
                     side="enemy"
                     zone="reserve"
@@ -946,7 +913,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     selectionAnchor={battlefieldSelectionAnchor}
                     handSelectionSide={handSelectionSide}
                     pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                    pendingDragCardKind={pendingDrag?.kind ?? null}
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
@@ -967,7 +933,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     selectionAnchor={battlefieldSelectionAnchor}
                     handSelectionSide={handSelectionSide}
                     pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                    pendingDragCardKind={pendingDrag?.kind ?? null}
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
@@ -992,7 +957,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     selectionAnchor={battlefieldSelectionAnchor}
                     handSelectionSide={handSelectionSide}
                     pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                    pendingDragCardKind={pendingDrag?.kind ?? null}
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
@@ -1013,7 +977,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     selectionAnchor={battlefieldSelectionAnchor}
                     handSelectionSide={handSelectionSide}
                     pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                    pendingDragCardKind={pendingDrag?.kind ?? null}
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
