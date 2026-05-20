@@ -171,6 +171,15 @@ describe("normalizeBattleStateSnapshot", () => {
     expect(result?.reducer.lastActivityKind).toBeNull();
   });
 
+  it("fills an RTDB-stripped empty dreamsign summary list on battle init", () => {
+    const raw = makeRawSnapshot({});
+    delete (raw.init as Record<string, unknown>).dreamsignSummaries;
+
+    const result = normalizeBattleStateSnapshot(raw);
+
+    expect(result?.init.dreamsignSummaries).toEqual([]);
+  });
+
   it("omits the metadata.payload key entirely when an RTDB-stripped history entry has no payload", () => {
     // Simulates an entry that round-tripped through RTDB after being written
     // with an empty `payload: {}` (e.g. END_TURN). RTDB drops empty objects on

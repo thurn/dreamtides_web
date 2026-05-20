@@ -1012,7 +1012,14 @@ describe("PlayableBattleScreen", () => {
       clickChip(container, "Dreamcaller");
     });
 
-    expect(container.querySelector("[data-battle-dreamcaller-panel]")?.textContent).toContain("Dreamsigns");
+    const panel = container.querySelector("[data-battle-dreamcaller-panel]");
+    expect(panel?.textContent).toContain("Dreamcaller Card");
+    expect(panel?.textContent).toContain("Aeris");
+    expect(panel?.textContent).toContain("Gain a fleeting advantage");
+    expect(panel?.querySelector("[data-battle-dreamcaller-card]")).not.toBeNull();
+    expect(panel?.querySelector("[data-battle-dreamcaller-rules]")).not.toBeNull();
+    expect(panel?.querySelector('img[alt="Aeris, Storm Archivist"]')).not.toBeNull();
+    expect(panel?.textContent).toContain("Dreamsigns");
 
     act(() => {
       root.unmount();

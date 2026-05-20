@@ -2,10 +2,12 @@ import type {
   BattleDreamcallerSummary,
   BattleDreamsignSummary,
 } from "../types";
+import { DreamcallerPortrait } from "../../components/DreamcallerPortrait";
+import { RulesText } from "../../components/RulesText";
 
 export function BattleDreamcallerPanel({
   dreamcaller,
-  dreamsigns,
+  dreamsigns = [],
   onClose,
 }: {
   dreamcaller: BattleDreamcallerSummary | null;
@@ -36,14 +38,20 @@ export function BattleDreamcallerPanel({
           <div className="floating-empty">No Dreamcaller is attached to this battle.</div>
         ) : (
           <>
-            <div className="dreamcaller-summary">
-              <div className="summary-grid">
-                <div className="summary-stat">
-                  <span className="label">Image</span>
-                  <span className="value">#{String(dreamcaller.imageNumber)}</span>
+            <div className="battle-dreamcaller-card" data-battle-dreamcaller-card="">
+              <div className="battle-dreamcaller-card-art">
+                <DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" />
+              </div>
+              <div className="battle-dreamcaller-card-copy">
+                <div>
+                  <p className="eyebrow">Dreamcaller Card</p>
+                  <h4>{dreamcaller.name}</h4>
+                  <p className="floating-subtitle">{dreamcaller.title}</p>
+                </div>
+                <div className="dreamcaller-text" data-battle-dreamcaller-rules="">
+                  <RulesText text={dreamcaller.renderedText} />
                 </div>
               </div>
-              <p className="dreamcaller-text">{dreamcaller.renderedText}</p>
             </div>
 
             <div className="floating-section">

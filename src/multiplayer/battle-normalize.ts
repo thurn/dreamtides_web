@@ -4,6 +4,7 @@ import {
   type BattleCardInstance,
   type BattleHistory,
   type BattleHistoryEntry,
+  type BattleInit,
   type BattleMutableState,
   type BattleReducerTransition,
   type BattleSideMutableState,
@@ -158,6 +159,13 @@ function normalizeReducer(
   };
 }
 
+function normalizeInit(raw: SharedBattleState["init"]): BattleInit {
+  return {
+    ...raw,
+    dreamsignSummaries: raw.dreamsignSummaries ?? [],
+  };
+}
+
 export function normalizeBattleStateSnapshot(
   raw: unknown,
 ): SharedBattleState | null {
@@ -169,7 +177,7 @@ export function normalizeBattleStateSnapshot(
     return null;
   }
   return {
-    init: candidate.init,
+    init: normalizeInit(candidate.init),
     reducer: normalizeReducer(candidate.reducer),
   };
 }
