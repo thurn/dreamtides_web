@@ -1107,12 +1107,9 @@ function BattleStackZone({
     >
       <div className="battle-stack-zone-header">
         <span>Stack</span>
-        <strong>{String((state.stack ?? []).length)}</strong>
       </div>
       <div className="battle-stack-zone-cards">
-        {(state.stack ?? []).length === 0 ? (
-          <span className="battle-stack-empty">Drag a card here to hold it.</span>
-        ) : (state.stack ?? []).map((entry) => {
+        {(state.stack ?? []).map((entry) => {
           const instance = state.cardInstances[entry.battleCardId];
           if (instance === undefined) {
             return null;

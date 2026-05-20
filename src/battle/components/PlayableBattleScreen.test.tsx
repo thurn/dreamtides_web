@@ -258,7 +258,22 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("keeps stack count and resolution controls available in the compact side zone", () => {
+  it("renders the empty stack zone without instructional copy or a counter", () => {
+    const { container, root } = renderScreen();
+    const stackZone = container.querySelector<HTMLElement>('[data-battle-region="stack-zone"]');
+
+    expect(stackZone).not.toBeNull();
+    expect(stackZone?.textContent).toBe("Stack");
+    expect(stackZone?.querySelector(".battle-stack-zone-header strong")).toBeNull();
+    expect(stackZone?.querySelector(".battle-stack-empty")).toBeNull();
+    expect(stackZone?.querySelector("[data-battle-card-id]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps stacked cards and resolution controls available in the stack zone", () => {
     const { container, root } = renderScreen((state) => {
       const [stackedCardId] = state.sides.player.hand;
       if (stackedCardId === undefined) {
@@ -277,8 +292,9 @@ describe("PlayableBattleScreen", () => {
 
     expect(stackZone).not.toBeNull();
     expect(stackZone?.textContent).toContain("Stack");
-    expect(stackZone?.textContent).toContain("1");
     expect(stackZone?.querySelector("[data-battle-card-id]")).not.toBeNull();
+    expect(stackZone?.querySelector(".battle-stack-zone-header strong")).toBeNull();
+    expect(stackZone?.querySelector(".battle-stack-empty")).toBeNull();
     expect(stackZone?.textContent).toContain("Void");
     expect(stackZone?.textContent).toContain("Banish");
 

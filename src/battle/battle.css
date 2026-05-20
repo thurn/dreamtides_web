@@ -269,7 +269,7 @@
   min-height: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
   overflow: hidden;
 }
@@ -367,14 +367,13 @@
 }
 
 .battle-stack-zone {
-  flex: 0 0 clamp(118px, 14vw, 148px);
-  align-self: center;
+  flex: 0 0 clamp(177px, 21vw, 222px);
+  align-self: stretch;
   display: flex;
   flex-direction: column;
   gap: 8px;
   min-width: 0;
-  height: min(100%, clamp(132px, 28vh, 196px));
-  min-height: min(132px, 100%);
+  min-height: 0;
   padding: 9px 10px;
   border: 1px dashed var(--line);
   border-radius: 8px;
@@ -390,7 +389,7 @@
 .battle-stack-zone-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 8px;
   min-width: 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -403,36 +402,35 @@
 .battle-stack-zone-cards {
   flex: 1 1 auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: stretch;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
   min-height: 0;
-  overflow-y: auto;
-}
-
-.battle-stack-empty {
-  color: var(--text-faint);
-  font-size: 11px;
-  line-height: 1.25;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .battle-stack-entry {
   display: grid;
-  grid-template-columns: 44px auto;
-  align-items: center;
-  gap: 6px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 7px;
   flex: 0 0 auto;
+  width: clamp(112px, 13vw, 142px);
+  min-height: 0;
 }
 
 .battle-stack-entry .battle-card {
-  width: 44px;
-  height: 66px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
 }
 
 .battle-stack-entry-actions {
   display: grid;
-  gap: 4px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
   min-width: 0;
 }
 
