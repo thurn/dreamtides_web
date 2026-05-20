@@ -467,9 +467,8 @@ export interface BattleHistoryEntryMetadata {
   timestamp: number;
   /**
    * Spec §H-4 envelope slot for per-command arguments. Populated at dispatch
-   * time by `createBattleCommandMetadata`. Optional because `RECOMPUTE_RESULT`
-   * and the auto-clear system entries have no user-facing arguments to
-   * preserve.
+   * time by `createBattleCommandMetadata`. Optional because some entries carry
+   * no user-facing arguments to preserve.
    */
   payload?: Record<string, unknown>;
   /**
@@ -533,14 +532,4 @@ export type BattleReducerAction =
     type: "FORCE_RESULT";
     result: BattleResult;
     metadata: BattleHistoryEntryMetadata;
-  }
-  | {
-    // bug-046: every other reducer action carries full metadata. RECOMPUTE_RESULT
-    // is the engine-internal emission that reconciles a forced result with the
-    // natural evaluation. Callers must pass an explicit commandId/label/kind;
-    // the reducer no longer back-fills defaults here.
-    type: "RECOMPUTE_RESULT";
-    commandId: string;
-    label: string;
-    kind: BattleHistoryEntryKind;
   };

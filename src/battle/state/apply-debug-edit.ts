@@ -1,7 +1,8 @@
 import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
 import {
-  applyBattleResult,
+  createBattleResultChangedLogFields,
   createEmptyTransitionData,
+  createFlowStep,
 } from "../engine/result";
 import {
   createBattleLogBaseFields,
@@ -19,7 +20,6 @@ import type {
   BattleDeckCardDefinition,
   BattleEngineEmissionContext,
   BattleFieldSlotAddress,
-  BattleInit,
   BattleMutableState,
   BattleResult,
   BattleSide,
@@ -978,7 +978,6 @@ function formatDestinationZoneLabel(
 export function forceBattleResult(
   state: BattleMutableState,
   result: BattleResult,
-  battleInit: Pick<BattleInit, "scoreToWin" | "turnLimit">,
   context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
@@ -993,8 +992,34 @@ export function forceBattleResult(
 
   const nextState = cloneBattleMutableState(state);
   nextState.forcedResult = result;
+  nextState.result = result;
 
-  return applyBattleResult(nextState, battleInit, context);
+  const evaluation = { result, reason: "forced_result" as const };
+
+  return {
+    state: nextState,
+    transition: {
+      ...createEmptyTransitionData(),
+      resultChange: {
+        at: createFlowStep(state.activeSide, state.phase),
+        previousResult: state.result,
+        result,
+        reason: "forced_result",
+      },
+      logEvents: [
+        {
+          event: "battle_proto_result_changed",
+          fields: createBattleResultChangedLogFields(
+            nextState,
+            state.result,
+            evaluation,
+            state.phase,
+            context,
+          ),
+        },
+      ],
+    },
+  };
 }
 
 function moveCardToDebugZone(

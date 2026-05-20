@@ -97,34 +97,37 @@ describe("battleReducer", () => {
     expect(reducerState.mutable.result).toBeNull();
   });
 
-  it("lets RECOMPUTE_RESULT derive the natural turn-limit draw from battle state", () => {
+  it("leaves result null when a score edit crosses the win target (manual outcome only)", () => {
     const { battleInit, state } = createTestBattle();
-
-    state.activeSide = "enemy";
-    state.phase = "ending";
-    state.turnNumber = battleInit.turnLimit;
-    state.sides.player.score = 12;
-    state.sides.enemy.score = 10;
 
     const reduced = battleReducer(
       createBattleReducerState(state),
       {
-        type: "RECOMPUTE_RESULT",
-        commandId: "RECOMPUTE_RESULT",
-        label: "Recompute Result",
-        kind: "result",
+        type: "DEBUG_EDIT",
+        edit: {
+          kind: "ADJUST_SCORE",
+          side: "player",
+          amount: battleInit.scoreToWin + 10,
+        },
+        metadata: {
+          commandId: "ADJUST_SCORE",
+          label: "Adjust Score",
+          kind: "numeric-state",
+          isComposite: false,
+          actor: "debug",
+          sourceSurface: "inspector",
+          targets: [{ kind: "side", ref: "player" }],
+          timestamp: 0,
+          undoPayload: null,
+        },
       },
       battleInit,
     );
 
-    expect(reduced.mutable.result).toBe("draw");
-    expect(reduced.history.past).toHaveLength(1);
-    expect(reduced.lastTransition?.resultChange).toEqual({
-      at: { side: "enemy", phase: "ending" },
-      previousResult: null,
-      result: "draw",
-      reason: "turn_limit_reached",
-    });
+    expect(reduced.mutable.sides.player.score).toBe(battleInit.scoreToWin + 10);
+    expect(reduced.mutable.result).toBeNull();
+    expect(reduced.mutable.forcedResult).toBeNull();
+    expect(reduced.lastTransition?.resultChange).toBeNull();
   });
 
   it("forces a result immediately and preserves the chosen forced-result marker", () => {
@@ -159,6 +162,91 @@ describe("battleReducer", () => {
       result: "defeat",
       reason: "forced_result",
     });
+  });
+
+  it("sets both result and forcedResult to victory on FORCE_RESULT victory", () => {
+    const { battleInit, state } = createTestBattle();
+    const reduced = battleReducer(
+      createBattleReducerState(state),
+      {
+        type: "FORCE_RESULT",
+        result: "victory",
+        metadata: {
+          commandId: "FORCE_RESULT",
+          label: "Force Victory",
+          kind: "result",
+          isComposite: true,
+          actor: "debug",
+          sourceSurface: "action-bar",
+          targets: [],
+          timestamp: 0,
+          undoPayload: null,
+        },
+      },
+      battleInit,
+    );
+
+    expect(reduced.mutable.forcedResult).toBe("victory");
+    expect(reduced.mutable.result).toBe("victory");
+    expect(reduced.lastTransition?.resultChange?.reason).toBe("forced_result");
+  });
+
+  it("keeps a forced defeat sticky through an unrelated debug edit", () => {
+    const { battleInit, state } = createTestBattle();
+    const battleCardId = state.sides.player.hand[0];
+
+    const forced = battleReducer(
+      createBattleReducerState(state),
+      {
+        type: "FORCE_RESULT",
+        result: "defeat",
+        metadata: {
+          commandId: "FORCE_RESULT",
+          label: "Force Defeat",
+          kind: "result",
+          isComposite: true,
+          actor: "debug",
+          sourceSurface: "action-bar",
+          targets: [],
+          timestamp: 0,
+          undoPayload: null,
+        },
+      },
+      battleInit,
+    );
+
+    expect(forced.mutable.result).toBe("defeat");
+    expect(forced.mutable.forcedResult).toBe("defeat");
+
+    const edited = battleReducer(
+      forced,
+      {
+        type: "DEBUG_EDIT",
+        edit: {
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId,
+          destination: { side: "player", zone: "void" },
+        },
+        metadata: {
+          commandId: "MOVE_CARD_TO_ZONE",
+          label: "Move Card",
+          kind: "zone-move",
+          isComposite: false,
+          actor: "debug",
+          sourceSurface: "inspector",
+          targets: [{ kind: "card", ref: battleCardId }],
+          timestamp: 0,
+          undoPayload: null,
+        },
+      },
+      battleInit,
+    );
+
+    // The forced outcome must stick: the unrelated edit does not recompute or
+    // clear it. It only changes via undo or another FORCE_RESULT.
+    expect(edited.mutable.result).toBe("defeat");
+    expect(edited.mutable.forcedResult).toBe("defeat");
+    expect(edited.mutable.sides.player.void).toContain(battleCardId);
   });
 
   it("keeps SKIP_TO_REWARDS distinct in history metadata while using forced victory semantics", () => {
@@ -215,7 +303,7 @@ describe("battleReducer", () => {
     expect(redone?.restored.mutable).toEqual(reduced.mutable);
   });
 
-  it("recomputes battle result after a committed move edit", () => {
+  it("never derives a result from a committed move edit even at the win target", () => {
     const { battleInit, state } = createTestBattle();
     const battleCardId = findPlayerEventCardId(state);
 
@@ -234,10 +322,11 @@ describe("battleReducer", () => {
       battleInit,
     );
 
-    expect(reduced.mutable.result).toBe("victory");
+    expect(reduced.mutable.result).toBeNull();
+    expect(reduced.mutable.forcedResult).toBeNull();
     expect(reduced.mutable.sides.player.void).toContain(battleCardId);
     expect(reduced.history.past).toHaveLength(1);
-    expect(reduced.lastTransition?.resultChange?.result).toBe("victory");
+    expect(reduced.lastTransition?.resultChange).toBeNull();
   });
 
   it("treats same-slot MOVE_CARD_TO_ZONE moves as a no-op without creating history", () => {
@@ -376,29 +465,25 @@ describe("battleReducer", () => {
     expect(cardTarget?.ref).toBe(battleCardId);
   });
 
-  it("emits winner, playerScore, enemyScore, and reason on battle_proto_result_changed for a player win", () => {
+  it("emits winner, playerScore, enemyScore, and reason on battle_proto_result_changed for a forced player win", () => {
     const { battleInit, state } = createTestBattle();
 
-    state.sides.player.score = battleInit.scoreToWin - 1;
+    state.sides.player.score = battleInit.scoreToWin + 4;
     state.sides.enemy.score = 5;
 
     const reduced = battleReducer(
       createBattleReducerState(state),
       {
-        type: "DEBUG_EDIT",
-        edit: {
-          kind: "ADJUST_SCORE",
-          side: "player",
-          amount: 5,
-        },
+        type: "FORCE_RESULT",
+        result: "victory",
         metadata: {
-          commandId: "ADJUST_SCORE",
-          label: "Adjust Score",
-          kind: "numeric-state",
-          isComposite: false,
+          commandId: "FORCE_RESULT",
+          label: "Force Victory",
+          kind: "result",
+          isComposite: true,
           actor: "debug",
           sourceSurface: "inspector",
-          targets: [{ kind: "side", ref: "player" }],
+          targets: [],
           timestamp: 0,
           undoPayload: null,
         },
@@ -413,7 +498,7 @@ describe("battleReducer", () => {
     expect(resultEvent).toBeDefined();
     expect(resultEvent?.fields).toMatchObject({
       result: "victory",
-      reason: "score_target_reached",
+      reason: "forced_result",
       winner: "player",
       playerScore: battleInit.scoreToWin + 4,
       enemyScore: 5,
@@ -423,29 +508,25 @@ describe("battleReducer", () => {
     });
   });
 
-  it("emits winner 'enemy' on battle_proto_result_changed for an enemy win", () => {
+  it("emits winner 'enemy' on battle_proto_result_changed for a forced enemy win", () => {
     const { battleInit, state } = createTestBattle();
 
     state.sides.player.score = 3;
-    state.sides.enemy.score = battleInit.scoreToWin - 1;
+    state.sides.enemy.score = battleInit.scoreToWin + 4;
 
     const reduced = battleReducer(
       createBattleReducerState(state),
       {
-        type: "DEBUG_EDIT",
-        edit: {
-          kind: "ADJUST_SCORE",
-          side: "enemy",
-          amount: 5,
-        },
+        type: "FORCE_RESULT",
+        result: "defeat",
         metadata: {
-          commandId: "ADJUST_SCORE",
-          label: "Adjust Score",
-          kind: "numeric-state",
-          isComposite: false,
+          commandId: "FORCE_RESULT",
+          label: "Force Defeat",
+          kind: "result",
+          isComposite: true,
           actor: "debug",
           sourceSurface: "inspector",
-          targets: [{ kind: "side", ref: "enemy" }],
+          targets: [],
           timestamp: 0,
           undoPayload: null,
         },
@@ -660,22 +741,28 @@ describe("battleReducer", () => {
     }
   });
 
-  it("emits winner null on battle_proto_result_changed for a draw", () => {
+  it("emits winner null on battle_proto_result_changed for a forced draw", () => {
     const { battleInit, state } = createTestBattle();
 
-    state.activeSide = "enemy";
-    state.phase = "ending";
-    state.turnNumber = battleInit.turnLimit;
     state.sides.player.score = 12;
     state.sides.enemy.score = 10;
 
     const reduced = battleReducer(
       createBattleReducerState(state),
       {
-        type: "RECOMPUTE_RESULT",
-        commandId: "RECOMPUTE_RESULT",
-        label: "Recompute Result",
-        kind: "result",
+        type: "FORCE_RESULT",
+        result: "draw",
+        metadata: {
+          commandId: "FORCE_RESULT",
+          label: "Force Draw",
+          kind: "result",
+          isComposite: true,
+          actor: "debug",
+          sourceSurface: "action-bar",
+          targets: [],
+          timestamp: 0,
+          undoPayload: null,
+        },
       },
       battleInit,
     );
@@ -686,7 +773,7 @@ describe("battleReducer", () => {
 
     expect(resultEvent?.fields).toMatchObject({
       result: "draw",
-      reason: "turn_limit_reached",
+      reason: "forced_result",
       winner: null,
       playerScore: 12,
       enemyScore: 10,
