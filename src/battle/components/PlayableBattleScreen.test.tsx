@@ -1109,7 +1109,16 @@ describe("PlayableBattleScreen", () => {
       container.querySelector<HTMLElement>('[data-battle-side-summary="player"]')?.click();
     });
 
-    expect(container.querySelector('[data-battle-side-summary-popover="player"]')?.textContent).toContain("Quick Zones");
+    const playerSummary = container.querySelector('[data-battle-side-summary-popover="player"]');
+    expect(playerSummary?.textContent).toContain("Quick Zones");
+    expect(playerSummary?.textContent).toContain("Gain a fleeting advantage");
+    expect(playerSummary?.textContent).not.toContain("Status");
+    expect(playerSummary?.textContent).not.toContain("Reserve");
+    expect(playerSummary?.textContent).not.toContain("Deployed");
+    expect(playerSummary?.textContent).not.toContain("Extra Turns");
+    expect(playerSummary?.querySelector("[data-battle-summary-dreamcaller-card]")).not.toBeNull();
+    expect(playerSummary?.querySelector("[data-battle-summary-dreamcaller-rules]")).not.toBeNull();
+    expect(playerSummary?.querySelector('img[alt="Aeris, Storm Archivist"]')).not.toBeNull();
     expect(container.textContent).toContain("Create Figment");
     expect(container.textContent).toContain("Dreamcaller");
 

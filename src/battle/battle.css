@@ -1535,6 +1535,14 @@
   margin: 0;
 }
 
+.summary-dreamcaller-card {
+  grid-template-columns: 120px minmax(0, 1fr);
+}
+
+.summary-dreamcaller-card .battle-dreamcaller-card-copy {
+  justify-content: center;
+}
+
 @media (max-width: 560px) {
   .battle-dreamcaller-card {
     grid-template-columns: 1fr;

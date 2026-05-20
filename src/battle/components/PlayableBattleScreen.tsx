@@ -784,6 +784,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           subtitle={openSideSummary === "player"
             ? battleInit.dreamcallerSummary?.title ?? ""
             : battleInit.enemyDescriptor.subtitle}
+          dreamcaller={openSideSummary === "player" ? battleInit.dreamcallerSummary : null}
           isActive={reducerState.mutable.activeSide === openSideSummary}
           isSelected={selection?.kind === "side-summary" && selection.side === openSideSummary}
           isPlayerInfoAvailable={battleInit.dreamcallerSummary !== null || battleInit.dreamsignSummaries.length > 0}
