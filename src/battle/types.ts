@@ -285,7 +285,6 @@ export interface BattleCardInstance {
   markers: BattleCardMarkers;
   notes: readonly BattleCardNote[];
   provenance: BattleCardProvenance;
-  enteredReserveTurnNumber?: number | null;
 }
 
 export interface BattleSideMutableState {
@@ -525,15 +524,6 @@ export interface BattleHistoryActivity {
 export type BattleActivity = BattleCommandActivity | BattleHistoryActivity;
 
 export type BattleReducerAction =
-  | {
-    type: "END_TURN";
-    metadata?: BattleHistoryEntryMetadata;
-  }
-  | {
-    type: "PASS_PHASE";
-    metadata: BattleHistoryEntryMetadata;
-  }
-  | { type: "RUN_AI_TURN" }
   | {
     type: "DEBUG_EDIT";
     edit: BattleDebugEdit;

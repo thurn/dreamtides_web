@@ -3,14 +3,10 @@ import {
   applyBattleResult,
   createEmptyTransitionData,
 } from "../engine/result";
-import { resolvePlayCard } from "../engine/play-card";
-import { buildJudgmentTransition } from "../engine/turn-flow";
 import {
   createBattleLogBaseFields,
   createBattleProtoCardCreatedLogEvent,
   createBattleProtoDeckReorderedLogEvent,
-  createBattleProtoExtraJudgmentLogEvent,
-  createBattleProtoExtraTurnGrantedLogEvent,
   createBattleProtoMarkerSetLogEvent,
   createBattleProtoNoteAddedLogEvent,
   createBattleProtoNoteClearedLogEvent,
@@ -41,6 +37,7 @@ import {
   isBattleFieldSlotAddressValid,
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
+  selectDefaultCharacterPlaySlot,
   selectKindleTargetBattleCardId,
 } from "./selectors";
 import {
@@ -291,11 +288,7 @@ export function applyDebugEdit(
     case "HIDE_DECK_TOP":
       return hideDeckTop(state, nextState, edit.side, edit.count);
     case "PLAY_FROM_DECK_TOP":
-      return playFromDeckTop(state, edit.side, edit.target, context);
-    case "FORCE_JUDGMENT":
-      return forceJudgment(nextState, edit.side, context);
-    case "GRANT_EXTRA_TURN":
-      return grantExtraTurn(nextState, edit.side, context);
+      return playFromDeckTop(state, edit.side, edit.target);
     case "SET_PHASE":
       if (nextState.phase === edit.phase) {
         return {
@@ -467,122 +460,47 @@ function playFromDeckTop(
   state: BattleMutableState,
   side: BattleSide,
   target: BattleFieldSlotAddress | undefined,
-  context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
   const topBattleCardId = state.sides[side].deck[0];
-  if (topBattleCardId === undefined) {
+  if (topBattleCardId === undefined || state.cardInstances[topBattleCardId] === undefined) {
     return {
       state,
       transition: createEmptyTransitionData(),
     };
   }
 
-  const instance = state.cardInstances[topBattleCardId];
-  if (instance === undefined) {
+  // Manual, energy-free play: move the top deck card straight onto an open
+  // battlefield slot on that side. The destination is the explicit target when
+  // given, otherwise the first open reserve slot, then the first open deployed
+  // slot (selectDefaultCharacterPlaySlot). No-op when nothing is open or the
+  // explicit target is occupied/invalid.
+  const resolvedTarget = target ?? selectDefaultCharacterPlaySlot(state, side) ?? undefined;
+  if (resolvedTarget === undefined) {
     return {
       state,
       transition: createEmptyTransitionData(),
     };
   }
 
-  const resolvedTarget = target
-    ?? (instance.definition.battleCardKind === "character"
-      ? firstEmptyReserveSlot(state, side)
-      : undefined);
-
-  if (
-    instance.definition.battleCardKind === "character" &&
-    resolvedTarget === undefined
-  ) {
+  if (!isDebugDestinationPlaceable(state, resolvedTarget)) {
     return {
       state,
       transition: createEmptyTransitionData(),
     };
   }
 
-  const stagedState = cloneBattleMutableState(state);
-  stagedState.sides[side].deck = stagedState.sides[side].deck.slice(1);
-  stagedState.sides[side].hand = [...stagedState.sides[side].hand, topBattleCardId];
-  stagedState.cardInstances[topBattleCardId].controller = side;
-  stagedState.cardInstances[topBattleCardId].isRevealedToPlayer = true;
-
-  const playResult = resolvePlayCard(stagedState, topBattleCardId, resolvedTarget, context);
-  if (playResult.state === stagedState) {
-    return {
-      state,
-      transition: createEmptyTransitionData(),
-    };
-  }
-
-  return {
-    state: playResult.state,
-    transition: playResult.transition,
-  };
-}
-
-function forceJudgment(
-  nextState: BattleMutableState,
-  side: BattleSide,
-  context: BattleEngineEmissionContext,
-): {
-  state: BattleMutableState;
-  transition: BattleTransitionData;
-} {
-  const transition = createEmptyTransitionData();
-  const { judgmentStep, judgment, scoreChanges, dissolvedCardIds } =
-    buildJudgmentTransition(nextState, transition, side, context, {
-      advancePhase: false,
-    });
-  transition.judgment = judgment;
-  transition.scoreChanges = scoreChanges;
-
-  const scoreChangeForSide = scoreChanges.find((change) => change.side === side);
-  transition.logEvents.push(
-    createBattleProtoExtraJudgmentLogEvent(
-      { ...nextState, phase: judgmentStep.phase },
-      {
-        resolvedSide: side,
-        dissolvedCardIds,
-        scoreChange: scoreChangeForSide === undefined ? 0 : scoreChangeForSide.delta,
-        forced: true,
-      },
-      context,
-    ),
-  );
+  const nextState = cloneBattleMutableState(state);
+  nextState.sides[side].deck = nextState.sides[side].deck.slice(1);
+  insertBattleCardAtDebugDestination(nextState, topBattleCardId, resolvedTarget);
+  nextState.cardInstances[topBattleCardId].controller = resolvedTarget.side;
+  nextState.cardInstances[topBattleCardId].isRevealedToPlayer = true;
 
   return {
     state: nextState,
-    transition,
-  };
-}
-
-function grantExtraTurn(
-  nextState: BattleMutableState,
-  side: BattleSide,
-  context: BattleEngineEmissionContext,
-): {
-  state: BattleMutableState;
-  transition: BattleTransitionData;
-} {
-  nextState.sides[side].pendingExtraTurns += 1;
-  return {
-    state: nextState,
-    transition: {
-      ...createEmptyTransitionData(),
-      logEvents: [
-        createBattleProtoExtraTurnGrantedLogEvent(
-          nextState,
-          {
-            grantedSide: side,
-            pendingExtraTurnsAfter: nextState.sides[side].pendingExtraTurns,
-          },
-          context,
-        ),
-      ],
-    },
+    transition: createEmptyTransitionData(),
   };
 }
 
@@ -630,22 +548,6 @@ function setSideHandVisibility(
       ],
     },
   };
-}
-
-function firstEmptyReserveSlot(
-  state: BattleMutableState,
-  side: BattleSide,
-): BattleFieldSlotAddress | undefined {
-  for (const slotId of RESERVE_SLOT_IDS) {
-    if (state.sides[side].reserve[slotId] === null) {
-      return {
-        side,
-        zone: "reserve",
-        slotId,
-      };
-    }
-  }
-  return undefined;
 }
 
 function addCardNote(

@@ -31,8 +31,8 @@ function createFixture() {
       command: {
         id: "DEBUG_EDIT",
         edit: {
-          kind: "GRANT_EXTRA_TURN",
-          side: "player",
+          kind: "SET_PHASE",
+          phase: "dusk",
         },
         sourceSurface: "side-summary",
       },
@@ -108,7 +108,7 @@ describe("BattleLogDrawer", () => {
 
     expect(container.querySelector('[data-battle-region="battle-log"]')?.textContent).toContain("Battle log");
     expect(container.textContent).toContain("Turn 1");
-    expect(container.textContent).toContain("Grant Extra Turn to Player");
+    expect(container.textContent).toContain("Set Phase to Dusk");
     expect(container.textContent).toContain("battle-flow");
     expect(container.textContent).toContain("Raw Events");
 

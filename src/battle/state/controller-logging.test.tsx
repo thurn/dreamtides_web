@@ -145,8 +145,7 @@ describe("useBattleController", () => {
   });
 
   it(
-    "emits exactly one battle_proto_command_applied for END_TURN but none for the "
-      + "internal RUN_AI_TURN follow-up (bug-043 log-parity)",
+    "emits exactly one battle_proto_command_applied per user command",
     () => {
       const { battleInit, initialState } = createTestBattle();
       let latest:
@@ -163,35 +162,24 @@ describe("useBattleController", () => {
         },
       });
 
-      // First, a user-initiated END_TURN composite. This MUST log exactly one
-      // `battle_proto_command_applied` entry with commandId END_TURN.
+      // A user-initiated SET_PHASE edit logs exactly one
+      // `battle_proto_command_applied` entry with commandId SET_PHASE.
       act(() => {
         latest?.dispatch({
           type: "APPLY_COMMAND",
-          command: { id: "END_TURN" },
+          command: {
+            id: "DEBUG_EDIT",
+            edit: { kind: "SET_PHASE", phase: "dusk" },
+          },
         });
       });
 
-      const afterEndTurn = getLogEntries().filter(
+      const afterSetPhase = getLogEntries().filter(
         (entry) =>
           entry.event === "battle_proto_command_applied"
-          && entry.commandId === "END_TURN",
+          && entry.commandId === "SET_PHASE",
       );
-      expect(afterEndTurn).toHaveLength(1);
-
-      // Then, an internal RUN_AI_TURN dispatch — the driver wraps it in
-      // clearLoggedActivity so it must NOT emit any new
-      // battle_proto_command_applied entry.
-      const logsBefore = getLogEntries().filter(
-        (entry) => entry.event === "battle_proto_command_applied",
-      );
-      act(() => {
-        latest?.dispatch({ type: "RUN_AI_TURN" });
-      });
-      const logsAfter = getLogEntries().filter(
-        (entry) => entry.event === "battle_proto_command_applied",
-      );
-      expect(logsAfter.length).toBe(logsBefore.length);
+      expect(afterSetPhase).toHaveLength(1);
 
       act(() => {
         root.unmount();

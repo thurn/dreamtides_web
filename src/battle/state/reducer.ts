@@ -1,7 +1,5 @@
 import {
-  createEndTurnHistoryMetadata,
   createRecomputeResultHistoryMetadata,
-  createRunAiTurnHistoryMetadata,
 } from "../debug/commands";
 import type {
   BattleEngineEmissionContext,
@@ -18,11 +16,6 @@ import {
   applyBattleResult,
   evaluateBattleResult,
 } from "../engine/result";
-import { advanceAfterEndTurn, passBattlePhase } from "../engine/turn-flow";
-import { runAiTurn } from "../ai/run-ai-turn";
-import {
-  selectShouldEndTurnFromDay,
-} from "./selectors";
 import {
   commitBattleHistoryEntry,
   createEmptyBattleHistory,
@@ -54,40 +47,6 @@ export function battleReducer(
   >,
 ): BattleReducerState {
   switch (action.type) {
-    case "END_TURN": {
-      const metadata = action.metadata ?? createEndTurnHistoryMetadata();
-      const context = createEngineEmissionContext(metadata);
-      return commitReducerTransition(
-        state,
-        metadata,
-        (mutableState) => endTurnWithAiFollowup(mutableState, battleInit, context),
-      );
-    }
-    case "PASS_PHASE": {
-      const context = createEngineEmissionContext(action.metadata);
-      return commitReducerTransition(
-        state,
-        action.metadata,
-        (mutableState) => passPhaseWithAiFollowup(mutableState, battleInit, context),
-      );
-    }
-    case "RUN_AI_TURN": {
-      // bug-070 / spec §H-15 still applies: the bootstrap dispatch in
-      // `use-ai-turn-driver.ts` is the only legal standalone caller, and it
-      // already short-circuits when `battleInit.enableAi` is false. The
-      // reducer-side guard here is defence-in-depth so any future caller that
-      // forgets the gate cannot resurrect heuristic moves at the reducer
-      // layer.
-      if (!battleInit.enableAi) {
-        return state;
-      }
-      const metadata = createRunAiTurnHistoryMetadata();
-      return commitReducerTransition(
-        state,
-        metadata,
-        (mutableState) => runAiTurn(mutableState, battleInit),
-      );
-    }
     case "DEBUG_EDIT": {
       const context = createEngineEmissionContext(action.metadata);
       return commitGameplayTransition(
@@ -237,71 +196,6 @@ function mergeTransitions(
     resultChange: right.resultChange ?? left.resultChange,
     aiChoices: [...left.aiChoices, ...right.aiChoices],
     logEvents: [...left.logEvents, ...right.logEvents],
-  };
-}
-
-function endTurnWithAiFollowup(
-  state: BattleMutableState,
-  battleInit: Pick<
-    BattleInit,
-    "enableAi" | "maxEnergyCap" | "playerDrawSkipsTurnOne" | "scoreToWin" | "turnLimit"
-  >,
-  context: BattleEngineEmissionContext,
-): {
-  state: BattleMutableState;
-  transition: BattleTransitionData;
-} {
-  const afterEndTurn = advanceAfterEndTurn(state, battleInit, context);
-  if (
-    afterEndTurn.state === state ||
-    afterEndTurn.state.result !== null ||
-    afterEndTurn.state.activeSide !== "enemy" ||
-    afterEndTurn.state.phase !== "day" ||
-    !battleInit.enableAi
-  ) {
-    // When `enableAi` is false the enemy's main phase is left intact for the
-    // player to drive via debug commands; a subsequent player-issued END_TURN
-    // composite will advance the flow back to the player.
-    return afterEndTurn;
-  }
-
-  const aiTurn = runAiTurn(afterEndTurn.state, battleInit);
-  return {
-    state: aiTurn.state,
-    transition: mergeTransitions(afterEndTurn.transition, aiTurn.transition),
-  };
-}
-
-function passPhaseWithAiFollowup(
-  state: BattleMutableState,
-  battleInit: Pick<
-    BattleInit,
-    "enableAi" | "maxEnergyCap" | "playerDrawSkipsTurnOne" | "scoreToWin" | "turnLimit"
-  >,
-  context: BattleEngineEmissionContext,
-): {
-  state: BattleMutableState;
-  transition: BattleTransitionData;
-} {
-  if (selectShouldEndTurnFromDay(state)) {
-    return endTurnWithAiFollowup(state, battleInit, context);
-  }
-
-  const advanced = passBattlePhase(state, battleInit, context);
-  if (
-    advanced.state === state ||
-    advanced.state.result !== null ||
-    advanced.state.activeSide !== "enemy" ||
-    advanced.state.phase !== "day" ||
-    !battleInit.enableAi
-  ) {
-    return advanced;
-  }
-
-  const aiTurn = runAiTurn(advanced.state, battleInit);
-  return {
-    state: aiTurn.state,
-    transition: mergeTransitions(advanced.transition, aiTurn.transition),
   };
 }
 

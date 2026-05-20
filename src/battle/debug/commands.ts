@@ -1,7 +1,4 @@
-import {
-  selectKindleTargetBattleCardId,
-  selectShouldEndTurnFromDay,
-} from "../state/selectors";
+import { selectKindleTargetBattleCardId } from "../state/selectors";
 import { formatPhaseLabel } from "../ui/format";
 import type {
   BattleCardMarkers,
@@ -19,8 +16,6 @@ import type {
 } from "../types";
 
 export type BattleCommandId =
-  | "END_TURN"
-  | "PASS_PHASE"
   | "DEBUG_EDIT"
   | "FORCE_RESULT"
   | "SKIP_TO_REWARDS";
@@ -173,14 +168,6 @@ export type BattleDebugEdit =
     target?: BattleFieldSlotAddress;
   }
   | {
-    kind: "FORCE_JUDGMENT";
-    side: BattleSide;
-  }
-  | {
-    kind: "GRANT_EXTRA_TURN";
-    side: BattleSide;
-  }
-  | {
     kind: "SET_PHASE";
     phase: BattlePhase;
   };
@@ -215,12 +202,6 @@ export function withDefaultSourceSurface(
 
 export type BattleCommand =
   | ({
-    id: "END_TURN";
-  } & BattleCommandEnvelope)
-  | ({
-    id: "PASS_PHASE";
-  } & BattleCommandEnvelope)
-  | ({
     id: "DEBUG_EDIT";
     edit: BattleDebugEdit;
   } & BattleCommandEnvelope)
@@ -247,10 +228,6 @@ export function createBattleCommandMetadata(
   // Undo still reads from full-state snapshots (bug-020 / §H-6).
   const metadata = (() => {
     switch (command.id) {
-      case "END_TURN":
-        return createEndTurnHistoryMetadata(envelope);
-      case "PASS_PHASE":
-        return createPassPhaseHistoryMetadata(state, envelope);
       case "DEBUG_EDIT":
         return createDebugEditHistoryMetadata(command.edit, state, envelope);
       case "FORCE_RESULT":
@@ -267,8 +244,6 @@ function buildCommandPayload(
   command: BattleCommand,
 ): Record<string, unknown> {
   switch (command.id) {
-    case "END_TURN":
-    case "PASS_PHASE":
     case "SKIP_TO_REWARDS":
       return {};
     case "DEBUG_EDIT":
@@ -276,36 +251,6 @@ function buildCommandPayload(
     case "FORCE_RESULT":
       return { result: command.result };
   }
-}
-
-export function createEndTurnHistoryMetadata(
-  envelope: BattleCommandMetadataEnvelope = {},
-): BattleHistoryEntryMetadata {
-  return createMetadata({
-    commandId: "END_TURN",
-    label: "End Turn",
-    kind: "battle-flow",
-    isComposite: true,
-    targets: [],
-    envelope,
-    defaultActor: "player",
-  });
-}
-
-export function createPassPhaseHistoryMetadata(
-  state: BattleMutableState,
-  envelope: BattleCommandMetadataEnvelope = {},
-): BattleHistoryEntryMetadata {
-  const isEndTurnComposite = state.phase === "night" || selectShouldEndTurnFromDay(state);
-  return createMetadata({
-    commandId: "PASS_PHASE",
-    label: isEndTurnComposite ? "End Turn" : "End Phase",
-    kind: "battle-flow",
-    isComposite: isEndTurnComposite,
-    targets: [],
-    envelope,
-    defaultActor: "player",
-  });
 }
 
 export function createDebugEditHistoryMetadata(
@@ -350,21 +295,6 @@ export function createSkipToRewardsHistoryMetadata(
     targets: [],
     envelope,
     defaultActor: "debug",
-  });
-}
-
-export function createRunAiTurnHistoryMetadata(
-  envelope: BattleCommandMetadataEnvelope = {},
-): BattleHistoryEntryMetadata {
-  return createMetadata({
-    commandId: "RUN_AI_TURN",
-    label: "Enemy Turn",
-    kind: "battle-flow",
-    isComposite: true,
-    targets: [],
-    envelope,
-    defaultActor: "enemy",
-    defaultSourceSurface: "auto-ai",
   });
 }
 
@@ -449,9 +379,6 @@ function createMetadata({
 
 function inferCommandActor(command: BattleCommand): BattleCommandActor {
   switch (command.id) {
-    case "END_TURN":
-    case "PASS_PHASE":
-      return "player";
     case "DEBUG_EDIT":
     case "FORCE_RESULT":
     case "SKIP_TO_REWARDS":
@@ -522,8 +449,6 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "REVEAL_DECK_TOP":
     case "HIDE_DECK_TOP":
       return "visibility";
-    case "FORCE_JUDGMENT":
-    case "GRANT_EXTRA_TURN":
     case "SET_PHASE":
       return "battle-flow";
   }
@@ -536,8 +461,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
  * sub-steps; undo itself is always snapshot-based regardless of this flag.
  *
  * The canonical set (bug-075) is:
- * - `FORCE_JUDGMENT` / `PLAY_FROM_DECK_TOP`: multi-step (judgment + score +
- *   dissolutions / deck-to-hand + play).
+ * - `PLAY_FROM_DECK_TOP`: multi-step (deck-to-battlefield placement).
  * - `KINDLE`: spec §H-16 example (spark + card instance + log).
  * - `CREATE_CARD_COPY` / `CREATE_FIGMENT`: mint instance + bump ordinal +
  *   insert into target zone, atomically.
@@ -549,7 +473,6 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
  */
 function isCompositeDebugEdit(edit: BattleDebugEdit): boolean {
   switch (edit.kind) {
-    case "FORCE_JUDGMENT":
     case "PLAY_FROM_DECK_TOP":
     case "KINDLE":
     case "CREATE_CARD_COPY":
@@ -635,9 +558,6 @@ function collectDebugEditTargets(
           makeZoneTarget(edit.side, "deck"),
           makeSlotTarget(edit.target),
         ];
-    case "FORCE_JUDGMENT":
-    case "GRANT_EXTRA_TURN":
-      return [makeSideTarget(edit.side)];
     case "SET_PHASE":
       return [];
   }
@@ -707,10 +627,6 @@ function createDebugEditLabel(
       return `Hide Top ${String(edit.count)} of ${formatSideLabel(edit.side)} Deck`;
     case "PLAY_FROM_DECK_TOP":
       return `Play Top of ${formatSideLabel(edit.side)} Deck`;
-    case "FORCE_JUDGMENT":
-      return `Force Judgment (${formatSideLabel(edit.side)})`;
-    case "GRANT_EXTRA_TURN":
-      return `Grant Extra Turn to ${formatSideLabel(edit.side)}`;
     case "SET_PHASE":
       return `Set Phase to ${formatPhaseLabel(edit.phase)}`;
   }

@@ -121,7 +121,6 @@ export function allocateBattleCardInstance(
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: params.provenance,
-    enteredReserveTurnNumber: null,
   };
   return battleCardId;
 }

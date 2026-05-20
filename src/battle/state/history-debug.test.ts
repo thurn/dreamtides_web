@@ -23,17 +23,16 @@ import { createInitialBattleState } from "./create-initial-state";
  * enough data in history to recover.
  */
 /**
- * Regression coverage for bug-003: after a player places a hand card in R0
- * and ends the turn (which auto-runs the enemy follow-up), a single UNDO
- * must leave exactly one entry on the redo stack so REDO can replay the
- * END_TURN composite verbatim. QA observed `future="Redo0"` and a disabled
- * redo button after this sequence on Task 03 HEAD; this asserts the invariant
- * end-to-end through the controller reducer (the same path the component
- * dispatches against) so any future reducer regression that drops the
- * END_TURN frame from the redo stack trips here first.
+ * Regression coverage for bug-003: after two committed commands, a single UNDO
+ * must leave exactly one entry on the redo stack so REDO can replay the second
+ * command verbatim. QA observed `future="Redo0"` and a disabled redo button
+ * after this sequence on Task 03 HEAD; this asserts the invariant end-to-end
+ * through the controller reducer (the same path the component dispatches
+ * against) so any future reducer regression that drops a frame from the redo
+ * stack trips here first.
  */
-describe("END_TURN undo/redo redo-stack coverage (bug-003)", () => {
-  it("redo restores END_TURN composite after a single undo", () => {
+describe("undo/redo redo-stack coverage (bug-003)", () => {
+  it("redo restores the second command after a single undo", () => {
     const { battleInit, state } = createTestBattle();
     const initial = createBattleControllerState(state);
     const playerHandCardId = initial.mutable.sides.player.hand[0];
@@ -56,33 +55,36 @@ describe("END_TURN undo/redo redo-stack coverage (bug-003)", () => {
     );
     expect(afterPlay.history.past.length).toBe(1);
 
-    // Step 2: end the turn (END_TURN composite + enemy AI follow-up).
-    const afterEndTurn = battleControllerReducer(
+    // Step 2: change the phase label.
+    const afterSetPhase = battleControllerReducer(
       afterPlay,
       {
         type: "APPLY_COMMAND",
-        command: { id: "END_TURN" },
+        command: {
+          id: "DEBUG_EDIT",
+          edit: { kind: "SET_PHASE", phase: "dusk" },
+        },
       },
       battleInit,
     );
-    expect(afterEndTurn.history.past.length).toBe(2);
-    expect(afterEndTurn.history.future.length).toBe(0);
+    expect(afterSetPhase.history.past.length).toBe(2);
+    expect(afterSetPhase.history.future.length).toBe(0);
 
     // Step 3: undo once.
     const afterUndo = battleControllerReducer(
-      afterEndTurn,
+      afterSetPhase,
       { type: "UNDO" },
       battleInit,
     );
 
     expect(afterUndo.history.past.length).toBe(1);
-    // The END_TURN frame MUST be on the redo stack so the UI re-enables the
+    // The second frame MUST be on the redo stack so the UI re-enables the
     // redo button and "Redo1" renders in the stat readout.
     expect(afterUndo.history.future.length).toBe(1);
     expect(afterUndo.mutable).toEqual(afterPlay.mutable);
 
-    // Step 4: redo must replay END_TURN and land on exactly the
-    // post-END_TURN snapshot captured in step 2.
+    // Step 4: redo must replay the second command and land on exactly the
+    // snapshot captured in step 2.
     const afterRedo = battleControllerReducer(
       afterUndo,
       { type: "REDO" },
@@ -91,7 +93,7 @@ describe("END_TURN undo/redo redo-stack coverage (bug-003)", () => {
 
     expect(afterRedo.history.past.length).toBe(2);
     expect(afterRedo.history.future.length).toBe(0);
-    expect(afterRedo.mutable).toEqual(afterEndTurn.mutable);
+    expect(afterRedo.mutable).toEqual(afterSetPhase.mutable);
   });
 });
 
@@ -570,13 +572,13 @@ function casesFromFactory(): DebugUndoCase[] {
       },
     },
     {
-      name: "GRANT_EXTRA_TURN",
+      name: "SET_PHASE",
       buildState: createTestBattle,
       command: {
         id: "DEBUG_EDIT",
         edit: {
-          kind: "GRANT_EXTRA_TURN",
-          side: "player",
+          kind: "SET_PHASE",
+          phase: "dusk",
         },
       },
     },
@@ -625,46 +627,6 @@ function casesFromFactory(): DebugUndoCase[] {
       name: "SKIP_TO_REWARDS",
       buildState: createTestBattle,
       command: { id: "SKIP_TO_REWARDS" },
-    },
-    {
-      name: "END_TURN",
-      buildState: createTestBattle,
-      command: { id: "END_TURN" },
-    },
-    {
-      name: "FORCE_JUDGMENT",
-      buildState: () => {
-        const fresh = createTestBattle();
-        const playerCharacter = fresh.state.sides.player.hand.find((cardId) =>
-          fresh.state.cardInstances[cardId].definition.battleCardKind === "character",
-        );
-        const enemyCharacter = fresh.state.sides.enemy.hand.find((cardId) =>
-          fresh.state.cardInstances[cardId].definition.battleCardKind === "character",
-        );
-        if (playerCharacter === undefined || enemyCharacter === undefined) {
-          throw new Error("Missing characters to seed FORCE_JUDGMENT undo case");
-        }
-        fresh.state.sides.player.hand = fresh.state.sides.player.hand.filter(
-          (cardId) => cardId !== playerCharacter,
-        );
-        fresh.state.sides.enemy.hand = fresh.state.sides.enemy.hand.filter(
-          (cardId) => cardId !== enemyCharacter,
-        );
-        fresh.state.sides.player.deployed.D0 = playerCharacter;
-        fresh.state.sides.enemy.deployed.D0 = enemyCharacter;
-        fresh.state.cardInstances[playerCharacter].sparkDelta =
-          10 - fresh.state.cardInstances[playerCharacter].definition.printedSpark;
-        fresh.state.cardInstances[enemyCharacter].sparkDelta =
-          1 - fresh.state.cardInstances[enemyCharacter].definition.printedSpark;
-        return fresh;
-      },
-      command: {
-        id: "DEBUG_EDIT",
-        edit: {
-          kind: "FORCE_JUDGMENT",
-          side: "player",
-        },
-      },
     },
   ];
 }

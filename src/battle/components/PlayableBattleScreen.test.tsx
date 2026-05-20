@@ -467,7 +467,6 @@ describe("PlayableBattleScreen", () => {
       state.sides.player.hand = state.sides.player.hand.filter((cardId) => cardId !== battleCardId);
       state.sides.player.deck = state.sides.player.deck.filter((cardId) => cardId !== battleCardId);
       state.sides.player.reserve.R0 = battleCardId;
-      state.cardInstances[battleCardId].enteredReserveTurnNumber = null;
     });
     const reserveCard = container.querySelector<HTMLElement>(
       `[data-slot-id="player-reserve-R0"] [data-battle-card-id="${reserveCardId}"]`,
@@ -525,7 +524,6 @@ describe("PlayableBattleScreen", () => {
       state.sides.enemy.hand = state.sides.enemy.hand.filter((cardId) => cardId !== battleCardId);
       state.sides.enemy.deck = state.sides.enemy.deck.filter((cardId) => cardId !== battleCardId);
       state.sides.enemy.reserve.R0 = battleCardId;
-      state.cardInstances[battleCardId].enteredReserveTurnNumber = null;
     });
     const reserveSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-reserve-R0"]');
     const deployedSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-deployed-D0"]');
@@ -795,7 +793,6 @@ describe("PlayableBattleScreen", () => {
       }
       state.sides.player.hand = state.sides.player.hand.filter((battleCardId) => battleCardId !== playerCardId);
       state.sides.player.reserve.R0 = playerCardId;
-      state.cardInstances[playerCardId].enteredReserveTurnNumber = state.turnNumber;
       stalePlayerCardId = playerCardId;
 
       let enemyCardId = state.sides.enemy.hand.find((battleCardId) => {
@@ -1119,7 +1116,6 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(container.querySelector('[data-battle-side-summary-popover="player"]')?.textContent).toContain("Quick Zones");
-    expect(container.textContent).toContain("Extra Turn");
     expect(container.textContent).toContain("Create Figment");
     expect(container.textContent).toContain("Dreamcaller");
 
@@ -1355,7 +1351,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("keeps the phase indicator in the persistent battle UI and dispatches END_TURN via the inspector", () => {
+  it("keeps the phase indicator in the persistent battle UI", () => {
     const { container, root } = renderScreen((state) => {
       state.phase = "day";
       state.activeSide = "player";

@@ -30,7 +30,6 @@ import {
   selectFailureOverlayResult,
   selectIsOpponentHandCardHidden,
 } from "../state/selectors";
-import { useAiTurnDriver } from "../state/use-ai-turn-driver";
 import { useAutoClearForcedResult } from "../state/use-auto-clear-forced-result";
 import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type {
@@ -178,7 +177,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     "--player-hand-zone-height": `${String(battleZoneLayout.playerHandHeight)}px`,
   } as CSSProperties;
   useAutoClearForcedResult(reducerState, battleInit, dispatch);
-  useAiTurnDriver(reducerState, dispatch, battleInit.enableAi);
 
   useEffect(() => {
     const serial = battleState.reducer.commandSerial;
@@ -799,7 +797,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               setSelection(null);
             }
           }}
-          onCommand={handleCommand}
           onOpenFigmentCreator={(side) => setOpenFigmentCreator(side)}
           onOpenPlayerInfo={() => setIsDreamcallerPanelOpen(true)}
           onOpenZone={handleOpenZoneBrowser}

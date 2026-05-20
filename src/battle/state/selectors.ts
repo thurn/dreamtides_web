@@ -112,14 +112,6 @@ export function selectCardHasNotes(instance: BattleCardInstance): boolean {
   return instance.notes.length > 0;
 }
 
-export function selectIsBattleCardReservedThisTurn(
-  state: BattleMutableState,
-  battleCardId: string | null,
-): boolean {
-  const instance = selectBattleCardInstance(state, battleCardId);
-  return instance?.enteredReserveTurnNumber === state.turnNumber;
-}
-
 /**
  * Returns the effective spark for a card instance, or `null` when the id
  * is missing or not resolvable. Prefer this over `selectEffectiveSparkOrZero`
@@ -158,59 +150,6 @@ export function selectDeployedSpark(
   slotId: DeploySlotId,
 ): number {
   return selectEffectiveSparkOrZero(state, state.sides[side].deployed[slotId]);
-}
-
-export function selectCanPlayCardInCurrentPhase(
-  state: BattleMutableState,
-  battleCardId: string,
-): boolean {
-  const location = selectBattleCardLocation(state, battleCardId);
-  const card = state.cardInstances[battleCardId];
-  if (location === null || card === undefined || state.result !== null) {
-    return false;
-  }
-  if (location.zone !== "hand" && location.zone !== "void") {
-    return false;
-  }
-  if (location.side !== state.activeSide) {
-    return false;
-  }
-  if (state.phase === "day" || state.phase === "dusk" || state.phase === "main") {
-    return true;
-  }
-  if (state.phase === "night") {
-    const timing = card.definition.timing ?? (card.definition.isFast ? "fast" : "standard");
-    return timing === "fast" || timing === "interrupt";
-  }
-  return false;
-}
-
-export function selectHasAffordableFastSpeedHandPlay(
-  state: BattleMutableState,
-  side: BattleSide,
-): boolean {
-  if (state.result !== null) {
-    return false;
-  }
-
-  const sideState = state.sides[side];
-  const nightState: BattleMutableState = {
-    ...state,
-    activeSide: side,
-    phase: "night",
-  };
-
-  return sideState.hand.some((battleCardId) => {
-    const card = state.cardInstances[battleCardId];
-    return card !== undefined &&
-      card.definition.energyCost <= sideState.currentEnergy &&
-      selectCanPlayCardInCurrentPhase(nightState, battleCardId);
-  });
-}
-
-export function selectShouldEndTurnFromDay(state: BattleMutableState): boolean {
-  return state.phase === "day" &&
-    !selectHasAffordableFastSpeedHandPlay(state, state.activeSide);
 }
 
 export function selectNaturalBattleResult(

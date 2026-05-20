@@ -476,7 +476,11 @@ describe("applyBattleCommandToRoom", () => {
     };
     const next = applyBattleCommandToRoom({
       room,
-      command: { id: "END_TURN", sourceSurface: "action-bar" },
+      command: {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase: "dusk" },
+        sourceSurface: "action-bar",
+      },
       now: "2026-05-09T00:00:00.000Z",
       actorId: "client-a",
       actionId: "action-1",

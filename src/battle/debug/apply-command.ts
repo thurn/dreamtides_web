@@ -28,16 +28,6 @@ function createBattleReducerAction(
   metadata: BattleHistoryEntryMetadata,
 ): BattleReducerAction {
   switch (command.id) {
-    case "END_TURN":
-      return {
-        type: "END_TURN",
-        metadata,
-      };
-    case "PASS_PHASE":
-      return {
-        type: "PASS_PHASE",
-        metadata,
-      };
     case "DEBUG_EDIT":
       return {
         type: "DEBUG_EDIT",

@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import type { BattleCommand } from "../debug/commands";
 import type {
   BattleMutableState,
   BattleSide,
@@ -12,7 +11,6 @@ export function BattleSideSummaryPopover({
   isSelected = false,
   isActive,
   onClose,
-  onCommand,
   onOpenFigmentCreator,
   onOpenPlayerInfo,
   onOpenZone,
@@ -25,7 +23,6 @@ export function BattleSideSummaryPopover({
   isSelected?: boolean;
   isActive: boolean;
   onClose: () => void;
-  onCommand: (command: BattleCommand) => void;
   onOpenFigmentCreator: (side: BattleSide) => void;
   onOpenPlayerInfo?: () => void;
   onOpenZone: (side: BattleSide, zone: BrowseableZone) => void;
@@ -126,34 +123,6 @@ export function BattleSideSummaryPopover({
       <div className="floating-section">
         <h4>Debug Actions</h4>
         <div className="chip-row">
-          <button
-            type="button"
-            className="chip"
-            onClick={() => {
-              onCommand({
-                id: "DEBUG_EDIT",
-                edit: { kind: "GRANT_EXTRA_TURN", side },
-                sourceSurface: "side-summary",
-              });
-              onClose();
-            }}
-          >
-            Extra Turn
-          </button>
-          <button
-            type="button"
-            className="chip"
-            onClick={() => {
-              onCommand({
-                id: "DEBUG_EDIT",
-                edit: { kind: "FORCE_JUDGMENT", side },
-                sourceSurface: "side-summary",
-              });
-              onClose();
-            }}
-          >
-            Extra Judgment
-          </button>
           <button
             type="button"
             className="chip"

@@ -367,28 +367,6 @@ function SideEditor({
           <button
             type="button"
             className="chip"
-            onClick={() => onCommand({
-              id: "DEBUG_EDIT",
-              edit: { kind: "GRANT_EXTRA_TURN", side },
-              sourceSurface: "inspector",
-            })}
-          >
-            Extra Turn
-          </button>
-          <button
-            type="button"
-            className="chip"
-            onClick={() => onCommand({
-              id: "DEBUG_EDIT",
-              edit: { kind: "FORCE_JUDGMENT", side },
-              sourceSurface: "inspector",
-            })}
-          >
-            Extra Judgment
-          </button>
-          <button
-            type="button"
-            className="chip"
             onClick={() => onOpenFigmentCreator(side)}
           >
             Create Figment

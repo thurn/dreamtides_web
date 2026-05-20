@@ -91,12 +91,6 @@ export function MultiplayerBattleProvider({
           console.error("Failed to dispatch battle history nav", error);
         });
         return;
-      case "RUN_AI_TURN":
-        // Phase 2 hardcodes startingSide to "player", so the bootstrap
-        // RUN_AI_TURN never actually fires in production. Treat as a no-op
-        // here; if a future phase needs it, fold into APPLY_COMMAND with a
-        // dedicated service helper.
-        return;
       case "CLEAR_FORCED_RESULT":
         void dispatchClearForcedResult({
           database: db,

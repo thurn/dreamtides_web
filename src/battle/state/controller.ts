@@ -14,7 +14,6 @@ import {
   undoBattleHistory,
 } from "./history";
 import {
-  battleReducer,
   createBattleReducerState,
   emitBattleTransitionLogEvents,
 } from "./reducer";
@@ -30,7 +29,6 @@ export type BattleControllerAction =
     type: "APPLY_COMMAND";
     command: BattleCommand;
   }
-  | { type: "RUN_AI_TURN" }
   | { type: "UNDO" }
   | { type: "REDO" }
   | { type: "CLEAR_FORCED_RESULT" };
@@ -54,19 +52,6 @@ export function battleControllerReducer(
       return applyCommandStateChange(
         state,
         applyBattleCommand(state, action.command, battleInit),
-      );
-    case "RUN_AI_TURN":
-      // bug-070 / spec §H-15: AI turns normally fold into the triggering
-      // END_TURN composite inside `battleReducer`. The only legal standalone
-      // RUN_AI_TURN dispatch is the bootstrap in `use-ai-turn-driver.ts`,
-      // which fires once at mount before any history exists. Rejecting
-      // non-empty-history dispatches preserves the "no sibling AI entry"
-      // invariant even if a future caller wires an extra dispatcher.
-      if (state.history.past.length > 0) {
-        return state;
-      }
-      return clearLoggedActivity(
-        battleReducer(state, { type: "RUN_AI_TURN" }, battleInit),
       );
     case "UNDO":
       return applyHistoryStateChange(state, "undo", undoBattleHistory(state.history));
@@ -246,14 +231,5 @@ function applyHistoryStateChange(
       metadata: { ...restored.entry.metadata },
     },
     activityId: state.activityId + 1,
-  };
-}
-
-function clearLoggedActivity(
-  state: BattleReducerState,
-): BattleReducerState {
-  return {
-    ...state,
-    lastActivity: null,
   };
 }
