@@ -28,7 +28,6 @@ vi.mock("../multiplayer/battle-service", async () => {
     ...actual,
     dispatchBattleCommandToRoom: vi.fn(() => Promise.resolve(undefined)),
     dispatchBattleHistoryNav: vi.fn(() => Promise.resolve(undefined)),
-    dispatchClearForcedResult: vi.fn(() => Promise.resolve(undefined)),
   };
 });
 
@@ -85,7 +84,6 @@ describe("useMultiplayerBattle", () => {
   beforeEach(() => {
     vi.mocked(battleService.dispatchBattleCommandToRoom).mockClear();
     vi.mocked(battleService.dispatchBattleHistoryNav).mockClear();
-    vi.mocked(battleService.dispatchClearForcedResult).mockClear();
   });
 
   afterEach(() => {
@@ -266,34 +264,5 @@ describe("useMultiplayerBattle", () => {
     const value = captured[captured.length - 1];
     expect(value).toBeDefined();
     expect(value.reducerState!.lastActivity).toBeNull();
-  });
-
-  it("dispatches CLEAR_FORCED_RESULT through dispatchClearForcedResult", async () => {
-    const fakeBattleState = makeFakeBattleState();
-    const captured: MultiplayerBattleValue[] = [];
-    mount(
-      <MultiplayerBattleProvider
-        database={{} as Database}
-        roomId="room-3"
-        clientId="client-c"
-        battleState={fakeBattleState}
-      >
-        <CaptureValue onValue={(value) => captured.push(value)} />
-      </MultiplayerBattleProvider>,
-    );
-
-    const value = captured[captured.length - 1];
-    expect(value).toBeDefined();
-
-    await act(async () => {
-      value.dispatch({ type: "CLEAR_FORCED_RESULT" });
-      await Promise.resolve();
-    });
-    expect(battleService.dispatchClearForcedResult).toHaveBeenCalledWith(
-      expect.objectContaining({
-        roomId: "room-3",
-        actorId: "client-c",
-      }),
-    );
   });
 });

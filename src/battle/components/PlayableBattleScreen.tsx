@@ -21,7 +21,6 @@ import { dispatchBattleReset, dispatchClearBattleState } from "../../multiplayer
 import type { SharedBattleState } from "../../multiplayer/battle-types";
 import { completeBattleSiteVictory } from "../integration/battle-completion-bridge";
 import { beginQuestFailureRoute } from "../integration/failure-route";
-import { evaluateBattleResult } from "../engine/result";
 import { emitBattleTransitionLogEvents } from "../state/reducer";
 import { formatBattleCardId } from "../state/create-initial-state";
 import {
@@ -30,7 +29,6 @@ import {
   selectFailureOverlayResult,
   selectIsOpponentHandCardHidden,
 } from "../state/selectors";
-import { useAutoClearForcedResult } from "../state/use-auto-clear-forced-result";
 import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type {
   BattleCommandSourceSurface,
@@ -176,7 +174,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     "--opponent-hand-zone-height": `${String(battleZoneLayout.opponentHandHeight)}px`,
     "--player-hand-zone-height": `${String(battleZoneLayout.playerHandHeight)}px`,
   } as CSSProperties;
-  useAutoClearForcedResult(reducerState, battleInit, dispatch);
 
   useEffect(() => {
     const serial = battleState.reducer.commandSerial;
@@ -422,7 +419,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     if (failureResult === null) {
       return;
     }
-    const evaluation = evaluateBattleResult(reducerState.mutable, battleInit);
     beginQuestFailureRoute({
       battleInit: {
         battleId: battleInit.battleId,
@@ -434,7 +430,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
         sides: reducerState.mutable.sides,
       },
       result: failureResult,
-      reason: evaluation.reason ?? "forced_result",
+      reason: "forced_result",
       siteLabel: site.type,
       mutations,
       clearBattleStateForRoom: () => {

@@ -5,17 +5,14 @@ import type {
   BattleFieldCardLocation,
   BattleFieldSlotAddress,
   BattleHistoryEntry,
-  BattleInit,
   BattleMutableState,
   BattleQuestDeckEntry,
-  BattleResult,
   BattleSide,
   BattlefieldZone,
   DeploySlotId,
   ReserveSlotId,
 } from "../types";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
-import { evaluateBattleResult } from "../engine/result";
 import { selectEffectiveSparkForInstance } from "./figments";
 
 /**
@@ -152,16 +149,6 @@ export function selectDeployedSpark(
   return selectEffectiveSparkOrZero(state, state.sides[side].deployed[slotId]);
 }
 
-export function selectNaturalBattleResult(
-  state: BattleMutableState,
-  battleInit: Pick<BattleInit, "scoreToWin" | "turnLimit">,
-): BattleResult | null {
-  return evaluateBattleResult(
-    { ...state, forcedResult: null },
-    battleInit,
-  ).result;
-}
-
 export function selectFailureOverlayResult(
   result: BattleMutableState["result"],
 ): QuestFailureBattleResult | null {
@@ -181,25 +168,6 @@ export function selectHistoryEntryTurnNumber(
   entry: BattleHistoryEntry,
 ): number {
   return entry.after.mutable.turnNumber;
-}
-
-/**
- * Returns true when a subsequent user action other than a direct force-result
- * has landed after the most recent FORCE_RESULT history entry. That implies an
- * edit has shifted the live battle state away from whatever supported the
- * forced result, so the forced flag should be cleared to let the live state
- * dictate the outcome.
- */
-export function shouldAutoClearForcedResult(
-  pastEntries: readonly BattleHistoryEntry[],
-): boolean {
-  const latest = pastEntries[pastEntries.length - 1];
-  if (latest === undefined) {
-    return false;
-  }
-
-  return latest.metadata.commandId !== "FORCE_RESULT"
-    && latest.metadata.commandId !== "SKIP_TO_REWARDS";
 }
 
 export function selectBattleCardLocation(

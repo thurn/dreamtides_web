@@ -10,7 +10,6 @@ import type { Database } from "firebase/database";
 import {
   dispatchBattleCommandToRoom,
   dispatchBattleHistoryNav,
-  dispatchClearForcedResult,
 } from "../multiplayer/battle-service";
 import type { SharedBattleState } from "../multiplayer/battle-types";
 import { createBattleReducerState } from "../battle/state/reducer";
@@ -89,15 +88,6 @@ export function MultiplayerBattleProvider({
           actorId: actor,
         }).catch((error: unknown) => {
           console.error("Failed to dispatch battle history nav", error);
-        });
-        return;
-      case "CLEAR_FORCED_RESULT":
-        void dispatchClearForcedResult({
-          database: db,
-          roomId: id,
-          actorId: actor,
-        }).catch((error: unknown) => {
-          console.error("Failed to dispatch clear forced result", error);
         });
         return;
       default: {

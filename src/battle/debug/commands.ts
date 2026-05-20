@@ -298,47 +298,6 @@ export function createSkipToRewardsHistoryMetadata(
   });
 }
 
-export function createRecomputeResultHistoryMetadata({
-  commandId,
-  kind,
-  label,
-}: {
-  commandId: string;
-  kind: BattleHistoryEntryKind;
-  label: string;
-}): BattleHistoryEntryMetadata {
-  // bug-046: every other reducer action carries full metadata; this factory
-  // no longer back-fills defaults so callers state their intent explicitly.
-  return createMetadata({
-    commandId,
-    label,
-    kind,
-    isComposite: false,
-    targets: [],
-    envelope: {},
-    defaultActor: "system",
-    defaultSourceSurface: "auto-system",
-  });
-}
-
-/**
- * Spec H-20 / §H auto-clear: metadata for the engine-internal history entry
- * that records auto-clearing a `forcedResult` after the recomputation runs.
- * Moved here (bug-080) so every metadata factory lives in `commands.ts`.
- */
-export function createClearForcedResultMetadata(): BattleHistoryEntryMetadata {
-  return createMetadata({
-    commandId: "CLEAR_FORCED_RESULT",
-    label: "Clear Forced Result",
-    kind: "result",
-    isComposite: false,
-    targets: [],
-    envelope: {},
-    defaultActor: "system",
-    defaultSourceSurface: "auto-system",
-  });
-}
-
 export interface BattleCommandMetadataEnvelope {
   actor?: BattleCommandActor;
   sourceSurface?: BattleCommandSourceSurface;

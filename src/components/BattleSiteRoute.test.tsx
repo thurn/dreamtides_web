@@ -36,7 +36,6 @@ vi.mock("../multiplayer/battle-service", async () => {
     ensureBattleSession: vi.fn(() => Promise.resolve(undefined)),
     dispatchBattleCommandToRoom: vi.fn(() => Promise.resolve(undefined)),
     dispatchBattleHistoryNav: vi.fn(() => Promise.resolve(undefined)),
-    dispatchClearForcedResult: vi.fn(() => Promise.resolve(undefined)),
   };
 });
 

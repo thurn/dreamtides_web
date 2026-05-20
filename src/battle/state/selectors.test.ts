@@ -5,7 +5,6 @@ import {
   selectEffectiveSpark,
   selectEffectiveSparkOrZero,
   selectFailureOverlayResult,
-  shouldAutoClearForcedResult,
 } from "./selectors";
 import {
   makeBattleTestCardDatabase,
@@ -13,11 +12,6 @@ import {
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
-import type {
-  BattleHistoryEntry,
-  BattleHistoryEntryKind,
-  BattleHistoryEntryMetadata,
-} from "../types";
 
 describe("selectEffectiveSpark", () => {
   it("clamps negative printedSpark + sparkDelta to zero per spec E-5", () => {
@@ -92,70 +86,3 @@ describe("selectFailureOverlayResult", () => {
   });
 });
 
-describe("shouldAutoClearForcedResult", () => {
-  it("returns false when the history is empty", () => {
-    expect(shouldAutoClearForcedResult([])).toBe(false);
-  });
-
-  it("returns false when the most recent entry is a direct force result", () => {
-    expect(
-      shouldAutoClearForcedResult([
-        makeHistoryEntry("PLAY_CARD", "zone-move"),
-        makeHistoryEntry("FORCE_RESULT", "result"),
-      ]),
-    ).toBe(false);
-  });
-
-  it("returns false when the most recent entry is Skip To Rewards", () => {
-    expect(
-      shouldAutoClearForcedResult([
-        makeHistoryEntry("SKIP_TO_REWARDS", "result"),
-      ]),
-    ).toBe(false);
-  });
-
-  it("returns true when a later non-force, non-skip entry lands after a force", () => {
-    expect(
-      shouldAutoClearForcedResult([
-        makeHistoryEntry("FORCE_RESULT", "result"),
-        makeHistoryEntry("ADJUST_SCORE", "numeric-state"),
-      ]),
-    ).toBe(true);
-  });
-
-  it("returns true when a gameplay entry follows a forced result", () => {
-    expect(
-      shouldAutoClearForcedResult([
-        makeHistoryEntry("FORCE_RESULT", "result"),
-        makeHistoryEntry("PLAY_CARD", "zone-move"),
-      ]),
-    ).toBe(true);
-  });
-});
-
-function makeHistoryEntry(
-  commandId: string,
-  kind: BattleHistoryEntryKind,
-): BattleHistoryEntry {
-  const metadata: BattleHistoryEntryMetadata = {
-    commandId,
-    label: commandId,
-    kind,
-    isComposite: false,
-    actor: "debug",
-    sourceSurface: "action-bar",
-    targets: [],
-    timestamp: 0,
-    undoPayload: null,
-  };
-  const snapshot = {
-    mutable: {} as BattleHistoryEntry["before"]["mutable"],
-    lastTransition: null,
-  };
-
-  return {
-    metadata,
-    before: snapshot,
-    after: snapshot,
-  };
-}
