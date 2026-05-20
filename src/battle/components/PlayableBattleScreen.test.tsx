@@ -384,6 +384,7 @@ describe("PlayableBattleScreen", () => {
     expect(BATTLE_CSS).toMatch(/\.stage\s*{[^}]*flex:\s*1 1 auto;/s);
     expect(BATTLE_CSS).toMatch(/\.battlefield-zone-layout\s*{[^}]*flex:\s*1 1 auto;/s);
     expect(BATTLE_CSS).toMatch(/\.bf-wrap\s*{[^}]*flex:\s*1 1 var\(--battlefield-row-width\);/s);
+    expect(BATTLE_CSS).toMatch(/\.player-hand-zone\.compact\s*{[^}]*flex-basis:\s*var\(--player-hand-zone-compact-height,/s);
   });
 
   it("has no phase-action button in the action bar", () => {
@@ -404,6 +405,8 @@ describe("PlayableBattleScreen", () => {
     const { container, initialState, root } = renderScreen();
 
     expect(container.querySelector('[data-battle-region="opponent-hand-tray"]')).toBeNull();
+    expect(container.querySelector(".player-hand-zone")?.className)
+      .not.toContain("compact");
     expect(container.querySelector('[data-battle-region="player-hand-tray"]')?.className)
       .not.toContain("compact");
 
@@ -412,6 +415,8 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(container.querySelector('[data-battle-region="opponent-hand-tray"]')).not.toBeNull();
+    expect(container.querySelector(".player-hand-zone")?.className)
+      .toContain("compact");
     expect(container.querySelector('[data-battle-region="player-hand-tray"]')?.className)
       .toContain("compact");
     expect(container.querySelectorAll(".revealed-hand-card.player")).toHaveLength(

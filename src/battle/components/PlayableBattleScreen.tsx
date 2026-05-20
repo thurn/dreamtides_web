@@ -801,7 +801,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               />
             </div>
           </div>
-          <div className="player-hand-zone">
+          <div className={isOpponentHandRevealed ? "player-hand-zone compact" : "player-hand-zone"}>
             <BattleHandTray
               canInteract={true}
               compact={isOpponentHandRevealed}

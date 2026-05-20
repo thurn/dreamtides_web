@@ -859,6 +859,10 @@
   overflow: hidden;
 }
 
+.player-hand-zone.compact {
+  flex-basis: var(--player-hand-zone-compact-height, calc(var(--revealed-hand-card-h) + 24px));
+}
+
 .player-hand-zone .hand-row {
   height: 100%;
 }
