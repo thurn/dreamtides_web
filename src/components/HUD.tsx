@@ -106,7 +106,7 @@ export function HUD({
       }}
     >
       {/* Left section: essence, deck, dreamcaller */}
-      <div className="flex min-w-0 items-center gap-2 overflow-hidden md:gap-5">
+      <div className="flex min-w-0 items-center gap-2 overflow-visible md:gap-5">
         {/* Essence counter. Color identity is the only marker for
             essence across the prototype; no glyph is rendered so the
             HUD stays consistent with shop / battle-reward surfaces.
@@ -210,6 +210,7 @@ export function HUD({
           </button>
           {state.dreamcaller !== null && (
             <div
+              data-testid="hud-dreamcaller-popover-layer"
               className="pointer-events-none absolute bottom-full left-0 z-30 mb-3 hidden origin-bottom-left opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 lg:block"
             >
               <DreamcallerPopover dreamcaller={state.dreamcaller} />

@@ -282,6 +282,27 @@ describe("HUD", () => {
     });
   });
 
+  it("keeps the dreamcaller hover popup outside clipped HUD ancestors", () => {
+    setQuestContext(makeState([]));
+    const { container, root } = renderHud();
+
+    const popoverLayer = container.querySelector<HTMLElement>(
+      '[data-testid="hud-dreamcaller-popover-layer"]',
+    );
+    expect(popoverLayer).not.toBeNull();
+    expect(container.querySelector('[data-testid="dreamcaller-popover"]')).not.toBeNull();
+
+    let current = popoverLayer?.parentElement ?? null;
+    while (current !== null && current !== container) {
+      expect(current.classList.contains("overflow-hidden")).toBe(false);
+      current = current.parentElement;
+    }
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders Why Journey beside Debug when journey explanation data is active", () => {
     setQuestContext(makeState([]));
     const onToggleJourneyExplanation = vi.fn();
