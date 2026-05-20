@@ -282,6 +282,47 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("does not select cards or battlefield slots from ordinary clicks", () => {
+    const { container, root } = renderScreen();
+    const firstHandCard = container.querySelector<HTMLElement>(
+      '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
+    );
+    const emptySlot = container.querySelector<HTMLElement>('[data-slot-id="player-reserve-R0"]');
+    if (firstHandCard === null || emptySlot === null) {
+      throw new Error("expected hand card and reserve slot");
+    }
+    const handCardId = firstHandCard.getAttribute("data-battle-card-id");
+
+    act(() => {
+      firstHandCard.click();
+    });
+
+    expect(container.querySelector('.inspector .head h3')?.textContent).toBe("Inspector");
+    expect(container.textContent).toContain("Battle State");
+    expect(container.textContent).not.toContain("Card State");
+    expect(container.querySelector('[data-battle-card-id][data-selected="true"]')).toBeNull();
+
+    act(() => {
+      emptySlot.click();
+    });
+
+    expect(
+      container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id"),
+    ).toBeNull();
+    expect(container.textContent).not.toContain("Your reserve R0");
+    expect(container.querySelector('[data-slot-id][data-selected="true"]')).toBeNull();
+    expect(container.querySelector(".selected-slot")).toBeNull();
+    expect(
+      container.querySelector(
+        `[data-battle-region="player-hand-tray"] [data-battle-card-id="${handCardId ?? ""}"]`,
+      ),
+    ).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("keeps stacked cards and resolution controls available in the stack zone", () => {
     const { container, root } = renderScreen((state) => {
       const [stackedCardId] = state.sides.player.hand;
@@ -367,7 +408,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("renders revealed opponent hand cards with inspection affordances and no affordability dimming", () => {
+  it("renders revealed opponent hand cards without selection or affordability dimming", () => {
     let enemyCardId = "";
     let enemyCardName = "";
     const { container, root } = renderScreen((state) => {
@@ -407,15 +448,15 @@ describe("PlayableBattleScreen", () => {
       enemyCard?.click();
     });
 
-    expect(enemyCard?.getAttribute("data-selected")).toBe("true");
-    expect(container.querySelector(".inspector")?.textContent).toContain(enemyCardName);
+    expect(enemyCard?.getAttribute("data-selected")).toBe("false");
+    expect(container.querySelector(".inspector")?.textContent).not.toContain(enemyCardName);
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("plays a selected hand card into reserve through the battlefield shell", () => {
+  it("drags a hand card into reserve through the battlefield shell", () => {
     const { container, root } = renderScreen((state) => {
       state.sides.player.currentEnergy = 10;
       state.sides.player.maxEnergy = 10;
@@ -429,11 +470,12 @@ describe("PlayableBattleScreen", () => {
     }
 
     act(() => {
-      firstHandCard.click();
+      firstHandCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
     });
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-slot-id="player-reserve-R0"]')?.click();
+      container.querySelector<HTMLElement>('[data-slot-id="player-reserve-R0"]')
+        ?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
     });
 
     expect(
@@ -484,14 +526,14 @@ describe("PlayableBattleScreen", () => {
     expect(menu?.textContent).not.toContain("Clear reserved");
     expect(menu?.textContent).toContain("→ Deployed");
 
-    act(() => {
-      reserveCard.click();
-    });
+    const moveToDeployed = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
+      .find((element) => element.textContent === "→ Deployed");
+    if (moveToDeployed === undefined) {
+      throw new Error("expected move to deployed item");
+    }
 
-    expect(container.querySelector(".inspector")?.textContent).not.toContain("Reserved");
-
     act(() => {
-      container.querySelector<HTMLElement>('[data-slot-id="player-deployed-D0"]')?.click();
+      moveToDeployed.click();
     });
 
     expect(container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id")).toBeNull();
@@ -542,12 +584,14 @@ describe("PlayableBattleScreen", () => {
     const menu = container.querySelector("[data-battle-context-menu]");
     expect(menu?.textContent).toContain("→ Deployed");
 
-    act(() => {
-      reserveCard.click();
-    });
+    const moveToDeployed = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
+      .find((element) => element.textContent === "→ Deployed");
+    if (moveToDeployed === undefined) {
+      throw new Error("expected move to deployed item");
+    }
 
     act(() => {
-      deployedSlot.click();
+      moveToDeployed.click();
     });
 
     expect(reserveSlot.getAttribute("data-slot-card-id")).toBeNull();
@@ -611,7 +655,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("selects, inspects, right-clicks, and drags revealed opponent hand cards to enemy battlefield slots", () => {
+  it("right-clicks and drags revealed opponent hand cards to enemy battlefield slots", () => {
     const { container, initialState, root } = renderScreen();
 
     act(() => {
@@ -632,13 +676,11 @@ describe("PlayableBattleScreen", () => {
     if (opponentCardId === null) {
       throw new Error("expected opponent card id");
     }
-    const opponentCardName = initialState.cardInstances[opponentCardId]?.definition.name;
-
     act(() => {
       opponentCard.click();
     });
 
-    expect(container.querySelector(".inspector")?.textContent).toContain(opponentCardName);
+    expect(opponentCard.getAttribute("data-selected")).toBe("false");
 
     act(() => {
       opponentCard.dispatchEvent(new MouseEvent("contextmenu", {
@@ -650,7 +692,7 @@ describe("PlayableBattleScreen", () => {
     });
 
     const menu = container.querySelector("[data-battle-context-menu]");
-    expect(menu?.textContent).toContain("Inspect");
+    expect(menu?.textContent).not.toContain("Inspect");
     expect(menu?.textContent).not.toContain("Reveal");
     expect(menu?.textContent).not.toContain("Hide");
 
@@ -960,7 +1002,8 @@ describe("PlayableBattleScreen", () => {
     expect(menu?.textContent).toContain("Create Copy");
     expect(menu?.textContent).toContain("Markers");
     expect(menu?.textContent).toContain("Add Note");
-    expect(menu?.textContent).toContain("Inspect");
+    expect(menu?.textContent).not.toContain("Inspect");
+    expect(container.querySelector('[data-battle-card-id][data-selected="true"]')).toBeNull();
 
     act(() => {
       root.unmount();
@@ -1067,11 +1110,22 @@ describe("PlayableBattleScreen", () => {
     const firstHandCardId = firstHandCard.getAttribute("data-battle-card-id");
 
     act(() => {
-      firstHandCard.click();
+      firstHandCard.dispatchEvent(new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 200,
+        clientY: 140,
+      }));
     });
 
+    const playItem = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
+      .find((element) => element.textContent === "Play to reserve");
+    if (playItem === undefined) {
+      throw new Error("expected play to reserve item");
+    }
+
     act(() => {
-      container.querySelector<HTMLElement>('[data-slot-id="player-reserve-R0"]')?.click();
+      playItem.click();
     });
 
     // Even with zero energy the card is played — gating is removed.

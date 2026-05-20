@@ -22,33 +22,16 @@ function createFixture() {
     dreamcallers: makeBattleTestDreamcallers(),
   });
   const state = createInitialBattleState(battleInit);
-  const selectedBattleCardId = state.sides.player.hand[0];
-  if (selectedBattleCardId === undefined) {
-    throw new Error("expected opening hand card");
-  }
-  return { battleInit, selectedBattleCardId, state };
+  return { battleInit, state };
 }
 
-function mount(selection: "player-hand" | "enemy-hand"): {
+function mount(): {
   container: HTMLDivElement;
-  onClearSelection: ReturnType<typeof vi.fn>;
   onCommand: ReturnType<typeof vi.fn>;
   onToggleOpponentHand: ReturnType<typeof vi.fn>;
   root: Root;
-  selectedBattleCardId: string;
 } {
-  const { battleInit, selectedBattleCardId, state } = createFixture();
-  let activeSelection = { kind: "card" as const, battleCardId: selectedBattleCardId };
-
-  if (selection === "enemy-hand") {
-    const enemyHandCardId = state.sides.enemy.hand[0];
-    if (enemyHandCardId === undefined) {
-      throw new Error("expected enemy hand card");
-    }
-    activeSelection = { kind: "card", battleCardId: enemyHandCardId };
-  }
-
-  const onClearSelection = vi.fn();
+  const { battleInit, state } = createFixture();
   const onCommand = vi.fn();
   const onToggleOpponentHand = vi.fn();
   const container = document.createElement("div");
@@ -66,26 +49,22 @@ function mount(selection: "player-hand" | "enemy-hand"): {
         isOpponentHandRevealed={false}
         isOpen
         lastTransition={null}
-        selection={activeSelection}
         state={state}
-        onClearSelection={onClearSelection}
         onClose={() => undefined}
         onOpen={() => undefined}
         onCommand={onCommand}
         onOpenFigmentCreator={() => undefined}
         onOpenForesee={() => undefined}
-        onOpenNoteEditor={() => undefined}
         onOpenZone={() => undefined}
         onResetBattle={() => undefined}
         onRedo={() => undefined}
-        onSelectBattleCard={() => undefined}
         onToggleOpponentHand={onToggleOpponentHand}
         onUndo={() => undefined}
       />,
     );
   });
 
-  return { container, onClearSelection, onCommand, onToggleOpponentHand, root, selectedBattleCardId };
+  return { container, onCommand, onToggleOpponentHand, root };
 }
 
 afterEach(() => {
@@ -93,11 +72,10 @@ afterEach(() => {
 });
 
 describe("BattleInspector", () => {
-  it("renders the slimmed inspector with card summary and side controls", () => {
-    const { container, onClearSelection, onCommand, onToggleOpponentHand, root, selectedBattleCardId } = mount("player-hand");
+  it("renders global battle state and side controls", () => {
+    const { container, onCommand, onToggleOpponentHand, root } = mount();
 
-    expect(container.textContent).toContain("Right-click this card");
-    expect(container.textContent).toContain("Card State");
+    expect(container.textContent).toContain("Battle State");
     expect(container.textContent).toContain("Your state");
     expect(container.textContent).toContain("Enemy state");
     expect(container.textContent).toContain("Visibility");
@@ -105,35 +83,21 @@ describe("BattleInspector", () => {
     expect(container.textContent).toContain("Result");
     expect(container.textContent).toContain("Skip to rewards");
     expect(container.textContent).toContain("History");
+    expect(container.textContent).not.toContain("Card State");
+    expect(container.textContent).not.toContain("Right-click this card");
     expect(container.querySelector('[data-battle-inspector-handle]')?.textContent).toContain("CLOSE");
 
     act(() => {
       clickChip(container, "+1 Draw");
       clickChip(container, "Show enemy hand");
-      clickChip(container, "Clear");
     });
 
-    expect(selectedBattleCardId).toBeTruthy();
     expect(onCommand.mock.calls[0]?.[0]).toMatchObject({
       id: "DEBUG_EDIT",
       edit: { kind: "DRAW_CARD", side: "player" },
       sourceSurface: "inspector",
     });
     expect(onToggleOpponentHand).toHaveBeenCalledTimes(1);
-    expect(onClearSelection).toHaveBeenCalledTimes(1);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("shows enemy-hand card metadata without visibility badges", () => {
-    const { container, onCommand, root } = mount("enemy-hand");
-
-    expect(container.textContent).toContain("Card State");
-    expect(container.textContent).not.toContain("Revealed");
-    expect(container.textContent).not.toContain("Hidden");
-    expect(onCommand).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();

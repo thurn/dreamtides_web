@@ -21,25 +21,6 @@ export type BattlefieldZone = "reserve" | "deployed";
 export type BrowseableZone = "deck" | "hand" | "void" | "banished";
 export type MarkerDiffState = "set" | "cleared" | "unchanged";
 
-export type BattleSelection =
-  | {
-    kind: "card";
-    battleCardId: string;
-  }
-  | {
-    kind: "slot";
-    target: BattleFieldSlotAddress;
-  }
-  | {
-    kind: "zone-header";
-    side: BattleSide;
-    zone: BrowseableZone;
-  }
-  | {
-    kind: "side-summary";
-    side: BattleSide;
-  }
-  | null;
 export type BattlePhase =
   | "dawn"
   | "day"

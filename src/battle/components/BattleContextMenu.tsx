@@ -27,7 +27,6 @@ export function BattleContextMenu({
   y,
   onClose,
   onCommand,
-  onInspect,
 }: {
   battleCardId: string;
   onOpenNoteEditor: (battleCardId: string) => void;
@@ -37,7 +36,6 @@ export function BattleContextMenu({
   y: number;
   onClose: () => void;
   onCommand: (command: BattleCommand) => void;
-  onInspect: (battleCardId: string) => void;
 }) {
   const card = state.cardInstances[battleCardId];
   const location = selectBattleCardLocation(state, battleCardId);
@@ -269,13 +267,6 @@ export function BattleContextMenu({
       });
     }
 
-    result.push({ divider: true });
-
-    result.push({
-      label: "Inspect",
-      action: () => onInspect(battleCardId),
-    });
-
     return result;
 
     function kindleItem(amount: number): ContextMenuItem {
@@ -293,7 +284,7 @@ export function BattleContextMenu({
         }),
       };
     }
-  }, [battleCardId, card, location, onCommand, onInspect, onOpenNoteEditor, sourceSurface, state]);
+  }, [battleCardId, card, location, onCommand, onOpenNoteEditor, sourceSurface, state]);
 
   if (card === undefined || location === null) {
     return null;

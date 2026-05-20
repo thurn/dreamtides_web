@@ -1,22 +1,15 @@
-import type { CSSProperties } from "react";
 import { useMemo } from "react";
 import type { BattleCommand } from "../debug/commands";
-import {
-  selectBattleCardLocation,
-  selectBattlefieldSlotOccupant,
-} from "../state/selectors";
 import type {
   BattleInit,
   BattleMutableState,
-  BattleSelection,
   BattleSide,
   BrowseableZone,
 } from "../types";
-import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
 import { createDiscardMostRecentHandCardCommand } from "./battle-ui-commands";
 
 export function BattleInspector({
-  battleInit: _battleInit,
+  battleInit,
   canPlayerAct: _canPlayerAct,
   futureCount,
   historyCount,
@@ -24,19 +17,15 @@ export function BattleInspector({
   isOpponentHandRevealed,
   isOpen,
   lastTransition: _lastTransition,
-  selection,
   state,
-  onClearSelection,
   onClose,
   onOpen,
   onCommand,
   onOpenFigmentCreator,
   onOpenForesee,
-  onOpenNoteEditor: _onOpenNoteEditor,
   onOpenZone,
   onResetBattle,
   onRedo,
-  onSelectBattleCard: _onSelectBattleCard,
   onToggleOpponentHand,
   onUndo,
 }: {
@@ -48,31 +37,18 @@ export function BattleInspector({
   isOpponentHandRevealed: boolean;
   isOpen: boolean;
   lastTransition: unknown;
-  selection: BattleSelection;
   state: BattleMutableState;
-  onClearSelection: () => void;
   onClose: () => void;
   onOpen?: () => void;
   onCommand: (command: BattleCommand) => void;
   onOpenFigmentCreator: (side: BattleSide) => void;
   onOpenForesee: (side: BattleSide, count: number) => void;
-  onOpenNoteEditor: (battleCardId: string) => void;
   onOpenZone: (side: BattleSide, zone: BrowseableZone) => void;
   onResetBattle?: () => void;
   onRedo?: () => void;
-  onSelectBattleCard: (battleCardId: string) => void;
   onToggleOpponentHand: () => void;
   onUndo?: () => void;
 }) {
-  const selectedCard = selection?.kind === "card"
-    ? state.cardInstances[selection.battleCardId] ?? null
-    : null;
-  const selectedCardLocation = selectedCard === null
-    ? null
-    : selectBattleCardLocation(state, selectedCard.battleCardId);
-  const selectedSlotOccupant = selection?.kind === "slot"
-    ? selectBattlefieldSlotOccupant(state, selection.target)
-    : null;
   const playerDiscardCommand = useMemo(
     () => createDiscardMostRecentHandCardCommand(state, "player", "inspector"),
     [state],
@@ -87,7 +63,7 @@ export function BattleInspector({
       <button
         type="button"
         data-battle-inspector-handle=""
-        className={`inspector-handle ${selection !== null ? "has-selection" : ""}`}
+        className="inspector-handle"
         onClick={() => (isOpen ? onClose() : onOpen?.())}
         title={isOpen ? "Close inspector" : "Open inspector"}
       >
@@ -98,26 +74,14 @@ export function BattleInspector({
         <>
           <div className="head">
             <div>
-              <h3>{selectedCard !== null ? "Card" : "Inspector"}</h3>
+              <h3>Inspector</h3>
             </div>
             <button type="button" className="btn ghost sm" onClick={onClose}>
               ✕
             </button>
           </div>
           <div className="inspector-body">
-            {selectedCard !== null ? (
-              <CardInspector
-                card={selectedCard}
-                location={selectedCardLocation}
-              />
-            ) : selection?.kind === "slot" ? (
-              <SlotInspector
-                occupantId={selectedSlotOccupant}
-                slotLabel={`${selection.target.side === "player" ? "Your" : "Enemy"} ${selection.target.zone} ${selection.target.slotId}`}
-              />
-            ) : (
-              <div className="insp-empty">Select a card or slot to edit.</div>
-            )}
+            <GlobalBattleState battleInit={battleInit} state={state} />
 
             <div className="insp-section">
               <h4>Visibility</h4>
@@ -204,89 +168,12 @@ export function BattleInspector({
                 >
                   ↷ Redo
                 </button>
-                <button type="button" className="chip" onClick={onClearSelection}>
-                  Clear
-                </button>
               </div>
             </div>
           </div>
         </>
       ) : null}
     </aside>
-  );
-}
-
-function CardInspector({
-  card,
-  location,
-}: {
-  card: BattleMutableState["cardInstances"][string];
-  location: ReturnType<typeof selectBattleCardLocation>;
-}) {
-  const side = location?.side ?? card.controller;
-  const effectiveSpark = Math.max(0, card.definition.printedSpark + card.sparkDelta);
-  const locationLabel = location === null
-    ? "UNKNOWN"
-    : location.zone === "reserve" || location.zone === "deployed"
-      ? `${side === "player" ? "YOUR" : "ENEMY"} ${location.zone.toUpperCase()} · ${location.slotId}`
-      : `${location.zone.toUpperCase()} · ${side.toUpperCase()}`;
-
-  return (
-    <div>
-      <div className="insp-card-preview">
-        <div style={{ "--card-w": "70px", "--card-h": "96px" } as CSSProperties}>
-          <BattleCardView
-            data={battleCardVisualFromInstance(card)}
-            reserved={false}
-          />
-        </div>
-        <div className="meta">
-          <div className="n">{card.definition.name}</div>
-          <div className="t">
-            {card.definition.battleCardKind} · {card.definition.subtype} · {(card.definition.tides[0] ?? "—").toUpperCase()}
-          </div>
-          <div className="text">{card.definition.renderedText.replace(/<[^>]+>/g, "")}</div>
-          <div className="badges">
-            <span>Cost {String(card.definition.energyCost)}</span>
-            {card.definition.battleCardKind === "character" ? (
-              <span>
-                ◆ {String(effectiveSpark)}
-                {card.sparkDelta !== 0 ? ` (${card.sparkDelta > 0 ? "+" : ""}${String(card.sparkDelta)})` : ""}
-              </span>
-            ) : null}
-            {card.definition.isFast ? <span className="badge-accent">fast</span> : null}
-            {card.definition.reclaimCost !== null ? (
-              <span className="badge-accent">
-                Reclaim {String(card.definition.reclaimCost)}
-              </span>
-            ) : null}
-          </div>
-          <div className="t">{locationLabel}</div>
-        </div>
-      </div>
-
-      <div className="insp-note card-action-hint">
-        Right-click this card for play, move, note, marker, and copy actions.
-      </div>
-
-      <div className="insp-section">
-        <h4>Card State</h4>
-        <div className="chip-row">
-          {card.markers.isPrevented ? <span className="chip active">Prevented</span> : null}
-          {card.markers.isCopied ? <span className="chip active">Copied</span> : null}
-          <span className="chip">{card.notes.length} Notes</span>
-        </div>
-        {card.notes.length > 0 ? (
-          <div className="insp-note-list">
-            {card.notes.map((note) => (
-              <div key={note.noteId} className="insp-note-entry">
-                {note.text}
-              </div>
-            ))}
-          </div>
-        ) : null}
-      </div>
-    </div>
   );
 }
 
@@ -416,17 +303,55 @@ function NumericRow({
   );
 }
 
-function SlotInspector({
-  occupantId,
-  slotLabel,
+function GlobalBattleState({
+  battleInit,
+  state,
 }: {
-  occupantId: string | null;
-  slotLabel: string;
+  battleInit: BattleInit;
+  state: BattleMutableState;
 }) {
   return (
-    <div className="insp-empty">
-      {slotLabel}
-      {occupantId === null ? " is empty." : ` contains ${occupantId}.`}
+    <div className="insp-section">
+      <h4>Battle State</h4>
+      <div className="chip-row">
+        <span className="chip">Turn {String(state.turnNumber)}</span>
+        <span className="chip">{state.phase}</span>
+        <span className="chip">{state.activeSide === "player" ? "Player active" : "Enemy active"}</span>
+        <span className="chip">{state.result ?? "Live"}</span>
+      </div>
+      <div className="row-ctl">
+        <span className="lbl">Battle</span>
+        <span className="val">{battleInit.enemyDescriptor.name}</span>
+      </div>
+      <ZoneCountRow label="Your zones" state={state} side="player" />
+      <ZoneCountRow label="Enemy zones" state={state} side="enemy" />
+      <div className="row-ctl">
+        <span className="lbl">Stack</span>
+        <span className="val">{String((state.stack ?? []).length)}</span>
+      </div>
+    </div>
+  );
+}
+
+function ZoneCountRow({
+  label,
+  side,
+  state,
+}: {
+  label: string;
+  side: BattleSide;
+  state: BattleMutableState;
+}) {
+  const sideState = state.sides[side];
+  const reserveCount = Object.values(sideState.reserve).filter(Boolean).length;
+  const deployedCount = Object.values(sideState.deployed).filter(Boolean).length;
+
+  return (
+    <div className="row-ctl">
+      <span className="lbl">{label}</span>
+      <span className="val">
+        H{String(sideState.hand.length)} D{String(sideState.deck.length)} V{String(sideState.void.length)} B{String(sideState.banished.length)} R{String(reserveCount)} P{String(deployedCount)}
+      </span>
     </div>
   );
 }
