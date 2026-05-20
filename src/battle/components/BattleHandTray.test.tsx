@@ -76,7 +76,7 @@ afterEach(() => {
 });
 
 describe("BattleHandTray", () => {
-  it("renders one mockup card per hand entry, including affordability state", () => {
+  it("renders one mockup card per hand entry without affordability dimming", () => {
     const { container, root, state } = mount();
     const cards = [...container.querySelectorAll<HTMLElement>("[data-battle-card-id]")];
     const firstCardId = state.sides.player.hand[0];
@@ -89,13 +89,53 @@ describe("BattleHandTray", () => {
     expect(cards).toHaveLength(2);
     expect(cards[0]?.textContent).toContain(state.cardInstances[firstCardId]?.definition.name ?? "");
     expect(cards[1]?.textContent).toContain(state.cardInstances[secondCardId]?.definition.name ?? "");
-    expect(cards[0]?.classList.contains("playable")).toBe(
-      (state.cardInstances[firstCardId]?.definition.energyCost ?? 0) <= state.sides.player.currentEnergy,
-    );
-    expect(cards[1]?.classList.contains("unaffordable")).toBe(
-      (state.cardInstances[secondCardId]?.definition.energyCost ?? 0) > state.sides.player.currentEnergy,
-    );
     expect(cards[0]?.classList.contains("selected")).toBe(true);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("never dims or disables hand cards regardless of energy or phase", () => {
+    // Render with energy=1 so any card with cost > 1 would normally be unaffordable.
+    const { container, root, state } = mount();
+    // Force at least one card to have a cost exceeding available energy.
+    const secondCardId = state.sides.player.hand[1];
+    if (secondCardId === undefined) {
+      throw new Error("expected second hand card");
+    }
+    const card = state.cardInstances[secondCardId];
+    if (card === undefined) {
+      throw new Error("expected card instance");
+    }
+    card.definition = { ...card.definition, energyCost: 99 };
+
+    // Re-render with the mutated state so the overpriced card is in the tray.
+    act(() => {
+      root.render(
+        <BattleHandTray
+          canInteract={false}
+          currentEnergy={0}
+          hand={state.sides.player.hand.slice(0, 2)}
+          onHandCardAction={() => undefined}
+          openingHandSize={5}
+          playerDrawSkipsTurnOne
+          selectedCardId={null}
+          state={state}
+          onCardClick={() => undefined}
+          onCardDoubleClick={() => undefined}
+        />,
+      );
+    });
+
+    const cards = [...container.querySelectorAll<HTMLElement>("[data-battle-card-id]")];
+    expect(cards).toHaveLength(2);
+    for (const card of cards) {
+      expect(card.classList.contains("unaffordable")).toBe(false);
+      expect(card.classList.contains("playable")).toBe(false);
+      expect(card.classList.contains("unplayable")).toBe(false);
+      expect(card.getAttribute("draggable")).toBe("true");
+    }
 
     act(() => {
       root.unmount();

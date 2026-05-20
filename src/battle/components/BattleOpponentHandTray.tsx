@@ -5,10 +5,10 @@ import type { BattleMutableState } from "../types";
 import { battleCardDisplayFromInstance } from "./BattleCardView";
 
 export function BattleOpponentHandTray({
-  canInteract,
-  currentEnergy,
+  canInteract: _canInteract,
+  currentEnergy: _currentEnergy,
   hand,
-  isCardPlayable,
+  isCardPlayable: _isCardPlayable,
   selectedCardId,
   state,
   onCardClick,
@@ -45,9 +45,6 @@ export function BattleOpponentHandTray({
           if (instance === undefined) {
             return null;
           }
-          const cost = instance.definition.energyCost;
-          const isPlayable = canInteract && cost <= currentEnergy && (isCardPlayable?.(battleCardId) ?? true);
-          const isUnaffordable = cost > currentEnergy;
           const isSelected = selectedCardId === battleCardId;
           const wrapperClass = [
             "battle-card",
@@ -56,9 +53,7 @@ export function BattleOpponentHandTray({
             "revealed-hand-card",
             "opponent-card",
             "opponent",
-            isPlayable ? "playable" : "",
             isSelected ? "selected" : "",
-            isUnaffordable ? "unaffordable" : "",
           ]
             .filter((value) => value !== "")
             .join(" ");
@@ -69,10 +64,10 @@ export function BattleOpponentHandTray({
               data-battle-card-id={battleCardId}
               data-battle-card-variant="hand"
               data-battle-hand-card=""
-              data-battle-card-playable={isPlayable ? "true" : "false"}
+              data-battle-card-playable="true"
               data-selected={String(isSelected)}
               className={wrapperClass}
-              draggable={isPlayable}
+              draggable={true}
               onClick={(event) => {
                 event.stopPropagation();
                 onCardClick(battleCardId);

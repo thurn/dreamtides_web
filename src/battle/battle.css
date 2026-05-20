@@ -558,21 +558,6 @@
   box-shadow: none;
 }
 
-.battle-card.hand-card.quest-card.unaffordable {
-  filter: brightness(0.65) saturate(0.6);
-}
-
-/* Playable affordance only — the selected ring is drawn by CardDisplay
-   itself (via its `selected` prop) so it stays identical to selection
-   highlighting everywhere else in the quest. */
-.battle-card.hand-card.quest-card.playable:not(.selected)::after {
-  content: "";
-  position: absolute;
-  inset: -3px;
-  border-radius: 14px;
-  border: 1px solid var(--accent-edge);
-  pointer-events: none;
-}
 
 .battle-card:hover {
   transform: translateY(-2px);
@@ -583,10 +568,6 @@
   background: linear-gradient(160deg, #1f1733, #120e20);
 }
 
-.battle-card.playable {
-  border-color: var(--accent-edge);
-  box-shadow: 0 0 0 1px var(--accent-soft), 0 4px 12px rgba(0, 0, 0, 0.35);
-}
 
 .battle-card.selected {
   border-color: var(--accent);
@@ -604,9 +585,6 @@
   background: var(--accent);
 }
 
-.battle-card.unaffordable {
-  filter: brightness(0.7);
-}
 
 .battle-card.hidden-enemy {
   background: repeating-linear-gradient(45deg, #16112a 0 6px, #120e21 6px 12px);
@@ -665,11 +643,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
-.battle-card.playable .c-cost {
-  box-shadow:
-    0 0 0 1px rgba(168, 85, 247, 0.45),
-    0 1px 3px rgba(0, 0, 0, 0.45);
-}
 
 /* Spark pip — matches PipBadge "spark" variant. */
 .battle-card .c-spark {

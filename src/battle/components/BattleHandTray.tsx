@@ -15,20 +15,20 @@ import { BattleCardView, battleCardDisplayFromInstance, battleCardVisualFromInst
  *
  * The outer wrapper carries the same `data-battle-card-id`,
  * `data-battle-hand-card`, `data-battle-card-variant`, and CSS class names
- * (`playable`, `unaffordable`, `selected`, `battle-card`, `hand-card`) that
- * the rest of the battle UI and tests rely on, so the visual swap is
- * non-disruptive.
+ * (`selected`, `battle-card`, `hand-card`) that the rest of the battle UI and
+ * tests rely on. Every hand card is always draggable and fully lit — there is
+ * no affordability dimming.
  */
 export function BattleHandTray({
-  canInteract,
-  currentEnergy,
+  canInteract: _canInteract,
+  currentEnergy: _currentEnergy,
   hand,
   onHandCardAction: _onHandCardAction,
   openingHandSize: _openingHandSize,
   playerDrawSkipsTurnOne: _playerDrawSkipsTurnOne,
   selectedCardId,
   state,
-  isCardPlayable,
+  isCardPlayable: _isCardPlayable,
   onCardClick,
   onCardContextMenu,
   onCardDoubleClick,
@@ -75,17 +75,12 @@ export function BattleHandTray({
           if (instance === undefined) {
             return null;
           }
-          const cost = instance.definition.energyCost;
-          const isPlayable = canInteract && cost <= currentEnergy && (isCardPlayable?.(battleCardId) ?? true);
-          const isUnaffordable = cost > currentEnergy;
           const isSelected = selectedCardId === battleCardId;
           const wrapperClass = [
             "battle-card",
             "hand-card",
             "quest-card",
-            isPlayable ? "playable" : "",
             isSelected ? "selected" : "",
-            isUnaffordable ? "unaffordable" : "",
           ]
             .filter((value) => value !== "")
             .join(" ");
@@ -98,11 +93,11 @@ export function BattleHandTray({
                 className="revealed-hand-card player"
                 dataBattleHandCard
                 data={battleCardVisualFromInstance(instance)}
-                playable={isPlayable}
+                playable={false}
                 selected={isSelected}
-                unaffordable={isUnaffordable}
+                unaffordable={false}
                 reserved={false}
-                draggable={isPlayable}
+                draggable={true}
                 onClick={(event) => {
                   event.stopPropagation();
                   onCardClick(battleCardId);
@@ -131,10 +126,10 @@ export function BattleHandTray({
               data-battle-card-id={battleCardId}
               data-battle-card-variant="hand"
               data-battle-hand-card=""
-              data-battle-card-playable={isPlayable ? "true" : "false"}
+              data-battle-card-playable="true"
               data-selected={String(isSelected)}
               className={wrapperClass}
-              draggable={isPlayable}
+              draggable={true}
               onClick={() => onCardClick(battleCardId)}
               onDoubleClick={() => onCardDoubleClick(battleCardId)}
               onContextMenu={(event) => {
