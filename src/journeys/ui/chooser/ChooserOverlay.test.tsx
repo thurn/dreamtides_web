@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ReactElement } from "react";
 
+import type { CardData } from "../../../types/cards";
 import type { ChooserRequest } from "../../apply/chooserPlan";
 
 import {
@@ -66,6 +67,25 @@ const cardCandidates: readonly CardChooserCandidate[] = [
   { entryId: "e3", cardId: "c3", name: "Gamma", rulesText: "Third card." },
   { entryId: "e4", cardId: "c4", name: "Delta", rulesText: "Fourth card." },
 ];
+
+function makeCard(overrides: Partial<CardData>): CardData {
+  return {
+    name: "Alpha",
+    id: "alpha",
+    cardNumber: 101,
+    cardType: "Character",
+    subtype: "Warrior",
+    isStarter: false,
+    energyCost: 2,
+    spark: 3,
+    isFast: true,
+    tides: ["ember"],
+    renderedText: "Gain ●2. An ally gets ⍏1.",
+    imageNumber: 101,
+    artOwned: true,
+    ...overrides,
+  };
+}
 
 const dreamsignRequest: ChooserRequest = {
   kind: "dreamsign",
@@ -144,6 +164,43 @@ describe("Chooser overlay components", () => {
       entryIds: ["e1", "e3"],
       cardIds: ["c1", "c3"],
     });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders card chooser candidates with the normal card display", () => {
+    const { container, root } = mount(
+      <CardChooser
+        request={cardRequest}
+        candidates={[
+          {
+            entryId: "card-alpha",
+            cardId: "alpha",
+            name: "Alpha",
+            rulesText: "Fallback text.",
+            card: makeCard({}),
+          },
+        ]}
+        onResolve={vi.fn()}
+        onCancel={vi.fn()}
+      />,
+    );
+
+    expect(container.querySelector("[data-pip-variant=\"energy\"]")?.textContent)
+      .toBe("2");
+    expect(container.querySelector("[data-testid=\"card-type-line\"]")?.textContent)
+      .toContain("Warrior");
+    expect(container.querySelectorAll("i.bx.bxs-flame[aria-label=\"energy\"]").length)
+      .toBe(1);
+    expect(container.querySelectorAll("[data-pip-variant=\"spark\"]").length)
+      .toBe(2);
+
+    const cardButton = buttonByName(container, "Alpha");
+    expect(cardButton.getAttribute("data-offering-card-selected")).toBe("false");
+    click(cardButton);
+    expect(cardButton.getAttribute("data-offering-card-selected")).toBe("true");
 
     act(() => {
       root.unmount();

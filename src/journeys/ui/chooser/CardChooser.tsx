@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
+import { CardDisplay } from "../../../components/CardDisplay";
+import type { CardData } from "../../../types/cards";
 import type { ChooserRequest, ChooserResolution } from "../../apply/chooserPlan";
 
 import { ChooserOverlay } from "./ChooserOverlay";
@@ -10,6 +12,7 @@ export interface CardChooserCandidate {
   readonly cardId?: string;
   readonly name: string;
   readonly rulesText?: string;
+  readonly card?: CardData;
 }
 
 export interface CardChooserProps {
@@ -106,7 +109,7 @@ function CardChooserInner({
       onCancel={onCancel}
       onConfirm={handleConfirm}
     >
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {candidates.map((candidate) => {
           const selected = selectedEntrySet.has(candidate.entryId);
           return (
@@ -117,28 +120,52 @@ function CardChooserInner({
               data-offering-card-selected={selected ? "true" : "false"}
               aria-pressed={selected}
               onClick={() => toggleEntry(candidate.entryId)}
-              className="min-h-28 rounded-lg p-4 text-left transition-colors hover:brightness-125"
+              className="group relative rounded-lg p-2 text-left transition-transform hover:scale-[1.01] focus-visible:ring-2 focus-visible:ring-purple-300 focus-visible:outline-none"
               style={{
-                background:
-                  "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
+                background: selected
+                  ? "rgba(168, 85, 247, 0.16)"
+                  : "rgba(15, 10, 24, 0.58)",
                 border: `1px solid ${selected ? OFFERING_ACCENT.borderStrong : OFFERING_ACCENT.border}`,
                 boxShadow: selected
-                  ? `0 0 0 2px ${OFFERING_ACCENT.border}, 0 0 18px ${OFFERING_ACCENT.glow}`
+                  ? `0 0 0 2px ${OFFERING_ACCENT.borderStrong}, 0 0 22px ${OFFERING_ACCENT.glow}`
                   : `0 0 12px ${OFFERING_ACCENT.glow}`,
               }}
             >
-              <span
-                className="block text-base font-bold"
-                style={{ color: "#f8fafc" }}
-              >
-                {candidate.name}
-              </span>
-              {candidate.rulesText ? (
+              {candidate.card ? (
+                <CardDisplay
+                  card={candidate.card}
+                  selected={selected}
+                  selectionColor={OFFERING_ACCENT.borderStrong}
+                />
+              ) : (
+                <span className="block min-h-28 p-2">
+                  <span
+                    className="block text-base font-bold"
+                    style={{ color: "#f8fafc" }}
+                  >
+                    {candidate.name}
+                  </span>
+                  {candidate.rulesText ? (
+                    <span
+                      className="mt-2 block text-sm leading-snug opacity-80"
+                      style={{ color: "#e2e8f0" }}
+                    >
+                      {candidate.rulesText}
+                    </span>
+                  ) : null}
+                </span>
+              )}
+              {selected ? (
                 <span
-                  className="mt-2 block text-sm leading-snug opacity-80"
-                  style={{ color: "#e2e8f0" }}
+                  aria-hidden="true"
+                  className="absolute top-3 right-3 flex h-7 w-7 items-center justify-center rounded-full text-base font-bold shadow-lg"
+                  style={{
+                    background: OFFERING_ACCENT.buttonBackground,
+                    border: "1px solid rgba(255, 255, 255, 0.72)",
+                    color: "#ffffff",
+                  }}
                 >
-                  {candidate.rulesText}
+                  ✓
                 </span>
               ) : null}
             </button>
