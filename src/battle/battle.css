@@ -541,9 +541,9 @@
 
 /* `quest-card` is the hand-card shell that delegates its chrome to the
    shared CardDisplay component. The shell is a transparent wrapper that
-   only owns hit-testing, drag affordance, and the selected/unaffordable
-   visual cues — the card body itself comes from CardDisplay so cards in
-   hand look identical to cards everywhere else in the prototype. */
+   only owns hit-testing, drag affordance, and the selected visual cue —
+   the card body itself comes from CardDisplay so cards in hand look
+   identical to cards everywhere else in the prototype. */
 .battle-card.hand-card.quest-card {
   background: transparent;
   border: none;
@@ -558,7 +558,6 @@
   box-shadow: none;
 }
 
-
 .battle-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
@@ -568,13 +567,10 @@
   background: linear-gradient(160deg, #1f1733, #120e20);
 }
 
-
 .battle-card.selected {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px var(--accent-soft), 0 6px 20px rgba(0, 0, 0, 0.5);
 }
-
-
 
 .battle-card.hidden-enemy {
   background: repeating-linear-gradient(45deg, #16112a 0 6px, #120e21 6px 12px);
@@ -632,7 +628,6 @@
     0 -1px 0 #000;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
-
 
 /* Spark pip — matches PipBadge "spark" variant. */
 .battle-card .c-spark {

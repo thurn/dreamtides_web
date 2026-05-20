@@ -11,7 +11,7 @@ export function BattleActionBar({
   isDesktopInspectorLayout: _isDesktopInspectorLayout,
   isInspectorDrawerOpen: _isInspectorDrawerOpen,
   isOpponentHandRevealed = false,
-  onCommand: _onCommand,
+  onCommand,
   onOpenForesee: _onOpenForesee,
   onRedo,
   onToggleBattleLog,
@@ -120,7 +120,7 @@ export function BattleActionBar({
           type="button"
           data-battle-action="skip-to-rewards"
           className="btn ghost sm"
-          onClick={() => _onCommand({ id: "SKIP_TO_REWARDS", sourceSurface: "action-bar" })}
+          onClick={() => onCommand({ id: "SKIP_TO_REWARDS", sourceSurface: "action-bar" })}
         >
           Skip to rewards
         </button>

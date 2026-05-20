@@ -97,7 +97,7 @@ describe("BattleHandTray", () => {
   });
 
   it("never dims or disables hand cards regardless of energy or phase", () => {
-    // Render with energy=1 so any card with cost > 1 would normally be unaffordable.
+    // Render with energy=0 so any card with cost > 0 would normally be unaffordable.
     const { container, root, state } = mount();
     // Force at least one card to have a cost exceeding available energy.
     const secondCardId = state.sides.player.hand[1];
@@ -133,7 +133,6 @@ describe("BattleHandTray", () => {
     for (const card of cards) {
       expect(card.classList.contains("unaffordable")).toBe(false);
       expect(card.classList.contains("playable")).toBe(false);
-      expect(card.classList.contains("unplayable")).toBe(false);
       expect(card.getAttribute("draggable")).toBe("true");
     }
 

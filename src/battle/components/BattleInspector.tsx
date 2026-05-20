@@ -105,7 +105,6 @@ export function BattleInspector({
               <CardInspector
                 card={selectedCard}
                 location={selectedCardLocation}
-                state={state}
               />
             ) : selection?.kind === "slot" ? (
               <SlotInspector
@@ -202,11 +201,9 @@ export function BattleInspector({
 function CardInspector({
   card,
   location,
-  state: _state,
 }: {
   card: BattleMutableState["cardInstances"][string];
   location: ReturnType<typeof selectBattleCardLocation>;
-  state: BattleMutableState;
 }) {
   const side = location?.side ?? card.controller;
   const effectiveSpark = Math.max(0, card.definition.printedSpark + card.sparkDelta);
