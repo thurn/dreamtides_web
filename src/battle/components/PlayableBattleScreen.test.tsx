@@ -264,13 +264,13 @@ describe("PlayableBattleScreen", () => {
       .toContain("battle-side-zone-column");
     expect(container.querySelector('[data-battle-region="enemy-status-strip"]')?.parentElement?.className)
       .toContain("battle-side-zone-column");
-    expect(container.querySelector('[data-battle-region="player-void-zone"]')?.parentElement?.className)
+    expect(container.querySelector('[data-battle-region="player-void-zone"]')?.closest(".battle-side-zone-column")?.className)
       .toContain("battle-side-zone-column");
-    expect(container.querySelector('[data-battle-region="enemy-void-zone"]')?.parentElement?.className)
+    expect(container.querySelector('[data-battle-region="enemy-void-zone"]')?.closest(".battle-side-zone-column")?.className)
       .toContain("battle-side-zone-column");
-    expect(container.querySelector('[data-battle-region="player-banished-zone"]')?.parentElement?.className)
+    expect(container.querySelector('[data-battle-region="player-banished-zone"]')?.closest(".battle-side-zone-column")?.className)
       .toContain("battle-side-zone-column");
-    expect(container.querySelector('[data-battle-region="enemy-banished-zone"]')?.parentElement?.className)
+    expect(container.querySelector('[data-battle-region="enemy-banished-zone"]')?.closest(".battle-side-zone-column")?.className)
       .toContain("battle-side-zone-column");
     expect(container.textContent).toContain("You");
     expect(container.textContent).toContain("Enemy");
@@ -2276,6 +2276,74 @@ describe("PlayableBattleScreen", () => {
       root.unmount();
     });
     vi.useRealTimers();
+  });
+
+  it("draws one card for each side from its status-strip draw button", () => {
+    const { container, initialState, root } = renderScreen();
+    const playerDrawnCardId = initialState.sides.player.deck[0];
+    const enemyDrawnCardId = initialState.sides.enemy.deck[0];
+    if (playerDrawnCardId === undefined || enemyDrawnCardId === undefined) {
+      throw new Error("expected both decks to contain a card");
+    }
+    const initialPlayerHandCount = initialState.sides.player.hand.length;
+    const initialEnemyHandCount = initialState.sides.enemy.hand.length;
+
+    const playerDrawButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-region="player-status-strip"] [data-battle-action="status-draw-player"]',
+    );
+    const enemyDrawButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-region="enemy-status-strip"] [data-battle-action="status-draw-enemy"]',
+    );
+
+    expect(playerDrawButton).not.toBeNull();
+    expect(playerDrawButton?.textContent).toBe("Draw card");
+    expect(enemyDrawButton).not.toBeNull();
+    expect(enemyDrawButton?.textContent).toBe("Draw card");
+
+    act(() => {
+      playerDrawButton?.click();
+    });
+
+    expect(container.querySelectorAll('[data-battle-region="player-hand-tray"] [data-battle-card-id]'))
+      .toHaveLength(initialPlayerHandCount + 1);
+    expect(
+      container.querySelector(
+        `[data-battle-region="player-hand-tray"] [data-battle-card-id="${playerDrawnCardId}"]`,
+      ),
+    ).not.toBeNull();
+    expect(getLogEntries().some((entry) =>
+      entry.event === "battle_proto_command_applied" &&
+      entry.commandId === "DRAW_CARD" &&
+      entry.label === "Draw 1 for Player" &&
+      entry.sourceSurface === "status-strip"
+    )).toBe(true);
+
+    act(() => {
+      enemyDrawButton?.click();
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+
+    expect(container.querySelectorAll('[data-battle-region="opponent-hand-tray"] [data-battle-card-id]'))
+      .toHaveLength(initialEnemyHandCount + 1);
+    expect(
+      container.querySelector(
+        `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${enemyDrawnCardId}"]`,
+      ),
+    ).not.toBeNull();
+
+    expect(getLogEntries().some((entry) =>
+      entry.event === "battle_proto_command_applied" &&
+      entry.commandId === "DRAW_CARD" &&
+      entry.label === "Draw 1 for Enemy" &&
+      entry.sourceSurface === "status-strip"
+    )).toBe(true);
+
+    act(() => {
+      root.unmount();
+    });
   });
 });
 

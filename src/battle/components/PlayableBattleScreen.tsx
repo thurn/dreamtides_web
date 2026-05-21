@@ -707,22 +707,24 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 )}
               />
               <div className="battle-side-zone-column player">
-                <BattleSmallZoneDropTarget
-                  label="Banished"
-                  side="player"
-                  zone="banished"
-                  pendingDrag={pendingDrag}
-                  onDrop={(sourceSurface) => handleZoneDrop("player", "banished", sourceSurface)}
-                  onOpen={() => handleOpenZoneBrowser("player", "banished")}
-                />
-                <BattleSmallZoneDropTarget
-                  label="Void"
-                  side="player"
-                  zone="void"
-                  pendingDrag={pendingDrag}
-                  onDrop={(sourceSurface) => handleZoneDrop("player", "void", sourceSurface)}
-                  onOpen={() => handleOpenZoneBrowser("player", "void")}
-                />
+                <div className="battle-small-zone-row">
+                  <BattleSmallZoneDropTarget
+                    label="Banished"
+                    side="player"
+                    zone="banished"
+                    pendingDrag={pendingDrag}
+                    onDrop={(sourceSurface) => handleZoneDrop("player", "banished", sourceSurface)}
+                    onOpen={() => handleOpenZoneBrowser("player", "banished")}
+                  />
+                  <BattleSmallZoneDropTarget
+                    label="Void"
+                    side="player"
+                    zone="void"
+                    pendingDrag={pendingDrag}
+                    onDrop={(sourceSurface) => handleZoneDrop("player", "void", sourceSurface)}
+                    onOpen={() => handleOpenZoneBrowser("player", "void")}
+                  />
+                </div>
                 <BattleStatusStrip
                   dreamcaller={battleInit.dreamcallerSummary}
                   side="player"
@@ -744,6 +746,11 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   onSetScore={(value) => handleCommand({
                     id: "DEBUG_EDIT",
                     edit: { kind: "SET_SCORE", side: "player", value },
+                    sourceSurface: "status-strip",
+                  })}
+                  onDrawCard={() => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "DRAW_CARD", side: "player" },
                     sourceSurface: "status-strip",
                   })}
                   onOpenSummary={() => handleOpenSummary("player")}
@@ -862,25 +869,32 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     edit: { kind: "SET_SCORE", side: "enemy", value },
                     sourceSurface: "status-strip",
                   })}
+                  onDrawCard={() => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "DRAW_CARD", side: "enemy" },
+                    sourceSurface: "status-strip",
+                  })}
                   onOpenSummary={() => handleOpenSummary("enemy")}
                   onCloseSummary={() => handleCloseSummary("enemy")}
                 />
-                <BattleSmallZoneDropTarget
-                  label="Void"
-                  side="enemy"
-                  zone="void"
-                  pendingDrag={pendingDrag}
-                  onDrop={(sourceSurface) => handleZoneDrop("enemy", "void", sourceSurface)}
-                  onOpen={() => handleOpenZoneBrowser("enemy", "void")}
-                />
-                <BattleSmallZoneDropTarget
-                  label="Banished"
-                  side="enemy"
-                  zone="banished"
-                  pendingDrag={pendingDrag}
-                  onDrop={(sourceSurface) => handleZoneDrop("enemy", "banished", sourceSurface)}
-                  onOpen={() => handleOpenZoneBrowser("enemy", "banished")}
-                />
+                <div className="battle-small-zone-row">
+                  <BattleSmallZoneDropTarget
+                    label="Void"
+                    side="enemy"
+                    zone="void"
+                    pendingDrag={pendingDrag}
+                    onDrop={(sourceSurface) => handleZoneDrop("enemy", "void", sourceSurface)}
+                    onOpen={() => handleOpenZoneBrowser("enemy", "void")}
+                  />
+                  <BattleSmallZoneDropTarget
+                    label="Banished"
+                    side="enemy"
+                    zone="banished"
+                    pendingDrag={pendingDrag}
+                    onDrop={(sourceSurface) => handleZoneDrop("enemy", "banished", sourceSurface)}
+                    onOpen={() => handleOpenZoneBrowser("enemy", "banished")}
+                  />
+                </div>
               </div>
             </div>
           </div>

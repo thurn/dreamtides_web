@@ -43,6 +43,7 @@ function mount(withBanished = false): {
   onSetEnergy: ReturnType<typeof vi.fn>;
   onSetScore: ReturnType<typeof vi.fn>;
   onIncreaseMaxEnergyAndFill: ReturnType<typeof vi.fn>;
+  onDrawCard: ReturnType<typeof vi.fn>;
   onCloseSummary: ReturnType<typeof vi.fn>;
   onOpenSummary: ReturnType<typeof vi.fn>;
   root: Root;
@@ -57,6 +58,7 @@ function mount(withBanished = false): {
   const onCloseSummary = vi.fn();
   const onOpenSummary = vi.fn();
   const onIncreaseMaxEnergyAndFill = vi.fn();
+  const onDrawCard = vi.fn();
   const onSetEnergy = vi.fn();
   const onSetScore = vi.fn();
   const container = document.createElement("div");
@@ -81,6 +83,7 @@ function mount(withBanished = false): {
         onSetEnergy={onSetEnergy}
         onSetScore={onSetScore}
         onIncreaseMaxEnergyAndFill={onIncreaseMaxEnergyAndFill}
+        onDrawCard={onDrawCard}
         onCloseSummary={onCloseSummary}
         onOpenSummary={onOpenSummary}
       />,
@@ -94,6 +97,7 @@ function mount(withBanished = false): {
     onSetEnergy,
     onSetScore,
     onIncreaseMaxEnergyAndFill,
+    onDrawCard,
     onCloseSummary,
     onOpenSummary,
     root,
@@ -279,6 +283,7 @@ describe("BattleStatusStrip", () => {
         onSetEnergy={onSetEnergy}
         onSetScore={onSetScore}
         onIncreaseMaxEnergyAndFill={vi.fn()}
+        onDrawCard={vi.fn()}
         onCloseSummary={vi.fn()}
         onOpenSummary={vi.fn()}
       />,

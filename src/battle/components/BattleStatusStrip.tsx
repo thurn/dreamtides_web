@@ -20,6 +20,7 @@ export function BattleStatusStrip({
   onSetEnergy,
   onSetScore,
   onIncreaseMaxEnergyAndFill,
+  onDrawCard,
   onCloseSummary,
   onOpenSummary,
 }: {
@@ -33,6 +34,7 @@ export function BattleStatusStrip({
   onSetEnergy: (value: number) => void;
   onSetScore: (value: number) => void;
   onIncreaseMaxEnergyAndFill: () => void;
+  onDrawCard: () => void;
   onCloseSummary: () => void;
   onOpenSummary: () => void;
 }) {
@@ -109,6 +111,15 @@ export function BattleStatusStrip({
           onFill={onIncreaseMaxEnergyAndFill}
         />
       </div>
+      <button
+        type="button"
+        aria-label={`Draw one card for ${side === "player" ? "you" : "enemy"}`}
+        className="status-strip-action"
+        data-battle-action={`status-draw-${side}`}
+        onClick={onDrawCard}
+      >
+        Draw card
+      </button>
     </section>
   );
 }
