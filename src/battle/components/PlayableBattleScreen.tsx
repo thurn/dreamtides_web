@@ -694,8 +694,18 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 )}
               />
               <div className="battle-side-zone-column player">
-                <BattleVoidDropZone
+                <BattleSmallZoneDropTarget
+                  label="Banished"
                   side="player"
+                  zone="banished"
+                  pendingDrag={pendingDrag}
+                  onDrop={(sourceSurface) => handleZoneDrop("player", "banished", sourceSurface)}
+                  onOpen={() => handleOpenZoneBrowser("player", "banished")}
+                />
+                <BattleSmallZoneDropTarget
+                  label="Void"
+                  side="player"
+                  zone="void"
                   pendingDrag={pendingDrag}
                   onDrop={(sourceSurface) => handleZoneDrop("player", "void", sourceSurface)}
                   onOpen={() => handleOpenZoneBrowser("player", "void")}
@@ -842,11 +852,21 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   onOpenSummary={() => handleOpenSummary("enemy")}
                   onCloseSummary={() => handleCloseSummary("enemy")}
                 />
-                <BattleVoidDropZone
+                <BattleSmallZoneDropTarget
+                  label="Void"
                   side="enemy"
+                  zone="void"
                   pendingDrag={pendingDrag}
                   onDrop={(sourceSurface) => handleZoneDrop("enemy", "void", sourceSurface)}
                   onOpen={() => handleOpenZoneBrowser("enemy", "void")}
+                />
+                <BattleSmallZoneDropTarget
+                  label="Banished"
+                  side="enemy"
+                  zone="banished"
+                  pendingDrag={pendingDrag}
+                  onDrop={(sourceSurface) => handleZoneDrop("enemy", "banished", sourceSurface)}
+                  onOpen={() => handleOpenZoneBrowser("enemy", "banished")}
                 />
               </div>
             </div>
@@ -983,13 +1003,17 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   );
 }
 
-function BattleVoidDropZone({
+function BattleSmallZoneDropTarget({
+  label,
   side,
+  zone,
   pendingDrag,
   onDrop,
   onOpen,
 }: {
+  label: string;
   side: BattleSide;
+  zone: "void" | "banished";
   pendingDrag: PendingDragState;
   onDrop: (sourceSurface: BattleCommandSourceSurface) => void;
   onOpen: () => void;
@@ -999,10 +1023,10 @@ function BattleVoidDropZone({
   return (
     <button
       type="button"
-      data-battle-region={`${side}-void-zone`}
-      data-battle-zone-open={`${side}:void`}
-      data-battle-zone-drop-target={isDropTarget ? `${side}:void` : undefined}
-      className={`battle-void-zone ${side} ${isDropTarget ? "drop-target" : ""}`}
+      data-battle-region={`${side}-${zone}-zone`}
+      data-battle-zone-open={`${side}:${zone}`}
+      data-battle-zone-drop-target={isDropTarget ? `${side}:${zone}` : undefined}
+      className={`battle-small-zone ${side} ${zone} ${isDropTarget ? "drop-target" : ""}`}
       onClick={onOpen}
       onDragOver={(event) => {
         if (isDropTarget) {
@@ -1018,7 +1042,7 @@ function BattleVoidDropZone({
         onDrop(pendingDrag.sourceSurface);
       }}
     >
-      <span>Void</span>
+      <span>{label}</span>
     </button>
   );
 }

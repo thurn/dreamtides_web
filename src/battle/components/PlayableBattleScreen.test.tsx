@@ -244,6 +244,7 @@ describe("PlayableBattleScreen", () => {
     ).toEqual([
       "status-bar",
       "stack-zone",
+      "player-banished-zone",
       "player-void-zone",
       "player-status-strip",
       "enemy-reserve-row",
@@ -253,6 +254,7 @@ describe("PlayableBattleScreen", () => {
       "player-reserve-row",
       "enemy-status-strip",
       "enemy-void-zone",
+      "enemy-banished-zone",
       "player-hand-tray",
       "action-bar",
     ]);
@@ -265,6 +267,10 @@ describe("PlayableBattleScreen", () => {
     expect(container.querySelector('[data-battle-region="player-void-zone"]')?.parentElement?.className)
       .toContain("battle-side-zone-column");
     expect(container.querySelector('[data-battle-region="enemy-void-zone"]')?.parentElement?.className)
+      .toContain("battle-side-zone-column");
+    expect(container.querySelector('[data-battle-region="player-banished-zone"]')?.parentElement?.className)
+      .toContain("battle-side-zone-column");
+    expect(container.querySelector('[data-battle-region="enemy-banished-zone"]')?.parentElement?.className)
       .toContain("battle-side-zone-column");
     expect(container.textContent).toContain("You");
     expect(container.textContent).toContain("Enemy");
@@ -573,6 +579,56 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(container.querySelector('[data-battle-zone-browser="player:void"]')).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("drops a player hand card into the player banished zone and opens the banished browser", () => {
+    const { container, root } = renderScreen();
+    const firstHandCard = container.querySelector<HTMLElement>(
+      '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
+    );
+    const banishedZone = container.querySelector<HTMLElement>('[data-battle-region="player-banished-zone"]');
+
+    if (firstHandCard === null || banishedZone === null) {
+      throw new Error("expected player hand card and banished zone");
+    }
+    const battleCardId = firstHandCard.getAttribute("data-battle-card-id");
+
+    act(() => {
+      firstHandCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(banishedZone.getAttribute("data-battle-zone-drop-target")).toBe("player:banished");
+
+    act(() => {
+      banishedZone.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    expect(
+      container.querySelector(
+        `[data-battle-region="player-hand-tray"] [data-battle-card-id="${battleCardId ?? ""}"]`,
+      ),
+    ).toBeNull();
+    expect(container.querySelector('[data-battle-zone-browser="player:banished"]')).toBeNull();
+
+    act(() => {
+      banishedZone.click();
+    });
+
+    const browser = container.querySelector<HTMLElement>('[data-battle-zone-browser="player:banished"]');
+    expect(browser?.textContent).toContain("Your Banished");
+    expect(
+      browser?.querySelector(`[data-zone-browser-card-id="${battleCardId ?? ""}"]`),
+    ).not.toBeNull();
+
+    act(() => {
+      browser?.querySelector<HTMLButtonElement>(".m-head .btn.ghost")?.click();
+    });
+
+    expect(container.querySelector('[data-battle-zone-browser="player:banished"]')).toBeNull();
 
     act(() => {
       root.unmount();
@@ -1001,7 +1057,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("exposes void drop zones beside both status strips", () => {
+  it("exposes void and banished drop zones beside both status strips", () => {
     const { container, root } = renderScreen();
 
     act(() => {
@@ -1024,17 +1080,33 @@ describe("PlayableBattleScreen", () => {
         ?.getAttribute("data-battle-zone-open"),
     ).toBe("enemy:void");
     expect(
+      container.querySelector('[data-battle-region="enemy-banished-zone"]')
+        ?.getAttribute("data-battle-zone-open"),
+    ).toBe("enemy:banished");
+    expect(
       container.querySelector('[data-battle-region="player-void-zone"]')
         ?.getAttribute("data-battle-zone-open"),
     ).toBe("player:void");
+    expect(
+      container.querySelector('[data-battle-region="player-banished-zone"]')
+        ?.getAttribute("data-battle-zone-open"),
+    ).toBe("player:banished");
     expect(
       container.querySelector('[data-battle-region="enemy-void-zone"]')
         ?.getAttribute("data-battle-zone-drop-target"),
     ).toBe("enemy:void");
     expect(
+      container.querySelector('[data-battle-region="enemy-banished-zone"]')
+        ?.getAttribute("data-battle-zone-drop-target"),
+    ).toBe("enemy:banished");
+    expect(
       container.querySelector('[data-battle-region="player-void-zone"]')
         ?.getAttribute("data-battle-zone-drop-target"),
     ).toBe("player:void");
+    expect(
+      container.querySelector('[data-battle-region="player-banished-zone"]')
+        ?.getAttribute("data-battle-zone-drop-target"),
+    ).toBe("player:banished");
 
     act(() => {
       root.unmount();

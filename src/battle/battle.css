@@ -297,8 +297,8 @@
   width: 100%;
 }
 
-.battle-void-zone {
-  flex: 0 0 var(--battle-void-zone-height, clamp(108px, 11vh, 110px));
+.battle-small-zone {
+  flex: 0 0 var(--battle-small-zone-height, clamp(108px, 11vh, 110px));
   width: 100%;
   min-height: 0;
   display: flex;
@@ -316,13 +316,13 @@
   transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
 }
 
-.battle-void-zone:hover,
-.battle-void-zone:focus-visible {
+.battle-small-zone:hover,
+.battle-small-zone:focus-visible {
   border-color: var(--line-strong);
   color: var(--text);
 }
 
-.battle-void-zone.drop-target {
+.battle-small-zone.drop-target {
   border-color: var(--accent);
   background: var(--accent-soft);
   color: var(--text);
