@@ -413,8 +413,8 @@
 
 .battle-stack-entry {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  align-items: stretch;
+  grid-template-rows: auto auto;
+  align-items: start;
   gap: 7px;
   flex: 0 0 auto;
   width: clamp(112px, 13vw, 142px);
@@ -423,7 +423,8 @@
 
 .battle-stack-entry .battle-card {
   width: 100%;
-  height: 100%;
+  height: auto;
+  aspect-ratio: 78 / 108;
   min-height: 0;
 }
 

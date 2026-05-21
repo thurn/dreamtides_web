@@ -387,6 +387,12 @@ describe("PlayableBattleScreen", () => {
     expect(BATTLE_CSS).toMatch(/\.player-hand-zone\.compact\s*{[^}]*flex-basis:\s*var\(--player-hand-zone-compact-height,/s);
   });
 
+  it("keeps stack zone cards at the mini battle-card aspect ratio", () => {
+    expect(BATTLE_CSS).toMatch(/\.battle-stack-entry\s*{[^}]*grid-template-rows:\s*auto auto;/s);
+    expect(BATTLE_CSS).toMatch(/\.battle-stack-entry\s+\.battle-card\s*{[^}]*height:\s*auto;/s);
+    expect(BATTLE_CSS).toMatch(/\.battle-stack-entry\s+\.battle-card\s*{[^}]*aspect-ratio:\s*78 \/ 108;/s);
+  });
+
   it("has no phase-action button in the action bar", () => {
     const { container, root } = renderScreen((state) => {
       state.phase = "day";
