@@ -13,6 +13,8 @@ export function BattleStatusStrip({
   title,
   isActive,
   isSummarySelected = false,
+  onAdjustEnergy,
+  onAdjustScore,
   onCloseSummary,
   onOpenSummary,
 }: {
@@ -23,6 +25,8 @@ export function BattleStatusStrip({
   title: string;
   isActive: boolean;
   isSummarySelected?: boolean;
+  onAdjustEnergy: (amount: number) => void;
+  onAdjustScore: (amount: number) => void;
   onCloseSummary: () => void;
   onOpenSummary: () => void;
 }) {
@@ -32,10 +36,6 @@ export function BattleStatusStrip({
       data-battle-ownership={side}
       data-battle-side-status={side}
       className={`status-strip ${side}`}
-      onMouseEnter={onOpenSummary}
-      onMouseLeave={onCloseSummary}
-      onFocus={onOpenSummary}
-      onBlur={onCloseSummary}
     >
       <button
         type="button"
@@ -44,6 +44,10 @@ export function BattleStatusStrip({
         data-battle-side-summary-selected={String(isSummarySelected)}
         className={`summary-trigger ${isSummarySelected ? "selected" : ""} ${isActive ? "active" : ""}`}
         title={subtitle === "" ? title : `${title} · ${subtitle}`}
+        onMouseEnter={onOpenSummary}
+        onMouseLeave={onCloseSummary}
+        onFocus={onOpenSummary}
+        onBlur={onCloseSummary}
       >
         {dreamcaller !== null ? (
           <span className="status-dreamcaller-thumb" data-battle-status-dreamcaller-thumb="">
@@ -65,7 +69,12 @@ export function BattleStatusStrip({
           className="stat"
         >
           <span className="label">PTS</span>
-          <span className="val">{String(sideState.score)}</span>
+          <StatStepper
+            decrementLabel={`Decrease ${side === "player" ? "your" : "enemy"} points`}
+            incrementLabel={`Increase ${side === "player" ? "your" : "enemy"} points`}
+            value={String(sideState.score)}
+            onAdjust={onAdjustScore}
+          />
         </div>
         <div
           data-battle-stat={`${side}:energy`}
@@ -75,11 +84,48 @@ export function BattleStatusStrip({
           className="stat"
         >
           <span className="label">E</span>
-          <span className="val">
-            {String(sideState.currentEnergy)}/{String(sideState.maxEnergy)}
-          </span>
+          <StatStepper
+            decrementLabel={`Decrease ${side === "player" ? "your" : "enemy"} energy`}
+            incrementLabel={`Increase ${side === "player" ? "your" : "enemy"} energy`}
+            value={`${String(sideState.currentEnergy)}/${String(sideState.maxEnergy)}`}
+            onAdjust={onAdjustEnergy}
+          />
         </div>
       </div>
     </section>
+  );
+}
+
+function StatStepper({
+  decrementLabel,
+  incrementLabel,
+  value,
+  onAdjust,
+}: {
+  decrementLabel: string;
+  incrementLabel: string;
+  value: string;
+  onAdjust: (amount: number) => void;
+}) {
+  return (
+    <span className="stat-stepper">
+      <button
+        type="button"
+        aria-label={decrementLabel}
+        className="stat-stepper-button"
+        onClick={() => onAdjust(-1)}
+      >
+        {"<"}
+      </button>
+      <span className="val">{value}</span>
+      <button
+        type="button"
+        aria-label={incrementLabel}
+        className="stat-stepper-button"
+        onClick={() => onAdjust(1)}
+      >
+        {">"}
+      </button>
+    </span>
   );
 }

@@ -40,6 +40,8 @@ function createState() {
 
 function mount(withBanished = false): {
   container: HTMLDivElement;
+  onAdjustEnergy: ReturnType<typeof vi.fn>;
+  onAdjustScore: ReturnType<typeof vi.fn>;
   onCloseSummary: ReturnType<typeof vi.fn>;
   onOpenSummary: ReturnType<typeof vi.fn>;
   root: Root;
@@ -53,6 +55,8 @@ function mount(withBanished = false): {
   }
   const onCloseSummary = vi.fn();
   const onOpenSummary = vi.fn();
+  const onAdjustEnergy = vi.fn();
+  const onAdjustScore = vi.fn();
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -72,13 +76,15 @@ function mount(withBanished = false): {
         subtitle=""
         title="Aeris"
         isActive
+        onAdjustEnergy={onAdjustEnergy}
+        onAdjustScore={onAdjustScore}
         onCloseSummary={onCloseSummary}
         onOpenSummary={onOpenSummary}
       />,
     );
   });
 
-  return { container, onCloseSummary, onOpenSummary, root };
+  return { container, onAdjustEnergy, onAdjustScore, onCloseSummary, onOpenSummary, root };
 }
 
 afterEach(() => {
@@ -135,6 +141,26 @@ describe("BattleStatusStrip", () => {
 
     expect(container.querySelector('[data-battle-zone-open="player:banished"]')).toBeNull();
     expect(container.textContent).not.toContain("B");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("calls stat adjusters from the score and energy arrow controls", () => {
+    const { container, onAdjustEnergy, onAdjustScore, root } = mount();
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('button[aria-label="Decrease your points"]')?.click();
+      container.querySelector<HTMLButtonElement>('button[aria-label="Increase your points"]')?.click();
+      container.querySelector<HTMLButtonElement>('button[aria-label="Decrease your energy"]')?.click();
+      container.querySelector<HTMLButtonElement>('button[aria-label="Increase your energy"]')?.click();
+    });
+
+    expect(onAdjustScore).toHaveBeenNthCalledWith(1, -1);
+    expect(onAdjustScore).toHaveBeenNthCalledWith(2, 1);
+    expect(onAdjustEnergy).toHaveBeenNthCalledWith(1, -1);
+    expect(onAdjustEnergy).toHaveBeenNthCalledWith(2, 1);
 
     act(() => {
       root.unmount();

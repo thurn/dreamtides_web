@@ -553,6 +553,44 @@
   cursor: pointer;
 }
 
+.stat-stepper {
+  display: grid;
+  grid-template-columns: 18px minmax(2.75ch, 4.5ch) 18px;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+}
+
+.stat-stepper .val {
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.stat-stepper-button {
+  width: 18px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--line) 85%, var(--text) 15%);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--surface) 78%, var(--line) 22%);
+  color: var(--text-dim);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.stat-stepper-button:hover,
+.stat-stepper-button:focus-visible {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
 .stat.clickable:hover {
   color: var(--text);
 }

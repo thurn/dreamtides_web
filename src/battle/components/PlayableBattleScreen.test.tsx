@@ -1152,6 +1152,7 @@ describe("PlayableBattleScreen", () => {
     act(() => {
       container
         .querySelector<HTMLElement>('[data-battle-region="player-status-strip"]')
+        ?.querySelector<HTMLElement>("[data-battle-side-summary]")
         ?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
     });
 
@@ -1172,6 +1173,7 @@ describe("PlayableBattleScreen", () => {
     act(() => {
       container
         .querySelector<HTMLElement>('[data-battle-region="enemy-status-strip"]')
+        ?.querySelector<HTMLElement>("[data-battle-side-summary]")
         ?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
     });
 
@@ -1770,6 +1772,45 @@ describe("PlayableBattleScreen", () => {
     expect(
       container.querySelector<HTMLButtonElement>('[data-battle-action="undo"]')?.disabled,
     ).toBe(true);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("adjusts both sides' score and current energy from status-strip arrow controls", () => {
+    const { container, root } = renderScreen((state) => {
+      state.sides.player.score = 4;
+      state.sides.player.currentEnergy = 2;
+      state.sides.player.maxEnergy = 5;
+      state.sides.enemy.score = 7;
+      state.sides.enemy.currentEnergy = 3;
+      state.sides.enemy.maxEnergy = 6;
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('button[aria-label="Increase your points"]')?.click();
+      container.querySelector<HTMLButtonElement>('button[aria-label="Decrease your energy"]')?.click();
+      container.querySelector<HTMLButtonElement>('button[aria-label="Decrease enemy points"]')?.click();
+      container.querySelector<HTMLButtonElement>('button[aria-label="Increase enemy energy"]')?.click();
+    });
+
+    expect(container.querySelector('[data-battle-stat="player:score"]')?.getAttribute("data-battle-value"))
+      .toBe("5");
+    expect(container.querySelector('[data-battle-stat="player:energy"]')?.getAttribute("data-battle-current-energy"))
+      .toBe("1");
+    expect(container.querySelector('[data-battle-stat="player:energy"]')?.getAttribute("data-battle-max-energy"))
+      .toBe("5");
+    expect(container.querySelector('[data-battle-stat="enemy:score"]')?.getAttribute("data-battle-value"))
+      .toBe("6");
+    expect(container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-current-energy"))
+      .toBe("4");
+    expect(container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-max-energy"))
+      .toBe("6");
+
+    const commandLogs = getLogEntries().filter((entry) => entry.event === "battle_proto_command_applied");
+    const lastCommandLog = commandLogs[commandLogs.length - 1];
+    expect(lastCommandLog?.sourceSurface).toBe("status-strip");
 
     act(() => {
       root.unmount();

@@ -695,6 +695,16 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 title={battleInit.dreamcallerSummary?.name ?? "Player"}
                 isActive={reducerState.mutable.activeSide === "player"}
                 isSummarySelected={openSideSummary === "player"}
+                onAdjustEnergy={(amount) => handleCommand({
+                  id: "DEBUG_EDIT",
+                  edit: { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount },
+                  sourceSurface: "status-strip",
+                })}
+                onAdjustScore={(amount) => handleCommand({
+                  id: "DEBUG_EDIT",
+                  edit: { kind: "ADJUST_SCORE", side: "player", amount },
+                  sourceSurface: "status-strip",
+                })}
                 onOpenSummary={() => handleOpenSummary("player")}
                 onCloseSummary={() => handleCloseSummary("player")}
               />
@@ -794,6 +804,16 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 title={battleInit.enemyDescriptor.name}
                 isActive={reducerState.mutable.activeSide === "enemy"}
                 isSummarySelected={openSideSummary === "enemy"}
+                onAdjustEnergy={(amount) => handleCommand({
+                  id: "DEBUG_EDIT",
+                  edit: { kind: "ADJUST_CURRENT_ENERGY", side: "enemy", amount },
+                  sourceSurface: "status-strip",
+                })}
+                onAdjustScore={(amount) => handleCommand({
+                  id: "DEBUG_EDIT",
+                  edit: { kind: "ADJUST_SCORE", side: "enemy", amount },
+                  sourceSurface: "status-strip",
+                })}
                 onOpenSummary={() => handleOpenSummary("enemy")}
                 onCloseSummary={() => handleCloseSummary("enemy")}
               />

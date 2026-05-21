@@ -77,6 +77,7 @@ export type BattleCommandSourceSurface =
   | "figment-creator"
   | "card-badges"
   | "side-summary"
+  | "status-strip"
   | "dreamcaller-panel";
 
 /**
