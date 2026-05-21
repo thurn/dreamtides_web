@@ -236,6 +236,7 @@ export function CardDisplay({
             src={cardImageUrl(card.cardNumber)}
             alt={card.name}
             className="h-full w-full object-cover"
+            draggable={false}
             onError={() => {
               setImageError(true);
             }}

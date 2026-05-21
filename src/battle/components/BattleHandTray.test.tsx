@@ -141,6 +141,21 @@ describe("BattleHandTray", () => {
     });
   });
 
+  it("keeps hand card art from becoming the native drag image", () => {
+    const { container, root } = mount();
+    const firstCard = container.querySelector<HTMLElement>("[data-battle-card-id]");
+    const firstCardImage = firstCard?.querySelector<HTMLImageElement>("img");
+
+    expect(firstCard?.classList.contains("quest-card")).toBe(true);
+    expect(firstCard?.getAttribute("draggable")).toBe("true");
+    expect(firstCardImage?.getAttribute("draggable")).toBe("false");
+    expect(firstCardImage?.draggable).toBe(false);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("forwards click, double-click, and context-menu events with the battle card id", () => {
     const { clickCard, container, contextMenu, doubleClickCard, root } = mount();
     const firstCard = container.querySelector<HTMLElement>("[data-battle-card-id]");
