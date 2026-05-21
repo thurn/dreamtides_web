@@ -478,6 +478,48 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("decrements active side and turn when the left floating phase control wraps from player", () => {
+    const { container, root } = renderScreen((state) => {
+      state.phase = "dawn";
+      state.activeSide = "player";
+      state.turnNumber = 2;
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="previous"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Night");
+    expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 1");
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("decrements active side without changing turn when the left floating phase control wraps from enemy", () => {
+    const { container, root } = renderScreen((state) => {
+      state.phase = "dawn";
+      state.activeSide = "enemy";
+      state.turnNumber = 1;
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="previous"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Night");
+    expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 1");
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Player");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("advances active side when the next floating phase control wraps", () => {
     const { container, root } = renderScreen((state) => {
       state.phase = "night";

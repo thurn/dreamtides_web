@@ -1303,7 +1303,9 @@ function computePhaseControlTarget(
   const normalizedNextIndex = (nextIndex + PHASE_CONTROL_SEQUENCE.length) % PHASE_CONTROL_SEQUENCE.length;
   const phase = PHASE_CONTROL_SEQUENCE[normalizedNextIndex];
   const turnPair = didWrap
-    ? advanceBattleTurnPair(state.activeSide, state.turnNumber)
+    ? control === "previous"
+      ? decrementBattleTurnPair(state.activeSide, state.turnNumber)
+      : advanceBattleTurnPair(state.activeSide, state.turnNumber)
     : { activeSide: state.activeSide, turnNumber: state.turnNumber };
   const action = control === "previous" ? "Return" : "Advance";
 
@@ -1342,6 +1344,19 @@ function advanceBattleTurnPair(
     return { activeSide: "enemy", turnNumber };
   }
   return { activeSide: "player", turnNumber: turnNumber + 1 };
+}
+
+function decrementBattleTurnPair(
+  activeSide: BattleSide,
+  turnNumber: number,
+): {
+  activeSide: BattleSide;
+  turnNumber: number;
+} {
+  if (activeSide === "enemy") {
+    return { activeSide: "player", turnNumber };
+  }
+  return { activeSide: "enemy", turnNumber: Math.max(1, turnNumber - 1) };
 }
 
 function ScaledBattlefield({ children }: { children: ReactNode }) {
