@@ -69,6 +69,7 @@ function makeRawSnapshot(overrides: Record<string, unknown>) {
         id: "enemy",
         name: "Enemy",
         subtitle: "",
+        imageNumber: "001",
         portraitSeed: 0,
         packageTides: [],
         abilityText: "",

@@ -625,14 +625,14 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("opens the zone browser from the status strip with the mockup controls", () => {
+  it("opens the zone browser from the inspector with the mockup controls", () => {
     const { container, root } = renderScreen();
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-battle-zone-open="player:hand"]')?.click();
+      clickChip(container, "Open Deck");
     });
 
-    expect(container.textContent).toContain("Your Hand");
+    expect(container.textContent).toContain("Your Deck");
     expect(
       container.querySelector<HTMLInputElement>("[data-zone-browser-search]")?.placeholder,
     ).toBe("Search by name…");
@@ -643,7 +643,7 @@ describe("PlayableBattleScreen", () => {
       container.querySelector<HTMLElement>(".modal-scrim")?.click();
     });
 
-    expect(container.textContent).not.toContain("Your Hand");
+    expect(container.textContent).not.toContain("Your Deck");
 
     act(() => {
       root.unmount();
@@ -767,9 +767,6 @@ describe("PlayableBattleScreen", () => {
         }
       }
     });
-    const initialEnemyHandCount = initialState.sides.enemy.hand.length;
-    const initialEnemyVoidCount = initialState.sides.enemy.void.length;
-
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
     });
@@ -815,23 +812,11 @@ describe("PlayableBattleScreen", () => {
         `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${opponentEventId}"]`,
       ),
     ).toBeNull();
-    expect(
-      container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count"),
-    ).toBe(String(initialEnemyHandCount - 1));
     // The play is now an unrestricted move: the event lands in void without
     // spending energy.
     expect(
       container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-current-energy"),
     ).toBe("10");
-    expect(
-      container.querySelector('[data-battle-stat="enemy:void"]')?.getAttribute("data-battle-zone-count"),
-    ).toBe(String(initialEnemyVoidCount + 1));
-
-    act(() => {
-      container.querySelector<HTMLElement>('[data-battle-zone-open="enemy:void"]')?.click();
-    });
-
-    expect(container.querySelector(`[data-zone-browser-card-id="${opponentEventId}"]`)).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -916,9 +901,6 @@ describe("PlayableBattleScreen", () => {
     if (playItem === undefined) {
       throw new Error("expected enemy character play item");
     }
-    const enemyHandCountBeforePlay = Number(
-      container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
-    );
     const enemyEnergyBeforePlay = Number(
       container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-current-energy") ?? "0",
     );
@@ -939,9 +921,6 @@ describe("PlayableBattleScreen", () => {
         `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${opponentCharacterId}"]`,
       ),
     ).toBeNull();
-    expect(
-      container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count"),
-    ).toBe(String(enemyHandCountBeforePlay - 1));
     // The play is now an unrestricted move: placing the character costs no
     // energy.
     expect(
@@ -953,7 +932,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("drops opponent hand cards onto status-strip zone targets through debug movement", () => {
+  it("does not expose status-strip zone targets for debug movement", () => {
     const { container, root } = renderScreen();
 
     act(() => {
@@ -963,27 +942,16 @@ describe("PlayableBattleScreen", () => {
     const opponentCard = container.querySelector<HTMLElement>(
       '[data-battle-region="opponent-hand-tray"] [data-battle-card-id]',
     );
-    const enemyVoidButton = container.querySelector<HTMLElement>('[data-battle-zone-open="enemy:void"]');
-    if (opponentCard === null || enemyVoidButton === null) {
-      throw new Error("expected opponent card and enemy void zone");
+    if (opponentCard === null) {
+      throw new Error("expected opponent card");
     }
-    const opponentCardId = opponentCard.getAttribute("data-battle-card-id");
 
     act(() => {
       opponentCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
     });
 
-    expect(enemyVoidButton.getAttribute("data-battle-zone-drop-target")).toBe("enemy:void");
-
-    act(() => {
-      enemyVoidButton.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
-    });
-
-    act(() => {
-      container.querySelector<HTMLElement>('[data-battle-zone-open="enemy:void"]')?.click();
-    });
-
-    expect(container.querySelector(`[data-zone-browser-card-id="${opponentCardId}"]`)).not.toBeNull();
+    expect(container.querySelector('[data-battle-zone-open="enemy:void"]')).toBeNull();
+    expect(container.querySelector('[data-battle-zone-open="player:void"]')).toBeNull();
 
     act(() => {
       root.unmount();
@@ -1095,9 +1063,6 @@ describe("PlayableBattleScreen", () => {
       (element) => element.closest("[data-battle-card-id]")?.getAttribute("data-battle-card-id") === deployedCardId,
     );
     expect(sparkBadge?.textContent).toBe(String(printedSpark + 3));
-    expect(container.querySelector('[data-battle-stat="player:spark"]')?.textContent).toContain(
-      String(printedSpark + 3),
-    );
     expect(
       getLogEntries().some((entry) =>
         entry.event === "battle_proto_command_applied" &&
@@ -1181,56 +1146,50 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("opens side-summary actions and player battle-side info without altering the main strip", () => {
+  it("opens read-only side summaries on status-strip hover", () => {
     const { container, root } = renderScreen();
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-battle-side-summary="player"]')?.click();
+      container
+        .querySelector<HTMLElement>('[data-battle-region="player-status-strip"]')
+        ?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
     });
 
     const playerSummary = container.querySelector('[data-battle-side-summary-popover="player"]');
-    expect(playerSummary?.textContent).toContain("Quick Zones");
     expect(playerSummary?.textContent).toContain("Gain a fleeting advantage");
     expect(playerSummary?.textContent).not.toContain("Status");
     expect(playerSummary?.textContent).not.toContain("Reserve");
     expect(playerSummary?.textContent).not.toContain("Deployed");
     expect(playerSummary?.textContent).not.toContain("Extra Turns");
+    expect(playerSummary?.textContent).not.toContain("Quick Zones");
+    expect(playerSummary?.textContent).not.toContain("Debug Actions");
+    expect(playerSummary?.textContent).not.toContain("Create Figment");
+    expect(playerSummary?.textContent).not.toContain("Dreamcaller");
     expect(playerSummary?.querySelector("[data-battle-summary-dreamcaller-card]")).not.toBeNull();
     expect(playerSummary?.querySelector("[data-battle-summary-dreamcaller-rules]")).not.toBeNull();
     expect(playerSummary?.querySelector('img[alt="Aeris, Storm Archivist"]')).not.toBeNull();
-    expect(container.textContent).toContain("Create Figment");
-    expect(container.textContent).toContain("Dreamcaller");
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-battle-side-summary="enemy"]')?.click();
+      container
+        .querySelector<HTMLElement>('[data-battle-region="enemy-status-strip"]')
+        ?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
     });
 
     expect(container.querySelector('[data-battle-side-summary-popover="player"]')).toBeNull();
-    expect(container.querySelector('[data-battle-side-summary-popover="enemy"]')?.textContent).toContain("Quick Zones");
-
-    act(() => {
-      container.querySelector<HTMLElement>('[data-battle-side-summary="player"]')?.click();
-    });
-
-    act(() => {
-      clickChip(container, "Dreamcaller");
-    });
-
-    const panel = container.querySelector("[data-battle-dreamcaller-panel]");
-    expect(panel?.textContent).toContain("Dreamcaller Card");
-    expect(panel?.textContent).toContain("Aeris");
-    expect(panel?.textContent).toContain("Gain a fleeting advantage");
-    expect(panel?.querySelector("[data-battle-dreamcaller-card]")).not.toBeNull();
-    expect(panel?.querySelector("[data-battle-dreamcaller-rules]")).not.toBeNull();
-    expect(panel?.querySelector('img[alt="Aeris, Storm Archivist"]')).not.toBeNull();
-    expect(panel?.textContent).toContain("Dreamsigns");
+    const enemySummary = container.querySelector('[data-battle-side-summary-popover="enemy"]');
+    expect(enemySummary?.textContent).toContain("field grows harder to uproot");
+    expect(enemySummary?.textContent).not.toContain("Quick Zones");
+    expect(enemySummary?.textContent).not.toContain("Debug Actions");
+    expect(enemySummary?.textContent).not.toContain("Create Figment");
+    expect(enemySummary?.querySelector("[data-battle-summary-dreamcaller-card]")).not.toBeNull();
+    expect(enemySummary?.querySelector("img")).not.toBeNull();
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("creates an enemy Shadow Figment from the enemy state summary into an open reserve slot", () => {
+  it("creates an enemy Shadow Figment from the inspector into an open reserve slot", () => {
     const { container, initialState, root } = renderScreen((state) => {
       const enemyCardId = state.sides.enemy.hand[0];
       if (enemyCardId === undefined) {
@@ -1241,10 +1200,7 @@ describe("PlayableBattleScreen", () => {
     });
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-battle-side-summary="enemy"]')?.click();
-    });
-    act(() => {
-      clickChip(container, "Create Figment");
+      clickChip(container, "Create Figment", 1);
     });
 
     expect(container.querySelector("[data-battle-figment-creator]")).not.toBeNull();
@@ -1281,9 +1237,6 @@ describe("PlayableBattleScreen", () => {
     const { container, root } = renderScreen();
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-battle-side-summary="player"]')?.click();
-    });
-    act(() => {
       clickChip(container, "Create Figment");
     });
     act(() => {
@@ -1298,9 +1251,6 @@ describe("PlayableBattleScreen", () => {
         ?.click();
     });
 
-    act(() => {
-      container.querySelector<HTMLElement>('[data-battle-side-summary="player"]')?.click();
-    });
     act(() => {
       clickChip(container, "Create Figment");
     });
@@ -1681,29 +1631,31 @@ describe("PlayableBattleScreen", () => {
     const deployedCard = container.querySelector<HTMLElement>(
       `[data-slot-id="player-deployed-D0"] [data-battle-card-id="${deployedCardId}"]`,
     );
-    const voidButton = container.querySelector<HTMLElement>('[data-battle-stat="player:void"]');
-    if (deployedCard === null || voidButton === null) {
-      throw new Error("expected deployed card and player void zone button");
+    if (deployedCard === null) {
+      throw new Error("expected deployed card");
     }
 
-    const voidCountBefore = Number(voidButton.getAttribute("data-battle-zone-count") ?? "0");
+    act(() => {
+      deployedCard.dispatchEvent(new MouseEvent("contextmenu", {
+        bubbles: true,
+        cancelable: true,
+        clientX: 300,
+        clientY: 300,
+      }));
+    });
+    const voidItem = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
+      .find((element) => element.textContent === "→ Void");
+    if (voidItem === undefined) {
+      throw new Error("expected void move item");
+    }
 
     act(() => {
-      deployedCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
-    });
-    act(() => {
-      voidButton.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+      voidItem.click();
     });
 
-    // The card left the battlefield and the void count grew by one.
     expect(
       container.querySelector('[data-slot-id="player-deployed-D0"]')?.getAttribute("data-slot-card-id"),
     ).toBeNull();
-    expect(
-      Number(
-        container.querySelector('[data-battle-stat="player:void"]')?.getAttribute("data-battle-zone-count") ?? "0",
-      ),
-    ).toBe(voidCountBefore + 1);
 
     act(() => {
       root.unmount();
@@ -1734,10 +1686,6 @@ describe("PlayableBattleScreen", () => {
     if (deployedCard === null || handTray === null) {
       throw new Error("expected deployed card and player hand tray");
     }
-    const handCountBefore = Number(
-      container.querySelector('[data-battle-stat="player:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
-    );
-
     act(() => {
       deployedCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
     });
@@ -1754,11 +1702,6 @@ describe("PlayableBattleScreen", () => {
         `[data-battle-region="player-hand-tray"] [data-battle-card-id="${deployedCardId}"]`,
       ),
     ).not.toBeNull();
-    expect(
-      Number(
-        container.querySelector('[data-battle-stat="player:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
-      ),
-    ).toBe(handCountBefore + 1);
 
     act(() => {
       root.unmount();
@@ -1792,10 +1735,6 @@ describe("PlayableBattleScreen", () => {
     if (deployedCard === null || enemyHandTray === null) {
       throw new Error("expected deployed card and revealed enemy hand tray");
     }
-    const enemyHandCountBefore = Number(
-      container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
-    );
-
     act(() => {
       deployedCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
     });
@@ -1812,11 +1751,6 @@ describe("PlayableBattleScreen", () => {
         `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${deployedCardId}"]`,
       ),
     ).not.toBeNull();
-    expect(
-      Number(
-        container.querySelector('[data-battle-stat="enemy:hand"]')?.getAttribute("data-battle-zone-count") ?? "0",
-      ),
-    ).toBe(enemyHandCountBefore + 1);
 
     act(() => {
       root.unmount();
@@ -1843,10 +1777,11 @@ describe("PlayableBattleScreen", () => {
   });
 });
 
-function clickChip(container: HTMLElement, label: string): void {
-  const chip = [...container.querySelectorAll<HTMLElement>(".chip")].find(
+function clickChip(container: HTMLElement, label: string, matchIndex = 0): void {
+  const chips = [...container.querySelectorAll<HTMLElement>(".chip")].filter(
     (element) => element.textContent?.trim() === label,
   );
+  const chip = chips[matchIndex];
   if (chip === undefined) {
     throw new Error(`missing chip: ${label}`);
   }

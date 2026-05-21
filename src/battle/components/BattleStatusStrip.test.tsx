@@ -40,8 +40,8 @@ function createState() {
 
 function mount(withBanished = false): {
   container: HTMLDivElement;
-  onOpenZone: ReturnType<typeof vi.fn>;
-  onSelectSummary: ReturnType<typeof vi.fn>;
+  onCloseSummary: ReturnType<typeof vi.fn>;
+  onOpenSummary: ReturnType<typeof vi.fn>;
   root: Root;
 } {
   const state = createState();
@@ -51,8 +51,8 @@ function mount(withBanished = false): {
       state.sides.player.banished.push(banishedId);
     }
   }
-  const onOpenZone = vi.fn();
-  const onSelectSummary = vi.fn();
+  const onCloseSummary = vi.fn();
+  const onOpenSummary = vi.fn();
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -60,19 +60,25 @@ function mount(withBanished = false): {
   act(() => {
     root.render(
       <BattleStatusStrip
+        dreamcaller={{
+          id: "aeris",
+          imageNumber: "01",
+          name: "Aeris",
+          renderedText: "Gain a fleeting advantage.",
+          title: "Storm Archivist",
+        }}
         side="player"
         sideState={state.sides.player}
-        state={state}
         subtitle=""
         title="Aeris"
         isActive
-        onOpenZone={onOpenZone}
-        onSelectSummary={onSelectSummary}
+        onCloseSummary={onCloseSummary}
+        onOpenSummary={onOpenSummary}
       />,
     );
   });
 
-  return { container, onOpenZone, onSelectSummary, root };
+  return { container, onCloseSummary, onOpenSummary, root };
 }
 
 afterEach(() => {
@@ -80,12 +86,13 @@ afterEach(() => {
 });
 
 describe("BattleStatusStrip", () => {
-  it("renders compact combat state and keeps browseable zones in incidental details", () => {
-    const { container, onOpenZone, onSelectSummary, root } = mount();
+  it("renders compact combat state without browseable zone counts", () => {
+    const { container, onCloseSummary, onOpenSummary, root } = mount();
     const primaryStats = container.querySelector('[data-battle-status-primary="player"]');
-    const incidentalStats = container.querySelector('[data-battle-status-incidental="player"]');
+    const summaryTrigger = container.querySelector<HTMLElement>('[data-battle-side-summary="player"]');
 
     expect(container.textContent).toContain("You");
+    expect(container.querySelector("[data-battle-status-dreamcaller-thumb]")).not.toBeNull();
     expect(primaryStats?.textContent).toContain("PTS");
     expect(primaryStats?.textContent).toContain("E");
     expect(primaryStats?.textContent).toContain("9");
@@ -94,23 +101,29 @@ describe("BattleStatusStrip", () => {
     expect(primaryStats?.textContent).not.toContain("D");
     expect(primaryStats?.textContent).not.toContain("V");
     expect(primaryStats?.textContent).not.toContain("B");
-    expect(incidentalStats?.textContent).toContain("◆");
-    expect(incidentalStats?.textContent).toContain("H");
-    expect(incidentalStats?.textContent).toContain("D");
-    expect(incidentalStats?.textContent).toContain("V");
-    expect(incidentalStats?.textContent).toContain("B");
-    expect(incidentalStats?.textContent).toContain("3");
+    expect(container.querySelector('[data-battle-status-incidental="player"]')).toBeNull();
+    expect(container.querySelector('[data-battle-zone-open="player:hand"]')).toBeNull();
+    expect(container.querySelector('[data-battle-zone-open="player:deck"]')).toBeNull();
+    expect(container.querySelector('[data-battle-zone-open="player:void"]')).toBeNull();
+    expect(container.querySelector('[data-battle-zone-open="player:banished"]')).toBeNull();
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-battle-side-summary="player"]')?.click();
-      container.querySelector<HTMLElement>('[data-battle-zone-open="player:hand"]')?.click();
-      container.querySelector<HTMLElement>('[data-battle-zone-open="player:deck"]')?.click();
-      container.querySelector<HTMLElement>('[data-battle-zone-open="player:void"]')?.click();
-      container.querySelector<HTMLElement>('[data-battle-zone-open="player:banished"]')?.click();
+      summaryTrigger?.click();
     });
 
-    expect(onSelectSummary).toHaveBeenCalledTimes(1);
-    expect(onOpenZone.mock.calls).toEqual([["hand"], ["deck"], ["void"], ["banished"]]);
+    expect(onOpenSummary).not.toHaveBeenCalled();
+
+    act(() => {
+      summaryTrigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+
+    expect(onOpenSummary).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      summaryTrigger?.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+    });
+
+    expect(onCloseSummary).toHaveBeenCalledTimes(1);
 
     act(() => {
       root.unmount();
@@ -118,15 +131,10 @@ describe("BattleStatusStrip", () => {
   });
 
   it("shows the banished chip count when the side has banished cards", () => {
-    const { container, onOpenZone, root } = mount(true);
+    const { container, root } = mount(true);
 
-    expect(container.textContent).toContain("B");
-
-    act(() => {
-      container.querySelector<HTMLElement>('[data-battle-zone-open="player:banished"]')?.click();
-    });
-
-    expect(onOpenZone).toHaveBeenCalledWith("banished");
+    expect(container.querySelector('[data-battle-zone-open="player:banished"]')).toBeNull();
+    expect(container.textContent).not.toContain("B");
 
     act(() => {
       root.unmount();

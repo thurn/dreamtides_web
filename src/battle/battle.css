@@ -479,11 +479,25 @@
   background: transparent;
   padding: 0;
   text-align: left;
-  cursor: pointer;
+  cursor: default;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: stretch;
+  gap: 7px;
 }
 
 .summary-trigger .who {
   display: block;
+}
+
+.summary-trigger-copy {
+  min-width: 0;
+}
+
+.status-dreamcaller-thumb {
+  display: block;
+  width: min(82px, 100%);
+  justify-self: center;
 }
 
 .summary-trigger .summary-meta {
@@ -514,22 +528,6 @@
   grid-template-columns: 1fr;
   gap: 4px;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-.status-strip .stats.incidental {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  pointer-events: none;
-  transition: max-height 0.16s ease, opacity 0.16s ease;
-}
-
-.status-strip:hover .stats.incidental,
-.status-strip:focus-within .stats.incidental {
-  max-height: 160px;
-  opacity: 1;
-  pointer-events: auto;
 }
 
 .stat {

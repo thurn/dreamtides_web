@@ -27,12 +27,15 @@ import {
 import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type {
   BattleCommandSourceSurface,
+  BattleDreamcallerSummary,
+  BattleEnemyDescriptor,
   BattleFieldSlotAddress,
   BattleMutableState,
   BattleReducerState,
   BattleSide,
   BrowseableZone,
 } from "../types";
+import type { QuestContent } from "../../data/quest-content";
 import type { BattleCommand } from "../debug/commands";
 import { BattleActionBar } from "./BattleActionBar";
 import { BattleCardHoverPreview } from "./BattleCardHoverPreview";
@@ -120,7 +123,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     );
   }
 
-  const { state: questState, mutations, cardDatabase } = useQuest();
+  const { state: questState, mutations, cardDatabase, questContent } = useQuest();
   const isDesktopInspectorLayout = useIsDesktopInspectorLayout();
   const [isInspectorDrawerOpen, setIsInspectorDrawerOpen] = useState(readIsDesktopInspectorLayout());
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
@@ -362,13 +365,13 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     });
   }
 
-  function handleSelectSummary(side: BattleSide): void {
-    if (openSideSummary === side) {
-      setOpenSideSummary(null);
-      return;
-    }
+  function handleOpenSummary(side: BattleSide): void {
     setOpenSideSummary(side);
     setContextMenu(null);
+  }
+
+  function handleCloseSummary(side: BattleSide): void {
+    setOpenSideSummary((current) => current === side ? null : current);
   }
 
   function handleCardContextMenu(
@@ -513,6 +516,11 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     setHoverPreview(null);
   }
 
+  const enemyDreamcallerSummary = resolveEnemyDreamcallerSummary(
+    battleInit.enemyDescriptor,
+    questContent,
+  );
+
   return (
     <div
       className="battle-shell"
@@ -596,16 +604,12 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           subtitle={openSideSummary === "player"
             ? battleInit.dreamcallerSummary?.title ?? ""
             : battleInit.enemyDescriptor.subtitle}
-          dreamcaller={openSideSummary === "player" ? battleInit.dreamcallerSummary : null}
+          dreamcaller={openSideSummary === "player" ? battleInit.dreamcallerSummary : enemyDreamcallerSummary}
           isActive={reducerState.mutable.activeSide === openSideSummary}
           isSelected={false}
-          isPlayerInfoAvailable={battleInit.dreamcallerSummary !== null || battleInit.dreamsignSummaries.length > 0}
           onClose={() => {
             setOpenSideSummary(null);
           }}
-          onOpenFigmentCreator={(side) => setOpenFigmentCreator(side)}
-          onOpenPlayerInfo={() => setIsDreamcallerPanelOpen(true)}
-          onOpenZone={handleOpenZoneBrowser}
         />
       ) : null}
       {isDreamcallerPanelOpen ? (
@@ -684,18 +688,15 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 )}
               />
               <BattleStatusStrip
+                dreamcaller={battleInit.dreamcallerSummary}
                 side="player"
                 sideState={reducerState.mutable.sides.player}
-                state={reducerState.mutable}
                 subtitle={battleInit.dreamcallerSummary?.title ?? ""}
                 title={battleInit.dreamcallerSummary?.name ?? "Player"}
                 isActive={reducerState.mutable.activeSide === "player"}
                 isSummarySelected={openSideSummary === "player"}
-                onOpenZone={(zone) => handleOpenZoneBrowser("player", zone)}
-                onZoneDrop={handleZoneDrop}
-                pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-                onSelectSummary={() => handleSelectSummary("player")}
+                onOpenSummary={() => handleOpenSummary("player")}
+                onCloseSummary={() => handleCloseSummary("player")}
               />
               <ScaledBattlefield>
                 <div className="battlefield">
@@ -787,17 +788,14 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               </ScaledBattlefield>
               <BattleStatusStrip
                 side="enemy"
+                dreamcaller={enemyDreamcallerSummary}
                 sideState={reducerState.mutable.sides.enemy}
-                state={reducerState.mutable}
                 subtitle={battleInit.enemyDescriptor.subtitle}
                 title={battleInit.enemyDescriptor.name}
                 isActive={reducerState.mutable.activeSide === "enemy"}
                 isSummarySelected={openSideSummary === "enemy"}
-                onOpenZone={(zone) => handleOpenZoneBrowser("enemy", zone)}
-                onZoneDrop={handleZoneDrop}
-                pendingDragCardId={pendingDrag?.battleCardId ?? null}
-                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-                onSelectSummary={() => handleSelectSummary("enemy")}
+                onOpenSummary={() => handleOpenSummary("enemy")}
+                onCloseSummary={() => handleCloseSummary("enemy")}
               />
             </div>
           </div>
@@ -1124,6 +1122,56 @@ function ScaledBattlefield({ children }: { children: ReactNode }) {
       </div>
     </div>
   );
+}
+
+function resolveEnemyDreamcallerSummary(
+  enemyDescriptor: BattleEnemyDescriptor,
+  questContent: QuestContent,
+): BattleDreamcallerSummary {
+  const sourceDreamcaller = findEnemySourceDreamcaller(enemyDescriptor, questContent);
+  return {
+    id: sourceDreamcaller?.id ?? enemyDescriptor.id,
+    imageNumber: enemyDescriptor.imageNumber ?? sourceDreamcaller?.imageNumber ?? "001",
+    name: enemyDescriptor.name,
+    renderedText: enemyDescriptor.abilityText,
+    title: enemyDescriptor.subtitle,
+  };
+}
+
+function findEnemySourceDreamcaller(
+  enemyDescriptor: BattleEnemyDescriptor,
+  questContent: QuestContent,
+) {
+  const sourceId = parseEnemySourceDreamcallerId(enemyDescriptor.id);
+  if (sourceId !== null) {
+    const byId = questContent.dreamcallers.find((dreamcaller) => dreamcaller.id === sourceId);
+    if (byId !== undefined) {
+      return byId;
+    }
+  }
+
+  const descriptorName = enemyDescriptor.name.toLocaleLowerCase();
+  return questContent.dreamcallers.find((dreamcaller) => {
+    const fullName = dreamcaller.name.toLocaleLowerCase();
+    const shortName = fullName.split(",")[0] ?? fullName;
+    return descriptorName === fullName ||
+      descriptorName === shortName ||
+      descriptorName.endsWith(` ${fullName}`) ||
+      descriptorName.endsWith(` ${shortName}`);
+  });
+}
+
+function parseEnemySourceDreamcallerId(enemyId: string): string | null {
+  const prefix = "enemy:";
+  if (!enemyId.startsWith(prefix)) {
+    return null;
+  }
+  const sourceAndSeed = enemyId.slice(prefix.length);
+  const seedSeparator = sourceAndSeed.lastIndexOf(":");
+  if (seedSeparator <= 0) {
+    return null;
+  }
+  return sourceAndSeed.slice(0, seedSeparator);
 }
 
 export function computeBattlefieldScale({

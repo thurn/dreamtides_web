@@ -3,7 +3,6 @@ import type {
   BattleDreamcallerSummary,
   BattleMutableState,
   BattleSide,
-  BrowseableZone,
 } from "../types";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 import { DreamcallerPortrait } from "../../components/DreamcallerPortrait";
@@ -11,26 +10,18 @@ import { RulesText } from "../../components/RulesText";
 
 export function BattleSideSummaryPopover({
   dreamcaller = null,
-  isPlayerInfoAvailable = false,
   isSelected = false,
   isActive,
   onClose,
-  onOpenFigmentCreator,
-  onOpenPlayerInfo,
-  onOpenZone,
   side,
   state,
   subtitle,
   title,
 }: {
   dreamcaller?: BattleDreamcallerSummary | null;
-  isPlayerInfoAvailable?: boolean;
   isSelected?: boolean;
   isActive: boolean;
   onClose: () => void;
-  onOpenFigmentCreator: (side: BattleSide) => void;
-  onOpenPlayerInfo?: () => void;
-  onOpenZone: (side: BattleSide, zone: BrowseableZone) => void;
   side: BattleSide;
   state: BattleMutableState;
   subtitle: string;
@@ -40,7 +31,7 @@ export function BattleSideSummaryPopover({
   const sideState = state.sides[side];
   const reserveCount = RESERVE_SLOT_IDS.filter((slotId) => sideState.reserve[slotId] !== null).length;
   const deployedCount = DEPLOY_SLOT_IDS.filter((slotId) => sideState.deployed[slotId] !== null).length;
-  const showDreamcallerSummary = side === "player" && dreamcaller !== null;
+  const showDreamcallerSummary = dreamcaller !== null;
 
   useEffect(() => {
     function handlePointerDown(event: MouseEvent): void {
@@ -94,6 +85,7 @@ export function BattleSideSummaryPopover({
             <DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" />
           </div>
           <div className="battle-dreamcaller-card-copy">
+            <h4>{dreamcaller.name}</h4>
             <div className="dreamcaller-text" data-battle-summary-dreamcaller-rules="">
               <RulesText text={dreamcaller.renderedText} />
             </div>
@@ -115,53 +107,6 @@ export function BattleSideSummaryPopover({
           </div>
         </div>
       )}
-
-      <div className="floating-section">
-        <h4>Quick Zones</h4>
-        <div className="chip-row">
-          {(["hand", "deck", "void", "banished"] as const).map((zone) => (
-            <button
-              key={zone}
-              type="button"
-              className="chip"
-              onClick={() => {
-                onOpenZone(side, zone);
-                onClose();
-              }}
-            >
-              {zone === "void" ? "Void" : zone[0].toUpperCase() + zone.slice(1)}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="floating-section">
-        <h4>Debug Actions</h4>
-        <div className="chip-row">
-          <button
-            type="button"
-            className="chip"
-            onClick={() => {
-              onOpenFigmentCreator(side);
-              onClose();
-            }}
-          >
-            Create Figment
-          </button>
-          {side === "player" && isPlayerInfoAvailable ? (
-            <button
-              type="button"
-              className="chip"
-              onClick={() => {
-                onOpenPlayerInfo?.();
-                onClose();
-              }}
-            >
-              Dreamcaller
-            </button>
-          ) : null}
-        </div>
-      </div>
     </div>
   );
 }

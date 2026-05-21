@@ -151,6 +151,7 @@ export interface BattleEnemyDescriptor {
   id: string;
   name: string;
   subtitle: string;
+  imageNumber?: Dreamcaller["imageNumber"];
   portraitSeed: number;
   packageTides: readonly PackageTideId[];
   abilityText: string;
