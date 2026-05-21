@@ -2,6 +2,7 @@ import type { CardData } from "../types/cards";
 import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { DraftConfig, DraftState, PackContext } from "../types/draft";
 import { logEvent } from "../logging";
+import { DEFAULT_DRAFT_SITE_PICK_COUNT } from "./draft-site-config";
 
 /** Default shared draft configuration. */
 export const DEFAULT_DRAFT_CONFIG: Readonly<DraftConfig> = {
@@ -9,7 +10,7 @@ export const DEFAULT_DRAFT_CONFIG: Readonly<DraftConfig> = {
 };
 
 /** Number of player picks per draft site visit. */
-export const SITE_PICKS = 5;
+export const SITE_PICKS = DEFAULT_DRAFT_SITE_PICK_COUNT;
 
 /**
  * Sample unique card numbers from weighted entries without replacement.

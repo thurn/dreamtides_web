@@ -6,6 +6,7 @@ import type {
   SiteType,
 } from "../types/quest";
 import { BIOMES, type Biome } from "../data/biomes";
+import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
 
 /** Parameters for site generation that require external data. */
@@ -271,6 +272,7 @@ export function generateSiteComposition(
       type,
       isEnhanced: false,
       isVisited: false,
+      ...(type === "Draft" ? { data: draftSiteData() } : {}),
     }));
   }
 
@@ -291,6 +293,7 @@ export function generateSiteComposition(
       type: "Draft",
       isEnhanced: false,
       isVisited: false,
+      data: draftSiteData(),
     });
   }
 

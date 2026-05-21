@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import type { SiteState } from "../types/quest";
 import { rewardPreviewLabel, siteTypeIcon, siteTypeName } from "../atlas/atlas-generator";
+import { draftSitePickCount } from "../draft/draft-site-config";
 
 interface SiteCardProps {
   site: SiteState;
@@ -44,7 +45,11 @@ export function SiteCard({
   };
 
   const icon = siteTypeIcon(site.type);
-  const label = isBattle ? battleLabel(completionLevel) : siteTypeName(site.type);
+  const label = isBattle
+    ? battleLabel(completionLevel)
+    : site.type === "Draft"
+      ? `Draft ${String(draftSitePickCount(site))}x`
+      : siteTypeName(site.type);
 
   // Border styling
   let borderColor = "rgba(124, 58, 237, 0.3)";
