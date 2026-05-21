@@ -151,6 +151,10 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     isResultOverlayDismissed;
 
   useEffect(() => {
+    if (reducerState.mutable !== battleState.reducer.mutable) {
+      return;
+    }
+
     const serial = battleState.reducer.commandSerial;
     if (serial === loggedCommandSerialRef.current) {
       return;
@@ -164,7 +168,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     if (lastEntry !== undefined) {
       logBattleCommandApplied(lastEntry.metadata, reducerState.mutable);
     }
-  }, [battleState.reducer.commandSerial, reducerState]);
+  }, [battleState.reducer.commandSerial, battleState.reducer.mutable, reducerState]);
 
   function handleCommand(command: BattleCommand): void {
     setPendingDrag(null);

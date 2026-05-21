@@ -79,6 +79,27 @@ function CaptureValue({
   return null;
 }
 
+function ScoreAdjuster() {
+  const value = useMultiplayerBattle();
+  const score = value.reducerState?.mutable.sides.player.score ?? 0;
+  return (
+    <button
+      type="button"
+      data-score={String(score)}
+      onClick={() => value.dispatch({
+        type: "APPLY_COMMAND",
+        command: {
+          id: "DEBUG_EDIT",
+          edit: { kind: "ADJUST_SCORE", side: "player", amount: 1 },
+          sourceSurface: "status-strip",
+        },
+      })}
+    >
+      {score}
+    </button>
+  );
+}
+
 describe("useMultiplayerBattle", () => {
   beforeEach(() => {
     vi.mocked(battleService.dispatchBattleCommandToRoom).mockClear();
@@ -135,6 +156,65 @@ describe("useMultiplayerBattle", () => {
     expect(commandInput?.roomId).toBe("room-1");
     expect(commandInput?.actorId).toBe("client-a");
     expect(commandInput?.command.id).toBe("DEBUG_EDIT");
+  });
+
+  it("updates reducerState optimistically before the database write resolves", () => {
+    vi.mocked(battleService.dispatchBattleCommandToRoom).mockImplementationOnce(
+      () => new Promise(() => undefined),
+    );
+    const fakeBattleState = makeFakeBattleState();
+    const { container } = mount(
+      <MultiplayerBattleProvider
+        database={{} as Database}
+        roomId="room-1"
+        clientId="client-a"
+        battleState={fakeBattleState}
+      >
+        <ScoreAdjuster />
+      </MultiplayerBattleProvider>,
+    );
+
+    const button = container.querySelector<HTMLButtonElement>("button");
+    expect(button?.getAttribute("data-score")).toBe("0");
+
+    act(() => {
+      button?.click();
+    });
+
+    expect(button?.getAttribute("data-score")).toBe("1");
+    expect(battleService.dispatchBattleCommandToRoom).toHaveBeenCalledTimes(1);
+    expect(fakeBattleState.reducer.commandSerial).toBe(0);
+  });
+
+  it("keeps optimistic reducerState when a stale room snapshot re-renders", () => {
+    vi.mocked(battleService.dispatchBattleCommandToRoom).mockImplementationOnce(
+      () => new Promise(() => undefined),
+    );
+    const fakeBattleState = makeFakeBattleState();
+    const element = (
+      <MultiplayerBattleProvider
+        database={{} as Database}
+        roomId="room-1"
+        clientId="client-a"
+        battleState={fakeBattleState}
+      >
+        <ScoreAdjuster />
+      </MultiplayerBattleProvider>
+    );
+    const { container, root } = mount(element);
+    const button = container.querySelector<HTMLButtonElement>("button");
+
+    act(() => {
+      button?.click();
+    });
+    expect(button?.getAttribute("data-score")).toBe("1");
+
+    act(() => {
+      root.render(element);
+    });
+
+    expect(button?.getAttribute("data-score")).toBe("1");
+    expect(fakeBattleState.reducer.commandSerial).toBe(0);
   });
 
   it("returns null battleState when the room slot is null", () => {
