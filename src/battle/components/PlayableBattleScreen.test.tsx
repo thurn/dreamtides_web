@@ -574,6 +574,35 @@ describe("PlayableBattleScreen", () => {
       browser?.querySelector(`[data-zone-browser-card-id="${battleCardId ?? ""}"]`),
     ).not.toBeNull();
 
+    const browserCard = browser?.querySelector<HTMLElement>(
+      `[data-battle-card-id="${battleCardId ?? ""}"]`,
+    );
+    const handTray = container.querySelector<HTMLElement>('[data-battle-region="player-hand-tray"]');
+    if (browserCard === undefined || browserCard === null || handTray === null) {
+      throw new Error("expected void browser card and player hand tray");
+    }
+
+    act(() => {
+      browserCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(handTray.getAttribute("data-battle-zone-drop-target")).toBe("player:hand");
+
+    act(() => {
+      handTray.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    expect(
+      container.querySelector(
+        `[data-battle-region="player-hand-tray"] [data-battle-card-id="${battleCardId ?? ""}"]`,
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        `[data-battle-zone-browser="player:void"] [data-zone-browser-card-id="${battleCardId ?? ""}"]`,
+      ),
+    ).toBeNull();
+
     act(() => {
       browser?.querySelector<HTMLButtonElement>(".m-head .btn.ghost")?.click();
     });

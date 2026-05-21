@@ -1,6 +1,7 @@
 import type {
   KeyboardEvent as ReactKeyboardEvent,
   MouseEvent as ReactMouseEvent,
+  PointerEvent as ReactPointerEvent,
 } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { BattleCommand } from "../debug/commands";
@@ -14,6 +15,11 @@ import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
 
 type BattleZoneBrowserSortMode = "current" | "cost" | "spark" | "name";
 type BattleZoneBrowserTypeFilter = "all" | "character" | "event";
+type BrowserPosition = { x: number; y: number };
+type BrowserDragState = {
+  offsetX: number;
+  offsetY: number;
+} | null;
 
 export function BattleZoneBrowser({
   browser,
@@ -24,6 +30,8 @@ export function BattleZoneBrowser({
   onOpenForesee,
   onOpenReorderMultiple,
   onCardContextMenu,
+  onCardDragEnd,
+  onCardDragStart,
 }: {
   browser: {
     side: BattleSide;
@@ -40,14 +48,23 @@ export function BattleZoneBrowser({
     event: ReactMouseEvent<HTMLDivElement>,
     sourceSurface: BattleCommandSourceSurface,
   ) => void;
+  onCardDragEnd?: () => void;
+  onCardDragStart?: (
+    battleCardId: string,
+    sourceSurface: BattleCommandSourceSurface,
+  ) => void;
 }) {
   const [query, setQuery] = useState("");
   const [sortMode, setSortMode] = useState<BattleZoneBrowserSortMode>("current");
   const [typeFilter, setTypeFilter] = useState<BattleZoneBrowserTypeFilter>("all");
+  const [browserPosition, setBrowserPosition] = useState<BrowserPosition | null>(null);
+  const [browserDrag, setBrowserDrag] = useState<BrowserDragState>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const cardIds = state.sides[browser.side][browser.zone];
   const sourceSurface = sourceSurfaceForZoneBrowser(browser.zone);
+  const usesFloatingBrowser = browser.zone === "void" || browser.zone === "banished";
   const isEnemyHandLocallyHidden = browser.zone === "hand" &&
     browser.side === "enemy" &&
     !isOpponentHandRevealed;
@@ -73,6 +90,54 @@ export function BattleZoneBrowser({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [onClose]);
+
+  useEffect(() => {
+    if (browserDrag === null) {
+      return undefined;
+    }
+    const drag = browserDrag;
+
+    function handlePointerMove(event: PointerEvent): void {
+      const modal = modalRef.current;
+      const modalWidth = modal?.offsetWidth ?? 0;
+      const modalHeight = modal?.offsetHeight ?? 0;
+      setBrowserPosition({
+        x: clamp(event.clientX - drag.offsetX, 8, window.innerWidth - modalWidth - 8),
+        y: clamp(event.clientY - drag.offsetY, 8, window.innerHeight - modalHeight - 8),
+      });
+    }
+
+    function handlePointerUp(): void {
+      setBrowserDrag(null);
+    }
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerUp);
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
+      window.removeEventListener("pointercancel", handlePointerUp);
+    };
+  }, [browserDrag]);
+
+  function handleBrowserDragStart(event: ReactPointerEvent<HTMLDivElement>): void {
+    if (!usesFloatingBrowser || isInteractiveDragHandleChild(event.target)) {
+      return;
+    }
+
+    const modal = modalRef.current;
+    if (modal === null) {
+      return;
+    }
+
+    const rect = modal.getBoundingClientRect();
+    setBrowserPosition({ x: rect.left, y: rect.top });
+    setBrowserDrag({
+      offsetX: event.clientX - rect.left,
+      offsetY: event.clientY - rect.top,
+    });
+  }
 
   function handleCardListKeyDown(event: ReactKeyboardEvent<HTMLDivElement>): void {
     if (!["ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) {
@@ -105,14 +170,34 @@ export function BattleZoneBrowser({
     buttons[nextIndex]?.focus();
   }
 
+  const wrapperClassName = usesFloatingBrowser
+    ? "zone-browser-floating-layer"
+    : "modal-scrim";
+  const modalClassName = usesFloatingBrowser
+    ? "modal zone-browser-modal compact-zone-browser"
+    : "modal zone-browser-modal";
+  const modalStyle = usesFloatingBrowser && browserPosition !== null
+    ? { left: `${String(browserPosition.x)}px`, top: `${String(browserPosition.y)}px` }
+    : undefined;
+
   return (
-    <div className="modal-scrim" onClick={onClose}>
+    <div
+      className={wrapperClassName}
+      onClick={usesFloatingBrowser ? undefined : onClose}
+    >
       <div
-        className="modal"
+        ref={modalRef}
+        className={modalClassName}
         data-battle-zone-browser={`${browser.side}:${browser.zone}`}
+        data-battle-zone-browser-floating={usesFloatingBrowser ? "true" : undefined}
+        style={modalStyle}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="m-head">
+        <div
+          className="m-head"
+          data-zone-browser-drag-handle={usesFloatingBrowser ? "" : undefined}
+          onPointerDown={handleBrowserDragStart}
+        >
           <div>
             <h2>{browser.side === "player" ? "Your" : "Enemy"} {formatZoneName(browser.zone)}</h2>
             <div className="subhead">
@@ -171,6 +256,13 @@ export function BattleZoneBrowser({
                     battleCardId={battleCardId}
                     data={battleCardVisualFromInstance(instance)}
                     hidden={isHidden}
+                    draggable={!isHidden}
+                    onDragStart={() => {
+                      if (!isHidden) {
+                        onCardDragStart?.(battleCardId, sourceSurface);
+                      }
+                    }}
+                    onDragEnd={() => onCardDragEnd?.()}
                     onContextMenu={(event) => {
                       event.preventDefault();
                       if (isHidden) {
@@ -265,6 +357,18 @@ export function BattleZoneBrowser({
       </div>
     </div>
   );
+}
+
+function isInteractiveDragHandleChild(target: EventTarget): boolean {
+  return target instanceof HTMLElement &&
+    target.closest("button, input, select, textarea") !== null;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  if (max < min) {
+    return min;
+  }
+  return Math.min(max, Math.max(min, value));
 }
 
 function applyBrowserFilters(

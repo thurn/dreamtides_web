@@ -27,19 +27,27 @@ function createState() {
 
 function mount(
   browser: { side: "player" | "enemy"; zone: "deck" | "hand" | "void" | "banished" },
-  options: { isOpponentHandRevealed?: boolean } = {},
+  options: {
+    isOpponentHandRevealed?: boolean;
+    mutateState?: (state: ReturnType<typeof createState>) => void;
+  } = {},
 ): {
   container: HTMLDivElement;
   onCommand: ReturnType<typeof vi.fn>;
   onCardContextMenu: ReturnType<typeof vi.fn>;
+  onCardDragEnd: ReturnType<typeof vi.fn>;
+  onCardDragStart: ReturnType<typeof vi.fn>;
   onOpenForesee: ReturnType<typeof vi.fn>;
   onOpenReorderMultiple: ReturnType<typeof vi.fn>;
   root: Root;
   state: ReturnType<typeof createState>;
 } {
   const state = createState();
+  options.mutateState?.(state);
   const onCommand = vi.fn();
   const onCardContextMenu = vi.fn();
+  const onCardDragEnd = vi.fn();
+  const onCardDragStart = vi.fn();
   const onOpenForesee = vi.fn();
   const onOpenReorderMultiple = vi.fn();
   const container = document.createElement("div");
@@ -57,11 +65,23 @@ function mount(
         onOpenForesee={onOpenForesee}
         onOpenReorderMultiple={onOpenReorderMultiple}
         onCardContextMenu={onCardContextMenu}
+        onCardDragStart={onCardDragStart}
+        onCardDragEnd={onCardDragEnd}
       />,
     );
   });
 
-  return { container, onCommand, onCardContextMenu, onOpenForesee, onOpenReorderMultiple, root, state };
+  return {
+    container,
+    onCommand,
+    onCardContextMenu,
+    onCardDragEnd,
+    onCardDragStart,
+    onOpenForesee,
+    onOpenReorderMultiple,
+    root,
+    state,
+  };
 }
 
 function dispatchContextMenu(element: Element): MouseEvent {
@@ -202,6 +222,70 @@ describe("BattleZoneBrowser", () => {
 
     act(() => {
       root.unmount();
+    });
+  });
+
+  it("renders void and banished as compact floating browsers with draggable cards", () => {
+    let voidCardId = "";
+    const { container, onCardDragEnd, onCardDragStart, root } = mount(
+      { side: "player", zone: "void" },
+      {
+        mutateState: (state) => {
+          voidCardId = state.sides.player.hand[0] ?? "";
+          state.sides.player.hand = state.sides.player.hand.filter((cardId) => cardId !== voidCardId);
+          state.sides.player.void = [voidCardId];
+        },
+      },
+    );
+
+    expect(container.querySelector(".modal-scrim")).toBeNull();
+    expect(container.querySelector(".zone-browser-floating-layer")).not.toBeNull();
+    expect(container.querySelector(".compact-zone-browser")).not.toBeNull();
+    expect(
+      container.querySelector("[data-battle-zone-browser]")?.getAttribute("data-battle-zone-browser-floating"),
+    ).toBe("true");
+
+    const browserCard = container.querySelector<HTMLElement>("[data-battle-card-id]");
+    expect(browserCard).not.toBeNull();
+
+    act(() => {
+      browserCard?.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+      browserCard?.dispatchEvent(new Event("dragend", { bubbles: true, cancelable: true }));
+    });
+
+    expect(onCardDragStart).toHaveBeenCalledWith(voidCardId, "zone-browser-void");
+    expect(onCardDragEnd).toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+
+    const banished = mount(
+      { side: "player", zone: "banished" },
+      {
+        mutateState: (state) => {
+          const banishedCardId = state.sides.player.hand[0] ?? "";
+          state.sides.player.hand = state.sides.player.hand.filter((cardId) => cardId !== banishedCardId);
+          state.sides.player.banished = [banishedCardId];
+        },
+      },
+    );
+
+    expect(banished.container.querySelector(".modal-scrim")).toBeNull();
+    expect(banished.container.querySelector(".compact-zone-browser")).not.toBeNull();
+
+    const banishedCard = banished.container.querySelector<HTMLElement>("[data-battle-card-id]");
+    act(() => {
+      banishedCard?.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(banished.onCardDragStart).toHaveBeenCalledWith(
+      banished.state.sides.player.banished[0],
+      "zone-browser-banished",
+    );
+
+    act(() => {
+      banished.root.unmount();
     });
   });
 });

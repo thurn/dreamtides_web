@@ -392,13 +392,16 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     setOpenSideSummary(null);
   }
 
-  function handleCardDragStart(battleCardId: string): void {
+  function handleCardDragStart(
+    battleCardId: string,
+    sourceSurface?: BattleCommandSourceSurface,
+  ): void {
     const location = selectBattleCardLocation(reducerState.mutable, battleCardId);
     const instance = reducerState.mutable.cardInstances[battleCardId];
     if (instance !== undefined) {
       setPendingDrag({
         battleCardId,
-        sourceSurface: resolveDragSourceSurface(location),
+        sourceSurface: sourceSurface ?? resolveDragSourceSurface(location),
       });
     }
     setContextMenu(null);
@@ -540,6 +543,8 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           onOpenForesee={(side, count) => setOpenForeseeOverlay({ side, count })}
           onOpenReorderMultiple={(side) => setOpenDeckOrderPicker(side)}
           onCardContextMenu={handleCardContextMenu}
+          onCardDragStart={handleCardDragStart}
+          onCardDragEnd={() => setPendingDrag(null)}
         />
       ) : null}
       {openForeseeOverlay !== null ? (

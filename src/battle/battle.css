@@ -1502,6 +1502,13 @@
   padding: 40px;
 }
 
+.zone-browser-floating-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+
 .floating-surface-scrim {
   position: fixed;
   inset: 0;
@@ -1730,6 +1737,27 @@
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
 }
 
+.compact-zone-browser {
+  position: fixed;
+  top: 72px;
+  left: 24px;
+  width: min(540px, calc(100vw - 48px));
+  max-height: min(70vh, 560px);
+  pointer-events: auto;
+}
+
+.compact-zone-browser .m-head {
+  cursor: move;
+  user-select: none;
+}
+
+.compact-zone-browser .m-head .controls,
+.compact-zone-browser .m-head button,
+.compact-zone-browser .m-head input,
+.compact-zone-browser .m-head select {
+  cursor: auto;
+}
+
 .m-head {
   padding: 16px 22px;
   border-bottom: 1px solid var(--line);
@@ -1780,11 +1808,22 @@
   flex: 1;
 }
 
+.compact-zone-browser .m-body {
+  flex: 0 1 auto;
+  max-height: min(46vh, 380px);
+  padding: 14px 16px;
+}
+
 .browse-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
   gap: 14px;
   justify-items: center;
+}
+
+.compact-zone-browser .browse-grid {
+  grid-template-columns: repeat(auto-fill, var(--card-w));
+  justify-content: start;
 }
 
 .browse-cell {
