@@ -398,6 +398,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     battleCardId: string,
     sourceSurface?: BattleCommandSourceSurface,
   ): void {
+    setHoverPreview(null);
     const location = selectBattleCardLocation(reducerState.mutable, battleCardId);
     const instance = reducerState.mutable.cardInstances[battleCardId];
     if (instance !== undefined) {
@@ -407,6 +408,10 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       });
     }
     setContextMenu(null);
+  }
+
+  function handleCardDragEnd(): void {
+    setPendingDrag(null);
   }
 
   // Every card-movement gesture funnels through the single unrestricted move
@@ -500,6 +505,10 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     battleCardId: string,
     event: ReactPointerMouseEvent<HTMLDivElement>,
   ): void {
+    if (pendingDrag !== null) {
+      setHoverPreview(null);
+      return;
+    }
     setHoverPreview({
       battleCardId,
       x: event.clientX,
@@ -511,6 +520,10 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     battleCardId: string,
     event: ReactPointerMouseEvent<HTMLDivElement>,
   ): void {
+    if (pendingDrag !== null) {
+      setHoverPreview(null);
+      return;
+    }
     setHoverPreview((current) => current?.battleCardId === battleCardId
       ? {
         battleCardId,
@@ -546,7 +559,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           onOpenReorderMultiple={(side) => setOpenDeckOrderPicker(side)}
           onCardContextMenu={handleCardContextMenu}
           onCardDragStart={handleCardDragStart}
-          onCardDragEnd={() => setPendingDrag(null)}
+          onCardDragEnd={handleCardDragEnd}
           onCardDropToBrowser={(sourceSurface) => handleZoneDrop(
             openZoneBrowser.side,
             openZoneBrowser.zone,
@@ -677,7 +690,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   onCardClick={handleHandCardClick}
                   onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "opponent-hand-tray")}
                   onCardDragStart={handleCardDragStart}
-                  onCardDragEnd={() => setPendingDrag(null)}
+                  onCardDragEnd={handleCardDragEnd}
                   onCardDropToHand={(sourceSurface) => handleZoneDrop("enemy", "hand", sourceSurface)}
                   onCardHoverStart={handleBattlefieldCardHoverStart}
                   onCardHoverMove={handleBattlefieldCardHoverMove}
@@ -695,7 +708,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 onCardClick={handleBattlefieldCardClick}
                 onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                 onCardDragStart={handleCardDragStart}
-                onCardDragEnd={() => setPendingDrag(null)}
+                onCardDragEnd={handleCardDragEnd}
                 onCardHoverStart={handleBattlefieldCardHoverStart}
                 onCardHoverMove={handleBattlefieldCardHoverMove}
                 onCardHoverEnd={handleBattlefieldCardHoverEnd}
@@ -772,7 +785,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
-                    onCardDragEnd={() => setPendingDrag(null)}
+                    onCardDragEnd={handleCardDragEnd}
                     onCardHoverStart={handleBattlefieldCardHoverStart}
                     onCardHoverMove={handleBattlefieldCardHoverMove}
                     onCardHoverEnd={handleBattlefieldCardHoverEnd}
@@ -792,7 +805,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
-                    onCardDragEnd={() => setPendingDrag(null)}
+                    onCardDragEnd={handleCardDragEnd}
                     onCardHoverStart={handleBattlefieldCardHoverStart}
                     onCardHoverMove={handleBattlefieldCardHoverMove}
                     onCardHoverEnd={handleBattlefieldCardHoverEnd}
@@ -816,7 +829,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
-                    onCardDragEnd={() => setPendingDrag(null)}
+                    onCardDragEnd={handleCardDragEnd}
                     onCardHoverStart={handleBattlefieldCardHoverStart}
                     onCardHoverMove={handleBattlefieldCardHoverMove}
                     onCardHoverEnd={handleBattlefieldCardHoverEnd}
@@ -836,7 +849,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
-                    onCardDragEnd={() => setPendingDrag(null)}
+                    onCardDragEnd={handleCardDragEnd}
                     onCardHoverStart={handleBattlefieldCardHoverStart}
                     onCardHoverMove={handleBattlefieldCardHoverMove}
                     onCardHoverEnd={handleBattlefieldCardHoverEnd}
@@ -928,7 +941,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "hand-tray")}
               onCardDoubleClick={handleHandCardDoubleClick}
               onCardDragStart={handleCardDragStart}
-              onCardDragEnd={() => setPendingDrag(null)}
+              onCardDragEnd={handleCardDragEnd}
               onCardDropToHand={(sourceSurface) => handleZoneDrop("player", "hand", sourceSurface)}
               onCardHoverStart={handleBattlefieldCardHoverStart}
               onCardHoverMove={handleBattlefieldCardHoverMove}
@@ -986,7 +999,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           onCommand={handleCommand}
         />
       ) : null}
-      {hoverPreview !== null
+      {hoverPreview !== null && pendingDrag === null
         ? (() => {
           const hoverCard = reducerState.mutable.cardInstances[hoverPreview.battleCardId];
           return hoverCard === undefined

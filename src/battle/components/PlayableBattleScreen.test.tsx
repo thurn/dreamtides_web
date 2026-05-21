@@ -1828,6 +1828,103 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("closes and suppresses card hover previews while a hand card drag is active", () => {
+    const { container, root } = renderScreen();
+    const handCards = [
+      ...container.querySelectorAll<HTMLElement>(
+        '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
+      ),
+    ];
+    const firstHandCard = handCards[0];
+    const secondHandCard = handCards[1];
+
+    if (firstHandCard === undefined || secondHandCard === undefined) {
+      throw new Error("expected at least two hand cards");
+    }
+
+    act(() => {
+      firstHandCard.dispatchEvent(new MouseEvent("mouseover", {
+        bubbles: true,
+        clientX: 320,
+        clientY: 240,
+      }));
+    });
+
+    expect(container.querySelector("[data-battle-hover-preview]")).not.toBeNull();
+
+    act(() => {
+      firstHandCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(container.querySelector("[data-battle-hover-preview]")).toBeNull();
+
+    act(() => {
+      secondHandCard.dispatchEvent(new MouseEvent("mouseover", {
+        bubbles: true,
+        clientX: 360,
+        clientY: 260,
+      }));
+    });
+
+    expect(container.querySelector("[data-battle-hover-preview]")).toBeNull();
+
+    act(() => {
+      firstHandCard.dispatchEvent(new Event("dragend", { bubbles: true, cancelable: true }));
+    });
+
+    act(() => {
+      secondHandCard.dispatchEvent(new MouseEvent("mouseover", {
+        bubbles: true,
+        clientX: 380,
+        clientY: 280,
+      }));
+    });
+
+    expect(container.querySelector("[data-battle-hover-preview]")).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("closes card hover previews when dragging a battlefield card", () => {
+    const { container, root } = renderScreen((state) => {
+      const deployedCardId = state.sides.player.hand.shift();
+      if (deployedCardId === undefined) {
+        throw new Error("expected player hand card");
+      }
+      state.sides.player.deployed.D0 = deployedCardId;
+    });
+
+    const battlefieldCard = container.querySelector<HTMLElement>(
+      '[data-slot-id="player-deployed-D0"] [data-battle-card-id]',
+    );
+
+    if (battlefieldCard === null) {
+      throw new Error("expected battlefield card");
+    }
+
+    act(() => {
+      battlefieldCard.dispatchEvent(new MouseEvent("mouseover", {
+        bubbles: true,
+        clientX: 320,
+        clientY: 240,
+      }));
+    });
+
+    expect(container.querySelector("[data-battle-hover-preview]")).not.toBeNull();
+
+    act(() => {
+      battlefieldCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(container.querySelector("[data-battle-hover-preview]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("keeps the phase indicator in the persistent battle UI", () => {
     const { container, root } = renderScreen((state) => {
       state.phase = "day";
