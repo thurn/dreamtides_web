@@ -683,6 +683,9 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                 onCardDragStart={handleCardDragStart}
                 onCardDragEnd={() => setPendingDrag(null)}
+                onCardHoverStart={handleBattlefieldCardHoverStart}
+                onCardHoverMove={handleBattlefieldCardHoverMove}
+                onCardHoverEnd={handleBattlefieldCardHoverEnd}
                 onResolveToBanished={(battleCardId, side) => handleCommand(
                   createMoveCardToZoneCommand(battleCardId, side, "banished", "battlefield"),
                 )}
@@ -972,6 +975,9 @@ function BattleStackZone({
   onCardContextMenu,
   onCardDragStart,
   onCardDragEnd,
+  onCardHoverStart,
+  onCardHoverMove,
+  onCardHoverEnd,
   onResolveToBanished,
   onResolveToVoid,
 }: {
@@ -982,6 +988,9 @@ function BattleStackZone({
   onCardContextMenu: (battleCardId: string, event: ReactMouseEvent<HTMLDivElement>) => void;
   onCardDragStart: (battleCardId: string) => void;
   onCardDragEnd: () => void;
+  onCardHoverStart: (battleCardId: string, event: ReactPointerMouseEvent<HTMLDivElement>) => void;
+  onCardHoverMove: (battleCardId: string, event: ReactPointerMouseEvent<HTMLDivElement>) => void;
+  onCardHoverEnd: () => void;
   onResolveToBanished: (battleCardId: string, side: BattleSide) => void;
   onResolveToVoid: (battleCardId: string, side: BattleSide) => void;
 }) {
@@ -1027,6 +1036,9 @@ function BattleStackZone({
                 }}
                 onDragStart={() => onCardDragStart(entry.battleCardId)}
                 onDragEnd={onCardDragEnd}
+                onMouseEnter={(event) => onCardHoverStart(entry.battleCardId, event)}
+                onMouseMove={(event) => onCardHoverMove(entry.battleCardId, event)}
+                onMouseLeave={onCardHoverEnd}
               />
               <div className="battle-stack-entry-actions">
                 <button

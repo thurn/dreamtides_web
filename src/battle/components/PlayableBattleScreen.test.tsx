@@ -337,24 +337,28 @@ describe("PlayableBattleScreen", () => {
 
   it("keeps stacked cards and resolution controls available in the stack zone", () => {
     const { container, root } = renderScreen((state) => {
-      const [stackedCardId] = state.sides.player.hand;
-      if (stackedCardId === undefined) {
-        throw new Error("expected player hand card");
+      const stackedCardIds = state.sides.player.hand.slice(0, 2);
+      if (stackedCardIds.length < 2) {
+        throw new Error("expected two player hand cards");
       }
-      state.sides.player.hand = state.sides.player.hand.filter((battleCardId) => battleCardId !== stackedCardId);
+      state.sides.player.hand = state.sides.player.hand.filter((battleCardId) => !stackedCardIds.includes(battleCardId));
       state.stack ??= [];
-      state.stack.push({
-        stackEntryId: "stack_test_0001",
-        battleCardId: stackedCardId,
-        side: "player",
-        paidCost: 0,
+      stackedCardIds.forEach((battleCardId, index) => {
+        state.stack?.push({
+          stackEntryId: `stack_test_${String(index + 1).padStart(4, "0")}`,
+          battleCardId,
+          side: "player",
+          paidCost: 0,
+        });
       });
     });
     const stackZone = container.querySelector<HTMLElement>('[data-battle-region="stack-zone"]');
 
     expect(stackZone).not.toBeNull();
     expect(stackZone?.textContent).toContain("Stack");
-    expect(stackZone?.querySelector("[data-battle-card-id]")).not.toBeNull();
+    expect(stackZone?.querySelectorAll(".battle-stack-entry")).toHaveLength(2);
+    expect(stackZone?.querySelectorAll("[data-battle-card-id]")).toHaveLength(2);
+    expect(stackZone?.querySelectorAll(".battle-stack-entry-actions")).toHaveLength(2);
     expect(stackZone?.querySelector(".battle-stack-zone-header strong")).toBeNull();
     expect(stackZone?.querySelector(".battle-stack-empty")).toBeNull();
     expect(stackZone?.textContent).toContain("Void");
@@ -388,7 +392,10 @@ describe("PlayableBattleScreen", () => {
   });
 
   it("keeps stack zone cards at the mini battle-card aspect ratio", () => {
+    expect(BATTLE_CSS).toMatch(/\.battle-stack-zone-cards\s*{[^}]*flex-direction:\s*column;/s);
+    expect(BATTLE_CSS).toMatch(/\.battle-stack-zone-cards\s*{[^}]*overflow-y:\s*auto;/s);
     expect(BATTLE_CSS).toMatch(/\.battle-stack-entry\s*{[^}]*grid-template-rows:\s*auto auto;/s);
+    expect(BATTLE_CSS).toMatch(/\.battle-stack-entry\s*{[^}]*align-content:\s*start;/s);
     expect(BATTLE_CSS).toMatch(/\.battle-stack-entry\s+\.battle-card\s*{[^}]*height:\s*auto;/s);
     expect(BATTLE_CSS).toMatch(/\.battle-stack-entry\s+\.battle-card\s*{[^}]*aspect-ratio:\s*78 \/ 108;/s);
   });
@@ -1382,6 +1389,58 @@ describe("PlayableBattleScreen", () => {
 
     act(() => {
       battlefieldCard.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+    });
+
+    expect(container.querySelector("[data-battle-hover-preview]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows a full card hover preview for stack cards", () => {
+    const { container, initialState, root } = renderScreen((state) => {
+      const stackedCardId = state.sides.player.hand.shift();
+      if (stackedCardId === undefined) {
+        throw new Error("expected player hand card");
+      }
+      state.stack ??= [];
+      state.stack.push({
+        stackEntryId: "stack_test_0001",
+        battleCardId: stackedCardId,
+        side: "player",
+        paidCost: 0,
+      });
+    });
+
+    const stackCard = container.querySelector<HTMLElement>(
+      '[data-battle-region="stack-zone"] [data-battle-card-id]',
+    );
+    const hoveredCardId = initialState.stack?.[0]?.battleCardId;
+
+    if (stackCard === null || hoveredCardId === undefined) {
+      throw new Error("expected stack card");
+    }
+
+    act(() => {
+      stackCard.dispatchEvent(new MouseEvent("mouseover", {
+        bubbles: true,
+        clientX: 320,
+        clientY: 240,
+      }));
+      stackCard.dispatchEvent(new MouseEvent("mousemove", {
+        bubbles: true,
+        clientX: 340,
+        clientY: 260,
+      }));
+    });
+
+    expect(container.querySelector("[data-battle-hover-preview]")?.textContent).toContain(
+      initialState.cardInstances[hoveredCardId]?.definition.renderedText ?? "",
+    );
+
+    act(() => {
+      stackCard.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
     });
 
     expect(container.querySelector("[data-battle-hover-preview]")).toBeNull();
