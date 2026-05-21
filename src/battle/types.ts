@@ -78,7 +78,8 @@ export type BattleCommandSourceSurface =
   | "card-badges"
   | "side-summary"
   | "status-strip"
-  | "dreamcaller-panel";
+  | "dreamcaller-panel"
+  | "phase-controls";
 
 /**
  * Narrowed pointer to the entity a command operates on. The `ref` string is a

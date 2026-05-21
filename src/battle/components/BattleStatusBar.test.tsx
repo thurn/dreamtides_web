@@ -100,20 +100,11 @@ describe("BattleStatusBar", () => {
     });
   });
 
-  it("cycles night back to dawn through the increment arrow", () => {
+  it("keeps phase increment controls out of the top bar", () => {
     const onSetPhase = vi.fn();
     const { container, root } = mount({ phase: "night", onSetPhase });
 
-    const arrow = container.querySelector<HTMLButtonElement>(
-      '[data-battle-phase-increment]',
-    );
-    expect(arrow).not.toBeNull();
-    act(() => {
-      arrow?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    });
-
-    expect(onSetPhase).toHaveBeenCalledTimes(1);
-    expect(onSetPhase).toHaveBeenCalledWith("dawn");
+    expect(container.querySelector('[data-battle-phase-increment]')).toBeNull();
 
     act(() => {
       root.unmount();

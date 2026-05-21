@@ -320,6 +320,24 @@ export function applyDebugEdit(
         state: nextState,
         transition: createEmptyTransitionData(),
       };
+    case "SET_BATTLE_FLOW":
+      if (
+        nextState.phase === edit.phase &&
+        nextState.activeSide === edit.activeSide &&
+        nextState.turnNumber === edit.turnNumber
+      ) {
+        return {
+          state,
+          transition: createEmptyTransitionData(),
+        };
+      }
+      nextState.phase = edit.phase;
+      nextState.activeSide = edit.activeSide;
+      nextState.turnNumber = edit.turnNumber;
+      return {
+        state: nextState,
+        transition: createEmptyTransitionData(),
+      };
   }
 }
 

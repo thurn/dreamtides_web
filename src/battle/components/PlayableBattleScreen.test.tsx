@@ -426,6 +426,100 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("floats phase controls over the player hand tray", () => {
+    const { container, root } = renderScreen((state) => {
+      state.phase = "day";
+      state.activeSide = "player";
+      state.turnNumber = 1;
+    });
+
+    expect(container.querySelector('[data-battle-phase-increment]')).toBeNull();
+    const controls = container.querySelectorAll("[data-battle-phase-control]");
+    expect(controls).toHaveLength(3);
+    expect(
+      container.querySelector(".player-hand-zone .phase-float-actions"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="previous"]')
+        ?.getAttribute("title"),
+    ).toBe("Return to Dawn");
+    expect(
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next"]')
+        ?.getAttribute("title"),
+    ).toBe("Advance to Dusk");
+    expect(
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next-major"]')
+        ?.getAttribute("title"),
+    ).toBe("Advance to Night");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("decrements the phase with the left floating phase control", () => {
+    const { container, root } = renderScreen((state) => {
+      state.phase = "dusk";
+      state.activeSide = "player";
+      state.turnNumber = 1;
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="previous"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Day");
+    expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 1");
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Player");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("advances active side when the next floating phase control wraps", () => {
+    const { container, root } = renderScreen((state) => {
+      state.phase = "night";
+      state.activeSide = "player";
+      state.turnNumber = 1;
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Dawn");
+    expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 1");
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("increments the turn when the next day-or-night floating phase control wraps from enemy", () => {
+    const { container, root } = renderScreen((state) => {
+      state.phase = "night";
+      state.activeSide = "enemy";
+      state.turnNumber = 1;
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next-major"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Day");
+    expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 2");
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Player");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("reveals compact player and opponent hand trays from the action bar", () => {
     const { container, initialState, root } = renderScreen();
 

@@ -973,10 +973,77 @@
   flex: 0 0 var(--player-hand-zone-height, 276px);
   min-height: 0;
   overflow: hidden;
+  position: relative;
 }
 
 .player-hand-zone.compact {
   flex-basis: var(--player-hand-zone-compact-height, calc(var(--revealed-hand-card-h) + 24px));
+}
+
+.phase-float-actions {
+  position: absolute;
+  top: 10px;
+  right: 24px;
+  z-index: 18;
+  display: flex;
+  gap: 10px;
+}
+
+.phase-float-button {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent-edge);
+  border-radius: 8px;
+  background: #7c3aed;
+  color: #ffffff;
+  box-shadow: 0 12px 28px rgba(5, 2, 10, 0.36);
+  cursor: pointer;
+  padding: 0;
+}
+
+.phase-float-button .bx {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.phase-float-button:hover,
+.phase-float-button:focus-visible {
+  background: #8b5cf6;
+  border-color: var(--accent-strong);
+  outline: none;
+}
+
+.phase-float-button::after {
+  content: attr(data-preview);
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 126px;
+  max-width: 176px;
+  border: 1px solid var(--accent-edge);
+  border-radius: 8px;
+  background: rgba(10, 6, 18, 0.96);
+  color: #ffffff;
+  padding: 7px 9px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.phase-float-button:hover::after,
+.phase-float-button:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .player-hand-zone .hand-row {

@@ -41,8 +41,6 @@ export function BattleStatusBar({
   const phaseLabel = formatPhaseLabel(phase);
   const sideLabel = result === null ? formatSideLabel(activeSide) : "Battle Over";
   const visiblePhase = normalizeVisiblePhase(phase);
-  const currentStepIndex = PHASE_STEPS.findIndex((step) => step.id === visiblePhase);
-  const nextPhase = PHASE_STEPS[(currentStepIndex + 1) % PHASE_STEPS.length].id;
 
   return (
     <section data-battle-region="status-bar" className="topbar">
@@ -64,16 +62,6 @@ export function BattleStatusBar({
           >
             {phaseLabel}
           </strong>
-          <button
-            type="button"
-            className="phase-increment"
-            data-battle-phase-increment={nextPhase}
-            aria-label={`Advance phase to ${formatPhaseLabel(nextPhase)}`}
-            title={`Advance phase to ${formatPhaseLabel(nextPhase)}`}
-            onClick={() => onSetPhase?.(nextPhase)}
-          >
-            <i className="bx bx-skip-next" aria-hidden="true" />
-          </button>
         </div>
         <div className="phase-track" aria-label="Battle phases">
           {PHASE_STEPS.map((step) => (

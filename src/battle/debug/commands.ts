@@ -174,6 +174,12 @@ export type BattleDebugEdit =
   | {
     kind: "SET_PHASE";
     phase: BattlePhase;
+  }
+  | {
+    kind: "SET_BATTLE_FLOW";
+    phase: BattlePhase;
+    activeSide: BattleSide;
+    turnNumber: number;
   };
 
 export interface BattleCommandEnvelope {
@@ -414,6 +420,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "HIDE_DECK_TOP":
       return "visibility";
     case "SET_PHASE":
+    case "SET_BATTLE_FLOW":
       return "battle-flow";
   }
 }
@@ -444,6 +451,7 @@ function isCompositeDebugEdit(edit: BattleDebugEdit): boolean {
     case "CREATE_FIGMENT":
     case "MOVE_CARD_TO_ZONE":
     case "INCREASE_MAX_ENERGY_AND_FILL":
+    case "SET_BATTLE_FLOW":
       return true;
     default:
       return false;
@@ -526,6 +534,7 @@ function collectDebugEditTargets(
           makeSlotTarget(edit.target),
         ];
     case "SET_PHASE":
+    case "SET_BATTLE_FLOW":
       return [];
   }
 }
@@ -598,6 +607,8 @@ function createDebugEditLabel(
       return `Play Top of ${formatSideLabel(edit.side)} Deck`;
     case "SET_PHASE":
       return `Set Phase to ${formatPhaseLabel(edit.phase)}`;
+    case "SET_BATTLE_FLOW":
+      return `Set Battle Flow to ${formatPhaseLabel(edit.phase)}`;
   }
 }
 

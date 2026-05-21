@@ -31,6 +31,7 @@ import type {
   BattleEnemyDescriptor,
   BattleFieldSlotAddress,
   BattleMutableState,
+  BattlePhase,
   BattleReducerState,
   BattleSide,
   BrowseableZone,
@@ -65,6 +66,7 @@ import {
 } from "./battle-ui-commands";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
+const PHASE_CONTROL_SEQUENCE = ["dawn", "day", "dusk", "night"] as const satisfies readonly BattlePhase[];
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
 type RewardOverlayState = {
   rewardSource: string;
@@ -883,6 +885,21 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             </div>
           </div>
           <div className={isOpponentHandRevealed ? "player-hand-zone compact" : "player-hand-zone"}>
+            <BattlePhaseFloatControls
+              state={reducerState.mutable}
+              onSetBattleFlow={(target) => {
+                handleCommand({
+                  id: "DEBUG_EDIT",
+                  edit: {
+                    kind: "SET_BATTLE_FLOW",
+                    phase: target.phase,
+                    activeSide: target.activeSide,
+                    turnNumber: target.turnNumber,
+                  },
+                  sourceSurface: "phase-controls",
+                });
+              }}
+            />
             <BattleHandTray
               canInteract={true}
               compact={isOpponentHandRevealed}
@@ -1198,6 +1215,133 @@ function BattleLiveRegion({
       {announcement}
     </div>
   );
+}
+
+type BattleFlowTarget = {
+  phase: BattlePhase;
+  activeSide: BattleSide;
+  turnNumber: number;
+  preview: string;
+};
+
+function BattlePhaseFloatControls({
+  state,
+  onSetBattleFlow,
+}: {
+  state: BattleMutableState;
+  onSetBattleFlow: (target: BattleFlowTarget) => void;
+}) {
+  const previousTarget = computePhaseControlTarget(state, "previous");
+  const nextTarget = computePhaseControlTarget(state, "next");
+  const nextMajorTarget = computePhaseControlTarget(state, "next-major");
+
+  return (
+    <div className="phase-float-actions" aria-label="Phase controls">
+      <button
+        type="button"
+        className="phase-float-button"
+        data-battle-phase-control="previous"
+        data-preview={previousTarget.preview}
+        aria-label={previousTarget.preview}
+        title={previousTarget.preview}
+        onClick={() => onSetBattleFlow(previousTarget)}
+      >
+        <i className="bx bx-left-arrow-alt" aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        className="phase-float-button"
+        data-battle-phase-control="next"
+        data-preview={nextTarget.preview}
+        aria-label={nextTarget.preview}
+        title={nextTarget.preview}
+        onClick={() => onSetBattleFlow(nextTarget)}
+      >
+        <i className="bx bx-right-arrow-alt" aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        className="phase-float-button"
+        data-battle-phase-control="next-major"
+        data-preview={nextMajorTarget.preview}
+        aria-label={nextMajorTarget.preview}
+        title={nextMajorTarget.preview}
+        onClick={() => onSetBattleFlow(nextMajorTarget)}
+      >
+        <i className="bx bx-skip-next" aria-hidden="true" />
+      </button>
+    </div>
+  );
+}
+
+function computePhaseControlTarget(
+  state: BattleMutableState,
+  control: "previous" | "next" | "next-major",
+): BattleFlowTarget {
+  const currentPhase = normalizePhaseForControls(state.phase);
+  const currentIndex = PHASE_CONTROL_SEQUENCE.indexOf(currentPhase);
+  const { didWrap, nextIndex } = (() => {
+    if (control === "previous") {
+      const index = currentIndex - 1;
+      return { didWrap: index < 0, nextIndex: index };
+    }
+    if (control === "next") {
+      const index = currentIndex + 1;
+      return { didWrap: index >= PHASE_CONTROL_SEQUENCE.length, nextIndex: index };
+    }
+    const nextDayOrNight = PHASE_CONTROL_SEQUENCE.findIndex(
+      (phase, index) => index > currentIndex && (phase === "day" || phase === "night"),
+    );
+    if (nextDayOrNight >= 0) {
+      return { didWrap: false, nextIndex: nextDayOrNight };
+    }
+    return {
+      didWrap: true,
+      nextIndex: PHASE_CONTROL_SEQUENCE.findIndex((phase) => phase === "day"),
+    };
+  })();
+  const normalizedNextIndex = (nextIndex + PHASE_CONTROL_SEQUENCE.length) % PHASE_CONTROL_SEQUENCE.length;
+  const phase = PHASE_CONTROL_SEQUENCE[normalizedNextIndex];
+  const turnPair = didWrap
+    ? advanceBattleTurnPair(state.activeSide, state.turnNumber)
+    : { activeSide: state.activeSide, turnNumber: state.turnNumber };
+  const action = control === "previous" ? "Return" : "Advance";
+
+  return {
+    phase,
+    ...turnPair,
+    preview: `${action} to ${formatPhaseLabel(phase)}`,
+  };
+}
+
+function normalizePhaseForControls(phase: BattleMutableState["phase"]): (typeof PHASE_CONTROL_SEQUENCE)[number] {
+  switch (phase) {
+    case "startOfTurn":
+    case "draw":
+      return "dawn";
+    case "main":
+      return "day";
+    case "judgment":
+    case "challenge":
+    case "endOfTurn":
+    case "ending":
+      return "night";
+    default:
+      return phase;
+  }
+}
+
+function advanceBattleTurnPair(
+  activeSide: BattleSide,
+  turnNumber: number,
+): {
+  activeSide: BattleSide;
+  turnNumber: number;
+} {
+  if (activeSide === "player") {
+    return { activeSide: "enemy", turnNumber };
+  }
+  return { activeSide: "player", turnNumber: turnNumber + 1 };
 }
 
 function ScaledBattlefield({ children }: { children: ReactNode }) {
