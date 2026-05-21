@@ -40,8 +40,8 @@ function createState() {
 
 function mount(withBanished = false): {
   container: HTMLDivElement;
-  onAdjustEnergy: ReturnType<typeof vi.fn>;
-  onAdjustScore: ReturnType<typeof vi.fn>;
+  onSetEnergy: ReturnType<typeof vi.fn>;
+  onSetScore: ReturnType<typeof vi.fn>;
   onCloseSummary: ReturnType<typeof vi.fn>;
   onOpenSummary: ReturnType<typeof vi.fn>;
   root: Root;
@@ -55,13 +55,13 @@ function mount(withBanished = false): {
   }
   const onCloseSummary = vi.fn();
   const onOpenSummary = vi.fn();
-  const onAdjustEnergy = vi.fn();
-  const onAdjustScore = vi.fn();
+  const onSetEnergy = vi.fn();
+  const onSetScore = vi.fn();
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
 
-  act(() => {
+  function render() {
     root.render(
       <BattleStatusStrip
         dreamcaller={{
@@ -76,18 +76,21 @@ function mount(withBanished = false): {
         subtitle=""
         title="Aeris"
         isActive
-        onAdjustEnergy={onAdjustEnergy}
-        onAdjustScore={onAdjustScore}
+        onSetEnergy={onSetEnergy}
+        onSetScore={onSetScore}
         onCloseSummary={onCloseSummary}
         onOpenSummary={onOpenSummary}
       />,
     );
-  });
+  }
 
-  return { container, onAdjustEnergy, onAdjustScore, onCloseSummary, onOpenSummary, root };
+  act(render);
+
+  return { container, onSetEnergy, onSetScore, onCloseSummary, onOpenSummary, root };
 }
 
 afterEach(() => {
+  vi.useRealTimers();
   document.body.innerHTML = "";
 });
 
@@ -147,20 +150,73 @@ describe("BattleStatusStrip", () => {
     });
   });
 
-  it("calls stat adjusters from the score and energy arrow controls", () => {
-    const { container, onAdjustEnergy, onAdjustScore, root } = mount();
+  it("updates displayed stats immediately and commits debounced absolute values", () => {
+    vi.useFakeTimers();
+    const { container, onSetEnergy, onSetScore, root } = mount();
 
     act(() => {
-      container.querySelector<HTMLButtonElement>('button[aria-label="Decrease your points"]')?.click();
       container.querySelector<HTMLButtonElement>('button[aria-label="Increase your points"]')?.click();
       container.querySelector<HTMLButtonElement>('button[aria-label="Decrease your energy"]')?.click();
-      container.querySelector<HTMLButtonElement>('button[aria-label="Increase your energy"]')?.click();
     });
 
-    expect(onAdjustScore).toHaveBeenNthCalledWith(1, -1);
-    expect(onAdjustScore).toHaveBeenNthCalledWith(2, 1);
-    expect(onAdjustEnergy).toHaveBeenNthCalledWith(1, -1);
-    expect(onAdjustEnergy).toHaveBeenNthCalledWith(2, 1);
+    expect(container.querySelector('[data-battle-stat="player:score"]')?.getAttribute("data-battle-value"))
+      .toBe("10");
+    expect(container.querySelector('[data-battle-stat="player:energy"]')?.getAttribute("data-battle-current-energy"))
+      .toBe("1");
+    expect(onSetScore).not.toHaveBeenCalled();
+    expect(onSetEnergy).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+
+    expect(onSetScore).toHaveBeenCalledWith(10);
+    expect(onSetEnergy).toHaveBeenCalledWith(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("ignores external stat updates for ten seconds after a local edit", () => {
+    vi.useFakeTimers();
+    const state = createState();
+    const onSetEnergy = vi.fn();
+    const onSetScore = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    const render = () => root.render(
+      <BattleStatusStrip
+        side="player"
+        sideState={state.sides.player}
+        subtitle=""
+        title="Aeris"
+        isActive
+        onSetEnergy={onSetEnergy}
+        onSetScore={onSetScore}
+        onCloseSummary={vi.fn()}
+        onOpenSummary={vi.fn()}
+      />,
+    );
+
+    act(render);
+    act(() => {
+      container.querySelector<HTMLButtonElement>('button[aria-label="Increase your points"]')?.click();
+    });
+
+    state.sides.player.score = 99;
+    act(render);
+
+    expect(container.querySelector('[data-battle-stat="player:score"]')?.getAttribute("data-battle-value"))
+      .toBe("10");
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+
+    expect(container.querySelector('[data-battle-stat="player:score"]')?.getAttribute("data-battle-value"))
+      .toBe("99");
 
     act(() => {
       root.unmount();

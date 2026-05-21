@@ -1812,7 +1812,7 @@ describe("PlayableBattleScreen", () => {
     expect(getLogEntries().some((entry) => entry.event === "battle_proto_command_applied")).toBe(false);
 
     act(() => {
-      vi.advanceTimersByTime(150);
+      vi.advanceTimersByTime(250);
     });
 
     const commandLogs = getLogEntries().filter((entry) => entry.event === "battle_proto_command_applied");
