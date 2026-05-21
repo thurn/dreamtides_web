@@ -595,12 +595,20 @@ describe("PlayableBattleScreen", () => {
   it("renders revealed opponent hand cards without selection or affordability dimming", () => {
     let enemyCardId = "";
     let enemyCardName = "";
+    let enemyRulesText = "";
+    let playerCardId = "";
+    let playerCardName = "";
+    let playerRulesText = "";
     const { container, root } = renderScreen((state) => {
       state.activeSide = "enemy";
       state.phase = "day";
       state.sides.enemy.currentEnergy = 0;
       enemyCardId = state.sides.enemy.hand[0] ?? "";
       enemyCardName = state.cardInstances[enemyCardId].definition.name;
+      enemyRulesText = state.cardInstances[enemyCardId].definition.renderedText;
+      playerCardId = state.sides.player.hand[0] ?? "";
+      playerCardName = state.cardInstances[playerCardId].definition.name;
+      playerRulesText = state.cardInstances[playerCardId].definition.renderedText;
       // Give all enemy hand cards a cost that exceeds available energy.
       for (const battleCardId of state.sides.enemy.hand) {
         state.cardInstances[battleCardId].definition = {
@@ -617,6 +625,9 @@ describe("PlayableBattleScreen", () => {
     const enemyCard = container.querySelector<HTMLElement>(
       `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${enemyCardId}"]`,
     );
+    const playerCard = container.querySelector<HTMLElement>(
+      `[data-battle-region="player-hand-tray"] [data-battle-card-id="${playerCardId}"]`,
+    );
 
     expect(enemyCard?.getAttribute("data-battle-card-variant")).toBe("hand");
     expect(enemyCard?.hasAttribute("data-battle-hand-card")).toBe(true);
@@ -627,6 +638,17 @@ describe("PlayableBattleScreen", () => {
     expect(enemyCard?.classList.contains("unaffordable")).toBe(false);
     expect(enemyCard?.classList.contains("playable")).toBe(false);
     expect(enemyCard?.getAttribute("draggable")).toBe("true");
+
+    expect(playerCard?.classList.contains("quest-card")).toBe(true);
+    expect(playerCard?.classList.contains("revealed-hand-card")).toBe(true);
+    expect(playerCard?.querySelector(".c-top")).toBeNull();
+    expect(enemyCard?.querySelector(".c-top")).toBeNull();
+    expect(playerCard?.querySelector("[data-testid='card-type-line']")).not.toBeNull();
+    expect(enemyCard?.querySelector("[data-testid='card-type-line']")).not.toBeNull();
+    expect(playerCard?.textContent).toContain(playerCardName);
+    expect(playerCard?.textContent).toContain(playerRulesText);
+    expect(enemyCard?.textContent).toContain(enemyCardName);
+    expect(enemyCard?.textContent).toContain(enemyRulesText);
 
     act(() => {
       enemyCard?.click();

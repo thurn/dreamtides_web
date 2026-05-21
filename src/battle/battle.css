@@ -25,8 +25,8 @@
   --card-h: 108px;
   --hand-card-w: clamp(148px, 14vw, 176px);
   --hand-card-h: clamp(214px, 22vw, 252px);
-  --revealed-hand-card-w: clamp(78px, 7vw, 88px);
-  --revealed-hand-card-h: clamp(112px, 10.5vw, 126px);
+  --revealed-hand-card-w: clamp(132px, 12vw, 156px);
+  --revealed-hand-card-h: clamp(198px, 18vw, 234px);
   --slot-gap: 10px;
   --row-gap: 6px;
   --battlefield-row-width: calc(var(--card-w) * 5 + var(--slot-gap) * 4);
@@ -977,7 +977,7 @@
 }
 
 .player-hand-zone.compact {
-  flex-basis: var(--player-hand-zone-compact-height, calc(var(--revealed-hand-card-h) + 24px));
+  flex-basis: var(--player-hand-zone-compact-height, calc(var(--revealed-hand-card-h) + 28px));
 }
 
 .phase-float-actions {
@@ -1108,7 +1108,7 @@
 }
 
 .opponent-hand-zone {
-  flex: 0 0 var(--opponent-hand-zone-height, 126px);
+  flex: 0 0 var(--opponent-hand-zone-height, calc(var(--revealed-hand-card-h) + 28px));
   min-height: 0;
   overflow: hidden;
 }
@@ -1143,45 +1143,6 @@
   width: var(--revealed-hand-card-w);
   height: var(--revealed-hand-card-h);
   min-width: var(--revealed-hand-card-w);
-}
-
-.battle-card.revealed-hand-card.player {
-  border-color: rgba(56, 189, 248, 0.42);
-}
-
-.battle-card.revealed-hand-card.opponent {
-  border-color: rgba(248, 113, 113, 0.45);
-}
-
-.battle-card.revealed-hand-card .c-top {
-  padding: 5px 6px 3px;
-  min-height: 20px;
-}
-
-.battle-card.revealed-hand-card .c-cost,
-.battle-card.revealed-hand-card .c-spark {
-  width: 18px;
-  height: 18px;
-  font-size: 9px;
-}
-
-.battle-card.revealed-hand-card .c-art {
-  flex: 0 0 34%;
-  margin: 3px 5px;
-  border-radius: 5px;
-}
-
-.battle-card.revealed-hand-card .c-name {
-  padding: 1px 6px 3px;
-  font-size: 9px;
-  line-height: 1.1;
-  white-space: normal;
-}
-
-.battle-card.revealed-hand-card .c-type,
-.battle-card.revealed-hand-card .c-rules,
-.battle-card.revealed-hand-card .c-keywords {
-  display: none;
 }
 
 .actionbar {

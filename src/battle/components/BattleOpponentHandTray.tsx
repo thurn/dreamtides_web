@@ -1,8 +1,7 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 
-import { CardDisplay } from "../../components/CardDisplay";
 import type { BattleCommandSourceSurface, BattleMutableState } from "../types";
-import { battleCardDisplayFromInstance } from "./BattleCardView";
+import { BattleHandCard } from "./BattleHandTray";
 
 export function BattleOpponentHandTray({
   canInteract: _canInteract,
@@ -72,28 +71,15 @@ export function BattleOpponentHandTray({
             return null;
           }
           const isSelected = selectedCardId === battleCardId;
-          const wrapperClass = [
-            "battle-card",
-            "hand-card",
-            "quest-card",
-            "revealed-hand-card",
-            "opponent-card",
-            "opponent",
-            isSelected ? "selected" : "",
-          ]
-            .filter((value) => value !== "")
-            .join(" ");
 
           return (
-            <div
+            <BattleHandCard
               key={battleCardId}
-              data-battle-card-id={battleCardId}
-              data-battle-card-variant="hand"
-              data-battle-hand-card=""
-              data-battle-card-playable="true"
-              data-selected={String(isSelected)}
-              className={wrapperClass}
-              draggable={true}
+              battleCardId={battleCardId}
+              compact
+              instance={instance}
+              selected={isSelected}
+              side="opponent"
               onClick={(event) => {
                 event.stopPropagation();
                 onCardClick(battleCardId);
@@ -108,14 +94,7 @@ export function BattleOpponentHandTray({
               onMouseEnter={(event) => onCardHoverStart?.(battleCardId, event)}
               onMouseMove={(event) => onCardHoverMove?.(battleCardId, event)}
               onMouseLeave={() => onCardHoverEnd?.()}
-            >
-              <CardDisplay
-                card={battleCardDisplayFromInstance(instance)}
-                selected={isSelected}
-                selectionColor="#f97316"
-                className="h-full w-full"
-              />
-            </div>
+            />
           );
         })}
       </div>
