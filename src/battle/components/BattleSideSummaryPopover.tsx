@@ -64,7 +64,7 @@ export function BattleSideSummaryPopover({
   return (
     <div
       ref={popoverRef}
-      className={`side-summary-popover ${side}`}
+      className="side-summary-popover"
       data-battle-side-summary-popover={side}
       data-selected={String(isSelected)}
     >

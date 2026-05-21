@@ -1570,11 +1570,6 @@
   z-index: 46;
 }
 
-.side-summary-popover.player {
-  top: auto;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 160px);
-}
-
 .dreamcaller-panel {
   left: auto;
   right: 24px;
