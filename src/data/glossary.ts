@@ -93,7 +93,8 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   // --- Keywords -------------------------------------------------------
   {
     term: "Reclaim",
-    definition: "You may play this card from your void, then banish it.",
+    definition:
+      "You may play this card from your void, then banish it when it leaves play.",
     variants: ["reclaim", "reclaimed"],
   },
   {
@@ -118,6 +119,11 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["unbound"],
   },
   {
+    term: "Unstoppable",
+    definition: "Scores points when dissolving a defender during challenges.",
+    variants: ["unbound"],
+  },
+  {
     term: "Echo",
     definition: "Triggers an additional time.",
     variants: ["echo"],
@@ -136,6 +142,11 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     term: "Deployed",
     definition: "In the front rank.",
     variants: ["deployed"],
+  },
+  {
+    term: "Prevent",
+    definition: "Counter a card on the stack and send it to the void.",
+    variants: ["prevent", "prevented"],
   },
 
   // --- Verbs ----------------------------------------------------------
@@ -202,22 +213,25 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   },
   {
     term: "Azure",
-    definition: "Transfiguration: appends \"draw a card\" to this event card's text.",
+    definition:
+      'Transfiguration: appends "draw a card" to this event card\'s text.',
     variants: ["azure"],
   },
   {
     term: "Bronze",
-    definition: "Transfiguration: adds \"reclaim\" to this event card's text.",
+    definition: 'Transfiguration: adds "reclaim" to this event card\'s text.',
     variants: ["bronze"],
   },
   {
     term: "Rose",
-    definition: "Transfiguration: reduces an activated ability's energy cost by 1.",
+    definition:
+      "Transfiguration: reduces an activated ability's energy cost by 1.",
     variants: ["rose"],
   },
   {
     term: "Prismatic",
-    definition: "Transfiguration: applies every other eligible transfiguration to a card.",
+    definition:
+      "Transfiguration: applies every other eligible transfiguration to a card.",
     variants: ["prismatic"],
   },
 ];

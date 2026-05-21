@@ -13,7 +13,7 @@ import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 
 const TIDES_LABEL_HOVER_BLURB =
-  "These tide pools will be shuffled together to form the draft pool.";
+  "These tides will be shuffled together to form the draft pool.";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -412,17 +412,15 @@ describe("QuestStartScreen", () => {
         "rgb(148, 163, 184)",
       );
     }
+    expect(container.querySelectorAll("[data-dreamcaller-tide]")).toHaveLength(
+      DISPLAYED_TIDES.length,
+    );
     expect(
-      container.querySelectorAll("[data-dreamcaller-tide]"),
-    ).toHaveLength(DISPLAYED_TIDES.length);
-    expect(
-      Array.from(container.querySelectorAll("[data-dreamcaller-tide]")).map((tide) =>
-        tide.getAttribute("data-dreamcaller-tide"),
+      Array.from(container.querySelectorAll("[data-dreamcaller-tide]")).map(
+        (tide) => tide.getAttribute("data-dreamcaller-tide"),
       ),
     ).toEqual(
-      DISPLAYED_TIDES.map(
-        (tide) => `${tide.dreamcallerId}:${tide.id}`,
-      ),
+      DISPLAYED_TIDES.map((tide) => `${tide.dreamcallerId}:${tide.id}`),
     );
 
     for (const dreamcaller of OFFERED_DREAMCALLERS) {
@@ -554,9 +552,7 @@ describe("QuestStartScreen", () => {
 
       // No popover content is in the DOM before hover.
       expect(
-        document.body.querySelectorAll(
-          "[data-structural-tides-label-tooltip]",
-        ),
+        document.body.querySelectorAll("[data-structural-tides-label-tooltip]"),
       ).toHaveLength(0);
 
       act(() => {
@@ -581,9 +577,7 @@ describe("QuestStartScreen", () => {
         );
       });
       expect(
-        document.body.querySelectorAll(
-          "[data-structural-tides-label-tooltip]",
-        ),
+        document.body.querySelectorAll("[data-structural-tides-label-tooltip]"),
       ).toHaveLength(0);
 
       act(() => {
@@ -609,9 +603,9 @@ describe("QuestStartScreen", () => {
         // Dreamcaller card) must not embed any tide chip, tide label,
         // tide-info icon, or per-tide hover tooltip. Tide rows live in the
         // static card body alongside the button, not inside it.
-        expect(
-          button.querySelectorAll("[data-dreamcaller-tide]"),
-        ).toHaveLength(0);
+        expect(button.querySelectorAll("[data-dreamcaller-tide]")).toHaveLength(
+          0,
+        );
         expect(
           button.querySelectorAll("[data-dreamcaller-tide-tooltip]"),
         ).toHaveLength(0);
@@ -643,9 +637,7 @@ describe("QuestStartScreen", () => {
 
       // No portaled tides label tooltip should appear from a card hover.
       expect(
-        document.body.querySelectorAll(
-          "[data-structural-tides-label-tooltip]",
-        ),
+        document.body.querySelectorAll("[data-structural-tides-label-tooltip]"),
       ).toHaveLength(0);
 
       act(() => {

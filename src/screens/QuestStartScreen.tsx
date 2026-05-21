@@ -12,7 +12,7 @@ const DREAMCALLER_ACCENT = "#c084fc";
 const DREAMCALLER_HOVER_TRANSITION = { duration: 0.12, delay: 0 } as const;
 const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
 const TIDES_LABEL_HOVER_BLURB =
-  "These tide pools will be shuffled together to form the draft pool.";
+  "These tides will be shuffled together to form the draft pool.";
 
 /** Intro screen where the player picks a dreamcaller to start the quest. */
 export function QuestStartScreen() {
