@@ -3,10 +3,10 @@
  * image control with stable space beneath the circle for hover-card anchoring.
  *
  * Hovering the circle reveals a `JourneyHoverCard` showing the option's full
- * rendered text plus a vertical stack of `GlossaryDefinitionCard` panels for
- * every glossary term the effect text references. Hover state is owned by the
- * caller (`JourneyScreen`), so multiple circles share a single "which option
- * is hovered" piece of state and never light up two cards simultaneously.
+ * rendered text, glossary definition panels, and previews for specific cards
+ * named in the text. Hover state is owned by the caller (`JourneyScreen`), so
+ * multiple circles share a single "which option is hovered" piece of state and
+ * never light up two cards simultaneously.
  *
  * `imageUrl` and `dreamName` are required: every rendered option has a
  * resolved dream-art assignment. Missing art is an invariant violation handled
@@ -15,9 +15,9 @@
  *
  * Viewport awareness: the hover wrapper measures its rendered height after
  * mount and flips above the circle when the natural below-circle position
- * would clip off the bottom of the viewport. This keeps the full prose +
- * glossary stack on-screen even on short viewports or when the player hovers
- * an option that sits low on the page.
+ * would clip off the bottom of the viewport. This keeps the full prose,
+ * glossary, and card-preview stack on-screen even on short viewports or when
+ * the player hovers an option that sits low on the page.
  *
  * Isolation: imports React, framer-motion, and the sibling `JourneyHoverCard`.
  */
@@ -25,6 +25,7 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { AnimatePresence } from "framer-motion";
 
+import type { CardData } from "../../types/cards";
 import { JourneyHoverCard } from "./JourneyHoverCard";
 
 /** Props for `JourneyOptionCircle`. */
@@ -35,6 +36,8 @@ export interface JourneyOptionCircleProps {
   readonly dreamName: string;
   /** Full rendered option text passed through to the hover card. */
   readonly text: string;
+  /** Cards named by the option text, in first-reference order. */
+  readonly referencedCards?: readonly CardData[];
   /**
    * When true, the image control is unavailable. Preview interactions remain
    * active so the player can still read the locked option's text.
@@ -91,6 +94,7 @@ export function JourneyOptionCircle({
   imageUrl,
   dreamName,
   text,
+  referencedCards,
   locked,
   hovered,
   onMouseEnter,
@@ -112,7 +116,7 @@ export function JourneyOptionCircle({
   // anchor below or above the circle plus whether the wrapper needs an
   // internal scroll cap to keep its content fully on-screen. Re-runs whenever
   // the hover toggles or the wrapper's content changes height (e.g. a
-  // different option's glossary stack).
+  // different option's glossary or card-preview stack).
   useLayoutEffect(() => {
     if (!hovered) {
       // Reset to the default placement when hidden so the next show starts
@@ -217,7 +221,11 @@ export function JourneyOptionCircle({
             className="absolute left-1/2 z-10 -translate-x-1/2"
             style={buildHoverWrapperStyle(placement)}
           >
-            <JourneyHoverCard dreamName={dreamName} text={text} />
+            <JourneyHoverCard
+              dreamName={dreamName}
+              text={text}
+              referencedCards={referencedCards}
+            />
           </div>
         )}
       </AnimatePresence>

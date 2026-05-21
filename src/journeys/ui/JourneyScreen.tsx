@@ -48,12 +48,10 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { CardData, CardType, Rarity } from "../../types/cards";
 import { applyBranch, planBranch } from "../apply/applyBranch";
 import { applyOption } from "../apply/applyOption";
 import type { ApplyMeta } from "../apply/applyShared";
 import type { ChooserRequest, ChooserResolution } from "../apply/chooserPlan";
-import type { CardContent } from "../content/types";
 import type { JourneyMutations } from "../apply/JourneyMutations";
 import { logJourneyChooserCancelled } from "../logging";
 import type { JourneyContext } from "../journey/context";
@@ -92,6 +90,10 @@ import {
   buildJourneyExplanation,
   type JourneyExplanation,
 } from "./journeyExplanation";
+import {
+  cardContentToDisplayData,
+  findReferencedCardPreviews,
+} from "./referencedCards";
 
 /** Props for `JourneyScreen`. */
 export interface JourneyScreenProps {
@@ -177,87 +179,6 @@ function cardRulesText(
   return candidate.length > 160 ? `${candidate.slice(0, 157)}...` : candidate;
 }
 
-function stringRawField(
-  raw: Record<string, unknown>,
-  ...keys: readonly string[]
-): string | undefined {
-  for (const key of keys) {
-    const value = raw[key];
-    if (typeof value === "string") {
-      return value;
-    }
-  }
-  return undefined;
-}
-
-function numberRawField(
-  raw: Record<string, unknown>,
-  ...keys: readonly string[]
-): number | undefined {
-  for (const key of keys) {
-    const value = raw[key];
-    if (typeof value === "number" && Number.isFinite(value)) {
-      return value;
-    }
-  }
-  return undefined;
-}
-
-function booleanRawField(
-  raw: Record<string, unknown>,
-  ...keys: readonly string[]
-): boolean | undefined {
-  for (const key of keys) {
-    const value = raw[key];
-    if (typeof value === "boolean") {
-      return value;
-    }
-  }
-  return undefined;
-}
-
-function normalizeCardType(cardType: string): CardType {
-  return cardType === "Character" ? "Character" : "Event";
-}
-
-function normalizeRarityForDisplay(rawRarity: string | undefined): Rarity | undefined {
-  if (
-    rawRarity === "Legendary" ||
-    rawRarity === "Starter" ||
-    rawRarity === "Special"
-  ) {
-    return rawRarity;
-  }
-  return undefined;
-}
-
-function cardDisplayData(card: CardContent): CardData {
-  const renderedText =
-    stringRawField(card.raw, "renderedText", "rendered-text", "rulesText", "text", "description") ??
-    "";
-  const imageNumber = numberRawField(card.raw, "imageNumber", "image-number") ??
-    card.cardNumber;
-  const isStarter =
-    booleanRawField(card.raw, "isStarter", "is-starter") ?? card.rarity === "Starter";
-
-  return {
-    id: card.id,
-    name: card.name,
-    cardNumber: card.cardNumber,
-    cardType: normalizeCardType(card.cardType),
-    subtype: stringRawField(card.raw, "subtype") ?? "",
-    isStarter,
-    rarity: normalizeRarityForDisplay(stringRawField(card.raw, "rarity")),
-    energyCost: card.energyCost === "*" ? null : card.energyCost,
-    spark: typeof card.spark === "number" ? card.spark : null,
-    isFast: booleanRawField(card.raw, "isFast", "is-fast") ?? false,
-    tides: [...card.tides],
-    renderedText,
-    imageNumber,
-    artOwned: booleanRawField(card.raw, "artOwned", "art-owned") ?? true,
-  };
-}
-
 function buildCardChooserCandidates(
   request: CardChooserRequest,
   context: JourneyContext,
@@ -283,7 +204,7 @@ function buildCardChooserCandidates(
           cardId: entry.card.id,
           name: entry.card.name,
           rulesText: cardRulesText(entry.card),
-          card: cardDisplayData(entry.card),
+          card: cardContentToDisplayData(entry.card),
         },
       ];
     });
@@ -303,7 +224,7 @@ function buildCardChooserCandidates(
         cardId: card.id,
         name: card.name,
         rulesText: cardRulesText(card),
-        card: cardDisplayData(card),
+        card: cardContentToDisplayData(card),
       },
     ];
   });
@@ -826,6 +747,10 @@ function JourneyScreenInner({
                 imageUrl={assignment.imageUrl}
                 dreamName={assignment.dreamName}
                 text={branch.text}
+                referencedCards={findReferencedCardPreviews(
+                  branch.text,
+                  context.content.cards,
+                )}
                 locked={branch.locked}
                 hovered={hoveredOptionKey === key}
                 onMouseEnter={() => setHoveredOptionKey(key)}
@@ -888,6 +813,10 @@ function JourneyScreenInner({
               imageUrl={assignment.imageUrl}
               dreamName={assignment.dreamName}
               text={resolved.text}
+              referencedCards={findReferencedCardPreviews(
+                resolved.text,
+                context.content.cards,
+              )}
               locked={resolved.locked}
               hovered={hoveredOptionKey === key}
               onMouseEnter={() => setHoveredOptionKey(key)}

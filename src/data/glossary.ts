@@ -121,7 +121,7 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   {
     term: "Unstoppable",
     definition: "Scores points when dissolving a defender during challenges.",
-    variants: ["unbound"],
+    variants: ["unstoppable"],
   },
   {
     term: "Echo",

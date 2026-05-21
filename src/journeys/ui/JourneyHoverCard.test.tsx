@@ -19,6 +19,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { HTMLAttributes, ReactNode } from "react";
 
+import type { CardData } from "../../types/cards";
 import { JourneyHoverCard } from "./JourneyHoverCard";
 
 // Mock framer-motion so the rendered DOM matches the JSX one-to-one and we
@@ -73,6 +74,24 @@ function queryTermHeadings(container: HTMLElement): string[] {
   return Array.from(stack.children)
     .map((panel) => panel.querySelector("p")?.textContent ?? "")
     .filter((text) => text.length > 0);
+}
+
+function makeCard(name: string, cardNumber: number): CardData {
+  return {
+    id: `card-${String(cardNumber)}`,
+    name,
+    cardNumber,
+    cardType: "Event",
+    subtype: "Spell",
+    isStarter: false,
+    energyCost: 1,
+    spark: null,
+    isFast: false,
+    tides: [],
+    renderedText: `${name} rules text.`,
+    imageNumber: cardNumber,
+    artOwned: true,
+  };
 }
 
 describe("JourneyHoverCard", () => {
@@ -144,5 +163,22 @@ describe("JourneyHoverCard", () => {
       "Transfigure",
       "Foresee",
     ]);
+  });
+
+  it("renders referenced card previews beside the ability text", () => {
+    const { container } = trackedMount(
+      <JourneyHoverCard
+        dreamName="Iron Front"
+        text="Gain 'Spell Tome'. Purge 'Ringwatcher'."
+        referencedCards={[makeCard("Spell Tome", 101), makeCard("Ringwatcher", 102)]}
+      />,
+    );
+
+    const stack = container.querySelector<HTMLElement>(
+      '[data-testid="journey-hover-card-preview-stack"]',
+    );
+    expect(stack).not.toBeNull();
+    expect(stack?.textContent).toContain("Spell Tome");
+    expect(stack?.textContent).toContain("Ringwatcher");
   });
 });
