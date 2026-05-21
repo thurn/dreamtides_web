@@ -574,6 +574,35 @@ describe("PlayableBattleScreen", () => {
       browser?.querySelector(`[data-zone-browser-card-id="${battleCardId ?? ""}"]`),
     ).not.toBeNull();
 
+    const secondHandCard = container.querySelector<HTMLElement>(
+      '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
+    );
+    if (secondHandCard === null) {
+      throw new Error("expected another player hand card");
+    }
+    const secondHandCardId = secondHandCard.getAttribute("data-battle-card-id");
+
+    act(() => {
+      secondHandCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(browser?.getAttribute("data-battle-zone-drop-target")).toBe("player:void");
+
+    act(() => {
+      browser?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    expect(
+      container.querySelector(
+        `[data-battle-zone-browser="player:void"] [data-zone-browser-card-id="${secondHandCardId ?? ""}"]`,
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        `[data-battle-region="player-hand-tray"] [data-battle-card-id="${secondHandCardId ?? ""}"]`,
+      ),
+    ).toBeNull();
+
     const browserCard = browser?.querySelector<HTMLElement>(
       `[data-battle-card-id="${battleCardId ?? ""}"]`,
     );

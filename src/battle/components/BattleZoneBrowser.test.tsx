@@ -37,6 +37,7 @@ function mount(
   onCardContextMenu: ReturnType<typeof vi.fn>;
   onCardDragEnd: ReturnType<typeof vi.fn>;
   onCardDragStart: ReturnType<typeof vi.fn>;
+  onCardDropToBrowser: ReturnType<typeof vi.fn>;
   onOpenForesee: ReturnType<typeof vi.fn>;
   onOpenReorderMultiple: ReturnType<typeof vi.fn>;
   root: Root;
@@ -48,6 +49,7 @@ function mount(
   const onCardContextMenu = vi.fn();
   const onCardDragEnd = vi.fn();
   const onCardDragStart = vi.fn();
+  const onCardDropToBrowser = vi.fn();
   const onOpenForesee = vi.fn();
   const onOpenReorderMultiple = vi.fn();
   const container = document.createElement("div");
@@ -67,6 +69,8 @@ function mount(
         onCardContextMenu={onCardContextMenu}
         onCardDragStart={onCardDragStart}
         onCardDragEnd={onCardDragEnd}
+        onCardDropToBrowser={onCardDropToBrowser}
+        pendingDragSourceSurface="hand-tray"
       />,
     );
   });
@@ -77,6 +81,7 @@ function mount(
     onCardContextMenu,
     onCardDragEnd,
     onCardDragStart,
+    onCardDropToBrowser,
     onOpenForesee,
     onOpenReorderMultiple,
     root,
@@ -227,7 +232,7 @@ describe("BattleZoneBrowser", () => {
 
   it("renders void and banished as compact floating browsers with draggable cards", () => {
     let voidCardId = "";
-    const { container, onCardDragEnd, onCardDragStart, root } = mount(
+    const { container, onCardDragEnd, onCardDragStart, onCardDropToBrowser, root } = mount(
       { side: "player", zone: "void" },
       {
         mutateState: (state) => {
@@ -244,6 +249,10 @@ describe("BattleZoneBrowser", () => {
     expect(
       container.querySelector("[data-battle-zone-browser]")?.getAttribute("data-battle-zone-browser-floating"),
     ).toBe("true");
+    expect(
+      container.querySelector("[data-battle-zone-browser]")?.getAttribute("data-battle-zone-drop-target"),
+    ).toBe("player:void");
+    expect(container.querySelector(".m-head .btn.ghost")).not.toBeNull();
 
     const browserCard = container.querySelector<HTMLElement>("[data-battle-card-id]");
     expect(browserCard).not.toBeNull();
@@ -251,10 +260,14 @@ describe("BattleZoneBrowser", () => {
     act(() => {
       browserCard?.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
       browserCard?.dispatchEvent(new Event("dragend", { bubbles: true, cancelable: true }));
+      container.querySelector("[data-battle-zone-browser]")?.dispatchEvent(
+        new Event("drop", { bubbles: true, cancelable: true }),
+      );
     });
 
     expect(onCardDragStart).toHaveBeenCalledWith(voidCardId, "zone-browser-void");
     expect(onCardDragEnd).toHaveBeenCalled();
+    expect(onCardDropToBrowser).toHaveBeenCalledWith("hand-tray");
 
     act(() => {
       root.unmount();
@@ -273,6 +286,7 @@ describe("BattleZoneBrowser", () => {
 
     expect(banished.container.querySelector(".modal-scrim")).toBeNull();
     expect(banished.container.querySelector(".compact-zone-browser")).not.toBeNull();
+    expect(banished.container.querySelector(".m-head .btn.ghost")).not.toBeNull();
 
     const banishedCard = banished.container.querySelector<HTMLElement>("[data-battle-card-id]");
     act(() => {

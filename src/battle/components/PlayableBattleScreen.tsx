@@ -545,6 +545,12 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           onCardContextMenu={handleCardContextMenu}
           onCardDragStart={handleCardDragStart}
           onCardDragEnd={() => setPendingDrag(null)}
+          onCardDropToBrowser={(sourceSurface) => handleZoneDrop(
+            openZoneBrowser.side,
+            openZoneBrowser.zone,
+            sourceSurface,
+          )}
+          pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
         />
       ) : null}
       {openForeseeOverlay !== null ? (

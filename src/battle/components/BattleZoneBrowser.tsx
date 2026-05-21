@@ -32,6 +32,8 @@ export function BattleZoneBrowser({
   onCardContextMenu,
   onCardDragEnd,
   onCardDragStart,
+  onCardDropToBrowser,
+  pendingDragSourceSurface = null,
 }: {
   browser: {
     side: BattleSide;
@@ -53,6 +55,8 @@ export function BattleZoneBrowser({
     battleCardId: string,
     sourceSurface: BattleCommandSourceSurface,
   ) => void;
+  onCardDropToBrowser?: (sourceSurface: BattleCommandSourceSurface) => void;
+  pendingDragSourceSurface?: BattleCommandSourceSurface | null;
 }) {
   const [query, setQuery] = useState("");
   const [sortMode, setSortMode] = useState<BattleZoneBrowserSortMode>("current");
@@ -73,6 +77,7 @@ export function BattleZoneBrowser({
     [cardIds, query, sortMode, state, typeFilter],
   );
   const topDeckCount = Math.min(3, cardIds.length);
+  const isDropTarget = pendingDragSourceSurface !== null && onCardDropToBrowser !== undefined;
 
   useEffect(() => {
     searchInputRef.current?.focus();
@@ -190,8 +195,22 @@ export function BattleZoneBrowser({
         className={modalClassName}
         data-battle-zone-browser={`${browser.side}:${browser.zone}`}
         data-battle-zone-browser-floating={usesFloatingBrowser ? "true" : undefined}
+        data-battle-zone-drop-target={isDropTarget ? `${browser.side}:${browser.zone}` : undefined}
         style={modalStyle}
         onClick={(event) => event.stopPropagation()}
+        onDragOver={(event) => {
+          if (isDropTarget) {
+            event.preventDefault();
+          }
+        }}
+        onDrop={(event) => {
+          if (!isDropTarget || pendingDragSourceSurface === null) {
+            return;
+          }
+          event.preventDefault();
+          event.stopPropagation();
+          onCardDropToBrowser(pendingDragSourceSurface);
+        }}
       >
         <div
           className="m-head"
