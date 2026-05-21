@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import { flushSync } from "react-dom";
+import { useEffect, useRef, useState } from "react";
 import { DreamcallerPortrait } from "../../components/DreamcallerPortrait";
 import type {
   BattleDreamcallerSummary,
@@ -8,25 +7,7 @@ import type {
 } from "../types";
 
 const STAT_COMMIT_DELAY_MS = 200;
-const STAT_COMMIT_IDLE_TIMEOUT_MS = 1_000;
 const STAT_FIREBASE_ECHO_BLOCK_MS = 10_000;
-
-type IdleDeadlineLike = {
-  didTimeout: boolean;
-  timeRemaining: () => number;
-};
-
-type IdleWindow = Window & {
-  requestIdleCallback?: (
-    callback: (deadline: IdleDeadlineLike) => void,
-    options?: { timeout?: number },
-  ) => number;
-  cancelIdleCallback?: (handle: number) => void;
-};
-
-type DeferredCommitHandle =
-  | { kind: "idle"; handle: number }
-  | { kind: "timeout"; handle: number };
 
 export function BattleStatusStrip({
   dreamcaller = null,
@@ -132,11 +113,9 @@ function LocalStatusStat({
   const [localValue, setLocalValue] = useState(externalValue);
   const [isEditingLocally, setIsEditingLocally] = useState(false);
   const commitTimerRef = useRef<number | null>(null);
-  const deferredCommitRef = useRef<DeferredCommitHandle | null>(null);
   const releaseTimerRef = useRef<number | null>(null);
   const latestExternalValueRef = useRef(externalValue);
   const latestLocalValueRef = useRef(externalValue);
-  const ignoreNextClickRef = useRef(false);
 
   useEffect(() => {
     latestExternalValueRef.current = externalValue;
@@ -150,7 +129,6 @@ function LocalStatusStat({
     if (commitTimerRef.current !== null) {
       window.clearTimeout(commitTimerRef.current);
     }
-    cancelDeferredCommit(deferredCommitRef);
     if (releaseTimerRef.current !== null) {
       window.clearTimeout(releaseTimerRef.current);
     }
@@ -159,21 +137,15 @@ function LocalStatusStat({
   function adjust(amount: number): void {
     const next = latestLocalValueRef.current + amount;
     latestLocalValueRef.current = next;
-    flushSync(() => {
-      setIsEditingLocally(true);
-      setLocalValue(next);
-    });
+    setIsEditingLocally(true);
+    setLocalValue(next);
 
     if (commitTimerRef.current !== null) {
       window.clearTimeout(commitTimerRef.current);
     }
-    cancelDeferredCommit(deferredCommitRef);
     commitTimerRef.current = window.setTimeout(() => {
       commitTimerRef.current = null;
-      deferredCommitRef.current = scheduleDeferredCommit(() => {
-        deferredCommitRef.current = null;
-        onCommit(latestLocalValueRef.current);
-      });
+      onCommit(latestLocalValueRef.current);
     }, STAT_COMMIT_DELAY_MS);
 
     if (releaseTimerRef.current !== null) {
@@ -185,27 +157,6 @@ function LocalStatusStat({
       latestLocalValueRef.current = latestExternalValueRef.current;
       setLocalValue(latestExternalValueRef.current);
     }, STAT_FIREBASE_ECHO_BLOCK_MS);
-  }
-
-  function handlePointerDown(
-    event: ReactPointerEvent<HTMLButtonElement>,
-    amount: number,
-  ): void {
-    if (event.button !== 0) {
-      return;
-    }
-
-    ignoreNextClickRef.current = true;
-    adjust(amount);
-  }
-
-  function handleClick(amount: number): void {
-    if (ignoreNextClickRef.current) {
-      ignoreNextClickRef.current = false;
-      return;
-    }
-
-    adjust(amount);
   }
 
   return (
@@ -224,8 +175,7 @@ function LocalStatusStat({
           type="button"
           aria-label={decrementLabel}
           className="stat-stepper-button"
-          onPointerDown={(event) => handlePointerDown(event, -1)}
-          onClick={() => handleClick(-1)}
+          onClick={() => adjust(-1)}
         >
           {"<"}
         </button>
@@ -234,45 +184,11 @@ function LocalStatusStat({
           type="button"
           aria-label={incrementLabel}
           className="stat-stepper-button"
-          onPointerDown={(event) => handlePointerDown(event, 1)}
-          onClick={() => handleClick(1)}
+          onClick={() => adjust(1)}
         >
           {">"}
         </button>
       </span>
     </div>
   );
-}
-
-function scheduleDeferredCommit(callback: () => void): DeferredCommitHandle {
-  const idleWindow = window as IdleWindow;
-  if (typeof idleWindow.requestIdleCallback === "function") {
-    return {
-      kind: "idle",
-      handle: idleWindow.requestIdleCallback(
-        callback,
-        { timeout: STAT_COMMIT_IDLE_TIMEOUT_MS },
-      ),
-    };
-  }
-
-  return {
-    kind: "timeout",
-    handle: window.setTimeout(callback, 1),
-  };
-}
-
-function cancelDeferredCommit(ref: { current: DeferredCommitHandle | null }): void {
-  const current = ref.current;
-  if (current === null) {
-    return;
-  }
-
-  if (current.kind === "idle") {
-    const idleWindow = window as IdleWindow;
-    idleWindow.cancelIdleCallback?.(current.handle);
-  } else {
-    window.clearTimeout(current.handle);
-  }
-  ref.current = null;
 }

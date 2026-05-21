@@ -167,88 +167,11 @@ describe("BattleStatusStrip", () => {
     expect(onSetEnergy).not.toHaveBeenCalled();
 
     act(() => {
-      vi.advanceTimersByTime(201);
+      vi.advanceTimersByTime(200);
     });
 
     expect(onSetScore).toHaveBeenCalledWith(10);
     expect(onSetEnergy).toHaveBeenCalledWith(1);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("updates on pointer down and suppresses the follow-up click", () => {
-    vi.useFakeTimers();
-    const { container, onSetScore, root } = mount();
-    const increaseScore = container.querySelector<HTMLButtonElement>(
-      'button[aria-label="Increase your points"]',
-    );
-
-    act(() => {
-      increaseScore?.dispatchEvent(new MouseEvent("pointerdown", { bubbles: true, button: 0 }));
-    });
-
-    expect(container.querySelector('[data-battle-stat="player:score"]')?.getAttribute("data-battle-value"))
-      .toBe("10");
-
-    act(() => {
-      increaseScore?.click();
-    });
-
-    expect(container.querySelector('[data-battle-stat="player:score"]')?.getAttribute("data-battle-value"))
-      .toBe("10");
-
-    act(() => {
-      vi.advanceTimersByTime(201);
-    });
-
-    expect(onSetScore).toHaveBeenCalledWith(10);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("keeps commit work out of the immediate click path", () => {
-    vi.useFakeTimers();
-    const idleCallbacks: Array<() => void> = [];
-    const idleWindow = window as Window & {
-      requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => number;
-      cancelIdleCallback?: (handle: number) => void;
-    };
-    const originalRequestIdleCallback = idleWindow.requestIdleCallback;
-    const originalCancelIdleCallback = idleWindow.cancelIdleCallback;
-    idleWindow.requestIdleCallback = vi.fn((callback: () => void) => {
-      idleCallbacks.push(callback);
-      return idleCallbacks.length;
-    });
-    idleWindow.cancelIdleCallback = vi.fn();
-    const { container, onSetScore, root } = mount();
-
-    act(() => {
-      container.querySelector<HTMLButtonElement>('button[aria-label="Increase your points"]')?.click();
-    });
-
-    expect(container.querySelector('[data-battle-stat="player:score"]')?.getAttribute("data-battle-value"))
-      .toBe("10");
-    expect(onSetScore).not.toHaveBeenCalled();
-
-    act(() => {
-      vi.advanceTimersByTime(200);
-    });
-
-    expect(idleWindow.requestIdleCallback).toHaveBeenCalledTimes(1);
-    expect(onSetScore).not.toHaveBeenCalled();
-
-    act(() => {
-      idleCallbacks[0]?.();
-    });
-
-    expect(onSetScore).toHaveBeenCalledWith(10);
-
-    idleWindow.requestIdleCallback = originalRequestIdleCallback;
-    idleWindow.cancelIdleCallback = originalCancelIdleCallback;
 
     act(() => {
       root.unmount();
