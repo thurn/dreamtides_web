@@ -1792,24 +1792,34 @@ describe("PlayableBattleScreen", () => {
     act(() => {
       container.querySelector<HTMLButtonElement>('button[aria-label="Increase your points"]')?.click();
       container.querySelector<HTMLButtonElement>('button[aria-label="Decrease your energy"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Increase your maximum energy and refill energy"]')
+        ?.click();
       container.querySelector<HTMLButtonElement>('button[aria-label="Decrease enemy points"]')?.click();
       container.querySelector<HTMLButtonElement>('button[aria-label="Increase enemy energy"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Increase enemy maximum energy and refill energy"]')
+        ?.click();
     });
 
     expect(container.querySelector('[data-battle-stat="player:score"]')?.getAttribute("data-battle-value"))
       .toBe("5");
     expect(container.querySelector('[data-battle-stat="player:energy"]')?.getAttribute("data-battle-current-energy"))
-      .toBe("1");
+      .toBe("6");
     expect(container.querySelector('[data-battle-stat="player:energy"]')?.getAttribute("data-battle-max-energy"))
-      .toBe("5");
+      .toBe("6");
     expect(container.querySelector('[data-battle-stat="enemy:score"]')?.getAttribute("data-battle-value"))
       .toBe("6");
     expect(container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-current-energy"))
-      .toBe("4");
+      .toBe("7");
     expect(container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-max-energy"))
-      .toBe("6");
+      .toBe("7");
 
-    expect(getLogEntries().some((entry) => entry.event === "battle_proto_command_applied")).toBe(false);
+    expect(getLogEntries().some((entry) =>
+      entry.event === "battle_proto_command_applied" &&
+      entry.commandId === "INCREASE_MAX_ENERGY_AND_FILL" &&
+      entry.sourceSurface === "status-strip"
+    )).toBe(true);
 
     act(() => {
       vi.advanceTimersByTime(250);

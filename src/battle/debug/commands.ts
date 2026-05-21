@@ -49,6 +49,10 @@ export type BattleDebugEdit =
     value: number;
   }
   | {
+    kind: "INCREASE_MAX_ENERGY_AND_FILL";
+    side: BattleSide;
+  }
+  | {
     kind: "ADJUST_SCORE";
     side: BattleSide;
     amount: number;
@@ -384,6 +388,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "ADJUST_CURRENT_ENERGY":
     case "SET_MAX_ENERGY":
     case "ADJUST_MAX_ENERGY":
+    case "INCREASE_MAX_ENERGY_AND_FILL":
       return "numeric-state";
     case "SET_CARD_SPARK":
     case "SET_CARD_SPARK_DELTA":
@@ -427,6 +432,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
  * - `MOVE_CARD_TO_ZONE`: zone transition; the battlefield-to-battlefield
  *   path also edits three fields (source slot, target slot, controller),
  *   and cross-zone moves are enough to warrant the flag for log clarity.
+ * - `INCREASE_MAX_ENERGY_AND_FILL`: edits both current and maximum energy.
  * - All simple numeric edits, flag toggles, and visibility changes stay
  *   non-composite.
  */
@@ -437,6 +443,7 @@ function isCompositeDebugEdit(edit: BattleDebugEdit): boolean {
     case "CREATE_CARD_COPY":
     case "CREATE_FIGMENT":
     case "MOVE_CARD_TO_ZONE":
+    case "INCREASE_MAX_ENERGY_AND_FILL":
       return true;
     default:
       return false;
@@ -454,6 +461,7 @@ function collectDebugEditTargets(
     case "ADJUST_CURRENT_ENERGY":
     case "SET_MAX_ENERGY":
     case "ADJUST_MAX_ENERGY":
+    case "INCREASE_MAX_ENERGY_AND_FILL":
     case "DRAW_CARD":
       return [makeSideTarget(edit.side)];
     case "SET_SIDE_HAND_VISIBILITY":
@@ -533,6 +541,8 @@ function createDebugEditLabel(
       return `Set ${formatSideLabel(edit.side)} Energy to ${String(edit.value)}`;
     case "SET_MAX_ENERGY":
       return `Set ${formatSideLabel(edit.side)} Max Energy to ${String(edit.value)}`;
+    case "INCREASE_MAX_ENERGY_AND_FILL":
+      return `Increase ${formatSideLabel(edit.side)} Max Energy and Fill Energy`;
     case "ADJUST_SCORE":
       return `${formatSignedAction(edit.amount, "Adjust")} ${formatSideLabel(edit.side)} Score`;
     case "ADJUST_CURRENT_ENERGY":

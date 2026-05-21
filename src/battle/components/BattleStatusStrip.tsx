@@ -19,6 +19,7 @@ export function BattleStatusStrip({
   isSummarySelected = false,
   onSetEnergy,
   onSetScore,
+  onIncreaseMaxEnergyAndFill,
   onCloseSummary,
   onOpenSummary,
 }: {
@@ -31,6 +32,7 @@ export function BattleStatusStrip({
   isSummarySelected?: boolean;
   onSetEnergy: (value: number) => void;
   onSetScore: (value: number) => void;
+  onIncreaseMaxEnergyAndFill: () => void;
   onCloseSummary: () => void;
   onOpenSummary: () => void;
 }) {
@@ -83,8 +85,10 @@ export function BattleStatusStrip({
           label="E"
           decrementLabel={`Decrease ${side === "player" ? "your" : "enemy"} energy`}
           incrementLabel={`Increase ${side === "player" ? "your" : "enemy"} energy`}
+          fillLabel={`Increase ${side === "player" ? "your" : "enemy"} maximum energy and refill energy`}
           renderValue={(value) => `${String(value)}/${String(sideState.maxEnergy)}`}
           onCommit={onSetEnergy}
+          onFill={onIncreaseMaxEnergyAndFill}
         />
       </div>
     </section>
@@ -96,19 +100,23 @@ function LocalStatusStat({
   externalValue,
   incrementLabel,
   label,
+  fillLabel,
   maxEnergy,
   renderValue,
   stat,
   onCommit,
+  onFill,
 }: {
   decrementLabel: string;
   externalValue: number;
   incrementLabel: string;
   label: string;
+  fillLabel?: string;
   maxEnergy?: number;
   renderValue: (value: number) => string;
   stat: string;
   onCommit: (value: number) => void;
+  onFill?: () => void;
 }) {
   const [localValue, setLocalValue] = useState(externalValue);
   const [isEditingLocally, setIsEditingLocally] = useState(false);
@@ -159,6 +167,19 @@ function LocalStatusStat({
     }, STAT_FIREBASE_ECHO_BLOCK_MS);
   }
 
+  function fill(): void {
+    if (commitTimerRef.current !== null) {
+      window.clearTimeout(commitTimerRef.current);
+      commitTimerRef.current = null;
+    }
+    if (releaseTimerRef.current !== null) {
+      window.clearTimeout(releaseTimerRef.current);
+      releaseTimerRef.current = null;
+    }
+    setIsEditingLocally(false);
+    onFill?.();
+  }
+
   return (
     <div
       data-battle-stat={stat}
@@ -170,7 +191,7 @@ function LocalStatusStat({
       className="stat"
     >
       <span className="label">{label}</span>
-      <span className="stat-stepper">
+      <span className={`stat-stepper ${onFill === undefined ? "" : "with-fill"}`}>
         <button
           type="button"
           aria-label={decrementLabel}
@@ -188,6 +209,16 @@ function LocalStatusStat({
         >
           {">"}
         </button>
+        {onFill === undefined || fillLabel === undefined ? null : (
+          <button
+            type="button"
+            aria-label={fillLabel}
+            className="stat-stepper-button"
+            onClick={fill}
+          >
+            <i className="bx bx-plus" aria-hidden="true" />
+          </button>
+        )}
       </span>
     </div>
   );

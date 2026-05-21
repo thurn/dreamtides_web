@@ -42,6 +42,7 @@ function mount(withBanished = false): {
   container: HTMLDivElement;
   onSetEnergy: ReturnType<typeof vi.fn>;
   onSetScore: ReturnType<typeof vi.fn>;
+  onIncreaseMaxEnergyAndFill: ReturnType<typeof vi.fn>;
   onCloseSummary: ReturnType<typeof vi.fn>;
   onOpenSummary: ReturnType<typeof vi.fn>;
   root: Root;
@@ -55,6 +56,7 @@ function mount(withBanished = false): {
   }
   const onCloseSummary = vi.fn();
   const onOpenSummary = vi.fn();
+  const onIncreaseMaxEnergyAndFill = vi.fn();
   const onSetEnergy = vi.fn();
   const onSetScore = vi.fn();
   const container = document.createElement("div");
@@ -78,6 +80,7 @@ function mount(withBanished = false): {
         isActive
         onSetEnergy={onSetEnergy}
         onSetScore={onSetScore}
+        onIncreaseMaxEnergyAndFill={onIncreaseMaxEnergyAndFill}
         onCloseSummary={onCloseSummary}
         onOpenSummary={onOpenSummary}
       />,
@@ -86,7 +89,15 @@ function mount(withBanished = false): {
 
   act(render);
 
-  return { container, onSetEnergy, onSetScore, onCloseSummary, onOpenSummary, root };
+  return {
+    container,
+    onSetEnergy,
+    onSetScore,
+    onIncreaseMaxEnergyAndFill,
+    onCloseSummary,
+    onOpenSummary,
+    root,
+  };
 }
 
 afterEach(() => {
@@ -178,6 +189,49 @@ describe("BattleStatusStrip", () => {
     });
   });
 
+  it("renders an energy refill button after the energy arrow controls", () => {
+    const { container, onIncreaseMaxEnergyAndFill, root } = mount();
+    const energyButtons = [
+      ...container.querySelectorAll<HTMLButtonElement>('[data-battle-stat="player:energy"] button'),
+    ];
+
+    expect(energyButtons.map((button) => button.getAttribute("aria-label"))).toEqual([
+      "Decrease your energy",
+      "Increase your energy",
+      "Increase your maximum energy and refill energy",
+    ]);
+
+    act(() => {
+      energyButtons[2]?.click();
+    });
+
+    expect(onIncreaseMaxEnergyAndFill).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("clears pending local energy commits when refilling energy", () => {
+    vi.useFakeTimers();
+    const { container, onSetEnergy, onIncreaseMaxEnergyAndFill, root } = mount();
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('button[aria-label="Decrease your energy"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Increase your maximum energy and refill energy"]')
+        ?.click();
+      vi.advanceTimersByTime(250);
+    });
+
+    expect(onIncreaseMaxEnergyAndFill).toHaveBeenCalledTimes(1);
+    expect(onSetEnergy).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("ignores external stat updates for ten seconds after a local edit", () => {
     vi.useFakeTimers();
     const state = createState();
@@ -195,6 +249,7 @@ describe("BattleStatusStrip", () => {
         isActive
         onSetEnergy={onSetEnergy}
         onSetScore={onSetScore}
+        onIncreaseMaxEnergyAndFill={vi.fn()}
         onCloseSummary={vi.fn()}
         onOpenSummary={vi.fn()}
       />,

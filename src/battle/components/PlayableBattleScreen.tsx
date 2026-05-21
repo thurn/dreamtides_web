@@ -703,6 +703,11 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   edit: { kind: "SET_CURRENT_ENERGY", side: "player", value },
                   sourceSurface: "status-strip",
                 })}
+                onIncreaseMaxEnergyAndFill={() => handleCommand({
+                  id: "DEBUG_EDIT",
+                  edit: { kind: "INCREASE_MAX_ENERGY_AND_FILL", side: "player" },
+                  sourceSurface: "status-strip",
+                })}
                 onSetScore={(value) => handleCommand({
                   id: "DEBUG_EDIT",
                   edit: { kind: "SET_SCORE", side: "player", value },
@@ -810,6 +815,11 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                 onSetEnergy={(value) => handleCommand({
                   id: "DEBUG_EDIT",
                   edit: { kind: "SET_CURRENT_ENERGY", side: "enemy", value },
+                  sourceSurface: "status-strip",
+                })}
+                onIncreaseMaxEnergyAndFill={() => handleCommand({
+                  id: "DEBUG_EDIT",
+                  edit: { kind: "INCREASE_MAX_ENERGY_AND_FILL", side: "enemy" },
                   sourceSurface: "status-strip",
                 })}
                 onSetScore={(value) => handleCommand({

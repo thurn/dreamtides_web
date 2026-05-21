@@ -435,8 +435,8 @@
 }
 
 .status-strip {
-  flex: 0 0 clamp(116px, 12vw, 142px);
-  width: clamp(116px, 12vw, 142px);
+  flex: 0 0 clamp(128px, 13vw, 154px);
+  width: clamp(128px, 13vw, 154px);
   max-height: calc(100% - 12px);
   display: flex;
   flex-direction: column;
@@ -561,6 +561,10 @@
   min-width: 0;
 }
 
+.stat-stepper.with-fill {
+  grid-template-columns: 16px minmax(2.75ch, 4.75ch) 16px 16px;
+}
+
 .stat-stepper .val {
   min-width: 0;
   overflow: hidden;
@@ -583,6 +587,16 @@
   font-size: 11px;
   line-height: 1;
   cursor: pointer;
+}
+
+.stat-stepper.with-fill .stat-stepper-button {
+  width: 16px;
+  height: 18px;
+}
+
+.stat-stepper-button .bx {
+  font-size: 13px;
+  line-height: 1;
 }
 
 .stat-stepper-button:hover,

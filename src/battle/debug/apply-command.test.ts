@@ -229,8 +229,19 @@ describe("applyBattleCommand", () => {
       },
     );
 
-    const scoreAdjusted = applyBattleCommand(
+    const filled = applyBattleCommand(
       maxAdjusted,
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "INCREASE_MAX_ENERGY_AND_FILL",
+          side: "player",
+        },
+      },
+    );
+
+    const scoreAdjusted = applyBattleCommand(
+      filled,
       {
         id: "DEBUG_EDIT",
         edit: {
@@ -241,8 +252,8 @@ describe("applyBattleCommand", () => {
       },
     );
 
-    expect(scoreAdjusted.mutable.sides.player.currentEnergy).toBe(-1);
-    expect(scoreAdjusted.mutable.sides.player.maxEnergy).toBe(5);
+    expect(scoreAdjusted.mutable.sides.player.currentEnergy).toBe(6);
+    expect(scoreAdjusted.mutable.sides.player.maxEnergy).toBe(6);
     expect(scoreAdjusted.mutable.sides.enemy.score).toBe(7);
   });
 

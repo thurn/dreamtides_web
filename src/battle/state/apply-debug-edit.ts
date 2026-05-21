@@ -103,6 +103,25 @@ export function applyDebugEdit(
           context,
         ),
       };
+    case "INCREASE_MAX_ENERGY_AND_FILL": {
+      const previousCurrentEnergy = state.sides[edit.side].currentEnergy;
+      const previousMaxEnergy = state.sides[edit.side].maxEnergy;
+      const nextMaxEnergy = previousMaxEnergy + 1;
+      nextState.sides[edit.side].maxEnergy = nextMaxEnergy;
+      nextState.sides[edit.side].currentEnergy = nextMaxEnergy;
+      return {
+        state: nextState,
+        transition: createEnergyChangeTransition(
+          state,
+          edit.side,
+          previousCurrentEnergy,
+          nextState.sides[edit.side].currentEnergy,
+          previousMaxEnergy,
+          nextState.sides[edit.side].maxEnergy,
+          context,
+        ),
+      };
+    }
     case "ADJUST_SCORE":
       if (edit.amount === 0) {
         return {
