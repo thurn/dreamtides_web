@@ -35,15 +35,9 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
   const enemyDeckCardIds = battleInit.enemyDeckDefinition.map((definition) =>
     createBattleCardInstance(state, definition, "enemy", false),
   );
-  const startingHandSize = Math.max(0, battleInit.openingHandSize - 1);
-  const playerOpeningHandSize = battleInit.startingSide === "player"
-    ? startingHandSize
-    : battleInit.openingHandSize;
-  const enemyOpeningHandSize = battleInit.startingSide === "enemy"
-    ? startingHandSize
-    : battleInit.openingHandSize;
-  const playerOpeningHand = playerDeckCardIds.slice(0, playerOpeningHandSize);
-  const enemyOpeningHand = enemyDeckCardIds.slice(0, enemyOpeningHandSize);
+  const openingHandSize = Math.max(0, battleInit.openingHandSize);
+  const playerOpeningHand = playerDeckCardIds.slice(0, openingHandSize);
+  const enemyOpeningHand = enemyDeckCardIds.slice(0, openingHandSize);
   state.sides.player.hand = playerOpeningHand;
   state.sides.player.deck = playerDeckCardIds.slice(playerOpeningHand.length);
   state.sides.enemy.hand = enemyOpeningHand;

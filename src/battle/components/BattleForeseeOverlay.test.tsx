@@ -188,12 +188,12 @@ describe("BattleForeseeOverlay", () => {
       );
     });
 
-    expect(container.textContent).toContain(
-      state.cardInstances[initialTopCard]?.definition.name ?? "",
-    );
-    expect(container.textContent).not.toContain(
-      state.cardInstances[nextCard]?.definition.name ?? "",
-    );
+    expect(
+      container.querySelector(`[data-battle-foresee-card="${initialTopCard}"]`),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(`[data-battle-foresee-card="${nextCard}"]`),
+    ).toBeNull();
 
     act(() => {
       document.querySelector<HTMLButtonElement>(
@@ -201,9 +201,9 @@ describe("BattleForeseeOverlay", () => {
       )?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(container.textContent).not.toContain(
-      state.cardInstances[nextCard]?.definition.name ?? "",
-    );
+    expect(
+      container.querySelector(`[data-battle-foresee-card="${nextCard}"]`),
+    ).toBeNull();
     expect(container.textContent).toContain("No revealed cards remain.");
     expect(container.textContent).not.toContain("Deck is empty.");
 

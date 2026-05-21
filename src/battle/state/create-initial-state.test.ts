@@ -9,7 +9,7 @@ import {
 } from "./create-initial-state";
 
 describe("createInitialBattleState", () => {
-  it("draws 4 cards for the starting side, 5 for the responder, and seeds both sides at 2/2", () => {
+  it("draws the configured opening hand size for both sides and seeds both sides at 2/2", () => {
     const battleInit = createBattleInit({
       battleEntryKey: "site-7::2::dreamscape-2",
       site: makeBattleTestSite(),
@@ -29,10 +29,10 @@ describe("createInitialBattleState", () => {
     expect(state.sides.player.maxEnergy).toBe(2);
     expect(state.sides.enemy.currentEnergy).toBe(2);
     expect(state.sides.enemy.maxEnergy).toBe(2);
-    expect(state.sides.player.hand).toHaveLength(4);
-    expect(state.sides.enemy.hand).toHaveLength(5);
+    expect(state.sides.player.hand).toHaveLength(battleInit.openingHandSize);
+    expect(state.sides.enemy.hand).toHaveLength(battleInit.openingHandSize);
     expect(state.sides.player.deck).toHaveLength(
-      battleInit.playerDeckOrder.length - 4,
+      battleInit.playerDeckOrder.length - battleInit.openingHandSize,
     );
     expect(state.sides.enemy.deck).toHaveLength(
       battleInit.enemyDeckDefinition.length - battleInit.openingHandSize,
@@ -70,8 +70,8 @@ describe("createInitialBattleState", () => {
     expect(state.sides.player.maxEnergy).toBe(2);
     expect(state.sides.enemy.currentEnergy).toBe(2);
     expect(state.sides.enemy.maxEnergy).toBe(2);
-    // Opening hand dealt by createInitialBattleState; no extra Dawn draw runs.
-    expect(state.sides.player.hand).toHaveLength(4);
+    expect(state.sides.player.hand).toHaveLength(battleInit.openingHandSize);
+    expect(state.sides.enemy.hand).toHaveLength(battleInit.openingHandSize);
     // Empty board on both sides.
     for (const side of ["player", "enemy"] as const) {
       expect(state.sides[side].void).toEqual([]);
