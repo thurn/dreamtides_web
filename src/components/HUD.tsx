@@ -98,6 +98,7 @@ export function HUD({
       // the dreamcaller subtitle below lg so it never collides with the
       // Dreamsigns counter.
       className="fixed right-0 bottom-0 left-0 z-50 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 px-3 py-2 md:gap-x-6 md:px-6 lg:grid-cols-[minmax(0,1fr)_auto_auto]"
+      data-quest-bottom-hud=""
       style={{
         background:
           "linear-gradient(180deg, rgba(10, 6, 18, 0.85) 0%, rgba(10, 6, 18, 0.95) 100%)",

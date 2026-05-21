@@ -59,6 +59,9 @@ const HOVER_GAP_PX = 8;
 /** Padding (px) the hover wrapper refuses to cross at the viewport edges. */
 const HOVER_VIEWPORT_PADDING_PX = 6;
 
+/** Selector for the fixed bottom HUD that visually reserves viewport space. */
+const BOTTOM_HUD_SELECTOR = "[data-quest-bottom-hud]";
+
 type HoverSide = "below" | "above";
 
 interface HoverPlacement {
@@ -87,6 +90,21 @@ function buildHoverWrapperStyle(placement: HoverPlacement): CSSProperties {
     overflowY: "auto",
     pointerEvents: "auto",
   };
+}
+
+function getReservedBottomInsetPx(viewportHeight: number): number {
+  if (typeof document === "undefined") {
+    return 0;
+  }
+  const hud = document.querySelector<HTMLElement>(BOTTOM_HUD_SELECTOR);
+  if (hud === null) {
+    return 0;
+  }
+  const hudRect = hud.getBoundingClientRect();
+  if (hudRect.height <= 0 || hudRect.bottom <= 0) {
+    return 0;
+  }
+  return Math.max(0, viewportHeight - Math.max(0, hudRect.top));
 }
 
 /** Circular dream-art image control. */
@@ -133,8 +151,10 @@ export function JourneyOptionCircle({
     const hoverRect = hover.getBoundingClientRect();
     const viewportHeight =
       typeof window === "undefined" ? 0 : window.innerHeight;
+    const reservedBottomInset = getReservedBottomInsetPx(viewportHeight);
     const spaceBelow =
       viewportHeight -
+      reservedBottomInset -
       buttonRect.bottom -
       HOVER_GAP_PX -
       HOVER_VIEWPORT_PADDING_PX;
@@ -155,14 +175,7 @@ export function JourneyOptionCircle({
       // as fit stay on-screen; the remainder becomes vertically scrollable
       // instead of clipping off the viewport edge.
       nextSide = spaceBelow >= spaceAbove ? "below" : "above";
-      nextMaxHeight = Math.max(
-        spaceBelow,
-        spaceAbove,
-        // Always allow at least the prose tooltip itself to render — well
-        // below the typical option-text height so cards never collapse to a
-        // zero-height strip.
-        160,
-      );
+      nextMaxHeight = Math.max(spaceBelow, spaceAbove, 0);
     }
     setPlacement({ side: nextSide, maxHeightPx: nextMaxHeight });
   }, [hovered, text]);
