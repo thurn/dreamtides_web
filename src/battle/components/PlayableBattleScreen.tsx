@@ -693,32 +693,40 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   createMoveCardToZoneCommand(battleCardId, side, "void", "battlefield"),
                 )}
               />
-              <BattleStatusStrip
-                dreamcaller={battleInit.dreamcallerSummary}
-                side="player"
-                sideState={reducerState.mutable.sides.player}
-                subtitle={battleInit.dreamcallerSummary?.title ?? ""}
-                title={battleInit.dreamcallerSummary?.name ?? "Player"}
-                isActive={reducerState.mutable.activeSide === "player"}
-                isSummarySelected={openSideSummary === "player"}
-                onSetEnergy={(value) => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "SET_CURRENT_ENERGY", side: "player", value },
-                  sourceSurface: "status-strip",
-                })}
-                onIncreaseMaxEnergyAndFill={() => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "INCREASE_MAX_ENERGY_AND_FILL", side: "player" },
-                  sourceSurface: "status-strip",
-                })}
-                onSetScore={(value) => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "SET_SCORE", side: "player", value },
-                  sourceSurface: "status-strip",
-                })}
-                onOpenSummary={() => handleOpenSummary("player")}
-                onCloseSummary={() => handleCloseSummary("player")}
-              />
+              <div className="battle-side-zone-column player">
+                <BattleVoidDropZone
+                  side="player"
+                  pendingDrag={pendingDrag}
+                  onDrop={(sourceSurface) => handleZoneDrop("player", "void", sourceSurface)}
+                  onOpen={() => handleOpenZoneBrowser("player", "void")}
+                />
+                <BattleStatusStrip
+                  dreamcaller={battleInit.dreamcallerSummary}
+                  side="player"
+                  sideState={reducerState.mutable.sides.player}
+                  subtitle={battleInit.dreamcallerSummary?.title ?? ""}
+                  title={battleInit.dreamcallerSummary?.name ?? "Player"}
+                  isActive={reducerState.mutable.activeSide === "player"}
+                  isSummarySelected={openSideSummary === "player"}
+                  onSetEnergy={(value) => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "SET_CURRENT_ENERGY", side: "player", value },
+                    sourceSurface: "status-strip",
+                  })}
+                  onIncreaseMaxEnergyAndFill={() => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "INCREASE_MAX_ENERGY_AND_FILL", side: "player" },
+                    sourceSurface: "status-strip",
+                  })}
+                  onSetScore={(value) => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "SET_SCORE", side: "player", value },
+                    sourceSurface: "status-strip",
+                  })}
+                  onOpenSummary={() => handleOpenSummary("player")}
+                  onCloseSummary={() => handleCloseSummary("player")}
+                />
+              </div>
               <ScaledBattlefield>
                 <div className="battlefield">
                   <BattlefieldGrid
@@ -807,32 +815,40 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   />
                 </div>
               </ScaledBattlefield>
-              <BattleStatusStrip
-                side="enemy"
-                dreamcaller={enemyDreamcallerSummary}
-                sideState={reducerState.mutable.sides.enemy}
-                subtitle={battleInit.enemyDescriptor.subtitle}
-                title={battleInit.enemyDescriptor.name}
-                isActive={reducerState.mutable.activeSide === "enemy"}
-                isSummarySelected={openSideSummary === "enemy"}
-                onSetEnergy={(value) => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "SET_CURRENT_ENERGY", side: "enemy", value },
-                  sourceSurface: "status-strip",
-                })}
-                onIncreaseMaxEnergyAndFill={() => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "INCREASE_MAX_ENERGY_AND_FILL", side: "enemy" },
-                  sourceSurface: "status-strip",
-                })}
-                onSetScore={(value) => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "SET_SCORE", side: "enemy", value },
-                  sourceSurface: "status-strip",
-                })}
-                onOpenSummary={() => handleOpenSummary("enemy")}
-                onCloseSummary={() => handleCloseSummary("enemy")}
-              />
+              <div className="battle-side-zone-column enemy">
+                <BattleStatusStrip
+                  side="enemy"
+                  dreamcaller={enemyDreamcallerSummary}
+                  sideState={reducerState.mutable.sides.enemy}
+                  subtitle={battleInit.enemyDescriptor.subtitle}
+                  title={battleInit.enemyDescriptor.name}
+                  isActive={reducerState.mutable.activeSide === "enemy"}
+                  isSummarySelected={openSideSummary === "enemy"}
+                  onSetEnergy={(value) => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "SET_CURRENT_ENERGY", side: "enemy", value },
+                    sourceSurface: "status-strip",
+                  })}
+                  onIncreaseMaxEnergyAndFill={() => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "INCREASE_MAX_ENERGY_AND_FILL", side: "enemy" },
+                    sourceSurface: "status-strip",
+                  })}
+                  onSetScore={(value) => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "SET_SCORE", side: "enemy", value },
+                    sourceSurface: "status-strip",
+                  })}
+                  onOpenSummary={() => handleOpenSummary("enemy")}
+                  onCloseSummary={() => handleCloseSummary("enemy")}
+                />
+                <BattleVoidDropZone
+                  side="enemy"
+                  pendingDrag={pendingDrag}
+                  onDrop={(sourceSurface) => handleZoneDrop("enemy", "void", sourceSurface)}
+                  onOpen={() => handleOpenZoneBrowser("enemy", "void")}
+                />
+              </div>
             </div>
           </div>
           <div className={isOpponentHandRevealed ? "player-hand-zone compact" : "player-hand-zone"}>
@@ -964,6 +980,46 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
         </button>
       ) : null}
     </div>
+  );
+}
+
+function BattleVoidDropZone({
+  side,
+  pendingDrag,
+  onDrop,
+  onOpen,
+}: {
+  side: BattleSide;
+  pendingDrag: PendingDragState;
+  onDrop: (sourceSurface: BattleCommandSourceSurface) => void;
+  onOpen: () => void;
+}) {
+  const isDropTarget = pendingDrag !== null;
+
+  return (
+    <button
+      type="button"
+      data-battle-region={`${side}-void-zone`}
+      data-battle-zone-open={`${side}:void`}
+      data-battle-zone-drop-target={isDropTarget ? `${side}:void` : undefined}
+      className={`battle-void-zone ${side} ${isDropTarget ? "drop-target" : ""}`}
+      onClick={onOpen}
+      onDragOver={(event) => {
+        if (isDropTarget) {
+          event.preventDefault();
+        }
+      }}
+      onDrop={(event) => {
+        if (pendingDrag === null) {
+          return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        onDrop(pendingDrag.sourceSurface);
+      }}
+    >
+      <span>Void</span>
+    </button>
   );
 }
 

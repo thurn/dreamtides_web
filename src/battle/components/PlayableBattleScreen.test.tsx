@@ -244,6 +244,7 @@ describe("PlayableBattleScreen", () => {
     ).toEqual([
       "status-bar",
       "stack-zone",
+      "player-void-zone",
       "player-status-strip",
       "enemy-reserve-row",
       "enemy-deployed-row",
@@ -251,15 +252,20 @@ describe("PlayableBattleScreen", () => {
       "player-deployed-row",
       "player-reserve-row",
       "enemy-status-strip",
+      "enemy-void-zone",
       "player-hand-tray",
       "action-bar",
     ]);
     expect(container.querySelector('[data-battle-region="stack-zone"]')?.parentElement?.className)
       .toContain("battlefield-zone-layout");
     expect(container.querySelector('[data-battle-region="player-status-strip"]')?.parentElement?.className)
-      .toContain("battlefield-zone-layout");
+      .toContain("battle-side-zone-column");
     expect(container.querySelector('[data-battle-region="enemy-status-strip"]')?.parentElement?.className)
-      .toContain("battlefield-zone-layout");
+      .toContain("battle-side-zone-column");
+    expect(container.querySelector('[data-battle-region="player-void-zone"]')?.parentElement?.className)
+      .toContain("battle-side-zone-column");
+    expect(container.querySelector('[data-battle-region="enemy-void-zone"]')?.parentElement?.className)
+      .toContain("battle-side-zone-column");
     expect(container.textContent).toContain("You");
     expect(container.textContent).toContain("Enemy");
     expect(container.textContent).toContain("Undo");
@@ -517,6 +523,56 @@ describe("PlayableBattleScreen", () => {
     expect(
       container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id"),
     ).toBe(firstHandCard.getAttribute("data-battle-card-id"));
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("drops a player hand card into the player void zone and opens the void browser", () => {
+    const { container, root } = renderScreen();
+    const firstHandCard = container.querySelector<HTMLElement>(
+      '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
+    );
+    const voidZone = container.querySelector<HTMLElement>('[data-battle-region="player-void-zone"]');
+
+    if (firstHandCard === null || voidZone === null) {
+      throw new Error("expected player hand card and void zone");
+    }
+    const battleCardId = firstHandCard.getAttribute("data-battle-card-id");
+
+    act(() => {
+      firstHandCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(voidZone.getAttribute("data-battle-zone-drop-target")).toBe("player:void");
+
+    act(() => {
+      voidZone.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    expect(
+      container.querySelector(
+        `[data-battle-region="player-hand-tray"] [data-battle-card-id="${battleCardId ?? ""}"]`,
+      ),
+    ).toBeNull();
+    expect(container.querySelector('[data-battle-zone-browser="player:void"]')).toBeNull();
+
+    act(() => {
+      voidZone.click();
+    });
+
+    const browser = container.querySelector<HTMLElement>('[data-battle-zone-browser="player:void"]');
+    expect(browser?.textContent).toContain("Your Void");
+    expect(
+      browser?.querySelector(`[data-zone-browser-card-id="${battleCardId ?? ""}"]`),
+    ).not.toBeNull();
+
+    act(() => {
+      browser?.querySelector<HTMLButtonElement>(".m-head .btn.ghost")?.click();
+    });
+
+    expect(container.querySelector('[data-battle-zone-browser="player:void"]')).toBeNull();
 
     act(() => {
       root.unmount();
@@ -945,7 +1001,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("does not expose status-strip zone targets for debug movement", () => {
+  it("exposes void drop zones beside both status strips", () => {
     const { container, root } = renderScreen();
 
     act(() => {
@@ -963,8 +1019,22 @@ describe("PlayableBattleScreen", () => {
       opponentCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
     });
 
-    expect(container.querySelector('[data-battle-zone-open="enemy:void"]')).toBeNull();
-    expect(container.querySelector('[data-battle-zone-open="player:void"]')).toBeNull();
+    expect(
+      container.querySelector('[data-battle-region="enemy-void-zone"]')
+        ?.getAttribute("data-battle-zone-open"),
+    ).toBe("enemy:void");
+    expect(
+      container.querySelector('[data-battle-region="player-void-zone"]')
+        ?.getAttribute("data-battle-zone-open"),
+    ).toBe("player:void");
+    expect(
+      container.querySelector('[data-battle-region="enemy-void-zone"]')
+        ?.getAttribute("data-battle-zone-drop-target"),
+    ).toBe("enemy:void");
+    expect(
+      container.querySelector('[data-battle-region="player-void-zone"]')
+        ?.getAttribute("data-battle-zone-drop-target"),
+    ).toBe("player:void");
 
     act(() => {
       root.unmount();

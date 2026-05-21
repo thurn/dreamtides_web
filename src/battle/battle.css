@@ -274,6 +274,60 @@
   overflow: hidden;
 }
 
+.battle-side-zone-column {
+  flex: 0 0 var(--battle-status-strip-width, clamp(128px, 13vw, 154px));
+  width: var(--battle-status-strip-width, clamp(128px, 13vw, 154px));
+  align-self: stretch;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.battle-side-zone-column.player {
+  justify-content: flex-end;
+}
+
+.battle-side-zone-column.enemy {
+  justify-content: flex-start;
+}
+
+.battle-side-zone-column .status-strip {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+.battle-void-zone {
+  flex: 0 0 var(--battle-void-zone-height, clamp(108px, 11vh, 110px));
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--text-dim);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.battle-void-zone:hover,
+.battle-void-zone:focus-visible {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+.battle-void-zone.drop-target {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
 .bf-wrap {
   flex: 1 1 var(--battlefield-row-width);
   min-width: 0;
@@ -437,8 +491,8 @@
 }
 
 .status-strip {
-  flex: 0 0 clamp(128px, 13vw, 154px);
-  width: clamp(128px, 13vw, 154px);
+  flex: 0 0 var(--battle-status-strip-width, clamp(128px, 13vw, 154px));
+  width: var(--battle-status-strip-width, clamp(128px, 13vw, 154px));
   max-height: calc(100% - 12px);
   display: flex;
   flex-direction: column;
