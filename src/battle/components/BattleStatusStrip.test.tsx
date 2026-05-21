@@ -137,10 +137,39 @@ describe("BattleStatusStrip", () => {
       summaryTrigger?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
     });
 
+    expect(onOpenSummary).not.toHaveBeenCalled();
+
+    act(() => {
+      container.querySelector<HTMLElement>('[data-battle-status-primary="player"]')
+        ?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+
+    expect(onOpenSummary).not.toHaveBeenCalled();
+
+    act(() => {
+      container.querySelector<HTMLElement>("[data-battle-status-dreamcaller-name]")
+        ?.dispatchEvent(new Event("pointerenter"));
+    });
+
+    expect(onOpenSummary).not.toHaveBeenCalled();
+
+    act(() => {
+      container.querySelector<HTMLElement>("[data-battle-status-dreamcaller-thumb]")
+        ?.dispatchEvent(new Event("pointerenter"));
+    });
+
     expect(onOpenSummary).toHaveBeenCalledTimes(1);
 
     act(() => {
-      summaryTrigger?.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+      container.querySelector<HTMLElement>("[data-battle-status-dreamcaller-thumb]")
+        ?.dispatchEvent(new Event("pointerleave"));
+    });
+
+    expect(onCloseSummary).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      container.querySelector<HTMLElement>("[data-battle-status-dreamcaller-name]")
+        ?.dispatchEvent(new Event("pointerleave"));
     });
 
     expect(onCloseSummary).toHaveBeenCalledTimes(1);

@@ -531,15 +531,25 @@
 .summary-trigger {
   width: 100%;
   min-width: 0;
-  border: none;
-  background: transparent;
-  padding: 0;
   text-align: left;
-  cursor: default;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   justify-items: stretch;
   gap: 7px;
+}
+
+.summary-hover-target {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  cursor: pointer;
+}
+
+.summary-hover-target:focus-visible {
+  outline: 2px solid var(--accent-edge);
+  outline-offset: 3px;
 }
 
 .summary-trigger .who {
@@ -554,6 +564,7 @@
   display: block;
   width: min(82px, 100%);
   justify-self: center;
+  border-radius: 8px;
 }
 
 .summary-trigger .summary-meta {
@@ -574,8 +585,7 @@
   color: var(--text);
 }
 
-.summary-trigger.selected .summary-meta,
-.summary-trigger:hover .summary-meta {
+.summary-trigger.selected .summary-meta {
   color: var(--text-dim);
 }
 

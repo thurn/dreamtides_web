@@ -1359,7 +1359,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("opens read-only side summaries on status-strip hover", () => {
+  it("opens read-only side summaries from Dreamcaller image hover", () => {
     const { container, root } = renderScreen();
 
     act(() => {
@@ -1367,6 +1367,24 @@ describe("PlayableBattleScreen", () => {
         .querySelector<HTMLElement>('[data-battle-region="player-status-strip"]')
         ?.querySelector<HTMLElement>("[data-battle-side-summary]")
         ?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-battle-side-summary-popover="player"]')).toBeNull();
+
+    act(() => {
+      container
+        .querySelector<HTMLElement>('[data-battle-region="player-status-strip"]')
+        ?.querySelector<HTMLElement>("[data-battle-status-dreamcaller-name]")
+        ?.dispatchEvent(new Event("pointerenter"));
+    });
+
+    expect(container.querySelector('[data-battle-side-summary-popover="player"]')).toBeNull();
+
+    act(() => {
+      container
+        .querySelector<HTMLElement>('[data-battle-region="player-status-strip"]')
+        ?.querySelector<HTMLElement>("[data-battle-status-dreamcaller-thumb]")
+        ?.dispatchEvent(new Event("pointerenter"));
     });
 
     const playerSummary = container.querySelector('[data-battle-side-summary-popover="player"]');
@@ -1386,8 +1404,8 @@ describe("PlayableBattleScreen", () => {
     act(() => {
       container
         .querySelector<HTMLElement>('[data-battle-region="enemy-status-strip"]')
-        ?.querySelector<HTMLElement>("[data-battle-side-summary]")
-        ?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+        ?.querySelector<HTMLElement>("[data-battle-status-dreamcaller-thumb]")
+        ?.dispatchEvent(new Event("pointerenter"));
     });
 
     expect(container.querySelector('[data-battle-side-summary-popover="player"]')).toBeNull();

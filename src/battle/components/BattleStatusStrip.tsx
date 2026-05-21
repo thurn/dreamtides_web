@@ -36,6 +36,21 @@ export function BattleStatusStrip({
   onCloseSummary: () => void;
   onOpenSummary: () => void;
 }) {
+  const summaryTargetRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    const target = summaryTargetRef.current;
+    if (target === null) {
+      return undefined;
+    }
+    target.addEventListener("pointerenter", onOpenSummary);
+    target.addEventListener("pointerleave", onCloseSummary);
+    return () => {
+      target.removeEventListener("pointerenter", onOpenSummary);
+      target.removeEventListener("pointerleave", onCloseSummary);
+    };
+  }, [onCloseSummary, onOpenSummary]);
+
   return (
     <section
       data-battle-region={`${side}-status-strip`}
@@ -43,31 +58,34 @@ export function BattleStatusStrip({
       data-battle-side-status={side}
       className={`status-strip ${side}`}
     >
-      <button
-        type="button"
+      <div
         data-battle-side-summary={side}
         data-battle-side-summary-active={String(isActive)}
         data-battle-side-summary-selected={String(isSummarySelected)}
         className={`summary-trigger ${isSummarySelected ? "selected" : ""} ${isActive ? "active" : ""}`}
         title={subtitle === "" ? title : `${title} · ${subtitle}`}
-        onMouseEnter={onOpenSummary}
-        onMouseLeave={onCloseSummary}
-        onFocus={onOpenSummary}
-        onBlur={onCloseSummary}
       >
         {dreamcaller !== null ? (
-          <span className="status-dreamcaller-thumb" data-battle-status-dreamcaller-thumb="">
+          <button
+            type="button"
+            aria-label={`Show ${title} details`}
+            className="status-dreamcaller-thumb summary-hover-target"
+            data-battle-status-dreamcaller-thumb=""
+            ref={summaryTargetRef}
+            onFocus={onOpenSummary}
+            onBlur={onCloseSummary}
+          >
             <DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" />
-          </span>
+          </button>
         ) : null}
         <span className="summary-trigger-copy">
           <span className="who">{side === "player" ? "You" : "Enemy"}</span>
-          <span className="summary-meta">
+          <span className="summary-meta" data-battle-status-dreamcaller-name="">
             {title}
             {subtitle === "" ? "" : ` · ${subtitle}`}
           </span>
         </span>
-      </button>
+      </div>
       <div className="stats" data-battle-status-primary={side}>
         <LocalStatusStat
           stat={`${side}:score`}
