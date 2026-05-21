@@ -5,7 +5,7 @@ import type {
   MouseEvent as ReactPointerMouseEvent,
   ReactNode,
 } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { SiteState } from "../../types/quest";
 import {
   createBattleLogBaseFields,
@@ -33,6 +33,7 @@ import type {
   BattleMutableState,
   BattleReducerState,
   BattleSide,
+  BattleSideMutableState,
   BrowseableZone,
 } from "../types";
 import type { QuestContent } from "../../data/quest-content";
@@ -65,6 +66,8 @@ import {
 } from "./battle-ui-commands";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
+const STATUS_STAT_COMMIT_DELAY_MS = 120;
+const BATTLE_SIDES: readonly BattleSide[] = ["player", "enemy"];
 
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
 type RewardOverlayState = {
@@ -90,6 +93,51 @@ type HoverPreviewState = {
   x: number;
   y: number;
 } | null;
+type PendingStatusStatAdjustments = Record<
+  BattleSide,
+  {
+    currentEnergy: number;
+    score: number;
+  }
+>;
+type StatusStatField = keyof PendingStatusStatAdjustments[BattleSide];
+
+function createEmptyPendingStatusStats(): PendingStatusStatAdjustments {
+  return {
+    player: { currentEnergy: 0, score: 0 },
+    enemy: { currentEnergy: 0, score: 0 },
+  };
+}
+
+function clonePendingStatusStats(
+  current: PendingStatusStatAdjustments,
+): PendingStatusStatAdjustments {
+  return {
+    player: { ...current.player },
+    enemy: { ...current.enemy },
+  };
+}
+
+function hasPendingStatusStats(pending: PendingStatusStatAdjustments): boolean {
+  return BATTLE_SIDES.some(
+    (side) => pending[side].score !== 0 || pending[side].currentEnergy !== 0,
+  );
+}
+
+function applyPendingStatusStats(
+  sideState: BattleSideMutableState,
+  pending: PendingStatusStatAdjustments[BattleSide],
+): BattleSideMutableState {
+  if (pending.score === 0 && pending.currentEnergy === 0) {
+    return sideState;
+  }
+
+  return {
+    ...sideState,
+    currentEnergy: sideState.currentEnergy + pending.currentEnergy,
+    score: sideState.score + pending.score,
+  };
+}
 
 export function PlayableBattleScreen({ site }: { site: SiteState }) {
   const { battleState, reducerState } = useMultiplayerBattle();
@@ -140,6 +188,12 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const [isDreamcallerPanelOpen, setIsDreamcallerPanelOpen] = useState(false);
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
+  const [pendingStatusStats, setPendingStatusStats] =
+    useState<PendingStatusStatAdjustments>(createEmptyPendingStatusStats);
+  const pendingStatusStatsRef = useRef<PendingStatusStatAdjustments>(
+    createEmptyPendingStatusStats(),
+  );
+  const pendingStatusStatsTimerRef = useRef<number | null>(null);
   const loggedCommandSerialRef = useRef(0);
   const canPlayerAct = true;
   const historyCount = reducerState.history.past.length;
@@ -149,6 +203,92 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     !isResultOverlayDismissed;
   const showReopenPill = reducerState.mutable.result !== null &&
     isResultOverlayDismissed;
+  const displayedPlayerSideState = applyPendingStatusStats(
+    reducerState.mutable.sides.player,
+    pendingStatusStats.player,
+  );
+  const displayedEnemySideState = applyPendingStatusStats(
+    reducerState.mutable.sides.enemy,
+    pendingStatusStats.enemy,
+  );
+
+  const handleCommand = useCallback((command: BattleCommand): void => {
+    setPendingDrag(null);
+    setHoverPreview(null);
+    dispatch({ type: "APPLY_COMMAND", command });
+  }, [dispatch]);
+
+  const flushPendingStatusStats = useCallback(() => {
+    if (pendingStatusStatsTimerRef.current !== null) {
+      window.clearTimeout(pendingStatusStatsTimerRef.current);
+      pendingStatusStatsTimerRef.current = null;
+    }
+
+    const pending = pendingStatusStatsRef.current;
+    if (!hasPendingStatusStats(pending)) {
+      return;
+    }
+
+    pendingStatusStatsRef.current = createEmptyPendingStatusStats();
+    setPendingStatusStats(createEmptyPendingStatusStats());
+
+    for (const side of BATTLE_SIDES) {
+      const sidePending = pending[side];
+      if (sidePending.score !== 0) {
+        handleCommand({
+          id: "DEBUG_EDIT",
+          edit: { kind: "ADJUST_SCORE", side, amount: sidePending.score },
+          sourceSurface: "status-strip",
+        });
+      }
+      if (sidePending.currentEnergy !== 0) {
+        handleCommand({
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "ADJUST_CURRENT_ENERGY",
+            side,
+            amount: sidePending.currentEnergy,
+          },
+          sourceSurface: "status-strip",
+        });
+      }
+    }
+  }, [handleCommand]);
+
+  const queueStatusStatAdjustment = useCallback((
+    side: BattleSide,
+    field: StatusStatField,
+    amount: number,
+  ) => {
+    setPendingStatusStats((current) => {
+      const next = clonePendingStatusStats(current);
+      next[side][field] += amount;
+      pendingStatusStatsRef.current = next;
+      return next;
+    });
+
+    if (pendingStatusStatsTimerRef.current !== null) {
+      window.clearTimeout(pendingStatusStatsTimerRef.current);
+    }
+    pendingStatusStatsTimerRef.current = window.setTimeout(() => {
+      flushPendingStatusStats();
+    }, STATUS_STAT_COMMIT_DELAY_MS);
+  }, [flushPendingStatusStats]);
+
+  useEffect(() => () => {
+    if (pendingStatusStatsTimerRef.current !== null) {
+      window.clearTimeout(pendingStatusStatsTimerRef.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    pendingStatusStatsRef.current = createEmptyPendingStatusStats();
+    setPendingStatusStats(createEmptyPendingStatusStats());
+    if (pendingStatusStatsTimerRef.current !== null) {
+      window.clearTimeout(pendingStatusStatsTimerRef.current);
+      pendingStatusStatsTimerRef.current = null;
+    }
+  }, [battleInit.battleId]);
 
   useEffect(() => {
     if (reducerState.mutable !== battleState.reducer.mutable) {
@@ -169,12 +309,6 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       logBattleCommandApplied(lastEntry.metadata, reducerState.mutable);
     }
   }, [battleState.reducer.commandSerial, battleState.reducer.mutable, reducerState]);
-
-  function handleCommand(command: BattleCommand): void {
-    setPendingDrag(null);
-    setHoverPreview(null);
-    dispatch({ type: "APPLY_COMMAND", command });
-  }
 
   useEffect(() => {
     const baseFields = createBattleLogBaseFields(reducerState.mutable, {
@@ -629,12 +763,12 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             activeSide={reducerState.mutable.activeSide}
             battleId={battleInit.battleId}
             enemyName={battleInit.enemyDescriptor.name}
-            enemyScore={reducerState.mutable.sides.enemy.score}
+            enemyScore={displayedEnemySideState.score}
             futureCount={futureCount}
             hasAiOpponent
             historyCount={historyCount}
             phase={reducerState.mutable.phase}
-            playerScore={reducerState.mutable.sides.player.score}
+            playerScore={displayedPlayerSideState.score}
             result={reducerState.mutable.result}
             roundNumber={reducerState.mutable.turnNumber}
             siteType={site.type}
@@ -657,7 +791,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               <div className="opponent-hand-zone">
                 <BattleOpponentHandTray
                   canInteract={true}
-                  currentEnergy={reducerState.mutable.sides.enemy.currentEnergy}
+                  currentEnergy={displayedEnemySideState.currentEnergy}
                   hand={reducerState.mutable.sides.enemy.hand}
                   isCardPlayable={undefined}
                   selectedCardId={null}
@@ -694,21 +828,15 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               <BattleStatusStrip
                 dreamcaller={battleInit.dreamcallerSummary}
                 side="player"
-                sideState={reducerState.mutable.sides.player}
+                sideState={displayedPlayerSideState}
                 subtitle={battleInit.dreamcallerSummary?.title ?? ""}
                 title={battleInit.dreamcallerSummary?.name ?? "Player"}
                 isActive={reducerState.mutable.activeSide === "player"}
                 isSummarySelected={openSideSummary === "player"}
-                onAdjustEnergy={(amount) => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount },
-                  sourceSurface: "status-strip",
-                })}
-                onAdjustScore={(amount) => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "ADJUST_SCORE", side: "player", amount },
-                  sourceSurface: "status-strip",
-                })}
+                onAdjustEnergy={(amount) =>
+                  queueStatusStatAdjustment("player", "currentEnergy", amount)}
+                onAdjustScore={(amount) =>
+                  queueStatusStatAdjustment("player", "score", amount)}
                 onOpenSummary={() => handleOpenSummary("player")}
                 onCloseSummary={() => handleCloseSummary("player")}
               />
@@ -803,21 +931,15 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               <BattleStatusStrip
                 side="enemy"
                 dreamcaller={enemyDreamcallerSummary}
-                sideState={reducerState.mutable.sides.enemy}
+                sideState={displayedEnemySideState}
                 subtitle={battleInit.enemyDescriptor.subtitle}
                 title={battleInit.enemyDescriptor.name}
                 isActive={reducerState.mutable.activeSide === "enemy"}
                 isSummarySelected={openSideSummary === "enemy"}
-                onAdjustEnergy={(amount) => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "ADJUST_CURRENT_ENERGY", side: "enemy", amount },
-                  sourceSurface: "status-strip",
-                })}
-                onAdjustScore={(amount) => handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: { kind: "ADJUST_SCORE", side: "enemy", amount },
-                  sourceSurface: "status-strip",
-                })}
+                onAdjustEnergy={(amount) =>
+                  queueStatusStatAdjustment("enemy", "currentEnergy", amount)}
+                onAdjustScore={(amount) =>
+                  queueStatusStatAdjustment("enemy", "score", amount)}
                 onOpenSummary={() => handleOpenSummary("enemy")}
                 onCloseSummary={() => handleCloseSummary("enemy")}
               />
@@ -827,7 +949,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             <BattleHandTray
               canInteract={true}
               compact={isOpponentHandRevealed}
-              currentEnergy={reducerState.mutable.sides.player.currentEnergy}
+              currentEnergy={displayedPlayerSideState.currentEnergy}
               hand={reducerState.mutable.sides.player.hand}
               onHandCardAction={handleCommand}
               openingHandSize={battleInit.openingHandSize}

@@ -1779,6 +1779,7 @@ describe("PlayableBattleScreen", () => {
   });
 
   it("adjusts both sides' score and current energy from status-strip arrow controls", () => {
+    vi.useFakeTimers();
     const { container, root } = renderScreen((state) => {
       state.sides.player.score = 4;
       state.sides.player.currentEnergy = 2;
@@ -1808,6 +1809,12 @@ describe("PlayableBattleScreen", () => {
     expect(container.querySelector('[data-battle-stat="enemy:energy"]')?.getAttribute("data-battle-max-energy"))
       .toBe("6");
 
+    expect(getLogEntries().some((entry) => entry.event === "battle_proto_command_applied")).toBe(false);
+
+    act(() => {
+      vi.advanceTimersByTime(150);
+    });
+
     const commandLogs = getLogEntries().filter((entry) => entry.event === "battle_proto_command_applied");
     const lastCommandLog = commandLogs[commandLogs.length - 1];
     expect(lastCommandLog?.sourceSurface).toBe("status-strip");
@@ -1815,6 +1822,7 @@ describe("PlayableBattleScreen", () => {
     act(() => {
       root.unmount();
     });
+    vi.useRealTimers();
   });
 });
 
