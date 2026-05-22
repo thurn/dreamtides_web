@@ -13,6 +13,7 @@ logs/
 .env.local
 .env.*.local
 .firebase
+*-debug.log
 .claude/scheduled_tasks.lock
 .DS_Store
 .claude/worktrees

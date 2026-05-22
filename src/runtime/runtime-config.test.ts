@@ -7,6 +7,7 @@ describe("parseRuntimeConfig", () => {
       seedOverride: null,
       startInBattle: false,
       gameId: null,
+      databaseMode: "emulator",
       debugJourneyShape: null,
       debugJourneyReward: null,
       debugJourneyCost: null,
@@ -74,6 +75,20 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?game=abc").gameId).toBeNull();
       expect(parseRuntimeConfig("?game=bad_id").gameId).toBeNull();
       expect(parseRuntimeConfig("?game=").gameId).toBeNull();
+    });
+  });
+
+  describe("databaseMode", () => {
+    it("returns realtime only when realtime=1", () => {
+      expect(parseRuntimeConfig("?realtime=1").databaseMode).toBe("realtime");
+    });
+
+    it("defaults to emulator for missing or non-1 realtime values", () => {
+      expect(parseRuntimeConfig("").databaseMode).toBe("emulator");
+      expect(parseRuntimeConfig("?realtime=").databaseMode).toBe("emulator");
+      expect(parseRuntimeConfig("?realtime=0").databaseMode).toBe("emulator");
+      expect(parseRuntimeConfig("?realtime=true").databaseMode).toBe("emulator");
+      expect(parseRuntimeConfig("?realtime=2").databaseMode).toBe("emulator");
     });
   });
 });

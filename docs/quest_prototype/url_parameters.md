@@ -21,6 +21,16 @@ When set to exactly `1`, the prototype boots directly into a battle instead of
 the normal Dreamcaller selection flow. Any other value (including `0`, `true`,
 empty, or absent) leaves the normal start flow in place.
 
+## `realtime`
+
+Selects the Firebase Realtime Database target. When set to exactly `1`, the app
+uses the cloud Firebase project configured by `VITE_FIREBASE_*` environment
+variables. Any other value (including `0`, `true`, empty, or absent) uses the
+local Realtime Database emulator at `127.0.0.1:9000` with the
+`demo-quest-prototype` project.
+
+Room navigation keeps `realtime=1` in the URL when a cloud room is created.
+
 ## Dream Journey Debug Harness
 
 In local development, Dream Journey QA can force selected generation inputs:
@@ -65,6 +75,7 @@ http://localhost:5173/                          # default
 http://localhost:5173/?seed=42                  # fixed seed
 http://localhost:5173/?startInBattle=1          # boot straight into battle
 http://localhost:5173/?game=quest42             # parsed multiplayer room id
+http://localhost:5173/?realtime=1               # use cloud Firebase RTDB
 http://localhost:5173/?debugJourneyShape=single_offer
 http://localhost:5173/?debugJourneyReward=gain_essence
 http://localhost:5173/?debugJourneyCost=pay_essence

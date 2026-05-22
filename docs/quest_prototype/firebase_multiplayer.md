@@ -1,11 +1,13 @@
 # Firebase Multiplayer
 
 The V2 quest prototype uses Firebase Realtime Database for shared quest rooms
-and Firebase Hosting for deployed share links.
+and Firebase Hosting for deployed share links. Default URLs use the local
+Realtime Database emulator with project `demo-quest-prototype`. Cloud RTDB
+rooms use URLs that include `?realtime=1`.
 
 ## Environment
 
-Copy `.env.example` to `.env.local` and fill in the Firebase web app values:
+Cloud RTDB mode reads the Firebase web app values from `.env.local`:
 
 - `VITE_FIREBASE_API_KEY`
 - `VITE_FIREBASE_AUTH_DOMAIN`
@@ -14,6 +16,9 @@ Copy `.env.example` to `.env.local` and fill in the Firebase web app values:
 - `VITE_FIREBASE_APP_ID`
 - `VITE_FIREBASE_STORAGE_BUCKET`
 - `VITE_FIREBASE_MESSAGING_SENDER_ID`
+
+Emulator mode uses the demo project config built into
+`src/firebase/app-config.ts`.
 
 ## Database Rules
 
@@ -78,42 +83,64 @@ Run:
 npm start
 ```
 
+This starts the Realtime Database emulator on `127.0.0.1:9000`, the Emulator UI
+on `127.0.0.1:4000`, refreshes generated assets, and serves Vite on
+`http://localhost:5173/`.
+
 Open `http://localhost:5173/`, create a game, then open the generated
-`?game=<roomId>` URL in a second browser window.
+`?game=<roomId>` URL in a second browser window. Inspect the emulator room data
+with:
+
+```bash
+curl "http://127.0.0.1:9000/rooms.json?ns=demo-quest-prototype"
+```
+
+Use the Vite-only script to inspect the visible emulator connection error state:
+
+```bash
+npm run dev:vite
+```
 
 ## Manual Two-Window QA
 
-1. Create a room in the first window.
-2. Open the share URL in a second window.
-3. Pick a Dreamcaller in either window and verify both windows enter the same
+1. Run `npm start`.
+2. Create a room in the first window.
+3. Open the share URL in a second window.
+4. Pick a Dreamcaller in either window and verify both windows enter the same
    dreamscape.
-4. Open a draft site, pick a card in one window, and verify the other window
+5. Open a draft site, pick a card in one window, and verify the other window
    shows the updated deck and next offer.
-5. Trigger an essence-changing action in one window while taking a different
+6. Trigger an essence-changing action in one window while taking a different
    shared action in the other window, then verify both changes are present.
-6. Open a reward, shop, Dreamsign, or essence site and verify both windows show
+7. Open a reward, shop, Dreamsign, or essence site and verify both windows show
    the same revealed result.
-7. Refresh both windows and verify they reload the room state.
-8. Reset the quest and verify both windows return to the shared start state.
-9. Enter a Battle site from the atlas in either window. Confirm both windows
-   show the same enemy, deck order, and reward options.
-10. Play a card in one window. Confirm the other window renders the same
+8. Refresh both windows and verify they reload the room state.
+9. Reset the quest and verify both windows return to the shared start state.
+10. Enter a Battle site from the atlas in either window. Confirm both windows
+    show the same enemy, deck order, and reward options.
+11. Play a card in one window. Confirm the other window renders the same
     play and animation within one round-trip.
-11. Issue concurrent commands from both windows (e.g. play a card in window
+12. Issue concurrent commands from both windows (e.g. play a card in window
     A while moving a card in window B). Confirm both apply without state
     corruption.
-12. Press Undo in one window. Confirm both windows rewind together. Press
+13. Press Undo in one window. Confirm both windows rewind together. Press
     Redo in either window. Confirm both windows advance together.
-13. Press Reset Battle in one window. Confirm both windows reset history
+14. Press Reset Battle in one window. Confirm both windows reset history
     and return to the prepared initial state.
-14. Win a battle, select a reward in either window. Confirm both windows
+15. Win a battle, select a reward in either window. Confirm both windows
     apply the reward, return to the atlas, and clear the battle slot.
-15. Lose or draw a battle, dismiss the result overlay. Confirm both windows
+16. Lose or draw a battle, dismiss the result overlay. Confirm both windows
     surface the failed screen and clear the battle slot.
-16. Trigger Reset Quest while a battle is active. Confirm both rooms clear
+17. Trigger Reset Quest while a battle is active. Confirm both rooms clear
     `questState` and `battleState`.
-17. Refresh either window mid-battle and confirm the same shared state
+18. Refresh either window mid-battle and confirm the same shared state
     reloads.
+
+## Cloud Smoke QA
+
+Open `http://localhost:5173/?realtime=1`, create a room, and confirm the URL
+contains both `realtime=1` and `game=<roomId>`. Verify the room exists in the
+configured cloud Realtime Database, then delete the smoke-test room.
 
 ## Deploy
 
@@ -125,4 +152,5 @@ firebase deploy
 ```
 
 Firebase Hosting serves `dist/` and rewrites all routes to `index.html`, so
-share links with `?game=<roomId>` load the app shell.
+share links with `?game=<roomId>` load the app shell. Hosted cloud RTDB rooms
+use share links with `?realtime=1&game=<roomId>`.

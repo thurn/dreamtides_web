@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Database, Unsubscribe } from "firebase/database";
+import type { DatabaseMode } from "../runtime/runtime-config";
 import { generateRoomId } from "./room-id";
 import {
   createRoomEvictingStale,
@@ -12,6 +13,7 @@ import { ACTION_LOG_LIMIT, type MultiplayerRoom, type RoomSession } from "./room
 interface MultiplayerRoomGateProps {
   database: Database;
   gameId: string | null;
+  databaseMode?: DatabaseMode;
   children: (session: RoomSession) => ReactNode;
 }
 
@@ -56,6 +58,7 @@ function connectedCount(room: MultiplayerRoom): number {
 export function MultiplayerRoomGate({
   database,
   gameId,
+  databaseMode = "emulator",
   children,
 }: MultiplayerRoomGateProps): ReactNode {
   const clientId = useMemo(createClientId, []);
@@ -226,11 +229,18 @@ export function MultiplayerRoomGate({
     <RoomShell subtitle="Firebase setup issue">
       <p style={{ color: "#fca5a5", maxWidth: "32rem", textAlign: "center" }}>{gateState.message}</p>
       <p style={{ color: "#94a3b8", maxWidth: "32rem", textAlign: "center", fontSize: "0.875rem" }}>
-        Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN,
-        VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.
+        {firebaseSetupHelp(databaseMode)}
       </p>
     </RoomShell>
   );
+}
+
+function firebaseSetupHelp(databaseMode: DatabaseMode): string {
+  if (databaseMode === "emulator") {
+    return "Run npm start to launch the Firebase Realtime Database emulator on 127.0.0.1:9000 with Vite.";
+  }
+
+  return "Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.";
 }
 
 function CreateGameButton({

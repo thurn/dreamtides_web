@@ -198,6 +198,23 @@ describe("MultiplayerRoomGate", () => {
     expect(container.textContent).toContain("Loading ab12cd");
   });
 
+  it("preserves realtime=1 when creating a room from a realtime URL", async () => {
+    window.history.replaceState(null, "", "/?realtime=1");
+
+    const { container } = mount(
+      <MultiplayerRoomGate database={database} gameId={null} databaseMode="realtime">
+        {() => <div>Quest App</div>}
+      </MultiplayerRoomGate>,
+    );
+
+    await act(async () => {
+      createButton(container).click();
+      await Promise.resolve();
+    });
+
+    expect(window.location.search).toBe("?realtime=1&game=ab12cd");
+  });
+
   it("renders children when subscribed room is ready and calls writePresence", () => {
     subscribeWith({
       status: "ready",
@@ -383,6 +400,20 @@ describe("MultiplayerRoomGate", () => {
 
     const { container } = mount(
       <MultiplayerRoomGate database={database} gameId="ab12cd">
+        {() => <div>Quest App</div>}
+      </MultiplayerRoomGate>,
+    );
+
+    expect(container.textContent).toContain("Firebase setup issue");
+    expect(container.textContent).toContain("Permission denied");
+    expect(container.textContent).toContain("Run npm start");
+  });
+
+  it("shows realtime Firebase setup help in realtime mode", () => {
+    subscribeWith({ status: "error", message: "Permission denied" });
+
+    const { container } = mount(
+      <MultiplayerRoomGate database={database} gameId="ab12cd" databaseMode="realtime">
         {() => <div>Quest App</div>}
       </MultiplayerRoomGate>,
     );

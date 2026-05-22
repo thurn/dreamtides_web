@@ -291,7 +291,7 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
     }
 
     try {
-      setDatabase(getFirebaseDatabase());
+      setDatabase(getFirebaseDatabase(runtimeConfig.databaseMode));
       setFirebaseError(null);
     } catch (error) {
       setDatabase(null);
@@ -299,7 +299,7 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
         error instanceof Error ? error.message : "Failed to initialize Firebase.",
       );
     }
-  }, [questContent]);
+  }, [questContent, runtimeConfig.databaseMode]);
 
   if (loadError !== null) {
     return (
@@ -354,11 +354,7 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
         <h1>Firebase setup issue</h1>
         <div>
           <p>{firebaseError}</p>
-          <p>
-            Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN,
-            VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID,
-            VITE_FIREBASE_APP_ID.
-          </p>
+          <p>{firebaseSetupHelp(runtimeConfig.databaseMode)}</p>
         </div>
       </main>
     );
@@ -374,7 +370,11 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
   }
 
   return (
-    <MultiplayerRoomGate database={database} gameId={runtimeConfig.gameId}>
+    <MultiplayerRoomGate
+      database={database}
+      gameId={runtimeConfig.gameId}
+      databaseMode={runtimeConfig.databaseMode}
+    >
       {(session) => (
         <MultiplayerQuestProvider
           database={database}
@@ -396,4 +396,12 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
       )}
     </MultiplayerRoomGate>
   );
+}
+
+function firebaseSetupHelp(databaseMode: RuntimeConfig["databaseMode"]): string {
+  if (databaseMode === "emulator") {
+    return "Run npm start to launch the Firebase Realtime Database emulator on 127.0.0.1:9000 with Vite.";
+  }
+
+  return "Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.";
 }

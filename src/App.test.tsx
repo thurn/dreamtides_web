@@ -288,12 +288,14 @@ describe("App", () => {
           seedOverride: null,
           startInBattle: false,
           gameId: "ab12cd",
+          databaseMode: "emulator",
         }}
       />,
     );
 
     await flushAppEffects();
 
+    expect(getFirebaseDatabase).toHaveBeenCalledWith("emulator");
     expect(container.querySelector("[data-room-gate='ab12cd']")).not.toBeNull();
     expect(container.querySelector("[data-multiplayer-provider]")).not.toBeNull();
 
@@ -313,6 +315,7 @@ describe("App", () => {
           seedOverride: null,
           startInBattle: false,
           gameId: null,
+          databaseMode: "emulator",
         }}
       />,
     );
@@ -321,9 +324,37 @@ describe("App", () => {
 
     expect(container.textContent).toContain("Firebase setup issue");
     expect(container.textContent).toContain("Missing VITE_FIREBASE_DATABASE_URL");
-    expect(container.textContent).toContain("Required env: VITE_FIREBASE_API_KEY");
+    expect(container.textContent).toContain("Run npm start");
     expect(container.querySelector("[data-room-gate]")).toBeNull();
     expect(container.querySelector("[data-multiplayer-provider]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders realtime Firebase setup help when realtime database initialization fails", async () => {
+    vi.mocked(getFirebaseDatabase).mockImplementationOnce(() => {
+      throw new Error("Missing VITE_FIREBASE_DATABASE_URL");
+    });
+
+    const { container, root } = mount(
+      <App
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          gameId: null,
+          databaseMode: "realtime",
+        }}
+      />,
+    );
+
+    await flushAppEffects();
+
+    expect(getFirebaseDatabase).toHaveBeenCalledWith("realtime");
+    expect(container.textContent).toContain("Firebase setup issue");
+    expect(container.textContent).toContain("Missing VITE_FIREBASE_DATABASE_URL");
+    expect(container.textContent).toContain("Required env: VITE_FIREBASE_API_KEY");
 
     act(() => {
       root.unmount();
@@ -360,7 +391,12 @@ describe("QuestApp", () => {
     const { container, root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          gameId: null,
+          databaseMode: "emulator",
+        }}
       />,
     );
 
@@ -385,7 +421,12 @@ describe("QuestApp", () => {
     const { container, root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          gameId: null,
+          databaseMode: "emulator",
+        }}
       />,
     );
 
@@ -424,7 +465,12 @@ describe("QuestApp", () => {
     const { root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          gameId: null,
+          databaseMode: "emulator",
+        }}
       />,
     );
 
@@ -452,7 +498,12 @@ describe("QuestApp", () => {
     const { root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          gameId: null,
+          databaseMode: "emulator",
+        }}
       />,
     );
 
@@ -490,6 +541,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: true,
           gameId: null,
+          databaseMode: "emulator",
         }}
       />,
     );
@@ -523,6 +575,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: false,
           gameId: null,
+          databaseMode: "emulator",
         }}
       />,
     );
@@ -569,7 +622,12 @@ describe("QuestApp", () => {
     const { container, root } = mount(
       <QuestApp
         cardDatabase={new Map()}
-        runtimeConfig={{ seedOverride: null, startInBattle: false, gameId: null }}
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          gameId: null,
+          databaseMode: "emulator",
+        }}
       />,
     );
 

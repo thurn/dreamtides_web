@@ -5,7 +5,12 @@ import {
   type FirebaseApp,
   type FirebaseOptions,
 } from "firebase/app";
-import { getDatabase, type Database } from "firebase/database";
+import {
+  connectDatabaseEmulator,
+  getDatabase,
+  type Database,
+} from "firebase/database";
+import type { DatabaseMode } from "../runtime/runtime-config";
 
 export interface FirebaseRuntimeEnv {
   readonly VITE_FIREBASE_API_KEY?: string;
@@ -24,6 +29,21 @@ const REQUIRED_KEYS = [
   "VITE_FIREBASE_PROJECT_ID",
   "VITE_FIREBASE_APP_ID",
 ] as const satisfies readonly (keyof FirebaseRuntimeEnv)[];
+
+const EMULATOR_PROJECT_ID = "demo-quest-prototype";
+const EMULATOR_APP_NAME = "quest-prototype-emulator";
+const REALTIME_APP_NAME = "quest-prototype-realtime";
+const EMULATOR_DATABASE_HOST = "127.0.0.1";
+const EMULATOR_DATABASE_PORT = 9000;
+const connectedEmulatorDatabases = new WeakSet<Database>();
+
+const EMULATOR_FIREBASE_CONFIG: FirebaseOptions = {
+  apiKey: "demo-api-key",
+  authDomain: `${EMULATOR_PROJECT_ID}.firebaseapp.com`,
+  databaseURL: `https://${EMULATOR_PROJECT_ID}.firebaseio.com`,
+  projectId: EMULATOR_PROJECT_ID,
+  appId: "demo-app-id",
+};
 
 export class FirebaseConfigError extends Error {
   readonly missingKeys: string[];
@@ -64,17 +84,39 @@ export function readFirebaseConfig(env: FirebaseRuntimeEnv): FirebaseOptions {
   return config;
 }
 
+function getNamedApp(name: string, options: FirebaseOptions): FirebaseApp {
+  if (getApps().some((app) => app.name === name)) {
+    return getApp(name);
+  }
+
+  return initializeApp(options, name);
+}
+
 export function getFirebaseApp(
+  mode: DatabaseMode = "emulator",
   env: FirebaseRuntimeEnv = import.meta.env as unknown as FirebaseRuntimeEnv,
 ): FirebaseApp {
-  if (getApps().length > 0) {
-    return getApp();
+  if (mode === "emulator") {
+    return getNamedApp(EMULATOR_APP_NAME, EMULATOR_FIREBASE_CONFIG);
   }
-  return initializeApp(readFirebaseConfig(env));
+
+  return getNamedApp(REALTIME_APP_NAME, readFirebaseConfig(env));
 }
 
 export function getFirebaseDatabase(
+  mode: DatabaseMode = "emulator",
   env: FirebaseRuntimeEnv = import.meta.env as unknown as FirebaseRuntimeEnv,
 ): Database {
-  return getDatabase(getFirebaseApp(env));
+  const database = getDatabase(getFirebaseApp(mode, env));
+
+  if (mode === "emulator" && !connectedEmulatorDatabases.has(database)) {
+    connectDatabaseEmulator(
+      database,
+      EMULATOR_DATABASE_HOST,
+      EMULATOR_DATABASE_PORT,
+    );
+    connectedEmulatorDatabases.add(database);
+  }
+
+  return database;
 }

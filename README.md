@@ -3,12 +3,13 @@
 A standalone web prototype of the Dreamtides Quest Mode flow. The player picks
 a Dreamcaller, a fixed package resolves, and the run proceeds through draft
 sites, Dreamsign surfaces, playable battles, and atlas progression. All
-state is in memory and resets on page load.
+quest runs are stored in Firebase Realtime Database rooms. Default local URLs
+use the Firebase emulator, and cloud RTDB rooms use `?realtime=1`.
 
 ## Quick Start
 
-One command — installs deps, kills any stale dev server, regenerates assets,
-starts Vite, and pops the app open in your default browser:
+One command installs deps, starts the Firebase Realtime Database emulator,
+regenerates assets, starts Vite, and opens the app in your default browser:
 
 ```bash
 cd ~/quest_prototype && npm run launch
@@ -17,16 +18,18 @@ cd ~/quest_prototype && npm run launch
 If deps are already installed and you don't need a new browser tab, use:
 
 ```bash
-npm start              # kills stale server, refreshes assets, starts Vite on :5173
+npm start              # starts emulator, refreshes assets, starts Vite on :5173
 ```
 
 What `npm start` does:
 
-1. Kills anything currently bound to port 5173 so you can re-run it freely.
-2. Refreshes `public/card-data.json`, `public/dreamcaller-data.json`,
+1. Starts the Firebase Realtime Database emulator on `127.0.0.1:9000` with
+   project `demo-quest-prototype`.
+2. Starts the Emulator UI on `127.0.0.1:4000`.
+3. Refreshes `public/card-data.json`, `public/dreamcaller-data.json`,
    `public/dreamsign-data.json`, and the symlinks under `public/cards/`,
    `public/dreamcallers/`, and `public/dreamsigns/`.
-3. Starts Vite on `http://localhost:5173/` with `--strictPort` so a port
+4. Starts Vite on `http://localhost:5173/` with `--strictPort` so a port
    collision fails loudly instead of drifting to 5174.
 
 `npm run launch` is just `npm install && npm start -- --open`, so Vite opens
@@ -51,11 +54,13 @@ this repo, so no sibling dreamtides checkout is required.
 
 ```bash
 npm run launch          # install + start + open browser (the all-in-one command)
-npm run dev             # same as start, but does NOT kill an existing server
+npm run dev             # same as start
+npm run dev:vite        # Vite on :5173 with the emulator managed separately
 npm run setup-assets    # regenerate JSON + symlinks without starting Vite
 npm run typecheck       # tsc --noEmit
 npm run lint            # eslint src/
 npm test                # vitest run
+npm run test:emulator   # Firebase emulator integration tests
 npm run build           # production build into dist/
 npm run preview         # serve the production build locally
 ```

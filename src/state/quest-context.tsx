@@ -663,6 +663,7 @@ export function QuestProvider({
     seedOverride: null,
     startInBattle: false,
     gameId: null,
+    databaseMode: "emulator",
   },
 }: {
   children: ReactNode;
