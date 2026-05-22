@@ -33,6 +33,8 @@ interface PipBadgeProps {
    * stays readable but the badge does not overpower adjacent text.
    */
   size?: "sm" | "md";
+  /** Multiplier for card renderers that need the pip to follow card text scale. */
+  scale?: number;
   /**
    * Optional accessible label for screen readers. If omitted, the badge
    * uses a sensible default for its variant.
@@ -95,28 +97,47 @@ interface SizeSpec {
   sizeClass: string;
   /** Tailwind text-size class for the value. */
   textClass: string;
+  /** Square diameter of the disc, in px. */
+  sizePx: number;
+  /** Numeric font size, in px. */
+  fontSizePx: number;
 }
 
 const SIZES: Readonly<Record<"sm" | "md", SizeSpec>> = {
-  sm: { sizeClass: "h-5 w-5", textClass: "text-[11px]" },
-  md: { sizeClass: "h-7 w-7", textClass: "text-base" },
+  sm: {
+    sizeClass: "h-5 w-5",
+    textClass: "text-[11px]",
+    sizePx: 20,
+    fontSizePx: 11,
+  },
+  md: {
+    sizeClass: "h-7 w-7",
+    textClass: "text-base",
+    sizePx: 28,
+    fontSizePx: 16,
+  },
 };
 
 export function PipBadge({
   variant,
   value,
   size = "sm",
+  scale = 1,
   ariaLabel,
   tooltip,
 }: PipBadgeProps) {
   const spec = SIZES[size];
   const label = ariaLabel ?? VARIANT_DEFAULT_LABEL[variant];
+  const resolvedScale = Number.isFinite(scale) && scale > 0 ? scale : 1;
 
   const badgeStyle: CSSProperties = {
     background: VARIANT_FILL[variant],
     border: `1px solid ${VARIANT_BORDER[variant]}`,
     color: "#ffffff",
+    fontSize: `${String(spec.fontSizePx * resolvedScale)}px`,
+    height: `${String(spec.sizePx * resolvedScale)}px`,
     textShadow: NUMBER_TEXT_SHADOW,
+    width: `${String(spec.sizePx * resolvedScale)}px`,
     lineHeight: 1,
   };
 

@@ -401,6 +401,8 @@ describe("PlayableBattleScreen", () => {
     expect(BATTLE_CSS).toMatch(/\.battlefield-zone-layout\s*{[^}]*flex:\s*1 1 auto;/s);
     expect(BATTLE_CSS).toMatch(/\.bf-wrap\s*{[^}]*flex:\s*1 1 var\(--battlefield-row-width\);/s);
     expect(BATTLE_CSS).toMatch(/\.player-hand-zone\.compact\s*{[^}]*flex-basis:\s*var\(--player-hand-zone-compact-height,/s);
+    expect(BATTLE_CSS).toMatch(/--revealed-hand-card-w:\s*clamp\(66px,\s*6vw,\s*78px\);/);
+    expect(BATTLE_CSS).toMatch(/--revealed-hand-card-h:\s*clamp\(99px,\s*9vw,\s*117px\);/);
   });
 
   it("keeps stack zone cards at the mini battle-card aspect ratio", () => {
@@ -595,20 +597,16 @@ describe("PlayableBattleScreen", () => {
   it("renders revealed opponent hand cards without selection or affordability dimming", () => {
     let enemyCardId = "";
     let enemyCardName = "";
-    let enemyRulesText = "";
     let playerCardId = "";
     let playerCardName = "";
-    let playerRulesText = "";
     const { container, root } = renderScreen((state) => {
       state.activeSide = "enemy";
       state.phase = "day";
       state.sides.enemy.currentEnergy = 0;
       enemyCardId = state.sides.enemy.hand[0] ?? "";
       enemyCardName = state.cardInstances[enemyCardId].definition.name;
-      enemyRulesText = state.cardInstances[enemyCardId].definition.renderedText;
       playerCardId = state.sides.player.hand[0] ?? "";
       playerCardName = state.cardInstances[playerCardId].definition.name;
-      playerRulesText = state.cardInstances[playerCardId].definition.renderedText;
       // Give all enemy hand cards a cost that exceeds available energy.
       for (const battleCardId of state.sides.enemy.hand) {
         state.cardInstances[battleCardId].definition = {
@@ -646,9 +644,9 @@ describe("PlayableBattleScreen", () => {
     expect(playerCard?.querySelector("[data-testid='card-type-line']")).not.toBeNull();
     expect(enemyCard?.querySelector("[data-testid='card-type-line']")).not.toBeNull();
     expect(playerCard?.textContent).toContain(playerCardName);
-    expect(playerCard?.textContent).toContain(playerRulesText);
+    expect(playerCard?.querySelector("[data-rules-text-paragraph]")).toBeNull();
     expect(enemyCard?.textContent).toContain(enemyCardName);
-    expect(enemyCard?.textContent).toContain(enemyRulesText);
+    expect(enemyCard?.querySelector("[data-rules-text-paragraph]")).toBeNull();
 
     act(() => {
       enemyCard?.click();

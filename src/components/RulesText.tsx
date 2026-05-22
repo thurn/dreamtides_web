@@ -60,16 +60,28 @@ interface RulesTextProps {
   text: string;
   /** Optional override color for plain text. */
   color?: string;
+  /** Optional scale for inline resource pips on small card surfaces. */
+  pipScale?: number;
 }
 
-function renderSegment(segment: TextSegment, key: number | string): ReactNode {
+interface RenderRulesTextOptions {
+  pipScale?: number;
+}
+
+function renderSegment(
+  segment: TextSegment,
+  key: number | string,
+  options: RenderRulesTextOptions,
+): ReactNode {
   if (segment.kind === "text") {
     return <span key={key}>{segment.value}</span>;
   }
   if (segment.kind === "nobreak") {
     return (
       <span key={key} style={{ whiteSpace: "nowrap" }}>
-        {segment.segments.map((inner, j) => renderSegment(inner, `${key}-${j}`))}
+        {segment.segments.map((inner, j) =>
+          renderSegment(inner, `${key}-${j}`, options),
+        )}
       </span>
     );
   }
@@ -87,7 +99,12 @@ function renderSegment(segment: TextSegment, key: number | string): ReactNode {
   if (segment.kind === "sparkPip") {
     return (
       <span key={key} className="inline-flex align-middle">
-        <PipBadge variant="spark" value={segment.value} size="sm" />
+        <PipBadge
+          variant="spark"
+          value={segment.value}
+          size="sm"
+          scale={options.pipScale}
+        />
       </span>
     );
   }
@@ -143,7 +160,10 @@ function splitRulesTextIntoParagraphs(text: string): string[] {
 const PARAGRAPH_GAP_EM = 0.5;
 
 /** Renders the parsed rules text segments to React nodes. */
-export function renderRulesText(text: string): ReactNode[] {
+export function renderRulesText(
+  text: string,
+  options: RenderRulesTextOptions = {},
+): ReactNode[] {
   const paragraphs = splitRulesTextIntoParagraphs(text);
   return paragraphs.map((paragraph, p) => {
     const segments = tokenizeRulesText(paragraph);
@@ -155,7 +175,9 @@ export function renderRulesText(text: string): ReactNode[] {
         data-rules-text-paragraph=""
         style={style}
       >
-        {segments.map((segment, i) => renderSegment(segment, `${p}-${i}`))}
+        {segments.map((segment, i) =>
+          renderSegment(segment, `${p}-${i}`, options),
+        )}
       </div>
     );
   });
@@ -169,12 +191,12 @@ export function renderRulesText(text: string): ReactNode[] {
  * tokenizer handles the symbol substitution and the glossary tooltip
  * lookup.
  */
-export function RulesText({ text, color }: RulesTextProps) {
+export function RulesText({ text, color, pipScale }: RulesTextProps) {
   if (color !== undefined) {
     // The renderer produces `<div>` paragraph blocks (see `renderRulesText`),
     // so the color wrapper is also a `<div>` to keep block-in-block HTML
     // nesting valid.
-    return <div style={{ color }}>{renderRulesText(text)}</div>;
+    return <div style={{ color }}>{renderRulesText(text, { pipScale })}</div>;
   }
-  return <>{renderRulesText(text)}</>;
+  return <>{renderRulesText(text, { pipScale })}</>;
 }

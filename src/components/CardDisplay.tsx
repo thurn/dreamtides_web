@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import type { RefObject } from "react";
 import type { CardData, FrozenCardData, Rarity } from "../types/cards";
 import { cardImageUrl } from "../data/card-database";
 import { formatTypeLine } from "./card-text";
+import { computeCardTextScale } from "./card-display-scale";
 import { PipBadge } from "./PipBadge";
 import { renderRulesText } from "./RulesText";
 
@@ -104,6 +106,50 @@ const ENERGY_PIP_TOOLTIP =
 const SPARK_PIP_TOOLTIP =
   "Spark. A character's combat power — higher spark wins combat.";
 
+function useCardTextScale(large: boolean): {
+  cardRef: RefObject<HTMLDivElement | null>;
+  textScale: number;
+} {
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const [widthPx, setWidthPx] = useState<number | null>(null);
+
+  useEffect(() => {
+    const element = cardRef.current;
+    if (element === null) {
+      return;
+    }
+
+    const measuredElement = element;
+
+    function updateWidth(): void {
+      const nextWidth = measuredElement.getBoundingClientRect().width;
+      if (Number.isFinite(nextWidth) && nextWidth > 0) {
+        setWidthPx(nextWidth);
+      }
+    }
+
+    updateWidth();
+
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", updateWidth);
+      return () => {
+        window.removeEventListener("resize", updateWidth);
+      };
+    }
+
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(measuredElement);
+    return () => {
+      observer.disconnect();
+    };
+  }, [large]);
+
+  return {
+    cardRef,
+    textScale: computeCardTextScale(widthPx, large),
+  };
+}
+
 /** Props for the CardDisplay component. */
 interface CardDisplayProps {
   card: CardData | FrozenCardData;
@@ -116,6 +162,8 @@ interface CardDisplayProps {
   className?: string;
   /** Use larger text sizes for rules text, name, type line, and stats. */
   large?: boolean;
+  /** Hide rules text for dense card surfaces that show identity and stats. */
+  hideRulesText?: boolean;
 }
 
 /**
@@ -129,8 +177,10 @@ export function CardDisplay({
   tintColor,
   className,
   large = false,
+  hideRulesText = false,
 }: CardDisplayProps) {
   const [imageError, setImageError] = useState(false);
+  const { cardRef, textScale } = useCardTextScale(large);
 
   useEffect(() => {
     setImageError(false);
@@ -172,10 +222,17 @@ export function CardDisplay({
       ? ` ${rarityStyle.cssClass}`
       : "";
   const rarityAttr = card.rarity !== undefined ? card.rarity : undefined;
+  const nameFontSize = (large ? 20 : 14) * textScale;
+  const typeFontSize = (large ? 14 : 10) * textScale;
+  const rulesFontSize = (large ? 16 : 10) * textScale;
+  const fallbackFontSize = 14 * textScale;
+  const showRulesText = !hideRulesText && card.renderedText.trim() !== "";
 
   return (
     <div
+      ref={cardRef}
       className={`relative flex flex-col overflow-hidden rounded-lg transition-transform duration-200${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}${className ? ` ${className}` : ""}`}
+      data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
       style={{
         aspectRatio: "2 / 3",
@@ -220,11 +277,14 @@ export function CardDisplay({
       )}
 
       {/* Energy cost badge */}
-      <div className={`absolute ${large ? "top-2 left-2" : "top-1.5 left-1.5"} z-10 flex flex-col items-center gap-1`}>
+      <div
+        className={`absolute ${large ? "top-2 left-2" : "top-1.5 left-1.5"} z-10 flex flex-col items-center gap-1`}
+      >
         <PipBadge
           variant="energy"
           value={card.energyCost !== null ? String(card.energyCost) : "X"}
           size={large ? "md" : "sm"}
+          scale={textScale}
           tooltip={ENERGY_PIP_TOOLTIP}
         />
       </div>
@@ -250,8 +310,12 @@ export function CardDisplay({
             }}
           >
             <span
-              className="text-center text-sm font-medium opacity-60"
-              style={{ color: nameColor }}
+              className="text-center font-medium opacity-60"
+              style={{
+                color: nameColor,
+                fontSize: `${String(fallbackFontSize)}px`,
+                lineHeight: 1.15,
+              }}
             >
               {card.name}
             </span>
@@ -267,11 +331,21 @@ export function CardDisplay({
       </div>
 
       {/* Card info area */}
-      <div className={`flex min-h-0 flex-1 flex-col ${large ? "px-3 pt-2 pb-2" : "px-2 pt-1 pb-1.5"}`}>
+      <div
+        className={`flex min-h-0 flex-1 flex-col ${large ? "px-3 pt-2 pb-2" : "px-2 pt-1 pb-1.5"}`}
+      >
         {/* Card name */}
         <h3
-          className={`truncate ${large ? "text-xl" : "text-sm"} leading-tight font-bold`}
-          style={{ color: nameColor }}
+          className="font-bold"
+          style={{
+            color: nameColor,
+            display: "-webkit-box",
+            fontSize: `${String(nameFontSize)}px`,
+            lineHeight: 1.08,
+            overflow: "hidden",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2,
+          }}
         >
           {card.name}
         </h3>
@@ -279,8 +353,14 @@ export function CardDisplay({
         {(typeLine !== "" || attributeChips.length > 0) && (
           <div
             data-testid="card-type-line"
-            className={`mt-0.5 flex items-center gap-1 truncate ${large ? "text-sm" : "text-[10px]"} opacity-50`}
-            style={{ color: "#e2e8f0" }}
+            className="mt-0.5 flex items-center gap-1 opacity-50"
+            style={{
+              color: "#e2e8f0",
+              fontSize: `${String(typeFontSize)}px`,
+              lineHeight: 1.1,
+              minHeight: `${String(typeFontSize * 1.1)}px`,
+              overflow: "hidden",
+            }}
           >
             {attributeChips.map((chip) => (
               <span
@@ -299,12 +379,20 @@ export function CardDisplay({
         )}
 
         {/* Rules text */}
-        <div
-          className={`mt-1 min-h-0 flex-1 overflow-y-auto ${large ? "text-base leading-snug" : "text-[10px] leading-tight"} opacity-80`}
-          style={{ color: tintColor ?? "#e2e8f0" }}
-        >
-          {renderRulesText(card.renderedText)}
-        </div>
+        {showRulesText ? (
+          <div
+            className="mt-1 min-h-0 flex-1 overflow-y-auto opacity-80"
+            style={{
+              color: tintColor ?? "#e2e8f0",
+              fontSize: `${String(rulesFontSize)}px`,
+              lineHeight: large ? 1.35 : 1.18,
+            }}
+          >
+            {renderRulesText(card.renderedText, { pipScale: textScale })}
+          </div>
+        ) : (
+          <div aria-hidden="true" className="min-h-0 flex-1" />
+        )}
 
         {/* Spark badge for Characters */}
         {card.spark !== null && (
@@ -313,6 +401,7 @@ export function CardDisplay({
               variant="spark"
               value={String(card.spark)}
               size={large ? "md" : "sm"}
+              scale={textScale}
               tooltip={SPARK_PIP_TOOLTIP}
             />
           </div>

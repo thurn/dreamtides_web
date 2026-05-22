@@ -5,6 +5,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { CardData } from "../types/cards";
+import { computeCardTextScale } from "./card-display-scale";
 import { CardDisplay } from "./CardDisplay";
 
 function makeCard(overrides: Partial<CardData>): CardData {
@@ -52,6 +53,32 @@ afterEach(() => {
 });
 
 describe("CardDisplay", () => {
+  it("computes card text scale from rendered card width", () => {
+    expect(computeCardTextScale(null, false)).toBe(1);
+    expect(computeCardTextScale(156, false)).toBe(1);
+    expect(computeCardTextScale(78, false)).toBe(0.5);
+    expect(computeCardTextScale(48, false)).toBe(0.48);
+    expect(computeCardTextScale(220, true)).toBe(1);
+    expect(computeCardTextScale(110, true)).toBe(0.5);
+  });
+
+  it("can omit rules text on dense card surfaces", () => {
+    const { container, root } = mount(
+      <CardDisplay
+        card={makeCard({ renderedText: "Draw a card." })}
+        hideRulesText
+      />,
+    );
+
+    expect(container.textContent).toContain("Test Card");
+    expect(container.textContent).not.toContain("Draw a card.");
+    expect(container.querySelector("[data-rules-text-paragraph]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the energy cost badge as a teal/cyan circular pip with no flame icon", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ energyCost: 4 })} />,

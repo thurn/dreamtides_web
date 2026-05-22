@@ -25,8 +25,8 @@
   --card-h: 108px;
   --hand-card-w: clamp(148px, 14vw, 176px);
   --hand-card-h: clamp(214px, 22vw, 252px);
-  --revealed-hand-card-w: clamp(132px, 12vw, 156px);
-  --revealed-hand-card-h: clamp(198px, 18vw, 234px);
+  --revealed-hand-card-w: clamp(66px, 6vw, 78px);
+  --revealed-hand-card-h: clamp(99px, 9vw, 117px);
   --slot-gap: 10px;
   --row-gap: 6px;
   --battlefield-row-width: calc(var(--card-w) * 5 + var(--slot-gap) * 4);
