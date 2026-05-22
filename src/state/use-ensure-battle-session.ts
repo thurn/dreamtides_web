@@ -44,6 +44,7 @@ export function useEnsureBattleSession(input: {
     | "dreamcaller"
     | "dreamsigns"
     | "resolvedPackage"
+    | "seed"
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
   dreamcallers: readonly DreamcallerContent[];

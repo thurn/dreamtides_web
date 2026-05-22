@@ -1516,7 +1516,7 @@ describe("PlayableBattleScreen", () => {
   });
 
   it("opens read-only side summaries from Dreamcaller image hover", () => {
-    const { container, root } = renderScreen();
+    const { battleInit, container, root } = renderScreen();
 
     act(() => {
       container
@@ -1568,7 +1568,9 @@ describe("PlayableBattleScreen", () => {
     expect(container.querySelector('[data-battle-side-summary-popover="player"]')).toBeNull();
     const enemySummary = container.querySelector('[data-battle-side-summary-popover="enemy"]');
     expect(enemySummary?.className).toBe("side-summary-popover");
-    expect(enemySummary?.textContent).toContain("field grows harder to uproot");
+    expect(enemySummary?.textContent).toContain(
+      battleInit.enemyDescriptor.abilityText,
+    );
     expect(enemySummary?.textContent).not.toContain("Quick Zones");
     expect(enemySummary?.textContent).not.toContain("Debug Actions");
     expect(enemySummary?.textContent).not.toContain("Create Figment");

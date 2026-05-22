@@ -112,6 +112,7 @@ export function makeBattleTestState(): Pick<
   | "dreamcaller"
   | "dreamsigns"
   | "resolvedPackage"
+  | "seed"
 > {
   return {
     atlas: {
@@ -136,6 +137,7 @@ export function makeBattleTestState(): Pick<
     dreamcaller: makeBattleTestDreamcaller(),
     dreamsigns: makeBattleTestDreamsigns(),
     resolvedPackage: makeResolvedPackage(),
+    seed: "test-quest-seed",
   };
 }
 

@@ -65,6 +65,7 @@ export interface CreateBattleInitInput {
     | "dreamcaller"
     | "dreamsigns"
     | "resolvedPackage"
+    | "seed"
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
   dreamcallers: readonly DreamcallerContent[];
@@ -115,7 +116,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     dreamsignTemplates = [],
     seedOverride,
   } = input;
-  const seed = resolveSeed(battleEntryKey, seedOverride);
+  const seed = resolveSeed(battleEntryKey, state.seed, seedOverride);
   const streams = createBattleRngStreams(seed);
   const questDeckEntries: readonly BattleQuestDeckEntry[] = Object.freeze(
     state.deck.map((entry) => Object.freeze({
@@ -211,10 +212,11 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
  */
 function resolveSeed(
   battleEntryKey: string,
+  questSeed: string,
   seedOverride: number | null | undefined,
 ): number {
   if (seedOverride === undefined || seedOverride === null) {
-    return deriveBattleSeed(battleEntryKey);
+    return deriveBattleSeed(`${questSeed}:${battleEntryKey}`);
   }
   if (
     !Number.isFinite(seedOverride) ||

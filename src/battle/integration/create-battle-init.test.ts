@@ -149,6 +149,20 @@ describe("createBattleInit", () => {
         sameEnemyDescriptor && samePlayerDeckOrder && sameEnemyDeck,
       ).toBe(false);
     });
+
+    it("same battle entry in different quest seeds uses a different battle seed", () => {
+      const baseInput = makeBaseInput();
+      const otherInput: CreateBattleInitInput = {
+        ...baseInput,
+        state: { ...baseInput.state, seed: "another-quest-seed" },
+      };
+
+      const a = createBattleInit(baseInput);
+      const b = createBattleInit(otherInput);
+
+      expect(a.battleEntryKey).toBe(b.battleEntryKey);
+      expect(a.seed).not.toBe(b.seed);
+    });
   });
 
   describe("seedOverride", () => {
@@ -171,7 +185,9 @@ describe("createBattleInit", () => {
 
     it("falls back to the hash-derived seed when seedOverride is null or omitted", () => {
       const baseInput = makeBaseInput();
-      const expectedSeed = deriveBattleSeed(baseInput.battleEntryKey);
+      const expectedSeed = deriveBattleSeed(
+        `${baseInput.state.seed}:${baseInput.battleEntryKey}`,
+      );
 
       const fromOmitted = createBattleInit(baseInput);
       const fromNull = createBattleInit({ ...baseInput, seedOverride: null });
