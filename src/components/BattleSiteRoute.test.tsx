@@ -284,7 +284,7 @@ describe("BattleSiteRoute", () => {
     const { container } = mount(
       <BattleSiteRoute
         site={makeSite()}
-        cardDatabase={new Map()}
+        cardDatabase={makeBattleTestCardDatabase()}
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
@@ -305,7 +305,7 @@ describe("BattleSiteRoute", () => {
     mount(
       <BattleSiteRoute
         site={makeSite()}
-        cardDatabase={new Map()}
+        cardDatabase={makeBattleTestCardDatabase()}
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
@@ -333,7 +333,7 @@ describe("BattleSiteRoute", () => {
     const { container } = mount(
       <BattleSiteRoute
         site={makeSite()}
-        cardDatabase={new Map()}
+        cardDatabase={makeBattleTestCardDatabase()}
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
@@ -361,7 +361,7 @@ describe("BattleSiteRoute", () => {
     const { container, root } = mount(
       <BattleSiteRoute
         site={makeSite()}
-        cardDatabase={new Map()}
+        cardDatabase={makeBattleTestCardDatabase()}
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
@@ -384,7 +384,7 @@ describe("BattleSiteRoute", () => {
         wrap(
           <BattleSiteRoute
             site={makeSite()}
-            cardDatabase={new Map()}
+            cardDatabase={makeBattleTestCardDatabase()}
             runtimeConfig={{
               seedOverride: null,
               startInBattle: false,

@@ -3,9 +3,14 @@ import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestS
 import { createBattleInit, type CreateBattleInitInput } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
 import type { CardData } from "../../types/cards";
+import type { DreamcallerContent, PackageTideId } from "../../types/content";
 import type { CardKeywordModification, CardTypeChange } from "../../types/quest";
 
-const ENEMY_DECK_SIZE = 50;
+const ENEMY_DECK_SIZE = 40;
+const REMOVAL_TIDES = new Set<PackageTideId>([
+  "cheap_removal",
+  "premium_removal",
+]);
 
 function makeBaseInput(): CreateBattleInitInput {
   return {
@@ -38,6 +43,49 @@ function makePackageCard(
     imageNumber: cardNumber,
     artOwned: true,
   };
+}
+
+function isRemovalEventCard(card: CardData): boolean {
+  return (
+    card.cardType === "Event" &&
+    card.tides.some((tide) => REMOVAL_TIDES.has(tide))
+  );
+}
+
+function overlapsTides(
+  card: CardData,
+  packageTides: readonly PackageTideId[],
+): boolean {
+  const packageTideSet = new Set(packageTides);
+  return card.tides.some((tide) => packageTideSet.has(tide));
+}
+
+async function readGeneratedQuestContent(): Promise<{
+  cards: CardData[];
+  dreamcallers: DreamcallerContent[];
+} | null> {
+  try {
+    const fs = await import("node:fs");
+    const path = await import("node:path");
+    const url = await import("node:url");
+    const dir = path.dirname(url.fileURLToPath(import.meta.url));
+    const cardJsonPath = path.resolve(dir, "../../../public/card-data.json");
+    const dreamcallerJsonPath = path.resolve(
+      dir,
+      "../../../public/dreamcaller-data.json",
+    );
+    if (!fs.existsSync(cardJsonPath) || !fs.existsSync(dreamcallerJsonPath)) {
+      return null;
+    }
+    return {
+      cards: JSON.parse(fs.readFileSync(cardJsonPath, "utf8")) as CardData[],
+      dreamcallers: JSON.parse(
+        fs.readFileSync(dreamcallerJsonPath, "utf8"),
+      ) as DreamcallerContent[],
+    };
+  } catch {
+    return null;
+  }
 }
 
 describe("createBattleInit", () => {
@@ -449,6 +497,24 @@ describe("createBattleInit", () => {
       expect(Object.isFrozen(init.enemyDescriptor)).toBe(true);
     });
 
+    it("uses the selected Dreamcaller's exact identity for real enemies", () => {
+      const input = makeBaseInput();
+      const init = createBattleInit(input);
+      const selectedDreamcaller = input.dreamcallers.find((dreamcaller) =>
+        init.enemyDescriptor.id.startsWith(`enemy:${dreamcaller.id}:`),
+      );
+
+      expect(selectedDreamcaller).toBeDefined();
+      expect(init.enemyDescriptor.name).toBe(selectedDreamcaller?.name);
+      expect(init.enemyDescriptor.subtitle).toBe("");
+      expect(init.enemyDescriptor.packageTides).toEqual(
+        selectedDreamcaller?.mandatoryTides,
+      );
+      for (const prefix of ["Shadow", "Nightmare", "Phantom", "Dark"]) {
+        expect(init.enemyDescriptor.name.startsWith(`${prefix} `)).toBe(false);
+      }
+    });
+
     it("falls back to a synthetic descriptor when no dreamcallers are available", () => {
       const init = createBattleInit({
         ...makeBaseInput(),
@@ -488,38 +554,56 @@ describe("createBattleInit", () => {
   });
 
   describe("enemyDeckDefinition", () => {
-    it("builds a 50-card deck from real card-database entries (B-13, B-17)", () => {
-      const init = createBattleInit(makeBaseInput());
-      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
+    it("builds a unique 40-card deck from card-database entries", () => {
+      const input = makeBaseInput();
+      const init = createBattleInit(input);
+      const cardNumbers = init.enemyDeckDefinition.map((card) => card.cardNumber);
 
-      const cardDatabase = makeBaseInput().cardDatabase;
+      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
+      expect(new Set(cardNumbers).size).toBe(ENEMY_DECK_SIZE);
+
       for (const card of init.enemyDeckDefinition) {
-        const databaseCard = cardDatabase.get(card.cardNumber);
+        const databaseCard = input.cardDatabase.get(card.cardNumber);
         expect(databaseCard).toBeDefined();
       }
     });
 
-    it("excludes cards with null energyCost from enemy candidates (B-15)", () => {
-      const stripCard = (number: number): CardData =>
-        ({
-          name: `cost-null-${String(number)}`,
-          id: `cost-null-${String(number)}`,
-          cardNumber: number,
-          cardType: "Character",
-          subtype: "Echo",
-          isStarter: false,
-          energyCost: null,
-          spark: 1,
-          isFast: false,
-          tides: ["alpha"],
-          renderedText: "no cost",
-          imageNumber: number,
-          artOwned: true,
-        });
+    it("starts from four removal events and fills the rest from required tides", () => {
+      const input = makeBaseInput();
+      const init = createBattleInit(input);
+      const removalCards: CardData[] = [];
+      const nonRemovalCards: CardData[] = [];
+
+      for (const deckCard of init.enemyDeckDefinition) {
+        const databaseCard = input.cardDatabase.get(deckCard.cardNumber);
+        expect(databaseCard).toBeDefined();
+        if (databaseCard === undefined) {
+          continue;
+        }
+        if (isRemovalEventCard(databaseCard)) {
+          removalCards.push(databaseCard);
+        } else {
+          nonRemovalCards.push(databaseCard);
+        }
+      }
+
+      expect(removalCards.length).toBeGreaterThanOrEqual(4);
+      for (const card of nonRemovalCards) {
+        expect(overlapsTides(card, init.enemyDescriptor.packageTides)).toBe(true);
+      }
+    });
+
+    it("excludes starters and cards with null energyCost from enemy candidates", () => {
       const baseInput = makeBaseInput();
       const augmented = new Map(baseInput.cardDatabase);
-      augmented.set(801, stripCard(801));
-      augmented.set(802, stripCard(802));
+      augmented.set(801, {
+        ...makePackageCard(801, "Character", 1, "alpha"),
+        energyCost: null,
+      });
+      augmented.set(802, {
+        ...makePackageCard(802, "Event", 2, "alpha"),
+        isStarter: true,
+      });
 
       const init = createBattleInit({ ...baseInput, cardDatabase: augmented });
       const cardNumbersChosen = init.enemyDeckDefinition.map(
@@ -527,18 +611,6 @@ describe("createBattleInit", () => {
       );
       expect(cardNumbersChosen).not.toContain(801);
       expect(cardNumbersChosen).not.toContain(802);
-    });
-
-    it("keeps a substantial character/event mix in the full enemy deck (B-17)", () => {
-      const init = createBattleInit(makeBaseInput());
-      const characters = init.enemyDeckDefinition.filter(
-        (card) => card.battleCardKind === "character",
-      );
-      const events = init.enemyDeckDefinition.filter(
-        (card) => card.battleCardKind === "event",
-      );
-      expect(characters.length).toBeGreaterThanOrEqual(30);
-      expect(events.length).toBeGreaterThanOrEqual(16);
     });
 
     it("freezes the enemy deck definition list and per-card tides", () => {
@@ -550,117 +622,137 @@ describe("createBattleInit", () => {
       }
     });
 
-    it("gives each duplicate-fallback entry its own tides array (B-8, B-18)", () => {
+    it("prefers removal events that overlap the enemy's required tides", () => {
       const baseInput = makeBaseInput();
-      const tinyDb = new Map<number, CardData>();
-      // Single character and a single event — every bucket must fall back to
-      // duplicates of the same underlying card, forcing the duplicate-fallback
-      // path that used to share tides references.
-      tinyDb.set(700, {
-        name: "Solo Character",
-        id: "solo-char",
-        cardNumber: 700,
-        cardType: "Character",
-        subtype: "Echo",
-        isStarter: false,
-        energyCost: 2,
-        spark: 1,
-        isFast: false,
-        tides: ["alpha"],
-        renderedText: "",
-        imageNumber: 700,
-        artOwned: true,
-      });
-      tinyDb.set(701, {
-        name: "Solo Event",
-        id: "solo-event",
-        cardNumber: 701,
-        cardType: "Event",
-        subtype: "Spell",
-        isStarter: false,
-        energyCost: 2,
-        spark: null,
-        isFast: false,
-        tides: ["alpha"],
-        renderedText: "",
-        imageNumber: 701,
-        artOwned: true,
-      });
+      const db = new Map<number, CardData>();
+      const matchingRemovalNumbers = new Set<number>();
 
-      const init = createBattleInit({
-        ...baseInput,
-        cardDatabase: tinyDb,
-        state: {
-          ...baseInput.state,
-          deck: baseInput.state.deck.filter((entry) => tinyDb.has(entry.cardNumber)),
-        },
-      });
-
-      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
-      const tidesReferences = init.enemyDeckDefinition.map((card) => card.tides);
-      // Every copied card should have a distinct frozen tides array so later
-      // mutations (if unfrozen in a future caller) cannot leak across copies.
-      const uniqueReferences = new Set(tidesReferences);
-      expect(uniqueReferences.size).toBe(tidesReferences.length);
-    });
-
-    it("backfills the deck up to 50 cards even when the matching-tide pool is tiny (B-18)", () => {
-      const baseInput = makeBaseInput();
-      const tinyDb = new Map<number, CardData>();
-      const cards: CardData[] = [];
+      for (let i = 0; i < 40; i += 1) {
+        const isRemoval = i < 4;
+        const card = makePackageCard(
+          400 + i,
+          isRemoval ? "Event" : "Character",
+          1 + (i % 4),
+          "tide_beta",
+        );
+        db.set(card.cardNumber, {
+          ...card,
+          tides: isRemoval ? ["tide_beta", "cheap_removal"] : ["tide_beta"],
+        });
+        if (isRemoval) {
+          matchingRemovalNumbers.add(card.cardNumber);
+        }
+      }
       for (let i = 0; i < 4; i += 1) {
-        cards.push({
-          name: `Solo Char ${String(i)}`,
-          id: `solo-char-${String(i)}`,
-          cardNumber: 700 + i,
-          cardType: "Character",
-          subtype: "Echo",
-          isStarter: false,
-          energyCost: i % 4,
-          spark: 1,
-          isFast: false,
-          tides: ["alpha"],
-          renderedText: "",
-          imageNumber: 700 + i,
-          artOwned: true,
-        });
+        const card = makePackageCard(500 + i, "Event", 2, "cheap_removal");
+        db.set(card.cardNumber, card);
       }
-      for (let i = 0; i < 2; i += 1) {
-        cards.push({
-          name: `Solo Event ${String(i)}`,
-          id: `solo-event-${String(i)}`,
-          cardNumber: 800 + i,
-          cardType: "Event",
-          subtype: "Spell",
-          isStarter: false,
-          energyCost: 2,
-          spark: null,
-          isFast: false,
-          tides: ["alpha"],
-          renderedText: "",
-          imageNumber: 800 + i,
-          artOwned: true,
-        });
+      const init = createBattleInit({
+        ...baseInput,
+        cardDatabase: db,
+        dreamcallers: [
+          {
+            id: "tide-beta-dc",
+            name: "Tide Beta Sentinel",
+            title: "Required Tide Test",
+            renderedText: "",
+            imageNumber: "001",
+            startingEssence: 250,
+            mandatoryTides: ["tide_beta"],
+            optionalTides: [],
+          },
+        ],
+        state: { ...baseInput.state, deck: [] },
+      });
+
+      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
+      const selectedRemovalNumbers = init.enemyDeckDefinition
+        .filter((card) => {
+          const databaseCard = db.get(card.cardNumber);
+          return databaseCard !== undefined && isRemovalEventCard(databaseCard);
+        })
+        .map((card) => card.cardNumber);
+      expect(selectedRemovalNumbers.sort((a, b) => a - b)).toEqual(
+        [...matchingRemovalNumbers].sort((a, b) => a - b),
+      );
+    });
+
+    it("falls back to global removal events for the four removal slots", () => {
+      const baseInput = makeBaseInput();
+      const db = new Map<number, CardData>();
+      const globalRemovalNumbers = new Set<number>();
+
+      for (let i = 0; i < 36; i += 1) {
+        const card = makePackageCard(600 + i, "Character", 1 + (i % 5), "alpha");
+        db.set(card.cardNumber, card);
       }
-      for (const card of cards) {
-        tinyDb.set(card.cardNumber, card);
+      for (let i = 0; i < 4; i += 1) {
+        const card = makePackageCard(700 + i, "Event", 2, "cheap_removal");
+        db.set(card.cardNumber, card);
+        globalRemovalNumbers.add(card.cardNumber);
       }
 
       const init = createBattleInit({
         ...baseInput,
-        cardDatabase: tinyDb,
-        state: {
-          ...baseInput.state,
-          deck: baseInput.state.deck.filter((entry) =>
-            tinyDb.has(entry.cardNumber),
-          ),
-        },
+        cardDatabase: db,
+        dreamcallers: [
+          {
+            id: "alpha-dc",
+            name: "Alpha Sentinel",
+            title: "Removal Fallback Test",
+            renderedText: "",
+            imageNumber: "001",
+            startingEssence: 250,
+            mandatoryTides: ["alpha"],
+            optionalTides: [],
+          },
+        ],
+        state: { ...baseInput.state, deck: [] },
       });
 
       expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
+      const selectedNumbers = new Set(
+        init.enemyDeckDefinition.map((card) => card.cardNumber),
+      );
+      for (const cardNumber of globalRemovalNumbers) {
+        expect(selectedNumbers.has(cardNumber)).toBe(true);
+      }
     });
 
-    it("treats a empty-tide enemy as accepting all candidates (empty package tides accept all candidates)", () => {
+    it("throws when the required-tide pool cannot fill the unique deck", () => {
+      const baseInput = makeBaseInput();
+      const db = new Map<number, CardData>();
+      for (let i = 0; i < 4; i += 1) {
+        const card = makePackageCard(800 + i, "Event", 2, "cheap_removal");
+        db.set(card.cardNumber, card);
+      }
+      for (let i = 0; i < 12; i += 1) {
+        const card = makePackageCard(900 + i, "Character", 2, "alpha");
+        db.set(card.cardNumber, card);
+      }
+
+      expect(() =>
+        createBattleInit({
+          ...baseInput,
+          cardDatabase: db,
+          dreamcallers: [
+            {
+              id: "alpha-dc",
+              name: "Alpha Sentinel",
+              title: "Sparse Pool Test",
+              renderedText: "",
+              imageNumber: "001",
+              startingEssence: 250,
+              mandatoryTides: ["alpha"],
+              optionalTides: [],
+            },
+          ],
+          state: { ...baseInput.state, deck: [] },
+        }),
+      ).toThrow(/enemy deck needs 40 unique cards/);
+    });
+
+    it("treats an empty required-tide enemy as accepting all candidates", () => {
       const baseInput = makeBaseInput();
       const init = createBattleInit({
         ...baseInput,
@@ -680,188 +772,47 @@ describe("createBattleInit", () => {
 
       expect(init.enemyDescriptor.packageTides).toEqual([]);
       expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
+      expect(
+        new Set(init.enemyDeckDefinition.map((card) => card.cardNumber)).size,
+      ).toBe(ENEMY_DECK_SIZE);
     });
 
-    it("strongly prefers accent-matching candidates over off-accent candidates in a mixed pool (B-14)", () => {
-      // Force an tide_beta-accent enemy and provide enough tide_beta-accent supply to
-      // fill every bucket — plus extra tide_alpha-accent noise as distractors.
-      const baseInput = makeBaseInput();
-      const db = new Map<number, CardData>();
-      const packageNumbers = new Set<number>();
-      for (let i = 0; i < 6; i += 1) {
-        const card = makePackageCard(400 + i, "Character", 1 + (i % 2), "tide_beta");
-        db.set(card.cardNumber, card);
-        packageNumbers.add(card.cardNumber);
-      }
-      for (let i = 0; i < 4; i += 1) {
-        const card = makePackageCard(410 + i, "Character", 3 + (i % 2), "tide_beta");
-        db.set(card.cardNumber, card);
-        packageNumbers.add(card.cardNumber);
-      }
-      for (let i = 0; i < 4; i += 1) {
-        const card = makePackageCard(420 + i, "Character", 5 + (i % 2), "tide_beta");
-        db.set(card.cardNumber, card);
-        packageNumbers.add(card.cardNumber);
-      }
-      for (let i = 0; i < 6; i += 1) {
-        const card = makePackageCard(430 + i, "Event", (i % 4) + 1, "tide_beta");
-        db.set(card.cardNumber, card);
-        packageNumbers.add(card.cardNumber);
-      }
-      // tide_alpha distractors at every cost band for characters and events.
-      for (let i = 0; i < 6; i += 1) {
-        const card = makePackageCard(500 + i, "Character", 1 + (i % 6), "tide_alpha");
-        db.set(card.cardNumber, card);
-      }
-      for (let i = 0; i < 4; i += 1) {
-        const card = makePackageCard(520 + i, "Event", 2 + (i % 3), "tide_alpha");
-        db.set(card.cardNumber, card);
-      }
-
-      const init = createBattleInit({
-        ...baseInput,
-        cardDatabase: db,
-        dreamcallers: [
-          {
-            id: "tide-beta-dc",
-            name: "Tide Beta Sentinel",
-            title: "Accent Test",
-            renderedText: "",
-            imageNumber: "001",
-            startingEssence: 250,
-            mandatoryTides: ["tide_beta"],
-            optionalTides: [],
-          },
-        ],
-        state: { ...baseInput.state, deck: [] },
-      });
-
-      expect(init.enemyDescriptor.packageTides).toEqual(["tide_beta"]);
-      const matchingTideCount = init.enemyDeckDefinition.filter((card) =>
-        packageNumbers.has(card.cardNumber),
-      ).length;
-      // With broad accent-matching supply, most of the final deck should stay
-      // on-accent while still allowing kind/cost fallback when a bucket needs
-      // more unique cards.
-      expect(matchingTideCount).toBeGreaterThanOrEqual(35);
-    });
-
-    it("falls through accent -> kind+cost -> wide numeric-cost pool before duplicating (B-19)", () => {
-      // Build an tide_beta enemy with zero tide_beta-accent cards in the pool. The fallback
-      // is tide_alpha candidates that cover every bucket exactly, so duplicates must
-      // not appear even though layer 1 (accent) is empty.
-      const pool: CardData[] = [
-        makePackageCard(600, "Character", 1, "tide_alpha"),
-        makePackageCard(601, "Character", 2, "tide_alpha"),
-        makePackageCard(602, "Character", 2, "tide_alpha"),
-        makePackageCard(603, "Character", 3, "tide_alpha"),
-        makePackageCard(604, "Character", 4, "tide_alpha"),
-        makePackageCard(605, "Character", 4, "tide_alpha"),
-        makePackageCard(606, "Character", 5, "tide_alpha"),
-        makePackageCard(607, "Character", 6, "tide_alpha"),
-        makePackageCard(608, "Event", 2, "tide_alpha"),
-        makePackageCard(609, "Event", 2, "tide_alpha"),
-        makePackageCard(610, "Event", 4, "tide_alpha"),
-        makePackageCard(611, "Event", 5, "tide_alpha"),
-      ];
-      const db = new Map(pool.map((card) => [card.cardNumber, card]));
-      const baseInput = makeBaseInput();
-      const init = createBattleInit({
-        ...baseInput,
-        cardDatabase: db,
-        dreamcallers: [
-          {
-            id: "tide-beta-dc",
-            name: "Tide Beta Sentinel",
-            title: "Accent Test",
-            renderedText: "",
-            imageNumber: "001",
-            startingEssence: 250,
-            mandatoryTides: ["tide_beta"],
-            optionalTides: [],
-          },
-        ],
-        state: { ...baseInput.state, deck: [] },
-      });
-
-      expect(init.enemyDescriptor.packageTides).toEqual(["tide_beta"]);
-      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
-      // Every card we emit must come from the tide_alpha pool — no phantom accent
-      // matches can appear because tide_beta pool is empty. Cross-bucket duplicates
-      // are acceptable under the current bucket model, but single-card
-      // duplication from an empty layer-2 fallback is not: assert the deck
-      // spans several distinct cards across both kinds, proving the fallback
-      // layer actually widens past the accent-empty layer before duplicating.
-      const fallbackNumbers = new Set(pool.map((c) => c.cardNumber));
-      const distinct = new Set<number>();
-      for (const card of init.enemyDeckDefinition) {
-        expect(fallbackNumbers.has(card.cardNumber)).toBe(true);
-        distinct.add(card.cardNumber);
-      }
-      expect(distinct.size).toBeGreaterThanOrEqual(8);
-    });
-
-    it("widens to the non-starter numeric-cost pool when accent and kind+cost layers are empty (B-19 bug-009)", () => {
-      // Only cheap characters exist — no mid, no expensive, no events. The
-      // mid/expensive character buckets and both event buckets must widen to
-      // the full non-starter numeric-cost pool (which here is just the cheap
-      // characters) before falling back to duplicates.
-      const pool: CardData[] = [];
-      for (let i = 0; i < 6; i += 1) {
-        pool.push(makePackageCard(700 + i, "Character", 1, "tide_alpha"));
-      }
-      const db = new Map(pool.map((card) => [card.cardNumber, card]));
-      const baseInput = makeBaseInput();
-      const init = createBattleInit({
-        ...baseInput,
-        cardDatabase: db,
-        dreamcallers: [
-          {
-            id: "tide-beta-dc",
-            name: "Tide Beta Sentinel",
-            title: "",
-            renderedText: "",
-            imageNumber: "001",
-            startingEssence: 250,
-            mandatoryTides: ["tide_beta"],
-            optionalTides: [],
-          },
-        ],
-        state: { ...baseInput.state, deck: [] },
-      });
-      expect(init.enemyDescriptor.packageTides).toEqual(["tide_beta"]);
-      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
-      // All cards should come from the pool — every hit is a cheap character,
-      // confirming the widening layer actually ran for mid/expensive/event
-      // buckets instead of skipping to duplicates.
-      const sourceNumbers = new Set(pool.map((c) => c.cardNumber));
-      for (const card of init.enemyDeckDefinition) {
-        expect(sourceNumbers.has(card.cardNumber)).toBe(true);
-      }
-    });
-
-    it("shuffles the final enemy deck once so it differs from construction order (B-20)", () => {
-      // The construction order is deterministic (accent-first, bucket-by-bucket),
-      // so we can reconstruct the pre-shuffle ordering and assert the post-
-      // shuffle output is a permutation of it — but not identical.
+    it("shuffles the final enemy deck deterministically", () => {
       const init = createBattleInit(makeBaseInput());
       const numbers = init.enemyDeckDefinition.map((card) => card.cardNumber);
       const sortedNumbers = [...numbers].sort((a, b) => a - b);
 
       expect(numbers.length).toBe(ENEMY_DECK_SIZE);
-      // Sanity: the deck isn't trivially already sorted or grouped by kind.
-      // A deterministic bucket-order would place the 8 characters before the 4
-      // events. Confirm the shuffle breaks that.
-      const firstEightKinds = init.enemyDeckDefinition
-        .slice(0, 8)
-        .map((card) => card.battleCardKind);
-      const allCharactersFirst = firstEightKinds.every((kind) => kind === "character");
-      expect(allCharactersFirst).toBe(false);
-      // Post-shuffle deck still contains the same multiset of cards — just
-      // reordered — so sorting the numbers matches sorting of a repeat call.
+      expect(numbers).not.toEqual(sortedNumbers);
       const again = createBattleInit(makeBaseInput());
-      expect([...again.enemyDeckDefinition.map((c) => c.cardNumber)].sort((a, b) => a - b))
-        .toEqual(sortedNumbers);
+      expect(
+        [...again.enemyDeckDefinition.map((c) => c.cardNumber)].sort(
+          (a, b) => a - b,
+        ),
+      ).toEqual(sortedNumbers);
+    });
+
+    it("has enough real content for every Dreamcaller recipe", async () => {
+      const content = await readGeneratedQuestContent();
+      if (content === null) {
+        return;
+      }
+      const eligibleCards = content.cards.filter(
+        (card) => !card.isStarter && card.energyCost !== null,
+      );
+      const globalRemovalEvents = eligibleCards.filter(isRemovalEventCard);
+
+      expect(globalRemovalEvents.length).toBeGreaterThanOrEqual(4);
+
+      for (const dreamcaller of content.dreamcallers) {
+        const requiredPool = eligibleCards.filter((card) =>
+          overlapsTides(card, dreamcaller.mandatoryTides),
+        );
+        expect(
+          requiredPool.length,
+          `${dreamcaller.name} required-pool count`,
+        ).toBeGreaterThanOrEqual(36);
+      }
     });
   });
 

@@ -58,6 +58,47 @@ export function makeBattleTestCardDatabase(): Map<number, CardData> {
     makeCard(304, "Late Pulse", "Event", 6, null, ["gamma"]),
   ];
 
+  for (let i = 0; i < 42; i += 1) {
+    const cardType = i % 4 === 0 ? "Event" : "Character";
+    cards.push(
+      makeCard(
+        1000 + i,
+        `Alpha Pool ${String(i)}`,
+        cardType,
+        1 + (i % 6),
+        cardType === "Character" ? 1 + (i % 4) : null,
+        cardType === "Event" && i < 8 ? ["alpha", "cheap_removal"] : ["alpha"],
+      ),
+    );
+  }
+
+  for (let i = 0; i < 42; i += 1) {
+    const cardType = i % 5 === 0 ? "Event" : "Character";
+    cards.push(
+      makeCard(
+        1100 + i,
+        `Beta Pool ${String(i)}`,
+        cardType,
+        1 + (i % 6),
+        cardType === "Character" ? 1 + (i % 4) : null,
+        cardType === "Event" && i < 10 ? ["beta", "premium_removal"] : ["beta"],
+      ),
+    );
+  }
+
+  for (let i = 0; i < 4; i += 1) {
+    cards.push(
+      makeCard(
+        1200 + i,
+        `Global Removal ${String(i)}`,
+        "Event",
+        2 + (i % 2),
+        null,
+        i % 2 === 0 ? ["cheap_removal"] : ["premium_removal"],
+      ),
+    );
+  }
+
   return new Map(cards.map((card) => [card.cardNumber, card]));
 }
 

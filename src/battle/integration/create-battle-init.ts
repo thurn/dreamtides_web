@@ -18,30 +18,12 @@ import type {
   BattleQuestDeckEntry,
 } from "../types";
 
-const ENEMY_PREFIXES = [
-  "Shadow",
-  "Nightmare",
-  "Phantom",
-  "Dark",
-  "Cursed",
-  "Twisted",
-  "Fallen",
-  "Spectral",
-] as const;
-const ENEMY_SUBTITLES = [
-  "Dreamcaller Echo",
-  "Recovered Nightmare",
-  "Atlas Warden",
-  "Hollow Adversary",
-  "False Pilgrim",
-  "Storm-Bound Usurper",
-] as const;
-const ENEMY_DECK_SIZE = 50;
-const ENEMY_CHEAP_CHARACTER_COUNT = 13;
-const ENEMY_MID_CHARACTER_COUNT = 13;
-const ENEMY_EXPENSIVE_CHARACTER_COUNT = 8;
-const ENEMY_CHEAP_OR_MID_EVENT_COUNT = 8;
-const ENEMY_ANY_EVENT_COUNT = 8;
+const ENEMY_DECK_SIZE = 40;
+const ENEMY_REMOVAL_EVENT_COUNT = 4;
+const REMOVAL_TIDES = new Set<PackageTideId>([
+  "cheap_removal",
+  "premium_removal",
+]);
 
 /**
  * Minimum quest deck size for a battle. A deck below this is padded with
@@ -266,11 +248,8 @@ export function createEnemyDescriptor(
   }
 
   const template = pickRandom(dreamcallers, random);
-  const prefix = pickRandom(ENEMY_PREFIXES, random);
-  const subtitleSeed = pickRandom(ENEMY_SUBTITLES, random);
   const dreamsignCount = Math.floor(random() * 3) + 1;
   const portraitSeed = Math.floor(random() * 1_000_000);
-  const baseName = template.name.split(",")[0].split(" the ")[0];
 
   // The opponent's Dreamsigns are concrete: drawn from the templates adjacent
   // to the enemy's mandatory tides, so they can be shown before the battle.
@@ -303,8 +282,8 @@ export function createEnemyDescriptor(
 
   return {
     id: `enemy:${template.id}:${String(portraitSeed)}`,
-    name: `${prefix} ${baseName}`,
-    subtitle: `${subtitleSeed} • ${template.title}`,
+    name: template.name,
+    subtitle: "",
     imageNumber: template.imageNumber,
     portraitSeed,
     packageTides: Object.freeze([...template.mandatoryTides]),
@@ -321,130 +300,65 @@ function createEnemyDeckDefinition(
   const numericCards = Array.from(cardDatabase.values()).filter(
     (card) => !card.isStarter && card.energyCost !== null,
   );
-  const characters = numericCards.filter((card) => card.cardType === "Character");
-  const events = numericCards.filter((card) => card.cardType !== "Character");
-  const chosen: BattleDeckCardDefinition[] = [];
+  const requiredPool = filterByPackage(numericCards, enemyPackageTides);
+  const removalEvents = numericCards.filter(isRemovalEvent);
+  const requiredRemovalEvents = requiredPool.filter(isRemovalEvent);
+  const chosenCards: CardData[] = [];
+  const usedCardNumbers = new Set<number>();
 
-  addEnemyCards(
-    chosen,
-    filterByCostBand(filterByPackage(characters, enemyPackageTides), "cheap"),
-    filterByCostBand(characters, "cheap"),
-    numericCards,
-    ENEMY_CHEAP_CHARACTER_COUNT,
-    rng,
+  addUniqueCards(
+    chosenCards,
+    usedCardNumbers,
+    rng.shuffle(requiredRemovalEvents),
+    ENEMY_REMOVAL_EVENT_COUNT,
   );
-  addEnemyCards(
-    chosen,
-    filterByCostBand(filterByPackage(characters, enemyPackageTides), "mid"),
-    filterByCostBand(characters, "mid"),
-    numericCards,
-    ENEMY_MID_CHARACTER_COUNT,
-    rng,
-  );
-  addEnemyCards(
-    chosen,
-    filterByCostBand(filterByPackage(characters, enemyPackageTides), "expensive"),
-    filterByCostBand(characters, "expensive"),
-    numericCards,
-    ENEMY_EXPENSIVE_CHARACTER_COUNT,
-    rng,
-  );
-  addEnemyCards(
-    chosen,
-    filterByCostBand(filterByPackage(events, enemyPackageTides), "cheapOrMid"),
-    filterByCostBand(events, "cheapOrMid"),
-    numericCards,
-    ENEMY_CHEAP_OR_MID_EVENT_COUNT,
-    rng,
-  );
-  addEnemyCards(
-    chosen,
-    filterByPackage(events, enemyPackageTides),
-    events,
-    numericCards,
-    ENEMY_ANY_EVENT_COUNT,
-    rng,
+  if (chosenCards.length < ENEMY_REMOVAL_EVENT_COUNT) {
+    addUniqueCards(
+      chosenCards,
+      usedCardNumbers,
+      rng.shuffle(removalEvents),
+      ENEMY_REMOVAL_EVENT_COUNT,
+    );
+  }
+
+  if (chosenCards.length < ENEMY_REMOVAL_EVENT_COUNT) {
+    throw new Error(
+      `createBattleInit: enemy deck needs ${String(ENEMY_REMOVAL_EVENT_COUNT)} unique removal events, found ${String(chosenCards.length)}`,
+    );
+  }
+
+  addUniqueCards(
+    chosenCards,
+    usedCardNumbers,
+    rng.shuffle(requiredPool),
+    ENEMY_DECK_SIZE,
   );
 
-  if (chosen.length < ENEMY_DECK_SIZE) {
-    addEnemyCards(
-      chosen,
-      filterByPackage(numericCards, enemyPackageTides),
-      numericCards,
-      numericCards,
-      ENEMY_DECK_SIZE - chosen.length,
-      rng,
+  if (chosenCards.length < ENEMY_DECK_SIZE) {
+    throw new Error(
+      `createBattleInit: enemy deck needs ${String(ENEMY_DECK_SIZE)} unique cards, found ${String(chosenCards.length)} for required tides ${enemyPackageTides.join(", ")}`,
     );
   }
 
   return rng
-    .shuffle(chosen)
-    .slice(0, ENEMY_DECK_SIZE)
+    .shuffle(chosenCards.map(normalizeEnemyDeckCard))
     .map(cloneBattleDeckCardDefinition);
 }
 
-/**
- * Fills a bucket with up to `count` cards, walking three distinct layers in the
- * order required by spec §B-19:
- *   1. package-matching candidates for the requested kind/cost slice
- *   2. any non-starter numeric-cost card (widening past the kind/cost slice)
- *   3. duplicates of cards already chosen for this bucket
- *
- * Layer 1 and layer 2 are kept strictly separate so that an empty package pool
- * falls through to the broader non-starter pool rather than collapsing into it
- * (bug-009). `widePool` is typically the full non-starter numeric-cost roster.
- */
-function addEnemyCards(
-  chosen: BattleDeckCardDefinition[],
-  primaryPool: readonly CardData[],
-  fallbackPool: readonly CardData[],
-  widePool: readonly CardData[],
-  count: number,
-  rng: BattleRng,
-): void {
-  const orderedPrimaryPool = rng.shuffle(primaryPool);
-  const orderedFallbackPool = rng.shuffle(fallbackPool);
-  const bucket: BattleDeckCardDefinition[] = [];
-  const usedCardNumbers = new Set<number>();
-
-  fillLayer(bucket, usedCardNumbers, orderedPrimaryPool, count);
-  fillLayer(bucket, usedCardNumbers, orderedFallbackPool, count);
-
-  // Only shuffle the broader non-starter numeric-cost pool when the primary and
-  // kind+cost layers cannot satisfy the bucket. Keeping this shuffle lazy
-  // preserves upstream RNG consumption for the normal case where the primary
-  // and fallback layers already fill the bucket.
-  let orderedWidePool: readonly CardData[] | null = null;
-  if (bucket.length < count) {
-    orderedWidePool = rng.shuffle(widePool);
-    fillLayer(bucket, usedCardNumbers, orderedWidePool, count);
-  }
-
-  const duplicateFallback = bucket.length > 0
-    ? bucket
-    : (orderedWidePool ?? rng.shuffle(widePool)).map(normalizeEnemyDeckCard);
-
-  while (bucket.length < count && duplicateFallback.length > 0) {
-    bucket.push(cloneBattleDeckCardDefinition(duplicateFallback[bucket.length % duplicateFallback.length]));
-  }
-
-  chosen.push(...bucket);
-}
-
-function fillLayer(
-  bucket: BattleDeckCardDefinition[],
+function addUniqueCards(
+  chosenCards: CardData[],
   usedCardNumbers: Set<number>,
   orderedPool: readonly CardData[],
   count: number,
 ): void {
   for (const card of orderedPool) {
-    if (bucket.length >= count) {
+    if (chosenCards.length >= count) {
       return;
     }
     if (usedCardNumbers.has(card.cardNumber)) {
       continue;
     }
-    bucket.push(normalizeEnemyDeckCard(card));
+    chosenCards.push(card);
     usedCardNumbers.add(card.cardNumber);
   }
 }
@@ -458,19 +372,13 @@ function cloneBattleDeckCardDefinition(
   };
 }
 
-/**
- * Returns only cards that share at least one package tide with the enemy's
- * package (empty array when there is no overlap, or when the enemy has no
- * declared package tides). The caller is responsible for providing a separate,
- * broader fallback pool — this function must not silently widen on empty
- * (bug-009).
- */
+/** Returns cards that share at least one package tide with the enemy package. */
 function filterByPackage(
   cards: readonly CardData[],
   enemyPackageTides: readonly PackageTideId[],
 ): CardData[] {
   if (enemyPackageTides.length === 0) {
-    return [];
+    return [...cards];
   }
   const enemyTideSet = new Set(enemyPackageTides);
   return cards.filter((card) =>
@@ -478,23 +386,11 @@ function filterByPackage(
   );
 }
 
-function filterByCostBand(
-  cards: readonly CardData[],
-  band: "cheap" | "mid" | "expensive" | "cheapOrMid",
-): CardData[] {
-  return cards.filter((card) => {
-    const cost = card.energyCost ?? 0;
-    if (band === "cheap") {
-      return cost <= 2;
-    }
-    if (band === "mid") {
-      return cost >= 3 && cost <= 4;
-    }
-    if (band === "expensive") {
-      return cost >= 5;
-    }
-    return cost <= 4;
-  });
+function isRemovalEvent(card: CardData): boolean {
+  return (
+    card.cardType === "Event" &&
+    card.tides.some((tide) => REMOVAL_TIDES.has(tide))
+  );
 }
 
 function normalizePlayerDeckCard(
