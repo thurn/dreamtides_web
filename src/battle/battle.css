@@ -338,6 +338,24 @@
   color: var(--text);
 }
 
+@media (min-width: 1280px) {
+  .battle-side-zone-column {
+    flex-basis: clamp(154px, 12vw, 188px);
+    width: clamp(154px, 12vw, 188px);
+  }
+
+  .battle-small-zone-row {
+    flex-basis: clamp(156px, 21vh, 218px);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+
+  .battle-small-zone {
+    font-size: clamp(12px, 1vw, 15px);
+    font-weight: 700;
+  }
+}
+
 .bf-wrap {
   flex: 1 1 var(--battlefield-row-width);
   min-width: 0;
