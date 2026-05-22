@@ -691,6 +691,86 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("opens the battle pool viewer and drags generated cards into visible drop targets", () => {
+    const { container, root } = renderScreen();
+    const handTray = container.querySelector<HTMLElement>('[data-battle-region="player-hand-tray"]');
+    const poolButton = container.querySelector<HTMLButtonElement>('[data-battle-action="open-pool-viewer"]');
+    const initialHandCount = container.querySelectorAll(
+      '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
+    ).length;
+
+    if (handTray === null || poolButton === null) {
+      throw new Error("expected hand tray and pool button");
+    }
+
+    act(() => {
+      poolButton.click();
+    });
+    expect(container.querySelector('[data-pool-viewer="floating"]')).not.toBeNull();
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-pool-source="catalog"]')?.click();
+    });
+
+    const handPoolCard = container.querySelector<HTMLElement>('[data-pool-card-number="201"]');
+    if (handPoolCard === null) {
+      throw new Error("expected pool card");
+    }
+
+    act(() => {
+      handPoolCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+
+    expect(handTray.getAttribute("data-battle-zone-drop-target")).toBe("player:hand");
+
+    act(() => {
+      handTray.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    expect(container.querySelectorAll(
+      '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
+    )).toHaveLength(initialHandCount + 1);
+    expect(handTray.textContent).toContain("Beta Tender");
+
+    const slotPoolCard = container.querySelector<HTMLElement>('[data-pool-card-number="202"]');
+    const reserveSlot = container.querySelector<HTMLElement>('[data-slot-id="player-reserve-R0"]');
+    if (slotPoolCard === null || reserveSlot === null) {
+      throw new Error("expected pool card and reserve slot");
+    }
+
+    act(() => {
+      slotPoolCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+    act(() => {
+      reserveSlot.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+
+    expect(reserveSlot.getAttribute("data-slot-card-id")).toMatch(/^bc_/);
+    expect(reserveSlot.textContent).toContain("Garden Sentinel");
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+    const enemyHandTray = container.querySelector<HTMLElement>('[data-battle-region="opponent-hand-tray"]');
+    const enemyPoolCard = container.querySelector<HTMLElement>('[data-pool-card-number="205"]');
+    if (enemyHandTray === null || enemyPoolCard === null) {
+      throw new Error("expected enemy hand tray and pool card");
+    }
+
+    act(() => {
+      enemyPoolCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
+    });
+    expect(enemyHandTray.getAttribute("data-battle-zone-drop-target")).toBe("enemy:hand");
+    act(() => {
+      enemyHandTray.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+    expect(enemyHandTray.textContent).toContain("Harvest Ritual");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("drops a player hand card into the player void zone and opens the void browser", () => {
     const { container, root } = renderScreen();
     const firstHandCard = container.querySelector<HTMLElement>(

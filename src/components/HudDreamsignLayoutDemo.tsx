@@ -203,6 +203,7 @@ export function HudDreamsignLayoutDemo() {
         <HUD
           onOpenDeckViewer={noop}
           onOpenGlossary={noop}
+          onOpenPoolViewer={noop}
           onOpenDebugScreen={noop}
           onToggleCardSourceOverlay={noop}
           onToggleJourneyExplanation={noop}

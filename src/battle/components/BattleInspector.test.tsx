@@ -54,6 +54,7 @@ function mount(): {
         onOpen={() => undefined}
         onCommand={onCommand}
         onOpenFigmentCreator={() => undefined}
+        onOpenPoolViewer={() => undefined}
         onOpenForesee={() => undefined}
         onOpenZone={() => undefined}
         onResetBattle={() => undefined}

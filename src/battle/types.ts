@@ -79,6 +79,7 @@ export type BattleCommandSourceSurface =
   | "side-summary"
   | "status-strip"
   | "dreamcaller-panel"
+  | "pool-viewer"
   | "phase-controls";
 
 /**
@@ -235,7 +236,8 @@ export interface BattleCardNote {
 export type BattleCardProvenanceKind =
   | "quest-deck"
   | "generated-copy"
-  | "generated-figment";
+  | "generated-figment"
+  | "generated-pool";
 
 export interface BattleCardProvenance {
   kind: BattleCardProvenanceKind;

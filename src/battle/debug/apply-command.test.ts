@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createBattleInit } from "../integration/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import { createBattleReducerState } from "../state/reducer";
+import { createBaseBattleDeckCardDefinition } from "../card-definition";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
@@ -778,6 +779,123 @@ describe("applyBattleCommand", () => {
       printedSpark: 3,
       subtype: "Wisp",
     });
+  });
+
+  it("creates generated pool cards into open zones and leaves occupied slots unchanged", () => {
+    const { state } = createTestBattle();
+    const card = makeBattleTestCardDatabase().get(201);
+    if (card === undefined) {
+      throw new Error("expected test card");
+    }
+    const definition = createBaseBattleDeckCardDefinition(card);
+    const previousOrdinal = state.nextBattleCardOrdinal;
+
+    const toHand = applyBattleCommand(
+      createBattleReducerState(state),
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_CARD_FROM_DEFINITION",
+          definition,
+          destination: { side: "player", zone: "hand" },
+          createdAtMs: 77,
+        },
+        sourceSurface: "pool-viewer",
+      },
+    );
+    const handCardId = `bc_${String(previousOrdinal).padStart(4, "0")}`;
+    expect(toHand.mutable.sides.player.hand).toContain(handCardId);
+    expect(toHand.mutable.cardInstances[handCardId]).toMatchObject({
+      owner: "player",
+      controller: "player",
+      isRevealedToPlayer: true,
+      provenance: {
+        kind: "generated-pool",
+        sourceBattleCardId: null,
+        createdAtMs: 77,
+      },
+    });
+    expect(toHand.history.past[0].metadata).toMatchObject({
+      commandId: "CREATE_CARD_FROM_DEFINITION",
+      label: "Create Beta Tender",
+      kind: "zone-move",
+      isComposite: true,
+      sourceSurface: "pool-viewer",
+      targets: [{ kind: "zone", ref: "player:hand" }],
+    });
+    expect(toHand.lastTransition?.logEvents.find(
+      (entry) => entry.event === "battle_proto_card_created",
+    )?.fields).toMatchObject({
+      battleCardId: handCardId,
+      destinationZone: "player:hand",
+      provenanceKind: "generated-pool",
+      sourceBattleCardId: null,
+      name: "Beta Tender",
+      ownerSide: "player",
+    });
+
+    const toEnemySlot = applyBattleCommand(
+      toHand,
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_CARD_FROM_DEFINITION",
+          definition,
+          destination: { side: "enemy", zone: "reserve", slotId: "R0" },
+          createdAtMs: 78,
+        },
+        sourceSurface: "pool-viewer",
+      },
+    );
+    expect(toEnemySlot.mutable.sides.enemy.reserve.R0).toBe(`bc_${String(previousOrdinal + 1).padStart(4, "0")}`);
+
+    const toDeckTop = applyBattleCommand(
+      toEnemySlot,
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_CARD_FROM_DEFINITION",
+          definition,
+          destination: { side: "player", zone: "deck", position: "top" },
+          createdAtMs: 79,
+        },
+        sourceSurface: "pool-viewer",
+      },
+    );
+    expect(toDeckTop.mutable.sides.player.deck[0]).toBe(`bc_${String(previousOrdinal + 2).padStart(4, "0")}`);
+
+    const toStack = applyBattleCommand(
+      toDeckTop,
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_CARD_FROM_DEFINITION",
+          definition,
+          destination: { side: "enemy", zone: "stack" },
+          createdAtMs: 80,
+        },
+        sourceSurface: "pool-viewer",
+      },
+    );
+    expect(toStack.mutable.stack?.[toStack.mutable.stack.length - 1]).toMatchObject({
+      battleCardId: `bc_${String(previousOrdinal + 3).padStart(4, "0")}`,
+      side: "enemy",
+    });
+
+    const occupiedNoop = applyBattleCommand(
+      toStack,
+      {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_CARD_FROM_DEFINITION",
+          definition,
+          destination: { side: "enemy", zone: "reserve", slotId: "R0" },
+          createdAtMs: 81,
+        },
+        sourceSurface: "pool-viewer",
+      },
+    );
+    expect(occupiedNoop).toBe(toStack);
   });
 
   it("stacks matching figments for the same side instead of creating a second battlefield card", () => {

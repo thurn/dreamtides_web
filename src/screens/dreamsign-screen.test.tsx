@@ -380,6 +380,7 @@ describe("DreamsignOfferingScreen Why Dreamsigns button", () => {
         <HUD
           onOpenDeckViewer={vi.fn()}
           onOpenGlossary={vi.fn()}
+          onOpenPoolViewer={vi.fn()}
           onOpenDebugScreen={vi.fn()}
           onToggleCardSourceOverlay={vi.fn()}
           onToggleJourneyExplanation={vi.fn()}
@@ -393,9 +394,6 @@ describe("DreamsignOfferingScreen Why Dreamsigns button", () => {
     );
 
     const slot = document.getElementById(HUD_DREAMSIGN_DEBUG_SLOT_ID);
-    const debugButton = Array.from(document.querySelectorAll("button")).find(
-      (candidate) => candidate.textContent?.includes("Debug"),
-    );
     const whyButton = document.querySelector<HTMLButtonElement>(
       '[data-testid="hud-why-dreamsigns-button"]',
     );
@@ -404,12 +402,16 @@ describe("DreamsignOfferingScreen Why Dreamsigns button", () => {
       throw new Error("HUD dreamsign slot missing");
     }
     expect(whyButton).not.toBeNull();
-    expect(debugButton).not.toBeUndefined();
     expect(slot.contains(whyButton)).toBe(true);
-    expect(slot.nextElementSibling).toBe(debugButton);
     expect(slot.parentElement?.className).toContain("flex-wrap");
     expect(slot.parentElement?.className).toContain("col-span-2");
     expect(slot.parentElement?.className).toContain("lg:col-span-1");
+    act(() => {
+      document.querySelector<HTMLButtonElement>('[data-testid="hud-utility-menu-button"]')?.click();
+    });
+    expect(document.querySelector('[data-testid="hud-utility-menu"]')?.textContent).toContain(
+      "Package Debug",
+    );
     expect(
       container.querySelector(
         '[data-offering-footer] [data-testid="hud-why-dreamsigns-button"]',

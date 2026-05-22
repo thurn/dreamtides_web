@@ -53,6 +53,7 @@ function useAnimatedNumber(target: number, duration: number): number {
 interface HudProps {
   onOpenDeckViewer: () => void;
   onOpenGlossary: () => void;
+  onOpenPoolViewer: () => void;
   onOpenDebugScreen: () => void;
   onToggleCardSourceOverlay: () => void;
   onToggleJourneyExplanation: () => void;
@@ -67,6 +68,7 @@ interface HudProps {
 export function HUD({
   onOpenDeckViewer,
   onOpenGlossary,
+  onOpenPoolViewer,
   onOpenDebugScreen,
   onToggleCardSourceOverlay,
   onToggleJourneyExplanation,
@@ -77,13 +79,19 @@ export function HUD({
   isJourneyExplanationOpen,
 }: HudProps) {
   const { state } = useQuest();
+  const [isUtilityMenuOpen, setIsUtilityMenuOpen] = useState(false);
   const animatedEssence = useAnimatedNumber(
     state.essence,
     ESSENCE_ANIM_DURATION,
   );
 
   function handleDownloadLog() {
+    setIsUtilityMenuOpen(false);
     downloadLog();
+  }
+
+  function closeUtilityMenu(): void {
+    setIsUtilityMenuOpen(false);
   }
 
   const dreamcallerName = state.dreamcaller?.name ?? null;
@@ -265,20 +273,7 @@ export function HUD({
           <span className="sr-only lg:hidden">Glossary</span>
         </button>
         {hasCardSourceDebug && (
-          <button
-            className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-sky-300`}
-            style={{
-              background: isCardSourceOverlayOpen
-                ? "rgba(96, 165, 250, 0.24)"
-                : "rgba(96, 165, 250, 0.14)",
-              border: `1px solid ${isCardSourceOverlayOpen ? "rgba(96, 165, 250, 0.5)" : "rgba(96, 165, 250, 0.28)"}`,
-              color: isCardSourceOverlayOpen ? "#dbeafe" : "#93c5fd",
-            }}
-            onClick={onToggleCardSourceOverlay}
-          >
-            <span className="lg:hidden">{"?"}</span>
-            <span className="hidden lg:inline">Why Cards</span>
-          </button>
+          <span className="sr-only">Card source debug available</span>
         )}
         <span
           id={HUD_DREAMSIGN_DEBUG_SLOT_ID}
@@ -288,55 +283,100 @@ export function HUD({
         {hasDraftData && (
           <>
             {hasJourneyExplanation && (
-              <button
-                className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-cyan-300`}
-                style={{
-                  background: isJourneyExplanationOpen
-                    ? "rgba(34, 211, 238, 0.24)"
-                    : "rgba(34, 211, 238, 0.14)",
-                  border: `1px solid ${
-                    isJourneyExplanationOpen
-                      ? "rgba(34, 211, 238, 0.52)"
-                      : "rgba(34, 211, 238, 0.3)"
-                  }`,
-                  color: isJourneyExplanationOpen ? "#cffafe" : "#67e8f9",
-                }}
-                onClick={onToggleJourneyExplanation}
-                data-testid="hud-why-journey-button"
-                aria-pressed={isJourneyExplanationOpen}
-              >
-                <span className="lg:hidden" aria-hidden="true">{"?"}</span>
-                <span className="hidden lg:inline">Why Journey</span>
-                <span className="sr-only lg:hidden">Why Journey</span>
-              </button>
+              <span className="sr-only">Journey explanation available</span>
             )}
-            <button
-              className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-rose-300`}
-              style={{
-                background: "rgba(239, 68, 68, 0.15)",
-                border: "1px solid rgba(239, 68, 68, 0.3)",
-                color: "#f87171",
-              }}
-              onClick={onOpenDebugScreen}
-            >
-              <span className="lg:hidden">{"\uD83D\uDC1B"}</span>
-              <span className="hidden lg:inline">Debug</span>
-            </button>
           </>
         )}
-        <button
-          className={`${HUD_BUTTON_BASE_CLASS} focus-visible:ring-amber-300`}
-          style={{
-            background: "rgba(212, 160, 23, 0.15)",
-            border: "1px solid rgba(212, 160, 23, 0.3)",
-            color: "#fbbf24",
-          }}
-          onClick={handleDownloadLog}
-        >
-          <span className="lg:hidden">{"\u2B73"}</span>
-          <span className="hidden lg:inline">Download Log</span>
-        </button>
+        <div className="relative">
+          <button
+            type="button"
+            aria-label="Open utility menu"
+            aria-expanded={isUtilityMenuOpen}
+            data-testid="hud-utility-menu-button"
+            className={`${HUD_BUTTON_BASE_CLASS} min-w-9 focus-visible:ring-cyan-300`}
+            style={{
+              background: "rgba(15, 23, 42, 0.72)",
+              border: "1px solid rgba(148, 163, 184, 0.32)",
+              color: "#e2e8f0",
+            }}
+            onClick={() => setIsUtilityMenuOpen((value) => !value)}
+          >
+            {"\u22ef"}
+          </button>
+          {isUtilityMenuOpen ? (
+            <div
+              data-testid="hud-utility-menu"
+              className="absolute right-0 bottom-full z-50 mb-2 flex min-w-48 flex-col gap-1 rounded-md border border-slate-600 bg-slate-950 p-2 shadow-xl"
+            >
+              <UtilityMenuButton
+                label="Pool Viewer"
+                onClick={() => {
+                  closeUtilityMenu();
+                  onOpenPoolViewer();
+                }}
+              />
+              {hasCardSourceDebug ? (
+                <UtilityMenuButton
+                  label="Why Cards"
+                  active={isCardSourceOverlayOpen}
+                  onClick={() => {
+                    closeUtilityMenu();
+                    onToggleCardSourceOverlay();
+                  }}
+                />
+              ) : null}
+              {hasDraftData ? (
+                <UtilityMenuButton
+                  label="Package Debug"
+                  onClick={() => {
+                    closeUtilityMenu();
+                    onOpenDebugScreen();
+                  }}
+                />
+              ) : null}
+              {hasJourneyExplanation ? (
+                <UtilityMenuButton
+                  label="Why Journey"
+                  active={isJourneyExplanationOpen}
+                  onClick={() => {
+                    closeUtilityMenu();
+                    onToggleJourneyExplanation();
+                  }}
+                  testId="hud-why-journey-button"
+                />
+              ) : null}
+              <UtilityMenuButton label="Download Log" onClick={handleDownloadLog} />
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
+  );
+}
+
+function UtilityMenuButton({
+  active = false,
+  label,
+  onClick,
+  testId,
+}: {
+  active?: boolean;
+  label: string;
+  onClick: () => void;
+  testId?: string;
+}) {
+  return (
+    <button
+      type="button"
+      data-testid={testId}
+      className="min-h-9 rounded-md px-3 text-left text-sm font-medium hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+      style={{
+        background: active ? "rgba(34, 211, 238, 0.18)" : "transparent",
+        color: active ? "#cffafe" : "#e2e8f0",
+      }}
+      onClick={onClick}
+    >
+      {label}
+    </button>
   );
 }

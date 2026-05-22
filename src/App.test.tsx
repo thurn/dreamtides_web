@@ -69,8 +69,16 @@ vi.mock("./components/ScreenRouter", () => ({
   ScreenRouter: () => <div>Screen Router</div>,
 }));
 
+interface HudMockProps {
+  onOpenPoolViewer: () => void;
+}
+
 vi.mock("./components/HUD", () => ({
-  HUD: () => <div data-testid="hud">HUD</div>,
+  HUD: ({ onOpenPoolViewer }: HudMockProps) => (
+    <button type="button" data-testid="hud" onClick={onOpenPoolViewer}>
+      HUD
+    </button>
+  ),
 }));
 
 interface DeckViewerMockProps {
@@ -86,6 +94,23 @@ const deckViewerMock = vi.fn<(props: DeckViewerMockProps) => ReactNode>(
 
 vi.mock("./components/DeckViewer", () => ({
   DeckViewer: (props: DeckViewerMockProps) => deckViewerMock(props),
+}));
+
+interface PoolViewerMockProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const poolViewerMock = vi.fn<(props: PoolViewerMockProps) => ReactNode>(
+  ({ isOpen, onClose }) => (
+    <button type="button" data-pool-open={String(isOpen)} onClick={onClose}>
+      Pool Viewer
+    </button>
+  ),
+);
+
+vi.mock("./components/PoolViewer", () => ({
+  PoolViewer: (props: PoolViewerMockProps) => poolViewerMock(props),
 }));
 
 interface StartingDeckModalMockProps {
@@ -511,6 +536,44 @@ describe("QuestApp", () => {
       expect.objectContaining({ isOpen: false }),
     );
     expect(deckViewerMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isOpen: false }),
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("opens and closes the Pool Viewer from the HUD entry point", () => {
+    setQuestState(starterCallerState({ hasSeenStartingDeckPopup: true }));
+
+    const { container, root } = mount(
+      <QuestApp
+        cardDatabase={new Map()}
+        runtimeConfig={{
+          seedOverride: null,
+          startInBattle: false,
+          gameId: null,
+          databaseMode: "emulator",
+        }}
+      />,
+    );
+
+    expect(poolViewerMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isOpen: false }),
+    );
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>("[data-testid='hud']")?.click();
+    });
+    expect(poolViewerMock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ isOpen: true }),
+    );
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>("[data-pool-open='true']")?.click();
+    });
+    expect(poolViewerMock).toHaveBeenLastCalledWith(
       expect.objectContaining({ isOpen: false }),
     );
 

@@ -7,12 +7,14 @@ import type {
 } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { SiteState } from "../../types/quest";
+import type { CardData } from "../../types/cards";
 import {
   createBattleLogBaseFields,
   logBattleCommandApplied,
   logEventOnce,
 } from "../../logging";
 import { useQuest } from "../../state/quest-context";
+import { PoolViewer } from "../../components/PoolViewer";
 import { useMultiplayerBattle } from "../../state/multiplayer-battle-context";
 import { dispatchBattleReset, dispatchClearBattleState } from "../../multiplayer/battle-service";
 import type { SharedBattleState } from "../../multiplayer/battle-types";
@@ -27,6 +29,7 @@ import {
 import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type {
   BattleCommandSourceSurface,
+  BattleDeckCardDefinition,
   BattleDreamcallerSummary,
   BattleEnemyDescriptor,
   BattleFieldSlotAddress,
@@ -64,6 +67,7 @@ import {
   createMoveCardToStackCommand,
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
+import { createBaseBattleDeckCardDefinition } from "../card-definition";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
 const PHASE_CONTROL_SEQUENCE = ["dawn", "day", "dusk", "night"] as const satisfies readonly BattlePhase[];
@@ -83,8 +87,13 @@ type ForeseeOverlayState = {
   side: BattleSide;
 } | null;
 type PendingDragState = {
+  kind: "battle-card";
   battleCardId: string;
   sourceSurface: BattleCommandSourceSurface;
+} | {
+  kind: "pool-card";
+  definition: BattleDeckCardDefinition;
+  sourceSurface: "pool-viewer";
 } | null;
 type HoverPreviewState = {
   battleCardId: string;
@@ -136,6 +145,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
   const [openForeseeOverlay, setOpenForeseeOverlay] = useState<ForeseeOverlayState>(null);
   const [openDeckOrderPicker, setOpenDeckOrderPicker] = useState<BattleSide | null>(null);
   const [openFigmentCreator, setOpenFigmentCreator] = useState<BattleSide | null>(null);
+  const [isPoolViewerOpen, setIsPoolViewerOpen] = useState(false);
   const [openNoteEditor, setOpenNoteEditor] = useState<string | null>(null);
   const [openSideSummary, setOpenSideSummary] = useState<BattleSide | null>(null);
   const [isDreamcallerPanelOpen, setIsDreamcallerPanelOpen] = useState(false);
@@ -150,6 +160,11 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     !isResultOverlayDismissed;
   const showReopenPill = reducerState.mutable.result !== null &&
     isResultOverlayDismissed;
+  const pendingDragCardId = pendingDrag === null
+    ? null
+    : pendingDrag.kind === "battle-card"
+      ? pendingDrag.battleCardId
+      : "__pool_viewer_card__";
 
   const handleCommand = useCallback((command: BattleCommand): void => {
     setPendingDrag(null);
@@ -223,6 +238,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       setOpenForeseeOverlay(null);
       setOpenDeckOrderPicker(null);
       setOpenFigmentCreator(null);
+      setIsPoolViewerOpen(false);
       setOpenNoteEditor(null);
       setOpenSideSummary(null);
       setIsDreamcallerPanelOpen(false);
@@ -235,6 +251,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     setOpenForeseeOverlay(null);
     setOpenDeckOrderPicker(null);
     setOpenFigmentCreator(null);
+    setIsPoolViewerOpen(false);
     setOpenNoteEditor(null);
     setOpenSideSummary(null);
     setIsDreamcallerPanelOpen(false);
@@ -319,6 +336,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     setOpenForeseeOverlay(null);
     setOpenDeckOrderPicker(null);
     setOpenFigmentCreator(null);
+    setIsPoolViewerOpen(false);
     setOpenNoteEditor(null);
     setOpenSideSummary(null);
     setIsDreamcallerPanelOpen(false);
@@ -403,6 +421,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     const instance = reducerState.mutable.cardInstances[battleCardId];
     if (instance !== undefined) {
       setPendingDrag({
+        kind: "battle-card",
         battleCardId,
         sourceSurface: sourceSurface ?? resolveDragSourceSurface(location),
       });
@@ -412,6 +431,16 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
 
   function handleCardDragEnd(): void {
     setPendingDrag(null);
+  }
+
+  function handlePoolCardDragStart(card: CardData): void {
+    setPendingDrag({
+      kind: "pool-card",
+      definition: createBaseBattleDeckCardDefinition(card),
+      sourceSurface: "pool-viewer",
+    });
+    setContextMenu(null);
+    setHoverPreview(null);
   }
 
   // Every card-movement gesture funnels through the single unrestricted move
@@ -434,12 +463,15 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       return;
     }
 
-    const draggedLocation = selectBattleCardLocation(reducerState.mutable, pendingDrag.battleCardId);
+    const draggedLocation = pendingDrag.kind === "battle-card"
+      ? selectBattleCardLocation(reducerState.mutable, pendingDrag.battleCardId)
+      : null;
     const targetOccupant = selectBattlefieldSlotOccupant(reducerState.mutable, target);
 
     if (targetOccupant !== null) {
       const sourceIsBattlefield =
-        draggedLocation?.zone === "reserve" || draggedLocation?.zone === "deployed";
+        pendingDrag.kind === "battle-card" &&
+        (draggedLocation?.zone === "reserve" || draggedLocation?.zone === "deployed");
       if (sourceIsBattlefield) {
         handleCommand({
           id: "DEBUG_EDIT",
@@ -458,6 +490,21 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       // Dropping a non-battlefield card onto an occupied slot is a no-op: a
       // physical card cannot share a slot, and only battlefield-to-battlefield
       // drags can swap.
+      setPendingDrag(null);
+      return;
+    }
+
+    if (pendingDrag.kind === "pool-card") {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_CARD_FROM_DEFINITION",
+          definition: pendingDrag.definition,
+          destination: target,
+          createdAtMs: Date.now(),
+        },
+        sourceSurface: "pool-viewer",
+      });
       setPendingDrag(null);
       return;
     }
@@ -483,6 +530,23 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
       return;
     }
 
+    if (pendingDrag.kind === "pool-card") {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_CARD_FROM_DEFINITION",
+          definition: pendingDrag.definition,
+          destination: zone === "deck"
+            ? { side, zone: "deck", position: "top" }
+            : { side, zone },
+          createdAtMs: Date.now(),
+        },
+        sourceSurface: "pool-viewer",
+      });
+      setPendingDrag(null);
+      return;
+    }
+
     const command = zone === "deck"
       ? createMoveCardToDeckCommand(pendingDrag.battleCardId, side, "top", sourceSurface)
       : createMoveCardToZoneCommand(pendingDrag.battleCardId, side, zone, sourceSurface);
@@ -494,6 +558,22 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
     if (pendingDrag === null) {
       return;
     }
+
+    if (pendingDrag.kind === "pool-card") {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_CARD_FROM_DEFINITION",
+          definition: pendingDrag.definition,
+          destination: { side: "player", zone: "stack" },
+          createdAtMs: Date.now(),
+        },
+        sourceSurface: "pool-viewer",
+      });
+      setPendingDrag(null);
+      return;
+    }
+
     const side = selectBattleCardLocation(reducerState.mutable, pendingDrag.battleCardId)?.side ?? "player";
     handleCommand(
       createMoveCardToStackCommand(pendingDrag.battleCardId, side, pendingDrag.sourceSurface),
@@ -611,6 +691,16 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           })}
         />
       ) : null}
+      <PoolViewer
+        cardDatabase={cardDatabase}
+        draftState={questState.draftState}
+        isOpen={isPoolViewerOpen}
+        onClose={() => setIsPoolViewerOpen(false)}
+        onPoolCardDragEnd={handleCardDragEnd}
+        onPoolCardDragStart={handlePoolCardDragStart}
+        title="Battle Pool Viewer"
+        variant="floating"
+      />
       {openNoteEditor !== null ? (
         <BattleCardNoteEditor
           battleCardId={openNoteEditor}
@@ -695,7 +785,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                   onCardHoverStart={handleBattlefieldCardHoverStart}
                   onCardHoverMove={handleBattlefieldCardHoverMove}
                   onCardHoverEnd={handleBattlefieldCardHoverEnd}
-                  pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                  pendingDragCardId={pendingDragCardId}
                   pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
                 />
               </div>
@@ -703,7 +793,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             <div className="battlefield-zone-layout">
               <BattleStackZone
                 state={reducerState.mutable}
-                pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                pendingDragCardId={pendingDragCardId}
                 onDrop={handleStackDrop}
                 onCardClick={handleBattlefieldCardClick}
                 onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
@@ -781,7 +871,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     selectedSlot={null}
                     selectionAnchor={null}
                     handSelectionSide={null}
-                    pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                    pendingDragCardId={pendingDragCardId}
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
@@ -801,7 +891,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     selectedSlot={null}
                     selectionAnchor={null}
                     handSelectionSide={null}
-                    pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                    pendingDragCardId={pendingDragCardId}
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
@@ -825,7 +915,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     selectedSlot={null}
                     selectionAnchor={null}
                     handSelectionSide={null}
-                    pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                    pendingDragCardId={pendingDragCardId}
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
@@ -845,7 +935,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
                     selectedSlot={null}
                     selectionAnchor={null}
                     handSelectionSide={null}
-                    pendingDragCardId={pendingDrag?.battleCardId ?? null}
+                    pendingDragCardId={pendingDragCardId}
                     onCardClick={handleBattlefieldCardClick}
                     onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "battlefield")}
                     onCardDragStart={handleCardDragStart}
@@ -946,7 +1036,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
               onCardHoverStart={handleBattlefieldCardHoverStart}
               onCardHoverMove={handleBattlefieldCardHoverMove}
               onCardHoverEnd={handleBattlefieldCardHoverEnd}
-              pendingDragCardId={pendingDrag?.battleCardId ?? null}
+              pendingDragCardId={pendingDragCardId}
               pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
               isCardPlayable={undefined}
             />
@@ -978,6 +1068,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
           onOpen={() => setIsInspectorDrawerOpen(true)}
           onCommand={handleCommand}
           onOpenFigmentCreator={(side) => setOpenFigmentCreator(side)}
+          onOpenPoolViewer={() => setIsPoolViewerOpen(true)}
           onOpenForesee={(side, count) => setOpenForeseeOverlay({ side, count })}
           onOpenZone={handleOpenZoneBrowser}
           onResetBattle={handleResetBattle}

@@ -188,6 +188,7 @@ describe("HUD", () => {
   function renderHud(overrides: Partial<{
     onOpenDeckViewer: () => void;
     onOpenGlossary: () => void;
+    onOpenPoolViewer: () => void;
     onOpenDebugScreen: () => void;
     onToggleCardSourceOverlay: () => void;
     onToggleJourneyExplanation: () => void;
@@ -199,6 +200,7 @@ describe("HUD", () => {
       <HUD
         onOpenDeckViewer={overrides.onOpenDeckViewer ?? vi.fn()}
         onOpenGlossary={overrides.onOpenGlossary ?? vi.fn()}
+        onOpenPoolViewer={overrides.onOpenPoolViewer ?? vi.fn()}
         onOpenDebugScreen={overrides.onOpenDebugScreen ?? vi.fn()}
         onToggleCardSourceOverlay={
           overrides.onToggleCardSourceOverlay ?? vi.fn()
@@ -303,31 +305,57 @@ describe("HUD", () => {
     });
   });
 
-  it("renders Why Journey beside Debug when journey explanation data is active", () => {
+  it("renders utility actions inside the HUD menu", () => {
     setQuestContext(makeState([]));
+    const onOpenPoolViewer = vi.fn();
+    const onOpenDebugScreen = vi.fn();
     const onToggleJourneyExplanation = vi.fn();
     const { container, root } = renderHud({
       hasDraftData: true,
       hasJourneyExplanation: true,
+      onOpenDebugScreen,
+      onOpenPoolViewer,
       onToggleJourneyExplanation,
     });
 
+    const menuButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="hud-utility-menu-button"]',
+    );
+    act(() => {
+      menuButton?.click();
+    });
+
+    const menu = container.querySelector('[data-testid="hud-utility-menu"]');
+    expect(menu).not.toBeNull();
+    expect(menu?.textContent).toContain("Pool Viewer");
+    expect(menu?.textContent).toContain("Package Debug");
+    expect(menu?.textContent).toContain("Why Journey");
+    expect(menu?.textContent).toContain("Download Log");
+
+    const poolButton = Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
+      .find((button) => button.textContent === "Pool Viewer");
+
+    act(() => {
+      poolButton?.click();
+    });
+    expect(onOpenPoolViewer).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      menuButton?.click();
+    });
+    const debugButton = Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
+      .find((button) => button.textContent === "Package Debug");
+    act(() => {
+      debugButton?.click();
+    });
+    expect(onOpenDebugScreen).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      menuButton?.click();
+    });
     const whyJourneyButton = container.querySelector<HTMLButtonElement>(
       '[data-testid="hud-why-journey-button"]',
     );
-    expect(whyJourneyButton).not.toBeNull();
-    expect(whyJourneyButton?.textContent).toContain("Why Journey");
-
-    const rightButtons = Array.from(container.querySelectorAll("button"));
-    const whyIndex = rightButtons.findIndex(
-      (button) => button === whyJourneyButton,
-    );
-    const debugIndex = rightButtons.findIndex((button) =>
-      button.textContent?.includes("Debug"),
-    );
-    expect(whyIndex).toBeGreaterThanOrEqual(0);
-    expect(debugIndex).toBe(whyIndex + 1);
-
     act(() => {
       whyJourneyButton?.click();
     });

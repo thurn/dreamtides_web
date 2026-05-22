@@ -9,6 +9,7 @@ import { applyDeckEntryCardModification } from "../../card-type-change";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
+import { createBaseBattleDeckCardDefinition } from "../card-definition";
 import type {
   BattleDeckCardDefinition,
   BattleDreamcallerSummary,
@@ -343,7 +344,7 @@ function createEnemyDeckDefinition(
   }
 
   return rng
-    .shuffle(chosenCards.map(normalizeEnemyDeckCard))
+    .shuffle(chosenCards.map(createBaseBattleDeckCardDefinition))
     .map(cloneBattleDeckCardDefinition);
 }
 
@@ -430,27 +431,6 @@ function normalizePlayerDeckCard(
       ? {}
       : { keywordModification: entry.keywordModification }),
     isBane: entry.isBane,
-  };
-}
-
-function normalizeEnemyDeckCard(card: CardData): BattleDeckCardDefinition {
-  return {
-    sourceDeckEntryId: null,
-    cardNumber: card.cardNumber,
-    name: card.name,
-    battleCardKind: card.cardType === "Character" ? "character" : "event",
-    subtype: card.subtype,
-    energyCost: card.energyCost ?? 0,
-    printedEnergyCost: card.energyCost,
-    printedSpark: card.spark ?? 0,
-    isFast: card.isFast,
-    timing: card.isFast ? "fast" : "standard",
-    reclaimCost: null,
-    tides: [...card.tides],
-    renderedText: card.renderedText,
-    imageNumber: card.imageNumber,
-    transfiguration: null,
-    isBane: false,
   };
 }
 

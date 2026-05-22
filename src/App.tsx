@@ -11,6 +11,7 @@ import { MultiplayerBattleProvider } from "./state/multiplayer-battle-context";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { HUD } from "./components/HUD";
 import { DeckViewer } from "./components/DeckViewer";
+import { PoolViewer } from "./components/PoolViewer";
 import { StartingDeckModal } from "./components/StartingDeckModal";
 import { GlossaryPopup } from "./components/GlossaryPopup";
 import { DebugScreen } from "./screens/DebugScreen";
@@ -47,6 +48,7 @@ export function QuestApp({
     state.screen.type !== "questStart"
     && !isBattleSiteHudHidden(state);
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
+  const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
@@ -109,6 +111,14 @@ export function QuestApp({
 
   const handleCloseDeckViewer = useCallback(() => {
     setDeckViewerOpen(false);
+  }, []);
+
+  const handleOpenPoolViewer = useCallback(() => {
+    setPoolViewerOpen(true);
+  }, []);
+
+  const handleClosePoolViewer = useCallback(() => {
+    setPoolViewerOpen(false);
   }, []);
 
   const handleOpenGlossary = useCallback(() => {
@@ -177,6 +187,7 @@ export function QuestApp({
             <HUD
               onOpenDeckViewer={handleOpenDeckViewer}
               onOpenGlossary={handleOpenGlossary}
+              onOpenPoolViewer={handleOpenPoolViewer}
               onOpenDebugScreen={handleOpenDebugScreen}
               onToggleCardSourceOverlay={handleToggleCardSourceOverlay}
               hasDraftData={hasDraftData}
@@ -199,6 +210,14 @@ export function QuestApp({
             isOpen={deckViewerOpen}
             onClose={handleCloseDeckViewer}
             cardDatabase={cardDatabase}
+          />
+        </ErrorBoundary>
+        <ErrorBoundary scope="overlay:pool-viewer" onClose={handleClosePoolViewer}>
+          <PoolViewer
+            cardDatabase={cardDatabase}
+            draftState={state.draftState}
+            isOpen={poolViewerOpen}
+            onClose={handleClosePoolViewer}
           />
         </ErrorBoundary>
         <ErrorBoundary

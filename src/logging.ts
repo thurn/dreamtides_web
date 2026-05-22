@@ -222,7 +222,7 @@ export function createBattleProtoCardCreatedLogEvent(
   state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
   payload: {
     battleCardId: string;
-    provenanceKind: "generated-copy" | "generated-figment";
+    provenanceKind: "generated-copy" | "generated-figment" | "generated-pool";
     sourceBattleCardId: string | null;
     name: string;
     subtype: string;

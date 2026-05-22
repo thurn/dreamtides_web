@@ -6,6 +6,7 @@ import type {
   BattleCommandActor,
   BattleCommandSourceSurface,
   BattleCommandTarget,
+  BattleDeckCardDefinition,
   BattleFieldSlotAddress,
   BattleHistoryEntryKind,
   BattleHistoryEntryMetadata,
@@ -145,6 +146,12 @@ export type BattleDebugEdit =
     chosenSubtype: string;
     chosenSpark: number;
     name: string;
+    destination: BattleDebugZoneDestination;
+    createdAtMs: number;
+  }
+  | {
+    kind: "CREATE_CARD_FROM_DEFINITION";
+    definition: BattleDeckCardDefinition;
     destination: BattleDebugZoneDestination;
     createdAtMs: number;
   }
@@ -409,6 +416,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "DISCARD_CARD":
     case "CREATE_CARD_COPY":
     case "CREATE_FIGMENT":
+    case "CREATE_CARD_FROM_DEFINITION":
     case "REORDER_DECK":
     case "PLAY_FROM_DECK_TOP":
       return "zone-move";
@@ -434,7 +442,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
  * The canonical set (bug-075) is:
  * - `PLAY_FROM_DECK_TOP`: multi-step (deck-to-battlefield placement).
  * - `KINDLE`: spec §H-16 example (spark + card instance + log).
- * - `CREATE_CARD_COPY` / `CREATE_FIGMENT`: mint instance + bump ordinal +
+ * - `CREATE_CARD_COPY` / `CREATE_FIGMENT` / `CREATE_CARD_FROM_DEFINITION`: mint instance + bump ordinal +
  *   insert into target zone, atomically.
  * - `MOVE_CARD_TO_ZONE`: zone transition; the battlefield-to-battlefield
  *   path also edits three fields (source slot, target slot, controller),
@@ -449,6 +457,7 @@ function isCompositeDebugEdit(edit: BattleDebugEdit): boolean {
     case "KINDLE":
     case "CREATE_CARD_COPY":
     case "CREATE_FIGMENT":
+    case "CREATE_CARD_FROM_DEFINITION":
     case "MOVE_CARD_TO_ZONE":
     case "INCREASE_MAX_ENERGY_AND_FILL":
     case "SET_BATTLE_FLOW":
@@ -516,6 +525,12 @@ function collectDebugEditTargets(
     case "CREATE_FIGMENT":
       return [
         makeSideTarget(edit.side),
+        "slotId" in edit.destination
+          ? makeSlotTarget(edit.destination)
+          : makeZoneTarget(edit.destination.side, edit.destination.zone),
+      ];
+    case "CREATE_CARD_FROM_DEFINITION":
+      return [
         "slotId" in edit.destination
           ? makeSlotTarget(edit.destination)
           : makeZoneTarget(edit.destination.side, edit.destination.zone),
@@ -597,6 +612,8 @@ function createDebugEditLabel(
       return `Create Copy of ${readCardName(state, edit.sourceBattleCardId)}`;
     case "CREATE_FIGMENT":
       return `Create Figment (${edit.chosenSubtype}/${String(edit.chosenSpark)})`;
+    case "CREATE_CARD_FROM_DEFINITION":
+      return `Create ${edit.definition.name}`;
     case "REORDER_DECK":
       return `Reorder ${formatSideLabel(edit.side)} Deck`;
     case "REVEAL_DECK_TOP":

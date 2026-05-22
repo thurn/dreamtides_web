@@ -22,6 +22,7 @@ export function BattleInspector({
   onOpen,
   onCommand,
   onOpenFigmentCreator,
+  onOpenPoolViewer,
   onOpenForesee,
   onOpenZone,
   onResetBattle,
@@ -42,6 +43,7 @@ export function BattleInspector({
   onOpen?: () => void;
   onCommand: (command: BattleCommand) => void;
   onOpenFigmentCreator: (side: BattleSide) => void;
+  onOpenPoolViewer: () => void;
   onOpenForesee: (side: BattleSide, count: number) => void;
   onOpenZone: (side: BattleSide, zone: BrowseableZone) => void;
   onResetBattle?: () => void;
@@ -86,6 +88,14 @@ export function BattleInspector({
             <div className="insp-section">
               <h4>Visibility</h4>
               <div className="chip-row">
+                <button
+                  type="button"
+                  data-battle-action="open-pool-viewer"
+                  className="chip"
+                  onClick={onOpenPoolViewer}
+                >
+                  Pool Viewer
+                </button>
                 <button
                   type="button"
                   data-battle-action="toggle-opponent-hand"

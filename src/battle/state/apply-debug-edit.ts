@@ -300,6 +300,15 @@ export function applyDebugEdit(
         edit.createdAtMs,
         context,
       );
+    case "CREATE_CARD_FROM_DEFINITION":
+      return createCardFromDefinition(
+        state,
+        nextState,
+        edit.definition,
+        edit.destination,
+        edit.createdAtMs,
+        context,
+      );
     case "REORDER_DECK":
       return reorderDeck(state, nextState, edit.side, edit.order, context);
     case "REVEAL_DECK_TOP":
@@ -967,6 +976,68 @@ function createFigment(
             provenanceKind: "generated-figment",
             sourceBattleCardId: null,
             subtype: chosenSubtype,
+          },
+          context,
+        ),
+      ],
+    },
+  };
+}
+
+function createCardFromDefinition(
+  state: BattleMutableState,
+  nextState: BattleMutableState,
+  definition: BattleDeckCardDefinition,
+  destination: BattleDebugZoneDestination,
+  createdAtMs: number,
+  context: BattleEngineEmissionContext,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  if (!isDestinationAvailable(nextState, destination)) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  const clonedDefinition = cloneBattleDeckCardDefinition(definition);
+  const provenance: BattleCardProvenance = {
+    kind: "generated-pool",
+    sourceBattleCardId: null,
+    chosenSpark: null,
+    chosenSubtype: null,
+    createdAtTurnNumber: nextState.turnNumber,
+    createdAtSide: nextState.activeSide,
+    createdAtMs,
+  };
+  const battleCardId = allocateBattleCardInstance(nextState, {
+    definition: clonedDefinition,
+    owner: destination.side,
+    controller: destination.side,
+    isRevealedToPlayer: true,
+    provenance,
+  });
+
+  insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
+
+  return {
+    state: nextState,
+    transition: {
+      ...createEmptyTransitionData(),
+      logEvents: [
+        createBattleProtoCardCreatedLogEvent(
+          nextState,
+          {
+            battleCardId,
+            destinationZone: formatDestinationZoneLabel(destination),
+            name: clonedDefinition.name,
+            ownerSide: destination.side,
+            printedSpark: clonedDefinition.printedSpark,
+            provenanceKind: "generated-pool",
+            sourceBattleCardId: null,
+            subtype: clonedDefinition.subtype,
           },
           context,
         ),
