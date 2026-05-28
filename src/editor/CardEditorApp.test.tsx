@@ -599,6 +599,76 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("keeps the latest name draft visible when an earlier in-flight save fails", async () => {
+    const pendingSave = deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardField"]>>>();
+    const saveEditorCardField = vi
+      .fn<EditorApiClient["saveEditorCardField"]>()
+      .mockReturnValue(pendingSave.promise);
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    const firstInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (firstInput === null) {
+      throw new Error("Missing name input");
+    }
+
+    act(() => {
+      setInputValue(firstInput, "First Save");
+      pressKey(firstInput, "Enter");
+    });
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    const secondInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (secondInput === null) {
+      throw new Error("Missing second name input");
+    }
+    act(() => {
+      setInputValue(secondInput, "Latest Draft");
+    });
+
+    await act(async () => {
+      pendingSave.reject(new Error("Disk write failed"));
+      await Promise.resolve();
+    });
+
+    expect(container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    )?.value).toBe("Latest Draft");
+    expect(container.textContent).toContain("Disk write failed");
+    expect(container.textContent).not.toContain("Moonlit Envoy");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("keeps a successful save after a no-op re-edit while the save is pending", async () => {
     const pendingSave = deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardField"]>>>();
     const saveEditorCardField = vi

@@ -68,6 +68,18 @@ function withEntry(
   };
 }
 
+function hasActiveDirtyLocalDraft(
+  entry: EditableFieldSaveEntry,
+  clientRevision: number,
+  confirmedValue: EditableFieldValue,
+): boolean {
+  return (
+    (entry.status === "editing" || entry.status === "saving") &&
+    entry.clientRevision > clientRevision &&
+    !Object.is(entry.draftValue, confirmedValue)
+  );
+}
+
 export function beginFieldEdit(
   state: EditableSaveState,
   target: FieldTarget,
@@ -165,15 +177,16 @@ export function completeFieldSave(
     return state;
   }
 
-  const hasActiveDirtyLocalDraft =
-    (entry.status === "editing" || entry.status === "saving") &&
-    entry.clientRevision > clientRevision &&
-    !Object.is(entry.draftValue, confirmedValue);
+  const shouldKeepLocalDraft = hasActiveDirtyLocalDraft(
+    entry,
+    clientRevision,
+    confirmedValue,
+  );
 
   return withEntry(state, {
     ...entry,
-    status: hasActiveDirtyLocalDraft ? "editing" : "saved",
-    draftValue: hasActiveDirtyLocalDraft ? entry.draftValue : confirmedValue,
+    status: shouldKeepLocalDraft ? "editing" : "saved",
+    draftValue: shouldKeepLocalDraft ? entry.draftValue : confirmedValue,
     confirmedValue,
     clientRevision: entry.clientRevision,
     message: null,
@@ -192,12 +205,18 @@ export function failFieldSave(
     return state;
   }
 
+  const shouldKeepLocalDraft = hasActiveDirtyLocalDraft(
+    entry,
+    clientRevision,
+    serverConfirmedValue,
+  );
+
   return withEntry(state, {
     ...entry,
-    status: "error",
-    draftValue: serverConfirmedValue,
+    status: shouldKeepLocalDraft ? "editing" : "error",
+    draftValue: shouldKeepLocalDraft ? entry.draftValue : serverConfirmedValue,
     confirmedValue: serverConfirmedValue,
-    clientRevision,
+    clientRevision: shouldKeepLocalDraft ? entry.clientRevision : clientRevision,
     message,
   });
 }

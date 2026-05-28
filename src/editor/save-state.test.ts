@@ -208,4 +208,34 @@ describe("editor save state", () => {
       draftValue: "Latest Draft",
     });
   });
+
+  it("keeps an active newer draft visible when an older pending save fails", () => {
+    const firstSave = startFieldSave(
+      beginFieldEdit(EMPTY_EDITOR_SAVE_STATE, firstName, "Original"),
+      firstName,
+      "First Save",
+      "Original",
+    );
+    const editedAgain = updateFieldDraft(
+      firstSave.state,
+      firstName,
+      "Latest Draft",
+      "Original",
+    );
+
+    const failed = failFieldSave(
+      editedAgain,
+      firstName,
+      firstSave.clientRevision,
+      "Original",
+      "Save failed",
+    );
+
+    expect(fieldSaveEntry(failed, firstName)).toMatchObject({
+      status: "editing",
+      draftValue: "Latest Draft",
+      confirmedValue: "Original",
+      message: "Save failed",
+    });
+  });
 });
