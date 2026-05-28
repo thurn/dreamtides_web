@@ -76,7 +76,11 @@ function decodePathSegment(segment) {
 }
 
 function isEditorCardsApiPath(pathname) {
-  if (pathname.startsWith(BASE_PATH)) {
+  if (
+    pathname === BASE_PATH ||
+    pathname.startsWith(`${BASE_PATH}/`) ||
+    pathname.startsWith(`${BASE_PATH}%`)
+  ) {
     return true;
   }
 

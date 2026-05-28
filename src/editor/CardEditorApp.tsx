@@ -7,11 +7,7 @@ import type {
   EditorDisplayState,
 } from "./types";
 
-type AbortableEditorApiClient = Omit<EditorApiClient, "loadEditorCards"> & {
-  loadEditorCards(signal?: AbortSignal): Promise<EditorCardRecord[]>;
-};
-
-const DEFAULT_EDITOR_API_CLIENT: AbortableEditorApiClient = {
+const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
   loadEditorCards,
   saveEditorCardField,
 };
@@ -22,7 +18,7 @@ type LoadStatus =
   | { kind: "error"; message: string };
 
 export interface CardEditorAppProps {
-  apiClient?: AbortableEditorApiClient;
+  apiClient?: EditorApiClient;
 }
 
 function errorMessageFor(error: unknown): string {

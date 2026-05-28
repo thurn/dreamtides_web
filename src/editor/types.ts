@@ -97,7 +97,7 @@ export interface EditorApiErrorBody {
 }
 
 export interface EditorApiClient {
-  loadEditorCards(): Promise<EditorCardRecord[]>;
+  loadEditorCards(signal?: AbortSignal): Promise<EditorCardRecord[]>;
   saveEditorCardField(
     request: SaveEditorCardFieldRequest,
   ): Promise<SaveEditorCardFieldResponse>;
