@@ -388,6 +388,7 @@ describe("CardEditorApp", () => {
     if (input === null) {
       throw new Error("Missing name input");
     }
+    expect(document.activeElement).toBe(input);
 
     act(() => {
       setInputValue(input, "Renamed Envoy");

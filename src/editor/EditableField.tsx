@@ -1,4 +1,4 @@
-import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
 import type { EditableCardField } from "./types";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 
@@ -64,6 +64,17 @@ export default function EditableField({
   const isEditing = saveEntry?.status === "editing";
   const draftValue = saveEntry?.draftValue ?? value;
   const status = statusText(saveEntry);
+  const editorRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    if (!isEditing) {
+      return;
+    }
+
+    const editorElement = editorRef.current;
+    editorElement?.focus();
+    editorElement?.select();
+  }, [isEditing]);
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (event.key === "Enter" && mode === "single-line") {
@@ -83,6 +94,9 @@ export default function EditableField({
       <textarea
         aria-label={`${field} editor`}
         data-editor-input-field={field}
+        ref={(element) => {
+          editorRef.current = element;
+        }}
         value={String(draftValue)}
         onChange={(event) => onDraftChange(event.currentTarget.value)}
         onKeyDown={handleKeyDown}
@@ -92,6 +106,9 @@ export default function EditableField({
       <input
         aria-label={`${field} editor`}
         data-editor-input-field={field}
+        ref={(element) => {
+          editorRef.current = element;
+        }}
         type="text"
         value={String(draftValue)}
         onChange={(event) => onDraftChange(event.currentTarget.value)}
