@@ -260,9 +260,19 @@ describe("CardEditorApp", () => {
       "[data-editor-card-id=\"event-card\"]",
     );
 
-    expect(editorCard?.querySelector("[data-testid=\"card-type-line\"]")?.textContent).toContain(
-      "Event",
+    const typeLine = editorCard?.querySelector<HTMLElement>(
+      "[data-testid=\"card-type-line\"]",
     );
+    const subtypeField = editorCard?.querySelector<HTMLElement>(
+      "[data-editor-field=\"subtype\"]",
+    );
+    const typeSpan = subtypeField?.parentElement?.firstElementChild;
+
+    expect(typeLine?.textContent).toBe("Event — Omen");
+    expect(subtypeField?.textContent).toBe("Omen");
+    expect(subtypeField?.textContent).not.toContain("Event");
+    expect(typeSpan?.textContent).toBe("Event");
+    expect(typeSpan?.hasAttribute("data-editor-field")).toBe(false);
     expect(editorCard?.querySelector("[data-editor-field=\"card-type\"]")).toBeNull();
 
     act(() => {

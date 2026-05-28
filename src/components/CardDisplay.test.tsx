@@ -136,6 +136,9 @@ describe("CardDisplay", () => {
           typeLine: (_context, defaultNode) => (
             <span data-slot="type-line">{defaultNode}</span>
           ),
+          typeLineContent: (_context, defaultNode) => (
+            <span data-slot="type-line-content">{defaultNode}</span>
+          ),
           rulesText: (_context, defaultNode) => (
             <span data-slot="rules-text">{defaultNode}</span>
           ),
@@ -149,6 +152,7 @@ describe("CardDisplay", () => {
     expect(container.querySelector("[data-slot=\"energy\"] [data-pip-variant=\"energy\"]")).not.toBeNull();
     expect(container.querySelector("[data-slot=\"name\"]")?.textContent).toContain("Test Card");
     expect(container.querySelector("[data-slot=\"type-line\"]")?.textContent).toContain("Scout");
+    expect(container.querySelector("[data-slot=\"type-line-content\"]")?.textContent).toBe("Scout");
     expect(container.querySelector("[data-slot=\"rules-text\"]")?.textContent).toContain("Draw a card.");
     expect(container.querySelector("[data-slot=\"spark\"] [data-pip-variant=\"spark\"]")).not.toBeNull();
     expect(container.firstElementChild?.getAttribute("data-card-text-scale")).toBe("1.00");

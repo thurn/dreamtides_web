@@ -160,6 +160,10 @@ export interface CardViewSlotContext {
 export interface CardViewSlots {
   energy?: (context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode;
   name?: (context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode;
+  typeLineContent?: (
+    context: CardViewSlotContext,
+    defaultNode: ReactNode,
+  ) => ReactNode;
   typeLine?: (context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode;
   rulesText?: (context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode;
   spark?: (context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode;
@@ -276,6 +280,8 @@ export function CardView({
       {card.name}
     </h3>
   );
+  const typeLineContentNode =
+    typeLine !== "" ? <span className="truncate">{typeLine}</span> : null;
   const typeLineNode =
     typeLine !== "" || attributeChips.length > 0 ? (
       <div
@@ -299,7 +305,9 @@ export function CardView({
             {chip.glyph}
           </span>
         ))}
-        {typeLine !== "" && <span className="truncate">{typeLine}</span>}
+        {typeLine !== "" &&
+          (slots.typeLineContent?.(slotContext, typeLineContentNode) ??
+            typeLineContentNode)}
       </div>
     ) : null;
   const rulesTextNode = showRulesText ? (

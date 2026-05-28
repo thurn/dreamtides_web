@@ -1,10 +1,40 @@
+import type { ReactNode } from "react";
 import { CardView } from "../components/CardView";
-import type { CardViewSlots } from "../components/CardView";
+import type { CardViewSlotContext, CardViewSlots } from "../components/CardView";
 import type { EditorCardRecord, EditorDisplayState } from "./types";
 
 export interface EditableCardProps {
   card: EditorCardRecord;
   size: EditorDisplayState["size"];
+}
+
+function hasVisibleSubtype(context: CardViewSlotContext): boolean {
+  return context.card.subtype !== "" && context.card.subtype !== "*";
+}
+
+function renderEditableTypeLineContent(
+  context: CardViewSlotContext,
+  defaultNode: ReactNode,
+): ReactNode {
+  if (!hasVisibleSubtype(context)) {
+    return defaultNode;
+  }
+
+  if (context.card.cardType === "Event") {
+    return (
+      <span className="truncate">
+        <span>{context.card.cardType}</span>
+        <span aria-hidden="true"> — </span>
+        <span data-editor-field="subtype">{context.card.subtype}</span>
+      </span>
+    );
+  }
+
+  return (
+    <span className="truncate" data-editor-field="subtype">
+      {context.card.subtype}
+    </span>
+  );
 }
 
 const readOnlySlots: CardViewSlots = {
@@ -18,11 +48,8 @@ const readOnlySlots: CardViewSlots = {
       {defaultNode}
     </div>
   ),
-  typeLine: (_context, defaultNode) => (
-    <div data-editor-field="subtype" style={{ display: "contents" }}>
-      {defaultNode}
-    </div>
-  ),
+  typeLineContent: (context, defaultNode) =>
+    renderEditableTypeLineContent(context, defaultNode),
   rulesText: (_context, defaultNode) => (
     <div data-editor-field="rendered-text" style={{ display: "contents" }}>
       {defaultNode}
