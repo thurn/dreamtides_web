@@ -1299,6 +1299,44 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("renders initial variable spark as an editable X pip", async () => {
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(() =>
+          Promise.resolve([
+            makeEditorCard({
+              id: "card-id-1",
+              spark: "*",
+              preview: makePreview({ id: "card-id-1", spark: null }),
+            }),
+          ]),
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"]',
+    );
+    if (editorCard === null) {
+      throw new Error("Missing editor card");
+    }
+
+    expect(
+      editorCard.querySelector('[data-pip-variant="spark"]')?.textContent,
+    ).toContain("X");
+    expect(
+      editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("saves integer spark values and renders the confirmed spark pip", async () => {
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>
@@ -1374,7 +1412,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("opens spark editing from the placeholder and saves variable spark", async () => {
+  it("opens spark editing from the placeholder, saves variable spark, and reopens with X", async () => {
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>
         Promise.resolve({
@@ -1434,7 +1472,7 @@ describe("CardEditorApp", () => {
     }
 
     await act(async () => {
-      setInputValue(input, "*");
+      setInputValue(input, "X");
       pressKey(input, "Enter");
       await flushAsyncWork();
     });
@@ -1444,8 +1482,25 @@ describe("CardEditorApp", () => {
       field: "spark",
       value: "*",
     });
-    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
+    expect(
+      editorCard.querySelector('[data-pip-variant="spark"]')?.textContent,
+    ).toContain("X");
+    expect(
+      editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
+    ).toBeNull();
     expect(sparkField.textContent).toContain("Saved");
+
+    act(() => {
+      sparkField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const reopenedInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="spark"]',
+    );
+    if (reopenedInput === null) {
+      throw new Error("Missing reopened spark input");
+    }
+
+    expect(reopenedInput.value).toBe("X");
 
     act(() => {
       root.unmount();

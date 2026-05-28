@@ -165,6 +165,29 @@ describe("editor save state", () => {
     });
   });
 
+  it("starts a fresh edit from the passed display value after a completed save", () => {
+    const firstSave = startFieldSave(
+      beginFieldEdit(EMPTY_EDITOR_SAVE_STATE, firstSpark, "X"),
+      firstSpark,
+      "*",
+      "*",
+    );
+    const completed = completeFieldSave(
+      firstSave.state,
+      firstSpark,
+      firstSave.clientRevision,
+      "*",
+    );
+
+    const reenteredEdit = beginFieldEdit(completed, firstSpark, "X");
+
+    expect(fieldSaveEntry(reenteredEdit, firstSpark)).toMatchObject({
+      status: "editing",
+      draftValue: "X",
+      confirmedValue: "X",
+    });
+  });
+
   it("restores the server-confirmed value for matching failed saves", () => {
     const firstSave = startFieldSave(
       EMPTY_EDITOR_SAVE_STATE,

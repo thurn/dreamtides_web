@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { CardView } from "../components/CardView";
 import type { CardViewSlots } from "../components/CardView";
+import { PipBadge } from "../components/PipBadge";
 import EditableField from "./EditableField";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type { EditableCardField, EditorCardRecord, EditorDisplayState } from "./types";
@@ -41,6 +42,11 @@ function readOnlySlot(field: string, defaultNode: ReactNode) {
 
 function displayEditorValue(value: EditableFieldValue): EditableFieldValue {
   return value === "*" ? "X" : value;
+}
+
+function isVariableEditorValue(value: EditableFieldValue): boolean {
+  const textValue = String(value).trim();
+  return textValue === "*" || textValue === "X";
 }
 
 function numericPreviewValue(
@@ -125,6 +131,9 @@ export default function EditableCard({
   const visibleSpark = numericPreviewValue(
     sparkSaveEntry?.draftValue ?? card.spark,
     { allowBlank: true },
+  );
+  const showVariableSpark = isVariableEditorValue(
+    sparkSaveEntry?.draftValue ?? card.spark,
   );
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
   const visibleRulesText = String(
@@ -229,7 +238,7 @@ export default function EditableCard({
         {readOnlySlot("rendered-text", defaultNode)}
       </EditableField>
     ),
-    spark: (_context, defaultNode) => (
+    spark: (context, defaultNode) => (
       <div className="mt-auto flex items-center justify-end pt-0.5">
         <EditableField
           field="spark"
@@ -241,7 +250,17 @@ export default function EditableCard({
           onCancel={() => onFieldCancel(card, "spark")}
           onSave={(value) => onFieldSave(card, "spark", value)}
         >
-          {defaultNode ?? sparkPlaceholder()}
+          {showVariableSpark ? (
+            <PipBadge
+              ariaLabel="variable spark"
+              variant="spark"
+              value="X"
+              size={context.large ? "md" : "sm"}
+              scale={context.textScale}
+            />
+          ) : (
+            defaultNode ?? sparkPlaceholder()
+          )}
         </EditableField>
       </div>
     ),

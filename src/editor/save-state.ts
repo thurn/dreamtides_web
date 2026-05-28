@@ -86,10 +86,11 @@ export function beginFieldEdit(
   confirmedValue: EditableFieldValue,
 ): EditableSaveState {
   const entry = entryFor(state, target, confirmedValue);
+  const hasActiveDraft = entry.status === "editing" || entry.status === "saving";
   return withEntry(state, {
     ...entry,
     status: "editing",
-    draftValue: entry.draftValue,
+    draftValue: hasActiveDraft ? entry.draftValue : confirmedValue,
     confirmedValue,
     clientRevision: entry.clientRevision + 1,
     message: null,
