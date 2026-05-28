@@ -1,4 +1,13 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -10,8 +19,22 @@ import {
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/cards";
+const API_PREFIX = "/api/editor";
 const CARD_TOML_PATH = join("data", "tabula", "rendered-cards.toml");
+const CARD_JSON_PATH = join("public", "card-data.json");
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
+
+const defaultFileSystem = {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+};
+
+let saveCounter = 0;
 
 function elapsedMs(start) {
   return Number((performance.now() - start).toFixed(3));
@@ -36,15 +59,50 @@ function errorResponse(res, statusCode, code, message, details) {
   });
 }
 
-function isEditorCardsPath(pathname) {
-  return pathname.startsWith(BASE_PATH);
+function isEditorApiPath(pathname) {
+  return pathname === API_PREFIX || pathname.startsWith(`${API_PREFIX}/`);
 }
 
 function rawPathFromUrl(url) {
   return (url ?? "/").split("?", 1)[0];
 }
 
+function decodePathSegment(segment) {
+  try {
+    return {
+      ok: true,
+      value: decodeURIComponent(segment),
+    };
+  } catch {
+    return {
+      ok: false,
+    };
+  }
+}
+
 function routeForRawPath(rawPath) {
+  const rawSegments = rawPath.split("/");
+  if (rawSegments[1] === "api" && rawSegments[2] === "editor" && rawSegments.length >= 4) {
+    const resourceSegment = decodePathSegment(rawSegments[3]);
+    if (!resourceSegment.ok) {
+      return {
+        ok: false,
+        statusCode: 400,
+        code: "INVALID_API_PATH",
+        message: "API path must use canonical static segments.",
+      };
+    }
+
+    if (resourceSegment.value === "cards" && rawSegments[3] !== "cards") {
+      return {
+        ok: false,
+        statusCode: 400,
+        code: "INVALID_API_PATH",
+        message: "API path must use canonical static segments.",
+      };
+    }
+  }
+
   if (rawPath === BASE_PATH) {
     return {
       ok: true,
@@ -193,7 +251,79 @@ function isCanonicalUuid(value) {
   return typeof value === "string" && UUID_PATTERN.test(value);
 }
 
-async function handlePatch(req, res, rootDir, cardId) {
+function generateCardDataJsonFromToml(patchedSource, fileSystem) {
+  const tempRoot = fileSystem.mkdtempSync(join(tmpdir(), "quest-card-editor-refresh-"));
+
+  try {
+    fileSystem.mkdirSync(join(tempRoot, "data", "tabula"), { recursive: true });
+    fileSystem.mkdirSync(join(tempRoot, "public"), { recursive: true });
+    fileSystem.writeFileSync(join(tempRoot, CARD_TOML_PATH), patchedSource);
+
+    refreshCardDataJson({ rootDir: tempRoot });
+
+    const cardJson = fileSystem.readFileSync(join(tempRoot, CARD_JSON_PATH), "utf8");
+    JSON.parse(cardJson);
+
+    return cardJson;
+  } finally {
+    fileSystem.rmSync(tempRoot, { recursive: true, force: true });
+  }
+}
+
+function tempPathFor(destination, extension) {
+  saveCounter += 1;
+  return `${destination}.${process.pid}.${Date.now()}.${saveCounter}.${extension}`;
+}
+
+function writePreparedCardFiles(rootDir, { tomlSource, cardJson }, fileSystem) {
+  const writes = [
+    {
+      destination: join(rootDir, CARD_TOML_PATH),
+      temp: tempPathFor(join(rootDir, CARD_TOML_PATH), "tmp"),
+      backup: tempPathFor(join(rootDir, CARD_TOML_PATH), "bak"),
+      content: tomlSource,
+    },
+    {
+      destination: join(rootDir, CARD_JSON_PATH),
+      temp: tempPathFor(join(rootDir, CARD_JSON_PATH), "tmp"),
+      backup: tempPathFor(join(rootDir, CARD_JSON_PATH), "bak"),
+      content: cardJson,
+    },
+  ];
+
+  try {
+    for (const write of writes) {
+      fileSystem.writeFileSync(write.temp, write.content);
+    }
+
+    for (const write of writes) {
+      fileSystem.renameSync(write.destination, write.backup);
+    }
+
+    for (const write of writes) {
+      fileSystem.renameSync(write.temp, write.destination);
+    }
+
+    for (const write of writes) {
+      fileSystem.rmSync(write.backup, { force: true, recursive: true });
+    }
+  } catch (error) {
+    for (const write of writes) {
+      fileSystem.rmSync(write.temp, { force: true, recursive: true });
+    }
+
+    for (const write of writes) {
+      if (fileSystem.existsSync(write.backup)) {
+        fileSystem.rmSync(write.destination, { force: true, recursive: true });
+        fileSystem.renameSync(write.backup, write.destination);
+      }
+    }
+
+    throw error;
+  }
+}
+
+async function handlePatch(req, res, rootDir, cardId, fileSystem) {
   let body;
   try {
     body = await readJsonRequest(req);
@@ -247,22 +377,17 @@ async function handlePatch(req, res, rootDir, cardId) {
 
   const tomlPath = join(rootDir, CARD_TOML_PATH);
   const patchStart = performance.now();
-  const source = readFileSync(tomlPath, "utf8");
+  const source = fileSystem.readFileSync(tomlPath, "utf8");
   const patched = patchRenderedCardsToml(source, {
     cardId,
     field: body.field,
     value: body.value,
   });
-  writeFileSync(tomlPath, patched.source);
   const patchMs = elapsedMs(patchStart);
 
   const refreshStart = performance.now();
-  try {
-    refreshCardDataJson({ rootDir });
-  } catch (error) {
-    writeFileSync(tomlPath, source);
-    throw error;
-  }
+  const cardJson = generateCardDataJsonFromToml(patched.source, fileSystem);
+  writePreparedCardFiles(rootDir, { tomlSource: patched.source, cardJson }, fileSystem);
   const refreshMs = elapsedMs(refreshStart);
 
   const confirmStart = performance.now();
@@ -287,11 +412,14 @@ async function handlePatch(req, res, rootDir, cardId) {
   });
 }
 
-export function createCardEditorApiMiddleware({ rootDir = ROOT } = {}) {
+export function createCardEditorApiMiddleware({
+  rootDir = ROOT,
+  fileSystem = defaultFileSystem,
+} = {}) {
   return async function cardEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
 
-    if (!isEditorCardsPath(rawPath)) {
+    if (!isEditorApiPath(rawPath)) {
       next();
       return;
     }
@@ -311,7 +439,7 @@ export function createCardEditorApiMiddleware({ rootDir = ROOT } = {}) {
       }
 
       if (req.method === "PATCH" && route.resource === "card") {
-        await handlePatch(req, res, rootDir, route.cardId);
+        await handlePatch(req, res, rootDir, route.cardId, fileSystem);
         return;
       }
 

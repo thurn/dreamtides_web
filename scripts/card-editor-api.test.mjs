@@ -2,9 +2,11 @@
 
 import { createServer, request as httpRequest } from "node:http";
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  renameSync,
   rmSync,
   writeFileSync,
 } from "node:fs";
@@ -98,8 +100,8 @@ function readCardJson(rootDir) {
   return readFileSync(join(rootDir, "public", "card-data.json"), "utf8");
 }
 
-async function startApi(rootDir) {
-  const middleware = createCardEditorApiMiddleware({ rootDir });
+async function startApi(rootDir, options = {}) {
+  const middleware = createCardEditorApiMiddleware({ rootDir, ...options });
   const server = createServer((req, res) => {
     middleware(req, res, () => {
       res.writeHead(418, { "Content-Type": "application/json" });
@@ -162,6 +164,24 @@ async function requestRawJson(origin, path, { method = "GET", headers = {}, body
 function expectNoWrites(rootDir, originalToml, originalCardJson) {
   expect(readToml(rootDir)).toBe(originalToml);
   expect(readCardJson(rootDir)).toBe(originalCardJson);
+}
+
+function fileSystemFailingGeneratedJsonWrite() {
+  return {
+    existsSync,
+    mkdirSync,
+    mkdtempSync,
+    readFileSync,
+    renameSync,
+    rmSync,
+    writeFileSync(path, data) {
+      if (String(path).includes("card-data.json.") && String(path).endsWith(".tmp")) {
+        throw new Error("Injected card-data.json write failure");
+      }
+
+      writeFileSync(path, data);
+    },
+  };
 }
 
 afterEach(async () => {
@@ -234,12 +254,13 @@ describe("createCardEditorApiMiddleware", () => {
     expect(cards.map((card) => card.name)).toEqual(["Moonlit Envoy", "Second Card", "Nightmare"]);
   });
 
-  it("rolls back the TOML edit when card-data.json refresh fails", async () => {
+  it("keeps TOML and card-data.json unchanged when the generated JSON write fails", async () => {
     const rootDir = writeFixtureRoot();
     const originalToml = readToml(rootDir);
-    rmSync(join(rootDir, "public", "card-data.json"));
-    mkdirSync(join(rootDir, "public", "card-data.json"));
-    const origin = await startApi(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir, {
+      fileSystem: fileSystemFailingGeneratedJsonWrite(),
+    });
 
     const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`, {
       method: "PATCH",
@@ -247,7 +268,7 @@ describe("createCardEditorApiMiddleware", () => {
       body: JSON.stringify({
         id: FIRST_ID,
         field: "name",
-        value: "Refresh Failure Name",
+        value: "Generated JSON Write Failure",
       }),
     });
 
@@ -255,7 +276,7 @@ describe("createCardEditorApiMiddleware", () => {
     expect(body.error).toMatchObject({
       code: "SAVE_FAILED",
     });
-    expect(readToml(rootDir)).toBe(originalToml);
+    expectNoWrites(rootDir, originalToml, originalCardJson);
   });
 
   it("returns 400 for route/body id mismatch and does not write files", async () => {
@@ -472,6 +493,30 @@ describe("createCardEditorApiMiddleware", () => {
     expect(response.statusCode).toBe(400);
     expect(body.error).toMatchObject({
       code: "INVALID_CARD_ID",
+    });
+    expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
+  it("rejects encoded static API route segments with a JSON error", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestRawJson(origin, `/api/editor/card%73/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Encoded Static Segment",
+      }),
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.headers["content-type"]).toContain("application/json");
+    expect(body.error).toMatchObject({
+      code: "INVALID_API_PATH",
     });
     expectNoWrites(rootDir, originalToml, originalCardJson);
   });
