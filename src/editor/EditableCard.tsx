@@ -177,7 +177,7 @@ export default function EditableCard({
       </EditableField>
     ),
     typeLineContent: (context, defaultNode) => {
-      const subtype = context.card.subtype;
+      const subtype = context.card.subtype.trim();
       const hasSubtype = subtype !== "" && subtype !== "*";
 
       if (context.card.cardType === "Event") {

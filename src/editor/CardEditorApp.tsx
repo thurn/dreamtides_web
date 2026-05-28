@@ -220,7 +220,7 @@ function validateSingleLineFieldSave(
   }
 
   if (field === "subtype") {
-    return { ok: true, value: String(value) };
+    return { ok: true, value: textValue };
   }
 
   if (field === "energy-cost" || field === "spark") {
