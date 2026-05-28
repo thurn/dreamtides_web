@@ -62,10 +62,11 @@ function makeEditorCard(overrides: Partial<EditorCardRecord> = {}): EditorCardRe
 
 function makeApiClient(
   loadEditorCards: EditorApiClient["loadEditorCards"],
+  saveEditorCardField: EditorApiClient["saveEditorCardField"] = vi.fn(),
 ): EditorApiClient {
   return {
     loadEditorCards,
-    saveEditorCardField: vi.fn(),
+    saveEditorCardField,
   };
 }
 
@@ -106,6 +107,23 @@ function setSelectValue(select: HTMLSelectElement, value: string): void {
   const setValue = valueDescriptor.set.bind(select);
   setValue(value);
   select.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+function pressKey(element: HTMLElement, key: string): void {
+  element.dispatchEvent(
+    new KeyboardEvent("keydown", {
+      bubbles: true,
+      cancelable: true,
+      key,
+    }),
+  );
+}
+
+async function flushAsyncWork(): Promise<void> {
+  await Promise.resolve();
+  await new Promise((resolve) => {
+    setTimeout(resolve, 0);
+  });
 }
 
 function editorCardIds(container: HTMLElement): string[] {
@@ -259,7 +277,6 @@ describe("CardEditorApp", () => {
     const editorCard = container.querySelector<HTMLElement>(
       "[data-editor-card-id=\"event-card\"]",
     );
-
     const typeLine = editorCard?.querySelector<HTMLElement>(
       "[data-testid=\"card-type-line\"]",
     );
@@ -301,6 +318,269 @@ describe("CardEditorApp", () => {
     );
     expect(grid).not.toBeNull();
     expect(grid?.style.gridTemplateColumns).toContain("220px");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("saves edited card names with Enter through the editor API", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            name: String(request.value),
+            preview: makePreview({
+              id: request.id,
+              name: String(request.value),
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: {
+            readMs: 1,
+            patchMs: 1,
+            refreshMs: 1,
+            confirmMs: 1,
+            totalMs: 4,
+          },
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (input === null) {
+      throw new Error("Missing name input");
+    }
+
+    act(() => {
+      setInputValue(input, "Renamed Envoy");
+    });
+    expect(container.textContent).toContain("Renamed Envoy");
+
+    await act(async () => {
+      pressKey(input, "Enter");
+      await flushAsyncWork();
+    });
+
+    const savedRequest = saveEditorCardField.mock.calls[0]?.[0];
+    expect(savedRequest).toMatchObject({
+      id: "card-id-1",
+      field: "name",
+      value: "Renamed Envoy",
+    });
+    expect(savedRequest?.clientRevision).toEqual(expect.any(Number));
+    expect(container.textContent).toContain("Saved");
+    expect(container.textContent).toContain("Renamed Envoy");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("cancels name edits with Escape and does not save on blur", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>();
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (input === null) {
+      throw new Error("Missing name input");
+    }
+
+    act(() => {
+      setInputValue(input, "Draft Name");
+      input.dispatchEvent(new FocusEvent("blur", { bubbles: true }));
+    });
+
+    expect(saveEditorCardField).not.toHaveBeenCalled();
+    expect(container.textContent).toContain("Draft Name");
+
+    act(() => {
+      pressKey(input, "Escape");
+    });
+
+    expect(container.querySelector('[data-editor-input-field="name"]')).toBeNull();
+    expect(container.textContent).toContain("Moonlit Envoy");
+    expect(container.textContent).not.toContain("Draft Name");
+    expect(saveEditorCardField).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("restores the confirmed name and shows an error when a name save fails", async () => {
+    const saveEditorCardField = vi
+      .fn<EditorApiClient["saveEditorCardField"]>()
+      .mockRejectedValue(new Error("Disk write failed"));
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (input === null) {
+      throw new Error("Missing name input");
+    }
+
+    await act(async () => {
+      setInputValue(input, "Broken Name");
+      pressKey(input, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(container.textContent).toContain("Moonlit Envoy");
+    expect(container.textContent).not.toContain("Broken Name");
+    expect(container.textContent).toContain("Disk write failed");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps the latest name draft visible while an earlier save is in flight", async () => {
+    const pendingSave = deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardField"]>>>();
+    const saveEditorCardField = vi
+      .fn<EditorApiClient["saveEditorCardField"]>()
+      .mockReturnValue(pendingSave.promise);
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    const firstInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (firstInput === null) {
+      throw new Error("Missing name input");
+    }
+
+    act(() => {
+      setInputValue(firstInput, "First Save");
+      pressKey(firstInput, "Enter");
+    });
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const secondInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (secondInput === null) {
+      throw new Error("Missing second name input");
+    }
+    act(() => {
+      setInputValue(secondInput, "Latest Draft");
+    });
+
+    await act(async () => {
+      pendingSave.resolve({
+        card: makeEditorCard({
+          id: "card-id-1",
+          name: "First Save",
+          preview: makePreview({ id: "card-id-1", name: "First Save" }),
+        }),
+        clientRevision: saveEditorCardField.mock.calls[0]?.[0].clientRevision,
+        timing: {
+          readMs: 1,
+          patchMs: 1,
+          refreshMs: 1,
+          confirmMs: 1,
+          totalMs: 4,
+        },
+      });
+      await Promise.resolve();
+    });
+
+    expect(container.textContent).toContain("Latest Draft");
+    expect(container.textContent).not.toContain("First Save");
 
     act(() => {
       root.unmount();

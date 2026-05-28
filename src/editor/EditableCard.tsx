@@ -1,11 +1,26 @@
 import type { ReactNode } from "react";
 import { CardView } from "../components/CardView";
 import type { CardViewSlotContext, CardViewSlots } from "../components/CardView";
+import EditableField from "./EditableField";
+import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type { EditorCardRecord, EditorDisplayState } from "./types";
 
 export interface EditableCardProps {
   card: EditorCardRecord;
   size: EditorDisplayState["size"];
+  nameSaveEntry: EditableFieldSaveEntry | null;
+  onNameBeginEdit: (card: EditorCardRecord, value: EditableFieldValue) => void;
+  onNameDraftChange: (card: EditorCardRecord, value: EditableFieldValue) => void;
+  onNameCancel: (card: EditorCardRecord) => void;
+  onNameSave: (card: EditorCardRecord, value: EditableFieldValue) => void;
+}
+
+function readOnlySlot(field: string, defaultNode: ReactNode) {
+  return (
+    <div data-editor-field={field} style={{ display: "contents" }}>
+      {defaultNode}
+    </div>
+  );
 }
 
 function hasVisibleSubtype(context: CardViewSlotContext): boolean {
@@ -37,35 +52,44 @@ function renderEditableTypeLineContent(
   );
 }
 
-const readOnlySlots: CardViewSlots = {
-  energy: (_context, defaultNode) => (
-    <div data-editor-field="energy-cost" style={{ display: "contents" }}>
-      {defaultNode}
-    </div>
-  ),
-  name: (_context, defaultNode) => (
-    <div data-editor-field="name" style={{ display: "contents" }}>
-      {defaultNode}
-    </div>
-  ),
-  typeLineContent: (context, defaultNode) =>
-    renderEditableTypeLineContent(context, defaultNode),
-  rulesText: (_context, defaultNode) => (
-    <div data-editor-field="rendered-text" style={{ display: "contents" }}>
-      {defaultNode}
-    </div>
-  ),
-  spark: (_context, defaultNode) => (
-    <div data-editor-field="spark" style={{ display: "contents" }}>
-      {defaultNode}
-    </div>
-  ),
-};
+export default function EditableCard({
+  card,
+  size,
+  nameSaveEntry,
+  onNameBeginEdit,
+  onNameDraftChange,
+  onNameCancel,
+  onNameSave,
+}: EditableCardProps) {
+  const visibleName = String(nameSaveEntry?.draftValue ?? card.name);
+  const visibleCard = {
+    ...card.preview,
+    name: visibleName,
+  };
+  const slots: CardViewSlots = {
+    energy: (_context, defaultNode) => readOnlySlot("energy-cost", defaultNode),
+    name: (_context, defaultNode) => (
+      <EditableField
+        field="name"
+        value={card.name}
+        saveEntry={nameSaveEntry}
+        onBeginEdit={(value) => onNameBeginEdit(card, value)}
+        onDraftChange={(value) => onNameDraftChange(card, value)}
+        onCancel={() => onNameCancel(card)}
+        onSave={(value) => onNameSave(card, value)}
+      >
+        {defaultNode}
+      </EditableField>
+    ),
+    typeLineContent: (context, defaultNode) =>
+      renderEditableTypeLineContent(context, defaultNode),
+    rulesText: (_context, defaultNode) => readOnlySlot("rendered-text", defaultNode),
+    spark: (_context, defaultNode) => readOnlySlot("spark", defaultNode),
+  };
 
-export default function EditableCard({ card, size }: EditableCardProps) {
   return (
     <article
-      aria-label={card.name}
+      aria-label={visibleName}
       data-editor-card-id={card.id}
       style={{
         display: "grid",
@@ -74,10 +98,10 @@ export default function EditableCard({ card, size }: EditableCardProps) {
       }}
     >
       <CardView
-        card={card.preview}
+        card={visibleCard}
         large={size === "large"}
         hideRulesText={size === "small"}
-        slots={readOnlySlots}
+        slots={slots}
       />
       <div
         style={{
@@ -87,7 +111,7 @@ export default function EditableCard({ card, size }: EditableCardProps) {
           textAlign: "center",
         }}
       >
-        #{card.cardNumber} {card.name}
+        #{card.cardNumber} {visibleName}
       </div>
     </article>
   );

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { loadEditorCards, saveEditorCardField } from "./editor-api";
 import CardEditorGrid from "./CardEditorGrid";
 import CardEditorToolbar from "./CardEditorToolbar";
@@ -6,6 +6,18 @@ import {
   parseEditorDisplayState,
   replaceEditorDisplayStateInUrl,
 } from "./editor-url-state";
+import {
+  beginFieldEdit,
+  cancelFieldEdit,
+  completeFieldSave,
+  EMPTY_EDITOR_SAVE_STATE,
+  failFieldSave,
+  fieldSaveEntry,
+  rejectFieldEdit,
+  startFieldSave,
+  updateFieldDraft,
+} from "./save-state";
+import type { EditableFieldValue, EditableSaveState } from "./save-state";
 import type {
   EditorApiClient,
   EditorCardRecord,
@@ -186,6 +198,10 @@ export default function CardEditorApp({
     kind: "loading",
   });
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [saveState, setSaveState] = useState<EditableSaveState>(
+    EMPTY_EDITOR_SAVE_STATE,
+  );
+  const saveStateRef = useRef(saveState);
 
   useEffect(() => {
     let cancelled = false;
@@ -231,6 +247,108 @@ export default function CardEditorApp({
   function handleDisplayStateChange(nextState: EditorDisplayState) {
     setDisplayState(nextState);
     replaceEditorDisplayStateInUrl(nextState);
+  }
+
+  function setEditorSaveState(
+    updater: (current: EditableSaveState) => EditableSaveState,
+  ) {
+    const next = updater(saveStateRef.current);
+    saveStateRef.current = next;
+    setSaveState(next);
+  }
+
+  function handleNameBeginEdit(card: EditorCardRecord, value: EditableFieldValue) {
+    setEditorSaveState((current) =>
+      beginFieldEdit(current, { cardId: card.id, field: "name" }, value),
+    );
+  }
+
+  function handleNameDraftChange(card: EditorCardRecord, value: EditableFieldValue) {
+    setEditorSaveState((current) =>
+      updateFieldDraft(
+        current,
+        { cardId: card.id, field: "name" },
+        value,
+        card.name,
+      ),
+    );
+  }
+
+  function handleNameCancel(card: EditorCardRecord) {
+    setEditorSaveState((current) =>
+      cancelFieldEdit(current, { cardId: card.id, field: "name" }, card.name),
+    );
+  }
+
+  function replaceConfirmedCard(nextCard: EditorCardRecord) {
+    setLoadStatus((current) => {
+      if (current.kind !== "loaded") {
+        return current;
+      }
+
+      return {
+        kind: "loaded",
+        cards: current.cards.map((card) =>
+          card.id === nextCard.id ? nextCard : card,
+        ),
+      };
+    });
+  }
+
+  function handleNameSave(card: EditorCardRecord, value: EditableFieldValue) {
+    const nextName = String(value).trim();
+    const target = { cardId: card.id, field: "name" as const };
+
+    if (nextName.length === 0) {
+      setEditorSaveState((current) =>
+        rejectFieldEdit(current, target, card.name, "Name cannot be blank."),
+      );
+      return;
+    }
+
+    let clientRevision = 0;
+    setEditorSaveState((current) => {
+      const result = startFieldSave(current, target, nextName, card.name);
+      clientRevision = result.clientRevision;
+      return result.state;
+    });
+
+    void apiClient
+      .saveEditorCardField({
+        id: card.id,
+        field: "name",
+        value: nextName,
+        clientRevision,
+      })
+      .then((response) => {
+        const responseRevision = response.clientRevision ?? clientRevision;
+        const currentEntry = fieldSaveEntry(saveStateRef.current, target);
+        if (
+          currentEntry === null ||
+          responseRevision < currentEntry.clientRevision
+        ) {
+          return;
+        }
+
+        setEditorSaveState((current) =>
+          completeFieldSave(
+            current,
+            target,
+            responseRevision,
+            response.card.name,
+          ),
+        );
+        replaceConfirmedCard(response.card);
+      })
+      .catch((error: unknown) => {
+        const message = errorMessageFor(error);
+        const currentEntry = fieldSaveEntry(saveStateRef.current, target);
+        if (currentEntry !== null && clientRevision >= currentEntry.clientRevision) {
+          setEditorSaveState((current) =>
+            failFieldSave(current, target, clientRevision, card.name, message),
+          );
+        }
+      });
   }
 
   return (
@@ -337,7 +455,15 @@ export default function CardEditorApp({
                 No cards match the current filters.
               </p>
             ) : (
-              <CardEditorGrid cards={visibleCards} size={displayState.size} />
+              <CardEditorGrid
+                cards={visibleCards}
+                size={displayState.size}
+                saveState={saveState}
+                onNameBeginEdit={handleNameBeginEdit}
+                onNameDraftChange={handleNameDraftChange}
+                onNameCancel={handleNameCancel}
+                onNameSave={handleNameSave}
+              />
             )}
           </div>
         ) : null}

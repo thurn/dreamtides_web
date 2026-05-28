@@ -1,0 +1,142 @@
+import { describe, expect, it } from "vitest";
+import {
+  beginFieldEdit,
+  completeFieldSave,
+  EMPTY_EDITOR_SAVE_STATE,
+  failFieldSave,
+  fieldSaveEntry,
+  startFieldSave,
+  updateFieldDraft,
+} from "./save-state";
+
+const firstName = { cardId: "card-1", field: "name" } as const;
+const secondName = { cardId: "card-2", field: "name" } as const;
+const firstSpark = { cardId: "card-1", field: "spark" } as const;
+
+describe("editor save state", () => {
+  it("marks exactly one card UUID and field as saving", () => {
+    const edited = updateFieldDraft(
+      updateFieldDraft(EMPTY_EDITOR_SAVE_STATE, secondName, "Other", "Other"),
+      firstSpark,
+      3,
+      2,
+    );
+
+    const result = startFieldSave(edited, firstName, "Renamed", "Original");
+
+    expect(fieldSaveEntry(result.state, firstName)).toMatchObject({
+      status: "saving",
+      draftValue: "Renamed",
+    });
+    expect(fieldSaveEntry(result.state, secondName)).toMatchObject({
+      status: "editing",
+    });
+    expect(fieldSaveEntry(result.state, firstSpark)).toMatchObject({
+      status: "editing",
+    });
+  });
+
+  it("applies success only to the matching card UUID and field", () => {
+    const firstSave = startFieldSave(
+      EMPTY_EDITOR_SAVE_STATE,
+      firstName,
+      "Renamed",
+      "Original",
+    );
+    const secondSave = startFieldSave(
+      firstSave.state,
+      secondName,
+      "Other Renamed",
+      "Other",
+    );
+
+    const completed = completeFieldSave(
+      secondSave.state,
+      firstName,
+      firstSave.clientRevision,
+      "Renamed",
+    );
+
+    expect(fieldSaveEntry(completed, firstName)).toMatchObject({
+      status: "saved",
+      confirmedValue: "Renamed",
+    });
+    expect(fieldSaveEntry(completed, secondName)).toMatchObject({
+      status: "saving",
+      confirmedValue: "Other",
+    });
+  });
+
+  it("ignores stale success responses with older client revisions", () => {
+    const firstSave = startFieldSave(
+      EMPTY_EDITOR_SAVE_STATE,
+      firstName,
+      "First",
+      "Original",
+    );
+    const editedAgain = updateFieldDraft(
+      firstSave.state,
+      firstName,
+      "Latest Draft",
+      "Original",
+    );
+
+    const completed = completeFieldSave(
+      editedAgain,
+      firstName,
+      firstSave.clientRevision,
+      "First",
+    );
+
+    expect(completed).toBe(editedAgain);
+    expect(fieldSaveEntry(completed, firstName)).toMatchObject({
+      status: "saving",
+      draftValue: "Latest Draft",
+    });
+  });
+
+  it("restores the server-confirmed value for matching failed saves", () => {
+    const firstSave = startFieldSave(
+      EMPTY_EDITOR_SAVE_STATE,
+      firstName,
+      "Renamed",
+      "Original",
+    );
+
+    const failed = failFieldSave(
+      firstSave.state,
+      firstName,
+      firstSave.clientRevision,
+      "Original",
+      "Save failed",
+    );
+
+    expect(fieldSaveEntry(failed, firstName)).toMatchObject({
+      status: "error",
+      draftValue: "Original",
+      confirmedValue: "Original",
+      message: "Save failed",
+    });
+  });
+
+  it("keeps the latest draft visible when editing during an in-flight save", () => {
+    const firstSave = startFieldSave(
+      beginFieldEdit(EMPTY_EDITOR_SAVE_STATE, firstName, "Original"),
+      firstName,
+      "First Save",
+      "Original",
+    );
+
+    const editedAgain = updateFieldDraft(
+      firstSave.state,
+      firstName,
+      "Latest Draft",
+      "Original",
+    );
+
+    expect(fieldSaveEntry(editedAgain, firstName)).toMatchObject({
+      status: "saving",
+      draftValue: "Latest Draft",
+    });
+  });
+});
