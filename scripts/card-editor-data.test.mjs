@@ -353,6 +353,27 @@ card-number = 2
     expect(parsed.cards[0].spark).toBe(5);
   });
 
+  it("patches top-level fields after multiline rendered text contains a cards block-looking line", () => {
+    const source = fixtureToml();
+    const renderedText = "Intro.\n[[cards]]\nenergy-cost = 99\nOutro.";
+
+    const textPatched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: renderedText,
+    }).source;
+    const costPatched = patchRenderedCardsToml(textPatched, {
+      cardId: FIRST_ID,
+      field: "energy-cost",
+      value: 4,
+    }).source;
+    const parsed = parse(costPatched);
+
+    expect(parsed.cards).toHaveLength(4);
+    expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
+    expect(parsed.cards[0]["energy-cost"]).toBe(4);
+  });
+
   it("replaces the full literal multiline rendered text on a second multiline patch", () => {
     const source = fixtureToml();
     const firstRenderedText = "First line.\n\nspark = 99\nstale content.";
@@ -373,6 +394,36 @@ card-number = 2
     expect(parsed.cards[0]["rendered-text"]).toBe(secondRenderedText);
     expect(secondPatched).not.toContain("stale content.");
     expect(secondPatched).toContain("fresh content.");
+  });
+
+  it("canonicalizes variable energy-cost values before writing TOML", () => {
+    const source = fixtureToml();
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "energy-cost",
+      value: "X",
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["energy-cost"]).toBe("*");
+    expect(transformCard(parsed.cards[0]).energyCost).toBeNull();
+    expect(patched.source).toContain('energy-cost = "*"');
+    expect(patched.source).not.toContain('energy-cost = "X"');
+  });
+
+  it("canonicalizes blank spark values before writing TOML", () => {
+    const source = fixtureToml();
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: SECOND_ID,
+      field: "spark",
+      value: "   ",
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[1].spark).toBe("");
+    expect(patched.source).toContain('spark = ""');
   });
 });
 

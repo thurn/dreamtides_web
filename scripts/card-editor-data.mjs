@@ -146,16 +146,6 @@ function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
 }
 
-function cardBlocks(source) {
-  const starts = [...source.matchAll(/^\[\[cards\]\]\s*$/gmu)].map((match) => match.index);
-
-  return starts.map((start, index) => ({
-    start,
-    end: starts[index + 1] ?? source.length,
-    text: source.slice(start, starts[index + 1] ?? source.length),
-  }));
-}
-
 function lineEndIndex(text, start) {
   const newlineIndex = text.indexOf("\n", start);
   return newlineIndex === -1 ? text.length : newlineIndex + 1;
@@ -190,6 +180,30 @@ function toggledMultilineDelimiter(text, activeDelimiter) {
   }
 
   return activeDelimiter;
+}
+
+function cardBlocks(source) {
+  const starts = [];
+  let offset = 0;
+  let activeMultilineDelimiter = null;
+
+  while (offset < source.length) {
+    const end = lineEndIndex(source, offset);
+    const line = source.slice(offset, end);
+
+    if (activeMultilineDelimiter === null && /^\[\[cards\]\]\s*$/u.test(line.trimEnd())) {
+      starts.push(offset);
+    }
+
+    activeMultilineDelimiter = toggledMultilineDelimiter(line, activeMultilineDelimiter);
+    offset = end;
+  }
+
+  return starts.map((start, index) => ({
+    start,
+    end: starts[index + 1] ?? source.length,
+    text: source.slice(start, starts[index + 1] ?? source.length),
+  }));
 }
 
 function topLevelFieldOffset(blockText, field) {
@@ -307,6 +321,11 @@ export function patchRenderedCardsToml(source, { cardId, field, value }) {
     throw new Error(`Field ${field} is not editable`);
   }
 
+  const validation = validateCardEdit(field, value);
+  if (!validation.ok) {
+    throw new Error(validation.message);
+  }
+
   const block = findCardBlock(source, cardId);
   if (block === undefined) {
     throw new Error(`Card ${cardId} was not found`);
@@ -315,7 +334,7 @@ export function patchRenderedCardsToml(source, { cardId, field, value }) {
   const range = fieldRangeInBlock(block, field);
   const existing = source.slice(range.start, range.end);
   const lineEnding = existing.endsWith("\n") ? "\n" : "";
-  const replacement = `${field} = ${tomlValue(value)}${lineEnding}`;
+  const replacement = `${field} = ${tomlValue(validation.value)}${lineEnding}`;
   const patchedSource = source.slice(0, range.start) + replacement + source.slice(range.end);
 
   parse(patchedSource);
