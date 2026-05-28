@@ -19,7 +19,6 @@ import {
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/cards";
-const API_PREFIX = "/api/editor";
 const CARD_TOML_PATH = join("data", "tabula", "rendered-cards.toml");
 const CARD_JSON_PATH = join("public", "card-data.json");
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
@@ -59,10 +58,6 @@ function errorResponse(res, statusCode, code, message, details) {
   });
 }
 
-function isEditorApiPath(pathname) {
-  return pathname === API_PREFIX || pathname.startsWith(`${API_PREFIX}/`);
-}
-
 function rawPathFromUrl(url) {
   return (url ?? "/").split("?", 1)[0];
 }
@@ -78,6 +73,20 @@ function decodePathSegment(segment) {
       ok: false,
     };
   }
+}
+
+function isEditorCardsApiPath(pathname) {
+  if (pathname.startsWith(BASE_PATH)) {
+    return true;
+  }
+
+  const rawSegments = pathname.split("/");
+  if (rawSegments[1] !== "api" || rawSegments[2] !== "editor" || rawSegments.length < 4) {
+    return false;
+  }
+
+  const resourceSegment = decodePathSegment(rawSegments[3]);
+  return resourceSegment.ok && resourceSegment.value === "cards";
 }
 
 function routeForRawPath(rawPath) {
@@ -419,7 +428,7 @@ export function createCardEditorApiMiddleware({
   return async function cardEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
 
-    if (!isEditorApiPath(rawPath)) {
+    if (!isEditorCardsApiPath(rawPath)) {
       next();
       return;
     }

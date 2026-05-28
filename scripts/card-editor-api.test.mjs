@@ -209,6 +209,16 @@ describe("createCardEditorApiMiddleware", () => {
     expect(body).toEqual({ next: true });
   });
 
+  it("passes unrelated /api/editor paths to next", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, "/api/editor/other");
+
+    expect(response.status).toBe(418);
+    expect(body).toEqual({ next: true });
+  });
+
   it("returns all source cards with UUID ids", async () => {
     const rootDir = writeFixtureRoot();
     const origin = await startApi(rootDir);
