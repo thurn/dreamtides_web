@@ -7,7 +7,11 @@ import type {
   EditorDisplayState,
 } from "./types";
 
-const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
+type AbortableEditorApiClient = Omit<EditorApiClient, "loadEditorCards"> & {
+  loadEditorCards(signal?: AbortSignal): Promise<EditorCardRecord[]>;
+};
+
+const DEFAULT_EDITOR_API_CLIENT: AbortableEditorApiClient = {
   loadEditorCards,
   saveEditorCardField,
 };
@@ -18,11 +22,15 @@ type LoadStatus =
   | { kind: "error"; message: string };
 
 export interface CardEditorAppProps {
-  apiClient?: EditorApiClient;
+  apiClient?: AbortableEditorApiClient;
 }
 
 function errorMessageFor(error: unknown): string {
   return error instanceof Error ? error.message : "Unable to load editor cards.";
+}
+
+function isAbortError(error: unknown): boolean {
+  return error instanceof DOMException && error.name === "AbortError";
 }
 
 function displayStateDataAttributes(displayState: EditorDisplayState) {
@@ -50,16 +58,21 @@ export default function CardEditorApp({
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
 
     async function loadCards() {
       setLoadStatus({ kind: "loading" });
 
       try {
-        const cards = await apiClient.loadEditorCards();
+        const cards = await apiClient.loadEditorCards(controller.signal);
         if (!cancelled) {
           setLoadStatus({ kind: "loaded", cards });
         }
       } catch (error) {
+        if (isAbortError(error)) {
+          return;
+        }
+
         if (!cancelled) {
           setLoadStatus({ kind: "error", message: errorMessageFor(error) });
         }
@@ -70,6 +83,7 @@ export default function CardEditorApp({
 
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, [apiClient, loadAttempt]);
 

@@ -11,7 +11,9 @@ function renderStrict(children: ReactNode) {
   root.render(<StrictMode>{children}</StrictMode>);
 }
 
-if (window.location.pathname === "/editor") {
+const pathname = window.location.pathname.replace(/\/+$/, "");
+
+if (pathname === "/editor") {
   renderStrict(<CardEditorApp />);
 } else {
   const [

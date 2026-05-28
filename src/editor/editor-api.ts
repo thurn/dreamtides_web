@@ -5,7 +5,20 @@ import type {
 } from "./types";
 
 async function readJsonResponse<T>(response: Response): Promise<T> {
-  const body = (await response.json()) as unknown;
+  const text = await response.text();
+  let body: unknown = null;
+
+  if (text.trim() !== "") {
+    try {
+      body = JSON.parse(text) as unknown;
+    } catch (error) {
+      if (!response.ok) {
+        throw new Error(`Editor API request failed with ${response.status}`);
+      }
+
+      throw error;
+    }
+  }
 
   if (!response.ok) {
     const message =
@@ -24,11 +37,14 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
-export async function loadEditorCards(): Promise<LoadEditorCardsResponse["cards"]> {
+export async function loadEditorCards(
+  signal?: AbortSignal,
+): Promise<LoadEditorCardsResponse["cards"]> {
   const response = await fetch("/api/editor/cards", {
     headers: {
       Accept: "application/json",
     },
+    signal,
   });
   const body = await readJsonResponse<LoadEditorCardsResponse>(response);
   return body.cards;
