@@ -37,7 +37,7 @@ function errorResponse(res, statusCode, code, message, details) {
 }
 
 function isEditorCardsPath(pathname) {
-  return pathname === BASE_PATH || pathname.startsWith(`${BASE_PATH}/`);
+  return pathname.startsWith(BASE_PATH);
 }
 
 function rawPathFromUrl(url) {
@@ -53,6 +53,15 @@ function routeForRawPath(rawPath) {
   }
 
   if (!rawPath.startsWith(`${BASE_PATH}/`)) {
+    if (rawPath.slice(BASE_PATH.length).startsWith("%")) {
+      return {
+        ok: false,
+        statusCode: 400,
+        code: "INVALID_CARD_ID",
+        message: "Route card id must be a canonical UUID.",
+      };
+    }
+
     return {
       ok: false,
       statusCode: 404,
@@ -83,7 +92,7 @@ function routeForRawPath(rawPath) {
     };
   }
 
-  if (cardId.includes("/") || !UUID_PATTERN.test(cardId)) {
+  if (encodedSegment !== cardId || cardId.includes("/") || !UUID_PATTERN.test(cardId)) {
     return {
       ok: false,
       statusCode: 400,

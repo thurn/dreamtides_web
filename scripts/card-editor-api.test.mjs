@@ -429,6 +429,53 @@ describe("createCardEditorApiMiddleware", () => {
     expectNoWrites(rootDir, originalToml, originalCardJson);
   });
 
+  it("rejects encoded safe UUID characters in the route id and does not write files", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+    const encodedRouteId = FIRST_ID.replace("-", "%2d");
+
+    const { response, body } = await requestRawJson(origin, `/api/editor/cards/${encodedRouteId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Encoded Hyphen",
+      }),
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(body.error).toMatchObject({
+      code: "INVALID_CARD_ID",
+    });
+    expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
+  it("rejects encoded separators after the cards prefix as API errors", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestRawJson(origin, `/api/editor/cards%2F${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Encoded Separator",
+      }),
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(body.error).toMatchObject({
+      code: "INVALID_CARD_ID",
+    });
+    expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
   it("rejects malformed percent escapes in the route id and does not write files", async () => {
     const rootDir = writeFixtureRoot();
     const originalToml = readToml(rootDir);
