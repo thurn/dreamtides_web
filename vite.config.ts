@@ -4,11 +4,15 @@ import tailwindcss from "@tailwindcss/vite";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Plugin } from "vite";
+import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+export const generatedCardDataWatchPaths = [
+  path.join(__dirname, "data", "tabula", "rendered-cards.toml"),
+  path.join(__dirname, "public", "card-data.json"),
+].map((filePath) => path.resolve(filePath));
 
 /** Vite plugin that writes quest log events to disk during development. */
 function questLogPlugin(): Plugin {
@@ -49,49 +53,109 @@ function cardEditorApiPlugin(): Plugin {
 }
 
 /** Vite plugin that detects stale generated card data during development. */
-function generatedCardDataDriftPlugin(): Plugin {
-  const watchedPaths = new Set([
-    path.join(__dirname, "data", "tabula", "rendered-cards.toml"),
-    path.join(__dirname, "public", "card-data.json"),
-  ].map((filePath) => path.resolve(filePath)));
+export function generatedCardDataDriftPlugin(): Plugin {
+  const watchedPaths = new Set(generatedCardDataWatchPaths);
 
   const runCheck = (): ReturnType<typeof checkGeneratedCardData> =>
     checkGeneratedCardData({ rootDir: __dirname });
+
+  const isWatchedCardDataPath = (filePath: string): boolean =>
+    watchedPaths.has(path.resolve(filePath));
+
+  const reportCheckResult = (
+    result: ReturnType<typeof checkGeneratedCardData>,
+    server: ViteDevServer,
+  ): void => {
+    if (result.ok) {
+      console.info(`[card-data] ${result.message}`);
+      return;
+    }
+
+    console.error(`[card-data] ${result.message}`);
+    server.ws.send({
+      type: "error",
+      err: {
+        message: "Generated card data is out of date",
+        stack: result.message,
+      },
+    });
+  };
+
+  const watchedDirectories = new Map<string, Set<string>>();
+  for (const watchedPath of watchedPaths) {
+    const directory = path.dirname(watchedPath);
+    const basename = path.basename(watchedPath);
+    const filenames = watchedDirectories.get(directory) ?? new Set<string>();
+    filenames.add(basename);
+    watchedDirectories.set(directory, filenames);
+  }
 
   return {
     name: "generated-card-data-drift-guard",
     apply: "serve",
     configureServer(server) {
-      for (const watchedPath of watchedPaths) {
-        server.watcher.add(watchedPath);
-      }
-
       const initialResult = runCheck();
       if (!initialResult.ok) {
         throw new Error(initialResult.message);
       }
       console.info(`[card-data] ${initialResult.message}`);
 
-      server.watcher.on("change", (changedPath) => {
-        if (!watchedPaths.has(path.resolve(changedPath))) {
-          return;
+      let pendingCheck: ReturnType<typeof setTimeout> | null = null;
+      const scheduleCheck = (): void => {
+        if (pendingCheck !== null) {
+          clearTimeout(pendingCheck);
         }
 
-        const result = runCheck();
-        if (result.ok) {
-          console.info(`[card-data] ${result.message}`);
-          return;
-        }
+        pendingCheck = setTimeout(() => {
+          pendingCheck = null;
+          reportCheckResult(runCheck(), server);
+        }, 25);
+      };
 
-        console.error(`[card-data] ${result.message}`);
-        server.ws.send({
-          type: "error",
-          err: {
-            message: "Generated card data is out of date",
-            stack: result.message,
+      const watchers = Array.from(watchedDirectories, ([directory, filenames]) =>
+        fs.watch(
+          directory,
+          { persistent: false },
+          (_eventType, filename) => {
+            if (filename === null) {
+              scheduleCheck();
+              return;
+            }
+
+            if (filenames.has(filename.toString())) {
+              scheduleCheck();
+            }
           },
-        });
-      });
+        ),
+      );
+
+      let closed = false;
+      const closeWatchers = (): void => {
+        if (closed) {
+          return;
+        }
+
+        closed = true;
+        if (pendingCheck !== null) {
+          clearTimeout(pendingCheck);
+          pendingCheck = null;
+        }
+
+        for (const watcher of watchers) {
+          watcher.close();
+        }
+      };
+
+      server.httpServer?.once("close", closeWatchers);
+      server.watcher.once("close", closeWatchers);
+    },
+    hotUpdate(context) {
+      if (!isWatchedCardDataPath(context.file)) {
+        return undefined;
+      }
+
+      reportCheckResult(runCheck(), context.server);
+      return [];
     },
   };
 }
@@ -118,5 +182,10 @@ export default defineConfig({
       "**/.temp/**",
       "**/.claude/worktrees/**",
     ],
+  },
+  server: {
+    watch: {
+      ignored: generatedCardDataWatchPaths,
+    },
   },
 });
