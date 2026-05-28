@@ -20,7 +20,6 @@ quest prototype's existing card visual language.
 The editor supports inline editing for these fields:
 
 - Energy cost, stored as `energy-cost`
-- Card type, stored as `card-type`
 - Character type, stored as `subtype`
 - Card name, stored as `name`
 - Spark, stored as `spark`
@@ -43,7 +42,7 @@ The editor supports:
 ## Non-goals
 
 - Editing tides, rarity, starter flags, image numbers, art ownership, ids,
-  reclaim cost, or fast status.
+  card type, reclaim cost, or fast status.
 - Editing dreamcallers or dreamsigns.
 - A mobile or tablet editor layout. Laptop and desktop resolutions are the
   supported manual QA target.
@@ -66,6 +65,10 @@ The transform normalizes TOML fields into runtime `CardData`:
 - Missing `subtype` becomes an empty string
 - TOML kebab-case keys become runtime camelCase keys
 - most `Special` rarity records are filtered from runtime JSON
+
+Card records are identified by their `id` UUID. `card-number` remains part of
+the card content for art lookup, ordering, and compatibility with existing
+runtime systems, but editor API paths and save operations use UUID identity.
 
 The editor needs the TOML source as its authoritative dataset because the user
 needs to edit all card records, preserve source formatting, and write changes
@@ -106,6 +109,7 @@ returns editor records ordered by TOML order.
 
 Each returned record includes:
 
+- `id`
 - `cardNumber`
 - the editable TOML-facing fields
 - a preview-ready `CardData` value produced with the existing transform rules
@@ -114,12 +118,13 @@ Each returned record includes:
 The endpoint returns all source records. It does not apply the runtime
 `Special` rarity filter used by `public/card-data.json`.
 
-### `PATCH /api/editor/cards/:cardNumber`
+### `PATCH /api/editor/cards/:cardId`
 
 Accepts one field edit for one card:
 
 ```json
 {
+  "id": "56020364-cbe8-4500-900f-33510a95ff10",
   "field": "name",
   "value": "Moonlit Envoy",
   "clientRevision": 12
@@ -129,8 +134,7 @@ Accepts one field edit for one card:
 The endpoint:
 
 1. Reads the current TOML file.
-2. Locates the `[[cards]]` block whose `card-number` matches the route
-   parameter.
+2. Locates the `[[cards]]` block whose `id` UUID matches the route parameter.
 3. Validates the field and value.
 4. Applies a targeted text patch to that field inside that card block.
 5. Writes `data/tabula/rendered-cards.toml`.
@@ -148,7 +152,7 @@ text patcher instead of serializing the entire TOML object.
 
 The patcher operates on one `[[cards]]` block:
 
-- It finds the block by `card-number`.
+- It finds the block by `id` UUID.
 - It replaces only the line or multiline value for the requested field.
 - It preserves all unrelated blocks and unrelated fields byte-for-byte.
 - It preserves the current field order.
@@ -177,7 +181,6 @@ Field rules:
 - `spark`: accepts non-negative integers, variable values entered as `X` or
   `*`, and blank. The TOML source stores variable spark as `"*"` and blank
   spark as `""`.
-- `card-type`: accepts `Character` or `Event`.
 - `subtype`: accepts a string. Blank is valid.
 - `name`: accepts a non-empty string after trimming only surrounding editor
   input artifacts. Intentional internal spacing is preserved.
@@ -198,7 +201,7 @@ Top-level regions:
 - Scrollable card grid.
 - Inline save/validation status rendered on the affected card or field.
 
-The grid reuses existing card display behavior where possible:
+The grid shares the normal quest card rendering path:
 
 - Card art from `public/cards/<cardNumber>.webp`
 - Event and Character chrome
@@ -206,21 +209,25 @@ The grid reuses existing card display behavior where possible:
 - Type line formatting
 - Rules text rendering, including symbols and glossary formatting
 
-If the existing `CardDisplay` cannot expose stable editable targets without
-awkward event plumbing, the implementation should extract a shared presentational
-card body that both `CardDisplay` and editor cards can use. The shared piece
-must keep the normal card viewer behavior stable.
+Implementation should refactor `CardDisplay` into shared render primitives that
+the normal quest surfaces and the editor both consume. The editor can wrap
+editable regions around shared slots, but the visual card structure, chrome,
+text scaling, pips, art handling, type line formatting, rarity treatment, and
+rules text rendering should have one maintained implementation. This shared
+render path is an acceptance criterion.
 
 ## Inline Editing
 
 Editable regions:
 
 - Cost pip
-- Card type text
-- Subtype text
+- Subtype text in the type line
 - Name
 - Spark pip or spark placeholder
 - Rules text block
+
+The card type portion of the type line is display-only. The editor does not
+edit `card-type`.
 
 Behavior:
 
@@ -332,11 +339,12 @@ browser console for developer debugging.
 
 Focused automated coverage should include:
 
-- TOML block locator finds the correct card by `card-number`.
+- TOML block locator finds the correct card by `id` UUID.
+- Save requests identify cards by UUID.
 - Field patcher preserves unrelated bytes in the TOML file.
 - Field patcher handles single-line and multiline `rendered-text`.
 - Cost and spark validation accepts integer and special values.
-- Invalid card type, cost, and spark values fail with structured errors.
+- Invalid cost and spark values fail with structured errors.
 - Focused card-data refresh matches the existing `transformCard` behavior.
 - URL parser accepts valid editor params and falls back for invalid params.
 - React tests for double-click edit mode, Enter commit, Escape revert, blur
@@ -380,7 +388,7 @@ slice, including:
 - Card grid and scale controls
 - Inline name editing
 - Inline cost and spark editing
-- Card type and subtype editing
+- Subtype editing
 - Rules-text editing
 - Save states and validation errors
 - Save failure rollback
@@ -411,8 +419,8 @@ Keep implementation units small:
 - `src/editor/` owns editor React components, URL state, API client, and editor
   validation helpers that are safe for browser code.
 - Vite middleware owns filesystem access and TOML patching.
-- Shared card display extraction is allowed only if needed to make editable
-  targets robust while preserving normal card display behavior.
+- Shared card display extraction is expected so normal quest card surfaces and
+  editor card surfaces use the same rendering primitives.
 - Existing quest runtime state and multiplayer code should stay out of the
   editor.
 
@@ -420,6 +428,7 @@ Keep implementation units small:
 
 - `/editor` loads without Firebase or room setup.
 - The editor displays all cards from `data/tabula/rendered-cards.toml`.
+- Editor saves identify cards by UUID.
 - Search, filters, sorting, sort direction, and scale controls work and update
   URL parameters via `replaceState`.
 - Double-clicking each supported card field enters inline edit mode.
@@ -431,6 +440,7 @@ Keep implementation units small:
 - `public/card-data.json` refreshes through the focused transform when it can
   stay within the responsiveness budget.
 - Save and validation errors are visible, local, and recoverable.
+- Editor cards and normal quest cards share one maintained rendering path.
 - The full automated check suite passes.
 - Every UI slice has a completed `agent-browser` QA subagent checkpoint with
   screenshots and analysis against the required visual checklist.
