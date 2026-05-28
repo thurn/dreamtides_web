@@ -49,6 +49,10 @@ function isVariableEditorValue(value: EditableFieldValue): boolean {
   return textValue === "*" || textValue === "X";
 }
 
+function isBlankEditorValue(value: EditableFieldValue): boolean {
+  return String(value).trim() === "";
+}
+
 function numericPreviewValue(
   value: EditableFieldValue,
   { allowBlank }: { allowBlank: boolean },
@@ -135,6 +139,9 @@ export default function EditableCard({
   const showVariableSpark = isVariableEditorValue(
     sparkSaveEntry?.draftValue ?? card.spark,
   );
+  const hasConfirmedBlankSparkSave =
+    sparkSaveEntry?.status === "saved" &&
+    isBlankEditorValue(sparkSaveEntry.confirmedValue);
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
   const visibleRulesText = String(
     rulesTextSaveEntry?.draftValue ?? card["rendered-text"],
@@ -258,7 +265,7 @@ export default function EditableCard({
               size={context.large ? "md" : "sm"}
               scale={context.textScale}
             />
-          ) : (
+          ) : hasConfirmedBlankSparkSave ? null : (
             defaultNode ?? sparkPlaceholder()
           )}
         </EditableField>

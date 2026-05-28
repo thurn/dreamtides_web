@@ -1291,7 +1291,7 @@ describe("CardEditorApp", () => {
     expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
     expect(
       editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
-    ).not.toBeNull();
+    ).toBeNull();
     expect(sparkField.textContent).toContain("Saved");
 
     act(() => {
