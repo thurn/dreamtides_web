@@ -353,11 +353,15 @@ function fieldRangeInBlock(block, field) {
 }
 
 function tomlString(value) {
-  return JSON.stringify(value);
+  return JSON.stringify(value).replace(/\u007f/gu, "\\u007F");
 }
 
 function tomlMultilineString(value) {
   return `'''\n${value}'''`;
+}
+
+function hasUnsafeLiteralStringControl(value) {
+  return /[\u0000-\u0009\u000B-\u001F\u007F]/u.test(value);
 }
 
 function tomlValue(value) {
@@ -367,7 +371,7 @@ function tomlValue(value) {
 
   const stringValue = String(value);
   if (stringValue.includes("\n")) {
-    if (stringValue.includes("'''")) {
+    if (stringValue.includes("'''") || hasUnsafeLiteralStringControl(stringValue)) {
       return tomlString(stringValue);
     }
 

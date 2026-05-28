@@ -423,6 +423,46 @@ card-number = 2
     expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
   });
 
+  it("patches multiline rendered text containing NUL without raw-control parse failure", () => {
+    const source = fixtureToml();
+    const renderedText = "a\n\u0000";
+
+    expect(validateCardEdit("rendered-text", renderedText)).toMatchObject({
+      ok: true,
+      value: renderedText,
+    });
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: renderedText,
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
+    expect(patched.source).toContain("\\u0000");
+  });
+
+  it("patches one-line rendered text containing DEL without raw-control parse failure", () => {
+    const source = fixtureToml();
+    const renderedText = "a\u007f";
+
+    expect(validateCardEdit("rendered-text", renderedText)).toMatchObject({
+      ok: true,
+      value: renderedText,
+    });
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: renderedText,
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
+    expect(patched.source).toContain("\\u007F");
+  });
+
   it("patches top-level fields after literal multiline rendered text contains assignment-looking lines", () => {
     const source = fixtureToml();
     const renderedText = "Intro.\n\nspark = 99\nenergy-cost = 99\n\nOutro.";
