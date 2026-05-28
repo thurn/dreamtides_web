@@ -238,8 +238,11 @@ export default function CardEditorApp({
       aria-busy={loadStatus.kind === "loading"}
       {...displayStateDataAttributes(displayState)}
       style={{
-        minHeight: "100vh",
+        height: "100dvh",
         boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
         padding: "32px",
         background: "#101417",
         color: "#f7f1df",
@@ -253,6 +256,7 @@ export default function CardEditorApp({
           alignItems: "center",
           justifyContent: "space-between",
           gap: "24px",
+          flex: "0 0 auto",
           borderBottom: "1px solid rgba(247, 241, 223, 0.18)",
           paddingBottom: "20px",
         }}
@@ -296,7 +300,15 @@ export default function CardEditorApp({
         ) : null}
       </header>
 
-      <section style={{ paddingTop: "28px" }}>
+      <section
+        style={{
+          display: "flex",
+          flex: "1 1 auto",
+          flexDirection: "column",
+          minHeight: 0,
+          paddingTop: "28px",
+        }}
+      >
         {loadStatus.kind === "loading" ? (
           <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
             Loading source cards...
@@ -304,7 +316,15 @@ export default function CardEditorApp({
         ) : null}
 
         {loadStatus.kind === "loaded" ? (
-          <div style={{ display: "grid", gap: "22px" }}>
+          <div
+            style={{
+              display: "flex",
+              flex: "1 1 auto",
+              flexDirection: "column",
+              gap: "22px",
+              minHeight: 0,
+            }}
+          >
             <CardEditorToolbar
               displayState={displayState}
               subtypeOptions={subtypeOptions}

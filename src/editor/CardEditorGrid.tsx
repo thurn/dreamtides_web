@@ -11,8 +11,15 @@ export default function CardEditorGrid({ cards, size }: CardEditorGridProps) {
   return (
     <div
       aria-label="Filtered cards"
+      data-editor-scroll-region="cards"
       data-editor-grid-size={size}
       style={{
+        flex: "1 1 auto",
+        minHeight: 0,
+        overflowY: "auto",
+        overscrollBehavior: "contain",
+        paddingRight: "4px",
+        paddingBottom: "8px",
         display: "grid",
         gridTemplateColumns: SIZE_PRESETS[size].columns,
         gap: SIZE_PRESETS[size].gap,

@@ -220,6 +220,28 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("keeps the page shell fixed while the card grid is internally scrollable", async () => {
+    const { container, root } = await mountLoadedApp([
+      makeEditorCard({ id: "card-id-1" }),
+      makeEditorCard({ id: "card-id-2" }),
+    ]);
+    const shell = container.querySelector("main");
+    const scrollRegion = container.querySelector<HTMLElement>(
+      "[data-editor-scroll-region=\"cards\"]",
+    );
+
+    expect(shell?.style.height).toBe("100dvh");
+    expect(shell?.style.overflow).toBe("hidden");
+    expect(scrollRegion).not.toBeNull();
+    expect(scrollRegion?.style.overflowY).toBe("auto");
+    expect(scrollRegion?.style.overscrollBehavior).toBe("contain");
+    expect(scrollRegion?.style.minHeight).toBe("0px");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("keeps card type display-only in the editor card type line", async () => {
     const { container, root } = await mountLoadedApp([
       makeEditorCard({
