@@ -6,6 +6,7 @@ import {
   EMPTY_EDITOR_SAVE_STATE,
   failFieldSave,
   fieldSaveEntry,
+  rejectSubmittedFieldSave,
   rejectFieldEdit,
   startFieldSave,
   updateFieldDraft,
@@ -233,6 +234,60 @@ describe("editor save state", () => {
       draftValue: "",
       confirmedValue: "Original",
       message: "Name cannot be blank.",
+    });
+  });
+
+  it("keeps server validation failures editable with the submitted draft", () => {
+    const save = startFieldSave(
+      beginFieldEdit(EMPTY_EDITOR_SAVE_STATE, firstName, "Original"),
+      firstName,
+      "",
+      "Original",
+    );
+
+    const rejected = rejectSubmittedFieldSave(
+      save.state,
+      firstName,
+      save.clientRevision,
+      "Original",
+      "Name cannot be blank.",
+    );
+
+    expect(fieldSaveEntry(rejected, firstName)).toMatchObject({
+      status: "editing",
+      draftValue: "",
+      confirmedValue: "Original",
+      message: "Name cannot be blank.",
+    });
+  });
+
+  it("ignores stale server validation responses when a newer save has been submitted", () => {
+    const firstSave = startFieldSave(
+      EMPTY_EDITOR_SAVE_STATE,
+      firstName,
+      "First",
+      "Original",
+    );
+    const secondSave = startFieldSave(
+      updateFieldDraft(firstSave.state, firstName, "Second", "Original"),
+      firstName,
+      "Second",
+      "Original",
+    );
+
+    const rejected = rejectSubmittedFieldSave(
+      secondSave.state,
+      firstName,
+      firstSave.clientRevision,
+      "Original",
+      "First is invalid.",
+    );
+
+    expect(rejected).toBe(secondSave.state);
+    expect(fieldSaveEntry(rejected, firstName)).toMatchObject({
+      status: "saving",
+      draftValue: "Second",
+      submittedRevision: secondSave.clientRevision,
     });
   });
 

@@ -1,8 +1,47 @@
 import type {
+  EditorApiErrorBody,
   LoadEditorCardsResponse,
   SaveEditorCardFieldRequest,
   SaveEditorCardFieldResponse,
 } from "./types";
+
+export class EditorApiRequestError extends Error {
+  readonly code: string | undefined;
+  readonly details: unknown;
+  readonly status: number;
+
+  constructor({
+    code,
+    details,
+    message,
+    status,
+  }: {
+    code?: string;
+    details?: unknown;
+    message: string;
+    status: number;
+  }) {
+    super(message);
+    this.name = "EditorApiRequestError";
+    this.code = code;
+    this.details = details;
+    this.status = status;
+  }
+}
+
+function readApiError(body: unknown): EditorApiErrorBody["error"] | undefined {
+  if (
+    body !== null &&
+    typeof body === "object" &&
+    "error" in body &&
+    body.error !== null &&
+    typeof body.error === "object"
+  ) {
+    return body.error as EditorApiErrorBody["error"];
+  }
+
+  return undefined;
+}
 
 async function readJsonResponse<T>(response: Response): Promise<T> {
   const text = await response.text();
@@ -21,17 +60,16 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   }
 
   if (!response.ok) {
-    const message =
-      body !== null &&
-      typeof body === "object" &&
-      "error" in body &&
-      body.error !== null &&
-      typeof body.error === "object" &&
-      "message" in body.error &&
-      typeof body.error.message === "string"
-        ? body.error.message
-        : `Editor API request failed with ${response.status}`;
-    throw new Error(message);
+    const apiError = readApiError(body);
+    throw new EditorApiRequestError({
+      code: apiError?.code,
+      details: apiError?.details,
+      message:
+        typeof apiError?.message === "string"
+          ? apiError.message
+          : `Editor API request failed with ${response.status}`,
+      status: response.status,
+    });
   }
 
   return body as T;

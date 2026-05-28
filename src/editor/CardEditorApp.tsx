@@ -14,6 +14,7 @@ import {
   failFieldSave,
   fieldSaveEntry,
   rejectFieldEdit,
+  rejectSubmittedFieldSave,
   startFieldSave,
   updateFieldDraft,
 } from "./save-state";
@@ -46,6 +47,15 @@ function errorMessageFor(error: unknown): string {
 
 function isAbortError(error: unknown): boolean {
   return error instanceof DOMException && error.name === "AbortError";
+}
+
+function isServerValidationError(error: unknown): boolean {
+  return (
+    error !== null &&
+    typeof error === "object" &&
+    "code" in error &&
+    error.code === "INVALID_EDIT"
+  );
 }
 
 function displayStateDataAttributes(displayState: EditorDisplayState) {
@@ -436,15 +446,25 @@ export default function CardEditorApp({
           currentEntry !== null &&
           clientRevision >= currentEntry.submittedRevision
         ) {
-          setEditorSaveState((current) =>
-            failFieldSave(
+          setEditorSaveState((current) => {
+            if (isServerValidationError(error)) {
+              return rejectSubmittedFieldSave(
+                current,
+                target,
+                clientRevision,
+                confirmedFieldValue(card, field),
+                message,
+              );
+            }
+
+            return failFieldSave(
               current,
               target,
               clientRevision,
               confirmedFieldValue(card, field),
               message,
-            ),
-          );
+            );
+          });
         }
       });
   }

@@ -222,3 +222,25 @@ export function failFieldSave(
     message,
   });
 }
+
+export function rejectSubmittedFieldSave(
+  state: EditableSaveState,
+  target: FieldTarget,
+  clientRevision: number,
+  serverConfirmedValue: EditableFieldValue,
+  message: string,
+): EditableSaveState {
+  const entry = fieldSaveEntry(state, target);
+  if (entry === null || clientRevision < entry.submittedRevision) {
+    return state;
+  }
+
+  return withEntry(state, {
+    ...entry,
+    status: "editing",
+    draftValue: entry.draftValue,
+    confirmedValue: serverConfirmedValue,
+    clientRevision: entry.clientRevision,
+    message,
+  });
+}
