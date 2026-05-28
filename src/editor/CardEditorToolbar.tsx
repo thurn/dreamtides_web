@@ -136,6 +136,11 @@ export default function CardEditorToolbar({
   totalCount,
   onDisplayStateChange,
 }: CardEditorToolbarProps) {
+  const visibleSubtypeOptions =
+    displayState.subtype !== "" && !subtypeOptions.includes(displayState.subtype)
+      ? [displayState.subtype, ...subtypeOptions]
+      : subtypeOptions;
+
   const updateDisplayState = (patch: Partial<EditorDisplayState>) => {
     onDisplayStateChange({
       ...displayState,
@@ -212,7 +217,7 @@ export default function CardEditorToolbar({
           style={inputStyle}
         >
           <option value="">Any subtype</option>
-          {subtypeOptions.map((subtype) => (
+          {visibleSubtypeOptions.map((subtype) => (
             <option key={subtype} value={subtype}>
               {subtype}
             </option>

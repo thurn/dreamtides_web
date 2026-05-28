@@ -55,9 +55,15 @@ function displayType(card: EditorCardRecord): string {
   return card.preview.cardType ?? card.cardType;
 }
 
+function normalizeSubtype(subtype: unknown): string {
+  return typeof subtype === "string" ? subtype.trim() : "";
+}
+
 function sourceSubtype(card: EditorCardRecord): string {
   const sourceSubtype = card.source.subtype;
-  return typeof sourceSubtype === "string" ? sourceSubtype : card.subtype;
+  return typeof sourceSubtype === "string"
+    ? normalizeSubtype(sourceSubtype)
+    : normalizeSubtype(card.subtype);
 }
 
 function costFilterValue(card: EditorCardRecord): string {
@@ -111,6 +117,7 @@ function filteredAndSortedCards(
   displayState: EditorDisplayState,
 ): EditorCardRecord[] {
   const searchText = displayState.searchText.trim().toLowerCase();
+  const subtypeFilter = normalizeSubtype(displayState.subtype);
 
   return cards
     .map((card, index) => ({ card, index }))
@@ -137,8 +144,8 @@ function filteredAndSortedCards(
       }
 
       return (
-        displayState.subtype === "" ||
-        sourceSubtype(card) === displayState.subtype
+        subtypeFilter === "" ||
+        sourceSubtype(card) === subtypeFilter
       );
     })
     .sort((left, right) => {
@@ -158,7 +165,7 @@ function subtypeOptionsFromCards(cards: readonly EditorCardRecord[]): string[] {
   return Array.from(
     new Set(
       cards
-        .map((card) => sourceSubtype(card).trim())
+        .map((card) => sourceSubtype(card))
         .filter((subtype) => subtype.length > 0),
     ),
   ).sort((left, right) =>

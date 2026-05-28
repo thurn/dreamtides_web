@@ -553,6 +553,70 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("filters and sorts by trimmed source subtypes", async () => {
+    const cards = [
+      makeEditorCard({
+        id: "padded-scout",
+        cardNumber: 2,
+        name: "Padded Scout",
+        subtype: "Scout",
+        source: { subtype: " Scout " },
+        preview: makePreview({
+          id: "padded-scout",
+          cardNumber: 2,
+          name: "Padded Scout",
+          subtype: "Scout",
+        }),
+      }),
+      makeEditorCard({
+        id: "guide",
+        cardNumber: 1,
+        name: "Guide",
+        subtype: "Guide",
+        source: { subtype: "Guide" },
+        preview: makePreview({
+          id: "guide",
+          cardNumber: 1,
+          name: "Guide",
+          subtype: "Guide",
+        }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+    const subtypeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Subtype filter"]',
+    );
+    const sortSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Sort field"]',
+    );
+
+    if (subtypeSelect === null || sortSelect === null) {
+      throw new Error("Missing subtype controls");
+    }
+
+    expect(Array.from(subtypeSelect.options).map((option) => option.value)).toEqual([
+      "",
+      "Guide",
+      "Scout",
+    ]);
+
+    act(() => {
+      setSelectValue(sortSelect, "subtype");
+    });
+    expect(editorCardIds(container)).toEqual(["guide", "padded-scout"]);
+
+    act(() => {
+      setSelectValue(subtypeSelect, "Scout");
+    });
+
+    expect(editorCardIds(container)).toEqual(["padded-scout"]);
+    expect(container.textContent).toContain("1 / 2 cards");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("replaces the URL for every toolbar display control", async () => {
     const cards = [
       makeEditorCard({

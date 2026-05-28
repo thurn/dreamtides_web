@@ -213,4 +213,39 @@ describe("CardEditorToolbar", () => {
       root.unmount();
     });
   });
+
+  it("keeps the active subtype visible when it is not in loaded options", () => {
+    const displayState = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      subtype: "Visionary",
+    };
+    const { container, root } = mount(
+      <CardEditorToolbar
+        displayState={displayState}
+        subtypeOptions={["Guide", "Scout"]}
+        visibleCount={0}
+        totalCount={5}
+        onDisplayStateChange={vi.fn()}
+      />,
+    );
+    const subtypeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Subtype filter"]',
+    );
+
+    if (subtypeSelect === null) {
+      throw new Error("Missing subtype filter");
+    }
+
+    expect(subtypeSelect.value).toBe("Visionary");
+    expect(Array.from(subtypeSelect.options).map((option) => option.value)).toEqual([
+      "",
+      "Visionary",
+      "Guide",
+      "Scout",
+    ]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
