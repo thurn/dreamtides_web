@@ -153,14 +153,15 @@ export function startFieldSave(
 export function rejectFieldEdit(
   state: EditableSaveState,
   target: FieldTarget,
+  draftValue: EditableFieldValue,
   confirmedValue: EditableFieldValue,
   message: string,
 ): EditableSaveState {
   const entry = entryFor(state, target, confirmedValue);
   return withEntry(state, {
     ...entry,
-    status: "error",
-    draftValue: confirmedValue,
+    status: "editing",
+    draftValue,
     confirmedValue,
     message,
   });

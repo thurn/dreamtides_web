@@ -6,6 +6,7 @@ import {
   EMPTY_EDITOR_SAVE_STATE,
   failFieldSave,
   fieldSaveEntry,
+  rejectFieldEdit,
   startFieldSave,
   updateFieldDraft,
 } from "./save-state";
@@ -185,6 +186,30 @@ describe("editor save state", () => {
       draftValue: "Original",
       confirmedValue: "Original",
       message: "Save failed",
+    });
+  });
+
+  it("keeps local validation failures editable with the rejected draft", () => {
+    const edited = updateFieldDraft(
+      beginFieldEdit(EMPTY_EDITOR_SAVE_STATE, firstName, "Original"),
+      firstName,
+      "",
+      "Original",
+    );
+
+    const rejected = rejectFieldEdit(
+      edited,
+      firstName,
+      "",
+      "Original",
+      "Name cannot be blank.",
+    );
+
+    expect(fieldSaveEntry(rejected, firstName)).toMatchObject({
+      status: "editing",
+      draftValue: "",
+      confirmedValue: "Original",
+      message: "Name cannot be blank.",
     });
   });
 

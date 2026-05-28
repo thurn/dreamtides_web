@@ -248,4 +248,33 @@ describe("CardEditorToolbar", () => {
       root.unmount();
     });
   });
+
+  it("omits blank loaded subtype options", () => {
+    const { container, root } = mount(
+      <CardEditorToolbar
+        displayState={DEFAULT_EDITOR_DISPLAY_STATE}
+        subtypeOptions={["", "Guide", "  ", "Scout"]}
+        visibleCount={2}
+        totalCount={5}
+        onDisplayStateChange={vi.fn()}
+      />,
+    );
+    const subtypeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Subtype filter"]',
+    );
+
+    if (subtypeSelect === null) {
+      throw new Error("Missing subtype filter");
+    }
+
+    expect(Array.from(subtypeSelect.options).map((option) => option.value)).toEqual([
+      "",
+      "Guide",
+      "Scout",
+    ]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });

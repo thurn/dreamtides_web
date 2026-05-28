@@ -287,6 +287,7 @@ describe("CardEditorApp", () => {
       makeEditorCard({
         id: "event-card",
         cardType: "Event",
+        subtype: "Omen",
         source: { subtype: "Omen" },
         preview: makePreview({
           id: "event-card",
@@ -313,6 +314,210 @@ describe("CardEditorApp", () => {
     expect(typeSpan?.textContent).toBe("Event");
     expect(typeSpan?.hasAttribute("data-editor-field")).toBe(false);
     expect(editorCard?.querySelector("[data-editor-field=\"card-type\"]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("edits only the subtype segment of the type line and refreshes subtype options", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            cardType: "Event",
+            subtype: String(request.value),
+            source: { subtype: String(request.value) },
+            preview: makePreview({
+              id: request.id,
+              cardType: "Event",
+              subtype: String(request.value),
+              spark: null,
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () =>
+            Promise.resolve([
+              makeEditorCard({
+                id: "event-card",
+                cardType: "Event",
+                subtype: "Omen",
+                source: { subtype: "Omen" },
+                preview: makePreview({
+                  id: "event-card",
+                  cardType: "Event",
+                  subtype: "Omen",
+                  spark: null,
+                }),
+              }),
+            ]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="event-card"]',
+    );
+    const cardTypeText = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-type-line-card-type="true"]',
+    );
+    const subtypeField = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-field="subtype"]',
+    );
+    if (
+      editorCard === null ||
+      cardTypeText === null ||
+      cardTypeText === undefined ||
+      subtypeField === null ||
+      subtypeField === undefined
+    ) {
+      throw new Error("Missing editable type line");
+    }
+
+    act(() => {
+      cardTypeText.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    expect(container.querySelector('[data-editor-input-field="subtype"]')).toBeNull();
+
+    act(() => {
+      subtypeField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="subtype"]',
+    );
+    if (input === null) {
+      throw new Error("Missing subtype input");
+    }
+
+    await act(async () => {
+      setInputValue(input, "Vision");
+      pressKey(input, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "event-card",
+      field: "subtype",
+      value: "Vision",
+    });
+    expect(cardTypeText.textContent).toBe("Event");
+    expect(subtypeField.textContent).toContain("Vision");
+
+    const subtypeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Subtype filter"]',
+    );
+    expect(Array.from(subtypeSelect?.options ?? []).map((option) => option.value)).toEqual([
+      "",
+      "Vision",
+    ]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("saves blank event subtypes and leaves a restrained edit affordance", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            cardType: "Event",
+            subtype: String(request.value),
+            source: { subtype: String(request.value) },
+            preview: makePreview({
+              id: request.id,
+              cardType: "Event",
+              subtype: String(request.value),
+              spark: null,
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () =>
+            Promise.resolve([
+              makeEditorCard({
+                id: "event-card",
+                cardType: "Event",
+                subtype: "Omen",
+                source: { subtype: "Omen" },
+                preview: makePreview({
+                  id: "event-card",
+                  cardType: "Event",
+                  subtype: "Omen",
+                  spark: null,
+                }),
+              }),
+            ]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="event-card"]',
+    );
+    const subtypeField = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-field="subtype"]',
+    );
+    if (editorCard === null || subtypeField === null || subtypeField === undefined) {
+      throw new Error("Missing subtype field");
+    }
+
+    act(() => {
+      subtypeField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="subtype"]',
+    );
+    if (input === null) {
+      throw new Error("Missing subtype input");
+    }
+
+    await act(async () => {
+      setInputValue(input, "");
+      pressKey(input, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "event-card",
+      field: "subtype",
+      value: "",
+    });
+    expect(
+      editorCard.querySelector('[data-editor-type-line-card-type="true"]')?.textContent,
+    ).toBe("Event");
+    expect(
+      editorCard.querySelector('[data-editor-subtype-placeholder="true"]'),
+    ).not.toBeNull();
+    const subtypeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Subtype filter"]',
+    );
+    expect(Array.from(subtypeSelect?.options ?? []).map((option) => option.value)).toEqual([
+      "",
+    ]);
 
     act(() => {
       root.unmount();
@@ -474,6 +679,149 @@ describe("CardEditorApp", () => {
     expect(container.textContent).toContain("Moonlit Envoy");
     expect(container.textContent).not.toContain("Draft Name");
     expect(saveEditorCardField).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps blank name validation editable until Escape cancels it", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>();
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (input === null) {
+      throw new Error("Missing name input");
+    }
+
+    act(() => {
+      setInputValue(input, "");
+      pressKey(input, "Enter");
+    });
+
+    const invalidInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    expect(invalidInput).not.toBeNull();
+    expect(invalidInput?.value).toBe("");
+    expect(document.activeElement).toBe(invalidInput);
+    expect(nameField.textContent).toContain("Name cannot be blank.");
+    expect(saveEditorCardField).not.toHaveBeenCalled();
+
+    act(() => {
+      if (invalidInput === null) {
+        throw new Error("Missing invalid name input");
+      }
+      pressKey(invalidInput, "Escape");
+    });
+
+    expect(container.querySelector('[data-editor-input-field="name"]')).toBeNull();
+    expect(nameField.textContent).toContain("Moonlit Envoy");
+    expect(nameField.textContent).not.toContain("Name cannot be blank.");
+    expect(saveEditorCardField).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("saves a corrected name after inline validation fails", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            name: String(request.value),
+            preview: makePreview({
+              id: request.id,
+              name: String(request.value),
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (input === null) {
+      throw new Error("Missing name input");
+    }
+
+    act(() => {
+      setInputValue(input, "");
+      pressKey(input, "Enter");
+    });
+
+    const invalidInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (invalidInput === null) {
+      throw new Error("Missing invalid name input");
+    }
+
+    await act(async () => {
+      setInputValue(invalidInput, "Corrected Envoy");
+      pressKey(invalidInput, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "card-id-1",
+      field: "name",
+      value: "Corrected Envoy",
+    });
+    expect(nameField.textContent).toContain("Saved");
+    expect(nameField.textContent).toContain("Corrected Envoy");
+    expect(nameField.textContent).not.toContain("Name cannot be blank.");
 
     act(() => {
       root.unmount();
@@ -657,7 +1005,9 @@ describe("CardEditorApp", () => {
     expect(energyField.textContent).toContain(
       "Enter a non-negative whole number or X.",
     );
-    expect(energyField.textContent).toContain("2");
+    expect(container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="energy-cost"]',
+    )?.value).toBe("1.5");
 
     act(() => {
       root.unmount();
@@ -929,7 +1279,9 @@ describe("CardEditorApp", () => {
     expect(sparkField.textContent).toContain(
       "Enter a non-negative whole number or X.",
     );
-    expect(sparkField.textContent).toContain("1");
+    expect(container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="spark"]',
+    )?.value).toBe("abc");
 
     act(() => {
       root.unmount();

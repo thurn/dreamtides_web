@@ -219,6 +219,10 @@ function validateSingleLineFieldSave(
       : { ok: true, value: textValue };
   }
 
+  if (field === "subtype") {
+    return { ok: true, value: String(value) };
+  }
+
   if (field === "energy-cost" || field === "spark") {
     if (field === "spark" && textValue.length === 0) {
       return { ok: true, value: "" };
@@ -373,6 +377,7 @@ export default function CardEditorApp({
         rejectFieldEdit(
           current,
           target,
+          value,
           confirmedFieldValue(card, field),
           validation.message,
         ),

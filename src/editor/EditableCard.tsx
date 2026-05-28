@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { CardView } from "../components/CardView";
-import type { CardViewSlotContext, CardViewSlots } from "../components/CardView";
+import type { CardViewSlots } from "../components/CardView";
 import EditableField from "./EditableField";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type { EditableCardField, EditorCardRecord, EditorDisplayState } from "./types";
@@ -11,6 +11,7 @@ export interface EditableCardProps {
   nameSaveEntry: EditableFieldSaveEntry | null;
   energySaveEntry: EditableFieldSaveEntry | null;
   sparkSaveEntry: EditableFieldSaveEntry | null;
+  subtypeSaveEntry: EditableFieldSaveEntry | null;
   onFieldBeginEdit: (
     card: EditorCardRecord,
     field: EditableCardField,
@@ -34,35 +35,6 @@ function readOnlySlot(field: string, defaultNode: ReactNode) {
     <div data-editor-field={field} style={{ display: "contents" }}>
       {defaultNode}
     </div>
-  );
-}
-
-function hasVisibleSubtype(context: CardViewSlotContext): boolean {
-  return context.card.subtype !== "" && context.card.subtype !== "*";
-}
-
-function renderEditableTypeLineContent(
-  context: CardViewSlotContext,
-  defaultNode: ReactNode,
-): ReactNode {
-  if (!hasVisibleSubtype(context)) {
-    return defaultNode;
-  }
-
-  if (context.card.cardType === "Event") {
-    return (
-      <span className="truncate">
-        <span>{context.card.cardType}</span>
-        <span aria-hidden="true"> — </span>
-        <span data-editor-field="subtype">{context.card.subtype}</span>
-      </span>
-    );
-  }
-
-  return (
-    <span className="truncate" data-editor-field="subtype">
-      {context.card.subtype}
-    </span>
   );
 }
 
@@ -111,12 +83,33 @@ function sparkPlaceholder() {
   );
 }
 
+function subtypePlaceholder() {
+  return (
+    <span
+      data-editor-subtype-placeholder="true"
+      style={{
+        border: "1px dashed rgba(226, 232, 240, 0.42)",
+        borderRadius: "4px",
+        color: "rgba(226, 232, 240, 0.68)",
+        display: "inline-block",
+        fontSize: "0.72em",
+        fontWeight: 800,
+        lineHeight: 1.1,
+        padding: "1px 4px",
+      }}
+    >
+      Add subtype
+    </span>
+  );
+}
+
 export default function EditableCard({
   card,
   size,
   nameSaveEntry,
   energySaveEntry,
   sparkSaveEntry,
+  subtypeSaveEntry,
   onFieldBeginEdit,
   onFieldDraftChange,
   onFieldCancel,
@@ -131,12 +124,28 @@ export default function EditableCard({
     sparkSaveEntry?.draftValue ?? card.spark,
     { allowBlank: true },
   );
+  const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
   const visibleCard = {
     ...card.preview,
     energyCost: visibleEnergyCost,
     name: visibleName,
     spark: visibleSpark,
+    subtype: visibleSubtype,
   };
+  const renderSubtypeEditor = (children: ReactNode) => (
+    <EditableField
+      field="subtype"
+      layout="inline"
+      value={card.subtype}
+      saveEntry={subtypeSaveEntry}
+      onBeginEdit={(value) => onFieldBeginEdit(card, "subtype", value)}
+      onDraftChange={(value) => onFieldDraftChange(card, "subtype", value)}
+      onCancel={() => onFieldCancel(card, "subtype")}
+      onSave={(value) => onFieldSave(card, "subtype", value)}
+    >
+      {children}
+    </EditableField>
+  );
   const slots: CardViewSlots = {
     energy: (_context, defaultNode) => (
       <EditableField
@@ -167,8 +176,34 @@ export default function EditableCard({
         {defaultNode}
       </EditableField>
     ),
-    typeLineContent: (context, defaultNode) =>
-      renderEditableTypeLineContent(context, defaultNode),
+    typeLineContent: (context, defaultNode) => {
+      const subtype = context.card.subtype;
+      const hasSubtype = subtype !== "" && subtype !== "*";
+
+      if (context.card.cardType === "Event") {
+        return (
+          <span className="truncate">
+            <span data-editor-type-line-card-type="true">
+              {context.card.cardType}
+            </span>
+            <span aria-hidden="true"> — </span>
+            {renderSubtypeEditor(
+              hasSubtype ? (
+                <span>{subtype}</span>
+              ) : (
+                subtypePlaceholder()
+              ),
+            )}
+          </span>
+        );
+      }
+
+      if (hasSubtype) {
+        return renderSubtypeEditor(<span className="truncate">{subtype}</span>);
+      }
+
+      return defaultNode;
+    },
     rulesText: (_context, defaultNode) => readOnlySlot("rendered-text", defaultNode),
     spark: (_context, defaultNode) => (
       <div className="mt-auto flex items-center justify-end pt-0.5">

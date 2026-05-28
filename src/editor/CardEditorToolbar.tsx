@@ -136,10 +136,14 @@ export default function CardEditorToolbar({
   totalCount,
   onDisplayStateChange,
 }: CardEditorToolbarProps) {
+  const loadedSubtypeOptions = subtypeOptions.filter(
+    (subtype) => subtype.trim().length > 0,
+  );
   const visibleSubtypeOptions =
-    displayState.subtype !== "" && !subtypeOptions.includes(displayState.subtype)
-      ? [displayState.subtype, ...subtypeOptions]
-      : subtypeOptions;
+    displayState.subtype !== "" &&
+    !loadedSubtypeOptions.includes(displayState.subtype)
+      ? [displayState.subtype, ...loadedSubtypeOptions]
+      : loadedSubtypeOptions;
 
   const updateDisplayState = (patch: Partial<EditorDisplayState>) => {
     onDisplayStateChange({

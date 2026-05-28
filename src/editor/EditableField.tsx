@@ -5,9 +5,9 @@ import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 export interface EditableFieldProps {
   field: EditableCardField;
   value: EditableFieldValue;
-  layout?: "block" | "pip";
+  layout?: "block" | "inline" | "pip";
   mode?: "single-line" | "multiline";
-  saveEntry: EditableFieldSaveEntry | null;
+  saveEntry: EditableFieldSaveEntry | null | undefined;
   children: ReactNode;
   onBeginEdit: (value: EditableFieldValue) => void;
   onDraftChange: (value: EditableFieldValue) => void;
@@ -29,8 +29,8 @@ const inputStyle = {
   padding: "2px 5px",
 } satisfies CSSProperties;
 
-function statusText(entry: EditableFieldSaveEntry | null): string {
-  if (entry === null) {
+function statusText(entry: EditableFieldSaveEntry | null | undefined): string {
+  if (entry === null || entry === undefined) {
     return "";
   }
 
@@ -66,7 +66,13 @@ export default function EditableField({
   const isEditing = saveEntry?.status === "editing";
   const draftValue = saveEntry?.draftValue ?? value;
   const status = statusText(saveEntry);
+  const isErrorStatus =
+    saveEntry?.status === "error" ||
+    (saveEntry?.status === "editing" &&
+      saveEntry.message !== null &&
+      saveEntry.message !== "");
   const editorRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
+  const isInlineLayout = layout === "inline";
   const isPipLayout = layout === "pip";
 
   useEffect(() => {
@@ -129,6 +135,13 @@ export default function EditableField({
                 width: "46px",
               }
             : {}),
+          ...(isInlineLayout
+            ? {
+                minHeight: "22px",
+                padding: "1px 5px",
+                width: "96px",
+              }
+            : {}),
         }}
       />
     );
@@ -139,13 +152,18 @@ export default function EditableField({
       data-editor-save-status={saveEntry?.status ?? "idle"}
       onDoubleClick={() => onBeginEdit(value)}
       style={{
-        alignItems: isPipLayout ? "center" : undefined,
-        display: isPipLayout ? "inline-flex" : "block",
-        flexDirection: isPipLayout ? "column" : undefined,
-        minHeight: isPipLayout ? "2.7em" : "2.35em",
+        alignItems: isPipLayout || isInlineLayout ? "center" : undefined,
+        display: isPipLayout || isInlineLayout ? "inline-flex" : "block",
+        flexDirection: isPipLayout || isInlineLayout ? "column" : undefined,
+        minHeight: isPipLayout
+          ? "2.7em"
+          : isInlineLayout
+            ? "1.85em"
+            : "2.35em",
         minWidth: isPipLayout ? "46px" : undefined,
         position: "relative",
-        width: isPipLayout ? "auto" : "100%",
+        verticalAlign: isInlineLayout ? "middle" : undefined,
+        width: isPipLayout || isInlineLayout ? "auto" : "100%",
       }}
     >
       {isEditing ? editor : children}
@@ -155,15 +173,15 @@ export default function EditableField({
         style={{
           display: "block",
           minHeight: "0.95em",
-          color: saveEntry?.status === "error" ? "#f0c6bd" : "#8edbd1",
-          fontSize: isPipLayout ? "0.5rem" : "0.58rem",
+          color: isErrorStatus ? "#f0c6bd" : "#8edbd1",
+          fontSize: isPipLayout ? "0.5rem" : isInlineLayout ? "0.48rem" : "0.58rem",
           fontWeight: 800,
           lineHeight: 1.1,
           marginTop: "1px",
-          maxWidth: isPipLayout ? "74px" : undefined,
+          maxWidth: isPipLayout ? "74px" : isInlineLayout ? "96px" : undefined,
           opacity: status === "" ? 0 : 1,
-          textAlign: isPipLayout ? "center" : undefined,
-          whiteSpace: isPipLayout ? "normal" : "nowrap",
+          textAlign: isPipLayout || isInlineLayout ? "center" : undefined,
+          whiteSpace: isPipLayout || isInlineLayout ? "normal" : "nowrap",
         }}
       >
         {status}
