@@ -207,7 +207,7 @@ function confirmedFieldValue(
   }
 }
 
-function validateSingleLineFieldSave(
+function validateFieldSave(
   field: EditableCardField,
   value: EditableFieldValue,
 ): { ok: true; value: EditableFieldValue } | { ok: false; message: string } {
@@ -221,6 +221,10 @@ function validateSingleLineFieldSave(
 
   if (field === "subtype") {
     return { ok: true, value: textValue };
+  }
+
+  if (field === "rendered-text") {
+    return { ok: true, value: String(value) };
   }
 
   if (field === "energy-cost" || field === "spark") {
@@ -370,7 +374,7 @@ export default function CardEditorApp({
     value: EditableFieldValue,
   ) {
     const target = { cardId: card.id, field };
-    const validation = validateSingleLineFieldSave(field, value);
+    const validation = validateFieldSave(field, value);
 
     if (!validation.ok) {
       setEditorSaveState((current) =>

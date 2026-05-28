@@ -12,6 +12,7 @@ export interface EditableCardProps {
   energySaveEntry: EditableFieldSaveEntry | null;
   sparkSaveEntry: EditableFieldSaveEntry | null;
   subtypeSaveEntry: EditableFieldSaveEntry | null;
+  rulesTextSaveEntry: EditableFieldSaveEntry | null;
   onFieldBeginEdit: (
     card: EditorCardRecord,
     field: EditableCardField,
@@ -32,7 +33,7 @@ export interface EditableCardProps {
 
 function readOnlySlot(field: string, defaultNode: ReactNode) {
   return (
-    <div data-editor-field={field} style={{ display: "contents" }}>
+    <div data-editor-readonly-field={field} style={{ display: "contents" }}>
       {defaultNode}
     </div>
   );
@@ -110,6 +111,7 @@ export default function EditableCard({
   energySaveEntry,
   sparkSaveEntry,
   subtypeSaveEntry,
+  rulesTextSaveEntry,
   onFieldBeginEdit,
   onFieldDraftChange,
   onFieldCancel,
@@ -125,10 +127,14 @@ export default function EditableCard({
     { allowBlank: true },
   );
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
+  const visibleRulesText = String(
+    rulesTextSaveEntry?.draftValue ?? card["rendered-text"],
+  );
   const visibleCard = {
     ...card.preview,
     energyCost: visibleEnergyCost,
     name: visibleName,
+    renderedText: visibleRulesText,
     spark: visibleSpark,
     subtype: visibleSubtype,
   };
@@ -208,7 +214,21 @@ export default function EditableCard({
 
       return defaultNode;
     },
-    rulesText: (_context, defaultNode) => readOnlySlot("rendered-text", defaultNode),
+    rulesText: (_context, defaultNode) => (
+      <EditableField
+        field="rendered-text"
+        mode="multiline"
+        value={card["rendered-text"]}
+        saveEntry={rulesTextSaveEntry}
+        onBeginEdit={(value) => onFieldBeginEdit(card, "rendered-text", value)}
+        onDraftChange={(value) =>
+          onFieldDraftChange(card, "rendered-text", value)}
+        onCancel={() => onFieldCancel(card, "rendered-text")}
+        onSave={(value) => onFieldSave(card, "rendered-text", value)}
+      >
+        {readOnlySlot("rendered-text", defaultNode)}
+      </EditableField>
+    ),
     spark: (_context, defaultNode) => (
       <div className="mt-auto flex items-center justify-end pt-0.5">
         <EditableField

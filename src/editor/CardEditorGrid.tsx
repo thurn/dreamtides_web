@@ -78,6 +78,10 @@ export default function CardEditorGrid({
             cardId: card.id,
             field: "subtype",
           })}
+          rulesTextSaveEntry={fieldSaveEntry(saveState, {
+            cardId: card.id,
+            field: "rendered-text",
+          })}
           onFieldBeginEdit={onFieldBeginEdit}
           onFieldDraftChange={onFieldDraftChange}
           onFieldCancel={onFieldCancel}

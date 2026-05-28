@@ -106,6 +106,19 @@ function setInputValue(input: HTMLInputElement, value: string): void {
   input.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
+function setTextareaValue(textarea: HTMLTextAreaElement, value: string): void {
+  const valueDescriptor = Object.getOwnPropertyDescriptor(
+    HTMLTextAreaElement.prototype,
+    "value",
+  );
+  if (valueDescriptor?.set === undefined) {
+    throw new Error("Missing textarea value setter");
+  }
+  const setValue = valueDescriptor.set.bind(textarea);
+  setValue(value);
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
 function setSelectValue(select: HTMLSelectElement, value: string): void {
   const valueDescriptor = Object.getOwnPropertyDescriptor(
     HTMLSelectElement.prototype,
@@ -119,14 +132,19 @@ function setSelectValue(select: HTMLSelectElement, value: string): void {
   select.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
-function pressKey(element: HTMLElement, key: string): void {
-  element.dispatchEvent(
-    new KeyboardEvent("keydown", {
-      bubbles: true,
-      cancelable: true,
-      key,
-    }),
-  );
+function pressKey(
+  element: HTMLElement,
+  key: string,
+  options: KeyboardEventInit = {},
+): KeyboardEvent {
+  const event = new KeyboardEvent("keydown", {
+    bubbles: true,
+    cancelable: true,
+    key,
+    ...options,
+  });
+  element.dispatchEvent(event);
+  return event;
 }
 
 async function flushAsyncWork(): Promise<void> {
@@ -1478,6 +1496,171 @@ describe("CardEditorApp", () => {
     expect(container.querySelector<HTMLInputElement>(
       '[data-editor-input-field="spark"]',
     )?.value).toBe("abc");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("saves multiline rules text with Enter and renders the confirmed preview", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            "rendered-text": String(request.value),
+            preview: makePreview({
+              id: request.id,
+              renderedText: String(request.value),
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () =>
+            Promise.resolve([
+              makeEditorCard({
+                id: "card-id-1",
+                "rendered-text": "Draw a card.",
+                preview: makePreview({
+                  id: "card-id-1",
+                  renderedText: "Draw a card.",
+                }),
+              }),
+            ]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"]',
+    );
+    const rulesField = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-field="rendered-text"]',
+    );
+    if (editorCard === null || rulesField === null || rulesField === undefined) {
+      throw new Error("Missing rules text field");
+    }
+
+    act(() => {
+      rulesField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const textarea = container.querySelector<HTMLTextAreaElement>(
+      '[data-editor-input-field="rendered-text"]',
+    );
+    if (textarea === null) {
+      throw new Error("Missing rules text textarea");
+    }
+    expect(textarea.value).toBe("Draw a card.");
+
+    const shiftEnterEvent = pressKey(textarea, "Enter", { shiftKey: true });
+    expect(shiftEnterEvent.defaultPrevented).toBe(false);
+    expect(saveEditorCardField).not.toHaveBeenCalled();
+    expect(
+      container.querySelector('[data-editor-input-field="rendered-text"]'),
+    ).not.toBeNull();
+
+    const renderedText = "Gain ●1.\n\nDraw a card.";
+    await act(async () => {
+      setTextareaValue(textarea, renderedText);
+      pressKey(textarea, "Enter");
+      await flushAsyncWork();
+    });
+
+    const savedRequest = saveEditorCardField.mock.calls[0]?.[0];
+    expect(savedRequest).toMatchObject({
+      id: "card-id-1",
+      field: "rendered-text",
+      value: renderedText,
+    });
+    expect(savedRequest?.clientRevision).toEqual(expect.any(Number));
+    expect(
+      container.querySelector('[data-editor-input-field="rendered-text"]'),
+    ).toBeNull();
+    expect(rulesField.textContent).toContain("Saved");
+    expect(editorCard.querySelectorAll("[data-rules-text-paragraph]").length).toBe(2);
+    expect(editorCard.textContent).toContain("Gain ");
+    expect(editorCard.textContent).toContain("1.");
+    expect(editorCard.textContent).toContain("Draw a card.");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("cancels rules text edits with Escape and does not save on blur", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>();
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () =>
+            Promise.resolve([
+              makeEditorCard({
+                id: "card-id-1",
+                "rendered-text": "Original rules text.",
+                preview: makePreview({
+                  id: "card-id-1",
+                  renderedText: "Original rules text.",
+                }),
+              }),
+            ]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const rulesField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="rendered-text"]',
+    );
+    if (rulesField === null) {
+      throw new Error("Missing rules text field");
+    }
+
+    act(() => {
+      rulesField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const textarea = container.querySelector<HTMLTextAreaElement>(
+      '[data-editor-input-field="rendered-text"]',
+    );
+    if (textarea === null) {
+      throw new Error("Missing rules text textarea");
+    }
+
+    act(() => {
+      setTextareaValue(textarea, "Draft rules text.");
+      textarea.dispatchEvent(new FocusEvent("blur", { bubbles: true }));
+    });
+
+    expect(saveEditorCardField).not.toHaveBeenCalled();
+    expect(
+      container.querySelector<HTMLTextAreaElement>(
+        '[data-editor-input-field="rendered-text"]',
+      )?.value,
+    ).toBe("Draft rules text.");
+
+    act(() => {
+      pressKey(textarea, "Escape");
+    });
+
+    expect(
+      container.querySelector('[data-editor-input-field="rendered-text"]'),
+    ).toBeNull();
+    expect(rulesField.textContent).toContain("Original rules text.");
+    expect(rulesField.textContent).not.toContain("Draft rules text.");
+    expect(saveEditorCardField).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();

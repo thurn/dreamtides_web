@@ -86,7 +86,7 @@ export default function EditableField({
   }, [isEditing]);
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    if (event.key === "Enter" && mode === "single-line") {
+    if (event.key === "Enter" && (mode === "single-line" || !event.shiftKey)) {
       event.preventDefault();
       onSave(draftValue);
       return;
