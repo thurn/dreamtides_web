@@ -82,6 +82,47 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
+function setInputValue(input: HTMLInputElement, value: string): void {
+  const valueSetter = Object.getOwnPropertyDescriptor(
+    HTMLInputElement.prototype,
+    "value",
+  )?.set;
+  valueSetter?.call(input, value);
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function setSelectValue(select: HTMLSelectElement, value: string): void {
+  const valueSetter = Object.getOwnPropertyDescriptor(
+    HTMLSelectElement.prototype,
+    "value",
+  )?.set;
+  valueSetter?.call(select, value);
+  select.dispatchEvent(new Event("change", { bubbles: true }));
+}
+
+function editorCardIds(container: HTMLElement): string[] {
+  return Array.from(container.querySelectorAll("[data-editor-card-id]")).map(
+    (element) => element.getAttribute("data-editor-card-id") ?? "",
+  );
+}
+
+async function mountLoadedApp(
+  cards: EditorCardRecord[],
+): Promise<{
+  container: HTMLDivElement;
+  root: Root;
+}> {
+  const mounted = mount(
+    <CardEditorApp apiClient={makeApiClient(() => Promise.resolve(cards))} />,
+  );
+
+  await act(async () => {
+    await Promise.resolve();
+  });
+
+  return mounted;
+}
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & {
@@ -247,4 +288,234 @@ describe("CardEditorApp", () => {
       root.unmount();
     });
   });
+
+  it("filters by name and rules text while replacing the URL", async () => {
+    const cards = [
+      makeEditorCard({
+        id: "moon-card",
+        name: "Moonlit Envoy",
+        "rendered-text": "Draw a card.",
+        preview: makePreview({
+          id: "moon-card",
+          name: "Moonlit Envoy",
+          renderedText: "Draw a card.",
+        }),
+      }),
+      makeEditorCard({
+        id: "rules-card",
+        name: "Quiet Guide",
+        "rendered-text": "Shield an ally.",
+        preview: makePreview({
+          id: "rules-card",
+          name: "Quiet Guide",
+          renderedText: "Shield an ally.",
+        }),
+      }),
+      makeEditorCard({
+        id: "other-card",
+        name: "Sun Keeper",
+        "rendered-text": "Gain energy.",
+        preview: makePreview({
+          id: "other-card",
+          name: "Sun Keeper",
+          renderedText: "Gain energy.",
+        }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+    const replaceState = vi.spyOn(window.history, "replaceState");
+    const pushState = vi.spyOn(window.history, "pushState");
+    const searchInput = container.querySelector(
+      '[aria-label="Search cards"]',
+    ) as HTMLInputElement | null;
+
+    if (searchInput === null) {
+      throw new Error("Missing search input");
+    }
+
+    act(() => {
+      setInputValue(searchInput, "shield");
+    });
+
+    expect(searchInput.value).toBe("shield");
+    expect(container.textContent).toContain("1 / 3 cards");
+    expect(editorCardIds(container)).toEqual(["rules-card"]);
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?q=shield",
+    );
+    expect(pushState).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("filters by display type, x cost, and nonblank source subtypes", async () => {
+    const cards = [
+      makeEditorCard({
+        id: "event-x",
+        cardType: "Event",
+        subtype: "",
+        source: { subtype: "" },
+        preview: makePreview({
+          id: "event-x",
+          name: "Variable Event",
+          cardType: "Event",
+          subtype: "",
+          energyCost: null,
+          spark: null,
+        }),
+      }),
+      makeEditorCard({
+        id: "character-guide",
+        cardType: "Character",
+        subtype: "Guide",
+        source: { subtype: "Guide" },
+        preview: makePreview({
+          id: "character-guide",
+          name: "Guide",
+          cardType: "Character",
+          subtype: "Guide",
+          energyCost: 2,
+        }),
+      }),
+      makeEditorCard({
+        id: "character-scout",
+        cardType: "Character",
+        subtype: "Scout",
+        source: { subtype: "Scout" },
+        preview: makePreview({
+          id: "character-scout",
+          name: "Scout",
+          cardType: "Character",
+          subtype: "Scout",
+          energyCost: 3,
+        }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+    const eventButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent === "Events",
+    );
+    const costSelect = container.querySelector(
+      '[aria-label="Cost filter"]',
+    ) as HTMLSelectElement | null;
+    const subtypeSelect = container.querySelector(
+      '[aria-label="Subtype filter"]',
+    ) as HTMLSelectElement | null;
+
+    if (eventButton === undefined || costSelect === null || subtypeSelect === null) {
+      throw new Error("Missing filter control");
+    }
+
+    expect(Array.from(subtypeSelect.options).map((option) => option.value)).toEqual([
+      "",
+      "Guide",
+      "Scout",
+    ]);
+
+    act(() => {
+      eventButton.click();
+    });
+    act(() => {
+      setSelectValue(costSelect, "x");
+    });
+
+    expect(editorCardIds(container)).toEqual(["event-x"]);
+    expect(container.textContent).toContain("1 / 3 cards");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("sorts by selected field and direction", async () => {
+    const cards = [
+      makeEditorCard({
+        id: "beta",
+        name: "Beta",
+        preview: makePreview({ id: "beta", name: "Beta" }),
+      }),
+      makeEditorCard({
+        id: "alpha",
+        name: "Alpha",
+        preview: makePreview({ id: "alpha", name: "Alpha" }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+    const sortSelect = container.querySelector(
+      '[aria-label="Sort field"]',
+    ) as HTMLSelectElement | null;
+    const directionButton = container.querySelector(
+      '[aria-label="Sort direction"]',
+    ) as HTMLButtonElement | null;
+
+    if (sortSelect === null || directionButton === null) {
+      throw new Error("Missing sort control");
+    }
+
+    act(() => {
+      setSelectValue(sortSelect, "name");
+    });
+    expect(editorCardIds(container)).toEqual(["alpha", "beta"]);
+
+    act(() => {
+      directionButton.click();
+    });
+    expect(editorCardIds(container)).toEqual(["beta", "alpha"]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it.each(["number", "name", "cost", "type", "subtype", "spark"])(
+    "keeps equal-key sorting stable for %s",
+    async (queryValue) => {
+    window.history.pushState(null, "", `/editor?sort=${queryValue}`);
+    const cards = [
+      makeEditorCard({
+        id: "first",
+        cardNumber: 1,
+        name: "Same",
+        subtype: "Guide",
+        spark: 2,
+        preview: makePreview({
+          id: "first",
+          cardNumber: 1,
+          name: "Same",
+          cardType: "Character",
+          subtype: "Guide",
+          energyCost: 2,
+          spark: 2,
+        }),
+      }),
+      makeEditorCard({
+        id: "second",
+        cardNumber: 1,
+        name: "Same",
+        subtype: "Guide",
+        spark: 2,
+        preview: makePreview({
+          id: "second",
+          cardNumber: 1,
+          name: "Same",
+          cardType: "Character",
+          subtype: "Guide",
+          energyCost: 2,
+          spark: 2,
+        }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+
+    expect(editorCardIds(container)).toEqual(["first", "second"]);
+
+      act(() => {
+        root.unmount();
+      });
+    },
+  );
 });
