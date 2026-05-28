@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   beginFieldEdit,
+  cancelFieldEdit,
   completeFieldSave,
   EMPTY_EDITOR_SAVE_STATE,
   failFieldSave,
@@ -117,6 +118,39 @@ describe("editor save state", () => {
 
     const completed = completeFieldSave(
       reenteredEdit,
+      firstName,
+      firstSave.clientRevision,
+      "First Save",
+    );
+
+    expect(fieldSaveEntry(completed, firstName)).toMatchObject({
+      status: "saved",
+      draftValue: "First Save",
+      confirmedValue: "First Save",
+      submittedRevision: firstSave.clientRevision,
+    });
+  });
+
+  it("applies a save response after canceling a no-op re-edit during the pending save", () => {
+    const firstSave = startFieldSave(
+      EMPTY_EDITOR_SAVE_STATE,
+      firstName,
+      "First Save",
+      "Original",
+    );
+    const reenteredEdit = beginFieldEdit(
+      firstSave.state,
+      firstName,
+      "Original",
+    );
+    const canceledEdit = cancelFieldEdit(
+      reenteredEdit,
+      firstName,
+      "Original",
+    );
+
+    const completed = completeFieldSave(
+      canceledEdit,
       firstName,
       firstSave.clientRevision,
       "First Save",

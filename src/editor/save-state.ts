@@ -165,14 +165,15 @@ export function completeFieldSave(
     return state;
   }
 
-  const hasNewerLocalDraft =
+  const hasActiveDirtyLocalDraft =
+    (entry.status === "editing" || entry.status === "saving") &&
     entry.clientRevision > clientRevision &&
     !Object.is(entry.draftValue, confirmedValue);
 
   return withEntry(state, {
     ...entry,
-    status: hasNewerLocalDraft ? "editing" : "saved",
-    draftValue: hasNewerLocalDraft ? entry.draftValue : confirmedValue,
+    status: hasActiveDirtyLocalDraft ? "editing" : "saved",
+    draftValue: hasActiveDirtyLocalDraft ? entry.draftValue : confirmedValue,
     confirmedValue,
     clientRevision: entry.clientRevision,
     message: null,
