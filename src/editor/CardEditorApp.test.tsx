@@ -83,20 +83,26 @@ function mount(element: ReactElement): {
 }
 
 function setInputValue(input: HTMLInputElement, value: string): void {
-  const valueSetter = Object.getOwnPropertyDescriptor(
+  const valueDescriptor = Object.getOwnPropertyDescriptor(
     HTMLInputElement.prototype,
     "value",
-  )?.set;
-  valueSetter?.call(input, value);
+  );
+  if (valueDescriptor?.set === undefined) {
+    throw new Error("Missing input value setter");
+  }
+  Reflect.apply(valueDescriptor.set, input, [value]);
   input.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
 function setSelectValue(select: HTMLSelectElement, value: string): void {
-  const valueSetter = Object.getOwnPropertyDescriptor(
+  const valueDescriptor = Object.getOwnPropertyDescriptor(
     HTMLSelectElement.prototype,
     "value",
-  )?.set;
-  valueSetter?.call(select, value);
+  );
+  if (valueDescriptor?.set === undefined) {
+    throw new Error("Missing select value setter");
+  }
+  Reflect.apply(valueDescriptor.set, select, [value]);
   select.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
@@ -325,9 +331,9 @@ describe("CardEditorApp", () => {
     const { container, root } = await mountLoadedApp(cards);
     const replaceState = vi.spyOn(window.history, "replaceState");
     const pushState = vi.spyOn(window.history, "pushState");
-    const searchInput = container.querySelector(
+    const searchInput = container.querySelector<HTMLInputElement>(
       '[aria-label="Search cards"]',
-    ) as HTMLInputElement | null;
+    );
 
     if (searchInput === null) {
       throw new Error("Missing search input");
@@ -399,12 +405,12 @@ describe("CardEditorApp", () => {
     const eventButton = Array.from(container.querySelectorAll("button")).find(
       (button) => button.textContent === "Events",
     );
-    const costSelect = container.querySelector(
+    const costSelect = container.querySelector<HTMLSelectElement>(
       '[aria-label="Cost filter"]',
-    ) as HTMLSelectElement | null;
-    const subtypeSelect = container.querySelector(
+    );
+    const subtypeSelect = container.querySelector<HTMLSelectElement>(
       '[aria-label="Subtype filter"]',
-    ) as HTMLSelectElement | null;
+    );
 
     if (eventButton === undefined || costSelect === null || subtypeSelect === null) {
       throw new Error("Missing filter control");
@@ -445,12 +451,12 @@ describe("CardEditorApp", () => {
       }),
     ];
     const { container, root } = await mountLoadedApp(cards);
-    const sortSelect = container.querySelector(
+    const sortSelect = container.querySelector<HTMLSelectElement>(
       '[aria-label="Sort field"]',
-    ) as HTMLSelectElement | null;
-    const directionButton = container.querySelector(
+    );
+    const directionButton = container.querySelector<HTMLButtonElement>(
       '[aria-label="Sort direction"]',
-    ) as HTMLButtonElement | null;
+    );
 
     if (sortSelect === null || directionButton === null) {
       throw new Error("Missing sort control");
