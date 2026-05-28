@@ -186,6 +186,95 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("renders loaded editor cards through the shared read-only card grid", async () => {
+    const cards = [
+      makeEditorCard({
+        id: "uuid-card-1",
+        cardType: "Character",
+        subtype: "Scout",
+        source: { subtype: "Scout" },
+        preview: makePreview({
+          id: "uuid-card-1",
+          cardType: "Character",
+          subtype: "Scout",
+          renderedText: "Draw a card.",
+        }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+    const editorCard = container.querySelector<HTMLElement>(
+      "[data-editor-card-id=\"uuid-card-1\"]",
+    );
+
+    expect(editorCard).not.toBeNull();
+    expect(editorCard?.querySelector("[data-card-text-scale]")).not.toBeNull();
+    expect(editorCard?.querySelector("[data-editor-field=\"name\"]")?.textContent).toContain(
+      "Moonlit Envoy",
+    );
+    expect(editorCard?.querySelector("[data-editor-field=\"rendered-text\"]")?.textContent).toContain(
+      "Draw a card.",
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps card type display-only in the editor card type line", async () => {
+    const { container, root } = await mountLoadedApp([
+      makeEditorCard({
+        id: "event-card",
+        cardType: "Event",
+        source: { subtype: "Omen" },
+        preview: makePreview({
+          id: "event-card",
+          cardType: "Event",
+          subtype: "Omen",
+          spark: null,
+        }),
+      }),
+    ]);
+    const editorCard = container.querySelector<HTMLElement>(
+      "[data-editor-card-id=\"event-card\"]",
+    );
+
+    expect(editorCard?.querySelector("[data-testid=\"card-type-line\"]")?.textContent).toContain(
+      "Event",
+    );
+    expect(editorCard?.querySelector("[data-editor-field=\"card-type\"]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("updates editor grid sizing from the size control", async () => {
+    const { container, root } = await mountLoadedApp([makeEditorCard()]);
+    const largeButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent === "Large",
+    );
+
+    if (largeButton === undefined) {
+      throw new Error("Missing large size button");
+    }
+
+    expect(container.querySelector("[data-editor-grid-size=\"medium\"]")).not.toBeNull();
+
+    act(() => {
+      largeButton.click();
+    });
+
+    const grid = container.querySelector<HTMLElement>(
+      "[data-editor-grid-size=\"large\"]",
+    );
+    expect(grid).not.toBeNull();
+    expect(grid?.style.gridTemplateColumns).toContain("220px");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders a retryable error state after a failed load", async () => {
     const loadEditorCards = vi
       .fn<EditorApiClient["loadEditorCards"]>()

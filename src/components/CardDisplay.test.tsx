@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { CardData } from "../types/cards";
 import { computeCardTextScale } from "./card-display-scale";
 import { CardDisplay } from "./CardDisplay";
+import { CardView } from "./CardView";
 
 function makeCard(overrides: Partial<CardData>): CardData {
   return {
@@ -73,6 +74,84 @@ describe("CardDisplay", () => {
     expect(container.textContent).toContain("Test Card");
     expect(container.textContent).not.toContain("Draw a card.");
     expect(container.querySelector("[data-rules-text-paragraph]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("preserves aspect ratio and text-scale metadata on the shared card root", () => {
+    const { container, root } = mount(<CardDisplay card={makeCard({})} />);
+    const cardRoot = container.firstElementChild as HTMLDivElement | null;
+
+    if (cardRoot === null) {
+      throw new Error("Missing card root");
+    }
+
+    expect(cardRoot.style.aspectRatio).toBe("2 / 3");
+    expect(cardRoot.getAttribute("data-card-text-scale")).toBe("1.00");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the image fallback through the shared card view", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ name: "Fallback Name" })} />,
+    );
+    const image = container.querySelector("img");
+
+    if (image === null) {
+      throw new Error("Missing card image");
+    }
+
+    act(() => {
+      image.dispatchEvent(new Event("error", { bubbles: true }));
+    });
+
+    expect(container.querySelector("img")).toBeNull();
+    expect(container.textContent).toContain("Fallback Name");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("lets CardView slot overrides wrap editable field surfaces", () => {
+    const { container, root } = mount(
+      <CardView
+        card={makeCard({
+          cardType: "Character",
+          subtype: "Scout",
+          renderedText: "Draw a card.",
+        })}
+        slots={{
+          energy: (_context, defaultNode) => (
+            <span data-slot="energy">{defaultNode}</span>
+          ),
+          name: (_context, defaultNode) => (
+            <span data-slot="name">{defaultNode}</span>
+          ),
+          typeLine: (_context, defaultNode) => (
+            <span data-slot="type-line">{defaultNode}</span>
+          ),
+          rulesText: (_context, defaultNode) => (
+            <span data-slot="rules-text">{defaultNode}</span>
+          ),
+          spark: (_context, defaultNode) => (
+            <span data-slot="spark">{defaultNode}</span>
+          ),
+        }}
+      />,
+    );
+
+    expect(container.querySelector("[data-slot=\"energy\"] [data-pip-variant=\"energy\"]")).not.toBeNull();
+    expect(container.querySelector("[data-slot=\"name\"]")?.textContent).toContain("Test Card");
+    expect(container.querySelector("[data-slot=\"type-line\"]")?.textContent).toContain("Scout");
+    expect(container.querySelector("[data-slot=\"rules-text\"]")?.textContent).toContain("Draw a card.");
+    expect(container.querySelector("[data-slot=\"spark\"] [data-pip-variant=\"spark\"]")).not.toBeNull();
+    expect(container.firstElementChild?.getAttribute("data-card-text-scale")).toBe("1.00");
 
     act(() => {
       root.unmount();

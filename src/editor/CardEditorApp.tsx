@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { CardDisplay } from "../components/CardDisplay";
 import { loadEditorCards, saveEditorCardField } from "./editor-api";
+import CardEditorGrid from "./CardEditorGrid";
 import CardEditorToolbar from "./CardEditorToolbar";
 import {
   parseEditorDisplayState,
@@ -169,17 +169,6 @@ function subtypeOptionsFromCards(cards: readonly EditorCardRecord[]): string[] {
   );
 }
 
-function cardWidthForSize(size: EditorDisplayState["size"]): string {
-  switch (size) {
-    case "small":
-      return "170px";
-    case "large":
-      return "240px";
-    case "medium":
-      return "204px";
-  }
-}
-
 export default function CardEditorApp({
   apiClient = DEFAULT_EDITOR_API_CLIENT,
 }: CardEditorAppProps) {
@@ -321,44 +310,7 @@ export default function CardEditorApp({
                 No cards match the current filters.
               </p>
             ) : (
-              <div
-                aria-label="Filtered cards"
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: `repeat(auto-fill, minmax(${cardWidthForSize(displayState.size)}, 1fr))`,
-                  gap: "18px",
-                  alignItems: "start",
-                }}
-              >
-                {visibleCards.map((card) => (
-                  <article
-                    key={card.id}
-                    aria-label={card.name}
-                    data-editor-card-id={card.id}
-                    style={{
-                      display: "grid",
-                      gap: "10px",
-                      justifyItems: "center",
-                    }}
-                  >
-                    <CardDisplay
-                      card={card.preview}
-                      large={displayState.size === "large"}
-                      hideRulesText={displayState.size === "small"}
-                    />
-                    <div
-                      style={{
-                        color: "#f7f1df",
-                        fontSize: "0.9rem",
-                        fontWeight: 800,
-                        textAlign: "center",
-                      }}
-                    >
-                      #{card.cardNumber} {card.name}
-                    </div>
-                  </article>
-                ))}
-              </div>
+              <CardEditorGrid cards={visibleCards} size={displayState.size} />
             )}
           </div>
         ) : null}
