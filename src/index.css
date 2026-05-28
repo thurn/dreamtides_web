@@ -76,8 +76,52 @@ button:disabled {
 }
 
 @media (max-width: 520px) {
+  .card-editor-shell {
+    height: auto !important;
+    min-height: 100dvh;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 16px !important;
+  }
+
+  .card-editor-header {
+    align-items: flex-start !important;
+    flex-direction: column;
+    gap: 12px !important;
+    padding-bottom: 14px !important;
+  }
+
+  .card-editor-source-count {
+    white-space: normal !important;
+  }
+
+  .card-editor-content {
+    min-height: auto !important;
+    padding-top: 18px !important;
+  }
+
+  .card-editor-loaded-content {
+    min-height: auto !important;
+    gap: 16px !important;
+  }
+
   .card-editor-toolbar {
-    grid-template-columns: minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 14px !important;
+  }
+
+  .card-editor-toolbar > :first-child,
+  .card-editor-toolbar > :nth-child(2),
+  .card-editor-toolbar > :nth-child(7),
+  .card-editor-toolbar > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .card-editor-toolbar input,
+  .card-editor-toolbar select,
+  .card-editor-toolbar button {
+    max-width: 100%;
+    min-width: 0;
   }
 }
 

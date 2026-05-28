@@ -354,6 +354,8 @@ export default function CardEditorApp({
   return (
     <main
       aria-busy={loadStatus.kind === "loading"}
+      className="card-editor-shell"
+      data-editor-layout="responsive-scroll-shell"
       {...displayStateDataAttributes(displayState)}
       style={{
         height: "100dvh",
@@ -369,6 +371,7 @@ export default function CardEditorApp({
       }}
     >
       <header
+        className="card-editor-header"
         style={{
           display: "flex",
           alignItems: "center",
@@ -406,6 +409,7 @@ export default function CardEditorApp({
         {loadStatus.kind === "loaded" ? (
           <div
             aria-label="source card count"
+            className="card-editor-source-count"
             style={{
               color: "#f3d46b",
               fontSize: "1rem",
@@ -419,6 +423,7 @@ export default function CardEditorApp({
       </header>
 
       <section
+        className="card-editor-content"
         style={{
           display: "flex",
           flex: "1 1 auto",
@@ -435,6 +440,7 @@ export default function CardEditorApp({
 
         {loadStatus.kind === "loaded" ? (
           <div
+            className="card-editor-loaded-content"
             style={{
               display: "flex",
               flex: "1 1 auto",

@@ -238,18 +238,30 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("keeps the page shell fixed while the card grid is internally scrollable", async () => {
+  it("keeps the desktop shell fixed and exposes narrow scroll-layout hooks", async () => {
     const { container, root } = await mountLoadedApp([
       makeEditorCard({ id: "card-id-1" }),
       makeEditorCard({ id: "card-id-2" }),
     ]);
     const shell = container.querySelector("main");
+    const header = container.querySelector("header");
+    const content = container.querySelector<HTMLElement>(".card-editor-content");
+    const loadedContent = container.querySelector<HTMLElement>(
+      ".card-editor-loaded-content",
+    );
     const scrollRegion = container.querySelector<HTMLElement>(
       "[data-editor-scroll-region=\"cards\"]",
     );
 
+    expect(shell?.classList.contains("card-editor-shell")).toBe(true);
+    expect(shell?.getAttribute("data-editor-layout")).toBe(
+      "responsive-scroll-shell",
+    );
     expect(shell?.style.height).toBe("100dvh");
     expect(shell?.style.overflow).toBe("hidden");
+    expect(header?.classList.contains("card-editor-header")).toBe(true);
+    expect(content).not.toBeNull();
+    expect(loadedContent).not.toBeNull();
     expect(scrollRegion).not.toBeNull();
     expect(scrollRegion?.style.overflowY).toBe("auto");
     expect(scrollRegion?.style.overscrollBehavior).toBe("contain");
