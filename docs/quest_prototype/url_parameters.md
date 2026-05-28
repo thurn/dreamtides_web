@@ -76,10 +76,12 @@ these parameters with `history.replaceState`, so display changes keep the
 current history entry.
 
 - `q=<text>` stores card search text. Empty search text is omitted.
-- `type=Character` or `type=Event` filters by card type. The default `all`
+- `type=character` or `type=event` filters by card type. The default `all`
   type filter is omitted.
-- `cost=<number>` filters by numeric energy cost. `cost=x` selects variable
-  cost cards. Empty cost filtering is omitted.
+- `cost=0`, `cost=1`, `cost=2`, `cost=3`, or `cost=4` filters by exact
+  numeric energy cost. `cost=5plus` filters by costs of 5 or more, and
+  `cost=x` selects variable cost cards. The default `all` cost filter is
+  omitted.
 - `subtype=<text>` filters by subtype. Empty subtype filtering is omitted.
 - `sort=number`, `sort=name`, `sort=cost`, `sort=type`, `sort=subtype`, or
   `sort=spark` selects the sort field. The default `number` sort is omitted.
@@ -91,7 +93,7 @@ current history entry.
 Example:
 
 ```
-http://localhost:5173/editor?q=moon&type=Event&sort=name&dir=desc&size=large
+http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
 ```
 
 ## Examples
@@ -106,5 +108,5 @@ http://localhost:5173/?debugJourneyShape=single_offer
 http://localhost:5173/?debugJourneyReward=gain_essence
 http://localhost:5173/?debugJourneyCost=pay_essence
 http://localhost:5173/?seed=7&startInBattle=1
-http://localhost:5173/editor?q=moon&type=Event
+http://localhost:5173/editor?q=moon&type=event
 ```

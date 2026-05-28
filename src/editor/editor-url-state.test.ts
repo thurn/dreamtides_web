@@ -13,9 +13,20 @@ describe("editor URL display state", () => {
   it("falls back to default display state for invalid query values", () => {
     expect(
       parseEditorDisplayState(
-        "?type=Spell&cost=-1&sort=bad&dir=sideways&size=tiny",
+        "?type=Spell&cost=99&sort=bad&dir=sideways&size=tiny",
       ),
     ).toEqual(DEFAULT_EDITOR_DISPLAY_STATE);
+  });
+
+  it("accepts spec type and cost filter values", () => {
+    expect(parseEditorDisplayState("?type=character&cost=5plus")).toMatchObject({
+      type: "character",
+      cost: "5plus",
+    });
+    expect(parseEditorDisplayState("?type=event&cost=x")).toMatchObject({
+      type: "event",
+      cost: "x",
+    });
   });
 
   it("round-trips search text through q", () => {
@@ -33,8 +44,8 @@ describe("editor URL display state", () => {
   it("serializes non-default controls into stable query params", () => {
     const state: EditorDisplayState = {
       searchText: "",
-      type: "Character",
-      cost: "x",
+      type: "character",
+      cost: "5plus",
       subtype: "Scout",
       sort: "name",
       dir: "desc",
@@ -42,7 +53,7 @@ describe("editor URL display state", () => {
     };
 
     expect(serializeEditorDisplayState(state).toString()).toBe(
-      "type=Character&cost=x&subtype=Scout&sort=name&dir=desc&size=large",
+      "type=character&cost=5plus&subtype=Scout&sort=name&dir=desc&size=large",
     );
     expect(parseEditorDisplayState(serializeEditorDisplayState(state))).toEqual(
       state,

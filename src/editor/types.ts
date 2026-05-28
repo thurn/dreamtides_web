@@ -23,7 +23,16 @@ export interface EditorCardRecord {
   preview: CardData;
 }
 
-export type EditorTypeFilter = "all" | CardType;
+export type EditorTypeFilter = "all" | "character" | "event";
+export type EditorCostFilter =
+  | "all"
+  | "0"
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5plus"
+  | "x";
 export type EditorSortField =
   | "cardNumber"
   | "name"
@@ -37,7 +46,7 @@ export type EditorCardSize = "small" | "medium" | "large";
 export interface EditorDisplayState {
   searchText: string;
   type: EditorTypeFilter;
-  cost: string;
+  cost: EditorCostFilter;
   subtype: string;
   sort: EditorSortField;
   dir: EditorSortDirection;

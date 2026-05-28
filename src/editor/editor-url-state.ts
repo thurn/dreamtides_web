@@ -1,5 +1,6 @@
 import type {
   EditorCardSize,
+  EditorCostFilter,
   EditorDisplayState,
   EditorSortDirection,
   EditorSortField,
@@ -9,14 +10,24 @@ import type {
 export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   searchText: "",
   type: "all",
-  cost: "",
+  cost: "all",
   subtype: "",
   sort: "cardNumber",
   dir: "asc",
   size: "medium",
 };
 
-const TYPE_VALUES = new Set<EditorTypeFilter>(["all", "Character", "Event"]);
+const TYPE_VALUES = new Set<EditorTypeFilter>(["all", "character", "event"]);
+const COST_VALUES = new Set<EditorCostFilter>([
+  "all",
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5plus",
+  "x",
+]);
 const SORT_PARAM_TO_FIELD = new Map<string, EditorSortField>([
   ["number", "cardNumber"],
   ["name", "name"],
@@ -48,14 +59,14 @@ function parseType(value: string | null): EditorTypeFilter {
     : DEFAULT_EDITOR_DISPLAY_STATE.type;
 }
 
-function parseCost(value: string | null): string {
-  if (value === null || value === "") {
+function parseCost(value: string | null): EditorCostFilter {
+  if (value === null) {
     return DEFAULT_EDITOR_DISPLAY_STATE.cost;
   }
 
   const normalized = value.trim().toLowerCase();
-  return normalized === "x" || /^\d+$/u.test(normalized)
-    ? normalized
+  return COST_VALUES.has(normalized as EditorCostFilter)
+    ? (normalized as EditorCostFilter)
     : DEFAULT_EDITOR_DISPLAY_STATE.cost;
 }
 

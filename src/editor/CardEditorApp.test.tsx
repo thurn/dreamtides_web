@@ -224,7 +224,7 @@ describe("CardEditorApp", () => {
     window.history.pushState(
       null,
       "",
-      "/editor?q=moon&type=Event&cost=x&subtype=Omen&sort=spark&dir=desc&size=small",
+      "/editor?q=moon&type=event&cost=5plus&subtype=Omen&sort=spark&dir=desc&size=small",
     );
     const { container, root } = mount(
       <CardEditorApp apiClient={makeApiClient(() => Promise.resolve([]))} />,
@@ -236,8 +236,8 @@ describe("CardEditorApp", () => {
 
     const shell = container.querySelector("main");
     expect(shell?.getAttribute("data-editor-search")).toBe("moon");
-    expect(shell?.getAttribute("data-editor-type")).toBe("Event");
-    expect(shell?.getAttribute("data-editor-cost")).toBe("x");
+    expect(shell?.getAttribute("data-editor-type")).toBe("event");
+    expect(shell?.getAttribute("data-editor-cost")).toBe("5plus");
     expect(shell?.getAttribute("data-editor-subtype")).toBe("Omen");
     expect(shell?.getAttribute("data-editor-sort")).toBe("spark");
     expect(shell?.getAttribute("data-editor-dir")).toBe("desc");
