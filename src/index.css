@@ -65,6 +65,22 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.card-editor-toolbar {
+  grid-template-columns: minmax(220px, 1.4fr) repeat(4, minmax(130px, auto));
+}
+
+@media (max-width: 980px) {
+  .card-editor-toolbar {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .card-editor-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .draft-offer-card-wrapper {
   width: var(--draft-offer-card-width);
 }

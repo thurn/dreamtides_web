@@ -50,7 +50,6 @@ const SIZE_OPTIONS: Array<{ value: EditorCardSize; label: string }> = [
 
 const toolbarStyle = {
   display: "grid",
-  gridTemplateColumns: "minmax(220px, 1.4fr) repeat(4, minmax(130px, auto))",
   gap: "14px",
   alignItems: "end",
   padding: "18px",
@@ -62,6 +61,7 @@ const toolbarStyle = {
 const labelStyle = {
   display: "grid",
   gap: "7px",
+  minWidth: 0,
   color: "#c9d3cf",
   fontSize: "0.82rem",
   fontWeight: 700,
@@ -80,6 +80,8 @@ const inputStyle = {
 
 const segmentedStyle = {
   display: "inline-flex",
+  width: "100%",
+  boxSizing: "border-box",
   minHeight: "42px",
   border: "1px solid rgba(247, 241, 223, 0.24)",
   borderRadius: "6px",
@@ -93,7 +95,7 @@ function segmentButtonStyle(active: boolean): CSSProperties {
     borderRight: "1px solid rgba(247, 241, 223, 0.16)",
     background: active ? "#2d8a80" : "#121c1f",
     color: active ? "#ffffff" : "#d9e1dd",
-    padding: "0 13px",
+    padding: "0 10px",
     font: "inherit",
     fontWeight: 800,
     cursor: "pointer",
@@ -118,7 +120,11 @@ export default function CardEditorToolbar({
     displayState.dir === "asc" ? "desc" : "asc";
 
   return (
-    <section aria-label="Card editor controls" style={toolbarStyle}>
+    <section
+      aria-label="Card editor controls"
+      className="card-editor-toolbar"
+      style={toolbarStyle}
+    >
       <label style={labelStyle}>
         Search
         <input

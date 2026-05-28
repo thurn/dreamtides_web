@@ -94,6 +94,9 @@ describe("CardEditorToolbar", () => {
     );
 
     expect(container.querySelector('[aria-label="Search cards"]')).not.toBeNull();
+    expect(
+      container.querySelector('[aria-label="Card editor controls"]')?.classList,
+    ).toContain("card-editor-toolbar");
     expect(container.textContent).toContain("All");
     expect(container.textContent).toContain("Characters");
     expect(container.textContent).toContain("Events");
