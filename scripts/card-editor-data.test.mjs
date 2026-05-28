@@ -197,10 +197,14 @@ describe("validateCardEdit", () => {
     }
   });
 
-  it('rejects multiline rendered text that cannot be represented as a multiline TOML string', () => {
+  it("accepts rendered text containing TOML string delimiter markers", () => {
     expect(validateCardEdit("rendered-text", 'Before\n""" after')).toMatchObject({
-      ok: false,
-      field: "rendered-text",
+      ok: true,
+      value: 'Before\n""" after',
+    });
+    expect(validateCardEdit("rendered-text", "Before\n''' after")).toMatchObject({
+      ok: true,
+      value: "Before\n''' after",
     });
   });
 });
@@ -362,6 +366,48 @@ card-number = 2
       ok: true,
       value: renderedText,
     });
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: renderedText,
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
+  });
+
+  it('patches one-line rendered text containing triple double quotes', () => {
+    const source = fixtureToml();
+    const renderedText = 'One-line """ marker.';
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: renderedText,
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
+  });
+
+  it("patches one-line rendered text containing triple single quotes", () => {
+    const source = fixtureToml();
+    const renderedText = "One-line ''' marker.";
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: renderedText,
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
+  });
+
+  it("patches multiline rendered text containing quote markers and a trailing backslash before newline", () => {
+    const source = fixtureToml();
+    const renderedText = "First \"\"\" marker.\nSecond ''' marker.\nkeep slash\\\nkeep newline";
 
     const patched = patchRenderedCardsToml(source, {
       cardId: FIRST_ID,

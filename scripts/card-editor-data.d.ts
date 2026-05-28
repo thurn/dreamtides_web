@@ -1,4 +1,11 @@
-export const EDITABLE_CARD_FIELDS: Set<string>;
+export type EditableCardField =
+  | "energy-cost"
+  | "subtype"
+  | "name"
+  | "spark"
+  | "rendered-text";
+
+export const EDITABLE_CARD_FIELDS: ReadonlySet<EditableCardField>;
 
 export interface CardEditorRecord {
   id: string;

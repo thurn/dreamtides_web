@@ -128,14 +128,6 @@ export function validateCardEdit(field, rawValue) {
       return validationFailure(field, "Rules text must be text.", rawValue);
     }
 
-    if (rawValue.includes('"""')) {
-      return validationFailure(field, 'Rules text cannot contain """.', rawValue);
-    }
-
-    if (rawValue.includes("'''")) {
-      return validationFailure(field, "Rules text cannot contain '''.", rawValue);
-    }
-
     return validationSuccess(field, rawValue);
   }
 
@@ -361,10 +353,6 @@ function tomlString(value) {
 }
 
 function tomlMultilineString(value) {
-  if (value.includes("'''")) {
-    throw new Error("Multiline TOML strings cannot contain '''");
-  }
-
   return `'''\n${value}'''`;
 }
 
@@ -375,6 +363,10 @@ function tomlValue(value) {
 
   const stringValue = String(value);
   if (stringValue.includes("\n")) {
+    if (stringValue.includes("'''")) {
+      return tomlString(stringValue);
+    }
+
     return tomlMultilineString(stringValue);
   }
 
