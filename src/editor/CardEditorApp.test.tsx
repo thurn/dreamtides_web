@@ -195,6 +195,31 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("aborts an in-flight load when the editor unmounts", async () => {
+    const pendingLoad = deferred<EditorCardRecord[]>();
+    let loadSignal: AbortSignal | undefined;
+    const loadEditorCards = vi.fn((signal?: AbortSignal) => {
+      loadSignal = signal;
+      return pendingLoad.promise;
+    });
+    const { root } = mount(
+      <CardEditorApp apiClient={makeApiClient(loadEditorCards)} />,
+    );
+
+    expect(loadSignal?.aborted).toBe(false);
+
+    act(() => {
+      root.unmount();
+    });
+
+    expect(loadSignal?.aborted).toBe(true);
+
+    await act(async () => {
+      pendingLoad.reject(new DOMException("Load aborted.", "AbortError"));
+      await Promise.resolve();
+    });
+  });
+
   it("parses the initial editor display state from the URL", async () => {
     window.history.pushState(
       null,
