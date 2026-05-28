@@ -184,6 +184,24 @@ function fileSystemFailingGeneratedJsonWrite() {
   };
 }
 
+function fileSystemFailingBackupCleanup() {
+  return {
+    existsSync,
+    mkdirSync,
+    mkdtempSync,
+    readFileSync,
+    renameSync,
+    rmSync(path, options) {
+      if (String(path).endsWith(".bak")) {
+        throw new Error("Injected backup cleanup failure");
+      }
+
+      rmSync(path, options);
+    },
+    writeFileSync,
+  };
+}
+
 afterEach(async () => {
   await Promise.all(
     servers.splice(0).map((server) => new Promise((resolve, reject) => {
@@ -287,6 +305,36 @@ describe("createCardEditorApiMiddleware", () => {
       code: "SAVE_FAILED",
     });
     expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
+  it("keeps a save committed when backup cleanup fails after replacement", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir, {
+      fileSystem: fileSystemFailingBackupCleanup(),
+    });
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Cleanup Failure Name",
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    expect(body.card).toMatchObject({
+      id: FIRST_ID,
+      name: "Cleanup Failure Name",
+    });
+    expect(readToml(rootDir)).toContain('name = "Cleanup Failure Name"');
+    const cards = JSON.parse(readCardJson(rootDir));
+    expect(cards.map((card) => card.name)).toEqual([
+      "Cleanup Failure Name",
+      "Second Card",
+      "Nightmare",
+    ]);
   });
 
   it("returns 400 for route/body id mismatch and does not write files", async () => {
