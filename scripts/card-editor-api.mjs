@@ -11,6 +11,7 @@ import {
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/cards";
 const CARD_TOML_PATH = join("data", "tabula", "rendered-cards.toml");
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
 function elapsedMs(start) {
   return Number((performance.now() - start).toFixed(3));
@@ -39,9 +40,64 @@ function isEditorCardsPath(pathname) {
   return pathname === BASE_PATH || pathname.startsWith(`${BASE_PATH}/`);
 }
 
-function patchCardIdFromPath(pathname) {
-  const match = /^\/api\/editor\/cards\/([^/]+)$/u.exec(pathname);
-  return match?.[1] ?? null;
+function rawPathFromUrl(url) {
+  return (url ?? "/").split("?", 1)[0];
+}
+
+function routeForRawPath(rawPath) {
+  if (rawPath === BASE_PATH) {
+    return {
+      ok: true,
+      resource: "collection",
+    };
+  }
+
+  if (!rawPath.startsWith(`${BASE_PATH}/`)) {
+    return {
+      ok: false,
+      statusCode: 404,
+      code: "NOT_FOUND",
+      message: "Endpoint was not found.",
+    };
+  }
+
+  const encodedSegment = rawPath.slice(BASE_PATH.length + 1);
+  if (encodedSegment.length === 0 || encodedSegment.includes("/")) {
+    return {
+      ok: false,
+      statusCode: 404,
+      code: "NOT_FOUND",
+      message: "Endpoint was not found.",
+    };
+  }
+
+  let cardId;
+  try {
+    cardId = decodeURIComponent(encodedSegment);
+  } catch {
+    return {
+      ok: false,
+      statusCode: 400,
+      code: "INVALID_CARD_ID",
+      message: "Route card id must be a canonical UUID.",
+    };
+  }
+
+  if (cardId.includes("/") || !UUID_PATTERN.test(cardId)) {
+    return {
+      ok: false,
+      statusCode: 400,
+      code: "INVALID_CARD_ID",
+      message: "Route card id must be a canonical UUID.",
+      details: { id: cardId },
+    };
+  }
+
+  return {
+    ok: true,
+    resource: "card",
+    cardId,
+  };
 }
 
 function readRequestBody(req) {
@@ -74,7 +130,7 @@ function cardNotFound(res, cardId) {
   errorResponse(res, 404, "CARD_NOT_FOUND", "Card was not found.", { id: cardId });
 }
 
-function methodNotAllowed(res) {
+function methodNotAllowed(res, allowedMethods) {
   jsonResponse(
     res,
     405,
@@ -84,7 +140,7 @@ function methodNotAllowed(res) {
         message: "Method is not allowed for this endpoint.",
       },
     },
-    { Allow: "GET, PATCH" },
+    { Allow: allowedMethods.join(", ") },
   );
 }
 
@@ -124,12 +180,11 @@ function assertPatchBody(body) {
   return { ok: true };
 }
 
-async function handlePatch(req, res, rootDir, cardId) {
-  if (cardId === null) {
-    methodNotAllowed(res);
-    return;
-  }
+function isCanonicalUuid(value) {
+  return typeof value === "string" && UUID_PATTERN.test(value);
+}
 
+async function handlePatch(req, res, rootDir, cardId) {
   let body;
   try {
     body = await readJsonRequest(req);
@@ -144,6 +199,13 @@ async function handlePatch(req, res, rootDir, cardId) {
   const bodyResult = assertPatchBody(body);
   if (!bodyResult.ok) {
     errorResponse(res, 400, bodyResult.code, bodyResult.message);
+    return;
+  }
+
+  if (!isCanonicalUuid(body.id)) {
+    errorResponse(res, 400, "INVALID_CARD_ID", "Request body id must be a canonical UUID.", {
+      id: body.id,
+    });
     return;
   }
 
@@ -186,7 +248,12 @@ async function handlePatch(req, res, rootDir, cardId) {
   const patchMs = elapsedMs(patchStart);
 
   const refreshStart = performance.now();
-  refreshCardDataJson({ rootDir });
+  try {
+    refreshCardDataJson({ rootDir });
+  } catch (error) {
+    writeFileSync(tomlPath, source);
+    throw error;
+  }
   const refreshMs = elapsedMs(refreshStart);
 
   const confirmStart = performance.now();
@@ -213,28 +280,33 @@ async function handlePatch(req, res, rootDir, cardId) {
 
 export function createCardEditorApiMiddleware({ rootDir = ROOT } = {}) {
   return async function cardEditorApiMiddleware(req, res, next) {
-    const requestUrl = new URL(req.url ?? "/", "http://localhost");
-    const pathname = requestUrl.pathname;
+    const rawPath = rawPathFromUrl(req.url);
 
-    if (!isEditorCardsPath(pathname)) {
+    if (!isEditorCardsPath(rawPath)) {
       next();
       return;
     }
 
     try {
-      if (req.method === "GET" && pathname === BASE_PATH) {
+      const route = routeForRawPath(rawPath);
+      if (!route.ok) {
+        errorResponse(res, route.statusCode, route.code, route.message, route.details);
+        return;
+      }
+
+      if (req.method === "GET" && route.resource === "collection") {
         jsonResponse(res, 200, {
           cards: readEditorCards({ rootDir }),
         });
         return;
       }
 
-      if (req.method === "PATCH") {
-        await handlePatch(req, res, rootDir, patchCardIdFromPath(pathname));
+      if (req.method === "PATCH" && route.resource === "card") {
+        await handlePatch(req, res, rootDir, route.cardId);
         return;
       }
 
-      methodNotAllowed(res);
+      methodNotAllowed(res, route.resource === "collection" ? ["GET"] : ["PATCH"]);
     } catch (error) {
       errorResponse(res, 500, "SAVE_FAILED", error instanceof Error ? error.message : "Save failed.");
     }

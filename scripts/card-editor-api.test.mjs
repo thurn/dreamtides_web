@@ -1,10 +1,11 @@
 // @vitest-environment node
 
-import { createServer } from "node:http";
+import { createServer, request as httpRequest } from "node:http";
 import {
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  rmSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -123,6 +124,46 @@ async function requestJson(origin, path, init) {
   };
 }
 
+async function requestRawJson(origin, path, { method = "GET", headers = {}, body } = {}) {
+  const url = new URL(origin);
+
+  return new Promise((resolve, reject) => {
+    const req = httpRequest(
+      {
+        hostname: url.hostname,
+        port: url.port,
+        path,
+        method,
+        headers,
+      },
+      (response) => {
+        let rawBody = "";
+        response.setEncoding("utf8");
+        response.on("data", (chunk) => {
+          rawBody += chunk;
+        });
+        response.on("end", () => {
+          resolve({
+            response,
+            body: JSON.parse(rawBody),
+          });
+        });
+      },
+    );
+
+    req.on("error", reject);
+    if (body !== undefined) {
+      req.write(body);
+    }
+    req.end();
+  });
+}
+
+function expectNoWrites(rootDir, originalToml, originalCardJson) {
+  expect(readToml(rootDir)).toBe(originalToml);
+  expect(readCardJson(rootDir)).toBe(originalCardJson);
+}
+
 afterEach(async () => {
   await Promise.all(
     servers.splice(0).map((server) => new Promise((resolve, reject) => {
@@ -191,6 +232,30 @@ describe("createCardEditorApiMiddleware", () => {
     expect(readToml(rootDir)).toContain('name = "Moonlit Envoy"');
     const cards = JSON.parse(readCardJson(rootDir));
     expect(cards.map((card) => card.name)).toEqual(["Moonlit Envoy", "Second Card", "Nightmare"]);
+  });
+
+  it("rolls back the TOML edit when card-data.json refresh fails", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    rmSync(join(rootDir, "public", "card-data.json"));
+    mkdirSync(join(rootDir, "public", "card-data.json"));
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Refresh Failure Name",
+      }),
+    });
+
+    expect(response.status).toBe(500);
+    expect(body.error).toMatchObject({
+      code: "SAVE_FAILED",
+    });
+    expect(readToml(rootDir)).toBe(originalToml);
   });
 
   it("returns 400 for route/body id mismatch and does not write files", async () => {
@@ -305,12 +370,133 @@ describe("createCardEditorApiMiddleware", () => {
       }),
     });
 
-    expect(response.status).toBe(404);
+    expect(response.status).toBe(400);
     expect(body.error).toMatchObject({
-      code: "CARD_NOT_FOUND",
+      code: "INVALID_CARD_ID",
     });
-    expect(readToml(rootDir)).toBe(originalToml);
-    expect(readCardJson(rootDir)).toBe(originalCardJson);
+    expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
+  it("rejects encoded dot-segment subroutes before path normalization and does not write files", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestRawJson(
+      origin,
+      `/api/editor/cards/extra/%2e%2e/${FIRST_ID}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: FIRST_ID,
+          field: "name",
+          value: "Normalized Attack",
+        }),
+      },
+    );
+
+    expect(response.statusCode).toBe(404);
+    expect(body.error).toMatchObject({
+      code: "NOT_FOUND",
+    });
+    expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
+  it("rejects encoded slashes in the route id and does not write files", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+    const encodedRouteId = FIRST_ID.replace("-", "%2F");
+    const decodedRouteId = FIRST_ID.replace("-", "/");
+
+    const { response, body } = await requestRawJson(origin, `/api/editor/cards/${encodedRouteId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: decodedRouteId,
+        field: "name",
+        value: "Slash Attack",
+      }),
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(body.error).toMatchObject({
+      code: "INVALID_CARD_ID",
+    });
+    expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
+  it("rejects malformed percent escapes in the route id and does not write files", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestRawJson(origin, "/api/editor/cards/%E0%A4%A", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Bad Escape",
+      }),
+    });
+
+    expect(response.statusCode).toBe(400);
+    expect(body.error).toMatchObject({
+      code: "INVALID_CARD_ID",
+    });
+    expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
+  it("rejects uppercase UUID route ids and does not write files", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+    const uppercaseId = "AAAAAAAA-AAAA-4AAA-8AAA-AAAAAAAAAAAA";
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${uppercaseId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: uppercaseId,
+        field: "name",
+        value: "Uppercase Attack",
+      }),
+    });
+
+    expect(response.status).toBe(400);
+    expect(body.error).toMatchObject({
+      code: "INVALID_CARD_ID",
+    });
+    expectNoWrites(rootDir, originalToml, originalCardJson);
+  });
+
+  it("rejects non-UUID body ids and does not write files", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: "not-a-uuid",
+        field: "name",
+        value: "Body Attack",
+      }),
+    });
+
+    expect(response.status).toBe(400);
+    expect(body.error).toMatchObject({
+      code: "INVALID_CARD_ID",
+    });
+    expectNoWrites(rootDir, originalToml, originalCardJson);
   });
 
   it("returns 405 for unsupported methods under /api/editor/cards", async () => {
@@ -324,7 +510,20 @@ describe("createCardEditorApiMiddleware", () => {
     });
 
     expect(response.status).toBe(405);
-    expect(response.headers.get("allow")).toBe("GET, PATCH");
+    expect(response.headers.get("allow")).toBe("GET");
+    expect(body.error).toMatchObject({
+      code: "METHOD_NOT_ALLOWED",
+    });
+  });
+
+  it("returns resource-specific 405 responses for card resources", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`);
+
+    expect(response.status).toBe(405);
+    expect(response.headers.get("allow")).toBe("PATCH");
     expect(body.error).toMatchObject({
       code: "METHOD_NOT_ALLOWED",
     });
