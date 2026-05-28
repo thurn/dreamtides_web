@@ -311,7 +311,26 @@ card-number = 2
     const parsed = parse(patched.source);
 
     expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
-    expect(patched.source).toContain('rendered-text = """\nFirst line.\n\nSecond line with "quotes"."""');
+    expect(patched.source).toContain("rendered-text = '''\nFirst line.\n\nSecond line with \"quotes\".'''");
+  });
+
+  it("patches multiline rendered text with a trailing backslash before a newline without folding it", () => {
+    const source = fixtureToml();
+    const renderedText = "keep slash\\\nkeep newline";
+
+    expect(validateCardEdit("rendered-text", renderedText)).toMatchObject({
+      ok: true,
+      value: renderedText,
+    });
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: renderedText,
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
   });
 });
 
