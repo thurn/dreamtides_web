@@ -309,6 +309,8 @@ describe("createCardEditorApiMiddleware", () => {
 
   it("keeps a save committed when backup cleanup fails after replacement", async () => {
     const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
     const origin = await startApi(rootDir, {
       fileSystem: fileSystemFailingBackupCleanup(),
     });
@@ -328,7 +330,9 @@ describe("createCardEditorApiMiddleware", () => {
       id: FIRST_ID,
       name: "Cleanup Failure Name",
     });
+    expect(readToml(rootDir)).not.toBe(originalToml);
     expect(readToml(rootDir)).toContain('name = "Cleanup Failure Name"');
+    expect(readCardJson(rootDir)).not.toBe(originalCardJson);
     const cards = JSON.parse(readCardJson(rootDir));
     expect(cards.map((card) => card.name)).toEqual([
       "Cleanup Failure Name",
