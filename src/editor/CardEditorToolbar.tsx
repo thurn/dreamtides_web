@@ -1,4 +1,5 @@
-import type { CSSProperties } from "react";
+import { useState } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type {
   EditorCardSize,
   EditorCostFilter,
@@ -88,18 +89,44 @@ const segmentedStyle = {
   overflow: "hidden",
 } satisfies CSSProperties;
 
-function segmentButtonStyle(active: boolean): CSSProperties {
+function segmentButtonStyle(active: boolean, interactive: boolean): CSSProperties {
   return {
     minHeight: "42px",
     border: 0,
     borderRight: "1px solid rgba(247, 241, 223, 0.16)",
-    background: active ? "#2d8a80" : "#121c1f",
+    background: active ? (interactive ? "#36a398" : "#2d8a80") : interactive ? "#1f3438" : "#121c1f",
     color: active ? "#ffffff" : "#d9e1dd",
     padding: "0 10px",
     font: "inherit",
     fontWeight: 800,
     cursor: "pointer",
+    boxShadow: interactive ? "inset 0 0 0 1px rgba(247, 241, 223, 0.22)" : undefined,
   };
+}
+
+interface SegmentButtonProps {
+  active: boolean;
+  children: ReactNode;
+  onClick: () => void;
+}
+
+function SegmentButton({ active, children, onClick }: SegmentButtonProps) {
+  const [interactive, setInteractive] = useState(false);
+
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      onFocus={() => setInteractive(true)}
+      onBlur={() => setInteractive(false)}
+      onMouseEnter={() => setInteractive(true)}
+      onMouseLeave={() => setInteractive(false)}
+      style={segmentButtonStyle(active, interactive)}
+    >
+      {children}
+    </button>
+  );
 }
 
 export default function CardEditorToolbar({
@@ -143,15 +170,13 @@ export default function CardEditorToolbar({
         Type
         <div aria-label="Type filter" role="group" style={segmentedStyle}>
           {TYPE_OPTIONS.map((option) => (
-            <button
+            <SegmentButton
               key={option.value}
-              type="button"
-              aria-pressed={displayState.type === option.value}
+              active={displayState.type === option.value}
               onClick={() => updateDisplayState({ type: option.value })}
-              style={segmentButtonStyle(displayState.type === option.value)}
             >
               {option.label}
-            </button>
+            </SegmentButton>
           ))}
         </div>
       </div>
@@ -237,15 +262,13 @@ export default function CardEditorToolbar({
         Size
         <div aria-label="Card size" role="group" style={segmentedStyle}>
           {SIZE_OPTIONS.map((option) => (
-            <button
+            <SegmentButton
               key={option.value}
-              type="button"
-              aria-pressed={displayState.size === option.value}
+              active={displayState.size === option.value}
               onClick={() => updateDisplayState({ size: option.value })}
-              style={segmentButtonStyle(displayState.size === option.value)}
             >
               {option.label}
-            </button>
+            </SegmentButton>
           ))}
         </div>
       </div>
