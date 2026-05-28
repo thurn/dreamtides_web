@@ -312,10 +312,6 @@ function writePreparedCardFiles(rootDir, { tomlSource, cardJson }, fileSystem) {
     for (const write of writes) {
       fileSystem.renameSync(write.temp, write.destination);
     }
-
-    for (const write of writes) {
-      fileSystem.rmSync(write.backup, { force: true, recursive: true });
-    }
   } catch (error) {
     for (const write of writes) {
       fileSystem.rmSync(write.temp, { force: true, recursive: true });
@@ -329,6 +325,14 @@ function writePreparedCardFiles(rootDir, { tomlSource, cardJson }, fileSystem) {
     }
 
     throw error;
+  }
+
+  for (const write of writes) {
+    try {
+      fileSystem.rmSync(write.backup, { force: true, recursive: true });
+    } catch {
+      // Backups are removed after both destination files are committed.
+    }
   }
 }
 
