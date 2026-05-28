@@ -104,14 +104,38 @@ export function validateCardEdit(field, rawValue) {
   }
 
   if (field === "name") {
-    const value = String(rawValue).trim();
+    if (typeof rawValue !== "string") {
+      return validationFailure(field, "Name must be text.", rawValue);
+    }
+
+    const value = rawValue.trim();
     if (value.length === 0) {
       return validationFailure(field, "Name cannot be blank.", rawValue);
     }
     return validationSuccess(field, value);
   }
 
-  return validationSuccess(field, String(rawValue));
+  if (field === "subtype") {
+    if (typeof rawValue !== "string") {
+      return validationFailure(field, "Subtype must be text.", rawValue);
+    }
+
+    return validationSuccess(field, rawValue);
+  }
+
+  if (field === "rendered-text") {
+    if (typeof rawValue !== "string") {
+      return validationFailure(field, "Rules text must be text.", rawValue);
+    }
+
+    if (rawValue.includes('"""')) {
+      return validationFailure(field, 'Rules text cannot contain """.', rawValue);
+    }
+
+    return validationSuccess(field, rawValue);
+  }
+
+  return validationFailure(field, "This field is not editable.", rawValue);
 }
 
 function escapeRegExp(value) {
@@ -138,15 +162,54 @@ function lineEndIndex(text, start) {
   return newlineIndex === -1 ? text.length : newlineIndex + 1;
 }
 
-function fieldRangeInBlock(block, field) {
-  const fieldPattern = new RegExp(`^${escapeRegExp(field)}\\s*=`, "mu");
-  const match = fieldPattern.exec(block.text);
+function tripleQuoteCount(text) {
+  let count = 0;
+  let nextSearchStart = 0;
 
-  if (match === null) {
+  while (nextSearchStart < text.length) {
+    const index = text.indexOf('"""', nextSearchStart);
+    if (index === -1) {
+      break;
+    }
+
+    count += 1;
+    nextSearchStart = index + 3;
+  }
+
+  return count;
+}
+
+function topLevelFieldOffset(blockText, field) {
+  const fieldPattern = new RegExp(`^\\s*${escapeRegExp(field)}\\s*=`, "u");
+  let offset = 0;
+  let inMultilineString = false;
+
+  while (offset < blockText.length) {
+    const end = lineEndIndex(blockText, offset);
+    const line = blockText.slice(offset, end);
+
+    if (!inMultilineString && fieldPattern.test(line)) {
+      return offset;
+    }
+
+    const delimiterCount = tripleQuoteCount(line);
+    if (delimiterCount % 2 === 1) {
+      inMultilineString = !inMultilineString;
+    }
+
+    offset = end;
+  }
+
+  return -1;
+}
+
+function fieldRangeInBlock(block, field) {
+  const start = topLevelFieldOffset(block.text, field);
+
+  if (start === -1) {
     throw new Error(`Field ${field} was not found in target card block`);
   }
 
-  const start = match.index;
   const firstLineEnd = lineEndIndex(block.text, start);
   const firstLine = block.text.slice(start, firstLineEnd);
   const firstTripleQuote = firstLine.indexOf('"""');

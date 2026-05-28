@@ -21,6 +21,7 @@ import { transformCard } from "./setup-assets.mjs";
 const FIRST_ID = "11111111-1111-4111-8111-111111111111";
 const SECOND_ID = "22222222-2222-4222-8222-222222222222";
 const SPECIAL_ID = "33333333-3333-4333-8333-333333333333";
+const BANE_ID = "44444444-4444-4444-8444-444444444444";
 
 function fixtureToml() {
   return `[[cards]]
@@ -43,6 +44,10 @@ id = "${SECOND_ID}"
 tides = ["void_recursion"]
 rendered-text = """
 Line one.
+
+spark = 99
+subtype = "Wrong Target"
+energy-cost = 99
 
 Line three.
 """
@@ -69,6 +74,21 @@ spark = "*"
 image-number = 1003
 art-owned = false
 card-number = 999
+
+[[cards]]
+name = "Nightmare"
+id = "${BANE_ID}"
+tides = ["bane"]
+rendered-text = "Bane text."
+energy-cost = 0
+card-type = "Event"
+subtype = ""
+rarity = "Special"
+is-fast = false
+spark = ""
+image-number = 1004
+art-owned = false
+card-number = 1000
 `;
 }
 
@@ -96,8 +116,8 @@ describe("readEditorCards", () => {
 
     const cards = readEditorCards({ rootDir });
 
-    expect(cards.map((card) => card.id)).toEqual([FIRST_ID, SECOND_ID, SPECIAL_ID]);
-    expect(cards.at(-1)).toMatchObject({
+    expect(cards.map((card) => card.id)).toEqual([FIRST_ID, SECOND_ID, SPECIAL_ID, BANE_ID]);
+    expect(cards.at(-2)).toMatchObject({
       id: SPECIAL_ID,
       cardNumber: 999,
       rarity: "Special",
@@ -166,6 +186,21 @@ describe("validateCardEdit", () => {
     });
     expect(validateCardEdit("name", "   ").ok).toBe(false);
   });
+
+  it("rejects non-string values for text fields", () => {
+    for (const field of ["name", "subtype", "rendered-text"]) {
+      expect(validateCardEdit(field, null)).toMatchObject({ ok: false, field });
+      expect(validateCardEdit(field, ["text"]).ok).toBe(false);
+      expect(validateCardEdit(field, { text: "value" }).ok).toBe(false);
+    }
+  });
+
+  it('rejects multiline rendered text that cannot be represented as a multiline TOML string', () => {
+    expect(validateCardEdit("rendered-text", 'Before\n""" after')).toMatchObject({
+      ok: false,
+      field: "rendered-text",
+    });
+  });
 });
 
 describe("patchRenderedCardsToml", () => {
@@ -198,6 +233,34 @@ describe("patchRenderedCardsToml", () => {
     expect(parse(patched.source).cards[1].subtype).toBe("Oracle");
   });
 
+  it("patches spark, subtype, and energy-cost fields outside assignment-looking rendered text", () => {
+    const source = fixtureToml();
+
+    const sparkPatched = patchRenderedCardsToml(source, {
+      cardId: SECOND_ID,
+      field: "spark",
+      value: 4,
+    }).source;
+    const subtypePatched = patchRenderedCardsToml(sparkPatched, {
+      cardId: SECOND_ID,
+      field: "subtype",
+      value: "Oracle",
+    }).source;
+    const costPatched = patchRenderedCardsToml(subtypePatched, {
+      cardId: SECOND_ID,
+      field: "energy-cost",
+      value: 3,
+    }).source;
+    const parsed = parse(costPatched);
+
+    expect(parsed.cards[1]["rendered-text"]).toContain("spark = 99");
+    expect(parsed.cards[1]["rendered-text"]).toContain('subtype = "Wrong Target"');
+    expect(parsed.cards[1]["rendered-text"]).toContain("energy-cost = 99");
+    expect(parsed.cards[1].spark).toBe(4);
+    expect(parsed.cards[1].subtype).toBe("Oracle");
+    expect(parsed.cards[1]["energy-cost"]).toBe(3);
+  });
+
   it("patches multiline rendered text with parseable TOML and preserved newline content", () => {
     const source = fixtureToml();
     const renderedText = "First line.\n\nSecond line with \"quotes\".";
@@ -221,11 +284,13 @@ describe("refreshCardDataJson", () => {
     const result = refreshCardDataJson({ rootDir });
     const cards = JSON.parse(readFileSync(join(rootDir, "public", "card-data.json"), "utf8"));
 
-    expect(result).toMatchObject({ count: 2 });
+    expect(result).toMatchObject({ count: 3 });
     expect(cards).toEqual([
       transformCard(parse(fixtureToml()).cards[0]),
       transformCard(parse(fixtureToml()).cards[1]),
+      transformCard(parse(fixtureToml()).cards[3]),
     ]);
+    expect(cards.map((card) => card.name)).toContain("Nightmare");
     expect(readFileSync(join(rootDir, "public", "untouched.json"), "utf8")).toBe('{"keep":true}\n');
   });
 });
