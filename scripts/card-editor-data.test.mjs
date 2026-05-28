@@ -332,6 +332,26 @@ card-number = 2
 
     expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
   });
+
+  it("patches top-level fields after literal multiline rendered text contains assignment-looking lines", () => {
+    const source = fixtureToml();
+    const renderedText = "Intro.\n\nspark = 99\nenergy-cost = 99\n\nOutro.";
+
+    const textPatched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: renderedText,
+    }).source;
+    const sparkPatched = patchRenderedCardsToml(textPatched, {
+      cardId: FIRST_ID,
+      field: "spark",
+      value: 5,
+    }).source;
+    const parsed = parse(sparkPatched);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
+    expect(parsed.cards[0].spark).toBe(5);
+  });
 });
 
 describe("refreshCardDataJson", () => {

@@ -161,40 +161,51 @@ function lineEndIndex(text, start) {
   return newlineIndex === -1 ? text.length : newlineIndex + 1;
 }
 
-function tripleQuoteCount(text) {
-  let count = 0;
+function toggledMultilineDelimiter(text, activeDelimiter) {
   let nextSearchStart = 0;
 
   while (nextSearchStart < text.length) {
-    const index = text.indexOf('"""', nextSearchStart);
-    if (index === -1) {
-      break;
+    const doubleIndex = text.indexOf('"""', nextSearchStart);
+    const singleIndex = text.indexOf("'''", nextSearchStart);
+    const indexes = [
+      { delimiter: '"""', index: doubleIndex },
+      { delimiter: "'''", index: singleIndex },
+    ].filter((candidate) => candidate.index !== -1);
+
+    if (indexes.length === 0) {
+      return activeDelimiter;
     }
 
-    count += 1;
-    nextSearchStart = index + 3;
+    const next = indexes.reduce((earliest, candidate) =>
+      candidate.index < earliest.index ? candidate : earliest,
+    );
+
+    if (activeDelimiter === null) {
+      activeDelimiter = next.delimiter;
+    } else if (activeDelimiter === next.delimiter) {
+      activeDelimiter = null;
+    }
+
+    nextSearchStart = next.index + 3;
   }
 
-  return count;
+  return activeDelimiter;
 }
 
 function topLevelFieldOffset(blockText, field) {
   const fieldPattern = new RegExp(`^\\s*${escapeRegExp(field)}\\s*=`, "u");
   let offset = 0;
-  let inMultilineString = false;
+  let activeMultilineDelimiter = null;
 
   while (offset < blockText.length) {
     const end = lineEndIndex(blockText, offset);
     const line = blockText.slice(offset, end);
 
-    if (!inMultilineString && fieldPattern.test(line)) {
+    if (activeMultilineDelimiter === null && fieldPattern.test(line)) {
       return offset;
     }
 
-    const delimiterCount = tripleQuoteCount(line);
-    if (delimiterCount % 2 === 1) {
-      inMultilineString = !inMultilineString;
-    }
+    activeMultilineDelimiter = toggledMultilineDelimiter(line, activeMultilineDelimiter);
 
     offset = end;
   }
