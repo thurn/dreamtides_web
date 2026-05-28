@@ -70,6 +70,16 @@ function makeApiClient(
   };
 }
 
+function makeSaveTiming() {
+  return {
+    readMs: 1,
+    patchMs: 1,
+    refreshMs: 1,
+    confirmMs: 1,
+    totalMs: 4,
+  };
+}
+
 function mount(element: ReactElement): {
   container: HTMLDivElement;
   root: Root;
@@ -464,6 +474,462 @@ describe("CardEditorApp", () => {
     expect(container.textContent).toContain("Moonlit Envoy");
     expect(container.textContent).not.toContain("Draft Name");
     expect(saveEditorCardField).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("saves variable and integer energy costs through the UUID editor API", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            "energy-cost": request.value as string | number,
+            preview: makePreview({
+              id: request.id,
+              energyCost: request.value === "*" ? null : Number(request.value),
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const energyField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="energy-cost"]',
+    );
+    if (energyField === null) {
+      throw new Error("Missing energy field");
+    }
+
+    act(() => {
+      energyField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const variableInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="energy-cost"]',
+    );
+    if (variableInput === null) {
+      throw new Error("Missing energy input");
+    }
+
+    await act(async () => {
+      setInputValue(variableInput, "X");
+      pressKey(variableInput, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "card-id-1",
+      field: "energy-cost",
+      value: "*",
+    });
+    expect(energyField.textContent).toContain("X");
+    expect(energyField.textContent).toContain("Saved");
+
+    act(() => {
+      energyField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const integerInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="energy-cost"]',
+    );
+    if (integerInput === null) {
+      throw new Error("Missing second energy input");
+    }
+
+    await act(async () => {
+      setInputValue(integerInput, "4");
+      pressKey(integerInput, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[1]?.[0]).toMatchObject({
+      id: "card-id-1",
+      field: "energy-cost",
+      value: 4,
+    });
+    expect(energyField.textContent).toContain("4");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows the pending energy-cost value optimistically before save confirmation", async () => {
+    const pendingSave = deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardField"]>>>();
+    const saveEditorCardField = vi
+      .fn<EditorApiClient["saveEditorCardField"]>()
+      .mockReturnValue(pendingSave.promise);
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const energyField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="energy-cost"]',
+    );
+    if (energyField === null) {
+      throw new Error("Missing energy field");
+    }
+
+    act(() => {
+      energyField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="energy-cost"]',
+    );
+    if (input === null) {
+      throw new Error("Missing energy input");
+    }
+
+    act(() => {
+      setInputValue(input, "5");
+      pressKey(input, "Enter");
+    });
+
+    expect(energyField.textContent).toContain("5");
+    expect(energyField.textContent).toContain("Saving...");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows validation feedback for invalid energy costs without saving", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>();
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const energyField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="energy-cost"]',
+    );
+    if (energyField === null) {
+      throw new Error("Missing energy field");
+    }
+
+    act(() => {
+      energyField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="energy-cost"]',
+    );
+    if (input === null) {
+      throw new Error("Missing energy input");
+    }
+
+    act(() => {
+      setInputValue(input, "1.5");
+      pressKey(input, "Enter");
+    });
+
+    expect(saveEditorCardField).not.toHaveBeenCalled();
+    expect(energyField.textContent).toContain(
+      "Enter a non-negative whole number or X.",
+    );
+    expect(energyField.textContent).toContain("2");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("saves blank spark values and renders the confirmed no-spark preview", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            spark: "",
+            preview: makePreview({
+              id: request.id,
+              spark: null,
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"]',
+    );
+    const sparkField = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-field="spark"]',
+    );
+    if (editorCard === null || sparkField === null || sparkField === undefined) {
+      throw new Error("Missing spark field");
+    }
+
+    act(() => {
+      sparkField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="spark"]',
+    );
+    if (input === null) {
+      throw new Error("Missing spark input");
+    }
+
+    await act(async () => {
+      setInputValue(input, "");
+      pressKey(input, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "card-id-1",
+      field: "spark",
+      value: "",
+    });
+    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
+    expect(
+      editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
+    ).not.toBeNull();
+    expect(sparkField.textContent).toContain("Saved");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("saves integer spark values and renders the confirmed spark pip", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            spark: request.value as number,
+            preview: makePreview({
+              id: request.id,
+              spark: Number(request.value),
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () =>
+            Promise.resolve([
+              makeEditorCard({
+                id: "card-id-1",
+                spark: "",
+                preview: makePreview({ id: "card-id-1", spark: null }),
+              }),
+            ]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"]',
+    );
+    const sparkField = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-field="spark"]',
+    );
+    if (editorCard === null || sparkField === null || sparkField === undefined) {
+      throw new Error("Missing spark field");
+    }
+
+    act(() => {
+      sparkField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="spark"]',
+    );
+    if (input === null) {
+      throw new Error("Missing spark input");
+    }
+
+    await act(async () => {
+      setInputValue(input, "3");
+      pressKey(input, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "card-id-1",
+      field: "spark",
+      value: 3,
+    });
+    expect(editorCard.querySelector('[data-pip-variant="spark"]')?.textContent).toContain("3");
+    expect(sparkField.textContent).toContain("Saved");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("opens spark editing from the placeholder and saves variable spark", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            spark: "*",
+            preview: makePreview({
+              id: request.id,
+              spark: null,
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () =>
+            Promise.resolve([
+              makeEditorCard({
+                id: "card-id-1",
+                spark: "",
+                preview: makePreview({ id: "card-id-1", spark: null }),
+              }),
+            ]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"]',
+    );
+    const sparkField = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-field="spark"]',
+    );
+    if (editorCard === null || sparkField === null || sparkField === undefined) {
+      throw new Error("Missing spark placeholder field");
+    }
+    expect(
+      editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
+    ).not.toBeNull();
+
+    act(() => {
+      sparkField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="spark"]',
+    );
+    if (input === null) {
+      throw new Error("Missing spark input");
+    }
+
+    await act(async () => {
+      setInputValue(input, "*");
+      pressKey(input, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "card-id-1",
+      field: "spark",
+      value: "*",
+    });
+    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
+    expect(sparkField.textContent).toContain("Saved");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows validation feedback for invalid spark values without saving", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>();
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const sparkField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="spark"]',
+    );
+    if (sparkField === null) {
+      throw new Error("Missing spark field");
+    }
+
+    act(() => {
+      sparkField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="spark"]',
+    );
+    if (input === null) {
+      throw new Error("Missing spark input");
+    }
+
+    act(() => {
+      setInputValue(input, "abc");
+      pressKey(input, "Enter");
+    });
+
+    expect(saveEditorCardField).not.toHaveBeenCalled();
+    expect(sparkField.textContent).toContain(
+      "Enter a non-negative whole number or X.",
+    );
+    expect(sparkField.textContent).toContain("1");
 
     act(() => {
       root.unmount();

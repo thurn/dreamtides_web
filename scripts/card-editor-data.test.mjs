@@ -682,6 +682,22 @@ expression = "cards.name"
     expect(parsed.cards[1].spark).toBe("");
     expect(patched.source).toContain('spark = ""');
   });
+
+  it("canonicalizes variable spark values before writing TOML", () => {
+    const source = fixtureToml();
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: SECOND_ID,
+      field: "spark",
+      value: "X",
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[1].spark).toBe("*");
+    expect(transformCard(parsed.cards[1]).spark).toBeNull();
+    expect(patched.source).toContain('spark = "*"');
+    expect(patched.source).not.toContain('spark = "X"');
+  });
 });
 
 describe("refreshCardDataJson", () => {

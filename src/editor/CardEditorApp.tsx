@@ -19,6 +19,7 @@ import {
 } from "./save-state";
 import type { EditableFieldValue, EditableSaveState } from "./save-state";
 import type {
+  EditableCardField,
   EditorApiClient,
   EditorCardRecord,
   EditorDisplayState,
@@ -188,6 +189,58 @@ function subtypeOptionsFromCards(cards: readonly EditorCardRecord[]): string[] {
   );
 }
 
+function confirmedFieldValue(
+  card: EditorCardRecord,
+  field: EditableCardField,
+): EditableFieldValue {
+  switch (field) {
+    case "energy-cost":
+      return card["energy-cost"];
+    case "name":
+      return card.name;
+    case "spark":
+      return card.spark;
+    case "rendered-text":
+      return card["rendered-text"];
+    case "subtype":
+      return card.subtype;
+  }
+}
+
+function validateSingleLineFieldSave(
+  field: EditableCardField,
+  value: EditableFieldValue,
+): { ok: true; value: EditableFieldValue } | { ok: false; message: string } {
+  const textValue = String(value).trim();
+
+  if (field === "name") {
+    return textValue.length === 0
+      ? { ok: false, message: "Name cannot be blank." }
+      : { ok: true, value: textValue };
+  }
+
+  if (field === "energy-cost" || field === "spark") {
+    if (field === "spark" && textValue.length === 0) {
+      return { ok: true, value: "" };
+    }
+
+    if (textValue === "X" || textValue === "*") {
+      return { ok: true, value: "*" };
+    }
+
+    if (/^\d+$/u.test(textValue)) {
+      return { ok: true, value: Number(textValue) };
+    }
+
+    return {
+      ok: false,
+      message: "Enter a non-negative whole number or X.",
+    };
+  }
+
+  return { ok: false, message: "This field is not editable." };
+}
+
 export default function CardEditorApp({
   apiClient = DEFAULT_EDITOR_API_CLIENT,
 }: CardEditorAppProps) {
@@ -257,26 +310,38 @@ export default function CardEditorApp({
     setSaveState(next);
   }
 
-  function handleNameBeginEdit(card: EditorCardRecord, value: EditableFieldValue) {
+  function handleFieldBeginEdit(
+    card: EditorCardRecord,
+    field: EditableCardField,
+    value: EditableFieldValue,
+  ) {
     setEditorSaveState((current) =>
-      beginFieldEdit(current, { cardId: card.id, field: "name" }, value),
+      beginFieldEdit(current, { cardId: card.id, field }, value),
     );
   }
 
-  function handleNameDraftChange(card: EditorCardRecord, value: EditableFieldValue) {
+  function handleFieldDraftChange(
+    card: EditorCardRecord,
+    field: EditableCardField,
+    value: EditableFieldValue,
+  ) {
     setEditorSaveState((current) =>
       updateFieldDraft(
         current,
-        { cardId: card.id, field: "name" },
+        { cardId: card.id, field },
         value,
-        card.name,
+        confirmedFieldValue(card, field),
       ),
     );
   }
 
-  function handleNameCancel(card: EditorCardRecord) {
+  function handleFieldCancel(card: EditorCardRecord, field: EditableCardField) {
     setEditorSaveState((current) =>
-      cancelFieldEdit(current, { cardId: card.id, field: "name" }, card.name),
+      cancelFieldEdit(
+        current,
+        { cardId: card.id, field },
+        confirmedFieldValue(card, field),
+      ),
     );
   }
 
@@ -295,20 +360,35 @@ export default function CardEditorApp({
     });
   }
 
-  function handleNameSave(card: EditorCardRecord, value: EditableFieldValue) {
-    const nextName = String(value).trim();
-    const target = { cardId: card.id, field: "name" as const };
+  function handleFieldSave(
+    card: EditorCardRecord,
+    field: EditableCardField,
+    value: EditableFieldValue,
+  ) {
+    const target = { cardId: card.id, field };
+    const validation = validateSingleLineFieldSave(field, value);
 
-    if (nextName.length === 0) {
+    if (!validation.ok) {
       setEditorSaveState((current) =>
-        rejectFieldEdit(current, target, card.name, "Name cannot be blank."),
+        rejectFieldEdit(
+          current,
+          target,
+          confirmedFieldValue(card, field),
+          validation.message,
+        ),
       );
       return;
     }
 
+    const serverValue = validation.value;
     let clientRevision = 0;
     setEditorSaveState((current) => {
-      const result = startFieldSave(current, target, nextName, card.name);
+      const result = startFieldSave(
+        current,
+        target,
+        serverValue,
+        confirmedFieldValue(card, field),
+      );
       clientRevision = result.clientRevision;
       return result.state;
     });
@@ -316,8 +396,8 @@ export default function CardEditorApp({
     void apiClient
       .saveEditorCardField({
         id: card.id,
-        field: "name",
-        value: nextName,
+        field,
+        value: serverValue,
         clientRevision,
       })
       .then((response) => {
@@ -335,7 +415,7 @@ export default function CardEditorApp({
             current,
             target,
             responseRevision,
-            response.card.name,
+            confirmedFieldValue(response.card, field),
           ),
         );
         replaceConfirmedCard(response.card);
@@ -348,7 +428,13 @@ export default function CardEditorApp({
           clientRevision >= currentEntry.submittedRevision
         ) {
           setEditorSaveState((current) =>
-            failFieldSave(current, target, clientRevision, card.name, message),
+            failFieldSave(
+              current,
+              target,
+              clientRevision,
+              confirmedFieldValue(card, field),
+              message,
+            ),
           );
         }
       });
@@ -468,10 +554,10 @@ export default function CardEditorApp({
                 cards={visibleCards}
                 size={displayState.size}
                 saveState={saveState}
-                onNameBeginEdit={handleNameBeginEdit}
-                onNameDraftChange={handleNameDraftChange}
-                onNameCancel={handleNameCancel}
-                onNameSave={handleNameSave}
+                onFieldBeginEdit={handleFieldBeginEdit}
+                onFieldDraftChange={handleFieldDraftChange}
+                onFieldCancel={handleFieldCancel}
+                onFieldSave={handleFieldSave}
               />
             )}
           </div>

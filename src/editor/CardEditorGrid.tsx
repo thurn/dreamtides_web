@@ -2,26 +2,42 @@ import { SIZE_PRESETS } from "../components/card-size";
 import EditableCard from "./EditableCard";
 import type { EditableSaveState, EditableFieldValue } from "./save-state";
 import { fieldSaveEntry } from "./save-state";
-import type { EditorCardRecord, EditorDisplayState } from "./types";
+import type {
+  EditableCardField,
+  EditorCardRecord,
+  EditorDisplayState,
+} from "./types";
 
 export interface CardEditorGridProps {
   cards: readonly EditorCardRecord[];
   size: EditorDisplayState["size"];
   saveState: EditableSaveState;
-  onNameBeginEdit: (card: EditorCardRecord, value: EditableFieldValue) => void;
-  onNameDraftChange: (card: EditorCardRecord, value: EditableFieldValue) => void;
-  onNameCancel: (card: EditorCardRecord) => void;
-  onNameSave: (card: EditorCardRecord, value: EditableFieldValue) => void;
+  onFieldBeginEdit: (
+    card: EditorCardRecord,
+    field: EditableCardField,
+    value: EditableFieldValue,
+  ) => void;
+  onFieldDraftChange: (
+    card: EditorCardRecord,
+    field: EditableCardField,
+    value: EditableFieldValue,
+  ) => void;
+  onFieldCancel: (card: EditorCardRecord, field: EditableCardField) => void;
+  onFieldSave: (
+    card: EditorCardRecord,
+    field: EditableCardField,
+    value: EditableFieldValue,
+  ) => void;
 }
 
 export default function CardEditorGrid({
   cards,
   size,
   saveState,
-  onNameBeginEdit,
-  onNameDraftChange,
-  onNameCancel,
-  onNameSave,
+  onFieldBeginEdit,
+  onFieldDraftChange,
+  onFieldCancel,
+  onFieldSave,
 }: CardEditorGridProps) {
   return (
     <div
@@ -50,10 +66,18 @@ export default function CardEditorGrid({
             cardId: card.id,
             field: "name",
           })}
-          onNameBeginEdit={onNameBeginEdit}
-          onNameDraftChange={onNameDraftChange}
-          onNameCancel={onNameCancel}
-          onNameSave={onNameSave}
+          energySaveEntry={fieldSaveEntry(saveState, {
+            cardId: card.id,
+            field: "energy-cost",
+          })}
+          sparkSaveEntry={fieldSaveEntry(saveState, {
+            cardId: card.id,
+            field: "spark",
+          })}
+          onFieldBeginEdit={onFieldBeginEdit}
+          onFieldDraftChange={onFieldDraftChange}
+          onFieldCancel={onFieldCancel}
+          onFieldSave={onFieldSave}
         />
       ))}
     </div>
