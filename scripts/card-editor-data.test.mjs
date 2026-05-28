@@ -163,6 +163,7 @@ describe("validateCardEdit", () => {
     expect(validateCardEdit("energy-cost", "-1").ok).toBe(false);
     expect(validateCardEdit("energy-cost", "1.5").ok).toBe(false);
     expect(validateCardEdit("energy-cost", "abc").ok).toBe(false);
+    expect(validateCardEdit("energy-cost", "x").ok).toBe(false);
   });
 
   it("accepts non-negative integer, variable, and blank spark values", () => {
@@ -177,6 +178,7 @@ describe("validateCardEdit", () => {
     expect(validateCardEdit("spark", "-1").ok).toBe(false);
     expect(validateCardEdit("spark", "1.5").ok).toBe(false);
     expect(validateCardEdit("spark", "abc").ok).toBe(false);
+    expect(validateCardEdit("spark", "x").ok).toBe(false);
   });
 
   it("rejects empty card names after trimming surrounding input whitespace", () => {
@@ -216,6 +218,42 @@ describe("patchRenderedCardsToml", () => {
 
     expect(parsed.cards[0].name).toBe("First Card");
     expect(parsed.cards[1].name).toBe("Renamed By UUID");
+  });
+
+  it("locates the target card by top-level UUID rather than id-looking rendered text", () => {
+    const source = `[[cards]]
+name = "Decoy"
+id = "decoy-id"
+rendered-text = """
+id = "${SECOND_ID}"
+"""
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+spark = ""
+card-number = 1
+
+[[cards]]
+name = "Actual Target"
+id = "${SECOND_ID}"
+rendered-text = "Target text."
+energy-cost = 2
+card-type = "Event"
+subtype = ""
+spark = ""
+card-number = 2
+`;
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: SECOND_ID,
+      field: "name",
+      value: "Patched Target",
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0].name).toBe("Decoy");
+    expect(parsed.cards[0]["rendered-text"]).toContain(`id = "${SECOND_ID}"`);
+    expect(parsed.cards[1].name).toBe("Patched Target");
   });
 
   it("changes only the target UUID block and leaves unrelated blocks byte-for-byte identical", () => {

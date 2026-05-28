@@ -72,7 +72,7 @@ function validateNonNegativeIntegerOrVariable(field, rawValue, { allowBlank }) {
     return validationSuccess(field, "");
   }
 
-  if (typeof value === "string" && (value === "X" || value === "x" || value === "*")) {
+  if (typeof value === "string" && (value === "X" || value === "*")) {
     return validationSuccess(field, "*");
   }
 
@@ -152,11 +152,6 @@ function cardBlocks(source) {
   }));
 }
 
-function findCardBlock(source, cardId) {
-  const idPattern = new RegExp(`^id\\s*=\\s*"${escapeRegExp(cardId)}"\\s*$`, "mu");
-  return cardBlocks(source).find((block) => idPattern.test(block.text));
-}
-
 function lineEndIndex(text, start) {
   const newlineIndex = text.indexOf("\n", start);
   return newlineIndex === -1 ? text.length : newlineIndex + 1;
@@ -201,6 +196,24 @@ function topLevelFieldOffset(blockText, field) {
   }
 
   return -1;
+}
+
+function topLevelFieldLine(blockText, field) {
+  const start = topLevelFieldOffset(blockText, field);
+  if (start === -1) {
+    return null;
+  }
+
+  return blockText.slice(start, lineEndIndex(blockText, start));
+}
+
+function findCardBlock(source, cardId) {
+  const idPattern = new RegExp(`^\\s*id\\s*=\\s*"${escapeRegExp(cardId)}"\\s*$`, "u");
+
+  return cardBlocks(source).find((block) => {
+    const idLine = topLevelFieldLine(block.text, "id");
+    return idLine !== null && idPattern.test(idLine.trimEnd());
+  });
 }
 
 function fieldRangeInBlock(block, field) {
