@@ -202,6 +202,10 @@ export default function EditableCard({
         return renderSubtypeEditor(<span className="truncate">{subtype}</span>);
       }
 
+      if (context.card.cardType === "Character") {
+        return renderSubtypeEditor(subtypePlaceholder());
+      }
+
       return defaultNode;
     },
     rulesText: (_context, defaultNode) => readOnlySlot("rendered-text", defaultNode),

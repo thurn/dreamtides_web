@@ -162,6 +162,34 @@ describe("CardDisplay", () => {
     });
   });
 
+  it("lets CardView type-line content slots render for blank formatted type lines", () => {
+    const { container, root } = mount(
+      <CardView
+        card={makeCard({
+          cardType: "Character",
+          isFast: false,
+          subtype: "*",
+        })}
+        slots={{
+          typeLineContent: () => (
+            <span data-slot="type-line-content">Add subtype</span>
+          ),
+        }}
+      />,
+    );
+
+    const typeLine = container.querySelector<HTMLElement>(
+      "[data-testid=\"card-type-line\"]",
+    );
+    expect(typeLine).not.toBeNull();
+    expect(typeLine?.textContent).toBe("Add subtype");
+    expect(container.querySelector("[data-slot=\"type-line-content\"]")).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the energy cost badge as a teal/cyan circular pip with no flame icon", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ energyCost: 4 })} />,

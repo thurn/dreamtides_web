@@ -621,6 +621,105 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it.each([
+    { cardId: "character-blank-subtype", initialSubtype: "" },
+    { cardId: "character-hidden-subtype", initialSubtype: "*" },
+  ])(
+    "renders an editable subtype placeholder for Character subtype '$initialSubtype'",
+    async ({ cardId, initialSubtype }) => {
+      const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+        (request) =>
+          Promise.resolve({
+            card: makeEditorCard({
+              id: request.id,
+              cardType: "Character",
+              subtype: String(request.value),
+              source: { subtype: String(request.value) },
+              preview: makePreview({
+                id: request.id,
+                cardType: "Character",
+                subtype: String(request.value),
+              }),
+            }),
+            clientRevision: request.clientRevision,
+            timing: makeSaveTiming(),
+          }),
+      );
+      const { container, root } = mount(
+        <CardEditorApp
+          apiClient={makeApiClient(
+            () =>
+              Promise.resolve([
+                makeEditorCard({
+                  id: cardId,
+                  cardType: "Character",
+                  subtype: initialSubtype,
+                  source: { subtype: initialSubtype },
+                  preview: makePreview({
+                    id: cardId,
+                    cardType: "Character",
+                    subtype: initialSubtype,
+                  }),
+                }),
+              ]),
+            saveEditorCardField,
+          )}
+        />,
+      );
+
+      await act(async () => {
+        await Promise.resolve();
+      });
+
+      const editorCard = container.querySelector<HTMLElement>(
+        `[data-editor-card-id="${cardId}"]`,
+      );
+      const subtypeField = editorCard?.querySelector<HTMLElement>(
+        '[data-editor-field="subtype"]',
+      );
+      if (editorCard === null || subtypeField === null || subtypeField === undefined) {
+        throw new Error("Missing Character subtype field");
+      }
+
+      expect(
+        editorCard.querySelector('[data-editor-subtype-placeholder="true"]'),
+      ).not.toBeNull();
+
+      act(() => {
+        subtypeField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+      });
+      const input = container.querySelector<HTMLInputElement>(
+        '[data-editor-input-field="subtype"]',
+      );
+      if (input === null) {
+        throw new Error("Missing subtype input");
+      }
+
+      await act(async () => {
+        setInputValue(input, "Guide");
+        pressKey(input, "Enter");
+        await flushAsyncWork();
+      });
+
+      expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+        id: cardId,
+        field: "subtype",
+        value: "Guide",
+      });
+      expect(subtypeField.textContent).toContain("Guide");
+      const subtypeSelect = container.querySelector<HTMLSelectElement>(
+        '[aria-label="Subtype filter"]',
+      );
+      expect(
+        Array.from(subtypeSelect?.options ?? []).map((option) => option.value),
+      ).toEqual(["", "Guide"]);
+
+      act(() => {
+        root.unmount();
+      });
+    },
+  );
+
   it("updates editor grid sizing from the size control", async () => {
     const { container, root } = await mountLoadedApp([makeEditorCard()]);
     const largeButton = Array.from(container.querySelectorAll("button")).find(

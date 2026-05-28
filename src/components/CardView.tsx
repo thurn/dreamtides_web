@@ -282,8 +282,15 @@ export function CardView({
   );
   const typeLineContentNode =
     typeLine !== "" ? <span className="truncate">{typeLine}</span> : null;
+  const renderedTypeLineContent =
+    slots.typeLineContent?.(slotContext, typeLineContentNode) ??
+    typeLineContentNode;
+  const hasTypeLineContent =
+    renderedTypeLineContent !== null &&
+    renderedTypeLineContent !== undefined &&
+    renderedTypeLineContent !== false;
   const typeLineNode =
-    typeLine !== "" || attributeChips.length > 0 ? (
+    hasTypeLineContent || attributeChips.length > 0 ? (
       <div
         data-testid="card-type-line"
         className="mt-0.5 flex items-center gap-1 opacity-50"
@@ -305,9 +312,7 @@ export function CardView({
             {chip.glyph}
           </span>
         ))}
-        {typeLine !== "" &&
-          (slots.typeLineContent?.(slotContext, typeLineContentNode) ??
-            typeLineContentNode)}
+        {renderedTypeLineContent}
       </div>
     ) : null;
   const rulesTextNode = showRulesText ? (
