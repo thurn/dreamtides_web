@@ -1,0 +1,81 @@
+// @vitest-environment jsdom
+
+import { describe, expect, it, vi } from "vitest";
+import type { EditorDisplayState } from "./types";
+import {
+  DEFAULT_EDITOR_DISPLAY_STATE,
+  parseEditorDisplayState,
+  replaceEditorDisplayStateInUrl,
+  serializeEditorDisplayState,
+} from "./editor-url-state";
+
+describe("editor URL display state", () => {
+  it("falls back to default display state for invalid query values", () => {
+    expect(
+      parseEditorDisplayState(
+        "?type=Spell&cost=-1&sort=bad&dir=sideways&size=tiny",
+      ),
+    ).toEqual(DEFAULT_EDITOR_DISPLAY_STATE);
+  });
+
+  it("round-trips search text through q", () => {
+    const state: EditorDisplayState = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      searchText: "Moon & tide",
+    };
+
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.toString()).toBe("q=Moon+%26+tide");
+    expect(parseEditorDisplayState(params).searchText).toBe("Moon & tide");
+  });
+
+  it("serializes non-default controls into stable query params", () => {
+    const state: EditorDisplayState = {
+      searchText: "",
+      type: "Character",
+      cost: "x",
+      subtype: "Scout",
+      sort: "name",
+      dir: "desc",
+      size: "large",
+    };
+
+    expect(serializeEditorDisplayState(state).toString()).toBe(
+      "type=Character&cost=x&subtype=Scout&sort=name&dir=desc&size=large",
+    );
+    expect(parseEditorDisplayState(serializeEditorDisplayState(state))).toEqual(
+      state,
+    );
+  });
+
+  it("omits empty and default values", () => {
+    expect(serializeEditorDisplayState(DEFAULT_EDITOR_DISPLAY_STATE).toString()).toBe(
+      "",
+    );
+    expect(
+      serializeEditorDisplayState({
+        ...DEFAULT_EDITOR_DISPLAY_STATE,
+        searchText: "",
+        subtype: "",
+      }).toString(),
+    ).toBe("");
+  });
+
+  it("updates the current URL with replaceState", () => {
+    window.history.pushState(null, "", "/editor");
+    const replaceState = vi.spyOn(window.history, "replaceState");
+    const pushState = vi.spyOn(window.history, "pushState");
+
+    replaceEditorDisplayStateInUrl({
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      searchText: "spark",
+      size: "small",
+    });
+
+    expect(replaceState).toHaveBeenCalledWith(null, "", "/editor?q=spark&size=small");
+    expect(pushState).not.toHaveBeenCalled();
+    replaceState.mockRestore();
+    pushState.mockRestore();
+  });
+});

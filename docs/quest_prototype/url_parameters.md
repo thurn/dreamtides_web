@@ -1,8 +1,8 @@
 # URL Parameters
 
-The quest prototype reads query-string parameters from `window.location.search`
+The quest runtime reads query-string parameters from `window.location.search`
 once at page load via `parseRuntimeConfig` in `src/runtime/runtime-config.ts`.
-Parameters are not reactive: changing them requires a page reload.
+Quest runtime parameters are not reactive: changing them requires a page reload.
 
 ## `seed`
 
@@ -68,6 +68,32 @@ Example:
 http://localhost:5173/?game=quest42
 ```
 
+## Card Editor
+
+The standalone `/editor` route manages display state through query parameters.
+Invalid values fall back to the default editor display state. The editor updates
+these parameters with `history.replaceState`, so display changes keep the
+current history entry.
+
+- `q=<text>` stores card search text. Empty search text is omitted.
+- `type=Character` or `type=Event` filters by card type. The default `all`
+  type filter is omitted.
+- `cost=<number>` filters by numeric energy cost. `cost=x` selects variable
+  cost cards. Empty cost filtering is omitted.
+- `subtype=<text>` filters by subtype. Empty subtype filtering is omitted.
+- `sort=number`, `sort=name`, `sort=cost`, `sort=type`, `sort=subtype`, or
+  `sort=spark` selects the sort field. The default `number` sort is omitted.
+- `dir=asc` or `dir=desc` selects the sort direction. The default `asc`
+  direction is omitted.
+- `size=small`, `size=medium`, or `size=large` selects the card preview size.
+  The default `medium` size is omitted.
+
+Example:
+
+```
+http://localhost:5173/editor?q=moon&type=Event&sort=name&dir=desc&size=large
+```
+
 ## Examples
 
 ```
@@ -80,4 +106,5 @@ http://localhost:5173/?debugJourneyShape=single_offer
 http://localhost:5173/?debugJourneyReward=gain_essence
 http://localhost:5173/?debugJourneyCost=pay_essence
 http://localhost:5173/?seed=7&startInBattle=1
+http://localhost:5173/editor?q=moon&type=Event
 ```

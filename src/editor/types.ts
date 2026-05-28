@@ -1,0 +1,95 @@
+import type { CardData, CardType, Rarity } from "../types/cards";
+
+export type EditableCardField =
+  | "energy-cost"
+  | "subtype"
+  | "name"
+  | "spark"
+  | "rendered-text";
+
+export type EditorFieldValue = string | number;
+
+export interface EditorCardRecord {
+  id: string;
+  cardNumber: number;
+  cardType: CardType;
+  rarity?: Rarity;
+  "energy-cost": EditorFieldValue;
+  subtype: string;
+  name: string;
+  spark: EditorFieldValue;
+  "rendered-text": string;
+  source: Record<string, unknown>;
+  preview: CardData;
+}
+
+export type EditorTypeFilter = "all" | CardType;
+export type EditorSortField =
+  | "cardNumber"
+  | "name"
+  | "cost"
+  | "type"
+  | "subtype"
+  | "spark";
+export type EditorSortDirection = "asc" | "desc";
+export type EditorCardSize = "small" | "medium" | "large";
+
+export interface EditorDisplayState {
+  searchText: string;
+  type: EditorTypeFilter;
+  cost: string;
+  subtype: string;
+  sort: EditorSortField;
+  dir: EditorSortDirection;
+  size: EditorCardSize;
+}
+
+export type EditorFieldSaveStatus = "idle" | "saving" | "saved" | "error";
+
+export interface EditorFieldSaveState {
+  status: EditorFieldSaveStatus;
+  clientRevision: number;
+  message: string | null;
+}
+
+export type EditorSaveState = Record<string, EditorFieldSaveState>;
+
+export interface LoadEditorCardsResponse {
+  cards: EditorCardRecord[];
+}
+
+export interface SaveEditorCardFieldRequest {
+  id: string;
+  field: EditableCardField;
+  value: unknown;
+  clientRevision?: number;
+}
+
+export interface EditorSaveTiming {
+  readMs: number;
+  patchMs: number;
+  refreshMs: number;
+  confirmMs: number;
+  totalMs: number;
+}
+
+export interface SaveEditorCardFieldResponse {
+  card: EditorCardRecord;
+  clientRevision?: number;
+  timing: EditorSaveTiming;
+}
+
+export interface EditorApiErrorBody {
+  error?: {
+    code?: string;
+    message?: string;
+    details?: unknown;
+  };
+}
+
+export interface EditorApiClient {
+  loadEditorCards(): Promise<EditorCardRecord[]>;
+  saveEditorCardField(
+    request: SaveEditorCardFieldRequest,
+  ): Promise<SaveEditorCardFieldResponse>;
+}
