@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "launch": "npm install && npm start -- --open",
+    "editor": "npm install && npm run dev:vite -- --open /editor",
     "start": "node scripts/dev-with-emulator.mjs",
     "dev": "npm start",
     "dev:vite": "node scripts/setup-assets.mjs && vite --port 5173 --strictPort",
