@@ -90,7 +90,8 @@ function setInputValue(input: HTMLInputElement, value: string): void {
   if (valueDescriptor?.set === undefined) {
     throw new Error("Missing input value setter");
   }
-  Reflect.apply(valueDescriptor.set, input, [value]);
+  const setValue = valueDescriptor.set.bind(input);
+  setValue(value);
   input.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
@@ -102,7 +103,8 @@ function setSelectValue(select: HTMLSelectElement, value: string): void {
   if (valueDescriptor?.set === undefined) {
     throw new Error("Missing select value setter");
   }
-  Reflect.apply(valueDescriptor.set, select, [value]);
+  const setValue = valueDescriptor.set.bind(select);
+  setValue(value);
   select.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
