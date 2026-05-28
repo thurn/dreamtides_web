@@ -18,3 +18,4 @@ logs/
 .DS_Store
 .claude/worktrees
 .worktrees/
+.superpowers/
