@@ -356,6 +356,16 @@ describe("CardEditorApp", () => {
     expect(pushState).not.toHaveBeenCalled();
 
     act(() => {
+      setInputValue(searchInput, "moon");
+    });
+
+    expect(searchInput.value).toBe("moon");
+    expect(container.textContent).toContain("1 / 3 cards");
+    expect(editorCardIds(container)).toEqual(["moon-card"]);
+    expect(replaceState).toHaveBeenLastCalledWith(null, "", "/editor?q=moon");
+    expect(pushState).not.toHaveBeenCalled();
+
+    act(() => {
       root.unmount();
     });
   });
@@ -433,6 +443,129 @@ describe("CardEditorApp", () => {
 
     expect(editorCardIds(container)).toEqual(["event-x"]);
     expect(container.textContent).toContain("1 / 3 cards");
+    expect(
+      Array.from(container.querySelectorAll("[data-editor-card-id]")).every(
+        (cardElement) =>
+          cardElement.querySelector(
+            'input, select, textarea, [contenteditable="true"], [aria-label="Card type"]',
+          ) === null,
+      ),
+    ).toBe(true);
+
+    act(() => {
+      setSelectValue(subtypeSelect, "Scout");
+    });
+
+    expect(editorCardIds(container)).toEqual([]);
+    expect(container.textContent).toContain("0 / 3 cards");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("replaces the URL for every toolbar display control", async () => {
+    const cards = [
+      makeEditorCard({
+        id: "event-x",
+        cardType: "Event",
+        subtype: "Scout",
+        source: { subtype: "Scout" },
+        preview: makePreview({
+          id: "event-x",
+          cardType: "Event",
+          subtype: "Scout",
+          energyCost: null,
+        }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+    const replaceState = vi.spyOn(window.history, "replaceState");
+    const pushState = vi.spyOn(window.history, "pushState");
+    const eventButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent === "Events",
+    );
+    const costSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Cost filter"]',
+    );
+    const subtypeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Subtype filter"]',
+    );
+    const sortSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Sort field"]',
+    );
+    const directionButton = container.querySelector<HTMLButtonElement>(
+      '[aria-label="Sort direction"]',
+    );
+    const smallButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent === "Small",
+    );
+
+    if (
+      eventButton === undefined ||
+      costSelect === null ||
+      subtypeSelect === null ||
+      sortSelect === null ||
+      directionButton === null ||
+      smallButton === undefined
+    ) {
+      throw new Error("Missing toolbar control");
+    }
+
+    act(() => {
+      eventButton.click();
+    });
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?type=event",
+    );
+
+    act(() => {
+      setSelectValue(costSelect, "x");
+    });
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?type=event&cost=x",
+    );
+
+    act(() => {
+      setSelectValue(subtypeSelect, "Scout");
+    });
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?type=event&cost=x&subtype=Scout",
+    );
+
+    act(() => {
+      setSelectValue(sortSelect, "spark");
+    });
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?type=event&cost=x&subtype=Scout&sort=spark",
+    );
+
+    act(() => {
+      directionButton.click();
+    });
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?type=event&cost=x&subtype=Scout&sort=spark&dir=desc",
+    );
+
+    act(() => {
+      smallButton.click();
+    });
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?type=event&cost=x&subtype=Scout&sort=spark&dir=desc&size=small",
+    );
+    expect(pushState).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();
