@@ -152,31 +152,63 @@ function lineEndIndex(text, start) {
 }
 
 function toggledMultilineDelimiter(text, activeDelimiter) {
-  let nextSearchStart = 0;
+  let index = 0;
 
-  while (nextSearchStart < text.length) {
-    const doubleIndex = text.indexOf('"""', nextSearchStart);
-    const singleIndex = text.indexOf("'''", nextSearchStart);
-    const indexes = [
-      { delimiter: '"""', index: doubleIndex },
-      { delimiter: "'''", index: singleIndex },
-    ].filter((candidate) => candidate.index !== -1);
+  while (index < text.length) {
+    if (activeDelimiter !== null) {
+      const closeIndex = text.indexOf(activeDelimiter, index);
+      if (closeIndex === -1) {
+        return activeDelimiter;
+      }
 
-    if (indexes.length === 0) {
+      activeDelimiter = null;
+      index = closeIndex + 3;
+      continue;
+    }
+
+    if (text.startsWith('"""', index)) {
+      activeDelimiter = '"""';
+      index += 3;
+      continue;
+    }
+
+    if (text.startsWith("'''", index)) {
+      activeDelimiter = "'''";
+      index += 3;
+      continue;
+    }
+
+    if (text[index] === "#") {
       return activeDelimiter;
     }
 
-    const next = indexes.reduce((earliest, candidate) =>
-      candidate.index < earliest.index ? candidate : earliest,
-    );
-
-    if (activeDelimiter === null) {
-      activeDelimiter = next.delimiter;
-    } else if (activeDelimiter === next.delimiter) {
-      activeDelimiter = null;
+    if (text[index] === '"') {
+      index += 1;
+      while (index < text.length) {
+        if (text[index] === "\\") {
+          index += 2;
+        } else if (text[index] === '"') {
+          index += 1;
+          break;
+        } else {
+          index += 1;
+        }
+      }
+      continue;
     }
 
-    nextSearchStart = next.index + 3;
+    if (text[index] === "'") {
+      index += 1;
+      while (index < text.length && text[index] !== "'") {
+        index += 1;
+      }
+      if (index < text.length) {
+        index += 1;
+      }
+      continue;
+    }
+
+    index += 1;
   }
 
   return activeDelimiter;
@@ -246,18 +278,51 @@ function findCardBlock(source, cardId) {
 }
 
 function firstMultilineDelimiter(text) {
-  const delimiters = [
-    { delimiter: '"""', index: text.indexOf('"""') },
-    { delimiter: "'''", index: text.indexOf("'''") },
-  ].filter((candidate) => candidate.index !== -1);
+  let index = 0;
 
-  if (delimiters.length === 0) {
-    return null;
+  while (index < text.length) {
+    if (text.startsWith('"""', index)) {
+      return { delimiter: '"""', index };
+    }
+
+    if (text.startsWith("'''", index)) {
+      return { delimiter: "'''", index };
+    }
+
+    if (text[index] === "#") {
+      return null;
+    }
+
+    if (text[index] === '"') {
+      index += 1;
+      while (index < text.length) {
+        if (text[index] === "\\") {
+          index += 2;
+        } else if (text[index] === '"') {
+          index += 1;
+          break;
+        } else {
+          index += 1;
+        }
+      }
+      continue;
+    }
+
+    if (text[index] === "'") {
+      index += 1;
+      while (index < text.length && text[index] !== "'") {
+        index += 1;
+      }
+      if (index < text.length) {
+        index += 1;
+      }
+      continue;
+    }
+
+    index += 1;
   }
 
-  return delimiters.reduce((earliest, candidate) =>
-    candidate.index < earliest.index ? candidate : earliest,
-  );
+  return null;
 }
 
 function fieldRangeInBlock(block, field) {

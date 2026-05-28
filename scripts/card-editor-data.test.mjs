@@ -271,6 +271,46 @@ card-number = 2
     expect(parse(patched.source).cards[1].subtype).toBe("Oracle");
   });
 
+  it("patches a later card after an earlier ordinary string contains triple single quotes", () => {
+    const source = fixtureToml();
+
+    const firstPatched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "subtype",
+      value: "Subtype ''' marker",
+    }).source;
+    const secondPatched = patchRenderedCardsToml(firstPatched, {
+      cardId: SECOND_ID,
+      field: "name",
+      value: "Later Card",
+    });
+    const parsed = parse(secondPatched.source);
+
+    expect(parsed.cards[0].subtype).toBe("Subtype ''' marker");
+    expect(parsed.cards[0].name).toBe("First Card");
+    expect(parsed.cards[1].name).toBe("Later Card");
+  });
+
+  it("patches a later card after an earlier ordinary string contains triple double quotes", () => {
+    const source = fixtureToml();
+
+    const firstPatched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "subtype",
+      value: 'Subtype """ marker',
+    }).source;
+    const secondPatched = patchRenderedCardsToml(firstPatched, {
+      cardId: SECOND_ID,
+      field: "name",
+      value: "Later Card",
+    });
+    const parsed = parse(secondPatched.source);
+
+    expect(parsed.cards[0].subtype).toBe('Subtype """ marker');
+    expect(parsed.cards[0].name).toBe("First Card");
+    expect(parsed.cards[1].name).toBe("Later Card");
+  });
+
   it("patches spark, subtype, and energy-cost fields outside assignment-looking rendered text", () => {
     const source = fixtureToml();
 
