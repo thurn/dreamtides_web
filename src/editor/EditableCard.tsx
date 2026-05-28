@@ -142,6 +142,9 @@ export default function EditableCard({
   const hasConfirmedBlankSparkSave =
     sparkSaveEntry?.status === "saved" &&
     isBlankEditorValue(sparkSaveEntry.confirmedValue);
+  const hasPendingBlankSparkSave =
+    sparkSaveEntry?.status === "saving" &&
+    isBlankEditorValue(sparkSaveEntry.draftValue);
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
   const visibleRulesText = String(
     rulesTextSaveEntry?.draftValue ?? card["rendered-text"],
@@ -265,7 +268,7 @@ export default function EditableCard({
               size={context.large ? "md" : "sm"}
               scale={context.textScale}
             />
-          ) : hasConfirmedBlankSparkSave ? null : (
+          ) : hasPendingBlankSparkSave || hasConfirmedBlankSparkSave ? null : (
             defaultNode ?? sparkPlaceholder()
           )}
         </EditableField>

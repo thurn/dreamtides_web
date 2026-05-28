@@ -1299,6 +1299,65 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("shows pending blank spark saves without a pip or placeholder", async () => {
+    const pendingSave = deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardField"]>>>();
+    const saveEditorCardField = vi
+      .fn<EditorApiClient["saveEditorCardField"]>()
+      .mockReturnValue(pendingSave.promise);
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"]',
+    );
+    const sparkField = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-field="spark"]',
+    );
+    if (editorCard === null || sparkField === null || sparkField === undefined) {
+      throw new Error("Missing spark field");
+    }
+
+    act(() => {
+      sparkField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="spark"]',
+    );
+    if (input === null) {
+      throw new Error("Missing spark input");
+    }
+
+    act(() => {
+      setInputValue(input, "");
+      pressKey(input, "Enter");
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "card-id-1",
+      field: "spark",
+      value: "",
+    });
+    expect(sparkField.textContent).toContain("Saving...");
+    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
+    expect(
+      editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders initial variable spark as an editable X pip", async () => {
     const { container, root } = mount(
       <CardEditorApp
