@@ -147,12 +147,46 @@ function lineEndIndex(text, start) {
   return newlineIndex === -1 ? text.length : newlineIndex + 1;
 }
 
+function isEscapedByBackslash(text, index) {
+  let backslashCount = 0;
+  let cursor = index - 1;
+
+  while (cursor >= 0 && text[cursor] === "\\") {
+    backslashCount += 1;
+    cursor -= 1;
+  }
+
+  return backslashCount % 2 === 1;
+}
+
+function multilineDelimiterCloseIndex(text, delimiter, start) {
+  if (delimiter === "'''") {
+    return text.indexOf(delimiter, start);
+  }
+
+  let index = start;
+  while (index < text.length) {
+    const closeIndex = text.indexOf(delimiter, index);
+    if (closeIndex === -1) {
+      return -1;
+    }
+
+    if (!isEscapedByBackslash(text, closeIndex)) {
+      return closeIndex;
+    }
+
+    index = closeIndex + 1;
+  }
+
+  return -1;
+}
+
 function toggledMultilineDelimiter(text, activeDelimiter) {
   let index = 0;
 
   while (index < text.length) {
     if (activeDelimiter !== null) {
-      const closeIndex = text.indexOf(activeDelimiter, index);
+      const closeIndex = multilineDelimiterCloseIndex(text, activeDelimiter, index);
       if (closeIndex === -1) {
         return activeDelimiter;
       }
@@ -219,7 +253,7 @@ function cardBlocks(source) {
     const end = lineEndIndex(source, offset);
     const line = source.slice(offset, end);
 
-    if (activeMultilineDelimiter === null && /^\[\[cards\]\]\s*$/u.test(line.trimEnd())) {
+    if (activeMultilineDelimiter === null && /^\s*\[\[cards\]\]\s*(?:#.*)?$/u.test(line.trimEnd())) {
       starts.push(offset);
     }
 
@@ -265,7 +299,7 @@ function topLevelFieldLine(blockText, field) {
 }
 
 function findCardBlock(source, cardId) {
-  const idPattern = new RegExp(`^\\s*id\\s*=\\s*"${escapeRegExp(cardId)}"\\s*$`, "u");
+  const idPattern = new RegExp(`^\\s*id\\s*=\\s*"${escapeRegExp(cardId)}"\\s*(?:#.*)?$`, "u");
 
   return cardBlocks(source).find((block) => {
     const idLine = topLevelFieldLine(block.text, "id");
@@ -340,7 +374,7 @@ function fieldRangeInBlock(block, field) {
   }
 
   const valueStart = start + multilineStart.index + multilineStart.delimiter.length;
-  const valueEnd = block.text.indexOf(multilineStart.delimiter, valueStart);
+  const valueEnd = multilineDelimiterCloseIndex(block.text, multilineStart.delimiter, valueStart);
 
   if (valueEnd === -1) {
     throw new Error(`Field ${field} has an unterminated multiline string`);

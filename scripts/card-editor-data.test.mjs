@@ -264,6 +264,39 @@ card-number = 2
     expect(parsed.cards[1].name).toBe("Patched Target");
   });
 
+  it("locates cards with inline comments on the table header and id line", () => {
+    const source = `[[cards]] # primary card
+name = "Commented Card"
+id = "${FIRST_ID}" # stable UUID
+rendered-text = "Commented source."
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+spark = ""
+card-number = 1
+
+[[cards]]
+name = "Later Card"
+id = "${SECOND_ID}"
+rendered-text = "Later source."
+energy-cost = 2
+card-type = "Event"
+subtype = ""
+spark = ""
+card-number = 2
+`;
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "name",
+      value: "Patched Commented Card",
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0].name).toBe("Patched Commented Card");
+    expect(parsed.cards[1].name).toBe("Later Card");
+  });
+
   it("changes only the target UUID block and leaves unrelated blocks byte-for-byte identical", () => {
     const source = fixtureToml();
 
@@ -345,6 +378,69 @@ card-number = 2
     expect(parsed.cards[1].spark).toBe(4);
     expect(parsed.cards[1].subtype).toBe("Oracle");
     expect(parsed.cards[1]["energy-cost"]).toBe(3);
+  });
+
+  it("patches following top-level fields after an escaped delimiter in multiline basic rendered text", () => {
+    const source = String.raw`[[cards]]
+name = "Escaped Delimiter"
+id = "${FIRST_ID}"
+rendered-text = """
+Text with an escaped delimiter: \""" marker.
+"""
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+spark = ""
+card-number = 1
+
+[[cards]]
+name = "Later Card"
+id = "${SECOND_ID}"
+rendered-text = "Later source."
+energy-cost = 2
+card-type = "Event"
+subtype = ""
+spark = ""
+card-number = 2
+`;
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "energy-cost",
+      value: 4,
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe('Text with an escaped delimiter: """ marker.\n');
+    expect(parsed.cards[0]["energy-cost"]).toBe(4);
+    expect(parsed.cards[1].name).toBe("Later Card");
+  });
+
+  it("replaces multiline basic rendered text with escaped delimiters without leaving stale content", () => {
+    const source = String.raw`[[cards]]
+name = "Escaped Delimiter"
+id = "${FIRST_ID}"
+rendered-text = """
+Text with an escaped delimiter: \""" marker.
+stale content.
+"""
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+spark = ""
+card-number = 1
+`;
+    const renderedText = "Fresh text.";
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: renderedText,
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
+    expect(patched.source).not.toContain("stale content.");
   });
 
   it("patches multiline rendered text with parseable TOML and preserved newline content", () => {
