@@ -325,7 +325,7 @@ export default function CardEditorApp({
         const currentEntry = fieldSaveEntry(saveStateRef.current, target);
         if (
           currentEntry === null ||
-          responseRevision < currentEntry.clientRevision
+          responseRevision < currentEntry.submittedRevision
         ) {
           return;
         }
@@ -343,7 +343,10 @@ export default function CardEditorApp({
       .catch((error: unknown) => {
         const message = errorMessageFor(error);
         const currentEntry = fieldSaveEntry(saveStateRef.current, target);
-        if (currentEntry !== null && clientRevision >= currentEntry.clientRevision) {
+        if (
+          currentEntry !== null &&
+          clientRevision >= currentEntry.submittedRevision
+        ) {
           setEditorSaveState((current) =>
             failFieldSave(current, target, clientRevision, card.name, message),
           );

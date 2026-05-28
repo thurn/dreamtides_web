@@ -8,6 +8,7 @@ export interface EditableFieldSaveEntry {
   field: EditableCardField;
   status: EditableFieldStatus;
   clientRevision: number;
+  submittedRevision: number;
   draftValue: EditableFieldValue;
   confirmedValue: EditableFieldValue;
   message: string | null;
@@ -47,6 +48,7 @@ function entryFor(
       ...target,
       status: "idle",
       clientRevision: 0,
+      submittedRevision: 0,
       draftValue: confirmedValue,
       confirmedValue,
       message: null,
@@ -130,6 +132,7 @@ export function startFieldSave(
       draftValue,
       confirmedValue,
       clientRevision: nextRevision,
+      submittedRevision: nextRevision,
       message: null,
     }),
   };
@@ -158,16 +161,20 @@ export function completeFieldSave(
   confirmedValue: EditableFieldValue,
 ): EditableSaveState {
   const entry = fieldSaveEntry(state, target);
-  if (entry === null || clientRevision < entry.clientRevision) {
+  if (entry === null || clientRevision < entry.submittedRevision) {
     return state;
   }
 
+  const hasNewerLocalDraft =
+    entry.clientRevision > clientRevision &&
+    !Object.is(entry.draftValue, confirmedValue);
+
   return withEntry(state, {
     ...entry,
-    status: "saved",
-    draftValue: confirmedValue,
+    status: hasNewerLocalDraft ? "editing" : "saved",
+    draftValue: hasNewerLocalDraft ? entry.draftValue : confirmedValue,
     confirmedValue,
-    clientRevision,
+    clientRevision: entry.clientRevision,
     message: null,
   });
 }
@@ -180,7 +187,7 @@ export function failFieldSave(
   message: string,
 ): EditableSaveState {
   const entry = fieldSaveEntry(state, target);
-  if (entry === null || clientRevision < entry.clientRevision) {
+  if (entry === null || clientRevision < entry.submittedRevision) {
     return state;
   }
 

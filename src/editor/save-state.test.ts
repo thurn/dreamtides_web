@@ -67,31 +67,66 @@ describe("editor save state", () => {
     });
   });
 
-  it("ignores stale success responses with older client revisions", () => {
+  it("ignores stale success responses when a newer save has been submitted", () => {
     const firstSave = startFieldSave(
       EMPTY_EDITOR_SAVE_STATE,
       firstName,
       "First",
       "Original",
     );
-    const editedAgain = updateFieldDraft(
+    const secondDraft = updateFieldDraft(
       firstSave.state,
       firstName,
       "Latest Draft",
       "Original",
     );
+    const secondSave = startFieldSave(
+      secondDraft,
+      firstName,
+      "Second",
+      "Original",
+    );
 
     const completed = completeFieldSave(
-      editedAgain,
+      secondSave.state,
       firstName,
       firstSave.clientRevision,
       "First",
     );
 
-    expect(completed).toBe(editedAgain);
+    expect(completed).toBe(secondSave.state);
     expect(fieldSaveEntry(completed, firstName)).toMatchObject({
       status: "saving",
-      draftValue: "Latest Draft",
+      draftValue: "Second",
+      submittedRevision: secondSave.clientRevision,
+    });
+  });
+
+  it("applies a save response after a no-op re-edit during the pending save", () => {
+    const firstSave = startFieldSave(
+      EMPTY_EDITOR_SAVE_STATE,
+      firstName,
+      "First Save",
+      "Original",
+    );
+    const reenteredEdit = beginFieldEdit(
+      firstSave.state,
+      firstName,
+      "Original",
+    );
+
+    const completed = completeFieldSave(
+      reenteredEdit,
+      firstName,
+      firstSave.clientRevision,
+      "First Save",
+    );
+
+    expect(fieldSaveEntry(completed, firstName)).toMatchObject({
+      status: "saved",
+      draftValue: "First Save",
+      confirmedValue: "First Save",
+      submittedRevision: firstSave.clientRevision,
     });
   });
 

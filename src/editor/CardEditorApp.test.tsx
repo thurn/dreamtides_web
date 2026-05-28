@@ -599,6 +599,87 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("keeps a successful save after a no-op re-edit while the save is pending", async () => {
+    const pendingSave = deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardField"]>>>();
+    const saveEditorCardField = vi
+      .fn<EditorApiClient["saveEditorCardField"]>()
+      .mockReturnValue(pendingSave.promise);
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    const firstInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (firstInput === null) {
+      throw new Error("Missing name input");
+    }
+
+    act(() => {
+      setInputValue(firstInput, "First Save");
+      pressKey(firstInput, "Enter");
+    });
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    await act(async () => {
+      pendingSave.resolve({
+        card: makeEditorCard({
+          id: "card-id-1",
+          name: "First Save",
+          preview: makePreview({ id: "card-id-1", name: "First Save" }),
+        }),
+        clientRevision: saveEditorCardField.mock.calls[0]?.[0].clientRevision,
+        timing: {
+          readMs: 1,
+          patchMs: 1,
+          refreshMs: 1,
+          confirmMs: 1,
+          totalMs: 4,
+        },
+      });
+      await Promise.resolve();
+    });
+
+    const secondInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (secondInput !== null) {
+      act(() => {
+        pressKey(secondInput, "Escape");
+      });
+    }
+
+    expect(container.textContent).toContain("First Save");
+    expect(container.textContent).toContain("Saved");
+    expect(container.textContent).not.toContain("Moonlit Envoy");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders a retryable error state after a failed load", async () => {
     const loadEditorCards = vi
       .fn<EditorApiClient["loadEditorCards"]>()
