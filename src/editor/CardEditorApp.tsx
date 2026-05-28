@@ -230,7 +230,7 @@ function validateFieldSave(
   }
 
   if (field === "subtype") {
-    return { ok: true, value: textValue };
+    return { ok: true, value: String(value) };
   }
 
   if (field === "rendered-text") {

@@ -1,4 +1,11 @@
-import { useEffect, useRef, type CSSProperties, type KeyboardEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 import type { EditableCardField } from "./types";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 
@@ -65,7 +72,9 @@ export default function EditableField({
 }: EditableFieldProps) {
   const isEditing = saveEntry?.status === "editing";
   const draftValue = saveEntry?.draftValue ?? value;
-  const status = statusText(saveEntry);
+  const isSavedStatus = saveEntry?.status === "saved";
+  const [savedExpired, setSavedExpired] = useState(false);
+  const status = isSavedStatus && savedExpired ? "" : statusText(saveEntry);
   const isErrorStatus =
     saveEntry?.status === "error" ||
     (saveEntry?.status === "editing" &&
@@ -84,6 +93,22 @@ export default function EditableField({
     editorElement?.focus();
     editorElement?.select();
   }, [isEditing]);
+
+  useEffect(() => {
+    if (!isSavedStatus) {
+      setSavedExpired(false);
+      return;
+    }
+
+    setSavedExpired(false);
+    const timer = window.setTimeout(() => {
+      setSavedExpired(true);
+    }, 1800);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [isSavedStatus, saveEntry]);
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (event.key === "Enter" && (mode === "single-line" || !event.shiftKey)) {
@@ -182,6 +207,14 @@ export default function EditableField({
           opacity: status === "" ? 0 : 1,
           textAlign: isPipLayout || isInlineLayout ? "center" : undefined,
           whiteSpace: isPipLayout || isInlineLayout ? "normal" : "nowrap",
+          ...((isPipLayout || isInlineLayout) && status !== ""
+            ? {
+                background: "rgba(6, 16, 18, 0.92)",
+                borderRadius: "4px",
+                boxShadow: "0 1px 3px rgba(0, 0, 0, 0.45)",
+                padding: "1px 4px",
+              }
+            : {}),
         }}
       >
         {status}

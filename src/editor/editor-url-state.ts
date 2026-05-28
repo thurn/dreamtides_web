@@ -48,9 +48,7 @@ const DIR_VALUES = new Set<EditorSortDirection>(["asc", "desc"]);
 const SIZE_VALUES = new Set<EditorCardSize>(["small", "medium", "large"]);
 
 function paramsFromSearch(search: string | URLSearchParams): URLSearchParams {
-  return search instanceof URLSearchParams
-    ? new URLSearchParams(search)
-    : new URLSearchParams(search);
+  return new URLSearchParams(search);
 }
 
 function parseType(value: string | null): EditorTypeFilter {

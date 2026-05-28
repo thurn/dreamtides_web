@@ -549,7 +549,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("canonicalizes whitespace-only subtypes to blank subtype behavior", async () => {
+  it("saves whitespace-only subtypes verbatim and shows blank subtype affordance", async () => {
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>
         Promise.resolve({
@@ -625,7 +625,7 @@ describe("CardEditorApp", () => {
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
       id: "event-card",
       field: "subtype",
-      value: "",
+      value: "   ",
     });
     expect(
       editorCard.querySelector('[data-editor-type-line-card-type="true"]')?.textContent,
@@ -640,6 +640,90 @@ describe("CardEditorApp", () => {
     expect(Array.from(subtypeSelect?.options ?? []).map((option) => option.value)).toEqual([
       "",
     ]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("saves subtype edits without trimming surrounding whitespace", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            cardType: "Event",
+            subtype: String(request.value),
+            source: { subtype: String(request.value) },
+            preview: makePreview({
+              id: request.id,
+              cardType: "Event",
+              subtype: String(request.value),
+              spark: null,
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () =>
+            Promise.resolve([
+              makeEditorCard({
+                id: "event-card",
+                cardType: "Event",
+                subtype: "Omen",
+                source: { subtype: "Omen" },
+                preview: makePreview({
+                  id: "event-card",
+                  cardType: "Event",
+                  subtype: "Omen",
+                  spark: null,
+                }),
+              }),
+            ]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="event-card"]',
+    );
+    const subtypeField = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-field="subtype"]',
+    );
+    if (editorCard === null || subtypeField === null || subtypeField === undefined) {
+      throw new Error("Missing subtype field");
+    }
+
+    act(() => {
+      subtypeField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="subtype"]',
+    );
+    if (input === null) {
+      throw new Error("Missing subtype input");
+    }
+
+    await act(async () => {
+      setInputValue(input, "  Scout  ");
+      pressKey(input, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "event-card",
+      field: "subtype",
+      value: "  Scout  ",
+    });
 
     act(() => {
       root.unmount();
@@ -1047,6 +1131,79 @@ describe("CardEditorApp", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("auto-clears the transient Saved indicator after a successful save", async () => {
+    vi.useFakeTimers();
+    try {
+      const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+        (request) =>
+          Promise.resolve({
+            card: makeEditorCard({
+              id: request.id,
+              name: String(request.value),
+              preview: makePreview({
+                id: request.id,
+                name: String(request.value),
+              }),
+            }),
+            clientRevision: request.clientRevision,
+            timing: makeSaveTiming(),
+          }),
+      );
+      const { container, root } = mount(
+        <CardEditorApp
+          apiClient={makeApiClient(
+            () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+            saveEditorCardField,
+          )}
+        />,
+      );
+
+      await act(async () => {
+        await Promise.resolve();
+      });
+
+      const nameField = container.querySelector<HTMLElement>(
+        '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      );
+      if (nameField === null) {
+        throw new Error("Missing name field");
+      }
+
+      act(() => {
+        nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+      });
+
+      const input = container.querySelector<HTMLInputElement>(
+        '[data-editor-input-field="name"]',
+      );
+      if (input === null) {
+        throw new Error("Missing name input");
+      }
+
+      await act(async () => {
+        setInputValue(input, "Renamed Envoy");
+        pressKey(input, "Enter");
+        await Promise.resolve();
+        await Promise.resolve();
+      });
+
+      expect(nameField.textContent).toContain("Saved");
+
+      act(() => {
+        vi.advanceTimersByTime(1800);
+      });
+
+      expect(nameField.textContent).not.toContain("Saved");
+      expect(nameField.textContent).toContain("Renamed Envoy");
+
+      act(() => {
+        root.unmount();
+      });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("saves variable and integer energy costs through the UUID editor API", async () => {
