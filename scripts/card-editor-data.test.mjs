@@ -600,6 +600,37 @@ card-number = 1
     expect(parsed.cards[0]["energy-cost"]).toBe(4);
   });
 
+  it("does not patch metadata fields after a final card missing the target field", () => {
+    const source = `[[cards]]
+id = "${FIRST_ID}"
+rendered-text = "Missing a card name."
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+spark = ""
+card-number = 1
+
+[metadata]
+source = "test fixture"
+
+[[metadata.derived_columns]]
+name = "Metadata Name"
+expression = "cards.name"
+`;
+    let patchedSource = source;
+
+    expect(() => {
+      patchedSource = patchRenderedCardsToml(source, {
+        cardId: FIRST_ID,
+        field: "name",
+        value: "Patched Card Name",
+      }).source;
+    }).toThrow("Field name was not found in target card block");
+
+    expect(patchedSource).toBe(source);
+    expect(parse(source).metadata.derived_columns[0].name).toBe("Metadata Name");
+  });
+
   it("replaces the full literal multiline rendered text on a second multiline patch", () => {
     const source = fixtureToml();
     const firstRenderedText = "First line.\n\nspark = 99\nstale content.";

@@ -244,28 +244,50 @@ function toggledMultilineDelimiter(text, activeDelimiter) {
   return activeDelimiter;
 }
 
+function isTopLevelTableHeaderLine(line) {
+  return /^\s*(?:\[[^\[\]]+\]|\[\[[^\[\]]+\]\])\s*(?:#.*)?$/u.test(line.trimEnd());
+}
+
 function cardBlocks(source) {
-  const starts = [];
+  const blocks = [];
+  let currentStart = null;
   let offset = 0;
   let activeMultilineDelimiter = null;
 
   while (offset < source.length) {
     const end = lineEndIndex(source, offset);
     const line = source.slice(offset, end);
+    const isTopLevelHeader =
+      activeMultilineDelimiter === null && isTopLevelTableHeaderLine(line);
 
-    if (activeMultilineDelimiter === null && /^\s*\[\[cards\]\]\s*(?:#.*)?$/u.test(line.trimEnd())) {
-      starts.push(offset);
+    if (isTopLevelHeader) {
+      if (currentStart !== null) {
+        blocks.push({
+          start: currentStart,
+          end: offset,
+          text: source.slice(currentStart, offset),
+        });
+        currentStart = null;
+      }
+
+      if (/^\s*\[\[cards\]\]\s*(?:#.*)?$/u.test(line.trimEnd())) {
+        currentStart = offset;
+      }
     }
 
     activeMultilineDelimiter = toggledMultilineDelimiter(line, activeMultilineDelimiter);
     offset = end;
   }
 
-  return starts.map((start, index) => ({
-    start,
-    end: starts[index + 1] ?? source.length,
-    text: source.slice(start, starts[index + 1] ?? source.length),
-  }));
+  if (currentStart !== null) {
+    blocks.push({
+      start: currentStart,
+      end: source.length,
+      text: source.slice(currentStart),
+    });
+  }
+
+  return blocks;
 }
 
 function topLevelFieldOffset(blockText, field) {
