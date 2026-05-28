@@ -352,6 +352,28 @@ card-number = 2
     expect(parsed.cards[0]["rendered-text"]).toBe(renderedText);
     expect(parsed.cards[0].spark).toBe(5);
   });
+
+  it("replaces the full literal multiline rendered text on a second multiline patch", () => {
+    const source = fixtureToml();
+    const firstRenderedText = "First line.\n\nspark = 99\nstale content.";
+    const secondRenderedText = "Second line.\n\nenergy-cost = 99\nfresh content.";
+
+    const firstPatched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: firstRenderedText,
+    }).source;
+    const secondPatched = patchRenderedCardsToml(firstPatched, {
+      cardId: FIRST_ID,
+      field: "rendered-text",
+      value: secondRenderedText,
+    }).source;
+    const parsed = parse(secondPatched);
+
+    expect(parsed.cards[0]["rendered-text"]).toBe(secondRenderedText);
+    expect(secondPatched).not.toContain("stale content.");
+    expect(secondPatched).toContain("fresh content.");
+  });
 });
 
 describe("refreshCardDataJson", () => {

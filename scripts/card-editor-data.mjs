@@ -231,6 +231,21 @@ function findCardBlock(source, cardId) {
   });
 }
 
+function firstMultilineDelimiter(text) {
+  const delimiters = [
+    { delimiter: '"""', index: text.indexOf('"""') },
+    { delimiter: "'''", index: text.indexOf("'''") },
+  ].filter((candidate) => candidate.index !== -1);
+
+  if (delimiters.length === 0) {
+    return null;
+  }
+
+  return delimiters.reduce((earliest, candidate) =>
+    candidate.index < earliest.index ? candidate : earliest,
+  );
+}
+
 function fieldRangeInBlock(block, field) {
   const start = topLevelFieldOffset(block.text, field);
 
@@ -240,17 +255,17 @@ function fieldRangeInBlock(block, field) {
 
   const firstLineEnd = lineEndIndex(block.text, start);
   const firstLine = block.text.slice(start, firstLineEnd);
-  const firstTripleQuote = firstLine.indexOf('"""');
+  const multilineStart = firstMultilineDelimiter(firstLine);
 
-  if (firstTripleQuote === -1) {
+  if (multilineStart === null) {
     return {
       start: block.start + start,
       end: block.start + firstLineEnd,
     };
   }
 
-  const valueStart = start + firstTripleQuote + 3;
-  const valueEnd = block.text.indexOf('"""', valueStart);
+  const valueStart = start + multilineStart.index + multilineStart.delimiter.length;
+  const valueEnd = block.text.indexOf(multilineStart.delimiter, valueStart);
 
   if (valueEnd === -1) {
     throw new Error(`Field ${field} has an unterminated multiline string`);
