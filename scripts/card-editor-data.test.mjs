@@ -164,6 +164,8 @@ describe("validateCardEdit", () => {
     expect(validateCardEdit("energy-cost", "1.5").ok).toBe(false);
     expect(validateCardEdit("energy-cost", "abc").ok).toBe(false);
     expect(validateCardEdit("energy-cost", "x").ok).toBe(false);
+    expect(validateCardEdit("energy-cost", [1]).ok).toBe(false);
+    expect(validateCardEdit("energy-cost", null).ok).toBe(false);
   });
 
   it("accepts non-negative integer, variable, and blank spark values", () => {
@@ -179,6 +181,8 @@ describe("validateCardEdit", () => {
     expect(validateCardEdit("spark", "1.5").ok).toBe(false);
     expect(validateCardEdit("spark", "abc").ok).toBe(false);
     expect(validateCardEdit("spark", "x").ok).toBe(false);
+    expect(validateCardEdit("spark", []).ok).toBe(false);
+    expect(validateCardEdit("spark", {}).ok).toBe(false);
   });
 
   it("rejects empty card names after trimming surrounding input whitespace", () => {

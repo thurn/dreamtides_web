@@ -66,7 +66,11 @@ function validationSuccess(field, value) {
 }
 
 function validateNonNegativeIntegerOrVariable(field, rawValue, { allowBlank }) {
-  const value = typeof rawValue === "number" ? rawValue : String(rawValue).trim();
+  if (typeof rawValue !== "number" && typeof rawValue !== "string") {
+    return validationFailure(field, "Enter a non-negative whole number or X.", rawValue);
+  }
+
+  const value = typeof rawValue === "number" ? rawValue : rawValue.trim();
 
   if (allowBlank && value === "") {
     return validationSuccess(field, "");
