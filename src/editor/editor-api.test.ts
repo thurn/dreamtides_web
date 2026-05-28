@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { loadEditorCards } from "./editor-api";
+import { loadEditorCards, saveEditorCardField } from "./editor-api";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -45,6 +45,40 @@ describe("editor-api", () => {
     );
 
     await expect(loadEditorCards()).rejects.toThrow("Card source unavailable");
+  });
+
+  it("preserves structured validation errors from save responses", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        () =>
+          Promise.resolve(
+            new Response(
+              JSON.stringify({
+                error: {
+                  code: "INVALID_EDIT",
+                  details: { field: "name" },
+                  message: "Name cannot be blank.",
+                },
+              }),
+              { status: 400 },
+            ),
+          ),
+      ),
+    );
+
+    await expect(
+      saveEditorCardField({
+        field: "name",
+        id: "card-id",
+        value: "",
+      }),
+    ).rejects.toMatchObject({
+      code: "INVALID_EDIT",
+      details: { field: "name" },
+      message: "Name cannot be blank.",
+      status: 400,
+    });
   });
 
   it("passes an abort signal to the card load request", async () => {

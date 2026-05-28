@@ -80,6 +80,13 @@ function makeSaveTiming() {
   };
 }
 
+function serverValidationError(message: string): Error & { code: string; status: number } {
+  return Object.assign(new Error(message), {
+    code: "INVALID_EDIT",
+    status: 400,
+  });
+}
+
 function mount(element: ReactElement): {
   container: HTMLDivElement;
   root: Root;
@@ -1784,7 +1791,21 @@ describe("CardEditorApp", () => {
   it("restores the confirmed name and shows an error when a name save fails", async () => {
     const saveEditorCardField = vi
       .fn<EditorApiClient["saveEditorCardField"]>()
-      .mockRejectedValue(new Error("Disk write failed"));
+      .mockRejectedValueOnce(new Error("Disk write failed"))
+      .mockImplementationOnce((request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            name: String(request.value),
+            preview: makePreview({
+              id: request.id,
+              name: String(request.value),
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+      );
     const { container, root } = mount(
       <CardEditorApp
         apiClient={makeApiClient(
@@ -1825,6 +1846,155 @@ describe("CardEditorApp", () => {
     expect(container.textContent).toContain("Moonlit Envoy");
     expect(container.textContent).not.toContain("Broken Name");
     expect(container.textContent).toContain("Disk write failed");
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const retryInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (retryInput === null) {
+      throw new Error("Missing retry name input");
+    }
+
+    await act(async () => {
+      setInputValue(retryInput, "Recovered Name");
+      pressKey(retryInput, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField).toHaveBeenCalledTimes(2);
+    expect(container.textContent).toContain("Recovered Name");
+    expect(container.textContent).toContain("Saved");
+    expect(container.textContent).not.toContain("Disk write failed");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps a server-rejected name draft visible with the validation message", async () => {
+    const saveEditorCardField = vi
+      .fn<EditorApiClient["saveEditorCardField"]>()
+      .mockRejectedValue(serverValidationError("Name already exists."));
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (input === null) {
+      throw new Error("Missing name input");
+    }
+
+    await act(async () => {
+      setInputValue(input, "Duplicate Name");
+      pressKey(input, "Enter");
+      await flushAsyncWork();
+    });
+
+    const rejectedInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    expect(rejectedInput?.value).toBe("Duplicate Name");
+    expect(nameField.getAttribute("data-editor-save-status")).toBe("editing");
+    expect(nameField.textContent).toContain("Name already exists.");
+    expect(nameField.textContent).not.toContain("Moonlit Envoy");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("marks only the submitted field on the submitted card as saving", async () => {
+    const pendingSave = deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardField"]>>>();
+    const saveEditorCardField = vi
+      .fn<EditorApiClient["saveEditorCardField"]>()
+      .mockReturnValue(pendingSave.promise);
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () =>
+            Promise.resolve([
+              makeEditorCard({ id: "card-id-1" }),
+              makeEditorCard({
+                id: "card-id-2",
+                cardNumber: 13,
+                name: "Other Envoy",
+                preview: makePreview({
+                  id: "card-id-2",
+                  cardNumber: 13,
+                  name: "Other Envoy",
+                }),
+              }),
+            ]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const firstNameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    const firstSubtypeField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="subtype"]',
+    );
+    const secondNameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-2"] [data-editor-field="name"]',
+    );
+    if (
+      firstNameField === null ||
+      firstSubtypeField === null ||
+      secondNameField === null
+    ) {
+      throw new Error("Missing editable fields");
+    }
+
+    act(() => {
+      firstNameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const input = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (input === null) {
+      throw new Error("Missing name input");
+    }
+
+    act(() => {
+      setInputValue(input, "Saving Name");
+      pressKey(input, "Enter");
+    });
+
+    expect(firstNameField.getAttribute("data-editor-save-status")).toBe("saving");
+    expect(firstSubtypeField.getAttribute("data-editor-save-status")).toBe("idle");
+    expect(secondNameField.getAttribute("data-editor-save-status")).toBe("idle");
+    expect(firstNameField.textContent).toContain("Saving...");
+    expect(firstSubtypeField.textContent).not.toContain("Saving...");
+    expect(secondNameField.textContent).not.toContain("Saving...");
 
     act(() => {
       root.unmount();
@@ -1904,6 +2074,99 @@ describe("CardEditorApp", () => {
     });
 
     expect(container.textContent).toContain("Latest Draft");
+    expect(container.textContent).not.toContain("First Save");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("ignores a slow older save response after a newer edit is confirmed", async () => {
+    const firstSave = deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardField"]>>>();
+    const secondSave = deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardField"]>>>();
+    const saveEditorCardField = vi
+      .fn<EditorApiClient["saveEditorCardField"]>()
+      .mockReturnValueOnce(firstSave.promise)
+      .mockReturnValueOnce(secondSave.promise);
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const nameField = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+    );
+    if (nameField === null) {
+      throw new Error("Missing name field");
+    }
+
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const firstInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (firstInput === null) {
+      throw new Error("Missing first name input");
+    }
+
+    act(() => {
+      setInputValue(firstInput, "First Save");
+      pressKey(firstInput, "Enter");
+    });
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const secondInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (secondInput === null) {
+      throw new Error("Missing second name input");
+    }
+
+    act(() => {
+      setInputValue(secondInput, "Second Save");
+      pressKey(secondInput, "Enter");
+    });
+
+    await act(async () => {
+      secondSave.resolve({
+        card: makeEditorCard({
+          id: "card-id-1",
+          name: "Second Save",
+          preview: makePreview({ id: "card-id-1", name: "Second Save" }),
+        }),
+        clientRevision: saveEditorCardField.mock.calls[1]?.[0].clientRevision,
+        timing: makeSaveTiming(),
+      });
+      await Promise.resolve();
+    });
+
+    expect(container.textContent).toContain("Second Save");
+    expect(container.textContent).not.toContain("First Save");
+
+    await act(async () => {
+      firstSave.resolve({
+        card: makeEditorCard({
+          id: "card-id-1",
+          name: "First Save",
+          preview: makePreview({ id: "card-id-1", name: "First Save" }),
+        }),
+        clientRevision: saveEditorCardField.mock.calls[0]?.[0].clientRevision,
+        timing: makeSaveTiming(),
+      });
+      await Promise.resolve();
+    });
+
+    expect(container.textContent).toContain("Second Save");
     expect(container.textContent).not.toContain("First Save");
 
     act(() => {
