@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin } from "vite";
+import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -32,6 +33,17 @@ function questLogPlugin(): Plugin {
           res.end("ok");
         });
       });
+    },
+  };
+}
+
+/** Vite plugin that serves local card editor read/write endpoints. */
+function cardEditorApiPlugin(): Plugin {
+  return {
+    name: "card-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(createCardEditorApiMiddleware({ rootDir: __dirname }));
     },
   };
 }
@@ -85,7 +97,13 @@ function generatedCardDataDriftPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), questLogPlugin(), generatedCardDataDriftPlugin()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    questLogPlugin(),
+    cardEditorApiPlugin(),
+    generatedCardDataDriftPlugin(),
+  ],
   test: {
     include: [
       "src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",

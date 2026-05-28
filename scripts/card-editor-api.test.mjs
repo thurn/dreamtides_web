@@ -1,0 +1,332 @@
+// @vitest-environment node
+
+import { createServer } from "node:http";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { afterEach, describe, expect, it } from "vitest";
+import { createCardEditorApiMiddleware } from "./card-editor-api.mjs";
+
+const FIRST_ID = "11111111-1111-4111-8111-111111111111";
+const SECOND_ID = "22222222-2222-4222-8222-222222222222";
+const SPECIAL_ID = "33333333-3333-4333-8333-333333333333";
+const BANE_ID = "44444444-4444-4444-8444-444444444444";
+
+const servers = [];
+
+function fixtureToml() {
+  return `[[cards]]
+name = "First Card"
+id = "${FIRST_ID}"
+tides = ["event_chain"]
+rendered-text = "Draw a card."
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+is-fast = false
+spark = ""
+image-number = 1001
+art-owned = true
+card-number = 7
+
+[[cards]]
+name = "Second Card"
+id = "${SECOND_ID}"
+tides = ["void_recursion"]
+rendered-text = "Line two."
+energy-cost = 2
+card-type = "Character"
+subtype = "Guide"
+is-fast = false
+spark = 1
+image-number = 1002
+art-owned = false
+card-number = 7
+
+[[cards]]
+name = "Void Indicator"
+id = "${SPECIAL_ID}"
+tides = ["special"]
+rendered-text = "Filtered from runtime JSON."
+energy-cost = "*"
+card-type = "Event"
+subtype = ""
+rarity = "Special"
+is-fast = false
+spark = "*"
+image-number = 1003
+art-owned = false
+card-number = 999
+
+[[cards]]
+name = "Nightmare"
+id = "${BANE_ID}"
+tides = ["bane"]
+rendered-text = "Bane text."
+energy-cost = 0
+card-type = "Event"
+subtype = ""
+rarity = "Special"
+is-fast = false
+spark = ""
+image-number = 1004
+art-owned = false
+card-number = 1000
+`;
+}
+
+function writeFixtureRoot() {
+  const rootDir = mkdtempSync(join(tmpdir(), "quest-card-editor-api-"));
+  mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
+  mkdirSync(join(rootDir, "public"), { recursive: true });
+  writeFileSync(join(rootDir, "data", "tabula", "rendered-cards.toml"), fixtureToml());
+  writeFileSync(join(rootDir, "public", "card-data.json"), "[]\n");
+  return rootDir;
+}
+
+function readToml(rootDir) {
+  return readFileSync(join(rootDir, "data", "tabula", "rendered-cards.toml"), "utf8");
+}
+
+function readCardJson(rootDir) {
+  return readFileSync(join(rootDir, "public", "card-data.json"), "utf8");
+}
+
+async function startApi(rootDir) {
+  const middleware = createCardEditorApiMiddleware({ rootDir });
+  const server = createServer((req, res) => {
+    middleware(req, res, () => {
+      res.writeHead(418, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ next: true }));
+    });
+  });
+
+  await new Promise((resolve) => {
+    server.listen(0, "127.0.0.1", resolve);
+  });
+
+  servers.push(server);
+  const address = server.address();
+  return `http://${address.address}:${address.port}`;
+}
+
+async function requestJson(origin, path, init) {
+  const response = await fetch(`${origin}${path}`, init);
+  return {
+    response,
+    body: await response.json(),
+  };
+}
+
+afterEach(async () => {
+  await Promise.all(
+    servers.splice(0).map((server) => new Promise((resolve, reject) => {
+      server.close((error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    })),
+  );
+});
+
+describe("createCardEditorApiMiddleware", () => {
+  it("passes unrelated paths to next", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, "/other/path");
+
+    expect(response.status).toBe(418);
+    expect(body).toEqual({ next: true });
+  });
+
+  it("returns all source cards with UUID ids", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, "/api/editor/cards");
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toContain("application/json");
+    expect(body.cards.map((card) => card.id)).toEqual([FIRST_ID, SECOND_ID, SPECIAL_ID, BANE_ID]);
+    expect(body.cards.map((card) => card.cardNumber)).toEqual([7, 7, 999, 1000]);
+    for (const card of body.cards) {
+      expect(card.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u);
+    }
+  });
+
+  it("applies one valid field edit and refreshes card-data.json", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "name",
+        value: "Moonlit Envoy",
+        clientRevision: 12,
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    expect(body).toMatchObject({
+      card: {
+        id: FIRST_ID,
+        name: "Moonlit Envoy",
+      },
+      clientRevision: 12,
+    });
+    expect(body.timing.totalMs).toEqual(expect.any(Number));
+    expect(body.timing.patchMs).toEqual(expect.any(Number));
+    expect(readToml(rootDir)).toContain('name = "Moonlit Envoy"');
+    const cards = JSON.parse(readCardJson(rootDir));
+    expect(cards.map((card) => card.name)).toEqual(["Moonlit Envoy", "Second Card", "Nightmare"]);
+  });
+
+  it("returns 400 for route/body id mismatch and does not write files", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: SECOND_ID,
+        field: "name",
+        value: "Wrong Card",
+      }),
+    });
+
+    expect(response.status).toBe(400);
+    expect(body.error).toMatchObject({
+      code: "CARD_ID_MISMATCH",
+    });
+    expect(readToml(rootDir)).toBe(originalToml);
+    expect(readCardJson(rootDir)).toBe(originalCardJson);
+  });
+
+  it("returns 400 for card-type edits and does not write files", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "card-type",
+        value: "Character",
+      }),
+    });
+
+    expect(response.status).toBe(400);
+    expect(body.error).toMatchObject({
+      code: "INVALID_EDIT",
+      details: {
+        field: "card-type",
+      },
+    });
+    expect(readToml(rootDir)).toBe(originalToml);
+    expect(readCardJson(rootDir)).toBe(originalCardJson);
+  });
+
+  it("returns 400 with a structured error body for invalid JSON", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const response = await fetch(`${origin}/api/editor/cards/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: "{not json",
+    });
+    const body = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(body).toMatchObject({
+      error: {
+        code: "INVALID_JSON",
+        message: expect.any(String),
+      },
+    });
+  });
+
+  it("returns 404 for unknown UUID and does not write files", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+    const unknownId = "99999999-9999-4999-8999-999999999999";
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${unknownId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: unknownId,
+        field: "name",
+        value: "Unknown Card",
+      }),
+    });
+
+    expect(response.status).toBe(404);
+    expect(body.error).toMatchObject({
+      code: "CARD_NOT_FOUND",
+    });
+    expect(readToml(rootDir)).toBe(originalToml);
+    expect(readCardJson(rootDir)).toBe(originalCardJson);
+  });
+
+  it("does not accept card number as route identity", async () => {
+    const rootDir = writeFixtureRoot();
+    const originalToml = readToml(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, "/api/editor/cards/7", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: "7",
+        field: "name",
+        value: "Card Number Edit",
+      }),
+    });
+
+    expect(response.status).toBe(404);
+    expect(body.error).toMatchObject({
+      code: "CARD_NOT_FOUND",
+    });
+    expect(readToml(rootDir)).toBe(originalToml);
+    expect(readCardJson(rootDir)).toBe(originalCardJson);
+  });
+
+  it("returns 405 for unsupported methods under /api/editor/cards", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, "/api/editor/cards", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({}),
+    });
+
+    expect(response.status).toBe(405);
+    expect(response.headers.get("allow")).toBe("GET, PATCH");
+    expect(body.error).toMatchObject({
+      code: "METHOD_NOT_ALLOWED",
+    });
+  });
+});
