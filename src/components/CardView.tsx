@@ -183,6 +183,12 @@ export interface CardViewProps {
   large?: boolean;
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
+  /**
+   * When true, the corner pip tooltips and inline glossary-term popovers are
+   * suppressed. Surfaces that show many editable cards at once (the card
+   * editor) use this to keep hover behavior calm and non-distracting.
+   */
+  suppressHoverHelp?: boolean;
   /** Optional editor wrappers for individual rendered card slots. */
   slots?: CardViewSlots;
 }
@@ -199,6 +205,7 @@ export function CardView({
   className,
   large = false,
   hideRulesText = false,
+  suppressHoverHelp = false,
   slots = {},
 }: CardViewProps) {
   const [imageError, setImageError] = useState(false);
@@ -261,7 +268,7 @@ export function CardView({
       value={card.energyCost !== null ? String(card.energyCost) : "X"}
       size={large ? "md" : "sm"}
       scale={textScale}
-      tooltip={ENERGY_PIP_TOOLTIP}
+      tooltip={suppressHoverHelp ? undefined : ENERGY_PIP_TOOLTIP}
     />
   );
   const nameNode = (
@@ -324,7 +331,10 @@ export function CardView({
         lineHeight: large ? 1.35 : 1.18,
       }}
     >
-      {renderRulesText(card.renderedText, { pipScale: textScale })}
+      {renderRulesText(card.renderedText, {
+        pipScale: textScale,
+        disableGlossary: suppressHoverHelp,
+      })}
     </div>
   ) : (
     <div aria-hidden="true" className="min-h-0 flex-1" />
@@ -337,7 +347,7 @@ export function CardView({
           value={String(card.spark)}
           size={large ? "md" : "sm"}
           scale={textScale}
-          tooltip={SPARK_PIP_TOOLTIP}
+          tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}
         />
       </div>
     ) : null;

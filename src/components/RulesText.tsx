@@ -66,6 +66,12 @@ interface RulesTextProps {
 
 interface RenderRulesTextOptions {
   pipScale?: number;
+  /**
+   * When true, glossary terms render as plain text instead of underlined hover
+   * popovers. Surfaces that present many cards at once (e.g. the card editor)
+   * use this to keep the rules text calm and non-distracting.
+   */
+  disableGlossary?: boolean;
 }
 
 function renderSegment(
@@ -86,6 +92,9 @@ function renderSegment(
     );
   }
   if (segment.kind === "term") {
+    if (options.disableGlossary === true) {
+      return <span key={key}>{segment.word}</span>;
+    }
     return (
       <HoverPopover
         key={key}

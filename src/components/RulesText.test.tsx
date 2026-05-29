@@ -5,7 +5,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ENERGY_PIP_COLOR } from "./PipBadge";
-import { RulesText } from "./RulesText";
+import { renderRulesText, RulesText } from "./RulesText";
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -46,6 +46,24 @@ describe("RulesText", () => {
     );
     expect(triggerSpan).toBeDefined();
     expect(triggerSpan?.getAttribute("style")).toContain("text-decoration");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders glossary terms as plain text when glossary is disabled", () => {
+    const { container, root } = mount(
+      <div>{renderRulesText("Reclaim this card.", { disableGlossary: true })}</div>,
+    );
+
+    const reclaimSpan = Array.from(container.querySelectorAll("span")).find(
+      (s) => s.textContent === "Reclaim",
+    );
+    expect(reclaimSpan).toBeDefined();
+    expect(reclaimSpan?.getAttribute("style") ?? "").not.toContain(
+      "text-decoration",
+    );
 
     act(() => {
       root.unmount();
