@@ -28,6 +28,11 @@ export interface CardEditorGridProps {
     field: EditableCardField,
     value: EditableFieldValue,
   ) => void;
+  onFieldCommit: (
+    card: EditorCardRecord,
+    field: EditableCardField,
+    value: EditableFieldValue,
+  ) => void;
 }
 
 export default function CardEditorGrid({
@@ -38,6 +43,7 @@ export default function CardEditorGrid({
   onFieldDraftChange,
   onFieldCancel,
   onFieldSave,
+  onFieldCommit,
 }: CardEditorGridProps) {
   return (
     <div
@@ -86,6 +92,7 @@ export default function CardEditorGrid({
           onFieldDraftChange={onFieldDraftChange}
           onFieldCancel={onFieldCancel}
           onFieldSave={onFieldSave}
+          onFieldCommit={onFieldCommit}
         />
       ))}
     </div>

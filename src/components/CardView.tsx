@@ -339,18 +339,24 @@ export function CardView({
   ) : (
     <div aria-hidden="true" className="min-h-0 flex-1" />
   );
-  const sparkNode =
+  const sparkBadgeNode =
     card.spark !== null ? (
-      <div className="mt-auto flex items-center justify-end pt-0.5">
-        <PipBadge
-          variant="spark"
-          value={String(card.spark)}
-          size={large ? "md" : "sm"}
-          scale={textScale}
-          tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}
-        />
-      </div>
+      <PipBadge
+        variant="spark"
+        value={String(card.spark)}
+        size={large ? "md" : "sm"}
+        scale={textScale}
+        tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}
+      />
     ) : null;
+  // The spark corner container is owned by CardView (like the energy corner)
+  // so the badge — and any editor input a slot swaps in — stays pinned to the
+  // bottom-right. Slots receive the bare badge as their default node.
+  const renderedSparkContent = slots.spark?.(slotContext, sparkBadgeNode) ?? sparkBadgeNode;
+  const hasSparkContent =
+    renderedSparkContent !== null &&
+    renderedSparkContent !== undefined &&
+    renderedSparkContent !== false;
 
   return (
     <div
@@ -459,7 +465,11 @@ export function CardView({
         {slots.rulesText?.(slotContext, rulesTextNode) ?? rulesTextNode}
 
         {/* Spark badge for Characters */}
-        {slots.spark?.(slotContext, sparkNode) ?? sparkNode}
+        {hasSparkContent ? (
+          <div className="mt-auto flex items-center justify-end pt-0.5">
+            {renderedSparkContent}
+          </div>
+        ) : null}
       </div>
 
       {/* Bottom accent */}

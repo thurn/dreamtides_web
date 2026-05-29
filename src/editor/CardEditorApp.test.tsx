@@ -453,7 +453,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("saves blank event subtypes and leaves a restrained edit affordance", async () => {
+  it("saves blank event subtypes without an add-subtype placeholder", async () => {
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>
         Promise.resolve({
@@ -536,7 +536,7 @@ describe("CardEditorApp", () => {
     ).toBe("Event");
     expect(
       editorCard.querySelector('[data-editor-subtype-placeholder="true"]'),
-    ).not.toBeNull();
+    ).toBeNull();
     const subtypeSelect = container.querySelector<HTMLSelectElement>(
       '[aria-label="Subtype filter"]',
     );
@@ -549,7 +549,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("saves whitespace-only subtypes verbatim and shows blank subtype affordance", async () => {
+  it("saves whitespace-only subtypes verbatim without a placeholder", async () => {
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>
         Promise.resolve({
@@ -632,7 +632,7 @@ describe("CardEditorApp", () => {
     ).toBe("Event");
     expect(
       editorCard.querySelector('[data-editor-subtype-placeholder="true"]'),
-    ).not.toBeNull();
+    ).toBeNull();
     expect(subtypeField.textContent).not.toContain("   ");
     const subtypeSelect = container.querySelector<HTMLSelectElement>(
       '[aria-label="Subtype filter"]',
@@ -734,44 +734,24 @@ describe("CardEditorApp", () => {
     { cardId: "character-blank-subtype", initialSubtype: "" },
     { cardId: "character-hidden-subtype", initialSubtype: "*" },
   ])(
-    "renders an editable subtype placeholder for Character subtype '$initialSubtype'",
+    "renders no subtype affordance for blank Character subtype '$initialSubtype'",
     async ({ cardId, initialSubtype }) => {
-      const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
-        (request) =>
-          Promise.resolve({
-            card: makeEditorCard({
-              id: request.id,
-              cardType: "Character",
-              subtype: String(request.value),
-              source: { subtype: String(request.value) },
-              preview: makePreview({
-                id: request.id,
-                cardType: "Character",
-                subtype: String(request.value),
-              }),
-            }),
-            clientRevision: request.clientRevision,
-            timing: makeSaveTiming(),
-          }),
-      );
       const { container, root } = mount(
         <CardEditorApp
-          apiClient={makeApiClient(
-            () =>
-              Promise.resolve([
-                makeEditorCard({
+          apiClient={makeApiClient(() =>
+            Promise.resolve([
+              makeEditorCard({
+                id: cardId,
+                cardType: "Character",
+                subtype: initialSubtype,
+                source: { subtype: initialSubtype },
+                preview: makePreview({
                   id: cardId,
                   cardType: "Character",
                   subtype: initialSubtype,
-                  source: { subtype: initialSubtype },
-                  preview: makePreview({
-                    id: cardId,
-                    cardType: "Character",
-                    subtype: initialSubtype,
-                  }),
                 }),
-              ]),
-            saveEditorCardField,
+              }),
+            ]),
           )}
         />,
       );
@@ -783,45 +763,18 @@ describe("CardEditorApp", () => {
       const editorCard = container.querySelector<HTMLElement>(
         `[data-editor-card-id="${cardId}"]`,
       );
-      const subtypeField = editorCard?.querySelector<HTMLElement>(
-        '[data-editor-field="subtype"]',
-      );
-      if (editorCard === null || subtypeField === null || subtypeField === undefined) {
-        throw new Error("Missing Character subtype field");
+      if (editorCard === null) {
+        throw new Error("Missing editor card");
       }
 
+      // A blank-subtype character shows no subtype text, no editable subtype
+      // field, and no add-subtype placeholder chip.
+      expect(
+        editorCard.querySelector('[data-editor-field="subtype"]'),
+      ).toBeNull();
       expect(
         editorCard.querySelector('[data-editor-subtype-placeholder="true"]'),
-      ).not.toBeNull();
-
-      act(() => {
-        subtypeField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
-      });
-      const input = container.querySelector<HTMLInputElement>(
-        '[data-editor-input-field="subtype"]',
-      );
-      if (input === null) {
-        throw new Error("Missing subtype input");
-      }
-
-      await act(async () => {
-        setInputValue(input, "Guide");
-        pressKey(input, "Enter");
-        await flushAsyncWork();
-      });
-
-      expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-        id: cardId,
-        field: "subtype",
-        value: "Guide",
-      });
-      expect(subtypeField.textContent).toContain("Guide");
-      const subtypeSelect = container.querySelector<HTMLSelectElement>(
-        '[aria-label="Subtype filter"]',
-      );
-      expect(
-        Array.from(subtypeSelect?.options ?? []).map((option) => option.value),
-      ).toEqual(["", "Guide"]);
+      ).toBeNull();
 
       act(() => {
         root.unmount();
@@ -913,7 +866,7 @@ describe("CardEditorApp", () => {
     act(() => {
       setInputValue(input, "Renamed Envoy");
     });
-    expect(container.textContent).toContain("Renamed Envoy");
+    expect(input.value).toBe("Renamed Envoy");
 
     await act(async () => {
       pressKey(input, "Enter");
@@ -935,8 +888,19 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("cancels name edits with Escape and does not save on blur", async () => {
-    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>();
+  it("discards name edits with Escape and saves them on blur", async () => {
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            name: String(request.value),
+            preview: makePreview({ id: request.id, name: String(request.value) }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
     const { container, root } = mount(
       <CardEditorApp
         apiClient={makeApiClient(
@@ -957,33 +921,51 @@ describe("CardEditorApp", () => {
       throw new Error("Missing name field");
     }
 
+    // Escape discards the draft without writing.
     act(() => {
       nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
     });
-
-    const input = container.querySelector<HTMLInputElement>(
+    const escapeInput = container.querySelector<HTMLInputElement>(
       '[data-editor-input-field="name"]',
     );
-    if (input === null) {
+    if (escapeInput === null) {
       throw new Error("Missing name input");
     }
-
     act(() => {
-      setInputValue(input, "Draft Name");
-      input.dispatchEvent(new FocusEvent("blur", { bubbles: true }));
-    });
-
-    expect(saveEditorCardField).not.toHaveBeenCalled();
-    expect(container.textContent).toContain("Draft Name");
-
-    act(() => {
-      pressKey(input, "Escape");
+      setInputValue(escapeInput, "Draft Name");
+      pressKey(escapeInput, "Escape");
     });
 
     expect(container.querySelector('[data-editor-input-field="name"]')).toBeNull();
     expect(container.textContent).toContain("Moonlit Envoy");
     expect(container.textContent).not.toContain("Draft Name");
     expect(saveEditorCardField).not.toHaveBeenCalled();
+
+    // Blur (click away) commits the current value.
+    act(() => {
+      nameField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const blurInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-input-field="name"]',
+    );
+    if (blurInput === null) {
+      throw new Error("Missing reopened name input");
+    }
+    act(() => {
+      setInputValue(blurInput, "Blurred Name");
+    });
+    await act(async () => {
+      // React delegates onBlur to the bubbling focusout event.
+      blurInput.dispatchEvent(new FocusEvent("focusout", { bubbles: true }));
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "card-id-1",
+      field: "name",
+      value: "Blurred Name",
+    });
+    expect(container.textContent).toContain("Blurred Name");
 
     act(() => {
       root.unmount();
@@ -1522,7 +1504,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("renders initial variable spark as an editable X pip", async () => {
+  it("renders no spark pip for variable spark, matching the card renderer", async () => {
     const { container, root } = mount(
       <CardEditorApp
         apiClient={makeApiClient(() =>
@@ -1548,9 +1530,9 @@ describe("CardEditorApp", () => {
       throw new Error("Missing editor card");
     }
 
-    expect(
-      editorCard.querySelector('[data-pip-variant="spark"]')?.textContent,
-    ).toContain("X");
+    // Variable spark normalizes to null in the preview, so CardView (and the
+    // editor) show no spark pip and no add-spark placeholder.
+    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
     expect(
       editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
     ).toBeNull();
@@ -1583,8 +1565,8 @@ describe("CardEditorApp", () => {
             Promise.resolve([
               makeEditorCard({
                 id: "card-id-1",
-                spark: "",
-                preview: makePreview({ id: "card-id-1", spark: null }),
+                spark: 2,
+                preview: makePreview({ id: "card-id-1", spark: 2 }),
               }),
             ]),
           saveEditorCardField,
@@ -1635,7 +1617,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("opens spark editing from the placeholder, saves variable spark, and reopens with X", async () => {
+  it("saves variable spark from a numeric pip and drops the pip to match the renderer", async () => {
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>
         Promise.resolve({
@@ -1658,8 +1640,8 @@ describe("CardEditorApp", () => {
             Promise.resolve([
               makeEditorCard({
                 id: "card-id-1",
-                spark: "",
-                preview: makePreview({ id: "card-id-1", spark: null }),
+                spark: 2,
+                preview: makePreview({ id: "card-id-1", spark: 2 }),
               }),
             ]),
           saveEditorCardField,
@@ -1678,11 +1660,12 @@ describe("CardEditorApp", () => {
       '[data-editor-field="spark"]',
     );
     if (editorCard === null || sparkField === null || sparkField === undefined) {
-      throw new Error("Missing spark placeholder field");
+      throw new Error("Missing spark field");
     }
-    expect(
-      editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
-    ).not.toBeNull();
+    // Editing opens from the existing numeric pip and shows X for variable.
+    expect(editorCard.querySelector('[data-pip-variant="spark"]')?.textContent).toContain(
+      "2",
+    );
 
     act(() => {
       sparkField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
@@ -1705,25 +1688,13 @@ describe("CardEditorApp", () => {
       field: "spark",
       value: "*",
     });
-    expect(
-      editorCard.querySelector('[data-pip-variant="spark"]')?.textContent,
-    ).toContain("X");
+    // Variable spark normalizes to null, so the pip disappears just like the
+    // shared renderer.
+    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
     expect(
       editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
     ).toBeNull();
     expect(sparkField.textContent).toContain("Saved");
-
-    act(() => {
-      sparkField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
-    });
-    const reopenedInput = container.querySelector<HTMLInputElement>(
-      '[data-editor-input-field="spark"]',
-    );
-    if (reopenedInput === null) {
-      throw new Error("Missing reopened spark input");
-    }
-
-    expect(reopenedInput.value).toBe("X");
 
     act(() => {
       root.unmount();
@@ -2230,7 +2201,11 @@ describe("CardEditorApp", () => {
       await Promise.resolve();
     });
 
-    expect(container.textContent).toContain("Latest Draft");
+    expect(
+      container.querySelector<HTMLInputElement>(
+        '[data-editor-input-field="name"]',
+      )?.value,
+    ).toBe("Latest Draft");
     expect(container.textContent).not.toContain("First Save");
 
     act(() => {

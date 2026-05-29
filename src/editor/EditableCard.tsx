@@ -1,7 +1,6 @@
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { CardView } from "../components/CardView";
 import type { CardViewSlots } from "../components/CardView";
-import { PipBadge } from "../components/PipBadge";
 import EditableField from "./EditableField";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type { EditableCardField, EditorCardRecord, EditorDisplayState } from "./types";
@@ -30,27 +29,15 @@ export interface EditableCardProps {
     field: EditableCardField,
     value: EditableFieldValue,
   ) => void;
-}
-
-function readOnlySlot(field: string, defaultNode: ReactNode) {
-  return (
-    <div data-editor-readonly-field={field} style={{ display: "contents" }}>
-      {defaultNode}
-    </div>
-  );
+  onFieldCommit: (
+    card: EditorCardRecord,
+    field: EditableCardField,
+    value: EditableFieldValue,
+  ) => void;
 }
 
 function displayEditorValue(value: EditableFieldValue): EditableFieldValue {
   return value === "*" ? "X" : value;
-}
-
-function isVariableEditorValue(value: EditableFieldValue): boolean {
-  const textValue = String(value).trim();
-  return textValue === "*" || textValue === "X";
-}
-
-function isBlankEditorValue(value: EditableFieldValue): boolean {
-  return String(value).trim() === "";
 }
 
 function numericPreviewValue(
@@ -70,50 +57,6 @@ function numericPreviewValue(
   return null;
 }
 
-function sparkPlaceholder() {
-  return (
-    <span
-      aria-label="spark placeholder"
-      data-editor-spark-placeholder="true"
-      style={{
-        alignItems: "center",
-        border: "1px dashed rgba(250, 204, 21, 0.65)",
-        borderRadius: "999px",
-        color: "rgba(250, 204, 21, 0.82)",
-        display: "inline-flex",
-        fontSize: "0.7rem",
-        fontWeight: 900,
-        height: "20px",
-        justifyContent: "center",
-        lineHeight: 1,
-        width: "20px",
-      }}
-    >
-      +
-    </span>
-  );
-}
-
-function subtypePlaceholder() {
-  return (
-    <span
-      data-editor-subtype-placeholder="true"
-      style={{
-        border: "1px dashed rgba(226, 232, 240, 0.42)",
-        borderRadius: "4px",
-        color: "rgba(226, 232, 240, 0.68)",
-        display: "inline-block",
-        fontSize: "0.72em",
-        fontWeight: 800,
-        lineHeight: 1.1,
-        padding: "1px 4px",
-      }}
-    >
-      Add subtype
-    </span>
-  );
-}
-
 export default function EditableCard({
   card,
   size,
@@ -126,7 +69,10 @@ export default function EditableCard({
   onFieldDraftChange,
   onFieldCancel,
   onFieldSave,
+  onFieldCommit,
 }: EditableCardProps) {
+  const cardRef = useRef<HTMLElement | null>(null);
+
   const visibleName = String(nameSaveEntry?.draftValue ?? card.name);
   const visibleEnergyCost = numericPreviewValue(
     energySaveEntry?.draftValue ?? card["energy-cost"],
@@ -136,15 +82,6 @@ export default function EditableCard({
     sparkSaveEntry?.draftValue ?? card.spark,
     { allowBlank: true },
   );
-  const showVariableSpark = isVariableEditorValue(
-    sparkSaveEntry?.draftValue ?? card.spark,
-  );
-  const hasConfirmedBlankSparkSave =
-    sparkSaveEntry?.status === "saved" &&
-    isBlankEditorValue(sparkSaveEntry.confirmedValue);
-  const hasPendingBlankSparkSave =
-    sparkSaveEntry?.status === "saving" &&
-    isBlankEditorValue(sparkSaveEntry.draftValue);
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
   const visibleRulesText = String(
     rulesTextSaveEntry?.draftValue ?? card["rendered-text"],
@@ -157,53 +94,67 @@ export default function EditableCard({
     spark: visibleSpark,
     subtype: visibleSubtype,
   };
-  const renderSubtypeEditor = (children: ReactNode) => (
+
+  // Common props for an editable region. EditableField is a `display: contents`
+  // wrapper, so the rendered card geometry is exactly CardView's; the editor
+  // only swaps in an input on the same spot while a field is being edited and
+  // floats its save status in a fixed overlay.
+  const fieldProps = (
+    field: EditableCardField,
+    value: EditableFieldValue,
+    saveEntry: EditableFieldSaveEntry | null,
+  ) => ({
+    field,
+    value,
+    saveEntry,
+    cardAnchorRef: cardRef,
+    onBeginEdit: (next: EditableFieldValue) =>
+      onFieldBeginEdit(card, field, next),
+    onDraftChange: (next: EditableFieldValue) =>
+      onFieldDraftChange(card, field, next),
+    onCancel: () => onFieldCancel(card, field),
+    onSave: (next: EditableFieldValue) => onFieldSave(card, field, next),
+    onCommit: (next: EditableFieldValue) => onFieldCommit(card, field, next),
+  });
+
+  const renderSubtypeField = (children: ReactNode) => (
     <EditableField
-      field="subtype"
+      {...fieldProps("subtype", card.subtype, subtypeSaveEntry)}
       layout="inline"
-      value={card.subtype}
-      saveEntry={subtypeSaveEntry}
-      onBeginEdit={(value) => onFieldBeginEdit(card, "subtype", value)}
-      onDraftChange={(value) => onFieldDraftChange(card, "subtype", value)}
-      onCancel={() => onFieldCancel(card, "subtype")}
-      onSave={(value) => onFieldSave(card, "subtype", value)}
     >
       {children}
     </EditableField>
   );
+
   const slots: CardViewSlots = {
     energy: (_context, defaultNode) => (
       <EditableField
-        field="energy-cost"
+        {...fieldProps(
+          "energy-cost",
+          displayEditorValue(card["energy-cost"]),
+          energySaveEntry,
+        )}
         layout="pip"
-        value={displayEditorValue(card["energy-cost"])}
-        saveEntry={energySaveEntry}
-        onBeginEdit={(value) =>
-          onFieldBeginEdit(card, "energy-cost", value)}
-        onDraftChange={(value) =>
-          onFieldDraftChange(card, "energy-cost", value)}
-        onCancel={() => onFieldCancel(card, "energy-cost")}
-        onSave={(value) => onFieldSave(card, "energy-cost", value)}
       >
         {defaultNode}
       </EditableField>
     ),
     name: (_context, defaultNode) => (
-      <EditableField
-        field="name"
-        value={card.name}
-        saveEntry={nameSaveEntry}
-        onBeginEdit={(value) => onFieldBeginEdit(card, "name", value)}
-        onDraftChange={(value) => onFieldDraftChange(card, "name", value)}
-        onCancel={() => onFieldCancel(card, "name")}
-        onSave={(value) => onFieldSave(card, "name", value)}
-      >
+      <EditableField {...fieldProps("name", card.name, nameSaveEntry)}>
         {defaultNode}
       </EditableField>
     ),
     typeLineContent: (context, defaultNode) => {
       const subtype = context.card.subtype.trim();
       const hasSubtype = subtype !== "" && subtype !== "*";
+      const editingSubtype = subtypeSaveEntry?.status === "editing";
+      // Keep the subtype field mounted while a save is in flight or just
+      // settled so its floating status badge has a home even when the saved
+      // value is blank.
+      const subtypeActive =
+        subtypeSaveEntry !== null && subtypeSaveEntry.status !== "idle";
+      const showSubtypeText = hasSubtype || editingSubtype;
+      const mountSubtypeField = showSubtypeText || subtypeActive;
 
       if (context.card.cardType === "Event") {
         return (
@@ -211,97 +162,70 @@ export default function EditableCard({
             <span data-editor-type-line-card-type="true">
               {context.card.cardType}
             </span>
-            <span aria-hidden="true"> — </span>
-            {renderSubtypeEditor(
-              hasSubtype ? (
-                <span>{subtype}</span>
-              ) : (
-                subtypePlaceholder()
-              ),
-            )}
+            {mountSubtypeField ? (
+              <>
+                {showSubtypeText ? <span aria-hidden="true"> — </span> : null}
+                {renderSubtypeField(
+                  hasSubtype ? <span>{subtype}</span> : <span />,
+                )}
+              </>
+            ) : null}
           </span>
         );
       }
 
-      if (hasSubtype) {
-        return renderSubtypeEditor(<span className="truncate">{subtype}</span>);
-      }
-
-      if (context.card.cardType === "Character") {
-        return renderSubtypeEditor(subtypePlaceholder());
+      if (mountSubtypeField) {
+        return renderSubtypeField(
+          hasSubtype ? <span className="truncate">{subtype}</span> : <span />,
+        );
       }
 
       return defaultNode;
     },
     rulesText: (_context, defaultNode) => (
       <EditableField
-        field="rendered-text"
+        {...fieldProps("rendered-text", card["rendered-text"], rulesTextSaveEntry)}
         mode="multiline"
-        value={card["rendered-text"]}
-        saveEntry={rulesTextSaveEntry}
-        onBeginEdit={(value) => onFieldBeginEdit(card, "rendered-text", value)}
-        onDraftChange={(value) =>
-          onFieldDraftChange(card, "rendered-text", value)}
-        onCancel={() => onFieldCancel(card, "rendered-text")}
-        onSave={(value) => onFieldSave(card, "rendered-text", value)}
       >
-        {readOnlySlot("rendered-text", defaultNode)}
+        {defaultNode}
       </EditableField>
     ),
-    spark: (context, defaultNode) => (
-      <div className="mt-auto flex items-center justify-end pt-0.5">
+    spark: (_context, defaultNode) => {
+      const sparkActive =
+        sparkSaveEntry !== null && sparkSaveEntry.status !== "idle";
+      if (!sparkActive && defaultNode === null) {
+        // No spark value: match CardView and render nothing. The editor does
+        // not offer an "add spark" affordance. While a save is in flight or
+        // settled the field stays mounted so its status badge has a home.
+        return null;
+      }
+
+      // CardView owns the bottom-right spark container, so this stays a stable
+      // EditableField in both display and edit states (no remount on edit).
+      return (
         <EditableField
-          field="spark"
+          {...fieldProps("spark", displayEditorValue(card.spark), sparkSaveEntry)}
           layout="pip"
-          value={displayEditorValue(card.spark)}
-          saveEntry={sparkSaveEntry}
-          onBeginEdit={(value) => onFieldBeginEdit(card, "spark", value)}
-          onDraftChange={(value) => onFieldDraftChange(card, "spark", value)}
-          onCancel={() => onFieldCancel(card, "spark")}
-          onSave={(value) => onFieldSave(card, "spark", value)}
         >
-          {showVariableSpark ? (
-            <PipBadge
-              ariaLabel="variable spark"
-              variant="spark"
-              value="X"
-              size={context.large ? "md" : "sm"}
-              scale={context.textScale}
-            />
-          ) : hasPendingBlankSparkSave || hasConfirmedBlankSparkSave ? null : (
-            defaultNode ?? sparkPlaceholder()
-          )}
+          {defaultNode}
         </EditableField>
-      </div>
-    ),
+      );
+    },
   };
 
   return (
     <article
+      ref={cardRef}
       aria-label={visibleName}
       data-editor-card-id={card.id}
-      style={{
-        display: "grid",
-        gap: "10px",
-        justifyItems: "center",
-      }}
+      style={{ display: "block" }}
     >
       <CardView
         card={visibleCard}
         large={size === "large"}
-        hideRulesText={size === "small"}
+        suppressHoverHelp
         slots={slots}
       />
-      <div
-        style={{
-          color: "#f7f1df",
-          fontSize: "0.9rem",
-          fontWeight: 800,
-          textAlign: "center",
-        }}
-      >
-        #{card.cardNumber} {visibleName}
-      </div>
     </article>
   );
 }

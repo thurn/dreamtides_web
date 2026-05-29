@@ -343,9 +343,26 @@ export default function CardEditorApp({
     field: EditableCardField,
     value: EditableFieldValue,
   ) {
-    setEditorSaveState((current) =>
-      beginFieldEdit(current, { cardId: card.id, field }, value),
-    );
+    setEditorSaveState((current) => {
+      // Only one inline editor is open at a time. Clicking into a new field
+      // normally blurs (and saves) the previous one first; this also closes
+      // any other field still in edit mode as a safety net so two inputs can
+      // never appear together.
+      let next = current;
+      for (const entry of Object.values(current.fields)) {
+        if (
+          entry.status === "editing" &&
+          !(entry.cardId === card.id && entry.field === field)
+        ) {
+          next = cancelFieldEdit(
+            next,
+            { cardId: entry.cardId, field: entry.field },
+            entry.confirmedValue,
+          );
+        }
+      }
+      return beginFieldEdit(next, { cardId: card.id, field }, value);
+    });
   }
 
   function handleFieldDraftChange(
@@ -371,6 +388,25 @@ export default function CardEditorApp({
         confirmedFieldValue(card, field),
       ),
     );
+  }
+
+  function handleFieldCommit(
+    card: EditorCardRecord,
+    field: EditableCardField,
+    value: EditableFieldValue,
+  ) {
+    // Blur / click-away commit. An unchanged or invalid value simply closes the
+    // editor without writing; a valid change is saved like an Enter confirm.
+    const validation = validateFieldSave(field, value);
+    if (
+      !validation.ok ||
+      String(validation.value) === String(confirmedFieldValue(card, field))
+    ) {
+      handleFieldCancel(card, field);
+      return;
+    }
+
+    handleFieldSave(card, field, value);
   }
 
   function replaceConfirmedCard(nextCard: EditorCardRecord) {
@@ -578,6 +614,7 @@ export default function CardEditorApp({
                 onFieldDraftChange={handleFieldDraftChange}
                 onFieldCancel={handleFieldCancel}
                 onFieldSave={handleFieldSave}
+                onFieldCommit={handleFieldCommit}
               />
             )}
           </div>
