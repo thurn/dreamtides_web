@@ -215,7 +215,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("renders the title and source-card count after a successful load", async () => {
+  it("renders the title and visible-card count after a successful load", async () => {
     const cards = [
       makeEditorCard({ id: "card-id-1" }),
       makeEditorCard({ id: "card-id-2", cardNumber: 13 }),
@@ -229,7 +229,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(container.textContent).toContain("Card Editor");
-    expect(container.textContent).toContain("2 source cards");
+    expect(container.textContent).toContain("2 / 2 cards");
     expect(container.querySelector("main")?.getAttribute("aria-busy")).toBe(
       "false",
     );
@@ -2595,7 +2595,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(loadEditorCards).toHaveBeenCalledTimes(2);
-    expect(container.textContent).toContain("1 source cards");
+    expect(container.textContent).toContain("1 / 1 cards");
 
     act(() => {
       root.unmount();
@@ -2677,7 +2677,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("filters by name and rules text while replacing the URL", async () => {
+  it("searches names by default and rules text only when opted in", async () => {
     const cards = [
       makeEditorCard({
         id: "moon-card",
@@ -2716,33 +2716,41 @@ describe("CardEditorApp", () => {
     const searchInput = container.querySelector<HTMLInputElement>(
       '[aria-label="Search cards"]',
     );
+    const rulesScopeToggle = container.querySelector<HTMLInputElement>(
+      '[aria-label="Search rules text"]',
+    );
 
-    if (searchInput === null) {
-      throw new Error("Missing search input");
+    if (searchInput === null || rulesScopeToggle === null) {
+      throw new Error("Missing search controls");
     }
 
+    // Name search matches a card name only.
+    act(() => {
+      setInputValue(searchInput, "moon");
+    });
+    expect(container.textContent).toContain("1 / 3 cards");
+    expect(editorCardIds(container)).toEqual(["moon-card"]);
+    expect(replaceState).toHaveBeenLastCalledWith(null, "", "/editor?q=moon");
+
+    // A rules-text-only term matches nothing while scoped to names.
     act(() => {
       setInputValue(searchInput, "shield");
     });
+    expect(container.textContent).toContain("0 / 3 cards");
+    expect(editorCardIds(container)).toEqual([]);
+    expect(replaceState).toHaveBeenLastCalledWith(null, "", "/editor?q=shield");
 
-    expect(searchInput.value).toBe("shield");
+    // Opting into rules-text search surfaces the rules-text match.
+    act(() => {
+      rulesScopeToggle.click();
+    });
     expect(container.textContent).toContain("1 / 3 cards");
     expect(editorCardIds(container)).toEqual(["rules-card"]);
     expect(replaceState).toHaveBeenLastCalledWith(
       null,
       "",
-      "/editor?q=shield",
+      "/editor?q=shield&scope=all",
     );
-    expect(pushState).not.toHaveBeenCalled();
-
-    act(() => {
-      setInputValue(searchInput, "moon");
-    });
-
-    expect(searchInput.value).toBe("moon");
-    expect(container.textContent).toContain("1 / 3 cards");
-    expect(editorCardIds(container)).toEqual(["moon-card"]);
-    expect(replaceState).toHaveBeenLastCalledWith(null, "", "/editor?q=moon");
     expect(pushState).not.toHaveBeenCalled();
 
     act(() => {

@@ -2,6 +2,7 @@ import type {
   EditorCardSize,
   EditorCostFilter,
   EditorDisplayState,
+  EditorSearchScope,
   EditorSortDirection,
   EditorSortField,
   EditorTypeFilter,
@@ -9,6 +10,7 @@ import type {
 
 export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   searchText: "",
+  searchScope: "name",
   type: "all",
   cost: "all",
   subtype: "",
@@ -46,6 +48,7 @@ const SORT_FIELD_TO_PARAM: Record<EditorSortField, string> = {
 };
 const DIR_VALUES = new Set<EditorSortDirection>(["asc", "desc"]);
 const SIZE_VALUES = new Set<EditorCardSize>(["small", "medium", "large"]);
+const SCOPE_VALUES = new Set<EditorSearchScope>(["name", "all"]);
 
 function paramsFromSearch(search: string | URLSearchParams): URLSearchParams {
   return new URLSearchParams(search);
@@ -88,6 +91,12 @@ function parseSize(value: string | null): EditorCardSize {
     : DEFAULT_EDITOR_DISPLAY_STATE.size;
 }
 
+function parseScope(value: string | null): EditorSearchScope {
+  return value !== null && SCOPE_VALUES.has(value as EditorSearchScope)
+    ? (value as EditorSearchScope)
+    : DEFAULT_EDITOR_DISPLAY_STATE.searchScope;
+}
+
 export function parseEditorDisplayState(
   search: string | URLSearchParams = window.location.search,
 ): EditorDisplayState {
@@ -95,6 +104,7 @@ export function parseEditorDisplayState(
 
   return {
     searchText: params.get("q") ?? DEFAULT_EDITOR_DISPLAY_STATE.searchText,
+    searchScope: parseScope(params.get("scope")),
     type: parseType(params.get("type")),
     cost: parseCost(params.get("cost")),
     subtype: params.get("subtype") ?? DEFAULT_EDITOR_DISPLAY_STATE.subtype,
@@ -111,6 +121,9 @@ export function serializeEditorDisplayState(
 
   if (state.searchText !== DEFAULT_EDITOR_DISPLAY_STATE.searchText) {
     params.set("q", state.searchText);
+  }
+  if (state.searchScope !== DEFAULT_EDITOR_DISPLAY_STATE.searchScope) {
+    params.set("scope", state.searchScope);
   }
   if (state.type !== DEFAULT_EDITOR_DISPLAY_STATE.type) {
     params.set("type", state.type);

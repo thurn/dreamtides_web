@@ -44,6 +44,7 @@ describe("editor URL display state", () => {
   it("serializes non-default controls into stable query params", () => {
     const state: EditorDisplayState = {
       searchText: "",
+      searchScope: "all",
       type: "character",
       cost: "5plus",
       subtype: "Scout",
@@ -53,11 +54,25 @@ describe("editor URL display state", () => {
     };
 
     expect(serializeEditorDisplayState(state).toString()).toBe(
-      "type=character&cost=5plus&subtype=Scout&sort=cost&dir=desc&size=large",
+      "scope=all&type=character&cost=5plus&subtype=Scout&sort=cost&dir=desc&size=large",
     );
     expect(parseEditorDisplayState(serializeEditorDisplayState(state))).toEqual(
       state,
     );
+  });
+
+  it("round-trips the rules-text search scope through scope", () => {
+    expect(parseEditorDisplayState("?q=shield&scope=all")).toMatchObject({
+      searchText: "shield",
+      searchScope: "all",
+    });
+    expect(parseEditorDisplayState("?scope=bogus").searchScope).toBe("name");
+    expect(
+      serializeEditorDisplayState({
+        ...DEFAULT_EDITOR_DISPLAY_STATE,
+        searchScope: "name",
+      }).toString(),
+    ).toBe("");
   });
 
   it("omits empty and default values", () => {

@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
 import type {
   EditorCardSize,
   EditorCostFilter,
   EditorDisplayState,
-  EditorSortDirection,
   EditorSortField,
   EditorTypeFilter,
 } from "./types";
@@ -35,8 +35,8 @@ const COST_OPTIONS: Array<{ value: EditorCostFilter; label: string }> = [
 ];
 
 const SORT_OPTIONS: Array<{ value: EditorSortField; label: string }> = [
-  { value: "cardNumber", label: "Number" },
   { value: "name", label: "Name" },
+  { value: "cardNumber", label: "Number" },
   { value: "cost", label: "Cost" },
   { value: "type", label: "Type" },
   { value: "subtype", label: "Subtype" },
@@ -50,57 +50,77 @@ const SIZE_OPTIONS: Array<{ value: EditorCardSize; label: string }> = [
 ];
 
 const toolbarStyle = {
-  display: "grid",
+  display: "flex",
+  flexDirection: "column",
+  gap: "10px",
+  flex: "0 0 auto",
+} satisfies CSSProperties;
+
+const barStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: "12px",
+  flexWrap: "wrap",
+  padding: "8px 12px",
+  border: "1px solid rgba(247, 241, 223, 0.16)",
+  borderRadius: "8px",
+  background: "rgba(18, 28, 31, 0.96)",
+} satisfies CSSProperties;
+
+const panelStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+  alignItems: "flex-end",
   gap: "14px",
-  alignItems: "end",
-  padding: "18px",
-  border: "1px solid rgba(247, 241, 223, 0.18)",
+  padding: "14px",
+  border: "1px solid rgba(247, 241, 223, 0.16)",
   borderRadius: "8px",
   background: "rgba(18, 28, 31, 0.96)",
 } satisfies CSSProperties;
 
 const labelStyle = {
   display: "grid",
-  gap: "7px",
+  gap: "6px",
   minWidth: 0,
   color: "#c9d3cf",
-  fontSize: "0.82rem",
+  fontSize: "0.78rem",
   fontWeight: 700,
 } satisfies CSSProperties;
 
 const inputStyle = {
-  minHeight: "42px",
+  minHeight: "36px",
   boxSizing: "border-box",
   border: "1px solid rgba(247, 241, 223, 0.28)",
   borderRadius: "6px",
   background: "#0f1719",
   color: "#fff7e0",
-  padding: "0 12px",
+  padding: "0 10px",
   font: "inherit",
 } satisfies CSSProperties;
 
 const segmentedStyle = {
   display: "inline-flex",
-  width: "100%",
+  width: "fit-content",
   boxSizing: "border-box",
-  minHeight: "42px",
+  minHeight: "36px",
   border: "1px solid rgba(247, 241, 223, 0.24)",
   borderRadius: "6px",
   overflow: "hidden",
 } satisfies CSSProperties;
 
-function segmentButtonStyle(active: boolean, interactive: boolean): CSSProperties {
+function segmentButtonStyle(active: boolean): CSSProperties {
   return {
-    minHeight: "42px",
+    minHeight: "34px",
     border: 0,
     borderRight: "1px solid rgba(247, 241, 223, 0.16)",
-    background: active ? (interactive ? "#36a398" : "#2d8a80") : interactive ? "#1f3438" : "#121c1f",
+    background: active ? "#2d8a80" : "#16242a",
     color: active ? "#ffffff" : "#d9e1dd",
-    padding: "0 10px",
+    padding: "0 12px",
     font: "inherit",
     fontWeight: 800,
+    fontSize: "0.82rem",
     cursor: "pointer",
-    boxShadow: interactive ? "inset 0 0 0 1px rgba(247, 241, 223, 0.22)" : undefined,
   };
 }
 
@@ -111,22 +131,43 @@ interface SegmentButtonProps {
 }
 
 function SegmentButton({ active, children, onClick }: SegmentButtonProps) {
-  const [interactive, setInteractive] = useState(false);
-
   return (
     <button
       type="button"
       aria-pressed={active}
       onClick={onClick}
-      onFocus={() => setInteractive(true)}
-      onBlur={() => setInteractive(false)}
-      onMouseEnter={() => setInteractive(true)}
-      onMouseLeave={() => setInteractive(false)}
-      style={segmentButtonStyle(active, interactive)}
+      style={segmentButtonStyle(active)}
     >
       {children}
     </button>
   );
+}
+
+/** Display-state fields treated as "filters" by the Filters chip and Clear. */
+function activeFilterCount(state: EditorDisplayState): number {
+  let count = 0;
+  if (state.searchText.trim() !== DEFAULT_EDITOR_DISPLAY_STATE.searchText) {
+    count += 1;
+  }
+  if (state.searchScope !== DEFAULT_EDITOR_DISPLAY_STATE.searchScope) {
+    count += 1;
+  }
+  if (state.type !== DEFAULT_EDITOR_DISPLAY_STATE.type) {
+    count += 1;
+  }
+  if (state.cost !== DEFAULT_EDITOR_DISPLAY_STATE.cost) {
+    count += 1;
+  }
+  if (state.subtype !== DEFAULT_EDITOR_DISPLAY_STATE.subtype) {
+    count += 1;
+  }
+  if (state.sort !== DEFAULT_EDITOR_DISPLAY_STATE.sort) {
+    count += 1;
+  }
+  if (state.dir !== DEFAULT_EDITOR_DISPLAY_STATE.dir) {
+    count += 1;
+  }
+  return count;
 }
 
 export default function CardEditorToolbar({
@@ -136,6 +177,11 @@ export default function CardEditorToolbar({
   totalCount,
   onDisplayStateChange,
 }: CardEditorToolbarProps) {
+  const panelId = useId();
+  const [expanded, setExpanded] = useState(
+    () => activeFilterCount(displayState) > 0,
+  );
+
   const loadedSubtypeOptions = subtypeOptions.filter(
     (subtype) => subtype.trim().length > 0,
   );
@@ -152,8 +198,22 @@ export default function CardEditorToolbar({
     });
   };
 
-  const nextDirection: EditorSortDirection =
-    displayState.dir === "asc" ? "desc" : "asc";
+  const filterCount = activeFilterCount(displayState);
+  const isDescending = displayState.dir === "desc";
+
+  const clearFilters = () => {
+    // Reset every search/filter/sort field to its default while preserving the
+    // card-size view preference, which lives in the always-visible bar.
+    updateDisplayState({
+      searchText: DEFAULT_EDITOR_DISPLAY_STATE.searchText,
+      searchScope: DEFAULT_EDITOR_DISPLAY_STATE.searchScope,
+      type: DEFAULT_EDITOR_DISPLAY_STATE.type,
+      cost: DEFAULT_EDITOR_DISPLAY_STATE.cost,
+      subtype: DEFAULT_EDITOR_DISPLAY_STATE.subtype,
+      sort: DEFAULT_EDITOR_DISPLAY_STATE.sort,
+      dir: DEFAULT_EDITOR_DISPLAY_STATE.dir,
+    });
+  };
 
   return (
     <section
@@ -161,141 +221,239 @@ export default function CardEditorToolbar({
       className="card-editor-toolbar"
       style={toolbarStyle}
     >
-      <label style={labelStyle}>
-        Search
-        <input
-          aria-label="Search cards"
-          type="search"
-          value={displayState.searchText}
-          onChange={(event) =>
-            updateDisplayState({ searchText: event.currentTarget.value })
-          }
-          placeholder="Name or rules text"
-          style={inputStyle}
-        />
-      </label>
-
-      <div style={labelStyle}>
-        Type
-        <div aria-label="Type filter" role="group" style={segmentedStyle}>
-          {TYPE_OPTIONS.map((option) => (
-            <SegmentButton
-              key={option.value}
-              active={displayState.type === option.value}
-              onClick={() => updateDisplayState({ type: option.value })}
-            >
-              {option.label}
-            </SegmentButton>
-          ))}
-        </div>
-      </div>
-
-      <label style={labelStyle}>
-        Cost
-        <select
-          aria-label="Cost filter"
-          value={displayState.cost}
-          onChange={(event) =>
-            updateDisplayState({
-              cost: event.currentTarget.value as EditorCostFilter,
-            })
-          }
-          style={inputStyle}
-        >
-          {COST_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label style={labelStyle}>
-        Subtype
-        <select
-          aria-label="Subtype filter"
-          value={displayState.subtype}
-          onChange={(event) =>
-            updateDisplayState({ subtype: event.currentTarget.value })
-          }
-          style={inputStyle}
-        >
-          <option value="">Any subtype</option>
-          {visibleSubtypeOptions.map((subtype) => (
-            <option key={subtype} value={subtype}>
-              {subtype}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <label style={labelStyle}>
-        Sort
-        <select
-          aria-label="Sort field"
-          value={displayState.sort}
-          onChange={(event) =>
-            updateDisplayState({
-              sort: event.currentTarget.value as EditorSortField,
-            })
-          }
-          style={inputStyle}
-        >
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <div style={labelStyle}>
-        Direction
-        <button
-          type="button"
-          aria-label="Sort direction"
-          aria-pressed={displayState.dir === "desc"}
-          onClick={() => updateDisplayState({ dir: nextDirection })}
+      <div className="card-editor-toolbar-bar" style={barStyle}>
+        <div
+          aria-live="polite"
+          aria-label="Visible card count"
           style={{
-            ...inputStyle,
-            cursor: "pointer",
+            color: "#f3d46b",
             fontWeight: 800,
-            background: displayState.dir === "desc" ? "#2d8a80" : "#121c1f",
+            fontSize: "0.92rem",
+            whiteSpace: "nowrap",
           }}
         >
-          {displayState.dir === "asc" ? "Ascending" : "Descending"}
-        </button>
-      </div>
+          {visibleCount} / {totalCount} cards
+        </div>
 
-      <div style={labelStyle}>
-        Size
-        <div aria-label="Card size" role="group" style={segmentedStyle}>
-          {SIZE_OPTIONS.map((option) => (
-            <SegmentButton
-              key={option.value}
-              active={displayState.size === option.value}
-              onClick={() => updateDisplayState({ size: option.value })}
-            >
-              {option.label}
-            </SegmentButton>
-          ))}
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div aria-label="Card size" role="group" style={segmentedStyle}>
+            {SIZE_OPTIONS.map((option) => (
+              <SegmentButton
+                key={option.value}
+                active={displayState.size === option.value}
+                onClick={() => updateDisplayState({ size: option.value })}
+              >
+                {option.label}
+              </SegmentButton>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            aria-expanded={expanded}
+            aria-controls={panelId}
+            onClick={() => setExpanded((value) => !value)}
+            style={{
+              ...inputStyle,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              cursor: "pointer",
+              fontWeight: 800,
+              background: expanded ? "#1f3438" : "#16242a",
+            }}
+          >
+            <span>Filters</span>
+            {filterCount > 0 ? (
+              <span
+                aria-hidden="true"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minWidth: "18px",
+                  height: "18px",
+                  padding: "0 5px",
+                  borderRadius: "999px",
+                  background: "#36a398",
+                  color: "#06201d",
+                  fontSize: "0.72rem",
+                  fontWeight: 900,
+                }}
+              >
+                {filterCount}
+              </span>
+            ) : null}
+            <span aria-hidden="true" style={{ fontSize: "0.7rem" }}>
+              {expanded ? "▴" : "▾"}
+            </span>
+          </button>
         </div>
       </div>
 
       <div
-        aria-live="polite"
-        aria-label="Visible card count"
-        style={{
-          minHeight: "42px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          color: "#f3d46b",
-          fontWeight: 800,
-          whiteSpace: "nowrap",
-        }}
+        id={panelId}
+        className="card-editor-toolbar-panel"
+        hidden={!expanded}
+        style={panelStyle}
       >
-        {visibleCount} / {totalCount} cards
+        <label style={{ ...labelStyle, flex: "1 1 220px" }}>
+          Search
+          <input
+            aria-label="Search cards"
+            type="search"
+            value={displayState.searchText}
+            onChange={(event) =>
+              updateDisplayState({ searchText: event.currentTarget.value })
+            }
+            placeholder={
+              displayState.searchScope === "all"
+                ? "Name or rules text"
+                : "Card name"
+            }
+            style={inputStyle}
+          />
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              color: "#9fb0ab",
+              fontSize: "0.74rem",
+              fontWeight: 600,
+            }}
+          >
+            <input
+              aria-label="Search rules text"
+              type="checkbox"
+              checked={displayState.searchScope === "all"}
+              onChange={(event) =>
+                updateDisplayState({
+                  searchScope: event.currentTarget.checked ? "all" : "name",
+                })
+              }
+              style={{ accentColor: "#36a398", cursor: "pointer" }}
+            />
+            Search rules text
+          </span>
+        </label>
+
+        <div style={labelStyle}>
+          Type
+          <div aria-label="Type filter" role="group" style={segmentedStyle}>
+            {TYPE_OPTIONS.map((option) => (
+              <SegmentButton
+                key={option.value}
+                active={displayState.type === option.value}
+                onClick={() => updateDisplayState({ type: option.value })}
+              >
+                {option.label}
+              </SegmentButton>
+            ))}
+          </div>
+        </div>
+
+        <label style={labelStyle}>
+          Cost
+          <select
+            aria-label="Cost filter"
+            value={displayState.cost}
+            onChange={(event) =>
+              updateDisplayState({
+                cost: event.currentTarget.value as EditorCostFilter,
+              })
+            }
+            style={inputStyle}
+          >
+            {COST_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label style={labelStyle}>
+          Subtype
+          <select
+            aria-label="Subtype filter"
+            value={displayState.subtype}
+            onChange={(event) =>
+              updateDisplayState({ subtype: event.currentTarget.value })
+            }
+            style={inputStyle}
+          >
+            <option value="">Any subtype</option>
+            {visibleSubtypeOptions.map((subtype) => (
+              <option key={subtype} value={subtype}>
+                {subtype}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <div style={labelStyle}>
+          Sort
+          <div style={{ display: "flex", gap: "6px" }}>
+            <select
+              aria-label="Sort field"
+              value={displayState.sort}
+              onChange={(event) =>
+                updateDisplayState({
+                  sort: event.currentTarget.value as EditorSortField,
+                })
+              }
+              style={inputStyle}
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <button
+              type="button"
+              aria-label="Sort direction"
+              aria-pressed={isDescending}
+              title={isDescending ? "Descending" : "Ascending"}
+              onClick={() =>
+                updateDisplayState({ dir: isDescending ? "asc" : "desc" })
+              }
+              style={{
+                ...inputStyle,
+                width: "38px",
+                padding: 0,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                fontSize: "1rem",
+                fontWeight: 800,
+              }}
+            >
+              <span aria-hidden="true">{isDescending ? "↓" : "↑"}</span>
+            </button>
+          </div>
+        </div>
+
+        <div style={{ ...labelStyle, color: "transparent" }}>
+          {" "}
+          <button
+            type="button"
+            aria-label="Clear filters"
+            onClick={clearFilters}
+            disabled={filterCount === 0}
+            style={{
+              ...inputStyle,
+              cursor: filterCount === 0 ? "not-allowed" : "pointer",
+              fontWeight: 800,
+              color: filterCount === 0 ? "#6c7a76" : "#fff7e0",
+              opacity: filterCount === 0 ? 0.6 : 1,
+            }}
+          >
+            Clear filters
+          </button>
+        </div>
       </div>
     </section>
   );

@@ -197,7 +197,8 @@ describe("CardEditorToolbar", () => {
     expect(costSelect.value).toBe("x");
     expect(subtypeSelect.value).toBe("Scout");
     expect(sortSelect.value).toBe("spark");
-    expect(directionButton.textContent).toBe("Descending");
+    expect(directionButton.getAttribute("aria-pressed")).toBe("true");
+    expect(directionButton.getAttribute("title")).toBe("Descending");
     expect(largeButton.getAttribute("aria-pressed")).toBe("true");
     expect(onChange).toHaveBeenLastCalledWith({
       ...DEFAULT_EDITOR_DISPLAY_STATE,

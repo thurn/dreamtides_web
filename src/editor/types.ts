@@ -42,9 +42,15 @@ export type EditorSortField =
   | "spark";
 export type EditorSortDirection = "asc" | "desc";
 export type EditorCardSize = "small" | "medium" | "large";
+/**
+ * Which card fields the search box matches against. `name` (the default)
+ * searches only card names; `all` additionally searches rules text.
+ */
+export type EditorSearchScope = "name" | "all";
 
 export interface EditorDisplayState {
   searchText: string;
+  searchScope: EditorSearchScope;
   type: EditorTypeFilter;
   cost: EditorCostFilter;
   subtype: string;

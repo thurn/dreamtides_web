@@ -61,6 +61,7 @@ function isServerValidationError(error: unknown): boolean {
 function displayStateDataAttributes(displayState: EditorDisplayState) {
   return {
     "data-editor-search": displayState.searchText,
+    "data-editor-scope": displayState.searchScope,
     "data-editor-type": displayState.type,
     "data-editor-cost": displayState.cost,
     "data-editor-subtype": displayState.subtype,
@@ -70,8 +71,15 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
   };
 }
 
-function cardSearchText(card: EditorCardRecord): string {
-  return `${card.name} ${card["rendered-text"]} ${card.preview.name} ${card.preview.renderedText}`;
+function cardSearchText(
+  card: EditorCardRecord,
+  scope: EditorDisplayState["searchScope"],
+): string {
+  if (scope === "all") {
+    return `${card.name} ${card["rendered-text"]} ${card.preview.name} ${card.preview.renderedText}`;
+  }
+
+  return `${card.name} ${card.preview.name}`;
 }
 
 function displayType(card: EditorCardRecord): string {
@@ -147,7 +155,9 @@ function filteredAndSortedCards(
     .filter(({ card }) => {
       if (
         searchText !== "" &&
-        !cardSearchText(card).toLowerCase().includes(searchText)
+        !cardSearchText(card, displayState.searchScope)
+          .toLowerCase()
+          .includes(searchText)
       ) {
         return false;
       }
@@ -481,7 +491,7 @@ export default function CardEditorApp({
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
-        padding: "32px",
+        padding: "16px 20px",
         background: "#101417",
         color: "#f7f1df",
         fontFamily:
@@ -492,52 +502,33 @@ export default function CardEditorApp({
         className="card-editor-header"
         style={{
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "24px",
+          alignItems: "baseline",
+          gap: "10px",
           flex: "0 0 auto",
-          borderBottom: "1px solid rgba(247, 241, 223, 0.18)",
-          paddingBottom: "20px",
         }}
       >
-        <div>
-          <p
-            style={{
-              margin: "0 0 8px",
-              color: "#8edbd1",
-              fontSize: "0.82rem",
-              fontWeight: 700,
-              letterSpacing: "0",
-              textTransform: "uppercase",
-            }}
-          >
-            Source Cards
-          </p>
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "2rem",
-              lineHeight: 1.1,
-              letterSpacing: "0",
-            }}
-          >
-            Card Editor
-          </h1>
-        </div>
-        {loadStatus.kind === "loaded" ? (
-          <div
-            aria-label="source card count"
-            className="card-editor-source-count"
-            style={{
-              color: "#f3d46b",
-              fontSize: "1rem",
-              fontWeight: 700,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {loadStatus.cards.length} source cards
-          </div>
-        ) : null}
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "1.05rem",
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: "0",
+          }}
+        >
+          Card Editor
+        </h1>
+        <span
+          aria-hidden="true"
+          style={{ color: "rgba(247, 241, 223, 0.35)" }}
+        >
+          ·
+        </span>
+        <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
+          {loadStatus.kind === "loaded"
+            ? "Card source editor"
+            : "Loading…"}
+        </span>
       </header>
 
       <section
@@ -547,7 +538,7 @@ export default function CardEditorApp({
           flex: "1 1 auto",
           flexDirection: "column",
           minHeight: 0,
-          paddingTop: "28px",
+          paddingTop: "12px",
         }}
       >
         {loadStatus.kind === "loading" ? (
@@ -563,7 +554,7 @@ export default function CardEditorApp({
               display: "flex",
               flex: "1 1 auto",
               flexDirection: "column",
-              gap: "22px",
+              gap: "12px",
               minHeight: 0,
             }}
           >
