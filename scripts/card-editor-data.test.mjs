@@ -111,23 +111,15 @@ function blockFor(source, id) {
 }
 
 describe("readEditorCards", () => {
-  it("loads every source card in TOML order, including Special records filtered from runtime JSON", () => {
+  it("loads source cards in TOML order, excluding Special-rarity records", () => {
     const rootDir = writeFixtureRoot();
 
     const cards = readEditorCards({ rootDir });
 
-    expect(cards.map((card) => card.id)).toEqual([FIRST_ID, SECOND_ID, SPECIAL_ID, BANE_ID]);
-    expect(cards.at(-2)).toMatchObject({
-      id: SPECIAL_ID,
-      cardNumber: 999,
-      rarity: "Special",
-      preview: {
-        id: SPECIAL_ID,
-        cardNumber: 999,
-        energyCost: null,
-        spark: null,
-      },
-    });
+    expect(cards.map((card) => card.id)).toEqual([FIRST_ID, SECOND_ID]);
+    expect(cards.some((card) => card.rarity === "Special")).toBe(false);
+    expect(cards.some((card) => card.id === SPECIAL_ID)).toBe(false);
+    expect(cards.some((card) => card.id === BANE_ID)).toBe(false);
   });
 
   it("exposes UUID identity separately from cardNumber content metadata", () => {

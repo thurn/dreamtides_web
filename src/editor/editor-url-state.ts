@@ -12,7 +12,7 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   type: "all",
   cost: "all",
   subtype: "",
-  sort: "cardNumber",
+  sort: "name",
   dir: "asc",
   size: "medium",
 };

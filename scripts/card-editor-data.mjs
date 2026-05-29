@@ -45,7 +45,12 @@ function editorRecordFromCard(card) {
 }
 
 export function readEditorCards({ rootDir = ROOT } = {}) {
-  return readSourceCards(rootDir).map(editorRecordFromCard);
+  // The editor does not display Special-rarity records: the only two are the
+  // "Void Indicator Card" placeholder and the "Nightmare" bane, neither of
+  // which is meaningful to edit through the card editor.
+  return readSourceCards(rootDir)
+    .filter((card) => card.rarity !== "Special")
+    .map(editorRecordFromCard);
 }
 
 function validationFailure(field, message, value) {

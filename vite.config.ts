@@ -66,8 +66,10 @@ export function generatedCardDataDriftPlugin(): Plugin {
     result: ReturnType<typeof checkGeneratedCardData>,
     server: ViteDevServer,
   ): void => {
+    // Stay silent on the success path: card edits trigger this check on every
+    // save, and logging a "matches" line each time floods the dev console.
+    // Drift is still surfaced loudly below.
     if (result.ok) {
-      console.info(`[card-data] ${result.message}`);
       return;
     }
 
@@ -98,7 +100,6 @@ export function generatedCardDataDriftPlugin(): Plugin {
       if (!initialResult.ok) {
         throw new Error(initialResult.message);
       }
-      console.info(`[card-data] ${initialResult.message}`);
 
       let pendingCheck: ReturnType<typeof setTimeout> | null = null;
       const scheduleCheck = (): void => {

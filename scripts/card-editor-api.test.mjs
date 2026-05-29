@@ -247,7 +247,7 @@ describe("createCardEditorApiMiddleware", () => {
     expect(body).toEqual({ next: true });
   });
 
-  it("returns all source cards with UUID ids", async () => {
+  it("returns source cards with UUID ids, excluding Special-rarity records", async () => {
     const rootDir = writeFixtureRoot();
     const origin = await startApi(rootDir);
 
@@ -255,8 +255,8 @@ describe("createCardEditorApiMiddleware", () => {
 
     expect(response.status).toBe(200);
     expect(response.headers.get("content-type")).toContain("application/json");
-    expect(body.cards.map((card) => card.id)).toEqual([FIRST_ID, SECOND_ID, SPECIAL_ID, BANE_ID]);
-    expect(body.cards.map((card) => card.cardNumber)).toEqual([7, 7, 999, 1000]);
+    expect(body.cards.map((card) => card.id)).toEqual([FIRST_ID, SECOND_ID]);
+    expect(body.cards.map((card) => card.cardNumber)).toEqual([7, 7]);
     for (const card of body.cards) {
       expect(card.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u);
     }
