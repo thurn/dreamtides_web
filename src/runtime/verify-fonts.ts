@@ -138,6 +138,19 @@ export async function verifyFonts(): Promise<void> {
     return;
   }
 
+  // Fonts declared via @font-face (how Google Fonts delivers them) load
+  // lazily: the browser only fetches a family once an element using it is laid
+  // out. At startup — before the first cards render — no element references
+  // these families, so document.fonts.ready resolves immediately and a probe
+  // would measure the not-yet-loaded fallback and report a false positive.
+  // Explicitly request each required family so the fonts are fetched
+  // regardless of what is currently on screen, then wait for them to settle.
+  await Promise.all(
+    REQUIRED_FONTS.map((font) =>
+      document.fonts.load(`1em "${font.family}"`).catch(() => undefined),
+    ),
+  );
+
   try {
     await document.fonts.ready;
   } catch {
