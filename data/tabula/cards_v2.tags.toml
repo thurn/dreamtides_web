@@ -105,3 +105,7 @@ color = "#166534"
 [[tags]]
 name = "Spark Scaler"
 color = "#a21caf"
+
+[[tags]]
+name = "Score Trigger"
+color = "#d97706"
