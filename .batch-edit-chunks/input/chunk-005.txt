@@ -1,0 +1,197 @@
+[[cards]]
+name = "Duskshore Virtuoso"
+mtg-name = "Thing in the Ice // Awoken Horror"
+id = "8d35aec1-29ad-432c-9c23-25a52804cbae"
+tides = []
+rendered-text = """
+When you play an event, store 1⧗.
+
+3⧗: This character gains +5✦."""
+energy-cost = 2
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 2
+tags = ["Event Payoff"]
+image-number = 631097744
+art-owned = false
+card-number = 41
+
+[[cards]]
+name = "Sylvan Matriarch"
+mtg-name = "Arwen, Weaver of Hope"
+id = "89c0d03c-2199-415a-bc66-89e451034328"
+tides = []
+rendered-text = "When you materialize a non-figment character, it gains +X✦ where X is this character's ✦."
+energy-cost = 4
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 1
+tags = []
+image-number = 2415692455
+art-owned = false
+card-number = 42
+
+[[cards]]
+name = "Starshot Gunner"
+mtg-name = "Aether Spellbomb"
+id = "a9b5afaa-e149-4bf4-9007-077e8e9f12e6"
+tides = []
+rendered-text = "1●, Abandon this character: Return a character to hand."
+energy-cost = 1
+card-type = "Character"
+subtype = "Warrior"
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 1
+tags = []
+image-number = 432001924
+art-owned = false
+card-number = 43
+
+[[cards]]
+name = "Desolation's Edge"
+mtg-name = "Ratchet Bomb"
+id = "8855e20c-e23f-4499-a5e8-a7a46ff81d2b"
+tides = []
+rendered-text = """
+☪: Store 1⧗.
+
+Abandon this character: Dissolve each character with cost less than or equal to the stored ⧗."""
+energy-cost = 2
+card-type = "Character"
+subtype = "Warrior"
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 2
+tags = []
+image-number = 776481895
+art-owned = false
+card-number = 44
+
+[[cards]]
+name = "Soulflame Predator"
+mtg-name = "Stonecloaker"
+id = "401bb341-8385-41e9-8f6f-7b48e9ce174d"
+tides = []
+rendered-text = "▸Materialized: Banish a card from the opponent's void."
+energy-cost = 1
+card-type = "Character"
+subtype = "Spirit Animal"
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 2
+tags = []
+image-number = 2278837667
+art-owned = false
+card-number = 45
+
+[[cards]]
+name = "Nomad of Endless Paths"
+mtg-name = "Stonecloaker"
+id = "44ae8838-4714-43a5-a7bd-e9f806f35ca9"
+tides = []
+rendered-text = """
+Unstoppable.
+
+▸Materialized: Return another ally to hand."""
+energy-cost = 2
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = true
+is-interrupt = false
+spark = 5
+tags = []
+image-number = 1529898275
+art-owned = false
+card-number = 46
+
+[[cards]]
+name = "Conduit of Ashes"
+mtg-name = "Lotus Petal"
+id = "eae928f6-aab2-415e-b4b1-b9c3ed8e6818"
+tides = []
+rendered-text = "Abandon this character: Gain 1●."
+energy-cost = 0
+card-type = "Character"
+subtype = "Spirit Animal"
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 0
+tags = ["Lotus Petal"]
+image-number = 1053081881
+art-owned = false
+card-number = 47
+
+[[cards]]
+name = "Ghostlight Wolves"
+mtg-name = "Elvish Archdruid"
+id = "c8579b20-95ff-4b1d-b4c6-6bd049fc4760"
+tides = []
+rendered-text = """
+☪: Gain 1● for each allied spirit animal.
+
+Support – Supported spirit animals have +2✦."""
+energy-cost = 3
+card-type = "Character"
+subtype = "Spirit Animal"
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 2
+tags = ["Spirit Lord"]
+image-number = 2127752129
+art-owned = false
+card-number = 48
+
+[[cards]]
+name = "Eternal Stag"
+mtg-name = "Elvish Archdruid"
+id = "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6"
+tides = []
+rendered-text = """
+Allied spirit animals have +1✦.
+
+2●, ☪: Draw a spirit animal."""
+energy-cost = 2
+card-type = "Character"
+subtype = "Spirit Animal"
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 3
+tags = ["Spirit Lord"]
+image-number = 1543022372
+art-owned = false
+card-number = 49
+
+[[cards]]
+name = "Avatar of Cosmic Reckoning"
+mtg-name = "Marionette Apprentice"
+id = "cbabe603-1333-42bd-85c0-555c664b60b3"
+tides = []
+rendered-text = '''
+▸Materialized: Materialize a 1✦ ethereal figment.
+
+When an ally is dissolved, gain 1⍟.'''
+energy-cost = 3
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 1
+tags = ["Blood Artist", "Score Trigger"]
+image-number = 2287054243
+art-owned = false
+card-number = 50
