@@ -19,6 +19,8 @@
     "setup-assets": "node scripts/setup-assets.mjs"
   },
   "dependencies": {
+    "@dicebear/collection": "^9.4.2",
+    "@dicebear/core": "^9.4.2",
     "boxicons": "^2.1.4",
     "firebase": "^12.13.0",
     "framer-motion": "^12.6.3",

@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode, RefObject } from "react";
 import type { CardData, FrozenCardData, Rarity } from "../types/cards";
-import { cardImageUrl } from "../data/card-database";
+import {
+  cardIdenticonUri,
+  cardImageUrl,
+  hasAssignedImage,
+} from "../data/card-database";
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { PipBadge } from "./PipBadge";
@@ -217,6 +221,14 @@ export function CardView({
     setImageError(false);
   }, [card.imageNumber]);
 
+  // Cards whose art has not been keyed yet (e.g. cards_v2) render a generated
+  // identicon, seeded by the stable card id, instead of attempting a missing
+  // image load.
+  const hasImage = hasAssignedImage(card.imageNumber);
+  const identiconUri = hasImage
+    ? null
+    : cardIdenticonUri(card.id !== "" ? card.id : card.name);
+
   const accentColor = CHARACTER_CHROME_COLOR;
   const chromeColor =
     card.cardType === "Event" ? EVENT_CHROME_COLOR : accentColor;
@@ -417,7 +429,15 @@ export function CardView({
 
       {/* Card art area */}
       <div className="relative w-full" style={{ height: "45%" }}>
-        {!imageError ? (
+        {identiconUri !== null ? (
+          <img
+            src={identiconUri}
+            alt={`${card.name} identicon`}
+            className="h-full w-full object-cover"
+            draggable={false}
+            loading="lazy"
+          />
+        ) : !imageError ? (
           <img
             src={cardImageUrl(card.imageNumber)}
             alt={card.name}
