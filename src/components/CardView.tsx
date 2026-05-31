@@ -11,7 +11,6 @@ import { computeCardTextScale } from "./card-display-scale";
 import {
   CARD_ART_ASPECT_RATIO,
   CARD_FRAME_ASPECT_RATIO,
-  FRAME_LAYOUT,
   cardFrameUrl,
 } from "./card-assets";
 import { CardStatOrb } from "./CardStatOrb";
@@ -25,25 +24,26 @@ import { renderRulesText } from "./RulesText";
  */
 const SELECTION_DEFAULT_COLOR = "#f97316";
 
-/** Card name / type typography. */
-const NAME_FONT_FAMILY = '"EB Garamond", Georgia, serif';
-const NAME_COLOR = "#ffffff";
-/** Rules text typography. */
-const RULES_FONT_FAMILY = '"Fira Sans Condensed", "Inter", sans-serif';
-const RULES_COLOR = "#1a1714";
+/** Card name / type / rules text colors and fonts, as CSS-var references so the
+ * `.card-view` rule in `index.css` is the single place these are tuned. */
+const NAME_COLOR = "var(--cv-name-color)";
+const NAME_FONT_FAMILY = "var(--cv-name-font-family)";
+const RULES_COLOR = "var(--cv-rules-color)";
+const RULES_FONT_FAMILY = "var(--cv-rules-font-family)";
 
 /**
- * Fonts auto-shrink to fit their box; these are the multipliers (of the
- * rendered card width) used for the maximum font size before shrinking, tuned
- * so a base-width card matches the mockup. The fit hook only sizes down from
- * here, never up.
+ * Upper bound for the font auto-shrink search, as a fraction of the rendered
+ * card width. The real font ceiling is the `--cv-*-font-max` CSS var, applied
+ * via `min()`; this cap only needs to sit above every ceiling so that short
+ * text settles on the var rather than being clamped here.
  */
-const NAME_FONT_MAX_RATIO = 0.094;
-const TYPE_FONT_MAX_RATIO = 0.058;
-const RULES_FONT_MAX_RATIO_SMALL = 0.066;
-const RULES_FONT_MAX_RATIO_LARGE = 0.07;
+const FIT_SEARCH_CAP_RATIO = 0.22;
 
-/** Orb diameters as a fraction of the rendered card width. */
+/**
+ * Orb diameters as a fraction of the rendered card width, used to size the
+ * digit auto-shrink search. The rendered orb size is the `--cv-*-orb-size` CSS
+ * var; these mirror its defaults.
+ */
 const ENERGY_ORB_RATIO = 0.18;
 const SPARK_ORB_RATIO = 0.2;
 
@@ -237,17 +237,16 @@ export function CardView({
   const rarityStyle = rarityStyleFor(card);
   const attributeChips = buildAttributeChips(card);
 
-  const energyOrbPx = widthPx * ENERGY_ORB_RATIO;
-  const sparkOrbPx = widthPx * SPARK_ORB_RATIO;
+  // Search caps for the auto-shrink fits. The displayed size is the smaller of
+  // the CSS-var ceiling and the fitted size (see `min(...)` below), so these
+  // caps only bound the search.
+  const energyOrbCapPx = widthPx * ENERGY_ORB_RATIO;
+  const sparkOrbCapPx = widthPx * SPARK_ORB_RATIO;
+  const fitCapPx = widthPx * FIT_SEARCH_CAP_RATIO;
 
-  const nameMaxPx = widthPx * NAME_FONT_MAX_RATIO;
-  const typeMaxPx = widthPx * TYPE_FONT_MAX_RATIO;
-  const rulesMaxPx =
-    widthPx * (large ? RULES_FONT_MAX_RATIO_LARGE : RULES_FONT_MAX_RATIO_SMALL);
-
-  const nameFit = useFitText(nameMaxPx, 7, [card.name, nameMaxPx]);
-  const typeFit = useFitText(typeMaxPx, 6, [typeLine, typeMaxPx]);
-  const rulesFit = useFitText(rulesMaxPx, 6, [card.renderedText, rulesMaxPx]);
+  const nameFit = useFitText(fitCapPx, 7, [card.name, fitCapPx]);
+  const typeFit = useFitText(fitCapPx, 6, [typeLine, fitCapPx]);
+  const rulesFit = useFitText(fitCapPx, 6, [card.renderedText, fitCapPx]);
 
   // Selection / rarity rings, stacked as box-shadows so they compose with the
   // rounded corners.
@@ -283,7 +282,8 @@ export function CardView({
     <CardStatOrb
       variant="energy"
       value={card.energyCost !== null ? String(card.energyCost) : "X"}
-      sizePx={energyOrbPx}
+      sizeVar="var(--cv-energy-orb-size)"
+      numberCapPx={energyOrbCapPx}
       tooltip={suppressHoverHelp ? undefined : ENERGY_PIP_TOOLTIP}
     />
   );
@@ -299,7 +299,7 @@ export function CardView({
         whiteSpace: "nowrap",
         color: NAME_COLOR,
         fontFamily: NAME_FONT_FAMILY,
-        fontSize: `${String(nameFit.fontSize)}px`,
+        fontSize: `min(var(--cv-name-font-max), ${String(nameFit.fontSize)}px)`,
         lineHeight: 1,
       }}
     >
@@ -329,7 +329,7 @@ export function CardView({
           textAlign: "right",
           color: NAME_COLOR,
           fontFamily: NAME_FONT_FAMILY,
-          fontSize: `${String(typeFit.fontSize)}px`,
+          fontSize: `min(var(--cv-type-font-max), ${String(typeFit.fontSize)}px)`,
           lineHeight: 1,
         }}
       >
@@ -352,16 +352,16 @@ export function CardView({
       ref={rulesFit.ref}
       style={{
         position: "absolute",
-        left: `${String(FRAME_LAYOUT.rulesSidePadding * 100)}%`,
-        right: `${String(FRAME_LAYOUT.rulesSidePadding * 100)}%`,
-        top: `${String(FRAME_LAYOUT.rulesTop * 100)}%`,
-        bottom: `${String(FRAME_LAYOUT.rulesBottom * 100)}%`,
+        left: "var(--cv-rules-side-pad)",
+        right: "var(--cv-rules-side-pad)",
+        top: "var(--cv-rules-top)",
+        bottom: "var(--cv-rules-bottom)",
         overflow: "hidden",
         textAlign: "left",
         color: tintColor ?? RULES_COLOR,
         fontFamily: RULES_FONT_FAMILY,
-        fontSize: `${String(rulesFit.fontSize)}px`,
-        lineHeight: 1.16,
+        fontSize: `min(var(--cv-rules-font-max), ${String(rulesFit.fontSize)}px)`,
+        lineHeight: "var(--cv-rules-line-height)",
       }}
     >
       {renderRulesText(card.renderedText, {
@@ -376,7 +376,8 @@ export function CardView({
       <CardStatOrb
         variant="spark"
         value={String(card.spark)}
-        sizePx={sparkOrbPx}
+        sizeVar="var(--cv-spark-orb-size)"
+        numberCapPx={sparkOrbCapPx}
         tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}
       />
     ) : null;
@@ -387,8 +388,6 @@ export function CardView({
     renderedSparkContent !== undefined &&
     renderedSparkContent !== false;
 
-  const cornerInset = widthPx * 0.012;
-
   const renderedNameNode = slots.name?.(slotContext, nameNode) ?? nameNode;
   const renderedTypeLineNode =
     slots.typeLine?.(slotContext, typeLineNode) ?? typeLineNode;
@@ -398,12 +397,11 @@ export function CardView({
   return (
     <div
       ref={cardRef}
-      className={`relative overflow-hidden rounded-lg transition-transform duration-200${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}${className ? ` ${className}` : ""}`}
+      className={`card-view relative overflow-hidden rounded-lg transition-transform duration-200${large ? " card-view--large" : ""}${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}${className ? ` ${className}` : ""}`}
       data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
       style={{
         aspectRatio: "2 / 3",
-        background: "#0d0814",
         boxShadow: shadowLayers.join(", "),
       }}
       onClick={onClick}
@@ -453,7 +451,7 @@ export function CardView({
               style={{
                 color: NAME_COLOR,
                 fontFamily: NAME_FONT_FAMILY,
-                fontSize: `${String(nameMaxPx)}px`,
+                fontSize: "var(--cv-name-font-max)",
                 lineHeight: 1.15,
               }}
             >
@@ -498,13 +496,13 @@ export function CardView({
           style={
             {
               position: "absolute",
-              left: `${String(FRAME_LAYOUT.nameSidePadding * 100)}%`,
-              right: `${String(FRAME_LAYOUT.nameSidePadding * 100)}%`,
-              bottom: `${String((1 - FRAME_LAYOUT.nameRowBottom) * 100)}%`,
+              left: "var(--cv-name-side-pad)",
+              right: "var(--cv-name-side-pad)",
+              bottom: "var(--cv-name-row-bottom)",
               display: "flex",
               alignItems: "baseline",
               justifyContent: "space-between",
-              gap: "0.4em",
+              gap: "var(--cv-name-type-gap)",
               lineHeight: 1,
               overflow: "hidden",
             } satisfies CSSProperties
@@ -521,7 +519,7 @@ export function CardView({
       {/* Energy cost orb (top-left). */}
       <div
         className="absolute z-10"
-        style={{ top: `${String(cornerInset)}px`, left: `${String(cornerInset)}px` }}
+        style={{ top: "var(--cv-corner-inset)", left: "var(--cv-corner-inset)" }}
       >
         {slots.energy?.(slotContext, energyNode) ?? energyNode}
       </div>
@@ -531,8 +529,8 @@ export function CardView({
         <div
           className="absolute z-10"
           style={{
-            bottom: `${String(cornerInset)}px`,
-            right: `${String(cornerInset * 1.6)}px`,
+            bottom: "var(--cv-corner-inset)",
+            right: "var(--cv-spark-corner-inset-x)",
           }}
         >
           {renderedSparkContent}

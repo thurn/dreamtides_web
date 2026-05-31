@@ -22,8 +22,14 @@ interface CardStatOrbProps {
   variant: CardStatOrbVariant;
   /** Displayed value (string so callers can pass `"X"` for variable cost). */
   value: string;
-  /** Square diameter of the orb in px. */
-  sizePx: number;
+  /** CSS length for the square orb diameter (e.g. `var(--cv-energy-orb-size)`). */
+  sizeVar: string;
+  /**
+   * Upper bound (px) for the digit auto-shrink search. The displayed size is
+   * the smaller of the orb-relative ceiling and the fitted size, so this only
+   * needs to sit at or above the rendered orb size.
+   */
+  numberCapPx: number;
   ariaLabel?: string;
   tooltip?: ReactNode;
 }
@@ -41,16 +47,21 @@ interface CardStatOrbProps {
 export function CardStatOrb({
   variant,
   value,
-  sizePx,
+  sizeVar,
+  numberCapPx,
   ariaLabel,
   tooltip,
 }: CardStatOrbProps) {
   const label = ariaLabel ?? DEFAULT_LABEL[variant];
   // The number box is inset to the glowing core of the orb so the digit sits
   // centered on the brightest region rather than over the soft outer edge.
-  const numberBoxPx = sizePx * 0.66;
-  const { ref, fontSize } = useFitText(numberBoxPx, 6, [value, numberBoxPx]);
-  const outlinePx = Math.max(1, fontSize * 0.08);
+  const numberBoxSize = `calc(${sizeVar} * 0.66)`;
+  const { ref, fontSize } = useFitText(numberCapPx, 6, [value, numberCapPx]);
+
+  // The digit's font-size is the smaller of the box-relative ceiling and the
+  // fitted size, so a single digit fills the box (and tracks the CSS orb size
+  // live) while multi-digit values shrink to fit.
+  const numberFontSize = `min(${numberBoxSize}, ${String(fontSize)}px)`;
 
   const numberStyle: CSSProperties = {
     fontFamily: '"Anton", system-ui, sans-serif',
@@ -61,16 +72,17 @@ export function CardStatOrb({
     whiteSpace: "nowrap",
     overflow: "hidden",
     // Crisp black outline composed from eight offsets so it reads against both
-    // the dark teal energy orb and the bright gold spark orb.
+    // the dark teal energy orb and the bright gold spark orb. Offsets are in
+    // `em` so the outline tracks the rendered digit size.
     textShadow: [
-      `${String(outlinePx)}px 0 0 #000`,
-      `-${String(outlinePx)}px 0 0 #000`,
-      `0 ${String(outlinePx)}px 0 #000`,
-      `0 -${String(outlinePx)}px 0 #000`,
-      `${String(outlinePx)}px ${String(outlinePx)}px 0 #000`,
-      `-${String(outlinePx)}px ${String(outlinePx)}px 0 #000`,
-      `${String(outlinePx)}px -${String(outlinePx)}px 0 #000`,
-      `-${String(outlinePx)}px -${String(outlinePx)}px 0 #000`,
+      `0.08em 0 0 #000`,
+      `-0.08em 0 0 #000`,
+      `0 0.08em 0 #000`,
+      `0 -0.08em 0 #000`,
+      `0.08em 0.08em 0 #000`,
+      `-0.08em 0.08em 0 #000`,
+      `0.08em -0.08em 0 #000`,
+      `-0.08em -0.08em 0 #000`,
     ].join(", "),
   };
 
@@ -84,8 +96,8 @@ export function CardStatOrb({
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
-        width: `${String(sizePx)}px`,
-        height: `${String(sizePx)}px`,
+        width: sizeVar,
+        height: sizeVar,
         backgroundImage: `url(${ORB_IMAGE[variant]})`,
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
@@ -97,12 +109,12 @@ export function CardStatOrb({
         ref={ref}
         style={{
           ...numberStyle,
-          width: `${String(numberBoxPx)}px`,
-          height: `${String(numberBoxPx)}px`,
+          width: numberBoxSize,
+          height: numberBoxSize,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: `${String(fontSize)}px`,
+          fontSize: numberFontSize,
         }}
       >
         {value}

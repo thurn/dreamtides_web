@@ -153,6 +153,66 @@ button:disabled {
 }
 
 /*
+ * Rendered-card geometry knobs.
+ *
+ * Every tunable position, size, color, and font on a Dreamtides card is a CSS
+ * custom property declared here and consumed by `CardView` / `CardStatOrb`
+ * through `var()`. Edit any value in dev tools to preview every on-screen card
+ * at once.
+ *
+ * The card root declares `container-type: inline-size`, so `cqw` units resolve
+ * against the card's own width (1cqw = 1% of the rendered card width). Sizes
+ * that must scale with the card use `cqw`; the name / type / rules regions are
+ * positioned with plain `%` against the parchment-frame box they live in.
+ *
+ * The parchment is a downward-narrowing trapezoid: the rules rectangle is inset
+ * (`--cv-rules-side-pad`) so text never spills onto the angled side drapes, and
+ * the name / type row sits on the dark drape valance just above the parchment's
+ * top edge (anchored by its bottom offset, `--cv-name-row-bottom`).
+ *
+ * Font sizes are ceilings: each text element's `font-size` is the `*-font-max`
+ * var, and the auto-shrink fit only adds a smaller inline override when the
+ * text would otherwise overflow its box.
+ */
+.card-view {
+  container-type: inline-size;
+  background: var(--cv-backing, #0d0814);
+
+  /* Corner stat orbs: energy (top-left), spark (bottom-right). */
+  --cv-energy-orb-size: 18cqw;
+  --cv-spark-orb-size: 20cqw;
+  --cv-corner-inset: 1.2cqw;
+  --cv-spark-corner-inset-x: 1.92cqw;
+
+  /* Name / type row, positioned within the parchment-frame box. */
+  --cv-name-side-pad: 12%;
+  /* Bottom offset of the name / type row from the frame's bottom edge. */
+  --cv-name-row-bottom: 74.5%;
+  --cv-name-type-gap: 0.4em;
+
+  /* Rules-text rectangle, inset to stay on the parchment. */
+  --cv-rules-side-pad: 17%;
+  --cv-rules-top: 31%;
+  --cv-rules-bottom: 12%;
+  --cv-rules-line-height: 1.16;
+
+  /* Font ceilings (auto-shrink only sizes down from these). */
+  --cv-name-font-max: 9.4cqw;
+  --cv-type-font-max: 5.8cqw;
+  --cv-rules-font-max: 6.6cqw;
+
+  /* Typography. */
+  --cv-name-font-family: "EB Garamond", Georgia, serif;
+  --cv-rules-font-family: "Fira Sans Condensed", "Inter", sans-serif;
+  --cv-name-color: #ffffff;
+  --cv-rules-color: #1a1714;
+}
+
+.card-view--large {
+  --cv-rules-font-max: 7cqw;
+}
+
+/*
  * Dark-theme scrollbar for the draft-site deck rail. The rail is the only
  * scrollable region on the draft screen, so a default OS scrollbar would
  * stick out against the purple/black panel. The track fades into the panel
