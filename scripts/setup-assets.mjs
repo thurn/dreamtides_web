@@ -15,6 +15,28 @@ const DREAMCALLER_ART_DIR_CANDIDATES = [
 ];
 const DREAMSIGN_ART_DIR = join(homedir(), "Documents", "dreamsigns", "filtered");
 const JOURNEY_ART_DIR = join(homedir(), "Documents", "shutterstock", "images_journeys");
+const CARD_FRAME_ART_DIR = join(
+  homedir(),
+  "dreamtides",
+  "client",
+  "Assets",
+  "ThirdParty",
+  "GameAssets",
+);
+
+/**
+ * Card chrome art shared by every `CardView` surface: the energy / spark stat
+ * orbs and the parchment frame overlays (one for characters, one for events).
+ * Sourced from the Dreamtides Unity client asset tree and symlinked into
+ * `public/card-frame/` so Vite serves them at `/card-frame/<file>`. The files
+ * are intentionally kept out of version control (see `.gitignore`).
+ */
+const CARD_FRAME_FILES = [
+  "energy_cost_background.png",
+  "spark_background.png",
+  "card_frame.png",
+  "card_frame_event.png",
+];
 
 const PUBLIC_DIR = join(ROOT, "public");
 
@@ -186,8 +208,10 @@ export function setupAssets({
   dreamcallerArtDir = defaultDreamcallerArtDir(),
   dreamsignArtDir = DREAMSIGN_ART_DIR,
   journeyArtDir = JOURNEY_ART_DIR,
+  cardFrameArtDir = CARD_FRAME_ART_DIR,
 } = {}) {
   const cardsDir = join(publicDir, "cards");
+  const cardFrameDir = join(publicDir, "card-frame");
   const dreamcallersDir = join(publicDir, "dreamcallers");
   const dreamsignsDir = join(publicDir, "dreamsigns");
   const journeysDir = join(publicDir, "journeys");
@@ -403,6 +427,31 @@ export function setupAssets({
       `  Warning: journey art directory not found at ${journeyArtDir} — image URLs will 404`,
     );
   }
+
+  // Card chrome art (stat orbs + parchment frames). Symlinked from the
+  // Dreamtides client asset tree into `public/card-frame/`. Missing source
+  // files warn-and-continue like the other art directories so a fresh
+  // checkout without the Unity client still builds (the card chrome just
+  // renders without its background images).
+  recreateDir(cardFrameDir);
+  let linkedCardFrameArt = 0;
+  let missingCardFrameArt = 0;
+  for (const filename of CARD_FRAME_FILES) {
+    const sourcePath = join(cardFrameArtDir, filename);
+    const symlinkPath = join(cardFrameDir, filename);
+    if (existsSync(sourcePath)) {
+      symlinkSync(sourcePath, symlinkPath);
+      linkedCardFrameArt++;
+    } else {
+      console.warn(
+        `  Warning: missing card frame art ${filename} at ${sourcePath}`,
+      );
+      missingCardFrameArt++;
+    }
+  }
+  console.log(
+    `Linked ${linkedCardFrameArt} of ${CARD_FRAME_FILES.length} card frame images (${missingCardFrameArt} missing)`,
+  );
 
   console.log("Asset setup complete.");
 }

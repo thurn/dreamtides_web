@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { ReactNode, RefObject } from "react";
+import type { CSSProperties, ReactNode, RefObject } from "react";
 import type { CardData, FrozenCardData, Rarity } from "../types/cards";
 import {
   cardIdenticonUri,
@@ -8,33 +8,55 @@ import {
 } from "../data/card-database";
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
-import { PipBadge } from "./PipBadge";
+import {
+  CARD_ART_ASPECT_RATIO,
+  CARD_FRAME_ASPECT_RATIO,
+  FRAME_LAYOUT,
+  cardFrameUrl,
+} from "./card-assets";
+import { CardStatOrb } from "./CardStatOrb";
+import { useFitText } from "./useFitText";
 import { renderRulesText } from "./RulesText";
 
-const EVENT_CHROME_COLOR = "#c084fc";
-const CHARACTER_CHROME_COLOR = "#facc15";
+/**
+ * Default chrome accent used for the selection ring fallback. The card's type
+ * is conveyed by the parchment frame art (a dark drape for characters, a
+ * purple drape for events) rather than a colored border.
+ */
+const SELECTION_DEFAULT_COLOR = "#f97316";
+
+/** Card name / type typography. */
+const NAME_FONT_FAMILY = '"EB Garamond", Georgia, serif';
+const NAME_COLOR = "#ffffff";
+/** Rules text typography. */
+const RULES_FONT_FAMILY = '"Fira Sans Condensed", "Inter", sans-serif';
+const RULES_COLOR = "#1a1714";
 
 /**
- * Visual treatment for a rarity bucket. A rarity adds an outer "frame layer"
- * on top of the base card chrome — a colored ring stacked as a spread-only
- * `box-shadow` so it composes with the existing 1px border and rounded
- * corners, plus an optional shimmer overlay controlled via a CSS class
- * defined in `index.css`. The shimmer keyframes honor
- * `prefers-reduced-motion`: the sweep is paused and a static highlight
- * gradient stays in place.
- *
- * The map is the single extension point for future rarities (Mythic /
- * Ascendant / …). Add an entry here, and the frame, animation, and
- * accessibility behavior fall out without further branching in render code.
+ * Fonts auto-shrink to fit their box; these are the multipliers (of the
+ * rendered card width) used for the maximum font size before shrinking, tuned
+ * so a base-width card matches the mockup. The fit hook only sizes down from
+ * here, never up.
+ */
+const NAME_FONT_MAX_RATIO = 0.094;
+const TYPE_FONT_MAX_RATIO = 0.058;
+const RULES_FONT_MAX_RATIO_SMALL = 0.066;
+const RULES_FONT_MAX_RATIO_LARGE = 0.07;
+
+/** Orb diameters as a fraction of the rendered card width. */
+const ENERGY_ORB_RATIO = 0.18;
+const SPARK_ORB_RATIO = 0.2;
+
+/**
+ * Visual treatment for a rarity bucket. A rarity adds an outer accent ring
+ * stacked as a spread-only `box-shadow` so it composes with the rounded
+ * corners, plus an optional shimmer overlay controlled via a CSS class in
+ * `index.css`. The shimmer keyframes honor `prefers-reduced-motion`.
  */
 interface RarityStyle {
-  /** Outer accent ring color. */
   outlineColor: string;
-  /** Soft glow color stacked beneath the outline. */
   glowColor: string;
-  /** Width of the accent ring (px). 0 means no rarity frame. */
   outlineWidthPx: number;
-  /** Test-id suffix and CSS hook for the shimmer overlay. */
   cssClass: string | null;
 }
 
@@ -46,8 +68,6 @@ const RARITY_STYLES: Readonly<Record<Rarity, RarityStyle | null>> = {
     outlineWidthPx: 2,
     cssClass: "card-rarity-legendary",
   },
-  // Bane content (Special rarity) renders with the bane indicator chrome in
-  // the deck viewer rather than a rarity frame. No additional outline / glow.
   Special: null,
 };
 
@@ -55,31 +75,20 @@ function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
   if (card.rarity === undefined) {
     return null;
   }
-  // A rarity outside RARITY_STYLES (such as the empty rarity carried by some
-  // source records) has no rarity frame.
   return RARITY_STYLES[card.rarity] ?? null;
 }
 
 /**
  * An inline glyph that surfaces a boolean card attribute on the type/subtype
  * row (e.g. `↯ Explorer`). Chips read as part of the same typographic row as
- * the type label — same font size, same opacity wrapper — and are colored to
- * match the inline rules-text rendering for the same symbol.
- *
- * Adding a new attribute (unstoppable, deployed, ...) is two lines: extend
- * `ATTRIBUTE_CHIPS` with another entry. The render code below picks them up
- * automatically.
+ * the type label and are colored to match the inline rules-text rendering for
+ * the same symbol.
  */
 interface AttributeChip {
-  /** Stable React key + `data-attribute-chip` hook for tests. */
   key: string;
-  /** Glyph rendered inline at type-line typography. */
   glyph: string;
-  /** Color applied to the glyph; matches the inline symbol color in rules text. */
   color: string;
-  /** Accessible label so screen readers announce the attribute. */
   ariaLabel: string;
-  /** Predicate that decides whether this chip applies to a card. */
   applies(card: Pick<CardData, "isFast">): boolean;
 }
 
@@ -93,28 +102,24 @@ const ATTRIBUTE_CHIPS: readonly AttributeChip[] = [
   },
 ];
 
-function buildAttributeChips(
-  card: Pick<CardData, "isFast">,
-): AttributeChip[] {
+function buildAttributeChips(card: Pick<CardData, "isFast">): AttributeChip[] {
   return ATTRIBUTE_CHIPS.filter((chip) => chip.applies(card));
 }
 
-/**
- * Hover tooltip copy for the corner pip badges. Kept short and plain-language
- * so a new player can learn what each pip means after a 1-second hover.
- *
- * Phrasing intentionally mirrors the glossary entries for "Spark" and
- * "Essence"/energy in `src/data/glossary.ts` so a player who hovers a pip
- * sees the same wording they'd see hovering the term inline in rules text.
- */
 const ENERGY_PIP_TOOLTIP =
   "Energy cost. Spend this much energy to play the card.";
 const SPARK_PIP_TOOLTIP =
   "Spark. A character's combat power — higher spark wins combat.";
 
-function useCardTextScale(large: boolean): {
+/**
+ * Tracks the rendered card width. The width drives both the legacy text-scale
+ * metadata (`data-card-text-scale`, still asserted by tests and used as the
+ * baseline font ceiling) and the pixel sizes of the orbs and frame text.
+ */
+function useCardMetrics(large: boolean): {
   cardRef: RefObject<HTMLDivElement | null>;
   textScale: number;
+  widthPx: number;
 } {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [widthPx, setWidthPx] = useState<number | null>(null);
@@ -124,7 +129,6 @@ function useCardTextScale(large: boolean): {
     if (element === null) {
       return;
     }
-
     const measuredElement = element;
 
     function updateWidth(): void {
@@ -142,7 +146,6 @@ function useCardTextScale(large: boolean): {
         window.removeEventListener("resize", updateWidth);
       };
     }
-
     const observer = new ResizeObserver(updateWidth);
     observer.observe(measuredElement);
     return () => {
@@ -153,6 +156,7 @@ function useCardTextScale(large: boolean): {
   return {
     cardRef,
     textScale: computeCardTextScale(widthPx, large),
+    widthPx: widthPx ?? (large ? 220 : 156),
   };
 }
 
@@ -181,7 +185,7 @@ export interface CardViewProps {
   onClick?: () => void;
   selected?: boolean;
   selectionColor?: string;
-  /** When set, tints the card's stat values and rules text in this color. */
+  /** When set, tints the card's rules text in this color. */
   tintColor?: string;
   /** Additional CSS class name for the root element. */
   className?: string;
@@ -190,9 +194,9 @@ export interface CardViewProps {
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
   /**
-   * When true, the corner pip tooltips and inline glossary-term popovers are
-   * suppressed. Surfaces that show many editable cards at once (the card
-   * editor) use this to keep hover behavior calm and non-distracting.
+   * When true, the corner stat tooltips and inline glossary-term popovers are
+   * suppressed. Surfaces that show many cards at once (the card editor) use
+   * this to keep hover behavior calm and non-distracting.
    */
   suppressHoverHelp?: boolean;
   /** Optional editor wrappers for individual rendered card slots. */
@@ -200,13 +204,16 @@ export interface CardViewProps {
 }
 
 /**
- * Renders a Dreamtides card with rarity-driven chrome.
+ * Renders a Dreamtides card: full-width art at the native 0.87 art aspect
+ * ratio anchored to the top, a parchment frame overlay across the lower
+ * portion carrying the name / type / rules text, and glowing energy (top-left)
+ * and spark (bottom-right) stat orbs. The card box itself stays 2:3 portrait.
  */
 export function CardView({
   card,
   onClick,
   selected = false,
-  selectionColor = "#f97316",
+  selectionColor = SELECTION_DEFAULT_COLOR,
   tintColor,
   className,
   large = false,
@@ -215,60 +222,55 @@ export function CardView({
   slots = {},
 }: CardViewProps) {
   const [imageError, setImageError] = useState(false);
-  const { cardRef, textScale } = useCardTextScale(large);
+  const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
   useEffect(() => {
     setImageError(false);
   }, [card.imageNumber]);
 
-  // Cards whose art has not been keyed yet (e.g. cards_v2) render a generated
-  // identicon, seeded by the stable card id, instead of attempting a missing
-  // image load.
   const hasImage = hasAssignedImage(card.imageNumber);
   const identiconUri = hasImage
     ? null
     : cardIdenticonUri(card.id !== "" ? card.id : card.name);
 
-  const accentColor = CHARACTER_CHROME_COLOR;
-  const chromeColor =
-    card.cardType === "Event" ? EVENT_CHROME_COLOR : accentColor;
-  const borderColor = chromeColor;
-  const nameColor = "#f8fafc";
   const typeLine = formatTypeLine(card);
   const rarityStyle = rarityStyleFor(card);
   const attributeChips = buildAttributeChips(card);
 
-  // Compose the box-shadow: base soft chrome glow + optional rarity ring
-  // (stacked as a wider outer glow) + selection overlay if set. The rarity
-  // ring uses a spread-only box-shadow rather than `outline` so it composes
-  // cleanly with the existing border and rounded corners.
-  const shadowLayers: string[] = [];
+  const energyOrbPx = widthPx * ENERGY_ORB_RATIO;
+  const sparkOrbPx = widthPx * SPARK_ORB_RATIO;
+
+  const nameMaxPx = widthPx * NAME_FONT_MAX_RATIO;
+  const typeMaxPx = widthPx * TYPE_FONT_MAX_RATIO;
+  const rulesMaxPx =
+    widthPx * (large ? RULES_FONT_MAX_RATIO_LARGE : RULES_FONT_MAX_RATIO_SMALL);
+
+  const nameFit = useFitText(nameMaxPx, 7, [card.name, nameMaxPx]);
+  const typeFit = useFitText(typeMaxPx, 6, [typeLine, typeMaxPx]);
+  const rulesFit = useFitText(rulesMaxPx, 6, [card.renderedText, rulesMaxPx]);
+
+  // Selection / rarity rings, stacked as box-shadows so they compose with the
+  // rounded corners.
+  const shadowLayers: string[] = ["0 4px 14px rgba(0, 0, 0, 0.55)"];
   if (selected) {
-    shadowLayers.push(
+    shadowLayers.unshift(
       `0 0 0 3px ${selectionColor}`,
       `0 0 12px ${selectionColor}`,
     );
-  } else {
-    shadowLayers.push(`0 0 18px ${chromeColor}26`);
-  }
-  if (rarityStyle !== null && !selected) {
-    shadowLayers.push(
+  } else if (rarityStyle !== null) {
+    shadowLayers.unshift(
       `0 0 0 ${String(rarityStyle.outlineWidthPx)}px ${rarityStyle.outlineColor}`,
       `0 0 22px ${rarityStyle.glowColor}`,
     );
   }
 
   const isInteractive = onClick !== undefined;
-
   const rarityClass =
     rarityStyle !== null && rarityStyle.cssClass !== null
       ? ` ${rarityStyle.cssClass}`
       : "";
   const rarityAttr = card.rarity !== undefined ? card.rarity : undefined;
-  const nameFontSize = (large ? 20 : 14) * textScale;
-  const typeFontSize = (large ? 14 : 10) * textScale;
-  const rulesFontSize = (large ? 16 : 10) * textScale;
-  const fallbackFontSize = 14 * textScale;
+
   const showRulesText = !hideRulesText && card.renderedText.trim() !== "";
   const slotContext: CardViewSlotContext = {
     card,
@@ -276,33 +278,37 @@ export function CardView({
     textScale,
     typeLine,
   };
+
   const energyNode = (
-    <PipBadge
+    <CardStatOrb
       variant="energy"
       value={card.energyCost !== null ? String(card.energyCost) : "X"}
-      size={large ? "md" : "sm"}
-      scale={textScale}
+      sizePx={energyOrbPx}
       tooltip={suppressHoverHelp ? undefined : ENERGY_PIP_TOOLTIP}
     />
   );
+
   const nameNode = (
-    <h3
+    <div
+      ref={nameFit.ref}
       className="font-bold"
       style={{
-        color: nameColor,
-        display: "-webkit-box",
-        fontSize: `${String(nameFontSize)}px`,
-        lineHeight: 1.08,
+        flex: "1 1 0",
+        minWidth: 0,
         overflow: "hidden",
-        WebkitBoxOrient: "vertical",
-        WebkitLineClamp: 2,
+        whiteSpace: "nowrap",
+        color: NAME_COLOR,
+        fontFamily: NAME_FONT_FAMILY,
+        fontSize: `${String(nameFit.fontSize)}px`,
+        lineHeight: 1,
       }}
     >
       {card.name}
-    </h3>
+    </div>
   );
+
   const typeLineContentNode =
-    typeLine !== "" ? <span className="truncate">{typeLine}</span> : null;
+    typeLine !== "" ? <span>{typeLine}</span> : null;
   const renderedTypeLineContent =
     slots.typeLineContent?.(slotContext, typeLineContentNode) ??
     typeLineContentNode;
@@ -313,14 +319,18 @@ export function CardView({
   const typeLineNode =
     hasTypeLineContent || attributeChips.length > 0 ? (
       <div
+        ref={typeFit.ref}
         data-testid="card-type-line"
-        className="mt-0.5 flex items-center gap-1 opacity-50"
         style={{
-          color: "#e2e8f0",
-          fontSize: `${String(typeFontSize)}px`,
-          lineHeight: 1.1,
-          minHeight: `${String(typeFontSize * 1.1)}px`,
+          flex: "0 1 auto",
+          minWidth: 0,
           overflow: "hidden",
+          whiteSpace: "nowrap",
+          textAlign: "right",
+          color: NAME_COLOR,
+          fontFamily: NAME_FONT_FAMILY,
+          fontSize: `${String(typeFit.fontSize)}px`,
+          lineHeight: 1,
         }}
       >
         {attributeChips.map((chip) => (
@@ -336,13 +346,22 @@ export function CardView({
         {renderedTypeLineContent}
       </div>
     ) : null;
+
   const rulesTextNode = showRulesText ? (
     <div
-      className="mt-1 min-h-0 flex-1 overflow-y-auto opacity-80"
+      ref={rulesFit.ref}
       style={{
-        color: tintColor ?? "#e2e8f0",
-        fontSize: `${String(rulesFontSize)}px`,
-        lineHeight: large ? 1.35 : 1.18,
+        position: "absolute",
+        left: `${String(FRAME_LAYOUT.sidePadding * 100)}%`,
+        right: `${String(FRAME_LAYOUT.sidePadding * 100)}%`,
+        top: `${String(FRAME_LAYOUT.rulesTop * 100)}%`,
+        bottom: `${String(FRAME_LAYOUT.rulesBottom * 100)}%`,
+        overflow: "hidden",
+        textAlign: "left",
+        color: tintColor ?? RULES_COLOR,
+        fontFamily: RULES_FONT_FAMILY,
+        fontSize: `${String(rulesFit.fontSize)}px`,
+        lineHeight: 1.16,
       }}
     >
       {renderRulesText(card.renderedText, {
@@ -350,38 +369,41 @@ export function CardView({
         disableGlossary: suppressHoverHelp,
       })}
     </div>
-  ) : (
-    <div aria-hidden="true" className="min-h-0 flex-1" />
-  );
-  const sparkBadgeNode =
+  ) : null;
+
+  const sparkOrbNode =
     card.spark !== null ? (
-      <PipBadge
+      <CardStatOrb
         variant="spark"
         value={String(card.spark)}
-        size={large ? "md" : "sm"}
-        scale={textScale}
+        sizePx={sparkOrbPx}
         tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}
       />
     ) : null;
-  // The spark corner container is owned by CardView (like the energy corner)
-  // so the badge — and any editor input a slot swaps in — stays pinned to the
-  // bottom-right. Slots receive the bare badge as their default node.
-  const renderedSparkContent = slots.spark?.(slotContext, sparkBadgeNode) ?? sparkBadgeNode;
+  const renderedSparkContent =
+    slots.spark?.(slotContext, sparkOrbNode) ?? sparkOrbNode;
   const hasSparkContent =
     renderedSparkContent !== null &&
     renderedSparkContent !== undefined &&
     renderedSparkContent !== false;
 
+  const cornerInset = widthPx * 0.012;
+
+  const renderedNameNode = slots.name?.(slotContext, nameNode) ?? nameNode;
+  const renderedTypeLineNode =
+    slots.typeLine?.(slotContext, typeLineNode) ?? typeLineNode;
+  const renderedRulesNode =
+    slots.rulesText?.(slotContext, rulesTextNode) ?? rulesTextNode;
+
   return (
     <div
       ref={cardRef}
-      className={`relative flex flex-col overflow-hidden rounded-lg transition-transform duration-200${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}${className ? ` ${className}` : ""}`}
+      className={`relative overflow-hidden rounded-lg transition-transform duration-200${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}${className ? ` ${className}` : ""}`}
       data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
       style={{
         aspectRatio: "2 / 3",
-        background: "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
-        border: `1px solid ${borderColor}`,
+        background: "#0d0814",
         boxShadow: shadowLayers.join(", "),
       }}
       onClick={onClick}
@@ -397,38 +419,11 @@ export function CardView({
           }
         : {})}
     >
+      {/* Card art — full width at the native art aspect ratio, anchored top. */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-1"
-        style={{
-          background: `linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0%, ${chromeColor} 50%, rgba(255, 255, 255, 0.08) 100%)`,
-          opacity: 0.8,
-        }}
-      />
-
-      {/*
-        Rarity shimmer overlay. Rendered only when the card has a rarity
-        treatment that defines a CSS hook; the keyframe animation lives in
-        `index.css` so `prefers-reduced-motion` can pause the sweep while
-        keeping the static highlight gradient visible. Pointer-events-none
-        keeps the overlay transparent to clicks.
-      */}
-      {rarityStyle?.cssClass !== undefined && rarityStyle?.cssClass !== null && (
-        <div
-          data-testid="card-rarity-shimmer"
-          aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 rounded-lg ${rarityStyle.cssClass}__shimmer`}
-        />
-      )}
-
-      {/* Energy cost badge */}
-      <div
-        className={`absolute ${large ? "top-2 left-2" : "top-1.5 left-1.5"} z-10 flex flex-col items-center gap-1`}
+        className="absolute inset-x-0 top-0"
+        style={{ aspectRatio: String(CARD_ART_ASPECT_RATIO) }}
       >
-        {slots.energy?.(slotContext, energyNode) ?? energyNode}
-      </div>
-
-      {/* Card art area */}
-      <div className="relative w-full" style={{ height: "45%" }}>
         {identiconUri !== null ? (
           <img
             src={identiconUri}
@@ -451,15 +446,14 @@ export function CardView({
         ) : (
           <div
             className="flex h-full w-full items-center justify-center p-2"
-            style={{
-              background: `linear-gradient(135deg, ${accentColor}24, rgba(255, 255, 255, 0.05))`,
-            }}
+            style={{ background: "rgba(255, 255, 255, 0.04)" }}
           >
             <span
-              className="text-center font-medium opacity-60"
+              className="text-center font-medium opacity-70"
               style={{
-                color: nameColor,
-                fontSize: `${String(fallbackFontSize)}px`,
+                color: NAME_COLOR,
+                fontFamily: NAME_FONT_FAMILY,
+                fontSize: `${String(nameMaxPx)}px`,
                 lineHeight: 1.15,
               }}
             >
@@ -467,38 +461,79 @@ export function CardView({
             </span>
           </div>
         )}
-        {/* Gradient overlay at bottom of art */}
+      </div>
+
+      {/*
+        Rarity shimmer overlay. Rendered only when the card has a rarity
+        treatment that defines a CSS hook; the keyframe animation lives in
+        `index.css` so `prefers-reduced-motion` can pause the sweep while
+        keeping the static highlight gradient visible.
+      */}
+      {rarityStyle?.cssClass !== undefined && rarityStyle?.cssClass !== null && (
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-4"
-          style={{
-            background: "linear-gradient(transparent, #1a1025)",
-          }}
+          data-testid="card-rarity-shimmer"
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 rounded-lg ${rarityStyle.cssClass}__shimmer`}
         />
-      </div>
+      )}
 
-      {/* Card info area */}
+      {/* Parchment frame overlay across the lower portion of the card. */}
       <div
-        className={`flex min-h-0 flex-1 flex-col ${large ? "px-3 pt-2 pb-2" : "px-2 pt-1 pb-1.5"}`}
+        className="absolute inset-x-0 bottom-0"
+        style={{
+          aspectRatio: String(CARD_FRAME_ASPECT_RATIO),
+          backgroundImage: `url(${cardFrameUrl(card.cardType)})`,
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+        }}
       >
-        {slots.name?.(slotContext, nameNode) ?? nameNode}
-        {slots.typeLine?.(slotContext, typeLineNode) ?? typeLineNode}
+        {/* Name + type, baseline-aligned on the dark drape band. */}
+        <div
+          style={
+            {
+              position: "absolute",
+              left: `${String(FRAME_LAYOUT.sidePadding * 100)}%`,
+              right: `${String(FRAME_LAYOUT.sidePadding * 100)}%`,
+              top: `${String(FRAME_LAYOUT.nameRowTop * 100)}%`,
+              height: `${String(
+                (FRAME_LAYOUT.nameRowBottom - FRAME_LAYOUT.nameRowTop) * 100,
+              )}%`,
+              display: "flex",
+              alignItems: "baseline",
+              justifyContent: "space-between",
+              gap: "0.4em",
+              overflow: "hidden",
+            } satisfies CSSProperties
+          }
+        >
+          {renderedNameNode}
+          {renderedTypeLineNode}
+        </div>
 
-        {/* Rules text */}
-        {slots.rulesText?.(slotContext, rulesTextNode) ?? rulesTextNode}
-
-        {/* Spark badge for Characters */}
-        {hasSparkContent ? (
-          <div className="mt-auto flex items-center justify-end pt-0.5">
-            {renderedSparkContent}
-          </div>
-        ) : null}
+        {/* Rules text confined to the parchment region. */}
+        {renderedRulesNode}
       </div>
 
-      {/* Bottom accent */}
+      {/* Energy cost orb (top-left). */}
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px"
-        style={{ background: borderColor }}
-      />
+        className="absolute z-10"
+        style={{ top: `${String(cornerInset)}px`, left: `${String(cornerInset)}px` }}
+      >
+        {slots.energy?.(slotContext, energyNode) ?? energyNode}
+      </div>
+
+      {/* Spark orb (bottom-right) for characters. */}
+      {hasSparkContent ? (
+        <div
+          className="absolute z-10"
+          style={{
+            bottom: `${String(cornerInset)}px`,
+            right: `${String(cornerInset * 1.6)}px`,
+          }}
+        >
+          {renderedSparkContent}
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -1441,7 +1441,7 @@ describe("CardEditorApp", () => {
       field: "spark",
       value: "",
     });
-    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
+    expect(editorCard.querySelector('[data-card-stat="spark"]')).toBeNull();
     expect(
       editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
     ).toBeNull();
@@ -1501,7 +1501,7 @@ describe("CardEditorApp", () => {
       value: "",
     });
     expect(sparkField.textContent).toContain("Saving...");
-    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
+    expect(editorCard.querySelector('[data-card-stat="spark"]')).toBeNull();
     expect(
       editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
     ).toBeNull();
@@ -1539,7 +1539,7 @@ describe("CardEditorApp", () => {
 
     // Variable spark normalizes to null in the preview, so CardView (and the
     // editor) show no spark pip and no add-spark placeholder.
-    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
+    expect(editorCard.querySelector('[data-card-stat="spark"]')).toBeNull();
     expect(
       editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
     ).toBeNull();
@@ -1616,7 +1616,7 @@ describe("CardEditorApp", () => {
       field: "spark",
       value: 3,
     });
-    expect(editorCard.querySelector('[data-pip-variant="spark"]')?.textContent).toContain("3");
+    expect(editorCard.querySelector('[data-card-stat="spark"]')?.textContent).toContain("3");
     expect(sparkField.textContent).toContain("Saved");
 
     act(() => {
@@ -1670,7 +1670,7 @@ describe("CardEditorApp", () => {
       throw new Error("Missing spark field");
     }
     // Editing opens from the existing numeric pip and shows X for variable.
-    expect(editorCard.querySelector('[data-pip-variant="spark"]')?.textContent).toContain(
+    expect(editorCard.querySelector('[data-card-stat="spark"]')?.textContent).toContain(
       "2",
     );
 
@@ -1697,7 +1697,7 @@ describe("CardEditorApp", () => {
     });
     // Variable spark normalizes to null, so the pip disappears just like the
     // shared renderer.
-    expect(editorCard.querySelector('[data-pip-variant="spark"]')).toBeNull();
+    expect(editorCard.querySelector('[data-card-stat="spark"]')).toBeNull();
     expect(
       editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
     ).toBeNull();

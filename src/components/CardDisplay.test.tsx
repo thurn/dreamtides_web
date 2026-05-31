@@ -149,12 +149,12 @@ describe("CardDisplay", () => {
       />,
     );
 
-    expect(container.querySelector("[data-slot=\"energy\"] [data-pip-variant=\"energy\"]")).not.toBeNull();
+    expect(container.querySelector("[data-slot=\"energy\"] [data-card-stat=\"energy\"]")).not.toBeNull();
     expect(container.querySelector("[data-slot=\"name\"]")?.textContent).toContain("Test Card");
     expect(container.querySelector("[data-slot=\"type-line\"]")?.textContent).toContain("Scout");
     expect(container.querySelector("[data-slot=\"type-line-content\"]")?.textContent).toBe("Scout");
     expect(container.querySelector("[data-slot=\"rules-text\"]")?.textContent).toContain("Draw a card.");
-    expect(container.querySelector("[data-slot=\"spark\"] [data-pip-variant=\"spark\"]")).not.toBeNull();
+    expect(container.querySelector("[data-slot=\"spark\"] [data-card-stat=\"spark\"]")).not.toBeNull();
     expect(container.firstElementChild?.getAttribute("data-card-text-scale")).toBe("1.00");
 
     act(() => {
@@ -190,27 +190,32 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders the energy cost badge as a teal/cyan circular pip with no flame icon", () => {
+  it("renders the energy cost as a teal orb with a white outlined number and no flame icon", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ energyCost: 4 })} />,
     );
 
-    const energyBadge = container.querySelector<HTMLElement>(
-      "[data-pip-variant=\"energy\"]",
+    const energyOrb = container.querySelector<HTMLElement>(
+      "[data-card-stat=\"energy\"]",
     );
-    expect(energyBadge).not.toBeNull();
-    expect(energyBadge?.textContent).toBe("4");
-    expect(energyBadge?.getAttribute("aria-label")).toBe("energy cost");
-    // The corner badge has no flame icon — only inline rules-text references do.
+    expect(energyOrb).not.toBeNull();
+    expect(energyOrb?.textContent).toBe("4");
+    expect(energyOrb?.getAttribute("aria-label")).toBe("energy cost");
+    // The orb is backed by the teal energy-cost art.
+    expect(energyOrb?.getAttribute("style") ?? "").toContain(
+      "energy_cost_background.png",
+    );
+    // The number is white with a black text-shadow outline.
+    const numberStyle =
+      energyOrb?.querySelector("div")?.getAttribute("style")?.toLowerCase() ??
+      "";
+    expect(numberStyle).toContain("color: rgb(255, 255, 255)");
+    expect(numberStyle).toContain("text-shadow");
+    // The corner stat has no flame icon — only inline rules-text references do.
     const cornerFlame = container.querySelector(
       "i.bx.bxs-flame[aria-label=\"energy cost\"]",
     );
     expect(cornerFlame).toBeNull();
-    // Teal/cyan fill, white text, black outline.
-    const style = energyBadge?.getAttribute("style") ?? "";
-    expect(style.toLowerCase()).toContain("rgb(14, 165, 233)");
-    expect(style.toLowerCase()).toContain("color: rgb(255, 255, 255)");
-    expect(style.toLowerCase()).toContain("text-shadow");
     // No bare ● glyph.
     expect(container.textContent).not.toContain("●");
 
@@ -219,15 +224,15 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders the energy cost badge as 'X' for variable-cost (null) cards", () => {
+  it("renders the energy cost as 'X' for variable-cost (null) cards", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ energyCost: null })} />,
     );
 
-    const energyBadge = container.querySelector<HTMLElement>(
-      "[data-pip-variant=\"energy\"]",
+    const energyOrb = container.querySelector<HTMLElement>(
+      "[data-card-stat=\"energy\"]",
     );
-    expect(energyBadge?.textContent).toBe("X");
+    expect(energyOrb?.textContent).toBe("X");
 
     act(() => {
       root.unmount();
@@ -254,7 +259,14 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders Event cards with a distinctive purple border chrome", () => {
+  /** Returns the inline background-image declarations rendered in the tree. */
+  function backgroundImages(container: HTMLElement): string {
+    return Array.from(container.querySelectorAll<HTMLElement>("[style]"))
+      .map((el) => el.getAttribute("style") ?? "")
+      .join(" ");
+  }
+
+  it("renders Event cards with the purple event parchment frame", () => {
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
@@ -264,55 +276,51 @@ describe("CardDisplay", () => {
       />,
     );
 
-    const cardRoot = container.firstElementChild as HTMLDivElement | null;
-    if (!cardRoot) {
-      throw new Error("Missing card root");
-    }
-
-    expect(cardRoot.style.border).toContain("rgb(192, 132, 252)");
-    expect(cardRoot.style.boxShadow).toContain("#c084fc");
+    const styles = backgroundImages(container);
+    expect(styles).toContain("card_frame_event.png");
+    expect(styles).not.toContain("card_frame.png");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("renders Character cards with a distinctive yellow border chrome", () => {
+  it("renders Character cards with the character parchment frame", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
     );
 
-    const cardRoot = container.firstElementChild as HTMLDivElement | null;
-    if (!cardRoot) {
-      throw new Error("Missing card root");
-    }
-
-    expect(cardRoot.style.border).toContain("rgb(250, 204, 21)");
-    expect(cardRoot.style.boxShadow).toContain("#facc15");
+    const styles = backgroundImages(container);
+    expect(styles).toContain("card_frame.png");
+    expect(styles).not.toContain("card_frame_event.png");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("renders the spark badge as a gold circular pip with no ⍏ glyph", () => {
+  it("renders the spark stat as a gold orb with a white outlined number and no ⍏ glyph", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ cardType: "Character", spark: 4 })} />,
     );
 
-    const sparkBadge = container.querySelector<HTMLElement>(
-      "[data-pip-variant=\"spark\"]",
+    const sparkOrb = container.querySelector<HTMLElement>(
+      "[data-card-stat=\"spark\"]",
     );
-    expect(sparkBadge).not.toBeNull();
-    expect(sparkBadge?.textContent).toBe("4");
+    expect(sparkOrb).not.toBeNull();
+    expect(sparkOrb?.textContent).toBe("4");
     // No bare spark glyph anywhere on the card.
     expect(container.textContent).not.toContain("⍏");
-    // Gold fill on the badge.
-    const style = sparkBadge?.getAttribute("style") ?? "";
-    expect(style.toLowerCase()).toContain("rgb(250, 204, 21)");
-    // White text with a black text-shadow outline.
-    expect(style.toLowerCase()).toContain("color: rgb(255, 255, 255)");
-    expect(style.toLowerCase()).toContain("text-shadow");
+    // The orb is backed by the gold spark art.
+    expect(sparkOrb?.getAttribute("style") ?? "").toContain(
+      "spark_background.png",
+    );
+    // White number with a black text-shadow outline.
+    const numberStyle =
+      sparkOrb?.querySelector("div")?.getAttribute("style")?.toLowerCase() ??
+      "";
+    expect(numberStyle).toContain("color: rgb(255, 255, 255)");
+    expect(numberStyle).toContain("text-shadow");
 
     act(() => {
       root.unmount();
@@ -330,35 +338,35 @@ describe("CardDisplay", () => {
       />,
     );
 
-    // The inline reference is its own pip badge in addition to the stat
-    // badge in the corner.
-    const sparkBadges = container.querySelectorAll(
+    // The inline reference renders as its own compact pip badge, separate
+    // from the corner spark orb.
+    const inlinePips = container.querySelectorAll(
       "[data-pip-variant=\"spark\"]",
     );
-    expect(sparkBadges.length).toBe(2);
+    expect(inlinePips.length).toBe(1);
+    expect(container.querySelector("[data-card-stat=\"spark\"]")).not.toBeNull();
     // No bare ⍏ glyph anywhere — including inside the rules text.
     expect(container.textContent).not.toContain("⍏");
     // The inline pip displays the value from the rules text.
-    const inlineValues = Array.from(sparkBadges).map((b) => b.textContent);
-    expect(inlineValues).toContain("3");
+    expect(inlinePips[0]?.textContent).toBe("3");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("wraps the energy badge in a HoverPopover tooltip anchor", () => {
+  it("wraps the energy orb in a HoverPopover tooltip anchor", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ energyCost: 4 })} />,
     );
 
-    const energyBadge = container.querySelector<HTMLElement>(
-      "[data-pip-variant=\"energy\"]",
+    const energyOrb = container.querySelector<HTMLElement>(
+      "[data-card-stat=\"energy\"]",
     );
-    expect(energyBadge).not.toBeNull();
-    // PipBadge wraps the badge in a span when a tooltip is set; without a
-    // tooltip the badge would be the direct child of the positioning div.
-    const wrapper = energyBadge?.parentElement;
+    expect(energyOrb).not.toBeNull();
+    // CardStatOrb wraps the orb in a HoverPopover span when a tooltip is set;
+    // without a tooltip the orb would be the direct child of the positioning div.
+    const wrapper = energyOrb?.parentElement;
     expect(wrapper?.tagName.toLowerCase()).toBe("span");
 
     act(() => {
@@ -366,16 +374,16 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("wraps the spark badge in a HoverPopover tooltip anchor", () => {
+  it("wraps the spark orb in a HoverPopover tooltip anchor", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ cardType: "Character", spark: 3 })} />,
     );
 
-    const sparkBadge = container.querySelector<HTMLElement>(
-      "[data-pip-variant=\"spark\"]",
+    const sparkOrb = container.querySelector<HTMLElement>(
+      "[data-card-stat=\"spark\"]",
     );
-    expect(sparkBadge).not.toBeNull();
-    const wrapper = sparkBadge?.parentElement;
+    expect(sparkOrb).not.toBeNull();
+    const wrapper = sparkOrb?.parentElement;
     expect(wrapper?.tagName.toLowerCase()).toBe("span");
 
     act(() => {
@@ -383,14 +391,12 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("does not render a spark badge for Event cards", () => {
+  it("does not render a spark orb for Event cards", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ cardType: "Event", spark: null })} />,
     );
 
-    expect(
-      container.querySelector("[data-pip-variant=\"spark\"]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-card-stat=\"spark\"]")).toBeNull();
 
     act(() => {
       root.unmount();
@@ -456,7 +462,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("preserves the card-type chrome border on a Legendary card", () => {
+  it("keeps the character parchment frame on a Legendary card", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ rarity: "Legendary", cardType: "Character" })} />,
     );
@@ -465,8 +471,9 @@ describe("CardDisplay", () => {
     if (!cardRoot) {
       throw new Error("Missing card root");
     }
-    // Character chrome still drives the inner 1px border.
-    expect(cardRoot.style.border).toContain("rgb(250, 204, 21)");
+    // The gold rarity ring composes with the character frame art.
+    expect(cardRoot.style.boxShadow.toLowerCase()).toContain("#f5c542");
+    expect(backgroundImages(container)).toContain("card_frame.png");
 
     act(() => {
       root.unmount();
@@ -587,7 +594,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("uses parallel outline treatment so Character and Event chrome share width and softness", () => {
+  it("gives Character and Event cards an identical drop shadow, differing only by frame art", () => {
     const characterMount = mount(
       <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
     );
@@ -605,15 +612,16 @@ describe("CardDisplay", () => {
       throw new Error("Missing card root");
     }
 
-    // Same border width (both render a 1px solid border).
-    expect(characterRoot.style.borderWidth).toBe(eventRoot.style.borderWidth);
-    expect(characterRoot.style.borderStyle).toBe(eventRoot.style.borderStyle);
+    // The card box itself carries no type-colored chrome — the type is read
+    // from the parchment frame art, so both share the same drop shadow.
+    expect(characterRoot.style.boxShadow).toBe(eventRoot.style.boxShadow);
 
-    // Same softness: identical box-shadow expression except for the color token.
-    const normalize = (shadow: string) =>
-      shadow.replace(/#[0-9a-f]{6}/gi, "<color>");
-    expect(normalize(characterRoot.style.boxShadow)).toBe(
-      normalize(eventRoot.style.boxShadow),
+    // The frame art differs by type.
+    expect(backgroundImages(characterMount.container)).toContain(
+      "card_frame.png",
+    );
+    expect(backgroundImages(eventMount.container)).toContain(
+      "card_frame_event.png",
     );
 
     act(() => {

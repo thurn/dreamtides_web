@@ -188,14 +188,16 @@ describe("Chooser overlay components", () => {
       />,
     );
 
-    expect(container.querySelector("[data-pip-variant=\"energy\"]")?.textContent)
+    expect(container.querySelector("[data-card-stat=\"energy\"]")?.textContent)
       .toBe("2");
     expect(container.querySelector("[data-testid=\"card-type-line\"]")?.textContent)
       .toContain("Warrior");
     expect(container.querySelectorAll("i.bx.bxs-flame[aria-label=\"energy\"]").length)
       .toBe(1);
+    // One corner spark orb plus one inline ⍏ pip in the rules text.
+    expect(container.querySelector("[data-card-stat=\"spark\"]")).not.toBeNull();
     expect(container.querySelectorAll("[data-pip-variant=\"spark\"]").length)
-      .toBe(2);
+      .toBe(1);
 
     const cardButton = buttonByName(container, "Alpha");
     expect(cardButton.getAttribute("data-offering-card-selected")).toBe("false");

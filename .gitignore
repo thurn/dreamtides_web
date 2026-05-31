@@ -1,6 +1,7 @@
 node_modules/
 dist/
 public/cards/
+public/card-frame/
 public/dreamcallers/
 public/dreamsigns/
 public/journeys/
