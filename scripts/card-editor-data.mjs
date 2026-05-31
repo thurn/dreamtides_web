@@ -5,7 +5,7 @@ import { parse } from "smol-toml";
 import { BANE_NAMES, transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const CARD_TOML_PATH = join("data", "tabula", "rendered-cards.toml");
+export const DEFAULT_CARD_TOML_PATH = join("data", "tabula", "rendered-cards.toml");
 const CARD_JSON_PATH = join("public", "card-data.json");
 
 export const EDITABLE_CARD_FIELDS = new Set([
@@ -16,13 +16,13 @@ export const EDITABLE_CARD_FIELDS = new Set([
   "rendered-text",
 ]);
 
-function readSourceCards(rootDir) {
-  const cardTomlPath = join(rootDir, CARD_TOML_PATH);
-  const parsed = parse(readFileSync(cardTomlPath, "utf8"));
+function readSourceCards(rootDir, cardTomlPath = DEFAULT_CARD_TOML_PATH) {
+  const absoluteTomlPath = join(rootDir, cardTomlPath);
+  const parsed = parse(readFileSync(absoluteTomlPath, "utf8"));
   const cards = parsed.cards;
 
   if (!Array.isArray(cards)) {
-    throw new Error("Expected [[cards]] array in rendered-cards.toml");
+    throw new Error(`Expected [[cards]] array in ${cardTomlPath}`);
   }
 
   return cards;
@@ -44,11 +44,11 @@ function editorRecordFromCard(card) {
   };
 }
 
-export function readEditorCards({ rootDir = ROOT } = {}) {
+export function readEditorCards({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
   // The editor does not display Special-rarity records: the only two are the
   // "Void Indicator Card" placeholder and the "Nightmare" bane, neither of
   // which is meaningful to edit through the card editor.
-  return readSourceCards(rootDir)
+  return readSourceCards(rootDir, cardTomlPath)
     .filter((card) => card.rarity !== "Special")
     .map(editorRecordFromCard);
 }
@@ -470,8 +470,8 @@ export function patchRenderedCardsToml(source, { cardId, field, value }) {
   };
 }
 
-export function refreshCardDataJson({ rootDir = ROOT } = {}) {
-  const cards = readSourceCards(rootDir)
+export function refreshCardDataJson({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
+  const cards = readSourceCards(rootDir, cardTomlPath)
     .filter((card) => card.rarity !== "Special" || BANE_NAMES.has(card.name))
     .map(transformCard);
   const cardJsonPath = join(rootDir, CARD_JSON_PATH);

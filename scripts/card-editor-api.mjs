@@ -8,9 +8,10 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  DEFAULT_CARD_TOML_PATH,
   patchRenderedCardsToml,
   readEditorCards,
   refreshCardDataJson,
@@ -19,7 +20,8 @@ import {
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/cards";
-const CARD_TOML_PATH = join("data", "tabula", "rendered-cards.toml");
+const CARD_TOML_PATH = DEFAULT_CARD_TOML_PATH;
+const CARD_TOML_DIR = join("data", "tabula");
 const CARD_JSON_PATH = join("public", "card-data.json");
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
@@ -60,6 +62,47 @@ function errorResponse(res, statusCode, code, message, details) {
 
 function rawPathFromUrl(url) {
   return (url ?? "/").split("?", 1)[0];
+}
+
+function tomlParamFromUrl(url) {
+  const queryIndex = (url ?? "").indexOf("?");
+  if (queryIndex === -1) {
+    return null;
+  }
+
+  return new URLSearchParams((url ?? "").slice(queryIndex + 1)).get("toml");
+}
+
+// Resolve the `toml` query parameter to a repository-relative path that is
+// guaranteed to live directly inside `data/tabula`. The value may be a bare
+// filename (`cards_v2.toml`) or the full relative path (`data/tabula/cards_v2.toml`).
+// When the parameter is absent the canonical rendered-cards file is used.
+function resolveRequestedTomlPath(rootDir, requested) {
+  if (requested === null || requested === undefined || requested.trim() === "") {
+    return { ok: true, relativePath: DEFAULT_CARD_TOML_PATH };
+  }
+
+  const trimmed = requested.trim();
+  if (trimmed.includes("\0")) {
+    return { ok: false, message: "The toml parameter is invalid." };
+  }
+
+  const hasDirectory = trimmed.includes("/") || trimmed.includes("\\");
+  const candidate = hasDirectory ? trimmed : join(CARD_TOML_DIR, trimmed);
+
+  if (!candidate.toLowerCase().endsWith(".toml")) {
+    return { ok: false, message: "The toml file must have a .toml extension." };
+  }
+
+  const tabulaDir = resolve(rootDir, CARD_TOML_DIR);
+  const target = resolve(rootDir, candidate);
+  const within = relative(tabulaDir, target);
+
+  if (within === "" || within.startsWith("..") || isAbsolute(within) || within.includes(sep)) {
+    return { ok: false, message: "The toml file must be located in data/tabula." };
+  }
+
+  return { ok: true, relativePath: join(CARD_TOML_DIR, within) };
 }
 
 function decodePathSegment(segment) {
@@ -288,22 +331,16 @@ function tempPathFor(destination, extension) {
   return `${destination}.${process.pid}.${Date.now()}.${saveCounter}.${extension}`;
 }
 
-function writePreparedCardFiles(rootDir, { tomlSource, cardJson }, fileSystem) {
-  const writes = [
-    {
-      destination: join(rootDir, CARD_TOML_PATH),
-      temp: tempPathFor(join(rootDir, CARD_TOML_PATH), "tmp"),
-      backup: tempPathFor(join(rootDir, CARD_TOML_PATH), "bak"),
-      content: tomlSource,
-    },
-    {
-      destination: join(rootDir, CARD_JSON_PATH),
-      temp: tempPathFor(join(rootDir, CARD_JSON_PATH), "tmp"),
-      backup: tempPathFor(join(rootDir, CARD_JSON_PATH), "bak"),
-      content: cardJson,
-    },
-  ];
+function preparedWrite(destination, content) {
+  return {
+    destination,
+    temp: tempPathFor(destination, "tmp"),
+    backup: tempPathFor(destination, "bak"),
+    content,
+  };
+}
 
+function commitFiles(writes, fileSystem) {
   try {
     for (const write of writes) {
       fileSystem.writeFileSync(write.temp, write.content);
@@ -340,7 +377,7 @@ function writePreparedCardFiles(rootDir, { tomlSource, cardJson }, fileSystem) {
   }
 }
 
-async function handlePatch(req, res, rootDir, cardId, fileSystem) {
+async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) {
   let body;
   try {
     body = await readJsonRequest(req);
@@ -384,7 +421,7 @@ async function handlePatch(req, res, rootDir, cardId, fileSystem) {
 
   const totalStart = performance.now();
   const readStart = performance.now();
-  const beforeCards = readEditorCards({ rootDir });
+  const beforeCards = readEditorCards({ rootDir, cardTomlPath });
   const readMs = elapsedMs(readStart);
 
   if (!beforeCards.some((card) => card.id === cardId)) {
@@ -392,7 +429,7 @@ async function handlePatch(req, res, rootDir, cardId, fileSystem) {
     return;
   }
 
-  const tomlPath = join(rootDir, CARD_TOML_PATH);
+  const tomlPath = join(rootDir, cardTomlPath);
   const patchStart = performance.now();
   const source = fileSystem.readFileSync(tomlPath, "utf8");
   const patched = patchRenderedCardsToml(source, {
@@ -402,13 +439,23 @@ async function handlePatch(req, res, rootDir, cardId, fileSystem) {
   });
   const patchMs = elapsedMs(patchStart);
 
+  // The runtime card catalog (public/card-data.json) is generated from the
+  // canonical rendered-cards file. Editing any other source TOML writes only
+  // that file so an alternate dataset never overwrites the runtime catalog.
+  const refreshesCardJson = cardTomlPath === DEFAULT_CARD_TOML_PATH;
   const refreshStart = performance.now();
-  const cardJson = generateCardDataJsonFromToml(patched.source, fileSystem);
-  writePreparedCardFiles(rootDir, { tomlSource: patched.source, cardJson }, fileSystem);
+  const writes = [preparedWrite(tomlPath, patched.source)];
+  if (refreshesCardJson) {
+    const cardJson = generateCardDataJsonFromToml(patched.source, fileSystem);
+    writes.push(preparedWrite(join(rootDir, CARD_JSON_PATH), cardJson));
+  }
+  commitFiles(writes, fileSystem);
   const refreshMs = elapsedMs(refreshStart);
 
   const confirmStart = performance.now();
-  const confirmedCard = readEditorCards({ rootDir }).find((card) => card.id === cardId);
+  const confirmedCard = readEditorCards({ rootDir, cardTomlPath }).find(
+    (card) => card.id === cardId,
+  );
   const confirmMs = elapsedMs(confirmStart);
 
   if (confirmedCard === undefined) {
@@ -448,15 +495,29 @@ export function createCardEditorApiMiddleware({
         return;
       }
 
+      const tomlResolution = resolveRequestedTomlPath(rootDir, tomlParamFromUrl(req.url));
+      if (!tomlResolution.ok) {
+        errorResponse(res, 400, "INVALID_TOML", tomlResolution.message);
+        return;
+      }
+
+      const cardTomlPath = tomlResolution.relativePath;
+      if (!fileSystem.existsSync(join(rootDir, cardTomlPath))) {
+        errorResponse(res, 404, "TOML_NOT_FOUND", "The requested toml file was not found.", {
+          toml: cardTomlPath,
+        });
+        return;
+      }
+
       if (req.method === "GET" && route.resource === "collection") {
         jsonResponse(res, 200, {
-          cards: readEditorCards({ rootDir }),
+          cards: readEditorCards({ rootDir, cardTomlPath }),
         });
         return;
       }
 
       if (req.method === "PATCH" && route.resource === "card") {
-        await handlePatch(req, res, rootDir, route.cardId, fileSystem);
+        await handlePatch(req, res, rootDir, route.cardId, cardTomlPath, fileSystem);
         return;
       }
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { loadEditorCards, saveEditorCardField } from "./editor-api";
+import { editorTomlParam, loadEditorCards, saveEditorCardField } from "./editor-api";
 import CardEditorGrid from "./CardEditorGrid";
 import CardEditorToolbar from "./CardEditorToolbar";
 import {
@@ -275,6 +275,12 @@ export default function CardEditorApp({
   const [displayState, setDisplayState] = useState<EditorDisplayState>(() =>
     parseEditorDisplayState(window.location.search),
   );
+  const activeTomlLabel = useMemo(() => {
+    const param = editorTomlParam();
+    const path = param ?? "rendered-cards.toml";
+    const fileName = path.split(/[\\/]/u).pop();
+    return fileName !== undefined && fileName !== "" ? fileName : path;
+  }, []);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>({
     kind: "loading",
   });
@@ -561,9 +567,7 @@ export default function CardEditorApp({
           ·
         </span>
         <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
-          {loadStatus.kind === "loaded"
-            ? "Card source editor"
-            : "Loading…"}
+          {loadStatus.kind === "loaded" ? activeTomlLabel : "Loading…"}
         </span>
       </header>
 

@@ -104,4 +104,21 @@ describe("editor URL display state", () => {
     replaceState.mockRestore();
     pushState.mockRestore();
   });
+
+  it("preserves the toml file selection across display-state URL updates", () => {
+    window.history.pushState(null, "", "/editor?toml=data/tabula/cards_v2.toml");
+    const replaceState = vi.spyOn(window.history, "replaceState");
+
+    replaceEditorDisplayStateInUrl({
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      searchText: "spark",
+    });
+
+    expect(replaceState).toHaveBeenCalledWith(
+      null,
+      "",
+      "/editor?q=spark&toml=data%2Ftabula%2Fcards_v2.toml",
+    );
+    replaceState.mockRestore();
+  });
 });

@@ -51,7 +51,9 @@ function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
   if (card.rarity === undefined) {
     return null;
   }
-  return RARITY_STYLES[card.rarity];
+  // A rarity outside RARITY_STYLES (such as the empty rarity carried by some
+  // source records) has no rarity frame.
+  return RARITY_STYLES[card.rarity] ?? null;
 }
 
 /**

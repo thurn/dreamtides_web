@@ -693,3 +693,114 @@ describe("createCardEditorApiMiddleware", () => {
     });
   });
 });
+
+const ALT_ID = "55555555-5555-4555-8555-555555555555";
+
+function altFixtureToml() {
+  return `[[cards]]
+name = "Alternate Card"
+id = "${ALT_ID}"
+tides = []
+rendered-text = "Alternate text."
+energy-cost = 3
+card-type = "Character"
+subtype = "Wanderer"
+is-fast = false
+spark = 2
+image-number = 2001
+art-owned = false
+card-number = 1
+`;
+}
+
+function writeAltFixture(rootDir, fileName = "cards_v2.toml") {
+  writeFileSync(join(rootDir, "data", "tabula", fileName), altFixtureToml());
+}
+
+function readAltToml(rootDir, fileName = "cards_v2.toml") {
+  return readFileSync(join(rootDir, "data", "tabula", fileName), "utf8");
+}
+
+describe("createCardEditorApiMiddleware toml selection", () => {
+  it("loads cards from an alternate toml selected by the full relative path", async () => {
+    const rootDir = writeFixtureRoot();
+    writeAltFixture(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(
+      origin,
+      "/api/editor/cards?toml=data/tabula/cards_v2.toml",
+    );
+
+    expect(response.status).toBe(200);
+    expect(body.cards.map((card) => card.id)).toEqual([ALT_ID]);
+  });
+
+  it("accepts a bare filename for the toml parameter", async () => {
+    const rootDir = writeFixtureRoot();
+    writeAltFixture(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, "/api/editor/cards?toml=cards_v2.toml");
+
+    expect(response.status).toBe(200);
+    expect(body.cards.map((card) => card.id)).toEqual([ALT_ID]);
+  });
+
+  it("edits the alternate toml without touching the runtime card-data.json", async () => {
+    const rootDir = writeFixtureRoot();
+    writeAltFixture(rootDir);
+    const originalCardJson = readCardJson(rootDir);
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(
+      origin,
+      `/api/editor/cards/${ALT_ID}?toml=cards_v2.toml`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: ALT_ID, field: "name", value: "Renamed Alt" }),
+      },
+    );
+
+    expect(response.status).toBe(200);
+    expect(body.card).toMatchObject({ id: ALT_ID, name: "Renamed Alt" });
+    expect(readAltToml(rootDir)).toContain('name = "Renamed Alt"');
+    // The canonical file and the generated runtime catalog are untouched.
+    expect(readToml(rootDir)).toBe(fixtureToml());
+    expect(readCardJson(rootDir)).toBe(originalCardJson);
+  });
+
+  it("returns 404 when the requested toml file does not exist", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, "/api/editor/cards?toml=missing.toml");
+
+    expect(response.status).toBe(404);
+    expect(body.error).toMatchObject({ code: "TOML_NOT_FOUND" });
+  });
+
+  it("rejects toml paths that escape data/tabula", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(
+      origin,
+      `/api/editor/cards?toml=${encodeURIComponent("../../etc/passwd.toml")}`,
+    );
+
+    expect(response.status).toBe(400);
+    expect(body.error).toMatchObject({ code: "INVALID_TOML" });
+  });
+
+  it("rejects toml parameters without a .toml extension", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, "/api/editor/cards?toml=cards_v2.json");
+
+    expect(response.status).toBe(400);
+    expect(body.error).toMatchObject({ code: "INVALID_TOML" });
+  });
+});

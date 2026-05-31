@@ -75,10 +75,35 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
+/**
+ * The `toml` URL parameter selects which source TOML file under `data/tabula`
+ * the editor reads and writes. When absent the canonical rendered-cards file
+ * is used. The same value is forwarded to every editor API request so loads
+ * and saves stay pinned to the selected file.
+ */
+export function editorTomlParam(): string | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const value = new URLSearchParams(window.location.search).get("toml");
+  return value !== null && value.trim() !== "" ? value : null;
+}
+
+function withTomlParam(path: string): string {
+  const toml = editorTomlParam();
+  if (toml === null) {
+    return path;
+  }
+
+  const separator = path.includes("?") ? "&" : "?";
+  return `${path}${separator}toml=${encodeURIComponent(toml)}`;
+}
+
 export async function loadEditorCards(
   signal?: AbortSignal,
 ): Promise<LoadEditorCardsResponse["cards"]> {
-  const response = await fetch("/api/editor/cards", {
+  const response = await fetch(withTomlParam("/api/editor/cards"), {
     headers: {
       Accept: "application/json",
     },
@@ -91,7 +116,7 @@ export async function loadEditorCards(
 export async function saveEditorCardField(
   request: SaveEditorCardFieldRequest,
 ): Promise<SaveEditorCardFieldResponse> {
-  const response = await fetch(`/api/editor/cards/${request.id}`, {
+  const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
     method: "PATCH",
     headers: {
       Accept: "application/json",
