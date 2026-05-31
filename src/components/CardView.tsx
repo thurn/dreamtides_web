@@ -31,8 +31,8 @@ const RULES_FONT_FAMILY = "var(--cv-rules-font-family)";
  * digit auto-shrink search. The rendered orb size is the `--cv-*-orb-size` CSS
  * var; these mirror its defaults.
  */
-const ENERGY_ORB_RATIO = 0.156;
-const SPARK_ORB_RATIO = 0.132;
+const ENERGY_ORB_RATIO = 0.152;
+const SPARK_ORB_RATIO = 0.088;
 
 /**
  * Visual treatment for a rarity bucket. A rarity adds an outer accent ring
@@ -193,10 +193,12 @@ export interface CardViewProps {
 /**
  * Renders a Dreamtides card: full-bleed art covering the whole 2:3 portrait
  * frame, with all chrome floating over it as translucent, blurred elements.
- * The energy cost and spark orbs share a column in the top-left corner; a
- * single bottom-anchored text box carries a name / type title band over the
- * rules body and auto-sizes to the amount of rules text. Top and bottom
- * gradient scrims keep the chrome legible over any illustration.
+ * A frosted name bar runs across the top holding the card name (with the spark
+ * orb at its right edge), and the large energy cost orb floats over the bar's
+ * left end, protruding above and below it. A single bottom-anchored text box
+ * pairs the italic type line over the rules body and auto-sizes to the amount
+ * of rules text. Top and bottom gradient scrims keep the chrome legible over
+ * any illustration.
  */
 export function CardView({
   card,
@@ -309,19 +311,15 @@ export function CardView({
       <div
         data-testid="card-type-line"
         style={{
-          flex: "0 1 auto",
-          minWidth: 0,
-          overflow: "hidden",
-          whiteSpace: "nowrap",
-          textAlign: "right",
+          textAlign: "left",
           color: TYPE_COLOR,
           fontFamily: NAME_FONT_FAMILY,
           fontStyle: "italic",
           fontWeight: 500,
-          letterSpacing: "0.01em",
-          textShadow: "0 1px 1px rgba(0, 0, 0, 0.65)",
+          letterSpacing: "0.02em",
+          textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
           fontSize: "var(--cv-type-font-size)",
-          lineHeight: 1.1,
+          lineHeight: 1.2,
         }}
       >
         {attributeChips.map((chip) => (
@@ -341,7 +339,6 @@ export function CardView({
   const rulesTextNode = showRulesText ? (
     <div
       style={{
-        padding: "var(--cv-rules-pad)",
         textAlign: "left",
         color: tintColor ?? RULES_COLOR,
         fontFamily: RULES_FONT_FAMILY,
@@ -379,6 +376,8 @@ export function CardView({
     slots.typeLine?.(slotContext, typeLineNode) ?? typeLineNode;
   const renderedRulesNode =
     slots.rulesText?.(slotContext, rulesTextNode) ?? rulesTextNode;
+  const hasTextboxContent =
+    Boolean(renderedTypeLineNode) || Boolean(renderedRulesNode);
 
   return (
     <div
@@ -492,77 +491,88 @@ export function CardView({
       />
 
       {/*
-        Bottom-anchored text box: a name / type title band over the rules body.
+        Bottom-anchored text box: the italic type line paired tightly over the
+        rules body (a `gap` reads the type as the lead-in line of the rules).
         Height is automatic so the box grows or shrinks with the rules text,
         capped by `--cv-textbox-max-height`. The blur + translucent gradient
         let the art read through while keeping text legible.
+      */}
+      {hasTextboxContent ? (
+        <div
+          style={
+            {
+              position: "absolute",
+              left: "var(--cv-textbox-inset)",
+              right: "var(--cv-textbox-inset)",
+              bottom: "var(--cv-textbox-inset)",
+              zIndex: 4,
+              maxHeight: "var(--cv-textbox-max-height)",
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+              gap: "var(--cv-type-gap)",
+              padding: "var(--cv-textbox-pad)",
+              borderRadius: "var(--cv-textbox-radius)",
+              background: "var(--cv-textbox-bg)",
+              backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+              WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+              border: "1px solid var(--cv-textbox-border)",
+              boxShadow:
+                "0 1px 0 rgba(255,255,255,0.07) inset, 0 12px 28px rgba(0,0,0,0.5)",
+            } satisfies CSSProperties
+          }
+        >
+          {renderedTypeLineNode}
+          {renderedRulesNode}
+        </div>
+      ) : null}
+
+      {/*
+        Top name bar: the card name (left, flexes to fill) with the spark orb at
+        its right edge. The bar's left padding clears the energy orb that floats
+        over its left end.
       */}
       <div
         style={
           {
             position: "absolute",
-            left: "var(--cv-textbox-inset)",
-            right: "var(--cv-textbox-inset)",
-            bottom: "var(--cv-textbox-inset)",
-            zIndex: 4,
-            maxHeight: "var(--cv-textbox-max-height)",
+            top: "var(--cv-namebar-top)",
+            left: "var(--cv-namebar-left)",
+            right: "var(--cv-header-inset)",
+            height: "var(--cv-namebar-height)",
+            zIndex: 5,
+            display: "flex",
+            alignItems: "center",
+            gap: "var(--cv-namebar-gap)",
+            paddingLeft: "var(--cv-namebar-pad-left)",
+            paddingRight: "var(--cv-namebar-pad-right)",
             overflow: "hidden",
-            borderRadius: "var(--cv-textbox-radius)",
+            borderRadius: "var(--cv-namebar-radius)",
             background: "var(--cv-textbox-bg)",
             backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
             WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
             border: "1px solid var(--cv-textbox-border)",
             boxShadow:
-              "0 1px 0 rgba(255,255,255,0.07) inset, 0 12px 28px rgba(0,0,0,0.5)",
+              "0 1px 0 rgba(255,255,255,0.16) inset, 0 -6px 14px rgba(0,0,0,0.30) inset, 0 6px 16px rgba(0,0,0,0.34)",
           } satisfies CSSProperties
         }
       >
-        {/* Title band: name (left) and type (right) share one baseline. */}
-        <div
-          style={
-            {
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "space-between",
-              gap: "var(--cv-name-type-gap)",
-              padding: "var(--cv-titleband-pad)",
-              background: "var(--cv-titleband-bg)",
-              borderBottom: "1px solid var(--cv-titleband-border)",
-              boxShadow: "0 1px 0 rgba(255,255,255,0.06) inset",
-              overflow: "hidden",
-            } satisfies CSSProperties
-          }
-        >
-          {renderedNameNode}
-          {renderedTypeLineNode}
-        </div>
-
-        {/* Rules body. */}
-        {renderedRulesNode}
+        {renderedNameNode}
+        {hasSparkContent ? renderedSparkContent : null}
       </div>
 
-      {/* Cost / spark orb column, top-left (spark stacked beneath the cost). */}
+      {/* Energy cost orb, floating over the name bar's left end and protruding
+          above and below it. */}
       <div
-        className="absolute z-10"
+        className="absolute"
         style={{
           top: "var(--cv-energy-orb-top)",
           left: "var(--cv-energy-orb-left)",
+          zIndex: 10,
         }}
       >
         {slots.energy?.(slotContext, energyNode) ?? energyNode}
       </div>
-
-      {hasSparkContent ? (
-        <div
-          className="absolute z-10"
-          style={{
-            top: "var(--cv-spark-orb-top)",
-            left: "var(--cv-spark-orb-left)",
-          }}
-        >
-          {renderedSparkContent}
-        </div>
-      ) : null}
     </div>
   );
 }

@@ -165,7 +165,7 @@ button:disabled {
  * against the card's own width (1cqw = 1% of the rendered card width). All
  * chrome sizes scale with the card via `cqw`; the values below are the design
  * spec's 500px-wide measurements expressed as a fraction of that width
- * (e.g. the 78px energy orb is 78 / 500 = 15.6cqw).
+ * (e.g. the 76px energy orb is 76 / 500 = 15.2cqw).
  *
  * The text box is bottom-anchored with automatic height, so it grows or
  * shrinks to fit the rules text — a shorter ability reveals more art. The
@@ -173,8 +173,9 @@ button:disabled {
  * against the card because the box is absolutely positioned) bounds how far an
  * unusually long ability can climb before its overflow is clipped.
  *
- * The cost / spark orbs share a vertical column in the top-left corner: the
- * energy cost on top, the slightly smaller spark directly beneath it.
+ * A frosted name bar runs across the top: the energy cost orb floats over its
+ * left end (protruding above and below), the card name flexes to fill the
+ * middle, and the smaller spark orb sits at the right.
  */
 .card-view {
   container-type: inline-size;
@@ -191,76 +192,73 @@ button:disabled {
   --cv-radius: 3.6% / 2.4%;
   --cv-textbox-radius: 2.6cqw;
 
-  /* Cost / spark orb column, top-left. Spark is centered on the cost's axis. */
-  --cv-energy-orb-size: 15.6cqw;
-  --cv-spark-orb-size: 13.2cqw;
-  --cv-energy-orb-top: 2.8cqw;
-  --cv-energy-orb-left: 2.8cqw;
-  --cv-spark-orb-top: 18cqw;
-  --cv-spark-orb-left: 4cqw;
+  /* Energy cost orb (floats over the name bar's left end, protruding above and
+   * below it) and spark orb (sits at the right of the name bar). */
+  --cv-energy-orb-size: 15.2cqw;
+  --cv-spark-orb-size: 8.8cqw;
+  --cv-energy-orb-top: 3.2cqw;
+  --cv-energy-orb-left: 3.6cqw;
+
+  /* Top name bar geometry. */
+  --cv-header-inset: 3.6cqw;
+  --cv-namebar-top: 5.8cqw;
+  --cv-namebar-left: 11.2cqw;
+  --cv-namebar-height: 10cqw;
+  --cv-namebar-radius: 2.8cqw;
+  --cv-namebar-gap: 2cqw;
+  --cv-namebar-pad-left: 10cqw;
+  --cv-namebar-pad-right: 1.6cqw;
 
   /* Floating text box: inset from the card edges, anchored to the bottom. */
   --cv-textbox-inset: 3.6cqw;
   --cv-textbox-max-height: 74%;
   --cv-textbox-blur: 11px;
+  --cv-textbox-pad: 2.6cqw 3.2cqw;
 
-  /* Title band (name + type) padding and the rules-body padding. */
-  --cv-titleband-pad: 2cqw 3.4cqw 1.8cqw;
-  --cv-rules-pad: 2.8cqw 3.6cqw 3cqw;
-  --cv-name-type-gap: 2.4cqw;
-  --cv-rules-line-height: 1.36;
+  /* Tight type-line/rules pairing and rules line spacing. */
+  --cv-type-gap: 0.8cqw;
+  --cv-rules-line-height: 1.38;
   --cv-paragraph-gap: 0.68em;
 
-  /* Legibility scrims behind the orb column (top) and text box (bottom). */
-  --cv-vignette-top-height: 20%;
-  --cv-vignette-bottom-height: 42%;
+  /* Legibility scrims behind the name bar (top) and text box (bottom). */
+  --cv-vignette-top-height: 24%;
+  --cv-vignette-bottom-height: 46%;
 
-  /* Font sizes, as fixed fractions of the card width (23px / 15px / 17.5px at
-   * the 500px design width). They never auto-shrink per card, so every card on
-   * a surface shares one type scale and the name : rules size ratio always
-   * matches the spec (4.6 / 3.5 ≈ 23 / 17.5). A name too long for one line
+  /* Font sizes, as fixed fractions of the card width (24px / 15px / 18px at the
+   * 500px design width). They never auto-shrink per card, so every card on a
+   * surface shares one type scale and the name : rules size ratio always
+   * matches the spec (4.8 / 3.6 = 24 / 18). A name too long for one line
    * truncates with an ellipsis instead of shrinking; the rules body keeps its
    * size and lets the text box grow taller. */
-  --cv-name-font-size: 4.6cqw;
+  --cv-name-font-size: 4.8cqw;
   --cv-type-font-size: 3cqw;
-  --cv-rules-font-size: 3.5cqw;
+  --cv-rules-font-size: 3.6cqw;
 
   /* Typography. */
   --cv-name-font-family: "EB Garamond", Georgia, serif;
   --cv-rules-font-family: "Fira Sans Condensed", "Inter", sans-serif;
   --cv-name-color: #f6f6f5;
-  --cv-type-color: rgba(238, 238, 236, 0.78);
+  --cv-type-color: rgba(238, 238, 236, 0.74);
   --cv-rules-color: #f1f1f0;
 
-  /* Monochrome black chrome for the default (Character) frame. */
+  /* Monochrome black chrome for the default (Character) frame. The name bar
+   * reuses this fill so the two floating panels read as one material. */
   --cv-textbox-bg: linear-gradient(
     180deg,
-    rgba(6, 6, 7, 0.62) 0%,
-    rgba(2, 2, 3, 0.74) 100%
+    rgba(6, 6, 7, 0.8) 0%,
+    rgba(2, 2, 3, 0.86) 100%
   );
   --cv-textbox-border: rgba(255, 255, 255, 0.14);
-  --cv-titleband-bg: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.11) 0%,
-    rgba(255, 255, 255, 0.035) 100%
-  );
-  --cv-titleband-border: rgba(255, 255, 255, 0.14);
 }
 
-/* Event frame: a dark purple accent on the title band and text box. */
+/* Event frame: a dark purple accent on the name bar and text box. */
 .card-view[data-card-type="Event"] {
   --cv-textbox-bg: linear-gradient(
     180deg,
-    rgba(36, 15, 49, 0.66) 0%,
-    rgba(18, 7, 27, 0.8) 100%
+    rgba(40, 16, 56, 0.82) 0%,
+    rgba(19, 8, 30, 0.88) 100%
   );
   --cv-textbox-border: rgba(178, 132, 226, 0.32);
-  --cv-titleband-bg: linear-gradient(
-    180deg,
-    rgba(101, 49, 156, 0.64) 0%,
-    rgba(60, 25, 102, 0.68) 100%
-  );
-  --cv-titleband-border: rgba(184, 138, 232, 0.38);
 }
 
 /*

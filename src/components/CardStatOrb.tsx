@@ -36,8 +36,9 @@ interface CardStatOrbProps {
 
 /**
  * A card stat rendered as a glowing orb with a centered number. Energy cost
- * uses the teal orb (top-left of the card); spark uses the gold orb
- * (bottom-right). The number is set in Anton — white with a black outline —
+ * uses the teal orb (floating over the top name bar's left end); spark uses
+ * the gold orb (at the right of the name bar). The number is set in Anton —
+ * white with a black outline —
  * and auto-shrinks to fit the orb so multi-digit values never overflow.
  *
  * Single source of truth for the orb stat treatment shared by every
