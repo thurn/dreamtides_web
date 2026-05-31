@@ -945,8 +945,11 @@ name = "Griefglass Collector"
 mtg-name = "Marionette Apprentice"
 id = "cbabe603-1333-42bd-85c0-555c664b60b3"
 tides = []
-rendered-text = "When an ally is dissolved, gain 1⍟."
-energy-cost = 2
+rendered-text = '''
+▸Materialized: Materialize a 1✦ ethereal figment.
+
+When an ally is dissolved, gain 1⍟.'''
+energy-cost = 3
 card-type = "Character"
 subtype = ""
 rarity = ""
@@ -1325,7 +1328,7 @@ name = "Dissolution Mourner"
 mtg-name = "Zulaport Cutthroat"
 id = "ffec9fdd-d948-4756-b7df-39b9e982613e"
 tides = []
-rendered-text = "When an ally is dissolved, gain 1⍟."
+rendered-text = "When an ally leaves play, gain 1⍟."
 energy-cost = 2
 card-type = "Character"
 subtype = ""
@@ -1822,11 +1825,14 @@ name = "Crossroads of the Drowned"
 mtg-name = "Prismari Command"
 id = "e3431bd0-5a81-497f-9ec9-18275b568c00"
 tides = []
-rendered-text = """
+rendered-text = '''
 Choose One:
+
 - Dissolve an enemy with 2✦ or less.
+
 - Draw 2 cards, then discard 2 cards.
-- Return a character with cost 2● or less from your void to hand."""
+
+- Return a character with cost 2● or less from your void to hand.'''
 energy-cost = 3
 card-type = "Event"
 subtype = ""
@@ -3725,7 +3731,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Score Trigger"]
+tags = []
 image-number = ""
 art-owned = false
 card-number = 194
@@ -4628,7 +4634,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Score Trigger"]
+tags = []
 image-number = ""
 art-owned = false
 card-number = 241
@@ -5398,10 +5404,10 @@ name = "Drown the Faint Spark"
 mtg-name = "Darkblast"
 id = "7762759b-c1df-4c86-9dbb-a49d152f3616"
 tides = []
-rendered-text = """
+rendered-text = '''
 Dissolve an enemy with 1✦ or less.
 
-Reclaim 1●"""
+Reclaim 1●'''
 energy-cost = 1
 card-type = "Event"
 subtype = ""
