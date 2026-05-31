@@ -39,6 +39,7 @@ const SORT_PARAM_TO_FIELD = new Map<string, EditorSortField>([
   ["type", "type"],
   ["subtype", "subtype"],
   ["spark", "spark"],
+  ["rulestextlength", "rulesTextLength"],
 ]);
 const SORT_FIELD_TO_PARAM: Record<EditorSortField, string> = {
   cardNumber: "number",
@@ -47,6 +48,7 @@ const SORT_FIELD_TO_PARAM: Record<EditorSortField, string> = {
   type: "type",
   subtype: "subtype",
   spark: "spark",
+  rulesTextLength: "rulestextlength",
 };
 const DIR_VALUES = new Set<EditorSortDirection>(["asc", "desc"]);
 const SIZE_VALUES = new Set<EditorCardSize>(["small", "medium", "large"]);

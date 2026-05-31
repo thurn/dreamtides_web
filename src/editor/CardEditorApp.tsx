@@ -148,6 +148,8 @@ function sortValue(card: EditorCardRecord, sort: EditorSortField): string | numb
       return sourceSubtype(card);
     case "spark":
       return sortSparkValue(card);
+    case "rulesTextLength":
+      return card.preview.renderedText.length;
   }
 }
 

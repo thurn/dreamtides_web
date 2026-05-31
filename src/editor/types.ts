@@ -52,7 +52,8 @@ export type EditorSortField =
   | "cost"
   | "type"
   | "subtype"
-  | "spark";
+  | "spark"
+  | "rulesTextLength";
 export type EditorSortDirection = "asc" | "desc";
 export type EditorCardSize = "small" | "medium" | "large";
 /**

@@ -33,8 +33,7 @@ type SortCriteria =
   | "acquisitionOrder"
   | "energyCost"
   | "name"
-  | "cardType"
-  | "rulesTextLength";
+  | "cardType";
 
 /** Labels for sort criteria. */
 const SORT_LABELS: Readonly<Record<SortCriteria, string>> = {
@@ -42,7 +41,6 @@ const SORT_LABELS: Readonly<Record<SortCriteria, string>> = {
   energyCost: "Energy Cost",
   name: "Name",
   cardType: "Card Type",
-  rulesTextLength: "Rules Text Length",
 };
 
 /** Card type filter options. */
@@ -190,9 +188,6 @@ export function DeckViewer({
           break;
         case "cardType":
           cmp = a.card.cardType.localeCompare(b.card.cardType);
-          break;
-        case "rulesTextLength":
-          cmp = a.card.renderedText.length - b.card.renderedText.length;
           break;
       }
       return sortAscending ? cmp : -cmp;
