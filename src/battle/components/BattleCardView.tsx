@@ -28,7 +28,7 @@ export function battleCardVisualFromInstance(
   instance: BattleCardInstance,
 ): BattleCardVisualData {
   return {
-    artUrl: instance.definition.imageNumber > 0 ? cardImageUrl(instance.definition.cardNumber) : null,
+    artUrl: instance.definition.imageNumber > 0 ? cardImageUrl(instance.definition.imageNumber) : null,
     cost: instance.definition.energyCost,
     figmentCount: selectFigmentCount(instance),
     isFast: instance.definition.isFast,
@@ -47,7 +47,7 @@ export function battleCardVisualFromReward(
   card: FrozenCardData,
 ): BattleCardVisualData {
   return {
-    artUrl: card.artOwned ? cardImageUrl(card.cardNumber) : null,
+    artUrl: card.artOwned ? cardImageUrl(card.imageNumber) : null,
     cost: card.energyCost ?? 0,
     figmentCount: 1,
     isFast: card.isFast,

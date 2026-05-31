@@ -288,7 +288,7 @@ function DeckSidebar({
                   // lighter veil over the right so the art reads as the row's
                   // identifier. A faint dim at the far right brings the
                   // duplicate count back into legibility.
-                  backgroundImage: `linear-gradient(90deg, rgba(10, 6, 18, 0.85) 0%, rgba(10, 6, 18, 0.35) 35%, rgba(10, 6, 18, 0.05) 65%, rgba(10, 6, 18, 0.45) 100%), url("${cardImageUrl(cardNumber)}")`,
+                  backgroundImage: `linear-gradient(90deg, rgba(10, 6, 18, 0.85) 0%, rgba(10, 6, 18, 0.35) 35%, rgba(10, 6, 18, 0.05) 65%, rgba(10, 6, 18, 0.45) 100%), url("${cardImageUrl(card.imageNumber)}")`,
                   backgroundSize: "cover",
                   backgroundPosition: `center ${DECK_ROW_ART_FOCAL_Y}`,
                   backgroundRepeat: "no-repeat",

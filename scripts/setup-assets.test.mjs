@@ -196,7 +196,7 @@ rendered-text = "Use the canonical Dreamsign text."
         packageTides: ["core", "support"],
       },
     ]);
-    expect(existsSync(join(publicDir, "cards", "1.webp"))).toBe(true);
+    expect(existsSync(join(publicDir, "cards", "101.webp"))).toBe(true);
     expect(existsSync(join(publicDir, "dreamcallers", "0007.png"))).toBe(true);
     expect(existsSync(join(publicDir, "dreamsigns", "test-sign.png"))).toBe(true);
   });

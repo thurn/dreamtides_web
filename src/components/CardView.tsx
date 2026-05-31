@@ -215,7 +215,7 @@ export function CardView({
 
   useEffect(() => {
     setImageError(false);
-  }, [card.cardNumber]);
+  }, [card.imageNumber]);
 
   const accentColor = CHARACTER_CHROME_COLOR;
   const chromeColor =
@@ -419,7 +419,7 @@ export function CardView({
       <div className="relative w-full" style={{ height: "45%" }}>
         {!imageError ? (
           <img
-            src={cardImageUrl(card.cardNumber)}
+            src={cardImageUrl(card.imageNumber)}
             alt={card.name}
             className="h-full w-full object-cover"
             draggable={false}

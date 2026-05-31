@@ -1,8 +1,8 @@
 import type { CardData } from "../types/cards";
 
-/** Returns the URL path for a card's image. */
-export function cardImageUrl(cardNumber: number): string {
-  return `/cards/${String(cardNumber)}.webp`;
+/** Returns the URL path for a card's image, keyed by its image number. */
+export function cardImageUrl(imageNumber: number): string {
+  return `/cards/${String(imageNumber)}.webp`;
 }
 
 export function isStarterCard(card: Pick<CardData, "isStarter">): boolean {

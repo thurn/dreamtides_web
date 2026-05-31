@@ -269,15 +269,32 @@ export function setupAssets({
   let missing = 0;
 
   for (const card of jsonCards) {
+    if (
+      card.imageNumber === "" ||
+      card.imageNumber === null ||
+      card.imageNumber === undefined
+    ) {
+      continue;
+    }
+
     const hash = imageHash(card.imageNumber);
     const cachePath = join(imageCacheDir, hash);
-    const symlinkPath = join(cardsDir, `${card.cardNumber}.webp`);
+    const symlinkPath = join(cardsDir, `${card.imageNumber}.webp`);
+
+    // Several cards can share one image number, so the symlink for an image is
+    // created once and reused by every card that references it.
+    if (existsSync(symlinkPath)) {
+      linked++;
+      continue;
+    }
 
     if (existsSync(cachePath)) {
       symlinkSync(cachePath, symlinkPath);
       linked++;
     } else {
-      console.warn(`  Warning: missing cache file for card ${card.cardNumber} (${card.name}): ${hash}`);
+      console.warn(
+        `  Warning: missing cache file for image ${card.imageNumber} (${card.name}): ${hash}`,
+      );
       missing++;
     }
   }
