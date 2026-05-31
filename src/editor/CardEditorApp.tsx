@@ -1,7 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { editorTomlParam, loadEditorCards, saveEditorCardField } from "./editor-api";
+import {
+  editorTomlParam,
+  loadEditorCards,
+  loadEditorTags,
+  saveEditorCardField,
+  saveEditorCardTags,
+  saveEditorTagRegistry,
+} from "./editor-api";
 import CardEditorGrid from "./CardEditorGrid";
+import type { CardTagSaveState } from "./CardEditorGrid";
 import CardEditorToolbar from "./CardEditorToolbar";
+import ManageTagsModal from "./ManageTagsModal";
 import {
   parseEditorDisplayState,
   replaceEditorDisplayStateInUrl,
@@ -25,11 +34,15 @@ import type {
   EditorCardRecord,
   EditorDisplayState,
   EditorSortField,
+  EditorTag,
 } from "./types";
 
 const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
   loadEditorCards,
   saveEditorCardField,
+  loadEditorTags,
+  saveEditorCardTags,
+  saveEditorTagRegistry,
 };
 
 type LoadStatus =
@@ -65,6 +78,8 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-type": displayState.type,
     "data-editor-cost": displayState.cost,
     "data-editor-subtype": displayState.subtype,
+    "data-editor-tags": displayState.tagFilters.join(","),
+    "data-editor-tag-editing": String(displayState.tagEditing),
     "data-editor-sort": displayState.sort,
     "data-editor-dir": displayState.dir,
     "data-editor-size": displayState.size,
@@ -172,6 +187,14 @@ function filteredAndSortedCards(
       if (
         displayState.cost !== "all" &&
         costFilterValue(card) !== displayState.cost
+      ) {
+        return false;
+      }
+
+      // Tag filters use AND semantics: a card must carry every selected tag.
+      if (
+        displayState.tagFilters.length > 0 &&
+        !displayState.tagFilters.every((tag) => card.tags.includes(tag))
       ) {
         return false;
       }
@@ -289,6 +312,13 @@ export default function CardEditorApp({
     EMPTY_EDITOR_SAVE_STATE,
   );
   const saveStateRef = useRef(saveState);
+  const [tags, setTags] = useState<EditorTag[]>([]);
+  const [tagSaveState, setTagSaveState] = useState<
+    Record<string, CardTagSaveState>
+  >({});
+  const [manageTagsOpen, setManageTagsOpen] = useState(false);
+  const [registrySaving, setRegistrySaving] = useState(false);
+  const [registryError, setRegistryError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -321,6 +351,34 @@ export default function CardEditorApp({
     };
   }, [apiClient, loadAttempt]);
 
+  useEffect(() => {
+    let cancelled = false;
+    const controller = new AbortController();
+
+    async function loadTags() {
+      try {
+        const loadedTags = await apiClient.loadEditorTags(controller.signal);
+        if (!cancelled) {
+          setTags(loadedTags);
+        }
+      } catch (error) {
+        if (isAbortError(error) || cancelled) {
+          return;
+        }
+        // A missing or unreadable registry should not break card editing; the
+        // grid falls back to neutral tag colors until the registry loads.
+        setTags([]);
+      }
+    }
+
+    void loadTags();
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [apiClient, loadAttempt]);
+
   const loadedCards = loadStatus.kind === "loaded" ? loadStatus.cards : [];
   const subtypeOptions = useMemo(
     () => subtypeOptionsFromCards(loadedCards),
@@ -330,6 +388,15 @@ export default function CardEditorApp({
     () => filteredAndSortedCards(loadedCards, displayState),
     [loadedCards, displayState],
   );
+  const tagUsageCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const card of loadedCards) {
+      for (const tag of card.tags) {
+        counts[tag] = (counts[tag] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [loadedCards]);
 
   function handleDisplayStateChange(nextState: EditorDisplayState) {
     setDisplayState(nextState);
@@ -521,6 +588,73 @@ export default function CardEditorApp({
       });
   }
 
+  function applyCardTags(card: EditorCardRecord, nextTags: string[]) {
+    const previousTags = card.tags;
+    // Optimistically reflect the change so the chip appears/disappears
+    // immediately; the server result replaces it, or a failure reverts it.
+    replaceConfirmedCard({ ...card, tags: nextTags });
+    setTagSaveState((current) => ({
+      ...current,
+      [card.id]: { saving: true, error: null },
+    }));
+
+    void apiClient
+      .saveEditorCardTags({ id: card.id, tags: nextTags })
+      .then((response) => {
+        replaceConfirmedCard(response.card);
+        setTagSaveState((current) => ({
+          ...current,
+          [card.id]: { saving: false, error: null },
+        }));
+      })
+      .catch((error: unknown) => {
+        replaceConfirmedCard({ ...card, tags: previousTags });
+        setTagSaveState((current) => ({
+          ...current,
+          [card.id]: { saving: false, error: errorMessageFor(error) },
+        }));
+      });
+  }
+
+  function handleAddCardTag(card: EditorCardRecord, name: string) {
+    if (card.tags.includes(name)) {
+      return;
+    }
+    applyCardTags(card, [...card.tags, name]);
+  }
+
+  function handleRemoveCardTag(card: EditorCardRecord, name: string) {
+    if (!card.tags.includes(name)) {
+      return;
+    }
+    applyCardTags(
+      card,
+      card.tags.filter((tag) => tag !== name),
+    );
+  }
+
+  function handleSaveTagRegistry(nextTags: EditorTag[]) {
+    setRegistrySaving(true);
+    setRegistryError(null);
+
+    void apiClient
+      .saveEditorTagRegistry({ tags: nextTags })
+      .then((response) => {
+        setTags(response.tags);
+        setLoadStatus((current) =>
+          current.kind === "loaded"
+            ? { kind: "loaded", cards: response.cards }
+            : current,
+        );
+        setRegistrySaving(false);
+        setManageTagsOpen(false);
+      })
+      .catch((error: unknown) => {
+        setRegistrySaving(false);
+        setRegistryError(errorMessageFor(error));
+      });
+  }
+
   return (
     <main
       aria-busy={loadStatus.kind === "loading"}
@@ -601,9 +735,11 @@ export default function CardEditorApp({
             <CardEditorToolbar
               displayState={displayState}
               subtypeOptions={subtypeOptions}
+              availableTags={tags}
               visibleCount={visibleCards.length}
               totalCount={loadStatus.cards.length}
               onDisplayStateChange={handleDisplayStateChange}
+              onOpenManageTags={() => setManageTagsOpen(true)}
             />
             {visibleCards.length === 0 ? (
               <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
@@ -614,11 +750,17 @@ export default function CardEditorApp({
                 cards={visibleCards}
                 size={displayState.size}
                 saveState={saveState}
+                tagEditing={displayState.tagEditing}
+                availableTags={tags}
+                tagSaveState={tagSaveState}
                 onFieldBeginEdit={handleFieldBeginEdit}
                 onFieldDraftChange={handleFieldDraftChange}
                 onFieldCancel={handleFieldCancel}
                 onFieldSave={handleFieldSave}
                 onFieldCommit={handleFieldCommit}
+                onAddCardTag={handleAddCardTag}
+                onRemoveCardTag={handleRemoveCardTag}
+                onOpenManageTags={() => setManageTagsOpen(true)}
               />
             )}
           </div>
@@ -656,6 +798,20 @@ export default function CardEditorApp({
           </div>
         ) : null}
       </section>
+
+      {manageTagsOpen ? (
+        <ManageTagsModal
+          tags={tags}
+          usageCounts={tagUsageCounts}
+          saving={registrySaving}
+          saveError={registryError}
+          onSave={handleSaveTagRegistry}
+          onClose={() => {
+            setManageTagsOpen(false);
+            setRegistryError(null);
+          }}
+        />
+      ) : null}
     </main>
   );
 }

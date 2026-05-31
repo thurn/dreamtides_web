@@ -1,9 +1,15 @@
 import { useRef, type ReactNode } from "react";
 import { CardView } from "../components/CardView";
 import type { CardViewSlots } from "../components/CardView";
+import CardTagEditor from "./CardTagEditor";
 import EditableField from "./EditableField";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
-import type { EditableCardField, EditorCardRecord, EditorDisplayState } from "./types";
+import type {
+  EditableCardField,
+  EditorCardRecord,
+  EditorDisplayState,
+  EditorTag,
+} from "./types";
 
 export interface EditableCardProps {
   card: EditorCardRecord;
@@ -13,6 +19,10 @@ export interface EditableCardProps {
   sparkSaveEntry: EditableFieldSaveEntry | null;
   subtypeSaveEntry: EditableFieldSaveEntry | null;
   rulesTextSaveEntry: EditableFieldSaveEntry | null;
+  tagEditing: boolean;
+  availableTags: EditorTag[];
+  tagSaving: boolean;
+  tagError: string | null;
   onFieldBeginEdit: (
     card: EditorCardRecord,
     field: EditableCardField,
@@ -34,6 +44,9 @@ export interface EditableCardProps {
     field: EditableCardField,
     value: EditableFieldValue,
   ) => void;
+  onAddCardTag: (card: EditorCardRecord, name: string) => void;
+  onRemoveCardTag: (card: EditorCardRecord, name: string) => void;
+  onOpenManageTags: () => void;
 }
 
 function displayEditorValue(value: EditableFieldValue): EditableFieldValue {
@@ -65,11 +78,18 @@ export default function EditableCard({
   sparkSaveEntry,
   subtypeSaveEntry,
   rulesTextSaveEntry,
+  tagEditing,
+  availableTags,
+  tagSaving,
+  tagError,
   onFieldBeginEdit,
   onFieldDraftChange,
   onFieldCancel,
   onFieldSave,
   onFieldCommit,
+  onAddCardTag,
+  onRemoveCardTag,
+  onOpenManageTags,
 }: EditableCardProps) {
   const cardRef = useRef<HTMLElement | null>(null);
 
@@ -226,6 +246,17 @@ export default function EditableCard({
         suppressHoverHelp
         slots={slots}
       />
+      {tagEditing ? (
+        <CardTagEditor
+          cardTags={card.tags}
+          availableTags={availableTags}
+          saving={tagSaving}
+          error={tagError}
+          onAddTag={(name) => onAddCardTag(card, name)}
+          onRemoveTag={(name) => onRemoveCardTag(card, name)}
+          onOpenManageTags={onOpenManageTags}
+        />
+      ) : null}
     </article>
   );
 }

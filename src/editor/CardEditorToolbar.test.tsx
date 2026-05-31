@@ -58,6 +58,8 @@ function StatefulToolbar({
     <CardEditorToolbar
       displayState={displayState}
       subtypeOptions={["Guide", "Scout"]}
+      availableTags={[]}
+      onOpenManageTags={vi.fn()}
       visibleCount={2}
       totalCount={5}
       onDisplayStateChange={(nextState) => {
@@ -87,6 +89,8 @@ describe("CardEditorToolbar", () => {
       <CardEditorToolbar
         displayState={DEFAULT_EDITOR_DISPLAY_STATE}
         subtypeOptions={["Guide", "Scout"]}
+      availableTags={[]}
+      onOpenManageTags={vi.fn()}
         visibleCount={2}
         totalCount={5}
         onDisplayStateChange={vi.fn()}
@@ -224,6 +228,8 @@ describe("CardEditorToolbar", () => {
       <CardEditorToolbar
         displayState={displayState}
         subtypeOptions={["Guide", "Scout"]}
+      availableTags={[]}
+      onOpenManageTags={vi.fn()}
         visibleCount={0}
         totalCount={5}
         onDisplayStateChange={vi.fn()}
@@ -255,6 +261,8 @@ describe("CardEditorToolbar", () => {
       <CardEditorToolbar
         displayState={DEFAULT_EDITOR_DISPLAY_STATE}
         subtypeOptions={["", "Guide", "  ", "Scout"]}
+        availableTags={[]}
+        onOpenManageTags={vi.fn()}
         visibleCount={2}
         totalCount={5}
         onDisplayStateChange={vi.fn()}

@@ -48,6 +48,8 @@ describe("editor URL display state", () => {
       type: "character",
       cost: "5plus",
       subtype: "Scout",
+      tagFilters: [],
+      tagEditing: false,
       sort: "cost",
       dir: "desc",
       size: "large",
@@ -86,6 +88,28 @@ describe("editor URL display state", () => {
         subtype: "",
       }).toString(),
     ).toBe("");
+  });
+
+  it("round-trips tag filters and tag-editing mode", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      tagFilters: ["Removal", "Elves"],
+      tagEditing: true,
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.getAll("tag")).toEqual(["Removal", "Elves"]);
+    expect(params.get("tagedit")).toBe("1");
+
+    const parsed = parseEditorDisplayState(params);
+    expect(parsed.tagFilters).toEqual(["Removal", "Elves"]);
+    expect(parsed.tagEditing).toBe(true);
+  });
+
+  it("dedupes and trims tag filters and defaults tag-editing off", () => {
+    const parsed = parseEditorDisplayState("?tag=Removal&tag=Removal&tag=%20Elves%20");
+    expect(parsed.tagFilters).toEqual(["Removal", "Elves"]);
+    expect(parsed.tagEditing).toBe(false);
   });
 
   it("updates the current URL with replaceState", () => {

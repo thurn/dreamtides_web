@@ -6,12 +6,21 @@ import type {
   EditableCardField,
   EditorCardRecord,
   EditorDisplayState,
+  EditorTag,
 } from "./types";
+
+export interface CardTagSaveState {
+  saving: boolean;
+  error: string | null;
+}
 
 export interface CardEditorGridProps {
   cards: readonly EditorCardRecord[];
   size: EditorDisplayState["size"];
   saveState: EditableSaveState;
+  tagEditing: boolean;
+  availableTags: EditorTag[];
+  tagSaveState: Record<string, CardTagSaveState>;
   onFieldBeginEdit: (
     card: EditorCardRecord,
     field: EditableCardField,
@@ -33,17 +42,26 @@ export interface CardEditorGridProps {
     field: EditableCardField,
     value: EditableFieldValue,
   ) => void;
+  onAddCardTag: (card: EditorCardRecord, name: string) => void;
+  onRemoveCardTag: (card: EditorCardRecord, name: string) => void;
+  onOpenManageTags: () => void;
 }
 
 export default function CardEditorGrid({
   cards,
   size,
   saveState,
+  tagEditing,
+  availableTags,
+  tagSaveState,
   onFieldBeginEdit,
   onFieldDraftChange,
   onFieldCancel,
   onFieldSave,
   onFieldCommit,
+  onAddCardTag,
+  onRemoveCardTag,
+  onOpenManageTags,
 }: CardEditorGridProps) {
   return (
     <div
@@ -88,11 +106,18 @@ export default function CardEditorGrid({
             cardId: card.id,
             field: "rendered-text",
           })}
+          tagEditing={tagEditing}
+          availableTags={availableTags}
+          tagSaving={tagSaveState[card.id]?.saving ?? false}
+          tagError={tagSaveState[card.id]?.error ?? null}
           onFieldBeginEdit={onFieldBeginEdit}
           onFieldDraftChange={onFieldDraftChange}
           onFieldCancel={onFieldCancel}
           onFieldSave={onFieldSave}
           onFieldCommit={onFieldCommit}
+          onAddCardTag={onAddCardTag}
+          onRemoveCardTag={onRemoveCardTag}
+          onOpenManageTags={onOpenManageTags}
         />
       ))}
     </div>

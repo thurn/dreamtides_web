@@ -54,6 +54,7 @@ function makeEditorCard(overrides: Partial<EditorCardRecord> = {}): EditorCardRe
     name: preview.name,
     spark: 1,
     "rendered-text": preview.renderedText,
+    tags: [],
     source: {},
     preview,
     ...overrides,
@@ -63,10 +64,15 @@ function makeEditorCard(overrides: Partial<EditorCardRecord> = {}): EditorCardRe
 function makeApiClient(
   loadEditorCards: EditorApiClient["loadEditorCards"],
   saveEditorCardField: EditorApiClient["saveEditorCardField"] = vi.fn(),
+  overrides: Partial<EditorApiClient> = {},
 ): EditorApiClient {
   return {
     loadEditorCards,
     saveEditorCardField,
+    loadEditorTags: vi.fn().mockResolvedValue([]),
+    saveEditorCardTags: vi.fn(),
+    saveEditorTagRegistry: vi.fn(),
+    ...overrides,
   };
 }
 

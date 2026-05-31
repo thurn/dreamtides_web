@@ -1,8 +1,13 @@
 import type {
   EditorApiErrorBody,
+  EditorTag,
   LoadEditorCardsResponse,
+  LoadEditorTagsResponse,
   SaveEditorCardFieldRequest,
   SaveEditorCardFieldResponse,
+  SaveEditorCardTagsRequest,
+  SaveEditorTagRegistryRequest,
+  SaveEditorTagRegistryResponse,
 } from "./types";
 
 export class EditorApiRequestError extends Error {
@@ -126,4 +131,45 @@ export async function saveEditorCardField(
   });
 
   return readJsonResponse<SaveEditorCardFieldResponse>(response);
+}
+
+export async function loadEditorTags(signal?: AbortSignal): Promise<EditorTag[]> {
+  const response = await fetch(withTomlParam("/api/editor/tags"), {
+    headers: {
+      Accept: "application/json",
+    },
+    signal,
+  });
+  const body = await readJsonResponse<LoadEditorTagsResponse>(response);
+  return body.tags;
+}
+
+export async function saveEditorCardTags(
+  request: SaveEditorCardTagsRequest,
+): Promise<SaveEditorCardFieldResponse> {
+  const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id: request.id, field: "tags", value: request.tags }),
+  });
+
+  return readJsonResponse<SaveEditorCardFieldResponse>(response);
+}
+
+export async function saveEditorTagRegistry(
+  request: SaveEditorTagRegistryRequest,
+): Promise<SaveEditorTagRegistryResponse> {
+  const response = await fetch(withTomlParam("/api/editor/tags"), {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(request),
+  });
+
+  return readJsonResponse<SaveEditorTagRegistryResponse>(response);
 }

@@ -1,0 +1,31 @@
+# Tag registry for cards_v2.toml.
+# Each [[tags]] entry defines an available card tag and its display color.
+# Managed by the card editor's "Manage tags" panel.
+
+[[tags]]
+name = "Cantrips"
+color = "#7c3aed"
+
+[[tags]]
+name = "Discover"
+color = "#1d4ed8"
+
+[[tags]]
+name = "Elves"
+color = "#15803d"
+
+[[tags]]
+name = "Free Sacrifice"
+color = "#b91c1c"
+
+[[tags]]
+name = "Merfolk Looter"
+color = "#0e7490"
+
+[[tags]]
+name = "Removal"
+color = "#c2410c"
+
+[[tags]]
+name = "Thoughtseize"
+color = "#be185d"

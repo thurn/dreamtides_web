@@ -19,8 +19,15 @@ export interface EditorCardRecord {
   name: string;
   spark: EditorFieldValue;
   "rendered-text": string;
+  tags: string[];
   source: Record<string, unknown>;
   preview: CardData;
+}
+
+/** A registry tag: a tag name paired with the color used to render its chip. */
+export interface EditorTag {
+  name: string;
+  color: string;
 }
 
 export type EditorTypeFilter = "all" | "character" | "event";
@@ -54,6 +61,16 @@ export interface EditorDisplayState {
   type: EditorTypeFilter;
   cost: EditorCostFilter;
   subtype: string;
+  /**
+   * Tag names a card must all carry to remain visible (AND semantics). Empty
+   * means no tag filtering.
+   */
+  tagFilters: string[];
+  /**
+   * When true the grid shows each card's tag chips with add/remove controls.
+   * Inline field editing remains available regardless of this flag.
+   */
+  tagEditing: boolean;
   sort: EditorSortField;
   dir: EditorSortDirection;
   size: EditorCardSize;
@@ -102,9 +119,34 @@ export interface EditorApiErrorBody {
   };
 }
 
+export interface LoadEditorTagsResponse {
+  tags: EditorTag[];
+}
+
+export interface SaveEditorCardTagsRequest {
+  id: string;
+  tags: string[];
+}
+
+export interface SaveEditorTagRegistryRequest {
+  tags: EditorTag[];
+}
+
+export interface SaveEditorTagRegistryResponse {
+  tags: EditorTag[];
+  cards: EditorCardRecord[];
+}
+
 export interface EditorApiClient {
   loadEditorCards(signal?: AbortSignal): Promise<EditorCardRecord[]>;
   saveEditorCardField(
     request: SaveEditorCardFieldRequest,
   ): Promise<SaveEditorCardFieldResponse>;
+  loadEditorTags(signal?: AbortSignal): Promise<EditorTag[]>;
+  saveEditorCardTags(
+    request: SaveEditorCardTagsRequest,
+  ): Promise<SaveEditorCardFieldResponse>;
+  saveEditorTagRegistry(
+    request: SaveEditorTagRegistryRequest,
+  ): Promise<SaveEditorTagRegistryResponse>;
 }

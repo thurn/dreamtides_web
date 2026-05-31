@@ -14,6 +14,8 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   type: "all",
   cost: "all",
   subtype: "",
+  tagFilters: [],
+  tagEditing: false,
   sort: "name",
   dir: "asc",
   size: "medium",
@@ -97,6 +99,17 @@ function parseScope(value: string | null): EditorSearchScope {
     : DEFAULT_EDITOR_DISPLAY_STATE.searchScope;
 }
 
+function parseTagFilters(params: URLSearchParams): string[] {
+  const tags: string[] = [];
+  for (const raw of params.getAll("tag")) {
+    const value = raw.trim();
+    if (value !== "" && !tags.includes(value)) {
+      tags.push(value);
+    }
+  }
+  return tags;
+}
+
 export function parseEditorDisplayState(
   search: string | URLSearchParams = window.location.search,
 ): EditorDisplayState {
@@ -108,6 +121,8 @@ export function parseEditorDisplayState(
     type: parseType(params.get("type")),
     cost: parseCost(params.get("cost")),
     subtype: params.get("subtype") ?? DEFAULT_EDITOR_DISPLAY_STATE.subtype,
+    tagFilters: parseTagFilters(params),
+    tagEditing: params.get("tagedit") === "1",
     sort: parseSort(params.get("sort")),
     dir: parseDir(params.get("dir")),
     size: parseSize(params.get("size")),
@@ -133,6 +148,12 @@ export function serializeEditorDisplayState(
   }
   if (state.subtype !== DEFAULT_EDITOR_DISPLAY_STATE.subtype) {
     params.set("subtype", state.subtype);
+  }
+  for (const tag of state.tagFilters) {
+    params.append("tag", tag);
+  }
+  if (state.tagEditing) {
+    params.set("tagedit", "1");
   }
   if (state.sort !== DEFAULT_EDITOR_DISPLAY_STATE.sort) {
     params.set("sort", SORT_FIELD_TO_PARAM[state.sort]);

@@ -1,20 +1,24 @@
 import { useId, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
+import TagFilterControl from "./TagFilterControl";
 import type {
   EditorCardSize,
   EditorCostFilter,
   EditorDisplayState,
   EditorSortField,
+  EditorTag,
   EditorTypeFilter,
 } from "./types";
 
 interface CardEditorToolbarProps {
   displayState: EditorDisplayState;
   subtypeOptions: string[];
+  availableTags: EditorTag[];
   visibleCount: number;
   totalCount: number;
   onDisplayStateChange: (state: EditorDisplayState) => void;
+  onOpenManageTags: () => void;
 }
 
 const TYPE_OPTIONS: Array<{ value: EditorTypeFilter; label: string }> = [
@@ -161,6 +165,7 @@ function activeFilterCount(state: EditorDisplayState): number {
   if (state.subtype !== DEFAULT_EDITOR_DISPLAY_STATE.subtype) {
     count += 1;
   }
+  count += state.tagFilters.length;
   if (state.sort !== DEFAULT_EDITOR_DISPLAY_STATE.sort) {
     count += 1;
   }
@@ -173,9 +178,11 @@ function activeFilterCount(state: EditorDisplayState): number {
 export default function CardEditorToolbar({
   displayState,
   subtypeOptions,
+  availableTags,
   visibleCount,
   totalCount,
   onDisplayStateChange,
+  onOpenManageTags,
 }: CardEditorToolbarProps) {
   const panelId = useId();
   const [expanded, setExpanded] = useState(
@@ -210,6 +217,7 @@ export default function CardEditorToolbar({
       type: DEFAULT_EDITOR_DISPLAY_STATE.type,
       cost: DEFAULT_EDITOR_DISPLAY_STATE.cost,
       subtype: DEFAULT_EDITOR_DISPLAY_STATE.subtype,
+      tagFilters: [],
       sort: DEFAULT_EDITOR_DISPLAY_STATE.sort,
       dir: DEFAULT_EDITOR_DISPLAY_STATE.dir,
     });
@@ -235,7 +243,7 @@ export default function CardEditorToolbar({
           {visibleCount} / {totalCount} cards
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
           <div aria-label="Card size" role="group" style={segmentedStyle}>
             {SIZE_OPTIONS.map((option) => (
               <SegmentButton
@@ -247,6 +255,48 @@ export default function CardEditorToolbar({
               </SegmentButton>
             ))}
           </div>
+
+          <button
+            type="button"
+            aria-pressed={displayState.tagEditing}
+            onClick={() =>
+              updateDisplayState({ tagEditing: !displayState.tagEditing })
+            }
+            title="Show tag chips with add/remove controls under each card"
+            style={{
+              ...inputStyle,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "7px",
+              cursor: "pointer",
+              fontWeight: 800,
+              border: displayState.tagEditing
+                ? "1px solid #2d8a80"
+                : inputStyle.border,
+              background: displayState.tagEditing ? "#2d8a80" : "#16242a",
+              color: displayState.tagEditing ? "#ffffff" : "#d9e1dd",
+            }}
+          >
+            <span aria-hidden="true">🏷</span>
+            <span>{displayState.tagEditing ? "Tag mode: on" : "Tag mode"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenManageTags}
+            title="Create tags, set colors, and delete tags"
+            style={{
+              ...inputStyle,
+              display: "inline-flex",
+              alignItems: "center",
+              cursor: "pointer",
+              fontWeight: 800,
+              background: "#16242a",
+              color: "#d9e1dd",
+            }}
+          >
+            Manage tags
+          </button>
 
           <button
             type="button"
@@ -391,6 +441,12 @@ export default function CardEditorToolbar({
             ))}
           </select>
         </label>
+
+        <TagFilterControl
+          availableTags={availableTags}
+          selected={displayState.tagFilters}
+          onChange={(tagFilters) => updateDisplayState({ tagFilters })}
+        />
 
         <div style={labelStyle}>
           Sort

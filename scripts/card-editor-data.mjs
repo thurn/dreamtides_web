@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
@@ -14,7 +14,51 @@ export const EDITABLE_CARD_FIELDS = new Set([
   "name",
   "spark",
   "rendered-text",
+  "tags",
 ]);
+
+// Distinct, readable swatch colors handed out to tags that do not yet have an
+// explicit color in the registry sidecar. A tag's default is chosen
+// deterministically from its name so the same tag always seeds to the same
+// color across loads and across the client and server.
+export const DEFAULT_TAG_COLORS = [
+  "#c2410c",
+  "#15803d",
+  "#1d4ed8",
+  "#7c3aed",
+  "#b91c1c",
+  "#0f766e",
+  "#a16207",
+  "#be185d",
+  "#4338ca",
+  "#3f6212",
+  "#0e7490",
+  "#9333ea",
+];
+
+const TAG_COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/u;
+
+function tagNameHash(name) {
+  // FNV-1a over the tag name keeps default-color assignment stable and
+  // platform-independent.
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < name.length; index += 1) {
+    hash ^= name.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash;
+}
+
+export function defaultTagColor(name) {
+  const index = tagNameHash(name) % DEFAULT_TAG_COLORS.length;
+  return DEFAULT_TAG_COLORS[index];
+}
+
+// The tag registry lives in a sidecar TOML next to the card file it annotates:
+// `data/tabula/cards_v2.toml` -> `data/tabula/cards_v2.tags.toml`.
+export function tagRegistryPathFor(cardTomlPath) {
+  return cardTomlPath.replace(/\.toml$/iu, ".tags.toml");
+}
 
 function readSourceCards(rootDir, cardTomlPath = DEFAULT_CARD_TOML_PATH) {
   const absoluteTomlPath = join(rootDir, cardTomlPath);
@@ -39,9 +83,28 @@ function editorRecordFromCard(card) {
     name: card.name,
     spark: card.spark ?? "",
     "rendered-text": card["rendered-text"] ?? "",
+    tags: normalizeTagList(card.tags),
     source: card,
     preview: transformCard(card),
   };
+}
+
+function normalizeTagList(rawTags) {
+  if (!Array.isArray(rawTags)) {
+    return [];
+  }
+
+  const tags = [];
+  for (const entry of rawTags) {
+    if (typeof entry !== "string") {
+      continue;
+    }
+    const trimmed = entry.trim();
+    if (trimmed !== "" && !tags.includes(trimmed)) {
+      tags.push(trimmed);
+    }
+  }
+  return tags;
 }
 
 export function readEditorCards({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
@@ -138,6 +201,28 @@ export function validateCardEdit(field, rawValue) {
     }
 
     return validationSuccess(field, rawValue);
+  }
+
+  if (field === "tags") {
+    if (!Array.isArray(rawValue)) {
+      return validationFailure(field, "Tags must be a list.", rawValue);
+    }
+
+    const tags = [];
+    for (const entry of rawValue) {
+      if (typeof entry !== "string") {
+        return validationFailure(field, "Each tag must be text.", rawValue);
+      }
+      const trimmed = entry.trim();
+      if (trimmed === "") {
+        return validationFailure(field, "Tags cannot be blank.", rawValue);
+      }
+      if (!tags.includes(trimmed)) {
+        tags.push(trimmed);
+      }
+    }
+
+    return validationSuccess(field, tags);
   }
 
   return validationFailure(field, "This field is not editable.", rawValue);
@@ -425,7 +510,19 @@ function hasUnsafeLiteralStringControl(value) {
   return /[\u0000-\u0009\u000B-\u001F\u007F]/u.test(value);
 }
 
+function tomlInlineStringArray(values) {
+  if (values.length === 0) {
+    return "[]";
+  }
+
+  return `[${values.map((entry) => tomlString(String(entry))).join(", ")}]`;
+}
+
 function tomlValue(value) {
+  if (Array.isArray(value)) {
+    return tomlInlineStringArray(value);
+  }
+
   if (typeof value === "number" || typeof value === "boolean") {
     return String(value);
   }
@@ -483,4 +580,140 @@ export function refreshCardDataJson({ rootDir = ROOT, cardTomlPath = DEFAULT_CAR
     count: cards.length,
     path: cardJsonPath,
   };
+}
+
+function usedTagNames(rootDir, cardTomlPath) {
+  const used = [];
+  for (const card of readSourceCards(rootDir, cardTomlPath)) {
+    for (const tag of normalizeTagList(card.tags)) {
+      if (!used.includes(tag)) {
+        used.push(tag);
+      }
+    }
+  }
+  return used;
+}
+
+/**
+ * Read the tag registry sidecar for a card file. Tags explicitly defined in the
+ * sidecar keep their authored order and colors. Any tag that is in use on a card
+ * but missing from the sidecar is appended (sorted by name) with a deterministic
+ * default color so the editor always has a color for every tag it might render.
+ */
+export function readTagRegistry({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
+  const registryPath = join(rootDir, tagRegistryPathFor(cardTomlPath));
+  const tags = [];
+  const seen = new Set();
+
+  if (existsSync(registryPath)) {
+    const parsed = parse(readFileSync(registryPath, "utf8"));
+    const entries = Array.isArray(parsed.tags) ? parsed.tags : [];
+    for (const entry of entries) {
+      if (entry === null || typeof entry !== "object") {
+        continue;
+      }
+      const name = typeof entry.name === "string" ? entry.name.trim() : "";
+      if (name === "" || seen.has(name)) {
+        continue;
+      }
+      const color =
+        typeof entry.color === "string" && TAG_COLOR_PATTERN.test(entry.color.trim())
+          ? entry.color.trim().toLowerCase()
+          : defaultTagColor(name);
+      seen.add(name);
+      tags.push({ name, color });
+    }
+  }
+
+  const unregistered = usedTagNames(rootDir, cardTomlPath)
+    .filter((name) => !seen.has(name))
+    .sort((left, right) => left.localeCompare(right, undefined, { sensitivity: "base" }));
+
+  for (const name of unregistered) {
+    tags.push({ name, color: defaultTagColor(name) });
+  }
+
+  return tags;
+}
+
+export function validateTagRegistry(rawTags) {
+  if (!Array.isArray(rawTags)) {
+    return { ok: false, message: "Tag registry must be a list." };
+  }
+
+  const tags = [];
+  const seen = new Set();
+  for (const entry of rawTags) {
+    if (entry === null || typeof entry !== "object" || Array.isArray(entry)) {
+      return { ok: false, message: "Each tag must be an object with a name and color." };
+    }
+
+    const name = typeof entry.name === "string" ? entry.name.trim() : "";
+    if (name === "") {
+      return { ok: false, message: "Tag names cannot be blank." };
+    }
+    if (seen.has(name)) {
+      return { ok: false, message: `Duplicate tag name: ${name}.` };
+    }
+
+    const rawColor = typeof entry.color === "string" ? entry.color.trim() : "";
+    if (!TAG_COLOR_PATTERN.test(rawColor)) {
+      return { ok: false, message: `Tag "${name}" needs a #RRGGBB color.` };
+    }
+
+    seen.add(name);
+    tags.push({ name, color: rawColor.toLowerCase() });
+  }
+
+  return { ok: true, tags };
+}
+
+export function serializeTagRegistry(tags, { cardTomlBasename } = {}) {
+  const headerTarget = cardTomlBasename ? ` for ${cardTomlBasename}` : "";
+  const lines = [
+    `# Tag registry${headerTarget}.`,
+    "# Each [[tags]] entry defines an available card tag and its display color.",
+    "# Managed by the card editor's \"Manage tags\" panel.",
+    "",
+  ];
+
+  for (const tag of tags) {
+    lines.push("[[tags]]");
+    lines.push(`name = ${tomlString(tag.name)}`);
+    lines.push(`color = ${tomlString(tag.color)}`);
+    lines.push("");
+  }
+
+  return `${lines.join("\n").trimEnd()}\n`;
+}
+
+/**
+ * Remove the given tag names from every card that carries them, returning the
+ * patched TOML source. Used when a tag is deleted from the registry so no card
+ * is left referencing a tag the registry no longer defines.
+ */
+export function removeTagsFromCards(source, removedNames) {
+  if (removedNames.length === 0) {
+    return source;
+  }
+
+  const removed = new Set(removedNames);
+  const parsed = parse(source);
+  const cards = Array.isArray(parsed.cards) ? parsed.cards : [];
+
+  let next = source;
+  for (const card of cards) {
+    const tags = normalizeTagList(card.tags);
+    if (!tags.some((tag) => removed.has(tag))) {
+      continue;
+    }
+    const filtered = tags.filter((tag) => !removed.has(tag));
+    next = patchRenderedCardsToml(next, {
+      cardId: card.id,
+      field: "tags",
+      value: filtered,
+    }).source;
+  }
+
+  return next;
 }

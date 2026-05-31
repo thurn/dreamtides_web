@@ -14,8 +14,13 @@ import {
   DEFAULT_CARD_TOML_PATH,
   patchRenderedCardsToml,
   readEditorCards,
+  readTagRegistry,
   refreshCardDataJson,
+  removeTagsFromCards,
+  serializeTagRegistry,
+  tagRegistryPathFor,
   validateCardEdit,
+  validateTagRegistry,
 } from "./card-editor-data.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -341,13 +346,23 @@ function preparedWrite(destination, content) {
 }
 
 function commitFiles(writes, fileSystem) {
+  // A write whose destination does not yet exist (for example the tag registry
+  // sidecar before its first save) has no prior file to back up; it is created
+  // fresh and removed again if the commit rolls back. Destinations that already
+  // exist are backed up so a failed commit can restore the original contents.
+  const preexisting = new Set(
+    writes.filter((write) => fileSystem.existsSync(write.destination)),
+  );
+
   try {
     for (const write of writes) {
       fileSystem.writeFileSync(write.temp, write.content);
     }
 
     for (const write of writes) {
-      fileSystem.renameSync(write.destination, write.backup);
+      if (preexisting.has(write)) {
+        fileSystem.renameSync(write.destination, write.backup);
+      }
     }
 
     for (const write of writes) {
@@ -359,9 +374,16 @@ function commitFiles(writes, fileSystem) {
     }
 
     for (const write of writes) {
-      if (fileSystem.existsSync(write.backup)) {
+      if (preexisting.has(write)) {
+        // Restore the original file from its backup if the backup was taken.
+        if (fileSystem.existsSync(write.backup)) {
+          fileSystem.rmSync(write.destination, { force: true, recursive: true });
+          fileSystem.renameSync(write.backup, write.destination);
+        }
+      } else {
+        // A file that did not exist before this commit is dropped so a failed
+        // commit leaves the tree exactly as it found it.
         fileSystem.rmSync(write.destination, { force: true, recursive: true });
-        fileSystem.renameSync(write.backup, write.destination);
       }
     }
 
@@ -369,10 +391,13 @@ function commitFiles(writes, fileSystem) {
   }
 
   for (const write of writes) {
+    if (!preexisting.has(write)) {
+      continue;
+    }
     try {
       fileSystem.rmSync(write.backup, { force: true, recursive: true });
     } catch {
-      // Backups are removed after both destination files are committed.
+      // Backups are removed after every destination file is committed.
     }
   }
 }
@@ -417,6 +442,22 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
       value: validation.value,
     });
     return;
+  }
+
+  // Card tags may only reference tags that exist in the registry, so the card
+  // file never ends up pointing at a tag the registry does not define.
+  if (body.field === "tags") {
+    const registryNames = new Set(
+      readTagRegistry({ rootDir, cardTomlPath }).map((tag) => tag.name),
+    );
+    const unknown = validation.value.filter((tag) => !registryNames.has(tag));
+    if (unknown.length > 0) {
+      errorResponse(res, 400, "INVALID_EDIT", "Unknown tag. Create it in Manage tags first.", {
+        field: "tags",
+        value: unknown,
+      });
+      return;
+    }
   }
 
   const totalStart = performance.now();
@@ -476,12 +517,115 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
   });
 }
 
+const TAGS_BASE_PATH = "/api/editor/tags";
+
+function isEditorTagsApiPath(pathname) {
+  return pathname === TAGS_BASE_PATH;
+}
+
+async function handleTagsPut(req, res, rootDir, cardTomlPath, fileSystem) {
+  let body;
+  try {
+    body = await readJsonRequest(req);
+  } catch (error) {
+    if (error.code === "INVALID_JSON") {
+      errorResponse(res, 400, "INVALID_JSON", error.message);
+      return;
+    }
+    throw error;
+  }
+
+  if (body === null || typeof body !== "object" || Array.isArray(body) || !Array.isArray(body.tags)) {
+    errorResponse(res, 400, "INVALID_REQUEST", "PUT body must include a tags array.");
+    return;
+  }
+
+  const validation = validateTagRegistry(body.tags);
+  if (!validation.ok) {
+    errorResponse(res, 400, "INVALID_TAG_REGISTRY", validation.message);
+    return;
+  }
+
+  const newNames = new Set(validation.tags.map((tag) => tag.name));
+  const usedNames = new Set();
+  for (const card of readEditorCards({ rootDir, cardTomlPath })) {
+    for (const tag of card.tags) {
+      usedNames.add(tag);
+    }
+  }
+  const removedUsed = [...usedNames].filter((name) => !newNames.has(name));
+
+  const registryAbsPath = join(rootDir, tagRegistryPathFor(cardTomlPath));
+  const cardTomlBasename = cardTomlPath.split(/[\\/]/u).pop();
+  const writes = [
+    preparedWrite(registryAbsPath, serializeTagRegistry(validation.tags, { cardTomlBasename })),
+  ];
+
+  // Deleting a tag from the registry strips it from every card that used it so
+  // the card file never references an undefined tag.
+  if (removedUsed.length > 0) {
+    const tomlPath = join(rootDir, cardTomlPath);
+    const source = fileSystem.readFileSync(tomlPath, "utf8");
+    const patchedSource = removeTagsFromCards(source, removedUsed);
+    writes.push(preparedWrite(tomlPath, patchedSource));
+
+    if (cardTomlPath === DEFAULT_CARD_TOML_PATH) {
+      const cardJson = generateCardDataJsonFromToml(patchedSource, fileSystem);
+      writes.push(preparedWrite(join(rootDir, CARD_JSON_PATH), cardJson));
+    }
+  }
+
+  commitFiles(writes, fileSystem);
+
+  jsonResponse(res, 200, {
+    tags: readTagRegistry({ rootDir, cardTomlPath }),
+    cards: readEditorCards({ rootDir, cardTomlPath }),
+  });
+}
+
+async function handleTags(req, res, rootDir, cardTomlPath, fileSystem) {
+  if (req.method === "GET") {
+    jsonResponse(res, 200, { tags: readTagRegistry({ rootDir, cardTomlPath }) });
+    return;
+  }
+
+  if (req.method === "PUT") {
+    await handleTagsPut(req, res, rootDir, cardTomlPath, fileSystem);
+    return;
+  }
+
+  methodNotAllowed(res, ["GET", "PUT"]);
+}
+
 export function createCardEditorApiMiddleware({
   rootDir = ROOT,
   fileSystem = defaultFileSystem,
 } = {}) {
   return async function cardEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
+
+    if (isEditorTagsApiPath(rawPath)) {
+      try {
+        const tomlResolution = resolveRequestedTomlPath(rootDir, tomlParamFromUrl(req.url));
+        if (!tomlResolution.ok) {
+          errorResponse(res, 400, "INVALID_TOML", tomlResolution.message);
+          return;
+        }
+
+        const cardTomlPath = tomlResolution.relativePath;
+        if (!fileSystem.existsSync(join(rootDir, cardTomlPath))) {
+          errorResponse(res, 404, "TOML_NOT_FOUND", "The requested toml file was not found.", {
+            toml: cardTomlPath,
+          });
+          return;
+        }
+
+        await handleTags(req, res, rootDir, cardTomlPath, fileSystem);
+      } catch (error) {
+        errorResponse(res, 500, "SAVE_FAILED", error instanceof Error ? error.message : "Save failed.");
+      }
+      return;
+    }
 
     if (!isEditorCardsApiPath(rawPath)) {
       next();
