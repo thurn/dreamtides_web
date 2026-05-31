@@ -11,6 +11,13 @@ definition; many rows share a function under different names, and many rows have
 no name at all. Cards are referenced below by name where one exists, otherwise as
 `(unnamed)`, always followed by their stat line `[cost●/spark✦ type]`.
 
+Each group and family below carries a **Tag** naming a card tag in
+`data/tabula/cards_v2.tags.toml`. Every member card of the group is assigned that
+tag in `data/tabula/cards_v2.toml`, so the set can be pulled up directly in the
+card editor by filtering on the tag. Some cards belong to two families and carry
+both tags. The removal families (§2.2, §2.12–§2.14) all share the broad `Removal`
+tag.
+
 "Duplicate" and "near-duplicate" are distinguished as:
 
 - **Exact functional duplicate** — identical rules text. Two such cards differ
@@ -31,6 +38,8 @@ normalization). They are the strongest candidates for consolidation or
 intentional differentiation.
 
 ### 1.1 `▸Dawn: Gain 1●.` — nine cards
+
+**Tag:** `Elves`
 
 The single largest exact-duplicate cluster. All are 1● Spirit Animals; the only
 difference is printed spark (0✦ vs 1✦):
@@ -53,6 +62,8 @@ wider mana-dork family (these plus several typo and rider variants).
 
 ### 1.2 `When an ally is dissolved, gain 1⍟.` — three cards
 
+**Tag:** `Blood Artist`
+
 | Card | Cost | Spark |
 | --- | --- | --- |
 | Marionette Apprentice | 2 | 1 |
@@ -63,6 +74,8 @@ Marionette Apprentice and Cruel Celebrant are fully interchangeable (same text,
 cost, spark, type). Zulaport Cutthroat differs only by +1 printed spark.
 
 ### 1.3 `▸Materialized: Draw a card.` — three cards
+
+**Tag:** `ETB Draw`
 
 | Card | Cost | Spark | Type |
 | --- | --- | --- | --- |
@@ -76,6 +89,8 @@ Omens is the same card at 0✦. See §2.3 for the broader "ETB: draw a card" fam
 
 ### 1.4 `Once per turn, you may play a character with cost 2● or less from your void.`
 
+**Tag:** `Lurrus`
+
 | Card | Cost | Spark |
 | --- | --- | --- |
 | Lurrus of the Dream-Den | 2 | 2 |
@@ -86,6 +101,8 @@ edition of Lurrus.
 
 ### 1.5 `▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play.`
 
+**Tag:** `Tidehollow Sculler`
+
 | Card | Cost | Spark | Type |
 | --- | --- | --- | --- |
 | Tidehollow Sculler | 2 | 2 | Survivor |
@@ -94,6 +111,8 @@ edition of Lurrus.
 Identical except type. Fully interchangeable outside tribal contexts.
 
 ### 1.6 `☪: Draw a card, then discard a card.`
+
+**Tag:** `Merfolk Looter`
 
 | Card | Cost | Spark |
 | --- | --- | --- |
@@ -106,6 +125,8 @@ cost — see §2.10.)
 
 ### 1.7 `Abandon another character: Gain 1●.`
 
+**Tag:** `Free Sacrifice`
+
 | Card | Cost | Spark | Type |
 | --- | --- | --- | --- |
 | Warren Soultrader | 3 | 1 | Survivor |
@@ -117,6 +138,8 @@ character.
 
 ### 1.8 `Vengeful` + `▸Materialized: Draw a card.`
 
+**Tag:** `ETB Draw`
+
 | Card | Cost | Spark | Timing |
 | --- | --- | --- | --- |
 | Baleful Strix | 2 | 1 | — |
@@ -127,6 +150,8 @@ cell is blank — a data issue, see Part 3).
 
 ### 1.9 `Gain 3●.`
 
+**Tag:** `Ritual`
+
 | Card | Cost | Type |
 | --- | --- | --- |
 | Black Lotus | 0 | Event |
@@ -136,6 +161,8 @@ Same ritual effect; Black Lotus is the 0● (net +3) version, Dark Ritual the 1�
 (net +2) version. Part of the ritual family in §2.6.
 
 ### 1.10 `(no ability)`
+
+**Tag:** `Vanilla`
 
 | Card | Cost | Spark | Type | Timing |
 | --- | --- | --- | --- | --- |
@@ -152,6 +179,8 @@ Each family below shares a core effect. Members are listed as a gradient; the
 notes call out which members are close enough to read as redundant.
 
 ### 2.1 Mana dorks — `▸Dawn: Gain 1●` (≈12 cards)
+
+**Tag:** `Elves`
 
 Beyond the nine exact duplicates of §1.1, the following carry the same Dawn-ramp
 core with minor riders:
@@ -175,6 +204,8 @@ spark, type, or a small entry condition. Strong consolidation candidate.
 
 ### 2.2 Single-target burn — `Dissolve an enemy with N✦ or less` (≈10 cards)
 
+**Tag:** `Removal`
+
 | Card | Cost | Threshold | Timing / Rider |
 | --- | --- | --- | --- |
 | Lightning Bolt | 1 | 3✦ | Fast/Interrupt |
@@ -195,6 +226,8 @@ mode.
 
 ### 2.3 ETB card draw — `▸Materialized: Draw a card` (≈6 cards)
 
+**Tag:** `ETB Draw`
+
 Beyond the three exact duplicates of §1.3:
 
 - **Baleful Strix** / **Ice-Fang Coatl** `[2●/1✦]` — add `Vengeful` (see §1.8).
@@ -205,6 +238,8 @@ and Elvish Visionary remain the redundant pair.
 
 ### 2.4 Materialize **and** Dissolve: draw
 
+**Tag:** `Ichor Wellspring`
+
 | Card | Cost | Spark | Note |
 | --- | --- | --- | --- |
 | Ichor Wellspring | 2 | 1 | `▸Materialized, Dissolved: Draw a card.` |
@@ -214,6 +249,8 @@ Near-identical two-for-one draw bodies; Experimental Synthesizer is the cheaper,
 downside (Ephemeral) version.
 
 ### 2.5 Counters / Prevent (≈14 cards)
+
+**Tag:** `Counterspell`
 
 All share `Prevent a played card`-type text and are Fast/Interrupt Events (plus
 two character-bodied counters). The differentiators are the tax/condition:
@@ -241,6 +278,8 @@ pair conceptually.
 
 ### 2.6 Energy rituals — `Gain N●` (≈7 cards)
 
+**Tag:** `Ritual`
+
 | Card | Cost | Gain | Net | Note |
 | --- | --- | --- | --- | --- |
 | Black Lotus | 0 | 3● | +3 | §1.9 |
@@ -257,6 +296,8 @@ pair conceptually.
 
 ### 2.7 Hand disruption — discard from opponent's hand (≈6 cards)
 
+**Tag:** `Thoughtseize`
+
 | Card | Cost | Scope |
 | --- | --- | --- |
 | Thoughtseize | 1 | any chosen card |
@@ -270,6 +311,8 @@ A clean gradient by restriction. Thoughtseize is the unconditional baseline;
 the others narrow scope or add a body/recursion.
 
 ### 2.8 Sacrifice outlets — abandon a character for value (≈9, "Free Sacrifice")
+
+**Tag:** `Free Sacrifice`
 
 | Card | Cost | Output |
 | --- | --- | --- |
@@ -288,6 +331,8 @@ Squandered Resources) are the tight cluster; the rest vary the resource produced
 
 ### 2.9 Self-sacrifice for energy — `Abandon this character: Gain N●`
 
+**Tag:** `Lotus Petal`
+
 | Card | Cost | Spark | Gain |
 | --- | --- | --- | --- |
 | Lotus Petal | 0 | 0 | 1● |
@@ -299,11 +344,15 @@ the cost curve.
 
 ### 2.10 Looters — draw then discard on tap (≈3, "Merfolk Looter")
 
+**Tag:** `Merfolk Looter`
+
 The two free `☪: Draw a card, then discard a card` printings (§1.6) plus
 Conspiracy Theorist, which gates the same wheel behind `2●, ☪, Discard a card`
 and adds a Reclaim rider.
 
 ### 2.11 Cantrips — dig + draw Events (≈6, "Cantrips")
+
+**Tag:** `Cantrips`
 
 | Card | Cost | Effect |
 | --- | --- | --- |
@@ -319,6 +368,8 @@ order of clauses aside). Opt and Consider differ only by Foresee depth and a
 Reclaim rider.
 
 ### 2.12 Single-target banish — `Banish an enemy` (≈10 cards)
+
+**Tag:** `Removal`
 
 | Card | Cost | Scope |
 | --- | --- | --- |
@@ -337,11 +388,15 @@ unconditional banish, Path adding the opponent-gains-points drawback.
 
 ### 2.13 Cost-based removal — `Dissolve an enemy with cost N● or less` (≈4)
 
+**Tag:** `Removal`
+
 Abrupt Decay (2●, ≤3●), Fatal Push (1●, ≤3● after abandon), Firebolt (1●, ≤2●,
 Reclaim 5●), Molten Vortex (activated, ≤2●). A gradient by cost cap and
 condition.
 
 ### 2.14 Unconditional dissolve with a cost rider (≈8)
+
+**Tag:** `Removal`
 
 `Dissolve an enemy` gated behind an additional cost or condition: Flare of Malice
 (Offering), Bone Shards (abandon/discard), Bitter Triumph (discard/5⍟), Snuff Out
@@ -350,6 +405,8 @@ scales), Ancient Grudge (warriors only). Same "kill anything" payload, each
 buying it with a different resource.
 
 ### 2.15 Token generators by figment type
+
+**Tag:** `Figment Maker`
 
 - **1✦ warrior figment** (≈7): Retrofitter Foundry, Sai Master Thopterist, Urza,
   Genesis Chamber, Thopter Foundry, Hangarback Walker, Asmoranomardicadaistinaculdacar.
@@ -364,6 +421,8 @@ materialize a 1✦ figment" appears as both warrior (Genesis Chamber) and ethere
 
 ### 2.16 "When you play an event" payoffs (≈9)
 
+**Tag:** `Event Payoff`
+
 A shared trigger (`When you play an event, …`) with nine distinct payoffs: draw+
 discard, awaken all, +1✦ this turn (Jeskai Ascendancy), Foresee 1, store ⧗
 (two cards), make a 1✦ ethereal figment (Young Pyromancer), create a 1✦ warrior
@@ -372,6 +431,8 @@ figment, Gain 1● (Birgi). A design *space* rather than duplicates, but the two
 
 ### 2.17 "When you play a character" payoffs
 
+**Tag:** `Character Payoff`
+
 Genesis Chamber (1✦ warrior figment) and Torens (1✦ ethereal figment) share
 identical trigger+effect shape differing only by figment type; Blasting Station
 and Paradise Mantle both read `When you play a character, store 1⧗` and differ
@@ -379,11 +440,15 @@ only in the counter sink.
 
 ### 2.18 ETB self-mill — `▸Materialized: Erode N` (≈7)
 
+**Tag:** `Self-Mill`
+
 Undead Butler, Kitchen Finks, Satyr Wayfinder, Goblin Engineer, Aftermath
 Analyst, Stitcher's Supplier, (unnamed `2●/2✦`). All seed the void on entry; they
 differ in erode depth (1/3/4) and the attached payoff.
 
 ### 2.19 Storage-counter removal — `store ⧗ → X⧗: Dissolve an enemy with X✦`
+
+**Tag:** `Storage Removal`
 
 Mayhem Devil (`When you abandon a character, store 1⧗`) and Goblin Bombardment
 (`Abandon a character: store 1⧗`) reach the identical X⧗-dissolve sink by nearly
@@ -391,6 +456,8 @@ identical means; the (unnamed) `[3●/2✦ Warrior]` `3●: store 1⧗ … X⧗:
 enemy with ✦ X or less` is the same engine with a paid store.
 
 ### 2.20 Outsider "ninja" bounce package (5)
+
+**Tag:** `Ninja`
 
 Ingenious Infiltrator, Yuriko, Ninja of the Deep Hours, Moon-Circuit Hacker,
 Thousand-Faced Shadow all share `▸Materialized: Return another ally to hand. Move
@@ -400,15 +467,21 @@ clause is verbatim across all five.
 
 ### 2.21 ETB bounce an ally (3)
 
+**Tag:** `ETB Bounce`
+
 Whitemane Lion, Kor Skyfisher (+Awakened), Oracle of Kruphix (+rider) share
 `▸Materialized: Return an ally to hand.`
 
 ### 2.22 Awaken an ally (3)
 
+**Tag:** `Awaken`
+
 Quirion Ranger (`☪: Awaken an ally`), Scryb Ranger and Fatestitcher (both
 `Awakened` + a tap-to-awaken ability with an extra cost/rider).
 
 ### 2.23 Spirit-animal energy taps & lords
+
+**Tag:** `Spirit Lord`
 
 - `Gain 1● for each allied spirit animal` — Priest of Titania and the (unnamed)
   `[3●/2✦ Spirit Animal]` (which adds a Support clause).
@@ -418,6 +491,8 @@ Quirion Ranger (`☪: Awaken an ally`), Scryb Ranger and Fatestitcher (both
   (each pairs the lord with a different draw outlet).
 
 ### 2.24 Self-spark scalers
+
+**Tag:** `Spark Scaler`
 
 - `This character has +1✦ for each allied warrior` — Blade of Unity, Master of
   Etherium (adds a warrior anthem), and the two figment-copy makers (the unnamed
@@ -456,25 +531,36 @@ apparent variety and should be normalized.
 
 ## Part 4 — Summary
 
-| Group | Cards | Type | Action to consider |
-| --- | --- | --- | --- |
-| §1.1 `▸Dawn: Gain 1●` dorks | 9 | Exact | Collapse to two stat lines |
-| §2.1 wider mana-dork family | ≈12 | Near | Consolidate; fix Avacyn's Pilgrim text |
-| §1.2 ally-dissolved → 1⍟ | 3 | Exact | Two are interchangeable |
-| §1.3 / §2.3 ETB draw a card | 6 | Exact/Near | Spirited Companion ≡ Elvish Visionary |
-| §1.4 play ≤2● from void | 2 | Exact | Ramunap = costlier Lurrus |
-| §1.5 banish from hand (body) | 2 | Exact | Type-only difference |
-| §1.6 / §2.10 ☪ looter | 3 | Exact/Near | Two free loots identical |
-| §1.7 / §2.8 abandon → 1● | 3 | Exact | Warren ≡ Phyrexian Altar |
-| §1.8 Vengeful + ETB draw | 2 | Exact | Fast-only difference |
-| §1.9 / §2.6 rituals | 7 | Exact/Near | Several share net energy |
-| §2.2 burn (N✦ threshold) | 10 | Near | Healthy gradient |
-| §2.5 counters | 14 | Near | Healthy gradient |
-| §2.7 hand disruption | 6 | Near | Healthy gradient |
-| §2.11 cantrips | 6 | Near | Preordain ≈ Serum Visions |
-| §2.12 banish enemy | 10 | Near | Swords ≈ Path to Exile |
-| §2.15–2.17 token/trigger payoffs | many | Near | Overlap across figment types |
-| §2.20 Outsider ninja package | 5 | Near | Intentional family, verbatim clause |
+| Group | Cards | Type | Tag | Action to consider |
+| --- | --- | --- | --- | --- |
+| §1.1 `▸Dawn: Gain 1●` dorks | 9 | Exact | `Elves` | Collapse to two stat lines |
+| §2.1 wider mana-dork family | ≈12 | Near | `Elves` | Consolidate; fix Avacyn's Pilgrim text |
+| §1.2 ally-dissolved → 1⍟ | 3 | Exact | `Blood Artist` | Two are interchangeable |
+| §1.3 / §2.3 ETB draw a card | 6 | Exact/Near | `ETB Draw` | Spirited Companion ≡ Elvish Visionary |
+| §1.4 play ≤2● from void | 2 | Exact | `Lurrus` | Ramunap = costlier Lurrus |
+| §1.5 banish from hand (body) | 2 | Exact | `Tidehollow Sculler` | Type-only difference |
+| §1.6 / §2.10 ☪ looter | 3 | Exact/Near | `Merfolk Looter` | Two free loots identical |
+| §1.7 / §2.8 abandon → 1● | 3 | Exact | `Free Sacrifice` | Warren ≡ Phyrexian Altar |
+| §1.8 Vengeful + ETB draw | 2 | Exact | `ETB Draw` | Fast-only difference |
+| §1.9 / §2.6 rituals | 7 | Exact/Near | `Ritual` | Several share net energy |
+| §1.10 vanilla bodies | 2 | Exact | `Vanilla` | Distinct by spark/type/Fast |
+| §2.2 burn (N✦ threshold) | 10 | Near | `Removal` | Healthy gradient |
+| §2.4 materialize+dissolve draw | 2 | Near | `Ichor Wellspring` | Synthesizer is the downside edition |
+| §2.5 counters | 14 | Near | `Counterspell` | Healthy gradient |
+| §2.7 hand disruption | 6 | Near | `Thoughtseize` | Healthy gradient |
+| §2.9 self-sacrifice for energy | 4 | Near | `Lotus Petal` | Petal ≈ Bloom on the curve |
+| §2.11 cantrips | 6 | Near | `Cantrips` | Preordain ≈ Serum Visions |
+| §2.12 banish enemy | 10 | Near | `Removal` | Swords ≈ Path to Exile |
+| §2.13 / §2.14 conditional dissolve | 12 | Near | `Removal` | Gradient by cost cap / rider |
+| §2.15 figment generators | 29 | Near | `Figment Maker` | Overlap across figment types |
+| §2.16 / §2.17 trigger payoffs | 18 | Near | `Event Payoff` / `Character Payoff` | Shared trigger, varied payoff |
+| §2.18 ETB self-mill | 7 | Near | `Self-Mill` | Vary erode depth + payoff |
+| §2.19 storage-counter removal | 3 | Near | `Storage Removal` | Same X⧗ dissolve sink |
+| §2.20 Outsider ninja package | 5 | Near | `Ninja` | Intentional family, verbatim clause |
+| §2.21 ETB bounce an ally | 3 | Near | `ETB Bounce` | Shared opening clause |
+| §2.22 awaken an ally | 3 | Near | `Awaken` | Shared opening clause |
+| §2.23 spirit-animal taps & lords | 7 | Near | `Spirit Lord` | Energy taps + spark lords |
+| §2.24 self-spark scalers | 6 | Near | `Spark Scaler` | Warrior- and void-count scalers |
 
 **Highest-value consolidation targets**, in order:
 
