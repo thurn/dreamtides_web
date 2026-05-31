@@ -1,0 +1,197 @@
+[[cards]]
+name = "Unbroken"
+mtg-name = "Marauding Mako"
+id = "4124a05c-b6dd-4334-b202-59fa17d77668"
+tides = []
+rendered-text = "When you discard a card, this character gains +1✦."
+energy-cost = 1
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 1
+tags = []
+image-number = 1791664445
+art-owned = false
+card-number = 31
+
+[[cards]]
+name = "Bloomweaver"
+mtg-name = "Fastbond"
+id = "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea"
+tides = []
+rendered-text = """
+Veil 2●
+
+When you play a character with cost 2● or less, gain 1●."""
+energy-cost = 1
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 1
+tags = ["Character Payoff"]
+image-number = 1790126246
+art-owned = true
+card-number = 32
+
+[[cards]]
+name = "Spirit Field Reclaimer"
+mtg-name = "Lion Sash"
+id = "78673e2b-a6d1-43de-8850-3d3327de5cc6"
+tides = []
+rendered-text = """
+1●, Banish a character from a player's void: Store 1⧗.
+
+Support – Supported allies have +1✦ for each stored ⧗."""
+energy-cost = 3
+card-type = "Character"
+subtype = "Warrior"
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 2
+tags = []
+image-number = 2287054239
+art-owned = true
+card-number = 33
+
+[[cards]]
+name = "Chronicle Reclaimer"
+mtg-name = "Ledger Shredder"
+id = "5b2b2188-b9f0-4b3b-9185-26a820d343c7"
+tides = []
+rendered-text = "When you play your second card in a turn, draw a card, then discard a card."
+energy-cost = 2
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = true
+is-interrupt = false
+spark = 2
+tags = []
+image-number = 1633431265
+art-owned = true
+card-number = 34
+
+[[cards]]
+name = "Woodland Apparition"
+mtg-name = "Detective's Phoenix"
+id = "1268a899-b209-46bb-bce4-6def1dcd0404"
+tides = []
+rendered-text = """
+Support – Supported allies have +2✦ and have unstoppable.
+
+Reclaim – 3●, Banish 3 cards from your void."""
+energy-cost = 3
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 3
+tags = []
+image-number = 472322395
+art-owned = false
+card-number = 35
+
+[[cards]]
+name = "Wasteland Holdout"
+mtg-name = "Staff of the Storyteller"
+id = "f4082c01-fdc8-4583-afdb-76bac980b3bf"
+tides = []
+rendered-text = """
+When you materialize a figment, store 1⧗.
+
+1⧗, ☪: Draw a card."""
+energy-cost = 2
+card-type = "Character"
+subtype = "Warrior"
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 2
+tags = []
+image-number = 2590831715
+art-owned = false
+card-number = 36
+
+[[cards]]
+name = "Curio Dealer"
+mtg-name = "Survival of the Fittest"
+id = "4f0f0811-1a4c-4d42-a804-77dba8707792"
+tides = []
+rendered-text = """
+Veil 2● 
+
+1●, Discard a character with cost X●: Discover a character with cost X●."""
+energy-cost = 2
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 1
+tags = []
+image-number = 454095535
+art-owned = false
+card-number = 37
+
+[[cards]]
+name = "Moment Rewound"
+mtg-name = "Time Walk"
+id = "a911ef71-799c-4240-ad13-8fabd3caeafa"
+tides = []
+rendered-text = "Take an extra turn after this one."
+energy-cost = 3
+card-type = "Event"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = 758082493
+art-owned = false
+card-number = 38
+
+[[cards]]
+name = "Starsea Traveler"
+mtg-name = "Ramunap Excavator"
+id = "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6"
+tides = []
+rendered-text = "Once per turn, you may play a character with cost 2● or less from your void."
+energy-cost = 3
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 3
+tags = ["Lurrus"]
+image-number = 1084620233
+art-owned = true
+card-number = 39
+
+[[cards]]
+name = "The Waking Titan"
+mtg-name = "Thing in the Ice // Awoken Horror"
+id = "47b1d6b7-0388-4bb9-abfc-ed832d902e9f"
+tides = []
+rendered-text = """
+When you play an event, store 1⧗.
+
+5⧗: Return all other characters to hand."""
+energy-cost = 3
+card-type = "Character"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 4
+tags = ["Event Payoff"]
+image-number = 2320845229
+art-owned = false
+card-number = 40
