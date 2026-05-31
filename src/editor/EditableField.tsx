@@ -3,6 +3,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type ChangeEvent,
   type CSSProperties,
   type KeyboardEvent,
   type ReactNode,
@@ -10,6 +11,7 @@ import {
 } from "react";
 import type { EditableCardField } from "./types";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
+import { applySymbolReplacements } from "./symbol-replacements";
 
 export interface EditableFieldProps {
   field: EditableCardField;
@@ -176,6 +178,9 @@ export default function EditableField({
   // Set when Enter/Escape closes the editor so the trailing blur does not
   // double-commit the same value.
   const closingRef = useRef(false);
+  // Caret position to restore after a symbol-shortcut replacement shrinks the
+  // text; null when the latest change needs no caret adjustment.
+  const pendingCaretRef = useRef<number | null>(null);
   const isPipLayout = layout === "pip";
   const isInlineLayout = layout === "inline";
 
@@ -231,6 +236,31 @@ export default function EditableField({
     onCommit(draftValue);
   }
 
+  function handleChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) {
+    const rawValue = event.currentTarget.value;
+    const rawCaret = event.currentTarget.selectionStart ?? rawValue.length;
+    const { value: nextValue, caret } = applySymbolReplacements(
+      rawValue,
+      rawCaret,
+    );
+    pendingCaretRef.current = nextValue === rawValue ? null : caret;
+    onDraftChange(nextValue);
+  }
+
+  // After a replacement re-renders the controlled value, the browser would
+  // otherwise drop the caret to the end of the text. Restore it next to the
+  // inserted glyph.
+  useLayoutEffect(() => {
+    const caret = pendingCaretRef.current;
+    if (caret === null) {
+      return;
+    }
+    pendingCaretRef.current = null;
+    editorRef.current?.setSelectionRange(caret, caret);
+  }, [draftValue]);
+
   const editor =
     mode === "multiline" ? (
       <textarea
@@ -240,7 +270,7 @@ export default function EditableField({
           editorRef.current = element;
         }}
         value={String(draftValue)}
-        onChange={(event) => onDraftChange(event.currentTarget.value)}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
         style={{
@@ -258,7 +288,7 @@ export default function EditableField({
         }}
         type="text"
         value={String(draftValue)}
-        onChange={(event) => onDraftChange(event.currentTarget.value)}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
         onBlur={handleBlur}
         style={{
