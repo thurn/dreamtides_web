@@ -20,6 +20,12 @@ export interface EditorCardRecord {
   spark: EditorFieldValue;
   "rendered-text": string;
   tags: string[];
+  /**
+   * The Magic: The Gathering card this card is derived from. Surfaced as a
+   * hover tooltip in the editor for reference; it is not an editable field and
+   * is not carried into the quest prototype's card data.
+   */
+  mtgName: string;
   source: Record<string, unknown>;
   preview: CardData;
 }

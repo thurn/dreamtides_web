@@ -55,6 +55,7 @@ function makeEditorCard(overrides: Partial<EditorCardRecord> = {}): EditorCardRe
     spark: 1,
     "rendered-text": preview.renderedText,
     tags: [],
+    mtgName: "",
     source: {},
     preview,
     ...overrides,

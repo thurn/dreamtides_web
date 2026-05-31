@@ -84,6 +84,7 @@ function editorRecordFromCard(card) {
     spark: card.spark ?? "",
     "rendered-text": card["rendered-text"] ?? "",
     tags: normalizeTagList(card.tags),
+    mtgName: typeof card["mtg-name"] === "string" ? card["mtg-name"] : "",
     source: card,
     preview: transformCard(card),
   };
