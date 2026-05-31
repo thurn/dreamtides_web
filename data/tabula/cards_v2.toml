@@ -60,7 +60,10 @@ name = "Dawnseed Fox"
 mtg-name = "Noble Hierarch"
 id = "9b9c2743-75b3-499d-b5fb-c3429c92d420"
 tides = []
-rendered-text = "▸Dawn: Gain 1●."
+rendered-text = '''
+▸Dawn: Gain 1●.
+
+4●, ☪: This character gains +1✦.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -1880,7 +1883,10 @@ name = "Glimmerhorn Dawnling"
 mtg-name = "Avacyn's Pilgrim"
 id = "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c"
 tides = []
-rendered-text = "▸Dawn: Gain ●."
+rendered-text = '''
+Veil 2●
+
+▸Dawn: Gain 1●.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -2689,7 +2695,10 @@ name = "Dawnmote Familiar"
 mtg-name = "Ignoble Hierarch"
 id = "b8ecc46d-bd92-4826-a416-7ce177e69cbf"
 tides = []
-rendered-text = "▸Dawn: Gain 1●."
+rendered-text = '''
+▸Materialized: Foresee 1.
+
+▸Dawn: Gain 1●.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -4398,7 +4407,7 @@ name = "Dewlight Familiar"
 mtg-name = "Arbor Elf"
 id = "14ac6804-ed1d-4148-aad7-11796b6fff6c"
 tides = []
-rendered-text = "▸Dawn: Gain 1●."
+rendered-text = "▸Dawn: Gain 1●. With 3 allied spirit animals, gain 2● instead."
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -5008,7 +5017,10 @@ name = "Dewstep Familiar"
 mtg-name = "Elves of Deep Shadow"
 id = "7dd2214f-8d16-453a-9f28-62712e64eae1"
 tides = []
-rendered-text = "▸Dawn: Gain 1●."
+rendered-text = '''
+Vengeful
+
+▸Dawn: Gain 1●.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -6387,7 +6399,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Elves"]
+tags = []
 image-number = ""
 art-owned = false
 card-number = 333
@@ -7341,7 +7353,10 @@ name = "Dawnleaf Familiar"
 mtg-name = "Boreal Druid"
 id = "76766584-a8fb-41cc-8c4b-09655f478703"
 tides = []
-rendered-text = "▸Dawn: Gain 1●. "
+rendered-text = '''
+▸Materialized: Erode 2.
+
+▸Dawn: Gain 1●. '''
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -7866,7 +7881,10 @@ name = "Sunbud Grazer"
 mtg-name = "Fyndhorn Elves"
 id = "f0165a60-df1c-41db-87bb-a784c26835a5"
 tides = []
-rendered-text = "▸Dawn: Gain 1●. "
+rendered-text = '''
+▸Dawn: Gain 1●. 
+
+▸Dissolved: Gain 1●.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -7902,7 +7920,10 @@ name = "Sunmote Companion"
 mtg-name = "Birds of Paradise"
 id = "86fd585b-e9d0-4dc1-bce9-488014b9316d"
 tides = []
-rendered-text = "▸Dawn: Gain 1●. "
+rendered-text = '''
+▸Dawn: Gain 1●. 
+
+Reclaim 3●'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -8279,7 +8300,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Elves"]
+tags = []
 image-number = ""
 art-owned = false
 card-number = 430
