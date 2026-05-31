@@ -27,14 +27,6 @@ const RULES_COLOR = "var(--cv-rules-color)";
 const RULES_FONT_FAMILY = "var(--cv-rules-font-family)";
 
 /**
- * Upper bound for the font auto-shrink search, as a fraction of the rendered
- * card width. The real font ceiling is the `--cv-*-font-max` CSS var, applied
- * via `min()`; this cap only needs to sit above every ceiling so that short
- * text settles on the var rather than being clamped here.
- */
-const FIT_SEARCH_CAP_RATIO = 0.22;
-
-/**
  * Orb diameters as a fraction of the rendered card width, used to size the
  * digit auto-shrink search. The rendered orb size is the `--cv-*-orb-size` CSS
  * var; these mirror its defaults.
@@ -444,7 +436,7 @@ export function CardView({
             style={{
               color: NAME_COLOR,
               fontFamily: NAME_FONT_FAMILY,
-              fontSize: "var(--cv-name-font-max)",
+              fontSize: "var(--cv-name-font-size)",
               lineHeight: 1.15,
             }}
           >
