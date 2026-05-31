@@ -150,6 +150,8 @@ function sortValue(card: EditorCardRecord, sort: EditorSortField): string | numb
       return sortSparkValue(card);
     case "rulesTextLength":
       return card.preview.renderedText.length;
+    case "nameLength":
+      return card.name.length;
   }
 }
 

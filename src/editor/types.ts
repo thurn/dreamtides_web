@@ -53,7 +53,8 @@ export type EditorSortField =
   | "type"
   | "subtype"
   | "spark"
-  | "rulesTextLength";
+  | "rulesTextLength"
+  | "nameLength";
 export type EditorSortDirection = "asc" | "desc";
 export type EditorCardSize = "small" | "medium" | "large";
 /**

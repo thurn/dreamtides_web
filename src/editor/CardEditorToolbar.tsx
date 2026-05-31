@@ -57,6 +57,7 @@ const SORT_OPTIONS: Array<{ value: EditorSortField; label: string }> = [
   { value: "subtype", label: "Subtype" },
   { value: "spark", label: "Spark" },
   { value: "rulesTextLength", label: "Rules Text Length" },
+  { value: "nameLength", label: "Name Length" },
 ];
 
 const SIZE_OPTIONS: Array<{ value: EditorCardSize; label: string }> = [
