@@ -57,9 +57,10 @@ export type EditorSortDirection = "asc" | "desc";
 export type EditorCardSize = "small" | "medium" | "large";
 /**
  * Which card fields the search box matches against. `name` (the default)
- * searches only card names; `all` additionally searches rules text.
+ * searches only card names; `all` additionally searches rules text; `mtg`
+ * searches the source Magic: The Gathering name.
  */
-export type EditorSearchScope = "name" | "all";
+export type EditorSearchScope = "name" | "all" | "mtg";
 
 export interface EditorDisplayState {
   searchText: string;

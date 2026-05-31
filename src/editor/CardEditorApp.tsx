@@ -94,6 +94,10 @@ function cardSearchText(
     return `${card.name} ${card["rendered-text"]} ${card.preview.name} ${card.preview.renderedText}`;
   }
 
+  if (scope === "mtg") {
+    return card.mtgName;
+  }
+
   return `${card.name} ${card.preview.name}`;
 }
 

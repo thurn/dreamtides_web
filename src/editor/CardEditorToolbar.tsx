@@ -6,6 +6,7 @@ import type {
   EditorCardSize,
   EditorCostFilter,
   EditorDisplayState,
+  EditorSearchScope,
   EditorSortField,
   EditorTag,
   EditorTypeFilter,
@@ -25,6 +26,16 @@ const TYPE_OPTIONS: Array<{ value: EditorTypeFilter; label: string }> = [
   { value: "all", label: "All" },
   { value: "character", label: "Characters" },
   { value: "event", label: "Events" },
+];
+
+const SCOPE_OPTIONS: Array<{
+  value: EditorSearchScope;
+  label: string;
+  placeholder: string;
+}> = [
+  { value: "name", label: "Card name", placeholder: "Card name" },
+  { value: "all", label: "Rules text", placeholder: "Name or rules text" },
+  { value: "mtg", label: "MTG name", placeholder: "MTG name" },
 ];
 
 const COST_OPTIONS: Array<{ value: EditorCostFilter; label: string }> = [
@@ -357,35 +368,32 @@ export default function CardEditorToolbar({
               updateDisplayState({ searchText: event.currentTarget.value })
             }
             placeholder={
-              displayState.searchScope === "all"
-                ? "Name or rules text"
-                : "Card name"
+              SCOPE_OPTIONS.find(
+                (option) => option.value === displayState.searchScope,
+              )?.placeholder ?? "Card name"
             }
             style={inputStyle}
           />
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "6px",
-              color: "#9fb0ab",
-              fontSize: "0.74rem",
-              fontWeight: 600,
-            }}
+        </label>
+
+        <label style={labelStyle}>
+          Search in
+          <select
+            aria-label="Search scope"
+            value={displayState.searchScope}
+            onChange={(event) =>
+              updateDisplayState({
+                searchScope: event.currentTarget.value as EditorSearchScope,
+              })
+            }
+            style={inputStyle}
           >
-            <input
-              aria-label="Search rules text"
-              type="checkbox"
-              checked={displayState.searchScope === "all"}
-              onChange={(event) =>
-                updateDisplayState({
-                  searchScope: event.currentTarget.checked ? "all" : "name",
-                })
-              }
-              style={{ accentColor: "#36a398", cursor: "pointer" }}
-            />
-            Search rules text
-          </span>
+            {SCOPE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </label>
 
         <div style={labelStyle}>

@@ -2659,12 +2659,13 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("searches names by default and rules text only when opted in", async () => {
+  it("scopes search to names, rules text, or MTG name", async () => {
     const cards = [
       makeEditorCard({
         id: "moon-card",
         name: "Moonlit Envoy",
         "rendered-text": "Draw a card.",
+        mtgName: "Serra Angel",
         preview: makePreview({
           id: "moon-card",
           name: "Moonlit Envoy",
@@ -2675,6 +2676,7 @@ describe("CardEditorApp", () => {
         id: "rules-card",
         name: "Quiet Guide",
         "rendered-text": "Shield an ally.",
+        mtgName: "Giant Growth",
         preview: makePreview({
           id: "rules-card",
           name: "Quiet Guide",
@@ -2685,6 +2687,7 @@ describe("CardEditorApp", () => {
         id: "other-card",
         name: "Sun Keeper",
         "rendered-text": "Gain energy.",
+        mtgName: "Lightning Bolt",
         preview: makePreview({
           id: "other-card",
           name: "Sun Keeper",
@@ -2698,11 +2701,11 @@ describe("CardEditorApp", () => {
     const searchInput = container.querySelector<HTMLInputElement>(
       '[aria-label="Search cards"]',
     );
-    const rulesScopeToggle = container.querySelector<HTMLInputElement>(
-      '[aria-label="Search rules text"]',
+    const scopeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Search scope"]',
     );
 
-    if (searchInput === null || rulesScopeToggle === null) {
+    if (searchInput === null || scopeSelect === null) {
       throw new Error("Missing search controls");
     }
 
@@ -2724,7 +2727,7 @@ describe("CardEditorApp", () => {
 
     // Opting into rules-text search surfaces the rules-text match.
     act(() => {
-      rulesScopeToggle.click();
+      setSelectValue(scopeSelect, "all");
     });
     expect(container.textContent).toContain("1 / 3 cards");
     expect(editorCardIds(container)).toEqual(["rules-card"]);
@@ -2732,6 +2735,21 @@ describe("CardEditorApp", () => {
       null,
       "",
       "/editor?q=shield&scope=all",
+    );
+
+    // Switching to MTG-name search matches the source card name.
+    act(() => {
+      setInputValue(searchInput, "bolt");
+    });
+    act(() => {
+      setSelectValue(scopeSelect, "mtg");
+    });
+    expect(container.textContent).toContain("1 / 3 cards");
+    expect(editorCardIds(container)).toEqual(["other-card"]);
+    expect(replaceState).toHaveBeenLastCalledWith(
+      null,
+      "",
+      "/editor?q=bolt&scope=mtg",
     );
     expect(pushState).not.toHaveBeenCalled();
 
