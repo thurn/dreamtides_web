@@ -1,0 +1,50 @@
+[
+  {
+    "card_number": 1,
+    "id": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+    "name": "Duelist of Elsewhere",
+    "rationale": "A modest challenger briefly casts an opposing fighter out of the fight, making their skill feel like precise battlefield displacement rather than annihilation."
+  },
+  {
+    "card_number": 2,
+    "id": "161482b6-af07-4d9e-822d-8c738672beb9",
+    "name": "Signal of Second Shape",
+    "rationale": "The fast ally-rematerialization reads as a sudden battlefield call that lets a companion re-enter the dream in a renewed form."
+  },
+  {
+    "card_number": 3,
+    "id": "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+    "name": "Vision Paid to Night",
+    "rationale": "Offering and instant-speed card draw suggest a costly nocturnal bargain where something is surrendered for urgent insight."
+  },
+  {
+    "card_number": 4,
+    "id": "9b9c2743-75b3-499d-b5fb-c3429c92d420",
+    "name": "Dawnseed Fox",
+    "rationale": "A tiny spirit animal that brings energy each Dawn feels like a small animist familiar carrying the first usable light of the turn."
+  },
+  {
+    "card_number": 5,
+    "id": "967c714f-40c5-4a77-8e22-40691a2755d4",
+    "name": "Call Back the Shape",
+    "rationale": "The reusable low-cost event tells the story of coaxing an ally's form back into focus and then leaving the rite ready to be reclaimed."
+  },
+  {
+    "card_number": 6,
+    "id": "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
+    "name": "Ashroad Revenant",
+    "rationale": "A vengeful Survivor returning whenever the void is used feels like an enduring wasteland figure who follows every reclaimed path home."
+  },
+  {
+    "card_number": 7,
+    "id": "25d00336-5ad7-433b-8ced-71720a9f074a",
+    "name": "Tide of Unmade Memories",
+    "rationale": "The symmetric reshuffle and redraw reads as a dreamtide that dissolves both players' held plans and buried pasts into a fresh pattern."
+  },
+  {
+    "card_number": 8,
+    "id": "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+    "name": "Pearl-Eye Sifter",
+    "rationale": "The exhaust ability to draw then discard suggests a quiet watcher who filters visions for one useful glimmer at a time."
+  }
+]
