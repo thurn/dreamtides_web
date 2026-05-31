@@ -9,7 +9,6 @@ import {
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { CardStatOrb } from "./CardStatOrb";
-import { useFitText } from "./useFitText";
 import { renderRulesText } from "./RulesText";
 
 /**
@@ -235,15 +234,13 @@ export function CardView({
   const rarityStyle = rarityStyleFor(card);
   const attributeChips = buildAttributeChips(card);
 
-  // Search caps for the auto-shrink fits. The displayed size is the smaller of
-  // the CSS-var ceiling and the fitted size (see `min(...)` below), so these
-  // caps only bound the search.
+  // Search caps for the corner-orb digit auto-shrink. The displayed size is
+  // the smaller of the CSS-var ceiling and the fitted size (see `min(...)` in
+  // CardStatOrb), so these caps only bound the search. The name / type / rules
+  // text use fixed `cqw` sizes (no per-card auto-shrink) so every card on a
+  // surface shares one type scale, matching the design spec.
   const energyOrbCapPx = widthPx * ENERGY_ORB_RATIO;
   const sparkOrbCapPx = widthPx * SPARK_ORB_RATIO;
-  const fitCapPx = widthPx * FIT_SEARCH_CAP_RATIO;
-
-  const nameFit = useFitText(fitCapPx, 7, [card.name, fitCapPx]);
-  const typeFit = useFitText(fitCapPx, 6, [typeLine, fitCapPx]);
 
   // Selection / rarity rings, stacked as box-shadows so they compose with the
   // rounded corners.
@@ -287,7 +284,6 @@ export function CardView({
 
   const nameNode = (
     <div
-      ref={nameFit.ref}
       style={{
         flex: "1 1 0",
         minWidth: 0,
@@ -299,7 +295,7 @@ export function CardView({
         fontWeight: 600,
         letterSpacing: "0.01em",
         textShadow: "0 1px 2px rgba(0, 0, 0, 0.7)",
-        fontSize: `min(var(--cv-name-font-max), ${String(nameFit.fontSize)}px)`,
+        fontSize: "var(--cv-name-font-size)",
         lineHeight: 1.1,
       }}
     >
@@ -319,7 +315,6 @@ export function CardView({
   const typeLineNode =
     hasTypeLineContent || attributeChips.length > 0 ? (
       <div
-        ref={typeFit.ref}
         data-testid="card-type-line"
         style={{
           flex: "0 1 auto",
@@ -333,7 +328,7 @@ export function CardView({
           fontWeight: 500,
           letterSpacing: "0.01em",
           textShadow: "0 1px 1px rgba(0, 0, 0, 0.65)",
-          fontSize: `min(var(--cv-type-font-max), ${String(typeFit.fontSize)}px)`,
+          fontSize: "var(--cv-type-font-size)",
           lineHeight: 1.1,
         }}
       >
@@ -358,7 +353,7 @@ export function CardView({
         textAlign: "left",
         color: tintColor ?? RULES_COLOR,
         fontFamily: RULES_FONT_FAMILY,
-        fontSize: "var(--cv-rules-font-max)",
+        fontSize: "var(--cv-rules-font-size)",
         lineHeight: "var(--cv-rules-line-height)",
         textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
       }}

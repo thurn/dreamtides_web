@@ -180,8 +180,15 @@ button:disabled {
   container-type: inline-size;
   background: var(--cv-backing, #0d0814);
 
-  /* Card + text box corner radii (18px / 13px at the 500px design width). */
-  --cv-radius: 3.6cqw;
+  /* Card + text box corner radii (18px / 13px at the 500px design width).
+   * The card-level radius is a percentage so it resolves against the card's own
+   * 2:3 box: 3.6% of the width equals 2.4% of the height, giving a uniform
+   * ~3.6%-of-width corner at every rendered size. A `cqw` value here would
+   * resolve against an ancestor container (or the viewport) rather than the
+   * card itself and blow the corner up on wide layouts. The text-box radius
+   * stays `cqw` because the box is a descendant of the card container, where
+   * `cqw` resolves against the card width as intended. */
+  --cv-radius: 3.6% / 2.4%;
   --cv-textbox-radius: 2.6cqw;
 
   /* Cost / spark orb column, top-left. Spark is centered on the cost's axis. */
@@ -208,12 +215,15 @@ button:disabled {
   --cv-vignette-top-height: 20%;
   --cv-vignette-bottom-height: 42%;
 
-  /* Font sizes (23px / 15px / 17.5px at the 500px design width). Name and type
-   * auto-shrink down from these ceilings to stay on one line; the rules body
-   * holds its size and lets the box grow. */
-  --cv-name-font-max: 4.6cqw;
-  --cv-type-font-max: 3cqw;
-  --cv-rules-font-max: 3.5cqw;
+  /* Font sizes, as fixed fractions of the card width (23px / 15px / 17.5px at
+   * the 500px design width). They never auto-shrink per card, so every card on
+   * a surface shares one type scale and the name : rules size ratio always
+   * matches the spec (4.6 / 3.5 ≈ 23 / 17.5). A name too long for one line
+   * truncates with an ellipsis instead of shrinking; the rules body keeps its
+   * size and lets the text box grow taller. */
+  --cv-name-font-size: 4.6cqw;
+  --cv-type-font-size: 3cqw;
+  --cv-rules-font-size: 3.5cqw;
 
   /* Typography. */
   --cv-name-font-family: "EB Garamond", Georgia, serif;
@@ -251,12 +261,6 @@ button:disabled {
     rgba(60, 25, 102, 0.68) 100%
   );
   --cv-titleband-border: rgba(184, 138, 232, 0.38);
-}
-
-.card-view--large {
-  --cv-rules-font-max: 3.8cqw;
-  --cv-name-font-max: 4.9cqw;
-  --cv-type-font-max: 3.2cqw;
 }
 
 /*
