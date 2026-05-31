@@ -17,6 +17,17 @@ import { useLayoutEffect, useRef, useState, type RefObject } from "react";
  * element's *available* box (client size) changes, so the hook's own
  * font-size mutations — which change scroll size, not client size, for a
  * fixed-size box — cannot feed back into an observer loop.
+ *
+ * Measuring forces a synchronous layout (each candidate font size is written,
+ * then `scrollHeight`/`clientHeight` are read back). A surface like the card
+ * editor mounts hundreds of cards at once — three fits each — so measuring
+ * every card on mount or on every size toggle would force tens of thousands of
+ * full-document reflows and lock the page up for seconds. To bound that work,
+ * the fit only runs once the element is at (or near) the viewport: cards
+ * already on screen measure immediately, while off-screen cards defer their
+ * fit — and their resize / font re-fit wiring — until they scroll into range.
+ * Where `IntersectionObserver` is unavailable (e.g. jsdom under test) the fit
+ * runs eagerly, matching the always-measure behaviour those callers expect.
  */
 export function useFitText(
   maxFontPx: number,
@@ -66,41 +77,91 @@ export function useFitText(
       setFontSize(best);
     };
 
-    measure();
-
-    // Re-fit once the real fonts are ready so glyph metrics that differ from
-    // the fallback font cannot leave the text overflowing its box.
     let cancelled = false;
-    if (typeof document !== "undefined" && "fonts" in document) {
-      void document.fonts.ready.then(() => {
-        if (!cancelled) {
-          measure();
-        }
-      });
-    }
-
     let observer: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== "undefined") {
-      observer = new ResizeObserver(() => {
-        // Only re-fit when the box we must fit into actually changed size;
-        // ignore scroll-size changes caused by our own font mutations.
-        if (
-          element.clientWidth !== lastClientW ||
-          element.clientHeight !== lastClientH
-        ) {
-          measure();
-        }
-      });
-      observer.observe(element);
+    let usesWindowResize = false;
+    let started = false;
+
+    // Run the (reflow-forcing) fit and wire up the re-fit triggers. Deferred
+    // until the element is near the viewport so off-screen cards cost nothing.
+    const start = (): void => {
+      if (cancelled || started) {
+        return;
+      }
+      started = true;
+
+      measure();
+
+      // Re-fit once the real fonts are ready so glyph metrics that differ from
+      // the fallback font cannot leave the text overflowing its box.
+      if (typeof document !== "undefined" && "fonts" in document) {
+        void document.fonts.ready.then(() => {
+          if (!cancelled) {
+            measure();
+          }
+        });
+      }
+
+      if (typeof ResizeObserver !== "undefined") {
+        observer = new ResizeObserver(() => {
+          // Only re-fit when the box we must fit into actually changed size;
+          // ignore scroll-size changes caused by our own font mutations.
+          if (
+            element.clientWidth !== lastClientW ||
+            element.clientHeight !== lastClientH
+          ) {
+            measure();
+          }
+        });
+        observer.observe(element);
+      } else {
+        usesWindowResize = true;
+        window.addEventListener("resize", measure);
+      }
+    };
+
+    // Gate the fit on viewport proximity. Cards already on screen measure now
+    // (synchronously, so there is no flash from the unfitted size when text or
+    // size deps change); off-screen cards wait until they scroll within range.
+    // Without IntersectionObserver, measure eagerly.
+    const VIEWPORT_MARGIN_PX = 300;
+    let viewportObserver: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== "undefined") {
+      const rect = element.getBoundingClientRect();
+      const viewportH = window.innerHeight || 0;
+      const viewportW = window.innerWidth || 0;
+      const nearViewport =
+        rect.bottom >= -VIEWPORT_MARGIN_PX &&
+        rect.top <= viewportH + VIEWPORT_MARGIN_PX &&
+        rect.right >= -VIEWPORT_MARGIN_PX &&
+        rect.left <= viewportW + VIEWPORT_MARGIN_PX;
+      if (nearViewport) {
+        // Measure before paint, exactly like an eager fit.
+        start();
+      } else {
+        // Defer until this card scrolls (or the layout shifts it) into range.
+        viewportObserver = new IntersectionObserver(
+          (entries) => {
+            if (entries.some((entry) => entry.isIntersecting)) {
+              viewportObserver?.disconnect();
+              viewportObserver = null;
+              start();
+            }
+          },
+          { rootMargin: `${String(VIEWPORT_MARGIN_PX)}px` },
+        );
+        viewportObserver.observe(element);
+      }
     } else {
-      window.addEventListener("resize", measure);
+      start();
     }
 
     return () => {
       cancelled = true;
+      viewportObserver?.disconnect();
       if (observer !== null) {
         observer.disconnect();
-      } else {
+      } else if (usesWindowResize) {
         window.removeEventListener("resize", measure);
       }
     };
