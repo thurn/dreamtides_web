@@ -4,6 +4,12 @@ import { createRoot } from "react-dom/client";
 import "boxicons/css/boxicons.min.css";
 import "./index.css";
 import CardEditorApp from "./editor/CardEditorApp";
+import { verifyFonts } from "./runtime/verify-fonts";
+
+// Warn (console + on-screen banner) if the card webfonts failed to load, e.g.
+// when the Google Fonts CDN is blocked or offline and cards silently fall
+// back to system fonts.
+void verifyFonts();
 
 const root = createRoot(document.getElementById("root")!);
 
