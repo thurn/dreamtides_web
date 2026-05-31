@@ -259,14 +259,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  /** Returns the inline background-image declarations rendered in the tree. */
-  function backgroundImages(container: HTMLElement): string {
-    return Array.from(container.querySelectorAll<HTMLElement>("[style]"))
-      .map((el) => el.getAttribute("style") ?? "")
-      .join(" ");
-  }
-
-  it("renders Event cards with the purple event parchment frame", () => {
+  it("themes Event cards with the purple event accent", () => {
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
@@ -276,23 +269,26 @@ describe("CardDisplay", () => {
       />,
     );
 
-    const styles = backgroundImages(container);
-    expect(styles).toContain("card_frame_event.png");
-    expect(styles).not.toContain("card_frame.png");
+    const cardRoot = container.firstElementChild as HTMLElement | null;
+    // The Event accent is keyed off the card root's `data-card-type`, which
+    // drives the purple title-band / text-box gradients in `index.css`.
+    expect(cardRoot?.getAttribute("data-card-type")).toBe("Event");
+    // The full-bleed frame carries no parchment art.
+    expect(container.innerHTML).not.toContain("card_frame");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("renders Character cards with the character parchment frame", () => {
+  it("themes Character cards with the neutral black chrome", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
     );
 
-    const styles = backgroundImages(container);
-    expect(styles).toContain("card_frame.png");
-    expect(styles).not.toContain("card_frame_event.png");
+    const cardRoot = container.firstElementChild as HTMLElement | null;
+    expect(cardRoot?.getAttribute("data-card-type")).toBe("Character");
+    expect(container.innerHTML).not.toContain("card_frame");
 
     act(() => {
       root.unmount();
@@ -462,7 +458,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("keeps the character parchment frame on a Legendary card", () => {
+  it("keeps the gold rarity ring on a Legendary character card", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ rarity: "Legendary", cardType: "Character" })} />,
     );
@@ -471,9 +467,9 @@ describe("CardDisplay", () => {
     if (!cardRoot) {
       throw new Error("Missing card root");
     }
-    // The gold rarity ring composes with the character frame art.
+    // The gold rarity ring composes with the neutral character chrome.
     expect(cardRoot.style.boxShadow.toLowerCase()).toContain("#f5c542");
-    expect(backgroundImages(container)).toContain("card_frame.png");
+    expect(cardRoot.getAttribute("data-card-type")).toBe("Character");
 
     act(() => {
       root.unmount();
@@ -594,7 +590,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("gives Character and Event cards an identical drop shadow, differing only by frame art", () => {
+  it("gives Character and Event cards an identical drop shadow, differing only by the type accent", () => {
     const characterMount = mount(
       <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
     );
@@ -612,17 +608,13 @@ describe("CardDisplay", () => {
       throw new Error("Missing card root");
     }
 
-    // The card box itself carries no type-colored chrome — the type is read
-    // from the parchment frame art, so both share the same drop shadow.
+    // The card box itself carries no type-colored border, so both share the
+    // same drop shadow; the Event accent lives on the text box instead.
     expect(characterRoot.style.boxShadow).toBe(eventRoot.style.boxShadow);
 
-    // The frame art differs by type.
-    expect(backgroundImages(characterMount.container)).toContain(
-      "card_frame.png",
-    );
-    expect(backgroundImages(eventMount.container)).toContain(
-      "card_frame_event.png",
-    );
+    // The card type drives the purple Event accent on the text box.
+    expect(characterRoot.getAttribute("data-card-type")).toBe("Character");
+    expect(eventRoot.getAttribute("data-card-type")).toBe("Event");
 
     act(() => {
       characterMount.root.unmount();

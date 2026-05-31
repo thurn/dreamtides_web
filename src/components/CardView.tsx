@@ -8,25 +8,21 @@ import {
 } from "../data/card-database";
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
-import {
-  CARD_ART_ASPECT_RATIO,
-  CARD_FRAME_ASPECT_RATIO,
-  cardFrameUrl,
-} from "./card-assets";
 import { CardStatOrb } from "./CardStatOrb";
 import { useFitText } from "./useFitText";
 import { renderRulesText } from "./RulesText";
 
 /**
  * Default chrome accent used for the selection ring fallback. The card's type
- * is conveyed by the parchment frame art (a dark drape for characters, a
- * purple drape for events) rather than a colored border.
+ * is conveyed by the text-box accent (neutral black chrome for characters, a
+ * purple accent for events) rather than a colored border.
  */
 const SELECTION_DEFAULT_COLOR = "#f97316";
 
 /** Card name / type / rules text colors and fonts, as CSS-var references so the
  * `.card-view` rule in `index.css` is the single place these are tuned. */
 const NAME_COLOR = "var(--cv-name-color)";
+const TYPE_COLOR = "var(--cv-type-color)";
 const NAME_FONT_FAMILY = "var(--cv-name-font-family)";
 const RULES_COLOR = "var(--cv-rules-color)";
 const RULES_FONT_FAMILY = "var(--cv-rules-font-family)";
@@ -44,8 +40,8 @@ const FIT_SEARCH_CAP_RATIO = 0.22;
  * digit auto-shrink search. The rendered orb size is the `--cv-*-orb-size` CSS
  * var; these mirror its defaults.
  */
-const ENERGY_ORB_RATIO = 0.18;
-const SPARK_ORB_RATIO = 0.2;
+const ENERGY_ORB_RATIO = 0.156;
+const SPARK_ORB_RATIO = 0.132;
 
 /**
  * Visual treatment for a rarity bucket. A rarity adds an outer accent ring
@@ -204,10 +200,12 @@ export interface CardViewProps {
 }
 
 /**
- * Renders a Dreamtides card: full-width art at the native 0.87 art aspect
- * ratio anchored to the top, a parchment frame overlay across the lower
- * portion carrying the name / type / rules text, and glowing energy (top-left)
- * and spark (bottom-right) stat orbs. The card box itself stays 2:3 portrait.
+ * Renders a Dreamtides card: full-bleed art covering the whole 2:3 portrait
+ * frame, with all chrome floating over it as translucent, blurred elements.
+ * The energy cost and spark orbs share a column in the top-left corner; a
+ * single bottom-anchored text box carries a name / type title band over the
+ * rules body and auto-sizes to the amount of rules text. Top and bottom
+ * gradient scrims keep the chrome legible over any illustration.
  */
 export function CardView({
   card,
@@ -246,7 +244,6 @@ export function CardView({
 
   const nameFit = useFitText(fitCapPx, 7, [card.name, fitCapPx]);
   const typeFit = useFitText(fitCapPx, 6, [typeLine, fitCapPx]);
-  const rulesFit = useFitText(fitCapPx, 6, [card.renderedText, fitCapPx]);
 
   // Selection / rarity rings, stacked as box-shadows so they compose with the
   // rounded corners.
@@ -291,16 +288,19 @@ export function CardView({
   const nameNode = (
     <div
       ref={nameFit.ref}
-      className="font-bold"
       style={{
         flex: "1 1 0",
         minWidth: 0,
         overflow: "hidden",
         whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
         color: NAME_COLOR,
         fontFamily: NAME_FONT_FAMILY,
+        fontWeight: 600,
+        letterSpacing: "0.01em",
+        textShadow: "0 1px 2px rgba(0, 0, 0, 0.7)",
         fontSize: `min(var(--cv-name-font-max), ${String(nameFit.fontSize)}px)`,
-        lineHeight: 1,
+        lineHeight: 1.1,
       }}
     >
       {card.name}
@@ -327,10 +327,14 @@ export function CardView({
           overflow: "hidden",
           whiteSpace: "nowrap",
           textAlign: "right",
-          color: NAME_COLOR,
+          color: TYPE_COLOR,
           fontFamily: NAME_FONT_FAMILY,
+          fontStyle: "italic",
+          fontWeight: 500,
+          letterSpacing: "0.01em",
+          textShadow: "0 1px 1px rgba(0, 0, 0, 0.65)",
           fontSize: `min(var(--cv-type-font-max), ${String(typeFit.fontSize)}px)`,
-          lineHeight: 1,
+          lineHeight: 1.1,
         }}
       >
         {attributeChips.map((chip) => (
@@ -349,19 +353,14 @@ export function CardView({
 
   const rulesTextNode = showRulesText ? (
     <div
-      ref={rulesFit.ref}
       style={{
-        position: "absolute",
-        left: "var(--cv-rules-side-pad)",
-        right: "var(--cv-rules-side-pad)",
-        top: "var(--cv-rules-top)",
-        bottom: "var(--cv-rules-bottom)",
-        overflow: "hidden",
+        padding: "var(--cv-rules-pad)",
         textAlign: "left",
         color: tintColor ?? RULES_COLOR,
         fontFamily: RULES_FONT_FAMILY,
-        fontSize: `min(var(--cv-rules-font-max), ${String(rulesFit.fontSize)}px)`,
+        fontSize: "var(--cv-rules-font-max)",
         lineHeight: "var(--cv-rules-line-height)",
+        textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
       }}
     >
       {renderRulesText(card.renderedText, {
@@ -400,8 +399,10 @@ export function CardView({
       className={`card-view relative overflow-hidden rounded-lg transition-transform duration-200${large ? " card-view--large" : ""}${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}${className ? ` ${className}` : ""}`}
       data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
+      data-card-type={card.cardType}
       style={{
         aspectRatio: "2 / 3",
+        borderRadius: "var(--cv-radius)",
         boxShadow: shadowLayers.join(", "),
       }}
       onClick={onClick}
@@ -417,49 +418,65 @@ export function CardView({
           }
         : {})}
     >
-      {/* Card art — full width at the native art aspect ratio, anchored top. */}
-      <div
-        className="absolute inset-x-0 top-0"
-        style={{ aspectRatio: String(CARD_ART_ASPECT_RATIO) }}
-      >
-        {identiconUri !== null ? (
-          <img
-            src={identiconUri}
-            alt={`${card.name} identicon`}
-            className="h-full w-full object-contain"
-            draggable={false}
-            loading="lazy"
-          />
-        ) : !imageError ? (
-          <img
-            src={cardImageUrl(card.imageNumber)}
-            alt={card.name}
-            className="h-full w-full object-cover"
-            draggable={false}
-            onError={() => {
-              setImageError(true);
+      {/* Full-bleed art covering the entire card. */}
+      {identiconUri !== null ? (
+        <img
+          src={identiconUri}
+          alt={`${card.name} identicon`}
+          className="absolute inset-0 h-full w-full object-contain"
+          draggable={false}
+          loading="lazy"
+        />
+      ) : !imageError ? (
+        <img
+          src={cardImageUrl(card.imageNumber)}
+          alt={card.name}
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ objectPosition: "center 46%" }}
+          draggable={false}
+          onError={() => {
+            setImageError(true);
+          }}
+          loading="lazy"
+        />
+      ) : (
+        <div
+          className="absolute inset-0 flex items-center justify-center p-2"
+          style={{ background: "rgba(255, 255, 255, 0.04)" }}
+        >
+          <span
+            className="text-center font-medium opacity-70"
+            style={{
+              color: NAME_COLOR,
+              fontFamily: NAME_FONT_FAMILY,
+              fontSize: "var(--cv-name-font-max)",
+              lineHeight: 1.15,
             }}
-            loading="lazy"
-          />
-        ) : (
-          <div
-            className="flex h-full w-full items-center justify-center p-2"
-            style={{ background: "rgba(255, 255, 255, 0.04)" }}
           >
-            <span
-              className="text-center font-medium opacity-70"
-              style={{
-                color: NAME_COLOR,
-                fontFamily: NAME_FONT_FAMILY,
-                fontSize: "var(--cv-name-font-max)",
-                lineHeight: 1.15,
-              }}
-            >
-              {card.name}
-            </span>
-          </div>
-        )}
-      </div>
+            {card.name}
+          </span>
+        </div>
+      )}
+
+      {/* Legibility scrims: behind the orb column (top) and text box (bottom). */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0"
+        style={{
+          height: "var(--cv-vignette-top-height)",
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.26) 52%, rgba(0,0,0,0) 100%)",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0"
+        style={{
+          height: "var(--cv-vignette-bottom-height)",
+          background:
+            "linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.48) 42%, rgba(0,0,0,0.08) 80%, rgba(0,0,0,0) 100%)",
+        }}
+      />
 
       {/*
         Rarity shimmer overlay. Rendered only when the card has a rarity
@@ -471,39 +488,60 @@ export function CardView({
         <div
           data-testid="card-rarity-shimmer"
           aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 rounded-lg ${rarityStyle.cssClass}__shimmer`}
+          className={`pointer-events-none absolute inset-0 ${rarityStyle.cssClass}__shimmer`}
+          style={{ borderRadius: "var(--cv-radius)" }}
         />
       )}
 
-      {/* Parchment frame overlay across the lower portion of the card. */}
+      {/* Soft inner rim so the card edge reads against any art. */}
       <div
-        className="absolute inset-x-0 bottom-0"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
         style={{
-          aspectRatio: String(CARD_FRAME_ASPECT_RATIO),
-          backgroundImage: `url(${cardFrameUrl(card.cardType)})`,
-          backgroundSize: "100% 100%",
-          backgroundRepeat: "no-repeat",
+          borderRadius: "var(--cv-radius)",
+          boxShadow:
+            "0 0 0 1px rgba(255,255,255,0.05) inset, 0 0 5cqw 0.4cqw rgba(0,0,0,0.5) inset",
         }}
+      />
+
+      {/*
+        Bottom-anchored text box: a name / type title band over the rules body.
+        Height is automatic so the box grows or shrinks with the rules text,
+        capped by `--cv-textbox-max-height`. The blur + translucent gradient
+        let the art read through while keeping text legible.
+      */}
+      <div
+        style={
+          {
+            position: "absolute",
+            left: "var(--cv-textbox-inset)",
+            right: "var(--cv-textbox-inset)",
+            bottom: "var(--cv-textbox-inset)",
+            zIndex: 4,
+            maxHeight: "var(--cv-textbox-max-height)",
+            overflow: "hidden",
+            borderRadius: "var(--cv-textbox-radius)",
+            background: "var(--cv-textbox-bg)",
+            backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+            WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+            border: "1px solid var(--cv-textbox-border)",
+            boxShadow:
+              "0 1px 0 rgba(255,255,255,0.07) inset, 0 12px 28px rgba(0,0,0,0.5)",
+          } satisfies CSSProperties
+        }
       >
-        {/*
-          Name + type, baseline-aligned on the dark drape band. Anchored by
-          its bottom edge (just above the parchment) rather than a top/height
-          box, so the shared baseline stays pinned to the drape regardless of
-          how far either label auto-shrinks. `line-height: 1` keeps glyphs
-          within the row so descenders are not clipped by `overflow: hidden`.
-        */}
+        {/* Title band: name (left) and type (right) share one baseline. */}
         <div
           style={
             {
-              position: "absolute",
-              left: "var(--cv-name-side-pad)",
-              right: "var(--cv-name-side-pad)",
-              bottom: "var(--cv-name-row-bottom)",
               display: "flex",
               alignItems: "baseline",
               justifyContent: "space-between",
               gap: "var(--cv-name-type-gap)",
-              lineHeight: 1,
+              padding: "var(--cv-titleband-pad)",
+              background: "var(--cv-titleband-bg)",
+              borderBottom: "1px solid var(--cv-titleband-border)",
+              boxShadow: "0 1px 0 rgba(255,255,255,0.06) inset",
               overflow: "hidden",
             } satisfies CSSProperties
           }
@@ -512,25 +550,27 @@ export function CardView({
           {renderedTypeLineNode}
         </div>
 
-        {/* Rules text confined to the parchment region. */}
+        {/* Rules body. */}
         {renderedRulesNode}
       </div>
 
-      {/* Energy cost orb (top-left). */}
+      {/* Cost / spark orb column, top-left (spark stacked beneath the cost). */}
       <div
         className="absolute z-10"
-        style={{ top: "var(--cv-corner-inset)", left: "var(--cv-corner-inset)" }}
+        style={{
+          top: "var(--cv-energy-orb-top)",
+          left: "var(--cv-energy-orb-left)",
+        }}
       >
         {slots.energy?.(slotContext, energyNode) ?? energyNode}
       </div>
 
-      {/* Spark orb (bottom-right) for characters. */}
       {hasSparkContent ? (
         <div
           className="absolute z-10"
           style={{
-            bottom: "var(--cv-corner-inset)",
-            right: "var(--cv-spark-corner-inset-x)",
+            top: "var(--cv-spark-orb-top)",
+            left: "var(--cv-spark-orb-left)",
           }}
         >
           {renderedSparkContent}

@@ -155,61 +155,108 @@ button:disabled {
 /*
  * Rendered-card geometry knobs.
  *
- * Every tunable position, size, color, and font on a Dreamtides card is a CSS
- * custom property declared here and consumed by `CardView` / `CardStatOrb`
- * through `var()`. Edit any value in dev tools to preview every on-screen card
- * at once.
+ * The Dreamtides card is full-bleed: the illustration runs edge to edge and all
+ * chrome floats over it as translucent, blurred elements. Every tunable
+ * position, size, color, and font is a CSS custom property declared here and
+ * consumed by `CardView` / `CardStatOrb` through `var()`, so any value can be
+ * previewed live in dev tools across every on-screen card at once.
  *
  * The card root declares `container-type: inline-size`, so `cqw` units resolve
- * against the card's own width (1cqw = 1% of the rendered card width). Sizes
- * that must scale with the card use `cqw`; the name / type / rules regions are
- * positioned with plain `%` against the parchment-frame box they live in.
+ * against the card's own width (1cqw = 1% of the rendered card width). All
+ * chrome sizes scale with the card via `cqw`; the values below are the design
+ * spec's 500px-wide measurements expressed as a fraction of that width
+ * (e.g. the 78px energy orb is 78 / 500 = 15.6cqw).
  *
- * The parchment is a downward-narrowing trapezoid: the rules rectangle is inset
- * (`--cv-rules-side-pad`) so text never spills onto the angled side drapes, and
- * the name / type row sits on the dark drape valance just above the parchment's
- * top edge (anchored by its bottom offset, `--cv-name-row-bottom`).
+ * The text box is bottom-anchored with automatic height, so it grows or
+ * shrinks to fit the rules text — a shorter ability reveals more art. The
+ * `--cv-textbox-max-height` cap (a percentage of the card height, resolved
+ * against the card because the box is absolutely positioned) bounds how far an
+ * unusually long ability can climb before its overflow is clipped.
  *
- * Font sizes are ceilings: each text element's `font-size` is the `*-font-max`
- * var, and the auto-shrink fit only adds a smaller inline override when the
- * text would otherwise overflow its box.
+ * The cost / spark orbs share a vertical column in the top-left corner: the
+ * energy cost on top, the slightly smaller spark directly beneath it.
  */
 .card-view {
   container-type: inline-size;
   background: var(--cv-backing, #0d0814);
 
-  /* Corner stat orbs: energy (top-left), spark (bottom-right). */
-  --cv-energy-orb-size: 18cqw;
-  --cv-spark-orb-size: 20cqw;
-  --cv-corner-inset: 1.2cqw;
-  --cv-spark-corner-inset-x: 1.92cqw;
+  /* Card + text box corner radii (18px / 13px at the 500px design width). */
+  --cv-radius: 3.6cqw;
+  --cv-textbox-radius: 2.6cqw;
 
-  /* Name / type row, positioned within the parchment-frame box. */
-  --cv-name-side-pad: 12%;
-  /* Bottom offset of the name / type row from the frame's bottom edge. */
-  --cv-name-row-bottom: 74.5%;
-  --cv-name-type-gap: 0.4em;
+  /* Cost / spark orb column, top-left. Spark is centered on the cost's axis. */
+  --cv-energy-orb-size: 15.6cqw;
+  --cv-spark-orb-size: 13.2cqw;
+  --cv-energy-orb-top: 2.8cqw;
+  --cv-energy-orb-left: 2.8cqw;
+  --cv-spark-orb-top: 18cqw;
+  --cv-spark-orb-left: 4cqw;
 
-  /* Rules-text rectangle, inset to stay on the parchment. */
-  --cv-rules-side-pad: 17%;
-  --cv-rules-top: 31%;
-  --cv-rules-bottom: 12%;
-  --cv-rules-line-height: 1.16;
+  /* Floating text box: inset from the card edges, anchored to the bottom. */
+  --cv-textbox-inset: 3.6cqw;
+  --cv-textbox-max-height: 74%;
+  --cv-textbox-blur: 11px;
 
-  /* Font ceilings (auto-shrink only sizes down from these). */
-  --cv-name-font-max: 9.4cqw;
-  --cv-type-font-max: 5.8cqw;
-  --cv-rules-font-max: 6.6cqw;
+  /* Title band (name + type) padding and the rules-body padding. */
+  --cv-titleband-pad: 2cqw 3.4cqw 1.8cqw;
+  --cv-rules-pad: 2.8cqw 3.6cqw 3cqw;
+  --cv-name-type-gap: 2.4cqw;
+  --cv-rules-line-height: 1.36;
+  --cv-paragraph-gap: 0.68em;
+
+  /* Legibility scrims behind the orb column (top) and text box (bottom). */
+  --cv-vignette-top-height: 20%;
+  --cv-vignette-bottom-height: 42%;
+
+  /* Font sizes (23px / 15px / 17.5px at the 500px design width). Name and type
+   * auto-shrink down from these ceilings to stay on one line; the rules body
+   * holds its size and lets the box grow. */
+  --cv-name-font-max: 4.6cqw;
+  --cv-type-font-max: 3cqw;
+  --cv-rules-font-max: 3.5cqw;
 
   /* Typography. */
   --cv-name-font-family: "EB Garamond", Georgia, serif;
   --cv-rules-font-family: "Fira Sans Condensed", "Inter", sans-serif;
-  --cv-name-color: #ffffff;
-  --cv-rules-color: #1a1714;
+  --cv-name-color: #f6f6f5;
+  --cv-type-color: rgba(238, 238, 236, 0.78);
+  --cv-rules-color: #f1f1f0;
+
+  /* Monochrome black chrome for the default (Character) frame. */
+  --cv-textbox-bg: linear-gradient(
+    180deg,
+    rgba(6, 6, 7, 0.62) 0%,
+    rgba(2, 2, 3, 0.74) 100%
+  );
+  --cv-textbox-border: rgba(255, 255, 255, 0.14);
+  --cv-titleband-bg: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.11) 0%,
+    rgba(255, 255, 255, 0.035) 100%
+  );
+  --cv-titleband-border: rgba(255, 255, 255, 0.14);
+}
+
+/* Event frame: a dark purple accent on the title band and text box. */
+.card-view[data-card-type="Event"] {
+  --cv-textbox-bg: linear-gradient(
+    180deg,
+    rgba(36, 15, 49, 0.66) 0%,
+    rgba(18, 7, 27, 0.8) 100%
+  );
+  --cv-textbox-border: rgba(178, 132, 226, 0.32);
+  --cv-titleband-bg: linear-gradient(
+    180deg,
+    rgba(101, 49, 156, 0.64) 0%,
+    rgba(60, 25, 102, 0.68) 100%
+  );
+  --cv-titleband-border: rgba(184, 138, 232, 0.38);
 }
 
 .card-view--large {
-  --cv-rules-font-max: 7cqw;
+  --cv-rules-font-max: 3.8cqw;
+  --cv-name-font-max: 4.9cqw;
+  --cv-type-font-max: 3.2cqw;
 }
 
 /*

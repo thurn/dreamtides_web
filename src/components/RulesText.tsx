@@ -160,13 +160,11 @@ function splitRulesTextIntoParagraphs(text: string): string[] {
 
 /**
  * Top margin applied to every ability paragraph after the first. Expressed
- * in `em` so the gap scales with the surrounding font size — small card
- * chrome (`text-[10px]`) gets a proportionally smaller gap than the large
- * card or popover surfaces (`text-base`). The visual goal is "list items",
- * not "essay paragraphs": generous-but-restrained spacing. See backlog
- * task 029.
+ * in `em` so the gap scales with the surrounding font size. The value is the
+ * card design spec's inter-ability gap (≈ 50% of a line's height); the visual
+ * goal is "list items", not "essay paragraphs". See backlog task 029.
  */
-const PARAGRAPH_GAP_EM = 0.5;
+const PARAGRAPH_GAP_EM = 0.68;
 
 /** Renders the parsed rules text segments to React nodes. */
 export function renderRulesText(
