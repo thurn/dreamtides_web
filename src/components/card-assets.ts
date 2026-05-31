@@ -18,24 +18,34 @@ export const CARD_ART_ASPECT_RATIO = 0.87;
 export const CARD_FRAME_ASPECT_RATIO = 742 / 386;
 
 /**
- * Insets of the writable parchment region within the frame PNG, expressed as
+ * Geometry of the writable regions within the frame PNG, expressed as
  * fractions of the frame box. Derived by sampling the parchment (tan) pixels
- * in `card_frame.png`: the dense parchment area spans x∈[11%,89%], y∈[27%,97%],
- * and the dark drape valance where the name / type sit spans y∈[8%,27%]. Text
- * layers stay inside these bounds so rules text never overlaps the dark drape
- * regions of the art.
+ * in `card_frame.png` row by row. The parchment is a downward-narrowing
+ * trapezoid — the side drapes angle inward, so it is widest near the top
+ * (x∈[6.5%,93.9%] at y=30%) and narrowest at the bottom (x∈[16.7%,84.0%] at
+ * y=90%). The rules region is therefore inset to a rectangle that stays inside
+ * the parchment for every one of its rows, so rules text never spills onto the
+ * dark drapes.
+ *
+ * The dark drape valance where the name / type sit spans y∈[11%,27%]; the
+ * name row baseline is anchored just above the parchment's top edge (~25%).
  */
 export const FRAME_LAYOUT = {
-  /** Left / right padding for every text layer (fraction of frame width). */
-  sidePadding: 0.12,
-  /** Top of the name / type baseline row (fraction of frame height). */
-  nameRowTop: 0.07,
-  /** Bottom of the name / type baseline row — the parchment top edge. */
-  nameRowBottom: 0.27,
+  /** Left / right inset of the rules-text rectangle (fraction of frame width). */
+  rulesSidePadding: 0.17,
   /** Top of the rules-text region (fraction of frame height). */
-  rulesTop: 0.3,
-  /** Bottom margin of the rules-text region (fraction of frame height). */
-  rulesBottom: 0.06,
+  rulesTop: 0.31,
+  /** Bottom inset of the rules-text region (fraction of frame height). */
+  rulesBottom: 0.12,
+  /** Left / right inset of the name / type row (fraction of frame width). */
+  nameSidePadding: 0.12,
+  /**
+   * Bottom edge of the name / type row, as a fraction from the frame top. Sits
+   * just above the parchment so the shared text baseline (with the row's
+   * line-height of 1, the baseline lands a fraction of an em above this line)
+   * rests on the dark drape band.
+   */
+  nameRowBottom: 0.255,
 } as const;
 
 /** Returns the parchment frame overlay URL for a card type. */

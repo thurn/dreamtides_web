@@ -352,8 +352,8 @@ export function CardView({
       ref={rulesFit.ref}
       style={{
         position: "absolute",
-        left: `${String(FRAME_LAYOUT.sidePadding * 100)}%`,
-        right: `${String(FRAME_LAYOUT.sidePadding * 100)}%`,
+        left: `${String(FRAME_LAYOUT.rulesSidePadding * 100)}%`,
+        right: `${String(FRAME_LAYOUT.rulesSidePadding * 100)}%`,
         top: `${String(FRAME_LAYOUT.rulesTop * 100)}%`,
         bottom: `${String(FRAME_LAYOUT.rulesBottom * 100)}%`,
         overflow: "hidden",
@@ -487,21 +487,25 @@ export function CardView({
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* Name + type, baseline-aligned on the dark drape band. */}
+        {/*
+          Name + type, baseline-aligned on the dark drape band. Anchored by
+          its bottom edge (just above the parchment) rather than a top/height
+          box, so the shared baseline stays pinned to the drape regardless of
+          how far either label auto-shrinks. `line-height: 1` keeps glyphs
+          within the row so descenders are not clipped by `overflow: hidden`.
+        */}
         <div
           style={
             {
               position: "absolute",
-              left: `${String(FRAME_LAYOUT.sidePadding * 100)}%`,
-              right: `${String(FRAME_LAYOUT.sidePadding * 100)}%`,
-              top: `${String(FRAME_LAYOUT.nameRowTop * 100)}%`,
-              height: `${String(
-                (FRAME_LAYOUT.nameRowBottom - FRAME_LAYOUT.nameRowTop) * 100,
-              )}%`,
+              left: `${String(FRAME_LAYOUT.nameSidePadding * 100)}%`,
+              right: `${String(FRAME_LAYOUT.nameSidePadding * 100)}%`,
+              bottom: `${String((1 - FRAME_LAYOUT.nameRowBottom) * 100)}%`,
               display: "flex",
               alignItems: "baseline",
               justifyContent: "space-between",
               gap: "0.4em",
+              lineHeight: 1,
               overflow: "hidden",
             } satisfies CSSProperties
           }
