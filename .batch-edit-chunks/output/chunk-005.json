@@ -1,0 +1,50 @@
+[
+  {
+    "card_number": 33,
+    "id": "78673e2b-a6d1-43de-8850-3d3327de5cc6",
+    "name": "Grave-Tally Banneret",
+    "rationale": "A back-rank warrior counts the fallen into stored power, raising supported allies higher with every claimed memory."
+  },
+  {
+    "card_number": 34,
+    "id": "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
+    "name": "Twinbeat Adept",
+    "rationale": "This fast character lives in the rhythm of a second spell, catching the doubled pulse to trade one thought for another."
+  },
+  {
+    "card_number": 35,
+    "id": "1268a899-b209-46bb-bce4-6def1dcd0404",
+    "name": "Unburied Roadwarden",
+    "rationale": "The support figure returns from the void to clear a path, lending unstoppable force to the allies marching ahead."
+  },
+  {
+    "card_number": 36,
+    "id": "f4082c01-fdc8-4583-afdb-76bac980b3bf",
+    "name": "Echo-Drill Captain",
+    "rationale": "A martial trainer turns each materialized figment into practiced momentum, spending those echoes for tactical insight."
+  },
+  {
+    "card_number": 37,
+    "id": "4f0f0811-1a4c-4d42-a804-77dba8707792",
+    "name": "Veilbarter Medium",
+    "rationale": "A veiled broker trades one possible character for another of equal weight, treating identity as a hidden-market token."
+  },
+  {
+    "card_number": 38,
+    "id": "a911ef71-799c-4240-ad13-8fabd3caeafa",
+    "name": "Borrow Tomorrow's Dawn",
+    "rationale": "The event steals the next morning from the dream's horizon, creating a decisive extra turn before time can close."
+  },
+  {
+    "card_number": 39,
+    "id": "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6",
+    "name": "Void-Cradle Tender",
+    "rationale": "This caretaker coaxes small lost characters back from the void once each turn, making recurrence feel careful rather than grand."
+  },
+  {
+    "card_number": 40,
+    "id": "47b1d6b7-0388-4bb9-abfc-ed832d902e9f",
+    "name": "Stormglass Bellringer",
+    "rationale": "Each event charges the bell with gathering pressure until its fifth peal washes every other character back to hand."
+  }
+]
