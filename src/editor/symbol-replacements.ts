@@ -1,17 +1,17 @@
 /**
  * Inline symbol shortcuts for the card editor. Typing one of the trigger
- * sequences (e.g. `$e`) into a text field replaces it immediately with the
+ * sequences (e.g. `\e`) into a text field replaces it immediately with the
  * mapped glyph.
  */
 export const SYMBOL_REPLACEMENTS: ReadonlyArray<readonly [string, string]> = [
-  ["$e", "●"],
-  ["$c", "⧗"],
-  ["$p", "⍟"],
-  ["$x", "☪"],
-  ["$s", "✦"],
-  ["$f", "❖"],
-  ["$d", "–"],
-  ["$t", "▸"],
+  ["\\e", "●"],
+  ["\\c", "⧗"],
+  ["\\p", "⍟"],
+  ["\\x", "☪"],
+  ["\\s", "✦"],
+  ["\\f", "❖"],
+  ["\\d", "–"],
+  ["\\t", "▸"],
 ];
 
 export interface SymbolReplacementResult {

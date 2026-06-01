@@ -3,31 +3,31 @@ import { applySymbolReplacements } from "./symbol-replacements";
 
 describe("applySymbolReplacements", () => {
   it("replaces a trigger sequence with its glyph", () => {
-    const result = applySymbolReplacements("$e", 2);
+    const result = applySymbolReplacements("\\e", 2);
     expect(result.value).toBe("●");
     expect(result.caret).toBe(1);
   });
 
   it("replaces every supported sequence", () => {
-    const result = applySymbolReplacements("$e$c$p$x$s$f$d$t", 16);
+    const result = applySymbolReplacements("\\e\\c\\p\\x\\s\\f\\d\\t", 16);
     expect(result.value).toBe("●⧗⍟☪✦❖–▸");
   });
 
   it("replaces sequences embedded in surrounding text", () => {
-    const result = applySymbolReplacements("Pay $e to draw.", 6);
+    const result = applySymbolReplacements("Pay \\e to draw.", 6);
     expect(result.value).toBe("Pay ● to draw.");
-    // Caret was just after "$e"; it follows the glyph.
+    // Caret was just after "\e"; it follows the glyph.
     expect(result.caret).toBe(5);
   });
 
   it("leaves the caret ahead of a later replacement untouched", () => {
-    const result = applySymbolReplacements("a $e b", 1);
+    const result = applySymbolReplacements("a \\e b", 1);
     expect(result.value).toBe("a ● b");
     expect(result.caret).toBe(1);
   });
 
   it("parks the caret after the glyph when it sat inside the sequence", () => {
-    const result = applySymbolReplacements("$e", 1);
+    const result = applySymbolReplacements("\\e", 1);
     expect(result.value).toBe("●");
     expect(result.caret).toBe(1);
   });
@@ -39,7 +39,7 @@ describe("applySymbolReplacements", () => {
   });
 
   it("replaces repeated occurrences of the same sequence", () => {
-    const result = applySymbolReplacements("$e$e", 4);
+    const result = applySymbolReplacements("\\e\\e", 4);
     expect(result.value).toBe("●●");
     expect(result.caret).toBe(2);
   });
