@@ -252,7 +252,7 @@ button:disabled {
    * card only when its text needs more than the reserved three lines, so every
    * card shares one type scale until the text forces a smaller rules size. */
   --cv-name-font-size: 5.5cqw;
-  --cv-type-font-size: 4.5cqw;
+  --cv-type-font-size: 5.2cqw;
   --cv-rules-font-size: 4.75cqw;
 
   /* Typography. */
