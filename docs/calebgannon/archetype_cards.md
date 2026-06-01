@@ -1,0 +1,694 @@
+# Powered Synergy Cube — Cards by Archetype
+
+A companion to [archetypes.md](archetypes.md). For each archetype, this lists
+every card mentioned as connected to it anywhere in the `docs/calebgannon/`
+articles (the archetype overview, the five color articles, the introduction,
+and the cube-design article). Connection is interpreted broadly: enablers,
+payoffs, win conditions, support cards, example combo pieces, and cards
+discussed as answers to or signals for the archetype are all included.
+
+The same card appears under multiple archetypes wherever the articles connect
+it to more than one. Archetypes are listed in the same order as in
+`archetypes.md`. Card names are given in their canonical spelling.
+
+## Aggro and Tempo
+
+### Elves
+
+- Craterhoof Behemoth
+- Allosaurus Shepherd
+- Mirror Entity
+- Elvish Warmaster
+- Finale of Devastation
+- Gaea's Cradle
+- Elvish Archdruid
+- Priest of Titania
+- Birchlore Rangers
+- Heritage Druid
+- Nettle Sentinel
+- Paradise Mantle
+- Circle of Dreams Druid
+- Quirion Ranger
+- Wirewood Symbiote
+- Elvish Visionary
+- Glimpse of Nature
+- Birds of Paradise
+- Luminarch Aspirant
+- Torens, Fist of the Angels
+- Fiend Artisan
+- Pest Infestation
+- Masked Vandal
+- Lightning Bolt
+- Survival of the Fittest
+- Anger
+- Vengevine
+- Ephemerate
+- Eternal Witness
+- Collected Company
+- Aluren
+- Earthcraft
+- Intruder Alarm
+- Shrieking Drake
+- Skullclamp
+- Metallic Mimic
+- Forked Bolt (as an answer that keeps Elves in check)
+- Engineered Explosives (as an answer that keeps Elves in check)
+
+### Ninjas
+
+- Yuriko, the Tiger's Shadow
+- Spellstutter Sprite
+- Snapcaster Mage
+- Thieving Skydiver
+- Gingerbrute
+- Faerie Seer
+- Changeling Outcast
+- Moon-Circuit Hacker
+- Ninja of the Deep Hours
+- Ingenious Infiltrator
+- Kaito Shizuki
+- Daze
+- Force of Will
+- Force of Negation
+- Mana Drain
+- Spell Snare
+- Force Spike
+- Inquisition of Kozilek
+- Dread Fugue
+- Duress
+- Snuff Out
+- Prismatic Ending
+- Lightning Bolt
+- Dragon's Rage Channeler
+- Dreadhorde Arcanist
+- Soulherder
+- Restoration Angel
+- Solitude
+- Skyclave Apparition
+- Palace Jailer
+- March of Otherworldly Light
+- Mana Tithe
+- Snap
+- Remand
+- Occult Epiphany
+- Vendilion Clique
+- Brazen Borrower
+- Masked Vandal
+
+### Artifact Aggro
+
+- Mishra's Workshop
+- Tolarian Academy
+- Mana Crypt
+- Mox Pearl
+- Sol Ring
+- Cranial Plating
+- Steel Overseer
+- Nettlecyst
+- Lodestone Golem
+- Metallic Mimic
+- Michiko's Reign of Truth
+- Ornithopter
+- Hangarback Walker
+- Patchwork Automaton
+- Arcbound Ravager
+- Signal Pest
+- Ethersworn Canonist
+- Traxos, Tears of Oblivion
+- Tinker
+- Goblin Engineer
+- Oswald Fiddlebender
+- Ichor Wellspring
+- Experimental Synthesizer
+- Paradoxical Outcome
+- Emry, Lurker of the Loch
+- Bygone Bishop
+- Losheel, Clockwork Scholar
+- Welcoming Vampire
+- Retrofitter Foundry
+
+### Spells
+
+- Young Pyromancer
+- Dreadhorde Arcanist
+- Thing in the Ice
+- Krark, the Thumbless
+- Chandra, Acolyte of Flame
+- Lightning Bolt
+- Thoughtseize
+- Prismatic Ending
+
+### Zombies
+
+- Gravecrawler
+- Cryptbreaker
+- Headless Rider
+- Undead Augur
+- Putrid Imp
+- Priest of Forgotten Gods
+- Scourge of Nel Toth
+- Yawgmoth's Will
+- Nether Traitor
+- Skullclamp
+- Midnight Reaper
+- Phyrexian Altar
+- Pitiless Plunderer
+- Altar of Dementia
+- Goblin Bombardment
+- Yawgmoth, Thran Physician
+- Relentless Dead
+- Bridge from Below
+- Rotting Rats
+- Mayhem Devil
+- Anax, Hardened in the Forge
+- Bazaar of Baghdad
+- Anger
+- Carrion Feeder
+- Blood Artist
+- Stitcher's Supplier
+- Hogaak, Arisen Necropolis
+- Voldaren Bloodcaster
+- Cabal Therapy
+- Raven's Crime
+- Ox of Agonas
+- Faithless Looting
+- Anje's Ravager
+- Thoughtseize
+- Divest
+- Miasmic Mummy
+- Deathrite Shaman
+- Darkblast
+- Life from the Loam
+- Master of Death
+- Fatestitcher
+- Undead Butler
+- Metallic Mimic
+- Masked Vandal
+- Abrupt Decay
+
+## Midrange and Value
+
+### Discard / Madness
+
+- Rielle, the Everwise
+- Containment Construct
+- Squee, Goblin Nabob
+- Glint-Horn Buccaneer
+- Bazaar of Baghdad
+- Lion's Eye Diamond
+- Vengevine
+- Anger
+- Hogaak, Arisen Necropolis
+- Bridge from Below
+- Scourge of Nel Toth
+- Magmatic Channeler
+- Survival of the Fittest
+- Crop Rotation
+- Elvish Reclaimer
+- Traverse the Ulvenwald
+- Taiga
+- Blazing Rootwalla
+- Basking Rootwalla
+- Goblin Engineer
+- Priest of Forgotten Gods
+- Priest of Titania
+- Tortured Existence
+- The Underworld Cookbook
+- Putrid Imp
+- Faithless Looting
+- Asmoranomardicadaistinaculdacar
+- Cryptbreaker
+- Wheel of Fortune
+- Cathartic Reunion
+- Thrill of Possibility
+- Conspiracy Theorist
+- Bomat Courier
+- Master of Death
+- Ox of Agonas
+- Satyr Wayfinder
+- Life from the Loam
+- Conflagrate
+- Dragon's Rage Channeler
+- Blood Artist
+- Molten Vortex
+- Slogurk, the Overslime
+- Bonus Round
+- Magmatic Insight
+- Gamble
+- Echo of Eons
+- Goblin Welder
+- Galvanic Blast
+- Jeskai Ascendancy
+- Deep Analysis
+- Lingering Souls
+- Stitcher's Supplier
+- Undead Butler
+- Darkblast
+- Bloodghast
+- Gravecrawler
+- Rotting Rats
+- Blast from the Past
+- Orcish Lumberjack
+- Mons's Goblin Waiters
+
+### Sacrifice
+
+- Blood Artist
+- Yawgmoth, Thran Physician
+- Skullclamp
+- Mayhem Devil
+- Goblin Bombardment
+- Altar of Dementia
+- Greater Gargadon
+- Phyrexian Altar
+- Pitiless Plunderer
+- Earthcraft
+- Shambling Ghast
+- Carrion Feeder
+- Ophiomancer
+- Anax, Hardened in the Forge
+- Headless Rider
+- Gaea's Cradle
+- Birds of Paradise
+- Chatterstorm
+- Empty the Warrens
+- Pest Infestation
+- Chatterfang, Squirrel General
+- Genesis Chamber
+- Bridge from Below
+- Gravecrawler
+- Relentless Dead
+- Nether Traitor
+- Aluren
+- Enduring Renewal
+- Fecundity
+- Liliana's Standard Bearer
+- Undead Augur
+- Midnight Reaper
+- Eternal Witness
+- Undead Butler
+- Rally the Ancestors
+- Brought Back
+- Diabolic Intent
+- Demonic Tutor
+- Vampiric Tutor
+- Yawgmoth's Will
+- Stitcher's Supplier
+- Lion's Eye Diamond
+- Underworld Breach
+- Juri, Master of the Revue
+- Oni-Cult Anvil
+- Disciple of the Vault
+- Arcbound Ravager
+- Makeshift Munitions
+- Umezawa's Jitte (blanked by Goblin Bombardment)
+- Strip Mine
+- Goblin Welder
+- Goblin Engineer
+- Experimental Synthesizer
+- Ichor Wellspring
+- Myr Retriever
+- Intruder Alarm
+- Voldaren Bloodcaster
+- Krark-Clan Ironworks
+- Scrap Trawler
+- Junk Diver
+- Chandra, Acolyte of Flame
+- Lightning Bolt
+- Rabbit Battery
+- Galvanic Blast
+- Atog
+- Ashnod's Altar
+- Second Sunrise
+- Witch's Oven
+- Cauldron Familiar
+- Blast from the Past
+- Mons's Goblin Waiters
+
+### Lands
+
+- Fastbond
+- Exploration
+- Crucible of Worlds
+- Ramunap Excavator
+- Life from the Loam
+- Field of the Dead
+- Titania, Protector of Argoth
+- Molten Vortex
+- Valakut, the Molten Pinnacle
+- Punishing Fire
+- The Gitrog Monster
+- Korvold, Fae-Cursed King
+- Zuran Orb
+- Living Twister
+- Strip Mine
+- Dryad of the Ilysian Grove
+- Brought Back
+- Second Sunrise
+- Faith's Reward
+- Crop Rotation
+- Slogurk, the Overslime
+- Windswept Heath
+- Wooded Foothills
+- Arid Mesa
+- Boseiju, Who Endures
+- Wasteland
+- Mox Sapphire
+- Ratchet Bomb
+- Engineered Explosives
+- Knight of Autumn
+- Squandered Resources
+- Mayhem Devil
+- Banefire
+- Courser of Kruphix
+- Grove of the Burnwillows
+- Taiga
+- Stomping Ground
+- Greater Gargadon
+- Darkblast
+- Bazaar of Baghdad
+- General Ferrous Rokiric
+- Wrenn and Six
+- Orcish Lumberjack
+
+### Blink
+
+- Ephemerate
+- Soulherder
+- Yorion, Sky Nomad
+- Eternal Witness
+- Spirited Companion
+- Restoration Angel
+- Solitude
+- Skyclave Apparition
+- Blade Splicer
+- Paradoxical Outcome
+- Whitemane Lion
+- Aluren
+- Collected Company
+- Intruder Alarm
+- Elvish Visionary
+- Moon-Circuit Hacker
+- Ninja of the Deep Hours
+- Ingenious Infiltrator
+- Thieving Skydiver
+- Vendilion Clique
+- Masked Vandal
+- Swords to Plowshares
+- Birds of Paradise
+- Panharmonicon (discussed as a weak "secondary enabler" for blink)
+- Mulldrifter
+- Cloudblazer
+- Venser, Shaper Savant
+- Watcher for Tomorrow
+- Spellseeker
+
+## Combo
+
+### Storm
+
+- High Tide
+- Bonus Round
+- Krark, the Thumbless
+- Dualcaster Mage
+- Tendrils of Agony
+- Aetherflux Reservoir
+- Brain Freeze
+- Empty the Warrens
+- Underworld Breach
+- Increasing Vengeance
+- Lightning Bolt
+- Yawgmoth's Will
+- Past in Flames
+- Thrill of Possibility
+- Chain Lightning
+- Conflagrate
+- Desperate Ritual
+- Banefire
+- Finale of Promise
+- Time Walk
+- Ancestral Recall
+- Thoughtseize
+- Path to Exile
+- Helm of Awakening
+- Birgi, God of Storytelling
+- Seething Song
+- Manamorphose
+- Frantic Search
+- Snap
+- Snapcaster Mage
+- Sea Gate Stormcaller
+- Time Spiral
+- Dark Ritual
+- Lion's Eye Diamond
+- Stitcher's Supplier
+- Phyrexian Altar
+- Glimpse of Nature
+- Krark-Clan Ironworks
+- Hard Evidence
+- Jeskai Ascendancy
+- Mirror Entity
+- Changeling Outcast
+- Blood Artist
+- Thassa's Oracle
+- Mayhem Devil
+- Squee, Goblin Nabob
+- Goblin Welder
+- Valakut Exploration
+- Stifle (discussed as a card that invalidates Storm)
+
+### Glimpse Combo
+
+- Glimpse of Nature
+- Rite of Harmony
+- Beck
+- Shrieking Drake
+- Kor Skyfisher
+- Whitemane Lion
+- Aluren
+- Earthcraft
+- Intruder Alarm
+- Thassa's Oracle
+- Brain Freeze
+- Priest of Titania
+- Fastbond
+- Wirewood Symbiote
+- Elvish Visionary
+- Finale of Devastation
+- Birchlore Rangers
+- Heritage Druid
+- Nettle Sentinel
+- Paradise Mantle
+- Circle of Dreams Druid
+- Gaea's Cradle
+- Quirion Ranger
+- Craterhoof Behemoth
+- Allosaurus Shepherd
+- Mirror Entity
+- Elvish Warmaster
+- Aetherflux Reservoir
+- Altar of Dementia
+- Blood Artist
+- Walking Ballista
+- Paradoxical Outcome
+- Eternal Witness
+- Empty the Warrens
+- Torens, Fist of the Angels
+- Genesis Chamber
+- Fecundity
+- Liliana's Standard Bearer
+- Phyrexian Altar
+- Ashnod's Altar
+- Pitiless Plunderer
+- Rally the Ancestors
+- Second Sunrise
+- Diabolic Intent
+- Midnight Reaper
+- Gravecrawler
+- Relentless Dead
+- Nether Traitor
+- Sai, Master Thopterist
+- Tolarian Academy
+- Ornithopter
+- Emry, Lurker of the Loch
+- Hangarback Walker
+- Krark-Clan Ironworks
+- Scrap Trawler
+- Urza, Lord High Artificer
+- Ineffable Blessing
+- Sol Ring
+
+### Artifact Combo
+
+- Scrap Trawler
+- Teshar, Ancestor's Apostle
+- Myr Retriever
+- Krark-Clan Ironworks
+- Goblin Welder
+- Goblin Engineer
+- Tinker
+- Thopter Foundry
+- Urza, Lord High Artificer
+- Sai, Master Thopterist
+- Oswald Fiddlebender
+- Workshop Assistant
+- Junk Diver
+- Batterskull
+- Lodestone Golem
+- Eternal Witness
+- Black Lotus
+- Lion's Eye Diamond
+- Lotus Petal
+- Helm of Awakening
+- Altar of Dementia
+- Ashnod's Altar
+- Sword of the Meek
+- Phyrexian Altar
+- Arcbound Ravager
+- Mana Vault
+- Banefire
+- Aetherflux Reservoir
+- Walking Ballista
+- Perilous Myr
+- Monoskelion
+- Pyrite Spellbomb
+- Thassa's Oracle
+- Disciple of the Vault
+- Blasting Station
+- Experimental Synthesizer
+- Rabbit Battery
+- Ichor Wellspring
+- Second Sunrise
+- Mishra's Bauble
+- Conjurer's Bauble
+- Lotus Bloom
+- Thought Monitor
+- Nettlecyst
+- Ethersworn Canonist
+- Mana Crypt
+- Engineered Explosives
+- Blood Artist
+- Glissa, the Traitor
+- Academy Manufactor
+
+### Persist Combo
+
+- Kitchen Finks
+- Vizier of Remedies
+- Anafenza, Kin-Tree Spirit
+- Melira, Sylvok Outcast
+- Metallic Mimic
+- Blood Artist
+- Goblin Bombardment
+- Devoted Druid
+- Putrid Goblin
+- Altar of Dementia
+- Blasting Station
+- Phyrexian Altar
+- Ashnod's Altar
+- Walking Ballista
+- Viscera Seer
+- Tortured Existence
+- Survival of the Fittest
+- Rally the Ancestors
+- Mother of Runes
+- Spellskite
+- Sylvan Safekeeper
+- Vampiric Tutor
+- Fiend Artisan
+- Diabolic Intent
+- Swift Reconfiguration
+- Stonecoil Serpent
+- Birds of Paradise
+- Lightning Bolt
+
+### Second Sunrise Combo
+
+- Second Sunrise
+- Brought Back
+- Faith's Reward
+- Zuran Orb
+- Valakut Exploration
+- Arid Mesa
+- Marsh Flats
+- Crop Rotation
+- Strip Mine
+- Lotus Petal
+- Lotus Bloom
+- Chromatic Star
+- Mox Ruby
+- Tinker
+- Krark-Clan Ironworks
+- Ichor Wellspring
+- Experimental Synthesizer
+- Conjurer's Bauble
+- Blood Artist
+- Phyrexian Altar
+- Viscera Seer
+- Goblin Bombardment
+- Rally the Ancestors
+- Dualcaster Mage
+- Sevinne's Reclamation
+- Eternal Witness
+- Mons's Goblin Waiters
+- Pyrite Spellbomb
+- Greater Gargadon
+- Bonus Round
+- Increasing Vengeance
+- Black Lotus
+- Lion's Eye Diamond
+- Underworld Breach
+- Mishra's Bauble
+- Squandered Resources
+- Field of the Dead
+
+### Enduring Renewal
+
+- Enduring Renewal
+- Hangarback Walker
+- Walking Ballista
+- Blood Artist
+- Disciple of the Vault
+- Phyrexian Altar
+- Ashnod's Altar
+- Memnite
+- Cauldron Familiar
+- Pitiless Plunderer
+- Perilous Myr
+- Scrap Trawler
+- Krark-Clan Ironworks
+
+### Untap Combo (Intruder Alarm / Ascendancy)
+
+- Intruder Alarm
+- Jeskai Ascendancy
+- Hangarback Walker
+- Emry, Lurker of the Loch
+- Sai, Master Thopterist
+- Urza, Lord High Artificer
+- Black Lotus
+- Lotus Petal
+- Fatestitcher
+- Earthcraft
+- Paradise Mantle
+- Goblin Welder
+- Goblin Engineer
+- Arcbound Ravager
+- Junk Diver
+- Myr Retriever
+- Monoskelion
+- Anger
+- Lingering Souls
+- Empty the Warrens
+- Preordain
+- Birds of Paradise
+- Noble Hierarch
+- Saheeli, Sublime Artificer
+- Ponder
+- Glint-Horn Buccaneer
+- Life from the Loam
+- Conflagrate
+- Thassa's Oracle
+- Hogaak, Arisen Necropolis
+- Shrieking Drake
+- Memnite
