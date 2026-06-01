@@ -178,6 +178,14 @@ const ART_FEATHER_START_PCT =
 const ART_FEATHER_MASK = `linear-gradient(to bottom, rgba(0,0,0,0) ${ART_FEATHER_START_PCT}%, rgba(0,0,0,1) ${ART_REGION_HEIGHT_PCT}%, rgba(0,0,0,1) 100%)`;
 /** Blur radius as a fraction of the rendered card width. */
 const ART_EXTENSION_BLUR_RATIO = 0.05;
+/**
+ * Brightness multiplier on the blurred continuation. The source below the crop
+ * window is often lighter than the art at the seam (e.g. dark rocks over a hazy
+ * background), which would make the band read as a light blur. Pulling it down
+ * proportionally keeps the continuation from ever being lighter than the
+ * connecting art, while leaving already-dark bands dark.
+ */
+const ART_EXTENSION_BLUR_BRIGHTNESS = 0.6;
 /** Neutral dark base used until the art's bottom color has been sampled. */
 const ART_EXTENSION_BASE_COLOR = "#0b0b0d";
 /**
@@ -329,7 +337,7 @@ function ArtLayers({
           style={{
             position: "absolute",
             inset: 0,
-            filter: `blur(${blurPx.toFixed(2)}px)`,
+            filter: `blur(${blurPx.toFixed(2)}px) brightness(${ART_EXTENSION_BLUR_BRIGHTNESS})`,
           }}
         >
           <img src={imageUrl} alt="" style={extendedStyle} draggable={false} />
