@@ -25,6 +25,7 @@ import {
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
 import { cardImageUrl } from "../data/card-database";
+import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { logEvent } from "../logging";
 
 
@@ -37,8 +38,7 @@ const DECK_HIGHLIGHT_DURATION = 900;
 type PickPhase = "idle" | "animating" | "waiting";
 
 const DRAFT_OFFER_CARD_STYLE = {
-  "--draft-offer-card-width":
-    "min(calc((100cqw - 16px) / 2), calc((100vh - 48px - 80px) / 3))",
+  "--draft-offer-card-width": DRAFT_OFFER_CARD_WIDTH,
   aspectRatio: "2 / 3",
 } as CSSProperties & Record<"--draft-offer-card-width", string>;
 

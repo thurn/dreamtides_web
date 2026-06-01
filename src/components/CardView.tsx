@@ -31,8 +31,8 @@ const RULES_FONT_FAMILY = "var(--cv-rules-font-family)";
  * digit auto-shrink search. The rendered orb size is the `--cv-*-orb-size` CSS
  * var; these mirror its defaults.
  */
-const ENERGY_ORB_RATIO = 0.152;
-const SPARK_ORB_RATIO = 0.088;
+const ENERGY_ORB_RATIO = 0.16;
+const SPARK_ORB_RATIO = 0.12;
 
 /**
  * Visual treatment for a rarity bucket. A rarity adds an outer accent ring
@@ -197,8 +197,7 @@ export interface CardViewProps {
  * orb at its right edge), and the large energy cost orb floats over the bar's
  * left end, protruding above and below it. A single bottom-anchored text box
  * pairs the italic type line over the rules body and auto-sizes to the amount
- * of rules text. Top and bottom gradient scrims keep the chrome legible over
- * any illustration.
+ * of rules text.
  */
 export function CardView({
   card,
@@ -418,7 +417,7 @@ export function CardView({
           src={cardImageUrl(card.imageNumber)}
           alt={card.name}
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ objectPosition: "center 46%" }}
+          style={{ objectPosition: "center 46%", transform: "scale(1.17)" }}
           draggable={false}
           onError={() => {
             setImageError(true);
@@ -443,26 +442,6 @@ export function CardView({
           </span>
         </div>
       )}
-
-      {/* Legibility scrims: behind the orb column (top) and text box (bottom). */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0"
-        style={{
-          height: "var(--cv-vignette-top-height)",
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.26) 52%, rgba(0,0,0,0) 100%)",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0"
-        style={{
-          height: "var(--cv-vignette-bottom-height)",
-          background:
-            "linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.48) 42%, rgba(0,0,0,0.08) 80%, rgba(0,0,0,0) 100%)",
-        }}
-      />
 
       {/*
         Rarity shimmer overlay. Rendered only when the card has a rarity
@@ -546,7 +525,10 @@ export function CardView({
             gap: "var(--cv-namebar-gap)",
             paddingLeft: "var(--cv-namebar-pad-left)",
             paddingRight: "var(--cv-namebar-pad-right)",
-            overflow: "hidden",
+            // Visible so the spark orb, which is taller than the bar, protrudes
+            // above and below it (like the energy orb) instead of being
+            // clipped. The card name truncates via its own overflow rule.
+            overflow: "visible",
             borderRadius: "var(--cv-namebar-radius)",
             background: "var(--cv-textbox-bg)",
             backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",

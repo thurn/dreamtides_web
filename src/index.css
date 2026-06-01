@@ -165,7 +165,7 @@ button:disabled {
  * against the card's own width (1cqw = 1% of the rendered card width). All
  * chrome sizes scale with the card via `cqw`; the values below are the design
  * spec's 500px-wide measurements expressed as a fraction of that width
- * (e.g. the 76px energy orb is 76 / 500 = 15.2cqw).
+ * (e.g. the 80px energy orb is 80 / 500 = 16cqw).
  *
  * The text box is bottom-anchored with automatic height, so it grows or
  * shrinks to fit the rules text — a shorter ability reveals more art. The
@@ -193,10 +193,14 @@ button:disabled {
   --cv-textbox-radius: 2.6cqw;
 
   /* Energy cost orb (floats over the name bar's left end, protruding above and
-   * below it) and spark orb (sits at the right of the name bar). */
-  --cv-energy-orb-size: 15.2cqw;
-  --cv-spark-orb-size: 8.8cqw;
-  --cv-energy-orb-top: 3.2cqw;
+   * below it) and spark orb (sits at the right of the name bar). The energy
+   * orb top is chosen so its center sits on the name bar's center line
+   * (namebar-top 5.8 + namebar-height/2 5 = 10.8cqw; 10.8 − 16/2 = 2.8cqw).
+   * The name and spark orb are vertically centered within the bar, so all
+   * three share that center line. */
+  --cv-energy-orb-size: 16cqw;
+  --cv-spark-orb-size: 12cqw;
+  --cv-energy-orb-top: 2.8cqw;
   --cv-energy-orb-left: 3.6cqw;
 
   /* Top name bar geometry. */
@@ -220,19 +224,13 @@ button:disabled {
   --cv-rules-line-height: 1.38;
   --cv-paragraph-gap: 0.68em;
 
-  /* Legibility scrims behind the name bar (top) and text box (bottom). */
-  --cv-vignette-top-height: 24%;
-  --cv-vignette-bottom-height: 46%;
-
-  /* Font sizes, as fixed fractions of the card width (24px / 15px / 18px at the
-   * 500px design width). They never auto-shrink per card, so every card on a
-   * surface shares one type scale and the name : rules size ratio always
-   * matches the spec (4.8 / 3.6 = 24 / 18). A name too long for one line
-   * truncates with an ellipsis instead of shrinking; the rules body keeps its
-   * size and lets the text box grow taller. */
-  --cv-name-font-size: 4.8cqw;
-  --cv-type-font-size: 3cqw;
-  --cv-rules-font-size: 3.6cqw;
+  /* Font sizes, as fixed fractions of the card width. They never auto-shrink
+   * per card, so every card on a surface shares one type scale. A name too
+   * long for one line truncates with an ellipsis instead of shrinking; the
+   * rules body keeps its size and lets the text box grow taller. */
+  --cv-name-font-size: 5.5cqw;
+  --cv-type-font-size: 4.5cqw;
+  --cv-rules-font-size: 4.75cqw;
 
   /* Typography. */
   --cv-name-font-family: "EB Garamond", Georgia, serif;

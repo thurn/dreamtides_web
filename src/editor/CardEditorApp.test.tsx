@@ -809,7 +809,9 @@ describe("CardEditorApp", () => {
       "[data-editor-grid-size=\"large\"]",
     );
     expect(grid).not.toBeNull();
-    expect(grid?.style.gridTemplateColumns).toContain("220px");
+    // The "large" preset tiles cards at the quest draft offer width.
+    expect(grid?.style.gridTemplateColumns).toContain("auto-fill");
+    expect(grid?.style.gridTemplateColumns).toContain("100cqw");
 
     act(() => {
       root.unmount();

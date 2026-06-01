@@ -76,6 +76,10 @@ export default function CardEditorGrid({
         paddingRight: "4px",
         paddingBottom: "8px",
         display: "grid",
+        // Establishes the container that `100cqw` resolves against, matching
+        // the quest draft offer grid so the "large" preset's draft-width
+        // formula sizes cards against this grid's own width.
+        containerType: "inline-size",
         gridTemplateColumns: SIZE_PRESETS[size].columns,
         gap: SIZE_PRESETS[size].gap,
         alignItems: "start",
