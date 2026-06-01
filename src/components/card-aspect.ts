@@ -17,25 +17,19 @@ export const CARD_ASPECT_RATIO = `${CARD_ASPECT_W} / ${CARD_ASPECT_H}`;
 export const CARD_ASPECT_RATIO_VALUE = CARD_ASPECT_W / CARD_ASPECT_H;
 
 /**
- * Fraction of the card's height, measured up from the bottom edge, that does
- * not render the source artwork. Instead this band is filled by an
- * art-extension treatment (a mirrored, blurred, darkened continuation of the
- * art's bottom edge) so important art elements are not lost to the vertical
+ * Default fraction of the card's height, measured up from the bottom edge, that
+ * does not render the source artwork. Instead this band is filled by an
+ * art-extension treatment (a blurred, darkened, color-matched continuation of
+ * the art's bottom edge) so important art elements are not lost to the vertical
  * crop or hidden behind the bottom text box. The artwork itself is fitted into
- * the remaining top band, which is a slightly wider aspect ratio than the full
- * card. Change this single value to grow or shrink the fill band.
+ * the remaining top region, a slightly wider aspect ratio than the full card.
+ *
+ * At render time `CardView` scales the actual band to the height of the card's
+ * bottom text box (a one-line card barely needs to push the art up; a three-line
+ * card needs more), clamped to a min/max; this value seeds the band before the
+ * box has been measured.
  */
 export const ART_EXTENSION_FRACTION = 0.1;
-
-/**
- * Width-to-height ratio of the region the source artwork is fitted into: the
- * top `1 - ART_EXTENSION_FRACTION` of the card. Because it is shorter than the
- * full card at the same width, it is a wider ratio than
- * `CARD_ASPECT_RATIO_VALUE`. The art crop (pan/zoom) is resolved against this
- * region rather than the whole card.
- */
-export const ART_REGION_ASPECT_RATIO_VALUE =
-  CARD_ASPECT_RATIO_VALUE / (1 - ART_EXTENSION_FRACTION);
 
 /**
  * Card corner radius (18px at the 500px design width). The horizontal radius

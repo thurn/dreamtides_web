@@ -8,8 +8,8 @@ import {
 } from "../data/card-database";
 import {
   ART_EXTENSION_FRACTION,
-  ART_REGION_ASPECT_RATIO_VALUE,
   CARD_ASPECT_RATIO,
+  CARD_ASPECT_RATIO_VALUE,
   CARD_CORNER_RADIUS,
 } from "./card-aspect";
 import { formatTypeLine } from "./card-text";
@@ -104,6 +104,15 @@ function artImageStyle(
 }
 
 /**
+ * Width-to-height ratio of the art region (the top `1 - extensionFraction` of the
+ * card). Shorter than the full card at the same width, so a wider ratio than
+ * `CARD_ASPECT_RATIO_VALUE`. The crop is resolved against this, not the card.
+ */
+function artRegionAspect(extensionFraction: number): number {
+  return CARD_ASPECT_RATIO_VALUE / (1 - extensionFraction);
+}
+
+/**
  * The same crop as {@link artImageStyle} for the art region, but placed inside a
  * full-card container so the image keeps its art-region size and position yet is
  * free to extend below the seam into the fill band. The image's content there is
@@ -116,6 +125,7 @@ function artImageStyle(
 function artImageStyleExtended(
   art: { x: number; y: number; scale: number },
   imageAspect: number | null,
+  extensionFraction: number,
 ): CSSProperties {
   if (imageAspect === null) {
     return {
@@ -128,11 +138,11 @@ function artImageStyleExtended(
     };
   }
 
-  const region = 1 - ART_EXTENSION_FRACTION;
+  const region = 1 - extensionFraction;
   const { renderW, renderH, panX, panY } = artCoverMetrics(
     art,
     imageAspect,
-    ART_REGION_ASPECT_RATIO_VALUE,
+    artRegionAspect(extensionFraction),
   );
   // Heights are fractions of the art region; scale them to fractions of the
   // full card, and center on the art region's center (not the card's), so the
@@ -162,22 +172,21 @@ function artImageStyleExtended(
  * seam. A gradient in the art's own (darkened) bottom color then grounds the
  * band so it ends dark and on-palette rather than as a light gray bar.
  */
-const ART_REGION_HEIGHT_PCT = (1 - ART_EXTENSION_FRACTION) * 100;
+/** Floor and ceiling on the dynamic band fraction (of card height). The floor
+ * keeps a small fill even under a one-line box; the ceiling stops a wordy card
+ * from squeezing the artwork too far. */
+const ART_EXTENSION_MIN_FRACTION = 0.05;
+const ART_EXTENSION_MAX_FRACTION = 0.22;
 /**
- * Height of card, above the seam, over which the crisp artwork blurs into the
- * band. The blur ramps in across this zone so the transition reads as a soft
- * defocus rather than a line. It is fine that real art detail is lost here.
+ * Feather height (the zone above the seam over which the crisp artwork blurs into
+ * the band) as a multiple of the band height, capped as a fraction of the card.
+ * Scaling it with the band keeps the transition proportional: a small band gets
+ * a shallow feather so a one-line card's artwork is barely disturbed.
  */
-const ART_EXTENSION_FEATHER_FRACTION = 0.16;
-/**
- * Alpha mask (card-height stops) for the blurred layer: invisible above the
- * feather zone, ramping in across it, fully opaque from the seam down.
- */
-const ART_FEATHER_START_PCT =
-  (1 - ART_EXTENSION_FRACTION - ART_EXTENSION_FEATHER_FRACTION) * 100;
-const ART_FEATHER_MASK = `linear-gradient(to bottom, rgba(0,0,0,0) ${ART_FEATHER_START_PCT}%, rgba(0,0,0,1) ${ART_REGION_HEIGHT_PCT}%, rgba(0,0,0,1) 100%)`;
-/** Blur radius as a fraction of the rendered card width. */
-const ART_EXTENSION_BLUR_RATIO = 0.05;
+const ART_EXTENSION_FEATHER_TO_BAND = 1.4;
+const ART_EXTENSION_FEATHER_MAX_FRACTION = 0.16;
+/** Blur radius as a fraction of the band height (so it scales with the band). */
+const ART_EXTENSION_BLUR_TO_BAND = 0.4;
 /**
  * Brightness multiplier on the blurred continuation. The source below the crop
  * window is often lighter than the art at the seam (e.g. dark rocks over a hazy
@@ -202,8 +211,8 @@ const ART_EXTENSION_TINT_DARKEN = 0.4;
  */
 const ART_EXTENSION_TINT_SEAM_ALPHA = 0.5;
 const ART_EXTENSION_TINT_EDGE_ALPHA = 0.92;
-/** Card-height % where the tint begins to ramp in (just inside the feather). */
-const ART_EXTENSION_TINT_START_PCT = ART_REGION_HEIGHT_PCT - 5;
+/** How far above the seam (card-height %) the tint begins to ramp in. */
+const ART_EXTENSION_TINT_LEAD_PCT = 5;
 
 interface BottomColor {
   r: number;
@@ -255,6 +264,7 @@ function ArtLayers({
   artCrop,
   imageAspect,
   bottomColor,
+  extensionFraction,
   widthPx,
   onLoad,
   onError,
@@ -264,17 +274,37 @@ function ArtLayers({
   artCrop: { x: number; y: number; scale: number };
   imageAspect: number | null;
   bottomColor: BottomColor | null;
+  extensionFraction: number;
   widthPx: number;
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
+  // Band geometry, all derived from the dynamic fraction so the fill tracks the
+  // card's text-box height.
+  const regionHeightPct = (1 - extensionFraction) * 100;
+  const featherFraction = Math.min(
+    extensionFraction * ART_EXTENSION_FEATHER_TO_BAND,
+    ART_EXTENSION_FEATHER_MAX_FRACTION,
+  );
+  const featherStartPct = (1 - extensionFraction - featherFraction) * 100;
+  const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct}%, rgba(0,0,0,1) ${regionHeightPct}%, rgba(0,0,0,1) 100%)`;
+  const tintStartPct = regionHeightPct - ART_EXTENSION_TINT_LEAD_PCT;
+
   const imageStyle = artImageStyle(
     artCrop,
     imageAspect,
-    ART_REGION_ASPECT_RATIO_VALUE,
+    artRegionAspect(extensionFraction),
   );
-  const extendedStyle = artImageStyleExtended(artCrop, imageAspect);
-  const blurPx = Math.max(2, widthPx * ART_EXTENSION_BLUR_RATIO);
+  const extendedStyle = artImageStyleExtended(
+    artCrop,
+    imageAspect,
+    extensionFraction,
+  );
+  const cardHeightPx = widthPx / CARD_ASPECT_RATIO_VALUE;
+  const blurPx = Math.max(
+    2,
+    cardHeightPx * extensionFraction * ART_EXTENSION_BLUR_TO_BAND,
+  );
   // The band's tint is the art's own bottom color, darkened. Until it is
   // sampled, fall back to black so the band still grounds dark (never light).
   const tintRgb =
@@ -283,7 +313,7 @@ function ArtLayers({
       : "0, 0, 0";
   const baseColor =
     bottomColor !== null ? `rgb(${tintRgb})` : ART_EXTENSION_BASE_COLOR;
-  const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${ART_EXTENSION_TINT_START_PCT}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${ART_REGION_HEIGHT_PCT}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
+  const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${tintStartPct}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${regionHeightPct}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
   return (
     <>
       {/* Base behind the band: the art's darkened bottom color, so any sliver the
@@ -301,7 +331,7 @@ function ArtLayers({
           left: 0,
           right: 0,
           top: 0,
-          height: `${ART_REGION_HEIGHT_PCT}%`,
+          height: `${regionHeightPct}%`,
           overflow: "hidden",
         }}
       >
@@ -329,8 +359,8 @@ function ArtLayers({
           position: "absolute",
           inset: 0,
           overflow: "hidden",
-          maskImage: ART_FEATHER_MASK,
-          WebkitMaskImage: ART_FEATHER_MASK,
+          maskImage: featherMask,
+          WebkitMaskImage: featherMask,
         }}
       >
         <div
@@ -605,6 +635,9 @@ export function CardView({
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
   const [bottomColor, setBottomColor] = useState<BottomColor | null>(null);
+  const [extensionFraction, setExtensionFraction] =
+    useState(ART_EXTENSION_FRACTION);
+  const bottomChromeRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
   // Auto-shrink the rules body so a card needing more than the reserved three
@@ -837,6 +870,52 @@ export function CardView({
   const hasTextboxContent = Boolean(renderedRulesNode);
   const hasBottomChrome = hasTextboxContent || Boolean(renderedTypeLineNode);
 
+  // Scale the fill band to the height of the bottom chrome (type label + text
+  // box): the band is sized so the seam — the bottom of the crisp artwork — sits
+  // at the top of the chrome, pushing the art up just enough that nothing
+  // important hides behind it. A one-line box needs almost no push; a three-line
+  // box needs more. The chrome's size does not depend on the band, so this does
+  // not feed back. Clamped to a sane min/max.
+  useEffect(() => {
+    const cardEl = cardRef.current;
+    if (cardEl === null) {
+      return;
+    }
+    const chromeEl = bottomChromeRef.current;
+    if (chromeEl === null) {
+      setExtensionFraction(ART_EXTENSION_MIN_FRACTION);
+      return;
+    }
+    const measure = (): void => {
+      const cardRect = cardEl.getBoundingClientRect();
+      const chromeRect = chromeEl.getBoundingClientRect();
+      if (cardRect.height <= 0) {
+        return;
+      }
+      const raw = (cardRect.bottom - chromeRect.top) / cardRect.height;
+      const next = Math.min(
+        ART_EXTENSION_MAX_FRACTION,
+        Math.max(ART_EXTENSION_MIN_FRACTION, raw),
+      );
+      setExtensionFraction((prev) =>
+        Math.abs(prev - next) > 0.002 ? next : prev,
+      );
+    };
+    measure();
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure);
+      return () => {
+        window.removeEventListener("resize", measure);
+      };
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(cardEl);
+    observer.observe(chromeEl);
+    return () => {
+      observer.disconnect();
+    };
+  }, [cardRef, hasBottomChrome, large, card.renderedText, rulesFontPx]);
+
   // The box shrinks to its rules text, bottom-aligned, capped at the three-line
   // height (`--cv-textbox-height`): a short card gets a short box, while text
   // beyond three lines auto-shrinks to the cap. A type-only editor box (no rules
@@ -889,6 +968,7 @@ export function CardView({
           artCrop={artCrop}
           imageAspect={imageAspect}
           bottomColor={bottomColor}
+          extensionFraction={extensionFraction}
           widthPx={widthPx}
           onLoad={(event) => {
             const image = event.currentTarget;
@@ -959,6 +1039,7 @@ export function CardView({
       */}
       {hasBottomChrome ? (
         <div
+          ref={bottomChromeRef}
           style={{
             position: "absolute",
             left: "var(--cv-textbox-inset)",
