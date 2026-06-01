@@ -693,7 +693,7 @@ mtg-name = "Survival of the Fittest"
 id = "4f0f0811-1a4c-4d42-a804-77dba8707792"
 tides = []
 rendered-text = """
-Veil 2● 
+Veil 2●
 
 1●, Discard a character with cost X●: Discover a character with cost X●."""
 energy-cost = 2
@@ -2434,7 +2434,7 @@ energy-cost = 2
 card-type = "Character"
 subtype = "Outsider"
 rarity = ""
-is-fast = false
+is-fast = true
 is-interrupt = false
 spark = 2
 tags = ["Ninja"]
@@ -2612,7 +2612,7 @@ tides = []
 rendered-text = "(no ability)"
 energy-cost = 0
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Warrior"
 rarity = ""
 is-fast = true
 is-interrupt = false
@@ -5182,7 +5182,7 @@ mtg-name = "Exploration"
 id = "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7"
 tides = []
 rendered-text = """
-Veil 2● 
+Veil 2●
 
 The first character with cost 2● or less you play each turn costs you 0●."""
 energy-cost = 1
@@ -5463,7 +5463,7 @@ energy-cost = 2
 card-type = "Character"
 subtype = "Outsider"
 rarity = ""
-is-fast = false
+is-fast = true
 is-interrupt = false
 spark = 2
 tags = ["Ninja"]
@@ -7900,7 +7900,7 @@ mtg-name = "Fyndhorn Elves"
 id = "f0165a60-df1c-41db-87bb-a784c26835a5"
 tides = []
 rendered-text = '''
-▸Dawn: Gain 1●. 
+▸Dawn: Gain 1●.
 
 ▸Dissolved: Gain 1●.'''
 energy-cost = 1
@@ -7939,7 +7939,7 @@ mtg-name = "Birds of Paradise"
 id = "86fd585b-e9d0-4dc1-bce9-488014b9316d"
 tides = []
 rendered-text = '''
-▸Dawn: Gain 1●. 
+▸Dawn: Gain 1●.
 
 Reclaim 3●'''
 energy-cost = 1
@@ -8211,7 +8211,10 @@ name = "Looming Oracle"
 mtg-name = "Wall of Omens"
 id = "4b20e66e-2466-4518-8ef9-67f580bd6f14"
 tides = []
-rendered-text = "▸Materialized: Draw a card."
+rendered-text = '''
+Veil 2●
+
+▸Materialized: Draw a card.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
