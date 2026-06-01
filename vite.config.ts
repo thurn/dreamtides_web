@@ -186,7 +186,15 @@ export default defineConfig({
   },
   server: {
     watch: {
-      ignored: generatedCardDataWatchPaths,
+      // The card editor APIs write card and tag TOML files under data/tabula
+      // (via temp-file swaps) and regenerate public/card-data.json on every
+      // save. None of these are part of the module graph, so the dev watcher
+      // ignores them; otherwise each editor save triggers a full page reload,
+      // which would close the art editor mid-edit and discard inline edits.
+      ignored: [
+        path.resolve(path.join(__dirname, "data", "tabula")) + "/**",
+        ...generatedCardDataWatchPaths,
+      ],
     },
   },
 });

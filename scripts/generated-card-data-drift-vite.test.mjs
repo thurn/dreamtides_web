@@ -1,6 +1,6 @@
 // @vitest-environment node
 
-import { dirname, join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 import viteConfig, {
@@ -33,9 +33,13 @@ function callHotUpdate(plugin, context) {
 
 describe("generated card data drift Vite integration", () => {
   it("keeps editor-written card data files out of Vite's reload watcher", () => {
-    expect(viteConfig.server?.watch?.ignored).toEqual(
-      generatedCardDataWatchPaths,
-    );
+    // The whole data/tabula directory is ignored so editor writes to any card
+    // or tag TOML (not just the default rendered-cards.toml) never trigger a
+    // full page reload, alongside the generated card data paths.
+    expect(viteConfig.server?.watch?.ignored).toEqual([
+      resolve(join(rootDir, "data", "tabula")) + "/**",
+      ...generatedCardDataWatchPaths,
+    ]);
   });
 
   it("suppresses full-page reloads for card editor source and generated data writes", () => {
