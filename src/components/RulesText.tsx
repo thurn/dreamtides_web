@@ -159,20 +159,16 @@ function splitRulesTextIntoParagraphs(text: string): string[] {
 }
 
 /**
- * Rules-text line height, mirrored from `--cv-rules-line-height` in
- * `index.css`. Used to express the inter-ability gap as a fraction of a line.
+ * Top margin applied to every ability paragraph after the first, sizing the
+ * blank line that separates two abilities to about half the visible height of a
+ * full blank line. The margin sits on top of each line's leading, so a value of
+ * roughly a third of a line height already reads as a half-height blank line;
+ * this packs more abilities into the fixed text box while still reading as
+ * separate "list items" rather than "essay paragraphs". Expressed in `em` so it
+ * scales with the surrounding (possibly auto-shrunk) font size. See backlog
+ * task 029.
  */
-const RULES_LINE_HEIGHT = 1.38;
-
-/**
- * Top margin applied to every ability paragraph after the first. A blank-line
- * separator between two abilities renders at 50% of the height of a normal
- * blank line (one line height), packing more abilities into the fixed text box
- * while still reading as separate "list items" rather than "essay paragraphs".
- * Expressed in `em` so the gap scales with the surrounding (possibly
- * auto-shrunk) font size. See backlog task 029.
- */
-const PARAGRAPH_GAP_EM = RULES_LINE_HEIGHT * 0.5;
+const PARAGRAPH_GAP_EM = 0.34;
 
 /** Renders the parsed rules text segments to React nodes. */
 export function renderRulesText(
