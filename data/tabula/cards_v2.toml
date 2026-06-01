@@ -1753,7 +1753,7 @@ tides = []
 rendered-text = """
 ▸Materialized: You may discard a card to draw a card.
 
-Relcaim 2●"""
+Reclaim 2●"""
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -3294,7 +3294,7 @@ name = "Fathomscourge"
 mtg-name = "Oni-Cult Anvil"
 id = "f0a70e7d-46af-4d32-92cc-9d510e97a07e"
 tides = []
-rendered-text = "One per turn, when an allied warrior is dissolved, create a 1✦ warrior figment."
+rendered-text = "Once per turn, when an allied warrior is dissolved, create a 1✦ warrior figment."
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -3613,13 +3613,13 @@ mtg-name = "Wight of the Reliquary"
 id = "f46490a5-7030-4ade-93e9-bedb5813f590"
 tides = []
 rendered-text = "This character has +1✦ for each character in your void."
-energy-cost = ""
+energy-cost = 2
 card-type = "Character"
 subtype = "Survivor"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = ""
+spark = 2
 tags = ["Spark Scaler"]
 image-number = 550834042
 art-owned = false
@@ -3729,7 +3729,7 @@ name = "Thornwood Delver"
 mtg-name = "Gau, Feral Youth"
 id = "c6d8a7cc-3856-4030-96eb-450e406dec33"
 tides = []
-rendered-text = "One per turn, when you reclaim a card, gain X⍟ where X is this character's ✦. Then this character gains +1✦."
+rendered-text = "Once per turn, when you reclaim a card, gain X⍟ where X is this character's ✦. Then this character gains +1✦."
 energy-cost = 2
 card-type = "Character"
 subtype = "Explorer"
@@ -3803,7 +3803,7 @@ name = "Weight of Memory"
 mtg-name = "Unholy Heat"
 id = "2a8dff0b-759f-40cc-af40-393a4e7129d4"
 tides = []
-rendered-text = "Dissolve an enemy with ✦ less that or equal to the number of cards in your void."
+rendered-text = "Dissolve an enemy with ✦ less than or equal to the number of cards in your void."
 energy-cost = 0
 card-type = "Event"
 subtype = ""
@@ -5223,7 +5223,7 @@ name = "Worldsong Behemoth"
 mtg-name = "Llanowar Elves"
 id = "b5fbff03-f850-4627-94eb-12ed4dc15334"
 tides = []
-rendered-text = "▸Dawn: Gain 1●. "
+rendered-text = "▸Dawn: Gain 1●."
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -5245,13 +5245,13 @@ rendered-text = """
 Fast
 
 ▸Dawn: Materialize a 1✦ ethereal figment."""
-energy-cost = ""
+energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = ""
+spark = 1
 tags = ["Figment Maker"]
 image-number = 337161542
 art-owned = false
@@ -6224,13 +6224,13 @@ rendered-text = """
 ▸Materialized: Draw a warrior.
 
 When you materialize a non-figment warrior, this character gains +1 spark."""
-energy-cost = ""
+energy-cost = 2
 card-type = "Character"
 subtype = "Synth"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = ""
+spark = 1
 tags = []
 image-number = 608687447
 art-owned = false
@@ -7028,7 +7028,7 @@ name = "Ethereal Trailblazer"
 mtg-name = "Elvish Mystic"
 id = "48257e3e-9600-4edf-a905-e73a41ab5ec1"
 tides = []
-rendered-text = "▸Dawn: Gain 1●. "
+rendered-text = "▸Dawn: Gain 1●."
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -7372,7 +7372,7 @@ tides = []
 rendered-text = '''
 ▸Materialized: Erode 2.
 
-▸Dawn: Gain 1●. '''
+▸Dawn: Gain 1●.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -7393,7 +7393,7 @@ tides = []
 rendered-text = """
 ▸Materialized: Draw a card.
 
-▸Dawn: Gain 1●. """
+▸Dawn: Gain 1●."""
 energy-cost = 3
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -7668,7 +7668,7 @@ mtg-name = "Aftermath Analyst"
 id = "d8c90a33-a581-469a-9fd3-9a80d1cc5315"
 tides = []
 rendered-text = """
-▸Materialize: Erode 3
+▸Materialized: Erode 3
 
 5●, ☪, Abandon this character: Return all characters with cost 2● or less from your void to play."""
 energy-cost = 3
