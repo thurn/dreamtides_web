@@ -234,11 +234,12 @@ button:disabled {
   --cv-paragraph-gap: 0.68em;
   --cv-typelabel-gap: 1.2cqw;
 
-  /* Fixed text-box height: a three-line rules area + vertical padding. Derived
+  /* Maximum text-box height: a three-line rules area + vertical padding. Derived
    * from the rules font size and line height so adjusting the font size keeps
-   * the reserved box proportional. The rules area is the height of three rules
-   * lines at the base font; rules text that overflows it shrinks to fit, while
-   * shorter text is centered within the box. */
+   * the cap proportional. The rules area is the height of three rules lines at
+   * the base font; the box shrinks to its rules text and is bottom-aligned, so
+   * shorter text yields a shorter box, while text that would overflow three
+   * lines shrinks its font to fit this cap. */
   --cv-textbox-rules-area-height: calc(
     var(--cv-rules-font-size) * var(--cv-rules-line-height) * 3
   );

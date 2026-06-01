@@ -439,29 +439,20 @@ export function CardView({
     renderedTypeLineContent !== null &&
     renderedTypeLineContent !== undefined &&
     renderedTypeLineContent !== false;
-  // The label floats on the art, anchored to the card's right edge just above
-  // the text box. When rules text is shown the box takes a fixed height, so the
-  // label rides a constant gap above it computed from the box geometry; a card
-  // with no rules box keeps the same gap above the bottom inset where the box
-  // would begin.
-  const typeLabelBottom = showRulesText
-    ? "calc(var(--cv-textbox-inset) + var(--cv-textbox-height) + var(--cv-typelabel-gap))"
-    : "calc(var(--cv-textbox-inset) + var(--cv-typelabel-gap))";
+  // The label floats on the art directly above the text box as the top row of
+  // the bottom-anchored column below. `paddingRight` pulls its right edge in by
+  // the box's corner radius so it lines up with where the box's flat top edge
+  // ends and the rounded corner begins; `marginBottom` is the gap it rides above
+  // the box. Because the column is bottom-anchored and the box shrinks to its
+  // text, the label tracks the box's actual top however tall the box is.
   const typeLineNode =
     hasTypeLineContent || attributeChips.length > 0 ? (
       <div
         data-testid="card-type-line"
         style={{
-          position: "absolute",
-          // Pulled in by the text box's corner radius so the label's right edge
-          // lines up with where the box's flat top edge ends and the rounded
-          // corner begins, rather than with the box's outer edge.
-          right: "calc(var(--cv-textbox-inset) + var(--cv-textbox-radius))",
-          bottom: typeLabelBottom,
-          maxWidth:
-            "calc(100% - 2 * var(--cv-textbox-inset) - var(--cv-textbox-radius))",
-          zIndex: 4,
           textAlign: "right",
+          paddingRight: "var(--cv-textbox-radius)",
+          marginBottom: "var(--cv-typelabel-gap)",
           // No background plate, so legibility comes from the faux outline (eight
           // zero-blur shadow copies), a uniform vector stroke painted outside the
           // fill, and the soft halo/drop layers.
@@ -498,41 +489,27 @@ export function CardView({
 
   const rulesTextNode = showRulesText ? (
     <div
+      ref={rulesFitRef}
       style={{
-        // The rules body fills a fixed three-line area below the type line and
-        // centers its text vertically, so a card with fewer than three rules
-        // lines sits centered in that area while the type line stays anchored to
-        // the top of the box.
-        height: "var(--cv-textbox-rules-area-height)",
-        flexShrink: 0,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
+        // The box shrinks to this element, so its height is the rules text up to
+        // a three-line cap: shorter text makes a shorter box, while text longer
+        // than three lines auto-shrinks its font (the `maxHeight` cap bounds the
+        // element's client height, which is what lets `useFitText` detect the
+        // overflow and size down) until it fits the three-line area.
+        maxHeight: "var(--cv-textbox-rules-area-height)",
         overflow: "hidden",
+        textAlign: "left",
+        color: tintColor ?? RULES_COLOR,
+        fontFamily: RULES_FONT_FAMILY,
+        fontSize: `min(var(--cv-rules-font-size), ${String(rulesFontPx)}px)`,
+        lineHeight: "var(--cv-rules-line-height)",
+        textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
       }}
     >
-      <div
-        ref={rulesFitRef}
-        style={{
-          // Text longer than three lines auto-shrinks (capped by `maxHeight`
-          // plus the fitted font size) until it fits the area. Block flow with
-          // no internal centering keeps the `scrollHeight` measurement that
-          // drives the fit reliable.
-          maxHeight: "var(--cv-textbox-rules-area-height)",
-          overflow: "hidden",
-          textAlign: "left",
-          color: tintColor ?? RULES_COLOR,
-          fontFamily: RULES_FONT_FAMILY,
-          fontSize: `min(var(--cv-rules-font-size), ${String(rulesFontPx)}px)`,
-          lineHeight: "var(--cv-rules-line-height)",
-          textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
-        }}
-      >
-        {renderRulesText(card.renderedText, {
-          pipScale: textScale,
-          disableGlossary: suppressHoverHelp,
-        })}
-      </div>
+      {renderRulesText(card.renderedText, {
+        pipScale: textScale,
+        disableGlossary: suppressHoverHelp,
+      })}
     </div>
   ) : null;
 
@@ -559,14 +536,14 @@ export function CardView({
   const renderedRulesNode =
     slots.rulesText?.(slotContext, rulesTextNode) ?? rulesTextNode;
   const hasTextboxContent = Boolean(renderedRulesNode);
+  const hasBottomChrome = hasTextboxContent || Boolean(renderedTypeLineNode);
 
-  // When rules text is shown the box takes a fixed height (a three-line rules
-  // area + padding), so every card on a surface shares the same footprint, and
-  // the rules body centers its text within the three-line area. A card with no
-  // rules text shows no box at all; its floating type label is the only bottom
-  // chrome.
+  // The box shrinks to its rules text, bottom-aligned, capped at the three-line
+  // height (`--cv-textbox-height`): a short card gets a short box, while text
+  // beyond three lines auto-shrinks to the cap. A type-only editor box (no rules
+  // text) keeps the larger `--cv-textbox-max-height` cap.
   const textboxSizing: CSSProperties = showRulesText
-    ? { height: "var(--cv-textbox-height)" }
+    ? { maxHeight: "var(--cv-textbox-height)" }
     : { maxHeight: "var(--cv-textbox-max-height)" };
 
   const artCrop = card.art ?? DEFAULT_ART_CROP;
@@ -669,46 +646,51 @@ export function CardView({
       />
 
       {/*
-        Floating type/subtype label: it sits directly on the art, anchored to
-        the card's right edge just above the text box, with no plate behind it.
-        Legibility comes from the faux outline + halo/drop treatment rather than
-        a background.
+        Bottom-anchored chrome column: the floating type/subtype label sits on
+        the art as the top row, with the rules text box stacked below it. The
+        column is pinned to the card's bottom and sizes to its content, so the
+        box shrinks to its rules text (bottom-aligned, capped at three lines) and
+        the label always rides a constant gap above the box's actual top. The
+        label has no plate — its legibility comes from the faux outline +
+        halo/drop treatment; the box's blur + translucent gradient let the art
+        read through while keeping the rules text legible.
       */}
-      {renderedTypeLineNode}
-
-      {/*
-        Bottom-anchored text box holding the rules body. When rules text is shown
-        the box takes a fixed height reserving three rules lines, so every card on
-        a surface shares the same footprint; the rules text centers within the
-        three-line area, and rules text beyond three lines auto-shrinks to fit.
-        The blur + translucent gradient let the art read through while keeping
-        text legible.
-      */}
-      {hasTextboxContent ? (
+      {hasBottomChrome ? (
         <div
-          style={
-            {
-              position: "absolute",
-              left: "var(--cv-textbox-inset)",
-              right: "var(--cv-textbox-inset)",
-              bottom: "var(--cv-textbox-inset)",
-              zIndex: 4,
-              ...textboxSizing,
-              overflow: "hidden",
-              display: "flex",
-              flexDirection: "column",
-              padding: "var(--cv-textbox-pad)",
-              borderRadius: "var(--cv-textbox-radius)",
-              background: "var(--cv-textbox-bg)",
-              backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
-              WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
-              border: "1px solid var(--cv-textbox-border)",
-              boxShadow:
-                "0 1px 0 rgba(255,255,255,0.07) inset, 0 12px 28px rgba(0,0,0,0.5)",
-            } satisfies CSSProperties
-          }
+          style={{
+            position: "absolute",
+            left: "var(--cv-textbox-inset)",
+            right: "var(--cv-textbox-inset)",
+            bottom: "var(--cv-textbox-inset)",
+            zIndex: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "stretch",
+          }}
         >
-          {renderedRulesNode}
+          {renderedTypeLineNode}
+          {hasTextboxContent ? (
+            <div
+              style={
+                {
+                  ...textboxSizing,
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "var(--cv-textbox-pad)",
+                  borderRadius: "var(--cv-textbox-radius)",
+                  background: "var(--cv-textbox-bg)",
+                  backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                  WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                  border: "1px solid var(--cv-textbox-border)",
+                  boxShadow:
+                    "0 1px 0 rgba(255,255,255,0.07) inset, 0 12px 28px rgba(0,0,0,0.5)",
+                } satisfies CSSProperties
+              }
+            >
+              {renderedRulesNode}
+            </div>
+          ) : null}
         </div>
       ) : null}
 
