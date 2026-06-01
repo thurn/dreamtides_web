@@ -1,5 +1,7 @@
 # Introduction to My Powered Synergy Cube
 
+- march of otherworldly light
+
 *Source: https://calebgannon.com/2022/03/08/introduction-to-my-powered-synergy-cube/*
 
 ## Design Philosophy
@@ -8,9 +10,15 @@ Jump to the archetypes
 
 [My Powered Synergy Cube](https://cubecobra.com/cube/overview/synergy) was built as a limited environment that challenges the players’ imagination to draft a deck as a cohesive unit rather than relying on the strengths of individual cards. The overall design philosophy is that decks should by synergistic, meaning that it will be rare for a single card to be able to win the game on its own. 
 
+- Goblin Welder
+- Intruder Alarm
+- Memnite
+
 Rather, by combining cards that work well together the player should craft a deck that is stronger than each individual card it is comprised of. This requires careful planning and thoughtful drafting, and I find that it makes for some really interesting decisions and gameplay both in the drafting process and the following games with the deck.
 
 To enable this goal, I had to cut a lot of the cards that are independently capable of winning the game that you might expect in a powered cube. Planeswalkers are a big offender in this category, as most of them offer card advantage, board presence and a win condition all in a single card. So you will notice a substantially reduced number of them in the cube. Other examples of cards that just did too much are Ragavan, Nimble Pilferer, Laelia, the Blade Reforged, Hexdrinker, Murktide Regent,  and Fire Covenant.
+
+- Black Lotus
 
 I make the distinction between powerful enablers and cards that are standalone win conditions: Black Lotus is a very strong magic card but it will not win you the game on its own. Whereas it is entirely possible to win a game of magic where the only spell you cast is Oko, Thief of Crowns. 
 
@@ -36,9 +44,15 @@ There are two main ways to approach draft in this cube. The first is to start wi
 
 Removal or disruption and lands are great in this phase of a draft too. You’re always going to need fixing and interaction, so spending picks you are unsure about on these cards are almost guaranteed to pay off later. For example, Lightning Bolt will be great regardless of whether you end up in lands, storm madness or sacrifice. Once you see a flagpost signal that an archetype is open, you can jump on it aggressively and reap the rewards of your patience. Something like a fifth pick Aluren or Goblin Bombardment is often a great sign to jump in. The biggest mistake with this strategy is waiting too long and not committing to an archetype in time. 
 
+- Tolarian Academy
+
 The other approach is to jump into an archetype early and do your best to cut it off as much as possible. The really important thing to look for here is what signals you are sending downstream as you do this. If your opening pack has Tolarian Academy and Mishra's Workshop and you take one of them, the person you are passing to is going to see you passing them a fantastic artifact enabler and perhaps move into your lane. 
 
 This strategy works best when your opening pack has only a single strong signal to your archetype. You also really have to pay attention to what signals you are getting, as the person passing to you may have been the one to open a pack with two enablers and passed you one of them. If you get cut off you have to plan your pivot quickly and carefully or decide to double down and try to move the other person off the archetype.
+
+- Aluren
+- Anger
+- Oni-Cult Anvil
 
 The beauty of this cube is there are just so many archetypes that there will always be a way for every single person at the table to be drafting their own archetype and feel like they are in the “open lane”. If you find yourself in this situation, keep in mind that interaction and lands tend to get picked up by a variety of archetypes so if you can’t decide, err on the side of taking these cards first and try to get your synergy pieces on the wheel (unless they are hallmark enablers that your deck cannot live without).
 
@@ -47,6 +61,8 @@ One major point that I need to stress is that this cube is not the mtgo vintage 
 Additionally, since the curve is so low, even off-color or colorless power is not an auto-include in any deck. Sol Ring is probably the most notable example of this — there are so many decks full of 1 and 2 mana plays that the extra colorless mana sol ring offers is really of no use. Sol Ring is still a fantastic card but nowhere near the windmill slam dunk it can be in other cubes. Look at my deck that I drafted above to see an example of a place where sol ring would be not that great. I still might play it in the deck, but I would take something like Misty Rainforest over it if given the choice.
 
 ## Drafting in Paper
+
+- Cogwork Librarian
 
 When drafting this cube in paper, I highly recommend having each player begin the draft with a Cogwork Librarian in their pool. Because of the synergistic nature of this cube, you can often end up in a situation where one pack has multiple cards that you need without the ability to wheel them. The Librarian solves this by allowing you to save up your draft picks for situations like these. 
 
@@ -75,11 +91,23 @@ On first glance, the cube might look like it would play out as a bunch of games 
 
 By design, most of the engines are either creature or artifact based meaning they can be interacted with by plenty of removal spells. (_For balance purposes, enchantments are a bit more safe from removal than artifacts, although there are still ways to remove them_.) The result of this is that the games often play out grindy and midrangey for a time as both players slowly unfold their plans until eventually someone is able to establish an engine after all the interaction has been exhausted (or sidestepped when an opponent is tapped out). For me, this makes for an engaging and exciting experience.
 
+- Goblin Engineer
+- Experimental Synthesizer
+- Ichor Wellspring
+
 What I mean by “engine” is a series of cards that play well together, allowing you to gain tremendous value (or win the game immediately). The three cards I have listed above form a pretty strong card advantage engine as an example. You can tap Goblin Engineer to draw a card and exile the top card of your library then play it every single turn. That is a substantial way to pull ahead in a game if left unchecked (it is approximately like casting an Ancestral Recall every single turn). 
 
 Another example of a fun engine is Gravecrawler with another zombie and Skullclamp. This gives you the static ability of 1B: draw two cards. If you add Headless Rider and a Blood Artist into the mix suddenly things get a lot scarier for your opponent as 1B now gets you 2 cards, creates a 2/2 zombie token and your opponent loses one life. 
 
+- Kitchen Finks
+- Melira, Sylvok Outcast
+- Ashnod's Altar
+
 The key to creating decks like this is to establish your engines to be as robust and broad as possible. You won’t always draw specific cards, your opponent is going to interact with you and you need to plan accordingly. Kitchen Finks and Melira, Slyvok Outcast are technically an infinite combo with Ashnod's Altar, allowing you to gain infinite life, infinite colorless mana and infinite death triggers. But you likely shouldn’t run these three cards in an otherwise aggressive red/white shell just because they are a combo. The key thing to always be asking yourself is: “What happens if my opponent has a single piece of removal”. In this case, if they kill the Melira and you have no follow up then your Ashnod's Altar and Kitchen Finks are probably not going to be doing very much in the rest of your deck. The thing is, your combo plan didn’t mesh with the overall objective of your deck.
+
+- Kitchen Finks
+- Anafenza, Kin-Tree Spirit
+- Goblin Bombardment
 
 Now let’s consider a very similar situation but instead of Ashnod's Altar we have Anafenza, Kin-Tree Spirit and Goblin Bombardment in an aggressive red/white list. We still have an infinite combo, as the counters from Anafenza, Kin-Tree Spirit counteract the persist counters from Kitchen Finks. 
 
@@ -88,6 +116,8 @@ The difference is that each of these cards are just independently fairly good in
 The above example is one philosophy: only to include synergies when they are convenient for the deck. The other approach is to overload your deck so full of redundant synergies that almost every single card in your deck will help you out. This is perhaps most evident in the elves game plan (such as the list I showed above). The essential combo is just having creatures in play with things that care about creatures in play or casting creature spells. If one elf dies you have 15 more to replace it immediately. Aluren, Earthcraft and Intruder Alarm are never dead draws because they’re good with just about every single creature in your deck. 
 
 This extreme level of redundancy and synergy allows you to fight through some interaction without the whole deck just falling apart. (_Also in the case of elves, speed is your friend too. Elves might just be the fastest deck in the format, so if you can kill your opponent before they are even able to stop you that is yet another way to beat interaction._)
+
+- Masked Vandal
 
 Anyway, the main point I am trying to get across in this section is that **while the cube is full of awesome and powerful synergies, you have to remember that it is a vintage power level cube**. The removal and disruption is good and efficient. **Your opponents are going to be building out engines just like you are, and it is very important to be able to interact with them either to disrupt their game plan or to protect your own**. Combo pieces that are also disruptive, defensive or recursive should be taken very highly for this reason. 
 
@@ -99,15 +129,30 @@ I don’t mean this to discourage you from pursuing some wild ideas. Please, by 
 
 This cube has a VERY low mana curve. It is not uncommon to be able to companion Lurrus of the Dream Den, for example. You absolutely need to interact or make a play on the first or second turns of the game unless your play on the third turn is strong enough to make up for the tempo loss. 
 
+- Dark Confidant
+- Ethersworn Canonist
+- Goblin Engineer
+
 Over 80% of creatures in the cube have two or less toughness, and roughly 40% have one toughness. Shocks and pings are very, very good. Disfigure is actually stronger than doom blade, as there are actually more black creatures than there are creatures with greater than two toughness. So take removal spells like Tarfire and Disfigure as you would Terminate and Flame Slash in other formats. 
 
+- Pitiless Plunderer
+- Glint-Horn Buccaneer
+- Korvold, Fae-Cursed King
+
 On the flip side of that, most of the removal in this cube is either based on dealing damage like Lightning Bolt or mana value like Abrupt Decay. Creatures with greater than two toughness are fairly difficult to kill. Creatures with four or more toughness are essentially immune to all but the most premium of removal spells, especially if their mana value is greater than three. They also block really well. Sometimes a 2/4 body can just hold down an entire army from the opponent.
+
+- Ratchet Bomb
+- Engineered Explosives
 
 These cards are substantially better than most people expect. A Ratched Bomb for 0 kills all tokens, moxen and cards like Stonecoil Serpent. Explosives for 1 can give elves a really hard time. They are flexible tools that can slot into any deck since they are colorless, and there are quite a few ways to recur them as well.
 
 Damn, Fiery Confluence and The Meathook Massacre are the only wraths in the format (and I will likely remove some of these eventually). In a 540 card cube this means it is unlikely you will run into a wrath of any kind. Since most archetypes end up creature based, there are few decks that would even want to play The Meathook Massacre for more than two. For the most part you are safe to go wide, especially with high toughness creatures.
 
 ## Mana
+
+- Steam Vents
+- Flooded Strand
+- Badlands
 
 Because this cube has such a low curve it is absolutely vital to have access to all your colors of mana as soon as possible. On the flipside, this also means you will frequently run fewer lands than in a traditional cube format (12-16 lands including moxen is about standard for the cube). Both of these together mean that decks have a dire need for fixing, and not just a dual land or two, decks need GOOD fixing. 
 

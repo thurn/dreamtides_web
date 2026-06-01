@@ -4,15 +4,32 @@
 
 Surprisingly, blue is largely a supporting color in this cube with not so many archetypes of its own. Lots of decks want cantrips and counterspells though, so blue is still very important. The major blue archetypes are Ninjas, Artifacts, Ascendancy/Intruder Alarm and storm.
 
+- Yuriko, the Tiger’s Shadow
+- Urza, Lord High Artificer
+- Jeskai Ascendancy
+- High Tide
+
 ## Ninjas
 
 I’m starting with Ninjas mostly because it is my favorite archetype of the blue section, plus a lot of things I say here will apply to other archetypes as well. You might think that the Ninjas archetype is based around actual Ninjas, but its actually just a shell that is able to take great advantage of the card selection and countermagic that is so characteristic of blue. So I’ll start by talking through those.
+
+- Daze
+- Force of Negation
+- Force of Will
 
 First, there is the countermagic. With this cube being so heavily synergy based, a timely counterspell on a key enabler or payoff can set your opponent back many turns. Countering Goblin Bombardment in a sacrifice deck, for example, can leave them with a full board ready to die but nothing to get them there. The free counterspells are particularly important as they don’t restrict your mana so you can spend your turn doing other things (like playing Ninjas!), but cards like Mana Drain and Spell Snare are also great. 
 
 Spell Snare is typically not a cube card but with the curve so low it actually hits over 25% of the cube (including lands). The value from it comes from the ability to counter 2 drops on the draw and jump ahead in tempo (the same reason Force Spike is so valuable).
 
+- Inquisition of Kozilek
+- Dread Fugue
+- Duress
+
 A good pairing for countermagic is discard— being able to see what is in your opponent’s hand can help you decide when to leave mana up and when to advance your own board. Plus you get to take stuff from their hand! Dread Fugue again may seem like it is not a cube card, but this cube has such a low curve it hits over 40% of the nonland cards (which is roughly similar to Duress in terms of number of hits). One of the most reliable uses for Dread Fugue is to take removal or countermagic from your opponent and protect your own gameplan, which is a key part of the Ninjas strategy.
+
+- Snuff Out
+- Prismatic Ending
+- Lightning Bolt
 
 Lastly we have removal. While you sorta get the black removal “for free”, Esper and Grixis Ninjas can also be quite common. Overall white tends to have the best removal and a fair number of evasive creatures, so if you are torn between the two splash colors I would lean into white. Although red does have some interesting things to offer like Dragon's Rage Channeler and Dreadhorde Arcanist. 
 
@@ -22,9 +39,21 @@ You can have a great UB tempo deck without Ninjas, but you really cannot have a 
 
 ## Enablers
 
+- Spellstutter Sprite
+- Thieving Skydiver
+- Snapcaster Mage
+
 There are really two types of enablers for ninjas. The first are the good value enter-the-battlefield (ETB) creatures like the three above. With these, the utility of Ninjutsu is often more about re-buying their abilities as it is getting a Ninja into play. This combination can be backbreaking for opponents as you get value from the Ninja hit and the creature it returned. Decks like this often lean more into the controlling side, since the creatures themselves make for reasonable win conditions. 
 
+- Soulherder
+- Restoration Angel
+- Solitude
+
 While rare, you can also combine this with a small blink shell when leaning into Esper ninjas. The ETB creatures work well in both archetypes and can really help your deck pop off. While less controlling than the full tempo based list, interaction is absolutely vital for this archetype. Disruptive creatures in particular can help with this, like Skyclave Apparition and Palace Jailer, although you are going to need to interact at 1-2 mana as well, so pick up stuff like March of Otherworldly Light and Mana Tithe. This is a great option to go for if UB removal/countermagic is being heavily cut by other archetypes, but Ninjas is still open.
+
+- Gingerbrute
+- Faerie Seer
+- Changeling Outcast
 
 The other type of Ninja enablers are what I would refer to as “aggro” enablers. Decks running these types of creatures often have a different gameplan than their more controlling counterparts above. Here, the goal is to stick a threat and defend it. T1 Changeling Outcast into t2 Yuriko, the Tiger's Shadow means you can start drawing extra cards and hitting your opponent for a lot of damage very quickly. Changeling Outcast in particular is worth mentioning for this as it is a Ninja itself, so once you re-play it and start hitting, you’ll get double Yuriko triggers.
 
@@ -34,11 +63,21 @@ Tempo plays become extra valuable here, with things like Snap and Remand able to
 
 ## Payoffs
 
+- Moon-Circuit Hacker
+- Ninja of the Deep Hours
+- Ingenious Infiltrator
+
 The ninjas themselves are all fairly similar, I basically only included the ones that draw you a card when they hit. The major difference is the UB ninjas trigger when any ninja hits, so they can get out of hand with multiple ninjas in play. They also have 3 toughness which makes them quite a bit harder to kill. The UB ninjas are the best ones, but the monoblue ninjas are still great (especially Moon-Circuit Hacker, since it only costs 1 mana).
+
+- Kaito Shizuki
 
 While not a Ninja himself, Kaito fits really well into these sorts of decks. He protects himself the turn he comes down, draws you cards and makes unblockable tokens for you! The tokens are also Ninjas, which is relevant for the UB ninja abilities specifically. So far the only time I have multi-triggered something like Ingenious Infiltrator is with Kaito tokens (and it has happened something like three times so far! I did win all those games), so keep that in mind. Kaito is also just good enough on its own though, even without ninjas in your deck he can play a great supporting role for any tempo based list that plans on attacking with evasive creatures. The ultimate is mostly irrelevant though.
 
 ### Winning the Game
+
+- Occult Epiphany
+- Vendilion Clique
+- Brazen Borrower
 
 Honestly, winning the game happens more as a side effect of stopping your opponent than anything with these decks. Disrupt them until they have nothing left and beat down with some Ophidians and flying creatures. It can be important just to keep track of how many threats you have left in your deck though, so you should know how hard you should work to protect what you have in play. It is possible to win with just a Vendillion Clique but you need to play that game in a very particular manner, and recognizing that is your only route to victory early can make all the difference.
 
@@ -47,6 +86,8 @@ You can sometimes get into races where flying threats like the above three can b
 ## Artifacts
 
 I already have a fairly extensive discussion of artifacts in my article on the white archetypes in my cube [here](https://calebgannon.com/2022/03/06/white-archetypes-in-my-powered-synergy-cube/#artifact-combo). For the most part, white artifacts tends to be the aggressive deck and blue artifacts tends to be more controlling/combo oriented. There is no hard rule that says either deck has to be one or the other though, and often the artifact decks end up being UW anyway. 
+
+- Tinker
 
 One card that is worth talking about in detail is Tinker. I think overall Tinker is probably the single most misunderstood card in my cube. In most situations we are accustomed to Tinker reading 2U: you win the game as there is usually some large artifact monster that it finds (or more recently, Bolas's Citadel). In my cube I have cut almost all of those game ending cards so there is no “oops I win” mode for tinker.
 
@@ -58,7 +99,12 @@ TLDR: Probably don’t first pick Tinker in this cube, but also don’t complete
 
 ## Intruder Alarm/Ascendancy
 
+- Intruder Alarm
+- Jeskai Ascendancy
+
 Time for some fun archetypes! Both Jeskai Ascendancy and Intruder Alarm are combo cards based on untapping your creatures. While they do play out similarly sometimes (we’ll get to that in a second), they are probably more different than they are similar. We’ll start with the unifying card though, before going through each archetype individually.
+
+- Emry, Lurker of the Loch
 
 Emry, Lurker of the Loch is perhaps one of the more important cards for either of these two archetypes. Her ability to tap and then cast a spell works perfectly with the untap effects from either card. The difference is that Intruder Alarm triggers when creatures enter, while Jeskai Ascendancy goes with noncreature cards.
 
@@ -66,19 +112,34 @@ Emry, Lurker of the Loch is perhaps one of the more important cards for either o
 
 While the main applications for Intruder Alarm are centered in green (you can read about those archetypes [here](https://calebgannon.com/2022/03/05/green-archetypes-in-my-powered-synergy-cube/#glimpse)), it has a surprising number of other uses. There are are quite a few artifacts that can be cast for a variable about of mana, which includes 0 as an option (ie. Hangarback Walker). This allows you to cast a creature spell but have it immediately go to the graveyard. When you combine that with Emry and Intruder Alarm, she will untap herself any time the creature enters so you suddenly have the ability to cast infinite spells, get infinite death triggers and artifact ETB’s as well. If that wasn’t enough, your entire team untaps each cycle, so something like Paradise Mantle can generate infinite mana.
 
+- Goblin Welder
+- Goblin Engineer
+
 Perhaps even better for this role are the welders. Not being limited to only artifacts that kill themselves, the welders can loop artifact creatures for value. Arcbound Ravager gives a modular trigger on death, Junk Diver returns an artifact to your hand, and so on. You can easily set up game ending loops where you swap two artifact creatures back and forth, but use their abilities to get back other things as well. If you use Junk Diver and Myr Retriever in a loop, you can get back two other artifacts every cycle, so Black Lotus and Monoskelion can suddenly mean lethal.
 
 Sai, Master Thopterist can take this archetype to the next level, giving you double untap triggers for each artifact you cast. You can pair him with something like Urza, Lord High Artificer for insane amounts of mana, as every artifact spell you cast will create a token, which will untap your entire team (which you can tap for mana, thanks to Urza). With an engine like this, you don’t even need the welders necessarily, although they would still be great in the deck.
 
 ### Jeskai Ascendancy
 
+- Jeskai Ascendancy
+
 Ascendancy + Emry is a much more reliable combo than Intruder Alarm was, as Ascendancy triggers from noncreature spells. This is great though because there are lot more useful 0 cost artifacts that sacrifice themselves. Black Lotus is obviously the best for this role, but Lotus Petal or even a Moxen with an artifact sacrifice outlet will work. Simply get these cards into play and you will end up with infinite mana and an infinitely large Emry (as well as any other creature on your team). 
 
 The beauty of Jeskai Ascendancy though is that there are so many other ways to utilize it besides just Emry. It is a repeatable discard outlet for something like the red discard archetype, it helps you dig through your deck in some storm lists and it also grows your entire team of creatures.
 
+- Anger
+- Lingering Souls
+- Empty the Warrens
+
 First, I think the best companion for Jeskai Ascendancy has got to be Anger. Ascendancy gives you an easy way to discard it and grow your army, all in one card! You only need a few tokens with haste to close out games with this card, so Empty the Warrens and a couple Preordain are probably enough to win.
 
+- Fatestitcher
+
 Fatestitcher is another very important card in these archetypes. As with Anger, you get to discard it for free which lets you unearth it easily. The haste from unearth lets it start tapping or untapping things right away. Most commonly, you use this card to help you to continue generating mana by untapping your lands with each spell you cast. While you are doing so, the Fatestitcher is growing bigger and bigger. Eventually you can start using it to tap down your opponent’s blockers and attack for lethal, all with one card! A few burn spells can definitely make this job easier in a 40 card deck.
+
+- Birds of Paradise
+- Earthcraft
+- Noble Hierarch
 
 Jeskai Ascendancy also plays extremely well with mana dorks. They play similar to how Fatestitcher does by tapping for mana repeatedly until you can swing with them for lethal. The biggest downside is the lack of haste. You can make up for this by using something like Earthcraft or Urza, Lord High Artificer to overcome that limitation and start generating insane amounts of mana. Token producers like Saheeli, Sublime Artificer can really help the Earthcraft-style builds go off, but are just great in the archetype in general.
 
@@ -89,6 +150,8 @@ There are so many ways to take advantage of both of these cards, what I’ve nam
 ## Storm
 
 I have already discussed Storm somewhat extensively in my articles covering the [red](https://calebgannon.com/2022/03/08/red-archetypes-in-my-powered-synergy-cube/#storm) and [black](https://calebgannon.com/2022/04/21/black-archetypes-in-my-powered-synergy-cube/#storm) archetypes in this cube. There aren’t too many surprises when it comes to blue storm in this cube compared to a normal vintage cube list. So rather than bore you with saying High Tide is one of the best storm cards ever printed for the hundredth time, I’ll present you a challenge. 
+
+- Hard Evidence
 
 Hard evidence is a spell that makes one, 0/3 Crab creature token. In this cube I would like to keep a leaderboard of Crab-related wins. This means both quantity and magnitude of crab. For example, you could use Bonus Round and other copy effects to create a swarm of crab tokens. Or you could make one crab token and grow it to insane proportions with Jeskai Ascendancy. 
 

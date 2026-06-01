@@ -6,6 +6,10 @@ I spent a lot of time working through the design of my [Powered Synergy Cube](ht
 
 ## Have Specific Goals
 
+- Pyromancers Goggles
+- Genesis Ultimatum
+- Conflux
+
 When designing anything, the single most important question you should be able to answer is “Why?” What goal are you trying to achieve in doing this? What types of gameplay are you trying to create?
 
 By starting from a fundamental design goal, you can base every decision you make on whether it will ultimately help to realize that vision in your cube. This might sound like a cliché or something that should be obviously easy to follow, but it is such an important part of the cube planning process.
@@ -24,11 +28,19 @@ Without these larger issues to focus on, I would have been lost in an endless st
 
 When I first started working on my cube (when my goals were just flat power level and fun) I figured all I had to do was screen every single new card I added to determine if it was too strong on its own or not fun. This meant I got to cut cards like T3feri, Jace, the Mind Sculptor and Bribery. Once I had cut all the obvious offenders I assumed I was finished, but oh dear was I wrong.
 
+- Narset Parter of Veils
+- Bribery
+- Emrakul, the Aeons Torn
+
 In most high-power cubes, Bribery is typically 5 mana: win the game because you can grab one of the big creatures like Emrakul, the Aeon's Torn and close the game on the spot. In my cube, Bribery is actually not good at all because I removed almost all of the expensive targets for it. So while I originally removed it for being too strong, in the final iteration of my cube the card is actually too weak. 
 
 The opposite can happen as well. In War of the Spark limited, Narset, Parter of Veils was pretty good, but not amazing. Most limited decks run a lot of creatures and her static ability didn’t come up too often. She was just a better divination for the most part, but not problematic at all. Meanwhile, in Vintage she plays out like a 3 mana Dig Through Time that also stops the opponent from drawing cards. She is so oppressive that she was restricted in that format.
 
 What I’m trying to say is: _As you make changes to your cube, the context in which the cards exist will also change_. This means that the relative characteristics of each card can shift dramatically. Cards that previously did not align with your design goal may actually be ok now, and more perniciously, cards that previously aligned with your design goal can start to cause problems.
+
+- Forked Bolt
+- Noble Hierarch
+- Birds of Paradise
 
 Adding or removing one card affects more about your cube than just that one card. The addition of cards like Forked Bolt can make 1 toughness creatures worse, in particular mana dorks. While it might be tempting to say “Forked Bolt is GREAT in this cube” because of all the smaller creatures for it to hit, you can also think about it as saying “Smaller creatures are BAD in this cube” because of effects like Forked Bolt. 
 
@@ -47,6 +59,10 @@ A few examples of cards that I had to cut from my cube because I didn’t think 
 
 ## The Fun Cards Are the Ones That Actually Get Played
 
+- Pyromancers Goggles
+- Conflux
+- Glissa the Traitor
+
 This one hurt me so much to accept, but I am so glad that I have. No matter much you try and support your pet cards and how cool these archetypes might be, if they never actually come together they are less fun than other cards that actually would see play.
 
 Glissa is a hard one for me to accept, as I love this card so much. The problem was just that her casting cost does not line up at all with the archetype she is supposed to play in. I added tons of support cards for her like Engineered Explosives and Pyrite Spellbomb, but the reality was that people would take these cards and end up in Jeskai colors (which are the major colors for artifacts in my cube) and pass Glissa every time. 
@@ -61,6 +77,9 @@ The moral of this section is: sometimes you just have to make hard cuts for the 
 
 ## Stronger is Not Always Better
 
+- Ragavan
+- Jackal Pup
+
 This is a short section but I felt it was important to mention. Often, I see people speaking of cards as “strict upgrades” for their cube. Ragavan is “strictly better” than Jackal Pup, for example. But stronger may not lead to games that are more fun. Both Ragavan and Jackal Pup are great aggressive early plays that punish slower decks, but Ragavan can snowball out of control so quickly that sometimes it can feel like the game is over after a single hit. This extreme pressure to interact quickly can completely invalidate entire strategies and lead to players feeling resentment.
 
 The fun feeling of “will the control deck be able to stabilize in time against the aggro deck” is a delicate balance, and it is entirely possible that a card like Ragavan can be too powerful to allow that tension to play out in a meaningful way like something like Jackal Pup might. Once you get hit by Ragavan and your opponent plays a 3 drop on turn 2 (potentially even from your deck) the game may have already been lost.
@@ -70,6 +89,10 @@ To attempt to balance this, I often see players sticking to the ban lists of spe
 Just because a card is legal in the format you have decided to build your cube in and is stronger than a card you currently have in your cube does not mean you have to include it. I cut Ragavan from my Vintage cube and have never once regretted that decision. Rabbit Battery is currently filling that role and I’m loving it.
 
 ## It’s Ok to Break the Rules
+
+- Blast from the Past
+- Mons’s Goblin Waiters
+- Ineffable Blessing
 
 Following up on our discussion above, it is rather common to restrict a cube to a specific constructed environment or card rarities (a pauper cube, for example would only run commons). I think overall this is a good starting point, but there are plenty of reasons to make exemptions. 
 
@@ -84,6 +107,10 @@ For me, this meant allowing myself to include silver bordered cards in my vintag
 I also broke the singleton rule to allow myself better mana. By running three sets of fetches and two sets of each dual, I am able to achieve constructed level fixing in a limited environment. It has been fantastic. While I only did this with lands, there can be times where breaking singleton on certain cards in the cube to help with consistency might be beneficial. This can be especially true when you are trying to support an archetype that doesn’t quite have enough redundant enablers. Is running two copies of Lord of Atlantis or Cursecatcher really that different than having Llanowar Elves and Elvish Mystic? 
 
 ## Calculate Card Density
+
+- Lightning Bolt
+- Chain Lightning
+- Forked Bolt
 
 This one is something that is so easy to do, but so often gets overlooked. In this section I’ll use removal as the example, but the general rule applies to anything you could want. It can be a great diagnostic tool for your cube.
 
@@ -103,6 +130,10 @@ Things get a bit more complex when talking about two-color pairings, but similar
 
 Parasitic is a term most people use to mean a card or archetype that forms a second smaller archetype that is self-referential. The analogy is in reference to how parasites feed off of their hosts. Rather than melding uniformly with the rest of the cards in your cube, these few stand on their own. They do work together, but not with your cube at large. 
 
+- Lion’s Eye Diamond
+- Yawgmoth’s Will
+- Tendrils of Agony
+
 A common example of this is the storm archetype. These three cards work really well together in the storm deck, but you aren’t often playing a card like Tendrils of Agony or Lion’s Eye Diamond in other decks. They mostly work well when they are played together.
 
 Usually this characteristic is cited as exclusively as a problem (and it definitely can be), but I think there are a lot of overlooked aspects of these cards that can be used as a design tool. I used storm as an example, but these rules apply to other parasitic mechanics like life gain, +1/+1 counters and artifacts.
@@ -121,6 +152,9 @@ In a cube with only flexible “non parasitic” cards, the relative strength of
 
 ### 2\. The decks are more likely to come together
 
+- Witch’s Oven
+- Cauldron Familiar
+
 I am running both Witch’s Oven and Cauldron Familiar in my cube. I originally just included the Oven because I was worried the cat was “too narrow” of a card for the cube, whereas the Oven is a reasonable sacrifice outlet, especially in decks that care about artifact tokens like Oni-Cult Anvil. 
 
 After a bit of thought and testing I realized the cat being narrow might actually be a useful thing. Whoever picks up Witch’s Oven is likely to want the cat far more than anyone else, allowing them to pick it up late and complete their combo. This will overall increase the chances of the Cat-Oven deck coming together, which leads to happier drafters and more fun games. Synergies based on highly competitive cards are fare less likely to happen (for example: Tinker \+ Mana Crypt).
@@ -131,9 +165,13 @@ Additionally, you need to be careful when doing this with cubes where the entire
 
 ### 3\. When supported enough, archetypes stop being parasitic
 
+- Hardened Scales
+
 Another way to work with parasitic cards or archetypes is to just support them more. In general, +1/+1 counters tends to be a parasitic archetype. Sure there are flexible cards that just happen to gain counters, but the archetype specific cards like Hardened Scales are only useful in a fully dedicated counters deck. You can’t just put this card in a random green deck.
 
 But this only holds true as long as +1/+1 counters is a minor theme within your cube. If 30% of the cards in the cube happen to interact with Hardened Scales, it is no longer a parasitic card and can be considered just a generally good option.
+
+- Young Pyromancer
 
 Think of a card like Young Pyromancer — in most cubes this is just a high value pickup and would not be considered parasitic. But that is only true because spells are so commonplace that it is easy to draft a deck where the Pyromancer does something. You can think of this like spells being an archetype that covers a large portion of the cube. If instead there were only a few instant and sorcery spells in the entire cube, Young Pyromancer would be a “parasitic” card.
 
@@ -147,11 +185,19 @@ Often times people run parasitic cards but are afraid of having too much support
 
 ## Be Wary of Secondary Enablers
 
+- Panharmonicon
+- Idol of Oblivion
+- Hardened Scales
+
 This is one of the more important lessons I have learned, and also the one I get asked the most questions about! Secondary enablers is a term I use to describe cards like the above three — they do absolutely nothing until another card enables them (they are enabled by enablers). These are really tricky cards because at first glance they look like good options to include in their respective decks. A common line of thinking goes something like: “ _Oh I’m playing a cube with a blink archetype, Panharmonicon likes enter the battlefield effects, it would be awesome in my cube_ to support the blink archetype”.
 
 Let’s break down the series of events that needs to take place for Panharmonicon to work. First, you draft a deck with a sufficient number of enter the battlefield effects (a minimum of 12 probably). Then, you take the time to spend 4 mana and cast Panharmonicon. The turn you cast it, panharmonicon does absolutely nothing. But on turn 5 you untap and reap the rewards when you play mulldrifter and get your sweet Panharmonicon trigger.
 
+- Touch of Brilliance
+
 Now I have to ask…was Panharmonicon really even good in that situation? Or to put it another way, how happy would you be putting Touch of Brilliance in your deck (let alone if you had to wait a turn and spend 5 additional mana to get your card draw). Because that’s all Panharmonicon did in our scenario.
+
+- Concentrate
 
 Even if we play two Mulldrifters and get to copy two triggers, our Panharmonicon was not much better than Concentrate. It is only really when you get three or more enter the battlefield effects where this card starts to pull ahead of other existing effects that could be handled with a single card.
 
@@ -163,6 +209,8 @@ In all of these scenarios you are likely to get as much if not more value out of
 
 I know I largely used Panharmonicon in my examples here, but that’s just because it is specifically the one I get asked about the most. The card can be lots of fun, but singleton limited is just a very difficult place to make cards like this work. I have tried time and time again to run cards like this and they all have underperformed substantially. Even when they do “work out”, the payoff was often equal or only slightly better than the effects I could have gotten from other cards without having to wait multiple turns.
 
+- Academy Manufactor
+
 I do offer a caveat, which is that these cards can make for great aspirational or fun impromptu draft challenges. I personally am running Academy Manufactor in my cube because I have found that people love to chase after making this card go crazy (although the paper cube runs a custom version of this card that triggers off of any token, not just Clue Food and Treasure). I know it is objectively less strong than other options, but I like it and it seems like others do too, so I included it. When these cards go off, they can go huge in ways that other cards do not.
 
 The difference is that in this situation I am running this card knowingly for what it is: a fun meme. It is totally fine to include cards for this purpose, but make sure they are supported enough to be enjoyable and try to keep them to a minimum.
@@ -172,6 +220,10 @@ Also, as I mentioned in the parasitic section above, this problem does not apply
 ## Conservation of Flexibility
 
 By making certain aspects of your cube more flexible, you can free up other aspects to be less flexible. For example, if you make mana fixing more abundant, players won’t have to spend picks on mana as highly and can instead use early picks on something else. 
+
+- Oni Cult Anvil
+- Scourge of Nel Toth
+- Tendrils of Agony
 
 My cube is full of strange synergy pieces, enablers and payoff cards. Many of these are must-picks for the players who are drafting those archetypes, so they have to take the cards whenever they show up. This significantly limits the flexibility players have during the drafting process to pick up other things like fixing, removal and card draw.
 
@@ -203,6 +255,8 @@ Ok that was a lot of text, but I just really wanted to encourage you that it is 
 
 The title says it all. Spotting cards that don’t fit well in your environment is just easier than identifying cards that do. This is true in both the planning and testing stages. I cannot tell you the number of times I have looked at a card and thought “wow, this would be perfect in my cube”, only to add it and see it do absolutely nothing (or sometimes actively make the cube environment worse, like Stifle that I mentioned above).
 
+- Rotting Rats
+
 I have also looked at cards that I thought were unlikely to perform at all in my cube, but after a test run realize they fit perfectly. There have been cards that I looked at dozens of times, and each time I wrote them off because they were “bad”. Rotting Rats is probably the most notable example of this. All of the effects do things that my cube is wanting to do, it has the zombie creature type and it is a cheap and re-useable effect. But for some reason, the idea that this card was fundamentally bad clouded my judgement and prevented me from adding it to my cube until only recently.
 
 The first time I saw Rotting Rats while drafting my cube I was in the mono black Zombies archetype and I was desperate for a discard outlet to support stuff like Scourge of Nel Toth and Vengevine. I snapped it up and the card played out fantastically in my deck, enabling me while also disrupting my opponent. Now it is one of the cards I am more excited to see whenever I am looking to discard or sacrifice stuff.
@@ -216,6 +270,8 @@ You can take advantage of these facts by using your time when others are draftin
 ## Sometimes Bad Cards Just Need More Support
 
 I offer this section as a bit of caution after reading the previous one. The strength or utility of cards is a function of the cube environment they are in. Often cards that underperform are doing so because they lack the proper amount of support. Birchlore Rangers is a magic card with a lot of potential. But in an environment without enough elves this card will do practically nothing.
+
+- Birchlore Rangers
 
 I had originally tested out a tiny elves package in my cube, since I was scared of adding too many “narrow” cards. During that time, all of the elves cards looked horrible— nobody played them and they went last pick frequently. Dejected, I cut the whole elves package altogether thinking these were just not cards meant for cube.
 
@@ -231,6 +287,10 @@ Quick note of caution: Don’t warp your cube too much just to make a single car
 
 No matter what your intention is with adding a card to your cube, there will often be some pre-conceived notion of what that card is supposed to do. When drafters see cards like this, they can be led astray chasing an archetype that is not supported and come away feeling cheated. It can be overwhelmingly tempting to blame the drafters for not understanding your cube properly, but ultimately it is your job as the cube designer to make it clear what your cube is supposed to be doing. 
 
+- Entomb
+- Reanimate
+- Unearth
+
 While a card like Entomb can be used in other archetypes, it is almost exclusively associated with reanimator. I have often thought it would be good in my cube to enable things like Hogaak, Crucible of Worlds and Dreadhorde Arcanist. Even if it does work to help those cards out, it can easily send the wrong signals and get picked up early from people hoping to reanimate some fatties.
 
 It can still be ok to include cards like this on occasion, especially if they are in isolation. Bigger problems arise when you have multiple cards like this pointing to an archetype that doesn’t exist.
@@ -238,6 +298,8 @@ It can still be ok to include cards like this on occasion, especially if they ar
 For example, reanimate is a pretty decent value play on its own. Getting back a creature that died earlier for a single mana can be a massive tempo swing. But the existence of that card in your cube begins to suggest a reanimator archetype. If you run Reanimate and also included Entomb to support your lands or spells package, players can easily get confused.
 
 The other side of this is also true: it can often be correct to include cards that send better signals over other ones that might technically play a bit better. Letting players know loud and clear “hey, this is an archetype” is something that provides real value to their cube experience. 
+
+- Asmoranomardicadaistinaculdacar
 
 This card might not be the best discard payoff ever created, but the fact that it can only be utilized in a discard deck and lets players know The Underworld Cookbook is also in the cube is useful. It tells players there is a serious deck that cares about discarding stuff, and gives them information about what other support options are in the cube. While it itself may or may not play a meaningful role in those decks, the message it gives players can help them make more informed decisions during the draft, leading to overall better decks.
 
