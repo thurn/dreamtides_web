@@ -19,8 +19,10 @@ export interface CardEditorGridProps {
   size: EditorDisplayState["size"];
   saveState: EditableSaveState;
   tagEditing: boolean;
+  artEditing: boolean;
   availableTags: EditorTag[];
   tagSaveState: Record<string, CardTagSaveState>;
+  onOpenArtEditor: (card: EditorCardRecord) => void;
   onFieldBeginEdit: (
     card: EditorCardRecord,
     field: EditableCardField,
@@ -52,8 +54,10 @@ export default function CardEditorGrid({
   size,
   saveState,
   tagEditing,
+  artEditing,
   availableTags,
   tagSaveState,
+  onOpenArtEditor,
   onFieldBeginEdit,
   onFieldDraftChange,
   onFieldCancel,
@@ -111,9 +115,11 @@ export default function CardEditorGrid({
             field: "rendered-text",
           })}
           tagEditing={tagEditing}
+          artEditing={artEditing}
           availableTags={availableTags}
           tagSaving={tagSaveState[card.id]?.saving ?? false}
           tagError={tagSaveState[card.id]?.error ?? null}
+          onOpenArtEditor={onOpenArtEditor}
           onFieldBeginEdit={onFieldBeginEdit}
           onFieldDraftChange={onFieldDraftChange}
           onFieldCancel={onFieldCancel}

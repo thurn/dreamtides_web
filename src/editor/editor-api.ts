@@ -3,6 +3,7 @@ import type {
   EditorTag,
   LoadEditorCardsResponse,
   LoadEditorTagsResponse,
+  SaveEditorCardArtRequest,
   SaveEditorCardFieldRequest,
   SaveEditorCardFieldResponse,
   SaveEditorCardTagsRequest,
@@ -128,6 +129,21 @@ export async function saveEditorCardField(
       "Content-Type": "application/json",
     },
     body: JSON.stringify(request),
+  });
+
+  return readJsonResponse<SaveEditorCardFieldResponse>(response);
+}
+
+export async function saveEditorCardArt(
+  request: SaveEditorCardArtRequest,
+): Promise<SaveEditorCardFieldResponse> {
+  const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id: request.id, field: "art", value: request.art }),
   });
 
   return readJsonResponse<SaveEditorCardFieldResponse>(response);

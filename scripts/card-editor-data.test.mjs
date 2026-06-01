@@ -193,6 +193,33 @@ describe("validateCardEdit", () => {
     }
   });
 
+  it("normalizes and clamps art crop values", () => {
+    expect(validateCardEdit("art", { x: 50, y: 46, scale: 1.2 })).toMatchObject({
+      ok: true,
+      value: { x: 50, y: 46, scale: 1.2 },
+    });
+    expect(validateCardEdit("art", { x: -10, y: 250, scale: 9 })).toMatchObject({
+      ok: true,
+      value: { x: 0, y: 100, scale: 5 },
+    });
+    expect(
+      validateCardEdit("art", { x: 33.333, y: 12.5, scale: 1.234 }),
+    ).toMatchObject({
+      ok: true,
+      value: { x: 33.3, y: 12.5, scale: 1.23 },
+    });
+  });
+
+  it("rejects non-numeric or malformed art crop values", () => {
+    expect(validateCardEdit("art", null).ok).toBe(false);
+    expect(validateCardEdit("art", [50, 46, 1.2]).ok).toBe(false);
+    expect(validateCardEdit("art", { x: 50, y: 46 }).ok).toBe(false);
+    expect(validateCardEdit("art", { x: "50", y: 46, scale: 1.2 }).ok).toBe(false);
+    expect(
+      validateCardEdit("art", { x: Number.NaN, y: 46, scale: 1.2 }).ok,
+    ).toBe(false);
+  });
+
   it("accepts rendered text containing TOML string delimiter markers", () => {
     expect(validateCardEdit("rendered-text", 'Before\n""" after')).toMatchObject({
       ok: true,
@@ -643,6 +670,41 @@ expression = "cards.name"
     expect(parsed.cards[0]["rendered-text"]).toBe(secondRenderedText);
     expect(secondPatched).not.toContain("stale content.");
     expect(secondPatched).toContain("fresh content.");
+  });
+
+  it("inserts an art crop table into a card that has none", () => {
+    const source = fixtureToml();
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "art",
+      value: { x: 40, y: 55, scale: 1.3 },
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0].art).toEqual({ x: 40, y: 55, scale: 1.3 });
+    expect(patched.source).toContain("art = { x = 40, y = 55, scale = 1.3 }");
+    // The unrelated block stays byte-for-byte identical.
+    expect(blockFor(patched.source, SECOND_ID)).toBe(blockFor(source, SECOND_ID));
+  });
+
+  it("replaces an existing art crop table in place", () => {
+    const source = fixtureToml();
+
+    const inserted = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "art",
+      value: { x: 40, y: 55, scale: 1.3 },
+    }).source;
+    const replaced = patchRenderedCardsToml(inserted, {
+      cardId: FIRST_ID,
+      field: "art",
+      value: { x: 60, y: 20, scale: 2 },
+    });
+    const parsed = parse(replaced.source);
+
+    expect(parsed.cards[0].art).toEqual({ x: 60, y: 20, scale: 2 });
+    expect(replaced.source).not.toContain("x = 40");
   });
 
   it("canonicalizes variable energy-cost values before writing TOML", () => {

@@ -14,6 +14,20 @@ export type CardType = "Character" | "Event";
  */
 export type Rarity = "Legendary" | "Starter" | "Special";
 
+/**
+ * Per-card art crop. `x` and `y` are CSS `object-position` percentages (0–100)
+ * controlling which part of the source image is centered, and `scale` is the
+ * `object-cover` zoom factor (1 = fill, larger = zoomed in). Authored through
+ * the card editor's art-edit mode and stored as the inline `art` table in the
+ * card TOML; absent on cards that have never been cropped, in which case
+ * `CardView` falls back to its default crop.
+ */
+export interface ArtCrop {
+  x: number;
+  y: number;
+  scale: number;
+}
+
 /** A single card record loaded from card-data.json. */
 export interface CardData {
   name: string;
@@ -35,6 +49,8 @@ export interface CardData {
   renderedText: string;
   imageNumber: number;
   artOwned: boolean;
+  /** Art crop applied to the card's image; absent cards use the default crop. */
+  art?: ArtCrop;
 }
 
 /**

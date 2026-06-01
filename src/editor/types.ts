@@ -1,4 +1,4 @@
-import type { CardData, CardType, Rarity } from "../types/cards";
+import type { ArtCrop, CardData, CardType, Rarity } from "../types/cards";
 
 export type EditableCardField =
   | "energy-cost"
@@ -6,6 +6,13 @@ export type EditableCardField =
   | "name"
   | "spark"
   | "rendered-text";
+
+/**
+ * Card fields the editor can save. Extends the inline-editable scalar fields
+ * with `art`, which is edited through the dedicated art-edit modal rather than
+ * the inline field flow, and `tags`, saved through the tag controls.
+ */
+export type SavableCardField = EditableCardField | "art" | "tags";
 
 export type EditorFieldValue = string | number;
 
@@ -80,6 +87,11 @@ export interface EditorDisplayState {
    * Inline field editing remains available regardless of this flag.
    */
   tagEditing: boolean;
+  /**
+   * When true the grid enters art-edit mode: clicking a card opens the art crop
+   * editor instead of editing inline fields.
+   */
+  artEditing: boolean;
   sort: EditorSortField;
   dir: EditorSortDirection;
   size: EditorCardSize;
@@ -101,9 +113,15 @@ export interface LoadEditorCardsResponse {
 
 export interface SaveEditorCardFieldRequest {
   id: string;
-  field: EditableCardField;
+  field: SavableCardField;
   value: unknown;
   clientRevision?: number;
+}
+
+/** Request to save a card's art crop through the art-edit modal. */
+export interface SaveEditorCardArtRequest {
+  id: string;
+  art: ArtCrop;
 }
 
 export interface EditorSaveTiming {
@@ -154,6 +172,9 @@ export interface EditorApiClient {
   loadEditorTags(signal?: AbortSignal): Promise<EditorTag[]>;
   saveEditorCardTags(
     request: SaveEditorCardTagsRequest,
+  ): Promise<SaveEditorCardFieldResponse>;
+  saveEditorCardArt(
+    request: SaveEditorCardArtRequest,
   ): Promise<SaveEditorCardFieldResponse>;
   saveEditorTagRegistry(
     request: SaveEditorTagRegistryRequest,

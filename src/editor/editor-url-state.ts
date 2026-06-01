@@ -16,6 +16,7 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   subtype: "",
   tagFilters: [],
   tagEditing: false,
+  artEditing: false,
   sort: "name",
   dir: "asc",
   size: "medium",
@@ -127,6 +128,7 @@ export function parseEditorDisplayState(
     subtype: params.get("subtype") ?? DEFAULT_EDITOR_DISPLAY_STATE.subtype,
     tagFilters: parseTagFilters(params),
     tagEditing: params.get("tagedit") === "1",
+    artEditing: params.get("artedit") === "1",
     sort: parseSort(params.get("sort")),
     dir: parseDir(params.get("dir")),
     size: parseSize(params.get("size")),
@@ -158,6 +160,9 @@ export function serializeEditorDisplayState(
   }
   if (state.tagEditing) {
     params.set("tagedit", "1");
+  }
+  if (state.artEditing) {
+    params.set("artedit", "1");
   }
   if (state.sort !== DEFAULT_EDITOR_DISPLAY_STATE.sort) {
     params.set("sort", SORT_FIELD_TO_PARAM[state.sort]);

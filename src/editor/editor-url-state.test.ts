@@ -50,6 +50,7 @@ describe("editor URL display state", () => {
       subtype: "Scout",
       tagFilters: [],
       tagEditing: false,
+      artEditing: false,
       sort: "cost",
       dir: "desc",
       size: "large",
@@ -104,6 +105,18 @@ describe("editor URL display state", () => {
     const parsed = parseEditorDisplayState(params);
     expect(parsed.tagFilters).toEqual(["Removal", "Elves"]);
     expect(parsed.tagEditing).toBe(true);
+  });
+
+  it("round-trips art-editing mode", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      artEditing: true,
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.get("artedit")).toBe("1");
+    expect(parseEditorDisplayState(params).artEditing).toBe(true);
+    expect(parseEditorDisplayState("?artedit=0").artEditing).toBe(false);
   });
 
   it("dedupes and trims tag filters and defaults tag-editing off", () => {

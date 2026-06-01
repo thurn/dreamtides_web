@@ -296,6 +296,31 @@ export default function CardEditorToolbar({
 
           <button
             type="button"
+            aria-pressed={displayState.artEditing}
+            onClick={() =>
+              updateDisplayState({ artEditing: !displayState.artEditing })
+            }
+            title="Click a card to pan and zoom its art crop"
+            style={{
+              ...inputStyle,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "7px",
+              cursor: "pointer",
+              fontWeight: 800,
+              border: displayState.artEditing
+                ? "1px solid #2d8a80"
+                : inputStyle.border,
+              background: displayState.artEditing ? "#2d8a80" : "#16242a",
+              color: displayState.artEditing ? "#ffffff" : "#d9e1dd",
+            }}
+          >
+            <span aria-hidden="true">🖼</span>
+            <span>{displayState.artEditing ? "Art mode: on" : "Art mode"}</span>
+          </button>
+
+          <button
+            type="button"
             onClick={onOpenManageTags}
             title="Create tags, set colors, and delete tags"
             style={{

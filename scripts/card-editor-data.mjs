@@ -15,7 +15,23 @@ export const EDITABLE_CARD_FIELDS = new Set([
   "spark",
   "rendered-text",
   "tags",
+  "art",
 ]);
+
+/**
+ * Default art crop applied to cards that have no authored `art` table. Mirrors
+ * `DEFAULT_ART_CROP` in `src/components/CardView.tsx`; the art-edit mode seeds
+ * its controls from here when a card has not been cropped yet.
+ */
+export const DEFAULT_ART_CROP = { x: 50, y: 46, scale: 1.17 };
+
+// Art crop bounds. `x`/`y` are object-position percentages; `scale` is the
+// object-cover zoom factor (1 keeps the image at cover size, never smaller, so
+// the frame stays fully covered).
+const ART_OFFSET_MIN = 0;
+const ART_OFFSET_MAX = 100;
+const ART_SCALE_MIN = 1;
+const ART_SCALE_MAX = 5;
 
 // Distinct, readable swatch colors handed out to tags that do not yet have an
 // explicit color in the registry sidecar. A tag's default is chosen
@@ -163,9 +179,46 @@ function validateNonNegativeIntegerOrVariable(field, rawValue, { allowBlank }) {
   return validationFailure(field, "Enter a non-negative whole number or X.", rawValue);
 }
 
+function roundTo(value, decimals) {
+  const factor = 10 ** decimals;
+  return Math.round(value * factor) / factor;
+}
+
+function clampNumber(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function validateArtCrop(field, rawValue) {
+  if (rawValue === null || typeof rawValue !== "object" || Array.isArray(rawValue)) {
+    return validationFailure(field, "Art must be an object with x, y, and scale.", rawValue);
+  }
+
+  const { x, y, scale } = rawValue;
+  if (
+    typeof x !== "number" ||
+    typeof y !== "number" ||
+    typeof scale !== "number" ||
+    !Number.isFinite(x) ||
+    !Number.isFinite(y) ||
+    !Number.isFinite(scale)
+  ) {
+    return validationFailure(field, "Art x, y, and scale must be numbers.", rawValue);
+  }
+
+  return validationSuccess(field, {
+    x: roundTo(clampNumber(x, ART_OFFSET_MIN, ART_OFFSET_MAX), 1),
+    y: roundTo(clampNumber(y, ART_OFFSET_MIN, ART_OFFSET_MAX), 1),
+    scale: roundTo(clampNumber(scale, ART_SCALE_MIN, ART_SCALE_MAX), 2),
+  });
+}
+
 export function validateCardEdit(field, rawValue) {
   if (!EDITABLE_CARD_FIELDS.has(field)) {
     return validationFailure(field, "This field is not editable.", rawValue);
+  }
+
+  if (field === "art") {
+    return validateArtCrop(field, rawValue);
   }
 
   if (field === "energy-cost") {
@@ -519,9 +572,20 @@ function tomlInlineStringArray(values) {
   return `[${values.map((entry) => tomlString(String(entry))).join(", ")}]`;
 }
 
+function tomlInlineTable(value) {
+  const parts = Object.entries(value).map(
+    ([key, entry]) => `${key} = ${tomlValue(entry)}`,
+  );
+  return `{ ${parts.join(", ")} }`;
+}
+
 function tomlValue(value) {
   if (Array.isArray(value)) {
     return tomlInlineStringArray(value);
+  }
+
+  if (value !== null && typeof value === "object") {
+    return tomlInlineTable(value);
   }
 
   if (typeof value === "number" || typeof value === "boolean") {
@@ -555,17 +619,43 @@ export function patchRenderedCardsToml(source, { cardId, field, value }) {
     throw new Error(`Card ${cardId} was not found`);
   }
 
-  const range = fieldRangeInBlock(block, field);
-  const existing = source.slice(range.start, range.end);
-  const lineEnding = existing.endsWith("\n") ? "\n" : "";
-  const replacement = `${field} = ${tomlValue(validation.value)}${lineEnding}`;
-  const patchedSource = source.slice(0, range.start) + replacement + source.slice(range.end);
+  let patchedSource;
+  if (field === "art" && topLevelFieldOffset(block.text, field) === -1) {
+    // The art crop is optional and absent on cards that have never been
+    // cropped, so add it to the card block. Every other field already exists on
+    // every card; a missing one signals a malformed record and still throws via
+    // fieldRangeInBlock below.
+    const insertAt = block.start + blockContentInsertOffset(block.text);
+    const needsLeadingNewline = insertAt > 0 && source[insertAt - 1] !== "\n";
+    const insertion = `${needsLeadingNewline ? "\n" : ""}${field} = ${tomlValue(validation.value)}\n`;
+    patchedSource = source.slice(0, insertAt) + insertion + source.slice(insertAt);
+  } else {
+    const range = fieldRangeInBlock(block, field);
+    const existing = source.slice(range.start, range.end);
+    const lineEnding = existing.endsWith("\n") ? "\n" : "";
+    const replacement = `${field} = ${tomlValue(validation.value)}${lineEnding}`;
+    patchedSource = source.slice(0, range.start) + replacement + source.slice(range.end);
+  }
 
   parse(patchedSource);
 
   return {
     source: patchedSource,
   };
+}
+
+/**
+ * Offset within a card block at which to append a brand-new field: immediately
+ * after the block's last non-blank line, so the field joins the card's existing
+ * keys instead of landing in the blank gap before the next `[[cards]]` entry.
+ */
+function blockContentInsertOffset(blockText) {
+  const contentEnd = blockText.replace(/\s+$/u, "").length;
+  if (contentEnd === 0) {
+    return blockText.length;
+  }
+  const newlineIndex = blockText.indexOf("\n", contentEnd);
+  return newlineIndex === -1 ? blockText.length : newlineIndex + 1;
 }
 
 export function refreshCardDataJson({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {

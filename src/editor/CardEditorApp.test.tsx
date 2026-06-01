@@ -72,6 +72,7 @@ function makeApiClient(
     saveEditorCardField,
     loadEditorTags: vi.fn().mockResolvedValue([]),
     saveEditorCardTags: vi.fn(),
+    saveEditorCardArt: vi.fn(),
     saveEditorTagRegistry: vi.fn(),
     ...overrides,
   };

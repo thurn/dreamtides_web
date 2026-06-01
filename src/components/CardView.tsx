@@ -19,6 +19,14 @@ import { renderRulesText } from "./RulesText";
  */
 const SELECTION_DEFAULT_COLOR = "#f97316";
 
+/**
+ * Fallback art crop for cards that carry no authored `art` setting. Mirrors the
+ * historical hardcoded framing (centered horizontally, biased slightly above
+ * center, zoomed to hide source letterboxing). The card editor's art-edit mode
+ * overrides this per card by writing an `art` table to the card TOML.
+ */
+export const DEFAULT_ART_CROP = { x: 50, y: 46, scale: 1.17 } as const;
+
 /** Card name / type / rules text colors and fonts, as CSS-var references so the
  * `.card-view` rule in `index.css` is the single place these are tuned. */
 const NAME_COLOR = "var(--cv-name-color)";
@@ -379,6 +387,8 @@ export function CardView({
   const hasTextboxContent =
     Boolean(renderedTypeLineNode) || Boolean(renderedRulesNode);
 
+  const artCrop = card.art ?? DEFAULT_ART_CROP;
+
   return (
     <div
       ref={cardRef}
@@ -419,7 +429,10 @@ export function CardView({
           src={cardImageUrl(card.imageNumber)}
           alt={card.name}
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ objectPosition: "center 46%", transform: "scale(1.17)" }}
+          style={{
+            objectPosition: `${artCrop.x}% ${artCrop.y}%`,
+            transform: `scale(${artCrop.scale})`,
+          }}
           draggable={false}
           onError={() => {
             setImageError(true);

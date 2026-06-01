@@ -26,9 +26,11 @@ export interface EditableCardProps {
   subtypeSaveEntry: EditableFieldSaveEntry | null;
   rulesTextSaveEntry: EditableFieldSaveEntry | null;
   tagEditing: boolean;
+  artEditing: boolean;
   availableTags: EditorTag[];
   tagSaving: boolean;
   tagError: string | null;
+  onOpenArtEditor: (card: EditorCardRecord) => void;
   onFieldBeginEdit: (
     card: EditorCardRecord,
     field: EditableCardField,
@@ -162,9 +164,11 @@ export default function EditableCard({
   subtypeSaveEntry,
   rulesTextSaveEntry,
   tagEditing,
+  artEditing,
   availableTags,
   tagSaving,
   tagError,
+  onOpenArtEditor,
   onFieldBeginEdit,
   onFieldDraftChange,
   onFieldCancel,
@@ -317,6 +321,40 @@ export default function EditableCard({
       );
     },
   };
+
+  if (artEditing) {
+    // Art-edit mode replaces inline field editing: the whole card is a button
+    // that opens the art crop editor. The preview reflects the card's saved art.
+    return (
+      <article
+        ref={cardRef}
+        aria-label={visibleName}
+        data-editor-card-id={card.id}
+        style={{ display: "block" }}
+      >
+        <button
+          type="button"
+          aria-label={`Edit art crop for ${visibleName}`}
+          title="Click to edit art crop"
+          onClick={() => onOpenArtEditor(card)}
+          style={{
+            display: "block",
+            width: "100%",
+            padding: 0,
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+          }}
+        >
+          <CardView
+            card={visibleCard}
+            large={size === "large"}
+            suppressHoverHelp
+          />
+        </button>
+      </article>
+    );
+  }
 
   return (
     <article

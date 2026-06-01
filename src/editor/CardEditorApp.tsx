@@ -3,6 +3,7 @@ import {
   editorTomlParam,
   loadEditorCards,
   loadEditorTags,
+  saveEditorCardArt,
   saveEditorCardField,
   saveEditorCardTags,
   saveEditorTagRegistry,
@@ -10,7 +11,10 @@ import {
 import CardEditorGrid from "./CardEditorGrid";
 import type { CardTagSaveState } from "./CardEditorGrid";
 import CardEditorToolbar from "./CardEditorToolbar";
+import ArtCropEditor from "./ArtCropEditor";
+import type { ArtSaveStatus } from "./ArtCropEditor";
 import ManageTagsModal from "./ManageTagsModal";
+import type { ArtCrop } from "../types/cards";
 import {
   parseEditorDisplayState,
   replaceEditorDisplayStateInUrl,
@@ -42,6 +46,7 @@ const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
   saveEditorCardField,
   loadEditorTags,
   saveEditorCardTags,
+  saveEditorCardArt,
   saveEditorTagRegistry,
 };
 
@@ -80,6 +85,7 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-subtype": displayState.subtype,
     "data-editor-tags": displayState.tagFilters.join(","),
     "data-editor-tag-editing": String(displayState.tagEditing),
+    "data-editor-art-editing": String(displayState.artEditing),
     "data-editor-sort": displayState.sort,
     "data-editor-dir": displayState.dir,
     "data-editor-size": displayState.size,
@@ -327,6 +333,9 @@ export default function CardEditorApp({
   const [manageTagsOpen, setManageTagsOpen] = useState(false);
   const [registrySaving, setRegistrySaving] = useState(false);
   const [registryError, setRegistryError] = useState<string | null>(null);
+  const [artEditorCardId, setArtEditorCardId] = useState<string | null>(null);
+  const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
+  const [artSaveError, setArtSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -663,6 +672,39 @@ export default function CardEditorApp({
       });
   }
 
+  function handleOpenArtEditor(card: EditorCardRecord) {
+    setArtEditorCardId(card.id);
+    setArtSaveStatus("idle");
+    setArtSaveError(null);
+  }
+
+  function handleCloseArtEditor() {
+    setArtEditorCardId(null);
+    setArtSaveStatus("idle");
+    setArtSaveError(null);
+  }
+
+  function handleArtSave(card: EditorCardRecord, art: ArtCrop) {
+    setArtSaveStatus("saving");
+    setArtSaveError(null);
+
+    void apiClient
+      .saveEditorCardArt({ id: card.id, art })
+      .then((response) => {
+        replaceConfirmedCard(response.card);
+        setArtSaveStatus("saved");
+      })
+      .catch((error: unknown) => {
+        setArtSaveStatus("error");
+        setArtSaveError(errorMessageFor(error));
+      });
+  }
+
+  const artEditorCard =
+    artEditorCardId === null
+      ? null
+      : (loadedCards.find((card) => card.id === artEditorCardId) ?? null);
+
   return (
     <main
       aria-busy={loadStatus.kind === "loading"}
@@ -759,8 +801,10 @@ export default function CardEditorApp({
                 size={displayState.size}
                 saveState={saveState}
                 tagEditing={displayState.tagEditing}
+                artEditing={displayState.artEditing}
                 availableTags={tags}
                 tagSaveState={tagSaveState}
+                onOpenArtEditor={handleOpenArtEditor}
                 onFieldBeginEdit={handleFieldBeginEdit}
                 onFieldDraftChange={handleFieldDraftChange}
                 onFieldCancel={handleFieldCancel}
@@ -806,6 +850,16 @@ export default function CardEditorApp({
           </div>
         ) : null}
       </section>
+
+      {artEditorCard !== null ? (
+        <ArtCropEditor
+          card={artEditorCard}
+          saveStatus={artSaveStatus}
+          saveError={artSaveError}
+          onSave={(art) => handleArtSave(artEditorCard, art)}
+          onClose={handleCloseArtEditor}
+        />
+      ) : null}
 
       {manageTagsOpen ? (
         <ManageTagsModal
