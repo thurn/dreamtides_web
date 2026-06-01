@@ -1713,9 +1713,7 @@ mtg-name = "Engineered Explosives"
 id = "e656cfd3-7481-46e5-934d-4dd242b00031"
 tides = []
 rendered-text = "Dissolve each character with cost X●."
-energy-cost = """
-3
-X"""
+energy-cost = "3,X"
 card-type = "Event"
 subtype = ""
 rarity = ""
@@ -3766,9 +3764,7 @@ mtg-name = "Expansion // Explosion"
 id = "4fac8060-2644-409f-806b-c6a845ef6f31"
 tides = []
 rendered-text = "Draw X cards."
-energy-cost = """
-2
-X"""
+energy-cost = "2,X"
 card-type = "Event"
 subtype = ""
 rarity = ""
@@ -3952,9 +3948,7 @@ mtg-name = "Occult Epiphany"
 id = "58f96494-87ec-4145-9e1c-95951d0ab711"
 tides = []
 rendered-text = "Draw X cards, then discard X cards. Materialize a 1✦ ethereal figment for each event discarded."
-energy-cost = """
-1
-X"""
+energy-cost = "1,X"
 card-type = "Event"
 subtype = ""
 rarity = ""
@@ -4745,9 +4739,7 @@ mtg-name = "The Meathook Massacre"
 id = "4cece464-2fde-483d-af92-04cd0341be5b"
 tides = []
 rendered-text = "Dissolve each character with X✦ or less."
-energy-cost = """
-2
-X"""
+energy-cost = "2,X"
 card-type = "Event"
 subtype = ""
 rarity = ""
@@ -5627,9 +5619,7 @@ mtg-name = "Green Sun's Zenith"
 id = "d9434b04-217c-4b37-b763-c46404d8fef9"
 tides = []
 rendered-text = "Discover a character with cost X and materialize it."
-energy-cost = """
-1
-X"""
+energy-cost = "1,X"
 card-type = "Event"
 subtype = ""
 rarity = ""
@@ -6485,9 +6475,7 @@ mtg-name = "Thieving Skydiver"
 id = "4ef8b2e7-3525-4c25-aa30-f751467f182f"
 tides = []
 rendered-text = "▸Materialized: Gain control of an enemy with cost X● or less."
-energy-cost = """
-3
-X"""
+energy-cost = "3,X"
 card-type = "Character"
 subtype = "Ancient"
 rarity = ""
@@ -7145,9 +7133,7 @@ mtg-name = "Rally the Ancestors"
 id = "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa"
 tides = []
 rendered-text = "Materialize each character with cost X● or less in your void. Banish them at end of turn."
-energy-cost = """
-1
-X"""
+energy-cost = "1,X"
 card-type = "Event"
 subtype = ""
 rarity = ""
@@ -8749,9 +8735,7 @@ mtg-name = "Finale of Promise"
 id = "69552516-14bc-42b9-b4b6-3a0cdc29686b"
 tides = []
 rendered-text = "Up to 2 events with cost X● or less in your void gain reclaim 0● until end of turn."
-energy-cost = """
-2
-X"""
+energy-cost = "2,X"
 card-type = "Event"
 subtype = ""
 rarity = ""
@@ -9403,9 +9387,7 @@ rendered-text = """
 Veil 2●
 
 When you materialize a character with cost X●, draw a card."""
-energy-cost = """
-2
-X"""
+energy-cost = "2,X"
 card-type = "Character"
 subtype = "Explorer"
 rarity = ""

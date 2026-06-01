@@ -205,6 +205,9 @@ button:disabled {
   --cv-spark-orb-size: 12cqw;
   --cv-energy-orb-top: 2.8cqw;
   --cv-energy-orb-left: 3.6cqw;
+  /* Vertical spacing between stacked orbs on a multi-cost card so the second
+   * orb tucks just below the first as it protrudes down over the art. */
+  --cv-energy-orb-gap: 1cqw;
 
   /* Top name bar geometry. */
   --cv-header-inset: 3.6cqw;

@@ -59,15 +59,84 @@ function kebabToCamel(str) {
 }
 
 /**
+ * Display label for one energy-cost segment. Variable markers (`X`, `x`, `*`)
+ * all normalize to `"X"`; a numeric segment keeps its digits.
+ */
+function energyCostSegmentLabel(segment) {
+  const trimmed = segment.trim();
+  if (trimmed === "X" || trimmed === "x" || trimmed === "*") {
+    return "X";
+  }
+  return trimmed;
+}
+
+function numericEnergySegment(segment) {
+  const trimmed = segment.trim();
+  return /^\d+$/u.test(trimmed) ? Number(trimmed) : null;
+}
+
+/**
+ * Parse a TOML `energy-cost` value into the runtime numeric cost plus the
+ * ordered orb labels for cards that carry more than one cost.
+ *
+ * A single value (number, `"X"`/`"*"`, or blank) yields `{ energyCost,
+ * energyCosts: null }`: blanks and variable markers become `null` (rendered as
+ * a single `X` orb) and numbers are preserved. A comma- or newline-separated
+ * value such as `"2,X"` is a multi-cost card: `energyCosts` holds the ordered
+ * orb labels (`["2", "X"]`) and `energyCost` takes the first numeric segment as
+ * the base cost (`2`), or `null` when no segment is numeric.
+ */
+export function parseEnergyCost(value) {
+  if (typeof value === "number") {
+    return { energyCost: value, energyCosts: null };
+  }
+  if (typeof value !== "string") {
+    return { energyCost: null, energyCosts: null };
+  }
+
+  const segments = value
+    .split(/[,\n]/u)
+    .map((segment) => segment.trim())
+    .filter((segment) => segment !== "");
+
+  if (segments.length === 0) {
+    return { energyCost: null, energyCosts: null };
+  }
+
+  if (segments.length === 1) {
+    return { energyCost: numericEnergySegment(segments[0]), energyCosts: null };
+  }
+
+  let base = null;
+  for (const segment of segments) {
+    const numeric = numericEnergySegment(segment);
+    if (numeric !== null) {
+      base = numeric;
+      break;
+    }
+  }
+
+  return { energyCost: base, energyCosts: segments.map(energyCostSegmentLabel) };
+}
+
+/**
  * Convert a TOML card record to its JSON representation with camelCase keys.
  * Spark normalization: "" or missing becomes null; "*" (variable spark)
- * becomes null; integer values are preserved.
+ * becomes null; integer values are preserved. Energy cost is parsed by
+ * `parseEnergyCost`: multi-cost cards (e.g. `"2,X"`) additionally emit an
+ * `energyCosts` array of orb labels.
  */
 export function transformCard(card) {
   const result = {};
   for (const [key, value] of Object.entries(card)) {
     const camelKey = kebabToCamel(key);
-    if (camelKey === "spark" || camelKey === "energyCost") {
+    if (camelKey === "energyCost") {
+      const parsed = parseEnergyCost(value);
+      result.energyCost = parsed.energyCost;
+      if (parsed.energyCosts !== null) {
+        result.energyCosts = parsed.energyCosts;
+      }
+    } else if (camelKey === "spark") {
       result[camelKey] = value === "" || value === "*" ? null : value;
     } else {
       result[camelKey] = value;

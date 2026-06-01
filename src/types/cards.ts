@@ -45,6 +45,14 @@ export interface CardData {
    */
   rarity?: Rarity;
   energyCost: number | null;
+  /**
+   * Ordered orb labels for a card that has more than one energy cost, sourced
+   * from a comma-separated TOML `energy-cost` such as `"2,X"` (which yields
+   * `["2", "X"]`). `CardView` renders one energy orb per label in a vertical
+   * column. Absent on the common single-cost card, where the single orb is
+   * derived from `energyCost` (or `X` when it is `null`).
+   */
+  energyCosts?: string[];
   spark: number | null;
   isFast: boolean;
   reclaimCost?: number | null;

@@ -239,6 +239,40 @@ describe("CardDisplay", () => {
     });
   });
 
+  it("stacks one energy orb per cost for a multi-cost card", () => {
+    const { container, root } = mount(
+      <CardDisplay
+        card={makeCard({ energyCost: 2, energyCosts: ["2", "X"] })}
+      />,
+    );
+
+    const energyOrbs = container.querySelectorAll<HTMLElement>(
+      "[data-card-stat=\"energy\"]",
+    );
+    expect(energyOrbs.length).toBe(2);
+    expect([...energyOrbs].map((orb) => orb.textContent)).toEqual(["2", "X"]);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders a single orb when a multi-cost array has only one entry", () => {
+    const { container, root } = mount(
+      <CardDisplay card={makeCard({ energyCost: 5, energyCosts: ["5"] })} />,
+    );
+
+    const energyOrbs = container.querySelectorAll<HTMLElement>(
+      "[data-card-stat=\"energy\"]",
+    );
+    expect(energyOrbs.length).toBe(1);
+    expect(energyOrbs[0]?.textContent).toBe("5");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders inline energy symbols in rules text as flame icons", () => {
     const { container, root } = mount(
       <CardDisplay

@@ -399,15 +399,40 @@ export function CardView({
     typeLine,
   };
 
-  const energyNode = (
+  // Multi-cost cards (e.g. an "X" spell with a fixed base, stored as `"2,X"`)
+  // stack one orb per cost in a vertical column; the common single-cost card
+  // shows one orb derived from `energyCost`.
+  const stackedEnergyCosts =
+    card.energyCosts !== undefined && card.energyCosts.length > 1
+      ? card.energyCosts
+      : null;
+  const energyOrb = (label: string, key?: string) => (
     <CardStatOrb
+      key={key}
       variant="energy"
-      value={card.energyCost !== null ? String(card.energyCost) : "X"}
+      value={label}
       sizeVar="var(--cv-energy-orb-size)"
       numberCapPx={energyOrbCapPx}
       tooltip={suppressHoverHelp ? undefined : ENERGY_PIP_TOOLTIP}
     />
   );
+  const energyNode =
+    stackedEnergyCosts !== null ? (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "var(--cv-energy-orb-gap)",
+        }}
+      >
+        {stackedEnergyCosts.map((label, index) =>
+          energyOrb(label, `${label}-${String(index)}`),
+        )}
+      </div>
+    ) : (
+      energyOrb(card.energyCost !== null ? String(card.energyCost) : "X")
+    );
 
   const nameNode = (
     <div

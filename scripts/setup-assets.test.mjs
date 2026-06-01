@@ -10,7 +10,12 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { imageHash, setupAssets } from "./setup-assets.mjs";
+import {
+  imageHash,
+  parseEnergyCost,
+  setupAssets,
+  transformCard,
+} from "./setup-assets.mjs";
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -374,5 +379,64 @@ rendered-text = ""
     const byNumber = new Map(cards.map((c) => [c.cardNumber, c]));
     expect(byNumber.get(401)?.rarity).toBe("Legendary");
     expect(byNumber.get(402)?.rarity).toBe(undefined);
+  });
+});
+
+describe("parseEnergyCost", () => {
+  it("preserves a numeric single cost without orb labels", () => {
+    expect(parseEnergyCost(3)).toEqual({ energyCost: 3, energyCosts: null });
+  });
+
+  it("treats blank and variable single values as a null cost", () => {
+    expect(parseEnergyCost("")).toEqual({ energyCost: null, energyCosts: null });
+    expect(parseEnergyCost("*")).toEqual({ energyCost: null, energyCosts: null });
+    expect(parseEnergyCost("X")).toEqual({ energyCost: null, energyCosts: null });
+  });
+
+  it("splits a comma-separated multi-cost into orb labels and a base cost", () => {
+    expect(parseEnergyCost("2,X")).toEqual({
+      energyCost: 2,
+      energyCosts: ["2", "X"],
+    });
+  });
+
+  it("accepts the legacy newline-separated multi-cost form", () => {
+    expect(parseEnergyCost("3\nX")).toEqual({
+      energyCost: 3,
+      energyCosts: ["3", "X"],
+    });
+  });
+
+  it("uses the first numeric segment as the base cost", () => {
+    expect(parseEnergyCost("X,2")).toEqual({
+      energyCost: 2,
+      energyCosts: ["X", "2"],
+    });
+  });
+});
+
+describe("transformCard energy cost", () => {
+  const base = {
+    name: "Multi Cost",
+    id: "multi-cost",
+    "card-number": 1,
+    "card-type": "Event",
+    "is-fast": false,
+    tides: [],
+    "rendered-text": "",
+    "image-number": 1,
+    "art-owned": false,
+  };
+
+  it("emits an energyCosts array for a multi-cost card", () => {
+    const result = transformCard({ ...base, "energy-cost": "2,X" });
+    expect(result.energyCost).toBe(2);
+    expect(result.energyCosts).toEqual(["2", "X"]);
+  });
+
+  it("omits energyCosts for a single-cost card", () => {
+    const result = transformCard({ ...base, "energy-cost": 4 });
+    expect(result.energyCost).toBe(4);
+    expect("energyCosts" in result).toBe(false);
   });
 });

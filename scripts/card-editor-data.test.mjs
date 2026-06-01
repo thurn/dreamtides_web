@@ -151,13 +151,34 @@ describe("validateCardEdit", () => {
     expect(validateCardEdit("energy-cost", "*")).toMatchObject({ ok: true, value: "*" });
   });
 
-  it("rejects negative, fractional, and non-numeric energy costs", () => {
+  it("accepts and canonicalizes comma-separated multi-costs", () => {
+    expect(validateCardEdit("energy-cost", "2,X")).toMatchObject({
+      ok: true,
+      value: "2,X",
+    });
+    expect(validateCardEdit("energy-cost", " 3 , x ")).toMatchObject({
+      ok: true,
+      value: "3,X",
+    });
+    expect(validateCardEdit("energy-cost", "1,*")).toMatchObject({
+      ok: true,
+      value: "1,X",
+    });
+  });
+
+  it("rejects negative, fractional, non-numeric, and malformed multi-costs", () => {
     expect(validateCardEdit("energy-cost", "-1").ok).toBe(false);
     expect(validateCardEdit("energy-cost", "1.5").ok).toBe(false);
     expect(validateCardEdit("energy-cost", "abc").ok).toBe(false);
     expect(validateCardEdit("energy-cost", "x").ok).toBe(false);
     expect(validateCardEdit("energy-cost", [1]).ok).toBe(false);
     expect(validateCardEdit("energy-cost", null).ok).toBe(false);
+    expect(validateCardEdit("energy-cost", "2,").ok).toBe(false);
+    expect(validateCardEdit("energy-cost", "2,abc").ok).toBe(false);
+  });
+
+  it("does not treat a comma-bearing spark value as a multi-cost", () => {
+    expect(validateCardEdit("spark", "2,X").ok).toBe(false);
   });
 
   it("accepts non-negative integer, variable, and blank spark values", () => {

@@ -152,7 +152,11 @@ function validationSuccess(field, value) {
   };
 }
 
-function validateNonNegativeIntegerOrVariable(field, rawValue, { allowBlank }) {
+function validateNonNegativeIntegerOrVariable(
+  field,
+  rawValue,
+  { allowBlank, allowMultiple = false },
+) {
   if (typeof rawValue !== "number" && typeof rawValue !== "string") {
     return validationFailure(field, "Enter a non-negative whole number or X.", rawValue);
   }
@@ -161,6 +165,30 @@ function validateNonNegativeIntegerOrVariable(field, rawValue, { allowBlank }) {
 
   if (allowBlank && value === "") {
     return validationSuccess(field, "");
+  }
+
+  // Multi-cost: comma-separated segments such as "2,X". Each segment is a
+  // non-negative integer or the variable marker X, canonicalized to "2,X".
+  if (allowMultiple && typeof value === "string" && value.includes(",")) {
+    const segments = value.split(",").map((segment) => segment.trim());
+    if (segments.length < 2 || segments.some((segment) => segment === "")) {
+      return validationFailure(field, "Enter costs separated by commas, e.g. 2,X.", rawValue);
+    }
+    const canonical = [];
+    for (const segment of segments) {
+      if (segment === "X" || segment === "x" || segment === "*") {
+        canonical.push("X");
+      } else if (/^\d+$/u.test(segment)) {
+        canonical.push(segment);
+      } else {
+        return validationFailure(
+          field,
+          "Each cost must be a non-negative whole number or X.",
+          rawValue,
+        );
+      }
+    }
+    return validationSuccess(field, canonical.join(","));
   }
 
   if (typeof value === "string" && (value === "X" || value === "*")) {
@@ -224,7 +252,10 @@ export function validateCardEdit(field, rawValue) {
   }
 
   if (field === "energy-cost") {
-    return validateNonNegativeIntegerOrVariable(field, rawValue, { allowBlank: false });
+    return validateNonNegativeIntegerOrVariable(field, rawValue, {
+      allowBlank: false,
+      allowMultiple: true,
+    });
   }
 
   if (field === "spark") {

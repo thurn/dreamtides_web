@@ -78,6 +78,44 @@ function numericPreviewValue(
   return null;
 }
 
+function energyCostSegmentLabel(segment: string): string {
+  const trimmed = segment.trim();
+  return trimmed === "*" || trimmed === "X" || trimmed === "x" ? "X" : trimmed;
+}
+
+/**
+ * Mirror of the setup-assets `parseEnergyCost` transform for the editor's live
+ * preview: turn the raw `energy-cost` draft value into the numeric base cost
+ * plus the ordered orb labels of a multi-cost card (`"2,X"` -> `["2", "X"]`).
+ * Single values yield `energyCosts: null` so the preview falls back to the one
+ * derived orb.
+ */
+function energyPreviewValue(value: EditableFieldValue): {
+  energyCost: number | null;
+  energyCosts: string[] | null;
+} {
+  const segments = String(value)
+    .split(/[,\n]/u)
+    .map((segment) => segment.trim())
+    .filter((segment) => segment !== "");
+
+  if (segments.length <= 1) {
+    return {
+      energyCost: numericPreviewValue(value, { allowBlank: false }),
+      energyCosts: null,
+    };
+  }
+
+  const base = segments
+    .map((segment) => numericPreviewValue(segment, { allowBlank: false }))
+    .find((numeric) => numeric !== null);
+
+  return {
+    energyCost: base ?? null,
+    energyCosts: segments.map(energyCostSegmentLabel),
+  };
+}
+
 /**
  * Editor-only hover tooltip showing the card's source Magic: The Gathering
  * name. Rendered with `position: fixed` and anchored to the owning card so it
@@ -183,9 +221,8 @@ export default function EditableCard({
   const mtgName = card.mtgName.trim();
 
   const visibleName = String(nameSaveEntry?.draftValue ?? card.name);
-  const visibleEnergyCost = numericPreviewValue(
+  const visibleEnergy = energyPreviewValue(
     energySaveEntry?.draftValue ?? card["energy-cost"],
-    { allowBlank: false },
   );
   const visibleSpark = numericPreviewValue(
     sparkSaveEntry?.draftValue ?? card.spark,
@@ -197,7 +234,8 @@ export default function EditableCard({
   );
   const visibleCard = {
     ...card.preview,
-    energyCost: visibleEnergyCost,
+    energyCost: visibleEnergy.energyCost,
+    energyCosts: visibleEnergy.energyCosts ?? undefined,
     name: visibleName,
     renderedText: visibleRulesText,
     spark: visibleSpark,
