@@ -325,7 +325,7 @@ name = "Moonlit Dancer"
 mtg-name = "Jeskai Ascendancy"
 id = "34ef6c0c-1a23-4870-a52c-90d34e9769be"
 tides = []
-rendered-text = "When you play an event, allied characters gain +1✦ this turn."
+rendered-text = "When you play an event, allied characters gain +1✦ until end of turn."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -1388,7 +1388,7 @@ name = "Salvage Engine"
 mtg-name = "Oona's Prowler"
 id = "5a747998-7219-4e23-be42-b8cb3be12348"
 tides = []
-rendered-text = "Discard a card: This character has +2✦ this turn."
+rendered-text = "Discard a card: This character gains +2✦ until end of turn."
 energy-cost = 2
 card-type = "Character"
 subtype = "Tinkerer"
@@ -1790,7 +1790,7 @@ tides = []
 rendered-text = """
 ☪, Discard an event: Draw an event.
 
-This character gets +1✦ for each event in your void."""
+This character has +1✦ for each event in your void."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Musician"
@@ -1827,12 +1827,9 @@ mtg-name = "Prismari Command"
 id = "e3431bd0-5a81-497f-9ec9-18275b568c00"
 tides = []
 rendered-text = '''
-Choose One:
-
+Choose one:
 - Dissolve an enemy with 2✦ or less.
-
 - Draw 2 cards, then discard 2 cards.
-
 - Return a character with cost 2● or less from your void to hand.'''
 energy-cost = 3
 card-type = "Event"
@@ -2427,7 +2424,7 @@ tides = []
 rendered-text = """
 ▸Materialized: Return another ally to hand. Move this character to that ally’s position.
 
-When an allied outsider scores ⍟, foresee 1, then draw a card. """
+When an allied outsider scores ⍟, foresee 1, then draw a card."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Outsider"
@@ -2506,9 +2503,9 @@ mtg-name = "Banefire"
 id = "1c8e6736-13d6-42d1-8668-46f422fec11e"
 tides = []
 rendered-text = """
-Choose One:
+Choose one:
 - Gain X⍟.
-- Dissolve an enemy with X✦"""
+- Dissolve an enemy with X✦."""
 energy-cost = "X"
 card-type = "Event"
 subtype = ""
@@ -2686,7 +2683,7 @@ name = "Frostbound Defiant"
 mtg-name = "Ignoble Hierarch"
 id = "98f16d26-be71-49ad-9034-5fafb5d3f053"
 tides = []
-rendered-text = "▸Night: If you have only one challenger, that character gets +3✦."
+rendered-text = "▸Night: If you have only one challenger, give that character +3✦."
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
@@ -3292,7 +3289,7 @@ name = "Fathomscourge"
 mtg-name = "Oni-Cult Anvil"
 id = "f0a70e7d-46af-4d32-92cc-9d510e97a07e"
 tides = []
-rendered-text = "Once per turn, when an allied warrior is dissolved, create a 1✦ warrior figment."
+rendered-text = "Once per turn, when an allied warrior is dissolved, materialize a 1✦ warrior figment."
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -3481,7 +3478,7 @@ name = "Spiritbound Alpha"
 mtg-name = "Elvish Warmaster"
 id = "a75c22ac-e343-4757-964e-a0bb981b5a28"
 tides = []
-rendered-text = "❖ – 5●: Allied spirit animals gain +3✦ and vengeful this turn."
+rendered-text = "❖ – 5●: Allied spirit animals gain +3✦ and vengeful until end of turn."
 energy-cost = 3
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -3870,7 +3867,7 @@ name = "Ride of the Vanguard"
 mtg-name = "Michiko's Reign of Truth // Portrait of Michiko"
 id = "d6e8842f-c0a4-4b4c-93bd-377cfae60894"
 tides = []
-rendered-text = "❖ – ☪: An ally gets +1✦ for each allied warrior until end of turn."
+rendered-text = "❖ – ☪: Give an ally +1✦ for each allied warrior until end of turn."
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -4139,7 +4136,7 @@ name = "Colossal Convergence"
 mtg-name = "Arcbound Ravager"
 id = "82749215-ed35-44e3-a745-72ca76036c7c"
 tides = []
-rendered-text = "❖❖ – ☪, Abandon a character: An allied character gains +X✦ where X is the abandoned character's ✦."
+rendered-text = "❖❖ – ☪, Abandon a character: Give an ally +X✦ where X is the abandoned character's ✦."
 energy-cost = 4
 card-type = "Character"
 subtype = "Warrior"
@@ -4623,7 +4620,7 @@ mtg-name = "Kaito Shizuki"
 id = "8e003d04-e489-4c55-9c72-fc5612909d07"
 tides = []
 rendered-text = """
-3●, ☪: Create a 1✦ outsider figment.
+3●, ☪: Materialize a 1✦ outsider figment.
 
 When an allied outsider scores ⍟, draw a card and gain ⍟ equal to its ● cost."""
 energy-cost = 3
@@ -4754,7 +4751,7 @@ name = "Mystic Runefish"
 mtg-name = "Allosaurus Shepherd"
 id = "edb479be-68a5-45bc-bd19-2602156edb57"
 tides = []
-rendered-text = "☪, 5●: Each allied spirit animal's ✦ becomes 7."
+rendered-text = "5●, ☪: Each allied spirit animal's ✦ becomes 7."
 energy-cost = 2
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -4967,7 +4964,7 @@ name = "Twilight Troubadour"
 mtg-name = "Saheeli, Sublime Artificer"
 id = "174a5909-48e2-4aab-8cc5-fa3292281d1d"
 tides = []
-rendered-text = "When you play an event, create a 1✦ warrior figment."
+rendered-text = "When you play an event, materialize a 1✦ warrior figment."
 energy-cost = 2
 card-type = "Character"
 subtype = "Musician"
@@ -4985,7 +4982,7 @@ name = "Simulacra"
 mtg-name = "Saheeli, Sublime Artificer"
 id = "ccff822e-e2ae-4d38-9720-6df289dbe4cd"
 tides = []
-rendered-text = "2●, ☪: Create a figment copy of an ally until end of turn."
+rendered-text = "2●, ☪: Materialize a figment copy of an ally until end of turn."
 energy-cost = 3
 card-type = "Character"
 subtype = "Synth"
@@ -5575,7 +5572,7 @@ mtg-name = "Emry, Lurker of the Loch"
 id = "cd3d8e4a-618e-4c2f-be60-0363b81887f1"
 tides = []
 rendered-text = """
-▸Materialized: Erode 4
+▸Materialized: Erode 4.
 
 ☪: You may play an event from your void."""
 energy-cost = 2
@@ -6372,8 +6369,8 @@ id = "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f"
 tides = []
 rendered-text = """
 1●, Abandon this character: Choose one:
-- Gain 2⍟
-- Draw a card"""
+- Gain 2⍟.
+- Draw a card."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -6631,7 +6628,7 @@ name = "Ember Shepherd"
 mtg-name = "Sylvan Safekeeper"
 id = "bd43b120-2503-406c-8b72-ea3dc55198a0"
 tides = []
-rendered-text = "❖❖ – Abandon another character: An allied character cannot be targeted by effects this turn."
+rendered-text = "❖❖ – Abandon another character: An ally cannot be targeted by effects this turn."
 energy-cost = 1
 card-type = "Character"
 subtype = "Visitor"
@@ -7652,7 +7649,7 @@ mtg-name = "Aftermath Analyst"
 id = "d8c90a33-a581-469a-9fd3-9a80d1cc5315"
 tides = []
 rendered-text = """
-▸Materialized: Erode 3
+▸Materialized: Erode 3.
 
 5●, ☪, Abandon this character: Return all characters with cost 2● or less from your void to play."""
 energy-cost = 3
@@ -7829,7 +7826,7 @@ name = "Flamestride Rider"
 mtg-name = "Losheel, Clockwork Scholar"
 id = "f07dfe42-566c-4e91-a250-9e2781e9d06f"
 tides = []
-rendered-text = "Allied warriors cannot be dissolved while challenging"
+rendered-text = "Allied warriors cannot be dissolved while challenging."
 energy-cost = 4
 card-type = "Character"
 subtype = "Warrior"
@@ -7945,8 +7942,8 @@ id = "01d53e49-7833-4122-a970-b72c73ad2c28"
 tides = []
 rendered-text = """
 Look at the top 4 cards of your deck. Choose one:
-- Draw one of the cards.
-- Draw two of the cards. They gain ephemeral."""
+- Draw 1 of the cards.
+- Draw 2 of the cards. They gain ephemeral."""
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -7986,7 +7983,7 @@ mtg-name = "Goblin Engineer"
 id = "81074582-dfb3-497c-8c04-f97a24d6b1d4"
 tides = []
 rendered-text = """
-▸Materialized: Erode 3
+▸Materialized: Erode 3.
 
 ☪, Abandon a warrior: Materialize a warrior with cost 2● or less from your void."""
 energy-cost = 2
@@ -8276,7 +8273,7 @@ tides = []
 rendered-text = """
 Materialize two 1✦ ethereal figments.
 
-Reclaim 2● """
+Reclaim 2●"""
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -8295,7 +8292,7 @@ mtg-name = "Joraga Treespeaker"
 id = "691883df-63d8-4664-a1fe-d5f3b5becd11"
 tides = []
 rendered-text = """
-2●, ☪: Store 1⧗
+2●, ☪: Store 1⧗.
 
 ▸Dawn: Gain 1● for each stored ⧗."""
 energy-cost = 1
@@ -9245,7 +9242,7 @@ tides = []
 rendered-text = """
 Abandon a character: Store 1⧗.
 
-2●, 2⧗: Materialize two 1✦ warrior figments"""
+2●, 2⧗: Materialize two 1✦ warrior figments."""
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -9672,7 +9669,7 @@ name = "Stoneborn Leviathan"
 mtg-name = "Sylvan Emissary"
 id = "07ceb104-0b27-473a-bc72-e6225479ed83"
 tides = []
-rendered-text = "1●, Return an ally to hand: An ally gains +1✦."
+rendered-text = "1●, Return an ally to hand: Give an ally +1✦."
 energy-cost = 2
 card-type = "Character"
 subtype = "Spirit Animal"
