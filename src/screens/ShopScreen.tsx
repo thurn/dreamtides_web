@@ -12,6 +12,7 @@ import {
   HoverPopover,
 } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
+import { CARD_ASPECT_RATIO } from "../components/card-aspect";
 import { SIZE_PRESETS } from "../components/card-size";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
@@ -297,7 +298,7 @@ function ShopSlotCard({
       <div
         className="rounded-lg opacity-20"
         style={{
-          aspectRatio: "2 / 3",
+          aspectRatio: CARD_ASPECT_RATIO,
           background:
             "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
           border: "1px dashed rgba(107, 114, 128, 0.15)",
@@ -326,7 +327,7 @@ function ShopSlotCard({
         <div
           className="flex flex-col items-center justify-center gap-2 rounded-lg p-3"
           style={{
-            aspectRatio: "2 / 3",
+            aspectRatio: CARD_ASPECT_RATIO,
             background:
               "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
             ...baneStyling,

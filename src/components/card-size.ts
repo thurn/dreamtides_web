@@ -2,16 +2,9 @@ export type CardSizePreset = "small" | "medium" | "large";
 
 const CARD_SIZE_STORAGE_KEY = "quest-prototype-card-size";
 
-/**
- * Width of a single card in the quest draft offer: the smaller of half the
- * container width (two cards across) and a third of the available viewport
- * height (two 2:3 rows tall). The card editor's "large" preset tiles cards at
- * this same width so editor previews match the size players see while
- * drafting. Both surfaces resolve `100cqw` against an `inline-size` container,
- * so the value tracks the surface width.
- */
-export const DRAFT_OFFER_CARD_WIDTH =
-  "min(calc((100cqw - 16px) / 2), calc((100vh - 48px - 80px) / 3))";
+import { DRAFT_OFFER_CARD_WIDTH } from "./card-aspect";
+
+export { DRAFT_OFFER_CARD_WIDTH };
 
 export const SIZE_PRESETS: Readonly<
   Record<CardSizePreset, { columns: string; gap: string; label: string }>

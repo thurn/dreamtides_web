@@ -781,11 +781,11 @@ describe("DraftSiteScreen", () => {
 
     // Each offer card wrapper sizes itself from the smaller of half the
     // draft-area width and one third of (viewport - HUD - header chrome),
-    // preserving the 2:3 card ratio while keeping both rows and columns in
+    // preserving the 5:7 card ratio while keeping both rows and columns in
     // view beside the deck rail.
     const offerWrappers = Array.from(screen.querySelectorAll("div")).filter(
       (element) =>
-        element.style.aspectRatio === "2 / 3"
+        element.style.aspectRatio === "5 / 7"
         && element.style.getPropertyValue("--draft-offer-card-width").startsWith("min("),
     );
     expect(offerWrappers).toHaveLength(4);
@@ -797,7 +797,7 @@ describe("DraftSiteScreen", () => {
       expect(width).toContain("48px");
       expect(width).toContain("80px");
       expect(width).toMatch(/\/\s*2/);
-      expect(width).toMatch(/\/\s*3/);
+      expect(width).toMatch(/\*\s*5\s*\/\s*14/);
     }
 
     act(() => {

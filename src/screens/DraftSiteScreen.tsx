@@ -25,6 +25,7 @@ import {
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
 import { cardImageUrl } from "../data/card-database";
+import { CARD_ASPECT_RATIO } from "../components/card-aspect";
 import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { logEvent } from "../logging";
 
@@ -39,7 +40,7 @@ type PickPhase = "idle" | "animating" | "waiting";
 
 const DRAFT_OFFER_CARD_STYLE = {
   "--draft-offer-card-width": DRAFT_OFFER_CARD_WIDTH,
-  aspectRatio: "2 / 3",
+  aspectRatio: CARD_ASPECT_RATIO,
 } as CSSProperties & Record<"--draft-offer-card-width", string>;
 
 interface RectSnapshot {

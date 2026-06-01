@@ -6,6 +6,7 @@ import {
   cardImageUrl,
   hasAssignedImage,
 } from "../data/card-database";
+import { CARD_ASPECT_RATIO, CARD_CORNER_RADIUS } from "./card-aspect";
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { CardStatOrb } from "./CardStatOrb";
@@ -386,10 +387,11 @@ export function CardView({
       data-rarity={rarityAttr}
       data-card-type={card.cardType}
       style={{
-        aspectRatio: "2 / 3",
+        aspectRatio: CARD_ASPECT_RATIO,
+        "--cv-radius": CARD_CORNER_RADIUS,
         borderRadius: "var(--cv-radius)",
         boxShadow: shadowLayers.join(", "),
-      }}
+      } as CSSProperties}
       onClick={onClick}
       {...(isInteractive
         ? {

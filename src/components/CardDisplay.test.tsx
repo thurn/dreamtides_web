@@ -88,7 +88,7 @@ describe("CardDisplay", () => {
       throw new Error("Missing card root");
     }
 
-    expect(cardRoot.style.aspectRatio).toBe("2 / 3");
+    expect(cardRoot.style.aspectRatio).toBe("5 / 7");
     expect(cardRoot.getAttribute("data-card-text-scale")).toBe("1.00");
 
     act(() => {

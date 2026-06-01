@@ -183,13 +183,15 @@ button:disabled {
 
   /* Card + text box corner radii (18px / 13px at the 500px design width).
    * The card-level radius is a percentage so it resolves against the card's own
-   * 2:3 box: 3.6% of the width equals 2.4% of the height, giving a uniform
-   * ~3.6%-of-width corner at every rendered size. A `cqw` value here would
-   * resolve against an ancestor container (or the viewport) rather than the
-   * card itself and blow the corner up on wide layouts. The text-box radius
-   * stays `cqw` because the box is a descendant of the card container, where
-   * `cqw` resolves against the card width as intended. */
-  --cv-radius: 3.6% / 2.4%;
+   * box, giving a uniform ~3.6%-of-width corner at every rendered size. A `cqw`
+   * value here would resolve against an ancestor container (or the viewport)
+   * rather than the card itself and blow the corner up on wide layouts. CardView
+   * sets `--cv-radius` inline from `card-aspect.ts` so the vertical component
+   * tracks the chosen aspect ratio; this declaration is the default for any card
+   * chrome rendered outside CardView. The text-box radius stays `cqw` because
+   * the box is a descendant of the card container, where `cqw` resolves against
+   * the card width as intended. */
+  --cv-radius: 3.6% / 2.57%;
   --cv-textbox-radius: 2.6cqw;
 
   /* Energy cost orb (floats over the name bar's left end, protruding above and
