@@ -8,9 +8,7 @@ that the same effect is always written the same way. Mechanics terms used here
 keyword *does*; this guide governs how that text is *formatted*.
 
 When a choice was open, the resolution adopted below is the one to follow even
-where existing cards still differ. The companion audit
-`docs/cards2/templating_consistency.md` lists the specific cards that depart from
-these rules.
+where existing cards still differ.
 
 ---
 
