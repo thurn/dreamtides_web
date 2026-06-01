@@ -7,8 +7,9 @@ import {
   hasAssignedImage,
 } from "../data/card-database";
 import {
+  ART_EXTENSION_FRACTION,
+  ART_REGION_ASPECT_RATIO_VALUE,
   CARD_ASPECT_RATIO,
-  CARD_ASPECT_RATIO_VALUE,
   CARD_CORNER_RADIUS,
 } from "./card-aspect";
 import { formatTypeLine } from "./card-text";
@@ -35,15 +36,17 @@ export const DEFAULT_ART_CROP = { x: 0, y: 0, scale: 1.17 } as const;
 
 /**
  * Resolve an art crop against the source image's aspect ratio into CSS for the
- * full-bleed art image. The image is sized to cover the frame at `scale` 1 and
- * grown by the zoom; the normalized pan (-1..1) is mapped to a translate within
- * the overflow that covering and zooming create, so the frame stays fully
- * covered for any pan in range. `imageAspect` is null until the image loads, in
- * which case a centered cover fallback is used.
+ * art image. The image is sized to cover its frame at `scale` 1 and grown by the
+ * zoom; the normalized pan (-1..1) is mapped to a translate within the overflow
+ * that covering and zooming create, so the frame stays fully covered for any pan
+ * in range. `imageAspect` is null until the image loads, in which case a
+ * centered cover fallback is used. `frameAspect` is the width-to-height ratio of
+ * the box being covered (the art region, not the whole card).
  */
 function artImageStyle(
   art: { x: number; y: number; scale: number },
   imageAspect: number | null,
+  frameAspect: number,
 ): CSSProperties {
   if (imageAspect === null) {
     return {
@@ -58,7 +61,7 @@ function artImageStyle(
 
   // ratio > 1 means the image is wider than the frame (its sides are cropped by
   // covering); ratio < 1 means it is taller (its top/bottom are cropped).
-  const ratio = imageAspect / CARD_ASPECT_RATIO_VALUE;
+  const ratio = imageAspect / frameAspect;
   const coverW = ratio >= 1 ? ratio : 1;
   const coverH = ratio >= 1 ? 1 : 1 / ratio;
   const renderW = art.scale * coverW;
@@ -82,6 +85,149 @@ function artImageStyle(
     objectFit: "cover",
     transform: `translate(-50%, -50%) translate(${panX}%, ${panY}%)`,
   };
+}
+
+/**
+ * Art-extension treatment for the bottom `ART_EXTENSION_FRACTION` of the card.
+ * The artwork is fitted into the top region; this band is filled by mirroring
+ * the art's bottom edge downward, blurring it into an abstract continuation,
+ * and grounding it with a darkening gradient plus faint noise (which breaks up
+ * the banding a heavy blur leaves behind). The mirror meets the artwork at the
+ * exact seam pixels, so the color is continuous across the boundary.
+ */
+const ART_REGION_HEIGHT_PCT = (1 - ART_EXTENSION_FRACTION) * 100;
+const ART_EXTENSION_HEIGHT_PCT = ART_EXTENSION_FRACTION * 100;
+/** Mirror blur radius as a fraction of the rendered card width. */
+const ART_EXTENSION_BLUR_RATIO = 0.045;
+/** Opacity of the darkening gradient at the card's bottom edge. */
+const ART_EXTENSION_DARKEN_OPACITY = 0.45;
+/** Opacity of the noise overlay that dithers out blur banding. */
+const ART_EXTENSION_NOISE_OPACITY = 0.06;
+/**
+ * Tiled fractal-noise tile (an inline SVG) drawn faintly over the fill band to
+ * keep the blurred mirror from reading as a smooth synthetic gradient.
+ */
+const ART_EXTENSION_NOISE_URI =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)'/%3E%3C/svg%3E";
+
+/**
+ * The full-bleed card art: the source artwork fitted into the top region plus
+ * the mirrored/blurred/darkened fill band along the bottom. The primary image
+ * carries the load/error handlers (so the parent learns the source aspect); the
+ * mirror is a second copy of the same image with identical crop, reflected about
+ * the seam so its top pixels match the artwork's bottom pixels.
+ */
+function ArtLayers({
+  imageUrl,
+  alt,
+  artCrop,
+  imageAspect,
+  widthPx,
+  onLoad,
+  onError,
+}: {
+  imageUrl: string;
+  alt: string;
+  artCrop: { x: number; y: number; scale: number };
+  imageAspect: number | null;
+  widthPx: number;
+  onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
+  onError: () => void;
+}) {
+  const imageStyle = artImageStyle(
+    artCrop,
+    imageAspect,
+    ART_REGION_ASPECT_RATIO_VALUE,
+  );
+  const blurPx = Math.max(2, widthPx * ART_EXTENSION_BLUR_RATIO);
+  return (
+    <>
+      {/* Artwork, fitted into the top region (a wider aspect than the card). */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 0,
+          height: `${ART_REGION_HEIGHT_PCT}%`,
+          overflow: "hidden",
+        }}
+      >
+        <img
+          src={imageUrl}
+          alt={alt}
+          style={imageStyle}
+          draggable={false}
+          onLoad={onLoad}
+          onError={onError}
+          loading="lazy"
+        />
+      </div>
+
+      {/*
+        Fill band: the bottom `ART_EXTENSION_FRACTION` of the card. The outer
+        layer clips to the band; the inner wrapper is a copy of the art region
+        flipped about its bottom edge (the seam), so only its top strip — the
+        mirror of the artwork's bottom strip — shows through the clip. A heavy
+        blur turns it into an abstract color continuation.
+      */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          overflow: "hidden",
+          clipPath: `inset(${ART_REGION_HEIGHT_PCT}% 0 0 0)`,
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+            height: `${ART_REGION_HEIGHT_PCT}%`,
+            overflow: "hidden",
+            transform: "scaleY(-1)",
+            transformOrigin: "center bottom",
+            filter: `blur(${blurPx.toFixed(2)}px)`,
+          }}
+        >
+          <img src={imageUrl} alt="" style={imageStyle} draggable={false} />
+        </div>
+      </div>
+
+      {/* Darkening gradient that grounds the fill band and aids text legibility. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: `${ART_REGION_HEIGHT_PCT}%`,
+          height: `${ART_EXTENSION_HEIGHT_PCT}%`,
+          background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,${ART_EXTENSION_DARKEN_OPACITY}) 100%)`,
+        }}
+      />
+
+      {/* Faint noise over the fill band to dither out blur banding. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: `${ART_REGION_HEIGHT_PCT}%`,
+          height: `${ART_EXTENSION_HEIGHT_PCT}%`,
+          backgroundImage: `url("${ART_EXTENSION_NOISE_URI}")`,
+          backgroundRepeat: "repeat",
+          opacity: ART_EXTENSION_NOISE_OPACITY,
+          mixBlendMode: "overlay",
+        }}
+      />
+    </>
+  );
 }
 
 /** Card name / type / rules text colors and fonts, as CSS-var references so the
@@ -609,11 +755,12 @@ export function CardView({
           loading="lazy"
         />
       ) : !imageError ? (
-        <img
-          src={cardImageUrl(card.imageNumber)}
+        <ArtLayers
+          imageUrl={cardImageUrl(card.imageNumber)}
           alt={card.name}
-          style={artImageStyle(artCrop, imageAspect)}
-          draggable={false}
+          artCrop={artCrop}
+          imageAspect={imageAspect}
+          widthPx={widthPx}
           onLoad={(event) => {
             const { naturalWidth, naturalHeight } = event.currentTarget;
             if (naturalWidth > 0 && naturalHeight > 0) {
@@ -623,7 +770,6 @@ export function CardView({
           onError={() => {
             setImageError(true);
           }}
-          loading="lazy"
         />
       ) : (
         <div

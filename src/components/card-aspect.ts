@@ -17,6 +17,27 @@ export const CARD_ASPECT_RATIO = `${CARD_ASPECT_W} / ${CARD_ASPECT_H}`;
 export const CARD_ASPECT_RATIO_VALUE = CARD_ASPECT_W / CARD_ASPECT_H;
 
 /**
+ * Fraction of the card's height, measured up from the bottom edge, that does
+ * not render the source artwork. Instead this band is filled by an
+ * art-extension treatment (a mirrored, blurred, darkened continuation of the
+ * art's bottom edge) so important art elements are not lost to the vertical
+ * crop or hidden behind the bottom text box. The artwork itself is fitted into
+ * the remaining top band, which is a slightly wider aspect ratio than the full
+ * card. Change this single value to grow or shrink the fill band.
+ */
+export const ART_EXTENSION_FRACTION = 0.1;
+
+/**
+ * Width-to-height ratio of the region the source artwork is fitted into: the
+ * top `1 - ART_EXTENSION_FRACTION` of the card. Because it is shorter than the
+ * full card at the same width, it is a wider ratio than
+ * `CARD_ASPECT_RATIO_VALUE`. The art crop (pan/zoom) is resolved against this
+ * region rather than the whole card.
+ */
+export const ART_REGION_ASPECT_RATIO_VALUE =
+  CARD_ASPECT_RATIO_VALUE / (1 - ART_EXTENSION_FRACTION);
+
+/**
  * Card corner radius (18px at the 500px design width). The horizontal radius
  * is a fixed percentage of the width; the vertical radius is scaled by the
  * aspect ratio so the rendered corner is uniform (`3.6%` of width on every
