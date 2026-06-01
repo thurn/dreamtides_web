@@ -89,12 +89,9 @@ The builder applies the watermark `clip-path` (see below).
    page background.
 2. **Crisp art** — `artImageStyleExtended` image, drawn full-card and
    watermark-clipped (no band clip), so it backs the feather with real pixels.
-   One-line cards fit it to the whole card (`regionFraction` `1`) and stop here.
 3. **Blurred continuation** — a second `artImageStyleExtended` image, `filter:
    blur(...) brightness(...)`, inside a wrapper carrying the **feather mask**.
 4. **Color tint** — a vertical gradient in the art's darkened bottom color.
-
-Layers 3–4 are omitted on one-line cards, which carry no fill band.
 
 The chrome (name bar, type label, rules box, orbs) draws on top of all of this
 with its own `z-index`.
@@ -160,22 +157,13 @@ turns that into `bandTopPct` and derives the whole band from it:
   grounds nearly solid at the card bottom.
 
 Because the feather is anchored to the measured box top rather than a fixed card
-position, a wordy box (a tall box, higher up) yields a larger band and the
-feather never spills onto the crisp art above the box. Before the box is measured
-(and for cards with no rules box) the band falls back to
-`ART_BAND_DEFAULT_TOP_PCT`, the `ART_EXTENSION_FRACTION` baseline. The band draws
-behind the box and never changes the box's size, so writing the band from a box
-measurement cannot loop; a small dead-band (`< 0.002`) absorbs observer jitter.
-
-**One-line cards drop the band entirely.** The same effect counts the rules
-lines (the text element's content height over its line height); when the rules
-text is a single line, `ArtLayers` skips the blurred and tint layers and fits the
-crisp art to the whole card (`artImageStyleExtended` with `regionFraction` `1`),
-so the text box floats over real artwork with no fill. The watermark crop still
-applies, so the source's bottom edge reaches the card bottom without exposing the
-strip. Because the source is landscape, simply removing the band without filling
-the card would expose a flat dark base behind the box; fitting the art to the
-whole card is what makes the no-band case read as full-bleed art.
+position, a one-line box (low on the card) yields a small band and a wordy box (a
+tall box, higher up) yields a larger one, and the feather never spills onto the
+crisp art above the box. Before the box is measured (and for cards with no rules
+box) the band falls back to `ART_BAND_DEFAULT_TOP_PCT`, the
+`ART_EXTENSION_FRACTION` baseline. The band draws behind the box and never
+changes the box's size, so writing the band from a box measurement cannot loop; a
+small dead-band (`< 0.002`) absorbs observer jitter.
 
 ### The two parts of the band
 
@@ -347,11 +335,9 @@ is not covered by the text box.
 Always test on the three line counts together — they exercise the band-sizing
 behavior that everything else trades against:
 
-- **One line** (e.g. *Blade of Unity*) — has no fill band: confirm the crisp art
-  fills the whole card with no watermark strip at the bottom and the text box
-  floats over real artwork.
-- **Two lines** (e.g. *Blazeguard*, *A New Adventure*) — the band returns; watch
-  for blur above the box and a seam at the box top.
+- **One line** (e.g. *Blade of Unity*, *Blazepath Traveler*) — the hardest case;
+  watch for blur above the box and for a seam at the box top.
+- **Two lines** (e.g. *Blazeguard*, *A New Adventure*).
 - **Three lines** (e.g. *Abomination of Memory*).
 
 Also confirm: no watermark strip on bright-bottomed art (e.g. *Abyssal
