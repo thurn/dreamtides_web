@@ -136,13 +136,13 @@ function artImageStyleExtended(
  * Art-extension treatment for the bottom `ART_EXTENSION_FRACTION` of the card.
  * The crisp artwork is fitted into the top region. A single blurred copy of the
  * same crop — extended past the seam so it shows the real source pixels below
- * the crop window — is laid over the bottom and masked so the blur fades in
- * gradually downward from the seam (which sits at the text box's top) and then
- * fully fills the band, leaving the artwork above the box fully crisp. Because it
- * is the artwork's genuine downward continuation (not a reflection), the band
- * reads as a defocus of the art with no fold or symmetry seam. A gradient in the
- * art's own (darkened) bottom color then grounds the band so it ends dark and
- * on-palette rather than as a light gray bar.
+ * the crop window — is laid over the bottom: fully opaque from the seam (the
+ * text box's top) down, and feathering up into the art above so the defocus is
+ * smooth with no visible seam. Because it is the artwork's genuine downward
+ * continuation (not a reflection), the band reads as a defocus of the art with
+ * no fold or symmetry seam. A gradient in the art's own (darkened) bottom color
+ * then grounds the band, ramping in at/below the seam so it ends dark and
+ * on-palette without darkening the art above the box.
  */
 /** Floor and ceiling on the dynamic band fraction (of card height). The floor
  * keeps a small fill even under a one-line box; the ceiling stops a wordy card
@@ -156,13 +156,16 @@ const ART_EXTENSION_MAX_FRACTION = 0.28;
  */
 const ART_EXTENSION_BOX_MULTIPLIER = 1.0;
 /**
- * Distance below the seam, as a fraction of the band height, over which the blur
- * and tint ramp from nothing to full. The crisp artwork (rendered full-card and
- * unclipped) backs this ramp, so the transition is a smooth defocus with no hard
- * edge and no gap — and because it ramps downward from the box's top, it stays
- * hidden behind the box.
+ * Feather height — the zone *above* the seam over which the artwork softens into
+ * the (fully blurred) fill — as a multiple of the band height, capped as a
+ * fraction of the card. The blur is fully opaque at the seam and fades up into
+ * the art, giving a smooth seamless defocus rather than a blur that switches on
+ * at the box's top edge. Scaling with the band keeps it proportional: a small
+ * text box gets a short feather, a large one gets the longer, smoother feather.
+ * Only the blur reaches above the box; the darkening tint stays at/below it.
  */
-const ART_EXTENSION_FEATHER_TO_BAND = 0.5;
+const ART_EXTENSION_FEATHER_TO_BAND = 0.9;
+const ART_EXTENSION_FEATHER_MAX_FRACTION = 0.18;
 /** Blur radius as a fraction of the band height (so it scales with the band). */
 const ART_EXTENSION_BLUR_TO_BAND = 0.4;
 /**
@@ -260,16 +263,18 @@ function ArtLayers({
   onError: () => void;
 }) {
   // Band geometry, derived from the dynamic fraction so the fill tracks the
-  // card's text-box height. The seam sits at the box's top; the blur and tint
-  // ramp in *downward* from there, so the crisp→blur transition stays behind the
-  // text box and the artwork above the box is untouched. The crisp art is
-  // rendered full-card and unclipped, so it backs the ramp with no gap.
+  // card's text-box height. The blur is fully opaque at the seam (the box's top)
+  // and feathers *upward* into the art, so the defocus is smooth with no visible
+  // seam; the crisp art (rendered full-card and unclipped) backs the feather so
+  // there is no gap. The darkening tint, by contrast, stays at/below the seam so
+  // only soft blur — never darkening — reaches above the box.
   const regionHeightPct = (1 - extensionFraction) * 100;
-  const rampEndPct = Math.min(
-    100,
-    regionHeightPct + extensionFraction * ART_EXTENSION_FEATHER_TO_BAND * 100,
+  const featherUp = Math.min(
+    extensionFraction * ART_EXTENSION_FEATHER_TO_BAND,
+    ART_EXTENSION_FEATHER_MAX_FRACTION,
   );
-  const fillMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${regionHeightPct}%, rgba(0,0,0,1) ${rampEndPct}%, rgba(0,0,0,1) 100%)`;
+  const featherStartPct = (1 - extensionFraction - featherUp) * 100;
+  const fillMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct}%, rgba(0,0,0,1) ${regionHeightPct}%, rgba(0,0,0,1) 100%)`;
 
   const extendedStyle = artImageStyleExtended(
     artCrop,
@@ -314,10 +319,9 @@ function ArtLayers({
       />
 
       {/*
-        Blurred copy of the same crop, masked so it is invisible above the seam
-        (the art stays crisp there) and ramps in downward from the seam to fully
-        cover the bottom — the crisp→blur transition therefore lives behind the
-        text box.
+        Blurred copy of the same crop, masked fully opaque from the seam down and
+        feathering up into the art above it, so the artwork softens smoothly into
+        the fill with no visible seam.
       */}
       <div
         aria-hidden="true"
@@ -341,8 +345,9 @@ function ArtLayers({
       </div>
 
       {/* Color-matched darkening: a gradient in the art's own (darkened) bottom
-          color that also ramps in downward from the seam, grounding the band's
-          edge nearly solid so the rules text stays legible. */}
+          color, transparent at the seam and ramping to nearly solid at the
+          bottom edge, so the fill grounds dark behind the box without darkening
+          the art above it. */}
       <div
         aria-hidden="true"
         style={{ position: "absolute", inset: 0, background: tintGradient }}
