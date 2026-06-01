@@ -69,64 +69,17 @@ function artCoverMetrics(
 }
 
 /**
- * Resolve an art crop into CSS for the art image, sized to cover its frame at
- * `scale` 1 and grown by the zoom. `imageAspect` is null until the image loads,
- * in which case a centered cover fallback is used. `frameAspect` is the
- * width-to-height ratio of the box being covered (the art region, not the whole
- * card).
- */
-function artImageStyle(
-  art: { x: number; y: number; scale: number },
-  imageAspect: number | null,
-  frameAspect: number,
-): CSSProperties {
-  // Clip the watermark strip off the source bottom (the image renders the source
-  // 1:1 along its own height).
-  const clipPath = `inset(0 0 ${(ART_SOURCE_BOTTOM_CROP * 100).toFixed(3)}% 0)`;
-  if (imageAspect === null) {
-    return {
-      position: "absolute",
-      inset: 0,
-      height: "100%",
-      width: "100%",
-      objectFit: "cover",
-      transform: `scale(${art.scale})`,
-      clipPath,
-    };
-  }
-
-  const { renderW, renderH, panX, panY } = artCoverMetrics(
-    art,
-    imageAspect,
-    frameAspect,
-  );
-  return {
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    width: `${renderW * 100}%`,
-    height: `${renderH * 100}%`,
-    // The art is intentionally sized larger than the frame to create pan
-    // overflow; override the global `img { max-width: 100% }` base rule so the
-    // width is not capped back to the frame (which would leave a gap when
-    // panned).
-    maxWidth: "none",
-    maxHeight: "none",
-    objectFit: "cover",
-    transform: `translate(-50%, -50%) translate(${panX}%, ${panY}%)`,
-    clipPath,
-  };
-}
-
-/**
- * The same crop as {@link artImageStyle} for the art region, but placed inside a
- * full-card container so the image keeps its art-region size and position yet is
- * free to extend below the seam into the fill band. The image's content there is
- * the real source pixels just below the art-region crop window — a genuine
- * downward continuation, so a blurred copy reads as a defocus of the artwork
- * rather than a reflection (no fold or symmetry seam). For a source that does
- * not reach the card's bottom edge (a short/landscape crop), the band's dark
- * base shows through the unreached sliver.
+ * Resolve an art crop into CSS for the art image, placed inside a full-card
+ * container so the image keeps its art-region size and position yet is free to
+ * extend below the seam into the fill band. Used for both the crisp artwork and
+ * the blurred band copy, so the two share an identical placement and the blur is
+ * a pure defocus of the same pixels rather than a ghosted second copy. The
+ * image's content below the art-region crop window is the real source pixels
+ * just under it — a genuine downward continuation, so the blurred copy reads as
+ * a defocus of the artwork rather than a reflection (no fold or symmetry seam).
+ * For a source that does not reach the card's bottom edge (a short/landscape
+ * crop), the band's dark base shows through the unreached sliver. `imageAspect`
+ * is null until the image loads, in which case a centered cover fallback is used.
  */
 function artImageStyleExtended(
   art: { x: number; y: number; scale: number },
@@ -172,30 +125,45 @@ function artImageStyleExtended(
 }
 
 /**
- * Art-extension treatment for the bottom `ART_EXTENSION_FRACTION` of the card.
- * The crisp artwork is fitted into the top region. A single blurred copy of the
- * same crop — extended past the seam so it shows the real source pixels below
- * the crop window — is laid over the bottom and masked so the blur fades in
- * gradually across a feather zone just above the seam and then fully fills the
- * band. Because it is the artwork's genuine downward continuation (not a
- * reflection), the band reads as a defocus of the art with no fold or symmetry
- * seam. A gradient in the art's own (darkened) bottom color then grounds the
- * band so it ends dark and on-palette rather than as a light gray bar.
+ * Art-extension treatment for the bottom fill band. The crisp artwork is drawn
+ * full-card (a single extended copy of the crop, watermark-clipped). A blurred
+ * copy of the *same* crop is laid over it and masked so the blur is absent above
+ * the band, feathers in across a short ramp, and then fully fills the band from
+ * the seam down. Because the blur is the artwork's genuine downward continuation
+ * (not a reflection) and shares the crisp copy's exact placement, the band reads
+ * as a pure defocus of the art with no fold or ghost. A gradient in the art's
+ * own (darkened) bottom color then grounds the band so it ends dark and
+ * on-palette rather than as a light gray bar.
+ *
+ * The band is sized per card from the rules text box: the feather starts at the
+ * box's measured top and the seam sits a short fixed distance below it, so the
+ * darkened fill always tucks behind the box and scales with it — a one-line box
+ * yields a small band low on the card, a wordy box a taller one. Anchoring the
+ * feather to the measured box top (rather than a fixed card position) is what
+ * keeps the blur from spilling onto the crisp art above a short box.
  */
-const ART_REGION_HEIGHT_PCT = (1 - ART_EXTENSION_FRACTION) * 100;
 /**
- * Height of card, above the seam, over which the crisp artwork blurs into the
- * band. The blur ramps in across this zone so the transition reads as a soft
- * defocus rather than a line. It is fine that real art detail is lost here.
+ * Band top (card-height %) used until the rules box has been measured (and for
+ * cards with no rules box). Matches the `ART_EXTENSION_FRACTION` baseline so the
+ * first paint is already close to the resolved band.
  */
-const ART_EXTENSION_FEATHER_FRACTION = 0.16;
+const ART_BAND_DEFAULT_TOP_PCT = (1 - ART_EXTENSION_FRACTION) * 100;
 /**
- * Alpha mask (card-height stops) for the blurred layer: invisible above the
- * feather zone, ramping in across it, fully opaque from the seam down.
+ * Clamp on the measured box-top %, so a stray measurement cannot collapse the
+ * band to nothing or grow it past half the card. The max keeps a small band even
+ * under the shortest box; the min caps the tallest band.
  */
-const ART_FEATHER_START_PCT =
-  (1 - ART_EXTENSION_FRACTION - ART_EXTENSION_FEATHER_FRACTION) * 100;
-const ART_FEATHER_MASK = `linear-gradient(to bottom, rgba(0,0,0,0) ${ART_FEATHER_START_PCT}%, rgba(0,0,0,1) ${ART_REGION_HEIGHT_PCT}%, rgba(0,0,0,1) 100%)`;
+const ART_BAND_MIN_TOP_PCT = 55;
+const ART_BAND_MAX_TOP_PCT = 94;
+/**
+ * Height of the feather (card-height %): the seam — where the blur reaches full
+ * opacity and the tint begins — sits this far below the feather start (the box
+ * top), so the whole ramp tucks behind the box's top edge and reads as a soft
+ * defocus rather than a line where it shows beside the box.
+ */
+const ART_EXTENSION_FEATHER_BELOW_PCT = 6;
+/** Card-height % over which the tint ramps in above the seam (a soft lead-in). */
+const ART_EXTENSION_TINT_RAMP_PCT = 5;
 /** Blur radius as a fraction of the rendered card width. */
 const ART_EXTENSION_BLUR_RATIO = 0.05;
 /**
@@ -222,8 +190,6 @@ const ART_EXTENSION_TINT_DARKEN = 0.4;
  */
 const ART_EXTENSION_TINT_SEAM_ALPHA = 0.5;
 const ART_EXTENSION_TINT_EDGE_ALPHA = 0.92;
-/** Card-height % where the tint begins to ramp in (just inside the feather). */
-const ART_EXTENSION_TINT_START_PCT = ART_REGION_HEIGHT_PCT - 5;
 
 interface BottomColor {
   r: number;
@@ -279,6 +245,7 @@ function ArtLayers({
   imageAspect,
   bottomColor,
   widthPx,
+  bandTopPct,
   onLoad,
   onError,
 }: {
@@ -288,14 +255,10 @@ function ArtLayers({
   imageAspect: number | null;
   bottomColor: BottomColor | null;
   widthPx: number;
+  bandTopPct: number;
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
-  const imageStyle = artImageStyle(
-    artCrop,
-    imageAspect,
-    ART_REGION_ASPECT_RATIO_VALUE,
-  );
   const extendedStyle = artImageStyleExtended(artCrop, imageAspect);
   const blurPx = Math.max(2, widthPx * ART_EXTENSION_BLUR_RATIO);
   // The band's tint is the art's own bottom color, darkened. Until it is
@@ -306,7 +269,19 @@ function ArtLayers({
       : "0, 0, 0";
   const baseColor =
     bottomColor !== null ? `rgb(${tintRgb})` : ART_EXTENSION_BASE_COLOR;
-  const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${ART_EXTENSION_TINT_START_PCT}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${ART_REGION_HEIGHT_PCT}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
+
+  // Resolve the band geometry from the measured rules-box top. The feather
+  // starts at the box top and the seam (full blur + tint onset) sits a short
+  // fixed distance below it, so the whole band tucks behind the box and scales
+  // with it.
+  const featherStartPct = Math.min(
+    Math.max(bandTopPct, ART_BAND_MIN_TOP_PCT),
+    ART_BAND_MAX_TOP_PCT,
+  );
+  const seamPct = Math.min(100, featherStartPct + ART_EXTENSION_FEATHER_BELOW_PCT);
+  const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct.toFixed(2)}%, rgba(0,0,0,1) ${seamPct.toFixed(2)}%, rgba(0,0,0,1) 100%)`;
+  const tintStartPct = Math.max(0, seamPct - ART_EXTENSION_TINT_RAMP_PCT);
+  const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${tintStartPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${seamPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
   return (
     <>
       {/* Base behind the band: the art's darkened bottom color, so any sliver the
@@ -316,35 +291,25 @@ function ArtLayers({
         style={{ position: "absolute", inset: 0, background: baseColor }}
       />
 
-      {/* Crisp artwork, fitted into the top region (wider aspect than the card). */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 0,
-          height: `${ART_REGION_HEIGHT_PCT}%`,
-          overflow: "hidden",
-        }}
-      >
-        <img
-          src={imageUrl}
-          alt={alt}
-          style={imageStyle}
-          draggable={false}
-          onLoad={onLoad}
-          onError={onError}
-          loading="lazy"
-        />
-      </div>
+      {/* Crisp artwork, drawn full-card (watermark-clipped) so the blurred band
+          has no clip line for the dark base to show through. The blurred layer
+          masks it from the band down. */}
+      <img
+        src={imageUrl}
+        alt={alt}
+        style={extendedStyle}
+        draggable={false}
+        onLoad={onLoad}
+        onError={onError}
+        loading="lazy"
+      />
 
       {/*
         Blurred continuation. A second copy of the art, extended past the seam so
         it shows the real source below the crop window, blurred. The mask hides it
-        above the feather zone, ramps it in across the zone (the art defocuses
-        into the band), and holds it opaque from the seam down (the band shows the
-        blurred continuation).
+        above the feather zone (the box top), ramps it in across the feather (the
+        art defocuses into the band), and holds it opaque from the seam down (the
+        band shows the blurred continuation).
       */}
       <div
         aria-hidden="true"
@@ -352,8 +317,8 @@ function ArtLayers({
           position: "absolute",
           inset: 0,
           overflow: "hidden",
-          maskImage: ART_FEATHER_MASK,
-          WebkitMaskImage: ART_FEATHER_MASK,
+          maskImage: featherMask,
+          WebkitMaskImage: featherMask,
         }}
       >
         <div
@@ -628,6 +593,10 @@ export function CardView({
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
   const [bottomColor, setBottomColor] = useState<BottomColor | null>(null);
+  // Top of the rules text box as a fraction of card height, measured live so the
+  // art fill band can size itself to the box (null until measured / no box).
+  const [boxTopFrac, setBoxTopFrac] = useState<number | null>(null);
+  const bandBoxRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
   // Auto-shrink the rules body so a card needing more than the reserved three
@@ -860,6 +829,53 @@ export function CardView({
   const hasTextboxContent = Boolean(renderedRulesNode);
   const hasBottomChrome = hasTextboxContent || Boolean(renderedTypeLineNode);
 
+  // Measure the rules box's top edge relative to the card so the fill band can
+  // scale to the box. Measuring the box itself (not the bottom chrome, which
+  // includes the floating type label's fixed offset) is what surfaces the
+  // per-line height difference. The band draws behind the box and never changes
+  // its size, so writing the band from a box measurement cannot loop; a small
+  // dead-band absorbs observer jitter.
+  useEffect(() => {
+    const cardEl = cardRef.current;
+    const boxEl = bandBoxRef.current;
+    if (cardEl === null || boxEl === null) {
+      setBoxTopFrac(null);
+      return;
+    }
+
+    function measure(): void {
+      if (cardEl === null || boxEl === null) {
+        return;
+      }
+      const cardRect = cardEl.getBoundingClientRect();
+      if (cardRect.height <= 0) {
+        return;
+      }
+      const boxRect = boxEl.getBoundingClientRect();
+      const frac = (boxRect.top - cardRect.top) / cardRect.height;
+      setBoxTopFrac((prev) =>
+        prev !== null && Math.abs(prev - frac) < 0.002 ? prev : frac,
+      );
+    }
+
+    measure();
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure);
+      return () => {
+        window.removeEventListener("resize", measure);
+      };
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(cardEl);
+    observer.observe(boxEl);
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasTextboxContent, card.renderedText, widthPx, large, rulesFontPx]);
+
+  const bandTopPct =
+    boxTopFrac !== null ? boxTopFrac * 100 : ART_BAND_DEFAULT_TOP_PCT;
+
   // The box shrinks to its rules text, bottom-aligned, capped at the three-line
   // height (`--cv-textbox-height`): a short card gets a short box, while text
   // beyond three lines auto-shrinks to the cap. A type-only editor box (no rules
@@ -913,6 +929,7 @@ export function CardView({
           imageAspect={imageAspect}
           bottomColor={bottomColor}
           widthPx={widthPx}
+          bandTopPct={bandTopPct}
           onLoad={(event) => {
             const image = event.currentTarget;
             const { naturalWidth, naturalHeight } = image;
@@ -996,6 +1013,7 @@ export function CardView({
           {renderedTypeLineNode}
           {hasTextboxContent ? (
             <div
+              ref={bandBoxRef}
               style={
                 {
                   ...textboxSizing,

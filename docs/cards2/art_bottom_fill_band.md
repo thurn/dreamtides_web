@@ -25,9 +25,9 @@ looking wrong.
 ## Where it lives
 
 - `src/components/CardView.tsx` — all of it. The art-extension constants, the
-  crop-math helpers (`artCoverMetrics`, `artImageStyle`, `artImageStyleExtended`),
-  the bottom-color sampler (`sampleBottomColor`), and the `ArtLayers` component
-  that stacks the layers.
+  crop-math helpers (`artCoverMetrics`, `artImageStyleExtended`), the
+  bottom-color sampler (`sampleBottomColor`), the `ResizeObserver` that measures
+  the rules box, and the `ArtLayers` component that stacks the layers.
 - `src/components/card-aspect.ts` — `CARD_ASPECT_RATIO_VALUE`,
   `ART_EXTENSION_FRACTION` (band height as a fraction of card height), and
   `ART_REGION_ASPECT_RATIO_VALUE` (the wider aspect of the art region).
@@ -64,24 +64,21 @@ zoom `scale ≥ 1`) and the aspect ratio of the box being covered, it returns:
 - `panX`, `panY` — translate as a percentage of the image's own size, bounded so
   `|pan| === 1` aligns the image edge with the frame edge.
 
-Two style builders consume it:
+`artImageStyleExtended(art, imageAspect)` consumes it: it places the crop inside
+a **full-card** container, sized to the art region (the top
+`1 - ART_EXTENSION_FRACTION`, fitted at the wider `ART_REGION_ASPECT_RATIO_VALUE`)
+and centered on the art region's center (not the card's), so the image keeps its
+art-region size/position but is free to extend past the band into the lower part
+of the card.
 
-- `artImageStyle(art, imageAspect, frameAspect)` — centers the image in its
-  parent box. Used for the **crisp art region**, whose parent is the top region
-  (a `1 - ART_EXTENSION_FRACTION` tall box) and whose `frameAspect` is the wider
-  `ART_REGION_ASPECT_RATIO_VALUE`.
-- `artImageStyleExtended(art, imageAspect)` — places the *same* crop inside a
-  **full-card** container, centered on the art region's center (not the card's),
-  so the image keeps its art-region size/position but is free to extend past the
-  seam. Used for the **blurred continuation**.
+**Both** the crisp artwork and the blurred continuation render through this one
+builder, so they place the image **identically**. That is what makes the blur a
+pure defocus of the same pixels rather than a ghosted second copy: the blurred
+layer is literally the crisp layer with `filter: blur(...)` and a feather mask on
+top. Drawing the crisp layer full-card (rather than clipped at the band) means
+there is no clip line for the dark base to show through at the seam.
 
-Key identity: for a given crop, `artImageStyle` (in the region box) and
-`artImageStyleExtended` (in the full-card box) place the image **identically** in
-the overlapping region. That is what makes the blur a pure defocus of the same
-pixels rather than a ghosted second copy. If you ever change one builder, change
-the other to match, or the feather will ghost.
-
-Both builders apply the watermark `clip-path` (see below).
+The builder applies the watermark `clip-path` (see below).
 
 ## Layer stack (current implementation)
 
@@ -90,10 +87,10 @@ Both builders apply the watermark `clip-path` (see below).
 1. **Base** — a solid dark fill (`ART_EXTENSION_BASE_COLOR`, or the sampled art
    color once known) so any sliver an edge does not reach reads as dark, never as
    page background.
-2. **Crisp art region** — `artImageStyle` image, clipped to the top
-   `ART_REGION_HEIGHT_PCT`%.
-3. **Blurred continuation** — `artImageStyleExtended` image, `filter: blur(...)
-   brightness(...)`, inside a wrapper carrying the **feather mask**.
+2. **Crisp art** — `artImageStyleExtended` image, drawn full-card and
+   watermark-clipped (no band clip), so it backs the feather with real pixels.
+3. **Blurred continuation** — a second `artImageStyleExtended` image, `filter:
+   blur(...) brightness(...)`, inside a wrapper carrying the **feather mask**.
 4. **Color tint** — a vertical gradient in the art's darkened bottom color.
 
 The chrome (name bar, type label, rules box, orbs) draws on top of all of this
@@ -138,13 +135,35 @@ the strip; the clipped sliver falls behind the fill/box. The sampler excludes th
 same fraction. This is the one fix that must survive any rewrite — without it,
 pushing the art up exposes the watermark.
 
-## The hard part: sizing the band per card
+## Sizing the band per card
 
-The recurring, genuinely difficult requirement is: **make the band smaller on
-simple cards (one line of rules text) and larger on wordy cards, without ever
-showing a visible seam.** The current committed implementation uses a *fixed*
-band (afab16c behavior) because the dynamic version kept reintroducing a seam.
-This section explains exactly why, so the next attempt gets it right.
+The band is sized per card so it is **smaller on simple cards (one line of rules
+text) and larger on wordy cards, without ever showing a visible seam.** This is
+the genuinely difficult part of the feature, and the design below is shaped
+entirely by the constraints and pitfalls that follow. Read them before changing
+the sizing — almost every simpler approach reintroduces a seam.
+
+### How it works now
+
+A `ResizeObserver` measures the rules text box's top edge relative to the card
+and stores it as `boxTopFrac = (boxTop - cardTop) / cardHeight`. `ArtLayers`
+turns that into `bandTopPct` and derives the whole band from it:
+
+- The **feather start** is the measured box top (`featherStartPct`), clamped to
+  `[ART_BAND_MIN_TOP_PCT, ART_BAND_MAX_TOP_PCT]`.
+- The **fully-blurred seam** sits `ART_EXTENSION_FEATHER_BELOW_PCT` below it, so
+  the feather ramp tucks behind the box's top edge.
+- The **tint** ramps in just above the seam (`ART_EXTENSION_TINT_RAMP_PCT`) and
+  grounds nearly solid at the card bottom.
+
+Because the feather is anchored to the measured box top rather than a fixed card
+position, a one-line box (low on the card) yields a small band and a wordy box (a
+tall box, higher up) yields a larger one, and the feather never spills onto the
+crisp art above the box. Before the box is measured (and for cards with no rules
+box) the band falls back to `ART_BAND_DEFAULT_TOP_PCT`, the
+`ART_EXTENSION_FRACTION` baseline. The band draws behind the box and never
+changes the box's size, so writing the band from a box measurement cannot loop; a
+small dead-band (`< 0.002`) absorbs observer jitter.
 
 ### The two parts of the band
 
@@ -168,41 +187,38 @@ Think of the band as two distinct things:
    sliver *below* the box top (tucked behind the box), or deep near the card
    bottom — never at the box top.
 
-3. **A fixed-length feather does not scale.** afab16c's `0.16` feather is hidden
-   behind a tall three-line box but spills *above* a short one-line box (because
-   the short box covers less of it), which looks like blur bleeding onto the
-   artwork above the box. Shortening the feather to fit a small band makes the
-   transition abrupt — a seam. The feather length must scale with the box.
+3. **A feather pinned to a fixed card position does not scale.** A feather fixed
+   at one card-height position is hidden behind a tall three-line box but spills
+   *above* a short one-line box (which covers less of it), so blur bleeds onto the
+   artwork above the box. Anchoring the feather *start* to the measured box top
+   instead keeps it tucked at the box on every card, so a single fixed feather
+   length stays smooth without spilling.
 
-4. **The blur must be opaque where the crisp art is clipped.** The crisp region
-   is clipped at its bottom edge. If the blur mask is *transparent* at that line
-   (e.g. a feather that ramps in going downward from the seam), the dark base
-   shows through the 1px gap between "crisp art ends" and "blur begins" — a thin
-   hard line. Either keep the blur fully opaque at the clip line, or render the
-   crisp art **full-card and unclipped** so it backs the ramp and there is no gap
-   to expose.
+4. **The blur must back the crisp art at the seam.** If the crisp art is clipped
+   at the band's top and the blur mask is *transparent* there (e.g. a feather that
+   ramps in going downward from the seam), the dark base shows through the 1px gap
+   between "crisp art ends" and "blur begins" — a thin hard line. The crisp art is
+   therefore drawn **full-card and unclipped**, so it backs the ramp and there is
+   no gap to expose.
 
-### The recommended design (decouple seam from feather)
+### The design (anchor the band to the box top)
 
-The combination that satisfies all four constraints — and the one this thread
-kept *almost* reaching — is:
+The combination that satisfies all four constraints is:
 
-- Draw the **crisp art full-card and unclipped** (`artImageStyleExtended` without
-  the region clip) so there is never a clip-gap line. The blurred layer sits on
-  top of it.
-- Anchor the **fully-blurred seam** a fixed small distance *below the text box's
-  top* (tucked behind the box), so it is always hidden regardless of box size.
-- Let only the **feather start** scale with the box: start it near the box top so
-  a one-line card gets a short feather (more crisp art preserved) and a wordy
-  card a longer one. Ramp the feather *behind* the box.
-- Keep the **tint** ramping in at/below the seam only, so darkening never reaches
-  above the box (only soft blur may, and only if you choose to let the feather
-  extend slightly above for extra smoothness).
+- Draw the **crisp art full-card and unclipped** (`artImageStyleExtended`, no band
+  clip) so there is never a clip-gap line. The blurred layer sits on top of it.
+- Anchor the **feather start** to the measured text-box top, so the ramp tracks
+  the box and never spills onto the crisp art above a short box.
+- Place the **fully-blurred seam** a fixed small distance *below* the feather
+  start (`ART_EXTENSION_FEATHER_BELOW_PCT`), tucked behind the box's top edge, so
+  the seam line is hidden regardless of box size.
+- Ramp the **tint** in just above the seam, so darkening stays at/below the box
+  top and never reaches the crisp art above the box.
 
-Measure the text box (not the whole bottom chrome) with a `ResizeObserver` and
-convert `(cardBottom - boxTop) / cardHeight` into the band fraction, clamped to a
-sane min/max. Measuring the **box**, not the chrome, matters: the chrome includes
-the floating type label, which adds a fixed offset that over-sizes every band and
+The text box (not the whole bottom chrome) is measured with a `ResizeObserver`,
+converting `(boxTop - cardTop) / cardHeight` into the band top, clamped to a sane
+min/max. Measuring the **box**, not the chrome, matters: the chrome includes the
+floating type label, which adds a fixed offset that over-sizes every band and
 hides the per-line differences.
 
 There is no feedback loop to fear here: the box's size depends on its text, not
@@ -280,14 +296,20 @@ that avoids it:
 ## Tunable constants (current)
 
 In `card-aspect.ts`:
-- `ART_EXTENSION_FRACTION` (`0.1`) — band height as a fraction of card height
-  (the fixed-band baseline; becomes a default/seed if band sizing is made
-  dynamic).
+- `ART_EXTENSION_FRACTION` (`0.1`) — the band-sizing seed: it fixes the art
+  region's aspect and is the default band top until the rules box is measured.
 - `ART_REGION_ASPECT_RATIO_VALUE` — derived wider aspect of the art region.
 
 In `CardView.tsx`:
 - `ART_SOURCE_BOTTOM_CROP` (`21/280`) — watermark strip crop fraction.
-- `ART_EXTENSION_FEATHER_FRACTION` (`0.16`) — feather height above the seam.
+- `ART_BAND_DEFAULT_TOP_PCT` (`(1 - ART_EXTENSION_FRACTION) * 100`) — band top
+  used before the rules box is measured / when there is no box.
+- `ART_BAND_MIN_TOP_PCT` (`55`) / `ART_BAND_MAX_TOP_PCT` (`94`) — clamp on the
+  measured box-top %, bounding the tallest and smallest band.
+- `ART_EXTENSION_FEATHER_BELOW_PCT` (`6`) — feather height: card-height % from
+  the feather start (box top) down to the fully-blurred seam.
+- `ART_EXTENSION_TINT_RAMP_PCT` (`5`) — card-height % over which the tint ramps
+  in above the seam.
 - `ART_EXTENSION_BLUR_RATIO` (`0.05`) — blur radius as a fraction of card width.
 - `ART_EXTENSION_BLUR_BRIGHTNESS` (`0.6`) — brightness multiplier on the blur.
 - `ART_BOTTOM_SAMPLE_FRACTION` (`0.3`) — source band height averaged for the tint.
