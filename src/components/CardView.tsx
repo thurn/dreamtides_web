@@ -166,25 +166,31 @@ function artImageStyleExtended(
  * The crisp artwork is fitted into the top region. A single blurred copy of the
  * same crop — extended past the seam so it shows the real source pixels below
  * the crop window — is laid over the bottom and masked so the blur fades in
- * gradually across a feather zone just above the seam and then fully fills the
- * band. Because it is the artwork's genuine downward continuation (not a
- * reflection), the band reads as a defocus of the art with no fold or symmetry
- * seam. A gradient in the art's own (darkened) bottom color then grounds the
- * band so it ends dark and on-palette rather than as a light gray bar.
+ * gradually downward from the seam (which sits at the text box's top) and then
+ * fully fills the band, leaving the artwork above the box fully crisp. Because it
+ * is the artwork's genuine downward continuation (not a reflection), the band
+ * reads as a defocus of the art with no fold or symmetry seam. A gradient in the
+ * art's own (darkened) bottom color then grounds the band so it ends dark and
+ * on-palette rather than as a light gray bar.
  */
 /** Floor and ceiling on the dynamic band fraction (of card height). The floor
  * keeps a small fill even under a one-line box; the ceiling stops a wordy card
  * from squeezing the artwork too far. */
-const ART_EXTENSION_MIN_FRACTION = 0.05;
-const ART_EXTENSION_MAX_FRACTION = 0.22;
+const ART_EXTENSION_MIN_FRACTION = 0.06;
+const ART_EXTENSION_MAX_FRACTION = 0.28;
 /**
- * Feather height (the zone above the seam over which the crisp artwork blurs into
- * the band) as a multiple of the band height, capped as a fraction of the card.
- * Scaling it with the band keeps the transition proportional: a small band gets
- * a shallow feather so a one-line card's artwork is barely disturbed.
+ * Multiplier on the measured text-box coverage. The band's top (the seam) sits
+ * at the box's top, so the blur and tint stay at or below the box and never
+ * bleed up into the crisp artwork above it.
  */
-const ART_EXTENSION_FEATHER_TO_BAND = 1.4;
-const ART_EXTENSION_FEATHER_MAX_FRACTION = 0.16;
+const ART_EXTENSION_BOX_MULTIPLIER = 1.0;
+/**
+ * Portion of the band height, measured down from the seam, over which the blur
+ * and tint ramp in. Keeping the ramp below the seam (rather than above it) means
+ * the artwork above the text box stays fully crisp; the transition lives behind
+ * the box's top edge.
+ */
+const ART_EXTENSION_FEATHER_RAMP = 0.5;
 /** Blur radius as a fraction of the band height (so it scales with the band). */
 const ART_EXTENSION_BLUR_TO_BAND = 0.4;
 /**
@@ -211,8 +217,6 @@ const ART_EXTENSION_TINT_DARKEN = 0.4;
  */
 const ART_EXTENSION_TINT_SEAM_ALPHA = 0.5;
 const ART_EXTENSION_TINT_EDGE_ALPHA = 0.92;
-/** How far above the seam (card-height %) the tint begins to ramp in. */
-const ART_EXTENSION_TINT_LEAD_PCT = 5;
 
 interface BottomColor {
   r: number;
@@ -280,15 +284,14 @@ function ArtLayers({
   onError: () => void;
 }) {
   // Band geometry, all derived from the dynamic fraction so the fill tracks the
-  // card's text-box height.
+  // card's text-box height. The seam (band top) sits at the box's top; the blur
+  // and tint ramp in downward from there so nothing above the box is touched.
   const regionHeightPct = (1 - extensionFraction) * 100;
-  const featherFraction = Math.min(
-    extensionFraction * ART_EXTENSION_FEATHER_TO_BAND,
-    ART_EXTENSION_FEATHER_MAX_FRACTION,
+  const rampEndPct = Math.min(
+    100,
+    regionHeightPct + extensionFraction * ART_EXTENSION_FEATHER_RAMP * 100,
   );
-  const featherStartPct = (1 - extensionFraction - featherFraction) * 100;
-  const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct}%, rgba(0,0,0,1) ${regionHeightPct}%, rgba(0,0,0,1) 100%)`;
-  const tintStartPct = regionHeightPct - ART_EXTENSION_TINT_LEAD_PCT;
+  const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${regionHeightPct}%, rgba(0,0,0,1) ${rampEndPct}%, rgba(0,0,0,1) 100%)`;
 
   const imageStyle = artImageStyle(
     artCrop,
@@ -313,7 +316,8 @@ function ArtLayers({
       : "0, 0, 0";
   const baseColor =
     bottomColor !== null ? `rgb(${tintRgb})` : ART_EXTENSION_BASE_COLOR;
-  const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${tintStartPct}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${regionHeightPct}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
+  const tintMidPct = regionHeightPct + (100 - regionHeightPct) * 0.5;
+  const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${regionHeightPct}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${tintMidPct}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
   return (
     <>
       {/* Base behind the band: the art's darkened bottom color, so any sliver the
@@ -349,9 +353,9 @@ function ArtLayers({
       {/*
         Blurred continuation. A second copy of the art, extended past the seam so
         it shows the real source below the crop window, blurred. The mask hides it
-        above the feather zone, ramps it in across the zone (the art defocuses
-        into the band), and holds it opaque from the seam down (the band shows the
-        blurred continuation).
+        above the seam (keeping the art crisp there), ramps it in downward from
+        the seam, and holds it opaque to the bottom (the band shows the blurred
+        continuation behind the text box).
       */}
       <div
         aria-hidden="true"
@@ -375,7 +379,7 @@ function ArtLayers({
       </div>
 
       {/* Color-matched darkening: a gradient in the art's own (darkened) bottom
-          color that ramps in just above the seam and grounds the band's edge
+          color that ramps in downward from the seam and grounds the band's edge
           nearly solid, so the fill is dark and on-palette and the rules text
           stays legible. */}
       <div
@@ -893,10 +897,13 @@ export function CardView({
       if (cardRect.height <= 0) {
         return;
       }
-      const raw = (cardRect.bottom - boxRect.top) / cardRect.height;
+      const coverage = (cardRect.bottom - boxRect.top) / cardRect.height;
       const next = Math.min(
         ART_EXTENSION_MAX_FRACTION,
-        Math.max(ART_EXTENSION_MIN_FRACTION, raw),
+        Math.max(
+          ART_EXTENSION_MIN_FRACTION,
+          coverage * ART_EXTENSION_BOX_MULTIPLIER,
+        ),
       );
       setExtensionFraction((prev) =>
         Math.abs(prev - next) > 0.002 ? next : prev,
