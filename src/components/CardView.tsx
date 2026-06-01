@@ -8,8 +8,8 @@ import {
 } from "../data/card-database";
 import {
   ART_EXTENSION_FRACTION,
-  ART_REGION_ASPECT_RATIO_VALUE,
   CARD_ASPECT_RATIO,
+  CARD_ASPECT_RATIO_VALUE,
   CARD_CORNER_RADIUS,
 } from "./card-aspect";
 import { formatTypeLine } from "./card-text";
@@ -80,10 +80,16 @@ function artCoverMetrics(
  * For a source that does not reach the card's bottom edge (a short/landscape
  * crop), the band's dark base shows through the unreached sliver. `imageAspect`
  * is null until the image loads, in which case a centered cover fallback is used.
+ *
+ * `regionFraction` is the fraction of the card the art is fitted into: the
+ * default seats the art in the top art region (leaving room for the fill band),
+ * while passing `1` fits it to the whole card. One-line cards drop the band and
+ * fill the card, so they pass `1` and the art reaches the bottom edge.
  */
 function artImageStyleExtended(
   art: { x: number; y: number; scale: number },
   imageAspect: number | null,
+  regionFraction: number = 1 - ART_EXTENSION_FRACTION,
 ): CSSProperties {
   // Clip the watermark strip off the source bottom (the image renders the source
   // 1:1 along its own height, so the clipped sliver falls behind the fill/box).
@@ -100,11 +106,11 @@ function artImageStyleExtended(
     };
   }
 
-  const region = 1 - ART_EXTENSION_FRACTION;
+  const region = regionFraction;
   const { renderW, renderH, panX, panY } = artCoverMetrics(
     art,
     imageAspect,
-    ART_REGION_ASPECT_RATIO_VALUE,
+    CARD_ASPECT_RATIO_VALUE / region,
   );
   // Heights are fractions of the art region; scale them to fractions of the
   // full card, and center on the art region's center (not the card's), so the
@@ -237,6 +243,10 @@ function sampleBottomColor(image: HTMLImageElement): BottomColor | null {
  * defocus of the same pixels rather than a ghost. The band is tinted with a
  * darkened version of the art's own bottom color so it grounds out dark and
  * matches the palette instead of reading as a light gray bar.
+ *
+ * When `suppressBand` is set (a one-line rules box), the band is dropped
+ * entirely: the crisp art is fitted to the whole card and floats the text box
+ * over real artwork, with no blurred/tinted fill.
  */
 function ArtLayers({
   imageUrl,
@@ -246,6 +256,7 @@ function ArtLayers({
   bottomColor,
   widthPx,
   bandTopPct,
+  suppressBand,
   onLoad,
   onError,
 }: {
@@ -256,10 +267,17 @@ function ArtLayers({
   bottomColor: BottomColor | null;
   widthPx: number;
   bandTopPct: number;
+  suppressBand: boolean;
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
-  const extendedStyle = artImageStyleExtended(artCrop, imageAspect);
+  // One-line cards fill the whole card with crisp art (no band); every other
+  // card seats the art in the top region and leaves room for the fill band.
+  const extendedStyle = artImageStyleExtended(
+    artCrop,
+    imageAspect,
+    suppressBand ? 1 : undefined,
+  );
   const blurPx = Math.max(2, widthPx * ART_EXTENSION_BLUR_RATIO);
   // The band's tint is the art's own bottom color, darkened. Until it is
   // sampled, fall back to black so the band still grounds dark (never light).
@@ -304,42 +322,51 @@ function ArtLayers({
         loading="lazy"
       />
 
-      {/*
-        Blurred continuation. A second copy of the art, extended past the seam so
-        it shows the real source below the crop window, blurred. The mask hides it
-        above the feather zone (the box top), ramps it in across the feather (the
-        art defocuses into the band), and holds it opaque from the seam down (the
-        band shows the blurred continuation).
-      */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          overflow: "hidden",
-          maskImage: featherMask,
-          WebkitMaskImage: featherMask,
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            filter: `blur(${blurPx.toFixed(2)}px) brightness(${ART_EXTENSION_BLUR_BRIGHTNESS})`,
-          }}
-        >
-          <img src={imageUrl} alt="" style={extendedStyle} draggable={false} />
-        </div>
-      </div>
+      {suppressBand ? null : (
+        <>
+          {/*
+            Blurred continuation. A second copy of the art, extended past the seam
+            so it shows the real source below the crop window, blurred. The mask
+            hides it above the feather zone (the box top), ramps it in across the
+            feather (the art defocuses into the band), and holds it opaque from
+            the seam down (the band shows the blurred continuation).
+          */}
+          <div
+            aria-hidden="true"
+            style={{
+              position: "absolute",
+              inset: 0,
+              overflow: "hidden",
+              maskImage: featherMask,
+              WebkitMaskImage: featherMask,
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                filter: `blur(${blurPx.toFixed(2)}px) brightness(${ART_EXTENSION_BLUR_BRIGHTNESS})`,
+              }}
+            >
+              <img
+                src={imageUrl}
+                alt=""
+                style={extendedStyle}
+                draggable={false}
+              />
+            </div>
+          </div>
 
-      {/* Color-matched darkening: a gradient in the art's own (darkened) bottom
-          color that ramps in just above the seam and grounds the band's edge
-          nearly solid, so the fill is dark and on-palette and the rules text
-          stays legible. */}
-      <div
-        aria-hidden="true"
-        style={{ position: "absolute", inset: 0, background: tintGradient }}
-      />
+          {/* Color-matched darkening: a gradient in the art's own (darkened)
+              bottom color that ramps in just above the seam and grounds the
+              band's edge nearly solid, so the fill is dark and on-palette and the
+              rules text stays legible. */}
+          <div
+            aria-hidden="true"
+            style={{ position: "absolute", inset: 0, background: tintGradient }}
+          />
+        </>
+      )}
     </>
   );
 }
@@ -596,6 +623,9 @@ export function CardView({
   // Top of the rules text box as a fraction of card height, measured live so the
   // art fill band can size itself to the box (null until measured / no box).
   const [boxTopFrac, setBoxTopFrac] = useState<number | null>(null);
+  // Whether the rules text occupies a single line; such cards drop the fill band
+  // and fill the card with crisp art instead.
+  const [oneLineRules, setOneLineRules] = useState(false);
   const bandBoxRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
@@ -830,7 +860,8 @@ export function CardView({
   const hasBottomChrome = hasTextboxContent || Boolean(renderedTypeLineNode);
 
   // Measure the rules box's top edge relative to the card so the fill band can
-  // scale to the box. Measuring the box itself (not the bottom chrome, which
+  // scale to the box, and count the rules lines so a one-line card can drop the
+  // band entirely. Measuring the box itself (not the bottom chrome, which
   // includes the floating type label's fixed offset) is what surfaces the
   // per-line height difference. The band draws behind the box and never changes
   // its size, so writing the band from a box measurement cannot loop; a small
@@ -840,6 +871,7 @@ export function CardView({
     const boxEl = bandBoxRef.current;
     if (cardEl === null || boxEl === null) {
       setBoxTopFrac(null);
+      setOneLineRules(false);
       return;
     }
 
@@ -856,6 +888,17 @@ export function CardView({
       setBoxTopFrac((prev) =>
         prev !== null && Math.abs(prev - frac) < 0.002 ? prev : frac,
       );
+
+      // Count the rules lines from the text element's content height: a single
+      // line means the band is dropped and the card is filled with crisp art.
+      const rulesEl = rulesFitRef.current;
+      if (rulesEl !== null) {
+        const lineHeightPx = parseFloat(getComputedStyle(rulesEl).lineHeight);
+        if (Number.isFinite(lineHeightPx) && lineHeightPx > 0) {
+          const lines = Math.round(rulesEl.scrollHeight / lineHeightPx);
+          setOneLineRules(lines <= 1);
+        }
+      }
     }
 
     measure();
@@ -875,6 +918,9 @@ export function CardView({
 
   const bandTopPct =
     boxTopFrac !== null ? boxTopFrac * 100 : ART_BAND_DEFAULT_TOP_PCT;
+  // Drop the fill band when the rules text is a single line: the crisp art fills
+  // the card and the text box floats over real artwork.
+  const suppressArtBand = hasTextboxContent && oneLineRules;
 
   // The box shrinks to its rules text, bottom-aligned, capped at the three-line
   // height (`--cv-textbox-height`): a short card gets a short box, while text
@@ -930,6 +976,7 @@ export function CardView({
           bottomColor={bottomColor}
           widthPx={widthPx}
           bandTopPct={bandTopPct}
+          suppressBand={suppressArtBand}
           onLoad={(event) => {
             const image = event.currentTarget;
             const { naturalWidth, naturalHeight } = image;
