@@ -159,11 +159,10 @@ function artImageStyleExtended(
  * gradually across a feather zone just above the seam and then fully fills the
  * band. Because it is the artwork's genuine downward continuation (not a
  * reflection), the band reads as a defocus of the art with no fold or symmetry
- * seam. A darkening gradient grounds the band and faint noise breaks up the
- * smoothness a heavy blur leaves behind.
+ * seam. A gradient in the art's own (darkened) bottom color then grounds the
+ * band so it ends dark and on-palette rather than as a light gray bar.
  */
 const ART_REGION_HEIGHT_PCT = (1 - ART_EXTENSION_FRACTION) * 100;
-const ART_EXTENSION_HEIGHT_PCT = ART_EXTENSION_FRACTION * 100;
 /**
  * Height of card, above the seam, over which the crisp artwork blurs into the
  * band. The blur ramps in across this zone so the transition reads as a soft
@@ -179,31 +178,75 @@ const ART_FEATHER_START_PCT =
 const ART_FEATHER_MASK = `linear-gradient(to bottom, rgba(0,0,0,0) ${ART_FEATHER_START_PCT}%, rgba(0,0,0,1) ${ART_REGION_HEIGHT_PCT}%, rgba(0,0,0,1) 100%)`;
 /** Blur radius as a fraction of the rendered card width. */
 const ART_EXTENSION_BLUR_RATIO = 0.05;
-/** Dark base shown behind the band where a short crop does not reach the edge. */
+/** Neutral dark base used until the art's bottom color has been sampled. */
 const ART_EXTENSION_BASE_COLOR = "#0b0b0d";
-/** Opacity of the darkening gradient at the card's bottom edge. */
-const ART_EXTENSION_DARKEN_OPACITY = 0.4;
-/** Opacity of the noise overlay that dithers out blur banding. */
-const ART_EXTENSION_NOISE_OPACITY = 0.06;
 /**
- * Tiled fractal-noise tile (an inline SVG) drawn faintly over the fill band to
- * keep the blurred fill from reading as a smooth synthetic gradient.
+ * Fraction of the source image's height, measured from its bottom, averaged into
+ * a single color used to tint and darken the fill band so it matches the art's
+ * own palette instead of fading toward a neutral gray.
  */
-const ART_EXTENSION_NOISE_URI =
-  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)'/%3E%3C/svg%3E";
+const ART_BOTTOM_SAMPLE_FRACTION = 0.3;
+/** The sampled bottom color is multiplied by this to darken the band tint. */
+const ART_EXTENSION_TINT_DARKEN = 0.4;
+/**
+ * Tint alpha at the seam (lets the blurred art read through) and at the bottom
+ * edge (nearly solid, so the band grounds out dark and color-matched).
+ */
+const ART_EXTENSION_TINT_SEAM_ALPHA = 0.5;
+const ART_EXTENSION_TINT_EDGE_ALPHA = 0.92;
+/** Card-height % where the tint begins to ramp in (just inside the feather). */
+const ART_EXTENSION_TINT_START_PCT = ART_REGION_HEIGHT_PCT - 5;
+
+interface BottomColor {
+  r: number;
+  g: number;
+  b: number;
+}
+
+/**
+ * Average color of the source image's bottom strip, used to tint the fill band.
+ * Drawing the strip into a 1×1 canvas averages it in one step. Same-origin card
+ * images do not taint the canvas; any read failure falls back to null (the band
+ * then darkens toward the neutral base color).
+ */
+function sampleBottomColor(image: HTMLImageElement): BottomColor | null {
+  try {
+    const w = image.naturalWidth;
+    const h = image.naturalHeight;
+    if (w <= 0 || h <= 0) {
+      return null;
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = 1;
+    canvas.height = 1;
+    const ctx = canvas.getContext("2d");
+    if (ctx === null) {
+      return null;
+    }
+    const strip = Math.max(1, Math.round(h * ART_BOTTOM_SAMPLE_FRACTION));
+    ctx.drawImage(image, 0, h - strip, w, strip, 0, 0, 1, 1);
+    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+    return { r, g, b };
+  } catch {
+    return null;
+  }
+}
 
 /**
  * The full-bleed card art: the crisp source artwork fitted into the top region,
  * with a blurred, extended copy feathered over the bottom to fill the band. The
  * primary image carries the load/error handlers (so the parent learns the source
  * aspect); the blurred copy uses the identical crop, so the feather is a pure
- * defocus of the same pixels rather than a ghost.
+ * defocus of the same pixels rather than a ghost. The band is tinted with a
+ * darkened version of the art's own bottom color so it grounds out dark and
+ * matches the palette instead of reading as a light gray bar.
  */
 function ArtLayers({
   imageUrl,
   alt,
   artCrop,
   imageAspect,
+  bottomColor,
   widthPx,
   onLoad,
   onError,
@@ -212,6 +255,7 @@ function ArtLayers({
   alt: string;
   artCrop: { x: number; y: number; scale: number };
   imageAspect: number | null;
+  bottomColor: BottomColor | null;
   widthPx: number;
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
@@ -223,16 +267,22 @@ function ArtLayers({
   );
   const extendedStyle = artImageStyleExtended(artCrop, imageAspect);
   const blurPx = Math.max(2, widthPx * ART_EXTENSION_BLUR_RATIO);
+  // The band's tint is the art's own bottom color, darkened. Until it is
+  // sampled, fall back to black so the band still grounds dark (never light).
+  const tintRgb =
+    bottomColor !== null
+      ? `${Math.round(bottomColor.r * ART_EXTENSION_TINT_DARKEN)}, ${Math.round(bottomColor.g * ART_EXTENSION_TINT_DARKEN)}, ${Math.round(bottomColor.b * ART_EXTENSION_TINT_DARKEN)}`
+      : "0, 0, 0";
+  const baseColor =
+    bottomColor !== null ? `rgb(${tintRgb})` : ART_EXTENSION_BASE_COLOR;
+  const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${ART_EXTENSION_TINT_START_PCT}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${ART_REGION_HEIGHT_PCT}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
   return (
     <>
-      {/* Dark base so any sliver the extended art does not reach reads as dark. */}
+      {/* Base behind the band: the art's darkened bottom color, so any sliver the
+          extended art does not reach matches rather than going neutral. */}
       <div
         aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          background: ART_EXTENSION_BASE_COLOR,
-        }}
+        style={{ position: "absolute", inset: 0, background: baseColor }}
       />
 
       {/* Crisp artwork, fitted into the top region (wider aspect than the card). */}
@@ -286,33 +336,13 @@ function ArtLayers({
         </div>
       </div>
 
-      {/* Darkening gradient that grounds the fill band and aids text legibility. */}
+      {/* Color-matched darkening: a gradient in the art's own (darkened) bottom
+          color that ramps in just above the seam and grounds the band's edge
+          nearly solid, so the fill is dark and on-palette and the rules text
+          stays legible. */}
       <div
         aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: `${ART_REGION_HEIGHT_PCT}%`,
-          height: `${ART_EXTENSION_HEIGHT_PCT}%`,
-          background: `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,${ART_EXTENSION_DARKEN_OPACITY}) 100%)`,
-        }}
-      />
-
-      {/* Faint noise over the fill band to dither out blur banding. */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: `${ART_REGION_HEIGHT_PCT}%`,
-          height: `${ART_EXTENSION_HEIGHT_PCT}%`,
-          backgroundImage: `url("${ART_EXTENSION_NOISE_URI}")`,
-          backgroundRepeat: "repeat",
-          opacity: ART_EXTENSION_NOISE_OPACITY,
-          mixBlendMode: "overlay",
-        }}
+        style={{ position: "absolute", inset: 0, background: tintGradient }}
       />
     </>
   );
@@ -566,6 +596,7 @@ export function CardView({
 }: CardViewProps) {
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
+  const [bottomColor, setBottomColor] = useState<BottomColor | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
   // Auto-shrink the rules body so a card needing more than the reserved three
@@ -584,6 +615,7 @@ export function CardView({
   useEffect(() => {
     setImageError(false);
     setImageAspect(null);
+    setBottomColor(null);
   }, [card.imageNumber]);
 
   const hasImage = hasAssignedImage(card.imageNumber);
@@ -848,11 +880,14 @@ export function CardView({
           alt={card.name}
           artCrop={artCrop}
           imageAspect={imageAspect}
+          bottomColor={bottomColor}
           widthPx={widthPx}
           onLoad={(event) => {
-            const { naturalWidth, naturalHeight } = event.currentTarget;
+            const image = event.currentTarget;
+            const { naturalWidth, naturalHeight } = image;
             if (naturalWidth > 0 && naturalHeight > 0) {
               setImageAspect(naturalWidth / naturalHeight);
+              setBottomColor(sampleBottomColor(image));
             }
           }}
           onError={() => {
