@@ -271,7 +271,7 @@ name = "Luminwings"
 mtg-name = "Mox Opal"
 id = "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49"
 tides = []
-rendered-text = "▸Dawn: With 3 allied spirit animals, Gain 1●."
+rendered-text = "▸Dawn: With 3 allied spirit animals, gain 1●."
 energy-cost = 0
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -2960,7 +2960,7 @@ mtg-name = "Anax, Hardened in the Forge"
 id = "6d6ce556-60df-486f-b2d8-5df168a6f75e"
 tides = []
 rendered-text = """
-When an non-figment ally is dissolved, materialize a 1✦ ember figment.
+When a non-figment ally is dissolved, materialize a 1✦ ember figment.
 
 When an ember figment is dissolved, this character gains +1✦."""
 energy-cost = 3
@@ -3707,9 +3707,7 @@ tides = []
 rendered-text = """
 Awakened
 
-▸Challenge: This character gains +1✦.
-
-use with another"""
+▸Challenge: This character gains +1✦."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -5923,7 +5921,7 @@ name = "Dawnrunner"
 mtg-name = "Jadar, Ghoulcaller of Nephalia"
 id = "9d63ba3e-fafb-466e-8418-ce5f8941ba30"
 tides = []
-rendered-text = "▸Night: If you have no allied shadow figments, materialize a 2● shadow figment."
+rendered-text = "▸Night: If you have no allied shadow figments, materialize a 2✦ shadow figment."
 energy-cost = 2
 card-type = "Character"
 subtype = "Child"
@@ -6532,7 +6530,7 @@ mtg-name = "Baloth Prime"
 id = "a5056a4c-542b-4a7c-8fe6-895126c7d4c8"
 tides = []
 rendered-text = """
-When you abandon a character with cost 2● or less, materialize a 4✦ Monstrosity figment.
+When you abandon a character with cost 2● or less, materialize a 4✦ monstrosity figment.
 
 4●: Abandon a character with cost 2● or less."""
 energy-cost = 6
