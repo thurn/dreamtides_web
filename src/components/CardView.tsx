@@ -6,7 +6,11 @@ import {
   cardImageUrl,
   hasAssignedImage,
 } from "../data/card-database";
-import { CARD_ASPECT_RATIO, CARD_CORNER_RADIUS } from "./card-aspect";
+import {
+  CARD_ASPECT_RATIO,
+  CARD_ASPECT_RATIO_VALUE,
+  CARD_CORNER_RADIUS,
+} from "./card-aspect";
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { CardStatOrb } from "./CardStatOrb";
@@ -23,19 +27,54 @@ const SELECTION_DEFAULT_COLOR = "#f97316";
  * Fallback art crop for cards that carry no authored `art` setting: centered
  * with a slight cover zoom that hides source letterboxing. The card editor's
  * art-edit mode overrides this per card by writing an `art` table to the card
- * TOML. `x`/`y` are pan offsets as a percentage of the card (0 = centered),
- * applied as a CSS translate, and `scale` is the cover zoom.
+ * TOML. `x`/`y` are normalized pan positions (-1..1, 0 = centered) and `scale`
+ * is the cover zoom.
  */
 export const DEFAULT_ART_CROP = { x: 0, y: 0, scale: 1.17 } as const;
 
 /**
- * Largest gap-free pan offset (as a percentage of the card) at a given zoom.
- * The art image covers the frame at scale 1, so panning is only possible within
- * the overflow the zoom creates: `(scale - 1) / 2` of the card on each axis.
- * Mirrored by `maxArtOffsetPercent` in `scripts/card-editor-data.mjs`.
+ * Resolve an art crop against the source image's aspect ratio into CSS for the
+ * full-bleed art image. The image is sized to cover the frame at `scale` 1 and
+ * grown by the zoom; the normalized pan (-1..1) is mapped to a translate within
+ * the overflow that covering and zooming create, so the frame stays fully
+ * covered for any pan in range. `imageAspect` is null until the image loads, in
+ * which case a centered cover fallback is used.
  */
-export function maxArtOffsetPercent(scale: number): number {
-  return Math.max(0, (scale - 1) / 2) * 100;
+function artImageStyle(
+  art: { x: number; y: number; scale: number },
+  imageAspect: number | null,
+): CSSProperties {
+  if (imageAspect === null) {
+    return {
+      position: "absolute",
+      inset: 0,
+      height: "100%",
+      width: "100%",
+      objectFit: "cover",
+      transform: `scale(${art.scale})`,
+    };
+  }
+
+  // ratio > 1 means the image is wider than the frame (its sides are cropped by
+  // covering); ratio < 1 means it is taller (its top/bottom are cropped).
+  const ratio = imageAspect / CARD_ASPECT_RATIO_VALUE;
+  const coverW = ratio >= 1 ? ratio : 1;
+  const coverH = ratio >= 1 ? 1 : 1 / ratio;
+  const renderW = art.scale * coverW;
+  const renderH = art.scale * coverH;
+  // Translate as a percentage of the image's own size, bounded so |pan| === 1
+  // aligns the image edge with the frame edge (no gap).
+  const panX = renderW > 1 ? (art.x * (renderW - 1)) / (2 * renderW) * 100 : 0;
+  const panY = renderH > 1 ? (art.y * (renderH - 1)) / (2 * renderH) * 100 : 0;
+  return {
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    width: `${renderW * 100}%`,
+    height: `${renderH * 100}%`,
+    objectFit: "cover",
+    transform: `translate(-50%, -50%) translate(${panX}%, ${panY}%)`,
+  };
 }
 
 /** Card name / type / rules text colors and fonts, as CSS-var references so the
@@ -232,10 +271,12 @@ export function CardView({
   slots = {},
 }: CardViewProps) {
   const [imageError, setImageError] = useState(false);
+  const [imageAspect, setImageAspect] = useState<number | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
   useEffect(() => {
     setImageError(false);
+    setImageAspect(null);
   }, [card.imageNumber]);
 
   const hasImage = hasAssignedImage(card.imageNumber);
@@ -439,11 +480,14 @@ export function CardView({
         <img
           src={cardImageUrl(card.imageNumber)}
           alt={card.name}
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{
-            transform: `translate(${artCrop.x}%, ${artCrop.y}%) scale(${artCrop.scale})`,
-          }}
+          style={artImageStyle(artCrop, imageAspect)}
           draggable={false}
+          onLoad={(event) => {
+            const { naturalWidth, naturalHeight } = event.currentTarget;
+            if (naturalWidth > 0 && naturalHeight > 0) {
+              setImageAspect(naturalWidth / naturalHeight);
+            }
+          }}
           onError={() => {
             setImageError(true);
           }}

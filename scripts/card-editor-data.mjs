@@ -25,20 +25,15 @@ export const EDITABLE_CARD_FIELDS = new Set([
  */
 export const DEFAULT_ART_CROP = { x: 0, y: 0, scale: 1.17 };
 
-// Art crop bounds. `x`/`y` are pan offsets as a percentage of the card applied
-// as a CSS translate (0 = centered); `scale` is the cover zoom (1 keeps the
-// image at cover size, never smaller, so the frame stays fully covered).
+// Art crop bounds. `x`/`y` are normalized pan positions in -1..1 (0 = centered,
+// ±1 = panned to the image edge); `scale` is the cover zoom (1 keeps the image
+// at cover size, never smaller, so the frame stays fully covered). The pan is
+// resolved against the source image's aspect ratio at render time, so the
+// stored value is independent of image dimensions.
+const ART_OFFSET_MIN = -1;
+const ART_OFFSET_MAX = 1;
 const ART_SCALE_MIN = 1;
 const ART_SCALE_MAX = 5;
-
-/**
- * Largest gap-free pan offset (percentage of the card) at a given zoom. The
- * image covers the frame at scale 1, so panning is bounded by the overflow the
- * zoom creates. Mirrors `maxArtOffsetPercent` in `src/components/CardView.tsx`.
- */
-function maxArtOffsetPercent(scale) {
-  return Math.max(0, (scale - 1) / 2) * 100;
-}
 
 // Distinct, readable swatch colors handed out to tags that do not yet have an
 // explicit color in the registry sidecar. A tag's default is chosen
@@ -212,12 +207,10 @@ function validateArtCrop(field, rawValue) {
     return validationFailure(field, "Art x, y, and scale must be numbers.", rawValue);
   }
 
-  const clampedScale = roundTo(clampNumber(scale, ART_SCALE_MIN, ART_SCALE_MAX), 2);
-  const maxOffset = maxArtOffsetPercent(clampedScale);
   return validationSuccess(field, {
-    x: roundTo(clampNumber(x, -maxOffset, maxOffset), 1),
-    y: roundTo(clampNumber(y, -maxOffset, maxOffset), 1),
-    scale: clampedScale,
+    x: roundTo(clampNumber(x, ART_OFFSET_MIN, ART_OFFSET_MAX), 3),
+    y: roundTo(clampNumber(y, ART_OFFSET_MIN, ART_OFFSET_MAX), 3),
+    scale: roundTo(clampNumber(scale, ART_SCALE_MIN, ART_SCALE_MAX), 2),
   });
 }
 

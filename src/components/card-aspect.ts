@@ -13,6 +13,9 @@ export const CARD_ASPECT_H = 7;
 /** Value for the CSS `aspect-ratio` property / inline style. */
 export const CARD_ASPECT_RATIO = `${CARD_ASPECT_W} / ${CARD_ASPECT_H}`;
 
+/** Numeric width-to-height ratio of the card, for layout math. */
+export const CARD_ASPECT_RATIO_VALUE = CARD_ASPECT_W / CARD_ASPECT_H;
+
 /**
  * Card corner radius (18px at the 500px design width). The horizontal radius
  * is a fixed percentage of the width; the vertical radius is scaled by the
