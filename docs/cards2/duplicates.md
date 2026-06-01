@@ -511,7 +511,6 @@ apparent variety and should be normalized.
 - **Avacyn's Pilgrim** `[1●/1✦]` reads `▸Dawn: Gain ●.` — missing the `1`. It is
   the 1●/1✦ mana dork of §1.1/§2.1; the text should read `▸Dawn: Gain 1●.`
 - **Scrapwork Mutt** reads `Relcaim 2●` — misspelling of `Reclaim 2●`.
-- **Valakut Exporation** — name misspelling of "Exploration".
 - **Aftermath Analyst** reads `▸Materialize: Erode 3` — should be `▸Materialized:`
   to match the §2.18 self-mill family.
 - **One per turn** vs **Once per turn** — the (unnamed) `[2●/3✦ Warrior]` "One per
