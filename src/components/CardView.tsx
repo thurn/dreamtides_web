@@ -156,16 +156,19 @@ const ART_BAND_DEFAULT_TOP_PCT = (1 - ART_EXTENSION_FRACTION) * 100;
 const ART_BAND_MIN_TOP_PCT = 55;
 const ART_BAND_MAX_TOP_PCT = 94;
 /**
- * Height of the feather (card-height %): the seam — where the blur reaches full
- * opacity and the tint begins — sits this far below the feather start (the box
- * top), so the whole ramp tucks behind the box's top edge and reads as a soft
- * defocus rather than a line where it shows beside the box.
+ * Feather geometry (card-height %). The blur ramp begins `ABOVE` the box top and
+ * reaches full opacity `BELOW` it, so the transition eases in from the crisp art
+ * over a long, gentle gradient (no hard line where it shows beside the box) and
+ * the fully-blurred seam stays a short distance below the box top. Keeping
+ * `BELOW` small holds the solid dark band thin, while the longer `ABOVE` lead-in
+ * is what dissolves the seam.
  */
-const ART_EXTENSION_FEATHER_BELOW_PCT = 6;
-/** Card-height % over which the tint ramps in above the seam (a soft lead-in). */
-const ART_EXTENSION_TINT_RAMP_PCT = 5;
+const ART_EXTENSION_FEATHER_ABOVE_PCT = 7;
+const ART_EXTENSION_FEATHER_BELOW_PCT = 3;
+/** Card-height % above the box top where the tint begins its gentle lead-in. */
+const ART_EXTENSION_TINT_ABOVE_PCT = 3;
 /** Blur radius as a fraction of the rendered card width. */
-const ART_EXTENSION_BLUR_RATIO = 0.05;
+const ART_EXTENSION_BLUR_RATIO = 0.06;
 /**
  * Brightness multiplier on the blurred continuation. The source below the crop
  * window is often lighter than the art at the seam (e.g. dark rocks over a hazy
@@ -270,17 +273,18 @@ function ArtLayers({
   const baseColor =
     bottomColor !== null ? `rgb(${tintRgb})` : ART_EXTENSION_BASE_COLOR;
 
-  // Resolve the band geometry from the measured rules-box top. The feather
-  // starts at the box top and the seam (full blur + tint onset) sits a short
-  // fixed distance below it, so the whole band tucks behind the box and scales
-  // with it.
-  const featherStartPct = Math.min(
+  // Resolve the band geometry from the measured rules-box top. The blur ramp
+  // eases in from above the box top and reaches full opacity just below it, so
+  // the transition is a long gentle gradient (no seam) while the solid dark band
+  // stays thin and scales with the box.
+  const bandTop = Math.min(
     Math.max(bandTopPct, ART_BAND_MIN_TOP_PCT),
     ART_BAND_MAX_TOP_PCT,
   );
-  const seamPct = Math.min(100, featherStartPct + ART_EXTENSION_FEATHER_BELOW_PCT);
+  const featherStartPct = Math.max(0, bandTop - ART_EXTENSION_FEATHER_ABOVE_PCT);
+  const seamPct = Math.min(100, bandTop + ART_EXTENSION_FEATHER_BELOW_PCT);
   const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct.toFixed(2)}%, rgba(0,0,0,1) ${seamPct.toFixed(2)}%, rgba(0,0,0,1) 100%)`;
-  const tintStartPct = Math.max(0, seamPct - ART_EXTENSION_TINT_RAMP_PCT);
+  const tintStartPct = Math.max(0, bandTop - ART_EXTENSION_TINT_ABOVE_PCT);
   const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${tintStartPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${seamPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
   return (
     <>

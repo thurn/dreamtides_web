@@ -147,23 +147,25 @@ the sizing — almost every simpler approach reintroduces a seam.
 
 A `ResizeObserver` measures the rules text box's top edge relative to the card
 and stores it as `boxTopFrac = (boxTop - cardTop) / cardHeight`. `ArtLayers`
-turns that into `bandTopPct` and derives the whole band from it:
+turns that into `bandTopPct`, clamps it to
+`[ART_BAND_MIN_TOP_PCT, ART_BAND_MAX_TOP_PCT]` (`bandTop`), and derives the band:
 
-- The **feather start** is the measured box top (`featherStartPct`), clamped to
-  `[ART_BAND_MIN_TOP_PCT, ART_BAND_MAX_TOP_PCT]`.
-- The **fully-blurred seam** sits `ART_EXTENSION_FEATHER_BELOW_PCT` below it, so
-  the feather ramp tucks behind the box's top edge.
-- The **tint** ramps in just above the seam (`ART_EXTENSION_TINT_RAMP_PCT`) and
-  grounds nearly solid at the card bottom.
+- The **feather start** sits `ART_EXTENSION_FEATHER_ABOVE_PCT` *above* `bandTop`,
+  so the blur eases in from the crisp art over a long, gentle ramp with no hard
+  line where it shows beside the box.
+- The **fully-blurred seam** sits `ART_EXTENSION_FEATHER_BELOW_PCT` *below*
+  `bandTop` — a small offset, so the solid dark band stays thin.
+- The **tint** begins its lead-in `ART_EXTENSION_TINT_ABOVE_PCT` above `bandTop`,
+  reaches its seam alpha at the seam, and grounds nearly solid at the card bottom.
 
-Because the feather is anchored to the measured box top rather than a fixed card
+Because the band is anchored to the measured box top rather than a fixed card
 position, a one-line box (low on the card) yields a small band and a wordy box (a
-tall box, higher up) yields a larger one, and the feather never spills onto the
-crisp art above the box. Before the box is measured (and for cards with no rules
-box) the band falls back to `ART_BAND_DEFAULT_TOP_PCT`, the
-`ART_EXTENSION_FRACTION` baseline. The band draws behind the box and never
-changes the box's size, so writing the band from a box measurement cannot loop; a
-small dead-band (`< 0.002`) absorbs observer jitter.
+tall box, higher up) yields a larger one. The long upward feather is what
+dissolves the seam; it reads as a soft defocus rather than a line. Before the box
+is measured (and for cards with no rules box) the band falls back to
+`ART_BAND_DEFAULT_TOP_PCT`, the `ART_EXTENSION_FRACTION` baseline. The band draws
+behind the box and never changes the box's size, so writing the band from a box
+measurement cannot loop; a small dead-band (`< 0.002`) absorbs observer jitter.
 
 ### The two parts of the band
 
@@ -306,11 +308,13 @@ In `CardView.tsx`:
   used before the rules box is measured / when there is no box.
 - `ART_BAND_MIN_TOP_PCT` (`55`) / `ART_BAND_MAX_TOP_PCT` (`94`) — clamp on the
   measured box-top %, bounding the tallest and smallest band.
-- `ART_EXTENSION_FEATHER_BELOW_PCT` (`6`) — feather height: card-height % from
-  the feather start (box top) down to the fully-blurred seam.
-- `ART_EXTENSION_TINT_RAMP_PCT` (`5`) — card-height % over which the tint ramps
-  in above the seam.
-- `ART_EXTENSION_BLUR_RATIO` (`0.05`) — blur radius as a fraction of card width.
+- `ART_EXTENSION_FEATHER_ABOVE_PCT` (`7`) — card-height % the blur ramp begins
+  above the box top (the long lead-in that dissolves the seam).
+- `ART_EXTENSION_FEATHER_BELOW_PCT` (`3`) — card-height % from the box top down to
+  the fully-blurred seam (kept small so the solid dark band stays thin).
+- `ART_EXTENSION_TINT_ABOVE_PCT` (`3`) — card-height % above the box top where the
+  tint begins its lead-in.
+- `ART_EXTENSION_BLUR_RATIO` (`0.06`) — blur radius as a fraction of card width.
 - `ART_EXTENSION_BLUR_BRIGHTNESS` (`0.6`) — brightness multiplier on the blur.
 - `ART_BOTTOM_SAMPLE_FRACTION` (`0.3`) — source band height averaged for the tint.
 - `ART_EXTENSION_TINT_DARKEN` (`0.4`) — multiplier darkening the sampled color.
