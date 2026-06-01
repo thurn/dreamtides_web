@@ -193,20 +193,28 @@ describe("validateCardEdit", () => {
     }
   });
 
-  it("normalizes and clamps art crop values", () => {
-    expect(validateCardEdit("art", { x: 50, y: 46, scale: 1.2 })).toMatchObject({
+  it("normalizes and clamps art crop values to the zoom's pan range", () => {
+    // At scale 2 the pan range is (2 - 1) / 2 = 50% of the card on each axis.
+    expect(validateCardEdit("art", { x: 20, y: -30, scale: 2 })).toMatchObject({
       ok: true,
-      value: { x: 50, y: 46, scale: 1.2 },
+      value: { x: 20, y: -30, scale: 2 },
     });
-    expect(validateCardEdit("art", { x: -10, y: 250, scale: 9 })).toMatchObject({
+    // Scale clamps to 1..5; at scale 5 the pan range is (5 - 1) / 2 = 200%, and
+    // offsets beyond it clamp to its edge.
+    expect(validateCardEdit("art", { x: 300, y: -300, scale: 9 })).toMatchObject({
       ok: true,
-      value: { x: 0, y: 100, scale: 5 },
+      value: { x: 200, y: -200, scale: 5 },
+    });
+    // At the minimum zoom there is no overflow, so panning is pinned to center.
+    expect(validateCardEdit("art", { x: 40, y: 40, scale: 1 })).toMatchObject({
+      ok: true,
+      value: { x: 0, y: 0, scale: 1 },
     });
     expect(
-      validateCardEdit("art", { x: 33.333, y: 12.5, scale: 1.234 }),
+      validateCardEdit("art", { x: 3.333, y: -1.27, scale: 1.234 }),
     ).toMatchObject({
       ok: true,
-      value: { x: 33.3, y: 12.5, scale: 1.23 },
+      value: { x: 3.3, y: -1.3, scale: 1.23 },
     });
   });
 
@@ -678,12 +686,12 @@ expression = "cards.name"
     const patched = patchRenderedCardsToml(source, {
       cardId: FIRST_ID,
       field: "art",
-      value: { x: 40, y: 55, scale: 1.3 },
+      value: { x: 10, y: -12, scale: 1.3 },
     });
     const parsed = parse(patched.source);
 
-    expect(parsed.cards[0].art).toEqual({ x: 40, y: 55, scale: 1.3 });
-    expect(patched.source).toContain("art = { x = 40, y = 55, scale = 1.3 }");
+    expect(parsed.cards[0].art).toEqual({ x: 10, y: -12, scale: 1.3 });
+    expect(patched.source).toContain("art = { x = 10, y = -12, scale = 1.3 }");
     // The unrelated block stays byte-for-byte identical.
     expect(blockFor(patched.source, SECOND_ID)).toBe(blockFor(source, SECOND_ID));
   });
@@ -694,17 +702,17 @@ expression = "cards.name"
     const inserted = patchRenderedCardsToml(source, {
       cardId: FIRST_ID,
       field: "art",
-      value: { x: 40, y: 55, scale: 1.3 },
+      value: { x: 10, y: -12, scale: 1.3 },
     }).source;
     const replaced = patchRenderedCardsToml(inserted, {
       cardId: FIRST_ID,
       field: "art",
-      value: { x: 60, y: 20, scale: 2 },
+      value: { x: -25, y: 40, scale: 2 },
     });
     const parsed = parse(replaced.source);
 
-    expect(parsed.cards[0].art).toEqual({ x: 60, y: 20, scale: 2 });
-    expect(replaced.source).not.toContain("x = 40");
+    expect(parsed.cards[0].art).toEqual({ x: -25, y: 40, scale: 2 });
+    expect(replaced.source).not.toContain("x = 10");
   });
 
   it("canonicalizes variable energy-cost values before writing TOML", () => {

@@ -15,12 +15,14 @@ export type CardType = "Character" | "Event";
 export type Rarity = "Legendary" | "Starter" | "Special";
 
 /**
- * Per-card art crop. `x` and `y` are CSS `object-position` percentages (0–100)
- * controlling which part of the source image is centered, and `scale` is the
- * `object-cover` zoom factor (1 = fill, larger = zoomed in). Authored through
- * the card editor's art-edit mode and stored as the inline `art` table in the
- * card TOML; absent on cards that have never been cropped, in which case
- * `CardView` falls back to its default crop.
+ * Per-card art crop. The image covers the frame at `scale` 1; `x` and `y` pan
+ * it as a percentage of the card (0 = centered), applied as a CSS translate,
+ * and `scale` is the cover zoom (1 = fill, larger = zoomed in). Panning is only
+ * possible within the overflow the zoom creates, so `x`/`y` are bounded by
+ * `(scale - 1) / 2` to keep the frame fully covered. Authored through the card
+ * editor's art-edit mode and stored as the inline `art` table in the card TOML;
+ * absent on cards that have never been cropped, in which case `CardView` falls
+ * back to its default crop.
  */
 export interface ArtCrop {
   x: number;

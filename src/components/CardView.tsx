@@ -20,12 +20,23 @@ import { renderRulesText } from "./RulesText";
 const SELECTION_DEFAULT_COLOR = "#f97316";
 
 /**
- * Fallback art crop for cards that carry no authored `art` setting. Mirrors the
- * historical hardcoded framing (centered horizontally, biased slightly above
- * center, zoomed to hide source letterboxing). The card editor's art-edit mode
- * overrides this per card by writing an `art` table to the card TOML.
+ * Fallback art crop for cards that carry no authored `art` setting: centered
+ * with a slight cover zoom that hides source letterboxing. The card editor's
+ * art-edit mode overrides this per card by writing an `art` table to the card
+ * TOML. `x`/`y` are pan offsets as a percentage of the card (0 = centered),
+ * applied as a CSS translate, and `scale` is the cover zoom.
  */
-export const DEFAULT_ART_CROP = { x: 50, y: 46, scale: 1.17 } as const;
+export const DEFAULT_ART_CROP = { x: 0, y: 0, scale: 1.17 } as const;
+
+/**
+ * Largest gap-free pan offset (as a percentage of the card) at a given zoom.
+ * The art image covers the frame at scale 1, so panning is only possible within
+ * the overflow the zoom creates: `(scale - 1) / 2` of the card on each axis.
+ * Mirrored by `maxArtOffsetPercent` in `scripts/card-editor-data.mjs`.
+ */
+export function maxArtOffsetPercent(scale: number): number {
+  return Math.max(0, (scale - 1) / 2) * 100;
+}
 
 /** Card name / type / rules text colors and fonts, as CSS-var references so the
  * `.card-view` rule in `index.css` is the single place these are tuned. */
@@ -430,8 +441,7 @@ export function CardView({
           alt={card.name}
           className="absolute inset-0 h-full w-full object-cover"
           style={{
-            objectPosition: `${artCrop.x}% ${artCrop.y}%`,
-            transform: `scale(${artCrop.scale})`,
+            transform: `translate(${artCrop.x}%, ${artCrop.y}%) scale(${artCrop.scale})`,
           }}
           draggable={false}
           onError={() => {

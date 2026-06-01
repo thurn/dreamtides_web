@@ -323,8 +323,10 @@ export default function EditableCard({
   };
 
   if (artEditing) {
-    // Art-edit mode replaces inline field editing: the whole card is a button
-    // that opens the art crop editor. The preview reflects the card's saved art.
+    // Art-edit mode replaces inline field editing: clicking the card opens the
+    // art crop editor. CardView handles the click and button semantics itself,
+    // so the card is not wrapped in an element whose styles would cascade into
+    // the card chrome. The preview reflects the card's saved art.
     return (
       <article
         ref={cardRef}
@@ -332,26 +334,12 @@ export default function EditableCard({
         data-editor-card-id={card.id}
         style={{ display: "block" }}
       >
-        <button
-          type="button"
-          aria-label={`Edit art crop for ${visibleName}`}
-          title="Click to edit art crop"
+        <CardView
+          card={visibleCard}
+          large={size === "large"}
+          suppressHoverHelp
           onClick={() => onOpenArtEditor(card)}
-          style={{
-            display: "block",
-            width: "100%",
-            padding: 0,
-            border: "none",
-            background: "transparent",
-            cursor: "pointer",
-          }}
-        >
-          <CardView
-            card={visibleCard}
-            large={size === "large"}
-            suppressHoverHelp
-          />
-        </button>
+        />
       </article>
     );
   }

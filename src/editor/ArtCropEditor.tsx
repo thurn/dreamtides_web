@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { CardView, DEFAULT_ART_CROP } from "../components/CardView";
+import {
+  CardView,
+  DEFAULT_ART_CROP,
+  maxArtOffsetPercent,
+} from "../components/CardView";
 import type { ArtCrop } from "../types/cards";
 import type { EditorCardRecord } from "./types";
 
-/** Percentage points each pan press shifts the crop's focal point. */
-const PAN_STEP = 2;
+/** Percentage of the card each pan press shifts the crop. */
+const PAN_STEP = 3;
 /** Zoom factor change per zoom press. */
-const ZOOM_STEP = 0.05;
-const OFFSET_MIN = 0;
-const OFFSET_MAX = 100;
+const ZOOM_STEP = 0.1;
 const SCALE_MIN = 1;
 const SCALE_MAX = 5;
 /** Delay before an adjustment is persisted, coalescing rapid button presses. */
@@ -175,13 +177,17 @@ export default function ArtCropEditor({
   const nudge = useCallback(
     (deltas: Partial<ArtCrop>) => {
       setArt((current) => {
+        const scale = roundTo(
+          clamp(current.scale + (deltas.scale ?? 0), SCALE_MIN, SCALE_MAX),
+          2,
+        );
+        // Panning is bounded by the overflow the zoom creates; zooming out
+        // re-clamps the offsets so the frame stays fully covered.
+        const maxOffset = maxArtOffsetPercent(scale);
         const next: ArtCrop = {
-          x: roundTo(clamp(current.x + (deltas.x ?? 0), OFFSET_MIN, OFFSET_MAX), 1),
-          y: roundTo(clamp(current.y + (deltas.y ?? 0), OFFSET_MIN, OFFSET_MAX), 1),
-          scale: roundTo(
-            clamp(current.scale + (deltas.scale ?? 0), SCALE_MIN, SCALE_MAX),
-            2,
-          ),
+          x: roundTo(clamp(current.x + (deltas.x ?? 0), -maxOffset, maxOffset), 1),
+          y: roundTo(clamp(current.y + (deltas.y ?? 0), -maxOffset, maxOffset), 1),
+          scale,
         };
         latestArtRef.current = next;
         return next;
