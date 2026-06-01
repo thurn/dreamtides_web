@@ -45,7 +45,7 @@ An events-matter shell that pairs a high density of cheap interactive events —
 removal, prevents, card draw — with payoff characters like Gateweaver, Somber
 Flockmaster, The Waking Titan, and Echo Architect that trigger whenever you play
 an event. The drafting heuristic is to take eight or more 1● and 2● events
-first, then wheel the payoffs. It splashes naturally into Storm, Discard, and
+first, then focus on the payoffs. It splashes naturally into Storm, Discard, and
 control directions.
 
 ### Survivors
