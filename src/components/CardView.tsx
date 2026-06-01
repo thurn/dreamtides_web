@@ -72,6 +72,12 @@ function artImageStyle(
     top: "50%",
     width: `${renderW * 100}%`,
     height: `${renderH * 100}%`,
+    // The art is intentionally sized larger than the frame to create pan
+    // overflow; override the global `img { max-width: 100% }` base rule so the
+    // width is not capped back to the frame (which would leave a gap when
+    // panned).
+    maxWidth: "none",
+    maxHeight: "none",
     objectFit: "cover",
     transform: `translate(-50%, -50%) translate(${panX}%, ${panY}%)`,
   };
