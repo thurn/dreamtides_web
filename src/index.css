@@ -226,29 +226,24 @@ button:disabled {
   --cv-textbox-pad-x: 3.2cqw;
   --cv-textbox-pad: var(--cv-textbox-pad-y) var(--cv-textbox-pad-x);
 
-  /* Tight type-line/rules pairing and rules line spacing. */
-  --cv-type-gap: 0.8cqw;
+  /* Rules line spacing, and the gap the floating type label rides above the
+   * text box (it is anchored to the box's top edge so the gap stays constant
+   * regardless of the box height). */
   --cv-type-line-height: 1.2;
   --cv-rules-line-height: 1.38;
   --cv-paragraph-gap: 0.68em;
+  --cv-typelabel-gap: 1.2cqw;
 
-  /* Fixed text-box height: one type line + a three-line rules area + vertical
-   * padding. Derived from the font sizes and line heights so adjusting a font
-   * size keeps the reserved box proportional. The rules area is the height of
-   * three rules lines at the base font; rules text that overflows it shrinks to
-   * fit, while shorter text is centered within the box. */
-  --cv-textbox-type-line-height: calc(
-    var(--cv-type-font-size) * var(--cv-type-line-height)
-  );
+  /* Fixed text-box height: a three-line rules area + vertical padding. Derived
+   * from the rules font size and line height so adjusting the font size keeps
+   * the reserved box proportional. The rules area is the height of three rules
+   * lines at the base font; rules text that overflows it shrinks to fit, while
+   * shorter text is centered within the box. */
   --cv-textbox-rules-area-height: calc(
     var(--cv-rules-font-size) * var(--cv-rules-line-height) * 3
   );
-  --cv-textbox-content-height: calc(
-    var(--cv-textbox-type-line-height) + var(--cv-type-gap) +
-      var(--cv-textbox-rules-area-height)
-  );
   --cv-textbox-height: calc(
-    var(--cv-textbox-content-height) + 2 * var(--cv-textbox-pad-y)
+    var(--cv-textbox-rules-area-height) + 2 * var(--cv-textbox-pad-y)
   );
 
   /* Font sizes, as fractions of the card width. The name and type line use
@@ -264,7 +259,10 @@ button:disabled {
   --cv-name-font-family: "EB Garamond", Georgia, serif;
   --cv-rules-font-family: "Fira Sans Condensed", "Inter", sans-serif;
   --cv-name-color: #f6f6f5;
-  --cv-type-color: rgba(238, 238, 236, 0.74);
+  /* Near-white and fully opaque: the type label floats on the art with no plate
+   * behind it, so its fill rides on top of the faux outline rather than a
+   * translucent panel. */
+  --cv-type-color: #fbfbf9;
   --cv-rules-color: #f1f1f0;
 
   /* Monochrome black chrome for the default (Character) frame. The name bar

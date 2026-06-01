@@ -93,6 +93,49 @@ const RULES_COLOR = "var(--cv-rules-color)";
 const RULES_FONT_FAMILY = "var(--cv-rules-font-family)";
 
 /**
+ * Outline + shadow for the floating type label, which sits directly on the art
+ * above the text box with no plate behind it, so its legibility comes entirely
+ * from a faux outline rather than a background. A single `text-shadow` only
+ * offsets one way, so the outline is stamped as eight zero-blur copies (four
+ * cardinals + four diagonals) forming a hard ring around the glyphs. The
+ * diagonals over-reach the cardinals by a factor of √2, so the ring alone is
+ * slightly lumpy; a true `-webkit-text-stroke` paints a uniform vector outline
+ * underneath to even it out (with `paint-order: stroke fill` so the stroke sits
+ * outside the fill instead of eating into the letterforms), and a soft ambient
+ * halo gap-fills the remaining pinholes. A downward drop grounds the label as
+ * if floating just above the art. Offsets are in `cqw` so the whole treatment
+ * scales with the rendered card width. See the
+ * `Card A Corner Type Label - Implementation.md` design handoff for the
+ * derivation.
+ */
+const TYPE_LABEL_RING_RADIUS_CQW = 0.62;
+const TYPE_LABEL_OUTLINE_COLOR = "rgba(0, 0, 0, 0.95)";
+const TYPE_LABEL_RING_DIRECTIONS: readonly (readonly [number, number])[] = [
+  [1, 0],
+  [-1, 0],
+  [0, 1],
+  [0, -1],
+  [1, 1],
+  [1, -1],
+  [-1, 1],
+  [-1, -1],
+];
+const TYPE_LABEL_TEXT_SHADOW = [
+  // Eight zero-blur copies: blur must stay 0 or the ring smears and stops
+  // reading as a crisp edge.
+  ...TYPE_LABEL_RING_DIRECTIONS.map(
+    ([x, y]) =>
+      `${(x * TYPE_LABEL_RING_RADIUS_CQW).toFixed(3)}cqw ${(y * TYPE_LABEL_RING_RADIUS_CQW).toFixed(3)}cqw 0 ${TYPE_LABEL_OUTLINE_COLOR}`,
+  ),
+  // Ambient halo: a centered blur that lifts the text off light or busy art and
+  // fills the thin gaps the eight-spoke ring leaves between its offsets.
+  "0 0 1.6cqw rgba(0, 0, 0, 0.85)",
+  // Grounding drop: a slight downward shadow giving the label a hair of depth.
+  "0 0.4cqw 1.2cqw rgba(0, 0, 0, 0.8)",
+].join(", ");
+const TYPE_LABEL_TEXT_STROKE = `0.34cqw ${TYPE_LABEL_OUTLINE_COLOR}`;
+
+/**
  * Orb diameters as a fraction of the rendered card width, used to size the
  * digit auto-shrink search. The rendered orb size is the `--cv-*-orb-size` CSS
  * var; these mirror its defaults.
@@ -271,9 +314,9 @@ export interface CardViewProps {
  * frame, with all chrome floating over it as translucent, blurred elements.
  * A frosted name bar runs across the top holding the card name (with the spark
  * orb at its right edge), and the large energy cost orb floats over the bar's
- * left end, protruding above and below it. A single bottom-anchored text box
- * pairs the italic type line over the rules body and auto-sizes to the amount
- * of rules text.
+ * left end, protruding above and below it. The italic type/subtype label floats
+ * directly on the art at the card's bottom-right, just above a bottom-anchored
+ * text box that holds the rules body and auto-sizes to the amount of rules text.
  */
 export function CardView({
   card,
@@ -396,26 +439,47 @@ export function CardView({
     renderedTypeLineContent !== null &&
     renderedTypeLineContent !== undefined &&
     renderedTypeLineContent !== false;
+  // The label floats on the art, anchored to the card's right edge just above
+  // the text box. When rules text is shown the box takes a fixed height, so the
+  // label rides a constant gap above it computed from the box geometry; a card
+  // with no rules box keeps the same gap above the bottom inset where the box
+  // would begin.
+  const typeLabelBottom = showRulesText
+    ? "calc(var(--cv-textbox-inset) + var(--cv-textbox-height) + var(--cv-typelabel-gap))"
+    : "calc(var(--cv-textbox-inset) + var(--cv-typelabel-gap))";
   const typeLineNode =
     hasTypeLineContent || attributeChips.length > 0 ? (
       <div
         data-testid="card-type-line"
         style={{
-          textAlign: "left",
+          position: "absolute",
+          // Pulled in by the text box's corner radius so the label's right edge
+          // lines up with where the box's flat top edge ends and the rounded
+          // corner begins, rather than with the box's outer edge.
+          right: "calc(var(--cv-textbox-inset) + var(--cv-textbox-radius))",
+          bottom: typeLabelBottom,
+          maxWidth:
+            "calc(100% - 2 * var(--cv-textbox-inset) - var(--cv-textbox-radius))",
+          zIndex: 4,
+          textAlign: "right",
+          // No background plate, so legibility comes from the faux outline (eight
+          // zero-blur shadow copies), a uniform vector stroke painted outside the
+          // fill, and the soft halo/drop layers.
           color: TYPE_COLOR,
           fontFamily: NAME_FONT_FAMILY,
           fontStyle: "italic",
           fontWeight: 500,
           letterSpacing: "0.02em",
-          textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
+          WebkitTextStroke: TYPE_LABEL_TEXT_STROKE,
+          paintOrder: "stroke fill",
+          textShadow: TYPE_LABEL_TEXT_SHADOW,
           fontSize: "var(--cv-type-font-size)",
           lineHeight: "var(--cv-type-line-height)",
-          // Kept to a single line so the fixed text box's one-line type reserve
-          // holds; an over-long type line truncates rather than wrapping.
+          // A single line floating over the art. No `overflow: hidden` here: the
+          // box shrink-wraps the text, so clipping would crop the outline and
+          // halo at the left/right edges. Over-long labels extend leftward over
+          // the art instead of truncating.
           whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          flexShrink: 0,
         }}
       >
         {attributeChips.map((chip) => (
@@ -494,14 +558,13 @@ export function CardView({
     slots.typeLine?.(slotContext, typeLineNode) ?? typeLineNode;
   const renderedRulesNode =
     slots.rulesText?.(slotContext, rulesTextNode) ?? rulesTextNode;
-  const hasTextboxContent =
-    Boolean(renderedTypeLineNode) || Boolean(renderedRulesNode);
+  const hasTextboxContent = Boolean(renderedRulesNode);
 
-  // When rules text is shown the box takes a fixed height (one type line + a
-  // three-line rules area + padding), so every card on a surface shares the
-  // same footprint. The type line is anchored to the top and the rules body
-  // centers its text within the three-line area below it. A type-only box keeps
-  // an automatic height capped by `--cv-textbox-max-height`.
+  // When rules text is shown the box takes a fixed height (a three-line rules
+  // area + padding), so every card on a surface shares the same footprint, and
+  // the rules body centers its text within the three-line area. A card with no
+  // rules text shows no box at all; its floating type label is the only bottom
+  // chrome.
   const textboxSizing: CSSProperties = showRulesText
     ? { height: "var(--cv-textbox-height)" }
     : { maxHeight: "var(--cv-textbox-max-height)" };
@@ -606,14 +669,20 @@ export function CardView({
       />
 
       {/*
-        Bottom-anchored text box: the italic type line sits at the top with the
-        rules body beneath it. When rules text is shown the box takes a fixed
-        height reserving one type line plus three rules lines, so every card on a
-        surface shares the same footprint; the type line stays anchored to the
-        top while the rules text centers within the three-line area below it, and
-        rules text beyond three lines auto-shrinks to fit. A type-only box keeps
-        an automatic height capped by `--cv-textbox-max-height`. The blur +
-        translucent gradient let the art read through while keeping text legible.
+        Floating type/subtype label: it sits directly on the art, anchored to
+        the card's right edge just above the text box, with no plate behind it.
+        Legibility comes from the faux outline + halo/drop treatment rather than
+        a background.
+      */}
+      {renderedTypeLineNode}
+
+      {/*
+        Bottom-anchored text box holding the rules body. When rules text is shown
+        the box takes a fixed height reserving three rules lines, so every card on
+        a surface shares the same footprint; the rules text centers within the
+        three-line area, and rules text beyond three lines auto-shrinks to fit.
+        The blur + translucent gradient let the art read through while keeping
+        text legible.
       */}
       {hasTextboxContent ? (
         <div
@@ -628,7 +697,6 @@ export function CardView({
               overflow: "hidden",
               display: "flex",
               flexDirection: "column",
-              gap: "var(--cv-type-gap)",
               padding: "var(--cv-textbox-pad)",
               borderRadius: "var(--cv-textbox-radius)",
               background: "var(--cv-textbox-bg)",
@@ -640,7 +708,6 @@ export function CardView({
             } satisfies CSSProperties
           }
         >
-          {renderedTypeLineNode}
           {renderedRulesNode}
         </div>
       ) : null}
