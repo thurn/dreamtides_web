@@ -5,7 +5,8 @@ every card mentioned as connected to it anywhere in the `docs/calebgannon/`
 articles (the archetype overview, the five color articles, the introduction,
 and the cube-design article). Connection is interpreted broadly: enablers,
 payoffs, win conditions, support cards, example combo pieces, and cards
-discussed as answers to or signals for the archetype are all included.
+discussed as signals for the archetype are all included. Cards mentioned only
+as answers to or counters against an archetype are not listed under it.
 
 The same card appears under multiple archetypes wherever the articles connect
 it to more than one. Archetypes are listed in the same order as in
@@ -51,8 +52,6 @@ it to more than one. Archetypes are listed in the same order as in
 - Shrieking Drake
 - Skullclamp
 - Metallic Mimic
-- Forked Bolt (as an answer that keeps Elves in check)
-- Engineered Explosives (as an answer that keeps Elves in check)
 
 ### Ninjas
 
@@ -301,7 +300,6 @@ it to more than one. Archetypes are listed in the same order as in
 - Disciple of the Vault
 - Arcbound Ravager
 - Makeshift Munitions
-- Umezawa's Jitte (blanked by Goblin Bombardment)
 - Strip Mine
 - Goblin Welder
 - Goblin Engineer
@@ -455,7 +453,6 @@ it to more than one. Archetypes are listed in the same order as in
 - Squee, Goblin Nabob
 - Goblin Welder
 - Valakut Exploration
-- Stifle (discussed as a card that invalidates Storm)
 
 ### Glimpse Combo
 
