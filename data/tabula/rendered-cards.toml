@@ -3177,7 +3177,7 @@ art-owned = true
 card-number = 217
 
 [[cards]]
-name = "Archive of the Forgotten "
+name = "Archive of the Forgotten"
 id = "1ce137cb-4234-45f7-abd2-d0ce97549885"
 tides = ["reclaim_events", "event_chain"]
 rendered-text = """
