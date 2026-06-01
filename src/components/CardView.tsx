@@ -35,13 +35,35 @@ const SELECTION_DEFAULT_COLOR = "#f97316";
 export const DEFAULT_ART_CROP = { x: 0, y: 0, scale: 1.17 } as const;
 
 /**
- * Resolve an art crop against the source image's aspect ratio into CSS for the
- * art image. The image is sized to cover its frame at `scale` 1 and grown by the
- * zoom; the normalized pan (-1..1) is mapped to a translate within the overflow
- * that covering and zooming create, so the frame stays fully covered for any pan
- * in range. `imageAspect` is null until the image loads, in which case a
- * centered cover fallback is used. `frameAspect` is the width-to-height ratio of
- * the box being covered (the art region, not the whole card).
+ * Cover metrics for an art crop against a frame: the rendered image size (as a
+ * multiple of the frame, ≥ 1 on the covered axis) and the pan translate (as a
+ * percentage of the image's own size, bounded so |pan| === 1 aligns the image
+ * edge with the frame edge). `frameAspect` is the width-to-height ratio of the
+ * box being covered.
+ */
+function artCoverMetrics(
+  art: { x: number; y: number; scale: number },
+  imageAspect: number,
+  frameAspect: number,
+): { renderW: number; renderH: number; panX: number; panY: number } {
+  // ratio > 1 means the image is wider than the frame (its sides are cropped by
+  // covering); ratio < 1 means it is taller (its top/bottom are cropped).
+  const ratio = imageAspect / frameAspect;
+  const coverW = ratio >= 1 ? ratio : 1;
+  const coverH = ratio >= 1 ? 1 : 1 / ratio;
+  const renderW = art.scale * coverW;
+  const renderH = art.scale * coverH;
+  const panX = renderW > 1 ? ((art.x * (renderW - 1)) / (2 * renderW)) * 100 : 0;
+  const panY = renderH > 1 ? ((art.y * (renderH - 1)) / (2 * renderH)) * 100 : 0;
+  return { renderW, renderH, panX, panY };
+}
+
+/**
+ * Resolve an art crop into CSS for the art image, sized to cover its frame at
+ * `scale` 1 and grown by the zoom. `imageAspect` is null until the image loads,
+ * in which case a centered cover fallback is used. `frameAspect` is the
+ * width-to-height ratio of the box being covered (the art region, not the whole
+ * card).
  */
 function artImageStyle(
   art: { x: number; y: number; scale: number },
@@ -59,17 +81,11 @@ function artImageStyle(
     };
   }
 
-  // ratio > 1 means the image is wider than the frame (its sides are cropped by
-  // covering); ratio < 1 means it is taller (its top/bottom are cropped).
-  const ratio = imageAspect / frameAspect;
-  const coverW = ratio >= 1 ? ratio : 1;
-  const coverH = ratio >= 1 ? 1 : 1 / ratio;
-  const renderW = art.scale * coverW;
-  const renderH = art.scale * coverH;
-  // Translate as a percentage of the image's own size, bounded so |pan| === 1
-  // aligns the image edge with the frame edge (no gap).
-  const panX = renderW > 1 ? (art.x * (renderW - 1)) / (2 * renderW) * 100 : 0;
-  const panY = renderH > 1 ? (art.y * (renderH - 1)) / (2 * renderH) * 100 : 0;
+  const { renderW, renderH, panX, panY } = artCoverMetrics(
+    art,
+    imageAspect,
+    frameAspect,
+  );
   return {
     position: "absolute",
     left: "50%",
@@ -88,34 +104,100 @@ function artImageStyle(
 }
 
 /**
+ * The same crop as {@link artImageStyle} for the art region, but placed inside a
+ * full-card container so the image keeps its art-region size and position yet is
+ * free to extend below the seam into the fill band. The image's content there is
+ * the real source pixels just below the art-region crop window — a genuine
+ * downward continuation, so a blurred copy reads as a defocus of the artwork
+ * rather than a reflection (no fold or symmetry seam). For a source that does
+ * not reach the card's bottom edge (a short/landscape crop), the band's dark
+ * base shows through the unreached sliver.
+ */
+function artImageStyleExtended(
+  art: { x: number; y: number; scale: number },
+  imageAspect: number | null,
+): CSSProperties {
+  if (imageAspect === null) {
+    return {
+      position: "absolute",
+      inset: 0,
+      height: "100%",
+      width: "100%",
+      objectFit: "cover",
+      transform: `scale(${art.scale})`,
+    };
+  }
+
+  const region = 1 - ART_EXTENSION_FRACTION;
+  const { renderW, renderH, panX, panY } = artCoverMetrics(
+    art,
+    imageAspect,
+    ART_REGION_ASPECT_RATIO_VALUE,
+  );
+  // Heights are fractions of the art region; scale them to fractions of the
+  // full card, and center on the art region's center (not the card's), so the
+  // placement is identical to the crisp art region above and the image simply
+  // continues past the seam.
+  return {
+    position: "absolute",
+    left: "50%",
+    top: `${(region / 2) * 100}%`,
+    width: `${renderW * 100}%`,
+    height: `${renderH * region * 100}%`,
+    maxWidth: "none",
+    maxHeight: "none",
+    objectFit: "cover",
+    transform: `translate(-50%, -50%) translate(${panX}%, ${panY}%)`,
+  };
+}
+
+/**
  * Art-extension treatment for the bottom `ART_EXTENSION_FRACTION` of the card.
- * The artwork is fitted into the top region; this band is filled by mirroring
- * the art's bottom edge downward, blurring it into an abstract continuation,
- * and grounding it with a darkening gradient plus faint noise (which breaks up
- * the banding a heavy blur leaves behind). The mirror meets the artwork at the
- * exact seam pixels, so the color is continuous across the boundary.
+ * The crisp artwork is fitted into the top region. A single blurred copy of the
+ * same crop — extended past the seam so it shows the real source pixels below
+ * the crop window — is laid over the bottom and masked so the blur fades in
+ * gradually across a feather zone just above the seam and then fully fills the
+ * band. Because it is the artwork's genuine downward continuation (not a
+ * reflection), the band reads as a defocus of the art with no fold or symmetry
+ * seam. A darkening gradient grounds the band and faint noise breaks up the
+ * smoothness a heavy blur leaves behind.
  */
 const ART_REGION_HEIGHT_PCT = (1 - ART_EXTENSION_FRACTION) * 100;
 const ART_EXTENSION_HEIGHT_PCT = ART_EXTENSION_FRACTION * 100;
-/** Mirror blur radius as a fraction of the rendered card width. */
-const ART_EXTENSION_BLUR_RATIO = 0.045;
+/**
+ * Height of card, above the seam, over which the crisp artwork blurs into the
+ * band. The blur ramps in across this zone so the transition reads as a soft
+ * defocus rather than a line. It is fine that real art detail is lost here.
+ */
+const ART_EXTENSION_FEATHER_FRACTION = 0.16;
+/**
+ * Alpha mask (card-height stops) for the blurred layer: invisible above the
+ * feather zone, ramping in across it, fully opaque from the seam down.
+ */
+const ART_FEATHER_START_PCT =
+  (1 - ART_EXTENSION_FRACTION - ART_EXTENSION_FEATHER_FRACTION) * 100;
+const ART_FEATHER_MASK = `linear-gradient(to bottom, rgba(0,0,0,0) ${ART_FEATHER_START_PCT}%, rgba(0,0,0,1) ${ART_REGION_HEIGHT_PCT}%, rgba(0,0,0,1) 100%)`;
+/** Blur radius as a fraction of the rendered card width. */
+const ART_EXTENSION_BLUR_RATIO = 0.05;
+/** Dark base shown behind the band where a short crop does not reach the edge. */
+const ART_EXTENSION_BASE_COLOR = "#0b0b0d";
 /** Opacity of the darkening gradient at the card's bottom edge. */
-const ART_EXTENSION_DARKEN_OPACITY = 0.45;
+const ART_EXTENSION_DARKEN_OPACITY = 0.4;
 /** Opacity of the noise overlay that dithers out blur banding. */
 const ART_EXTENSION_NOISE_OPACITY = 0.06;
 /**
  * Tiled fractal-noise tile (an inline SVG) drawn faintly over the fill band to
- * keep the blurred mirror from reading as a smooth synthetic gradient.
+ * keep the blurred fill from reading as a smooth synthetic gradient.
  */
 const ART_EXTENSION_NOISE_URI =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)'/%3E%3C/svg%3E";
 
 /**
- * The full-bleed card art: the source artwork fitted into the top region plus
- * the mirrored/blurred/darkened fill band along the bottom. The primary image
- * carries the load/error handlers (so the parent learns the source aspect); the
- * mirror is a second copy of the same image with identical crop, reflected about
- * the seam so its top pixels match the artwork's bottom pixels.
+ * The full-bleed card art: the crisp source artwork fitted into the top region,
+ * with a blurred, extended copy feathered over the bottom to fill the band. The
+ * primary image carries the load/error handlers (so the parent learns the source
+ * aspect); the blurred copy uses the identical crop, so the feather is a pure
+ * defocus of the same pixels rather than a ghost.
  */
 function ArtLayers({
   imageUrl,
@@ -139,10 +221,21 @@ function ArtLayers({
     imageAspect,
     ART_REGION_ASPECT_RATIO_VALUE,
   );
+  const extendedStyle = artImageStyleExtended(artCrop, imageAspect);
   const blurPx = Math.max(2, widthPx * ART_EXTENSION_BLUR_RATIO);
   return (
     <>
-      {/* Artwork, fitted into the top region (a wider aspect than the card). */}
+      {/* Dark base so any sliver the extended art does not reach reads as dark. */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: ART_EXTENSION_BASE_COLOR,
+        }}
+      />
+
+      {/* Crisp artwork, fitted into the top region (wider aspect than the card). */}
       <div
         aria-hidden="true"
         style={{
@@ -166,11 +259,11 @@ function ArtLayers({
       </div>
 
       {/*
-        Fill band: the bottom `ART_EXTENSION_FRACTION` of the card. The outer
-        layer clips to the band; the inner wrapper is a copy of the art region
-        flipped about its bottom edge (the seam), so only its top strip — the
-        mirror of the artwork's bottom strip — shows through the clip. A heavy
-        blur turns it into an abstract color continuation.
+        Blurred continuation. A second copy of the art, extended past the seam so
+        it shows the real source below the crop window, blurred. The mask hides it
+        above the feather zone, ramps it in across the zone (the art defocuses
+        into the band), and holds it opaque from the seam down (the band shows the
+        blurred continuation).
       */}
       <div
         aria-hidden="true"
@@ -178,23 +271,18 @@ function ArtLayers({
           position: "absolute",
           inset: 0,
           overflow: "hidden",
-          clipPath: `inset(${ART_REGION_HEIGHT_PCT}% 0 0 0)`,
+          maskImage: ART_FEATHER_MASK,
+          WebkitMaskImage: ART_FEATHER_MASK,
         }}
       >
         <div
           style={{
             position: "absolute",
-            left: 0,
-            right: 0,
-            top: 0,
-            height: `${ART_REGION_HEIGHT_PCT}%`,
-            overflow: "hidden",
-            transform: "scaleY(-1)",
-            transformOrigin: "center bottom",
+            inset: 0,
             filter: `blur(${blurPx.toFixed(2)}px)`,
           }}
         >
-          <img src={imageUrl} alt="" style={imageStyle} draggable={false} />
+          <img src={imageUrl} alt="" style={extendedStyle} draggable={false} />
         </div>
       </div>
 
