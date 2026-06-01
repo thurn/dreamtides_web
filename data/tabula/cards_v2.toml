@@ -210,6 +210,7 @@ tags = ["Ritual"]
 image-number = 1164289066
 art-owned = false
 card-number = 11
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Moonlit Voyage"
@@ -471,6 +472,7 @@ tags = []
 image-number = 1125132389
 art-owned = false
 card-number = 25
+art = { x = 0, y = 0.1, scale = 1.2 }
 
 [[cards]]
 name = "Echo Architect"
@@ -981,6 +983,7 @@ tags = ["Free Sacrifice", "Spark Scaler"]
 image-number = 1639942843
 art-owned = false
 card-number = 51
+art = { x = 0.4, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "The Dread Sovereign"
@@ -2129,6 +2132,7 @@ tags = []
 image-number = 1639942837
 art-owned = false
 card-number = 111
+art = { x = 0.4, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Marrow Drinker"
@@ -2677,6 +2681,7 @@ tags = ["Score Trigger"]
 image-number = 753489184
 art-owned = false
 card-number = 139
+art = { x = 0, y = 0.1, scale = 1.2 }
 
 [[cards]]
 name = "Frostbound Defiant"
@@ -4805,6 +4810,7 @@ tags = ["Discover"]
 image-number = 450347140
 art-owned = false
 card-number = 250
+art = { x = -0.7, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Surge of Fury"
@@ -7314,6 +7320,7 @@ tags = []
 image-number = 682942723
 art-owned = false
 card-number = 379
+art = { x = 0.7, y = 0.8, scale = 1.17 }
 
 [[cards]]
 name = "Duskwall Delver"
@@ -7773,6 +7780,7 @@ tags = []
 image-number = 1347487814
 art-owned = true
 card-number = 402
+art = { x = -0.3, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Void Pilgrim"
@@ -8747,6 +8755,7 @@ tags = []
 image-number = 644603677
 art-owned = true
 card-number = 453
+art = { x = 0, y = -0.3, scale = 1.27 }
 
 [[cards]]
 name = "Mirrorlight Architect"
@@ -8840,6 +8849,7 @@ tags = ["Free Sacrifice"]
 image-number = 2303852063
 art-owned = false
 card-number = 458
+art = { x = 0.4, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Lord of Hidden Paths"
@@ -9182,6 +9192,7 @@ tags = ["Removal"]
 image-number = 2221822099
 art-owned = false
 card-number = 476
+art = { x = 0, y = 0.4, scale = 1.17 }
 
 [[cards]]
 name = "Searcher in the Mists"
@@ -9314,6 +9325,7 @@ tags = ["Counterspell"]
 image-number = 1282908322
 art-owned = true
 card-number = 483
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Wasteland Arbitrator"
