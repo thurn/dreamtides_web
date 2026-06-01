@@ -169,10 +169,10 @@ button:disabled {
  *
  * The text box is bottom-anchored with a fixed height that always reserves
  * room for one type line plus three rules lines at the base font sizes, so
- * every card on a surface shows the same text-box footprint. Rules text shorter
- * than three lines is centered in the box; rules text that needs more than
- * three lines auto-shrinks (see CardView's `useFitText` wiring) until it fits
- * the reserved space.
+ * every card on a surface shows the same text-box footprint. The type line is
+ * anchored to the top; the rules body centers its text within the three-line
+ * area below it, and rules text that needs more than three lines auto-shrinks
+ * (see CardView's `useFitText` wiring) until it fits the area.
  *
  * A frosted name bar runs across the top: the energy cost orb floats over its
  * left end (protruding above and below), the card name flexes to fill the

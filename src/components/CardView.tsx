@@ -434,27 +434,41 @@ export function CardView({
 
   const rulesTextNode = showRulesText ? (
     <div
-      ref={rulesFitRef}
       style={{
-        // The rules body occupies a fixed three-line area: shorter text is
-        // centered by the text box, while longer text auto-shrinks (capped by
-        // `maxHeight` plus the fitted font size) until it fits. Block flow with
-        // no internal centering keeps the `scrollHeight` measurement that drives
-        // the fit reliable.
-        maxHeight: "var(--cv-textbox-rules-area-height)",
+        // The rules body fills a fixed three-line area below the type line and
+        // centers its text vertically, so a card with fewer than three rules
+        // lines sits centered in that area while the type line stays anchored to
+        // the top of the box.
+        height: "var(--cv-textbox-rules-area-height)",
+        flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
         overflow: "hidden",
-        textAlign: "left",
-        color: tintColor ?? RULES_COLOR,
-        fontFamily: RULES_FONT_FAMILY,
-        fontSize: `min(var(--cv-rules-font-size), ${String(rulesFontPx)}px)`,
-        lineHeight: "var(--cv-rules-line-height)",
-        textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
       }}
     >
-      {renderRulesText(card.renderedText, {
-        pipScale: textScale,
-        disableGlossary: suppressHoverHelp,
-      })}
+      <div
+        ref={rulesFitRef}
+        style={{
+          // Text longer than three lines auto-shrinks (capped by `maxHeight`
+          // plus the fitted font size) until it fits the area. Block flow with
+          // no internal centering keeps the `scrollHeight` measurement that
+          // drives the fit reliable.
+          maxHeight: "var(--cv-textbox-rules-area-height)",
+          overflow: "hidden",
+          textAlign: "left",
+          color: tintColor ?? RULES_COLOR,
+          fontFamily: RULES_FONT_FAMILY,
+          fontSize: `min(var(--cv-rules-font-size), ${String(rulesFontPx)}px)`,
+          lineHeight: "var(--cv-rules-line-height)",
+          textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
+        }}
+      >
+        {renderRulesText(card.renderedText, {
+          pipScale: textScale,
+          disableGlossary: suppressHoverHelp,
+        })}
+      </div>
     </div>
   ) : null;
 
@@ -484,12 +498,12 @@ export function CardView({
     Boolean(renderedTypeLineNode) || Boolean(renderedRulesNode);
 
   // When rules text is shown the box takes a fixed height (one type line + a
-  // three-line rules area + padding) and centers its content, so a card with
-  // fewer than three rules lines sits vertically centered and every card on a
-  // surface shares the same footprint. A type-only box keeps an automatic
-  // height capped by `--cv-textbox-max-height`.
+  // three-line rules area + padding), so every card on a surface shares the
+  // same footprint. The type line is anchored to the top and the rules body
+  // centers its text within the three-line area below it. A type-only box keeps
+  // an automatic height capped by `--cv-textbox-max-height`.
   const textboxSizing: CSSProperties = showRulesText
-    ? { height: "var(--cv-textbox-height)", justifyContent: "center" }
+    ? { height: "var(--cv-textbox-height)" }
     : { maxHeight: "var(--cv-textbox-max-height)" };
 
   const artCrop = card.art ?? DEFAULT_ART_CROP;
@@ -592,15 +606,14 @@ export function CardView({
       />
 
       {/*
-        Bottom-anchored text box: the italic type line paired tightly over the
-        rules body (a `gap` reads the type as the lead-in line of the rules).
-        When rules text is shown the box takes a fixed height reserving one type
-        line plus three rules lines and centers its content, so every card on a
-        surface shares the same footprint and short text sits vertically
-        centered; rules text beyond three lines auto-shrinks to fit. A type-only
-        box keeps an automatic height capped by `--cv-textbox-max-height`. The
-        blur + translucent gradient let the art read through while keeping text
-        legible.
+        Bottom-anchored text box: the italic type line sits at the top with the
+        rules body beneath it. When rules text is shown the box takes a fixed
+        height reserving one type line plus three rules lines, so every card on a
+        surface shares the same footprint; the type line stays anchored to the
+        top while the rules text centers within the three-line area below it, and
+        rules text beyond three lines auto-shrinks to fit. A type-only box keeps
+        an automatic height capped by `--cv-textbox-max-height`. The blur +
+        translucent gradient let the art read through while keeping text legible.
       */}
       {hasTextboxContent ? (
         <div
