@@ -637,7 +637,7 @@ export function CardView({
   const [bottomColor, setBottomColor] = useState<BottomColor | null>(null);
   const [extensionFraction, setExtensionFraction] =
     useState(ART_EXTENSION_FRACTION);
-  const bottomChromeRef = useRef<HTMLDivElement | null>(null);
+  const textboxRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
   // Auto-shrink the rules body so a card needing more than the reserved three
@@ -870,29 +870,30 @@ export function CardView({
   const hasTextboxContent = Boolean(renderedRulesNode);
   const hasBottomChrome = hasTextboxContent || Boolean(renderedTypeLineNode);
 
-  // Scale the fill band to the height of the bottom chrome (type label + text
-  // box): the band is sized so the seam — the bottom of the crisp artwork — sits
-  // at the top of the chrome, pushing the art up just enough that nothing
-  // important hides behind it. A one-line box needs almost no push; a three-line
-  // box needs more. The chrome's size does not depend on the band, so this does
-  // not feed back. Clamped to a sane min/max.
+  // Scale the fill band to the height of the rules text box: the band is sized so
+  // the seam — the bottom of the crisp artwork — sits at the top of the box,
+  // pushing the art up just enough that the box does not cover it. A one-line box
+  // needs almost no push; a three-line box needs more. The floating type label
+  // stays on the crisp art above the seam. With no text box the band falls back
+  // to the minimum. The box's size does not depend on the band, so this does not
+  // feed back. Clamped to a sane min/max.
   useEffect(() => {
     const cardEl = cardRef.current;
     if (cardEl === null) {
       return;
     }
-    const chromeEl = bottomChromeRef.current;
-    if (chromeEl === null) {
+    const boxEl = textboxRef.current;
+    if (boxEl === null) {
       setExtensionFraction(ART_EXTENSION_MIN_FRACTION);
       return;
     }
     const measure = (): void => {
       const cardRect = cardEl.getBoundingClientRect();
-      const chromeRect = chromeEl.getBoundingClientRect();
+      const boxRect = boxEl.getBoundingClientRect();
       if (cardRect.height <= 0) {
         return;
       }
-      const raw = (cardRect.bottom - chromeRect.top) / cardRect.height;
+      const raw = (cardRect.bottom - boxRect.top) / cardRect.height;
       const next = Math.min(
         ART_EXTENSION_MAX_FRACTION,
         Math.max(ART_EXTENSION_MIN_FRACTION, raw),
@@ -910,11 +911,11 @@ export function CardView({
     }
     const observer = new ResizeObserver(measure);
     observer.observe(cardEl);
-    observer.observe(chromeEl);
+    observer.observe(boxEl);
     return () => {
       observer.disconnect();
     };
-  }, [cardRef, hasBottomChrome, large, card.renderedText, rulesFontPx]);
+  }, [cardRef, hasTextboxContent, large, card.renderedText, rulesFontPx]);
 
   // The box shrinks to its rules text, bottom-aligned, capped at the three-line
   // height (`--cv-textbox-height`): a short card gets a short box, while text
@@ -1039,7 +1040,6 @@ export function CardView({
       */}
       {hasBottomChrome ? (
         <div
-          ref={bottomChromeRef}
           style={{
             position: "absolute",
             left: "var(--cv-textbox-inset)",
@@ -1054,6 +1054,7 @@ export function CardView({
           {renderedTypeLineNode}
           {hasTextboxContent ? (
             <div
+              ref={textboxRef}
               style={
                 {
                   ...textboxSizing,
