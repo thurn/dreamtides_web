@@ -968,10 +968,10 @@ name = "Ashen Remnant"
 mtg-name = "Fiend Artisan"
 id = "5639053e-1fe3-4a42-b9c3-3fdf894bfab6"
 tides = []
-rendered-text = """
-This character gets +1✦ for each character in your void.
+rendered-text = '''
+This character has +1✦ for each character in your void.
 
-Abandon another character: Erode 1."""
+Abandon another character: Erode 1.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Survivor"
@@ -2289,7 +2289,7 @@ name = "Wreckland Maverick"
 mtg-name = "Tidehollow Sculler"
 id = "ea118471-164b-4d7f-bb02-044c862ed07e"
 tides = []
-rendered-text = "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play."
+rendered-text = "▸Materialized: Banish a chosen character from the opponent's hand until this character leaves play."
 energy-cost = 2
 card-type = "Character"
 subtype = "Survivor"
@@ -3003,7 +3003,7 @@ name = "Revenant of the Lost"
 mtg-name = "Lurrus of the Dream-Den"
 id = "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e"
 tides = []
-rendered-text = "Once per turn, you may play a character with cost 2● or less from your void."
+rendered-text = "☪: A character in your void with cost 2● or less gains reclaim until end of turn."
 energy-cost = 2
 card-type = "Character"
 subtype = "Ancient"
@@ -3273,17 +3273,17 @@ name = "Shoreline Penitent"
 mtg-name = "Conspiracy Theorist"
 id = "d755cfa4-d7c0-46d8-a836-909c45c68890"
 tides = []
-rendered-text = """
-2●, ☪, Discard a card: Draw a card.
+rendered-text = '''
+3●, ☪, Discard a card: Draw a card.
 
-When you discard a card, it gains reclaim until end of turn."""
+When you discard a card, it gains reclaim until end of turn.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Explorer"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 2
+spark = 1
 tags = ["Merfolk Looter"]
 image-number = 1983798659
 art-owned = false
@@ -3687,7 +3687,7 @@ name = "Exiles of the Last Light"
 mtg-name = "Warren Soultrader"
 id = "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6"
 tides = []
-rendered-text = "Abandon another character: Gain 1●."
+rendered-text = "Abandon another character: Gain 1●. The opponent gains 1⍟."
 energy-cost = 3
 card-type = "Character"
 subtype = "Survivor"
@@ -3699,6 +3699,7 @@ tags = ["Free Sacrifice"]
 image-number = 457875892
 art-owned = false
 card-number = 192
+art = { x = -0.3, y = 0.3, scale = 1.17 }
 
 [[cards]]
 name = "Pyre Challenger"
@@ -3832,13 +3833,14 @@ tags = ["Free Sacrifice"]
 image-number = 1626794383
 art-owned = false
 card-number = 199
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Ruptured Dynamo"
 mtg-name = "Zuran Orb"
 id = "ed02e610-2e68-4457-95a6-c7c6db60ca40"
 tides = []
-rendered-text = "Abandon a character with cost 2● or less: Erode 1."
+rendered-text = "Abandon a character: Return a character from your void to your hand."
 energy-cost = 1
 card-type = "Character"
 subtype = "Synth"
@@ -5404,6 +5406,7 @@ tags = ["Free Sacrifice"]
 image-number = 1633431256
 art-owned = false
 card-number = 281
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Shatter the Frail"
@@ -7426,7 +7429,7 @@ name = "Manufactured Abomination"
 mtg-name = "Jace, Vryn's Prodigy // Jace, Telepath Unbound"
 id = "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"
 tides = []
-rendered-text = "☪: Draw a card, then discard a card."
+rendered-text = "☪, Discard a card: Draw a card."
 energy-cost = 2
 card-type = "Character"
 subtype = "Ancient"
@@ -7451,7 +7454,7 @@ subtype = "Synth"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 2
+spark = 1
 tags = ["Tidehollow Sculler"]
 image-number = 1793552422
 art-owned = false
@@ -7579,6 +7582,7 @@ tags = ["Free Sacrifice", "Figment Maker", "Character Payoff"]
 image-number = 515170852
 art-owned = false
 card-number = 392
+art = { x = 0.5, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Cascading Detonation"
