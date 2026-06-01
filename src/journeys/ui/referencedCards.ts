@@ -76,6 +76,7 @@ export function cardContentToDisplayData(card: CardContent): CardData {
     rarity: normalizeRarityForDisplay(stringRawField(card.raw, "rarity")),
     energyCost: card.energyCost === "*" ? null : card.energyCost,
     spark: typeof card.spark === "number" ? card.spark : null,
+    sparkVariable: card.spark === "*",
     isFast: booleanRawField(card.raw, "isFast", "is-fast") ?? false,
     tides: [...card.tides],
     renderedText,

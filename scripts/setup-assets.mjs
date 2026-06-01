@@ -120,11 +120,38 @@ export function parseEnergyCost(value) {
 }
 
 /**
+ * Parse a TOML `spark` value into the runtime numeric spark plus a flag for
+ * variable spark.
+ *
+ * Numbers are preserved. The variable markers `X`, `x`, and `*` yield
+ * `{ spark: null, variable: true }`, which `CardView` renders as a single `X`
+ * spark orb. Blank, missing, or otherwise unparseable spark yields
+ * `{ spark: null, variable: false }` — no spark orb, the common case for
+ * Events.
+ */
+export function parseSpark(value) {
+  if (typeof value === "number") {
+    return { spark: value, variable: false };
+  }
+  if (typeof value === "string") {
+    const trimmed = value.trim();
+    if (trimmed === "X" || trimmed === "x" || trimmed === "*") {
+      return { spark: null, variable: true };
+    }
+    if (/^\d+$/u.test(trimmed)) {
+      return { spark: Number(trimmed), variable: false };
+    }
+  }
+  return { spark: null, variable: false };
+}
+
+/**
  * Convert a TOML card record to its JSON representation with camelCase keys.
- * Spark normalization: "" or missing becomes null; "*" (variable spark)
- * becomes null; integer values are preserved. Energy cost is parsed by
- * `parseEnergyCost`: multi-cost cards (e.g. `"2,X"`) additionally emit an
- * `energyCosts` array of orb labels.
+ * Spark is parsed by `parseSpark`: numbers are preserved, variable markers
+ * (`X`/`x`/`*`) become `null` plus a `sparkVariable: true` flag (rendered as a
+ * single `X` orb), and blank or missing spark becomes `null`. Energy cost is
+ * parsed by `parseEnergyCost`: multi-cost cards (e.g. `"2,X"`) additionally
+ * emit an `energyCosts` array of orb labels.
  */
 export function transformCard(card) {
   const result = {};
@@ -137,7 +164,11 @@ export function transformCard(card) {
         result.energyCosts = parsed.energyCosts;
       }
     } else if (camelKey === "spark") {
-      result[camelKey] = value === "" || value === "*" ? null : value;
+      const parsed = parseSpark(value);
+      result.spark = parsed.spark;
+      if (parsed.variable) {
+        result.sparkVariable = true;
+      }
     } else {
       result[camelKey] = value;
     }

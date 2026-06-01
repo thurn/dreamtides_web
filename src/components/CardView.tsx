@@ -539,10 +539,10 @@ export function CardView({
   ) : null;
 
   const sparkOrbNode =
-    card.spark !== null ? (
+    card.spark !== null || card.sparkVariable === true ? (
       <CardStatOrb
         variant="spark"
-        value={String(card.spark)}
+        value={card.spark !== null ? String(card.spark) : "X"}
         sizeVar="var(--cv-spark-orb-size)"
         numberCapPx={sparkOrbCapPx}
         tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}

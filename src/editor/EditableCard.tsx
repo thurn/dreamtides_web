@@ -78,6 +78,12 @@ function numericPreviewValue(
   return null;
 }
 
+/** Whether a raw spark draft value is the variable marker (`X`/`x`/`*`). */
+function isVariableSparkValue(value: EditableFieldValue): boolean {
+  const textValue = String(value).trim();
+  return textValue === "*" || textValue === "X" || textValue === "x";
+}
+
 function energyCostSegmentLabel(segment: string): string {
   const trimmed = segment.trim();
   return trimmed === "*" || trimmed === "X" || trimmed === "x" ? "X" : trimmed;
@@ -224,10 +230,11 @@ export default function EditableCard({
   const visibleEnergy = energyPreviewValue(
     energySaveEntry?.draftValue ?? card["energy-cost"],
   );
-  const visibleSpark = numericPreviewValue(
-    sparkSaveEntry?.draftValue ?? card.spark,
-    { allowBlank: true },
-  );
+  const sparkDraftValue = sparkSaveEntry?.draftValue ?? card.spark;
+  const visibleSpark = numericPreviewValue(sparkDraftValue, {
+    allowBlank: true,
+  });
+  const visibleSparkVariable = isVariableSparkValue(sparkDraftValue);
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
   const visibleRulesText = String(
     rulesTextSaveEntry?.draftValue ?? card["rendered-text"],
@@ -239,6 +246,7 @@ export default function EditableCard({
     name: visibleName,
     renderedText: visibleRulesText,
     spark: visibleSpark,
+    sparkVariable: visibleSparkVariable,
     subtype: visibleSubtype,
   };
 

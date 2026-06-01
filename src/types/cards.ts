@@ -54,6 +54,15 @@ export interface CardData {
    */
   energyCosts?: string[];
   spark: number | null;
+  /**
+   * Whether this card's spark is variable (printed as an `X` orb), sourced from
+   * a TOML `spark` of `X`/`x`/`*`. When `true`, `spark` is `null` and `CardView`
+   * renders a single `X` spark orb. This distinguishes a variable-spark card
+   * from a card with no spark at all (the common case for Events), which also
+   * has `spark: null` but leaves this `false`/absent and renders no spark orb.
+   * Mirrors how a `null` `energyCost` falls back to an `X` energy orb.
+   */
+  sparkVariable?: boolean;
   isFast: boolean;
   reclaimCost?: number | null;
   tides: PackageTideId[];

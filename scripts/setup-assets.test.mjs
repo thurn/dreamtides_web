@@ -13,6 +13,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   imageHash,
   parseEnergyCost,
+  parseSpark,
   setupAssets,
   transformCard,
 } from "./setup-assets.mjs";
@@ -438,5 +439,56 @@ describe("transformCard energy cost", () => {
     const result = transformCard({ ...base, "energy-cost": 4 });
     expect(result.energyCost).toBe(4);
     expect("energyCosts" in result).toBe(false);
+  });
+});
+
+describe("parseSpark", () => {
+  it("preserves a numeric spark", () => {
+    expect(parseSpark(3)).toEqual({ spark: 3, variable: false });
+    expect(parseSpark("5")).toEqual({ spark: 5, variable: false });
+  });
+
+  it("flags the variable markers as a variable spark", () => {
+    expect(parseSpark("X")).toEqual({ spark: null, variable: true });
+    expect(parseSpark("x")).toEqual({ spark: null, variable: true });
+    expect(parseSpark("*")).toEqual({ spark: null, variable: true });
+  });
+
+  it("treats blank or missing spark as no spark", () => {
+    expect(parseSpark("")).toEqual({ spark: null, variable: false });
+    expect(parseSpark(undefined)).toEqual({ spark: null, variable: false });
+  });
+});
+
+describe("transformCard spark", () => {
+  const base = {
+    name: "Spark Card",
+    id: "spark-card",
+    "card-number": 1,
+    "card-type": "Character",
+    "energy-cost": 1,
+    "is-fast": false,
+    tides: [],
+    "rendered-text": "",
+    "image-number": 1,
+    "art-owned": false,
+  };
+
+  it("emits sparkVariable for a variable spark", () => {
+    const result = transformCard({ ...base, spark: "X" });
+    expect(result.spark).toBe(null);
+    expect(result.sparkVariable).toBe(true);
+  });
+
+  it("omits sparkVariable for a numeric spark", () => {
+    const result = transformCard({ ...base, spark: 4 });
+    expect(result.spark).toBe(4);
+    expect("sparkVariable" in result).toBe(false);
+  });
+
+  it("omits sparkVariable for a blank spark", () => {
+    const result = transformCard({ ...base, spark: "" });
+    expect(result.spark).toBe(null);
+    expect("sparkVariable" in result).toBe(false);
   });
 });

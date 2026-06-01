@@ -1514,7 +1514,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("renders no spark pip for variable spark, matching the card renderer", async () => {
+  it("renders an X spark pip for variable spark, matching the card renderer", async () => {
     const { container, root } = mount(
       <CardEditorApp
         apiClient={makeApiClient(() =>
@@ -1522,7 +1522,11 @@ describe("CardEditorApp", () => {
             makeEditorCard({
               id: "card-id-1",
               spark: "*",
-              preview: makePreview({ id: "card-id-1", spark: null }),
+              preview: makePreview({
+                id: "card-id-1",
+                spark: null,
+                sparkVariable: true,
+              }),
             }),
           ]),
         )}
@@ -1540,12 +1544,11 @@ describe("CardEditorApp", () => {
       throw new Error("Missing editor card");
     }
 
-    // Variable spark normalizes to null in the preview, so CardView (and the
-    // editor) show no spark pip and no add-spark placeholder.
-    expect(editorCard.querySelector('[data-card-stat="spark"]')).toBeNull();
-    expect(
-      editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
-    ).toBeNull();
+    // Variable spark renders a single `X` orb, matching how CardView falls back
+    // to an `X` orb for a variable cost.
+    const sparkOrb = editorCard.querySelector('[data-card-stat="spark"]');
+    expect(sparkOrb).not.toBeNull();
+    expect(sparkOrb?.textContent).toContain("X");
 
     act(() => {
       root.unmount();
@@ -1627,7 +1630,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it("saves variable spark from a numeric pip and drops the pip to match the renderer", async () => {
+  it("saves variable spark from a numeric pip and shows the X pip to match the renderer", async () => {
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>
         Promise.resolve({
@@ -1637,6 +1640,7 @@ describe("CardEditorApp", () => {
             preview: makePreview({
               id: request.id,
               spark: null,
+              sparkVariable: true,
             }),
           }),
           clientRevision: request.clientRevision,
@@ -1698,12 +1702,10 @@ describe("CardEditorApp", () => {
       field: "spark",
       value: "*",
     });
-    // Variable spark normalizes to null, so the pip disappears just like the
-    // shared renderer.
-    expect(editorCard.querySelector('[data-card-stat="spark"]')).toBeNull();
+    // Variable spark renders a single `X` orb, just like the shared renderer.
     expect(
-      editorCard.querySelector("[data-editor-spark-placeholder=\"true\"]"),
-    ).toBeNull();
+      editorCard.querySelector('[data-card-stat="spark"]')?.textContent,
+    ).toContain("X");
     expect(sparkField.textContent).toContain("Saved");
 
     act(() => {
