@@ -15,6 +15,7 @@ import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { CardStatOrb } from "./CardStatOrb";
 import { renderRulesText } from "./RulesText";
+import { useFitText } from "./useFitText";
 
 /**
  * Default chrome accent used for the selection ring fallback. The card's type
@@ -98,6 +99,16 @@ const RULES_FONT_FAMILY = "var(--cv-rules-font-family)";
  */
 const ENERGY_ORB_RATIO = 0.16;
 const SPARK_ORB_RATIO = 0.12;
+
+/**
+ * Rules-text base size as a fraction of the rendered card width, mirroring
+ * `--cv-rules-font-size` (4.75cqw) in `index.css`. It seeds the auto-shrink
+ * ceiling so the fitted px size matches the cqw base when the text fits, while
+ * the floor fraction bounds how small a wordy card may shrink before its
+ * overflow is clipped.
+ */
+const RULES_FONT_RATIO = 0.0475;
+const RULES_MIN_FONT_FRACTION = 0.5;
 
 /**
  * Visual treatment for a rarity bucket. A rarity adds an outer accent ring
@@ -280,6 +291,19 @@ export function CardView({
   const [imageAspect, setImageAspect] = useState<number | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
+  // Auto-shrink the rules body so a card needing more than the reserved three
+  // lines still fits the fixed text box. The ceiling mirrors the
+  // `--cv-rules-font-size` cqw base (text that fits keeps the shared type
+  // scale); the fitted size only drops below it when the text overflows the
+  // three-line area.
+  const rulesMaxFontPx = widthPx * RULES_FONT_RATIO;
+  const rulesMinFontPx = rulesMaxFontPx * RULES_MIN_FONT_FRACTION;
+  const { ref: rulesFitRef, fontSize: rulesFontPx } = useFitText(
+    rulesMaxFontPx,
+    rulesMinFontPx,
+    [card.renderedText, textScale],
+  );
+
   useEffect(() => {
     setImageError(false);
     setImageAspect(null);
@@ -385,7 +409,13 @@ export function CardView({
           letterSpacing: "0.02em",
           textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
           fontSize: "var(--cv-type-font-size)",
-          lineHeight: 1.2,
+          lineHeight: "var(--cv-type-line-height)",
+          // Kept to a single line so the fixed text box's one-line type reserve
+          // holds; an over-long type line truncates rather than wrapping.
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          flexShrink: 0,
         }}
       >
         {attributeChips.map((chip) => (
@@ -404,11 +434,19 @@ export function CardView({
 
   const rulesTextNode = showRulesText ? (
     <div
+      ref={rulesFitRef}
       style={{
+        // The rules body occupies a fixed three-line area: shorter text is
+        // centered by the text box, while longer text auto-shrinks (capped by
+        // `maxHeight` plus the fitted font size) until it fits. Block flow with
+        // no internal centering keeps the `scrollHeight` measurement that drives
+        // the fit reliable.
+        maxHeight: "var(--cv-textbox-rules-area-height)",
+        overflow: "hidden",
         textAlign: "left",
         color: tintColor ?? RULES_COLOR,
         fontFamily: RULES_FONT_FAMILY,
-        fontSize: "var(--cv-rules-font-size)",
+        fontSize: `min(var(--cv-rules-font-size), ${String(rulesFontPx)}px)`,
         lineHeight: "var(--cv-rules-line-height)",
         textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
       }}
@@ -444,6 +482,15 @@ export function CardView({
     slots.rulesText?.(slotContext, rulesTextNode) ?? rulesTextNode;
   const hasTextboxContent =
     Boolean(renderedTypeLineNode) || Boolean(renderedRulesNode);
+
+  // When rules text is shown the box takes a fixed height (one type line + a
+  // three-line rules area + padding) and centers its content, so a card with
+  // fewer than three rules lines sits vertically centered and every card on a
+  // surface shares the same footprint. A type-only box keeps an automatic
+  // height capped by `--cv-textbox-max-height`.
+  const textboxSizing: CSSProperties = showRulesText
+    ? { height: "var(--cv-textbox-height)", justifyContent: "center" }
+    : { maxHeight: "var(--cv-textbox-max-height)" };
 
   const artCrop = card.art ?? DEFAULT_ART_CROP;
 
@@ -547,9 +594,13 @@ export function CardView({
       {/*
         Bottom-anchored text box: the italic type line paired tightly over the
         rules body (a `gap` reads the type as the lead-in line of the rules).
-        Height is automatic so the box grows or shrinks with the rules text,
-        capped by `--cv-textbox-max-height`. The blur + translucent gradient
-        let the art read through while keeping text legible.
+        When rules text is shown the box takes a fixed height reserving one type
+        line plus three rules lines and centers its content, so every card on a
+        surface shares the same footprint and short text sits vertically
+        centered; rules text beyond three lines auto-shrinks to fit. A type-only
+        box keeps an automatic height capped by `--cv-textbox-max-height`. The
+        blur + translucent gradient let the art read through while keeping text
+        legible.
       */}
       {hasTextboxContent ? (
         <div
@@ -560,7 +611,7 @@ export function CardView({
               right: "var(--cv-textbox-inset)",
               bottom: "var(--cv-textbox-inset)",
               zIndex: 4,
-              maxHeight: "var(--cv-textbox-max-height)",
+              ...textboxSizing,
               overflow: "hidden",
               display: "flex",
               flexDirection: "column",

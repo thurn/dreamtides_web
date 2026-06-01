@@ -167,11 +167,12 @@ button:disabled {
  * spec's 500px-wide measurements expressed as a fraction of that width
  * (e.g. the 80px energy orb is 80 / 500 = 16cqw).
  *
- * The text box is bottom-anchored with automatic height, so it grows or
- * shrinks to fit the rules text — a shorter ability reveals more art. The
- * `--cv-textbox-max-height` cap (a percentage of the card height, resolved
- * against the card because the box is absolutely positioned) bounds how far an
- * unusually long ability can climb before its overflow is clipped.
+ * The text box is bottom-anchored with a fixed height that always reserves
+ * room for one type line plus three rules lines at the base font sizes, so
+ * every card on a surface shows the same text-box footprint. Rules text shorter
+ * than three lines is centered in the box; rules text that needs more than
+ * three lines auto-shrinks (see CardView's `useFitText` wiring) until it fits
+ * the reserved space.
  *
  * A frosted name bar runs across the top: the energy cost orb floats over its
  * left end (protruding above and below), the card name flexes to fill the
@@ -215,21 +216,46 @@ button:disabled {
   --cv-namebar-pad-left: 10cqw;
   --cv-namebar-pad-right: 1.6cqw;
 
-  /* Floating text box: inset from the card edges, anchored to the bottom. */
+  /* Floating text box: inset from the card edges, anchored to the bottom. The
+   * `--cv-textbox-max-height` cap (a percentage of the card height) bounds
+   * type-only boxes, which keep an automatic height. */
   --cv-textbox-inset: 3.6cqw;
   --cv-textbox-max-height: 74%;
   --cv-textbox-blur: 11px;
-  --cv-textbox-pad: 2.6cqw 3.2cqw;
+  --cv-textbox-pad-y: 2.6cqw;
+  --cv-textbox-pad-x: 3.2cqw;
+  --cv-textbox-pad: var(--cv-textbox-pad-y) var(--cv-textbox-pad-x);
 
   /* Tight type-line/rules pairing and rules line spacing. */
   --cv-type-gap: 0.8cqw;
+  --cv-type-line-height: 1.2;
   --cv-rules-line-height: 1.38;
   --cv-paragraph-gap: 0.68em;
 
-  /* Font sizes, as fixed fractions of the card width. They never auto-shrink
-   * per card, so every card on a surface shares one type scale. A name too
-   * long for one line truncates with an ellipsis instead of shrinking; the
-   * rules body keeps its size and lets the text box grow taller. */
+  /* Fixed text-box height: one type line + a three-line rules area + vertical
+   * padding. Derived from the font sizes and line heights so adjusting a font
+   * size keeps the reserved box proportional. The rules area is the height of
+   * three rules lines at the base font; rules text that overflows it shrinks to
+   * fit, while shorter text is centered within the box. */
+  --cv-textbox-type-line-height: calc(
+    var(--cv-type-font-size) * var(--cv-type-line-height)
+  );
+  --cv-textbox-rules-area-height: calc(
+    var(--cv-rules-font-size) * var(--cv-rules-line-height) * 3
+  );
+  --cv-textbox-content-height: calc(
+    var(--cv-textbox-type-line-height) + var(--cv-type-gap) +
+      var(--cv-textbox-rules-area-height)
+  );
+  --cv-textbox-height: calc(
+    var(--cv-textbox-content-height) + 2 * var(--cv-textbox-pad-y)
+  );
+
+  /* Font sizes, as fractions of the card width. The name and type line use
+   * these sizes verbatim and truncate with an ellipsis when too long for one
+   * line. The rules body starts at `--cv-rules-font-size` and auto-shrinks per
+   * card only when its text needs more than the reserved three lines, so every
+   * card shares one type scale until the text forces a smaller rules size. */
   --cv-name-font-size: 5.5cqw;
   --cv-type-font-size: 4.5cqw;
   --cv-rules-font-size: 4.75cqw;
