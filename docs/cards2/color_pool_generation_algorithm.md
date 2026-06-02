@@ -109,16 +109,34 @@ generate():
 
 ### How the three families combine
 
+The most important thing to understand is that **a bare-color list is never
+poured into the pool as a unit.** The unit of selection is a *color identity*,
+not a file, and each family plays a distinct role:
+
 - **`core`** is always the base layer, guaranteeing a spine of universally useful
   cards in every pool.
-- **Bare-color draft lists** define `legal` — the set of cards permitted in the
-  chosen identity — and supply the **fill staples** (step 4a) used to top a pool
-  up to size with generically good on-color cards.
-- **Color+archetype draft lists** and **on-color mechanic archetypes** are the
-  **themes** (step 3) that give the pool its synergistic identity. A mechanic
-  archetype only becomes a candidate theme when at least `T_ON` of its cards are
-  legal in the chosen colors, so green creature themes never surface in a
-  black-red pool, and so on.
+- **Bare-color draft lists** (`u`, `ub`, `ubr`, …) are **never themes** — they
+  carry no archetype, so adding one wholesale would just be "every blue-black-red
+  card," which is both incoherent and far too large (a single three-color list
+  can exceed the 220 cap on its own). Instead they play two supporting roles:
+  1. **They define `legal`.** The union of every on-color bare list, plus core,
+     is the set of cards permitted in the chosen identity. A card can only ever
+     enter the pool if it is in `legal`.
+  2. **They are the fill reservoir.** When the themed pool comes up short
+     (step 4a), cards are drawn from these lists ranked by how many on-color
+     lists contain each one — i.e. the most generically good on-color cards
+     first.
+- **Color+archetype draft lists** (`ur-welder`, `br-aristocrats`, …) and
+  **on-color mechanic archetypes** are the **themes** (step 3) that give the
+  pool its synergistic identity — the cards that actually get added. A bare-color
+  list's cards therefore reach the pool only when they are *also* in a chosen
+  theme, or when they are pulled as fill. A mechanic archetype qualifies as a
+  theme only when at least `T_ON` of its cards are legal in the chosen colors, so
+  a green creature theme never surfaces in a blue-black-red pool.
+
+So a card's path into the pool is always: it must be `legal` (a bare-color list
+vouches for its color), **and** it must be earned by a selected theme or drawn
+as fill. The bare lists set the boundary; the themes and fill populate inside it.
 
 ### Copy counts and the 2-copy cap
 
@@ -166,6 +184,63 @@ last-added theme (un-reinforced 1-ofs), never cards shared between themes.
 - **`JIT`** — how far below the natural ceiling the random target may fall.
   Larger values demote more 2-ofs (more variety, smaller pools); smaller values
   keep pools near the top of the band with more staple 2-ofs intact.
+
+## Worked example: a blue-black-red (`ubr`) pool
+
+Suppose step 1 rolls the three-color identity `C = {u, b, r}`.
+
+**Step 2 — gather the on-color lists.** 37 draft lists have a color prefix that
+is a subset of `{u, b, r}`. Seven are bare-color lists, and these define the
+boundary of the pool (they are *not* added as themes):
+
+```
+bare-color lists (define `legal` and the fill reservoir):
+   246  ubr      208  br       130  u       69  b
+   226  ur       180  ub        98  r
+```
+
+Their union with `core` is `legal` = **406 cards** — every card playable in
+U/B/R. Note `ubr.txt` alone is 246 cards, already larger than the 220-card pool;
+this is exactly why bare lists are boundaries, not themes.
+
+The remaining 30 on-color draft lists carry archetype suffixes and *are*
+eligible themes (`ur-welder`, `br-aristocrats`, `ub-storm`, `ubr-control`, …).
+Alongside them, the mechanic archetypes are filtered by the `T_ON = 0.55`
+on-color test:
+
+```
+qualify as themes (≥55% on-color): abandon 87%, storm 98%, events 95%,
+   fading-farewell 96%, survivors 92%, warrior-aggro 91%, warrior-combo 91%,
+   outsiders 87%, discard-madness 85%, wake-the-fallen 85%, …
+excluded (too off-color): spirit-animals 39%, cheap-characters 54%
+```
+
+**Steps 3–4 — build the pool.** One run (with a fixed seed) walks:
+
+```
+STEP 0  core.txt ............................ poolSize 30
+STEP 1  seed theme  D:u-artifact-control ..... poolSize 57
+STEP 2  + A:warrior-aggro   (overlap 17) ..... poolSize 124
+STEP 3  + D:ur-welder       (overlap 53) ..... poolSize 239   ← over the cap
+JITTER  target 206; demote 33 of 63 2-ofs .... poolSize 206
+FINAL   size 206 · 176 unique · 30 two-ofs
+```
+
+The walk found a U/R artifact-and-welder shell, overshot 220, and the jitter
+demoted 33 randomly-chosen second copies down to a random target of 206 —
+removing duplicate copies, never whole cards, so every combo piece survives.
+(Fill was not needed here because the walk already overshot; it would run only
+if the walk had stopped below 180.)
+
+**Where `ubr.txt` ended up.** Of its 246 cards, **109 appear in this pool** —
+the ones that happened to belong to the chosen artifact/welder/warrior themes
+(or were vouched for as legal and reinforced into 2-ofs). The other 137 were
+off-theme for this particular shell and simply did not get added. A different
+seed under the same `{u, b, r}` identity would land on, say, a storm or
+aristocrats shell and pull a different ~100–120 of those 246 cards. That is
+where the run-to-run variety within a single color identity comes from: the
+identity fixes the 406-card boundary, and the themes choose which slice of it
+becomes the pool.
 
 ## Evidence
 
