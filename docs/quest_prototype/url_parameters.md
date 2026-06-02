@@ -68,6 +68,17 @@ Example:
 http://localhost:5173/?game=quest42
 ```
 
+## `identicons`
+
+When set to exactly `1`, every card renders its generated identicon art in
+place of its assigned image. Any other value (including `0`, `true`, empty, or
+absent) shows normal card art, with identicons used only as the fallback for
+cards that have no assigned image.
+
+The parameter applies wherever cards render, so it works on both the quest
+prototype and the standalone `/editor` route. It is read once at page load and
+is not reactive; changing it requires a reload.
+
 ## Card Editor
 
 The standalone `/editor` route manages display state through query parameters.
@@ -104,6 +115,8 @@ http://localhost:5173/?seed=42                  # fixed seed
 http://localhost:5173/?startInBattle=1          # boot straight into battle
 http://localhost:5173/?game=quest42             # parsed multiplayer room id
 http://localhost:5173/?realtime=1               # use cloud Firebase RTDB
+http://localhost:5173/?identicons=1             # force identicon art for cards
+http://localhost:5173/editor?identicons=1       # same, in the card editor
 http://localhost:5173/?debugJourneyShape=single_offer
 http://localhost:5173/?debugJourneyReward=gain_essence
 http://localhost:5173/?debugJourneyCost=pay_essence

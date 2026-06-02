@@ -6,6 +6,7 @@ import {
   cardImageUrl,
   hasAssignedImage,
 } from "../data/card-database";
+import { identiconsForced } from "../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
   ART_REGION_ASPECT_RATIO_VALUE,
@@ -622,7 +623,9 @@ export function CardView({
     setBottomColor(null);
   }, [card.imageNumber]);
 
-  const hasImage = hasAssignedImage(card.imageNumber);
+  // `identicons=1` forces the generated identicon for every card; otherwise it
+  // is the art fallback for cards without an assigned image.
+  const hasImage = !identiconsForced() && hasAssignedImage(card.imageNumber);
   const identiconUri = hasImage
     ? null
     : cardIdenticonUri(card.id !== "" ? card.id : card.name);
