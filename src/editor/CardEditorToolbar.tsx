@@ -60,6 +60,7 @@ const SORT_OPTIONS: Array<{ value: EditorSortField; label: string }> = [
   { value: "spark", label: "Spark" },
   { value: "rulesTextLength", label: "Rules Text Length" },
   { value: "nameLength", label: "Name Length" },
+  { value: "tideCount", label: "Tide Count" },
 ];
 
 const SIZE_OPTIONS: Array<{ value: EditorCardSize; label: string }> = [

@@ -166,6 +166,8 @@ function sortValue(card: EditorCardRecord, sort: EditorSortField): string | numb
       return card.preview.renderedText.length;
     case "nameLength":
       return card.name.length;
+    case "tideCount":
+      return card.tides.length;
   }
 }
 
