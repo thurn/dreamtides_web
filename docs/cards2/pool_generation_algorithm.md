@@ -7,11 +7,12 @@ archetypes rather than an arbitrary mix.
 
 ## Inputs
 
-- **`docs/archetype_lists/*.txt`** — 16 archetype lists, one card name per line.
-  Each is a curated, combo-aware grouping that corresponds to an archetype in
+- **`tides`** in `data/tabula/cards_v2.toml` — grouping cards by their tide base
+  name yields 16 archetype lists. Each is a curated, combo-aware grouping that
+  corresponds to an archetype in
   [`dreamtides_archetypes.md`](dreamtides_archetypes.md).
-- **`docs/archetype_lists/core.txt`** — 30 "any-deck" filler cards that fit into
-  every pool.
+- **`core = true`** in `data/tabula/cards_v2.toml` — the ~30 "any-deck" filler
+  cards that fit into every pool.
 
 The 16 archetype lists slice a single ~461-card universe by
 mechanic/synergy. Their sizes range from 25 (`fading-farewell`) to 126

@@ -71,6 +71,17 @@ export interface CardData {
   artOwned: boolean;
   /** Art crop applied to the card's image; absent cards use the default crop. */
   art?: ArtCrop;
+  /**
+   * Draft-pool membership metadata sourced from `cards_v2.toml`. Present on the
+   * experimental cards_v2 records the color-pool generator consumes; absent on
+   * runtime catalog cards. `core` flags an always-included staple, `colors`
+   * lists the bare color-combo pools the card belongs to (e.g. `"b"`, `"br"`),
+   * and `draftArchetypes` lists the color+archetype slices (e.g.
+   * `"br-aristocrats"`). See `docs/cards2/color_pool_generation_algorithm.md`.
+   */
+  core?: boolean;
+  colors?: string[];
+  draftArchetypes?: string[];
 }
 
 /**

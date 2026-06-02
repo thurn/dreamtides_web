@@ -1,25 +1,13 @@
 // Browser port of `scripts/generate-color-pool.mjs`. It builds a random,
-// color-coherent Dreamtides card pool of 180-220 cards from the same three
-// families of curated lists the Node script uses — see
-// `docs/cards2/color_pool_generation_algorithm.md` for the full design.
+// color-coherent Dreamtides card pool of 180-220 cards from per-card metadata —
+// see `docs/cards2/color_pool_generation_algorithm.md` for the full design.
 //
-// The Node script reads the lists from disk; here Vite inlines every list file
-// at build time via `import.meta.glob(..., '?raw')`, so the algorithm can run
-// entirely in the browser. The output is a multiset of card *names*; the caller
-// maps those names onto `cards_v2.toml` records.
-
-// Raw contents of every list file, keyed by absolute path from the project
-// root (e.g. "/docs/archetype_lists/abandon.txt").
-const archRaw = import.meta.glob("/docs/archetype_lists/*.txt", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-});
-const draftRaw = import.meta.glob("/docs/drafts_adapted/*.txt", {
-  query: "?raw",
-  import: "default",
-  eager: true,
-});
+// The generator's inputs are reconstructed from `cards_v2.toml` records (loaded
+// in the browser via `cards-v2-database.ts`): `core` cards seed every pool,
+// `tides` supply the mechanic-archetype themes, and `colors` /
+// `draftArchetypes` supply the color-combo lists and color+archetype slices.
+// The output is a multiset of card *names*; the caller maps those names onto
+// `cards_v2.toml` records.
 
 // --- tunable constants (kept in sync with the Node script) -------------------
 const LO = 180;
@@ -30,6 +18,43 @@ const T_ON = 0.55; // archetype is "on-color" if >= this fraction is legal
 const TOPK = 3; // sample among the best neighbors in the theme walk
 const ALPHA = 1.0; // weight exponent on overlap score
 const JIT = 15; // how far below the ceiling the random target may fall
+
+// Mechanic-archetype tide base name -> theme key. The key matches the historical
+// archetype-list basename so theme labels (e.g. "A:discard-madness") are stable.
+const TIDE_TO_ARCHETYPE = new Map<string, string>([
+  ["Abandon", "abandon"],
+  ["Blink", "blink"],
+  ["Celestial Reverie Combo", "celestial-reverie-combo"],
+  ["Cheap Characters", "cheap-characters"],
+  ["Cindermarch / Shadow Soloist Combo", "cindermarch-shadow-soloist-combo"],
+  ["Discard / Madness", "discard-madness"],
+  ["Events", "events"],
+  ["Fading Farewell", "fading-farewell"],
+  ["Outsiders", "outsiders"],
+  ["Reclaim Combo", "reclaim-combo"],
+  ["Spirit Animals", "spirit-animals"],
+  ["Storm", "storm"],
+  ["Survivors", "survivors"],
+  ["Wake the Fallen / Shadow March Combo", "wake-the-fallen-combo"],
+  ["Warrior Aggro", "warrior-aggro"],
+  ["Warrior Combo", "warrior-combo"],
+]);
+
+/** The card fields the pool generator reads. `CardData` satisfies this shape. */
+export interface PoolCard {
+  name: string;
+  tides?: readonly string[];
+  core?: boolean;
+  colors?: readonly string[];
+  draftArchetypes?: readonly string[];
+}
+
+/** The generator's reconstructed inputs. */
+export interface PoolData {
+  core: Set<string>;
+  archLists: Map<string, Set<string>>;
+  draftLists: Map<string, Set<string>>;
+}
 
 /** Result of one pool generation. */
 export interface GeneratedPool {
@@ -76,42 +101,67 @@ function weightedPick<T>(rng: () => number, items: T[], weights: number[]): T {
   return items[items.length - 1];
 }
 
-// --- load the lists ----------------------------------------------------------
-function basename(path: string): string {
-  const file = path.split("/").pop() ?? path;
-  return file.endsWith(".txt") ? file.slice(0, -4) : file;
+// --- build the lists from card metadata --------------------------------------
+// The historical generator read one list per file and iterated them in directory
+// order, which is the code-unit sort of the `<name>.txt` filenames ('-' < '.', so
+// "b-weenie" precedes "b"). Re-key the rebuilt maps in that same order so the
+// overlap-weighted walk visits themes identically.
+function byFilename(a: string, b: string): number {
+  const fa = `${a}.txt`;
+  const fb = `${b}.txt`;
+  return fa < fb ? -1 : fa > fb ? 1 : 0;
 }
-function parseList(raw: string): Set<string> {
-  return new Set(
-    raw
-      .split("\n")
-      .map((l) => l.trim())
-      .filter(Boolean),
-  );
-}
-function loadRaw(raw: Record<string, unknown>): Map<string, Set<string>> {
+function orderedMap(map: Map<string, Set<string>>): Map<string, Set<string>> {
   const out = new Map<string, Set<string>>();
-  for (const [path, contents] of Object.entries(raw)) {
-    out.set(basename(path), parseList(String(contents)));
+  for (const key of [...map.keys()].sort(byFilename)) {
+    out.set(key, map.get(key) ?? new Set<string>());
   }
   return out;
 }
+function addTo(map: Map<string, Set<string>>, key: string, value: string): void {
+  let set = map.get(key);
+  if (!set) {
+    set = new Set<string>();
+    map.set(key, set);
+  }
+  set.add(value);
+}
 
-const archLists = loadRaw(archRaw);
-const core = archLists.get("core") ?? new Set<string>();
-archLists.delete("core");
-const draftLists = loadRaw(draftRaw);
+/**
+ * Reconstruct the generator's inputs from card records. Each card contributes
+ * to `core` (if flagged), to one mechanic archetype per tide base name, and to
+ * every bare color-combo list and color+archetype slice it belongs to.
+ */
+export function buildPoolData(cards: readonly PoolCard[]): PoolData {
+  const core = new Set<string>();
+  const archLists = new Map<string, Set<string>>();
+  const draftLists = new Map<string, Set<string>>();
+  for (const card of cards) {
+    if (card.core) core.add(card.name);
+    for (const tide of card.tides ?? []) {
+      if (tide.endsWith(" Splash")) continue;
+      const key = TIDE_TO_ARCHETYPE.get(tide);
+      if (key) addTo(archLists, key, card.name);
+    }
+    for (const list of card.colors ?? []) addTo(draftLists, list, card.name);
+    for (const list of card.draftArchetypes ?? []) {
+      addTo(draftLists, list, card.name);
+    }
+  }
+  return {
+    core,
+    archLists: orderedMap(archLists),
+    draftLists: orderedMap(draftLists),
+  };
+}
 
-// Leading run of color letters in a filename ('' if it has no color prefix).
+// Leading run of color letters in a list name ('' if it has no color prefix).
 function colorPrefix(name: string): string {
   const head = name.split("-")[0];
   const isColors =
     head.length > 0 && [...head].every((c) => COLORS.includes(c));
   return isColors ? head : "";
 }
-const draftPrefix = new Map(
-  [...draftLists.keys()].map((n) => [n, colorPrefix(n)]),
-);
 
 function inter(set: Set<string>, other: Set<string>): number {
   let n = 0;
@@ -126,11 +176,18 @@ function poolSize(counts: Map<string, number>): number {
 }
 
 // --- the algorithm -----------------------------------------------------------
-function generate(rng: () => number): {
+function generate(
+  rng: () => number,
+  { core, archLists, draftLists }: PoolData,
+): {
   C: Set<string>;
   selected: string[];
   counts: Map<string, number>;
 } {
+  const draftPrefix = new Map(
+    [...draftLists.keys()].map((n) => [n, colorPrefix(n)]),
+  );
+
   // 1. choose a color identity C
   const k = Number(
     weightedPick(
@@ -251,14 +308,27 @@ function generate(rng: () => number): {
 }
 
 /**
- * Generate a fresh random pool. Pass a `seed` to reproduce a previous run;
- * omit it for a new random pool each call. Copy counts in the returned map are
- * capped at 2, matching the 2-copy rule the design doc describes.
+ * Generate a fresh random pool from the given card records. Pass a `seed` to
+ * reproduce a previous run; omit it for a new random pool each call. Copy counts
+ * in the returned map are capped at 2, matching the 2-copy rule the design doc
+ * describes. For repeated generation, build `PoolData` once with
+ * {@link buildPoolData} and call {@link generatePoolFromData}.
  */
-export function generatePool(seed?: number): GeneratedPool {
+export function generatePool(
+  cards: readonly PoolCard[],
+  seed?: number,
+): GeneratedPool {
+  return generatePoolFromData(buildPoolData(cards), seed);
+}
+
+/** Generate a pool from prebuilt {@link PoolData}. */
+export function generatePoolFromData(
+  poolData: PoolData,
+  seed?: number,
+): GeneratedPool {
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
-  const { C, selected, counts } = generate(makeRng(resolvedSeed));
+  const { C, selected, counts } = generate(makeRng(resolvedSeed), poolData);
 
   const capped = new Map<string, number>();
   for (const [card, count] of counts) {

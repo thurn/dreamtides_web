@@ -7,30 +7,38 @@ color-coherent, synergistic selection rather than an arbitrary mix.
 
 ## Inputs
 
-Three families of plain-text lists (one card name per line) feed the generator:
+The generator reads per-card membership metadata from
+`data/tabula/cards_v2.toml`. Each card record carries the fields the generator
+needs, and three families of lists are reconstructed from them:
 
-- **`docs/archetype_lists/core.txt`** — 30 "any-deck" filler cards that fit into
-  every pool.
-- **`docs/archetype_lists/*.txt`** — 16 *mechanic* archetype lists (abandon,
-  storm, spirit-animals, warrior-combo, …). Each is a curated, combo-aware
-  grouping of cards that want to be played together for a mechanical reason.
-- **`docs/drafts_adapted/*.txt`** — 150 *color* lists. Each filename is a
-  **color-identity prefix** drawn from the five colors `w u b r g`, optionally
-  followed by an archetype suffix:
-  - **Bare-color lists** (`b`, `wu`, `ubr`, `wubrg`, …) — broad pools of cards
-    legal in that color identity. These range from ~70 cards (mono) to ~378
-    (all five colors).
-  - **Color+archetype lists** (`br-aristocrats`, `ur-storm`, `wu-blink`,
-    `g-ramp`, …) — focused archetype slices constrained to a color identity.
+- **`core`** — a boolean flag. Cards with `core = true` are the ~30 "any-deck"
+  filler cards that seed every pool.
+- **`tides`** — the card's mechanic-archetype memberships (abandon, storm,
+  spirit-animals, warrior-combo, …). Grouping cards by their tide base name
+  yields the 16 *mechanic* archetype lists, each a curated, combo-aware grouping
+  of cards that want to be played together for a mechanical reason. (The
+  `… Splash` tide variants are membership annotations for the card editor and do
+  not form separate lists.)
+- **`colors`** and **`draft-archetypes`** — the card's *color* list memberships.
+  Each list name is a **color-identity prefix** drawn from the five colors
+  `w u b r g`, optionally followed by an archetype suffix:
+  - **Bare-color lists** (`colors`: `b`, `wu`, `ubr`, `wubrg`, …) — broad pools
+    of cards legal in that color identity. These range from ~70 cards (mono) to
+    ~378 (all five colors).
+  - **Color+archetype lists** (`draft-archetypes`: `br-aristocrats`, `ur-storm`,
+    `wu-blink`, `g-ramp`, …) — focused archetype slices constrained to a color
+    identity.
 
-Together the three families span a universe of **508 distinct cards**.
+Inverting these fields across all cards reconstructs `core`, 16 mechanic
+archetype lists, and 157 color lists, spanning a universe of **509 distinct
+cards**.
 
 ## Why color identity is the organizing principle
 
 A limited-format card pool is most naturally defined by *color identity*: a
 two- or three-color pool that a player can commit to and draft within. The
-`drafts_adapted` filenames encode exactly this structure, and the data shows it
-is a strong, independent axis:
+`colors` and `draft-archetypes` list names encode exactly this structure, and
+the data shows it is a strong, independent axis:
 
 - **Color nesting is real but soft.** A smaller color identity's cards are
   mostly contained in a larger one that includes it (`b` ⊆ `br` ≈ 0.90; a
@@ -64,18 +72,18 @@ constants:  LO = 180, HI = 220
             T_ON  = 0.55      # archetype "on-color" threshold
             TOPK  = 3,  ALPHA = 1.0,  JIT = 15
 
-prefix(list)      = leading run of w/u/b/r/g in the filename ('' if none)
+prefix(list)      = leading run of w/u/b/r/g in the list name ('' if none)
 poolSize(count)   = Σ over cards of min(2, count[card])
 
 generate():
-  count = multiset; start = core.txt          # core is always the base layer
+  count = multiset; start = core              # core is always the base layer
 
   # --- 1. choose a color identity C ---
   k = weighted-random size from K_WEIGHTS
   C = random k-subset of {w,u,b,r,g}
 
   # --- 2. legal card pool + candidate themes for this identity ---
-  onColorDraft = [ D in drafts_adapted : prefix(D) ⊆ C and prefix(D) ≠ '' ]
+  onColorDraft = [ D in color lists : prefix(D) ⊆ C and prefix(D) ≠ '' ]
   legal        = core ∪ ⋃ { cards(D) : D in onColorDraft }   # everything in-identity
 
   themes = {}
@@ -200,8 +208,8 @@ bare-color lists (define `legal` and the fill reservoir):
 ```
 
 Their union with `core` is `legal` = **406 cards** — every card playable in
-U/B/R. Note `ubr.txt` alone is 246 cards, already larger than the 220-card pool;
-this is exactly why bare lists are boundaries, not themes.
+U/B/R. Note the `ubr` list alone is 246 cards, already larger than the 220-card
+pool; this is exactly why bare lists are boundaries, not themes.
 
 The remaining 30 on-color draft lists carry archetype suffixes and *are*
 eligible themes (`ur-welder`, `br-aristocrats`, `ub-storm`, `ubr-control`, …).
@@ -218,7 +226,7 @@ excluded (too off-color): spirit-animals 39%, cheap-characters 54%
 **Steps 3–4 — build the pool.** One run (with a fixed seed) walks:
 
 ```
-STEP 0  core.txt ............................ poolSize 30
+STEP 0  core ................................ poolSize 30
 STEP 1  seed theme  D:u-artifact-control ..... poolSize 57
 STEP 2  + A:warrior-aggro   (overlap 17) ..... poolSize 124
 STEP 3  + D:ur-welder       (overlap 53) ..... poolSize 239   ← over the cap
@@ -232,7 +240,7 @@ removing duplicate copies, never whole cards, so every combo piece survives.
 (Fill was not needed here because the walk already overshot; it would run only
 if the walk had stopped below 180.)
 
-**Where `ubr.txt` ended up.** Of its 246 cards, **109 appear in this pool** —
+**Where the `ubr` list ended up.** Of its 246 cards, **109 appear in this pool** —
 the ones that happened to belong to the chosen artifact/welder/warrior themes
 (or were vouched for as legal and reinforced into 2-ofs). The other 137 were
 off-theme for this particular shell and simply did not get added. A different
@@ -276,7 +284,7 @@ distinct color identities produced: 30  (top: uw, bg, rw, bu, gr, gw)
 colors-per-pool: {1: 513, 2: 2486, 3: 1616, 4: 385}
 distinct card pools: 4807 (96.1% unique)
 most common single pool: 87 times (1.74%)
-reachable universe: 497 / 508 cards over 3,000 runs, incl. all 47
+reachable universe: 509 / 509 cards over 3,000 runs, incl. all
                     cards that appear only in draft lists
 ```
 
@@ -288,7 +296,7 @@ Interpretation:
   the two- and three-color pools that make the best draft environments.
 - **Variety.** 96.1% of runs are unique card pools; the single most common pool
   appears only 1.74% of the time.
-- **Reach.** The pools collectively use 497 of the 508 cards in the universe,
+- **Reach.** The pools collectively use all 509 cards in the universe,
   including every card that exists only in the color lists — the color corpus
   meaningfully widens what a pool can contain.
 - **Staples preserved.** A median of 34 cards are 2-ofs. About 16% of runs are

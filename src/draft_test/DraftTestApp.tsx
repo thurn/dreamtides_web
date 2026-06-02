@@ -327,7 +327,7 @@ export default function DraftTestApp() {
         const db = await loadCardsV2Database();
         if (cancelled) return;
 
-        const pool: GeneratedPool = generatePool();
+        const pool: GeneratedPool = generatePool([...db.values()]);
         const nameIndex = buildNameIndex(db);
         const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(
           pool,
