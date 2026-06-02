@@ -59,7 +59,9 @@ function StatefulToolbar({
       displayState={displayState}
       subtypeOptions={["Guide", "Scout"]}
       availableTags={[]}
+      availableTides={[]}
       onOpenManageTags={vi.fn()}
+      onOpenManageTides={vi.fn()}
       visibleCount={2}
       totalCount={5}
       onDisplayStateChange={(nextState) => {
@@ -90,7 +92,9 @@ describe("CardEditorToolbar", () => {
         displayState={DEFAULT_EDITOR_DISPLAY_STATE}
         subtypeOptions={["Guide", "Scout"]}
       availableTags={[]}
+      availableTides={[]}
       onOpenManageTags={vi.fn()}
+      onOpenManageTides={vi.fn()}
         visibleCount={2}
         totalCount={5}
         onDisplayStateChange={vi.fn()}
@@ -147,8 +151,8 @@ describe("CardEditorToolbar", () => {
   it("updates segmented, select, and direction controls", () => {
     const onChange = vi.fn();
     const { container, root } = mount(<StatefulToolbar onChange={onChange} />);
-    const charactersButton = Array.from(container.querySelectorAll("button")).find(
-      (button) => button.textContent === "Characters",
+    const typeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Type filter"]',
     );
     const costSelect = container.querySelector<HTMLSelectElement>(
       '[aria-label="Cost filter"]',
@@ -167,7 +171,7 @@ describe("CardEditorToolbar", () => {
     );
 
     if (
-      charactersButton === undefined ||
+      typeSelect === null ||
       costSelect === null ||
       subtypeSelect === null ||
       sortSelect === null ||
@@ -178,9 +182,9 @@ describe("CardEditorToolbar", () => {
     }
 
     act(() => {
-      charactersButton.click();
+      setSelectValue(typeSelect, "character");
     });
-    expect(charactersButton.getAttribute("aria-pressed")).toBe("true");
+    expect(typeSelect.value).toBe("character");
 
     act(() => {
       setSelectValue(costSelect, "x");
@@ -229,7 +233,9 @@ describe("CardEditorToolbar", () => {
         displayState={displayState}
         subtypeOptions={["Guide", "Scout"]}
       availableTags={[]}
+      availableTides={[]}
       onOpenManageTags={vi.fn()}
+      onOpenManageTides={vi.fn()}
         visibleCount={0}
         totalCount={5}
         onDisplayStateChange={vi.fn()}
@@ -262,7 +268,9 @@ describe("CardEditorToolbar", () => {
         displayState={DEFAULT_EDITOR_DISPLAY_STATE}
         subtypeOptions={["", "Guide", "  ", "Scout"]}
         availableTags={[]}
+        availableTides={[]}
         onOpenManageTags={vi.fn()}
+        onOpenManageTides={vi.fn()}
         visibleCount={2}
         totalCount={5}
         onDisplayStateChange={vi.fn()}

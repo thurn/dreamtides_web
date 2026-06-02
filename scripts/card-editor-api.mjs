@@ -15,13 +15,45 @@ import {
   patchRenderedCardsToml,
   readEditorCards,
   readTagRegistry,
+  readTideRegistry,
   refreshCardDataJson,
   removeTagsFromCards,
+  removeTidesFromCards,
   serializeTagRegistry,
+  serializeTideRegistry,
   tagRegistryPathFor,
+  tideRegistryPathFor,
   validateCardEdit,
   validateTagRegistry,
 } from "./card-editor-data.mjs";
+
+// API-side facet descriptors bind each card taxonomy to its registry endpoint
+// and the data-layer helpers that read, serialize, and cascade it. Tags and
+// tides share every handler; only this table differs.
+const API_FACETS = {
+  tags: {
+    field: "tags",
+    basePath: "/api/editor/tags",
+    Noun: "Tag",
+    noun: "tag",
+    invalidRegistryCode: "INVALID_TAG_REGISTRY",
+    readRegistry: readTagRegistry,
+    registryPathFor: tagRegistryPathFor,
+    serializeRegistry: serializeTagRegistry,
+    removeFromCards: removeTagsFromCards,
+  },
+  tides: {
+    field: "tides",
+    basePath: "/api/editor/tides",
+    Noun: "Tide",
+    noun: "tide",
+    invalidRegistryCode: "INVALID_TIDE_REGISTRY",
+    readRegistry: readTideRegistry,
+    registryPathFor: tideRegistryPathFor,
+    serializeRegistry: serializeTideRegistry,
+    removeFromCards: removeTidesFromCards,
+  },
+};
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/cards";
@@ -444,18 +476,23 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
     return;
   }
 
-  // Card tags may only reference tags that exist in the registry, so the card
-  // file never ends up pointing at a tag the registry does not define.
-  if (body.field === "tags") {
+  // A card facet (tags, tides) may only reference values that exist in its
+  // registry, so the card file never ends up pointing at a value the registry
+  // does not define.
+  if (body.field === "tags" || body.field === "tides") {
+    const facet = API_FACETS[body.field];
     const registryNames = new Set(
-      readTagRegistry({ rootDir, cardTomlPath }).map((tag) => tag.name),
+      facet.readRegistry({ rootDir, cardTomlPath }).map((entry) => entry.name),
     );
-    const unknown = validation.value.filter((tag) => !registryNames.has(tag));
+    const unknown = validation.value.filter((value) => !registryNames.has(value));
     if (unknown.length > 0) {
-      errorResponse(res, 400, "INVALID_EDIT", "Unknown tag. Create it in Manage tags first.", {
-        field: "tags",
-        value: unknown,
-      });
+      errorResponse(
+        res,
+        400,
+        "INVALID_EDIT",
+        `Unknown ${facet.noun}. Create it in Manage ${facet.noun}s first.`,
+        { field: body.field, value: unknown },
+      );
       return;
     }
   }
@@ -517,13 +554,16 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
   });
 }
 
-const TAGS_BASE_PATH = "/api/editor/tags";
-
-function isEditorTagsApiPath(pathname) {
-  return pathname === TAGS_BASE_PATH;
+function editorFacetForPath(pathname) {
+  for (const facet of Object.values(API_FACETS)) {
+    if (pathname === facet.basePath) {
+      return facet;
+    }
+  }
+  return null;
 }
 
-async function handleTagsPut(req, res, rootDir, cardTomlPath, fileSystem) {
+async function handleFacetPut(req, res, rootDir, cardTomlPath, fileSystem, facet) {
   let body;
   try {
     body = await readJsonRequest(req);
@@ -535,38 +575,46 @@ async function handleTagsPut(req, res, rootDir, cardTomlPath, fileSystem) {
     throw error;
   }
 
-  if (body === null || typeof body !== "object" || Array.isArray(body) || !Array.isArray(body.tags)) {
+  if (
+    body === null ||
+    typeof body !== "object" ||
+    Array.isArray(body) ||
+    !Array.isArray(body.tags)
+  ) {
     errorResponse(res, 400, "INVALID_REQUEST", "PUT body must include a tags array.");
     return;
   }
 
   const validation = validateTagRegistry(body.tags);
   if (!validation.ok) {
-    errorResponse(res, 400, "INVALID_TAG_REGISTRY", validation.message);
+    errorResponse(res, 400, facet.invalidRegistryCode, validation.message);
     return;
   }
 
   const newNames = new Set(validation.tags.map((tag) => tag.name));
   const usedNames = new Set();
   for (const card of readEditorCards({ rootDir, cardTomlPath })) {
-    for (const tag of card.tags) {
-      usedNames.add(tag);
+    for (const value of card[facet.field]) {
+      usedNames.add(value);
     }
   }
   const removedUsed = [...usedNames].filter((name) => !newNames.has(name));
 
-  const registryAbsPath = join(rootDir, tagRegistryPathFor(cardTomlPath));
+  const registryAbsPath = join(rootDir, facet.registryPathFor(cardTomlPath));
   const cardTomlBasename = cardTomlPath.split(/[\\/]/u).pop();
   const writes = [
-    preparedWrite(registryAbsPath, serializeTagRegistry(validation.tags, { cardTomlBasename })),
+    preparedWrite(
+      registryAbsPath,
+      facet.serializeRegistry(validation.tags, { cardTomlBasename }),
+    ),
   ];
 
-  // Deleting a tag from the registry strips it from every card that used it so
-  // the card file never references an undefined tag.
+  // Deleting a value from the registry strips it from every card that used it so
+  // the card file never references an undefined value.
   if (removedUsed.length > 0) {
     const tomlPath = join(rootDir, cardTomlPath);
     const source = fileSystem.readFileSync(tomlPath, "utf8");
-    const patchedSource = removeTagsFromCards(source, removedUsed);
+    const patchedSource = facet.removeFromCards(source, removedUsed);
     writes.push(preparedWrite(tomlPath, patchedSource));
 
     if (cardTomlPath === DEFAULT_CARD_TOML_PATH) {
@@ -578,19 +626,19 @@ async function handleTagsPut(req, res, rootDir, cardTomlPath, fileSystem) {
   commitFiles(writes, fileSystem);
 
   jsonResponse(res, 200, {
-    tags: readTagRegistry({ rootDir, cardTomlPath }),
+    tags: facet.readRegistry({ rootDir, cardTomlPath }),
     cards: readEditorCards({ rootDir, cardTomlPath }),
   });
 }
 
-async function handleTags(req, res, rootDir, cardTomlPath, fileSystem) {
+async function handleFacet(req, res, rootDir, cardTomlPath, fileSystem, facet) {
   if (req.method === "GET") {
-    jsonResponse(res, 200, { tags: readTagRegistry({ rootDir, cardTomlPath }) });
+    jsonResponse(res, 200, { tags: facet.readRegistry({ rootDir, cardTomlPath }) });
     return;
   }
 
   if (req.method === "PUT") {
-    await handleTagsPut(req, res, rootDir, cardTomlPath, fileSystem);
+    await handleFacetPut(req, res, rootDir, cardTomlPath, fileSystem, facet);
     return;
   }
 
@@ -604,7 +652,8 @@ export function createCardEditorApiMiddleware({
   return async function cardEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
 
-    if (isEditorTagsApiPath(rawPath)) {
+    const facet = editorFacetForPath(rawPath);
+    if (facet !== null) {
       try {
         const tomlResolution = resolveRequestedTomlPath(rootDir, tomlParamFromUrl(req.url));
         if (!tomlResolution.ok) {
@@ -620,7 +669,7 @@ export function createCardEditorApiMiddleware({
           return;
         }
 
-        await handleTags(req, res, rootDir, cardTomlPath, fileSystem);
+        await handleFacet(req, res, rootDir, cardTomlPath, fileSystem, facet);
       } catch (error) {
         errorResponse(res, 500, "SAVE_FAILED", error instanceof Error ? error.message : "Save failed.");
       }

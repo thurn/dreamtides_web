@@ -15,7 +15,9 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   cost: "all",
   subtype: "",
   tagFilters: [],
+  tideFilters: [],
   tagEditing: false,
+  tideEditing: false,
   artEditing: false,
   sort: "name",
   dir: "asc",
@@ -104,15 +106,15 @@ function parseScope(value: string | null): EditorSearchScope {
     : DEFAULT_EDITOR_DISPLAY_STATE.searchScope;
 }
 
-function parseTagFilters(params: URLSearchParams): string[] {
-  const tags: string[] = [];
-  for (const raw of params.getAll("tag")) {
+function parseFacetFilters(params: URLSearchParams, param: string): string[] {
+  const values: string[] = [];
+  for (const raw of params.getAll(param)) {
     const value = raw.trim();
-    if (value !== "" && !tags.includes(value)) {
-      tags.push(value);
+    if (value !== "" && !values.includes(value)) {
+      values.push(value);
     }
   }
-  return tags;
+  return values;
 }
 
 export function parseEditorDisplayState(
@@ -126,8 +128,12 @@ export function parseEditorDisplayState(
     type: parseType(params.get("type")),
     cost: parseCost(params.get("cost")),
     subtype: params.get("subtype") ?? DEFAULT_EDITOR_DISPLAY_STATE.subtype,
-    tagFilters: parseTagFilters(params),
+    tagFilters: parseFacetFilters(params, "tag"),
+    // Tide filtering is single-select; keep only the first value if a URL
+    // somehow carries more than one `tide` param.
+    tideFilters: parseFacetFilters(params, "tide").slice(0, 1),
     tagEditing: params.get("tagedit") === "1",
+    tideEditing: params.get("tideedit") === "1",
     artEditing: params.get("artedit") === "1",
     sort: parseSort(params.get("sort")),
     dir: parseDir(params.get("dir")),
@@ -158,8 +164,14 @@ export function serializeEditorDisplayState(
   for (const tag of state.tagFilters) {
     params.append("tag", tag);
   }
+  for (const tide of state.tideFilters) {
+    params.append("tide", tide);
+  }
   if (state.tagEditing) {
     params.set("tagedit", "1");
+  }
+  if (state.tideEditing) {
+    params.set("tideedit", "1");
   }
   if (state.artEditing) {
     params.set("artedit", "1");

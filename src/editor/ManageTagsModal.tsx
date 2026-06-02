@@ -15,6 +15,8 @@ export interface ManageTagsModalProps {
   saveError: string | null;
   onSave: (tags: EditorTag[]) => void;
   onClose: () => void;
+  /** Singular label for the facet, e.g. "tag" or "tide". */
+  noun?: string;
 }
 
 const overlayStyle: CSSProperties = {
@@ -136,7 +138,9 @@ export default function ManageTagsModal({
   saveError,
   onSave,
   onClose,
+  noun = "tag",
 }: ManageTagsModalProps) {
+  const title = `Manage ${noun}s`;
   const [draft, setDraft] = useState<EditorTag[]>(() =>
     tags.map((tag) => ({ ...tag })),
   );
@@ -182,7 +186,7 @@ export default function ManageTagsModal({
   const addTag = () => {
     const trimmed = newName.trim();
     if (trimmed === "") {
-      setLocalError("Enter a tag name.");
+      setLocalError(`Enter a ${noun} name.`);
       return;
     }
     if (draftNames.has(trimmed.toLowerCase())) {
@@ -215,12 +219,12 @@ export default function ManageTagsModal({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Manage tags"
+        aria-label={title}
         style={dialogStyle}
       >
         <div style={headerStyle}>
           <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800 }}>
-            Manage tags
+            {title}
           </h2>
           <button
             type="button"
@@ -242,7 +246,7 @@ export default function ManageTagsModal({
         <div style={bodyStyle}>
           {draft.length === 0 ? (
             <p style={{ margin: 0, color: "#9fb0ab", fontSize: "0.85rem" }}>
-              No tags defined yet. Add one below.
+              {`No ${noun}s defined yet. Add one below.`}
             </p>
           ) : (
             draft.map((tag) => {
@@ -273,11 +277,11 @@ export default function ManageTagsModal({
                   </span>
                   <button
                     type="button"
-                    aria-label={`Delete tag ${tag.name}`}
+                    aria-label={`Delete ${noun} ${tag.name}`}
                     title={
                       count > 0
                         ? `Delete and remove from ${count} card${count === 1 ? "" : "s"}`
-                        : "Delete tag"
+                        : `Delete ${noun}`
                     }
                     onClick={() => removeTag(tag.name)}
                     style={{
@@ -303,16 +307,16 @@ export default function ManageTagsModal({
           >
             <input
               type="color"
-              aria-label="New tag color"
+              aria-label={`New ${noun} color`}
               value={newColor}
               onChange={(event) => setNewColor(event.currentTarget.value)}
               style={colorInputStyle}
             />
             <input
               type="text"
-              aria-label="New tag name"
+              aria-label={`New ${noun} name`}
               value={newName}
-              placeholder="New tag name"
+              placeholder={`New ${noun} name`}
               onChange={(event) => {
                 setNewName(event.currentTarget.value);
                 setLocalError(null);

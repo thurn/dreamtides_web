@@ -3,10 +3,13 @@ import {
   editorTomlParam,
   loadEditorCards,
   loadEditorTags,
+  loadEditorTides,
   saveEditorCardArt,
   saveEditorCardField,
   saveEditorCardTags,
+  saveEditorCardTides,
   saveEditorTagRegistry,
+  saveEditorTideRegistry,
 } from "./editor-api";
 import CardEditorGrid from "./CardEditorGrid";
 import type { CardTagSaveState } from "./CardEditorGrid";
@@ -46,8 +49,11 @@ const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
   saveEditorCardField,
   loadEditorTags,
   saveEditorCardTags,
+  loadEditorTides,
+  saveEditorCardTides,
   saveEditorCardArt,
   saveEditorTagRegistry,
+  saveEditorTideRegistry,
 };
 
 type LoadStatus =
@@ -84,7 +90,9 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-cost": displayState.cost,
     "data-editor-subtype": displayState.subtype,
     "data-editor-tags": displayState.tagFilters.join(","),
+    "data-editor-tides": displayState.tideFilters.join(","),
     "data-editor-tag-editing": String(displayState.tagEditing),
+    "data-editor-tide-editing": String(displayState.tideEditing),
     "data-editor-art-editing": String(displayState.artEditing),
     "data-editor-sort": displayState.sort,
     "data-editor-dir": displayState.dir,
@@ -213,6 +221,15 @@ function filteredAndSortedCards(
         return false;
       }
 
+      // Tide filtering is single-select but uses the same containment check so a
+      // card must carry the selected tide to remain visible.
+      if (
+        displayState.tideFilters.length > 0 &&
+        !displayState.tideFilters.every((tide) => card.tides.includes(tide))
+      ) {
+        return false;
+      }
+
       return (
         subtypeFilter === "" ||
         sourceSubtype(card) === subtypeFilter
@@ -333,6 +350,15 @@ export default function CardEditorApp({
   const [manageTagsOpen, setManageTagsOpen] = useState(false);
   const [registrySaving, setRegistrySaving] = useState(false);
   const [registryError, setRegistryError] = useState<string | null>(null);
+  const [tides, setTides] = useState<EditorTag[]>([]);
+  const [tideSaveState, setTideSaveState] = useState<
+    Record<string, CardTagSaveState>
+  >({});
+  const [manageTidesOpen, setManageTidesOpen] = useState(false);
+  const [tideRegistrySaving, setTideRegistrySaving] = useState(false);
+  const [tideRegistryError, setTideRegistryError] = useState<string | null>(
+    null,
+  );
   const [artEditorCardId, setArtEditorCardId] = useState<string | null>(null);
   const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
@@ -396,6 +422,34 @@ export default function CardEditorApp({
     };
   }, [apiClient, loadAttempt]);
 
+  useEffect(() => {
+    let cancelled = false;
+    const controller = new AbortController();
+
+    async function loadTides() {
+      try {
+        const loadedTides = await apiClient.loadEditorTides(controller.signal);
+        if (!cancelled) {
+          setTides(loadedTides);
+        }
+      } catch (error) {
+        if (isAbortError(error) || cancelled) {
+          return;
+        }
+        // A missing or unreadable registry should not break card editing; the
+        // grid falls back to neutral tide colors until the registry loads.
+        setTides([]);
+      }
+    }
+
+    void loadTides();
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [apiClient, loadAttempt]);
+
   const loadedCards = loadStatus.kind === "loaded" ? loadStatus.cards : [];
   const subtypeOptions = useMemo(
     () => subtypeOptionsFromCards(loadedCards),
@@ -410,6 +464,15 @@ export default function CardEditorApp({
     for (const card of loadedCards) {
       for (const tag of card.tags) {
         counts[tag] = (counts[tag] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [loadedCards]);
+  const tideUsageCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const card of loadedCards) {
+      for (const tide of card.tides) {
+        counts[tide] = (counts[tide] ?? 0) + 1;
       }
     }
     return counts;
@@ -605,28 +668,39 @@ export default function CardEditorApp({
       });
   }
 
-  function applyCardTags(card: EditorCardRecord, nextTags: string[]) {
-    const previousTags = card.tags;
-    // Optimistically reflect the change so the chip appears/disappears
-    // immediately; the server result replaces it, or a failure reverts it.
-    replaceConfirmedCard({ ...card, tags: nextTags });
-    setTagSaveState((current) => ({
+  // Optimistically reflect a card facet (tags / tides) change so the chip
+  // appears or disappears immediately; the server result replaces it, or a
+  // failure reverts it. Tags and tides share this path, differing only in the
+  // card field, the save request, and the per-card save-state setter.
+  function applyCardFacet(
+    card: EditorCardRecord,
+    field: "tags" | "tides",
+    nextValues: string[],
+    runSave: (values: string[]) => Promise<{ card: EditorCardRecord }>,
+    setSaveState: (
+      updater: (
+        current: Record<string, CardTagSaveState>,
+      ) => Record<string, CardTagSaveState>,
+    ) => void,
+  ) {
+    const previousValues = card[field];
+    replaceConfirmedCard({ ...card, [field]: nextValues });
+    setSaveState((current) => ({
       ...current,
       [card.id]: { saving: true, error: null },
     }));
 
-    void apiClient
-      .saveEditorCardTags({ id: card.id, tags: nextTags })
+    void runSave(nextValues)
       .then((response) => {
         replaceConfirmedCard(response.card);
-        setTagSaveState((current) => ({
+        setSaveState((current) => ({
           ...current,
           [card.id]: { saving: false, error: null },
         }));
       })
       .catch((error: unknown) => {
-        replaceConfirmedCard({ ...card, tags: previousTags });
-        setTagSaveState((current) => ({
+        replaceConfirmedCard({ ...card, [field]: previousValues });
+        setSaveState((current) => ({
           ...current,
           [card.id]: { saving: false, error: errorMessageFor(error) },
         }));
@@ -637,16 +711,51 @@ export default function CardEditorApp({
     if (card.tags.includes(name)) {
       return;
     }
-    applyCardTags(card, [...card.tags, name]);
+    applyCardFacet(
+      card,
+      "tags",
+      [...card.tags, name],
+      (tags) => apiClient.saveEditorCardTags({ id: card.id, tags }),
+      setTagSaveState,
+    );
   }
 
   function handleRemoveCardTag(card: EditorCardRecord, name: string) {
     if (!card.tags.includes(name)) {
       return;
     }
-    applyCardTags(
+    applyCardFacet(
       card,
+      "tags",
       card.tags.filter((tag) => tag !== name),
+      (tags) => apiClient.saveEditorCardTags({ id: card.id, tags }),
+      setTagSaveState,
+    );
+  }
+
+  function handleAddCardTide(card: EditorCardRecord, name: string) {
+    if (card.tides.includes(name)) {
+      return;
+    }
+    applyCardFacet(
+      card,
+      "tides",
+      [...card.tides, name],
+      (tides) => apiClient.saveEditorCardTides({ id: card.id, tides }),
+      setTideSaveState,
+    );
+  }
+
+  function handleRemoveCardTide(card: EditorCardRecord, name: string) {
+    if (!card.tides.includes(name)) {
+      return;
+    }
+    applyCardFacet(
+      card,
+      "tides",
+      card.tides.filter((tide) => tide !== name),
+      (tides) => apiClient.saveEditorCardTides({ id: card.id, tides }),
+      setTideSaveState,
     );
   }
 
@@ -669,6 +778,28 @@ export default function CardEditorApp({
       .catch((error: unknown) => {
         setRegistrySaving(false);
         setRegistryError(errorMessageFor(error));
+      });
+  }
+
+  function handleSaveTideRegistry(nextTides: EditorTag[]) {
+    setTideRegistrySaving(true);
+    setTideRegistryError(null);
+
+    void apiClient
+      .saveEditorTideRegistry({ tides: nextTides })
+      .then((response) => {
+        setTides(response.tags);
+        setLoadStatus((current) =>
+          current.kind === "loaded"
+            ? { kind: "loaded", cards: response.cards }
+            : current,
+        );
+        setTideRegistrySaving(false);
+        setManageTidesOpen(false);
+      })
+      .catch((error: unknown) => {
+        setTideRegistrySaving(false);
+        setTideRegistryError(errorMessageFor(error));
       });
   }
 
@@ -786,10 +917,12 @@ export default function CardEditorApp({
               displayState={displayState}
               subtypeOptions={subtypeOptions}
               availableTags={tags}
+              availableTides={tides}
               visibleCount={visibleCards.length}
               totalCount={loadStatus.cards.length}
               onDisplayStateChange={handleDisplayStateChange}
               onOpenManageTags={() => setManageTagsOpen(true)}
+              onOpenManageTides={() => setManageTidesOpen(true)}
             />
             {visibleCards.length === 0 ? (
               <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
@@ -801,9 +934,12 @@ export default function CardEditorApp({
                 size={displayState.size}
                 saveState={saveState}
                 tagEditing={displayState.tagEditing}
+                tideEditing={displayState.tideEditing}
                 artEditing={displayState.artEditing}
                 availableTags={tags}
+                availableTides={tides}
                 tagSaveState={tagSaveState}
+                tideSaveState={tideSaveState}
                 onOpenArtEditor={handleOpenArtEditor}
                 onFieldBeginEdit={handleFieldBeginEdit}
                 onFieldDraftChange={handleFieldDraftChange}
@@ -813,6 +949,9 @@ export default function CardEditorApp({
                 onAddCardTag={handleAddCardTag}
                 onRemoveCardTag={handleRemoveCardTag}
                 onOpenManageTags={() => setManageTagsOpen(true)}
+                onAddCardTide={handleAddCardTide}
+                onRemoveCardTide={handleRemoveCardTide}
+                onOpenManageTides={() => setManageTidesOpen(true)}
               />
             )}
           </div>
@@ -871,6 +1010,21 @@ export default function CardEditorApp({
           onClose={() => {
             setManageTagsOpen(false);
             setRegistryError(null);
+          }}
+        />
+      ) : null}
+
+      {manageTidesOpen ? (
+        <ManageTagsModal
+          noun="tide"
+          tags={tides}
+          usageCounts={tideUsageCounts}
+          saving={tideRegistrySaving}
+          saveError={tideRegistryError}
+          onSave={handleSaveTideRegistry}
+          onClose={() => {
+            setManageTidesOpen(false);
+            setTideRegistryError(null);
           }}
         />
       ) : null}

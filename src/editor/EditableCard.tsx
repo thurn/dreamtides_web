@@ -26,10 +26,14 @@ export interface EditableCardProps {
   subtypeSaveEntry: EditableFieldSaveEntry | null;
   rulesTextSaveEntry: EditableFieldSaveEntry | null;
   tagEditing: boolean;
+  tideEditing: boolean;
   artEditing: boolean;
   availableTags: EditorTag[];
+  availableTides: EditorTag[];
   tagSaving: boolean;
   tagError: string | null;
+  tideSaving: boolean;
+  tideError: string | null;
   onOpenArtEditor: (card: EditorCardRecord) => void;
   onFieldBeginEdit: (
     card: EditorCardRecord,
@@ -55,6 +59,9 @@ export interface EditableCardProps {
   onAddCardTag: (card: EditorCardRecord, name: string) => void;
   onRemoveCardTag: (card: EditorCardRecord, name: string) => void;
   onOpenManageTags: () => void;
+  onAddCardTide: (card: EditorCardRecord, name: string) => void;
+  onRemoveCardTide: (card: EditorCardRecord, name: string) => void;
+  onOpenManageTides: () => void;
 }
 
 function displayEditorValue(value: EditableFieldValue): EditableFieldValue {
@@ -208,10 +215,14 @@ export default function EditableCard({
   subtypeSaveEntry,
   rulesTextSaveEntry,
   tagEditing,
+  tideEditing,
   artEditing,
   availableTags,
+  availableTides,
   tagSaving,
   tagError,
+  tideSaving,
+  tideError,
   onOpenArtEditor,
   onFieldBeginEdit,
   onFieldDraftChange,
@@ -221,6 +232,9 @@ export default function EditableCard({
   onAddCardTag,
   onRemoveCardTag,
   onOpenManageTags,
+  onAddCardTide,
+  onRemoveCardTide,
+  onOpenManageTides,
 }: EditableCardProps) {
   const cardRef = useRef<HTMLElement | null>(null);
   const [hovering, setHovering] = useState(false);
@@ -414,6 +428,18 @@ export default function EditableCard({
           onAddTag={(name) => onAddCardTag(card, name)}
           onRemoveTag={(name) => onRemoveCardTag(card, name)}
           onOpenManageTags={onOpenManageTags}
+        />
+      ) : null}
+      {tideEditing ? (
+        <CardTagEditor
+          noun="tide"
+          cardTags={card.tides}
+          availableTags={availableTides}
+          saving={tideSaving}
+          error={tideError}
+          onAddTag={(name) => onAddCardTide(card, name)}
+          onRemoveTag={(name) => onRemoveCardTide(card, name)}
+          onOpenManageTags={onOpenManageTides}
         />
       ) : null}
       {hovering && mtgName !== "" ? (

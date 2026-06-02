@@ -49,7 +49,9 @@ describe("editor URL display state", () => {
       cost: "5plus",
       subtype: "Scout",
       tagFilters: [],
+      tideFilters: [],
       tagEditing: false,
+      tideEditing: false,
       artEditing: false,
       sort: "cost",
       dir: "desc",
@@ -105,6 +107,27 @@ describe("editor URL display state", () => {
     const parsed = parseEditorDisplayState(params);
     expect(parsed.tagFilters).toEqual(["Removal", "Elves"]);
     expect(parsed.tagEditing).toBe(true);
+  });
+
+  it("round-trips a single tide filter and tide-editing mode", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      tideFilters: ["event_chain"],
+      tideEditing: true,
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.getAll("tide")).toEqual(["event_chain"]);
+    expect(params.get("tideedit")).toBe("1");
+
+    const parsed = parseEditorDisplayState(params);
+    expect(parsed.tideFilters).toEqual(["event_chain"]);
+    expect(parsed.tideEditing).toBe(true);
+  });
+
+  it("keeps only the first tide filter when several are present", () => {
+    const parsed = parseEditorDisplayState("?tide=event_chain&tide=void_recursion");
+    expect(parsed.tideFilters).toEqual(["event_chain"]);
   });
 
   it("round-trips art-editing mode", () => {

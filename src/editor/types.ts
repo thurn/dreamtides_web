@@ -10,9 +10,10 @@ export type EditableCardField =
 /**
  * Card fields the editor can save. Extends the inline-editable scalar fields
  * with `art`, which is edited through the dedicated art-edit modal rather than
- * the inline field flow, and `tags`, saved through the tag controls.
+ * the inline field flow, and the facet lists `tags` and `tides`, saved through
+ * their respective chip controls.
  */
-export type SavableCardField = EditableCardField | "art" | "tags";
+export type SavableCardField = EditableCardField | "art" | "tags" | "tides";
 
 export type EditorFieldValue = string | number;
 
@@ -27,6 +28,7 @@ export interface EditorCardRecord {
   spark: EditorFieldValue;
   "rendered-text": string;
   tags: string[];
+  tides: string[];
   /**
    * The Magic: The Gathering card this card is derived from. Surfaced as a
    * hover tooltip in the editor for reference; it is not an editable field and
@@ -83,10 +85,20 @@ export interface EditorDisplayState {
    */
   tagFilters: string[];
   /**
+   * Tide names to filter by. Single-select: selecting a tide replaces any prior
+   * selection, so this holds at most one name. Empty means no tide filtering.
+   */
+  tideFilters: string[];
+  /**
    * When true the grid shows each card's tag chips with add/remove controls.
    * Inline field editing remains available regardless of this flag.
    */
   tagEditing: boolean;
+  /**
+   * When true the grid shows each card's tide chips with add/remove controls,
+   * mirroring tag mode.
+   */
+  tideEditing: boolean;
   /**
    * When true the grid enters art-edit mode: clicking a card opens the art crop
    * editor instead of editing inline fields.
@@ -164,6 +176,15 @@ export interface SaveEditorTagRegistryResponse {
   cards: EditorCardRecord[];
 }
 
+export interface SaveEditorCardTidesRequest {
+  id: string;
+  tides: string[];
+}
+
+export interface SaveEditorTideRegistryRequest {
+  tides: EditorTag[];
+}
+
 export interface EditorApiClient {
   loadEditorCards(signal?: AbortSignal): Promise<EditorCardRecord[]>;
   saveEditorCardField(
@@ -173,10 +194,17 @@ export interface EditorApiClient {
   saveEditorCardTags(
     request: SaveEditorCardTagsRequest,
   ): Promise<SaveEditorCardFieldResponse>;
+  loadEditorTides(signal?: AbortSignal): Promise<EditorTag[]>;
+  saveEditorCardTides(
+    request: SaveEditorCardTidesRequest,
+  ): Promise<SaveEditorCardFieldResponse>;
   saveEditorCardArt(
     request: SaveEditorCardArtRequest,
   ): Promise<SaveEditorCardFieldResponse>;
   saveEditorTagRegistry(
     request: SaveEditorTagRegistryRequest,
+  ): Promise<SaveEditorTagRegistryResponse>;
+  saveEditorTideRegistry(
+    request: SaveEditorTideRegistryRequest,
   ): Promise<SaveEditorTagRegistryResponse>;
 }

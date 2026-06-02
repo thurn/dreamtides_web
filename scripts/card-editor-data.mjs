@@ -15,8 +15,29 @@ export const EDITABLE_CARD_FIELDS = new Set([
   "spark",
   "rendered-text",
   "tags",
+  "tides",
   "art",
 ]);
+
+/**
+ * A "facet" is a card-level taxonomy stored as an inline string array on each
+ * card and backed by a registry sidecar that pairs each name with a display
+ * color. Tags and tides are the two facets; they share every code path, differing
+ * only in the card field they live on, the registry sidecar suffix, and labels.
+ * The registry sidecar reuses the card field name as its `[[field]]` array key.
+ */
+export const TAG_FACET = {
+  field: "tags",
+  registrySuffix: ".tags.toml",
+  noun: "tag",
+  Noun: "Tag",
+};
+export const TIDE_FACET = {
+  field: "tides",
+  registrySuffix: ".tides.toml",
+  noun: "tide",
+  Noun: "Tide",
+};
 
 /**
  * Default art crop applied to cards that have no authored `art` table. Mirrors
@@ -72,10 +93,19 @@ export function defaultTagColor(name) {
   return DEFAULT_TAG_COLORS[index];
 }
 
-// The tag registry lives in a sidecar TOML next to the card file it annotates:
-// `data/tabula/cards_v2.toml` -> `data/tabula/cards_v2.tags.toml`.
+// A facet registry lives in a sidecar TOML next to the card file it annotates:
+// `data/tabula/cards_v2.toml` -> `data/tabula/cards_v2.tags.toml` (tags) or
+// `data/tabula/cards_v2.tides.toml` (tides).
+function facetRegistryPathFor(cardTomlPath, facet) {
+  return cardTomlPath.replace(/\.toml$/iu, facet.registrySuffix);
+}
+
 export function tagRegistryPathFor(cardTomlPath) {
-  return cardTomlPath.replace(/\.toml$/iu, ".tags.toml");
+  return facetRegistryPathFor(cardTomlPath, TAG_FACET);
+}
+
+export function tideRegistryPathFor(cardTomlPath) {
+  return facetRegistryPathFor(cardTomlPath, TIDE_FACET);
 }
 
 function readSourceCards(rootDir, cardTomlPath = DEFAULT_CARD_TOML_PATH) {
@@ -102,6 +132,7 @@ function editorRecordFromCard(card) {
     spark: card.spark ?? "",
     "rendered-text": card["rendered-text"] ?? "",
     tags: normalizeTagList(card.tags),
+    tides: normalizeTagList(card.tides),
     mtgName: typeof card["mtg-name"] === "string" ? card["mtg-name"] : "",
     source: card,
     preview: transformCard(card),
@@ -290,26 +321,28 @@ export function validateCardEdit(field, rawValue) {
     return validationSuccess(field, rawValue);
   }
 
-  if (field === "tags") {
+  if (field === "tags" || field === "tides") {
+    const noun = field === "tides" ? "tide" : "tag";
+    const Noun = field === "tides" ? "Tides" : "Tags";
     if (!Array.isArray(rawValue)) {
-      return validationFailure(field, "Tags must be a list.", rawValue);
+      return validationFailure(field, `${Noun} must be a list.`, rawValue);
     }
 
-    const tags = [];
+    const values = [];
     for (const entry of rawValue) {
       if (typeof entry !== "string") {
-        return validationFailure(field, "Each tag must be text.", rawValue);
+        return validationFailure(field, `Each ${noun} must be text.`, rawValue);
       }
       const trimmed = entry.trim();
       if (trimmed === "") {
-        return validationFailure(field, "Tags cannot be blank.", rawValue);
+        return validationFailure(field, `${Noun} cannot be blank.`, rawValue);
       }
-      if (!tags.includes(trimmed)) {
-        tags.push(trimmed);
+      if (!values.includes(trimmed)) {
+        values.push(trimmed);
       }
     }
 
-    return validationSuccess(field, tags);
+    return validationSuccess(field, values);
   }
 
   return validationFailure(field, "This field is not editable.", rawValue);
@@ -706,12 +739,12 @@ export function refreshCardDataJson({ rootDir = ROOT, cardTomlPath = DEFAULT_CAR
   };
 }
 
-function usedTagNames(rootDir, cardTomlPath) {
+function usedFacetNames(rootDir, cardTomlPath, facet) {
   const used = [];
   for (const card of readSourceCards(rootDir, cardTomlPath)) {
-    for (const tag of normalizeTagList(card.tags)) {
-      if (!used.includes(tag)) {
-        used.push(tag);
+    for (const value of normalizeTagList(card[facet.field])) {
+      if (!used.includes(value)) {
+        used.push(value);
       }
     }
   }
@@ -719,19 +752,24 @@ function usedTagNames(rootDir, cardTomlPath) {
 }
 
 /**
- * Read the tag registry sidecar for a card file. Tags explicitly defined in the
- * sidecar keep their authored order and colors. Any tag that is in use on a card
- * but missing from the sidecar is appended (sorted by name) with a deterministic
- * default color so the editor always has a color for every tag it might render.
+ * Read a facet registry sidecar for a card file. Entries explicitly defined in
+ * the sidecar keep their authored order and colors. Any value that is in use on a
+ * card but missing from the sidecar is appended (sorted by name) with a
+ * deterministic default color so the editor always has a color for every value it
+ * might render.
  */
-export function readTagRegistry({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
-  const registryPath = join(rootDir, tagRegistryPathFor(cardTomlPath));
+export function readFacetRegistry({
+  rootDir = ROOT,
+  cardTomlPath = DEFAULT_CARD_TOML_PATH,
+  facet = TAG_FACET,
+} = {}) {
+  const registryPath = join(rootDir, facetRegistryPathFor(cardTomlPath, facet));
   const tags = [];
   const seen = new Set();
 
   if (existsSync(registryPath)) {
     const parsed = parse(readFileSync(registryPath, "utf8"));
-    const entries = Array.isArray(parsed.tags) ? parsed.tags : [];
+    const entries = Array.isArray(parsed[facet.field]) ? parsed[facet.field] : [];
     for (const entry of entries) {
       if (entry === null || typeof entry !== "object") {
         continue;
@@ -749,7 +787,7 @@ export function readTagRegistry({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TO
     }
   }
 
-  const unregistered = usedTagNames(rootDir, cardTomlPath)
+  const unregistered = usedFacetNames(rootDir, cardTomlPath, facet)
     .filter((name) => !seen.has(name))
     .sort((left, right) => left.localeCompare(right, undefined, { sensitivity: "base" }));
 
@@ -758,6 +796,14 @@ export function readTagRegistry({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TO
   }
 
   return tags;
+}
+
+export function readTagRegistry({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
+  return readFacetRegistry({ rootDir, cardTomlPath, facet: TAG_FACET });
+}
+
+export function readTideRegistry({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
+  return readFacetRegistry({ rootDir, cardTomlPath, facet: TIDE_FACET });
 }
 
 export function validateTagRegistry(rawTags) {
@@ -792,17 +838,20 @@ export function validateTagRegistry(rawTags) {
   return { ok: true, tags };
 }
 
-export function serializeTagRegistry(tags, { cardTomlBasename } = {}) {
+export function serializeFacetRegistry(
+  tags,
+  { cardTomlBasename, facet = TAG_FACET } = {},
+) {
   const headerTarget = cardTomlBasename ? ` for ${cardTomlBasename}` : "";
   const lines = [
-    `# Tag registry${headerTarget}.`,
-    "# Each [[tags]] entry defines an available card tag and its display color.",
-    "# Managed by the card editor's \"Manage tags\" panel.",
+    `# ${facet.Noun} registry${headerTarget}.`,
+    `# Each [[${facet.field}]] entry defines an available card ${facet.noun} and its display color.`,
+    `# Managed by the card editor's "Manage ${facet.noun}s" panel.`,
     "",
   ];
 
   for (const tag of tags) {
-    lines.push("[[tags]]");
+    lines.push(`[[${facet.field}]]`);
     lines.push(`name = ${tomlString(tag.name)}`);
     lines.push(`color = ${tomlString(tag.color)}`);
     lines.push("");
@@ -811,12 +860,20 @@ export function serializeTagRegistry(tags, { cardTomlBasename } = {}) {
   return `${lines.join("\n").trimEnd()}\n`;
 }
 
+export function serializeTagRegistry(tags, { cardTomlBasename } = {}) {
+  return serializeFacetRegistry(tags, { cardTomlBasename, facet: TAG_FACET });
+}
+
+export function serializeTideRegistry(tags, { cardTomlBasename } = {}) {
+  return serializeFacetRegistry(tags, { cardTomlBasename, facet: TIDE_FACET });
+}
+
 /**
- * Remove the given tag names from every card that carries them, returning the
- * patched TOML source. Used when a tag is deleted from the registry so no card
- * is left referencing a tag the registry no longer defines.
+ * Remove the given names from the given facet field on every card that carries
+ * them, returning the patched TOML source. Used when a value is deleted from the
+ * registry so no card is left referencing a value the registry no longer defines.
  */
-export function removeTagsFromCards(source, removedNames) {
+export function removeFacetValuesFromCards(source, removedNames, facet = TAG_FACET) {
   if (removedNames.length === 0) {
     return source;
   }
@@ -827,17 +884,25 @@ export function removeTagsFromCards(source, removedNames) {
 
   let next = source;
   for (const card of cards) {
-    const tags = normalizeTagList(card.tags);
-    if (!tags.some((tag) => removed.has(tag))) {
+    const values = normalizeTagList(card[facet.field]);
+    if (!values.some((value) => removed.has(value))) {
       continue;
     }
-    const filtered = tags.filter((tag) => !removed.has(tag));
+    const filtered = values.filter((value) => !removed.has(value));
     next = patchRenderedCardsToml(next, {
       cardId: card.id,
-      field: "tags",
+      field: facet.field,
       value: filtered,
     }).source;
   }
 
   return next;
+}
+
+export function removeTagsFromCards(source, removedNames) {
+  return removeFacetValuesFromCards(source, removedNames, TAG_FACET);
+}
+
+export function removeTidesFromCards(source, removedNames) {
+  return removeFacetValuesFromCards(source, removedNames, TIDE_FACET);
 }

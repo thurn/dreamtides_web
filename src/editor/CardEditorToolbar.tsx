@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
 import TagFilterControl from "./TagFilterControl";
@@ -16,10 +16,12 @@ interface CardEditorToolbarProps {
   displayState: EditorDisplayState;
   subtypeOptions: string[];
   availableTags: EditorTag[];
+  availableTides: EditorTag[];
   visibleCount: number;
   totalCount: number;
   onDisplayStateChange: (state: EditorDisplayState) => void;
   onOpenManageTags: () => void;
+  onOpenManageTides: () => void;
 }
 
 const TYPE_OPTIONS: Array<{ value: EditorTypeFilter; label: string }> = [
@@ -116,6 +118,22 @@ const inputStyle = {
   font: "inherit",
 } satisfies CSSProperties;
 
+const menuItemStyle = {
+  display: "block",
+  width: "100%",
+  textAlign: "left",
+  minHeight: "32px",
+  border: 0,
+  borderRadius: "5px",
+  background: "transparent",
+  color: "#e7efec",
+  padding: "6px 9px",
+  font: "inherit",
+  fontSize: "0.84rem",
+  fontWeight: 700,
+  cursor: "pointer",
+} satisfies CSSProperties;
+
 const segmentedStyle = {
   display: "inline-flex",
   width: "fit-content",
@@ -179,6 +197,7 @@ function activeFilterCount(state: EditorDisplayState): number {
     count += 1;
   }
   count += state.tagFilters.length;
+  count += state.tideFilters.length;
   if (state.sort !== DEFAULT_EDITOR_DISPLAY_STATE.sort) {
     count += 1;
   }
@@ -188,19 +207,87 @@ function activeFilterCount(state: EditorDisplayState): number {
   return count;
 }
 
+function modeToggleStyle(active: boolean): CSSProperties {
+  return {
+    ...inputStyle,
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "7px",
+    cursor: "pointer",
+    fontWeight: 800,
+    border: active ? "1px solid #2d8a80" : inputStyle.border,
+    background: active ? "#2d8a80" : "#16242a",
+    color: active ? "#ffffff" : "#d9e1dd",
+  };
+}
+
+interface ModeToggleProps {
+  active: boolean;
+  icon: string;
+  label: string;
+  title: string;
+  onToggle: () => void;
+}
+
+function ModeToggle({ active, icon, label, title, onToggle }: ModeToggleProps) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onToggle}
+      title={title}
+      style={modeToggleStyle(active)}
+    >
+      <span aria-hidden="true">{icon}</span>
+      <span>{label}</span>
+    </button>
+  );
+}
+
 export default function CardEditorToolbar({
   displayState,
   subtypeOptions,
   availableTags,
+  availableTides,
   visibleCount,
   totalCount,
   onDisplayStateChange,
   onOpenManageTags,
+  onOpenManageTides,
 }: CardEditorToolbarProps) {
   const panelId = useId();
+  const menuId = useId();
   const [expanded, setExpanded] = useState(
     () => activeFilterCount(displayState) > 0,
   );
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!menuOpen) {
+      return;
+    }
+    const handlePointerDown = (event: MouseEvent) => {
+      if (
+        menuRef.current !== null &&
+        event.target instanceof Node &&
+        !menuRef.current.contains(event.target)
+      ) {
+        setMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen]);
 
   const loadedSubtypeOptions = subtypeOptions.filter(
     (subtype) => subtype.trim().length > 0,
@@ -231,6 +318,7 @@ export default function CardEditorToolbar({
       cost: DEFAULT_EDITOR_DISPLAY_STATE.cost,
       subtype: DEFAULT_EDITOR_DISPLAY_STATE.subtype,
       tagFilters: [],
+      tideFilters: [],
       sort: DEFAULT_EDITOR_DISPLAY_STATE.sort,
       dir: DEFAULT_EDITOR_DISPLAY_STATE.dir,
     });
@@ -269,72 +357,106 @@ export default function CardEditorToolbar({
             ))}
           </div>
 
-          <button
-            type="button"
-            aria-pressed={displayState.tagEditing}
-            onClick={() =>
+          <ModeToggle
+            active={displayState.tagEditing}
+            icon="🏷"
+            label="Tags"
+            title="Show tag chips with add/remove controls under each card"
+            onToggle={() =>
               updateDisplayState({ tagEditing: !displayState.tagEditing })
             }
-            title="Show tag chips with add/remove controls under each card"
-            style={{
-              ...inputStyle,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "7px",
-              cursor: "pointer",
-              fontWeight: 800,
-              border: displayState.tagEditing
-                ? "1px solid #2d8a80"
-                : inputStyle.border,
-              background: displayState.tagEditing ? "#2d8a80" : "#16242a",
-              color: displayState.tagEditing ? "#ffffff" : "#d9e1dd",
-            }}
-          >
-            <span aria-hidden="true">🏷</span>
-            <span>{displayState.tagEditing ? "Tag mode: on" : "Tag mode"}</span>
-          </button>
+          />
 
-          <button
-            type="button"
-            aria-pressed={displayState.artEditing}
-            onClick={() =>
+          <ModeToggle
+            active={displayState.tideEditing}
+            icon="🌊"
+            label="Tides"
+            title="Show tide chips with add/remove controls under each card"
+            onToggle={() =>
+              updateDisplayState({ tideEditing: !displayState.tideEditing })
+            }
+          />
+
+          <ModeToggle
+            active={displayState.artEditing}
+            icon="🖼"
+            label="Art"
+            title="Click a card to pan and zoom its art crop"
+            onToggle={() =>
               updateDisplayState({ artEditing: !displayState.artEditing })
             }
-            title="Click a card to pan and zoom its art crop"
-            style={{
-              ...inputStyle,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "7px",
-              cursor: "pointer",
-              fontWeight: 800,
-              border: displayState.artEditing
-                ? "1px solid #2d8a80"
-                : inputStyle.border,
-              background: displayState.artEditing ? "#2d8a80" : "#16242a",
-              color: displayState.artEditing ? "#ffffff" : "#d9e1dd",
-            }}
-          >
-            <span aria-hidden="true">🖼</span>
-            <span>{displayState.artEditing ? "Art mode: on" : "Art mode"}</span>
-          </button>
+          />
 
-          <button
-            type="button"
-            onClick={onOpenManageTags}
-            title="Create tags, set colors, and delete tags"
-            style={{
-              ...inputStyle,
-              display: "inline-flex",
-              alignItems: "center",
-              cursor: "pointer",
-              fontWeight: 800,
-              background: "#16242a",
-              color: "#d9e1dd",
-            }}
-          >
-            Manage tags
-          </button>
+          <div ref={menuRef} style={{ position: "relative" }}>
+            <button
+              type="button"
+              aria-haspopup="menu"
+              aria-expanded={menuOpen}
+              aria-controls={menuId}
+              aria-label="More actions"
+              title="More actions"
+              onClick={() => setMenuOpen((value) => !value)}
+              style={{
+                ...inputStyle,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minWidth: "38px",
+                cursor: "pointer",
+                fontWeight: 900,
+                fontSize: "1.1rem",
+                lineHeight: 1,
+                background: menuOpen ? "#1f3438" : "#16242a",
+                color: "#d9e1dd",
+              }}
+            >
+              <span aria-hidden="true">⋯</span>
+            </button>
+            {menuOpen ? (
+              <div
+                id={menuId}
+                role="menu"
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 4px)",
+                  right: 0,
+                  zIndex: 50,
+                  minWidth: "170px",
+                  padding: "6px",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(142, 219, 209, 0.5)",
+                  background: "#0f1a1d",
+                  boxShadow: "0 12px 30px rgba(0, 0, 0, 0.55)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "2px",
+                }}
+              >
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onOpenManageTags();
+                  }}
+                  style={menuItemStyle}
+                >
+                  Manage tags…
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onOpenManageTides();
+                  }}
+                  style={menuItemStyle}
+                >
+                  Manage tides…
+                </button>
+              </div>
+            ) : null}
+          </div>
 
           <button
             type="button"
@@ -423,20 +545,25 @@ export default function CardEditorToolbar({
           </select>
         </label>
 
-        <div style={labelStyle}>
+        <label style={labelStyle}>
           Type
-          <div aria-label="Type filter" role="group" style={segmentedStyle}>
+          <select
+            aria-label="Type filter"
+            value={displayState.type}
+            onChange={(event) =>
+              updateDisplayState({
+                type: event.currentTarget.value as EditorTypeFilter,
+              })
+            }
+            style={inputStyle}
+          >
             {TYPE_OPTIONS.map((option) => (
-              <SegmentButton
-                key={option.value}
-                active={displayState.type === option.value}
-                onClick={() => updateDisplayState({ type: option.value })}
-              >
+              <option key={option.value} value={option.value}>
                 {option.label}
-              </SegmentButton>
+              </option>
             ))}
-          </div>
-        </div>
+          </select>
+        </label>
 
         <label style={labelStyle}>
           Cost
@@ -481,6 +608,14 @@ export default function CardEditorToolbar({
           availableTags={availableTags}
           selected={displayState.tagFilters}
           onChange={(tagFilters) => updateDisplayState({ tagFilters })}
+        />
+
+        <TagFilterControl
+          noun="tide"
+          singleSelect
+          availableTags={availableTides}
+          selected={displayState.tideFilters}
+          onChange={(tideFilters) => updateDisplayState({ tideFilters })}
         />
 
         <div style={labelStyle}>

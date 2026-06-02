@@ -8,6 +8,13 @@ export interface TagFilterControlProps {
   availableTags: EditorTag[];
   selected: string[];
   onChange: (selected: string[]) => void;
+  /** Singular label for the facet, e.g. "tag" or "tide". */
+  noun?: string;
+  /**
+   * When true the control holds at most one value: selecting a new value
+   * replaces the current selection rather than adding to it.
+   */
+  singleSelect?: boolean;
 }
 
 const triggerStyle: CSSProperties = {
@@ -61,7 +68,10 @@ export default function TagFilterControl({
   availableTags,
   selected,
   onChange,
+  noun = "tag",
+  singleSelect = false,
 }: TagFilterControlProps) {
+  const label = `${noun.charAt(0).toUpperCase()}${noun.slice(1)}s`;
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -108,10 +118,17 @@ export default function TagFilterControl({
   }, [availableTags, selected, query]);
 
   const addFilter = (name: string) => {
-    if (!selected.includes(name)) {
+    if (singleSelect) {
+      // Single-select replaces the prior selection so only one value filters
+      // at a time.
+      onChange([name]);
+    } else if (!selected.includes(name)) {
       onChange([...selected, name]);
     }
     setQuery("");
+    if (singleSelect) {
+      setOpen(false);
+    }
   };
 
   const removeFilter = (name: string) => {
@@ -132,8 +149,8 @@ export default function TagFilterControl({
       }}
     >
       <span>
-        Tags
-        {selected.length > 1 ? (
+        {label}
+        {!singleSelect && selected.length > 1 ? (
           <span style={{ color: "#8edbd1", fontWeight: 700 }}> (matching all)</span>
         ) : null}
       </span>
@@ -150,7 +167,7 @@ export default function TagFilterControl({
           <span aria-hidden="true" style={{ fontSize: "0.85rem" }}>
             +
           </span>
-          Filter by tag
+          {`Filter by ${noun}`}
           <span aria-hidden="true" style={{ fontSize: "0.7rem" }}>
             {open ? "▴" : "▾"}
           </span>
@@ -174,8 +191,8 @@ export default function TagFilterControl({
             type="search"
             value={query}
             onChange={(event) => setQuery(event.currentTarget.value)}
-            placeholder="Search tags…"
-            aria-label="Search tags to filter by"
+            placeholder={`Search ${noun}s…`}
+            aria-label={`Search ${noun}s to filter by`}
             style={searchInputStyle}
           />
           <div
@@ -197,10 +214,10 @@ export default function TagFilterControl({
                 }}
               >
                 {availableTags.length === 0
-                  ? "No tags yet."
+                  ? `No ${noun}s yet.`
                   : query.trim() !== ""
-                    ? "No matching tags."
-                    : "All tags selected."}
+                    ? `No matching ${noun}s.`
+                    : `All ${noun}s selected.`}
               </span>
             ) : (
               selectable.map((tag) => (

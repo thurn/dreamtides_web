@@ -55,6 +55,7 @@ function makeEditorCard(overrides: Partial<EditorCardRecord> = {}): EditorCardRe
     spark: 1,
     "rendered-text": preview.renderedText,
     tags: [],
+    tides: [],
     mtgName: "",
     source: {},
     preview,
@@ -72,8 +73,11 @@ function makeApiClient(
     saveEditorCardField,
     loadEditorTags: vi.fn().mockResolvedValue([]),
     saveEditorCardTags: vi.fn(),
+    loadEditorTides: vi.fn().mockResolvedValue([]),
+    saveEditorCardTides: vi.fn(),
     saveEditorCardArt: vi.fn(),
     saveEditorTagRegistry: vi.fn(),
+    saveEditorTideRegistry: vi.fn(),
     ...overrides,
   };
 }
@@ -2814,8 +2818,8 @@ describe("CardEditorApp", () => {
       }),
     ];
     const { container, root } = await mountLoadedApp(cards);
-    const eventButton = Array.from(container.querySelectorAll("button")).find(
-      (button) => button.textContent === "Events",
+    const typeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Type filter"]',
     );
     const costSelect = container.querySelector<HTMLSelectElement>(
       '[aria-label="Cost filter"]',
@@ -2824,7 +2828,7 @@ describe("CardEditorApp", () => {
       '[aria-label="Subtype filter"]',
     );
 
-    if (eventButton === undefined || costSelect === null || subtypeSelect === null) {
+    if (typeSelect === null || costSelect === null || subtypeSelect === null) {
       throw new Error("Missing filter control");
     }
 
@@ -2835,7 +2839,7 @@ describe("CardEditorApp", () => {
     ]);
 
     act(() => {
-      eventButton.click();
+      setSelectValue(typeSelect, "event");
     });
     act(() => {
       setSelectValue(costSelect, "x");
@@ -2946,8 +2950,8 @@ describe("CardEditorApp", () => {
     const { container, root } = await mountLoadedApp(cards);
     const replaceState = vi.spyOn(window.history, "replaceState");
     const pushState = vi.spyOn(window.history, "pushState");
-    const eventButton = Array.from(container.querySelectorAll("button")).find(
-      (button) => button.textContent === "Events",
+    const typeSelect = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Type filter"]',
     );
     const costSelect = container.querySelector<HTMLSelectElement>(
       '[aria-label="Cost filter"]',
@@ -2966,7 +2970,7 @@ describe("CardEditorApp", () => {
     );
 
     if (
-      eventButton === undefined ||
+      typeSelect === null ||
       costSelect === null ||
       subtypeSelect === null ||
       sortSelect === null ||
@@ -2977,7 +2981,7 @@ describe("CardEditorApp", () => {
     }
 
     act(() => {
-      eventButton.click();
+      setSelectValue(typeSelect, "event");
     });
     expect(replaceState).toHaveBeenLastCalledWith(
       null,

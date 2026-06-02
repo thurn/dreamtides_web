@@ -20,9 +20,12 @@ export interface CardEditorGridProps {
   size: EditorDisplayState["size"];
   saveState: EditableSaveState;
   tagEditing: boolean;
+  tideEditing: boolean;
   artEditing: boolean;
   availableTags: EditorTag[];
+  availableTides: EditorTag[];
   tagSaveState: Record<string, CardTagSaveState>;
+  tideSaveState: Record<string, CardTagSaveState>;
   onOpenArtEditor: (card: EditorCardRecord) => void;
   onFieldBeginEdit: (
     card: EditorCardRecord,
@@ -48,6 +51,9 @@ export interface CardEditorGridProps {
   onAddCardTag: (card: EditorCardRecord, name: string) => void;
   onRemoveCardTag: (card: EditorCardRecord, name: string) => void;
   onOpenManageTags: () => void;
+  onAddCardTide: (card: EditorCardRecord, name: string) => void;
+  onRemoveCardTide: (card: EditorCardRecord, name: string) => void;
+  onOpenManageTides: () => void;
 }
 
 export default function CardEditorGrid({
@@ -55,9 +61,12 @@ export default function CardEditorGrid({
   size,
   saveState,
   tagEditing,
+  tideEditing,
   artEditing,
   availableTags,
+  availableTides,
   tagSaveState,
+  tideSaveState,
   onOpenArtEditor,
   onFieldBeginEdit,
   onFieldDraftChange,
@@ -67,6 +76,9 @@ export default function CardEditorGrid({
   onAddCardTag,
   onRemoveCardTag,
   onOpenManageTags,
+  onAddCardTide,
+  onRemoveCardTide,
+  onOpenManageTides,
 }: CardEditorGridProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   // Whether the widest row currently shows 5 or more cards. A full row of cards
@@ -175,10 +187,14 @@ export default function CardEditorGrid({
             field: "rendered-text",
           })}
           tagEditing={tagEditing}
+          tideEditing={tideEditing}
           artEditing={artEditing}
           availableTags={availableTags}
+          availableTides={availableTides}
           tagSaving={tagSaveState[card.id]?.saving ?? false}
           tagError={tagSaveState[card.id]?.error ?? null}
+          tideSaving={tideSaveState[card.id]?.saving ?? false}
+          tideError={tideSaveState[card.id]?.error ?? null}
           onOpenArtEditor={onOpenArtEditor}
           onFieldBeginEdit={onFieldBeginEdit}
           onFieldDraftChange={onFieldDraftChange}
@@ -188,6 +204,9 @@ export default function CardEditorGrid({
           onAddCardTag={onAddCardTag}
           onRemoveCardTag={onRemoveCardTag}
           onOpenManageTags={onOpenManageTags}
+          onAddCardTide={onAddCardTide}
+          onRemoveCardTide={onRemoveCardTide}
+          onOpenManageTides={onOpenManageTides}
         />
         </div>
       ))}

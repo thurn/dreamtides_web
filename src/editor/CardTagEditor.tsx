@@ -12,6 +12,8 @@ export interface CardTagEditorProps {
   onAddTag: (name: string) => void;
   onRemoveTag: (name: string) => void;
   onOpenManageTags: () => void;
+  /** Singular label for the facet, e.g. "tag" or "tide". */
+  noun?: string;
 }
 
 const stripStyle: CSSProperties = {
@@ -80,7 +82,9 @@ export default function CardTagEditor({
   onAddTag,
   onRemoveTag,
   onOpenManageTags,
+  noun = "tag",
 }: CardTagEditorProps) {
+  const Noun = `${noun.charAt(0).toUpperCase()}${noun.slice(1)}`;
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -135,7 +139,11 @@ export default function CardTagEditor({
   };
 
   return (
-    <div ref={containerRef} style={stripStyle} data-editor-card-tags="true">
+    <div
+      ref={containerRef}
+      style={stripStyle}
+      {...{ [`data-editor-card-${noun}s`]: "true" }}
+    >
       {cardTags.map((name) => (
         <TagChip
           key={name}
@@ -151,14 +159,14 @@ export default function CardTagEditor({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={popoverId}
-        title="Add a tag"
+        title={`Add a ${noun}`}
         onClick={() => setOpen((value) => !value)}
         style={addButtonStyle}
       >
         <span aria-hidden="true" style={{ fontSize: "0.8rem" }}>
           +
         </span>
-        Tag
+        {Noun}
       </button>
 
       {saving ? (
@@ -182,8 +190,8 @@ export default function CardTagEditor({
             type="search"
             value={query}
             onChange={(event) => setQuery(event.currentTarget.value)}
-            placeholder="Search tags…"
-            aria-label="Search tags to add"
+            placeholder={`Search ${noun}s…`}
+            aria-label={`Search ${noun}s to add`}
             style={searchInputStyle}
           />
           <div
@@ -205,10 +213,10 @@ export default function CardTagEditor({
                 }}
               >
                 {availableTags.length === 0
-                  ? "No tags yet."
+                  ? `No ${noun}s yet.`
                   : query.trim() !== ""
-                    ? "No matching tags."
-                    : "All tags applied."}
+                    ? `No matching ${noun}s.`
+                    : `All ${noun}s applied.`}
               </span>
             ) : (
               assignable.map((tag) => (
@@ -244,7 +252,7 @@ export default function CardTagEditor({
               textDecoration: "underline",
             }}
           >
-            Manage tags…
+            {`Manage ${noun}s…`}
           </button>
         </div>
       ) : null}
