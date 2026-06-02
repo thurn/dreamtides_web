@@ -215,7 +215,7 @@ card-number = 10
 
 [[cards]]
 name = "Arc Gate Opening"
-mtg-name = "Incandescent Ritual"
+mtg-name = "Desperate Ritual"
 id = "be72bd04-21a6-4035-a117-2b7213ad1a34"
 large-tides = ["Storm"]
 medium-tides = ["Storm Splash"]
@@ -1062,6 +1062,7 @@ tags = ["Blood Artist", "Score Trigger"]
 image-number = 2287054243
 art-owned = false
 card-number = 50
+art = { x = -0.2, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Ashen Remnant"
@@ -4580,6 +4581,7 @@ tags = []
 image-number = 2430444881
 art-owned = false
 card-number = 216
+art = { x = 0, y = 1, scale = 1.57 }
 
 [[cards]]
 name = "Forsworn Champion"
@@ -4709,7 +4711,7 @@ card-number = 222
 
 [[cards]]
 name = "Call of Calamity"
-mtg-name = "Counsel of Ember"
+mtg-name = "Magmatic Insight"
 id = "435ed83c-f7a6-4a73-a684-67fcc4e49bc4"
 large-tides = ["Discard / Madness"]
 medium-tides = ["Discard / Madness Splash"]
@@ -4792,6 +4794,7 @@ tags = []
 image-number = 649133680
 art-owned = false
 card-number = 226
+art = { x = 0, y = 0.9, scale = 1.17 }
 
 [[cards]]
 name = "Rootbound Witness"
@@ -5454,6 +5457,7 @@ tags = []
 image-number = 2018053217
 art-owned = false
 card-number = 257
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Conduit of Resonance"
@@ -5789,6 +5793,7 @@ tags = ["Figment Maker"]
 image-number = 337161542
 art-owned = false
 card-number = 273
+art = { x = 0, y = 1, scale = 1.27 }
 
 [[cards]]
 name = "Wondrous Clearing"
@@ -9464,7 +9469,7 @@ card-number = 444
 
 [[cards]]
 name = "Ethereal Courser"
-mtg-name = "Oracle of Kruphix"
+mtg-name = "Shrieking Drake"
 id = "ad76c77a-e456-4e59-bbf7-6bcb56f892ee"
 large-tides = ["Blink", "Celestial Reverie Combo", "Outsiders"]
 medium-tides = ["Blink Splash", "Celestial Reverie Combo Splash", "Outsiders Splash"]
@@ -9978,6 +9983,7 @@ tags = []
 image-number = 2251144875
 art-owned = false
 card-number = 469
+art = { x = 0.6, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Harvester of Despair"
@@ -10602,6 +10608,7 @@ tags = []
 image-number = 1798514914
 art-owned = false
 card-number = 498
+art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Sigil Analyst"
@@ -10685,6 +10692,7 @@ tags = []
 image-number = 1648927918
 art-owned = false
 card-number = 502
+
 [metadata]
 schema_version = 1
 

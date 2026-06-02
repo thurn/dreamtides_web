@@ -9,13 +9,10 @@ This document narrows that list to the unmapped cards that also appear in the
 (`CalebGannonsPoweredSynergyCube.txt`). These are the live gaps: effects present
 in the cube as it is drafted today that have no Dreamtides mapping.
 
-1. Desperate Ritual
 2. Diabolic Intent
 3. Dread Fugue
 4. Gamble
 5. Hard Evidence
-6. Magmatic Insight
 7. Monoskelion
 8. Punishing Fire
-9. Shrieking Drake
 10. Swift Reconfiguration
