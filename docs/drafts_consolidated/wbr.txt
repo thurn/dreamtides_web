@@ -1,0 +1,181 @@
+Aether Vial
+Aetherflux Reservoir
+Altar of Dementia
+Anafenza, Kin-Tree Spirit
+Anax, Hardened in the Forge
+Anger
+Arcbound Ravager
+Arcum's Astrolabe
+Ashnod's Altar
+Black Lotus
+Blade Splicer
+Blasting Station
+Blood Artist
+Bloodghast
+Bloodsoaked Champion
+Bomat Courier
+Bridge from Below
+Burst Lightning
+Cauldron Familiar
+Chain Lightning
+Chandra, Acolyte of Flame
+Chromatic Star
+Collective Brutality
+Conjurer's Bauble
+Cranial Plating
+Crucible of Worlds
+Cruel Celebrant
+Cryptbreaker
+Currency Converter
+Damn
+Demand Answers
+Diabolic Intent
+Digsite Engineer
+Dismember
+Duress
+Engineered Explosives
+Enlightened Tutor
+Esper Sentinel
+Eternal Witness
+Ethersworn Canonist
+Expansion // Explosion
+Experimental Synthesizer
+Faith's Reward
+Fatal Push
+Fiend Artisan
+Fiery Confluence
+Flare of Malice
+Formidable Speaker
+Galvanic Blast
+Gau, Feral Youth
+Genesis Chamber
+Gingerbrute
+Glint-Horn Buccaneer
+Goblin Bombardment
+Goblin Engineer
+Goblin Welder
+Grafted Wargear
+Gravecrawler
+Grim Lavamancer
+Hangarback Walker
+Headless Rider
+Hidden Stockpile
+Hope of Ghirapur
+Ichor Wellspring
+Increasing Vengeance
+Ingenious Smith
+Inti, Seneschal of the Sun
+Izzet Charm
+Jeskai Ascendancy
+Junk Diver
+Juri, Master of the Revue
+Kaito Shizuki
+Kolaghan's Command
+Kor Skyfisher
+Korvold, Fae-Cursed King
+Krark, the Thumbless
+Krark-Clan Ironworks
+Lethal Scheme
+Lightning Bolt
+Liliana's Standard Bearer
+Lingering Souls
+Lion Sash
+Lion's Eye Diamond
+Lodestone Golem
+Losheel, Clockwork Scholar
+Lotus Petal
+Luminarch Aspirant
+Lurrus of the Dream-Den
+Makeshift Munitions
+Mana Crypt
+Marauding Mako
+March of Otherworldly Light
+Marionette Apprentice
+Mayhem Devil
+Memnite
+Michiko's Reign of Truth
+Midnight Reaper
+Mirror Entity
+Molten Gatekeeper
+Monoskelion
+Mox Diamond
+Mox Emerald
+Mox Jet
+Mox Opal
+Mox Ruby
+Mox Sapphire
+Myr Retriever
+Nested Shambler
+Nether Traitor
+Nettlecyst
+Night's Whisper
+Oni-Cult Anvil
+Ophiomancer
+Ornithopter
+Ornithopter of Paradise
+Oswald Fiddlebender
+Paradise Mantle
+Paradoxical Outcome
+Patchwork Automaton
+Path to Exile
+Perilous Myr
+Phelia, Exuberant Shepherd
+Phyrexian Altar
+Phyrexian Revoker
+Pitiless Plunderer
+Porcelain Legionnaire
+Portable Hole
+Priest of Forgotten Gods
+Putrid Goblin
+Pyrite Spellbomb
+Ratchet Bomb
+Refurbished Familiar
+Retrofitter Foundry
+Rite of Harmony
+Rotting Rats
+Scrap Trawler
+Scrapheap Scrounger
+Scrapwork Mutt
+Scrapyard Recombiner
+Second Sunrise
+Seething Song
+Sevinne's Reclamation
+Shambling Ghast
+Shrieking Drake
+Signal Pest
+Skullclamp
+Smuggler's Copter
+Sol Ring
+Solitude
+Spawning Pit
+Spellskite
+Springleaf Drum
+Staff of the Storyteller
+Steel Overseer
+Stonecoil Serpent
+Stoneforge Mystic
+Swords to Plowshares
+Teshar, Ancestor's Apostle
+The Meathook Massacre
+The Underworld Cookbook
+Thing in the Ice
+Thopter Foundry
+Thought Monitor
+Thoughtseize
+Time Walk
+Umbral Collar Zealot
+Unholy Heat
+Urza's Bauble
+Vault Skirge
+Vibrance
+Viscera Seer
+Voldaren Bloodcaster
+Walking Ballista
+Warren Soultrader
+Wheel of Fortune
+Witch's Oven
+Wizard's Rockets
+Workshop Assistant
+Yawgmoth's Will
+Zabaz, the Glimmerwasp
+Zulaport Cutthroat

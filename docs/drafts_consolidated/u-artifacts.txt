@@ -1,0 +1,86 @@
+Aether Spellbomb
+Arcbound Ravager
+Arcum's Astrolabe
+Black Lotus
+Brainstorm
+Brazen Borrower
+Chart a Course
+Chromatic Star
+Conjurer's Bauble
+Consider
+Counterspell
+Cranial Plating
+Currency Converter
+Daze
+Deep Analysis
+Demonic Tutor
+Dig Through Time
+Emry, Lurker of the Loch
+Flare of Denial
+Force of Negation
+Force of Will
+Goblin Engineer
+Gush
+Hangarback Walker
+Hard Evidence
+Hope of Ghirapur
+Ichor Wellspring
+Impulse
+Jace, Vryn's Prodigy
+Junk Diver
+Krark-Clan Ironworks
+Ledger Shredder
+Lodestone Golem
+Lotus Petal
+Mana Crypt
+Mana Drain
+Mana Leak
+Mana Vault
+Marketback Walker
+Master of Etherium
+Memnite
+Memory Lapse
+Mishra's Bauble
+Mox Emerald
+Mox Jet
+Mox Opal
+Mox Ruby
+Myr Retriever
+Ornithopter
+Paradise Mantle
+Patchwork Automaton
+Phyrexian Revoker
+Ponder
+Portable Hole
+Preordain
+Pyrite Spellbomb
+Remand
+Repeal
+Retrofitter Foundry
+Saheeli, Sublime Artificer
+Sai, Master Thopterist
+Scrap Trawler
+Scrapyard Recombiner
+Sensei's Divining Top
+Serum Visions
+Snap
+Snapcaster Mage
+Spellseeker
+Spellstutter Sprite
+Steel Overseer
+Stonecoil Serpent
+Sword of the Meek
+Thing in the Ice
+Thopter Foundry
+Thought Monitor
+Thought Scour
+Time Spiral
+Time Walk
+Tinker
+Treasure Cruise
+Urza's Bauble
+Urza, Lord High Artificer
+Vault Skirge
+Vendilion Clique
+Walking Ballista
+Zabaz, the Glimmerwasp

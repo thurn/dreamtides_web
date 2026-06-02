@@ -1,0 +1,80 @@
+Abrade
+Aether Vial
+Aetherflux Reservoir
+Arcbound Ravager
+Arcum's Astrolabe
+Banefire
+Blade Splicer
+Brain Freeze
+Burst Lightning
+Chain Lightning
+Conjurer's Bauble
+Conspiracy Theorist
+Cranial Plating
+Deep Analysis
+Digsite Engineer
+Dragon's Rage Channeler
+Empty the Warrens
+Emry, Lurker of the Loch
+Enduring Renewal
+Esper Sentinel
+Expansion // Explosion
+Faith's Reward
+Fiery Confluence
+Force of Will
+Gitaxian Probe
+Goblin Engineer
+Grim Lavamancer
+Gush
+Imperial Recruiter
+Impulse
+Incinerate
+Ingenious Smith
+Jeskai Ascendancy
+Lightning Bolt
+Lodestone Golem
+Loran of the Third Path
+Lotus Bloom
+Makeshift Munitions
+Mana Tithe
+Mana Vault
+Marketback Walker
+Mox Diamond
+Myr Retriever
+Opt
+Ornithopter
+Oswald Fiddlebender
+Oust
+Path to Exile
+Phelia, Exuberant Shepherd
+Ponder
+Porcelain Legionnaire
+Portable Hole
+Prismari Command
+Pyrite Spellbomb
+Reflector Mage
+Remand
+Saheeli, Sublime Artificer
+Scheming Fence
+Scrap Trawler
+Sensei's Divining Top
+Sevinne's Reclamation
+Signal Pest
+Skyclave Apparition
+Snap
+Spell Pierce
+Spell Snare
+Spellseeker
+Steel Overseer
+Stern Scolding
+Swords to Plowshares
+Teshar, Ancestor's Apostle
+Thassa's Oracle
+Thieving Skydiver
+Thought Monitor
+Treasure Cruise
+Unholy Heat
+Urza, Lord High Artificer
+Watcher for Tomorrow
+Wheel of Fortune
+Young Pyromancer

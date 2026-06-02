@@ -1,0 +1,198 @@
+Accursed Marauder
+Aether Spellbomb
+Aetherflux Reservoir
+Agatha's Soul Cauldron
+Ancestral Recall
+Arcbound Ravager
+Arcum's Astrolabe
+Ashnod's Altar
+Baleful Strix
+Baloth Prime
+Bitter Triumph
+Bitterbloom Bearer
+Black Lotus
+Blade Splicer
+Bloodsoaked Champion
+Brainstorm
+Brazen Borrower
+Brought Back
+Cabal Ritual
+Cabal Therapy
+Carrion Feeder
+Chart a Course
+Chromatic Sphere
+Chromatic Star
+Chrome Mox
+Collective Brutality
+Conspiracy Theorist
+Containment Construct
+Counterspell
+Cranial Plating
+Cruel Celebrant
+Cryptbreaker
+Currency Converter
+Damn
+Dark Confidant
+Dark Ritual
+Daze
+Deep Analysis
+Deep-Cavern Bat
+Digsite Engineer
+Dismember
+Dreams of Steel and Oil
+Duress
+Echo of Eons
+Emry, Lurker of the Loch
+Enlightened Tutor
+Ephemerate
+Esper Sentinel
+Ethersworn Canonist
+Faerie Seer
+Faithless Looting
+Fatal Push
+Firebolt
+Flare of Denial
+Force of Negation
+Force of Will
+Genesis Chamber
+Giver of Runes
+Goblin Bombardment
+Gravecrawler
+Hard Evidence
+Hidden Stockpile
+High Tide
+Hope of Ghirapur
+Ingenious Infiltrator
+Ingenious Smith
+Inquisition of Kozilek
+Jace, Vryn's Prodigy
+Kaito Shizuki
+Kor Skyfisher
+Krark-Clan Ironworks
+Ledger Shredder
+Lethal Scheme
+Lingering Souls
+Lion's Eye Diamond
+Lodestone Golem
+Loran of the Third Path
+Losheel, Clockwork Scholar
+Lotus Bloom
+Lotus Petal
+Luminarch Aspirant
+Lurrus of the Dream-Den
+Mana Crypt
+Mana Drain
+Mana Leak
+Mana Tithe
+Mana Vault
+March of Otherworldly Light
+Marionette Apprentice
+Marketback Walker
+Master of Etherium
+Memnite
+Mesmeric Fiend
+Metallic Mimic
+Michiko's Reign of Truth
+Midnight Reaper
+Mind's Desire
+Mishra's Bauble
+Monoskelion
+Moon-Circuit Hacker
+Mox Diamond
+Mox Emerald
+Mox Jet
+Mox Opal
+Mox Pearl
+Mox Ruby
+Myr Retriever
+Nettlecyst
+Night's Whisper
+Noble Hierarch
+Occult Epiphany
+Oona's Prowler
+Ophiomancer
+Opt
+Ornithopter
+Oswald Fiddlebender
+Oust
+Paradise Mantle
+Patchwork Automaton
+Path to Exile
+Perilous Myr
+Phelia, Exuberant Shepherd
+Phyrexian Revoker
+Ponder
+Porcelain Legionnaire
+Portable Hole
+Preordain
+Priest of Forgotten Gods
+Prismatic Ending
+Recruiter of the Guard
+Reflector Mage
+Refurbished Familiar
+Remand
+Repeal
+Retrofitter Foundry
+Saheeli, Sublime Artificer
+Sai, Master Thopterist
+Scheming Fence
+Scrap Trawler
+Scrapheap Scrounger
+Scrapyard Recombiner
+Sea Gate Stormcaller
+Sensei's Divining Top
+Serum Visions
+Sevinne's Reclamation
+Shambling Ghast
+Shardless Agent
+Signal Pest
+Skyclave Apparition
+Smuggler's Copter
+Snapcaster Mage
+Sneaky Snacker
+Sol Ring
+Solitude
+Soulherder
+Spell Pierce
+Spell Snare
+Spellseeker
+Spellskite
+Spellstutter Sprite
+Springleaf Drum
+Steel Overseer
+Stitcher's Supplier
+Stonecoil Serpent
+Stoneforge Mystic
+Swift Reconfiguration
+Swords to Plowshares
+Tendrils of Agony
+Teshar, Ancestor's Apostle
+Thalia, Guardian of Thraben
+Thassa's Oracle
+The Meathook Massacre
+Thieving Skydiver
+Thopter Foundry
+Thought Monitor
+Thought Scour
+Thoughtseize
+Thousand-Faced Shadow
+Thraben Inspector
+Tidehollow Sculler
+Time Spiral
+Time Walk
+Timetwister
+Tinker
+Undead Butler
+Urza's Bauble
+Urza, Lord High Artificer
+Vampiric Tutor
+Vault Skirge
+Voldaren Bloodcaster
+Walking Ballista
+Wall of Omens
+Witch's Oven
+Wizard's Rockets
+Workshop Assistant
+Yuriko, the Tiger's Shadow
+Zabaz, the Glimmerwasp
+Zombie Infestation

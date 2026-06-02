@@ -1,0 +1,123 @@
+Aether Spellbomb
+Aetherflux Reservoir
+Ancestral Recall
+Arcbound Ravager
+Arcum's Astrolabe
+Ashnod's Altar
+Black Lotus
+Brain Freeze
+Chart a Course
+Chromatic Sphere
+Chromatic Star
+Conjurer's Bauble
+Consider
+Counterspell
+Cranial Plating
+Crucible of Worlds
+Currency Converter
+Daze
+Deep Analysis
+Demonic Tutor
+Dig Through Time
+Digsite Engineer
+Duress
+Echo of Eons
+Emry, Lurker of the Loch
+Expressive Iteration
+Faerie Seer
+Flare of Denial
+Force of Will
+Frantic Search
+Genesis Chamber
+Gingerbrute
+Gitaxian Probe
+Goblin Engineer
+Gush
+Hangarback Walker
+Hard Evidence
+Hope of Ghirapur
+Ichor Wellspring
+Impulse
+Jace, Vryn's Prodigy
+Junk Diver
+Krark-Clan Ironworks
+Ledger Shredder
+Lion's Eye Diamond
+Lodestone Golem
+Lotus Bloom
+Lotus Petal
+Mana Crypt
+Mana Drain
+Mana Leak
+Mana Vault
+Marketback Walker
+Master of Etherium
+Memnite
+Memory Lapse
+Metallic Mimic
+Mind's Desire
+Mishra's Bauble
+Moon-Circuit Hacker
+Mox Diamond
+Mox Emerald
+Mox Opal
+Mox Pearl
+Mox Sapphire
+Myr Retriever
+Mystical Tutor
+Nettlecyst
+Opt
+Ornithopter
+Ornithopter of Paradise
+Oswald Fiddlebender
+Paradise Mantle
+Paradoxical Outcome
+Patchwork Automaton
+Perilous Myr
+Phyrexian Revoker
+Preordain
+Pyrite Spellbomb
+Ratchet Bomb
+Refurbished Familiar
+Remand
+Repeal
+Retrofitter Foundry
+Saheeli, Sublime Artificer
+Sai, Master Thopterist
+Scrap Trawler
+Scrapyard Recombiner
+Sensei's Divining Top
+Serum Visions
+Signal Pest
+Skullclamp
+Smuggler's Copter
+Sol Ring
+Spell Pierce
+Spell Snare
+Spellseeker
+Spellskite
+Spellstutter Sprite
+Springleaf Drum
+Steel Overseer
+Stonecoil Serpent
+Sword of the Meek
+Teshar, Ancestor's Apostle
+Thieving Skydiver
+Thopter Foundry
+Thought Monitor
+Thousand-Faced Shadow
+Time Spiral
+Time Walk
+Timetwister
+Tinker
+Treasure Cruise
+Turnabout
+Urza's Bauble
+Urza, Lord High Artificer
+Vault Skirge
+Walking Ballista
+Watcher for Tomorrow
+Witch's Oven
+Wizard's Rockets
+Workshop Assistant
+Zabaz, the Glimmerwasp

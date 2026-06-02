@@ -1,0 +1,121 @@
+Abrade
+Aether Spellbomb
+Aetherflux Reservoir
+Altar of Dementia
+Anax, Hardened in the Forge
+Ancestral Recall
+Ancient Grudge
+Arcbound Ravager
+Arcum's Astrolabe
+Ashnod's Altar
+Black Lotus
+Blasting Station
+Bomat Courier
+Brainstorm
+Chain Lightning
+Chart a Course
+Chromatic Sphere
+Chromatic Star
+Chrome Mox
+Conjurer's Bauble
+Conspiracy Theorist
+Containment Construct
+Counterspell
+Cranial Plating
+Crucible of Worlds
+Deep Analysis
+Demand Answers
+Diamond Lion
+Dragon's Rage Channeler
+Dreadhorde Arcanist
+Echo of Eons
+Emry, Lurker of the Loch
+Experimental Synthesizer
+Fiery Confluence
+Finale of Promise
+Force of Will
+Galvanic Blast
+Gingerbrute
+Gitaxian Probe
+Goblin Engineer
+Goblin Welder
+Greater Gargadon
+Grim Lavamancer
+Hangarback Walker
+Ichor Wellspring
+Imperial Recruiter
+Ingenious Smith
+Izzet Charm
+Junk Diver
+Krark-Clan Ironworks
+Ledger Shredder
+Lightning Bolt
+Lodestone Golem
+Losheel, Clockwork Scholar
+Lotus Bloom
+Lotus Petal
+Makeshift Munitions
+Mana Crypt
+Mana Drain
+Marauding Mako
+Marketback Walker
+Master of Etherium
+Memnite
+Mind's Desire
+Mishra's Bauble
+Molten Gatekeeper
+Monoskelion
+Moon-Circuit Hacker
+Mox Emerald
+Mox Opal
+Mox Sapphire
+Myr Retriever
+Nettlecyst
+Ninja of the Deep Hours
+Oni-Cult Anvil
+Ornithopter
+Ox of Agonas
+Patchwork Automaton
+Perilous Myr
+Phyrexian Altar
+Porcelain Legionnaire
+Preordain
+Prismari Command
+Punishing Fire
+Pyrite Spellbomb
+Ratchet Bomb
+Refurbished Familiar
+Retrofitter Foundry
+Saheeli, Sublime Artificer
+Sai, Master Thopterist
+Scrap Trawler
+Scrapwork Mutt
+Scrapyard Recombiner
+Sensei's Divining Top
+Signal Pest
+Skullclamp
+Smuggler's Copter
+Sneaky Snacker
+Sol Ring
+Spell Pierce
+Spellstutter Sprite
+Steel Overseer
+Sword of the Meek
+Teshar, Ancestor's Apostle
+Thopter Foundry
+Thought Monitor
+Time Walk
+Timetwister
+Tinker
+Treasure Cruise
+Unholy Heat
+Urza's Bauble
+Urza, Lord High Artificer
+Vault Skirge
+Vendilion Clique
+Walking Ballista
+Watcher for Tomorrow
+Wizard's Rockets
+Workshop Assistant
+Zabaz, the Glimmerwasp
+Zuran Orb
