@@ -301,6 +301,7 @@ function readDreamsignAltText(dreamsignArtDir) {
 
 export function setupAssets({
   cardTomlPath = join(DATA_DIR, "tabula", "rendered-cards.toml"),
+  cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   dreamcallerTomlPath = join(DATA_DIR, "tabula", "dreamcallers.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
   publicDir = PUBLIC_DIR,
@@ -316,6 +317,7 @@ export function setupAssets({
   const dreamsignsDir = join(publicDir, "dreamsigns");
   const journeysDir = join(publicDir, "journeys");
   const cardJsonPath = join(publicDir, "card-data.json");
+  const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
@@ -347,6 +349,25 @@ export function setupAssets({
   mkdirSync(publicDir, { recursive: true });
   writeFileSync(cardJsonPath, JSON.stringify(jsonCards, null, 2) + "\n");
   console.log(`Wrote ${jsonCards.length} cards to card-data.json`);
+
+  // Experimental v2 card pool used by the standalone `/draft_test` page. It is
+  // transformed with the same kebab->camel rules as the runtime pool and
+  // written to its own JSON so the draft test harness can fetch it without
+  // disturbing card-data.json (which the dev drift guard pins to
+  // rendered-cards.toml). Special-rarity filtering is intentionally skipped:
+  // cards_v2 carries no rarities and the harness shows the whole pool.
+  console.log("Parsing cards_v2.toml...");
+  const cardV2TomlContent = readFileSync(cardV2TomlPath, "utf8");
+  const parsedCardsV2 = parse(cardV2TomlContent);
+  const allCardsV2 = parsedCardsV2.cards;
+
+  if (!Array.isArray(allCardsV2)) {
+    throw new Error("Expected [[cards]] array in cards_v2.toml");
+  }
+
+  const jsonCardsV2 = allCardsV2.map(transformCard);
+  writeFileSync(cardV2JsonPath, JSON.stringify(jsonCardsV2, null, 2) + "\n");
+  console.log(`Wrote ${jsonCardsV2.length} cards to cards_v2-data.json`);
 
   console.log("Parsing dreamcallers.toml...");
   const dreamcallerTomlContent = readFileSync(dreamcallerTomlPath, "utf8");
@@ -424,6 +445,44 @@ export function setupAssets({
   }
 
   console.log(`Linked ${linked} of ${jsonCards.length} card images (${missing} missing)`);
+
+  // Link art for the experimental v2 pool into the same cards directory, keyed
+  // by image number. Many v2 image numbers are absent from the local cache, in
+  // which case the `/draft_test` page falls back to a generated identicon, so
+  // misses are counted quietly rather than warned per card.
+  let linkedV2 = 0;
+  let missingV2 = 0;
+  for (const card of jsonCardsV2) {
+    const imageNumber = card.imageNumber;
+    if (
+      imageNumber === "" ||
+      imageNumber === null ||
+      imageNumber === undefined ||
+      Number(imageNumber) <= 0
+    ) {
+      continue;
+    }
+
+    const hash = imageHash(imageNumber);
+    const cachePath = join(imageCacheDir, hash);
+    const symlinkPath = join(cardsDir, `${imageNumber}.webp`);
+
+    if (existsSync(symlinkPath)) {
+      linkedV2++;
+      continue;
+    }
+
+    if (existsSync(cachePath)) {
+      symlinkSync(cachePath, symlinkPath);
+      linkedV2++;
+    } else {
+      missingV2++;
+    }
+  }
+
+  console.log(
+    `Linked ${linkedV2} of ${jsonCardsV2.length} cards_v2 images (${missingV2} missing)`,
+  );
 
   recreateDir(dreamcallersDir);
   let linkedDreamcallerArt = 0;

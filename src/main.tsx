@@ -21,6 +21,9 @@ const pathname = window.location.pathname.replace(/\/+$/, "");
 
 if (pathname === "/editor") {
   renderStrict(<CardEditorApp />);
+} else if (pathname === "/draft_test") {
+  const { default: DraftTestApp } = await import("./draft_test/DraftTestApp");
+  renderStrict(<DraftTestApp />);
 } else {
   const [
     { default: App },
