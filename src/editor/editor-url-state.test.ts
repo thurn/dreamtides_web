@@ -52,7 +52,6 @@ describe("editor URL display state", () => {
       tideFilters: [],
       tagEditing: false,
       tideEditing: false,
-      tideKind: "large",
       artEditing: false,
       sort: "cost",
       dir: "desc",
@@ -110,22 +109,20 @@ describe("editor URL display state", () => {
     expect(parsed.tagEditing).toBe(true);
   });
 
-  it("round-trips a single tide filter and tide-editing kind", () => {
+  it("round-trips a single tide filter and tide-editing mode", () => {
     const state = {
       ...DEFAULT_EDITOR_DISPLAY_STATE,
       tideFilters: ["event_chain"],
       tideEditing: true,
-      tideKind: "medium" as const,
     };
     const params = serializeEditorDisplayState(state);
 
     expect(params.getAll("tide")).toEqual(["event_chain"]);
-    expect(params.get("tideedit")).toBe("medium");
+    expect(params.get("tideedit")).toBe("1");
 
     const parsed = parseEditorDisplayState(params);
     expect(parsed.tideFilters).toEqual(["event_chain"]);
     expect(parsed.tideEditing).toBe(true);
-    expect(parsed.tideKind).toBe("medium");
   });
 
   it("keeps only the first tide filter when several are present", () => {

@@ -22,7 +22,6 @@ import {
   parseEditorDisplayState,
   replaceEditorDisplayStateInUrl,
 } from "./editor-url-state";
-import { TIDE_RECORD_FIELD_BY_KIND } from "./types";
 import {
   beginFieldEdit,
   cancelFieldEdit,
@@ -43,15 +42,7 @@ import type {
   EditorDisplayState,
   EditorSortField,
   EditorTag,
-  EditorTide,
-  ManageFacetEntry,
-  TideKind,
 } from "./types";
-
-/** Every tide on a card, across all three kinds, in large→medium→small order. */
-function allTides(card: EditorCardRecord): string[] {
-  return [...card.largeTides, ...card.mediumTides, ...card.smallTides];
-}
 
 const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
   loadEditorCards,
@@ -102,7 +93,6 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-tides": displayState.tideFilters.join(","),
     "data-editor-tag-editing": String(displayState.tagEditing),
     "data-editor-tide-editing": String(displayState.tideEditing),
-    "data-editor-tide-kind": displayState.tideKind,
     "data-editor-art-editing": String(displayState.artEditing),
     "data-editor-sort": displayState.sort,
     "data-editor-dir": displayState.dir,
@@ -177,7 +167,7 @@ function sortValue(card: EditorCardRecord, sort: EditorSortField): string | numb
     case "nameLength":
       return card.name.length;
     case "tideCount":
-      return allTides(card).length;
+      return card.tides.length;
   }
 }
 
@@ -234,10 +224,10 @@ function filteredAndSortedCards(
       }
 
       // Tide filtering is single-select but uses the same containment check so a
-      // card must carry the selected tide (in any kind) to remain visible.
+      // card must carry the selected tide to remain visible.
       if (
         displayState.tideFilters.length > 0 &&
-        !displayState.tideFilters.every((tide) => allTides(card).includes(tide))
+        !displayState.tideFilters.every((tide) => card.tides.includes(tide))
       ) {
         return false;
       }
@@ -362,7 +352,7 @@ export default function CardEditorApp({
   const [manageTagsOpen, setManageTagsOpen] = useState(false);
   const [registrySaving, setRegistrySaving] = useState(false);
   const [registryError, setRegistryError] = useState<string | null>(null);
-  const [tides, setTides] = useState<EditorTide[]>([]);
+  const [tides, setTides] = useState<EditorTag[]>([]);
   const [tideSaveState, setTideSaveState] = useState<
     Record<string, CardTagSaveState>
   >({});
@@ -483,7 +473,7 @@ export default function CardEditorApp({
   const tideUsageCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     for (const card of loadedCards) {
-      for (const tide of allTides(card)) {
+      for (const tide of card.tides) {
         counts[tide] = (counts[tide] ?? 0) + 1;
       }
     }
@@ -686,7 +676,7 @@ export default function CardEditorApp({
   // card field, the save request, and the per-card save-state setter.
   function applyCardFacet(
     card: EditorCardRecord,
-    field: "tags" | "largeTides" | "mediumTides" | "smallTides",
+    field: "tags" | "tides",
     nextValues: string[],
     runSave: (values: string[]) => Promise<{ card: EditorCardRecord }>,
     setSaveState: (
@@ -745,50 +735,38 @@ export default function CardEditorApp({
     );
   }
 
-  function handleAddCardTide(
-    card: EditorCardRecord,
-    name: string,
-    kind: TideKind,
-  ) {
-    const field = TIDE_RECORD_FIELD_BY_KIND[kind];
-    if (card[field].includes(name)) {
+  function handleAddCardTide(card: EditorCardRecord, name: string) {
+    if (card.tides.includes(name)) {
       return;
     }
     applyCardFacet(
       card,
-      field,
-      [...card[field], name],
-      (tides) => apiClient.saveEditorCardTides({ id: card.id, kind, tides }),
+      "tides",
+      [...card.tides, name],
+      (tides) => apiClient.saveEditorCardTides({ id: card.id, tides }),
       setTideSaveState,
     );
   }
 
-  function handleRemoveCardTide(
-    card: EditorCardRecord,
-    name: string,
-    kind: TideKind,
-  ) {
-    const field = TIDE_RECORD_FIELD_BY_KIND[kind];
-    if (!card[field].includes(name)) {
+  function handleRemoveCardTide(card: EditorCardRecord, name: string) {
+    if (!card.tides.includes(name)) {
       return;
     }
     applyCardFacet(
       card,
-      field,
-      card[field].filter((tide) => tide !== name),
-      (tides) => apiClient.saveEditorCardTides({ id: card.id, kind, tides }),
+      "tides",
+      card.tides.filter((tide) => tide !== name),
+      (tides) => apiClient.saveEditorCardTides({ id: card.id, tides }),
       setTideSaveState,
     );
   }
 
-  function handleSaveTagRegistry(nextTags: ManageFacetEntry[]) {
+  function handleSaveTagRegistry(nextTags: EditorTag[]) {
     setRegistrySaving(true);
     setRegistryError(null);
 
     void apiClient
-      .saveEditorTagRegistry({
-        tags: nextTags.map((tag) => ({ name: tag.name, color: tag.color })),
-      })
+      .saveEditorTagRegistry({ tags: nextTags })
       .then((response) => {
         setTags(response.tags);
         setLoadStatus((current) =>
@@ -805,18 +783,12 @@ export default function CardEditorApp({
       });
   }
 
-  function handleSaveTideRegistry(nextTides: ManageFacetEntry[]) {
+  function handleSaveTideRegistry(nextTides: EditorTag[]) {
     setTideRegistrySaving(true);
     setTideRegistryError(null);
 
     void apiClient
-      .saveEditorTideRegistry({
-        tides: nextTides.map((tide) => ({
-          name: tide.name,
-          color: tide.color,
-          kind: tide.kind ?? "large",
-        })),
-      })
+      .saveEditorTideRegistry({ tides: nextTides })
       .then((response) => {
         setTides(response.tags);
         setLoadStatus((current) =>
@@ -965,7 +937,6 @@ export default function CardEditorApp({
                 saveState={saveState}
                 tagEditing={displayState.tagEditing}
                 tideEditing={displayState.tideEditing}
-                tideKind={displayState.tideKind}
                 artEditing={displayState.artEditing}
                 availableTags={tags}
                 availableTides={tides}
@@ -980,12 +951,8 @@ export default function CardEditorApp({
                 onAddCardTag={handleAddCardTag}
                 onRemoveCardTag={handleRemoveCardTag}
                 onOpenManageTags={() => setManageTagsOpen(true)}
-                onAddCardTide={(card, name) =>
-                  handleAddCardTide(card, name, displayState.tideKind)
-                }
-                onRemoveCardTide={(card, name) =>
-                  handleRemoveCardTide(card, name, displayState.tideKind)
-                }
+                onAddCardTide={handleAddCardTide}
+                onRemoveCardTide={handleRemoveCardTide}
                 onOpenManageTides={() => setManageTidesOpen(true)}
               />
             )}
@@ -1053,7 +1020,6 @@ export default function CardEditorApp({
         <ManageTagsModal
           noun="tide"
           tags={tides}
-          kinds={["large", "medium", "small"]}
           usageCounts={tideUsageCounts}
           saving={tideRegistrySaving}
           saveError={tideRegistryError}

@@ -10,14 +10,7 @@ import type {
   EditorSortField,
   EditorTag,
   EditorTypeFilter,
-  TideKind,
 } from "./types";
-
-const TIDE_KIND_OPTIONS: Array<{ value: TideKind; label: string }> = [
-  { value: "large", label: "Large" },
-  { value: "medium", label: "Medium" },
-  { value: "small", label: "Small" },
-];
 
 interface CardEditorToolbarProps {
   displayState: EditorDisplayState;
@@ -375,51 +368,15 @@ export default function CardEditorToolbar({
             }
           />
 
-          <label
-            title="Show tide chips for one kind with add/remove controls under each card"
-            style={{
-              ...modeToggleStyle(displayState.tideEditing),
-              gap: "6px",
-              paddingRight: "4px",
-            }}
-          >
-            <span aria-hidden="true">🌊</span>
-            <span>Tides</span>
-            <select
-              aria-label="Tide editing kind"
-              value={displayState.tideEditing ? displayState.tideKind : ""}
-              onChange={(event) => {
-                const value = event.currentTarget.value;
-                if (value === "") {
-                  updateDisplayState({ tideEditing: false });
-                } else {
-                  updateDisplayState({
-                    tideEditing: true,
-                    tideKind: value as TideKind,
-                  });
-                }
-              }}
-              style={{
-                minHeight: "26px",
-                border: "1px solid rgba(247, 241, 223, 0.28)",
-                borderRadius: "5px",
-                background: "#0f1719",
-                color: "#fff7e0",
-                font: "inherit",
-                fontWeight: 800,
-                fontSize: "0.8rem",
-                padding: "0 4px",
-                cursor: "pointer",
-              }}
-            >
-              <option value="">Off</option>
-              {TIDE_KIND_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          <ModeToggle
+            active={displayState.tideEditing}
+            icon="🌊"
+            label="Tides"
+            title="Show tide chips with add/remove controls under each card"
+            onToggle={() =>
+              updateDisplayState({ tideEditing: !displayState.tideEditing })
+            }
+          />
 
           <ModeToggle
             active={displayState.artEditing}

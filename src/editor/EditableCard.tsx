@@ -10,14 +10,11 @@ import type { CardViewSlots } from "../components/CardView";
 import CardTagEditor from "./CardTagEditor";
 import EditableField from "./EditableField";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
-import { TIDE_RECORD_FIELD_BY_KIND } from "./types";
 import type {
   EditableCardField,
   EditorCardRecord,
   EditorDisplayState,
   EditorTag,
-  EditorTide,
-  TideKind,
 } from "./types";
 
 export interface EditableCardProps {
@@ -30,10 +27,9 @@ export interface EditableCardProps {
   rulesTextSaveEntry: EditableFieldSaveEntry | null;
   tagEditing: boolean;
   tideEditing: boolean;
-  tideKind: TideKind;
   artEditing: boolean;
   availableTags: EditorTag[];
-  availableTides: EditorTide[];
+  availableTides: EditorTag[];
   tagSaving: boolean;
   tagError: string | null;
   tideSaving: boolean;
@@ -220,7 +216,6 @@ export default function EditableCard({
   rulesTextSaveEntry,
   tagEditing,
   tideEditing,
-  tideKind,
   artEditing,
   availableTags,
   availableTides,
@@ -438,8 +433,8 @@ export default function EditableCard({
       {tideEditing ? (
         <CardTagEditor
           noun="tide"
-          cardTags={card[TIDE_RECORD_FIELD_BY_KIND[tideKind]]}
-          availableTags={availableTides.filter((tide) => tide.kind === tideKind)}
+          cardTags={card.tides}
+          availableTags={availableTides}
           saving={tideSaving}
           error={tideError}
           onAddTag={(name) => onAddCardTide(card, name)}

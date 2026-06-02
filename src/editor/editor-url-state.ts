@@ -6,10 +6,7 @@ import type {
   EditorSortDirection,
   EditorSortField,
   EditorTypeFilter,
-  TideKind,
 } from "./types";
-
-const TIDE_KIND_VALUES = new Set<TideKind>(["large", "medium", "small"]);
 
 export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   searchText: "",
@@ -21,7 +18,6 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   tideFilters: [],
   tagEditing: false,
   tideEditing: false,
-  tideKind: "large",
   artEditing: false,
   sort: "name",
   dir: "asc",
@@ -139,12 +135,7 @@ export function parseEditorDisplayState(
     // somehow carries more than one `tide` param.
     tideFilters: parseFacetFilters(params, "tide").slice(0, 1),
     tagEditing: params.get("tagedit") === "1",
-    // `tideedit` carries the active kind (`large`/`medium`/`small`); its
-    // presence with a valid kind turns tide editing on.
-    tideEditing: TIDE_KIND_VALUES.has(params.get("tideedit") as TideKind),
-    tideKind: TIDE_KIND_VALUES.has(params.get("tideedit") as TideKind)
-      ? (params.get("tideedit") as TideKind)
-      : DEFAULT_EDITOR_DISPLAY_STATE.tideKind,
+    tideEditing: params.get("tideedit") === "1",
     artEditing: params.get("artedit") === "1",
     sort: parseSort(params.get("sort")),
     dir: parseDir(params.get("dir")),
@@ -182,7 +173,7 @@ export function serializeEditorDisplayState(
     params.set("tagedit", "1");
   }
   if (state.tideEditing) {
-    params.set("tideedit", state.tideKind);
+    params.set("tideedit", "1");
   }
   if (state.artEditing) {
     params.set("artedit", "1");

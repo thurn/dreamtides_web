@@ -1,8 +1,6 @@
-import { TIDE_FIELD_BY_KIND } from "./types";
 import type {
   EditorApiErrorBody,
   EditorTag,
-  EditorTide,
   LoadEditorCardsResponse,
   LoadEditorTagsResponse,
   SaveEditorCardArtRequest,
@@ -13,13 +11,7 @@ import type {
   SaveEditorTagRegistryRequest,
   SaveEditorTagRegistryResponse,
   SaveEditorTideRegistryRequest,
-  SaveEditorTideRegistryResponse,
 } from "./types";
-
-/** GET/PUT `/api/editor/tides` carry the registry list under `tags`. */
-interface LoadEditorTidesResponse {
-  tags: EditorTide[];
-}
 
 export class EditorApiRequestError extends Error {
   readonly code: string | undefined;
@@ -200,32 +192,27 @@ export async function saveEditorTagRegistry(
   return readJsonResponse<SaveEditorTagRegistryResponse>(response);
 }
 
-export async function loadEditorTides(signal?: AbortSignal): Promise<EditorTide[]> {
+export async function loadEditorTides(signal?: AbortSignal): Promise<EditorTag[]> {
   const response = await fetch(withTomlParam("/api/editor/tides"), {
     headers: {
       Accept: "application/json",
     },
     signal,
   });
-  const body = await readJsonResponse<LoadEditorTidesResponse>(response);
+  const body = await readJsonResponse<LoadEditorTagsResponse>(response);
   return body.tags;
 }
 
 export async function saveEditorCardTides(
   request: SaveEditorCardTidesRequest,
 ): Promise<SaveEditorCardFieldResponse> {
-  // A tide's kind selects which of the card's three tide fields it is saved to.
   const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
     method: "PATCH",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      id: request.id,
-      field: TIDE_FIELD_BY_KIND[request.kind],
-      value: request.tides,
-    }),
+    body: JSON.stringify({ id: request.id, field: "tides", value: request.tides }),
   });
 
   return readJsonResponse<SaveEditorCardFieldResponse>(response);
@@ -233,7 +220,7 @@ export async function saveEditorCardTides(
 
 export async function saveEditorTideRegistry(
   request: SaveEditorTideRegistryRequest,
-): Promise<SaveEditorTideRegistryResponse> {
+): Promise<SaveEditorTagRegistryResponse> {
   // The tide registry endpoint shares the tag registry's body shape: the entry
   // list is carried under `tags` regardless of facet.
   const response = await fetch(withTomlParam("/api/editor/tides"), {
@@ -245,5 +232,5 @@ export async function saveEditorTideRegistry(
     body: JSON.stringify({ tags: request.tides }),
   });
 
-  return readJsonResponse<SaveEditorTideRegistryResponse>(response);
+  return readJsonResponse<SaveEditorTagRegistryResponse>(response);
 }

@@ -153,37 +153,9 @@ export function parseSpark(value) {
  * parsed by `parseEnergyCost`: multi-cost cards (e.g. `"2,X"`) additionally
  * emit an `energyCosts` array of orb labels.
  */
-// Card fields that hold tides, one per kind. Cards split tides across these
-// three fields; the runtime card data carries the union as a single `tides`
-// list. A card authored with a single legacy `tides` field is left untouched
-// and flows through the generic key copy below.
-const SPLIT_TIDE_FIELDS = ["large-tides", "medium-tides", "small-tides"];
-
 export function transformCard(card) {
   const result = {};
-  // Union of the split tide fields, deduped in first-seen order. The combined
-  // list is placed at the position of the first split field encountered so the
-  // key order of the generated card data stays stable.
-  const splitTides = [];
-  let splitTidesPlaced = false;
   for (const [key, value] of Object.entries(card)) {
-    if (SPLIT_TIDE_FIELDS.includes(key)) {
-      if (!splitTidesPlaced) {
-        result.tides = splitTides;
-        splitTidesPlaced = true;
-      }
-      if (Array.isArray(value)) {
-        for (const entry of value) {
-          if (typeof entry === "string") {
-            const trimmed = entry.trim();
-            if (trimmed !== "" && !splitTides.includes(trimmed)) {
-              splitTides.push(trimmed);
-            }
-          }
-        }
-      }
-      continue;
-    }
     const camelKey = kebabToCamel(key);
     if (camelKey === "energyCost") {
       const parsed = parseEnergyCost(value);
