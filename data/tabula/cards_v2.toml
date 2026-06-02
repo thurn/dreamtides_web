@@ -10693,6 +10693,160 @@ image-number = 1648927918
 art-owned = false
 card-number = 502
 
+[[cards]]
+name = "Stolen Genesis"
+mtg-name = "Diabolic Intent"
+id = "7b55efd1-6d9f-4156-9de7-1c71ccc410cb"
+large-tides = []
+medium-tides = []
+small-tides = []
+rendered-text = """
+To play this card, abandon a character.
+
+Materialize a random character with higher cost from your deck.
+
+Reclaim 3●"""
+energy-cost = 2
+card-type = "Event"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = 2293194527
+art-owned = false
+card-number = 503
+
+[[cards]]
+name = "Secrets of the Deep"
+mtg-name = "Dread Fugue"
+id = "eae700c9-5005-4627-b8d6-a5c2c273e61a"
+large-tides = []
+medium-tides = []
+small-tides = []
+rendered-text = "Look at the opponent's hand. Put a card from it into your hand."
+energy-cost = 2
+card-type = "Event"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = 2131591273
+art-owned = false
+card-number = 504
+
+[[cards]]
+name = "Desperation"
+mtg-name = "Gamble"
+id = "8f69312f-4bec-4671-99da-e752ec6d4cbc"
+large-tides = []
+medium-tides = []
+small-tides = []
+rendered-text = """
+Draw 2 cards, then discard a card.
+
+When you discard this card, it gains reclaim until end of turn."""
+energy-cost = 2
+card-type = "Event"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = 1470059006
+art-owned = false
+card-number = 505
+
+[[cards]]
+name = "Rootspring Summons"
+mtg-name = "Hard Evidence"
+id = "56f019a8-6b77-4bcb-bfa6-37b94e188ead"
+large-tides = []
+medium-tides = []
+small-tides = []
+rendered-text = """
+Materialize a 4✦ monstrosity figment.
+
+Reclaim 4●"""
+energy-cost = 3
+card-type = "Event"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = 717263296
+art-owned = false
+card-number = 506
+
+[[cards]]
+name = "Iron Executor"
+mtg-name = "Monoskelion"
+id = "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a"
+large-tides = []
+medium-tides = []
+small-tides = []
+rendered-text = "Abandon this character: Dissolve an enemy with ✦ less than or equal to this character's ✦."
+energy-cost = 2
+card-type = "Character"
+subtype = "Warrior"
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = 1
+tags = []
+image-number = 425039824
+art-owned = false
+card-number = 507
+
+[[cards]]
+name = "Eruption"
+mtg-name = "Punishing Fire"
+id = "8a8af982-d1a1-42a0-9229-5e3af13e8dbe"
+large-tides = []
+medium-tides = []
+small-tides = []
+rendered-text = """
+Dissolve an enemy with 2✦ or less.
+
+When an enemy scores ⍟, return this card from your void to your hand."""
+energy-cost = 2
+card-type = "Event"
+subtype = ""
+rarity = ""
+is-fast = true
+is-interrupt = true
+spark = ""
+tags = ["Removal"]
+image-number = 450440617
+art-owned = false
+card-number = 508
+
+[[cards]]
+name = "Lithic Severance"
+mtg-name = "Swift Reconfiguration"
+id = "9e9efbc0-d438-48a9-9551-85c93fb33f3e"
+large-tides = []
+medium-tides = []
+small-tides = []
+rendered-text = '''An enemy loses all abilities and gains "3●: Restore this character's abilities."'''
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+rarity = ""
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = 1694993302
+art-owned = false
+card-number = 509
+
 [metadata]
 schema_version = 1
 
