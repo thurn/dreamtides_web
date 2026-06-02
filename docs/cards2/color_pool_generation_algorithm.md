@@ -1,0 +1,221 @@
+# Dreamtides — Color-Identity Card Pool Generation
+
+An algorithm that builds a random card pool of 180–220 cards by combining three
+families of curated card lists around a randomly chosen **color identity**. Each
+card appears at most twice. The pool changes every run but is always a
+color-coherent, synergistic selection rather than an arbitrary mix.
+
+## Inputs
+
+Three families of plain-text lists (one card name per line) feed the generator:
+
+- **`docs/archetype_lists/core.txt`** — 30 "any-deck" filler cards that fit into
+  every pool.
+- **`docs/archetype_lists/*.txt`** — 16 *mechanic* archetype lists (abandon,
+  storm, spirit-animals, warrior-combo, …). Each is a curated, combo-aware
+  grouping of cards that want to be played together for a mechanical reason.
+- **`docs/drafts_adapted/*.txt`** — 150 *color* lists. Each filename is a
+  **color-identity prefix** drawn from the five colors `w u b r g`, optionally
+  followed by an archetype suffix:
+  - **Bare-color lists** (`b`, `wu`, `ubr`, `wubrg`, …) — broad pools of cards
+    legal in that color identity. These range from ~70 cards (mono) to ~378
+    (all five colors).
+  - **Color+archetype lists** (`br-aristocrats`, `ur-storm`, `wu-blink`,
+    `g-ramp`, …) — focused archetype slices constrained to a color identity.
+
+Together the three families span a universe of **508 distinct cards**.
+
+## Why color identity is the organizing principle
+
+A limited-format card pool is most naturally defined by *color identity*: a
+two- or three-color pool that a player can commit to and draft within. The
+`drafts_adapted` filenames encode exactly this structure, and the data shows it
+is a strong, independent axis:
+
+- **Color nesting is real but soft.** A smaller color identity's cards are
+  mostly contained in a larger one that includes it (`b` ⊆ `br` ≈ 0.90; a
+  color+archetype slice sits ~0.75–1.0 inside its bare-color list), so lists
+  that share colors share cards — but the lists are independently curated, not
+  literal supersets.
+- **Color is independent of mechanics.** Each mechanic archetype maps only
+  weakly onto any single color list (best-match Jaccard 0.12–0.42). The void
+  "abandon" theme leans black/red, the "spirit-animals" theme leans green, and
+  so on, but no color list *is* a mechanic archetype. Color identity is
+  therefore a genuinely separate dimension that can gate which mechanic
+  archetypes are allowed to share a pool.
+
+The generator uses color identity as the **backbone** (which cards are legal
+together) and the mechanic archetypes as **themes** layered on top (what the
+pool is trying to do).
+
+## Design goals
+
+1. **Color coherence.** Every card in a pool is legal in one chosen color
+   identity, so the pool reads as a real two/three-color draft environment.
+2. **Synergy.** Within that identity the pool is built from a few overlapping
+   themes, with their two-card combos and synergy pieces intact.
+3. **Randomness.** Every run produces a different, plausible pool.
+
+## The algorithm
+
+```
+constants:  LO = 180, HI = 220
+            K_WEIGHTS = {1: .10, 2: .50, 3: .32, 4: .08}  # colors per pool
+            T_ON  = 0.55      # archetype "on-color" threshold
+            TOPK  = 3,  ALPHA = 1.0,  JIT = 15
+
+prefix(list)      = leading run of w/u/b/r/g in the filename ('' if none)
+poolSize(count)   = Σ over cards of min(2, count[card])
+
+generate():
+  count = multiset; start = core.txt          # core is always the base layer
+
+  # --- 1. choose a color identity C ---
+  k = weighted-random size from K_WEIGHTS
+  C = random k-subset of {w,u,b,r,g}
+
+  # --- 2. legal card pool + candidate themes for this identity ---
+  onColorDraft = [ D in drafts_adapted : prefix(D) ⊆ C and prefix(D) ≠ '' ]
+  legal        = core ∪ ⋃ { cards(D) : D in onColorDraft }   # everything in-identity
+
+  themes = {}
+  for each mechanic archetype A:
+      if |cards(A) ∩ legal| / |cards(A)| ≥ T_ON:    # A fits these colors
+          themes[A] = cards(A) ∩ legal              # restricted to legal cards
+  for each D in onColorDraft with an archetype suffix:
+      themes[D] = cards(D)                          # color+archetype slices
+
+  # --- 3. synergy walk among themes (overlap-weighted), staying on-color ---
+  seed = random theme; add seed to selection; count += seed
+  while poolSize(count) < LO and unused themes remain:
+      union = cards of all selected themes
+      cands = [ (Theme, |cards(Theme) ∩ union|) ] for unused themes, score > 0
+      take the TOPK highest-scoring; pick one with probability ∝ score^ALPHA
+      add pick to selection; count += pick
+
+  # --- 4a. if still short, fill with on-color staples ---
+  if poolSize(count) < LO:
+      freq[c] = number of onColorDraft lists containing c
+      add not-yet-present cards as 1-ofs in descending freq until poolSize ≥ LO
+
+  # --- 4b. jitter to a random target near the ceiling ---
+  cap    = min(poolSize(count), HI)
+  target = random integer in [ max(LO, cap - JIT), cap ]
+  demote a RANDOM subset of 2-ofs to 1-ofs until poolSize(count) ≤ target
+  if still above target: trim fringe cards unique to the last theme (fallback)
+
+  return C, selection, count
+```
+
+### How the three families combine
+
+- **`core`** is always the base layer, guaranteeing a spine of universally useful
+  cards in every pool.
+- **Bare-color draft lists** define `legal` — the set of cards permitted in the
+  chosen identity — and supply the **fill staples** (step 4a) used to top a pool
+  up to size with generically good on-color cards.
+- **Color+archetype draft lists** and **on-color mechanic archetypes** are the
+  **themes** (step 3) that give the pool its synergistic identity. A mechanic
+  archetype only becomes a candidate theme when at least `T_ON` of its cards are
+  legal in the chosen colors, so green creature themes never surface in a
+  black-red pool, and so on.
+
+### Copy counts and the 2-copy cap
+
+A card's copy count is the number of selected sources (core, themes) that
+contain it, capped at 2. A card shared by two or more selected sources is a
+2-of; a card from a single source — or added as a fill staple — is a 1-of.
+`poolSize` counts these capped copies, so the 180–220 target is measured in
+total cards including duplicates.
+
+### How randomness is injected
+
+Variety comes from four card-preserving sources, none of which cuts a card out
+of a theme:
+
+1. **The color identity** — both how many colors (`K_WEIGHTS`) and which ones.
+2. **The seed theme** and the **weighted walk** among the top neighbors at each
+   step.
+3. **Which on-color staples** are drawn during fill.
+4. **The per-run jitter target**, which then **demotes a random subset of the
+   shared 2-ofs to single copies** to reach that size.
+
+The jitter is essential: a fixed identity and theme set otherwise produces a
+fixed card set. Rolling a random target within `JIT` of the cluster's natural
+ceiling and demoting a random subset of 2-ofs makes two runs on the same
+identity differ in both size and *which* staples are kept as 2-ofs.
+
+### Why size control is safe for combos
+
+Demotion (the primary size-control step) removes a *second copy*, never a card,
+so every synergy piece and two-card combo in the selected themes stays present.
+The fringe trim is a fallback that fires only for the rare oversized identity
+whose unique cards alone exceed the target; it removes only cards unique to the
+last-added theme (un-reinforced 1-ofs), never cards shared between themes.
+
+### Tunable knobs
+
+- **`K_WEIGHTS`** — distribution over how many colors a pool spans. Defaults
+  favor two- and three-color identities, matching typical draft environments.
+- **`T_ON`** — how on-color a mechanic archetype must be to qualify as a theme.
+  Higher values keep pools more strictly within their colors; lower values let
+  more cross-color themes in.
+- **`TOPK` / `ALPHA`** — breadth and bias of the theme walk. `TOPK = 1` is a
+  deterministic greedy walk; higher `ALPHA` biases harder toward the single best
+  neighbor.
+- **`JIT`** — how far below the natural ceiling the random target may fall.
+  Larger values demote more 2-ofs (more variety, smaller pools); smaller values
+  keep pools near the top of the band with more staple 2-ofs intact.
+
+## Evidence
+
+A reference implementation was run to validate the four properties: size in
+band, color coherence, synergistic themes, and run-to-run variety.
+
+### Sample runs (deterministic per-trial seeds, for reproducibility)
+
+Themes are labelled `A:` (on-color mechanic archetype) and `D:` (color+archetype
+draft slice). The bracket is the chosen color identity.
+
+```
+#0 [ruw ] size=214 uniq=196 2of=18 | D:wr-artifact-aggro + D:wr-aggro
+#1 [bw  ] size=219 uniq=212 2of= 7 | A:wake-the-fallen-combo + D:wb-weenie
+#2 [gruw] size=214 uniq=197 2of=17 | D:ur-academy + D:wr-artifacts + D:wr-artifact-aggro
+#3 [gu  ] size=181 uniq=135 2of=46 | D:g-big-ramp + D:ug-lands-soup
+#5 [buw ] size=208 uniq=178 2of=30 | D:wu-weenie + D:w-weenie + D:wub-artifact-control
+#6 [ruw ] size=183 uniq=142 2of=41 | A:cheap-characters + A:wake-the-fallen-combo + A:warrior-combo
+#7 [ru  ] size=188 uniq=156 2of=32 | D:u-welder + D:ur-welder
+```
+
+Each pool is a recognizable color-and-strategy environment: a red-white artifact
+aggro pool, a green ramp/lands pool, a blue-red welder pool, and so on. Every
+selected theme is legal in the bracketed identity.
+
+### Distribution over 5,000 random runs
+
+```
+runs=5000
+size: min=180  p50=207  max=220  in[180,220]=100%
+2-ofs per pool: p50=34  max=83  all-singleton runs=799 (16%)
+distinct color identities produced: 30  (top: uw, bg, rw, bu, gr, gw)
+colors-per-pool: {1: 513, 2: 2486, 3: 1616, 4: 385}
+distinct card pools: 4807 (96.1% unique)
+most common single pool: 87 times (1.74%)
+reachable universe: 497 / 508 cards over 3,000 runs, incl. all 47
+                    cards that appear only in draft lists
+```
+
+Interpretation:
+
+- **Size.** 100% of runs land in [180, 220], spread across the upper band
+  (median 207).
+- **Color coherence.** All 30 reachable color identities appear, weighted toward
+  the two- and three-color pools that make the best draft environments.
+- **Variety.** 96.1% of runs are unique card pools; the single most common pool
+  appears only 1.74% of the time.
+- **Reach.** The pools collectively use 497 of the 508 cards in the universe,
+  including every card that exists only in the color lists — the color corpus
+  meaningfully widens what a pool can contain.
+- **Staples preserved.** A median of 34 cards are 2-ofs. About 16% of runs are
+  all-singleton, mostly the small or loosely-overlapping color identities whose
+  themes share few cards to begin with.
