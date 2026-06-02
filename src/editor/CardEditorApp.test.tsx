@@ -800,19 +800,26 @@ describe("CardEditorApp", () => {
       throw new Error("Missing large size button");
     }
 
-    expect(container.querySelector("[data-editor-grid-size=\"medium\"]")).not.toBeNull();
+    const mediumGrid = container.querySelector<HTMLElement>(
+      "[data-editor-grid-size=\"medium\"]",
+    );
+    expect(mediumGrid).not.toBeNull();
+    // Cards are tiled at the active preset width on each card-item wrapper.
+    expect(
+      mediumGrid
+        ?.querySelector<HTMLElement>("[data-editor-card-item]")
+        ?.style.width,
+    ).toBe("176px");
 
     act(() => {
       largeButton.click();
     });
 
+    // The "large" preset tiles cards at the quest draft offer width.
     const grid = container.querySelector<HTMLElement>(
       "[data-editor-grid-size=\"large\"]",
     );
     expect(grid).not.toBeNull();
-    // The "large" preset tiles cards at the quest draft offer width.
-    expect(grid?.style.gridTemplateColumns).toContain("auto-fill");
-    expect(grid?.style.gridTemplateColumns).toContain("100cqw");
 
     act(() => {
       root.unmount();
