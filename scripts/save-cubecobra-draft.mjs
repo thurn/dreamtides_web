@@ -13,48 +13,48 @@
 //   2026-06-02-u-welder-b7f6c0c2-6adb-4ac8-98c2-a837259a94f6.txt
 // Each file is a newline-delimited list of the seat's main-deck card names
 // (one line per card, copies repeated), straight from Cube Cobra's own export.
+//
+// The deck-fetching logic is also exported (saveDraft, fetchText,
+// extractReactProps, slugify) for reuse by save-cubecobra-cube-drafts.mjs.
 
 import { writeFileSync, mkdirSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
-const BASE = "https://cubecobra.com";
+export const BASE = "https://cubecobra.com";
 
-function usage(msg) {
-  if (msg) console.error(`Error: ${msg}\n`);
-  console.error(
-    "Usage: node scripts/save-cubecobra-draft.mjs <deckUrlOrId> [targetDir]",
-  );
-  process.exit(msg ? 1 : 0);
+const DRAFT_ID_RE =
+  /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+
+// Accept a full deck URL or a bare draft id; return the UUID (or null).
+export function parseDraftId(input) {
+  const m = DRAFT_ID_RE.exec(input ?? "");
+  return m ? m[0].toLowerCase() : null;
 }
 
-// Accept a full deck URL or a bare draft id; return the UUID.
-function parseDraftId(input) {
-  const m = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.exec(
-    input,
-  );
-  if (!m) usage(`could not find a draft id in "${input}"`);
-  return m[0].toLowerCase();
-}
-
-function slugify(name) {
+export function slugify(name) {
   return (
-    name
+    (name ?? "")
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "") || "deck"
   );
 }
 
-async function fetchText(url) {
-  const res = await fetch(url, { headers: { "User-Agent": "quest-prototype-draft-saver" } });
+export const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+export async function fetchText(url) {
+  const res = await fetch(url, {
+    headers: { "User-Agent": "quest-prototype-draft-saver" },
+  });
   if (!res.ok) throw new Error(`GET ${url} -> HTTP ${res.status}`);
   return res.text();
 }
 
-// Pull the `window.reactProps = {...}` blob out of a deck page and parse it.
-// The blob is a JS object literal (it can contain bare `undefined`), so we
+// Pull the `window.reactProps = {...}` blob out of a Cube Cobra page and parse
+// it. The blob is a JS object literal (it can contain bare `undefined`), so we
 // coerce those value tokens to null before JSON.parse.
-function extractReactProps(html) {
+export function extractReactProps(html) {
   const start = html.indexOf("window.reactProps");
   if (start === -1) throw new Error("reactProps not found in page HTML");
   const eq = html.indexOf("=", start) + 1;
@@ -65,12 +65,10 @@ function extractReactProps(html) {
   return JSON.parse(jsonish);
 }
 
-async function main() {
-  const [input, targetArg] = process.argv.slice(2);
-  if (!input || input === "-h" || input === "--help") usage(input ? "" : "missing <deckUrlOrId>");
-
-  const draftId = parseDraftId(input);
-  const targetDir = resolve(targetArg ?? ".");
+// Download every seat of one draft into targetDir. Returns
+// { draftId, date, seats: [{ seat, name, file, cards }] }.
+// seatDelayMs spaces out the per-seat requests to stay polite.
+export async function saveDraft(draftId, targetDir, { seatDelayMs = 0 } = {}) {
   mkdirSync(targetDir, { recursive: true });
 
   // One page load gives us every seat's name plus the draft date.
@@ -79,19 +77,49 @@ async function main() {
   if (!draft?.seatNames?.length) throw new Error("no seats found for this draft");
 
   const date = new Date(draft.date).toISOString().slice(0, 10); // YYYY-MM-DD (UTC)
-  console.log(`Draft ${draftId} (${date}): ${draft.seatNames.length} seats -> ${targetDir}`);
-
+  const seats = [];
   for (let seat = 0; seat < draft.seatNames.length; seat++) {
+    if (seat > 0 && seatDelayMs) await sleep(seatDelayMs);
     const name = draft.seatNames[seat] ?? `seat-${seat}`;
-    const deck = await fetchText(`${BASE}/cube/deck/download/txt/${draftId}/${seat}`);
-    const lines = deck.split("\n").filter((l) => l.trim() !== "").length;
+    const deck = await fetchText(
+      `${BASE}/cube/deck/download/txt/${draftId}/${seat}`,
+    );
+    const cards = deck.split("\n").filter((l) => l.trim() !== "").length;
     const file = `${date}-${slugify(name)}-${draftId}.txt`;
     writeFileSync(join(targetDir, file), deck.endsWith("\n") ? deck : `${deck}\n`);
-    console.log(`  seat ${seat}: ${name} (${lines} cards) -> ${file}`);
+    seats.push({ seat, name, file, cards });
+  }
+  return { draftId, date, seats };
+}
+
+function usage(msg) {
+  if (msg) console.error(`Error: ${msg}\n`);
+  console.error(
+    "Usage: node scripts/save-cubecobra-draft.mjs <deckUrlOrId> [targetDir]",
+  );
+  process.exit(msg ? 1 : 0);
+}
+
+async function main() {
+  const [input, targetArg] = process.argv.slice(2);
+  if (!input || input === "-h" || input === "--help") {
+    usage(input ? "" : "missing <deckUrlOrId>");
+  }
+  const draftId = parseDraftId(input);
+  if (!draftId) usage(`could not find a draft id in "${input}"`);
+  const targetDir = resolve(targetArg ?? ".");
+
+  const { date, seats } = await saveDraft(draftId, targetDir);
+  console.log(`Draft ${draftId} (${date}): ${seats.length} seats -> ${targetDir}`);
+  for (const { seat, name, file, cards } of seats) {
+    console.log(`  seat ${seat}: ${name} (${cards} cards) -> ${file}`);
   }
 }
 
-main().catch((err) => {
-  console.error(err.message ?? err);
-  process.exit(1);
-});
+// Run as a CLI only when invoked directly, not when imported.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((err) => {
+    console.error(err.message ?? err);
+    process.exit(1);
+  });
+}
