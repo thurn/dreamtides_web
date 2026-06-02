@@ -10,6 +10,7 @@ Starcatcher
 Hatching Ground
 Fragments of Vision
 Headtaker Wurm
+Aurora Confluence
 Derelict Voyage
 Packcaller of Shadows
 Doorlight Foundling
@@ -82,3 +83,4 @@ Ferryman of the Falls
 Harvest the Forgotten
 Wheel of the Heavens
 Surge of Fury
+Keeper of Forgotten Light

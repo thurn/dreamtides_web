@@ -22,6 +22,7 @@ Forsaken Skyline
 Twilight Suppressor
 Wreckheap Survivor
 Ebonwing
+Aurora Confluence
 Harvester of Despair
 Scrapyard Custodian
 Embersummoner
@@ -132,6 +133,7 @@ Ferryman of the Falls
 Crucible Warlord
 Endless Projection
 Weight of Memory
+Keeper of Forgotten Light
 Door to Possibility
 Overstory Explorer
 Titan of Forgotten Echoes

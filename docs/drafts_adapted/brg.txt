@@ -34,6 +34,7 @@ Veil of the Wastes
 Maelstrom Denial
 Ebonwing
 Shadowcaller
+Aurora Confluence
 Fell the Mighty
 Immolate and Rise
 Peak Plunder
@@ -211,6 +212,7 @@ Moment Rewound
 Ashborn Necromancer
 Ashwalker
 Weight of Memory
+Keeper of Forgotten Light
 Door to Possibility
 Harrowing Officiant
 Overstory Explorer

@@ -2264,7 +2264,7 @@ card-number = 118
 
 [[cards]]
 name = "Keeper of Forgotten Light"
-mtg-name = "Valakut Exporation"
+mtg-name = "Valakut Exploration"
 id = "8b5eb29c-146f-46fb-9407-55004128fba7"
 tides = ["Celestial Reverie Combo", "Celestial Reverie Combo Splash", "Cheap Characters", "Cheap Characters Splash", "Storm", "Wake the Fallen / Shadow March Combo"]
 rendered-text = "When you materialize a non-figment character with cost 2● or less, draw a card with ephemeral."
@@ -2362,7 +2362,7 @@ card-number = 123
 
 [[cards]]
 name = "Aurora Confluence"
-mtg-name = "Goblin's Gambit"
+mtg-name = "Burning Inquiry"
 id = "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188"
 tides = ["Discard / Madness"]
 rendered-text = "Choose a player. Discard X chosen cards from that player's hand. That player draws X cards."

@@ -15,6 +15,7 @@ Forsaken Skyline
 Hatching Ground
 Fragments of Vision
 Headtaker Wurm
+Aurora Confluence
 Fell the Mighty
 Spiral Offering
 Shared Revelation
@@ -113,6 +114,7 @@ Harvest the Forgotten
 Moment Rewound
 Wheel of the Heavens
 Knowledge Restored
+Keeper of Forgotten Light
 Pilgrim of Old Stones
 Rift Pilgrim
 Starfall Communion

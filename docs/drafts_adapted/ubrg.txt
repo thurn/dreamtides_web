@@ -33,6 +33,7 @@ Hatching Ground
 Fragments of Vision
 Shadowcaller
 Blazeguard
+Aurora Confluence
 Nebula's Wake
 Immolate and Rise
 Peak Plunder
@@ -213,6 +214,7 @@ Deathwalker
 Ashwalker
 Weight of Memory
 Rebirth Ritualist
+Keeper of Forgotten Light
 Door to Possibility
 Pilgrim of Old Stones
 Harrowing Officiant

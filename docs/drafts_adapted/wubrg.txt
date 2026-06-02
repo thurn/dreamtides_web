@@ -40,6 +40,7 @@ Maelstrom Denial
 Fragments of Vision
 Shadowcaller
 Blazeguard
+Aurora Confluence
 Fell the Mighty
 Immolate and Rise
 Peak Plunder
@@ -353,6 +354,7 @@ Ashwalker
 Forge-Twin
 Speaker for the Forgotten
 Crescendo Channeler
+Keeper of Forgotten Light
 Door to Possibility
 Apocalypse Vigilante
 Harrowing Officiant

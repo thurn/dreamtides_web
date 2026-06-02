@@ -57,6 +57,7 @@ Ember Shepherd
 Ferryman of the Falls
 Wreckland Maverick
 Wheel of the Heavens
+Keeper of Forgotten Light
 Ochre Prospector
 The Forsaker
 Ruptured Dynamo
