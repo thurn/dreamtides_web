@@ -33,8 +33,7 @@ group as a named list of card names.
   Madness," "Warrior Aggro," or "Spirit Animals." Collecting every card that
   shares a tide gives a curated, combo-aware list of cards that want to be
   played together for a mechanical reason. There are sixteen such archetype
-  lists. (Some tides are tagged as a "Splash" variant; those are editing
-  annotations and are ignored here.)
+  lists.
 
 - **Color lists.** Each card also declares which color combinations it is legal
   in. These list names are built from the game's five colors, written with the

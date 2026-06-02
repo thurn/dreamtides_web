@@ -139,7 +139,6 @@ export function buildPoolData(cards: readonly PoolCard[]): PoolData {
   for (const card of cards) {
     if (card.core) core.add(card.name);
     for (const tide of card.tides ?? []) {
-      if (tide.endsWith(" Splash")) continue;
       const key = TIDE_TO_ARCHETYPE.get(tide);
       if (key) addTo(archLists, key, card.name);
     }

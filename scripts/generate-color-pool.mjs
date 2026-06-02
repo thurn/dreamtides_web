@@ -121,7 +121,6 @@ export function buildPoolData(cards) {
     const name = card.name;
     if (card.core) core.add(name);
     for (const tide of card.tides ?? []) {
-      if (tide.endsWith(" Splash")) continue;
       const key = TIDE_TO_ARCHETYPE.get(tide);
       if (key) add(archLists, key, name);
     }
