@@ -8,6 +8,26 @@ const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_CARD_TOML_PATH = join("data", "tabula", "rendered-cards.toml");
 const CARD_JSON_PATH = join("public", "card-data.json");
 
+/**
+ * The three tide "kinds". A tide's kind is authored in the registry sidecar and
+ * controls which of a card's three tide fields the tide lives on.
+ */
+export const TIDE_KINDS = ["large", "medium", "small"];
+/** Card fields that hold tides, one per kind, in display order. */
+export const TIDE_CARD_FIELDS = ["large-tides", "medium-tides", "small-tides"];
+/** Map a tide kind to the card field that holds tides of that kind. */
+export const TIDE_FIELD_BY_KIND = {
+  large: "large-tides",
+  medium: "medium-tides",
+  small: "small-tides",
+};
+/** Inverse of {@link TIDE_FIELD_BY_KIND}: card field to the kind it holds. */
+export const TIDE_KIND_BY_FIELD = {
+  "large-tides": "large",
+  "medium-tides": "medium",
+  "small-tides": "small",
+};
+
 export const EDITABLE_CARD_FIELDS = new Set([
   "energy-cost",
   "subtype",
@@ -15,29 +35,46 @@ export const EDITABLE_CARD_FIELDS = new Set([
   "spark",
   "rendered-text",
   "tags",
-  "tides",
+  ...TIDE_CARD_FIELDS,
   "art",
 ]);
 
 /**
- * A "facet" is a card-level taxonomy stored as an inline string array on each
- * card and backed by a registry sidecar that pairs each name with a display
- * color. Tags and tides are the two facets; they share every code path, differing
- * only in the card field they live on, the registry sidecar suffix, and labels.
- * The registry sidecar reuses the card field name as its `[[field]]` array key.
+ * A "facet" is a card-level taxonomy backed by a registry sidecar that pairs
+ * each name with a display color. Tags live on the single `tags` card field.
+ * Tides are a `kinded` facet: every tide carries a `kind` in the registry and
+ * lives on one of the three `cardFields` (`large-tides`, `medium-tides`,
+ * `small-tides`) according to that kind. The registry sidecar names its
+ * `[[field]]` array after `field`.
  */
 export const TAG_FACET = {
   field: "tags",
+  cardFields: ["tags"],
   registrySuffix: ".tags.toml",
   noun: "tag",
   Noun: "Tag",
+  kinded: false,
 };
 export const TIDE_FACET = {
   field: "tides",
+  cardFields: TIDE_CARD_FIELDS,
   registrySuffix: ".tides.toml",
   noun: "tide",
   Noun: "Tide",
+  kinded: true,
 };
+
+/**
+ * Resolve a tide's kind: an explicit, valid kind wins; otherwise it is inferred
+ * from the name so legacy registries and splash variants land on a sensible
+ * default. Splash tides are medium; everything else is large.
+ */
+export function tideKindFor(name, rawKind) {
+  if (typeof rawKind === "string" && TIDE_KINDS.includes(rawKind.trim())) {
+    return rawKind.trim();
+  }
+  return name.trim().endsWith(" Splash") ? "medium" : "large";
+}
 
 /**
  * Default art crop applied to cards that have no authored `art` table. Mirrors
@@ -132,7 +169,9 @@ function editorRecordFromCard(card) {
     spark: card.spark ?? "",
     "rendered-text": card["rendered-text"] ?? "",
     tags: normalizeTagList(card.tags),
-    tides: normalizeTagList(card.tides),
+    largeTides: normalizeTagList(card["large-tides"]),
+    mediumTides: normalizeTagList(card["medium-tides"]),
+    smallTides: normalizeTagList(card["small-tides"]),
     mtgName: typeof card["mtg-name"] === "string" ? card["mtg-name"] : "",
     source: card,
     preview: transformCard(card),
@@ -321,9 +360,10 @@ export function validateCardEdit(field, rawValue) {
     return validationSuccess(field, rawValue);
   }
 
-  if (field === "tags" || field === "tides") {
-    const noun = field === "tides" ? "tide" : "tag";
-    const Noun = field === "tides" ? "Tides" : "Tags";
+  if (field === "tags" || TIDE_CARD_FIELDS.includes(field)) {
+    const isTide = field !== "tags";
+    const noun = isTide ? "tide" : "tag";
+    const Noun = isTide ? "Tides" : "Tags";
     if (!Array.isArray(rawValue)) {
       return validationFailure(field, `${Noun} must be a list.`, rawValue);
     }
@@ -739,16 +779,24 @@ export function refreshCardDataJson({ rootDir = ROOT, cardTomlPath = DEFAULT_CAR
   };
 }
 
-function usedFacetNames(rootDir, cardTomlPath, facet) {
-  const used = [];
+/**
+ * Names in use across a facet's card fields, paired with the kind of the field
+ * they were found on (for kinded facets). A name keeps the kind of the first
+ * field it appears on. Used to seed the registry with any value present on a
+ * card but missing from the sidecar.
+ */
+function usedFacetEntries(rootDir, cardTomlPath, facet) {
+  const seen = new Map();
   for (const card of readSourceCards(rootDir, cardTomlPath)) {
-    for (const value of normalizeTagList(card[facet.field])) {
-      if (!used.includes(value)) {
-        used.push(value);
+    for (const cardField of facet.cardFields) {
+      for (const value of normalizeTagList(card[cardField])) {
+        if (!seen.has(value)) {
+          seen.set(value, facet.kinded ? TIDE_KIND_BY_FIELD[cardField] : undefined);
+        }
       }
     }
   }
-  return used;
+  return [...seen].map(([name, kind]) => ({ name, kind }));
 }
 
 /**
@@ -783,16 +831,20 @@ export function readFacetRegistry({
           ? entry.color.trim().toLowerCase()
           : defaultTagColor(name);
       seen.add(name);
-      tags.push({ name, color });
+      tags.push(facet.kinded ? { name, color, kind: tideKindFor(name, entry.kind) } : { name, color });
     }
   }
 
-  const unregistered = usedFacetNames(rootDir, cardTomlPath, facet)
-    .filter((name) => !seen.has(name))
-    .sort((left, right) => left.localeCompare(right, undefined, { sensitivity: "base" }));
+  const unregistered = usedFacetEntries(rootDir, cardTomlPath, facet)
+    .filter((entry) => !seen.has(entry.name))
+    .sort((left, right) => left.name.localeCompare(right.name, undefined, { sensitivity: "base" }));
 
-  for (const name of unregistered) {
-    tags.push({ name, color: defaultTagColor(name) });
+  for (const entry of unregistered) {
+    tags.push(
+      facet.kinded
+        ? { name: entry.name, color: defaultTagColor(entry.name), kind: tideKindFor(entry.name, entry.kind) }
+        : { name: entry.name, color: defaultTagColor(entry.name) },
+    );
   }
 
   return tags;
@@ -806,36 +858,53 @@ export function readTideRegistry({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_T
   return readFacetRegistry({ rootDir, cardTomlPath, facet: TIDE_FACET });
 }
 
-export function validateTagRegistry(rawTags) {
+export function validateFacetRegistry(rawTags, facet = TAG_FACET) {
+  const { Noun, noun, kinded } = facet;
   if (!Array.isArray(rawTags)) {
-    return { ok: false, message: "Tag registry must be a list." };
+    return { ok: false, message: `${Noun} registry must be a list.` };
   }
 
   const tags = [];
   const seen = new Set();
   for (const entry of rawTags) {
     if (entry === null || typeof entry !== "object" || Array.isArray(entry)) {
-      return { ok: false, message: "Each tag must be an object with a name and color." };
+      return { ok: false, message: `Each ${noun} must be an object with a name and color.` };
     }
 
     const name = typeof entry.name === "string" ? entry.name.trim() : "";
     if (name === "") {
-      return { ok: false, message: "Tag names cannot be blank." };
+      return { ok: false, message: `${Noun} names cannot be blank.` };
     }
     if (seen.has(name)) {
-      return { ok: false, message: `Duplicate tag name: ${name}.` };
+      return { ok: false, message: `Duplicate ${noun} name: ${name}.` };
     }
 
     const rawColor = typeof entry.color === "string" ? entry.color.trim() : "";
     if (!TAG_COLOR_PATTERN.test(rawColor)) {
-      return { ok: false, message: `Tag "${name}" needs a #RRGGBB color.` };
+      return { ok: false, message: `${Noun} "${name}" needs a #RRGGBB color.` };
     }
 
     seen.add(name);
-    tags.push({ name, color: rawColor.toLowerCase() });
+    if (kinded) {
+      const rawKind = typeof entry.kind === "string" ? entry.kind.trim() : "";
+      if (rawKind !== "" && !TIDE_KINDS.includes(rawKind)) {
+        return { ok: false, message: `${Noun} "${name}" has an unknown kind.` };
+      }
+      tags.push({ name, color: rawColor.toLowerCase(), kind: tideKindFor(name, rawKind) });
+    } else {
+      tags.push({ name, color: rawColor.toLowerCase() });
+    }
   }
 
   return { ok: true, tags };
+}
+
+export function validateTagRegistry(rawTags) {
+  return validateFacetRegistry(rawTags, TAG_FACET);
+}
+
+export function validateTideRegistry(rawTags) {
+  return validateFacetRegistry(rawTags, TIDE_FACET);
 }
 
 export function serializeFacetRegistry(
@@ -854,6 +923,9 @@ export function serializeFacetRegistry(
     lines.push(`[[${facet.field}]]`);
     lines.push(`name = ${tomlString(tag.name)}`);
     lines.push(`color = ${tomlString(tag.color)}`);
+    if (facet.kinded) {
+      lines.push(`kind = ${tomlString(tideKindFor(tag.name, tag.kind))}`);
+    }
     lines.push("");
   }
 
@@ -884,16 +956,20 @@ export function removeFacetValuesFromCards(source, removedNames, facet = TAG_FAC
 
   let next = source;
   for (const card of cards) {
-    const values = normalizeTagList(card[facet.field]);
-    if (!values.some((value) => removed.has(value))) {
-      continue;
+    // A kinded facet spreads its values across several card fields, so each is
+    // swept independently.
+    for (const cardField of facet.cardFields) {
+      const values = normalizeTagList(card[cardField]);
+      if (!values.some((value) => removed.has(value))) {
+        continue;
+      }
+      const filtered = values.filter((value) => !removed.has(value));
+      next = patchRenderedCardsToml(next, {
+        cardId: card.id,
+        field: cardField,
+        value: filtered,
+      }).source;
     }
-    const filtered = values.filter((value) => !removed.has(value));
-    next = patchRenderedCardsToml(next, {
-      cardId: card.id,
-      field: facet.field,
-      value: filtered,
-    }).source;
   }
 
   return next;

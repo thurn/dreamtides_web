@@ -8,6 +8,8 @@ import type {
   EditorCardRecord,
   EditorDisplayState,
   EditorTag,
+  EditorTide,
+  TideKind,
 } from "./types";
 
 export interface CardTagSaveState {
@@ -21,9 +23,10 @@ export interface CardEditorGridProps {
   saveState: EditableSaveState;
   tagEditing: boolean;
   tideEditing: boolean;
+  tideKind: TideKind;
   artEditing: boolean;
   availableTags: EditorTag[];
-  availableTides: EditorTag[];
+  availableTides: EditorTide[];
   tagSaveState: Record<string, CardTagSaveState>;
   tideSaveState: Record<string, CardTagSaveState>;
   onOpenArtEditor: (card: EditorCardRecord) => void;
@@ -62,6 +65,7 @@ export default function CardEditorGrid({
   saveState,
   tagEditing,
   tideEditing,
+  tideKind,
   artEditing,
   availableTags,
   availableTides,
@@ -188,6 +192,7 @@ export default function CardEditorGrid({
           })}
           tagEditing={tagEditing}
           tideEditing={tideEditing}
+          tideKind={tideKind}
           artEditing={artEditing}
           availableTags={availableTags}
           availableTides={availableTides}

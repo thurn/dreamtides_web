@@ -1,131 +1,163 @@
-# Tides registry for cards_v2.toml.
+# Tide registry for cards_v2.toml.
 # Each [[tides]] entry defines an available card tide and its display color.
 # Managed by the card editor's "Manage tides" panel.
 
 [[tides]]
 name = "Abandon"
 color = "#a52727"
+kind = "large"
 
 [[tides]]
 name = "Abandon Splash"
 color = "#d36969"
+kind = "medium"
 
 [[tides]]
 name = "Blink"
 color = "#a55727"
+kind = "large"
 
 [[tides]]
 name = "Blink Splash"
 color = "#d39269"
+kind = "medium"
 
 [[tides]]
 name = "Celestial Reverie Combo"
 color = "#a58627"
+kind = "large"
 
 [[tides]]
 name = "Celestial Reverie Combo Splash"
 color = "#d3b969"
+kind = "medium"
 
 [[tides]]
 name = "Cheap Characters"
 color = "#94a527"
+kind = "large"
 
 [[tides]]
 name = "Cheap Characters Splash"
 color = "#c5d369"
+kind = "medium"
 
 [[tides]]
 name = "Cindermarch / Shadow Soloist Combo"
 color = "#66a527"
+kind = "large"
 
 [[tides]]
 name = "Cindermarch / Shadow Soloist Combo Splash"
 color = "#9ed369"
+kind = "medium"
 
 [[tides]]
 name = "Discard / Madness"
 color = "#36a527"
+kind = "large"
 
 [[tides]]
 name = "Discard / Madness Splash"
 color = "#75d369"
+kind = "medium"
 
 [[tides]]
 name = "Events"
 color = "#27a546"
+kind = "large"
 
 [[tides]]
 name = "Events Splash"
 color = "#69d383"
+kind = "medium"
 
 [[tides]]
 name = "Fading Farewell"
 color = "#27a577"
+kind = "large"
 
 [[tides]]
 name = "Fading Farewell Splash"
 color = "#69d3ac"
+kind = "medium"
 
 [[tides]]
 name = "Outsiders"
 color = "#27a5a5"
+kind = "large"
 
 [[tides]]
 name = "Outsiders Splash"
 color = "#69d3d3"
+kind = "medium"
 
 [[tides]]
 name = "Reclaim Combo"
 color = "#2775a5"
+kind = "large"
 
 [[tides]]
 name = "Reclaim Combo Splash"
 color = "#69abd3"
+kind = "medium"
 
 [[tides]]
 name = "Spirit Animals"
 color = "#2746a5"
+kind = "large"
 
 [[tides]]
 name = "Spirit Animals Splash"
 color = "#6983d3"
+kind = "medium"
 
 [[tides]]
 name = "Storm"
 color = "#3827a5"
+kind = "large"
 
 [[tides]]
 name = "Storm Splash"
 color = "#7769d3"
+kind = "medium"
 
 [[tides]]
 name = "Survivors"
 color = "#6627a5"
+kind = "large"
 
 [[tides]]
 name = "Survivors Splash"
 color = "#9e69d3"
+kind = "medium"
 
 [[tides]]
 name = "Wake the Fallen / Shadow March Combo"
 color = "#9627a5"
+kind = "large"
 
 [[tides]]
 name = "Wake the Fallen / Shadow March Combo Splash"
 color = "#c769d3"
+kind = "medium"
 
 [[tides]]
 name = "Warrior Aggro"
 color = "#a52786"
+kind = "large"
 
 [[tides]]
 name = "Warrior Aggro Splash"
 color = "#d369b9"
+kind = "medium"
 
 [[tides]]
 name = "Warrior Combo"
 color = "#a52755"
+kind = "large"
 
 [[tides]]
 name = "Warrior Combo Splash"
 color = "#d36990"
+kind = "medium"

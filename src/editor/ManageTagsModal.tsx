@@ -6,18 +6,30 @@ import {
   isValidTagColor,
   readableTextColor,
 } from "./tag-color";
-import type { EditorTag } from "./types";
+import type { ManageFacetEntry, TideKind } from "./types";
 
 export interface ManageTagsModalProps {
-  tags: EditorTag[];
+  tags: ManageFacetEntry[];
   usageCounts: Record<string, number>;
   saving: boolean;
   saveError: string | null;
-  onSave: (tags: EditorTag[]) => void;
+  onSave: (tags: ManageFacetEntry[]) => void;
   onClose: () => void;
   /** Singular label for the facet, e.g. "tag" or "tide". */
   noun?: string;
+  /**
+   * When provided, each entry carries a kind chosen from this list and the
+   * modal renders a kind selector per row and on the add row. Absent for the
+   * tag facet, which has no kinds.
+   */
+  kinds?: TideKind[];
 }
+
+const KIND_LABELS: Record<TideKind, string> = {
+  large: "Large",
+  medium: "Medium",
+  small: "Small",
+};
 
 const overlayStyle: CSSProperties = {
   position: "fixed",
@@ -139,15 +151,18 @@ export default function ManageTagsModal({
   onSave,
   onClose,
   noun = "tag",
+  kinds,
 }: ManageTagsModalProps) {
   const title = `Manage ${noun}s`;
-  const [draft, setDraft] = useState<EditorTag[]>(() =>
+  const defaultKind = kinds?.[0];
+  const [draft, setDraft] = useState<ManageFacetEntry[]>(() =>
     tags.map((tag) => ({ ...tag })),
   );
   const [newName, setNewName] = useState("");
   const [newColor, setNewColor] = useState(
     () => DEFAULT_TAG_PALETTE[tags.length % DEFAULT_TAG_PALETTE.length],
   );
+  const [newKind, setNewKind] = useState<TideKind | undefined>(defaultKind);
   const [localError, setLocalError] = useState<string | null>(null);
   const dialogRef = useRef<HTMLDivElement | null>(null);
 
@@ -179,6 +194,12 @@ export default function ManageTagsModal({
     );
   };
 
+  const updateKind = (name: string, kind: TideKind) => {
+    setDraft((current) =>
+      current.map((tag) => (tag.name === name ? { ...tag, kind } : tag)),
+    );
+  };
+
   const removeTag = (name: string) => {
     setDraft((current) => current.filter((tag) => tag.name !== name));
   };
@@ -197,12 +218,30 @@ export default function ManageTagsModal({
       setLocalError("Pick a valid color.");
       return;
     }
-    setDraft((current) => [...current, { name: trimmed, color: newColor }]);
+    setDraft((current) => [
+      ...current,
+      { name: trimmed, color: newColor, ...(newKind ? { kind: newKind } : {}) },
+    ]);
     setNewName("");
     setNewColor(
       DEFAULT_TAG_PALETTE[(draft.length + 1) % DEFAULT_TAG_PALETTE.length],
     );
+    setNewKind(defaultKind);
     setLocalError(null);
+  };
+
+  const kindSelectStyle: CSSProperties = {
+    minHeight: "30px",
+    flex: "0 0 auto",
+    border: "1px solid rgba(247, 241, 223, 0.28)",
+    borderRadius: "6px",
+    background: "#0b1416",
+    color: "#fff7e0",
+    font: "inherit",
+    fontSize: "0.8rem",
+    fontWeight: 700,
+    padding: "0 6px",
+    cursor: "pointer",
   };
 
   return (
@@ -265,6 +304,22 @@ export default function ManageTagsModal({
                   <div style={{ flex: "1 1 auto", minWidth: 0 }}>
                     <TagChip name={tag.name} color={tag.color} />
                   </div>
+                  {kinds ? (
+                    <select
+                      aria-label={`Kind for ${tag.name}`}
+                      value={tag.kind ?? kinds[0]}
+                      onChange={(event) =>
+                        updateKind(tag.name, event.currentTarget.value as TideKind)
+                      }
+                      style={kindSelectStyle}
+                    >
+                      {kinds.map((kind) => (
+                        <option key={kind} value={kind}>
+                          {KIND_LABELS[kind]}
+                        </option>
+                      ))}
+                    </select>
+                  ) : null}
                   <span
                     style={{
                       color: "#9fb0ab",
@@ -329,6 +384,22 @@ export default function ManageTagsModal({
               }}
               style={{ ...textInputStyle, flex: "1 1 auto", minWidth: 0 }}
             />
+            {kinds ? (
+              <select
+                aria-label={`New ${noun} kind`}
+                value={newKind ?? kinds[0]}
+                onChange={(event) =>
+                  setNewKind(event.currentTarget.value as TideKind)
+                }
+                style={kindSelectStyle}
+              >
+                {kinds.map((kind) => (
+                  <option key={kind} value={kind}>
+                    {KIND_LABELS[kind]}
+                  </option>
+                ))}
+              </select>
+            ) : null}
             <button type="button" onClick={addTag} style={buttonStyle("ghost")}>
               Add
             </button>

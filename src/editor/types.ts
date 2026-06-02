@@ -7,13 +7,39 @@ export type EditableCardField =
   | "spark"
   | "rendered-text";
 
+/** The three tide "kinds"; a tide's kind selects which card field holds it. */
+export type TideKind = "large" | "medium" | "small";
+
+/** Card field that holds tides of a given kind. */
+export const TIDE_FIELD_BY_KIND: Record<TideKind, "large-tides" | "medium-tides" | "small-tides"> = {
+  large: "large-tides",
+  medium: "medium-tides",
+  small: "small-tides",
+};
+
+/** Editor-record key holding the tides of a given kind. */
+export const TIDE_RECORD_FIELD_BY_KIND: Record<
+  TideKind,
+  "largeTides" | "mediumTides" | "smallTides"
+> = {
+  large: "largeTides",
+  medium: "mediumTides",
+  small: "smallTides",
+};
+
 /**
  * Card fields the editor can save. Extends the inline-editable scalar fields
  * with `art`, which is edited through the dedicated art-edit modal rather than
- * the inline field flow, and the facet lists `tags` and `tides`, saved through
- * their respective chip controls.
+ * the inline field flow, the `tags` list, and the three per-kind tide lists,
+ * all saved through their respective chip controls.
  */
-export type SavableCardField = EditableCardField | "art" | "tags" | "tides";
+export type SavableCardField =
+  | EditableCardField
+  | "art"
+  | "tags"
+  | "large-tides"
+  | "medium-tides"
+  | "small-tides";
 
 export type EditorFieldValue = string | number;
 
@@ -28,7 +54,12 @@ export interface EditorCardRecord {
   spark: EditorFieldValue;
   "rendered-text": string;
   tags: string[];
-  tides: string[];
+  /** Large-kind tides on this card. */
+  largeTides: string[];
+  /** Medium-kind tides on this card. */
+  mediumTides: string[];
+  /** Small-kind tides on this card. */
+  smallTides: string[];
   /**
    * The Magic: The Gathering card this card is derived from. Surfaced as a
    * hover tooltip in the editor for reference; it is not an editable field and
@@ -43,6 +74,19 @@ export interface EditorCardRecord {
 export interface EditorTag {
   name: string;
   color: string;
+}
+
+/** A registry tide: a tag plus the kind that selects which card field holds it. */
+export interface EditorTide extends EditorTag {
+  kind: TideKind;
+}
+
+/**
+ * A draft registry entry as edited in the Manage tags/tides modal. `kind` is
+ * present for the kinded tide facet and absent for tags.
+ */
+export interface ManageFacetEntry extends EditorTag {
+  kind?: TideKind;
 }
 
 export type EditorTypeFilter = "all" | "character" | "event";
@@ -97,9 +141,16 @@ export interface EditorDisplayState {
   tagEditing: boolean;
   /**
    * When true the grid shows each card's tide chips with add/remove controls,
-   * mirroring tag mode.
+   * scoped to the {@link tideKind} kind: only that kind's chips appear and the
+   * add control offers only tides of that kind.
    */
   tideEditing: boolean;
+  /**
+   * Which tide kind the tide-editing UI operates on. Selecting a kind from the
+   * Tides dropdown turns tide editing on; turning it off leaves the last kind
+   * in place so reopening returns to it.
+   */
+  tideKind: TideKind;
   /**
    * When true the grid enters art-edit mode: clicking a card opens the art crop
    * editor instead of editing inline fields.
@@ -179,11 +230,17 @@ export interface SaveEditorTagRegistryResponse {
 
 export interface SaveEditorCardTidesRequest {
   id: string;
+  kind: TideKind;
   tides: string[];
 }
 
 export interface SaveEditorTideRegistryRequest {
-  tides: EditorTag[];
+  tides: EditorTide[];
+}
+
+export interface SaveEditorTideRegistryResponse {
+  tags: EditorTide[];
+  cards: EditorCardRecord[];
 }
 
 export interface EditorApiClient {
@@ -195,7 +252,7 @@ export interface EditorApiClient {
   saveEditorCardTags(
     request: SaveEditorCardTagsRequest,
   ): Promise<SaveEditorCardFieldResponse>;
-  loadEditorTides(signal?: AbortSignal): Promise<EditorTag[]>;
+  loadEditorTides(signal?: AbortSignal): Promise<EditorTide[]>;
   saveEditorCardTides(
     request: SaveEditorCardTidesRequest,
   ): Promise<SaveEditorCardFieldResponse>;
@@ -207,5 +264,5 @@ export interface EditorApiClient {
   ): Promise<SaveEditorTagRegistryResponse>;
   saveEditorTideRegistry(
     request: SaveEditorTideRegistryRequest,
-  ): Promise<SaveEditorTagRegistryResponse>;
+  ): Promise<SaveEditorTideRegistryResponse>;
 }

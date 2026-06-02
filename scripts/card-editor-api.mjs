@@ -22,9 +22,12 @@ import {
   serializeTagRegistry,
   serializeTideRegistry,
   tagRegistryPathFor,
+  TIDE_CARD_FIELDS,
+  TIDE_KIND_BY_FIELD,
   tideRegistryPathFor,
   validateCardEdit,
   validateTagRegistry,
+  validateTideRegistry,
 } from "./card-editor-data.mjs";
 
 // API-side facet descriptors bind each card taxonomy to its registry endpoint
@@ -33,27 +36,47 @@ import {
 const API_FACETS = {
   tags: {
     field: "tags",
+    cardFields: ["tags"],
+    recordFields: ["tags"],
+    kinded: false,
     basePath: "/api/editor/tags",
     Noun: "Tag",
     noun: "tag",
     invalidRegistryCode: "INVALID_TAG_REGISTRY",
     readRegistry: readTagRegistry,
+    validateRegistry: validateTagRegistry,
     registryPathFor: tagRegistryPathFor,
     serializeRegistry: serializeTagRegistry,
     removeFromCards: removeTagsFromCards,
   },
   tides: {
     field: "tides",
+    cardFields: TIDE_CARD_FIELDS,
+    // Editor-record keys (camelCase) that mirror the kebab card fields.
+    recordFields: ["largeTides", "mediumTides", "smallTides"],
+    kinded: true,
     basePath: "/api/editor/tides",
     Noun: "Tide",
     noun: "tide",
     invalidRegistryCode: "INVALID_TIDE_REGISTRY",
     readRegistry: readTideRegistry,
+    validateRegistry: validateTideRegistry,
     registryPathFor: tideRegistryPathFor,
     serializeRegistry: serializeTideRegistry,
     removeFromCards: removeTidesFromCards,
   },
 };
+
+/** The facet a card field belongs to, or null for non-facet fields. */
+function facetForCardField(field) {
+  if (field === "tags") {
+    return API_FACETS.tags;
+  }
+  if (TIDE_CARD_FIELDS.includes(field)) {
+    return API_FACETS.tides;
+  }
+  return null;
+}
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/cards";
@@ -478,19 +501,24 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
 
   // A card facet (tags, tides) may only reference values that exist in its
   // registry, so the card file never ends up pointing at a value the registry
-  // does not define.
-  if (body.field === "tags" || body.field === "tides") {
-    const facet = API_FACETS[body.field];
-    const registryNames = new Set(
-      facet.readRegistry({ rootDir, cardTomlPath }).map((entry) => entry.name),
-    );
+  // does not define. A tide field additionally requires every value to be a
+  // tide of that field's kind, keeping each card field consistent with the
+  // registry's kind assignment.
+  const fieldFacet = facetForCardField(body.field);
+  if (fieldFacet !== null) {
+    let registry = fieldFacet.readRegistry({ rootDir, cardTomlPath });
+    if (fieldFacet.kinded) {
+      const kind = TIDE_KIND_BY_FIELD[body.field];
+      registry = registry.filter((entry) => entry.kind === kind);
+    }
+    const registryNames = new Set(registry.map((entry) => entry.name));
     const unknown = validation.value.filter((value) => !registryNames.has(value));
     if (unknown.length > 0) {
       errorResponse(
         res,
         400,
         "INVALID_EDIT",
-        `Unknown ${facet.noun}. Create it in Manage ${facet.noun}s first.`,
+        `Unknown ${fieldFacet.noun}. Create it in Manage ${fieldFacet.noun}s first.`,
         { field: body.field, value: unknown },
       );
       return;
@@ -585,7 +613,7 @@ async function handleFacetPut(req, res, rootDir, cardTomlPath, fileSystem, facet
     return;
   }
 
-  const validation = validateTagRegistry(body.tags);
+  const validation = facet.validateRegistry(body.tags);
   if (!validation.ok) {
     errorResponse(res, 400, facet.invalidRegistryCode, validation.message);
     return;
@@ -594,8 +622,10 @@ async function handleFacetPut(req, res, rootDir, cardTomlPath, fileSystem, facet
   const newNames = new Set(validation.tags.map((tag) => tag.name));
   const usedNames = new Set();
   for (const card of readEditorCards({ rootDir, cardTomlPath })) {
-    for (const value of card[facet.field]) {
-      usedNames.add(value);
+    for (const recordField of facet.recordFields) {
+      for (const value of card[recordField]) {
+        usedNames.add(value);
+      }
     }
   }
   const removedUsed = [...usedNames].filter((name) => !newNames.has(name));

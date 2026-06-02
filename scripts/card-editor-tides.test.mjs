@@ -37,7 +37,9 @@ function fixtureToml() {
   return `[[cards]]
 name = "First Card"
 id = "${FIRST_ID}"
-tides = ["event_chain", "discover_toolbox"]
+large-tides = ["event_chain"]
+medium-tides = ["discover_toolbox"]
+small-tides = []
 rendered-text = "Draw a card."
 energy-cost = 1
 card-type = "Event"
@@ -52,7 +54,9 @@ card-number = 1
 [[cards]]
 name = "Second Card"
 id = "${SECOND_ID}"
-tides = ["event_chain"]
+large-tides = ["event_chain"]
+medium-tides = []
+small-tides = []
 rendered-text = "Line two."
 energy-cost = 2
 card-type = "Character"
@@ -67,7 +71,9 @@ card-number = 2
 [[cards]]
 name = "Third Card"
 id = "${THIRD_ID}"
-tides = []
+large-tides = []
+medium-tides = []
+small-tides = []
 rendered-text = "Line three."
 energy-cost = 3
 card-type = "Character"
@@ -92,10 +98,12 @@ function writeFixtureRoot({ withRegistry = false } = {}) {
         "[[tides]]",
         'name = "event_chain"',
         'color = "#ff0000"',
+        'kind = "large"',
         "",
         "[[tides]]",
         'name = "discover_toolbox"',
         'color = "#00ff00"',
+        'kind = "medium"',
         "",
       ].join("\n"),
     );
@@ -130,14 +138,20 @@ afterEach(() => {
 });
 
 describe("tide data model", () => {
-  it("exposes a normalized, deduped tide list on each editor record", () => {
+  it("exposes a normalized, per-kind tide list on each editor record", () => {
     const rootDir = writeFixtureRoot();
     const cards = readEditorCards({ rootDir, cardTomlPath: CARDS_REL_PATH });
 
-    expect(cards.map((card) => card.tides)).toEqual([
-      ["event_chain", "discover_toolbox"],
-      ["event_chain"],
-      [],
+    expect(
+      cards.map((card) => ({
+        large: card.largeTides,
+        medium: card.mediumTides,
+        small: card.smallTides,
+      })),
+    ).toEqual([
+      { large: ["event_chain"], medium: ["discover_toolbox"], small: [] },
+      { large: ["event_chain"], medium: [], small: [] },
+      { large: [], medium: [], small: [] },
     ]);
   });
 
@@ -148,95 +162,107 @@ describe("tide data model", () => {
   });
 });
 
-describe("validateCardEdit for tides", () => {
-  it("accepts and dedupes a string array", () => {
-    expect(validateCardEdit("tides", ["a", "b", "a"])).toMatchObject({
-      ok: true,
-      value: ["a", "b"],
-    });
-    expect(validateCardEdit("tides", [])).toMatchObject({ ok: true, value: [] });
+describe("validateCardEdit for tide fields", () => {
+  it("accepts and dedupes a string array on each kind field", () => {
+    for (const field of ["large-tides", "medium-tides", "small-tides"]) {
+      expect(validateCardEdit(field, ["a", "b", "a"])).toMatchObject({
+        ok: true,
+        value: ["a", "b"],
+      });
+      expect(validateCardEdit(field, [])).toMatchObject({ ok: true, value: [] });
+    }
   });
 
   it("rejects non-arrays, blanks, and non-strings", () => {
-    expect(validateCardEdit("tides", "event_chain").ok).toBe(false);
-    expect(validateCardEdit("tides", ["  "]).ok).toBe(false);
-    expect(validateCardEdit("tides", [3]).ok).toBe(false);
+    expect(validateCardEdit("large-tides", "event_chain").ok).toBe(false);
+    expect(validateCardEdit("medium-tides", ["  "]).ok).toBe(false);
+    expect(validateCardEdit("small-tides", [3]).ok).toBe(false);
   });
 });
 
-describe("patchRenderedCardsToml for tides", () => {
-  it("rewrites the inline tides array preserving valid TOML", () => {
+describe("patchRenderedCardsToml for tide fields", () => {
+  it("rewrites the inline kind array preserving valid TOML", () => {
     const patched = patchRenderedCardsToml(fixtureToml(), {
       cardId: THIRD_ID,
-      field: "tides",
+      field: "large-tides",
       value: ["void_recursion", "event_chain"],
     }).source;
 
     const parsed = parse(patched);
     const third = parsed.cards.find((card) => card.id === THIRD_ID);
-    expect(third.tides).toEqual(["void_recursion", "event_chain"]);
-    expect(patched).toContain('tides = ["void_recursion", "event_chain"]');
+    expect(third["large-tides"]).toEqual(["void_recursion", "event_chain"]);
+    expect(patched).toContain('large-tides = ["void_recursion", "event_chain"]');
   });
 });
 
 describe("readTideRegistry", () => {
-  it("seeds from tides used on cards when no sidecar exists", () => {
+  it("seeds from tides used on cards, keyed to the kind of their field", () => {
     const rootDir = writeFixtureRoot();
     const registry = readTideRegistry({ rootDir, cardTomlPath: CARDS_REL_PATH });
 
-    expect(registry.map((tide) => tide.name).sort()).toEqual([
-      "discover_toolbox",
-      "event_chain",
+    expect(
+      [...registry]
+        .sort((left, right) => left.name.localeCompare(right.name))
+        .map((tide) => ({ name: tide.name, kind: tide.kind })),
+    ).toEqual([
+      { name: "discover_toolbox", kind: "medium" },
+      { name: "event_chain", kind: "large" },
     ]);
     for (const tide of registry) {
       expect(tide.color).toMatch(/^#[0-9a-f]{6}$/u);
     }
   });
 
-  it("prefers sidecar colors and appends unregistered used tides", () => {
+  it("prefers sidecar colors and kinds and appends unregistered used tides", () => {
     const rootDir = writeFixtureRoot({ withRegistry: true });
     const patched = patchRenderedCardsToml(
       readFileSync(join(rootDir, CARDS_REL_PATH), "utf8"),
-      { cardId: THIRD_ID, field: "tides", value: ["void_recursion"] },
+      { cardId: THIRD_ID, field: "large-tides", value: ["void_recursion"] },
     ).source;
     writeFileSync(join(rootDir, CARDS_REL_PATH), patched);
 
     const registry = readTideRegistry({ rootDir, cardTomlPath: CARDS_REL_PATH });
     expect(registry).toEqual([
-      { name: "event_chain", color: "#ff0000" },
-      { name: "discover_toolbox", color: "#00ff00" },
-      { name: "void_recursion", color: defaultTagColor("void_recursion") },
+      { name: "event_chain", color: "#ff0000", kind: "large" },
+      { name: "discover_toolbox", color: "#00ff00", kind: "medium" },
+      {
+        name: "void_recursion",
+        color: defaultTagColor("void_recursion"),
+        kind: "large",
+      },
     ]);
   });
 });
 
 describe("serializeTideRegistry", () => {
-  it("round-trips through the TOML parser under the [[tides]] key", () => {
+  it("round-trips kinds through the TOML parser under the [[tides]] key", () => {
     const tides = [
-      { name: "event_chain", color: "#ff0000" },
-      { name: "discover_toolbox", color: "#00ff00" },
+      { name: "event_chain", color: "#ff0000", kind: "large" },
+      { name: "discover_toolbox", color: "#00ff00", kind: "medium" },
     ];
     const serialized = serializeTideRegistry(tides, {
       cardTomlBasename: "cards_v2.toml",
     });
     expect(serialized).toContain("[[tides]]");
+    expect(serialized).toContain('kind = "medium"');
     expect(parse(serialized).tides).toEqual(tides);
   });
 });
 
 describe("removeTidesFromCards", () => {
-  it("strips removed tides from every card that uses them", () => {
+  it("strips removed tides from every kind field that uses them", () => {
     const next = removeTidesFromCards(fixtureToml(), ["event_chain"]);
     const cards = parse(next).cards;
-    expect(cards.find((card) => card.id === FIRST_ID).tides).toEqual([
-      "discover_toolbox",
-    ]);
-    expect(cards.find((card) => card.id === SECOND_ID).tides).toEqual([]);
+    const first = cards.find((card) => card.id === FIRST_ID);
+    const second = cards.find((card) => card.id === SECOND_ID);
+    expect(first["large-tides"]).toEqual([]);
+    expect(first["medium-tides"]).toEqual(["discover_toolbox"]);
+    expect(second["large-tides"]).toEqual([]);
   });
 });
 
 describe("tide registry API", () => {
-  it("GET seeds the registry from used tides", async () => {
+  it("GET seeds the registry from used tides with their kinds", async () => {
     const rootDir = writeFixtureRoot();
     const origin = await startApi(rootDir);
 
@@ -245,9 +271,13 @@ describe("tide registry API", () => {
       "/api/editor/tides?toml=cards_v2.toml",
     );
     expect(response.status).toBe(200);
-    expect(body.tags.map((tide) => tide.name).sort()).toEqual([
-      "discover_toolbox",
-      "event_chain",
+    expect(
+      [...body.tags]
+        .sort((left, right) => left.name.localeCompare(right.name))
+        .map((tide) => ({ name: tide.name, kind: tide.kind })),
+    ).toEqual([
+      { name: "discover_toolbox", kind: "medium" },
+      { name: "event_chain", kind: "large" },
     ]);
   });
 
@@ -255,7 +285,8 @@ describe("tide registry API", () => {
     const rootDir = writeFixtureRoot();
     const origin = await startApi(rootDir);
 
-    // Keep only discover_toolbox; event_chain is deleted and must be stripped.
+    // Keep only discover_toolbox; event_chain is deleted and must be stripped
+    // from the large-tides field it lives on.
     const { response, body } = await requestJson(
       origin,
       "/api/editor/tides?toml=cards_v2.toml",
@@ -263,7 +294,7 @@ describe("tide registry API", () => {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          tags: [{ name: "discover_toolbox", color: "#00ff00" }],
+          tags: [{ name: "discover_toolbox", color: "#00ff00", kind: "medium" }],
         }),
       },
     );
@@ -272,8 +303,9 @@ describe("tide registry API", () => {
     expect(existsSync(join(rootDir, REGISTRY_REL_PATH))).toBe(true);
     const first = body.cards.find((card) => card.id === FIRST_ID);
     const second = body.cards.find((card) => card.id === SECOND_ID);
-    expect(first.tides).toEqual(["discover_toolbox"]);
-    expect(second.tides).toEqual([]);
+    expect(first.largeTides).toEqual([]);
+    expect(first.mediumTides).toEqual(["discover_toolbox"]);
+    expect(second.largeTides).toEqual([]);
   });
 
   it("PUT rejects an invalid registry", async () => {
@@ -293,10 +325,30 @@ describe("tide registry API", () => {
     expect(response.status).toBe(400);
     expect(body.error.code).toBe("INVALID_TIDE_REGISTRY");
   });
+
+  it("PUT rejects an unknown tide kind", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(
+      origin,
+      "/api/editor/tides?toml=cards_v2.toml",
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tags: [{ name: "event_chain", color: "#ff0000", kind: "huge" }],
+        }),
+      },
+    );
+
+    expect(response.status).toBe(400);
+    expect(body.error.code).toBe("INVALID_TIDE_REGISTRY");
+  });
 });
 
 describe("card tide PATCH", () => {
-  it("assigns a registry tide to a card", async () => {
+  it("assigns a registry tide to its kind field on a card", async () => {
     const rootDir = writeFixtureRoot();
     const origin = await startApi(rootDir);
 
@@ -308,14 +360,14 @@ describe("card tide PATCH", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: THIRD_ID,
-          field: "tides",
+          field: "large-tides",
           value: ["event_chain"],
         }),
       },
     );
 
     expect(response.status).toBe(200);
-    expect(body.card.tides).toEqual(["event_chain"]);
+    expect(body.card.largeTides).toEqual(["event_chain"]);
   });
 
   it("rejects a tide that is not in the registry", async () => {
@@ -330,8 +382,31 @@ describe("card tide PATCH", () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: THIRD_ID,
-          field: "tides",
+          field: "large-tides",
           value: ["nonexistent"],
+        }),
+      },
+    );
+
+    expect(response.status).toBe(400);
+    expect(body.error.code).toBe("INVALID_EDIT");
+  });
+
+  it("rejects assigning a tide to a field of the wrong kind", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    // discover_toolbox is a medium tide, so it cannot be saved to large-tides.
+    const { response, body } = await requestJson(
+      origin,
+      `/api/editor/cards/${THIRD_ID}?toml=cards_v2.toml`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: THIRD_ID,
+          field: "large-tides",
+          value: ["discover_toolbox"],
         }),
       },
     );
