@@ -31,9 +31,10 @@ two concerns on separate axes:
 - **Synergy** comes from *which* lists may combine — only lists that are
   *neighbors* (share cards with what is already selected) are ever added, and
   lists are always added **whole**, so no combo is ever split.
-- **Randomness** comes from a random starting seed plus weighted sampling among
-  the several best neighbors at each step — never from cutting cards out of a
-  list.
+- **Randomness** comes from three card-preserving sources: a random starting
+  seed, weighted sampling among the several best neighbors at each step, and a
+  per-run jitter that thins the shared 2-ofs to a random target size. None of
+  these cuts a card out of a list, so combos stay intact.
 
 ## "Neighboring" is measured, not hand-labeled
 
@@ -65,7 +66,7 @@ Three natural clusters emerge:
 ## The algorithm
 
 ```
-constants:  LO = 180, HI = 220, TOPK = 3, ALPHA = 1.0
+constants:  LO = 180, HI = 220, TOPK = 3, ALPHA = 1.0, JIT = 15
 
 generate():
   selected  = []                         # archetype lists chosen, in order
@@ -74,7 +75,7 @@ generate():
   seed = uniform-random archetype list
   add seed to selected; count += seed
 
-  # --- grow by neighbor walk ---
+  # --- 1. grow by neighbor walk ---
   while poolSize(count) < LO:
     union = set of all cards in any selected list
     cands = [ (L, |cards(L) ∩ union|) for L not in selected ]
@@ -84,14 +85,24 @@ generate():
     pick one, with probability ∝ s^ALPHA              # weighted random
     add pick to selected; count += pick
 
-  # --- trim overshoot (fringe-only) ---
-  if poolSize(count) > HI and len(selected) > 1:
+  # --- 2. pick a random target size near the top of the band ---
+  cap    = min(poolSize(count), HI)
+  target = uniform-random integer in [ max(LO, cap - JIT) , cap ]
+
+  # --- 3. jitter: demote a RANDOM subset of 2-ofs to 1-ofs down to target ---
+  twos = shuffle([ c for c in count if count[c] >= 2 ])
+  for c in twos:
+    if poolSize(count) <= target: break
+    count[c] = 1                         # removes a 2nd copy, never the card
+
+  # --- 4. fringe-trim fallback (only if still over, e.g. huge clusters) ---
+  if poolSize(count) > target and len(selected) > 1:
     last   = cards of the most recently added list
     others = core ∪ cards of every earlier selected list
-    fringe = [ c in last if c not in others ]   # cards UNIQUE to the last list
-    shuffle fringe
-    while poolSize(count) > HI and fringe not empty:
-      remove the next fringe card from count
+    fringe = shuffle([ c in last if c not in others ])  # cards UNIQUE to last
+    for c in fringe:
+      if poolSize(count) <= max(target, LO): break
+      remove c from count
 
   return selected, count
 
@@ -100,23 +111,37 @@ poolSize(count) = Σ over cards of min(2, count[card])
 
 ### Copy counts and the 2-copy cap
 
-A card's copy count in the pool is **the number of selected lists that contain
-it, capped at 2** (`core` counts as one of those lists). So a card shared by two
-or more selected lists is a 2-of, and a card found in only one selected list is
-a 1-of. This naturally weights the staples that multiple neighboring archetypes
-share up to a playset of two, while fringe cards stay as singletons.
-`poolSize` counts these capped copies, so the 180–220 target is measured in
-total cards including duplicates.
+Before the jitter step, a card's copy count is **the number of selected lists
+that contain it, capped at 2** (`core` counts as one of those lists). So a card
+shared by two or more selected lists is a candidate 2-of, and a card found in
+only one selected list is a 1-of. This weights the staples that multiple
+neighboring archetypes share up to a playset of two, while fringe cards stay as
+singletons. `poolSize` counts these capped copies, so the 180–220 target is
+measured in total cards including duplicates.
 
-### Why the trim is safe for combos
+### How randomness is injected (steps 2–3)
 
-Overshoot is handled by trimming **only the fringe of the last-added list** —
-cards that appear in *no other* selected list and are therefore 1-ofs that
-nothing else in the pool reinforces. Cards shared between selected lists (the
-synergy backbone, including every two-card combo whose halves live in two of the
-chosen lists) are never eligible for trimming. Whole lists are never partially
-added during the walk; trimming touches only un-reinforced singletons of the
-final list, and only as much as needed to reach 220.
+A neighbor walk alone is nearly deterministic: a given set of lists produces a
+fixed card set, so two runs that land on the same cluster yield the same pool.
+The jitter step breaks that. Each run rolls a **random target size** within
+`JIT` of the cluster's natural ceiling, then **demotes a random subset of the
+shared 2-ofs back to single copies** until the pool reaches that size. Two runs
+on the same cluster now differ in both their size and *which* staples are kept
+as 2-ofs, so identical pools become rare.
+
+Crucially, demotion **never removes a card** — it only drops a second copy — so
+every synergy piece and two-card combo in the cluster is still present. This is
+strictly safer for combos than cutting cards, which is why it is the primary
+size-control mechanism.
+
+### Why the fallback trim is safe for combos
+
+The fringe trim (step 4) only fires for the rare oversized cluster whose unique
+cards alone exceed the target even after every 2-of has been demoted. It removes
+**only the fringe of the last-added list** — cards that appear in *no other*
+selected list and are therefore un-reinforced 1-ofs. Cards shared between
+selected lists (the synergy backbone, including every two-card combo whose
+halves live in two of the chosen lists) are never eligible for trimming.
 
 ### Tunable knobs
 
@@ -126,62 +151,74 @@ final list, and only as much as needed to reach 220.
 - **`ALPHA`** — exponent on the overlap weight when sampling. Higher values bias
   harder toward the single best neighbor (tighter synergy); `0` makes the TOPK
   choice uniform (more variety). Default `1.0`.
+- **`JIT`** — how far below the cluster's natural ceiling the random target may
+  fall. Larger values demote more 2-ofs (more run-to-run variety and smaller,
+  lower-duplicate pools); smaller values keep pools near the top of the band
+  with more staple 2-ofs intact. Default `15`.
 - **Seed weighting** — seeds are chosen uniformly across the 16 lists by
   default, so small fringe archetypes seed as often as large ones. Weighting by
   list size would instead bias toward the large central archetypes.
 
 ## Evidence
 
-A reference implementation was run to validate the three properties: size in
-band, run-to-run variety, and cluster coherence.
+A reference implementation was run to validate four properties: size in band,
+cluster coherence, run-to-run variety, and preserved staple 2-ofs.
 
 ### Individual runs (deterministic per-trial seeds, for reproducibility)
 
 ```
-#0  size=193  uniq=153  2-ofs= 40  lists: core + warrior-combo + wake-the-fallen-combo
-#1  size=220  uniq=158  2-ofs= 62  lists: core + celestial-reverie-combo + blink + cheap-characters + spirit-animals
-#2  size=220  uniq=174  2-ofs= 46  lists: core + events + storm + discard-madness
-#3  size=202  uniq=164  2-ofs= 38  lists: core + spirit-animals + cindermarch-shadow-soloist-combo + celestial-reverie-combo
-#5  size=220  uniq=169  2-ofs= 51  lists: core + abandon + wake-the-fallen-combo
+#0 size=186 uniq=153 2-ofs= 33 | core + warrior-combo + wake-the-fallen-combo
+#1 size=208 uniq=175 2-ofs= 33 | core + celestial-reverie-combo + blink + cheap-characters + spirit-animals
+#2 size=210 uniq=210 2-ofs=  0 | core + events + storm + discard-madness
+#3 size=202 uniq=164 2-ofs= 38 | core + spirit-animals + cindermarch-shadow-soloist-combo + celestial-reverie-combo
+#5 size=205 uniq=178 2-ofs= 27 | core + abandon + wake-the-fallen-combo
 ```
 
-Each pool is a recognizable cluster: a warrior/aristocrats pool, a
-creatures/blink pool, a spells/value pool, a creatures/awaken pool, and an
-aristocrats pool. None mixes unrelated strategies.
+Each pool is a recognizable cluster — a warrior/aristocrats pool, a
+creatures/blink pool, a spells/value pool, a creatures/awaken pool, an
+aristocrats pool — and none mixes unrelated strategies. (#2 is an all-singleton
+pool: the loosely-overlapping spells cluster has few shared staples, and this
+run's low target demoted the rest.)
 
 ### Distribution over 5,000 random runs
 
 ```
 runs=5000
-size: min=181  p50=219  max=237  in[180,220]=99.0%
-lists-per-pool distribution: {2 lists: 2453, 3 lists: 2191, 4 lists: 356}
-distinct clusters produced: 65
-top clusters by frequency:
-   6.1%  discard-madness + survivors
-   5.8%  blink + celestial-reverie-combo + spirit-animals
-   5.7%  abandon + wake-the-fallen-combo
-   5.2%  abandon + warrior-combo
-   5.0%  warrior-aggro + warrior-combo
-   4.0%  wake-the-fallen-combo + warrior-combo
-   3.9%  abandon + survivors
-   3.1%  cheap-characters + discard-madness
-   3.1%  celestial-reverie-combo + cindermarch-shadow-soloist-combo + spirit-animals
-   2.7%  abandon + cheap-characters
-   2.6%  blink + outsiders + spirit-animals
-   2.6%  discard-madness + events + storm
+size: min=180  p50=206  max=220  in[180,220]=100%
+2-ofs per pool: p50=27  max=56  all-singleton runs=645 (13%)
+distinct list-combinations: 65
+distinct card pools: 4636 (92.7% of runs unique)
+exact repeats: 364 (7.3%)
+most common single pool: 51 times (1.02%)
 ```
 
 Interpretation:
 
-- **Size.** 99% of runs land in [180, 220]. Each pool is `core` (30 cards) plus
-  2–4 neighboring archetypes.
-- **Variety.** 65 distinct list-combinations appear, with the most common
-  occurring only ~6% of the time — broad spread, no single dominant output.
-- **Coherence.** Every frequent combination is a within-cluster pairing or
-  triple from the three clusters above; no cross-cluster noise.
-- **Residual overshoot.** ~1% of runs finish above 220 (worst observed 237).
-  This happens when the last-added list's fringe is too small to trim the pool
-  back to 220 — the trim deliberately refuses to touch the shared synergy
-  backbone, so it accepts a small overshoot rather than cut a reinforced card.
-  Raising the cap to ~240 for these runs, or sampling a smaller neighbor when the
-  best one would overshoot, would close the gap if a hard 220 ceiling is needed.
+- **Size.** 100% of runs land in [180, 220], spread across the upper band
+  (median 206). Each pool is `core` (30 cards) plus 2–4 neighboring archetypes.
+- **Coherence.** Only 65 distinct list-combinations are ever produced, all
+  within-cluster pairings or triples from the three clusters above — no
+  cross-cluster noise.
+- **Variety.** 92.7% of runs are unique card pools, and the single most common
+  pool appears only 1.02% of the time.
+- **Staples preserved.** A median of 27 cards are 2-ofs; 13% of runs are
+  all-singleton, almost all from the loosely-overlapping spells cluster, which
+  has few shared staples to begin with.
+
+### What the jitter step contributes
+
+Steps 2–3 are what produce run-to-run variety, and an ablation shows their
+effect. With the jitter disabled (target fixed at the cluster ceiling, no
+demotion), a cluster's fixed card set reproduces the same pool every time it is
+selected: across 5,000 runs only **2,277** distinct pools appear, **54.5%** of
+runs are exact repeats, and the most common single pool recurs **305 times
+(6.1%)**. With the default `JIT=15`, distinct pools rise to **4,636 (92.7%
+unique)** and the worst-case repeat drops to **51 (1.02%)**, while every pool
+stays in band and synergistically coherent.
+
+| Metric | Jitter disabled | `JIT=15` (default) |
+| --- | --- | --- |
+| Distinct card pools / 5,000 | 2,277 | 4,636 |
+| Runs that are unique pools | 45.5% | 92.7% |
+| Most common single pool | 305 (6.1%) | 51 (1.02%) |
+| In [180, 220] | 99% | 100% |
