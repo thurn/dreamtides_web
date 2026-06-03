@@ -24,6 +24,8 @@ the archetype. Archetypes follow the order in `dreamtides_archetypes.md`.
 
 The 1● "mana dork" that turns a wide board into energy and powers explosive starts.
 
+- MTG: Gaea's Cradle
+
 #### Dreamborne Leviathan
 
 *2● Character — Spirit Animal, 2✦*
@@ -31,6 +33,8 @@ The 1● "mana dork" that turns a wide board into energy and powers explosive st
 > Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal figment.
 
 Each spirit animal you play spawns another, giving the deck its signature board flood.
+
+- MTG: Elvish Warmaster
 
 #### Spiritbound Alpha
 
@@ -40,6 +44,8 @@ Each spirit animal you play spawns another, giving the deck its signature board 
 
 The tribal anthem/finisher that pushes a flooded board through as lethal damage.
 
+- MTG: Elvish Warmaster
+
 #### Spirit Bond
 
 *7● Event*
@@ -47,6 +53,8 @@ The tribal anthem/finisher that pushes a flooded board through as lethal damage.
 > Until end of turn, allied characters gain unstoppable and +X✦ where X is the number of allied characters.
 
 The overrun payoff: unstoppable plus +X✦ scaling with your character count closes the game.
+
+- MTG: Craterhoof Behemoth
 
 ### Outsiders
 
@@ -59,6 +67,8 @@ The overrun payoff: unstoppable plus +X✦ scaling with your character count clo
 
 The cheap engine for the outsider bounce loop that re-buys ▸Materialized triggers and draws when it scores ⍟.
 
+- MTG: Moon-Circuit Hacker
+
 #### Driftrider
 
 *2● Character — Outsider, 2✦*
@@ -68,6 +78,8 @@ The cheap engine for the outsider bounce loop that re-buys ▸Materialized trigg
 
 The workhorse two-drop bouncer that converts every outsider score into foresee + a card.
 
+- MTG: Yuriko, the Tiger's Shadow
+
 #### Thronebound Arbiter
 
 *4● Character — Outsider, 2✦*
@@ -76,6 +88,8 @@ The workhorse two-drop bouncer that converts every outsider score into foresee +
 > When an allied outsider scores ⍟, draw a card.
 
 The top-end bouncer whose ⍟ trigger draws, turning the grind itself into card advantage.
+
+- MTG: Ingenious Infiltrator
 
 ### Warrior Aggro
 
@@ -87,6 +101,8 @@ The top-end bouncer whose ⍟ trigger draws, turning the grind itself into card 
 
 Makes the first warrior each turn cost 3● less, enabling the explosive multi-warrior turns the deck is built on.
 
+- MTG: Mishra's Workshop
+
 #### Sundown Ronin
 
 *4● Character — Warrior, 4✦*
@@ -94,6 +110,8 @@ Makes the first warrior each turn cost 3● less, enabling the explosive multi-w
 > Warriors cost you 1● less.
 
 A global "warriors cost 1● less" that compounds the flood.
+
+- MTG: Lodestone Golem
 
 #### Skyflame Commander
 
@@ -103,6 +121,8 @@ A global "warriors cost 1● less" that compounds the flood.
 
 The Support anthem that scales every supported character with your warrior count.
 
+- MTG: Cranial Plating
+
 #### Nocturne Strummer
 
 *1● Character — Warrior, 1✦*
@@ -111,6 +131,8 @@ The Support anthem that scales every supported character with your warrior count
 > Support – Supported characters have +2✦.
 
 A mobile +2✦ Support body that amplifies the cheap board.
+
+- MTG: Cranial Plating
 
 ### Events
 
@@ -122,6 +144,8 @@ A mobile +2✦ Support body that amplifies the cheap board.
 
 The canonical "when you play an event" payoff, spawning a figment every event.
 
+- MTG: Young Pyromancer
+
 #### The Waking Titan
 
 *3● Character — Ancient, 4✦*
@@ -131,6 +155,8 @@ The canonical "when you play an event" payoff, spawning a figment every event.
 
 Stores ⧗ per event and bounces the enemy board, the marquee events-matter engine.
 
+- MTG: Thing in the Ice // Awoken Horror
+
 #### Somber Flockmaster
 
 *2● Character — Mage, 1✦*
@@ -138,6 +164,8 @@ Stores ⧗ per event and bounces the enemy board, the marquee events-matter engi
 > ▸Dawn: An event in your void with cost less than or equal to this character's ✦ gains reclaim 0● until end of turn.
 
 Recurs events from the void with reclaim, keeping the event chain flowing.
+
+- MTG: Dreadhorde Arcanist
 
 ### Survivors
 
@@ -149,6 +177,8 @@ Recurs events from the void with reclaim, keeping the event chain flowing.
 
 The premier enabler: with another survivor it replays from hand or void for 1●.
 
+- MTG: Gravecrawler
+
 #### Sorrow Watcher
 
 *1● Character — Survivor, 1✦*
@@ -158,6 +188,8 @@ The premier enabler: with another survivor it replays from hand or void for 1●
 
 Makes survivor figments and draws cards as the survivor count climbs.
 
+- MTG: Cryptbreaker
+
 #### Dustborn Veteran
 
 *3● Character — Survivor, 3✦*
@@ -165,6 +197,8 @@ Makes survivor figments and draws cards as the survivor count climbs.
 > When a non-figment allied survivor is dissolved, materialize a 1✦ survivor figment.
 
 Turns survivor deaths into fresh survivors, fueling the recursion engine.
+
+- MTG: Headless Rider
 
 ## Midrange and Value
 
@@ -180,6 +214,8 @@ Turns survivor deaths into fresh survivors, fueling the recursion engine.
 
 The iconic madness card: gains reclaim when discarded *or* eroded and makes a figment on every death.
 
+- MTG: Bridge from Below
+
 #### Part the Veil
 
 *4● Event*
@@ -188,6 +224,8 @@ The iconic madness card: gains reclaim when discarded *or* eroded and makes a fi
 > When you discard this card, it gains reclaim 2● until end of turn.
 
 Erodes for value and gains reclaim when discarded, the archetypal "good to throw away" card.
+
+- MTG: Anje's Ravager
 
 #### Minstrel of Falling Light
 
@@ -198,6 +236,8 @@ Erodes for value and gains reclaim when discarded, the archetypal "good to throw
 
 The discard outlet/draw engine that loots events and scales off the void.
 
+- MTG: Rielle, the Everwise
+
 #### Wheel of the Heavens
 
 *3● Event*
@@ -205,6 +245,8 @@ The discard outlet/draw engine that loots events and scales off the void.
 > Each player shuffles their hand and void into their deck, then draws 5 cards. Banish this card.
 
 The Wheel effect that refills the hand and floods the void in one shot.
+
+- MTG: Timetwister
 
 ### Abandon
 
@@ -217,6 +259,8 @@ The Wheel effect that refills the hand and floods the void in one shot.
 
 The cheap, repeatable abandon outlet that converts fodder into ⍟.
 
+- MTG: Goblin Bombardment
+
 #### Silent Avenger
 
 *3● Character — Visitor, 2✦*
@@ -224,6 +268,8 @@ The cheap, repeatable abandon outlet that converts fodder into ⍟.
 > When a character is dissolved, gain 1⍟.
 
 The premier abandon payoff: every dissolve becomes a point.
+
+- MTG: Blood Artist
 
 #### Obliterator of Worlds
 
@@ -234,6 +280,8 @@ The premier abandon payoff: every dissolve becomes a point.
 
 Stores ⧗ per abandon and turns it into removal.
 
+- MTG: Goblin Bombardment
+
 #### Skull Weaver
 
 *2● Character — Ancient, 2✦*
@@ -241,6 +289,8 @@ Stores ⧗ per abandon and turns it into removal.
 > When an ally leaves play, gain 1⍟.
 
 Gains ⍟ whenever any ally leaves play, rewarding a board built to die.
+
+- MTG: Zulaport Cutthroat
 
 ### Characters with Cost 2● or Less
 
@@ -252,6 +302,8 @@ Gains ⍟ whenever any ally leaves play, rewarding a board built to die.
 
 Lets you replay cheap characters straight from the void, the recursion backbone.
 
+- MTG: Crucible of Worlds
+
 #### Pathwalker
 
 *3● Character — Survivor, 2✦*
@@ -261,6 +313,8 @@ Lets you replay cheap characters straight from the void, the recursion backbone.
 
 A cheap survivor that buys back events and erodes from the void.
 
+- MTG: Life from the Loam
+
 #### Abomination of Memory
 
 *1● Character — Ancient, 1✦*
@@ -268,6 +322,8 @@ A cheap survivor that buys back events and erodes from the void.
 > This character has +4✦ if there are three or more characters with cost 2● or less in your void.
 
 A 1● beater that swells to 5✦ off a void full of cheap characters, the deck's payoff.
+
+- MTG: Elvish Reclaimer
 
 #### Ferryman of the Falls
 
@@ -277,6 +333,8 @@ A 1● beater that swells to 5✦ off a void full of cheap characters, the deck'
 > When a character with cost 2● or less is put into your void, draw a card.
 
 Draws a card whenever a cheap character hits the void and abandons for value, an 8✦ finisher.
+
+- MTG: The Gitrog Monster
 
 ### Blink
 
@@ -289,6 +347,8 @@ Draws a card whenever a cheap character hits the void and abandons for value, an
 
 The cheap, reclaimable rematerialize spell that re-fires a ▸Materialized ability.
 
+- MTG: Ephemerate
+
 #### Starlight Guide
 
 *2● Character — Guide, 2✦*
@@ -296,6 +356,8 @@ The cheap, reclaimable rematerialize spell that re-fires a ▸Materialized abili
 > ▸Challenge: Rematerialize an ally.
 
 A ▸Challenge body that rematerializes an ally on demand.
+
+- MTG: Phelia, Exuberant Shepherd
 
 #### Duskmount
 
@@ -305,6 +367,8 @@ A ▸Challenge body that rematerializes an ally on demand.
 > ☪: Rematerialize an ally. This character gains +1✦.
 
 An awakened engine that rematerializes an ally every turn.
+
+- MTG: Soulherder
 
 ## Combo
 
@@ -319,6 +383,8 @@ An awakened engine that rematerializes an ally every turn.
 
 The unpreventable "for each card you've played this turn" payoff that converts a chain into ⍟.
 
+- MTG: Tendrils of Agony
+
 #### Intermezzo Balladeer
 
 *3● Character — Musician, 2✦*
@@ -326,6 +392,8 @@ The unpreventable "for each card you've played this turn" payoff that converts a
 > When you play a card, gain 1⍟ for each other card you've played this turn.
 
 Gains ⍟ for every card already played as you keep chaining.
+
+- MTG: Aetherflux Reservoir
 
 #### Call of the Lost
 
@@ -336,6 +404,8 @@ Gains ⍟ for every card already played as you keep chaining.
 
 Turns the chain into a wide figment board.
 
+- MTG: Empty the Warrens
+
 #### Echoes of the Journey
 
 *5● Event*
@@ -343,6 +413,8 @@ Turns the chain into a wide figment board.
 > For each card you have played this turn, draw a card with ephemeral. They cost 0● this turn.
 
 Refills the chain for free, drawing a card per card played at 0● each.
+
+- MTG: Mind's Desire
 
 ### Celestial Reverie Combo
 
@@ -354,6 +426,8 @@ Refills the chain for free, drawing a card per card played at 0● each.
 
 Draws a card on each character you play, the namesake refill engine.
 
+- MTG: Glimpse of Nature
+
 #### Luminous Ascent
 
 *2● Event*
@@ -363,6 +437,8 @@ Draws a card on each character you play, the namesake refill engine.
 
 Draws on each materialize, deepening the loop and reclaiming itself.
 
+- MTG: Rite of Harmony
+
 #### Worlds Await
 
 *1● Event*
@@ -370,6 +446,8 @@ Draws on each materialize, deepening the loop and reclaiming itself.
 > If you have no cards in your deck, you win the game.
 
 The deterministic deck-out finisher the combo assembles toward.
+
+- MTG: Thassa's Oracle
 
 ### Warrior Combo
 
@@ -381,6 +459,8 @@ The deterministic deck-out finisher the combo assembles toward.
 
 The abandon outlet that loops warriors into energy.
 
+- MTG: Krark-Clan Ironworks
+
 #### Aftermath Bloom
 
 *2● Event*
@@ -390,6 +470,8 @@ The abandon outlet that loops warriors into energy.
 
 The warrior tutor: abandon a small warrior to dig up and deploy a larger one.
 
+- MTG: Tinker
+
 #### Dreaming Obelisk
 
 *2● Character — Warrior, 2✦*
@@ -397,6 +479,8 @@ The warrior tutor: abandon a small warrior to dig up and deploy a larger one.
 > ☪, Abandon a warrior: Materialize a warrior from your void.
 
 The "welder" that recurs warriors from the void for near-infinite value.
+
+- MTG: Goblin Welder
 
 ### Reclaim Combo
 
@@ -409,6 +493,8 @@ The "welder" that recurs warriors from the void for near-infinite value.
 
 Strips the reclaimed-banish rule so a Reclaim 0● body can be replayed endlessly, and hands out reclaim itself.
 
+- MTG: Anafenza, Kin-Tree Spirit
+
 #### Titan of Forgotten Echoes
 
 *2● Character — Ancient, 1✦*
@@ -416,6 +502,8 @@ Strips the reclaimed-banish rule so a Reclaim 0● body can be replayed endlessl
 > Cards you reclaim are not banished when they leave play.
 
 The redundant copy of that key static.
+
+- MTG: Vizier of Remedies
 
 #### Starrunner
 
@@ -427,6 +515,8 @@ The redundant copy of that key static.
 
 The Reclaim 0● engine body the combo loops for energy.
 
+- MTG: Devoted Druid
+
 ### Wake the Fallen / Shadow March Combo
 
 #### Wake the Fallen
@@ -437,6 +527,8 @@ The Reclaim 0● engine body the combo loops for energy.
 
 Mass-returns every character that dissolved this turn, re-firing all their triggers.
 
+- MTG: Faith's Reward
+
 #### Shadow March
 
 *3● Event*
@@ -445,6 +537,8 @@ Mass-returns every character that dissolved this turn, re-firing all their trigg
 
 The cheap-character variant of that mass return.
 
+- MTG: Second Sunrise
+
 #### Keeper of Forgotten Light
 
 *2● Character — Ancient, 2✦*
@@ -452,6 +546,8 @@ The cheap-character variant of that mass return.
 > When you materialize a non-figment character with cost 2● or less, draw a card with ephemeral.
 
 Draws a card on each cheap materialize, turning the mass return into a card engine.
+
+- MTG: Valakut Exploration
 
 ### Fading Farewell
 
@@ -463,6 +559,8 @@ Draws a card on each cheap materialize, turning the mass return into a card engi
 
 Returns allies to hand as they dissolve, the loop's namesake centerpiece.
 
+- MTG: Enduring Renewal
+
 #### Conduit of Ashes
 
 *0● Character — Spirit Animal, 0✦*
@@ -470,6 +568,8 @@ Returns allies to hand as they dissolve, the loop's namesake centerpiece.
 > Abandon this character: Gain 1●.
 
 The 0● body that, with a free abandon outlet, makes the loop infinite.
+
+- MTG: Lotus Petal
 
 ### Cindermarch / Shadow Soloist Combo
 
@@ -481,6 +581,8 @@ The 0● body that, with a free abandon outlet, makes the loop infinite.
 
 Awakens your whole board on every materialize, going infinite with zero-cost character producers.
 
+- MTG: Intruder Alarm
+
 #### Shadow Soloist
 
 *3● Character — Musician, 3✦*
@@ -489,6 +591,8 @@ Awakens your whole board on every materialize, going infinite with zero-cost cha
 
 Awakens each ally whenever you play an event, the event-driven engine.
 
+- MTG: Jeskai Ascendancy
+
 #### Conduit of Resonance
 
 *4● Character — Super, 3✦*
@@ -496,3 +600,5 @@ Awakens each ally whenever you play an event, the event-driven engine.
 > When you play a character, trigger the '▸Dawn' ability of each other allied character.
 
 Re-triggers every ally's ▸Dawn on each character you play.
+
+- MTG: Intruder Alarm
