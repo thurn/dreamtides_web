@@ -303,6 +303,7 @@ export function setupAssets({
   cardTomlPath = join(DATA_DIR, "tabula", "rendered-cards.toml"),
   cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   dreamcallerTomlPath = join(DATA_DIR, "tabula", "dreamcallers.toml"),
+  dreamcallerV2TomlPath = join(DATA_DIR, "tabula", "dreamcallers_v2.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
   publicDir = PUBLIC_DIR,
   imageCacheDir = IMAGE_CACHE_DIR,
@@ -319,6 +320,7 @@ export function setupAssets({
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
+  const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
 
@@ -385,6 +387,28 @@ export function setupAssets({
   );
   console.log(
     `Wrote ${jsonDreamcallers.length} dreamcallers to dreamcaller-data.json`,
+  );
+
+  // The v2 Dreamcaller identities (`dreamcallers_v2.toml`) drive the standalone
+  // draft test harness. They reuse the same portrait art pool and the same
+  // kebab->camel normalization, and may carry a `draft-archetypes` list that
+  // seeds draft-pool construction for that Dreamcaller.
+  console.log("Parsing dreamcallers_v2.toml...");
+  const dreamcallerV2TomlContent = readFileSync(dreamcallerV2TomlPath, "utf8");
+  const parsedDreamcallersV2 = parse(dreamcallerV2TomlContent);
+  const allDreamcallersV2 = parsedDreamcallersV2.dreamcaller;
+
+  if (!Array.isArray(allDreamcallersV2)) {
+    throw new Error("Expected [[dreamcaller]] array in dreamcallers_v2.toml");
+  }
+
+  const jsonDreamcallersV2 = allDreamcallersV2.map(transformDreamcaller);
+  writeFileSync(
+    dreamcallerV2JsonPath,
+    JSON.stringify(jsonDreamcallersV2, null, 2) + "\n",
+  );
+  console.log(
+    `Wrote ${jsonDreamcallersV2.length} dreamcallers to dreamcallers-v2-data.json`,
   );
 
   console.log("Parsing dreamsigns.toml...");
@@ -488,8 +512,17 @@ export function setupAssets({
   let linkedDreamcallerArt = 0;
   let missingDreamcallerArt = 0;
 
-  for (const dreamcaller of jsonDreamcallers) {
-    const filename = `${dreamcaller.imageNumber}.png`;
+  // Link portraits for both the runtime and v2 draft-test Dreamcallers, keyed by
+  // image number so a portrait shared between the two pools is linked once.
+  const dreamcallerArtByImageNumber = new Map();
+  for (const dreamcaller of [...jsonDreamcallers, ...jsonDreamcallersV2]) {
+    if (!dreamcallerArtByImageNumber.has(dreamcaller.imageNumber)) {
+      dreamcallerArtByImageNumber.set(dreamcaller.imageNumber, dreamcaller.name);
+    }
+  }
+
+  for (const [imageNumber, name] of dreamcallerArtByImageNumber) {
+    const filename = `${imageNumber}.png`;
     const sourcePath = join(dreamcallerArtDir, filename);
     const symlinkPath = join(dreamcallersDir, filename);
 
@@ -498,14 +531,14 @@ export function setupAssets({
       linkedDreamcallerArt++;
     } else {
       console.warn(
-        `  Warning: missing dreamcaller art for ${dreamcaller.name} (${dreamcaller.imageNumber})`,
+        `  Warning: missing dreamcaller art for ${name} (${imageNumber})`,
       );
       missingDreamcallerArt++;
     }
   }
 
   console.log(
-    `Linked ${linkedDreamcallerArt} of ${jsonDreamcallers.length} dreamcaller portraits (${missingDreamcallerArt} missing)`,
+    `Linked ${linkedDreamcallerArt} of ${dreamcallerArtByImageNumber.size} dreamcaller portraits (${missingDreamcallerArt} missing)`,
   );
 
   recreateDir(dreamsignsDir);

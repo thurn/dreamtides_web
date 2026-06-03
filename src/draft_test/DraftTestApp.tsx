@@ -15,13 +15,16 @@ import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
-import { generatePool } from "./color-pool";
-import type { GeneratedPool } from "./color-pool";
+import { buildPoolData, generatePoolFromData } from "./color-pool";
+import type { GeneratedPool, PoolData } from "./color-pool";
 import {
   buildNameIndex,
   loadCardsV2Database,
   resolvePool,
 } from "./cards-v2-database";
+import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
+import type { DraftDreamcaller } from "./dreamcallers-v2-database";
+import { DraftDreamcallerSelect } from "./DraftDreamcallerSelect";
 
 const OFFER_SIZE = 4;
 const DECK_ROW_HEIGHT_PX = 36;
@@ -289,6 +292,7 @@ function FullDeckOverlay({
 }
 
 interface PoolInfo {
+  dreamcaller: string;
   identity: string;
   themes: string[];
   size: number;
@@ -297,19 +301,22 @@ interface PoolInfo {
 }
 
 /**
- * Standalone draft test harness for the experimental `cards_v2` pool. It rolls
- * a fresh color-identity pool on load (refresh to reroll), then offers
- * 4 cards at a time to pick from. The draft never ends: when the pool can no
- * longer fill an offer the multiset is recreated, mirroring the quest draft
- * engine. A left-docked deck rail and a full-deck overlay show what has been
- * drafted.
+ * Standalone draft test harness for the experimental `cards_v2` pool. The
+ * player first picks one of three random v2 Dreamcallers; the chosen
+ * Dreamcaller seeds draft-pool construction. A Dreamcaller with
+ * `draftArchetypes` builds a pool focused on those archetypes, while one
+ * without them rolls the unconstrained random pool. The draft then offers
+ * 4 cards at a time to pick from and never ends: when the pool can no longer
+ * fill an offer the multiset is recreated, mirroring the quest draft engine. A
+ * left-docked deck rail and a full-deck overlay show what has been drafted.
  */
 export default function DraftTestApp() {
-  const [status, setStatus] = useState<"loading" | "ready" | "error">(
-    "loading",
-  );
+  const [status, setStatus] = useState<
+    "loading" | "select" | "ready" | "error"
+  >("loading");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [database, setDatabase] = useState<Map<number, CardData>>(new Map());
+  const [dreamcallers, setDreamcallers] = useState<DraftDreamcaller[]>([]);
   const [poolInfo, setPoolInfo] = useState<PoolInfo | null>(null);
   const [currentOffer, setCurrentOffer] = useState<number[]>([]);
   const [deck, setDeck] = useState<number[]>([]);
@@ -318,49 +325,23 @@ export default function DraftTestApp() {
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
 
   const draftStateRef = useRef<DraftState | null>(null);
+  const poolDataRef = useRef<PoolData | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     void (async () => {
       try {
-        const db = await loadCardsV2Database();
+        const [db, loadedDreamcallers] = await Promise.all([
+          loadCardsV2Database(),
+          loadDreamcallersV2(),
+        ]);
         if (cancelled) return;
 
-        const pool: GeneratedPool = generatePool([...db.values()]);
-        const nameIndex = buildNameIndex(db);
-        const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(
-          pool,
-          nameIndex,
-        );
-        if (unresolvedNames.length > 0) {
-          console.warn(
-            `[draft_test] ${String(unresolvedNames.length)} pool card names had no match in cards_v2: ${unresolvedNames.join(", ")}`,
-          );
-        }
-
-        const draftState: DraftState = {
-          draftPoolCopiesByCard,
-          remainingCopiesByCard: { ...draftPoolCopiesByCard },
-          currentOffer: [],
-          activeSiteId: "draft_test",
-          pickNumber: 1,
-          sitePicksCompleted: 0,
-        };
-        draftStateRef.current = draftState;
-
-        const firstOffer = drawAndSpendUniqueCards(draftState, OFFER_SIZE);
-
+        poolDataRef.current = buildPoolData([...db.values()]);
         setDatabase(db);
-        setPoolInfo({
-          identity: pool.identity,
-          themes: pool.themes,
-          size: pool.size,
-          uniqueCount: pool.counts.size,
-          seed: pool.seed,
-        });
-        setCurrentOffer(firstOffer);
-        setStatus("ready");
+        setDreamcallers(loadedDreamcallers);
+        setStatus("select");
       } catch (error) {
         if (cancelled) return;
         setErrorMessage(error instanceof Error ? error.message : String(error));
@@ -372,6 +353,53 @@ export default function DraftTestApp() {
       cancelled = true;
     };
   }, []);
+
+  const handleSelectDreamcaller = useCallback(
+    (dreamcaller: DraftDreamcaller) => {
+      const poolData = poolDataRef.current;
+      if (!poolData) return;
+
+      const pool: GeneratedPool = generatePoolFromData(
+        poolData,
+        undefined,
+        dreamcaller.draftArchetypes,
+      );
+      const nameIndex = buildNameIndex(database);
+      const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(
+        pool,
+        nameIndex,
+      );
+      if (unresolvedNames.length > 0) {
+        console.warn(
+          `[draft_test] ${String(unresolvedNames.length)} pool card names had no match in cards_v2: ${unresolvedNames.join(", ")}`,
+        );
+      }
+
+      const draftState: DraftState = {
+        draftPoolCopiesByCard,
+        remainingCopiesByCard: { ...draftPoolCopiesByCard },
+        currentOffer: [],
+        activeSiteId: "draft_test",
+        pickNumber: 1,
+        sitePicksCompleted: 0,
+      };
+      draftStateRef.current = draftState;
+
+      const firstOffer = drawAndSpendUniqueCards(draftState, OFFER_SIZE);
+
+      setPoolInfo({
+        dreamcaller: dreamcaller.name,
+        identity: pool.identity,
+        themes: pool.themes,
+        size: pool.size,
+        uniqueCount: pool.counts.size,
+        seed: pool.seed,
+      });
+      setCurrentOffer(firstOffer);
+      setStatus("ready");
+    },
+    [database],
+  );
 
   const offerCards = useMemo(() => {
     const cards = currentOffer
@@ -400,8 +428,17 @@ export default function DraftTestApp() {
   if (status === "loading") {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <p className="text-lg opacity-60">Generating draft pool…</p>
+        <p className="text-lg opacity-60">Loading Dreamcallers…</p>
       </div>
+    );
+  }
+
+  if (status === "select") {
+    return (
+      <DraftDreamcallerSelect
+        dreamcallers={dreamcallers}
+        onSelect={handleSelectDreamcaller}
+      />
     );
   }
 
@@ -477,6 +514,13 @@ export default function DraftTestApp() {
                   data-testid="draft-test-pool-info"
                   className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-[11px] opacity-80"
                 >
+                  <span
+                    data-testid="draft-test-pool-dreamcaller"
+                    className="font-semibold"
+                    style={{ color: "#e2e8f0" }}
+                  >
+                    {poolInfo.dreamcaller}
+                  </span>
                   <span
                     className="rounded px-2 py-0.5 font-bold uppercase tracking-widest"
                     style={{

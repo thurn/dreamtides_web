@@ -178,6 +178,7 @@ function poolSize(counts: Map<string, number>): number {
 function generate(
   rng: () => number,
   { core, archLists, draftLists }: PoolData,
+  seedArchetypes?: readonly string[],
 ): {
   C: Set<string>;
   selected: string[];
@@ -187,15 +188,34 @@ function generate(
     [...draftLists.keys()].map((n) => [n, colorPrefix(n)]),
   );
 
-  // 1. choose a color identity C
-  const k = Number(
-    weightedPick(
-      rng,
-      Object.keys(K_WEIGHTS),
-      Object.values(K_WEIGHTS),
-    ),
+  // A Dreamcaller can seed pool construction with a list of draft archetypes.
+  // We pick one of those archetypes at random, adopt its colors as the identity,
+  // and restrict the walk's color+archetype themes to the listed ones (on-color
+  // mechanic-tide archetypes still join the walk). Only archetypes that exist in
+  // the pool data and carry a color prefix are eligible seeds.
+  const eligibleSeeds = (seedArchetypes ?? []).filter(
+    (a) => draftLists.has(a) && colorPrefix(a) !== "",
   );
-  const C = new Set(shuffle(rng, [...COLORS]).slice(0, k));
+  const seeded = eligibleSeeds.length > 0;
+  const allowedDraft = seeded ? new Set(seedArchetypes) : null;
+
+  // 1. choose a color identity C
+  let C: Set<string>;
+  let seedThemeName: string | null = null;
+  if (seeded) {
+    const seed = eligibleSeeds[Math.floor(rng() * eligibleSeeds.length)];
+    C = new Set([...colorPrefix(seed)]);
+    seedThemeName = `D:${seed}`;
+  } else {
+    const k = Number(
+      weightedPick(
+        rng,
+        Object.keys(K_WEIGHTS),
+        Object.values(K_WEIGHTS),
+      ),
+    );
+    C = new Set(shuffle(rng, [...COLORS]).slice(0, k));
+  }
 
   // 2. on-color draft lists -> legal card pool for this identity
   const onColorDraft = [...draftLists.keys()].filter((n) => {
@@ -215,7 +235,9 @@ function generate(
     }
   }
   for (const n of onColorDraft) {
-    if (n.includes("-")) themes.set(`D:${n}`, draftLists.get(n) ?? new Set());
+    if (!n.includes("-")) continue;
+    if (allowedDraft !== null && !allowedDraft.has(n)) continue;
+    themes.set(`D:${n}`, draftLists.get(n) ?? new Set());
   }
   if (themes.size === 0) {
     for (const n of onColorDraft) {
@@ -233,7 +255,11 @@ function generate(
     }
   };
   const themeNames = [...themes.keys()];
-  addTheme(themeNames[Math.floor(rng() * themeNames.length)]);
+  if (seedThemeName !== null && themes.has(seedThemeName)) {
+    addTheme(seedThemeName);
+  } else {
+    addTheme(themeNames[Math.floor(rng() * themeNames.length)]);
+  }
 
   while (poolSize(counts) < LO) {
     const union = new Set<string>();
@@ -316,18 +342,28 @@ function generate(
 export function generatePool(
   cards: readonly PoolCard[],
   seed?: number,
+  seedArchetypes?: readonly string[],
 ): GeneratedPool {
-  return generatePoolFromData(buildPoolData(cards), seed);
+  return generatePoolFromData(buildPoolData(cards), seed, seedArchetypes);
 }
 
-/** Generate a pool from prebuilt {@link PoolData}. */
+/**
+ * Generate a pool from prebuilt {@link PoolData}. Pass `seedArchetypes` (a
+ * Dreamcaller's `draftArchetypes`) to seed construction from one of those
+ * archetypes; omit it for the unconstrained random pool.
+ */
 export function generatePoolFromData(
   poolData: PoolData,
   seed?: number,
+  seedArchetypes?: readonly string[],
 ): GeneratedPool {
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
-  const { C, selected, counts } = generate(makeRng(resolvedSeed), poolData);
+  const { C, selected, counts } = generate(
+    makeRng(resolvedSeed),
+    poolData,
+    seedArchetypes,
+  );
 
   const capped = new Map<string, number>();
   for (const [card, count] of counts) {

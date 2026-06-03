@@ -1,11 +1,15 @@
 import type { DreamcallerContent } from "../types/content";
 import type { Dreamcaller } from "../types/quest";
 
-/** Pick a stable random offer of Dreamcallers without replacement. */
-export function selectDreamcallerOffer(
-  dreamcallers: readonly DreamcallerContent[],
+/**
+ * Pick a stable random offer of Dreamcallers without replacement. Generic over
+ * the Dreamcaller shape so both the quest start screen (`DreamcallerContent`)
+ * and the draft test harness (`DraftDreamcaller`) can share the selection logic.
+ */
+export function selectDreamcallerOffer<T = DreamcallerContent>(
+  dreamcallers: readonly T[],
   offerSize = 3,
-): DreamcallerContent[] {
+): T[] {
   if (dreamcallers.length < offerSize) {
     throw new Error(
       `Expected at least ${String(offerSize)} Dreamcallers, received ${String(dreamcallers.length)}`,
