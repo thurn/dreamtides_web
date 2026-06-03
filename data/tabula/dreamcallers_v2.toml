@@ -1,0 +1,258 @@
+# Dreamcaller identities — v2 ability set
+# ---------------------------------------
+# Each entry pairs a Dreamcaller's name, title, art, and id with one of the 32
+# v2 abilities. The name and art are carried over from the v1 Dreamcaller whose
+# flavor best fits the new ability. Tides and starting essence are left unset
+# and are assigned separately.
+
+[[dreamcaller]]
+name = "Drusus Calvus"
+title = "Triumphator"
+id = "BDD3A3A7-242C-4D2B-8071-EBE56891A340"
+image-number = "0083"
+rendered-text = "At the start of your first turn, gain 1●."
+
+[[dreamcaller]]
+name = "Threxan"
+title = "the Resounding Wrath"
+id = "B99936CA-97F9-4930-AF5A-FA9EF92557EF"
+image-number = "0025"
+rendered-text = "At the start of your first turn, draw a card."
+
+[[dreamcaller]]
+name = "Vethran"
+title = "Whisperer of Wraiths"
+id = "F0F5449E-01C2-4635-BCE1-76B179FC2108"
+image-number = "0061"
+rendered-text = "3●, X●, ☪: Discover a card with cost X●."
+
+[[dreamcaller]]
+name = "Seld Rakor"
+title = "Standing Orders"
+id = "C72CFD7B-408B-47F6-ADF1-1E486A7E20D3"
+image-number = "0071"
+rendered-text = "At the start of your turn, if there are 3 or more cards in your void, foresee 1."
+
+[[dreamcaller]]
+name = "Ossian"
+title = "the Reckoning Blade"
+id = "B9BF6D4B-907C-4750-B51C-811AFF29DE59"
+image-number = "0022"
+rendered-text = "2●, ☪, Abandon an ally with 1✦: Draw a card."
+
+[[dreamcaller]]
+name = "Kaleth"
+title = "The Dreaming"
+id = "3C4773E4-F8E1-4686-86CB-B407A42489D4"
+image-number = "0026"
+rendered-text = "2●, ☪: Awaken an ally."
+
+[[dreamcaller]]
+name = "Calloway Flint"
+title = "Cutthroat Admiral"
+id = "8A2FCD65-BBA7-459C-A6B0-F0391B9293FD"
+image-number = "0052"
+rendered-text = "❖❖ – 4●, ☪: Draw a card."
+
+[[dreamcaller]]
+name = "Senemhet"
+title = "Lord of the Radiant Court"
+id = "1CC5A88A-134F-42F7-A0AE-95ACE44B3745"
+image-number = "0035"
+rendered-text = "▸Dawn: If you have 5●, gain 1●."
+
+[[dreamcaller]]
+name = "Karev Soltis"
+title = "Breach Respondent"
+id = "9E4862FD-E18C-463E-9D5F-E5D73C29A66F"
+image-number = "0037"
+rendered-text = "Once per turn, when the opponent scores ⍟, draw a card unless the opponent pays 1●."
+
+[[dreamcaller]]
+name = "Tessa"
+title = "Gleaner of Dust"
+id = "BA973428-6D90-4847-B779-CB7E25A5AC84"
+image-number = "0051"
+rendered-text = "When you play your second card in a turn, draw a card, then discard a card."
+
+[[dreamcaller]]
+name = "Serenath Veyl"
+title = "Cantor of the Unreal"
+id = "9E19B3D1-12F2-43C1-9CB1-08DE7CD32E32"
+image-number = "0098"
+rendered-text = "1●, ☪: If you materialized a figment this turn, draw a card."
+
+[[dreamcaller]]
+name = "Korrax"
+title = "Iron Sovereign"
+id = "6029BE40-75B9-4C07-912F-9718B6C5C747"
+image-number = "0003"
+rendered-text = "▸Night: Give an ally +1✦."
+
+[[dreamcaller]]
+name = "Kell Tarn"
+title = "Wreckoner"
+id = "133E22DD-F81B-406D-B4E3-98C346D7FD4E"
+image-number = "0013"
+rendered-text = "Once per turn, if there are 7 or more cards in your void, you may play a character from your void."
+
+[[dreamcaller]]
+name = "Caedryn"
+title = "Shrouded Inquisitor"
+id = "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4"
+image-number = "0112"
+rendered-text = "2●, ☪, Abandon an ally: Materialize a random character with cost 1● higher from your deck."
+
+[[dreamcaller]]
+name = "Kragg"
+title = "Spent-Blood Chieftain"
+id = "16B579FE-C15B-4DF6-8262-D45CE44732AE"
+image-number = "0064"
+rendered-text = "Once per turn, when you abandon an ally, the next character you play this turn costs 2● less."
+
+[[dreamcaller]]
+name = "Vrakmoth"
+title = "Ashbroker"
+id = "86026206-1B11-4F38-A24E-FD3C697F5353"
+image-number = "0087"
+rendered-text = "Once per turn, when you discard a card, draw a card with ephemeral."
+
+[[dreamcaller]]
+name = "Seraveth"
+title = "Twice-Mourned"
+id = "6488452D-4E9E-466C-96DF-716D4EC646B1"
+image-number = "0017"
+rendered-text = "When you play your second character in a turn, a character in your void gains reclaim until end of turn."
+
+[[dreamcaller]]
+name = "Corvath"
+title = "the Salvage-Born"
+id = "B8C1B0AB-0FE6-47D6-B576-0C2231AEB81E"
+image-number = "0044"
+rendered-text = "Once per turn, when you discard a card, it gains reclaim until end of turn."
+
+[[dreamcaller]]
+name = "Kael Voss"
+title = "Recon Commander"
+id = "81954CA0-DA36-49DD-915C-1CCB1B2D7B05"
+image-number = "0007"
+rendered-text = "2●, ☪, Discard a card: Materialize a 1✦ survivor figment."
+
+[[dreamcaller]]
+name = "Vaela"
+title = "Ember Among Remnants"
+id = "60BD584B-5BC8-4EE7-8A98-CBB304EB71AB"
+image-number = "0028"
+rendered-text = "Once per turn, when a card leaves your void, a card in your void gains reclaim until end of turn."
+
+[[dreamcaller]]
+name = "Edran"
+title = "the Invocant"
+id = "5E28154D-770A-4B84-8AAC-9DE44F5D7D02"
+image-number = "0080"
+rendered-text = "❖ – 4●, ☪: Materialize a 1✦ outsider figment."
+
+[[dreamcaller]]
+name = "Zeva"
+title = "the Dredger"
+id = "4D5E3933-7DD6-406B-922D-DD78ACFA044A"
+image-number = "0005"
+rendered-text = "❖❖ – 2●, ☪, Discard a card: An event in your void gains reclaim until end of turn."
+
+[[dreamcaller]]
+name = "Kasane"
+title = "Wearer of the Stolen Face"
+id = "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477"
+image-number = "0060"
+rendered-text = "4●, ☪: Copy the next event you play this turn."
+
+[[dreamcaller]]
+name = "Rael"
+title = "Chain Accelerant"
+id = "84E7020C-7384-4CC3-A20F-AB05F03CC375"
+image-number = "0106"
+rendered-text = "When you play your second event in a turn, foresee 2."
+
+[[dreamcaller]]
+name = "Ovanel"
+title = "Lector of the Receding Rite"
+id = "F6208407-C4E9-42AC-B533-346704F5E39E"
+image-number = "0078"
+rendered-text = "2●, ☪: If you played an event this turn, draw an event."
+
+[[dreamcaller]]
+name = "Yveth Coravel"
+title = "Scion of the Returning Tide"
+id = "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851"
+image-number = "0084"
+rendered-text = "2●, ☪: Return an ally to hand. Its cost is reduced by 1●."
+
+[[dreamcaller]]
+name = "Grath"
+title = "Packmaster"
+id = "94E7C651-25E9-4A62-9DE4-EAF5BA20542C"
+image-number = "0095"
+rendered-text = "4●, ☪: Gain 1● for each allied spirit animal."
+
+[[dreamcaller]]
+name = "Radulf"
+title = "Hegemon of Shattered Thrones"
+id = "3EBABA62-9000-429D-B203-2A5A9724389A"
+image-number = "0045"
+rendered-text = "With 3 or more allied characters, the first character you play each turn costs 1● less."
+
+[[dreamcaller]]
+name = "Demetrios"
+title = "Strategos of the Phalanx"
+id = "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C"
+image-number = "0100"
+rendered-text = "When you play your second character in a turn, draw a card with ephemeral."
+
+[[dreamcaller]]
+name = "Gunnar Deepforge"
+title = "The Hammer's Echo"
+id = "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB"
+image-number = "0108"
+rendered-text = "2●, ☪: Materialize a 0✦ figment copy of the last warrior you played this turn."
+
+[[dreamcaller]]
+name = "Tensho"
+title = "Daimyo of Lacquered Fury"
+id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
+image-number = "0029"
+rendered-text = "When the first card you draw in a turn is a warrior, reduce its cost by 1●."
+
+[[dreamcaller]]
+name = "Valdren"
+title = "Warhost Exemplar"
+id = "91D4C3B5-FD63-480B-9ED5-979109A227BB"
+image-number = "0056"
+rendered-text = "2●, ☪: A warrior in your void gains reclaim until end of turn."
+
+[metadata]
+schema_version = 1
+
+[metadata.rows]
+default_height = 100
+frozen_rows = 1
+
+[[metadata.columns]]
+key = "name"
+width = 220
+bold = true
+
+[[metadata.columns]]
+key = "title"
+width = 220
+
+[[metadata.columns]]
+key = "id"
+width = 140
+
+[[metadata.columns]]
+key = "image-number"
+width = 110
+
+[[metadata.columns]]
+key = "rendered-text"
+width = 420
