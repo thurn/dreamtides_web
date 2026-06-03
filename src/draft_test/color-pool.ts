@@ -31,6 +31,7 @@ export const DEFAULT_POOL_VARIANT: PoolVariant = "default";
 
 // Knobs for the `diverse` variant. Grouped here so tuning is a one-stop edit.
 interface DiverseTuning {
+  seedExponent: number;
   walkExploration: number;
   reachExponent: number;
   themeBudget: number | null;
@@ -38,6 +39,11 @@ interface DiverseTuning {
   fillExponent: number;
 }
 const DIVERSE: DiverseTuning = {
+  // Seed: weight the opening archetype (which sets the color identity) by
+  // 1 / reach^seedExponent, so identities that few archetypes can reach —
+  // notably multi-color ones — are seeded more often. This lifts otherwise
+  // starved multi-color archetypes. 0 = seed uniformly at random.
+  seedExponent: 1,
   // Walk: 1 = always pick the next theme uniformly at random among on-color
   // candidates (kills the rich-get-richer overlap bias); 0 = behave like the
   // default overlap-weighted walk. Values in between mix the two per step.
@@ -558,7 +564,13 @@ function generateDiverse(
     : [...draftLists.keys()].filter(
         (n) => n.includes("-") && colorPrefix(n) !== "",
       );
-  const seed = seedPool[Math.floor(rng() * seedPool.length)];
+  const seed = weightedPick(
+    rng,
+    seedPool,
+    seedPool.map(
+      (a) => 1 / Math.max(1, reach.get(`D:${a}`) ?? 1) ** DIVERSE.seedExponent,
+    ),
+  );
   const C = new Set([...colorPrefix(seed)]);
   const seedThemeName = `D:${seed}`;
 

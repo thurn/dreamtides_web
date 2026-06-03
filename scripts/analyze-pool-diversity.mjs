@@ -1,7 +1,12 @@
-// Analyze draft-pool diversity across many unconstrained (no-Dreamcaller) pools.
+// Analyze draft-pool diversity across the realistic draft-test flow: every pool
+// is gated through a Dreamcaller. Players are offered three random Dreamcallers
+// and pick one, which averages to a uniform draw over all 32, so this rotates
+// uniformly through them — seeding each pool with the chosen Dreamcaller's
+// draft archetypes (the 12 Dreamcallers without archetypes roll the
+// unconstrained pool). Pass `--unconstrained` to instead analyze raw
+// no-Dreamcaller pools.
 //
-// It generates N pools with the shared algorithm (src/draft_test/color-pool.ts)
-// and aggregates how often each card and each theme is selected, how pool size
+// It aggregates how often each card and each theme is selected, how pool size
 // and color identity are distributed, and how a card's inclusion rate tracks
 // its metadata (core flag, number of color lists, number of draft archetypes).
 // The goal is to quantify which cards/archetypes dominate the pool and why.
@@ -10,9 +15,10 @@
 //   node scripts/analyze-pool-diversity.mjs                       # default, 3000 seeds
 //   node scripts/analyze-pool-diversity.mjs --variant diverse
 //   node scripts/analyze-pool-diversity.mjs --compare             # default vs diverse
+//   node scripts/analyze-pool-diversity.mjs --unconstrained       # ignore Dreamcallers
 //   node scripts/analyze-pool-diversity.mjs --seeds 5000 --top 30
 import { buildPoolData, generatePoolFromData } from "../src/draft_test/color-pool.ts";
-import { loadCards } from "./generate-color-pool.mjs";
+import { loadCards, loadDreamcallers } from "./generate-color-pool.mjs";
 
 const DEFAULT_SEEDS = 3000;
 const DEFAULT_TOP = 25;
@@ -35,9 +41,17 @@ const seeds = num(argv, "--seeds", DEFAULT_SEEDS);
 const top = num(argv, "--top", DEFAULT_TOP);
 const compare = argv.includes("--compare");
 const variant = str(argv, "--variant", "default");
+const unconstrained = argv.includes("--unconstrained");
 
 const cards = loadCards();
 const poolData = buildPoolData(cards);
+// Dreamcaller draft-archetype lists to rotate through (undefined == open pool).
+// In `--unconstrained` mode a single null entry generates no-Dreamcaller pools.
+const dreamcallers = loadDreamcallers();
+const seedLists = unconstrained
+  ? [undefined]
+  : dreamcallers.map((d) => d.draftArchetypes);
+const seedFor = (seed) => seedLists[seed % seedLists.length];
 const meta = new Map(
   cards.map((c) => [
     c.name,
@@ -79,7 +93,7 @@ function stats(values) {
   };
 }
 
-/** Run `seeds` pools of `variant` and return aggregate counters. */
+/** Run `seeds` Dreamcaller-gated pools of `variant` and return aggregate counters. */
 function simulate(variant) {
   const inclusion = new Map();
   const copies = new Map();
@@ -88,7 +102,7 @@ function simulate(variant) {
   const sizes = [];
   let totalSlots = 0;
   for (let seed = 0; seed < seeds; seed++) {
-    const pool = generatePoolFromData(poolData, seed, undefined, variant);
+    const pool = generatePoolFromData(poolData, seed, seedFor(seed), variant);
     sizes.push(pool.size);
     identityCount.set(pool.identity, (identityCount.get(pool.identity) ?? 0) + 1);
     for (const t of pool.themes) themeCount.set(t, (themeCount.get(t) ?? 0) + 1);
@@ -142,8 +156,14 @@ function printMetrics(label, m) {
   console.log(`  themes never selected: ${m.themeZero}   below 1%: ${m.themeBelow1} of ${themeUniverse.length}`);
 }
 
+const flow = unconstrained
+  ? "unconstrained (no Dreamcaller)"
+  : `Dreamcaller-gated (uniform over ${seedLists.length})`;
+
 if (compare) {
-  console.log(`# diversity comparison over ${seeds} seeds (lower CoV = more balanced)`);
+  console.log(
+    `# diversity comparison over ${seeds} ${flow} pools (lower CoV = more balanced)`,
+  );
   printMetrics("variant: default", metrics(simulate("default")));
   printMetrics("variant: diverse", metrics(simulate("diverse")));
 } else {
@@ -160,7 +180,7 @@ function detailedReport(variant) {
       ? (copies.get(name) ?? 0) / (inclusion.get(name) ?? 1)
       : 0;
   const avgSize = sizes.reduce((s, x) => s + x, 0) / sizes.length;
-  console.log(`# ${variant} pool diversity over ${seeds} seeds`);
+  console.log(`# ${variant} pool diversity over ${seeds} ${flow} pools`);
   console.log(
     `pool size: avg ${avgSize.toFixed(1)}, min ${Math.min(...sizes)}, max ${Math.max(...sizes)}`,
   );

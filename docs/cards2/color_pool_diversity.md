@@ -5,10 +5,24 @@ This report quantifies how evenly the draft-pool generator
 explains why some cards and themes dominate while others are rare, and proposes
 ways to flatten the distribution.
 
-It is based on simulating **3000 unconstrained pools** (no Dreamcaller seeding)
-with `node scripts/analyze-pool-diversity.mjs --seeds 3000`. The card data is
-the 509-card `cards_v2.toml` set, of which 31 are flagged `core`. Re-running the
-script reproduces every figure below.
+The card data is the 509-card `cards_v2.toml` set, of which 31 are flagged
+`core`. Two distributions matter, and this report uses both:
+
+- **Unconstrained** (no Dreamcaller seeding) — the bare algorithm. The
+  *Root-cause* analysis below uses this to isolate the generator's own biases.
+- **Dreamcaller-gated** — the realistic draft-test flow: every pool is produced
+  by first choosing a Dreamcaller and seeding from its draft archetypes. Players
+  are offered three random Dreamcallers and pick one, which averages to a uniform
+  draw over all 32; the 12 Dreamcallers without archetypes roll the unconstrained
+  pool. The *Results* for the `diverse` variant are measured on this gated
+  distribution, since it is what players actually experience.
+
+Both are reproducible:
+
+```
+node scripts/analyze-pool-diversity.mjs --compare                 # gated, default vs diverse
+node scripts/analyze-pool-diversity.mjs --unconstrained --seeds 3000   # raw algorithm
+```
 
 ## Summary
 
@@ -31,9 +45,16 @@ In a real session a player sees only a handful of pools, so in practice the
 multi-color, or lightly-tagged) feel like fixed categories even though the long
 run is less absolute.
 
-## What the data shows
+## Root cause: what the unconstrained data shows
 
-### Inclusion-rate distribution (3000 pools)
+The figures in this section come from 3000 **unconstrained** pools, to isolate
+the algorithm's own biases. The Dreamcaller-gated flow shows the same skew —
+e.g. default gated card inclusion ranges 1.3%–80.9% with 10 cards below 5%, and
+78 of 142 archetypes are selected under 1% — because gating only restricts which
+archetypes seed each pool; it does not change how the generator weights cards
+within a pool.
+
+### Inclusion-rate distribution (3000 unconstrained pools)
 
 | Inclusion rate | Cards |
 | --- | --- |
@@ -236,13 +257,10 @@ Ordered roughly by impact-to-effort. Each can be evaluated by re-running
 ## Reproducing this analysis
 
 ```
-node scripts/analyze-pool-diversity.mjs --seeds 3000        # full report
+node scripts/analyze-pool-diversity.mjs                     # gated default report
+node scripts/analyze-pool-diversity.mjs --unconstrained     # raw algorithm report
 node scripts/simulate-dreamcaller-pools.mjs --seeds 500     # per-Dreamcaller view
 ```
-
-The Dreamcaller-seeded pools narrow the distribution further within each
-identity, so the effects above apply there too, scoped to the seeding
-Dreamcaller's archetypes.
 
 ## The `diverse` variant
 
@@ -256,13 +274,18 @@ tags confer membership). Each lever maps to a root cause above.
 **Flattening levers**
 
 - **Theme-first identity** — instead of rolling colors first, the identity is
-  taken from a uniformly-chosen color-archetype, so every archetype seeds pools
-  at the same base rate and multi-color identities actually occur (addresses
-  effects 5 and 6).
+  taken from a chosen color-archetype, so every archetype can seed a pool and
+  multi-color identities actually occur (addresses effects 5 and 6). With a
+  Dreamcaller, the seed is drawn from that Dreamcaller's archetypes; otherwise
+  from all color-archetypes.
+- **Inverse-reach seeding** — the opening archetype is weighted by
+  `1 / reach^1`, where *reach* is how many identities it can reach. Multi-color
+  archetypes (which reach few identities) seed more often, so the multi-color
+  identities that their themes need are rolled often enough to lift them out of
+  the tail.
 - **Inverse-reach theme walk** — the walk picks the next theme weighted by
-  `1 / reach^1.5`, where *reach* is how many identities the theme is eligible in.
-  Broadly-eligible mechanic and one-color themes are down-weighted; niche and
-  multi-color themes surface (addresses effect 4).
+  `1 / reach^1.5`. Broadly-eligible mechanic and one-color themes are
+  down-weighted; niche and multi-color themes surface (addresses effect 4).
 - **Theme budget** — a pool draws at most six themes, then fills the rest, so no
   pool is dominated by whichever archetypes happen to be eligible everywhere.
 
@@ -284,38 +307,45 @@ and core cards still seed every pool.
 
 ### Results
 
-Over 3000 unconstrained seeds (`analyze-pool-diversity.mjs --compare`). Lower
+Over 5000 **Dreamcaller-gated** pools — the realistic flow, rotating uniformly
+through all 32 Dreamcallers (`analyze-pool-diversity.mjs --compare`). Lower
 coefficient of variation (CoV) means a flatter, more balanced distribution.
 
 | Metric | default | diverse |
 | --- | --- | --- |
-| Non-core card inclusion CoV | 0.43 | **0.26** |
-| Non-core card inclusion range | 1.5% – 82.9% | **13.6% – 60.4%** |
+| Non-core card inclusion CoV | 0.35 | **0.17** |
+| Non-core card inclusion range | 1.3% – 80.5% | **20.5% – 60.3%** |
 | Non-core cards below 5% | 10 | **0** |
-| Archetype selection CoV | 1.40 | **0.49** |
-| Archetype selection range | 0% – 12.5% | **1.2% – 9.8%** |
-| Archetypes never selected | 16 | **0** |
-| Archetypes below 1% | 85 | **0** |
-| Top-50 cards' share of slots | 25.3% | 22.9% |
+| Archetype selection CoV | 1.22 | **0.54** |
+| Archetype selection range | 0% – 10.1% | **1.0% – 12.5%** |
+| Archetypes never selected | 3 | **0** |
+| Archetypes below 1% | 77 | **0–1** |
+| Top-50 cards' share of slots | 24.2% | 22.4% |
 
-The narrowly-tagged cards that the default variant starves — e.g. *Liminal
-Striker* (`0 color lists / 1 archetype`) — rise from ~1.7% to ~16%. Every
-archetype is now used, and every non-core card appears in at least ~13% of
-pools. The trade-off is coherence: a diverse pool is a few focused archetypes
-plus a broad, evenly-sampled remainder rather than a tight synergy cluster, and
-it carries more 1-ofs (higher unique-card count).
+Under the gated flow every non-core card now appears in at least ~21% of pools
+(up from a 1.3% floor), and every archetype is selected ~1% of the time or more
+(the default starves 77 of 142 below 1%; under `diverse` only the single rarest
+five-color label hovers right at the 1% line). The narrowly-tagged cards the
+default variant buries — e.g. *Liminal Striker* (`0 color lists / 1 archetype`)
+— rise from ~1.7% to the low tens of percent. The trade-off is coherence: a
+diverse pool is a few focused archetypes plus a broad, evenly-sampled remainder
+rather than a tight synergy cluster, and it carries more 1-ofs (higher unique
+count).
+
+The same comparison on raw unconstrained pools (`--compare --unconstrained`)
+is similar: card CoV 0.43 → 0.26, archetype CoV 1.40 → 0.49.
 
 ### Residual limits
 
 Two effects survive and are best addressed in the data, not the algorithm:
 
-- The very rarest cards still bottom out around 13–16%. These are the
-  `0 color lists / 1 archetype` cards; lifting them further means tagging them
-  into more colors/archetypes in `cards_v2.toml`.
+- The rarest cards (the `0 color lists / 1 archetype` ones) sit at the bottom of
+  the ~21–60% gated band. Lifting them to the middle means tagging them into more
+  colors/archetypes in `cards_v2.toml`.
 - Per-archetype balance across color counts is bounded by color structure: a
   four-color archetype needs a four-color pool, which is intrinsically rarer.
-  The variant compresses this to a ~8x top-to-bottom archetype ratio (from
-  effectively unbounded) but cannot erase it.
+  Inverse-reach seeding lifts every archetype above 1% (gated max 12.5%, median
+  ~3.7%) but the higher-color archetypes still cluster toward the lower end.
 
 ### Using, tuning, reverting, or promoting the variant
 
@@ -325,8 +355,9 @@ Two effects survive and are best addressed in the data, not the algorithm:
 - **In tooling:** `node scripts/generate-color-pool.mjs --variant diverse`,
   `node scripts/analyze-pool-diversity.mjs --variant diverse` (or `--compare`).
 - **Tuning:** every knob lives in the `DIVERSE` constant in
-  `src/draft_test/color-pool.ts` (`reachExponent`, `themeBudget`, `inclusionK`,
-  `fillExponent`, `walkExploration`); re-run `--compare` to see the effect.
+  `src/draft_test/color-pool.ts` (`seedExponent`, `reachExponent`, `themeBudget`,
+  `inclusionK`, `fillExponent`, `walkExploration`); re-run `--compare` to see the
+  effect.
 - **Promote to primary:** set `DEFAULT_POOL_VARIANT = "diverse"` in
   `color-pool.ts`. The URL parameter still selects either variant for
   comparison.
