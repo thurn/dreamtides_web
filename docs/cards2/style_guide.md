@@ -300,7 +300,8 @@ same singular/distributive split.
 - **The opponent** is always `the opponent` (never `your opponent` or `each
   opponent`).
 - Ownership is expressed with `ally`/`allied`, never the word `control`. State a
-  condition with `with`: `With 3 allied warriors, draw a card.`
+  board-count condition with `If there are … in play,`: `If there are 3 allied
+  warriors in play, draw a card.`
 
 ---
 
@@ -333,8 +334,9 @@ You may play that card from your void this turn.
 
 ## 11. Conditions and `with cost`
 
-- A leading condition is written `With <condition>,` and the effect follows:
-  `With 3 or more allied characters, reveal the top card of your deck.`
+- A leading condition that counts characters in play is written `If there are
+  <condition> in play,` and the effect follows: `If there are 3 or more allied
+  characters in play, reveal the top card of your deck.`
 - A cost threshold reads `with cost N● or less` (or `or more`): `Return a
   character with cost 2● or less from your void to hand.`
 - An equality threshold spells out the comparison: `with cost less than or equal
