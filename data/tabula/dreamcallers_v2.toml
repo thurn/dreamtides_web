@@ -95,7 +95,7 @@ title = "Wreckoner"
 id = "133E22DD-F81B-406D-B4E3-98C346D7FD4E"
 image-number = "0013"
 rendered-text = "Once per turn, if there are 7 or more cards in your void, you may play a character from your void."
-draft-archetypes = ["b-aristocrats", "b-midrange-reanimator", "b-tempo", "b-weenie", "bg-aristocrats", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "ubg-value-midrange", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbrg-aristocrats", "wubg-value-midrange"]
+draft-archetypes = ["b-aristocrats", "b-midrange-reanimator", "b-tempo", "b-weenie", "bg-aristocrats", "bg-lands-midrange", "bg-lands-soup", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "brg-lands-monsters", "brg-lands-soup", "brg-midrange", "g-big-ramp", "g-lands-soup", "rg-lands-soup", "ubg-ramp", "ubg-value-midrange", "ubr-control", "ubrg-lands-midrange", "ubrg-lands-soup", "ug-lands-midrange", "ug-lands-soup", "ug-ramp", "ug-sneak", "ur-welder", "urg-lands-soup", "w-weenie", "wb-aristocrats", "wb-artifact-control", "wb-weenie", "wbg-midrange", "wbg-value-midrange", "wbrg-aristocrats", "wbrg-lands-soup", "wg-big-ramp", "wg-lands-soup", "wr-artifact-aggro", "wu-artifact-control", "wu-midrange-weenie", "wub-artifact-control", "wubg-lands-soup", "wubg-value-midrange", "wubr-artifact-aggro", "wubrg-lands-soup", "wug-big-ramp", "wug-lands-soup", "wug-value", "wurg-lands-soup"]
 
 [[dreamcaller]]
 name = "Caedryn"
@@ -119,7 +119,7 @@ title = "Ashbroker"
 id = "86026206-1B11-4F38-A24E-FD3C697F5353"
 image-number = "0087"
 rendered-text = "Once per turn, when you discard a card, draw a card with ephemeral."
-draft-archetypes = ["br-aristocrats", "br-madness", "ubr-control", "ubr-storm", "ur-burn", "ur-spellslinger", "ur-storm", "wbr-aristocrats", "wr-aggro", "wubrg-value"]
+draft-archetypes = ["br-aristocrats", "br-madness", "r-aggro", "r-burn", "rg-midrange", "ubr-control", "ubr-storm", "ubrg-storm", "ur-burn", "ur-spellslinger", "ur-storm", "wbr-aristocrats", "wr-aggro", "wr-artifact-aggro", "wr-artifacts", "wubrg-value", "wur-aggro", "wurg-lands-soup"]
 
 [[dreamcaller]]
 name = "Seraveth"
@@ -127,7 +127,7 @@ title = "Twice-Mourned"
 id = "6488452D-4E9E-466C-96DF-716D4EC646B1"
 image-number = "0017"
 rendered-text = "When you play your second character in a turn, a character in your void gains reclaim until end of turn."
-draft-archetypes = ["b-aristocrats", "b-midrange-reanimator", "b-tempo", "b-weenie", "bg-aristocrats", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "ubg-value-midrange", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbrg-aristocrats", "wub-control", "wubg-value-midrange"]
+draft-archetypes = ["b-aristocrats", "b-midrange-reanimator", "b-tempo", "b-weenie", "bg-aristocrats", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "brg-lands-monsters", "brg-midrange", "g-big-ramp", "rg-midrange", "ubg-tempo", "ubg-value-midrange", "ug-ramp", "ug-sneak", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbrg-aristocrats", "wub-control", "wubg-control", "wubg-value-midrange", "wubrg-value", "wug-big-ramp"]
 
 [[dreamcaller]]
 name = "Corvath"
@@ -135,7 +135,7 @@ title = "the Salvage-Born"
 id = "B8C1B0AB-0FE6-47D6-B576-0C2231AEB81E"
 image-number = "0044"
 rendered-text = "Once per turn, when you discard a card, it gains reclaim until end of turn."
-draft-archetypes = ["br-aristocrats", "br-madness", "brg-lands-monsters", "r-aggro", "r-burn", "ub-madness", "ubr-control", "ubr-storm", "ur-spellslinger", "ur-storm", "ur-welder", "wr-aggro"]
+draft-archetypes = ["bg-midrange", "br-aristocrats", "br-madness", "br-welder", "brg-lands-monsters", "r-aggro", "r-burn", "ub-madness", "ubr-control", "ubr-storm", "ur-spellslinger", "ur-storm", "ur-welder", "wb-weenie", "wr-aggro", "wu-artifact-control", "wub-artifact-control", "wubg-value-midrange", "wubrg-value"]
 
 [[dreamcaller]]
 name = "Kael Voss"
@@ -143,7 +143,7 @@ title = "Recon Commander"
 id = "81954CA0-DA36-49DD-915C-1CCB1B2D7B05"
 image-number = "0007"
 rendered-text = "2●, ☪, Discard a card: Materialize a 1✦ survivor figment."
-draft-archetypes = ["b-aristocrats", "b-tempo", "b-weenie", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "ub-reanimator", "ub-tempo", "ubg-tempo", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbr-aristocrats", "wbrg-aristocrats", "wub-control", "wubrg-value"]
+draft-archetypes = ["b-aristocrats", "b-tempo", "b-weenie", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "brg-midrange", "ub-reanimator", "ub-tempo", "ubg-tempo", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbr-aristocrats", "wbrg-aristocrats", "wub-control", "wubrg-value"]
 
 [[dreamcaller]]
 name = "Vaela"
@@ -159,7 +159,7 @@ title = "the Invocant"
 id = "5E28154D-770A-4B84-8AAC-9DE44F5D7D02"
 image-number = "0080"
 rendered-text = "❖ – 4●, ☪: Materialize a 1✦ outsider figment."
-draft-archetypes = ["b-aristocrats", "b-tempo", "b-weenie", "br-aristocrats", "brg-midrange", "ub-reanimator", "ub-storm", "ub-tempo", "ubg-tempo", "ubg-value-midrange", "ubr-control", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbrg-aristocrats", "wub-control", "wubg-value-midrange", "wubrg-value"]
+draft-archetypes = ["b-aristocrats", "b-tempo", "b-weenie", "br-aristocrats", "brg-midrange", "ub-reanimator", "ub-storm", "ub-tempo", "ubg-tempo", "ubg-value-midrange", "ubr-control", "ubr-storm", "ubrg-lands-soup", "ug-ramp", "ug-sneak", "ur-welder", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbrg-aristocrats", "wu-control", "wub-control", "wubg-value-midrange", "wubrg-value", "wug-value"]
 
 [[dreamcaller]]
 name = "Zeva"
@@ -167,7 +167,7 @@ title = "the Dredger"
 id = "4D5E3933-7DD6-406B-922D-DD78ACFA044A"
 image-number = "0005"
 rendered-text = "❖❖ – 2●, ☪, Discard a card: An event in your void gains reclaim until end of turn."
-draft-archetypes = ["br-madness", "br-storm", "u-storm", "ub-madness", "ub-storm", "ub-tempo", "ubr-control", "ubr-storm", "ur-burn", "ur-spellslinger", "ur-storm", "urg-storm", "wu-control", "wub-control", "wubrg-value"]
+draft-archetypes = ["br-madness", "br-storm", "u-artifacts", "u-big-mana-artifacts", "u-storm", "ub-madness", "ub-reanimator", "ub-storm", "ub-tempo", "ubr-control", "ubr-storm", "ug-ramp", "ur-burn", "ur-spellslinger", "ur-storm", "urg-lands-soup", "urg-storm", "wu-artifact-control", "wu-blink", "wu-control", "wub-artifact-control", "wub-control", "wubg-lands-soup", "wubr-artifact-aggro", "wubrg-value", "wug-value", "wur-aggro", "wurg-artifacts"]
 
 [[dreamcaller]]
 name = "Kasane"
@@ -175,7 +175,7 @@ title = "Wearer of the Stolen Face"
 id = "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477"
 image-number = "0060"
 rendered-text = "4●, ☪: Copy the next event you play this turn."
-draft-archetypes = ["br-aristocrats", "br-storm", "ubr-storm", "ubrg-storm", "ur-burn", "ur-spellslinger", "ur-storm", "urg-storm", "wubrg-value", "wur-control"]
+draft-archetypes = ["br-aristocrats", "br-storm", "brg-midrange", "u-storm", "ubr-storm", "ubrg-storm", "ur-burn", "ur-spellslinger", "ur-storm", "urg-lands-soup", "urg-storm", "wr-aggro", "wubrg-value", "wur-control"]
 
 [[dreamcaller]]
 name = "Rael"
@@ -183,7 +183,7 @@ title = "Chain Accelerant"
 id = "84E7020C-7384-4CC3-A20F-AB05F03CC375"
 image-number = "0106"
 rendered-text = "When you play your second event in a turn, foresee 2."
-draft-archetypes = ["br-storm", "ub-storm", "ubr-control", "ubr-storm", "ubrg-storm", "ur-burn", "ur-control", "ur-spellslinger", "ur-storm", "urg-storm", "wu-control", "wur-control"]
+draft-archetypes = ["br-aristocrats", "br-storm", "r-aggro", "r-burn", "r-welder", "ub-storm", "ubr-control", "ubr-storm", "ubrg-storm", "ur-burn", "ur-control", "ur-spellslinger", "ur-storm", "ur-welder", "urg-storm", "wbr-aristocrats", "wr-aggro", "wu-control", "wubr-artifact-aggro", "wur-aggro", "wur-control"]
 
 [[dreamcaller]]
 name = "Ovanel"
@@ -199,7 +199,7 @@ title = "Scion of the Returning Tide"
 id = "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851"
 image-number = "0084"
 rendered-text = "2●, ☪: Return an ally to hand. Its cost is reduced by 1●."
-draft-archetypes = ["b-tempo", "ub-tempo", "ubg-tempo", "ubg-value-midrange", "ubr-control", "wu-blink", "wu-control", "wub-control", "wubg-control", "wubg-value-midrange", "wubrg-value", "wug-value"]
+draft-archetypes = ["b-tempo", "bg-big-ramp", "bg-lands-midrange", "bg-midrange", "g-big-ramp", "g-lands-soup", "ub-tempo", "ubg-ramp", "ubg-tempo", "ubg-value-midrange", "ubr-control", "ug-big-ramp", "ug-lands-midrange", "ug-ramp", "ug-sneak", "urg-lands-soup", "w-artifact-control", "w-weenie", "wb-artifact-control", "wb-weenie", "wbg-value-midrange", "wbrg-lands-soup", "wg-big-ramp", "wg-lands-soup", "wg-midrange", "wg-ramp", "wr-aggro", "wu-artifact-control", "wu-blink", "wu-control", "wu-midrange-weenie", "wub-artifact-control", "wub-control", "wubg-big-ramp", "wubg-control", "wubg-lands-soup", "wubg-ramp", "wubg-value", "wubg-value-midrange", "wubrg-value", "wug-lands-soup", "wug-value", "wur-artifacts", "wurg-lands-soup"]
 
 [[dreamcaller]]
 name = "Grath"
@@ -207,7 +207,7 @@ title = "Packmaster"
 id = "94E7C651-25E9-4A62-9DE4-EAF5BA20542C"
 image-number = "0095"
 rendered-text = "4●, ☪: Gain 1● for each allied spirit animal."
-draft-archetypes = ["bg-big-ramp", "bg-lands-midrange", "bg-midrange", "brg-midrange", "g-big-ramp", "g-ramp", "rg-lands-soup", "ug-big-ramp", "ug-lands-soup", "ug-ramp", "wbrg-lands-soup", "wg-big-ramp", "wg-midrange", "wg-ramp", "wubg-big-ramp", "wubg-ramp", "wubrg-value", "wurg-lands-soup"]
+draft-archetypes = ["bg-big-ramp", "bg-lands-midrange", "bg-midrange", "brg-midrange", "g-big-ramp", "g-lands-soup", "g-ramp", "rg-lands-soup", "ubrg-lands-soup", "ug-big-ramp", "ug-lands-soup", "ug-ramp", "wbrg-lands-soup", "wg-big-ramp", "wg-midrange", "wg-ramp", "wubg-big-ramp", "wubg-lands-soup", "wubg-ramp", "wubrg-value", "wug-big-ramp", "wurg-lands-soup"]
 
 [[dreamcaller]]
 name = "Radulf"
@@ -215,7 +215,7 @@ title = "Hegemon of Shattered Thrones"
 id = "3EBABA62-9000-429D-B203-2A5A9724389A"
 image-number = "0045"
 rendered-text = "If there are 3 or more allied characters in play, the first character you play each turn costs 1● less."
-draft-archetypes = ["w-weenie", "wb-weenie", "wbg-midrange", "wbg-weenie", "wbr-aristocrats", "wg-midrange", "wg-value-midrange", "wr-aggro", "wr-vanguard", "wr-warriors", "wu-midrange-weenie", "wu-weenie", "wubg-value-midrange", "wubrg-value"]
+draft-archetypes = ["bg-big-ramp", "bg-midrange", "brg-lands-midrange", "brg-midrange", "g-big-ramp", "g-lands-soup", "g-ramp", "rg-lands-soup", "rg-midrange", "ubg-value-midrange", "ubrg-storm", "ug-big-ramp", "ug-ramp", "ug-sneak", "w-weenie", "wb-weenie", "wbg-midrange", "wbg-weenie", "wbr-aristocrats", "wbrg-lands-soup", "wg-big-ramp", "wg-midrange", "wg-value-midrange", "wr-aggro", "wr-vanguard", "wr-warriors", "wu-artifact-control", "wu-midrange-weenie", "wu-weenie", "wubg-lands-soup", "wubg-value-midrange", "wubrg-value", "wug-value", "wurg-artifacts", "wurg-lands-soup"]
 
 [[dreamcaller]]
 name = "Demetrios"
@@ -223,7 +223,7 @@ title = "Strategos of the Phalanx"
 id = "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C"
 image-number = "0100"
 rendered-text = "When you play your second character in a turn, draw a card with ephemeral."
-draft-archetypes = ["w-weenie", "wb-value", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wg-midrange", "wg-value-midrange", "wu-midrange-weenie", "wu-weenie", "wubg-value", "wubrg-value", "wug-value"]
+draft-archetypes = ["bg-big-ramp", "bg-lands-midrange", "bg-midrange", "brg-midrange", "g-big-ramp", "g-lands-soup", "ubg-ramp", "ubg-value-midrange", "ug-ramp", "ug-sneak", "urg-lands-soup", "w-weenie", "wb-value", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbrg-aristocrats", "wbrg-lands-soup", "wg-big-ramp", "wg-lands-soup", "wg-midrange", "wg-ramp", "wg-value-midrange", "wu-midrange-weenie", "wu-weenie", "wubg-value", "wubrg-value", "wug-big-ramp", "wug-value", "wurg-lands-soup"]
 
 [[dreamcaller]]
 name = "Gunnar Deepforge"
@@ -231,7 +231,7 @@ title = "The Hammer's Echo"
 id = "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB"
 image-number = "0108"
 rendered-text = "2●, ☪: Materialize a 0✦ figment copy of the last warrior you played this turn."
-draft-archetypes = ["u-artifacts", "ur-artifacts", "w-artifact-aggro", "w-artifact-control", "w-weenie", "wb-weenie", "wbg-weenie", "wr-aggro", "wr-artifact-aggro", "wr-artifacts", "wr-vanguard", "wr-warriors", "wu-artifact-control", "wu-midrange-weenie", "wu-weenie", "wub-artifact-control", "wubg-artifact-control", "wubr-artifact-aggro", "wur-artifact-aggro", "wur-artifacts"]
+draft-archetypes = ["br-welder", "r-aggro", "r-burn", "u-artifact-control", "u-artifacts", "u-big-mana-artifacts", "u-control", "ub-tempo", "ubr-control", "ubr-storm", "ug-cheaty-ramp", "ug-ramp", "ur-academy", "ur-artifacts", "ur-burn", "ur-control", "ur-spellslinger", "ur-storm", "ur-welder", "urg-artifact-control", "w-artifact-aggro", "w-artifact-control", "w-weenie", "wb-weenie", "wbg-weenie", "wr-aggro", "wr-artifact-aggro", "wr-artifacts", "wr-vanguard", "wr-warriors", "wu-academy", "wu-artifact-control", "wu-artifacts", "wu-midrange-weenie", "wu-weenie", "wub-artifact-control", "wub-control", "wubg-artifact-control", "wubr-artifact-aggro", "wubrg-lands-midrange", "wubrg-value", "wug-value", "wur-artifact-aggro", "wur-artifacts", "wurg-artifacts"]
 
 [[dreamcaller]]
 name = "Tensho"
@@ -239,7 +239,7 @@ title = "Daimyo of Lacquered Fury"
 id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 image-number = "0029"
 rendered-text = "When the first card you draw in a turn is a warrior, reduce its cost by 1●."
-draft-archetypes = ["wr-aggro", "wr-vanguard", "wr-warriors", "wur-aggro"]
+draft-archetypes = ["u-artifacts", "u-welder", "ub-storm", "ubg-value-midrange", "ubr-storm", "ubr-welder", "ur-artifacts", "ur-storm", "ur-welder", "urg-artifact-control", "w-artifact-aggro", "wr-aggro", "wr-artifacts", "wr-vanguard", "wr-warriors", "wu-artifact-control", "wu-artifacts", "wu-weenie", "wub-artifact-control", "wub-control", "wubg-control", "wubr-welder", "wur-aggro", "wur-artifacts", "wurg-artifacts"]
 
 [[dreamcaller]]
 name = "Valdren"
@@ -247,7 +247,7 @@ title = "Warhost Exemplar"
 id = "91D4C3B5-FD63-480B-9ED5-979109A227BB"
 image-number = "0056"
 rendered-text = "2●, ☪: A warrior in your void gains reclaim until end of turn."
-draft-archetypes = ["wbg-weenie", "wbr-aristocrats", "wbrg-aristocrats", "wr-aggro", "wr-vanguard", "wr-warriors", "wubg-value", "wubrg-value", "wug-value", "wur-aggro"]
+draft-archetypes = ["u-artifacts", "u-welder", "ub-storm", "ubg-value-midrange", "ubr-storm", "ubr-welder", "ur-artifacts", "ur-storm", "ur-welder", "urg-artifact-control", "w-academy", "w-artifact-aggro", "w-artifact-control", "w-weenie", "wb-value", "wb-weenie", "wbg-weenie", "wbr-aristocrats", "wbrg-aristocrats", "wr-aggro", "wr-artifact-aggro", "wr-artifacts", "wr-vanguard", "wr-warriors", "wu-artifact-control", "wu-artifacts", "wu-weenie", "wub-artifact-control", "wub-control", "wubg-control", "wubg-value", "wubr-welder", "wubrg-value", "wug-value", "wur-aggro", "wur-artifacts", "wurg-artifacts"]
 
 [metadata]
 schema_version = 1
