@@ -1,0 +1,213 @@
+37 Time Walk
+31 Ancestral Recall
+29 Black Lotus
+27 Mana Crypt
+27 Tinker
+26 Mox Ruby
+25 Mana Drain
+25 Sol Ring
+24 Tolarian Academy
+23 Mox Sapphire
+22 Strip Mine
+20 Lightning Bolt
+19 Mox Emerald
+19 Mox Jet
+19 Mox Pearl
+19 Urza, Lord High Artificer
+19 Wheel of Fortune
+18 Aluren
+17 Earthcraft
+17 Solitude
+16 Swords to Plowshares
+15 High Tide
+15 Stoneforge Mystic
+15 Timetwister
+14 Birds of Paradise
+14 Demonic Tutor
+14 Force of Will
+14 Lion's Eye Diamond
+14 Mox Diamond
+13 Mana Vault
+13 Monument to Endurance
+13 Time Spiral
+12 Lurrus of the Dream-Den
+12 Skullclamp
+12 Yawgmoth's Will
+11 Brain Freeze
+11 Gaea's Cradle
+11 Glimpse of Nature
+11 Intruder Alarm
+11 Rofellos, Llanowar Emissary
+11 Scalding Tarn
+11 Thoughtseize
+10 Chrome Mox
+10 Fastbond
+10 Inti, Seneschal of the Sun
+10 Mishra's Workshop
+10 Noble Hierarch
+9 Mox Opal
+9 Priest of Titania
+8 Craterhoof Behemoth
+8 Krark-Clan Ironworks
+8 Misty Rainforest
+8 Phelia, Exuberant Shepherd
+8 Vampiric Tutor
+7 Collected Company
+7 Counterspell
+7 Flooded Strand
+7 Polluted Delta
+7 Survival of the Fittest
+7 Tendrils of Agony
+6 Arcbound Ravager
+6 Snapcaster Mage
+6 Soulherder
+5 Dark Ritual
+5 Esper Sentinel
+5 Hogaak, Arisen Necropolis
+5 Jeskai Ascendancy
+5 Ledger Shredder
+5 Thalia, Guardian of Thraben
+5 Volcanic Island
+4 Ancient Grudge
+4 Anger
+4 Chandra, Acolyte of Flame
+4 Chatterfang, Squirrel General
+4 Exploration
+4 Faerie Seer
+4 Field of the Dead
+4 Ignoble Hierarch
+4 Insidious Roots
+4 Jace, Vryn's Prodigy // Jace, Telepath Unbound
+4 Korvold, Fae-Cursed King
+4 Lotus Petal
+4 Remand
+4 Smuggler's Copter
+4 Torens, Fist of the Angels
+4 Yuriko, the Tiger's Shadow
+3 Basking Rootwalla
+3 Bazaar of Baghdad
+3 Deathrite Shaman
+3 Enduring Renewal
+3 Faithless Looting
+3 Goblin Welder
+3 Gravecrawler
+3 Jetmir's Garden
+3 Master of Death
+3 Mayhem Devil
+3 Phyrexian Altar
+3 Ponder
+3 Reflector Mage
+3 Six
+3 Squandered Resources
+3 Thassa's Oracle
+3 The Meathook Massacre
+3 Tropical Island
+3 Undead Butler
+3 Underground Sea
+3 Windswept Heath
+3 Young Pyromancer
+2 Arid Mesa
+2 Baloth Prime
+2 Bloodstained Mire
+2 Cranial Plating
+2 Dark Confidant
+2 Dreadhorde Arcanist
+2 Elvish Warmaster
+2 Emry, Lurker of the Loch
+2 Flare of Duplication
+2 Force of Negation
+2 Formidable Speaker
+2 Gilded Goose
+2 Indatha Triome
+2 Ineffable Blessing
+2 Izzet Charm
+2 Junk Diver
+2 Lonis, Cryptozoologist
+2 Magmatic Insight
+2 Mana Leak
+2 Night's Whisper
+2 Pest Infestation
+2 Preordain
+2 Priest of Forgotten Gods
+2 Prismatic Vista
+2 Punishing Fire
+2 Recruiter of the Guard
+2 Retrofitter Foundry
+2 Rielle, the Everwise
+2 Rite of Harmony
+2 Samwise Gamgee
+2 Slogurk, the Overslime
+2 Spirited Companion
+2 Sword of the Meek
+2 The Gitrog Monster
+2 Thopter Foundry
+2 Vengevine
+2 Vibrance
+2 Zombie Infestation
+1 Abrade
+1 Agatha's Soul Cauldron
+1 Anax, Hardened in the Forge
+1 Arcum's Astrolabe
+1 Arwen, Weaver of Hope
+1 Bayou
+1 Birgi, God of Storytelling // Harnfel, Horn of Bounty
+1 Blast from the Past
+1 Bloodsoaked Champion
+1 Brainstorm
+1 Bridge from Below
+1 Chain Lightning
+1 Chromatic Sphere
+1 Consider
+1 Crucible of Worlds
+1 Cruel Celebrant
+1 Desperate Ritual
+1 Devoted Druid
+1 Dreams of Steel and Oil
+1 Echo of Eons
+1 Elves of Deep Shadow
+1 Elvish Mystic
+1 Elvish Reclaimer
+1 Emeritus of Truce // Swords to Plowshares
+1 Encouraging Aviator // Jump
+1 Eternal Witness
+1 Fecundity
+1 Fiery Confluence
+1 Fyndhorn Elves
+1 Gau, Feral Youth
+1 Goblin Engineer
+1 Gush
+1 Heritage Druid
+1 Impractical Joke
+1 Ingenious Smith
+1 Inkshape Demonstrator
+1 Joraga Treespeaker
+1 Life from the Loam
+1 Living Twister
+1 Llanowar Elves
+1 Llanowar Visionary
+1 Luminarch Aspirant
+1 Marauding Mako
+1 Marsh Flats
+1 Masked Vandal
+1 Memnite
+1 Midnight Reaper
+1 Mindful Biomancer
+1 Molten Gatekeeper
+1 Oust
+1 Paradoxical Outcome
+1 Path to Exile
+1 Phyrexian Revoker
+1 Pull from the Grave
+1 Rally the Ancestors
+1 Sai, Master Thopterist
+1 Scryb Ranger
+1 Second Sunrise
+1 Snuff Out
+1 Spawning Pit
+1 Spiritcall Enthusiast // Scrollboost
+1 Springleaf Drum
+1 Steel Overseer
+1 Teshar, Ancestor's Apostle
+1 Vizier of Remedies
+1 Xander's Lounge
+1 Zulaport Cutthroat
