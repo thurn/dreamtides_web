@@ -107,6 +107,31 @@ Example:
 http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
 ```
 
+## Draft Test
+
+The standalone `/draft_test` route exercises the experimental `cards_v2` draft
+pool. Start the dev server with `npm run dev:vite` (or `npm run draft_test`,
+which opens the route directly) and visit it on port 5173. It reads one query
+parameter at page load (not reactive; changing it requires a reload).
+
+- `algo=default` or `algo=diverse` selects the pool-generation algorithm.
+  `default` is the original color-identity generator; `diverse` is the variant
+  tuned to spread cards and archetypes more evenly across pools (see
+  `docs/cards2/color_pool_diversity.md`). Any other value (including empty or
+  absent) falls back to the build default, which is `default`.
+
+The chosen algorithm applies to the pool built from your Dreamcaller selection,
+and the active variant is shown as a chip in the draft header; clicking the chip
+reloads with the other algorithm so the two can be compared side by side.
+
+Examples:
+
+```
+http://localhost:5173/draft_test                # default pool algorithm
+http://localhost:5173/draft_test?algo=diverse   # diverse (flattened) algorithm
+http://localhost:5173/draft_test?algo=default   # original algorithm (explicit)
+```
+
 ## Examples
 
 ```
@@ -122,4 +147,5 @@ http://localhost:5173/?debugJourneyReward=gain_essence
 http://localhost:5173/?debugJourneyCost=pay_essence
 http://localhost:5173/?seed=7&startInBattle=1
 http://localhost:5173/editor?q=moon&type=event
+http://localhost:5173/draft_test?algo=diverse   # diverse draft-pool algorithm
 ```
