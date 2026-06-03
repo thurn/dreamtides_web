@@ -70,6 +70,21 @@ export interface GeneratedPool {
   size: number;
 }
 
+/**
+ * Expand a pool's copy counts into newline-ready card lines: names sorted, a
+ * 2-of duplicated, so the line count equals the pool size. Shared by the Node
+ * generator/simulation tooling so its output matches the in-app pool exactly.
+ */
+export function poolToLines(counts: Map<string, number>): string[] {
+  const lines: string[] = [];
+  for (const [card, count] of [...counts.entries()].sort((a, b) =>
+    a[0].localeCompare(b[0]),
+  )) {
+    for (let i = 0; i < Math.min(2, count); i++) lines.push(card);
+  }
+  return lines;
+}
+
 // --- seedable RNG (mulberry32) so runs are reproducible with a seed ----------
 function makeRng(seed: number): () => number {
   let a = seed >>> 0;

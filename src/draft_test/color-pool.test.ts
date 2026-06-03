@@ -1,47 +1,55 @@
 // @vitest-environment node
 //
-// Parity between the browser color-pool generator (`color-pool.ts`) and the
-// Node generator (`scripts/generate-color-pool.mjs`). Both implement the same
-// algorithm over the same `cards_v2.toml` metadata; this proves they produce
-// byte-identical pools for every seed, so the standalone draft harness and any
-// offline tooling never diverge.
+// The pool-construction algorithm lives in `color-pool.ts` and is the single
+// source of truth: the Node generator (`scripts/generate-color-pool.mjs`)
+// imports it rather than re-implementing it, so the standalone draft harness,
+// the CLI, and the simulation tooling can never diverge. This test pins that
+// contract — the Node `runSeed` wrapper must reproduce, byte-for-byte, the pool
+// the shared generator produces, for both unconstrained and Dreamcaller-seeded
+// pools.
 import { describe, expect, it } from "vitest";
 import {
-  buildPoolData,
+  buildPoolData as buildNodePoolData,
+  findDreamcaller,
   loadCards,
+  loadDreamcallers,
   runSeed,
 } from "../../scripts/generate-color-pool.mjs";
-import {
-  buildPoolData as buildBrowserPoolData,
-  generatePoolFromData,
-} from "./color-pool";
+import { buildPoolData, generatePoolFromData, poolToLines } from "./color-pool";
 
 const cards = loadCards();
-const nodePoolData = buildPoolData(cards);
-const browserPoolData = buildBrowserPoolData(cards);
+const poolData = buildPoolData(cards);
 
-// Expand a browser pool's count map into the Node generator's line format:
-// names sorted, a 2-of duplicated.
-function browserLines(counts: Map<string, number>): string[] {
-  const lines: string[] = [];
-  for (const [name, count] of [...counts.entries()].sort((a, b) =>
-    a[0].localeCompare(b[0]),
-  )) {
-    for (let i = 0; i < Math.min(2, count); i++) lines.push(name);
-  }
-  return lines;
-}
-
-describe("browser/Node color-pool parity", () => {
-  it("produces identical identity, themes, and cards for every seed", () => {
+describe("Node generator delegates to the shared color-pool algorithm", () => {
+  it("reproduces the shared generator's pool for every unconstrained seed", () => {
     for (let seed = 0; seed < 2000; seed++) {
-      const node = runSeed(seed, nodePoolData);
-      const browser = generatePoolFromData(browserPoolData, seed);
-      expect(browser.identity, `identity seed=${seed}`).toBe(node.identity);
-      expect(browser.themes, `themes seed=${seed}`).toEqual(node.themes);
-      expect(browser.size, `size seed=${seed}`).toBe(node.size);
-      expect(browserLines(browser.counts), `cards seed=${seed}`).toEqual(
-        node.lines,
+      const node = runSeed(seed, buildNodePoolData(cards));
+      const shared = generatePoolFromData(poolData, seed);
+      expect(node.identity, `identity seed=${String(seed)}`).toBe(
+        shared.identity,
+      );
+      expect(node.themes, `themes seed=${String(seed)}`).toEqual(shared.themes);
+      expect(node.size, `size seed=${String(seed)}`).toBe(shared.size);
+      expect(node.lines, `cards seed=${String(seed)}`).toEqual(
+        poolToLines(shared.counts),
+      );
+    }
+  });
+
+  it("reproduces the shared generator's pool when seeded by a Dreamcaller", () => {
+    const dreamcaller = findDreamcaller(loadDreamcallers(), "Kell Tarn");
+    expect(dreamcaller?.draftArchetypes).toBeDefined();
+    const seedArchetypes = dreamcaller?.draftArchetypes;
+
+    for (let seed = 0; seed < 500; seed++) {
+      const node = runSeed(seed, poolData, seedArchetypes);
+      const shared = generatePoolFromData(poolData, seed, seedArchetypes);
+      expect(node.identity, `identity seed=${String(seed)}`).toBe(
+        shared.identity,
+      );
+      expect(node.themes, `themes seed=${String(seed)}`).toEqual(shared.themes);
+      expect(node.lines, `cards seed=${String(seed)}`).toEqual(
+        poolToLines(shared.counts),
       );
     }
   });

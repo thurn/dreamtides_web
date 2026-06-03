@@ -74,6 +74,10 @@ three-color pools heavily favored because those make the best draft
 environments. It then picks that many colors at random from the five. This
 combination is the pool's color identity.
 
+When a Dreamcaller seeds the pool (see "Dreamcaller-seeded pools" below) this
+step is replaced: the identity is taken from one of the Dreamcaller's archetypes
+instead of rolled at random.
+
 **2. Decide what is legal.** A color list is "on-color" when its color prefix
 fits entirely inside the chosen identity — for a blue-black-red identity, the
 lists `u`, `br`, and `ubr` all qualify, but a green list does not. The pool of
@@ -139,6 +143,29 @@ added theme — cards that appear in no earlier theme and are therefore
 unreinforced singletons. Cards shared between themes, the synergistic backbone,
 are never eligible for this trim. This step almost never fires.
 
+## Dreamcaller-seeded pools
+
+In the draft test harness the player first picks one of three Dreamcallers, and
+that choice can steer pool construction. A Dreamcaller may carry a list of
+**draft archetypes** — the color-plus-archetype lists its abilities are suited
+to. When it does, the generator seeds from that list rather than rolling freely:
+
+- It picks one of the Dreamcaller's archetypes at random and adopts that
+  archetype's colors as the pool's color identity (replacing step 1). Because
+  the seed archetype is chosen anew each run, the identity still varies across
+  rerolls, weighted toward the colors the Dreamcaller's list covers.
+- When gathering candidate themes (step 3), the color-plus-archetype themes are
+  restricted to the Dreamcaller's listed archetypes. On-color mechanic
+  archetypes still qualify the same way, so a seeded pool draws from the
+  Dreamcaller's intended decks plus any mechanical strategies that fit its
+  colors.
+- The synergy walk opens from the chosen archetype rather than a random theme.
+
+Every later stage — legality, the walk, filler, jitter, and the fringe trim —
+behaves exactly as it does for an unseeded pool. A Dreamcaller with no draft
+archetypes is suited to any pool and rolls the unconstrained random pool
+described above.
+
 ## How a card ends up in the pool
 
 Putting the path together: a card reaches the pool only if it is **legal** (some
@@ -175,6 +202,21 @@ without a seed produces a fresh random seed and therefore a new pool every time.
 Passing a specific seed reproduces a previous run exactly, which makes pools easy
 to share, debug, and test. The returned result includes the seed that produced
 it for this reason.
+
+## Generating and simulating pools offline
+
+The algorithm in `src/draft_test/color-pool.ts` is the single source of truth.
+The Node tooling imports it directly rather than re-implementing it, so a pool
+generated offline for a given seed matches the in-app pool exactly.
+
+- `npm run generate-pool -- --seed 42` prints one pool (one card name per line,
+  a 2-of printed twice) with a summary line on stderr. Add
+  `--dreamcaller "<name|id>"` to seed it from a Dreamcaller's draft archetypes.
+- `npm run simulate-pools` runs many seeds per Dreamcaller and reports aggregate
+  statistics — pool size, color-identity distribution, character/event mix, the
+  energy-cost curve, and the most frequently selected themes and cards. Flags:
+  `--seeds N`, `--base-seed S`, `--dreamcaller "<name|id>"`, `--top N`, and
+  `--json` for machine-readable output.
 
 ## Tunable constants
 

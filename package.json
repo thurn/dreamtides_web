@@ -17,7 +17,9 @@
     "test": "vitest run",
     "test:emulator": "PATH=/opt/homebrew/opt/openjdk@21/bin:/usr/local/opt/openjdk@21/bin:$PATH firebase emulators:exec --only database --project demo-quest-prototype \"vitest run src/multiplayer/firebase-emulator.integration.test.ts\"",
     "typecheck": "tsc --noEmit",
-    "setup-assets": "node scripts/setup-assets.mjs"
+    "setup-assets": "node scripts/setup-assets.mjs",
+    "generate-pool": "node scripts/generate-color-pool.mjs",
+    "simulate-pools": "node scripts/simulate-dreamcaller-pools.mjs"
   },
   "dependencies": {
     "@dicebear/collection": "^9.4.2",
