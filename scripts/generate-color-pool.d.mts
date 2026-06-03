@@ -42,8 +42,10 @@ export function findDreamcaller(
   dreamcallers: readonly DreamcallerRecord[],
   query: string,
 ): DreamcallerRecord | null;
+export type PoolVariant = "default" | "diverse";
 export function runSeed(
   seed: number,
   poolData: PoolData,
   seedArchetypes?: readonly string[],
+  variant?: PoolVariant,
 ): SeedResult;

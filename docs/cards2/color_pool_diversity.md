@@ -243,3 +243,95 @@ node scripts/simulate-dreamcaller-pools.mjs --seeds 500     # per-Dreamcaller vi
 The Dreamcaller-seeded pools narrow the distribution further within each
 identity, so the effects above apply there too, scoped to the seeding
 Dreamcaller's archetypes.
+
+## The `diverse` variant
+
+The recommendations above are implemented as a second generation variant,
+`diverse`, selectable side by side with `default`. It deliberately leaves core
+cards untouched (core is meant to be ever-present) and instead attacks the
+non-core skew with two families of intervention from the recommendations:
+*flattening* (algorithmic) and *alternate tagging* (reinterpreting how a card's
+tags confer membership). Each lever maps to a root cause above.
+
+**Flattening levers**
+
+- **Theme-first identity** — instead of rolling colors first, the identity is
+  taken from a uniformly-chosen color-archetype, so every archetype seeds pools
+  at the same base rate and multi-color identities actually occur (addresses
+  effects 5 and 6).
+- **Inverse-reach theme walk** — the walk picks the next theme weighted by
+  `1 / reach^1.5`, where *reach* is how many identities the theme is eligible in.
+  Broadly-eligible mechanic and one-color themes are down-weighted; niche and
+  multi-color themes surface (addresses effect 4).
+- **Theme budget** — a pool draws at most six themes, then fills the rest, so no
+  pool is dominated by whichever archetypes happen to be eligible everywhere.
+
+**Alternate-tagging levers**
+
+- **Inverse-breadth card inclusion** — when a theme is added, each card is
+  included with probability `min(1, 3 / themeBreadth)`, where *themeBreadth* is
+  how many archetype themes the card is tagged into. A card tagged into 30
+  archetypes contributes a fraction per theme; a card tagged into one is added
+  reliably. This reinterprets multi-membership as *fractional* membership and
+  flattens both inclusion rate and 2-of accumulation (addresses effect 3).
+- **Inverse-legality fill** — shortfall fillers are sampled weighted by
+  `1 / colorBreadth`, where *colorBreadth* is how many color combinations the
+  card is legal in, so cards legal in few combos are favored when they are legal
+  rather than crowded out by everywhere-legal staples (addresses effect 2).
+
+Pool size still varies across the full 180–220 band (a random target per pool),
+and core cards still seed every pool.
+
+### Results
+
+Over 3000 unconstrained seeds (`analyze-pool-diversity.mjs --compare`). Lower
+coefficient of variation (CoV) means a flatter, more balanced distribution.
+
+| Metric | default | diverse |
+| --- | --- | --- |
+| Non-core card inclusion CoV | 0.43 | **0.26** |
+| Non-core card inclusion range | 1.5% – 82.9% | **13.6% – 60.4%** |
+| Non-core cards below 5% | 10 | **0** |
+| Archetype selection CoV | 1.40 | **0.49** |
+| Archetype selection range | 0% – 12.5% | **1.2% – 9.8%** |
+| Archetypes never selected | 16 | **0** |
+| Archetypes below 1% | 85 | **0** |
+| Top-50 cards' share of slots | 25.3% | 22.9% |
+
+The narrowly-tagged cards that the default variant starves — e.g. *Liminal
+Striker* (`0 color lists / 1 archetype`) — rise from ~1.7% to ~16%. Every
+archetype is now used, and every non-core card appears in at least ~13% of
+pools. The trade-off is coherence: a diverse pool is a few focused archetypes
+plus a broad, evenly-sampled remainder rather than a tight synergy cluster, and
+it carries more 1-ofs (higher unique-card count).
+
+### Residual limits
+
+Two effects survive and are best addressed in the data, not the algorithm:
+
+- The very rarest cards still bottom out around 13–16%. These are the
+  `0 color lists / 1 archetype` cards; lifting them further means tagging them
+  into more colors/archetypes in `cards_v2.toml`.
+- Per-archetype balance across color counts is bounded by color structure: a
+  four-color archetype needs a four-color pool, which is intrinsically rarer.
+  The variant compresses this to a ~8x top-to-bottom archetype ratio (from
+  effectively unbounded) but cannot erase it.
+
+### Using, tuning, reverting, or promoting the variant
+
+- **In the draft test harness:** append `?algo=diverse` (or `?algo=default`) to
+  the `/draft_test` URL, or click the variant chip in the pool header to switch.
+  Open the two URLs side by side to compare.
+- **In tooling:** `node scripts/generate-color-pool.mjs --variant diverse`,
+  `node scripts/analyze-pool-diversity.mjs --variant diverse` (or `--compare`).
+- **Tuning:** every knob lives in the `DIVERSE` constant in
+  `src/draft_test/color-pool.ts` (`reachExponent`, `themeBudget`, `inclusionK`,
+  `fillExponent`, `walkExploration`); re-run `--compare` to see the effect.
+- **Promote to primary:** set `DEFAULT_POOL_VARIANT = "diverse"` in
+  `color-pool.ts`. The URL parameter still selects either variant for
+  comparison.
+- **Revert:** set `DEFAULT_POOL_VARIANT = "default"` (the current default) to
+  fall back everywhere, or delete `generateDiverse` and its helpers and the
+  `"diverse"` branch in `generatePoolFromData` to remove the experiment entirely.
+  The `default` algorithm is untouched by the variant and is covered by the
+  byte-for-byte parity test.

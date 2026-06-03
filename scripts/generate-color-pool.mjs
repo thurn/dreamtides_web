@@ -90,8 +90,8 @@ export function findDreamcaller(dreamcallers, query) {
  * identity, the selected theme labels, and the pool size. Pass `seedArchetypes`
  * (a Dreamcaller's `draftArchetypes`) to seed construction from that list.
  */
-export function runSeed(seed, poolData, seedArchetypes) {
-  const pool = generatePoolFromData(poolData, seed >>> 0, seedArchetypes);
+export function runSeed(seed, poolData, seedArchetypes, variant) {
+  const pool = generatePoolFromData(poolData, seed >>> 0, seedArchetypes, variant);
   return {
     lines: poolToLines(pool.counts),
     identity: pool.identity,
@@ -117,9 +117,19 @@ function parseDreamcaller(argv) {
   return null;
 }
 
+function parseVariant(argv) {
+  const i = argv.indexOf("--variant");
+  const value =
+    i !== -1 && argv[i + 1] != null
+      ? argv[i + 1]
+      : argv.find((a) => a.startsWith("--variant="))?.slice("--variant=".length);
+  return value === "diverse" ? "diverse" : "default";
+}
+
 function main() {
   const argv = process.argv.slice(2);
   const seed = parseSeed(argv);
+  const variant = parseVariant(argv);
   const poolData = buildPoolData(loadCards());
 
   const dreamcallerQuery = parseDreamcaller(argv);
@@ -137,10 +147,15 @@ function main() {
     }`;
   }
 
-  const { lines, identity, themes } = runSeed(seed, poolData, seedArchetypes);
+  const { lines, identity, themes } = runSeed(
+    seed,
+    poolData,
+    seedArchetypes,
+    variant,
+  );
   process.stdout.write(`${lines.join("\n")}\n`);
   process.stderr.write(
-    `# dreamcaller=${dreamcallerLabel} identity=${identity} seed=${seed} size=${lines.length} themes=${themes.join(", ")}\n`,
+    `# variant=${variant} dreamcaller=${dreamcallerLabel} identity=${identity} seed=${seed} size=${lines.length} themes=${themes.join(", ")}\n`,
   );
 }
 

@@ -218,6 +218,12 @@ generated offline for a given seed matches the in-app pool exactly.
   `--seeds N`, `--base-seed S`, `--dreamcaller "<name|id>"`, `--top N`, and
   `--json` for machine-readable output.
 
+This document describes the `default` variant. A second `diverse` variant tunes
+the same skeleton to spread cards and archetypes more evenly; it is selectable
+via the `variant` argument, the `--variant diverse` CLI flag, and the draft test
+`?algo=diverse` URL parameter. See `color_pool_diversity.md` for its design,
+measured results, and how to make it the primary algorithm.
+
 ## Tunable constants
 
 A few constants at the top of the file shape the behavior:

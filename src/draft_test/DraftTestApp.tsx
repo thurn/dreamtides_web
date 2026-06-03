@@ -16,7 +16,8 @@ import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
 import { buildPoolData, generatePoolFromData } from "./color-pool";
-import type { GeneratedPool, PoolData } from "./color-pool";
+import type { GeneratedPool, PoolData, PoolVariant } from "./color-pool";
+import { DEFAULT_POOL_VARIANT } from "./color-pool";
 import {
   buildNameIndex,
   loadCardsV2Database,
@@ -298,6 +299,25 @@ interface PoolInfo {
   size: number;
   uniqueCount: number;
   seed: number;
+  variant: PoolVariant;
+}
+
+/**
+ * Pool-generation variant for this session, from the `?algo=` URL parameter
+ * (`default` or `diverse`). Invalid or absent values fall back to
+ * {@link DEFAULT_POOL_VARIANT}, so flipping that constant changes the default
+ * everywhere while the URL parameter still allows side-by-side comparison.
+ */
+function readPoolVariant(): PoolVariant {
+  const algo = new URLSearchParams(window.location.search).get("algo");
+  return algo === "default" || algo === "diverse" ? algo : DEFAULT_POOL_VARIANT;
+}
+
+/** Reload the harness with the other variant selected via `?algo=`. */
+function switchPoolVariant(next: PoolVariant): void {
+  const url = new URL(window.location.href);
+  url.searchParams.set("algo", next);
+  window.location.assign(url.toString());
 }
 
 /**
@@ -311,6 +331,7 @@ interface PoolInfo {
  * left-docked deck rail and a full-deck overlay show what has been drafted.
  */
 export default function DraftTestApp() {
+  const poolVariant = useMemo(readPoolVariant, []);
   const [status, setStatus] = useState<
     "loading" | "select" | "ready" | "error"
   >("loading");
@@ -363,6 +384,7 @@ export default function DraftTestApp() {
         poolData,
         undefined,
         dreamcaller.draftArchetypes,
+        poolVariant,
       );
       const nameIndex = buildNameIndex(database);
       const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(
@@ -394,11 +416,12 @@ export default function DraftTestApp() {
         size: pool.size,
         uniqueCount: pool.counts.size,
         seed: pool.seed,
+        variant: pool.variant,
       });
       setCurrentOffer(firstOffer);
       setStatus("ready");
     },
-    [database],
+    [database, poolVariant],
   );
 
   const offerCards = useMemo(() => {
@@ -521,6 +544,31 @@ export default function DraftTestApp() {
                   >
                     {poolInfo.dreamcaller}
                   </span>
+                  <button
+                    type="button"
+                    data-testid="draft-test-pool-variant"
+                    title={`Pool algorithm: ${poolInfo.variant}. Click to switch.`}
+                    onClick={() => {
+                      switchPoolVariant(
+                        poolInfo.variant === "diverse" ? "default" : "diverse",
+                      );
+                    }}
+                    className="cursor-pointer rounded px-2 py-0.5 font-bold uppercase tracking-widest transition-colors"
+                    style={{
+                      background:
+                        poolInfo.variant === "diverse"
+                          ? "rgba(16, 185, 129, 0.18)"
+                          : "rgba(148, 163, 184, 0.16)",
+                      border:
+                        poolInfo.variant === "diverse"
+                          ? "1px solid rgba(16, 185, 129, 0.5)"
+                          : "1px solid rgba(148, 163, 184, 0.4)",
+                      color:
+                        poolInfo.variant === "diverse" ? "#34d399" : "#cbd5e1",
+                    }}
+                  >
+                    {poolInfo.variant}
+                  </button>
                   <span
                     className="rounded px-2 py-0.5 font-bold uppercase tracking-widest"
                     style={{
