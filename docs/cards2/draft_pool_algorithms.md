@@ -227,110 +227,183 @@ generated pools.
 
 ## The `decklists` algorithm
 
-The `decklists` algorithm abandons the synthesized themes the other two walk and
-instead grows a pool out of *real, human-built decklists*. The idea is that real
-decks already encode the cards that actually play well together, so a pool grown
-from them feels more like a curated, single-archetype experience. It works by
-picking a starting decklist and then snowballing in the decklists most similar
-to it until the pool is full. If no usable decklists are bundled, it falls back
-entirely to the `default` algorithm.
+The other two algorithms *synthesize* a pool by stacking up themes — bundles of
+cards that share a tag. The `decklists` algorithm does something different: it
+grows a pool out of **real, human-built decklists**. The premise is that real
+decks already encode which cards actually play well together, so a pool grown
+from them feels like a curated, single-archetype experience rather than a
+tag-driven scoop. In one sentence: it picks one real deck to start from, then
+repeatedly folds in the real decks most *similar* to it until the pool is full.
+If no usable decklists are bundled, it falls back entirely to `default`.
 
-### Filtering the decklist corpus and IDF weighting
+### Vocabulary: the four moving parts
 
-The algorithm first prepares the decklist corpus, cached per data set. It drops
-decklists that are too small (fewer than 16 cards — the tail of partial or
-near-empty files that carry too little signal) and too large (more than 34 cards
-— a handful of aggregate files that are not really drafted decks and would
-dominate any similarity score).
+Most of the confusion in this algorithm comes from four terms that sound alike
+but are distinct things. They are introduced here in the order they depend on
+each other; the rest of the section is just these four spelled out.
+
+- **Theme** — a *persistent bias*, fixed for the whole run, that pulls every
+  later decision toward the Dreamcaller's mechanic. It is never a single choice;
+  it is a gravity well. It comes from the Dreamcaller's *theme archetypes* — its
+  mechanic-archetype slugs like `abandon` or `storm` (see Shared foundations) —
+  and is expressed as a set of cards plus a 0-to-1 "how theme-dense is this deck"
+  score. A Dreamcaller with no theme archetypes has no theme, and every bias
+  below switches off.
+
+- **Strategy** — a *single choice made once per run*: exactly one of the
+  Dreamcaller's *seed archetypes*. A seed archetype is a color-plus-archetype
+  draft list like `br-aristocrats` — a broad "these colors, this drafted
+  archetype" grouping. The algorithm rolls one of the Dreamcaller's seed
+  archetypes to be this pool's strategy; that single pick sets the pool's color
+  identity and decides which real deck becomes the starter.
+
+- **Starter** — *one real decklist*: the concrete seed the whole pool orbits.
+  The strategy chooses it (the real deck that best embodies the rolled strategy),
+  and everything afterward is measured by similarity to it.
+
+- **Spine** — *a set of mechanic archetypes* (like `abandon`, `discard-madness`)
+  that growth is allowed to absorb cards from. It is read off the starter (its
+  dominant mechanics) plus the theme, and it acts as a gate on what later decks
+  may contribute.
+
+The key thing to hold onto is that **theme and spine live in one vocabulary —
+mechanic archetypes — while strategy lives in another — color-plus-archetype
+draft lists.** Each real card carries both kinds of tag: *what it mechanically
+does* (its mechanic archetypes) and *which drafted color-archetypes it belongs
+to*. The strategy is chosen in the second vocabulary; the spine and theme
+operate in the first.
+
+These four chain together: the **theme** biases which **strategy** gets rolled;
+the strategy selects the **starter**; the starter's dominant mechanics (together
+with the theme) define the **spine**; and the spine gates the snowball that
+grows the pool. The theme also keeps a thumb on the scale at the starter and
+snowball steps. The rest of this section walks that chain in order.
+
+### Setup: the decklist corpus and what "similar" means
+
+Before any of that, the algorithm prepares its corpus of real decklists, cached
+per data set. It first drops unusable decks: those too small (fewer than 16
+cards — partial or near-empty files with too little signal to anchor or match
+on) and those too large (more than 34 cards — a few aggregate files that are not
+really drafted decks and would swamp any similarity score).
 
 Over the surviving decks it computes an **inverse-document-frequency (IDF)**
 weight for every card: the log of the inverse of the fraction of decks the card
-appears in. A card in nearly every deck gets a weight near zero; a distinctive
-card that appears in only a few decks gets a high weight. Every notion of
-"similarity" and "fit" below is computed as a cosine over these IDF-weighted card
-vectors, so two decks are "similar" because they share *distinctive* cards, not
-because they both run the ubiquitous staples. Each deck's vector norm is
-precomputed for the cosine.
+appears in. A card that shows up in nearly every deck gets a weight near zero; a
+card that appears in only a handful of decks gets a high weight. Every measure
+of "similar" and "fits" in this algorithm is a cosine over these IDF-weighted
+card vectors. That is what makes "similar" mean *shares the distinctive cards*
+rather than *shares the popular staples* — two decks both running the
+near-omnipresent Abandon staples are not counted as similar on that account,
+whereas two decks sharing the same rare payoff are. Each deck's vector length is
+precomputed so these cosines are cheap.
 
-### The Dreamcaller's theme
+### The theme: a card set and a density score
 
-If the Dreamcaller has theme archetypes, the algorithm forms the **theme card
-set** — the union of all cards in those mechanic-archetype lists — and defines a
-**theme cosine** that measures how densely any given deck is packed with those
-theme cards (again IDF-weighted, between zero and one). When the Dreamcaller has
-no theme, the theme cosine is zero everywhere, every theme-bias term below
-collapses to one, and the pool is built without any theme bias.
+If the Dreamcaller has theme archetypes, the algorithm turns them into two
+things it will reuse at every later step:
 
-### Rolling a strategy
+- The **theme card set** — the union of all cards across the Dreamcaller's
+  mechanic-archetype lists. For an `abandon` Dreamcaller this is every Abandon
+  card; for a `["storm", "events"]` Dreamcaller it is every Storm card plus every
+  Events card.
+- The **theme density** of a deck (the "theme cosine") — a 0-to-1 measure of how
+  heavily that deck draws on the theme card set, IDF-weighted so distinctive
+  theme cards count for more than ubiquitous ones.
 
-From the Dreamcaller's eligible seed archetypes the algorithm rolls one
-"strategy" — the role the pool will play. The roll is weighted toward strategies
-that overlap the theme: each eligible strategy's weight grows with how many of
-its cards are theme cards (raised to a tuning exponent), so an Abandon
-Dreamcaller lands on an aristocrats-style strategy far more often than on an
-off-theme green ramp. The rolled strategy supplies the pool's color identity
-(its color prefix). A Dreamcaller with no seed archetypes leaves the strategy
-open, and the starter is then any real decklist.
+When the Dreamcaller has no theme archetypes, the theme card set is empty, every
+deck's theme density is zero, and every theme-bias multiplier below becomes one
+— i.e. the pool is built with no theme bias at all.
 
-### Picking the starter
+### Step 1 — Roll the strategy
 
-The **starter** is the single decklist the whole pool will orbit. When a strategy
-was rolled, each decklist is scored by how much IDF weight it shares with the
-strategy's cards (its "fit"), and that fit is then scaled up for decks dense in
-the theme (multiplied by one plus a theme-starter-boost times the deck's theme
-cosine). Rather than always taking the single best-fitting deck, the algorithm
-keeps the top 25 by score and samples among them weighted by fit raised to a
-power — this is the main source of run-to-run variety, since the same strategy
-can yield a different starter each time. With no strategy rolled, the starter is
-a random decklist.
+The algorithm now picks the pool's strategy: exactly one of the Dreamcaller's
+seed archetypes (the color-plus-archetype draft lists that exist in the data and
+carry a color prefix). It does not pick uniformly — it weights each candidate by
+how much that draft list overlaps the theme card set, so a candidate full of
+theme cards is rolled far more often than an off-theme one. Concretely, an
+Abandon Dreamcaller whose seed archetypes include an aristocrats list and a
+green-ramp list will roll aristocrats most of the time, because aristocrats
+shares many cards with the Abandon theme and ramp shares few. (The strength of
+that pull is a tuning exponent.)
 
-### The spine
+The rolled strategy carries two things forward: its **color prefix becomes the
+pool's color identity** (e.g. `br`), and its **card list becomes the yardstick
+for choosing the starter** in the next step. A Dreamcaller with no seed
+archetypes has no strategy — the identity is left open and the starter is simply
+a random real deck.
 
-To keep the grown pool's *card list* focused on one strategy — rather than
-dragging in the off-archetype halves of every neighboring deck — the algorithm
-defines a **spine**: the set of mechanic archetypes that growth is allowed to
-absorb cards from. The spine always includes the Dreamcaller's theme archetypes
-first, so a themed pool can never gate out its own theme (important for splashy
-themes like outsiders that are rarely a deck's *dominant* tide). It then fills
-the remaining spine slots — up to two archetypes by default, or more if the theme
-already used more — with the starter's own most-represented archetypes, ranked by
-how many of the starter's cards fall in each. During growth, only cards that
-belong to at least one spine archetype are eligible to be absorbed. (If the spine
-ends up empty, the gate is open and every card is eligible.)
+### Step 2 — Pick the starter
 
-### Snowballing similar decklists
+The **starter** is the one real decklist the finished pool will orbit. With a
+strategy in hand, the algorithm scores every real deck by its **fit** to the
+strategy: the total IDF weight of the cards that deck shares with the strategy's
+card list (so a deck that shares the strategy's distinctive cards scores far
+above one that merely shares its staples). That fit is then multiplied by the
+deck's theme density, so among equally-fitting decks the more theme-dense one is
+preferred.
 
-The pool is seeded with the core cards plus every card in the starter. The
-algorithm then computes a **growth score** for each other decklist: its cosine
-similarity to the *starter* (anchored to the starter, not to the drifting pool,
-so the whole pool keeps orbiting one archetype), scaled up for decks dense in
-the theme (one plus a theme-grow-boost times the theme cosine). Anchoring to the
-fixed starter and boosting the theme together keep the snowball from wandering
-off into whatever else merely co-occurs in the colors.
+Rather than always taking the single best-scoring deck — which would make the
+strategy produce the same pool every time — it keeps the top 25 by score and
+samples one of them, weighted toward the higher scores. This is the algorithm's
+main source of run-to-run variety: the same rolled strategy yields a different
+starter, and therefore a different pool, each time. With no strategy rolled, the
+starter is just a random deck.
 
-It then repeats until the pool reaches its target size: it ranks the unused
-decks by growth score, keeps the top ten, and samples one using a softmax with a
-low temperature — so it almost always takes a highly similar deck, but
-occasionally reaches a little wider. From the chosen deck it absorbs cards (in
-shuffled order so it can stop exactly at the target), but *only* the cards that
-are on the spine, incrementing each card's count. A card reaches two copies only
-when two different absorbed decks both include it. The loop stalls out and stops
-early if it goes many iterations without adding anything new.
+### Step 3 — Read off the spine
 
-The target size is smaller than the other two algorithms — around 150 copies
-with a small random wobble — because the pool is meant to play as a focused,
-single-archetype pool rather than a broad 180–220 draft pool.
+The starter is a whole real deck, and real decks are not perfectly pure — a
+br-aristocrats deck still carries a few off-archetype cards. If growth absorbed
+every card of every similar deck, the pool would smear across many archetypes.
+The **spine** prevents that: it is the set of mechanic archetypes that growth is
+allowed to draw cards from, so the pool's card list stays one coherent strategy.
+
+The spine is assembled from two sources. First, the Dreamcaller's theme
+archetypes always go in, so a themed pool can never gate out its own theme —
+this matters for splashy themes (like outsiders) that are rarely any single
+deck's *dominant* mechanic. Then the algorithm looks at the starter, counts how
+many of the starter's cards fall into each mechanic archetype, and adds the
+most-represented ones until the spine holds its budget (two archetypes by
+default, or more if the theme alone already needed more). The result is a spine
+that captures the starter's primary and secondary mechanics plus the theme. A
+card is "on the spine" if it belongs to any spine archetype; if the spine somehow
+ends up empty, the gate is open and every card qualifies.
+
+### Step 4 — Snowball similar decks onto the starter
+
+Now the pool is grown. It begins seeded with the core staples (one copy each)
+plus *every* card of the starter — the starter is added in full, unfiltered;
+only the *neighbor* decks added next are spine-gated.
+
+Each remaining real deck gets a **growth score**: its IDF-cosine similarity to
+the *starter* — not to the pool as it grows, which keeps the whole pool orbiting
+the one fixed starter instead of drifting — multiplied by that deck's theme
+density, so the snowball keeps pulling in theme-dense decks rather than wandering
+into whatever else happens to share the colors.
+
+The algorithm then loops until the pool reaches its target size: it ranks the
+unused decks by growth score, keeps the top ten, and samples one with a
+low-temperature softmax — so it almost always takes the single most similar deck
+but occasionally reaches a bit wider. From the chosen deck it folds in cards in
+shuffled order (shuffling lets it stop exactly at the target), but **only the
+cards that are on the spine**, bumping each card's count. A card reaches two
+copies only when two different folded-in decks both contain it. The loop stops
+early if it goes 30 iterations without adding anything (for example, when every
+similar deck's on-spine cards are already present).
+
+The target size is deliberately smaller than the other two algorithms — about
+150 copies with a small random wobble — because this pool is meant to play as a
+focused single-archetype pool, not a broad 180–220 draft pool.
 
 ### Identity and labels
 
-Finally the algorithm settles the display identity and labels. When a strategy
-was rolled, the identity is simply its color prefix, matching the other
-algorithms. For an open pool with no rolled strategy, it instead takes the
-colors that a meaningful share of the actual pool sits in (at least 18% of the
-unique cards), so the identity reflects the real decklists rather than every
-color a lone splash card happens to touch. It also records the rolled strategy
-label and the single archetype most represented in the finished pool as the
-pool's themes for display.
+Finally the algorithm settles what to display. When a strategy was rolled the
+color identity is simply its color prefix, matching the other algorithms. For an
+open pool (no strategy) it instead takes the colors that a meaningful share of
+the finished pool actually sits in (at least 18% of the unique cards), so the
+identity reflects the real decks rather than every color a lone splash card
+touches. For the theme labels it records the rolled strategy and the single
+mechanic archetype most represented in the finished pool.
 
 ---
 
