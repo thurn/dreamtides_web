@@ -18,6 +18,7 @@ import { generateDecklists } from "./variant-decklists.ts";
 import { generateDiverse } from "./variant-diverse.ts";
 import { generateIdf } from "./variant-idf.ts";
 import { generateIdf2 } from "./variant-idf2.ts";
+import { generateIdf3 } from "./variant-idf3.ts";
 import { generateMerged } from "./variant-merged.ts";
 
 function runVariant(
@@ -27,6 +28,7 @@ function runVariant(
   seedArchetypes?: readonly string[],
   themeArchetypes?: readonly string[],
   targetSize?: number,
+  signatureCards?: readonly string[],
 ): VariantResult {
   switch (variant) {
     case "diverse":
@@ -51,6 +53,8 @@ function runVariant(
       return generateIdf(rng, poolData, targetSize);
     case "idf2":
       return generateIdf2(rng, poolData, targetSize);
+    case "idf3":
+      return generateIdf3(rng, poolData, signatureCards, targetSize);
     case "default":
       return generate(rng, poolData, seedArchetypes, targetSize);
   }
@@ -63,7 +67,8 @@ function runVariant(
  * describes. For repeated generation, build `PoolData` once with
  * {@link buildPoolData} and call {@link generatePoolFromData}. Pass `targetSize`
  * to pin the pool to a specific number of copies; omit it for each variant's own
- * default size.
+ * default size. Pass `signatureCards` (a Dreamcaller's signature) to steer the
+ * `idf3` variant; the other variants ignore it.
  */
 export function generatePool(
   cards: readonly PoolCard[],
@@ -72,6 +77,7 @@ export function generatePool(
   variant: PoolVariant = DEFAULT_POOL_VARIANT,
   themeArchetypes?: readonly string[],
   targetSize?: number,
+  signatureCards?: readonly string[],
 ): GeneratedPool {
   return generatePoolFromData(
     buildPoolData(cards),
@@ -80,6 +86,7 @@ export function generatePool(
     variant,
     themeArchetypes,
     targetSize,
+    signatureCards,
   );
 }
 
@@ -91,7 +98,9 @@ export function generatePool(
  * `themeArchetypes` (a Dreamcaller's mechanic-archetype tide slugs) to bias the
  * `decklists` variant toward that theme; the other variants ignore it. Pass
  * `targetSize` to pin the pool to that many copies; omit it for each variant's
- * own default size band.
+ * own default size band. Pass `signatureCards` (a Dreamcaller's signature) to
+ * steer the `idf3` variant toward the Dreamcaller's decks; the other variants
+ * ignore it.
  */
 export function generatePoolFromData(
   poolData: PoolData,
@@ -100,6 +109,7 @@ export function generatePoolFromData(
   variant: PoolVariant = DEFAULT_POOL_VARIANT,
   themeArchetypes?: readonly string[],
   targetSize?: number,
+  signatureCards?: readonly string[],
 ): GeneratedPool {
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
@@ -111,6 +121,7 @@ export function generatePoolFromData(
     seedArchetypes,
     themeArchetypes,
     targetSize,
+    signatureCards,
   );
 
   const capped = new Map<string, number>();

@@ -312,11 +312,12 @@ const POOL_VARIANTS: readonly PoolVariant[] = [
   "merged",
   "idf",
   "idf2",
+  "idf3",
 ];
 
 /**
  * Pool-generation variant for this session, from the `?algo=` URL parameter
- * (`default`, `diverse`, `decklists`, `merged`, `idf`, or `idf2`). Invalid or absent values
+ * (`default`, `diverse`, `decklists`, `merged`, `idf`, `idf2`, or `idf3`). Invalid or absent values
  * fall back to {@link DEFAULT_POOL_VARIANT}, so flipping that constant changes
  * the default everywhere while the URL parameter still allows side-by-side
  * comparison.
@@ -344,8 +345,9 @@ function readPoolSeed(): number | undefined {
  * A target draft-pool size in copies from the `?size=` URL parameter, applied to
  * whichever `?algo=` variant is active. Every variant honors it: `default` and
  * `diverse` pin their [180, 220] band to this value, while `decklists`,
- * `merged`, `idf`, and `idf2` center their size window on it. A non-positive or
- * non-numeric value is ignored, leaving each variant's own default size.
+ * `merged`, `idf`, `idf2`, and `idf3` center their size window on it. A
+ * non-positive or non-numeric value is ignored, leaving each variant's own
+ * default size.
  */
 function readPoolSize(): number | undefined {
   const raw = new URLSearchParams(window.location.search).get("size");
@@ -476,6 +478,7 @@ export default function DraftTestApp() {
         poolVariant,
         dreamcaller.themeArchetypes,
         poolSizeOverride,
+        dreamcaller.signatureCards,
       );
       const nameIndex = buildNameIndex(database);
       const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(

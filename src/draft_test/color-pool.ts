@@ -12,8 +12,9 @@
 // The implementation is split across the `color-pool/` directory: shared
 // infrastructure (`constants`, `types`, `rng`, `util`, `pool-data`, `themes`)
 // plus one module per generation variant (`variant-default`, `variant-diverse`,
-// `variant-decklists`, `variant-merged`, `variant-idf`, `variant-idf2`) wired
-// together by `generate`. This file re-exports the public surface so existing
+// `variant-decklists`, `variant-merged`, `variant-idf`, `variant-idf2`,
+// `variant-idf3`) wired together by `generate`. This file re-exports the public
+// surface so existing
 // importers (including the `.mjs` tooling that imports `color-pool.ts` directly)
 // keep a single stable entry point.
 

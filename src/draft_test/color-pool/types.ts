@@ -13,7 +13,8 @@ export type PoolVariant =
   | "decklists"
   | "merged"
   | "idf"
-  | "idf2";
+  | "idf2"
+  | "idf3";
 export const DEFAULT_POOL_VARIANT: PoolVariant = "default";
 
 /** The card fields the pool generator reads. `CardData` satisfies this shape. */

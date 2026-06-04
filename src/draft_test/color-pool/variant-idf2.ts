@@ -33,7 +33,10 @@ interface Idf2Tuning {
   // coherence (see the experiment's cohesion guard).
   diversityBeta: number;
 }
-const IDF2: Idf2Tuning = {
+// Exported so `idf3` can reuse `diversityBeta` to rebuild the diversity weight
+// `div(i) = 1 / (1 + nearTwins(i)) ^ diversityBeta` from the cached twin counts
+// rather than recomputing the O(n²) near-twin pass.
+export const IDF2: Idf2Tuning = {
   twinTau: 0.5,
   diversityBeta: 0.5,
 };
@@ -42,12 +45,14 @@ const IDF2: Idf2Tuning = {
 // many other decks sit within `IDF2.twinTau` IDF-cosine of it. Computed once in a
 // single O(n²) pass and cached per PoolData, since `idf2`'s only addition over
 // `idf` is to weight the starter draw by the inverse of this count.
-interface Idf2Corpus {
+export interface Idf2Corpus {
   base: IdfCorpus;
   twinCount: number[];
 }
 const idf2CorpusCache = new WeakMap<PoolData, Idf2Corpus | null>();
-function idf2Corpus(poolData: PoolData): Idf2Corpus | null {
+// Exported (with its cache) so `idf3` shares the same per-PoolData near-twin
+// computation rather than running the O(n²) pass a second time.
+export function idf2Corpus(poolData: PoolData): Idf2Corpus | null {
   const cached = idf2CorpusCache.get(poolData);
   if (cached !== undefined) return cached;
   const base = idfCorpus(poolData);
