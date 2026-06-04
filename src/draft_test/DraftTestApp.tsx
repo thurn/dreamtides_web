@@ -319,10 +319,55 @@ function readPoolVariant(): PoolVariant {
     : DEFAULT_POOL_VARIANT;
 }
 
+/**
+ * A fixed pool seed from the `?seed=` URL parameter, or undefined for a fresh
+ * random pool each pick. Set it to the seed logged in the console (or shown in
+ * the pool header) to reproduce and inspect a specific session.
+ */
+function readPoolSeed(): number | undefined {
+  const raw = new URLSearchParams(window.location.search).get("seed");
+  if (raw === null) return undefined;
+  const seed = Number(raw);
+  return Number.isFinite(seed) ? seed >>> 0 : undefined;
+}
+
 /** The next variant in the cycle, for the toggle button. */
 function nextPoolVariant(current: PoolVariant): PoolVariant {
   const i = POOL_VARIANTS.indexOf(current);
   return POOL_VARIANTS[(i + 1) % POOL_VARIANTS.length];
+}
+
+/**
+ * Log a compact, reproducible trace of a generated pool so a single draft
+ * session can be understood after the fact. It prints the seed (which
+ * reproduces the exact pool), the variant, the rolled themes, the identity and
+ * size, and — most usefully — the pool's makeup by mechanic archetype (tide),
+ * counted in copies. That tide breakdown is what reveals, e.g., that an
+ * abandon-focused Dreamcaller's pool actually came out Spirit-Animals-heavy.
+ */
+function logPoolTrace(
+  dreamcaller: string,
+  pool: GeneratedPool,
+  database: Map<number, CardData>,
+  nameIndex: Map<string, number>,
+): void {
+  const tideCopies = new Map<string, number>();
+  for (const [name, copies] of pool.counts) {
+    const cardNumber = nameIndex.get(name);
+    const card = cardNumber === undefined ? undefined : database.get(cardNumber);
+    for (const tide of card?.tides ?? []) {
+      tideCopies.set(tide, (tideCopies.get(tide) ?? 0) + copies);
+    }
+  }
+  const tides = [...tideCopies.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([tide, n]) => `${tide} ${String(n)}`)
+    .join(", ");
+  console.info(
+    `[draft_test] ${dreamcaller} | ${pool.variant} | seed=${String(pool.seed)} | ` +
+      `${pool.identity || "—"} | ${String(pool.size)} cards | ` +
+      `themes: ${pool.themes.join(", ")}\n  tides (copies): ${tides}`,
+  );
 }
 
 /** Reload the harness with the given variant selected via `?algo=`. */
@@ -344,6 +389,7 @@ function switchPoolVariant(next: PoolVariant): void {
  */
 export default function DraftTestApp() {
   const poolVariant = useMemo(readPoolVariant, []);
+  const poolSeed = useMemo(readPoolSeed, []);
   const [status, setStatus] = useState<
     "loading" | "select" | "ready" | "error"
   >("loading");
@@ -395,7 +441,7 @@ export default function DraftTestApp() {
 
       const pool: GeneratedPool = generatePoolFromData(
         poolData,
-        undefined,
+        poolSeed,
         dreamcaller.draftArchetypes,
         poolVariant,
       );
@@ -409,6 +455,7 @@ export default function DraftTestApp() {
           `[draft_test] ${String(unresolvedNames.length)} pool card names had no match in cards_v2: ${unresolvedNames.join(", ")}`,
         );
       }
+      logPoolTrace(dreamcaller.name, pool, database, nameIndex);
 
       const draftState: DraftState = {
         draftPoolCopiesByCard,
@@ -434,7 +481,7 @@ export default function DraftTestApp() {
       setCurrentOffer(firstOffer);
       setStatus("ready");
     },
-    [database, poolVariant],
+    [database, poolVariant, poolSeed],
   );
 
   const offerCards = useMemo(() => {
@@ -596,6 +643,12 @@ export default function DraftTestApp() {
                   </span>
                   <span className="opacity-60">
                     {poolInfo.themes.map(prettyTheme).join(" + ")}
+                  </span>
+                  <span
+                    title="Pool seed — reproduces this exact pool. See the console for the full tide breakdown."
+                    className="font-mono opacity-40"
+                  >
+                    seed {String(poolInfo.seed)}
                   </span>
                 </div>
               ) : undefined
