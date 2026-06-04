@@ -26,6 +26,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join, dirname, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { parse } from 'smol-toml';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -148,6 +149,20 @@ function parseDeck(path) {
   return { set: seen };
 }
 
+// Map card name -> its rules text from cards_v2.toml, collapsed to a single line
+// (rendered-text is often a multi-line TOML string). Cards with no rules text
+// map to ''.
+function loadRulesText() {
+  const tomlPath = join(REPO_ROOT, 'data', 'tabula', 'cards_v2.toml');
+  const parsed = parse(readFileSync(tomlPath, 'utf8'));
+  const byName = new Map();
+  for (const card of parsed.cards ?? []) {
+    const text = (card['rendered-text'] ?? '').replace(/\s+/g, ' ').trim();
+    byName.set(card.name, text);
+  }
+  return byName;
+}
+
 function loadCorpus(dir) {
   const decks = new Map(); // filename -> { set }
   for (const file of readdirSync(dir)) {
@@ -209,6 +224,7 @@ function main() {
   const input = parseDeck(inputPath);
   const inputName = basename(inputPath);
 
+  const rulesText = loadRulesText();
   const decks = loadCorpus(opts.dir);
   const { weight, df, N } = computeWeights(decks, opts);
   const normInput = norm(input.set, weight);
@@ -297,7 +313,8 @@ function main() {
   for (const [card, copies] of [...finalPool.entries()].sort(
     (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
   )) {
-    console.log(`${copies}  ${card}`);
+    const text = rulesText.get(card) ?? '';
+    console.log(`${copies}  ${card}${text ? `  ${text}` : ''}`);
   }
 }
 
