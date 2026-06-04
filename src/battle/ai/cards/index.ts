@@ -31,12 +31,14 @@ import { twilightMinstrel } from "./twilight-minstrel";
 import { circlewatchSeer } from "./circlewatch-seer";
 import { brandedDirewolf } from "./branded-direwolf";
 import { sigilswornChampion } from "./sigilsworn-champion";
+import { lastWitness } from "./last-witness";
 
 const models: StarterCardModel[] = [
   twilightMinstrel,
   circlewatchSeer,
   brandedDirewolf,
   sigilswornChampion,
+  lastWitness,
 ];
 
 export const starterCardModels: ReadonlyMap<number, StarterCardModel> = new Map<
