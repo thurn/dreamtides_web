@@ -820,7 +820,6 @@ export function QuestProvider({
         const generated = generateRewardSiteData({
           dreamsignTemplates: questContent.dreamsignTemplates,
           remainingDreamsignPoolIds: prev.remainingDreamsignPool,
-          selectedPackageTides: prev.resolvedPackage?.selectedTides ?? [],
           regenerationPoolIds: prev.resolvedPackage?.dreamsignPoolIds ?? [],
         });
         const runtime: RewardSiteRuntime = {
@@ -947,20 +946,11 @@ export function QuestProvider({
         }
 
         const site = findSite(prev, siteId);
-        // The Dreamsign Draft screen guarantees at least one offered
-        // dreamsign comes from a required structural tide of the active
-        // dreamcaller. Other dreamsign reveals (e.g. the 1-of-1 Dreamsign
-        // Offering) remain unconstrained.
-        const requiredTides =
-          site?.type === "DreamsignDraft"
-            ? (prev.resolvedPackage?.mandatoryTides ?? [])
-            : [];
         const revealed = drawDreamsignOptions(
           prev.remainingDreamsignPool,
           questContent.dreamsignTemplates,
           optionCount,
           prev.resolvedPackage?.dreamsignPoolIds ?? [],
-          requiredTides,
         );
         const source =
           site?.type === "DreamsignDraft"

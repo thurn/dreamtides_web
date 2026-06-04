@@ -1340,7 +1340,6 @@ export function MultiplayerQuestProvider({
         ? generateRewardSiteData({
             dreamsignTemplates: current.questContent.dreamsignTemplates,
             remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
-            selectedPackageTides: expectedSelectedTides,
             regenerationPoolIds:
               current.state.resolvedPackage?.dreamsignPoolIds ?? [],
           })
@@ -1519,15 +1518,6 @@ export function MultiplayerQuestProvider({
       const expectedRemainingDreamsignPool = [
         ...current.state.remainingDreamsignPool,
       ];
-      const site = findSite(current.state, siteId);
-      // The Dreamsign Draft screen guarantees at least one offered dreamsign
-      // comes from a required structural tide of the active dreamcaller.
-      // Other dreamsign reveals (e.g. the 1-of-1 Dreamsign Offering) remain
-      // unconstrained.
-      const requiredTides =
-        site?.type === "DreamsignDraft"
-          ? (current.state.resolvedPackage?.mandatoryTides ?? [])
-          : [];
       const revealed =
         current.state.siteRuntime[siteId] === undefined
           ? drawDreamsignOptions(
@@ -1535,7 +1525,6 @@ export function MultiplayerQuestProvider({
               current.questContent.dreamsignTemplates,
               optionCount,
               current.state.resolvedPackage?.dreamsignPoolIds ?? [],
-              requiredTides,
             )
           : null;
       const runtime: DreamsignOfferSiteRuntime | null =

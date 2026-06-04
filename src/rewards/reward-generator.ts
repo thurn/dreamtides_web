@@ -1,6 +1,5 @@
-import type { DreamsignTemplate, PackageTideId } from "../types/content";
+import type { DreamsignTemplate } from "../types/content";
 import type { Dreamsign } from "../types/quest";
-import { pickPackageAdjacentItem } from "../data/tide-weights";
 import {
   readDreamsignPool,
   resolveDreamsignTemplates,
@@ -24,7 +23,6 @@ export type RewardSiteData =
 export interface RewardGenerationOptions {
   dreamsignTemplates: readonly DreamsignTemplate[];
   remainingDreamsignPoolIds: readonly string[];
-  selectedPackageTides: readonly PackageTideId[];
   /**
    * The run's full Dreamsign pool. When the remaining pool is exhausted it is
    * recreated from this list so a Reward Site can still grant a Dreamsign.
@@ -41,7 +39,6 @@ export interface RewardGenerationResult {
 export function generateRewardSiteData({
   dreamsignTemplates,
   remainingDreamsignPoolIds,
-  selectedPackageTides,
   regenerationPoolIds,
 }: RewardGenerationOptions): RewardGenerationResult {
   let availableIds = readDreamsignPool(
@@ -58,11 +55,11 @@ export function generateRewardSiteData({
     ).availableIds;
   }
 
-  const dreamsignTemplate = pickPackageAdjacentItem(
-    resolveDreamsignTemplates(availableIds, dreamsignTemplates),
-    (candidate) => candidate.packageTides,
-    selectedPackageTides,
-  );
+  const candidates = resolveDreamsignTemplates(availableIds, dreamsignTemplates);
+  const dreamsignTemplate =
+    candidates.length === 0
+      ? null
+      : candidates[Math.floor(Math.random() * candidates.length)];
 
   if (dreamsignTemplate !== null) {
     return {
