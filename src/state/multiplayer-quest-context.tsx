@@ -2193,9 +2193,9 @@ export function MultiplayerQuestProvider({
       dreamsignRegenerationPoolIds:
         current.state.resolvedPackage?.dreamsignPoolIds ?? [],
       starterDecklistCardNumbers:
-        expectedRuntime.restrictedTide === null
-          ? undefined
-          : (current.state.resolvedPackage?.starterDecklistCardNumbers ?? []),
+        site.type === "SpecialtyShop"
+          ? (current.state.resolvedPackage?.starterDecklistCardNumbers ?? [])
+          : undefined,
     });
     const replacements = shopSlotsToRuntime(generated.slots);
     let replacementIndex = 0;

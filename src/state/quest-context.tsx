@@ -1428,9 +1428,9 @@ export function QuestProvider({
           dreamsignRegenerationPoolIds:
             prev.resolvedPackage?.dreamsignPoolIds ?? [],
           starterDecklistCardNumbers:
-            runtime.restrictedTide === null
-              ? undefined
-              : (prev.resolvedPackage?.starterDecklistCardNumbers ?? []),
+            site.type === "SpecialtyShop"
+              ? (prev.resolvedPackage?.starterDecklistCardNumbers ?? [])
+              : undefined,
         });
         const replacements = shopSlotsToRuntime(generated.slots);
         let replacementIndex = 0;
