@@ -7,7 +7,11 @@ algorithms, selected with the `?algo=` URL parameter: `default`, `diverse`, and
 `src/draft_test/color-pool.ts`. This document explains, in detail, how each one
 works.
 
-This document is the canonical description of the three algorithms.
+This document is the canonical description of the three algorithms. It also
+documents a fourth, experimental construction — the merged-archetype-lists
+algorithm — which lives in `scripts/merged-archetype-pool-experiment.mjs` and is
+evaluated against `decklists` by simulation rather than exposed as a production
+`?algo=` variant.
 
 ## Shared foundations
 
@@ -540,3 +544,230 @@ passed to all three; its theme archetypes are passed through but only the
 caps every card at two copies, derives the ordered color-identity string, and
 returns the pool together with its identity, chosen themes, copy counts, the seed
 used, the final size, and which variant produced it.
+
+---
+
+## The merged-archetype-lists algorithm (experimental)
+
+The `decklists` algorithm earns its complexity by doing all of its work at run
+time: it holds the full corpus of real decks in memory and, every time a pool is
+built, searches that corpus with IDF-weighted cosine similarity to find a starter
+and its neighbors, gates them through a spine, and snowballs them with a softmax.
+The **merged-archetype-lists** algorithm starts from a single observation: almost
+none of that machinery is about the player's pool — it is plumbing for *finding
+decks that belong together* inside a large, unlabeled pile. If that grouping is
+done **once, offline**, the run-time step collapses to something a paragraph can
+describe: roll one archetype, keep the lists that share its colors, and shuffle a
+few of them together.
+
+This algorithm is implemented in `scripts/merged-archetype-pool-experiment.mjs`
+and is evaluated against the `decklists` algorithm by simulation (see *How it is
+measured*, below). It is a candidate simplification, not a production `?algo=`
+variant.
+
+### Two phases: an offline collapse, then a trivial run-time pick
+
+The algorithm has two clearly separated phases, and the data flows strictly from
+the first into the second:
+
+- **Phase 1 (offline, built once).** Collapse the real decks into a small set of
+  **merged archetype lists** — one list per drafted archetype, each holding the
+  cards that recur across that archetype's real decks. This is the set of lists
+  the run-time step draws from. It is the only "curation" the algorithm does, and
+  it is fully mechanical.
+- **Phase 2 (run time, once per pool).** Given a Dreamcaller, choose a subset of
+  those lists and shuffle them into a pool. Every per-pool decision is a plain
+  weighted random pick; there is no similarity search.
+
+### Where the data comes from
+
+This is the part most worth slowing down on, because the inputs arrive from four
+different places and one of them is recovered in an unusual way.
+
+- **The merged lists are built from the raw decklist files in `docs/drafts_dt/`,
+  read directly — not from the `decklists-data.json` bundle.** The reason is the
+  archetype label. Each drafted deck is saved as `<date>-<label>-<uuid>.txt`,
+  where the label is the drafter's own name for the deck (`br-aristocrats`,
+  `ur-storm`, `g-big-ramp`, …). `scripts/setup-assets.mjs` keeps only the card
+  names when it writes `decklists-data.json`, so the bundle carries no label.
+  Phase 1 therefore reads the `*.txt` filenames itself to recover each deck's
+  label, then groups by it.
+- **The set of valid card names** comes from `public/cards_v2-data.json`; a line
+  in a decklist file is ignored unless it names a known card.
+- **The core staples and the theme card set** come from the same `PoolData` the
+  other three algorithms use (`buildPoolData`): `PoolData.core` is the set of
+  `core = true` cards, and the theme card set is read out of `PoolData.archLists`
+  (built from each card's `tides`) using the Dreamcaller's theme slugs, exactly as
+  in `decklists`.
+- **The Dreamcaller's seed archetypes** — the candidate archetypes it may lead
+  with — are its `draftArchetypes`, from the `draft-archetypes` list in
+  `dreamcallers_v2.toml`. These are the same color-plus-archetype names that label
+  the decks and key the merged lists, which is what lets a Dreamcaller's list of
+  archetypes line up with the merged lists by name.
+
+### Phase 1 — collapsing the decks into merged archetype lists
+
+`buildMergedLists(threshold)` walks every file in `docs/drafts_dt/` and produces a
+map from archetype label to a set of card names:
+
+1. **Parse the label.** A filename is matched against `<YYYY-MM-DD>-<label>-<uuid>`;
+   files that do not match (or are not `.txt`) are skipped.
+2. **Keep only archetype labels.** The label must begin with a color run *and*
+   carry an archetype name after it: `br-aristocrats` is kept; a bare color like
+   `ur` is dropped (it names no archetype); a colorless `c-…` label is dropped
+   (its head is not a color).
+3. **Read and clean the deck.** The file's lines are trimmed and filtered to known
+   card names. A deck is dropped unless it holds between 16 and 34 distinct cards —
+   the same window `decklists` uses, which excludes partial files and the few
+   oversized aggregate files.
+4. **Group and threshold.** Decks are grouped by label. A label with fewer than
+   three real decks is dropped (too little signal to merge). For each surviving
+   label, the algorithm counts, for every card, how many of that label's decks
+   contain it, and keeps the cards that appear in at least `threshold` decks
+   (default two). The survivors — most frequent first, capped at 100 — become that
+   label's merged list.
+
+On the current data set, the default threshold yields **49 merged lists**,
+averaging about 46 cards each (all within the 100-card cap), and every themed
+Dreamcaller has at least one of its archetypes represented.
+
+The threshold is the quiet but important step. Because a card has to **recur
+across several real decks** of an archetype to survive, the merged list holds "the
+cards this archetype keeps playing" rather than "every card legal in these
+colors." That recurrence test is itself a co-occurrence filter, which is what lets
+these compact lists stand in for whole real decks (see *How it is measured*).
+
+### The tuning knobs
+
+Phase 2 is governed by a handful of knobs (the experiment sweeps them; the
+parenthesized value is the setting that reproduces the `decklists` output):
+
+- **`targetSize` / `targetJitter`** — the pool aims for `targetSize` copies with a
+  small random wobble (150 ± 8), matching `decklists`.
+- **`themeExp`** — the exponent applied to a candidate's theme overlap when rolling
+  the primary archetype (1.5). Higher leans the roll harder toward the
+  Dreamcaller's mechanic.
+- **`weighting`** — how each *next* list is chosen during the snowball: `overlap`
+  (favor lists that share cards with what is already chosen, for coherence),
+  `theme` (favor theme-dense lists), or `uniform`. (`overlap`.)
+- **`includeProb`** — when a list is folded in, each of its cards joins the pool
+  with this probability (0.7). Below one, each list contributes a *partial* view,
+  which raises run-to-run variance and lowers how completely any one archetype is
+  handed over.
+- **`themeCoreFrac`** — the per-Dreamcaller **core**: the fraction of the on-color
+  theme cards that are always seeded into the pool (1.0 to match `decklists`; lower
+  for a less theme-saturated, more varied pool).
+- **`themeKeep`** — when true, theme cards ignore the `includeProb` dropout and are
+  always taken when a list is folded (true). Together with `themeCoreFrac` it is
+  the lever that keeps a themed pool on its mechanic.
+
+### Phase 2 — building a pool
+
+Given a Dreamcaller's seed archetypes and theme slugs, plus the merged lists from
+Phase 1, `generateMerged` builds one pool:
+
+1. **Roll the primary archetype.** Among the Dreamcaller's seed archetypes, the
+   **eligible** ones are those that have a merged list and a color prefix. Each is
+   weighted by `(1 + how many of its cards are theme cards) ^ themeExp`, and one is
+   drawn — so a theme-dense archetype is rolled far more often than an off-theme
+   one. The chosen archetype's color prefix becomes the pool's **color identity**
+   (e.g. `br`). A Dreamcaller with no eligible archetype produces an open pool,
+   where the primary is just a random merged list.
+2. **Gather the on-color candidates.** Every merged list whose color prefix fits
+   inside the identity (every letter of its prefix is an identity color) is a
+   candidate to fold in. A `br` identity admits the `b`, `r`, and `br` lists but
+   not, say, `bg-midrange` — its `g` is off-color — even when that is one of the
+   Dreamcaller's own archetypes.
+3. **Seed the pool.** The pool's copy counts start with the core staples at one
+   copy each. Then the **theme core** is laid down: the theme cards that appear in
+   at least one on-color list are each seeded (one copy) with probability
+   `themeCoreFrac`. This is the always-present spine of the Dreamcaller's mechanic
+   — the "core list for this Dreamcaller," derived automatically from its theme and
+   chosen colors rather than authored by hand.
+4. **Fold in the primary.** The primary list's cards are added in shuffled order,
+   each kept with probability `includeProb` (theme cards always kept when
+   `themeKeep`), bumping copy counts, until the target size is reached.
+5. **Snowball the rest.** While the pool is below target, the algorithm repeatedly
+   picks one unused on-color list — weighted by `weighting`, by default by how much
+   it overlaps what is already chosen — and folds it in the same way. It stops at
+   the target, or early if thirty picks in a row add nothing new.
+6. **Cap and label.** As with the other algorithms, every card is capped at two
+   copies, so a card reaches two only by appearing across several of the seeded and
+   folded lists. The pool's identity is the rolled archetype's colors.
+
+### Worked example: building Kragg's pool
+
+To make the chain concrete, here is one run for the Dreamcaller **Kragg**, the
+same Dreamcaller the `decklists` worked example uses, so the two can be compared
+directly.
+
+**Setup — what Kragg brings.** As before, from `dreamcallers_v2.toml` Kragg's
+`draftArchetypes` are his **seed archetypes** (the aristocrats, black-midrange,
+and ramp lists such as `br-aristocrats`, `b-aristocrats`, `bg-midrange`,
+`ug-cheaty-ramp`, …), and `loadDreamcallersV2` attaches `themeArchetypes =
+["abandon"]`. The **theme card set** is every Abandon card in
+`PoolData.archLists`.
+
+**Phase 1 is already done.** Offline, `buildMergedLists` has produced the ~49
+merged lists. Several of Kragg's archetypes are among them — the aristocrats lists
+(`b-aristocrats`, `br-aristocrats`, `wb-aristocrats`, …) and the black-midrange
+lists each have enough real decks to merge. Each is a compact set of the cards
+that recur across that archetype's real decks.
+
+**Step 1 — roll the primary.** Kragg's eligible archetypes are weighted by how
+many Abandon cards each merged list holds, raised to 1.5. The aristocrats lists are
+dense in Abandon payoffs, so one of them is rolled far more often than, say, a ramp
+list that shares almost no Abandon cards. Suppose the roll lands on
+**`br-aristocrats`**; the identity is **`br`**.
+
+**Step 2 — on-color candidates.** The candidate lists are the merged lists whose
+colors fit inside `{b, r}`: `b-aristocrats`, `br-aristocrats`, and any black or red
+lists such as `r-burn` or `b-tempo`. A `bg-midrange` list is excluded — its green
+is off-color — even though it is one of Kragg's archetypes.
+
+**Step 3 — seed.** The core staples go in at one copy each. Then the Abandon theme
+core: the Abandon cards that appear in some on-color (black or red) merged list are
+each seeded, so the pool leads with its sacrifice payoffs no matter which lists are
+folded next.
+
+**Step 4–5 — fold and snowball.** The `br-aristocrats` list is folded in (its
+Abandon cards always kept), then the algorithm repeatedly folds the on-color list
+that overlaps most with what is already chosen — pulling in the other black-red
+sacrifice and aristocrats cards — until the pool reaches its ~150-copy target.
+
+**Result.** Kragg's pool comes out as a roughly 150-copy black-red sacrifice pool:
+a `br` identity, led by Abandon payoffs from the theme core, fleshed out with the
+cards that recur across real BR aristocrats decks. As with `decklists`, the exact
+lists folded depend on the seed; the data sources and the order of operations do
+not.
+
+### How it is measured
+
+Because this is a candidate rather than a shipped variant, the experiment script
+judges it the way the `decklists` work was judged: it imports the real
+`generatePoolFromData` as an oracle and runs both algorithms over the same 20
+themed Dreamcallers and 10 fixed seeds, reporting four numbers per pool, averaged:
+
+- **recall** — the fraction of the pool's unique cards that carry the
+  Dreamcaller's theme tide. A coherence measure: how on-theme the pool is.
+- **coverage** — the fraction of the on-color theme-tide set that the pool actually
+  contains. A "hand-fed" measure: near 1.0 means the player is handed essentially
+  the whole theme kit.
+- **varJac** — the average pairwise Jaccard of the unique-card sets across the ten
+  seeds for one Dreamcaller. A variance measure: *lower* means the pool changes more
+  from run to run.
+- **coc** — the average number of real decks in which two of the pool's distinctive
+  (non-core) cards co-occur, sampled over card pairs. A *micro-coherence* measure:
+  higher means the pool's cards genuinely get played together in real decks, not
+  merely share a color.
+
+On the current data set, with a full theme core (`themeCoreFrac = 1`, `themeKeep`,
+`includeProb = 0.7`, `overlap` weighting) the merged selector lands on top of the
+`decklists` oracle: recall 0.47 vs 0.51, coverage 0.72 vs 0.71, varJac 0.56 vs 0.62
+(slightly more varied), and coc 8.46 vs 8.13 (micro-coherence preserved). Lowering
+`themeCoreFrac` trades theme saturation for variance and a less hand-fed pool, so
+that one knob is a dial the `decklists` algorithm does not expose. Running the same
+selector over the broad existing `draftLists` instead of the merged lists (skipping
+Phase 1) gives coverage 1.0 and coc 6.17 — it hands over the entire kit and its
+cards barely co-occur — which is what shows the Phase 1 merge is doing the real
+work.
