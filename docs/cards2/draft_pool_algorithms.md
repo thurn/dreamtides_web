@@ -1,11 +1,12 @@
 # Draft Pool Construction Algorithms
 
 The draft test mode (`draft_test`) builds a card pool that a player drafts
-from. The pool is assembled by one of five interchangeable construction
+from. The pool is assembled by one of six interchangeable construction
 algorithms, selected with the `?algo=` URL parameter: `default`, `diverse`,
-`decklists`, `merged`, and `idf` (for example, `draft_test?algo=decklists`). The
-run-time half of all five lives in `src/draft_test/color-pool.ts`. This document
-explains, in detail, how each one works.
+`decklists`, `merged`, `idf`, and `idf2` (for example,
+`draft_test?algo=decklists`). The run-time half of all six lives in
+`src/draft_test/color-pool.ts`. This document explains, in detail, how each one
+works.
 
 This document is the canonical description of the five algorithms. The `merged`
 algorithm (the merged-archetype-lists construction) does part of its work
@@ -535,16 +536,17 @@ card names back to `cards_v2` card numbers for the draft engine.
 
 ---
 
-## How the three are dispatched
+## How they are dispatched
 
 When a pool is requested, the dispatcher reads the chosen variant and routes to
-the matching algorithm — `diverse` and `decklists` to their respective
-functions, anything else to `default`. The Dreamcaller's seed archetypes are
-passed to all three; its theme archetypes are passed through but only the
-`decklists` algorithm uses them. Whatever the algorithm returns, the dispatcher
-caps every card at two copies, derives the ordered color-identity string, and
-returns the pool together with its identity, chosen themes, copy counts, the seed
-used, the final size, and which variant produced it.
+the matching algorithm — `diverse`, `decklists`, `merged`, `idf`, and `idf2` to
+their respective functions, anything else to `default`. The Dreamcaller's seed
+archetypes are passed to every variant; its theme archetypes are passed through
+but only `decklists` and `merged` use them, and `idf`/`idf2` ignore both
+entirely. Whatever the algorithm returns, the dispatcher caps every card at two
+copies, derives the ordered color-identity string, and returns the pool together
+with its identity, chosen themes, copy counts, the seed used, the final size, and
+which variant produced it.
 
 ---
 
@@ -846,3 +848,67 @@ IDF-weighted vector norm is precomputed so similarity is a cheap dot product.
 this algorithm consumes nothing but the decklists, so the identity string is left
 empty and the header shows none. The theme labels are `idf` plus `deck#<index>`,
 recording which corpus decklist started the pool.
+
+---
+
+## The `idf2` algorithm
+
+`idf2` is `idf` with one change: the starter decklist is drawn with a **diversity
+bias** instead of uniformly at random. Every other step — the corpus, the
+IDF-weighted cosine ranking, the best-first whole-deck union, the size window —
+is shared with `idf` (the two literally call the same growth helper). Like `idf`
+it reads nothing but the real decklists; no archetypes, tides, colors,
+Dreamcallers, or core staples enter into it. Its knobs live in the `IDF2`
+constant in `color-pool.ts`, alongside the `IDF` block it builds on.
+
+### The problem it fixes
+
+`idf`'s starter draw is uniform over the filtered corpus, and the corpus is
+lopsided: a popular archetype is recorded as dozens of near-duplicate real decks
+while a fringe archetype has only a handful. Because pool growth is fully
+determined by the starter (the starter draw is `idf`'s only randomness), a
+uniform draw lands in the big near-duplicate clusters far more often than in the
+small ones — so the player keeps being handed the same kind of pool. The fix is
+purely mechanical and derived from the decklists alone: make a deck that sits in
+a crowded cluster less likely to be the starter.
+
+### Inverse near-twin-count starter weighting
+
+The corpus is processed once (cached per `PoolData`) into the `idf` corpus plus,
+for every deck, its **near-twin count**: how many other decks lie within
+`twinTau` IDF-cosine of it (`0.5` by default). A deck deep inside a 44-deck
+cluster has dozens of near-twins; a one-of-a-kind fringe deck has none. The
+starter is then drawn weighted by
+
+```
+weight(deck) = 1 / (1 + nearTwins(deck)) ^ diversityBeta
+```
+
+so a deck competes for probability mass against its own near-duplicates: the
+44-deck cluster as a whole is no longer 44× more likely to anchor a pool than a
+singleton. `diversityBeta` (`0.5` by default) is the strength dial — `0`
+reproduces `idf`'s uniform draw, and higher values flatten cluster occupancy
+harder. The draw consumes a single random number, exactly as `idf`'s uniform draw
+does, so a seed still reproduces a pool exactly.
+
+### What the bias is worth, and its limit
+
+`scripts/idf-starter-diversity-experiment.mjs` measures this against `idf`'s
+uniform draw, clustering the corpus on content alone (no labels) and computing
+exact archetype-occupancy metrics over the starter distribution. At the
+production setting (`twinTau = 0.5`, `diversityBeta = 0.5`) it raises the
+effective number of distinct archetypes drawn from about 221 to about 552 and
+cuts the single most common archetype's share from about 4.1% to about 1.2%,
+while the mean starter-to-folded-deck cohesion barely moves (about 0.45 to 0.42)
+— the pools stay coherent. Pushing `diversityBeta` past roughly 1 starts seeding
+pools from decks that have no real neighbours, which erodes that cohesion, so the
+gentle default is the chosen operating point. The bias evens out which
+*archetype* a pool is, not which individual cards appear: the most broadly played
+staples are still unioned into nearly every pool, because that happens in the
+whole-deck union step, downstream of the starter draw.
+
+### Identity and labels
+
+Like `idf`, `idf2` reports no color identity — it consumes no color metadata, so
+the identity string is left empty and the header shows none. The theme labels are
+`idf2` plus `deck#<index>`, recording which corpus decklist started the pool.
