@@ -633,13 +633,7 @@ export function applyCardSourceDebug(
         ? null
         : {
           ...cardSourceDebug,
-          entries: cardSourceDebug.entries.map((entry) => ({
-            ...entry,
-            cardTides: [...entry.cardTides],
-            matchedMandatoryTides: [...entry.matchedMandatoryTides],
-            matchedOptionalTides: [...entry.matchedOptionalTides],
-            sourceTides: (entry.sourceTides ?? []).map((tide) => ({ ...tide })),
-          })),
+          entries: cardSourceDebug.entries.map((entry) => ({ ...entry })),
         },
   };
 }

@@ -4,10 +4,9 @@ import type {
   ResolvedDreamcallerPackage,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
-import type { CardSourceDebugState, Dreamsign } from "../types/quest";
+import type { CardSourceDebugState } from "../types/quest";
 import { CardSourceOverlay } from "../screens/CardSourceOverlay";
 import { DebugScreen } from "../screens/DebugScreen";
-import { DreamsignSourceOverlay } from "../screens/DreamsignSourceOverlay";
 
 function makeCard(cardNumber: number, name: string): CardData {
   return {
@@ -73,15 +72,6 @@ const dreamsignTemplates: readonly DreamsignTemplate[] = [
   },
 ];
 
-const dreamsigns: readonly Dreamsign[] = [
-  {
-    id: "demo-sign",
-    name: "Iron Omen",
-    effectDescription: "Gain 1 essence.",
-    isBane: false,
-  },
-];
-
 const cardSourceDebug: CardSourceDebugState = {
   screenLabel: "Demo Cards",
   surface: "Draft",
@@ -89,24 +79,8 @@ const cardSourceDebug: CardSourceDebugState = {
     {
       cardNumber: 1,
       cardName: "Lantern Vanguard",
-      cardTides: ["warrior_pressure", "big_energy"],
-      matchedMandatoryTides: ["warrior_pressure"],
-      matchedOptionalTides: ["big_energy"],
-      sourceTides: [
-        {
-          tideId: "warrior_pressure",
-          displayName: "Iron Charge",
-          requirement: "required",
-          role: "structural",
-        },
-        {
-          tideId: "big_energy",
-          displayName: "Stormwell Surge",
-          requirement: "optional",
-          role: "supporting",
-        },
-      ],
-      isFallback: false,
+      inStarterDecklist: true,
+      draftPoolCopies: 0,
     },
   ],
 };
@@ -122,17 +96,6 @@ export function TideDocumentationHoverDemo() {
           cardSourceDebug={cardSourceDebug}
           isOpen
           onClose={() => {}}
-        />
-      ) : surface === "dreamsigns" ? (
-        <DreamsignSourceOverlay
-          isOpen
-          onClose={() => {}}
-          screenLabel="Demo Dreamsigns"
-          offeredDreamsigns={[...dreamsigns]}
-          dreamsignTemplates={dreamsignTemplates}
-          mandatoryTides={["warrior_pressure"]}
-          optionalTides={["big_energy"]}
-          remainingPoolSize={1}
         />
       ) : (
         <DebugScreen

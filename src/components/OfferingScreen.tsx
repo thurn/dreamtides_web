@@ -293,7 +293,7 @@ export function OfferingSkipButton({
   );
 }
 
-/** Secondary purple-tinted footer button used for "Why Dreamsigns?" etc. */
+/** Secondary purple-tinted footer button for offering-screen actions. */
 export function OfferingSecondaryButton({
   children,
   onClick,

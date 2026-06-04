@@ -87,24 +87,20 @@ function normalizeAtlas(atlas: DreamAtlas | undefined): DreamAtlas {
 }
 
 /**
- * Restore arrays on a `CardSourceDebugEntry` that RTDB silently dropped.
+ * Restore fields on a `CardSourceDebugEntry` that RTDB silently dropped.
  *
- * A fallback entry has empty `matchedMandatoryTides` and `matchedOptionalTides`
- * arrays; a card with no tides has an empty `cardTides` array; legacy and
- * fallback entries can have an empty `sourceTides` array. Realtime
- * Database strips all four on write, so the round-tripped entry arrives
- * with `undefined` fields and the overlay crashes when it iterates them.
+ * Realtime Database strips boolean `false` and numeric `0` on write, so a
+ * round-tripped entry for a draft-pool card with zero copies, or one outside
+ * the starter decklist, arrives with `undefined` fields. Restore the defaults
+ * so the overlay renders without crashing.
  */
 function normalizeCardSourceDebugEntry(
   entry: CardSourceDebugEntry,
 ): CardSourceDebugEntry {
   return {
     ...entry,
-    cardTides: entry.cardTides ?? [],
-    matchedMandatoryTides: entry.matchedMandatoryTides ?? [],
-    matchedOptionalTides: entry.matchedOptionalTides ?? [],
-    sourceTides: entry.sourceTides ?? [],
-    isFallback: entry.isFallback ?? false,
+    inStarterDecklist: entry.inStarterDecklist ?? false,
+    draftPoolCopies: entry.draftPoolCopies ?? 0,
   };
 }
 

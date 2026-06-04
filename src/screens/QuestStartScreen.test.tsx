@@ -12,8 +12,8 @@ import { QuestStartScreen } from "./QuestStartScreen";
 import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 
-const TIDES_LABEL_HOVER_BLURB =
-  "These tides will be shuffled together to form the draft pool.";
+const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
+  "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -101,8 +101,9 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     renderedText: "First dreamcaller.",
     imageNumber: "0009",
     startingEssence: 230,
-    mandatoryTides: ["materialize_value", "ally_formation", "cheap_curve"],
-    optionalTides: ["spirit_growth", "topdeck_setup", "resource_burst"],
+    mandatoryTides: [],
+    optionalTides: [],
+    signatureCards: ["Lantern Seer", "Banner Captain", "Verdant Sprout"],
   },
   {
     id: "caller-2",
@@ -111,8 +112,9 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     renderedText: "Second dreamcaller.",
     imageNumber: "0010",
     startingEssence: 250,
-    mandatoryTides: ["warrior_pressure", "ally_wide", "tempo_resets"],
-    optionalTides: ["tempo_resets", "fast_tempo", "resource_burst"],
+    mandatoryTides: [],
+    optionalTides: [],
+    signatureCards: ["Ember Scout", "Charging Host", "Quick Striker"],
   },
   {
     id: "caller-3",
@@ -121,123 +123,20 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     renderedText: "Third dreamcaller.",
     imageNumber: "0011",
     startingEssence: 285,
-    mandatoryTides: ["void_recursion", "spark_tall", "trigger_reuse"],
-    optionalTides: ["trigger_reuse", "character_chain", "void_setup"],
+    mandatoryTides: [],
+    optionalTides: [],
+    signatureCards: ["Void Revenant", "Crowned Spark", "Endless Procession"],
   },
 ] as const;
 
 let currentMutations: QuestMutations;
 
-const DISPLAYED_TIDES = [
-  {
-    appearance: "mandatory",
-    displayName: "Echo Arrival",
-    dreamcallerId: "caller-1",
-    hoverBlurb:
-      "Arrival is never just arrival. Every entrance leaves behind an extra page of value, until replay itself feels like drawing breath.",
-    id: "materialize_value",
-    kind: "structural",
-  },
-  {
-    appearance: "mandatory",
-    displayName: "Banner Formation",
-    dreamcallerId: "caller-1",
-    hoverBlurb:
-      "This tide fights like a drilled company. Position matters, timing matters, and a disciplined line turns ordinary allies into a precise machine.",
-    id: "ally_formation",
-    kind: "structural",
-  },
-  {
-    appearance: "optional",
-    displayName: "Verdant Ascent",
-    dreamcallerId: "caller-1",
-    hoverBlurb:
-      "Life gathers momentum in secret roots. Small turns become rich turns, rich turns become overwhelming ones, and the dream keeps flowering upward.",
-    id: "spirit_growth",
-    kind: "structural",
-  },
-  {
-    appearance: "optional",
-    displayName: "Crown the Draw",
-    dreamcallerId: "caller-1",
-    hoverBlurb:
-      "Tools that prepare the top of the deck so future draws and reveals land where they should.",
-    id: "topdeck_setup",
-    kind: "support",
-  },
-  {
-    appearance: "mandatory",
-    displayName: "Iron Charge",
-    dreamcallerId: "caller-2",
-    hoverBlurb:
-      "A war drum beat made into doctrine. The first bodies hit hard, then every follow-up turns the field into a sprint the enemy cannot survive.",
-    id: "warrior_pressure",
-    kind: "structural",
-  },
-  {
-    appearance: "mandatory",
-    displayName: "Rising Host",
-    dreamcallerId: "caller-2",
-    hoverBlurb:
-      "A single threat can be answered. A battlefield that keeps filling cannot. The host grows until the whole dream is occupied.",
-    id: "ally_wide",
-    kind: "structural",
-  },
-  {
-    appearance: "optional",
-    displayName: "Quickened Edge",
-    dreamcallerId: "caller-2",
-    hoverBlurb:
-      "Victory lives in the half-second before the rival is ready. This tide steals initiative, acts at impossible moments, and never gives it back.",
-    id: "fast_tempo",
-    kind: "structural",
-  },
-  {
-    appearance: "optional",
-    displayName: "Sudden Windfall",
-    dreamcallerId: "caller-2",
-    hoverBlurb:
-      "Temporary acceleration that creates one oversized turn even if the deck cannot sustain it forever.",
-    id: "resource_burst",
-    kind: "support",
-  },
-  {
-    appearance: "mandatory",
-    displayName: "Haunting Return",
-    dreamcallerId: "caller-3",
-    hoverBlurb:
-      "Nothing properly leaves. The void keeps its own ledger, and what was spent comes stalking back when the moment is right.",
-    id: "void_recursion",
-    kind: "structural",
-  },
-  {
-    appearance: "mandatory",
-    displayName: "Kindled Crown",
-    dreamcallerId: "caller-3",
-    hoverBlurb:
-      "All strength is gathered into a chosen few. One threat grows radiant enough to rule the board while lesser bodies exist only to feed it.",
-    id: "spark_tall",
-    kind: "structural",
-  },
-  {
-    appearance: "optional",
-    displayName: "Living Procession",
-    dreamcallerId: "caller-3",
-    hoverBlurb:
-      "Each body invites the next. The turn becomes a procession of arrivals, rebates, and chained deployments that never quite stop on schedule.",
-    id: "character_chain",
-    kind: "structural",
-  },
-  {
-    appearance: "optional",
-    displayName: "Grave Preparation",
-    dreamcallerId: "caller-3",
-    hoverBlurb:
-      "Self-mill and discard support that makes void payoffs turn on earlier and more reliably.",
-    id: "void_setup",
-    kind: "support",
-  },
-] as const;
+const SIGNATURE_CARDS = OFFERED_DREAMCALLERS.flatMap((dreamcaller) =>
+  (dreamcaller.signatureCards ?? []).map((name) => ({
+    dreamcallerId: dreamcaller.id,
+    name,
+  })),
+);
 
 function makeMutations(): QuestMutations {
   return {
@@ -383,49 +282,48 @@ afterEach(() => {
 });
 
 describe("QuestStartScreen", () => {
-  it("shows exactly 3 Dreamcaller choices", () => {
+  it("shows exactly 3 Dreamcaller choices with their signature cards", () => {
     const { container, root } = mount(<QuestStartScreen />);
 
     expect(container.textContent).toContain("Mira of Lanterns");
     expect(container.textContent).toContain("Vey of Embers");
     expect(container.textContent).toContain("Noctis of Tides");
     expect(container.textContent).toContain("Choose Your Dreamcaller");
-    expect(container.textContent).toContain("Tides:");
-    expect(container.textContent).not.toContain("Structural Tides");
+    expect(container.textContent).toContain("Signature Cards:");
     expect(container.querySelectorAll("button")).toHaveLength(3);
     expect(
-      container.querySelectorAll("[data-structural-tides-label]"),
+      container.querySelectorAll("[data-signature-cards-label]"),
     ).toHaveLength(3);
     expect(
-      container.querySelectorAll("[data-structural-tides-info-icon]"),
+      container.querySelectorAll("[data-signature-cards-info-icon]"),
     ).toHaveLength(3);
     for (const dreamcaller of OFFERED_DREAMCALLERS) {
       const icon = container.querySelector(
-        `[data-structural-tides-info-icon="${dreamcaller.id}"]`,
+        `[data-signature-cards-info-icon="${dreamcaller.id}"]`,
       );
       expect(icon).not.toBeNull();
       expect(icon?.className).toContain("bx-info-circle");
-      expect(icon?.getAttribute("aria-label")).toBe("About tides");
+      expect(icon?.getAttribute("aria-label")).toBe("About signature cards");
       expect((icon as HTMLElement | null)?.style.color).toBe(
         "rgb(148, 163, 184)",
       );
     }
-    expect(container.querySelectorAll("[data-dreamcaller-tide]")).toHaveLength(
-      DISPLAYED_TIDES.length,
-    );
     expect(
-      Array.from(container.querySelectorAll("[data-dreamcaller-tide]")).map(
-        (tide) => tide.getAttribute("data-dreamcaller-tide"),
-      ),
+      container.querySelectorAll("[data-dreamcaller-signature-card]"),
+    ).toHaveLength(SIGNATURE_CARDS.length);
+    expect(
+      Array.from(
+        container.querySelectorAll("[data-dreamcaller-signature-card]"),
+      ).map((card) => card.getAttribute("data-dreamcaller-signature-card")),
     ).toEqual(
-      DISPLAYED_TIDES.map((tide) => `${tide.dreamcallerId}:${tide.id}`),
+      SIGNATURE_CARDS.map((card) => `${card.dreamcallerId}:${card.name}`),
     );
 
     for (const dreamcaller of OFFERED_DREAMCALLERS) {
       const label = container.querySelector(
-        `[data-structural-tides-label="${dreamcaller.id}"]`,
+        `[data-signature-cards-label="${dreamcaller.id}"]`,
       );
-      expect(label?.textContent).toBe("Tides:");
+      expect(label?.textContent).toBe("Signature Cards:");
       expect((label as HTMLElement | null)?.style.color).toBe(
         "rgb(148, 163, 184)",
       );
@@ -433,61 +331,26 @@ describe("QuestStartScreen", () => {
       // the trigger is hovered, so it is not in the static DOM.
       expect(
         container.querySelector(
-          `[data-structural-tides-label-tooltip="${dreamcaller.id}"]`,
+          `[data-signature-cards-label-tooltip="${dreamcaller.id}"]`,
         ),
       ).toBeNull();
     }
 
-    for (const tide of DISPLAYED_TIDES) {
-      expect(container.textContent).toContain(tide.displayName);
-      expect(container.textContent).toContain(tide.hoverBlurb);
+    for (const card of SIGNATURE_CARDS) {
+      expect(container.textContent).toContain(card.name);
       const row = container.querySelector(
-        `[data-dreamcaller-tide="${tide.dreamcallerId}:${tide.id}"]`,
+        `[data-dreamcaller-signature-card="${card.dreamcallerId}:${card.name}"]`,
       );
-      expect(row?.getAttribute("data-dreamcaller-tide-appearance")).toBe(
-        tide.appearance,
-      );
-      expect(row?.getAttribute("data-dreamcaller-tide-kind")).toBe(tide.kind);
       const visibleRow = row?.firstElementChild;
       expect(visibleRow).not.toBeNull();
       expect((visibleRow as HTMLElement | null)?.style.color).toBe(
-        tide.appearance === "optional"
-          ? "rgb(148, 163, 184)"
-          : "rgb(255, 255, 255)",
+        "rgb(255, 255, 255)",
       );
       const icon = container.querySelector(
-        `[data-dreamcaller-tide-icon="${tide.dreamcallerId}:${tide.id}"]`,
+        `[data-dreamcaller-signature-card-icon="${card.dreamcallerId}:${card.name}"]`,
       );
-      expect(icon?.className).toContain("bx");
-      expect(icon?.className).toContain(
-        tide.kind === "structural" ? "bx" : "bxs-circle",
-      );
-      expect((icon as HTMLElement | null)?.style.color).toBe(
-        tide.appearance === "optional"
-          ? "rgb(148, 163, 184)"
-          : "rgb(255, 255, 255)",
-      );
-      if (tide.kind === "structural") {
-        expect(
-          container.querySelector(
-            `[data-dreamcaller-tide-tooltip="${tide.dreamcallerId}:${tide.id}"]`,
-          )?.textContent,
-        ).toBe(tide.hoverBlurb);
-      } else {
-        expect(
-          container.querySelector(
-            `[data-dreamcaller-tide-tooltip="${tide.dreamcallerId}:${tide.id}"]`,
-          )?.textContent,
-        ).toBe(tide.hoverBlurb);
-      }
+      expect(icon?.className).toContain("bxs-star");
     }
-
-    expect(container.textContent).not.toContain("topdeck_setup");
-    expect(container.textContent).not.toContain("tempo_resets");
-    expect(container.textContent).not.toContain("resource_burst");
-    expect(container.textContent).not.toContain("trigger_reuse");
-    expect(container.textContent).not.toContain("void_setup");
-    expect(container.textContent).not.toContain("cheap_curve");
 
     const secondDreamcallerButton = Array.from(
       container.querySelectorAll("button"),
@@ -534,13 +397,13 @@ describe("QuestStartScreen", () => {
     });
   });
 
-  it("portals the tides explanation popover into the body when the (i) icon is hovered", () => {
+  it("portals the signature-cards explanation popover into the body when the (i) icon is hovered", () => {
     vi.useFakeTimers();
     try {
       const { container, root } = mount(<QuestStartScreen />);
 
       const firstIcon = container.querySelector(
-        `[data-structural-tides-info-icon="${OFFERED_DREAMCALLERS[0].id}"]`,
+        `[data-signature-cards-info-icon="${OFFERED_DREAMCALLERS[0].id}"]`,
       );
       expect(firstIcon).not.toBeNull();
       // The HoverPopover wraps its child in a <span>; dispatch mouse events
@@ -550,7 +413,7 @@ describe("QuestStartScreen", () => {
 
       // No popover content is in the DOM before hover.
       expect(
-        document.body.querySelectorAll("[data-structural-tides-label-tooltip]"),
+        document.body.querySelectorAll("[data-signature-cards-label-tooltip]"),
       ).toHaveLength(0);
 
       act(() => {
@@ -563,10 +426,10 @@ describe("QuestStartScreen", () => {
       });
 
       const tooltip = document.body.querySelector(
-        `[data-structural-tides-label-tooltip="${OFFERED_DREAMCALLERS[0].id}"]`,
+        `[data-signature-cards-label-tooltip="${OFFERED_DREAMCALLERS[0].id}"]`,
       );
       expect(tooltip).not.toBeNull();
-      expect(tooltip?.textContent).toBe(TIDES_LABEL_HOVER_BLURB);
+      expect(tooltip?.textContent).toBe(SIGNATURE_CARDS_LABEL_HOVER_BLURB);
 
       // Mouse leave hides the popover.
       act(() => {
@@ -575,7 +438,7 @@ describe("QuestStartScreen", () => {
         );
       });
       expect(
-        document.body.querySelectorAll("[data-structural-tides-label-tooltip]"),
+        document.body.querySelectorAll("[data-signature-cards-label-tooltip]"),
       ).toHaveLength(0);
 
       act(() => {
@@ -586,7 +449,7 @@ describe("QuestStartScreen", () => {
     }
   });
 
-  it("does not surface tide tags or names when hovering a Dreamcaller card", () => {
+  it("does not embed signature-card rows inside the Dreamcaller card button", () => {
     vi.useFakeTimers();
     try {
       const { container, root } = mount(<QuestStartScreen />);
@@ -598,32 +461,27 @@ describe("QuestStartScreen", () => {
 
       for (const button of dreamcallerButtons) {
         // The button (the visually-emphasized surface while hovering a
-        // Dreamcaller card) must not embed any tide chip, tide label,
-        // tide-info icon, or per-tide hover tooltip. Tide rows live in the
-        // static card body alongside the button, not inside it.
-        expect(button.querySelectorAll("[data-dreamcaller-tide]")).toHaveLength(
-          0,
-        );
+        // Dreamcaller card) must not embed any signature-card chip, label, or
+        // info icon. Signature-card rows live in the static card body
+        // alongside the button, not inside it.
         expect(
-          button.querySelectorAll("[data-dreamcaller-tide-tooltip]"),
+          button.querySelectorAll("[data-dreamcaller-signature-card]"),
         ).toHaveLength(0);
         expect(
-          button.querySelectorAll("[data-structural-tides-label]"),
+          button.querySelectorAll("[data-signature-cards-label]"),
         ).toHaveLength(0);
         expect(
-          button.querySelectorAll("[data-structural-tides-info-icon]"),
+          button.querySelectorAll("[data-signature-cards-info-icon]"),
         ).toHaveLength(0);
-        for (const tide of DISPLAYED_TIDES) {
-          expect(button.textContent).not.toContain(tide.displayName);
+        for (const card of SIGNATURE_CARDS) {
+          expect(button.textContent).not.toContain(card.name);
         }
       }
 
-      // Hovering a Dreamcaller card button must not portal any tide-related
-      // popover content into document.body. The only popover on this screen
-      // that portals to body is the (i) info icon's "tide pools will be
-      // shuffled" blurb, which is triggered by the icon, not the card.
-      const cardWrapper = dreamcallerButtons[0]?.parentElement;
-      expect(cardWrapper).not.toBeNull();
+      // Hovering a Dreamcaller card button must not portal any popover content
+      // into document.body. The only popover on this screen that portals to
+      // body is the (i) info icon's signature-cards blurb, which is triggered
+      // by the icon, not the card.
       act(() => {
         dreamcallerButtons[0]?.dispatchEvent(
           new MouseEvent("mouseover", { bubbles: true }),
@@ -633,9 +491,8 @@ describe("QuestStartScreen", () => {
         vi.advanceTimersByTime(1000);
       });
 
-      // No portaled tides label tooltip should appear from a card hover.
       expect(
-        document.body.querySelectorAll("[data-structural-tides-label-tooltip]"),
+        document.body.querySelectorAll("[data-signature-cards-label-tooltip]"),
       ).toHaveLength(0);
 
       act(() => {

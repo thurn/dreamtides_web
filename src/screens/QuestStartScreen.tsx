@@ -2,7 +2,6 @@ import { useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
-import { dreamcallerTidesForDisplay } from "../data/structural-tides";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
@@ -11,8 +10,8 @@ import type { DreamcallerContent } from "../types/content";
 const DREAMCALLER_ACCENT = "#c084fc";
 const DREAMCALLER_HOVER_TRANSITION = { duration: 0.12, delay: 0 } as const;
 const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
-const TIDES_LABEL_HOVER_BLURB =
-  "These tides will be shuffled together to form the draft pool.";
+const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
+  "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
 
 /** Intro screen where the player picks a dreamcaller to start the quest. */
 export function QuestStartScreen() {
@@ -72,10 +71,7 @@ export function QuestStartScreen() {
       >
         {offered.map((dreamcaller, index) => {
           const accentColor = DREAMCALLER_ACCENT;
-          const displayedTides = dreamcallerTidesForDisplay(
-            dreamcaller.mandatoryTides,
-            dreamcaller.optionalTides,
-          );
+          const signatureCards = dreamcaller.signatureCards ?? [];
           return (
             <motion.div
               key={dreamcaller.name}
@@ -158,18 +154,18 @@ export function QuestStartScreen() {
                   </span>
                 </div>
               </motion.button>
-              {displayedTides.length > 0 && (
+              {signatureCards.length > 0 && (
                 <div className="flex w-full flex-col gap-2 px-1">
                   <span
                     className="inline-flex w-fit items-center gap-1.5"
-                    data-structural-tides-label-wrapper={dreamcaller.id}
+                    data-signature-cards-label-wrapper={dreamcaller.id}
                   >
                     <span
                       className="text-xs font-medium"
-                      data-structural-tides-label={dreamcaller.id}
+                      data-signature-cards-label={dreamcaller.id}
                       style={{ color: "#94a3b8" }}
                     >
-                      Tides:
+                      Signature Cards:
                     </span>
                     <HoverPopover
                       content={
@@ -180,16 +176,16 @@ export function QuestStartScreen() {
                             borderColor: "rgba(255, 255, 255, 0.16)",
                             color: "#ffffff",
                           }}
-                          data-structural-tides-label-tooltip={dreamcaller.id}
+                          data-signature-cards-label-tooltip={dreamcaller.id}
                         >
-                          {TIDES_LABEL_HOVER_BLURB}
+                          {SIGNATURE_CARDS_LABEL_HOVER_BLURB}
                         </span>
                       }
                     >
                       <i
-                        aria-label="About tides"
+                        aria-label="About signature cards"
                         className="bx bx-info-circle text-sm leading-none"
-                        data-structural-tides-info-icon={dreamcaller.id}
+                        data-signature-cards-info-icon={dreamcaller.id}
                         style={{
                           color: "#94a3b8",
                           cursor: "help",
@@ -199,52 +195,24 @@ export function QuestStartScreen() {
                     </HoverPopover>
                   </span>
                   <div className="flex w-full flex-col gap-2">
-                    {displayedTides.map((tide) => (
+                    {signatureCards.map((cardName) => (
                       <span
-                        key={`${dreamcaller.id}-${tide.id}`}
-                        className="group/structural relative"
-                        data-dreamcaller-tide={`${dreamcaller.id}:${tide.id}`}
-                        data-dreamcaller-tide-appearance={tide.appearance}
-                        data-dreamcaller-tide-id={tide.id}
-                        data-dreamcaller-tide-kind={tide.kind}
+                        key={`${dreamcaller.id}-${cardName}`}
+                        className="relative"
+                        data-dreamcaller-signature-card={`${dreamcaller.id}:${cardName}`}
                       >
                         <span
                           className="inline-flex min-h-8 w-full items-center justify-start gap-1.5 px-1 py-1 text-xs font-medium"
-                          style={{
-                            color:
-                              tide.appearance === "optional"
-                                ? "#94a3b8"
-                                : "#ffffff",
-                          }}
+                          style={{ color: "#ffffff" }}
                         >
-                          {tide.iconClass !== null && (
-                            <i
-                              aria-hidden="true"
-                              className={`bx ${tide.iconClass} text-sm leading-none`}
-                              data-dreamcaller-tide-icon={`${dreamcaller.id}:${tide.id}`}
-                              style={{
-                                color:
-                                  tide.appearance === "optional"
-                                    ? "#94a3b8"
-                                    : "#ffffff",
-                              }}
-                            />
-                          )}
-                          <span>{tide.displayName}</span>
+                          <i
+                            aria-hidden="true"
+                            className="bx bxs-star text-sm leading-none"
+                            data-dreamcaller-signature-card-icon={`${dreamcaller.id}:${cardName}`}
+                            style={{ color: accentColor }}
+                          />
+                          <span>{cardName}</span>
                         </span>
-                        {tide.hoverBlurb !== null && (
-                          <span
-                            className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 hidden w-56 -translate-x-1/2 rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl group-hover/structural:block"
-                            style={{
-                              background: "#000000",
-                              borderColor: "rgba(255, 255, 255, 0.16)",
-                              color: "#ffffff",
-                            }}
-                            data-dreamcaller-tide-tooltip={`${dreamcaller.id}:${tide.id}`}
-                          >
-                            {tide.hoverBlurb}
-                          </span>
-                        )}
                       </span>
                     ))}
                   </div>

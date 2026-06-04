@@ -181,27 +181,6 @@ function revealOffer(
   return true;
 }
 
-/** Count cards per package tide in a collection of card numbers. */
-function countByTide(
-  cardNumbers: number[],
-  cardDatabase: Map<number, CardData>,
-): Record<string, number> {
-  const counts: Record<string, number> = {};
-
-  for (const cardNumber of cardNumbers) {
-    const card = cardDatabase.get(cardNumber);
-    if (card === undefined) {
-      continue;
-    }
-
-    for (const tide of card.tides) {
-      counts[tide] = (counts[tide] ?? 0) + 1;
-    }
-  }
-
-  return counts;
-}
-
 function sanitizeDraftPoolCopies(
   cardDatabase: Map<number, CardData>,
   draftPoolCopiesByCard: Record<string, number>,
@@ -222,12 +201,6 @@ function sanitizeDraftPoolCopies(
   }
 
   return remainingCopiesByCard;
-}
-
-function expandRemainingCopies(remainingCopiesByCard: Record<string, number>): number[] {
-  return Object.entries(remainingCopiesByCard).flatMap(([cardNumberText, copies]) =>
-    Array.from({ length: copies }, () => Number(cardNumberText)),
-  );
 }
 
 export function countRemainingCards(
@@ -270,14 +243,11 @@ export function initializeDraftState(
   resolvedPackage: ResolvedDreamcallerPackage,
 ): DraftState {
   const draftState = createInitialDraftState(cardDatabase, resolvedPackage);
-  const expandedPool = expandRemainingCopies(draftState.remainingCopiesByCard);
 
   logEvent("draft_pool_initialized", {
     poolSize: countRemainingCards(draftState.remainingCopiesByCard),
     uniqueCardCount: countRemainingUniqueCards(draftState.remainingCopiesByCard),
     dreamcallerId: resolvedPackage.dreamcaller.id,
-    selectedPackageTides: resolvedPackage.selectedTides,
-    cardCountByTide: countByTide(expandedPool, cardDatabase),
   });
 
   return draftState;
@@ -347,7 +317,6 @@ function processPlayerPickInternal(
       pickNumber: state.pickNumber,
       cardNumber,
       cardName: card?.name ?? "Unknown",
-      cardTides: card?.tides ?? [],
       offerCards: currentOffer,
       poolRemaining: countRemainingCards(state.remainingCopiesByCard),
       uniqueCardsRemaining: countRemainingUniqueCards(state.remainingCopiesByCard),

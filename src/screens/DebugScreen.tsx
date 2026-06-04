@@ -2,12 +2,10 @@ import { useCallback, useEffect, useMemo, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CardData } from "../types/cards";
 import type {
-  PackageTideId,
   DreamsignTemplate,
   ResolvedDreamcallerPackage,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
-import { TideDocumentationHover } from "../components/TideDocumentationHover";
 import {
   extractDraftDebugInfo,
   extractPackageDebugInfo,
@@ -134,14 +132,6 @@ export function DebugScreen({
                     value={String(packageDebugInfo.startingEssence)}
                   />
                   <StatBadge
-                    label="Required"
-                    value={String(packageDebugInfo.mandatoryTides.length)}
-                  />
-                  <StatBadge
-                    label="Optional"
-                    value={String(packageDebugInfo.optionalSubset.length)}
-                  />
-                  <StatBadge
                     label="Draft Pool"
                     value={String(packageDebugInfo.draftPoolSize)}
                   />
@@ -175,48 +165,6 @@ export function DebugScreen({
                   <p className="text-sm font-bold" style={{ color: "#e2e8f0" }}>
                     {packageDebugInfo.dreamcallerName}
                   </p>
-                </InfoCard>
-
-                <InfoCard title="Required Packages">
-                  <p className="mb-2 text-xs opacity-60">
-                    Fixed package IDs always used for this Dreamcaller.
-                  </p>
-                  <DebugChipList
-                    emptyLabel="No required packages."
-                    items={packageDebugInfo.mandatoryTides.map((packageTideId) => ({
-                      key: packageTideId,
-                      label: packageTideId,
-                      tideId: packageTideId,
-                    }))}
-                  />
-                </InfoCard>
-
-                <InfoCard title="Selected Optional Packages">
-                  <p className="mb-2 text-xs opacity-60">
-                    Optional package IDs selected for this run's draft pool.
-                  </p>
-                  <DebugChipList
-                    emptyLabel="No optional packages were selected."
-                    items={packageDebugInfo.optionalSubset.map((packageTideId) => ({
-                      key: packageTideId,
-                      label: packageTideId,
-                      tideId: packageTideId,
-                    }))}
-                  />
-                </InfoCard>
-
-                <InfoCard title="Full Draft Pool Packages">
-                  <p className="mb-2 text-xs opacity-60">
-                    Combined required and selected optional package IDs.
-                  </p>
-                  <DebugChipList
-                    emptyLabel="No package IDs are active."
-                    items={packageDebugInfo.selectedTides.map((packageTideId) => ({
-                      key: packageTideId,
-                      label: packageTideId,
-                      tideId: packageTideId,
-                    }))}
-                  />
                 </InfoCard>
 
                 <InfoCard title="Package Validation">
@@ -310,7 +258,7 @@ function DebugChipList({
   items,
 }: {
   emptyLabel: string;
-  items: Array<{ key: string; label: string; tideId?: PackageTideId }>;
+  items: Array<{ key: string; label: string }>;
 }) {
   if (items.length === 0) {
     return <p className="text-sm opacity-50">{emptyLabel}</p>;
@@ -328,13 +276,7 @@ function DebugChipList({
             color: "#c084fc",
           }}
         >
-          {item.tideId === undefined ? (
-            item.label
-          ) : (
-            <TideDocumentationHover tideId={item.tideId}>
-              {item.label}
-            </TideDocumentationHover>
-          )}
+          {item.label}
         </span>
       ))}
     </div>

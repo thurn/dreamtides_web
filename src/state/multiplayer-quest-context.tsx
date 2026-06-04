@@ -1332,9 +1332,6 @@ export function MultiplayerQuestProvider({
     const expectedRemainingDreamsignPool = [
       ...current.state.remainingDreamsignPool,
     ];
-    const expectedSelectedTides = [
-      ...(current.state.resolvedPackage?.selectedTides ?? []),
-    ];
     const generated =
       current.state.siteRuntime[siteId] === undefined
         ? generateRewardSiteData({
@@ -1378,10 +1375,6 @@ export function MultiplayerQuestProvider({
           !arraysEqual(
             room.questState.remainingDreamsignPool,
             expectedRemainingDreamsignPool,
-          ) ||
-          !arraysEqual(
-            room.questState.resolvedPackage?.selectedTides ?? [],
-            expectedSelectedTides,
           )
         ) {
           return room;

@@ -3,11 +3,7 @@ import { buildCardSourceDebugState } from "./card-source-debug";
 import type { CardData } from "../types/cards";
 import type { ResolvedDreamcallerPackage } from "../types/content";
 
-function makeCard(
-  cardNumber: number,
-  name: string,
-  tides: string[],
-): CardData {
+function makeCard(cardNumber: number, name: string): CardData {
   return {
     name,
     id: `card-${String(cardNumber)}`,
@@ -18,7 +14,7 @@ function makeCard(
     energyCost: 1,
     spark: 1,
     isFast: false,
-    tides,
+    tides: [],
     renderedText: "",
     imageNumber: cardNumber,
     artOwned: true,
@@ -34,28 +30,30 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       renderedText: "Test rules text.",
       imageNumber: "0009",
       startingEssence: 250,
-      mandatoryTides: ["core"],
-      optionalTides: ["support-a", "support-b", "support-c"],
+      mandatoryTides: [],
+      optionalTides: [],
+      signatureCards: ["Lantern Witness"],
     },
-    mandatoryTides: ["core"],
-    optionalSubset: ["support-a", "support-b"],
-    selectedTides: ["core", "support-a", "support-b"],
-    draftPoolCopiesByCard: { "1": 2 },
+    mandatoryTides: [],
+    optionalSubset: [],
+    selectedTides: [],
+    draftPoolCopiesByCard: { "2": 2, "7": 1 },
     dreamsignPoolIds: ["sign-1"],
-    mandatoryOnlyPoolSize: 120,
+    mandatoryOnlyPoolSize: 200,
     draftPoolSize: 200,
     doubledCardCount: 10,
-    legalSubsetCount: 3,
+    legalSubsetCount: 1,
     preferredSubsetCount: 1,
+    starterDecklistCardNumbers: [1],
   };
 }
 
 describe("buildCardSourceDebugState", () => {
-  it("splits matching tides between required and optional selections", () => {
+  it("flags cards that belong to the dreamcaller's starter decklist", () => {
     const result = buildCardSourceDebugState(
       "Draft Picks",
       "Draft",
-      [makeCard(1, "Lantern Witness", ["support-a", "core", "outsider"])],
+      [makeCard(1, "Lantern Witness")],
       makeResolvedPackage(),
     );
 
@@ -66,87 +64,67 @@ describe("buildCardSourceDebugState", () => {
         {
           cardNumber: 1,
           cardName: "Lantern Witness",
-          cardTides: ["core", "outsider", "support-a"],
-          matchedMandatoryTides: ["core"],
-          matchedOptionalTides: ["support-a"],
-          sourceTides: [
-            {
-              tideId: "core",
-              displayName: "Core",
-              requirement: "required",
-              role: "supporting",
-            },
-            {
-              tideId: "support-a",
-              displayName: "Support A",
-              requirement: "optional",
-              role: "supporting",
-            },
-          ],
-          isFallback: false,
+          inStarterDecklist: true,
+          draftPoolCopies: 0,
         },
       ],
     });
   });
 
-  it("marks cards with no selected tide overlap as fallbacks", () => {
+  it("reports the draft-pool copy count for non-starter cards", () => {
     const result = buildCardSourceDebugState(
       "Shop Offers",
       "Shop",
-      [makeCard(7, "Wandering Relic", ["outsider"])],
+      [makeCard(2, "Banner Patrol"), makeCard(7, "Wandering Relic")],
+      makeResolvedPackage(),
+    );
+
+    expect(result?.entries).toEqual([
+      {
+        cardNumber: 2,
+        cardName: "Banner Patrol",
+        inStarterDecklist: false,
+        draftPoolCopies: 2,
+      },
+      {
+        cardNumber: 7,
+        cardName: "Wandering Relic",
+        inStarterDecklist: false,
+        draftPoolCopies: 1,
+      },
+    ]);
+  });
+
+  it("reports zero copies for cards outside the draft pool", () => {
+    const result = buildCardSourceDebugState(
+      "Shop Offers",
+      "Shop",
+      [makeCard(9, "Outsider Wisp")],
       makeResolvedPackage(),
     );
 
     expect(result?.entries[0]).toEqual({
-      cardNumber: 7,
-      cardName: "Wandering Relic",
-      cardTides: ["outsider"],
-      matchedMandatoryTides: [],
-      matchedOptionalTides: [],
-      sourceTides: [],
-      isFallback: true,
+      cardNumber: 9,
+      cardName: "Outsider Wisp",
+      inStarterDecklist: false,
+      draftPoolCopies: 0,
     });
   });
 
-  it("labels source tide roles from configured tide metadata", () => {
+  it("falls back to zero copies when there is no resolved package", () => {
     const result = buildCardSourceDebugState(
       "Draft Picks",
       "Draft",
-      [
-        makeCard(2, "Banner Patrol", [
-          "ally_formation",
-          "cheap_curve",
-          "fast_setup",
-        ]),
-      ],
-      {
-        ...makeResolvedPackage(),
-        mandatoryTides: ["ally_formation"],
-        optionalSubset: ["cheap_curve", "fast_setup"],
-        selectedTides: ["ally_formation", "cheap_curve", "fast_setup"],
-      },
+      [makeCard(3, "Stray Echo")],
+      null,
     );
 
-    expect(result?.entries[0]?.sourceTides).toEqual([
-      {
-        tideId: "ally_formation",
-        displayName: "Banner Formation",
-        requirement: "required",
-        role: "structural",
-      },
-      {
-        tideId: "cheap_curve",
-        displayName: "First-Light Muster",
-        requirement: "optional",
-        role: "utility",
-      },
-      {
-        tideId: "fast_setup",
-        displayName: "Quick Lattice",
-        requirement: "optional",
-        role: "supporting",
-      },
-    ]);
+    expect(result?.entries[0]).toEqual({
+      cardNumber: 3,
+      cardName: "Stray Echo",
+      inStarterDecklist: false,
+      draftPoolCopies: 0,
+    });
   });
 
   it("returns null when no cards are visible", () => {

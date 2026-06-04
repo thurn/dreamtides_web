@@ -528,7 +528,7 @@ describe("room service", () => {
     });
   });
 
-  it("restores RTDB-stripped tide arrays on cardSourceDebug entries", () => {
+  it("restores RTDB-stripped provenance fields on cardSourceDebug entries", () => {
     const listener = vi.fn();
     const strippedQuestState = {
       ...createDefaultState(),
@@ -536,29 +536,18 @@ describe("room service", () => {
         screenLabel: "Draft Picks",
         surface: "Draft",
         entries: [
-          // Fallback entry: RTDB strips empty `matchedMandatoryTides` and
-          // `matchedOptionalTides`. Also strip `cardTides` so the
-          // normalizer must restore all three.
+          // Draft-pool entry outside the starter decklist with zero copies:
+          // RTDB strips both the `false` and the `0`, so the normalizer must
+          // restore both.
           {
             cardNumber: 711,
             cardName: "Lonely Fallback",
-            isFallback: true,
           },
-          // Selected entry: RTDB strips only the empty `matchedOptionalTides`.
+          // Starter-deck entry: RTDB strips the `0` draft-pool copy count.
           {
             cardNumber: 712,
-            cardName: "Required Match",
-            cardTides: ["core"],
-            matchedMandatoryTides: ["core"],
-            sourceTides: [
-              {
-                tideId: "core",
-                displayName: "Core",
-                requirement: "required",
-                role: "supporting",
-              },
-            ],
-            isFallback: false,
+            cardName: "Starter Pick",
+            inStarterDecklist: true,
           },
         ],
       },
@@ -582,27 +571,14 @@ describe("room service", () => {
         {
           cardNumber: 711,
           cardName: "Lonely Fallback",
-          cardTides: [],
-          matchedMandatoryTides: [],
-          matchedOptionalTides: [],
-          sourceTides: [],
-          isFallback: true,
+          inStarterDecklist: false,
+          draftPoolCopies: 0,
         },
         {
           cardNumber: 712,
-          cardName: "Required Match",
-          cardTides: ["core"],
-          matchedMandatoryTides: ["core"],
-          matchedOptionalTides: [],
-          sourceTides: [
-            {
-              tideId: "core",
-              displayName: "Core",
-              requirement: "required",
-              role: "supporting",
-            },
-          ],
-          isFallback: false,
+          cardName: "Starter Pick",
+          inStarterDecklist: true,
+          draftPoolCopies: 0,
         },
       ],
     });

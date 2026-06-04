@@ -35,33 +35,14 @@ function makeOverlayState(): CardSourceDebugState {
       {
         cardNumber: 11,
         cardName: "Lantern Broker",
-        cardTides: ["warrior_pressure", "big_energy"],
-        matchedMandatoryTides: ["warrior_pressure"],
-        matchedOptionalTides: ["big_energy"],
-        sourceTides: [
-          {
-            tideId: "warrior_pressure",
-            displayName: "Iron Charge",
-            requirement: "required",
-            role: "structural",
-          },
-          {
-            tideId: "big_energy",
-            displayName: "Stormwell Surge",
-            requirement: "optional",
-            role: "supporting",
-          },
-        ],
-        isFallback: false,
+        inStarterDecklist: true,
+        draftPoolCopies: 0,
       },
       {
         cardNumber: 12,
         cardName: "Driftbound Relic",
-        cardTides: ["outsider"],
-        matchedMandatoryTides: [],
-        matchedOptionalTides: [],
-        sourceTides: [],
-        isFallback: true,
+        inStarterDecklist: false,
+        draftPoolCopies: 2,
       },
     ],
   };
@@ -94,7 +75,7 @@ afterEach(() => {
 });
 
 describe("CardSourceOverlay", () => {
-  it("renders per-card source tides with requirement and role labels", () => {
+  it("reports each card's starter-deck or draft-pool provenance", () => {
     const { container, root } = mount(
       <CardSourceOverlay
         cardSourceDebug={makeOverlayState()}
@@ -106,111 +87,41 @@ describe("CardSourceOverlay", () => {
     expect(container.textContent).toContain("Why am I seeing these cards?");
     expect(container.textContent).toContain("Shop Offers");
     expect(container.textContent).toContain("Lantern Broker");
-    expect(container.textContent).toContain("On theme");
-    expect(container.textContent).toContain("Iron Charge");
-    expect(container.textContent).toContain("Required");
-    expect(container.textContent).toContain("Structural");
-    expect(container.textContent).toContain("Stormwell Surge");
-    expect(container.textContent).toContain("Optional");
-    expect(container.textContent).toContain("Supporting");
+    expect(container.textContent).toContain("Starter deck");
+    expect(container.textContent).toContain(
+      "Part of this dreamcaller's starting decklist.",
+    );
     expect(container.textContent).toContain("Driftbound Relic");
-    expect(container.textContent).toContain("Fallback");
-    expect(container.textContent ?? "").not.toContain("warrior_pressure");
-    expect(container.textContent ?? "").not.toContain("big_energy");
-    expect(container.textContent ?? "").not.toContain("outsider");
+    expect(container.textContent).toContain("Draft pool");
+    expect(container.textContent).toContain("Draft-pool card (2 copies).");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("shows literal tide documentation when a source tide is hovered", () => {
-    vi.useFakeTimers();
-    try {
-      const { container, root } = mount(
-        <CardSourceOverlay
-          cardSourceDebug={makeOverlayState()}
-          isOpen
-          onClose={vi.fn()}
-        />,
-      );
-
-      expect(
-        document.body.querySelector("[data-tide-doc-popover='warrior_pressure']"),
-      ).toBeNull();
-
-      const tideTrigger = container.querySelector<HTMLElement>(
-        "[data-tide-doc-trigger='warrior_pressure']",
-      );
-      expect(tideTrigger).not.toBeNull();
-      const triggerWrapper = tideTrigger?.parentElement ?? null;
-      expect(triggerWrapper).not.toBeNull();
-
-      act(() => {
-        triggerWrapper?.dispatchEvent(
-          new MouseEvent("mouseover", { bubbles: true }),
-        );
-      });
-      act(() => {
-        vi.advanceTimersByTime(300);
-      });
-
-      const popover = document.body.querySelector(
-        "[data-tide-doc-popover='warrior_pressure']",
-      );
-      expect(popover?.textContent).toContain("Display name: Iron Charge.");
-      expect(popover?.textContent).toContain(
-        "Mechanical identity: Low-curve Warriors, direct spark buffs, point racing, and aggressive battlefield snowball.",
-      );
-      expect(popover?.textContent).not.toContain(
-        "A war drum beat made into doctrine.",
-      );
-
-      act(() => {
-        root.unmount();
-      });
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it("renders without crashing when tide arrays are missing or empty", () => {
-    // Realtime Database silently drops empty arrays on write, so a
-    // round-tripped fallback entry arrives with `matchedMandatoryTides`,
-    // `matchedOptionalTides`, and `cardTides` set to `undefined`. The
-    // overlay must still render its summary chip without crashing.
-    const strippedFallback = {
+  it("renders without crashing when provenance fields are missing", () => {
+    // Realtime Database silently drops `false` and `0` on write, so a
+    // round-tripped entry can arrive with `inStarterDecklist` and
+    // `draftPoolCopies` set to `undefined`. The overlay must still render its
+    // summary without crashing.
+    const strippedEntry = {
       cardNumber: 99,
-      cardName: "Stripped Fallback",
-      isFallback: true,
+      cardName: "Stripped Entry",
     } as unknown as CardSourceDebugEntry;
-    const emptyArraysEntry: CardSourceDebugEntry = {
-      cardNumber: 100,
-      cardName: "Empty Arrays",
-      cardTides: [],
-      matchedMandatoryTides: [],
-      matchedOptionalTides: [],
-      sourceTides: [],
-      isFallback: true,
-    };
     const overlay: CardSourceDebugState = {
       screenLabel: "Draft Picks",
       surface: "Draft",
-      entries: [strippedFallback, emptyArraysEntry],
+      entries: [strippedEntry],
     };
 
     const { container, root } = mount(
-      <CardSourceOverlay
-        cardSourceDebug={overlay}
-        isOpen
-        onClose={vi.fn()}
-      />,
+      <CardSourceOverlay cardSourceDebug={overlay} isOpen onClose={vi.fn()} />,
     );
 
     expect(container.textContent).toContain("Why am I seeing these cards?");
-    expect(container.textContent).toContain("Stripped Fallback");
-    expect(container.textContent).toContain("Empty Arrays");
-    expect(container.textContent).toContain("Fallback");
+    expect(container.textContent).toContain("Stripped Entry");
+    expect(container.textContent).toContain("Draft pool");
 
     act(() => {
       root.unmount();
@@ -227,11 +138,7 @@ describe("CardSourceOverlay", () => {
     } as unknown as CardSourceDebugState;
 
     const { container, root } = mount(
-      <CardSourceOverlay
-        cardSourceDebug={overlay}
-        isOpen
-        onClose={vi.fn()}
-      />,
+      <CardSourceOverlay cardSourceDebug={overlay} isOpen onClose={vi.fn()} />,
     );
 
     expect(container.textContent).toContain("Why am I seeing these cards?");

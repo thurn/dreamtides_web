@@ -85,28 +85,16 @@ export interface Dreamsign {
   isBane: boolean;
 }
 
-/** One card currently being explained by the provenance debug overlay. */
-export type CardSourceDebugTideRole =
-  | "structural"
-  | "supporting"
-  | "utility"
-  | "unclassified";
-
-export interface CardSourceDebugTideSource {
-  tideId: PackageTideId;
-  displayName: string;
-  requirement: "required" | "optional";
-  role: CardSourceDebugTideRole;
-}
-
+/**
+ * One card currently being explained by the provenance debug overlay. idf3
+ * builds each Dreamcaller's pool from its signature cards, so provenance is
+ * reported as starter-decklist membership and the card's draft-pool copy count.
+ */
 export interface CardSourceDebugEntry {
   cardNumber: number;
   cardName: string;
-  cardTides: PackageTideId[];
-  matchedMandatoryTides: PackageTideId[];
-  matchedOptionalTides: PackageTideId[];
-  sourceTides: CardSourceDebugTideSource[];
-  isFallback: boolean;
+  inStarterDecklist: boolean;
+  draftPoolCopies: number;
 }
 
 /** Which surface produced the currently explained cards. */

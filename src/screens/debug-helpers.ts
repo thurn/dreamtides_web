@@ -32,9 +32,6 @@ export interface DreamsignPoolDebugEntry {
 export interface PackageDebugInfo {
   dreamcallerName: string;
   startingEssence: number;
-  mandatoryTides: string[];
-  optionalSubset: string[];
-  selectedTides: string[];
   mandatoryOnlyPoolSize: number;
   draftPoolSize: number;
   doubledCardCount: number;
@@ -113,9 +110,6 @@ export function extractPackageDebugInfo(
   return {
     dreamcallerName: resolvedPackage.dreamcaller.name,
     startingEssence: resolvedPackage.dreamcaller.startingEssence,
-    mandatoryTides: [...(resolvedPackage.mandatoryTides ?? [])],
-    optionalSubset: [...(resolvedPackage.optionalSubset ?? [])],
-    selectedTides: [...(resolvedPackage.selectedTides ?? [])],
     mandatoryOnlyPoolSize: resolvedPackage.mandatoryOnlyPoolSize,
     draftPoolSize: resolvedPackage.draftPoolSize,
     doubledCardCount: resolvedPackage.doubledCardCount,

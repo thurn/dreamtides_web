@@ -8,8 +8,6 @@ import {
   DreamsignHoverCard,
 } from "../components/DreamsignHoverCard";
 import { HoverPopover } from "../components/HoverPopover";
-import { DreamsignSourceButton } from "../components/DreamsignSourceButton";
-import { DreamsignSourceOverlay } from "./DreamsignSourceOverlay";
 import {
   OFFERING_NEUTRAL,
   OfferingAcceptButton,
@@ -29,24 +27,19 @@ interface DreamsignDraftScreenProps {
 
 /** Shows 3 (or 4 enhanced) dreamsign options. Pick 1 or skip. */
 export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
-  const { state, mutations, questContent } = useQuest();
+  const { state, mutations } = useQuest();
   const { dreamsigns: currentDreamsigns, maxDreamsigns } = state;
 
   const optionCount = site.isEnhanced ? 4 : 3;
   const runtime = state.siteRuntime[site.id];
   const offerRuntime = runtime?.kind === "dreamsignOffer" ? runtime : null;
   const options = offerRuntime?.offeredDreamsigns ?? null;
-  const resolvedPackage = state.resolvedPackage;
-  const remainingPoolSize =
-    offerRuntime?.remainingDreamsignPool.length
-    ?? state.remainingDreamsignPool.length;
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
 
   const [purging, setPurging] = useState(false);
   const [pendingDreamsign, setPendingDreamsign] = useState<Dreamsign | null>(
     null,
   );
-  const [sourceOverlayOpen, setSourceOverlayOpen] = useState(false);
 
   useEffect(() => {
     if (runtime === undefined) {
@@ -186,31 +179,7 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
         >
           Skip (discards the shown Dreamsigns)
         </OfferingSkipButton>
-        <DreamsignSourceButton
-          onClick={() => {
-            setSourceOverlayOpen(true);
-          }}
-        />
       </OfferingFooter>
-
-      <DreamsignSourceOverlay
-        isOpen={sourceOverlayOpen}
-        onClose={() => {
-          setSourceOverlayOpen(false);
-        }}
-        screenLabel="Dreamsign Draft"
-        offeredDreamsigns={options}
-        dreamsignTemplates={questContent.dreamsignTemplates}
-        mandatoryTides={resolvedPackage?.mandatoryTides ?? []}
-        optionalTides={resolvedPackage?.optionalSubset ?? []}
-        remainingPoolSize={remainingPoolSize}
-        initialDreamsignPoolIds={resolvedPackage?.dreamsignPoolIds ?? []}
-        remainingDreamsignPool={
-          offerRuntime?.remainingDreamsignPool ?? state.remainingDreamsignPool
-        }
-        requestedOptionCount={optionCount}
-        requiredTideGuarantee
-      />
     </OfferingScreenLayout>
   );
 }

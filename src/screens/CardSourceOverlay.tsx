@@ -4,7 +4,6 @@ import type {
   CardSourceDebugEntry,
   CardSourceDebugState,
 } from "../types/quest";
-import { TideDocumentationHover } from "../components/TideDocumentationHover";
 
 interface CardSourceOverlayProps {
   cardSourceDebug: CardSourceDebugState | null;
@@ -15,22 +14,19 @@ interface CardSourceOverlayProps {
 function surfaceCopy(surface: CardSourceDebugState["surface"]): string {
   switch (surface) {
     case "Draft":
-      return "Draft cards come directly from your dreamcaller's pool.";
+      return "Draft cards come directly from your dreamcaller's idf3 pool, built around its signature cards.";
     case "Shop":
     case "SpecialtyShop":
-      return "Shop cards prefer cards from your dreamcaller's pool, falling back to the broader pool only when needed.";
+      return "Shop cards are drawn from your dreamcaller's idf3 pool, built around its signature cards.";
     case "BattleReward":
     case "Reward":
-      return "Rewards prefer cards from your dreamcaller's pool, falling back to the broader pool when none match.";
+      return "Rewards are drawn from your dreamcaller's idf3 pool, built around its signature cards.";
   }
 }
 
-function labelize(value: string): string {
-  return value.charAt(0).toUpperCase() + value.slice(1);
-}
-
 function CardExplanation({ entry }: { entry: CardSourceDebugEntry }) {
-  const sourceTides = entry.sourceTides ?? [];
+  const inStarterDecklist = entry.inStarterDecklist;
+  const copies = entry.draftPoolCopies;
 
   return (
     <div
@@ -50,56 +46,28 @@ function CardExplanation({ entry }: { entry: CardSourceDebugEntry }) {
         <span
           className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
           style={{
-            background: entry.isFallback
-              ? "rgba(148, 163, 184, 0.22)"
-              : "rgba(168, 85, 247, 0.28)",
-            color: entry.isFallback ? "#cbd5e1" : "#f1f5f9",
+            background: inStarterDecklist
+              ? "rgba(168, 85, 247, 0.28)"
+              : "rgba(148, 163, 184, 0.22)",
+            color: inStarterDecklist ? "#f1f5f9" : "#cbd5e1",
             border: `1px solid ${
-              entry.isFallback
-                ? "rgba(148, 163, 184, 0.4)"
-                : "rgba(168, 85, 247, 0.45)"
+              inStarterDecklist
+                ? "rgba(168, 85, 247, 0.45)"
+                : "rgba(148, 163, 184, 0.4)"
             }`,
           }}
         >
-          {entry.isFallback ? "Fallback" : "On theme"}
+          {inStarterDecklist ? "Starter deck" : "Draft pool"}
         </span>
       </div>
 
-      {sourceTides.length > 0 ? (
-        <div className="mt-3 space-y-2">
-          {sourceTides.map((tide) => (
-            <div
-              key={`${entry.cardNumber}-${tide.requirement}-${tide.tideId}`}
-              className="rounded-md px-2.5 py-2 text-xs"
-              style={{
-                background: "rgba(30, 41, 59, 0.62)",
-                border: "1px solid rgba(148, 163, 184, 0.16)",
-              }}
-            >
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span className="font-semibold" style={{ color: "#e0f2fe" }}>
-                  <TideDocumentationHover tideId={tide.tideId}>
-                    {tide.displayName}
-                  </TideDocumentationHover>
-                </span>
-                <span className="opacity-55">•</span>
-                <span className="opacity-80">{labelize(tide.requirement)}</span>
-                <span className="opacity-55">•</span>
-                <span className="opacity-80">{labelize(tide.role)}</span>
-              </div>
-              <p className="mt-1 opacity-65">
-                This card entered the pool through {tide.displayName}.
-              </p>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p className="mt-3 text-xs opacity-70">
-          {entry.isFallback
-            ? "Drawn from the broader pool because no selected tide matched this card."
-            : "Selected package match; source details are unavailable for this entry."}
-        </p>
-      )}
+      <p className="mt-3 text-xs opacity-70">
+        {inStarterDecklist
+          ? "Part of this dreamcaller's starting decklist."
+          : copies > 0
+            ? `Draft-pool card (${String(copies)} ${copies === 1 ? "copy" : "copies"}).`
+            : "Drawn from the broader pool."}
+      </p>
     </div>
   );
 }

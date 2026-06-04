@@ -166,18 +166,8 @@ function makeCardSourceDebugState(): CardSourceDebugState {
       {
         cardNumber: 101,
         cardName: "Lantern Witness",
-        cardTides: ["core", "support-a"],
-        matchedMandatoryTides: ["core"],
-        matchedOptionalTides: ["support-a"],
-        sourceTides: [
-          {
-            tideId: "core",
-            displayName: "Core",
-            requirement: "required",
-            role: "supporting",
-          },
-        ],
-        isFallback: false,
+        inStarterDecklist: true,
+        draftPoolCopies: 0,
       },
     ],
   };
@@ -500,18 +490,8 @@ describe("Task 02 state transitions", () => {
     overlay.entries.push({
       cardNumber: 202,
       cardName: "Late Mutation",
-      cardTides: ["support-b"],
-      matchedMandatoryTides: [],
-      matchedOptionalTides: ["support-b"],
-      sourceTides: [
-        {
-          tideId: "support-b",
-          displayName: "Support B",
-          requirement: "optional",
-          role: "supporting",
-        },
-      ],
-      isFallback: false,
+      inStarterDecklist: false,
+      draftPoolCopies: 1,
     });
 
     expect(next.cardSourceDebug?.entries).toHaveLength(1);
