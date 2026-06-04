@@ -29,8 +29,9 @@ export interface StarterCardModel {
 
 import { twilightMinstrel } from "./twilight-minstrel";
 import { circlewatchSeer } from "./circlewatch-seer";
+import { brandedDirewolf } from "./branded-direwolf";
 
-const models: StarterCardModel[] = [twilightMinstrel, circlewatchSeer];
+const models: StarterCardModel[] = [twilightMinstrel, circlewatchSeer, brandedDirewolf];
 
 export const starterCardModels: ReadonlyMap<number, StarterCardModel> = new Map<
   number,
