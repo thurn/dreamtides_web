@@ -1,5 +1,5 @@
 // Generate a random Dreamtides card pool of 180-220 cards using the
-// color-identity algorithm documented in docs/cards2/color_pool_generation_algorithm.md.
+// color-identity algorithm documented in docs/cards2/draft_pool_algorithms.md.
 //
 // The pool-construction algorithm itself lives in `src/draft_test/color-pool.ts`
 // and is the single source of truth shared with the in-app draft test harness:

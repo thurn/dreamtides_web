@@ -4,7 +4,7 @@
 // `default` while keeping core cards present and pool size in the 180-220 band.
 // These tests pin its invariants and assert that, over many seeds, it spreads
 // both cards and archetypes far more evenly than the default variant (see
-// `docs/cards2/color_pool_diversity.md`).
+// `docs/cards2/draft_pool_algorithms.md`).
 import { describe, expect, it } from "vitest";
 import { loadCards } from "../../scripts/generate-color-pool.mjs";
 import { buildPoolData, generatePoolFromData } from "./color-pool";

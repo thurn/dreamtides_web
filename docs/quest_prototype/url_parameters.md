@@ -114,10 +114,11 @@ pool. Start the dev server with `npm run dev:vite` (or `npm run draft_test`,
 which opens the route directly) and visit it on port 5173. It reads one query
 parameter at page load (not reactive; changing it requires a reload).
 
-- `algo=default` or `algo=diverse` selects the pool-generation algorithm.
-  `default` is the original color-identity generator; `diverse` is the variant
-  tuned to spread cards and archetypes more evenly across pools (see
-  `docs/cards2/color_pool_diversity.md`). Any other value (including empty or
+- `algo=default`, `algo=diverse`, or `algo=decklists` selects the
+  pool-construction algorithm. `default` is the color-identity generator;
+  `diverse` spreads cards and archetypes more evenly across pools; `decklists`
+  grows the pool out of real human-built decklists. All three are described in
+  `docs/cards2/draft_pool_algorithms.md`. Any other value (including empty or
   absent) falls back to the build default, which is `default`.
 
 The chosen algorithm applies to the pool built from your Dreamcaller selection,

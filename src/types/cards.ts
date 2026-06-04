@@ -77,7 +77,7 @@ export interface CardData {
    * runtime catalog cards. `core` flags an always-included staple, `colors`
    * lists the bare color-combo pools the card belongs to (e.g. `"b"`, `"br"`),
    * and `draftArchetypes` lists the color+archetype slices (e.g.
-   * `"br-aristocrats"`). See `docs/cards2/color_pool_generation_algorithm.md`.
+   * `"br-aristocrats"`). See `docs/cards2/draft_pool_algorithms.md`.
    */
   core?: boolean;
   colors?: string[];

@@ -1,6 +1,6 @@
 // Browser port of `scripts/generate-color-pool.mjs`. It builds a random,
 // color-coherent Dreamtides card pool of 180-220 cards from per-card metadata —
-// see `docs/cards2/color_pool_generation_algorithm.md` for the full design.
+// see `docs/cards2/draft_pool_algorithms.md` for the full design.
 //
 // The generator's inputs are reconstructed from `cards_v2.toml` records (loaded
 // in the browser via `cards-v2-database.ts`): `core` cards seed every pool,
@@ -22,7 +22,7 @@ const JIT = 15; // how far below the ceiling the random target may fall
 // --- pool-generation variants ------------------------------------------------
 // `default` is the original color-identity algorithm. `diverse` is an
 // experimental variant tuned to spread cards and archetypes more evenly across
-// pools (see `docs/cards2/color_pool_diversity.md`). The two are selectable
+// pools (see `docs/cards2/draft_pool_algorithms.md`). The two are selectable
 // side by side via the `variant` argument and the draft test `?algo=` URL
 // parameter. To make a variant the primary one, change `DEFAULT_POOL_VARIANT`;
 // to retire the experiment, delete the `diverse` branch and `generateDiverse`.
