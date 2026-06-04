@@ -28,6 +28,7 @@ It is written to be read alongside:
 - [The Evaluation Function](#the-evaluation-function)
 - [The Planner](#the-planner)
 - [Modeling the Opponent](#modeling-the-opponent)
+- [The Approval Loop](#the-approval-loop)
 - [Time Budget and Performance](#time-budget-and-performance)
 - [A Worked Turn](#a-worked-turn)
 - [Codebase Integration](#codebase-integration)
@@ -41,8 +42,10 @@ It is written to be read alongside:
 
 **Goals.**
 
-- An enemy that takes its own turns, plays its Starter deck competently, and
+- An enemy that proposes its own turns, plays its Starter deck competently, and
   competes for the 25⍟ victory threshold.
+- Every AI action is a suggestion the human approves with an explicit click
+  before it commits; the AI never mutates shared battle state on its own.
 - Decisions driven by heuristics plus a shallow search and a thin Monte Carlo
   layer over opponent responses.
 - A hard per-decision time budget of 100ms, with graceful degradation (return
@@ -60,8 +63,9 @@ It is written to be read alongside:
   treats opponent cards abstractly.
 - Perfect play or a difficulty-tuned ladder. One competent difficulty is the
   target; difficulty knobs are noted as future work.
-- Driving the human player's side. The human keeps the existing controls; the AI
-  drives only the enemy side and shared combat resolution.
+- Driving the human player's side, or any autonomous mutation. The human keeps
+  the existing controls; the AI only *proposes* the enemy side's actions and the
+  combat outcome, which the human approves.
 - Networked/remote AI. The AI runs locally on the quest client (see
   [Codebase Integration](#codebase-integration)).
 
@@ -180,11 +184,19 @@ already carries. The AI does not fork the state model.
 most of the work. Search exists to order plays, choose targets, and avoid
 walking challengers into bad combat — not to look many plies ahead.
 
+**5. The AI proposes; the human commits.** This is the cornerstone of the
+integration. The AI is a *suggestion engine*: it computes what it wants to do but
+mutates nothing directly. Every action — playing a character, playing removal,
+declaring challengers, resolving the Challenge phase — is surfaced as a single
+proposal that the human approves with an explicit click before it is applied. The
+AI's path stops at "here is my next move"; the human's click is what calls
+`dispatch`. See [The Approval Loop](#the-approval-loop).
+
 ## System Overview
 
-The AI is a new module tree under `src/battle/ai/`. It has five parts plus a
-small shared "rules spine" that the prototype needs in order to play a real game
-at all.
+The AI is a new module tree under `src/battle/ai/`, plus a proposal/approval
+surface in `src/battle/components/` and a small shared "rules spine" the prototype
+needs in order to play a real game at all.
 
 ```text
 src/battle/
@@ -196,9 +208,11 @@ src/battle/
     evaluate.ts        Static board evaluation (returns a scalar, AI's POV)
     planner.ts         Staged beam search that produces a turn plan
     opponent-model.ts  Abstract opponent + response sampling (Monte Carlo)
-    driver.ts          Turns a plan into BattleCommand[] and the turn handoff
-    use-battle-ai.ts    React hook: watch activeSide, run planner, dispatch
-    trace.ts           Builds BattleAiChoiceTrace entries for the log/inspector
+    driver.ts          Turns the next planned action into a proposed BattleCommand[]
+    use-battle-ai.ts    React hook: watch activeSide, run planner, surface a proposal
+    trace.ts           Builds BattleAiChoiceTrace entries for the proposal/log/inspector
+  components/
+    BattleAiProposalBar.tsx  Approve / Reject / End AI Turn for the current proposal
   engine/
     judgment.ts        NEW shared Challenge-phase resolver (used by both sides)
     energy.ts          NEW shared start-of-turn energy ramp
@@ -216,14 +230,17 @@ activeSide === "enemy"  (watched by use-battle-ai.ts)
   planner  --uses-->  evaluate + opponent-model + per-card models
         |
         v
-  TurnPlan (ordered Ai actions)  --driver-->  BattleCommand[]
+  next best action  --driver-->  proposed BattleCommand[]
         |
         v
-  dispatch({ type: "APPLY_COMMAND", command })  (one per action, paced)
+  BattleAiProposalBar  -->  human clicks Approve (or Reject)
         |
-        v
-  human Dusk/Night windows, then judgment.ts proposes + the human confirms
-  the Challenge outcome; SET_BATTLE_FLOW hands the turn back
+        v (on Approve)
+  dispatch({ type: "APPLY_COMMAND", command })  -->  re-plan from live state
+        |
+        v (loop until the AI proposes End Turn, which the human approves)
+  human Dusk/Night windows, then judgment.ts proposes the Challenge outcome,
+  the human approves it, and SET_BATTLE_FLOW hands the turn back
 ```
 
 ## The Rules Spine
@@ -332,6 +349,14 @@ proposed dissolves and score deltas, or a human-entered adjustment — goes thro
 the existing `DEBUG_EDIT` path, so undo/redo and the battle log keep working. The
 auto-resolver is thus a flow guide, a math helper, and a safety interlock, not a
 general effect engine.
+
+Under [The Approval Loop](#the-approval-loop) this is strengthened further: every
+AI action *and* the Challenge outcome are already gated behind explicit human
+approval, so the human is always in the loop by construction. The capability
+check's job is then to keep each proposal honest and legible — flagging any
+in-play card whose trigger or keyword could change the result so the human can
+resolve or adjust it before approving, instead of approving a subtly wrong
+outcome.
 
 ## The Forward Model
 
@@ -463,7 +488,8 @@ map one-to-one onto the existing `BattleAiDecisionStage` enum:
    turns.)
 3. **`nonCharacter`** — play events (removal, pump, card selection) at the point
    in the plan where they score best.
-4. **`endTurn`** — pass; the rules spine then resolves the Challenge phase.
+4. **`endTurn`** — pass. This is itself a proposal the human approves, after
+   which the rules spine proposes the Challenge outcome for approval.
 
 The search keeps a **beam** of the top-K partial plans (K ≈ 8–16) ranked by the
 evaluation function, expanding each by one legal action per stage until no
@@ -478,8 +504,19 @@ small, bounded amount of interleaving by letting the `nonCharacter` stage run
 both before and after `reposition` and keeping whichever beam entry scores
 higher. This stays cheap because the beam width caps total work.
 
-Output is a `TurnPlan` plus, for each chosen action, a `BattleAiChoiceTrace`
-(stage, choice kind, card, target, before/after heuristic score) for display.
+Output is a `TurnPlan` plus, for each action, a `BattleAiChoiceTrace` (stage,
+choice kind, card, target, before/after heuristic score) used to render the
+proposal and the log.
+
+The planner runs in a **receding-horizon** loop. It plans the whole intended turn
+so that look-ahead captures order-sensitive synergies, but only the *first* action
+is surfaced as a proposal. After the human approves it (and the command is
+applied) or rejects it, the planner re-runs from the live state to produce the
+next proposal. Re-planning each step is cheap (well under the budget) and keeps
+every proposal honest: it is always computed against the real board, so a rejected
+action or an unexpected human play during the turn never leaves the AI executing a
+stale plan. A rejection re-plans with that action excluded; an explicit "End AI
+Turn" stops the loop. See [The Approval Loop](#the-approval-loop).
 
 ## Modeling the Opponent
 
@@ -519,6 +556,52 @@ sample count is a budget-bounded knob.
 This layer never inspects real opponent card definitions; it consumes only
 abstract bodies and counts, preserving the asymmetric-knowledge principle.
 
+## The Approval Loop
+
+The AI never commits state. It produces proposals, and the human approves each
+one with a click before it is applied. This makes the human the authority on every
+change to the board, fits the prototype's manual-sandbox philosophy, and removes
+any risk of the AI silently committing a wrong result (see
+[Auto-Resolution and Manual Steps](#auto-resolution-and-manual-steps)).
+
+The loop, for the AI's turn:
+
+1. The planner computes the AI's next best action from the live state
+   (receding-horizon; see [The Planner](#the-planner)).
+2. `BattleAiProposalBar` renders it as one proposal: a plain-language description
+   ("Play Branded Direwolf to the back rank"; "Dissolve your 3✦ body with
+   Flashpoint Blast"; "Declare Meadowforged Colossus as a challenger"), the
+   referenced card(s), and the AI's short rationale from the
+   `BattleAiChoiceTrace`.
+3. The human clicks **Approve**, **Reject**, or **End AI Turn**:
+   - **Approve** dispatches the action's `DEBUG_EDIT` command(s) through the
+     normal controller path, so it lands in history and the log and is undoable.
+     The planner then re-plans and proposes the next action.
+   - **Reject** discards the proposal; the planner re-plans with that action
+     excluded and proposes an alternative.
+   - **End AI Turn** stops the loop immediately and moves to the handoff,
+     regardless of remaining proposals.
+4. When the AI's best action is to pass, it proposes **End Turn**. Approving it
+   declares the AI's challengers and yields the human's Dusk/Night windows.
+5. The Challenge phase resolves the same way: the judgment resolver produces a
+   previewed outcome (lane-by-lane dissolves and score deltas), rendered as a
+   single **Approve outcome** proposal that the human confirms — and can hand-edit
+   first if a trigger on their own card should change it. Only on approval do the
+   score and dissolves commit.
+
+Because each proposal is a single atomic step the human gates, no artificial
+pacing is needed: the human's clicks pace the turn. The proposal carries
+everything needed to judge it — what will happen, to which cards, and why — so
+approval is an informed decision rather than a rubber stamp. The same surface
+covers the rare case where the AI cannot fully model a board interaction: the
+proposal flags it ("your Gatebound Warden has a ▸Challenge trigger — resolve it
+before approving") and waits.
+
+Approving every action is the default and the design target. An optional
+"approve all remaining" affordance — auto-approving the rest of a computed turn —
+is noted as a convenience in [Open Questions](#open-questions), kept secondary to
+the click-per-action model.
+
 ## Time Budget and Performance
 
 The state is tiny and every component is linear in board size, so the realistic
@@ -536,10 +619,11 @@ still treats 100ms as a hard ceiling, enforced structurally:
   mid-turn) are resolved by a direct heuristic with no search and are effectively
   instant.
 
-For legibility the *executed* plan is intentionally paced — the driver inserts a
-short delay (a few hundred ms, configurable) between dispatched commands so the
-human can watch the AI act. This pacing is presentation, not thinking time, and
-is separate from the 100ms decision budget.
+The turn is paced by the human's approvals rather than by an artificial delay:
+each action waits at the proposal bar until the human clicks (see
+[The Approval Loop](#the-approval-loop)), so the player always has time to read
+what the AI intends before it happens. The 100ms budget therefore bounds only the
+work behind a single proposal, computed when the previous one is resolved.
 
 ## A Worked Turn
 
@@ -550,32 +634,34 @@ Worlds (1●). On the board it already has a Meadowforged Colossus in `reserve`
 (played last turn, now awakened) and the player has a lone 3✦ body in their front
 rank.
 
-1. **`character` stage.** The planner considers playing Branded Direwolf (4●) and
-   Twilight Minstrel (2●). Energy is 5, so it cannot do both plus an event. Beam
-   entries explore: {Direwolf}, {Minstrel}, {Minstrel + then a 1-3● event}. The
-   Minstrel-first lines evaluate higher because Twilight Minstrel's Support lifts
-   the Colossus and any front-rank body by +2✦.
-2. **`nonCharacter` (pre-reposition).** Flashpoint Blast can dissolve the
-   player's 3✦ body (cost ≤ 3● permitting). Removing it clears the only defender,
-   raising expected Challenge points. The beam keeps a line that casts it.
-3. **`reposition` stage.** The Colossus (awakened) is pushed to `deployed`. With
-   Twilight Minstrel placed in a supporting `reserve` slot, the Colossus's
-   effective spark is its 6 base + 2 per supporting ally + 2 from Minstrel's
-   Support — the forward model computes the exact number via the adjacency map.
-4. **`nonCharacter` (post-reposition).** Distant Worlds (+3✦) is evaluated on the
-   committed challenger. Against the opponent model — now "no defense" is likely
-   since their body was removed — the extra spark converts directly to points, so
-   the AI casts it on the Colossus.
-5. **`endTurn`.** The AI passes, declaring the Colossus as its challenger.
-   Control returns to the human for their Dusk window (position a defender, play
-   a Fast card); the judgment resolver then previews the lane outcome — the
-   unblocked Colossus scoring for the AI — which the human confirms before the
-   score commits. The spine checks the win condition, ramps energy, and hands the
-   turn back via `SET_BATTLE_FLOW`.
+1. **Proposal: play Twilight Minstrel (2●).** Internally the planner weighs
+   Branded Direwolf (4●) against Twilight Minstrel (2●) and prefers Minstrel
+   first, because its Support lifts the Colossus and any front-rank body by +2✦.
+   It surfaces "Play Twilight Minstrel to the back rank." You click **Approve**;
+   the materialization commits and the planner re-plans.
+2. **Proposal: Flashpoint Blast on your 3✦ body.** With the Minstrel down, the
+   next-best action is removal — dissolving the player's only defender raises the
+   AI's expected Challenge points. The proposal names the exact target. You click
+   **Approve** (or **Reject** if you know it should fizzle — say the body has Veil
+   you have not revealed).
+3. **Proposal: declare Meadowforged Colossus as a challenger.** The awakened
+   Colossus is pushed to `deployed`, with the Minstrel placed in a supporting
+   `reserve` slot. The proposal shows its computed effective spark — 6 base + 2
+   per supporting ally + 2 from Minstrel's Support, via the adjacency map. You
+   **Approve**.
+4. **Proposal: Distant Worlds (+3✦) on the Colossus.** With the defender gone the
+   opponent model expects no block, so the extra spark converts straight to
+   points. You **Approve**.
+5. **Proposal: End Turn.** Approving it declares challengers and yields your Dusk
+   window (position a defender, play a Fast card). The judgment resolver then
+   proposes the outcome — "Meadowforged Colossus scores N⍟, no defenders" — which
+   you **Approve**. Only then does the score commit; the spine checks the win
+   condition, ramps energy, and hands the turn back via `SET_BATTLE_FLOW`.
 
-Each step emits a `BattleAiChoiceTrace`, so the log reads as a legible sequence:
-"play Twilight Minstrel → dissolve your 3✦ body with Flashpoint Blast → push
-Meadowforged Colossus to challenge → pump it with Distant Worlds → pass."
+Each approved step emits a `BattleAiChoiceTrace`, so the log reads as a legible
+sequence — "play Twilight Minstrel → dissolve your 3✦ body with Flashpoint Blast →
+push Meadowforged Colossus to challenge → pump it with Distant Worlds → pass" —
+and every entry in it was something you clicked to allow.
 
 ## Codebase Integration
 
@@ -595,31 +681,36 @@ is on, use this deck for `enemyDeckDefinition` instead of the idf3-steered pool.
 This is a narrow branch at the single existing `createEnemyDeckDefinition` call
 site; the surrounding padding/shuffle logic is reused unchanged.
 
-**3. The driver hook.** `ai/use-battle-ai.ts` is a hook mounted by
-`PlayableBattleScreen` only when `aiMode` is on. It watches
-`reducerState.mutable`:
+**3. The driver hook and proposal surface.** `ai/use-battle-ai.ts` is a hook
+mounted by `PlayableBattleScreen` only when `aiMode` is on. It watches
+`reducerState.mutable`, and instead of dispatching directly it holds the AI's
+*current proposal* as React state for `BattleAiProposalBar` to render:
 
 ```ts
-useBattleAi({ reducerState, dispatch, enabled: aiMode });
+const { proposal, approve, reject, endAiTurn } =
+  useBattleAi({ reducerState, dispatch, enabled: aiMode });
 // internally:
-//   when mutable.activeSide === "enemy" && mutable.result === null
-//   and no AI turn is already in flight:
-//     plan = runPlanner(forwardModelFrom(mutable), deadline)
-//     for (const action of plan.actions) {
-//       dispatch({ type: "APPLY_COMMAND", command: toCommand(action) });
-//       await pace();   // presentation delay
-//     }
-//     resolveChallengeAndHandoff(dispatch, mutable);
+//   when mutable.activeSide === "enemy" && mutable.result === null:
+//     proposal = planNextAction(forwardModelFrom(mutable), deadline)  // one action
+//   approve(): dispatch the proposal's command(s), then re-plan -> next proposal
+//   reject():  re-plan excluding the rejected action -> alternative proposal
+//   endAiTurn(): stop, then propose the Challenge outcome and the handoff
 ```
 
-It reuses the same `dispatch({ type: "APPLY_COMMAND", command })` path every
-human gesture uses, so there is no second mutation route to keep consistent, and
-undo/redo and logging continue to work unchanged.
+Only the human-triggered `approve` (and the approved Challenge outcome) calls
+`dispatch({ type: "APPLY_COMMAND", command })` — the same path every human gesture
+uses — so there is no second mutation route to keep consistent, and undo/redo and
+logging continue to work unchanged. `BattleAiProposalBar` (in
+`src/battle/components/`) renders the current proposal with **Approve**,
+**Reject**, and **End AI Turn** controls and the AI's rationale.
 
-**4. Input gating.** Wire the existing placeholders: set `canPlayerAct` (today
-hardcoded to `true` in `PlayableBattleScreen.tsx`) to `false` while
-`activeSide === "enemy"` under AI mode, so the player cannot edit state mid-AI
-turn, and pass `hasAiOpponent={aiMode}` to `BattleStatusBar` (it already renders
+**4. Input gating.** Wire the existing placeholders. While the AI holds an
+un-approved proposal, set `canPlayerAct` (today hardcoded to `true` in
+`PlayableBattleScreen.tsx`) to `false` so the player drives the turn only through
+the proposal bar's Approve/Reject controls rather than by free editing. During the
+human's own Dusk/Night windows the proposal bar steps aside and normal controls
+return so the player can position defenders and play Fast cards. Pass
+`hasAiOpponent={aiMode}` to `BattleStatusBar` (it already renders
 `data-battle-status-meta="has-ai"`).
 
 **5. Multiplayer coexistence.** The battle state is shared through
@@ -640,12 +731,14 @@ handoff) and `FORCE_RESULT` only via the normal win-detection path.
 
 The AI's reasoning is surfaced through three layers, reusing existing surfaces.
 
-- **Action narration and pacing (always on).** Because the driver paces its
-  dispatched commands, the player watches the AI act one step at a time. Each
-  step shows a transient caption derived from its `BattleAiChoiceTrace` —
-  "AI plays Branded Direwolf," "AI pushes Meadowforged Colossus to challenge,"
-  "AI dissolves your body with Flashpoint Blast." A "thinking…" indicator on the
-  enemy side of `BattleStatusBar` covers the brief planning moment.
+- **The proposal bar (always on, the primary surface).** Every AI action appears
+  in `BattleAiProposalBar` *before* it happens, as a plain-language suggestion
+  with the referenced card(s), the AI's rationale from the `BattleAiChoiceTrace`,
+  and **Approve** / **Reject** / **End AI Turn** controls. The player therefore
+  both sees and gates each move — playing a character, removal, declaring
+  challengers, resolving the Challenge phase — and nothing reaches the board
+  without a click. A "thinking…" indicator on the enemy side of `BattleStatusBar`
+  covers the brief moment a proposal is being computed.
 
 - **The battle log (always on).** Every AI action already produces a transition;
   populating its `aiChoices` makes the AI's turn render as a readable list in
@@ -661,10 +754,10 @@ The AI's reasoning is surfaced through three layers, reusing existing surfaces.
   tuning and stays out of the normal player flow, consistent with how the
   prototype keeps package internals behind debug surfaces.
 
-Together these satisfy the requirement that the player can both *see* what the AI
-does (narration + log) and, when desired, *inspect why* (the debug panel), all
-without inventing new state plumbing — the `aiChoices` channel already exists end
-to end.
+Together these satisfy the requirement that the player both *sees and approves*
+what the AI does (the proposal bar), keeps a durable record of it (the log), and,
+when desired, can *inspect why* (the debug panel) — all built on the `aiChoices`
+channel that already exists end to end.
 
 ## Testing and Tuning
 
@@ -698,11 +791,13 @@ to end.
 3. **Per-card models + evaluation.** `ai/cards/*` and `ai/evaluate.ts`.
 4. **Planner + opponent model.** `ai/planner.ts`, `ai/opponent-model.ts`, the
    time-budget guard, and the self-play harness for weight tuning.
-5. **Driver + integration.** `ai/use-battle-ai.ts`, the `?ai=1` runtime-config
-   plumbing, deck injection in `createBattleInit`, and `canPlayerAct` /
-   `hasAiOpponent` wiring.
-6. **Presentation.** `aiChoices` trace population, action narration/pacing, the
-   thinking indicator, and the debug inspector tab.
+5. **Driver + approval surface + integration.** `ai/use-battle-ai.ts`,
+   `components/BattleAiProposalBar.tsx`, the `?ai=1` runtime-config plumbing, deck
+   injection in `createBattleInit`, and the `canPlayerAct` / `hasAiOpponent`
+   wiring (gated to the proposal bar during AI proposals).
+6. **Presentation.** `aiChoices` trace population, the proposal bar's
+   plain-language descriptions and rationale, the thinking indicator, and the
+   debug inspector tab.
 7. **Hardening.** Browser QA, multiplayer-coexistence gating, and difficulty
    knobs (beam width, expectiminimax vs. worst-case, sample count).
 
@@ -725,6 +820,11 @@ entirely through the headless harness.
 - **Difficulty.** Ship one competent difficulty first; expose beam width,
   expectiminimax-vs-worst-case, and Monte Carlo sample count as the difficulty
   axes later. Is a single difficulty acceptable for v1?
+- **Rejection and convenience.** Approving each action is the default. What
+  should **Reject** do — skip the action and let the AI propose its next-best
+  alternative (re-plan), or end the AI's turn outright? And should there be an
+  optional "approve all remaining" toggle for players who want faster turns, or is
+  one click per action always required?
 - **Multiplayer coexistence.** Confirm the AI should be disabled in shared
   multiplayer rooms (or owner-gated), so two clients never both drive the enemy.
 - **Doc/term alignment.** The code uses `deployed`/`reserve`; the rules doc uses
@@ -744,12 +844,13 @@ entirely through the headless harness.
 | `src/battle/ai/evaluate.ts` | NEW — static board evaluation. |
 | `src/battle/ai/planner.ts` | NEW — staged beam search; emits `TurnPlan` + traces. |
 | `src/battle/ai/opponent-model.ts` | NEW — abstract opponent + response sampling. |
-| `src/battle/ai/driver.ts` | NEW — plan → `BattleCommand[]` + handoff. |
-| `src/battle/ai/use-battle-ai.ts` | NEW — hook watching `activeSide`, dispatching. |
-| `src/battle/ai/trace.ts` | NEW — builds `BattleAiChoiceTrace` entries. |
+| `src/battle/ai/driver.ts` | NEW — next planned action → proposed `BattleCommand[]` (committed on approval). |
+| `src/battle/ai/use-battle-ai.ts` | NEW — hook watching `activeSide`; holds the current proposal, commits on approval, re-plans. |
+| `src/battle/ai/trace.ts` | NEW — builds `BattleAiChoiceTrace` entries (proposal + log). |
+| `src/battle/components/BattleAiProposalBar.tsx` | NEW — proposal/approval surface (Approve / Reject / End AI Turn + rationale). |
 | `src/battle/engine/judgment.ts` | NEW — shared Challenge-phase resolver. |
 | `src/battle/engine/energy.ts` | NEW — shared start-of-turn energy ramp. |
-| `src/battle/components/PlayableBattleScreen.tsx` | Mount the AI hook; gate `canPlayerAct`; pass `hasAiOpponent`. |
+| `src/battle/components/PlayableBattleScreen.tsx` | Mount the AI hook + proposal bar; gate `canPlayerAct` to the proposal during AI proposals; pass `hasAiOpponent`. |
 | `src/battle/components/BattleInspector.tsx` | Debug-gated AI reasoning tab. |
 | `src/battle/components/BattleLogDrawer.tsx` | Render populated `aiChoices`. |
 | `scripts/battle-ai-experiment.mjs` | NEW — headless self-play harness for tuning. |
