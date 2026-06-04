@@ -34,6 +34,7 @@ import { sigilswornChampion } from "./sigilsworn-champion";
 import { lastWitness } from "./last-witness";
 import { meadowforgedColossus } from "./meadowforged-colossus";
 import { flashpointBlast } from "./flashpoint-blast";
+import { glimpseOfThePast } from "./glimpse-of-the-past";
 
 const models: StarterCardModel[] = [
   twilightMinstrel,
@@ -43,6 +44,7 @@ const models: StarterCardModel[] = [
   lastWitness,
   meadowforgedColossus,
   flashpointBlast,
+  glimpseOfThePast,
 ];
 
 export const starterCardModels: ReadonlyMap<number, StarterCardModel> = new Map<
