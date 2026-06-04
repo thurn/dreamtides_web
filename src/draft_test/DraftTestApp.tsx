@@ -21,6 +21,7 @@ import { DEFAULT_POOL_VARIANT } from "./color-pool";
 import {
   buildNameIndex,
   loadCardsV2Database,
+  loadDecklists,
   resolvePool,
 } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
@@ -302,18 +303,29 @@ interface PoolInfo {
   variant: PoolVariant;
 }
 
+/** Pool-generation variants, in the order the toggle button cycles them. */
+const POOL_VARIANTS: readonly PoolVariant[] = ["default", "diverse", "decklists"];
+
 /**
  * Pool-generation variant for this session, from the `?algo=` URL parameter
- * (`default` or `diverse`). Invalid or absent values fall back to
+ * (`default`, `diverse`, or `decklists`). Invalid or absent values fall back to
  * {@link DEFAULT_POOL_VARIANT}, so flipping that constant changes the default
  * everywhere while the URL parameter still allows side-by-side comparison.
  */
 function readPoolVariant(): PoolVariant {
   const algo = new URLSearchParams(window.location.search).get("algo");
-  return algo === "default" || algo === "diverse" ? algo : DEFAULT_POOL_VARIANT;
+  return POOL_VARIANTS.includes(algo as PoolVariant)
+    ? (algo as PoolVariant)
+    : DEFAULT_POOL_VARIANT;
 }
 
-/** Reload the harness with the other variant selected via `?algo=`. */
+/** The next variant in the cycle, for the toggle button. */
+function nextPoolVariant(current: PoolVariant): PoolVariant {
+  const i = POOL_VARIANTS.indexOf(current);
+  return POOL_VARIANTS[(i + 1) % POOL_VARIANTS.length];
+}
+
+/** Reload the harness with the given variant selected via `?algo=`. */
 function switchPoolVariant(next: PoolVariant): void {
   const url = new URL(window.location.href);
   url.searchParams.set("algo", next);
@@ -353,13 +365,14 @@ export default function DraftTestApp() {
 
     void (async () => {
       try {
-        const [db, loadedDreamcallers] = await Promise.all([
+        const [db, loadedDreamcallers, decklists] = await Promise.all([
           loadCardsV2Database(),
           loadDreamcallersV2(),
+          loadDecklists(),
         ]);
         if (cancelled) return;
 
-        poolDataRef.current = buildPoolData([...db.values()]);
+        poolDataRef.current = buildPoolData([...db.values()], decklists);
         setDatabase(db);
         setDreamcallers(loadedDreamcallers);
         setStatus("select");
@@ -547,24 +560,22 @@ export default function DraftTestApp() {
                   <button
                     type="button"
                     data-testid="draft-test-pool-variant"
-                    title={`Pool algorithm: ${poolInfo.variant}. Click to switch.`}
+                    title={`Pool algorithm: ${poolInfo.variant}. Click to cycle.`}
                     onClick={() => {
-                      switchPoolVariant(
-                        poolInfo.variant === "diverse" ? "default" : "diverse",
-                      );
+                      switchPoolVariant(nextPoolVariant(poolInfo.variant));
                     }}
                     className="cursor-pointer rounded px-2 py-0.5 font-bold uppercase tracking-widest transition-colors"
                     style={{
                       background:
-                        poolInfo.variant === "diverse"
-                          ? "rgba(16, 185, 129, 0.18)"
-                          : "rgba(148, 163, 184, 0.16)",
+                        poolInfo.variant === "default"
+                          ? "rgba(148, 163, 184, 0.16)"
+                          : "rgba(16, 185, 129, 0.18)",
                       border:
-                        poolInfo.variant === "diverse"
-                          ? "1px solid rgba(16, 185, 129, 0.5)"
-                          : "1px solid rgba(148, 163, 184, 0.4)",
+                        poolInfo.variant === "default"
+                          ? "1px solid rgba(148, 163, 184, 0.4)"
+                          : "1px solid rgba(16, 185, 129, 0.5)",
                       color:
-                        poolInfo.variant === "diverse" ? "#34d399" : "#cbd5e1",
+                        poolInfo.variant === "default" ? "#cbd5e1" : "#34d399",
                     }}
                   >
                     {poolInfo.variant}

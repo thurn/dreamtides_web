@@ -23,6 +23,19 @@ export async function loadCardsV2Database(): Promise<Map<number, CardData>> {
 }
 
 /**
+ * Fetch the bundled real decklists (`docs/drafts_dt`, written to
+ * `/decklists-data.json` by `scripts/setup-assets.mjs`) used by the `decklists`
+ * pool variant. Each inner array is one deck's card names. Returns an empty
+ * array if the bundle is missing so the harness still loads (the variant then
+ * falls back to the `default` algorithm).
+ */
+export async function loadDecklists(): Promise<string[][]> {
+  const response = await fetch("/decklists-data.json");
+  if (!response.ok) return [];
+  return (await response.json()) as string[][];
+}
+
+/**
  * Build a card-name -> card-number index from a v2 database. When two records
  * share a name the first wins; the draft pool only needs one representative
  * per name.

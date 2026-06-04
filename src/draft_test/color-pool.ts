@@ -26,8 +26,55 @@ const JIT = 15; // how far below the ceiling the random target may fall
 // side by side via the `variant` argument and the draft test `?algo=` URL
 // parameter. To make a variant the primary one, change `DEFAULT_POOL_VARIANT`;
 // to retire the experiment, delete the `diverse` branch and `generateDiverse`.
-export type PoolVariant = "default" | "diverse";
+export type PoolVariant = "default" | "diverse" | "decklists";
 export const DEFAULT_POOL_VARIANT: PoolVariant = "default";
+
+// Knobs for the `decklists` variant. It ignores the synthesized archetype
+// themes the other variants walk and instead grows a pool out of real,
+// human-shaped decklists (`docs/drafts_dt`, bundled to `decklists-data.json`):
+// pick a Dreamcaller strategy, grab a real decklist rich in that strategy's
+// cards as the "starter", then repeatedly add the decklists most *similar* to
+// the starter until the pool reaches the target size. Similarity is cosine over
+// IDF-weighted card vectors, so the distinctive cards two decks share count for
+// much more than ubiquitous ones (e.g. the near-omnipresent Abandon cards).
+// Grouped here so tuning is a one-stop edit.
+interface DecklistsTuning {
+  targetSize: number;
+  targetJitter: number;
+  minDeckSize: number;
+  maxDeckSize: number;
+  starterTopK: number;
+  starterAlpha: number;
+  growTopK: number;
+  growTemperature: number;
+}
+const DECKLISTS: DecklistsTuning = {
+  // Desired pool size in copies (each card capped at 2). The pool lands within
+  // +/- targetJitter of this. ~150 plays as a focused single-archetype pool.
+  targetSize: 150,
+  // Random wobble around targetSize so the size varies run to run.
+  targetJitter: 8,
+  // Ignore decklists smaller than this — the tail of partial/near-empty files
+  // carries too little signal to anchor or match on.
+  minDeckSize: 16,
+  // Ignore decklists larger than this — the handful of 50-91 card files are
+  // aggregates, not drafted decks, and would dominate any overlap score.
+  maxDeckSize: 34,
+  // Pick the starter by sampling among the N decklists that best fit the rolled
+  // strategy (weighted by fit^starterAlpha), rather than always the single best
+  // — that is a big source of run-to-run variety.
+  starterTopK: 25,
+  // Exponent on starter fit when sampling: higher = tighter to the best fits.
+  starterAlpha: 2,
+  // Each growth step samples among the N decklists most similar to the starter.
+  // Small keeps the pool focused; larger lets it drift toward the archetype's
+  // edges.
+  growTopK: 10,
+  // Softmax temperature for growth picks. Lower = almost always take the most
+  // similar deck (tight, archetype-pure pools); higher = flatter sampling
+  // (looser, more varied pools).
+  growTemperature: 0.35,
+};
 
 // Knobs for the `diverse` variant. Grouped here so tuning is a one-stop edit.
 interface DiverseTuning {
@@ -108,6 +155,12 @@ export interface PoolData {
   core: Set<string>;
   archLists: Map<string, Set<string>>;
   draftLists: Map<string, Set<string>>;
+  /**
+   * Real per-deck card lists used by the `decklists` variant. Optional because
+   * the theme-based variants and the Node tooling do not need them; when absent
+   * the `decklists` variant falls back to the `default` algorithm.
+   */
+  decklists?: readonly (readonly string[])[];
 }
 
 /** Result of one pool generation. */
@@ -203,7 +256,10 @@ function addTo(map: Map<string, Set<string>>, key: string, value: string): void 
  * to `core` (if flagged), to one mechanic archetype per tide base name, and to
  * every bare color-combo list and color+archetype slice it belongs to.
  */
-export function buildPoolData(cards: readonly PoolCard[]): PoolData {
+export function buildPoolData(
+  cards: readonly PoolCard[],
+  decklists?: readonly (readonly string[])[],
+): PoolData {
   const core = new Set<string>();
   const archLists = new Map<string, Set<string>>();
   const draftLists = new Map<string, Set<string>>();
@@ -222,6 +278,7 @@ export function buildPoolData(cards: readonly PoolCard[]): PoolData {
     core,
     archLists: orderedMap(archLists),
     draftLists: orderedMap(draftLists),
+    decklists,
   };
 }
 
@@ -681,6 +738,196 @@ function generateDiverse(
   return { C, selected, counts };
 }
 
+// --- the decklists variant ---------------------------------------------------
+// IDF weighting and per-deck norms over the *filtered* real decklists, cached
+// per PoolData. Filtering drops the near-empty and aggregate files so they
+// neither anchor a pool nor dominate similarity. IDF (log of inverse document
+// frequency) is what makes "similar" mean "shares distinctive cards" rather
+// than "shares popular cards": a card in nearly every deck gets ~0 weight.
+interface DeckVector {
+  cards: Set<string>;
+  norm: number;
+}
+interface DeckCorpus {
+  decks: DeckVector[];
+  idf: Map<string, number>;
+}
+const deckCorpusCache = new WeakMap<PoolData, DeckCorpus | null>();
+function deckCorpus(poolData: PoolData): DeckCorpus | null {
+  const cached = deckCorpusCache.get(poolData);
+  if (cached !== undefined) return cached;
+  let corpus: DeckCorpus | null = null;
+  const source = poolData.decklists;
+  if (source && source.length > 0) {
+    const filtered = source
+      .map((d) => new Set(d))
+      .filter(
+        (s) =>
+          s.size >= DECKLISTS.minDeckSize && s.size <= DECKLISTS.maxDeckSize,
+      );
+    if (filtered.length > 0) {
+      const n = filtered.length;
+      const df = new Map<string, number>();
+      for (const s of filtered) for (const c of s) df.set(c, (df.get(c) ?? 0) + 1);
+      const idf = new Map<string, number>();
+      for (const [c, d] of df) idf.set(c, Math.log((n + 1) / d));
+      const decks = filtered.map((cards): DeckVector => {
+        let sq = 0;
+        for (const c of cards) {
+          const w = idf.get(c) ?? 0;
+          sq += w * w;
+        }
+        return { cards, norm: Math.sqrt(sq) || 1 };
+      });
+      corpus = { decks, idf };
+    }
+  }
+  deckCorpusCache.set(poolData, corpus);
+  return corpus;
+}
+
+// Build a pool by snowballing real decklists. Roll one of the Dreamcaller's
+// strategies, take a real decklist rich in that strategy's cards as the
+// starter, then keep adding the decklists most similar to the starter (cosine
+// over IDF-weighted card vectors) until the target size. Falls back to the
+// `default` algorithm when no usable decklists are bundled.
+function generateDecklists(
+  rng: () => number,
+  poolData: PoolData,
+  seedArchetypes?: readonly string[],
+): { C: Set<string>; selected: string[]; counts: Map<string, number> } {
+  const corpus = deckCorpus(poolData);
+  if (!corpus) return generate(rng, poolData, seedArchetypes);
+
+  const { core, archLists, draftLists } = poolData;
+  const { decks, idf } = corpus;
+  const idfOf = (c: string): number => idf.get(c) ?? 0;
+
+  // 1. Roll one strategy off the Dreamcaller's list (the archetype role). An
+  //    open-pool Dreamcaller (no list) leaves it unset, so the starter is then
+  //    any real decklist.
+  const eligible = (seedArchetypes ?? []).filter(
+    (a) => draftLists.has(a) && colorPrefix(a) !== "",
+  );
+  let strategyLabel = "open";
+  let strategyPrefix = "";
+  let strategyCards: Set<string> | null = null;
+  if (eligible.length > 0) {
+    const rolled = eligible[Math.floor(rng() * eligible.length)];
+    strategyLabel = `D:${rolled}`;
+    strategyPrefix = colorPrefix(rolled);
+    strategyCards = draftLists.get(rolled) ?? null;
+  }
+
+  // 2. Pick the starter: the decklist that best fits the rolled strategy (most
+  //    shared IDF weight with its cards), sampled among the top fits so the
+  //    same strategy yields a different starter run to run.
+  const randomDeck = (): Set<string> =>
+    decks[Math.floor(rng() * decks.length)].cards;
+  let starter: Set<string>;
+  if (strategyCards && strategyCards.size > 0) {
+    const sc = strategyCards;
+    const scored = decks
+      .map((d): [Set<string>, number] => {
+        let fit = 0;
+        for (const c of d.cards) if (sc.has(c)) fit += idfOf(c);
+        return [d.cards, fit];
+      })
+      .filter(([, fit]) => fit > 0)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, DECKLISTS.starterTopK);
+    starter =
+      scored.length > 0
+        ? weightedPick(
+            rng,
+            scored.map(([cards]) => cards),
+            scored.map(([, fit]) => fit ** DECKLISTS.starterAlpha),
+          )
+        : randomDeck();
+  } else {
+    starter = randomDeck();
+  }
+
+  // 3. Anchor similarity to the starter (not the drifting pool) so the whole
+  //    pool stays orbiting one archetype.
+  let anchorSq = 0;
+  for (const c of starter) anchorSq += idfOf(c) ** 2;
+  const anchorNorm = Math.sqrt(anchorSq) || 1;
+  const simToStarter = (deck: DeckVector): number => {
+    let dot = 0;
+    for (const c of deck.cards) if (starter.has(c)) dot += idfOf(c) ** 2;
+    return dot / (anchorNorm * deck.norm);
+  };
+
+  // 4. Seed the pool with core staples + the starter, then snowball the
+  //    most-similar decklists until the jittered target. A card reaches 2
+  //    copies only when two different decks include it (cap at 2). Adding the
+  //    final deck in shuffled order lets us stop exactly at the target.
+  const target = randInt(
+    rng,
+    DECKLISTS.targetSize - DECKLISTS.targetJitter,
+    DECKLISTS.targetSize + DECKLISTS.targetJitter,
+  );
+  const counts = new Map<string, number>([...core].map((c) => [c, 1]));
+  const bump = (c: string): void => {
+    counts.set(c, (counts.get(c) ?? 0) + 1);
+  };
+  for (const c of starter) bump(c);
+
+  const used = new Set<Set<string>>([starter]);
+  while (poolSize(counts) < target) {
+    const cands = decks
+      .filter((d) => !used.has(d.cards))
+      .map((d): [DeckVector, number] => [d, simToStarter(d)])
+      .filter(([, s]) => s > 0)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, DECKLISTS.growTopK);
+    if (cands.length === 0) break;
+    const pick = weightedPick(
+      rng,
+      cands.map(([d]) => d),
+      cands.map(([, s]) => Math.exp(s / DECKLISTS.growTemperature)),
+    );
+    used.add(pick.cards);
+    for (const c of shuffle(rng, [...pick.cards])) {
+      if (poolSize(counts) >= target) break;
+      bump(c);
+    }
+  }
+
+  // 5. Identity + labels for display. With a rolled strategy the identity is
+  //    its color prefix (e.g. "ubg"), matching the theme-based variants. For an
+  //    open pool, take the colors a meaningful share of the pool actually sits
+  //    in, so the identity reflects the real decklists rather than every color
+  //    a lone splash card touches.
+  const C = new Set<string>();
+  if (strategyPrefix !== "") {
+    for (const letter of strategyPrefix) C.add(letter);
+  } else {
+    const unique = counts.size || 1;
+    for (const letter of COLORS) {
+      const list = draftLists.get(letter);
+      if (!list) continue;
+      let n = 0;
+      for (const c of counts.keys()) if (list.has(c)) n++;
+      if (n / unique >= 0.18) C.add(letter);
+    }
+  }
+  let domArch: string | null = null;
+  let domScore = 0;
+  for (const [a, set] of archLists) {
+    let s = 0;
+    for (const c of counts.keys()) if (set.has(c)) s++;
+    if (s > domScore) {
+      domScore = s;
+      domArch = a;
+    }
+  }
+  const selected = [strategyLabel];
+  if (domArch) selected.push(`A:${domArch}`);
+  return { C, selected, counts };
+}
+
 /**
  * Generate a fresh random pool from the given card records. Pass a `seed` to
  * reproduce a previous run; omit it for a new random pool each call. Copy counts
@@ -715,7 +962,9 @@ export function generatePoolFromData(
   const { C, selected, counts } =
     variant === "diverse"
       ? generateDiverse(rng, poolData, seedArchetypes)
-      : generate(rng, poolData, seedArchetypes);
+      : variant === "decklists"
+        ? generateDecklists(rng, poolData, seedArchetypes)
+        : generate(rng, poolData, seedArchetypes);
 
   const capped = new Map<string, number>();
   for (const [card, count] of counts) {

@@ -319,6 +319,8 @@ export function setupAssets({
   const journeysDir = join(publicDir, "journeys");
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
+  const decklistsJsonPath = join(publicDir, "decklists-data.json");
+  const draftsDtDir = join(ROOT, "docs", "drafts_dt");
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
   const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
@@ -370,6 +372,27 @@ export function setupAssets({
   const jsonCardsV2 = allCardsV2.map(transformCard);
   writeFileSync(cardV2JsonPath, JSON.stringify(jsonCardsV2, null, 2) + "\n");
   console.log(`Wrote ${jsonCardsV2.length} cards to cards_v2-data.json`);
+
+  // Real per-deck card lists (`docs/drafts_dt/*.txt`) bundled for the draft
+  // test's `decklists` pool variant, which builds a pool by snowballing
+  // similar real decklists rather than synthesizing one from archetype themes.
+  // Each file is one deck: a newline-separated list of card names. We keep only
+  // names that exist in cards_v2 (so the bundle never references unknown cards)
+  // and drop empty files; all size filtering happens in the algorithm so it
+  // stays tunable. Output shape is `string[][]` (one inner array per deck).
+  console.log("Bundling real decklists from docs/drafts_dt...");
+  const knownCardNames = new Set(jsonCardsV2.map((card) => card.name));
+  const decklists = [];
+  for (const filename of readdirSync(draftsDtDir).sort()) {
+    if (!filename.endsWith(".txt")) continue;
+    const lines = readFileSync(join(draftsDtDir, filename), "utf8")
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0 && knownCardNames.has(line));
+    if (lines.length > 0) decklists.push(lines);
+  }
+  writeFileSync(decklistsJsonPath, JSON.stringify(decklists) + "\n");
+  console.log(`Wrote ${decklists.length} decklists to decklists-data.json`);
 
   console.log("Parsing dreamcallers.toml...");
   const dreamcallerTomlContent = readFileSync(dreamcallerTomlPath, "utf8");
