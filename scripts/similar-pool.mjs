@@ -16,8 +16,10 @@
 //   ||A||        = sqrt(sum over c in A of weight(c)^2)
 //
 // Pool assembly: rank every other deck by similarity to the input, then union
-// decks best-first starting from the input itself. Each card is capped at
-// `--cap` copies. We stop the moment the pool reaches `--target` copies.
+// WHOLE decks best-first starting from the input itself. Each card is capped at
+// `--cap` copies. Decks are never truncated mid-list; instead we keep the
+// whole-deck boundary whose pool size lands closest to `--target`, accepting
+// anything inside the window [target - tolerance, target + tolerance].
 //
 // Run with --help for the full flag list.
 
@@ -31,7 +33,14 @@ const FLAGS = {
   target: {
     def: 100,
     parse: Number,
-    help: 'Target pool size in cards (counting duplicate copies). Default 100.',
+    help: 'Target pool size in cards (counting duplicate copies). The builder lands on '
+      + 'the whole-deck boundary closest to this. Default 100.',
+  },
+  tolerance: {
+    def: 10,
+    parse: Number,
+    help: 'Half-width of the acceptable pool-size window: the pool may end anywhere in '
+      + '[target - tolerance, target + tolerance] (e.g. 90-110). Default 10.',
   },
   cap: {
     def: 2,
@@ -66,21 +75,6 @@ const FLAGS = {
     help: 'Ignore cards appearing in more than this FRACTION of decks when SCORING '
       + 'similarity — a hard staple cutoff. Default 1.0 (keep all).',
   },
-  'card-order': {
-    def: 'file',
-    parse: String,
-    choices: ['file', 'idf'],
-    help: 'Order a deck\'s cards are pulled into the pool: "file" = listed order, '
-      + '"idf" = rarest-first. Affects which cards survive when a partial deck hits '
-      + 'the target. Default file.',
-  },
-  'whole-decks': {
-    def: false,
-    parse: () => true,
-    flag: true,
-    help: 'Only union complete decks; stop before the deck that would overshoot --target '
-      + '(pool may end under target) instead of adding a partial deck. Default off.',
-  },
   'include-input': {
     def: false,
     parse: () => true,
@@ -102,7 +96,7 @@ function printHelp() {
   console.log('  node scripts/similar-pool.mjs docs/drafts_anon/0001.txt');
   console.log('  node scripts/similar-pool.mjs my-deck.txt --target=60 --cap=3');
   console.log('  node scripts/similar-pool.mjs my-deck.txt --idf-power=2 --max-df-frac=0.05');
-  console.log('  node scripts/similar-pool.mjs my-deck.txt --whole-decks --card-order=idf');
+  console.log('  node scripts/similar-pool.mjs my-deck.txt --target=120 --tolerance=15');
 }
 
 function parseArgs(argv) {
@@ -142,22 +136,20 @@ function parseArgs(argv) {
 }
 
 // A deck is the set of distinct, non-empty card names in a file (corpus lists
-// are singletons; dedupe defensively, preserving listed order).
+// are singletons; dedupe defensively). With whole-deck unioning and a copy cap,
+// the pool's contents depend only on which decks are unioned, not card order,
+// so the set is all we need.
 function parseDeck(path) {
-  const order = [];
   const seen = new Set();
   for (const line of readFileSync(path, 'utf8').split('\n')) {
     const name = line.trim();
-    if (name && !seen.has(name)) {
-      seen.add(name);
-      order.push(name);
-    }
+    if (name) seen.add(name);
   }
-  return { set: seen, order };
+  return { set: seen };
 }
 
 function loadCorpus(dir) {
-  const decks = new Map(); // filename -> { set, order }
+  const decks = new Map(); // filename -> { set }
   for (const file of readdirSync(dir)) {
     if (!file.endsWith('.txt')) continue;
     const deck = parseDeck(join(dir, file));
@@ -232,10 +224,12 @@ function main() {
   // ---- Report the ranking ----
   console.log(`Input: ${inputName} (${input.set.size} cards)`);
   console.log(`Corpus: ${N} decks, ${weight.size} unique cards  (dir: ${opts.dir})`);
+  const low = opts.target - opts.tolerance;
+  const high = opts.target + opts.tolerance;
   console.log(
     `Scoring: idf-power=${opts['idf-power']}, min-df=${opts['min-df']}, `
-    + `max-df-frac=${opts['max-df-frac']}  |  pool: target=${opts.target}, cap=${opts.cap}, `
-    + `card-order=${opts['card-order']}, whole-decks=${opts['whole-decks']}\n`,
+    + `max-df-frac=${opts['max-df-frac']}  |  pool: target=${opts.target}±${opts.tolerance} `
+    + `(${low}-${high}), cap=${opts.cap}\n`,
   );
   console.log(`Top ${opts.top} most uniquely-similar decks (IDF-cosine):`);
   for (const { file, deck, sim } of scored.slice(0, opts.top)) {
@@ -250,63 +244,57 @@ function main() {
   }
 
   // ---- Assemble the pool ----
+  // Union whole decks best-first. After the input and after each added deck we
+  // have a candidate pool; we keep the candidate whose total size is closest to
+  // the target (tie-break toward the larger pool). Decks are never truncated.
+  function unionInto(pool, set) {
+    let added = 0;
+    for (const c of set) {
+      const have = pool.get(c) ?? 0;
+      if (have >= opts.cap) continue;
+      pool.set(c, have + 1);
+      added += 1;
+    }
+    return added;
+  }
+
   const pool = new Map(); // card -> copies
-  let size = 0;
-
-  function cardsInAddOrder(deck) {
-    if (opts['card-order'] === 'idf') {
-      return [...deck.order].sort((x, y) => (weight.get(y) ?? 0) - (weight.get(x) ?? 0));
-    }
-    return deck.order;
-  }
-
-  function addCard(card) {
-    if (size >= opts.target) return;
-    const have = pool.get(card) ?? 0;
-    if (have >= opts.cap) return;
-    pool.set(card, have + 1);
-    size += 1;
-  }
-
-  // Input goes in first.
-  for (const c of cardsInAddOrder(input)) {
-    if (size >= opts.target) break;
-    addCard(c);
-  }
-
-  const used = [];
+  let size = unionInto(pool, input.set);
+  const used = []; // { file, sim, added }
+  // Each candidate snapshots the pool reachable after unioning `used.length` decks.
+  const candidates = [{ pool: new Map(pool), size, used: [] }];
   for (const { file, deck, sim } of scored) {
-    if (size >= opts.target) break;
-    // With --whole-decks, only add this deck if it fits entirely.
-    if (opts['whole-decks']) {
-      let wouldAdd = 0;
-      for (const c of deck.set) {
-        if ((pool.get(c) ?? 0) < opts.cap) wouldAdd += 1;
-      }
-      if (size + wouldAdd > opts.target) continue;
-    }
-    const before = size;
-    for (const c of cardsInAddOrder(deck)) {
-      if (size >= opts.target) break;
-      addCard(c);
-    }
-    if (size > before) used.push({ file, sim, added: size - before });
+    const added = unionInto(pool, deck.set);
+    used.push({ file, sim, added });
+    candidates.push({ pool: new Map(pool), size: (size += added), used: [...used] });
+    // Once we reach the top of the window, more decks only move us further away.
+    if (size >= high) break;
+  }
+
+  let best = candidates[0];
+  for (const cand of candidates) {
+    const d = Math.abs(cand.size - opts.target);
+    const bd = Math.abs(best.size - opts.target);
+    if (d < bd || (d === bd && cand.size > best.size)) best = cand;
   }
 
   console.log(`\nDecks unioned into the pool (in similarity order):`);
   console.log(`  ${inputName} (input)`);
-  for (const { file, sim, added } of used) {
+  for (const { file, sim, added } of best.used) {
     console.log(`  ${file}  sim=${sim.toFixed(4)}  (+${added} cards)`);
   }
 
-  const singles = [...pool.values()].filter((n) => n === 1).length;
-  const capped = [...pool.values()].filter((n) => n >= opts.cap).length;
+  const finalPool = best.pool;
+  const singles = [...finalPool.values()].filter((n) => n === 1).length;
+  const capped = [...finalPool.values()].filter((n) => n >= opts.cap).length;
+  const inWindow = best.size >= low && best.size <= high;
   console.log(
-    `\nPool: ${size} cards total — ${pool.size} distinct `
-    + `(${singles} singletons, ${capped} at the ${opts.cap}-copy cap)`,
+    `\nPool: ${best.size} cards total — ${finalPool.size} distinct `
+    + `(${singles} singletons, ${capped} at the ${opts.cap}-copy cap)`
+    + (inWindow ? '' : `  [!] closest whole-deck size to target; outside ${low}-${high}`),
   );
   console.log(`\n=== POOL ===`);
-  for (const [card, copies] of [...pool.entries()].sort(
+  for (const [card, copies] of [...finalPool.entries()].sort(
     (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
   )) {
     console.log(`${copies}  ${card}`);
