@@ -79,9 +79,10 @@ function idf2Corpus(poolData: PoolData): Idf2Corpus | null {
 export function generateIdf2(
   rng: () => number,
   poolData: PoolData,
+  targetSize?: number,
 ): VariantResult {
   const corpus = idf2Corpus(poolData);
-  if (!corpus) return generate(rng, poolData);
+  if (!corpus) return generate(rng, poolData, undefined, targetSize);
   const { base, twinCount } = corpus;
   const { decks, idf } = base;
 
@@ -102,6 +103,6 @@ export function generateIdf2(
     }
   }
 
-  const counts = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx);
+  const counts = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx, targetSize);
   return { C: new Set(), selected: ["idf2", `deck#${String(startIdx)}`], counts };
 }

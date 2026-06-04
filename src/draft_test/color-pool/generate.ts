@@ -26,20 +26,33 @@ function runVariant(
   poolData: PoolData,
   seedArchetypes?: readonly string[],
   themeArchetypes?: readonly string[],
+  targetSize?: number,
 ): VariantResult {
   switch (variant) {
     case "diverse":
-      return generateDiverse(rng, poolData, seedArchetypes);
+      return generateDiverse(rng, poolData, seedArchetypes, targetSize);
     case "decklists":
-      return generateDecklists(rng, poolData, seedArchetypes, themeArchetypes);
+      return generateDecklists(
+        rng,
+        poolData,
+        seedArchetypes,
+        themeArchetypes,
+        targetSize,
+      );
     case "merged":
-      return generateMerged(rng, poolData, seedArchetypes, themeArchetypes);
+      return generateMerged(
+        rng,
+        poolData,
+        seedArchetypes,
+        themeArchetypes,
+        targetSize,
+      );
     case "idf":
-      return generateIdf(rng, poolData);
+      return generateIdf(rng, poolData, targetSize);
     case "idf2":
-      return generateIdf2(rng, poolData);
+      return generateIdf2(rng, poolData, targetSize);
     case "default":
-      return generate(rng, poolData, seedArchetypes);
+      return generate(rng, poolData, seedArchetypes, targetSize);
   }
 }
 
@@ -48,7 +61,9 @@ function runVariant(
  * reproduce a previous run; omit it for a new random pool each call. Copy counts
  * in the returned map are capped at 2, matching the 2-copy rule the design doc
  * describes. For repeated generation, build `PoolData` once with
- * {@link buildPoolData} and call {@link generatePoolFromData}.
+ * {@link buildPoolData} and call {@link generatePoolFromData}. Pass `targetSize`
+ * to pin the pool to a specific number of copies; omit it for each variant's own
+ * default size.
  */
 export function generatePool(
   cards: readonly PoolCard[],
@@ -56,6 +71,7 @@ export function generatePool(
   seedArchetypes?: readonly string[],
   variant: PoolVariant = DEFAULT_POOL_VARIANT,
   themeArchetypes?: readonly string[],
+  targetSize?: number,
 ): GeneratedPool {
   return generatePoolFromData(
     buildPoolData(cards),
@@ -63,6 +79,7 @@ export function generatePool(
     seedArchetypes,
     variant,
     themeArchetypes,
+    targetSize,
   );
 }
 
@@ -72,7 +89,9 @@ export function generatePool(
  * archetypes; omit it for the unconstrained random pool. Pass `variant` to
  * select the generation algorithm (see {@link PoolVariant}). Pass
  * `themeArchetypes` (a Dreamcaller's mechanic-archetype tide slugs) to bias the
- * `decklists` variant toward that theme; the other variants ignore it.
+ * `decklists` variant toward that theme; the other variants ignore it. Pass
+ * `targetSize` to pin the pool to that many copies; omit it for each variant's
+ * own default size band.
  */
 export function generatePoolFromData(
   poolData: PoolData,
@@ -80,6 +99,7 @@ export function generatePoolFromData(
   seedArchetypes?: readonly string[],
   variant: PoolVariant = DEFAULT_POOL_VARIANT,
   themeArchetypes?: readonly string[],
+  targetSize?: number,
 ): GeneratedPool {
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
@@ -90,6 +110,7 @@ export function generatePoolFromData(
     poolData,
     seedArchetypes,
     themeArchetypes,
+    targetSize,
   );
 
   const capped = new Map<string, number>();

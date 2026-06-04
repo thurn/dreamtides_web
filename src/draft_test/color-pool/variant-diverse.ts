@@ -125,10 +125,17 @@ export function generateDiverse(
   rng: () => number,
   poolData: PoolData,
   seedArchetypes?: readonly string[],
+  targetSize?: number,
 ): VariantResult {
   const { core, draftLists } = poolData;
   const breadth = themeBreadth(poolData);
   const reach = themeReach(poolData);
+
+  // A caller can pin the pool to an exact size; otherwise it lands somewhere in
+  // the [LO, HI] band. Collapsing the band to `targetSize` fixes the fill/trim
+  // target at it.
+  const lo = targetSize ?? LO;
+  const hi = targetSize ?? HI;
 
   // 1. choose a color identity by seeding from one archetype. A Dreamcaller
   // restricts the seed pool to its own archetypes; otherwise any color+archetype
@@ -172,7 +179,7 @@ export function generateDiverse(
   const themeNames = [...themes.keys()];
   addTheme(themes.has(seedThemeName) ? seedThemeName : themeNames[0]);
 
-  while (poolSize(counts) < LO) {
+  while (poolSize(counts) < lo) {
     if (DIVERSE.themeBudget !== null && selected.length >= DIVERSE.themeBudget) {
       break;
     }
@@ -211,7 +218,7 @@ export function generateDiverse(
   // 5. fill to a random target size by sampling legal non-pool cards weighted
   // toward narrow color breadth, so diverse pools vary across the whole 180-220
   // band rather than pinning to the floor.
-  const target = randInt(rng, LO, HI);
+  const target = randInt(rng, lo, hi);
   if (poolSize(counts) < target) {
     const cBreadth = colorBreadth(poolData);
     const candidates = [...legal].filter((c) => !counts.has(c));

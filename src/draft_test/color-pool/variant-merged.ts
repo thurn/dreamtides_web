@@ -65,10 +65,11 @@ export function generateMerged(
   poolData: PoolData,
   seedArchetypes?: readonly string[],
   themeArchetypes?: readonly string[],
+  targetSize?: number,
 ): VariantResult {
   const { core, archLists, mergedLists } = poolData;
   if (!mergedLists || mergedLists.size === 0) {
-    return generate(rng, poolData, seedArchetypes);
+    return generate(rng, poolData, seedArchetypes, targetSize);
   }
 
   // The Dreamcaller's theme: the union of cards in its mechanic-archetype tide
@@ -116,10 +117,11 @@ export function generateMerged(
     [...colorPrefix(label)].every((ch) => C.has(ch)),
   );
 
+  const center = targetSize ?? MERGED.targetSize;
   const target = randInt(
     rng,
-    MERGED.targetSize - MERGED.targetJitter,
-    MERGED.targetSize + MERGED.targetJitter,
+    center - MERGED.targetJitter,
+    center + MERGED.targetJitter,
   );
   const counts = new Map<string, number>([...core].map((c) => [c, 1]));
   const bump = (c: string): void => {

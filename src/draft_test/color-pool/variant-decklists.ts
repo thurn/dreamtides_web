@@ -134,9 +134,10 @@ export function generateDecklists(
   poolData: PoolData,
   seedArchetypes?: readonly string[],
   themeArchetypes?: readonly string[],
+  targetSize?: number,
 ): VariantResult {
   const corpus = deckCorpus(poolData);
-  if (!corpus) return generate(rng, poolData, seedArchetypes);
+  if (!corpus) return generate(rng, poolData, seedArchetypes, targetSize);
 
   const { core, archLists, draftLists } = poolData;
   const { decks, idf } = corpus;
@@ -261,10 +262,11 @@ export function generateDecklists(
   //    neighbor's on-spine cards. A card reaches 2 copies only when two
   //    different decks include it (cap at 2). Shuffling each deck's cards lets
   //    us stop exactly at the target.
+  const center = targetSize ?? DECKLISTS.targetSize;
   const target = randInt(
     rng,
-    DECKLISTS.targetSize - DECKLISTS.targetJitter,
-    DECKLISTS.targetSize + DECKLISTS.targetJitter,
+    center - DECKLISTS.targetJitter,
+    center + DECKLISTS.targetJitter,
   );
   const counts = new Map<string, number>([...core].map((c) => [c, 1]));
   const bump = (c: string): void => {

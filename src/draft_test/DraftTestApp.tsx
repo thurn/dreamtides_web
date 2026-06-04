@@ -340,6 +340,20 @@ function readPoolSeed(): number | undefined {
   return Number.isFinite(seed) ? seed >>> 0 : undefined;
 }
 
+/**
+ * A target draft-pool size in copies from the `?size=` URL parameter, applied to
+ * whichever `?algo=` variant is active. Every variant honors it: `default` and
+ * `diverse` pin their [180, 220] band to this value, while `decklists`,
+ * `merged`, `idf`, and `idf2` center their size window on it. A non-positive or
+ * non-numeric value is ignored, leaving each variant's own default size.
+ */
+function readPoolSize(): number | undefined {
+  const raw = new URLSearchParams(window.location.search).get("size");
+  if (raw === null) return undefined;
+  const size = Number(raw);
+  return Number.isFinite(size) && size > 0 ? Math.floor(size) : undefined;
+}
+
 /** The next variant in the cycle, for the toggle button. */
 function nextPoolVariant(current: PoolVariant): PoolVariant {
   const i = POOL_VARIANTS.indexOf(current);
@@ -399,6 +413,7 @@ function switchPoolVariant(next: PoolVariant): void {
 export default function DraftTestApp() {
   const poolVariant = useMemo(readPoolVariant, []);
   const poolSeed = useMemo(readPoolSeed, []);
+  const poolSizeOverride = useMemo(readPoolSize, []);
   const [status, setStatus] = useState<
     "loading" | "select" | "ready" | "error"
   >("loading");
@@ -460,6 +475,7 @@ export default function DraftTestApp() {
         dreamcaller.draftArchetypes,
         poolVariant,
         dreamcaller.themeArchetypes,
+        poolSizeOverride,
       );
       const nameIndex = buildNameIndex(database);
       const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(
@@ -497,7 +513,7 @@ export default function DraftTestApp() {
       setCurrentOffer(firstOffer);
       setStatus("ready");
     },
-    [database, poolVariant, poolSeed],
+    [database, poolVariant, poolSeed, poolSizeOverride],
   );
 
   const offerCards = useMemo(() => {

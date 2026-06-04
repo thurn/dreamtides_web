@@ -130,6 +130,7 @@ export function growIdfPool(
   decks: IdfDeck[],
   idfOf: (c: string) => number,
   startIdx: number,
+  targetSize: number = IDF.targetSize,
 ): Map<string, number> {
   const starter = decks[startIdx];
   const ranked = decks
@@ -138,7 +139,7 @@ export function growIdfPool(
     .map((x) => ({ d: x.d, sim: idfCosine(starter, x.d, idfOf) }))
     .sort((a, b) => b.sim - a.sim);
 
-  const high = IDF.targetSize + IDF.targetTolerance;
+  const high = targetSize + IDF.targetTolerance;
   const unionInto = (pool: Map<string, number>, cards: Set<string>): number => {
     let added = 0;
     for (const c of cards) {
@@ -155,8 +156,8 @@ export function growIdfPool(
   for (const { d } of ranked) {
     size += unionInto(pool, d.cards);
     if (
-      Math.abs(size - IDF.targetSize) < Math.abs(best.size - IDF.targetSize) ||
-      (Math.abs(size - IDF.targetSize) === Math.abs(best.size - IDF.targetSize) &&
+      Math.abs(size - targetSize) < Math.abs(best.size - targetSize) ||
+      (Math.abs(size - targetSize) === Math.abs(best.size - targetSize) &&
         size > best.size)
     ) {
       best = { counts: new Map(pool), size };
@@ -176,14 +177,15 @@ export function growIdfPool(
 export function generateIdf(
   rng: () => number,
   poolData: PoolData,
+  targetSize?: number,
 ): VariantResult {
   const corpus = idfCorpus(poolData);
-  if (!corpus) return generate(rng, poolData);
+  if (!corpus) return generate(rng, poolData, undefined, targetSize);
   const { decks, idf } = corpus;
 
   // Pick the starter decklist uniformly at random, then grow the pool from it.
   const startIdx = Math.floor(rng() * decks.length);
-  const counts = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx);
+  const counts = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx, targetSize);
 
   // No color identity: deriving one would read the color metadata, and this
   // variant consumes nothing but the decklists. The identity string is left

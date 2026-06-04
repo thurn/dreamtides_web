@@ -12,8 +12,15 @@ export function generate(
   rng: () => number,
   poolData: PoolData,
   seedArchetypes?: readonly string[],
+  targetSize?: number,
 ): VariantResult {
   const { core, draftLists } = poolData;
+
+  // A caller can pin the pool to an exact size; otherwise it lands in the
+  // [LO, HI] band. Collapsing the band to `targetSize` makes the fill loops
+  // build up to it and the jitter/trim below converge on it exactly.
+  const lo = targetSize ?? LO;
+  const hi = targetSize ?? HI;
 
   // A Dreamcaller can seed pool construction with a list of draft archetypes.
   // We pick one of those archetypes at random, adopt its colors as the identity,
@@ -59,7 +66,7 @@ export function generate(
     addTheme(themeNames[Math.floor(rng() * themeNames.length)]);
   }
 
-  while (poolSize(counts) < LO) {
+  while (poolSize(counts) < lo) {
     const union = new Set<string>();
     for (const s of selected) {
       for (const c of themes.get(s) ?? []) union.add(c);
@@ -83,7 +90,7 @@ export function generate(
   }
 
   // 4a. if still short, fill with the most-shared on-color staples (1-ofs)
-  if (poolSize(counts) < LO) {
+  if (poolSize(counts) < lo) {
     const freq = new Map<string, number>();
     for (const n of onColorDraft) {
       for (const c of draftLists.get(n) ?? []) {
@@ -95,14 +102,14 @@ export function generate(
       .map(([c]) => c)
       .filter((c) => !counts.has(c));
     for (const c of fillers) {
-      if (poolSize(counts) >= LO) break;
+      if (poolSize(counts) >= lo) break;
       counts.set(c, 1);
     }
   }
 
   // 4b. jitter: demote a random subset of 2-ofs down to a random target size
-  const cap = Math.min(poolSize(counts), HI);
-  const target = randInt(rng, Math.max(LO, cap - JIT), cap);
+  const cap = Math.min(poolSize(counts), hi);
+  const target = randInt(rng, Math.max(lo, cap - JIT), cap);
   const twos = shuffle(
     rng,
     [...counts.entries()].filter(([, v]) => v >= 2).map(([c]) => c),
@@ -125,7 +132,7 @@ export function generate(
       ),
     );
     for (const c of fringe) {
-      if (poolSize(counts) <= Math.max(target, LO)) break;
+      if (poolSize(counts) <= Math.max(target, lo)) break;
       counts.delete(c);
     }
   }
