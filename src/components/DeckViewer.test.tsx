@@ -215,10 +215,8 @@ function setQuestContext(): void {
     cardDatabase: new Map<number, CardData>(),
     questContent: {
       cardDatabase: new Map(),
-      cardsByPackageTide: new Map(),
       dreamcallers: [],
       dreamsignTemplates: [],
-      resolvedPackagesByDreamcallerId: new Map(),
     },
   });
 }
@@ -320,10 +318,8 @@ function mountWithFullDeck(initialSize: "small" | "medium" | "large") {
     cardDatabase: makeFullCardDatabase(),
     questContent: {
       cardDatabase: new Map(),
-      cardsByPackageTide: new Map(),
       dreamcallers: [],
       dreamsignTemplates: [],
-      resolvedPackagesByDreamcallerId: new Map(),
     },
   });
   return mount(
@@ -344,10 +340,8 @@ describe("DeckViewer", () => {
       cardDatabase: new Map<number, CardData>(),
       questContent: {
         cardDatabase: new Map(),
-        cardsByPackageTide: new Map(),
         dreamcallers: [],
         dreamsignTemplates: [],
-        resolvedPackagesByDreamcallerId: new Map(),
       },
     });
 
@@ -598,10 +592,8 @@ describe("DeckViewer", () => {
       cardDatabase: new Map<number, CardData>(),
       questContent: {
         cardDatabase: new Map(),
-        cardsByPackageTide: new Map(),
         dreamcallers: [],
         dreamsignTemplates: [],
-        resolvedPackagesByDreamcallerId: new Map(),
       },
     });
 

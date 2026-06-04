@@ -190,10 +190,8 @@ function setQuestContext(state: QuestState, mutations: QuestMutations): void {
     cardDatabase,
     questContent: {
       cardDatabase,
-      cardsByPackageTide: new Map(),
       dreamcallers: [],
       dreamsignTemplates: [],
-      resolvedPackagesByDreamcallerId: new Map(),
     },
   });
 }

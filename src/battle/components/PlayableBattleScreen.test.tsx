@@ -147,10 +147,8 @@ function mount(element: ReactElement): {
   const cardDatabase = makeBattleTestCardDatabase();
   const questContent = {
     cardDatabase,
-    cardsByPackageTide: new Map(),
     dreamcallers: makeBattleTestDreamcallers(),
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map(),
   };
   const container = document.createElement("div");
   document.body.append(container);

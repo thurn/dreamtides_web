@@ -6,7 +6,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestContent } from "../data/quest-content";
 import { resetLog } from "../logging";
 import type { CardData } from "../types/cards";
-import type { ResolvedDreamcallerPackage } from "../types/content";
 import type {
   DreamAtlas,
   DreamscapeNode,
@@ -55,13 +54,8 @@ function makeQuestContent(
 ): QuestContent {
   return {
     cardDatabase,
-    cardsByPackageTide: new Map(),
     dreamcallers: [],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map<
-      string,
-      ResolvedDreamcallerPackage
-    >(),
   };
 }
 

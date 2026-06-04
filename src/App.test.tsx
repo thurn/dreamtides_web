@@ -242,10 +242,8 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
 function makeQuestContent(): QuestContent {
   return {
     cardDatabase: new Map<number, CardData>(),
-    cardsByPackageTide: new Map(),
     dreamcallers: [],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map(),
   };
 }
 
@@ -256,10 +254,8 @@ function setQuestState(state: QuestState): void {
     cardDatabase: new Map<number, CardData>(),
     questContent: {
       cardDatabase: new Map(),
-      cardsByPackageTide: new Map(),
       dreamcallers: [],
       dreamsignTemplates: [],
-      resolvedPackagesByDreamcallerId: new Map(),
     },
   });
 }
@@ -480,10 +476,8 @@ describe("QuestApp", () => {
       cardDatabase: new Map<number, CardData>(),
       questContent: {
         cardDatabase: new Map(),
-        cardsByPackageTide: new Map(),
         dreamcallers: [],
         dreamsignTemplates: [],
-        resolvedPackagesByDreamcallerId: new Map(),
       },
     });
 
@@ -590,10 +584,8 @@ describe("QuestApp", () => {
       cardDatabase: new Map<number, CardData>(),
       questContent: {
         cardDatabase: new Map(),
-        cardsByPackageTide: new Map(),
         dreamcallers: [],
         dreamsignTemplates: [],
-        resolvedPackagesByDreamcallerId: new Map(),
       },
     });
 
@@ -624,10 +616,8 @@ describe("QuestApp", () => {
       cardDatabase: new Map<number, CardData>(),
       questContent: {
         cardDatabase: new Map(),
-        cardsByPackageTide: new Map(),
         dreamcallers: [],
         dreamsignTemplates: [],
-        resolvedPackagesByDreamcallerId: new Map(),
       },
     });
 

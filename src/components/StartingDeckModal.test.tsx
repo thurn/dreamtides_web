@@ -207,10 +207,8 @@ function setQuestContext(state: QuestState = makeState()): void {
     cardDatabase: makeCardDatabase(),
     questContent: {
       cardDatabase: new Map(),
-      cardsByPackageTide: new Map(),
       dreamcallers: [],
       dreamsignTemplates: [],
-      resolvedPackagesByDreamcallerId: new Map(),
     },
   });
 }

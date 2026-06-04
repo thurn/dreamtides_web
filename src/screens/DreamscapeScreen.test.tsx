@@ -195,10 +195,8 @@ describe("DreamscapeScreen", () => {
       cardDatabase: new Map(),
       questContent: {
         cardDatabase: new Map(),
-        cardsByPackageTide: new Map(),
         dreamcallers: [],
         dreamsignTemplates: [],
-        resolvedPackagesByDreamcallerId: new Map(),
       },
     });
 
@@ -310,10 +308,8 @@ describe("DreamscapeScreen", () => {
       cardDatabase: new Map(),
       questContent: {
         cardDatabase: new Map(),
-        cardsByPackageTide: new Map(),
         dreamcallers: [],
         dreamsignTemplates: [],
-        resolvedPackagesByDreamcallerId: new Map(),
       },
     });
 

@@ -193,10 +193,8 @@ function setQuestContext(state: QuestState): void {
     cardDatabase: makeCardDatabase(),
     questContent: {
       cardDatabase: makeCardDatabase(),
-      cardsByPackageTide: new Map(),
       dreamcallers: [],
       dreamsignTemplates: [],
-      resolvedPackagesByDreamcallerId: new Map(),
     },
   });
 }
@@ -638,10 +636,8 @@ describe("ShopScreen", () => {
       cardDatabase: makeCardDatabase(),
       questContent: {
         cardDatabase: makeCardDatabase(),
-        cardsByPackageTide: new Map(),
         dreamcallers: [],
         dreamsignTemplates: [],
-        resolvedPackagesByDreamcallerId: new Map(),
       },
     });
 

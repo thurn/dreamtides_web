@@ -122,34 +122,12 @@ function makeDreamsign(id: string, name: string): Dreamsign {
 function makeQuestContent(): QuestContent {
   return {
     cardDatabase: new Map([[101, makeCard(101)]]),
-    cardsByPackageTide: new Map(),
     dreamcallers: [testDreamcaller],
     dreamsignTemplates: [
       makeDreamsignTemplate("dreamsign-1", "Dreamsign One"),
       makeDreamsignTemplate("dreamsign-2", "Dreamsign Two"),
       makeDreamsignTemplate("dreamsign-3", "Dreamsign Three"),
     ],
-    resolvedPackagesByDreamcallerId: new Map([
-      [
-        testDreamcaller.id,
-        {
-          dreamcaller: testDreamcaller,
-          mandatoryTides: [...testDreamcaller.mandatoryTides],
-          optionalSubset: [...testDreamcaller.optionalTides],
-          selectedTides: [
-            ...testDreamcaller.mandatoryTides,
-            ...testDreamcaller.optionalTides,
-          ],
-          draftPoolCopiesByCard: {},
-          dreamsignPoolIds: ["dreamsign-1"],
-          mandatoryOnlyPoolSize: 0,
-          draftPoolSize: 0,
-          doubledCardCount: 0,
-          legalSubsetCount: 1,
-          preferredSubsetCount: 1,
-        },
-      ],
-    ]),
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
 }

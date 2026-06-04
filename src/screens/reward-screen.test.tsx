@@ -212,10 +212,8 @@ function setQuestContext(
     cardDatabase,
     questContent: {
       cardDatabase,
-      cardsByPackageTide: new Map(),
       dreamcallers: [],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
-      resolvedPackagesByDreamcallerId: new Map(),
     },
   });
 }

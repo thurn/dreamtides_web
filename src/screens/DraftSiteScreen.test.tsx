@@ -434,10 +434,8 @@ function setQuestContext(
     cardDatabase: currentCardDatabase,
     questContent: {
       cardDatabase: currentCardDatabase,
-      cardsByPackageTide: new Map(),
       dreamcallers: [],
       dreamsignTemplates: [],
-      resolvedPackagesByDreamcallerId: new Map(),
     },
   }));
 }

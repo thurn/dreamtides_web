@@ -72,10 +72,8 @@ function makeQuestContent(
 
   return {
     cardDatabase,
-    cardsByPackageTide: new Map([["core", corpusCards]]),
     dreamcallers: [dreamcaller],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map(),
     poolContext: makeTestPoolContext(["dreamsign-a", "dreamsign-b"]),
   };
 }

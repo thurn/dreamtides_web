@@ -188,10 +188,8 @@ const demoQuestContext: QuestContextValue = {
   cardDatabase: new Map<number, CardData>(),
   questContent: {
     cardDatabase: new Map(),
-    cardsByPackageTide: new Map(),
     dreamcallers: [demoDreamcaller],
     dreamsignTemplates: demoTemplates,
-    resolvedPackagesByDreamcallerId: new Map(),
   },
 };
 

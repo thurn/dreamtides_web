@@ -29,10 +29,8 @@ function makeQuestContent(): QuestContent {
   );
   return {
     cardDatabase,
-    cardsByPackageTide: new Map(),
     dreamcallers: [dreamcaller],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map(),
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
 }
@@ -68,10 +66,8 @@ describe("createStartInBattleState", () => {
     const dreamcaller = makeDreamcaller();
     const questContent: QuestContent = {
       cardDatabase: new Map(),
-      cardsByPackageTide: new Map(),
       dreamcallers: [dreamcaller],
       dreamsignTemplates: [],
-      resolvedPackagesByDreamcallerId: new Map(),
     };
 
     expect(createStartInBattleState(questContent)).toBeNull();
@@ -80,10 +76,8 @@ describe("createStartInBattleState", () => {
   it("returns null when there are no dreamcallers", () => {
     const questContent: QuestContent = {
       cardDatabase: new Map(),
-      cardsByPackageTide: new Map(),
       dreamcallers: [],
       dreamsignTemplates: [],
-      resolvedPackagesByDreamcallerId: new Map(),
       poolContext: makeTestPoolContext(),
     };
 
