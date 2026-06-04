@@ -8,15 +8,18 @@
 // same code runs here and in the browser — pools generated here match the app
 // byte-for-byte for a given seed.
 //
-// The pool is sourced from per-card metadata in data/tabula/cards_v2.toml:
+// The pool is sourced from per-card draft metadata that lives in TypeScript
+// (`src/draft_test/cards-v2-metadata.ts`), keyed by card name:
 //   - core             cards seed every pool
 //   - tides            supply the mechanic-archetype themes (one per tide base name)
 //   - colors           the bare color-combo lists that define legality + fill
-//   - draft-archetypes the color+archetype slices that supply color-tied themes
+//   - draftArchetypes  the color+archetype slices that supply color-tied themes
+// cards_v2.toml supplies the card list (names); the metadata is merged in here.
 //
-// A Dreamcaller (data/tabula/dreamcallers_v2.toml) may carry a `draft-archetypes`
-// list; passing `--dreamcaller <name|id>` seeds construction from that list, the
-// same way picking the Dreamcaller does in the app.
+// A Dreamcaller's `draftArchetypes` (from {@link DREAMCALLER_ARCHETYPES} in
+// `src/draft_test/dreamcallers-v2-database.ts`) seed construction; passing
+// `--dreamcaller <name|id>` seeds from that list, the same way picking the
+// Dreamcaller does in the app.
 //
 // Card names are written newline-delimited to stdout; a 2-of is printed twice,
 // so the line count equals the pool size. A one-line summary (color identity,
@@ -33,6 +36,8 @@ import {
   generatePoolFromData,
   poolToLines,
 } from "../src/draft_test/color-pool.ts";
+import { CARDS_V2_POOL_METADATA } from "../src/draft_test/cards-v2-metadata.ts";
+import { DREAMCALLER_ARCHETYPES } from "../src/draft_test/dreamcallers-v2-database.ts";
 
 export { buildPoolData };
 
@@ -43,24 +48,30 @@ const DREAMCALLER_TOML = new URL(
   import.meta.url,
 ).pathname;
 
-/** Load and normalize the card records the generator needs from cards_v2.toml. */
+/**
+ * Load and normalize the card records the generator needs. The card list (names)
+ * comes from cards_v2.toml; the draft-pool metadata is merged in by name from
+ * {@link CARDS_V2_POOL_METADATA}.
+ */
 export function loadCards(tomlPath = CARD_TOML) {
   const parsed = parse(readFileSync(tomlPath, "utf8"));
-  return parsed.cards.map((card) => ({
-    name: card.name,
-    tides: Array.isArray(card.tides) ? card.tides : [],
-    core: card.core === true,
-    colors: Array.isArray(card.colors) ? card.colors : [],
-    draftArchetypes: Array.isArray(card["draft-archetypes"])
-      ? card["draft-archetypes"]
-      : [],
-  }));
+  return parsed.cards.map((card) => {
+    const meta = CARDS_V2_POOL_METADATA[card.name] ?? {};
+    return {
+      name: card.name,
+      tides: meta.tides ?? [],
+      core: meta.core === true,
+      colors: meta.colors ?? [],
+      draftArchetypes: meta.draftArchetypes ?? [],
+    };
+  });
 }
 
 /**
- * Load the v2 Dreamcaller identities. Each record carries an id, name, and an
- * optional `draft-archetypes` list that seeds pool construction; a Dreamcaller
- * without the list rolls the unconstrained random pool.
+ * Load the v2 Dreamcaller identities. The id, name, and title come from
+ * dreamcallers_v2.toml; the optional `draftArchetypes` list that seeds pool
+ * construction is merged in by name from {@link DREAMCALLER_ARCHETYPES}. A
+ * Dreamcaller without that list rolls the unconstrained random pool.
  */
 export function loadDreamcallers(tomlPath = DREAMCALLER_TOML) {
   const parsed = parse(readFileSync(tomlPath, "utf8"));
@@ -68,9 +79,7 @@ export function loadDreamcallers(tomlPath = DREAMCALLER_TOML) {
     id: dreamcaller.id,
     name: dreamcaller.name,
     title: dreamcaller.title ?? "",
-    draftArchetypes: Array.isArray(dreamcaller["draft-archetypes"])
-      ? dreamcaller["draft-archetypes"]
-      : undefined,
+    draftArchetypes: DREAMCALLER_ARCHETYPES[dreamcaller.name],
   }));
 }
 

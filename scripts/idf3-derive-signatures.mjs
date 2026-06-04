@@ -1,5 +1,5 @@
-// One-off authoring aid for the idf3 DREAMCALLER_SIGNATURES table
-// (docs/cards2/idf3_signature_design.md, Section 4.4).
+// One-off authoring aid for the idf3 `signature-cards` lists in
+// dreamcallers_v2.toml (docs/cards2/idf3_signature_design.md, Section 4.4).
 //
 // For every themed Dreamcaller it ranks candidate signature cards two
 // independent ways and prints them side by side so a human can pick 4-6:

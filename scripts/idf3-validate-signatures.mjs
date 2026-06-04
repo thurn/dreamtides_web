@@ -1,4 +1,5 @@
-// Validate the hand-authored DREAMCALLER_SIGNATURES table: feed each real
+// Validate the shipped Dreamcaller signatures (the `signature-cards` field in
+// dreamcallers_v2.toml): feed each real
 // signature through the idf3 A'' starter-draw scheme and measure, using each
 // Dreamcaller's real archetype-labeled decks as ground truth (which the steering
 // never sees), whether the draw lands on the Dreamcaller's decks and spreads
@@ -10,13 +11,20 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import { DREAMCALLER_SIGNATURES } from "../src/draft_test/dreamcallers-v2-database.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
 const cards = readJson("public/cards_v2-data.json");
 const decklistsData = readJson("public/decklists-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
+
+// The shipped signatures, recovered from the generated Dreamcaller data
+// (sourced from the `signature-cards` field in dreamcallers_v2.toml).
+const DREAMCALLER_SIGNATURES = Object.fromEntries(
+  dreamcallers
+    .filter((d) => Array.isArray(d.signatureCards) && d.signatureCards.length > 0)
+    .map((d) => [d.name, d.signatureCards]),
+);
 
 // A'' constants (design Section 5.1) + idf/idf2 corpus knobs.
 const SIG = { alpha: 2, cap: 0.4, anchorCount: 3, eps: 0.05 };
@@ -114,7 +122,7 @@ function anchorSim(signature) {
 }
 
 console.log(
-  `Validating shipped DREAMCALLER_SIGNATURES via A'' (alpha=${SIG.alpha}, cap=${SIG.cap}, m=${SIG.anchorCount}) over ${N} decks.\n`,
+  `Validating shipped signature-cards via A'' (alpha=${SIG.alpha}, cap=${SIG.cap}, m=${SIG.anchorCount}) over ${N} decks.\n`,
 );
 const head =
   "Dreamcaller".padEnd(18) +

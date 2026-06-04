@@ -189,17 +189,16 @@ machinery precise.
 
 ### 4.1 The signature table
 
-The new data is a single table mapping a Dreamcaller's name to its signature
-card list:
+The new data is a per-Dreamcaller `signature-cards` field, a card list:
 
 ```
-DREAMCALLER_SIGNATURES : { [dreamcallerName] : cardName[] }
+signature-cards : cardName[]   # one per [[dreamcaller]] in dreamcallers_v2.toml
 ```
 
-It lives beside the existing per-Dreamcaller data and is attached to each
-Dreamcaller when the Dreamcaller records are loaded, exactly as other
-per-Dreamcaller fields are. Its values are **card names only** — the algorithm's
-native vocabulary. A typical entry is a handful of names:
+It lives in `data/tabula/dreamcallers_v2.toml` alongside each Dreamcaller's name,
+title, and ability, and flows into the loaded Dreamcaller records as
+`signatureCards`. Its values are **card names only** — the algorithm's native
+vocabulary. A typical entry is a handful of names:
 
 ```
 Kragg:  [ "<a distinctive sacrifice payoff>",
@@ -414,11 +413,11 @@ on-identity as well — steering the starter alone is sufficient, which is why
 
 The pieces fit into the existing pool-construction flow as follows:
 
-1. **The table.** Add `DREAMCALLER_SIGNATURES` (name → card-name list) beside the
-   other per-Dreamcaller data.
-2. **Attach at load.** When Dreamcaller records are loaded, attach each one a
-   `signatureCards` field from `DREAMCALLER_SIGNATURES[name]` (an empty list when
-   absent), mirroring how other per-Dreamcaller guidance is attached.
+1. **The data.** Add a `signature-cards` card list to each `[[dreamcaller]]` in
+   `dreamcallers_v2.toml`.
+2. **Load it.** The asset build carries `signature-cards` into the generated
+   Dreamcaller JSON as `signatureCards` (an empty list when absent), and the
+   records expose it like other per-Dreamcaller guidance.
 3. **Thread it through.** Pass `signatureCards` into pool generation alongside the
    other per-Dreamcaller arguments, and register a new `idf3` variant that the
    dispatcher routes to. Expose it for manual testing via the pool-variant
@@ -442,7 +441,8 @@ nothing about steering changes growth's cost.
 Suppose Kragg is a black-red sacrifice Dreamcaller whose decks lean on Abandon
 payoffs. An author writes a three-to-six card signature of Kragg's distinctive
 sacrifice payoffs and Abandon enablers — not the format's staples or mana, which
-would be zeroed anyway — and records it under `Kragg` in `DREAMCALLER_SIGNATURES`.
+would be zeroed anyway — and records it as `signature-cards` on the `Kragg`
+entry in `dreamcallers_v2.toml`.
 
 At run time, the player picks Kragg. The probe is formed from those signature
 cards (Step 1). The algorithm scores every real deck by similarity to the probe

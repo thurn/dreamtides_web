@@ -14,9 +14,12 @@ export interface DraftDreamcaller {
   imageNumber: string;
   startingEssence: number;
   /**
-   * Draft archetypes this Dreamcaller is suited to. When present, they seed
-   * draft-pool construction (see `color-pool.ts`). When absent, the Dreamcaller
-   * is suitable for any pool and the draft uses the unconstrained random pool.
+   * Draft archetypes this Dreamcaller is suited to, sourced from
+   * {@link DREAMCALLER_ARCHETYPES} and merged into the data by
+   * `scripts/setup-assets.mjs`. When present, they seed draft-pool construction
+   * for the non-`idf3` `?algo=` variants (see `color-pool.ts`). When absent, the
+   * Dreamcaller is suitable for any pool and the draft uses the unconstrained
+   * random pool.
    */
   draftArchetypes?: string[];
   /**
@@ -29,11 +32,12 @@ export interface DraftDreamcaller {
   themeArchetypes?: readonly string[];
   /**
    * The Dreamcaller's signature: a short list of distinctive card names that
-   * stands in for "what this Dreamcaller wants to do", attached at load from
-   * {@link DREAMCALLER_SIGNATURES}. The `idf3` pool variant treats it as a query
-   * to locate the real decks that most embody the Dreamcaller and steers the
-   * starter draw toward them (see `docs/cards2/idf3_signature_design.md`). Empty
-   * for Dreamcallers with no signature, which then get the diversity-only draw.
+   * stands in for "what this Dreamcaller wants to do", sourced from the
+   * `signature-cards` field in `dreamcallers_v2.toml`. The `idf3` pool variant
+   * (the standard algorithm) treats it as a query to locate the real decks that
+   * most embody the Dreamcaller and steers the starter draw toward them (see
+   * `docs/cards2/idf3_signature_design.md`). Empty for Dreamcallers with no
+   * signature, which then get the diversity-only draw.
    */
   signatureCards?: readonly string[];
 }
@@ -79,172 +83,36 @@ export const DREAMCALLER_THEMES: Record<string, readonly string[]> = {
 };
 
 /**
- * Maps each themed Dreamcaller (by name) to its signature: a short list of
- * distinctive card names capturing what the Dreamcaller is about. This is the
- * only new data the `idf3` pool variant needs — it reads no colors, tides, or
- * archetype labels, just these card names (see
- * `docs/cards2/idf3_signature_design.md`).
- *
- * Each list was derived from the Dreamcaller's {@link DREAMCALLER_THEMES} tide
- * build-arounds, scored by how often each card recurs in that Dreamcaller's own
- * real decklists weighted by its corpus IDF (distinctiveness), so the cards are
- * both characteristic of the strategy and distinctive in the corpus at large —
- * the recipe in Section 4.4 of the design. Same-theme Dreamcallers lean toward
- * the cards distinctive to their own color / sub-archetype home. The derivation
- * is reproducible via `scripts/idf3-derive-signatures.mjs`. Edit a list to
- * retune which decks a Dreamcaller's pool anchors on; a handful of genuinely
- * characteristic cards is enough, and IDF self-cleans any incidental staple.
+ * Maps each themed Dreamcaller (by name) to the draft archetypes its pool is
+ * steered toward by the non-`idf3` `?algo=` variants (`default`, `diverse`,
+ * `decklists`, `merged`). The standard `idf3` variant reads none of this — it
+ * steers from each Dreamcaller's `signature-cards` in `dreamcallers_v2.toml`
+ * instead. These labels live here in TypeScript rather
+ * than in `dreamcallers_v2.toml`; `scripts/setup-assets.mjs` merges them into
+ * `dreamcallers-v2-data.json`, and `scripts/generate-color-pool.mjs` reads them
+ * directly. Edit a list to retune which archetypes a Dreamcaller pulls toward.
  */
-export const DREAMCALLER_SIGNATURES: Record<string, readonly string[]> = {
-  // Blink / Celestial Reverie Combo
-  "Yveth Coravel": [
-    "Celestial Reverie",
-    "Ambush Operative",
-    "Featherlight Summoner",
-    "Skyborne Jellyfish",
-    "Mountainwatch Alpha",
-  ],
-  // Cost 2-or-less matters / Void Recursion
-  "Kell Tarn": [
-    "Starsea Traveler",
-    "Revenant of the Lost",
-    "Skull Weaver",
-    "Ashborn Necromancer",
-    "Abomination of Memory",
-  ],
-  // Abandon
-  Caedryn: [
-    "Harborwarden",
-    "Fathomless Maw",
-    "Kindlehorn",
-    "Duskwall Delver",
-    "Maelstrom Denial",
-  ],
-  Kragg: [
-    "Harborwarden",
-    "Duskwall Delver",
-    "Fathomless Maw",
-    "Maelstrom Denial",
-    "Dreadweaver",
-  ],
-  // Discard / Madness
-  Vrakmoth: [
-    "From the Barrow",
-    "Cascade of Reflections",
-    "Starfall Communion",
-    "Across the Void",
-    "A New Adventure",
-  ],
-  Seraveth: [
-    "Kindred Sparks",
-    "Dreadweaver",
-    "Silent Avenger",
-    "Ashwalker",
-    "Veil of the Wastes",
-  ],
-  Corvath: [
-    "Cascade of Reflections",
-    "From the Barrow",
-    "Starfall Communion",
-    "Pulse of Sacrifice",
-    "Gleamharvester",
-  ],
-  // Survivors / Void Recursion
-  "Kael Voss": [
-    "Ashborn Necromancer",
-    "Wasteland Tamer",
-    "Dreadweaver",
-    "Skull Weaver",
-    "Kindred Sparks",
-  ],
-  Vaela: [
-    "Skull Weaver",
-    "Ashborn Necromancer",
-    "Dreadweaver",
-    "Kindred Sparks",
-    "Harvester of Despair",
-  ],
-  // Tempo / Control / Outsiders
-  Edran: [
-    "Riftwalker",
-    "Dreaming Groves",
-    "Lurking Dread",
-    "Standoff",
-    "Keeper of the Tides",
-  ],
-  Zeva: [
-    "Dreadwood Emissary",
-    "Break the Sequence",
-    "Ridgecutter",
-    "Clockwork Prodigy",
-    "Echoing Denial",
-  ],
-  // Storm / Events
-  Kasane: [
-    "Archive of the Forgotten",
-    "Cascade of Reflections",
-    "Arc Gate Opening",
-    "From the Barrow",
-    "Hatching Ground",
-  ],
-  Rael: [
-    "Archive of the Forgotten",
-    "Arc Gate Opening",
-    "From the Barrow",
-    "Cascade of Reflections",
-    "Molten Duel",
-  ],
-  Ovanel: [
-    "Archive of the Forgotten",
-    "Arc Gate Opening",
-    "From the Barrow",
-    "Genesis Burst",
-    "Broadcast Array",
-  ],
-  // Spirit Animals / Celestial Reverie / Creature Storm
-  Grath: [
-    "Mountainwatch Alpha",
-    "Ethereal Trailblazer",
-    "Skyborne Jellyfish",
-    "Young Beastcaller",
-    "Celestial Reverie",
-  ],
-  Radulf: [
-    "Ethereal Trailblazer",
-    "Celestial Reverie",
-    "Mountainwatch Alpha",
-    "Worldsong Behemoth",
-    "Oathbound Pair",
-  ],
-  Demetrios: [
-    "Celestial Reverie",
-    "Ethereal Trailblazer",
-    "Skyborne Jellyfish",
-    "Mountainwatch Alpha",
-    "Sunshadow Eagle",
-  ],
-  // Warriors
-  "Gunnar Deepforge": [
-    "Crucible Warlord",
-    "Assault Leader",
-    "Flamestride Rider",
-    "Invoker of Myths",
-    "Reforged Automaton",
-  ],
-  Tensho: [
-    "Runebound Champion",
-    "Echo Technician",
-    "Dream Garden Visitor",
-    "Aftermath Bloom",
-    "Grim Reclaimer",
-  ],
-  Valdren: [
-    "Crucible Warlord",
-    "Assault Leader",
-    "Wolfbond Chieftain",
-    "Invoker of Myths",
-    "Flamestride Rider",
-  ],
+export const DREAMCALLER_ARCHETYPES: Record<string, readonly string[]> = {
+  "Kell Tarn": ["b-aristocrats", "b-midrange-reanimator", "b-tempo", "b-weenie", "bg-aristocrats", "bg-lands-midrange", "bg-lands-soup", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "brg-lands-monsters", "brg-lands-soup", "brg-midrange", "g-big-ramp", "g-lands-soup", "rg-lands-soup", "ubg-ramp", "ubg-value-midrange", "ubr-control", "ubrg-lands-midrange", "ubrg-lands-soup", "ug-lands-midrange", "ug-lands-soup", "ug-ramp", "ug-sneak", "ur-welder", "urg-lands-soup", "w-weenie", "wb-aristocrats", "wb-artifact-control", "wb-weenie", "wbg-midrange", "wbg-value-midrange", "wbrg-aristocrats", "wbrg-lands-soup", "wg-big-ramp", "wg-lands-soup", "wr-artifact-aggro", "wu-artifact-control", "wu-midrange-weenie", "wub-artifact-control", "wubg-lands-soup", "wubg-value-midrange", "wubr-artifact-aggro", "wubrg-lands-soup", "wug-big-ramp", "wug-lands-soup", "wug-value", "wurg-lands-soup"],
+  "Caedryn": ["b-aristocrats", "bg-big-ramp", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "brg-lands-monsters", "brg-midrange", "ub-reanimator", "ubg-tempo", "ug-cheaty-ramp", "ug-sneak", "wb-aristocrats", "wbg-midrange", "wbg-value-midrange", "wubg-big-ramp", "wubg-control", "wubg-value", "wubrg-value"],
+  "Kragg": ["b-aristocrats", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "brg-lands-monsters", "brg-midrange", "ug-cheaty-ramp", "ug-sneak", "wb-aristocrats", "wbg-midrange", "wbg-value-midrange", "wbr-aristocrats", "wbrg-aristocrats", "wubg-value", "wubrg-value"],
+  "Vrakmoth": ["br-aristocrats", "br-madness", "r-aggro", "r-burn", "rg-midrange", "ubr-control", "ubr-storm", "ubrg-storm", "ur-burn", "ur-spellslinger", "ur-storm", "wbr-aristocrats", "wr-aggro", "wr-artifact-aggro", "wr-artifacts", "wubrg-value", "wur-aggro", "wurg-lands-soup"],
+  "Seraveth": ["b-aristocrats", "b-midrange-reanimator", "b-tempo", "b-weenie", "bg-aristocrats", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "brg-lands-monsters", "brg-midrange", "g-big-ramp", "rg-midrange", "ubg-tempo", "ubg-value-midrange", "ug-ramp", "ug-sneak", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbrg-aristocrats", "wub-control", "wubg-control", "wubg-value-midrange", "wubrg-value", "wug-big-ramp"],
+  "Corvath": ["bg-midrange", "br-aristocrats", "br-madness", "br-welder", "brg-lands-monsters", "r-aggro", "r-burn", "ub-madness", "ubr-control", "ubr-storm", "ur-spellslinger", "ur-storm", "ur-welder", "wb-weenie", "wr-aggro", "wu-artifact-control", "wub-artifact-control", "wubg-value-midrange", "wubrg-value"],
+  "Kael Voss": ["b-aristocrats", "b-tempo", "b-weenie", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "brg-midrange", "ub-reanimator", "ub-tempo", "ubg-tempo", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbr-aristocrats", "wbrg-aristocrats", "wub-control", "wubrg-value"],
+  "Vaela": ["b-aristocrats", "b-midrange-reanimator", "b-tempo", "b-weenie", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "ub-reanimator", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wubg-value-midrange"],
+  "Edran": ["b-aristocrats", "b-tempo", "b-weenie", "br-aristocrats", "brg-midrange", "ub-reanimator", "ub-storm", "ub-tempo", "ubg-tempo", "ubg-value-midrange", "ubr-control", "ubr-storm", "ubrg-lands-soup", "ug-ramp", "ug-sneak", "ur-welder", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbrg-aristocrats", "wu-control", "wub-control", "wubg-value-midrange", "wubrg-value", "wug-value"],
+  "Zeva": ["br-madness", "br-storm", "u-artifacts", "u-big-mana-artifacts", "u-storm", "ub-madness", "ub-reanimator", "ub-storm", "ub-tempo", "ubr-control", "ubr-storm", "ug-ramp", "ur-burn", "ur-spellslinger", "ur-storm", "urg-lands-soup", "urg-storm", "wu-artifact-control", "wu-blink", "wu-control", "wub-artifact-control", "wub-control", "wubg-lands-soup", "wubr-artifact-aggro", "wubrg-value", "wug-value", "wur-aggro", "wurg-artifacts"],
+  "Kasane": ["br-aristocrats", "br-storm", "brg-midrange", "u-storm", "ubr-storm", "ubrg-storm", "ur-burn", "ur-spellslinger", "ur-storm", "urg-lands-soup", "urg-storm", "wr-aggro", "wubrg-value", "wur-control"],
+  "Rael": ["br-aristocrats", "br-storm", "r-aggro", "r-burn", "r-welder", "ub-storm", "ubr-control", "ubr-storm", "ubrg-storm", "ur-burn", "ur-control", "ur-spellslinger", "ur-storm", "ur-welder", "urg-storm", "wbr-aristocrats", "wr-aggro", "wu-control", "wubr-artifact-aggro", "wur-aggro", "wur-control"],
+  "Ovanel": ["u-control", "u-storm", "ub-storm", "ub-tempo", "ubr-control", "ubr-storm", "ubrg-storm", "ur-burn", "ur-control", "ur-spellslinger", "ur-storm", "wub-control", "wur-control"],
+  "Yveth Coravel": ["b-tempo", "bg-big-ramp", "bg-lands-midrange", "bg-midrange", "g-big-ramp", "g-lands-soup", "ub-tempo", "ubg-ramp", "ubg-tempo", "ubg-value-midrange", "ubr-control", "ug-big-ramp", "ug-lands-midrange", "ug-ramp", "ug-sneak", "urg-lands-soup", "w-artifact-control", "w-weenie", "wb-artifact-control", "wb-weenie", "wbg-value-midrange", "wbrg-lands-soup", "wg-big-ramp", "wg-lands-soup", "wg-midrange", "wg-ramp", "wr-aggro", "wu-artifact-control", "wu-blink", "wu-control", "wu-midrange-weenie", "wub-artifact-control", "wub-control", "wubg-big-ramp", "wubg-control", "wubg-lands-soup", "wubg-ramp", "wubg-value", "wubg-value-midrange", "wubrg-value", "wug-lands-soup", "wug-value", "wur-artifacts", "wurg-lands-soup"],
+  "Grath": ["bg-big-ramp", "bg-lands-midrange", "bg-midrange", "brg-midrange", "g-big-ramp", "g-lands-soup", "g-ramp", "rg-lands-soup", "ubrg-lands-soup", "ug-big-ramp", "ug-lands-soup", "ug-ramp", "wbrg-lands-soup", "wg-big-ramp", "wg-midrange", "wg-ramp", "wubg-big-ramp", "wubg-lands-soup", "wubg-ramp", "wubrg-value", "wug-big-ramp", "wurg-lands-soup"],
+  "Radulf": ["bg-big-ramp", "bg-midrange", "brg-lands-midrange", "brg-midrange", "g-big-ramp", "g-lands-soup", "g-ramp", "rg-lands-soup", "rg-midrange", "ubg-value-midrange", "ubrg-storm", "ug-big-ramp", "ug-ramp", "ug-sneak", "w-weenie", "wb-weenie", "wbg-midrange", "wbg-weenie", "wbr-aristocrats", "wbrg-lands-soup", "wg-big-ramp", "wg-midrange", "wg-value-midrange", "wr-aggro", "wr-vanguard", "wr-warriors", "wu-artifact-control", "wu-midrange-weenie", "wu-weenie", "wubg-lands-soup", "wubg-value-midrange", "wubrg-value", "wug-value", "wurg-artifacts", "wurg-lands-soup"],
+  "Demetrios": ["bg-big-ramp", "bg-lands-midrange", "bg-midrange", "brg-midrange", "g-big-ramp", "g-lands-soup", "ubg-ramp", "ubg-value-midrange", "ug-ramp", "ug-sneak", "urg-lands-soup", "w-weenie", "wb-value", "wb-weenie", "wbg-value-midrange", "wbg-weenie", "wbrg-aristocrats", "wbrg-lands-soup", "wg-big-ramp", "wg-lands-soup", "wg-midrange", "wg-ramp", "wg-value-midrange", "wu-midrange-weenie", "wu-weenie", "wubg-value", "wubrg-value", "wug-big-ramp", "wug-value", "wurg-lands-soup"],
+  "Gunnar Deepforge": ["br-welder", "r-aggro", "r-burn", "u-artifact-control", "u-artifacts", "u-big-mana-artifacts", "u-control", "ub-tempo", "ubr-control", "ubr-storm", "ug-cheaty-ramp", "ug-ramp", "ur-academy", "ur-artifacts", "ur-burn", "ur-control", "ur-spellslinger", "ur-storm", "ur-welder", "urg-artifact-control", "w-artifact-aggro", "w-artifact-control", "w-weenie", "wb-weenie", "wbg-weenie", "wr-aggro", "wr-artifact-aggro", "wr-artifacts", "wr-vanguard", "wr-warriors", "wu-academy", "wu-artifact-control", "wu-artifacts", "wu-midrange-weenie", "wu-weenie", "wub-artifact-control", "wub-control", "wubg-artifact-control", "wubr-artifact-aggro", "wubrg-lands-midrange", "wubrg-value", "wug-value", "wur-artifact-aggro", "wur-artifacts", "wurg-artifacts"],
+  "Tensho": ["u-artifacts", "u-welder", "ub-storm", "ubg-value-midrange", "ubr-storm", "ubr-welder", "ur-artifacts", "ur-storm", "ur-welder", "urg-artifact-control", "w-artifact-aggro", "wr-aggro", "wr-artifacts", "wr-vanguard", "wr-warriors", "wu-artifact-control", "wu-artifacts", "wu-weenie", "wub-artifact-control", "wub-control", "wubg-control", "wubr-welder", "wur-aggro", "wur-artifacts", "wurg-artifacts"],
+  "Valdren": ["u-artifacts", "u-welder", "ub-storm", "ubg-value-midrange", "ubr-storm", "ubr-welder", "ur-artifacts", "ur-storm", "ur-welder", "urg-artifact-control", "w-academy", "w-artifact-aggro", "w-artifact-control", "w-weenie", "wb-value", "wb-weenie", "wbg-weenie", "wbr-aristocrats", "wbrg-aristocrats", "wr-aggro", "wr-artifact-aggro", "wr-artifacts", "wr-vanguard", "wr-warriors", "wu-artifact-control", "wu-artifacts", "wu-weenie", "wub-artifact-control", "wub-control", "wubg-control", "wubg-value", "wubr-welder", "wubrg-value", "wug-value", "wur-aggro", "wur-artifacts", "wurg-artifacts"],
 };
 
 export async function loadDreamcallersV2(): Promise<DraftDreamcaller[]> {
@@ -257,7 +125,7 @@ export async function loadDreamcallersV2(): Promise<DraftDreamcaller[]> {
   const dreamcallers = (await response.json()) as DraftDreamcaller[];
   for (const dc of dreamcallers) {
     dc.themeArchetypes = DREAMCALLER_THEMES[dc.name] ?? [];
-    dc.signatureCards = DREAMCALLER_SIGNATURES[dc.name] ?? [];
+    dc.signatureCards = dc.signatureCards ?? [];
   }
   return dreamcallers;
 }

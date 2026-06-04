@@ -27,25 +27,29 @@ Nothing the algorithms read is invented at run time; every input is resolved
 from a source file through a fixed pipeline. It is worth following that pipeline
 once, because the rest of this document refers to these stores by name.
 
-- **The card records** start in `data/tabula/cards_v2.toml`, a list of
-  `[[cards]]` entries. Each entry carries the fields the generator cares about:
-  `name`, `core` (a boolean staple flag), `tides` (mechanic tags such as
-  `"Abandon"` or `"Storm"`), `colors` (the bare color-combo lists the card is
-  legal in, e.g. `["b", "br", "wbr"]`), and `draft-archetypes` (the
-  color-plus-archetype slices it belongs to, e.g. `["br-aristocrats",
-  "wb-aristocrats"]`). The build step `scripts/setup-assets.mjs` parses that
-  TOML, renames kebab-case keys to camelCase (`draft-archetypes` becomes
-  `draftArchetypes`), and writes `public/cards_v2-data.json`. At run time
-  `loadCardsV2Database` (in `cards-v2-database.ts`) fetches that JSON into a
-  `Map<number, CardData>` keyed by card number.
+- **The card records** start as `[[cards]]` entries in
+  `data/tabula/cards_v2.toml`, which supplies each card's `name` and rules text.
+  The draft-pool metadata the non-`idf3` variants read lives in TypeScript, in
+  `src/draft_test/cards-v2-metadata.ts`, keyed by card name: `core` (a boolean
+  staple flag), `tides` (mechanic tags such as `"Abandon"` or `"Storm"`),
+  `colors` (the bare color-combo lists the card is legal in, e.g.
+  `["b", "br", "wbr"]`), and `draftArchetypes` (the color-plus-archetype slices
+  it belongs to, e.g. `["br-aristocrats", "wb-aristocrats"]`). The build step
+  `scripts/setup-assets.mjs` parses the TOML, merges that metadata in by name,
+  and writes `public/cards_v2-data.json`. At run time `loadCardsV2Database` (in
+  `cards-v2-database.ts`) fetches that JSON into a `Map<number, CardData>` keyed
+  by card number.
 
-- **The Dreamcaller records** start in `data/tabula/dreamcallers_v2.toml`, a list
-  of `[[dreamcaller]]` entries. Each may carry a `draft-archetypes` list. The
-  same build step writes `public/dreamcallers-v2-data.json`, and
+- **The Dreamcaller records** start as `[[dreamcaller]]` entries in
+  `data/tabula/dreamcallers_v2.toml`, which supplies each Dreamcaller's name,
+  ability, and `signature-cards` (the standard `idf3` steering data). The
+  `draft-archetypes` the non-`idf3` variants seed from live in TypeScript, in the
+  `DREAMCALLER_ARCHETYPES` map in `dreamcallers-v2-database.ts`. The same build
+  step merges them into `public/dreamcallers-v2-data.json`, and
   `loadDreamcallersV2` (in `dreamcallers-v2-database.ts`) fetches it into
-  `DraftDreamcaller[]`. Crucially, a Dreamcaller's **theme** is *not* in the
-  TOML: `loadDreamcallersV2` attaches it after fetching, by looking the
-  Dreamcaller's name up in the hardcoded `DREAMCALLER_THEMES` map in
+  `DraftDreamcaller[]`. A Dreamcaller's **theme** is also defined in TypeScript:
+  `loadDreamcallersV2` attaches it after fetching, by looking the Dreamcaller's
+  name up in the hardcoded `DREAMCALLER_THEMES` map in
   `dreamcallers-v2-database.ts` (so `Kragg` resolves to `["abandon"]`). That map
   is the single source of truth for which mechanic a Dreamcaller pulls toward.
 
@@ -135,8 +139,8 @@ In the normal draft-test flow the player first chooses a Dreamcaller, and that
 choice feeds two optional pieces of guidance into pool construction. The two
 come from *different* sources, which matters:
 
-- **Seed archetypes** — the Dreamcaller's `draftArchetypes`, read from its
-  `draft-archetypes` list in `dreamcallers_v2.toml`. These are
+- **Seed archetypes** — the Dreamcaller's `draftArchetypes`, from its entry in
+  the `DREAMCALLER_ARCHETYPES` map in `dreamcallers-v2-database.ts`. These are
   color-plus-archetype list names (e.g. `br-aristocrats`), the same names that
   key `PoolData.draftLists`. Only those that exist in `draftLists` and carry a
   color prefix are eligible. They constrain the pool's color identity and (in the

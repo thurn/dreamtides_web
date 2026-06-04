@@ -1,8 +1,8 @@
 # Dreamcaller Signature Cards — MTG Names
 
 The MTG card (`mtg-name`) that each Dreamcaller signature card was reskinned
-from. Signatures come from `DREAMCALLER_SIGNATURES` in
-`src/draft_test/dreamcallers-v2-database.ts`; the `mtg-name` for each
+from. Signatures come from the `signature-cards` field in
+`data/tabula/dreamcallers_v2.toml`; the `mtg-name` for each
 Dreamtides card name is read from `data/tabula/cards_v2.toml`. Each
 Dreamcaller heading also shows its own title and ability from
 `data/tabula/dreamcallers_v2.toml`.

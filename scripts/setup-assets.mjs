@@ -5,6 +5,8 @@ import { resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
+import { CARDS_V2_POOL_METADATA } from "../src/draft_test/cards-v2-metadata.ts";
+import { DREAMCALLER_ARCHETYPES } from "../src/draft_test/dreamcallers-v2-database.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DATA_DIR = join(ROOT, "data");
@@ -445,7 +447,21 @@ export function setupAssets({
     throw new Error("Expected [[cards]] array in cards_v2.toml");
   }
 
-  const jsonCardsV2 = allCardsV2.map(transformCard);
+  // The draft-pool metadata (core/tides/colors/draft-archetypes) the non-`idf3`
+  // pool variants consume lives in TypeScript (`cards-v2-metadata.ts`), not in
+  // cards_v2.toml. Merge it back into each record by name before serializing so
+  // the generated JSON the browser harness and the pool experiments read is
+  // complete. The standard `idf3` variant ignores all of it.
+  const jsonCardsV2 = allCardsV2.map((card) => {
+    const meta = CARDS_V2_POOL_METADATA[card.name];
+    if (meta) {
+      if (meta.tides) card.tides = meta.tides;
+      if (meta.core !== undefined) card.core = meta.core;
+      if (meta.colors) card.colors = meta.colors;
+      if (meta.draftArchetypes) card["draft-archetypes"] = meta.draftArchetypes;
+    }
+    return transformCard(card);
+  });
   writeFileSync(cardV2JsonPath, JSON.stringify(jsonCardsV2, null, 2) + "\n");
   console.log(`Wrote ${jsonCardsV2.length} cards to cards_v2-data.json`);
 
@@ -501,8 +517,10 @@ export function setupAssets({
 
   // The v2 Dreamcaller identities (`dreamcallers_v2.toml`) drive the standalone
   // draft test harness. They reuse the same portrait art pool and the same
-  // kebab->camel normalization, and may carry a `draft-archetypes` list that
-  // seeds draft-pool construction for that Dreamcaller.
+  // kebab->camel normalization, and carry a `signature-cards` list that steers
+  // the standard `idf3` pool variant. The `draft-archetypes` the non-`idf3`
+  // variants seed from live in TypeScript ({@link DREAMCALLER_ARCHETYPES}) and
+  // are merged in below.
   console.log("Parsing dreamcallers_v2.toml...");
   const dreamcallerV2TomlContent = readFileSync(dreamcallerV2TomlPath, "utf8");
   const parsedDreamcallersV2 = parse(dreamcallerV2TomlContent);
@@ -512,7 +530,11 @@ export function setupAssets({
     throw new Error("Expected [[dreamcaller]] array in dreamcallers_v2.toml");
   }
 
-  const jsonDreamcallersV2 = allDreamcallersV2.map(transformDreamcaller);
+  const jsonDreamcallersV2 = allDreamcallersV2.map((dreamcaller) => {
+    const archetypes = DREAMCALLER_ARCHETYPES[dreamcaller.name];
+    if (archetypes) dreamcaller["draft-archetypes"] = archetypes;
+    return transformDreamcaller(dreamcaller);
+  });
   writeFileSync(
     dreamcallerV2JsonPath,
     JSON.stringify(jsonDreamcallersV2, null, 2) + "\n",
