@@ -113,17 +113,17 @@ export function extractPackageDebugInfo(
   return {
     dreamcallerName: resolvedPackage.dreamcaller.name,
     startingEssence: resolvedPackage.dreamcaller.startingEssence,
-    mandatoryTides: [...resolvedPackage.mandatoryTides],
-    optionalSubset: [...resolvedPackage.optionalSubset],
-    selectedTides: [...resolvedPackage.selectedTides],
+    mandatoryTides: [...(resolvedPackage.mandatoryTides ?? [])],
+    optionalSubset: [...(resolvedPackage.optionalSubset ?? [])],
+    selectedTides: [...(resolvedPackage.selectedTides ?? [])],
     mandatoryOnlyPoolSize: resolvedPackage.mandatoryOnlyPoolSize,
     draftPoolSize: resolvedPackage.draftPoolSize,
     doubledCardCount: resolvedPackage.doubledCardCount,
     legalSubsetCount: resolvedPackage.legalSubsetCount,
     preferredSubsetCount: resolvedPackage.preferredSubsetCount,
-    initialDreamsignPoolSize: resolvedPackage.dreamsignPoolIds.length,
+    initialDreamsignPoolSize: (resolvedPackage.dreamsignPoolIds ?? []).length,
     remainingDreamsigns: remainingDreamsignPool.map(toDreamsignEntry),
-    spentDreamsigns: resolvedPackage.dreamsignPoolIds
+    spentDreamsigns: (resolvedPackage.dreamsignPoolIds ?? [])
       .filter((id) => !remainingIds.has(id))
       .map(toDreamsignEntry),
   };

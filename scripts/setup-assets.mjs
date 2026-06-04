@@ -182,6 +182,9 @@ export function transformCard(card) {
   if (!("subtype" in result) || result.subtype == null) {
     result.subtype = "";
   }
+  if (!Array.isArray(result.tides)) {
+    result.tides = [];
+  }
   return result;
 }
 
