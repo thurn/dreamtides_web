@@ -142,5 +142,10 @@ export function generateIdf3(
   // starter is on-identity and growth pulls in its most similar neighbours, so the
   // grown pool is on-identity too; steering the starter alone is sufficient.
   const counts = growIdfPool(decks, idfOf, startIdx, targetSize);
-  return { C: new Set(), selected: ["idf3", `deck#${String(startIdx)}`], counts };
+  return {
+    C: new Set(),
+    selected: ["idf3", `deck#${String(startIdx)}`],
+    counts,
+    starterDeck: [...decks[startIdx].cards],
+  };
 }

@@ -114,7 +114,7 @@ export function generatePoolFromData(
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
   const rng = makeRng(resolvedSeed);
-  const { C, selected, counts } = runVariant(
+  const { C, selected, counts, starterDeck } = runVariant(
     variant,
     rng,
     poolData,
@@ -137,5 +137,6 @@ export function generatePoolFromData(
     seed: resolvedSeed,
     size: poolSize(counts),
     variant,
+    starterDeck: starterDeck ?? [],
   };
 }

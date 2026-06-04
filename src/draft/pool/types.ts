@@ -61,6 +61,12 @@ export interface GeneratedPool {
   size: number;
   /** Which generation variant produced this pool. */
   variant: PoolVariant;
+  /**
+   * The single real decklist the `idf3` variant chose as this run's starter —
+   * the anchor deck the pool was grown from. Empty for variants that do not
+   * select a starter deck.
+   */
+  starterDeck?: readonly string[];
 }
 
 /**
@@ -72,4 +78,10 @@ export interface VariantResult {
   C: Set<string>;
   selected: string[];
   counts: Map<string, number>;
+  /**
+   * The real decklist this variant chose as the run's starter, if any. Only the
+   * `idf3` variant sets it (its grown-from anchor deck); other variants leave it
+   * undefined and `generate.ts` defaults the public field to `[]`.
+   */
+  starterDeck?: readonly string[];
 }
