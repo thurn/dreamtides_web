@@ -34,11 +34,11 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 
 describe("Branded Direwolf (#512)", () => {
   it("is vanilla: no trigger or static hooks defined", () => {
-    expect(brandedDirewolf.onMaterialized).toBeUndefined();
-    expect(brandedDirewolf.onDawn).toBeUndefined();
-    expect(brandedDirewolf.onDissolved).toBeUndefined();
-    expect(brandedDirewolf.supportSpark).toBeUndefined();
-    expect(brandedDirewolf.selfStaticSpark).toBeUndefined();
+    expect("onMaterialized" in brandedDirewolf).toBe(false);
+    expect("onDawn" in brandedDirewolf).toBe(false);
+    expect("onDissolved" in brandedDirewolf).toBe(false);
+    expect("supportSpark" in brandedDirewolf).toBe(false);
+    expect("selfStaticSpark" in brandedDirewolf).toBe(false);
   });
 
   it("play pays energy and occupies a reserve slot, exhausted", () => {
