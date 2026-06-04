@@ -71,7 +71,6 @@ function makeRawSnapshot(overrides: Record<string, unknown>) {
         subtitle: "",
         imageNumber: "001",
         portraitSeed: 0,
-        packageTides: [],
         abilityText: "",
         dreamsignCount: 0,
       },

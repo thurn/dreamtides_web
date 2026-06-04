@@ -58,7 +58,6 @@ function normalizeCardInstance(
     definition: {
       ...raw.definition,
       timing: raw.definition.timing ?? (raw.definition.isFast ? "fast" : "standard"),
-      tides: raw.definition.tides ?? [],
     },
   };
 }

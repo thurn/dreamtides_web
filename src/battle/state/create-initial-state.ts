@@ -146,7 +146,6 @@ export function cloneBattleDeckCardDefinition(
 ): BattleCardInstance["definition"] {
   return {
     ...definition,
-    tides: [...definition.tides],
   };
 }
 

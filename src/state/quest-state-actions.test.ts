@@ -37,7 +37,6 @@ function makeCard(
     energyCost: 1,
     spark: null,
     isFast: false,
-    tides: ["core"],
     renderedText: "Test card.",
     imageNumber: cardNumber,
     artOwned: true,
@@ -54,8 +53,6 @@ function makeDreamcaller(): DreamcallerContent {
     imageNumber: "0006",
     startingEssence: 275,
     signatureCards: ["Alpha Card 1"],
-    mandatoryTides: [],
-    optionalTides: [],
   };
 }
 

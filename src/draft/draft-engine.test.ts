@@ -12,10 +12,7 @@ import {
   SITE_PICKS,
 } from "./draft-engine";
 
-function makeCard(
-  cardNumber: number,
-  tide: string = "tide_alpha",
-): CardData {
+function makeCard(cardNumber: number): CardData {
   return {
     name: `TestCard${String(cardNumber)}`,
     id: `test-${String(cardNumber)}`,
@@ -26,7 +23,6 @@ function makeCard(
     energyCost: 3,
     spark: 1,
     isFast: false,
-    tides: [tide],
     renderedText: "",
     imageNumber: cardNumber,
     artOwned: false,
@@ -48,12 +44,7 @@ function buildResolvedPackage(
       renderedText: "Test rules text.",
       imageNumber: "0003",
       startingEssence: 250,
-      mandatoryTides: ["core"],
-      optionalTides: ["support-a", "support-b", "support-c"],
     },
-    mandatoryTides: ["core"],
-    optionalSubset: ["support-a", "support-b", "support-c"],
-    selectedTides: ["core", "support-a", "support-b", "support-c"],
     draftPoolCopiesByCard: Object.fromEntries(
       Object.entries(copiesByCard).map(([cardNumber, copies]) => [
         cardNumber,

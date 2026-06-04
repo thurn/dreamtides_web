@@ -6,12 +6,9 @@
 // `src/journeys/journey/`, `src/journeys/content/`, `src/journeys/ui/`, or
 // `src/journeys/util/` reaches back into prototype-wide types.
 
-export type TideId = string;
-
 export type CardContent = {
   id: string;
   name: string;
-  tides: TideId[];
   rarity: string;
   cardType: string;
   energyCost: number | "*";
@@ -25,8 +22,6 @@ export type DreamcallerContent = {
   name: string;
   title: string;
   awakening: string;
-  mandatoryTides: TideId[];
-  optionalTides: TideId[];
   raw: Record<string, unknown>;
 };
 
@@ -36,7 +31,6 @@ export type DreamsignContent = {
   kind: "tidal" | "neutral";
   orientation?: "quest" | "battle";
   renderedText: string;
-  tides: TideId[];
   raw: Record<string, unknown>;
 };
 

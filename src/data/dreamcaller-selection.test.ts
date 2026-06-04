@@ -13,8 +13,6 @@ function makeDreamcaller(id: string): DreamcallerContent {
     renderedText: `Rules text for ${id}.`,
     imageNumber: `00${id}`,
     startingEssence: 250,
-    mandatoryTides: ["tide_alpha"],
-    optionalTides: ["support-a", "support-b", "support-c", "support-d"],
   };
 }
 

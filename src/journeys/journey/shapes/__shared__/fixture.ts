@@ -18,7 +18,6 @@ function card(
   overrides: Partial<CardContent> & { id: string; name: string },
 ): CardContent {
   return {
-    tides: overrides.tides ?? [],
     rarity: overrides.rarity ?? "Common",
     cardType: overrides.cardType ?? "Event",
     energyCost: overrides.energyCost ?? 2,
@@ -35,7 +34,6 @@ function dreamsign(
   return {
     kind: overrides.kind ?? "neutral",
     renderedText: overrides.renderedText ?? "",
-    tides: overrides.tides ?? [],
     raw: overrides.raw ?? {},
     ...overrides,
   };

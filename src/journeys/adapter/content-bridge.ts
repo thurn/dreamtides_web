@@ -41,7 +41,6 @@ export function cardDataToCardContent(card: CardData): CardContent {
   return {
     id: card.id,
     name: card.name,
-    tides: [...card.tides],
     rarity: normalizeRarity(card.rarity),
     cardType: card.cardType,
     energyCost,
@@ -61,7 +60,6 @@ export function cardDataToCardContent(card: CardData): CardContent {
       spark: card.spark,
       "is-fast": card.isFast,
       isFast: card.isFast,
-      tides: [...card.tides],
       "rendered-text": card.renderedText,
       renderedText: card.renderedText,
       "image-number": card.imageNumber,
@@ -83,8 +81,6 @@ export function dreamcallerContentToJourneyDreamcaller(
     name: source.name,
     title: source.title,
     awakening: "0",
-    mandatoryTides: [...source.mandatoryTides],
-    optionalTides: [...source.optionalTides],
     raw: {
       id: source.id,
       name: source.name,
@@ -94,20 +90,15 @@ export function dreamcallerContentToJourneyDreamcaller(
       "image-number": source.imageNumber,
       "starting-essence": source.startingEssence,
       startingEssence: source.startingEssence,
-      "mandatory-tides": [...source.mandatoryTides],
-      mandatoryTides: [...source.mandatoryTides],
-      "optional-tides": [...source.optionalTides],
-      optionalTides: [...source.optionalTides],
     },
   };
 }
 
 /**
  * Translate a `DreamsignTemplate` into the journey-internal `Dreamsign`.
- * The `kind` axis is derived from `packageTides`: any non-empty tide set
- * marks the dreamsign tidal; an empty set marks it neutral. The
- * `orientation` axis is omitted: the quest prototype does not distinguish
- * quest- vs. battle-oriented dreamsigns.
+ * Dreamsigns are `neutral`: the quest prototype does not distinguish tidal
+ * dreamsigns. The `orientation` axis is omitted: the quest prototype does not
+ * distinguish quest- vs. battle-oriented dreamsigns.
  */
 export function dreamsignTemplateToJourneyDreamsign(
   source: DreamsignTemplate,
@@ -115,16 +106,13 @@ export function dreamsignTemplateToJourneyDreamsign(
   return {
     id: source.id,
     name: source.name,
-    kind: source.packageTides.length > 0 ? "tidal" : "neutral",
+    kind: "neutral",
     renderedText: source.effectDescription,
-    tides: [...source.packageTides],
     raw: {
       id: source.id,
       name: source.name,
       "effect-description": source.effectDescription,
       effectDescription: source.effectDescription,
-      "package-tides": [...source.packageTides],
-      packageTides: [...source.packageTides],
       ...(source.imageName === undefined ? {} : { "image-name": source.imageName }),
       ...(source.imageAlt === undefined ? {} : { "image-alt": source.imageAlt }),
     },

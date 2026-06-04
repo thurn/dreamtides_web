@@ -2,10 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { loadQuestContent } from "./quest-content";
 import type { CardData } from "../types/cards";
 
-function makeCard(
-  cardNumber: number,
-  tides: string[],
-): CardData {
+function makeCard(cardNumber: number): CardData {
   return {
     name: `Card ${String(cardNumber)}`,
     id: `card-${String(cardNumber)}`,
@@ -16,7 +13,6 @@ function makeCard(
     energyCost: 2,
     spark: 1,
     isFast: false,
-    tides,
     renderedText: "",
     imageNumber: cardNumber,
     artOwned: true,
@@ -70,11 +66,7 @@ describe("loadQuestContent", () => {
   }
 
   it("loads V2 cards, Dreamcallers, decklists and builds the run pool context", async () => {
-    const cards = [
-      makeCard(1, ["core"]),
-      makeCard(2, ["core"]),
-      makeCard(3, ["support"]),
-    ];
+    const cards = [makeCard(1), makeCard(2), makeCard(3)];
     const v2Dreamcaller = {
       id: "dreamcaller-1",
       name: "Test Dreamcaller",
@@ -110,7 +102,7 @@ describe("loadQuestContent", () => {
   });
 
   it("offers every Dreamcaller without a validation skip loop", async () => {
-    const cards = [makeCard(1, ["core"]), makeCard(2, ["support"])];
+    const cards = [makeCard(1), makeCard(2)];
     const dreamcallers = [
       {
         id: "dc-a",

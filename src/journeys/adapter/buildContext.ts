@@ -204,19 +204,15 @@ function computeContentVersion(content: ContentBundle): string {
       energyCost: card.energyCost,
       spark: card.spark,
       rarity: card.rarity,
-      tides: card.tides,
     })),
     dreamcallers: content.dreamcallers.map((dreamcaller) => ({
       id: dreamcaller.id,
       name: dreamcaller.name,
-      mandatoryTides: dreamcaller.mandatoryTides,
-      optionalTides: dreamcaller.optionalTides,
     })),
     dreamsigns: content.dreamsigns.map((dreamsign) => ({
       id: dreamsign.id,
       name: dreamsign.name,
       kind: dreamsign.kind,
-      tides: dreamsign.tides,
     })),
   });
   return `content:${sha256(fingerprint).slice(0, 16)}`;

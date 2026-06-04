@@ -17,30 +17,17 @@ import {
   deckContainsDiscardAbility,
   deckContainsPredicate,
   deckHasMinSize,
-  poolHasDreamsignWithTide,
   transfigurationHasEligibleTarget,
 } from "./viability";
 
 function card(overrides: Partial<CardContent> & { id: string }): CardContent {
   return {
     name: overrides.name ?? overrides.id,
-    tides: overrides.tides ?? [],
     rarity: overrides.rarity ?? "common",
     cardType: overrides.cardType ?? "Event",
     energyCost: overrides.energyCost ?? 3,
     spark: overrides.spark ?? "",
     cardNumber: overrides.cardNumber ?? 0,
-    raw: overrides.raw ?? {},
-    ...overrides,
-  };
-}
-
-function dreamsign(overrides: Partial<DreamsignContent> & { id: string }): DreamsignContent {
-  return {
-    name: overrides.name ?? overrides.id,
-    kind: overrides.kind ?? "neutral",
-    renderedText: overrides.renderedText ?? "",
-    tides: overrides.tides ?? [],
     raw: overrides.raw ?? {},
     ...overrides,
   };
@@ -112,9 +99,6 @@ const NON_DISCARD_CARD = card({
 });
 const COST_ZERO_CARD = card({ id: "cost-zero", cardType: "Event", energyCost: 0 });
 
-const DREAMSIGN_DAWN = dreamsign({ id: "ds-dawn", tides: ["dawn"] });
-const DREAMSIGN_DUSK = dreamsign({ id: "ds-dusk", tides: ["dusk"] });
-
 const CASES: readonly Case[] = [
   {
     name: "deckContainsCard",
@@ -158,18 +142,6 @@ const CASES: readonly Case[] = [
       deckEntries: [{ cardId: EVENT_CARD.id, copies: 1 }],
     }),
     run: (ctx) => deckHasMinSize(ctx, 3),
-  },
-  {
-    name: "poolHasDreamsignWithTide",
-    positive: buildContext({
-      dreamsigns: [DREAMSIGN_DAWN],
-      dreamsignPoolIds: [DREAMSIGN_DAWN.id],
-    }),
-    negative: buildContext({
-      dreamsigns: [DREAMSIGN_DUSK],
-      dreamsignPoolIds: [DREAMSIGN_DUSK.id],
-    }),
-    run: (ctx) => poolHasDreamsignWithTide(ctx, "dawn"),
   },
   {
     name: "transfigurationHasEligibleTarget",

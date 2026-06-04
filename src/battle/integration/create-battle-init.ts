@@ -249,7 +249,6 @@ export function createEnemyDescriptor(
         subtitle: "Battlefield Projection",
         imageNumber: "001",
         portraitSeed: 0,
-        packageTides: Object.freeze([]),
         abilityText: "A synthetic opponent assembled for prototype combat.",
         dreamsigns: Object.freeze([]),
       },
@@ -261,14 +260,9 @@ export function createEnemyDescriptor(
   const dreamsignCount = Math.floor(random() * 3) + 1;
   const portraitSeed = Math.floor(random() * 1_000_000);
 
-  // The opponent's Dreamsigns are concrete: drawn from the templates adjacent
-  // to the enemy's mandatory tides, so they can be shown before the battle.
-  const enemyTides = new Set(template.mandatoryTides);
-  const adjacentTemplates = dreamsignTemplates.filter((candidate) =>
-    candidate.packageTides.some((tide) => enemyTides.has(tide)),
-  );
-  const dreamsignPool =
-    adjacentTemplates.length > 0 ? adjacentTemplates : dreamsignTemplates;
+  // The opponent's Dreamsigns are concrete: drawn from the full template pool
+  // so they can be shown before the battle.
+  const dreamsignPool = dreamsignTemplates;
   const dreamsigns: BattleDreamsignSummary[] = [];
   const usedDreamsignIds = new Set<string>();
   let attempts = 0;
@@ -297,9 +291,6 @@ export function createEnemyDescriptor(
       subtitle: "",
       imageNumber: template.imageNumber,
       portraitSeed,
-      // The tide field stays on the type for now but is always empty; the enemy
-      // deck is steered by `signatureCards` instead.
-      packageTides: Object.freeze([]),
       abilityText: template.renderedText,
       dreamsigns,
     },
@@ -398,7 +389,6 @@ function cloneBattleDeckCardDefinition(
 ): BattleDeckCardDefinition {
   return {
     ...definition,
-    tides: [...definition.tides],
   };
 }
 
@@ -428,7 +418,6 @@ function normalizePlayerDeckCard(
     isFast: effectiveCard.isFast,
     timing: effectiveCard.isFast ? "fast" : "standard",
     reclaimCost: effectiveCard.reclaimCost ?? null,
-    tides: [...card.tides],
     renderedText: effectiveCard.renderedText,
     imageNumber: card.imageNumber,
     transfiguration: entry.transfiguration,
@@ -445,7 +434,6 @@ function freezeBattleDeckCardDefinition(
 ): BattleDeckCardDefinition {
   return Object.freeze({
     ...definition,
-    tides: Object.freeze([...definition.tides]),
   });
 }
 
@@ -454,7 +442,6 @@ function freezeBattleEnemyDescriptor(
 ): BattleEnemyDescriptor {
   return Object.freeze({
     ...descriptor,
-    packageTides: Object.freeze([...descriptor.packageTides]),
     dreamsigns: Object.freeze(
       descriptor.dreamsigns.map((dreamsign) => Object.freeze({ ...dreamsign })),
     ),

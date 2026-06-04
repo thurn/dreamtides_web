@@ -12,7 +12,6 @@ const SAMPLE_CARD: CardData = {
   energyCost: 3,
   spark: 2,
   isFast: false,
-  tides: ["tide_alpha"],
   renderedText: "Sample text",
   imageNumber: 12345,
   artOwned: true,
@@ -132,18 +131,6 @@ describe("loadCardDatabase integration (real card-data.json)", () => {
         card.spark === null || typeof card.spark === "number",
       ).toBe(true);
       expect(typeof card.isFast).toBe("boolean");
-      expect(Array.isArray(card.tides)).toBe(true);
-      // Draftable cards belong to at least one package tide. Special-rarity
-      // cards (bane content like Nightmare) ship as referenceable content
-      // for dream-journey effects rather than as draftable cards, so their
-      // tides list is allowed to be empty.
-      if (card.rarity !== "Special") {
-        expect(card.tides.length).toBeGreaterThan(0);
-      }
-      for (const packageTideId of card.tides) {
-        expect(typeof packageTideId).toBe("string");
-        expect(packageTideId.length).toBeGreaterThan(0);
-      }
       expect(typeof card.renderedText).toBe("string");
       expect(typeof card.imageNumber).toBe("number");
       expect(typeof card.artOwned).toBe("boolean");
@@ -183,6 +170,5 @@ describe("loadCardDatabase integration (real card-data.json)", () => {
     expect(card).toBeDefined();
     expect(card?.cardNumber).toBe(1);
     expect(card?.name.length).toBeGreaterThan(0);
-    expect(card?.tides.length).toBeGreaterThan(0);
   });
 });

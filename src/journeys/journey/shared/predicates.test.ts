@@ -26,7 +26,6 @@ import { getPredicate, PREDICATES } from "./predicates";
 function card(overrides: Partial<CardContent> & { id: string }): CardContent {
   return {
     name: overrides.name ?? overrides.id,
-    tides: overrides.tides ?? [],
     rarity: overrides.rarity ?? "common",
     cardType: overrides.cardType ?? "Event",
     energyCost: overrides.energyCost ?? 3,

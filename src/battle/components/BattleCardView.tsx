@@ -21,7 +21,6 @@ export interface BattleCardVisualData {
   sparkDelta: number;
   subtype: string;
   text: string;
-  tides: readonly string[];
 }
 
 export function battleCardVisualFromInstance(
@@ -39,7 +38,6 @@ export function battleCardVisualFromInstance(
     sparkDelta: instance.sparkDelta,
     subtype: normalizeSubtype(instance.definition.subtype, instance.definition.battleCardKind),
     text: stripRulesText(instance.definition.renderedText),
-    tides: instance.definition.tides,
   };
 }
 
@@ -58,7 +56,6 @@ export function battleCardVisualFromReward(
     sparkDelta: 0,
     subtype: normalizeSubtype(card.subtype, card.cardType === "Character" ? "character" : "event"),
     text: stripRulesText(card.renderedText),
-    tides: card.tides,
   };
 }
 
@@ -77,7 +74,6 @@ export function battleCardDisplayFromInstance(
       ? selectEffectiveSparkForInstance(instance)
       : null,
     isFast: instance.definition.isFast,
-    tides: [...instance.definition.tides],
     renderedText: instance.definition.renderedText,
     imageNumber: instance.definition.imageNumber,
     artOwned: instance.definition.imageNumber > 0,

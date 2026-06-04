@@ -1,5 +1,5 @@
 import type { CardData } from "../types/cards";
-import type { DreamsignTemplate, PackageTideId } from "../types/content";
+import type { DreamsignTemplate } from "../types/content";
 import type { DraftState } from "../types/draft";
 import type { Dreamsign, RuntimeShopSlot } from "../types/quest";
 
@@ -74,8 +74,6 @@ export interface ShopInventoryResult {
   spentDreamsignPoolIds: string[];
   /** The draft state after shop card slots were drawn and spent. */
   draftState: DraftState | null;
-  /** The single tide this shop is restricted to, or null for a regular shop. */
-  restrictedTide: PackageTideId | null;
 }
 
 /** Returns the total discount for a slot after shop-wide modifiers. */
@@ -291,6 +289,5 @@ export function generateShopInventory(
     remainingDreamsignPoolIds: remainingPool,
     spentDreamsignPoolIds,
     draftState: nextDraftState,
-    restrictedTide: null,
   };
 }

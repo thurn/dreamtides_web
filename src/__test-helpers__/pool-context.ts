@@ -54,7 +54,6 @@ export function buildTestCorpusCards(): CardData[] {
       energyCost: 2,
       spark: 1,
       isFast: false,
-      tides: ["core"],
       renderedText: "",
       imageNumber: cardNumber,
       artOwned: true,

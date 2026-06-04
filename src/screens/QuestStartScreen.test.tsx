@@ -101,8 +101,6 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     renderedText: "First dreamcaller.",
     imageNumber: "0009",
     startingEssence: 230,
-    mandatoryTides: [],
-    optionalTides: [],
     signatureCards: ["Lantern Seer", "Banner Captain", "Verdant Sprout"],
   },
   {
@@ -112,8 +110,6 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     renderedText: "Second dreamcaller.",
     imageNumber: "0010",
     startingEssence: 250,
-    mandatoryTides: [],
-    optionalTides: [],
     signatureCards: ["Ember Scout", "Charging Host", "Quick Striker"],
   },
   {
@@ -123,8 +119,6 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     renderedText: "Third dreamcaller.",
     imageNumber: "0011",
     startingEssence: 285,
-    mandatoryTides: [],
-    optionalTides: [],
     signatureCards: ["Void Revenant", "Crowned Spark", "Endless Procession"],
   },
 ] as const;

@@ -6,7 +6,6 @@ const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
   {
     id: "dreamsign-1",
     name: "Dreamsign One",
-    packageTides: ["alpha"],
     effectDescription: "First effect.",
     imageName: "dreamsign_one.png",
     imageAlt: "Dreamsign One art",
@@ -14,7 +13,6 @@ const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
   {
     id: "dreamsign-2",
     name: "Dreamsign Two",
-    packageTides: ["beta"],
     effectDescription: "Second effect.",
   },
 ];

@@ -34,7 +34,6 @@ function makePreview(overrides: Partial<CardData> = {}): CardData {
     energyCost: 2,
     spark: 1,
     isFast: false,
-    tides: [],
     renderedText: "Draw a card.",
     imageNumber: 12,
     artOwned: true,

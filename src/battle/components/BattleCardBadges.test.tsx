@@ -111,7 +111,6 @@ function makeInstance(overrides: {
       printedSpark: 2,
       isFast: false,
       reclaimCost: null,
-      tides: [],
       renderedText: "",
       imageNumber: 1,
       transfiguration: null,

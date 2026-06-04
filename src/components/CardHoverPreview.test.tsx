@@ -21,7 +21,6 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
     energyCost: 2,
     spark: 2,
     isFast: false,
-    tides: ["alpha"],
     renderedText: "Gain a Bane. Reclaim that bane.",
     imageNumber: 1,
     artOwned: false,

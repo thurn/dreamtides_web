@@ -16,7 +16,6 @@ export function createBaseBattleDeckCardDefinition(
     isFast: card.isFast,
     timing: card.isFast ? "fast" : "standard",
     reclaimCost: card.reclaimCost ?? null,
-    tides: [...card.tides],
     renderedText: card.renderedText,
     imageNumber: card.imageNumber,
     transfiguration: null,

@@ -29,7 +29,6 @@ function makeCard(
     energyCost,
     spark: cardType === "Character" ? 2 : null,
     isFast: false,
-    tides: [],
     renderedText: `${name} text`,
     imageNumber: cardNumber,
     artOwned: true,

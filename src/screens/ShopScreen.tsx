@@ -156,11 +156,6 @@ export function ShopScreen({ site }: ShopScreenProps) {
         >
           {isSpecialty ? "Specialty Shop" : "Shop"}
         </h2>
-        {isSpecialty && runtime.restrictedTide !== null && (
-          <p className="mt-1 text-sm opacity-50">
-            Themed selection
-          </p>
-        )}
         {site.isEnhanced && (
           <span
             className="mt-2 inline-block rounded-full px-3 py-1 text-sm font-bold"

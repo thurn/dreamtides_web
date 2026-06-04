@@ -156,9 +156,6 @@ describe("battle history", () => {
     expect(history.past[0].before.mutable.cardInstances[battleCardId].definition).not.toBe(
       mutable.cardInstances[battleCardId].definition,
     );
-    expect(history.past[0].before.mutable.cardInstances[battleCardId].definition.tides).not.toBe(
-      mutable.cardInstances[battleCardId].definition.tides,
-    );
     expect(history.past[0].before.mutable.cardInstances[battleCardId].markers).not.toBe(
       mutable.cardInstances[battleCardId].markers,
     );

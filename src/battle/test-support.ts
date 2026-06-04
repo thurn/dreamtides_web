@@ -20,8 +20,6 @@ export function makeBattleTestDreamcallers(): DreamcallerContent[] {
       renderedText: "Whenever the first event each turn resolves, gain momentum.",
       imageNumber: "001",
       startingEssence: 250,
-      mandatoryTides: ["alpha"],
-      optionalTides: ["beta", "gamma"],
     },
     {
       id: "dreamcaller-bloom",
@@ -30,32 +28,30 @@ export function makeBattleTestDreamcallers(): DreamcallerContent[] {
       renderedText: "Your field grows harder to uproot with every turn passed.",
       imageNumber: "002",
       startingEssence: 250,
-      mandatoryTides: ["beta"],
-      optionalTides: ["alpha", "delta"],
     },
   ];
 }
 
 export function makeBattleTestCardDatabase(): Map<number, CardData> {
   const cards: CardData[] = [
-    makeCard(101, "Spark Initiate", "Character", 1, 2, ["alpha"]),
-    makeCard(102, "Arc Runner", "Character", 2, 3, ["alpha"]),
-    makeCard(103, "Static Channeler", "Character", 3, 2, ["alpha"]),
-    makeCard(104, "Tempest Guard", "Character", 4, 4, ["alpha"]),
-    makeCard(105, "Storm Titan", "Character", 6, 6, ["alpha"]),
-    makeCard(106, "Ion Burst", "Event", 1, null, ["alpha"]),
-    makeCard(107, "Refraction", "Event", 3, null, ["alpha"]),
-    makeCard(108, "Arc Collapse", "Event", 5, null, ["alpha"]),
-    makeCard(201, "Beta Tender", "Character", 1, 1, ["beta"]),
-    makeCard(202, "Garden Sentinel", "Character", 2, 2, ["beta"]),
-    makeCard(203, "Canopy Ranger", "Character", 3, 3, ["beta"]),
-    makeCard(204, "Verdant Colossus", "Character", 5, 5, ["beta"]),
-    makeCard(205, "Harvest Ritual", "Event", 2, null, ["beta"]),
-    makeCard(206, "Root Recall", "Event", 4, null, ["beta"]),
-    makeCard(301, "Null Courier", "Character", 1, 1, ["gamma"]),
-    makeCard(302, "Mirror Adept", "Character", 4, 3, ["gamma"]),
-    makeCard(303, "Silent Current", "Event", 2, null, ["gamma"]),
-    makeCard(304, "Late Pulse", "Event", 6, null, ["gamma"]),
+    makeCard(101, "Spark Initiate", "Character", 1, 2),
+    makeCard(102, "Arc Runner", "Character", 2, 3),
+    makeCard(103, "Static Channeler", "Character", 3, 2),
+    makeCard(104, "Tempest Guard", "Character", 4, 4),
+    makeCard(105, "Storm Titan", "Character", 6, 6),
+    makeCard(106, "Ion Burst", "Event", 1, null),
+    makeCard(107, "Refraction", "Event", 3, null),
+    makeCard(108, "Arc Collapse", "Event", 5, null),
+    makeCard(201, "Beta Tender", "Character", 1, 1),
+    makeCard(202, "Garden Sentinel", "Character", 2, 2),
+    makeCard(203, "Canopy Ranger", "Character", 3, 3),
+    makeCard(204, "Verdant Colossus", "Character", 5, 5),
+    makeCard(205, "Harvest Ritual", "Event", 2, null),
+    makeCard(206, "Root Recall", "Event", 4, null),
+    makeCard(301, "Null Courier", "Character", 1, 1),
+    makeCard(302, "Mirror Adept", "Character", 4, 3),
+    makeCard(303, "Silent Current", "Event", 2, null),
+    makeCard(304, "Late Pulse", "Event", 6, null),
   ];
 
   for (let i = 0; i < 42; i += 1) {
@@ -67,7 +63,6 @@ export function makeBattleTestCardDatabase(): Map<number, CardData> {
         cardType,
         1 + (i % 6),
         cardType === "Character" ? 1 + (i % 4) : null,
-        cardType === "Event" && i < 8 ? ["alpha", "cheap_removal"] : ["alpha"],
       ),
     );
   }
@@ -81,7 +76,6 @@ export function makeBattleTestCardDatabase(): Map<number, CardData> {
         cardType,
         1 + (i % 6),
         cardType === "Character" ? 1 + (i % 4) : null,
-        cardType === "Event" && i < 10 ? ["beta", "premium_removal"] : ["beta"],
       ),
     );
   }
@@ -94,7 +88,6 @@ export function makeBattleTestCardDatabase(): Map<number, CardData> {
         "Event",
         2 + (i % 2),
         null,
-        i % 2 === 0 ? ["cheap_removal"] : ["premium_removal"],
       ),
     );
   }
@@ -183,9 +176,6 @@ function makeBattleTestDreamsigns(): Dreamsign[] {
 function makeResolvedPackage(): ResolvedDreamcallerPackage {
   return {
     dreamcaller: makeBattleTestDreamcallers()[0],
-    mandatoryTides: ["alpha"],
-    optionalSubset: ["beta"],
-    selectedTides: ["alpha", "beta"],
     draftPoolCopiesByCard: {
       "101": 2,
       "102": 2,
@@ -207,7 +197,6 @@ function makeCard(
   cardType: CardData["cardType"],
   energyCost: number | null,
   spark: number | null,
-  tides: string[],
 ): CardData {
   return {
     name,
@@ -219,7 +208,6 @@ function makeCard(
     energyCost,
     spark,
     isFast: false,
-    tides,
     renderedText: `${name} text`,
     imageNumber: cardNumber,
     artOwned: true,

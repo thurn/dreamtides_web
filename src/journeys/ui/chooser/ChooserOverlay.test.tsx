@@ -79,7 +79,6 @@ function makeCard(overrides: Partial<CardData>): CardData {
     energyCost: 2,
     spark: 3,
     isFast: true,
-    tides: ["ember"],
     renderedText: "Gain ●2. An ally gets ⍏1.",
     imageNumber: 101,
     artOwned: true,

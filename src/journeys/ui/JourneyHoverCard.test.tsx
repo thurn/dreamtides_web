@@ -87,7 +87,6 @@ function makeCard(name: string, cardNumber: number): CardData {
     energyCost: 1,
     spark: null,
     isFast: false,
-    tides: [],
     renderedText: `${name} rules text.`,
     imageNumber: cardNumber,
     artOwned: true,

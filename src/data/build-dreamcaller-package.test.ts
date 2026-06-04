@@ -58,8 +58,6 @@ function makeDreamcaller(
     renderedText: "",
     imageNumber: "0",
     startingEssence: 250,
-    mandatoryTides: [],
-    optionalTides: [],
     // Point clearly at the first deck (which includes the starter names).
     signatureCards: ["Card 0", "Card 1", "Card 2"],
     ...overrides,
@@ -129,12 +127,9 @@ describe("buildDreamcallerPackage", () => {
     expect(new Set(numbers).size).toBe(numbers.length);
   });
 
-  it("leaves tide fields empty and passes through dreamsign ids", () => {
+  it("passes through dreamsign ids", () => {
     const ctx = makeContext();
     const pkg = buildDreamcallerPackage(makeDreamcaller(), ctx, "seed-abc");
-    expect(pkg.mandatoryTides).toEqual([]);
-    expect(pkg.optionalSubset).toEqual([]);
-    expect(pkg.selectedTides).toEqual([]);
     expect(pkg.dreamsignPoolIds).toEqual(["ds1", "ds2", "ds3"]);
   });
 });

@@ -1,5 +1,5 @@
 import { createDreamsign } from "../data/dreamsigns";
-import type { DreamsignTemplate, PackageTideId } from "../types/content";
+import type { DreamsignTemplate } from "../types/content";
 import type { Dreamsign } from "../types/quest";
 
 export interface DreamsignPoolDraw {
@@ -47,73 +47,6 @@ function shufflePick<T>(items: readonly T[], count: number): T[] {
   return pool.slice(0, count);
 }
 
-/**
- * Returns true when the template overlaps any of the given required tides.
- * A missing template (unknown id) is treated as not covering any tide.
- */
-function templateCoversRequiredTide(
-  template: DreamsignTemplate | undefined,
-  requiredTides: ReadonlySet<PackageTideId>,
-): boolean {
-  if (template === undefined || requiredTides.size === 0) {
-    return false;
-  }
-  return template.packageTides.some((tide) => requiredTides.has(tide));
-}
-
-/**
- * Enforces the "at least one offered dreamsign must come from a required
- * structural tide" guarantee on an already-sampled offer list.
- *
- * If the offer already includes a required-tide template, the offer is
- * returned unchanged. Otherwise, the function swaps one offered id for a
- * randomly-chosen eligible id drawn from `workingIds`. Random placement of
- * the swap keeps the constraint invisible in the UI: the structural slot is
- * not always first or always marked.
- *
- * Falls back gracefully when no eligible id exists in the working pool
- * (e.g. the pool is exhausted of required-tide dreamsigns) -- the original
- * offer is returned and the caller is responsible for any further fallback.
- */
-function ensureRequiredTideCoverage(
-  offeredIds: readonly string[],
-  workingIds: readonly string[],
-  templatesById: ReadonlyMap<string, DreamsignTemplate>,
-  requiredTides: ReadonlyArray<PackageTideId>,
-): string[] {
-  const requiredTideSet = new Set(requiredTides);
-  if (requiredTideSet.size === 0 || offeredIds.length === 0) {
-    return [...offeredIds];
-  }
-
-  const alreadyCovers = offeredIds.some((id) =>
-    templateCoversRequiredTide(templatesById.get(id), requiredTideSet),
-  );
-  if (alreadyCovers) {
-    return [...offeredIds];
-  }
-
-  const offeredSet = new Set(offeredIds);
-  const eligibleCandidates = workingIds.filter(
-    (id) =>
-      !offeredSet.has(id) &&
-      templateCoversRequiredTide(templatesById.get(id), requiredTideSet),
-  );
-
-  if (eligibleCandidates.length === 0) {
-    // Nothing in the working pool covers a required tide. Graceful fallback:
-    // return the offer as-is so the player still sees a complete draft.
-    return [...offeredIds];
-  }
-
-  const chosenEligible =
-    eligibleCandidates[Math.floor(Math.random() * eligibleCandidates.length)];
-  const swapIndex = Math.floor(Math.random() * offeredIds.length);
-  const result = [...offeredIds];
-  result[swapIndex] = chosenEligible;
-  return result;
-}
-
 /** Returns the canonical remaining Dreamsign ids backed by known templates. */
 export function readDreamsignPool(
   remainingDreamsignPool: readonly string[],
@@ -128,22 +61,12 @@ export function readDreamsignPool(
  * is recreated from `regenerationPoolIds` (the run's full Dreamsign pool) so
  * the shared pool behaves as a renewable resource, as the design document
  * describes.
- *
- * When `requiredTides` is non-empty (the active dreamcaller's required
- * structural tides) the draw guarantees that at least one offered dreamsign
- * carries a template tide in `requiredTides`, biasing the sampler only by
- * swapping a single slot when the unbiased shuffle did not naturally cover
- * the requirement. The swap is randomly positioned so the constrained slot
- * is not detectable from the offer's order. When the working pool contains
- * no required-tide template the draw falls back gracefully and returns the
- * unbiased offer.
  */
 export function drawDreamsignOptions(
   remainingDreamsignPool: readonly string[],
   templates: readonly DreamsignTemplate[],
   count: number,
   regenerationPoolIds?: readonly string[],
-  requiredTides?: readonly PackageTideId[],
 ): DreamsignPoolDraw {
   const { availableIds, templatesById } = canonicalizeDreamsignPool(
     remainingDreamsignPool,
@@ -161,20 +84,10 @@ export function drawDreamsignOptions(
     }
   }
 
-  const initialOfferedIds = shufflePick(
+  const offeredIds = shufflePick(
     workingIds,
     Math.min(count, workingIds.length),
   );
-
-  const offeredIds =
-    requiredTides !== undefined && requiredTides.length > 0
-      ? ensureRequiredTideCoverage(
-          initialOfferedIds,
-          workingIds,
-          templatesById,
-          requiredTides,
-        )
-      : initialOfferedIds;
 
   return {
     offeredIds,

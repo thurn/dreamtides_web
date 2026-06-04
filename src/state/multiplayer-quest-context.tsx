@@ -1893,7 +1893,6 @@ export function MultiplayerQuestProvider({
           slots: shopSlotsToRuntime(generated.slots),
           rerollCount: 0,
           remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
-          restrictedTide: generated.restrictedTide,
         };
         remainingDreamsignPool = generated.remainingDreamsignPoolIds;
         nextDraftState = generated.draftState;

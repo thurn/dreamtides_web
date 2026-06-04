@@ -1,4 +1,4 @@
-import type { PackageTideId, ResolvedDreamcallerPackage } from "./content";
+import type { ResolvedDreamcallerPackage } from "./content";
 import type { CardData, CardType } from "./cards";
 import type { DraftState } from "./draft";
 
@@ -199,11 +199,6 @@ export interface ShopSiteRuntime {
   slots: RuntimeShopSlot[];
   rerollCount: number;
   remainingDreamsignPoolIds: string[];
-  /**
-   * For a Specialty Shop, the single tide the inventory is restricted to;
-   * `null` for a regular Shop. Persisted so a reroll keeps the same tide.
-   */
-  restrictedTide: PackageTideId | null;
 }
 
 /**

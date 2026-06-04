@@ -173,7 +173,6 @@ function makeCardDatabase(): Map<number, CardData> {
         energyCost: 1,
         spark: 1,
         isFast: false,
-        tides: ["alpha"],
         renderedText: "Test text.",
         imageNumber: 101,
         artOwned: false,

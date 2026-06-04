@@ -934,7 +934,6 @@ function createFigment(
     printedSpark: chosenSpark,
     isFast: false,
     reclaimCost: null,
-    tides: [],
     renderedText: "",
     imageNumber: 0,
     transfiguration: null,

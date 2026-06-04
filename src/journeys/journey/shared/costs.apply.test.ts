@@ -102,7 +102,6 @@ function cardFixture(): readonly CardContent[] {
     {
       id: "starter-alpha",
       name: "Starter Alpha",
-      tides: [],
       rarity: "Starter",
       cardType: "Event",
       energyCost: 0,
@@ -113,7 +112,6 @@ function cardFixture(): readonly CardContent[] {
     {
       id: "starter-beta",
       name: "Starter Beta",
-      tides: [],
       rarity: "Starter",
       cardType: "Character",
       energyCost: 0,
@@ -124,7 +122,6 @@ function cardFixture(): readonly CardContent[] {
     {
       id: "event-alpha",
       name: "Event Alpha",
-      tides: [],
       rarity: "common",
       cardType: "Event",
       energyCost: 1,
@@ -135,7 +132,6 @@ function cardFixture(): readonly CardContent[] {
     {
       id: "event-beta",
       name: "Event Beta",
-      tides: [],
       rarity: "common",
       cardType: "Event",
       energyCost: 2,
@@ -156,7 +152,6 @@ function dreamsignFixture(): readonly DreamsignContent[] {
       name: "Name A",
       kind: "neutral",
       renderedText: "Effect A",
-      tides: [],
       raw: { id: "ds-1", name: "Name A", "effect-description": "Effect A" },
     },
     {
@@ -164,7 +159,6 @@ function dreamsignFixture(): readonly DreamsignContent[] {
       name: "Name B",
       kind: "neutral",
       renderedText: "Effect B",
-      tides: [],
       raw: { id: "ds-2", name: "Name B", "effect-description": "Effect B" },
     },
     {
@@ -172,7 +166,6 @@ function dreamsignFixture(): readonly DreamsignContent[] {
       name: "Name C",
       kind: "neutral",
       renderedText: "Effect C",
-      tides: [],
       raw: {
         id: "ds-3",
         name: "Name C",
@@ -191,7 +184,6 @@ function baneCardFixture(): readonly CardContent[] {
   return BANE_NAMES.map((name, i) => ({
     id: `bane-card-${name.toLowerCase()}-${String(i)}`,
     name,
-    tides: [],
     rarity: "common",
     cardType: "Event",
     energyCost: 0,
@@ -427,7 +419,6 @@ describe("Bane cost apply", () => {
         {
           id: "nightmare-card",
           name: "Nightmare",
-          tides: [],
           rarity: "Special",
           cardType: "Event",
           energyCost: 2,

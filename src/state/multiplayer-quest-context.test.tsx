@@ -63,8 +63,6 @@ const testDreamcaller: DreamcallerContent = {
   imageNumber: "0009",
   startingEssence: 235,
   signatureCards: ["Alpha Card 1"],
-  mandatoryTides: ["materialize_value"],
-  optionalTides: ["spirit_growth"],
 };
 
 function mount(element: ReactElement): {
@@ -94,7 +92,6 @@ function makeCard(cardNumber: number): CardData {
     energyCost: 1,
     spark: null,
     isFast: false,
-    tides: ["materialize_value"],
     renderedText: "Test card.",
     imageNumber: cardNumber,
     artOwned: true,
@@ -106,7 +103,6 @@ function makeDreamsignTemplate(id: string, name: string): DreamsignTemplate {
     id,
     name,
     effectDescription: `${name} effect.`,
-    packageTides: ["materialize_value"],
   };
 }
 
@@ -928,7 +924,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -969,7 +964,6 @@ describe("MultiplayerQuestProvider", () => {
     ]);
     expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
       kind: "shop",
-      restrictedTide: null,
       slots: [
         {
           itemType: "card",
@@ -1013,7 +1007,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1060,7 +1053,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1083,7 +1075,6 @@ describe("MultiplayerQuestProvider", () => {
         siteRuntime: {
           "site-1": {
             kind: "shop",
-            restrictedTide: null,
             slots: [
               {
                 itemType: "card",
@@ -1129,7 +1120,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1168,7 +1158,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1214,7 +1203,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1264,7 +1252,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "dreamsign",
@@ -1299,7 +1286,6 @@ describe("MultiplayerQuestProvider", () => {
     expect(nextRoom?.questState?.dreamsigns).toEqual([dreamsign]);
     expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
       kind: "shop",
-      restrictedTide: null,
       slots: [
         {
           itemType: "dreamsign",
@@ -1329,7 +1315,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "dreamsign",
@@ -1385,7 +1370,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "dreamsign",
@@ -1438,7 +1422,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "dreamsign",
@@ -1486,7 +1469,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1577,7 +1559,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -1627,7 +1608,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         "site-1": {
           kind: "shop",
-          restrictedTide: null,
           slots: [
             {
               itemType: "card",
@@ -3149,7 +3129,6 @@ describe("MultiplayerQuestProvider", () => {
       siteRuntime: {
         [site.id]: {
           kind: "shop",
-          restrictedTide: null,
           slots: [],
           rerollCount: 0,
           remainingDreamsignPoolIds: [],

@@ -23,7 +23,6 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
     energyCost: 2,
     spark: 1,
     isFast: false,
-    tides: ["tide_alpha"],
     renderedText: "Test text",
     imageNumber: 1,
     artOwned: false,
@@ -58,13 +57,11 @@ const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
   {
     id: "dreamsign-1",
     name: "Dreamsign One",
-    packageTides: ["tide_alpha"],
     effectDescription: "First effect.",
   },
   {
     id: "dreamsign-2",
     name: "Dreamsign Two",
-    packageTides: ["tide_beta"],
     effectDescription: "Second effect.",
   },
 ];
@@ -247,11 +244,11 @@ describe("shop runtime conversion", () => {
 
 describe("generateShopInventory", () => {
   const db = makeDatabase([
-    makeCard({ cardNumber: 1, tides: ["tide_alpha"] }),
-    makeCard({ cardNumber: 2, tides: ["tide_beta"] }),
-    makeCard({ cardNumber: 3, tides: ["tide_gamma"] }),
-    makeCard({ cardNumber: 4, tides: ["tide_alpha"] }),
-    makeCard({ cardNumber: 5, tides: ["tide_beta"] }),
+    makeCard({ cardNumber: 1 }),
+    makeCard({ cardNumber: 2 }),
+    makeCard({ cardNumber: 3 }),
+    makeCard({ cardNumber: 4 }),
+    makeCard({ cardNumber: 5 }),
   ]);
 
   it("generates 3 card slots and 2 dreamsign slots by default", () => {
@@ -404,27 +401,6 @@ describe("generateShopInventory", () => {
     expect(
       Object.keys(result.draftState?.remainingCopiesByCard ?? {}).length,
     ).toBeLessThan(Object.keys(draftState.remainingCopiesByCard).length);
-  });
-
-  it("returns a null restrictedTide for a regular shop", () => {
-    const result = generateShopInventory({
-      cardDatabase: db,
-      draftState: makeDraftState({ 1: 1, 2: 1, 3: 1 }),
-      remainingDreamsignPoolIds: [],
-      dreamsignTemplates: DREAMSIGN_TEMPLATES,
-    });
-    expect(result.restrictedTide).toBeNull();
-  });
-
-  it("returns a null restrictedTide for a Specialty Shop", () => {
-    const result = generateShopInventory({
-      cardDatabase: db,
-      draftState: makeDraftState({ 1: 1, 2: 1, 3: 1 }),
-      remainingDreamsignPoolIds: [],
-      dreamsignTemplates: DREAMSIGN_TEMPLATES,
-      starterDecklistCardNumbers: [1, 2, 3],
-    });
-    expect(result.restrictedTide).toBeNull();
   });
 
   it("does not crash with a null draft state", () => {

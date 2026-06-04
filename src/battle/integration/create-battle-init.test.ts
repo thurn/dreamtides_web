@@ -39,7 +39,6 @@ function makePackageCard(
     energyCost,
     spark: cardType === "Character" ? energyCost : null,
     isFast: false,
-    tides: [packageTide],
     renderedText: "",
     imageNumber: cardNumber,
     artOwned: true,
@@ -71,7 +70,6 @@ function makeSteeredPoolContext(): {
 
   const poolCards: PoolCard[] = Array.from(cardDatabase.values()).map((card) => ({
     name: card.name,
-    tides: card.tides,
   }));
   const poolData = buildPoolData(poolCards, [decklistA, decklistB]);
 
@@ -99,8 +97,6 @@ function makeSignatureDreamcallers(
       renderedText: "",
       imageNumber: "001",
       startingEssence: 250,
-      mandatoryTides: [],
-      optionalTides: [],
       signatureCards: [...signatureCards],
     },
   ];
@@ -384,12 +380,11 @@ describe("createBattleInit", () => {
       expect(init.questDeckEntries).toHaveLength(8);
     });
 
-    it("freezes the player deck order and each card's tides array", () => {
+    it("freezes the player deck order and each card", () => {
       const init = createBattleInit(makeBaseInput());
       expect(Object.isFrozen(init.playerDeckOrder)).toBe(true);
       for (const card of init.playerDeckOrder) {
         expect(Object.isFrozen(card)).toBe(true);
-        expect(Object.isFrozen(card.tides)).toBe(true);
       }
     });
 
@@ -541,9 +536,6 @@ describe("createBattleInit", () => {
       expect(selectedDreamcaller).toBeDefined();
       expect(init.enemyDescriptor.name).toBe(selectedDreamcaller?.name);
       expect(init.enemyDescriptor.subtitle).toBe("");
-      // packageTides is always empty: the enemy deck is steered by the chosen
-      // Dreamcaller's signature, not by tides.
-      expect(init.enemyDescriptor.packageTides).toEqual([]);
       for (const prefix of ["Shadow", "Nightmare", "Phantom", "Dark"]) {
         expect(init.enemyDescriptor.name.startsWith(`${prefix} `)).toBe(false);
       }
@@ -556,7 +548,6 @@ describe("createBattleInit", () => {
       });
 
       expect(init.enemyDescriptor.id).toBe("enemy:fallback");
-      expect(init.enemyDescriptor.packageTides).toEqual([]);
       expect(init.enemyDescriptor.dreamsigns).toEqual([]);
     });
 
@@ -568,13 +559,11 @@ describe("createBattleInit", () => {
             id: "enemy-sign-1",
             name: "Enemy Sign One",
             effectDescription: "An opposing boon.",
-            packageTides: [],
           },
           {
             id: "enemy-sign-2",
             name: "Enemy Sign Two",
             effectDescription: "Another opposing boon.",
-            packageTides: [],
           },
         ],
       });
@@ -624,12 +613,11 @@ describe("createBattleInit", () => {
       expect(cardNumbersChosen.has(802)).toBe(false);
     });
 
-    it("freezes the enemy deck definition list and per-card tides", () => {
+    it("freezes the enemy deck definition list", () => {
       const init = createBattleInit(makeBaseInput());
       expect(Object.isFrozen(init.enemyDeckDefinition)).toBe(true);
       for (const card of init.enemyDeckDefinition) {
         expect(Object.isFrozen(card)).toBe(true);
-        expect(Object.isFrozen(card.tides)).toBe(true);
       }
     });
 

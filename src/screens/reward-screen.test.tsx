@@ -71,7 +71,6 @@ const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
   {
     id: "dreamsign-1",
     name: "Dreamsign One",
-    packageTides: ["alpha"],
     effectDescription: "First effect.",
   },
 ];
@@ -192,7 +191,6 @@ function makeCardDatabase(): Map<number, CardData> {
         energyCost: 1,
         spark: 1,
         isFast: false,
-        tides: ["alpha"],
         renderedText: "Reward text.",
         imageNumber: 1,
         artOwned: false,
@@ -284,8 +282,6 @@ describe("RewardSiteScreen", () => {
     );
 
     expect(container.textContent).toContain("Dreamsign One");
-    expect(container.textContent).not.toContain("tide_alpha");
-    expect(container.querySelector('img[alt="tide_alpha"]')).toBeNull();
 
     clickButton(container, "Decline");
 

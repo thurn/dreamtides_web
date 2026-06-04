@@ -405,7 +405,6 @@ function contextWithDeck(): JourneyContext {
         {
           id: "card-a",
           name: "Glimmer Knife",
-          tides: [],
           rarity: "Starter",
           cardType: "Event",
           energyCost: 1,
@@ -416,7 +415,6 @@ function contextWithDeck(): JourneyContext {
         {
           id: "card-b",
           name: "Amber Lantern",
-          tides: [],
           rarity: "Starter",
           cardType: "Character",
           energyCost: 1,
@@ -455,7 +453,6 @@ function contextWithTransfiguredDeckEntries(): JourneyContext {
         {
           id: "card-a",
           name: "Glimmer Knife",
-          tides: [],
           rarity: "Starter",
           cardType: "Event",
           energyCost: 1,

@@ -14,7 +14,6 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
     energyCost: 1,
     spark: null,
     isFast: false,
-    tides: [],
     renderedText: "Draw a card.",
     imageNumber: 1,
     artOwned: true,

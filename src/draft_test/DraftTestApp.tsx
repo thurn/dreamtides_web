@@ -370,28 +370,11 @@ function nextPoolVariant(current: PoolVariant): PoolVariant {
  * counted in copies. That tide breakdown is what reveals, e.g., that an
  * abandon-focused Dreamcaller's pool actually came out Spirit-Animals-heavy.
  */
-function logPoolTrace(
-  dreamcaller: string,
-  pool: GeneratedPool,
-  database: Map<number, CardData>,
-  nameIndex: Map<string, number>,
-): void {
-  const tideCopies = new Map<string, number>();
-  for (const [name, copies] of pool.counts) {
-    const cardNumber = nameIndex.get(name);
-    const card = cardNumber === undefined ? undefined : database.get(cardNumber);
-    for (const tide of card?.tides ?? []) {
-      tideCopies.set(tide, (tideCopies.get(tide) ?? 0) + copies);
-    }
-  }
-  const tides = [...tideCopies.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .map(([tide, n]) => `${tide} ${String(n)}`)
-    .join(", ");
+function logPoolTrace(dreamcaller: string, pool: GeneratedPool): void {
   console.info(
     `[draft_test] ${dreamcaller} | ${pool.variant} | seed=${String(pool.seed)} | ` +
       `${pool.identity || "—"} | ${String(pool.size)} cards | ` +
-      `themes: ${pool.themes.join(", ")}\n  tides (copies): ${tides}`,
+      `themes: ${pool.themes.join(", ")}`,
   );
 }
 
@@ -490,7 +473,7 @@ export default function DraftTestApp() {
           `[draft_test] ${String(unresolvedNames.length)} pool card names had no match in cards_v2: ${unresolvedNames.join(", ")}`,
         );
       }
-      logPoolTrace(dreamcaller.name, pool, database, nameIndex);
+      logPoolTrace(dreamcaller.name, pool);
 
       const draftState: DraftState = {
         draftPoolCopiesByCard,

@@ -1198,7 +1198,6 @@ export function QuestProvider({
           slots: shopSlotsToRuntime(generated.slots),
           rerollCount: 0,
           remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
-          restrictedTide: generated.restrictedTide,
         };
 
         return {

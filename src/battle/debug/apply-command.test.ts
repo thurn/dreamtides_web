@@ -762,7 +762,6 @@ describe("applyBattleCommand", () => {
     expect(minted.definition.imageNumber).toBe(0);
     expect(minted.definition.battleCardKind).toBe("character");
     expect(minted.definition.energyCost).toBe(0);
-    expect(minted.definition.tides).toEqual([]);
     expect(applied.mutable.sides.player.reserve.R0).toBe(mintedId);
 
     const event = applied.lastTransition?.logEvents.find(

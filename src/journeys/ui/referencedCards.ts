@@ -78,7 +78,6 @@ export function cardContentToDisplayData(card: CardContent): CardData {
     spark: typeof card.spark === "number" ? card.spark : null,
     sparkVariable: card.spark === "*",
     isFast: booleanRawField(card.raw, "isFast", "is-fast") ?? false,
-    tides: [...card.tides],
     renderedText,
     imageNumber,
     artOwned: booleanRawField(card.raw, "artOwned", "art-owned") ?? true,

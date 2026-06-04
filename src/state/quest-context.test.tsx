@@ -33,7 +33,6 @@ function makeCard(cardNumber: number, name?: string): CardData {
     energyCost: 1,
     spark: 1,
     isFast: false,
-    tides: [],
     renderedText: "Test card.",
     imageNumber: cardNumber,
     artOwned: true,
@@ -415,7 +414,6 @@ describe("rerollShop free-reroll consumption", () => {
           slots: [],
           rerollCount: 0,
           remainingDreamsignPoolIds: [],
-          restrictedTide: null,
         },
       },
     };
@@ -464,7 +462,6 @@ describe("buyShopSlot essence discounts", () => {
           ],
           rerollCount: 0,
           remainingDreamsignPoolIds: [],
-          restrictedTide: null,
         },
       },
     };
@@ -515,7 +512,6 @@ describe("buyShopSlot omen discounts", () => {
           ],
           rerollCount: 0,
           remainingDreamsignPoolIds: [],
-          restrictedTide: null,
         },
       },
     };
@@ -558,7 +554,6 @@ describe("buyShopSlot omen discounts", () => {
           ],
           rerollCount: 0,
           remainingDreamsignPoolIds: [],
-          restrictedTide: null,
         },
       },
     };

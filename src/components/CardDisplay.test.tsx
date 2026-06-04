@@ -20,7 +20,6 @@ function makeCard(overrides: Partial<CardData>): CardData {
     energyCost: 3,
     spark: 2,
     isFast: false,
-    tides: ["tide_alpha"],
     renderedText: "Test text.",
     imageNumber: 1,
     artOwned: true,
@@ -317,7 +316,7 @@ describe("CardDisplay", () => {
 
   it("themes Character cards with the neutral black chrome", () => {
     const { container, root } = mount(
-      <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
+      <CardDisplay card={makeCard({ cardType: "Character" })} />,
     );
 
     const cardRoot = container.firstElementChild as HTMLElement | null;
@@ -626,7 +625,7 @@ describe("CardDisplay", () => {
 
   it("gives Character and Event cards an identical drop shadow, differing only by the type accent", () => {
     const characterMount = mount(
-      <CardDisplay card={makeCard({ cardType: "Character", tides: [] })} />,
+      <CardDisplay card={makeCard({ cardType: "Character" })} />,
     );
     const eventMount = mount(
       <CardDisplay

@@ -41,7 +41,6 @@ import { REWARDS, getReward } from "./rewards";
 
 function card(overrides: Partial<CardContent> & { id: string; name: string }): CardContent {
   return {
-    tides: overrides.tides ?? [],
     rarity: overrides.rarity ?? "common",
     cardType: overrides.cardType ?? "Event",
     energyCost: overrides.energyCost ?? 3,
@@ -56,7 +55,6 @@ function dreamsign(overrides: Partial<DreamsignContent> & { id: string; name: st
   return {
     kind: overrides.kind ?? "neutral",
     renderedText: overrides.renderedText ?? "",
-    tides: overrides.tides ?? [],
     raw: overrides.raw ?? {},
     ...overrides,
   };

@@ -218,13 +218,6 @@ function normalizeRewardDreamsign(
 function normalizeSiteRuntimeEntry(
   entry: SiteRuntimeState,
 ): SiteRuntimeState {
-  if (entry.kind === "shop") {
-    // RTDB strips `restrictedTide: null`, so restore it for regular shops.
-    return {
-      ...entry,
-      restrictedTide: entry.restrictedTide ?? null,
-    };
-  }
   if (entry.kind !== "reward") {
     return entry;
   }

@@ -20,6 +20,11 @@ export const DEFAULT_POOL_VARIANT: PoolVariant = "default";
 /** The card fields the pool generator reads. `CardData` satisfies this shape. */
 export interface PoolCard {
   name: string;
+  /**
+   * Mechanic-archetype tides for the experimental cards_v2 pool. Supplied by the
+   * `draft_test` experiment harness from `cards-v2-metadata.ts`; absent on
+   * runtime catalog cards, where the tide-derived archetype lists are unused.
+   */
   tides?: readonly string[];
   core?: boolean;
   colors?: readonly string[];

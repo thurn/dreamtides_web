@@ -31,7 +31,6 @@ import { COSTS, getCost } from "./costs";
 
 function card(overrides: Partial<CardContent> & { id: string; name: string }): CardContent {
   return {
-    tides: overrides.tides ?? [],
     rarity: overrides.rarity ?? "common",
     cardType: overrides.cardType ?? "Event",
     energyCost: overrides.energyCost ?? 3,

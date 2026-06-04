@@ -17,8 +17,6 @@ function makeDreamcaller(): DreamcallerContent {
     imageNumber: "0001",
     startingEssence: 250,
     signatureCards: ["Alpha Card 1"],
-    mandatoryTides: [],
-    optionalTides: [],
   };
 }
 

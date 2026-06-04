@@ -132,7 +132,6 @@ function makeCardDatabase(): Map<number, CardData> {
         energyCost: 2,
         spark: 1,
         isFast: false,
-        tides: [],
         renderedText: "Test text.",
         imageNumber: 1,
         artOwned: true,
@@ -165,7 +164,6 @@ function makeState(slots: RuntimeShopSlot[]): QuestState {
     siteRuntime: {
       "shop-1": {
         kind: "shop",
-        restrictedTide: null,
         slots,
         rerollCount: 0,
         remainingDreamsignPoolIds: [],

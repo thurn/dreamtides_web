@@ -76,16 +76,6 @@ export function deckContainsCardByName(ctx: JourneyContext, cardName: string): b
   });
 }
 
-export function poolHasDreamsignWithTide(ctx: JourneyContext, tide: string): boolean {
-  const dreamsignsById = new Map(
-    ctx.content.dreamsigns.map((dreamsign) => [dreamsign.id, dreamsign]),
-  );
-  return ctx.state.quest.dreamsignPoolIds.some((id) => {
-    const dreamsign = dreamsignsById.get(id);
-    return dreamsign !== undefined && dreamsign.tides.includes(tide);
-  });
-}
-
 export function transfigurationHasEligibleTarget(
   ctx: JourneyContext,
   transfigurationId: string,

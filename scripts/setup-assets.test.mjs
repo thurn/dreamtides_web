@@ -143,7 +143,6 @@ rendered-text = "Use the canonical Dreamsign text."
         energyCost: null,
         spark: null,
         isFast: false,
-        tides: ["core", "ally_formation"],
         renderedText: "Rules text.",
         imageNumber: 101,
         artOwned: true,
@@ -158,7 +157,6 @@ rendered-text = "Use the canonical Dreamsign text."
         energyCost: 2,
         spark: null,
         isFast: true,
-        tides: ["support"],
         renderedText: "",
         imageNumber: 102,
         artOwned: false,
@@ -174,7 +172,6 @@ rendered-text = "Use the canonical Dreamsign text."
         energyCost: 1,
         spark: 1,
         isFast: false,
-        tides: ["ignored"],
         renderedText: "",
         imageNumber: 103,
         artOwned: true,
@@ -199,7 +196,6 @@ rendered-text = "Use the canonical Dreamsign text."
         imageName: "test-sign.png",
         imageAlt: "Small idol with a violet glow.",
         effectDescription: "Use the canonical Dreamsign text.",
-        packageTides: ["core", "support"],
       },
     ]);
     expect(existsSync(join(publicDir, "cards", "101.webp"))).toBe(true);

@@ -9,7 +9,6 @@ interface RawDreamsign {
   imageName: string;
   imageAlt: string;
   effectDescription: string;
-  packageTides: string[];
 }
 
 /** Fetches canonical Dreamsign data from the asset pipeline output. */
@@ -25,7 +24,6 @@ export async function loadDreamsignTemplates(): Promise<DreamsignTemplate[]> {
     id: entry.id,
     name: entry.name,
     effectDescription: entry.effectDescription,
-    packageTides: [...entry.packageTides],
     imageName: entry.imageName,
     imageAlt: entry.imageAlt,
   }));

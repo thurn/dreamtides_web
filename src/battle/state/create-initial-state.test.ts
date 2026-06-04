@@ -137,7 +137,6 @@ describe("cloneBattleMutableState", () => {
 
     expect(clonedInstance).not.toBe(sourceInstance);
     expect(clonedInstance.definition).not.toBe(sourceInstance.definition);
-    expect(clonedInstance.definition.tides).not.toBe(sourceInstance.definition.tides);
     expect(clonedInstance.markers).not.toBe(sourceInstance.markers);
     expect(clonedInstance.notes).not.toBe(sourceInstance.notes);
     expect(clonedInstance.provenance).not.toBe(sourceInstance.provenance);
@@ -145,10 +144,8 @@ describe("cloneBattleMutableState", () => {
     // Mutating the clone must not affect the source.
     clonedInstance.sparkDelta = 7;
     clonedInstance.markers.isPrevented = true;
-    (clonedInstance.definition.tides as string[]).push("mutated");
     expect(sourceInstance.sparkDelta).toBe(0);
     expect(sourceInstance.markers.isPrevented).toBe(false);
-    expect(sourceInstance.definition.tides).not.toContain("mutated");
   });
 
   it("preserves scalar fields, activeSide, and nextBattleCardOrdinal exactly", () => {
@@ -180,7 +177,6 @@ describe("allocateBattleCardInstance", () => {
       printedSpark: 1,
       isFast: false,
       reclaimCost: null,
-      tides: ["alpha"],
       renderedText: "",
       imageNumber: cardNumber,
       transfiguration: null,

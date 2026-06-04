@@ -1,5 +1,3 @@
-export type PackageTideId = string;
-
 /**
  * Default starting essence used when a Dreamcaller record omits a tuned
  * value. Persistence helpers (see `normalizeQuestState`) also fall back to
@@ -19,8 +17,6 @@ export interface DreamcallerContent {
    * Defaults to `DEFAULT_STARTING_ESSENCE` when omitted from source data.
    */
   startingEssence: number;
-  mandatoryTides: PackageTideId[];
-  optionalTides: PackageTideId[];
   /**
    * Card names that steer the `idf3` pool generator toward this Dreamcaller's
    * intended decks when building the run's draft package. Optional during the
@@ -33,16 +29,12 @@ export interface DreamsignTemplate {
   id: string;
   name: string;
   effectDescription: string;
-  packageTides: PackageTideId[];
   imageName?: string;
   imageAlt?: string;
 }
 
 export interface ResolvedDreamcallerPackage {
   dreamcaller: DreamcallerContent;
-  mandatoryTides: PackageTideId[];
-  optionalSubset: PackageTideId[];
-  selectedTides: PackageTideId[];
   draftPoolCopiesByCard: Record<string, number>;
   dreamsignPoolIds: string[];
   mandatoryOnlyPoolSize: number;

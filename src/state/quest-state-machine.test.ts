@@ -95,12 +95,7 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       imageNumber: "0006",
       startingEssence: 250,
       signatureCards: ["Alpha Card 1"],
-      mandatoryTides: ["core"],
-      optionalTides: ["support-a", "support-b", "support-c", "support-d"],
     },
-    mandatoryTides: ["core"],
-    optionalSubset: ["support-a", "support-b", "support-c"],
-    selectedTides: ["core", "support-a", "support-b", "support-c"],
     draftPoolCopiesByCard: {
       "101": 2,
       "202": 1,
@@ -114,7 +109,7 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
   };
 }
 
-function makeCard(cardNumber: number, tides: CardData["tides"] = []): CardData {
+function makeCard(cardNumber: number): CardData {
   return {
     name: `Card ${String(cardNumber)}`,
     id: `card-${String(cardNumber)}`,
@@ -125,7 +120,6 @@ function makeCard(cardNumber: number, tides: CardData["tides"] = []): CardData {
     energyCost: 1,
     spark: 1,
     isFast: false,
-    tides,
     renderedText: "Test card.",
     imageNumber: cardNumber,
     artOwned: true,
@@ -280,8 +274,8 @@ describe("QuestProvider composed mutations", () => {
   it("preserves quest start instrumentation while applying one state transition", () => {
     const resolvedPackage = makeResolvedPackage();
     const cardDatabase = new Map<number, CardData>([
-      [101, makeCard(101, ["core"])],
-      [202, makeCard(202, ["support-a"])],
+      [101, makeCard(101)],
+      [202, makeCard(202)],
       ...STARTER_CARD_NUMBERS.map(
         (cardNumber) =>
           [cardNumber, makeCard(cardNumber)] as const,

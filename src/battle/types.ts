@@ -1,4 +1,3 @@
-import type { PackageTideId } from "../types/content";
 import type {
   CardKeywordModification,
   CardTypeChange,
@@ -141,7 +140,6 @@ export interface BattleDeckCardDefinition {
   isFast: boolean;
   timing?: BattleCardTiming;
   reclaimCost: number | null;
-  tides: readonly string[];
   renderedText: string;
   imageNumber: number;
   transfiguration: TransfigurationType | null;
@@ -156,7 +154,6 @@ export interface BattleEnemyDescriptor {
   subtitle: string;
   imageNumber?: Dreamcaller["imageNumber"];
   portraitSeed: number;
-  packageTides: readonly PackageTideId[];
   abilityText: string;
   /**
    * The concrete Dreamsigns the opponent brings to the battle, shown before

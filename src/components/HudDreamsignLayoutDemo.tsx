@@ -20,8 +20,6 @@ const demoDreamcaller: DreamcallerContent = {
   renderedText: "Begin with steady light.",
   imageNumber: "0005",
   startingEssence: 250,
-  mandatoryTides: ["ember"],
-  optionalTides: ["frost", "growth"],
 };
 
 const demoDreamsigns: Dreamsign[] = [
@@ -49,19 +47,16 @@ const demoTemplates: DreamsignTemplate[] = [
   {
     id: "embers-whisper",
     name: "Ember's Whisper",
-    packageTides: ["ember"],
     effectDescription: "Gain 50 essence after every battle.",
   },
   {
     id: "glacial-insight",
     name: "Glacial Insight",
-    packageTides: ["frost"],
     effectDescription: "Draft offers contain one extra option.",
   },
   {
     id: "verdant-accord",
     name: "Verdant Accord",
-    packageTides: ["growth"],
     effectDescription: "Heal after accepting a dreamsign.",
   },
 ];

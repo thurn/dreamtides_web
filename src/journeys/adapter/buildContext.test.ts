@@ -4,7 +4,6 @@ import {
   buildJourneyContentBundle,
   cardDataToCardContent,
   dreamcallerContentToJourneyDreamcaller,
-  dreamsignTemplateToJourneyDreamsign,
   normalizeRarity,
 } from "./content-bridge";
 import { buildJourneyContext } from "./buildContext";
@@ -12,7 +11,6 @@ import { journeySeedForSite } from "./seed";
 import type { CardData } from "../../types/cards";
 import type {
   DreamcallerContent,
-  DreamsignTemplate,
   ResolvedDreamcallerPackage,
 } from "../../types/content";
 import type {
@@ -37,7 +35,6 @@ function makeCard(overrides: Partial<CardData> & { cardNumber: number }): CardDa
     energyCost: 1,
     spark: 1,
     isFast: false,
-    tides: [],
     renderedText: "",
     imageNumber: overrides.cardNumber,
     artOwned: false,
@@ -77,12 +74,7 @@ function makeResolvedPackage(
       renderedText: "",
       imageNumber: "1",
       startingEssence: 250,
-      mandatoryTides: ["core"],
-      optionalTides: ["support-a"],
     },
-    mandatoryTides: ["core"],
-    optionalSubset: ["support-a"],
-    selectedTides: ["core", "support-a"],
     draftPoolCopiesByCard: draftPool,
     dreamsignPoolIds,
     mandatoryOnlyPoolSize: 0,
@@ -154,30 +146,6 @@ describe("normalizeRarity", () => {
     expect(normalizeRarity("Starter")).toBe("Starter");
     expect(normalizeRarity(undefined)).toBe("Uncommon");
     expect(normalizeRarity("Common")).toBe("Uncommon");
-  });
-});
-
-describe("dreamsignTemplateToJourneyDreamsign kind derivation", () => {
-  // Bug class: drift in tidal-vs-neutral classification. Non-empty
-  // packageTides must become "tidal"; empty packageTides must become
-  // "neutral". This is the only place the rule is encoded so a single test
-  // pair is sufficient.
-  it("derives kind from packageTides emptiness", () => {
-    const tidal: DreamsignTemplate = {
-      id: "ds-tidal",
-      name: "Tidal Sign",
-      effectDescription: "",
-      packageTides: ["core"],
-    };
-    const neutral: DreamsignTemplate = {
-      id: "ds-neutral",
-      name: "Neutral Sign",
-      effectDescription: "",
-      packageTides: [],
-    };
-
-    expect(dreamsignTemplateToJourneyDreamsign(tidal).kind).toBe("tidal");
-    expect(dreamsignTemplateToJourneyDreamsign(neutral).kind).toBe("neutral");
   });
 });
 
@@ -500,8 +468,6 @@ describe("buildJourneyContext projections", () => {
         renderedText: "",
         imageNumber: "1",
         startingEssence: 250,
-        mandatoryTides: [],
-        optionalTides: [],
       },
     ];
     const bundleA = buildJourneyContentBundle({
@@ -539,7 +505,6 @@ describe("cardDataToCardContent and dreamcallerContentToJourneyDreamcaller", () 
       rarity: "Legendary",
       isFast: true,
       renderedText: "Some text.",
-      tides: ["core"],
     });
 
     const projected = cardDataToCardContent(card);
@@ -551,7 +516,6 @@ describe("cardDataToCardContent and dreamcallerContentToJourneyDreamcaller", () 
     expect(projected.energyCost).toBe(3);
     expect(projected.spark).toBe(2);
     expect(projected.rarity).toBe("Rare");
-    expect(projected.tides).toEqual(["core"]);
     // `raw` is consumed by predicate helpers like `cardHasMagentaTrigger`,
     // which read `rendered-text`, `is-fast`, and `subtype`.
     expect(projected.raw["rendered-text"]).toBe("Some text.");
@@ -566,8 +530,6 @@ describe("cardDataToCardContent and dreamcallerContentToJourneyDreamcaller", () 
       renderedText: "",
       imageNumber: "9",
       startingEssence: 250,
-      mandatoryTides: ["core"],
-      optionalTides: ["support-a"],
     };
 
     const projected = dreamcallerContentToJourneyDreamcaller(source);
@@ -575,8 +537,6 @@ describe("cardDataToCardContent and dreamcallerContentToJourneyDreamcaller", () 
     expect(projected.id).toBe("dc-q");
     expect(projected.name).toBe("DC Q");
     expect(projected.title).toBe("Title Q");
-    expect(projected.mandatoryTides).toEqual(["core"]);
-    expect(projected.optionalTides).toEqual(["support-a"]);
     expect(projected.awakening).toBe("0");
   });
 });

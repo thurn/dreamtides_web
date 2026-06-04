@@ -93,7 +93,6 @@ function cardFixture(): readonly CardContent[] {
     {
       id: "starter-alpha",
       name: "Starter Alpha",
-      tides: [],
       rarity: "Starter",
       cardType: "Event",
       energyCost: 0,
@@ -104,7 +103,6 @@ function cardFixture(): readonly CardContent[] {
     {
       id: "starter-beta",
       name: "Starter Beta",
-      tides: [],
       rarity: "Starter",
       cardType: "Character",
       energyCost: 0,
@@ -115,7 +113,6 @@ function cardFixture(): readonly CardContent[] {
     {
       id: "event-alpha",
       name: "Event Alpha",
-      tides: [],
       rarity: "common",
       cardType: "Event",
       energyCost: 1,
@@ -126,7 +123,6 @@ function cardFixture(): readonly CardContent[] {
     {
       id: "event-beta",
       name: "Event Beta",
-      tides: [],
       rarity: "common",
       cardType: "Event",
       energyCost: 2,
@@ -142,7 +138,6 @@ function draftCardFixture(): readonly CardContent[] {
     {
       id: "event-alpha",
       name: "Event Alpha",
-      tides: [],
       rarity: "common",
       cardType: "Event",
       energyCost: 1,
@@ -153,7 +148,6 @@ function draftCardFixture(): readonly CardContent[] {
     {
       id: "event-beta",
       name: "Event Beta",
-      tides: [],
       rarity: "common",
       cardType: "Event",
       energyCost: 2,
@@ -164,7 +158,6 @@ function draftCardFixture(): readonly CardContent[] {
     {
       id: "event-gamma",
       name: "Event Gamma",
-      tides: [],
       rarity: "common",
       cardType: "Event",
       energyCost: 3,
@@ -175,7 +168,6 @@ function draftCardFixture(): readonly CardContent[] {
     {
       id: "event-delta",
       name: "Event Delta",
-      tides: [],
       rarity: "common",
       cardType: "Event",
       energyCost: 4,
@@ -196,7 +188,6 @@ function dreamsignFixture(): readonly DreamsignContent[] {
       name: "Name A",
       kind: "neutral",
       renderedText: "Effect A",
-      tides: [],
       raw: {
         id: "ds-1",
         name: "Name A",
@@ -210,7 +201,6 @@ function dreamsignFixture(): readonly DreamsignContent[] {
       name: "Name B",
       kind: "neutral",
       renderedText: "Effect B",
-      tides: [],
       raw: { id: "ds-2", name: "Name B", "effect-description": "Effect B" },
     },
   ];

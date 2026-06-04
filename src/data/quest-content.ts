@@ -103,9 +103,6 @@ export function buildDreamcallerPackage(
 
   return {
     dreamcaller,
-    mandatoryTides: [],
-    optionalSubset: [],
-    selectedTides: [],
     draftPoolCopiesByCard,
     dreamsignPoolIds: [...ctx.allDreamsignPoolIds],
     mandatoryOnlyPoolSize: draftPoolSize,
@@ -135,8 +132,6 @@ export async function loadQuestContent(): Promise<QuestContent> {
     imageNumber: dc.imageNumber,
     startingEssence: dc.startingEssence || DEFAULT_STARTING_ESSENCE,
     signatureCards: [...(dc.signatureCards ?? [])],
-    mandatoryTides: [],
-    optionalTides: [],
   }));
 
   const poolContext: RunPoolContext = {

@@ -171,6 +171,8 @@ export function transformCard(card) {
       if (parsed.variable) {
         result.sparkVariable = true;
       }
+    } else if (camelKey === "tides") {
+      // Tides are not part of runtime card data; drop any authored value.
     } else {
       result[camelKey] = value;
     }
@@ -181,9 +183,6 @@ export function transformCard(card) {
   }
   if (!("subtype" in result) || result.subtype == null) {
     result.subtype = "";
-  }
-  if (!Array.isArray(result.tides)) {
-    result.tides = [];
   }
   return result;
 }
@@ -327,7 +326,6 @@ export function transformDreamsign(dreamsign, altTextByImageName = new Map()) {
       altTextByImageName.get(dreamsign.image_name)
       ?? `${dreamsign.name} Dreamsign artwork`,
     effectDescription: dreamsign["rendered-text"] ?? "",
-    packageTides: Array.isArray(dreamsign.tides) ? [...dreamsign.tides] : [],
   };
 }
 

@@ -1,5 +1,3 @@
-import type { PackageTideId } from "./content";
-
 /** The two card types in Dreamtides. */
 export type CardType = "Character" | "Event";
 
@@ -65,7 +63,6 @@ export interface CardData {
   sparkVariable?: boolean;
   isFast: boolean;
   reclaimCost?: number | null;
-  tides: PackageTideId[];
   renderedText: string;
   imageNumber: number;
   artOwned: boolean;
@@ -87,10 +84,8 @@ export interface CardData {
 }
 
 /**
- * A `CardData` value whose top-level and `tides` array are frozen at runtime.
- * Consumers that receive a frozen value get compile-time feedback if they try
- * to mutate it (bug-030).
+ * A `CardData` value whose top-level fields are frozen at runtime. Consumers
+ * that receive a frozen value get compile-time feedback if they try to mutate
+ * it (bug-030).
  */
-export interface FrozenCardData extends Omit<CardData, "tides"> {
-  readonly tides: readonly PackageTideId[];
-}
+export type FrozenCardData = Readonly<CardData>;

@@ -15,7 +15,6 @@ function makeCard(
     cardType: "Event",
     energyCost: 2,
     spark: "",
-    tides: [],
     rarity: "",
     raw: {
       renderedText: `${name} rules text.`,
