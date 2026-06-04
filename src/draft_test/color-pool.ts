@@ -50,6 +50,7 @@ interface DecklistsTuning {
   themeStrategyExp: number;
   themeStarterBoost: number;
   themeGrowBoost: number;
+  spineArchetypes: number;
 }
 const DECKLISTS: DecklistsTuning = {
   // Desired pool size in copies (each card capped at 2). The pool lands within
@@ -90,6 +91,13 @@ const DECKLISTS: DecklistsTuning = {
   // (1 + this * theme-cosine), so the snowball keeps pulling in theme-dense
   // decks instead of drifting to whatever co-occurs in the colors. 0 = ignore.
   themeGrowBoost: 2.5,
+  // The pool's "spine" is the starter's top-N mechanic archetypes. During
+  // growth only cards on the spine are absorbed from each neighbor deck, so the
+  // pool's *card list* stays one strategy instead of dragging in each
+  // neighbor's off-archetype half (which is what made pools feel like a scatter
+  // of every archetype). 1 = a single pure archetype; 2 keeps a natural primary
+  // + secondary pairing; a large value effectively disables the gate.
+  spineArchetypes: 2,
 };
 
 // Knobs for the `diverse` variant. Grouped here so tuning is a one-stop edit.
@@ -910,10 +918,32 @@ function generateDecklists(
     return sim * (1 + DECKLISTS.themeGrowBoost * themeCosine(deck));
   };
 
+  // 3b. The pool's spine: the starter's own top mechanic archetypes. Growth
+  //     absorbs only cards on the spine, so the pool's card list stays one
+  //     strategy instead of dragging in each neighbor deck's off-archetype half.
+  const spineHits = new Map<string, number>();
+  for (const [slug, set] of archLists) {
+    let n = 0;
+    for (const c of starter) if (set.has(c)) n++;
+    if (n > 0) spineHits.set(slug, n);
+  }
+  const spine = new Set(
+    [...spineHits.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, DECKLISTS.spineArchetypes)
+      .map(([slug]) => slug),
+  );
+  const onSpine = (c: string): boolean => {
+    if (spine.size === 0) return true;
+    for (const slug of spine) if (archLists.get(slug)?.has(c)) return true;
+    return false;
+  };
+
   // 4. Seed the pool with core staples + the starter, then snowball the
-  //    most-similar decklists until the jittered target. A card reaches 2
-  //    copies only when two different decks include it (cap at 2). Adding the
-  //    final deck in shuffled order lets us stop exactly at the target.
+  //    most-similar decklists until the jittered target, taking only each
+  //    neighbor's on-spine cards. A card reaches 2 copies only when two
+  //    different decks include it (cap at 2). Shuffling each deck's cards lets
+  //    us stop exactly at the target.
   const target = randInt(
     rng,
     DECKLISTS.targetSize - DECKLISTS.targetJitter,
@@ -926,7 +956,8 @@ function generateDecklists(
   for (const c of starter) bump(c);
 
   const used = new Set<Set<string>>([starter]);
-  while (poolSize(counts) < target) {
+  let stall = 0;
+  while (poolSize(counts) < target && stall < 30) {
     const cands = decks
       .filter((d) => !used.has(d.cards))
       .map((d): [DeckVector, number] => [d, growScore(d)])
@@ -940,10 +971,12 @@ function generateDecklists(
       cands.map(([, s]) => Math.exp(s / DECKLISTS.growTemperature)),
     );
     used.add(pick.cards);
+    const before = poolSize(counts);
     for (const c of shuffle(rng, [...pick.cards])) {
       if (poolSize(counts) >= target) break;
-      bump(c);
+      if (onSpine(c)) bump(c);
     }
+    stall = poolSize(counts) === before ? stall + 1 : 0;
   }
 
   // 5. Identity + labels for display. With a rolled strategy the identity is
