@@ -71,7 +71,6 @@ function buildContext(args: {
       omens: args.omens ?? 0,
       dreamscape: 0,
     },
-    selectedTides: [],
     deck: {
       entries: deckEntries.map((entry) => ({ cardId: entry.cardId, copies: entry.copies })),
       summary: {

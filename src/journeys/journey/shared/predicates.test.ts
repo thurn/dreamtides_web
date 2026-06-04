@@ -142,7 +142,6 @@ function fixtureContext(): JourneyContext {
       quest: {
         seed: "test-seed",
         resources: { essence: 0, maxEssence: 10, omens: 0, dreamscape: 0 },
-        selectedTides: [],
         deck: {
           entries: FIXTURE_CARDS.map((c) => ({ cardId: c.id, copies: 1 })),
           summary: { totalCards: FIXTURE_CARDS.length, starterCards: 1, uniqueCards: FIXTURE_CARDS.length },

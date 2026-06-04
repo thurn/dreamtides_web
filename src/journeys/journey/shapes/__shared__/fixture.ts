@@ -203,7 +203,6 @@ export function buildFixtureContext(): JourneyContext {
       omens: 3,
       dreamscape: 1,
     },
-    selectedTides: [],
     deck: {
       entries: deckEntries,
       summary: {

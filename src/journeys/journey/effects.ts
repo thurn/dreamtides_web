@@ -26,7 +26,6 @@ import type {
   ContentBundle,
   DreamcallerContent,
   DreamsignContent,
-  TideId,
 } from "../content/types";
 import type { QuestStateProjection } from "./context";
 import type {
@@ -70,7 +69,6 @@ export type CardTargetPredicate = {
   isFast?: boolean;
   spark?: number;
   renderedTextIncludes?: readonly string[] | string;
-  tideOverlap?: readonly TideId[] | "selected";
   starter?: boolean;
   minCopies?: number;
   maxCopies?: number;
@@ -84,7 +82,6 @@ export type DreamsignTargetPredicate = {
   names?: readonly string[];
   kind?: DreamsignContent["kind"];
   orientation?: NonNullable<DreamsignContent["orientation"]>;
-  tideOverlap?: readonly TideId[] | "selected";
 };
 
 export type BaneTargetPredicate = {
@@ -727,21 +724,6 @@ function contentById<T extends { id: string }>(items: readonly T[]): Map<string,
   return new Map(items.map((item) => [item.id, item]));
 }
 
-function selectedTideSet(
-  quest: QuestStateProjection,
-  tideOverlap: readonly TideId[] | "selected",
-): Set<string> {
-  const tides = tideOverlap === "selected" ? quest.selectedTides : tideOverlap;
-  return new Set(tides.map(normalizeKey));
-}
-
-function hasTideOverlap(
-  sourceTides: readonly TideId[],
-  wantedTides: Set<string>,
-): boolean {
-  return sourceTides.some((tide) => wantedTides.has(normalizeKey(tide)));
-}
-
 function isFast(card: CardContent): boolean {
   return card.raw["is-fast"] === true || card.raw.isFast === true;
 }
@@ -894,11 +876,6 @@ export function resolveCardTargets(
   quest: QuestStateProjection,
   predicate: CardTargetPredicate = {},
 ): CardContent[] {
-  const tideOverlap =
-    predicate.tideOverlap === undefined
-      ? null
-      : selectedTideSet(quest, predicate.tideOverlap);
-
   return candidateCards(content, quest, predicate)
     .filter((card) => idOrNameMatches(card, predicate.ids))
     .filter((card) => idOrNameMatches(card, predicate.names))
@@ -910,7 +887,6 @@ export function resolveCardTargets(
     .filter((card) => predicate.spark === undefined || card.spark === predicate.spark)
     .filter((card) => renderedTextMatches(card, predicate.renderedTextIncludes))
     .filter((card) => !predicate.starter || card.rarity === "Starter")
-    .filter((card) => tideOverlap === null || hasTideOverlap(card.tides, tideOverlap))
     .filter((card) => copyCountMatches(card, quest, predicate))
     .filter((card) => abilityCountMatches(card, predicate))
     .sort((left, right) => {
@@ -951,11 +927,6 @@ export function resolveDreamsignTargets(
   quest: QuestStateProjection,
   predicate: DreamsignTargetPredicate = {},
 ): DreamsignContent[] {
-  const tideOverlap =
-    predicate.tideOverlap === undefined
-      ? null
-      : selectedTideSet(quest, predicate.tideOverlap);
-
   return candidateDreamsigns(content, quest, predicate)
     .filter((dreamsign) => idOrNameMatches(dreamsign, predicate.ids))
     .filter((dreamsign) => idOrNameMatches(dreamsign, predicate.names))
@@ -964,7 +935,6 @@ export function resolveDreamsignTargets(
       (dreamsign) =>
         predicate.orientation === undefined || dreamsign.orientation === predicate.orientation,
     )
-    .filter((dreamsign) => tideOverlap === null || hasTideOverlap(dreamsign.tides, tideOverlap))
     .sort((left, right) => left.name.localeCompare(right.name, "en-US"));
 }
 

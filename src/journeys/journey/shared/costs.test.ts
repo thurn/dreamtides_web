@@ -72,7 +72,6 @@ function emptyContext(overrides: {
       omens: overrides.omens ?? 0,
       dreamscape: 0,
     },
-    selectedTides: [],
     deck: {
       entries: deckEntries.map((e) => ({
         cardId: e.cardId,

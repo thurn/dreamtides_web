@@ -357,7 +357,6 @@ function dummyContext(): JourneyContext {
       quest: {
         seed: "test-seed",
         resources: { essence: 0, maxEssence: 0, omens: 0, dreamscape: 0 },
-        selectedTides: [],
         deck: { entries: [], summary: { totalCards: 0, starterCards: 0, uniqueCards: 0 } },
         draftPool: [],
         activeDreamsigns: [],

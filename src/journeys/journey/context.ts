@@ -21,7 +21,6 @@ export type QuestStateProjection = {
     readonly omens: number;
     readonly dreamscape: number;
   };
-  readonly selectedTides: readonly string[];
   readonly deck: {
     readonly entries: readonly {
       readonly cardId: string;

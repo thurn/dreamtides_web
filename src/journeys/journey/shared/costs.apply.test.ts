@@ -64,7 +64,6 @@ function buildContext(overrides: {
       omens: overrides.omens ?? 3,
       dreamscape: 0,
     },
-    selectedTides: [],
     deck: {
       entries: deckEntries,
       summary: {

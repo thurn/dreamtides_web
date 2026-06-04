@@ -282,7 +282,6 @@ export function buildJourneyContext(
   const draftPool = projectDraftPool(
     questState.resolvedPackage?.draftPoolCopiesByCard ?? {},
   );
-  const selectedTides = questState.resolvedPackage?.selectedTides ?? [];
   const activeDreamsigns = questState.dreamsigns.map((dreamsign) => ({
     dreamsignId: dreamsign.id ?? dreamsign.name,
   }));
@@ -299,7 +298,6 @@ export function buildJourneyContext(
       // counter, so it fills the same role for downstream resolvers.
       dreamscape: questState.completionLevel,
     },
-    selectedTides: [...selectedTides],
     deck: {
       entries: deckEntries,
       summary: summarizeDeck(deckEntries, starterCardIds),

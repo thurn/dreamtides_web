@@ -283,46 +283,22 @@ function selectedCardTargets(
   context: JourneyContext,
   drawContext: DrawContext,
 ) {
-  const selected = resolveCardTargets(context.content, context.state.quest, {
-    source: "draftPool",
-    tideOverlap: "selected",
-  });
-  const fallback = resolveCardTargets(context.content, context.state.quest, {
+  const targets = resolveCardTargets(context.content, context.state.quest, {
     source: "draftPool",
   });
 
-  return shuffleDeterministic(
-    drawContext,
-    "targets:cards",
-    selected.length > 0 ? selected : fallback,
-  );
+  return shuffleDeterministic(drawContext, "targets:cards", targets);
 }
 
 function selectedDreamsignTargets(
   context: JourneyContext,
   drawContext: DrawContext,
 ) {
-  const selected = resolveDreamsignTargets(
-    context.content,
-    context.state.quest,
-    {
-      source: "pool",
-      tideOverlap: "selected",
-    },
-  );
-  const fallback = resolveDreamsignTargets(
-    context.content,
-    context.state.quest,
-    {
-      source: "pool",
-    },
-  );
+  const targets = resolveDreamsignTargets(context.content, context.state.quest, {
+    source: "pool",
+  });
 
-  return shuffleDeterministic(
-    drawContext,
-    "targets:dreamsigns",
-    selected.length > 0 ? selected : fallback,
-  );
+  return shuffleDeterministic(drawContext, "targets:dreamsigns", targets);
 }
 
 function uniqueSorted(values: readonly string[]): string[] {
