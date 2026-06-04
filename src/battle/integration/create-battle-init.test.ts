@@ -2,15 +2,16 @@ import { describe, expect, it } from "vitest";
 import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import { createBattleInit, type CreateBattleInitInput } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
+import { buildNameIndex } from "../../data/cards-v2-database";
+import { buildPoolData } from "../../draft/pool/pool-data";
+import type { RunPoolContext } from "../../data/quest-content";
 import type { CardData } from "../../types/cards";
-import type { DreamcallerContent, PackageTideId } from "../../types/content";
+import type { DreamcallerContent } from "../../types/content";
+import type { PoolCard } from "../../draft/pool/types";
 import type { CardKeywordModification, CardTypeChange } from "../../types/quest";
 
-const ENEMY_DECK_SIZE = 40;
-const REMOVAL_TIDES = new Set<PackageTideId>([
-  "cheap_removal",
-  "premium_removal",
-]);
+// The padded minimum battle deck size; the enemy deck is padded up to this.
+const MIN_BATTLE_DECK_SIZE = 25;
 
 function makeBaseInput(): CreateBattleInitInput {
   return {
@@ -45,47 +46,64 @@ function makePackageCard(
   };
 }
 
-function isRemovalEventCard(card: CardData): boolean {
-  return (
-    card.cardType === "Event" &&
-    card.tides.some((tide) => REMOVAL_TIDES.has(tide))
-  );
+/**
+ * Builds a {@link RunPoolContext} over the battle test card database with two
+ * disjoint decklists, each large enough (>= 16 cards) to enter the idf3 corpus.
+ * Returns the context plus the card names that make up each decklist so steering
+ * assertions can compare against a known set.
+ */
+function makeSteeredPoolContext(): {
+  poolContext: RunPoolContext;
+  decklistA: string[];
+  decklistB: string[];
+} {
+  const cardDatabase = makeBattleTestCardDatabase();
+  const nameIndex = buildNameIndex(cardDatabase);
+  const byNumber = (n: number): string => {
+    const card = cardDatabase.get(n);
+    if (card === undefined) throw new Error(`missing test card #${String(n)}`);
+    return card.name;
+  };
+  // Decklist A: the "alpha pool" range (1000..1019). Decklist B: the "beta pool"
+  // range (1100..1119). Disjoint card sets so a steered draw is distinguishable.
+  const decklistA = Array.from({ length: 20 }, (_, i) => byNumber(1000 + i));
+  const decklistB = Array.from({ length: 20 }, (_, i) => byNumber(1100 + i));
+
+  const poolCards: PoolCard[] = Array.from(cardDatabase.values()).map((card) => ({
+    name: card.name,
+    tides: card.tides,
+  }));
+  const poolData = buildPoolData(poolCards, [decklistA, decklistB]);
+
+  const poolContext: RunPoolContext = {
+    poolData,
+    nameIndex,
+    allDreamsignPoolIds: [],
+  };
+  return { poolContext, decklistA, decklistB };
 }
 
-function overlapsTides(
-  card: CardData,
-  packageTides: readonly PackageTideId[],
-): boolean {
-  const packageTideSet = new Set(packageTides);
-  return card.tides.some((tide) => packageTideSet.has(tide));
-}
-
-async function readGeneratedQuestContent(): Promise<{
-  cards: CardData[];
-  dreamcallers: DreamcallerContent[];
-} | null> {
-  try {
-    const fs = await import("node:fs");
-    const path = await import("node:path");
-    const url = await import("node:url");
-    const dir = path.dirname(url.fileURLToPath(import.meta.url));
-    const cardJsonPath = path.resolve(dir, "../../../public/card-data.json");
-    const dreamcallerJsonPath = path.resolve(
-      dir,
-      "../../../public/dreamcaller-data.json",
-    );
-    if (!fs.existsSync(cardJsonPath) || !fs.existsSync(dreamcallerJsonPath)) {
-      return null;
-    }
-    return {
-      cards: JSON.parse(fs.readFileSync(cardJsonPath, "utf8")) as CardData[],
-      dreamcallers: JSON.parse(
-        fs.readFileSync(dreamcallerJsonPath, "utf8"),
-      ) as DreamcallerContent[],
-    };
-  } catch {
-    return null;
-  }
+/**
+ * Returns a single-Dreamcaller set whose Dreamcaller carries the given signature
+ * cards, so the enemy descriptor is deterministic and its signature steers the
+ * enemy deck.
+ */
+function makeSignatureDreamcallers(
+  signatureCards: readonly string[],
+): DreamcallerContent[] {
+  return [
+    {
+      id: "signature-dc",
+      name: "Signature Sentinel",
+      title: "Steering Test",
+      renderedText: "",
+      imageNumber: "001",
+      startingEssence: 250,
+      mandatoryTides: [],
+      optionalTides: [],
+      signatureCards: [...signatureCards],
+    },
+  ];
 }
 
 describe("createBattleInit", () => {
@@ -523,9 +541,9 @@ describe("createBattleInit", () => {
       expect(selectedDreamcaller).toBeDefined();
       expect(init.enemyDescriptor.name).toBe(selectedDreamcaller?.name);
       expect(init.enemyDescriptor.subtitle).toBe("");
-      expect(init.enemyDescriptor.packageTides).toEqual(
-        selectedDreamcaller?.mandatoryTides,
-      );
+      // packageTides is always empty: the enemy deck is steered by the chosen
+      // Dreamcaller's signature, not by tides.
+      expect(init.enemyDescriptor.packageTides).toEqual([]);
       for (const prefix of ["Shadow", "Nightmare", "Phantom", "Dark"]) {
         expect(init.enemyDescriptor.name.startsWith(`${prefix} `)).toBe(false);
       }
@@ -570,46 +588,23 @@ describe("createBattleInit", () => {
   });
 
   describe("enemyDeckDefinition", () => {
-    it("builds a unique 40-card deck from card-database entries", () => {
+    it("builds a non-empty deck whose every entry resolves in the card database (fallback path)", () => {
       const input = makeBaseInput();
       const init = createBattleInit(input);
-      const cardNumbers = init.enemyDeckDefinition.map((card) => card.cardNumber);
 
-      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
-      expect(new Set(cardNumbers).size).toBe(ENEMY_DECK_SIZE);
-
+      expect(init.enemyDeckDefinition.length).toBeGreaterThan(0);
+      expect(init.enemyDeckDefinition.length).toBeGreaterThanOrEqual(
+        MIN_BATTLE_DECK_SIZE,
+      );
       for (const card of init.enemyDeckDefinition) {
-        const databaseCard = input.cardDatabase.get(card.cardNumber);
-        expect(databaseCard).toBeDefined();
+        expect(input.cardDatabase.get(card.cardNumber)).toBeDefined();
       }
     });
 
-    it("starts from four removal events and fills the rest from required tides", () => {
-      const input = makeBaseInput();
-      const init = createBattleInit(input);
-      const removalCards: CardData[] = [];
-      const nonRemovalCards: CardData[] = [];
-
-      for (const deckCard of init.enemyDeckDefinition) {
-        const databaseCard = input.cardDatabase.get(deckCard.cardNumber);
-        expect(databaseCard).toBeDefined();
-        if (databaseCard === undefined) {
-          continue;
-        }
-        if (isRemovalEventCard(databaseCard)) {
-          removalCards.push(databaseCard);
-        } else {
-          nonRemovalCards.push(databaseCard);
-        }
-      }
-
-      expect(removalCards.length).toBeGreaterThanOrEqual(4);
-      for (const card of nonRemovalCards) {
-        expect(overlapsTides(card, init.enemyDescriptor.packageTides)).toBe(true);
-      }
-    });
-
-    it("excludes starters and cards with null energyCost from enemy candidates", () => {
+    it("excludes starters and null-energy cards in the fallback path", () => {
+      // With no poolContext the deck is sampled from draftable cards
+      // (non-starter, numeric cost). Confirm both exclusions hold over a card
+      // database where every non-excluded candidate would otherwise be chosen.
       const baseInput = makeBaseInput();
       const augmented = new Map(baseInput.cardDatabase);
       augmented.set(801, {
@@ -622,11 +617,11 @@ describe("createBattleInit", () => {
       });
 
       const init = createBattleInit({ ...baseInput, cardDatabase: augmented });
-      const cardNumbersChosen = init.enemyDeckDefinition.map(
-        (card) => card.cardNumber,
+      const cardNumbersChosen = new Set(
+        init.enemyDeckDefinition.map((card) => card.cardNumber),
       );
-      expect(cardNumbersChosen).not.toContain(801);
-      expect(cardNumbersChosen).not.toContain(802);
+      expect(cardNumbersChosen.has(801)).toBe(false);
+      expect(cardNumbersChosen.has(802)).toBe(false);
     });
 
     it("freezes the enemy deck definition list and per-card tides", () => {
@@ -638,196 +633,102 @@ describe("createBattleInit", () => {
       }
     });
 
-    it("prefers removal events that overlap the enemy's required tides", () => {
-      const baseInput = makeBaseInput();
-      const db = new Map<number, CardData>();
-      const matchingRemovalNumbers = new Set<number>();
+    it("builds a steered deck from a poolContext decklist that resolves and pads", () => {
+      const { poolContext, decklistA } = makeSteeredPoolContext();
+      const cardDatabase = makeBattleTestCardDatabase();
+      // Steer toward decklist A: its cards as the Dreamcaller signature.
+      const init = createBattleInit({
+        ...makeBaseInput(),
+        cardDatabase,
+        poolContext,
+        dreamcallers: makeSignatureDreamcallers(decklistA),
+      });
 
-      for (let i = 0; i < 40; i += 1) {
-        const isRemoval = i < 4;
-        const card = makePackageCard(
-          400 + i,
-          isRemoval ? "Event" : "Character",
-          1 + (i % 4),
-          "tide_beta",
-        );
-        db.set(card.cardNumber, {
-          ...card,
-          tides: isRemoval ? ["tide_beta", "cheap_removal"] : ["tide_beta"],
+      expect(init.enemyDeckDefinition.length).toBeGreaterThanOrEqual(
+        MIN_BATTLE_DECK_SIZE,
+      );
+      // Every chosen card resolves to a real card-database entry whose name is
+      // indexed in the run pool context.
+      for (const card of init.enemyDeckDefinition) {
+        expect(card.cardNumber).toBeGreaterThan(0);
+        expect(cardDatabase.get(card.cardNumber)).toBeDefined();
+        expect(poolContext.nameIndex.has(card.name)).toBe(true);
+      }
+    });
+
+    it("steers the enemy deck toward the signed decklist for fixed battle seeds", () => {
+      const { poolContext, decklistA, decklistB } = makeSteeredPoolContext();
+      const decklistANumbers = new Set(
+        decklistA.map((name) => poolContext.nameIndex.get(name)),
+      );
+      const decklistBNumbers = new Set(
+        decklistB.map((name) => poolContext.nameIndex.get(name)),
+      );
+
+      for (const seedOverride of [11, 2024]) {
+        const init = createBattleInit({
+          ...makeBaseInput(),
+          poolContext,
+          dreamcallers: makeSignatureDreamcallers(decklistA),
+          seedOverride,
         });
-        if (isRemoval) {
-          matchingRemovalNumbers.add(card.cardNumber);
+
+        const deckNumbers = init.enemyDeckDefinition.map((c) => c.cardNumber);
+        const fromA = deckNumbers.filter((n) => decklistANumbers.has(n)).length;
+        const fromB = deckNumbers.filter((n) => decklistBNumbers.has(n)).length;
+        // The deck steered toward A draws far more of A's cards than B's. The
+        // two decklists are disjoint card ranges, so this is a clean signal.
+        expect(fromA).toBeGreaterThan(fromB);
+        expect(fromA).toBeGreaterThan(0);
+        // Every chosen card belongs to the steered decklist (modulo padding):
+        // the resolved set is a subset of decklist A.
+        const uniqueChosen = new Set(deckNumbers);
+        for (const n of uniqueChosen) {
+          expect(decklistANumbers.has(n)).toBe(true);
         }
       }
-      for (let i = 0; i < 4; i += 1) {
-        const card = makePackageCard(500 + i, "Event", 2, "cheap_removal");
-        db.set(card.cardNumber, card);
-      }
-      const init = createBattleInit({
-        ...baseInput,
-        cardDatabase: db,
-        dreamcallers: [
-          {
-            id: "tide-beta-dc",
-            name: "Tide Beta Sentinel",
-            title: "Required Tide Test",
-            renderedText: "",
-            imageNumber: "001",
-            startingEssence: 250,
-            mandatoryTides: ["tide_beta"],
-            optionalTides: [],
-          },
-        ],
-        state: { ...baseInput.state, deck: [] },
-      });
+    });
 
-      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
-      const selectedRemovalNumbers = init.enemyDeckDefinition
-        .filter((card) => {
-          const databaseCard = db.get(card.cardNumber);
-          return databaseCard !== undefined && isRemovalEventCard(databaseCard);
-        })
-        .map((card) => card.cardNumber);
-      expect(selectedRemovalNumbers.sort((a, b) => a - b)).toEqual(
-        [...matchingRemovalNumbers].sort((a, b) => a - b),
+    it("is deterministic for a fixed seed with a poolContext", () => {
+      const { poolContext, decklistA } = makeSteeredPoolContext();
+      const input: CreateBattleInitInput = {
+        ...makeBaseInput(),
+        poolContext,
+        dreamcallers: makeSignatureDreamcallers(decklistA),
+        seedOverride: 777,
+      };
+      const first = createBattleInit(input);
+      const second = createBattleInit(input);
+      expect(first.enemyDeckDefinition.map((c) => c.cardNumber)).toEqual(
+        second.enemyDeckDefinition.map((c) => c.cardNumber),
       );
     });
 
-    it("falls back to global removal events for the four removal slots", () => {
-      const baseInput = makeBaseInput();
-      const db = new Map<number, CardData>();
-      const globalRemovalNumbers = new Set<number>();
-
-      for (let i = 0; i < 36; i += 1) {
-        const card = makePackageCard(600 + i, "Character", 1 + (i % 5), "alpha");
-        db.set(card.cardNumber, card);
+    it("falls back to a non-empty deck when poolContext is undefined", () => {
+      const init = createBattleInit({ ...makeBaseInput(), poolContext: undefined });
+      expect(init.enemyDeckDefinition.length).toBeGreaterThan(0);
+      for (const card of init.enemyDeckDefinition) {
+        expect(makeBattleTestCardDatabase().get(card.cardNumber)).toBeDefined();
       }
-      for (let i = 0; i < 4; i += 1) {
-        const card = makePackageCard(700 + i, "Event", 2, "cheap_removal");
-        db.set(card.cardNumber, card);
-        globalRemovalNumbers.add(card.cardNumber);
-      }
+    });
 
+    it("falls back when a poolContext resolves to an empty starter deck", () => {
+      // A poolContext whose name index shares nothing with the generated pool
+      // names yields an empty resolved list; the fallback still fills the deck.
+      const emptyIndexContext: RunPoolContext = {
+        poolData: makeSteeredPoolContext().poolContext.poolData,
+        nameIndex: new Map<string, number>([["does-not-exist", -1]]),
+        allDreamsignPoolIds: [],
+      };
       const init = createBattleInit({
-        ...baseInput,
-        cardDatabase: db,
-        dreamcallers: [
-          {
-            id: "alpha-dc",
-            name: "Alpha Sentinel",
-            title: "Removal Fallback Test",
-            renderedText: "",
-            imageNumber: "001",
-            startingEssence: 250,
-            mandatoryTides: ["alpha"],
-            optionalTides: [],
-          },
-        ],
-        state: { ...baseInput.state, deck: [] },
+        ...makeBaseInput(),
+        poolContext: emptyIndexContext,
       });
-
-      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
-      const selectedNumbers = new Set(
-        init.enemyDeckDefinition.map((card) => card.cardNumber),
+      expect(init.enemyDeckDefinition.length).toBeGreaterThanOrEqual(
+        MIN_BATTLE_DECK_SIZE,
       );
-      for (const cardNumber of globalRemovalNumbers) {
-        expect(selectedNumbers.has(cardNumber)).toBe(true);
-      }
-    });
-
-    it("throws when the required-tide pool cannot fill the unique deck", () => {
-      const baseInput = makeBaseInput();
-      const db = new Map<number, CardData>();
-      for (let i = 0; i < 4; i += 1) {
-        const card = makePackageCard(800 + i, "Event", 2, "cheap_removal");
-        db.set(card.cardNumber, card);
-      }
-      for (let i = 0; i < 12; i += 1) {
-        const card = makePackageCard(900 + i, "Character", 2, "alpha");
-        db.set(card.cardNumber, card);
-      }
-
-      expect(() =>
-        createBattleInit({
-          ...baseInput,
-          cardDatabase: db,
-          dreamcallers: [
-            {
-              id: "alpha-dc",
-              name: "Alpha Sentinel",
-              title: "Sparse Pool Test",
-              renderedText: "",
-              imageNumber: "001",
-              startingEssence: 250,
-              mandatoryTides: ["alpha"],
-              optionalTides: [],
-            },
-          ],
-          state: { ...baseInput.state, deck: [] },
-        }),
-      ).toThrow(/enemy deck needs 40 unique cards/);
-    });
-
-    it("treats an empty required-tide enemy as accepting all candidates", () => {
-      const baseInput = makeBaseInput();
-      const init = createBattleInit({
-        ...baseInput,
-        dreamcallers: [
-          {
-            id: "neutral-dc",
-            name: "Empty Echo",
-            title: "Test",
-            renderedText: "",
-            imageNumber: "001",
-            startingEssence: 250,
-            mandatoryTides: [],
-            optionalTides: [],
-          },
-        ],
-      });
-
-      expect(init.enemyDescriptor.packageTides).toEqual([]);
-      expect(init.enemyDeckDefinition).toHaveLength(ENEMY_DECK_SIZE);
-      expect(
-        new Set(init.enemyDeckDefinition.map((card) => card.cardNumber)).size,
-      ).toBe(ENEMY_DECK_SIZE);
-    });
-
-    it("shuffles the final enemy deck deterministically", () => {
-      const init = createBattleInit(makeBaseInput());
-      const numbers = init.enemyDeckDefinition.map((card) => card.cardNumber);
-      const sortedNumbers = [...numbers].sort((a, b) => a - b);
-
-      expect(numbers.length).toBe(ENEMY_DECK_SIZE);
-      expect(numbers).not.toEqual(sortedNumbers);
-      const again = createBattleInit(makeBaseInput());
-      expect(
-        [...again.enemyDeckDefinition.map((c) => c.cardNumber)].sort(
-          (a, b) => a - b,
-        ),
-      ).toEqual(sortedNumbers);
-    });
-
-    it("has enough real content for every Dreamcaller recipe", async () => {
-      const content = await readGeneratedQuestContent();
-      if (content === null) {
-        return;
-      }
-      const eligibleCards = content.cards.filter(
-        (card) => !card.isStarter && card.energyCost !== null,
-      );
-      const globalRemovalEvents = eligibleCards.filter(isRemovalEventCard);
-
-      expect(globalRemovalEvents.length).toBeGreaterThanOrEqual(4);
-
-      for (const dreamcaller of content.dreamcallers) {
-        const requiredPool = eligibleCards.filter((card) =>
-          overlapsTides(card, dreamcaller.mandatoryTides),
-        );
-        expect(
-          requiredPool.length,
-          `${dreamcaller.name} required-pool count`,
-        ).toBeGreaterThanOrEqual(36);
+      for (const card of init.enemyDeckDefinition) {
+        expect(makeBattleTestCardDatabase().get(card.cardNumber)).toBeDefined();
       }
     });
   });

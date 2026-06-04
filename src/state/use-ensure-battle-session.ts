@@ -6,6 +6,7 @@ import { createBattleInit } from "../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
+import type { RunPoolContext } from "../data/quest-content";
 import type { QuestState, SiteState } from "../types/quest";
 
 /**
@@ -49,6 +50,7 @@ export function useEnsureBattleSession(input: {
   cardDatabase: ReadonlyMap<number, CardData>;
   dreamcallers: readonly DreamcallerContent[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
+  poolContext?: RunPoolContext;
   seedOverride: number | null;
 }): void {
   const inFlightKey = useRef<string | null>(null);
@@ -69,6 +71,7 @@ export function useEnsureBattleSession(input: {
       cardDatabase: input.cardDatabase,
       dreamcallers: input.dreamcallers,
       dreamsignTemplates: input.dreamsignTemplates,
+      poolContext: input.poolContext,
       seedOverride: input.seedOverride,
     });
     const initial = createInitialBattleState(init);
@@ -91,6 +94,7 @@ export function useEnsureBattleSession(input: {
     input.database,
     input.dreamcallers,
     input.dreamsignTemplates,
+    input.poolContext,
     input.questState,
     input.roomId,
     input.seedOverride,

@@ -2,9 +2,10 @@ import type { CardData } from "../../types/cards";
 import type {
   DreamcallerContent,
   DreamsignTemplate,
-  PackageTideId,
 } from "../../types/content";
 import type { BattleModifier, QuestState, SiteState } from "../../types/quest";
+import type { RunPoolContext } from "../../data/quest-content";
+import { generatePoolFromData } from "../../draft/pool/generate";
 import { applyDeckEntryCardModification } from "../../card-type-change";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
@@ -18,13 +19,6 @@ import type {
   BattleInit,
   BattleQuestDeckEntry,
 } from "../types";
-
-const ENEMY_DECK_SIZE = 40;
-const ENEMY_REMOVAL_EVENT_COUNT = 4;
-const REMOVAL_TIDES = new Set<PackageTideId>([
-  "cheap_removal",
-  "premium_removal",
-]);
 
 /**
  * Minimum quest deck size for a battle. A deck below this is padded with
@@ -76,6 +70,14 @@ export interface CreateBattleInitInput {
    * the run's templates.
    */
   dreamsignTemplates?: readonly DreamsignTemplate[];
+  /**
+   * The run's pool context (decklist corpus + name index). Used to build the
+   * enemy deck from an idf3-steered `drafts_anon` decklist matching the enemy
+   * Dreamcaller's signature. Optional: when absent (or when the resolved
+   * decklist is empty) the enemy deck falls back to a sample of draftable cards
+   * from the card database.
+   */
+  poolContext?: RunPoolContext;
   seedOverride?: number | null;
 }
 
@@ -144,17 +146,19 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       }
       return freezeBattleDeckCardDefinition(normalizePlayerDeckCard(entry, card));
     });
-  const enemyDescriptor = freezeBattleEnemyDescriptor(
+  const { descriptor: rawEnemyDescriptor, signatureCards: enemySignatureCards } =
     createEnemyDescriptor(
       dreamcallers,
       dreamsignTemplates,
       streams.enemyDescriptor.nextFloat,
-    ),
-  );
+    );
+  const enemyDescriptor = freezeBattleEnemyDescriptor(rawEnemyDescriptor);
   const enemyDeckDefinition = createEnemyDeckDefinition(
+    enemySignatureCards,
+    input.poolContext,
     cardDatabase,
-    enemyDescriptor.packageTides,
     streams.enemyDeckOrder,
+    seed,
   ).map(freezeBattleDeckCardDefinition);
   const dreamcallerSummary = freezeBattleDreamcallerSummary(state.dreamcaller);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
@@ -236,17 +240,20 @@ export function createEnemyDescriptor(
   dreamcallers: readonly DreamcallerContent[],
   dreamsignTemplates: readonly DreamsignTemplate[],
   random: () => number,
-): BattleEnemyDescriptor {
+): { descriptor: BattleEnemyDescriptor; signatureCards: readonly string[] } {
   if (dreamcallers.length === 0) {
     return {
-      id: "enemy:fallback",
-      name: "Spectral Rival",
-      subtitle: "Battlefield Projection",
-      imageNumber: "001",
-      portraitSeed: 0,
-      packageTides: Object.freeze([]),
-      abilityText: "A synthetic opponent assembled for prototype combat.",
-      dreamsigns: Object.freeze([]),
+      descriptor: {
+        id: "enemy:fallback",
+        name: "Spectral Rival",
+        subtitle: "Battlefield Projection",
+        imageNumber: "001",
+        portraitSeed: 0,
+        packageTides: Object.freeze([]),
+        abilityText: "A synthetic opponent assembled for prototype combat.",
+        dreamsigns: Object.freeze([]),
+      },
+      signatureCards: [],
     };
   }
 
@@ -284,86 +291,106 @@ export function createEnemyDescriptor(
   }
 
   return {
-    id: `enemy:${template.id}:${String(portraitSeed)}`,
-    name: template.name,
-    subtitle: "",
-    imageNumber: template.imageNumber,
-    portraitSeed,
-    packageTides: Object.freeze([...template.mandatoryTides]),
-    abilityText: template.renderedText,
-    dreamsigns,
+    descriptor: {
+      id: `enemy:${template.id}:${String(portraitSeed)}`,
+      name: template.name,
+      subtitle: "",
+      imageNumber: template.imageNumber,
+      portraitSeed,
+      // The tide field stays on the type for now but is always empty; the enemy
+      // deck is steered by `signatureCards` instead.
+      packageTides: Object.freeze([]),
+      abilityText: template.renderedText,
+      dreamsigns,
+    },
+    signatureCards: template.signatureCards ?? [],
   };
 }
 
+/**
+ * Mixes the battle seed into a distinct stream for the enemy pool draw so the
+ * enemy deck is reproducible per battle seed without colliding with the other
+ * battle RNG streams.
+ */
+function deriveEnemyPoolSeed(seed: number): number {
+  // XOR with an arbitrary large bit-mixing constant to derive a distinct but fully deterministic sub-seed from the battle seed.
+  return (seed ^ 0x5f3759df) >>> 0;
+}
+
+/**
+ * Builds the enemy battle deck from an idf3 pool steered by the enemy
+ * Dreamcaller's signature cards, mirroring how the player's draft pool is built.
+ *
+ * With a `poolContext`, an idf3 pool is generated from the run's decklist corpus
+ * steered by `enemySignatureCards`; the chosen anchor decklist's card names are
+ * resolved to V2 card numbers via the name index, then to `CardData` via the
+ * card database (unresolved/missing entries are dropped). When `poolContext` is
+ * absent — or the resolved list is empty — the deck falls back to a shuffled
+ * sample of draftable cards (non-starter, numeric cost) so the enemy always has
+ * a non-empty deck. The chosen cards are padded up to `MIN_BATTLE_DECK_SIZE`,
+ * then shuffled into the enemy draw order.
+ */
 function createEnemyDeckDefinition(
+  enemySignatureCards: readonly string[],
+  poolContext: RunPoolContext | undefined,
   cardDatabase: ReadonlyMap<number, CardData>,
-  enemyPackageTides: readonly PackageTideId[],
   rng: BattleRng,
+  battleSeed: number,
 ): BattleDeckCardDefinition[] {
-  const numericCards = Array.from(cardDatabase.values()).filter(
-    (card) => !card.isStarter && card.energyCost !== null,
-  );
-  const requiredPool = filterByPackage(numericCards, enemyPackageTides);
-  const removalEvents = numericCards.filter(isRemovalEvent);
-  const requiredRemovalEvents = requiredPool.filter(isRemovalEvent);
-  const chosenCards: CardData[] = [];
-  const usedCardNumbers = new Set<number>();
+  let chosen: CardData[] = [];
 
-  addUniqueCards(
-    chosenCards,
-    usedCardNumbers,
-    rng.shuffle(requiredRemovalEvents),
-    ENEMY_REMOVAL_EVENT_COUNT,
-  );
-  if (chosenCards.length < ENEMY_REMOVAL_EVENT_COUNT) {
-    addUniqueCards(
-      chosenCards,
-      usedCardNumbers,
-      rng.shuffle(removalEvents),
-      ENEMY_REMOVAL_EVENT_COUNT,
+  if (poolContext !== undefined) {
+    const pool = generatePoolFromData(
+      poolContext.poolData,
+      deriveEnemyPoolSeed(battleSeed),
+      /* seedArchetypes */ undefined,
+      "idf3",
+      /* themeArchetypes */ undefined,
+      /* targetSize */ undefined,
+      enemySignatureCards,
+    );
+    for (const name of pool.starterDeck ?? []) {
+      const cardNumber = poolContext.nameIndex.get(name);
+      if (cardNumber === undefined) {
+        continue;
+      }
+      const card = cardDatabase.get(cardNumber);
+      if (card === undefined) {
+        continue;
+      }
+      chosen.push(card);
+    }
+  }
+
+  if (chosen.length === 0) {
+    chosen = rng.shuffle(
+      Array.from(cardDatabase.values()).filter(
+        (card) => !card.isStarter && card.energyCost !== null,
+      ),
     );
   }
 
-  if (chosenCards.length < ENEMY_REMOVAL_EVENT_COUNT) {
-    throw new Error(
-      `createBattleInit: enemy deck needs ${String(ENEMY_REMOVAL_EVENT_COUNT)} unique removal events, found ${String(chosenCards.length)}`,
-    );
-  }
-
-  addUniqueCards(
-    chosenCards,
-    usedCardNumbers,
-    rng.shuffle(requiredPool),
-    ENEMY_DECK_SIZE,
-  );
-
-  if (chosenCards.length < ENEMY_DECK_SIZE) {
-    throw new Error(
-      `createBattleInit: enemy deck needs ${String(ENEMY_DECK_SIZE)} unique cards, found ${String(chosenCards.length)} for required tides ${enemyPackageTides.join(", ")}`,
-    );
-  }
+  const padded = padEnemyDeck(chosen);
 
   return rng
-    .shuffle(chosenCards.map(createBaseBattleDeckCardDefinition))
+    .shuffle(padded.map(createBaseBattleDeckCardDefinition))
     .map(cloneBattleDeckCardDefinition);
 }
 
-function addUniqueCards(
-  chosenCards: CardData[],
-  usedCardNumbers: Set<number>,
-  orderedPool: readonly CardData[],
-  count: number,
-): void {
-  for (const card of orderedPool) {
-    if (chosenCards.length >= count) {
-      return;
-    }
-    if (usedCardNumbers.has(card.cardNumber)) {
-      continue;
-    }
-    chosenCards.push(card);
-    usedCardNumbers.add(card.cardNumber);
+/**
+ * Pads a chosen enemy card list up to `MIN_BATTLE_DECK_SIZE` by repeating
+ * whole-list copies (mirroring {@link padBattleDeck}). A list at or above the
+ * threshold, or an empty list, is returned unchanged.
+ */
+function padEnemyDeck(cards: readonly CardData[]): CardData[] {
+  if (cards.length === 0 || cards.length >= MIN_BATTLE_DECK_SIZE) {
+    return [...cards];
   }
+  const padded = [...cards];
+  while (padded.length < MIN_BATTLE_DECK_SIZE) {
+    padded.push(...cards);
+  }
+  return padded;
 }
 
 function cloneBattleDeckCardDefinition(
@@ -373,27 +400,6 @@ function cloneBattleDeckCardDefinition(
     ...definition,
     tides: [...definition.tides],
   };
-}
-
-/** Returns cards that share at least one package tide with the enemy package. */
-function filterByPackage(
-  cards: readonly CardData[],
-  enemyPackageTides: readonly PackageTideId[],
-): CardData[] {
-  if (enemyPackageTides.length === 0) {
-    return [...cards];
-  }
-  const enemyTideSet = new Set(enemyPackageTides);
-  return cards.filter((card) =>
-    card.tides.some((tide) => enemyTideSet.has(tide)),
-  );
-}
-
-function isRemovalEvent(card: CardData): boolean {
-  return (
-    card.cardType === "Event" &&
-    card.tides.some((tide) => REMOVAL_TIDES.has(tide))
-  );
 }
 
 function normalizePlayerDeckCard(
