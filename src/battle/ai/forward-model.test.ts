@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { cloneForwardModel, forwardModelFromState } from "./forward-model";
+import { cloneForwardModel, effectiveSpark, forwardModelFromState } from "./forward-model";
+import type { ForwardModel } from "./forward-model";
 import { allocateBattleCardInstance } from "../state/create-initial-state";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 import type {
@@ -356,5 +357,116 @@ describe("cloneForwardModel", () => {
     const clone = cloneForwardModel(original);
     clone.opponentBodies[0].effectiveSpark = 1000;
     expect(original.opponentBodies[0].effectiveSpark).toBe(4);
+  });
+});
+
+describe("effectiveSpark", () => {
+  function makeAiCard(
+    battleCardId: string,
+    basePrintedSpark: number,
+    sparkDelta: number,
+    figmentCount: number,
+  ): import("./forward-model").AiCard {
+    return {
+      battleCardId,
+      cardNumber: 1,
+      name: battleCardId,
+      energyCost: 1,
+      basePrintedSpark,
+      sparkDelta,
+      figmentCount,
+      canChallengeThisTurn: true,
+    };
+  }
+
+  function makeEmptyModel(): ForwardModel {
+    return {
+      aiEnergy: 0,
+      aiMaxEnergy: 0,
+      aiScore: 0,
+      playerScore: 0,
+      aiHand: [],
+      aiDeck: [],
+      aiVoid: [],
+      aiDeployed: { D0: null, D1: null, D2: null, D3: null },
+      aiReserve: { R0: null, R1: null, R2: null, R3: null, R4: null },
+      opponentBodies: [],
+      opponentHandCount: 0,
+      opponentVoidCount: 0,
+    };
+  }
+
+  it("returns 0 for an empty deployed slot", () => {
+    const model = makeEmptyModel();
+    expect(effectiveSpark(model, "D0", new Map())).toBe(0);
+  });
+
+  it("computes base spark as basePrintedSpark * figmentCount + sparkDelta", () => {
+    const model = makeEmptyModel();
+    // basePrintedSpark=3, figmentCount=4, sparkDelta=2 → 3*4+2 = 14
+    model.aiDeployed.D0 = makeAiCard("card-a", 3, 2, 4);
+    expect(effectiveSpark(model, "D0", new Map())).toBe(14);
+  });
+
+  it("R1 supports D0 and D1 but not D2", () => {
+    const model = makeEmptyModel();
+    // base spark = 5*1+0 = 5
+    model.aiDeployed.D0 = makeAiCard("body-d0", 5, 0, 1);
+    model.aiDeployed.D1 = makeAiCard("body-d1", 5, 0, 1);
+    model.aiDeployed.D2 = makeAiCard("body-d2", 5, 0, 1);
+    model.aiReserve.R1 = makeAiCard("r1-support", 2, 0, 1);
+    const sources = new Map([["r1-support", 2]]);
+
+    expect(effectiveSpark(model, "D0", sources)).toBe(7); // 5 + 2
+    expect(effectiveSpark(model, "D1", sources)).toBe(7); // 5 + 2
+    expect(effectiveSpark(model, "D2", sources)).toBe(5); // unchanged
+  });
+
+  it("R0 supports only D0, not D1", () => {
+    const model = makeEmptyModel();
+    model.aiDeployed.D0 = makeAiCard("body-d0", 3, 0, 1);
+    model.aiDeployed.D1 = makeAiCard("body-d1", 3, 0, 1);
+    model.aiReserve.R0 = makeAiCard("r0-support", 1, 0, 1);
+    const sources = new Map([["r0-support", 2]]);
+
+    expect(effectiveSpark(model, "D0", sources)).toBe(5); // 3 + 2
+    expect(effectiveSpark(model, "D1", sources)).toBe(3); // unchanged
+  });
+
+  it("two sources both supporting the same slot stack additively", () => {
+    const model = makeEmptyModel();
+    // R1 supports D0,D1; R2 supports D1,D2 → D1 gets both
+    model.aiDeployed.D1 = makeAiCard("body-d1", 4, 0, 1);
+    model.aiReserve.R1 = makeAiCard("r1-card", 1, 0, 1);
+    model.aiReserve.R2 = makeAiCard("r2-card", 1, 0, 1);
+    const sources = new Map([
+      ["r1-card", 2],
+      ["r2-card", 1],
+    ]);
+
+    // base=4, +2 from R1, +1 from R2 = 7
+    expect(effectiveSpark(model, "D1", sources)).toBe(7);
+  });
+
+  it("a reserve card absent from supportSources contributes nothing", () => {
+    const model = makeEmptyModel();
+    model.aiDeployed.D0 = makeAiCard("body-d0", 5, 0, 1);
+    model.aiReserve.R1 = makeAiCard("r1-no-support", 2, 0, 1);
+    // r1-no-support is NOT in sources
+    const sources = new Map<string, number>();
+
+    expect(effectiveSpark(model, "D0", sources)).toBe(5);
+  });
+
+  it("support is not divided — each supported slot gets the full value", () => {
+    const model = makeEmptyModel();
+    model.aiDeployed.D0 = makeAiCard("body-d0", 3, 0, 1);
+    model.aiDeployed.D1 = makeAiCard("body-d1", 3, 0, 1);
+    model.aiReserve.R1 = makeAiCard("r1-wide", 1, 0, 1);
+    const sources = new Map([["r1-wide", 3]]);
+
+    // Both slots get +3, not +1.5
+    expect(effectiveSpark(model, "D0", sources)).toBe(6);
+    expect(effectiveSpark(model, "D1", sources)).toBe(6);
   });
 });

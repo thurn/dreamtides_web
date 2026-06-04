@@ -3,6 +3,7 @@ import {
   selectEffectiveSparkForInstance,
   selectFigmentCount,
 } from "../state/figments";
+import { supportedDeploySlots } from "../engine/support";
 import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
 import type {
   BattleCardInstance,
@@ -177,6 +178,54 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     opponentHandCount: opponent.hand.length,
     opponentVoidCount: opponent.void.length,
   };
+}
+
+/**
+ * Computes the effective spark of the AI card occupying `slot`, adding support
+ * bonuses from back-rank (reserve) cards whose `battleCardId` appears in
+ * `supportSources`.
+ *
+ * Base spark = `basePrintedSpark * figmentCount + sparkDelta`.
+ *
+ * For each occupied reserve slot whose card's `battleCardId` is a key in
+ * `supportSources`, if that reserve slot's adjacency covers `slot` (per
+ * `supportedDeploySlots`), the mapped value is added to the total. Each
+ * support source contributes its full value to every slot it covers
+ * independently — the value is not divided across supported slots.
+ *
+ * Returns 0 if `slot` is empty.
+ *
+ * @param supportSources - Per back-rank `AiCard` `battleCardId`, the flat
+ *   spark bonus it grants to each front slot it supports.
+ */
+export function effectiveSpark(
+  model: ForwardModel,
+  slot: DeploySlotId,
+  supportSources: ReadonlyMap<string, number>,
+): number {
+  const card = model.aiDeployed[slot];
+  if (card === null) {
+    return 0;
+  }
+
+  const base = card.basePrintedSpark * card.figmentCount + card.sparkDelta;
+
+  let supportBonus = 0;
+  for (const reserveSlot of RESERVE_SLOT_IDS) {
+    const reserveCard = model.aiReserve[reserveSlot];
+    if (reserveCard === null) {
+      continue;
+    }
+    const bonus = supportSources.get(reserveCard.battleCardId);
+    if (bonus === undefined) {
+      continue;
+    }
+    if (supportedDeploySlots(reserveSlot).includes(slot)) {
+      supportBonus += bonus;
+    }
+  }
+
+  return base + supportBonus;
 }
 
 function cloneAiCard(card: AiCard): AiCard {
