@@ -450,15 +450,15 @@ export function setupAssets({
     throw new Error("Expected [[cards]] array in cards_v2.toml");
   }
 
-  // The draft-pool metadata (core/tides/colors/draft-archetypes) the non-`idf3`
+  // The draft-pool metadata (core/colors/draft-archetypes) the non-`idf3`
   // pool variants consume lives in TypeScript (`cards-v2-metadata.ts`), not in
   // cards_v2.toml. Merge it back into each record by name before serializing so
-  // the generated JSON the browser harness and the pool experiments read is
-  // complete. The standard `idf3` variant ignores all of it.
+  // the generated JSON the pool experiments read is complete. The standard
+  // `idf3` variant ignores all of it. Per-card `tides` are deliberately not
+  // injected: the runtime card data carries no tide values.
   const jsonCardsV2 = allCardsV2.map((card) => {
     const meta = CARDS_V2_POOL_METADATA[card.name];
     if (meta) {
-      if (meta.tides) card.tides = meta.tides;
       if (meta.core !== undefined) card.core = meta.core;
       if (meta.colors) card.colors = meta.colors;
       if (meta.draftArchetypes) card["draft-archetypes"] = meta.draftArchetypes;

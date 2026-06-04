@@ -205,7 +205,7 @@ function BattleCardArt({ data }: { data: BattleCardVisualData }) {
   }, [data.artUrl]);
 
   if (showFallback) {
-    return <div className="c-art-fill" style={createArtStyle(data.tides)} />;
+    return <div className="c-art-fill" style={createArtStyle(data.name)} />;
   }
 
   return (
@@ -223,8 +223,8 @@ function BattleCardArt({ data }: { data: BattleCardVisualData }) {
   );
 }
 
-function createArtStyle(tides: readonly string[]): CSSProperties {
-  const hue = tideHueForName(tides[0] ?? "");
+function createArtStyle(name: string): CSSProperties {
+  const hue = hueForName(name);
 
   return {
     background: [
@@ -236,12 +236,17 @@ function createArtStyle(tides: readonly string[]): CSSProperties {
   };
 }
 
-function tideHueForName(tide: string): number {
-  if (tide === "") {
+/**
+ * Derives a stable fallback-art hue from the card name so cards without linked
+ * art get a consistent gradient. The name is a stable per-card key, so the same
+ * card always renders the same hue.
+ */
+function hueForName(name: string): number {
+  if (name === "") {
     return 190;
   }
   let hash = 0;
-  for (const char of tide) {
+  for (const char of name) {
     hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   }
   return hash % 360;
