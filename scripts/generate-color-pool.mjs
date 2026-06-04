@@ -9,7 +9,7 @@
 // byte-for-byte for a given seed.
 //
 // The pool is sourced from per-card draft metadata that lives in TypeScript
-// (`src/draft_test/cards-v2-metadata.ts`), keyed by card name:
+// (`src/data/cards-v2-metadata.ts`), keyed by card name:
 //   - core             cards seed every pool
 //   - tides            supply the mechanic-archetype themes (one per tide base name)
 //   - colors           the bare color-combo lists that define legality + fill
@@ -17,7 +17,7 @@
 // cards_v2.toml supplies the card list (names); the metadata is merged in here.
 //
 // A Dreamcaller's `draftArchetypes` (from {@link DREAMCALLER_ARCHETYPES} in
-// `src/draft_test/dreamcallers-v2-database.ts`) seed construction; passing
+// `src/data/dreamcallers-v2-database.ts`) seed construction; passing
 // `--dreamcaller <name|id>` seeds from that list, the same way picking the
 // Dreamcaller does in the app.
 //
@@ -36,8 +36,8 @@ import {
   generatePoolFromData,
   poolToLines,
 } from "../src/draft/pool/index.ts";
-import { CARDS_V2_POOL_METADATA } from "../src/draft_test/cards-v2-metadata.ts";
-import { DREAMCALLER_ARCHETYPES } from "../src/draft_test/dreamcallers-v2-database.ts";
+import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
+import { DREAMCALLER_ARCHETYPES } from "../src/data/dreamcallers-v2-database.ts";
 
 export { buildPoolData };
 

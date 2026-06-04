@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { RulesText } from "../components/RulesText";
-import type { DraftDreamcaller } from "./dreamcallers-v2-database";
+import type { DraftDreamcaller } from "../data/dreamcallers-v2-database";
 
 const DREAMCALLER_ACCENT = "#c084fc";
 const DREAMCALLER_HOVER_TRANSITION = { duration: 0.12, delay: 0 } as const;

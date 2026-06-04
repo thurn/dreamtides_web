@@ -35,7 +35,7 @@ const decklistsData = readJson("public/decklists-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
 const poolData = buildPoolData(cards, decklistsData);
 
-// Theme map copied verbatim from src/draft_test/dreamcallers-v2-database.ts.
+// Theme map copied verbatim from src/data/dreamcallers-v2-database.ts.
 const DREAMCALLER_THEMES = {
   "Yveth Coravel": ["blink", "celestial-reverie-combo"],
   "Kell Tarn": ["cheap-characters", "reclaim-combo"],

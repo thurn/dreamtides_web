@@ -49,7 +49,7 @@ const TIDE_TO_ARCH = new Map([
   ["Warrior Combo", "warrior-combo"],
 ]);
 
-// DREAMCALLER_THEMES, copied from src/draft_test/dreamcallers-v2-database.ts.
+// DREAMCALLER_THEMES, copied from src/data/dreamcallers-v2-database.ts.
 const DREAMCALLER_THEMES = {
   "Yveth Coravel": ["blink", "celestial-reverie-combo"],
   "Kell Tarn": ["cheap-characters", "reclaim-combo"],

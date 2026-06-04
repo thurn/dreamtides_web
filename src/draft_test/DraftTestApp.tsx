@@ -24,9 +24,9 @@ import {
   loadDecklists,
   loadMergedArchetypeLists,
   resolvePool,
-} from "./cards-v2-database";
-import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
-import type { DraftDreamcaller } from "./dreamcallers-v2-database";
+} from "../data/cards-v2-database";
+import { loadDreamcallersV2 } from "../data/dreamcallers-v2-database";
+import type { DraftDreamcaller } from "../data/dreamcallers-v2-database";
 import { DraftDreamcallerSelect } from "./DraftDreamcallerSelect";
 
 const OFFER_SIZE = 4;

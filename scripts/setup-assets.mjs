@@ -5,8 +5,8 @@ import { resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
-import { CARDS_V2_POOL_METADATA } from "../src/draft_test/cards-v2-metadata.ts";
-import { DREAMCALLER_ARCHETYPES } from "../src/draft_test/dreamcallers-v2-database.ts";
+import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
+import { DREAMCALLER_ARCHETYPES } from "../src/data/dreamcallers-v2-database.ts";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DATA_DIR = join(ROOT, "data");

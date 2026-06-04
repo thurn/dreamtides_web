@@ -73,7 +73,7 @@ export interface CardData {
   art?: ArtCrop;
   /**
    * Draft-pool membership metadata for the experimental cards_v2 pool, defined
-   * in TypeScript (`src/draft_test/cards-v2-metadata.ts`) and merged into
+   * in TypeScript (`src/data/cards-v2-metadata.ts`) and merged into
    * `cards_v2-data.json` by `scripts/setup-assets.mjs`. Present on the cards_v2
    * records the non-`idf3` pool variants consume; absent on runtime catalog
    * cards. `core` flags an always-included staple, `colors` lists the bare

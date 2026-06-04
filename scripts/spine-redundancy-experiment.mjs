@@ -25,7 +25,7 @@ const cards = readJson("public/cards_v2-data.json");
 const decklistsData = readJson("public/decklists-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
 
-// Theme map copied verbatim from src/draft_test/dreamcallers-v2-database.ts
+// Theme map copied verbatim from src/data/dreamcallers-v2-database.ts
 // (DREAMCALLER_THEMES) — the single source of truth for a Dreamcaller's tide.
 const DREAMCALLER_THEMES = {
   "Yveth Coravel": ["blink", "celestial-reverie-combo"],
