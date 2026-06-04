@@ -22,6 +22,7 @@ It is written to be read alongside:
 - [Design Principles](#design-principles)
 - [System Overview](#system-overview)
 - [The Rules Spine](#the-rules-spine)
+- [Auto-Resolution and Manual Steps](#auto-resolution-and-manual-steps)
 - [The Forward Model](#the-forward-model)
 - [Per-Card Knowledge](#per-card-knowledge)
 - [The Evaluation Function](#the-evaluation-function)
@@ -221,7 +222,8 @@ activeSide === "enemy"  (watched by use-battle-ai.ts)
   dispatch({ type: "APPLY_COMMAND", command })  (one per action, paced)
         |
         v
-  judgment.ts resolves the Challenge phase, SET_BATTLE_FLOW hands turn back
+  human Dusk/Night windows, then judgment.ts proposes + the human confirms
+  the Challenge outcome; SET_BATTLE_FLOW hands the turn back
 ```
 
 ## The Rules Spine
@@ -241,7 +243,9 @@ by both sides (the human benefits from it too).
   fills the currently-empty `BattleJudgmentResolution` on the transition and
   applies dissolves (firing `▸Dissolved`, e.g. Last Witness) and score deltas.
   Effective spark here must include Support/static bonuses (see
-  [The Forward Model](#the-forward-model)).
+  [The Forward Model](#the-forward-model)). The resolver produces a *proposal*
+  and defers anything it cannot fully model to a manual step; see
+  [Auto-Resolution and Manual Steps](#auto-resolution-and-manual-steps).
 
 - **Energy ramp (`engine/energy.ts`).** At the start of each turn, raise max
   energy by one toward `maxEnergyCap` (10) and reset current energy to max. This
@@ -262,6 +266,72 @@ to resolve arbitrary card effects — only combat, energy, draw, and turn flow.
 Card effects are resolved by the side that plays the card: the AI resolves its
 own via the per-card models, and the human resolves theirs the way they do today
 (manually, in the sandbox), or via a future player-side affordance layer.
+
+## Auto-Resolution and Manual Steps
+
+Auto-resolving the end of turn is safe only for the parts the engine can prove it
+understands. The hazard is that resolution can hinge on steps the engine cannot
+model — and the human plays the full card pool, not the ten Starter cards, so the
+resolver must never assume it understands the human's board. Three kinds of step
+can change a turn's outcome:
+
+1. **The opponent's interaction windows.** When the AI is the active player, the
+   human still owns the Dusk window (position defenders opposite the AI's
+   challengers; play Fast cards) and a Night Fast window. These are not triggers;
+   they are the human's turn to react, and they must be preserved.
+2. **Triggers that fire inside resolution.** ▸Night and ▸Challenge fire at the
+   start of Night; ▸Dissolved fires after each lane. Lanes resolve `D0`→`D3` in
+   order, so a ▸Dissolved — or a Support source dissolving — in an early lane can
+   change the spark of later lanes: a supporter dying in `D0` silently drops +✦
+   from a challenger in `D2`.
+3. **Keywords and statics that bend the comparison.** Unstoppable, Vengeful,
+   Preeminence, and continuous Support / "+X✦ for each…" each change a lane's
+   result.
+
+The design handles this by separating two concerns that are easy to conflate:
+
+- **The AI's internal forward model may be approximate about the opponent.** A
+  wrong guess about a human trigger costs at most a suboptimal AI move, never an
+  illegal state, so this path stays cheap.
+- **The authoritative resolver is conservative.** It auto-resolves only what it
+  can fully model and **pauses for a manual step everywhere else.** Pausing
+  unnecessarily is acceptable; committing past a real trigger is not, so the
+  default is to pause.
+
+**Resolve the end of turn as explicit windows, not one atomic computation.** The
+window structure is pure rules and needs no card knowledge: declare challengers →
+Dusk window (hand to the human) → Night window (▸Night/▸Challenge fire; human Fast
+window) → per-lane Challenge, each followed by a ▸Dissolved window. The engine
+always walks every window, so no firing point is ever skipped; the only decision
+per window is auto versus manual.
+
+At each window the engine resolves automatically only:
+
+- effects from cards it fully models (the AI's ten Starter cards), and
+- a small allowlist of *general* keywords that are rules rather than card-specific
+  text — Unstoppable, Vengeful, Preeminence, and the base spark comparison.
+
+For anything else in play, a conservative **capability check** decides whether to
+pause. It is a lightweight scan of the in-play card's `renderedText`, keywords,
+and `tags` for the markers the rules already standardize — a `▸` trigger, a `–`
+keyword, the resolution keywords above, or static `+X✦` text — during a relevant
+window. It does not interpret the effect; it only detects that one exists, which
+is enough to stop and hand the step to the human. The AI's own cards are
+whitelisted, so the AI side never pauses spuriously.
+
+Even the pure-arithmetic lane resolution is presented as a **preview the human
+confirms** and can hand-edit before commit, since the human is the authority on
+their own cards. The flow is therefore *auto-propose, human-in-the-loop* rather
+than *auto-resolve*.
+
+This maps cleanly onto the existing code. The resolver returns a
+`BattleJudgmentResolution` proposal plus a list of pending manual windows;
+`PlayableBattleScreen` surfaces a confirm/resolve step (the prototype already
+expects the human to drive their own side); and every committed piece — the
+proposed dissolves and score deltas, or a human-entered adjustment — goes through
+the existing `DEBUG_EDIT` path, so undo/redo and the battle log keep working. The
+auto-resolver is thus a flow guide, a math helper, and a safety interlock, not a
+general effect engine.
 
 ## The Forward Model
 
@@ -496,8 +566,11 @@ rank.
    committed challenger. Against the opponent model — now "no defense" is likely
    since their body was removed — the extra spark converts directly to points, so
    the AI casts it on the Colossus.
-5. **`endTurn`.** The AI passes. The judgment resolver scores the unblocked
-   Colossus for the AI, checks the win condition, ramps energy, and hands the
+5. **`endTurn`.** The AI passes, declaring the Colossus as its challenger.
+   Control returns to the human for their Dusk window (position a defender, play
+   a Fast card); the judgment resolver then previews the lane outcome — the
+   unblocked Colossus scoring for the AI — which the human confirms before the
+   score commits. The spine checks the win condition, ramps energy, and hands the
    turn back via `SET_BATTLE_FLOW`.
 
 Each step emits a `BattleAiChoiceTrace`, so the log reads as a legible sequence:
@@ -641,10 +714,12 @@ entirely through the headless harness.
 - **Energy / Dreamwell model.** The prototype has no Dreamwell, so the energy
   ramp is a stand-in. Is `maxEnergy = min(turnNumber + 1, 10)` acceptable, or
   should the AI follow a specific curve? This affects both sides' tempo.
-- **Scope of rules enforcement.** This design has the spine resolve combat and
-  drive the enemy while the human keeps the manual sandbox controls. Should the
-  human side also gain real play affordances and enforcement, or is
-  sandbox-plus-real-combat the intended MVP?
+- **Manual-step granularity.** End-of-turn resolution pauses for the human's
+  interaction windows and for any in-play card it cannot fully model (see
+  [Auto-Resolution and Manual Steps](#auto-resolution-and-manual-steps)). How
+  aggressive should the capability check be — pause on any `▸`/keyword card for
+  safety, or keep an allowlist of full-pool cards known to be
+  challenge-irrelevant to cut down on confirm prompts?
 - **Deck multiset.** Default is 3× each Starter card (30, padded context of 25).
   Confirm the counts, or specify a curve-tuned distribution.
 - **Difficulty.** Ship one competent difficulty first; expose beam width,
