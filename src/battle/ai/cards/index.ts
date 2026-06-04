@@ -27,7 +27,11 @@ export interface StarterCardModel {
   valueHint?(model: ForwardModel, self: AiCard): number;
 }
 
+import { twilightMinstrel } from "./twilight-minstrel";
+
+const models: StarterCardModel[] = [twilightMinstrel];
+
 export const starterCardModels: ReadonlyMap<number, StarterCardModel> = new Map<
   number,
   StarterCardModel
->();
+>(models.map((model) => [model.cardNumber, model]));

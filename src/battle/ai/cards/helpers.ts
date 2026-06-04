@@ -15,6 +15,17 @@ export function removeFromHand(model: ForwardModel, self: AiCard): AiCard | null
 }
 
 /**
+ * Returns whether a character can be played now: the AI can afford its energy
+ * cost and at least one reserve slot is free to receive it.
+ */
+export function characterCanPlay(model: ForwardModel, self: AiCard): boolean {
+  if (model.aiEnergy < self.energyCost) {
+    return false;
+  }
+  return RESERVE_SLOT_IDS.some((slot) => model.aiReserve[slot] === null);
+}
+
+/**
  * Resolves a character `play`: pays `self.energyCost`, removes `self` from
  * hand, and places it into the first empty reserve slot with
  * `canChallengeThisTurn = false` (a character cannot challenge the turn it is
