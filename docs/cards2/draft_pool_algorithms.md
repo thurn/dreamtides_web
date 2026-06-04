@@ -15,28 +15,74 @@ Before any algorithm runs, the generator reconstructs a small set of inputs from
 the card database and exposes a handful of common concepts that all three
 algorithms build on.
 
+### Where the data comes from
+
+Nothing the algorithms read is invented at run time; every input is resolved
+from a source file through a fixed pipeline. It is worth following that pipeline
+once, because the rest of this document refers to these stores by name.
+
+- **The card records** start in `data/tabula/cards_v2.toml`, a list of
+  `[[cards]]` entries. Each entry carries the fields the generator cares about:
+  `name`, `core` (a boolean staple flag), `tides` (mechanic tags such as
+  `"Abandon"` or `"Storm"`), `colors` (the bare color-combo lists the card is
+  legal in, e.g. `["b", "br", "wbr"]`), and `draft-archetypes` (the
+  color-plus-archetype slices it belongs to, e.g. `["br-aristocrats",
+  "wb-aristocrats"]`). The build step `scripts/setup-assets.mjs` parses that
+  TOML, renames kebab-case keys to camelCase (`draft-archetypes` becomes
+  `draftArchetypes`), and writes `public/cards_v2-data.json`. At run time
+  `loadCardsV2Database` (in `cards-v2-database.ts`) fetches that JSON into a
+  `Map<number, CardData>` keyed by card number.
+
+- **The Dreamcaller records** start in `data/tabula/dreamcallers_v2.toml`, a list
+  of `[[dreamcaller]]` entries. Each may carry a `draft-archetypes` list. The
+  same build step writes `public/dreamcallers-v2-data.json`, and
+  `loadDreamcallersV2` (in `dreamcallers-v2-database.ts`) fetches it into
+  `DraftDreamcaller[]`. Crucially, a Dreamcaller's **theme** is *not* in the
+  TOML: `loadDreamcallersV2` attaches it after fetching, by looking the
+  Dreamcaller's name up in the hardcoded `DREAMCALLER_THEMES` map in
+  `dreamcallers-v2-database.ts` (so `Kragg` resolves to `["abandon"]`). That map
+  is the single source of truth for which mechanic a Dreamcaller pulls toward.
+
+- **The real decklists** start as plain-text files in `docs/drafts_dt/` — one
+  file per drafted deck, one card name per line. `scripts/setup-assets.mjs`
+  reads every `*.txt`, keeps only the lines whose names exist in `cards_v2`
+  (so the bundle never references unknown cards), drops empty files, and writes
+  `public/decklists-data.json` as an array of arrays of names. `loadDecklists`
+  (in `cards-v2-database.ts`) fetches it into `string[][]`, or returns an empty
+  array if the bundle is missing.
+
+The draft test page (`DraftTestApp.tsx`) loads all three at startup, then calls
+`buildPoolData` once to fold the card records (and the decklists) into the single
+`PoolData` structure described next. When the player picks a Dreamcaller, the
+page calls `generatePoolFromData` with that `PoolData`, the chosen variant, and
+the Dreamcaller's `draftArchetypes` and `themeArchetypes`. The pool the
+algorithm returns is a multiset of card *names*; `resolvePool` then maps those
+names back to card numbers (via a name-to-number index) for the draft engine to
+consume.
+
 ### The reconstructed inputs
 
-Every algorithm consumes the same prepared data structure, built once from the
-card records:
+`buildPoolData` (in `color-pool.ts`) walks every card record once and folds it
+into the structure all three algorithms consume — the `PoolData`:
 
-- **Core cards.** A fixed set of cards flagged as `core`. These always seed
-  every pool regardless of algorithm or colors — they are the universally
-  playable staples.
-- **Archetype lists.** For each mechanic archetype (Abandon, Storm, Discard /
-  Madness, Warrior Aggro, and so on) a set of the cards that belong to it. These
-  come from the cards' "tide" tags, mapped through a fixed tide-name-to-slug
-  table, so each mechanic archetype is keyed by a stable slug like `abandon` or
-  `storm`.
-- **Draft lists.** A set of cards for each *bare color combination* (for
-  example, every card legal in `ub`) and for each *color-plus-archetype slice*
-  (for example `ubr-control`). A bare color list has a name made purely of color
-  letters; a color-plus-archetype list has a color prefix followed by a hyphen
-  and an archetype name.
-- **Decklists.** Optionally, a collection of real, human-built decklists — each
-  one a list of card names. These are bundled from real draft decks and are used
-  only by the `decklists` algorithm. When they are absent, the `decklists`
-  algorithm falls back to `default`.
+- **Core cards** (`PoolData.core`). The set of card names whose record has
+  `core = true`. These always seed every pool regardless of algorithm or colors
+  — they are the universally playable staples.
+- **Archetype lists** (`PoolData.archLists`). A map from each mechanic archetype
+  to the set of card names in it. It is built from each card's `tides` field:
+  every tide base name is mapped through the fixed `TIDE_TO_ARCHETYPE` table in
+  `color-pool.ts` to a stable slug (`"Abandon"` to `abandon`, `"Storm"` to
+  `storm`), and the card is added to that slug's set. These slugs are exactly the
+  keys the `DREAMCALLER_THEMES` map uses, which is what lets a Dreamcaller's
+  theme name a key in `archLists`.
+- **Draft lists** (`PoolData.draftLists`). A map keyed by both *bare color
+  combinations* (from each card's `colors` field, e.g. `ub`) and
+  *color-plus-archetype slices* (from each card's `draftArchetypes` field, e.g.
+  `ubr-control`). A bare color list has a name made purely of color letters; a
+  color-plus-archetype list has a color prefix, a hyphen, then an archetype name.
+- **Decklists** (`PoolData.decklists`). The `string[][]` of real decks, passed
+  straight through from `loadDecklists`. Used only by the `decklists` algorithm;
+  when absent it falls back to `default`.
 
 The archetype and draft lists are re-keyed into a fixed, filename-style sort
 order so that the order in which an algorithm visits themes is deterministic and
@@ -80,15 +126,20 @@ size counts copies with that cap applied.
 ### Dreamcaller seeding
 
 In the normal draft-test flow the player first chooses a Dreamcaller, and that
-choice feeds two optional pieces of guidance into pool construction:
+choice feeds two optional pieces of guidance into pool construction. The two
+come from *different* sources, which matters:
 
-- **Seed archetypes** — the Dreamcaller's `draftArchetypes`. These are
-  color-plus-archetype list names. Only those that exist in the data and carry a
-  color prefix are eligible. They constrain the pool's color identity and (in
-  the theme-based algorithms) which color-plus-archetype themes are allowed.
-- **Theme archetypes** — the Dreamcaller's mechanic-archetype tide slugs (for
-  example `abandon`). These bias the `decklists` algorithm toward the
-  Dreamcaller's mechanical theme. The `default` and `diverse` algorithms ignore
+- **Seed archetypes** — the Dreamcaller's `draftArchetypes`, read from its
+  `draft-archetypes` list in `dreamcallers_v2.toml`. These are
+  color-plus-archetype list names (e.g. `br-aristocrats`), the same names that
+  key `PoolData.draftLists`. Only those that exist in `draftLists` and carry a
+  color prefix are eligible. They constrain the pool's color identity and (in the
+  theme-based algorithms) which color-plus-archetype themes are allowed.
+- **Theme archetypes** — the Dreamcaller's mechanic-archetype tide slugs (e.g.
+  `abandon`), *not* read from the TOML but attached at load from the
+  `DREAMCALLER_THEMES` map keyed by Dreamcaller name. These are the same slugs
+  that key `PoolData.archLists`. They bias the `decklists` algorithm toward the
+  Dreamcaller's mechanical theme; the `default` and `diverse` algorithms ignore
   them.
 
 A Dreamcaller with no archetypes produces an unconstrained pool.
@@ -303,8 +354,9 @@ precomputed so these cosines are cheap.
 If the Dreamcaller has theme archetypes, the algorithm turns them into two
 things it will reuse at every later step:
 
-- The **theme card set** — the union of all cards across the Dreamcaller's
-  mechanic-archetype lists. For an `abandon` Dreamcaller this is every Abandon
+- The **theme card set** — the union, across the Dreamcaller's theme slugs, of
+  the card sets stored at those slugs in `PoolData.archLists` (which were built
+  from each card's `tides`). For an `abandon` Dreamcaller this is every Abandon
   card; for a `["storm", "events"]` Dreamcaller it is every Storm card plus every
   Events card.
 - The **theme density** of a deck (the "theme cosine") — a 0-to-1 measure of how
@@ -318,10 +370,11 @@ deck's theme density is zero, and every theme-bias multiplier below becomes one
 ### Step 1 — Roll the strategy
 
 The algorithm now picks the pool's strategy: exactly one of the Dreamcaller's
-seed archetypes (the color-plus-archetype draft lists that exist in the data and
-carry a color prefix). It does not pick uniformly — it weights each candidate by
-how much that draft list overlaps the theme card set, so a candidate full of
-theme cards is rolled far more often than an off-theme one. Concretely, an
+seed archetypes (its `draftArchetypes`, which name keys in `PoolData.draftLists`)
+that exist in `draftLists` and carry a color prefix. It does not pick uniformly —
+it weights each candidate by how much that draft list (its card set in
+`draftLists`) overlaps the theme card set, so a candidate full of theme cards is
+rolled far more often than an off-theme one. Concretely, an
 Abandon Dreamcaller whose seed archetypes include an aristocrats list and a
 green-ramp list will roll aristocrats most of the time, because aristocrats
 shares many cards with the Abandon theme and ramp shares few. (The strength of
@@ -404,6 +457,76 @@ the finished pool actually sits in (at least 18% of the unique cards), so the
 identity reflects the real decks rather than every color a lone splash card
 touches. For the theme labels it records the rolled strategy and the single
 mechanic archetype most represented in the finished pool.
+
+### Worked example: building Kragg's pool
+
+To make the chain concrete, here is one full run for the Dreamcaller **Kragg**,
+with every value traced to where it is stored. (The exact decks and scores below
+depend on the random seed; the data sources and the order of operations do not.)
+
+**Setup — what Kragg brings.** The player picks Kragg. From
+`dreamcallers_v2.toml`, Kragg's `draft-archetypes` are loaded as his
+`draftArchetypes`: `b-aristocrats`, `bg-midrange`, `bg-midrange-reanimator`,
+`br-aristocrats`, `brg-lands-monsters`, `brg-midrange`, `ug-cheaty-ramp`,
+`ug-sneak`, `wb-aristocrats`, `wbg-midrange`, `wbg-value-midrange`,
+`wbr-aristocrats`, `wbrg-aristocrats`, `wubg-value`, and `wubrg-value` — these
+are his **strategy candidates**. Separately, `loadDreamcallersV2` looks up
+`"Kragg"` in the `DREAMCALLER_THEMES` map and attaches `themeArchetypes =
+["abandon"]` — his **theme**. The draft page calls `generatePoolFromData` with
+the prebuilt `PoolData`, the `decklists` variant, those `draftArchetypes` as the
+seed archetypes, and `["abandon"]` as the theme archetypes.
+
+**The theme card set.** The algorithm looks up `abandon` in `PoolData.archLists`
+— the set of every card whose `cards_v2.toml` record carried `"Abandon"` in its
+`tides`. That set becomes Kragg's **theme card set**, and every deck in the
+corpus gets a 0-to-1 theme density measuring how heavily, IDF-weighted, it leans
+on those Abandon cards.
+
+**Step 1 — roll the strategy.** Each of Kragg's fifteen seed archetypes that
+exists in `draftLists` and has a color prefix is a candidate. Each is weighted by
+how many of its cards (its set in `PoolData.draftLists`) are in the Abandon theme
+card set: the four aristocrats lists (`b-aristocrats`, `br-aristocrats`,
+`wb-aristocrats`, `wbr-aristocrats`, `wbrg-aristocrats`) are dense in Abandon
+payoffs and so carry far more weight than, say, `ug-cheaty-ramp`, which shares
+almost no Abandon cards. Suppose the weighted roll lands on **`br-aristocrats`**.
+That fixes the pool's color identity to **`br`**, and the card set stored at
+`draftLists.get("br-aristocrats")` becomes the yardstick for the starter.
+
+**Step 2 — pick the starter.** Every real deck in the corpus (from
+`PoolData.decklists`, the filtered `docs/drafts_dt` files) is scored by its fit
+to `br-aristocrats`: the total IDF weight of the cards it shares with that list,
+then multiplied by the deck's Abandon theme density. The black-red sacrifice
+decks in `docs/drafts_dt` (the `*-br-*.txt` files, say) score highest. Rather
+than always taking the single best, the algorithm keeps the top 25 and samples
+one weighted toward the top scores; suppose it draws a particular BR sacrifice
+deck. That deck is the **starter**.
+
+**Step 3 — read off the spine.** The spine begins with Kragg's theme,
+`abandon` (so the pool can never gate out its own Abandon cards). The algorithm
+then counts, for each mechanic archetype in `archLists`, how many of the
+starter's cards fall in it; the starter's most-represented mechanics — say
+`abandon` (already in) and `discard-madness` — fill the spine up to its budget of
+two. So the spine is `{abandon, discard-madness}`. A card counts as on-spine if
+it appears in either of those `archLists` sets.
+
+**Step 4 — snowball.** The pool is seeded with the core staples (`PoolData.core`,
+one copy each) plus *every* card of the starter, unfiltered. Then, repeatedly:
+each unused real deck is scored by its IDF-cosine similarity to the fixed
+starter, multiplied by its Abandon theme density; the top ten are kept and one is
+drawn with a low-temperature softmax (so it almost always takes the most similar
+BR sacrifice deck). From that deck only the **on-spine** cards — its Abandon and
+discard-madness cards — are folded in, one copy each, in shuffled order, until
+the pool hits its jittered target of about 150 copies. A card hits two copies
+only when two folded-in decks both ran it. The loop ends at the target, or early
+if thirty picks in a row add nothing new.
+
+**Result.** Kragg's pool comes out as a roughly 150-copy black-red sacrifice
+pool: a `br` identity, a card list dominated by Abandon and discard payoffs,
+grown from genuine BR sacrifice decklists rather than synthesized from tags. For
+display it is labelled with the rolled strategy (`br-aristocrats`) and the
+single mechanic archetype most represented in the finished pool (`abandon`).
+Finally the dispatcher caps every card at two copies, and `resolvePool` maps the
+card names back to `cards_v2` card numbers for the draft engine.
 
 ---
 
