@@ -28,7 +28,7 @@ it uses today. Dreamsign pool *construction* is explicitly out of scope.
 | Decklist corpus bundled | `docs/drafts_dt/` → `/decklists-data.json` | `docs/drafts_anon/` → `/decklists-data.json` |
 | Dreamsign offer / reward / shop | tide-biased (`requiredTides` / `selectedPackageTides`) | random |
 | Specialty shop | inventory restricted to a Dreamcaller mandatory tide | drawn from the run's chosen idf3 starter decklist |
-| Battle enemy deck | tide-filtered slice of the card DB + removal-event guarantee | a random `drafts_anon` decklist |
+| Battle enemy deck | tide-filtered slice of the card DB + removal-event guarantee | a `drafts_anon` decklist, idf3-steered by the enemy Dreamcaller |
 
 V1 assets (`card-data.json`, `dreamcallers.toml`, `dreamcaller-data.json`) and
 their generation stay in place for non-quest consumers (e.g. the card editor).
@@ -65,12 +65,14 @@ Provisional ports (final names/text subject to review):
 `STARTER_CARD_NUMBERS` becomes `[510, 511, 512, 513, 514, 515, 516, 517, 518,
 519]`.
 
-**Starters are not excluded from the pool.** The V2 starters carry no
-`isStarter`/exclusion role: `idf3` already builds the draft pool from the
-decklist corpus, and the three starter cards that match no `drafts_anon` deck
-simply never get drafted. The starting deck is purely the fixed 10-card list
-added at quest start (this is already how `STARTER_CARD_NUMBERS` is consumed —
-the `isStarter` flag only ever drove pool/enemy exclusion).
+**Starters are ineligible to be drafted.** Each ported starter is marked
+`rarity = "Starter"` (→ `isStarter = true` after transform). They are excluded
+from draft-pool construction and from any draft offer. In practice `idf3` builds
+the pool from `drafts_anon` decklist *names* and the renamed starters appear in
+no decklist, so they never enter a pool; the exclusion is also enforced
+explicitly — `resolvePool` / draft initialization drop any starter card number
+defensively. The starting deck is the fixed 10-card `STARTER_CARD_NUMBERS` list
+added at quest start.
 
 ## Section 2 — Relocate the pool library out of `draft_test`
 
@@ -162,19 +164,23 @@ shuffle when tides are absent, so this is mostly argument removal:
 
 ## Section 7 — Battle enemy decks (`src/battle/integration/create-battle-init.ts`)
 
-`createEnemyDeckDefinition` is rewritten to **use a random `drafts_anon`
-decklist** as the enemy deck:
+`createEnemyDeckDefinition` is rewritten to choose a `drafts_anon` decklist
+**steered by the enemy Dreamcaller**, mirroring the player's pool selection:
 
-1. Pick a random deck from the decklist corpus (threaded in via battle init).
-2. Resolve its card names to V2 card numbers against the V2 card database;
-   drop unresolved names.
+1. `createEnemyDescriptor` already picks a random V2 Dreamcaller for the enemy.
+   Use that Dreamcaller's `signatureCards` to run `generateIdf3` (with a
+   battle-seeded RNG) over the decklist corpus and take its chosen starter
+   decklist (`starterDeck`). Signatureless enemy Dreamcallers fall through to a
+   diversity pick — no special casing.
+2. Resolve the chosen deck's card names to V2 card numbers against the V2 card
+   database; drop unresolved names.
 3. Pad up to the minimum battle deck size (reuse the existing whole-deck padding
    approach) if the resolved deck is short.
 
-The removal-event guarantee, `REMOVAL_TIDES`, `isRemovalEvent`, and
-`filterByPackage` are removed. `createEnemyDescriptor` already degrades to a
-random enemy with random dreamsigns once Dreamcaller tides are empty; its
-`packageTides` field becomes an empty constant (or is dropped where unused).
+This requires threading the decklist corpus + name index into battle init. The
+removal-event guarantee, `REMOVAL_TIDES`, `isRemovalEvent`, and `filterByPackage`
+are removed. The enemy descriptor's `packageTides` field becomes an empty
+constant (or is dropped where unused).
 
 ## Section 8 — Asset generation (`scripts/setup-assets.mjs`)
 
@@ -197,8 +203,10 @@ random enemy with random dreamsigns once Dreamcaller tides are empty; its
 - **Unit**: quest-content V2 loading; pool generation at quest start
   (deterministic per seed; signatureless Dreamcaller → diversity pool);
   `resolvePool` over `drafts_anon`; specialty shop draws from the starter
-  decklist; enemy deck resolves from a `drafts_anon` deck; dreamsign draws are
-  unbiased. Update/relocate the existing `color-pool-*` tests.
+  decklist; enemy deck resolves from an idf3-steered `drafts_anon` deck (and
+  diversity-picks for a signatureless enemy); starter cards never appear in a
+  draft pool/offer; dreamsign draws are unbiased. Update/relocate the existing
+  `color-pool-*` tests.
 - **Core checks**: `npm run lint`, `npm run typecheck`, `npm test` (run
   `npm install` first in a fresh worktree).
 - **Browser QA** (per `AGENTS.md`): run setup-assets, start a scoped QA Vite
