@@ -918,21 +918,26 @@ function generateDecklists(
     return sim * (1 + DECKLISTS.themeGrowBoost * themeCosine(deck));
   };
 
-  // 3b. The pool's spine: the starter's own top mechanic archetypes. Growth
-  //     absorbs only cards on the spine, so the pool's card list stays one
-  //     strategy instead of dragging in each neighbor deck's off-archetype half.
+  // 3b. The pool's spine: the archetypes growth is allowed to absorb, so the
+  //     pool's card list stays one strategy instead of dragging in each
+  //     neighbor deck's off-archetype half. It always includes the Dreamcaller's
+  //     theme (so a themed pool can never gate its own theme out — important for
+  //     splashy themes like outsiders that are rarely a deck's *dominant* tide),
+  //     then fills with the starter's other dominant archetypes up to
+  //     spineArchetypes.
+  const spine = new Set<string>();
+  for (const slug of themeArchetypes ?? []) if (archLists.has(slug)) spine.add(slug);
+  const spineBudget = Math.max(DECKLISTS.spineArchetypes, spine.size);
   const spineHits = new Map<string, number>();
   for (const [slug, set] of archLists) {
     let n = 0;
     for (const c of starter) if (set.has(c)) n++;
     if (n > 0) spineHits.set(slug, n);
   }
-  const spine = new Set(
-    [...spineHits.entries()]
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, DECKLISTS.spineArchetypes)
-      .map(([slug]) => slug),
-  );
+  for (const [slug] of [...spineHits.entries()].sort((a, b) => b[1] - a[1])) {
+    if (spine.size >= spineBudget) break;
+    spine.add(slug);
+  }
   const onSpine = (c: string): boolean => {
     if (spine.size === 0) return true;
     for (const slug of spine) if (archLists.get(slug)?.has(c)) return true;
