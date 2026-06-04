@@ -47,6 +47,23 @@ export function playCharacterToReserve(model: ForwardModel, self: AiCard): void 
 }
 
 /**
+ * Resolves an event `play`: pays `self.energyCost`, removes `self` from hand,
+ * runs `effect` (the card's resolution, which mutates the model), then pushes
+ * `self` onto `model.aiVoid`. The removed-from-hand instance (falling back to
+ * `self`) is the one sent to the void.
+ */
+export function playEvent(
+  model: ForwardModel,
+  self: AiCard,
+  effect: () => void,
+): void {
+  model.aiEnergy -= self.energyCost;
+  const card = removeFromHand(model, self) ?? self;
+  effect();
+  model.aiVoid.push(card);
+}
+
+/**
  * Draws the top card of `model.aiDeck` into `model.aiHand`. No-op on an empty
  * deck (the prototype does not model deck-out loss here).
  */
