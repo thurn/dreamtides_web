@@ -189,7 +189,7 @@ export function transformCard(card) {
 // The `merged` pool algorithm draws from one card list per drafted archetype,
 // each holding the cards that recur across that archetype's real decks. That
 // collapse is done once, here, offline: the run-time browser cannot read the
-// `docs/drafts_dt` filenames, and the `decklists-data.json` bundle keeps only
+// `docs/drafts_anon` filenames, and the `decklists-data.json` bundle keeps only
 // card names (the archetype label is dropped), so the merged lists are baked
 // into their own JSON. The algorithm and these knobs are described in
 // `docs/cards2/draft_pool_algorithms.md`; `scripts/merged-archetype-pool-experiment.mjs`
@@ -210,7 +210,7 @@ function mergedColorPrefix(name) {
 }
 
 /**
- * Collapse the real decklist files (`docs/drafts_dt/*.txt`) into merged
+ * Collapse the real decklist files (`docs/drafts_anon/*.txt`) into merged
  * archetype lists: a map from each drafted archetype label (e.g.
  * `br-aristocrats`) to the cards that recur across that archetype's decks.
  *
@@ -224,9 +224,9 @@ function mergedColorPrefix(name) {
  * `MERGED_MAX_LIST`. Returns a plain object (label -> card-name array) ready to
  * serialize.
  */
-export function buildMergedArchetypeLists(draftsDtDir, knownCardNames) {
+export function buildMergedArchetypeLists(draftsAnonDir, knownCardNames) {
   const byLabel = new Map(); // label -> array of Set<name>
-  for (const filename of readdirSync(draftsDtDir).sort()) {
+  for (const filename of readdirSync(draftsAnonDir).sort()) {
     if (!filename.endsWith(".txt")) continue;
     const match = MERGED_LIST_FILE_RE.exec(filename.replace(/\.txt$/u, ""));
     if (!match) continue;
@@ -235,7 +235,7 @@ export function buildMergedArchetypeLists(draftsDtDir, knownCardNames) {
     if (mergedColorPrefix(label) === "" || label === mergedColorPrefix(label)) {
       continue;
     }
-    const names = readFileSync(join(draftsDtDir, filename), "utf8")
+    const names = readFileSync(join(draftsAnonDir, filename), "utf8")
       .split("\n")
       .map((line) => line.trim())
       .filter((line) => line.length > 0 && knownCardNames.has(line));
@@ -398,7 +398,7 @@ export function setupAssets({
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
   const decklistsJsonPath = join(publicDir, "decklists-data.json");
   const mergedListsJsonPath = join(publicDir, "merged-archetype-lists-data.json");
-  const draftsDtDir = join(ROOT, "docs", "drafts_dt");
+  const draftsAnonDir = join(ROOT, "docs", "drafts_anon");
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
   const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
@@ -465,19 +465,19 @@ export function setupAssets({
   writeFileSync(cardV2JsonPath, JSON.stringify(jsonCardsV2, null, 2) + "\n");
   console.log(`Wrote ${jsonCardsV2.length} cards to cards_v2-data.json`);
 
-  // Real per-deck card lists (`docs/drafts_dt/*.txt`) bundled for the draft
+  // Real per-deck card lists (`docs/drafts_anon/*.txt`) bundled for the draft
   // test's `decklists` pool variant, which builds a pool by snowballing
   // similar real decklists rather than synthesizing one from archetype themes.
   // Each file is one deck: a newline-separated list of card names. We keep only
   // names that exist in cards_v2 (so the bundle never references unknown cards)
   // and drop empty files; all size filtering happens in the algorithm so it
   // stays tunable. Output shape is `string[][]` (one inner array per deck).
-  console.log("Bundling real decklists from docs/drafts_dt...");
+  console.log("Bundling real decklists from docs/drafts_anon...");
   const knownCardNames = new Set(jsonCardsV2.map((card) => card.name));
   const decklists = [];
-  for (const filename of readdirSync(draftsDtDir).sort()) {
+  for (const filename of readdirSync(draftsAnonDir).sort()) {
     if (!filename.endsWith(".txt")) continue;
-    const lines = readFileSync(join(draftsDtDir, filename), "utf8")
+    const lines = readFileSync(join(draftsAnonDir, filename), "utf8")
       .split("\n")
       .map((line) => line.trim())
       .filter((line) => line.length > 0 && knownCardNames.has(line));
@@ -488,10 +488,10 @@ export function setupAssets({
 
   // Merged archetype lists for the draft test's `merged` pool variant. The
   // archetype label is dropped from decklists-data.json, so we collapse the
-  // labeled `docs/drafts_dt` files here (offline) into one list per archetype
+  // labeled `docs/drafts_anon` files here (offline) into one list per archetype
   // and bundle them for the browser. See `buildMergedArchetypeLists`.
-  console.log("Building merged archetype lists from docs/drafts_dt...");
-  const mergedLists = buildMergedArchetypeLists(draftsDtDir, knownCardNames);
+  console.log("Building merged archetype lists from docs/drafts_anon...");
+  const mergedLists = buildMergedArchetypeLists(draftsAnonDir, knownCardNames);
   writeFileSync(mergedListsJsonPath, JSON.stringify(mergedLists) + "\n");
   console.log(
     `Wrote ${Object.keys(mergedLists).length} merged archetype lists to merged-archetype-lists-data.json`,
