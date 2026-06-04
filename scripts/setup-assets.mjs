@@ -183,6 +183,81 @@ export function transformCard(card) {
   return result;
 }
 
+// --- merged archetype lists (the `merged` draft-test pool variant) -----------
+// The `merged` pool algorithm draws from one card list per drafted archetype,
+// each holding the cards that recur across that archetype's real decks. That
+// collapse is done once, here, offline: the run-time browser cannot read the
+// `docs/drafts_dt` filenames, and the `decklists-data.json` bundle keeps only
+// card names (the archetype label is dropped), so the merged lists are baked
+// into their own JSON. The algorithm and these knobs are described in
+// `docs/cards2/draft_pool_algorithms.md`; `scripts/merged-archetype-pool-experiment.mjs`
+// mirrors this build to evaluate the variant against `decklists`.
+const MERGED_LIST_FILE_RE =
+  /^\d{4}-\d{2}-\d{2}-(.+)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
+const MERGED_MIN_DECK = 16; // distinct cards: drop partial/near-empty files
+const MERGED_MAX_DECK = 34; // distinct cards: drop oversized aggregate files
+const MERGED_MIN_DECKS_PER_LABEL = 3; // labels with fewer real decks are too thin to merge
+const MERGED_CARD_THRESHOLD = 2; // a card joins when it recurs in >= this many of the label's decks
+const MERGED_MAX_LIST = 100; // a merged list holds at most this many cards
+
+/** Leading run of w/u/b/r/g color letters in a label ('' if it has none). */
+function mergedColorPrefix(name) {
+  const head = name.split("-")[0];
+  const isColors = head.length > 0 && [...head].every((c) => "wubrg".includes(c));
+  return isColors ? head : "";
+}
+
+/**
+ * Collapse the real decklist files (`docs/drafts_dt/*.txt`) into merged
+ * archetype lists: a map from each drafted archetype label (e.g.
+ * `br-aristocrats`) to the cards that recur across that archetype's decks.
+ *
+ * The archetype label is recovered from each filename
+ * (`<YYYY-MM-DD>-<label>-<uuid>.txt`); files whose label is a bare color (`ur`)
+ * or carries no color prefix are skipped because they name no archetype. A deck
+ * is used only if it has 16-34 distinct known cards. Decks are grouped by label,
+ * labels with fewer than three decks are dropped, and within a surviving label a
+ * card is kept when it appears in at least `MERGED_CARD_THRESHOLD` of the label's
+ * decks. Survivors are ordered most-frequent first and capped at
+ * `MERGED_MAX_LIST`. Returns a plain object (label -> card-name array) ready to
+ * serialize.
+ */
+export function buildMergedArchetypeLists(draftsDtDir, knownCardNames) {
+  const byLabel = new Map(); // label -> array of Set<name>
+  for (const filename of readdirSync(draftsDtDir).sort()) {
+    if (!filename.endsWith(".txt")) continue;
+    const match = MERGED_LIST_FILE_RE.exec(filename.replace(/\.txt$/u, ""));
+    if (!match) continue;
+    const label = match[1];
+    // Need both a color prefix and an archetype name after it.
+    if (mergedColorPrefix(label) === "" || label === mergedColorPrefix(label)) {
+      continue;
+    }
+    const names = readFileSync(join(draftsDtDir, filename), "utf8")
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0 && knownCardNames.has(line));
+    const set = new Set(names);
+    if (set.size < MERGED_MIN_DECK || set.size > MERGED_MAX_DECK) continue;
+    if (!byLabel.has(label)) byLabel.set(label, []);
+    byLabel.get(label).push(set);
+  }
+
+  const lists = {};
+  for (const [label, decks] of byLabel) {
+    if (decks.length < MERGED_MIN_DECKS_PER_LABEL) continue;
+    const freq = new Map();
+    for (const deck of decks) {
+      for (const card of deck) freq.set(card, (freq.get(card) ?? 0) + 1);
+    }
+    let kept = [...freq.entries()].filter(([, n]) => n >= MERGED_CARD_THRESHOLD);
+    kept.sort((a, b) => b[1] - a[1]);
+    if (kept.length > MERGED_MAX_LIST) kept = kept.slice(0, MERGED_MAX_LIST);
+    if (kept.length > 0) lists[label] = kept.map(([card]) => card);
+  }
+  return lists;
+}
+
 /**
  * Default starting essence used when a Dreamcaller TOML record omits a
  * `starting-essence` value. Mirrors `DEFAULT_STARTING_ESSENCE` in
@@ -320,6 +395,7 @@ export function setupAssets({
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
   const decklistsJsonPath = join(publicDir, "decklists-data.json");
+  const mergedListsJsonPath = join(publicDir, "merged-archetype-lists-data.json");
   const draftsDtDir = join(ROOT, "docs", "drafts_dt");
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
   const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
@@ -393,6 +469,17 @@ export function setupAssets({
   }
   writeFileSync(decklistsJsonPath, JSON.stringify(decklists) + "\n");
   console.log(`Wrote ${decklists.length} decklists to decklists-data.json`);
+
+  // Merged archetype lists for the draft test's `merged` pool variant. The
+  // archetype label is dropped from decklists-data.json, so we collapse the
+  // labeled `docs/drafts_dt` files here (offline) into one list per archetype
+  // and bundle them for the browser. See `buildMergedArchetypeLists`.
+  console.log("Building merged archetype lists from docs/drafts_dt...");
+  const mergedLists = buildMergedArchetypeLists(draftsDtDir, knownCardNames);
+  writeFileSync(mergedListsJsonPath, JSON.stringify(mergedLists) + "\n");
+  console.log(
+    `Wrote ${Object.keys(mergedLists).length} merged archetype lists to merged-archetype-lists-data.json`,
+  );
 
   console.log("Parsing dreamcallers.toml...");
   const dreamcallerTomlContent = readFileSync(dreamcallerTomlPath, "utf8");

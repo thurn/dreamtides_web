@@ -36,6 +36,22 @@ export async function loadDecklists(): Promise<string[][]> {
 }
 
 /**
+ * Fetch the bundled merged archetype lists (`docs/drafts_dt`, collapsed offline
+ * to `/merged-archetype-lists-data.json` by `scripts/setup-assets.mjs`) used by
+ * the `merged` pool variant. Maps each archetype label (e.g. `br-aristocrats`)
+ * to the cards that recur across that archetype's real decks. Returns an empty
+ * object if the bundle is missing so the harness still loads (the variant then
+ * falls back to the `default` algorithm).
+ */
+export async function loadMergedArchetypeLists(): Promise<
+  Record<string, string[]>
+> {
+  const response = await fetch("/merged-archetype-lists-data.json");
+  if (!response.ok) return {};
+  return (await response.json()) as Record<string, string[]>;
+}
+
+/**
  * Build a card-name -> card-number index from a v2 database. When two records
  * share a name the first wins; the draft pool only needs one representative
  * per name.

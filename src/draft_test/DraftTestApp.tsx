@@ -22,6 +22,7 @@ import {
   buildNameIndex,
   loadCardsV2Database,
   loadDecklists,
+  loadMergedArchetypeLists,
   resolvePool,
 } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
@@ -304,13 +305,19 @@ interface PoolInfo {
 }
 
 /** Pool-generation variants, in the order the toggle button cycles them. */
-const POOL_VARIANTS: readonly PoolVariant[] = ["default", "diverse", "decklists"];
+const POOL_VARIANTS: readonly PoolVariant[] = [
+  "default",
+  "diverse",
+  "decklists",
+  "merged",
+];
 
 /**
  * Pool-generation variant for this session, from the `?algo=` URL parameter
- * (`default`, `diverse`, or `decklists`). Invalid or absent values fall back to
- * {@link DEFAULT_POOL_VARIANT}, so flipping that constant changes the default
- * everywhere while the URL parameter still allows side-by-side comparison.
+ * (`default`, `diverse`, `decklists`, or `merged`). Invalid or absent values
+ * fall back to {@link DEFAULT_POOL_VARIANT}, so flipping that constant changes
+ * the default everywhere while the URL parameter still allows side-by-side
+ * comparison.
  */
 function readPoolVariant(): PoolVariant {
   const algo = new URLSearchParams(window.location.search).get("algo");
@@ -411,14 +418,20 @@ export default function DraftTestApp() {
 
     void (async () => {
       try {
-        const [db, loadedDreamcallers, decklists] = await Promise.all([
-          loadCardsV2Database(),
-          loadDreamcallersV2(),
-          loadDecklists(),
-        ]);
+        const [db, loadedDreamcallers, decklists, mergedLists] =
+          await Promise.all([
+            loadCardsV2Database(),
+            loadDreamcallersV2(),
+            loadDecklists(),
+            loadMergedArchetypeLists(),
+          ]);
         if (cancelled) return;
 
-        poolDataRef.current = buildPoolData([...db.values()], decklists);
+        poolDataRef.current = buildPoolData(
+          [...db.values()],
+          decklists,
+          mergedLists,
+        );
         setDatabase(db);
         setDreamcallers(loadedDreamcallers);
         setStatus("select");

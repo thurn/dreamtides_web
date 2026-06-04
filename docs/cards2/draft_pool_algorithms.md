@@ -1,17 +1,18 @@
 # Draft Pool Construction Algorithms
 
 The draft test mode (`draft_test`) builds a card pool that a player drafts
-from. The pool is assembled by one of three interchangeable construction
-algorithms, selected with the `?algo=` URL parameter: `default`, `diverse`, and
-`decklists` (for example, `draft_test?algo=decklists`). All three live in
-`src/draft_test/color-pool.ts`. This document explains, in detail, how each one
-works.
+from. The pool is assembled by one of four interchangeable construction
+algorithms, selected with the `?algo=` URL parameter: `default`, `diverse`,
+`decklists`, and `merged` (for example, `draft_test?algo=decklists`). The
+run-time half of all four lives in `src/draft_test/color-pool.ts`. This document
+explains, in detail, how each one works.
 
-This document is the canonical description of the three algorithms. It also
-documents a fourth, experimental construction — the merged-archetype-lists
-algorithm — which lives in `scripts/merged-archetype-pool-experiment.mjs` and is
-evaluated against `decklists` by simulation rather than exposed as a production
-`?algo=` variant.
+This document is the canonical description of the four algorithms. The `merged`
+algorithm (the merged-archetype-lists construction) does part of its work
+offline: `scripts/setup-assets.mjs` collapses the real decks into merged lists
+and bundles them, and `color-pool.ts` reads those lists at run time.
+`scripts/merged-archetype-pool-experiment.mjs` evaluates `merged` against
+`decklists` by simulation.
 
 ## Shared foundations
 
@@ -547,7 +548,7 @@ used, the final size, and which variant produced it.
 
 ---
 
-## The merged-archetype-lists algorithm (experimental)
+## The `merged` algorithm
 
 The `decklists` algorithm earns its complexity by doing all of its work at run
 time: it holds the full corpus of real decks in memory and, every time a pool is
@@ -560,10 +561,13 @@ done **once, offline**, the run-time step collapses to something a paragraph can
 describe: roll one archetype, keep the lists that share its colors, and shuffle a
 few of them together.
 
-This algorithm is implemented in `scripts/merged-archetype-pool-experiment.mjs`
-and is evaluated against the `decklists` algorithm by simulation (see *How it is
-measured*, below). It is a candidate simplification, not a production `?algo=`
-variant.
+This algorithm is selected with `?algo=merged`. Its run-time phase lives in
+`src/draft_test/color-pool.ts` (the `generateMerged` function and the `MERGED`
+tuning block) alongside the other three; its offline phase — the merged-list
+build — lives in `scripts/setup-assets.mjs`, which writes the lists to
+`public/merged-archetype-lists-data.json` for the browser to fetch.
+`scripts/merged-archetype-pool-experiment.mjs` evaluates it against the
+`decklists` algorithm by simulation (see *How it is measured*, below).
 
 ### Two phases: an offline collapse, then a trivial run-time pick
 
@@ -607,8 +611,9 @@ different places and one of them is recovered in an unusual way.
 
 ### Phase 1 — collapsing the decks into merged archetype lists
 
-`buildMergedLists(threshold)` walks every file in `docs/drafts_dt/` and produces a
-map from archetype label to a set of card names:
+`buildMergedArchetypeLists` (in `scripts/setup-assets.mjs`; the experiment's
+`buildMergedLists` mirrors it) walks every file in `docs/drafts_dt/` and produces
+a map from archetype label to a set of card names:
 
 1. **Parse the label.** A filename is matched against `<YYYY-MM-DD>-<label>-<uuid>`;
    files that do not match (or are not `.txt`) are skipped.
@@ -639,8 +644,10 @@ these compact lists stand in for whole real decks (see *How it is measured*).
 
 ### The tuning knobs
 
-Phase 2 is governed by a handful of knobs (the experiment sweeps them; the
-parenthesized value is the setting that reproduces the `decklists` output):
+Phase 2 is governed by a handful of knobs — the `MERGED` tuning block in
+`color-pool.ts`. The parenthesized value is the production setting, chosen to
+reproduce the `decklists` output; the experiment sweeps them to justify that
+choice:
 
 - **`targetSize` / `targetJitter`** — the pool aims for `targetSize` copies with a
   small random wobble (150 ± 8), matching `decklists`.
@@ -743,8 +750,8 @@ not.
 
 ### How it is measured
 
-Because this is a candidate rather than a shipped variant, the experiment script
-judges it the way the `decklists` work was judged: it imports the real
+The experiment script judges `merged` against `decklists` the way the
+`decklists` work was originally judged: it imports the real
 `generatePoolFromData` as an oracle and runs both algorithms over the same 20
 themed Dreamcallers and 10 fixed seeds, reporting four numbers per pool, averaged:
 
