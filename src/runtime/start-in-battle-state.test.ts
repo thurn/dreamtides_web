@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
+import type { CardData } from "../types/cards";
 import type { QuestContent } from "../data/quest-content";
-import type { DreamcallerContent, ResolvedDreamcallerPackage } from "../types/content";
+import type { DreamcallerContent } from "../types/content";
+import {
+  buildTestCorpusCards,
+  makeTestPoolContext,
+} from "../__test-helpers__/pool-context";
 import { createStartInBattleState } from "./start-in-battle-state";
 
 function makeDreamcaller(): DreamcallerContent {
@@ -11,38 +16,24 @@ function makeDreamcaller(): DreamcallerContent {
     renderedText: "Test ability.",
     imageNumber: "0001",
     startingEssence: 250,
-    mandatoryTides: ["tide_alpha"],
-    optionalTides: ["tide_beta", "tide_gamma", "tide_delta", "tide_zeta"],
-  };
-}
-
-function makeResolvedPackage(): ResolvedDreamcallerPackage {
-  const dreamcaller = makeDreamcaller();
-  return {
-    dreamcaller,
-    mandatoryTides: ["tide_alpha"],
-    optionalSubset: ["tide_beta", "tide_gamma", "tide_delta"],
-    selectedTides: ["tide_alpha", "tide_beta", "tide_gamma", "tide_delta"],
-    draftPoolCopiesByCard: { "101": 2 },
-    dreamsignPoolIds: ["dreamsign-1", "dreamsign-2"],
-    mandatoryOnlyPoolSize: 120,
-    draftPoolSize: 200,
-    doubledCardCount: 4,
-    legalSubsetCount: 12,
-    preferredSubsetCount: 6,
+    signatureCards: ["Alpha Card 1"],
+    mandatoryTides: [],
+    optionalTides: [],
   };
 }
 
 function makeQuestContent(): QuestContent {
-  const resolvedPackage = makeResolvedPackage();
+  const dreamcaller = makeDreamcaller();
+  const cardDatabase = new Map<number, CardData>(
+    buildTestCorpusCards().map((card) => [card.cardNumber, card]),
+  );
   return {
-    cardDatabase: new Map(),
+    cardDatabase,
     cardsByPackageTide: new Map(),
-    dreamcallers: [resolvedPackage.dreamcaller],
+    dreamcallers: [dreamcaller],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map([
-      [resolvedPackage.dreamcaller.id, resolvedPackage],
-    ]),
+    resolvedPackagesByDreamcallerId: new Map(),
+    poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
 }
 
@@ -73,7 +64,7 @@ describe("createStartInBattleState", () => {
     expect(activeBattleSite?.type).toBe("Battle");
   });
 
-  it("returns null when no resolved dreamcaller package is available", () => {
+  it("returns null when the run pool context is unavailable", () => {
     const dreamcaller = makeDreamcaller();
     const questContent: QuestContent = {
       cardDatabase: new Map(),
@@ -81,6 +72,19 @@ describe("createStartInBattleState", () => {
       dreamcallers: [dreamcaller],
       dreamsignTemplates: [],
       resolvedPackagesByDreamcallerId: new Map(),
+    };
+
+    expect(createStartInBattleState(questContent)).toBeNull();
+  });
+
+  it("returns null when there are no dreamcallers", () => {
+    const questContent: QuestContent = {
+      cardDatabase: new Map(),
+      cardsByPackageTide: new Map(),
+      dreamcallers: [],
+      dreamsignTemplates: [],
+      resolvedPackagesByDreamcallerId: new Map(),
+      poolContext: makeTestPoolContext(),
     };
 
     expect(createStartInBattleState(questContent)).toBeNull();

@@ -221,118 +221,119 @@ describe("resolveDreamcallerPackage", () => {
 });
 
 describe("loadQuestContent", () => {
-  it("loads normalized assets and resolves packages once at runtime", async () => {
-    const cards = buildCards({
-      m1: 40,
-      m2: 40,
-      m3: 40,
-      o1: 20,
-      o2: 25,
-      o3: 30,
-      o4: 33,
-    });
-
+  function stubFetch({
+    cards,
+    dreamcallers,
+    dreamsigns,
+    decklists,
+  }: {
+    cards: CardData[];
+    dreamcallers: unknown[];
+    dreamsigns: unknown[];
+    decklists: string[][];
+  }): void {
     vi.stubGlobal(
       "fetch",
       vi.fn((input: string | URL) => {
         const path = String(input);
-        if (path === "/card-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(cards),
-          });
+        if (path === "/cards_v2-data.json") {
+          return Promise.resolve({ ok: true, json: () => Promise.resolve(cards) });
         }
-        if (path === "/dreamcaller-data.json") {
+        if (path === "/dreamcallers-v2-data.json") {
           return Promise.resolve({
             ok: true,
-            json: () =>
-              Promise.resolve([makeDreamcaller(["o1", "o2", "o3", "o4"])]),
+            json: () => Promise.resolve(dreamcallers),
           });
         }
         if (path === "/dreamsign-data.json") {
           return Promise.resolve({
             ok: true,
-            json: () => Promise.resolve([]),
+            json: () => Promise.resolve(dreamsigns),
+          });
+        }
+        if (path === "/decklists-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(decklists),
           });
         }
         return Promise.reject(new Error(`Unexpected fetch path: ${path}`));
       }),
     );
+  }
+
+  it("loads V2 cards, Dreamcallers, decklists and builds the run pool context", async () => {
+    const cards = [
+      makeCard(1, ["core"]),
+      makeCard(2, ["core"]),
+      makeCard(3, ["support"]),
+    ];
+    const v2Dreamcaller = {
+      id: "dreamcaller-1",
+      name: "Test Dreamcaller",
+      title: "Speaker of Tests",
+      renderedText: "Test rules text.",
+      imageNumber: "0001",
+      startingEssence: 235,
+      signatureCards: ["Card 1", "Card 2"],
+    };
+
+    stubFetch({
+      cards,
+      dreamcallers: [v2Dreamcaller],
+      dreamsigns: [],
+      decklists: [["Card 1", "Card 2", "Card 3"]],
+    });
 
     const content = await loadQuestContent();
 
     expect(content.cardDatabase.size).toBe(cards.length);
-    expect(content.cardsByPackageTide.get("m1")).toHaveLength(40);
     expect(content.dreamcallers).toHaveLength(1);
-    expect(content.resolvedPackagesByDreamcallerId.get("dreamcaller-1"))
-      .toMatchObject({
-        selectedTides: ["m1", "m2", "m3", "o1", "o2", "o4"],
-        draftPoolSize: 198,
-      });
+    // The Dreamcaller mapping must carry the V2 signature cards through.
+    expect(content.dreamcallers[0].signatureCards).toEqual(["Card 1", "Card 2"]);
+    expect(content.dreamcallers[0].startingEssence).toBe(235);
+
+    // Packages are no longer precomputed at load.
+    expect(content.resolvedPackagesByDreamcallerId.size).toBe(0);
+
+    // The pool context indexes every loaded card and carries the decklists.
+    expect(content.poolContext).toBeDefined();
+    const poolContext = content.poolContext!;
+    for (const card of cards) {
+      expect(poolContext.nameIndex.get(card.name)).toBe(card.cardNumber);
+    }
+    expect(poolContext.poolData.decklists).not.toHaveLength(0);
   });
 
-  it("skips invalid Dreamcaller packages with a warning instead of failing the load", async () => {
-    const cards = buildCards({
-      m1: 40,
-      m2: 40,
-      m3: 40,
-      o1: 5,
-      o2: 5,
-      o3: 5,
-      o4: 5,
-      x1: 5,
-      x2: 5,
-      x3: 5,
-      x4: 5,
-    });
+  it("offers every Dreamcaller without a validation skip loop", async () => {
+    const cards = [makeCard(1, ["core"]), makeCard(2, ["support"])];
+    const dreamcallers = [
+      {
+        id: "dc-a",
+        name: "Alpha",
+        title: "A",
+        renderedText: "",
+        imageNumber: "0001",
+        startingEssence: 0,
+        signatureCards: ["Card 1"],
+      },
+      {
+        id: "dc-b",
+        name: "Beta",
+        title: "B",
+        renderedText: "",
+        imageNumber: "0002",
+        startingEssence: 250,
+        signatureCards: [],
+      },
+    ];
 
-    vi.stubGlobal(
-      "fetch",
-      vi.fn((input: string | URL) => {
-        const path = String(input);
-        if (path === "/card-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(cards),
-          });
-        }
-        if (path === "/dreamcaller-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () =>
-              Promise.resolve([
-                { ...makeDreamcaller(["o1", "o2", "o3", "o4"]), id: "bad-1", name: "Bad One" },
-                { ...makeDreamcaller(["x1", "x2", "x3", "x4"]), id: "bad-2", name: "Bad Two" },
-              ]),
-          });
-        }
-        if (path === "/dreamsign-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve([]),
-          });
-        }
-        return Promise.reject(new Error(`Unexpected fetch path: ${path}`));
-      }),
-    );
-
-    const { resetLog, getLogEntries } = await import("../logging");
-    resetLog();
+    stubFetch({ cards, dreamcallers, dreamsigns: [], decklists: [["Card 1"]] });
 
     const content = await loadQuestContent();
 
-    expect(content.dreamcallers).toHaveLength(0);
-    expect(content.resolvedPackagesByDreamcallerId.size).toBe(0);
-
-    const skippedEvents = getLogEntries().filter(
-      (entry) => entry.event === "dreamcaller_package_skipped",
-    );
-    expect(skippedEvents.map((entry) => entry.dreamcallerId).sort()).toEqual([
-      "bad-1",
-      "bad-2",
-    ]);
-    for (const event of skippedEvents) {
-      expect(String(event.reason)).toMatch(/no legal optional subset/);
-    }
+    expect(content.dreamcallers.map((dc) => dc.id)).toEqual(["dc-a", "dc-b"]);
+    // A zero startingEssence falls back to the default rather than being dropped.
+    expect(content.dreamcallers[0].startingEssence).toBe(250);
   });
 });

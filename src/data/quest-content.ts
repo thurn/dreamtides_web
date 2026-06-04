@@ -1,19 +1,26 @@
 import {
   isStarterCard,
-  loadCardDatabase,
 } from "./card-database";
 import { loadDreamsignTemplates } from "./dreamsigns";
 import { logEvent } from "../logging";
-import type {
-  DreamcallerContent,
-  DreamsignTemplate,
-  PackageTideId,
-  ResolvedDreamcallerPackage,
+import {
+  DEFAULT_STARTING_ESSENCE,
+  type DreamcallerContent,
+  type DreamsignTemplate,
+  type PackageTideId,
+  type ResolvedDreamcallerPackage,
 } from "../types/content";
 import type { CardData } from "../types/cards";
 import type { PoolData } from "../draft/pool/types.ts";
 import { generatePoolFromData } from "../draft/pool/generate.ts";
-import { resolvePool } from "./cards-v2-database";
+import { buildPoolData } from "../draft/pool/pool-data";
+import {
+  buildNameIndex,
+  loadCardsV2Database,
+  loadDecklists,
+  resolvePool,
+} from "./cards-v2-database";
+import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 
 const DREAMCALLER_JSON_PATH = "/dreamcaller-data.json";
@@ -30,6 +37,7 @@ export interface QuestContent {
   dreamcallers: DreamcallerContent[];
   dreamsignTemplates: readonly DreamsignTemplate[];
   resolvedPackagesByDreamcallerId: Map<string, ResolvedDreamcallerPackage>;
+  poolContext?: RunPoolContext;
 }
 
 /**
@@ -230,60 +238,46 @@ export async function loadDreamcallerContent(): Promise<DreamcallerContent[]> {
   return (await response.json()) as DreamcallerContent[];
 }
 
-/** Loads normalized quest content and validates Dreamcaller package data up front. */
+/** Loads V2 quest content (cards, Dreamcallers, decklists) and the run pool context. */
 export async function loadQuestContent(): Promise<QuestContent> {
-  const [cardDatabase, dreamcallers, dreamsignTemplates] = await Promise.all([
-    loadCardDatabase(),
-    loadDreamcallerContent(),
-    loadDreamsignTemplates(),
-  ]);
+  const [cardDatabase, draftDreamcallers, dreamsignTemplates, decklists] =
+    await Promise.all([
+      loadCardsV2Database(),
+      loadDreamcallersV2(),
+      loadDreamsignTemplates(),
+      loadDecklists(),
+    ]);
+
+  const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
+    id: dc.id,
+    name: dc.name,
+    title: dc.title,
+    renderedText: dc.renderedText,
+    imageNumber: dc.imageNumber,
+    startingEssence: dc.startingEssence || DEFAULT_STARTING_ESSENCE,
+    signatureCards: [...(dc.signatureCards ?? [])],
+    mandatoryTides: [],
+    optionalTides: [],
+  }));
+
   const draftableCards = Array.from(cardDatabase.values()).filter(
     (card) => !isStarterCard(card),
   );
   const cardsByPackageTide = buildCardsByPackageTideIndex(draftableCards);
-  const resolvedPackagesByDreamcallerId = new Map<
-    string,
-    ResolvedDreamcallerPackage
-  >();
-  const skipped: { name: string; id: string; reason: string }[] = [];
-  const validDreamcallers: DreamcallerContent[] = [];
 
-  for (const dreamcaller of dreamcallers) {
-    try {
-      resolvedPackagesByDreamcallerId.set(
-        dreamcaller.id,
-        resolveDreamcallerPackage(
-          dreamcaller,
-          draftableCards,
-          dreamsignTemplates,
-        ),
-      );
-      validDreamcallers.push(dreamcaller);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      skipped.push({ name: dreamcaller.name, id: dreamcaller.id, reason: message });
-      logEvent("dreamcaller_package_skipped", {
-        dreamcallerId: dreamcaller.id,
-        dreamcallerName: dreamcaller.name,
-        reason: message,
-      });
-    }
-  }
-
-  if (skipped.length > 0) {
-    logEvent("dreamcaller_package_validation_summary", {
-      validCount: validDreamcallers.length,
-      skippedCount: skipped.length,
-      skipped,
-    });
-  }
+  const poolContext: RunPoolContext = {
+    poolData: buildPoolData(Array.from(cardDatabase.values()), decklists),
+    nameIndex: buildNameIndex(cardDatabase),
+    allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),
+  };
 
   return {
     cardDatabase,
     cardsByPackageTide,
-    dreamcallers: validDreamcallers,
+    dreamcallers,
     dreamsignTemplates,
-    resolvedPackagesByDreamcallerId,
+    resolvedPackagesByDreamcallerId: new Map(),
+    poolContext,
   };
 }
 

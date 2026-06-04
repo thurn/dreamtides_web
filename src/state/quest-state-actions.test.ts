@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
-import type {
-  DreamcallerContent,
-  ResolvedDreamcallerPackage,
-} from "../types/content";
+import type { DreamcallerContent } from "../types/content";
 import type { QuestContent } from "../data/quest-content";
+import {
+  buildTestCorpusCards,
+  makeTestPoolContext,
+} from "../__test-helpers__/pool-context";
 import type { DreamAtlas, QuestState } from "../types/quest";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import { createDefaultState } from "./quest-context";
@@ -52,51 +53,30 @@ function makeDreamcaller(): DreamcallerContent {
     renderedText: "Test ability.",
     imageNumber: "0006",
     startingEssence: 275,
-    mandatoryTides: ["core"],
-    optionalTides: ["support-a", "support-b", "support-c", "support-d"],
-  };
-}
-
-function makeResolvedPackage(
-  dreamcaller: DreamcallerContent = makeDreamcaller(),
-): ResolvedDreamcallerPackage {
-  return {
-    dreamcaller,
-    mandatoryTides: ["core"],
-    optionalSubset: ["support-a", "support-b", "support-c"],
-    selectedTides: ["core", "support-a", "support-b", "support-c"],
-    draftPoolCopiesByCard: {
-      "101": 2,
-      "202": 1,
-    },
-    dreamsignPoolIds: ["embers-whisper", "glacial-insight"],
-    mandatoryOnlyPoolSize: 120,
-    draftPoolSize: 210,
-    doubledCardCount: 1,
-    legalSubsetCount: 2,
-    preferredSubsetCount: 1,
+    signatureCards: ["Alpha Card 1"],
+    mandatoryTides: [],
+    optionalTides: [],
   };
 }
 
 function makeQuestContent(
-  resolvedPackage: ResolvedDreamcallerPackage = makeResolvedPackage(),
+  dreamcaller: DreamcallerContent = makeDreamcaller(),
 ): QuestContent {
   const starterCards = STARTER_CARD_NUMBERS.map((cardNumber) =>
     makeCard(cardNumber, { isStarter: true }),
   );
-  const draftCards = [makeCard(101), makeCard(202)];
+  const corpusCards = buildTestCorpusCards();
   const cardDatabase = new Map<number, CardData>(
-    [...starterCards, ...draftCards].map((card) => [card.cardNumber, card]),
+    [...starterCards, ...corpusCards].map((card) => [card.cardNumber, card]),
   );
 
   return {
     cardDatabase,
-    cardsByPackageTide: new Map([["core", draftCards]]),
-    dreamcallers: [resolvedPackage.dreamcaller],
+    cardsByPackageTide: new Map([["core", corpusCards]]),
+    dreamcallers: [dreamcaller],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId: new Map([
-      [resolvedPackage.dreamcaller.id, resolvedPackage],
-    ]),
+    resolvedPackagesByDreamcallerId: new Map(),
+    poolContext: makeTestPoolContext(["dreamsign-a", "dreamsign-b"]),
   };
 }
 
@@ -303,14 +283,14 @@ describe("quest state actions", () => {
   it("starts a quest from a Dreamcaller in one state transition", () => {
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
     const dreamcaller = makeDreamcaller();
-    const resolvedPackage = makeResolvedPackage(dreamcaller);
-    const questContent = makeQuestContent(resolvedPackage);
+    const questContent = makeQuestContent(dreamcaller);
     const prev = createDefaultState();
 
     const next = startQuestFromDreamcaller({
       prev,
       dreamcaller,
       questContent,
+      seedOverride: "quest-seed-1",
     });
     const firstAvailableNode = Object.values(next.atlas.nodes).find(
       (node) => node.status === "available",
@@ -320,12 +300,19 @@ describe("quest state actions", () => {
     expect(next.dreamcaller?.startingEssence).toBe(275);
     expect(next.essence).toBe(dreamcaller.startingEssence);
     expect(prev.essence).toBe(250);
-    expect(next.resolvedPackage).toBe(resolvedPackage);
+    // The package is built from the run pool context at quest start; assert a
+    // non-empty draft pool was produced rather than checking exact card numbers.
+    expect(next.resolvedPackage).not.toBeNull();
+    expect(next.resolvedPackage?.draftPoolSize).toBeGreaterThan(0);
+    expect(Object.keys(next.resolvedPackage?.draftPoolCopiesByCard ?? {}).length)
+      .toBeGreaterThan(0);
+    // The state seed matches the seed the pool was built from.
+    expect(next.seed).toBe("quest-seed-1");
     expect(next.remainingDreamsignPool).toEqual(
-      resolvedPackage.dreamsignPoolIds,
+      next.resolvedPackage?.dreamsignPoolIds,
     );
     expect(next.remainingDreamsignPool).not.toBe(
-      resolvedPackage.dreamsignPoolIds,
+      next.resolvedPackage?.dreamsignPoolIds,
     );
     expect(next.deck.map((entry) => entry.cardNumber)).toEqual(
       STARTER_CARD_NUMBERS,
@@ -333,20 +320,15 @@ describe("quest state actions", () => {
     expect(next.deck.map((entry) => entry.entryId)).toEqual(
       STARTER_CARD_NUMBERS.map((_, index) => `deck-${String(index + 1)}`),
     );
-    expect(next.draftState).toEqual({
-      draftPoolCopiesByCard: {
-        "101": 2,
-        "202": 1,
-      },
-      remainingCopiesByCard: {
-        "101": 2,
-        "202": 1,
-      },
-      currentOffer: [],
-      activeSiteId: null,
-      pickNumber: 1,
-      sitePicksCompleted: 0,
-    });
+    expect(next.draftState?.draftPoolCopiesByCard).toEqual(
+      next.resolvedPackage?.draftPoolCopiesByCard,
+    );
+    expect(next.draftState?.remainingCopiesByCard).toEqual(
+      next.resolvedPackage?.draftPoolCopiesByCard,
+    );
+    expect(next.draftState?.currentOffer).toEqual([]);
+    expect(next.draftState?.pickNumber).toBe(1);
+    expect(next.draftState?.sitePicksCompleted).toBe(0);
     expect(firstAvailableNode).toBeDefined();
     expect(next.currentDreamscape).toBe(firstAvailableNode?.id);
     expect(next.visitedSites).toEqual([]);

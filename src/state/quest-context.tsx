@@ -721,13 +721,6 @@ export function QuestProvider({
   const startQuest = useCallback(
     (dreamcaller: DreamcallerContent) => {
       setState((prev) => {
-        const resolvedPackage = questContent.resolvedPackagesByDreamcallerId.get(
-          dreamcaller.id,
-        );
-        if (resolvedPackage === undefined) {
-          throw new Error(`Missing resolved package for ${dreamcaller.id}`);
-        }
-
         const starterCardNumbers = STARTER_CARD_NUMBERS.filter(
           (cardNumber) =>
             !prev.deck.some((entry) => entry.cardNumber === cardNumber),
@@ -757,7 +750,9 @@ export function QuestProvider({
           totalDeckSize: next.deck.length,
         });
 
-        initializeDraftState(cardDatabase, resolvedPackage);
+        if (next.resolvedPackage !== null) {
+          initializeDraftState(cardDatabase, next.resolvedPackage);
+        }
         if (next.draftState !== null) {
           logEvent("draft_state_updated", {
             source: "quest_start",
@@ -778,14 +773,9 @@ export function QuestProvider({
           startingDeckSize: next.deck.length,
           dreamcallerId: dreamcaller.id,
           dreamcallerName: dreamcaller.name,
-          packageSummary: {
-            mandatoryTides: resolvedPackage.mandatoryTides,
-            optionalSubset: resolvedPackage.optionalSubset,
-            selectedTides: resolvedPackage.selectedTides,
-          },
-          selectedPackageTides: resolvedPackage.selectedTides,
-          draftPoolSize: resolvedPackage.draftPoolSize,
-          dreamsignPoolSize: resolvedPackage.dreamsignPoolIds.length,
+          draftPoolSize: next.resolvedPackage?.draftPoolSize ?? 0,
+          dreamsignPoolSize:
+            next.resolvedPackage?.dreamsignPoolIds.length ?? 0,
           dreamscapesGenerated: Object.keys(next.atlas.nodes).length - 1,
         });
 

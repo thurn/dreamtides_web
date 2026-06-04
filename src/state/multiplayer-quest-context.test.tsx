@@ -9,6 +9,7 @@ import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
 import type { CardTypeChange, Dreamsign, QuestState, SiteState } from "../types/quest";
+import { makeTestPoolContext } from "../__test-helpers__/pool-context";
 import { useQuest, type QuestContextValue } from "./quest-context";
 import { createDefaultState } from "./quest-context";
 import { MultiplayerQuestProvider } from "./multiplayer-quest-context";
@@ -61,6 +62,7 @@ const testDreamcaller: DreamcallerContent = {
   renderedText: "First dreamcaller.",
   imageNumber: "0009",
   startingEssence: 235,
+  signatureCards: ["Alpha Card 1"],
   mandatoryTides: ["materialize_value"],
   optionalTides: ["spirit_growth"],
 };
@@ -148,6 +150,7 @@ function makeQuestContent(): QuestContent {
         },
       ],
     ]),
+    poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
 }
 

@@ -2,6 +2,7 @@ import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import { initializeDraftState } from "../draft/draft-engine";
+import { buildDreamcallerPackage } from "../data/quest-content";
 import type { QuestContent } from "../data/quest-content";
 import type { QuestState } from "../types/quest";
 import { generateQuestSeed } from "../state/quest-state-actions";
@@ -9,21 +10,23 @@ import { generateQuestSeed } from "../state/quest-state-actions";
 export function createStartInBattleState(
   questContent: QuestContent,
 ): QuestState | null {
-  const dreamcaller = questContent.dreamcallers.find((candidate) =>
-    questContent.resolvedPackagesByDreamcallerId.has(candidate.id)
-  );
+  const dreamcaller = questContent.dreamcallers[0];
 
   if (dreamcaller === undefined) {
     return null;
   }
 
-  const resolvedPackage = questContent.resolvedPackagesByDreamcallerId.get(
-    dreamcaller.id,
-  );
-
-  if (resolvedPackage === undefined) {
+  const poolContext = questContent.poolContext;
+  if (poolContext === undefined) {
     return null;
   }
+
+  const seed = generateQuestSeed();
+  const resolvedPackage = buildDreamcallerPackage(
+    dreamcaller,
+    poolContext,
+    seed,
+  );
 
   const atlas = generateInitialAtlas(0, { playerHasBanes: false });
   const dreamscapeWithBattle = Object.values(atlas.nodes).find(
@@ -40,7 +43,7 @@ export function createStartInBattleState(
   }
 
   return {
-    seed: generateQuestSeed(),
+    seed,
     essence: 250,
     essenceCap: 500,
     omens: 0,

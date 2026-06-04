@@ -10,6 +10,10 @@ import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import { getLogEntries, resetLog } from "../logging";
 import type { CardData } from "../types/cards";
 import type { ResolvedDreamcallerPackage } from "../types/content";
+import {
+  buildTestCorpusCards,
+  makeTestPoolContext,
+} from "../__test-helpers__/pool-context";
 import type { DraftState } from "../types/draft";
 import type {
   CardSourceDebugState,
@@ -40,10 +44,15 @@ function makeQuestContent(
     cardsByPackageTide: new Map(),
     dreamcallers: resolvedPackage === null ? [] : [resolvedPackage.dreamcaller],
     dreamsignTemplates: [],
-    resolvedPackagesByDreamcallerId:
-      resolvedPackage === null
-        ? new Map<string, ResolvedDreamcallerPackage>()
-        : new Map([[resolvedPackage.dreamcaller.id, resolvedPackage]]),
+    resolvedPackagesByDreamcallerId: new Map<
+      string,
+      ResolvedDreamcallerPackage
+    >(),
+    poolContext: makeTestPoolContext([
+      "embers-whisper",
+      "glacial-insight",
+      "ashbloom-mantle",
+    ]),
   };
 }
 
@@ -90,6 +99,7 @@ function makeResolvedPackage(): ResolvedDreamcallerPackage {
       renderedText: "Test rules text.",
       imageNumber: "0006",
       startingEssence: 250,
+      signatureCards: ["Alpha Card 1"],
       mandatoryTides: ["core"],
       optionalTides: ["support-a", "support-b", "support-c", "support-d"],
     },
@@ -291,6 +301,9 @@ describe("QuestProvider composed mutations", () => {
         (cardNumber) =>
           [cardNumber, makeCard(cardNumber)] as const,
       ),
+      ...buildTestCorpusCards().map(
+        (card) => [card.cardNumber, card] as const,
+      ),
     ]);
     const quest = mountQuestContext({
       cardDatabase,
@@ -335,8 +348,9 @@ describe("QuestProvider composed mutations", () => {
       startingDeckSize: STARTER_CARD_NUMBERS.length,
       dreamcallerId: resolvedPackage.dreamcaller.id,
       dreamcallerName: resolvedPackage.dreamcaller.name,
-      selectedPackageTides: resolvedPackage.selectedTides,
     });
+    // The draft pool is built from the run pool context at quest start.
+    expect(questStartedEntry?.draftPoolSize).toBeGreaterThan(0);
   });
 
   it("does not log duplicate local site completion", () => {

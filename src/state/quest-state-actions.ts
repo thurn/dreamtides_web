@@ -1,5 +1,6 @@
 import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
+import { buildDreamcallerPackage } from "../data/quest-content";
 import type { QuestContent } from "../data/quest-content";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import {
@@ -323,13 +324,14 @@ export function startQuestFromDreamcaller({
    */
   seedOverride?: string;
 }): QuestState {
-  const resolvedPackage = questContent.resolvedPackagesByDreamcallerId.get(
-    dreamcaller.id,
-  );
-
-  if (resolvedPackage === undefined) {
-    throw new Error(`Missing resolved package for ${dreamcaller.id}`);
+  const seed = seedOverride ?? generateQuestSeed();
+  const poolContext = questContent.poolContext;
+  if (poolContext === undefined) {
+    throw new Error(
+      "startQuestFromDreamcaller: questContent.poolContext is required",
+    );
   }
+  const resolvedPackage = buildDreamcallerPackage(dreamcaller, poolContext, seed);
 
   const deck = [...prev.deck];
   for (const cardNumber of STARTER_CARD_NUMBERS) {
@@ -359,7 +361,7 @@ export function startQuestFromDreamcaller({
 
   return {
     ...prev,
-    seed: seedOverride ?? generateQuestSeed(),
+    seed,
     essence: dreamcaller.startingEssence,
     deck,
     dreamcaller: toQuestDreamcaller(dreamcaller),
