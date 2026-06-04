@@ -1402,17 +1402,11 @@ function generateIdf(
   }
   const counts = best.counts;
 
-  // 4. Identity is descriptive only (it never influences card selection): the
-  //    colors a meaningful share of the resulting pool actually sits in, mirroring
-  //    the `decklists` open-pool branch.
-  const C = new Set<string>();
-  const unique = counts.size || 1;
-  for (const letter of COLORS) {
-    const list = poolData.draftLists.get(letter);
-    if (!list) continue;
-    if (inter(new Set(counts.keys()), list) / unique >= 0.18) C.add(letter);
-  }
-  return { C, selected: ["idf", `deck#${String(startIdx)}`], counts };
+  // No color identity: deriving one would read the color metadata, and this
+  // variant consumes nothing but the decklists. The identity string is left
+  // empty; the labels record only that this is `idf` and which corpus decklist
+  // started the pool.
+  return { C: new Set(), selected: ["idf", `deck#${String(startIdx)}`], counts };
 }
 
 /**

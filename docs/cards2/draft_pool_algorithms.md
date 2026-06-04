@@ -842,8 +842,7 @@ IDF-weighted vector norm is precomputed so similarity is a cheap dot product.
 
 ### Identity and labels
 
-The color identity is descriptive only and never influences which cards are
-chosen: after the pool is built, a color letter joins the identity when at least
-18% of the pool's distinct cards are legal in that bare-color list — the same
-post-hoc rule the `decklists` algorithm uses for an open pool. The theme labels
-are `idf` plus `deck#<index>`, recording which corpus decklist started the pool.
+`idf` reports no color identity. Deriving one would read the color metadata, and
+this algorithm consumes nothing but the decklists, so the identity string is left
+empty and the header shows none. The theme labels are `idf` plus `deck#<index>`,
+recording which corpus decklist started the pool.

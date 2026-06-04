@@ -41,6 +41,13 @@ describe("idf pool variant", () => {
     }
   });
 
+  it("reports no color identity (consumes no color metadata)", () => {
+    for (let seed = 0; seed < 50; seed++) {
+      const pool = generatePoolFromData(poolData, seed, undefined, "idf");
+      expect(pool.identity, `seed=${String(seed)}`).toBe("");
+    }
+  });
+
   it("is reproducible from a seed", () => {
     for (let seed = 0; seed < 50; seed++) {
       const a = generatePoolFromData(poolData, seed, undefined, "idf");
