@@ -159,15 +159,14 @@ describe("needsManualResolution", () => {
       expect(needsManualResolution(instance, MODELED)).toBe(true);
     });
 
-    it("does NOT match '+X✦' (non-numeric — variable spark, not a literal bonus)", () => {
+    it("returns true for '+X✦' (variable spark — conservative pause required)", () => {
+      // Cards #42 and #374 carry only "+X✦" with no triggered-ability or keyword
+      // marker, so Rule 4 must catch them to preserve the conservative bias.
       const instance = makeInstance(
         "Until end of turn, allied characters gain +X✦ where X is the number of allies.",
         600,
       );
-      // +X✦ is not a literal numeric modifier — the regex requires digits, so this
-      // should NOT be caught by the static-spark rule. (It may still be caught by
-      // other rules if present; here no other markers exist.)
-      expect(needsManualResolution(instance, MODELED)).toBe(false);
+      expect(needsManualResolution(instance, MODELED)).toBe(true);
     });
   });
 

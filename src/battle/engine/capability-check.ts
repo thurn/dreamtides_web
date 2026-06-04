@@ -11,7 +11,7 @@ import type { BattleCardInstance } from "../types";
  * Glyphs confirmed against public/cards_v2-data.json:
  *   ▸  U+25B8 — triggered-ability marker ("▸Dawn:", "▸Challenge:", …)
  *   –  U+2013 — en dash keyword/ability separator ("Support – …", "Reclaim – …")
- *   ✦  U+2726 — spark glyph used in "+N✦" static buffs
+ *   ✦  U+2726 — spark glyph used in "+N✦" / "+X✦" static buffs
  */
 export function needsManualResolution(
   instance: BattleCardInstance,
@@ -49,13 +49,13 @@ export function needsManualResolution(
     return true;
   }
 
-  // ── Rule 4: static spark bonus +<digits>✦ ─────────────────────────────────
-  // A literal "+N✦" phrase means the card grants a permanent or conditional
-  // spark bonus the AI's heuristic scoring does not account for.
-  // Note: "+X✦" (variable, non-numeric) is intentionally excluded — the AI
-  // cannot compute X anyway and those cards will usually be caught by another
-  // rule (triggered ability or keyword) in practice.
-  if (/\+\d+✦/.test(text)) {
+  // ── Rule 4: static spark bonus +<digits>✦ or +X✦ ────────────────────────
+  // A "+N✦" or "+X✦" phrase means the card grants a permanent or conditional
+  // spark bonus the AI's heuristic scoring does not account for. Both the
+  // numeric form ("+2✦") and the literal variable form ("+X✦") are matched,
+  // because cards carrying only "+X✦" (e.g. #42, #374) have no other marker
+  // that would otherwise trigger a pause.
+  if (/\+(?:\d+|X)✦/.test(text)) {
     return true;
   }
 
