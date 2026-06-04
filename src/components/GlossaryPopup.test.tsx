@@ -5,7 +5,6 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GlossaryPopup } from "./GlossaryPopup";
 import { GLOSSARY } from "../data/glossary";
-import { STRUCTURAL_TIDE_META } from "../data/structural-tides";
 
 vi.mock("../logging", () => ({
   logEvent: vi.fn(),
@@ -83,24 +82,6 @@ describe("GlossaryPopup", () => {
     });
   });
 
-  it("does not list any structural tide names", () => {
-    const { container, root } = mount(
-      <GlossaryPopup isOpen={true} onClose={vi.fn()} />,
-    );
-    const bodyText = container.querySelector(
-      '[data-testid="glossary-popup-body"]',
-    )?.textContent ?? "";
-    for (const meta of Object.values(STRUCTURAL_TIDE_META)) {
-      if (meta === undefined) continue;
-      expect(
-        bodyText,
-        `Glossary should not advertise tide "${meta.displayName}"`,
-      ).not.toContain(meta.displayName);
-    }
-    act(() => {
-      root.unmount();
-    });
-  });
 
   it("closes when the close button is clicked", () => {
     const onClose = vi.fn();

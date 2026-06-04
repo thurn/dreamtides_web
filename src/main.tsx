@@ -28,13 +28,11 @@ if (pathname === "/editor") {
   const [
     { default: App },
     { HudDreamsignLayoutDemo },
-    { TideDocumentationHoverDemo },
     { JourneyHoverCardDemo },
     { parseRuntimeConfig },
   ] = await Promise.all([
     import("./App.tsx"),
     import("./components/HudDreamsignLayoutDemo"),
-    import("./components/TideDocumentationHoverDemo"),
     import("./journeys/ui/JourneyHoverCardDemo"),
     import("./runtime/runtime-config"),
   ]);
@@ -49,8 +47,6 @@ if (pathname === "/editor") {
   renderStrict(
     demoParam === "hud-dreamsign-layout" ? (
       <HudDreamsignLayoutDemo />
-    ) : demoParam === "tide-doc-hover" ? (
-      <TideDocumentationHoverDemo />
     ) : demoParam === "journey-hover" ? (
       <JourneyHoverCardDemo />
     ) : (
