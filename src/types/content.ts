@@ -21,6 +21,12 @@ export interface DreamcallerContent {
   startingEssence: number;
   mandatoryTides: PackageTideId[];
   optionalTides: PackageTideId[];
+  /**
+   * Card names that steer the `idf3` pool generator toward this Dreamcaller's
+   * intended decks when building the run's draft package. Optional during the
+   * V2 migration; absent for v1 records.
+   */
+  signatureCards?: string[];
 }
 
 export interface DreamsignTemplate {
@@ -44,4 +50,10 @@ export interface ResolvedDreamcallerPackage {
   doubledCardCount: number;
   legalSubsetCount: number;
   preferredSubsetCount: number;
+  /**
+   * Card numbers of the idf3 starter deck the pool was grown from, resolved
+   * against the run's name index. Excludes starter cards and unmapped names,
+   * deduped in first-seen order. Optional during the V2 migration.
+   */
+  starterDecklistCardNumbers?: number[];
 }
