@@ -24,6 +24,10 @@ import { dirname, resolve } from "node:path";
 import { buildPoolData, generatePoolFromData } from "../src/draft_test/color-pool.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+// True only when this file is the entry point. When another script imports it
+// (e.g. dump-merged-lists.mjs) this is false, so the report block is skipped and
+// only the exported helpers run.
+const isMainModule = resolve(process.argv[1] ?? "") === fileURLToPath(import.meta.url);
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
 
 const cards = readJson("public/cards_v2-data.json");
@@ -116,7 +120,7 @@ const MAX_DECK = 34;
 const MIN_DECKS_PER_LABEL = 3; // labels with fewer real decks are too thin to merge
 const MAX_LIST = 100; // the design cap: a list holds at most 100 names
 
-function buildMergedLists(threshold) {
+export function buildMergedLists(threshold) {
   const dir = resolve(ROOT, "docs/drafts_dt");
   const byLabel = new Map(); // label -> array of Set<name>
   for (const file of readdirSync(dir)) {
@@ -357,6 +361,7 @@ const fmt = (m) =>
   `uniq ${m.uniq.toFixed(1).padStart(5)}  recall ${m.recall.toFixed(3)}  ` +
   `coverage ${m.coverage.toFixed(3)}  varJac ${m.variance.toFixed(3)}  coc ${m.coc.toFixed(2)}`;
 
+if (isMainModule) {
 console.log("=".repeat(78));
 console.log("MERGED ARCHETYPE LISTS — corpus collapse summary (threshold = 2 decks)");
 const baseLists = buildMergedLists(2);
@@ -423,3 +428,4 @@ for (const cfg of configs) {
   console.log(`  ${`merged  ${parts.join(" ")}`.padEnd(48)}: ${fmt(evaluate(gen))}`);
 }
 console.log("=".repeat(78));
+}
