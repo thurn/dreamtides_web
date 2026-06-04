@@ -55,16 +55,18 @@ const DREAMCALLER_TOML = new URL(
  */
 export function loadCards(tomlPath = CARD_TOML) {
   const parsed = parse(readFileSync(tomlPath, "utf8"));
-  return parsed.cards.map((card) => {
-    const meta = CARDS_V2_POOL_METADATA[card.name] ?? {};
-    return {
-      name: card.name,
-      tides: meta.tides ?? [],
-      core: meta.core === true,
-      colors: meta.colors ?? [],
-      draftArchetypes: meta.draftArchetypes ?? [],
-    };
-  });
+  return parsed.cards
+    .filter((card) => card.rarity !== "Starter")
+    .map((card) => {
+      const meta = CARDS_V2_POOL_METADATA[card.name] ?? {};
+      return {
+        name: card.name,
+        tides: meta.tides ?? [],
+        core: meta.core === true,
+        colors: meta.colors ?? [],
+        draftArchetypes: meta.draftArchetypes ?? [],
+      };
+    });
 }
 
 /**
