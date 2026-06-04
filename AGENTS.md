@@ -21,7 +21,12 @@ For quest prototype UI work, run browser QA with `/opt/homebrew/bin/agent-browse
 against a local Vite server. `npx agent-browser` is an acceptable fallback when
 the Homebrew-installed binary is unavailable. Start the QA Vite server on a port
 other than `http://localhost:5173` (for example `npm run dev -- --port 5174`) so
-QA does not kill the developer's own server already running on the default port. Validate the feature through the
+QA does not kill the developer's own server already running on the default port.
+When tearing down the QA server, kill only the process you started — capture its
+PID at launch, or match its exact port (`pkill -f "vite --port 5174"`). Never run
+a broad `pkill -f vite` (or `pkill -f "firebase|vite|emulator"`): it matches
+every Vite process regardless of port and terminates the developer's 5173 server
+too. Validate the feature through the
 normal player workflow, inspect the captured error buffer for render errors,
 unhandled rejections, and console errors, and check the UI state directly in
 the browser. Confirm controls are usable, expected state changes occur, text
