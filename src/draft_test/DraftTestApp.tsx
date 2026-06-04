@@ -310,11 +310,12 @@ const POOL_VARIANTS: readonly PoolVariant[] = [
   "diverse",
   "decklists",
   "merged",
+  "idf",
 ];
 
 /**
  * Pool-generation variant for this session, from the `?algo=` URL parameter
- * (`default`, `diverse`, `decklists`, or `merged`). Invalid or absent values
+ * (`default`, `diverse`, `decklists`, `merged`, or `idf`). Invalid or absent values
  * fall back to {@link DEFAULT_POOL_VARIANT}, so flipping that constant changes
  * the default everywhere while the URL parameter still allows side-by-side
  * comparison.

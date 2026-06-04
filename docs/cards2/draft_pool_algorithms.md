@@ -1,13 +1,13 @@
 # Draft Pool Construction Algorithms
 
 The draft test mode (`draft_test`) builds a card pool that a player drafts
-from. The pool is assembled by one of four interchangeable construction
+from. The pool is assembled by one of five interchangeable construction
 algorithms, selected with the `?algo=` URL parameter: `default`, `diverse`,
-`decklists`, and `merged` (for example, `draft_test?algo=decklists`). The
-run-time half of all four lives in `src/draft_test/color-pool.ts`. This document
+`decklists`, `merged`, and `idf` (for example, `draft_test?algo=decklists`). The
+run-time half of all five lives in `src/draft_test/color-pool.ts`. This document
 explains, in detail, how each one works.
 
-This document is the canonical description of the four algorithms. The `merged`
+This document is the canonical description of the five algorithms. The `merged`
 algorithm (the merged-archetype-lists construction) does part of its work
 offline: `scripts/setup-assets.mjs` collapses the real decks into merged lists
 and bundles them, and `color-pool.ts` reads those lists at run time.
@@ -778,3 +778,72 @@ selector over the broad existing `draftLists` instead of the merged lists (skipp
 Phase 1) gives coverage 1.0 and coc 6.17 — it hands over the entire kit and its
 cards barely co-occur — which is what shows the Phase 1 merge is doing the real
 work.
+
+---
+
+## The `idf` algorithm
+
+The `idf` algorithm is the simplest decklist-based pool, and the only one that
+reads nothing but the real decklists. The `default`, `diverse`, `decklists`, and
+`merged` algorithms all consult the synthesized inputs — core staples, mechanic
+tides, color lists, draft archetypes, and the Dreamcaller's seed and theme
+archetypes. `idf` ignores all of them. It picks one real decklist at random and
+grows a pool around it by IDF-weighted similarity. The premise is the most
+literal reading of "give the player a coherent pool": hand them a real deck and
+the real decks most like it.
+
+Its run-time knobs live in the `IDF` constant in `color-pool.ts` (the in-app
+equivalents of the `scripts/similar-pool.mjs` command-line flags), grouped so
+retuning is a one-stop edit. If no usable decklists are bundled it falls back
+entirely to `default`.
+
+### The corpus and what "similar" means
+
+Like `decklists`, `idf` builds its own corpus from `PoolData.decklists`, cached
+per `PoolData` (in a separate cache from `decklists`, so the two retune
+independently). It keeps only decklists whose distinct-card count is within
+`[minDeckSize, maxDeckSize]` — corpus hygiene that drops the near-empty partial
+files and the handful of 50-91 card aggregates, which are not drafted decks and
+would distort both the frequencies and the overlap scores.
+
+Each card `c` gets an inverse-document-frequency weight `ln((n + 1) / df(c))`
+raised to `idfPower`, where `df(c)` is the number of decks containing `c` and `n`
+is the corpus size. A card in nearly every deck gets a weight near zero, so two
+decks that share it are not counted as similar on that account; a card in only a
+handful of decks dominates the score when two decks share it. Cards whose `df`
+falls below `minDf` or above `maxDfFrac * n` are zeroed out of the score entirely
+(too rare or too staple to carry signal), though they are still unioned into the
+pool. `idfPower > 1` sharpens the rarity emphasis further; `idfPower = 0` ignores
+rarity and reduces the score to plain card-presence cosine. Each deck's
+IDF-weighted vector norm is precomputed so similarity is a cheap dot product.
+
+### Building the pool
+
+1. **Pick the starter.** Choose one decklist from the corpus uniformly at random.
+   This single draw — seeded by the run's RNG — is the only randomness in the
+   algorithm, so a seed reproduces a pool exactly and different seeds give
+   different starters and therefore different pools.
+2. **Rank the rest.** Score every other decklist by IDF-weighted cosine
+   similarity to the starter — the sum of `idf²` over the cards the two decks
+   share, divided by the product of their norms — and sort descending. "Most
+   similar" thus means "shares the most distinctive cards", not "shares the most
+   popular cards".
+3. **Union whole decks best-first.** Seed the pool with the starter, then fold in
+   the ranked decklists one at a time, each card's copy count rising by one per
+   deck up to `cap` copies (the draft engine caps every pool at two copies
+   downstream regardless). Decks are never truncated mid-list. After the starter
+   and after each added deck the running pool is a candidate; the algorithm keeps
+   the candidate whose size is closest to `targetSize` (ties going to the larger
+   pool) and stops once a candidate reaches `targetSize + targetTolerance`, since
+   adding more only moves further away. The acceptable window is therefore
+   `[targetSize - targetTolerance, targetSize + targetTolerance]`; the boundary
+   nearest the target wins, and a single deck occasionally jumps across the
+   window, landing the pool a little outside it.
+
+### Identity and labels
+
+The color identity is descriptive only and never influences which cards are
+chosen: after the pool is built, a color letter joins the identity when at least
+18% of the pool's distinct cards are legal in that bare-color list — the same
+post-hoc rule the `decklists` algorithm uses for an open pool. The theme labels
+are `idf` plus `deck#<index>`, recording which corpus decklist started the pool.

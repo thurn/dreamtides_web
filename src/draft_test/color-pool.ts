@@ -26,7 +26,12 @@ const JIT = 15; // how far below the ceiling the random target may fall
 // side by side via the `variant` argument and the draft test `?algo=` URL
 // parameter. To make a variant the primary one, change `DEFAULT_POOL_VARIANT`;
 // to retire the experiment, delete the `diverse` branch and `generateDiverse`.
-export type PoolVariant = "default" | "diverse" | "decklists" | "merged";
+export type PoolVariant =
+  | "default"
+  | "diverse"
+  | "decklists"
+  | "merged"
+  | "idf";
 export const DEFAULT_POOL_VARIANT: PoolVariant = "default";
 
 // Knobs for the `decklists` variant. It ignores the synthesized archetype
@@ -190,6 +195,55 @@ const DIVERSE: DiverseTuning = {
   // (which are otherwise rarely fill candidates), countering the legality-breadth
   // bias. 0 = uniform fill.
   fillExponent: 1,
+};
+
+// Knobs for the `idf` variant. It is the simplest decklist-based pool: pick one
+// real decklist at random, rank every other decklist by IDF-weighted cosine
+// similarity to it, then union whole decklists best-first (capping copies) until
+// the pool size lands closest to the target. It reads nothing but the bundled
+// decklists — no tides, archetypes, colors, dreamcallers, or core staples bias
+// the cards chosen. IDF (log of inverse document frequency) is what makes
+// "similar" mean "shares distinctive cards" rather than "shares popular cards":
+// a card in nearly every deck gets ~0 weight. These knobs are the in-app
+// equivalents of the `scripts/similar-pool.mjs` command-line flags; edit here to
+// retune. Grouped so tuning is a one-stop edit.
+interface IdfTuning {
+  targetSize: number;
+  targetTolerance: number;
+  cap: number;
+  idfPower: number;
+  minDf: number;
+  maxDfFrac: number;
+  minDeckSize: number;
+  maxDeckSize: number;
+}
+const IDF: IdfTuning = {
+  // Desired pool size in copies. The builder lands on the whole-deck boundary
+  // whose size is closest to this — it never truncates a deck mid-list.
+  targetSize: 100,
+  // Half-width of the acceptable size window: the pool may end anywhere in
+  // [targetSize - targetTolerance, targetSize + targetTolerance] (e.g. 90-110).
+  // The boundary nearest targetSize wins; this only widens what counts as "ok".
+  targetTolerance: 10,
+  // Max copies of any single card. The draft engine caps every pool at 2 copies
+  // downstream, so values above 2 have no extra effect; set 1 for a singleton
+  // pool.
+  cap: 2,
+  // Exponent on the idf weights. 1 = standard. >1 sharpens the rarity emphasis
+  // (staples matter even less); 0 = ignore rarity, plain card-presence cosine.
+  idfPower: 1,
+  // Ignore cards appearing in fewer than this many decks when SCORING similarity
+  // (they are still unioned into the pool). 1 keeps all.
+  minDf: 1,
+  // Ignore cards appearing in more than this FRACTION of decks when SCORING
+  // similarity — a hard staple cutoff. 1 keeps all.
+  maxDfFrac: 1,
+  // Corpus hygiene: ignore decklists smaller than this. The tail of
+  // partial/near-empty files carries too little signal to anchor or match on.
+  minDeckSize: 16,
+  // Corpus hygiene: ignore decklists larger than this. The handful of 50-91 card
+  // files are aggregates, not drafted decks, and would distort df and overlap.
+  maxDeckSize: 34,
 };
 
 // Mechanic-archetype tide base name -> theme key. The key matches the historical
@@ -1231,6 +1285,136 @@ function generateMerged(
   return { C, selected, counts };
 }
 
+// --- the idf variant ---------------------------------------------------------
+// Its own IDF corpus over the filtered decklists, tuned by `IDF` (not the
+// `decklists` variant's `DECKLISTS`/`deckCorpus`, so the two can be retuned
+// independently). Weights are idf^idfPower with the rare/staple cutoffs applied:
+// a card outside [minDf, maxDfFrac * n] gets 0 weight and so cannot drive
+// similarity, while still being unionable into the pool. Cached per PoolData.
+interface IdfDeck {
+  cards: Set<string>;
+  norm: number;
+}
+interface IdfCorpus {
+  decks: IdfDeck[];
+  idf: Map<string, number>;
+}
+const idfCorpusCache = new WeakMap<PoolData, IdfCorpus | null>();
+function idfCorpus(poolData: PoolData): IdfCorpus | null {
+  const cached = idfCorpusCache.get(poolData);
+  if (cached !== undefined) return cached;
+  let corpus: IdfCorpus | null = null;
+  const source = poolData.decklists;
+  if (source && source.length > 0) {
+    const filtered = source
+      .map((d) => new Set(d))
+      .filter((s) => s.size >= IDF.minDeckSize && s.size <= IDF.maxDeckSize);
+    if (filtered.length > 0) {
+      const n = filtered.length;
+      const df = new Map<string, number>();
+      for (const s of filtered) for (const c of s) df.set(c, (df.get(c) ?? 0) + 1);
+      const maxDf = IDF.maxDfFrac * n;
+      const idf = new Map<string, number>();
+      for (const [c, d] of df) {
+        // Cards too rare or too common carry no similarity signal.
+        if (d < IDF.minDf || d > maxDf) {
+          idf.set(c, 0);
+          continue;
+        }
+        idf.set(c, Math.log((n + 1) / d) ** IDF.idfPower);
+      }
+      const decks = filtered.map((cards): IdfDeck => {
+        let sq = 0;
+        for (const c of cards) {
+          const w = idf.get(c) ?? 0;
+          sq += w * w;
+        }
+        return { cards, norm: Math.sqrt(sq) || 1 };
+      });
+      corpus = { decks, idf };
+    }
+  }
+  idfCorpusCache.set(poolData, corpus);
+  return corpus;
+}
+
+// Build a pool purely from real decklists: pick one at random, rank the rest by
+// IDF-weighted cosine similarity to it, then union whole decklists best-first —
+// capping copies at `IDF.cap` — keeping the whole-deck boundary whose size lands
+// closest to `IDF.targetSize`. Decks are never truncated. This variant ignores
+// `seedArchetypes`/`themeArchetypes` and every other input entirely; the only
+// randomness is which decklist starts the pool. Falls back to the `default`
+// algorithm when no usable decklists are bundled.
+function generateIdf(
+  rng: () => number,
+  poolData: PoolData,
+): { C: Set<string>; selected: string[]; counts: Map<string, number> } {
+  const corpus = idfCorpus(poolData);
+  if (!corpus) return generate(rng, poolData);
+  const { decks, idf } = corpus;
+  const idfOf = (c: string): number => idf.get(c) ?? 0;
+
+  // 1. Pick the starter decklist uniformly at random.
+  const startIdx = Math.floor(rng() * decks.length);
+  const starter = decks[startIdx];
+
+  // 2. Rank every other decklist by IDF-cosine similarity to the starter.
+  const cosine = (a: IdfDeck, b: IdfDeck): number => {
+    const [small, large] = a.cards.size <= b.cards.size ? [a, b] : [b, a];
+    let dot = 0;
+    for (const c of small.cards) if (large.cards.has(c)) dot += idfOf(c) ** 2;
+    return dot / (a.norm * b.norm);
+  };
+  const ranked = decks
+    .map((d, i) => ({ d, i }))
+    .filter((x) => x.i !== startIdx)
+    .map((x) => ({ d: x.d, sim: cosine(starter, x.d) }))
+    .sort((a, b) => b.sim - a.sim);
+
+  // 3. Union whole decks best-first. After the starter and after each added
+  //    deck we have a candidate pool; keep the one whose size is closest to the
+  //    target (tie-break toward the larger pool), stopping once a candidate
+  //    reaches the top of the window since going further only moves away.
+  const high = IDF.targetSize + IDF.targetTolerance;
+  const unionInto = (pool: Map<string, number>, cards: Set<string>): number => {
+    let added = 0;
+    for (const c of cards) {
+      const have = pool.get(c) ?? 0;
+      if (have >= IDF.cap) continue;
+      pool.set(c, have + 1);
+      added += 1;
+    }
+    return added;
+  };
+  const pool = new Map<string, number>();
+  let size = unionInto(pool, starter.cards);
+  let best = { counts: new Map(pool), size };
+  for (const { d } of ranked) {
+    size += unionInto(pool, d.cards);
+    if (
+      Math.abs(size - IDF.targetSize) < Math.abs(best.size - IDF.targetSize) ||
+      (Math.abs(size - IDF.targetSize) === Math.abs(best.size - IDF.targetSize) &&
+        size > best.size)
+    ) {
+      best = { counts: new Map(pool), size };
+    }
+    if (size >= high) break;
+  }
+  const counts = best.counts;
+
+  // 4. Identity is descriptive only (it never influences card selection): the
+  //    colors a meaningful share of the resulting pool actually sits in, mirroring
+  //    the `decklists` open-pool branch.
+  const C = new Set<string>();
+  const unique = counts.size || 1;
+  for (const letter of COLORS) {
+    const list = poolData.draftLists.get(letter);
+    if (!list) continue;
+    if (inter(new Set(counts.keys()), list) / unique >= 0.18) C.add(letter);
+  }
+  return { C, selected: ["idf", `deck#${String(startIdx)}`], counts };
+}
+
 /**
  * Generate a fresh random pool from the given card records. Pass a `seed` to
  * reproduce a previous run; omit it for a new random pool each call. Copy counts
@@ -1279,7 +1463,9 @@ export function generatePoolFromData(
         ? generateDecklists(rng, poolData, seedArchetypes, themeArchetypes)
         : variant === "merged"
           ? generateMerged(rng, poolData, seedArchetypes, themeArchetypes)
-          : generate(rng, poolData, seedArchetypes);
+          : variant === "idf"
+            ? generateIdf(rng, poolData)
+            : generate(rng, poolData, seedArchetypes);
 
   const capped = new Map<string, number>();
   for (const [card, count] of counts) {
