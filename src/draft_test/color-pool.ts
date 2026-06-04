@@ -47,6 +47,9 @@ interface DecklistsTuning {
   starterAlpha: number;
   growTopK: number;
   growTemperature: number;
+  themeStrategyExp: number;
+  themeStarterBoost: number;
+  themeGrowBoost: number;
 }
 const DECKLISTS: DecklistsTuning = {
   // Desired pool size in copies (each card capped at 2). The pool lands within
@@ -74,6 +77,19 @@ const DECKLISTS: DecklistsTuning = {
   // similar deck (tight, archetype-pure pools); higher = flatter sampling
   // (looser, more varied pools).
   growTemperature: 0.35,
+  // Theme bias (only when the Dreamcaller has theme archetypes). The strategy
+  // roll weights each eligible strategy by (1 + theme cards in it)^this, so an
+  // abandon Dreamcaller rolls aristocrats far more than off-theme green ramp.
+  // 0 = roll uniformly regardless of theme.
+  themeStrategyExp: 1.5,
+  // Theme bias on starter choice: a candidate decklist's fit score is scaled by
+  // (1 + this * theme-cosine), pulling the starter toward decks dense in the
+  // Dreamcaller's theme cards. 0 = ignore theme when picking the starter.
+  themeStarterBoost: 2,
+  // Theme bias on each growth step: similarity to the starter is scaled by
+  // (1 + this * theme-cosine), so the snowball keeps pulling in theme-dense
+  // decks instead of drifting to whatever co-occurs in the colors. 0 = ignore.
+  themeGrowBoost: 2.5,
 };
 
 // Knobs for the `diverse` variant. Grouped here so tuning is a one-stop edit.
@@ -787,14 +803,17 @@ function deckCorpus(poolData: PoolData): DeckCorpus | null {
 }
 
 // Build a pool by snowballing real decklists. Roll one of the Dreamcaller's
-// strategies, take a real decklist rich in that strategy's cards as the
-// starter, then keep adding the decklists most similar to the starter (cosine
-// over IDF-weighted card vectors) until the target size. Falls back to the
-// `default` algorithm when no usable decklists are bundled.
+// strategies (biased toward its theme), take a real decklist rich in that
+// strategy's and the theme's cards as the starter, then keep adding the
+// decklists most similar to the starter and dense in the theme until the target
+// size. `themeArchetypes` are the Dreamcaller's mechanic-archetype tide slugs
+// (e.g. `abandon`); when empty the pool is unbiased. Falls back to the `default`
+// algorithm when no usable decklists are bundled.
 function generateDecklists(
   rng: () => number,
   poolData: PoolData,
   seedArchetypes?: readonly string[],
+  themeArchetypes?: readonly string[],
 ): { C: Set<string>; selected: string[]; counts: Map<string, number> } {
   const corpus = deckCorpus(poolData);
   if (!corpus) return generate(rng, poolData, seedArchetypes);
@@ -803,7 +822,27 @@ function generateDecklists(
   const { decks, idf } = corpus;
   const idfOf = (c: string): number => idf.get(c) ?? 0;
 
-  // 1. Roll one strategy off the Dreamcaller's list (the archetype role). An
+  // 0. The Dreamcaller's theme: the union of cards in its mechanic-archetype
+  //    tide lists. `themeCosine` measures how dense a deck is in those cards
+  //    (IDF-weighted, 0..1); it is 0 throughout when the Dreamcaller has no
+  //    theme, so every theme term below collapses to 1 and the pool is unbiased.
+  const themeCards = new Set<string>();
+  for (const slug of themeArchetypes ?? []) {
+    for (const c of archLists.get(slug) ?? []) themeCards.add(c);
+  }
+  let themeSq = 0;
+  for (const c of themeCards) themeSq += idfOf(c) ** 2;
+  const themeNorm = Math.sqrt(themeSq) || 1;
+  const themeCosine = (deck: DeckVector): number => {
+    if (themeCards.size === 0) return 0;
+    let dot = 0;
+    for (const c of deck.cards) if (themeCards.has(c)) dot += idfOf(c) ** 2;
+    return dot / (themeNorm * deck.norm);
+  };
+
+  // 1. Roll one strategy off the Dreamcaller's list (the archetype role),
+  //    weighted toward strategies that overlap the theme so an abandon
+  //    Dreamcaller lands on aristocrats rather than off-theme green ramp. An
   //    open-pool Dreamcaller (no list) leaves it unset, so the starter is then
   //    any real decklist.
   const eligible = (seedArchetypes ?? []).filter(
@@ -813,15 +852,24 @@ function generateDecklists(
   let strategyPrefix = "";
   let strategyCards: Set<string> | null = null;
   if (eligible.length > 0) {
-    const rolled = eligible[Math.floor(rng() * eligible.length)];
+    const rolled = weightedPick(
+      rng,
+      eligible,
+      eligible.map((a) => {
+        let themeHits = 0;
+        for (const c of draftLists.get(a) ?? []) if (themeCards.has(c)) themeHits++;
+        return (1 + themeHits) ** DECKLISTS.themeStrategyExp;
+      }),
+    );
     strategyLabel = `D:${rolled}`;
     strategyPrefix = colorPrefix(rolled);
     strategyCards = draftLists.get(rolled) ?? null;
   }
 
   // 2. Pick the starter: the decklist that best fits the rolled strategy (most
-  //    shared IDF weight with its cards), sampled among the top fits so the
-  //    same strategy yields a different starter run to run.
+  //    shared IDF weight with its cards), boosted toward decks dense in the
+  //    theme, and sampled among the top fits so the same strategy yields a
+  //    different starter run to run.
   const randomDeck = (): Set<string> =>
     decks[Math.floor(rng() * decks.length)].cards;
   let starter: Set<string>;
@@ -831,7 +879,7 @@ function generateDecklists(
       .map((d): [Set<string>, number] => {
         let fit = 0;
         for (const c of d.cards) if (sc.has(c)) fit += idfOf(c);
-        return [d.cards, fit];
+        return [d.cards, fit * (1 + DECKLISTS.themeStarterBoost * themeCosine(d))];
       })
       .filter(([, fit]) => fit > 0)
       .sort((a, b) => b[1] - a[1])
@@ -849,14 +897,17 @@ function generateDecklists(
   }
 
   // 3. Anchor similarity to the starter (not the drifting pool) so the whole
-  //    pool stays orbiting one archetype.
+  //    pool stays orbiting one archetype, and boost candidates dense in the
+  //    theme so the snowball keeps the Dreamcaller's strategy instead of
+  //    drifting to whatever else co-occurs in the colors.
   let anchorSq = 0;
   for (const c of starter) anchorSq += idfOf(c) ** 2;
   const anchorNorm = Math.sqrt(anchorSq) || 1;
-  const simToStarter = (deck: DeckVector): number => {
+  const growScore = (deck: DeckVector): number => {
     let dot = 0;
     for (const c of deck.cards) if (starter.has(c)) dot += idfOf(c) ** 2;
-    return dot / (anchorNorm * deck.norm);
+    const sim = dot / (anchorNorm * deck.norm);
+    return sim * (1 + DECKLISTS.themeGrowBoost * themeCosine(deck));
   };
 
   // 4. Seed the pool with core staples + the starter, then snowball the
@@ -878,7 +929,7 @@ function generateDecklists(
   while (poolSize(counts) < target) {
     const cands = decks
       .filter((d) => !used.has(d.cards))
-      .map((d): [DeckVector, number] => [d, simToStarter(d)])
+      .map((d): [DeckVector, number] => [d, growScore(d)])
       .filter(([, s]) => s > 0)
       .sort((a, b) => b[1] - a[1])
       .slice(0, DECKLISTS.growTopK);
@@ -940,21 +991,31 @@ export function generatePool(
   seed?: number,
   seedArchetypes?: readonly string[],
   variant: PoolVariant = DEFAULT_POOL_VARIANT,
+  themeArchetypes?: readonly string[],
 ): GeneratedPool {
-  return generatePoolFromData(buildPoolData(cards), seed, seedArchetypes, variant);
+  return generatePoolFromData(
+    buildPoolData(cards),
+    seed,
+    seedArchetypes,
+    variant,
+    themeArchetypes,
+  );
 }
 
 /**
  * Generate a pool from prebuilt {@link PoolData}. Pass `seedArchetypes` (a
  * Dreamcaller's `draftArchetypes`) to seed construction from one of those
  * archetypes; omit it for the unconstrained random pool. Pass `variant` to
- * select the generation algorithm (see {@link PoolVariant}).
+ * select the generation algorithm (see {@link PoolVariant}). Pass
+ * `themeArchetypes` (a Dreamcaller's mechanic-archetype tide slugs) to bias the
+ * `decklists` variant toward that theme; the other variants ignore it.
  */
 export function generatePoolFromData(
   poolData: PoolData,
   seed?: number,
   seedArchetypes?: readonly string[],
   variant: PoolVariant = DEFAULT_POOL_VARIANT,
+  themeArchetypes?: readonly string[],
 ): GeneratedPool {
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
@@ -963,7 +1024,7 @@ export function generatePoolFromData(
     variant === "diverse"
       ? generateDiverse(rng, poolData, seedArchetypes)
       : variant === "decklists"
-        ? generateDecklists(rng, poolData, seedArchetypes)
+        ? generateDecklists(rng, poolData, seedArchetypes, themeArchetypes)
         : generate(rng, poolData, seedArchetypes);
 
   const capped = new Map<string, number>();

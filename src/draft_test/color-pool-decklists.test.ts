@@ -71,6 +71,33 @@ describe("decklists pool variant", () => {
     expect(pool.themes[0]).toMatch(/^D:(ur|ub)-storm$/);
   });
 
+  it("biases the pool toward the Dreamcaller's theme archetypes", () => {
+    // Kragg is an abandon Dreamcaller. With the abandon theme applied, his
+    // pools should carry markedly more Abandon-tide cards than without it.
+    const tidesOf = new Map<string, readonly string[]>();
+    for (const c of cards as { name: string; tides?: readonly string[] }[]) {
+      if (c.tides?.length) tidesOf.set(c.name, c.tides);
+    }
+    const KRAGG = [
+      "b-aristocrats", "bg-midrange", "br-aristocrats", "ug-cheaty-ramp",
+      "ug-sneak", "wb-aristocrats", "wbg-midrange", "wbrg-aristocrats",
+      "wubg-value", "wubrg-value",
+    ];
+    const abandonCopies = (theme: string[] | undefined): number => {
+      let total = 0;
+      for (let seed = 0; seed < 40; seed++) {
+        const pool = generatePoolFromData(poolData, seed, KRAGG, "decklists", theme);
+        for (const [card, copies] of pool.counts) {
+          if (tidesOf.get(card)?.includes("Abandon")) total += copies;
+        }
+      }
+      return total;
+    };
+    const themed = abandonCopies(["abandon"]);
+    const unthemed = abandonCopies(undefined);
+    expect(themed).toBeGreaterThan(unthemed * 1.2);
+  });
+
   it("falls back to the default algorithm when no decklists are bundled", () => {
     const noDecks = buildPoolData(cards);
     const fallback = generatePoolFromData(noDecks, 3, undefined, "decklists");

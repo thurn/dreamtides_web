@@ -444,6 +444,7 @@ export default function DraftTestApp() {
         poolSeed,
         dreamcaller.draftArchetypes,
         poolVariant,
+        dreamcaller.themeArchetypes,
       );
       const nameIndex = buildNameIndex(database);
       const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(
