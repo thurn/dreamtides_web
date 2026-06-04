@@ -9320,6 +9320,176 @@ image-number = 1694993302
 art-owned = false
 card-number = 509
 
+[[cards]]
+name = "Twilight Minstrel"
+mtg-name = ""
+id = "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
+rendered-text = "Support – Supported characters have +2✦."
+energy-cost = 2
+card-type = "Character"
+subtype = "Musician"
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = 1
+tags = []
+image-number = ""
+art-owned = false
+card-number = 510
+
+[[cards]]
+name = "Circlewatch Seer"
+mtg-name = ""
+id = "647f5150-b2e0-424b-9480-27557642524e"
+rendered-text = "▸Materialized: Foresee 1."
+energy-cost = 3
+card-type = "Character"
+subtype = "Visionary"
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = 1
+tags = []
+image-number = ""
+art-owned = false
+card-number = 511
+
+[[cards]]
+name = "Branded Direwolf"
+mtg-name = ""
+id = "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
+rendered-text = ""
+energy-cost = 4
+card-type = "Character"
+subtype = "Spirit Animal"
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = 4
+tags = []
+image-number = ""
+art-owned = false
+card-number = 512
+
+[[cards]]
+name = "Sigilsworn Champion"
+mtg-name = ""
+id = "a28ad36d-fa74-4190-a463-7efd3a6233d0"
+rendered-text = "▸Dawn: Gain 1⍟."
+energy-cost = 5
+card-type = "Character"
+subtype = "Warrior"
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = 3
+tags = []
+image-number = ""
+art-owned = false
+card-number = 513
+
+[[cards]]
+name = "Last Witness"
+mtg-name = ""
+id = "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"
+rendered-text = "▸Dissolved: Draw a card."
+energy-cost = 3
+card-type = "Character"
+subtype = "Visitor"
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = 2
+tags = []
+image-number = ""
+art-owned = false
+card-number = 514
+
+[[cards]]
+name = "Meadowforged Colossus"
+mtg-name = ""
+id = "5ab11bef-5dcd-49f5-be49-ae2ccde76e70"
+rendered-text = "This character has +2✦ for each supporting ally."
+energy-cost = 6
+card-type = "Character"
+subtype = "Synth"
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = 6
+tags = []
+image-number = ""
+art-owned = false
+card-number = 515
+
+[[cards]]
+name = "Flashpoint Blast"
+mtg-name = ""
+id = "4408b942-09a0-4f4e-a403-10c708c6e3c5"
+rendered-text = "Dissolve an enemy with cost 3● or less."
+energy-cost = 2
+card-type = "Event"
+subtype = ""
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = ""
+art-owned = false
+card-number = 516
+
+[[cards]]
+name = "Glimpse of the Past"
+mtg-name = ""
+id = "2162742c-09d0-4e62-ae49-0f8f79b45adc"
+rendered-text = "Draw a card, then foresee 1."
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = ""
+art-owned = false
+card-number = 517
+
+[[cards]]
+name = "Herald's Sign"
+mtg-name = ""
+id = "910b4cf9-dec7-4e03-af4f-7d5ae342eeba"
+rendered-text = "Discover a character."
+energy-cost = 2
+card-type = "Event"
+subtype = ""
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = ""
+art-owned = false
+card-number = 518
+
+[[cards]]
+name = "Distant Worlds"
+mtg-name = ""
+id = "944e15d2-d680-4ebe-8d18-36826f4b1535"
+rendered-text = "Give an ally +3✦."
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+rarity = "Starter"
+is-fast = false
+is-interrupt = false
+spark = ""
+tags = []
+image-number = ""
+art-owned = false
+card-number = 519
+
 [metadata]
 schema_version = 1
 
