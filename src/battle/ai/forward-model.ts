@@ -41,8 +41,15 @@ export interface AiCard {
  * Abstract view of an opponent body on the battlefield. By the
  * asymmetric-knowledge principle the planner sees only spark, rank, slot, and
  * whether the body is a figment — never the opponent's card identity.
+ *
+ * `battleCardId` is a pure targeting HANDLE: it lets a model (e.g. Flashpoint
+ * Blast) name which body it wants to act on without revealing the card's
+ * cardNumber, name, or text. The asymmetric-knowledge principle is preserved
+ * because the handle carries no identity information the planner can read.
  */
 export interface AiOpponentBody {
+  /** Opaque instance id used only to name this body as a target. */
+  battleCardId: string;
   effectiveSpark: number;
   /** `front` = deployed, `back` = reserve. */
   rank: "front" | "back";
@@ -144,6 +151,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     const instance = id === null ? undefined : state.cardInstances[id];
     if (instance !== undefined) {
       opponentBodies.push({
+        battleCardId: instance.battleCardId,
         effectiveSpark: selectEffectiveSparkForInstance(instance),
         rank: "front",
         slot: slotId,
@@ -156,6 +164,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     const instance = id === null ? undefined : state.cardInstances[id];
     if (instance !== undefined) {
       opponentBodies.push({
+        battleCardId: instance.battleCardId,
         effectiveSpark: selectEffectiveSparkForInstance(instance),
         rank: "back",
         slot: slotId,

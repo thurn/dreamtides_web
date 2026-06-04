@@ -218,6 +218,7 @@ describe("forwardModelFromState", () => {
 
     const frontBody = model.opponentBodies.find((body) => body.slot === "D0");
     expect(frontBody).toEqual({
+      battleCardId: front,
       effectiveSpark: 7,
       rank: "front",
       slot: "D0",
@@ -226,6 +227,7 @@ describe("forwardModelFromState", () => {
 
     const backBody = model.opponentBodies.find((body) => body.slot === "R0");
     expect(backBody).toEqual({
+      battleCardId: back,
       effectiveSpark: 3,
       rank: "back",
       slot: "R0",
@@ -234,6 +236,7 @@ describe("forwardModelFromState", () => {
 
     const figmentBody = model.opponentBodies.find((body) => body.slot === "D2");
     expect(figmentBody).toEqual({
+      battleCardId: figment,
       effectiveSpark: 4,
       rank: "front",
       slot: "D2",
@@ -243,11 +246,11 @@ describe("forwardModelFromState", () => {
     expect(model.opponentHandCount).toBe(2);
     expect(model.opponentVoidCount).toBe(1);
 
-    // Asymmetric-knowledge: no opponent identity leaks onto bodies.
+    // Asymmetric-knowledge: `battleCardId` is a bare targeting handle; no
+    // opponent card IDENTITY (cardNumber/name) leaks onto bodies.
     for (const body of model.opponentBodies) {
       expect(body).not.toHaveProperty("cardNumber");
       expect(body).not.toHaveProperty("name");
-      expect(body).not.toHaveProperty("battleCardId");
     }
   });
 

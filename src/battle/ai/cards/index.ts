@@ -16,6 +16,14 @@ export interface StarterCardModel {
   onDawn?(model: ForwardModel, self: AiCard): void;
   onDissolved?(model: ForwardModel, self: AiCard): void;
   supportSpark?(model: ForwardModel, self: AiCard): number | null; // feeds effectiveSpark's supportSources
+  /**
+   * Flat +✦ bonus a deployed card grants to ITSELF from a self-static (e.g.
+   * Meadowforged Colossus's "+2✦ for each supporting ally"). Returns 0/`null`
+   * when the static is inactive (card not deployed, no supporters). Distinct
+   * from {@link supportSpark}, which a back-rank card grants to OTHER front
+   * allies. See `battle_ai.md` §"Per-Card Knowledge".
+   */
+  selfStaticSpark?(model: ForwardModel, self: AiCard): number;
   valueHint?(model: ForwardModel, self: AiCard): number;
 }
 
