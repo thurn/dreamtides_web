@@ -7,10 +7,10 @@ import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 
 /** Fixed price for standard card items. */
-const STANDARD_CARD_PRICE = 100;
+export const STANDARD_CARD_PRICE = 100;
 
 /** Fixed price for specialty-shop card items. */
-const SPECIALTY_CARD_PRICE = 200;
+export const SPECIALTY_CARD_PRICE = 200;
 
 /** Fixed price for dreamsign items, paid in omens. */
 const DREAMSIGN_OMEN_PRICE = 2;
@@ -58,11 +58,12 @@ export interface ShopGenerationOptions {
   /** The run's full Dreamsign pool, used to regenerate an exhausted pool. */
   dreamsignRegenerationPoolIds?: readonly string[];
   /**
-   * When provided and non-empty the shop is a Specialty Shop: a single tide is
-   * chosen from this list (the dreamcaller's mandatory tides) and the entire
-   * inventory is restricted to cards and Dreamsigns of that tide.
+   * When provided and non-empty the shop is a Specialty Shop: its card slots
+   * are drawn from this fixed list (the run's chosen idf3 starter decklist)
+   * instead of the depleting draft multiset, and they do not spend the draft
+   * pool.
    */
-  specialtyTides?: readonly PackageTideId[];
+  starterDecklistCardNumbers?: readonly number[];
   cardCount?: number;
   dreamsignCount?: number;
 }
@@ -179,46 +180,13 @@ export function runtimeSlotsToShopSlots(
   });
 }
 
-/** Pick one random tide from the dreamcaller's mandatory tides. */
-function pickSpecialtyTide(
-  specialtyTides: readonly PackageTideId[],
-): PackageTideId | null {
-  if (specialtyTides.length === 0) {
-    return null;
-  }
-  return specialtyTides[Math.floor(Math.random() * specialtyTides.length)];
-}
-
-/** Returns the draft-pool card numbers eligible for the restricted tide. */
-function eligibleCardNumbersForTide(
-  draftState: DraftState,
-  cardDatabase: ReadonlyMap<number, CardData>,
-  tide: PackageTideId,
-): Set<number> {
-  const eligible = new Set<number>();
-  for (const cardNumberText of Object.keys(draftState.remainingCopiesByCard)) {
-    const cardNumber = Number(cardNumberText);
-    const card = cardDatabase.get(cardNumber);
-    if (card !== undefined && card.tides.includes(tide)) {
-      eligible.add(cardNumber);
-    }
-  }
-  for (const cardNumberText of Object.keys(draftState.draftPoolCopiesByCard)) {
-    const cardNumber = Number(cardNumberText);
-    const card = cardDatabase.get(cardNumber);
-    if (card !== undefined && card.tides.includes(tide)) {
-      eligible.add(cardNumber);
-    }
-  }
-  return eligible;
-}
-
 /**
- * Generates shop inventory: 3 cards and 2 dreamsigns by default. Cards are
- * drawn from — and spent against — the run draft multiset; dreamsigns are
- * drawn from — and spent against — the run's shared Dreamsign pool. When
- * `specialtyTides` is provided the whole inventory is restricted to a single
- * randomly chosen mandatory tide (Specialty Shop).
+ * Generates shop inventory: 3 cards and 2 dreamsigns by default. Dreamsigns are
+ * drawn from — and spent against — the run's shared Dreamsign pool. A regular
+ * shop's card slots are drawn from — and spent against — the run draft
+ * multiset. When `starterDecklistCardNumbers` is non-empty the shop is a
+ * Specialty Shop whose card slots are instead drawn from that fixed list
+ * without touching the draft multiset.
  */
 export function generateShopInventory(
   options: ShopGenerationOptions,
@@ -229,33 +197,44 @@ export function generateShopInventory(
     remainingDreamsignPoolIds = [],
     dreamsignTemplates = [],
     dreamsignRegenerationPoolIds,
-    specialtyTides = [],
+    starterDecklistCardNumbers = [],
     cardCount = STANDARD_CARD_COUNT,
     dreamsignCount = STANDARD_DREAMSIGN_COUNT,
   } = options;
 
-  const restrictedTide = pickSpecialtyTide(specialtyTides);
-  const isSpecialty = restrictedTide !== null;
+  const isSpecialty = starterDecklistCardNumbers.length > 0;
   const cardPrice = isSpecialty ? SPECIALTY_CARD_PRICE : STANDARD_CARD_PRICE;
 
-  // --- Card slots: drawn from the draft multiset and spent. ---
   const nextDraftState =
     draftState === null ? null : structuredClone(draftState);
   const slots: ShopSlot[] = [];
-  if (nextDraftState !== null) {
-    const eligible =
-      restrictedTide === null
-        ? undefined
-        : eligibleCardNumbersForTide(
-          nextDraftState,
-          cardDatabase,
-          restrictedTide,
-        );
-    const drawnCardNumbers = drawAndSpendUniqueCards(
-      nextDraftState,
-      cardCount,
-      eligible,
-    );
+
+  if (isSpecialty) {
+    // --- Specialty card slots: drawn from the fixed starter decklist,
+    // without touching the draft multiset. ---
+    const shuffled = [...starterDecklistCardNumbers];
+    for (let i = shuffled.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    const drawnCardNumbers = shuffled.slice(0, cardCount);
+    for (const cardNumber of drawnCardNumbers) {
+      const card = cardDatabase.get(cardNumber);
+      if (card === undefined) {
+        continue;
+      }
+      slots.push({
+        itemType: "card",
+        card,
+        dreamsign: null,
+        basePrice: cardPrice,
+        discountPercent: 0,
+        purchased: false,
+      });
+    }
+  } else if (nextDraftState !== null) {
+    // --- Regular card slots: drawn from the draft multiset and spent. ---
+    const drawnCardNumbers = drawAndSpendUniqueCards(nextDraftState, cardCount);
     for (const cardNumber of drawnCardNumbers) {
       const card = cardDatabase.get(cardNumber);
       if (card === undefined) {
@@ -276,22 +255,11 @@ export function generateShopInventory(
   let remainingPool = [...remainingDreamsignPoolIds];
   const spentDreamsignPoolIds: string[] = [];
   if (dreamsignTemplates.length > 0 && dreamsignCount > 0) {
-    const templatesById = new Map(
-      dreamsignTemplates.map((template) => [template.id, template]),
-    );
-    // For a Specialty Shop, only Dreamsigns of the restricted tide are
-    // eligible to be drawn, but the remaining pool still drops every drawn id.
-    const eligiblePool =
-      restrictedTide === null
-        ? remainingPool
-        : remainingPool.filter((id) =>
-          templatesById.get(id)?.packageTides.includes(restrictedTide),
-        );
     const draw = drawDreamsignOptions(
-      eligiblePool,
+      remainingPool,
       dreamsignTemplates,
       dreamsignCount,
-      restrictedTide === null ? dreamsignRegenerationPoolIds : undefined,
+      dreamsignRegenerationPoolIds,
     );
     for (const dreamsign of draw.offeredDreamsigns) {
       slots.push({
@@ -323,6 +291,6 @@ export function generateShopInventory(
     remainingDreamsignPoolIds: remainingPool,
     spentDreamsignPoolIds,
     draftState: nextDraftState,
-    restrictedTide,
+    restrictedTide: null,
   };
 }

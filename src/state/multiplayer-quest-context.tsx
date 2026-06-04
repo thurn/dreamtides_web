@@ -1902,9 +1902,9 @@ export function MultiplayerQuestProvider({
           dreamsignTemplates: current.questContent.dreamsignTemplates,
           dreamsignRegenerationPoolIds:
             current.state.resolvedPackage?.dreamsignPoolIds ?? [],
-          specialtyTides: specialtyOnly
-            ? (current.state.resolvedPackage?.mandatoryTides ?? [])
-            : [],
+          starterDecklistCardNumbers: specialtyOnly
+            ? (current.state.resolvedPackage?.starterDecklistCardNumbers ?? [])
+            : undefined,
         });
         runtime = {
           kind: "shop",
@@ -2192,10 +2192,10 @@ export function MultiplayerQuestProvider({
       dreamsignTemplates: current.questContent.dreamsignTemplates,
       dreamsignRegenerationPoolIds:
         current.state.resolvedPackage?.dreamsignPoolIds ?? [],
-      specialtyTides:
+      starterDecklistCardNumbers:
         expectedRuntime.restrictedTide === null
-          ? []
-          : [expectedRuntime.restrictedTide],
+          ? undefined
+          : (current.state.resolvedPackage?.starterDecklistCardNumbers ?? []),
     });
     const replacements = shopSlotsToRuntime(generated.slots);
     let replacementIndex = 0;

@@ -8,6 +8,8 @@ import {
   rerollCost,
   runtimeSlotsToShopSlots,
   shopSlotsToRuntime,
+  STANDARD_CARD_PRICE,
+  SPECIALTY_CARD_PRICE,
 } from "./shop-generator";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
@@ -337,26 +339,71 @@ describe("generateShopInventory", () => {
     }
   });
 
-  it("restricts a Specialty Shop to a single mandatory tide", () => {
-    const specialtyDb = makeDatabase([
-      makeCard({ cardNumber: 1, tides: ["tide_alpha"] }),
-      makeCard({ cardNumber: 2, tides: ["tide_alpha"] }),
-      makeCard({ cardNumber: 3, tides: ["tide_alpha"] }),
-      makeCard({ cardNumber: 4, tides: ["tide_beta"] }),
-    ]);
+  it("draws Specialty Shop card slots from the starter decklist", () => {
+    const starterDecklistCardNumbers = [2, 4];
     const result = generateShopInventory({
-      cardDatabase: specialtyDb,
-      draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1 }),
+      cardDatabase: db,
+      draftState: makeDraftState({ 1: 1, 3: 1, 5: 1 }),
       remainingDreamsignPoolIds: ["dreamsign-1"],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
-      specialtyTides: ["tide_alpha"],
+      starterDecklistCardNumbers,
+      cardCount: 2,
     });
-    expect(result.restrictedTide).toBe("tide_alpha");
+    const cardSlots = result.slots.filter((slot) => slot.itemType === "card");
+    expect(cardSlots.length).toBeGreaterThan(0);
+    for (const slot of cardSlots) {
+      expect(slot.card).not.toBeNull();
+      expect(starterDecklistCardNumbers).toContain(slot.card!.cardNumber);
+    }
+  });
+
+  it("does not deplete the draft pool for a Specialty Shop", () => {
+    const draftState = makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 });
+    const before = structuredClone(draftState.remainingCopiesByCard);
+    const result = generateShopInventory({
+      cardDatabase: db,
+      draftState,
+      remainingDreamsignPoolIds: ["dreamsign-1"],
+      dreamsignTemplates: DREAMSIGN_TEMPLATES,
+      starterDecklistCardNumbers: [1, 2, 3, 4, 5],
+    });
+    // The original passed-in object is unchanged.
+    expect(draftState.remainingCopiesByCard).toEqual(before);
+    // The returned draft state still has the full multiset.
+    expect(result.draftState?.remainingCopiesByCard).toEqual(before);
+  });
+
+  it("prices Specialty Shop card slots at the specialty price", () => {
+    const result = generateShopInventory({
+      cardDatabase: db,
+      draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
+      remainingDreamsignPoolIds: ["dreamsign-1"],
+      dreamsignTemplates: DREAMSIGN_TEMPLATES,
+      starterDecklistCardNumbers: [1, 2, 3, 4, 5],
+    });
     for (const slot of result.slots) {
-      if (slot.itemType === "card" && slot.card !== null) {
-        expect(slot.card.tides).toContain("tide_alpha");
+      if (slot.itemType === "card") {
+        expect(slot.basePrice).toBe(SPECIALTY_CARD_PRICE);
       }
     }
+  });
+
+  it("prices regular shop card slots at the standard price and spends the pool", () => {
+    const draftState = makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 });
+    const result = generateShopInventory({
+      cardDatabase: db,
+      draftState,
+      remainingDreamsignPoolIds: [],
+      dreamsignTemplates: DREAMSIGN_TEMPLATES,
+    });
+    const cardSlots = result.slots.filter((slot) => slot.itemType === "card");
+    for (const slot of cardSlots) {
+      expect(slot.basePrice).toBe(STANDARD_CARD_PRICE);
+    }
+    // The regular shop spends drawn cards from the draft multiset.
+    expect(
+      Object.keys(result.draftState?.remainingCopiesByCard ?? {}).length,
+    ).toBeLessThan(Object.keys(draftState.remainingCopiesByCard).length);
   });
 
   it("returns a null restrictedTide for a regular shop", () => {
@@ -365,6 +412,17 @@ describe("generateShopInventory", () => {
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1 }),
       remainingDreamsignPoolIds: [],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
+    });
+    expect(result.restrictedTide).toBeNull();
+  });
+
+  it("returns a null restrictedTide for a Specialty Shop", () => {
+    const result = generateShopInventory({
+      cardDatabase: db,
+      draftState: makeDraftState({ 1: 1, 2: 1, 3: 1 }),
+      remainingDreamsignPoolIds: [],
+      dreamsignTemplates: DREAMSIGN_TEMPLATES,
+      starterDecklistCardNumbers: [1, 2, 3],
     });
     expect(result.restrictedTide).toBeNull();
   });

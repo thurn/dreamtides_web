@@ -1199,9 +1199,9 @@ export function QuestProvider({
           dreamsignTemplates: questContent.dreamsignTemplates,
           dreamsignRegenerationPoolIds:
             prev.resolvedPackage?.dreamsignPoolIds ?? [],
-          specialtyTides: specialtyOnly
-            ? (prev.resolvedPackage?.mandatoryTides ?? [])
-            : [],
+          starterDecklistCardNumbers: specialtyOnly
+            ? (prev.resolvedPackage?.starterDecklistCardNumbers ?? [])
+            : undefined,
         });
         logEvent("dreamsign_pool_updated", {
           source: "shop_inventory_revealed",
@@ -1427,8 +1427,10 @@ export function QuestProvider({
           dreamsignTemplates: questContent.dreamsignTemplates,
           dreamsignRegenerationPoolIds:
             prev.resolvedPackage?.dreamsignPoolIds ?? [],
-          specialtyTides:
-            runtime.restrictedTide === null ? [] : [runtime.restrictedTide],
+          starterDecklistCardNumbers:
+            runtime.restrictedTide === null
+              ? undefined
+              : (prev.resolvedPackage?.starterDecklistCardNumbers ?? []),
         });
         const replacements = shopSlotsToRuntime(generated.slots);
         let replacementIndex = 0;
