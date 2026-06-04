@@ -32,7 +32,7 @@ export interface DraftDreamcaller {
 /**
  * Maps each themed Dreamcaller (by name) to the mechanic-archetype tide slugs
  * its ability is built around. Slugs match the keys of `PoolData.archLists`
- * (see `TIDE_TO_ARCHETYPE` in `color-pool.ts`). Derived from each ability's
+ * (see `TIDE_TO_ARCHETYPE` in `color-pool/constants.ts`). Derived from each ability's
  * effect, not from its costs — e.g. Ossian pays an Abandon cost but its payoff
  * (draw a card) is generic, so it is Neutral and omitted here. Edit this map to
  * retune which archetype a Dreamcaller pulls its pool toward.
