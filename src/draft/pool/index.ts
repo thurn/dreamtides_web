@@ -18,13 +18,13 @@
 // importers (including the `.mjs` tooling that imports `color-pool.ts` directly)
 // keep a single stable entry point.
 
-export { buildPoolData } from "./color-pool/pool-data.ts";
-export { generatePool, generatePoolFromData } from "./color-pool/generate.ts";
-export { poolToLines } from "./color-pool/util.ts";
-export { DEFAULT_POOL_VARIANT } from "./color-pool/types.ts";
+export { buildPoolData } from "./pool-data.ts";
+export { generatePool, generatePoolFromData } from "./generate.ts";
+export { poolToLines } from "./util.ts";
+export { DEFAULT_POOL_VARIANT } from "./types.ts";
 export type {
   GeneratedPool,
   PoolCard,
   PoolData,
   PoolVariant,
-} from "./color-pool/types.ts";
+} from "./types.ts";

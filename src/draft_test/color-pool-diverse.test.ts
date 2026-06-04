@@ -7,7 +7,7 @@
 // `docs/cards2/draft_pool_algorithms.md`).
 import { describe, expect, it } from "vitest";
 import { loadCards } from "../../scripts/generate-color-pool.mjs";
-import { buildPoolData, generatePoolFromData } from "./color-pool";
+import { buildPoolData, generatePoolFromData } from "../draft/pool";
 
 const cards = loadCards();
 const poolData = buildPoolData(cards);

@@ -37,7 +37,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import { buildPoolData, generatePoolFromData } from "../src/draft_test/color-pool.ts";
+import { buildPoolData, generatePoolFromData } from "../src/draft/pool/index.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));

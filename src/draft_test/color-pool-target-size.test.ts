@@ -18,7 +18,7 @@ import {
   buildPoolData,
   generatePoolFromData,
   type PoolVariant,
-} from "./color-pool";
+} from "../draft/pool";
 
 const cards = loadCards();
 const decklists = JSON.parse(

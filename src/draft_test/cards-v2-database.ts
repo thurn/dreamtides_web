@@ -1,5 +1,5 @@
 import type { CardData } from "../types/cards";
-import type { GeneratedPool } from "./color-pool";
+import type { GeneratedPool } from "../draft/pool";
 
 /**
  * Fetches the experimental v2 card pool (generated from `cards_v2.toml` by

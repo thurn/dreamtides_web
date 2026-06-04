@@ -1,5 +1,5 @@
 // Type declarations for the Node color-pool generator so typed tests can import
-// its building blocks. The pool algorithm lives in `src/draft_test/color-pool.ts`
+// its building blocks. The pool algorithm lives in `src/draft/pool/index.ts`
 // (the single source of truth); this script loads source data and formats the
 // result. The runtime lives in `generate-color-pool.mjs`.
 

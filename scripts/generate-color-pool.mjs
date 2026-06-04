@@ -1,7 +1,7 @@
 // Generate a random Dreamtides card pool of 180-220 cards using the
 // color-identity algorithm documented in docs/cards2/draft_pool_algorithms.md.
 //
-// The pool-construction algorithm itself lives in `src/draft_test/color-pool.ts`
+// The pool-construction algorithm itself lives in `src/draft/pool/index.ts`
 // and is the single source of truth shared with the in-app draft test harness:
 // this script only loads the source data (cards_v2.toml, dreamcallers_v2.toml)
 // and formats the result. Node strips the TypeScript types on import, so the
@@ -35,7 +35,7 @@ import {
   buildPoolData,
   generatePoolFromData,
   poolToLines,
-} from "../src/draft_test/color-pool.ts";
+} from "../src/draft/pool/index.ts";
 import { CARDS_V2_POOL_METADATA } from "../src/draft_test/cards-v2-metadata.ts";
 import { DREAMCALLER_ARCHETYPES } from "../src/draft_test/dreamcallers-v2-database.ts";
 

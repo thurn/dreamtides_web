@@ -15,7 +15,7 @@ import {
   loadDreamcallers,
   runSeed,
 } from "../../scripts/generate-color-pool.mjs";
-import { buildPoolData, generatePoolFromData, poolToLines } from "./color-pool";
+import { buildPoolData, generatePoolFromData, poolToLines } from "../draft/pool";
 
 const cards = loadCards();
 const poolData = buildPoolData(cards);

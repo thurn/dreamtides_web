@@ -17,7 +17,7 @@
 //   node scripts/analyze-pool-diversity.mjs --compare             # default vs diverse
 //   node scripts/analyze-pool-diversity.mjs --unconstrained       # ignore Dreamcallers
 //   node scripts/analyze-pool-diversity.mjs --seeds 5000 --top 30
-import { buildPoolData, generatePoolFromData } from "../src/draft_test/color-pool.ts";
+import { buildPoolData, generatePoolFromData } from "../src/draft/pool/index.ts";
 import { loadCards, loadDreamcallers } from "./generate-color-pool.mjs";
 
 const DEFAULT_SEEDS = 3000;

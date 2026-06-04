@@ -2,7 +2,7 @@
 // so pool construction can be analyzed across many seeds.
 //
 // Pools are built with the exact algorithm the app uses: this script seeds the
-// shared generator (`src/draft_test/color-pool.ts`) from each Dreamcaller's
+// shared generator (`src/draft/pool/index.ts`) from each Dreamcaller's
 // `draft-archetypes`. A Dreamcaller without that list rolls the unconstrained
 // random pool, mirroring picking it in the draft test harness.
 //
@@ -19,7 +19,7 @@
 //   node scripts/simulate-dreamcaller-pools.mjs --json > pools.json
 import { readFileSync } from "node:fs";
 import { parse } from "smol-toml";
-import { buildPoolData, generatePoolFromData } from "../src/draft_test/color-pool.ts";
+import { buildPoolData, generatePoolFromData } from "../src/draft/pool/index.ts";
 import { loadCards, loadDreamcallers, findDreamcaller } from "./generate-color-pool.mjs";
 
 const CARD_TOML = new URL("../data/tabula/cards_v2.toml", import.meta.url)

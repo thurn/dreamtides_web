@@ -15,9 +15,9 @@ import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
-import { buildPoolData, generatePoolFromData } from "./color-pool";
-import type { GeneratedPool, PoolData, PoolVariant } from "./color-pool";
-import { DEFAULT_POOL_VARIANT } from "./color-pool";
+import { buildPoolData, generatePoolFromData } from "../draft/pool";
+import type { GeneratedPool, PoolData, PoolVariant } from "../draft/pool";
+import { DEFAULT_POOL_VARIANT } from "../draft/pool";
 import {
   buildNameIndex,
   loadCardsV2Database,

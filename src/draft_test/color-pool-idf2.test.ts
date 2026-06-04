@@ -15,7 +15,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { loadCards } from "../../scripts/generate-color-pool.mjs";
-import { buildPoolData, generatePoolFromData, poolToLines } from "./color-pool";
+import { buildPoolData, generatePoolFromData, poolToLines } from "../draft/pool";
 
 const cards = loadCards();
 const decklists = JSON.parse(
