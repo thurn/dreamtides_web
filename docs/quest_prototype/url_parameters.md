@@ -21,6 +21,22 @@ When set to exactly `1`, the prototype boots directly into a battle instead of
 the normal Dreamcaller selection flow. Any other value (including `0`, `true`,
 empty, or absent) leaves the normal start flow in place.
 
+## `ai`
+
+When set to exactly `1`, the playable battle runs a local AI opponent on the
+enemy side. The AI plays a fixed deck of the ten `Starter` cards and proposes
+each enemy action — playing a character, repositioning, casting an event,
+declaring challengers, and resolving the Challenge phase — through a proposal
+bar the human approves, rejects, or ends with an explicit click. Only the
+human's approval commits state. While an un-approved AI action proposal is held,
+the human's own board controls are inactive; they return during the AI's
+end-of-turn proposal and the human's own turn. Any other value (including `0`,
+`true`, empty, or absent) leaves the battle as a manual sandbox with no AI actor.
+
+The AI is a local actor that runs on a single client, so it stays off in a
+shared multiplayer room (when two or more clients are connected). It pairs with
+`startInBattle=1` for a direct entry point (`?startInBattle=1&ai=1`).
+
 ## `realtime`
 
 Selects the Firebase Realtime Database target. When set to exactly `1`, the app
@@ -147,6 +163,7 @@ http://localhost:5173/?debugJourneyShape=single_offer
 http://localhost:5173/?debugJourneyReward=gain_essence
 http://localhost:5173/?debugJourneyCost=pay_essence
 http://localhost:5173/?seed=7&startInBattle=1
+http://localhost:5173/?startInBattle=1&ai=1     # battle vs the local AI opponent
 http://localhost:5173/editor?q=moon&type=event
 http://localhost:5173/draft_test?algo=diverse   # diverse draft-pool algorithm
 ```
