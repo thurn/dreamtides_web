@@ -1,8 +1,10 @@
-// Public entry points: assemble a {@link GeneratedPool} by dispatching to the
-// selected variant generator and capping copies at 2.
+// Public entry points: assemble a {@link GeneratedPool} by handing a uniform
+// request to the strategy the selected variant resolves to (see `registry.ts`)
+// and capping copies at 2. This module never branches on which algorithm runs.
 
 import { COLORS } from "./constants.ts";
 import { buildPoolData } from "./pool-data.ts";
+import { poolStrategyFor } from "./registry.ts";
 import { makeRng } from "./rng.ts";
 import {
   DEFAULT_POOL_VARIANT,
@@ -10,55 +12,8 @@ import {
   type PoolCard,
   type PoolData,
   type PoolVariant,
-  type VariantResult,
 } from "./types.ts";
 import { poolSize } from "./util.ts";
-import { generate } from "./variant-default.ts";
-import { generateDecklists } from "./variant-decklists.ts";
-import { generateDiverse } from "./variant-diverse.ts";
-import { generateIdf } from "./variant-idf.ts";
-import { generateIdf2 } from "./variant-idf2.ts";
-import { generateIdf3 } from "./variant-idf3.ts";
-import { generateMerged } from "./variant-merged.ts";
-
-function runVariant(
-  variant: PoolVariant,
-  rng: () => number,
-  poolData: PoolData,
-  seedArchetypes?: readonly string[],
-  themeArchetypes?: readonly string[],
-  targetSize?: number,
-  signatureCards?: readonly string[],
-): VariantResult {
-  switch (variant) {
-    case "diverse":
-      return generateDiverse(rng, poolData, seedArchetypes, targetSize);
-    case "decklists":
-      return generateDecklists(
-        rng,
-        poolData,
-        seedArchetypes,
-        themeArchetypes,
-        targetSize,
-      );
-    case "merged":
-      return generateMerged(
-        rng,
-        poolData,
-        seedArchetypes,
-        themeArchetypes,
-        targetSize,
-      );
-    case "idf":
-      return generateIdf(rng, poolData, targetSize);
-    case "idf2":
-      return generateIdf2(rng, poolData, targetSize);
-    case "idf3":
-      return generateIdf3(rng, poolData, signatureCards, targetSize);
-    case "default":
-      return generate(rng, poolData, seedArchetypes, targetSize);
-  }
-}
 
 /**
  * Generate a fresh random pool from the given card records. Pass a `seed` to
@@ -114,15 +69,16 @@ export function generatePoolFromData(
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
   const rng = makeRng(resolvedSeed);
-  const { C, selected, counts, starterDeck, idf3Provenance } = runVariant(
+  const { C, selected, counts, starterDeck, idf3Provenance } = poolStrategyFor(
     variant,
+  ).generate({
     rng,
     poolData,
     seedArchetypes,
     themeArchetypes,
-    targetSize,
     signatureCards,
-  );
+    targetSize,
+  });
 
   const capped = new Map<string, number>();
   for (const [card, count] of counts) {

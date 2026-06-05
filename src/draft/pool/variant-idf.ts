@@ -8,6 +8,7 @@
 // a card in nearly every deck gets ~0 weight. The corpus, cosine, and growth
 // helpers here are shared with the `idf2` variant.
 
+import type { PoolStrategy } from "./strategy.ts";
 import type { PoolData, VariantResult } from "./types.ts";
 import { generate } from "./variant-default.ts";
 
@@ -227,3 +228,13 @@ export function generateIdf(
   // started the pool.
   return { C: new Set(), selected: ["idf", `deck#${String(startIdx)}`], counts };
 }
+
+/** Strategy adapter for the `idf` algorithm. */
+export const idfStrategy: PoolStrategy = {
+  id: "idf",
+  description:
+    "Simplest decklist pool: pick one real deck at random and grow it by " +
+    "IDF-cosine similarity to the rest of the corpus.",
+  generate: ({ rng, poolData, targetSize }) =>
+    generateIdf(rng, poolData, targetSize),
+};

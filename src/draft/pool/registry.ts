@@ -1,0 +1,56 @@
+// The registry of pool-construction strategies: the single place that knows
+// which generation algorithms exist. `generate.ts` dispatches through it, and
+// the `draft_test` harness derives the `?algo=` option set and the variant chip
+// cycle from it, so no other code enumerates or branches on individual
+// algorithms.
+//
+// `POOL_STRATEGIES` is typed as `Record<PoolVariant, PoolStrategy>`, so the
+// compiler requires exactly one entry per id in the {@link PoolVariant} union —
+// adding an id there without registering its strategy (or vice versa) is a type
+// error. To add an algorithm: extend the union in `types.ts`, export a
+// {@link PoolStrategy} from its variant module, and add it here.
+
+import type { PoolStrategy } from "./strategy.ts";
+import { DEFAULT_POOL_VARIANT, type PoolVariant } from "./types.ts";
+import { defaultStrategy } from "./variant-default.ts";
+import { decklistsStrategy } from "./variant-decklists.ts";
+import { diverseStrategy } from "./variant-diverse.ts";
+import { idfStrategy } from "./variant-idf.ts";
+import { idf2Strategy } from "./variant-idf2.ts";
+import { idf3Strategy } from "./variant-idf3.ts";
+import { mergedStrategy } from "./variant-merged.ts";
+
+/** Every registered strategy, keyed by the `?algo=` id that selects it. */
+export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
+  default: defaultStrategy,
+  diverse: diverseStrategy,
+  decklists: decklistsStrategy,
+  merged: mergedStrategy,
+  idf: idfStrategy,
+  idf2: idf2Strategy,
+  idf3: idf3Strategy,
+};
+
+/**
+ * The registered strategy ids, in registration order. This is the authoritative
+ * `?algo=` option list and the order the draft-test variant chip cycles through.
+ */
+export const POOL_VARIANT_IDS = Object.keys(POOL_STRATEGIES) as PoolVariant[];
+
+/** Whether `value` is a registered pool-strategy id. */
+export function isPoolVariant(value: unknown): value is PoolVariant {
+  return typeof value === "string" && value in POOL_STRATEGIES;
+}
+
+/**
+ * Resolve a raw `?algo=` value to a registered strategy id, falling back to
+ * {@link DEFAULT_POOL_VARIANT} for absent or unknown values.
+ */
+export function resolvePoolVariant(value: unknown): PoolVariant {
+  return isPoolVariant(value) ? value : DEFAULT_POOL_VARIANT;
+}
+
+/** Look up the strategy for a registered id. */
+export function poolStrategyFor(variant: PoolVariant): PoolStrategy {
+  return POOL_STRATEGIES[variant];
+}

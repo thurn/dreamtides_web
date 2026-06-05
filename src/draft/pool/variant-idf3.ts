@@ -30,6 +30,7 @@
 // `scripts/idf3-signature-experiment.mjs` validates this scheme and the constants
 // below against the real `idf2` oracle.
 
+import type { PoolStrategy } from "./strategy.ts";
 import type {
   Idf3PoolCardProvenance,
   Idf3PoolProvenance,
@@ -225,3 +226,13 @@ export function generateIdf3(
     idf3Provenance,
   };
 }
+
+/** Strategy adapter for the `idf3` algorithm. */
+export const idf3Strategy: PoolStrategy = {
+  id: "idf3",
+  description:
+    "idf2's diversity-biased decklist pool steered toward a Dreamcaller by its " +
+    "signature cards via anchor affinity.",
+  generate: ({ rng, poolData, signatureCards, targetSize }) =>
+    generateIdf3(rng, poolData, signatureCards, targetSize),
+};

@@ -2,11 +2,12 @@
 
 // `default` is the original color-identity algorithm. `diverse` is an
 // experimental variant tuned to spread cards and archetypes more evenly across
-// pools (see `docs/cards2/draft_pool_algorithms.md`). The variants are
-// selectable side by side via the `variant` argument and the draft test `?algo=`
-// URL parameter. To make a variant the primary one, change
-// `DEFAULT_POOL_VARIANT`; to retire one, delete its module and the corresponding
-// branch in `generate.ts`.
+// pools (see `docs/cards2/draft_pool_algorithms.md`). Each id names a
+// {@link PoolStrategy} registered in `registry.ts`; the variants are selectable
+// side by side via the `variant` argument and the draft test `?algo=` URL
+// parameter. To make a variant the primary one, change `DEFAULT_POOL_VARIANT`;
+// to retire one, remove its id here and its `registry.ts` entry, then delete its
+// module.
 export type PoolVariant =
   | "default"
   | "diverse"

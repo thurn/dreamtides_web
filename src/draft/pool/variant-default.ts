@@ -5,6 +5,7 @@
 import { ALPHA, COLORS, HI, JIT, K_WEIGHTS, LO, TOPK } from "./constants.ts";
 import { randInt, shuffle, weightedPick } from "./rng.ts";
 import { onColorCandidates } from "./themes.ts";
+import type { PoolStrategy } from "./strategy.ts";
 import type { PoolData, VariantResult } from "./types.ts";
 import { colorPrefix, inter, poolSize } from "./util.ts";
 
@@ -139,3 +140,14 @@ export function generate(
 
   return { C, selected, counts };
 }
+
+/** Strategy adapter for the `default` algorithm. */
+export const defaultStrategy: PoolStrategy = {
+  id: "default",
+  description:
+    "Color-identity walk: pick an identity, walk the on-color themes weighted " +
+    "by overlap with what is already chosen, then fill, jitter, and trim to a " +
+    "random target size.",
+  generate: ({ rng, poolData, seedArchetypes, targetSize }) =>
+    generate(rng, poolData, seedArchetypes, targetSize),
+};

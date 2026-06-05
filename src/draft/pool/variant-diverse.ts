@@ -9,6 +9,7 @@
 import { ALPHA, HI, LO, TOPK } from "./constants.ts";
 import { randInt, shuffle, weightedPick, weightedSample } from "./rng.ts";
 import { onColorCandidates } from "./themes.ts";
+import type { PoolStrategy } from "./strategy.ts";
 import type { PoolData, VariantResult } from "./types.ts";
 import { canonicalColors, colorPrefix, inter, poolSize } from "./util.ts";
 
@@ -258,3 +259,13 @@ export function generateDiverse(
 
   return { C, selected, counts };
 }
+
+/** Strategy adapter for the `diverse` algorithm. */
+export const diverseStrategy: PoolStrategy = {
+  id: "diverse",
+  description:
+    "Color-identity walk tuned to flatten the distribution, spreading cards and " +
+    "archetypes more evenly across pools via inverse-reach weighting.",
+  generate: ({ rng, poolData, seedArchetypes, targetSize }) =>
+    generateDiverse(rng, poolData, seedArchetypes, targetSize),
+};

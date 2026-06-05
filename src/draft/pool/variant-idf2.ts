@@ -14,6 +14,7 @@
 // from ~221 to ~552 and cuts the top archetype's share from ~4.1% to ~1.2%,
 // while pool coherence barely moves.
 
+import type { PoolStrategy } from "./strategy.ts";
 import type { PoolData, VariantResult } from "./types.ts";
 import { generate } from "./variant-default.ts";
 import {
@@ -111,3 +112,13 @@ export function generateIdf2(
   const { counts } = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx, targetSize);
   return { C: new Set(), selected: ["idf2", `deck#${String(startIdx)}`], counts };
 }
+
+/** Strategy adapter for the `idf2` algorithm. */
+export const idf2Strategy: PoolStrategy = {
+  id: "idf2",
+  description:
+    "Like idf, but draws the starter deck weighted by inverse near-twin count " +
+    "so over-represented archetypes are drawn far less often.",
+  generate: ({ rng, poolData, targetSize }) =>
+    generateIdf2(rng, poolData, targetSize),
+};

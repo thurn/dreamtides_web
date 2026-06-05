@@ -9,6 +9,7 @@
 
 import { COLORS } from "./constants.ts";
 import { randInt, shuffle, weightedPick } from "./rng.ts";
+import type { PoolStrategy } from "./strategy.ts";
 import type { PoolData, VariantResult } from "./types.ts";
 import { colorPrefix, poolSize } from "./util.ts";
 import { generate } from "./variant-default.ts";
@@ -330,3 +331,13 @@ export function generateDecklists(
   if (domArch) selected.push(`A:${domArch}`);
   return { C, selected, counts };
 }
+
+/** Strategy adapter for the `decklists` algorithm. */
+export const decklistsStrategy: PoolStrategy = {
+  id: "decklists",
+  description:
+    "Grows the pool from real human-built decklists by IDF-weighted cosine " +
+    "similarity to a starter deck, biased toward the Dreamcaller's theme.",
+  generate: ({ rng, poolData, seedArchetypes, themeArchetypes, targetSize }) =>
+    generateDecklists(rng, poolData, seedArchetypes, themeArchetypes, targetSize),
+};

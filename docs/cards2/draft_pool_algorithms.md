@@ -542,15 +542,25 @@ card names back to `cards_v2` card numbers for the draft engine.
 
 ## How they are dispatched
 
-When a pool is requested, the dispatcher reads the chosen variant and routes to
-the matching algorithm — `diverse`, `decklists`, `merged`, `idf`, and `idf2` to
-their respective functions, anything else to `default`. The Dreamcaller's seed
-archetypes are passed to every variant; its theme archetypes are passed through
-but only `decklists` and `merged` use them, and `idf`/`idf2` ignore both
-entirely. Whatever the algorithm returns, the dispatcher caps every card at two
-copies, derives the ordered color-identity string, and returns the pool together
-with its identity, chosen themes, copy counts, the seed used, the final size, and
-which variant produced it.
+Each algorithm is a `PoolStrategy` — an object with an `id`, a one-line
+`description`, and a `generate(request)` method — exported from its own
+`variant-*.ts` module. The strategies are collected in
+`src/draft/pool/registry.ts`, a `Record<PoolVariant, PoolStrategy>` that is the
+single source of truth for which algorithms exist; the `?algo=` URL parameter
+and the draft-test variant chip both read their option set from it.
+
+When a pool is requested, `generate.ts` builds one uniform `PoolGenerationRequest`
+— the seeded RNG, the pool data, and the Dreamcaller's seed archetypes, theme
+archetypes, and signature cards — looks the chosen id up in the registry, and
+calls that strategy's `generate`. The request carries every input any algorithm
+might read; each strategy destructures only the fields it uses (`default` and
+`diverse` read the seed archetypes, `decklists` and `merged` additionally read
+the theme archetypes, `idf3` reads the signature cards, and `idf`/`idf2` read
+neither), so `generate.ts` never branches on which algorithm runs. Whatever the
+strategy returns, `generate.ts` caps every card at two copies, derives the
+ordered color-identity string, and returns the pool together with its identity,
+chosen themes, copy counts, the seed used, the final size, and which variant
+produced it.
 
 ---
 

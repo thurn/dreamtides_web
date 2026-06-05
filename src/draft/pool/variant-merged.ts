@@ -8,6 +8,7 @@
 // `default` when no merged lists are bundled.
 
 import { randInt, shuffle, weightedPick } from "./rng.ts";
+import type { PoolStrategy } from "./strategy.ts";
 import type { PoolData, VariantResult } from "./types.ts";
 import { colorPrefix, poolSize } from "./util.ts";
 import { generate } from "./variant-default.ts";
@@ -201,3 +202,13 @@ export function generateMerged(
   if (domArch) selected.push(`A:${domArch}`);
   return { C, selected, counts };
 }
+
+/** Strategy adapter for the `merged` algorithm. */
+export const mergedStrategy: PoolStrategy = {
+  id: "merged",
+  description:
+    "Draws from pre-merged per-archetype lists with a trivial theme-weighted " +
+    "pick; reproduces the decklists output from offline-collapsed lists.",
+  generate: ({ rng, poolData, seedArchetypes, themeArchetypes, targetSize }) =>
+    generateMerged(rng, poolData, seedArchetypes, themeArchetypes, targetSize),
+};

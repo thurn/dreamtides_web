@@ -15,9 +15,13 @@ import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
-import { buildPoolData, generatePoolFromData } from "../draft/pool";
+import {
+  buildPoolData,
+  generatePoolFromData,
+  POOL_VARIANT_IDS,
+  resolvePoolVariant,
+} from "../draft/pool";
 import type { GeneratedPool, PoolData, PoolVariant } from "../draft/pool";
-import { DEFAULT_POOL_VARIANT } from "../draft/pool";
 import {
   buildNameIndex,
   loadCardsV2Database,
@@ -304,29 +308,16 @@ interface PoolInfo {
   variant: PoolVariant;
 }
 
-/** Pool-generation variants, in the order the toggle button cycles them. */
-const POOL_VARIANTS: readonly PoolVariant[] = [
-  "default",
-  "diverse",
-  "decklists",
-  "merged",
-  "idf",
-  "idf2",
-  "idf3",
-];
-
 /**
- * Pool-generation variant for this session, from the `?algo=` URL parameter
- * (`default`, `diverse`, `decklists`, `merged`, `idf`, `idf2`, or `idf3`). Invalid or absent values
- * fall back to {@link DEFAULT_POOL_VARIANT}, so flipping that constant changes
- * the default everywhere while the URL parameter still allows side-by-side
- * comparison.
+ * Pool-generation variant for this session, from the `?algo=` URL parameter.
+ * The accepted ids and the toggle cycle order come from the strategy registry
+ * (`POOL_VARIANT_IDS`); invalid or absent values fall back to the registry's
+ * default, so adding a strategy automatically extends the harness with no change
+ * here.
  */
 function readPoolVariant(): PoolVariant {
   const algo = new URLSearchParams(window.location.search).get("algo");
-  return POOL_VARIANTS.includes(algo as PoolVariant)
-    ? (algo as PoolVariant)
-    : DEFAULT_POOL_VARIANT;
+  return resolvePoolVariant(algo);
 }
 
 /**
@@ -358,8 +349,8 @@ function readPoolSize(): number | undefined {
 
 /** The next variant in the cycle, for the toggle button. */
 function nextPoolVariant(current: PoolVariant): PoolVariant {
-  const i = POOL_VARIANTS.indexOf(current);
-  return POOL_VARIANTS[(i + 1) % POOL_VARIANTS.length];
+  const i = POOL_VARIANT_IDS.indexOf(current);
+  return POOL_VARIANT_IDS[(i + 1) % POOL_VARIANT_IDS.length];
 }
 
 /**
