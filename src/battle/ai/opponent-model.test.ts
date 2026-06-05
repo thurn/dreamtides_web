@@ -183,6 +183,34 @@ describe("scoreAgainstOpponent", () => {
     expect(Number.isFinite(score)).toBe(true);
   });
 
+  it("returns a finite number when samples mix +Infinity and −Infinity evaluations", () => {
+    // Fixture designed to produce both terminal infinities in a single sample set:
+    // - playerScore = 25 means evaluate() returns -Infinity unless aiScore also
+    //   reaches 25 first (aiScore check is first in evaluate()).
+    // - aiScore = 20 + a challenger with spark 5 means the "noDefense" archetype
+    //   (unblocked scoring) pushes aiScore to 25 → +Infinity.
+    // - A "tradeEvenly" response with a bigger blocker prevents scoring, leaving
+    //   aiScore < 25 while playerScore = 25 → -Infinity.
+    // Without the clamp, weightedSum = (+Inf)*w1 + (-Inf)*w2 = NaN.
+    const model = emptyModel();
+    model.aiScore = 20;
+    model.playerScore = 25;
+    // Single challenger with spark 5: unblocked it scores 5, reaching aiScore 25.
+    model.aiDeployed.D0 = makeCard({
+      battleCardId: "ai-near-win",
+      basePrintedSpark: 5,
+      canChallengeThisTurn: true,
+    });
+    // One big blocker to ensure "tradeEvenly" keeps the AI from scoring.
+    model.opponentBodies = [makeBody({ battleCardId: "op-blocker", effectiveSpark: 6, slot: "D0" })];
+    model.opponentHandCount = 0;
+
+    const emResult = scoreAgainstOpponent(model, "expectiminimax", 8, 77);
+    const wcResult = scoreAgainstOpponent(model, "worstCase", 8, 77);
+    expect(Number.isFinite(emResult)).toBe(true);
+    expect(Number.isFinite(wcResult)).toBe(true);
+  });
+
   it("ignores deployed cards that cannot challenge this turn", () => {
     const exhausted = modelWithChallengers();
     for (const slot of ["D0", "D1", "D2"] as const) {

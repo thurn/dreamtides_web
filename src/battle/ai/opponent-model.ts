@@ -1,4 +1,5 @@
 import { buildSupportContribution } from "./cards/support-contribution";
+// Namespace import so the bounded-sampling test can spy on `evaluate`.
 import * as evaluateModule from "./evaluate";
 import { cloneForwardModel, type ForwardModel } from "./forward-model";
 import { DEPLOY_SLOT_IDS, type DeploySlotId } from "../types";
@@ -56,6 +57,22 @@ const ARCHETYPE_ORDER: readonly ResponseArchetype[] = [
 
 /** Hard cap on sampled responses, matching the spec ("≤ ~16"). */
 const MAX_SAMPLE_CAP = 16;
+
+/**
+ * Finite stand-in for ±Infinity returned by `evaluate` on terminal boards.
+ * Clamping keeps aggregation (weighted mean, min) well-defined when a sample
+ * set contains both a win-terminal (+Infinity) and a loss-terminal (−Infinity)
+ * evaluation; without clamping `weightedSum` becomes NaN.
+ */
+const TERMINAL_SENTINEL = 1e9;
+
+/** Replaces ±Infinity with ±{@link TERMINAL_SENTINEL}; passes finite values through. */
+function clampEval(value: number): number {
+  if (!Number.isFinite(value)) {
+    return value > 0 ? TERMINAL_SENTINEL : -TERMINAL_SENTINEL;
+  }
+  return value;
+}
 
 interface Challenger {
   slot: DeploySlotId;
@@ -348,7 +365,7 @@ export function scoreAgainstOpponent(
   for (const response of responses) {
     const clone = cloneForwardModel(model);
     applyResponse(clone, challengers, response);
-    const score = evaluateModule.evaluate(clone);
+    const score = clampEval(evaluateModule.evaluate(clone));
 
     weightedSum += response.weight * score;
     totalWeight += response.weight;
