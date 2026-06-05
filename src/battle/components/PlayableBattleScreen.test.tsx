@@ -168,6 +168,7 @@ function mount(element: ReactElement): {
 
 function renderScreen(
   mutateInitialState?: (state: ReturnType<typeof createTestBattle>["initialState"]) => void,
+  options?: { aiMode?: boolean },
 ) {
   const testBattle = createTestBattle();
   mutateInitialState?.(testBattle.initialState);
@@ -178,7 +179,7 @@ function renderScreen(
         battleInit={testBattle.battleInit}
         initialState={testBattle.initialState}
       >
-        <PlayableBattleScreen site={testBattle.site} />
+        <PlayableBattleScreen site={testBattle.site} aiMode={options?.aiMode ?? false} />
       </TestMultiplayerBattleHost>,
     ),
   };
@@ -557,6 +558,69 @@ describe("PlayableBattleScreen", () => {
     expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Day");
     expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 2");
     expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Player");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("ramps the enemy energy and draws when the player passes the turn in AI mode", () => {
+    const { container, root } = renderScreen(
+      (state) => {
+        state.phase = "night";
+        state.activeSide = "player";
+        state.turnNumber = 2;
+        state.sides.enemy.currentEnergy = 2;
+        state.sides.enemy.maxEnergy = 2;
+      },
+      { aiMode: true },
+    );
+
+    // Reveal the enemy hand so its live card count is observable in the DOM.
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+    const enemyHandBefore = container.querySelectorAll(".revealed-hand-card.opponent").length;
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next-major"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Day");
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
+    const enemyEnergy = container.querySelector('[data-battle-stat="enemy:energy"]');
+    // Turn 2 ramp: min(turnNumber + 1, cap) === 3, applied to both max and current.
+    expect(enemyEnergy?.getAttribute("data-battle-current-energy")).toBe("3");
+    expect(enemyEnergy?.getAttribute("data-battle-max-energy")).toBe("3");
+    // The enemy draws one card for its turn.
+    expect(container.querySelectorAll(".revealed-hand-card.opponent").length).toBe(
+      enemyHandBefore + 1,
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("leaves enemy energy untouched on a turn handoff when AI mode is off", () => {
+    const { container, root } = renderScreen((state) => {
+      state.phase = "night";
+      state.activeSide = "player";
+      state.turnNumber = 2;
+      state.sides.enemy.currentEnergy = 2;
+      state.sides.enemy.maxEnergy = 2;
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next-major"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
+    const enemyEnergy = container.querySelector('[data-battle-stat="enemy:energy"]');
+    expect(enemyEnergy?.getAttribute("data-battle-current-energy")).toBe("2");
+    expect(enemyEnergy?.getAttribute("data-battle-max-energy")).toBe("2");
 
     act(() => {
       root.unmount();

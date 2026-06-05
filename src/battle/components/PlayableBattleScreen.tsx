@@ -43,6 +43,7 @@ import type { QuestContent } from "../../data/quest-content";
 import type { BattleCommand } from "../debug/commands";
 import { useBattleAi } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
+import { energyRampEdits } from "../engine/energy";
 import { BattleActionBar } from "./BattleActionBar";
 import { BattleAiProposalBar } from "./BattleAiProposalBar";
 import { BattleCardHoverPreview } from "./BattleCardHoverPreview";
@@ -1095,6 +1096,43 @@ function PlayableBattleScreenInner({
                   },
                   sourceSurface: "phase-controls",
                 });
+                // In AI mode, the human advancing the turn into the enemy's
+                // turn IS the enemy's start-of-turn handoff, so it must apply
+                // the enemy's energy ramp and draw — the symmetric counterpart
+                // to the AI's own end-turn handoff, which ramps the incoming
+                // player (see `buildEndTurnProposal` in use-battle-ai.ts).
+                // Without it the enemy is frozen at its opening energy and the
+                // planner, unable to afford any development, passes every turn.
+                // A forward player→enemy handoff keeps the turn number (see
+                // `advanceBattleTurnPair`); the backward variant decrements it,
+                // so the equality check excludes rewinds.
+                const isAiEnemyHandoff =
+                  aiMode &&
+                  reducerState.mutable.activeSide === "player" &&
+                  target.activeSide === "enemy" &&
+                  target.turnNumber === reducerState.mutable.turnNumber;
+                if (isAiEnemyHandoff) {
+                  for (const edit of energyRampEdits(
+                    "enemy",
+                    target.turnNumber,
+                    battleInit.maxEnergyCap,
+                  )) {
+                    handleCommand({
+                      id: "DEBUG_EDIT",
+                      edit,
+                      sourceSurface: "phase-controls",
+                    });
+                  }
+                  // Mirror the handoff draw rule: the very first turn of the
+                  // game (turn 1) skips the draw; every later turn draws.
+                  if (target.turnNumber > 1) {
+                    handleCommand({
+                      id: "DEBUG_EDIT",
+                      edit: { kind: "DRAW_CARD", side: "enemy" },
+                      sourceSurface: "phase-controls",
+                    });
+                  }
+                }
               }}
             />
             <BattleHandTray
