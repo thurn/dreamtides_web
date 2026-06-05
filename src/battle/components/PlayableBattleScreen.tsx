@@ -822,7 +822,7 @@ function PlayableBattleScreenInner({
             {isOpponentHandRevealed ? (
               <div className="opponent-hand-zone">
                 <BattleOpponentHandTray
-                  canInteract={true}
+                  canInteract={canPlayerAct}
                   currentEnergy={reducerState.mutable.sides.enemy.currentEnergy}
                   hand={reducerState.mutable.sides.enemy.hand}
                   isCardPlayable={undefined}
@@ -917,7 +917,7 @@ function PlayableBattleScreenInner({
                     side="enemy"
                     zone="reserve"
                     state={reducerState.mutable}
-                    canInteract={true}
+                    canInteract={canPlayerAct}
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -937,7 +937,7 @@ function PlayableBattleScreenInner({
                     side="enemy"
                     zone="deployed"
                     state={reducerState.mutable}
-                    canInteract={true}
+                    canInteract={canPlayerAct}
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -961,7 +961,7 @@ function PlayableBattleScreenInner({
                     side="player"
                     zone="deployed"
                     state={reducerState.mutable}
-                    canInteract={true}
+                    canInteract={canPlayerAct}
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -981,7 +981,7 @@ function PlayableBattleScreenInner({
                     side="player"
                     zone="reserve"
                     state={reducerState.mutable}
-                    canInteract={true}
+                    canInteract={canPlayerAct}
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -1069,7 +1069,7 @@ function PlayableBattleScreenInner({
               }}
             />
             <BattleHandTray
-              canInteract={true}
+              canInteract={canPlayerAct}
               compact={isOpponentHandRevealed}
               currentEnergy={reducerState.mutable.sides.player.currentEnergy}
               hand={reducerState.mutable.sides.player.hand}
