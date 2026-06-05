@@ -127,33 +127,34 @@ Example:
 http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
 ```
 
-## Draft Test
+## `algo`
 
-The standalone `/draft_test` route exercises the experimental `cards_v2` draft
-pool. Start the dev server with `npm run dev:vite` (or `npm run draft_test`,
-which opens the route directly) and visit it on port 5173. It reads its query
-parameters at page load (not reactive; changing them requires a reload).
+Selects the draft-pool construction strategy on the standalone `/draft_test`
+route, which exercises the experimental `cards_v2` draft pool. Start the dev
+server with `npm run dev:vite` (or `npm run draft_test`, which opens the route
+directly) and visit it on port 5173.
 
-- `algo=<id>` selects the pool-construction strategy. Each strategy is a
-  `PoolStrategy` registered in `src/draft/pool/registry.ts`, which is the single
-  source of truth for the accepted ids; the registry currently provides:
+Each strategy is a `PoolStrategy` registered in `src/draft/pool/registry.ts`,
+which is the single source of truth for the accepted ids. The registry currently
+provides:
 
-  - `default` — color-identity generator (the build default).
-  - `diverse` — spreads cards and archetypes more evenly across pools.
-  - `decklists` — grows the pool out of real human-built decklists.
-  - `merged` — draws from pre-merged per-archetype lists.
-  - `idf` — grows a pool from one random decklist by IDF-cosine similarity.
-  - `idf2` — `idf` with a diversity-biased starter draw.
-  - `idf3` — `idf2` steered toward a Dreamcaller by its signature cards.
+- `algo=default` — color-identity generator (the build default).
+- `algo=diverse` — spreads cards and archetypes more evenly across pools.
+- `algo=decklists` — grows the pool out of real human-built decklists.
+- `algo=merged` — draws from pre-merged per-archetype lists.
+- `algo=idf` — grows a pool from one random decklist by IDF-cosine similarity.
+- `algo=idf2` — `idf` with a diversity-biased starter draw.
+- `algo=idf3` — `idf2` steered toward a Dreamcaller by its signature cards.
 
-  All of these are described in `docs/cards2/draft_pool_algorithms.md`. Any
-  value not registered (including empty or absent) falls back to the registry's
-  default (`DEFAULT_POOL_VARIANT`, currently `default`).
+All of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
+not registered (including empty or absent) falls back to the registry's default
+(`DEFAULT_POOL_VARIANT`, currently `default`).
 
 The chosen strategy applies to the pool built from your Dreamcaller selection,
 and the active variant is shown as a chip in the draft header; clicking the chip
 reloads with the next registered strategy (in registry order) so they can be
-compared side by side.
+compared side by side. The parameter is read once at page load and is not
+reactive; changing it requires a reload.
 
 Examples:
 
