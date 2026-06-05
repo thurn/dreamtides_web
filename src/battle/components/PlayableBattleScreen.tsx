@@ -5,7 +5,7 @@ import type {
   MouseEvent as ReactPointerMouseEvent,
   ReactNode,
 } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { SiteState } from "../../types/quest";
 import type { CardData } from "../../types/cards";
 import {
@@ -41,7 +41,9 @@ import type {
 } from "../types";
 import type { QuestContent } from "../../data/quest-content";
 import type { BattleCommand } from "../debug/commands";
+import { useBattleAi } from "../ai/use-battle-ai";
 import { BattleActionBar } from "./BattleActionBar";
+import { BattleAiProposalBar } from "./BattleAiProposalBar";
 import { BattleCardHoverPreview } from "./BattleCardHoverPreview";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
@@ -164,7 +166,38 @@ function PlayableBattleScreenInner({
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
   const loggedCommandSerialRef = useRef(0);
-  const canPlayerAct = true;
+
+  // Win/turn/energy caps for the AI planner, sourced from the battle init.
+  // Wrapped in `useMemo` so the object is referentially stable across renders;
+  // an inline literal would bust the hook's proposal memo every render.
+  const aiCaps = useMemo(
+    () => ({
+      scoreToWin: battleInit.scoreToWin,
+      turnLimit: battleInit.turnLimit,
+      maxEnergyCap: battleInit.maxEnergyCap,
+    }),
+    [battleInit.scoreToWin, battleInit.turnLimit, battleInit.maxEnergyCap],
+  );
+
+  // The AI approval loop. Inert unless `aiMode` is true: when disabled the hook
+  // holds no proposal and dispatches nothing. It receives the SAME live
+  // `reducerState`/`dispatch` the rest of the screen uses, so approved commands
+  // flow back as a new `reducerState` and the hook re-plans.
+  const { proposal, approve, reject, endAiTurn } = useBattleAi({
+    reducerState,
+    dispatch,
+    enabled: aiMode,
+    aiSide: "enemy",
+    caps: aiCaps,
+  });
+
+  // While the AI holds an un-approved ACTION proposal, the human drives only via
+  // the proposal bar's Approve/Reject. Normal controls return on the human's own
+  // turn (no proposal held) and during the endTurn proposal (the human approves
+  // the Challenge outcome).
+  const canPlayerAct = !(
+    aiMode && proposal !== null && proposal.kind === "action"
+  );
   const historyCount = reducerState.history.past.length;
   const futureCount = reducerState.history.future.length;
   const failureResult = selectFailureOverlayResult(reducerState.mutable.result);
@@ -772,6 +805,12 @@ function PlayableBattleScreenInner({
                 sourceSurface: "action-bar",
               });
             }}
+          />
+          <BattleAiProposalBar
+            proposal={proposal}
+            onApprove={approve}
+            onReject={reject}
+            onEndAiTurn={endAiTurn}
           />
           <BattleLiveRegion
             activeSide={reducerState.mutable.activeSide}
