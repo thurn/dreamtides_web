@@ -183,6 +183,23 @@ describe("BattleStatusStrip", () => {
     });
   });
 
+  it("shows the hand-card count on the dreamcaller portrait", () => {
+    const { container, root } = mount();
+    const handCount = container.querySelector<HTMLElement>(
+      '[data-battle-status-hand-count="player"]',
+    );
+    const thumb = container.querySelector('[data-battle-status-dreamcaller-thumb]');
+
+    expect(handCount).not.toBeNull();
+    expect(thumb?.contains(handCount)).toBe(true);
+    // createState() deploys one opening-hand card, leaving the rest in hand.
+    expect(handCount?.textContent).toContain("4");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("shows the banished chip count when the side has banished cards", () => {
     const { container, root } = mount(true);
 

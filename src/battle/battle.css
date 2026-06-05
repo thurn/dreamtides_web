@@ -339,6 +339,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   border: 1px dashed var(--line);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.025);
@@ -349,6 +350,19 @@
   text-transform: uppercase;
   cursor: pointer;
   transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.battle-small-zone-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5em;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .battle-small-zone:hover,
@@ -614,10 +628,35 @@
 }
 
 .status-dreamcaller-thumb {
+  position: relative;
   display: block;
   width: min(82px, 100%);
   justify-self: center;
   border-radius: 8px;
+}
+
+.status-hand-count {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.status-hand-count i {
+  font-size: 12px;
+  color: var(--text-dim);
 }
 
 .summary-trigger .summary-meta {

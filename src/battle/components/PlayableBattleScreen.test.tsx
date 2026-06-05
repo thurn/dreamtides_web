@@ -291,6 +291,38 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("shows card counts on the void and banished zone buttons and the player hand count on the character", () => {
+    const { container, root } = renderScreen((state) => {
+      const voidCardId = state.sides.player.deck.pop();
+      const banishedCardId = state.sides.player.deck.pop();
+      if (voidCardId !== undefined) {
+        state.sides.player.void.push(voidCardId);
+      }
+      if (banishedCardId !== undefined) {
+        state.sides.player.banished.push(banishedCardId);
+      }
+    });
+
+    const playerVoid = container.querySelector('[data-battle-zone-open="player:void"]');
+    const playerBanished = container.querySelector('[data-battle-zone-open="player:banished"]');
+    const enemyVoid = container.querySelector('[data-battle-zone-open="enemy:void"]');
+
+    expect(playerVoid?.getAttribute("data-battle-zone-count")).toBe("1");
+    expect(playerVoid?.querySelector(".battle-small-zone-count")?.textContent).toBe("1");
+    expect(playerBanished?.getAttribute("data-battle-zone-count")).toBe("1");
+    expect(enemyVoid?.getAttribute("data-battle-zone-count")).toBe("0");
+
+    const handCount = container.querySelector<HTMLElement>(
+      '[data-battle-status-hand-count="player"]',
+    );
+    expect(handCount).not.toBeNull();
+    expect(handCount?.textContent).toContain("5");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the empty stack zone without instructional copy or a counter", () => {
     const { container, root } = renderScreen();
     const stackZone = container.querySelector<HTMLElement>('[data-battle-region="stack-zone"]');

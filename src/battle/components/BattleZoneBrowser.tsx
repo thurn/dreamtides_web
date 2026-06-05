@@ -3,6 +3,7 @@ import type {
   MouseEvent as ReactMouseEvent,
   PointerEvent as ReactPointerEvent,
 } from "react";
+// `MouseEvent` doubles as the hover-preview event in this surface.
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { BattleCommand } from "../debug/commands";
 import type {
@@ -33,6 +34,9 @@ export function BattleZoneBrowser({
   onCardDragEnd,
   onCardDragStart,
   onCardDropToBrowser,
+  onCardHoverStart,
+  onCardHoverMove,
+  onCardHoverEnd,
   pendingDragSourceSurface = null,
 }: {
   browser: {
@@ -56,6 +60,15 @@ export function BattleZoneBrowser({
     sourceSurface: BattleCommandSourceSurface,
   ) => void;
   onCardDropToBrowser?: (sourceSurface: BattleCommandSourceSurface) => void;
+  onCardHoverStart?: (
+    battleCardId: string,
+    event: ReactMouseEvent<HTMLElement>,
+  ) => void;
+  onCardHoverMove?: (
+    battleCardId: string,
+    event: ReactMouseEvent<HTMLElement>,
+  ) => void;
+  onCardHoverEnd?: () => void;
   pendingDragSourceSurface?: BattleCommandSourceSurface | null;
 }) {
   const [query, setQuery] = useState("");
@@ -270,6 +283,17 @@ export function BattleZoneBrowser({
                   type="button"
                   data-zone-browser-card-id={battleCardId}
                   className="browse-cell"
+                  onMouseEnter={(event) => {
+                    if (!isHidden) {
+                      onCardHoverStart?.(battleCardId, event);
+                    }
+                  }}
+                  onMouseMove={(event) => {
+                    if (!isHidden) {
+                      onCardHoverMove?.(battleCardId, event);
+                    }
+                  }}
+                  onMouseLeave={() => onCardHoverEnd?.()}
                 >
                   <BattleCardView
                     battleCardId={battleCardId}

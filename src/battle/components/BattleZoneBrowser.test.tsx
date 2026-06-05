@@ -38,6 +38,9 @@ function mount(
   onCardDragEnd: ReturnType<typeof vi.fn>;
   onCardDragStart: ReturnType<typeof vi.fn>;
   onCardDropToBrowser: ReturnType<typeof vi.fn>;
+  onCardHoverStart: ReturnType<typeof vi.fn>;
+  onCardHoverMove: ReturnType<typeof vi.fn>;
+  onCardHoverEnd: ReturnType<typeof vi.fn>;
   onOpenForesee: ReturnType<typeof vi.fn>;
   onOpenReorderMultiple: ReturnType<typeof vi.fn>;
   root: Root;
@@ -50,6 +53,9 @@ function mount(
   const onCardDragEnd = vi.fn();
   const onCardDragStart = vi.fn();
   const onCardDropToBrowser = vi.fn();
+  const onCardHoverStart = vi.fn();
+  const onCardHoverMove = vi.fn();
+  const onCardHoverEnd = vi.fn();
   const onOpenForesee = vi.fn();
   const onOpenReorderMultiple = vi.fn();
   const container = document.createElement("div");
@@ -70,6 +76,9 @@ function mount(
         onCardDragStart={onCardDragStart}
         onCardDragEnd={onCardDragEnd}
         onCardDropToBrowser={onCardDropToBrowser}
+        onCardHoverStart={onCardHoverStart}
+        onCardHoverMove={onCardHoverMove}
+        onCardHoverEnd={onCardHoverEnd}
         pendingDragSourceSurface="hand-tray"
       />,
     );
@@ -82,6 +91,9 @@ function mount(
     onCardDragEnd,
     onCardDragStart,
     onCardDropToBrowser,
+    onCardHoverStart,
+    onCardHoverMove,
+    onCardHoverEnd,
     onOpenForesee,
     onOpenReorderMultiple,
     root,
@@ -300,6 +312,36 @@ describe("BattleZoneBrowser", () => {
 
     act(() => {
       banished.root.unmount();
+    });
+  });
+
+  it("forwards hover events from void browser cards so the large preview can open", () => {
+    const { container, onCardHoverStart, onCardHoverMove, onCardHoverEnd, root, state } = mount(
+      { side: "player", zone: "void" },
+      {
+        mutateState: (mutable) => {
+          const voidCardId = mutable.sides.player.hand[0] ?? "";
+          mutable.sides.player.hand = mutable.sides.player.hand.filter((cardId) => cardId !== voidCardId);
+          mutable.sides.player.void = [voidCardId];
+        },
+      },
+    );
+    const voidCardId = state.sides.player.void[0];
+    const cell = container.querySelector<HTMLElement>("button.browse-cell");
+    expect(cell).not.toBeNull();
+
+    act(() => {
+      cell?.dispatchEvent(new MouseEvent("mouseover", { bubbles: true, clientX: 120, clientY: 80 }));
+      cell?.dispatchEvent(new MouseEvent("mousemove", { bubbles: true, clientX: 130, clientY: 90 }));
+      cell?.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+    });
+
+    expect(onCardHoverStart).toHaveBeenCalledWith(voidCardId, expect.anything());
+    expect(onCardHoverMove).toHaveBeenCalledWith(voidCardId, expect.anything());
+    expect(onCardHoverEnd).toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
     });
   });
 });

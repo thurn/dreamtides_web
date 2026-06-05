@@ -78,6 +78,15 @@ export function BattleStatusStrip({
             onBlur={onCloseSummary}
           >
             <DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" />
+            <span
+              className="status-hand-count"
+              data-battle-status-hand-count={side}
+              title={`${String(sideState.hand.length)} cards in hand`}
+              aria-label={`${String(sideState.hand.length)} cards in hand`}
+            >
+              <i className="bx bx-card" aria-hidden="true" />
+              {String(sideState.hand.length)}
+            </span>
           </button>
         ) : null}
         <span className="summary-trigger-copy">

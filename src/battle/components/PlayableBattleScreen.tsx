@@ -714,6 +714,9 @@ function PlayableBattleScreenInner({
           onCardContextMenu={handleCardContextMenu}
           onCardDragStart={handleCardDragStart}
           onCardDragEnd={handleCardDragEnd}
+          onCardHoverStart={handleBattlefieldCardHoverStart}
+          onCardHoverMove={handleBattlefieldCardHoverMove}
+          onCardHoverEnd={handleBattlefieldCardHoverEnd}
           onCardDropToBrowser={(sourceSurface) => handleZoneDrop(
             openZoneBrowser.side,
             openZoneBrowser.zone,
@@ -899,6 +902,7 @@ function PlayableBattleScreenInner({
                     label="Banished"
                     side="player"
                     zone="banished"
+                    count={reducerState.mutable.sides.player.banished.length}
                     pendingDrag={pendingDrag}
                     onDrop={(sourceSurface) => handleZoneDrop("player", "banished", sourceSurface)}
                     onOpen={() => handleOpenZoneBrowser("player", "banished")}
@@ -907,6 +911,7 @@ function PlayableBattleScreenInner({
                     label="Void"
                     side="player"
                     zone="void"
+                    count={reducerState.mutable.sides.player.void.length}
                     pendingDrag={pendingDrag}
                     onDrop={(sourceSurface) => handleZoneDrop("player", "void", sourceSurface)}
                     onOpen={() => handleOpenZoneBrowser("player", "void")}
@@ -1069,6 +1074,7 @@ function PlayableBattleScreenInner({
                     label="Void"
                     side="enemy"
                     zone="void"
+                    count={reducerState.mutable.sides.enemy.void.length}
                     pendingDrag={pendingDrag}
                     onDrop={(sourceSurface) => handleZoneDrop("enemy", "void", sourceSurface)}
                     onOpen={() => handleOpenZoneBrowser("enemy", "void")}
@@ -1077,6 +1083,7 @@ function PlayableBattleScreenInner({
                     label="Banished"
                     side="enemy"
                     zone="banished"
+                    count={reducerState.mutable.sides.enemy.banished.length}
                     pendingDrag={pendingDrag}
                     onDrop={(sourceSurface) => handleZoneDrop("enemy", "banished", sourceSurface)}
                     onOpen={() => handleOpenZoneBrowser("enemy", "banished")}
@@ -1276,6 +1283,7 @@ function BattleSmallZoneDropTarget({
   label,
   side,
   zone,
+  count,
   pendingDrag,
   onDrop,
   onOpen,
@@ -1283,6 +1291,7 @@ function BattleSmallZoneDropTarget({
   label: string;
   side: BattleSide;
   zone: "void" | "banished";
+  count: number;
   pendingDrag: PendingDragState;
   onDrop: (sourceSurface: BattleCommandSourceSurface) => void;
   onOpen: () => void;
@@ -1294,6 +1303,7 @@ function BattleSmallZoneDropTarget({
       type="button"
       data-battle-region={`${side}-${zone}-zone`}
       data-battle-zone-open={`${side}:${zone}`}
+      data-battle-zone-count={String(count)}
       data-battle-zone-drop-target={isDropTarget ? `${side}:${zone}` : undefined}
       className={`battle-small-zone ${side} ${zone} ${isDropTarget ? "drop-target" : ""}`}
       onClick={onOpen}
@@ -1311,7 +1321,8 @@ function BattleSmallZoneDropTarget({
         onDrop(pendingDrag.sourceSurface);
       }}
     >
-      <span>{label}</span>
+      <span className="battle-small-zone-label">{label}</span>
+      <span className="battle-small-zone-count">{String(count)}</span>
     </button>
   );
 }
