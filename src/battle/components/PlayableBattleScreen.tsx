@@ -657,7 +657,7 @@ function PlayableBattleScreenInner({
 
   function handleBattlefieldCardHoverStart(
     battleCardId: string,
-    event: ReactPointerMouseEvent<HTMLDivElement>,
+    event: ReactPointerMouseEvent<HTMLElement>,
   ): void {
     if (pendingDrag !== null) {
       setHoverPreview(null);
@@ -672,7 +672,7 @@ function PlayableBattleScreenInner({
 
   function handleBattlefieldCardHoverMove(
     battleCardId: string,
-    event: ReactPointerMouseEvent<HTMLDivElement>,
+    event: ReactPointerMouseEvent<HTMLElement>,
   ): void {
     if (pendingDrag !== null) {
       setHoverPreview(null);
@@ -841,6 +841,9 @@ function PlayableBattleScreenInner({
             onApprove={approve}
             onReject={reject}
             onEndAiTurn={endAiTurn}
+            onCardPreviewStart={handleBattlefieldCardHoverStart}
+            onCardPreviewMove={handleBattlefieldCardHoverMove}
+            onCardPreviewEnd={handleBattlefieldCardHoverEnd}
           />
           <BattleLiveRegion
             activeSide={reducerState.mutable.activeSide}

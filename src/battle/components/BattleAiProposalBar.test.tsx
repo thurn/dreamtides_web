@@ -60,7 +60,7 @@ describe("BattleAiProposalBar", () => {
     expect(container.querySelector("[data-battle-ai-proposal]")).toBeNull();
   });
 
-  it("renders the description and card name and wires the three controls", () => {
+  it("renders the description once and wires the three controls", () => {
     const onApprove = vi.fn();
     const onReject = vi.fn();
     const onEndAiTurn = vi.fn();
@@ -77,8 +77,9 @@ describe("BattleAiProposalBar", () => {
       "[data-battle-ai-proposal-description]",
     );
     expect(description?.textContent).toBe("Declare Marked Direwolf as a challenger");
-    const card = container.querySelector("[data-battle-ai-proposal-card]");
-    expect(card?.textContent).toBe("Marked Direwolf");
+    // The card name is carried by the description; it must not also appear as a
+    // standalone chip (that read as the name printed twice).
+    expect(container.querySelector("[data-battle-ai-proposal-card]")).toBeNull();
 
     act(() => {
       container
@@ -99,5 +100,66 @@ describe("BattleAiProposalBar", () => {
     expect(onApprove).toHaveBeenCalledTimes(1);
     expect(onReject).toHaveBeenCalledTimes(1);
     expect(onEndAiTurn).toHaveBeenCalledTimes(1);
+  });
+
+  it("asks the screen to preview the proposed card on description hover", () => {
+    const onCardPreviewStart = vi.fn();
+    const onCardPreviewEnd = vi.fn();
+    const { container } = mount(
+      <BattleAiProposalBar
+        proposal={actionProposal()}
+        onApprove={vi.fn()}
+        onReject={vi.fn()}
+        onEndAiTurn={vi.fn()}
+        onCardPreviewStart={onCardPreviewStart}
+        onCardPreviewMove={vi.fn()}
+        onCardPreviewEnd={onCardPreviewEnd}
+      />,
+    );
+
+    const description = container.querySelector<HTMLElement>(
+      "[data-battle-ai-proposal-description]",
+    );
+    expect(description?.classList.contains("has-preview")).toBe(true);
+
+    act(() => {
+      description?.dispatchEvent(
+        new MouseEvent("mouseover", { bubbles: true }),
+      );
+    });
+    act(() => {
+      description?.dispatchEvent(
+        new MouseEvent("mouseout", { bubbles: true }),
+      );
+    });
+
+    expect(onCardPreviewStart).toHaveBeenCalledTimes(1);
+    expect(onCardPreviewStart.mock.calls[0]?.[0]).toBe("c-1");
+    expect(onCardPreviewEnd).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not mark the description as previewable without a card id", () => {
+    const proposal: AiProposal = {
+      kind: "endTurn",
+      description: "End turn — resolve the Challenge and pass",
+      trace: null,
+      commands: [],
+    };
+    const { container } = mount(
+      <BattleAiProposalBar
+        proposal={proposal}
+        onApprove={vi.fn()}
+        onReject={vi.fn()}
+        onEndAiTurn={vi.fn()}
+        onCardPreviewStart={vi.fn()}
+        onCardPreviewMove={vi.fn()}
+        onCardPreviewEnd={vi.fn()}
+      />,
+    );
+
+    const description = container.querySelector<HTMLElement>(
+      "[data-battle-ai-proposal-description]",
+    );
+    expect(description?.classList.contains("has-preview")).toBe(false);
   });
 });
