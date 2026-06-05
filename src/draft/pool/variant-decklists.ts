@@ -12,7 +12,7 @@ import { randInt, shuffle, weightedPick } from "./rng.ts";
 import type { PoolStrategy } from "./strategy.ts";
 import type { PoolData, VariantResult } from "./types.ts";
 import { colorPrefix, poolSize } from "./util.ts";
-import { generate } from "./variant-default.ts";
+import { generate } from "./variant-color-pool.ts";
 
 // Knobs for the `decklists` variant. Grouped here so tuning is a one-stop edit.
 interface DecklistsTuning {

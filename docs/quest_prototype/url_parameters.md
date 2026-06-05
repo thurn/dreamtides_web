@@ -51,6 +51,48 @@ local Realtime Database emulator at `127.0.0.1:9000` with the
 
 Room navigation keeps `realtime=1` in the URL when a cloud room is created.
 
+## `algo`
+
+Selects the draft-pool construction strategy. It drives the quest prototype's
+draft and enemy pools (parsed by `parseRuntimeConfig`, threaded through the run's
+pool context) and the standalone `/draft_test` harness (parsed by
+`DraftTestApp`).
+
+Each strategy is a `PoolStrategy` registered in `src/draft/pool/registry.ts`,
+the single source of truth for the accepted ids. The registry currently
+provides:
+
+- `algo=color_pool` — color-identity generator.
+- `algo=diverse` — spreads cards and archetypes more evenly across pools.
+- `algo=decklists` — grows the pool out of real human-built decklists.
+- `algo=merged` — draws from pre-merged per-archetype lists.
+- `algo=idf` — grows a pool from one random decklist by IDF-cosine similarity.
+- `algo=idf2` — `idf` with a diversity-biased starter draw.
+- `algo=idf3` — `idf2` steered toward a Dreamcaller by its signature cards
+  (the default).
+
+All of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
+not registered (including empty or absent) falls back to `DEFAULT_POOL_VARIANT`,
+currently `idf3`. Only `idf3` consumes the Dreamcaller's signature cards and
+produces the "Why Cards" provenance surface; the other strategies ignore the
+signature, and a non-`idf3` pool yields no anchor deck, so the enemy battle deck
+falls back to a sampled draftable deck.
+
+The parameter is read once at page load and is not reactive; changing it requires
+a reload. On `/draft_test` the active strategy is also shown as a chip in the
+draft header, and clicking the chip reloads with the next registered strategy
+(in registry order) so they can be compared side by side. That route exercises
+the experimental `cards_v2` pool directly: start the dev server with
+`npm run dev:vite` (or `npm run draft_test`) and visit it on port 5173.
+
+Examples:
+
+```
+http://localhost:5173/                          # quest prototype, default idf3 pool
+http://localhost:5173/?algo=color_pool          # quest prototype, color-identity pool
+http://localhost:5173/draft_test?algo=diverse   # draft harness, diverse algorithm
+```
+
 ## Dream Journey Debug Harness
 
 In local development, Dream Journey QA can force selected generation inputs:
@@ -125,44 +167,6 @@ Example:
 
 ```
 http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
-```
-
-## `algo`
-
-Selects the draft-pool construction strategy on the standalone `/draft_test`
-route, which exercises the experimental `cards_v2` draft pool. When `algo` is
-absent (or set to an unregistered value) the route uses `default`. Start the dev
-server with `npm run dev:vite` (or `npm run draft_test`, which opens the route
-directly) and visit it on port 5173.
-
-Each strategy is a `PoolStrategy` registered in `src/draft/pool/registry.ts`,
-which is the single source of truth for the accepted ids. The registry currently
-provides:
-
-- `algo=default` — color-identity generator (the build default).
-- `algo=diverse` — spreads cards and archetypes more evenly across pools.
-- `algo=decklists` — grows the pool out of real human-built decklists.
-- `algo=merged` — draws from pre-merged per-archetype lists.
-- `algo=idf` — grows a pool from one random decklist by IDF-cosine similarity.
-- `algo=idf2` — `idf` with a diversity-biased starter draw.
-- `algo=idf3` — `idf2` steered toward a Dreamcaller by its signature cards.
-
-All of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
-not registered (including empty or absent) falls back to the registry's default
-(`DEFAULT_POOL_VARIANT`, currently `default`).
-
-The chosen strategy applies to the pool built from your Dreamcaller selection,
-and the active variant is shown as a chip in the draft header; clicking the chip
-reloads with the next registered strategy (in registry order) so they can be
-compared side by side. The parameter is read once at page load and is not
-reactive; changing it requires a reload.
-
-Examples:
-
-```
-http://localhost:5173/draft_test                # default pool algorithm
-http://localhost:5173/draft_test?algo=diverse   # diverse (flattened) algorithm
-http://localhost:5173/draft_test?algo=default   # original algorithm (explicit)
 ```
 
 ## Examples

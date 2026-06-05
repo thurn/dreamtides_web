@@ -9,7 +9,8 @@ import {
   type ResolvedDreamcallerPackage,
 } from "../types/content";
 import type { CardData } from "../types/cards";
-import type { GeneratedPool, PoolData } from "../draft/pool/types.ts";
+import type { GeneratedPool, PoolData, PoolVariant } from "../draft/pool/types.ts";
+import { DEFAULT_POOL_VARIANT } from "../draft/pool/types.ts";
 import { generatePoolFromData } from "../draft/pool/generate.ts";
 import { buildPoolData } from "../draft/pool/pool-data";
 import {
@@ -37,6 +38,11 @@ export interface RunPoolContext {
   poolData: PoolData;
   nameIndex: Map<string, number>;
   allDreamsignPoolIds: string[];
+  /**
+   * Pool-construction strategy for this run, from `?algo=`. Absent contexts
+   * (e.g. tests) fall back to {@link DEFAULT_POOL_VARIANT}.
+   */
+  poolVariant?: PoolVariant;
 }
 
 const POOL_TARGET_SIZE = 200;
@@ -56,10 +62,14 @@ function hashStringToSeed(input: string): number {
 }
 
 /**
- * Generate the `idf3` pool for one Dreamcaller, steered by its signature cards
- * and pinned to the run's deterministic seed. The single source of pool
- * generation for both the draft package and its provenance summary, so the two
- * always describe the exact same pool.
+ * Generate the draft pool for one Dreamcaller, using the run's selected pool
+ * strategy (`ctx.poolVariant`, from `?algo=`, defaulting to
+ * {@link DEFAULT_POOL_VARIANT}), steered by its signature cards and pinned to the
+ * run's deterministic seed. The single source of pool generation for both the
+ * draft package and its provenance summary, so the two always describe the exact
+ * same pool. The signature-card steering and the provenance summary apply only
+ * to the `idf3` strategy; other strategies ignore the signature and produce no
+ * provenance.
  */
 function generateDreamcallerPool(
   dreamcaller: DreamcallerContent,
@@ -70,7 +80,7 @@ function generateDreamcallerPool(
     ctx.poolData,
     hashStringToSeed(`${questSeed}:${dreamcaller.id}`),
     undefined,
-    "idf3",
+    ctx.poolVariant ?? DEFAULT_POOL_VARIANT,
     undefined,
     POOL_TARGET_SIZE,
     dreamcaller.signatureCards ?? [],
@@ -78,10 +88,10 @@ function generateDreamcallerPool(
 }
 
 /**
- * Build the draft package for one Dreamcaller by generating an `idf3` pool
- * steered by the Dreamcaller's signature cards, resolving it against the run's
- * name index, and excluding starter cards from both the draft pool and the
- * starter decklist. Deterministic per `(questSeed, dreamcaller.id)`.
+ * Build the draft package for one Dreamcaller by generating its pool with the
+ * run's selected strategy (see {@link generateDreamcallerPool}), resolving it
+ * against the run's name index, and excluding starter cards from both the draft
+ * pool and the starter decklist. Deterministic per `(questSeed, dreamcaller.id)`.
  */
 export function buildDreamcallerPackage(
   dreamcaller: DreamcallerContent,
@@ -177,8 +187,14 @@ export function buildDreamcallerProvenance(
   };
 }
 
-/** Loads V2 quest content (cards, Dreamcallers, decklists) and the run pool context. */
-export async function loadQuestContent(): Promise<QuestContent> {
+/**
+ * Loads V2 quest content (cards, Dreamcallers, decklists) and the run pool
+ * context. `poolVariant` (from `?algo=`) selects the pool-construction strategy
+ * for the run; it defaults to {@link DEFAULT_POOL_VARIANT}.
+ */
+export async function loadQuestContent(
+  poolVariant: PoolVariant = DEFAULT_POOL_VARIANT,
+): Promise<QuestContent> {
   const [cardDatabase, draftDreamcallers, dreamsignTemplates, decklists] =
     await Promise.all([
       loadCardsV2Database(),
@@ -201,6 +217,7 @@ export async function loadQuestContent(): Promise<QuestContent> {
     poolData: buildPoolData(Array.from(cardDatabase.values()), decklists),
     nameIndex: buildNameIndex(cardDatabase),
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),
+    poolVariant,
   };
 
   return {

@@ -40,7 +40,7 @@ const TARGET = 160;
 // archetype's lists run dry, so its floor is loose while its ceiling is tight.
 const BANDS: readonly { variant: PoolVariant; below: number; above: number }[] =
   [
-    { variant: "default", below: 0, above: 0 },
+    { variant: "color_pool", below: 0, above: 0 },
     { variant: "diverse", below: 0, above: 16 },
     { variant: "decklists", below: 12, above: 12 },
     { variant: "merged", below: TARGET, above: 12 },
@@ -71,8 +71,8 @@ describe("targetSize pins the draft pool size for every variant", () => {
     );
   }
 
-  it("lands default on the exact requested size, well outside its default band", () => {
-    // The unconstrained `default` pool sits in [180, 220]; an override drives it
+  it("lands color_pool on the exact requested size, well outside its default band", () => {
+    // The unconstrained `color_pool` pool sits in [180, 220]; an override drives it
     // to any requested size exactly, proving the parameter takes effect.
     for (const target of [80, 120, 200]) {
       for (let seed = 0; seed < 50; seed++) {
@@ -80,7 +80,7 @@ describe("targetSize pins the draft pool size for every variant", () => {
           poolData,
           seed,
           undefined,
-          "default",
+          "color_pool",
           undefined,
           target,
         );

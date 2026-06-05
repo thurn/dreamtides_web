@@ -29,7 +29,7 @@ function cov(values: number[]): number {
 }
 
 /** Inclusion rate per card and selection rate per theme over `seeds` pools. */
-function aggregate(variant: "default" | "diverse", seeds: number) {
+function aggregate(variant: "color_pool" | "diverse", seeds: number) {
   const inclusion = new Map<string, number>();
   const themeCount = new Map<string, number>();
   for (let seed = 0; seed < seeds; seed++) {
@@ -56,9 +56,9 @@ describe("diverse pool variant", () => {
     }
   });
 
-  it("spreads cards and archetypes more evenly than default", () => {
+  it("spreads cards and archetypes more evenly than color_pool", () => {
     const seeds = 600;
-    const base = aggregate("default", seeds);
+    const base = aggregate("color_pool", seeds);
     const diverse = aggregate("diverse", seeds);
 
     // Lower coefficient of variation == flatter distribution.

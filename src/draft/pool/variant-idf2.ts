@@ -16,7 +16,7 @@
 
 import type { PoolStrategy } from "./strategy.ts";
 import type { PoolData, VariantResult } from "./types.ts";
-import { generate } from "./variant-default.ts";
+import { generate } from "./variant-color-pool.ts";
 import {
   type IdfCorpus,
   idfCorpus,

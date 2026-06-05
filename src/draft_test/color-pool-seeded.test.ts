@@ -35,7 +35,12 @@ describe("Dreamcaller-seeded color pool", () => {
     const seenIdentities = new Set<string>();
 
     for (let seed = 0; seed < 300; seed++) {
-      const pool = generatePoolFromData(poolData, seed, SEED_ARCHETYPES);
+      const pool = generatePoolFromData(
+        poolData,
+        seed,
+        SEED_ARCHETYPES,
+        "color_pool",
+      );
       seenIdentities.add(pool.identity);
 
       // The identity is the colors of one of the listed archetypes.
@@ -71,8 +76,13 @@ describe("Dreamcaller-seeded color pool", () => {
 
   it("matches the unconstrained pool when no archetypes are supplied", () => {
     for (let seed = 0; seed < 50; seed++) {
-      const withUndefined = generatePoolFromData(poolData, seed);
-      const withEmpty = generatePoolFromData(poolData, seed, []);
+      const withUndefined = generatePoolFromData(
+        poolData,
+        seed,
+        undefined,
+        "color_pool",
+      );
+      const withEmpty = generatePoolFromData(poolData, seed, [], "color_pool");
       expect(withEmpty.identity).toBe(withUndefined.identity);
       expect(withEmpty.themes).toEqual(withUndefined.themes);
       expect(withEmpty.size).toBe(withUndefined.size);

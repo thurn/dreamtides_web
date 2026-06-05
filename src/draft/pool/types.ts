@@ -1,22 +1,24 @@
 // Shared public and internal types for the pool generator.
 
-// `default` is the original color-identity algorithm. `diverse` is an
+// `color_pool` is the original color-identity algorithm. `diverse` is an
 // experimental variant tuned to spread cards and archetypes more evenly across
 // pools (see `docs/cards2/draft_pool_algorithms.md`). Each id names a
 // {@link PoolStrategy} registered in `registry.ts`; the variants are selectable
-// side by side via the `variant` argument and the draft test `?algo=` URL
-// parameter. To make a variant the primary one, change `DEFAULT_POOL_VARIANT`;
-// to retire one, remove its id here and its `registry.ts` entry, then delete its
-// module.
+// side by side via the `variant` argument and the `?algo=` URL parameter (which
+// drives both the quest prototype and the draft test harness). To make a variant
+// the primary one, change `DEFAULT_POOL_VARIANT`; to retire one, remove its id
+// here and its `registry.ts` entry, then delete its module.
 export type PoolVariant =
-  | "default"
+  | "color_pool"
   | "diverse"
   | "decklists"
   | "merged"
   | "idf"
   | "idf2"
   | "idf3";
-export const DEFAULT_POOL_VARIANT: PoolVariant = "default";
+// The quest prototype and the draft test harness both fall back to this when
+// `?algo=` is absent or unrecognised.
+export const DEFAULT_POOL_VARIANT: PoolVariant = "idf3";
 
 /** The card fields the pool generator reads. `CardData` satisfies this shape. */
 export interface PoolCard {

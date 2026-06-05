@@ -623,15 +623,15 @@ export default function DraftTestApp() {
                     className="cursor-pointer rounded px-2 py-0.5 font-bold uppercase tracking-widest transition-colors"
                     style={{
                       background:
-                        poolInfo.variant === "default"
+                        poolInfo.variant === "color_pool"
                           ? "rgba(148, 163, 184, 0.16)"
                           : "rgba(16, 185, 129, 0.18)",
                       border:
-                        poolInfo.variant === "default"
+                        poolInfo.variant === "color_pool"
                           ? "1px solid rgba(148, 163, 184, 0.4)"
                           : "1px solid rgba(16, 185, 129, 0.5)",
                       color:
-                        poolInfo.variant === "default" ? "#cbd5e1" : "#34d399",
+                        poolInfo.variant === "color_pool" ? "#cbd5e1" : "#34d399",
                     }}
                   >
                     {poolInfo.variant}

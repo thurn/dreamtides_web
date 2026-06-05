@@ -2,7 +2,7 @@
 
 The draft test mode (`draft_test`) builds a card pool that a player drafts
 from. The pool is assembled by one of six interchangeable construction
-algorithms, selected with the `?algo=` URL parameter: `default`, `diverse`,
+algorithms, selected with the `?algo=` URL parameter: `color_pool`, `diverse`,
 `decklists`, `merged`, `idf`, and `idf2` (for example,
 `draft_test?algo=decklists`). The run-time half of all six lives in
 `src/draft_test/color-pool.ts`. This document explains, in detail, how each one
@@ -92,7 +92,7 @@ into the structure all three algorithms consume — the `PoolData`:
   color-plus-archetype list has a color prefix, a hyphen, then an archetype name.
 - **Decklists** (`PoolData.decklists`). The `string[][]` of real decks, passed
   straight through from `loadDecklists`. Used only by the `decklists` algorithm;
-  when absent it falls back to `default`.
+  when absent it falls back to `color_pool`.
 
 The archetype and draft lists are re-keyed into a fixed, filename-style sort
 order so that the order in which an algorithm visits themes is deterministic and
@@ -149,16 +149,16 @@ come from *different* sources, which matters:
   `abandon`), *not* read from the TOML but attached at load from the
   `DREAMCALLER_THEMES` map keyed by Dreamcaller name. These are the same slugs
   that key `PoolData.archLists`. They bias the `decklists` algorithm toward the
-  Dreamcaller's mechanical theme; the `default` and `diverse` algorithms ignore
+  Dreamcaller's mechanical theme; the `color_pool` and `diverse` algorithms ignore
   them.
 
 A Dreamcaller with no archetypes produces an unconstrained pool.
 
 ---
 
-## The `default` algorithm
+## The `color_pool` algorithm
 
-The `default` algorithm builds a pool around a single color identity and then
+The `color_pool` algorithm builds a pool around a single color identity and then
 grows it by repeatedly adding the theme that overlaps most with what it has
 already chosen — a "rich get richer" synergy walk that produces coherent,
 strategy-focused pools.
@@ -224,10 +224,10 @@ reinforcing strategies, landing in the rough 180–220 range.
 
 ## The `diverse` algorithm
 
-The `diverse` algorithm keeps the same color-identity skeleton as `default` but
+The `diverse` algorithm keeps the same color-identity skeleton as `color_pool` but
 deliberately *flattens* the distribution, so that cards and archetypes appear
 across pools far more evenly. It was built to counter several biases in the
-`default` walk: multi-color archetypes being starved, broadly tagged cards
+`color_pool` walk: multi-color archetypes being starved, broadly tagged cards
 showing up in nearly every pool, and the overlap walk's rich-get-richer
 concentration. It does this at four points: seeding, walking, card inclusion,
 and filling. Each is governed by a tuning knob.
@@ -235,7 +235,7 @@ and filling. Each is governed by a tuning knob.
 ### Inverse-reach seeding
 
 The `diverse` algorithm seeds its identity from a single archetype just as
-`default` does (and respects Dreamcaller seed archetypes the same way), but the
+`color_pool` does (and respects Dreamcaller seed archetypes the same way), but the
 choice is no longer uniform. It computes each archetype theme's **reach** — the
 expected number of pools in which that theme would be an on-color candidate,
 weighted by how often each color identity comes up. Themes eligible in many
@@ -246,19 +246,19 @@ multi-color identities get seeded much more often.
 
 ### The inverse-reach walk
 
-Instead of `default`'s overlap-weighted walk, the `diverse` walk normally picks
+Instead of `color_pool`'s overlap-weighted walk, the `diverse` walk normally picks
 each next theme weighted by inverse reach again — pushing selection toward themes
 that are eligible in fewer identities, countering the dominance of broadly
 eligible mechanic and one-color themes. A tuning knob controls how strongly the
 walk leans on this: at full strength every step is chosen by inverse reach; dialed
-down, it falls back step by step to `default`'s overlap-weighted walk. The walk
+down, it falls back step by step to `color_pool`'s overlap-weighted walk. The walk
 also caps how many themes a pool draws (a budget of six by default) before it
 stops adding themes and lets the uniform fill carry the rest, which further
 flattens archetype usage.
 
 ### Inverse-breadth card inclusion
 
-When `default` adds a theme it takes *all* of the theme's cards. The `diverse`
+When `color_pool` adds a theme it takes *all* of the theme's cards. The `diverse`
 algorithm instead includes each card probabilistically. It computes each card's
 **theme breadth** — how many archetype themes the card is tagged into — and
 includes a card with probability equal to a small constant divided by that
@@ -295,7 +295,7 @@ decks already encode which cards actually play well together, so a pool grown
 from them feels like a curated, single-archetype experience rather than a
 tag-driven scoop. In one sentence: it picks one real deck to start from, then
 repeatedly folds in the real decks most *similar* to it until the pool is full.
-If no usable decklists are bundled, it falls back entirely to `default`.
+If no usable decklists are bundled, it falls back entirely to `color_pool`.
 
 ### Vocabulary: the four moving parts
 
@@ -553,7 +553,7 @@ When a pool is requested, `generate.ts` builds one uniform `PoolGenerationReques
 — the seeded RNG, the pool data, and the Dreamcaller's seed archetypes, theme
 archetypes, and signature cards — looks the chosen id up in the registry, and
 calls that strategy's `generate`. The request carries every input any algorithm
-might read; each strategy destructures only the fields it uses (`default` and
+might read; each strategy destructures only the fields it uses (`color_pool` and
 `diverse` read the seed archetypes, `decklists` and `merged` additionally read
 the theme archetypes, `idf3` reads the signature cards, and `idf`/`idf2` read
 neither), so `generate.ts` never branches on which algorithm runs. Whatever the
@@ -800,7 +800,7 @@ work.
 ## The `idf` algorithm
 
 The `idf` algorithm is the simplest decklist-based pool, and the only one that
-reads nothing but the real decklists. The `default`, `diverse`, `decklists`, and
+reads nothing but the real decklists. The `color_pool`, `diverse`, `decklists`, and
 `merged` algorithms all consult the synthesized inputs — core staples, mechanic
 tides, color lists, draft archetypes, and the Dreamcaller's seed and theme
 archetypes. `idf` ignores all of them. It picks one real decklist at random and
@@ -811,7 +811,7 @@ the real decks most like it.
 Its run-time knobs live in the `IDF` constant in `color-pool.ts` (the in-app
 equivalents of the `scripts/similar-pool.mjs` command-line flags), grouped so
 retuning is a one-stop edit. If no usable decklists are bundled it falls back
-entirely to `default`.
+entirely to `color_pool`.
 
 ### The corpus and what "similar" means
 

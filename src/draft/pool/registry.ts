@@ -12,7 +12,7 @@
 
 import type { PoolStrategy } from "./strategy.ts";
 import { DEFAULT_POOL_VARIANT, type PoolVariant } from "./types.ts";
-import { defaultStrategy } from "./variant-default.ts";
+import { colorPoolStrategy } from "./variant-color-pool.ts";
 import { decklistsStrategy } from "./variant-decklists.ts";
 import { diverseStrategy } from "./variant-diverse.ts";
 import { idfStrategy } from "./variant-idf.ts";
@@ -22,7 +22,7 @@ import { mergedStrategy } from "./variant-merged.ts";
 
 /** Every registered strategy, keyed by the `?algo=` id that selects it. */
 export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
-  default: defaultStrategy,
+  color_pool: colorPoolStrategy,
   diverse: diverseStrategy,
   decklists: decklistsStrategy,
   merged: mergedStrategy,

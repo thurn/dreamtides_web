@@ -6,6 +6,7 @@ import type {
 import type { BattleModifier, QuestState, SiteState } from "../../types/quest";
 import type { RunPoolContext } from "../../data/quest-content";
 import { generatePoolFromData } from "../../draft/pool/generate";
+import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
 import { applyDeckEntryCardModification } from "../../card-type-change";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
@@ -72,17 +73,19 @@ export interface CreateBattleInitInput {
    */
   dreamsignTemplates?: readonly DreamsignTemplate[];
   /**
-   * The run's pool context (decklist corpus + name index). Used to build the
-   * enemy deck from an idf3-steered `drafts_anon` decklist matching the enemy
-   * Dreamcaller's signature. Optional: when absent (or when the resolved
-   * decklist is empty) the enemy deck falls back to a sample of draftable cards
-   * from the card database.
+   * The run's pool context (decklist corpus + name index, plus the selected
+   * `poolVariant`). Used to build the enemy deck from the run's pool strategy —
+   * by default the `idf3` strategy, which yields a `drafts_anon` decklist
+   * matching the enemy Dreamcaller's signature. Optional: when absent (or when
+   * the resolved decklist is empty, as non-`idf3` strategies produce no starter
+   * deck) the enemy deck falls back to a sample of draftable cards from the card
+   * database.
    */
   poolContext?: RunPoolContext;
   seedOverride?: number | null;
   /**
    * When true, the enemy deck is built from the AI Starter deck
-   * ({@link buildAiStarterDeck}) instead of the idf3-steered pool. Used by the
+   * ({@link buildAiStarterDeck}) instead of the run's steered pool. Used by the
    * `?ai=1` runtime mode that pits the player against the battle AI opponent.
    */
   aiMode?: boolean;
@@ -317,16 +320,18 @@ function deriveEnemyPoolSeed(seed: number): number {
 }
 
 /**
- * Builds the enemy battle deck from an idf3 pool steered by the enemy
- * Dreamcaller's signature cards, mirroring how the player's draft pool is built.
+ * Builds the enemy battle deck from the run's pool strategy
+ * (`poolContext.poolVariant`, default `idf3`) steered by the enemy Dreamcaller's
+ * signature cards, mirroring how the player's draft pool is built.
  *
- * With a `poolContext`, an idf3 pool is generated from the run's decklist corpus
+ * With a `poolContext`, a pool is generated from the run's decklist corpus
  * steered by `enemySignatureCards`; the chosen anchor decklist's card names are
  * resolved to V2 card numbers via the name index, then to `CardData` via the
  * card database (unresolved/missing entries are dropped). When `poolContext` is
- * absent — or the resolved list is empty — the deck falls back to a shuffled
- * sample of draftable cards (non-starter, numeric cost) so the enemy always has
- * a non-empty deck. The chosen cards are padded up to `MIN_BATTLE_DECK_SIZE`,
+ * absent — or the resolved list is empty, as only `idf3` produces a starter
+ * deck — the deck falls back to a shuffled sample of draftable cards
+ * (non-starter, numeric cost) so the enemy always has a non-empty deck. The
+ * chosen cards are padded up to `MIN_BATTLE_DECK_SIZE`,
  * then shuffled into the enemy draw order.
  */
 function createEnemyDeckDefinition(
@@ -354,7 +359,7 @@ function createEnemyDeckDefinition(
       poolContext.poolData,
       deriveEnemyPoolSeed(battleSeed),
       /* seedArchetypes */ undefined,
-      "idf3",
+      poolContext.poolVariant ?? DEFAULT_POOL_VARIANT,
       /* themeArchetypes */ undefined,
       /* targetSize */ undefined,
       enemySignatureCards,

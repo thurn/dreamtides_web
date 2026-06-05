@@ -1,3 +1,5 @@
+import { resolvePoolVariant } from "../draft/pool";
+import type { PoolVariant } from "../draft/pool";
 import { normalizeRoomId } from "../multiplayer/room-id";
 
 export interface RuntimeConfig {
@@ -6,6 +8,14 @@ export interface RuntimeConfig {
   aiMode: boolean;
   gameId: string | null;
   databaseMode: DatabaseMode;
+  /**
+   * Draft-pool construction strategy from `?algo=`, resolved to a registered
+   * `PoolVariant` (unknown or absent values fall back to `DEFAULT_POOL_VARIANT`).
+   * Drives the quest prototype's draft and enemy pools. `parseRuntimeConfig`
+   * always sets it; it is optional only so test config literals can omit it and
+   * inherit the default.
+   */
+  poolVariant?: PoolVariant;
   debugJourneyShape?: string | null;
   debugJourneyReward?: string | null;
   debugJourneyCost?: string | null;
@@ -21,6 +31,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     aiMode: params.get("ai") !== "0",
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
+    poolVariant: resolvePoolVariant(params.get("algo")),
     debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),
     debugJourneyReward: parseDebugJourneyId(params.get("debugJourneyReward")),
     debugJourneyCost: parseDebugJourneyId(params.get("debugJourneyCost")),

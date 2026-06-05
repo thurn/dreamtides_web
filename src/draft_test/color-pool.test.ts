@@ -23,8 +23,8 @@ const poolData = buildPoolData(cards);
 describe("Node generator delegates to the shared color-pool algorithm", () => {
   it("reproduces the shared generator's pool for every unconstrained seed", () => {
     for (let seed = 0; seed < 2000; seed++) {
-      const node = runSeed(seed, buildNodePoolData(cards));
-      const shared = generatePoolFromData(poolData, seed);
+      const node = runSeed(seed, buildNodePoolData(cards), undefined, "color_pool");
+      const shared = generatePoolFromData(poolData, seed, undefined, "color_pool");
       expect(node.identity, `identity seed=${String(seed)}`).toBe(
         shared.identity,
       );
@@ -42,8 +42,13 @@ describe("Node generator delegates to the shared color-pool algorithm", () => {
     const seedArchetypes = dreamcaller?.draftArchetypes;
 
     for (let seed = 0; seed < 500; seed++) {
-      const node = runSeed(seed, poolData, seedArchetypes);
-      const shared = generatePoolFromData(poolData, seed, seedArchetypes);
+      const node = runSeed(seed, poolData, seedArchetypes, "color_pool");
+      const shared = generatePoolFromData(
+        poolData,
+        seed,
+        seedArchetypes,
+        "color_pool",
+      );
       expect(node.identity, `identity seed=${String(seed)}`).toBe(
         shared.identity,
       );

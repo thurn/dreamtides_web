@@ -92,7 +92,7 @@ describe("idf pool variant", () => {
   it("falls back to the default algorithm when no decklists are bundled", () => {
     const noDecks = buildPoolData(cards);
     const fallback = generatePoolFromData(noDecks, 3, undefined, "idf");
-    const expected = generatePoolFromData(noDecks, 3, undefined, "default");
+    const expected = generatePoolFromData(noDecks, 3, undefined, "color_pool");
     expect(signature(fallback.counts)).toBe(signature(expected.counts));
   });
 });

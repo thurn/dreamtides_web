@@ -38,7 +38,7 @@ import type {
   PoolData,
   VariantResult,
 } from "./types.ts";
-import { generate } from "./variant-default.ts";
+import { generate } from "./variant-color-pool.ts";
 import { type IdfDeck, idfCosine, growIdfPool } from "./variant-idf.ts";
 import { IDF2, idf2Corpus } from "./variant-idf2.ts";
 

@@ -9,6 +9,7 @@ describe("parseRuntimeConfig", () => {
       aiMode: true,
       gameId: null,
       databaseMode: "emulator",
+      poolVariant: "idf3",
       debugJourneyShape: null,
       debugJourneyReward: null,
       debugJourneyCost: null,
@@ -89,6 +90,22 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?game=abc").gameId).toBeNull();
       expect(parseRuntimeConfig("?game=bad_id").gameId).toBeNull();
       expect(parseRuntimeConfig("?game=").gameId).toBeNull();
+    });
+  });
+
+  describe("poolVariant", () => {
+    it("defaults to idf3 when algo is absent or unrecognised", () => {
+      expect(parseRuntimeConfig("").poolVariant).toBe("idf3");
+      expect(parseRuntimeConfig("?algo=").poolVariant).toBe("idf3");
+      expect(parseRuntimeConfig("?algo=nonsense").poolVariant).toBe("idf3");
+    });
+
+    it("returns a registered strategy id when algo matches one", () => {
+      expect(parseRuntimeConfig("?algo=color_pool").poolVariant).toBe(
+        "color_pool",
+      );
+      expect(parseRuntimeConfig("?algo=diverse").poolVariant).toBe("diverse");
+      expect(parseRuntimeConfig("?algo=idf2").poolVariant).toBe("idf2");
     });
   });
 

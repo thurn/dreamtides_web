@@ -1,6 +1,6 @@
-// The `default` variant: the original color-identity algorithm. Choose a color
-// identity, walk the on-color themes weighted by overlap with what is already
-// chosen, then fill, jitter, and trim to a random target size.
+// The `color_pool` variant: the original color-identity algorithm. Choose a
+// color identity, walk the on-color themes weighted by overlap with what is
+// already chosen, then fill, jitter, and trim to a random target size.
 
 import { ALPHA, COLORS, HI, JIT, K_WEIGHTS, LO, TOPK } from "./constants.ts";
 import { randInt, shuffle, weightedPick } from "./rng.ts";
@@ -141,9 +141,9 @@ export function generate(
   return { C, selected, counts };
 }
 
-/** Strategy adapter for the `default` algorithm. */
-export const defaultStrategy: PoolStrategy = {
-  id: "default",
+/** Strategy adapter for the `color_pool` algorithm. */
+export const colorPoolStrategy: PoolStrategy = {
+  id: "color_pool",
   description:
     "Color-identity walk: pick an identity, walk the on-color themes weighted " +
     "by overlap with what is already chosen, then fill, jitter, and trim to a " +
