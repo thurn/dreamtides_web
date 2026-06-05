@@ -308,9 +308,11 @@ function actionSortKey(action: PlanAction): string {
  * planner does not over-develop into losing positions.
  *
  * Work is bounded by `beamWidth` (top-K kept each round), the {@link MAX_DEPTH}
- * safety cap, and the deadline guard. The per-node action set strictly shrinks
- * with depth (each play spends energy + a hand card + a reserve slot; each
- * reposition fills a deploy slot), so the search terminates well before the cap.
+ * safety cap, and the deadline guard. The per-node action set is bounded by
+ * finite energy and board space: each play spends energy and a reserve slot,
+ * each reposition fills a deploy slot, and draw events (Glimpse, Herald's Sign)
+ * only add cards a later node can play if it can still pay for them. Combined
+ * with the MAX_DEPTH cap the search terminates well before the cap.
  */
 function searchBestPlan(rootModel: ForwardModel, opts: PlannerOptions): PlanAction[] {
   const rootScore = scorePlan(rootModel, opts);

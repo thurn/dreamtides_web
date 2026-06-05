@@ -504,8 +504,10 @@ root/END_TURN baseline is therefore the floor: a line that goes nowhere loses to
 passing, while a setup→payoff line that beats passing is proposed. Beam search
 (rather than greedy) is what captures these order-sensitive synergies without
 exploding the branching factor. Because the action set per round is tiny and
-strictly shrinks with depth, the whole search visits at most a few hundred
-states.
+bounded by finite energy and board space (each play spends energy and a reserve
+slot, each reposition fills a deploy slot, and draw events only add cards a later
+node can play if it can still pay for them), plus a MAX_DEPTH cap, the whole
+search visits at most a few hundred states.
 
 The stages are not strictly sequential where ordering matters for value (e.g. a
 removal spell that clears a blocker before a reposition); the planner allows a
