@@ -289,19 +289,35 @@ function actionSortKey(action: PlanAction): string {
   ].join("|");
 }
 
-const EPSILON = 1e-9;
-
 /**
- * Runs the staged beam search and returns the best complete plan found (its
- * action list, possibly empty). A plan terminates when no remaining legal action
- * strictly improves its score. The search is bounded by `beamWidth` and the
- * deadline guard, so worst-case work is small by construction.
+ * Runs the staged beam search and returns the best COMPLETE plan found (its
+ * action list, possibly empty).
+ *
+ * Every plan node — including the empty root — is itself a complete plan, in the
+ * sense that the AI could stop there and pass; a node's value is simply its
+ * model score ({@link scorePlan}). The search therefore tracks the
+ * highest-scoring node encountered anywhere in the tree (the root/END_TURN
+ * baseline included) and returns its action list.
+ *
+ * Expansion is a real bounded beam, NOT greedy: a partial plan is expanded by
+ * EVERY legal next action, with no "strictly improving" gate. A momentarily
+ * neutral-or-worse setup play (e.g. dropping Twilight Minstrel into the reserve)
+ * is allowed to remain in the beam so a later step (repositioning Meadowforged
+ * Colossus into a slot the Minstrel supports) can pay off within the same turn.
+ * A line that genuinely goes nowhere still loses to the root baseline, so the
+ * planner does not over-develop into losing positions.
+ *
+ * Work is bounded by `beamWidth` (top-K kept each round), the {@link MAX_DEPTH}
+ * safety cap, and the deadline guard. The per-node action set strictly shrinks
+ * with depth (each play spends energy + a hand card + a reserve slot; each
+ * reposition fills a deploy slot), so the search terminates well before the cap.
  */
 function searchBestPlan(rootModel: ForwardModel, opts: PlannerOptions): PlanAction[] {
   const rootScore = scorePlan(rootModel, opts);
   const root: BeamEntry = { model: rootModel, actions: [], score: rootScore };
 
-  // Best COMPLETE plan found so far. The root (do nothing) is always complete.
+  // Best COMPLETE plan found so far. The root (do nothing → END_TURN) is itself
+  // a complete plan and the baseline every line must beat to be proposed.
   let best: BeamEntry = root;
 
   // Deadline already passed at entry: return the empty plan immediately.
@@ -311,9 +327,9 @@ function searchBestPlan(rootModel: ForwardModel, opts: PlannerOptions): PlanActi
 
   let beam: BeamEntry[] = [root];
 
-  // Each iteration expands the beam by one action. The depth is bounded by the
-  // available energy/board space, so the loop always terminates; the explicit
-  // cap is a safety belt.
+  // Each iteration extends every partial plan in the beam by one action. The
+  // depth is bounded by available energy/board space, so the loop always
+  // terminates; the explicit cap is a safety belt.
   const MAX_DEPTH = 16;
   for (let depth = 0; depth < MAX_DEPTH; depth += 1) {
     if (deadlineApproached(opts)) {
@@ -321,37 +337,41 @@ function searchBestPlan(rootModel: ForwardModel, opts: PlannerOptions): PlanActi
     }
 
     const expansions: BeamEntry[] = [];
-    let anyExpansion = false;
 
     for (const entry of beam) {
       const candidates = generateActions(entry.model);
       // Deterministic candidate order.
       candidates.sort((a, b) => actionSortKey(a).localeCompare(actionSortKey(b)));
 
+      // A branch with no legal action is a dead end: it contributes no
+      // expansions and simply drops out of the beam. Its own score was already
+      // folded into `best` when the node was created.
       for (const action of candidates) {
         const nextModel = cloneForwardModel(entry.model);
         applyAction(nextModel, action);
         const score = scorePlan(nextModel, opts);
-        // Only keep strictly-improving expansions: the search stops when no
-        // positive-value action remains (`battle_ai.md` §"The Planner").
-        if (score > entry.score + EPSILON) {
-          anyExpansion = true;
-          const childActions = [...entry.actions, action];
-          const child: BeamEntry = { model: nextModel, actions: childActions, score };
-          expansions.push(child);
-          if (score > best.score + EPSILON) {
-            best = child;
-          }
+        // Keep EVERY legal expansion — non-improving steps included — so a later
+        // payoff in the same turn can still be discovered.
+        const child: BeamEntry = { model: nextModel, actions: [...entry.actions, action], score };
+        expansions.push(child);
+        // Track the best complete plan across the whole search. Tie-break on the
+        // plan's action path so identical inputs pick the same plan.
+        if (
+          score > best.score ||
+          (score === best.score && planSortKey(child).localeCompare(planSortKey(best)) < 0)
+        ) {
+          best = child;
         }
       }
     }
 
-    if (!anyExpansion) {
+    // Whole beam exhausted (every branch was a dead end): nothing left to expand.
+    if (expansions.length === 0) {
       break;
     }
 
-    // Keep the top-K expansions, breaking ties deterministically by the first
-    // action's sort key so identical inputs always retain the same beam.
+    // Keep the top-K expansions, breaking ties deterministically by the plan's
+    // action path so identical inputs always retain the same beam.
     expansions.sort((a, b) => {
       if (b.score !== a.score) {
         return b.score - a.score;

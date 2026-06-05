@@ -274,6 +274,68 @@ describe("planNextAction", () => {
     });
   });
 
+  describe("within-turn setup then payoff (beam, not greedy)", () => {
+    it("proposes the neutral setup play that enables a strongly positive completed line this turn", () => {
+      // Meadowforged Colossus (#515) is ALREADY on the AI board in a reserve
+      // slot, awakened (canChallengeThisTurn), so it can be repositioned this
+      // turn. Twilight Minstrel (#510) is in hand with exactly enough energy to
+      // play it. The board is otherwise empty and there are no opponent bodies.
+      //
+      // The winning completed line is:
+      //   1. play Minstrel  -> lands in R0 (first empty reserve slot)
+      //   2. reposition Colossus from R2 -> D0 (first empty deploy slot)
+      // In the final board the Colossus stands in D0 with 1 supporting ally
+      // (Minstrel in R0, which supports D0), so its effective spark is
+      //   6 (base) + 2 (Minstrel Support, R0 supports D0)
+      //             + 2 (own +2-per-supporter self-static, 1 supporter) = 10,
+      // scored unblocked against an empty opponent board. That completed plan
+      // scores far above END_TURN.
+      //
+      // Crucially, playing the Minstrel ON ITS OWN is NON-IMPROVING: it spends a
+      // hand card and energy and only adds a back-rank body, scoring slightly
+      // BELOW the do-nothing/END_TURN baseline (~3.5 vs ~4.0). The old
+      // strictly-improving beam pruned this setup step and never reached the
+      // payoff; it would instead reposition the Colossus alone (still better than
+      // passing, but the lesser line) and never play the Minstrel. The real beam
+      // keeps the neutral setup node so the payoff is discovered, and the best
+      // complete plan begins with the Minstrel play.
+      const colossusOnBoard = makeCard({
+        cardNumber: 515,
+        name: "Meadowforged Colossus",
+        basePrintedSpark: 6,
+        canChallengeThisTurn: true,
+      });
+      const model = baseModel({
+        aiEnergy: 2,
+        aiHand: [minstrel()],
+        aiReserve: { ...emptyReserve(), R2: colossusOnBoard },
+        opponentBodies: [],
+      });
+
+      const action = planNextAction(model, defaultOptions());
+
+      // The first action of the best complete plan is the Minstrel play (the
+      // setup step of the winning line) — NOT END_TURN, and NOT the lesser
+      // reposition-only line the greedy version would take.
+      expect(action.kind).toBe("PLAY_CARD");
+      expect(action.self?.cardNumber).toBe(510);
+    });
+  });
+
+  describe("over-development guard (no greedy cutoff != over-develop)", () => {
+    it("returns END_TURN when the only legal develop is a losing line", () => {
+      // A legal action EXISTS (the AI can afford the Minstrel) but playing it
+      // strictly lowers the score: it spends a hand card and energy to add a
+      // lone back-rank body with no front body to support and no payoff to set
+      // up. With the greedy cutoff removed the beam still explores this play, but
+      // because it scores below the do-nothing/END_TURN baseline the best
+      // complete plan is the empty/root plan and the planner passes.
+      const model = baseModel({ aiEnergy: 3, aiHand: [minstrel()] });
+      const action = planNextAction(model, defaultOptions());
+      expect(action.kind).toBe("END_TURN");
+    });
+  });
+
   describe("end turn fallback", () => {
     it("returns END_TURN when the hand is empty and no legal action exists", () => {
       const model = baseModel({ aiEnergy: 5, aiHand: [] });

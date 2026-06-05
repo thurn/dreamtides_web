@@ -492,11 +492,20 @@ map one-to-one onto the existing `BattleAiDecisionStage` enum:
    which the rules spine proposes the Challenge outcome for approval.
 
 The search keeps a **beam** of the top-K partial plans (K ≈ 8–16) ranked by the
-evaluation function, expanding each by one legal action per stage until no
-positive-value action remains or energy/space is exhausted. Beam search (rather
-than greedy) is what captures order-sensitive synergies without exploding the
-branching factor. Because the action set per stage is tiny, the whole search
-visits at most a few hundred states.
+evaluation function, expanding each by *every* legal action per round until the
+action set is exhausted (no card affordable, no reposition available) or the
+`MAX_DEPTH`/deadline guard trips. Crucially the expansion is NOT gated on
+"strictly improving": a momentarily neutral-or-worse setup play stays in the
+beam so a later step in the same turn can pay it off. Every plan node — the
+empty/root plan included — is itself a complete plan (the AI could stop there
+and pass), so a node's value is just its model score, and the search returns the
+first action of the **highest-scoring node** seen anywhere in the tree. The
+root/END_TURN baseline is therefore the floor: a line that goes nowhere loses to
+passing, while a setup→payoff line that beats passing is proposed. Beam search
+(rather than greedy) is what captures these order-sensitive synergies without
+exploding the branching factor. Because the action set per round is tiny and
+strictly shrinks with depth, the whole search visits at most a few hundred
+states.
 
 The stages are not strictly sequential where ordering matters for value (e.g. a
 removal spell that clears a blocker before a reposition); the planner allows a
