@@ -28,14 +28,8 @@
     "death": {
       "name": "An ally is dissolved"
     },
-    "score": {
-      "name": "A character scores ⍟"
-    },
     "reclaim": {
       "name": "Reclaim a card"
-    },
-    "erode": {
-      "name": "Erode / self-mill"
     },
     "storm": {
       "name": "Cards played this turn (Storm)"
@@ -45,15 +39,6 @@
     },
     "cheap-characters": {
       "name": "Cheap characters"
-    },
-    "wide-board": {
-      "name": "Wide board"
-    },
-    "counters": {
-      "name": "Stored counters"
-    },
-    "awaken": {
-      "name": "Awaken"
     }
   },
   "cards": {
@@ -115,9 +100,7 @@
           "tier": 2
         }
       ],
-      "supports": [
-        "score"
-      ]
+      "supports": []
     },
     "Annular Recall": {
       "needs": [],
@@ -133,15 +116,9 @@
       ]
     },
     "Apocalypse Vigilante": {
-      "needs": [
-        {
-          "theme": "score",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
-        "warriors",
-        "score"
+        "warriors"
       ]
     },
     "Arc Disciple": {
@@ -172,8 +149,7 @@
         }
       ],
       "supports": [
-        "cheap-characters",
-        "awaken"
+        "cheap-characters"
       ]
     },
     "Archive of the Forgotten": {
@@ -197,7 +173,6 @@
       "supports": [
         "abandon",
         "death",
-        "erode",
         "void"
       ]
     },
@@ -250,8 +225,7 @@
         "survivors",
         "cheap-characters",
         "abandon",
-        "death",
-        "erode"
+        "death"
       ]
     },
     "Ashfront Lieutenant": {
@@ -296,7 +270,6 @@
       "needs": [],
       "supports": [
         "survivors",
-        "erode",
         "void",
         "cheap-characters",
         "death"
@@ -353,8 +326,7 @@
         }
       ],
       "supports": [
-        "figments",
-        "score"
+        "figments"
       ]
     },
     "Barrage Specialist": {
@@ -405,12 +377,7 @@
       ]
     },
     "Blazing Emberwing": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 3
-        }
-      ],
+      "needs": [],
       "supports": [
         "spirit-animals"
       ]
@@ -549,9 +516,7 @@
       ],
       "supports": [
         "figments",
-        "awaken",
-        "reclaim",
-        "wide-board"
+        "reclaim"
       ]
     },
     "Call to the Unknown": {
@@ -630,8 +595,7 @@
       "supports": [
         "cheap-characters",
         "figments",
-        "abandon",
-        "wide-board"
+        "abandon"
       ]
     },
     "Celestial Reverie": {
@@ -669,8 +633,7 @@
     "Cinderblade Legionnaire": {
       "needs": [],
       "supports": [
-        "figments",
-        "wide-board"
+        "figments"
       ]
     },
     "Cinderfang": {
@@ -688,23 +651,7 @@
         }
       ],
       "supports": [
-        "score",
         "death"
-      ]
-    },
-    "Cindermarch": {
-      "needs": [
-        {
-          "theme": "awaken",
-          "tier": 2
-        },
-        {
-          "theme": "wide-board",
-          "tier": 2
-        }
-      ],
-      "supports": [
-        "awaken"
       ]
     },
     "Clockwork Conductor": {
@@ -773,15 +720,6 @@
         "death"
       ]
     },
-    "Conduit of Resonance": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 2
-        }
-      ],
-      "supports": []
-    },
     "Conjured Zenith": {
       "needs": [],
       "supports": [
@@ -847,15 +785,6 @@
         "warriors"
       ]
     },
-    "Crumbling Behemoth": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 3
-        }
-      ],
-      "supports": []
-    },
     "Crumbling Covenant": {
       "needs": [],
       "supports": [
@@ -890,15 +819,9 @@
       ]
     },
     "Dawnhorn Elder": {
-      "needs": [
-        {
-          "theme": "counters",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
-        "spirit-animals",
-        "counters"
+        "spirit-animals"
       ]
     },
     "Dawnprowler Panther": {
@@ -915,8 +838,7 @@
     "Dawnrunner": {
       "needs": [],
       "supports": [
-        "figments",
-        "wide-board"
+        "figments"
       ]
     },
     "Deathwalker": {
@@ -952,7 +874,6 @@
     "Depthwalker": {
       "needs": [],
       "supports": [
-        "erode",
         "void",
         "cheap-characters"
       ]
@@ -961,7 +882,6 @@
       "needs": [],
       "supports": [
         "events",
-        "score",
         "reclaim",
         "void"
       ]
@@ -972,8 +892,7 @@
         "warriors",
         "cheap-characters",
         "abandon",
-        "death",
-        "counters"
+        "death"
       ]
     },
     "Desperation": {
@@ -1080,7 +999,6 @@
       ],
       "supports": [
         "warriors",
-        "erode",
         "void",
         "cheap-characters"
       ]
@@ -1147,10 +1065,6 @@
         {
           "theme": "outsiders",
           "tier": 1
-        },
-        {
-          "theme": "score",
-          "tier": 2
         }
       ],
       "supports": [
@@ -1180,12 +1094,6 @@
         "discard"
       ]
     },
-    "Duskmount": {
-      "needs": [],
-      "supports": [
-        "awaken"
-      ]
-    },
     "Duskreaper": {
       "needs": [
         {
@@ -1193,9 +1101,7 @@
           "tier": 2
         }
       ],
-      "supports": [
-        "score"
-      ]
+      "supports": []
     },
     "Duskshore Virtuoso": {
       "needs": [
@@ -1205,8 +1111,7 @@
         }
       ],
       "supports": [
-        "cheap-characters",
-        "counters"
+        "cheap-characters"
       ]
     },
     "Duskwall Delver": {
@@ -1243,7 +1148,6 @@
       "needs": [],
       "supports": [
         "spirit-animals",
-        "erode",
         "void",
         "cheap-characters"
       ]
@@ -1269,7 +1173,6 @@
         }
       ],
       "supports": [
-        "erode",
         "void"
       ]
     },
@@ -1306,8 +1209,7 @@
     "Eclipse Herald": {
       "needs": [],
       "supports": [
-        "warriors",
-        "counters"
+        "warriors"
       ]
     },
     "Ecliptic Vantage": {
@@ -1364,15 +1266,9 @@
       ]
     },
     "Endless Projection": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
-        "figments",
-        "wide-board"
+        "figments"
       ]
     },
     "Enginespeaker": {
@@ -1403,12 +1299,7 @@
       ]
     },
     "Eruption": {
-      "needs": [
-        {
-          "theme": "score",
-          "tier": 1
-        }
-      ],
+      "needs": [],
       "supports": [
         "events",
         "reclaim"
@@ -1457,7 +1348,6 @@
       "supports": [
         "discard",
         "void",
-        "awaken",
         "cheap-characters"
       ]
     },
@@ -1484,17 +1374,11 @@
       "supports": [
         "spirit-animals",
         "cheap-characters",
-        "wide-board",
         "void"
       ]
     },
     "Fargazer": {
-      "needs": [
-        {
-          "theme": "erode",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
         "reclaim"
       ]
@@ -1507,8 +1391,7 @@
         }
       ],
       "supports": [
-        "death",
-        "score"
+        "death"
       ]
     },
     "Fathomscourge": {
@@ -1550,7 +1433,6 @@
     "Fern Treader": {
       "needs": [],
       "supports": [
-        "awaken",
         "storm"
       ]
     },
@@ -1564,7 +1446,6 @@
       "supports": [
         "abandon",
         "death",
-        "erode",
         "void"
       ]
     },
@@ -1575,12 +1456,7 @@
       ]
     },
     "Field Reverent": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 3
-        }
-      ],
+      "needs": [],
       "supports": [
         "warriors"
       ]
@@ -1626,8 +1502,7 @@
       "supports": [
         "events",
         "reclaim",
-        "discard",
-        "score"
+        "discard"
       ]
     },
     "Forge Inheritor": {
@@ -1649,12 +1524,6 @@
       "supports": [
         "warriors",
         "figments"
-      ]
-    },
-    "Forgotten Factory Titan": {
-      "needs": [],
-      "supports": [
-        "awaken"
       ]
     },
     "Forgotten Titan": {
@@ -1962,7 +1831,6 @@
       "needs": [],
       "supports": [
         "events",
-        "erode",
         "void",
         "storm"
       ]
@@ -1988,7 +1856,6 @@
         }
       ],
       "supports": [
-        "erode",
         "events"
       ]
     },
@@ -2020,14 +1887,7 @@
         "survivors",
         "figments",
         "discard",
-        "void",
-        "wide-board"
-      ]
-    },
-    "Horizon Follower": {
-      "needs": [],
-      "supports": [
-        "score"
+        "void"
       ]
     },
     "Iconoclast": {
@@ -2090,8 +1950,7 @@
       "supports": [
         "warriors",
         "figments",
-        "death",
-        "wide-board"
+        "death"
       ]
     },
     "Inspiring Templar": {
@@ -2162,7 +2021,6 @@
       "supports": [
         "abandon",
         "death",
-        "score",
         "cheap-characters"
       ]
     },
@@ -2226,9 +2084,7 @@
           "tier": 2
         }
       ],
-      "supports": [
-        "counters"
-      ]
+      "supports": []
     },
     "Kindred Sparks": {
       "needs": [
@@ -2253,14 +2109,8 @@
       ]
     },
     "Lanternhearted": {
-      "needs": [
-        {
-          "theme": "awaken",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
-        "awaken",
         "reclaim"
       ]
     },
@@ -2269,8 +2119,6 @@
       "supports": [
         "abandon",
         "death",
-        "counters",
-        "score",
         "cheap-characters"
       ]
     },
@@ -2317,14 +2165,8 @@
       ]
     },
     "Liminal Dreamer": {
-      "needs": [
-        {
-          "theme": "counters",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
-        "counters",
         "discard"
       ]
     },
@@ -2351,7 +2193,6 @@
         "spirit-animals",
         "discard",
         "cheap-characters",
-        "wide-board",
         "abandon",
         "death",
         "void"
@@ -2398,12 +2239,7 @@
       ]
     },
     "Luminous Ascent": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
         "events",
         "reclaim"
@@ -2418,8 +2254,7 @@
       ],
       "supports": [
         "spirit-animals",
-        "cheap-characters",
-        "wide-board"
+        "cheap-characters"
       ]
     },
     "Lunar Hart": {
@@ -2473,7 +2308,6 @@
       "supports": [
         "warriors",
         "abandon",
-        "erode",
         "void",
         "death",
         "cheap-characters"
@@ -2533,14 +2367,8 @@
       ]
     },
     "Mirrorlight Architect": {
-      "needs": [
-        {
-          "theme": "counters",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
-        "counters",
         "cheap-characters"
       ]
     },
@@ -2596,12 +2424,6 @@
       "needs": [],
       "supports": [
         "events"
-      ]
-    },
-    "Mother of Flames": {
-      "needs": [],
-      "supports": [
-        "awaken"
       ]
     },
     "Mountainwatch Alpha": {
@@ -2675,7 +2497,6 @@
       "needs": [],
       "supports": [
         "warriors",
-        "score",
         "death",
         "cheap-characters"
       ]
@@ -2683,24 +2504,12 @@
     "Nocturne": {
       "needs": [],
       "supports": [
-        "erode",
         "void",
         "reclaim"
       ]
     },
-    "Nomad of Endless Paths": {
-      "needs": [],
-      "supports": [
-        "score"
-      ]
-    },
     "Northlight Maestro": {
-      "needs": [
-        {
-          "theme": "score",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
         "outsiders"
       ]
@@ -2721,8 +2530,7 @@
       "supports": [
         "cheap-characters",
         "abandon",
-        "death",
-        "counters"
+        "death"
       ]
     },
     "Ochre Prospector": {
@@ -2791,9 +2599,7 @@
           "tier": 3
         }
       ],
-      "supports": [
-        "score"
-      ]
+      "supports": []
     },
     "Part the Veil": {
       "needs": [
@@ -2804,7 +2610,6 @@
       ],
       "supports": [
         "events",
-        "erode",
         "void",
         "reclaim"
       ]
@@ -2856,7 +2661,6 @@
         "events",
         "abandon",
         "death",
-        "erode",
         "void"
       ]
     },
@@ -2879,15 +2683,6 @@
         "void"
       ]
     },
-    "Petal-Seer": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 3
-        }
-      ],
-      "supports": []
-    },
     "Phantasmal Recruiter": {
       "needs": [
         {
@@ -2898,9 +2693,7 @@
       "supports": [
         "warriors",
         "figments",
-        "abandon",
-        "counters",
-        "wide-board"
+        "abandon"
       ]
     },
     "Phantom Flotilla": {
@@ -2929,16 +2722,11 @@
     "Pinnacle Ascendant": {
       "needs": [
         {
-          "theme": "awaken",
-          "tier": 2
-        },
-        {
           "theme": "discard",
           "tier": 1
         }
       ],
       "supports": [
-        "awaken",
         "reclaim"
       ]
     },
@@ -2951,7 +2739,6 @@
       ],
       "supports": [
         "warriors",
-        "erode",
         "void",
         "abandon",
         "cheap-characters"
@@ -2993,28 +2780,10 @@
       ]
     },
     "Pyre Challenger": {
-      "needs": [
-        {
-          "theme": "awaken",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
         "warriors",
-        "awaken",
-        "cheap-characters",
-        "score"
-      ]
-    },
-    "Pyrestone Avatar": {
-      "needs": [
-        {
-          "theme": "awaken",
-          "tier": 2
-        }
-      ],
-      "supports": [
-        "awaken"
+        "cheap-characters"
       ]
     },
     "Pyrewatcher": {
@@ -3055,7 +2824,6 @@
       "needs": [],
       "supports": [
         "figments",
-        "wide-board",
         "events"
       ]
     },
@@ -3198,15 +2966,9 @@
       ]
     },
     "Rootbound Witness": {
-      "needs": [
-        {
-          "theme": "awaken",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
         "warriors",
-        "awaken",
         "abandon",
         "death",
         "cheap-characters"
@@ -3221,8 +2983,7 @@
       ],
       "supports": [
         "events",
-        "cheap-characters",
-        "wide-board"
+        "cheap-characters"
       ]
     },
     "Rootspring Summons": {
@@ -3255,7 +3016,6 @@
     "Rusted Monolith": {
       "needs": [],
       "supports": [
-        "score",
         "reclaim",
         "void"
       ]
@@ -3264,7 +3024,6 @@
       "needs": [],
       "supports": [
         "warriors",
-        "awaken",
         "cheap-characters"
       ]
     },
@@ -3284,8 +3043,7 @@
       "supports": [
         "cheap-characters",
         "abandon",
-        "death",
-        "score"
+        "death"
       ]
     },
     "Salvage Engine": {
@@ -3333,8 +3091,7 @@
         }
       ],
       "supports": [
-        "warriors",
-        "counters"
+        "warriors"
       ]
     },
     "Scorched Reckoning": {
@@ -3353,14 +3110,12 @@
       "supports": [
         "cheap-characters",
         "discard",
-        "void",
-        "awaken"
+        "void"
       ]
     },
     "Scrapyard Custodian": {
       "needs": [],
       "supports": [
-        "score",
         "cheap-characters",
         "reclaim"
       ]
@@ -3380,7 +3135,6 @@
       "needs": [],
       "supports": [
         "survivors",
-        "erode",
         "void",
         "cheap-characters",
         "death"
@@ -3405,8 +3159,7 @@
     "Seedling Sage": {
       "needs": [],
       "supports": [
-        "cheap-characters",
-        "counters"
+        "cheap-characters"
       ]
     },
     "Seeker for the Way": {
@@ -3467,22 +3220,14 @@
         {
           "theme": "events",
           "tier": 2
-        },
-        {
-          "theme": "awaken",
-          "tier": 2
         }
       ],
-      "supports": [
-        "awaken"
-      ]
+      "supports": []
     },
     "Shadowbinder": {
       "needs": [],
       "supports": [
-        "figments",
-        "awaken",
-        "wide-board"
+        "figments"
       ]
     },
     "Shadowcaller": {
@@ -3507,7 +3252,6 @@
       "needs": [],
       "supports": [
         "discard",
-        "erode",
         "void",
         "abandon",
         "spirit-animals"
@@ -3628,8 +3372,7 @@
         }
       ],
       "supports": [
-        "cheap-characters",
-        "score"
+        "cheap-characters"
       ]
     },
     "Sky Voyager": {
@@ -3646,10 +3389,6 @@
       "needs": [
         {
           "theme": "cheap-characters",
-          "tier": 3
-        },
-        {
-          "theme": "wide-board",
           "tier": 3
         }
       ],
@@ -3683,8 +3422,7 @@
       ],
       "supports": [
         "warriors",
-        "abandon",
-        "score"
+        "abandon"
       ]
     },
     "Somber Flockmaster": {
@@ -3716,8 +3454,7 @@
       "supports": [
         "survivors",
         "figments",
-        "cheap-characters",
-        "wide-board"
+        "cheap-characters"
       ]
     },
     "Sorrowful Prince": {
@@ -3737,7 +3474,6 @@
       "supports": [
         "abandon",
         "death",
-        "counters",
         "cheap-characters"
       ]
     },
@@ -3777,8 +3513,7 @@
       "supports": [
         "warriors",
         "abandon",
-        "death",
-        "erode"
+        "death"
       ]
     },
     "Speaker for the Forgotten": {
@@ -3789,7 +3524,6 @@
         }
       ],
       "supports": [
-        "erode",
         "reclaim",
         "void"
       ]
@@ -3837,29 +3571,17 @@
       ]
     },
     "Spirit Bond": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 3
-        }
-      ],
+      "needs": [],
       "supports": [
-        "events",
-        "score"
+        "events"
       ]
     },
     "Spirit Field Reclaimer": {
-      "needs": [
-        {
-          "theme": "counters",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
         "warriors",
         "reclaim",
-        "void",
-        "counters"
+        "void"
       ]
     },
     "Spirit of Smoldering Echoes": {
@@ -3879,15 +3601,9 @@
       ]
     },
     "Spirit of the Greenwood": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 3
-        }
-      ],
+      "needs": [],
       "supports": [
         "spirit-animals",
-        "awaken",
         "cheap-characters"
       ]
     },
@@ -3915,12 +3631,7 @@
       ]
     },
     "Standard Bearer": {
-      "needs": [
-        {
-          "theme": "wide-board",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
         "warriors",
         "figments"
@@ -4096,12 +3807,6 @@
         "warriors"
       ]
     },
-    "Sundown Surfer": {
-      "needs": [],
-      "supports": [
-        "score"
-      ]
-    },
     "Sunken Radiance": {
       "needs": [],
       "supports": [
@@ -4135,20 +3840,13 @@
       ],
       "supports": [
         "spirit-animals",
-        "counters",
         "cheap-characters"
       ]
     },
     "Surge of Fury": {
-      "needs": [
-        {
-          "theme": "awaken",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
-        "events",
-        "awaken"
+        "events"
       ]
     },
     "Sylvan Matriarch": {
@@ -4210,16 +3908,14 @@
       "supports": [
         "cheap-characters",
         "abandon",
-        "death",
-        "counters"
+        "death"
       ]
     },
     "The Forsaker": {
       "needs": [],
       "supports": [
         "abandon",
-        "death",
-        "score"
+        "death"
       ]
     },
     "The Grand Heist": {
@@ -4250,8 +3946,7 @@
       "needs": [],
       "supports": [
         "reclaim",
-        "abandon",
-        "score"
+        "abandon"
       ]
     },
     "The Thinning": {
@@ -4267,9 +3962,7 @@
           "tier": 2
         }
       ],
-      "supports": [
-        "counters"
-      ]
+      "supports": []
     },
     "Thornwood Delver": {
       "needs": [
@@ -4278,19 +3971,13 @@
           "tier": 2
         }
       ],
-      "supports": [
-        "score"
-      ]
+      "supports": []
     },
     "Thronebound Arbiter": {
       "needs": [
         {
           "theme": "outsiders",
           "tier": 1
-        },
-        {
-          "theme": "score",
-          "tier": 2
         }
       ],
       "supports": [
@@ -4439,9 +4126,7 @@
       ],
       "supports": [
         "warriors",
-        "counters",
-        "abandon",
-        "score"
+        "abandon"
       ]
     },
     "Twilight Troubadour": {
@@ -4453,8 +4138,7 @@
       ],
       "supports": [
         "warriors",
-        "figments",
-        "wide-board"
+        "figments"
       ]
     },
     "Unbroken": {
@@ -4510,12 +4194,7 @@
       ]
     },
     "Vanishing Inquisitor": {
-      "needs": [
-        {
-          "theme": "score",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
         "outsiders"
       ]
@@ -4570,7 +4249,6 @@
         }
       ],
       "supports": [
-        "erode",
         "void",
         "abandon"
       ]
@@ -4578,8 +4256,7 @@
     "Verdant Pilgrim": {
       "needs": [],
       "supports": [
-        "spirit-animals",
-        "awaken"
+        "spirit-animals"
       ]
     },
     "Verdant Pioneer": {
@@ -4686,8 +4363,7 @@
     "Wandering Archivist": {
       "needs": [],
       "supports": [
-        "discard",
-        "score"
+        "discard"
       ]
     },
     "Warfield Stalwart": {
@@ -4719,8 +4395,7 @@
       ],
       "supports": [
         "warriors",
-        "cheap-characters",
-        "counters"
+        "cheap-characters"
       ]
     },
     "Wasteland Tamer": {
@@ -4765,10 +4440,6 @@
         {
           "theme": "events",
           "tier": 1
-        },
-        {
-          "theme": "erode",
-          "tier": 1
         }
       ],
       "supports": [
@@ -4794,7 +4465,6 @@
     "Wistful Angler": {
       "needs": [],
       "supports": [
-        "erode",
         "void",
         "cheap-characters"
       ]
@@ -4806,9 +4476,7 @@
           "tier": 3
         }
       ],
-      "supports": [
-        "awaken"
-      ]
+      "supports": []
     },
     "Wondrous Clearing": {
       "needs": [
@@ -4829,8 +4497,7 @@
         }
       ],
       "supports": [
-        "reclaim",
-        "score"
+        "reclaim"
       ]
     },
     "Worldbreacher": {
@@ -4843,8 +4510,7 @@
       "supports": [
         "warriors",
         "figments",
-        "cheap-characters",
-        "wide-board"
+        "cheap-characters"
       ]
     },
     "Worldsong Behemoth": {
