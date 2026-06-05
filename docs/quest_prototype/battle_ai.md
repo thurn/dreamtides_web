@@ -256,12 +256,16 @@ by both sides (the human benefits from it too).
   `battle_rules.md` §Challengers, Defenders, and Scoring: lower spark dissolves,
   ties dissolve both (respecting Preeminence — absent from the Starter pool but
   cheap to support), unpaired challengers score their spark, figment stacks
-  resolve top-down using the existing `selectFigmentChallengeLossCount`. This
-  fills the currently-empty `BattleJudgmentResolution` on the transition and
-  applies dissolves (firing `▸Dissolved`, e.g. Last Witness) and score deltas.
-  Effective spark here must include Support/static bonuses (see
-  [The Forward Model](#the-forward-model)). The resolver produces a *proposal*
-  and defers anything it cannot fully model to a manual step; see
+  resolve top-down using the existing `selectFigmentChallengeLossCount`.
+  `resolveJudgment` is a pure function: it reads the state but mutates nothing,
+  returning a `{ resolution, edits }` pair. The `BattleJudgmentResolution`
+  describes the outcome lane-by-lane for display, and the `BattleDebugEdit[]` —
+  an `ADJUST_SCORE` for the points scored plus a `MOVE_CARD_TO_ZONE`-to-void per
+  dissolved body — are the edits that commit the outcome (firing `▸Dissolved`,
+  e.g. Last Witness) once the human approves. Effective spark here must include
+  Support/static bonuses (see [The Forward Model](#the-forward-model)). The
+  resolver produces a *proposal* and defers anything it cannot fully model to a
+  manual step; see
   [Auto-Resolution and Manual Steps](#auto-resolution-and-manual-steps).
 
 - **Energy ramp (`engine/energy.ts`).** At the start of each turn, raise max
@@ -342,7 +346,10 @@ their own cards. The flow is therefore *auto-propose, human-in-the-loop* rather
 than *auto-resolve*.
 
 This maps cleanly onto the existing code. The resolver returns a
-`BattleJudgmentResolution` proposal plus a list of pending manual windows;
+`BattleJudgmentResolution` proposal plus the `BattleDebugEdit[]` that commit it,
+while a separate per-card `needsManualResolution` capability check
+(`engine/capability-check.ts`) flags any in-play card whose text the engine
+cannot model so the surrounding flow can pause for a manual step;
 `PlayableBattleScreen` surfaces a confirm/resolve step (the prototype already
 expects the human to drive their own side); and every committed piece — the
 proposed dissolves and score deltas, or a human-entered adjustment — goes through
@@ -559,8 +566,13 @@ be selected by a difficulty setting:
 
 "Monte Carlo" here means sampling a handful (≤ ~16) of concrete responses from
 those archetypes — including sampling *which* unknown card the opponent might
-hold — resolving each with the shared judgment resolver, and averaging. With a
-board this small, sampling is cheap, and the variance it captures (does the
+hold — resolving each directly over the forward-model projection (the abstract
+opponent bodies) with the same combat rules, and averaging. The shared
+`resolveJudgment` operates on full `BattleMutableState` with real instances, so
+it is reserved for the authoritative end-of-turn commit; the opponent model
+applies the matching lower-spark-dissolves / unpaired-scores comparison itself
+against the projection. With a board this small, sampling is cheap, and the
+variance it captures (does the
 opponent have the blocker or not?) is exactly the uncertainty the AI faces. The
 sample count is a budget-bounded knob.
 
