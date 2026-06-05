@@ -28,7 +28,8 @@
 //   headline = mean(adequacy) over all payoff instances, x100  (per-instance)
 //
 // Usage:
-//   node scripts/buildaround-support-experiment.mjs                 # all DCs, 200 seeds
+//   node scripts/buildaround-support-experiment.mjs                 # short themes, 200 seeds
+//   node scripts/buildaround-support-experiment.mjs --themes all    # score every theme
 //   node scripts/buildaround-support-experiment.mjs --seeds 500
 //   node scripts/buildaround-support-experiment.mjs --dreamcaller "Kell Tarn"
 //   node scripts/buildaround-support-experiment.mjs --top 30
@@ -54,6 +55,16 @@ const POOL_TARGET_SIZE = 200;
 const DEFAULT_SEEDS = 200;
 const DEFAULT_TOP = 20;
 
+// `--themes short` (the default) scores only this focused set of build-around
+// themes; `--themes all` scores every theme in the metadata.
+const SHORT_THEMES = new Set([
+  "survivors",
+  "spirit-animals",
+  "discard",
+  "warriors",
+  "abandon",
+]);
+
 /**
  * Score one generated pool against the support metadata. Returns one record per
  * *payoff instance*: a build-around present in the pool, for each theme it needs.
@@ -61,8 +72,15 @@ const DEFAULT_TOP = 20;
  * @param counts Map<cardName, copies> (a 2-of is capped at 2 copies).
  * @param meta   { cards: Record<name,{needs,supports}>, themes }.
  * @param tierTarget tier -> target support share.
+ * @param allowedThemes optional Set; when given, only emit instances whose theme
+ *   is in it (support copies are still counted across every theme).
  */
-export function scorePool(counts, meta, tierTarget = TIER_TARGET) {
+export function scorePool(
+  counts,
+  meta,
+  tierTarget = TIER_TARGET,
+  allowedThemes = null,
+) {
   const cap = (c) => Math.min(2, c);
   let size = 0;
   for (const c of counts.values()) size += cap(c);
@@ -85,6 +103,7 @@ export function scorePool(counts, meta, tierTarget = TIER_TARGET) {
     if (!entry || !(entry.needs ?? []).length) continue;
     const copies = cap(raw);
     for (const need of entry.needs) {
+      if (allowedThemes && !allowedThemes.has(need.theme)) continue;
       const target = tierTarget[need.tier];
       // Exclude the payoff's own copies, so a lone lord isn't self-supported.
       const self = (entry.supports ?? []).includes(need.theme) ? copies : 0;
@@ -151,6 +170,12 @@ function run() {
   const variant = str(argv, "--variant", "idf3");
   const dcFilter = str(argv, "--dreamcaller", null);
   const asJson = argv.includes("--json");
+  const themeMode = str(argv, "--themes", "short");
+  if (themeMode !== "short" && themeMode !== "all") {
+    console.error(`--themes must be "short" or "all" (got "${themeMode}").`);
+    process.exit(1);
+  }
+  const allowedThemes = themeMode === "short" ? SHORT_THEMES : null;
 
   const cards = readJson("public/cards_v2-data.json");
   const decklists = readJson("public/decklists-data.json");
@@ -189,7 +214,7 @@ function run() {
         dc.signatureCards ?? [],
       );
       poolSizes.push(pool.size);
-      const instances = scorePool(pool.counts, meta);
+      const instances = scorePool(pool.counts, meta, TIER_TARGET, allowedThemes);
       if (instances.length) poolsWithPayoffs++;
       for (const inst of instances) {
         all.push({ dreamcaller: dc.name, ...inst });
@@ -215,7 +240,14 @@ function run() {
     console.log(
       JSON.stringify(
         {
-          config: { variant, seeds, dreamcallers: dreamcallers.length, tierTarget: TIER_TARGET },
+          config: {
+            variant,
+            seeds,
+            dreamcallers: dreamcallers.length,
+            themes: themeMode,
+            scoredThemes: allowedThemes ? [...allowedThemes] : Object.keys(meta.themes),
+            tierTarget: TIER_TARGET,
+          },
           headline,
           totalPools,
           poolsWithPayoffs,
@@ -236,8 +268,12 @@ function run() {
   const pct = (x) => `${(x * 100).toFixed(1)}%`;
   const themeName = (k) => meta.themes[k]?.name ?? k;
 
+  const themeLabel =
+    themeMode === "short"
+      ? `short themes (${[...SHORT_THEMES].length})`
+      : `all themes (${Object.keys(meta.themes).length})`;
   console.log(
-    `Build-around support metric (${variant}, ${seeds} seeds x ${dreamcallers.length} Dreamcallers = ${totalPools} pools)`,
+    `Build-around support metric (${variant}, ${themeLabel}, ${seeds} seeds x ${dreamcallers.length} Dreamcallers = ${totalPools} pools)`,
   );
   console.log(
     `Tier targets: 1=${pct(TIER_TARGET[1])}  2=${pct(TIER_TARGET[2])}  3=${pct(TIER_TARGET[3])}   mean pool size ${mean(poolSizes).toFixed(0)} copies`,

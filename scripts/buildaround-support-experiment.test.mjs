@@ -66,4 +66,15 @@ describe("scorePool", () => {
     const counts = withFiller(new Map([["Grunt", 2]]), 5);
     expect(scorePool(counts, META)).toEqual([]);
   });
+
+  it("only emits instances for allowed themes when given a filter", () => {
+    const counts = withFiller(
+      new Map([["Lord", 1], ["Grunt", 1], ["EventPayoff", 1], ["AnEvent", 1]]),
+      6,
+    );
+    const all = scorePool(counts, META);
+    expect(all.map((i) => i.theme).sort()).toEqual(["events", "warriors"]);
+    const warriorsOnly = scorePool(counts, META, TIER_TARGET, new Set(["warriors"]));
+    expect(warriorsOnly.map((i) => i.theme)).toEqual(["warriors"]);
+  });
 });

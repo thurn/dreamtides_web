@@ -23,10 +23,7 @@
       "name": "Discard a card"
     },
     "abandon": {
-      "name": "Abandon a character"
-    },
-    "death": {
-      "name": "An ally is dissolved"
+      "name": "Abandon / dissolve"
     },
     "reclaim": {
       "name": "Reclaim a card"
@@ -112,7 +109,7 @@
       "needs": [],
       "supports": [
         "events",
-        "death"
+        "abandon"
       ]
     },
     "Apocalypse Vigilante": {
@@ -130,8 +127,7 @@
       ],
       "supports": [
         "warriors",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Arc Gate Opening": {
@@ -172,7 +168,6 @@
       "needs": [],
       "supports": [
         "abandon",
-        "death",
         "void"
       ]
     },
@@ -224,8 +219,7 @@
       "supports": [
         "survivors",
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Ashfront Lieutenant": {
@@ -272,7 +266,7 @@
         "survivors",
         "void",
         "cheap-characters",
-        "death"
+        "abandon"
       ]
     },
     "Aspiring Guardian": {
@@ -321,7 +315,7 @@
     "Avatar of Cosmic Reckoning": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -346,8 +340,7 @@
       "supports": [
         "warriors",
         "discard",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Blade of Unity": {
@@ -360,14 +353,14 @@
       "needs": [],
       "supports": [
         "spirit-animals",
-        "death",
+        "abandon",
         "cheap-characters"
       ]
     },
     "Blazeguard": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 1
         }
       ],
@@ -394,7 +387,6 @@
       "supports": [
         "warriors",
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -480,7 +472,7 @@
           "tier": 2
         },
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -640,7 +632,7 @@
       "needs": [],
       "supports": [
         "survivors",
-        "death"
+        "abandon"
       ]
     },
     "Cinderheart": {
@@ -651,7 +643,7 @@
         }
       ],
       "supports": [
-        "death"
+        "abandon"
       ]
     },
     "Clockwork Conductor": {
@@ -696,8 +688,7 @@
       "needs": [],
       "supports": [
         "warriors",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Company Commander": {
@@ -716,8 +707,7 @@
       "supports": [
         "spirit-animals",
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Conjured Zenith": {
@@ -848,7 +838,7 @@
           "tier": 2
         },
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -861,7 +851,7 @@
       "supports": [
         "survivors",
         "figments",
-        "death",
+        "abandon",
         "cheap-characters"
       ]
     },
@@ -891,8 +881,7 @@
       "supports": [
         "warriors",
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Desperation": {
@@ -931,7 +920,6 @@
       "supports": [
         "events",
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -967,8 +955,7 @@
     "Dreadweaver": {
       "needs": [],
       "supports": [
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Dreadwood Emissary": {
@@ -1097,7 +1084,7 @@
     "Duskreaper": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -1117,13 +1104,13 @@
     "Duskwall Delver": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
       "supports": [
         "survivors",
-        "death",
+        "abandon",
         "cheap-characters"
       ]
     },
@@ -1134,14 +1121,14 @@
           "tier": 2
         },
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
       "supports": [
         "survivors",
         "figments",
-        "death"
+        "abandon"
       ]
     },
     "Ebonwing": {
@@ -1221,16 +1208,14 @@
     "Ember Shepherd": {
       "needs": [],
       "supports": [
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Emberfang": {
       "needs": [],
       "supports": [
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Embersummoner": {
@@ -1287,7 +1272,6 @@
       "supports": [
         "survivors",
         "cheap-characters",
-        "death",
         "abandon"
       ]
     },
@@ -1354,14 +1338,13 @@
     "Exiles of the Last Light": {
       "needs": [],
       "supports": [
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Fading Farewell": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -1391,7 +1374,7 @@
         }
       ],
       "supports": [
-        "death"
+        "abandon"
       ]
     },
     "Fathomscourge": {
@@ -1401,7 +1384,7 @@
           "tier": 2
         },
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -1445,7 +1428,6 @@
       ],
       "supports": [
         "abandon",
-        "death",
         "void"
       ]
     },
@@ -1545,8 +1527,7 @@
       "supports": [
         "events",
         "abandon",
-        "cheap-characters",
-        "death"
+        "cheap-characters"
       ]
     },
     "Forsaken Skyline": {
@@ -1647,8 +1628,7 @@
       "needs": [],
       "supports": [
         "warriors",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Gateweaver": {
@@ -1764,8 +1744,7 @@
         }
       ],
       "supports": [
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Grotto Seer": {
@@ -1844,8 +1823,7 @@
       ],
       "supports": [
         "survivors",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Hatching Ground": {
@@ -1936,7 +1914,7 @@
       ],
       "supports": [
         "warriors",
-        "death"
+        "abandon"
       ]
     },
     "Infernal Rest": {
@@ -1950,7 +1928,7 @@
       "supports": [
         "warriors",
         "figments",
-        "death"
+        "abandon"
       ]
     },
     "Inspiring Templar": {
@@ -1996,8 +1974,7 @@
       "supports": [
         "warriors",
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Ironclad Holdout": {
@@ -2012,15 +1989,13 @@
       "supports": [
         "warriors",
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Junkfield Renegade": {
       "needs": [],
       "supports": [
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -2118,7 +2093,6 @@
       "needs": [],
       "supports": [
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -2194,7 +2168,6 @@
         "discard",
         "cheap-characters",
         "abandon",
-        "death",
         "void"
       ]
     },
@@ -2309,7 +2282,6 @@
         "warriors",
         "abandon",
         "void",
-        "death",
         "cheap-characters"
       ]
     },
@@ -2489,7 +2461,6 @@
       "needs": [],
       "supports": [
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -2497,7 +2468,7 @@
       "needs": [],
       "supports": [
         "warriors",
-        "death",
+        "abandon",
         "cheap-characters"
       ]
     },
@@ -2529,8 +2500,7 @@
       ],
       "supports": [
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Ochre Prospector": {
@@ -2538,7 +2508,6 @@
       "supports": [
         "warriors",
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -2564,14 +2533,14 @@
       "supports": [
         "warriors",
         "cheap-characters",
-        "death"
+        "abandon"
       ]
     },
     "Overstory Explorer": {
       "needs": [],
       "supports": [
         "cheap-characters",
-        "death"
+        "abandon"
       ]
     },
     "Packcaller of Shadows": {
@@ -2660,7 +2629,6 @@
         "survivors",
         "events",
         "abandon",
-        "death",
         "void"
       ]
     },
@@ -2791,7 +2759,6 @@
       "supports": [
         "warriors",
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -2832,7 +2799,6 @@
       "supports": [
         "warriors",
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -2864,7 +2830,7 @@
       "needs": [],
       "supports": [
         "survivors",
-        "death"
+        "abandon"
       ]
     },
     "Return to Nowhere": {
@@ -2970,7 +2936,6 @@
       "supports": [
         "warriors",
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -3009,7 +2974,6 @@
       "needs": [],
       "supports": [
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -3042,8 +3006,7 @@
       ],
       "supports": [
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Salvage Engine": {
@@ -3079,8 +3042,7 @@
       "supports": [
         "warriors",
         "abandon",
-        "cheap-characters",
-        "death"
+        "cheap-characters"
       ]
     },
     "Scorched Crusader": {
@@ -3123,7 +3085,7 @@
     "Scuttled Fortune": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -3137,7 +3099,7 @@
         "survivors",
         "void",
         "cheap-characters",
-        "death"
+        "abandon"
       ]
     },
     "Seaside Requiem": {
@@ -3146,7 +3108,6 @@
         "events",
         "discard",
         "abandon",
-        "death",
         "void"
       ]
     },
@@ -3181,7 +3142,7 @@
     "Seer of the Fallen": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -3197,7 +3158,7 @@
           "tier": 3
         },
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -3233,7 +3194,7 @@
     "Shadowcaller": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         },
         {
@@ -3242,7 +3203,7 @@
         }
       ],
       "supports": [
-        "death",
+        "abandon",
         "figments",
         "survivors",
         "reclaim"
@@ -3335,7 +3296,7 @@
     "Silent Avenger": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -3367,7 +3328,7 @@
     "Skull Weaver": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -3416,7 +3377,7 @@
           "tier": 2
         },
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -3473,7 +3434,6 @@
       ],
       "supports": [
         "abandon",
-        "death",
         "cheap-characters"
       ]
     },
@@ -3500,7 +3460,7 @@
     "Soulreaver": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -3512,8 +3472,7 @@
       "needs": [],
       "supports": [
         "warriors",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Speaker for the Forgotten": {
@@ -3536,8 +3495,7 @@
         }
       ],
       "supports": [
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Spellweaver": {
@@ -3558,7 +3516,6 @@
       "supports": [
         "warriors",
         "cheap-characters",
-        "death",
         "abandon"
       ]
     },
@@ -3698,8 +3655,7 @@
       "supports": [
         "warriors",
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Starlight Guide": {
@@ -3714,7 +3670,6 @@
         "spirit-animals",
         "cheap-characters",
         "abandon",
-        "death",
         "reclaim",
         "void"
       ]
@@ -3733,8 +3688,7 @@
       "supports": [
         "warriors",
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Steel Abomination": {
@@ -3768,8 +3722,7 @@
       "supports": [
         "events",
         "reclaim",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Stoneborn Eternal": {
@@ -3825,7 +3778,7 @@
     "Sunset Chronicler": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -3907,15 +3860,13 @@
       ],
       "supports": [
         "cheap-characters",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "The Forsaker": {
       "needs": [],
       "supports": [
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "The Grand Heist": {
@@ -4000,8 +3951,7 @@
       "needs": [],
       "supports": [
         "warriors",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Tidecaller": {
@@ -4114,7 +4064,7 @@
       ],
       "supports": [
         "reclaim",
-        "death"
+        "abandon"
       ]
     },
     "Twilight Suppressor": {
@@ -4304,8 +4254,7 @@
         }
       ],
       "supports": [
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Void Pilgrim": {
@@ -4343,7 +4292,7 @@
     "Volcanic Channeler": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -4352,7 +4301,7 @@
     "Wake the Fallen": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -4369,7 +4318,7 @@
     "Warfield Stalwart": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -4402,8 +4351,7 @@
       "needs": [],
       "supports": [
         "survivors",
-        "abandon",
-        "death"
+        "abandon"
       ]
     },
     "Weblight Waif": {
@@ -4459,7 +4407,7 @@
       "needs": [],
       "supports": [
         "warriors",
-        "death"
+        "abandon"
       ]
     },
     "Wistful Angler": {
@@ -4547,7 +4495,7 @@
     "Wreckborn": {
       "needs": [
         {
-          "theme": "death",
+          "theme": "abandon",
           "tier": 2
         }
       ],
@@ -4559,7 +4507,7 @@
       "needs": [],
       "supports": [
         "warriors",
-        "death",
+        "abandon",
         "void",
         "cheap-characters"
       ]
