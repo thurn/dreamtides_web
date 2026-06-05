@@ -254,6 +254,31 @@
   margin: 0 8px;
 }
 
+.battle-ai-thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.battle-ai-thinking-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  animation: battle-ai-thinking-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes battle-ai-thinking-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
 .stage {
   flex: 1 1 auto;
   min-height: 0;

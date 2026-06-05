@@ -82,6 +82,16 @@ export function BattleStatusBar({
         </div>
       </div>
       <div className="right">
+        {hasAiOpponent && activeSide === "enemy" && (
+          <span
+            data-battle-ai-thinking
+            className="battle-ai-thinking"
+            aria-live="polite"
+          >
+            <span className="battle-ai-thinking-dot" aria-hidden="true" />
+            AI thinking…
+          </span>
+        )}
         <div
           data-battle-stat="score-summary"
           data-battle-score-summary={`${String(playerScore)}:${String(enemyScore)}`}

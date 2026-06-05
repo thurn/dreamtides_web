@@ -111,3 +111,63 @@ describe("BattleStatusBar", () => {
     });
   });
 });
+
+describe("BattleStatusBar AI thinking indicator", () => {
+  function mountWith(props: {
+    hasAiOpponent: boolean;
+    activeSide: "player" | "enemy";
+  }) {
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() => {
+      root.render(
+        <BattleStatusBar
+          activeSide={props.activeSide}
+          battleId="battle:test"
+          enemyName="Shadow Aeris"
+          enemyScore={7}
+          futureCount={1}
+          hasAiOpponent={props.hasAiOpponent}
+          historyCount={3}
+          phase="day"
+          playerScore={12}
+          result={null}
+          roundNumber={4}
+          siteType="Battle"
+        />,
+      );
+    });
+    return { container, root };
+  }
+
+  it("shows the indicator when hasAiOpponent=true and activeSide=enemy", () => {
+    const { container, root } = mountWith({ hasAiOpponent: true, activeSide: "enemy" });
+
+    expect(container.querySelector("[data-battle-ai-thinking]")).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("hides the indicator when hasAiOpponent=true but activeSide=player", () => {
+    const { container, root } = mountWith({ hasAiOpponent: true, activeSide: "player" });
+
+    expect(container.querySelector("[data-battle-ai-thinking]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("hides the indicator when hasAiOpponent=false even on enemy turn", () => {
+    const { container, root } = mountWith({ hasAiOpponent: false, activeSide: "enemy" });
+
+    expect(container.querySelector("[data-battle-ai-thinking]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+});
