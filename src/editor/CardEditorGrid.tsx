@@ -1,5 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import { SIZE_PRESETS } from "../components/card-size";
+import CardBrowserGrid from "../components/card-browser/CardBrowserGrid";
 import EditableCard from "./EditableCard";
 import type { EditableSaveState, EditableFieldValue } from "./save-state";
 import { fieldSaveEntry } from "./save-state";
@@ -56,6 +55,12 @@ export interface CardEditorGridProps {
   onOpenManageTides: () => void;
 }
 
+/**
+ * The editor's card grid. Layout and sizing come from the shared
+ * `CardBrowserGrid`; this wrapper renders an editable card per item and exposes
+ * the editor's `data-editor-*` hooks on the scrolling container and card-item
+ * wrappers.
+ */
 export default function CardEditorGrid({
   cards,
   size,
@@ -80,89 +85,18 @@ export default function CardEditorGrid({
   onRemoveCardTide,
   onOpenManageTides,
 }: CardEditorGridProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  // Whether the widest row currently shows 5 or more cards. A full row of cards
-  // reads as unbalanced when left-aligned against the trailing slack, so once a
-  // row reaches five cards the wrapped cards are centered horizontally.
-  const [centerCards, setCenterCards] = useState(false);
-
-  // Measure how many cards share the first (top) row by grouping the wrapped
-  // flex items by their offset top. Centering does not change which items wrap
-  // onto each row, so toggling alignment never feeds back into this count.
-  useLayoutEffect(() => {
-    const container = containerRef.current;
-    if (container === null) {
-      return;
-    }
-
-    const measure = () => {
-      const items = container.querySelectorAll<HTMLElement>(
-        "[data-editor-card-item]",
-      );
-      if (items.length === 0) {
-        setCenterCards(false);
-        return;
-      }
-
-      const firstTop = items[0].offsetTop;
-      let firstRowCount = 0;
-      for (const item of items) {
-        if (Math.abs(item.offsetTop - firstTop) > 1) {
-          break;
-        }
-        firstRowCount += 1;
-      }
-
-      setCenterCards(firstRowCount >= 5);
-    };
-
-    measure();
-
-    if (typeof ResizeObserver === "undefined") {
-      return;
-    }
-
-    const observer = new ResizeObserver(measure);
-    observer.observe(container);
-    return () => {
-      observer.disconnect();
-    };
-  }, [cards, size]);
-
   return (
-    <div
-      ref={containerRef}
-      aria-label="Filtered cards"
-      data-editor-scroll-region="cards"
-      data-editor-grid-size={size}
-      style={{
-        flex: "1 1 auto",
-        minHeight: 0,
-        overflowY: "auto",
-        overscrollBehavior: "contain",
-        paddingRight: "4px",
-        paddingBottom: "8px",
-        display: "flex",
-        flexWrap: "wrap",
-        alignItems: "flex-start",
-        justifyContent: centerCards ? "center" : "flex-start",
-        // Establishes the container that `100cqw` resolves against, matching
-        // the quest draft offer grid so the "large" preset's draft-width
-        // formula sizes cards against this grid's own width.
-        containerType: "inline-size",
-        gap: SIZE_PRESETS[size].gap,
+    <CardBrowserGrid
+      items={cards}
+      size={size}
+      getKey={(card) => card.id}
+      containerProps={{
+        "aria-label": "Filtered cards",
+        "data-editor-scroll-region": "cards",
+        "data-editor-grid-size": size,
       }}
-    >
-      {cards.map((card) => (
-        <div
-          key={card.id}
-          data-editor-card-item=""
-          style={{
-            flex: `0 0 ${SIZE_PRESETS[size].cardWidth}`,
-            width: SIZE_PRESETS[size].cardWidth,
-            maxWidth: "100%",
-          }}
-        >
+      getItemProps={() => ({ "data-editor-card-item": "" })}
+      renderItem={(card) => (
         <EditableCard
           card={card}
           size={size}
@@ -208,8 +142,7 @@ export default function CardEditorGrid({
           onRemoveCardTide={onRemoveCardTide}
           onOpenManageTides={onOpenManageTides}
         />
-        </div>
-      ))}
-    </div>
+      )}
+    />
   );
 }
