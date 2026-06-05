@@ -1,0 +1,202 @@
+import { describe, expect, it, vi } from "vitest";
+
+import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
+import { scoreAgainstOpponent } from "./opponent-model";
+
+// --- Fixtures -------------------------------------------------------------
+
+function makeCard(overrides: Partial<AiCard> & { battleCardId: string }): AiCard {
+  return {
+    cardNumber: 0,
+    name: "Test",
+    energyCost: 0,
+    basePrintedSpark: 0,
+    sparkDelta: 0,
+    figmentCount: 1,
+    canChallengeThisTurn: true,
+    ...overrides,
+  };
+}
+
+function makeBody(overrides: Partial<AiOpponentBody> & { battleCardId: string }): AiOpponentBody {
+  return {
+    effectiveSpark: 1,
+    rank: "front",
+    slot: "D0",
+    isFigment: false,
+    ...overrides,
+  };
+}
+
+function emptyModel(): ForwardModel {
+  return {
+    aiEnergy: 0,
+    aiMaxEnergy: 5,
+    aiScore: 0,
+    playerScore: 0,
+    aiHand: [],
+    aiDeck: [],
+    aiVoid: [],
+    aiDeployed: { D0: null, D1: null, D2: null, D3: null },
+    aiReserve: { R0: null, R1: null, R2: null, R3: null, R4: null },
+    opponentBodies: [],
+    opponentHandCount: 0,
+    opponentVoidCount: 0,
+  };
+}
+
+/** A model with three AI challengers (sparks 5, 3, 2) and no opponent bodies. */
+function modelWithChallengers(): ForwardModel {
+  const model = emptyModel();
+  model.aiDeployed.D0 = makeCard({
+    battleCardId: "ai-0",
+    basePrintedSpark: 5,
+    canChallengeThisTurn: true,
+  });
+  model.aiDeployed.D1 = makeCard({
+    battleCardId: "ai-1",
+    basePrintedSpark: 3,
+    canChallengeThisTurn: true,
+  });
+  model.aiDeployed.D2 = makeCard({
+    battleCardId: "ai-2",
+    basePrintedSpark: 2,
+    canChallengeThisTurn: true,
+  });
+  return model;
+}
+
+// --- Tests ----------------------------------------------------------------
+
+describe("scoreAgainstOpponent", () => {
+  it("is deterministic for identical (model, mode, sampleCap, seed)", () => {
+    const model = modelWithChallengers();
+    model.opponentBodies = [
+      makeBody({ battleCardId: "op-0", effectiveSpark: 4, slot: "D0" }),
+      makeBody({ battleCardId: "op-1", effectiveSpark: 2, slot: "D1" }),
+    ];
+    model.opponentHandCount = 3;
+
+    const a = scoreAgainstOpponent(model, "expectiminimax", 8, 12345);
+    const b = scoreAgainstOpponent(model, "expectiminimax", 8, 12345);
+    expect(a).toBe(b);
+
+    const c = scoreAgainstOpponent(model, "worstCase", 8, 999);
+    const d = scoreAgainstOpponent(model, "worstCase", 8, 999);
+    expect(c).toBe(d);
+  });
+
+  it("worstCase <= expectiminimax for the same board and seed (min <= mean)", () => {
+    const model = modelWithChallengers();
+    model.opponentBodies = [
+      makeBody({ battleCardId: "op-0", effectiveSpark: 6, slot: "D0" }),
+      makeBody({ battleCardId: "op-1", effectiveSpark: 4, slot: "D1" }),
+    ];
+    model.opponentHandCount = 2;
+
+    const worst = scoreAgainstOpponent(model, "worstCase", 12, 555);
+    const expected = scoreAgainstOpponent(model, "expectiminimax", 12, 555);
+    expect(worst).toBeLessThanOrEqual(expected);
+  });
+
+  it("no opponent bodies (best case) scores higher than a board with big blockers", () => {
+    const open = modelWithChallengers();
+    open.opponentBodies = [];
+
+    const blocked = modelWithChallengers();
+    blocked.opponentBodies = [
+      makeBody({ battleCardId: "op-0", effectiveSpark: 9, slot: "D0" }),
+      makeBody({ battleCardId: "op-1", effectiveSpark: 9, slot: "D1" }),
+      makeBody({ battleCardId: "op-2", effectiveSpark: 9, slot: "D2" }),
+    ];
+
+    const openScore = scoreAgainstOpponent(open, "expectiminimax", 8, 7);
+    const blockedScore = scoreAgainstOpponent(blocked, "expectiminimax", 8, 7);
+    expect(openScore).toBeGreaterThan(blockedScore);
+  });
+
+  it("bounds the number of sampled responses by sampleCap", async () => {
+    const evaluateModule = await import("./evaluate");
+    const spy = vi.spyOn(evaluateModule, "evaluate");
+
+    const model = modelWithChallengers();
+    model.aiDeployed.D3 = makeCard({
+      battleCardId: "ai-3",
+      basePrintedSpark: 7,
+      canChallengeThisTurn: true,
+    });
+    model.opponentBodies = [
+      makeBody({ battleCardId: "op-0", effectiveSpark: 8, slot: "D0" }),
+      makeBody({ battleCardId: "op-1", effectiveSpark: 7, slot: "D1" }),
+      makeBody({ battleCardId: "op-2", effectiveSpark: 6, slot: "D2", rank: "back" }),
+      makeBody({ battleCardId: "op-3", effectiveSpark: 5, slot: "D3" }),
+    ];
+    model.opponentHandCount = 5;
+
+    spy.mockClear();
+    const score = scoreAgainstOpponent(model, "expectiminimax", 4, 42);
+    expect(Number.isFinite(score)).toBe(true);
+    expect(spy.mock.calls.length).toBeLessThanOrEqual(4);
+
+    spy.mockRestore();
+  });
+
+  it("does not explode on a large board with a small sampleCap", () => {
+    const model = modelWithChallengers();
+    model.aiDeployed.D3 = makeCard({
+      battleCardId: "ai-3",
+      basePrintedSpark: 9,
+      canChallengeThisTurn: true,
+    });
+    for (let i = 0; i < 9; i += 1) {
+      model.opponentBodies.push(
+        makeBody({
+          battleCardId: `op-${String(i)}`,
+          effectiveSpark: 3 + i,
+          slot: i < 4 ? `D${String(i)}` : `R${String(i - 4)}`,
+          rank: i < 4 ? "front" : "back",
+        }),
+      );
+    }
+    model.opponentHandCount = 7;
+
+    const score = scoreAgainstOpponent(model, "worstCase", 4, 314);
+    expect(Number.isFinite(score)).toBe(true);
+  });
+
+  it("reads only abstract opponent fields (asymmetric knowledge)", () => {
+    // The opponent bodies carry no card identity beyond the abstract handle —
+    // confirm the function runs and returns a finite number without touching
+    // any concrete card definition.
+    const model = modelWithChallengers();
+    model.opponentBodies = [makeBody({ battleCardId: "anon", effectiveSpark: 4 })];
+    model.opponentHandCount = 4;
+
+    const score = scoreAgainstOpponent(model, "expectiminimax", 8, 1);
+    expect(Number.isFinite(score)).toBe(true);
+  });
+
+  it("returns a finite number when the AI has no challengers", () => {
+    const model = emptyModel();
+    model.opponentBodies = [makeBody({ battleCardId: "op-0", effectiveSpark: 5 })];
+    const score = scoreAgainstOpponent(model, "expectiminimax", 8, 2);
+    expect(Number.isFinite(score)).toBe(true);
+  });
+
+  it("ignores deployed cards that cannot challenge this turn", () => {
+    const exhausted = modelWithChallengers();
+    for (const slot of ["D0", "D1", "D2"] as const) {
+      const card = exhausted.aiDeployed[slot];
+      if (card !== null) {
+        card.canChallengeThisTurn = false;
+      }
+    }
+    const active = modelWithChallengers();
+
+    // With no opponent bodies, active challengers score; exhausted ones do not,
+    // so the active board should evaluate strictly higher.
+    const exhaustedScore = scoreAgainstOpponent(exhausted, "expectiminimax", 8, 3);
+    const activeScore = scoreAgainstOpponent(active, "expectiminimax", 8, 3);
+    expect(activeScore).toBeGreaterThan(exhaustedScore);
+  });
+});
