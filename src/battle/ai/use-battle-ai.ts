@@ -1,17 +1,20 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { forwardModelFromState, type ForwardModel } from "./forward-model";
 import { planNextAction, type PlannedAction, type PlannerOptions } from "./planner";
+import { AI_DIFFICULTY_V1 } from "./difficulty";
 import { buildTrace } from "./trace";
 import { actionToCommands } from "./driver";
 import { buildSupportContribution } from "./cards/support-contribution";
 import { resolveJudgment } from "../engine/judgment";
 import { planHandoff } from "../engine/handoff";
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
-import type {
-  BattleAiChoiceTrace,
-  BattleMutableState,
-  BattleReducerState,
-  BattleSide,
+import {
+  DEPLOY_SLOT_IDS,
+  RESERVE_SLOT_IDS,
+  type BattleAiChoiceTrace,
+  type BattleMutableState,
+  type BattleReducerState,
+  type BattleSide,
 } from "../types";
 
 /**
@@ -28,10 +31,6 @@ export interface AiProposal {
   commands: BattleCommand[];
 }
 
-/** v1 planner tuning (`battle_ai.md` §"The Planner"). */
-const V1_BEAM_WIDTH = 12;
-const V1_SAMPLE_CAP = 8;
-const V1_OPPONENT_MODE = "expectiminimax" as const;
 /** Planning budget in ms past the snapshot clock. */
 const PLAN_BUDGET_MS = 100;
 
@@ -232,7 +231,7 @@ function planNonExcludedAction(
   return null;
 }
 
-const RESERVE_AND_DEPLOY_SLOTS = 9;
+const RESERVE_AND_DEPLOY_SLOTS = RESERVE_SLOT_IDS.length + DEPLOY_SLOT_IDS.length;
 
 /**
  * Returns a clone of `model` with the card identified by `battleCardId` removed
@@ -387,9 +386,9 @@ function plannerOptions(rngSeed: number): PlannerOptions {
       : 0;
   return {
     deadlineMs: nowMs + PLAN_BUDGET_MS,
-    beamWidth: V1_BEAM_WIDTH,
-    opponentMode: V1_OPPONENT_MODE,
-    sampleCap: V1_SAMPLE_CAP,
+    beamWidth: AI_DIFFICULTY_V1.beamWidth,
+    opponentMode: AI_DIFFICULTY_V1.opponentMode,
+    sampleCap: AI_DIFFICULTY_V1.sampleCap,
     nowMs,
     rngSeed,
   };
@@ -415,7 +414,7 @@ function aiHandSeed(model: ForwardModel, turnNumber: number): number {
 
 /**
  * Wraps a {@link BattleDebugEdit} as an AI-authored DEBUG_EDIT command, matching
- * the driver's envelope (`actor: "enemy"`, `sourceSurface: "auto-system"`).
+ * the driver's envelope (`actor: aiSide`, `sourceSurface: "auto-system"`).
  */
 function makeAiCommand(edit: BattleDebugEdit, aiSide: BattleSide): BattleCommand {
   return {

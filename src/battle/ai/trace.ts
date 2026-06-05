@@ -1,14 +1,6 @@
 import type { PlannedAction } from "./planner";
+import { CHARACTER_CARD_NUMBERS } from "./cards/card-numbers";
 import type { BattleAiChoiceTrace } from "../types";
-
-/**
- * Card numbers of the six Starter CHARACTERS. Playing one materializes a body
- * into a reserve slot; the rationale phrasing distinguishes a character body
- * landing in the back rank from an event resolving its effect.
- */
-const CHARACTER_CARD_NUMBERS: ReadonlySet<number> = new Set([
-  510, 511, 512, 513, 514, 515,
-]);
 
 /**
  * Enriches the planner's {@link BattleAiChoiceTrace} (carried on

@@ -1,5 +1,6 @@
 import { starterCardModels } from "./cards/index";
 import type { AiTargetChoice } from "./cards/index";
+import { CHARACTER_CARD_NUMBERS } from "./cards/card-numbers";
 import { evaluate } from "./evaluate";
 import { scoreAgainstOpponent, type OpponentMode } from "./opponent-model";
 import { cloneForwardModel, type AiCard, type ForwardModel } from "./forward-model";
@@ -52,21 +53,6 @@ export interface PlannerOptions {
 }
 
 // --- Card classification --------------------------------------------------
-
-/**
- * Card numbers of the six Starter CHARACTERS. Playing one materializes a body
- * into a reserve slot; the remaining four Starter cards (516–519) are events
- * resolved via their model's `chooseTargets` + `play`. The deck is fixed and
- * hand-encoded (`battle_ai.md` §"The AI Deck"), so a static set is exact.
- */
-const CHARACTER_CARD_NUMBERS: ReadonlySet<number> = new Set([
-  510, // Twilight Minstrel
-  511, // Circlewatch Seer
-  512, // Branded Direwolf
-  513, // Sigilsworn Champion
-  514, // Last Witness
-  515, // Meadowforged Colossus
-]);
 
 function isCharacterCard(card: AiCard): boolean {
   return CHARACTER_CARD_NUMBERS.has(card.cardNumber);

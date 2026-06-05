@@ -39,9 +39,9 @@ function baseTrace(overrides: Partial<BattleAiChoiceTrace> = {}): BattleAiChoice
 }
 
 /** Narrows a command to its DEBUG_EDIT edit, asserting the envelope shape. */
-function editOf(command: BattleCommand): BattleDebugEdit {
+function editOf(command: BattleCommand, actor: BattleSide = "enemy"): BattleDebugEdit {
   expect(command.id).toBe("DEBUG_EDIT");
-  expect(command.actor).toBe("enemy");
+  expect(command.actor).toBe(actor);
   expect(command.sourceSurface).toBe("auto-system");
   if (command.id !== "DEBUG_EDIT") {
     throw new Error("expected DEBUG_EDIT");
@@ -204,13 +204,15 @@ describe("actionToCommands — envelope", () => {
     const commands = actionToCommands(action, side);
     for (const command of commands) {
       expect(command.id).toBe("DEBUG_EDIT");
-      expect(command.actor).toBe("enemy");
+      // The DEBUG_EDIT envelope's `actor` is the AI's side, so a player-side AI
+      // authors edits as `actor: "player"`.
+      expect(command.actor).toBe("player");
       expect(command.sourceSurface).toBe("auto-system");
     }
-    const move = editOf(commands[0]);
+    const move = editOf(commands[0], side);
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
     expect(move.destination).toEqual({ side: "player", zone: "reserve", slotId: "R0" });
-    const energy = editOf(commands[1]);
+    const energy = editOf(commands[1], side);
     if (energy.kind !== "ADJUST_CURRENT_ENERGY") throw new Error("expected energy");
     expect(energy.side).toBe("player");
   });

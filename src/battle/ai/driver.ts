@@ -1,4 +1,5 @@
 import type { PlannedAction } from "./planner";
+import { CHARACTER_CARD_NUMBERS } from "./cards/card-numbers";
 import type { BattleCommand, BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
 import type { BattleSide, DeploySlotId, ReserveSlotId } from "../types";
 
@@ -6,7 +7,7 @@ import type { BattleSide, DeploySlotId, ReserveSlotId } from "../types";
  * Translates a {@link PlannedAction} into the EXISTING
  * {@link BattleCommand}/{@link BattleDebugEdit} vocabulary. The AI introduces NO
  * new command types: every emitted command is a `DEBUG_EDIT` envelope authored
- * by the AI (`actor: "enemy"`, `sourceSurface: "auto-system"`).
+ * by the AI (`actor: aiSide`, `sourceSurface: "auto-system"`).
  *
  * The driver performs the STRUCTURAL translation only. Where a faithful mapping
  * needs live battle state the `PlannedAction` does not carry (absolute spark
@@ -36,16 +37,12 @@ export function actionToCommands(action: PlannedAction, aiSide: BattleSide): Bat
   }
 }
 
-const CHARACTER_CARD_NUMBERS: ReadonlySet<number> = new Set([
-  510, 511, 512, 513, 514, 515,
-]);
-
 /** Wraps a {@link BattleDebugEdit} as an AI-authored DEBUG_EDIT command. */
-function edit(e: BattleDebugEdit): BattleCommand {
+function edit(e: BattleDebugEdit, aiSide: BattleSide): BattleCommand {
   return {
     id: "DEBUG_EDIT",
     edit: e,
-    actor: "enemy",
+    actor: aiSide,
     sourceSurface: "auto-system",
   };
 }
@@ -78,22 +75,25 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
     const commands: BattleCommand[] = [];
     if (slotId !== undefined) {
       commands.push(
-        edit({
-          kind: "MOVE_CARD_TO_ZONE",
-          battleCardId: self.battleCardId,
-          destination: reserveDestination(aiSide, slotId),
-        }),
+        edit(
+          {
+            kind: "MOVE_CARD_TO_ZONE",
+            battleCardId: self.battleCardId,
+            destination: reserveDestination(aiSide, slotId),
+          },
+          aiSide,
+        ),
       );
     }
     commands.push(
-      edit({ kind: "ADJUST_CURRENT_ENERGY", side: aiSide, amount: -self.energyCost }),
+      edit({ kind: "ADJUST_CURRENT_ENERGY", side: aiSide, amount: -self.energyCost }, aiSide),
     );
     return commands;
   }
 
   // Event play: pay energy, apply the effect, then send the event to the void.
   const commands: BattleCommand[] = [
-    edit({ kind: "ADJUST_CURRENT_ENERGY", side: aiSide, amount: -self.energyCost }),
+    edit({ kind: "ADJUST_CURRENT_ENERGY", side: aiSide, amount: -self.energyCost }, aiSide),
   ];
 
   const targetId = action.targets?.targetBattleCardId ?? null;
@@ -103,11 +103,14 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
       // card, so it goes to the OPPONENT's void.
       if (targetId !== null) {
         commands.push(
-          edit({
-            kind: "MOVE_CARD_TO_ZONE",
-            battleCardId: targetId,
-            destination: voidDestination(opposingSide(aiSide)),
-          }),
+          edit(
+            {
+              kind: "MOVE_CARD_TO_ZONE",
+              battleCardId: targetId,
+              destination: voidDestination(opposingSide(aiSide)),
+            },
+            aiSide,
+          ),
         );
       }
       break;
@@ -116,7 +119,7 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
       // Glimpse of the Past: draw a card. The optional Foresee deck reorder is
       // interactive and is surfaced for approval at the proposal layer (Task
       // 5.4); the driver emits only the deterministic draw.
-      commands.push(edit({ kind: "DRAW_CARD", side: aiSide }));
+      commands.push(edit({ kind: "DRAW_CARD", side: aiSide }, aiSide));
       break;
     }
     case 518: {
@@ -139,11 +142,14 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
 
   // The event card resolves to the AI's own void.
   commands.push(
-    edit({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: self.battleCardId,
-      destination: voidDestination(aiSide),
-    }),
+    edit(
+      {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: self.battleCardId,
+        destination: voidDestination(aiSide),
+      },
+      aiSide,
+    ),
   );
   return commands;
 }
@@ -158,10 +164,13 @@ function moveCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
   // `action.trace.sourceSlotId`; MOVE_CARD_TO_ZONE by id is robust regardless of
   // where the card currently sits.
   return [
-    edit({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: self.battleCardId,
-      destination: deployedDestination(aiSide, slotId),
-    }),
+    edit(
+      {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: self.battleCardId,
+        destination: deployedDestination(aiSide, slotId),
+      },
+      aiSide,
+    ),
   ];
 }
