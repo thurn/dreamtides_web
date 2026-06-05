@@ -219,7 +219,7 @@ name = "Radulf"
 title = "Hegemon of Shattered Thrones"
 id = "3EBABA62-9000-429D-B203-2A5A9724389A"
 image-number = "0045"
-rendered-text = "If there are 3 or more allied characters in play, the first character you play each turn costs 1● less."
+rendered-text = "With 3 or more allied characters, the first character you play each turn costs 1● less."
 signature-cards = ["Dawnprowler Panther", "Starrunner", "Celestial Reverie", "Mother of Flames", "Lumin-Gate Seer"]
 
 [[dreamcaller]]

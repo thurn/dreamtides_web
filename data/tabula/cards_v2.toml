@@ -151,10 +151,10 @@ name = "Ashcrown Charger"
 mtg-name = "Currency Converter"
 id = "724a1362-3f0f-4b77-b14e-22c0b877349a"
 rendered-text = """
-When you discard a card, store 1⧗.
+2●, ☪: Draw a card, then discard a card.
 
-☪, 1⧗: Materialize a 2✦ radiant figment."""
-energy-cost = 1
+Once per turn, when you discard a card, materialize a 2✦ radiant figment."""
+energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
 rarity = ""
@@ -256,10 +256,10 @@ card-number = 14
 name = "Luminwings"
 mtg-name = "Mox Opal"
 id = "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49"
-rendered-text = "▸Dawn: With 3 allied spirit animals, gain 1●."
+rendered-text = "▸Dawn: With 3 allied warriors, gain 1●."
 energy-cost = 0
 card-type = "Character"
-subtype = "Spirit Animal"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -2430,7 +2430,7 @@ name = "Sorrow Watcher"
 mtg-name = "Cryptbreaker"
 id = "16f4962d-2950-4360-8f55-bc47428480ef"
 rendered-text = """
-▸Materialized: Materialize a 1✦ survivor figment.
+☪: Materialize a 1✦ survivor figment.
 
 ☪: Draw a card for each 3 allied survivors."""
 energy-cost = 1
@@ -3100,7 +3100,7 @@ name = "Shoreline Penitent"
 mtg-name = "Conspiracy Theorist"
 id = "d755cfa4-d7c0-46d8-a836-909c45c68890"
 rendered-text = '''
-3●, ☪, Discard a card: Draw a card.
+2●, ☪, Discard a card: Draw a card.
 
 When you discard a card, it gains reclaim until end of turn.'''
 energy-cost = 2
@@ -4925,7 +4925,7 @@ id = "920ef495-5560-4fa6-9a95-b9584ef6a4cf"
 rendered-text = """
 When you materialize a non-figment character, store 1⧗.
 
-3⧗: Return a warrior from your void to your hand."""
+3⧗: Return a character from your void to your hand."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -6003,7 +6003,7 @@ id = "956aaeb1-5280-4294-bf80-73079f35c5f6"
 rendered-text = """
 ☪, Discard a card: Materialize a 1✦ warrior figment.
 
-☪, Abandon 2 warriors: Dissolve an enemy with 4✦ or less."""
+☪, Abandon 2 warrior figments: Dissolve an enemy with 4✦ or less."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -6118,9 +6118,8 @@ name = "Fury of the Clan"
 mtg-name = "Galvanic Blast"
 id = "f79c63f6-7cf1-4030-be39-217fd3c2fb7f"
 rendered-text = """
-Play this card only with 3 allied warriors.
-
-Dissolve an enemy."""
+With 3 or more allied warriors, dissolve an enemy. Otherwise, dissolve an enemy with 2✦ or less.
+"""
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -7937,12 +7936,12 @@ card-number = 433
 name = "Through the Rift"
 mtg-name = "Enlightened Tutor"
 id = "3076694f-ffc2-46c9-8e1a-39f3878c73c9"
-rendered-text = "Discover a spirit animal."
+rendered-text = "Choose a character type. Discover a character of that type and put it on top of your deck."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
 rarity = ""
-is-fast = false
+is-fast = true
 is-interrupt = false
 spark = ""
 tags = []
@@ -8805,7 +8804,7 @@ card-number = 481
 name = "Veil of the Wastes"
 mtg-name = "Bloodghast"
 id = "409147ec-d959-4f66-b126-564702e2cd4a"
-rendered-text = "When you materialize a survivor, return this card from your void to play."
+rendered-text = "When you materialize a character with cost 2● or less, return this card from your void to play."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"

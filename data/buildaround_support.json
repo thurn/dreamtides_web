@@ -172,12 +172,6 @@
       ]
     },
     "Ashcrown Charger": {
-      "needs": [
-        {
-          "theme": "discard",
-          "tier": 2
-        }
-      ],
       "supports": [
         "warriors",
         "figments",
@@ -487,12 +481,6 @@
       ]
     },
     "Call of Calamity": {
-      "needs": [
-        {
-          "theme": "discard",
-          "tier": 2
-        }
-      ],
       "supports": [
         "events",
         "discard",
@@ -527,12 +515,8 @@
     "Carrion Lord": {
       "needs": [
         {
-          "theme": "abandon",
-          "tier": 2
-        },
-        {
           "theme": "cheap-characters",
-          "tier": 2
+          "tier": 1
         }
       ],
       "supports": [
@@ -1345,7 +1329,7 @@
       "needs": [
         {
           "theme": "abandon",
-          "tier": 2
+          "tier": 1
         }
       ],
       "supports": [
@@ -1617,7 +1601,7 @@
       "needs": [
         {
           "theme": "warriors",
-          "tier": 3
+          "tier": 1
         }
       ],
       "supports": [
@@ -1779,10 +1763,6 @@
       "needs": [
         {
           "theme": "warriors",
-          "tier": 2
-        },
-        {
-          "theme": "discard",
           "tier": 1
         }
       ],
@@ -2221,7 +2201,7 @@
     "Luminwings": {
       "needs": [
         {
-          "theme": "spirit-animals",
+          "theme": "warriors",
           "tier": 3
         }
       ],
@@ -3017,12 +2997,7 @@
       ]
     },
     "Sanctum Approach": {
-      "needs": [
-        {
-          "theme": "discard",
-          "tier": 2
-        }
-      ],
+      "needs": [],
       "supports": [
         "events",
         "discard",
@@ -3046,12 +3021,6 @@
       ]
     },
     "Scorched Crusader": {
-      "needs": [
-        {
-          "theme": "warriors",
-          "tier": 1
-        }
-      ],
       "supports": [
         "warriors"
       ]
@@ -3409,7 +3378,7 @@
       "needs": [
         {
           "theme": "survivors",
-          "tier": 3
+          "tier": 2
         }
       ],
       "supports": [
@@ -3779,7 +3748,7 @@
       "needs": [
         {
           "theme": "abandon",
-          "tier": 2
+          "tier": 1
         }
       ],
       "supports": []
@@ -3936,12 +3905,6 @@
       ]
     },
     "Through the Rift": {
-      "needs": [
-        {
-          "theme": "spirit-animals",
-          "tier": 1
-        }
-      ],
       "supports": [
         "spirit-animals",
         "events"
@@ -3964,7 +3927,7 @@
       "needs": [
         {
           "theme": "survivors",
-          "tier": 2
+          "tier": 1
         }
       ],
       "supports": [
@@ -4173,7 +4136,7 @@
     "Veil of the Wastes": {
       "needs": [
         {
-          "theme": "survivors",
+          "theme": "cheap-characters",
           "tier": 2
         }
       ],
