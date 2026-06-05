@@ -1,0 +1,167 @@
+import type { PlannedAction } from "./planner";
+import type { BattleCommand, BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
+import type { BattleSide, DeploySlotId, ReserveSlotId } from "../types";
+
+/**
+ * Translates a {@link PlannedAction} into the EXISTING
+ * {@link BattleCommand}/{@link BattleDebugEdit} vocabulary. The AI introduces NO
+ * new command types: every emitted command is a `DEBUG_EDIT` envelope authored
+ * by the AI (`actor: "enemy"`, `sourceSurface: "auto-system"`).
+ *
+ * The driver performs the STRUCTURAL translation only. Where a faithful mapping
+ * needs live battle state the `PlannedAction` does not carry (absolute spark
+ * values, the discovered/foreseen card, the next-turn flow target), the driver
+ * emits the deterministic edits it can and the hook (Task 5.4) finalizes the
+ * rest against live state. Such cases are called out in comments below.
+ *
+ * Card-number families (the AI deck is fixed and hand-encoded):
+ * - 510–515: characters. Playing one drops a body into a reserve slot.
+ * - 516: Flashpoint Blast — dissolves an enemy body.
+ * - 517: Glimpse of the Past — draws (Foresee reorder is interactive).
+ * - 518: Herald's Sign — Discover (interactive pick of three).
+ * - 519: Distant Worlds — empowers an ally (+3✦).
+ */
+export function actionToCommands(action: PlannedAction, aiSide: BattleSide): BattleCommand[] {
+  switch (action.kind) {
+    case "PLAY_CARD":
+      return playCardCommands(action, aiSide);
+    case "MOVE_CARD":
+      return moveCardCommands(action, aiSide);
+    case "END_TURN":
+      // The end-of-turn flow (challenge resolution then handoff) is orchestrated
+      // by the hook (Task 5.4) via `resolveJudgment` + `planHandoff`, which need
+      // turn state the driver does not carry. The driver therefore emits NO
+      // command for END_TURN; the hook composes the challenge + handoff edits.
+      return [];
+  }
+}
+
+const CHARACTER_CARD_NUMBERS: ReadonlySet<number> = new Set([
+  510, 511, 512, 513, 514, 515,
+]);
+
+/** Wraps a {@link BattleDebugEdit} as an AI-authored DEBUG_EDIT command. */
+function edit(e: BattleDebugEdit): BattleCommand {
+  return {
+    id: "DEBUG_EDIT",
+    edit: e,
+    actor: "enemy",
+    sourceSurface: "auto-system",
+  };
+}
+
+function opposingSide(side: BattleSide): BattleSide {
+  return side === "player" ? "enemy" : "player";
+}
+
+function reserveDestination(side: BattleSide, slotId: ReserveSlotId): BattleDebugZoneDestination {
+  return { side, zone: "reserve", slotId };
+}
+
+function deployedDestination(side: BattleSide, slotId: DeploySlotId): BattleDebugZoneDestination {
+  return { side, zone: "deployed", slotId };
+}
+
+function voidDestination(side: BattleSide): BattleDebugZoneDestination {
+  return { side, zone: "void" };
+}
+
+function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleCommand[] {
+  const self = action.self;
+  if (self === undefined) {
+    return [];
+  }
+
+  if (CHARACTER_CARD_NUMBERS.has(self.cardNumber)) {
+    // Character: materialize the body into the chosen reserve slot, then pay.
+    const slotId = action.toSlot as ReserveSlotId | undefined;
+    const commands: BattleCommand[] = [];
+    if (slotId !== undefined) {
+      commands.push(
+        edit({
+          kind: "MOVE_CARD_TO_ZONE",
+          battleCardId: self.battleCardId,
+          destination: reserveDestination(aiSide, slotId),
+        }),
+      );
+    }
+    commands.push(
+      edit({ kind: "ADJUST_CURRENT_ENERGY", side: aiSide, amount: -self.energyCost }),
+    );
+    return commands;
+  }
+
+  // Event play: pay energy, apply the effect, then send the event to the void.
+  const commands: BattleCommand[] = [
+    edit({ kind: "ADJUST_CURRENT_ENERGY", side: aiSide, amount: -self.energyCost }),
+  ];
+
+  const targetId = action.targets?.targetBattleCardId ?? null;
+  switch (self.cardNumber) {
+    case 516: {
+      // Flashpoint Blast: dissolve the enemy body. The target is the opponent's
+      // card, so it goes to the OPPONENT's void.
+      if (targetId !== null) {
+        commands.push(
+          edit({
+            kind: "MOVE_CARD_TO_ZONE",
+            battleCardId: targetId,
+            destination: voidDestination(opposingSide(aiSide)),
+          }),
+        );
+      }
+      break;
+    }
+    case 517: {
+      // Glimpse of the Past: draw a card. The optional Foresee deck reorder is
+      // interactive and is surfaced for approval at the proposal layer (Task
+      // 5.4); the driver emits only the deterministic draw.
+      commands.push(edit({ kind: "DRAW_CARD", side: aiSide }));
+      break;
+    }
+    case 518: {
+      // Herald's Sign: Discover is interactive (the human/AI picks one of three).
+      // The discovered card is resolved at the proposal layer (Task 5.4); the
+      // driver emits only the energy + void edits.
+      break;
+    }
+    case 519: {
+      // Distant Worlds: grant +3✦ to an ally. `SET_CARD_SPARK_DELTA` is an
+      // ABSOLUTE write, so producing it requires the ally's current sparkDelta,
+      // which lives only in live battle state. The hook (Task 5.4) computes the
+      // new delta (current + 3) against live card state and applies the spark
+      // edit; the driver emits only the deterministic energy + void edits.
+      break;
+    }
+    default:
+      break;
+  }
+
+  // The event card resolves to the AI's own void.
+  commands.push(
+    edit({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: self.battleCardId,
+      destination: voidDestination(aiSide),
+    }),
+  );
+  return commands;
+}
+
+function moveCardCommands(action: PlannedAction, aiSide: BattleSide): BattleCommand[] {
+  const self = action.self;
+  const slotId = action.toSlot as DeploySlotId | undefined;
+  if (self === undefined || slotId === undefined) {
+    return [];
+  }
+  // Key the move by the card id + destination. The source slot lives only in
+  // `action.trace.sourceSlotId`; MOVE_CARD_TO_ZONE by id is robust regardless of
+  // where the card currently sits.
+  return [
+    edit({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: self.battleCardId,
+      destination: deployedDestination(aiSide, slotId),
+    }),
+  ];
+}
