@@ -127,6 +127,7 @@ function TestMultiplayerBattleHost({
       database: {} as Database,
       roomId: "test-room",
       clientId: "test-client",
+      connectedCount: 1,
       battleState,
       reducerState,
       dispatch: dispatchLocal,

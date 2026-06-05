@@ -42,6 +42,7 @@ import type {
 import type { QuestContent } from "../../data/quest-content";
 import type { BattleCommand } from "../debug/commands";
 import { useBattleAi } from "../ai/use-battle-ai";
+import { aiMayRunHere } from "../ai/ai-may-run-here";
 import { BattleActionBar } from "./BattleActionBar";
 import { BattleAiProposalBar } from "./BattleAiProposalBar";
 import { BattleCardHoverPreview } from "./BattleCardHoverPreview";
@@ -131,6 +132,7 @@ function PlayableBattleScreenInner({
     database,
     roomId,
     clientId,
+    connectedCount,
   } = useMultiplayerBattle();
   if (maybeBattleState === null || maybeReducerState === null) {
     throw new Error(
@@ -179,14 +181,22 @@ function PlayableBattleScreenInner({
     [battleInit.scoreToWin, battleInit.turnLimit, battleInit.maxEnergyCap],
   );
 
-  // The AI approval loop. Inert unless `aiMode` is true: when disabled the hook
-  // holds no proposal and dispatches nothing. It receives the SAME live
-  // `reducerState`/`dispatch` the rest of the screen uses, so approved commands
-  // flow back as a new `reducerState` and the hook re-plans.
+  // The AI is a LOCAL actor and must run on exactly ONE client. In a shared
+  // multiplayer room (two or more connected clients) it must NOT run here, or
+  // both clients would drive the enemy and corrupt the shared state. The gate is
+  // an ADDITIONAL condition on top of `aiMode`; single-player (one connected
+  // client) leaves the AI fully enabled.
+  const aiMayRun = aiMayRunHere({ connectedCount });
+
+  // The AI approval loop. Inert unless `aiMode` is true AND this client may run
+  // the AI: when disabled the hook holds no proposal and dispatches nothing. It
+  // receives the SAME live `reducerState`/`dispatch` the rest of the screen
+  // uses, so approved commands flow back as a new `reducerState` and the hook
+  // re-plans.
   const { proposal, approve, reject, endAiTurn } = useBattleAi({
     reducerState,
     dispatch,
-    enabled: aiMode,
+    enabled: aiMode && aiMayRun,
     aiSide: "enemy",
     caps: aiCaps,
   });

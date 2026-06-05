@@ -124,6 +124,7 @@ describe("useMultiplayerBattle", () => {
         database={{} as Database}
         roomId="room-1"
         clientId="client-a"
+        connectedCount={1}
         battleState={fakeBattleState}
       >
         <CaptureValue onValue={(value) => captured.push(value)} />
@@ -168,6 +169,7 @@ describe("useMultiplayerBattle", () => {
         database={{} as Database}
         roomId="room-1"
         clientId="client-a"
+        connectedCount={1}
         battleState={fakeBattleState}
       >
         <ScoreAdjuster />
@@ -196,6 +198,7 @@ describe("useMultiplayerBattle", () => {
         database={{} as Database}
         roomId="room-1"
         clientId="client-a"
+        connectedCount={1}
         battleState={fakeBattleState}
       >
         <ScoreAdjuster />
@@ -224,6 +227,7 @@ describe("useMultiplayerBattle", () => {
         database={{} as Database}
         roomId="room-1"
         clientId="client-a"
+        connectedCount={1}
         battleState={null}
       >
         <CaptureValue onValue={(value) => captured.push(value)} />
@@ -243,6 +247,7 @@ describe("useMultiplayerBattle", () => {
         database={{} as Database}
         roomId="room-2"
         clientId="client-b"
+        connectedCount={1}
         battleState={fakeBattleState}
       >
         <CaptureValue onValue={(value) => captured.push(value)} />
@@ -312,6 +317,7 @@ describe("useMultiplayerBattle", () => {
         database={{} as Database}
         roomId="room-undo"
         clientId="client-u"
+        connectedCount={1}
         battleState={undoneState}
       >
         <CaptureValue onValue={(value) => captured.push(value)} />
@@ -335,6 +341,7 @@ describe("useMultiplayerBattle", () => {
         database={{} as Database}
         roomId="room-fresh"
         clientId="client-f"
+        connectedCount={1}
         battleState={fakeBattleState}
       >
         <CaptureValue onValue={(value) => captured.push(value)} />

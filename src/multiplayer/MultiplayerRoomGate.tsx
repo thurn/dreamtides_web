@@ -3,6 +3,7 @@ import type { Database, Unsubscribe } from "firebase/database";
 import type { DatabaseMode } from "../runtime/runtime-config";
 import { generateRoomId } from "./room-id";
 import {
+  connectedClientCount,
   createRoomEvictingStale,
   pruneRoomActionLog,
   subscribeToRoom,
@@ -49,10 +50,6 @@ function navigateToRoom(roomId: string): void {
   const nextUrl = new URL(window.location.href);
   nextUrl.searchParams.set("game", roomId);
   window.history.pushState(null, "", `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`);
-}
-
-function connectedCount(room: MultiplayerRoom): number {
-  return Object.values(room.presence ?? {}).filter((entry) => entry.connected).length;
 }
 
 export function MultiplayerRoomGate({
@@ -182,7 +179,7 @@ export function MultiplayerRoomGate({
             border: "1px solid rgba(124, 58, 237, 0.25)",
           }}
         >
-          {connectedCount(gateState.room)} connected
+          {connectedClientCount(gateState.room)} connected
         </div>
         {children(session)}
       </>

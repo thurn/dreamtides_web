@@ -25,6 +25,13 @@ export interface MultiplayerBattleValue {
   database: Database;
   roomId: string;
   clientId: string;
+  /**
+   * Number of clients currently connected to the room. One connected client is
+   * the single-player quest flow; two or more clients are sharing the room. The
+   * battle AI uses this to gate itself off in shared rooms (it must run on
+   * exactly one client).
+   */
+  connectedCount: number;
   battleState: SharedBattleState | null;
   reducerState: BattleReducerState | null;
   dispatch: (action: BattleControllerAction) => void;
@@ -44,12 +51,14 @@ export function MultiplayerBattleProvider({
   database,
   roomId,
   clientId,
+  connectedCount,
   battleState,
 }: {
   children: ReactNode;
   database: Database;
   roomId: string;
   clientId: string;
+  connectedCount: number;
   battleState: SharedBattleState | null;
 }) {
   const stateRef = useRef({ database, roomId, clientId });
@@ -148,11 +157,12 @@ export function MultiplayerBattleProvider({
       database,
       roomId,
       clientId,
+      connectedCount,
       battleState,
       reducerState,
       dispatch,
     }),
-    [database, roomId, clientId, battleState, reducerState, dispatch],
+    [database, roomId, clientId, connectedCount, battleState, reducerState, dispatch],
   );
 
   return (

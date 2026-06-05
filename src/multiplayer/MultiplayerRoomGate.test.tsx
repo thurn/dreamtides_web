@@ -31,6 +31,8 @@ vi.mock("./room-service", () => ({
   pruneRoomActionLog: serviceMocks.pruneRoomActionLog,
   subscribeToRoom: serviceMocks.subscribeToRoom,
   writePresence: serviceMocks.writePresence,
+  connectedClientCount: (room: { presence?: Record<string, { connected: boolean }> }) =>
+    Object.values(room.presence ?? {}).filter((entry) => entry.connected).length,
 }));
 
 vi.mock("./room-id", () => ({

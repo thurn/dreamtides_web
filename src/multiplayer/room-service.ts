@@ -494,6 +494,16 @@ export async function runRoomTransaction(
   );
 }
 
+/**
+ * Number of clients currently connected to the room, counted from `presence`
+ * entries flagged `connected`. A single connected client is the single-player
+ * quest flow; two or more clients are sharing the room.
+ */
+export function connectedClientCount(room: MultiplayerRoom): number {
+  return Object.values(room.presence ?? {}).filter((entry) => entry.connected)
+    .length;
+}
+
 export async function writePresence(
   database: Database,
   roomId: string,

@@ -224,6 +224,7 @@ function wrap(
       database={{} as Database}
       roomId="room-1"
       clientId="client-a"
+      connectedCount={1}
       battleState={battleState}
     >
       {element}

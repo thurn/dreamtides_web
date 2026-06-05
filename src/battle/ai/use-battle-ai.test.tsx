@@ -4,6 +4,7 @@ import { act, useState, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useBattleAi, type AiProposal } from "./use-battle-ai";
+import { aiMayRunHere } from "./ai-may-run-here";
 import { createBattleReducerState } from "../state/reducer";
 import { allocateBattleCardInstance } from "../state/create-initial-state";
 import type { BattleCommand } from "../debug/commands";
@@ -274,6 +275,47 @@ describe("useBattleAi", () => {
     );
 
     expect(latest?.proposal).toBeNull();
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  it("produces no proposal and dispatches nothing when gated off by a shared room", () => {
+    // Mirror the screen: the multiplayer-coexistence gate is layered on top of
+    // aiMode. With two clients connected to the room, `aiMayRunHere` is false,
+    // so even though aiMode is true and it IS the AI's turn with a legal action,
+    // the hook must hold no proposal and dispatch nothing on this client.
+    const dispatch = vi.fn();
+    const aiMode = true;
+    const enabled = aiMode && aiMayRunHere({ connectedCount: 2 });
+    expect(enabled).toBe(false);
+    mount(
+      <HookHarness
+        initialState={makeEnemyTurnState()}
+        dispatch={dispatch}
+        enabled={enabled}
+      />,
+    );
+
+    expect(latest?.proposal).toBeNull();
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  it("still runs in single-player (sole connected client) with aiMode on", () => {
+    // The single-player quest flow is a room with exactly one connected client.
+    // The gate must NOT disable the AI there: with aiMode on and count 1, the
+    // hook produces a proposal on the AI's turn.
+    const dispatch = vi.fn();
+    const aiMode = true;
+    const enabled = aiMode && aiMayRunHere({ connectedCount: 1 });
+    expect(enabled).toBe(true);
+    mount(
+      <HookHarness
+        initialState={makeEnemyTurnState()}
+        dispatch={dispatch}
+        enabled={enabled}
+      />,
+    );
+
+    expect(latest?.proposal).not.toBeNull();
     expect(dispatch).not.toHaveBeenCalled();
   });
 
