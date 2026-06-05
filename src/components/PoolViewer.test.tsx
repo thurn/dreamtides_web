@@ -18,6 +18,7 @@ function makeCard(
   cardType: CardData["cardType"],
   energyCost: number | null,
   subtype: string,
+  mtgName?: string,
 ): CardData {
   return {
     name,
@@ -32,11 +33,12 @@ function makeCard(
     renderedText: `${name} text`,
     imageNumber: cardNumber,
     artOwned: true,
+    mtgName,
   };
 }
 
 const cards = [
-  makeCard(1, "Alpha Seer", "Character", 1, "Mystic"),
+  makeCard(1, "Alpha Seer", "Character", 1, "Mystic", "Serra Angel"),
   makeCard(2, "Beta Guard", "Character", 5, "Soldier"),
   makeCard(3, "Null Rain", "Event", null, ""),
   makeCard(4, "Quick Spark", "Event", 0, ""),
@@ -66,16 +68,20 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
-function renderPool(overrides: Partial<{
-  draftState: DraftState | null;
-  onPoolCardDragStart: (card: CardData) => void;
-}> = {}) {
+function renderPool(
+  overrides: Partial<{
+    draftState: DraftState | null;
+    onPoolCardDragStart: (card: CardData) => void;
+  }> = {},
+) {
   return mount(
     <PoolViewer
       cardDatabase={cardDatabase}
-      draftState={Object.prototype.hasOwnProperty.call(overrides, "draftState")
-        ? overrides.draftState!
-        : draftState}
+      draftState={
+        Object.prototype.hasOwnProperty.call(overrides, "draftState")
+          ? overrides.draftState!
+          : draftState
+      }
       isOpen
       onClose={vi.fn()}
       onPoolCardDragStart={overrides.onPoolCardDragStart}
@@ -89,6 +95,14 @@ function setInputValue(input: HTMLInputElement, value: string): void {
     "value",
   )?.set?.call(input, value);
   input.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+function setSelectValue(select: HTMLSelectElement, value: string): void {
+  Object.getOwnPropertyDescriptor(
+    window.HTMLSelectElement.prototype,
+    "value",
+  )?.set?.call(select, value);
+  select.dispatchEvent(new Event("change", { bubbles: true }));
 }
 
 beforeEach(() => {
@@ -111,56 +125,135 @@ describe("PoolViewer", () => {
     expect(container.textContent).toContain("Alpha Seer");
     expect(container.textContent).toContain("Null Rain");
     expect(container.textContent).not.toContain("Beta Guard");
-    expect(container.querySelector('[data-pool-card-number="1"] [data-pool-copy-badge]')?.textContent).toBe("x2");
+    expect(
+      container.querySelector(
+        '[data-pool-card-number="1"] [data-pool-copy-badge]',
+      )?.textContent,
+    ).toBe("x2");
 
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-pool-source="catalog"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('[data-pool-source="catalog"]')
+        ?.click();
     });
 
     expect(container.textContent).toContain("Beta Guard");
     expect(container.textContent).toContain("Quick Spark");
-    expect(container.querySelector('[data-pool-card-number="1"] [data-pool-copy-badge]')).toBeNull();
+    expect(
+      container.querySelector(
+        '[data-pool-card-number="1"] [data-pool-copy-badge]',
+      ),
+    ).toBeNull();
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("filters by name, cost, type, and character subtype", () => {
+  it("filters by name, cost, type, and character subtype with the shared toolbar", () => {
     const { container, root } = renderPool();
 
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-pool-source="catalog"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('[data-pool-source="catalog"]')
+        ?.click();
     });
     act(() => {
-      setInputValue(container.querySelector<HTMLInputElement>("[data-pool-search]")!, "spark");
+      setInputValue(
+        container.querySelector<HTMLInputElement>(
+          '[aria-label="Search cards"]',
+        )!,
+        "spark",
+      );
     });
-    expect(container.querySelector('[data-pool-card-number="4"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-pool-card-number="4"]'),
+    ).not.toBeNull();
     expect(container.querySelector('[data-pool-card-number="1"]')).toBeNull();
 
     act(() => {
-      setInputValue(container.querySelector<HTMLInputElement>("[data-pool-search]")!, "");
+      setInputValue(
+        container.querySelector<HTMLInputElement>(
+          '[aria-label="Search cards"]',
+        )!,
+        "",
+      );
     });
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-pool-cost="5+"]')?.click();
+      setSelectValue(
+        container.querySelector<HTMLSelectElement>(
+          '[aria-label="Cost filter"]',
+        )!,
+        "5plus",
+      );
     });
-    expect(container.querySelector('[data-pool-card-number="2"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-pool-card-number="2"]'),
+    ).not.toBeNull();
     expect(container.querySelector('[data-pool-card-number="4"]')).toBeNull();
 
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-pool-cost="all"]')?.click();
-      container.querySelector<HTMLButtonElement>('[data-pool-type="characters"]')?.click();
+      setSelectValue(
+        container.querySelector<HTMLSelectElement>(
+          '[aria-label="Cost filter"]',
+        )!,
+        "all",
+      );
+      setSelectValue(
+        container.querySelector<HTMLSelectElement>(
+          '[aria-label="Type filter"]',
+        )!,
+        "character",
+      );
     });
-    expect(container.querySelector('[data-pool-card-number="1"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-pool-card-number="1"]'),
+    ).not.toBeNull();
     expect(container.querySelector('[data-pool-card-number="3"]')).toBeNull();
 
     act(() => {
-      const select = container.querySelector<HTMLSelectElement>("[data-pool-subtype]")!;
-      select.value = "Soldier";
-      select.dispatchEvent(new Event("change", { bubbles: true }));
+      setSelectValue(
+        container.querySelector<HTMLSelectElement>(
+          '[aria-label="Subtype filter"]',
+        )!,
+        "Soldier",
+      );
     });
-    expect(container.querySelector('[data-pool-card-number="2"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-pool-card-number="2"]'),
+    ).not.toBeNull();
     expect(container.querySelector('[data-pool-card-number="1"]')).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows the source MTG name as a hover tooltip when a card carries one", () => {
+    const { container, root } = renderPool();
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-pool-source="catalog"]')
+        ?.click();
+    });
+
+    expect(container.querySelector("[data-card-browser-mtg-tooltip]")).toBeNull();
+
+    const cardArticle = container.querySelector<HTMLElement>(
+      '[data-pool-card-number="1"] article',
+    );
+    if (cardArticle === null) {
+      throw new Error("Missing pool card article");
+    }
+
+    act(() => {
+      cardArticle.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+
+    expect(
+      container.querySelector("[data-card-browser-mtg-tooltip]")?.textContent,
+    ).toBe("MTG: Serra Angel");
 
     act(() => {
       root.unmount();
@@ -175,10 +268,16 @@ describe("PoolViewer", () => {
     );
 
     act(() => {
-      container.querySelector<HTMLButtonElement>('[data-pool-source="catalog"]')?.click();
+      container
+        .querySelector<HTMLButtonElement>('[data-pool-source="catalog"]')
+        ?.click();
     });
     act(() => {
-      container.querySelector<HTMLElement>('[data-pool-card-number="1"] [role="button"]')?.click();
+      container
+        .querySelector<HTMLElement>(
+          '[data-pool-card-number="1"] [role="button"]',
+        )
+        ?.click();
     });
 
     expect(logEvent).toHaveBeenCalledWith("card_preview", { cardNumber: 1 });

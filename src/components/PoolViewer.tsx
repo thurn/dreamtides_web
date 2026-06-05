@@ -1,19 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import type { CSSProperties } from "react";
 import type { CardData } from "../types/cards";
 import type { DraftState } from "../types/draft";
-import { CardDisplay } from "./CardDisplay";
-import { CardHoverPreview } from "./CardHoverPreview";
-import { CardOverlay } from "./CardOverlay";
+import { BrowserCard } from "./card-browser/BrowserCard";
+import CardBrowserGrid from "./card-browser/CardBrowserGrid";
+import CardBrowserToolbar from "./card-browser/CardBrowserToolbar";
 import {
-  CARD_HOVER_PREVIEW_DELAY_MS,
-  CARD_HOVER_PREVIEW_WIDTH_PX,
-  HoverPopover,
-} from "./HoverPopover";
+  DEFAULT_CARD_BROWSER_VALUES,
+  type CardBrowserToolbarValues,
+} from "./card-browser/card-browser-types";
+import {
+  filterAndSortCardData,
+  subtypeOptionsFromCards,
+} from "./card-browser/card-browser-filter";
+import { CardOverlay } from "./CardOverlay";
 
 type PoolViewerSource = "run" | "catalog";
-type PoolViewerCostFilter = "all" | "0" | "1" | "2" | "3" | "4" | "5+" | "x";
-type PoolViewerTypeFilter = "all" | "characters" | "events";
 type PoolViewerVariant = "overlay" | "floating";
 type FloatingPosition = { x: number; y: number };
 type FloatingDragState = { offsetX: number; offsetY: number } | null;
@@ -23,6 +26,39 @@ interface PoolCardEntry {
   copies: number | null;
 }
 
+const segmentedStyle: CSSProperties = {
+  display: "inline-flex",
+  width: "fit-content",
+  boxSizing: "border-box",
+  minHeight: "36px",
+  border: "1px solid rgba(247, 241, 223, 0.24)",
+  borderRadius: "6px",
+  overflow: "hidden",
+};
+
+function sourceButtonStyle(active: boolean): CSSProperties {
+  return {
+    minHeight: "34px",
+    border: 0,
+    borderRight: "1px solid rgba(247, 241, 223, 0.16)",
+    background: active ? "#2d8a80" : "#16242a",
+    color: active ? "#ffffff" : "#d9e1dd",
+    padding: "0 12px",
+    font: "inherit",
+    fontWeight: 800,
+    fontSize: "0.82rem",
+    cursor: "pointer",
+  };
+}
+
+/**
+ * Read-only card-pool browser. It shares the card editor's filter/sort/size
+ * toolbar, grid layout, and Magic: The Gathering hover tooltip through the
+ * `card-browser` module, and layers in pool-specific affordances: a run-pool vs.
+ * full-catalog source toggle, remaining-copy badges, drag-to-deck support, and a
+ * click-to-zoom card overlay. It renders as a full-screen `overlay` or a
+ * draggable `floating` panel.
+ */
 export function PoolViewer({
   cardDatabase,
   draftState,
@@ -43,23 +79,20 @@ export function PoolViewer({
   variant?: PoolViewerVariant;
 }) {
   const [source, setSource] = useState<PoolViewerSource>("run");
-  const [query, setQuery] = useState("");
-  const [costFilter, setCostFilter] = useState<PoolViewerCostFilter>("all");
-  const [typeFilter, setTypeFilter] = useState<PoolViewerTypeFilter>("all");
-  const [subtypeFilter, setSubtypeFilter] = useState("");
+  const [values, setValues] = useState<CardBrowserToolbarValues>(
+    DEFAULT_CARD_BROWSER_VALUES,
+  );
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
-  const [floatingPosition, setFloatingPosition] = useState<FloatingPosition | null>(null);
+  const [floatingPosition, setFloatingPosition] =
+    useState<FloatingPosition | null>(null);
   const [floatingDrag, setFloatingDrag] = useState<FloatingDragState>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
-  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
       setOverlayCard(null);
       setFloatingDrag(null);
-      return;
     }
-    searchInputRef.current?.focus();
   }, [isOpen]);
 
   useEffect(() => {
@@ -80,12 +113,6 @@ export function PoolViewer({
   }, [isOpen, onClose, overlayCard]);
 
   useEffect(() => {
-    if (typeFilter !== "characters") {
-      setSubtypeFilter("");
-    }
-  }, [typeFilter]);
-
-  useEffect(() => {
     if (floatingDrag === null) {
       return undefined;
     }
@@ -97,7 +124,11 @@ export function PoolViewer({
       const height = panel?.offsetHeight ?? 0;
       setFloatingPosition({
         x: clamp(event.clientX - drag.offsetX, 8, window.innerWidth - width - 8),
-        y: clamp(event.clientY - drag.offsetY, 8, window.innerHeight - height - 8),
+        y: clamp(
+          event.clientY - drag.offsetY,
+          8,
+          window.innerHeight - height - 8,
+        ),
       });
     }
 
@@ -115,72 +146,106 @@ export function PoolViewer({
     };
   }, [floatingDrag]);
 
-  const entries = useMemo<PoolCardEntry[]>(() => {
-    const values = source === "run"
-      ? buildRunPoolEntries(draftState, cardDatabase)
-      : Array.from(cardDatabase.values()).map((card) => ({ card, copies: null }));
-    return values.sort((left, right) => left.card.name.localeCompare(right.card.name));
-  }, [cardDatabase, draftState, source]);
-
-  const subtypeOptions = useMemo(
-    () => Array.from(new Set(
-      entries
-        .map((entry) => entry.card)
-        .filter((card) => card.cardType === "Character" && card.subtype.trim() !== "")
-        .map((card) => card.subtype),
-    )).sort((left, right) => left.localeCompare(right)),
-    [entries],
+  const baseEntries = useMemo<PoolCardEntry[]>(
+    () =>
+      source === "run"
+        ? buildRunPoolEntries(draftState, cardDatabase)
+        : Array.from(cardDatabase.values()).map((card) => ({
+            card,
+            copies: null,
+          })),
+    [cardDatabase, draftState, source],
   );
 
-  const filteredEntries = useMemo(() => entries.filter((entry) => {
-    const card = entry.card;
-    if (query.trim() !== "" && !card.name.toLowerCase().includes(query.trim().toLowerCase())) {
-      return false;
-    }
-    if (!matchesCostFilter(card, costFilter)) {
-      return false;
-    }
-    if (typeFilter === "characters" && card.cardType !== "Character") {
-      return false;
-    }
-    if (typeFilter === "events" && card.cardType !== "Event") {
-      return false;
-    }
-    if (subtypeFilter !== "" && (card.cardType !== "Character" || card.subtype !== subtypeFilter)) {
-      return false;
-    }
-    return true;
-  }), [costFilter, entries, query, subtypeFilter, typeFilter]);
+  const baseCards = useMemo(
+    () => baseEntries.map((entry) => entry.card),
+    [baseEntries],
+  );
 
-  const handlePanelPointerDown = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
-    if (variant !== "floating" || event.target instanceof HTMLElement &&
-      event.target.closest("button, input, select, textarea, [data-pool-card-tile]") !== null) {
-      return;
-    }
-    const panel = panelRef.current;
-    if (panel === null) {
-      return;
-    }
-    const rect = panel.getBoundingClientRect();
-    setFloatingPosition({ x: rect.left, y: rect.top });
-    setFloatingDrag({
-      offsetX: event.clientX - rect.left,
-      offsetY: event.clientY - rect.top,
-    });
-  }, [variant]);
+  const copiesByNumber = useMemo(
+    () =>
+      new Map(
+        baseEntries.map((entry) => [entry.card.cardNumber, entry.copies]),
+      ),
+    [baseEntries],
+  );
 
-  const wrapperClass = variant === "floating"
-    ? "pointer-events-none fixed inset-0 z-[58]"
-    : "fixed inset-0 z-[60] flex flex-col bg-slate-950/90";
-  const panelClass = variant === "floating"
-    ? "pointer-events-auto fixed flex max-h-[min(76vh,720px)] w-[min(720px,calc(100vw-24px))] flex-col overflow-hidden rounded-lg border border-cyan-400/30 bg-slate-950/95 shadow-2xl"
-    : "flex min-h-0 flex-1 flex-col";
-  const panelStyle = variant === "floating"
-    ? {
-        left: `${String(floatingPosition?.x ?? 24)}px`,
-        top: `${String(floatingPosition?.y ?? 24)}px`,
+  const subtypeOptions = useMemo(
+    () => subtypeOptionsFromCards(baseCards),
+    [baseCards],
+  );
+
+  const filteredCards = useMemo(
+    () => filterAndSortCardData(baseCards, values),
+    [baseCards, values],
+  );
+
+  const handlePatch = useCallback(
+    (patch: Partial<CardBrowserToolbarValues>) => {
+      setValues((current) => ({ ...current, ...patch }));
+    },
+    [],
+  );
+
+  const handlePanelPointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (
+        variant !== "floating" ||
+        (event.target instanceof HTMLElement &&
+          event.target.closest(
+            "button, input, select, textarea, [data-pool-card-tile]",
+          ) !== null)
+      ) {
+        return;
       }
-    : undefined;
+      const panel = panelRef.current;
+      if (panel === null) {
+        return;
+      }
+      const rect = panel.getBoundingClientRect();
+      setFloatingPosition({ x: rect.left, y: rect.top });
+      setFloatingDrag({
+        offsetX: event.clientX - rect.left,
+        offsetY: event.clientY - rect.top,
+      });
+    },
+    [variant],
+  );
+
+  const wrapperClass =
+    variant === "floating"
+      ? "pointer-events-none fixed inset-0 z-[58]"
+      : "fixed inset-0 z-[60] flex flex-col";
+  const panelClass =
+    variant === "floating"
+      ? "pointer-events-auto fixed flex max-h-[min(76vh,720px)] w-[min(820px,calc(100vw-24px))] flex-col overflow-hidden rounded-lg border border-cyan-400/30 shadow-2xl"
+      : "flex min-h-0 flex-1 flex-col";
+  const panelStyle: CSSProperties =
+    variant === "floating"
+      ? {
+          left: `${String(floatingPosition?.x ?? 24)}px`,
+          top: `${String(floatingPosition?.y ?? 24)}px`,
+          background: "#101417",
+          color: "#f7f1df",
+        }
+      : { background: "#101417", color: "#f7f1df" };
+
+  const sourceToggle = (
+    <div role="group" aria-label="Card source" style={segmentedStyle}>
+      {(["run", "catalog"] as const).map((value) => (
+        <button
+          key={value}
+          type="button"
+          data-pool-source={value}
+          aria-pressed={source === value}
+          style={sourceButtonStyle(source === value)}
+          onClick={() => setSource(value)}
+        >
+          {value === "run" ? "Run Pool" : "All Cards"}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <AnimatePresence>
@@ -189,6 +254,11 @@ export function PoolViewer({
           key={`pool-viewer-${variant}`}
           className={wrapperClass}
           data-pool-viewer={variant}
+          style={
+            variant === "floating"
+              ? undefined
+              : { background: "rgba(2, 6, 12, 0.9)" }
+          }
           initial={{ opacity: 0, y: variant === "floating" ? 0 : 36 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: variant === "floating" ? 0 : 36 }}
@@ -202,115 +272,90 @@ export function PoolViewer({
             onClick={(event) => event.stopPropagation()}
           >
             <div
-              className="flex cursor-default flex-wrap items-center justify-between gap-3 border-b border-cyan-400/20 bg-slate-900/80 px-4 py-3"
+              className="flex cursor-default flex-wrap items-center justify-between gap-3 px-4 py-3"
+              style={{ borderBottom: "1px solid rgba(142, 219, 209, 0.2)" }}
               onPointerDown={handlePanelPointerDown}
             >
-              <div>
-                <h2 className="text-lg font-semibold text-slate-100">{title}</h2>
-                <div className="text-xs uppercase text-slate-400">
-                  {String(filteredEntries.length)} / {String(entries.length)} cards
-                </div>
-              </div>
+              <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800 }}>
+                {title}
+              </h2>
               <button
                 type="button"
                 aria-label="Close pool viewer"
-                className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-600 bg-slate-800 text-slate-100 hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                className="flex h-10 w-10 items-center justify-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                style={{
+                  border: "1px solid rgba(247, 241, 223, 0.28)",
+                  background: "#16242a",
+                  color: "#f7f1df",
+                }}
                 onClick={onClose}
               >
-                {"\u2715"}
+                {"✕"}
               </button>
             </div>
-            <div className="flex flex-wrap items-center gap-2 border-b border-slate-700 bg-slate-900/70 px-4 py-3">
-              <div className="flex items-center gap-1">
-                {(["run", "catalog"] as const).map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    data-pool-source={value}
-                    className={`min-h-9 rounded-md border px-3 text-xs font-semibold ${source === value ? "border-cyan-300 bg-cyan-300/20 text-cyan-100" : "border-slate-600 bg-slate-800 text-slate-300"}`}
-                    onClick={() => setSource(value)}
-                  >
-                    {value === "run" ? "Run Pool" : "All Cards"}
-                  </button>
-                ))}
-              </div>
-              <input
-                ref={searchInputRef}
-                type="search"
-                data-pool-search=""
-                className="min-h-9 min-w-[180px] flex-1 rounded-md border border-slate-600 bg-slate-950 px-3 text-sm text-slate-100 placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
-                placeholder="Search by name..."
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
+
+            <div
+              style={{
+                display: "flex",
+                flex: "1 1 auto",
+                flexDirection: "column",
+                minHeight: 0,
+                gap: "12px",
+                padding: "12px 16px 16px",
+              }}
+            >
+              <CardBrowserToolbar
+                ariaLabel="Pool viewer controls"
+                className="pool-viewer-toolbar"
+                values={values}
+                onPatch={handlePatch}
+                subtypeOptions={subtypeOptions}
+                visibleCount={filteredCards.length}
+                totalCount={baseCards.length}
+                barExtras={sourceToggle}
               />
-              <div className="flex flex-wrap items-center gap-1">
-                {(["all", "0", "1", "2", "3", "4", "5+", "x"] as const).map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    data-pool-cost={value}
-                    className={`min-h-8 rounded-md border px-2 text-xs ${costFilter === value ? "border-amber-300 bg-amber-300/20 text-amber-100" : "border-slate-600 bg-slate-800 text-slate-300"}`}
-                    onClick={() => setCostFilter(value)}
-                  >
-                    {value === "all" ? "All" : value.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-              <div className="flex flex-wrap items-center gap-1">
-                {(["all", "characters", "events"] as const).map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    data-pool-type={value}
-                    className={`min-h-8 rounded-md border px-2 text-xs ${typeFilter === value ? "border-fuchsia-300 bg-fuchsia-300/20 text-fuchsia-100" : "border-slate-600 bg-slate-800 text-slate-300"}`}
-                    onClick={() => setTypeFilter(value)}
-                  >
-                    {formatTypeFilter(value)}
-                  </button>
-                ))}
-              </div>
-              <select
-                data-pool-subtype=""
-                className="min-h-9 rounded-md border border-slate-600 bg-slate-950 px-2 text-sm text-slate-100 disabled:opacity-40"
-                disabled={typeFilter !== "characters" || subtypeOptions.length === 0}
-                value={subtypeFilter}
-                onChange={(event) => setSubtypeFilter(event.target.value)}
-              >
-                <option value="">All subtypes</option>
-                {subtypeOptions.map((subtype) => (
-                  <option key={subtype} value={subtype}>{subtype}</option>
-                ))}
-              </select>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3">
-              {filteredEntries.length === 0 ? (
-                <div className="flex h-full items-center justify-center text-sm text-slate-400" data-pool-empty="">
-                  {source === "run" && entries.length === 0
+
+              {filteredCards.length === 0 ? (
+                <div
+                  className="flex flex-1 items-center justify-center text-sm"
+                  style={{ color: "#9fb0ac" }}
+                  data-pool-empty=""
+                >
+                  {source === "run" && baseCards.length === 0
                     ? "No run pool cards are available."
                     : "No cards match the current filters."}
                 </div>
               ) : (
-                <div className="grid grid-cols-[repeat(auto-fill,minmax(130px,1fr))] gap-3 md:grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
-                  {filteredEntries.map(({ card, copies }) => {
-                    const tile = (
-                      <div
-                        data-pool-card-tile=""
-                        data-pool-card-number={String(card.cardNumber)}
-                        className="relative"
-                        draggable={onPoolCardDragStart !== undefined}
-                        onDragStart={(event) => {
-                          event.dataTransfer?.setData("text/plain", String(card.cardNumber));
-                          if (event.dataTransfer !== undefined) {
-                            event.dataTransfer.effectAllowed = "copy";
-                          }
-                          onPoolCardDragStart?.(card);
-                        }}
-                        onDragEnd={() => onPoolCardDragEnd?.()}
-                      >
-                        <CardDisplay
+                <CardBrowserGrid
+                  items={filteredCards}
+                  size={values.size}
+                  getKey={(card) => card.cardNumber}
+                  getItemProps={(card) => ({
+                    "data-pool-card-tile": "",
+                    "data-pool-card-number": String(card.cardNumber),
+                    draggable: onPoolCardDragStart !== undefined,
+                    onDragStart: (event) => {
+                      event.dataTransfer?.setData(
+                        "text/plain",
+                        String(card.cardNumber),
+                      );
+                      if (event.dataTransfer !== undefined) {
+                        event.dataTransfer.effectAllowed = "copy";
+                      }
+                      onPoolCardDragStart?.(card);
+                    },
+                    onDragEnd: () => onPoolCardDragEnd?.(),
+                    style: { position: "relative" },
+                  })}
+                  renderItem={(card) => {
+                    const copies =
+                      copiesByNumber.get(card.cardNumber) ?? null;
+                    return (
+                      <>
+                        <BrowserCard
                           card={card}
+                          size={values.size}
                           onClick={() => setOverlayCard(card)}
-                          className="h-full w-full"
                         />
                         {copies !== null ? (
                           <div
@@ -320,29 +365,10 @@ export function PoolViewer({
                             x{String(copies)}
                           </div>
                         ) : null}
-                      </div>
+                      </>
                     );
-                    return (
-                      <HoverPopover
-                        key={card.cardNumber}
-                        content={({ side, anchorRect }) => (
-                          <CardHoverPreview
-                            card={card}
-                            testId={`pool-card-preview-${String(card.cardNumber)}`}
-                            widthPx={CARD_HOVER_PREVIEW_WIDTH_PX}
-                            popoverSide={side}
-                            anchorRect={anchorRect}
-                          />
-                        )}
-                        delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
-                        maxWidthPx={null}
-                        triggerAs="div"
-                      >
-                        {tile}
-                      </HoverPopover>
-                    );
-                  })}
-                </div>
+                  }}
+                />
               )}
             </div>
           </div>
@@ -362,39 +388,19 @@ function buildRunPoolEntries(
   }
 
   const entries: PoolCardEntry[] = [];
-  for (const [cardNumberText, copies] of Object.entries(draftState.remainingCopiesByCard)) {
+  for (const [cardNumberText, copies] of Object.entries(
+    draftState.remainingCopiesByCard,
+  )) {
     const cardNumber = Number(cardNumberText);
-    const card = Number.isFinite(cardNumber) ? cardDatabase.get(cardNumber) : undefined;
+    const card = Number.isFinite(cardNumber)
+      ? cardDatabase.get(cardNumber)
+      : undefined;
     if (card === undefined || copies <= 0) {
       continue;
     }
     entries.push({ card, copies });
   }
   return entries;
-}
-
-function matchesCostFilter(card: CardData, filter: PoolViewerCostFilter): boolean {
-  switch (filter) {
-    case "all":
-      return true;
-    case "x":
-      return card.energyCost === null;
-    case "5+":
-      return card.energyCost !== null && card.energyCost >= 5;
-    default:
-      return card.energyCost === Number(filter);
-  }
-}
-
-function formatTypeFilter(filter: PoolViewerTypeFilter): string {
-  switch (filter) {
-    case "all":
-      return "All";
-    case "characters":
-      return "Characters";
-    case "events":
-      return "Events";
-  }
 }
 
 function clamp(value: number, min: number, max: number): number {
