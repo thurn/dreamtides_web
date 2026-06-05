@@ -172,6 +172,20 @@ function firstEmptyDeploySlot(model: ForwardModel): DeploySlotId | null {
 }
 
 /**
+ * The reserve slot a character play lands in: the first empty slot, matching
+ * {@link playCharacterToReserve}. Recording it on the action lets the driver
+ * emit the body's `MOVE_CARD_TO_ZONE` to a concrete reserve destination.
+ */
+function firstEmptyReserveSlot(model: ForwardModel): ReserveSlotId | null {
+  for (const slot of RESERVE_SLOT_IDS) {
+    if (model.aiReserve[slot] === null) {
+      return slot;
+    }
+  }
+  return null;
+}
+
+/**
  * Generates every legal next action from `model`, tagged by stage. Legality is
  * mandatory: a `PLAY_CARD` is generated only when the card model's `canPlay` is
  * true; a `MOVE_CARD` only into an empty deploy slot from a ready reserve card.
@@ -198,7 +212,10 @@ function generateActions(model: ForwardModel): PlanAction[] {
       kind: "PLAY_CARD",
       card,
       targets: cardModel.chooseTargets(model, card),
-      toSlot: null,
+      // The character body materializes into the first empty reserve slot
+      // (see `playCharacterToReserve`). Record it so the driver moves the
+      // card out of hand rather than only paying its energy.
+      toSlot: firstEmptyReserveSlot(model),
       sourceHandIndex: handIndex,
       sourceSlotId: null,
     });

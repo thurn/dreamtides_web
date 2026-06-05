@@ -143,6 +143,30 @@ describe("planNextAction", () => {
       expect(action.kind).not.toBe("MOVE_CARD");
     });
 
+    it("a returned character PLAY_CARD carries a concrete empty reserve slot", () => {
+      // The body materializes into a reserve slot, so the proposal must name one.
+      // Without it the driver pays the energy but emits no MOVE_CARD_TO_ZONE, so
+      // the card never leaves hand (energy down, card stuck in hand).
+      const challenger = makeCard({
+        cardNumber: 512,
+        name: "Marked Direwolf",
+        basePrintedSpark: 4,
+        canChallengeThisTurn: true,
+      });
+      const model = baseModel({
+        aiEnergy: 3,
+        aiHand: [minstrel()],
+        aiDeployed: { ...emptyDeployed(), D0: challenger },
+      });
+      const action = planNextAction(model, defaultOptions());
+      expect(action.kind).toBe("PLAY_CARD");
+      expect(action.self?.cardNumber).toBe(510);
+      expect(action.toSlot).toBeDefined();
+      expect(RESERVE_SLOT_IDS).toContain(action.toSlot);
+      // The named slot is empty in the source model.
+      expect(model.aiReserve[action.toSlot as "R0"]).toBeNull();
+    });
+
     it("a returned MOVE_CARD targets an empty, legal deploy slot from a ready reserve card", () => {
       const ready = makeCard({
         cardNumber: 512,
