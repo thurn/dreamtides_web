@@ -68,6 +68,33 @@ const SHORT_THEMES = new Set([
 ]);
 
 /**
+ * The dominant theme a Dreamcaller's signature steers toward: the theme cited
+ * most often across the signature cards' own `supports`/`needs`. This is the
+ * Dreamcaller's intended build-around identity, read straight off the signature
+ * (not from whatever incidental support share the grown pool ends up with).
+ * Returns null for a neutral Dreamcaller (no signature, or none of its signature
+ * cards carry a theme tag).
+ */
+export function dominantSignatureTheme(signatureCards, meta) {
+  const tally = new Map();
+  for (const name of signatureCards ?? []) {
+    const entry = meta.cards[name];
+    if (!entry) continue;
+    for (const t of entry.supports ?? []) tally.set(t, (tally.get(t) ?? 0) + 1);
+    for (const n of entry.needs ?? []) tally.set(n.theme, (tally.get(n.theme) ?? 0) + 1);
+  }
+  let best = null;
+  let bestCount = 0;
+  for (const [t, c] of tally) {
+    if (c > bestCount) {
+      best = t;
+      bestCount = c;
+    }
+  }
+  return best;
+}
+
+/**
  * Score one generated pool against the support metadata. Returns one record per
  * *payoff instance*: a build-around present in the pool, for each theme it needs.
  *
@@ -206,6 +233,19 @@ function run() {
   let poolsWithPayoffs = 0;
 
   for (const dc of dreamcallers) {
+    // When scoring a focused theme set (e.g. `--themes short`), a Dreamcaller
+    // whose signature steers toward an OUT-OF-SCOPE theme would otherwise be
+    // judged purely on drift -- short-theme payoffs that leaked into a pool built
+    // around something we deliberately excluded. Omit its off-theme signature so
+    // it generates the neutral idf2 pool (like a no-signature Dreamcaller) and is
+    // evaluated as a pool, rather than penalised for an identity out of scope. In
+    // `--themes all` every signature is in scope, so this never fires.
+    const dom = dominantSignatureTheme(dc.signatureCards, meta);
+    const signatureInScope = !allowedThemes || dom === null || allowedThemes.has(dom);
+    const effectiveSignature = signatureInScope ? dc.signatureCards ?? [] : [];
+    // A pool is "steered" when an in-scope signature actually shaped it; neutral
+    // and off-theme (omitted-signature) Dreamcallers produce the idf2 pool.
+    const steered = effectiveSignature.length > 0 && dom !== null;
     for (let seed = 0; seed < seeds; seed++) {
       const pool = generatePoolFromData(
         poolData,
@@ -214,13 +254,13 @@ function run() {
         variant,
         undefined,
         poolSize,
-        dc.signatureCards ?? [],
+        effectiveSignature,
       );
       poolSizes.push(pool.size);
       const instances = scorePool(pool.counts, meta, TIER_TARGET, allowedThemes);
       if (instances.length) poolsWithPayoffs++;
       for (const inst of instances) {
-        all.push({ dreamcaller: dc.name, ...inst });
+        all.push({ dreamcaller: dc.name, steered, ...inst });
         byTheme.add(inst.theme, inst.adequacy, inst.share);
         byDreamcaller.add(dc.name, inst.adequacy, inst.share);
         byPayoff.add(inst.payoff, inst.adequacy, inst.share);
@@ -287,6 +327,19 @@ function run() {
   console.log(
     `  (mean adequacy over ${all.length} payoff instances; ${poolsWithPayoffs}/${totalPools} pools contained a build-around)`,
   );
+  if (allowedThemes) {
+    // Split the headline by whether an in-scope signature steered the pool. The
+    // steered subset answers the question the focused metric is really about:
+    // when a player leans into a Dreamcaller built around a scored theme, do its
+    // build-arounds get supported? The neutral subset is just the idf2 floor.
+    const steeredInst = all.filter((i) => i.steered);
+    const neutralInst = all.filter((i) => !i.steered);
+    const steeredDc = new Set(steeredInst.map((i) => i.dreamcaller)).size;
+    console.log(
+      `  steered (${steeredDc} in-scope Dreamcallers): ${(mean(steeredInst.map((i) => i.adequacy)) * 100).toFixed(1)}` +
+        `   neutral pools: ${(mean(neutralInst.map((i) => i.adequacy)) * 100).toFixed(1)}`,
+    );
+  }
 
   console.log("\nBy theme (mean adequacy, worst first):");
   console.log(`  ${"theme".padEnd(26)} ${"adeq".padStart(6)} ${"support".padStart(8)} ${"instances".padStart(10)}`);
