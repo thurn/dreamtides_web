@@ -4,6 +4,8 @@ import type { CSSProperties } from "react";
 import type { CardData } from "../types/cards";
 import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { DraftState } from "../types/draft";
+import { poolStrategyFor } from "../draft/pool/registry";
+import type { PoolVariant } from "../draft/pool/types";
 import { BrowserCard } from "./card-browser/BrowserCard";
 import CardBrowserGrid from "./card-browser/CardBrowserGrid";
 import CardBrowserToolbar from "./card-browser/CardBrowserToolbar";
@@ -87,6 +89,7 @@ export function PoolViewer({
   onClose,
   onPoolCardDragEnd,
   onPoolCardDragStart,
+  poolVariant = null,
   resolvedPackage = null,
   title = "Pool Viewer",
   variant = "overlay",
@@ -97,6 +100,7 @@ export function PoolViewer({
   onClose: () => void;
   onPoolCardDragEnd?: () => void;
   onPoolCardDragStart?: (card: CardData) => void;
+  poolVariant?: PoolVariant | null;
   resolvedPackage?: ResolvedDreamcallerPackage | null;
   title?: string;
   variant?: PoolViewerVariant;
@@ -342,9 +346,37 @@ export function PoolViewer({
               style={{ borderBottom: "1px solid rgba(142, 219, 209, 0.2)" }}
               onPointerDown={handlePanelPointerDown}
             >
-              <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800 }}>
-                {title}
-              </h2>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "baseline",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                }}
+              >
+                <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800 }}>
+                  {title}
+                </h2>
+                {poolVariant ? (
+                  <span
+                    title={poolStrategyFor(poolVariant).description}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      borderRadius: "999px",
+                      border: "1px solid rgba(142, 219, 209, 0.4)",
+                      background: "rgba(45, 138, 128, 0.18)",
+                      color: "#8edbd1",
+                      padding: "2px 10px",
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {`algo: ${poolVariant}`}
+                  </span>
+                ) : null}
+              </div>
               <button
                 type="button"
                 aria-label="Close pool viewer"
