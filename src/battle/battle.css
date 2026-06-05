@@ -1354,6 +1354,29 @@
   font-size: 11px;
 }
 
+.btn.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.btn.icon .bx {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.btn.automation-active {
+  color: var(--accent);
+  background: var(--surface);
+  border-color: var(--accent);
+}
+
+.btn.automation-active:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 .inspector {
   align-self: stretch;
   width: 0;

@@ -323,6 +323,91 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("renders a basic automation gear toggle that flips on click", () => {
+    const { container, root } = renderScreen();
+    const toggle = container.querySelector<HTMLElement>('[data-battle-action="toggle-automation"]');
+    expect(toggle).not.toBeNull();
+    expect(toggle?.getAttribute("data-battle-automation-enabled")).toBe("false");
+    expect(toggle?.querySelector("i.bx.bxs-cog")).not.toBeNull();
+
+    act(() => {
+      toggle?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(
+      container
+        .querySelector('[data-battle-action="toggle-automation"]')
+        ?.getAttribute("data-battle-automation-enabled"),
+    ).toBe("true");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("spends energy and sends a played event to the void when automation is on", () => {
+    let eventCardId = "";
+    let eventCost = 0;
+    const { container, root } = renderScreen((state) => {
+      const found = Object.values(state.cardInstances).find(
+        (instance) => instance.definition.battleCardKind === "event",
+      );
+      if (found === undefined) {
+        throw new Error("expected an event card instance in the test battle");
+      }
+      eventCardId = found.battleCardId;
+      eventCost = found.definition.energyCost;
+      for (const side of ["player", "enemy"] as const) {
+        const sideState = state.sides[side];
+        sideState.hand = sideState.hand.filter((id) => id !== eventCardId);
+        sideState.deck = sideState.deck.filter((id) => id !== eventCardId);
+        sideState.void = sideState.void.filter((id) => id !== eventCardId);
+      }
+      found.owner = "player";
+      found.controller = "player";
+      state.sides.player.hand = [eventCardId];
+      state.sides.player.currentEnergy = 8;
+      state.sides.player.maxEnergy = 8;
+    });
+
+    act(() => {
+      container
+        .querySelector('[data-battle-action="toggle-automation"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    const handCard = container.querySelector<HTMLElement>(
+      `[data-battle-region="player-hand-tray"] [data-battle-card-id="${eventCardId}"]`,
+    );
+    expect(handCard).not.toBeNull();
+
+    act(() => {
+      handCard?.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+
+    // The event resolved to the void rather than entering a battlefield slot.
+    expect(
+      container
+        .querySelector('[data-battle-zone-open="player:void"]')
+        ?.getAttribute("data-battle-zone-count"),
+    ).toBe("1");
+    expect(
+      container.querySelector('[data-slot-id="player-reserve-R0"]')?.getAttribute("data-slot-card-id"),
+    ).toBeNull();
+
+    // Energy dropped by exactly the event's cost.
+    const energy = Number(
+      container
+        .querySelector('[data-battle-stat="player:energy"]')
+        ?.getAttribute("data-battle-current-energy"),
+    );
+    expect(energy).toBe(8 - eventCost);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("renders the empty stack zone without instructional copy or a counter", () => {
     const { container, root } = renderScreen();
     const stackZone = container.querySelector<HTMLElement>('[data-battle-region="stack-zone"]');

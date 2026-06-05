@@ -5,12 +5,14 @@ export function BattleActionBar({
   futureCount,
   hideDebugSection: _hideDebugSection = false,
   historyCount,
+  isBasicAutomationEnabled,
   isInteractionLocked = false,
   isBattleLogOpen: _isBattleLogOpen,
   isDesktopInspectorLayout: _isDesktopInspectorLayout,
   isInspectorDrawerOpen: _isInspectorDrawerOpen,
   onOpenForesee: _onOpenForesee,
   onRedo,
+  onToggleBasicAutomation,
   onToggleBattleLog,
   onToggleInspector: _onToggleInspector,
   onUndo,
@@ -18,12 +20,14 @@ export function BattleActionBar({
   futureCount: number;
   hideDebugSection?: boolean;
   historyCount: number;
+  isBasicAutomationEnabled: boolean;
   isInteractionLocked?: boolean;
   isBattleLogOpen: boolean;
   isDesktopInspectorLayout: boolean;
   isInspectorDrawerOpen: boolean;
   onOpenForesee: (side: BattleSide, count: number) => void;
   onRedo: () => void;
+  onToggleBasicAutomation: () => void;
   onToggleBattleLog: () => void;
   onToggleInspector: () => void;
   onUndo: () => void;
@@ -96,6 +100,18 @@ export function BattleActionBar({
           onClick={onToggleBattleLog}
         >
           Log
+        </button>
+        <button
+          type="button"
+          data-battle-action="toggle-automation"
+          data-battle-automation-enabled={isBasicAutomationEnabled ? "true" : "false"}
+          className={`btn ghost sm icon ${isBasicAutomationEnabled ? "automation-active" : ""}`}
+          aria-pressed={isBasicAutomationEnabled}
+          aria-label={`Basic automation ${isBasicAutomationEnabled ? "on" : "off"}`}
+          title={`Basic automation: ${isBasicAutomationEnabled ? "on" : "off"}`}
+          onClick={onToggleBasicAutomation}
+        >
+          <i className="bx bxs-cog" aria-hidden="true" />
         </button>
       </div>
     </section>

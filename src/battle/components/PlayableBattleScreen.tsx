@@ -44,6 +44,7 @@ import type { BattleCommand } from "../debug/commands";
 import { useBattleAi } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
 import { energyRampEdits } from "../engine/energy";
+import { planBasicAutomationCommands } from "../automation/basic-automation";
 import { BattleActionBar } from "./BattleActionBar";
 import { BattleAiProposalBar } from "./BattleAiProposalBar";
 import { BattleCardHoverPreview } from "./BattleCardHoverPreview";
@@ -166,6 +167,7 @@ function PlayableBattleScreenInner({
   const [openNoteEditor, setOpenNoteEditor] = useState<string | null>(null);
   const [openSideSummary, setOpenSideSummary] = useState<BattleSide | null>(null);
   const [isDreamcallerPanelOpen, setIsDreamcallerPanelOpen] = useState(false);
+  const [isBasicAutomationEnabled, setIsBasicAutomationEnabled] = useState(false);
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
   const loggedCommandSerialRef = useRef(0);
@@ -225,8 +227,28 @@ function PlayableBattleScreenInner({
   const handleCommand = useCallback((command: BattleCommand): void => {
     setPendingDrag(null);
     setHoverPreview(null);
+    // With basic automation on, a single gesture can expand into several
+    // commands (e.g. a play also spends energy; ending a turn resolves the
+    // Challenge, ramps energy, and draws). The planner reads the live state and
+    // returns the ordered command list; with automation off it is a passthrough.
+    if (isBasicAutomationEnabled) {
+      const plannedCommands = planBasicAutomationCommands(reducerState.mutable, command, {
+        maxEnergyCap: battleInit.maxEnergyCap,
+        scoreToWin: battleInit.scoreToWin,
+      });
+      for (const planned of plannedCommands) {
+        dispatch({ type: "APPLY_COMMAND", command: planned });
+      }
+      return;
+    }
     dispatch({ type: "APPLY_COMMAND", command });
-  }, [dispatch]);
+  }, [
+    dispatch,
+    isBasicAutomationEnabled,
+    reducerState.mutable,
+    battleInit.maxEnergyCap,
+    battleInit.scoreToWin,
+  ]);
 
   useEffect(() => {
     if (reducerState.mutable !== battleState.reducer.mutable) {
@@ -1112,8 +1134,12 @@ function PlayableBattleScreenInner({
                     // A forward player→enemy handoff keeps the turn number (see
                     // `advanceBattleTurnPair`); the backward variant decrements it,
                     // so the equality check excludes rewinds.
+                    // When basic automation is on it owns every start-of-turn
+                    // ramp and draw (for both sides), so the AI-specific handoff
+                    // shortcut must stand down to avoid ramping the enemy twice.
                     const isAiEnemyHandoff =
                       aiMode &&
+                      !isBasicAutomationEnabled &&
                       reducerState.mutable.activeSide === "player" &&
                       target.activeSide === "enemy" &&
                       target.turnNumber === reducerState.mutable.turnNumber;
@@ -1172,11 +1198,13 @@ function PlayableBattleScreenInner({
           <BattleActionBar
             futureCount={futureCount}
             historyCount={historyCount}
+            isBasicAutomationEnabled={isBasicAutomationEnabled}
             isBattleLogOpen={isBattleLogOpen}
             isDesktopInspectorLayout={isDesktopInspectorLayout}
             isInspectorDrawerOpen={isInspectorDrawerOpen}
             onOpenForesee={(_side, _count) => undefined}
             onRedo={() => dispatch({ type: "REDO" })}
+            onToggleBasicAutomation={() => setIsBasicAutomationEnabled((value) => !value)}
             onToggleBattleLog={() => setIsBattleLogOpen((value) => !value)}
             onToggleInspector={() => setIsInspectorDrawerOpen((value) => !value)}
             onUndo={() => dispatch({ type: "UNDO" })}
