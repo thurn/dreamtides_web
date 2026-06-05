@@ -2301,6 +2301,34 @@
   font-size: 10px;
 }
 
+.transition-ai-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.ai-choice {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  border-left: 2px solid var(--accent-primary, #7b61ff);
+  padding-left: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+}
+
+.ai-choice-label {
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.ai-choice-score {
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
 .raw-events {
   display: flex;
   flex-direction: column;

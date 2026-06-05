@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { getLogEntries, subscribeLogEntries } from "../../logging";
 import type {
+  BattleAiChoiceTrace,
   BattleHistory,
   BattleHistoryEntry,
   BattleHistoryEntryKind,
@@ -169,6 +170,20 @@ export function BattleLogDrawer({
                             ))}
                           </div>
                         ) : null}
+                        {entry.after.lastTransition?.aiChoices.length ? (
+                          <div className="transition-ai-choices">
+                            {entry.after.lastTransition.aiChoices.map((choice, index) => (
+                              <div key={`ai-choice-${String(index)}`} className="ai-choice">
+                                <span className="ai-choice-label">{formatAiChoiceLabel(choice)}</span>
+                                {choice.heuristicScoreBefore != null && choice.heuristicScoreAfter != null ? (
+                                  <span className="ai-choice-score">
+                                    {`score ${choice.heuristicScoreBefore.toFixed(1)} → ${choice.heuristicScoreAfter.toFixed(1)}`}
+                                  </span>
+                                ) : null}
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
                       </div>
                     ) : null}
                   </div>
@@ -248,6 +263,17 @@ function toggleKind(
     next.add(kind);
   }
   return next.size === 0 ? new Set(HISTORY_KINDS) : next;
+}
+
+function formatAiChoiceLabel(choice: BattleAiChoiceTrace): string {
+  if (choice.rationale != null && choice.rationale.length > 0) {
+    return choice.rationale;
+  }
+  const parts: string[] = [choice.stage, choice.choice];
+  if (choice.cardName != null) {
+    parts.push(choice.cardName);
+  }
+  return parts.join(" · ");
 }
 
 function classifyLogKind(event: string): "ai" | "debug" | "judgment" | "info" {

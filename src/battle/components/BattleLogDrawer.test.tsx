@@ -4,9 +4,11 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { logEvent, resetLog } from "../../logging";
+import { applyBattleCommand } from "../debug/apply-command";
 import { createBattleInit } from "../integration/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import { battleControllerReducer, createBattleControllerState } from "../state/controller";
+import { createBattleReducerState } from "../state/reducer";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
@@ -126,6 +128,69 @@ describe("BattleLogDrawer", () => {
 
     expect(container.textContent).toContain("Play to reserve");
     expect(container.textContent).toContain("Enemy passed");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders aiChoices rationale and score when an entry with aiChoices is expanded", () => {
+    const battleInit = createBattleInit({
+      battleEntryKey: "site-7::2::dreamscape-2",
+      site: makeBattleTestSite(),
+      state: makeBattleTestState(),
+      cardDatabase: makeBattleTestCardDatabase(),
+      dreamcallers: makeBattleTestDreamcallers(),
+    });
+    const initialState = createInitialBattleState(battleInit);
+    const reducerState = applyBattleCommand(
+      createBattleReducerState(initialState),
+      {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase: "dusk" },
+        aiChoices: [
+          {
+            stage: "character",
+            choice: "PLAY_CARD",
+            battleCardId: "enemy-card-1",
+            cardName: "Twilight Minstrel",
+            sourceHandIndex: 0,
+            sourceSlotId: null,
+            targetSlotId: "R0",
+            heuristicScoreBefore: 12.3,
+            heuristicScoreAfter: 18.7,
+            rationale: "Play Twilight Minstrel to the back rank",
+          },
+        ],
+      },
+    );
+
+    const onClose = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <BattleLogDrawer
+          battleInit={battleInit}
+          futureCount={0}
+          history={reducerState.history}
+          isOpen={true}
+          lastTransition={null}
+          onClose={onClose}
+        />,
+      );
+    });
+
+    // Expand the history entry by clicking its summary button
+    act(() => {
+      container.querySelector<HTMLElement>("[data-battle-log-history-entry]")?.click();
+    });
+
+    expect(container.textContent).toContain("Play Twilight Minstrel to the back rank");
+    expect(container.textContent).toContain("12.3");
+    expect(container.textContent).toContain("18.7");
 
     act(() => {
       root.unmount();
