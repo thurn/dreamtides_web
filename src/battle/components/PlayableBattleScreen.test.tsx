@@ -460,7 +460,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("floats phase controls over the player hand tray", () => {
+  it("places phase controls under the enemy banished zone", () => {
     const { container, root } = renderScreen((state) => {
       state.phase = "day";
       state.activeSide = "player";
@@ -471,7 +471,7 @@ describe("PlayableBattleScreen", () => {
     const controls = container.querySelectorAll("[data-battle-phase-control]");
     expect(controls).toHaveLength(3);
     expect(
-      container.querySelector(".player-hand-zone .phase-float-actions"),
+      container.querySelector(".battle-side-zone-column.enemy .phase-float-actions"),
     ).not.toBeNull();
     expect(
       container.querySelector<HTMLButtonElement>('[data-battle-phase-control="previous"]')

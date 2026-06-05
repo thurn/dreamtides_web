@@ -1089,62 +1089,62 @@ function PlayableBattleScreenInner({
                     onOpen={() => handleOpenZoneBrowser("enemy", "banished")}
                   />
                 </div>
+                <BattlePhaseFloatControls
+                  state={reducerState.mutable}
+                  onSetBattleFlow={(target) => {
+                    handleCommand({
+                      id: "DEBUG_EDIT",
+                      edit: {
+                        kind: "SET_BATTLE_FLOW",
+                        phase: target.phase,
+                        activeSide: target.activeSide,
+                        turnNumber: target.turnNumber,
+                      },
+                      sourceSurface: "phase-controls",
+                    });
+                    // In AI mode, the human advancing the turn into the enemy's
+                    // turn IS the enemy's start-of-turn handoff, so it must apply
+                    // the enemy's energy ramp and draw — the symmetric counterpart
+                    // to the AI's own end-turn handoff, which ramps the incoming
+                    // player (see `buildEndTurnProposal` in use-battle-ai.ts).
+                    // Without it the enemy is frozen at its opening energy and the
+                    // planner, unable to afford any development, passes every turn.
+                    // A forward player→enemy handoff keeps the turn number (see
+                    // `advanceBattleTurnPair`); the backward variant decrements it,
+                    // so the equality check excludes rewinds.
+                    const isAiEnemyHandoff =
+                      aiMode &&
+                      reducerState.mutable.activeSide === "player" &&
+                      target.activeSide === "enemy" &&
+                      target.turnNumber === reducerState.mutable.turnNumber;
+                    if (isAiEnemyHandoff) {
+                      for (const edit of energyRampEdits(
+                        "enemy",
+                        target.turnNumber,
+                        battleInit.maxEnergyCap,
+                      )) {
+                        handleCommand({
+                          id: "DEBUG_EDIT",
+                          edit,
+                          sourceSurface: "phase-controls",
+                        });
+                      }
+                      // Mirror the handoff draw rule: the very first turn of the
+                      // game (turn 1) skips the draw; every later turn draws.
+                      if (target.turnNumber > 1) {
+                        handleCommand({
+                          id: "DEBUG_EDIT",
+                          edit: { kind: "DRAW_CARD", side: "enemy" },
+                          sourceSurface: "phase-controls",
+                        });
+                      }
+                    }
+                  }}
+                />
               </div>
             </div>
           </div>
           <div className={isOpponentHandRevealed ? "player-hand-zone compact" : "player-hand-zone"}>
-            <BattlePhaseFloatControls
-              state={reducerState.mutable}
-              onSetBattleFlow={(target) => {
-                handleCommand({
-                  id: "DEBUG_EDIT",
-                  edit: {
-                    kind: "SET_BATTLE_FLOW",
-                    phase: target.phase,
-                    activeSide: target.activeSide,
-                    turnNumber: target.turnNumber,
-                  },
-                  sourceSurface: "phase-controls",
-                });
-                // In AI mode, the human advancing the turn into the enemy's
-                // turn IS the enemy's start-of-turn handoff, so it must apply
-                // the enemy's energy ramp and draw — the symmetric counterpart
-                // to the AI's own end-turn handoff, which ramps the incoming
-                // player (see `buildEndTurnProposal` in use-battle-ai.ts).
-                // Without it the enemy is frozen at its opening energy and the
-                // planner, unable to afford any development, passes every turn.
-                // A forward player→enemy handoff keeps the turn number (see
-                // `advanceBattleTurnPair`); the backward variant decrements it,
-                // so the equality check excludes rewinds.
-                const isAiEnemyHandoff =
-                  aiMode &&
-                  reducerState.mutable.activeSide === "player" &&
-                  target.activeSide === "enemy" &&
-                  target.turnNumber === reducerState.mutable.turnNumber;
-                if (isAiEnemyHandoff) {
-                  for (const edit of energyRampEdits(
-                    "enemy",
-                    target.turnNumber,
-                    battleInit.maxEnergyCap,
-                  )) {
-                    handleCommand({
-                      id: "DEBUG_EDIT",
-                      edit,
-                      sourceSurface: "phase-controls",
-                    });
-                  }
-                  // Mirror the handoff draw rule: the very first turn of the
-                  // game (turn 1) skips the draw; every later turn draws.
-                  if (target.turnNumber > 1) {
-                    handleCommand({
-                      id: "DEBUG_EDIT",
-                      edit: { kind: "DRAW_CARD", side: "enemy" },
-                      sourceSurface: "phase-controls",
-                    });
-                  }
-                }
-              }}
-            />
             <BattleHandTray
               canInteract={canPlayerAct}
               compact={isOpponentHandRevealed}
