@@ -6,7 +6,7 @@ describe("parseRuntimeConfig", () => {
     expect(parseRuntimeConfig("")).toEqual({
       seedOverride: null,
       startInBattle: false,
-      aiMode: false,
+      aiMode: true,
       gameId: null,
       databaseMode: "emulator",
       debugJourneyShape: null,
@@ -16,15 +16,15 @@ describe("parseRuntimeConfig", () => {
   });
 
   describe("aiMode", () => {
-    it("returns true when ai=1", () => {
+    it("defaults to true when ai is absent or any value other than 0", () => {
+      expect(parseRuntimeConfig("").aiMode).toBe(true);
       expect(parseRuntimeConfig("?ai=1").aiMode).toBe(true);
+      expect(parseRuntimeConfig("?ai=true").aiMode).toBe(true);
+      expect(parseRuntimeConfig("?ai=").aiMode).toBe(true);
     });
 
-    it("returns false when ai is absent or not 1", () => {
-      expect(parseRuntimeConfig("").aiMode).toBe(false);
+    it("returns false only when ai=0", () => {
       expect(parseRuntimeConfig("?ai=0").aiMode).toBe(false);
-      expect(parseRuntimeConfig("?ai=true").aiMode).toBe(false);
-      expect(parseRuntimeConfig("?ai=").aiMode).toBe(false);
     });
   });
 

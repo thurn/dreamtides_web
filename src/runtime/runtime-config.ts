@@ -18,7 +18,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
     startInBattle: params.get("startInBattle") === "1",
-    aiMode: params.get("ai") === "1",
+    aiMode: params.get("ai") !== "0",
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
     debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),
