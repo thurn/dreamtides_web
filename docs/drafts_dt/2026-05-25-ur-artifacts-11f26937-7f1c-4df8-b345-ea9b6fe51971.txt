@@ -10,7 +10,7 @@ Dreaming Obelisk
 Pit Descender
 Tranquil Duelist
 Burning Revenant
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Gilded Catalyst
@@ -21,7 +21,7 @@ Epiphany Unfolded
 Lunar Hart
 Worldbreacher
 The Deathsworn
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Fathomscourge
 Smoldering Ancient

@@ -10,7 +10,7 @@ A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card 
 4. Lunar Hart — "▸Materialized, Dawn: Gain 2●"; cheap burst-energy accelerant for the turn-two dump.
 5. Emberfang — "▸Dawn: Gain 2●. The opponent gains 3⍟"; free 0● accelerant for the fastest builds that close before the tax matters.
 6. Sundown Ronin — "Warriors cost you 1● less"; flat curve discount on the whole warrior plan.
-7. Runebound Champion — 5● body that "costs 1● less for each allied warrior"; lands for a song on a developed board.
+7. Dreadlord — 5● body that "costs 1● less for each allied warrior"; lands for a song on a developed board.
 8. Dreadmount Sovereign — "costs 1● less for each allied warrior" and Support warriors get +3✦; cheap top-end body that doubles as an anthem.
 
 ## Cheap aggressive warrior bodies
@@ -25,7 +25,7 @@ A companion to [warrior-aggro.md](warrior-aggro.md), listing every CardsV2 card 
 ## Warrior tribal anthems and scalers
 
 15. Skyflame Commander — "Support – Supported characters have +1✦ for each allied warrior"; the headline anthem, especially behind a figment stack.
-16. Nocturne Strummer — "Support – Supported characters have +2✦" with a 1● reposition; flat pump that slides to the lane that needs it.
+16. Last Light Herald — "Support – Supported characters have +2✦" with a 1● reposition; flat pump that slides to the lane that needs it.
 17. Company Commander — "When you play a warrior, this character gains +1✦"; permanent growth that becomes a finisher on its own.
 18. Assault Leader — "▸Dawn: Each allied warrior gains +1✦"; team-wide pump that compounds every turn.
 19. Momentum's Edge — name warrior on ▸Materialized for a team-wide +1✦ that also counts itself.

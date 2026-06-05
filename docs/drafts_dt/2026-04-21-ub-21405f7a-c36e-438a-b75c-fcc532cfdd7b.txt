@@ -10,7 +10,7 @@ Tranquil Duelist
 Inspiring Templar
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Dread Arbiter
@@ -20,7 +20,7 @@ Starshot Gunner
 Marrow Mimic
 Standard Bearer
 Ossuary Overlord
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Rite of Summoning
 Spellweaver

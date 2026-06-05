@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { circlewatchSeer } from "./circlewatch-seer";
+import { ringwatcher } from "./ringwatcher";
 import type { AiCard, ForwardModel } from "../forward-model";
 
 function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
@@ -32,14 +32,14 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
   };
 }
 
-describe("Circlewatch Seer (#511)", () => {
+describe("Ringwatcher (#511)", () => {
   it("onMaterialized keeps an affordable top card on top", () => {
     const self = makeCard({ battleCardId: "seer", cardNumber: 511 });
     const top = makeCard({ battleCardId: "a", cardNumber: 512, energyCost: 4 });
     const next = makeCard({ battleCardId: "b", cardNumber: 513, energyCost: 5 });
     const model = makeModel({ aiMaxEnergy: 5, aiDeck: [top, next] });
 
-    circlewatchSeer.onMaterialized?.(model, self);
+    ringwatcher.onMaterialized?.(model, self);
 
     expect(model.aiDeck.map((c) => c.battleCardId)).toEqual(["a", "b"]);
   });
@@ -51,7 +51,7 @@ describe("Circlewatch Seer (#511)", () => {
     const next = makeCard({ battleCardId: "b", cardNumber: 512, energyCost: 4 });
     const model = makeModel({ aiMaxEnergy: 5, aiDeck: [top, next] });
 
-    circlewatchSeer.onMaterialized?.(model, self);
+    ringwatcher.onMaterialized?.(model, self);
 
     // Deck is a permutation; the unaffordable card moved to the bottom.
     expect(model.aiDeck.map((c) => c.battleCardId).sort()).toEqual(["a", "b"]);
@@ -61,7 +61,7 @@ describe("Circlewatch Seer (#511)", () => {
   it("play materializes the character into reserve, exhausted", () => {
     const self = makeCard({ battleCardId: "seer", cardNumber: 511, energyCost: 3 });
     const model = makeModel({ aiEnergy: 5, aiHand: [self] });
-    circlewatchSeer.play(model, self, null);
+    ringwatcher.play(model, self, null);
     expect(model.aiEnergy).toBe(2);
     expect(model.aiReserve.R0?.battleCardId).toBe("seer");
     expect(model.aiReserve.R0?.canChallengeThisTurn).toBe(false);

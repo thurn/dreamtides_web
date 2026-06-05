@@ -52,7 +52,7 @@ The Ringleader
 Dreaming Groves
 Across the Void
 Call of the Lost
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Dreamscatter
@@ -113,7 +113,7 @@ Luminwings
 Inverted Reflection
 Moonlit Voyage
 Sanctum Approach
-Glimpse of What Was
+Ancient Descent
 Key to the Moment
 From the Barrow
 Weblight Waif
@@ -142,7 +142,7 @@ Momentum of the Fallen
 Barrage Specialist
 Dawnblade Wanderer
 Broadcast Array
-Worlds Await
+Terminus
 The Waking Titan
 Duskshore Virtuoso
 Harvest the Forgotten

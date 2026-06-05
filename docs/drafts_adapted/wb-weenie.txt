@@ -1,4 +1,4 @@
-Flashpoint Detonation
+Unleash Ruin
 Wasteland Tamer
 Mirrorlight Architect
 Intermezzo Balladeer
@@ -29,7 +29,7 @@ Marrow Mimic
 Fangbound
 Gleamharvester
 Shoreline Penitent
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Duskreaper
 Sorrow Watcher
@@ -86,7 +86,7 @@ Veil Shatter
 Avatar of Cosmic Reckoning
 Demonbane
 Momentum's Edge
-Final Witness
+Soulreaver
 Boundless Wanderer
 Field Reverent
 Dread Arbiter

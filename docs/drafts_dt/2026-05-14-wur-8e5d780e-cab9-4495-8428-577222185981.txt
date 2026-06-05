@@ -11,7 +11,7 @@ Colossal Convergence
 Forsworn Champion
 Starbound Striker
 Reforged Automaton
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Burning Revenant
@@ -30,6 +30,6 @@ Junkfield Renegade
 Blight Weaver
 Momentum of the Fallen
 Lightningborn
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Lanternwood Scout

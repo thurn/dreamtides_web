@@ -4,7 +4,7 @@ Worldsong Behemoth
 Undying Fang
 Cloudmantle Ray
 Moonbound Wolf
-Marked Direwolf
+Verdant Pilgrim
 Ebonwing
 Ember Shepherd
 Frostbound Defiant
@@ -29,7 +29,7 @@ Dreamcatcher's Call
 Veil Shatter
 Celestial Reverie
 Luminous Ascent
-Flashpoint Detonation
+Unleash Ruin
 Crumbling Behemoth
 Beacon of Tomorrow
 Melodist of the Finale

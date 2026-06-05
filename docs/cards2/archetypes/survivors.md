@@ -49,7 +49,7 @@ absorb spark from the top down, so the army it builds is also a genuine board
 presence.
 
 The dedicated card-draw payoffs round this out. Deathwalker ("When an allied
-survivor is dissolved, draw a card") and Final Witness ("When a non-figment ally
+survivor is dissolved, draw a card") and Soulreaver ("When a non-figment ally
 is dissolved, draw a card") convert every loss into a card; Thundercatcher
 ("2●, Abandon a 1✦ ally: Draw 2 cards") turns the deck's surplus of 1✦ bodies
 and figments directly into pairs of cards.
@@ -149,7 +149,7 @@ and two abandons to land a 7✦ Unstoppable threat that scores its spark as ⍟.
 
 - Vertiginous Leap
 - Peak Plunder
-- Flashpoint Detonation
+- Unleash Ruin
 
 The deck benefits hugely from incidental disruption. Vertiginous Leap ("Discard
 a chosen card from the opponent's hand") is a clean 1● strike at the opponent's
@@ -158,7 +158,7 @@ A single well-aimed discard can be game-defining, and these small hindrances —
 strip a card, abandon a body, erode the deck — add up to a grinding, attritional
 advantage.
 
-Removal is cheap and recurrable. Flashpoint Detonation ("Dissolve an enemy with
+Removal is cheap and recurrable. Unleash Ruin ("Dissolve an enemy with
 cost 3● or less") clears most of the curve for 2●. Shatter the Frail ("Dissolve
 an enemy with 1✦ or less. Reclaim 1●") trades for small bodies and comes back
 from the void to do it again. Whisper of the Past ("An event in your void gains

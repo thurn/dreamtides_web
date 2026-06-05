@@ -77,18 +77,18 @@ function defaultOptions(overrides: Partial<PlannerOptions> = {}): PlannerOptions
 // card-model lookups (canPlay / play / triggers) exercise real behavior.
 
 function minstrel(): AiCard {
-  // #510 Twilight Minstrel — 2●, 1✦, Support +2✦.
-  return makeCard({ cardNumber: 510, name: "Twilight Minstrel", energyCost: 2, basePrintedSpark: 1 });
+  // #510 Nocturne Strummer — 2●, 1✦, Support +2✦.
+  return makeCard({ cardNumber: 510, name: "Nocturne Strummer", energyCost: 2, basePrintedSpark: 1 });
 }
 
 function colossus(): AiCard {
-  // #515 Meadowforged Colossus — 6●, 6✦, +2✦ per supporting ally.
-  return makeCard({ cardNumber: 515, name: "Meadowforged Colossus", energyCost: 6, basePrintedSpark: 6 });
+  // #515 Wildflower Colossus — 6●, 6✦, +2✦ per supporting ally.
+  return makeCard({ cardNumber: 515, name: "Wildflower Colossus", energyCost: 6, basePrintedSpark: 6 });
 }
 
 function direwolf(): AiCard {
-  // #512 Branded Direwolf — 4●, 4✦ vanilla.
-  return makeCard({ cardNumber: 512, name: "Branded Direwolf", energyCost: 4, basePrintedSpark: 4 });
+  // #512 Marked Direwolf — 4●, 4✦ vanilla.
+  return makeCard({ cardNumber: 512, name: "Marked Direwolf", energyCost: 4, basePrintedSpark: 4 });
 }
 
 // --- Tests -----------------------------------------------------------------
@@ -125,7 +125,7 @@ describe("planNextAction", () => {
       // A reserve challenger plus a full deployed rank: no legal move target.
       const ready = makeCard({
         cardNumber: 512,
-        name: "Branded Direwolf",
+        name: "Marked Direwolf",
         basePrintedSpark: 4,
         canChallengeThisTurn: true,
       });
@@ -146,7 +146,7 @@ describe("planNextAction", () => {
     it("a returned MOVE_CARD targets an empty, legal deploy slot from a ready reserve card", () => {
       const ready = makeCard({
         cardNumber: 512,
-        name: "Branded Direwolf",
+        name: "Marked Direwolf",
         basePrintedSpark: 4,
         canChallengeThisTurn: true,
       });
@@ -251,7 +251,7 @@ describe("planNextAction", () => {
   });
 
   describe("synergy ordering", () => {
-    it("plays Twilight Minstrel before Meadowforged Colossus when only one is affordable", () => {
+    it("plays Nocturne Strummer before Wildflower Colossus when only one is affordable", () => {
       // Energy for exactly ONE of the two: 2 (Minstrel) but not 6 (Colossus).
       // A deployed challenger in D0 makes the Minstrel's Support immediately
       // valuable (it lifts that front body, and would lift a future Colossus),
@@ -259,7 +259,7 @@ describe("planNextAction", () => {
       // listed AFTER the Colossus in hand.
       const challenger = makeCard({
         cardNumber: 512,
-        name: "Branded Direwolf",
+        name: "Marked Direwolf",
         basePrintedSpark: 4,
         canChallengeThisTurn: true,
       });
@@ -276,9 +276,9 @@ describe("planNextAction", () => {
 
   describe("within-turn setup then payoff (beam, not greedy)", () => {
     it("proposes the neutral setup play that enables a strongly positive completed line this turn", () => {
-      // Meadowforged Colossus (#515) is ALREADY on the AI board in a reserve
+      // Wildflower Colossus (#515) is ALREADY on the AI board in a reserve
       // slot, awakened (canChallengeThisTurn), so it can be repositioned this
-      // turn. Twilight Minstrel (#510) is in hand with exactly enough energy to
+      // turn. Nocturne Strummer (#510) is in hand with exactly enough energy to
       // play it. The board is otherwise empty and there are no opponent bodies.
       //
       // The winning completed line is:
@@ -301,7 +301,7 @@ describe("planNextAction", () => {
       // complete plan begins with the Minstrel play.
       const colossusOnBoard = makeCard({
         cardNumber: 515,
-        name: "Meadowforged Colossus",
+        name: "Wildflower Colossus",
         basePrintedSpark: 6,
         canChallengeThisTurn: true,
       });

@@ -12,7 +12,7 @@ Northlight Maestro
 Veil of the Wastes
 Seeker of the Radiant Wilds
 Starbound Striker
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Wired Duelist
@@ -29,6 +29,6 @@ Mirrorlight Architect
 Harvest the Forgotten
 Fractured Veil
 Rite of Summoning
-Flashpoint Detonation
+Unleash Ruin
 Shadow Reflection
 Roots of Rebirth

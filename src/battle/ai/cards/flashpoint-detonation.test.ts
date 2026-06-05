@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { flashpointBlast } from "./flashpoint-blast";
+import { flashpointDetonation } from "./flashpoint-detonation";
 import type { AiCard, AiOpponentBody, ForwardModel } from "../forward-model";
 
 function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
@@ -42,10 +42,10 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
   };
 }
 
-describe("Flashpoint Blast (#516)", () => {
+describe("Flashpoint Detonation (#516)", () => {
   it("canPlay is false with no opponent bodies", () => {
     const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
-    expect(flashpointBlast.canPlay(makeModel({ opponentBodies: [] }), self)).toBe(false);
+    expect(flashpointDetonation.canPlay(makeModel({ opponentBodies: [] }), self)).toBe(false);
   });
 
   it("canPlay is false without enough energy", () => {
@@ -54,7 +54,7 @@ describe("Flashpoint Blast (#516)", () => {
       aiEnergy: 1,
       opponentBodies: [makeBody({ battleCardId: "x", effectiveSpark: 3 })],
     });
-    expect(flashpointBlast.canPlay(model, self)).toBe(false);
+    expect(flashpointDetonation.canPlay(model, self)).toBe(false);
   });
 
   it("chooseTargets prefers a front-rank body when one exists", () => {
@@ -65,7 +65,7 @@ describe("Flashpoint Blast (#516)", () => {
         makeBody({ battleCardId: "front", rank: "front", slot: "D0", effectiveSpark: 2 }),
       ],
     });
-    expect(flashpointBlast.chooseTargets(model, self)?.targetBattleCardId).toBe("front");
+    expect(flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId).toBe("front");
   });
 
   it("chooseTargets picks the highest-spark body when none are front rank", () => {
@@ -76,7 +76,7 @@ describe("Flashpoint Blast (#516)", () => {
         makeBody({ battleCardId: "big", rank: "back", slot: "R1", effectiveSpark: 7 }),
       ],
     });
-    expect(flashpointBlast.chooseTargets(model, self)?.targetBattleCardId).toBe("big");
+    expect(flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId).toBe("big");
   });
 
   it("play removes exactly the targeted body and bumps opponentVoidCount", () => {
@@ -90,7 +90,7 @@ describe("Flashpoint Blast (#516)", () => {
       opponentVoidCount: 0,
     });
 
-    flashpointBlast.play(model, self, { targetBattleCardId: "front" });
+    flashpointDetonation.play(model, self, { targetBattleCardId: "front" });
 
     expect(model.aiEnergy).toBe(3);
     expect(model.opponentBodies.map((b) => b.battleCardId)).toEqual(["keep"]);

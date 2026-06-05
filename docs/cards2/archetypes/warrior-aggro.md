@@ -54,7 +54,7 @@ front-rank warriors it sits behind by the full warrior count, so on a wide board
 a single Commander can swing a lane by several ✦. Because a Support benefit that
 lands on a figment stack applies to **each** figment in the stack, the same
 Commander behind a stack of warrior figments adds its bonus per figment — the
-anthem and the figment makers are built for each other. **Nocturne Strummer**
+anthem and the figment makers are built for each other. **Last Light Herald**
 backs it up with a flat "Support – Supported characters have +2✦," plus
 "❖ – 1●: Move this character to an unoccupied character position" so it can slide
 behind whichever lane needs the boost during the Day phase.
@@ -105,7 +105,7 @@ Night phase opens, turning a coordinated front rank into a much bigger ⍟ swing
 while challenging" means the opponent's blockers trade nothing — your warriors
 win or stalemate every defended lane and keep coming. **Sundown Ronin** taxes
 from the curve angle ("Warriors cost you 1● less"), and the top-end payoff
-slot is filled by **Runebound Champion** — a 5● body that "costs 1● less for each
+slot is filled by **Dreadlord** — a 5● body that "costs 1● less for each
 allied warrior," landing for a song on a developed board.
 
 ## Card flow and grinding

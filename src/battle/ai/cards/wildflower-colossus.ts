@@ -5,12 +5,12 @@ import type { StarterCardModel } from "./index";
 import { characterCanPlay, playCharacterToReserve } from "./helpers";
 
 /**
- * #515 Meadowforged Colossus (Character, 6●, 6✦) — "This character has +2✦ for
+ * #515 Wildflower Colossus (Character, 6●, 6✦) — "This character has +2✦ for
  * each supporting ally." (`battle_ai.md` §"The AI Deck"). A finisher/payoff:
  * the buff scales with how many occupied reserve slots support the deploy slot
  * it stands in.
  */
-export const meadowforgedColossus: StarterCardModel = {
+export const wildflowerColossus: StarterCardModel = {
   cardNumber: 515,
   canPlay(model: ForwardModel, self: AiCard): boolean {
     return characterCanPlay(model, self);

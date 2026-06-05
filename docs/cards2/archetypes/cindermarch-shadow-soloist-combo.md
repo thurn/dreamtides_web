@@ -171,7 +171,7 @@ that leaves play, and the Storm and Abandon payoffs read the same churn. Fleetin
 Reunion and Call of the Lost cash a long awakened turn into points or a wide
 ember board respectively.
 
-The deterministic finishes close it outright. Worlds Await, a 1● event, reads "If
+The deterministic finishes close it outright. Terminus, a 1● event, reads "If
 you have no cards in your deck, you win the game," so a loop that draws or erodes
 your own deck to empty — Echo Technician erodes 4 on ▸Materialized and lets you
 replay events from the void, and Speaker for the Forgotten erodes and hands back
@@ -227,7 +227,7 @@ Ashes), figment producers (Voidsire, Twilight Troubadour, Forge-Twin), and the
 standing-awaken statics (Pyrestone Avatar, Pinnacle Ascendant, Lanternhearted) so
 the board arrives ready to act even when the full loop is not assembled. Finally,
 lock in a close — a drain off the abandon churn, a Storm payoff in Call of the
-Lost or Fleeting Reunion, or a deterministic finish in Worlds Await or Paradox
+Lost or Fleeting Reunion, or a deterministic finish in Terminus or Paradox
 Enforcer.
 
 The deck plays as an engine that snowballs: drop an awakener, deploy a producer
@@ -237,6 +237,6 @@ assemble the pieces, since every awaken builds a real front rank as a byproduct.
 The win comes from a turn where the loop turns over enough times to bury the
 opponent — unbounded energy poured into a Storm count, a wide awakened figment
 board pushed across the front rank for ⍟, a drain dripping points off every
-abandoned body, or a deck-out into Worlds Await. Stay flexible about which close
+abandoned body, or a deck-out into Terminus. Stay flexible about which close
 you ride; the awaken layer is the constant, and the payoff is whichever shell you
 drafted around it.

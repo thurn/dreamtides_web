@@ -298,7 +298,7 @@ function dissolveOpponentSlot(side, slot) {
 function fireDissolved(side, card) {
   const cardModel = starterCardModels.get(card.cardNumber);
   if (cardModel?.onDissolved !== undefined) {
-    // onDissolved (e.g. Last Witness: draw a card) mutates the OWNER's zones.
+    // onDissolved (e.g. Final Witness: draw a card) mutates the OWNER's zones.
     // Run it against a one-side projection, then write drawn zones back.
     const view = ownBoardModel(side);
     cardModel.onDissolved(view, card);
@@ -438,7 +438,7 @@ function startTurn(side, turnNumber) {
   side.maxEnergy = value;
   side.energy = value;
 
-  // onDawn for every card on the board (Sigilsworn Champion: gain 1 score).
+  // onDawn for every card on the board (Runebound Champion: gain 1 score).
   for (const slot of DEPLOY_SLOT_IDS) {
     fireDawn(side, side.deployed[slot]);
   }
@@ -565,7 +565,7 @@ function playGame(aKind, bKind, seed) {
     const side = world[active];
     startTurn(side, turnNumber);
 
-    // Win can trigger on Dawn (Sigilsworn Champion).
+    // Win can trigger on Dawn (Runebound Champion).
     if (side.score >= SCORE_TO_WIN) {
       return result(world, active, turnNumber, decisionMs);
     }

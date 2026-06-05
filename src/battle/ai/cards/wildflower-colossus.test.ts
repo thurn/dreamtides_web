@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { meadowforgedColossus } from "./meadowforged-colossus";
+import { wildflowerColossus } from "./wildflower-colossus";
 import { buildSupportContribution } from "./support-contribution";
 import type { AiCard, ForwardModel } from "../forward-model";
 
@@ -33,14 +33,14 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
   };
 }
 
-describe("Meadowforged Colossus (#515)", () => {
+describe("Wildflower Colossus (#515)", () => {
   it("selfStaticSpark returns 0 when not deployed", () => {
     const self = makeCard({ battleCardId: "colossus", cardNumber: 515 });
     // Sitting in reserve, not deployed.
     const model = makeModel({
       aiReserve: { R0: self, R1: null, R2: null, R3: null, R4: null },
     });
-    expect(meadowforgedColossus.selfStaticSpark?.(model, self)).toBe(0);
+    expect(wildflowerColossus.selfStaticSpark?.(model, self)).toBe(0);
   });
 
   it("selfStaticSpark returns 0 when deployed with no supporters", () => {
@@ -48,7 +48,7 @@ describe("Meadowforged Colossus (#515)", () => {
     const model = makeModel({
       aiDeployed: { D1: self, D0: null, D2: null, D3: null },
     });
-    expect(meadowforgedColossus.selfStaticSpark?.(model, self)).toBe(0);
+    expect(wildflowerColossus.selfStaticSpark?.(model, self)).toBe(0);
   });
 
   it("selfStaticSpark returns 2 per occupied supporting reserve slot", () => {
@@ -60,7 +60,7 @@ describe("Meadowforged Colossus (#515)", () => {
       aiDeployed: { D0: null, D1: self, D2: null, D3: null },
       aiReserve: { R0: null, R1: supA, R2: supB, R3: null, R4: null },
     });
-    expect(meadowforgedColossus.selfStaticSpark?.(model, self)).toBe(4);
+    expect(wildflowerColossus.selfStaticSpark?.(model, self)).toBe(4);
   });
 
   it("buildSupportContribution credits the Colossus its self-static", () => {
@@ -77,7 +77,7 @@ describe("Meadowforged Colossus (#515)", () => {
   it("play materializes the character into reserve, exhausted", () => {
     const self = makeCard({ battleCardId: "colossus", cardNumber: 515, energyCost: 6 });
     const model = makeModel({ aiEnergy: 6, aiHand: [self] });
-    meadowforgedColossus.play(model, self, null);
+    wildflowerColossus.play(model, self, null);
     expect(model.aiEnergy).toBe(0);
     expect(model.aiReserve.R0?.battleCardId).toBe("colossus");
     expect(model.aiReserve.R0?.canChallengeThisTurn).toBe(false);

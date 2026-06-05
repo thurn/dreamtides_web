@@ -18,7 +18,7 @@ Immolate and Rise
 Peak Plunder
 Harvester of Despair
 Scrapyard Custodian
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Duskreaper
 Sorrow Watcher
@@ -76,7 +76,7 @@ Avatar of Cosmic Reckoning
 Demonbane
 Aspiring Guardian
 Momentum's Edge
-Final Witness
+Soulreaver
 Boundless Wanderer
 Field Reverent
 Dread Arbiter

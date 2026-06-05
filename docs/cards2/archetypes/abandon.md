@@ -107,7 +107,7 @@ abandons as spark and then cashes the whole pile as ⍟ when it finally dies
 itself — feed it into your own outlet for the payout.
 
 The card-draw payoffs keep the engine fed instead of pointed at the opponent.
-Sunset Chronicler ("When an ally is dissolved, draw a card") and Final Witness
+Sunset Chronicler ("When an ally is dissolved, draw a card") and Soulreaver
 ("When a non-figment ally is dissolved, draw a card") turn every loss into a
 card, while Deathwalker ("When an allied survivor is dissolved, draw a card") and
 Scuttled Fortune ("Draw a card for each ally that dissolved this turn") reward a

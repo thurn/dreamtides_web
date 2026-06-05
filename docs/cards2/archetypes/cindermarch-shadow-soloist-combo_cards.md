@@ -12,7 +12,7 @@ A companion to [cindermarch-shadow-soloist-combo.md](cindermarch-shadow-soloist-
 ## Awaken / untap engines and redundancy
 
 5. Lanternhearted — enters awakened, "☪: Awaken an ally", Reclaim 1●; the on-demand spot untapper, recurs cheaply.
-6. Marked Direwolf — "☪: Awaken an ally" is a redundant cheap copy of Lanternhearted's untap.
+6. Verdant Pilgrim — "☪: Awaken an ally" is a redundant cheap copy of Lanternhearted's untap.
 7. Mother of Flames — Awakened, "☪, Return an ally to hand: Awaken an ally" is another redundant awakener that also resets a materialize trigger.
 8. Moonbound Wolf — Awakened, "☪, Return an ally to hand: Trigger the 'Dawn' ability of an allied spirit animal" re-fires a Dawn engine and recycles a body.
 9. Rootbound Witness — Awakened, "Abandon this character: Allied characters gain awakened this turn" is a one-shot mass untap that primes the loop.
@@ -76,7 +76,7 @@ A companion to [cindermarch-shadow-soloist-combo.md](cindermarch-shadow-soloist-
 46. Starbound Striker — "▸Dissolved: Return another warrior from your void to your hand" recurs bodies into the next cycle.
 47. Tranquil Duelist — Vengeful, "▸Dissolved: Return another warrior from your void to your hand" recurs bodies for the loop.
 48. Dream Garden Visitor — "Once per turn, you may play a warrior from your void" plus an erode Dawn, refueling and self-milling.
-49. Echo Technician — "▸Materialized: Erode 4" and "☪: You may play an event from your void"; mills toward Worlds Await and replays the event chain.
+49. Echo Technician — "▸Materialized: Erode 4" and "☪: You may play an event from your void"; mills toward Terminus and replays the event chain.
 50. Pathwalker — "Abandon this character: Return an event from your void to your hand" and "▸Dawn: erode 3 from void"; recurs events and feeds the deck-out.
 51. Soulkindler — "If this card is in your void, allied characters have +1✦"; a passive team pump turning the wide awakened board into scored spark.
 
@@ -84,9 +84,9 @@ A companion to [cindermarch-shadow-soloist-combo.md](cindermarch-shadow-soloist-
 
 52. Call of the Lost — "For each card you've played this turn, materialize a 1✦ ember figment with awakened", Reclaim 2●; the Storm/Soloist board-flood payoff.
 53. Fleeting Reunion — "Gain X⍟. Reclaim – Discard X cards" cashes a flooded late-chain hand straight into points.
-54. Worlds Await — "If you have no cards in your deck, you win the game"; the deck-out finish the erode loops enable.
+54. Terminus — "If you have no cards in your deck, you win the game"; the deck-out finish the erode loops enable.
 55. Paradox Enforcer — 7✦ Unstoppable playable from the void for "banish 7 cards from your void"; a void-flood finisher that scores its full spark.
-56. Speaker for the Forgotten — "5●: Erode 1. That card gains reclaim 0●" mills the deck toward Worlds Await while handing back free reclaims.
+56. Speaker for the Forgotten — "5●: Erode 1. That card gains reclaim 0●" mills the deck toward Terminus while handing back free reclaims.
 57. Wandering Archivist — "2●, ☪: loot" and "When you discard a card, gain 1⍟"; a repeatable ☪ drain off the loot triggers.
 58. Rubble Diviner — "▸Challenge: pay 2● and discard to draw two" turns the awakened board's challenges into card and discard fuel for the drain.
-59. Runebound Champion — costs 1● less per allied warrior; a free 5✦ beater the wide warrior loop deploys to close.
+59. Dreadlord — costs 1● less per allied warrior; a free 5✦ beater the wide warrior loop deploys to close.

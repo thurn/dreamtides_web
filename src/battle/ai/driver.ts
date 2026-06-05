@@ -17,10 +17,10 @@ import type { BattleSide, DeploySlotId, ReserveSlotId } from "../types";
  *
  * Card-number families (the AI deck is fixed and hand-encoded):
  * - 510–515: characters. Playing one drops a body into a reserve slot.
- * - 516: Flashpoint Blast — dissolves an enemy body.
- * - 517: Glimpse of the Past — draws (Foresee reorder is interactive).
- * - 518: Herald's Sign — Discover (interactive pick of three).
- * - 519: Distant Worlds — empowers an ally (+3✦).
+ * - 516: Flashpoint Detonation — dissolves an enemy body.
+ * - 517: Glimpse of What Was — draws (Foresee reorder is interactive).
+ * - 518: Sign of Arrival — Discover (interactive pick of three).
+ * - 519: Worlds Await — empowers an ally (+3✦).
  */
 export function actionToCommands(action: PlannedAction, aiSide: BattleSide): BattleCommand[] {
   switch (action.kind) {
@@ -99,7 +99,7 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
   const targetId = action.targets?.targetBattleCardId ?? null;
   switch (self.cardNumber) {
     case 516: {
-      // Flashpoint Blast: dissolve the enemy body. The target is the opponent's
+      // Flashpoint Detonation: dissolve the enemy body. The target is the opponent's
       // card, so it goes to the OPPONENT's void.
       if (targetId !== null) {
         commands.push(
@@ -116,20 +116,20 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
       break;
     }
     case 517: {
-      // Glimpse of the Past: draw a card. The optional Foresee deck reorder is
+      // Glimpse of What Was: draw a card. The optional Foresee deck reorder is
       // interactive and is surfaced for approval at the proposal layer (Task
       // 5.4); the driver emits only the deterministic draw.
       commands.push(edit({ kind: "DRAW_CARD", side: aiSide }, aiSide));
       break;
     }
     case 518: {
-      // Herald's Sign: Discover is interactive (the human/AI picks one of three).
+      // Sign of Arrival: Discover is interactive (the human/AI picks one of three).
       // The discovered card is resolved at the proposal layer (Task 5.4); the
       // driver emits only the energy + void edits.
       break;
     }
     case 519: {
-      // Distant Worlds: grant +3✦ to an ally. `SET_CARD_SPARK_DELTA` is an
+      // Worlds Await: grant +3✦ to an ally. `SET_CARD_SPARK_DELTA` is an
       // ABSOLUTE write, so producing it requires the ally's current sparkDelta,
       // which lives only in live battle state. The hook (Task 5.4) computes the
       // new delta (current + 3) against live card state and applies the spark

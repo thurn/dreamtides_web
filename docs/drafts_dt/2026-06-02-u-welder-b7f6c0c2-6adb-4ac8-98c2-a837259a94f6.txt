@@ -9,7 +9,7 @@ Nineborn Specter
 Burning Revenant
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Sundown Ronin
@@ -21,7 +21,7 @@ Epiphany Unfolded
 Ochre Prospector
 Worldbreacher
 Standard Bearer
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Fathomscourge
 Smoldering Ancient

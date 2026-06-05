@@ -123,16 +123,16 @@ tractable.
 
 | Card | Cost | ✦ | Type / Subtype | Text | Role |
 | --- | --- | --- | --- | --- | --- |
-| Twilight Minstrel | 2● | 1 | Character / Musician | Support – Supported characters have +2✦. | Back-rank anchor; buffs front rank |
-| Circlewatch Seer | 3● | 1 | Character / Visionary | ▸Materialized: Foresee 1. | Filtering body |
-| Branded Direwolf | 4● | 4 | Character / Spirit Animal | (vanilla) | Efficient beater |
-| Sigilsworn Champion | 5● | 3 | Character / Warrior | ▸Dawn: Gain 1⍟. | Inevitability engine |
-| Last Witness | 3● | 2 | Character / Visitor | ▸Dissolved: Draw a card. | Value trader |
-| Meadowforged Colossus | 6● | 6 | Character / Synth | This character has +2✦ for each supporting ally. | Finisher / payoff |
-| Flashpoint Blast | 2● | — | Event | Dissolve an enemy with cost 3● or less. | Removal |
-| Glimpse of the Past | 1● | — | Event | Draw a card, then foresee 1. | Cantrip / dig |
-| Herald's Sign | 2● | — | Event | Discover a character. | Toolbox / card advantage |
-| Distant Worlds | 1● | — | Event | Give an ally +3✦. | Proactive pump |
+| Nocturne Strummer | 2● | 1 | Character / Musician | Support – Supported characters have +2✦. | Back-rank anchor; buffs front rank |
+| Ringwatcher | 3● | 1 | Character / Visionary | ▸Materialized: Foresee 1. | Filtering body |
+| Marked Direwolf | 4● | 4 | Character / Spirit Animal | (vanilla) | Efficient beater |
+| Runebound Champion | 5● | 3 | Character / Warrior | ▸Dawn: Gain 1⍟. | Inevitability engine |
+| Final Witness | 3● | 2 | Character / Visitor | ▸Dissolved: Draw a card. | Value trader |
+| Wildflower Colossus | 6● | 6 | Character / Synth | This character has +2✦ for each supporting ally. | Finisher / payoff |
+| Flashpoint Detonation | 2● | — | Event | Dissolve an enemy with cost 3● or less. | Removal |
+| Glimpse of What Was | 1● | — | Event | Draw a card, then foresee 1. | Cantrip / dig |
+| Sign of Arrival | 2● | — | Event | Discover a character. | Toolbox / card advantage |
+| Worlds Await | 1● | — | Event | Give an ally +3✦. | Proactive pump |
 
 **The three simplifying properties:**
 
@@ -142,7 +142,7 @@ tractable.
   phase.
 - **Zero activated abilities.** Nothing in the pool is a "Cost: Effect" ability
   the AI must consider activating. The only abilities are two static/support
-  effects (Twilight Minstrel, Meadowforged Colossus) and three triggers
+  effects (Nocturne Strummer, Wildflower Colossus) and three triggers
   (`▸Materialized`, `▸Dawn`, `▸Dissolved`).
 - **The deck is fixed and tiny.** Six distinct characters and four distinct
   events. Every card's behavior can be hand-encoded exactly, and the decision
@@ -154,10 +154,10 @@ is three copies of each card (30 cards); the exact counts are a tuning knob (see
 [Open Questions](#open-questions)).
 
 The deck's strategic shape, which the evaluation weights should reflect:
-cheap bodies and a Support package (Twilight Minstrel behind Meadowforged
-Colossus or any front-line body), one piece of removal (Flashpoint Blast), card
-selection (Glimpse, Circlewatch, Herald's Sign), a proactive pump (Distant
-Worlds), and a slow inevitability source (Sigilsworn Champion's ▸Dawn points).
+cheap bodies and a Support package (Nocturne Strummer behind Meadowforged
+Colossus or any front-line body), one piece of removal (Flashpoint Detonation), card
+selection (Glimpse, Circlewatch, Sign of Arrival), a proactive pump (Distant
+Worlds), and a slow inevitability source (Runebound Champion's ▸Dawn points).
 
 ## Design Principles
 
@@ -262,7 +262,7 @@ by both sides (the human benefits from it too).
   describes the outcome lane-by-lane for display, and the `BattleDebugEdit[]` —
   an `ADJUST_SCORE` for the points scored plus a `MOVE_CARD_TO_ZONE`-to-void per
   dissolved body — are the edits that commit the outcome (firing `▸Dissolved`,
-  e.g. Last Witness) once the human approves. Effective spark here must include
+  e.g. Final Witness) once the human approves. Effective spark here must include
   Support/static bonuses (see [The Forward Model](#the-forward-model)). The
   resolver produces a *proposal* and defers anything it cannot fully model to a
   manual step; see
@@ -381,7 +381,7 @@ times per turn. `forward-model.ts` provides a cheap, mutable projection of
   bonuses**, because the engine does not apply these. The model implements the
   support-adjacency map from `battle_rules.md` (B0→F0; B1→F0,F1; B2→F1,F2;
   B3→F2,F3; B4→F3, i.e. `reserve` slot → up-to-two `deployed` slots) so that
-  Twilight Minstrel's "+2✦ to supported" and Meadowforged Colossus's "+2✦ per
+  Nocturne Strummer's "+2✦ to supported" and Wildflower Colossus's "+2✦ per
   supporting ally" produce correct numbers.
 
 The forward model is a plain data structure with pure mutators, deliberately
@@ -415,7 +415,7 @@ interface StarterCardModel {
   // Trigger hooks the planner/judgment fire at the right time.
   onMaterialized?(model: ForwardModel, self: AiCard): void;   // Circlewatch
   onDawn?(model: ForwardModel, self: AiCard): void;           // Sigilsworn
-  onDissolved?(model: ForwardModel, self: AiCard): void;      // Last Witness
+  onDissolved?(model: ForwardModel, self: AiCard): void;      // Final Witness
   // Static contribution to a board the planner is evaluating.
   staticSparkContribution?(model: ForwardModel, self: AiCard): SparkEdit[];
   // Optional explicit value hint feeding the evaluation function.
@@ -425,31 +425,31 @@ interface StarterCardModel {
 
 Per-card notes that the models encode:
 
-- **Twilight Minstrel / Meadowforged Colossus** — static spark via
+- **Nocturne Strummer / Wildflower Colossus** — static spark via
   `staticSparkContribution`, resolved through the support-adjacency map. The
   Colossus wants supporters behind its front-rank slot; the planner's reposition
   stage accounts for that adjacency.
-- **Circlewatch Seer / Glimpse of the Past** — Foresee/draw selection: keep cards
+- **Ringwatcher / Glimpse of What Was** — Foresee/draw selection: keep cards
   that advance the current plan and curve, bin the rest. Modeled as a deck
   reorder on the forward model; the real command is `REORDER_DECK` (plus
   `DRAW_CARD` for Glimpse).
-- **Herald's Sign (Discover a character)** — choose the best of three offered by
+- **Sign of Arrival (Discover a character)** — choose the best of three offered by
   role need (a front-rank body, a missing supporter, curve fit). Because Discover
   reveals three from the AI's own Starter deck, the candidate set is known and
   scored with the same evaluation used elsewhere.
-- **Flashpoint Blast (Dissolve enemy, cost ≤ 3●)** — target selection over enemy
+- **Flashpoint Detonation (Dissolve enemy, cost ≤ 3●)** — target selection over enemy
   bodies: prefer removing a blocker before the AI's challenge, or the highest
   expected-points threat the filter allows. Opponent cost is read from the
   abstract body when known; unknown-cost bodies are treated conservatively.
-- **Distant Worlds (+3✦ to an ally)** — standard timing means it cannot be an
+- **Worlds Await (+3✦ to an ally)** — standard timing means it cannot be an
   instant combat trick; the AI plays it proactively to push a challenger past a
   likely blocker, grow Meadowforged toward lethal, or set up a favorable trade.
-- **Sigilsworn Champion (▸Dawn: gain 1⍟)** — a per-turn point source; its value
+- **Runebound Champion (▸Dawn: gain 1⍟)** — a per-turn point source; its value
   rises the longer the AI expects the game to run, so the evaluation rewards
   keeping it alive in the back rank.
-- **Last Witness (▸Dissolved: draw)** — trades up; the evaluation discounts the
+- **Final Witness (▸Dissolved: draw)** — trades up; the evaluation discounts the
   downside of losing it in combat because the trade replaces it with a card.
-- **Branded Direwolf** — vanilla 4✦ body; pure tempo, the cleanest challenger.
+- **Marked Direwolf** — vanilla 4✦ body; pure tempo, the cleanest challenger.
 
 This registry is the only place card-specific logic lives. Adding a card to the
 AI deck later means adding one `StarterCardModel`.
@@ -464,7 +464,7 @@ of view (higher is better). It is a weighted sum of interpretable terms:
 | Score differential | `aiScore - playerScore`, weighted heavily; 25 wins. |
 | Board spark | Effective spark of AI bodies minus opponent bodies, with front-rank/un-exhausted spark weighted above back-rank. |
 | Expected next-Challenge points | Estimated spark that will score unblocked given the committed front rank and the opponent-response model. |
-| Card advantage | AI hand size, plus "virtual" cards from active engines (Last Witness, Glimpse, Herald's Sign, Circlewatch). |
+| Card advantage | AI hand size, plus "virtual" cards from active engines (Final Witness, Glimpse, Sign of Arrival, Circlewatch). |
 | Tempo / energy waste | Small penalty for unspent energy. |
 | Inevitability | Bonus for live recurring sources (Sigilsworn ▸Dawn) scaled by expected remaining turns. |
 | Risk exposure | Penalty for over-committing fragile bodies into likely removal/blocks (informed by the opponent model). |
@@ -485,7 +485,7 @@ map one-to-one onto the existing `BattleAiDecisionStage` enum:
 
 1. **`character`** — choose which characters to play from hand (materialize into
    the back rank, exhausted), in cost order, paying energy. Synergy ordering
-   matters here (e.g. play Twilight Minstrel before Meadowforged so the Colossus
+   matters here (e.g. play Nocturne Strummer before Meadowforged so the Colossus
    evaluates with its supporter present).
 2. **`reposition`** — arrange the board: which un-exhausted characters to push
    from `reserve` to `deployed` to become challengers, and how to place
@@ -592,8 +592,8 @@ The loop, for the AI's turn:
 1. The planner computes the AI's next best action from the live state
    (receding-horizon; see [The Planner](#the-planner)).
 2. `BattleAiProposalBar` renders it as one proposal: a plain-language description
-   ("Play Branded Direwolf to the back rank"; "Dissolve your 3✦ body with
-   Flashpoint Blast"; "Declare Meadowforged Colossus as a challenger"), the
+   ("Play Marked Direwolf to the back rank"; "Dissolve your 3✦ body with
+   Flashpoint Detonation"; "Declare Wildflower Colossus as a challenger"), the
    referenced card(s), and the AI's short rationale from the
    `BattleAiChoiceTrace`.
 3. The human clicks **Approve**, **Reject**, or **End AI Turn**:
@@ -652,38 +652,38 @@ work behind a single proposal, computed when the previous one is resolved.
 
 To make the pieces concrete, here is a representative enemy turn. Suppose it is
 the AI's turn 4 (max energy 5 under the default ramp). The AI's hand holds
-Branded Direwolf (4●), Twilight Minstrel (2●), Flashpoint Blast (2●), Distant
-Worlds (1●). On the board it already has a Meadowforged Colossus in `reserve`
+Marked Direwolf (4●), Nocturne Strummer (2●), Flashpoint Detonation (2●), Distant
+Worlds (1●). On the board it already has a Wildflower Colossus in `reserve`
 (played last turn, now awakened) and the player has a lone 3✦ body in their front
 rank.
 
-1. **Proposal: play Twilight Minstrel (2●).** Internally the planner weighs
-   Branded Direwolf (4●) against Twilight Minstrel (2●) and prefers Minstrel
+1. **Proposal: play Nocturne Strummer (2●).** Internally the planner weighs
+   Marked Direwolf (4●) against Nocturne Strummer (2●) and prefers Minstrel
    first, because its Support lifts the Colossus and any front-rank body by +2✦.
-   It surfaces "Play Twilight Minstrel to the back rank." You click **Approve**;
+   It surfaces "Play Nocturne Strummer to the back rank." You click **Approve**;
    the materialization commits and the planner re-plans.
-2. **Proposal: Flashpoint Blast on your 3✦ body.** With the Minstrel down, the
+2. **Proposal: Flashpoint Detonation on your 3✦ body.** With the Minstrel down, the
    next-best action is removal — dissolving the player's only defender raises the
    AI's expected Challenge points. The proposal names the exact target. You click
    **Approve** (or **Reject** if you know it should fizzle — say the body has Veil
    you have not revealed).
-3. **Proposal: declare Meadowforged Colossus as a challenger.** The awakened
+3. **Proposal: declare Wildflower Colossus as a challenger.** The awakened
    Colossus is pushed to `deployed`, with the Minstrel placed in a supporting
    `reserve` slot. The proposal shows its computed effective spark — 6 base + 2
    per supporting ally + 2 from Minstrel's Support, via the adjacency map. You
    **Approve**.
-4. **Proposal: Distant Worlds (+3✦) on the Colossus.** With the defender gone the
+4. **Proposal: Worlds Await (+3✦) on the Colossus.** With the defender gone the
    opponent model expects no block, so the extra spark converts straight to
    points. You **Approve**.
 5. **Proposal: End Turn.** Approving it declares challengers and yields your Dusk
    window (position a defender, play a Fast card). The judgment resolver then
-   proposes the outcome — "Meadowforged Colossus scores N⍟, no defenders" — which
+   proposes the outcome — "Wildflower Colossus scores N⍟, no defenders" — which
    you **Approve**. Only then does the score commit; the spine checks the win
    condition, ramps energy, and hands the turn back via `SET_BATTLE_FLOW`.
 
 Each approved step emits a `BattleAiChoiceTrace`, so the log reads as a legible
-sequence — "play Twilight Minstrel → dissolve your 3✦ body with Flashpoint Blast →
-push Meadowforged Colossus to challenge → pump it with Distant Worlds → pass" —
+sequence — "play Nocturne Strummer → dissolve your 3✦ body with Flashpoint Detonation →
+push Wildflower Colossus to challenge → pump it with Worlds Await → pass" —
 and every entry in it was something you clicked to allow.
 
 ## Codebase Integration

@@ -3,12 +3,13 @@ import type { StarterCardModel } from "./index";
 import { characterCanPlay, playCharacterToReserve } from "./helpers";
 
 /**
- * #513 Sigilsworn Champion (Character, 5●, 3✦) — "▸Dawn: Gain 1⍟."
- * (`battle_ai.md` §"The AI Deck"). An inevitability engine: each Dawn it
- * scores a point, so its value rises the longer the game runs.
+ * #510 Nocturne Strummer (Character, 2●, 1✦) — "Support – Supported characters
+ * have +2✦." (`battle_ai.md` §"The AI Deck"). A back-rank anchor: it grants a
+ * flat +2✦ to every front ally in the deploy slots its reserve slot supports,
+ * resolved through {@link buildSupportContribution}.
  */
-export const sigilswornChampion: StarterCardModel = {
-  cardNumber: 513,
+export const nocturneStrummer: StarterCardModel = {
+  cardNumber: 510,
   canPlay(model: ForwardModel, self: AiCard): boolean {
     return characterCanPlay(model, self);
   },
@@ -18,7 +19,7 @@ export const sigilswornChampion: StarterCardModel = {
   play(model: ForwardModel, self: AiCard): void {
     playCharacterToReserve(model, self);
   },
-  onDawn(model: ForwardModel): void {
-    model.aiScore += 1;
+  supportSpark(): number {
+    return 2;
   },
 };

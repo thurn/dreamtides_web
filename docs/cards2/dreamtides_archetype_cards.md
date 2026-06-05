@@ -31,7 +31,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 15. Stoneborn Eternal
 16. Seedling Sage
 17. Blazing Emberwing
-18. Marked Direwolf
+18. Verdant Pilgrim
 19. Moonbound Wolf
 20. Dreamvale Monarch
 21. Celestial Reverie
@@ -107,7 +107,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 2. Wolfbond Chieftain
 3. Emberfang
 4. Lunar Hart
-5. Nocturne Strummer
+5. Last Light Herald
 6. Skyflame Commander
 7. Assault Leader
 8. Shadow Reflection
@@ -127,7 +127,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 22. Ossuary Overlord
 23. Spent Courier
 24. Key to the Moment
-25. Runebound Champion
+25. Dreadlord
 26. Echo Technician
 27. Dream Garden Visitor
 28. Flamestride Rider
@@ -161,7 +161,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 10. Path to Redemption
 11. Duskwall Delver
 12. Thundercatcher
-13. Final Witness
+13. Soulreaver
 14. Infernal Ascendant
 15. Volcanic Channeler
 16. Soulrender
@@ -204,7 +204,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 53. Momentum's Edge
 54. Sky Voyager
 55. Voidcaller
-56. Flashpoint Detonation
+56. Unleash Ruin
 
 ## Midrange and Value
 
@@ -315,7 +315,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 32. Sunset Chronicler
 33. Scuttled Fortune
 34. Deathwalker
-35. Final Witness
+35. Soulreaver
 36. Winterbough Monk
 37. Ashwalker
 38. Borrowed Minutes
@@ -458,7 +458,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 40. Field Reverent
 41. Signal Resonant
 42. Silent Avenger
-43. Worlds Await
+43. Terminus
 44. Fathomless Maw
 45. Kindlehorn
 46. Silent Gatherer
@@ -475,7 +475,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 6. Melodist of the Finale
 7. Cindermarch
 8. Conduit of Resonance
-9. Worlds Await
+9. Terminus
 10. Hatching Ground
 11. Mountainwatch Alpha
 12. Bloomweaver
@@ -489,7 +489,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 20. Seedling Sage
 21. Blazing Emberwing
 22. Spirit of the Greenwood
-23. Marked Direwolf
+23. Verdant Pilgrim
 24. Spirit Bond
 25. Mystic Runefish
 26. Boundless Wanderer
@@ -514,7 +514,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 45. Volcanic Channeler
 46. Borrowed Minutes
 47. Shadow March
-48. Final Witness
+48. Soulreaver
 49. Kindred Sparks
 50. Twilight Reclaimer
 51. Cinderfang
@@ -523,7 +523,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 54. Voidsire
 55. Wolfbond Chieftain
 56. Sandglider
-57. Runebound Champion
+57. Dreadlord
 58. Echo Technician
 59. Dream Garden Visitor
 60. Inferno's Herald
@@ -572,7 +572,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 33. Ashen Harbinger
 34. Nineborn Specter
 35. Junkfield Renegade
-36. Worlds Await
+36. Terminus
 37. Twilight Suppressor
 38. Spent Courier
 39. Ossuary Overlord
@@ -680,7 +680,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 4. Shadow Soloist
 5. Moonlit Dancer
 6. Inferno's Herald
-7. Runebound Champion
+7. Dreadlord
 8. Echo Technician
 9. Dream Garden Visitor
 10. Grim Reclaimer
@@ -716,6 +716,6 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 40. Pathwalker
 41. Scrap Reclaimer
 42. Fleeting Reunion
-43. Worlds Await
+43. Terminus
 44. Paradox Enforcer
 45. Aspiring Guardian

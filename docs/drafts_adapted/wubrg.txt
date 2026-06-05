@@ -1,4 +1,4 @@
-Flashpoint Detonation
+Unleash Ruin
 Starshot Gunner
 Veilseeker
 Forge Inheritor
@@ -63,7 +63,7 @@ Gleamharvester
 Shoreline Penitent
 Flagbearer of Decay
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Spirit Bond
 Forsaken Pact
@@ -214,7 +214,7 @@ Fathomless Maw
 Kindlehorn
 Aspiring Guardian
 Momentum's Edge
-Final Witness
+Soulreaver
 Echoes of the Journey
 Boundless Wanderer
 Field Reverent
@@ -236,7 +236,7 @@ Driftcaller Sovereign
 Sanctum Approach
 Salvage Engine
 Carrion Shepherd
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Fern Treader
 Seedling Sage
@@ -259,7 +259,7 @@ Return to Nowhere
 Grounded
 Eruption
 Enginespeaker
-Marked Direwolf
+Verdant Pilgrim
 Starsea Traveler
 Urban Desperado
 Verdant Pioneer

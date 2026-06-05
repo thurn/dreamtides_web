@@ -15,7 +15,7 @@ Vault Infiltrator
 Revenant of the Lost
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Gilded Catalyst
@@ -27,7 +27,7 @@ Luminwings
 Fangbound
 Worldbreacher
 Shattering Gambit
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Spellweaver
 Nightmare

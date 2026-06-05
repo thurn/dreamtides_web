@@ -59,13 +59,13 @@ A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card 
 ## Drain / death payoffs (finishers)
 
 40. Silent Avenger — "When a character is dissolved, gain 1⍟" — turns a near-infinite abandon chain into near-infinite ⍟.
-41. Soulrender — "Abandon a character: Chosen player erodes X (that character's cost)" — converts the chain into deck erosion or a Worlds Await setup.
+41. Soulrender — "Abandon a character: Chosen player erodes X (that character's cost)" — converts the chain into deck erosion or a Terminus setup.
 42. Nineborn Specter — "▸Dissolved: Gain 2⍟," a warrior that rewards every body you sacrifice.
 43. Twilight Suppressor — "When you play a character, store 1⧗" / "1⧗, Abandon a character: Gain 1⍟" — banks both halves of the loop into points.
 44. Junkfield Renegade — "1●, Abandon this character: Gain 2⍟ or draw" — a self-contained warrior closer that doubles as recursion fodder.
 45. Intermezzo Balladeer — "When you play a card, gain 1⍟ for each other card played this turn" — rewards the replay-heavy combo turn.
 46. Burst of Obliteration — "Gain X⍟ or dissolve an enemy with X✦" — the flexible finisher for an overflowing energy pool.
-47. Worlds Await — "If you have no cards in your deck, you win" — the deterministic out for the self-erosion build.
+47. Terminus — "If you have no cards in your deck, you win" — the deterministic out for the self-erosion build.
 48. Fathomless Maw — "When you abandon a character, gain 1⍟" — a pure drain payoff for the abandon loop.
 49. Skull Weaver — "When an ally leaves play, gain 1⍟" — Blood-Artist drain payoff on every body that leaves.
 50. Duskreaper — "When an ally is dissolved, gain 1⍟" — drain payoff covering the dissolve half of the loop.
@@ -121,7 +121,7 @@ A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card 
 82. Shadow March — "Materialize all characters ≤2● in your void which dissolved this turn" — a mass-return blowout for the cheap-warrior shell.
 83. Wake the Fallen — "Materialize all characters which dissolved this turn" — the broader mass-return for the abandon board.
 84. Blazeguard — "Materialize up to three chosen characters which dissolved this turn" — a cheap fast-speed mass return.
-85. Speaker for the Forgotten — "5●: Erode 1. That card gains reclaim 0●" — self-mills loop fodder into the void for replay or Worlds Await.
+85. Speaker for the Forgotten — "5●: Erode 1. That card gains reclaim 0●" — self-mills loop fodder into the void for replay or Terminus.
 
 ## Disruption and removal
 

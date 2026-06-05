@@ -19,7 +19,7 @@ Celestial Lookout
 Fern Treader
 Infernal Cavalier
 Blazing Emberwing
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Tranquil Duelist
@@ -41,7 +41,7 @@ Genesis Burst
 Spent Courier
 Melodist of the Finale
 Wasteland Holdout
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Summons of the Bonded
 Packcaller of Shadows

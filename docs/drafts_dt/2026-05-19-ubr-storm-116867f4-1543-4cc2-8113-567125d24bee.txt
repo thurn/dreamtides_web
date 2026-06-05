@@ -2,10 +2,10 @@ Planetgazer
 Apocalypse Vigilante
 Cosmonaut of Tides
 Echo Architect
-Worlds Await
+Terminus
 The Calling Night
 Wreckland Maverick
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 The Ringleader
@@ -20,7 +20,7 @@ Blightmaw
 Genesis Burst
 Gleam Below
 Canopy of Stars
-Glimpse of What Was
+Ancient Descent
 Ecliptic Vantage
 Starfall
 Shared Revelation

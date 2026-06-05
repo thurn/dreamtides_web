@@ -39,7 +39,7 @@ const DEFAULT_SCORE_TO_WIN = 25;
 const DEFAULT_TURN_LIMIT = 50;
 const DEFAULT_MAX_ENERGY_CAP = 10;
 
-/** Distant Worlds (#519) grants +3✦ to the chosen ally. */
+/** Worlds Await (#519) grants +3✦ to the chosen ally. */
 const DISTANT_WORLDS_CARD_NUMBER = 519;
 const DISTANT_WORLDS_SPARK_BONUS = 3;
 
@@ -297,7 +297,7 @@ function buildActionProposal(
 
 /**
  * Appends the live-state edits the driver deferred to the hook. Currently only
- * Distant Worlds (#519): `SET_CARD_SPARK_DELTA` is an ABSOLUTE write, so it is
+ * Worlds Await (#519): `SET_CARD_SPARK_DELTA` is an ABSOLUTE write, so it is
  * computed against the target instance's CURRENT `sparkDelta` plus the +3 bonus.
  */
 function enrichDeferredCommands(

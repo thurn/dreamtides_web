@@ -14,7 +14,7 @@ Assault Leader
 Starbound Striker
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Wired Duelist
@@ -27,7 +27,7 @@ Wolfbond Chieftain
 Lone Castaway
 Starshot Gunner
 Blight Weaver
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Shadow Reflection
 Twilight Troubadour

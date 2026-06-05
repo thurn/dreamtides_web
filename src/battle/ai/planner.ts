@@ -18,7 +18,7 @@ import {
  * Staged beam-search planner with a deadline guard (`battle_ai.md`
  * §"The Planner"). It runs a receding-horizon search: it plans the whole
  * intended turn so look-ahead captures order-sensitive synergies (e.g. play
- * Twilight Minstrel before Meadowforged Colossus so the Colossus evaluates with
+ * Nocturne Strummer before Wildflower Colossus so the Colossus evaluates with
  * its supporter present), but RETURNS ONLY THE SINGLE NEXT ACTION — the first
  * action of the best plan found — plus its trace. The caller applies that one
  * action and re-plans.
@@ -31,7 +31,7 @@ export interface PlannedAction {
   kind: "PLAY_CARD" | "MOVE_CARD" | "END_TURN";
   /** The card being played/moved (PLAY_CARD / MOVE_CARD). */
   self?: AiCard;
-  /** Chosen targets for a targeted play (Flashpoint, Distant Worlds, …). */
+  /** Chosen targets for a targeted play (Flashpoint, Worlds Await, …). */
   targets?: AiTargetChoice | null;
   /** Destination slot for a MOVE_CARD or a play placement. */
   toSlot?: BattlefieldSlotId;
@@ -287,7 +287,7 @@ function actionSortKey(action: PlanAction): string {
  *
  * Expansion is a real bounded beam, NOT greedy: a partial plan is expanded by
  * EVERY legal next action, with no "strictly improving" gate. A momentarily
- * neutral-or-worse setup play (e.g. dropping Twilight Minstrel into the reserve)
+ * neutral-or-worse setup play (e.g. dropping Nocturne Strummer into the reserve)
  * is allowed to remain in the beam so a later step (repositioning Meadowforged
  * Colossus into a slot the Minstrel supports) can pay off within the same turn.
  * A line that genuinely goes nowhere still loses to the root baseline, so the
@@ -296,7 +296,7 @@ function actionSortKey(action: PlanAction): string {
  * Work is bounded by `beamWidth` (top-K kept each round), the {@link MAX_DEPTH}
  * safety cap, and the deadline guard. The per-node action set is bounded by
  * finite energy and board space: each play spends energy and a reserve slot,
- * each reposition fills a deploy slot, and draw events (Glimpse, Herald's Sign)
+ * each reposition fills a deploy slot, and draw events (Glimpse, Sign of Arrival)
  * only add cards a later node can play if it can still pay for them. Combined
  * with the MAX_DEPTH cap the search terminates well before the cap.
  */

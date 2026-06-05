@@ -123,7 +123,7 @@ The Support anthem that scales every supported character with your warrior count
 
 - MTG: Cranial Plating
 
-#### Nocturne Strummer
+#### Last Light Herald
 
 *1● Character — Warrior, 1✦*
 
@@ -439,7 +439,7 @@ Draws on each materialize, deepening the loop and reclaiming itself.
 
 - MTG: Rite of Harmony
 
-#### Worlds Await
+#### Terminus
 
 *1● Event*
 

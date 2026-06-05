@@ -63,7 +63,7 @@ Crumbling Covenant
 Blight Weaver
 Resilient Wanderer
 Ripple Through Reality
-Final Witness
+Soulreaver
 Vanishing Inquisitor
 Rusted Monolith
 Inverted Reflection
@@ -72,7 +72,7 @@ Northlight Maestro
 Sanctum Approach
 Salvage Engine
 Carrion Shepherd
-Glimpse of What Was
+Ancient Descent
 Key to the Moment
 The Power Within
 Graywatch
@@ -102,7 +102,7 @@ Dawnblade Wanderer
 Assault Leader
 Null Sphere
 Searcher in the Mists
-Worlds Await
+Terminus
 Collateral Damage
 Cosmic Puppeteer
 The Waking Titan

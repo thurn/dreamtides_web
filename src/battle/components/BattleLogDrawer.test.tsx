@@ -153,13 +153,13 @@ describe("BattleLogDrawer", () => {
             stage: "character",
             choice: "PLAY_CARD",
             battleCardId: "enemy-card-1",
-            cardName: "Twilight Minstrel",
+            cardName: "Nocturne Strummer",
             sourceHandIndex: 0,
             sourceSlotId: null,
             targetSlotId: "R0",
             heuristicScoreBefore: 12.3,
             heuristicScoreAfter: 18.7,
-            rationale: "Play Twilight Minstrel to the back rank",
+            rationale: "Play Nocturne Strummer to the back rank",
           },
         ],
       },
@@ -188,7 +188,7 @@ describe("BattleLogDrawer", () => {
       container.querySelector<HTMLElement>("[data-battle-log-history-entry]")?.click();
     });
 
-    expect(container.textContent).toContain("Play Twilight Minstrel to the back rank");
+    expect(container.textContent).toContain("Play Nocturne Strummer to the back rank");
     expect(container.textContent).toContain("12.3");
     expect(container.textContent).toContain("18.7");
 

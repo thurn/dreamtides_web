@@ -26,7 +26,7 @@ Ironclad Marksman
 Guiding Light
 Flagbearer of Decay
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Sorrow Watcher
 Tidewreck Navigator
@@ -45,7 +45,7 @@ Collapse Protocol
 The Thinning
 Dreaming Groves
 Across the Void
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Spent Courier
@@ -93,7 +93,7 @@ Inspiring Templar
 Aspiring Guardian
 Ripple Through Reality
 Momentum's Edge
-Final Witness
+Soulreaver
 Dread Arbiter
 Iron Executor
 Vanishing Inquisitor
@@ -110,7 +110,7 @@ Fathomscourge
 Smoldering Ancient
 Salvage Engine
 Carrion Shepherd
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Fern Treader
 Seedling Sage
@@ -148,7 +148,7 @@ Assault Leader
 Null Sphere
 Blade of Unity
 The Deathsworn
-Worlds Await
+Terminus
 Collateral Damage
 Cosmic Puppeteer
 Spellweaver

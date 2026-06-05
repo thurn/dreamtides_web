@@ -40,7 +40,7 @@ Fleeting Reunion
 Gleamharvester
 Shoreline Penitent
 Flagbearer of Decay
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Spirit Bond
 Duskreaper
@@ -121,7 +121,7 @@ Demonbane
 Fathomless Maw
 Kindlehorn
 Ride of the Vanguard
-Final Witness
+Soulreaver
 Boundless Wanderer
 Field Reverent
 Dread Arbiter

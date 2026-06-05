@@ -19,18 +19,18 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 function actionProposal(): AiProposal {
   return {
     kind: "action",
-    description: "Declare Branded Direwolf as a challenger",
+    description: "Declare Marked Direwolf as a challenger",
     trace: {
       stage: "reposition",
       choice: "MOVE_CARD",
       battleCardId: "c-1",
-      cardName: "Branded Direwolf",
+      cardName: "Marked Direwolf",
       sourceHandIndex: null,
       sourceSlotId: "R0",
       targetSlotId: "D0",
       heuristicScoreBefore: 0,
       heuristicScoreAfter: 5,
-      rationale: "Declare Branded Direwolf as a challenger",
+      rationale: "Declare Marked Direwolf as a challenger",
       targetBattleCardId: null,
     },
     commands: [],
@@ -76,9 +76,9 @@ describe("BattleAiProposalBar", () => {
     const description = container.querySelector(
       "[data-battle-ai-proposal-description]",
     );
-    expect(description?.textContent).toBe("Declare Branded Direwolf as a challenger");
+    expect(description?.textContent).toBe("Declare Marked Direwolf as a challenger");
     const card = container.querySelector("[data-battle-ai-proposal-card]");
-    expect(card?.textContent).toBe("Branded Direwolf");
+    expect(card?.textContent).toBe("Marked Direwolf");
 
     act(() => {
       container

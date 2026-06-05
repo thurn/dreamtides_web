@@ -10,7 +10,7 @@ import type { BattleAiChoiceTrace } from "../types";
  * - `rationale`: a plain-language description of the action, derived from its
  *   kind / stage / card name / target.
  * - `targetBattleCardId`: the targeted card id (Flashpoint's enemy body,
- *   Distant Worlds' ally), or `null` when the action has no card target.
+ *   Worlds Await' ally), or `null` when the action has no card target.
  *
  * Returns a NEW trace object (the planner's trace is spread, never mutated) so
  * callers can keep the original alongside the enriched copy.
@@ -42,7 +42,7 @@ function describeAction(action: PlannedAction): string {
   }
 
   // Event play. Name the dissolve target when one is present (Flashpoint), the
-  // supported ally when one is present (Distant Worlds), otherwise a plain play.
+  // supported ally when one is present (Worlds Await), otherwise a plain play.
   const targetId = action.targets?.targetBattleCardId ?? null;
   if (cardNumber === 516 && targetId !== null) {
     return `Dissolve the enemy body with ${cardName}`;

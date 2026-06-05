@@ -8,7 +8,7 @@ Reforged Automaton
 Inspiring Templar
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Gilded Catalyst
@@ -21,7 +21,7 @@ Thundercatcher
 Worldbreacher
 Wasteland Holdout
 The Deathsworn
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Spellweaver
 Shadow Reflection

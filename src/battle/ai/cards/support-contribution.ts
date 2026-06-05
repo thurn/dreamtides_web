@@ -10,11 +10,11 @@ import { starterCardModels } from "./index";
  * bonus it receives, combining the two static sources in the Starter pool
  * (see `battle_ai.md` §"Per-Card Knowledge"):
  *
- * - **Support** (e.g. Twilight Minstrel): for each occupied reserve card whose
+ * - **Support** (e.g. Nocturne Strummer): for each occupied reserve card whose
  *   model returns a `supportSpark` value `V`, add `V` to every occupied
  *   deployed card sitting in a slot that reserve supports (per
  *   `supportedDeploySlots`).
- * - **Self-static** (e.g. Meadowforged Colossus): for each occupied deployed
+ * - **Self-static** (e.g. Wildflower Colossus): for each occupied deployed
  *   card whose model returns a `selfStaticSpark` value `V`, add `V` to that
  *   card's own id.
  *

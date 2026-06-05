@@ -33,7 +33,7 @@ grinding the opponent out rather than from a dedicated finisher.
 A fast warrior deck that leverages explosive deployment (Tethered Hollow makes
 the first warrior each turn cost 3● less, Wolfbond Chieftain and Crescendo
 Channeler convert a wide board into energy) to flood cheap warriors, then
-amplifies them with Support anthems and engines like Nocturne Strummer,
+amplifies them with Support anthems and engines like Last Light Herald,
 Skyflame Commander, Shadow Reflection, and Sundown Ronin. Figment makers
 (Voidsire, Spellweaver, Crescendo Channeler) keep the board wide, so type-payoffs
 like Momentum's Edge and Skyflame Commander scale quickly. It is the aggressive
@@ -121,7 +121,7 @@ enter, and self-bouncing characters (Still Dreamer, Forgotten Factory Titan,
 Nomad of Endless Paths) combined with free-cast enablers (Nexus Wayfinder,
 Heavenward Penitent, Melodist of the Finale) generate loops of energy, cards, and
 materializations. It can be played as a fair value list or as a deterministic
-combo finishing on Worlds Await, Hatching Ground, or a board payoff, and
+combo finishing on Terminus, Hatching Ground, or a board payoff, and
 overlaps strongly with Spirit Animals.
 
 ### Warrior Combo

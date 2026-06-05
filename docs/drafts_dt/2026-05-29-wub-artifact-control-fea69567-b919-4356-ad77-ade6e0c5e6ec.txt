@@ -10,7 +10,7 @@ Tranquil Duelist
 Featherlight Summoner
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Prism Caller
@@ -21,7 +21,7 @@ Dread Arbiter
 Wolfbond Chieftain
 Worldbreacher
 Marrow Mimic
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Spellweaver
 Shadow Reflection

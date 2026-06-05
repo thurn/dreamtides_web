@@ -17,11 +17,11 @@ Fangbound
 Blazing Emberwing
 Doorlight Foundling
 Ironclad Marksman
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Gilded Catalyst
 Somber Flockmaster
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Through the Rift
@@ -67,7 +67,7 @@ Shadow Reflection
 Sanctum Approach
 Fathomscourge
 Smoldering Ancient
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Fern Treader
 Mirror Protocol

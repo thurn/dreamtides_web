@@ -28,7 +28,7 @@ Gleamharvester
 Shoreline Penitent
 Flagbearer of Decay
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Duskreaper
 Sorrow Watcher
@@ -47,7 +47,7 @@ Collapse Protocol
 The Thinning
 Dreaming Groves
 Across the Void
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Through the Rift
@@ -104,7 +104,7 @@ Inspiring Templar
 Aspiring Guardian
 Momentum's Edge
 Ride of the Vanguard
-Final Witness
+Soulreaver
 Echoes of the Journey
 Dread Arbiter
 Iron Executor
@@ -118,7 +118,7 @@ Driftcaller Sovereign
 Sanctum Approach
 Salvage Engine
 Carrion Shepherd
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Mirror Protocol
 The Grand Heist
@@ -177,7 +177,7 @@ Challenge of the Blade
 Broadcast Array
 Prism Caller
 Cloaked Sentinel
-Worlds Await
+Terminus
 Collateral Damage
 Cosmic Puppeteer
 Spellweaver

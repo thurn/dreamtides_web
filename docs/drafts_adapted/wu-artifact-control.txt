@@ -17,7 +17,7 @@ Fangbound
 Ironclad Marksman
 Flagbearer of Decay
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Clockwork Conductor
 Chronicle Reclaimer
@@ -27,7 +27,7 @@ Sanctum Awakened
 Fractured Veil
 Gilded Catalyst
 Melodist of the Finale
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Fading Farewell
@@ -87,7 +87,7 @@ Starbound Striker
 Inverted Reflection
 Stoneborn Eternal
 Shadow Reflection
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Mirror Protocol
 The Grand Heist

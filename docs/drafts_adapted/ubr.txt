@@ -51,7 +51,7 @@ Gleamharvester
 Shoreline Penitent
 Flagbearer of Decay
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
 Ashcrown Charger
@@ -78,7 +78,7 @@ The Ringleader
 Dreaming Groves
 Across the Void
 Call of the Lost
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Ordained Collapse
@@ -161,7 +161,7 @@ Moonlit Voyage
 Sanctum Approach
 Fathomscourge
 Smoldering Ancient
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Fern Treader
 Verdant Wayfarer
@@ -206,7 +206,7 @@ Silent Gatherer
 Null Sphere
 The Deathsworn
 Broadcast Array
-Worlds Await
+Terminus
 Collateral Damage
 Shadowpaw
 Cosmic Puppeteer

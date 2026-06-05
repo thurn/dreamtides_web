@@ -79,7 +79,7 @@ A companion to [storm.md](storm.md), listing every CardsV2 card with a specific 
 52. Signal Resonant — 1✦ synth with all character types and a Fast reposition; a cheap body that slots any count.
 53. Boundless Wanderer — Grants all character types so type-payoffs reach the whole team; cheap glue for a wide storm board.
 54. Field Reverent — X● sets each ally's ✦ to X until end of turn; converts a wide figment board into a real clock.
-55. Worlds Await — If your deck is empty you win; the deterministic finish for a mill/draw-to-empty storm line.
+55. Terminus — If your deck is empty you win; the deterministic finish for a mill/draw-to-empty storm line.
 
 ## Abandon / drain overlap
 

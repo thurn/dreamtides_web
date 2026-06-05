@@ -21,7 +21,7 @@ Ironclad Marksman
 Gleamharvester
 Shoreline Penitent
 Flagbearer of Decay
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
 Ashcrown Charger
@@ -32,7 +32,7 @@ Gilded Catalyst
 Oracle of Shifting Skies
 Architect of Memory
 Somber Flockmaster
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Fading Farewell

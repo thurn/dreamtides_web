@@ -1,4 +1,4 @@
-Flashpoint Detonation
+Unleash Ruin
 Forge Inheritor
 Soulrender
 Nexus Wayfinder
@@ -60,7 +60,7 @@ Conjured Zenith
 Revenant of the Lost
 Avatar of Cosmic Reckoning
 Demonbane
-Final Witness
+Soulreaver
 Rusted Monolith
 Defiant Holdout
 Carrion Shepherd
@@ -68,7 +68,7 @@ Infernal Ascendant
 Volcanic Channeler
 Dreadweaver
 Enginespeaker
-Marked Direwolf
+Verdant Pilgrim
 Borrowed Minutes
 Dusk Duelist
 Call to the Unknown

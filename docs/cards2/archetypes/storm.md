@@ -176,7 +176,7 @@ behaves like a copy enabler for the count, replacing each character you play and
 keeping the hand full so the chain never stops. It is the bridge to the
 Celestial Reverie Combo deck, which uses self-bouncing characters and free-cast
 enablers to loop materializations into cards and energy — a creature-storm that
-shares the same payoffs. Worlds Await is the shared deterministic finish: if you
+shares the same payoffs. Terminus is the shared deterministic finish: if you
 have no cards in your deck, you win the game, so a chain that mills or draws your
 deck to empty (often via Reunion shuffling everything back and then drawing it
 out, or repeated card draw) closes on the spot. Keeper of Forgotten Light draws a
@@ -210,7 +210,7 @@ hand each turn. Silent Gatherer returns itself from the void to your hand on
 materializes a warrior from your void on ☪ and an abandon, recurring bodies into
 the chain. Searcher in the Mists erodes 4 on ▸Materialized and again when
 dissolved, filling your own void to fuel reclaim engines (and, pointed correctly,
-helping toward an empty-deck Worlds Await or a Fatigue close). The Ringleader and
+helping toward an empty-deck Terminus or a Fatigue close). The Ringleader and
 Cosmonaut of Tides, covered above, are characters whose ▸Materialized triggers
 set up a copy, so deploying them is itself part of the chain.
 

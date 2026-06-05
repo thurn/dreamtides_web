@@ -13,7 +13,7 @@ Peak Plunder
 Harvester of Despair
 Scrapyard Custodian
 Signal Resonant
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Duskreaper
 Sorrow Watcher
@@ -43,7 +43,7 @@ Scuttled Fortune
 Revenant of the Lost
 Emberfang
 Avatar of Cosmic Reckoning
-Final Witness
+Soulreaver
 Lone Castaway
 Rusted Monolith
 Defiant Holdout

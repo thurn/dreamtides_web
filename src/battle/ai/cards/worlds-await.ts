@@ -28,15 +28,15 @@ function baseSpark(card: AiCard): number {
 }
 
 /**
- * #519 Distant Worlds (Event, 1●) — "Give an ally +3✦." (`battle_ai.md`
+ * #519 Worlds Await (Event, 1●) — "Give an ally +3✦." (`battle_ai.md`
  * §"The AI Deck"). A proactive pump: standard timing, so the AI plays it to
  * push a challenger past a likely blocker or grow Meadowforged toward lethal.
  *
  * Target choice: prefer a deployed challenger (allies are listed deployed-first
- * and chosen by highest base spark); a Meadowforged Colossus is favored on a
+ * and chosen by highest base spark); a Wildflower Colossus is favored on a
  * tie since its own static stacks with the pump.
  */
-export const distantWorlds: StarterCardModel = {
+export const worldsAwait: StarterCardModel = {
   cardNumber: 519,
   canPlay(model: ForwardModel, self: AiCard): boolean {
     return model.aiEnergy >= self.energyCost && friendlyAllies(model).length > 0;
@@ -47,7 +47,7 @@ export const distantWorlds: StarterCardModel = {
       return null;
     }
     // Allies are deployed-first; pick the highest base spark, breaking ties
-    // toward Meadowforged Colossus. The stable scan keeps the earlier
+    // toward Wildflower Colossus. The stable scan keeps the earlier
     // (deployed) ally on equal base spark.
     let best = allies[0];
     for (const ally of allies) {

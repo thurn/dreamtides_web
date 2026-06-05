@@ -54,10 +54,10 @@ const ENERGY_WASTE_WEIGHT = 0.25;
 /** Simple estimate of spark that will score unblocked next Challenge. */
 const EXPECTED_POINTS_WEIGHT = 1;
 
-/** Bonus for a live Sigilsworn Champion (#513), a recurring ▸Dawn point source. */
+/** Bonus for a live Runebound Champion (#513), a recurring ▸Dawn point source. */
 const INEVITABILITY_WEIGHT = 2;
 
-/** Card number of Sigilsworn Champion (▸Dawn: gain 1⍟). */
+/** Card number of Runebound Champion (▸Dawn: gain 1⍟). */
 const SIGILSWORN_CHAMPION = 513;
 
 // --- Helpers --------------------------------------------------------------
@@ -70,7 +70,7 @@ function baseSpark(card: AiCard): number {
 /**
  * Sums each on-board/in-hand card's `valueHint` (when its model defines one),
  * looked up by `cardNumber` in {@link starterCardModels}. Engine cards (Last
- * Witness, Glimpse, Herald's Sign, Circlewatch) register their card-advantage
+ * Witness, Glimpse, Sign of Arrival, Circlewatch) register their card-advantage
  * value here.
  */
 function valueHintSum(model: ForwardModel, card: AiCard): number {
@@ -185,7 +185,7 @@ export function evaluate(model: ForwardModel): number {
   }
   score += VALUE_HINT_WEIGHT * hintTotal;
 
-  // Inevitability: a live Sigilsworn Champion is a recurring ▸Dawn point source.
+  // Inevitability: a live Runebound Champion is a recurring ▸Dawn point source.
   if (hasLiveSigilsworn) {
     score += INEVITABILITY_WEIGHT;
   }

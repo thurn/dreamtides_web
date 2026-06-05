@@ -9,7 +9,7 @@ Marrow Mimic
 Ironclad Marksman
 Guiding Light
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
 Ashcrown Charger
@@ -17,7 +17,7 @@ Defiant Parry
 Sanctum Awakened
 Rite of Summoning
 Fractured Veil
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Threadbreaker

@@ -71,7 +71,7 @@ A companion to [abandon.md](abandon.md), listing every CardsV2 card with a speci
 ## Card-draw / value payoffs
 
 58. Sunset Chronicler — "When an ally is dissolved, draw a card"; turns every loss into a card.
-59. Final Witness — "When a non-figment ally is dissolved, draw a card"; draw payoff that ignores figment noise.
+59. Soulreaver — "When a non-figment ally is dissolved, draw a card"; draw payoff that ignores figment noise.
 60. Deathwalker — "When an allied survivor is dissolved, draw a card"; rewards abandoning survivor fodder.
 61. Scuttled Fortune — "Draw a card for each ally that dissolved this turn"; rewards a turn that abandons several bodies at once.
 62. Seer of the Fallen — "When a non-figment ally is dissolved, create Contemplation"; builds selection out of deaths.

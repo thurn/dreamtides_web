@@ -21,7 +21,7 @@ Gleamharvester
 Shoreline Penitent
 Flagbearer of Decay
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Clockwork Conductor
 Sanctum Awakened
@@ -31,7 +31,7 @@ Oracle of Shifting Skies
 Architect of Memory
 Somber Flockmaster
 Across the Void
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Spent Courier

@@ -157,7 +157,7 @@ Edge.
 - Junkfield Renegade
 - Intermezzo Balladeer
 - Burst of Obliteration
-- Worlds Await
+- Terminus
 
 Closing the game once a loop is running is the easy part — you just need the loop
 to push ⍟ across the table or empty a deck. Silent Avenger ("When a character is
@@ -175,7 +175,7 @@ Intermezzo Balladeer ("When you play a card, gain 1⍟ for each other card you'v
 played this turn") rewards the replay-heavy turns the loop generates — each
 warrior recast from hand stacks the count higher. Burst of Obliteration is a
 flexible finisher (Gain X⍟ or dissolve an enemy with X✦) once your energy pool is
-overflowing. And Worlds Await ("If you have no cards in your deck, you win the
+overflowing. And Terminus ("If you have no cards in your deck, you win the
 game") is the deterministic out for any build that erodes itself empty while
 filling its void — a natural pair with Soulrender pointed at yourself and Pit
 Descender's Erode 3.
@@ -250,12 +250,12 @@ adds a non-abandon way to recur a key event like Aftermath Bloom or Shadow March
 
 - Speaker for the Forgotten
 - Shadow March
-- Worlds Await
+- Terminus
 
 Speaker for the Forgotten ("5●: Erode 1. That card gains reclaim 0● until end of
 turn") and Pit Descender's Erode 3 dovetail with a self-mill plan: erode your own
 deck to fill the void with loop fodder, then either replay the eroded cards or
-ride Worlds Await to the empty-deck win. Shadow March ("Materialize all
+ride Terminus to the empty-deck win. Shadow March ("Materialize all
 characters with cost 2● or less in your void which dissolved this turn") is a
 mass-return blowout for the cheap-warrior shell — abandon a board to your outlets,
 then bring it all back at once, re-firing every ▸Materialized trigger. This is the
@@ -289,7 +289,7 @@ Courier, Ossuary Overlord, and Colossal Convergence. The split is the finish:
 Warrior Aggro positions a wide, pumped board as challengers and scores spark as
 ⍟ directly, while Warrior Combo abandons that same board into a recursion engine
 and wins through Silent Avenger drains, Soulrender erosion, or a deterministic
-Worlds Await. Many real decks sit between the two, playing fair warrior beatdown
+Terminus. Many real decks sit between the two, playing fair warrior beatdown
 in games where the loop never assembles and pivoting to the engine when it does —
 the natural fall-back plan that makes the archetype resilient against
 disruption.

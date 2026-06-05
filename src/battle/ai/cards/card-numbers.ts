@@ -10,17 +10,17 @@
  *   their card model's `chooseTargets` + `play` and sent to the void.
  */
 export const CHARACTER_CARD_NUMBERS: ReadonlySet<number> = new Set([
-  510, // Twilight Minstrel
-  511, // Circlewatch Seer
-  512, // Branded Direwolf
-  513, // Sigilsworn Champion
-  514, // Last Witness
-  515, // Meadowforged Colossus
+  510, // Nocturne Strummer
+  511, // Ringwatcher
+  512, // Marked Direwolf
+  513, // Runebound Champion
+  514, // Final Witness
+  515, // Wildflower Colossus
 ]);
 
 export const EVENT_CARD_NUMBERS: ReadonlySet<number> = new Set([
-  516, // Flashpoint Blast
-  517, // Glimpse of the Past
-  518, // Herald's Sign
-  519, // Distant Worlds
+  516, // Flashpoint Detonation
+  517, // Glimpse of What Was
+  518, // Sign of Arrival
+  519, // Worlds Await
 ]);

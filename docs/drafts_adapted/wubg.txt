@@ -1,4 +1,4 @@
-Flashpoint Detonation
+Unleash Ruin
 Starshot Gunner
 Intermezzo Balladeer
 Veilseeker
@@ -110,7 +110,7 @@ Duskwall Delver
 Moonlit Voyage
 Young Beastcaller
 Driftcaller Sovereign
-Glimpse of What Was
+Ancient Descent
 Key to the Moment
 Shattering Gambit
 Sundown Surfer
@@ -159,7 +159,7 @@ Challenge of the Blade
 Broadcast Array
 Prism Caller
 Cloaked Sentinel
-Worlds Await
+Terminus
 Ferryman of the Falls
 Collateral Damage
 The Waking Titan

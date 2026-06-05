@@ -13,7 +13,7 @@ function aiCard(overrides: Partial<AiCard> = {}): AiCard {
   return {
     battleCardId: "ai-card-1",
     cardNumber: 510,
-    name: "Twilight Minstrel",
+    name: "Nocturne Strummer",
     energyCost: 2,
     basePrintedSpark: 2,
     sparkDelta: 0,
@@ -28,7 +28,7 @@ function baseTrace(overrides: Partial<BattleAiChoiceTrace> = {}): BattleAiChoice
     stage: "character",
     choice: "PLAY_CARD",
     battleCardId: "ai-card-1",
-    cardName: "Twilight Minstrel",
+    cardName: "Nocturne Strummer",
     sourceHandIndex: 0,
     sourceSlotId: null,
     targetSlotId: null,
@@ -111,14 +111,14 @@ describe("actionToCommands — reposition", () => {
   });
 });
 
-// --- PLAY_CARD event: Flashpoint Blast ------------------------------------
+// --- PLAY_CARD event: Flashpoint Detonation ------------------------------------
 
-describe("actionToCommands — Flashpoint Blast", () => {
+describe("actionToCommands — Flashpoint Detonation", () => {
   it("pays energy, dissolves the enemy target to the opponent void, and voids itself", () => {
     const self = aiCard({
       battleCardId: "flash-1",
       cardNumber: 516,
-      name: "Flashpoint Blast",
+      name: "Flashpoint Detonation",
       energyCost: 3,
     });
     const action: PlannedAction = {
@@ -130,7 +130,7 @@ describe("actionToCommands — Flashpoint Blast", () => {
       trace: baseTrace({
         stage: "nonCharacter",
         battleCardId: "flash-1",
-        cardName: "Flashpoint Blast",
+        cardName: "Flashpoint Detonation",
       }),
     };
 
@@ -225,7 +225,7 @@ describe("buildTrace", () => {
     const self = aiCard({
       battleCardId: "flash-1",
       cardNumber: 516,
-      name: "Flashpoint Blast",
+      name: "Flashpoint Detonation",
     });
     const action: PlannedAction = {
       stage: "nonCharacter",
@@ -235,7 +235,7 @@ describe("buildTrace", () => {
       trace: baseTrace({
         stage: "nonCharacter",
         battleCardId: "flash-1",
-        cardName: "Flashpoint Blast",
+        cardName: "Flashpoint Detonation",
         heuristicScoreBefore: 4,
         heuristicScoreAfter: 7,
       }),
@@ -247,14 +247,14 @@ describe("buildTrace", () => {
     expect(trace.stage).toBe("nonCharacter");
     expect(trace.choice).toBe("PLAY_CARD");
     expect(trace.battleCardId).toBe("flash-1");
-    expect(trace.cardName).toBe("Flashpoint Blast");
+    expect(trace.cardName).toBe("Flashpoint Detonation");
     expect(trace.heuristicScoreBefore).toBe(4);
     expect(trace.heuristicScoreAfter).toBe(7);
 
     // Enriched fields.
     expect(typeof trace.rationale).toBe("string");
     expect((trace.rationale ?? "").length).toBeGreaterThan(0);
-    expect(trace.rationale).toContain("Flashpoint Blast");
+    expect(trace.rationale).toContain("Flashpoint Detonation");
     expect(trace.targetBattleCardId).toBe("enemy-body-9");
 
     // Does not mutate the planner trace.
@@ -266,29 +266,29 @@ describe("buildTrace", () => {
     const playTrace = buildTrace({
       stage: "character",
       kind: "PLAY_CARD",
-      self: aiCard({ battleCardId: "minstrel-1", cardNumber: 510, name: "Twilight Minstrel" }),
+      self: aiCard({ battleCardId: "minstrel-1", cardNumber: 510, name: "Nocturne Strummer" }),
       targets: null,
       toSlot: "R2",
-      trace: baseTrace({ battleCardId: "minstrel-1", cardName: "Twilight Minstrel" }),
+      trace: baseTrace({ battleCardId: "minstrel-1", cardName: "Nocturne Strummer" }),
     });
-    expect(playTrace.rationale).toContain("Twilight Minstrel");
+    expect(playTrace.rationale).toContain("Nocturne Strummer");
     expect(playTrace.targetBattleCardId).toBeNull();
 
     const moveTrace = buildTrace({
       stage: "reposition",
       kind: "MOVE_CARD",
-      self: aiCard({ battleCardId: "colossus-1", cardNumber: 515, name: "Meadowforged Colossus" }),
+      self: aiCard({ battleCardId: "colossus-1", cardNumber: 515, name: "Wildflower Colossus" }),
       targets: null,
       toSlot: "D1",
       trace: baseTrace({
         stage: "reposition",
         choice: "MOVE_CARD",
         battleCardId: "colossus-1",
-        cardName: "Meadowforged Colossus",
+        cardName: "Wildflower Colossus",
         targetSlotId: "D1",
       }),
     });
-    expect(moveTrace.rationale).toContain("Meadowforged Colossus");
+    expect(moveTrace.rationale).toContain("Wildflower Colossus");
   });
 
   it("describes ending the turn", () => {

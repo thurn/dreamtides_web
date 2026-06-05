@@ -1,4 +1,4 @@
-Flashpoint Detonation
+Unleash Ruin
 Wasteland Tamer
 Veilseeker
 Mystic Runefish
@@ -150,7 +150,7 @@ Voidcaller
 Resilient Wanderer
 Fathomless Maw
 Kindlehorn
-Final Witness
+Soulreaver
 Fargazer
 Angel of the Eclipse
 Duneveil Vanguard
@@ -173,7 +173,7 @@ Graywatch
 Mountainwatch Alpha
 Eruption
 Enginespeaker
-Marked Direwolf
+Verdant Pilgrim
 Starsea Traveler
 Desolation's Edge
 Break the Veil

@@ -18,7 +18,7 @@ front rank clear while your own clock advances.
 First, the removal. Because most characters are small, a cheap dissolve is a
 reliable answer. Molten Duel dissolves a character with 3✦ or less for 1●,
 Shatter the Frail and Unleashed Destruction clear early bodies for 1●, Scorched
-Reckoning dissolves an enemy with 3✦ or less, and Flashpoint Detonation dissolves
+Reckoning dissolves an enemy with 3✦ or less, and Unleash Ruin dissolves
 an enemy with cost 3● or less. Grounded is the flexible catch-all: an X-cost
 event that banishes an enemy whose cost is exactly X●, so it scales to answer
 whatever the opponent committed.
@@ -44,7 +44,7 @@ opponent's hand turn after turn.
 
 Finally, card draw to keep the events flowing. Epiphany Unfolded draws 3 cards
 for 1●, Fragments of Vision and Gleam Below refill cheaply, and Guiding Light and
-Glimpse of What Was bundle Foresee with a cantrip so you smooth your draws while
+Ancient Descent bundle Foresee with a cantrip so you smooth your draws while
 feeding the engine. Door to Possibility and Inverted Reflection let you Discover
 the exact interactive event you need. The biggest concern for an Events deck is
 running out of gas after trading off resources one-for-one, so these cheap

@@ -7,7 +7,7 @@ self-bouncing body back to hand again and again — each replay drawing a card a
 refilling the pool — until your deck is empty or your hand is a wall of bodies.
 It can be drafted as a fair value list that simply floods the board with cheap
 characters and grinds out card advantage, or assembled into a deterministic
-go-off that draws its whole deck and closes on Worlds Await, buries the opponent
+go-off that draws its whole deck and closes on Terminus, buries the opponent
 under Fatigue with Hatching Ground, or builds a lethal board in one turn. It
 overlaps strongly with Spirit Animals, which supplies most of the cheap bodies
 the loop runs on, and with Storm, which shares the same character-draw trigger
@@ -103,12 +103,12 @@ A loop that draws net-positive cards eventually draws your whole deck, and an
 infinite engine needs a finish that does not require an opponent to cooperate.
 Two events convert "I have drawn my deck" directly into a win.
 
-Worlds Await is the deterministic close: a 1● event reading "If you have no cards
+Terminus is the deterministic close: a 1● event reading "If you have no cards
 in your deck, you win the game." A Celestial Reverie loop that draws net-positive
 every cycle empties the deck on its own; once the last card is in hand, Worlds
 Await wins on the spot. The discipline is in the timing — a draw trigger that
 fires with an empty deck causes Fatigue and hands the opponent points, so you
-want to stop the loop on the last card, hold Worlds Await, and cast it before the
+want to stop the loop on the last card, hold Terminus, and cast it before the
 next forced draw.
 
 Hatching Ground is the Fatigue close, shared with Storm. An X-cost event reading
@@ -120,7 +120,7 @@ twenty-plus characters in a turn makes Hatching Ground's multiplier enormous, so
 even a modest X buries a deck already low on cards.
 
 Both finishes care about the loop's length, so the right line is usually to run
-the loop as far as it safely goes, then cash it — Worlds Await if your own deck is
+the loop as far as it safely goes, then cash it — Terminus if your own deck is
 empty, Hatching Ground if you would rather mill theirs.
 
 ## The board payoffs
@@ -170,7 +170,7 @@ the Greenwood is a 1● Awakened spirit animal with "1●, ☪: Gain 1● for ea
 character," Blazing Emberwing is a 3● spirit animal with "☪: Gain 1● for each
 allied character," and Mountainwatch Alpha taps for 1● per allied spirit animal —
 on a wide board each is a large energy refund that can restart a stalled loop.
-Marked Direwolf ("☪: Awaken an ally") and Moonbound Wolf ("☪, Return an ally to
+Verdant Pilgrim ("☪: Awaken an ally") and Moonbound Wolf ("☪, Return an ally to
 hand: Trigger the 'Dawn' ability of an allied spirit animal") add bounce and
 awaken effects that re-buy materialization and ▸Dawn triggers, extending the
 chain. The payoffs carry over too: Mystic Runefish sets each allied spirit
@@ -219,7 +219,7 @@ figment board into the opponent's front rank drips points the whole time.
 Soulrender turns the wide board into Fatigue from the abandon side — a 3● warrior
 reading "Abandon a character: Chosen player erodes X, where X is that character's
 cost" — feeding the same empty-deck Fatigue plan as Hatching Ground. Sunset
-Chronicler and Final Witness draw on each ally dissolved, refilling the hand as a
+Chronicler and Soulreaver draw on each ally dissolved, refilling the hand as a
 board trades so a stalled loop reloads off combat rather than off the draw
 trigger.
 
@@ -230,7 +230,7 @@ triggers, Nexus Wayfinder and Heavenward Penitent are the free-cast enablers, an
 Still Dreamer, Forgotten Factory Titan, and Stoneborn Eternal are the
 self-bouncing bodies — these are the combo, and the loop wants at least one of
 each axis. Melodist of the Finale is the energy that makes the loop net-positive,
-and a dedicated finish (Worlds Await for the empty-deck win, Hatching Ground for
+and a dedicated finish (Terminus for the empty-deck win, Hatching Ground for
 Fatigue, or a board payoff like Standard Bearer plus Field Reverent and Spirit
 Bond) closes it. Round out the deck with the densest cheap-character base you can
 find — almost everything from Spirit Animals qualifies, and the spirit-animal
@@ -244,9 +244,9 @@ under a single Celestial Reverie grinds out enough card advantage and board to
 close like an aggro deck, no loop required. The combo turn comes when you have
 both a draw trigger and a free-cast enabler online — install Nexus Wayfinder, cast
 Celestial Reverie, deploy Melodist of the Finale, and loop Still Dreamer to draw
-your deck and flood the pool, then cash the turn with Worlds Await if your deck is
+your deck and flood the pool, then cash the turn with Terminus if your deck is
 empty, Hatching Ground if you would rather mill theirs, or a board payoff if you
 would rather attack. Mind the empty-deck timing on the draw trigger so a forced
-draw does not Fatigue you before Worlds Await resolves. Stay flexible — the right
+draw does not Fatigue you before Terminus resolves. Stay flexible — the right
 finish is whichever piece you have drawn, and the same cheap-character base
 supports the fair plan and the combo equally well.

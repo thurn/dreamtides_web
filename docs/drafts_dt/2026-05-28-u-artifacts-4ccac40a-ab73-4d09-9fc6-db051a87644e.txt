@@ -11,7 +11,7 @@ Forsworn Champion
 Pallid Arbiter
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Wired Duelist
@@ -23,7 +23,7 @@ Chronicle Reclaimer
 Ashcrown Charger
 Worldbreacher
 Ossuary Overlord
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Spellweaver
 Aftermath Bloom

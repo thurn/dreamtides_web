@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { lastWitness } from "./last-witness";
+import { finalWitness } from "./final-witness";
 import type { AiCard, ForwardModel } from "../forward-model";
 
 function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
@@ -32,14 +32,14 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
   };
 }
 
-describe("Last Witness (#514)", () => {
+describe("Final Witness (#514)", () => {
   it("onDissolved moves the top deck card into hand (hand +1, deck -1)", () => {
     const self = makeCard({ battleCardId: "witness", cardNumber: 514 });
     const top = makeCard({ battleCardId: "top", cardNumber: 512 });
     const rest = makeCard({ battleCardId: "rest", cardNumber: 513 });
     const model = makeModel({ aiDeck: [top, rest], aiHand: [] });
 
-    lastWitness.onDissolved?.(model, self);
+    finalWitness.onDissolved?.(model, self);
 
     expect(model.aiHand.map((c) => c.battleCardId)).toEqual(["top"]);
     expect(model.aiDeck.map((c) => c.battleCardId)).toEqual(["rest"]);
@@ -48,7 +48,7 @@ describe("Last Witness (#514)", () => {
   it("play materializes the character into reserve, exhausted", () => {
     const self = makeCard({ battleCardId: "witness", cardNumber: 514, energyCost: 3 });
     const model = makeModel({ aiEnergy: 5, aiHand: [self] });
-    lastWitness.play(model, self, null);
+    finalWitness.play(model, self, null);
     expect(model.aiEnergy).toBe(2);
     expect(model.aiReserve.R0?.battleCardId).toBe("witness");
     expect(model.aiReserve.R0?.canChallengeThisTurn).toBe(false);

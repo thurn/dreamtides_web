@@ -8,7 +8,7 @@ Forgotten Factory Titan
 Pit Descender
 Vault Infiltrator
 Assault Leader
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Infernal Cavalier
@@ -30,7 +30,7 @@ Lightningborn
 Fury of the Clan
 Void Pilgrim
 Wasteland Holdout
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Ossuary Overlord
 The Deathsworn

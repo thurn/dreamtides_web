@@ -43,7 +43,7 @@ Gleamharvester
 Shoreline Penitent
 Flagbearer of Decay
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
 Ashcrown Charger
@@ -62,7 +62,7 @@ Somber Flockmaster
 The Ringleader
 Across the Void
 Call of the Lost
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Fading Farewell
@@ -143,7 +143,7 @@ Shadow Reflection
 Moonlit Voyage
 Northlight Maestro
 Sanctum Approach
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Verdant Wayfarer
 Urban Cipher
@@ -195,7 +195,7 @@ Assault Leader
 Null Sphere
 Blade of Unity
 Broadcast Array
-Worlds Await
+Terminus
 Cosmic Puppeteer
 The Waking Titan
 Duskshore Virtuoso

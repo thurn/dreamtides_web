@@ -59,7 +59,7 @@ A companion to [spirit-animals.md](spirit-animals.md), listing every CardsV2 car
 41. Conduit of Resonance — "When you play a character, trigger the ▸Dawn ability of each other allied character"; turns a board of Dawn producers into a deployment engine.
 42. Unquenched — "When you materialize an ally, trigger its ▸Dawn ability"; pays you the moment a fresh Dawn producer enters.
 43. Cindermarch — "When you materialize a character, awaken each other allied character"; wakes the whole flood so it can challenge the turn it lands.
-44. Marked Direwolf — spirit animal, "☪: Awaken an ally"; wakes a body to swing the turn it floods.
+44. Verdant Pilgrim — spirit animal, "☪: Awaken an ally"; wakes a body to swing the turn it floods.
 45. Pyrestone Avatar — Offering, "Allied characters have awakened"; static awaken enabler that can drop for 0●.
 46. Pinnacle Ascendant — "Allied characters have awakened" with reclaim when discarded/eroded; static awaken anthem.
 
@@ -95,7 +95,7 @@ A companion to [spirit-animals.md](spirit-animals.md), listing every CardsV2 car
 ## Combo / value reach
 
 64. Celestial Reverie — "Until end of turn, when you play a character, draw a card"; the draw engine that turns each free body into a card.
-65. Worlds Await — "If you have no cards in your deck, you win the game"; the empty-deck finish for the combo build.
+65. Terminus — "If you have no cards in your deck, you win the game"; the empty-deck finish for the combo build.
 66. Hatching Ground — "For each card you've played this turn, chosen player erodes X"; Fatigues the opponent after a Storm turn.
 67. Roots of Rebirth — "Materialize two random characters with cost 2● or less from your deck"; almost never whiffs in a wall-to-wall cheap deck.
 68. Soulkindler — "If this card is in your void, allied characters have +1✦"; a permanent anthem from outside play.

@@ -280,7 +280,7 @@ describe("battleReducer", () => {
       stage: "reposition",
       choice: "MOVE_CARD",
       battleCardId: "enemy-card-1",
-      cardName: "Branded Direwolf",
+      cardName: "Marked Direwolf",
       sourceHandIndex: null,
       sourceSlotId: "R0",
       targetSlotId: "D0",

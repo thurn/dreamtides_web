@@ -29,7 +29,7 @@ Ripple Through Reality
 Ride of the Vanguard
 Duneveil Vanguard
 Sanctum Approach
-Glimpse of What Was
+Ancient Descent
 The Grand Heist
 Shattering Gambit
 Gatebound Warden
@@ -54,7 +54,7 @@ Toll of Passage
 Barrage Specialist
 Gateway Defender
 Challenge of the Blade
-Worlds Await
+Terminus
 The Waking Titan
 Duskshore Virtuoso
 Breach Artist

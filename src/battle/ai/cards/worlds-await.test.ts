@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { distantWorlds } from "./distant-worlds";
+import { worldsAwait } from "./worlds-await";
 import type { AiCard, ForwardModel } from "../forward-model";
 
 function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
@@ -32,10 +32,10 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
   };
 }
 
-describe("Distant Worlds (#519)", () => {
+describe("Worlds Await (#519)", () => {
   it("canPlay is false with no allies on the board", () => {
     const self = makeCard({ battleCardId: "dw", cardNumber: 519, energyCost: 1 });
-    expect(distantWorlds.canPlay(makeModel({ aiEnergy: 3 }), self)).toBe(false);
+    expect(worldsAwait.canPlay(makeModel({ aiEnergy: 3 }), self)).toBe(false);
   });
 
   it("canPlay is false without enough energy even with an ally", () => {
@@ -45,7 +45,7 @@ describe("Distant Worlds (#519)", () => {
       aiEnergy: 0,
       aiDeployed: { D0: ally, D1: null, D2: null, D3: null },
     });
-    expect(distantWorlds.canPlay(model, self)).toBe(false);
+    expect(worldsAwait.canPlay(model, self)).toBe(false);
   });
 
   it("canPlay is true with a reserve ally and energy", () => {
@@ -55,7 +55,7 @@ describe("Distant Worlds (#519)", () => {
       aiEnergy: 1,
       aiReserve: { R0: ally, R1: null, R2: null, R3: null, R4: null },
     });
-    expect(distantWorlds.canPlay(model, self)).toBe(true);
+    expect(worldsAwait.canPlay(model, self)).toBe(true);
   });
 
   it("play adds +3 to the chosen ally's sparkDelta and voids the event", () => {
@@ -68,8 +68,8 @@ describe("Distant Worlds (#519)", () => {
       aiDeployed: { D0: small, D1: big, D2: null, D3: null },
     });
 
-    const targets = distantWorlds.chooseTargets(model, self);
-    distantWorlds.play(model, self, targets);
+    const targets = worldsAwait.chooseTargets(model, self);
+    worldsAwait.play(model, self, targets);
 
     // Highest-base-spark deployed ally (big) gets the pump.
     expect(model.aiDeployed.D1?.sparkDelta).toBe(3);
@@ -87,8 +87,8 @@ describe("Distant Worlds (#519)", () => {
       aiReserve: { R0: null, R1: ally, R2: null, R3: null, R4: null },
     });
 
-    const targets = distantWorlds.chooseTargets(model, self);
-    distantWorlds.play(model, self, targets);
+    const targets = worldsAwait.chooseTargets(model, self);
+    worldsAwait.play(model, self, targets);
 
     expect(model.aiReserve.R1?.sparkDelta).toBe(3);
   });

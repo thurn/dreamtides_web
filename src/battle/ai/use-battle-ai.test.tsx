@@ -69,12 +69,12 @@ function questDeckProvenance(): BattleCardProvenance {
   };
 }
 
-/** A real Starter character: vanilla Branded Direwolf (#512), 4●, 4✦. */
+/** A real Starter character: vanilla Marked Direwolf (#512), 4●, 4✦. */
 function direwolfDefinition(): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
     cardNumber: 512,
-    name: "Branded Direwolf",
+    name: "Marked Direwolf",
     battleCardKind: "character",
     subtype: "Warrior",
     energyCost: 4,

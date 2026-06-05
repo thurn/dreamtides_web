@@ -54,7 +54,7 @@ A companion to [events.md](events.md), listing every CardsV2 card with a specifi
 
 ### Removal
 37. Molten Duel — 1● fast/interrupt dissolve of a character with 3✦ or less; premier cheap removal for the events core.
-38. Flashpoint Detonation — 2● fast dissolve of an enemy with cost 3● or less.
+38. Unleash Ruin — 2● fast dissolve of an enemy with cost 3● or less.
 39. Scorched Reckoning — 2● dissolve of an enemy with 3✦ or less.
 40. Shatter the Frail — 1● dissolve of a 1✦-or-less enemy, with Reclaim 1● for a second use.
 41. Unleashed Destruction — 1● dissolve of a cost-2●-or-less enemy.
@@ -78,5 +78,5 @@ A companion to [events.md](events.md), listing every CardsV2 card with a specifi
 53. Fragments of Vision — 1● fast/interrupt draw-3-then-shuffle-2 that smooths and refills.
 54. Gleam Below — 1● draw a card plus Foresee 2, a cheap cantrip that feeds the payoffs.
 55. Guiding Light — 1● Foresee 1 and draw, with Reclaim for a recurring cantrip.
-56. Glimpse of What Was — 1● fast/interrupt Foresee 1 and draw, a flexible cheap event.
+56. Ancient Descent — 1● fast/interrupt Foresee 1 and draw, a flexible cheap event.
 57. Sunken Radiance — 1● draw 2 / discard 2 with Reclaim 2●, digging while filling the void for reclaim.

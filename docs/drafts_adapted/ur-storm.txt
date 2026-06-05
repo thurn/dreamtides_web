@@ -48,7 +48,7 @@ The Ringleader
 Dreaming Groves
 Across the Void
 Call of the Lost
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Dreamscatter
@@ -108,7 +108,7 @@ Lone Castaway
 Luminwings
 Inverted Reflection
 Moonlit Voyage
-Glimpse of What Was
+Ancient Descent
 Fern Treader
 Verdant Wayfarer
 Urban Cipher
@@ -144,7 +144,7 @@ Barrage Specialist
 Keeper of the Tides
 Dawnblade Wanderer
 Broadcast Array
-Worlds Await
+Terminus
 Cosmic Puppeteer
 The Waking Titan
 Duskshore Virtuoso

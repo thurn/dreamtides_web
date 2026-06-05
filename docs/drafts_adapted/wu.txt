@@ -24,7 +24,7 @@ Ironclad Marksman
 Guiding Light
 Flagbearer of Decay
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
 Ashcrown Charger
@@ -33,7 +33,7 @@ Blade of Oblivion
 Fractured Veil
 Gilded Catalyst
 Immolate
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Augur Crow
@@ -99,7 +99,7 @@ Starbound Striker
 Shadow Reflection
 Northlight Maestro
 Sanctum Approach
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Fern Treader
 Mirror Protocol
@@ -163,7 +163,7 @@ The Deathsworn
 Challenge of the Blade
 Prism Caller
 Cloaked Sentinel
-Worlds Await
+Terminus
 Cosmic Puppeteer
 The Waking Titan
 Duskshore Virtuoso

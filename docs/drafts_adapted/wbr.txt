@@ -25,7 +25,7 @@ Shadowbinder
 Keeper of the Lightpath
 Marrow Mimic
 Ironclad Marksman
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Clockwork Conductor
 Duskreaper
@@ -107,7 +107,7 @@ Fathomless Maw
 Kindlehorn
 Aspiring Guardian
 Ride of the Vanguard
-Final Witness
+Soulreaver
 Boundless Wanderer
 Field Reverent
 Fargazer

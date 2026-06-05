@@ -18,7 +18,7 @@ Wreckland Maverick
 Flagbearer of Decay
 Inspiring Templar
 Wired Duelist
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Featherlight Summoner
@@ -40,7 +40,7 @@ Worldbreacher
 Marrow Mimic
 Fractured Vessel
 Forge Inheritor
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Saltless Mariner
 Obliterator of Worlds

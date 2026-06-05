@@ -14,7 +14,7 @@ Blade of Oblivion
 Dreaming Groves
 Across the Void
 Call of the Lost
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Ashen Remnant
@@ -53,7 +53,7 @@ Gateway Defender
 Blade of Unity
 Challenge of the Blade
 Broadcast Array
-Worlds Await
+Terminus
 Dreadmount Sovereign
 Sigil Analyst
 Vertiginous Leap

@@ -12,7 +12,7 @@ Marrow Mimic
 Ironclad Marksman
 Guiding Light
 Abolish
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Clockwork Conductor
 Chronicle Reclaimer
@@ -24,7 +24,7 @@ Fractured Veil
 Gilded Catalyst
 Dreaming Groves
 Across the Void
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Crimson Pilgrimage
@@ -67,7 +67,7 @@ Luminwings
 Starbound Striker
 Inverted Reflection
 Shadow Reflection
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Fern Treader
 Mirror Protocol

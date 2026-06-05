@@ -30,7 +30,7 @@ A companion to [outsiders.md](outsiders.md), listing every CardsV2 card with a s
 15. Saffron Trailblazer — enters Awakened with "❖ – 1●: Move this character to an unoccupied character position," so it can slide into an open lane and score the turn it lands.
 16. Planetgazer — repositioning body with ▸Materialized Foresee 2 to smooth draws while it threatens a lane.
 17. Keeper of the Tides — ▸Materialized prevents a played card with cost 2● or less and carries the reposition ability; a disruptive body that slides forward.
-18. Nocturne Strummer — 1● reposition body that also supports +2✦, a cheap evasive challenger for the scoring plan.
+18. Last Light Herald — 1● reposition body that also supports +2✦, a cheap evasive challenger for the scoring plan.
 19. Headtaker Wurm — reposition body whose ▸Materialized can bounce an enemy blocker out of a lane.
 
 ## ▸Materialized value bodies (rebuy on bounce)

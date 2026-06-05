@@ -247,7 +247,7 @@ Dreamcaller heading also shows its own title and ability from
 
 | Dreamtides card | MTG name |
 | --- | --- |
-| Runebound Champion | Emry, Lurker of the Loch |
+| Dreadlord | Emry, Lurker of the Loch |
 | Echo Technician | Emry, Lurker of the Loch |
 | Dream Garden Visitor | Emry, Lurker of the Loch |
 | Aftermath Bloom | Tinker |

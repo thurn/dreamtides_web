@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { glimpseOfThePast } from "./glimpse-of-the-past";
+import { glimpseOfWhatWas } from "./glimpse-of-what-was";
 import type { AiCard, ForwardModel } from "../forward-model";
 
 function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
@@ -32,11 +32,11 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
   };
 }
 
-describe("Glimpse of the Past (#517)", () => {
+describe("Glimpse of What Was (#517)", () => {
   it("canPlay requires 1 energy", () => {
     const self = makeCard({ battleCardId: "glimpse", cardNumber: 517, energyCost: 1 });
-    expect(glimpseOfThePast.canPlay(makeModel({ aiEnergy: 0 }), self)).toBe(false);
-    expect(glimpseOfThePast.canPlay(makeModel({ aiEnergy: 1 }), self)).toBe(true);
+    expect(glimpseOfWhatWas.canPlay(makeModel({ aiEnergy: 0 }), self)).toBe(false);
+    expect(glimpseOfWhatWas.canPlay(makeModel({ aiEnergy: 1 }), self)).toBe(true);
   });
 
   it("play draws one card and leaves the deck a permutation of the rest", () => {
@@ -46,7 +46,7 @@ describe("Glimpse of the Past (#517)", () => {
     const c = makeCard({ battleCardId: "c", cardNumber: 514, energyCost: 3 });
     const model = makeModel({ aiEnergy: 2, aiHand: [self], aiDeck: [a, b, c] });
 
-    glimpseOfThePast.play(model, self, null);
+    glimpseOfWhatWas.play(model, self, null);
 
     // Drew the top card (a); deck holds a permutation of b, c.
     expect(model.aiHand.map((x) => x.battleCardId)).toEqual(["a"]);

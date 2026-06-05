@@ -156,7 +156,7 @@ the tribe and turns into a spirit animal anthem on top.
 ## Awaken: attacking the turn you flood
 
 A board that materializes exhausted cannot challenge the turn it lands, so the
-deck carries ways to wake itself up and swing immediately. **Marked Direwolf**
+deck carries ways to wake itself up and swing immediately. **Verdant Pilgrim**
 ("☪: Awaken an ally") wakes one body at a time, while **Cindermarch** ("When you
 materialize a character, awaken each other allied character") wakes the whole board
 on every deployment — so a Storm turn that floods bodies also un-exhausts them,
@@ -209,7 +209,7 @@ Toward **Celestial Reverie Combo**: the engine pieces are already in the list.
 **Nexus Wayfinder** plus **Celestial Reverie** plus self-bouncing bodies
 (**Stoneborn Eternal**, **Heavenward Penitent**) turns into a draw-and-energy loop;
 **Melodist of the Finale** keeps the energy positive while you chain. Closing the
-loop is a matter of adding **Worlds Await** ("If you have no cards in your deck, you
+loop is a matter of adding **Terminus** ("If you have no cards in your deck, you
 win the game") for the empty-deck finish or **Hatching Ground** ("For each card
 you've played this turn, chosen player erodes X") to Fatigue the opponent out.
 

@@ -1,4 +1,4 @@
-Flashpoint Detonation
+Unleash Ruin
 Wasteland Tamer
 Veilseeker
 Mystic Runefish
@@ -88,7 +88,7 @@ Emerald Guardian
 Emberfang
 Cragfall
 Resilient Wanderer
-Final Witness
+Soulreaver
 Torchbearer of the Abyss
 Lone Castaway
 Inverted Reflection
@@ -109,7 +109,7 @@ Mountainwatch Alpha
 Enginespeaker
 Emberwatch Veteran
 Vessel of Echoes
-Marked Direwolf
+Verdant Pilgrim
 Starsea Traveler
 Break the Veil
 Herald of the Last Light

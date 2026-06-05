@@ -18,7 +18,7 @@ export interface StarterCardModel {
   supportSpark?(model: ForwardModel, self: AiCard): number | null; // feeds effectiveSpark's supportSources
   /**
    * Flat +✦ bonus a deployed card grants to ITSELF from a self-static (e.g.
-   * Meadowforged Colossus's "+2✦ for each supporting ally"). Returns 0/`null`
+   * Wildflower Colossus's "+2✦ for each supporting ally"). Returns 0/`null`
    * when the static is inactive (card not deployed, no supporters). Distinct
    * from {@link supportSpark}, which a back-rank card grants to OTHER front
    * allies. See `battle_ai.md` §"Per-Card Knowledge".
@@ -27,28 +27,28 @@ export interface StarterCardModel {
   valueHint?(model: ForwardModel, self: AiCard): number;
 }
 
-import { twilightMinstrel } from "./twilight-minstrel";
-import { circlewatchSeer } from "./circlewatch-seer";
-import { brandedDirewolf } from "./branded-direwolf";
-import { sigilswornChampion } from "./sigilsworn-champion";
-import { lastWitness } from "./last-witness";
-import { meadowforgedColossus } from "./meadowforged-colossus";
-import { flashpointBlast } from "./flashpoint-blast";
-import { glimpseOfThePast } from "./glimpse-of-the-past";
-import { heraldsSign } from "./heralds-sign";
-import { distantWorlds } from "./distant-worlds";
+import { nocturneStrummer } from "./nocturne-strummer";
+import { ringwatcher } from "./ringwatcher";
+import { markedDirewolf } from "./marked-direwolf";
+import { runeboundChampion } from "./runebound-champion";
+import { finalWitness } from "./final-witness";
+import { wildflowerColossus } from "./wildflower-colossus";
+import { flashpointDetonation } from "./flashpoint-detonation";
+import { glimpseOfWhatWas } from "./glimpse-of-what-was";
+import { signOfArrival } from "./sign-of-arrival";
+import { worldsAwait } from "./worlds-await";
 
 const models: StarterCardModel[] = [
-  twilightMinstrel,
-  circlewatchSeer,
-  brandedDirewolf,
-  sigilswornChampion,
-  lastWitness,
-  meadowforgedColossus,
-  flashpointBlast,
-  glimpseOfThePast,
-  heraldsSign,
-  distantWorlds,
+  nocturneStrummer,
+  ringwatcher,
+  markedDirewolf,
+  runeboundChampion,
+  finalWitness,
+  wildflowerColossus,
+  flashpointDetonation,
+  glimpseOfWhatWas,
+  signOfArrival,
+  worldsAwait,
 ];
 
 export const starterCardModels: ReadonlyMap<number, StarterCardModel> = new Map<

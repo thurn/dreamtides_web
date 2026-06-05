@@ -10,14 +10,14 @@ Derelict Voyage
 Ironclad Marksman
 Gleamharvester
 Shoreline Penitent
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Sanctum Awakened
 Gilded Catalyst
 Oracle of Shifting Skies
 Architect of Memory
 Call of the Lost
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Fading Farewell
@@ -48,7 +48,7 @@ Blight Weaver
 Demonbane
 Lone Castaway
 Starbound Striker
-Glimpse of What Was
+Ancient Descent
 Sandglider
 Mirror Protocol
 The Grand Heist
@@ -78,7 +78,7 @@ Assault Leader
 Null Sphere
 Challenge of the Blade
 Prism Caller
-Worlds Await
+Terminus
 Cosmic Puppeteer
 Dreadmount Sovereign
 Sigil Analyst

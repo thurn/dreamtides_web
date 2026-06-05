@@ -10,7 +10,7 @@ Sundown Surfer
 Starbound Striker
 Reforged Automaton
 Inspiring Templar
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Sundown Ronin
@@ -20,7 +20,7 @@ Ironclad Marksman
 Worldbreacher
 Through the Rift
 The Deathsworn
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Shadow March
 Aftermath Bloom

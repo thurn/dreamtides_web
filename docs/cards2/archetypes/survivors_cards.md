@@ -8,7 +8,7 @@ A companion to [survivors.md](survivors.md), listing every CardsV2 card with a s
 2. Sorrow Watcher — survivor enabler that makes a survivor figment on entry and draws a card per 3 allied survivors, feeding and scaling the whole deck.
 3. Dustborn Veteran — every non-figment allied survivor that dies leaves a 1✦ survivor figment, turning attrition into a growing army.
 4. Deathwalker — draws a card whenever an allied survivor is dissolved, converting each loss into a card.
-5. Final Witness — draws a card whenever a non-figment ally is dissolved, the broad attrition draw payoff.
+5. Soulreaver — draws a card whenever a non-figment ally is dissolved, the broad attrition draw payoff.
 6. Tidewreck Navigator — survivor figment maker on discard and survivor recursion engine (return a survivor from void by abandoning one).
 7. Defiant Holdout — survivor that makes survivor figments equal to its spark when it dies, paying you for its own death.
 8. Hope's Vanguard — discard a card to make a survivor figment, bridging the discard build with the survivor count.
@@ -83,7 +83,7 @@ A companion to [survivors.md](survivors.md), listing every CardsV2 card with a s
 56. Vertiginous Leap — clean 1● discard at the opponent's hand, a game-defining strip.
 57. Peak Plunder — hand disruption with Reclaim 1● that doubles as self-discard, recurring from the void.
 58. Break the Veil — makes the opponent discard with a reclaim mode paid by discarding, aimed out while re-buying itself.
-59. Flashpoint Detonation — dissolve an enemy with cost 3● or less for 2●, the deck's cheap broad removal.
+59. Unleash Ruin — dissolve an enemy with cost 3● or less for 2●, the deck's cheap broad removal.
 60. Shatter the Frail — kills small bodies with Reclaim 1●, trading and coming back from the void.
 
 ## Misc. role players

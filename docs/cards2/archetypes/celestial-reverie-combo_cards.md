@@ -69,7 +69,7 @@ A companion to [celestial-reverie-combo.md](celestial-reverie-combo.md), listing
 
 ## Dedicated finishers
 
-48. Worlds Await — 1● "If you have no cards in your deck, you win," the deterministic empty-deck close after the loop draws the deck.
+48. Terminus — 1● "If you have no cards in your deck, you win," the deterministic empty-deck close after the loop draws the deck.
 49. Hatching Ground — X● "For each card played this turn, chosen player erodes X," turning a long loop into a Fatigue kill on the opponent's deck.
 
 ## Drain and dissolve payoffs
@@ -77,10 +77,10 @@ A companion to [celestial-reverie-combo.md](celestial-reverie-combo.md), listing
 50. Silent Avenger — 3● "When a character is dissolved, gain 1⍟," dripping points as a wide figment board trades.
 51. Soulrender — 3● "Abandon a character: chosen player erodes X (its cost)," feeding the same empty-deck Fatigue plan from the abandon side.
 52. Sunset Chronicler — 3● "When an ally is dissolved, draw a card," reloading the hand off combat when the draw trigger stalls.
-53. Final Witness — 3● "When a non-figment ally is dissolved, draw a card," the same combat-reload as a survivor body.
+53. Soulreaver — 3● "When a non-figment ally is dissolved, draw a card," the same combat-reload as a survivor body.
 
 ## Spirit Animal awaken/replay support
 
-54. Marked Direwolf — 1● "☪: Awaken an ally," re-buying materialization-style readiness on the loop's bodies.
+54. Verdant Pilgrim — 1● "☪: Awaken an ally," re-buying materialization-style readiness on the loop's bodies.
 55. Moonbound Wolf — 1● "☪, Return an ally to hand: Trigger a spirit animal's Dawn," adding bounce and re-fired ▸Dawn value to extend the chain.
 56. Lunar Hart — 1● "▸Materialized, Dawn: Gain 2●," a repeating energy source when Conduit of Resonance re-fires ▸Dawn each play.

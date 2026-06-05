@@ -1,4 +1,4 @@
-Flashpoint Detonation
+Unleash Ruin
 Wasteland Tamer
 Veilseeker
 Forge Inheritor
@@ -96,7 +96,7 @@ Avatar of Cosmic Reckoning
 Sky Voyager
 Voidcaller
 Momentum's Edge
-Final Witness
+Soulreaver
 Dread Arbiter
 Iron Executor
 Torchbearer of the Abyss
@@ -118,7 +118,7 @@ Mountainwatch Alpha
 Enginespeaker
 Emberwatch Veteran
 Vessel of Echoes
-Marked Direwolf
+Verdant Pilgrim
 Starsea Traveler
 Break the Veil
 Herald of the Last Light

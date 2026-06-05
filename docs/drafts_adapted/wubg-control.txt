@@ -3,7 +3,7 @@ Silent Avenger
 Wreckheap Survivor
 Riftwalker
 Stolen Genesis
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Ordained Collapse
@@ -18,7 +18,7 @@ Blazepath Traveler
 Lumen Rover
 Flamestride Rider
 Invoker of Myths
-Final Witness
+Soulreaver
 Dread Arbiter
 Duskwall Delver
 Mirror Protocol

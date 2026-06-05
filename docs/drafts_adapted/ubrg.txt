@@ -47,7 +47,7 @@ Marrow Mimic
 Doorlight Foundling
 Guiding Light
 Flagbearer of Decay
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Spirit Bond
 Forsaken Pact
@@ -79,7 +79,7 @@ Ethereal Trailblazer
 Abomination of Memory
 Dreamvale Monarch
 Call of the Lost
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Augur Crow
@@ -145,7 +145,7 @@ Resilient Wanderer
 Fathomless Maw
 Kindlehorn
 Ripple Through Reality
-Final Witness
+Soulreaver
 Echoes of the Journey
 Duneveil Vanguard
 Lone Castaway
@@ -168,7 +168,7 @@ Eruption
 Enginespeaker
 Emberwatch Veteran
 Vessel of Echoes
-Marked Direwolf
+Verdant Pilgrim
 Starsea Traveler
 Desolation's Edge
 Break the Veil
@@ -199,7 +199,7 @@ Virtuoso of Harmony
 Silent Gatherer
 Curio Dealer
 Broadcast Array
-Worlds Await
+Terminus
 Ferryman of the Falls
 Shadowpaw
 Harvest the Forgotten

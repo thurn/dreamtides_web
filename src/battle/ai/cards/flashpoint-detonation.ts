@@ -3,7 +3,7 @@ import type { AiTargetChoice, StarterCardModel } from "./index";
 import { playEvent } from "./helpers";
 
 /**
- * #516 Flashpoint Blast (Event, 2●) — "Dissolve an enemy with cost 3● or less."
+ * #516 Flashpoint Detonation (Event, 2●) — "Dissolve an enemy with cost 3● or less."
  * (`battle_ai.md` §"The AI Deck"). Removal.
  *
  * The "cost ≤ 3" legality cannot be read from an abstract {@link
@@ -15,7 +15,7 @@ import { playEvent } from "./helpers";
  * Target choice (`battle_ai.md` §"Per-Card Knowledge"): prefer a front-rank
  * body (a blocker to clear before challenging), else the highest-spark threat.
  */
-export const flashpointBlast: StarterCardModel = {
+export const flashpointDetonation: StarterCardModel = {
   cardNumber: 516,
   canPlay(model: ForwardModel, self: AiCard): boolean {
     return model.aiEnergy >= self.energyCost && model.opponentBodies.length > 0;

@@ -1,4 +1,4 @@
-Flashpoint Detonation
+Unleash Ruin
 Wasteland Tamer
 Soulrender
 Epiphany Unfolded
@@ -15,7 +15,7 @@ Hatching Ground
 Scrapyard Custodian
 Derelict Voyage
 Blightmaw
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
 Ashcrown Charger
@@ -23,7 +23,7 @@ Shatter the Frail
 Whisper of the Past
 Defiant Parry
 Sanctum Awakened
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Fading Farewell
@@ -67,7 +67,7 @@ Fathomless Maw
 Kindlehorn
 Momentum's Edge
 Ride of the Vanguard
-Final Witness
+Soulreaver
 Dread Arbiter
 Soulbinder
 Vanishing Inquisitor
@@ -78,7 +78,7 @@ Starbound Striker
 Inverted Reflection
 Shadow Reflection
 Moonlit Voyage
-Glimpse of What Was
+Ancient Descent
 The Grand Heist
 Nineborn Specter
 Radiant Trio
