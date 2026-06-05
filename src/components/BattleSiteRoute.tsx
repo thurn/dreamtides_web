@@ -50,6 +50,7 @@ export function BattleSiteRoute({
     dreamsignTemplates: questContent.dreamsignTemplates,
     poolContext: questContent.poolContext,
     seedOverride: runtimeConfig.seedOverride,
+    aiMode: runtimeConfig.aiMode,
   });
 
   if (battleState === null) {
@@ -61,5 +62,5 @@ export function BattleSiteRoute({
     );
   }
 
-  return <PlayableBattleScreen site={site} />;
+  return <PlayableBattleScreen site={site} aiMode={runtimeConfig.aiMode} />;
 }

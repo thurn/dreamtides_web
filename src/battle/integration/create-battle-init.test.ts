@@ -700,6 +700,46 @@ describe("createBattleInit", () => {
       }
     });
 
+    it("builds the AI Starter deck (510-519 only) and is deterministic in aiMode", () => {
+      // Augment the base card database with the 10 real Starter card numbers
+      // (510-519). buildAiStarterDeck filters to isStarter cards, so only these
+      // should appear in the enemy deck when aiMode is on.
+      const baseInput = makeBaseInput();
+      const augmented = new Map(baseInput.cardDatabase);
+      const starterNumbers = Array.from({ length: 10 }, (_, i) => 510 + i);
+      for (const cardNumber of starterNumbers) {
+        augmented.set(cardNumber, {
+          ...makePackageCard(cardNumber, "Character", 1, "starter"),
+          isStarter: true,
+        });
+      }
+
+      const input: CreateBattleInitInput = {
+        ...baseInput,
+        cardDatabase: augmented,
+        aiMode: true,
+        seedOverride: 4242,
+      };
+      const first = createBattleInit(input);
+      const second = createBattleInit(input);
+
+      const allowed = new Set(starterNumbers);
+      const deckNumbers = first.enemyDeckDefinition.map((c) => c.cardNumber);
+      // 3 copies x 10 starters = 30 cards, all within 510-519.
+      expect(deckNumbers).toHaveLength(30);
+      for (const cardNumber of deckNumbers) {
+        expect(allowed.has(cardNumber)).toBe(true);
+      }
+      // Every starter is present exactly 3 times.
+      for (const cardNumber of starterNumbers) {
+        expect(deckNumbers.filter((n) => n === cardNumber)).toHaveLength(3);
+      }
+      // Deterministic for a fixed seed.
+      expect(deckNumbers).toEqual(
+        second.enemyDeckDefinition.map((c) => c.cardNumber),
+      );
+    });
+
     it("falls back when a poolContext resolves to an empty starter deck", () => {
       // A poolContext whose name index shares nothing with the generated pool
       // names yields an empty resolved list; the fallback still fills the deck.

@@ -6,11 +6,25 @@ describe("parseRuntimeConfig", () => {
     expect(parseRuntimeConfig("")).toEqual({
       seedOverride: null,
       startInBattle: false,
+      aiMode: false,
       gameId: null,
       databaseMode: "emulator",
       debugJourneyShape: null,
       debugJourneyReward: null,
       debugJourneyCost: null,
+    });
+  });
+
+  describe("aiMode", () => {
+    it("returns true when ai=1", () => {
+      expect(parseRuntimeConfig("?ai=1").aiMode).toBe(true);
+    });
+
+    it("returns false when ai is absent or not 1", () => {
+      expect(parseRuntimeConfig("").aiMode).toBe(false);
+      expect(parseRuntimeConfig("?ai=0").aiMode).toBe(false);
+      expect(parseRuntimeConfig("?ai=true").aiMode).toBe(false);
+      expect(parseRuntimeConfig("?ai=").aiMode).toBe(false);
     });
   });
 

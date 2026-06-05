@@ -101,15 +101,27 @@ type HoverPreviewState = {
   y: number;
 } | null;
 
-export function PlayableBattleScreen({ site }: { site: SiteState }) {
+export function PlayableBattleScreen({
+  site,
+  aiMode = false,
+}: {
+  site: SiteState;
+  aiMode?: boolean;
+}) {
   const { battleState, reducerState } = useMultiplayerBattle();
   if (battleState === null || reducerState === null) {
     return null; // BattleSiteRoute already shows the loading state.
   }
-  return <PlayableBattleScreenInner site={site} />;
+  return <PlayableBattleScreenInner site={site} aiMode={aiMode} />;
 }
 
-function PlayableBattleScreenInner({ site }: { site: SiteState }) {
+function PlayableBattleScreenInner({
+  site,
+  aiMode,
+}: {
+  site: SiteState;
+  aiMode: boolean;
+}) {
   const {
     battleState: maybeBattleState,
     reducerState: maybeReducerState,
@@ -746,7 +758,7 @@ function PlayableBattleScreenInner({ site }: { site: SiteState }) {
             enemyName={battleInit.enemyDescriptor.name}
             enemyScore={reducerState.mutable.sides.enemy.score}
             futureCount={futureCount}
-            hasAiOpponent
+            hasAiOpponent={aiMode}
             historyCount={historyCount}
             phase={reducerState.mutable.phase}
             playerScore={reducerState.mutable.sides.player.score}

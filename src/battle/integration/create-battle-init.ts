@@ -11,6 +11,7 @@ import { applyTransfigurationToCard } from "../../transfiguration/transfiguratio
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
+import { buildAiStarterDeck } from "../ai/deck";
 import type {
   BattleDeckCardDefinition,
   BattleDreamcallerSummary,
@@ -79,6 +80,12 @@ export interface CreateBattleInitInput {
    */
   poolContext?: RunPoolContext;
   seedOverride?: number | null;
+  /**
+   * When true, the enemy deck is built from the AI Starter deck
+   * ({@link buildAiStarterDeck}) instead of the idf3-steered pool. Used by the
+   * `?ai=1` runtime mode that pits the player against the battle AI opponent.
+   */
+  aiMode?: boolean;
 }
 
 function applyBattleRewardModifiers(
@@ -159,6 +166,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     cardDatabase,
     streams.enemyDeckOrder,
     seed,
+    input.aiMode ?? false,
   ).map(freezeBattleDeckCardDefinition);
   const dreamcallerSummary = freezeBattleDreamcallerSummary(state.dreamcaller);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
@@ -327,7 +335,18 @@ function createEnemyDeckDefinition(
   cardDatabase: ReadonlyMap<number, CardData>,
   rng: BattleRng,
   battleSeed: number,
+  aiMode: boolean,
 ): BattleDeckCardDefinition[] {
+  // AI mode builds the enemy deck from the fixed AI Starter deck (3 copies of
+  // each starter, 30 cards >= MIN_BATTLE_DECK_SIZE so no padding is needed),
+  // then shuffles it through the enemy-deck RNG stream to match the
+  // determinism and shape of the steered/fallback paths below.
+  if (aiMode) {
+    return rng
+      .shuffle(buildAiStarterDeck(cardDatabase))
+      .map(cloneBattleDeckCardDefinition);
+  }
+
   let chosen: CardData[] = [];
 
   if (poolContext !== undefined) {

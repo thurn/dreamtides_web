@@ -656,6 +656,7 @@ export function QuestProvider({
   runtimeConfig = {
     seedOverride: null,
     startInBattle: false,
+    aiMode: false,
     gameId: null,
     databaseMode: "emulator",
   },

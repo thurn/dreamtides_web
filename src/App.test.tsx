@@ -308,6 +308,7 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: "ab12cd",
           databaseMode: "emulator",
         }}
@@ -335,6 +336,7 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -364,6 +366,7 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: null,
           databaseMode: "realtime",
         }}
@@ -415,6 +418,7 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -445,6 +449,7 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -487,6 +492,7 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -520,6 +526,7 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -547,6 +554,7 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -595,6 +603,7 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: true,
+          aiMode: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -627,6 +636,7 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -678,6 +688,7 @@ describe("QuestApp", () => {
         runtimeConfig={{
           seedOverride: null,
           startInBattle: false,
+          aiMode: false,
           gameId: null,
           databaseMode: "emulator",
         }}

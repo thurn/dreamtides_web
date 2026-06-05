@@ -3,6 +3,7 @@ import { normalizeRoomId } from "../multiplayer/room-id";
 export interface RuntimeConfig {
   seedOverride: number | null;
   startInBattle: boolean;
+  aiMode: boolean;
   gameId: string | null;
   databaseMode: DatabaseMode;
   debugJourneyShape?: string | null;
@@ -17,6 +18,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
     startInBattle: params.get("startInBattle") === "1",
+    aiMode: params.get("ai") === "1",
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
     debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),

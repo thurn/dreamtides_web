@@ -52,6 +52,7 @@ export function useEnsureBattleSession(input: {
   dreamsignTemplates?: readonly DreamsignTemplate[];
   poolContext?: RunPoolContext;
   seedOverride: number | null;
+  aiMode?: boolean;
 }): void {
   const inFlightKey = useRef<string | null>(null);
 
@@ -73,6 +74,7 @@ export function useEnsureBattleSession(input: {
       dreamsignTemplates: input.dreamsignTemplates,
       poolContext: input.poolContext,
       seedOverride: input.seedOverride,
+      aiMode: input.aiMode,
     });
     const initial = createInitialBattleState(init);
 
@@ -87,6 +89,7 @@ export function useEnsureBattleSession(input: {
       inFlightKey.current = null;
     });
   }, [
+    input.aiMode,
     input.battleEntryKey,
     input.battleState,
     input.cardDatabase,
