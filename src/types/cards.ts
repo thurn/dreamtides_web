@@ -64,6 +64,14 @@ export interface CardData {
   isFast: boolean;
   reclaimCost?: number | null;
   renderedText: string;
+  /**
+   * Name of the Magic: The Gathering card this card is derived from, sourced
+   * from a TOML `mtg-name` and carried through the setup-assets transform.
+   * Surfaced as a reference hover tooltip in card-browsing surfaces (the card
+   * editor and the Pool Viewer). Present on sources that record it (e.g.
+   * `cards_v2.toml`); absent on cards whose source TOML omits `mtg-name`.
+   */
+  mtgName?: string;
   imageNumber: number;
   artOwned: boolean;
   /** Art crop applied to the card's image; absent cards use the default crop. */

@@ -31,8 +31,9 @@ export interface EditorCardRecord {
   tides: string[];
   /**
    * The Magic: The Gathering card this card is derived from. Surfaced as a
-   * hover tooltip in the editor for reference; it is not an editable field and
-   * is not carried into the quest prototype's card data.
+   * reference hover tooltip in the editor; it is not an editable field. The
+   * setup-assets transform also carries it onto the runtime `CardData.mtgName`,
+   * where card-browsing surfaces such as the Pool Viewer show the same tooltip.
    */
   mtgName: string;
   source: Record<string, unknown>;
