@@ -4,6 +4,7 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
+import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { DraftState } from "../types/draft";
 import { logEvent } from "../logging";
 import { PoolViewer } from "./PoolViewer";
@@ -55,6 +56,33 @@ const draftState: DraftState = {
   sitePicksCompleted: 0,
 };
 
+function makeResolvedPackage(
+  overrides: Partial<{
+    starterDecklistCardNumbers: number[];
+    signatureCards: string[];
+  }> = {},
+): ResolvedDreamcallerPackage {
+  return {
+    dreamcaller: {
+      id: "dc-test",
+      name: "Test Caller",
+      title: "The Tester",
+      renderedText: "",
+      imageNumber: "1",
+      startingEssence: 250,
+      signatureCards: overrides.signatureCards ?? ["Alpha Seer", "Quick Spark"],
+    },
+    draftPoolCopiesByCard: {},
+    dreamsignPoolIds: [],
+    mandatoryOnlyPoolSize: 0,
+    draftPoolSize: 0,
+    doubledCardCount: 0,
+    legalSubsetCount: 1,
+    preferredSubsetCount: 1,
+    starterDecklistCardNumbers: overrides.starterDecklistCardNumbers ?? [2, 3],
+  };
+}
+
 function mount(element: ReactElement): {
   container: HTMLDivElement;
   root: Root;
@@ -72,6 +100,7 @@ function renderPool(
   overrides: Partial<{
     draftState: DraftState | null;
     onPoolCardDragStart: (card: CardData) => void;
+    resolvedPackage: ResolvedDreamcallerPackage | null;
   }> = {},
 ) {
   return mount(
@@ -82,6 +111,7 @@ function renderPool(
           ? overrides.draftState!
           : draftState
       }
+      resolvedPackage={overrides.resolvedPackage ?? null}
       isOpen
       onClose={vi.fn()}
       onPoolCardDragStart={overrides.onPoolCardDragStart}
@@ -254,6 +284,77 @@ describe("PoolViewer", () => {
     expect(
       container.querySelector("[data-card-browser-mtg-tooltip]")?.textContent,
     ).toBe("MTG: Serra Angel");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("omits the IDF3 and signature toggles when no resolved package is supplied", () => {
+    const { container, root } = renderPool();
+
+    expect(container.querySelector('[data-pool-source="idf3"]')).toBeNull();
+    expect(
+      container.querySelector('[data-pool-source="signature"]'),
+    ).toBeNull();
+    expect(container.querySelector('[data-pool-source="run"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-pool-source="catalog"]'),
+    ).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows the IDF3 starting decklist and the signature cards from the resolved package", () => {
+    const { container, root } = renderPool({
+      resolvedPackage: makeResolvedPackage({
+        starterDecklistCardNumbers: [2, 3],
+        signatureCards: ["Alpha Seer", "Quick Spark"],
+      }),
+    });
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-pool-source="idf3"]')
+        ?.click();
+    });
+
+    expect(container.querySelector('[data-pool-card-number="2"]')).not.toBeNull();
+    expect(container.querySelector('[data-pool-card-number="3"]')).not.toBeNull();
+    expect(container.querySelector('[data-pool-card-number="1"]')).toBeNull();
+    // Decklist entries carry no remaining-copy badge.
+    expect(container.querySelector("[data-pool-copy-badge]")).toBeNull();
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-pool-source="signature"]')
+        ?.click();
+    });
+
+    expect(container.querySelector('[data-pool-card-number="1"]')).not.toBeNull();
+    expect(container.querySelector('[data-pool-card-number="4"]')).not.toBeNull();
+    expect(container.querySelector('[data-pool-card-number="2"]')).toBeNull();
+    expect(container.querySelector("[data-pool-copy-badge]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("hides the signature toggle when the Dreamcaller has no signature cards", () => {
+    const { container, root } = renderPool({
+      resolvedPackage: makeResolvedPackage({
+        starterDecklistCardNumbers: [2],
+        signatureCards: [],
+      }),
+    });
+
+    expect(container.querySelector('[data-pool-source="idf3"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-pool-source="signature"]'),
+    ).toBeNull();
 
     act(() => {
       root.unmount();

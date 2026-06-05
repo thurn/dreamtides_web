@@ -767,6 +767,7 @@ function PlayableBattleScreenInner({
       <PoolViewer
         cardDatabase={cardDatabase}
         draftState={questState.draftState}
+        resolvedPackage={questState.resolvedPackage}
         isOpen={isPoolViewerOpen}
         onClose={() => setIsPoolViewerOpen(false)}
         onPoolCardDragEnd={handleCardDragEnd}

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CSSProperties } from "react";
 import type { CardData } from "../types/cards";
+import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { DraftState } from "../types/draft";
 import { BrowserCard } from "./card-browser/BrowserCard";
 import CardBrowserGrid from "./card-browser/CardBrowserGrid";
@@ -16,8 +17,22 @@ import {
 } from "./card-browser/card-browser-filter";
 import { CardOverlay } from "./CardOverlay";
 
-type PoolViewerSource = "run" | "catalog";
+type PoolViewerSource = "run" | "catalog" | "idf3" | "signature";
 type PoolViewerVariant = "overlay" | "floating";
+
+const SOURCE_LABELS: Record<PoolViewerSource, string> = {
+  run: "Run Pool",
+  catalog: "All Cards",
+  idf3: "IDF3 Decklist",
+  signature: "Signature Cards",
+};
+
+const EMPTY_BASE_MESSAGES: Record<PoolViewerSource, string> = {
+  run: "No run pool cards are available.",
+  catalog: "No cards match the current filters.",
+  idf3: "No IDF3 starting decklist is available for this run.",
+  signature: "This Dreamcaller has no signature cards.",
+};
 type FloatingPosition = { x: number; y: number };
 type FloatingDragState = { offsetX: number; offsetY: number } | null;
 
@@ -54,10 +69,16 @@ function sourceButtonStyle(active: boolean): CSSProperties {
 /**
  * Read-only card-pool browser. It shares the card editor's filter/sort/size
  * toolbar, grid layout, and Magic: The Gathering hover tooltip through the
- * `card-browser` module, and layers in pool-specific affordances: a run-pool vs.
- * full-catalog source toggle, remaining-copy badges, drag-to-deck support, and a
- * click-to-zoom card overlay. It renders as a full-screen `overlay` or a
- * draggable `floating` panel.
+ * `card-browser` module, and layers in pool-specific affordances: a source
+ * toggle (remaining run pool, full catalog, the IDF3 starting decklist that
+ * seeded the pool, and the Dreamcaller's signature cards), remaining-copy
+ * badges, drag-to-deck support, and a click-to-zoom card overlay. It renders as
+ * a full-screen `overlay` or a draggable `floating` panel.
+ *
+ * The IDF3 and signature toggles appear only when `resolvedPackage` supplies the
+ * matching data — an IDF3 starter decklist and a non-empty signature list,
+ * respectively — so runs without that content show just the run-pool and
+ * catalog sources.
  */
 export function PoolViewer({
   cardDatabase,
@@ -66,6 +87,7 @@ export function PoolViewer({
   onClose,
   onPoolCardDragEnd,
   onPoolCardDragStart,
+  resolvedPackage = null,
   title = "Pool Viewer",
   variant = "overlay",
 }: {
@@ -75,6 +97,7 @@ export function PoolViewer({
   onClose: () => void;
   onPoolCardDragEnd?: () => void;
   onPoolCardDragStart?: (card: CardData) => void;
+  resolvedPackage?: ResolvedDreamcallerPackage | null;
   title?: string;
   variant?: PoolViewerVariant;
 }) {
@@ -146,16 +169,59 @@ export function PoolViewer({
     };
   }, [floatingDrag]);
 
-  const baseEntries = useMemo<PoolCardEntry[]>(
+  const idf3Entries = useMemo<PoolCardEntry[]>(
     () =>
-      source === "run"
-        ? buildRunPoolEntries(draftState, cardDatabase)
-        : Array.from(cardDatabase.values()).map((card) => ({
-            card,
-            copies: null,
-          })),
-    [cardDatabase, draftState, source],
+      buildEntriesFromCardNumbers(
+        resolvedPackage?.starterDecklistCardNumbers ?? [],
+        cardDatabase,
+      ),
+    [cardDatabase, resolvedPackage],
   );
+
+  const signatureEntries = useMemo<PoolCardEntry[]>(
+    () =>
+      buildSignatureEntries(
+        resolvedPackage?.dreamcaller.signatureCards ?? [],
+        cardDatabase,
+      ),
+    [cardDatabase, resolvedPackage],
+  );
+
+  const availableSources = useMemo<PoolViewerSource[]>(() => {
+    const sources: PoolViewerSource[] = ["run", "catalog"];
+    if (idf3Entries.length > 0) {
+      sources.push("idf3");
+    }
+    if (signatureEntries.length > 0) {
+      sources.push("signature");
+    }
+    return sources;
+  }, [idf3Entries.length, signatureEntries.length]);
+
+  // Fall back to the always-present run pool if the selected source loses its
+  // backing data (for example when a new run drops the signature cards).
+  useEffect(() => {
+    if (!availableSources.includes(source)) {
+      setSource("run");
+    }
+  }, [availableSources, source]);
+
+  const baseEntries = useMemo<PoolCardEntry[]>(() => {
+    switch (source) {
+      case "run":
+        return buildRunPoolEntries(draftState, cardDatabase);
+      case "idf3":
+        return idf3Entries;
+      case "signature":
+        return signatureEntries;
+      case "catalog":
+      default:
+        return Array.from(cardDatabase.values()).map((card) => ({
+          card,
+          copies: null,
+        }));
+    }
+  }, [cardDatabase, draftState, idf3Entries, signatureEntries, source]);
 
   const baseCards = useMemo(
     () => baseEntries.map((entry) => entry.card),
@@ -232,7 +298,7 @@ export function PoolViewer({
 
   const sourceToggle = (
     <div role="group" aria-label="Card source" style={segmentedStyle}>
-      {(["run", "catalog"] as const).map((value) => (
+      {availableSources.map((value) => (
         <button
           key={value}
           type="button"
@@ -241,7 +307,7 @@ export function PoolViewer({
           style={sourceButtonStyle(source === value)}
           onClick={() => setSource(value)}
         >
-          {value === "run" ? "Run Pool" : "All Cards"}
+          {SOURCE_LABELS[value]}
         </button>
       ))}
     </div>
@@ -321,8 +387,8 @@ export function PoolViewer({
                   style={{ color: "#9fb0ac" }}
                   data-pool-empty=""
                 >
-                  {source === "run" && baseCards.length === 0
-                    ? "No run pool cards are available."
+                  {baseCards.length === 0
+                    ? EMPTY_BASE_MESSAGES[source]
                     : "No cards match the current filters."}
                 </div>
               ) : (
@@ -399,6 +465,53 @@ function buildRunPoolEntries(
       continue;
     }
     entries.push({ card, copies });
+  }
+  return entries;
+}
+
+/**
+ * Resolve an ordered list of card numbers (such as the IDF3 starter decklist)
+ * into pool entries, skipping any number with no matching card. Entries carry
+ * no copy badge because these lists describe a deck, not a draftable multiset.
+ */
+function buildEntriesFromCardNumbers(
+  cardNumbers: readonly number[],
+  cardDatabase: ReadonlyMap<number, CardData>,
+): PoolCardEntry[] {
+  const entries: PoolCardEntry[] = [];
+  for (const cardNumber of cardNumbers) {
+    const card = cardDatabase.get(cardNumber);
+    if (card === undefined) {
+      continue;
+    }
+    entries.push({ card, copies: null });
+  }
+  return entries;
+}
+
+/**
+ * Resolve a Dreamcaller's signature card names against the card database by
+ * name, preserving authoring order and skipping names with no matching card.
+ * Signature cards are metadata, so entries carry no copy badge.
+ */
+function buildSignatureEntries(
+  signatureCards: readonly string[],
+  cardDatabase: ReadonlyMap<number, CardData>,
+): PoolCardEntry[] {
+  const cardsByName = new Map<string, CardData>();
+  for (const card of cardDatabase.values()) {
+    if (!cardsByName.has(card.name)) {
+      cardsByName.set(card.name, card);
+    }
+  }
+
+  const entries: PoolCardEntry[] = [];
+  for (const name of signatureCards) {
+    const card = cardsByName.get(name);
+    if (card === undefined) {
+      continue;
+    }
+    entries.push({ card, copies: null });
   }
   return entries;
 }

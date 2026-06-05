@@ -217,6 +217,7 @@ export function QuestApp({
           <PoolViewer
             cardDatabase={cardDatabase}
             draftState={state.draftState}
+            resolvedPackage={state.resolvedPackage}
             isOpen={poolViewerOpen}
             onClose={handleClosePoolViewer}
           />
