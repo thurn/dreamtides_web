@@ -408,6 +408,8 @@ export interface BattleAiChoiceTrace {
   targetSlotId: BattlefieldSlotId | null;
   heuristicScoreBefore: number | null;
   heuristicScoreAfter: number | null;
+  rationale?: string | null;
+  targetBattleCardId?: string | null;
 }
 
 export interface BattleDeferredLogEvent {
