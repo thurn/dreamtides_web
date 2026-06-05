@@ -27,6 +27,18 @@
 //   adequacy = min(1, share / target)              in [0, 1]
 //   headline = mean(adequacy) over all payoff instances, x100  (per-instance)
 //
+// Trap mode (`--traps`) answers a different question the mean headline hides:
+// how many TRAP cards does a real pool carry? A trap is a build-around payoff
+// sitting in a pool the pool cannot support, so a player who picks it is stuck.
+// A mean washes traps out -- a pool with 50 supported payoffs and 3 dead traps
+// still averages ~94. Trap detection reports a COUNT/RATE instead. It collapses
+// each payoff card to one adequacy = the MAX over its needed themes (a card is
+// only a trap if even its best-supportable theme is unsupported) and flags the
+// card when that best adequacy < tau. Trap mode evaluates the REAL production
+// pools: it passes each Dreamcaller's FULL signature (no off-theme signature
+// omission) and considers ALL themes, because off-identity drift payoffs (e.g. a
+// survivors payoff that leaked into an outsiders pool) are exactly the traps.
+//
 // Usage:
 //   node scripts/buildaround-support-experiment.mjs                 # short themes, 200 seeds
 //   node scripts/buildaround-support-experiment.mjs --themes all    # score every theme
@@ -35,6 +47,13 @@
 //   node scripts/buildaround-support-experiment.mjs --top 30
 //   node scripts/buildaround-support-experiment.mjs --pool-size 100  # smaller pool
 //   node scripts/buildaround-support-experiment.mjs --json > result.json
+//   node scripts/buildaround-support-experiment.mjs --traps          # trap-card mode
+//   node scripts/buildaround-support-experiment.mjs --traps --trap-tau 0.4
+// `--traps` switches into trap mode; `--trap-tau N` (default 0.35) sets the
+// adequacy threshold below which a payoff's best theme makes it a trap. Trap
+// mode respects --seeds, --pool-size, --variant, --dreamcaller, --top, and
+// --json; `--themes` does NOT apply in trap mode (traps are scored across all
+// themes, on the real production pool with every signature card).
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
@@ -56,6 +75,9 @@ export const TIER_TARGET = { 1: 0.1, 2: 0.18, 3: 0.25 };
 const POOL_TARGET_SIZE = 200;
 const DEFAULT_SEEDS = 200;
 const DEFAULT_TOP = 20;
+// Default trap threshold: a payoff whose best-supportable theme sits under 35%
+// of its demand target is a trap (picking it leaves the player stuck).
+const DEFAULT_TRAP_TAU = 0.35;
 
 // `--themes short` (the default) scores only this focused set of build-around
 // themes; `--themes all` scores every theme in the metadata.
@@ -153,6 +175,54 @@ export function scorePool(
   return instances;
 }
 
+/**
+ * Collapse a pool's payoff instances to one adequacy per *card*: the MAX over
+ * the themes that card needs (its best-supportable theme). A card is only a trap
+ * if even its best theme is unsupported, so the max is the right collapse.
+ *
+ * @returns Map<cardName, bestAdequacy in [0,1]>.
+ */
+export function cardBestAdequacies(
+  counts,
+  meta,
+  tierTarget = TIER_TARGET,
+  allowedThemes = null,
+) {
+  const byCard = new Map();
+  for (const inst of scorePool(counts, meta, tierTarget, allowedThemes)) {
+    byCard.set(
+      inst.payoff,
+      Math.max(byCard.get(inst.payoff) ?? 0, inst.adequacy),
+    );
+  }
+  return byCard;
+}
+
+/**
+ * The payoff cards in a pool that are traps: their best-supportable theme is
+ * still under `tau`. Built on top of `cardBestAdequacies`.
+ *
+ * @returns string[] of trap card names.
+ */
+export function trapCards(
+  counts,
+  meta,
+  tierTarget = TIER_TARGET,
+  tau = DEFAULT_TRAP_TAU,
+  allowedThemes = null,
+) {
+  const traps = [];
+  for (const [card, best] of cardBestAdequacies(
+    counts,
+    meta,
+    tierTarget,
+    allowedThemes,
+  )) {
+    if (best < tau) traps.push(card);
+  }
+  return traps;
+}
+
 function num(argv, flag, fallback) {
   const i = argv.indexOf(flag);
   if (i !== -1 && argv[i + 1] != null) return Number(argv[i + 1]);
@@ -192,8 +262,155 @@ function group() {
   };
 }
 
+function runTraps(argv) {
+  const seeds = num(argv, "--seeds", DEFAULT_SEEDS);
+  const top = num(argv, "--top", DEFAULT_TOP);
+  const poolSize = num(argv, "--pool-size", POOL_TARGET_SIZE);
+  const variant = str(argv, "--variant", "idf3");
+  const dcFilter = str(argv, "--dreamcaller", null);
+  const asJson = argv.includes("--json");
+  const tau = num(argv, "--trap-tau", DEFAULT_TRAP_TAU);
+
+  const cards = readJson("public/cards_v2-data.json");
+  const decklists = readJson("public/decklists-data.json");
+  let dreamcallers = readJson("public/dreamcallers-v2-data.json");
+  const meta = readJson("data/buildaround_support.json");
+
+  if (dcFilter) {
+    const q = dcFilter.toLowerCase();
+    dreamcallers = dreamcallers.filter(
+      (d) => d.id === dcFilter || d.name.toLowerCase() === q,
+    );
+    if (!dreamcallers.length) {
+      console.error(`No Dreamcaller matches "${dcFilter}".`);
+      process.exit(1);
+    }
+  }
+
+  const poolData = buildPoolData(cards, decklists);
+
+  const trapsPerPool = [];
+  const poolSizes = [];
+  let poolsWithTrap = 0;
+  // per-Dreamcaller: trap count and pools-with-trap count.
+  const dcTraps = new Map();
+  // per-card: number of pools where it appeared as a trap.
+  const trapCardPools = new Map();
+
+  for (const dc of dreamcallers) {
+    let dcStat = { traps: 0, poolsWithTrap: 0, pools: 0 };
+    dcTraps.set(dc.name, dcStat);
+    for (let seed = 0; seed < seeds; seed++) {
+      // REAL production pool: the FULL signature, every Dreamcaller, all themes.
+      const pool = generatePoolFromData(
+        poolData,
+        seed >>> 0,
+        undefined,
+        variant,
+        undefined,
+        poolSize,
+        dc.signatureCards ?? [],
+      );
+      poolSizes.push(pool.size);
+      const traps = trapCards(pool.counts, meta, TIER_TARGET, tau, null);
+      trapsPerPool.push(traps.length);
+      dcStat.pools += 1;
+      dcStat.traps += traps.length;
+      if (traps.length) {
+        poolsWithTrap += 1;
+        dcStat.poolsWithTrap += 1;
+      }
+      for (const card of traps) {
+        trapCardPools.set(card, (trapCardPools.get(card) ?? 0) + 1);
+      }
+    }
+  }
+
+  const totalPools = dreamcallers.length * seeds;
+  const expectedTrapsPerPool = mean(trapsPerPool);
+  const poolsWithTrapPct = totalPools ? poolsWithTrap / totalPools : 0;
+  const meanPoolSize = mean(poolSizes);
+
+  const byDreamcaller = [...dcTraps.entries()]
+    .map(([name, s]) => ({
+      dreamcaller: name,
+      trapsPerPool: s.pools ? s.traps / s.pools : 0,
+      poolsWithTrapPct: s.pools ? s.poolsWithTrap / s.pools : 0,
+      pools: s.pools,
+    }))
+    .sort((a, b) => b.trapsPerPool - a.trapsPerPool);
+
+  const worstTrapCards = [...trapCardPools.entries()]
+    .map(([card, pools]) => ({
+      card,
+      pools,
+      pct: totalPools ? pools / totalPools : 0,
+    }))
+    .sort((a, b) => b.pools - a.pools);
+
+  if (asJson) {
+    console.log(
+      JSON.stringify(
+        {
+          config: {
+            variant,
+            poolSize,
+            tau,
+            seeds,
+            dreamcallers: dreamcallers.length,
+            totalPools,
+          },
+          expectedTrapsPerPool,
+          poolsWithTrapPct,
+          meanPoolSize,
+          byDreamcaller,
+          worstTrapCards,
+        },
+        null,
+        2,
+      ),
+    );
+    return;
+  }
+
+  const tauPct = Math.round(tau * 100);
+  console.log(
+    `Trap metric (${variant}, pool size ${poolSize}, tau=${tau}, real production pools, ${seeds} seeds x ${dreamcallers.length} Dreamcallers = ${totalPools} pools)`,
+  );
+  console.log(
+    `  (a trap = a build-around whose best-supported theme is under ${tauPct}% of its demand target)`,
+  );
+  console.log("");
+  console.log(
+    `  ===  EXPECTED TRAP CARDS PER POOL: ${expectedTrapsPerPool.toFixed(2)}  ===`,
+  );
+  console.log(
+    `  pools carrying >=1 trap card: ${(poolsWithTrapPct * 100).toFixed(0)}%   (mean pool size ${meanPoolSize.toFixed(0)} copies)`,
+  );
+
+  console.log(`\nBy Dreamcaller (most traps per pool first):`);
+  for (const e of byDreamcaller) {
+    console.log(
+      `  ${e.dreamcaller.padEnd(20)} ${e.trapsPerPool.toFixed(2).padStart(5)}   (${(e.poolsWithTrapPct * 100).toFixed(0)}%)`,
+    );
+  }
+
+  console.log(
+    `\nWorst trap cards (pools where the card was a trap, of ${totalPools}), top ${top}:`,
+  );
+  for (const e of worstTrapCards.slice(0, top)) {
+    console.log(
+      `  ${String(e.pools).padStart(5)}  ${(e.pct * 100).toFixed(0).padStart(3)}%  ${e.card}`,
+    );
+  }
+}
+
 function run() {
   const argv = process.argv.slice(2);
+  if (argv.includes("--traps")) {
+    runTraps(argv);
+    return;
+  }
   const seeds = num(argv, "--seeds", DEFAULT_SEEDS);
   const top = num(argv, "--top", DEFAULT_TOP);
   const poolSize = num(argv, "--pool-size", POOL_TARGET_SIZE);

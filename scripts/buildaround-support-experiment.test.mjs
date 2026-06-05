@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { scorePool, TIER_TARGET } from "./buildaround-support-experiment.mjs";
+import {
+  cardBestAdequacies,
+  scorePool,
+  TIER_TARGET,
+  trapCards,
+} from "./buildaround-support-experiment.mjs";
 
 // Minimal hand-built metadata: a Warrior lord (payoff + support), a plain Warrior
 // body (support only), inert filler, and an event payoff with one event.
@@ -10,6 +15,15 @@ const META = {
     Grunt: { needs: [], supports: ["warriors"] },
     EventPayoff: { needs: [{ theme: "events", tier: 1 }], supports: [] },
     AnEvent: { needs: [], supports: ["events"] },
+    // A dual-theme payoff: needs both warriors (tier 3) and events (tier 1). Its
+    // best theme decides whether it is a trap, even if a secondary theme is thin.
+    DualPayoff: {
+      needs: [
+        { theme: "warriors", tier: 3 },
+        { theme: "events", tier: 1 },
+      ],
+      supports: [],
+    },
   },
 };
 
@@ -76,5 +90,63 @@ describe("scorePool", () => {
     expect(all.map((i) => i.theme).sort()).toEqual(["events", "warriors"]);
     const warriorsOnly = scorePool(counts, META, TIER_TARGET, new Set(["warriors"]));
     expect(warriorsOnly.map((i) => i.theme)).toEqual(["warriors"]);
+  });
+});
+
+describe("cardBestAdequacies", () => {
+  it("collapses a multi-theme payoff to the MAX adequacy across its themes", () => {
+    // DualPayoff needs warriors (tier 3, target .25) and events (tier 1, .10).
+    // Pool of 10: warriors support = Grunt(1) => share .10 => adequacy .4;
+    // events support = AnEvent(1) => share .10 => adequacy 1.0. Best is 1.0.
+    const counts = withFiller(
+      new Map([["DualPayoff", 1], ["Grunt", 1], ["AnEvent", 1]]),
+      7,
+    );
+    const best = cardBestAdequacies(counts, META);
+    expect(best.get("DualPayoff")).toBeCloseTo(1, 10);
+  });
+
+  it("gives one entry per payoff card", () => {
+    const counts = withFiller(
+      new Map([["Lord", 1], ["Grunt", 1], ["EventPayoff", 1], ["AnEvent", 1]]),
+      6,
+    );
+    const best = cardBestAdequacies(counts, META);
+    expect([...best.keys()].sort()).toEqual(["EventPayoff", "Lord"]);
+  });
+});
+
+describe("trapCards", () => {
+  it("flags a thinly-supported payoff as a trap below tau", () => {
+    // Lone Lord: warriors support excludes its own copy => 0 => adequacy 0.
+    const counts = withFiller(new Map([["Lord", 1]]), 9);
+    expect(cardBestAdequacies(counts, META).get("Lord")).toBe(0);
+    expect(trapCards(counts, META, TIER_TARGET, 0.35)).toEqual(["Lord"]);
+  });
+
+  it("does not flag a payoff whose best theme is supported, even if a secondary theme is thin", () => {
+    // DualPayoff: warriors thin (adequacy .4), events fully supported (1.0).
+    // Best theme is events => not a trap, despite the thin warriors theme.
+    const counts = withFiller(
+      new Map([["DualPayoff", 1], ["Grunt", 1], ["AnEvent", 1]]),
+      7,
+    );
+    expect(trapCards(counts, META, TIER_TARGET, 0.35)).toEqual([]);
+  });
+
+  it("does not flag an adequately supported payoff above tau", () => {
+    // EventPayoff tier 1 (target .10): 1 event in 10 => share .10 => adequacy 1.0.
+    const counts = withFiller(new Map([["EventPayoff", 1], ["AnEvent", 1]]), 8);
+    expect(trapCards(counts, META, TIER_TARGET, 0.35)).toEqual([]);
+  });
+
+  it("respects the tau boundary (strict <)", () => {
+    // Lord with warriors share .10 (target .25) => adequacy 0.4 exactly.
+    const counts = withFiller(new Map([["Lord", 1], ["Grunt", 1]]), 8);
+    expect(cardBestAdequacies(counts, META).get("Lord")).toBeCloseTo(0.4, 10);
+    // tau just above 0.4 => trap; at/below 0.4 => not a trap (strict <).
+    expect(trapCards(counts, META, TIER_TARGET, 0.41)).toEqual(["Lord"]);
+    expect(trapCards(counts, META, TIER_TARGET, 0.4)).toEqual([]);
+    expect(trapCards(counts, META, TIER_TARGET, 0.3)).toEqual([]);
   });
 });
