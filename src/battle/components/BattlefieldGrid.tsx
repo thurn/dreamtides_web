@@ -127,11 +127,14 @@ export function BattlefieldGrid({
                 onCardContextMenu?.(battleCardId, event);
               }}
               onDragOver={(event) => {
-                if (pendingDragCardId !== null) {
+                if (canInteract && pendingDragCardId !== null) {
                   event.preventDefault();
                 }
               }}
               onDrop={(event) => {
+                if (!canInteract) {
+                  return;
+                }
                 event.preventDefault();
                 onSlotDrop?.(target);
               }}
@@ -142,7 +145,7 @@ export function BattlefieldGrid({
                   data={battleCardVisualFromInstance(instance)}
                   reserved={false}
                   selected={isSelectedCard}
-                  draggable={true}
+                  draggable={canInteract}
                   onClick={(event) => {
                     event.stopPropagation();
                     onCardClick(instance.battleCardId);
@@ -152,8 +155,8 @@ export function BattlefieldGrid({
                     event.stopPropagation();
                     onCardContextMenu?.(instance.battleCardId, event);
                   }}
-                  onDragStart={() => onCardDragStart?.(instance.battleCardId)}
-                  onDragEnd={() => onCardDragEnd?.()}
+                  onDragStart={canInteract ? () => onCardDragStart?.(instance.battleCardId) : undefined}
+                  onDragEnd={canInteract ? () => onCardDragEnd?.() : undefined}
                   onMouseEnter={(event) => onCardHoverStart?.(instance.battleCardId, event)}
                   onMouseLeave={() => onCardHoverEnd?.()}
                   onMouseMove={(event) => onCardHoverMove?.(instance.battleCardId, event)}

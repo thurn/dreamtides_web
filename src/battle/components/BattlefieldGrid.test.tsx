@@ -82,8 +82,13 @@ afterEach(() => {
 });
 
 describe("BattlefieldGrid", () => {
-  it("makes every battlefield card tile draggable and free of the reserved class even when canInteract is false", () => {
+  it("makes battlefield card tiles non-draggable and slots inert when canInteract is false", () => {
+    // canInteract is false while the AI holds an un-approved action proposal: the
+    // human must not free-edit the board, only drive the turn via the proposal
+    // bar.
     const state = createState();
+    const cardDragStart = vi.fn();
+    const slotDrop = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -101,7 +106,9 @@ describe("BattlefieldGrid", () => {
           selectedSlot={null}
           selectionAnchor={null}
           onCardClick={() => undefined}
+          onCardDragStart={cardDragStart}
           onSlotClick={() => undefined}
+          onSlotDrop={slotDrop}
         />,
       );
     });
@@ -109,9 +116,17 @@ describe("BattlefieldGrid", () => {
     const cards = [...container.querySelectorAll<HTMLElement>("[data-battle-card-id]")];
     expect(cards.length).toBeGreaterThan(0);
     for (const card of cards) {
-      expect(card.getAttribute("draggable")).toBe("true");
+      expect(card.getAttribute("draggable")).toBe("false");
       expect(card.classList.contains("reserved")).toBe(false);
     }
+
+    // Dropping onto a slot is inert: the drop handler must not fire a board edit.
+    const slots = [...container.querySelectorAll<HTMLElement>("[data-slot-id]")];
+    expect(slots.length).toBeGreaterThan(0);
+    act(() => {
+      slots[0]?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
+    });
+    expect(slotDrop).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();

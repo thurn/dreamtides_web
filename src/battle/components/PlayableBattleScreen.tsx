@@ -328,6 +328,9 @@ function PlayableBattleScreenInner({
   }
 
   function handleHandCardDoubleClick(battleCardId: string): void {
+    if (!canPlayerAct) {
+      return;
+    }
     const side = selectBattleCardLocation(reducerState.mutable, battleCardId)?.side ?? "player";
     const command = createMoveCardToBattlefieldCommand(
       reducerState.mutable,
@@ -471,6 +474,9 @@ function PlayableBattleScreenInner({
     battleCardId: string,
     sourceSurface?: BattleCommandSourceSurface,
   ): void {
+    if (!canPlayerAct) {
+      return;
+    }
     setHoverPreview(null);
     const location = selectBattleCardLocation(reducerState.mutable, battleCardId);
     const instance = reducerState.mutable.cardInstances[battleCardId];
@@ -489,6 +495,9 @@ function PlayableBattleScreenInner({
   }
 
   function handlePoolCardDragStart(card: CardData): void {
+    if (!canPlayerAct) {
+      return;
+    }
     setPendingDrag({
       kind: "pool-card",
       definition: createBaseBattleDeckCardDefinition(card),
@@ -514,6 +523,9 @@ function PlayableBattleScreenInner({
   // | Drop onto stack zone                                     | stack                             | MOVE_CARD_TO_ZONE ({ side, zone:"stack" })  |
   // | Double-click a hand card                                 | first open reserve, else deployed | MOVE_CARD_TO_ZONE via battlefield helper    |
   function handleSlotDrop(target: BattleFieldSlotAddress): void {
+    if (!canPlayerAct) {
+      return;
+    }
     if (pendingDrag === null) {
       return;
     }
@@ -581,6 +593,9 @@ function PlayableBattleScreenInner({
     zone: BrowseableZone,
     sourceSurface: BattleCommandSourceSurface,
   ): void {
+    if (!canPlayerAct) {
+      return;
+    }
     if (pendingDrag === null) {
       return;
     }
@@ -610,6 +625,9 @@ function PlayableBattleScreenInner({
   }
 
   function handleStackDrop(): void {
+    if (!canPlayerAct) {
+      return;
+    }
     if (pendingDrag === null) {
       return;
     }

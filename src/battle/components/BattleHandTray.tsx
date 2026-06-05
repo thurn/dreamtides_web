@@ -6,7 +6,7 @@ import type { BattleCardInstance, BattleCommandSourceSurface, BattleMutableState
 import { battleCardDisplayFromInstance } from "./BattleCardView";
 
 export function BattleHandTray({
-  canInteract: _canInteract,
+  canInteract,
   currentEnergy: _currentEnergy,
   hand,
   onHandCardAction: _onHandCardAction,
@@ -94,21 +94,26 @@ export function BattleHandTray({
               selected={isSelected}
               side="player"
               compact={compact}
-              onClick={(event) => {
-                event.stopPropagation();
-                onCardClick(battleCardId);
-              }}
-              onDoubleClick={(event) => {
-                event.stopPropagation();
-                onCardDoubleClick(battleCardId);
-              }}
+              draggable={canInteract}
+              onClick={canInteract
+                ? (event) => {
+                  event.stopPropagation();
+                  onCardClick(battleCardId);
+                }
+                : undefined}
+              onDoubleClick={canInteract
+                ? (event) => {
+                  event.stopPropagation();
+                  onCardDoubleClick(battleCardId);
+                }
+                : undefined}
               onContextMenu={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
                 onCardContextMenu?.(battleCardId, event);
               }}
-              onDragStart={() => onCardDragStart?.(battleCardId)}
-              onDragEnd={() => onCardDragEnd?.()}
+              onDragStart={canInteract ? () => onCardDragStart?.(battleCardId) : undefined}
+              onDragEnd={canInteract ? () => onCardDragEnd?.() : undefined}
               onMouseEnter={(event) => onCardHoverStart?.(battleCardId, event)}
               onMouseMove={(event) => onCardHoverMove?.(battleCardId, event)}
               onMouseLeave={() => onCardHoverEnd?.()}
@@ -123,6 +128,7 @@ export function BattleHandTray({
 export function BattleHandCard({
   battleCardId,
   compact = false,
+  draggable = true,
   instance,
   selected,
   side,
@@ -137,10 +143,11 @@ export function BattleHandCard({
 }: {
   battleCardId: string;
   compact?: boolean;
+  draggable?: boolean;
   instance: BattleCardInstance;
   selected: boolean;
   side: "player" | "opponent";
-  onClick: (event: ReactMouseEvent<HTMLDivElement>) => void;
+  onClick?: (event: ReactMouseEvent<HTMLDivElement>) => void;
   onContextMenu?: (event: ReactMouseEvent<HTMLDivElement>) => void;
   onDoubleClick?: (event: ReactMouseEvent<HTMLDivElement>) => void;
   onDragEnd?: () => void;
@@ -168,7 +175,7 @@ export function BattleHandCard({
       data-battle-card-playable="false"
       data-selected={String(selected)}
       className={wrapperClass}
-      draggable={true}
+      draggable={draggable}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       onContextMenu={onContextMenu}

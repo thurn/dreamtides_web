@@ -114,7 +114,7 @@ describe("BattleHandTray", () => {
     act(() => {
       root.render(
         <BattleHandTray
-          canInteract={false}
+          canInteract
           currentEnergy={0}
           hand={state.sides.player.hand.slice(0, 2)}
           onHandCardAction={() => undefined}
@@ -135,6 +135,56 @@ describe("BattleHandTray", () => {
       expect(card.classList.contains("playable")).toBe(false);
       expect(card.getAttribute("draggable")).toBe("true");
     }
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("makes hand cards non-draggable and inert when canInteract is false", () => {
+    // canInteract is false while the AI holds an un-approved action proposal: the
+    // human must drive the turn only via the proposal bar, not by free-editing
+    // their own hand.
+    const state = createState();
+    const clickCard = vi.fn();
+    const doubleClickCard = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <BattleHandTray
+          canInteract={false}
+          currentEnergy={state.sides.player.currentEnergy}
+          hand={state.sides.player.hand.slice(0, 2)}
+          onHandCardAction={() => undefined}
+          openingHandSize={5}
+          playerDrawSkipsTurnOne
+          selectedCardId={null}
+          state={state}
+          onCardClick={clickCard}
+          onCardDoubleClick={doubleClickCard}
+        />,
+      );
+    });
+
+    const cards = [...container.querySelectorAll<HTMLElement>("[data-battle-card-id]")];
+    expect(cards).toHaveLength(2);
+    for (const card of cards) {
+      expect(card.getAttribute("draggable")).toBe("false");
+    }
+
+    const firstCard = cards[0];
+    if (firstCard === undefined) {
+      throw new Error("expected first hand card");
+    }
+    act(() => {
+      firstCard.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+      firstCard.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    expect(clickCard).not.toHaveBeenCalled();
+    expect(doubleClickCard).not.toHaveBeenCalled();
 
     act(() => {
       root.unmount();
