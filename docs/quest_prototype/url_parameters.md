@@ -130,7 +130,8 @@ http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
 ## `algo`
 
 Selects the draft-pool construction strategy on the standalone `/draft_test`
-route, which exercises the experimental `cards_v2` draft pool. Start the dev
+route, which exercises the experimental `cards_v2` draft pool. When `algo` is
+absent (or set to an unregistered value) the route uses `default`. Start the dev
 server with `npm run dev:vite` (or `npm run draft_test`, which opens the route
 directly) and visit it on port 5173.
 
