@@ -202,6 +202,68 @@ export function growIdfPool(
   return { counts: best.counts, includedDecks };
 }
 
+// Grow a pool from a chosen starter by COHERENT full-pool growth, an alternative
+// to {@link growIdfPool} used by the `idf4` variant. Where `growIdfPool` ranks
+// neighbours once by similarity to the FIXED starter, this grows greedily against
+// the ACCUMULATING pool: at each step it folds in the unfolded deck whose
+// IDF-cosine to the current pool vector (the pool's capped copy counts weighted by
+// IDF) is highest, caps copies at 2, and stops once the pool reaches
+// `targetSize`. Folding against the moving pool centroid keeps a far deck that
+// merely shares the starter's signature card — but little else — out unless it
+// also coheres with what the pool already holds, so the grown pool drifts less.
+// Whole decks are folded; cards are never truncated. The starter is folded first.
+// Ported from `coherentGrow` in `scripts/idf3-coherent-growth.mjs`.
+export function growCoherentPool(
+  decks: IdfDeck[],
+  idfOf: (c: string) => number,
+  startIdx: number,
+  targetSize: number = IDF.targetSize,
+): Map<string, number> {
+  const counts = new Map<string, number>();
+  const foldDeck = (d: IdfDeck): void => {
+    for (const c of d.cards) {
+      const have = counts.get(c) ?? 0;
+      if (have >= IDF.cap) continue;
+      counts.set(c, have + 1);
+    }
+  };
+  const folded = new Set<number>([startIdx]);
+  foldDeck(decks[startIdx]);
+  const sizeOf = (): number => {
+    let s = 0;
+    for (const v of counts.values()) s += v;
+    return s;
+  };
+
+  while (sizeOf() < targetSize) {
+    // The pool as an IDF vector (card -> capped copies) and its norm.
+    let pnorm = 0;
+    for (const [c, v] of counts) pnorm += (idfOf(c) * v) ** 2;
+    pnorm = Math.sqrt(pnorm) || 1;
+
+    // Fold the unfolded deck whose IDF-cosine to the pool vector is highest.
+    let best = -1;
+    let bestSim = -1;
+    for (let i = 0; i < decks.length; i++) {
+      if (folded.has(i)) continue;
+      let dot = 0;
+      for (const c of decks[i].cards) {
+        const v = counts.get(c);
+        if (v) dot += idfOf(c) ** 2 * v;
+      }
+      const sim = dot / (pnorm * (decks[i].norm || 1));
+      if (sim > bestSim) {
+        bestSim = sim;
+        best = i;
+      }
+    }
+    if (best < 0) break;
+    folded.add(best);
+    foldDeck(decks[best]);
+  }
+  return counts;
+}
+
 // Build a pool purely from real decklists: pick one at random, rank the rest by
 // IDF-weighted cosine similarity to it, then union whole decklists best-first —
 // capping copies at `IDF.cap` — keeping the whole-deck boundary whose size lands
