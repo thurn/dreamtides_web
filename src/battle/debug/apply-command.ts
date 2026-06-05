@@ -27,12 +27,14 @@ function createBattleReducerAction(
         type: "DEBUG_EDIT",
         edit: command.edit,
         metadata,
+        aiChoices: command.aiChoices,
       };
     case "FORCE_RESULT":
       return {
         type: "FORCE_RESULT",
         result: command.result,
         metadata,
+        aiChoices: command.aiChoices,
       };
     case "SKIP_TO_REWARDS":
       // Spec H-5 lists SKIP_TO_REWARDS as its own command id, and H-12 says

@@ -498,9 +498,15 @@ export type BattleReducerAction =
     type: "DEBUG_EDIT";
     edit: BattleDebugEdit;
     metadata: BattleHistoryEntryMetadata;
+    /**
+     * AI choice trace(s) carried from the command envelope onto the resulting
+     * transition's `aiChoices`. Omitted for human/debug commands.
+     */
+    aiChoices?: BattleAiChoiceTrace[];
   }
   | {
     type: "FORCE_RESULT";
     result: BattleResult;
     metadata: BattleHistoryEntryMetadata;
+    aiChoices?: BattleAiChoiceTrace[];
   };

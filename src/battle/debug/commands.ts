@@ -1,6 +1,7 @@
 import { selectKindleTargetBattleCardId } from "../state/selectors";
 import { formatPhaseLabel } from "../ui/format";
 import type {
+  BattleAiChoiceTrace,
   BattleCardMarkers,
   BattleCardNoteExpiry,
   BattleCommandActor,
@@ -198,6 +199,13 @@ export interface BattleCommandEnvelope {
    * override (e.g. tests that pin the field to a deterministic value).
    */
   timestamp?: number;
+  /**
+   * The AI's choice trace(s) for an approved AI command, carried onto the
+   * resulting `BattleReducerTransition.aiChoices` so the battle log can render
+   * the rationale behind the move. Absent for human/debug commands, where the
+   * transition's `aiChoices` defaults to `[]`.
+   */
+  aiChoices?: BattleAiChoiceTrace[];
 }
 
 /**

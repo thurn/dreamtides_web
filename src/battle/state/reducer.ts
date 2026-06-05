@@ -1,4 +1,5 @@
 import type {
+  BattleAiChoiceTrace,
   BattleEngineEmissionContext,
   BattleHistory,
   BattleHistoryEntryMetadata,
@@ -41,6 +42,7 @@ export function battleReducer(
         state,
         action.metadata,
         (mutableState) => applyDebugEdit(mutableState, action.edit, context),
+        action.aiChoices,
       );
     }
     case "FORCE_RESULT": {
@@ -49,6 +51,7 @@ export function battleReducer(
         state,
         action.metadata,
         (mutableState) => forceBattleResult(mutableState, action.result, context),
+        action.aiChoices,
       );
     }
   }
@@ -71,9 +74,16 @@ function commitReducerTransition(
     state: BattleMutableState;
     transition: BattleTransitionData;
   },
+  aiChoices: BattleAiChoiceTrace[] | undefined,
 ): BattleReducerState {
   const next = apply(state.mutable);
-  const nextTransition = createReducerTransition(metadata, next.transition);
+  // Overlay the command envelope's AI choice trace(s) onto the resolved
+  // transition so the battle log can render the move's rationale. Commands
+  // without a trace keep the transition's own `aiChoices` (the `[]` default).
+  const transitionData = aiChoices === undefined || aiChoices.length === 0
+    ? next.transition
+    : { ...next.transition, aiChoices };
+  const nextTransition = createReducerTransition(metadata, transitionData);
   const nextHistory = commitBattleHistoryEntry(
     state.history,
     metadata,

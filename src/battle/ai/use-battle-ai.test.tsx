@@ -210,6 +210,28 @@ describe("useBattleAi", () => {
     });
   });
 
+  it("attaches the action proposal's trace to the first dispatched command's aiChoices", () => {
+    const dispatch = vi.fn();
+    mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+
+    const proposal = latest?.proposal;
+    expect(proposal?.kind).toBe("action");
+    const trace = proposal?.trace ?? null;
+    expect(trace).not.toBeNull();
+    expect(trace?.rationale).toBeTruthy();
+
+    act(() => {
+      latest?.approve();
+    });
+
+    const firstCall = dispatch.mock.calls[0]?.[0] as {
+      type: "APPLY_COMMAND";
+      command: BattleCommand;
+    };
+    expect(firstCall.command.aiChoices).toEqual([trace]);
+    expect(firstCall.command.aiChoices?.[0]?.rationale).toBeTruthy();
+  });
+
   it("reject() dispatches nothing and changes the proposal", () => {
     const dispatch = vi.fn();
     mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);

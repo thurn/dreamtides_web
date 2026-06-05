@@ -278,11 +278,21 @@ function buildActionProposal(
   const trace = buildTrace(action);
   const commands = actionToCommands(action, aiSide);
   enrichDeferredCommands(commands, action, mutable, aiSide);
+  // Attach the trace to the FIRST command so the resulting transition's
+  // `aiChoices` carries this action's rationale into the battle log. The first
+  // command is the action's primary edit; subsequent edits (e.g. Distant
+  // Worlds' deferred spark) ride the same transition but need no trace. We
+  // replace the command rather than mutating it in place so the proposal's
+  // stored command stays a plain rebuild on each render.
+  const [firstCommand, ...restCommands] = commands;
+  const tracedCommands = firstCommand === undefined
+    ? commands
+    : [{ ...firstCommand, aiChoices: [trace] }, ...restCommands];
   return {
     kind: "action",
     description: trace.rationale ?? describeFallback(action),
     trace,
-    commands,
+    commands: tracedCommands,
   };
 }
 

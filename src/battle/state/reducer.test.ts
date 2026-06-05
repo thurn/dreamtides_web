@@ -18,7 +18,7 @@ import {
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
-import type { BattlePhase } from "../types";
+import type { BattleAiChoiceTrace, BattlePhase } from "../types";
 
 beforeEach(() => {
   resetLog();
@@ -272,6 +272,48 @@ describe("battleReducer", () => {
       isComposite: true,
     });
     expect(reduced.lastTransition?.resultChange?.reason).toBe("forced_result");
+  });
+
+  it("copies a command envelope's aiChoices onto the resulting transition", () => {
+    const { state } = createTestBattle();
+    const trace: BattleAiChoiceTrace = {
+      stage: "reposition",
+      choice: "MOVE_CARD",
+      battleCardId: "enemy-card-1",
+      cardName: "Branded Direwolf",
+      sourceHandIndex: null,
+      sourceSlotId: "R0",
+      targetSlotId: "D0",
+      heuristicScoreBefore: 1,
+      heuristicScoreAfter: 5,
+      rationale: "Repositioning to challenge.",
+      targetBattleCardId: null,
+    };
+
+    const reduced = applyBattleCommand(
+      createBattleReducerState(state),
+      {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase: "dusk" },
+        aiChoices: [trace],
+      },
+    );
+
+    expect(reduced.lastTransition?.aiChoices).toEqual([trace]);
+  });
+
+  it("defaults a command's transition aiChoices to [] when the envelope omits it", () => {
+    const { state } = createTestBattle();
+
+    const reduced = applyBattleCommand(
+      createBattleReducerState(state),
+      {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase: "dusk" },
+      },
+    );
+
+    expect(reduced.lastTransition?.aiChoices).toEqual([]);
   });
 
   it("supports exact undo and redo through history snapshots", () => {
