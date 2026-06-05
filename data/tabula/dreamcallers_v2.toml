@@ -100,7 +100,7 @@ title = "Wreckoner"
 id = "133E22DD-F81B-406D-B4E3-98C346D7FD4E"
 image-number = "0013"
 rendered-text = "Once per turn, if there are 7 or more cards in your void, you may play a character from your void."
-signature-cards = ["Starsea Traveler", "Revenant of the Lost", "Skull Weaver", "Ashborn Necromancer", "Abomination of Memory"]
+signature-cards = ["Duskreaper", "Warfield Stalwart", "Wreckland Maverick", "Collapse Protocol", "Skull Weaver"]
 
 [[dreamcaller]]
 name = "Caedryn"
@@ -108,7 +108,7 @@ title = "Shrouded Inquisitor"
 id = "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4"
 image-number = "0112"
 rendered-text = "2●, ☪, Abandon an ally: Materialize a random character with cost 1● higher from your deck."
-signature-cards = ["Harborwarden", "Fathomless Maw", "Kindlehorn", "Duskwall Delver", "Maelstrom Denial"]
+signature-cards = ["Duskreaper", "Kindred Sparks", "Ferryman's Tithe", "Entropy Spike", "Soulreaver"]
 
 [[dreamcaller]]
 name = "Kragg"
@@ -116,7 +116,7 @@ title = "Spent-Blood Chieftain"
 id = "16B579FE-C15B-4DF6-8262-D45CE44732AE"
 image-number = "0064"
 rendered-text = "Once per turn, when you abandon an ally, the next character you play this turn costs 2● less."
-signature-cards = ["Harborwarden", "Duskwall Delver", "Fathomless Maw", "Maelstrom Denial", "Dreadweaver"]
+signature-cards = ["Phantasmal Recruiter", "Titan of Forgotten Echoes", "Sunset Chronicler", "Embersummoner", "Fractured Vessel"]
 
 [[dreamcaller]]
 name = "Vrakmoth"
@@ -124,15 +124,15 @@ title = "Ashbroker"
 id = "86026206-1B11-4F38-A24E-FD3C697F5353"
 image-number = "0087"
 rendered-text = "Once per turn, when you discard a card, draw a card with ephemeral."
-signature-cards = ["From the Barrow", "Cascade of Reflections", "Starfall Communion", "Across the Void", "A New Adventure"]
+signature-cards = ["Wreckborn", "Shadowbinder", "Sorrowful Prince", "Oracle of Shifting Skies", "The Devourer"]
 
 [[dreamcaller]]
 name = "Seraveth"
 title = "Twice-Mourned"
 id = "6488452D-4E9E-466C-96DF-716D4EC646B1"
 image-number = "0017"
-rendered-text = "When you play your second character in a turn, a character in your void gains reclaim until end of turn."
-signature-cards = ["Kindred Sparks", "Dreadweaver", "Silent Avenger", "Ashwalker", "Veil of the Wastes"]
+rendered-text = "When you play your second character in a turn, a character in your void gains reclaim 2● until end of turn."
+signature-cards = ["Ridge Vortex Explorer", "Ashfront Lieutenant", "The Rising God", "Shadowcaller", "Sunset Chronicler"]
 
 [[dreamcaller]]
 name = "Corvath"
@@ -140,7 +140,7 @@ title = "the Salvage-Born"
 id = "B8C1B0AB-0FE6-47D6-B576-0C2231AEB81E"
 image-number = "0044"
 rendered-text = "Once per turn, when you discard a card, it gains reclaim until end of turn."
-signature-cards = ["Cascade of Reflections", "From the Barrow", "Starfall Communion", "Pulse of Sacrifice", "Gleamharvester"]
+signature-cards = ["Shadowpaw", "Torchbearer of the Abyss", "Fleeting Reunion", "Part the Veil", "Silent Gatherer"]
 
 [[dreamcaller]]
 name = "Kael Voss"
@@ -148,7 +148,7 @@ title = "Recon Commander"
 id = "81954CA0-DA36-49DD-915C-1CCB1B2D7B05"
 image-number = "0007"
 rendered-text = "2●, ☪, Discard a card: Materialize a 1✦ survivor figment."
-signature-cards = ["Ashborn Necromancer", "Wasteland Tamer", "Dreadweaver", "Skull Weaver", "Kindred Sparks"]
+signature-cards = ["Emberwatch Veteran", "Salvage Engine", "Specter of Silent Snow", "Resilient Wanderer", "Paradox Enforcer"]
 
 [[dreamcaller]]
 name = "Vaela"
@@ -156,7 +156,7 @@ title = "Ember Among Remnants"
 id = "60BD584B-5BC8-4EE7-8A98-CBB304EB71AB"
 image-number = "0028"
 rendered-text = "Once per turn, when a card leaves your void, a card in your void gains reclaim until end of turn."
-signature-cards = ["Skull Weaver", "Ashborn Necromancer", "Dreadweaver", "Kindred Sparks", "Harvester of Despair"]
+signature-cards = ["Twilight Reclaimer", "Deathwalker", "Skull Weaver", "Wasteland Arbitrator", "Stargazer Adrift"]
 
 [[dreamcaller]]
 name = "Edran"
@@ -164,7 +164,7 @@ title = "the Invocant"
 id = "5E28154D-770A-4B84-8AAC-9DE44F5D7D02"
 image-number = "0080"
 rendered-text = "❖ – 4●, ☪: Materialize a 1✦ outsider figment."
-signature-cards = ["Riftwalker", "Dreaming Groves", "Lurking Dread", "Standoff", "Keeper of the Tides"]
+signature-cards = ["Thronebound Arbiter", "Breach Artist", "Dreadcall Warden", "Vanishing Inquisitor", "Eternal Sentry"]
 
 [[dreamcaller]]
 name = "Zeva"
@@ -172,7 +172,7 @@ title = "the Dredger"
 id = "4D5E3933-7DD6-406B-922D-DD78ACFA044A"
 image-number = "0005"
 rendered-text = "❖❖ – 2●, ☪, Discard a card: An event in your void gains reclaim until end of turn."
-signature-cards = ["Dreadwood Emissary", "Break the Sequence", "Ridgecutter", "Clockwork Prodigy", "Echoing Denial"]
+signature-cards = ["Driftrider", "Planetgazer", "Breach Artist", "Dreadcall Warden", "Keeper of the Tides"]
 
 [[dreamcaller]]
 name = "Kasane"
@@ -180,7 +180,7 @@ title = "Wearer of the Stolen Face"
 id = "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477"
 image-number = "0060"
 rendered-text = "4●, ☪: Copy the next event you play this turn."
-signature-cards = ["Archive of the Forgotten", "Cascade of Reflections", "Arc Gate Opening", "From the Barrow", "Hatching Ground"]
+signature-cards = ["Nebula's Wake", "From the Barrow", "Call of the Lost", "Inverted Reflection", "Flash of Power"]
 
 [[dreamcaller]]
 name = "Rael"
@@ -188,7 +188,7 @@ title = "Chain Accelerant"
 id = "84E7020C-7384-4CC3-A20F-AB05F03CC375"
 image-number = "0106"
 rendered-text = "When you play your second event in a turn, foresee 2."
-signature-cards = ["Archive of the Forgotten", "Arc Gate Opening", "From the Barrow", "Cascade of Reflections", "Molten Duel"]
+signature-cards = ["The Devourer", "Shadowprowler", "Gateweaver", "Scorched Reckoning"]
 
 [[dreamcaller]]
 name = "Ovanel"
@@ -196,7 +196,7 @@ title = "Lector of the Receding Rite"
 id = "F6208407-C4E9-42AC-B533-346704F5E39E"
 image-number = "0078"
 rendered-text = "2●, ☪: If you played an event this turn, draw an event."
-signature-cards = ["Archive of the Forgotten", "Arc Gate Opening", "From the Barrow", "Genesis Burst", "Broadcast Array"]
+signature-cards = ["Weblight Waif", "Somber Flockmaster", "Unleashed Destruction", "Fell Swoop"]
 
 [[dreamcaller]]
 name = "Yveth Coravel"
@@ -212,7 +212,7 @@ title = "Packmaster"
 id = "94E7C651-25E9-4A62-9DE4-EAF5BA20542C"
 image-number = "0095"
 rendered-text = "4●, ☪: Gain 1● for each allied spirit animal."
-signature-cards = ["Mountainwatch Alpha", "Ethereal Trailblazer", "Skyborne Jellyfish", "Young Beastcaller", "Celestial Reverie"]
+signature-cards = ["Sunshadow Eagle", "Ghostlight Wolves", "Skyborne Jellyfish", "Stoneborn Eternal", "Verdant Pilgrim"]
 
 [[dreamcaller]]
 name = "Radulf"
@@ -220,7 +220,7 @@ title = "Hegemon of Shattered Thrones"
 id = "3EBABA62-9000-429D-B203-2A5A9724389A"
 image-number = "0045"
 rendered-text = "If there are 3 or more allied characters in play, the first character you play each turn costs 1● less."
-signature-cards = ["Ethereal Trailblazer", "Celestial Reverie", "Mountainwatch Alpha", "Worldsong Behemoth", "Oathbound Pair"]
+signature-cards = ["Dawnprowler Panther", "Starrunner", "Celestial Reverie", "Mother of Flames", "Lumin-Gate Seer"]
 
 [[dreamcaller]]
 name = "Demetrios"
@@ -228,7 +228,7 @@ title = "Strategos of the Phalanx"
 id = "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C"
 image-number = "0100"
 rendered-text = "When you play your second character in a turn, draw a card with ephemeral."
-signature-cards = ["Celestial Reverie", "Ethereal Trailblazer", "Skyborne Jellyfish", "Mountainwatch Alpha", "Sunshadow Eagle"]
+signature-cards = ["Stoneborn Eternal", "Moonbound Wolf", "Sunshadow Eagle", "Nexus Wayfinder", "Starrunner"]
 
 [[dreamcaller]]
 name = "Gunnar Deepforge"
@@ -236,7 +236,7 @@ title = "The Hammer's Echo"
 id = "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB"
 image-number = "0108"
 rendered-text = "2●, ☪: Materialize a 0✦ figment copy of the last warrior you played this turn."
-signature-cards = ["Crucible Warlord", "Assault Leader", "Flamestride Rider", "Invoker of Myths", "Reforged Automaton"]
+signature-cards = ["Spellweaver", "Starshot Gunner", "Grim Reclaimer", "Worldbreacher", "Inspiring Templar"]
 
 [[dreamcaller]]
 name = "Tensho"
@@ -244,7 +244,7 @@ title = "Daimyo of Lacquered Fury"
 id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 image-number = "0029"
 rendered-text = "When the first card you draw in a turn is a warrior, reduce its cost by 1●."
-signature-cards = ["Dreadlord", "Echo Technician", "Dream Garden Visitor", "Aftermath Bloom", "Grim Reclaimer"]
+signature-cards = ["Burning Revenant", "Pit Descender", "Worldbreacher", "Tranquil Duelist", "Nineborn Specter"]
 
 [[dreamcaller]]
 name = "Valdren"
@@ -252,7 +252,7 @@ title = "Warhost Exemplar"
 id = "91D4C3B5-FD63-480B-9ED5-979109A227BB"
 image-number = "0056"
 rendered-text = "2●, ☪: A warrior in your void gains reclaim until end of turn."
-signature-cards = ["Crucible Warlord", "Assault Leader", "Wolfbond Chieftain", "Invoker of Myths", "Flamestride Rider"]
+signature-cards = ["Grim Reclaimer", "Dreadmount Sovereign", "Ossuary Overlord", "Infernal Cavalier", "Aspiring Guardian"]
 
 [metadata]
 schema_version = 1
