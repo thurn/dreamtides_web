@@ -33,6 +33,7 @@
 //   node scripts/buildaround-support-experiment.mjs --seeds 500
 //   node scripts/buildaround-support-experiment.mjs --dreamcaller "Kell Tarn"
 //   node scripts/buildaround-support-experiment.mjs --top 30
+//   node scripts/buildaround-support-experiment.mjs --pool-size 100  # smaller pool
 //   node scripts/buildaround-support-experiment.mjs --json > result.json
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -50,7 +51,8 @@ const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
 export const TIER_TARGET = { 1: 0.1, 2: 0.18, 3: 0.25 };
 
 // Matches src/data/quest-content.ts (POOL_TARGET_SIZE) so simulated pools are the
-// size the game actually ships.
+// size the game actually ships. Overridable with `--pool-size N` to study how the
+// pool's size trades off against build-around adequacy.
 const POOL_TARGET_SIZE = 200;
 const DEFAULT_SEEDS = 200;
 const DEFAULT_TOP = 20;
@@ -167,6 +169,7 @@ function run() {
   const argv = process.argv.slice(2);
   const seeds = num(argv, "--seeds", DEFAULT_SEEDS);
   const top = num(argv, "--top", DEFAULT_TOP);
+  const poolSize = num(argv, "--pool-size", POOL_TARGET_SIZE);
   const variant = str(argv, "--variant", "idf3");
   const dcFilter = str(argv, "--dreamcaller", null);
   const asJson = argv.includes("--json");
@@ -210,7 +213,7 @@ function run() {
         undefined,
         variant,
         undefined,
-        POOL_TARGET_SIZE,
+        poolSize,
         dc.signatureCards ?? [],
       );
       poolSizes.push(pool.size);
@@ -242,6 +245,7 @@ function run() {
         {
           config: {
             variant,
+            poolSize,
             seeds,
             dreamcallers: dreamcallers.length,
             themes: themeMode,
@@ -273,7 +277,7 @@ function run() {
       ? `short themes (${[...SHORT_THEMES].length})`
       : `all themes (${Object.keys(meta.themes).length})`;
   console.log(
-    `Build-around support metric (${variant}, ${themeLabel}, ${seeds} seeds x ${dreamcallers.length} Dreamcallers = ${totalPools} pools)`,
+    `Build-around support metric (${variant}, pool size ${poolSize}, ${themeLabel}, ${seeds} seeds x ${dreamcallers.length} Dreamcallers = ${totalPools} pools)`,
   );
   console.log(
     `Tier targets: 1=${pct(TIER_TARGET[1])}  2=${pct(TIER_TARGET[2])}  3=${pct(TIER_TARGET[3])}   mean pool size ${mean(poolSizes).toFixed(0)} copies`,
