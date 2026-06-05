@@ -11,7 +11,7 @@ Tranquil Duelist
 Inspiring Templar
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Flamestride Rider
@@ -21,6 +21,6 @@ Lone Castaway
 Starshot Gunner
 Lightningborn
 Thundercatcher
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Forge Inheritor

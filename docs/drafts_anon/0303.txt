@@ -11,7 +11,7 @@ Tranquil Duelist
 Fathomless Maw
 Kindlehorn
 Infernal Cavalier
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Burning Revenant
@@ -25,7 +25,7 @@ Fury of the Clan
 Thundercatcher
 Shadowpaw
 Marrow Mimic
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Ossuary Overlord
 Lanternwood Scout

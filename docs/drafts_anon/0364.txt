@@ -1,6 +1,6 @@
 Paradox Enforcer
 Harvester of Despair
-Worlds Await
+Terminus
 Salvage Engine
 Eternal Sentry
 Doorlight Foundling
@@ -8,7 +8,7 @@ Ashborn Necromancer
 Resilient Wanderer
 Minstrel of Falling Light
 Key Sifter
-Final Witness
+Soulreaver
 Revenant of the Lost
 Rebirth Ritualist
 Pulse of Sacrifice

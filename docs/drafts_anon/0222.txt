@@ -22,7 +22,7 @@ Ashborn Necromancer
 Ashwalker
 Fathomless Maw
 Kindlehorn
-Final Witness
+Soulreaver
 Woodland Apparition
 Exiles of the Last Light
 Volcanic Channeler
@@ -38,7 +38,7 @@ Ironclad Marksman
 Maelstrom Denial
 Scorched Reckoning
 Stolen Genesis
-Flashpoint Detonation
+Unleash Ruin
 Sunset Chronicler
 Burning Pursuit
 Call of the Lost

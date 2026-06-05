@@ -244,7 +244,7 @@ title = "Daimyo of Lacquered Fury"
 id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 image-number = "0029"
 rendered-text = "When the first card you draw in a turn is a warrior, reduce its cost by 1●."
-signature-cards = ["Runebound Champion", "Echo Technician", "Dream Garden Visitor", "Aftermath Bloom", "Grim Reclaimer"]
+signature-cards = ["Dreadlord", "Echo Technician", "Dream Garden Visitor", "Aftermath Bloom", "Grim Reclaimer"]
 
 [[dreamcaller]]
 name = "Valdren"

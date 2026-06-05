@@ -9,7 +9,7 @@ Pit Descender
 Infernal Cavalier
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Conduit of Ashes
@@ -21,6 +21,6 @@ Epiphany Unfolded
 Ochre Prospector
 Marrow Mimic
 Ossuary Overlord
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Moment Rewound

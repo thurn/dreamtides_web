@@ -1,6 +1,6 @@
 Hallowed Stag
 Ebonwing
-Marked Direwolf
+Verdant Pilgrim
 Undying Fang
 Dawnprowler Panther
 Worldsong Behemoth
@@ -21,7 +21,7 @@ Heavenward Penitent
 Dreamcatcher's Call
 Inverted Reflection
 Immolate
-Flashpoint Detonation
+Unleash Ruin
 Crumbling Behemoth
 Beacon of Tomorrow
 Cragfall

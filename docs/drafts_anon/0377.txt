@@ -1,6 +1,6 @@
 Augur Crow
 Entropy Spike
-Marked Direwolf
+Verdant Pilgrim
 Vaultbreaker
 Echo Architect
 The Rising God
@@ -11,7 +11,7 @@ Vault Infiltrator
 Deathwalker
 Twilight Reclaimer
 Cinderfang
-Final Witness
+Soulreaver
 Carrion Lord
 Rusted Monolith
 Standoff

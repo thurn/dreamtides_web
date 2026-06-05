@@ -11,7 +11,7 @@ Inspiring Templar
 Infernal Cavalier
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Gilded Catalyst
@@ -24,7 +24,7 @@ Chronicle Reclaimer
 Ashcrown Charger
 Dawnblade Wanderer
 Ossuary Overlord
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Spellweaver
 Shadow Reflection

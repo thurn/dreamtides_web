@@ -7,7 +7,7 @@ Inspiring Templar
 Infernal Cavalier
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Sundown Ronin
@@ -24,7 +24,7 @@ Ashcrown Charger
 Worldbreacher
 The Deathsworn
 Ossuary Overlord
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Spellweaver
 Shadow Reflection

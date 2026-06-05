@@ -1,7 +1,7 @@
 Call to the Unknown
 Spirit Field Reclaimer
 Still Dreamer
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Silent Avenger
@@ -9,7 +9,7 @@ Dustborn Veteran
 Volcanic Channeler
 Wreckheap Survivor
 Enginespeaker
-Final Witness
+Soulreaver
 Ashborn Necromancer
 Scrapyard Custodian
 Unbroken
@@ -70,7 +70,7 @@ Phantasmal Recruiter
 Worldbreacher
 Luminwings
 Lone Castaway
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Conduit of Ashes
 Thundercatcher

@@ -4,7 +4,7 @@ Frostbound Defiant
 Emberwolf Triad
 Herald of the Last Light
 Blazebound Sentinel
-Marked Direwolf
+Verdant Pilgrim
 Stoneborn Eternal
 Lord of Hidden Paths
 Veil Crosser
@@ -17,7 +17,7 @@ Ashwalker
 Blazing Emberwing
 Dustborn Veteran
 Exiles of the Last Light
-Final Witness
+Soulreaver
 Winterbough Monk
 Volcanic Channeler
 Spirit Bond

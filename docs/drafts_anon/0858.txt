@@ -9,7 +9,7 @@ Mirror Protocol
 Blade of Oblivion
 Reforged Automaton
 Tranquil Duelist
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Infernal Cavalier
@@ -34,7 +34,7 @@ Epiphany Unfolded
 Lithic Severance
 Blazeguard
 Desolation's Edge
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Standard Bearer
 Ossuary Overlord

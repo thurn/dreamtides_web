@@ -284,7 +284,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["u", "wu", "wr", "ub", "ur", "ug", "wur", "wbr", "ubr", "urg", "brg", "wubrg"],
     draftArchetypes: ["br-aristocrats", "u-artifacts", "ur-storm", "ur-welder", "urg-artifact-control", "wu-academy", "wu-artifact-control", "wu-artifacts", "wu-control", "wub-artifact-control", "wur-artifacts"],
   },
-  "Nocturne Strummer": {
+  "Last Light Herald": {
     tides: ["Outsiders", "Warrior Aggro"],
     colors: ["w", "u", "r", "wu", "wb", "wr", "ub", "ur", "br", "wub", "wur", "wbr", "ubr", "wubr", "ubrg", "wubrg"],
     draftArchetypes: ["b-tempo", "br-welder", "r-welder", "u-artifact-control", "u-artifacts", "u-welder", "ur-artifacts", "ur-welder", "w-artifact-aggro", "w-artifact-control", "w-weenie", "wb-weenie", "wr-aggro", "wr-artifact-aggro", "wu-artifact-control", "wu-artifacts", "wub-artifact-control", "wub-weenie", "wubg-artifacts", "wubr-artifact-aggro", "wubr-welder", "wur-academy", "wur-artifact-aggro", "wur-artifacts", "wurg-artifacts"],
@@ -497,7 +497,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["wr", "ur", "wur", "ubr", "wbrg", "wubrg"],
     draftArchetypes: ["br-storm", "r-burn", "ub-storm", "ubr-control", "ubr-storm", "ubrg-lands-soup", "ubrg-storm", "ug-lands-midrange", "ur-burn", "ur-control", "ur-spellslinger", "ur-storm", "ur-welder", "urg-lands-soup", "urg-sneak", "wubg-lands-soup", "wubrg-lands-soup", "wur-academy", "wur-artifacts", "wur-control"],
   },
-  "Worlds Await": {
+  "Terminus": {
     tides: ["Celestial Reverie Combo", "Cindermarch / Shadow Soloist Combo", "Spirit Animals", "Storm", "Warrior Combo"],
     colors: ["wu", "ub", "ur", "ug", "wub", "wur", "ubr", "wubg", "ubrg"],
     draftArchetypes: ["rg-lands-soup", "ub-storm", "ub-tempo", "ubg-tempo", "ubr-storm", "ur-storm", "wubg-ramp", "wur-control"],
@@ -532,7 +532,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["w", "u", "wu", "wb", "ur", "rg", "wub", "wur", "wbg", "ubr", "wubr", "wubg", "ubrg", "wubrg"],
     draftArchetypes: ["br-storm", "br-welder", "ubr-storm", "ubrg-storm", "ur-storm", "ur-welder", "wr-artifact-aggro", "wr-artifacts", "wu-artifact-control", "wu-artifacts", "wur-artifacts", "wurg-artifacts"],
   },
-  "Flashpoint Detonation": {
+  "Unleash Ruin": {
     tides: ["Events", "Survivors"],
     core: true,
     colors: ["bg", "wbg", "ubg", "brg", "wubr", "wubg", "wbrg", "wubrg"],
@@ -1123,7 +1123,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["ug", "rg", "wug", "wbg", "ubg", "brg", "wubg", "ubrg", "wubrg"],
     draftArchetypes: ["bg-midrange", "br-aristocrats", "brg-lands-monsters", "brg-midrange", "g-big-ramp", "rg-midrange", "ubg-tempo", "ubg-value-midrange", "ug-ramp", "ug-sneak", "wubg-control", "wubrg-value", "wug-big-ramp"],
   },
-  "Glimpse of What Was": {
+  "Ancient Descent": {
     tides: ["Events"],
     colors: ["u", "wu", "ub", "ur", "ug", "wub", "wur", "ubr", "urg", "wubr", "wubg", "wubrg"],
     draftArchetypes: ["u-big-mana-artifacts", "u-control", "ub-tempo", "ubr-storm", "ubrg-storm", "ug-cheaty-ramp", "ug-ramp", "ur-burn", "ur-spellslinger", "ur-storm", "urg-storm", "wu-artifact-control", "wu-blink", "wu-control", "wug-value", "wur-artifacts", "wur-control"],
@@ -1442,7 +1442,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["w", "u", "g", "wu", "wb", "wr", "wg", "ub", "ur", "ug", "bg", "wub", "wbr", "wbg", "ubr", "brg", "wubg", "ubrg", "wubrg"],
     draftArchetypes: ["b-aristocrats", "b-tempo", "bg-lands-soup", "bg-midrange", "br-aristocrats", "g-big-ramp", "g-lands-soup", "r-aggro", "r-burn", "rg-midrange", "u-big-mana-artifacts", "u-storm", "ub-storm", "ub-tempo", "ubg-tempo", "ubr-storm", "ug-lands-midrange", "ug-lands-soup", "ug-ramp", "ur-artifacts", "ur-burn", "ur-storm", "ur-welder", "w-weenie", "wb-weenie", "wbg-midrange", "wg-big-ramp", "wg-midrange", "wub-control", "wub-weenie", "wubg-lands-soup", "wubg-value-midrange", "wubrg-lands-soup", "wug-value", "wur-artifacts"],
   },
-  "Runebound Champion": {
+  "Dreadlord": {
     tides: ["Cindermarch / Shadow Soloist Combo", "Warrior Aggro"],
     colors: ["u", "wu", "wr", "ub", "ur", "wub", "wur", "ubr", "wubr", "ubrg"],
     draftArchetypes: ["u-artifacts", "u-welder", "ub-storm", "ubg-value-midrange", "ubr-storm", "ubr-welder", "ur-artifacts", "ur-storm", "ur-welder", "urg-artifact-control", "w-artifact-aggro", "wr-artifacts", "wu-artifact-control", "wu-artifacts", "wu-weenie", "wub-artifact-control", "wub-control", "wubg-control", "wubr-welder", "wur-artifacts", "wurg-artifacts"],
@@ -1610,7 +1610,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["w", "wu", "wr", "wub", "wur", "wbr", "wubg"],
     draftArchetypes: ["u-artifact-control", "ub-storm", "ur-welder", "w-artifact-control", "w-weenie", "wb-weenie", "wr-artifact-aggro", "wu-artifact-control", "wu-artifacts", "wub-artifact-control", "wub-control", "wubg-control", "wubg-value-midrange", "wubr-artifact-aggro", "wur-artifacts", "wurg-artifacts"],
   },
-  "Marked Direwolf": {
+  "Verdant Pilgrim": {
     tides: ["Celestial Reverie Combo", "Cindermarch / Shadow Soloist Combo", "Spirit Animals"],
     colors: ["g", "wg", "ug", "bg", "rg", "wug", "wbg", "wrg", "urg", "brg", "ubrg", "wubrg"],
     draftArchetypes: ["bg-big-ramp", "bg-lands-midrange", "bg-midrange", "g-big-ramp", "g-lands-soup", "ubg-ramp", "ug-big-ramp", "ug-lands-midrange", "ug-ramp", "wbg-value-midrange", "wg-big-ramp", "wubg-big-ramp", "wubg-ramp"],
@@ -2225,7 +2225,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["r", "wr", "ur", "br", "rg", "wur", "urg", "brg", "ubrg", "wubrg"],
     draftArchetypes: ["br-aristocrats", "brg-lands-midrange", "brg-lands-monsters", "r-aggro", "r-aristocrats", "r-burn", "ubr-control", "ubrg-lands-soup", "ur-burn", "ur-control", "ur-spellslinger", "ur-welder", "wr-aggro", "wr-artifact-aggro", "wr-artifacts", "wurg-lands-soup"],
   },
-  "Final Witness": {
+  "Soulreaver": {
     tides: ["Abandon", "Celestial Reverie Combo", "Survivors"],
     colors: ["b", "wb", "ub", "br", "bg", "wub", "wbr", "brg", "wubr", "wbrg", "ubrg", "wubrg"],
     draftArchetypes: ["b-aristocrats", "b-midrange-reanimator", "b-tempo", "b-weenie", "bg-aristocrats", "bg-midrange", "bg-midrange-reanimator", "br-aristocrats", "ub-tempo", "wb-aristocrats", "wb-weenie", "wbg-value-midrange", "wubg-control", "wubrg-value"],

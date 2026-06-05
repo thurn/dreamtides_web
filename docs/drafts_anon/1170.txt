@@ -7,7 +7,7 @@ Pinnacle Ascendant
 Eclipse Herald
 Horizon Follower
 Ashen Harbinger
-Marked Direwolf
+Verdant Pilgrim
 Harvester of Despair
 Sorrow Watcher
 Tidewreck Navigator
@@ -31,7 +31,7 @@ Ashen Avenger
 Spirit of the Greenwood
 Evacuation Enforcer
 Forge Inheritor
-Flashpoint Detonation
+Unleash Ruin
 Ashfront Lieutenant
 Marrow Drinker
 Soulrender

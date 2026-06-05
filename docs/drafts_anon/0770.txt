@@ -8,7 +8,7 @@ Vault Infiltrator
 Pit Descender
 Flamestride Rider
 Invoker of Myths
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Sundown Ronin
@@ -19,7 +19,7 @@ Thundercatcher
 Together Against the Tide
 Shattering Gambit
 Void Pilgrim
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Defiant Parry
 Ripple Through Reality

@@ -18,7 +18,7 @@ Tranquil Duelist
 Infernal Cavalier
 Grim Reclaimer
 Voidsire
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Wired Duelist
@@ -27,7 +27,7 @@ Wolfbond Chieftain
 Ironclad Marksman
 Blight Weaver
 Ochre Prospector
-Nocturne Strummer
+Last Light Herald
 Skyflame Commander
 Key to the Moment
 Spirit Reaping

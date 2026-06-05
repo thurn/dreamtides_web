@@ -14,7 +14,7 @@ Silent Avenger
 Duskwall Delver
 Ashen Remnant
 The Dread Sovereign
-Runebound Champion
+Dreadlord
 Echo Technician
 Dream Garden Visitor
 Glimmerwood Scout
@@ -24,7 +24,7 @@ Grim Reclaimer
 Voidsire
 Soulflame Predator
 Nomad of Endless Paths
-Final Witness
+Soulreaver
 Flamestride Rider
 Invoker of Myths
 Dread Arbiter
