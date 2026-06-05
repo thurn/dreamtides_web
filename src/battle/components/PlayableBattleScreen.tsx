@@ -1106,6 +1106,8 @@ function PlayableBattleScreenInner({
           />
         </div>
         <BattleInspector
+          aiMode={aiMode}
+          aiProposal={proposal}
           battleInit={battleInit}
           canPlayerAct={canPlayerAct}
           futureCount={futureCount}

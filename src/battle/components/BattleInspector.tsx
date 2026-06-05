@@ -3,12 +3,18 @@ import type { BattleCommand } from "../debug/commands";
 import type {
   BattleInit,
   BattleMutableState,
+  BattleReducerTransition,
   BattleSide,
   BrowseableZone,
 } from "../types";
+import type { AiProposal } from "../ai/use-battle-ai";
+import { evaluate } from "../ai/evaluate";
+import { forwardModelFromState } from "../ai/forward-model";
 import { createDiscardMostRecentHandCardCommand } from "./battle-ui-commands";
 
 export function BattleInspector({
+  aiMode = false,
+  aiProposal = null,
   battleInit,
   canPlayerAct: _canPlayerAct,
   futureCount,
@@ -16,7 +22,7 @@ export function BattleInspector({
   isDesktopLayout: _isDesktopLayout,
   isOpponentHandRevealed,
   isOpen,
-  lastTransition: _lastTransition,
+  lastTransition,
   state,
   onClose,
   onOpen,
@@ -30,6 +36,10 @@ export function BattleInspector({
   onToggleOpponentHand,
   onUndo,
 }: {
+  /** When true, render the debug-only "AI Reasoning" section. */
+  aiMode?: boolean;
+  /** The AI's currently held proposal, or null (e.g. the player's turn). */
+  aiProposal?: AiProposal | null;
   battleInit: BattleInit;
   canPlayerAct: boolean;
   futureCount: number;
@@ -37,7 +47,7 @@ export function BattleInspector({
   isDesktopLayout: boolean;
   isOpponentHandRevealed: boolean;
   isOpen: boolean;
-  lastTransition: unknown;
+  lastTransition: BattleReducerTransition | null;
   state: BattleMutableState;
   onClose: () => void;
   onOpen?: () => void;
@@ -84,6 +94,14 @@ export function BattleInspector({
           </div>
           <div className="inspector-body">
             <GlobalBattleState battleInit={battleInit} state={state} />
+
+            {aiMode ? (
+              <AiReasoning
+                proposal={aiProposal}
+                state={state}
+                lastTransition={lastTransition}
+              />
+            ) : null}
 
             <div className="insp-section">
               <h4>Visibility</h4>
@@ -311,6 +329,141 @@ function NumericRow({
       </div>
     </div>
   );
+}
+
+// v1 planner tuning, mirrored from `use-battle-ai.ts` (`battle_ai.md`
+// §"The Planner"). These are the difficulty defaults the live AI plans with;
+// they are kept as local constants for display so the debug panel does not
+// reach into the hook's private module state.
+const V1_BEAM_WIDTH = 12;
+const V1_OPPONENT_MODE = "expectiminimax";
+const V1_SAMPLE_CAP = 8;
+
+/**
+ * DEBUG-ONLY: surfaces the planner's read on the current decision. Rendered only
+ * when `aiMode` is true (gated by the caller), so it is invisible in normal,
+ * non-AI battles.
+ *
+ * v1 shows what is available without a planner debug hook: the held proposal's
+ * rationale / kind / card / target / heuristic movement, a live static board
+ * evaluation, the fixed v1 planner settings, and an echo of the last
+ * transition's AI choices. Deeper internals — the full candidate-plan list and
+ * the opponent-response distribution the search explored — are a future
+ * extension that would require the planner to export a debug-output hook (it
+ * currently returns only the chosen action). That surgery is intentionally out
+ * of scope here.
+ */
+function AiReasoning({
+  proposal,
+  state,
+  lastTransition,
+}: {
+  proposal: AiProposal | null;
+  state: BattleMutableState;
+  lastTransition: BattleReducerTransition | null;
+}) {
+  // The static board evaluation is pure but defensively guarded: a malformed
+  // projection must never crash the inspector / battle screen.
+  const liveEvaluation = useMemo<number | null>(() => {
+    try {
+      return evaluate(forwardModelFromState(state, "enemy"));
+    } catch {
+      return null;
+    }
+  }, [state]);
+
+  const trace = proposal?.trace ?? null;
+  const cardName =
+    trace?.cardName ??
+    (trace?.battleCardId != null
+      ? state.cardInstances[trace.battleCardId]?.definition.name ?? null
+      : null);
+  const targetCardName =
+    trace?.targetBattleCardId != null
+      ? state.cardInstances[trace.targetBattleCardId]?.definition.name ??
+        trace.targetBattleCardId
+      : null;
+  const target = targetCardName ?? trace?.targetSlotId ?? null;
+
+  const aiChoices = lastTransition?.aiChoices ?? [];
+  const recentRationale = aiChoices[aiChoices.length - 1]?.rationale ?? null;
+
+  return (
+    <div className="insp-section">
+      <h4>AI Reasoning</h4>
+      {proposal === null ? (
+        <div className="row-ctl">
+          <span className="lbl">Proposal</span>
+          <span className="val">No active AI proposal</span>
+        </div>
+      ) : (
+        <>
+          <div className="row-ctl">
+            <span className="lbl">Proposal</span>
+            <span className="val">{proposal.description}</span>
+          </div>
+          <div className="row-ctl">
+            <span className="lbl">Kind</span>
+            <span className="val">{proposal.kind}</span>
+          </div>
+          {cardName !== null ? (
+            <div className="row-ctl">
+              <span className="lbl">Card</span>
+              <span className="val">{cardName}</span>
+            </div>
+          ) : null}
+          {target !== null ? (
+            <div className="row-ctl">
+              <span className="lbl">Target</span>
+              <span className="val">{target}</span>
+            </div>
+          ) : null}
+          {trace?.heuristicScoreBefore != null &&
+          trace.heuristicScoreAfter != null ? (
+            <div className="row-ctl">
+              <span className="lbl">Heuristic</span>
+              <span className="val">
+                {trace.heuristicScoreBefore.toFixed(1)} →{" "}
+                {trace.heuristicScoreAfter.toFixed(1)}
+              </span>
+            </div>
+          ) : null}
+        </>
+      )}
+      <div className="row-ctl">
+        <span className="lbl">Live eval</span>
+        <span className="val">{formatEvaluation(liveEvaluation)}</span>
+      </div>
+      <div className="row-ctl">
+        <span className="lbl">Planner</span>
+        <span className="val">
+          beam {String(V1_BEAM_WIDTH)} · {V1_OPPONENT_MODE} · sample{" "}
+          {String(V1_SAMPLE_CAP)}
+        </span>
+      </div>
+      <div className="row-ctl">
+        <span className="lbl">Recent AI choices</span>
+        <span className="val">
+          {String(aiChoices.length)}
+          {recentRationale !== null ? ` · ${recentRationale}` : ""}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/** Formats the static evaluation scalar; ±Infinity reads as a decided game. */
+function formatEvaluation(value: number | null): string {
+  if (value === null) {
+    return "—";
+  }
+  if (value === Number.POSITIVE_INFINITY) {
+    return "win";
+  }
+  if (value === Number.NEGATIVE_INFINITY) {
+    return "loss";
+  }
+  return value.toFixed(2);
 }
 
 function GlobalBattleState({
