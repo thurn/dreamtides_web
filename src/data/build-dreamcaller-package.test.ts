@@ -4,7 +4,11 @@ import { buildPoolData } from "../draft/pool/pool-data.ts";
 import type { PoolCard } from "../draft/pool/types.ts";
 import type { DreamcallerContent } from "../types/content";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
-import { buildDreamcallerPackage, type RunPoolContext } from "./quest-content";
+import {
+  buildDreamcallerPackage,
+  buildDreamcallerProvenance,
+  type RunPoolContext,
+} from "./quest-content";
 
 // Two card names that the name index maps to starter card numbers. These names
 // also appear in a decklist below, so a correct builder must still keep them out
@@ -131,5 +135,68 @@ describe("buildDreamcallerPackage", () => {
     const ctx = makeContext();
     const pkg = buildDreamcallerPackage(makeDreamcaller(), ctx, "seed-abc");
     expect(pkg.dreamsignPoolIds).toEqual(["ds1", "ds2", "ds3"]);
+  });
+});
+
+describe("buildDreamcallerProvenance", () => {
+  it("describes the exact same pool as buildDreamcallerPackage", () => {
+    const ctx = makeContext();
+    const pkg = buildDreamcallerPackage(makeDreamcaller(), ctx, "seed-abc");
+    const prov = buildDreamcallerProvenance(makeDreamcaller(), ctx, "seed-abc");
+
+    expect(prov).not.toBeNull();
+    const provenance = prov as NonNullable<typeof prov>;
+
+    // Same set of pooled (non-starter) cards, with matching copy counts.
+    expect(new Set(Object.keys(provenance.cardProvenanceByNumber))).toEqual(
+      new Set(Object.keys(pkg.draftPoolCopiesByCard)),
+    );
+    for (const [number, entry] of Object.entries(
+      provenance.cardProvenanceByNumber,
+    )) {
+      expect(entry.copies).toBe(pkg.draftPoolCopiesByCard[number]);
+    }
+  });
+
+  it("excludes starter cards from per-card provenance", () => {
+    const ctx = makeContext();
+    const prov = buildDreamcallerProvenance(makeDreamcaller(), ctx, "seed-abc");
+    const provenance = prov as NonNullable<typeof prov>;
+    for (const n of STARTER_CARD_NUMBERS) {
+      expect(provenance.cardProvenanceByNumber[String(n)]).toBeUndefined();
+    }
+    expect(provenance.cardProvenanceByNumber["510"]).toBeUndefined();
+    expect(provenance.cardProvenanceByNumber["511"]).toBeUndefined();
+  });
+
+  it("reports the signature, anchors, and a starter-seeded growth chain", () => {
+    const ctx = makeContext();
+    const prov = buildDreamcallerProvenance(makeDreamcaller(), ctx, "seed-abc");
+    const provenance = prov as NonNullable<typeof prov>;
+
+    expect(provenance.signatureCardNames).toEqual(["Card 0", "Card 1", "Card 2"]);
+    expect(provenance.signatureWeightedNames.length).toBeGreaterThan(0);
+    expect(provenance.anchors.length).toBeGreaterThan(0);
+    expect(provenance.starterCardCount).toBeGreaterThan(0);
+
+    // The first source deck is always the starter itself: rank 0, similarity 1.
+    expect(provenance.sourceDecks.length).toBeGreaterThan(0);
+    expect(provenance.sourceDecks[0].rank).toBe(0);
+    expect(provenance.sourceDecks[0].similarityToStarter).toBe(1);
+
+    // Every card traces to a real source deck, with the starter at rank 0.
+    const entries = Object.values(provenance.cardProvenanceByNumber);
+    expect(entries.some((e) => e.inStarterDeck && e.sourceRank === 0)).toBe(true);
+    for (const entry of entries) {
+      expect(entry.sourceRank).toBeGreaterThanOrEqual(0);
+      expect(entry.sourceRank).toBeLessThan(provenance.sourceDecks.length);
+      expect(entry.inStarterDeck).toBe(entry.sourceRank === 0);
+    }
+  });
+
+  it("is deterministic for the same inputs", () => {
+    const a = buildDreamcallerProvenance(makeDreamcaller(), makeContext(), "seed-abc");
+    const b = buildDreamcallerProvenance(makeDreamcaller(), makeContext(), "seed-abc");
+    expect(a).toEqual(b);
   });
 });

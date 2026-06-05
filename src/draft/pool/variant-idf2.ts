@@ -108,6 +108,6 @@ export function generateIdf2(
     }
   }
 
-  const counts = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx, targetSize);
+  const { counts } = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx, targetSize);
   return { C: new Set(), selected: ["idf2", `deck#${String(startIdx)}`], counts };
 }

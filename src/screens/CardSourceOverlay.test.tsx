@@ -6,6 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CardSourceOverlay } from "./CardSourceOverlay";
 import type { CardSourceDebugEntry, CardSourceDebugState } from "../types/quest";
+import type { Idf3ProvenanceSummary } from "../types/content";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -74,26 +75,104 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
+function makeProvenance(): Idf3ProvenanceSummary {
+  return {
+    signatureCardNames: ["Soul Reaper", "Grim Harvest"],
+    signatureWeightedNames: ["Soul Reaper", "Grim Harvest"],
+    signatureDroppedNames: ["Forest"],
+    anchors: [
+      {
+        similarityToSignature: 0.42,
+        distinctiveCardNames: ["Soul Reaper", "Blood Artist"],
+      },
+    ],
+    starterDistinctiveCardNames: ["Lantern Broker", "Grim Harvest"],
+    starterCardCount: 24,
+    sourceDecks: [
+      {
+        rank: 0,
+        similarityToStarter: 1,
+        distinctiveCardNames: ["Lantern Broker"],
+        contributedCardCount: 24,
+      },
+      {
+        rank: 1,
+        similarityToStarter: 0.31,
+        distinctiveCardNames: ["Driftbound Relic", "Tidal Surge"],
+        contributedCardCount: 8,
+      },
+    ],
+    cardProvenanceByNumber: {
+      "11": {
+        isSignature: false,
+        inStarterDeck: true,
+        copies: 1,
+        sourceRank: 0,
+        sourceSimilarity: 1,
+      },
+      "12": {
+        isSignature: false,
+        inStarterDeck: false,
+        copies: 2,
+        sourceRank: 1,
+        sourceSimilarity: 0.31,
+      },
+    },
+  };
+}
+
 describe("CardSourceOverlay", () => {
-  it("reports each card's starter-deck or draft-pool provenance", () => {
+  it("walks the signature -> anchors -> starter -> growth chain and traces each card", () => {
     const { container, root } = mount(
       <CardSourceOverlay
         cardSourceDebug={makeOverlayState()}
+        idf3Provenance={makeProvenance()}
         isOpen
         onClose={vi.fn()}
       />,
     );
 
-    expect(container.textContent).toContain("Why am I seeing these cards?");
-    expect(container.textContent).toContain("Shop Offers");
-    expect(container.textContent).toContain("Lantern Broker");
-    expect(container.textContent).toContain("Starter deck");
-    expect(container.textContent).toContain(
-      "Part of this dreamcaller's starting decklist.",
+    const text = container.textContent ?? "";
+    // Algorithm walkthrough.
+    expect(text).toContain("How this pool was built");
+    expect(text).toContain("Signature");
+    expect(text).toContain("Soul Reaper");
+    expect(text).toContain("Anchor decks");
+    expect(text).toContain("42% match to signature");
+    expect(text).toContain("Starter deck");
+    expect(text).toContain("Growth");
+    // Per-card tracing: the starter card and the grown neighbour card.
+    expect(text).toContain("Lantern Broker");
+    expect(text).toContain("In your");
+    expect(text).toContain("Driftbound Relic");
+    expect(text).toContain("source deck");
+    expect(text).toContain("31%");
+    expect(text).toContain("that deck features");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("falls back to a starter-deck / pool summary without provenance", () => {
+    const { container, root } = mount(
+      <CardSourceOverlay
+        cardSourceDebug={makeOverlayState()}
+        idf3Provenance={null}
+        isOpen
+        onClose={vi.fn()}
+      />,
     );
-    expect(container.textContent).toContain("Driftbound Relic");
-    expect(container.textContent).toContain("Draft pool");
-    expect(container.textContent).toContain("Draft-pool card (2 copies).");
+
+    const text = container.textContent ?? "";
+    expect(text).toContain("Why am I seeing these cards?");
+    expect(text).toContain("Shop Offers");
+    expect(text).not.toContain("How this pool was built");
+    expect(text).toContain("Lantern Broker");
+    expect(text).toContain("Starter deck");
+    expect(text).toContain("In your");
+    expect(text).toContain("Driftbound Relic");
+    expect(text).toContain("Draft-pool card. 2 copies in the pool.");
 
     act(() => {
       root.unmount();
@@ -116,12 +195,17 @@ describe("CardSourceOverlay", () => {
     };
 
     const { container, root } = mount(
-      <CardSourceOverlay cardSourceDebug={overlay} isOpen onClose={vi.fn()} />,
+      <CardSourceOverlay
+        cardSourceDebug={overlay}
+        idf3Provenance={null}
+        isOpen
+        onClose={vi.fn()}
+      />,
     );
 
     expect(container.textContent).toContain("Why am I seeing these cards?");
     expect(container.textContent).toContain("Stripped Entry");
-    expect(container.textContent).toContain("Draft pool");
+    expect(container.textContent).toContain("Pool");
 
     act(() => {
       root.unmount();
@@ -138,7 +222,12 @@ describe("CardSourceOverlay", () => {
     } as unknown as CardSourceDebugState;
 
     const { container, root } = mount(
-      <CardSourceOverlay cardSourceDebug={overlay} isOpen onClose={vi.fn()} />,
+      <CardSourceOverlay
+        cardSourceDebug={overlay}
+        idf3Provenance={null}
+        isOpen
+        onClose={vi.fn()}
+      />,
     );
 
     expect(container.textContent).toContain("Why am I seeing these cards?");

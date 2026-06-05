@@ -52,6 +52,70 @@ export interface PoolData {
   mergedLists?: Map<string, Set<string>>;
 }
 
+/**
+ * One real decklist that the `idf3` grower folded into the pool, summarised for
+ * the provenance debug surface. `distinctiveCardNames` are the deck's highest
+ * IDF-weight (most archetype-defining) card names, so a reader can recognise
+ * "what kind of deck this is" at a glance.
+ */
+export interface Idf3PoolSourceDeck {
+  /** 0 for the starter deck, then 1, 2, ... for each nearer-to-farther neighbour. */
+  rank: number;
+  /** IDF-cosine similarity of this deck to the starter (1 for the starter itself). */
+  similarityToStarter: number;
+  /** Highest IDF-weight card names in this deck, most distinctive first. */
+  distinctiveCardNames: string[];
+  /** How many pooled cards name this deck as their nearest source. */
+  contributedCardCount: number;
+}
+
+/** One anchor deck the signature located, summarised for the debug surface. */
+export interface Idf3PoolAnchor {
+  /** Probe-cosine similarity of this real deck to the signature. */
+  similarityToSignature: number;
+  /** Highest IDF-weight card names in the anchor deck, most distinctive first. */
+  distinctiveCardNames: string[];
+}
+
+/** Per-card provenance within an `idf3` pool, keyed by card name. */
+export interface Idf3PoolCardProvenance {
+  /** Whether this card is one of the Dreamcaller's signature cards. */
+  isSignature: boolean;
+  /** Whether this card is in the drawn starter decklist. */
+  inStarterDeck: boolean;
+  /** Copies of this card in the pool (1 or 2). */
+  copies: number;
+  /** Rank of the nearest source deck holding this card (0 = starter). */
+  sourceRank: number;
+  /** Similarity of that nearest source deck to the starter (1 for the starter). */
+  sourceSimilarity: number;
+}
+
+/**
+ * Full provenance for one generated `idf3` pool, keyed by card name. Records the
+ * whole chain — signature -> anchors -> starter -> grown neighbours — so a debug
+ * surface can explain why each card is in the pool. Only the `idf3` variant
+ * produces this; the field is absent on every other variant's result.
+ */
+export interface Idf3PoolProvenance {
+  /** The Dreamcaller's raw signature card names. */
+  signatureCardNames: string[];
+  /** Signature cards that carry IDF weight in the corpus (the actual probe). */
+  signatureWeightedNames: string[];
+  /** Signature cards dropped because they are absent or carry no IDF weight. */
+  signatureDroppedNames: string[];
+  /** The anchor decks the signature located, most similar first. */
+  anchors: Idf3PoolAnchor[];
+  /** Highest IDF-weight card names in the starter deck, most distinctive first. */
+  starterDistinctiveCardNames: string[];
+  /** Number of distinct cards in the starter deck. */
+  starterCardCount: number;
+  /** Every deck folded into the pool, starter first then nearest-to-farthest. */
+  sourceDecks: Idf3PoolSourceDeck[];
+  /** Per-card provenance, keyed by card name. */
+  cardProvenanceByName: Record<string, Idf3PoolCardProvenance>;
+}
+
 /** Result of one pool generation. */
 export interface GeneratedPool {
   /** Chosen color identity as ordered w/u/b/r/g letters, e.g. "ubr". */
@@ -72,6 +136,12 @@ export interface GeneratedPool {
    * select a starter deck.
    */
   starterDeck?: readonly string[];
+  /**
+   * Full per-card provenance for the run, set only by the `idf3` variant. The
+   * provenance debug surface ("Why Cards") reads it to explain how each card
+   * descends from the Dreamcaller's signature. Undefined for other variants.
+   */
+  idf3Provenance?: Idf3PoolProvenance;
 }
 
 /**
@@ -89,4 +159,9 @@ export interface VariantResult {
    * undefined and `generate.ts` defaults the public field to `[]`.
    */
   starterDeck?: readonly string[];
+  /**
+   * Full per-card provenance, set only by the `idf3` variant; threaded straight
+   * onto {@link GeneratedPool}. Undefined for other variants.
+   */
+  idf3Provenance?: Idf3PoolProvenance;
 }

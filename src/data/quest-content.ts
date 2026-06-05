@@ -4,10 +4,12 @@ import {
   DEFAULT_STARTING_ESSENCE,
   type DreamcallerContent,
   type DreamsignTemplate,
+  type Idf3CardProvenance,
+  type Idf3ProvenanceSummary,
   type ResolvedDreamcallerPackage,
 } from "../types/content";
 import type { CardData } from "../types/cards";
-import type { PoolData } from "../draft/pool/types.ts";
+import type { GeneratedPool, PoolData } from "../draft/pool/types.ts";
 import { generatePoolFromData } from "../draft/pool/generate.ts";
 import { buildPoolData } from "../draft/pool/pool-data";
 import {
@@ -54,6 +56,28 @@ function hashStringToSeed(input: string): number {
 }
 
 /**
+ * Generate the `idf3` pool for one Dreamcaller, steered by its signature cards
+ * and pinned to the run's deterministic seed. The single source of pool
+ * generation for both the draft package and its provenance summary, so the two
+ * always describe the exact same pool.
+ */
+function generateDreamcallerPool(
+  dreamcaller: DreamcallerContent,
+  ctx: RunPoolContext,
+  questSeed: string,
+): GeneratedPool {
+  return generatePoolFromData(
+    ctx.poolData,
+    hashStringToSeed(`${questSeed}:${dreamcaller.id}`),
+    undefined,
+    "idf3",
+    undefined,
+    POOL_TARGET_SIZE,
+    dreamcaller.signatureCards ?? [],
+  );
+}
+
+/**
  * Build the draft package for one Dreamcaller by generating an `idf3` pool
  * steered by the Dreamcaller's signature cards, resolving it against the run's
  * name index, and excluding starter cards from both the draft pool and the
@@ -64,15 +88,7 @@ export function buildDreamcallerPackage(
   ctx: RunPoolContext,
   questSeed: string,
 ): ResolvedDreamcallerPackage {
-  const pool = generatePoolFromData(
-    ctx.poolData,
-    hashStringToSeed(`${questSeed}:${dreamcaller.id}`),
-    undefined,
-    "idf3",
-    undefined,
-    POOL_TARGET_SIZE,
-    dreamcaller.signatureCards ?? [],
-  );
+  const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
 
   const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(pool, ctx.nameIndex);
   if (unresolvedNames.length > 0) {
@@ -111,6 +127,53 @@ export function buildDreamcallerPackage(
     legalSubsetCount: 1, // idf3 generates a single pool; no subset enumeration
     preferredSubsetCount: 1, // idf3 generates a single pool; no subset enumeration
     starterDecklistCardNumbers,
+  };
+}
+
+/**
+ * Recompute the full `idf3` provenance for one Dreamcaller's pool, resolved
+ * against the run's name index so per-card entries are keyed by card number.
+ * Reproduces the exact pool {@link buildDreamcallerPackage} built (same seed and
+ * inputs), so the "Why Cards" surface can explain every offered card without the
+ * provenance ever being persisted. Returns `null` for non-`idf3` pools (no
+ * provenance is produced). Per-card entries for starter cards are dropped, since
+ * those never appear as draftable pool cards.
+ */
+export function buildDreamcallerProvenance(
+  dreamcaller: DreamcallerContent,
+  ctx: RunPoolContext,
+  questSeed: string,
+): Idf3ProvenanceSummary | null {
+  const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
+  const provenance = pool.idf3Provenance;
+  if (provenance === undefined) return null;
+
+  const starterSet = new Set(STARTER_CARD_NUMBERS);
+  const cardProvenanceByNumber: Record<string, Idf3CardProvenance> = {};
+  for (const [name, entry] of Object.entries(provenance.cardProvenanceByName)) {
+    const cardNumber = ctx.nameIndex.get(name);
+    if (cardNumber === undefined) continue;
+    if (starterSet.has(cardNumber)) continue;
+    cardProvenanceByNumber[String(cardNumber)] = { ...entry };
+  }
+
+  return {
+    signatureCardNames: [...provenance.signatureCardNames],
+    signatureWeightedNames: [...provenance.signatureWeightedNames],
+    signatureDroppedNames: [...provenance.signatureDroppedNames],
+    anchors: provenance.anchors.map((a) => ({
+      similarityToSignature: a.similarityToSignature,
+      distinctiveCardNames: [...a.distinctiveCardNames],
+    })),
+    starterDistinctiveCardNames: [...provenance.starterDistinctiveCardNames],
+    starterCardCount: provenance.starterCardCount,
+    sourceDecks: provenance.sourceDecks.map((d) => ({
+      rank: d.rank,
+      similarityToStarter: d.similarityToStarter,
+      distinctiveCardNames: [...d.distinctiveCardNames],
+      contributedCardCount: d.contributedCardCount,
+    })),
+    cardProvenanceByNumber,
   };
 }
 

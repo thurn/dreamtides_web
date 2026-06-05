@@ -30,10 +30,33 @@
 // `scripts/idf3-signature-experiment.mjs` validates this scheme and the constants
 // below against the real `idf2` oracle.
 
-import type { PoolData, VariantResult } from "./types.ts";
+import type {
+  Idf3PoolCardProvenance,
+  Idf3PoolProvenance,
+  Idf3PoolSourceDeck,
+  PoolData,
+  VariantResult,
+} from "./types.ts";
 import { generate } from "./variant-default.ts";
 import { type IdfDeck, idfCosine, growIdfPool } from "./variant-idf.ts";
 import { IDF2, idf2Corpus } from "./variant-idf2.ts";
+
+// Number of highest-IDF-weight card names kept to characterise a deck on the
+// provenance surface — enough to recognise an archetype, short enough to read.
+const DISTINCTIVE_CARD_COUNT = 6;
+
+// The most archetype-defining cards in a deck: its members sorted by descending
+// IDF weight (rarest, most distinctive first), keeping only weighted cards.
+function topDistinctiveCards(
+  deck: IdfDeck,
+  idfOf: (c: string) => number,
+  limit = DISTINCTIVE_CARD_COUNT,
+): string[] {
+  return [...deck.cards]
+    .filter((c) => idfOf(c) > 0)
+    .sort((a, b) => idfOf(b) - idfOf(a))
+    .slice(0, limit);
+}
 
 interface Idf3Tuning {
   // Exponent on the capped affinity — the strength dial. 0 cancels the affinity
@@ -92,6 +115,9 @@ export function generateIdf3(
   // anchors). Dense, because an anchor is a whole deck — every deck in the
   // archetype scores high, not only those holding the literal signature cards.
   const affinity = new Array<number>(decks.length).fill(0);
+  // The anchor decks with their probe-cosine scores, hoisted so the provenance
+  // summary can report which real decks the signature located.
+  let anchorScored: { i: number; s: number }[] = [];
   if (probeCards.size > 0) {
     let psq = 0;
     for (const c of probeCards) psq += idfOf(c) ** 2;
@@ -99,12 +125,12 @@ export function generateIdf3(
 
     // Step 2 — anchors: the up-to-`anchorCount` decks with the highest POSITIVE
     // probe-cosine (decks scoring zero are never anchors).
-    const anchors = decks
+    anchorScored = decks
       .map((d, i) => ({ i, s: idfCosine(probe, d, idfOf) }))
       .filter((x) => x.s > 0)
       .sort((a, b) => b.s - a.s || a.i - b.i)
-      .slice(0, IDF3.anchorCount)
-      .map((x) => x.i);
+      .slice(0, IDF3.anchorCount);
+    const anchors = anchorScored.map((x) => x.i);
 
     // Step 3 — affinity: max cosine to any anchor; an anchor's affinity to itself
     // is 1.
@@ -141,11 +167,61 @@ export function generateIdf3(
   // Step 6 — grow the pool from the starter, unchanged from `idf`/`idf2`. The
   // starter is on-identity and growth pulls in its most similar neighbours, so the
   // grown pool is on-identity too; steering the starter alone is sufficient.
-  const counts = growIdfPool(decks, idfOf, startIdx, targetSize);
+  const { counts, includedDecks } = growIdfPool(decks, idfOf, startIdx, targetSize);
+
+  // Step 7 — provenance: attribute every pooled card to the nearest source deck
+  // that holds it. Walking `includedDecks` in growth order (starter first, then
+  // nearest-to-farthest neighbours) and recording the first deck that holds each
+  // card yields, for every card, the closest-to-starter deck it came from — the
+  // "distance from the starting point" the debug surface reports.
+  const signatureSet = new Set(signatureCards ?? []);
+  const cappedCopies = (name: string): number => Math.min(2, counts.get(name) ?? 0);
+  const cardProvenanceByName: Record<string, Idf3PoolCardProvenance> = {};
+  const contributedByRank = new Array<number>(includedDecks.length).fill(0);
+  for (let rank = 0; rank < includedDecks.length; rank += 1) {
+    const { deckIndex, similarityToStarter } = includedDecks[rank];
+    for (const name of decks[deckIndex].cards) {
+      if (!counts.has(name)) continue;
+      if (cardProvenanceByName[name] !== undefined) continue;
+      cardProvenanceByName[name] = {
+        isSignature: signatureSet.has(name),
+        inStarterDeck: rank === 0,
+        copies: cappedCopies(name),
+        sourceRank: rank,
+        sourceSimilarity: similarityToStarter,
+      };
+      contributedByRank[rank] += 1;
+    }
+  }
+
+  const sourceDecks: Idf3PoolSourceDeck[] = includedDecks.map((d, rank) => ({
+    rank,
+    similarityToStarter: d.similarityToStarter,
+    distinctiveCardNames: topDistinctiveCards(decks[d.deckIndex], idfOf),
+    contributedCardCount: contributedByRank[rank],
+  }));
+
+  const idf3Provenance: Idf3PoolProvenance = {
+    signatureCardNames: [...(signatureCards ?? [])],
+    signatureWeightedNames: [...probeCards],
+    signatureDroppedNames: (signatureCards ?? []).filter(
+      (c) => !probeCards.has(c),
+    ),
+    anchors: anchorScored.map((a) => ({
+      similarityToSignature: a.s,
+      distinctiveCardNames: topDistinctiveCards(decks[a.i], idfOf),
+    })),
+    starterDistinctiveCardNames: topDistinctiveCards(decks[startIdx], idfOf),
+    starterCardCount: decks[startIdx].cards.size,
+    sourceDecks,
+    cardProvenanceByName,
+  };
+
   return {
     C: new Set(),
     selected: ["idf3", `deck#${String(startIdx)}`],
     counts,
     starterDeck: [...decks[startIdx].cards],
+    idf3Provenance,
   };
 }

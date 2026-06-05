@@ -119,24 +119,50 @@ export function idfCosine(
   return dot / (a.norm * b.norm);
 }
 
+/** One decklist folded into a grown pool, in growth order. */
+export interface IncludedDeck {
+  /** Index of the deck in the corpus `decks` array. */
+  deckIndex: number;
+  /**
+   * IDF-cosine similarity of this deck to the starter. The starter itself is
+   * reported as `1` (it is identical to itself); every neighbour is `< 1`.
+   */
+  similarityToStarter: number;
+}
+
+/** What {@link growIdfPool} produced: the capped pool and how it was grown. */
+export interface IdfGrowthResult {
+  /** Card name -> copy count (1 or 2) of the kept pool. */
+  counts: Map<string, number>;
+  /**
+   * The decks actually folded into the kept pool, in growth order: the starter
+   * first (similarity 1), then the similarity-ranked neighbours up to the
+   * boundary the builder settled on. Decks folded past that boundary are
+   * excluded. `idf3` reads this to attribute each pooled card to the nearest
+   * source deck it came from.
+   */
+  includedDecks: IncludedDeck[];
+}
+
 // Grow a pool from a chosen starter decklist, shared by `idf` and `idf2` (they
 // differ only in how the starter is picked). Rank every other decklist by
 // IDF-cosine similarity to the starter, then union whole decklists best-first —
 // capping copies at `IDF.cap` — keeping the whole-deck boundary whose size lands
 // closest to `IDF.targetSize` (tie-break toward the larger pool), stopping once a
 // candidate reaches the top of the window since going further only moves away.
-// Decks are never truncated.
+// Decks are never truncated. Returns the kept pool together with the ordered
+// list of decks folded into it (see {@link IdfGrowthResult}).
 export function growIdfPool(
   decks: IdfDeck[],
   idfOf: (c: string) => number,
   startIdx: number,
   targetSize: number = IDF.targetSize,
-): Map<string, number> {
+): IdfGrowthResult {
   const starter = decks[startIdx];
   const ranked = decks
     .map((d, i) => ({ d, i }))
     .filter((x) => x.i !== startIdx)
-    .map((x) => ({ d: x.d, sim: idfCosine(starter, x.d, idfOf) }))
+    .map((x) => ({ d: x.d, i: x.i, sim: idfCosine(starter, x.d, idfOf) }))
     .sort((a, b) => b.sim - a.sim);
 
   const high = targetSize + IDF.targetTolerance;
@@ -152,19 +178,27 @@ export function growIdfPool(
   };
   const pool = new Map<string, number>();
   let size = unionInto(pool, starter.cards);
-  let best = { counts: new Map(pool), size };
-  for (const { d } of ranked) {
-    size += unionInto(pool, d.cards);
+  // `foldedNeighbours` records how many ranked neighbours were folded in at the
+  // kept boundary, so the included-deck list can be sliced to exactly that pool.
+  let best = { counts: new Map(pool), size, foldedNeighbours: 0 };
+  for (let k = 0; k < ranked.length; k += 1) {
+    size += unionInto(pool, ranked[k].d.cards);
     if (
       Math.abs(size - targetSize) < Math.abs(best.size - targetSize) ||
       (Math.abs(size - targetSize) === Math.abs(best.size - targetSize) &&
         size > best.size)
     ) {
-      best = { counts: new Map(pool), size };
+      best = { counts: new Map(pool), size, foldedNeighbours: k + 1 };
     }
     if (size >= high) break;
   }
-  return best.counts;
+  const includedDecks: IncludedDeck[] = [
+    { deckIndex: startIdx, similarityToStarter: 1 },
+    ...ranked
+      .slice(0, best.foldedNeighbours)
+      .map((r) => ({ deckIndex: r.i, similarityToStarter: r.sim })),
+  ];
+  return { counts: best.counts, includedDecks };
 }
 
 // Build a pool purely from real decklists: pick one at random, rank the rest by
@@ -185,7 +219,7 @@ export function generateIdf(
 
   // Pick the starter decklist uniformly at random, then grow the pool from it.
   const startIdx = Math.floor(rng() * decks.length);
-  const counts = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx, targetSize);
+  const { counts } = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx, targetSize);
 
   // No color identity: deriving one would read the color metadata, and this
   // variant consumes nothing but the decklists. The identity string is left

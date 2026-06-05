@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
 import type { QuestContent } from "./data/quest-content";
-import { loadQuestContent } from "./data/quest-content";
+import { buildDreamcallerProvenance, loadQuestContent } from "./data/quest-content";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { MultiplayerRoomGate } from "./multiplayer/MultiplayerRoomGate";
 import { connectedClientCount } from "./multiplayer/room-service";
@@ -78,6 +78,30 @@ export function QuestApp({
 
   const hasDraftData = state.resolvedPackage !== null;
   const hasCardSourceDebug = state.cardSourceDebug !== null;
+
+  // Recompute the full idf3 provenance for the "Why Cards" overlay on demand
+  // from the run seed and the pool corpus. It is deterministic per
+  // `(state.seed, dreamcaller.id)`, so it reproduces the exact pool the player
+  // is drafting from without ever being persisted. The signature is read from
+  // the freshly loaded content (matched by id) rather than the RTDB-round-tripped
+  // package, so an empty-array strip cannot silently lose the steer.
+  const resolvedDreamcallerId = state.resolvedPackage?.dreamcaller.id ?? null;
+  const cardSourceProvenance = useMemo(() => {
+    const poolContext = questContent.poolContext;
+    if (!cardSourceOverlayOpen || poolContext === undefined) return null;
+    if (resolvedDreamcallerId === null) return null;
+    const dreamcaller = questContent.dreamcallers.find(
+      (dc) => dc.id === resolvedDreamcallerId,
+    );
+    if (dreamcaller === undefined) return null;
+    return buildDreamcallerProvenance(dreamcaller, poolContext, state.seed);
+  }, [
+    cardSourceOverlayOpen,
+    questContent.poolContext,
+    questContent.dreamcallers,
+    resolvedDreamcallerId,
+    state.seed,
+  ]);
 
   useEffect(() => {
     // FIND-01-6 (Stage 4): do NOT auto-open the deck viewer when leaving the
@@ -253,6 +277,7 @@ export function QuestApp({
         >
           <CardSourceOverlay
             cardSourceDebug={state.cardSourceDebug}
+            idf3Provenance={cardSourceProvenance}
             isOpen={cardSourceOverlayOpen}
             onClose={handleCloseCardSourceOverlay}
           />
