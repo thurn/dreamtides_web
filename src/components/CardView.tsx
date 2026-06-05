@@ -842,6 +842,16 @@ export function CardView({
   // per-line height difference. The band draws behind the box and never changes
   // its size, so writing the band from a box measurement cannot loop; a small
   // dead-band absorbs observer jitter.
+  //
+  // The effect re-subscribes only when the box's existence or card identity
+  // changes, never on the live measured values (`widthPx`, `rulesFontPx`,
+  // `large`) it could influence. Those settle over several frames — the width
+  // observer resolves null→px, `useFitText` re-fits on font load — so listing
+  // them here would re-run the effect every frame, and its synchronous
+  // `setBoxTopFrac` would compound into React's nested-update guard ("Maximum
+  // update depth exceeded"). Any geometry change from a width or font shift
+  // resizes `cardEl`/`boxEl`, so the ResizeObserver below re-measures from its
+  // own (async, post-commit) callback instead.
   useEffect(() => {
     const cardEl = cardRef.current;
     const boxEl = bandBoxRef.current;
@@ -878,7 +888,7 @@ export function CardView({
     return () => {
       observer.disconnect();
     };
-  }, [hasTextboxContent, card.renderedText, widthPx, large, rulesFontPx]);
+  }, [hasTextboxContent, card.renderedText]);
 
   const bandTopPct =
     boxTopFrac !== null ? boxTopFrac * 100 : ART_BAND_DEFAULT_TOP_PCT;
