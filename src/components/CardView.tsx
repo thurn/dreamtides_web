@@ -419,13 +419,16 @@ const ENERGY_ORB_RATIO = 0.16;
 const SPARK_ORB_RATIO = 0.12;
 
 /**
- * Rules-text base size as a fraction of the rendered card width, mirroring
- * `--cv-rules-font-size` (4.75cqw) in `index.css`. It seeds the auto-shrink
- * ceiling so the fitted px size matches the cqw base when the text fits, while
- * the floor fraction bounds how small a wordy card may shrink before its
- * overflow is clipped.
+ * Rules-text ceiling size as a fraction of the rendered card width, matching
+ * the `--cv-rules-font-cap` (4.2cqw) display cap in `index.css`. The fitter
+ * writes the chosen size straight onto the element, so this ceiling is the
+ * size a card whose text fits renders at; the fit only drops below it when the
+ * text overflows the reserved area. The text box reserves three lines at the
+ * larger `--cv-rules-font-size`, so text up to a little over three capped lines
+ * still holds the cap before the fitter shrinks it. The floor fraction bounds
+ * how small a wordy card may shrink before its overflow is clipped.
  */
-const RULES_FONT_RATIO = 0.0475;
+const RULES_FONT_RATIO = 0.042;
 const RULES_MIN_FONT_FRACTION = 0.5;
 
 /**
@@ -595,6 +598,13 @@ export interface CardViewProps {
    * reshuffle endlessly as off-screen cards measured only after being moved.
    */
   eagerRulesFit?: boolean;
+  /**
+   * Grow the rules text box to a taller editing height. The card editor sets
+   * this while its rules-text field is open so the inline textarea has room to
+   * show and edit several lines at once instead of being clipped to the
+   * three-line display cap.
+   */
+  rulesTextboxExpanded?: boolean;
 }
 
 /**
@@ -619,6 +629,7 @@ export function CardView({
   slots = {},
   onRulesFontSizeChange,
   eagerRulesFit = false,
+  rulesTextboxExpanded = false,
 }: CardViewProps) {
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
@@ -634,10 +645,10 @@ export function CardView({
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
   // Auto-shrink the rules body so a card needing more than the reserved three
-  // lines still fits the fixed text box. The ceiling mirrors the
-  // `--cv-rules-font-size` cqw base (text that fits keeps the shared type
-  // scale); the fitted size only drops below it when the text overflows the
-  // three-line area.
+  // lines still fits the fixed text box. The ceiling sits just above the
+  // `--cv-rules-font-cap` display cap (text that fits keeps the shared type
+  // scale); the fitted size only drops below the cap when the text overflows
+  // the reserved area.
   const rulesMaxFontPx = widthPx * RULES_FONT_RATIO;
   const rulesMinFontPx = rulesMaxFontPx * RULES_MIN_FONT_FRACTION;
   const { ref: rulesFitRef, fontSize: rulesFontPx } = useFitText(
@@ -852,7 +863,7 @@ export function CardView({
         textAlign: "left",
         color: tintColor ?? RULES_COLOR,
         fontFamily: RULES_FONT_FAMILY,
-        fontSize: `min(var(--cv-rules-font-size), ${String(rulesFontPx)}px)`,
+        fontSize: `min(var(--cv-rules-font-cap), ${String(rulesFontPx)}px)`,
         lineHeight: "var(--cv-rules-line-height)",
         textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
       }}
@@ -961,9 +972,17 @@ export function CardView({
   // The box shrinks to its rules text, bottom-aligned, capped at the three-line
   // height (`--cv-textbox-height`): a short card gets a short box, while text
   // beyond three lines auto-shrinks to the cap. A type-only editor box (no rules
-  // text) keeps the larger `--cv-textbox-max-height` cap.
+  // text) keeps the larger `--cv-textbox-max-height` cap. While the editor's
+  // rules-text field is open the box takes a fixed, taller editing height so the
+  // inline textarea has room to show several lines at once; the column is
+  // bottom-anchored, so the box grows upward over the art.
   const textboxSizing: CSSProperties = showRulesText
-    ? { maxHeight: "var(--cv-textbox-height)" }
+    ? rulesTextboxExpanded
+      ? {
+          height: "var(--cv-textbox-expanded-height)",
+          maxHeight: "var(--cv-textbox-expanded-height)",
+        }
+      : { maxHeight: "var(--cv-textbox-height)" }
     : { maxHeight: "var(--cv-textbox-max-height)" };
 
   const artCrop = card.art ?? DEFAULT_ART_CROP;

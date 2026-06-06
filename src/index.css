@@ -255,15 +255,25 @@ button:disabled {
   --cv-textbox-height: calc(
     var(--cv-textbox-rules-area-height) + 2 * var(--cv-textbox-pad-y)
   );
+  /* Taller box height used while the editor's rules-text field is open: three
+   * times the display height so the inline textarea can show several lines at
+   * once. The bottom-anchored column grows the box upward over the art, well
+   * clear of the top name bar. */
+  --cv-textbox-expanded-height: calc(var(--cv-textbox-height) * 3);
 
   /* Font sizes, as fractions of the card width. The name and type line use
    * these sizes verbatim and truncate with an ellipsis when too long for one
-   * line. The rules body starts at `--cv-rules-font-size` and auto-shrinks per
-   * card only when its text needs more than the reserved three lines, so every
-   * card shares one type scale until the text forces a smaller rules size. */
+   * line. The rules body is capped at `--cv-rules-font-cap` and auto-shrinks
+   * per card only when its text needs more than the reserved area, so every
+   * card shares one type scale until the text forces a smaller rules size.
+   * `--cv-rules-font-size` is the larger size the text box reserves three lines
+   * of (which sizes the box and its overflow cap); the rendered text never
+   * exceeds the smaller `--cv-rules-font-cap`, so a card with a little over
+   * three capped lines still fits at the cap before its font shrinks. */
   --cv-name-font-size: 5.2cqw;
   --cv-type-font-size: 4.95cqw;
   --cv-rules-font-size: 4.5cqw;
+  --cv-rules-font-cap: 4.2cqw;
 
   /* Typography. */
   --cv-name-font-family: "EB Garamond", Georgia, serif;

@@ -329,6 +329,10 @@ export default function EditableCard({
     />
   ) : null;
 
+  // While the rules-text field is open, grow the card's text box so the inline
+  // editing textarea has room to show several lines instead of the three-line
+  // display cap.
+  const rulesTextEditing = rulesTextSaveEntry?.status === "editing";
   const visibleName = String(nameSaveEntry?.draftValue ?? card.name);
   const visibleEnergy = energyPreviewValue(
     energySaveEntry?.draftValue ?? card["energy-cost"],
@@ -513,6 +517,7 @@ export default function EditableCard({
         slots={slots}
         onRulesFontSizeChange={handleRulesFontSize}
         eagerRulesFit={eagerRulesFit}
+        rulesTextboxExpanded={rulesTextEditing}
       />
       {fontSizeOverlay}
       {/* Checkbox tagging hides the tag and tide chip editors so only the one

@@ -160,15 +160,15 @@ function splitRulesTextIntoParagraphs(text: string): string[] {
 
 /**
  * Top margin applied to every ability paragraph after the first, sizing the
- * blank line that separates two abilities to about half the visible height of a
- * full blank line. The margin sits on top of each line's leading, so a value of
- * roughly a third of a line height already reads as a half-height blank line;
- * this packs more abilities into the fixed text box while still reading as
- * separate "list items" rather than "essay paragraphs". Expressed in `em` so it
- * scales with the surrounding (possibly auto-shrunk) font size. See backlog
- * task 029.
+ * blank line that separates two abilities to a slim fraction of a full blank
+ * line. The margin sits on top of each line's leading, so even this small value
+ * reads as a clear break between abilities; keeping it tight packs more
+ * abilities into the fixed text box (and lets more cards hold the rules-text
+ * cap before the font shrinks) while still reading as separate "list items"
+ * rather than "essay paragraphs". Expressed in `em` so it scales with the
+ * surrounding (possibly auto-shrunk) font size. See backlog task 029.
  */
-const PARAGRAPH_GAP_EM = 0.34;
+const PARAGRAPH_GAP_EM = 0.22;
 
 /** Renders the parsed rules text segments to React nodes. */
 export function renderRulesText(
