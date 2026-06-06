@@ -64,8 +64,10 @@ function artCoverMetrics(
   const coverH = ratio >= 1 ? 1 : 1 / ratio;
   const renderW = art.scale * coverW;
   const renderH = art.scale * coverH;
-  const panX = renderW > 1 ? ((art.x * (renderW - 1)) / (2 * renderW)) * 100 : 0;
-  const panY = renderH > 1 ? ((art.y * (renderH - 1)) / (2 * renderH)) * 100 : 0;
+  const panX =
+    renderW > 1 ? ((art.x * (renderW - 1)) / (2 * renderW)) * 100 : 0;
+  const panY =
+    renderH > 1 ? ((art.y * (renderH - 1)) / (2 * renderH)) * 100 : 0;
   return { renderW, renderH, panX, panY };
 }
 
@@ -561,8 +563,14 @@ export interface CardViewSlots {
     context: CardViewSlotContext,
     defaultNode: ReactNode,
   ) => ReactNode;
-  typeLine?: (context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode;
-  rulesText?: (context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode;
+  typeLine?: (
+    context: CardViewSlotContext,
+    defaultNode: ReactNode,
+  ) => ReactNode;
+  rulesText?: (
+    context: CardViewSlotContext,
+    defaultNode: ReactNode,
+  ) => ReactNode;
   spark?: (context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode;
 }
 
@@ -789,7 +797,14 @@ export function CardView({
         <i
           key={index}
           className={`${BOLT_ICON_CLASS} align-middle`}
-          style={{ transform: "translateY(-0.1em)" }}
+          style={{
+            transform: "translateY(-0.1em)",
+            // The bolt glyph carries a wide left side-bearing; trim it on the
+            // first bolt so the mark starts at the name's text edge rather than
+            // floating in from it. Pull each later bolt (an interrupt's second
+            // mark) further in so the two bolts almost touch.
+            marginLeft: index === 0 ? "-0.3em" : "-0.35em",
+          }}
           aria-hidden="true"
         />
       ))}
@@ -818,8 +833,7 @@ export function CardView({
     </div>
   );
 
-  const typeLineContentNode =
-    typeLine !== "" ? <span>{typeLine}</span> : null;
+  const typeLineContentNode = typeLine !== "" ? <span>{typeLine}</span> : null;
   const renderedTypeLineContent =
     slots.typeLineContent?.(slotContext, typeLineContentNode) ??
     typeLineContentNode;
@@ -833,37 +847,36 @@ export function CardView({
   // ends and the rounded corner begins; `marginBottom` is the gap it rides above
   // the box. Because the column is bottom-anchored and the box shrinks to its
   // text, the label tracks the box's actual top however tall the box is.
-  const typeLineNode =
-    hasTypeLineContent ? (
-      <div
-        data-testid="card-type-line"
-        style={{
-          textAlign: "right",
-          paddingRight: "var(--cv-textbox-radius)",
-          marginBottom: "var(--cv-typelabel-gap)",
-          // No background plate, so legibility comes from the faux outline (eight
-          // zero-blur shadow copies), a uniform vector stroke painted outside the
-          // fill, and the soft halo/drop layers.
-          color: TYPE_COLOR,
-          fontFamily: NAME_FONT_FAMILY,
-          fontStyle: "italic",
-          fontWeight: 500,
-          letterSpacing: "0.02em",
-          WebkitTextStroke: TYPE_LABEL_TEXT_STROKE,
-          paintOrder: "stroke fill",
-          textShadow: TYPE_LABEL_TEXT_SHADOW,
-          fontSize: "var(--cv-type-font-size)",
-          lineHeight: "var(--cv-type-line-height)",
-          // A single line floating over the art. No `overflow: hidden` here: the
-          // box shrink-wraps the text, so clipping would crop the outline and
-          // halo at the left/right edges. Over-long labels extend leftward over
-          // the art instead of truncating.
-          whiteSpace: "nowrap",
-        }}
-      >
-        {renderedTypeLineContent}
-      </div>
-    ) : null;
+  const typeLineNode = hasTypeLineContent ? (
+    <div
+      data-testid="card-type-line"
+      style={{
+        textAlign: "right",
+        paddingRight: "var(--cv-textbox-radius)",
+        marginBottom: "var(--cv-typelabel-gap)",
+        // No background plate, so legibility comes from the faux outline (eight
+        // zero-blur shadow copies), a uniform vector stroke painted outside the
+        // fill, and the soft halo/drop layers.
+        color: TYPE_COLOR,
+        fontFamily: NAME_FONT_FAMILY,
+        fontStyle: "italic",
+        fontWeight: 500,
+        letterSpacing: "0.02em",
+        WebkitTextStroke: TYPE_LABEL_TEXT_STROKE,
+        paintOrder: "stroke fill",
+        textShadow: TYPE_LABEL_TEXT_SHADOW,
+        fontSize: "var(--cv-type-font-size)",
+        lineHeight: "var(--cv-type-line-height)",
+        // A single line floating over the art. No `overflow: hidden` here: the
+        // box shrink-wraps the text, so clipping would crop the outline and
+        // halo at the left/right edges. Over-long labels extend leftward over
+        // the art instead of truncating.
+        whiteSpace: "nowrap",
+      }}
+    >
+      {renderedTypeLineContent}
+    </div>
+  ) : null;
 
   const rulesTextNode = showRulesText ? (
     <div
@@ -1011,12 +1024,14 @@ export function CardView({
       data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
       data-card-type={card.cardType}
-      style={{
-        aspectRatio: CARD_ASPECT_RATIO,
-        "--cv-radius": CARD_CORNER_RADIUS,
-        borderRadius: "var(--cv-radius)",
-        boxShadow: shadowLayers.join(", "),
-      } as CSSProperties}
+      style={
+        {
+          aspectRatio: CARD_ASPECT_RATIO,
+          "--cv-radius": CARD_CORNER_RADIUS,
+          borderRadius: "var(--cv-radius)",
+          boxShadow: shadowLayers.join(", "),
+        } as CSSProperties
+      }
       onClick={onClick}
       {...(isInteractive
         ? {
@@ -1086,14 +1101,15 @@ export function CardView({
         `index.css` so `prefers-reduced-motion` can pause the sweep while
         keeping the static highlight gradient visible.
       */}
-      {rarityStyle?.cssClass !== undefined && rarityStyle?.cssClass !== null && (
-        <div
-          data-testid="card-rarity-shimmer"
-          aria-hidden="true"
-          className={`pointer-events-none absolute inset-0 ${rarityStyle.cssClass}__shimmer`}
-          style={{ borderRadius: "var(--cv-radius)" }}
-        />
-      )}
+      {rarityStyle?.cssClass !== undefined &&
+        rarityStyle?.cssClass !== null && (
+          <div
+            data-testid="card-rarity-shimmer"
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-0 ${rarityStyle.cssClass}__shimmer`}
+            style={{ borderRadius: "var(--cv-radius)" }}
+          />
+        )}
 
       {/* Soft inner rim so the card edge reads against any art. */}
       <div
@@ -1143,7 +1159,8 @@ export function CardView({
                   borderRadius: "var(--cv-textbox-radius)",
                   background: "var(--cv-textbox-bg)",
                   backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
-                  WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                  WebkitBackdropFilter:
+                    "blur(var(--cv-textbox-blur)) saturate(1)",
                   border: "1px solid var(--cv-textbox-border)",
                   boxShadow:
                     "0 1px 0 rgba(255,255,255,0.07) inset, 0 12px 28px rgba(0,0,0,0.5)",
