@@ -163,8 +163,16 @@ const ART_BAND_MAX_TOP_PCT = 94;
  * the fully-blurred seam stays a short distance below the box top. Keeping
  * `BELOW` small holds the solid dark band thin, while the longer `ABOVE` lead-in
  * is what dissolves the seam.
+ *
+ * The above-lead-in is a fixed share of card height, so on a short (1–2 line)
+ * box it is a large fraction of the small band and makes the blur feel tall,
+ * while on a full three-line box it is a small fraction of an already-tall band.
+ * To shorten the band on short boxes without altering the full ones, the lead-in
+ * uses the smaller `SHORT` value until the box reaches its three-line max height,
+ * where the `MAX` value (which dissolves the longer seam) takes over.
  */
-const ART_EXTENSION_FEATHER_ABOVE_PCT = 7;
+const ART_EXTENSION_FEATHER_ABOVE_MAX_PCT = 7;
+const ART_EXTENSION_FEATHER_ABOVE_SHORT_PCT = 5;
 const ART_EXTENSION_FEATHER_BELOW_PCT = 3;
 /** Card-height % above the box top where the tint begins its gentle lead-in. */
 const ART_EXTENSION_TINT_ABOVE_PCT = 3;
@@ -250,6 +258,7 @@ function ArtLayers({
   bottomColor,
   widthPx,
   bandTopPct,
+  featherAbovePct,
   onLoad,
   onError,
 }: {
@@ -260,6 +269,7 @@ function ArtLayers({
   bottomColor: BottomColor | null;
   widthPx: number;
   bandTopPct: number;
+  featherAbovePct: number;
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
@@ -282,7 +292,7 @@ function ArtLayers({
     Math.max(bandTopPct, ART_BAND_MIN_TOP_PCT),
     ART_BAND_MAX_TOP_PCT,
   );
-  const featherStartPct = Math.max(0, bandTop - ART_EXTENSION_FEATHER_ABOVE_PCT);
+  const featherStartPct = Math.max(0, bandTop - featherAbovePct);
   const seamPct = Math.min(100, bandTop + ART_EXTENSION_FEATHER_BELOW_PCT);
   const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct.toFixed(2)}%, rgba(0,0,0,1) ${seamPct.toFixed(2)}%, rgba(0,0,0,1) 100%)`;
   const tintStartPct = Math.max(0, bandTop - ART_EXTENSION_TINT_ABOVE_PCT);
@@ -601,6 +611,10 @@ export function CardView({
   // Top of the rules text box as a fraction of card height, measured live so the
   // art fill band can size itself to the box (null until measured / no box).
   const [boxTopFrac, setBoxTopFrac] = useState<number | null>(null);
+  // Whether the rules box has grown to its three-line max-height cap. A full box
+  // keeps the longer blur lead-in; a shorter (1–2 line) box uses a shorter one so
+  // its band does not feel tall.
+  const [boxAtMaxHeight, setBoxAtMaxHeight] = useState(false);
   const bandBoxRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
@@ -673,8 +687,8 @@ export function CardView({
   };
 
   // Multi-cost cards (e.g. an "X" spell with a fixed base, stored as `"2,X"`)
-  // stack one orb per cost in a vertical column; the common single-cost card
-  // shows one orb derived from `energyCost`.
+  // lay one orb per cost in a horizontal row; the common single-cost card shows
+  // one orb derived from `energyCost`.
   const stackedEnergyCosts =
     card.energyCosts !== undefined && card.energyCosts.length > 1
       ? card.energyCosts
@@ -694,14 +708,28 @@ export function CardView({
       <div
         style={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
           alignItems: "center",
-          gap: "var(--cv-energy-orb-gap)",
         }}
       >
-        {stackedEnergyCosts.map((label, index) =>
-          energyOrb(label, `${label}-${String(index)}`),
-        )}
+        {stackedEnergyCosts.map((label, index) => (
+          <div
+            key={`${label}-${String(index)}`}
+            style={{
+              position: "relative",
+              // Each orb after the first slides left to tuck behind the one
+              // before it; the earlier orb keeps the higher z-index so the later
+              // orb passes *under* it rather than over.
+              marginLeft:
+                index === 0
+                  ? undefined
+                  : "calc(-1 * var(--cv-energy-orb-overlap))",
+              zIndex: stackedEnergyCosts.length - index,
+            }}
+          >
+            {energyOrb(label)}
+          </div>
+        ))}
       </div>
     ) : (
       energyOrb(card.energyCost !== null ? String(card.energyCost) : "X")
@@ -857,6 +885,7 @@ export function CardView({
     const boxEl = bandBoxRef.current;
     if (cardEl === null || boxEl === null) {
       setBoxTopFrac(null);
+      setBoxAtMaxHeight(false);
       return;
     }
 
@@ -873,6 +902,14 @@ export function CardView({
       setBoxTopFrac((prev) =>
         prev !== null && Math.abs(prev - frac) < 0.002 ? prev : frac,
       );
+      // The box has `overflow: hidden` and a `max-height` cap, so when its text
+      // fills (or is shrunk to) three lines its rendered height reaches that cap.
+      // Comparing the two tells the band whether to use the full or short blur
+      // lead-in; a small tolerance absorbs sub-pixel rounding.
+      const capPx = Number.parseFloat(getComputedStyle(boxEl).maxHeight);
+      const atMax =
+        Number.isFinite(capPx) && capPx > 0 && boxRect.height >= capPx - 1;
+      setBoxAtMaxHeight((prev) => (prev === atMax ? prev : atMax));
     }
 
     measure();
@@ -892,6 +929,9 @@ export function CardView({
 
   const bandTopPct =
     boxTopFrac !== null ? boxTopFrac * 100 : ART_BAND_DEFAULT_TOP_PCT;
+  const featherAbovePct = boxAtMaxHeight
+    ? ART_EXTENSION_FEATHER_ABOVE_MAX_PCT
+    : ART_EXTENSION_FEATHER_ABOVE_SHORT_PCT;
 
   // The box shrinks to its rules text, bottom-aligned, capped at the three-line
   // height (`--cv-textbox-height`): a short card gets a short box, while text
@@ -947,6 +987,7 @@ export function CardView({
           bottomColor={bottomColor}
           widthPx={widthPx}
           bandTopPct={bandTopPct}
+          featherAbovePct={featherAbovePct}
           onLoad={(event) => {
             const image = event.currentTarget;
             const { naturalWidth, naturalHeight } = image;
@@ -1071,7 +1112,10 @@ export function CardView({
             display: "flex",
             alignItems: "center",
             gap: "var(--cv-namebar-gap)",
-            paddingLeft: "var(--cv-namebar-pad-left)",
+            paddingLeft:
+              stackedEnergyCosts !== null
+                ? "var(--cv-namebar-pad-left-multi)"
+                : "var(--cv-namebar-pad-left)",
             paddingRight: "var(--cv-namebar-pad-right)",
             // Visible so the spark orb, which is taller than the bar, protrudes
             // above and below it (like the energy orb) instead of being

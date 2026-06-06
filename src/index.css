@@ -193,40 +193,46 @@ button:disabled {
    * the box is a descendant of the card container, where `cqw` resolves against
    * the card width as intended. */
   --cv-radius: 3.6% / 2.57%;
-  --cv-textbox-radius: 2.6cqw;
+  --cv-textbox-radius: 2.35cqw;
 
   /* Energy cost orb (floats over the name bar's left end, protruding above and
    * below it) and spark orb (sits at the right of the name bar). The energy
    * orb top is chosen so its center sits on the name bar's center line
-   * (namebar-top 5.8 + namebar-height/2 5 = 10.8cqw; 10.8 − 16/2 = 2.8cqw).
+   * (namebar-top 4.3 + namebar-height/2 4.5 = 8.8cqw; 8.8 − 14.5/2 = 1.55cqw).
    * The name and spark orb are vertically centered within the bar, so all
    * three share that center line. */
-  --cv-energy-orb-size: 16cqw;
-  --cv-spark-orb-size: 12cqw;
-  --cv-energy-orb-top: 2.8cqw;
-  --cv-energy-orb-left: 3.6cqw;
-  /* Vertical spacing between stacked orbs on a multi-cost card so the second
-   * orb tucks just below the first as it protrudes down over the art. */
-  --cv-energy-orb-gap: 1cqw;
+  --cv-energy-orb-size: 14.5cqw;
+  --cv-spark-orb-size: 10.8cqw;
+  --cv-energy-orb-top: 1.55cqw;
+  --cv-energy-orb-left: 3.2cqw;
+  /* Multi-cost cards lay their orbs in a horizontal row; each orb after the
+   * first tucks behind the one before it by this overlap. Tuned to slide the
+   * earlier orb up to just shy of the centered glyph of the orb behind it (the
+   * glyph sits in the orb's central 66%), so the orbs nest tightly without the
+   * leading orb covering the digit. */
+  --cv-energy-orb-overlap: 4.75cqw;
 
   /* Top name bar geometry. */
-  --cv-header-inset: 3.6cqw;
-  --cv-namebar-top: 5.8cqw;
-  --cv-namebar-left: 11.2cqw;
-  --cv-namebar-height: 10cqw;
-  --cv-namebar-radius: 2.8cqw;
-  --cv-namebar-gap: 2cqw;
-  --cv-namebar-pad-left: 10cqw;
-  --cv-namebar-pad-right: 1.6cqw;
+  --cv-header-inset: 3.2cqw;
+  --cv-namebar-top: 4.3cqw;
+  --cv-namebar-left: 10.2cqw;
+  --cv-namebar-height: 9cqw;
+  --cv-namebar-radius: 2.55cqw;
+  --cv-namebar-gap: 1.8cqw;
+  --cv-namebar-pad-left: 8.8cqw;
+  /* A multi-cost card widens the orb cluster into a horizontal row, so the name
+   * needs extra left clearance to start past both orbs. */
+  --cv-namebar-pad-left-multi: 18.6cqw;
+  --cv-namebar-pad-right: 1.5cqw;
 
   /* Floating text box: inset from the card edges, anchored to the bottom. The
    * `--cv-textbox-max-height` cap (a percentage of the card height) bounds
    * type-only boxes, which keep an automatic height. */
-  --cv-textbox-inset: 3.6cqw;
+  --cv-textbox-inset: 3.25cqw;
   --cv-textbox-max-height: 74%;
   --cv-textbox-blur: 11px;
-  --cv-textbox-pad-y: 2.6cqw;
-  --cv-textbox-pad-x: 3.2cqw;
+  --cv-textbox-pad-y: 2.35cqw;
+  --cv-textbox-pad-x: 2.9cqw;
   --cv-textbox-pad: var(--cv-textbox-pad-y) var(--cv-textbox-pad-x);
 
   /* Rules line spacing, and the gap the floating type label rides above the
@@ -235,7 +241,7 @@ button:disabled {
   --cv-type-line-height: 1.2;
   --cv-rules-line-height: 1.38;
   --cv-paragraph-gap: 0.68em;
-  --cv-typelabel-gap: 1.2cqw;
+  --cv-typelabel-gap: 1.1cqw;
 
   /* Maximum text-box height: a three-line rules area + vertical padding. Derived
    * from the rules font size and line height so adjusting the font size keeps
@@ -255,9 +261,9 @@ button:disabled {
    * line. The rules body starts at `--cv-rules-font-size` and auto-shrinks per
    * card only when its text needs more than the reserved three lines, so every
    * card shares one type scale until the text forces a smaller rules size. */
-  --cv-name-font-size: 5.5cqw;
-  --cv-type-font-size: 5.2cqw;
-  --cv-rules-font-size: 4.75cqw;
+  --cv-name-font-size: 5.2cqw;
+  --cv-type-font-size: 4.95cqw;
+  --cv-rules-font-size: 4.5cqw;
 
   /* Typography. */
   --cv-name-font-family: "EB Garamond", Georgia, serif;
