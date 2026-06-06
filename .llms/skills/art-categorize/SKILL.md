@@ -50,8 +50,17 @@ Assign exactly one top-level category.
   is an **Event** (the shattering). A person holding a glowing artifact at center
   frame is a **Character** (the person).
 - **Small figure in a vast scene:** If the figure mainly provides scale or a
-  vantage point and the art is about the scene, it is an **Event** (or
-  Landscape if it reads as a vista), not a Character.
+  vantage point and the art is about the scene, it is an **Event**. Choose
+  **Landscape/Abstract** only when every figure is an incidental scale marker:
+  posture, relationship, clothing, and action are not readable, and the image
+  would tell essentially the same story without them.
+- **Human figure prominence:** A scene with visible people is an **Event**
+  unless it clearly has one primary protagonist, which is a **Character**.
+  Multiple figures are story-bearing when their silhouettes, poses, placement,
+  or relationship anchor the mood of the piece. A wide horizon, sky, shore,
+  city, or wilderness can still be an **Event** when the depicted moment is
+  about people witnessing, approaching, departing, waiting, confronting, or
+  being dwarfed by the scene.
 - **Group scenes** (armies, crowds, flocks) are always **Events**, never
   Characters — a Character must be a single primary figure.
 - **Two figures in conflict** are an **Event** — the confrontation is the
@@ -217,6 +226,10 @@ Rules for the fields:
 
 Before returning, double-check: did you actually *view* the image, does the
 category match what you saw, and did the final name print `PASS`?
+
+**Figure-story reconciliation:** Would the narrative still work if the figures
+were absent? If not, do not choose **Landscape/Abstract**. Choose **Event** for
+multiple story-bearing figures, or **Character** for one primary protagonist.
 
 **Category/narrative reconciliation:** If your name and narrative describe a
 *person or creature* (a role, a "lone rider," "a hooded ferryman"), the category
