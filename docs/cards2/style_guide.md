@@ -28,13 +28,16 @@ concept out only when no symbol applies.
 | `❖❖` | Interrupt (timing marker on an activated ability) |
 | `–` | Marker preceding a keyword such as `Reclaim` or `Support` |
 | `▸` | Marker preceding a named trigger such as `▸Dawn` or `▸Challenge` |
+| `≤` | At most — a cost or spark threshold of that amount or less |
+| `≥` | At least — a cost or spark threshold of that amount or more |
 
 ### 1.1 Symbol spacing is always glued
 
 A number attaches directly to its symbol, with no space between them:
 
-- Correct: `1●`, `+2✦`, `2✦ radiant figment`, `Veil 2●`, `Store 1⧗`, `gain 1⍟`.
-- Wrong: `1 ●`, `+2 ✦`.
+- Correct: `1●`, `+2✦`, `2✦ radiant figment`, `Veil 2●`, `Store 1⧗`, `gain 1⍟`,
+  `≤2●`, `≥3✦`.
+- Wrong: `1 ●`, `+2 ✦`, `≤ 2●`.
 
 ### 1.2 Variable amounts use `X`
 
@@ -139,7 +142,7 @@ Named triggers begin with the `▸` marker glued to a capitalized trigger name,
 followed by a colon and the effect:
 
 ```
-▸Materialized: Discover a character with 2✦ or less.
+▸Materialized: Discover a ≤2✦ character.
 ▸Challenge: Banish an enemy until end of turn.
 ▸Dawn: Gain 1●.
 ```
@@ -165,7 +168,7 @@ or permission:
 
 ```
 Once per turn, when you materialize a character, gain 1●.
-Once per turn, you may play a character with cost 2● or less from your void.
+Once per turn, you may play a ≤2● cost character from your void.
 ```
 
 ---
@@ -194,7 +197,7 @@ Costs are listed in a fixed order, comma-separated:
 
 ```
 4●, ☪: This character gains +1✦.
-2●, ☪, Discard a card: Return up to 2 characters with cost 2● or less from your void to your hand.
+2●, ☪, Discard a card: Return up to 2 ≤2● cost characters from your void to your hand.
 ☪, Discard an event: Draw an event.
 ```
 
@@ -236,9 +239,9 @@ There are no blank lines between bullets.
 
 ```
 Choose one:
-- Dissolve an enemy with 2✦ or less.
+- Dissolve a ≤2✦ enemy.
 - Draw 2 cards, then discard 2 cards.
-- Return a character with cost 2● or less from your void to hand.
+- Return a ≤2● cost character from your void to hand.
 ```
 
 A modal block can follow a trigger or a cost on the same logical line:
@@ -326,21 +329,28 @@ span the effect *looks at* rather than a state it *grants*:
 
 ```
 Draw a card for each ally that dissolved this turn.
-The next time you play an event with cost 2● or less this turn, copy it.
+The next time you play a ≤2● cost event this turn, copy it.
 You may play that card from your void this turn.
 ```
 
 ---
 
-## 11. Conditions and `with cost`
+## 11. Conditions and thresholds
 
 - A leading condition that counts characters in play is written `If there are
   <condition> in play,` and the effect follows: `If there are 3 or more allied
   characters in play, reveal the top card of your deck.`
-- A cost threshold reads `with cost N● or less` (or `or more`): `Return a
-  character with cost 2● or less from your void to hand.`
-- An equality threshold spells out the comparison: `with cost less than or equal
-  to the stored ⧗`.
+- A cost or spark threshold on a noun is a glued symbol prefix on the noun, not a
+  trailing `with …` clause. Use `≤` for "or less" and `≥` for "or more", and
+  spell out `cost` for an energy threshold: `a ≤2● cost character`, `≤2● cost
+  characters`, `a ≥3● cost character`, `a ≤2✦ enemy`, `each ≤X✦ character`. The
+  prefix sits directly before the head noun, after any other adjectives — `a
+  played ≤2● cost card`, `a random ≤2● cost character` — and the article before
+  it is always `a`, never `an` (`a ≤2✦ enemy`).
+- A pure count of objects keeps the words `or less`/`or more`: `If there are 7 or
+  more cards in your void, …`, `When you discard one or more cards, …`.
+- An equality threshold against a variable amount spells out the comparison:
+  `with cost less than or equal to the stored ⧗`.
 
 ---
 
@@ -365,3 +375,6 @@ You may play that card from your void this turn.
   opponent`.
 - Temporary state change → `until end of turn`; counting or permission window →
   `this turn`.
+- Cost/spark thresholds are glued symbol prefixes (`a ≤2● cost character`, `a
+  ≤2✦ enemy`, `a ≥3● cost character`), with article `a`; pure counts keep `or
+  less`/`or more`.

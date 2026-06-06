@@ -324,7 +324,7 @@ card-number = 18
 name = "Call to the Unknown"
 mtg-name = "Recruiter of the Guard"
 id = "5e1b943f-9fa2-4055-b613-5dd09a048c99"
-rendered-text = "▸Materialized: Discover a character with 2✦ or less."
+rendered-text = "▸Materialized: Discover a ≤2✦ character."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -418,7 +418,7 @@ id = "975f49d3-213a-43fc-8079-5fe40f126a7b"
 rendered-text = """
 Awakened, Veil 2●
 
-2●, ☪, Discard a card: Return up to 2 characters with cost 2● or less from your void to your hand."""
+2●, ☪, Discard a card: Return up to 2 ≤2● cost characters from your void to your hand."""
 energy-cost = 0
 card-type = "Character"
 subtype = "Tinkerer"
@@ -507,7 +507,7 @@ card-number = 28
 name = "Dusk Duelist"
 mtg-name = "Reclamation Sage"
 id = "3e6a5236-9850-4a69-9fe1-48389365a399"
-rendered-text = "▸Materialized: Dissolve an enemy with 2✦ or less."
+rendered-text = "▸Materialized: Dissolve a ≤2✦ enemy."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -524,7 +524,7 @@ card-number = 29
 name = "Molten Duel"
 mtg-name = "Lightning Bolt"
 id = "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b"
-rendered-text = "Dissolve a character with 3✦ or less."
+rendered-text = "Dissolve a ≤3✦ character."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -561,7 +561,7 @@ id = "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea"
 rendered-text = """
 Veil 2●
 
-When you play a character with cost 2● or less, gain 1●."""
+When you play a ≤2● cost character, gain 1●."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Visitor"
@@ -692,7 +692,7 @@ card-number = 38
 name = "Starsea Traveler"
 mtg-name = "Ramunap Excavator"
 id = "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6"
-rendered-text = "Once per turn, you may play a character with cost 2● or less from your void."
+rendered-text = "Once per turn, you may play a ≤2● cost character from your void."
 energy-cost = 3
 card-type = "Character"
 subtype = "Explorer"
@@ -1188,7 +1188,7 @@ card-number = 65
 name = "Abomination of Memory"
 mtg-name = "Elvish Reclaimer"
 id = "86881031-393f-4359-96f5-3adde6bdd74d"
-rendered-text = "This character has +4✦ if there are three or more characters with cost 2● or less in your void."
+rendered-text = "This character has +4✦ if there are three or more ≤2● cost characters in your void."
 energy-cost = 1
 card-type = "Character"
 subtype = "Ancient"
@@ -1333,7 +1333,7 @@ card-number = 73
 name = "Cosmonaut of Tides"
 mtg-name = "Sea Gate Stormcaller"
 id = "c7c95f67-a838-4e39-879c-cfbf0591540c"
-rendered-text = "▸Materialized: The next time you play an event with cost 2● or less this turn, copy it twice."
+rendered-text = "▸Materialized: The next time you play a ≤2● cost event this turn, copy it twice."
 energy-cost = 4
 card-type = "Character"
 subtype = "Explorer"
@@ -1387,7 +1387,7 @@ card-number = 76
 name = "Scorched Reckoning"
 mtg-name = "Incinerate"
 id = "027ae231-6569-49bb-866f-7c36ec794a11"
-rendered-text = "Dissolve an enemy with 3✦ or less."
+rendered-text = "Dissolve a ≤3✦ enemy."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -1733,9 +1733,9 @@ mtg-name = "Prismari Command"
 id = "e3431bd0-5a81-497f-9ec9-18275b568c00"
 rendered-text = '''
 Choose one:
-- Dissolve an enemy with 2✦ or less.
+- Dissolve a ≤2✦ enemy.
 - Draw 2 cards, then discard 2 cards.
-- Return a character with cost 2● or less from your void to hand.'''
+- Return a ≤2● cost character from your void to hand.'''
 energy-cost = 3
 card-type = "Event"
 subtype = ""
@@ -1846,7 +1846,7 @@ card-number = 101
 name = "Keeper of the Lightpath"
 mtg-name = "Chandra, Acolyte of Flame"
 id = "3a4ee059-4b6a-4a85-b3b8-a472834ea843"
-rendered-text = "☪: An event with cost 3● or less in your void gains reclaim."
+rendered-text = "☪: A ≤3● cost event in your void gains reclaim."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -1880,7 +1880,7 @@ card-number = 103
 name = "Unleash Ruin"
 mtg-name = "Abrupt Decay"
 id = "09332e5b-3b4e-458f-9df0-3fc0419f65c3"
-rendered-text = "Dissolve an enemy with cost 3● or less."
+rendered-text = "Dissolve a ≤3● cost enemy."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -2131,7 +2131,7 @@ card-number = 117
 name = "Toll of Passage"
 mtg-name = "Spell Snare"
 id = "0fde04ac-8552-45ce-83a3-5ab2384b36da"
-rendered-text = "Prevent a played card with cost 2● or less."
+rendered-text = "Prevent a played ≤2● cost card."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -2148,7 +2148,7 @@ card-number = 118
 name = "Keeper of Forgotten Light"
 mtg-name = "Valakut Exploration"
 id = "8b5eb29c-146f-46fb-9407-55004128fba7"
-rendered-text = "When you materialize a non-figment character with cost 2● or less, draw a card with ephemeral."
+rendered-text = "When you materialize a non-figment ≤2● cost character, draw a card with ephemeral."
 energy-cost = 2
 card-type = "Character"
 subtype = "Ancient"
@@ -2316,7 +2316,7 @@ name = "Unleashed Destruction"
 mtg-name = "Firebolt"
 id = "006e2f95-59a2-4cda-a777-e64f4aa31060"
 rendered-text = """
-Dissolve an enemy with cost 2● or less.
+Dissolve a ≤2● cost enemy.
 
 Reclaim 5●."""
 energy-cost = 1
@@ -2353,9 +2353,9 @@ name = "Forsaken Pact"
 mtg-name = "Crop Rotation"
 id = "ac2b2fc5-90d3-47e0-8332-25f7ba767035"
 rendered-text = """
-To play this card, abandon a character with cost 2● or less.
+To play this card, abandon a ≤2● cost character.
 
-Discover a character with cost 2● or less and materialize it."""
+Discover a ≤2● cost character and materialize it."""
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -2489,7 +2489,7 @@ id = "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a"
 rendered-text = """
 Play this card only if you abandoned a character this turn.
 
-Dissolve an enemy with cost 3● or less."""
+Dissolve a ≤3● cost enemy."""
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -2504,7 +2504,7 @@ card-number = 137
 
 [[cards]]
 name = "Fargazer"
-mtg-name = "Molten Gatekeeper"
+mtg-name = "Stitcher's Supplier"
 id = "8571d7b3-5401-4678-9e81-e14538c8c46e"
 rendered-text = """
 When you erode one or more cards, draw that many cards.
@@ -2713,7 +2713,7 @@ name = "Glimmerwood Scout"
 mtg-name = "Skyclave Apparition"
 id = "32f3d6f2-43c5-4510-a23e-558769a7a8c9"
 rendered-text = """
-▸Materialized: Banish an enemy with cost 4● or less.
+▸Materialized: Banish a ≤4● cost enemy.
 
 When this character leaves play, the opponent draws a card."""
 energy-cost = 3
@@ -2732,7 +2732,7 @@ card-number = 149
 name = "Virtuoso of Harmony"
 mtg-name = "Squandered Resources"
 id = "a952f833-825a-435f-82b1-8d85f872d274"
-rendered-text = "Abandon a character with cost 2● or less: Gain 1●."
+rendered-text = "Abandon a ≤2● cost character: Gain 1●."
 energy-cost = 2
 card-type = "Character"
 subtype = "Musician"
@@ -2843,7 +2843,7 @@ card-number = 155
 name = "Revenant of the Lost"
 mtg-name = "Lurrus of the Dream-Den"
 id = "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e"
-rendered-text = "☪: A character in your void with cost 2● or less gains reclaim until end of turn."
+rendered-text = "☪: A ≤2● cost character in your void gains reclaim until end of turn."
 energy-cost = 2
 card-type = "Character"
 subtype = "Ancient"
@@ -2948,7 +2948,7 @@ card-number = 161
 name = "Lurking Dread"
 mtg-name = "Inquisition of Kozilek"
 id = "bd27a996-bcdd-4f49-95c2-92c9d5875344"
-rendered-text = "Discard a chosen card with cost 2● or less from the opponent's hand."
+rendered-text = "Discard a chosen ≤2● cost card from the opponent's hand."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -3264,7 +3264,7 @@ id = "b6bad2a1-b857-4dd7-8b22-050eb68433a5"
 rendered-text = """
 ▸Dawn: Abandon a character. Erode 1.
 
-When a character with cost 2● or less is put into your void, draw a card."""
+When a ≤2● cost character is put into your void, draw a card."""
 energy-cost = 6
 card-type = "Character"
 subtype = "Explorer"
@@ -3403,7 +3403,7 @@ card-number = 186
 name = "Veil Crosser"
 mtg-name = "Wight of the Reliquary"
 id = "f10a9ba9-f5eb-4011-9426-a89c5de3b550"
-rendered-text = "☪, Abandon another character: Discover a character with cost 2● or less, then materialize it."
+rendered-text = "☪, Abandon another character: Discover a ≤2● cost character, then materialize it."
 energy-cost = 2
 card-type = "Character"
 subtype = "Survivor"
@@ -3580,7 +3580,7 @@ card-number = 196
 name = "Echoes of Eternity"
 mtg-name = "Expansion // Explosion"
 id = "d24ea640-638d-4ce2-b15d-b3f4588bda6b"
-rendered-text = "The next time you play an event with cost 2● or less this turn, copy it."
+rendered-text = "The next time you play a ≤2● cost event this turn, copy it."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -3614,7 +3614,7 @@ card-number = 198
 name = "The Forsaker"
 mtg-name = "Zuran Orb"
 id = "aba40bc6-3e9e-4874-be8a-6984cbf13146"
-rendered-text = "Abandon a character with cost 2● or less: Gain 1⍟."
+rendered-text = "Abandon a ≤2● cost character: Gain 1⍟."
 energy-cost = 3
 card-type = "Character"
 subtype = "Renegade"
@@ -3805,7 +3805,7 @@ card-number = 209
 name = "Depthwalker"
 mtg-name = "Satyr Wayfinder"
 id = "470bbf9d-a73c-4e00-bc66-cb0fa767c8de"
-rendered-text = "▸Materialized: Erode 4. You may return a character with cost 2● or less from among those cards to your hand."
+rendered-text = "▸Materialized: Erode 4. You may return a ≤2● cost character from among those cards to your hand."
 energy-cost = 2
 card-type = "Character"
 subtype = "Explorer"
@@ -4030,7 +4030,7 @@ card-number = 221
 name = "Null Sphere"
 mtg-name = "Stern Scolding"
 id = "6196d53d-a226-490d-a3bb-159a78d1b2b7"
-rendered-text = "Prevent a played character with 2✦ or less."
+rendered-text = "Prevent a played ≤2✦ character."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -4270,7 +4270,7 @@ card-number = 234
 name = "Duneveil Vanguard"
 mtg-name = "Molten Vortex"
 id = "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2"
-rendered-text = "Discard a character with cost 2● or less: Dissolve an enemy with cost 2● or less."
+rendered-text = "Discard a ≤2● cost character: Dissolve a ≤2● cost enemy."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -4489,7 +4489,7 @@ card-number = 246
 name = "Collateral Damage"
 mtg-name = "The Meathook Massacre"
 id = "4cece464-2fde-483d-af92-04cd0341be5b"
-rendered-text = "Dissolve each character with X✦ or less."
+rendered-text = "Dissolve each ≤X✦ character."
 energy-cost = "2,X"
 card-type = "Event"
 subtype = ""
@@ -4540,7 +4540,7 @@ card-number = 249
 name = "Barrage Specialist"
 mtg-name = "Spellseeker"
 id = "a031eada-2c47-49c6-8c19-d2fe85f8ce97"
-rendered-text = "▸Materialized: Discover an event with cost 2● or less."
+rendered-text = "▸Materialized: Discover a ≤2● cost event."
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
@@ -4618,7 +4618,7 @@ name = "Phantom Flotilla"
 mtg-name = "Sevinne's Reclamation"
 id = "3e83cbe2-2b21-4804-9906-4b4735db9869"
 rendered-text = """
-Materialize up to two characters with cost 2● or less from your void.
+Materialize up to two ≤2● cost characters from your void.
 
 Reclaim 5●."""
 energy-cost = 4
@@ -4831,7 +4831,7 @@ card-number = 265
 name = "Crumbling Covenant"
 mtg-name = "Mana Leak"
 id = "795a7b54-40d5-42f9-bc3a-9e92bc938c2d"
-rendered-text = "Prevent a played card unless the opponent abandons a character with cost 3● or more."
+rendered-text = "Prevent a played card unless the opponent abandons a ≥3● cost character."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -4865,7 +4865,7 @@ card-number = 267
 name = "Doorlight Foundling"
 mtg-name = "Coiling Oracle"
 id = "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e"
-rendered-text = "▸Materialized: If the top card of your deck is a character with cost 2● or less, materialize it. Otherwise, draw that card."
+rendered-text = "▸Materialized: If the top card of your deck is a ≤2● cost character, materialize it. Otherwise, draw that card."
 energy-cost = 2
 card-type = "Character"
 subtype = "Child"
@@ -4905,7 +4905,7 @@ id = "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7"
 rendered-text = """
 Veil 2●
 
-The first character with cost 2● or less you play each turn costs you 0●."""
+The first ≤2● cost character you play each turn costs you 0●."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Explorer"
@@ -4980,7 +4980,7 @@ art = { x = 0, y = 1, scale = 1.27 }
 name = "Wondrous Clearing"
 mtg-name = "Arboreal Grazer"
 id = "87f075b1-b058-4570-a75f-c4f8f544e192"
-rendered-text = "▸Materialized: You may materialize a character with cost 2● or less from your hand."
+rendered-text = "▸Materialized: You may materialize a ≤2● cost character from your hand."
 energy-cost = 1
 card-type = "Character"
 subtype = "Visitor"
@@ -5000,7 +5000,7 @@ id = "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6"
 rendered-text = """
 You may pay an additional 3● to play this event.
 
-Dissolve an enemy with 2✦ or less. If the additional cost was paid, dissolve an enemy with 5✦ or less instead."""
+Dissolve a ≤2✦ enemy. If the additional cost was paid, dissolve a ≤5✦ enemy instead."""
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -5124,7 +5124,7 @@ name = "Shatter the Frail"
 mtg-name = "Darkblast"
 id = "7762759b-c1df-4c86-9dbb-a49d152f3616"
 rendered-text = '''
-Dissolve an enemy with 1✦ or less.
+Dissolve a ≤1✦ enemy.
 
 Reclaim 1●'''
 energy-cost = 1
@@ -5379,7 +5379,7 @@ card-number = 295
 name = "Verdant Pioneer"
 mtg-name = "Ranger-Captain of Eos"
 id = "ae90a3e1-c650-4f21-83af-de3208151b11"
-rendered-text = "▸Materialized: Discover a character with cost 1● or less and materialize it."
+rendered-text = "▸Materialized: Discover a ≤1● cost character and materialize it."
 energy-cost = 2
 card-type = "Character"
 subtype = "Explorer"
@@ -5418,7 +5418,7 @@ card-number = 297
 name = "Wistful Angler"
 mtg-name = "Six"
 id = "0e1209c3-1041-4079-9b1c-f96816a7deb5"
-rendered-text = "▸Challenge: Erode 3. You may put a character with cost 2● or less from among those cards into your hand."
+rendered-text = "▸Challenge: Erode 3. You may put a ≤2● cost character from among those cards into your hand."
 energy-cost = 3
 card-type = "Character"
 subtype = "Child"
@@ -5813,9 +5813,9 @@ name = "Wraith of Twisting Shadows"
 mtg-name = "Knight of the Reliquary"
 id = "017a7b4b-3ccf-4635-9956-28a72b22274e"
 rendered-text = """
-This character has +1✦ for each character with cost 2● or less in your void.
+This character has +1✦ for each ≤2● cost character in your void.
 
-☪, Discard a card: Draw a character with cost 2● or less."""
+☪, Discard a card: Draw a ≤2● cost character."""
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -5832,7 +5832,7 @@ card-number = 320
 name = "Light of Emergence"
 mtg-name = "Knight of the Reliquary"
 id = "7977748d-02c1-4702-ba68-5c49f7f0759b"
-rendered-text = "☪, Abandon a character with cost 2● or less: Materialize a random character with cost 2● or less from your deck. This character gains +1✦."
+rendered-text = "☪, Abandon a ≤2● cost character: Materialize a random ≤2● cost character from your deck. This character gains +1✦."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -5924,7 +5924,7 @@ name = "Fell Swoop"
 mtg-name = "Lava Dart"
 id = "18979c10-39b8-42fb-ac1d-dd784da498d1"
 rendered-text = """
-Dissolve an enemy with 1✦ or less.
+Dissolve a ≤1✦ enemy.
 
 Reclaim – Discard a card"""
 energy-cost = 1
@@ -5944,7 +5944,7 @@ name = "Wreckage Prowler"
 mtg-name = "Living Twister"
 id = "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b"
 rendered-text = """
-1●: Return a character with cost 2● or less from your void to your hand.
+1●: Return a ≤2● cost character from your void to your hand.
 
 1●, ☪, Abandon a character: Draw a card."""
 energy-cost = 2
@@ -5964,7 +5964,7 @@ name = "Astral Angler"
 mtg-name = "Living Twister"
 id = "9af63811-7fef-4e28-b672-95ea82796f45"
 rendered-text = """
-2●, Discard a character: Dissolve an enemy with 2✦ or less.
+2●, Discard a character: Dissolve a ≤2✦ enemy.
 
 1●: Return an ally to hand."""
 energy-cost = 3
@@ -6003,7 +6003,7 @@ id = "956aaeb1-5280-4294-bf80-73079f35c5f6"
 rendered-text = """
 ☪, Discard a card: Materialize a 1✦ warrior figment.
 
-☪, Abandon 2 warrior figments: Dissolve an enemy with 4✦ or less."""
+☪, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -6118,7 +6118,7 @@ name = "Fury of the Clan"
 mtg-name = "Galvanic Blast"
 id = "f79c63f6-7cf1-4030-be39-217fd3c2fb7f"
 rendered-text = """
-With 3 or more allied warriors, dissolve an enemy. Otherwise, dissolve an enemy with 2✦ or less.
+With 3 or more allied warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy.
 """
 energy-cost = 1
 card-type = "Event"
@@ -6136,7 +6136,7 @@ card-number = 336
 name = "Cosmic Puppeteer"
 mtg-name = "Thieving Skydiver"
 id = "4ef8b2e7-3525-4c25-aa30-f751467f182f"
-rendered-text = "▸Materialized: Gain control of an enemy with cost X● or less."
+rendered-text = "▸Materialized: Gain control of a ≤X● cost enemy."
 energy-cost = "3,X"
 card-type = "Character"
 subtype = "Ancient"
@@ -6191,9 +6191,9 @@ name = "Carrion Lord"
 mtg-name = "Baloth Prime"
 id = "a5056a4c-542b-4a7c-8fe6-895126c7d4c8"
 rendered-text = """
-When you abandon a character with cost 2● or less, materialize a 4✦ monstrosity figment.
+When you abandon a ≤2● cost character, materialize a 4✦ monstrosity figment.
 
-4●: Abandon a character with cost 2● or less."""
+4●: Abandon a ≤2● cost character."""
 energy-cost = 6
 card-type = "Character"
 subtype = "Ancient"
@@ -6358,7 +6358,7 @@ card-number = 348
 name = "Nexus Wayfinder"
 mtg-name = "Aluren"
 id = "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277"
-rendered-text = "Characters with cost 2● or less cost you 0●."
+rendered-text = "≤2● cost characters cost you 0●."
 energy-cost = 4
 card-type = "Character"
 subtype = "Explorer"
@@ -6452,10 +6452,9 @@ card-number = 353
 name = "Steel Abomination"
 mtg-name = "Slogurk, the Overslime"
 id = "cc21a902-e482-46c0-bf07-e04035f39190"
-rendered-text = """
-When a character with cost 2● or less is put into your void, this character gains +1✦.
+rendered-text = """When a ≤2● cost character is put into your void, this character gains +1✦.
 
-▸Dissolved: Return up to 2 characters with cost 2● or less from your void to your hand."""
+▸Dissolved: Recover up to two ≤2● cost characters."""
 energy-cost = 3
 card-type = "Character"
 subtype = "Tinkerer"
@@ -6572,7 +6571,7 @@ card-number = 359
 name = "Clockwork Conductor"
 mtg-name = "Crucible of Worlds"
 id = "fa036c27-2234-4f76-8857-c242530627ce"
-rendered-text = "You may play characters with cost 2● or less from your void."
+rendered-text = "You may play ≤2● cost characters from your void."
 energy-cost = 4
 card-type = "Character"
 subtype = "Tinkerer"
@@ -6685,7 +6684,7 @@ card-number = 365
 name = "Blazepath Traveler"
 mtg-name = "Loran of the Third Path"
 id = "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b"
-rendered-text = "▸Materialized: Banish an enemy with cost 2● or less."
+rendered-text = "▸Materialized: Banish a ≤2● cost enemy."
 energy-cost = 5
 card-type = "Character"
 subtype = "Explorer"
@@ -6720,7 +6719,7 @@ name = "Forsaken Skyline"
 mtg-name = "Blast from the Past"
 id = "9d14885c-a757-40cc-b43e-87dbec7ec379"
 rendered-text = """
-Dissolve an enemy with 2✦ or less.
+Dissolve a ≤2✦ enemy.
 
 When you discard this card, it gains reclaim 1● until end of turn.
 
@@ -6761,7 +6760,7 @@ card-number = 369
 name = "Borrowed Minutes"
 mtg-name = "Rally the Ancestors"
 id = "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa"
-rendered-text = "Materialize each character with cost X● or less in your void. Banish them at end of turn."
+rendered-text = "Materialize each ≤X● cost character in your void. Banish them at end of turn."
 energy-cost = "1,X"
 card-type = "Event"
 subtype = ""
@@ -6812,7 +6811,7 @@ card-number = 372
 name = "Lightningborn"
 mtg-name = "Portable Hole"
 id = "c73f978e-8196-4589-a432-845265115555"
-rendered-text = "▸Materialized: Banish an enemy with cost 2● or less until this character leaves play."
+rendered-text = "▸Materialized: Banish a ≤2● cost enemy until this character leaves play."
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -6883,7 +6882,7 @@ id = "764b62f6-6af9-40ad-8d1f-653cc1a11030"
 rendered-text = """
 3●: Store 1⧗.
 
-X⧗: Dissolve an enemy with ✦ X or less."""
+X⧗: Dissolve a ≤X✦ enemy."""
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -7202,7 +7201,7 @@ name = "Radiant Convergence"
 mtg-name = "Disinter"
 id = "4dc2a049-d326-463b-85c7-117d5fd5ba72"
 rendered-text = """
-Materialize a character with cost 2● or less from your void.
+Materialize a ≤2● cost character from your void.
 
 Reclaim – Abandon two characters."""
 energy-cost = 1
@@ -7258,7 +7257,7 @@ id = "d8c90a33-a581-469a-9fd3-9a80d1cc5315"
 rendered-text = """
 ▸Materialized: Erode 3.
 
-5●, ☪, Abandon this character: Return all characters with cost 2● or less from your void to play."""
+5●, ☪, Abandon this character: Return all ≤2● cost characters from your void to play."""
 energy-cost = 3
 card-type = "Character"
 subtype = "Explorer"
@@ -7278,7 +7277,7 @@ id = "c96c6c7f-c0fe-4272-b856-a54ace01f596"
 rendered-text = """
 Offering
 
-Banish an enemy with cost 3● or less."""
+Banish a ≤3● cost enemy."""
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -7407,7 +7406,7 @@ card-number = 404
 name = "Prism Caller"
 mtg-name = "Teshar, Ancestor's Apostle"
 id = "886c9d49-b25f-4ddd-97f0-2ec4b42eda89"
-rendered-text = "When you play a warrior, you may materialize a character with cost 2● or less from your void."
+rendered-text = "When you play a warrior, you may materialize a ≤2● cost character from your void."
 energy-cost = 4
 card-type = "Character"
 subtype = "Explorer"
@@ -7575,7 +7574,7 @@ id = "81074582-dfb3-497c-8c04-f97a24d6b1d4"
 rendered-text = """
 ▸Materialized: Erode 3.
 
-☪, Abandon a warrior: Materialize a warrior with cost 2● or less from your void."""
+☪, Abandon a warrior: Materialize a ≤2● cost warrior from your void."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Explorer"
@@ -7592,7 +7591,7 @@ card-number = 414
 name = "Roots of Rebirth"
 mtg-name = "Collected Company"
 id = "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81"
-rendered-text = "Materialize two random characters with cost 2● or less from your deck."
+rendered-text = "Materialize two random ≤2● cost characters from your deck."
 energy-cost = 4
 card-type = "Event"
 subtype = ""
@@ -7626,7 +7625,7 @@ card-number = 416
 name = "Skyborne Jellyfish"
 mtg-name = "Rofellos, Llanowar Emissary"
 id = "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5"
-rendered-text = "▸Dawn: Gain 1● for each allied character with cost 2● or less."
+rendered-text = "▸Dawn: Gain 1● for each allied ≤2● cost character."
 energy-cost = 2
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -7735,7 +7734,7 @@ name = "Keeper of the Tides"
 mtg-name = "Spellstutter Sprite"
 id = "99101fce-f2b4-4032-b999-317ce3e4a6dd"
 rendered-text = """
-▸Materialized: Prevent a played card with cost 2● or less.
+▸Materialized: Prevent a played ≤2● cost card.
 
 ❖ – 1●: Move this character to an unoccupied character position."""
 energy-cost = 2
@@ -8192,7 +8191,7 @@ card-number = 447
 name = "Dragonward"
 mtg-name = "Imperial Recruiter"
 id = "69d9e550-eacc-49f2-8cc5-30b8940c9eed"
-rendered-text = "▸Materialized: Discover a character with cost 2● or less."
+rendered-text = "▸Materialized: Discover a ≤2● cost character."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -8280,7 +8279,7 @@ card-number = 452
 name = "Archive of the Forgotten"
 mtg-name = "Finale of Promise"
 id = "69552516-14bc-42b9-b4b6-3a0cdc29686b"
-rendered-text = "Up to 2 events with cost X● or less in your void gain reclaim 0● until end of turn."
+rendered-text = "Up to 2 ≤X● cost events in your void gain reclaim 0● until end of turn."
 energy-cost = "2,X"
 card-type = "Event"
 subtype = ""
@@ -8301,7 +8300,7 @@ id = "ccbefadc-aab8-4f8c-a705-07bd70c91731"
 rendered-text = """
 ▸Dawn: Store 1⧗.
 
-❖ – ☪: Materialize a character from your hand with cost X● or less, where X is the stored ⧗."""
+❖ – ☪: Materialize a ≤X● cost character from your hand, where X is the stored ⧗."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Synth"
@@ -8352,7 +8351,7 @@ card-number = 456
 name = "Shadow March"
 mtg-name = "Second Sunrise"
 id = "54471b31-4449-453d-9a6e-814d6225520a"
-rendered-text = "Materialize all characters with cost 2● or less in your void which dissolved this turn."
+rendered-text = "Materialize all ≤2● cost characters in your void which dissolved this turn."
 energy-cost = 3
 card-type = "Event"
 subtype = ""
@@ -8407,7 +8406,7 @@ card-number = 459
 name = "Prophet of the Consumed"
 mtg-name = "Shardless Agent"
 id = "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f"
-rendered-text = "▸Materialized: Draw a card with cost 2● or less. It costs 0●."
+rendered-text = "▸Materialized: Draw a ≤2● cost card. It costs 0●."
 energy-cost = 3
 card-type = "Character"
 subtype = "Synth"
@@ -8478,7 +8477,7 @@ card-number = 463
 name = "Veilpiercer"
 mtg-name = "Spell Queller"
 id = "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d"
-rendered-text = "▸Materialized: Return a played card with cost 3● or less to the opponent's hand. It costs 2● more."
+rendered-text = "▸Materialized: Return a played ≤3● cost card to the opponent's hand. It costs 2● more."
 energy-cost = 3
 card-type = "Character"
 subtype = "Detective"
@@ -8804,7 +8803,7 @@ card-number = 481
 name = "Veil of the Wastes"
 mtg-name = "Bloodghast"
 id = "409147ec-d959-4f66-b126-564702e2cd4a"
-rendered-text = "When you materialize a character with cost 2● or less, return this card from your void to play."
+rendered-text = "When you materialize a ≤2● cost character, return this card from your void to play."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -9041,7 +9040,7 @@ card-number = 494
 name = "Infernal Cavalier"
 mtg-name = "Workshop Assistant"
 id = "b64f0beb-6ba4-4559-b6ab-091c2f60a613"
-rendered-text = "▸Dissolved: Return another warrior with cost 4● or less from your void to your hand."
+rendered-text = "▸Dissolved: Return another ≤4● cost warrior from your void to your hand."
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -9287,7 +9286,7 @@ name = "Eruption"
 mtg-name = "Punishing Fire"
 id = "8a8af982-d1a1-42a0-9229-5e3af13e8dbe"
 rendered-text = """
-Dissolve an enemy with 2✦ or less.
+Dissolve a ≤2✦ enemy.
 
 When an enemy scores ⍟, return this card from your void to your hand."""
 energy-cost = 2
@@ -9425,7 +9424,7 @@ card-number = 515
 name = "Flashpoint Detonation"
 mtg-name = ""
 id = "4408b942-09a0-4f4e-a403-10c708c6e3c5"
-rendered-text = "Dissolve an enemy with cost 3● or less."
+rendered-text = "Dissolve a ≤3● cost enemy."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
