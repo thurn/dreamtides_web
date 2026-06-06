@@ -186,6 +186,27 @@ describe("getFirebaseDatabase", () => {
     );
   });
 
+  it("uses Vite emulator host and port overrides", () => {
+    const database = getFirebaseDatabase("emulator", {
+      VITE_FIREBASE_DATABASE_EMULATOR_HOST: "localhost",
+      VITE_FIREBASE_DATABASE_EMULATOR_PORT: "9100",
+    });
+
+    expect(firebaseMocks.connectDatabaseEmulator).toHaveBeenCalledWith(
+      database,
+      "localhost",
+      9100,
+    );
+  });
+
+  it("rejects invalid emulator port overrides", () => {
+    expect(() =>
+      getFirebaseDatabase("emulator", {
+        VITE_FIREBASE_DATABASE_EMULATOR_PORT: "not-a-port",
+      }),
+    ).toThrow("Invalid Firebase database emulator port: not-a-port");
+  });
+
   it("does not attach the emulator in realtime mode", () => {
     getFirebaseDatabase("realtime", completeEnv);
 

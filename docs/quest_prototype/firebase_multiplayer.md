@@ -85,14 +85,18 @@ npm start
 
 This starts the Realtime Database emulator on `127.0.0.1:9000`, the Emulator UI
 on `127.0.0.1:4000`, refreshes generated assets, and serves Vite on
-`http://localhost:5173/`.
+`http://localhost:5173/`. When an emulator port is occupied, `npm start`
+selects the next available local ports and prints the selected database, UI,
+hub, and logging ports before Vite starts. The selected database host and port
+are passed to Vite as `VITE_FIREBASE_DATABASE_EMULATOR_HOST` and
+`VITE_FIREBASE_DATABASE_EMULATOR_PORT`.
 
 Open `http://localhost:5173/`, create a game, then open the generated
 `?game=<roomId>` URL in a second browser window. Inspect the emulator room data
 with:
 
 ```bash
-curl "http://127.0.0.1:9000/rooms.json?ns=demo-quest-prototype"
+curl "http://127.0.0.1:<database-port>/rooms.json?ns=demo-quest-prototype"
 ```
 
 Use the Vite-only script to inspect the visible emulator connection error state:

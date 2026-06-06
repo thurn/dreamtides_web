@@ -20,6 +20,8 @@ export interface FirebaseRuntimeEnv {
   readonly VITE_FIREBASE_APP_ID?: string;
   readonly VITE_FIREBASE_STORAGE_BUCKET?: string;
   readonly VITE_FIREBASE_MESSAGING_SENDER_ID?: string;
+  readonly VITE_FIREBASE_DATABASE_EMULATOR_HOST?: string;
+  readonly VITE_FIREBASE_DATABASE_EMULATOR_PORT?: string;
 }
 
 const REQUIRED_KEYS = [
@@ -57,6 +59,27 @@ export class FirebaseConfigError extends Error {
 
 function present(value: string | undefined): value is string {
   return value !== undefined && value.trim() !== "";
+}
+
+function readEmulatorDatabaseHost(env: FirebaseRuntimeEnv): string {
+  return present(env.VITE_FIREBASE_DATABASE_EMULATOR_HOST)
+    ? env.VITE_FIREBASE_DATABASE_EMULATOR_HOST
+    : EMULATOR_DATABASE_HOST;
+}
+
+function readEmulatorDatabasePort(env: FirebaseRuntimeEnv): number {
+  if (!present(env.VITE_FIREBASE_DATABASE_EMULATOR_PORT)) {
+    return EMULATOR_DATABASE_PORT;
+  }
+
+  const port = Number(env.VITE_FIREBASE_DATABASE_EMULATOR_PORT);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error(
+      `Invalid Firebase database emulator port: ${env.VITE_FIREBASE_DATABASE_EMULATOR_PORT}`,
+    );
+  }
+
+  return port;
 }
 
 export function readFirebaseConfig(env: FirebaseRuntimeEnv): FirebaseOptions {
@@ -112,8 +135,8 @@ export function getFirebaseDatabase(
   if (mode === "emulator" && !connectedEmulatorDatabases.has(database)) {
     connectDatabaseEmulator(
       database,
-      EMULATOR_DATABASE_HOST,
-      EMULATOR_DATABASE_PORT,
+      readEmulatorDatabaseHost(env),
+      readEmulatorDatabasePort(env),
     );
     connectedEmulatorDatabases.add(database);
   }

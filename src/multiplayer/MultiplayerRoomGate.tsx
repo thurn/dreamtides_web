@@ -234,7 +234,7 @@ export function MultiplayerRoomGate({
 
 function firebaseSetupHelp(databaseMode: DatabaseMode): string {
   if (databaseMode === "emulator") {
-    return "Run npm start to launch the Firebase Realtime Database emulator on 127.0.0.1:9000 with Vite.";
+    return "Run npm start to launch the Firebase Realtime Database emulator with Vite.";
   }
 
   return "Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.";
