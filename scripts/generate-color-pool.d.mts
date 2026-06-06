@@ -3,6 +3,12 @@
 // (the single source of truth); this script loads source data and formats the
 // result. The runtime lives in `generate-color-pool.mjs`.
 
+// Re-use the pool generator's own variant union so this declaration cannot
+// drift from the set of supported variants.
+import type { PoolVariant } from "../src/draft/pool/types.ts";
+
+export type { PoolVariant };
+
 /** A card record the generator reads. */
 export interface PoolCard {
   name: string;
@@ -42,7 +48,6 @@ export function findDreamcaller(
   dreamcallers: readonly DreamcallerRecord[],
   query: string,
 ): DreamcallerRecord | null;
-export type PoolVariant = "default" | "diverse";
 export function runSeed(
   seed: number,
   poolData: PoolData,
