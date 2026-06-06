@@ -72,31 +72,53 @@ paragraph, separated by a normal space, not a blank line:
 When an ally is dissolved, gain 1⍟. Then this character gains +1✦.
 ```
 
-A card's play cost — a `To play this card,` clause (or its `To play this event,`
-/ `To play this character,` variants) — shares a paragraph with the effect it
-gates, joined by a normal space:
+Beyond a single two-sentence ability, three further cases fold what would
+otherwise be separate paragraphs into one:
 
-```
-To play this card, abandon a character. Materialize a random character with higher cost from your deck.
-```
+- **An event's resolution is one paragraph.** Everything an event does when it
+  resolves — a play cost (`To play this card,` and its `To play this event,` /
+  `To play this character,` variants), a play condition (`Play this event only if
+  …`), an alternative cost (`You may play this card for …`), a static property of
+  the event (`This event cannot be prevented.`, `This event costs 1● less …`),
+  and its effects — runs together in one paragraph, joined by normal spaces:
 
-Structurally parallel descriptive triggers share a paragraph too: when a card
-carries two or more `When …` clauses, they run together in one paragraph rather
-than splitting across blank lines:
+  ```
+  To play this card, abandon a character. Materialize a random character with higher cost from your deck.
+  Play this event only if there are 3 or more events in your void. Gain 5●.
+  Foresee 1. Draw a card.
+  ```
 
-```
-When an ally is dissolved, materialize a 1✦ survivor figment. When you discard or erode this card, it gains reclaim 0●.
-```
+- **Parallel descriptive triggers share a paragraph.** When a card carries two
+  or more `When …` clauses, they run together rather than splitting across blank
+  lines:
 
-Named (`▸`) triggers, standalone keywords, activated abilities, and `Reclaim`
-each keep their own paragraph; they are never folded into a neighbouring clause.
-A play cost or `When` clause that sits beside one of these stays separate from
-it:
+  ```
+  When an ally is dissolved, materialize a 1✦ survivor figment. When you discard or erode this card, it gains reclaim 0●.
+  ```
+
+- **Parallel static abilities share a paragraph.** Two static abilities that read
+  as a matched pair are written together:
+
+  ```
+  This character has +1✦ for each allied warrior. Other allied warriors have +1✦.
+  ```
+
+Named (`▸`) triggers, standalone keywords, activated abilities, `Support`, and
+`Reclaim` each keep their own paragraph; they are never folded into a
+neighbouring clause. A lone descriptive trigger keeps its own paragraph too — a
+`When …` clause merges only with another `When …` clause, never with an adjacent
+static or effect line:
 
 ```
 To play this card, banish a card from hand.
 
 ▸Materialized, ▸Dawn: Gain 1●.
+```
+
+```
+Allied characters have awakened.
+
+When you discard or erode this card, it gains reclaim 0●.
 ```
 
 ### 2.2 No trailing whitespace

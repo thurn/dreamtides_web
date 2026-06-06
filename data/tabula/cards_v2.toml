@@ -2269,10 +2269,7 @@ card-number = 125
 name = "Nebula's Wake"
 mtg-name = "Cabal Ritual"
 id = "4d4618bd-4779-4953-b446-dab05e1da5db"
-rendered-text = """
-Play this event only if there are 3 or more events in your void.
-
-Gain 5●."""
+rendered-text = "Play this event only if there are 3 or more events in your void. Gain 5●."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -2474,10 +2471,7 @@ card-number = 136
 name = "Together Against the Tide"
 mtg-name = "Fatal Push"
 id = "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a"
-rendered-text = """
-Play this card only if you abandoned a character this turn.
-
-Dissolve a ≤3● cost enemy."""
+rendered-text = "Play this card only if you abandoned a character this turn. Dissolve a ≤3● cost enemy."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -3291,10 +3285,7 @@ card-number = 181
 name = "Burning Pursuit"
 mtg-name = "Lethal Scheme"
 id = "8bf53fe6-8a25-401e-9a99-84343a026bb0"
-rendered-text = """
-This event costs 1● less for each allied character.
-
-Dissolve an enemy."""
+rendered-text = "This event costs 1● less for each allied character. Dissolve an enemy."
 energy-cost = 4
 card-type = "Event"
 subtype = ""
@@ -3659,10 +3650,7 @@ card-number = 202
 name = "Broadcast Array"
 mtg-name = "Tendrils of Agony"
 id = "d217303e-b115-484a-b22c-0e44d5701389"
-rendered-text = """
-This event cannot be prevented.
-
-Gain 2⍟ for each card you have played this turn."""
+rendered-text = "This event cannot be prevented. Gain 2⍟ for each card you have played this turn."
 energy-cost = 4
 card-type = "Event"
 subtype = ""
@@ -4049,10 +4037,7 @@ card-number = 224
 name = "Ancient Descent"
 mtg-name = "Opt"
 id = "3cc9253a-4db6-4b02-92d6-a37805d192fb"
-rendered-text = """
-Foresee 1.
-
-Draw a card."""
+rendered-text = "Foresee 1. Draw a card."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -4555,9 +4540,7 @@ name = "Nightmare"
 mtg-name = "Sevinne's Reclamation"
 id = "74e82d0d-e107-4207-ad2a-73d016ea54a9"
 rendered-text = """
-Gain 2●. Draw a card.
-
-If this event was reclaimed, copy it.
+Gain 2●. Draw a card. If this event was reclaimed, copy it.
 
 Reclaim 6●"""
 energy-cost = 2
@@ -4956,10 +4939,7 @@ card-number = 274
 name = "Fell the Mighty"
 mtg-name = "Burst Lightning"
 id = "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6"
-rendered-text = """
-You may pay an additional 3● to play this event.
-
-Dissolve a ≤2✦ enemy. If the additional cost was paid, dissolve a ≤5✦ enemy instead."""
+rendered-text = "You may pay an additional 3● to play this event. Dissolve a ≤2✦ enemy. If the additional cost was paid, dissolve a ≤5✦ enemy instead."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -6158,10 +6138,7 @@ card-number = 340
 name = "Gleam Below"
 mtg-name = "Serum Visions"
 id = "45e3d703-7efc-4dc2-b854-33211f8d4f11"
-rendered-text = """
-Draw a card.
-
-Foresee 2."""
+rendered-text = "Draw a card. Foresee 2."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -6252,10 +6229,7 @@ card-number = 345
 name = "Ecliptic Vantage"
 mtg-name = "Preordain"
 id = "84fd9c6e-79c6-4b65-878b-1534f3e4b220"
-rendered-text = """
-Foresee 2.
-
-Draw a card."""
+rendered-text = "Foresee 2. Draw a card."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -8039,10 +8013,7 @@ card-number = 443
 name = "Inspiring Templar"
 mtg-name = "Master of Etherium"
 id = "57bb1572-6075-4efd-a592-102b134132fd"
-rendered-text = """
-This character has +1✦ for each allied warrior.
-
-Other allied warriors have +1✦."""
+rendered-text = "This character has +1✦ for each allied warrior. Other allied warriors have +1✦."
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -9051,10 +9022,7 @@ card-number = 499
 name = "Immolate"
 mtg-name = "Dismember"
 id = "a56e0f68-30b6-404e-9b83-a7584177f21e"
-rendered-text = """
-You may play this card for 0● by giving the opponent 5⍟.
-
-Dissolve an enemy."""
+rendered-text = "You may play this card for 0● by giving the opponent 5⍟. Dissolve an enemy."
 energy-cost = 3
 card-type = "Event"
 subtype = ""
