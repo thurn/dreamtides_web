@@ -7,18 +7,16 @@ import { HoverPopover } from "./HoverPopover";
 import { PipBadge } from "./PipBadge";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 import {
-  ENERGY_GLOW_FILTER,
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
-  SPARK_GLOW_FILTER,
-  SPARK_ICON_CLASS,
   SPARK_ICON_COLOR,
+  SPARK_INLINE_ICON_CLASS,
 } from "./GlowIcon";
 
 /**
  * Renders rules text with:
- *   - the energy `●` glyph swapped for the blue glowing flame (`bxf bx-fire-alt`)
- *   - the spark `✦` glyph swapped for the amber-gold glowing sparkle mark
+ *   - the energy `●` glyph swapped for the blue flame (`bxf bx-fire-alt`)
+ *   - the spark `✦` glyph swapped for the amber-gold sparkle mark
  *   - the trigger `▸` and fast `↯` glyphs colored
  *   - glossary terms (Materialized, Judgment, Reclaim, Foresee, void,
  *     spark, ally, fast, etc.) wrapped in an underlined hover popover
@@ -116,12 +114,12 @@ function renderSegment(
     );
   }
   if (segment.symbol === "energy") {
-    // The inline energy glyph renders as the blue flame mark with the same
-    // bloom as the corner energy stat, so a `●3` reads as the same resource in
-    // both places. Rendered as a plain inline `<i>` (sized to the surrounding
-    // text) so it flows like a character rather than reserving a square box. The
-    // flame's mass sits low in its em box, so a small upward nudge centers it on
-    // the text instead of sitting below the line.
+    // The inline energy glyph renders as the blue flame mark, so a `●3` reads as
+    // the same resource as the corner energy stat. Rendered as a plain inline
+    // `<i>` (sized to the surrounding text) so it flows like a character rather
+    // than reserving a square box. The flame's mass sits low in its em box, so a
+    // small upward nudge centers it on the text instead of sitting below the
+    // line.
     return (
       <i
         key={key}
@@ -129,23 +127,23 @@ function renderSegment(
         className={`${ENERGY_ICON_CLASS} align-middle`}
         style={{
           color: ENERGY_ICON_COLOR,
-          filter: ENERGY_GLOW_FILTER,
           transform: "translateY(-0.08em)",
         }}
       />
     );
   }
   if (segment.symbol === "spark") {
-    // The inline spark glyph renders as the amber-gold sparkle mark with the
-    // same warm bloom as the corner spark stat, so a `1✦` reads as the same
-    // resource in both places. Like the energy flame it is a plain inline `<i>`
-    // so it flows with the text instead of sitting in an oversized box.
+    // The inline spark glyph renders as the amber-gold single-sparkle mark, so a
+    // `1✦` reads as the same resource as the corner spark stat (which uses the
+    // busier multi-star glyph at its larger size). Like the energy flame it is a
+    // plain inline `<i>` so it flows with the text instead of sitting in an
+    // oversized box.
     return (
       <i
         key={key}
         aria-label="spark"
-        className={`${SPARK_ICON_CLASS} align-middle`}
-        style={{ color: SPARK_ICON_COLOR, filter: SPARK_GLOW_FILTER }}
+        className={`${SPARK_INLINE_ICON_CLASS} align-middle`}
+        style={{ color: SPARK_ICON_COLOR }}
       />
     );
   }

@@ -2,15 +2,17 @@ import type { CSSProperties } from "react";
 import { ENERGY_PIP_COLOR } from "./PipBadge";
 
 /**
- * A glowing Boxicons glyph used for the card resource marks. Boxicons paints
- * via the element's text color, so callers pass the resource hue; an `em`-based
- * bloom (and an optional crisp black outline) is pinned to the icon's own
- * `font-size` so both track the glyph at any size.
+ * A Boxicons glyph used for the card resource marks. Boxicons paints via the
+ * element's text color, so callers pass the resource hue; an optional soft
+ * content-protection shadow (and an optional emitted-light glow, supplied by the
+ * caller) is pinned to the icon's own `font-size` so it tracks the glyph at any
+ * size.
  *
- * Single source of truth for the spark and energy symbols: the corner stat
- * orbs (`CardStatOrb`) and the inline references in rules text (`RulesText`)
- * render through the same classes, colors, and glow filters so a `●3` / `1✦`
- * reads as the same mark in both places.
+ * Source of truth for the spark and energy hues: the corner stat orbs
+ * (`CardStatOrb`) and the inline references in rules text (`RulesText`) pull the
+ * same colors so a `●3` / `1✦` reads as the same resource in both places. The
+ * corner stats use the larger sparkle/flame glyphs through this component; the
+ * inline references draw their own plain `<i>` in the matching hue.
  */
 
 /** Solid amber-gold fill for the spark mark. */
@@ -27,19 +29,11 @@ export const SPARK_ICON_CLASS = "bxf bx-sparkles";
 export const ENERGY_ICON_CLASS = "bxf bx-fire-alt";
 
 /**
- * Subtle emitted-light bloom for a resource mark: two stacked, zero-offset
- * `drop-shadow()` layers (a tight hot core and a wider soft halo). Zero offset
- * on every layer reads as the glyph *being* the light source rather than
- * casting a shadow, and `drop-shadow` (not `text-shadow`) follows the glyph's
- * actual alpha silhouette so the glow hugs its edges. Radii are in `em` so the
- * bloom scales with the icon's pinned `font-size`.
+ * Spark glyph for inline rules text. The single "sparkle" star reads more
+ * cleanly than the busier multi-star "sparkles" at the small inline size,
+ * while the corner spark stat keeps `SPARK_ICON_CLASS` at its larger size.
  */
-export const SPARK_GLOW_FILTER =
-  "drop-shadow(0 0 0.22em rgba(245, 205, 90, 0.6)) " +
-  "drop-shadow(0 0 0.5em rgba(243, 180, 50, 0.34))";
-export const ENERGY_GLOW_FILTER =
-  "drop-shadow(0 0 0.22em rgba(56, 189, 248, 0.6)) " +
-  "drop-shadow(0 0 0.5em rgba(14, 165, 233, 0.34))";
+export const SPARK_INLINE_ICON_CLASS = "bxf bx-sparkle";
 
 /**
  * Soft content-protection shadow that grounds the glyph against the art behind

@@ -1,11 +1,9 @@
 import { type CSSProperties, type ReactNode } from "react";
 import { HoverPopover } from "./HoverPopover";
 import {
-  ENERGY_GLOW_FILTER,
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
   GlowIcon,
-  SPARK_GLOW_FILTER,
   SPARK_ICON_CLASS,
   SPARK_ICON_COLOR,
 } from "./GlowIcon";
@@ -19,11 +17,13 @@ const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
 };
 
 /**
- * Glyph spec per stat variant. Both stats render the same way — a glowing,
- * shadowed Boxicons mark behind the centered number — so they read as a matched
- * pair. `overscale` pushes each glyph past the orb box (centered) to cancel the
- * padding inside its 24×24 viewBox, tuned per glyph so the sparkle and flame
- * land at the same visual weight.
+ * Glyph spec per stat variant. Both stats render the same way — a shadowed
+ * Boxicons mark behind the centered number — so they read as a matched pair.
+ * The corner marks carry only the soft content-protection shadow (no emitted
+ * bloom; the glow stays on the inline rules-text references). `overscale`
+ * pushes each glyph past the orb box (centered) to cancel the padding inside
+ * its 24×24 viewBox, tuned per glyph so the sparkle and flame land at the same
+ * visual weight.
  *
  * `numberShiftEm` tunes the digit per glyph: the flame's body sits in the upper
  * bulb of its box, so its digit is nudged down to seat inside the bulb instead
@@ -36,7 +36,6 @@ const ICON_BY_VARIANT: Readonly<
     {
       iconClass: string;
       color: string;
-      glowFilter: string;
       overscale: number;
       /** Vertical nudge of the digit, in `em` of the digit size. */
       numberShiftEm: number;
@@ -46,14 +45,12 @@ const ICON_BY_VARIANT: Readonly<
   spark: {
     iconClass: SPARK_ICON_CLASS,
     color: SPARK_ICON_COLOR,
-    glowFilter: SPARK_GLOW_FILTER,
     overscale: 1.15,
     numberShiftEm: 0,
   },
   energy: {
     iconClass: ENERGY_ICON_CLASS,
     color: ENERGY_ICON_COLOR,
-    glowFilter: ENERGY_GLOW_FILTER,
     overscale: 1.12,
     numberShiftEm: 0.06,
   },
@@ -85,13 +82,13 @@ interface CardStatOrbProps {
 }
 
 /**
- * A card stat rendered with a centered number over a glowing, black-outlined
- * Boxicons mark: the blue flame (`bxf bx-fire-alt`) for energy cost — floating
- * over the top name bar's left end — and the amber-gold sparkle (`bxf
- * bx-sparkles`) for spark, at the right of the name bar. Both marks carry a
- * matching warm/cool bloom and a soft content-protection shadow so they read as
- * a pair. The number is set in Anton — white with a soft dark shadow — and
- * auto-shrinks to fit so multi-digit values never overflow.
+ * A card stat rendered with a centered number over a Boxicons mark: the blue
+ * flame (`bxf bx-fire-alt`) for energy cost — floating over the top name bar's
+ * left end — and the amber-gold sparkle (`bxf bx-sparkles`) for spark, at the
+ * right of the name bar. Both marks carry a soft content-protection shadow (no
+ * emitted bloom — the glow stays on the inline rules-text references) so they
+ * read as a matched pair. The number is set in Anton — white with a soft dark
+ * shadow — and auto-shrinks to fit so multi-digit values never overflow.
  *
  * Single source of truth for the corner stat treatment shared by every
  * `CardView` surface. The inline `⍏N` references in rules text keep their own
@@ -158,7 +155,6 @@ export function CardStatOrb({
       <GlowIcon
         iconClass={icon.iconClass}
         color={icon.color}
-        glowFilter={icon.glowFilter}
         shadow
         size={`calc(${sizeVar} * ${String(icon.overscale)})`}
         style={{
