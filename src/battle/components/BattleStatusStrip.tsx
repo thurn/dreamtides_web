@@ -84,7 +84,7 @@ export function BattleStatusStrip({
               title={`${String(sideState.hand.length)} cards in hand`}
               aria-label={`${String(sideState.hand.length)} cards in hand`}
             >
-              <i className="bx bx-card" aria-hidden="true" />
+              <i className="bx bx-card-view" aria-hidden="true" />
               {String(sideState.hand.length)}
             </span>
           </button>

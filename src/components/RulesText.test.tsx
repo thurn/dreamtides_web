@@ -73,7 +73,7 @@ describe("RulesText", () => {
   it("renders the energy glyph as the boxicons flame icon", () => {
     const { container, root } = mount(<RulesText text="Pay ●3." />);
 
-    const flame = container.querySelector("i.bx.bxs-flame");
+    const flame = container.querySelector("i.bxf.bx-flame");
     expect(flame).not.toBeNull();
     expect(container.textContent).not.toContain("●");
 
@@ -90,7 +90,7 @@ describe("RulesText", () => {
   it("colors the inline energy flame with ENERGY_PIP_COLOR (matches the energy-cost pip)", () => {
     const { container, root } = mount(<RulesText text="Pay ●2 to draw a card." />);
 
-    const flame = container.querySelector<HTMLElement>("i.bx.bxs-flame");
+    const flame = container.querySelector<HTMLElement>("i.bxf.bx-flame");
     expect(flame).not.toBeNull();
     const style = flame?.getAttribute("style") ?? "";
     // jsdom serializes hex colors as `rgb(r, g, b)`. ENERGY_PIP_COLOR is

@@ -219,7 +219,8 @@
   color: var(--accent);
 }
 
-.phase-track-step .bx {
+.phase-track-step .bx,
+.phase-track-step .bxf {
   font-size: 15px;
   line-height: 1;
 }
@@ -1361,7 +1362,8 @@
   gap: 4px;
 }
 
-.btn.icon .bx {
+.btn.icon .bx,
+.btn.icon .bxf {
   font-size: 15px;
   line-height: 1;
 }

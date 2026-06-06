@@ -972,7 +972,7 @@ function RerollButton({ onClick }: { readonly onClick: () => void }) {
         cursor: "pointer",
       }}
     >
-      <i className="bx bx-refresh" aria-hidden="true" />
+      <i className="bx bx-refresh-cw" aria-hidden="true" />
     </button>
   );
 }

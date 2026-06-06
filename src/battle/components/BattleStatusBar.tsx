@@ -3,10 +3,10 @@ import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type { BattleMutableState, BattlePhase, BattleResult, BattleSide } from "../types";
 
 const PHASE_STEPS = [
-  { id: "dawn", label: "Dawn", icon: "bxs-sun phase-icon-sunrise" },
-  { id: "day", label: "Day", icon: "bxs-sun" },
-  { id: "dusk", label: "Dusk", icon: "bxs-sun phase-icon-sunset" },
-  { id: "night", label: "Night", icon: "bxs-moon" },
+  { id: "dawn", label: "Dawn", icon: "bx-sun phase-icon-sunrise" },
+  { id: "day", label: "Day", icon: "bx-sun" },
+  { id: "dusk", label: "Dusk", icon: "bx-sun phase-icon-sunset" },
+  { id: "night", label: "Night", icon: "bx-moon" },
 ] as const;
 
 export function BattleStatusBar({
@@ -75,7 +75,7 @@ export function BattleStatusBar({
               data-active={String(visiblePhase === step.id)}
               onClick={() => onSetPhase?.(step.id)}
             >
-              <i className={`bx ${step.icon}`} aria-hidden="true" />
+              <i className={`bxf ${step.icon}`} aria-hidden="true" />
               {step.label}
             </button>
           ))}

@@ -212,7 +212,7 @@ describe("CardDisplay", () => {
     expect(numberStyle).toContain("text-shadow");
     // The corner stat has no flame icon — only inline rules-text references do.
     const cornerFlame = container.querySelector(
-      "i.bx.bxs-flame[aria-label=\"energy cost\"]",
+      "i.bxf.bx-flame[aria-label=\"energy cost\"]",
     );
     expect(cornerFlame).toBeNull();
     // No bare ● glyph.
@@ -280,7 +280,7 @@ describe("CardDisplay", () => {
     );
 
     const inlineFlames = container.querySelectorAll(
-      "i.bx.bxs-flame[aria-label=\"energy\"]",
+      "i.bxf.bx-flame[aria-label=\"energy\"]",
     );
     expect(inlineFlames.length).toBe(1);
     expect(container.textContent).not.toContain("●");
@@ -340,8 +340,8 @@ describe("CardDisplay", () => {
     expect(sparkOrb?.textContent).toBe("4");
     // No bare spark glyph anywhere on the card.
     expect(container.textContent).not.toContain("⍏");
-    // The stat is backed by the inline sparkle SVG, not the old orb art.
-    expect(sparkOrb?.querySelector("svg")).not.toBeNull();
+    // The stat is backed by the Boxicons sparkle glyph, not the old orb art.
+    expect(sparkOrb?.querySelector("i.bxf.bx-sparkle")).not.toBeNull();
     // White number with a black text-shadow outline.
     const numberStyle =
       sparkOrb?.querySelector("div")?.getAttribute("style")?.toLowerCase() ??

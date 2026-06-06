@@ -343,7 +343,7 @@ describe("QuestStartScreen", () => {
       const icon = container.querySelector(
         `[data-dreamcaller-signature-card-icon="${card.dreamcallerId}:${card.name}"]`,
       );
-      expect(icon?.className).toContain("bxs-star");
+      expect(icon?.className).toContain("bx-star");
     }
 
     const secondDreamcallerButton = Array.from(

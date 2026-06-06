@@ -207,7 +207,7 @@ export function QuestStartScreen() {
                         >
                           <i
                             aria-hidden="true"
-                            className="bx bxs-star text-sm leading-none"
+                            className="bxf bx-star text-sm leading-none"
                             data-dreamcaller-signature-card-icon={`${dreamcaller.id}:${cardName}`}
                             style={{ color: accentColor }}
                           />

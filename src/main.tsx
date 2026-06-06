@@ -1,7 +1,8 @@
 import { StrictMode } from "react";
 import type { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
-import "boxicons/css/boxicons.min.css";
+import "./vendor/boxicons/boxicons.css";
+import "./vendor/boxicons/boxicons-filled.css";
 import "./index.css";
 import CardEditorApp from "./editor/CardEditorApp";
 import { verifyFonts } from "./runtime/verify-fonts";

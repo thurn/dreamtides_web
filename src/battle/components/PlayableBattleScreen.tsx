@@ -1526,7 +1526,7 @@ function BattlePhaseFloatControls({
         title={previousTarget.preview}
         onClick={() => onSetBattleFlow(previousTarget)}
       >
-        <i className="bx bx-left-arrow-alt" aria-hidden="true" />
+        <i className="bx bx-arrow-left" aria-hidden="true" />
       </button>
       <button
         type="button"
@@ -1537,7 +1537,7 @@ function BattlePhaseFloatControls({
         title={nextTarget.preview}
         onClick={() => onSetBattleFlow(nextTarget)}
       >
-        <i className="bx bx-right-arrow-alt" aria-hidden="true" />
+        <i className="bx bx-arrow-right" aria-hidden="true" />
       </button>
       <button
         type="button"

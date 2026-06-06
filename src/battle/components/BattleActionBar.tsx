@@ -111,7 +111,7 @@ export function BattleActionBar({
           title={`Basic automation: ${isBasicAutomationEnabled ? "on" : "off"}`}
           onClick={onToggleBasicAutomation}
         >
-          <i className="bx bxs-cog" aria-hidden="true" />
+          <i className="bxf bx-cog" aria-hidden="true" />
         </button>
       </div>
     </section>

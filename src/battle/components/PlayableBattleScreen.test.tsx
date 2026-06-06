@@ -328,7 +328,7 @@ describe("PlayableBattleScreen", () => {
     const toggle = container.querySelector<HTMLElement>('[data-battle-action="toggle-automation"]');
     expect(toggle).not.toBeNull();
     expect(toggle?.getAttribute("data-battle-automation-enabled")).toBe("false");
-    expect(toggle?.querySelector("i.bx.bxs-cog")).not.toBeNull();
+    expect(toggle?.querySelector("i.bxf.bx-cog")).not.toBeNull();
 
     act(() => {
       toggle?.dispatchEvent(new MouseEvent("click", { bubbles: true }));

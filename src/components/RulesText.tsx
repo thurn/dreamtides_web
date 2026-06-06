@@ -10,7 +10,7 @@ import { SparkleIcon } from "./SparkleIcon";
 
 /**
  * Renders rules text with:
- *   - the energy `●` glyph swapped for the Boxicons `bxs-flame`
+ *   - the energy `●` glyph swapped for the Boxicons filled flame (`bxf bx-flame`)
  *   - the spark `✦` glyph swapped for the amber-gold glowing sparkle mark
  *   - the trigger `▸` and fast `↯` glyphs colored
  *   - glossary terms (Materialized, Judgment, Reclaim, Foresee, void,
@@ -46,7 +46,7 @@ const SYMBOL_COLORS: Readonly<Record<string, string>> = {
 };
 
 /** Boxicons class used to render the energy symbol. */
-const ENERGY_ICON_CLASS = "bx bxs-flame";
+const ENERGY_ICON_CLASS = "bxf bx-flame";
 
 /** Inline-block trigger styling so the underline stays close to the word. */
 const TERM_STYLE: CSSProperties = {

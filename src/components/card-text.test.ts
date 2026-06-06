@@ -15,7 +15,7 @@ describe("tokenizeRulesText", () => {
 
   // The tokenizer continues to recognize U+25CF as the "energy" symbol; the
   // rendering layer (CardDisplay) is what swaps the segment for the Boxicons
-  // `bxs-flame` icon. See backlog task 004 \u2014 these assertions lock that the
+  // `bx-flame` icon. See backlog task 004 \u2014 these assertions lock that the
   // tokenizer keeps emitting `symbol: "energy"` for `\u25CF`, which is the
   // contract CardDisplay relies on to render the flame.
   it("identifies the energy symbol \u25CF", () => {
