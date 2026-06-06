@@ -811,14 +811,17 @@ export function CardView({
     </span>
   ));
 
+  // The bolts sit in their own flex cell beside the name rather than inside it,
+  // so the leading bolt can be nudged left to align with the name's text edge
+  // without the name box's `overflow: hidden` (which drives the ellipsis on
+  // long names) clipping the mark.
   const nameNode = (
     <div
       style={{
         flex: "1 1 0",
         minWidth: 0,
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-        textOverflow: "ellipsis",
+        display: "flex",
+        alignItems: "center",
         color: NAME_COLOR,
         fontFamily: NAME_FONT_FAMILY,
         fontWeight: 600,
@@ -828,8 +831,24 @@ export function CardView({
         lineHeight: 1.1,
       }}
     >
-      {attributeChipNodes}
-      {card.name}
+      {attributeChipNodes.length > 0 ? (
+        <span
+          style={{ flex: "0 0 auto", whiteSpace: "nowrap", marginRight: "0.1em" }}
+        >
+          {attributeChipNodes}
+        </span>
+      ) : null}
+      <span
+        style={{
+          flex: "1 1 0",
+          minWidth: 0,
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {card.name}
+      </span>
     </div>
   );
 

@@ -524,11 +524,12 @@ describe("CardDisplay", () => {
       "color: rgb(255, 255, 255)",
     );
 
-    // The chip is the first child of the name element and precedes the name
-    // text (the bolt is an icon glyph, so the name element's text is the name).
-    const nameEl = chip?.parentElement;
-    expect(nameEl?.firstElementChild).toBe(chip);
-    expect(nameEl?.textContent).toBe("Test Card");
+    // The bolts sit in their own cell before the name text, both inside the
+    // name flex container (the bolt is an icon glyph, so the container's only
+    // text is the card name).
+    const nameContainer = chip?.parentElement?.parentElement;
+    expect(nameContainer?.textContent).toBe("Test Card");
+    expect(nameContainer?.firstElementChild?.contains(chip ?? null)).toBe(true);
 
     // The bolt does not appear on the type/subtype row.
     const typeLine = container.querySelector<HTMLElement>(
@@ -574,9 +575,9 @@ describe("CardDisplay", () => {
     expect(chip?.getAttribute("aria-label")).toBe("interrupt");
 
     // Inline before the card name.
-    const nameEl = chip?.parentElement;
-    expect(nameEl?.firstElementChild).toBe(chip);
-    expect(nameEl?.textContent).toBe("Test Card");
+    const nameContainer = chip?.parentElement?.parentElement;
+    expect(nameContainer?.textContent).toBe("Test Card");
+    expect(nameContainer?.firstElementChild?.contains(chip ?? null)).toBe(true);
 
     act(() => {
       root.unmount();
@@ -622,8 +623,8 @@ describe("CardDisplay", () => {
     );
     expect(chip).not.toBeNull();
     expect(chip?.querySelectorAll("i.bxf.bx-bolt").length).toBe(1);
-    const nameEl = chip?.parentElement;
-    expect(nameEl?.textContent).toBe("Test Card");
+    const nameContainer = chip?.parentElement?.parentElement;
+    expect(nameContainer?.textContent).toBe("Test Card");
 
     act(() => {
       root.unmount();
