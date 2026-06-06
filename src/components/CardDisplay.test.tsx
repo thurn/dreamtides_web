@@ -519,9 +519,9 @@ describe("CardDisplay", () => {
     // A single filled bolt boxicon.
     expect(chip?.querySelectorAll("i.bxf.bx-bolt").length).toBe(1);
     expect(chip?.getAttribute("aria-label")).toBe("fast");
-    // Same gold the inline rules-text fast symbol uses.
+    // White bolt.
     expect((chip?.getAttribute("style") ?? "").toLowerCase()).toContain(
-      "color: rgb(250, 204, 21)",
+      "color: rgb(255, 255, 255)",
     );
 
     // The chip is the first child of the name element and precedes the name

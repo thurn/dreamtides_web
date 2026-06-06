@@ -463,50 +463,32 @@ function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
 }
 
 /**
- * An inline glyph that surfaces a card attribute on the type/subtype row
- * (e.g. a bolt before `Explorer`). Chips read as part of the same typographic
- * row as the type label and are colored to match the inline rules-text
- * rendering for the same symbol. `boltCount` lightning bolts render as the
- * filled Boxicons bolt mark: one for a fast card, two for an interrupt.
+ * An inline glyph that surfaces a card attribute before the card name (e.g. a
+ * bolt before the name). `boltCount` lightning bolts render as the filled
+ * Boxicons bolt mark: one for a fast card, two for an interrupt.
  */
 interface AttributeChip {
   key: string;
   boltCount: number;
-  color: string;
   ariaLabel: string;
 }
 
 /** Filled lightning-bolt mark shared by the fast and interrupt chips. */
 const BOLT_ICON_CLASS = "bxf bx-bolt";
-const FAST_CHIP_COLOR = "#facc15";
 
 /**
- * Builds the type-line attribute chips for a card. An interrupt is always also
- * a fast card, so it takes precedence and renders a double bolt rather than
- * stacking a separate single-bolt fast chip.
+ * Builds the attribute chips for a card. An interrupt is always also a fast
+ * card, so it takes precedence and renders a double bolt rather than stacking a
+ * separate single-bolt fast chip.
  */
 function buildAttributeChips(
   card: Pick<CardData, "isFast" | "isInterrupt">,
 ): AttributeChip[] {
   if (card.isInterrupt === true) {
-    return [
-      {
-        key: "interrupt",
-        boltCount: 2,
-        color: FAST_CHIP_COLOR,
-        ariaLabel: "interrupt",
-      },
-    ];
+    return [{ key: "interrupt", boltCount: 2, ariaLabel: "interrupt" }];
   }
   if (card.isFast) {
-    return [
-      {
-        key: "fast",
-        boltCount: 1,
-        color: FAST_CHIP_COLOR,
-        ariaLabel: "fast",
-      },
-    ];
+    return [{ key: "fast", boltCount: 1, ariaLabel: "fast" }];
   }
   return [];
 }
@@ -794,20 +776,20 @@ export function CardView({
     );
 
   // Fast/interrupt bolts ride inline immediately before the card name (one bolt
-  // for a fast card, two for an interrupt), colored to match the inline
-  // rules-text fast symbol. A trailing thin space keeps them off the first
-  // letter without inflating the gap the way a full space would.
+  // for a fast card, two for an interrupt). The bolt's mass sits low in its em
+  // box, so a small upward nudge centers it on the name text.
   const attributeChipNodes = attributeChips.map((chip) => (
     <span
       key={chip.key}
       data-attribute-chip={chip.key}
       aria-label={chip.ariaLabel}
-      style={{ color: chip.color, marginRight: "0.15em" }}
+      style={{ color: "#ffffff" }}
     >
       {Array.from({ length: chip.boltCount }, (_, index) => (
         <i
           key={index}
           className={`${BOLT_ICON_CLASS} align-middle`}
+          style={{ transform: "translateY(-0.1em)" }}
           aria-hidden="true"
         />
       ))}
