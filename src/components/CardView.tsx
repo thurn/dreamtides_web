@@ -463,31 +463,52 @@ function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
 }
 
 /**
- * An inline glyph that surfaces a boolean card attribute on the type/subtype
- * row (e.g. `↯ Explorer`). Chips read as part of the same typographic row as
- * the type label and are colored to match the inline rules-text rendering for
- * the same symbol.
+ * An inline glyph that surfaces a card attribute on the type/subtype row
+ * (e.g. a bolt before `Explorer`). Chips read as part of the same typographic
+ * row as the type label and are colored to match the inline rules-text
+ * rendering for the same symbol. `boltCount` lightning bolts render as the
+ * filled Boxicons bolt mark: one for a fast card, two for an interrupt.
  */
 interface AttributeChip {
   key: string;
-  glyph: string;
+  boltCount: number;
   color: string;
   ariaLabel: string;
-  applies(card: Pick<CardData, "isFast">): boolean;
 }
 
-const ATTRIBUTE_CHIPS: readonly AttributeChip[] = [
-  {
-    key: "fast",
-    glyph: "↯",
-    color: "#facc15",
-    ariaLabel: "fast",
-    applies: (card) => card.isFast,
-  },
-];
+/** Filled lightning-bolt mark shared by the fast and interrupt chips. */
+const BOLT_ICON_CLASS = "bxf bx-bolt";
+const FAST_CHIP_COLOR = "#facc15";
 
-function buildAttributeChips(card: Pick<CardData, "isFast">): AttributeChip[] {
-  return ATTRIBUTE_CHIPS.filter((chip) => chip.applies(card));
+/**
+ * Builds the type-line attribute chips for a card. An interrupt is always also
+ * a fast card, so it takes precedence and renders a double bolt rather than
+ * stacking a separate single-bolt fast chip.
+ */
+function buildAttributeChips(
+  card: Pick<CardData, "isFast" | "isInterrupt">,
+): AttributeChip[] {
+  if (card.isInterrupt === true) {
+    return [
+      {
+        key: "interrupt",
+        boltCount: 2,
+        color: FAST_CHIP_COLOR,
+        ariaLabel: "interrupt",
+      },
+    ];
+  }
+  if (card.isFast) {
+    return [
+      {
+        key: "fast",
+        boltCount: 1,
+        color: FAST_CHIP_COLOR,
+        ariaLabel: "fast",
+      },
+    ];
+  }
+  return [];
 }
 
 const ENERGY_PIP_TOOLTIP =
@@ -772,6 +793,27 @@ export function CardView({
       energyOrb(card.energyCost !== null ? String(card.energyCost) : "X")
     );
 
+  // Fast/interrupt bolts ride inline immediately before the card name (one bolt
+  // for a fast card, two for an interrupt), colored to match the inline
+  // rules-text fast symbol. A trailing thin space keeps them off the first
+  // letter without inflating the gap the way a full space would.
+  const attributeChipNodes = attributeChips.map((chip) => (
+    <span
+      key={chip.key}
+      data-attribute-chip={chip.key}
+      aria-label={chip.ariaLabel}
+      style={{ color: chip.color, marginRight: "0.15em" }}
+    >
+      {Array.from({ length: chip.boltCount }, (_, index) => (
+        <i
+          key={index}
+          className={`${BOLT_ICON_CLASS} align-middle`}
+          aria-hidden="true"
+        />
+      ))}
+    </span>
+  ));
+
   const nameNode = (
     <div
       style={{
@@ -789,6 +831,7 @@ export function CardView({
         lineHeight: 1.1,
       }}
     >
+      {attributeChipNodes}
       {card.name}
     </div>
   );
@@ -809,7 +852,7 @@ export function CardView({
   // the box. Because the column is bottom-anchored and the box shrinks to its
   // text, the label tracks the box's actual top however tall the box is.
   const typeLineNode =
-    hasTypeLineContent || attributeChips.length > 0 ? (
+    hasTypeLineContent ? (
       <div
         data-testid="card-type-line"
         style={{
@@ -836,16 +879,6 @@ export function CardView({
           whiteSpace: "nowrap",
         }}
       >
-        {attributeChips.map((chip) => (
-          <span
-            key={chip.key}
-            data-attribute-chip={chip.key}
-            aria-label={chip.ariaLabel}
-            style={{ color: chip.color }}
-          >
-            {chip.glyph}
-          </span>
-        ))}
         {renderedTypeLineContent}
       </div>
     ) : null;

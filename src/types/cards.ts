@@ -62,6 +62,12 @@ export interface CardData {
    */
   sparkVariable?: boolean;
   isFast: boolean;
+  /**
+   * Whether this card is an interrupt, sourced from a TOML `is-interrupt`.
+   * Interrupt cards are always also `isFast`; card surfaces mark an interrupt
+   * with a double-bolt glyph (versus the single bolt for a plain fast card).
+   */
+  isInterrupt?: boolean;
   reclaimCost?: number | null;
   renderedText: string;
   /**

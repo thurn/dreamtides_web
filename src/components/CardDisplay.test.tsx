@@ -500,10 +500,11 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders the fast attribute inline on the type/subtype row, not as a top-right circled badge", () => {
+  it("renders the fast attribute as a bolt inline before the card name", () => {
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
+          name: "Test Card",
           isFast: true,
           cardType: "Character",
           subtype: "Explorer",
@@ -511,29 +512,30 @@ describe("CardDisplay", () => {
       />,
     );
 
-    // The chip lives on the type-line row.
-    const typeLine = container.querySelector<HTMLElement>(
-      "[data-testid=\"card-type-line\"]",
-    );
-    expect(typeLine).not.toBeNull();
-    expect(typeLine?.textContent).toBe("↯Explorer");
-
-    const chip = typeLine?.querySelector<HTMLElement>(
+    const chip = container.querySelector<HTMLElement>(
       "[data-attribute-chip=\"fast\"]",
     );
     expect(chip).not.toBeNull();
-    expect(chip?.textContent).toBe("↯");
+    // A single filled bolt boxicon.
+    expect(chip?.querySelectorAll("i.bxf.bx-bolt").length).toBe(1);
     expect(chip?.getAttribute("aria-label")).toBe("fast");
     // Same gold the inline rules-text fast symbol uses.
     expect((chip?.getAttribute("style") ?? "").toLowerCase()).toContain(
       "color: rgb(250, 204, 21)",
     );
 
-    // The chip precedes the type label in DOM order.
-    const children = Array.from(typeLine?.children ?? []);
-    expect(children.length).toBe(2);
-    expect(children[0]?.getAttribute("data-attribute-chip")).toBe("fast");
-    expect(children[1]?.textContent).toBe("Explorer");
+    // The chip is the first child of the name element and precedes the name
+    // text (the bolt is an icon glyph, so the name element's text is the name).
+    const nameEl = chip?.parentElement;
+    expect(nameEl?.firstElementChild).toBe(chip);
+    expect(nameEl?.textContent).toBe("Test Card");
+
+    // The bolt does not appear on the type/subtype row.
+    const typeLine = container.querySelector<HTMLElement>(
+      "[data-testid=\"card-type-line\"]",
+    );
+    expect(typeLine?.querySelector("[data-attribute-chip]")).toBeNull();
+    expect(typeLine?.textContent).toBe("Explorer");
 
     // No corner badge: there must be no element at the old top-right slot
     // rendering the bolt.
@@ -541,6 +543,40 @@ describe("CardDisplay", () => {
       container.querySelectorAll<HTMLElement>("div[class*='right-'][class*='rounded-full']"),
     ).filter((el) => el.textContent === "↯");
     expect(cornerBadges.length).toBe(0);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders a double bolt before the name for an interrupt card", () => {
+    const { container, root } = mount(
+      <CardDisplay
+        card={makeCard({
+          name: "Test Card",
+          isFast: true,
+          isInterrupt: true,
+          cardType: "Character",
+          subtype: "Explorer",
+        })}
+      />,
+    );
+
+    // The interrupt chip replaces the single-bolt fast chip with two bolts.
+    expect(
+      container.querySelector("[data-attribute-chip=\"fast\"]"),
+    ).toBeNull();
+    const chip = container.querySelector<HTMLElement>(
+      "[data-attribute-chip=\"interrupt\"]",
+    );
+    expect(chip).not.toBeNull();
+    expect(chip?.querySelectorAll("i.bxf.bx-bolt").length).toBe(2);
+    expect(chip?.getAttribute("aria-label")).toBe("interrupt");
+
+    // Inline before the card name.
+    const nameEl = chip?.parentElement;
+    expect(nameEl?.firstElementChild).toBe(chip);
+    expect(nameEl?.textContent).toBe("Test Card");
 
     act(() => {
       root.unmount();
@@ -567,12 +603,13 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders the fast chip even when the card has no type-line text", () => {
-    // `formatTypeLine` returns "" for a Character with subtype "*". The
-    // attribute-chip slot must still render so the fast indicator is visible.
+  it("renders the fast bolt before the name even when the type line is empty", () => {
+    // `formatTypeLine` returns "" for a Character with subtype "*". The bolt
+    // rides on the name, so it must still render as the fast indicator.
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
+          name: "Test Card",
           isFast: true,
           cardType: "Character",
           subtype: "*",
@@ -580,19 +617,20 @@ describe("CardDisplay", () => {
       />,
     );
 
-    const typeLine = container.querySelector<HTMLElement>(
-      "[data-testid=\"card-type-line\"]",
+    const chip = container.querySelector<HTMLElement>(
+      "[data-attribute-chip=\"fast\"]",
     );
-    expect(typeLine).not.toBeNull();
-    expect(typeLine?.querySelector("[data-attribute-chip=\"fast\"]")).not.toBeNull();
-    expect(typeLine?.textContent).toBe("↯");
+    expect(chip).not.toBeNull();
+    expect(chip?.querySelectorAll("i.bxf.bx-bolt").length).toBe(1);
+    const nameEl = chip?.parentElement;
+    expect(nameEl?.textContent).toBe("Test Card");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("still renders inline ↯fast in rules text as the existing colored glyph", () => {
+  it("renders the name's fast bolt alongside the inline ↯fast rules-text glyph", () => {
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
@@ -602,12 +640,14 @@ describe("CardDisplay", () => {
       />,
     );
 
-    // The chip on the type line.
-    expect(
-      container.querySelector("[data-attribute-chip=\"fast\"]"),
-    ).not.toBeNull();
-    // The inline rules-text reference also still renders (two bolts total).
-    expect((container.textContent?.match(/↯/g) ?? []).length).toBe(2);
+    // The chip before the name renders as a filled bolt boxicon.
+    const chip = container.querySelector<HTMLElement>(
+      "[data-attribute-chip=\"fast\"]",
+    );
+    expect(chip).not.toBeNull();
+    expect(chip?.querySelectorAll("i.bxf.bx-bolt").length).toBe(1);
+    // The inline rules-text reference still renders the original colored glyph.
+    expect((container.textContent?.match(/↯/g) ?? []).length).toBe(1);
 
     act(() => {
       root.unmount();
