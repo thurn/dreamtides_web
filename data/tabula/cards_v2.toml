@@ -6452,9 +6452,10 @@ card-number = 353
 name = "Steel Abomination"
 mtg-name = "Slogurk, the Overslime"
 id = "cc21a902-e482-46c0-bf07-e04035f39190"
-rendered-text = """When a ≤2● cost character is put into your void, this character gains +1✦.
+rendered-text = '''
+When a ≤2● cost character is put into your void, grow +1✦.
 
-▸Dissolved: Recover up to two ≤2● cost characters."""
+▸Dissolved: Recover up to two ≤2● cost characters.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Tinkerer"
