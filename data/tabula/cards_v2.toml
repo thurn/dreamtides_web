@@ -2181,7 +2181,7 @@ id = "c750af2e-8185-4af0-bb38-4a41430c71b3"
 rendered-text = '''
 To play this card, banish a card from hand.
 
-Materialized, Dawn: Gain 1●.'''
+▸Materialized, ▸Dawn: Gain 1●.'''
 energy-cost = 0
 card-type = "Character"
 subtype = "Spirit Animal"
