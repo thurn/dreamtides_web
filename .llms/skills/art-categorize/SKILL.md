@@ -144,11 +144,41 @@ Invent a short, evocative card name.
   "wanderer"). Validate every candidate:
 
   ```bash
-  python3 .llms/skills/art-categorize/check-name.py "Candidate Name"
+  python3 .llms/skills/art-categorize/check-name.py "First Name" "Second Name" "Third Name"
   ```
 
-  It prints `PASS` or `FAIL: contains banned word(s): …`. Only keep a name that
-  prints `PASS`.
+  Pass all your candidates in a single call. Each output line is the candidate
+  followed by `PASS`, or `FAIL: contains banned word(s): …`. Only keep a name
+  that prints `PASS`.
+
+  **Pre-filter against the banned list below** so your candidates avoid these
+  words *before* you validate — this is a convenience snapshot to reduce wasted
+  candidates, but `check-name.py` (and `common_words.txt`) remain authoritative.
+  If the two ever disagree, trust the script. Banned words (each also bans its
+  possessive/plural — "wanderer" bans "Wanderer's"):
+
+  > forgotten, light, reclaimer, veil, echoes, spirit, titan, ascendant, call,
+  > eternal, herald, keeper, last, paths, pilgrim, seer, silent, sovereign,
+  > wanderer, abomination, arbiter, architect, ashen, aurora, avatar, blade,
+  > channeler, cosmic, defiant, dread, duelist, enforcer, fallen, guardian,
+  > holdout, infernal, leviathan, lost, memory, oblivion, radiant, revenant,
+  > seeker, sentinel, shadow, sunset, through, twilight, vanguard, verdant,
+  > void, voyager, wasteland, abyss, abyssal, adrift, alpha, ancient, angler,
+  > apocalypse, arc, arrival, astral, avenger, beacon, behemoth, break,
+  > burning, burst, caller, carrion, cascade, catalyst, celestial, champion,
+  > charger, clockwork, collapse, commander, conduit, convergence, crumbling,
+  > delver, denial, detonation, dreamer, dreaming, echo, eclipse, edge,
+  > endless, ethereal, explorer, fell, field, flames, forge, forsaken,
+  > fractured, fury, gate, genesis, glimpse, grim, guide, horizon, horror,
+  > immolate, iron, ironclad, key, liminal, lone, lord, marrow, moment,
+  > moonlit, nightmare, nocturne, old, oracle, passage, path, pathfinder,
+  > penitent, portal, power, prism, prophet, protocol, prowler, pulse, rebirth,
+  > reckoning, reflection, requiem, rest, reunion, rider, rift, ripple, rite,
+  > ritualist, ruin, sage, sanctum, scorched, scout, shadowcaller, shadows,
+  > shatter, shepherd, skies, skyline, smoldering, specialist, specter, stag,
+  > starfall, stargazer, starlight, stoneborn, striker, summons, sundown,
+  > surge, tides, trailblazer, traveler, twin, tyrant, urban, vessel, veteran,
+  > virtuoso, vision, vortex, voyage, wake, warden, weaver, witness, worlds
 - **No proper names.** Keep the dreamlike, anonymous feel — use roles, titles,
   descriptors, or abstract phrases, never invented character names ("Kael",
   "Voss").
