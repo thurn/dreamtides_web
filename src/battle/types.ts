@@ -257,6 +257,20 @@ export interface BattleCardInstance {
   markers: BattleCardMarkers;
   notes: readonly BattleCardNote[];
   provenance: BattleCardProvenance;
+  /**
+   * The `turnNumber` at which this card most recently entered play (the
+   * battlefield: a `reserve` or `deployed` slot). Set when a card materializes
+   * from a non-battlefield zone and cleared to `null` when it leaves play. A
+   * card that has never been in play (or whose state predates this field) is
+   * `undefined`.
+   *
+   * This is the engine's record of "entered play this turn", used to derive
+   * exhaustion: a character cannot challenge or defend until its controller's
+   * next turn (see `battle_rules.md` §Exhaust and Awaken). The Battle AI reads
+   * it to avoid declaring a freshly played character as a challenger, or moving
+   * a still-exhausted body up to block.
+   */
+  enteredPlayTurnNumber?: number | null;
 }
 
 export interface BattleSideMutableState {

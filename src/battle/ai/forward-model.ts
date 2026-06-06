@@ -28,11 +28,13 @@ export interface AiCard {
   /** 1 for non-figments; the engine's figment stack size otherwise. */
   figmentCount: number;
   /**
-   * Whether this character is allowed to challenge during the current turn.
-   * The engine has NO exhaustion field on card instances, so the forward model
-   * owns this flag itself. Projection defaults it to `true` for characters
-   * already on the board (they have been around at least a turn and could
-   * challenge); the planner sets it to `false` on cards it plays this turn.
+   * Whether this character is allowed to challenge (or, on the opponent's turn,
+   * defend) during the current turn. Projection derives it from the engine's
+   * {@link BattleCardInstance.enteredPlayTurnNumber} stamp: a body is exhausted
+   * — and so cannot act — until its controller's next turn, so a character that
+   * entered play on the AI's most recent turn is `false` and any older body (or
+   * one with no stamp) is `true`. The planner additionally sets it to `false`
+   * on cards it plays during the simulated turn.
    */
   canChallengeThisTurn: boolean;
 }
@@ -43,7 +45,7 @@ export interface AiCard {
  * whether the body is a figment — never the opponent's card identity.
  *
  * `battleCardId` is a pure targeting HANDLE: it lets a model (e.g. Flashpoint
- * Blast) name which body it wants to act on without revealing the card's
+ * Detonation) name which body it wants to act on without revealing the card's
  * cardNumber, name, or text. The asymmetric-knowledge principle is preserved
  * because the handle carries no identity information the planner can read.
  */
@@ -51,6 +53,13 @@ export interface AiOpponentBody {
   /** Opaque instance id used only to name this body as a target. */
   battleCardId: string;
   effectiveSpark: number;
+  /**
+   * The body's printed energy cost. A card in play is public, so its cost is
+   * known to both players (unlike its hidden hand/deck contents); cost-gated
+   * removal such as Flashpoint Detonation ("cost 3● or less") reads it. Coerced
+   * to `0` for a card with no printed cost.
+   */
+  energyCost: number;
   /** `front` = deployed, `back` = reserve. */
   rank: "front" | "back";
   /** The slot id, e.g. "D0" / "R2". */
@@ -83,8 +92,14 @@ function opposingSide(side: BattleSide): BattleSide {
  * which is coerced to `0` (these cards do have a real cost in play, but a null
  * is treated as free for planning so the projection never produces `NaN`).
  */
-function projectAiCard(instance: BattleCardInstance): AiCard {
+function projectAiCard(instance: BattleCardInstance, aiLatestTurn: number): AiCard {
   const rawCost: number | null = instance.definition.energyCost;
+  // A body is exhausted — and so cannot challenge or be moved up to defend —
+  // until its controller's next turn. It entered play on its controller's
+  // most recent turn iff its stamp equals `aiLatestTurn`; an older stamp (or
+  // none) means a Dawn has since cleared the exhausted status.
+  const enteredThisTurn = instance.enteredPlayTurnNumber != null
+    && instance.enteredPlayTurnNumber === aiLatestTurn;
   return {
     battleCardId: instance.battleCardId,
     cardNumber: instance.definition.cardNumber,
@@ -93,21 +108,35 @@ function projectAiCard(instance: BattleCardInstance): AiCard {
     basePrintedSpark: instance.definition.printedSpark,
     sparkDelta: instance.sparkDelta,
     figmentCount: selectFigmentCount(instance),
-    // Characters already on the board are assumed challenge-capable; the
-    // planner flips this to false on freshly played cards.
-    canChallengeThisTurn: true,
+    canChallengeThisTurn: !enteredThisTurn,
   };
 }
 
-function projectZone(state: BattleMutableState, ids: readonly string[]): AiCard[] {
+function projectZone(
+  state: BattleMutableState,
+  ids: readonly string[],
+  aiLatestTurn: number,
+): AiCard[] {
   const cards: AiCard[] = [];
   for (const id of ids) {
     const instance = state.cardInstances[id];
     if (instance !== undefined) {
-      cards.push(projectAiCard(instance));
+      cards.push(projectAiCard(instance, aiLatestTurn));
     }
   }
   return cards;
+}
+
+/**
+ * The AI's most recent turn number. Within a turn pair the player acts before
+ * the enemy at the same `turnNumber` (see `advanceTurnPair` in
+ * `engine/handoff.ts`), so when it is the AI's own turn its latest turn is the
+ * current one, and when it is the opponent's turn the AI's latest turn is the
+ * previous number. A body whose `enteredPlayTurnNumber` equals this value is
+ * still exhausted.
+ */
+function aiLatestTurnNumber(state: BattleMutableState, aiSide: BattleSide): number {
+  return state.activeSide === aiSide ? state.turnNumber : state.turnNumber - 1;
 }
 
 /**
@@ -119,6 +148,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   const ai = state.sides[aiSide];
   const opponentSide = opposingSide(aiSide);
   const opponent = state.sides[opponentSide];
+  const aiLatestTurn = aiLatestTurnNumber(state, aiSide);
 
   const aiDeployed: Record<DeploySlotId, AiCard | null> = {
     D0: null,
@@ -129,7 +159,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   for (const slotId of DEPLOY_SLOT_IDS) {
     const id = ai.deployed[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
-    aiDeployed[slotId] = instance === undefined ? null : projectAiCard(instance);
+    aiDeployed[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
   }
 
   const aiReserve: Record<ReserveSlotId, AiCard | null> = {
@@ -142,7 +172,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   for (const slotId of RESERVE_SLOT_IDS) {
     const id = ai.reserve[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
-    aiReserve[slotId] = instance === undefined ? null : projectAiCard(instance);
+    aiReserve[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
   }
 
   const opponentBodies: AiOpponentBody[] = [];
@@ -153,6 +183,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
       opponentBodies.push({
         battleCardId: instance.battleCardId,
         effectiveSpark: selectEffectiveSparkForInstance(instance),
+        energyCost: instance.definition.energyCost ?? 0,
         rank: "front",
         slot: slotId,
         isFigment: isFigmentInstance(instance),
@@ -166,6 +197,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
       opponentBodies.push({
         battleCardId: instance.battleCardId,
         effectiveSpark: selectEffectiveSparkForInstance(instance),
+        energyCost: instance.definition.energyCost ?? 0,
         rank: "back",
         slot: slotId,
         isFigment: isFigmentInstance(instance),
@@ -178,9 +210,9 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     aiMaxEnergy: ai.maxEnergy,
     aiScore: ai.score,
     playerScore: opponent.score,
-    aiHand: projectZone(state, ai.hand),
-    aiDeck: projectZone(state, ai.deck),
-    aiVoid: projectZone(state, ai.void),
+    aiHand: projectZone(state, ai.hand, aiLatestTurn),
+    aiDeck: projectZone(state, ai.deck, aiLatestTurn),
+    aiVoid: projectZone(state, ai.void, aiLatestTurn),
     aiDeployed,
     aiReserve,
     opponentBodies,

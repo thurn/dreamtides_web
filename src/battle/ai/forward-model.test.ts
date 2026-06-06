@@ -188,6 +188,50 @@ describe("forwardModelFromState", () => {
     expect(model.aiReserve.R3?.canChallengeThisTurn).toBe(true);
   });
 
+  it("marks a body that entered play on the AI's current turn as unable to challenge", () => {
+    const state = makeBareState();
+    const ai: BattleSide = "enemy";
+    state.activeSide = ai;
+    state.turnNumber = 4;
+
+    const fresh = addInstance(state, ai, makeCharacterDefinition("Fresh", 201, 3, 1));
+    state.cardInstances[fresh].enteredPlayTurnNumber = 4;
+    state.sides[ai].reserve.R0 = fresh;
+
+    const aged = addInstance(state, ai, makeCharacterDefinition("Aged", 202, 2, 1));
+    state.cardInstances[aged].enteredPlayTurnNumber = 2;
+    state.sides[ai].reserve.R1 = aged;
+
+    const model = forwardModelFromState(state, ai);
+
+    expect(model.aiReserve.R0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiReserve.R1?.canChallengeThisTurn).toBe(true);
+  });
+
+  it("keeps a body exhausted through the opponent's turn until the AI's next Dawn", () => {
+    const state = makeBareState();
+    const ai: BattleSide = "enemy";
+    const opponent: BattleSide = "player";
+    // The opponent is active at turnNumber 5; the AI's most recent turn was 4.
+    state.activeSide = opponent;
+    state.turnNumber = 5;
+
+    const playedLastAiTurn = addInstance(state, ai, makeCharacterDefinition("Recent", 201, 3, 1));
+    state.cardInstances[playedLastAiTurn].enteredPlayTurnNumber = 4;
+    state.sides[ai].reserve.R0 = playedLastAiTurn;
+
+    const playedEarlier = addInstance(state, ai, makeCharacterDefinition("Older", 202, 2, 1));
+    state.cardInstances[playedEarlier].enteredPlayTurnNumber = 3;
+    state.sides[ai].reserve.R1 = playedEarlier;
+
+    const model = forwardModelFromState(state, ai);
+
+    // Still exhausted during the opponent's turn → cannot be moved up to block.
+    expect(model.aiReserve.R0?.canChallengeThisTurn).toBe(false);
+    // Cleared at the AI's last Dawn → available to block.
+    expect(model.aiReserve.R1?.canChallengeThisTurn).toBe(true);
+  });
+
   it("projects opponent bodies as abstract spark/rank/slot without identity", () => {
     const state = makeBareState();
     const ai: BattleSide = "enemy";
@@ -220,6 +264,7 @@ describe("forwardModelFromState", () => {
     expect(frontBody).toEqual({
       battleCardId: front,
       effectiveSpark: 7,
+      energyCost: 1,
       rank: "front",
       slot: "D0",
       isFigment: false,
@@ -229,6 +274,7 @@ describe("forwardModelFromState", () => {
     expect(backBody).toEqual({
       battleCardId: back,
       effectiveSpark: 3,
+      energyCost: 1,
       rank: "back",
       slot: "R0",
       isFigment: false,
@@ -238,6 +284,7 @@ describe("forwardModelFromState", () => {
     expect(figmentBody).toEqual({
       battleCardId: figment,
       effectiveSpark: 4,
+      energyCost: 1,
       rank: "front",
       slot: "D2",
       isFigment: true,

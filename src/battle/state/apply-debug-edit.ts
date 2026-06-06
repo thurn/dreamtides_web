@@ -14,6 +14,7 @@ import {
   createBattleProtoNoteDismissedLogEvent,
 } from "../../logging";
 import type {
+  BattleCardInstance,
   BattleCardMarkers,
   BattleCardNote,
   BattleCardProvenance,
@@ -1196,13 +1197,42 @@ function moveCardToDebugZone(
     delete nextState.cardInstances[battleCardId];
   } else {
     insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
-    nextState.cardInstances[battleCardId].controller = destination.side;
+    const moved = nextState.cardInstances[battleCardId];
+    moved.controller = destination.side;
+    stampEnteredPlay(moved, source.zone, destination.zone, state.turnNumber);
   }
 
   return {
     state: nextState,
     transition: createEmptyTransitionData(),
   };
+}
+
+const BATTLEFIELD_ZONE_NAMES = new Set<string>(["reserve", "deployed"]);
+
+/**
+ * Maintains {@link BattleCardInstance.enteredPlayTurnNumber} across a zone move.
+ * A card that materializes into the battlefield (a `reserve`/`deployed` slot)
+ * from any other zone is stamped with the current `turnNumber`; a card that
+ * leaves the battlefield has the stamp cleared. A move within the battlefield
+ * (a reposition between `reserve` and `deployed`) leaves the stamp untouched,
+ * so a character keeps its entered-play turn while it stays in play.
+ */
+function stampEnteredPlay(
+  instance: BattleCardInstance,
+  sourceZone: string,
+  destinationZone: string,
+  turnNumber: number,
+): void {
+  const enteringPlay =
+    BATTLEFIELD_ZONE_NAMES.has(destinationZone) && !BATTLEFIELD_ZONE_NAMES.has(sourceZone);
+  const leavingPlay =
+    !BATTLEFIELD_ZONE_NAMES.has(destinationZone) && BATTLEFIELD_ZONE_NAMES.has(sourceZone);
+  if (enteringPlay) {
+    instance.enteredPlayTurnNumber = turnNumber;
+  } else if (leavingPlay) {
+    instance.enteredPlayTurnNumber = null;
+  }
 }
 
 function swapBattlefieldSlots(

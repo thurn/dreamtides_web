@@ -21,6 +21,7 @@ function makeCard(overrides: Partial<AiCard> & { battleCardId: string }): AiCard
 function makeBody(overrides: Partial<AiOpponentBody> & { battleCardId: string }): AiOpponentBody {
   return {
     effectiveSpark: 1,
+    energyCost: 0,
     rank: "front",
     slot: "D0",
     isFigment: false,

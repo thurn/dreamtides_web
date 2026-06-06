@@ -54,6 +54,7 @@ function opponentBody(overrides: Partial<AiOpponentBody> = {}): AiOpponentBody {
   return {
     battleCardId: `opp-${nextId}`,
     effectiveSpark: 0,
+    energyCost: 0,
     rank: "front",
     slot: "D0",
     isFigment: false,

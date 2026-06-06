@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { forwardModelFromState, type ForwardModel } from "./forward-model";
+import { planDefense } from "./defense";
 import { planNextAction, type PlannedAction, type PlannerOptions } from "./planner";
 import { AI_DIFFICULTY_V1 } from "./difficulty";
 import { buildTrace } from "./trace";
@@ -127,6 +128,45 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     forceEndTurn,
     caps,
   ]);
+
+  // Defensive auto-block: on the OPPONENT's Dusk the AI is the defender and
+  // positions front-rank blockers opposite the opponent's challengers. Unlike
+  // the offensive turn (gated behind human approval), defense is applied
+  // automatically so the player's own turn is not interrupted by a proposal —
+  // the dispatched repositions still flow through the normal command path and
+  // are logged and undoable. A ref keyed by the opponent's turn ensures the AI
+  // defends at most once per Dusk, so the dispatched moves do not re-trigger the
+  // effect into a loop.
+  const lastDefenseTurnKeyRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!enabled || mutable.result !== null) {
+      return;
+    }
+    if (mutable.activeSide === aiSide || mutable.phase !== "dusk") {
+      return;
+    }
+    const defenseKey = `${mutable.activeSide}:${String(mutable.turnNumber)}`;
+    if (lastDefenseTurnKeyRef.current === defenseKey) {
+      return;
+    }
+    lastDefenseTurnKeyRef.current = defenseKey;
+
+    const model = forwardModelFromState(mutable, aiSide);
+    const moves = planDefense(model, {
+      scoreToWin: caps?.scoreToWin ?? DEFAULT_SCORE_TO_WIN,
+    });
+    for (const move of moves) {
+      const commands = actionToCommands(move, aiSide);
+      const [firstCommand, ...restCommands] = commands;
+      const trace = buildTrace(move);
+      const tracedCommands = firstCommand === undefined
+        ? commands
+        : [{ ...firstCommand, aiChoices: [trace] }, ...restCommands];
+      for (const command of tracedCommands) {
+        dispatch({ type: "APPLY_COMMAND", command });
+      }
+    }
+  }, [enabled, aiSide, mutable, caps, dispatch]);
 
   // ONLY this path dispatches. It applies the held proposal's commands in order;
   // the resulting state change re-runs the memo to produce the next proposal.

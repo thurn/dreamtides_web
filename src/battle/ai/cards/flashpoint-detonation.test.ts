@@ -17,6 +17,7 @@ function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "ca
 function makeBody(overrides: Partial<AiOpponentBody> & Pick<AiOpponentBody, "battleCardId">): AiOpponentBody {
   return {
     effectiveSpark: 1,
+    energyCost: 0,
     rank: "back",
     slot: "R0",
     isFigment: false,
@@ -77,6 +78,38 @@ describe("Flashpoint Detonation (#516)", () => {
       ],
     });
     expect(flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId).toBe("big");
+  });
+
+  it("canPlay is false when every enemy body costs more than 3", () => {
+    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
+    const model = makeModel({
+      opponentBodies: [
+        makeBody({ battleCardId: "colossus", rank: "front", slot: "D0", effectiveSpark: 6, energyCost: 6 }),
+      ],
+    });
+    expect(flashpointDetonation.canPlay(model, self)).toBe(false);
+  });
+
+  it("chooseTargets skips a body that costs more than 3", () => {
+    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
+    const model = makeModel({
+      opponentBodies: [
+        // Biggest threat, but too expensive to dissolve — must be ignored.
+        makeBody({ battleCardId: "colossus", rank: "front", slot: "D0", effectiveSpark: 9, energyCost: 6 }),
+        makeBody({ battleCardId: "cheap", rank: "front", slot: "D1", effectiveSpark: 2, energyCost: 3 }),
+      ],
+    });
+    expect(flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId).toBe("cheap");
+  });
+
+  it("chooseTargets returns null when no body is cheap enough", () => {
+    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
+    const model = makeModel({
+      opponentBodies: [
+        makeBody({ battleCardId: "colossus", rank: "front", slot: "D0", effectiveSpark: 6, energyCost: 6 }),
+      ],
+    });
+    expect(flashpointDetonation.chooseTargets(model, self)).toBeNull();
   });
 
   it("play removes exactly the targeted body and bumps opponentVoidCount", () => {

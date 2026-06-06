@@ -2,30 +2,35 @@ import type { ForwardModel, AiCard } from "../forward-model";
 import type { AiTargetChoice, StarterCardModel } from "./index";
 import { playEvent } from "./helpers";
 
+/** Flashpoint Detonation only dissolves an enemy whose cost is at most this. */
+const MAX_TARGET_COST = 3;
+
 /**
  * #516 Flashpoint Detonation (Event, 2●) — "Dissolve an enemy with cost 3● or less."
  * (`battle_ai.md` §"The AI Deck"). Removal.
  *
- * The "cost ≤ 3" legality cannot be read from an abstract {@link
- * AiOpponentBody} (the asymmetric-knowledge principle hides opponent card
- * costs). The AI therefore proposes the blast OPTIMISTICALLY against the best
- * legal-looking target and the human approves or rejects it at the
- * proposal/driver layer.
+ * The "cost ≤ 3" legality is read from the body's `energyCost`: a card in play
+ * is public, so its cost is known even though the rest of the opponent's hand
+ * and deck stay abstract. Only bodies at or under {@link MAX_TARGET_COST} are
+ * legal targets, so the AI never proposes dissolving a body the spell cannot
+ * actually hit.
  *
- * Target choice (`battle_ai.md` §"Per-Card Knowledge"): prefer a front-rank
- * body (a blocker to clear before challenging), else the highest-spark threat.
+ * Target choice (`battle_ai.md` §"Per-Card Knowledge"): among the legal targets,
+ * prefer a front-rank body (a blocker to clear before challenging), else the
+ * highest-spark threat.
  */
 export const flashpointDetonation: StarterCardModel = {
   cardNumber: 516,
   canPlay(model: ForwardModel, self: AiCard): boolean {
-    return model.aiEnergy >= self.energyCost && model.opponentBodies.length > 0;
+    return model.aiEnergy >= self.energyCost && hasLegalTarget(model);
   },
   chooseTargets(model: ForwardModel): AiTargetChoice | null {
-    if (model.opponentBodies.length === 0) {
+    const legal = model.opponentBodies.filter((body) => body.energyCost <= MAX_TARGET_COST);
+    if (legal.length === 0) {
       return null;
     }
-    const fronts = model.opponentBodies.filter((body) => body.rank === "front");
-    const pool = fronts.length > 0 ? fronts : model.opponentBodies;
+    const fronts = legal.filter((body) => body.rank === "front");
+    const pool = fronts.length > 0 ? fronts : legal;
     let best = pool[0];
     for (const body of pool) {
       if (body.effectiveSpark > best.effectiveSpark) {
@@ -49,3 +54,8 @@ export const flashpointDetonation: StarterCardModel = {
     });
   },
 };
+
+/** Whether any enemy body is cheap enough for Flashpoint Detonation to dissolve. */
+function hasLegalTarget(model: ForwardModel): boolean {
+  return model.opponentBodies.some((body) => body.energyCost <= MAX_TARGET_COST);
+}
