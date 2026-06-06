@@ -240,7 +240,10 @@ button:disabled {
    * regardless of the box height). */
   --cv-type-line-height: 1.2;
   --cv-rules-line-height: 1.38;
-  --cv-paragraph-gap: 0.68em;
+  /* Top margin applied to every ability paragraph after the first, sizing the
+   * blank line that separates two abilities. Consumed by `RulesText`. Expressed
+   * in `em` so it scales with the (possibly auto-shrunk) rules font size. */
+  --cv-paragraph-gap: 0.22em;
   --cv-typelabel-gap: 1.1cqw;
 
   /* Maximum text-box height: a three-line rules area + vertical padding. Derived

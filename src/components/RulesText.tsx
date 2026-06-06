@@ -161,14 +161,20 @@ function splitRulesTextIntoParagraphs(text: string): string[] {
 /**
  * Top margin applied to every ability paragraph after the first, sizing the
  * blank line that separates two abilities to a slim fraction of a full blank
- * line. The margin sits on top of each line's leading, so even this small value
+ * line. The margin sits on top of each line's leading, so even a small value
  * reads as a clear break between abilities; keeping it tight packs more
  * abilities into the fixed text box (and lets more cards hold the rules-text
  * cap before the font shrinks) while still reading as separate "list items"
- * rather than "essay paragraphs". Expressed in `em` so it scales with the
- * surrounding (possibly auto-shrunk) font size. See backlog task 029.
+ * rather than "essay paragraphs".
+ *
+ * The actual size lives in the `--cv-paragraph-gap` design token (see
+ * `index.css`) so it can be tuned alongside the other card-view spacing
+ * variables. It is expressed in `em` there so it scales with the surrounding
+ * (possibly auto-shrunk) font size. The literal fallback keeps the gap sane on
+ * any surface that renders rules text without the card-view token in scope.
+ * See backlog task 029.
  */
-const PARAGRAPH_GAP_EM = 0.22;
+const PARAGRAPH_GAP = "var(--cv-paragraph-gap, 0.22em)";
 
 /** Renders the parsed rules text segments to React nodes. */
 export function renderRulesText(
@@ -179,7 +185,7 @@ export function renderRulesText(
   return paragraphs.map((paragraph, p) => {
     const segments = tokenizeRulesText(paragraph);
     const style: CSSProperties =
-      p === 0 ? {} : { marginTop: `${String(PARAGRAPH_GAP_EM)}em` };
+      p === 0 ? {} : { marginTop: PARAGRAPH_GAP };
     return (
       <div
         key={p}
