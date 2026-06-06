@@ -35,6 +35,11 @@ export interface EditableCardProps {
    * size the fitter computed (in px).
    */
   showFontSize: boolean;
+  /**
+   * Measure the rules-text fit immediately rather than on scroll. Set while the
+   * grid sorts by font size so every card contributes a stable sort key.
+   */
+  eagerRulesFit: boolean;
   availableTags: EditorTag[];
   availableTides: EditorTag[];
   tagSaving: boolean;
@@ -242,6 +247,7 @@ export default function EditableCard({
   artEditing,
   checkboxTag,
   showFontSize,
+  eagerRulesFit,
   availableTags,
   availableTides,
   tagSaving,
@@ -483,6 +489,7 @@ export default function EditableCard({
           suppressHoverHelp
           onClick={() => onOpenArtEditor(card)}
           onRulesFontSizeChange={handleRulesFontSize}
+          eagerRulesFit={eagerRulesFit}
         />
         {fontSizeOverlay}
         {checkboxControl}
@@ -505,6 +512,7 @@ export default function EditableCard({
         suppressHoverHelp
         slots={slots}
         onRulesFontSizeChange={handleRulesFontSize}
+        eagerRulesFit={eagerRulesFit}
       />
       {fontSizeOverlay}
       {/* Checkbox tagging hides the tag and tide chip editors so only the one

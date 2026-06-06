@@ -33,7 +33,9 @@ export function useFitText(
   maxFontPx: number,
   minFontPx: number,
   deps: readonly unknown[],
+  options?: { eager?: boolean },
 ): { ref: RefObject<HTMLDivElement | null>; fontSize: number } {
+  const eager = options?.eager ?? false;
   const ref = useRef<HTMLDivElement | null>(null);
   const [fontSize, setFontSize] = useState(maxFontPx);
 
@@ -123,10 +125,16 @@ export function useFitText(
     // Gate the fit on viewport proximity. Cards already on screen measure now
     // (synchronously, so there is no flash from the unfitted size when text or
     // size deps change); off-screen cards wait until they scroll within range.
-    // Without IntersectionObserver, measure eagerly.
+    // Without IntersectionObserver, measure eagerly. In `eager` mode the gate is
+    // bypassed entirely so every element measures regardless of position — the
+    // caller needs a complete, stable set of fitted sizes (e.g. to sort by
+    // them), which the viewport gate cannot provide because it only measures
+    // what is currently on screen.
     const VIEWPORT_MARGIN_PX = 300;
     let viewportObserver: IntersectionObserver | null = null;
-    if (typeof IntersectionObserver !== "undefined") {
+    if (eager) {
+      start();
+    } else if (typeof IntersectionObserver !== "undefined") {
       const rect = element.getBoundingClientRect();
       const viewportH = window.innerHeight || 0;
       const viewportW = window.innerWidth || 0;
@@ -165,7 +173,7 @@ export function useFitText(
         window.removeEventListener("resize", measure);
       }
     };
-  }, [maxFontPx, minFontPx, ...deps]);
+  }, [maxFontPx, minFontPx, eager, ...deps]);
 
   return { ref, fontSize };
 }

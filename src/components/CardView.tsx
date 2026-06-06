@@ -588,6 +588,13 @@ export interface CardViewProps {
    * this to drive its font-size overlay and font-size sort.
    */
   onRulesFontSizeChange?: (fontSizePx: number) => void;
+  /**
+   * Measure the rules-text fit immediately instead of deferring until the card
+   * nears the viewport. The card editor sets this while sorting by font size so
+   * every card reports a stable fitted size up front; without it the sort would
+   * reshuffle endlessly as off-screen cards measured only after being moved.
+   */
+  eagerRulesFit?: boolean;
 }
 
 /**
@@ -611,6 +618,7 @@ export function CardView({
   suppressHoverHelp = false,
   slots = {},
   onRulesFontSizeChange,
+  eagerRulesFit = false,
 }: CardViewProps) {
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
@@ -636,6 +644,7 @@ export function CardView({
     rulesMaxFontPx,
     rulesMinFontPx,
     [card.renderedText, textScale],
+    { eager: eagerRulesFit },
   );
 
   // Surface the fitted rules-text font size to interested callers (the card

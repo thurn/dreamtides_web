@@ -969,6 +969,7 @@ export default function CardEditorApp({
                 artEditing={displayState.artEditing}
                 checkboxTag={displayState.checkboxTag}
                 showFontSize={displayState.showFontSize}
+                eagerRulesFit={sortByFontSize}
                 availableTags={tags}
                 availableTides={tides}
                 tagSaveState={tagSaveState}

@@ -23,6 +23,7 @@ export interface CardEditorGridProps {
   artEditing: boolean;
   checkboxTag: string;
   showFontSize: boolean;
+  eagerRulesFit: boolean;
   availableTags: EditorTag[];
   availableTides: EditorTag[];
   tagSaveState: Record<string, CardTagSaveState>;
@@ -73,6 +74,7 @@ export default function CardEditorGrid({
   artEditing,
   checkboxTag,
   showFontSize,
+  eagerRulesFit,
   availableTags,
   availableTides,
   tagSaveState,
@@ -131,6 +133,7 @@ export default function CardEditorGrid({
           artEditing={artEditing}
           checkboxTag={checkboxTag}
           showFontSize={showFontSize}
+          eagerRulesFit={eagerRulesFit}
           availableTags={availableTags}
           availableTides={availableTides}
           tagSaving={tagSaveState[card.id]?.saving ?? false}
