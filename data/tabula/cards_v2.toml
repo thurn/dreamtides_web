@@ -195,11 +195,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Ritual"]
+tags = ["Ritual", "Art OK"]
 image-number = 1164289066
 art-owned = false
 card-number = 11
-art = { x = 0, y = 1, scale = 1.17 }
+art = { x = 0, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Moonlit Voyage"
@@ -1648,7 +1648,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = []
+tags = ["Art OK"]
 image-number = 1042405690
 art-owned = false
 card-number = 91
@@ -4045,10 +4045,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Cantrips"]
+tags = ["Cantrips", "Art OK"]
 image-number = 2415692459
 art-owned = false
 card-number = 225
+art = { x = 0, y = 0.5, scale = 1.17 }
 
 [[cards]]
 name = "Dreadweaver"
@@ -6982,6 +6983,7 @@ tags = ["Discover"]
 image-number = 789290998
 art-owned = false
 card-number = 387
+art = { x = 0, y = -0.4, scale = 1.17 }
 
 [[cards]]
 name = "Evacuation Enforcer"
@@ -7515,10 +7517,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = []
+tags = ["Art OK"]
 image-number = 1200949222
 art-owned = true
 card-number = 416
+art = { x = 0, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Skyborne Jellyfish"
@@ -8075,7 +8078,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = []
+tags = ["Art OK"]
 image-number = 1728839131
 art-owned = false
 card-number = 447
@@ -8718,7 +8721,7 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Counterspell"]
+tags = ["Counterspell", "Art OK"]
 image-number = 1282908322
 art-owned = true
 card-number = 483
