@@ -735,6 +735,7 @@ export function CardView({
       variant="energy"
       value={label}
       sizeVar="var(--cv-energy-orb-size)"
+      numberSizeVar="var(--cv-energy-orb-font-size)"
       numberCapPx={energyOrbCapPx}
       tooltip={suppressHoverHelp ? undefined : ENERGY_PIP_TOOLTIP}
     />
@@ -881,6 +882,7 @@ export function CardView({
         variant="spark"
         value={card.spark !== null ? String(card.spark) : "X"}
         sizeVar="var(--cv-spark-orb-size)"
+        numberSizeVar="var(--cv-spark-orb-font-size)"
         numberCapPx={sparkOrbCapPx}
         tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}
       />

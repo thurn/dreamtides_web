@@ -25,11 +25,10 @@ const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
  * padding inside its 24×24 viewBox, tuned per glyph so the sparkle and flame
  * land at the same visual weight.
  *
- * `numberFactor` and `numberShiftEm` tune the digit per glyph: the sparkle's
- * central diamond comfortably holds a large digit, but the flame is narrower
- * and its body sits in the upper bulb of its box, so its digit is a touch
- * smaller and nudged down to seat inside the bulb instead of crowding the
- * flame's edges.
+ * `numberShiftEm` tunes the digit per glyph: the flame's body sits in the upper
+ * bulb of its box, so its digit is nudged down to seat inside the bulb instead
+ * of crowding the flame's edges. The digit *size* lives in CSS (passed in as
+ * `numberSizeVar`) so it can be tuned live alongside the other orb tokens.
  */
 const ICON_BY_VARIANT: Readonly<
   Record<
@@ -39,9 +38,7 @@ const ICON_BY_VARIANT: Readonly<
       color: string;
       glowFilter: string;
       overscale: number;
-      /** Digit box edge as a fraction of the orb size. */
-      numberFactor: number;
-      /** Vertical nudge of the digit, in `em` of the orb size. */
+      /** Vertical nudge of the digit, in `em` of the digit size. */
       numberShiftEm: number;
     }
   >
@@ -51,7 +48,6 @@ const ICON_BY_VARIANT: Readonly<
     color: SPARK_ICON_COLOR,
     glowFilter: SPARK_GLOW_FILTER,
     overscale: 1.15,
-    numberFactor: 0.66,
     numberShiftEm: 0,
   },
   energy: {
@@ -59,7 +55,6 @@ const ICON_BY_VARIANT: Readonly<
     color: ENERGY_ICON_COLOR,
     glowFilter: ENERGY_GLOW_FILTER,
     overscale: 1.12,
-    numberFactor: 0.54,
     numberShiftEm: 0.06,
   },
 };
@@ -74,9 +69,15 @@ interface CardStatOrbProps {
   /** CSS length for the square orb diameter (e.g. `var(--cv-energy-orb-size)`). */
   sizeVar: string;
   /**
+   * CSS length for the digit size — the single-digit ceiling, which doubles as
+   * the digit box edge (e.g. `var(--cv-energy-orb-font-size)`). Multi-digit
+   * values auto-shrink below this to fit.
+   */
+  numberSizeVar: string;
+  /**
    * Upper bound (px) for the digit auto-shrink search. The displayed size is
-   * the smaller of the orb-relative ceiling and the fitted size, so this only
-   * needs to sit at or above the rendered orb size.
+   * the smaller of the CSS digit ceiling and the fitted size, so this only
+   * needs to sit at or above the rendered digit size.
    */
   numberCapPx: number;
   ariaLabel?: string;
@@ -100,15 +101,16 @@ export function CardStatOrb({
   variant,
   value,
   sizeVar,
+  numberSizeVar,
   numberCapPx,
   ariaLabel,
   tooltip,
 }: CardStatOrbProps) {
   const label = ariaLabel ?? DEFAULT_LABEL[variant];
   const icon = ICON_BY_VARIANT[variant];
-  // The number box is inset to the body of the glyph so the digit sits over its
-  // fullest region rather than crowding the edges; the inset is tuned per glyph.
-  const numberBoxSize = `calc(${sizeVar} * ${String(icon.numberFactor)})`;
+  // The digit box edge equals the CSS digit size; the digit sits over the
+  // glyph's body so it reads over the fullest region rather than the edges.
+  const numberBoxSize = numberSizeVar;
   const { ref, fontSize } = useFitText(numberCapPx, 6, [value, numberCapPx]);
 
   // The digit's font-size is the smaller of the box-relative ceiling and the

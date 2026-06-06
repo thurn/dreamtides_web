@@ -204,6 +204,12 @@ button:disabled {
   /* The spark orb matches the energy orb size so the two corner marks read as a
    * matched pair. */
   --cv-spark-orb-size: var(--cv-energy-orb-size);
+  /* Digit size for each corner stat (the ceiling for a single digit; multi-digit
+   * values auto-shrink to fit). Tuned per glyph: the flame is narrower and seats
+   * its digit in the bulb, so the energy digit is a touch smaller than the spark
+   * digit, which sits in the sparkle's roomier central diamond. */
+  --cv-energy-orb-font-size: 9cqw;
+  --cv-spark-orb-font-size: 9cqw;
   --cv-energy-orb-top: 2cqw;
   --cv-energy-orb-left: 5cqw;
   /* Multi-cost cards lay their orbs in a horizontal row; each orb after the
