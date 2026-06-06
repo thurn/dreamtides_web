@@ -119,14 +119,19 @@ function renderSegment(
     // The inline energy glyph renders as the blue flame mark with the same
     // bloom as the corner energy stat, so a `●3` reads as the same resource in
     // both places. Rendered as a plain inline `<i>` (sized to the surrounding
-    // text, vertically centered) so it flows like a character rather than
-    // reserving a square box.
+    // text) so it flows like a character rather than reserving a square box. The
+    // flame's mass sits low in its em box, so a small upward nudge centers it on
+    // the text instead of sitting below the line.
     return (
       <i
         key={key}
         aria-label="energy"
         className={`${ENERGY_ICON_CLASS} align-middle`}
-        style={{ color: ENERGY_ICON_COLOR, filter: ENERGY_GLOW_FILTER }}
+        style={{
+          color: ENERGY_ICON_COLOR,
+          filter: ENERGY_GLOW_FILTER,
+          transform: "translateY(-0.08em)",
+        }}
       />
     );
   }
