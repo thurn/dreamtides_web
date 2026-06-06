@@ -358,10 +358,10 @@ card-number = 20
 name = "Reclaimer of Lost Paths"
 mtg-name = "Anafenza, Kin-Tree Spirit"
 id = "738a5af0-f848-4d48-bceb-9a43c9b11066"
-rendered-text = """
+rendered-text = '''
 Cards you reclaim are not banished when they leave play.
 
-2●, ☪: A character in your void gains reclaim until end of turn."""
+2●, ☪: A character in your void gains reclaim.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
@@ -578,10 +578,10 @@ card-number = 32
 name = "Spirit Field Reclaimer"
 mtg-name = "Lion Sash"
 id = "78673e2b-a6d1-43de-8850-3d3327de5cc6"
-rendered-text = """
-1●, Banish a character from a player's void: Store 1⧗.
+rendered-text = '''
+1●, Banish a character from a void: Store 1⧗.
 
-Support – Supported allies have +1✦ for each stored ⧗."""
+Support – Supported allies have +1✦ for each stored ⧗.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -1350,10 +1350,10 @@ card-number = 74
 name = "Thronebound Arbiter"
 mtg-name = "Ingenious Infiltrator"
 id = "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb"
-rendered-text = """
-▸Materialized: Return another ally to hand. Move this character to that ally’s position.
+rendered-text = '''
+Phasing
 
-When an allied outsider scores ⍟, draw a card."""
+When an allied outsider scores ⍟, draw a card.'''
 energy-cost = 4
 card-type = "Character"
 subtype = "Outsider"
@@ -1586,10 +1586,10 @@ card-number = 87
 name = "Part the Veil"
 mtg-name = "Anje's Ravager"
 id = "650b2ed4-f016-46c0-815a-f53fffe08a9a"
-rendered-text = """
+rendered-text = '''
 Erode 4. You may put two of those cards into your hand.
 
-When you discard this card, it gains reclaim 2● until end of turn."""
+When you discard this card, it gains reclaim 2●.'''
 energy-cost = 4
 card-type = "Event"
 subtype = ""
@@ -1731,11 +1731,7 @@ card-number = 95
 name = "Return to Nowhere"
 mtg-name = "Prismari Command"
 id = "e3431bd0-5a81-497f-9ec9-18275b568c00"
-rendered-text = '''
-Choose one:
-- Dissolve a ≤2✦ enemy.
-- Draw 2 cards, then discard 2 cards.
-- Return a ≤2● cost character from your void to hand.'''
+rendered-text = "Choose one: Dissolve a ≤2✦ enemy, draw 2 cards and discard 2 cards, or return a ≤2● cost character from your void to hand."
 energy-cost = 3
 card-type = "Event"
 subtype = ""
@@ -2182,12 +2178,10 @@ card-number = 120
 name = "Fangbound"
 mtg-name = "Chrome Mox"
 id = "c750af2e-8185-4af0-bb38-4a41430c71b3"
-rendered-text = """
+rendered-text = '''
 To play this card, banish a card from hand.
 
-Veil 3●
-
-Materialized, Dawn: Gain 1●."""
+Materialized, Dawn: Gain 1●.'''
 energy-cost = 0
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -2298,7 +2292,7 @@ id = "954e8d50-d494-4fb2-b4c7-74979083b774"
 rendered-text = '''
 Phasing
 
-When an allied outsider triumphs, foresee 1 and draw a card.'''
+When an allied outsider scores ⍟, foresee 1 and draw a card.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Outsider"
@@ -2372,10 +2366,7 @@ card-number = 130
 name = "Burst of Obliteration"
 mtg-name = "Banefire"
 id = "1c8e6736-13d6-42d1-8668-46f422fec11e"
-rendered-text = """
-Choose one:
-- Gain X⍟.
-- Dissolve an enemy with X✦."""
+rendered-text = "Choose one: Gain X⍟ or dissolve an enemy with X✦."
 energy-cost = "X"
 card-type = "Event"
 subtype = ""
@@ -2506,11 +2497,11 @@ card-number = 137
 name = "Fargazer"
 mtg-name = "Stitcher's Supplier"
 id = "8571d7b3-5401-4678-9e81-e14538c8c46e"
-rendered-text = """
-When you erode one or more cards, draw that many cards.
+rendered-text = '''
+When you play a character, erode 1.
 
-Reclaim 1●. When you reclaim this character, banish it at end of turn."""
-energy-cost = 4
+Reclaim 2●'''
+energy-cost = 2
 card-type = "Character"
 subtype = "Explorer"
 rarity = ""
@@ -3813,12 +3804,10 @@ card-number = 210
 name = "Lanternwood Scout"
 mtg-name = "Makeshift Munitions"
 id = "d89f4c33-ffd3-4313-8106-0a9f7013cad8"
-rendered-text = """
-Veil 3●
-
+rendered-text = '''
 1●, Abandon another character: Store 1⧗.
 
-Abandon this character: Gain X⍟ where X is the stored ⧗."""
+Abandon this character: Gain X⍟ where X is the stored ⧗.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Explorer"
@@ -3947,10 +3936,7 @@ card-number = 217
 name = "Forge-Twin"
 mtg-name = "Urza, Lord High Artificer"
 id = "4b4cc613-2e28-4851-975f-14146286a062"
-rendered-text = """
-▸Materialized: Materialize a figment copy of 'Blade of Unity'.
-
-(Blade of Unity: 2● warrior with "This character has +1✦ for each allied warrior".)"""
+rendered-text = "▸Materialized: Materialize a figment copy of 'Blade of Unity'."
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -4298,7 +4284,10 @@ card-number = 236
 name = "Cradle of Storms"
 mtg-name = "Undo"
 id = "70306382-ac0d-4b08-843a-23efb3835c94"
-rendered-text = "Materialize all characters in your void which were discarded this turn. When you discard this card, it gains reclaim 0● until end of turn."
+rendered-text = '''
+Materialize all characters in your void which were discarded this turn.
+
+When you discard this card, it gains reclaim 0●.'''
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -5131,10 +5120,7 @@ card-number = 282
 name = "Whisper of the Past"
 mtg-name = "Darkblast"
 id = "5931e388-1856-4e5a-85f8-a5aa34f867b1"
-rendered-text = """
-An event in your void gains reclaim until end of turn.
-
-At the start of your turn, if this card is in your void, you may erode 3 to place this card on top of your deck."""
+rendered-text = "An event in your void gains reclaim. At the start of your turn, if this card is in your void, you may erode 3 to place this card on top of your deck."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -5151,10 +5137,10 @@ card-number = 283
 name = "Northlight Maestro"
 mtg-name = "Ninja of the Deep Hours"
 id = "071bcab4-ed02-48a0-93dc-8fd0f36611c8"
-rendered-text = """
-▸Materialized: Return another ally to hand. Move this character to that ally’s position.
+rendered-text = '''
+Phasing
 
-When this character scores ⍟, draw a card."""
+When this character scores ⍟, draw a card.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Outsider"
@@ -5384,12 +5370,10 @@ card-number = 296
 name = "Paradox Enforcer"
 mtg-name = "Hogaak, Arisen Necropolis"
 id = "3e802ecd-a83b-491b-9528-a4672d0e986f"
-rendered-text = """
-To play this character, banish 7 cards from your void.
+rendered-text = '''
+To play this character, banish 7 cards from your void. You may play this character from your void.
 
-You may play this character from your void.
-
-Unstoppable"""
+Unstoppable'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Visitor"
@@ -5568,7 +5552,7 @@ id = "4f29a241-9265-4669-a189-5a2a91923e12"
 rendered-text = '''
 Phasing
 
-▸Triumph: Draw a card, then discard a card.'''
+When this character scores ⍟, draw a card, then discard a card.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Outsider"
@@ -6028,10 +6012,7 @@ card-number = 331
 name = "Junkfield Renegade"
 mtg-name = "Pyrite Spellbomb"
 id = "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f"
-rendered-text = """
-1●, Abandon this character: Choose one:
-- Gain 2⍟.
-- Draw a card."""
+rendered-text = "1●, Abandon this character: Choose one: Gain 3⍟ or draw a card."
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -6440,11 +6421,8 @@ card-number = 353
 name = "Steel Abomination"
 mtg-name = "Slogurk, the Overslime"
 id = "cc21a902-e482-46c0-bf07-e04035f39190"
-rendered-text = '''
-When a ≤2● cost character is put into your void, this character gains +1✦.
-
-▸Dissolved: Recover up to two ≤2● cost characters.'''
-energy-cost = 3
+rendered-text = "▸Materialized, Dissolved: Return a ≤2● cost character from your void to your hand."
+energy-cost = 2
 card-type = "Character"
 subtype = "Tinkerer"
 rarity = ""
@@ -6577,10 +6555,7 @@ card-number = 360
 name = "Shadowcaller"
 mtg-name = "Bridge from Below"
 id = "c36e67ab-fbee-4d83-b57b-34d34f60e17c"
-rendered-text = '''
-Veil 3●
-
-When an ally is dissolved, materialize a 1✦ survivor figment. When you discard or erode this card, it gains reclaim 0●.'''
+rendered-text = "When an ally is dissolved, materialize a 1✦ survivor figment. When you discard or erode this card, it gains reclaim 0●."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -6703,9 +6678,10 @@ name = "Forsaken Skyline"
 mtg-name = "Blast from the Past"
 id = "9d14885c-a757-40cc-b43e-87dbec7ec379"
 rendered-text = '''
-Dissolve a ≤2✦ enemy. When you discard this card, it gains reclaim 1● until end of turn.
+Dissolve a ≤2✦ enemy.
 
-Reclaim 4●'''
+Reclaim 4●. When you discard this card, it gains reclaim 1● instead.
+'''
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -7141,10 +7117,10 @@ card-number = 391
 name = "Celestial Lookout"
 mtg-name = "Lonis, Cryptozoologist"
 id = "374ec185-b0f7-40e6-9988-09e96abccebe"
-rendered-text = """
-When you play a character, materialize a 1✦ ethereal figment.
+rendered-text = '''
+When you play a character, store 1⧗.
 
-Abandon X characters: Materialize a character with cost X● from the opponent's deck."""
+X⧗: Materialize a random character with cost X● from the opponent's deck.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Tinkerer"
@@ -7513,10 +7489,7 @@ card-number = 411
 name = "Crimson Pilgrimage"
 mtg-name = "Expressive Iteration"
 id = "01d53e49-7833-4122-a970-b72c73ad2c28"
-rendered-text = """
-Look at the top 4 cards of your deck. Choose one:
-- Draw 1 of the cards.
-- Draw 2 of the cards. They gain ephemeral."""
+rendered-text = "Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -8119,10 +8092,10 @@ card-number = 444
 name = "Ethereal Courser"
 mtg-name = "Shrieking Drake"
 id = "ad76c77a-e456-4e59-bbf7-6bcb56f892ee"
-rendered-text = """
+rendered-text = '''
 ▸Materialized: Return an ally to hand.
 
-When you return another character to your hand, you may shuffle a card in a player's void into their deck."""
+When you return another character to your hand, reduce its cost by 1●.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Visitor"
@@ -8207,10 +8180,7 @@ card-number = 449
 name = "Entropy Spike"
 mtg-name = "Shambling Ghast"
 id = "6b739127-1a23-4c5d-877a-8829dd7a8b8c"
-rendered-text = """
-▸Dissolved: Choose one:
-- Gain 1●.
-- Gain 1 maximum ●."""
+rendered-text = "▸Dissolved: Choose one: Gain 1●, or gain 1 maximum ●."
 energy-cost = 1
 card-type = "Character"
 subtype = "Survivor"
@@ -8948,10 +8918,10 @@ card-number = 490
 name = "Breach Artist"
 mtg-name = "Thousand-Faced Shadow"
 id = "87aba308-00b4-40d8-a46f-4e6f58a664a8"
-rendered-text = """
-▸Materialized: Return another ally to hand. Move this character to that ally’s position.
+rendered-text = '''
+Phasing
 
-When you return an ally to hand, reduce its cost by 2●."""
+When you return an ally to hand, reduce its cost by 2●.'''
 energy-cost = 4
 card-type = "Character"
 subtype = "Outsider"
