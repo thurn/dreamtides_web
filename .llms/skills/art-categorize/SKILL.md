@@ -55,8 +55,19 @@ Assign exactly one top-level category.
 - **Group scenes** (armies, crowds, flocks) are always **Events**, never
   Characters — a Character must be a single primary figure.
 - **Two figures in conflict** are an **Event** — the confrontation is the
-  subject. But a secondary figure that merely gives *scale* to a dominant
-  creature (a tiny diver beside a massive ray) keeps it a **Character**.
+  subject. This requires two *peer* figures opposing each other. A secondary
+  figure that merely gives *scale* to a dominant creature (a tiny diver beside a
+  massive ray) keeps it a **Character**.
+- **Mount or companion animal:** A human with a horse, wolf, familiar, or other
+  mount/companion is a **Character** when the human is clearly the protagonist —
+  the animal is companionship, not a second peer figure. Do not invoke the
+  "two figures" or "group scene" rules for a protagonist-plus-mount/companion.
+- **Single protagonist mid-action:** A lone figure performing an action —
+  aiming, casting, charging, leaping, lifting — is still a **Character**, not an
+  Event. The action defines their *subtype* and narrative, not their category.
+  Reserve **Event** for actions with no single clear protagonist (an explosion,
+  a ritual, a crowd) or for two peers in mutual conflict. A figure acting
+  against an unseen or offscreen target is a Character.
 - **Interior scenes** (rooms, corridors, vehicle cabins) without a central
   figure are **Events**, not Landscapes.
 - **Close-ups** of a single tree or rock are not Landscapes — Landscapes need
@@ -176,3 +187,10 @@ Rules for the fields:
 
 Before returning, double-check: did you actually *view* the image, does the
 category match what you saw, and did the final name print `PASS`?
+
+**Category/narrative reconciliation:** If your name and narrative describe a
+*person or creature* (a role, a "lone rider," "a hooded ferryman"), the category
+should almost certainly be **Character** — a single protagonist doing something,
+even something dramatic, is not an Event. If you've written a character-style
+name or narrative but labelled the art Event or Landscape, stop and re-decide the
+category before emitting. The two must agree.
