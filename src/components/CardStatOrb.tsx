@@ -1,14 +1,10 @@
 import { type CSSProperties, type ReactNode } from "react";
 import { HoverPopover } from "./HoverPopover";
-import { ENERGY_ORB_URL, SPARK_ORB_URL } from "./card-assets";
+import { ENERGY_ORB_URL } from "./card-assets";
+import { SparkleIcon } from "./SparkleIcon";
 import { useFitText } from "./useFitText";
 
 export type CardStatOrbVariant = "energy" | "spark";
-
-const ORB_IMAGE: Readonly<Record<CardStatOrbVariant, string>> = {
-  energy: ENERGY_ORB_URL,
-  spark: SPARK_ORB_URL,
-};
 
 const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
   energy: "energy cost",
@@ -35,13 +31,13 @@ interface CardStatOrbProps {
 }
 
 /**
- * A card stat rendered as a glowing orb with a centered number. Energy cost
- * uses the teal orb (floating over the top name bar's left end); spark uses
- * the gold orb (at the right of the name bar). The number is set in Anton —
- * white with a black outline —
- * and auto-shrinks to fit the orb so multi-digit values never overflow.
+ * A card stat rendered with a centered number over a glowing mark. Energy cost
+ * uses the teal orb art (floating over the top name bar's left end); spark uses
+ * the amber-gold Boxicons sparkle (a four-point star, with a subtle warm bloom)
+ * at the right of the name bar. The number is set in Anton — white with a black
+ * outline — and auto-shrinks to fit so multi-digit values never overflow.
  *
- * Single source of truth for the orb stat treatment shared by every
+ * Single source of truth for the corner stat treatment shared by every
  * `CardView` surface. The inline `⍏N` references in rules text keep their own
  * compact `PipBadge` rendering; this component is only for the corner stats.
  */
@@ -87,6 +83,8 @@ export function CardStatOrb({
     ].join(", "),
   };
 
+  const isSpark = variant === "spark";
+
   const orb = (
     <span
       data-card-stat={variant}
@@ -99,17 +97,39 @@ export function CardStatOrb({
         justifyContent: "center",
         width: sizeVar,
         height: sizeVar,
-        backgroundImage: `url(${ORB_IMAGE[variant]})`,
-        backgroundSize: "contain",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
         flex: "0 0 auto",
+        // Energy keeps the teal orb art behind the digit; spark draws the
+        // sparkle SVG layer below instead so it can carry the warm bloom.
+        ...(isSpark
+          ? {}
+          : {
+              backgroundImage: `url(${ENERGY_ORB_URL})`,
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "center",
+            }),
       }}
     >
+      {isSpark ? (
+        // The sparkle path leaves ~12.5% padding inside its 24×24 viewBox, so
+        // drawn at the box size the star reads smaller than the old orb art.
+        // Overscale it past the box (centered) so the points reach the stat's
+        // footprint, matching the energy orb's visual weight in the name bar.
+        <SparkleIcon
+          size={`calc(${sizeVar} * 1.3)`}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+      ) : null}
       <div
         ref={ref}
         style={{
           ...numberStyle,
+          position: "relative",
           width: numberBoxSize,
           height: numberBoxSize,
           display: "flex",

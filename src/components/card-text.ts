@@ -32,7 +32,11 @@ export type TextSegment =
 /** Maps special Unicode characters to their symbol type. */
 const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
   "●": "energy",
+  // Both the APL `⍏` (used by the inline `⍏N` pip form) and the four-point
+  // star `✦` (the inline resource glyph authored in card text, e.g. `+1✦`)
+  // are the spark symbol; the renderer draws either as the sparkle mark.
   "⍏": "spark",
+  "✦": "spark",
   "▸": "trigger",
   "↯": "fast",
 };

@@ -6,11 +6,13 @@ import {
 import { HoverPopover } from "./HoverPopover";
 import { ENERGY_PIP_COLOR, PipBadge } from "./PipBadge";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
+import { SparkleIcon } from "./SparkleIcon";
 
 /**
  * Renders rules text with:
  *   - the energy `●` glyph swapped for the Boxicons `bxs-flame`
- *   - the spark `⍏`, trigger `▸`, and fast `↯` glyphs colored
+ *   - the spark `✦` glyph swapped for the amber-gold glowing sparkle mark
+ *   - the trigger `▸` and fast `↯` glyphs colored
  *   - glossary terms (Materialized, Judgment, Reclaim, Foresee, void,
  *     spark, ally, fast, etc.) wrapped in an underlined hover popover
  *     showing their plain-language definition
@@ -39,7 +41,6 @@ import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
  */
 const SYMBOL_COLORS: Readonly<Record<string, string>> = {
   energy: ENERGY_PIP_COLOR,
-  spark: "#c084fc",
   trigger: "#94a3b8",
   fast: "#facc15",
 };
@@ -124,6 +125,21 @@ function renderSegment(
         aria-label="energy"
         className={`${ENERGY_ICON_CLASS} align-middle`}
         style={{ color: SYMBOL_COLORS.energy }}
+      />
+    );
+  }
+  if (segment.symbol === "spark") {
+    // The inline spark resource glyph renders as the amber-gold sparkle mark
+    // with the same subtle warm bloom as the corner spark stat, so a `1✦`
+    // reads as the same resource in both places.
+    return (
+      <SparkleIcon
+        key={key}
+        title="spark"
+        // Slightly larger than 1em so the padded star (it fills ~75% of its
+        // viewBox) optically matches the weight of the surrounding text.
+        size="1.2em"
+        style={{ verticalAlign: "-0.18em" }}
       />
     );
   }

@@ -328,7 +328,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders the spark stat as a gold orb with a white outlined number and no ⍏ glyph", () => {
+  it("renders the spark stat as a glowing sparkle with a white outlined number and no ⍏ glyph", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ cardType: "Character", spark: 4 })} />,
     );
@@ -340,10 +340,8 @@ describe("CardDisplay", () => {
     expect(sparkOrb?.textContent).toBe("4");
     // No bare spark glyph anywhere on the card.
     expect(container.textContent).not.toContain("⍏");
-    // The orb is backed by the gold spark art.
-    expect(sparkOrb?.getAttribute("style") ?? "").toContain(
-      "spark_background.png",
-    );
+    // The stat is backed by the inline sparkle SVG, not the old orb art.
+    expect(sparkOrb?.querySelector("svg")).not.toBeNull();
     // White number with a black text-shadow outline.
     const numberStyle =
       sparkOrb?.querySelector("div")?.getAttribute("style")?.toLowerCase() ??
