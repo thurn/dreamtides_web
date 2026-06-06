@@ -196,17 +196,16 @@ button:disabled {
   --cv-textbox-radius: 2.35cqw;
 
   /* Energy cost orb (floats over the name bar's left end, protruding above and
-   * below it) and spark orb (sits at the right of the name bar). The energy
-   * orb top is chosen so its center sits on the name bar's center line
-   * (namebar-top 4.3 + namebar-height/2 4.5 = 8.8cqw; 8.8 − 14.5/2 = 1.55cqw).
-   * The name and spark orb are vertically centered within the bar, so all
-   * three share that center line. */
+   * below it) and spark orb (sits at the right of the name bar). The energy orb
+   * is nudged up and inward from the card's top-left corner so it clears the
+   * corner radius and reads as part of the name bar; the spark orb stays
+   * vertically centered within the bar. */
   --cv-energy-orb-size: 14.5cqw;
   /* The spark orb matches the energy orb size so the two corner marks read as a
    * matched pair. */
   --cv-spark-orb-size: var(--cv-energy-orb-size);
-  --cv-energy-orb-top: 1.55cqw;
-  --cv-energy-orb-left: 3.2cqw;
+  --cv-energy-orb-top: 0.4cqw;
+  --cv-energy-orb-left: 4.4cqw;
   /* Multi-cost cards lay their orbs in a horizontal row; each orb after the
    * first tucks behind the one before it by this overlap. Tuned to slide the
    * earlier orb up to just shy of the centered glyph of the orb behind it (the

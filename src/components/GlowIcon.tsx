@@ -42,14 +42,15 @@ export const ENERGY_GLOW_FILTER =
   "drop-shadow(0 0 0.5em rgba(14, 165, 233, 0.34))";
 
 /**
- * A crisp black outline hugging the glyph silhouette, composed from four
- * cardinal zero-blur `drop-shadow()` copies. Offsets are in `em` so the outline
- * tracks the rendered icon size. Applied before the glow so the bloom radiates
- * around the outlined glyph rather than inside it.
+ * Soft content-protection shadow that grounds the glyph against the art behind
+ * it: a short downward dark blur plus a tight dark halo. This reads as depth
+ * rather than the hard cartoon keyline a multi-offset solid outline produces.
+ * Offsets/radii are in `em` so it tracks the rendered icon size. Applied before
+ * the glow so the colored bloom still radiates outward.
  */
-export const ICON_OUTLINE_FILTER =
-  "drop-shadow(0.022em 0 0 #000) drop-shadow(-0.022em 0 0 #000) " +
-  "drop-shadow(0 0.022em 0 #000) drop-shadow(0 -0.022em 0 #000)";
+export const ICON_SHADOW_FILTER =
+  "drop-shadow(0 0.03em 0.05em rgba(0, 0, 0, 0.55)) " +
+  "drop-shadow(0 0 0.03em rgba(0, 0, 0, 0.45))";
 
 export interface GlowIconProps {
   /** Boxicons class(es) for the glyph (e.g. `SPARK_ICON_CLASS`). */
@@ -64,8 +65,8 @@ export interface GlowIconProps {
   size?: string;
   /** Emitted-light bloom filter. Omit for no glow. */
   glowFilter?: string;
-  /** When true, adds the crisp black outline beneath the glow. */
-  outline?: boolean;
+  /** When true, adds the soft content-protection shadow beneath the glow. */
+  shadow?: boolean;
   className?: string;
   style?: CSSProperties;
   /** Accessible label; the icon is hidden from assistive tech when unset. */
@@ -77,12 +78,12 @@ export function GlowIcon({
   color,
   size = "1em",
   glowFilter,
-  outline = false,
+  shadow = false,
   className,
   style,
   title,
 }: GlowIconProps) {
-  const filter = [outline ? ICON_OUTLINE_FILTER : null, glowFilter ?? null]
+  const filter = [shadow ? ICON_SHADOW_FILTER : null, glowFilter ?? null]
     .filter((layer): layer is string => layer !== null)
     .join(" ");
   return (

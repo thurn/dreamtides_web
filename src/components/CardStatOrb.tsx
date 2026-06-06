@@ -20,15 +20,30 @@ const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
 
 /**
  * Glyph spec per stat variant. Both stats render the same way — a glowing,
- * black-outlined Boxicons mark behind the centered number — so they read as a
- * matched pair. `overscale` pushes each glyph past the orb box (centered) to
- * cancel the padding inside its 24×24 viewBox, tuned per glyph so the sparkle
- * and flame land at the same visual weight.
+ * shadowed Boxicons mark behind the centered number — so they read as a matched
+ * pair. `overscale` pushes each glyph past the orb box (centered) to cancel the
+ * padding inside its 24×24 viewBox, tuned per glyph so the sparkle and flame
+ * land at the same visual weight.
+ *
+ * `numberFactor` and `numberShiftEm` tune the digit per glyph: the sparkle's
+ * central diamond comfortably holds a large digit, but the flame is narrower
+ * and its body sits in the upper bulb of its box, so its digit is a touch
+ * smaller and nudged down to seat inside the bulb instead of crowding the
+ * flame's edges.
  */
 const ICON_BY_VARIANT: Readonly<
   Record<
     CardStatOrbVariant,
-    { iconClass: string; color: string; glowFilter: string; overscale: number }
+    {
+      iconClass: string;
+      color: string;
+      glowFilter: string;
+      overscale: number;
+      /** Digit box edge as a fraction of the orb size. */
+      numberFactor: number;
+      /** Vertical nudge of the digit, in `em` of the orb size. */
+      numberShiftEm: number;
+    }
   >
 > = {
   spark: {
@@ -36,12 +51,16 @@ const ICON_BY_VARIANT: Readonly<
     color: SPARK_ICON_COLOR,
     glowFilter: SPARK_GLOW_FILTER,
     overscale: 1.15,
+    numberFactor: 0.66,
+    numberShiftEm: 0,
   },
   energy: {
     iconClass: ENERGY_ICON_CLASS,
     color: ENERGY_ICON_COLOR,
     glowFilter: ENERGY_GLOW_FILTER,
-    overscale: 1.05,
+    overscale: 1.12,
+    numberFactor: 0.54,
+    numberShiftEm: 0.06,
   },
 };
 
@@ -69,9 +88,9 @@ interface CardStatOrbProps {
  * Boxicons mark: the blue flame (`bxf bx-fire-alt`) for energy cost — floating
  * over the top name bar's left end — and the amber-gold sparkle (`bxf
  * bx-sparkles`) for spark, at the right of the name bar. Both marks carry a
- * matching warm/cool bloom and outline so they read as a pair. The number is
- * set in Anton — white with a black outline — and auto-shrinks to fit so
- * multi-digit values never overflow.
+ * matching warm/cool bloom and a soft content-protection shadow so they read as
+ * a pair. The number is set in Anton — white with a soft dark shadow — and
+ * auto-shrinks to fit so multi-digit values never overflow.
  *
  * Single source of truth for the corner stat treatment shared by every
  * `CardView` surface. The inline `⍏N` references in rules text keep their own
@@ -86,9 +105,10 @@ export function CardStatOrb({
   tooltip,
 }: CardStatOrbProps) {
   const label = ariaLabel ?? DEFAULT_LABEL[variant];
-  // The number box is inset to the glowing core of the orb so the digit sits
-  // centered on the brightest region rather than over the soft outer edge.
-  const numberBoxSize = `calc(${sizeVar} * 0.66)`;
+  const icon = ICON_BY_VARIANT[variant];
+  // The number box is inset to the body of the glyph so the digit sits over its
+  // fullest region rather than crowding the edges; the inset is tuned per glyph.
+  const numberBoxSize = `calc(${sizeVar} * ${String(icon.numberFactor)})`;
   const { ref, fontSize } = useFitText(numberCapPx, 6, [value, numberCapPx]);
 
   // The digit's font-size is the smaller of the box-relative ceiling and the
@@ -104,22 +124,16 @@ export function CardStatOrb({
     textAlign: "center",
     whiteSpace: "nowrap",
     overflow: "hidden",
-    // Crisp black outline composed from eight offsets so it reads against both
-    // the dark teal energy orb and the bright gold spark orb. Offsets are in
-    // `em` so the outline tracks the rendered digit size.
+    // Soft content protection rather than a hard keyline: a thin near-black
+    // halo defines the digit edge against both the bright gold spark and the
+    // blue energy flame, and a short downward dark blur grounds it with depth.
+    // Radii are in `em` so the effect tracks the rendered digit size.
     textShadow: [
-      `0.08em 0 0 #000`,
-      `-0.08em 0 0 #000`,
-      `0 0.08em 0 #000`,
-      `0 -0.08em 0 #000`,
-      `0.08em 0.08em 0 #000`,
-      `-0.08em 0.08em 0 #000`,
-      `0.08em -0.08em 0 #000`,
-      `-0.08em -0.08em 0 #000`,
+      `0 0 0.04em rgba(0, 0, 0, 0.9)`,
+      `0 0 0.08em rgba(0, 0, 0, 0.7)`,
+      `0 0.035em 0.06em rgba(0, 0, 0, 0.85)`,
     ].join(", "),
   };
-
-  const icon = ICON_BY_VARIANT[variant];
 
   const orb = (
     <span
@@ -143,7 +157,7 @@ export function CardStatOrb({
         iconClass={icon.iconClass}
         color={icon.color}
         glowFilter={icon.glowFilter}
-        outline
+        shadow
         size={`calc(${sizeVar} * ${String(icon.overscale)})`}
         style={{
           position: "absolute",
@@ -157,6 +171,13 @@ export function CardStatOrb({
         style={{
           ...numberStyle,
           position: "relative",
+          // Nudge the digit into the glyph's body (e.g. down into the flame's
+          // bulb) so it seats over the fullest region. `em` tracks the digit
+          // size so the nudge scales with it.
+          transform:
+            icon.numberShiftEm !== 0
+              ? `translateY(${String(icon.numberShiftEm)}em)`
+              : undefined,
           width: numberBoxSize,
           height: numberBoxSize,
           display: "flex",
