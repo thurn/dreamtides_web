@@ -19,6 +19,7 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   tagEditing: false,
   tideEditing: false,
   artEditing: false,
+  checkboxTag: "",
   sort: "name",
   dir: "asc",
   size: "medium",
@@ -137,6 +138,7 @@ export function parseEditorDisplayState(
     tagEditing: params.get("tagedit") === "1",
     tideEditing: params.get("tideedit") === "1",
     artEditing: params.get("artedit") === "1",
+    checkboxTag: (params.get("checkboxtag") ?? DEFAULT_EDITOR_DISPLAY_STATE.checkboxTag).trim(),
     sort: parseSort(params.get("sort")),
     dir: parseDir(params.get("dir")),
     size: parseSize(params.get("size")),
@@ -177,6 +179,9 @@ export function serializeEditorDisplayState(
   }
   if (state.artEditing) {
     params.set("artedit", "1");
+  }
+  if (state.checkboxTag !== DEFAULT_EDITOR_DISPLAY_STATE.checkboxTag) {
+    params.set("checkboxtag", state.checkboxTag);
   }
   if (state.sort !== DEFAULT_EDITOR_DISPLAY_STATE.sort) {
     params.set("sort", SORT_FIELD_TO_PARAM[state.sort]);

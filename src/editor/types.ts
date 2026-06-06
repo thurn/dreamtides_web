@@ -106,6 +106,13 @@ export interface EditorDisplayState {
    * editor instead of editing inline fields.
    */
   artEditing: boolean;
+  /**
+   * Tag name for checkbox tagging mode. When non-empty the grid renders a big
+   * checkbox on each card that toggles this one tag, hiding all other tag and
+   * tide chips. Empty means checkbox tagging is off. This mode coexists with
+   * art-edit mode, so a card can be art-cropped and checkbox-tagged at once.
+   */
+  checkboxTag: string;
   sort: EditorSortField;
   dir: EditorSortDirection;
   size: EditorCardSize;

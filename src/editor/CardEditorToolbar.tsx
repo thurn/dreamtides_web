@@ -8,6 +8,7 @@ import {
 } from "../components/card-browser/card-browser-types";
 import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
 import TagFilterControl from "./TagFilterControl";
+import { tagColor } from "./tag-color";
 import type { EditorDisplayState, EditorTag } from "./types";
 
 interface CardEditorToolbarProps {
@@ -112,10 +113,15 @@ export default function CardEditorToolbar({
 }: CardEditorToolbarProps) {
   const menuId = useId();
   const [menuOpen, setMenuOpen] = useState(false);
+  // The overflow menu has two views: its root list and a secondary "checkbox
+  // tag" picker, so the (potentially long) tag list does not crowd the root.
+  const [menuView, setMenuView] = useState<"root" | "checkbox">("root");
   const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!menuOpen) {
+      // Always reopen on the root view.
+      setMenuView("root");
       return;
     }
     const handlePointerDown = (event: MouseEvent) => {
@@ -198,6 +204,16 @@ export default function CardEditorToolbar({
         }
       />
 
+      {displayState.checkboxTag !== "" ? (
+        <ModeToggle
+          active
+          icon="☑"
+          label={displayState.checkboxTag}
+          title={`Checkbox tagging "${displayState.checkboxTag}" — click to exit`}
+          onToggle={() => updateDisplayState({ checkboxTag: "" })}
+        />
+      ) : null}
+
       <div ref={menuRef} style={{ position: "relative" }}>
         <button
           type="button"
@@ -243,28 +259,171 @@ export default function CardEditorToolbar({
               gap: "2px",
             }}
           >
-            <button
-              type="button"
-              role="menuitem"
-              onClick={() => {
-                setMenuOpen(false);
-                onOpenManageTags();
-              }}
-              style={menuItemStyle}
-            >
-              Manage tags…
-            </button>
-            <button
-              type="button"
-              role="menuitem"
-              onClick={() => {
-                setMenuOpen(false);
-                onOpenManageTides();
-              }}
-              style={menuItemStyle}
-            >
-              Manage tides…
-            </button>
+            {menuView === "root" ? (
+              <>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onOpenManageTags();
+                  }}
+                  style={menuItemStyle}
+                >
+                  Manage tags…
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    onOpenManageTides();
+                  }}
+                  style={menuItemStyle}
+                >
+                  Manage tides…
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  aria-haspopup="menu"
+                  onClick={() => setMenuView("checkbox")}
+                  style={{
+                    ...menuItemStyle,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <span style={{ flex: "1 1 auto" }}>
+                    Checkbox tag
+                    {displayState.checkboxTag !== "" ? (
+                      <span style={{ color: "#8edbd1", fontWeight: 800 }}>
+                        {`: ${displayState.checkboxTag}`}
+                      </span>
+                    ) : null}
+                  </span>
+                  <span aria-hidden="true" style={{ color: "#8edbd1" }}>
+                    ›
+                  </span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setMenuView("root")}
+                  style={{
+                    ...menuItemStyle,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    color: "#8edbd1",
+                  }}
+                >
+                  <span aria-hidden="true">‹</span>
+                  <span>Checkbox tag</span>
+                </button>
+                <div
+                  aria-hidden="true"
+                  style={{
+                    height: "1px",
+                    margin: "2px 4px 4px",
+                    background: "rgba(142, 219, 209, 0.25)",
+                  }}
+                />
+                {availableTags.length === 0 ? (
+                  <span
+                    style={{
+                      padding: "4px 9px",
+                      fontSize: "0.78rem",
+                      fontWeight: 600,
+                      color: "#9fb0ab",
+                    }}
+                  >
+                    No tags yet.
+                  </span>
+                ) : (
+                  <div
+                    style={{
+                      maxHeight: "240px",
+                      overflowY: "auto",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
+                    }}
+                  >
+                    {displayState.checkboxTag !== "" ? (
+                      <button
+                        type="button"
+                        role="menuitem"
+                        onClick={() => {
+                          setMenuOpen(false);
+                          updateDisplayState({ checkboxTag: "" });
+                        }}
+                        style={{ ...menuItemStyle, color: "#f0c6bd" }}
+                      >
+                        Turn off checkbox mode
+                      </button>
+                    ) : null}
+                    {availableTags.map((tag) => {
+                      const active = tag.name === displayState.checkboxTag;
+                      return (
+                        <button
+                          key={tag.name}
+                          type="button"
+                          role="menuitemradio"
+                          aria-checked={active}
+                          onClick={() => {
+                            setMenuOpen(false);
+                            updateDisplayState({
+                              checkboxTag: active ? "" : tag.name,
+                            });
+                          }}
+                          style={{
+                            ...menuItemStyle,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            background: active ? "#1f3438" : "transparent",
+                          }}
+                        >
+                          <span
+                            aria-hidden="true"
+                            style={{
+                              width: "12px",
+                              textAlign: "center",
+                              color: "#8edbd1",
+                            }}
+                          >
+                            {active ? "✓" : ""}
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            style={{
+                              width: "10px",
+                              height: "10px",
+                              borderRadius: "50%",
+                              flex: "0 0 auto",
+                              background: tagColor(tag.name, availableTags),
+                            }}
+                          />
+                          <span
+                            style={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {tag.name}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
+            )}
           </div>
         ) : null}
       </div>

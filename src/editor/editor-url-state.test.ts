@@ -53,6 +53,7 @@ describe("editor URL display state", () => {
       tagEditing: false,
       tideEditing: false,
       artEditing: false,
+      checkboxTag: "",
       sort: "cost",
       dir: "desc",
       size: "large",
@@ -140,6 +141,21 @@ describe("editor URL display state", () => {
     expect(params.get("artedit")).toBe("1");
     expect(parseEditorDisplayState(params).artEditing).toBe(true);
     expect(parseEditorDisplayState("?artedit=0").artEditing).toBe(false);
+  });
+
+  it("round-trips checkbox tagging mode", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      checkboxTag: "Removal",
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.get("checkboxtag")).toBe("Removal");
+    expect(parseEditorDisplayState(params).checkboxTag).toBe("Removal");
+    expect(parseEditorDisplayState("?checkboxtag=%20Elves%20").checkboxTag).toBe(
+      "Elves",
+    );
+    expect(parseEditorDisplayState("").checkboxTag).toBe("");
   });
 
   it("dedupes and trims tag filters and defaults tag-editing off", () => {

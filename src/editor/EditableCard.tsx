@@ -4,6 +4,7 @@ import type { CardViewSlots } from "../components/CardView";
 import { MtgNameTooltip } from "../components/card-browser/MtgNameTooltip";
 import CardTagEditor from "./CardTagEditor";
 import EditableField from "./EditableField";
+import { readableTextColor, tagColor } from "./tag-color";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type {
   EditableCardField,
@@ -23,6 +24,12 @@ export interface EditableCardProps {
   tagEditing: boolean;
   tideEditing: boolean;
   artEditing: boolean;
+  /**
+   * When non-empty, checkbox tagging mode is active for this tag: a big
+   * checkbox overlays each card to toggle the tag, and the tag/tide chip
+   * editors are suppressed so only this one tag is in play.
+   */
+  checkboxTag: string;
   availableTags: EditorTag[];
   availableTides: EditorTag[];
   tagSaving: boolean;
@@ -124,6 +131,93 @@ function energyPreviewValue(value: EditableFieldValue): {
   };
 }
 
+interface CheckboxTagControlProps {
+  tagName: string;
+  checked: boolean;
+  color: string;
+  saving: boolean;
+  onToggle: () => void;
+}
+
+/**
+ * The checkbox shown below each card in checkbox tagging mode. It is a separate
+ * control under the card rather than an overlay, so it never hides the art and
+ * does not interfere with art-edit or inline field clicks on the card itself.
+ */
+function CheckboxTagControl({
+  tagName,
+  checked,
+  color,
+  saving,
+  onToggle,
+}: CheckboxTagControlProps) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={checked}
+      aria-label={`${checked ? "Remove" : "Add"} tag ${tagName}`}
+      title={`${checked ? "Remove" : "Add"} tag “${tagName}”`}
+      disabled={saving}
+      onClick={(event) => {
+        event.stopPropagation();
+        onToggle();
+      }}
+      style={{
+        marginTop: "6px",
+        width: "100%",
+        boxSizing: "border-box",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        padding: "6px 8px",
+        borderRadius: "8px",
+        border: checked
+          ? `1px solid ${color}`
+          : "1px solid rgba(247, 241, 223, 0.28)",
+        background: checked ? color : "rgba(15, 23, 25, 0.85)",
+        color: checked ? readableTextColor(color) : "#d9e1dd",
+        font: "inherit",
+        fontWeight: 700,
+        fontSize: "0.8rem",
+        cursor: saving ? "progress" : "pointer",
+        opacity: saving ? 0.6 : 1,
+      }}
+    >
+      <span
+        aria-hidden="true"
+        style={{
+          flex: "0 0 auto",
+          width: "20px",
+          height: "20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "5px",
+          border: checked
+            ? "2px solid rgba(255, 255, 255, 0.85)"
+            : "2px solid rgba(247, 241, 223, 0.5)",
+          background: checked ? "rgba(255, 255, 255, 0.18)" : "transparent",
+          fontSize: "0.95rem",
+          fontWeight: 900,
+          lineHeight: 1,
+        }}
+      >
+        {checked ? "✓" : ""}
+      </span>
+      <span
+        style={{
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          whiteSpace: "nowrap",
+        }}
+      >
+        {tagName}
+      </span>
+    </button>
+  );
+}
+
 export default function EditableCard({
   card,
   size,
@@ -135,6 +229,7 @@ export default function EditableCard({
   tagEditing,
   tideEditing,
   artEditing,
+  checkboxTag,
   availableTags,
   availableTides,
   tagSaving,
@@ -157,6 +252,25 @@ export default function EditableCard({
   const cardRef = useRef<HTMLElement | null>(null);
   const [hovering, setHovering] = useState(false);
   const mtgName = card.mtgName.trim();
+
+  const checkboxActive = checkboxTag !== "";
+  const checkboxChecked = checkboxActive && card.tags.includes(checkboxTag);
+  const toggleCheckboxTag = () => {
+    if (checkboxChecked) {
+      onRemoveCardTag(card, checkboxTag);
+    } else {
+      onAddCardTag(card, checkboxTag);
+    }
+  };
+  const checkboxControl = checkboxActive ? (
+    <CheckboxTagControl
+      tagName={checkboxTag}
+      checked={checkboxChecked}
+      color={tagColor(checkboxTag, availableTags)}
+      saving={tagSaving}
+      onToggle={toggleCheckboxTag}
+    />
+  ) : null;
 
   const visibleName = String(nameSaveEntry?.draftValue ?? card.name);
   const visibleEnergy = energyPreviewValue(
@@ -318,6 +432,7 @@ export default function EditableCard({
           suppressHoverHelp
           onClick={() => onOpenArtEditor(card)}
         />
+        {checkboxControl}
       </article>
     );
   }
@@ -337,7 +452,9 @@ export default function EditableCard({
         suppressHoverHelp
         slots={slots}
       />
-      {tagEditing ? (
+      {/* Checkbox tagging hides the tag and tide chip editors so only the one
+          selected tag is in play. */}
+      {!checkboxActive && tagEditing ? (
         <CardTagEditor
           cardTags={card.tags}
           availableTags={availableTags}
@@ -348,7 +465,7 @@ export default function EditableCard({
           onOpenManageTags={onOpenManageTags}
         />
       ) : null}
-      {tideEditing ? (
+      {!checkboxActive && tideEditing ? (
         <CardTagEditor
           noun="tide"
           cardTags={card.tides}
@@ -360,6 +477,7 @@ export default function EditableCard({
           onOpenManageTags={onOpenManageTides}
         />
       ) : null}
+      {checkboxControl}
       {hovering && mtgName !== "" ? (
         <MtgNameTooltip anchorRef={cardRef} mtgName={mtgName} />
       ) : null}

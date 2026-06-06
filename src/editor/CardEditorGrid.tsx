@@ -21,6 +21,7 @@ export interface CardEditorGridProps {
   tagEditing: boolean;
   tideEditing: boolean;
   artEditing: boolean;
+  checkboxTag: string;
   availableTags: EditorTag[];
   availableTides: EditorTag[];
   tagSaveState: Record<string, CardTagSaveState>;
@@ -68,6 +69,7 @@ export default function CardEditorGrid({
   tagEditing,
   tideEditing,
   artEditing,
+  checkboxTag,
   availableTags,
   availableTides,
   tagSaveState,
@@ -123,6 +125,7 @@ export default function CardEditorGrid({
           tagEditing={tagEditing}
           tideEditing={tideEditing}
           artEditing={artEditing}
+          checkboxTag={checkboxTag}
           availableTags={availableTags}
           availableTides={availableTides}
           tagSaving={tagSaveState[card.id]?.saving ?? false}

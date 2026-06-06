@@ -94,6 +94,7 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-tag-editing": String(displayState.tagEditing),
     "data-editor-tide-editing": String(displayState.tideEditing),
     "data-editor-art-editing": String(displayState.artEditing),
+    "data-editor-checkbox-tag": displayState.checkboxTag,
     "data-editor-sort": displayState.sort,
     "data-editor-dir": displayState.dir,
     "data-editor-size": displayState.size,
@@ -938,6 +939,7 @@ export default function CardEditorApp({
                 tagEditing={displayState.tagEditing}
                 tideEditing={displayState.tideEditing}
                 artEditing={displayState.artEditing}
+                checkboxTag={displayState.checkboxTag}
                 availableTags={tags}
                 availableTides={tides}
                 tagSaveState={tagSaveState}
