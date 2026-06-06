@@ -191,7 +191,7 @@ describe("Chooser overlay components", () => {
       .toBe("2");
     expect(container.querySelector("[data-testid=\"card-type-line\"]")?.textContent)
       .toContain("Warrior");
-    expect(container.querySelectorAll("i.bxf.bx-flame[aria-label=\"energy\"]").length)
+    expect(container.querySelectorAll("i.bxf.bx-fire-alt[aria-label=\"energy\"]").length)
       .toBe(1);
     // One corner spark orb plus one inline ⍏ pip in the rules text.
     expect(container.querySelector("[data-card-stat=\"spark\"]")).not.toBeNull();

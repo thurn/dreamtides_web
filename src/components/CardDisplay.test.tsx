@@ -189,7 +189,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders the energy cost as a teal orb with a white outlined number and no flame icon", () => {
+  it("renders the energy cost as a glowing flame with a white outlined number", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ energyCost: 4 })} />,
     );
@@ -200,21 +200,14 @@ describe("CardDisplay", () => {
     expect(energyOrb).not.toBeNull();
     expect(energyOrb?.textContent).toBe("4");
     expect(energyOrb?.getAttribute("aria-label")).toBe("energy cost");
-    // The orb is backed by the teal energy-cost art.
-    expect(energyOrb?.getAttribute("style") ?? "").toContain(
-      "energy_cost_background.png",
-    );
+    // The stat is backed by the Boxicons fire-alt glyph.
+    expect(energyOrb?.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
     // The number is white with a black text-shadow outline.
     const numberStyle =
       energyOrb?.querySelector("div")?.getAttribute("style")?.toLowerCase() ??
       "";
     expect(numberStyle).toContain("color: rgb(255, 255, 255)");
     expect(numberStyle).toContain("text-shadow");
-    // The corner stat has no flame icon — only inline rules-text references do.
-    const cornerFlame = container.querySelector(
-      "i.bxf.bx-flame[aria-label=\"energy cost\"]",
-    );
-    expect(cornerFlame).toBeNull();
     // No bare ● glyph.
     expect(container.textContent).not.toContain("●");
 
@@ -280,7 +273,7 @@ describe("CardDisplay", () => {
     );
 
     const inlineFlames = container.querySelectorAll(
-      "i.bxf.bx-flame[aria-label=\"energy\"]",
+      "i.bxf.bx-fire-alt[aria-label=\"energy\"]",
     );
     expect(inlineFlames.length).toBe(1);
     expect(container.textContent).not.toContain("●");
@@ -340,8 +333,8 @@ describe("CardDisplay", () => {
     expect(sparkOrb?.textContent).toBe("4");
     // No bare spark glyph anywhere on the card.
     expect(container.textContent).not.toContain("⍏");
-    // The stat is backed by the Boxicons sparkle glyph, not the old orb art.
-    expect(sparkOrb?.querySelector("i.bxf.bx-sparkle")).not.toBeNull();
+    // The stat is backed by the Boxicons sparkles glyph.
+    expect(sparkOrb?.querySelector("i.bxf.bx-sparkles")).not.toBeNull();
     // White number with a black text-shadow outline.
     const numberStyle =
       sparkOrb?.querySelector("div")?.getAttribute("style")?.toLowerCase() ??

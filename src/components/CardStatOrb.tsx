@@ -1,7 +1,14 @@
 import { type CSSProperties, type ReactNode } from "react";
 import { HoverPopover } from "./HoverPopover";
-import { ENERGY_ORB_URL } from "./card-assets";
-import { SparkleIcon } from "./SparkleIcon";
+import {
+  ENERGY_GLOW_FILTER,
+  ENERGY_ICON_CLASS,
+  ENERGY_ICON_COLOR,
+  GlowIcon,
+  SPARK_GLOW_FILTER,
+  SPARK_ICON_CLASS,
+  SPARK_ICON_COLOR,
+} from "./GlowIcon";
 import { useFitText } from "./useFitText";
 
 export type CardStatOrbVariant = "energy" | "spark";
@@ -9,6 +16,33 @@ export type CardStatOrbVariant = "energy" | "spark";
 const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
   energy: "energy cost",
   spark: "spark",
+};
+
+/**
+ * Glyph spec per stat variant. Both stats render the same way — a glowing,
+ * black-outlined Boxicons mark behind the centered number — so they read as a
+ * matched pair. `overscale` pushes each glyph past the orb box (centered) to
+ * cancel the padding inside its 24×24 viewBox, tuned per glyph so the sparkle
+ * and flame land at the same visual weight.
+ */
+const ICON_BY_VARIANT: Readonly<
+  Record<
+    CardStatOrbVariant,
+    { iconClass: string; color: string; glowFilter: string; overscale: number }
+  >
+> = {
+  spark: {
+    iconClass: SPARK_ICON_CLASS,
+    color: SPARK_ICON_COLOR,
+    glowFilter: SPARK_GLOW_FILTER,
+    overscale: 1.15,
+  },
+  energy: {
+    iconClass: ENERGY_ICON_CLASS,
+    color: ENERGY_ICON_COLOR,
+    glowFilter: ENERGY_GLOW_FILTER,
+    overscale: 1.05,
+  },
 };
 
 /** Tooltip delay tuned for corner stat targets (matches the old pip badges). */
@@ -31,11 +65,13 @@ interface CardStatOrbProps {
 }
 
 /**
- * A card stat rendered with a centered number over a glowing mark. Energy cost
- * uses the teal orb art (floating over the top name bar's left end); spark uses
- * the amber-gold Boxicons sparkle (a four-point star, with a subtle warm bloom)
- * at the right of the name bar. The number is set in Anton — white with a black
- * outline — and auto-shrinks to fit so multi-digit values never overflow.
+ * A card stat rendered with a centered number over a glowing, black-outlined
+ * Boxicons mark: the blue flame (`bxf bx-fire-alt`) for energy cost — floating
+ * over the top name bar's left end — and the amber-gold sparkle (`bxf
+ * bx-sparkles`) for spark, at the right of the name bar. Both marks carry a
+ * matching warm/cool bloom and outline so they read as a pair. The number is
+ * set in Anton — white with a black outline — and auto-shrinks to fit so
+ * multi-digit values never overflow.
  *
  * Single source of truth for the corner stat treatment shared by every
  * `CardView` surface. The inline `⍏N` references in rules text keep their own
@@ -83,7 +119,7 @@ export function CardStatOrb({
     ].join(", "),
   };
 
-  const isSpark = variant === "spark";
+  const icon = ICON_BY_VARIANT[variant];
 
   const orb = (
     <span
@@ -98,33 +134,24 @@ export function CardStatOrb({
         width: sizeVar,
         height: sizeVar,
         flex: "0 0 auto",
-        // Energy keeps the teal orb art behind the digit; spark draws the
-        // sparkle SVG layer below instead so it can carry the warm bloom.
-        ...(isSpark
-          ? {}
-          : {
-              backgroundImage: `url(${ENERGY_ORB_URL})`,
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-              backgroundPosition: "center",
-            }),
       }}
     >
-      {isSpark ? (
-        // The sparkle path leaves ~12.5% padding inside its 24×24 viewBox, so
-        // drawn at the box size the star reads smaller than the old orb art.
-        // Overscale it past the box (centered) so the points reach the stat's
-        // footprint, matching the energy orb's visual weight in the name bar.
-        <SparkleIcon
-          size={`calc(${sizeVar} * 1.3)`}
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-          }}
-        />
-      ) : null}
+      {/* The glowing mark sits below the digit. Each Boxicons glyph leaves
+          padding inside its 24×24 viewBox, so it is overscaled past the box
+          (centered) to reach the stat's footprint. */}
+      <GlowIcon
+        iconClass={icon.iconClass}
+        color={icon.color}
+        glowFilter={icon.glowFilter}
+        outline
+        size={`calc(${sizeVar} * ${String(icon.overscale)})`}
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
       <div
         ref={ref}
         style={{

@@ -4,13 +4,20 @@ import {
   type TextSegment,
 } from "./card-text";
 import { HoverPopover } from "./HoverPopover";
-import { ENERGY_PIP_COLOR, PipBadge } from "./PipBadge";
+import { PipBadge } from "./PipBadge";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
-import { SparkleIcon } from "./SparkleIcon";
+import {
+  ENERGY_GLOW_FILTER,
+  ENERGY_ICON_CLASS,
+  ENERGY_ICON_COLOR,
+  SPARK_GLOW_FILTER,
+  SPARK_ICON_CLASS,
+  SPARK_ICON_COLOR,
+} from "./GlowIcon";
 
 /**
  * Renders rules text with:
- *   - the energy `●` glyph swapped for the Boxicons filled flame (`bxf bx-flame`)
+ *   - the energy `●` glyph swapped for the blue glowing flame (`bxf bx-fire-alt`)
  *   - the spark `✦` glyph swapped for the amber-gold glowing sparkle mark
  *   - the trigger `▸` and fast `↯` glyphs colored
  *   - glossary terms (Materialized, Judgment, Reclaim, Foresee, void,
@@ -26,12 +33,6 @@ import { SparkleIcon } from "./SparkleIcon";
 /**
  * Color used for each symbol type when rendering rules text.
  *
- * The inline `energy` flame pulls from `ENERGY_PIP_COLOR` so the symbol
- * inside rules text reads as the exact same teal as the corner energy-cost
- * pip — the two anchors represent the same resource and must stay visually
- * unified. Importing the constant rather than re-typing the hex value
- * keeps the two from drifting again.
- *
  * The trigger arrow `▸` uses the muted slate (`#94a3b8`, slate-400) shared
  * with secondary text elsewhere (Dreamcaller subtitle, room-gate hints). It
  * marks the start of a triggered ability without competing for attention
@@ -40,13 +41,9 @@ import { SparkleIcon } from "./SparkleIcon";
  * the arrow read as a UI alert rather than a typographic guide.
  */
 const SYMBOL_COLORS: Readonly<Record<string, string>> = {
-  energy: ENERGY_PIP_COLOR,
   trigger: "#94a3b8",
   fast: "#facc15",
 };
-
-/** Boxicons class used to render the energy symbol. */
-const ENERGY_ICON_CLASS = "bxf bx-flame";
 
 /** Inline-block trigger styling so the underline stays close to the word. */
 const TERM_STYLE: CSSProperties = {
@@ -119,27 +116,31 @@ function renderSegment(
     );
   }
   if (segment.symbol === "energy") {
+    // The inline energy glyph renders as the blue flame mark with the same
+    // bloom as the corner energy stat, so a `●3` reads as the same resource in
+    // both places. Rendered as a plain inline `<i>` (sized to the surrounding
+    // text, vertically centered) so it flows like a character rather than
+    // reserving a square box.
     return (
       <i
         key={key}
         aria-label="energy"
         className={`${ENERGY_ICON_CLASS} align-middle`}
-        style={{ color: SYMBOL_COLORS.energy }}
+        style={{ color: ENERGY_ICON_COLOR, filter: ENERGY_GLOW_FILTER }}
       />
     );
   }
   if (segment.symbol === "spark") {
-    // The inline spark resource glyph renders as the amber-gold sparkle mark
-    // with the same subtle warm bloom as the corner spark stat, so a `1✦`
-    // reads as the same resource in both places.
+    // The inline spark glyph renders as the amber-gold sparkle mark with the
+    // same warm bloom as the corner spark stat, so a `1✦` reads as the same
+    // resource in both places. Like the energy flame it is a plain inline `<i>`
+    // so it flows with the text instead of sitting in an oversized box.
     return (
-      <SparkleIcon
+      <i
         key={key}
-        title="spark"
-        // Slightly larger than 1em so the padded star (it fills ~75% of its
-        // viewBox) optically matches the weight of the surrounding text.
-        size="1.2em"
-        style={{ verticalAlign: "-0.18em" }}
+        aria-label="spark"
+        className={`${SPARK_ICON_CLASS} align-middle`}
+        style={{ color: SPARK_ICON_COLOR, filter: SPARK_GLOW_FILTER }}
       />
     );
   }

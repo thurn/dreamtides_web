@@ -416,7 +416,7 @@ const TYPE_LABEL_TEXT_STROKE = `0.34cqw ${TYPE_LABEL_OUTLINE_COLOR}`;
  * var; these mirror its defaults.
  */
 const ENERGY_ORB_RATIO = 0.16;
-const SPARK_ORB_RATIO = 0.12;
+const SPARK_ORB_RATIO = 0.16;
 
 /**
  * Rules-text ceiling size as a fraction of the rendered card width, matching
