@@ -72,6 +72,33 @@ paragraph, separated by a normal space, not a blank line:
 When an ally is dissolved, gain 1⍟. Then this character gains +1✦.
 ```
 
+A card's play cost — a `To play this card,` clause (or its `To play this event,`
+/ `To play this character,` variants) — shares a paragraph with the effect it
+gates, joined by a normal space:
+
+```
+To play this card, abandon a character. Materialize a random character with higher cost from your deck.
+```
+
+Structurally parallel descriptive triggers share a paragraph too: when a card
+carries two or more `When …` clauses, they run together in one paragraph rather
+than splitting across blank lines:
+
+```
+When an ally is dissolved, materialize a 1✦ survivor figment. When you discard or erode this card, it gains reclaim 0●.
+```
+
+Named (`▸`) triggers, standalone keywords, activated abilities, and `Reclaim`
+each keep their own paragraph; they are never folded into a neighbouring clause.
+A play cost or `When` clause that sits beside one of these stays separate from
+it:
+
+```
+To play this card, banish a card from hand.
+
+▸Materialized, ▸Dawn: Gain 1●.
+```
+
 ### 2.2 No trailing whitespace
 
 Every line is trimmed: no trailing spaces, and no blank line at the start or end

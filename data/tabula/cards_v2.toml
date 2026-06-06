@@ -2346,10 +2346,7 @@ card-number = 129
 name = "Forsaken Pact"
 mtg-name = "Crop Rotation"
 id = "ac2b2fc5-90d3-47e0-8332-25f7ba767035"
-rendered-text = """
-To play this card, abandon a ≤2● cost character.
-
-Discover a ≤2● cost character and materialize it."""
+rendered-text = "To play this card, abandon a ≤2● cost character. Discover a ≤2● cost character and materialize it."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -3172,10 +3169,7 @@ card-number = 174
 name = "Spiral Offering"
 mtg-name = "Cathartic Reunion"
 id = "acefcfcf-cba5-46ec-913e-32f1091afbda"
-rendered-text = """
-To play this event, discard 2 cards.
-
-Draw 3 cards."""
+rendered-text = "To play this event, discard 2 cards. Draw 3 cards."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -3864,10 +3858,7 @@ card-number = 213
 name = "Seaside Requiem"
 mtg-name = "Demand Answers"
 id = "7ea13d02-9d97-492e-9edb-f326eb3b4d1c"
-rendered-text = """
-To play this card, abandon a character or discard a card.
-
-Draw 2 cards."""
+rendered-text = "To play this card, abandon a character or discard a card. Draw 2 cards."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -4024,10 +4015,7 @@ card-number = 222
 name = "Call of Calamity"
 mtg-name = "Magmatic Insight"
 id = "435ed83c-f7a6-4a73-a684-67fcc4e49bc4"
-rendered-text = """
-To play this event, discard X cards.
-
-Draw X+1 cards."""
+rendered-text = "To play this event, discard X cards. Draw X+1 cards."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -4119,10 +4107,7 @@ card-number = 227
 name = "Skies of Change"
 mtg-name = "Bitter Reunion"
 id = "dcaba429-6fbc-4ea5-b063-871134ccd03b"
-rendered-text = """
-To play this event, discard a card.
-
-Draw 2 cards."""
+rendered-text = "To play this event, discard a card. Draw 2 cards."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -4193,10 +4178,7 @@ card-number = 231
 name = "Young Beastcaller"
 mtg-name = "Nissa, Resurgent Animist"
 id = "cd2d4eaf-6295-451d-aaa2-ea74188bac3b"
-rendered-text = """
-When you materialize a spirit animal, gain 1●.
-
-When you materialize your second spirit animal in a turn, draw a spirit animal."""
+rendered-text = "When you materialize a spirit animal, gain 1●. When you materialize your second spirit animal in a turn, draw a spirit animal."
 energy-cost = 4
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -5992,10 +5974,7 @@ card-number = 330
 name = "Maelstrom Denial"
 mtg-name = "Bone Shards"
 id = "625fe37e-8059-481c-99fd-109fd02ceedd"
-rendered-text = """
-To play this event, abandon a character or discard a card.
-
-Dissolve an enemy."""
+rendered-text = "To play this event, abandon a character or discard a card. Dissolve an enemy."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -6478,10 +6457,7 @@ card-number = 356
 name = "Standoff"
 mtg-name = "Snuff Out"
 id = "f4c570d4-c500-4b66-ad97-e8ccbef19392"
-rendered-text = """
-To play this event, pay 5⍟.
-
-Dissolve an enemy."""
+rendered-text = "To play this event, pay 5⍟. Dissolve an enemy."
 energy-cost = 0
 card-type = "Event"
 subtype = ""
@@ -7020,10 +6996,7 @@ card-number = 386
 name = "Aftermath Bloom"
 mtg-name = "Tinker"
 id = "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c"
-rendered-text = """
-To play this event, abandon a warrior.
-
-Discover a warrior with higher cost, then materialize it."""
+rendered-text = "To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -7292,10 +7265,7 @@ card-number = 400
 name = "Knowledge Restored"
 mtg-name = "Treasure Cruise"
 id = "c6ae1899-c94c-464f-8edb-4a0b1ec2c981"
-rendered-text = """
-To play this card, banish 5 cards from your void.
-
-Draw 3 cards."""
+rendered-text = "To play this card, banish 5 cards from your void. Draw 3 cards."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -7998,10 +7968,7 @@ card-number = 439
 name = "Fractured Veil"
 mtg-name = "Dig Through Time"
 id = "06f8cfff-92ec-4668-afbc-f33a274c3b1a"
-rendered-text = """
-To play this event, banish X cards from your void.
-
-Look at the top X cards of your deck. Put two of them into your hand and the rest on the bottom."""
+rendered-text = "To play this event, banish X cards from your void. Look at the top X cards of your deck. Put two of them into your hand and the rest on the bottom."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -8972,10 +8939,7 @@ card-number = 493
 name = "Pyrokinetic Surge"
 mtg-name = "Bitter Triumph"
 id = "97b359ee-5a7a-4f54-bd65-e6221a893208"
-rendered-text = """
-To play this card, discard a card or pay 5⍟.
-
-Dissolve an enemy."""
+rendered-text = "To play this card, discard a card or pay 5⍟. Dissolve an enemy."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
