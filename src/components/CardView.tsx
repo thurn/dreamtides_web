@@ -798,12 +798,12 @@ export function CardView({
           key={index}
           className={`${BOLT_ICON_CLASS} align-middle`}
           style={{
-            transform: "translateY(-0.1em)",
+            transform: "translateY(-0.05em)",
             // The bolt glyph carries a wide left side-bearing; trim it on the
             // first bolt so the mark starts at the name's text edge rather than
             // floating in from it. Pull each later bolt (an interrupt's second
             // mark) further in so the two bolts almost touch.
-            marginLeft: index === 0 ? "-0.3em" : "-0.35em",
+            marginLeft: index === 0 ? "-0.4em" : "-0.35em",
           }}
           aria-hidden="true"
         />
@@ -833,7 +833,11 @@ export function CardView({
     >
       {attributeChipNodes.length > 0 ? (
         <span
-          style={{ flex: "0 0 auto", whiteSpace: "nowrap", marginRight: "0.1em" }}
+          style={{
+            flex: "0 0 auto",
+            whiteSpace: "nowrap",
+            marginRight: "0.1em",
+          }}
         >
           {attributeChipNodes}
         </span>
