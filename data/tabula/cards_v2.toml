@@ -1242,15 +1242,15 @@ card-number = 68
 name = "Headtaker Wurm"
 mtg-name = "Brazen Borrower // Petty Theft"
 id = "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7"
-rendered-text = """
-▸Materialized: You may pay 2● to return an enemy to hand.
+rendered-text = '''
+Phasing
 
-❖ – 1●: Move this character to an unoccupied character position."""
+▸Materialized: You may pay 2● to return an enemy to hand.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Monster"
 rarity = ""
-is-fast = false
+is-fast = true
 is-interrupt = false
 spark = 3
 tags = []
@@ -2295,10 +2295,10 @@ card-number = 126
 name = "Driftrider"
 mtg-name = "Yuriko, the Tiger's Shadow"
 id = "954e8d50-d494-4fb2-b4c7-74979083b774"
-rendered-text = """
-▸Materialized: Return another ally to hand. Move this character to that ally’s position.
+rendered-text = '''
+Phasing
 
-When an allied outsider scores ⍟, foresee 1, then draw a card."""
+When an allied outsider triumphs, foresee 1 and draw a card.'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Outsider"
@@ -2658,10 +2658,7 @@ card-number = 145
 name = "Seer of the Fallen"
 mtg-name = "Voldaren Bloodcaster // Bloodbat Summoner"
 id = "09e17f29-8ee1-477f-8175-ff37eb1f254a"
-rendered-text = """
-When a non-figment ally is dissolved, create 'Contemplation' in your hand.
-
-(Contemplation: 1● event, "Draw a card, then discard a card.")"""
+rendered-text = "When a non-figment ally is dissolved, create 'Contemplation' in your hand."
 energy-cost = 2
 card-type = "Character"
 subtype = "Survivor"
@@ -2803,10 +2800,7 @@ card-number = 153
 name = "Wreckborn"
 mtg-name = "Anax, Hardened in the Forge"
 id = "6d6ce556-60df-486f-b2d8-5df168a6f75e"
-rendered-text = """
-When a non-figment ally is dissolved, materialize a 1✦ ember figment.
-
-When an ember figment is dissolved, this character gains +1✦."""
+rendered-text = "When a non-figment ally is dissolved, materialize a 1✦ ember figment. When an ember figment is dissolved, this character gains +1✦."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -2823,10 +2817,7 @@ card-number = 154
 name = "Gloomantler"
 mtg-name = "Ang Kapre"
 id = "041fafeb-f159-4aba-90c2-3ce4b3038bdc"
-rendered-text = """
-Once per turn, if you have one or fewer cards in hand, you may play a character from your void.
-
-When you discard your third card in a turn, materialize this character from your void."""
+rendered-text = "Once per turn, if you have one or fewer cards in hand, you may play a character from your void."
 energy-cost = 3
 card-type = "Character"
 subtype = "Ancient"
@@ -4307,10 +4298,7 @@ card-number = 236
 name = "Cradle of Storms"
 mtg-name = "Undo"
 id = "70306382-ac0d-4b08-843a-23efb3835c94"
-rendered-text = """
-Materialize all characters in your void which were discarded this turn.
-
-When you discard this card, it gains reclaim 0● until end of turn."""
+rendered-text = "Materialize all characters in your void which were discarded this turn. When you discard this card, it gains reclaim 0● until end of turn."
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -5577,10 +5565,10 @@ card-number = 306
 name = "Vanishing Inquisitor"
 mtg-name = "Moon-Circuit Hacker"
 id = "4f29a241-9265-4669-a189-5a2a91923e12"
-rendered-text = """
-▸Materialized: Return another ally to hand. Move this character to that ally’s position.
+rendered-text = '''
+Phasing
 
-When this character scores ⍟, draw a card, then discard a card."""
+▸Triumph: Draw a card, then discard a card.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Outsider"
@@ -6453,7 +6441,7 @@ name = "Steel Abomination"
 mtg-name = "Slogurk, the Overslime"
 id = "cc21a902-e482-46c0-bf07-e04035f39190"
 rendered-text = '''
-When a ≤2● cost character is put into your void, grow +1✦.
+When a ≤2● cost character is put into your void, this character gains +1✦.
 
 ▸Dissolved: Recover up to two ≤2● cost characters.'''
 energy-cost = 3
@@ -6589,12 +6577,10 @@ card-number = 360
 name = "Shadowcaller"
 mtg-name = "Bridge from Below"
 id = "c36e67ab-fbee-4d83-b57b-34d34f60e17c"
-rendered-text = """
+rendered-text = '''
 Veil 3●
 
-When an ally is dissolved, materialize a 1✦ survivor figment.
-
-When you discard or erode this card, it gains reclaim 0●."""
+When an ally is dissolved, materialize a 1✦ survivor figment. When you discard or erode this card, it gains reclaim 0●.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -6611,10 +6597,7 @@ card-number = 361
 name = "Gilded Catalyst"
 mtg-name = "Digsite Engineer"
 id = "3fab0780-59d4-45f1-8aac-a870ad8729ac"
-rendered-text = """
-When you play a warrior, you may pay 2● to materialize a figment copy of 'Blade of Unity'.
-
-(Blade of Unity: 2● warrior with "This character has +1✦ for each allied warrior".)"""
+rendered-text = "When you play a warrior, you may pay 2● to materialize a figment copy of 'Blade of Unity'."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -6719,12 +6702,10 @@ card-number = 367
 name = "Forsaken Skyline"
 mtg-name = "Blast from the Past"
 id = "9d14885c-a757-40cc-b43e-87dbec7ec379"
-rendered-text = """
-Dissolve a ≤2✦ enemy.
+rendered-text = '''
+Dissolve a ≤2✦ enemy. When you discard this card, it gains reclaim 1● until end of turn.
 
-When you discard this card, it gains reclaim 1● until end of turn.
-
-Reclaim 4●"""
+Reclaim 4●'''
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -9190,12 +9171,10 @@ card-number = 502
 name = "Stolen Genesis"
 mtg-name = "Diabolic Intent"
 id = "7b55efd1-6d9f-4156-9de7-1c71ccc410cb"
-rendered-text = """
-To play this card, abandon a character.
+rendered-text = '''
+To play this card, abandon a character. Materialize a random character with higher cost from your deck.
 
-Materialize a random character with higher cost from your deck.
-
-Reclaim 3●"""
+Reclaim 3●'''
 energy-cost = 2
 card-type = "Event"
 subtype = ""
@@ -9357,7 +9336,7 @@ card-number = 511
 name = "Marked Direwolf"
 mtg-name = ""
 id = "e83014d3-9d35-4e80-a1b3-9b25360ad2af"
-rendered-text = ""
+rendered-text = "(no ability)"
 energy-cost = 4
 card-type = "Character"
 subtype = "Spirit Animal"
