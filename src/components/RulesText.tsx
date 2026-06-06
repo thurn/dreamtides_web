@@ -51,6 +51,20 @@ const TERM_STYLE: CSSProperties = {
   pointerEvents: "auto",
 };
 
+/**
+ * Glossary terms that render in the spark amber color wherever they appear in
+ * rules text, on top of the usual glossary underline/popover. These are
+ * keyword effects worth drawing the eye to (e.g. `Prevent`). Matched against
+ * `GlossaryEntry.term` so every authored variant (`prevent`, `prevented`)
+ * picks up the same emphasis.
+ */
+const EMPHASIZED_TERMS: ReadonlySet<string> = new Set(["Prevent"]);
+
+/** Spark-amber emphasis layered onto an emphasized glossary term. */
+const EMPHASIZED_TERM_STYLE: CSSProperties = {
+  color: SPARK_ICON_COLOR,
+};
+
 interface RulesTextProps {
   /** The rules text to render. */
   text: string;
@@ -88,13 +102,20 @@ function renderSegment(
     );
   }
   if (segment.kind === "term") {
+    const emphasis = EMPHASIZED_TERMS.has(segment.entry.term)
+      ? EMPHASIZED_TERM_STYLE
+      : undefined;
     if (options.disableGlossary === true) {
-      return <span key={key}>{segment.word}</span>;
+      return (
+        <span key={key} style={emphasis}>
+          {segment.word}
+        </span>
+      );
     }
     return (
       <HoverPopover
         key={key}
-        style={TERM_STYLE}
+        style={{ ...TERM_STYLE, ...emphasis }}
         content={<GlossaryDefinitionCard entry={segment.entry} />}
       >
         {segment.word}
