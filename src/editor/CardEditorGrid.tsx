@@ -22,10 +22,12 @@ export interface CardEditorGridProps {
   tideEditing: boolean;
   artEditing: boolean;
   checkboxTag: string;
+  showFontSize: boolean;
   availableTags: EditorTag[];
   availableTides: EditorTag[];
   tagSaveState: Record<string, CardTagSaveState>;
   tideSaveState: Record<string, CardTagSaveState>;
+  onRulesFontSize?: (cardId: string, fontSizePx: number) => void;
   onOpenArtEditor: (card: EditorCardRecord) => void;
   onFieldBeginEdit: (
     card: EditorCardRecord,
@@ -70,10 +72,12 @@ export default function CardEditorGrid({
   tideEditing,
   artEditing,
   checkboxTag,
+  showFontSize,
   availableTags,
   availableTides,
   tagSaveState,
   tideSaveState,
+  onRulesFontSize,
   onOpenArtEditor,
   onFieldBeginEdit,
   onFieldDraftChange,
@@ -126,12 +130,14 @@ export default function CardEditorGrid({
           tideEditing={tideEditing}
           artEditing={artEditing}
           checkboxTag={checkboxTag}
+          showFontSize={showFontSize}
           availableTags={availableTags}
           availableTides={availableTides}
           tagSaving={tagSaveState[card.id]?.saving ?? false}
           tagError={tagSaveState[card.id]?.error ?? null}
           tideSaving={tideSaveState[card.id]?.saving ?? false}
           tideError={tideSaveState[card.id]?.error ?? null}
+          onRulesFontSize={onRulesFontSize}
           onOpenArtEditor={onOpenArtEditor}
           onFieldBeginEdit={onFieldBeginEdit}
           onFieldDraftChange={onFieldDraftChange}

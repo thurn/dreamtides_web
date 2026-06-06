@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useCallback, useRef, useState, type ReactNode } from "react";
 import { CardView } from "../components/CardView";
 import type { CardViewSlots } from "../components/CardView";
 import { MtgNameTooltip } from "../components/card-browser/MtgNameTooltip";
@@ -30,12 +30,23 @@ export interface EditableCardProps {
    * editors are suppressed so only this one tag is in play.
    */
   checkboxTag: string;
+  /**
+   * When true, overlay a small badge on the card showing the rules-text font
+   * size the fitter computed (in px).
+   */
+  showFontSize: boolean;
   availableTags: EditorTag[];
   availableTides: EditorTag[];
   tagSaving: boolean;
   tagError: string | null;
   tideSaving: boolean;
   tideError: string | null;
+  /**
+   * Reports this card's fitted rules-text font size (in px) as it is measured.
+   * Supplied only when the grid needs it (font-size sort); omitting it skips the
+   * report while the local overlay still works.
+   */
+  onRulesFontSize?: (cardId: string, fontSizePx: number) => void;
   onOpenArtEditor: (card: EditorCardRecord) => void;
   onFieldBeginEdit: (
     card: EditorCardRecord,
@@ -230,12 +241,14 @@ export default function EditableCard({
   tideEditing,
   artEditing,
   checkboxTag,
+  showFontSize,
   availableTags,
   availableTides,
   tagSaving,
   tagError,
   tideSaving,
   tideError,
+  onRulesFontSize,
   onOpenArtEditor,
   onFieldBeginEdit,
   onFieldDraftChange,
@@ -251,7 +264,45 @@ export default function EditableCard({
 }: EditableCardProps) {
   const cardRef = useRef<HTMLElement | null>(null);
   const [hovering, setHovering] = useState(false);
+  const [rulesFontPx, setRulesFontPx] = useState<number | null>(null);
   const mtgName = card.mtgName.trim();
+
+  const handleRulesFontSize = useCallback(
+    (fontSizePx: number) => {
+      setRulesFontPx(fontSizePx);
+      onRulesFontSize?.(card.id, fontSizePx);
+    },
+    [onRulesFontSize, card.id],
+  );
+
+  const fontSizeOverlay =
+    showFontSize && rulesFontPx !== null ? (
+      <div
+        aria-hidden="true"
+        data-editor-font-size-overlay={rulesFontPx.toFixed(1)}
+        style={{
+          position: "absolute",
+          left: "4px",
+          top: "50%",
+          transform: "translateY(-50%)",
+          zIndex: 6,
+          pointerEvents: "none",
+          padding: "2px 6px",
+          borderRadius: "6px",
+          background: "rgba(8, 12, 14, 0.82)",
+          border: "1px solid rgba(142, 219, 209, 0.7)",
+          color: "#eafffb",
+          fontFamily:
+            "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+          fontSize: "0.72rem",
+          fontWeight: 700,
+          lineHeight: 1.1,
+          whiteSpace: "nowrap",
+        }}
+      >
+        {rulesFontPx.toFixed(1)}px
+      </div>
+    ) : null;
 
   const checkboxActive = checkboxTag !== "";
   const checkboxChecked = checkboxActive && card.tags.includes(checkboxTag);
@@ -424,14 +475,16 @@ export default function EditableCard({
         ref={cardRef}
         aria-label={visibleName}
         data-editor-card-id={card.id}
-        style={{ display: "block" }}
+        style={{ display: "block", position: "relative" }}
       >
         <CardView
           card={visibleCard}
           large={size === "large"}
           suppressHoverHelp
           onClick={() => onOpenArtEditor(card)}
+          onRulesFontSizeChange={handleRulesFontSize}
         />
+        {fontSizeOverlay}
         {checkboxControl}
       </article>
     );
@@ -444,14 +497,16 @@ export default function EditableCard({
       data-editor-card-id={card.id}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
-      style={{ display: "block" }}
+      style={{ display: "block", position: "relative" }}
     >
       <CardView
         card={visibleCard}
         large={size === "large"}
         suppressHoverHelp
         slots={slots}
+        onRulesFontSizeChange={handleRulesFontSize}
       />
+      {fontSizeOverlay}
       {/* Checkbox tagging hides the tag and tide chip editors so only the one
           selected tag is in play. */}
       {!checkboxActive && tagEditing ? (

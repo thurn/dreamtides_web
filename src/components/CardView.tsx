@@ -582,6 +582,12 @@ export interface CardViewProps {
   suppressHoverHelp?: boolean;
   /** Optional editor wrappers for individual rendered card slots. */
   slots?: CardViewSlots;
+  /**
+   * Called with the rules-text font size (in px) the auto-shrink fitter
+   * computed to fit the rules box, whenever it changes. The card editor uses
+   * this to drive its font-size overlay and font-size sort.
+   */
+  onRulesFontSizeChange?: (fontSizePx: number) => void;
 }
 
 /**
@@ -604,6 +610,7 @@ export function CardView({
   hideRulesText = false,
   suppressHoverHelp = false,
   slots = {},
+  onRulesFontSizeChange,
 }: CardViewProps) {
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
@@ -630,6 +637,15 @@ export function CardView({
     rulesMinFontPx,
     [card.renderedText, textScale],
   );
+
+  // Surface the fitted rules-text font size to interested callers (the card
+  // editor's font-size overlay and sort). A ref holds the latest callback so a
+  // fresh callback identity each render cannot retrigger the effect.
+  const rulesFontSizeCallbackRef = useRef(onRulesFontSizeChange);
+  rulesFontSizeCallbackRef.current = onRulesFontSizeChange;
+  useEffect(() => {
+    rulesFontSizeCallbackRef.current?.(rulesFontPx);
+  }, [rulesFontPx]);
 
   useEffect(() => {
     setImageError(false);

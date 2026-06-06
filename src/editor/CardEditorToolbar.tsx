@@ -23,9 +23,11 @@ interface CardEditorToolbarProps {
   onOpenManageTides: () => void;
 }
 
-// The editor offers every common sort field plus its facet-only Tide Count.
+// The editor offers every common sort field plus its facet-only Tide Count and
+// the measured rules-text font size (computed by the auto-shrink fitter).
 const EDITOR_SORT_OPTIONS: ReadonlyArray<CardBrowserSortOption> = [
   ...CARD_BROWSER_SORT_OPTIONS,
+  { value: "rulesTextFontSize", label: "Rules Text Font Size" },
   { value: "tideCount", label: "Tide Count" },
 ];
 
@@ -261,6 +263,35 @@ export default function CardEditorToolbar({
           >
             {menuView === "root" ? (
               <>
+                <button
+                  type="button"
+                  role="menuitemcheckbox"
+                  aria-checked={displayState.showFontSize}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    updateDisplayState({
+                      showFontSize: !displayState.showFontSize,
+                    });
+                  }}
+                  style={{
+                    ...menuItemStyle,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      width: "12px",
+                      textAlign: "center",
+                      color: "#8edbd1",
+                    }}
+                  >
+                    {displayState.showFontSize ? "✓" : ""}
+                  </span>
+                  <span style={{ flex: "1 1 auto" }}>Show font size</span>
+                </button>
                 <button
                   type="button"
                   role="menuitem"

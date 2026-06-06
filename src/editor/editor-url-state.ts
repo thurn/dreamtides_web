@@ -20,6 +20,7 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   tideEditing: false,
   artEditing: false,
   checkboxTag: "",
+  showFontSize: false,
   sort: "name",
   dir: "asc",
   size: "medium",
@@ -44,6 +45,7 @@ const SORT_PARAM_TO_FIELD = new Map<string, EditorSortField>([
   ["subtype", "subtype"],
   ["spark", "spark"],
   ["rulestextlength", "rulesTextLength"],
+  ["rulestextfontsize", "rulesTextFontSize"],
   ["namelength", "nameLength"],
   ["tidecount", "tideCount"],
 ]);
@@ -55,6 +57,7 @@ const SORT_FIELD_TO_PARAM: Record<EditorSortField, string> = {
   subtype: "subtype",
   spark: "spark",
   rulesTextLength: "rulestextlength",
+  rulesTextFontSize: "rulestextfontsize",
   nameLength: "namelength",
   tideCount: "tidecount",
 };
@@ -139,6 +142,7 @@ export function parseEditorDisplayState(
     tideEditing: params.get("tideedit") === "1",
     artEditing: params.get("artedit") === "1",
     checkboxTag: (params.get("checkboxtag") ?? DEFAULT_EDITOR_DISPLAY_STATE.checkboxTag).trim(),
+    showFontSize: params.get("showfontsize") === "1",
     sort: parseSort(params.get("sort")),
     dir: parseDir(params.get("dir")),
     size: parseSize(params.get("size")),
@@ -182,6 +186,9 @@ export function serializeEditorDisplayState(
   }
   if (state.checkboxTag !== DEFAULT_EDITOR_DISPLAY_STATE.checkboxTag) {
     params.set("checkboxtag", state.checkboxTag);
+  }
+  if (state.showFontSize) {
+    params.set("showfontsize", "1");
   }
   if (state.sort !== DEFAULT_EDITOR_DISPLAY_STATE.sort) {
     params.set("sort", SORT_FIELD_TO_PARAM[state.sort]);

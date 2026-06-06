@@ -54,6 +54,7 @@ describe("editor URL display state", () => {
       tideEditing: false,
       artEditing: false,
       checkboxTag: "",
+      showFontSize: false,
       sort: "cost",
       dir: "desc",
       size: "large",
@@ -156,6 +157,31 @@ describe("editor URL display state", () => {
       "Elves",
     );
     expect(parseEditorDisplayState("").checkboxTag).toBe("");
+  });
+
+  it("round-trips the font-size overlay toggle", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      showFontSize: true,
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.get("showfontsize")).toBe("1");
+    expect(parseEditorDisplayState(params).showFontSize).toBe(true);
+    expect(parseEditorDisplayState("?showfontsize=0").showFontSize).toBe(false);
+    expect(parseEditorDisplayState("").showFontSize).toBe(false);
+  });
+
+  it("round-trips the rules-text font-size sort field", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      sort: "rulesTextFontSize" as const,
+      dir: "asc" as const,
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.get("sort")).toBe("rulestextfontsize");
+    expect(parseEditorDisplayState(params).sort).toBe("rulesTextFontSize");
   });
 
   it("dedupes and trims tag filters and defaults tag-editing off", () => {

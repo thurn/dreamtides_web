@@ -64,6 +64,7 @@ export type EditorSortField =
   | "subtype"
   | "spark"
   | "rulesTextLength"
+  | "rulesTextFontSize"
   | "nameLength"
   | "tideCount";
 export type EditorSortDirection = "asc" | "desc";
@@ -113,6 +114,12 @@ export interface EditorDisplayState {
    * art-edit mode, so a card can be art-cropped and checkbox-tagged at once.
    */
   checkboxTag: string;
+  /**
+   * When true, each card shows a small overlay badge with the rules-text font
+   * size (in px) the auto-shrink fitter computed to fit the rules box. A
+   * diagnostic aid for spotting cards whose text was shrunk the most.
+   */
+  showFontSize: boolean;
   sort: EditorSortField;
   dir: EditorSortDirection;
   size: EditorCardSize;

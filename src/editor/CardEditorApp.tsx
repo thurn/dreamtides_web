@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   editorTomlParam,
   loadEditorCards,
@@ -95,6 +95,7 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-tide-editing": String(displayState.tideEditing),
     "data-editor-art-editing": String(displayState.artEditing),
     "data-editor-checkbox-tag": displayState.checkboxTag,
+    "data-editor-show-font-size": String(displayState.showFontSize),
     "data-editor-sort": displayState.sort,
     "data-editor-dir": displayState.dir,
     "data-editor-size": displayState.size,
@@ -149,7 +150,11 @@ function sortSparkValue(card: EditorCardRecord): number {
   return card.preview.spark ?? Number.POSITIVE_INFINITY;
 }
 
-function sortValue(card: EditorCardRecord, sort: EditorSortField): string | number {
+function sortValue(
+  card: EditorCardRecord,
+  sort: EditorSortField,
+  fontSizes: Record<string, number>,
+): string | number {
   switch (sort) {
     case "cardNumber":
       return card.cardNumber;
@@ -165,6 +170,12 @@ function sortValue(card: EditorCardRecord, sort: EditorSortField): string | numb
       return sortSparkValue(card);
     case "rulesTextLength":
       return card.preview.renderedText.length;
+    case "rulesTextFontSize":
+      // Cards are measured lazily as they enter the viewport, so a card not yet
+      // measured sorts as if its text fits at the largest size (the common
+      // case); cards that shrank report their smaller fitted size as they are
+      // seen, bubbling toward the small-font end of the order.
+      return fontSizes[card.id] ?? Number.POSITIVE_INFINITY;
     case "nameLength":
       return card.name.length;
     case "tideCount":
@@ -186,6 +197,7 @@ function compareSortValues(left: string | number, right: string | number): numbe
 function filteredAndSortedCards(
   cards: readonly EditorCardRecord[],
   displayState: EditorDisplayState,
+  fontSizes: Record<string, number>,
 ): EditorCardRecord[] {
   const searchText = displayState.searchText.trim().toLowerCase();
   const subtypeFilter = normalizeSubtype(displayState.subtype);
@@ -242,8 +254,8 @@ function filteredAndSortedCards(
       const direction = displayState.dir === "asc" ? 1 : -1;
       const comparison =
         compareSortValues(
-          sortValue(left.card, displayState.sort),
-          sortValue(right.card, displayState.sort),
+          sortValue(left.card, displayState.sort, fontSizes),
+          sortValue(right.card, displayState.sort, fontSizes),
         ) * direction;
 
       return comparison === 0 ? left.index - right.index : comparison;
@@ -365,6 +377,11 @@ export default function CardEditorApp({
   const [artEditorCardId, setArtEditorCardId] = useState<string | null>(null);
   const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
+  // Fitted rules-text font sizes (px) keyed by card id, reported by each card as
+  // it is measured. Only populated while sorting by font size, so font-size
+  // measurements do not churn the sort in any other view.
+  const [fontSizes, setFontSizes] = useState<Record<string, number>>({});
+  const sortByFontSize = displayState.sort === "rulesTextFontSize";
 
   useEffect(() => {
     let cancelled = false;
@@ -459,8 +476,19 @@ export default function CardEditorApp({
     [loadedCards],
   );
   const visibleCards = useMemo(
-    () => filteredAndSortedCards(loadedCards, displayState),
-    [loadedCards, displayState],
+    () => filteredAndSortedCards(loadedCards, displayState, fontSizes),
+    [loadedCards, displayState, fontSizes],
+  );
+
+  const handleRulesFontSize = useCallback(
+    (cardId: string, fontSizePx: number) => {
+      setFontSizes((current) =>
+        current[cardId] === fontSizePx
+          ? current
+          : { ...current, [cardId]: fontSizePx },
+      );
+    },
+    [],
   );
   const tagUsageCounts = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -940,10 +968,12 @@ export default function CardEditorApp({
                 tideEditing={displayState.tideEditing}
                 artEditing={displayState.artEditing}
                 checkboxTag={displayState.checkboxTag}
+                showFontSize={displayState.showFontSize}
                 availableTags={tags}
                 availableTides={tides}
                 tagSaveState={tagSaveState}
                 tideSaveState={tideSaveState}
+                onRulesFontSize={sortByFontSize ? handleRulesFontSize : undefined}
                 onOpenArtEditor={handleOpenArtEditor}
                 onFieldBeginEdit={handleFieldBeginEdit}
                 onFieldDraftChange={handleFieldDraftChange}
