@@ -263,6 +263,42 @@ function filteredAndSortedCards(
     .map(({ card }) => card);
 }
 
+/**
+ * Whether any inline field is mid-edit or mid-save. While this holds, the grid
+ * order is frozen so a card's live edits (which can change its sort key — most
+ * sharply its fitted rules-text font size) cannot reorder it out from under the
+ * open editor.
+ */
+function anyFieldEditing(saveState: EditableSaveState): boolean {
+  return Object.values(saveState.fields).some(
+    (entry) => entry.status === "editing" || entry.status === "saving",
+  );
+}
+
+/**
+ * Reorder the freshly filtered/sorted cards to match a frozen id order: cards
+ * present in the snapshot keep their snapshot positions, and any card not in it
+ * (e.g. newly matching a filter) keeps its natural order after them. Cards in
+ * the snapshot but no longer present are simply dropped.
+ */
+function reorderToFrozenOrder(
+  cards: readonly EditorCardRecord[],
+  frozenOrder: readonly string[],
+): EditorCardRecord[] {
+  const rank = new Map(frozenOrder.map((id, index) => [id, index]));
+  const fallback = frozenOrder.length;
+  return cards
+    .map((card, index) => ({ card, index }))
+    .sort((left, right) => {
+      const leftRank = rank.get(left.card.id) ?? fallback;
+      const rightRank = rank.get(right.card.id) ?? fallback;
+      return leftRank === rightRank
+        ? left.index - right.index
+        : leftRank - rightRank;
+    })
+    .map(({ card }) => card);
+}
+
 function subtypeOptionsFromCards(cards: readonly EditorCardRecord[]): string[] {
   return Array.from(
     new Set(
@@ -475,10 +511,24 @@ export default function CardEditorApp({
     () => subtypeOptionsFromCards(loadedCards),
     [loadedCards],
   );
-  const visibleCards = useMemo(
+  const sortedVisibleCards = useMemo(
     () => filteredAndSortedCards(loadedCards, displayState, fontSizes),
     [loadedCards, displayState, fontSizes],
   );
+
+  // Freeze the grid order while a field is being edited or saved. The frozen
+  // snapshot tracks the live sorted order whenever nothing is being edited, so
+  // when an edit begins it already holds the correct pre-edit order; during the
+  // edit the freshly sorted cards are reordered back to that snapshot so the
+  // card under edit (and its open input) never jumps or scrolls away.
+  const editing = anyFieldEditing(saveState);
+  const frozenOrderRef = useRef<string[]>([]);
+  if (!editing) {
+    frozenOrderRef.current = sortedVisibleCards.map((card) => card.id);
+  }
+  const visibleCards = editing
+    ? reorderToFrozenOrder(sortedVisibleCards, frozenOrderRef.current)
+    : sortedVisibleCards;
 
   const handleRulesFontSize = useCallback(
     (cardId: string, fontSizePx: number) => {
