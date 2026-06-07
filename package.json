@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "launch": "npm install && npm start -- --open",
+    "qai": "npm install && npm start -- --open \"/?ai=1\"",
     "editor": "npm install && npm run dev:vite -- --open /editor",
     "editor2": "npm install && npm run dev:vite -- --open \"/editor?toml=data/tabula/cards_v2.toml\"",
     "draft_test": "npm install && npm run dev:vite -- --open /draft_test",
