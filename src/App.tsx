@@ -2,7 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
 import type { QuestContent } from "./data/quest-content";
-import { buildDreamcallerProvenance, loadQuestContent } from "./data/quest-content";
+import {
+  buildDreamcallerProvenance,
+  buildDreamcallerSeedProvenance,
+  loadQuestContent,
+} from "./data/quest-content";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { MultiplayerRoomGate } from "./multiplayer/MultiplayerRoomGate";
 import { connectedClientCount } from "./multiplayer/room-service";
@@ -110,6 +114,31 @@ export function QuestApp({
     return buildDreamcallerProvenance(dreamcaller, poolContext, state.seed);
   }, [
     cardSourceOverlayOpen,
+    questContent.poolContext,
+    questContent.dreamcallers,
+    resolvedDreamcallerId,
+    state.seed,
+  ]);
+
+  // The `seed` variant's provenance: the random seed card and the affinity growth
+  // that built the pool. Recomputed on demand (same determinism guarantees as the
+  // idf3 provenance above) for the "Why Cards" overlay and the Pool Viewer, so
+  // both surfaces describe the exact pool the player drafts from. Only computed
+  // for the `seed` variant; null otherwise.
+  const isSeedVariant = runtimeConfig.poolVariant === "seed";
+  const seedProvenanceNeeded =
+    isSeedVariant && (cardSourceOverlayOpen || poolViewerOpen);
+  const seedProvenance = useMemo(() => {
+    const poolContext = questContent.poolContext;
+    if (!seedProvenanceNeeded || poolContext === undefined) return null;
+    if (resolvedDreamcallerId === null) return null;
+    const dreamcaller = questContent.dreamcallers.find(
+      (dc) => dc.id === resolvedDreamcallerId,
+    );
+    if (dreamcaller === undefined) return null;
+    return buildDreamcallerSeedProvenance(dreamcaller, poolContext, state.seed);
+  }, [
+    seedProvenanceNeeded,
     questContent.poolContext,
     questContent.dreamcallers,
     resolvedDreamcallerId,
@@ -257,6 +286,7 @@ export function QuestApp({
             resolvedPackage={state.resolvedPackage}
             poolVariant={runtimeConfig.poolVariant}
             replayRecord={replayRecord}
+            seedProvenance={seedProvenance}
             isOpen={poolViewerOpen}
             onClose={handleClosePoolViewer}
           />
@@ -293,6 +323,7 @@ export function QuestApp({
           <CardSourceOverlay
             cardSourceDebug={state.cardSourceDebug}
             idf3Provenance={cardSourceProvenance}
+            seedProvenance={seedProvenance}
             isOpen={cardSourceOverlayOpen}
             onClose={handleCloseCardSourceOverlay}
           />

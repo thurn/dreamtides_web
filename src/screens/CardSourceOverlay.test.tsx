@@ -6,7 +6,10 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CardSourceOverlay } from "./CardSourceOverlay";
 import type { CardSourceDebugEntry, CardSourceDebugState } from "../types/quest";
-import type { Idf3ProvenanceSummary } from "../types/content";
+import type {
+  Idf3ProvenanceSummary,
+  SeedProvenanceSummary,
+} from "../types/content";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -121,7 +124,70 @@ function makeProvenance(): Idf3ProvenanceSummary {
   };
 }
 
+function makeSeedProvenance(): SeedProvenanceSummary {
+  return {
+    seedCardName: "Lantern Broker",
+    seedCardNumber: 11,
+    targetSize: 150,
+    seedAffinityWeight: 0.4,
+    distinctCardCount: 96,
+    totalCopies: 150,
+    doubledCardCount: 54,
+    topPartnerCardNames: ["Driftbound Relic", "Tidal Surge"],
+    cardProvenanceByNumber: {
+      "11": {
+        isSeed: true,
+        copies: 2,
+        addOrder: 0,
+        seedAffinity: 1,
+        poolAffinity: 1,
+        blendedScore: 1,
+      },
+      "12": {
+        isSeed: false,
+        copies: 1,
+        addOrder: 7,
+        seedAffinity: 0.62,
+        poolAffinity: 0.48,
+        blendedScore: 0.55,
+      },
+    },
+  };
+}
+
 describe("CardSourceOverlay", () => {
+  it("walks the seed -> affinity -> growth story and traces each card in seed mode", () => {
+    const { container, root } = mount(
+      <CardSourceOverlay
+        cardSourceDebug={makeOverlayState()}
+        idf3Provenance={makeProvenance()}
+        seedProvenance={makeSeedProvenance()}
+        isOpen
+        onClose={vi.fn()}
+      />,
+    );
+
+    const text = container.textContent ?? "";
+    // Seed provenance takes precedence over idf3 when both are present.
+    expect(text).toContain("How this pool was built");
+    expect(text).toContain("Seed card");
+    expect(text).toContain("uniformly at random");
+    expect(text).toContain("Affinity");
+    expect(text).toContain("Growth");
+    expect(text).toContain("150"); // target size
+    // The seed walkthrough, not the idf3 anchors walkthrough.
+    expect(text).not.toContain("Anchor decks");
+    // Per-card tracing: the seed card and a grown card.
+    expect(text).toContain("The seed card");
+    expect(text).toContain("Driftbound Relic");
+    expect(text).toContain("affinity to the");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+
   it("walks the signature -> anchors -> starter -> growth chain and traces each card", () => {
     const { container, root } = mount(
       <CardSourceOverlay

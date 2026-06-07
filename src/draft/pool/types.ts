@@ -17,7 +17,8 @@ export type PoolVariant =
   | "idf2"
   | "idf3"
   | "idf4"
-  | "idf_human";
+  | "idf_human"
+  | "seed";
 // The quest prototype and the draft test harness both fall back to this when
 // `?algo=` is absent or unrecognised.
 export const DEFAULT_POOL_VARIANT: PoolVariant = "idf3";
@@ -129,6 +130,52 @@ export interface Idf3PoolProvenance {
   cardProvenanceByName: Record<string, Idf3PoolCardProvenance>;
 }
 
+/**
+ * Per-card provenance within a `seed` pool, keyed by card name. Records how and
+ * when each card entered the pool that grew outward from the single drawn seed
+ * card, so a debug surface can explain why each card is present.
+ */
+export interface SeedPoolCardProvenance {
+  /** Whether this is the randomly drawn seed card the pool grew from. */
+  isSeed: boolean;
+  /** Copies of this card in the pool (1 or 2). */
+  copies: number;
+  /** Order this card joined the pool (0 = the seed, then 1, 2, ... in growth order). */
+  addOrder: number;
+  /** Normalised affinity (0-1) of this card to the seed card. */
+  seedAffinity: number;
+  /** Normalised affinity (0-1) of this card to the pool at the moment it joined. */
+  poolAffinity: number;
+  /** Blended seed/pool/prior score this card was admitted on (the seed is 1). */
+  blendedScore: number;
+}
+
+/**
+ * Full provenance for one generated `seed` pool, keyed by card name. Records the
+ * seed card, the blend used, and per-card growth detail so a debug surface can
+ * explain what the initial card was and how the pool grew to its target size.
+ * Only the `seed` variant produces this; the field is absent on every other
+ * variant's result.
+ */
+export interface SeedPoolProvenance {
+  /** The card drawn uniformly at random that seeded the whole pool. */
+  seedCardName: string;
+  /** Target pool size in total copies the grower aimed for. */
+  targetSize: number;
+  /** The seed-vs-pool affinity blend weight used during growth (0-1). */
+  seedAffinityWeight: number;
+  /** Distinct cards in the finished pool. */
+  distinctCardCount: number;
+  /** Total copies in the finished pool. */
+  totalCopies: number;
+  /** How many cards earned a second copy. */
+  doubledCardCount: number;
+  /** The seed's strongest affinity partners that made it into the pool. */
+  topPartnerCardNames: string[];
+  /** Per-card provenance, keyed by card name. */
+  cardProvenanceByName: Record<string, SeedPoolCardProvenance>;
+}
+
 /** Result of one pool generation. */
 export interface GeneratedPool {
   /** Chosen color identity as ordered w/u/b/r/g letters, e.g. "ubr". */
@@ -155,6 +202,12 @@ export interface GeneratedPool {
    * descends from the Dreamcaller's signature. Undefined for other variants.
    */
   idf3Provenance?: Idf3PoolProvenance;
+  /**
+   * Full per-card provenance for the run, set only by the `seed` variant. The
+   * "Why Cards" surface reads it to explain the random seed card and how the pool
+   * grew around it. Undefined for other variants.
+   */
+  seedProvenance?: SeedPoolProvenance;
 }
 
 /**
@@ -177,4 +230,9 @@ export interface VariantResult {
    * onto {@link GeneratedPool}. Undefined for other variants.
    */
   idf3Provenance?: Idf3PoolProvenance;
+  /**
+   * Full per-card provenance, set only by the `seed` variant; threaded straight
+   * onto {@link GeneratedPool}. Undefined for other variants.
+   */
+  seedProvenance?: SeedPoolProvenance;
 }

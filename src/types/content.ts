@@ -98,6 +98,50 @@ export interface Idf3ProvenanceSummary {
   cardProvenanceByNumber: Record<string, Idf3CardProvenance>;
 }
 
+/** Per-card provenance within a `seed` pool, resolved by card number. */
+export interface SeedCardProvenance {
+  /** Whether this is the randomly drawn seed card the pool grew from. */
+  isSeed: boolean;
+  /** Copies of this card in the pool (1 or 2). */
+  copies: number;
+  /** Order this card joined the pool (0 = seed, then 1, 2, ... in growth order). */
+  addOrder: number;
+  /** Normalised affinity (0-1) of this card to the seed card. */
+  seedAffinity: number;
+  /** Normalised affinity (0-1) of this card to the pool when it joined. */
+  poolAffinity: number;
+  /** Blended seed/pool/prior score this card was admitted on (the seed is 1). */
+  blendedScore: number;
+}
+
+/**
+ * Full provenance for one Dreamcaller's resolved `seed` pool, keyed by card
+ * number. Records the random seed card and how the pool grew outward from it, so
+ * the "Why Cards" surface can explain what the initial card was and how the pool
+ * reached its target size. Recomputed on demand from the run seed and the pool
+ * corpus; never persisted.
+ */
+export interface SeedProvenanceSummary {
+  /** The card drawn uniformly at random that seeded the whole pool. */
+  seedCardName: string;
+  /** Card number of the seed card, or null if it does not resolve to one. */
+  seedCardNumber: number | null;
+  /** Target pool size in total copies the grower aimed for. */
+  targetSize: number;
+  /** The seed-vs-pool affinity blend weight used during growth (0-1). */
+  seedAffinityWeight: number;
+  /** Distinct cards in the finished pool. */
+  distinctCardCount: number;
+  /** Total copies in the finished pool. */
+  totalCopies: number;
+  /** How many cards earned a second copy. */
+  doubledCardCount: number;
+  /** The seed's strongest affinity partners that made it into the pool. */
+  topPartnerCardNames: string[];
+  /** Per-card provenance, keyed by card number (as a string). */
+  cardProvenanceByNumber: Record<string, SeedCardProvenance>;
+}
+
 export interface ResolvedDreamcallerPackage {
   dreamcaller: DreamcallerContent;
   draftPoolCopiesByCard: Record<string, number>;

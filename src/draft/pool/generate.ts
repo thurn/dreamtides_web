@@ -69,16 +69,15 @@ export function generatePoolFromData(
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
   const rng = makeRng(resolvedSeed);
-  const { C, selected, counts, starterDeck, idf3Provenance } = poolStrategyFor(
-    variant,
-  ).generate({
-    rng,
-    poolData,
-    seedArchetypes,
-    themeArchetypes,
-    signatureCards,
-    targetSize,
-  });
+  const { C, selected, counts, starterDeck, idf3Provenance, seedProvenance } =
+    poolStrategyFor(variant).generate({
+      rng,
+      poolData,
+      seedArchetypes,
+      themeArchetypes,
+      signatureCards,
+      targetSize,
+    });
 
   const capped = new Map<string, number>();
   for (const [card, count] of counts) {
@@ -95,5 +94,6 @@ export function generatePoolFromData(
     variant,
     starterDeck: starterDeck ?? [],
     idf3Provenance,
+    seedProvenance,
   };
 }

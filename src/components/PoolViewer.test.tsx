@@ -4,7 +4,10 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
-import type { ResolvedDreamcallerPackage } from "../types/content";
+import type {
+  ResolvedDreamcallerPackage,
+  SeedProvenanceSummary,
+} from "../types/content";
 import type { DraftState } from "../types/draft";
 import type { DraftRecord } from "../data/cards-v2-database";
 import type { PoolVariant } from "../draft/pool/types";
@@ -130,6 +133,7 @@ function renderPool(
     poolVariant: PoolVariant | null;
     replayRecord: DraftRecord | null;
     resolvedPackage: ResolvedDreamcallerPackage | null;
+    seedProvenance: SeedProvenanceSummary | null;
   }> = {},
 ) {
   return mount(
@@ -143,6 +147,7 @@ function renderPool(
       resolvedPackage={overrides.resolvedPackage ?? null}
       poolVariant={overrides.poolVariant ?? null}
       replayRecord={overrides.replayRecord ?? null}
+      seedProvenance={overrides.seedProvenance ?? null}
       isOpen
       onClose={vi.fn()}
       onPoolCardDragStart={overrides.onPoolCardDragStart}
@@ -180,6 +185,41 @@ afterEach(() => {
 });
 
 describe("PoolViewer", () => {
+  it("describes the seed card and growth when seed provenance is supplied", () => {
+    const seedProvenance: SeedProvenanceSummary = {
+      seedCardName: "Alpha Seer",
+      seedCardNumber: 1,
+      targetSize: 150,
+      seedAffinityWeight: 0.4,
+      distinctCardCount: 96,
+      totalCopies: 150,
+      doubledCardCount: 54,
+      topPartnerCardNames: ["Beta Guard"],
+      cardProvenanceByNumber: {},
+    };
+    const { container, root } = renderPool({
+      poolVariant: "seed",
+      seedProvenance,
+    });
+
+    const banner = container.querySelector('[data-pool-seed-source=""]');
+    expect(banner).not.toBeNull();
+    const text = banner?.textContent ?? "";
+    expect(text).toContain("Seed card:");
+    expect(text).toContain("Alpha Seer");
+    expect(text).toContain("150 copies");
+    expect(text).toContain("96 cards");
+    expect(text).toContain("54 doubled");
+    // The algorithm chip names the seed strategy.
+    expect(
+      container.querySelector('[data-pool-algo="seed"]'),
+    ).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("shows remaining run-pool copies by default and switches to the full catalog", () => {
     const { container, root } = renderPool();
 

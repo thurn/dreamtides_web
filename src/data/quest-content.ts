@@ -7,6 +7,8 @@ import {
   type Idf3CardProvenance,
   type Idf3ProvenanceSummary,
   type ResolvedDreamcallerPackage,
+  type SeedCardProvenance,
+  type SeedProvenanceSummary,
 } from "../types/content";
 import type { CardData } from "../types/cards";
 import type { GeneratedPool, PoolData, PoolVariant } from "../draft/pool/types.ts";
@@ -211,6 +213,46 @@ export function buildDreamcallerProvenance(
       distinctiveCardNames: [...d.distinctiveCardNames],
       contributedCardCount: d.contributedCardCount,
     })),
+    cardProvenanceByNumber,
+  };
+}
+
+/**
+ * Recompute the full `seed` provenance for one Dreamcaller's pool, resolved
+ * against the run's name index so per-card entries are keyed by card number.
+ * Reproduces the exact pool {@link buildDreamcallerPackage} built (same seed and
+ * inputs), so the "Why Cards" surface can explain the random seed card and how
+ * the pool grew without the provenance ever being persisted. Returns `null` for
+ * non-`seed` pools. Per-card entries for starter cards are dropped, since those
+ * never appear as draftable pool cards.
+ */
+export function buildDreamcallerSeedProvenance(
+  dreamcaller: DreamcallerContent,
+  ctx: RunPoolContext,
+  questSeed: string,
+): SeedProvenanceSummary | null {
+  const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
+  const provenance = pool.seedProvenance;
+  if (provenance === undefined) return null;
+
+  const starterSet = new Set(STARTER_CARD_NUMBERS);
+  const cardProvenanceByNumber: Record<string, SeedCardProvenance> = {};
+  for (const [name, entry] of Object.entries(provenance.cardProvenanceByName)) {
+    const cardNumber = ctx.nameIndex.get(name);
+    if (cardNumber === undefined) continue;
+    if (starterSet.has(cardNumber)) continue;
+    cardProvenanceByNumber[String(cardNumber)] = { ...entry };
+  }
+
+  return {
+    seedCardName: provenance.seedCardName,
+    seedCardNumber: ctx.nameIndex.get(provenance.seedCardName) ?? null,
+    targetSize: provenance.targetSize,
+    seedAffinityWeight: provenance.seedAffinityWeight,
+    distinctCardCount: provenance.distinctCardCount,
+    totalCopies: provenance.totalCopies,
+    doubledCardCount: provenance.doubledCardCount,
+    topPartnerCardNames: [...provenance.topPartnerCardNames],
     cardProvenanceByNumber,
   };
 }

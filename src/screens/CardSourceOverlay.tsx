@@ -7,6 +7,8 @@ import type {
 import type {
   Idf3CardProvenance,
   Idf3ProvenanceSummary,
+  SeedCardProvenance,
+  SeedProvenanceSummary,
 } from "../types/content";
 
 interface CardSourceOverlayProps {
@@ -18,6 +20,12 @@ interface CardSourceOverlayProps {
    * starter-deck / pool-copies summary.
    */
   idf3Provenance: Idf3ProvenanceSummary | null;
+  /**
+   * Full `seed`-variant provenance, recomputed on demand. When present the
+   * overlay walks the seed-card -> affinity -> growth story instead of the idf3
+   * chain and explains each shown card by how it grew out from the seed.
+   */
+  seedProvenance?: SeedProvenanceSummary | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -32,6 +40,19 @@ function surfaceCopy(surface: CardSourceDebugState["surface"]): string {
     case "BattleReward":
     case "Reward":
       return "Rewards are drawn from your Dreamcaller's idf3 pool, grown from a starter deck the signature steered toward.";
+  }
+}
+
+function seedSurfaceCopy(surface: CardSourceDebugState["surface"]): string {
+  switch (surface) {
+    case "Draft":
+      return "These draft cards come from a pool grown around a single card drawn at random, expanding by how strongly cards co-occur in real decks.";
+    case "Shop":
+    case "SpecialtyShop":
+      return "Shop cards are drawn from a pool grown around a single card drawn at random, expanding by how strongly cards co-occur in real decks.";
+    case "BattleReward":
+    case "Reward":
+      return "Rewards are drawn from a pool grown around a single card drawn at random, expanding by how strongly cards co-occur in real decks.";
   }
 }
 
@@ -393,9 +414,155 @@ function CardExplanation({
   );
 }
 
+/** The `seed`-variant walkthrough: seed card -> affinity -> growth. */
+function SeedProvenanceWalkthrough({
+  provenance,
+}: {
+  provenance: SeedProvenanceSummary;
+}) {
+  return (
+    <div className="space-y-2.5">
+      <Step index={1} title="Seed card">
+        <p>
+          One card was drawn <strong>uniformly at random</strong> from every card
+          that sees real play. The whole pool grew out from it.
+        </p>
+        <CardChips names={[provenance.seedCardName]} />
+      </Step>
+
+      <Step index={2} title="Affinity">
+        <p>
+          Every other card was scored by how strongly it{" "}
+          <strong>co-occurs</strong> with the seed and with the cards already
+          chosen, IDF-weighted so "fits with" means "shares distinctive cards" —
+          the same signal the deck-fit draft model reads. The blend leans{" "}
+          <strong>{pct(provenance.seedAffinityWeight)}</strong> on the seed,{" "}
+          <strong>{pct(1 - provenance.seedAffinityWeight)}</strong> on coherence
+          with the growing pool.
+        </p>
+        {provenance.topPartnerCardNames.length > 0 ? (
+          <>
+            <p className="text-[10px] uppercase tracking-wide opacity-50">
+              the seed's strongest partners in the pool
+            </p>
+            <CardChips names={provenance.topPartnerCardNames} />
+          </>
+        ) : null}
+      </Step>
+
+      <Step index={3} title="Growth">
+        <p>
+          Cards were added one copy at a time, highest blended affinity first,
+          recomputing pool coherence after each, until the pool reached its target
+          of <strong>{String(provenance.targetSize)}</strong> copies. The most
+          central cards earned a second copy.
+        </p>
+        <div
+          className="grid grid-cols-3 gap-2 rounded-md p-2 text-center"
+          style={{ background: "rgba(30, 41, 59, 0.5)", border: PANEL_BORDER }}
+        >
+          <div>
+            <p className="text-base font-bold" style={{ color: "#f8fafc" }}>
+              {String(provenance.totalCopies)}
+            </p>
+            <p className="text-[10px] opacity-60">total copies</p>
+          </div>
+          <div>
+            <p className="text-base font-bold" style={{ color: "#f8fafc" }}>
+              {String(provenance.distinctCardCount)}
+            </p>
+            <p className="text-[10px] opacity-60">distinct cards</p>
+          </div>
+          <div>
+            <p className="text-base font-bold" style={{ color: "#f8fafc" }}>
+              {String(provenance.doubledCardCount)}
+            </p>
+            <p className="text-[10px] opacity-60">doubled</p>
+          </div>
+        </div>
+      </Step>
+    </div>
+  );
+}
+
+/** Per-card "why is THIS card here" explanation for the `seed` variant. */
+function SeedCardExplanation({
+  entry,
+  provenance,
+}: {
+  entry: CardSourceDebugEntry;
+  provenance: SeedProvenanceSummary;
+}) {
+  const cardProvenance: SeedCardProvenance | null =
+    provenance.cardProvenanceByNumber[String(entry.cardNumber)] ?? null;
+  const isSeed = cardProvenance?.isSeed ?? false;
+  const copies = cardProvenance?.copies ?? entry.draftPoolCopies ?? 0;
+  const copiesLabel = `${String(copies)} ${copies === 1 ? "copy" : "copies"} in the pool`;
+
+  const badge = isSeed
+    ? {
+        label: "Seed",
+        bg: "rgba(234, 179, 8, 0.28)",
+        border: "rgba(234, 179, 8, 0.5)",
+      }
+    : {
+        label: "Pool",
+        bg: "rgba(148, 163, 184, 0.22)",
+        border: "rgba(148, 163, 184, 0.4)",
+      };
+
+  return (
+    <div
+      className="rounded-lg p-3"
+      style={{ background: PANEL_BG, border: PANEL_BORDER }}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold" style={{ color: "#f8fafc" }}>
+            {entry.cardName}
+          </p>
+          <p className="text-[11px] opacity-50">#{String(entry.cardNumber)}</p>
+        </div>
+        <span
+          className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+          style={{
+            background: badge.bg,
+            color: "#f1f5f9",
+            border: `1px solid ${badge.border}`,
+          }}
+        >
+          {badge.label}
+        </span>
+      </div>
+
+      <div className="mt-3 space-y-2 text-xs opacity-85">
+        {isSeed ? (
+          <p>
+            The <strong>seed card</strong> drawn at random — everything in the pool
+            grew out from it. {copiesLabel}.
+          </p>
+        ) : cardProvenance !== null ? (
+          <>
+            <p>
+              Joined the pool <strong>{ordinal(cardProvenance.addOrder)}</strong> of{" "}
+              {String(provenance.distinctCardCount)}, at{" "}
+              <strong>{pct(cardProvenance.seedAffinity)}</strong> affinity to the
+              seed and <strong>{pct(cardProvenance.poolAffinity)}</strong> to the
+              pool by then. {copiesLabel}.
+            </p>
+          </>
+        ) : (
+          <p>Draft-pool card. {copiesLabel}.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function CardSourceOverlay({
   cardSourceDebug,
   idf3Provenance,
+  seedProvenance = null,
   isOpen,
   onClose,
 }: CardSourceOverlayProps) {
@@ -458,7 +625,9 @@ export function CardSourceOverlay({
                 {cardSourceDebug.screenLabel}
               </h2>
               <p className="mt-1 text-xs opacity-70">
-                {surfaceCopy(cardSourceDebug.surface)}
+                {seedProvenance !== null
+                  ? seedSurfaceCopy(cardSourceDebug.surface)
+                  : surfaceCopy(cardSourceDebug.surface)}
               </p>
             </div>
             <button
@@ -472,7 +641,14 @@ export function CardSourceOverlay({
           </div>
 
           <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
-            {idf3Provenance !== null && stats !== null ? (
+            {seedProvenance !== null ? (
+              <section className="space-y-2">
+                <p className="text-[11px] font-bold tracking-[0.18em] uppercase opacity-50">
+                  How this pool was built
+                </p>
+                <SeedProvenanceWalkthrough provenance={seedProvenance} />
+              </section>
+            ) : idf3Provenance !== null && stats !== null ? (
               <section className="space-y-2">
                 <p className="text-[11px] font-bold tracking-[0.18em] uppercase opacity-50">
                   How this pool was built
@@ -485,13 +661,21 @@ export function CardSourceOverlay({
               <p className="text-[11px] font-bold tracking-[0.18em] uppercase opacity-50">
                 The cards in front of you
               </p>
-              {(cardSourceDebug.entries ?? []).map((entry) => (
-                <CardExplanation
-                  key={`${String(entry.cardNumber)}-${cardSourceDebug.surface}`}
-                  entry={entry}
-                  provenance={idf3Provenance}
-                />
-              ))}
+              {(cardSourceDebug.entries ?? []).map((entry) =>
+                seedProvenance !== null ? (
+                  <SeedCardExplanation
+                    key={`${String(entry.cardNumber)}-${cardSourceDebug.surface}`}
+                    entry={entry}
+                    provenance={seedProvenance}
+                  />
+                ) : (
+                  <CardExplanation
+                    key={`${String(entry.cardNumber)}-${cardSourceDebug.surface}`}
+                    entry={entry}
+                    provenance={idf3Provenance}
+                  />
+                ),
+              )}
             </section>
           </div>
         </motion.aside>

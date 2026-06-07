@@ -2,7 +2,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CSSProperties } from "react";
 import type { CardData } from "../types/cards";
-import type { ResolvedDreamcallerPackage } from "../types/content";
+import type {
+  ResolvedDreamcallerPackage,
+  SeedProvenanceSummary,
+} from "../types/content";
 import type { DraftState } from "../types/draft";
 import type { DraftRecord } from "../data/cards-v2-database";
 import { poolStrategyFor } from "../draft/pool/registry";
@@ -110,6 +113,7 @@ export function PoolViewer({
   poolVariant = null,
   replayRecord = null,
   resolvedPackage = null,
+  seedProvenance = null,
   title = "Pool Viewer",
   variant = "overlay",
 }: {
@@ -122,6 +126,7 @@ export function PoolViewer({
   poolVariant?: PoolVariant | null;
   replayRecord?: DraftRecord | null;
   resolvedPackage?: ResolvedDreamcallerPackage | null;
+  seedProvenance?: SeedProvenanceSummary | null;
   title?: string;
   variant?: PoolViewerVariant;
 }) {
@@ -495,6 +500,29 @@ export function PoolViewer({
                 }
                 barExtras={sourceToggle}
               />
+
+              {seedProvenance !== null ? (
+                <div
+                  data-pool-seed-source=""
+                  style={{
+                    fontSize: "0.78rem",
+                    color: "#9fb0ac",
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {"Seed card: "}
+                  <span style={{ color: "#f4c453", fontWeight: 700 }}>
+                    {seedProvenance.seedCardName}
+                  </span>
+                  {" — drawn at random, then grown to "}
+                  <span style={{ color: "#8edbd1", fontWeight: 600 }}>
+                    {`${String(seedProvenance.totalCopies)} copies`}
+                  </span>
+                  {` (${String(seedProvenance.distinctCardCount)} cards, ${String(
+                    seedProvenance.doubledCardCount,
+                  )} doubled) by co-occurrence affinity to the seed and to the cards already chosen.`}
+                </div>
+              ) : null}
 
               {source === "deck" && replayRecord !== null ? (
                 <div

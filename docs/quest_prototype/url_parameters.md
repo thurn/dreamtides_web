@@ -70,13 +70,20 @@ provides:
 - `algo=idf2` — `idf` with a diversity-biased starter draw.
 - `algo=idf3` — `idf2` steered toward a Dreamcaller by its signature cards
   (the default).
+- `algo=seed` — draws one card uniformly at random and grows a 150-card pool
+  around it by IDF-weighted co-occurrence affinity, both to the seed card and to
+  the cards already chosen (the same co-occurrence signal the deck-fit draft model
+  reads). Copies cap at 2; the most central cards earn the second copy.
 
-All of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
+Most of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
 not registered (including empty or absent) falls back to `DEFAULT_POOL_VARIANT`,
-currently `idf3`. Only `idf3` consumes the Dreamcaller's signature cards and
-produces the "Why Cards" provenance surface; the other strategies ignore the
-signature, and a non-`idf3` pool yields no anchor deck, so the enemy battle deck
-falls back to a sampled draftable deck.
+currently `idf3`. `idf3` consumes the Dreamcaller's signature cards; `seed`
+ignores it and draws its own random seed card. Both `idf3` and `seed` produce the
+"Why Cards" provenance surface — `idf3` describing the signature → starter →
+growth chain, `seed` describing the random seed card and its affinity growth. The
+other strategies ignore the signature and produce no provenance, and a pool with
+no anchor/seed yields no anchor deck, so the enemy battle deck falls back to a
+sampled draftable deck.
 
 The parameter is read once at page load and is not reactive; changing it requires
 a reload. On `/draft_test` the active strategy is also shown as a chip in the
@@ -112,6 +119,7 @@ Examples:
 ```
 http://localhost:5173/                          # quest prototype, default idf3 pool
 http://localhost:5173/?algo=color_pool          # quest prototype, color-identity pool
+http://localhost:5173/?algo=seed                # single random-card affinity-grown pool
 http://localhost:5173/?algo=replay              # record-replay deck-fit draft
 http://localhost:5173/?algo=fresh20             # fresh-pack deck-fit draft (20-card packs)
 http://localhost:5173/?algo=fresh20&packsize=30 # fresh-pack draft with 30-card packs
