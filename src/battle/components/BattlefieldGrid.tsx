@@ -6,30 +6,30 @@ import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
 } from "../state/selectors";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import type {
   BattleFieldSlotAddress,
   BattleMutableState,
   BattleSide,
   BattlefieldSlotId,
   BattlefieldZone,
-  DeploySlotId,
-  ReserveSlotId,
+  FrontRankSlotId,
+  BackRankSlotId,
 } from "../types";
 
-const SUPPORT_BY_DEPLOY: Record<DeploySlotId, readonly ReserveSlotId[]> = {
-  D0: ["R0", "R1"],
-  D1: ["R1", "R2"],
-  D2: ["R2", "R3"],
-  D3: ["R3", "R4"],
+const SUPPORT_BY_DEPLOY: Record<FrontRankSlotId, readonly BackRankSlotId[]> = {
+  F0: ["B0", "B1"],
+  F1: ["B1", "B2"],
+  F2: ["B2", "B3"],
+  F3: ["B3", "B4"],
 };
 
-const SUPPORT_BY_RESERVE: Record<ReserveSlotId, readonly DeploySlotId[]> = {
-  R0: ["D0"],
-  R1: ["D0", "D1"],
-  R2: ["D1", "D2"],
-  R3: ["D2", "D3"],
-  R4: ["D3"],
+const SUPPORT_BY_RESERVE: Record<BackRankSlotId, readonly FrontRankSlotId[]> = {
+  B0: ["F0"],
+  B1: ["F0", "F1"],
+  B2: ["F1", "F2"],
+  B3: ["F2", "F3"],
+  B4: ["F3"],
 };
 
 export function BattlefieldGrid({
@@ -71,7 +71,7 @@ export function BattlefieldGrid({
   state: BattleMutableState;
   zone: BattlefieldZone;
 }) {
-  const slotIds = zone === "reserve" ? RESERVE_SLOT_IDS : DEPLOY_SLOT_IDS;
+  const slotIds = zone === "reserve" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS;
   const supportHighlights = computeSupportHighlights(selectionAnchor, side);
 
   return (
@@ -200,8 +200,8 @@ function computeSupportHighlights(
   }
 
   if (selectionAnchor.zone === "deployed") {
-    return new Set<BattlefieldSlotId>(SUPPORT_BY_DEPLOY[selectionAnchor.slotId as DeploySlotId]);
+    return new Set<BattlefieldSlotId>(SUPPORT_BY_DEPLOY[selectionAnchor.slotId as FrontRankSlotId]);
   }
 
-  return new Set<BattlefieldSlotId>(SUPPORT_BY_RESERVE[selectionAnchor.slotId as ReserveSlotId]);
+  return new Set<BattlefieldSlotId>(SUPPORT_BY_RESERVE[selectionAnchor.slotId as BackRankSlotId]);
 }

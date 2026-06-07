@@ -6,7 +6,7 @@ import type {
   BattleDeckCardDefinition,
   BattleMutableState,
   BattleSide,
-  DeploySlotId,
+  FrontRankSlotId,
 } from "../types";
 
 function makeEmptySide(): BattleMutableState["sides"]["player"] {
@@ -19,8 +19,8 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     hand: [],
     void: [],
     banished: [],
-    reserve: { R0: null, R1: null, R2: null, R3: null, R4: null },
-    deployed: { D0: null, D1: null, D2: null, D3: null },
+    reserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    deployed: { F0: null, F1: null, F2: null, F3: null },
   };
 }
 
@@ -92,7 +92,7 @@ function figmentProvenance(subtype: string, chosenSpark: number): BattleCardProv
 interface PlacementSpec {
   name: string;
   spark: number;
-  slotId: DeploySlotId;
+  slotId: FrontRankSlotId;
   figmentCount?: number;
   subtype?: string;
 }
@@ -146,17 +146,17 @@ describe("resolveJudgment", () => {
   it("dissolves the lower-spark defender without scoring when both are present", () => {
     // Catches incorrect combat math: a defended challenger does not score.
     const { state, ids } = makeJudgmentState("player", {
-      player: [{ name: "challenger", spark: 4, slotId: "D0" }],
-      enemy: [{ name: "defender", spark: 3, slotId: "D0" }],
+      player: [{ name: "challenger", spark: 4, slotId: "F0" }],
+      enemy: [{ name: "defender", spark: 3, slotId: "F0" }],
     });
 
     const proposal = resolveJudgment({ state, activeSide: "player" });
 
     expect(proposal.resolution.playerScoreDelta).toBe(0);
     expect(proposal.resolution.enemyScoreDelta).toBe(0);
-    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "D0");
+    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "F0");
     expect(lane).toMatchObject({
-      slotId: "D0",
+      slotId: "F0",
       playerSpark: 4,
       enemySpark: 3,
       winner: "player",
@@ -178,15 +178,15 @@ describe("resolveJudgment", () => {
 
   it("dissolves both characters on a spark tie", () => {
     const { state, ids } = makeJudgmentState("player", {
-      player: [{ name: "challenger", spark: 3, slotId: "D0" }],
-      enemy: [{ name: "defender", spark: 3, slotId: "D0" }],
+      player: [{ name: "challenger", spark: 3, slotId: "F0" }],
+      enemy: [{ name: "defender", spark: 3, slotId: "F0" }],
     });
 
     const proposal = resolveJudgment({ state, activeSide: "player" });
 
     expect(proposal.resolution.playerScoreDelta).toBe(0);
     expect(proposal.resolution.enemyScoreDelta).toBe(0);
-    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "D0");
+    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "F0");
     expect(lane).toMatchObject({ winner: null, scoreDelta: 0 });
     expect(proposal.edits).toContainEqual({
       kind: "MOVE_CARD_TO_ZONE",
@@ -202,16 +202,16 @@ describe("resolveJudgment", () => {
 
   it("scores an unpaired challenger's spark for the active side", () => {
     const { state, ids } = makeJudgmentState("player", {
-      player: [{ name: "challenger", spark: 4, slotId: "D1" }],
+      player: [{ name: "challenger", spark: 4, slotId: "F1" }],
     });
 
     const proposal = resolveJudgment({ state, activeSide: "player" });
 
     expect(proposal.resolution.playerScoreDelta).toBe(4);
     expect(proposal.resolution.enemyScoreDelta).toBe(0);
-    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "D1");
+    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "F1");
     expect(lane).toMatchObject({
-      slotId: "D1",
+      slotId: "F1",
       playerSpark: 4,
       enemySpark: 0,
       winner: null,
@@ -231,7 +231,7 @@ describe("resolveJudgment", () => {
 
   it("does nothing in a lane where only the opposing defender is present", () => {
     const { state } = makeJudgmentState("player", {
-      enemy: [{ name: "lonelyDefender", spark: 5, slotId: "D0" }],
+      enemy: [{ name: "lonelyDefender", spark: 5, slotId: "F0" }],
     });
 
     const proposal = resolveJudgment({ state, activeSide: "player" });
@@ -239,7 +239,7 @@ describe("resolveJudgment", () => {
     expect(proposal.resolution.playerScoreDelta).toBe(0);
     expect(proposal.resolution.enemyScoreDelta).toBe(0);
     expect(proposal.edits).toHaveLength(0);
-    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "D0");
+    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "F0");
     expect(lane).toMatchObject({
       playerSpark: 0,
       enemySpark: 5,
@@ -252,8 +252,8 @@ describe("resolveJudgment", () => {
     // Catches support not being added before the comparison: a base-3 challenger
     // with +2 support beats a 4-spark defender.
     const { state, ids } = makeJudgmentState("player", {
-      player: [{ name: "challenger", spark: 3, slotId: "D0" }],
-      enemy: [{ name: "defender", spark: 4, slotId: "D0" }],
+      player: [{ name: "challenger", spark: 3, slotId: "F0" }],
+      enemy: [{ name: "defender", spark: 4, slotId: "F0" }],
     });
 
     const proposal = resolveJudgment({
@@ -262,7 +262,7 @@ describe("resolveJudgment", () => {
       supportContribution: new Map([[ids.challenger, 2]]),
     });
 
-    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "D0");
+    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "F0");
     expect(lane).toMatchObject({
       playerSpark: 5,
       enemySpark: 4,
@@ -289,14 +289,14 @@ describe("resolveJudgment", () => {
     // defender also dissolves on the tie.
     const { state, ids } = makeJudgmentState("player", {
       player: [
-        { name: "stack", spark: 1, slotId: "D0", figmentCount: 5, subtype: "Shadow" },
+        { name: "stack", spark: 1, slotId: "F0", figmentCount: 5, subtype: "Shadow" },
       ],
-      enemy: [{ name: "defender", spark: 5, slotId: "D0" }],
+      enemy: [{ name: "defender", spark: 5, slotId: "F0" }],
     });
 
     const proposal = resolveJudgment({ state, activeSide: "player" });
 
-    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "D0");
+    const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "F0");
     // Stack total spark = 5.
     expect(lane?.playerSpark).toBe(5);
     expect(lane?.enemySpark).toBe(5);
@@ -318,9 +318,9 @@ describe("resolveJudgment", () => {
     // the 3-spark defender dissolves because the stack total (6) exceeds it.
     const { state, ids } = makeJudgmentState("player", {
       player: [
-        { name: "stack", spark: 2, slotId: "D0", figmentCount: 3, subtype: "Shadow" },
+        { name: "stack", spark: 2, slotId: "F0", figmentCount: 3, subtype: "Shadow" },
       ],
-      enemy: [{ name: "defender", spark: 3, slotId: "D0" }],
+      enemy: [{ name: "defender", spark: 3, slotId: "F0" }],
     });
 
     const proposal = resolveJudgment({ state, activeSide: "player" });
@@ -343,10 +343,10 @@ describe("resolveJudgment", () => {
     // dissolve moves plus one ADJUST_SCORE equal to the active score delta.
     const { state, ids } = makeJudgmentState("player", {
       player: [
-        { name: "winner", spark: 4, slotId: "D0" },
-        { name: "unpaired", spark: 2, slotId: "D2" },
+        { name: "winner", spark: 4, slotId: "F0" },
+        { name: "unpaired", spark: 2, slotId: "F2" },
       ],
-      enemy: [{ name: "loser", spark: 3, slotId: "D0" }],
+      enemy: [{ name: "loser", spark: 3, slotId: "F0" }],
     });
 
     const proposal = resolveJudgment({ state, activeSide: "player" });
@@ -379,8 +379,8 @@ describe("resolveJudgment", () => {
 
   it("does not emit an ADJUST_SCORE edit when nothing scores", () => {
     const { state } = makeJudgmentState("player", {
-      player: [{ name: "challenger", spark: 4, slotId: "D0" }],
-      enemy: [{ name: "defender", spark: 3, slotId: "D0" }],
+      player: [{ name: "challenger", spark: 4, slotId: "F0" }],
+      enemy: [{ name: "defender", spark: 3, slotId: "F0" }],
     });
 
     const proposal = resolveJudgment({ state, activeSide: "player" });
@@ -392,8 +392,8 @@ describe("resolveJudgment", () => {
 
   it("does not mutate the input state", () => {
     const { state } = makeJudgmentState("player", {
-      player: [{ name: "challenger", spark: 4, slotId: "D0" }],
-      enemy: [{ name: "defender", spark: 3, slotId: "D0" }],
+      player: [{ name: "challenger", spark: 4, slotId: "F0" }],
+      enemy: [{ name: "defender", spark: 3, slotId: "F0" }],
     });
     const before = JSON.stringify(state);
 
@@ -404,7 +404,7 @@ describe("resolveJudgment", () => {
 
   it("scores for the enemy side when the enemy is the active side", () => {
     const { state } = makeJudgmentState("enemy", {
-      enemy: [{ name: "challenger", spark: 5, slotId: "D1" }],
+      enemy: [{ name: "challenger", spark: 5, slotId: "F1" }],
     });
 
     const proposal = resolveJudgment({ state, activeSide: "enemy" });

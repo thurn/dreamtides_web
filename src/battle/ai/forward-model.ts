@@ -4,13 +4,13 @@ import {
   selectFigmentCount,
 } from "../state/figments";
 import { supportedDeploySlots } from "../engine/support";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import type {
   BattleCardInstance,
   BattleMutableState,
   BattleSide,
-  DeploySlotId,
-  ReserveSlotId,
+  FrontRankSlotId,
+  BackRankSlotId,
 } from "../types";
 
 /**
@@ -62,7 +62,7 @@ export interface AiOpponentBody {
   energyCost: number;
   /** `front` = deployed, `back` = reserve. */
   rank: "front" | "back";
-  /** The slot id, e.g. "D0" / "R2". */
+  /** The slot id, e.g. "F0" / "B2". */
   slot: string;
   isFigment: boolean;
 }
@@ -75,8 +75,8 @@ export interface ForwardModel {
   aiHand: AiCard[];
   aiDeck: AiCard[];
   aiVoid: AiCard[];
-  aiDeployed: Record<DeploySlotId, AiCard | null>;
-  aiReserve: Record<ReserveSlotId, AiCard | null>;
+  aiDeployed: Record<FrontRankSlotId, AiCard | null>;
+  aiReserve: Record<BackRankSlotId, AiCard | null>;
   opponentBodies: AiOpponentBody[];
   opponentHandCount: number;
   opponentVoidCount: number;
@@ -150,33 +150,33 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   const opponent = state.sides[opponentSide];
   const aiLatestTurn = aiLatestTurnNumber(state, aiSide);
 
-  const aiDeployed: Record<DeploySlotId, AiCard | null> = {
-    D0: null,
-    D1: null,
-    D2: null,
-    D3: null,
+  const aiDeployed: Record<FrontRankSlotId, AiCard | null> = {
+    F0: null,
+    F1: null,
+    F2: null,
+    F3: null,
   };
-  for (const slotId of DEPLOY_SLOT_IDS) {
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
     const id = ai.deployed[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     aiDeployed[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
   }
 
-  const aiReserve: Record<ReserveSlotId, AiCard | null> = {
-    R0: null,
-    R1: null,
-    R2: null,
-    R3: null,
-    R4: null,
+  const aiReserve: Record<BackRankSlotId, AiCard | null> = {
+    B0: null,
+    B1: null,
+    B2: null,
+    B3: null,
+    B4: null,
   };
-  for (const slotId of RESERVE_SLOT_IDS) {
+  for (const slotId of BACK_RANK_SLOT_IDS) {
     const id = ai.reserve[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     aiReserve[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
   }
 
   const opponentBodies: AiOpponentBody[] = [];
-  for (const slotId of DEPLOY_SLOT_IDS) {
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
     const id = opponent.deployed[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     if (instance !== undefined) {
@@ -190,7 +190,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
       });
     }
   }
-  for (const slotId of RESERVE_SLOT_IDS) {
+  for (const slotId of BACK_RANK_SLOT_IDS) {
     const id = opponent.reserve[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     if (instance !== undefined) {
@@ -241,7 +241,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
  */
 export function effectiveSpark(
   model: ForwardModel,
-  slot: DeploySlotId,
+  slot: FrontRankSlotId,
   supportSources: ReadonlyMap<string, number>,
 ): number {
   const card = model.aiDeployed[slot];
@@ -252,7 +252,7 @@ export function effectiveSpark(
   const base = card.basePrintedSpark * card.figmentCount + card.sparkDelta;
 
   let supportBonus = 0;
-  for (const reserveSlot of RESERVE_SLOT_IDS) {
+  for (const reserveSlot of BACK_RANK_SLOT_IDS) {
     const reserveCard = model.aiReserve[reserveSlot];
     if (reserveCard === null) {
       continue;
@@ -293,17 +293,17 @@ export function cloneForwardModel(model: ForwardModel): ForwardModel {
     aiDeck: model.aiDeck.map(cloneAiCard),
     aiVoid: model.aiVoid.map(cloneAiCard),
     aiDeployed: {
-      D0: cloneAiCardOrNull(model.aiDeployed.D0),
-      D1: cloneAiCardOrNull(model.aiDeployed.D1),
-      D2: cloneAiCardOrNull(model.aiDeployed.D2),
-      D3: cloneAiCardOrNull(model.aiDeployed.D3),
+      F0: cloneAiCardOrNull(model.aiDeployed.F0),
+      F1: cloneAiCardOrNull(model.aiDeployed.F1),
+      F2: cloneAiCardOrNull(model.aiDeployed.F2),
+      F3: cloneAiCardOrNull(model.aiDeployed.F3),
     },
     aiReserve: {
-      R0: cloneAiCardOrNull(model.aiReserve.R0),
-      R1: cloneAiCardOrNull(model.aiReserve.R1),
-      R2: cloneAiCardOrNull(model.aiReserve.R2),
-      R3: cloneAiCardOrNull(model.aiReserve.R3),
-      R4: cloneAiCardOrNull(model.aiReserve.R4),
+      B0: cloneAiCardOrNull(model.aiReserve.B0),
+      B1: cloneAiCardOrNull(model.aiReserve.B1),
+      B2: cloneAiCardOrNull(model.aiReserve.B2),
+      B3: cloneAiCardOrNull(model.aiReserve.B3),
+      B4: cloneAiCardOrNull(model.aiReserve.B4),
     },
     opponentBodies: model.opponentBodies.map((body) => ({ ...body })),
     opponentHandCount: model.opponentHandCount,

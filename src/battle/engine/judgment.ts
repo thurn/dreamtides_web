@@ -11,9 +11,9 @@ import type {
   BattleLaneJudgment,
   BattleMutableState,
   BattleSide,
-  DeploySlotId,
+  FrontRankSlotId,
 } from "../types";
-import { DEPLOY_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS } from "../types";
 
 export interface JudgmentInput {
   state: BattleMutableState;
@@ -35,7 +35,7 @@ export interface JudgmentProposal {
  * Resolves the Challenge phase for one active side as a pure proposal
  * (rules §Challenge phase resolution). It reads `input.state` but never mutates
  * it and never performs the void moves itself — it only describes the outcome
- * and the edits that would commit it. Lanes `D0`→`D3` are resolved in order.
+ * and the edits that would commit it. Lanes `F0`→`F3` are resolved in order.
  */
 export function resolveJudgment(input: JudgmentInput): JudgmentProposal {
   const { state, activeSide } = input;
@@ -46,7 +46,7 @@ export function resolveJudgment(input: JudgmentInput): JudgmentProposal {
   const dissolvedBattleCardIds: { battleCardId: string; side: BattleSide }[] = [];
   let totalScored = 0;
 
-  for (const slotId of DEPLOY_SLOT_IDS) {
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
     const lane = resolveLane({
       state,
       slotId,
@@ -89,7 +89,7 @@ interface LaneResolution {
 
 function resolveLane(params: {
   state: BattleMutableState;
-  slotId: DeploySlotId;
+  slotId: FrontRankSlotId;
   activeSide: BattleSide;
   opposingSide: BattleSide;
   supportContribution: ReadonlyMap<string, number> | undefined;

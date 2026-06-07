@@ -37,7 +37,7 @@ describe("undo/redo redo-stack coverage (bug-003)", () => {
     const initial = createBattleControllerState(state);
     const playerHandCardId = initial.mutable.sides.player.hand[0];
 
-    // Step 1: place the hand card in R0 (mirrors QA step 2).
+    // Step 1: place the hand card in B0 (mirrors QA step 2).
     const afterPlay = battleControllerReducer(
       initial,
       {
@@ -47,7 +47,7 @@ describe("undo/redo redo-stack coverage (bug-003)", () => {
           edit: {
             kind: "MOVE_CARD_TO_ZONE",
             battleCardId: playerHandCardId,
-            destination: { side: "player", zone: "reserve", slotId: "R0" },
+            destination: { side: "player", zone: "reserve", slotId: "B0" },
           },
         },
       },
@@ -229,7 +229,7 @@ function casesFromFactory(): DebugUndoCase[] {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId: playerHandCardId,
-          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          destination: { side: "player", zone: "reserve", slotId: "B0" },
         },
       },
     },
@@ -263,7 +263,7 @@ function casesFromFactory(): DebugUndoCase[] {
         fresh.state.sides.player.hand = fresh.state.sides.player.hand.filter(
           (battleCardId) => battleCardId !== characterId,
         );
-        fresh.state.sides.player.reserve.R0 = characterId;
+        fresh.state.sides.player.reserve.B0 = characterId;
         return fresh;
       },
       command: {
@@ -338,16 +338,16 @@ function casesFromFactory(): DebugUndoCase[] {
         const a = fresh.state.sides.player.hand[0];
         const b = fresh.state.sides.player.hand[1];
         fresh.state.sides.player.hand = fresh.state.sides.player.hand.slice(2);
-        fresh.state.sides.player.deployed.D0 = a;
-        fresh.state.sides.player.reserve.R0 = b;
+        fresh.state.sides.player.deployed.F0 = a;
+        fresh.state.sides.player.reserve.B0 = b;
         return fresh;
       },
       command: {
         id: "DEBUG_EDIT",
         edit: {
           kind: "SWAP_BATTLEFIELD_SLOTS",
-          source: { side: "player", zone: "deployed", slotId: "D0" },
-          target: { side: "player", zone: "reserve", slotId: "R0" },
+          source: { side: "player", zone: "deployed", slotId: "F0" },
+          target: { side: "player", zone: "reserve", slotId: "B0" },
         },
       },
     },
@@ -359,7 +359,7 @@ function casesFromFactory(): DebugUndoCase[] {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId: playerHandCardId,
-          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          destination: { side: "player", zone: "reserve", slotId: "B0" },
         },
       },
     },
@@ -471,7 +471,7 @@ function casesFromFactory(): DebugUndoCase[] {
           chosenSubtype: "Wisp",
           chosenSpark: 2,
           name: "UndoFigment",
-          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          destination: { side: "player", zone: "reserve", slotId: "B0" },
           createdAtMs: 11,
         },
       },
@@ -489,7 +489,7 @@ function casesFromFactory(): DebugUndoCase[] {
         fresh.state.sides.player.hand = fresh.state.sides.player.hand.filter(
           (battleCardId) => battleCardId !== character,
         );
-        fresh.state.sides.player.reserve.R1 = character;
+        fresh.state.sides.player.reserve.B1 = character;
         return fresh;
       },
       command: {
@@ -499,7 +499,7 @@ function casesFromFactory(): DebugUndoCase[] {
           battleCardId: seed.state.sides.player.hand.find((battleCardId) =>
             seed.state.cardInstances[battleCardId].definition.battleCardKind === "character",
           ) ?? playerHandCardId,
-          destination: { side: "player", zone: "deployed", slotId: "D0" },
+          destination: { side: "player", zone: "deployed", slotId: "F0" },
         },
       },
     },

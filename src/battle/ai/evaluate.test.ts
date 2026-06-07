@@ -3,11 +3,11 @@ import { evaluate } from "./evaluate";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 
 function emptyDeployed(): ForwardModel["aiDeployed"] {
-  return { D0: null, D1: null, D2: null, D3: null };
+  return { F0: null, F1: null, F2: null, F3: null };
 }
 
 function emptyReserve(): ForwardModel["aiReserve"] {
-  return { R0: null, R1: null, R2: null, R3: null, R4: null };
+  return { B0: null, B1: null, B2: null, B3: null, B4: null };
 }
 
 function baseModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
@@ -52,7 +52,7 @@ function opponentBody(overrides: Partial<AiOpponentBody> = {}): AiOpponentBody {
     effectiveSpark: 0,
     energyCost: 0,
     rank: "front",
-    slot: "D0",
+    slot: "F0",
     isFigment: false,
     ...overrides,
   };
@@ -74,7 +74,7 @@ describe("evaluate", () => {
       const terrible = baseModel({
         aiScore: 25,
         opponentBodies: [
-          opponentBody({ effectiveSpark: 99, rank: "front", slot: "D0" }),
+          opponentBody({ effectiveSpark: 99, rank: "front", slot: "F0" }),
         ],
       });
       expect(evaluate(terrible)).toBe(Number.POSITIVE_INFINITY);
@@ -85,7 +85,7 @@ describe("evaluate", () => {
         playerScore: 25,
         aiDeployed: {
           ...emptyDeployed(),
-          D0: makeCard({ basePrintedSpark: 99 }),
+          F0: makeCard({ basePrintedSpark: 99 }),
         },
       });
       expect(evaluate(board)).toBe(Number.NEGATIVE_INFINITY);
@@ -118,26 +118,26 @@ describe("evaluate", () => {
       const aiAhead = baseModel({
         aiDeployed: {
           ...emptyDeployed(),
-          D0: makeCard({ basePrintedSpark: 5 }),
+          F0: makeCard({ basePrintedSpark: 5 }),
         },
-        opponentBodies: [opponentBody({ effectiveSpark: 1, rank: "front", slot: "D0" })],
+        opponentBodies: [opponentBody({ effectiveSpark: 1, rank: "front", slot: "F0" })],
       });
       const oppAhead = baseModel({
         aiDeployed: {
           ...emptyDeployed(),
-          D0: makeCard({ basePrintedSpark: 1 }),
+          F0: makeCard({ basePrintedSpark: 1 }),
         },
-        opponentBodies: [opponentBody({ effectiveSpark: 5, rank: "front", slot: "D0" })],
+        opponentBodies: [opponentBody({ effectiveSpark: 5, rank: "front", slot: "F0" })],
       });
       expect(evaluate(aiAhead)).toBeGreaterThan(evaluate(oppAhead));
     });
 
     it("weights front-rank spark above back-rank spark", () => {
       const front = baseModel({
-        aiDeployed: { ...emptyDeployed(), D0: makeCard({ basePrintedSpark: 4 }) },
+        aiDeployed: { ...emptyDeployed(), F0: makeCard({ basePrintedSpark: 4 }) },
       });
       const back = baseModel({
-        aiReserve: { ...emptyReserve(), R0: makeCard({ basePrintedSpark: 4 }) },
+        aiReserve: { ...emptyReserve(), B0: makeCard({ basePrintedSpark: 4 }) },
       });
       expect(evaluate(front)).toBeGreaterThan(evaluate(back));
     });

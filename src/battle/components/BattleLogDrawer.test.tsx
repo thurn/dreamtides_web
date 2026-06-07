@@ -156,7 +156,7 @@ describe("BattleLogDrawer", () => {
             cardName: "Nocturne Strummer",
             sourceHandIndex: 0,
             sourceSlotId: null,
-            targetSlotId: "R0",
+            targetSlotId: "B0",
             heuristicScoreBefore: 12.3,
             heuristicScoreAfter: 18.7,
             rationale: "Play Nocturne Strummer to the back rank",

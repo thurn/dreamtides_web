@@ -4,7 +4,7 @@ import type {
   BattleMutableState,
   BattleSide,
 } from "../types";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 
 export function isFigmentInstance(instance: BattleCardInstance | undefined | null): instance is BattleCardInstance {
   return instance?.provenance.kind === "generated-figment";
@@ -34,7 +34,7 @@ export function findBattlefieldFigmentStack(
 ): { battleCardId: string; location: BattleFieldSlotAddress } | null {
   const normalizedSubtype = normalizeFigmentSubtype(subtype);
 
-  for (const slotId of RESERVE_SLOT_IDS) {
+  for (const slotId of BACK_RANK_SLOT_IDS) {
     const battleCardId = state.sides[side].reserve[slotId];
     const instance = battleCardId === null ? null : state.cardInstances[battleCardId];
     if (
@@ -50,7 +50,7 @@ export function findBattlefieldFigmentStack(
     }
   }
 
-  for (const slotId of DEPLOY_SLOT_IDS) {
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
     const battleCardId = state.sides[side].deployed[slotId];
     const instance = battleCardId === null ? null : state.cardInstances[battleCardId];
     if (

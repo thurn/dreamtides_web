@@ -2,14 +2,14 @@ import { describe, expect, it } from "vitest";
 import { cloneForwardModel, effectiveSpark, forwardModelFromState } from "./forward-model";
 import type { ForwardModel } from "./forward-model";
 import { allocateBattleCardInstance } from "../state/create-initial-state";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import type {
   BattleCardProvenance,
   BattleDeckCardDefinition,
   BattleMutableState,
   BattleSide,
-  DeploySlotId,
-  ReserveSlotId,
+  FrontRankSlotId,
+  BackRankSlotId,
 } from "../types";
 
 function makeEmptySide(): BattleMutableState["sides"]["player"] {
@@ -22,8 +22,8 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     hand: [],
     void: [],
     banished: [],
-    reserve: { R0: null, R1: null, R2: null, R3: null, R4: null },
-    deployed: { D0: null, D1: null, D2: null, D3: null },
+    reserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    deployed: { F0: null, F1: null, F2: null, F3: null },
   };
 }
 
@@ -163,29 +163,29 @@ describe("forwardModelFromState", () => {
     const ai: BattleSide = "enemy";
 
     const deployed = addInstance(state, ai, makeCharacterDefinition("Deployed", 201, 3, 1));
-    state.sides[ai].deployed.D1 = deployed;
+    state.sides[ai].deployed.F1 = deployed;
     const reserved = addInstance(state, ai, makeCharacterDefinition("Reserved", 202, 2, 1));
-    state.sides[ai].reserve.R3 = reserved;
+    state.sides[ai].reserve.B3 = reserved;
 
     const model = forwardModelFromState(state, ai);
 
-    for (const slot of DEPLOY_SLOT_IDS) {
-      if (slot === "D1") {
+    for (const slot of FRONT_RANK_SLOT_IDS) {
+      if (slot === "F1") {
         expect(model.aiDeployed[slot]?.cardNumber).toBe(201);
       } else {
         expect(model.aiDeployed[slot]).toBeNull();
       }
     }
-    for (const slot of RESERVE_SLOT_IDS) {
-      if (slot === "R3") {
+    for (const slot of BACK_RANK_SLOT_IDS) {
+      if (slot === "B3") {
         expect(model.aiReserve[slot]?.cardNumber).toBe(202);
       } else {
         expect(model.aiReserve[slot]).toBeNull();
       }
     }
 
-    expect(model.aiDeployed.D1?.canChallengeThisTurn).toBe(true);
-    expect(model.aiReserve.R3?.canChallengeThisTurn).toBe(true);
+    expect(model.aiDeployed.F1?.canChallengeThisTurn).toBe(true);
+    expect(model.aiReserve.B3?.canChallengeThisTurn).toBe(true);
   });
 
   it("marks a body that entered play on the AI's current turn as unable to challenge", () => {
@@ -196,16 +196,16 @@ describe("forwardModelFromState", () => {
 
     const fresh = addInstance(state, ai, makeCharacterDefinition("Fresh", 201, 3, 1));
     state.cardInstances[fresh].enteredPlayTurnNumber = 4;
-    state.sides[ai].reserve.R0 = fresh;
+    state.sides[ai].reserve.B0 = fresh;
 
     const aged = addInstance(state, ai, makeCharacterDefinition("Aged", 202, 2, 1));
     state.cardInstances[aged].enteredPlayTurnNumber = 2;
-    state.sides[ai].reserve.R1 = aged;
+    state.sides[ai].reserve.B1 = aged;
 
     const model = forwardModelFromState(state, ai);
 
-    expect(model.aiReserve.R0?.canChallengeThisTurn).toBe(false);
-    expect(model.aiReserve.R1?.canChallengeThisTurn).toBe(true);
+    expect(model.aiReserve.B0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiReserve.B1?.canChallengeThisTurn).toBe(true);
   });
 
   it("keeps a body exhausted through the opponent's turn until the AI's next Dawn", () => {
@@ -218,18 +218,18 @@ describe("forwardModelFromState", () => {
 
     const playedLastAiTurn = addInstance(state, ai, makeCharacterDefinition("Recent", 201, 3, 1));
     state.cardInstances[playedLastAiTurn].enteredPlayTurnNumber = 4;
-    state.sides[ai].reserve.R0 = playedLastAiTurn;
+    state.sides[ai].reserve.B0 = playedLastAiTurn;
 
     const playedEarlier = addInstance(state, ai, makeCharacterDefinition("Older", 202, 2, 1));
     state.cardInstances[playedEarlier].enteredPlayTurnNumber = 3;
-    state.sides[ai].reserve.R1 = playedEarlier;
+    state.sides[ai].reserve.B1 = playedEarlier;
 
     const model = forwardModelFromState(state, ai);
 
     // Still exhausted during the opponent's turn → cannot be moved up to block.
-    expect(model.aiReserve.R0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiReserve.B0?.canChallengeThisTurn).toBe(false);
     // Cleared at the AI's last Dawn → available to block.
-    expect(model.aiReserve.R1?.canChallengeThisTurn).toBe(true);
+    expect(model.aiReserve.B1?.canChallengeThisTurn).toBe(true);
   });
 
   it("projects opponent bodies as abstract spark/rank/slot without identity", () => {
@@ -240,10 +240,10 @@ describe("forwardModelFromState", () => {
     const front = addInstance(state, opponent, makeCharacterDefinition("Front", 301, 5, 1), {
       sparkDelta: 2,
     });
-    state.sides[opponent].deployed.D0 = front;
+    state.sides[opponent].deployed.F0 = front;
 
     const back = addInstance(state, opponent, makeCharacterDefinition("Back", 302, 3, 1));
-    state.sides[opponent].reserve.R0 = back;
+    state.sides[opponent].reserve.B0 = back;
 
     const figment = addInstance(
       state,
@@ -251,7 +251,7 @@ describe("forwardModelFromState", () => {
       makeCharacterDefinition("Fig", 303, 1, 1),
       { figment: true, figmentCount: 4 },
     );
-    state.sides[opponent].deployed.D2 = figment;
+    state.sides[opponent].deployed.F2 = figment;
 
     state.sides[opponent].hand = ["x", "y"];
     state.sides[opponent].void = ["z"];
@@ -260,33 +260,33 @@ describe("forwardModelFromState", () => {
 
     expect(model.opponentBodies).toHaveLength(3);
 
-    const frontBody = model.opponentBodies.find((body) => body.slot === "D0");
+    const frontBody = model.opponentBodies.find((body) => body.slot === "F0");
     expect(frontBody).toEqual({
       battleCardId: front,
       effectiveSpark: 7,
       energyCost: 1,
       rank: "front",
-      slot: "D0",
+      slot: "F0",
       isFigment: false,
     });
 
-    const backBody = model.opponentBodies.find((body) => body.slot === "R0");
+    const backBody = model.opponentBodies.find((body) => body.slot === "B0");
     expect(backBody).toEqual({
       battleCardId: back,
       effectiveSpark: 3,
       energyCost: 1,
       rank: "back",
-      slot: "R0",
+      slot: "B0",
       isFigment: false,
     });
 
-    const figmentBody = model.opponentBodies.find((body) => body.slot === "D2");
+    const figmentBody = model.opponentBodies.find((body) => body.slot === "F2");
     expect(figmentBody).toEqual({
       battleCardId: figment,
       effectiveSpark: 4,
       energyCost: 1,
       rank: "front",
-      slot: "D2",
+      slot: "F2",
       isFigment: true,
     });
 
@@ -330,10 +330,10 @@ describe("cloneForwardModel", () => {
     state.sides[ai].hand = [hand];
 
     const deployed = addInstance(state, ai, makeCharacterDefinition("Deployed", 502, 3, 1));
-    state.sides[ai].deployed.D0 = deployed;
+    state.sides[ai].deployed.F0 = deployed;
 
     const opp = addInstance(state, opponent, makeCharacterDefinition("Opp", 503, 4, 1));
-    state.sides[opponent].deployed.D0 = opp;
+    state.sides[opponent].deployed.F0 = opp;
 
     return forwardModelFromState(state, ai);
   }
@@ -372,7 +372,7 @@ describe("cloneForwardModel", () => {
   it("does not alias deployed slot assignments", () => {
     const original = buildModel();
     const clone = cloneForwardModel(original);
-    const slot: DeploySlotId = "D0";
+    const slot: FrontRankSlotId = "F0";
     clone.aiDeployed[slot] = null;
     expect(original.aiDeployed[slot]?.cardNumber).toBe(502);
   });
@@ -380,7 +380,7 @@ describe("cloneForwardModel", () => {
   it("does not alias a deployed AiCard object", () => {
     const original = buildModel();
     const clone = cloneForwardModel(original);
-    const slot: DeploySlotId = "D0";
+    const slot: FrontRankSlotId = "F0";
     clone.aiDeployed[slot]!.canChallengeThisTurn = false;
     expect(original.aiDeployed[slot]?.canChallengeThisTurn).toBe(true);
   });
@@ -388,7 +388,7 @@ describe("cloneForwardModel", () => {
   it("does not alias reserve slot record", () => {
     const original = buildModel();
     const clone = cloneForwardModel(original);
-    const slot: ReserveSlotId = "R0";
+    const slot: BackRankSlotId = "B0";
     clone.aiReserve[slot] = {
       battleCardId: "r",
       cardNumber: 0,
@@ -438,8 +438,8 @@ describe("effectiveSpark", () => {
       aiHand: [],
       aiDeck: [],
       aiVoid: [],
-      aiDeployed: { D0: null, D1: null, D2: null, D3: null },
-      aiReserve: { R0: null, R1: null, R2: null, R3: null, R4: null },
+      aiDeployed: { F0: null, F1: null, F2: null, F3: null },
+      aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
       opponentBodies: [],
       opponentHandCount: 0,
       opponentVoidCount: 0,
@@ -448,75 +448,75 @@ describe("effectiveSpark", () => {
 
   it("returns 0 for an empty deployed slot", () => {
     const model = makeEmptyModel();
-    expect(effectiveSpark(model, "D0", new Map())).toBe(0);
+    expect(effectiveSpark(model, "F0", new Map())).toBe(0);
   });
 
   it("computes base spark as basePrintedSpark * figmentCount + sparkDelta", () => {
     const model = makeEmptyModel();
     // basePrintedSpark=3, figmentCount=4, sparkDelta=2 → 3*4+2 = 14
-    model.aiDeployed.D0 = makeAiCard("card-a", 3, 2, 4);
-    expect(effectiveSpark(model, "D0", new Map())).toBe(14);
+    model.aiDeployed.F0 = makeAiCard("card-a", 3, 2, 4);
+    expect(effectiveSpark(model, "F0", new Map())).toBe(14);
   });
 
-  it("R1 supports D0 and D1 but not D2", () => {
+  it("B1 supports F0 and F1 but not F2", () => {
     const model = makeEmptyModel();
     // base spark = 5*1+0 = 5
-    model.aiDeployed.D0 = makeAiCard("body-d0", 5, 0, 1);
-    model.aiDeployed.D1 = makeAiCard("body-d1", 5, 0, 1);
-    model.aiDeployed.D2 = makeAiCard("body-d2", 5, 0, 1);
-    model.aiReserve.R1 = makeAiCard("r1-support", 2, 0, 1);
+    model.aiDeployed.F0 = makeAiCard("body-d0", 5, 0, 1);
+    model.aiDeployed.F1 = makeAiCard("body-d1", 5, 0, 1);
+    model.aiDeployed.F2 = makeAiCard("body-d2", 5, 0, 1);
+    model.aiReserve.B1 = makeAiCard("r1-support", 2, 0, 1);
     const sources = new Map([["r1-support", 2]]);
 
-    expect(effectiveSpark(model, "D0", sources)).toBe(7); // 5 + 2
-    expect(effectiveSpark(model, "D1", sources)).toBe(7); // 5 + 2
-    expect(effectiveSpark(model, "D2", sources)).toBe(5); // unchanged
+    expect(effectiveSpark(model, "F0", sources)).toBe(7); // 5 + 2
+    expect(effectiveSpark(model, "F1", sources)).toBe(7); // 5 + 2
+    expect(effectiveSpark(model, "F2", sources)).toBe(5); // unchanged
   });
 
-  it("R0 supports only D0, not D1", () => {
+  it("B0 supports only F0, not F1", () => {
     const model = makeEmptyModel();
-    model.aiDeployed.D0 = makeAiCard("body-d0", 3, 0, 1);
-    model.aiDeployed.D1 = makeAiCard("body-d1", 3, 0, 1);
-    model.aiReserve.R0 = makeAiCard("r0-support", 1, 0, 1);
+    model.aiDeployed.F0 = makeAiCard("body-d0", 3, 0, 1);
+    model.aiDeployed.F1 = makeAiCard("body-d1", 3, 0, 1);
+    model.aiReserve.B0 = makeAiCard("r0-support", 1, 0, 1);
     const sources = new Map([["r0-support", 2]]);
 
-    expect(effectiveSpark(model, "D0", sources)).toBe(5); // 3 + 2
-    expect(effectiveSpark(model, "D1", sources)).toBe(3); // unchanged
+    expect(effectiveSpark(model, "F0", sources)).toBe(5); // 3 + 2
+    expect(effectiveSpark(model, "F1", sources)).toBe(3); // unchanged
   });
 
   it("two sources both supporting the same slot stack additively", () => {
     const model = makeEmptyModel();
-    // R1 supports D0,D1; R2 supports D1,D2 → D1 gets both
-    model.aiDeployed.D1 = makeAiCard("body-d1", 4, 0, 1);
-    model.aiReserve.R1 = makeAiCard("r1-card", 1, 0, 1);
-    model.aiReserve.R2 = makeAiCard("r2-card", 1, 0, 1);
+    // B1 supports F0,F1; B2 supports F1,F2 → F1 gets both
+    model.aiDeployed.F1 = makeAiCard("body-d1", 4, 0, 1);
+    model.aiReserve.B1 = makeAiCard("r1-card", 1, 0, 1);
+    model.aiReserve.B2 = makeAiCard("r2-card", 1, 0, 1);
     const sources = new Map([
       ["r1-card", 2],
       ["r2-card", 1],
     ]);
 
-    // base=4, +2 from R1, +1 from R2 = 7
-    expect(effectiveSpark(model, "D1", sources)).toBe(7);
+    // base=4, +2 from B1, +1 from B2 = 7
+    expect(effectiveSpark(model, "F1", sources)).toBe(7);
   });
 
   it("a reserve card absent from supportSources contributes nothing", () => {
     const model = makeEmptyModel();
-    model.aiDeployed.D0 = makeAiCard("body-d0", 5, 0, 1);
-    model.aiReserve.R1 = makeAiCard("r1-no-support", 2, 0, 1);
+    model.aiDeployed.F0 = makeAiCard("body-d0", 5, 0, 1);
+    model.aiReserve.B1 = makeAiCard("r1-no-support", 2, 0, 1);
     // r1-no-support is NOT in sources
     const sources = new Map<string, number>();
 
-    expect(effectiveSpark(model, "D0", sources)).toBe(5);
+    expect(effectiveSpark(model, "F0", sources)).toBe(5);
   });
 
   it("support is not divided — each supported slot gets the full value", () => {
     const model = makeEmptyModel();
-    model.aiDeployed.D0 = makeAiCard("body-d0", 3, 0, 1);
-    model.aiDeployed.D1 = makeAiCard("body-d1", 3, 0, 1);
-    model.aiReserve.R1 = makeAiCard("r1-wide", 1, 0, 1);
+    model.aiDeployed.F0 = makeAiCard("body-d0", 3, 0, 1);
+    model.aiDeployed.F1 = makeAiCard("body-d1", 3, 0, 1);
+    model.aiReserve.B1 = makeAiCard("r1-wide", 1, 0, 1);
     const sources = new Map([["r1-wide", 3]]);
 
     // Both slots get +3, not +1.5
-    expect(effectiveSpark(model, "D0", sources)).toBe(6);
-    expect(effectiveSpark(model, "D1", sources)).toBe(6);
+    expect(effectiveSpark(model, "F0", sources)).toBe(6);
+    expect(effectiveSpark(model, "F1", sources)).toBe(6);
   });
 });

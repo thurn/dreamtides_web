@@ -13,7 +13,7 @@ import type {
   BattleResult,
   BattleSide,
 } from "../types";
-import { DEPLOY_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS } from "../types";
 
 /**
  * "Basic automation" applies the small, deterministic subset of the Dreamtides
@@ -32,7 +32,7 @@ import { DEPLOY_SLOT_IDS } from "../types";
  *  - **Events resolve to the void.** An event played from hand is routed to the
  *    void instead of staying in play (rules §Card Types — Event).
  *  - **The Challenge phase resolves by spark.** When the active player ends
- *    their turn, each front-rank lane (`D0`–`D3`) is resolved by comparing
+ *    their turn, each front-rank lane (`F0`–`F3`) is resolved by comparing
  *    spark: the lower-spark character dissolves to the void, an unpaired
  *    challenger scores ⍟ equal to its spark, and the keyword rules below apply
  *    (rules §Challengers, Defenders, and Scoring).
@@ -244,7 +244,7 @@ export function resolveChallenge(
   let activeScored = 0;
   let opposingScored = 0;
 
-  for (const slotId of DEPLOY_SLOT_IDS) {
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
     const challengerId = state.sides[activeSide].deployed[slotId];
     const defenderId = state.sides[opposingSide].deployed[slotId];
     const challenger = challengerId === null ? null : state.cardInstances[challengerId] ?? null;

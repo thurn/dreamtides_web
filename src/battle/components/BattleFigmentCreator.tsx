@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CardData } from "../../types/cards";
 import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
-import type { BattleMutableState, BattleSide, DeploySlotId, ReserveSlotId } from "../types";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import type { BattleMutableState, BattleSide, FrontRankSlotId, BackRankSlotId } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 
 type FigmentZone = "hand" | "reserve" | "deployed" | "void" | "banished" | "deck";
 type FigmentDeckPosition = "top" | "bottom";
-type FigmentBattlefieldSlotId = ReserveSlotId | DeploySlotId;
+type FigmentBattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 const DEFAULT_FIGMENT_NAME = "Shadow Figment";
 const DEFAULT_FIGMENT_SUBTYPE = "Shadow";
 const DEFAULT_FIGMENT_SPARK = "1";
@@ -32,7 +32,7 @@ export function BattleFigmentCreator({
   const [zone, setZone] = useState<FigmentZone>("reserve");
   const [position, setPosition] = useState<FigmentDeckPosition>("top");
   const [slot, setSlot] = useState<FigmentBattlefieldSlotId>(
-    () => findFirstOpenReserveSlot(state, initialSide) ?? "R0",
+    () => findFirstOpenReserveSlot(state, initialSide) ?? "B0",
   );
   const nameInputRef = useRef<HTMLInputElement | null>(null);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
@@ -53,9 +53,9 @@ export function BattleFigmentCreator({
     // bug-110: reset slot when side changes so the previously highlighted
     // slot on the other side doesn't carry forward as a stale selection.
     if (zone === "reserve") {
-      setSlot(findFirstOpenReserveSlot(state, side) ?? "R0");
+      setSlot(findFirstOpenReserveSlot(state, side) ?? "B0");
     } else if (zone === "deployed") {
-      setSlot(findFirstOpenDeploySlot(state, side) ?? "D0");
+      setSlot(findFirstOpenDeploySlot(state, side) ?? "F0");
     }
   }, [side, state, zone]);
 
@@ -240,9 +240,9 @@ export function BattleFigmentCreator({
                   onChange={() => {
                     setZone(option);
                     if (option === "reserve" && !isReserveSlot(slot)) {
-                      setSlot("R0");
+                      setSlot("B0");
                     } else if (option === "deployed" && !isDeploySlot(slot)) {
-                      setSlot("D0");
+                      setSlot("F0");
                     }
                   }}
                 />
@@ -284,7 +284,7 @@ export function BattleFigmentCreator({
               Slot
             </legend>
             <div className="flex flex-wrap gap-3 text-sm text-slate-200">
-              {(zone === "reserve" ? RESERVE_SLOT_IDS : DEPLOY_SLOT_IDS).map(
+              {(zone === "reserve" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS).map(
                 (option) => (
                   <label key={option} className="flex items-center gap-2">
                     <input
@@ -404,12 +404,12 @@ function formatZoneLabel(zone: FigmentZone): string {
   }
 }
 
-function isReserveSlot(value: FigmentBattlefieldSlotId): value is ReserveSlotId {
-  return (RESERVE_SLOT_IDS as readonly string[]).includes(value);
+function isReserveSlot(value: FigmentBattlefieldSlotId): value is BackRankSlotId {
+  return (BACK_RANK_SLOT_IDS as readonly string[]).includes(value);
 }
 
-function isDeploySlot(value: FigmentBattlefieldSlotId): value is DeploySlotId {
-  return (DEPLOY_SLOT_IDS as readonly string[]).includes(value);
+function isDeploySlot(value: FigmentBattlefieldSlotId): value is FrontRankSlotId {
+  return (FRONT_RANK_SLOT_IDS as readonly string[]).includes(value);
 }
 
 function isBattlefieldSlotOccupied(
@@ -432,15 +432,15 @@ function isBattlefieldSlotOccupied(
 function findFirstOpenReserveSlot(
   state: BattleMutableState,
   side: BattleSide,
-): ReserveSlotId | null {
-  return RESERVE_SLOT_IDS.find((slotId) => state.sides[side].reserve[slotId] === null) ?? null;
+): BackRankSlotId | null {
+  return BACK_RANK_SLOT_IDS.find((slotId) => state.sides[side].reserve[slotId] === null) ?? null;
 }
 
 function findFirstOpenDeploySlot(
   state: BattleMutableState,
   side: BattleSide,
-): DeploySlotId | null {
-  return DEPLOY_SLOT_IDS.find((slotId) => state.sides[side].deployed[slotId] === null) ?? null;
+): FrontRankSlotId | null {
+  return FRONT_RANK_SLOT_IDS.find((slotId) => state.sides[side].deployed[slotId] === null) ?? null;
 }
 
 function canStackIntoBattlefieldSlot(

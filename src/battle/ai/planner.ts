@@ -5,13 +5,13 @@ import { evaluate } from "./evaluate";
 import { scoreAgainstOpponent, type OpponentMode } from "./opponent-model";
 import { cloneForwardModel, type AiCard, type ForwardModel } from "./forward-model";
 import {
-  DEPLOY_SLOT_IDS,
-  RESERVE_SLOT_IDS,
+  FRONT_RANK_SLOT_IDS,
+  BACK_RANK_SLOT_IDS,
   type BattleAiChoiceTrace,
   type BattleAiDecisionStage,
   type BattlefieldSlotId,
-  type DeploySlotId,
-  type ReserveSlotId,
+  type FrontRankSlotId,
+  type BackRankSlotId,
 } from "../types";
 
 /**
@@ -94,7 +94,7 @@ interface BeamEntry {
  * cheaper static {@link evaluate} is enough.
  */
 function hasCommittedChallenger(model: ForwardModel): boolean {
-  for (const slot of DEPLOY_SLOT_IDS) {
+  for (const slot of FRONT_RANK_SLOT_IDS) {
     const card = model.aiDeployed[slot];
     if (card !== null && card.canChallengeThisTurn) {
       return true;
@@ -133,16 +133,16 @@ function applyAction(model: ForwardModel, action: PlanAction): void {
     return;
   }
   // MOVE_CARD: reserve → empty deploy slot.
-  const fromSlot = action.sourceSlotId as ReserveSlotId | null;
-  const toSlot = action.toSlot as DeploySlotId | null;
+  const fromSlot = action.sourceSlotId as BackRankSlotId | null;
+  const toSlot = action.toSlot as FrontRankSlotId | null;
   if (fromSlot === null || toSlot === null) {
     return;
   }
   const card = model.aiReserve[fromSlot];
   if (card === null || card.battleCardId !== action.card.battleCardId) {
     // The card moved/changed in the clone; locate it by id across reserve.
-    let found: ReserveSlotId | null = null;
-    for (const slot of RESERVE_SLOT_IDS) {
+    let found: BackRankSlotId | null = null;
+    for (const slot of BACK_RANK_SLOT_IDS) {
       if (model.aiReserve[slot]?.battleCardId === action.card.battleCardId) {
         found = slot;
         break;
@@ -162,8 +162,8 @@ function applyAction(model: ForwardModel, action: PlanAction): void {
   model.aiReserve[fromSlot] = null;
 }
 
-function firstEmptyDeploySlot(model: ForwardModel): DeploySlotId | null {
-  for (const slot of DEPLOY_SLOT_IDS) {
+function firstEmptyDeploySlot(model: ForwardModel): FrontRankSlotId | null {
+  for (const slot of FRONT_RANK_SLOT_IDS) {
     if (model.aiDeployed[slot] === null) {
       return slot;
     }
@@ -176,8 +176,8 @@ function firstEmptyDeploySlot(model: ForwardModel): DeploySlotId | null {
  * {@link playCharacterToReserve}. Recording it on the action lets the driver
  * emit the body's `MOVE_CARD_TO_ZONE` to a concrete reserve destination.
  */
-function firstEmptyReserveSlot(model: ForwardModel): ReserveSlotId | null {
-  for (const slot of RESERVE_SLOT_IDS) {
+function firstEmptyReserveSlot(model: ForwardModel): BackRankSlotId | null {
+  for (const slot of BACK_RANK_SLOT_IDS) {
     if (model.aiReserve[slot] === null) {
       return slot;
     }
@@ -227,7 +227,7 @@ function generateActions(model: ForwardModel): PlanAction[] {
   // all of them only multiplies the branching factor without changing value.
   const targetDeploySlot = firstEmptyDeploySlot(model);
   if (targetDeploySlot !== null) {
-    for (const reserveSlot of RESERVE_SLOT_IDS) {
+    for (const reserveSlot of BACK_RANK_SLOT_IDS) {
       const card = model.aiReserve[reserveSlot];
       if (card === null || !card.canChallengeThisTurn) {
         continue;

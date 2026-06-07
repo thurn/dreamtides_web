@@ -1,5 +1,5 @@
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
-import type { DeploySlotId, ReserveSlotId } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import type { FrontRankSlotId, BackRankSlotId } from "../types";
 import type { AiCard, ForwardModel } from "./forward-model";
 import type { PlannedAction } from "./planner";
 
@@ -24,18 +24,18 @@ export interface DefenseOptions {
 }
 
 interface ReserveBody {
-  slot: ReserveSlotId;
+  slot: BackRankSlotId;
   card: AiCard;
   /** Effective spark this body brings to the lane it blocks in. */
   spark: number;
 }
 
 interface Challenger {
-  slot: DeploySlotId;
+  slot: FrontRankSlotId;
   spark: number;
 }
 
-const DEPLOY_SLOT_SET = new Set<string>(DEPLOY_SLOT_IDS);
+const DEPLOY_SLOT_SET = new Set<string>(FRONT_RANK_SLOT_IDS);
 
 /**
  * Plans the AI's defensive repositions against the opponent's committed
@@ -49,14 +49,14 @@ const DEPLOY_SLOT_SET = new Set<string>(DEPLOY_SLOT_IDS);
 export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedAction[] {
   const challengers: Challenger[] = model.opponentBodies
     .filter((body) => body.rank === "front" && DEPLOY_SLOT_SET.has(body.slot))
-    .map((body) => ({ slot: body.slot as DeploySlotId, spark: body.effectiveSpark }))
+    .map((body) => ({ slot: body.slot as FrontRankSlotId, spark: body.effectiveSpark }))
     .sort((a, b) => b.spark - a.spark);
   if (challengers.length === 0) {
     return [];
   }
 
   const available: ReserveBody[] = [];
-  for (const slot of RESERVE_SLOT_IDS) {
+  for (const slot of BACK_RANK_SLOT_IDS) {
     const card = model.aiReserve[slot];
     if (card !== null && card.canChallengeThisTurn) {
       available.push({ slot, card, spark: bodySpark(card) });
@@ -67,7 +67,7 @@ export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedA
   }
 
   const moves: PlannedAction[] = [];
-  const usedReserve = new Set<ReserveSlotId>();
+  const usedReserve = new Set<BackRankSlotId>();
   for (const challenger of challengers) {
     // A body already sitting opposite the challenger is already defending it.
     if (model.aiDeployed[challenger.slot] !== null) {
@@ -103,7 +103,7 @@ function bodySpark(card: AiCard): number {
  */
 function chooseBlocker(
   available: ReserveBody[],
-  used: ReadonlySet<ReserveSlotId>,
+  used: ReadonlySet<BackRankSlotId>,
   challengerSpark: number,
   model: ForwardModel,
   opts: DefenseOptions,
@@ -144,7 +144,7 @@ function shouldChump(
   return notAhead || nearLethal;
 }
 
-function makeBlockAction(card: AiCard, toSlot: DeploySlotId): PlannedAction {
+function makeBlockAction(card: AiCard, toSlot: FrontRankSlotId): PlannedAction {
   return {
     stage: "reposition",
     kind: "MOVE_CARD",

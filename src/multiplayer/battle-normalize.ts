@@ -1,6 +1,6 @@
 import {
-  DEPLOY_SLOT_IDS,
-  RESERVE_SLOT_IDS,
+  FRONT_RANK_SLOT_IDS,
+  BACK_RANK_SLOT_IDS,
   type BattleCardInstance,
   type BattleHistory,
   type BattleHistoryEntry,
@@ -8,25 +8,25 @@ import {
   type BattleMutableState,
   type BattleReducerTransition,
   type BattleSideMutableState,
-  type DeploySlotId,
-  type ReserveSlotId,
+  type FrontRankSlotId,
+  type BackRankSlotId,
 } from "../battle/types";
 import type {
   SharedBattleReducerSlice,
   SharedBattleState,
 } from "./battle-types";
 
-function defaultReserveSlots(): Record<ReserveSlotId, string | null> {
-  const slots = {} as Record<ReserveSlotId, string | null>;
-  for (const id of RESERVE_SLOT_IDS) {
+function defaultReserveSlots(): Record<BackRankSlotId, string | null> {
+  const slots = {} as Record<BackRankSlotId, string | null>;
+  for (const id of BACK_RANK_SLOT_IDS) {
     slots[id] = null;
   }
   return slots;
 }
 
-function defaultDeploySlots(): Record<DeploySlotId, string | null> {
-  const slots = {} as Record<DeploySlotId, string | null>;
-  for (const id of DEPLOY_SLOT_IDS) {
+function defaultDeploySlots(): Record<FrontRankSlotId, string | null> {
+  const slots = {} as Record<FrontRankSlotId, string | null>;
+  for (const id of FRONT_RANK_SLOT_IDS) {
     slots[id] = null;
   }
   return slots;

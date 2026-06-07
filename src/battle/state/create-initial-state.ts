@@ -6,8 +6,8 @@ import type {
   BattleMutableState,
   BattleSide,
   BattleSideMutableState,
-  DeploySlotId,
-  ReserveSlotId,
+  FrontRankSlotId,
+  BackRankSlotId,
 } from "../types";
 
 const OPENING_ENERGY = 2;
@@ -182,14 +182,14 @@ function createInitialSideState(
   };
 }
 
-function createEmptyReserve(): Record<ReserveSlotId, string | null> {
+function createEmptyReserve(): Record<BackRankSlotId, string | null> {
   // bug-036: literal object is type-safe without the unsound `as Record<...>`
   // cast; the compiler proves all five keys exist.
-  return { R0: null, R1: null, R2: null, R3: null, R4: null };
+  return { B0: null, B1: null, B2: null, B3: null, B4: null };
 }
 
-function createEmptyDeployed(): Record<DeploySlotId, string | null> {
-  return { D0: null, D1: null, D2: null, D3: null };
+function createEmptyDeployed(): Record<FrontRankSlotId, string | null> {
+  return { F0: null, F1: null, F2: null, F3: null };
 }
 
 export function formatBattleCardId(ordinal: number): string {

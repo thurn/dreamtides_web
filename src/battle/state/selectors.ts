@@ -9,10 +9,10 @@ import type {
   BattleQuestDeckEntry,
   BattleSide,
   BattlefieldZone,
-  DeploySlotId,
-  ReserveSlotId,
+  FrontRankSlotId,
+  BackRankSlotId,
 } from "../types";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import { selectEffectiveSparkForInstance } from "./figments";
 
 /**
@@ -74,7 +74,7 @@ export function selectKindleTargetBattleCardId(
     return preferredBattleCardId;
   }
 
-  for (const slotId of DEPLOY_SLOT_IDS) {
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
     const battleCardId = state.sides[side].deployed[slotId];
 
     if (battleCardId !== null) {
@@ -82,7 +82,7 @@ export function selectKindleTargetBattleCardId(
     }
   }
 
-  for (const slotId of RESERVE_SLOT_IDS) {
+  for (const slotId of BACK_RANK_SLOT_IDS) {
     const battleCardId = state.sides[side].reserve[slotId];
 
     if (battleCardId !== null) {
@@ -144,7 +144,7 @@ export function selectEffectiveSparkOrZero(
 export function selectDeployedSpark(
   state: BattleMutableState,
   side: BattleSide,
-  slotId: DeploySlotId,
+  slotId: FrontRankSlotId,
 ): number {
   return selectEffectiveSparkOrZero(state, state.sides[side].deployed[slotId]);
 }
@@ -303,7 +303,7 @@ export function selectDefaultCharacterPlaySlot(
   state: BattleMutableState,
   side: BattleSide,
 ): BattleFieldSlotAddress | null {
-  for (const slotId of RESERVE_SLOT_IDS) {
+  for (const slotId of BACK_RANK_SLOT_IDS) {
     if (state.sides[side].reserve[slotId] === null) {
       return {
         side,
@@ -316,7 +316,7 @@ export function selectDefaultCharacterPlaySlot(
   // Spec E-16: player card play must never be blocked. When the reserve is
   // full, fall back to the leftmost empty deployed slot so the character can
   // still enter play.
-  for (const slotId of DEPLOY_SLOT_IDS) {
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
     if (state.sides[side].deployed[slotId] === null) {
       return {
         side,
@@ -338,20 +338,20 @@ export function selectBattlefieldSlotOccupant(
   }
 
   if (target.zone === "reserve") {
-    return state.sides[target.side].reserve[target.slotId as ReserveSlotId];
+    return state.sides[target.side].reserve[target.slotId as BackRankSlotId];
   }
 
-  return state.sides[target.side].deployed[target.slotId as DeploySlotId];
+  return state.sides[target.side].deployed[target.slotId as FrontRankSlotId];
 }
 
 export function isBattleFieldSlotAddressValid(
   target: BattleFieldSlotAddress,
 ): target is BattleFieldSlotAddress {
   if (target.zone === "reserve") {
-    return RESERVE_SLOT_IDS.includes(target.slotId as ReserveSlotId);
+    return BACK_RANK_SLOT_IDS.includes(target.slotId as BackRankSlotId);
   }
 
-  return DEPLOY_SLOT_IDS.includes(target.slotId as DeploySlotId);
+  return FRONT_RANK_SLOT_IDS.includes(target.slotId as FrontRankSlotId);
 }
 
 function selectOccupiedBattlefieldSlot(
@@ -361,7 +361,7 @@ function selectOccupiedBattlefieldSlot(
   battleCardId: string,
 ): BattleFieldCardLocation | null {
   if (zone === "reserve") {
-    for (const slotId of RESERVE_SLOT_IDS) {
+    for (const slotId of BACK_RANK_SLOT_IDS) {
       const occupant = state.sides[side].reserve[slotId];
 
       if (occupant === battleCardId) {
@@ -376,7 +376,7 @@ function selectOccupiedBattlefieldSlot(
     return null;
   }
 
-  for (const slotId of DEPLOY_SLOT_IDS) {
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
     const occupant = state.sides[side].deployed[slotId];
 
     if (occupant === battleCardId) {

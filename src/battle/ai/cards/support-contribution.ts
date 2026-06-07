@@ -1,5 +1,5 @@
 import { supportedDeploySlots } from "../../engine/support";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../../types";
 import type { ForwardModel } from "../forward-model";
 import { starterCardModels } from "./index";
 
@@ -35,7 +35,7 @@ export function buildSupportContribution(model: ForwardModel): Map<string, numbe
   };
 
   // Support: back-rank cards buffing the front allies they cover.
-  for (const reserveSlot of RESERVE_SLOT_IDS) {
+  for (const reserveSlot of BACK_RANK_SLOT_IDS) {
     const reserveCard = model.aiReserve[reserveSlot];
     if (reserveCard === null) {
       continue;
@@ -54,7 +54,7 @@ export function buildSupportContribution(model: ForwardModel): Map<string, numbe
   }
 
   // Self-static: front-rank cards buffing themselves.
-  for (const deploySlot of DEPLOY_SLOT_IDS) {
+  for (const deploySlot of FRONT_RANK_SLOT_IDS) {
     const deployedCard = model.aiDeployed[deploySlot];
     if (deployedCard === null) {
       continue;

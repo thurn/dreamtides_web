@@ -23,7 +23,7 @@ function makeBody(overrides: Partial<AiOpponentBody> & { battleCardId: string })
     effectiveSpark: 1,
     energyCost: 0,
     rank: "front",
-    slot: "D0",
+    slot: "F0",
     isFigment: false,
     ...overrides,
   };
@@ -38,8 +38,8 @@ function emptyModel(): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: { D0: null, D1: null, D2: null, D3: null },
-    aiReserve: { R0: null, R1: null, R2: null, R3: null, R4: null },
+    aiDeployed: { F0: null, F1: null, F2: null, F3: null },
+    aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -49,17 +49,17 @@ function emptyModel(): ForwardModel {
 /** A model with three AI challengers (sparks 5, 3, 2) and no opponent bodies. */
 function modelWithChallengers(): ForwardModel {
   const model = emptyModel();
-  model.aiDeployed.D0 = makeCard({
+  model.aiDeployed.F0 = makeCard({
     battleCardId: "ai-0",
     basePrintedSpark: 5,
     canChallengeThisTurn: true,
   });
-  model.aiDeployed.D1 = makeCard({
+  model.aiDeployed.F1 = makeCard({
     battleCardId: "ai-1",
     basePrintedSpark: 3,
     canChallengeThisTurn: true,
   });
-  model.aiDeployed.D2 = makeCard({
+  model.aiDeployed.F2 = makeCard({
     battleCardId: "ai-2",
     basePrintedSpark: 2,
     canChallengeThisTurn: true,
@@ -73,8 +73,8 @@ describe("scoreAgainstOpponent", () => {
   it("is deterministic for identical (model, mode, sampleCap, seed)", () => {
     const model = modelWithChallengers();
     model.opponentBodies = [
-      makeBody({ battleCardId: "op-0", effectiveSpark: 4, slot: "D0" }),
-      makeBody({ battleCardId: "op-1", effectiveSpark: 2, slot: "D1" }),
+      makeBody({ battleCardId: "op-0", effectiveSpark: 4, slot: "F0" }),
+      makeBody({ battleCardId: "op-1", effectiveSpark: 2, slot: "F1" }),
     ];
     model.opponentHandCount = 3;
 
@@ -90,8 +90,8 @@ describe("scoreAgainstOpponent", () => {
   it("worstCase <= expectiminimax for the same board and seed (min <= mean)", () => {
     const model = modelWithChallengers();
     model.opponentBodies = [
-      makeBody({ battleCardId: "op-0", effectiveSpark: 6, slot: "D0" }),
-      makeBody({ battleCardId: "op-1", effectiveSpark: 4, slot: "D1" }),
+      makeBody({ battleCardId: "op-0", effectiveSpark: 6, slot: "F0" }),
+      makeBody({ battleCardId: "op-1", effectiveSpark: 4, slot: "F1" }),
     ];
     model.opponentHandCount = 2;
 
@@ -106,9 +106,9 @@ describe("scoreAgainstOpponent", () => {
 
     const blocked = modelWithChallengers();
     blocked.opponentBodies = [
-      makeBody({ battleCardId: "op-0", effectiveSpark: 9, slot: "D0" }),
-      makeBody({ battleCardId: "op-1", effectiveSpark: 9, slot: "D1" }),
-      makeBody({ battleCardId: "op-2", effectiveSpark: 9, slot: "D2" }),
+      makeBody({ battleCardId: "op-0", effectiveSpark: 9, slot: "F0" }),
+      makeBody({ battleCardId: "op-1", effectiveSpark: 9, slot: "F1" }),
+      makeBody({ battleCardId: "op-2", effectiveSpark: 9, slot: "F2" }),
     ];
 
     const openScore = scoreAgainstOpponent(open, "expectiminimax", 8, 7);
@@ -121,16 +121,16 @@ describe("scoreAgainstOpponent", () => {
     const spy = vi.spyOn(evaluateModule, "evaluate");
 
     const model = modelWithChallengers();
-    model.aiDeployed.D3 = makeCard({
+    model.aiDeployed.F3 = makeCard({
       battleCardId: "ai-3",
       basePrintedSpark: 7,
       canChallengeThisTurn: true,
     });
     model.opponentBodies = [
-      makeBody({ battleCardId: "op-0", effectiveSpark: 8, slot: "D0" }),
-      makeBody({ battleCardId: "op-1", effectiveSpark: 7, slot: "D1" }),
-      makeBody({ battleCardId: "op-2", effectiveSpark: 6, slot: "D2", rank: "back" }),
-      makeBody({ battleCardId: "op-3", effectiveSpark: 5, slot: "D3" }),
+      makeBody({ battleCardId: "op-0", effectiveSpark: 8, slot: "F0" }),
+      makeBody({ battleCardId: "op-1", effectiveSpark: 7, slot: "F1" }),
+      makeBody({ battleCardId: "op-2", effectiveSpark: 6, slot: "F2", rank: "back" }),
+      makeBody({ battleCardId: "op-3", effectiveSpark: 5, slot: "F3" }),
     ];
     model.opponentHandCount = 5;
 
@@ -144,7 +144,7 @@ describe("scoreAgainstOpponent", () => {
 
   it("does not explode on a large board with a small sampleCap", () => {
     const model = modelWithChallengers();
-    model.aiDeployed.D3 = makeCard({
+    model.aiDeployed.F3 = makeCard({
       battleCardId: "ai-3",
       basePrintedSpark: 9,
       canChallengeThisTurn: true,
@@ -197,13 +197,13 @@ describe("scoreAgainstOpponent", () => {
     model.aiScore = 20;
     model.playerScore = 25;
     // Single challenger with spark 5: unblocked it scores 5, reaching aiScore 25.
-    model.aiDeployed.D0 = makeCard({
+    model.aiDeployed.F0 = makeCard({
       battleCardId: "ai-near-win",
       basePrintedSpark: 5,
       canChallengeThisTurn: true,
     });
     // One big blocker to ensure "tradeEvenly" keeps the AI from scoring.
-    model.opponentBodies = [makeBody({ battleCardId: "op-blocker", effectiveSpark: 6, slot: "D0" })];
+    model.opponentBodies = [makeBody({ battleCardId: "op-blocker", effectiveSpark: 6, slot: "F0" })];
     model.opponentHandCount = 0;
 
     const emResult = scoreAgainstOpponent(model, "expectiminimax", 8, 77);
@@ -214,7 +214,7 @@ describe("scoreAgainstOpponent", () => {
 
   it("ignores deployed cards that cannot challenge this turn", () => {
     const exhausted = modelWithChallengers();
-    for (const slot of ["D0", "D1", "D2"] as const) {
+    for (const slot of ["F0", "F1", "F2"] as const) {
       const card = exhausted.aiDeployed[slot];
       if (card !== null) {
         card.canChallengeThisTurn = false;

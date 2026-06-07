@@ -53,7 +53,7 @@ describe("enteredPlayTurnNumber stamping", () => {
 
     expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).toBeUndefined();
 
-    state = moveCard(state, cardId, { side: "player", zone: "reserve", slotId: "R0" });
+    state = moveCard(state, cardId, { side: "player", zone: "reserve", slotId: "B0" });
 
     expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).toBe(turnNumber);
   });
@@ -63,10 +63,10 @@ describe("enteredPlayTurnNumber stamping", () => {
     const cardId = state.mutable.sides.player.hand[0];
     const turnNumber = state.mutable.turnNumber;
 
-    state = moveCard(state, cardId, { side: "player", zone: "reserve", slotId: "R0" });
+    state = moveCard(state, cardId, { side: "player", zone: "reserve", slotId: "B0" });
     expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).toBe(turnNumber);
 
-    state = moveCard(state, cardId, { side: "player", zone: "deployed", slotId: "D0" });
+    state = moveCard(state, cardId, { side: "player", zone: "deployed", slotId: "F0" });
 
     // A reposition within the battlefield does not re-stamp: the body keeps the
     // turn it first entered play.
@@ -77,7 +77,7 @@ describe("enteredPlayTurnNumber stamping", () => {
     let state = createBattle();
     const cardId = state.mutable.sides.player.hand[0];
 
-    state = moveCard(state, cardId, { side: "player", zone: "reserve", slotId: "R0" });
+    state = moveCard(state, cardId, { side: "player", zone: "reserve", slotId: "B0" });
     expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).not.toBeNull();
 
     state = moveCard(state, cardId, { side: "player", zone: "void" });

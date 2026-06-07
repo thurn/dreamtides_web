@@ -10,8 +10,8 @@ import { resolveJudgment } from "../engine/judgment";
 import { planHandoff } from "../engine/handoff";
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import {
-  DEPLOY_SLOT_IDS,
-  RESERVE_SLOT_IDS,
+  FRONT_RANK_SLOT_IDS,
+  BACK_RANK_SLOT_IDS,
   type BattleAiChoiceTrace,
   type BattleMutableState,
   type BattleReducerState,
@@ -271,7 +271,7 @@ function planNonExcludedAction(
   return null;
 }
 
-const RESERVE_AND_DEPLOY_SLOTS = RESERVE_SLOT_IDS.length + DEPLOY_SLOT_IDS.length;
+const RESERVE_AND_DEPLOY_SLOTS = BACK_RANK_SLOT_IDS.length + FRONT_RANK_SLOT_IDS.length;
 
 /**
  * Returns a clone of `model` with the card identified by `battleCardId` removed

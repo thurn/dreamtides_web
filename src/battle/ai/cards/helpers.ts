@@ -1,4 +1,4 @@
-import { RESERVE_SLOT_IDS } from "../../types";
+import { BACK_RANK_SLOT_IDS } from "../../types";
 import type { ForwardModel, AiCard } from "../forward-model";
 
 /**
@@ -22,7 +22,7 @@ export function characterCanPlay(model: ForwardModel, self: AiCard): boolean {
   if (model.aiEnergy < self.energyCost) {
     return false;
   }
-  return RESERVE_SLOT_IDS.some((slot) => model.aiReserve[slot] === null);
+  return BACK_RANK_SLOT_IDS.some((slot) => model.aiReserve[slot] === null);
 }
 
 /**
@@ -38,7 +38,7 @@ export function playCharacterToReserve(model: ForwardModel, self: AiCard): void 
   model.aiEnergy -= self.energyCost;
   const card = removeFromHand(model, self) ?? self;
   card.canChallengeThisTurn = false;
-  for (const slot of RESERVE_SLOT_IDS) {
+  for (const slot of BACK_RANK_SLOT_IDS) {
     if (model.aiReserve[slot] === null) {
       model.aiReserve[slot] = card;
       return;

@@ -1,6 +1,6 @@
 import { buildSupportContribution } from "./cards/support-contribution";
 import { starterCardModels } from "./cards/index";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import type { AiCard, ForwardModel } from "./forward-model";
 
 /**
@@ -115,7 +115,7 @@ export function evaluate(model: ForwardModel): number {
     }
   }
 
-  for (const slot of DEPLOY_SLOT_IDS) {
+  for (const slot of FRONT_RANK_SLOT_IDS) {
     const card = model.aiDeployed[slot];
     if (card === null) {
       continue;
@@ -134,7 +134,7 @@ export function evaluate(model: ForwardModel): number {
   }
 
   let aiBackSpark = 0;
-  for (const slot of RESERVE_SLOT_IDS) {
+  for (const slot of BACK_RANK_SLOT_IDS) {
     const card = model.aiReserve[slot];
     if (card !== null) {
       aiBackSpark += baseSpark(card) + (support.get(card.battleCardId) ?? 0);
@@ -165,7 +165,7 @@ export function evaluate(model: ForwardModel): number {
   for (const card of model.aiHand) {
     hintTotal += valueHintSum(model, card);
   }
-  for (const slot of DEPLOY_SLOT_IDS) {
+  for (const slot of FRONT_RANK_SLOT_IDS) {
     const card = model.aiDeployed[slot];
     if (card !== null) {
       hintTotal += valueHintSum(model, card);
@@ -174,7 +174,7 @@ export function evaluate(model: ForwardModel): number {
       }
     }
   }
-  for (const slot of RESERVE_SLOT_IDS) {
+  for (const slot of BACK_RANK_SLOT_IDS) {
     const card = model.aiReserve[slot];
     if (card !== null) {
       hintTotal += valueHintSum(model, card);

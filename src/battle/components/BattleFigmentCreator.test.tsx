@@ -124,7 +124,7 @@ describe("BattleFigmentCreator", () => {
     if (occupantId === undefined) {
       throw new Error("expected at least one enemy-owned card in test state");
     }
-    state.sides.enemy.reserve.R0 = occupantId;
+    state.sides.enemy.reserve.B0 = occupantId;
 
     const submits: BattleDebugEdit[] = [];
     const closes = { count: 0 };
@@ -159,7 +159,7 @@ describe("BattleFigmentCreator", () => {
     ).toBe("1");
     expect(
       document.querySelector<HTMLInputElement>(
-        'input[name="battle-figment-slot"][value="R1"]',
+        'input[name="battle-figment-slot"][value="B1"]',
       )?.checked,
     ).toBe(true);
 
@@ -183,7 +183,7 @@ describe("BattleFigmentCreator", () => {
     expect(edit.destination).toEqual({
       side: "enemy",
       zone: "reserve",
-      slotId: "R1",
+      slotId: "B1",
     });
     expect(edit.createdAtMs).toBe(777);
     expect(closes.count).toBe(1);
@@ -222,7 +222,7 @@ describe("BattleFigmentCreator", () => {
     expect(edit.destination).toEqual({
       side: "player",
       zone: "reserve",
-      slotId: "R0",
+      slotId: "B0",
     });
     expect(edit.createdAtMs).toBe(555);
     expect(closes.count).toBe(1);
@@ -234,13 +234,13 @@ describe("BattleFigmentCreator", () => {
 
   it("disables submit and surfaces inline reason when target slot is occupied (bug-114)", () => {
     const state = buildBattleState();
-    // Occupy player reserve R0 with any existing card.
+    // Occupy player reserve B0 with any existing card.
     const occupantId = Object.values(state.cardInstances)
       .find((instance) => instance.owner === "player")?.battleCardId;
     if (occupantId === undefined) {
       throw new Error("expected at least one player-owned card in test state");
     }
-    state.sides.player.reserve.R0 = occupantId;
+    state.sides.player.reserve.B0 = occupantId;
 
     const { root, submits } = mount({ state });
 
@@ -254,7 +254,7 @@ describe("BattleFigmentCreator", () => {
     expect(submitButton?.disabled).toBe(false);
 
     const r0Radio = document.querySelector<HTMLInputElement>(
-      'input[name="battle-figment-slot"][value="R0"]',
+      'input[name="battle-figment-slot"][value="B0"]',
     );
     expect(r0Radio).not.toBeNull();
     act(() => {
@@ -269,16 +269,16 @@ describe("BattleFigmentCreator", () => {
     const hint = document.querySelector<HTMLElement>(
       "[data-battle-figment-submit-hint]",
     );
-    expect(hint?.textContent).toContain("R0 is occupied");
+    expect(hint?.textContent).toContain("B0 is occupied");
 
     act(() => {
       submitButtonAfterOccupiedSlot?.click();
     });
     expect(submits).toHaveLength(0);
 
-    // Switching to an unoccupied slot (R1) re-enables submit.
+    // Switching to an unoccupied slot (B1) re-enables submit.
     const r1Radio = document.querySelector<HTMLInputElement>(
-      'input[name="battle-figment-slot"][value="R1"]',
+      'input[name="battle-figment-slot"][value="B1"]',
     );
     expect(r1Radio).not.toBeNull();
     act(() => {
@@ -301,7 +301,7 @@ describe("BattleFigmentCreator", () => {
     expect(edit.destination).toEqual({
       side: "player",
       zone: "reserve",
-      slotId: "R1",
+      slotId: "B1",
     });
 
     act(() => {
@@ -341,11 +341,11 @@ describe("BattleFigmentCreator", () => {
         createdAtMs: 1,
       },
     });
-    state.sides.player.reserve.R0 = stackId;
+    state.sides.player.reserve.B0 = stackId;
 
     const { root, submits } = mount({ state });
     const r0Radio = document.querySelector<HTMLInputElement>(
-      'input[name="battle-figment-slot"][value="R0"]',
+      'input[name="battle-figment-slot"][value="B0"]',
     );
     expect(r0Radio).not.toBeNull();
     act(() => {
@@ -369,7 +369,7 @@ describe("BattleFigmentCreator", () => {
     expect(edit.destination).toEqual({
       side: "player",
       zone: "reserve",
-      slotId: "R0",
+      slotId: "B0",
     });
 
     act(() => {

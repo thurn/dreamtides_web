@@ -59,8 +59,8 @@ describe("actionToCommands — character play", () => {
       kind: "PLAY_CARD",
       self,
       targets: null,
-      toSlot: "R2",
-      trace: baseTrace({ battleCardId: "minstrel-1", targetSlotId: "R2" }),
+      toSlot: "B2",
+      trace: baseTrace({ battleCardId: "minstrel-1", targetSlotId: "B2" }),
     };
 
     const commands = actionToCommands(action, "enemy");
@@ -70,7 +70,7 @@ describe("actionToCommands — character play", () => {
     expect(move.kind).toBe("MOVE_CARD_TO_ZONE");
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
     expect(move.battleCardId).toBe("minstrel-1");
-    expect(move.destination).toEqual({ side: "enemy", zone: "reserve", slotId: "R2" });
+    expect(move.destination).toEqual({ side: "enemy", zone: "reserve", slotId: "B2" });
 
     const energy = editOf(commands[1]);
     expect(energy.kind).toBe("ADJUST_CURRENT_ENERGY");
@@ -90,13 +90,13 @@ describe("actionToCommands — reposition", () => {
       kind: "MOVE_CARD",
       self,
       targets: null,
-      toSlot: "D1",
+      toSlot: "F1",
       trace: baseTrace({
         stage: "reposition",
         choice: "MOVE_CARD",
         battleCardId: "colossus-1",
-        sourceSlotId: "R0",
-        targetSlotId: "D1",
+        sourceSlotId: "B0",
+        targetSlotId: "F1",
       }),
     };
 
@@ -107,7 +107,7 @@ describe("actionToCommands — reposition", () => {
     expect(move.kind).toBe("MOVE_CARD_TO_ZONE");
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
     expect(move.battleCardId).toBe("colossus-1");
-    expect(move.destination).toEqual({ side: "enemy", zone: "deployed", slotId: "D1" });
+    expect(move.destination).toEqual({ side: "enemy", zone: "deployed", slotId: "F1" });
   });
 });
 
@@ -196,8 +196,8 @@ describe("actionToCommands — envelope", () => {
       kind: "PLAY_CARD",
       self,
       targets: null,
-      toSlot: "R0",
-      trace: baseTrace({ battleCardId: "minstrel-2", targetSlotId: "R0" }),
+      toSlot: "B0",
+      trace: baseTrace({ battleCardId: "minstrel-2", targetSlotId: "B0" }),
     };
 
     const side: BattleSide = "player";
@@ -211,7 +211,7 @@ describe("actionToCommands — envelope", () => {
     }
     const move = editOf(commands[0], side);
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
-    expect(move.destination).toEqual({ side: "player", zone: "reserve", slotId: "R0" });
+    expect(move.destination).toEqual({ side: "player", zone: "reserve", slotId: "B0" });
     const energy = editOf(commands[1], side);
     if (energy.kind !== "ADJUST_CURRENT_ENERGY") throw new Error("expected energy");
     expect(energy.side).toBe("player");
@@ -268,7 +268,7 @@ describe("buildTrace", () => {
       kind: "PLAY_CARD",
       self: aiCard({ battleCardId: "minstrel-1", cardNumber: 510, name: "Nocturne Strummer" }),
       targets: null,
-      toSlot: "R2",
+      toSlot: "B2",
       trace: baseTrace({ battleCardId: "minstrel-1", cardName: "Nocturne Strummer" }),
     });
     expect(playTrace.rationale).toContain("Nocturne Strummer");
@@ -279,13 +279,13 @@ describe("buildTrace", () => {
       kind: "MOVE_CARD",
       self: aiCard({ battleCardId: "colossus-1", cardNumber: 515, name: "Wildflower Colossus" }),
       targets: null,
-      toSlot: "D1",
+      toSlot: "F1",
       trace: baseTrace({
         stage: "reposition",
         choice: "MOVE_CARD",
         battleCardId: "colossus-1",
         cardName: "Wildflower Colossus",
-        targetSlotId: "D1",
+        targetSlotId: "F1",
       }),
     });
     expect(moveTrace.rationale).toContain("Wildflower Colossus");

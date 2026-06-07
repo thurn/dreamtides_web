@@ -2,16 +2,16 @@ import { describe, expect, it } from "vitest";
 import { planNextAction, type PlannerOptions } from "./planner";
 import { starterCardModels } from "./cards/index";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 
 // --- Fixture helpers -------------------------------------------------------
 
 function emptyDeployed(): ForwardModel["aiDeployed"] {
-  return { D0: null, D1: null, D2: null, D3: null };
+  return { F0: null, F1: null, F2: null, F3: null };
 }
 
 function emptyReserve(): ForwardModel["aiReserve"] {
-  return { R0: null, R1: null, R2: null, R3: null, R4: null };
+  return { B0: null, B1: null, B2: null, B3: null, B4: null };
 }
 
 function baseModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
@@ -56,7 +56,7 @@ function opponentBody(overrides: Partial<AiOpponentBody> = {}): AiOpponentBody {
     effectiveSpark: 0,
     energyCost: 0,
     rank: "front",
-    slot: "D0",
+    slot: "F0",
     isFigment: false,
     ...overrides,
   };
@@ -132,12 +132,12 @@ describe("planNextAction", () => {
       });
       const model = baseModel({
         aiEnergy: 0,
-        aiReserve: { ...emptyReserve(), R0: ready },
+        aiReserve: { ...emptyReserve(), B0: ready },
         aiDeployed: {
-          D0: makeCard({ basePrintedSpark: 1 }),
-          D1: makeCard({ basePrintedSpark: 1 }),
-          D2: makeCard({ basePrintedSpark: 1 }),
-          D3: makeCard({ basePrintedSpark: 1 }),
+          F0: makeCard({ basePrintedSpark: 1 }),
+          F1: makeCard({ basePrintedSpark: 1 }),
+          F2: makeCard({ basePrintedSpark: 1 }),
+          F3: makeCard({ basePrintedSpark: 1 }),
         },
       });
       const action = planNextAction(model, defaultOptions());
@@ -157,15 +157,15 @@ describe("planNextAction", () => {
       const model = baseModel({
         aiEnergy: 3,
         aiHand: [minstrel()],
-        aiDeployed: { ...emptyDeployed(), D0: challenger },
+        aiDeployed: { ...emptyDeployed(), F0: challenger },
       });
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("PLAY_CARD");
       expect(action.self?.cardNumber).toBe(510);
       expect(action.toSlot).toBeDefined();
-      expect(RESERVE_SLOT_IDS).toContain(action.toSlot);
+      expect(BACK_RANK_SLOT_IDS).toContain(action.toSlot);
       // The named slot is empty in the source model.
-      expect(model.aiReserve[action.toSlot as "R0"]).toBeNull();
+      expect(model.aiReserve[action.toSlot as "B0"]).toBeNull();
     });
 
     it("a returned MOVE_CARD targets an empty, legal deploy slot from a ready reserve card", () => {
@@ -177,15 +177,15 @@ describe("planNextAction", () => {
       });
       const model = baseModel({
         aiEnergy: 0,
-        aiReserve: { ...emptyReserve(), R0: ready },
+        aiReserve: { ...emptyReserve(), B0: ready },
         opponentBodies: [],
       });
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("MOVE_CARD");
       expect(action.toSlot).toBeDefined();
-      expect(DEPLOY_SLOT_IDS).toContain(action.toSlot);
+      expect(FRONT_RANK_SLOT_IDS).toContain(action.toSlot);
       // Destination is empty in the source model.
-      expect(model.aiDeployed[action.toSlot as "D0"]).toBeNull();
+      expect(model.aiDeployed[action.toSlot as "F0"]).toBeNull();
       expect(action.self?.battleCardId).toBe(ready.battleCardId);
     });
 
@@ -215,10 +215,10 @@ describe("planNextAction", () => {
           cardModel?.onMaterialized?.(model, self);
         } else if (action.kind === "MOVE_CARD") {
           const self = action.self as AiCard;
-          const toSlot = action.toSlot as "D0";
+          const toSlot = action.toSlot as "F0";
           expect(model.aiDeployed[toSlot]).toBeNull();
           // Apply the move on the live model.
-          for (const slot of RESERVE_SLOT_IDS) {
+          for (const slot of BACK_RANK_SLOT_IDS) {
             if (model.aiReserve[slot]?.battleCardId === self.battleCardId) {
               model.aiReserve[slot] = null;
             }
@@ -259,7 +259,7 @@ describe("planNextAction", () => {
         baseModel({
           aiEnergy: 8,
           aiHand: [minstrel(), direwolf(), colossus()],
-          opponentBodies: [opponentBody({ effectiveSpark: 2, slot: "D0" })],
+          opponentBodies: [opponentBody({ effectiveSpark: 2, slot: "F0" })],
         });
 
       const a = planNextAction(build(), defaultOptions());
@@ -278,7 +278,7 @@ describe("planNextAction", () => {
   describe("synergy ordering", () => {
     it("plays Nocturne Strummer before Wildflower Colossus when only one is affordable", () => {
       // Energy for exactly ONE of the two: 2 (Minstrel) but not 6 (Colossus).
-      // A deployed challenger in D0 makes the Minstrel's Support immediately
+      // A deployed challenger in F0 makes the Minstrel's Support immediately
       // valuable (it lifts that front body, and would lift a future Colossus),
       // so the character stage should lead with the Minstrel even though it is
       // listed AFTER the Colossus in hand.
@@ -291,7 +291,7 @@ describe("planNextAction", () => {
       const model = baseModel({
         aiEnergy: 3,
         aiHand: [colossus(), minstrel()],
-        aiDeployed: { ...emptyDeployed(), D0: challenger },
+        aiDeployed: { ...emptyDeployed(), F0: challenger },
       });
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("PLAY_CARD");
@@ -307,11 +307,11 @@ describe("planNextAction", () => {
       // play it. The board is otherwise empty and there are no opponent bodies.
       //
       // The winning completed line is:
-      //   1. play Minstrel  -> lands in R0 (first empty reserve slot)
-      //   2. reposition Colossus from R2 -> D0 (first empty deploy slot)
-      // In the final board the Colossus stands in D0 with 1 supporting ally
-      // (Minstrel in R0, which supports D0), so its effective spark is
-      //   6 (base) + 2 (Minstrel Support, R0 supports D0)
+      //   1. play Minstrel  -> lands in B0 (first empty reserve slot)
+      //   2. reposition Colossus from B2 -> F0 (first empty deploy slot)
+      // In the final board the Colossus stands in F0 with 1 supporting ally
+      // (Minstrel in B0, which supports F0), so its effective spark is
+      //   6 (base) + 2 (Minstrel Support, B0 supports F0)
       //             + 2 (own +2-per-supporter self-static, 1 supporter) = 10,
       // scored unblocked against an empty opponent board. That completed plan
       // scores far above END_TURN.
@@ -333,7 +333,7 @@ describe("planNextAction", () => {
       const model = baseModel({
         aiEnergy: 2,
         aiHand: [minstrel()],
-        aiReserve: { ...emptyReserve(), R2: colossusOnBoard },
+        aiReserve: { ...emptyReserve(), B2: colossusOnBoard },
         opponentBodies: [],
       });
 

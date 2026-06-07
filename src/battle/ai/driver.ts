@@ -1,7 +1,7 @@
 import type { PlannedAction } from "./planner";
 import { CHARACTER_CARD_NUMBERS } from "./cards/card-numbers";
 import type { BattleCommand, BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
-import type { BattleSide, DeploySlotId, ReserveSlotId } from "../types";
+import type { BattleSide, FrontRankSlotId, BackRankSlotId } from "../types";
 
 /**
  * Translates a {@link PlannedAction} into the EXISTING
@@ -51,11 +51,11 @@ function opposingSide(side: BattleSide): BattleSide {
   return side === "player" ? "enemy" : "player";
 }
 
-function reserveDestination(side: BattleSide, slotId: ReserveSlotId): BattleDebugZoneDestination {
+function reserveDestination(side: BattleSide, slotId: BackRankSlotId): BattleDebugZoneDestination {
   return { side, zone: "reserve", slotId };
 }
 
-function deployedDestination(side: BattleSide, slotId: DeploySlotId): BattleDebugZoneDestination {
+function deployedDestination(side: BattleSide, slotId: FrontRankSlotId): BattleDebugZoneDestination {
   return { side, zone: "deployed", slotId };
 }
 
@@ -71,7 +71,7 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
 
   if (CHARACTER_CARD_NUMBERS.has(self.cardNumber)) {
     // Character: materialize the body into the chosen reserve slot, then pay.
-    const slotId = action.toSlot as ReserveSlotId | undefined;
+    const slotId = action.toSlot as BackRankSlotId | undefined;
     const commands: BattleCommand[] = [];
     if (slotId !== undefined) {
       commands.push(
@@ -156,7 +156,7 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
 
 function moveCardCommands(action: PlannedAction, aiSide: BattleSide): BattleCommand[] {
   const self = action.self;
-  const slotId = action.toSlot as DeploySlotId | undefined;
+  const slotId = action.toSlot as FrontRankSlotId | undefined;
   if (self === undefined || slotId === undefined) {
     return [];
   }

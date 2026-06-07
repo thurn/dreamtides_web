@@ -22,7 +22,7 @@ describe("applyBattleCommand", () => {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId,
-          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          destination: { side: "player", zone: "reserve", slotId: "B0" },
         },
       },
     );
@@ -93,14 +93,14 @@ describe("applyBattleCommand", () => {
           destination: {
             side: "player",
             zone: "reserve",
-            slotId: "R0",
+            slotId: "B0",
           },
         },
       },
     );
 
     expect(toReserve.mutable.sides.player.void).not.toContain(battleCardId);
-    expect(toReserve.mutable.sides.player.reserve.R0).toBe(battleCardId);
+    expect(toReserve.mutable.sides.player.reserve.B0).toBe(battleCardId);
   });
 
   it("moves a hand card onto the stack as a zero-cost stack entry", () => {
@@ -265,9 +265,9 @@ describe("applyBattleCommand", () => {
     const leftmostReserveCardId = state.sides.player.hand[2];
 
     state.sides.player.hand = state.sides.player.hand.slice(3);
-    state.sides.player.reserve.R2 = preferredReserveCardId;
-    state.sides.player.deployed.D1 = leftmostDeployedCardId;
-    state.sides.player.reserve.R1 = leftmostReserveCardId;
+    state.sides.player.reserve.B2 = preferredReserveCardId;
+    state.sides.player.deployed.F1 = leftmostDeployedCardId;
+    state.sides.player.reserve.B1 = leftmostReserveCardId;
 
     const preferredKindle = applyBattleCommand(
       createBattleReducerState(state),
@@ -300,7 +300,7 @@ describe("applyBattleCommand", () => {
     expect(deployedFallback.mutable.cardInstances[leftmostDeployedCardId].sparkDelta).toBe(1);
     expect(deployedFallback.mutable.cardInstances[leftmostReserveCardId].sparkDelta).toBe(0);
 
-    state.sides.player.deployed.D1 = null;
+    state.sides.player.deployed.F1 = null;
     const reserveFallback = applyBattleCommand(
       createBattleReducerState(state),
       {
@@ -315,8 +315,8 @@ describe("applyBattleCommand", () => {
 
     expect(reserveFallback.mutable.cardInstances[leftmostReserveCardId].sparkDelta).toBe(3);
 
-    state.sides.player.reserve.R1 = null;
-    state.sides.player.reserve.R2 = null;
+    state.sides.player.reserve.B1 = null;
+    state.sides.player.reserve.B2 = null;
     const noOp = applyBattleCommand(
       createBattleReducerState(state),
       {
@@ -381,7 +381,7 @@ describe("applyBattleCommand", () => {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId,
-          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          destination: { side: "player", zone: "reserve", slotId: "B0" },
         },
         sourceSurface: "hand-tray",
       },
@@ -727,7 +727,7 @@ describe("applyBattleCommand", () => {
           chosenSubtype: "Wisp",
           chosenSpark: 3,
           name: "Test Figment",
-          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          destination: { side: "player", zone: "reserve", slotId: "B0" },
           createdAtMs: 123,
         },
         sourceSurface: "figment-creator",
@@ -745,7 +745,7 @@ describe("applyBattleCommand", () => {
     expect(metadata.sourceSurface).toBe("figment-creator");
     expect(metadata.targets).toEqual([
       { kind: "side", ref: "player" },
-      { kind: "slot", ref: "player:reserve:R0" },
+      { kind: "slot", ref: "player:reserve:B0" },
     ]);
     expect(metadata.undoPayload).toBeNull();
 
@@ -762,7 +762,7 @@ describe("applyBattleCommand", () => {
     expect(minted.definition.imageNumber).toBe(0);
     expect(minted.definition.battleCardKind).toBe("character");
     expect(minted.definition.energyCost).toBe(0);
-    expect(applied.mutable.sides.player.reserve.R0).toBe(mintedId);
+    expect(applied.mutable.sides.player.reserve.B0).toBe(mintedId);
 
     const event = applied.lastTransition?.logEvents.find(
       (entry) => entry.event === "battle_proto_card_created",
@@ -771,7 +771,7 @@ describe("applyBattleCommand", () => {
       battleCardId: mintedId,
       provenanceKind: "generated-figment",
       sourceBattleCardId: null,
-      destinationZone: "player:reserve:R0",
+      destinationZone: "player:reserve:B0",
       figmentCount: 1,
       name: "Test Figment",
       ownerSide: "player",
@@ -840,13 +840,13 @@ describe("applyBattleCommand", () => {
         edit: {
           kind: "CREATE_CARD_FROM_DEFINITION",
           definition,
-          destination: { side: "enemy", zone: "reserve", slotId: "R0" },
+          destination: { side: "enemy", zone: "reserve", slotId: "B0" },
           createdAtMs: 78,
         },
         sourceSurface: "pool-viewer",
       },
     );
-    expect(toEnemySlot.mutable.sides.enemy.reserve.R0).toBe(`bc_${String(previousOrdinal + 1).padStart(4, "0")}`);
+    expect(toEnemySlot.mutable.sides.enemy.reserve.B0).toBe(`bc_${String(previousOrdinal + 1).padStart(4, "0")}`);
 
     const toDeckTop = applyBattleCommand(
       toEnemySlot,
@@ -888,7 +888,7 @@ describe("applyBattleCommand", () => {
         edit: {
           kind: "CREATE_CARD_FROM_DEFINITION",
           definition,
-          destination: { side: "enemy", zone: "reserve", slotId: "R0" },
+          destination: { side: "enemy", zone: "reserve", slotId: "B0" },
           createdAtMs: 81,
         },
         sourceSurface: "pool-viewer",
@@ -909,15 +909,15 @@ describe("applyBattleCommand", () => {
           chosenSubtype: "Shadow",
           chosenSpark: 1,
           name: "Shadow Figment",
-          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          destination: { side: "player", zone: "reserve", slotId: "B0" },
           createdAtMs: 1,
         },
         sourceSurface: "figment-creator",
       },
     );
-    const firstFigmentId = first.mutable.sides.player.reserve.R0;
+    const firstFigmentId = first.mutable.sides.player.reserve.B0;
     if (firstFigmentId === null) {
-      throw new Error("Expected first Shadow Figment in R0");
+      throw new Error("Expected first Shadow Figment in B0");
     }
 
     const second = applyBattleCommand(
@@ -930,15 +930,15 @@ describe("applyBattleCommand", () => {
           chosenSubtype: "Shadow",
           chosenSpark: 1,
           name: "Shadow Figment",
-          destination: { side: "player", zone: "reserve", slotId: "R1" },
+          destination: { side: "player", zone: "reserve", slotId: "B1" },
           createdAtMs: 2,
         },
         sourceSurface: "figment-creator",
       },
     );
 
-    expect(second.mutable.sides.player.reserve.R0).toBe(firstFigmentId);
-    expect(second.mutable.sides.player.reserve.R1).toBeNull();
+    expect(second.mutable.sides.player.reserve.B0).toBe(firstFigmentId);
+    expect(second.mutable.sides.player.reserve.B1).toBeNull();
     expect(second.mutable.cardInstances[firstFigmentId].figmentCount).toBe(2);
     expect(Object.values(second.mutable.sides.player.reserve).filter((cardId) => {
       if (cardId === null) return false;
@@ -948,7 +948,7 @@ describe("applyBattleCommand", () => {
       (entry) => entry.event === "battle_proto_card_created",
     )?.fields).toMatchObject({
       battleCardId: firstFigmentId,
-      destinationZone: "player:reserve:R0",
+      destinationZone: "player:reserve:B0",
       figmentCount: 2,
       subtype: "Shadow",
     });
@@ -966,7 +966,7 @@ describe("applyBattleCommand", () => {
           chosenSubtype: "Shadow",
           chosenSpark: 1,
           name: "Shadow Figment",
-          destination: { side: "player", zone: "reserve", slotId: "R0" },
+          destination: { side: "player", zone: "reserve", slotId: "B0" },
           createdAtMs: 1,
         },
       },
@@ -981,17 +981,17 @@ describe("applyBattleCommand", () => {
           chosenSubtype: "Warrior",
           chosenSpark: 1,
           name: "Warrior Figment",
-          destination: { side: "player", zone: "reserve", slotId: "R1" },
+          destination: { side: "player", zone: "reserve", slotId: "B1" },
           createdAtMs: 2,
         },
       },
     );
 
-    expect(second.mutable.sides.player.reserve.R0).toMatch(/^bc_/);
-    expect(second.mutable.sides.player.reserve.R1).toMatch(/^bc_/);
-    expect(second.mutable.sides.player.reserve.R1).not.toBe(second.mutable.sides.player.reserve.R0);
-    expect(second.mutable.cardInstances[second.mutable.sides.player.reserve.R0 ?? ""].definition.subtype).toBe("Shadow");
-    expect(second.mutable.cardInstances[second.mutable.sides.player.reserve.R1 ?? ""].definition.subtype).toBe("Warrior");
+    expect(second.mutable.sides.player.reserve.B0).toMatch(/^bc_/);
+    expect(second.mutable.sides.player.reserve.B1).toMatch(/^bc_/);
+    expect(second.mutable.sides.player.reserve.B1).not.toBe(second.mutable.sides.player.reserve.B0);
+    expect(second.mutable.cardInstances[second.mutable.sides.player.reserve.B0 ?? ""].definition.subtype).toBe("Shadow");
+    expect(second.mutable.cardInstances[second.mutable.sides.player.reserve.B1 ?? ""].definition.subtype).toBe("Warrior");
   });
 
   it("commits REORDER_DECK metadata and emits a deck-reordered log event", () => {
@@ -1117,7 +1117,7 @@ describe("applyBattleCommand", () => {
 
     expect(applied.mutable.sides.player.deck).not.toContain(characterBattleCardId);
     expect(applied.mutable.sides.player.hand).not.toContain(characterBattleCardId);
-    expect(applied.mutable.sides.player.reserve.R0).toBe(characterBattleCardId);
+    expect(applied.mutable.sides.player.reserve.B0).toBe(characterBattleCardId);
   });
 
   it("commits SET_PHASE metadata and changes only the phase label", () => {
@@ -1239,8 +1239,8 @@ describe("applyBattleCommand", () => {
     state.sides.enemy.hand = state.sides.enemy.hand.filter((cardId) =>
       cardId !== battlefieldCardB,
     );
-    state.sides.player.deployed.D0 = battlefieldCardA;
-    state.sides.enemy.deployed.D0 = battlefieldCardB;
+    state.sides.player.deployed.F0 = battlefieldCardA;
+    state.sides.enemy.deployed.F0 = battlefieldCardB;
 
     const zoneMove = applyBattleCommand(
       createBattleReducerState(state),
@@ -1261,8 +1261,8 @@ describe("applyBattleCommand", () => {
         id: "DEBUG_EDIT",
         edit: {
           kind: "SWAP_BATTLEFIELD_SLOTS",
-          source: { side: "player", zone: "deployed", slotId: "D0" },
-          target: { side: "enemy", zone: "deployed", slotId: "D0" },
+          source: { side: "player", zone: "deployed", slotId: "F0" },
+          target: { side: "enemy", zone: "deployed", slotId: "F0" },
         },
       },
     );

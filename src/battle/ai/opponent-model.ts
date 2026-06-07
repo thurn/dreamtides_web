@@ -2,7 +2,7 @@ import { buildSupportContribution } from "./cards/support-contribution";
 // Namespace import so the bounded-sampling test can spy on `evaluate`.
 import * as evaluateModule from "./evaluate";
 import { cloneForwardModel, type ForwardModel } from "./forward-model";
-import { DEPLOY_SLOT_IDS, type DeploySlotId } from "../types";
+import { FRONT_RANK_SLOT_IDS, type FrontRankSlotId } from "../types";
 
 /**
  * Abstract opponent-response model. Given a {@link ForwardModel} projection
@@ -75,7 +75,7 @@ function clampEval(value: number): number {
 }
 
 interface Challenger {
-  slot: DeploySlotId;
+  slot: FrontRankSlotId;
   battleCardId: string;
   effectiveSpark: number;
 }
@@ -120,7 +120,7 @@ function createRng(seed: number): () => number {
 function buildChallengers(model: ForwardModel): Challenger[] {
   const support = buildSupportContribution(model);
   const challengers: Challenger[] = [];
-  for (const slot of DEPLOY_SLOT_IDS) {
+  for (const slot of FRONT_RANK_SLOT_IDS) {
     const card = model.aiDeployed[slot];
     if (card === null || !card.canChallengeThisTurn) {
       continue;
@@ -146,7 +146,7 @@ function buildDefenders(model: ForwardModel): DefenderBody[] {
 // --- Applying a response to a cloned model --------------------------------
 
 /** Moves the AI card occupying `slot` from deployed into the void. */
-function dissolveChallenger(model: ForwardModel, slot: DeploySlotId): void {
+function dissolveChallenger(model: ForwardModel, slot: FrontRankSlotId): void {
   const card = model.aiDeployed[slot];
   if (card === null) {
     return;
@@ -253,7 +253,7 @@ function applyResponse(
       // and matched to the biggest challenger they can dissolve (spark >=);
       // remaining challengers score unblocked.
       const defenders = buildDefenders(clone);
-      const blocked = new Set<DeploySlotId>();
+      const blocked = new Set<FrontRankSlotId>();
       for (const defender of defenders) {
         // Pick the biggest not-yet-blocked challenger the defender can dissolve
         // or tie (defender spark >= challenger spark removes the most AI spark).

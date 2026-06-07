@@ -34,7 +34,7 @@ describe("battleControllerReducer", () => {
           edit: {
             kind: "MOVE_CARD_TO_ZONE",
             battleCardId,
-            destination: { side: "player", zone: "reserve", slotId: "R0" },
+            destination: { side: "player", zone: "reserve", slotId: "B0" },
           },
         },
       },

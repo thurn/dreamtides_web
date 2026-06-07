@@ -28,8 +28,8 @@ function createState() {
   if (reserveId === undefined || deployId === undefined) {
     throw new Error("expected opening hand cards");
   }
-  state.sides.player.reserve.R1 = reserveId;
-  state.sides.player.deployed.D0 = deployId;
+  state.sides.player.reserve.B1 = reserveId;
+  state.sides.player.deployed.F0 = deployId;
   return state;
 }
 
@@ -56,9 +56,9 @@ function mount(zone: "reserve" | "deployed"): {
         canInteract
         handSelectionSide="player"
         pendingDragCardId={null}
-        selectedCardId={zone === "reserve" ? state.sides.player.reserve.R1 : state.sides.player.deployed.D0}
+        selectedCardId={zone === "reserve" ? state.sides.player.reserve.B1 : state.sides.player.deployed.F0}
         selectedSlot={null}
-        selectionAnchor={{ side: "player", zone: "reserve", slotId: "R1" }}
+        selectionAnchor={{ side: "player", zone: "reserve", slotId: "B1" }}
         onCardClick={cardClicks}
         onCardContextMenu={() => undefined}
         onSlotClick={slotClicks as (target: BattleFieldSlotAddress, isOccupied: boolean) => void}
@@ -135,19 +135,19 @@ describe("BattlefieldGrid", () => {
 
   it("renders the row shell, slot ids, selected card state, and support highlights", () => {
     const { container, root, state } = mount("deployed");
-    const deployedCardId = state.sides.player.deployed.D0;
+    const deployedCardId = state.sides.player.deployed.F0;
 
     expect(container.querySelector('[data-battle-region="player-deployed-row"]')).not.toBeNull();
-    expect(container.querySelector('[data-slot-id="player-deployed-D0"]')).not.toBeNull();
-    expect(container.querySelector('[data-slot-id="player-deployed-D3"]')).not.toBeNull();
+    expect(container.querySelector('[data-slot-id="player-deployed-F0"]')).not.toBeNull();
+    expect(container.querySelector('[data-slot-id="player-deployed-F3"]')).not.toBeNull();
     expect(
-      container.querySelector('[data-slot-id="player-deployed-D0"] [data-battle-card-id]')?.textContent,
+      container.querySelector('[data-slot-id="player-deployed-F0"] [data-battle-card-id]')?.textContent,
     ).toContain(state.cardInstances[deployedCardId!]?.definition.name ?? "");
     expect(
-      container.querySelector('[data-slot-id="player-deployed-D0"]')?.getAttribute("data-battle-support-highlighted"),
+      container.querySelector('[data-slot-id="player-deployed-F0"]')?.getAttribute("data-battle-support-highlighted"),
     ).toBe("true");
     expect(
-      container.querySelector('[data-slot-id="player-deployed-D1"]')?.getAttribute("data-battle-support-highlighted"),
+      container.querySelector('[data-slot-id="player-deployed-F1"]')?.getAttribute("data-battle-support-highlighted"),
     ).toBe("true");
 
     act(() => {
@@ -157,8 +157,8 @@ describe("BattlefieldGrid", () => {
 
   it("routes occupied clicks to onCardClick and empty clicks to onSlotClick", () => {
     const { cardClicks, container, root, slotClicks } = mount("reserve");
-    const occupied = container.querySelector<HTMLElement>('[data-slot-id="player-reserve-R1"]');
-    const empty = container.querySelector<HTMLElement>('[data-slot-id="player-reserve-R4"]');
+    const occupied = container.querySelector<HTMLElement>('[data-slot-id="player-reserve-B1"]');
+    const empty = container.querySelector<HTMLElement>('[data-slot-id="player-reserve-B4"]');
 
     if (occupied === null || empty === null) {
       throw new Error("expected reserve slots");
@@ -171,7 +171,7 @@ describe("BattlefieldGrid", () => {
 
     expect(cardClicks).toHaveBeenCalledTimes(1);
     expect(slotClicks).toHaveBeenCalledWith(
-      { side: "player", zone: "reserve", slotId: "R4" },
+      { side: "player", zone: "reserve", slotId: "B4" },
       false,
     );
 

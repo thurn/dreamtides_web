@@ -26,7 +26,7 @@ import type {
   BattleSide,
   BattleTransitionData,
 } from "../types";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import {
   allocateBattleCardInstance,
   allocateBattleStackEntryId,
@@ -1563,11 +1563,11 @@ function setBattlefieldSlotOccupant(
   battleCardId: string | null,
 ): void {
   if (target.zone === "reserve") {
-    state.sides[target.side].reserve[target.slotId as (typeof RESERVE_SLOT_IDS)[number]] = battleCardId;
+    state.sides[target.side].reserve[target.slotId as (typeof BACK_RANK_SLOT_IDS)[number]] = battleCardId;
     return;
   }
 
-  state.sides[target.side].deployed[target.slotId as (typeof DEPLOY_SLOT_IDS)[number]] = battleCardId;
+  state.sides[target.side].deployed[target.slotId as (typeof FRONT_RANK_SLOT_IDS)[number]] = battleCardId;
 }
 
 // `createEmptyTransitionData` imported from ../engine/result (bug-015).

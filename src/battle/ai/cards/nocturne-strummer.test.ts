@@ -24,8 +24,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: { D0: null, D1: null, D2: null, D3: null },
-    aiReserve: { R0: null, R1: null, R2: null, R3: null, R4: null },
+    aiDeployed: { F0: null, F1: null, F2: null, F3: null },
+    aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -43,10 +43,10 @@ describe("Nocturne Strummer (#510)", () => {
     const minstrel = makeCard({ battleCardId: "minstrel", cardNumber: 510 });
     // The receiving ally needs no model of its own; it only collects the bonus.
     const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
-    // R1 supports D0 and D1.
+    // B1 supports F0 and F1.
     const model = makeModel({
-      aiDeployed: { D0: ally, D1: null, D2: null, D3: null },
-      aiReserve: { R0: null, R1: minstrel, R2: null, R3: null, R4: null },
+      aiDeployed: { F0: ally, F1: null, F2: null, F3: null },
+      aiReserve: { B0: null, B1: minstrel, B2: null, B3: null, B4: null },
     });
     const contribution = buildSupportContribution(model);
     expect(contribution.get("ally")).toBe(2);
@@ -55,10 +55,10 @@ describe("Nocturne Strummer (#510)", () => {
   it("does not buff a deployed ally outside the supported slots", () => {
     const minstrel = makeCard({ battleCardId: "minstrel", cardNumber: 510 });
     const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
-    // R0 supports only D0; an ally in D3 is not covered.
+    // B0 supports only F0; an ally in F3 is not covered.
     const model = makeModel({
-      aiDeployed: { D0: null, D1: null, D2: null, D3: ally },
-      aiReserve: { R0: minstrel, R1: null, R2: null, R3: null, R4: null },
+      aiDeployed: { F0: null, F1: null, F2: null, F3: ally },
+      aiReserve: { B0: minstrel, B1: null, B2: null, B3: null, B4: null },
     });
     expect(buildSupportContribution(model).get("ally")).toBeUndefined();
   });
@@ -69,7 +69,7 @@ describe("Nocturne Strummer (#510)", () => {
     nocturneStrummer.play(model, self, null);
     expect(model.aiEnergy).toBe(3);
     expect(model.aiHand).toHaveLength(0);
-    expect(model.aiReserve.R0?.battleCardId).toBe("minstrel");
-    expect(model.aiReserve.R0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiReserve.B0?.battleCardId).toBe("minstrel");
+    expect(model.aiReserve.B0?.canChallengeThisTurn).toBe(false);
   });
 });

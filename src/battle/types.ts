@@ -8,13 +8,13 @@ import type {
 } from "../types/quest";
 import type { BattleDebugEdit } from "./debug/commands";
 
-export const RESERVE_SLOT_IDS = ["R0", "R1", "R2", "R3", "R4"] as const;
-export const DEPLOY_SLOT_IDS = ["D0", "D1", "D2", "D3"] as const;
+export const BACK_RANK_SLOT_IDS = ["B0", "B1", "B2", "B3", "B4"] as const;
+export const FRONT_RANK_SLOT_IDS = ["F0", "F1", "F2", "F3"] as const;
 
 export type BattleSide = "player" | "enemy";
-export type ReserveSlotId = (typeof RESERVE_SLOT_IDS)[number];
-export type DeploySlotId = (typeof DEPLOY_SLOT_IDS)[number];
-export type BattlefieldSlotId = ReserveSlotId | DeploySlotId;
+export type BackRankSlotId = (typeof BACK_RANK_SLOT_IDS)[number];
+export type FrontRankSlotId = (typeof FRONT_RANK_SLOT_IDS)[number];
+export type BattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 export type BattleZoneId = "deck" | "hand" | "void" | "banished" | "reserve" | "deployed" | "stack";
 export type BattlefieldZone = "reserve" | "deployed";
 export type BrowseableZone = "deck" | "hand" | "void" | "banished";
@@ -282,8 +282,8 @@ export interface BattleSideMutableState {
   hand: string[];
   void: string[];
   banished: string[];
-  reserve: Record<ReserveSlotId, string | null>;
-  deployed: Record<DeploySlotId, string | null>;
+  reserve: Record<BackRankSlotId, string | null>;
+  deployed: Record<FrontRankSlotId, string | null>;
 }
 
 export interface BattleStackEntry {
@@ -365,7 +365,7 @@ export type BattleCardLocation =
   | BattleFieldCardLocation;
 
 export interface BattleLaneJudgment {
-  slotId: DeploySlotId;
+  slotId: FrontRankSlotId;
   playerSpark: number;
   enemySpark: number;
   winner: BattleSide | null;

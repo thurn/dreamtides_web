@@ -1,5 +1,5 @@
 import { supportingReserveSlots } from "../../engine/support";
-import { DEPLOY_SLOT_IDS } from "../../types";
+import { FRONT_RANK_SLOT_IDS } from "../../types";
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { StarterCardModel } from "./index";
 import { characterCanPlay, playCharacterToReserve } from "./helpers";
@@ -22,7 +22,7 @@ export const wildflowerColossus: StarterCardModel = {
     playCharacterToReserve(model, self);
   },
   selfStaticSpark(model: ForwardModel, self: AiCard): number {
-    const deploySlot = DEPLOY_SLOT_IDS.find(
+    const deploySlot = FRONT_RANK_SLOT_IDS.find(
       (slot) => model.aiDeployed[slot]?.battleCardId === self.battleCardId,
     );
     if (deploySlot === undefined) {

@@ -1,7 +1,7 @@
 import type { BattleCommand } from "../debug/commands";
 import type { BattleDebugZoneDestination } from "../debug/commands";
 import { selectDefaultCharacterPlaySlot } from "../state/selectors";
-import { DEPLOY_SLOT_IDS, RESERVE_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import type {
   BattleCommandSourceSurface,
   BattleMutableState,
@@ -141,7 +141,7 @@ function findFirstOpenBattlefieldSlot(
   zone: BattlefieldZone,
 ): BattleFieldSlotAddress | null {
   if (zone === "reserve") {
-    for (const slotId of RESERVE_SLOT_IDS) {
+    for (const slotId of BACK_RANK_SLOT_IDS) {
       if (state.sides[side].reserve[slotId] === null) {
         return { side, zone, slotId };
       }
@@ -149,7 +149,7 @@ function findFirstOpenBattlefieldSlot(
     return null;
   }
 
-  for (const slotId of DEPLOY_SLOT_IDS) {
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
     if (state.sides[side].deployed[slotId] === null) {
       return { side, zone, slotId };
     }

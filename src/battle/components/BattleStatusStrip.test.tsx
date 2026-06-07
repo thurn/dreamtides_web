@@ -26,7 +26,7 @@ function createState() {
   if (deployedId === undefined) {
     throw new Error("expected opening hand card");
   }
-  state.sides.player.deployed.D0 = deployedId;
+  state.sides.player.deployed.F0 = deployedId;
   const deployedCard = state.cardInstances[deployedId];
   if (deployedCard === undefined) {
     throw new Error("expected deployed card instance");

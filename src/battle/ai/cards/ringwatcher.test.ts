@@ -23,8 +23,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: { D0: null, D1: null, D2: null, D3: null },
-    aiReserve: { R0: null, R1: null, R2: null, R3: null, R4: null },
+    aiDeployed: { F0: null, F1: null, F2: null, F3: null },
+    aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -63,7 +63,7 @@ describe("Ringwatcher (#511)", () => {
     const model = makeModel({ aiEnergy: 5, aiHand: [self] });
     ringwatcher.play(model, self, null);
     expect(model.aiEnergy).toBe(2);
-    expect(model.aiReserve.R0?.battleCardId).toBe("seer");
-    expect(model.aiReserve.R0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiReserve.B0?.battleCardId).toBe("seer");
+    expect(model.aiReserve.B0?.canChallengeThisTurn).toBe(false);
   });
 });
