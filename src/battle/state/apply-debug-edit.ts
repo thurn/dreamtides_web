@@ -50,6 +50,7 @@ import {
   selectFigmentCount,
   selectFigmentSparks,
 } from "./figments";
+import { lookupFigmentCatalogEntry, type FigmentKeyword } from "./figment-catalog";
 
 export function applyDebugEdit(
   state: BattleMutableState,
@@ -884,6 +885,14 @@ function createFigment(
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
+  // A negative `chosenSpark` is the "use catalog default" sentinel: resolve it to
+  // the catalog base spark for this figment type (rules §Figments), falling back
+  // to 0 for an unknown subtype.
+  const catalogEntry = lookupFigmentCatalogEntry(chosenSubtype);
+  const resolvedSpark = chosenSpark < 0
+    ? catalogEntry?.baseSpark ?? 0
+    : chosenSpark;
+
   if ("slotId" in destination) {
     const existingStack = findBattlefieldFigmentStack(
       nextState,
@@ -891,7 +900,7 @@ function createFigment(
       chosenSubtype,
     );
     if (existingStack !== null) {
-      addFigmentsToStackInPlace(nextState, existingStack.battleCardId, 1, chosenSpark);
+      addFigmentsToStackInPlace(nextState, existingStack.battleCardId, 1, resolvedSpark);
       const stack = nextState.cardInstances[existingStack.battleCardId];
       return {
         state: nextState,
@@ -906,7 +915,7 @@ function createFigment(
                 figmentCount: stack === undefined ? 1 : selectFigmentCount(stack),
                 name: stack?.definition.name ?? name,
                 ownerSide: side,
-                printedSpark: stack?.definition.printedSpark ?? chosenSpark,
+                printedSpark: stack?.definition.printedSpark ?? resolvedSpark,
                 provenanceKind: "generated-figment",
                 sourceBattleCardId: null,
                 subtype: chosenSubtype,
@@ -934,7 +943,7 @@ function createFigment(
     subtype: chosenSubtype,
     energyCost: 0,
     printedEnergyCost: 0,
-    printedSpark: chosenSpark,
+    printedSpark: resolvedSpark,
     isFast: false,
     reclaimCost: null,
     renderedText: "",
@@ -945,7 +954,7 @@ function createFigment(
   const provenance: BattleCardProvenance = {
     kind: "generated-figment",
     sourceBattleCardId: null,
-    chosenSpark,
+    chosenSpark: resolvedSpark,
     chosenSubtype,
     createdAtTurnNumber: nextState.turnNumber,
     createdAtSide: nextState.activeSide,
@@ -961,6 +970,8 @@ function createFigment(
 
   insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
 
+  applyFigmentKeywordToStatus(nextState, battleCardId, catalogEntry?.keyword);
+
   return {
     state: nextState,
     transition: {
@@ -974,7 +985,7 @@ function createFigment(
             figmentCount: selectFigmentCount(nextState.cardInstances[battleCardId]),
             name,
             ownerSide: side,
-            printedSpark: chosenSpark,
+            printedSpark: resolvedSpark,
             provenanceKind: "generated-figment",
             sourceBattleCardId: null,
             subtype: chosenSubtype,
@@ -984,6 +995,39 @@ function createFigment(
       ],
     },
   };
+}
+
+/**
+ * Stamps a figment type's implicit keyword onto the new instance's status. The
+ * four combat keywords map onto the matching `granted*` flag; `support` is a
+ * static Support benefit resolved at challenge time and has no status flag.
+ */
+function applyFigmentKeywordToStatus(
+  state: BattleMutableState,
+  battleCardId: string,
+  keyword: FigmentKeyword | undefined,
+): void {
+  const instance = state.cardInstances[battleCardId];
+  if (instance === undefined || keyword === undefined) {
+    return;
+  }
+
+  switch (keyword) {
+    case "unstoppable":
+      instance.status.grantedUnstoppable = true;
+      return;
+    case "vengeful":
+      instance.status.grantedVengeful = true;
+      return;
+    case "preeminence":
+      instance.status.grantedPreeminence = true;
+      return;
+    case "awakened":
+      instance.status.grantedAwakened = true;
+      return;
+    case "support":
+      return;
+  }
 }
 
 function createCardFromDefinition(
