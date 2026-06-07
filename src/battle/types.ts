@@ -15,8 +15,8 @@ export type BattleSide = "player" | "enemy";
 export type BackRankSlotId = (typeof BACK_RANK_SLOT_IDS)[number];
 export type FrontRankSlotId = (typeof FRONT_RANK_SLOT_IDS)[number];
 export type BattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
-export type BattleZoneId = "deck" | "hand" | "void" | "banished" | "reserve" | "deployed" | "stack";
-export type BattlefieldZone = "reserve" | "deployed";
+export type BattleZoneId = "deck" | "hand" | "void" | "banished" | "backRank" | "frontRank" | "stack";
+export type BattlefieldZone = "backRank" | "frontRank";
 export type BrowseableZone = "deck" | "hand" | "void" | "banished";
 export type MarkerDiffState = "set" | "cleared" | "unchanged";
 
@@ -259,7 +259,7 @@ export interface BattleCardInstance {
   provenance: BattleCardProvenance;
   /**
    * The `turnNumber` at which this card most recently entered play (the
-   * battlefield: a `reserve` or `deployed` slot). Set when a card materializes
+   * battlefield: a `backRank` or `frontRank` slot). Set when a card materializes
    * from a non-battlefield zone and cleared to `null` when it leaves play. A
    * card that has never been in play (or whose state predates this field) is
    * `undefined`.
@@ -282,8 +282,8 @@ export interface BattleSideMutableState {
   hand: string[];
   void: string[];
   banished: string[];
-  reserve: Record<BackRankSlotId, string | null>;
-  deployed: Record<FrontRankSlotId, string | null>;
+  backRank: Record<BackRankSlotId, string | null>;
+  frontRank: Record<FrontRankSlotId, string | null>;
 }
 
 export interface BattleStackEntry {
@@ -342,7 +342,7 @@ export interface BattleHandCardLocation {
 
 export interface BattleZoneCardLocation {
   side: BattleSide;
-  zone: Exclude<BattleZoneId, "hand" | "reserve" | "deployed" | "stack">;
+  zone: Exclude<BattleZoneId, "hand" | "backRank" | "frontRank" | "stack">;
   index: number;
 }
 

@@ -77,8 +77,8 @@ function emptySide(overrides: Partial<BattleSideMutableState> = {}): BattleSideM
     hand: [],
     void: [],
     banished: [],
-    reserve: Object.fromEntries(BACK_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["reserve"],
-    deployed: Object.fromEntries(FRONT_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["deployed"],
+    backRank: Object.fromEntries(BACK_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["backRank"],
+    frontRank: Object.fromEntries(FRONT_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["frontRank"],
     ...overrides,
   };
 }
@@ -112,7 +112,7 @@ function edits(commands: BattleCommand[]): BattleDebugEdit[] {
   return commands.flatMap((command) => (command.id === "DEBUG_EDIT" ? [command.edit] : []));
 }
 
-function deployed(slot: FrontRankSlotId, battleCardId: string | null): Record<FrontRankSlotId, string | null> {
+function frontRankSlots(slot: FrontRankSlotId, battleCardId: string | null): Record<FrontRankSlotId, string | null> {
   return {
     ...Object.fromEntries(FRONT_RANK_SLOT_IDS.map((id) => [id, null])),
     [slot]: battleCardId,
@@ -133,7 +133,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "c1",
-        destination: { side: "player", zone: "reserve", slotId: "B0" },
+        destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
       sourceSurface: "hand-tray",
     };
@@ -144,7 +144,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "c1",
-        destination: { side: "player", zone: "reserve", slotId: "B0" },
+        destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -3 },
     ]);
@@ -160,7 +160,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "e1",
-        destination: { side: "player", zone: "deployed", slotId: "F0" },
+        destination: { side: "player", zone: "frontRank", slotId: "F0" },
       },
       sourceSurface: "hand-tray",
     };
@@ -185,7 +185,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "c1",
-        destination: { side: "player", zone: "reserve", slotId: "B0" },
+        destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
       sourceSurface: "hand-tray",
     };
@@ -216,7 +216,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
 
   it("does not spend energy when moving a card already on the battlefield", () => {
     const state = makeState({
-      player: { currentEnergy: 5, reserve: { B0: "c1", B1: null, B2: null, B3: null, B4: null } },
+      player: { currentEnergy: 5, backRank: { B0: "c1", B1: null, B2: null, B3: null, B4: null } },
       instances: [makeInstance("c1", { owner: "player", energyCost: 3 })],
     });
     const reposition: BattleCommand = {
@@ -224,7 +224,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: "c1",
-        destination: { side: "player", zone: "deployed", slotId: "F0" },
+        destination: { side: "player", zone: "frontRank", slotId: "F0" },
       },
       sourceSurface: "battlefield",
     };
@@ -237,7 +237,7 @@ describe("resolveChallenge — spark comparison", () => {
   it("scores an unpaired challenger's spark for the active side", () => {
     const state = makeState({
       activeSide: "player",
-      player: { deployed: deployed("F0", "p0") },
+      player: { frontRank: frontRankSlots("F0", "p0") },
       instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
     });
 
@@ -249,8 +249,8 @@ describe("resolveChallenge — spark comparison", () => {
   it("dissolves the lower-spark character in a defended lane", () => {
     const state = makeState({
       activeSide: "player",
-      player: { deployed: deployed("F0", "p0") },
-      enemy: { deployed: deployed("F0", "e0") },
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      enemy: { frontRank: frontRankSlots("F0", "e0") },
       instances: [
         makeInstance("p0", { owner: "player", printedSpark: 5 }),
         makeInstance("e0", { owner: "enemy", printedSpark: 3 }),
@@ -274,8 +274,8 @@ describe("resolveChallenge — spark comparison", () => {
   it("dissolves both characters on a spark tie", () => {
     const state = makeState({
       activeSide: "player",
-      player: { deployed: deployed("F0", "p0") },
-      enemy: { deployed: deployed("F0", "e0") },
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      enemy: { frontRank: frontRankSlots("F0", "e0") },
       instances: [
         makeInstance("p0", { owner: "player", printedSpark: 4 }),
         makeInstance("e0", { owner: "enemy", printedSpark: 4 }),
@@ -293,8 +293,8 @@ describe("resolveChallenge — keyword awareness", () => {
   it("lets a Preeminence character win a spark tie", () => {
     const state = makeState({
       activeSide: "player",
-      player: { deployed: deployed("F0", "p0") },
-      enemy: { deployed: deployed("F0", "e0") },
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      enemy: { frontRank: frontRankSlots("F0", "e0") },
       instances: [
         makeInstance("p0", { owner: "player", printedSpark: 4, renderedText: "Preeminence" }),
         makeInstance("e0", { owner: "enemy", printedSpark: 4 }),
@@ -317,8 +317,8 @@ describe("resolveChallenge — keyword awareness", () => {
   it("dissolves the winner too when the loser is Vengeful", () => {
     const state = makeState({
       activeSide: "player",
-      player: { deployed: deployed("F0", "p0") },
-      enemy: { deployed: deployed("F0", "e0") },
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      enemy: { frontRank: frontRankSlots("F0", "e0") },
       instances: [
         makeInstance("p0", { owner: "player", printedSpark: 5 }),
         makeInstance("e0", { owner: "enemy", printedSpark: 2, renderedText: "Vengeful" }),
@@ -334,8 +334,8 @@ describe("resolveChallenge — keyword awareness", () => {
   it("scores a defended Unstoppable challenger that survives", () => {
     const state = makeState({
       activeSide: "player",
-      player: { deployed: deployed("F0", "p0") },
-      enemy: { deployed: deployed("F0", "e0") },
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      enemy: { frontRank: frontRankSlots("F0", "e0") },
       instances: [
         makeInstance("p0", { owner: "player", printedSpark: 6, renderedText: "Unstoppable" }),
         makeInstance("e0", { owner: "enemy", printedSpark: 3 }),
@@ -350,8 +350,8 @@ describe("resolveChallenge — keyword awareness", () => {
   it("recognizes the Celestial figment's implicit Preeminence keyword", () => {
     const state = makeState({
       activeSide: "player",
-      player: { deployed: deployed("F0", "p0") },
-      enemy: { deployed: deployed("F0", "e0") },
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      enemy: { frontRank: frontRankSlots("F0", "e0") },
       instances: [
         makeInstance("p0", {
           owner: "player",
@@ -382,7 +382,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 3,
-      player: { deployed: deployed("F0", "p0") },
+      player: { frontRank: frontRankSlots("F0", "p0") },
       enemy: { deck: ["d-enemy"] },
       instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
     });
@@ -448,7 +448,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 4,
-      player: { score: 22, deployed: deployed("F0", "p0") },
+      player: { score: 22, frontRank: frontRankSlots("F0", "p0") },
       enemy: { deck: ["d-enemy"] },
       instances: [makeInstance("p0", { owner: "player", printedSpark: 5 })],
     });

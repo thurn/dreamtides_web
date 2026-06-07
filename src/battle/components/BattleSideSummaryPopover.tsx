@@ -29,8 +29,8 @@ export function BattleSideSummaryPopover({
 }) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const sideState = state.sides[side];
-  const reserveCount = BACK_RANK_SLOT_IDS.filter((slotId) => sideState.reserve[slotId] !== null).length;
-  const deployedCount = FRONT_RANK_SLOT_IDS.filter((slotId) => sideState.deployed[slotId] !== null).length;
+  const reserveCount = BACK_RANK_SLOT_IDS.filter((slotId) => sideState.backRank[slotId] !== null).length;
+  const deployedCount = FRONT_RANK_SLOT_IDS.filter((slotId) => sideState.frontRank[slotId] !== null).length;
   const showDreamcallerSummary = dreamcaller !== null;
 
   useEffect(() => {
@@ -98,11 +98,11 @@ export function BattleSideSummaryPopover({
             <span className="value">{isActive ? "Active" : "Waiting"}</span>
           </div>
           <div className="summary-stat">
-            <span className="label">Reserve</span>
+            <span className="label">Back Rank</span>
             <span className="value">{String(reserveCount)}/5</span>
           </div>
           <div className="summary-stat">
-            <span className="label">Deployed</span>
+            <span className="label">Front Rank</span>
             <span className="value">{String(deployedCount)}/4</span>
           </div>
         </div>

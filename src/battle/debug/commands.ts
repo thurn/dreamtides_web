@@ -393,7 +393,7 @@ function makeSideTarget(side: BattleSide): BattleCommandTarget {
 
 function makeZoneTarget(
   side: BattleSide,
-  zone: "deck" | "hand" | "void" | "banished" | "reserve" | "deployed" | "stack",
+  zone: "deck" | "hand" | "void" | "banished" | "backRank" | "frontRank" | "stack",
 ): BattleCommandTarget {
   return {
     kind: "zone",
@@ -720,12 +720,12 @@ function formatSlotLabel(slot: BattleFieldSlotAddress): string {
   return `${formatSideLabel(slot.side)} ${formatZoneLabel(slot.zone)} ${slot.slotId}`;
 }
 
-function formatZoneLabel(zone: "reserve" | "deployed" | "deck" | "hand" | "void" | "banished" | "stack"): string {
+function formatZoneLabel(zone: "backRank" | "frontRank" | "deck" | "hand" | "void" | "banished" | "stack"): string {
   switch (zone) {
-    case "reserve":
-      return "Reserve";
-    case "deployed":
-      return "Deployed";
+    case "backRank":
+      return "Back Rank";
+    case "frontRank":
+      return "Front Rank";
     case "deck":
       return "Deck";
     case "hand":

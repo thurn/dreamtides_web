@@ -35,7 +35,7 @@ export function findBattlefieldFigmentStack(
   const normalizedSubtype = normalizeFigmentSubtype(subtype);
 
   for (const slotId of BACK_RANK_SLOT_IDS) {
-    const battleCardId = state.sides[side].reserve[slotId];
+    const battleCardId = state.sides[side].backRank[slotId];
     const instance = battleCardId === null ? null : state.cardInstances[battleCardId];
     if (
       battleCardId !== null &&
@@ -45,13 +45,13 @@ export function findBattlefieldFigmentStack(
     ) {
       return {
         battleCardId,
-        location: { side, zone: "reserve", slotId },
+        location: { side, zone: "backRank", slotId },
       };
     }
   }
 
   for (const slotId of FRONT_RANK_SLOT_IDS) {
-    const battleCardId = state.sides[side].deployed[slotId];
+    const battleCardId = state.sides[side].frontRank[slotId];
     const instance = battleCardId === null ? null : state.cardInstances[battleCardId];
     if (
       battleCardId !== null &&
@@ -61,7 +61,7 @@ export function findBattlefieldFigmentStack(
     ) {
       return {
         battleCardId,
-        location: { side, zone: "deployed", slotId },
+        location: { side, zone: "frontRank", slotId },
       };
     }
   }

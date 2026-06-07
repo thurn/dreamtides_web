@@ -138,15 +138,15 @@ function areBattleSideStatesEqual(
   if (!areStringArraysEqual(left.hand, right.hand)) return false;
   if (!areStringArraysEqual(left.void, right.void)) return false;
   if (!areStringArraysEqual(left.banished, right.banished)) return false;
-  for (const slotId of Object.keys(left.reserve)) {
-    if (left.reserve[slotId as keyof typeof left.reserve] !==
-      right.reserve[slotId as keyof typeof right.reserve]) {
+  for (const slotId of Object.keys(left.backRank)) {
+    if (left.backRank[slotId as keyof typeof left.backRank] !==
+      right.backRank[slotId as keyof typeof right.backRank]) {
       return false;
     }
   }
-  for (const slotId of Object.keys(left.deployed)) {
-    if (left.deployed[slotId as keyof typeof left.deployed] !==
-      right.deployed[slotId as keyof typeof right.deployed]) {
+  for (const slotId of Object.keys(left.frontRank)) {
+    if (left.frontRank[slotId as keyof typeof left.frontRank] !==
+      right.frontRank[slotId as keyof typeof right.frontRank]) {
       return false;
     }
   }

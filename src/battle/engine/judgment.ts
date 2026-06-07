@@ -104,8 +104,8 @@ function resolveLane(params: {
     dissolvedBattleCardIds,
   } = params;
 
-  const challengerId = state.sides[activeSide].deployed[slotId];
-  const defenderId = state.sides[opposingSide].deployed[slotId];
+  const challengerId = state.sides[activeSide].frontRank[slotId];
+  const defenderId = state.sides[opposingSide].frontRank[slotId];
   const challenger =
     challengerId === null ? null : state.cardInstances[challengerId] ?? null;
   const defender =

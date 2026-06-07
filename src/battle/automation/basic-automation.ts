@@ -245,8 +245,8 @@ export function resolveChallenge(
   let opposingScored = 0;
 
   for (const slotId of FRONT_RANK_SLOT_IDS) {
-    const challengerId = state.sides[activeSide].deployed[slotId];
-    const defenderId = state.sides[opposingSide].deployed[slotId];
+    const challengerId = state.sides[activeSide].frontRank[slotId];
+    const defenderId = state.sides[opposingSide].frontRank[slotId];
     const challenger = challengerId === null ? null : state.cardInstances[challengerId] ?? null;
     const defender = defenderId === null ? null : state.cardInstances[defenderId] ?? null;
 

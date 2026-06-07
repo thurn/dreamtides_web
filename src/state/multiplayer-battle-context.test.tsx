@@ -143,7 +143,7 @@ describe("useMultiplayerBattle", () => {
           edit: {
             kind: "MOVE_CARD_TO_ZONE",
             battleCardId: "p#0",
-            destination: { side: "player", zone: "reserve", slotId: "B0" },
+            destination: { side: "player", zone: "backRank", slotId: "B0" },
           },
           sourceSurface: "hand-tray",
         },

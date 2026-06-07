@@ -52,11 +52,11 @@ function opposingSide(side: BattleSide): BattleSide {
 }
 
 function reserveDestination(side: BattleSide, slotId: BackRankSlotId): BattleDebugZoneDestination {
-  return { side, zone: "reserve", slotId };
+  return { side, zone: "backRank", slotId };
 }
 
 function deployedDestination(side: BattleSide, slotId: FrontRankSlotId): BattleDebugZoneDestination {
-  return { side, zone: "deployed", slotId };
+  return { side, zone: "frontRank", slotId };
 }
 
 function voidDestination(side: BattleSide): BattleDebugZoneDestination {

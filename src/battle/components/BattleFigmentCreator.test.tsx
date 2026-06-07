@@ -124,7 +124,7 @@ describe("BattleFigmentCreator", () => {
     if (occupantId === undefined) {
       throw new Error("expected at least one enemy-owned card in test state");
     }
-    state.sides.enemy.reserve.B0 = occupantId;
+    state.sides.enemy.backRank.B0 = occupantId;
 
     const submits: BattleDebugEdit[] = [];
     const closes = { count: 0 };
@@ -182,7 +182,7 @@ describe("BattleFigmentCreator", () => {
     expect(edit.name).toBe("Shadow Figment");
     expect(edit.destination).toEqual({
       side: "enemy",
-      zone: "reserve",
+      zone: "backRank",
       slotId: "B1",
     });
     expect(edit.createdAtMs).toBe(777);
@@ -221,7 +221,7 @@ describe("BattleFigmentCreator", () => {
     expect(edit.name).toBe("Custom Figment");
     expect(edit.destination).toEqual({
       side: "player",
-      zone: "reserve",
+      zone: "backRank",
       slotId: "B0",
     });
     expect(edit.createdAtMs).toBe(555);
@@ -240,7 +240,7 @@ describe("BattleFigmentCreator", () => {
     if (occupantId === undefined) {
       throw new Error("expected at least one player-owned card in test state");
     }
-    state.sides.player.reserve.B0 = occupantId;
+    state.sides.player.backRank.B0 = occupantId;
 
     const { root, submits } = mount({ state });
 
@@ -300,7 +300,7 @@ describe("BattleFigmentCreator", () => {
     }
     expect(edit.destination).toEqual({
       side: "player",
-      zone: "reserve",
+      zone: "backRank",
       slotId: "B1",
     });
 
@@ -341,7 +341,7 @@ describe("BattleFigmentCreator", () => {
         createdAtMs: 1,
       },
     });
-    state.sides.player.reserve.B0 = stackId;
+    state.sides.player.backRank.B0 = stackId;
 
     const { root, submits } = mount({ state });
     const r0Radio = document.querySelector<HTMLInputElement>(
@@ -368,7 +368,7 @@ describe("BattleFigmentCreator", () => {
     }
     expect(edit.destination).toEqual({
       side: "player",
-      zone: "reserve",
+      zone: "backRank",
       slotId: "B0",
     });
 

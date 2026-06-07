@@ -433,11 +433,11 @@
   width: var(--battlefield-row-width);
 }
 
-.slots.reserve {
+.slots.backRank {
   grid-template-columns: repeat(5, var(--card-w));
 }
 
-.slots.deployed {
+.slots.frontRank {
   grid-template-columns: repeat(4, var(--card-w));
   padding-left: calc((var(--card-w) + var(--slot-gap)) / 2);
 }

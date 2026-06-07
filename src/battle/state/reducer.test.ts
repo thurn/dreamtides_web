@@ -51,7 +51,7 @@ describe("battleReducer", () => {
     expect(reduced.mutable.sides.player.score).toBe(before.sides.player.score);
     expect(reduced.mutable.sides.player.hand).toEqual(before.sides.player.hand);
     expect(reduced.mutable.sides.player.deck).toEqual(before.sides.player.deck);
-    expect(reduced.mutable.sides.player.deployed).toEqual(before.sides.player.deployed);
+    expect(reduced.mutable.sides.player.frontRank).toEqual(before.sides.player.frontRank);
     expect(reduced.history.past).toHaveLength(1);
     expect(reduced.history.past[0].metadata).toMatchObject({
       commandId: "SET_PHASE",
@@ -69,8 +69,8 @@ describe("battleReducer", () => {
     const enemyD0 = state.sides.enemy.hand[0];
     state.sides.player.hand = state.sides.player.hand.filter((id) => id !== playerD0);
     state.sides.enemy.hand = state.sides.enemy.hand.filter((id) => id !== enemyD0);
-    state.sides.player.deployed.F0 = playerD0;
-    state.sides.enemy.deployed.F0 = enemyD0;
+    state.sides.player.frontRank.F0 = playerD0;
+    state.sides.enemy.frontRank.F0 = enemyD0;
     state.sides.player.score = 5;
     state.sides.enemy.score = 3;
 
@@ -90,8 +90,8 @@ describe("battleReducer", () => {
     expect(reducerState.mutable.phase).toBe("night");
     expect(reducerState.mutable.sides.player.score).toBe(before.sides.player.score);
     expect(reducerState.mutable.sides.enemy.score).toBe(before.sides.enemy.score);
-    expect(reducerState.mutable.sides.player.deployed).toEqual(before.sides.player.deployed);
-    expect(reducerState.mutable.sides.enemy.deployed).toEqual(before.sides.enemy.deployed);
+    expect(reducerState.mutable.sides.player.frontRank).toEqual(before.sides.player.frontRank);
+    expect(reducerState.mutable.sides.enemy.frontRank).toEqual(before.sides.enemy.frontRank);
     expect(reducerState.mutable.result).toBeNull();
   });
 
@@ -366,7 +366,7 @@ describe("battleReducer", () => {
     const battleCardId = state.sides.player.hand[0];
 
     state.sides.player.hand = state.sides.player.hand.slice(1);
-    state.sides.player.reserve.B0 = battleCardId;
+    state.sides.player.backRank.B0 = battleCardId;
 
     const reducerState = createBattleReducerState(state);
     const reduced = applyBattleCommand(
@@ -376,7 +376,7 @@ describe("battleReducer", () => {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId,
-          destination: { side: "player", zone: "reserve", slotId: "B0" },
+          destination: { side: "player", zone: "backRank", slotId: "B0" },
         },
       },
     );
@@ -392,7 +392,7 @@ describe("battleReducer", () => {
 
     state.activeSide = "enemy";
     state.sides.player.hand = state.sides.player.hand.filter((cardId) => cardId !== fieldCardId);
-    state.sides.player.reserve.B0 = fieldCardId;
+    state.sides.player.backRank.B0 = fieldCardId;
 
     // Moving a player hand card goes through even though the enemy is active.
     const playReduced = applyBattleCommand(
@@ -402,7 +402,7 @@ describe("battleReducer", () => {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId: handCardId,
-          destination: { side: "player", zone: "reserve", slotId: "B1" },
+          destination: { side: "player", zone: "backRank", slotId: "B1" },
         },
       },
     );
@@ -419,14 +419,14 @@ describe("battleReducer", () => {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId: fieldCardId,
-          destination: { side: "player", zone: "deployed", slotId: "F0" },
+          destination: { side: "player", zone: "frontRank", slotId: "F0" },
         },
       },
     );
 
     // The move is permitted during the challenge phase per H-1.
-    expect(moveReduced.mutable.sides.player.reserve.B0).toBeNull();
-    expect(moveReduced.mutable.sides.player.deployed.F0).toBe(fieldCardId);
+    expect(moveReduced.mutable.sides.player.backRank.B0).toBeNull();
+    expect(moveReduced.mutable.sides.player.frontRank.F0).toBe(fieldCardId);
     expect(moveReduced.history.past).toHaveLength(1);
   });
 
@@ -440,7 +440,7 @@ describe("battleReducer", () => {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId,
-          destination: { side: "player", zone: "reserve", slotId: "B0" },
+          destination: { side: "player", zone: "backRank", slotId: "B0" },
         },
       },
     );
@@ -672,7 +672,7 @@ describe("battleReducer", () => {
     expect(reduced.history.past[0].metadata.commandId).toBe("PLAY_FROM_DECK_TOP");
     expect(reduced.mutable.sides.player.deck).not.toContain(character);
     expect(reduced.mutable.sides.player.hand).not.toContain(character);
-    expect(reduced.mutable.sides.player.reserve.B0).toBe(character);
+    expect(reduced.mutable.sides.player.backRank.B0).toBe(character);
     // Energy-free manual play: no energy is spent.
     expect(reduced.mutable.sides.player.currentEnergy).toBe(energyBefore);
   });
@@ -684,8 +684,8 @@ describe("battleReducer", () => {
     state.sides.player.hand = state.sides.player.hand.filter(
       (cardId) => cardId !== cardA && cardId !== cardB,
     );
-    state.sides.player.reserve.B0 = cardA;
-    state.sides.player.reserve.B2 = cardB;
+    state.sides.player.backRank.B0 = cardA;
+    state.sides.player.backRank.B2 = cardB;
 
     const reduced = applyBattleCommand(
       createBattleReducerState(state),
@@ -693,14 +693,14 @@ describe("battleReducer", () => {
         id: "DEBUG_EDIT",
         edit: {
           kind: "SWAP_BATTLEFIELD_SLOTS",
-          source: { side: "player", zone: "reserve", slotId: "B0" },
-          target: { side: "player", zone: "reserve", slotId: "B2" },
+          source: { side: "player", zone: "backRank", slotId: "B0" },
+          target: { side: "player", zone: "backRank", slotId: "B2" },
         },
       },
     );
 
-    expect(reduced.mutable.sides.player.reserve.B0).toBe(cardB);
-    expect(reduced.mutable.sides.player.reserve.B2).toBe(cardA);
+    expect(reduced.mutable.sides.player.backRank.B0).toBe(cardB);
+    expect(reduced.mutable.sides.player.backRank.B2).toBe(cardA);
     expect(reduced.history.past).toHaveLength(1);
   });
 
@@ -710,7 +710,7 @@ describe("battleReducer", () => {
     state.sides.enemy.hand = state.sides.enemy.hand.filter(
       (cardId) => cardId !== enemyCardId,
     );
-    state.sides.enemy.deployed.F1 = enemyCardId;
+    state.sides.enemy.frontRank.F1 = enemyCardId;
 
     const reduced = applyBattleCommand(
       createBattleReducerState(state),
@@ -719,13 +719,13 @@ describe("battleReducer", () => {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId: enemyCardId,
-          destination: { side: "enemy", zone: "reserve", slotId: "B3" },
+          destination: { side: "enemy", zone: "backRank", slotId: "B3" },
         },
       },
     );
 
-    expect(reduced.mutable.sides.enemy.deployed.F1).toBeNull();
-    expect(reduced.mutable.sides.enemy.reserve.B3).toBe(enemyCardId);
+    expect(reduced.mutable.sides.enemy.frontRank.F1).toBeNull();
+    expect(reduced.mutable.sides.enemy.backRank.B3).toBe(enemyCardId);
     expect(reduced.history.past).toHaveLength(1);
   });
 

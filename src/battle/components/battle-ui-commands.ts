@@ -140,9 +140,9 @@ function findFirstOpenBattlefieldSlot(
   side: BattleSide,
   zone: BattlefieldZone,
 ): BattleFieldSlotAddress | null {
-  if (zone === "reserve") {
+  if (zone === "backRank") {
     for (const slotId of BACK_RANK_SLOT_IDS) {
-      if (state.sides[side].reserve[slotId] === null) {
+      if (state.sides[side].backRank[slotId] === null) {
         return { side, zone, slotId };
       }
     }
@@ -150,7 +150,7 @@ function findFirstOpenBattlefieldSlot(
   }
 
   for (const slotId of FRONT_RANK_SLOT_IDS) {
-    if (state.sides[side].deployed[slotId] === null) {
+    if (state.sides[side].frontRank[slotId] === null) {
       return { side, zone, slotId };
     }
   }

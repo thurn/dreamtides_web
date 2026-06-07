@@ -55,10 +55,10 @@ export function formatZoneLabel(zone: BattleZoneId): string {
       return "Void";
     case "banished":
       return "Banished";
-    case "reserve":
-      return "Reserve";
-    case "deployed":
-      return "Deployed";
+    case "backRank":
+      return "Back Rank";
+    case "frontRank":
+      return "Front Rank";
     case "stack":
       return "Stack";
   }

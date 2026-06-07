@@ -121,7 +121,7 @@ describe("planDefense", () => {
         F3: null,
       },
       aiReserve: {
-        B0: makeCard({ battleCardId: "reserve", basePrintedSpark: 5 }),
+        B0: makeCard({ battleCardId: "backRank", basePrintedSpark: 5 }),
         B1: null,
         B2: null,
         B3: null,

@@ -70,7 +70,7 @@ describe("actionToCommands — character play", () => {
     expect(move.kind).toBe("MOVE_CARD_TO_ZONE");
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
     expect(move.battleCardId).toBe("minstrel-1");
-    expect(move.destination).toEqual({ side: "enemy", zone: "reserve", slotId: "B2" });
+    expect(move.destination).toEqual({ side: "enemy", zone: "backRank", slotId: "B2" });
 
     const energy = editOf(commands[1]);
     expect(energy.kind).toBe("ADJUST_CURRENT_ENERGY");
@@ -107,7 +107,7 @@ describe("actionToCommands — reposition", () => {
     expect(move.kind).toBe("MOVE_CARD_TO_ZONE");
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
     expect(move.battleCardId).toBe("colossus-1");
-    expect(move.destination).toEqual({ side: "enemy", zone: "deployed", slotId: "F1" });
+    expect(move.destination).toEqual({ side: "enemy", zone: "frontRank", slotId: "F1" });
   });
 });
 
@@ -211,7 +211,7 @@ describe("actionToCommands — envelope", () => {
     }
     const move = editOf(commands[0], side);
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
-    expect(move.destination).toEqual({ side: "player", zone: "reserve", slotId: "B0" });
+    expect(move.destination).toEqual({ side: "player", zone: "backRank", slotId: "B0" });
     const energy = editOf(commands[1], side);
     if (energy.kind !== "ADJUST_CURRENT_ENERGY") throw new Error("expected energy");
     expect(energy.side).toBe("player");

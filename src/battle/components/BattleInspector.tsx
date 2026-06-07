@@ -506,8 +506,8 @@ function ZoneCountRow({
   state: BattleMutableState;
 }) {
   const sideState = state.sides[side];
-  const reserveCount = Object.values(sideState.reserve).filter(Boolean).length;
-  const deployedCount = Object.values(sideState.deployed).filter(Boolean).length;
+  const reserveCount = Object.values(sideState.backRank).filter(Boolean).length;
+  const deployedCount = Object.values(sideState.frontRank).filter(Boolean).length;
 
   return (
     <div className="row-ctl">

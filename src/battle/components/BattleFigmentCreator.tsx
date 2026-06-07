@@ -4,7 +4,7 @@ import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/comma
 import type { BattleMutableState, BattleSide, FrontRankSlotId, BackRankSlotId } from "../types";
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 
-type FigmentZone = "hand" | "reserve" | "deployed" | "void" | "banished" | "deck";
+type FigmentZone = "hand" | "backRank" | "frontRank" | "void" | "banished" | "deck";
 type FigmentDeckPosition = "top" | "bottom";
 type FigmentBattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 const DEFAULT_FIGMENT_NAME = "Shadow Figment";
@@ -29,7 +29,7 @@ export function BattleFigmentCreator({
   const [subtype, setSubtype] = useState(DEFAULT_FIGMENT_SUBTYPE);
   const [sparkText, setSparkText] = useState(DEFAULT_FIGMENT_SPARK);
   const [side, setSide] = useState<BattleSide>(initialSide);
-  const [zone, setZone] = useState<FigmentZone>("reserve");
+  const [zone, setZone] = useState<FigmentZone>("backRank");
   const [position, setPosition] = useState<FigmentDeckPosition>("top");
   const [slot, setSlot] = useState<FigmentBattlefieldSlotId>(
     () => findFirstOpenReserveSlot(state, initialSide) ?? "B0",
@@ -52,9 +52,9 @@ export function BattleFigmentCreator({
   useEffect(() => {
     // bug-110: reset slot when side changes so the previously highlighted
     // slot on the other side doesn't carry forward as a stale selection.
-    if (zone === "reserve") {
+    if (zone === "backRank") {
       setSlot(findFirstOpenReserveSlot(state, side) ?? "B0");
-    } else if (zone === "deployed") {
+    } else if (zone === "frontRank") {
       setSlot(findFirstOpenDeploySlot(state, side) ?? "F0");
     }
   }, [side, state, zone]);
@@ -229,7 +229,7 @@ export function BattleFigmentCreator({
           </legend>
           <div className="flex flex-wrap gap-3 text-sm text-slate-200">
             {(
-              ["hand", "reserve", "deployed", "void", "banished", "deck"] as const
+              ["hand", "backRank", "frontRank", "void", "banished", "deck"] as const
             ).map((option) => (
               <label key={option} className="flex items-center gap-2">
                 <input
@@ -239,9 +239,9 @@ export function BattleFigmentCreator({
                   checked={zone === option}
                   onChange={() => {
                     setZone(option);
-                    if (option === "reserve" && !isReserveSlot(slot)) {
+                    if (option === "backRank" && !isReserveSlot(slot)) {
                       setSlot("B0");
-                    } else if (option === "deployed" && !isDeploySlot(slot)) {
+                    } else if (option === "frontRank" && !isDeploySlot(slot)) {
                       setSlot("F0");
                     }
                   }}
@@ -275,7 +275,7 @@ export function BattleFigmentCreator({
             </div>
           </fieldset>
         ) : null}
-        {zone === "reserve" || zone === "deployed" ? (
+        {zone === "backRank" || zone === "frontRank" ? (
           <fieldset
             data-battle-figment-field="slot"
             className="flex flex-col gap-2"
@@ -284,7 +284,7 @@ export function BattleFigmentCreator({
               Slot
             </legend>
             <div className="flex flex-wrap gap-3 text-sm text-slate-200">
-              {(zone === "reserve" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS).map(
+              {(zone === "backRank" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS).map(
                 (option) => (
                   <label key={option} className="flex items-center gap-2">
                     <input
@@ -353,7 +353,7 @@ function buildDestination({
   slot: FigmentBattlefieldSlotId;
   zone: FigmentZone;
 }): BattleDebugZoneDestination {
-  if (zone === "reserve" || zone === "deployed") {
+  if (zone === "backRank" || zone === "frontRank") {
     return {
       side,
       zone,
@@ -391,10 +391,10 @@ function formatZoneLabel(zone: FigmentZone): string {
   switch (zone) {
     case "hand":
       return "Hand";
-    case "reserve":
-      return "Reserve";
-    case "deployed":
-      return "Deployed";
+    case "backRank":
+      return "Back Rank";
+    case "frontRank":
+      return "Front Rank";
     case "void":
       return "Void";
     case "banished":
@@ -420,11 +420,11 @@ function isBattlefieldSlotOccupied(
 ): boolean {
   // bug-114: peek into the live battlefield to gate the submit button against
   // occupied target slots. Non-battlefield zones are never occupied.
-  if (zone === "reserve" && isReserveSlot(slot)) {
-    return state.sides[side].reserve[slot] !== null;
+  if (zone === "backRank" && isReserveSlot(slot)) {
+    return state.sides[side].backRank[slot] !== null;
   }
-  if (zone === "deployed" && isDeploySlot(slot)) {
-    return state.sides[side].deployed[slot] !== null;
+  if (zone === "frontRank" && isDeploySlot(slot)) {
+    return state.sides[side].frontRank[slot] !== null;
   }
   return false;
 }
@@ -433,14 +433,14 @@ function findFirstOpenReserveSlot(
   state: BattleMutableState,
   side: BattleSide,
 ): BackRankSlotId | null {
-  return BACK_RANK_SLOT_IDS.find((slotId) => state.sides[side].reserve[slotId] === null) ?? null;
+  return BACK_RANK_SLOT_IDS.find((slotId) => state.sides[side].backRank[slotId] === null) ?? null;
 }
 
 function findFirstOpenDeploySlot(
   state: BattleMutableState,
   side: BattleSide,
 ): FrontRankSlotId | null {
-  return FRONT_RANK_SLOT_IDS.find((slotId) => state.sides[side].deployed[slotId] === null) ?? null;
+  return FRONT_RANK_SLOT_IDS.find((slotId) => state.sides[side].frontRank[slotId] === null) ?? null;
 }
 
 function canStackIntoBattlefieldSlot(
@@ -466,11 +466,11 @@ function selectBattlefieldSlotOccupant(
   zone: FigmentZone,
   slot: FigmentBattlefieldSlotId,
 ): string | null {
-  if (zone === "reserve" && isReserveSlot(slot)) {
-    return state.sides[side].reserve[slot];
+  if (zone === "backRank" && isReserveSlot(slot)) {
+    return state.sides[side].backRank[slot];
   }
-  if (zone === "deployed" && isDeploySlot(slot)) {
-    return state.sides[side].deployed[slot];
+  if (zone === "frontRank" && isDeploySlot(slot)) {
+    return state.sides[side].frontRank[slot];
   }
   return null;
 }

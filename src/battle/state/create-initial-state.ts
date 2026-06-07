@@ -157,8 +157,8 @@ function cloneBattleSideMutableState(side: BattleSideMutableState): BattleSideMu
     hand: [...side.hand],
     void: [...side.void],
     banished: [...side.banished],
-    reserve: { ...side.reserve },
-    deployed: { ...side.deployed },
+    backRank: { ...side.backRank },
+    frontRank: { ...side.frontRank },
   };
 }
 
@@ -177,18 +177,18 @@ function createInitialSideState(
     hand,
     void: [],
     banished: [],
-    reserve: createEmptyReserve(),
-    deployed: createEmptyDeployed(),
+    backRank: createEmptyBackRank(),
+    frontRank: createEmptyFrontRank(),
   };
 }
 
-function createEmptyReserve(): Record<BackRankSlotId, string | null> {
+function createEmptyBackRank(): Record<BackRankSlotId, string | null> {
   // bug-036: literal object is type-safe without the unsound `as Record<...>`
   // cast; the compiler proves all five keys exist.
   return { B0: null, B1: null, B2: null, B3: null, B4: null };
 }
 
-function createEmptyDeployed(): Record<FrontRankSlotId, string | null> {
+function createEmptyFrontRank(): Record<FrontRankSlotId, string | null> {
   return { F0: null, F1: null, F2: null, F3: null };
 }
 

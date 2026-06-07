@@ -157,7 +157,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     F3: null,
   };
   for (const slotId of FRONT_RANK_SLOT_IDS) {
-    const id = ai.deployed[slotId];
+    const id = ai.frontRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     aiDeployed[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
   }
@@ -170,14 +170,14 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     B4: null,
   };
   for (const slotId of BACK_RANK_SLOT_IDS) {
-    const id = ai.reserve[slotId];
+    const id = ai.backRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     aiReserve[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
   }
 
   const opponentBodies: AiOpponentBody[] = [];
   for (const slotId of FRONT_RANK_SLOT_IDS) {
-    const id = opponent.deployed[slotId];
+    const id = opponent.frontRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     if (instance !== undefined) {
       opponentBodies.push({
@@ -191,7 +191,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     }
   }
   for (const slotId of BACK_RANK_SLOT_IDS) {
-    const id = opponent.reserve[slotId];
+    const id = opponent.backRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     if (instance !== undefined) {
       opponentBodies.push({

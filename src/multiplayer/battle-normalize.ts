@@ -16,7 +16,7 @@ import type {
   SharedBattleState,
 } from "./battle-types";
 
-function defaultReserveSlots(): Record<BackRankSlotId, string | null> {
+function defaultBackRankSlots(): Record<BackRankSlotId, string | null> {
   const slots = {} as Record<BackRankSlotId, string | null>;
   for (const id of BACK_RANK_SLOT_IDS) {
     slots[id] = null;
@@ -24,7 +24,7 @@ function defaultReserveSlots(): Record<BackRankSlotId, string | null> {
   return slots;
 }
 
-function defaultDeploySlots(): Record<FrontRankSlotId, string | null> {
+function defaultFrontRankSlots(): Record<FrontRankSlotId, string | null> {
   const slots = {} as Record<FrontRankSlotId, string | null>;
   for (const id of FRONT_RANK_SLOT_IDS) {
     slots[id] = null;
@@ -44,8 +44,8 @@ function normalizeSide(
     hand: raw?.hand ?? [],
     void: raw?.void ?? [],
     banished: raw?.banished ?? [],
-    reserve: { ...defaultReserveSlots(), ...(raw?.reserve ?? {}) },
-    deployed: { ...defaultDeploySlots(), ...(raw?.deployed ?? {}) },
+    backRank: { ...defaultBackRankSlots(), ...(raw?.backRank ?? {}) },
+    frontRank: { ...defaultFrontRankSlots(), ...(raw?.frontRank ?? {}) },
   };
 }
 

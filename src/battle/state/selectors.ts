@@ -75,7 +75,7 @@ export function selectKindleTargetBattleCardId(
   }
 
   for (const slotId of FRONT_RANK_SLOT_IDS) {
-    const battleCardId = state.sides[side].deployed[slotId];
+    const battleCardId = state.sides[side].frontRank[slotId];
 
     if (battleCardId !== null) {
       return battleCardId;
@@ -83,7 +83,7 @@ export function selectKindleTargetBattleCardId(
   }
 
   for (const slotId of BACK_RANK_SLOT_IDS) {
-    const battleCardId = state.sides[side].reserve[slotId];
+    const battleCardId = state.sides[side].backRank[slotId];
 
     if (battleCardId !== null) {
       return battleCardId;
@@ -146,7 +146,7 @@ export function selectDeployedSpark(
   side: BattleSide,
   slotId: FrontRankSlotId,
 ): number {
-  return selectEffectiveSparkOrZero(state, state.sides[side].deployed[slotId]);
+  return selectEffectiveSparkOrZero(state, state.sides[side].frontRank[slotId]);
 }
 
 export function selectFailureOverlayResult(
@@ -229,7 +229,7 @@ export function selectBattleCardLocation(
     const reserveLocation = selectOccupiedBattlefieldSlot(
       state,
       side,
-      "reserve",
+      "backRank",
       battleCardId,
     );
     if (reserveLocation !== null) {
@@ -239,7 +239,7 @@ export function selectBattleCardLocation(
     const deployedLocation = selectOccupiedBattlefieldSlot(
       state,
       side,
-      "deployed",
+      "frontRank",
       battleCardId,
     );
     if (deployedLocation !== null) {
@@ -256,7 +256,7 @@ export function selectBattlefieldCardLocation(
 ): BattleFieldCardLocation | null {
   const location = selectBattleCardLocation(state, battleCardId);
 
-  if (location === null || (location.zone !== "reserve" && location.zone !== "deployed")) {
+  if (location === null || (location.zone !== "backRank" && location.zone !== "frontRank")) {
     return null;
   }
 
@@ -304,10 +304,10 @@ export function selectDefaultCharacterPlaySlot(
   side: BattleSide,
 ): BattleFieldSlotAddress | null {
   for (const slotId of BACK_RANK_SLOT_IDS) {
-    if (state.sides[side].reserve[slotId] === null) {
+    if (state.sides[side].backRank[slotId] === null) {
       return {
         side,
-        zone: "reserve",
+        zone: "backRank",
         slotId,
       };
     }
@@ -317,10 +317,10 @@ export function selectDefaultCharacterPlaySlot(
   // full, fall back to the leftmost empty deployed slot so the character can
   // still enter play.
   for (const slotId of FRONT_RANK_SLOT_IDS) {
-    if (state.sides[side].deployed[slotId] === null) {
+    if (state.sides[side].frontRank[slotId] === null) {
       return {
         side,
-        zone: "deployed",
+        zone: "frontRank",
         slotId,
       };
     }
@@ -337,17 +337,17 @@ export function selectBattlefieldSlotOccupant(
     return null;
   }
 
-  if (target.zone === "reserve") {
-    return state.sides[target.side].reserve[target.slotId as BackRankSlotId];
+  if (target.zone === "backRank") {
+    return state.sides[target.side].backRank[target.slotId as BackRankSlotId];
   }
 
-  return state.sides[target.side].deployed[target.slotId as FrontRankSlotId];
+  return state.sides[target.side].frontRank[target.slotId as FrontRankSlotId];
 }
 
 export function isBattleFieldSlotAddressValid(
   target: BattleFieldSlotAddress,
 ): target is BattleFieldSlotAddress {
-  if (target.zone === "reserve") {
+  if (target.zone === "backRank") {
     return BACK_RANK_SLOT_IDS.includes(target.slotId as BackRankSlotId);
   }
 
@@ -360,9 +360,9 @@ function selectOccupiedBattlefieldSlot(
   zone: BattlefieldZone,
   battleCardId: string,
 ): BattleFieldCardLocation | null {
-  if (zone === "reserve") {
+  if (zone === "backRank") {
     for (const slotId of BACK_RANK_SLOT_IDS) {
-      const occupant = state.sides[side].reserve[slotId];
+      const occupant = state.sides[side].backRank[slotId];
 
       if (occupant === battleCardId) {
         return {
@@ -377,7 +377,7 @@ function selectOccupiedBattlefieldSlot(
   }
 
   for (const slotId of FRONT_RANK_SLOT_IDS) {
-    const occupant = state.sides[side].deployed[slotId];
+    const occupant = state.sides[side].frontRank[slotId];
 
     if (occupant === battleCardId) {
       return {

@@ -33,8 +33,8 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     hand: [],
     void: [],
     banished: [],
-    reserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
-    deployed: { F0: null, F1: null, F2: null, F3: null },
+    backRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    frontRank: { F0: null, F1: null, F2: null, F3: null },
   };
 }
 
@@ -105,7 +105,7 @@ function makeEnemyTurnState(
     isRevealedToPlayer: false,
     provenance: questDeckProvenance(),
   });
-  mutable.sides.enemy.reserve.B0 = cardId;
+  mutable.sides.enemy.backRank.B0 = cardId;
   mutate?.(mutable);
   return createBattleReducerState(mutable);
 }

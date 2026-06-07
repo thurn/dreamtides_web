@@ -132,12 +132,12 @@ describe("normalizeBattleStateSnapshot", () => {
     expect(reducer.mutable.cardInstances).toEqual({});
 
     for (const id of BACK_RANK_SLOT_IDS) {
-      expect(reducer.mutable.sides.player.reserve[id]).toBeNull();
-      expect(reducer.mutable.sides.enemy.reserve[id]).toBeNull();
+      expect(reducer.mutable.sides.player.backRank[id]).toBeNull();
+      expect(reducer.mutable.sides.enemy.backRank[id]).toBeNull();
     }
     for (const id of FRONT_RANK_SLOT_IDS) {
-      expect(reducer.mutable.sides.player.deployed[id]).toBeNull();
-      expect(reducer.mutable.sides.enemy.deployed[id]).toBeNull();
+      expect(reducer.mutable.sides.player.frontRank[id]).toBeNull();
+      expect(reducer.mutable.sides.enemy.frontRank[id]).toBeNull();
     }
 
     expect(reducer.mutable.sides.player.deck).toEqual([]);
@@ -393,7 +393,7 @@ describe("applyBattleCommandToRoom", () => {
         edit: {
           kind: "MOVE_CARD_TO_ZONE",
           battleCardId: initial.sides.player.hand[0],
-          destination: { side: "player", zone: "reserve", slotId: "B0" },
+          destination: { side: "player", zone: "backRank", slotId: "B0" },
         },
         sourceSurface: "hand-tray",
       },
@@ -519,7 +519,7 @@ function buildRoomWithOneCommittedCommand() {
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: initial.sides.player.hand[0],
-        destination: { side: "player", zone: "reserve", slotId: "B0" },
+        destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
       sourceSurface: "hand-tray",
     },

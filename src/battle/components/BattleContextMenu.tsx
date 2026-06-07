@@ -17,6 +17,7 @@ import {
   createMoveCardToRowCommand,
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
+import { formatZoneLabel } from "../ui/format";
 
 export function BattleContextMenu({
   battleCardId,
@@ -72,13 +73,13 @@ export function BattleContextMenu({
     const result: ContextMenuItem[] = [];
 
     if (location.zone === "hand") {
-      const playDestination = card.definition.battleCardKind === "character" ? "reserve" : "void";
+      const playDestination = card.definition.battleCardKind === "character" ? "backRank" : "void";
       const playCommand = card.definition.battleCardKind === "character"
         ? createMoveCardToBattlefieldCommand(state, battleCardId, location.side, sourceSurface)
         : createMoveCardToZoneCommand(battleCardId, location.side, "void", sourceSurface);
       if (playCommand !== null) {
         result.push({
-          label: `Play to ${playDestination}`,
+          label: `Play to ${formatZoneLabel(playDestination)}`,
           action: () => onCommand(playCommand),
         });
       }
@@ -87,7 +88,7 @@ export function BattleContextMenu({
           state,
           battleCardId,
           location.side,
-          "deployed",
+          "frontRank",
           sourceSurface,
         );
         if (deployedTarget !== null) {
@@ -151,20 +152,20 @@ export function BattleContextMenu({
       "hand",
       sourceSurface,
     ), location.zone !== "hand", onCommand);
-    appendIfPresent(result, "→ Reserve", createMoveCardToRowCommand(
+    appendIfPresent(result, "→ Back Rank", createMoveCardToRowCommand(
       state,
       battleCardId,
       location.side,
-      "reserve",
+      "backRank",
       sourceSurface,
-    ), location.zone !== "reserve", onCommand);
-    appendIfPresent(result, "→ Deployed", createMoveCardToRowCommand(
+    ), location.zone !== "backRank", onCommand);
+    appendIfPresent(result, "→ Front Rank", createMoveCardToRowCommand(
       state,
       battleCardId,
       location.side,
-      "deployed",
+      "frontRank",
       sourceSurface,
-    ), location.zone !== "deployed", onCommand);
+    ), location.zone !== "frontRank", onCommand);
     appendIfPresent(result, "→ Void", createMoveCardToZoneCommand(
       battleCardId,
       location.side,
@@ -293,7 +294,7 @@ export function BattleContextMenu({
   const menuHeight = Math.min(items.length * 28 + 64, 600);
   const left = Math.min(x, window.innerWidth - 248);
   const top = Math.min(y, window.innerHeight - menuHeight - 8);
-  const locationLabel = location.zone === "reserve" || location.zone === "deployed"
+  const locationLabel = location.zone === "backRank" || location.zone === "frontRank"
     ? `${location.side === "player" ? "YOU" : "ENEMY"} · ${location.zone.toUpperCase()} ${location.slotId}`
     : `${location.side === "player" ? "YOU" : "ENEMY"} · ${location.zone.toUpperCase()}`;
 
@@ -357,13 +358,13 @@ export function BattleContextMenu({
     };
 
     appendCreateCopy("→ Hand", { side, zone: "hand" });
-    const reserveTarget = createMoveCardToRowCommand(state, battleCardId, side, "reserve", sourceSurface);
+    const reserveTarget = createMoveCardToRowCommand(state, battleCardId, side, "backRank", sourceSurface);
     if (reserveTarget !== null) {
-      appendCreateCopy("→ Reserve", reserveTarget.edit.destination);
+      appendCreateCopy("→ Back Rank", reserveTarget.edit.destination);
     }
-    const deployedTarget = createMoveCardToRowCommand(state, battleCardId, side, "deployed", sourceSurface);
+    const deployedTarget = createMoveCardToRowCommand(state, battleCardId, side, "frontRank", sourceSurface);
     if (deployedTarget !== null) {
-      appendCreateCopy("→ Deployed", deployedTarget.edit.destination);
+      appendCreateCopy("→ Front Rank", deployedTarget.edit.destination);
     }
     appendCreateCopy("→ Void", { side, zone: "void" });
     appendCreateCopy("→ Banished", { side, zone: "banished" });

@@ -1208,7 +1208,7 @@ function moveCardToDebugZone(
   };
 }
 
-const BATTLEFIELD_ZONE_NAMES = new Set<string>(["reserve", "deployed"]);
+const BATTLEFIELD_ZONE_NAMES = new Set<string>(["backRank", "frontRank"]);
 
 /**
  * Maintains {@link BattleCardInstance.enteredPlayTurnNumber} across a zone move.
@@ -1461,7 +1461,7 @@ function isSameLocation(
 ): boolean {
   if ("slotId" in destination) {
     return (
-      (source.zone === "reserve" || source.zone === "deployed") &&
+      (source.zone === "backRank" || source.zone === "frontRank") &&
       source.side === destination.side &&
       source.zone === destination.zone &&
       source.slotId === destination.slotId
@@ -1507,8 +1507,8 @@ function removeBattleCardFromLocation(
     case "stack":
       state.stack?.splice(source.index, 1);
       return;
-    case "reserve":
-    case "deployed":
+    case "backRank":
+    case "frontRank":
       setBattlefieldSlotOccupant(
         state,
         {
@@ -1562,12 +1562,12 @@ function setBattlefieldSlotOccupant(
   target: BattleFieldSlotAddress,
   battleCardId: string | null,
 ): void {
-  if (target.zone === "reserve") {
-    state.sides[target.side].reserve[target.slotId as (typeof BACK_RANK_SLOT_IDS)[number]] = battleCardId;
+  if (target.zone === "backRank") {
+    state.sides[target.side].backRank[target.slotId as (typeof BACK_RANK_SLOT_IDS)[number]] = battleCardId;
     return;
   }
 
-  state.sides[target.side].deployed[target.slotId as (typeof FRONT_RANK_SLOT_IDS)[number]] = battleCardId;
+  state.sides[target.side].frontRank[target.slotId as (typeof FRONT_RANK_SLOT_IDS)[number]] = battleCardId;
 }
 
 // `createEmptyTransitionData` imported from ../engine/result (bug-015).

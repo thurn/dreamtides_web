@@ -561,7 +561,7 @@ function PlayableBattleScreenInner({
     if (targetOccupant !== null) {
       const sourceIsBattlefield =
         pendingDrag.kind === "battle-card" &&
-        (draggedLocation?.zone === "reserve" || draggedLocation?.zone === "deployed");
+        (draggedLocation?.zone === "backRank" || draggedLocation?.zone === "frontRank");
       if (sourceIsBattlefield) {
         handleCommand({
           id: "DEBUG_EDIT",
@@ -975,7 +975,7 @@ function PlayableBattleScreenInner({
                 <div className="battlefield">
                   <BattlefieldGrid
                     side="enemy"
-                    zone="reserve"
+                    zone="backRank"
                     state={reducerState.mutable}
                     canInteract={canPlayerAct}
                     selectedCardId={null}
@@ -995,7 +995,7 @@ function PlayableBattleScreenInner({
                   />
                   <BattlefieldGrid
                     side="enemy"
-                    zone="deployed"
+                    zone="frontRank"
                     state={reducerState.mutable}
                     canInteract={canPlayerAct}
                     selectedCardId={null}
@@ -1019,7 +1019,7 @@ function PlayableBattleScreenInner({
                   />
                   <BattlefieldGrid
                     side="player"
-                    zone="deployed"
+                    zone="frontRank"
                     state={reducerState.mutable}
                     canInteract={canPlayerAct}
                     selectedCardId={null}
@@ -1039,7 +1039,7 @@ function PlayableBattleScreenInner({
                   />
                   <BattlefieldGrid
                     side="player"
-                    zone="reserve"
+                    zone="backRank"
                     state={reducerState.mutable}
                     canInteract={canPlayerAct}
                     selectedCardId={null}

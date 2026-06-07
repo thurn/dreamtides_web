@@ -260,11 +260,11 @@ describe("PlayableBattleScreen", () => {
       "player-banished-zone",
       "player-void-zone",
       "player-status-strip",
-      "enemy-reserve-row",
-      "enemy-deployed-row",
+      "enemy-backRank-row",
+      "enemy-frontRank-row",
       "judgment-divider",
-      "player-deployed-row",
-      "player-reserve-row",
+      "player-frontRank-row",
+      "player-backRank-row",
       "enemy-status-strip",
       "enemy-void-zone",
       "enemy-banished-zone",
@@ -405,7 +405,7 @@ describe("PlayableBattleScreen", () => {
         ?.getAttribute("data-battle-zone-count"),
     ).toBe("1");
     expect(
-      container.querySelector('[data-slot-id="player-reserve-B0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="player-backRank-B0"]')?.getAttribute("data-slot-card-id"),
     ).toBeNull();
 
     // Energy dropped by exactly the event's cost.
@@ -441,7 +441,7 @@ describe("PlayableBattleScreen", () => {
     const firstHandCard = container.querySelector<HTMLElement>(
       '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
     );
-    const emptySlot = container.querySelector<HTMLElement>('[data-slot-id="player-reserve-B0"]');
+    const emptySlot = container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B0"]');
     if (firstHandCard === null || emptySlot === null) {
       throw new Error("expected hand card and reserve slot");
     }
@@ -461,7 +461,7 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(
-      container.querySelector('[data-slot-id="player-reserve-B0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="player-backRank-B0"]')?.getAttribute("data-slot-card-id"),
     ).toBeNull();
     expect(container.textContent).not.toContain("Your reserve B0");
     expect(container.querySelector('[data-slot-id][data-selected="true"]')).toBeNull();
@@ -871,12 +871,12 @@ describe("PlayableBattleScreen", () => {
     });
 
     act(() => {
-      container.querySelector<HTMLElement>('[data-slot-id="player-reserve-B0"]')
+      container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B0"]')
         ?.dispatchEvent(new Event("drop", { bubbles: true, cancelable: true }));
     });
 
     expect(
-      container.querySelector('[data-slot-id="player-reserve-B0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="player-backRank-B0"]')?.getAttribute("data-slot-card-id"),
     ).toBe(firstHandCard.getAttribute("data-battle-card-id"));
 
     act(() => {
@@ -926,7 +926,7 @@ describe("PlayableBattleScreen", () => {
     expect(handTray.textContent).toContain("Beta Tender");
 
     const slotPoolCard = container.querySelector<HTMLElement>('[data-pool-card-number="202"]');
-    const reserveSlot = container.querySelector<HTMLElement>('[data-slot-id="player-reserve-B0"]');
+    const reserveSlot = container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B0"]');
     if (slotPoolCard === null || reserveSlot === null) {
       throw new Error("expected pool card and reserve slot");
     }
@@ -1139,10 +1139,10 @@ describe("PlayableBattleScreen", () => {
       state.turnNumber = 1;
       state.sides.player.hand = state.sides.player.hand.filter((cardId) => cardId !== battleCardId);
       state.sides.player.deck = state.sides.player.deck.filter((cardId) => cardId !== battleCardId);
-      state.sides.player.reserve.B0 = battleCardId;
+      state.sides.player.backRank.B0 = battleCardId;
     });
     const reserveCard = container.querySelector<HTMLElement>(
-      `[data-slot-id="player-reserve-B0"] [data-battle-card-id="${reserveCardId}"]`,
+      `[data-slot-id="player-backRank-B0"] [data-battle-card-id="${reserveCardId}"]`,
     );
     if (reserveCard === null) {
       throw new Error("expected reserve card");
@@ -1159,10 +1159,10 @@ describe("PlayableBattleScreen", () => {
 
     const menu = container.querySelector("[data-battle-context-menu]");
     expect(menu?.textContent).not.toContain("Clear reserved");
-    expect(menu?.textContent).toContain("→ Deployed");
+    expect(menu?.textContent).toContain("→ Front Rank");
 
     const moveToDeployed = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
-      .find((element) => element.textContent === "→ Deployed");
+      .find((element) => element.textContent === "→ Front Rank");
     if (moveToDeployed === undefined) {
       throw new Error("expected move to deployed item");
     }
@@ -1171,8 +1171,8 @@ describe("PlayableBattleScreen", () => {
       moveToDeployed.click();
     });
 
-    expect(container.querySelector('[data-slot-id="player-reserve-B0"]')?.getAttribute("data-slot-card-id")).toBeNull();
-    expect(container.querySelector('[data-slot-id="player-deployed-F0"]')?.getAttribute("data-slot-card-id")).toBe(reserveCardId);
+    expect(container.querySelector('[data-slot-id="player-backRank-B0"]')?.getAttribute("data-slot-card-id")).toBeNull();
+    expect(container.querySelector('[data-slot-id="player-frontRank-F0"]')?.getAttribute("data-slot-card-id")).toBe(reserveCardId);
 
     act(() => {
       root.unmount();
@@ -1196,12 +1196,12 @@ describe("PlayableBattleScreen", () => {
       state.turnNumber = 2;
       state.sides.enemy.hand = state.sides.enemy.hand.filter((cardId) => cardId !== battleCardId);
       state.sides.enemy.deck = state.sides.enemy.deck.filter((cardId) => cardId !== battleCardId);
-      state.sides.enemy.reserve.B0 = battleCardId;
+      state.sides.enemy.backRank.B0 = battleCardId;
     });
-    const reserveSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-reserve-B0"]');
-    const deployedSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-deployed-F0"]');
+    const reserveSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-backRank-B0"]');
+    const deployedSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-frontRank-F0"]');
     const reserveCard = container.querySelector<HTMLElement>(
-      `[data-slot-id="enemy-reserve-B0"] [data-battle-card-id="${reserveCardId}"]`,
+      `[data-slot-id="enemy-backRank-B0"] [data-battle-card-id="${reserveCardId}"]`,
     );
     if (reserveSlot === null || deployedSlot === null || reserveCard === null) {
       throw new Error("expected enemy battlefield card and target slot");
@@ -1217,10 +1217,10 @@ describe("PlayableBattleScreen", () => {
     });
 
     const menu = container.querySelector("[data-battle-context-menu]");
-    expect(menu?.textContent).toContain("→ Deployed");
+    expect(menu?.textContent).toContain("→ Front Rank");
 
     const moveToDeployed = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
-      .find((element) => element.textContent === "→ Deployed");
+      .find((element) => element.textContent === "→ Front Rank");
     if (moveToDeployed === undefined) {
       throw new Error("expected move to deployed item");
     }
@@ -1331,7 +1331,7 @@ describe("PlayableBattleScreen", () => {
     expect(menu?.textContent).not.toContain("Reveal");
     expect(menu?.textContent).not.toContain("Hide");
 
-    const enemyReserveSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-reserve-B0"]');
+    const enemyReserveSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-backRank-B0"]');
     if (enemyReserveSlot === null) {
       throw new Error("expected enemy reserve slot");
     }
@@ -1341,7 +1341,7 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(
-      container.querySelector<HTMLElement>('[data-slot-id="enemy-reserve-B0"]')
+      container.querySelector<HTMLElement>('[data-slot-id="enemy-backRank-B0"]')
         ?.getAttribute("data-battle-drop-target"),
     ).toBe("true");
 
@@ -1408,9 +1408,9 @@ describe("PlayableBattleScreen", () => {
     });
 
     const menu = container.querySelector("[data-battle-context-menu]");
-    expect(menu?.textContent).toContain("Play to void");
+    expect(menu?.textContent).toContain("Play to Void");
     const playItem = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
-      .find((element) => element.textContent === "Play to void");
+      .find((element) => element.textContent === "Play to Void");
     if (playItem === undefined) {
       throw new Error("expected enemy event play item");
     }
@@ -1450,7 +1450,7 @@ describe("PlayableBattleScreen", () => {
         throw new Error("expected player character");
       }
       state.sides.player.hand = state.sides.player.hand.filter((battleCardId) => battleCardId !== playerCardId);
-      state.sides.player.reserve.B0 = playerCardId;
+      state.sides.player.backRank.B0 = playerCardId;
       stalePlayerCardId = playerCardId;
 
       let enemyCardId = state.sides.enemy.hand.find((battleCardId) => {
@@ -1478,7 +1478,7 @@ describe("PlayableBattleScreen", () => {
     });
 
     const stalePlayerCard = container.querySelector<HTMLElement>(
-      `[data-slot-id="player-reserve-B0"] [data-battle-card-id="${stalePlayerCardId}"]`,
+      `[data-slot-id="player-backRank-B0"] [data-battle-card-id="${stalePlayerCardId}"]`,
     );
     const opponentCard = container.querySelector<HTMLElement>(
       `[data-battle-region="opponent-hand-tray"] [data-battle-card-id="${opponentCharacterId}"]`,
@@ -1509,7 +1509,7 @@ describe("PlayableBattleScreen", () => {
     const menu = container.querySelector("[data-battle-context-menu]");
     expect(menu?.textContent).toContain(initialState.cardInstances[opponentCharacterId].definition.name);
     const playItem = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
-      .find((element) => element.textContent === "Play to reserve");
+      .find((element) => element.textContent === "Play to Back Rank");
     if (playItem === undefined) {
       throw new Error("expected enemy character play item");
     }
@@ -1522,10 +1522,10 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(
-      container.querySelector('[data-slot-id="player-reserve-B0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="player-backRank-B0"]')?.getAttribute("data-slot-card-id"),
     ).toBe(stalePlayerCardId);
     expect(
-      [...container.querySelectorAll("[data-slot-id^='enemy-reserve-']")]
+      [...container.querySelectorAll("[data-slot-id^='enemy-backRank-']")]
         .some((slot) => slot.getAttribute("data-slot-card-id") === opponentCharacterId),
     ).toBe(true);
     expect(
@@ -1623,11 +1623,11 @@ describe("PlayableBattleScreen", () => {
     });
 
     const menu = container.querySelector("[data-battle-context-menu]");
-    expect(menu?.textContent).toContain("Play to reserve");
+    expect(menu?.textContent).toContain("Play to Back Rank");
     expect(menu?.textContent).toContain("Play, deploy");
     expect(menu?.textContent).toContain("Kindle");
-    expect(menu?.textContent).toContain("→ Reserve");
-    expect(menu?.textContent).toContain("→ Deployed");
+    expect(menu?.textContent).toContain("→ Back Rank");
+    expect(menu?.textContent).toContain("→ Front Rank");
     expect(menu?.textContent).toContain("→ Void");
     expect(menu?.textContent).toContain("→ Banished");
     expect(menu?.textContent).toContain("→ Deck top");
@@ -1658,11 +1658,11 @@ describe("PlayableBattleScreen", () => {
       state.sides.player.hand = state.sides.player.hand.filter(
         (battleCardId) => battleCardId !== characterCardId,
       );
-      state.sides.player.deployed.F0 = characterCardId;
+      state.sides.player.frontRank.F0 = characterCardId;
     });
 
     const battlefieldCard = container.querySelector<HTMLElement>(
-      '[data-slot-id="player-deployed-F0"] [data-battle-card-id]',
+      '[data-slot-id="player-frontRank-F0"] [data-battle-card-id]',
     );
     if (battlefieldCard === null || deployedCardId === null) {
       throw new Error("expected deployed battlefield card");
@@ -1749,7 +1749,7 @@ describe("PlayableBattleScreen", () => {
     });
 
     const playItem = [...container.querySelectorAll<HTMLElement>(".ctx-item")]
-      .find((element) => element.textContent === "Play to reserve");
+      .find((element) => element.textContent === "Play to Back Rank");
     if (playItem === undefined) {
       throw new Error("expected play to reserve item");
     }
@@ -1760,7 +1760,7 @@ describe("PlayableBattleScreen", () => {
 
     // Even with zero energy the card is played — gating is removed.
     expect(
-      container.querySelector('[data-slot-id="player-reserve-B0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="player-backRank-B0"]')?.getAttribute("data-slot-card-id"),
     ).toBe(firstHandCardId);
 
     act(() => {
@@ -1862,7 +1862,7 @@ describe("PlayableBattleScreen", () => {
         throw new Error("expected enemy hand card");
       }
       state.sides.enemy.hand = state.sides.enemy.hand.filter((id) => id !== enemyCardId);
-      state.sides.enemy.reserve.B0 = enemyCardId;
+      state.sides.enemy.backRank.B0 = enemyCardId;
     });
 
     act(() => {
@@ -1886,11 +1886,11 @@ describe("PlayableBattleScreen", () => {
     });
 
     const r1CardId = container
-      .querySelector('[data-slot-id="enemy-reserve-B1"]')
+      .querySelector('[data-slot-id="enemy-backRank-B1"]')
       ?.getAttribute("data-slot-card-id");
     expect(r1CardId).toMatch(/^bc_/);
-    expect(r1CardId).not.toBe(initialState.sides.enemy.reserve.B0);
-    expect(container.querySelector('[data-slot-id="enemy-reserve-B1"]')?.textContent).toContain(
+    expect(r1CardId).not.toBe(initialState.sides.enemy.backRank.B0);
+    expect(container.querySelector('[data-slot-id="enemy-backRank-B1"]')?.textContent).toContain(
       "Shadow Figment",
     );
 
@@ -1933,10 +1933,10 @@ describe("PlayableBattleScreen", () => {
     });
 
     const stackCardId = container
-      .querySelector('[data-slot-id="player-reserve-B0"]')
+      .querySelector('[data-slot-id="player-backRank-B0"]')
       ?.getAttribute("data-slot-card-id");
     expect(stackCardId).toMatch(/^bc_/);
-    expect(container.querySelector('[data-slot-id="player-reserve-B1"]')?.getAttribute("data-slot-card-id")).toBeNull();
+    expect(container.querySelector('[data-slot-id="player-backRank-B1"]')?.getAttribute("data-slot-card-id")).toBeNull();
     expect(
       container.querySelector(`[data-battle-card-id="${stackCardId ?? ""}"] .c-figment-count`)?.textContent,
     ).toBe("2");
@@ -1967,7 +1967,7 @@ describe("PlayableBattleScreen", () => {
     }
 
     const eventCardId = eventCard.getAttribute("data-battle-card-id");
-    const reserveSlot = container.querySelector<HTMLElement>('[data-slot-id="player-reserve-B0"]');
+    const reserveSlot = container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B0"]');
 
     if (eventCardId === null || reserveSlot === null) {
       throw new Error("expected event card id and reserve slot");
@@ -1992,7 +1992,7 @@ describe("PlayableBattleScreen", () => {
       ),
     ).toBeNull();
     expect(
-      container.querySelector('[data-slot-id="player-reserve-B0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="player-backRank-B0"]')?.getAttribute("data-slot-card-id"),
     ).toBe(eventCardId);
 
     act(() => {
@@ -2006,17 +2006,17 @@ describe("PlayableBattleScreen", () => {
       if (deployedCardId === undefined) {
         throw new Error("expected player hand card");
       }
-      state.sides.player.deployed.F0 = deployedCardId;
+      state.sides.player.frontRank.F0 = deployedCardId;
     });
 
     const battlefieldCard = container.querySelector<HTMLElement>(
-      '[data-slot-id="player-deployed-F0"] [data-battle-card-id]',
+      '[data-slot-id="player-frontRank-F0"] [data-battle-card-id]',
     );
 
     if (battlefieldCard === null) {
       throw new Error("expected battlefield card");
     }
-    const hoveredCardId = initialState.sides.player.deployed.F0;
+    const hoveredCardId = initialState.sides.player.frontRank.F0;
     if (hoveredCardId === null) {
       throw new Error("expected deployed card id");
     }
@@ -2166,11 +2166,11 @@ describe("PlayableBattleScreen", () => {
       if (deployedCardId === undefined) {
         throw new Error("expected player hand card");
       }
-      state.sides.player.deployed.F0 = deployedCardId;
+      state.sides.player.frontRank.F0 = deployedCardId;
     });
 
     const battlefieldCard = container.querySelector<HTMLElement>(
-      '[data-slot-id="player-deployed-F0"] [data-battle-card-id]',
+      '[data-slot-id="player-frontRank-F0"] [data-battle-card-id]',
     );
 
     if (battlefieldCard === null) {
@@ -2349,13 +2349,13 @@ describe("PlayableBattleScreen", () => {
         throw new Error("expected player hand card");
       }
       // Clear an enemy deployed slot so the move lands on an empty target.
-      state.sides.enemy.deployed.F0 = null;
+      state.sides.enemy.frontRank.F0 = null;
     });
 
     const handCard = container.querySelector<HTMLElement>(
       `[data-battle-region="player-hand-tray"] [data-battle-card-id="${playerCardId}"]`,
     );
-    const enemyDeployedSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-deployed-F0"]');
+    const enemyDeployedSlot = container.querySelector<HTMLElement>('[data-slot-id="enemy-frontRank-F0"]');
     if (handCard === null || enemyDeployedSlot === null) {
       throw new Error("expected player hand card and enemy deployed slot");
     }
@@ -2370,7 +2370,7 @@ describe("PlayableBattleScreen", () => {
     // MOVE_CARD_TO_ZONE with destination.side === "enemy": the player card is
     // now controlled by the enemy and occupies their deployed slot.
     expect(
-      container.querySelector('[data-slot-id="enemy-deployed-F0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="enemy-frontRank-F0"]')?.getAttribute("data-slot-card-id"),
     ).toBe(playerCardId);
     expect(
       container.querySelector(
@@ -2414,7 +2414,7 @@ describe("PlayableBattleScreen", () => {
 
     // The card lands in the first open reserve slot...
     expect(
-      [...container.querySelectorAll("[data-slot-id^='player-reserve-']")]
+      [...container.querySelectorAll("[data-slot-id^='player-backRank-']")]
         .some((slot) => slot.getAttribute("data-slot-card-id") === playerCardId),
     ).toBe(true);
     // ...and neither side's current energy changed (a move never pays a cost).
@@ -2440,11 +2440,11 @@ describe("PlayableBattleScreen", () => {
       deployedCardId = characterId;
       state.sides.player.hand = state.sides.player.hand.filter((id) => id !== characterId);
       state.sides.player.deck = state.sides.player.deck.filter((id) => id !== characterId);
-      state.sides.player.deployed.F0 = characterId;
+      state.sides.player.frontRank.F0 = characterId;
     });
 
     const deployedCard = container.querySelector<HTMLElement>(
-      `[data-slot-id="player-deployed-F0"] [data-battle-card-id="${deployedCardId}"]`,
+      `[data-slot-id="player-frontRank-F0"] [data-battle-card-id="${deployedCardId}"]`,
     );
     if (deployedCard === null) {
       throw new Error("expected deployed card");
@@ -2469,7 +2469,7 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(
-      container.querySelector('[data-slot-id="player-deployed-F0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="player-frontRank-F0"]')?.getAttribute("data-slot-card-id"),
     ).toBeNull();
 
     act(() => {
@@ -2491,11 +2491,11 @@ describe("PlayableBattleScreen", () => {
       deployedCardId = characterId;
       state.sides.player.hand = state.sides.player.hand.filter((id) => id !== characterId);
       state.sides.player.deck = state.sides.player.deck.filter((id) => id !== characterId);
-      state.sides.player.deployed.F0 = characterId;
+      state.sides.player.frontRank.F0 = characterId;
     });
 
     const deployedCard = container.querySelector<HTMLElement>(
-      `[data-slot-id="player-deployed-F0"] [data-battle-card-id="${deployedCardId}"]`,
+      `[data-slot-id="player-frontRank-F0"] [data-battle-card-id="${deployedCardId}"]`,
     );
     const handTray = container.querySelector<HTMLElement>('[data-battle-region="player-hand-tray"]');
     if (deployedCard === null || handTray === null) {
@@ -2510,7 +2510,7 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(
-      container.querySelector('[data-slot-id="player-deployed-F0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="player-frontRank-F0"]')?.getAttribute("data-slot-card-id"),
     ).toBeNull();
     expect(
       container.querySelector(
@@ -2537,14 +2537,14 @@ describe("PlayableBattleScreen", () => {
       deployedCardId = characterId;
       state.sides.player.hand = state.sides.player.hand.filter((id) => id !== characterId);
       state.sides.player.deck = state.sides.player.deck.filter((id) => id !== characterId);
-      state.sides.player.deployed.F0 = characterId;
+      state.sides.player.frontRank.F0 = characterId;
     });
 
     act(() => {
       container.querySelector<HTMLElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
     });
     const deployedCard = container.querySelector<HTMLElement>(
-      `[data-slot-id="player-deployed-F0"] [data-battle-card-id="${deployedCardId}"]`,
+      `[data-slot-id="player-frontRank-F0"] [data-battle-card-id="${deployedCardId}"]`,
     );
     const enemyHandTray = container.querySelector<HTMLElement>('[data-battle-region="opponent-hand-tray"]');
     if (deployedCard === null || enemyHandTray === null) {
@@ -2559,7 +2559,7 @@ describe("PlayableBattleScreen", () => {
     });
 
     expect(
-      container.querySelector('[data-slot-id="player-deployed-F0"]')?.getAttribute("data-slot-card-id"),
+      container.querySelector('[data-slot-id="player-frontRank-F0"]')?.getAttribute("data-slot-card-id"),
     ).toBeNull();
     expect(
       container.querySelector(

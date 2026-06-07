@@ -76,8 +76,8 @@ describe("createInitialBattleState", () => {
     for (const side of ["player", "enemy"] as const) {
       expect(state.sides[side].void).toEqual([]);
       expect(state.sides[side].banished).toEqual([]);
-      expect(Object.values(state.sides[side].reserve).every((slot) => slot === null)).toBe(true);
-      expect(Object.values(state.sides[side].deployed).every((slot) => slot === null)).toBe(true);
+      expect(Object.values(state.sides[side].backRank).every((slot) => slot === null)).toBe(true);
+      expect(Object.values(state.sides[side].frontRank).every((slot) => slot === null)).toBe(true);
     }
     expect(state.stack ?? []).toEqual([]);
   });
@@ -121,8 +121,8 @@ describe("cloneBattleMutableState", () => {
     expect(clone.sides.player.hand).not.toBe(state.sides.player.hand);
     expect(clone.sides.player.void).not.toBe(state.sides.player.void);
     expect(clone.sides.player.banished).not.toBe(state.sides.player.banished);
-    expect(clone.sides.player.reserve).not.toBe(state.sides.player.reserve);
-    expect(clone.sides.player.deployed).not.toBe(state.sides.player.deployed);
+    expect(clone.sides.player.backRank).not.toBe(state.sides.player.backRank);
+    expect(clone.sides.player.frontRank).not.toBe(state.sides.player.frontRank);
     expect(clone.sides.player.visibility).not.toBe(state.sides.player.visibility);
     expect(clone.cardInstances).not.toBe(state.cardInstances);
   });

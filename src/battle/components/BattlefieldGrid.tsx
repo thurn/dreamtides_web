@@ -71,7 +71,7 @@ export function BattlefieldGrid({
   state: BattleMutableState;
   zone: BattlefieldZone;
 }) {
-  const slotIds = zone === "reserve" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS;
+  const slotIds = zone === "backRank" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS;
   const supportHighlights = computeSupportHighlights(selectionAnchor, side);
 
   return (
@@ -180,7 +180,7 @@ export function resolveBattlefieldSelectionAnchor(
   }
 
   const location = selectBattleCardLocation(state, selectedCardId);
-  if (location === null || (location.zone !== "reserve" && location.zone !== "deployed")) {
+  if (location === null || (location.zone !== "backRank" && location.zone !== "frontRank")) {
     return null;
   }
 
@@ -199,7 +199,7 @@ function computeSupportHighlights(
     return new Set<BattlefieldSlotId>();
   }
 
-  if (selectionAnchor.zone === "deployed") {
+  if (selectionAnchor.zone === "frontRank") {
     return new Set<BattlefieldSlotId>(SUPPORT_BY_DEPLOY[selectionAnchor.slotId as FrontRankSlotId]);
   }
 

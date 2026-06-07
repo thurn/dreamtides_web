@@ -22,8 +22,8 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     hand: [],
     void: [],
     banished: [],
-    reserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
-    deployed: { F0: null, F1: null, F2: null, F3: null },
+    backRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    frontRank: { F0: null, F1: null, F2: null, F3: null },
   };
 }
 
@@ -163,9 +163,9 @@ describe("forwardModelFromState", () => {
     const ai: BattleSide = "enemy";
 
     const deployed = addInstance(state, ai, makeCharacterDefinition("Deployed", 201, 3, 1));
-    state.sides[ai].deployed.F1 = deployed;
+    state.sides[ai].frontRank.F1 = deployed;
     const reserved = addInstance(state, ai, makeCharacterDefinition("Reserved", 202, 2, 1));
-    state.sides[ai].reserve.B3 = reserved;
+    state.sides[ai].backRank.B3 = reserved;
 
     const model = forwardModelFromState(state, ai);
 
@@ -196,11 +196,11 @@ describe("forwardModelFromState", () => {
 
     const fresh = addInstance(state, ai, makeCharacterDefinition("Fresh", 201, 3, 1));
     state.cardInstances[fresh].enteredPlayTurnNumber = 4;
-    state.sides[ai].reserve.B0 = fresh;
+    state.sides[ai].backRank.B0 = fresh;
 
     const aged = addInstance(state, ai, makeCharacterDefinition("Aged", 202, 2, 1));
     state.cardInstances[aged].enteredPlayTurnNumber = 2;
-    state.sides[ai].reserve.B1 = aged;
+    state.sides[ai].backRank.B1 = aged;
 
     const model = forwardModelFromState(state, ai);
 
@@ -218,11 +218,11 @@ describe("forwardModelFromState", () => {
 
     const playedLastAiTurn = addInstance(state, ai, makeCharacterDefinition("Recent", 201, 3, 1));
     state.cardInstances[playedLastAiTurn].enteredPlayTurnNumber = 4;
-    state.sides[ai].reserve.B0 = playedLastAiTurn;
+    state.sides[ai].backRank.B0 = playedLastAiTurn;
 
     const playedEarlier = addInstance(state, ai, makeCharacterDefinition("Older", 202, 2, 1));
     state.cardInstances[playedEarlier].enteredPlayTurnNumber = 3;
-    state.sides[ai].reserve.B1 = playedEarlier;
+    state.sides[ai].backRank.B1 = playedEarlier;
 
     const model = forwardModelFromState(state, ai);
 
@@ -240,10 +240,10 @@ describe("forwardModelFromState", () => {
     const front = addInstance(state, opponent, makeCharacterDefinition("Front", 301, 5, 1), {
       sparkDelta: 2,
     });
-    state.sides[opponent].deployed.F0 = front;
+    state.sides[opponent].frontRank.F0 = front;
 
     const back = addInstance(state, opponent, makeCharacterDefinition("Back", 302, 3, 1));
-    state.sides[opponent].reserve.B0 = back;
+    state.sides[opponent].backRank.B0 = back;
 
     const figment = addInstance(
       state,
@@ -251,7 +251,7 @@ describe("forwardModelFromState", () => {
       makeCharacterDefinition("Fig", 303, 1, 1),
       { figment: true, figmentCount: 4 },
     );
-    state.sides[opponent].deployed.F2 = figment;
+    state.sides[opponent].frontRank.F2 = figment;
 
     state.sides[opponent].hand = ["x", "y"];
     state.sides[opponent].void = ["z"];
@@ -330,10 +330,10 @@ describe("cloneForwardModel", () => {
     state.sides[ai].hand = [hand];
 
     const deployed = addInstance(state, ai, makeCharacterDefinition("Deployed", 502, 3, 1));
-    state.sides[ai].deployed.F0 = deployed;
+    state.sides[ai].frontRank.F0 = deployed;
 
     const opp = addInstance(state, opponent, makeCharacterDefinition("Opp", 503, 4, 1));
-    state.sides[opponent].deployed.F0 = opp;
+    state.sides[opponent].frontRank.F0 = opp;
 
     return forwardModelFromState(state, ai);
   }
