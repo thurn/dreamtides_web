@@ -83,6 +83,7 @@ function emptySide(overrides: Partial<BattleSideMutableState> = {}): BattleSideM
     banished: [],
     backRank: Object.fromEntries(BACK_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["backRank"],
     frontRank: Object.fromEntries(FRONT_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["frontRank"],
+    fatigueCount: 0,
     ...overrides,
   };
 }
@@ -561,6 +562,118 @@ describe("planBasicAutomationCommands — turn handoff", () => {
 
     const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
     expect(result.some((edit) => edit.kind === "SET_CARD_STATUS")).toBe(false);
+  });
+
+  it("banishes the outgoing side's ephemeral hand and offering in-play cards", () => {
+    const ephemeral = makeInstance("p-eph", { owner: "player" });
+    ephemeral.status.ephemeral = true;
+    const offering = makeInstance("p-off", { owner: "player", printedSpark: 3 });
+    offering.status.offering = true;
+    const normalHand = makeInstance("p-keep", { owner: "player" });
+    const normalPlay = makeInstance("p-stay", { owner: "player", printedSpark: 2 });
+
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 4,
+      player: {
+        hand: ["p-eph", "p-keep"],
+        frontRank: frontRankSlots("F0", "p-off"),
+        backRank: {
+          B0: "p-stay",
+          B1: null,
+          B2: null,
+          B3: null,
+          B4: null,
+        },
+      },
+      enemy: { deck: ["d-enemy"] },
+      instances: [ephemeral, offering, normalHand, normalPlay],
+    });
+    const handoff: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 4 },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
+
+    // The ephemeral hand card and the offering in-play card are banished.
+    expect(result).toContainEqual({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: "p-eph",
+      destination: { side: "player", zone: "banished" },
+    });
+    expect(result).toContainEqual({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: "p-off",
+      destination: { side: "player", zone: "banished" },
+    });
+    // Normal cards (hand and in-play) are left alone.
+    const banishedIds = result
+      .filter(
+        (edit) =>
+          edit.kind === "MOVE_CARD_TO_ZONE" && edit.destination.zone === "banished",
+      )
+      .map((edit) => (edit.kind === "MOVE_CARD_TO_ZONE" ? edit.battleCardId : ""));
+    expect(banishedIds).not.toContain("p-keep");
+    expect(banishedIds).not.toContain("p-stay");
+  });
+
+  it("banishes the outgoing side after the hand-limit discard and before the side flip", () => {
+    const ephemeral = makeInstance("p-eph", { owner: "player" });
+    ephemeral.status.ephemeral = true;
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 4,
+      player: { hand: ["p-eph"] },
+      enemy: { deck: ["d-enemy"] },
+      instances: [ephemeral],
+    });
+    const handoff: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 4 },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
+    const banishIndex = result.findIndex(
+      (edit) =>
+        edit.kind === "MOVE_CARD_TO_ZONE" && edit.battleCardId === "p-eph",
+    );
+    const flowIndex = result.findIndex((edit) => edit.kind === "SET_BATTLE_FLOW");
+    expect(banishIndex).toBeGreaterThanOrEqual(0);
+    // The Ending banish belongs to the outgoing player's turn, so it precedes
+    // the side flip (rules §Turn Structure — Ending).
+    expect(banishIndex).toBeLessThan(flowIndex);
+  });
+
+  it("does not banish the incoming side's ephemeral or offering cards", () => {
+    const incomingEphemeral = makeInstance("e-eph", { owner: "enemy" });
+    incomingEphemeral.status.ephemeral = true;
+    const incomingOffering = makeInstance("e-off", { owner: "enemy", printedSpark: 2 });
+    incomingOffering.status.offering = true;
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 4,
+      enemy: {
+        deck: ["d-enemy"],
+        hand: ["e-eph"],
+        frontRank: frontRankSlots("F0", "e-off"),
+      },
+      instances: [incomingEphemeral, incomingOffering],
+    });
+    const handoff: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 4 },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
+    expect(
+      result.some(
+        (edit) => edit.kind === "MOVE_CARD_TO_ZONE" && edit.destination.zone === "banished",
+      ),
+    ).toBe(false);
   });
 
   it("leaves non-handoff flow edits unchanged", () => {

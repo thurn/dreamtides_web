@@ -14,6 +14,7 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     banished: [],
     backRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
     frontRank: { F0: null, F1: null, F2: null, F3: null },
+    fatigueCount: 0,
   };
 }
 

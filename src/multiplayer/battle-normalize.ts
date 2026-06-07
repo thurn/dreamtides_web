@@ -47,6 +47,7 @@ function normalizeSide(
     banished: raw?.banished ?? [],
     backRank: { ...defaultBackRankSlots(), ...(raw?.backRank ?? {}) },
     frontRank: { ...defaultFrontRankSlots(), ...(raw?.frontRank ?? {}) },
+    fatigueCount: raw?.fatigueCount ?? 0,
   };
 }
 

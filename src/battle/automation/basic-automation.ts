@@ -46,6 +46,9 @@ import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
  *    character it controls loses the exhausted status (rules §Dawn).
  *  - **End-of-turn hand limit.** The outgoing player discards down to ten cards
  *    (rules §Turn Structure — Ending).
+ *  - **Ending banishes end-of-turn statuses.** After the hand-limit discard, the
+ *    outgoing side's ephemeral cards still in hand and offering cards still in
+ *    play are banished (rules §Turn Structure — Ending).
  *  - **Victory threshold.** When a side reaches the score threshold after the
  *    Challenge resolves, the battle result is forced (rules §Objective).
  */
@@ -191,6 +194,13 @@ function planTurnHandoff(
 
   for (const discardEdit of handLimitDiscardEdits(state, outgoingSide)) {
     commands.push(autoCommand(discardEdit));
+  }
+
+  // Ending: after the hand-limit discard, the outgoing side's end-of-turn
+  // statuses are enforced — ephemeral cards still in hand and offering cards
+  // still in play are banished (rules §Turn Structure — Ending).
+  for (const banishEdit of endingBanishEdits(state, outgoingSide)) {
+    commands.push(autoCommand(banishEdit));
   }
 
   // The user's own flow edit performs the side flip.
@@ -395,6 +405,53 @@ function handLimitDiscardEdits(
     edits.push({ kind: "DISCARD_CARD", battleCardId });
   }
   return edits;
+}
+
+/**
+ * Ending: banishes the outgoing side's end-of-turn statuses (rules §Turn
+ * Structure — Ending). Any card with `status.ephemeral` still in that side's
+ * hand, and any card with `status.offering` still in play (front or back rank),
+ * is moved to `banished`. Pure: it only reads `state` and never mutates it.
+ */
+function endingBanishEdits(
+  state: BattleMutableState,
+  side: BattleSide,
+): BattleDebugEdit[] {
+  const edits: BattleDebugEdit[] = [];
+  const sideState = state.sides[side];
+
+  for (const battleCardId of sideState.hand) {
+    appendBanishEdit(state, side, battleCardId, "ephemeral", edits);
+  }
+  for (const slotId of BACK_RANK_SLOT_IDS) {
+    appendBanishEdit(state, side, sideState.backRank[slotId], "offering", edits);
+  }
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
+    appendBanishEdit(state, side, sideState.frontRank[slotId], "offering", edits);
+  }
+
+  return edits;
+}
+
+function appendBanishEdit(
+  state: BattleMutableState,
+  side: BattleSide,
+  battleCardId: string | null,
+  statusKey: "ephemeral" | "offering",
+  edits: BattleDebugEdit[],
+): void {
+  if (battleCardId === null) {
+    return;
+  }
+  const instance = state.cardInstances[battleCardId];
+  if (instance === undefined || !instance.status[statusKey]) {
+    return;
+  }
+  edits.push({
+    kind: "MOVE_CARD_TO_ZONE",
+    battleCardId,
+    destination: { side, zone: "banished" },
+  });
 }
 
 /**

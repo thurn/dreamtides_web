@@ -221,6 +221,102 @@ function setCardStatus(
   });
 }
 
+function drawCard(
+  state: BattleReducerState,
+  side: BattleReducerState["mutable"]["activeSide"],
+): BattleReducerState {
+  return battleControllerReducer(state, {
+    type: "APPLY_COMMAND",
+    command: {
+      id: "DEBUG_EDIT",
+      edit: { kind: "DRAW_CARD", side },
+    },
+  });
+}
+
+function erode(
+  state: BattleReducerState,
+  side: BattleReducerState["mutable"]["activeSide"],
+  count: number,
+): BattleReducerState {
+  return battleControllerReducer(state, {
+    type: "APPLY_COMMAND",
+    command: {
+      id: "DEBUG_EDIT",
+      edit: { kind: "ERODE", side, count },
+    },
+  });
+}
+
+describe("ERODE", () => {
+  it("moves the top `count` cards of the side's deck to its void", () => {
+    const state = createBattle();
+    const deckBefore = [...state.mutable.sides.player.deck];
+    const voidBefore = state.mutable.sides.player.void.length;
+
+    const result = erode(state, "player", 2);
+
+    expect(result.mutable.sides.player.deck).toEqual(deckBefore.slice(2));
+    expect(result.mutable.sides.player.void.slice(voidBefore)).toEqual(
+      deckBefore.slice(0, 2),
+    );
+  });
+});
+
+describe("Fatigue", () => {
+  it("awards the opponent doubling points and increments fatigueCount when drawing from an empty deck", () => {
+    const state = createBattle();
+    state.mutable.sides.player.deck = [];
+    const enemyScoreBefore = state.mutable.sides.enemy.score;
+
+    const afterFirst = drawCard(state, "player");
+    // First fatigue event: 2^0 = 1 point to the opponent.
+    expect(afterFirst.mutable.sides.enemy.score).toBe(enemyScoreBefore + 1);
+    expect(afterFirst.mutable.sides.player.fatigueCount).toBe(1);
+
+    const afterSecond = drawCard(afterFirst, "player");
+    // Second fatigue event: 2^1 = 2 more points (total 3).
+    expect(afterSecond.mutable.sides.enemy.score).toBe(enemyScoreBefore + 3);
+    expect(afterSecond.mutable.sides.player.fatigueCount).toBe(2);
+  });
+
+  it("awards the opponent fatigue per card when eroding from an empty deck", () => {
+    const state = createBattle();
+    state.mutable.sides.player.deck = [];
+    const enemyScoreBefore = state.mutable.sides.enemy.score;
+
+    // Eroding 2 from an empty deck is two fatigue events: 1 then 2 = 3.
+    const result = erode(state, "player", 2);
+    expect(result.mutable.sides.enemy.score).toBe(enemyScoreBefore + 3);
+    expect(result.mutable.sides.player.fatigueCount).toBe(2);
+  });
+
+  it("fatigues the player side too, awarding the enemy's opponent (player)", () => {
+    const state = createBattle();
+    state.mutable.sides.enemy.deck = [];
+    const playerScoreBefore = state.mutable.sides.player.score;
+
+    const result = drawCard(state, "enemy");
+    expect(result.mutable.sides.player.score).toBe(playerScoreBefore + 1);
+    expect(result.mutable.sides.enemy.fatigueCount).toBe(1);
+  });
+
+  it("erodes available cards then fatigues for the shortfall", () => {
+    const state = createBattle();
+    const topCard = state.mutable.sides.player.deck[0];
+    state.mutable.sides.player.deck = [topCard];
+    const enemyScoreBefore = state.mutable.sides.enemy.score;
+    const voidBefore = state.mutable.sides.player.void.length;
+
+    // Erode 2 with a 1-card deck: one card moves to void, one fatigue event (1).
+    const result = erode(state, "player", 2);
+    expect(result.mutable.sides.player.deck).toEqual([]);
+    expect(result.mutable.sides.player.void.slice(voidBefore)).toEqual([topCard]);
+    expect(result.mutable.sides.enemy.score).toBe(enemyScoreBefore + 1);
+    expect(result.mutable.sides.player.fatigueCount).toBe(1);
+  });
+});
+
 describe("SET_CARD_STATUS", () => {
   it("merges the partial status, clearing isExhausted while leaving siblings intact", () => {
     const state = createBattle();

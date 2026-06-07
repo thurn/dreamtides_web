@@ -204,6 +204,7 @@ function createInitialSideState(
     banished: [],
     backRank: createEmptyBackRank(),
     frontRank: createEmptyFrontRank(),
+    fatigueCount: 0,
   };
 }
 

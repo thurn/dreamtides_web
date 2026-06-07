@@ -311,6 +311,13 @@ export interface BattleSideMutableState {
   banished: string[];
   backRank: Record<BackRankSlotId, string | null>;
   frontRank: Record<FrontRankSlotId, string | null>;
+  /**
+   * Number of Fatigue events this side has suffered this battle (rules
+   * §Fatigue). Drawing or eroding from an empty deck awards the opponent
+   * `2^fatigueCount` ⍟ and increments this counter, so the doubling sequence
+   * (1⍟, 2⍟, 4⍟, …) is reproducible across the snapshot/undo model. Default 0.
+   */
+  fatigueCount: number;
 }
 
 export interface BattleStackEntry {

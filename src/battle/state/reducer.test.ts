@@ -610,10 +610,11 @@ describe("battleReducer", () => {
     }
   });
 
-  it("leaves the state unchanged for a DEBUG_EDIT DRAW_CARD on an empty deck (M-6)", () => {
+  it("fatigues the drawing side on a DEBUG_EDIT DRAW_CARD from an empty deck", () => {
     const { state } = createTestBattle();
     state.sides.player.deck = [];
     const handBefore = [...state.sides.player.hand];
+    const enemyScoreBefore = state.sides.enemy.score;
 
     const reducerState = createBattleReducerState(state);
     const reduced = battleReducer(
@@ -635,10 +636,14 @@ describe("battleReducer", () => {
       },
     );
 
-    expect(reduced).toBe(reducerState);
+    // Drawing from an empty deck causes Fatigue (rules §Fatigue): the hand and
+    // deck are unchanged, the opponent scores the first doubling term (1⍟), and
+    // the drawing side's fatigueCount increments.
     expect(reduced.mutable.sides.player.hand).toEqual(handBefore);
     expect(reduced.mutable.sides.player.deck).toEqual([]);
-    expect(reduced.history.past).toHaveLength(0);
+    expect(reduced.mutable.sides.enemy.score).toBe(enemyScoreBefore + 1);
+    expect(reduced.mutable.sides.player.fatigueCount).toBe(1);
+    expect(reduced.history.past).toHaveLength(1);
   });
 
   it("PLAY_FROM_DECK_TOP places the top deck card on the first open reserve slot with no energy change", () => {

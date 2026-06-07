@@ -95,6 +95,15 @@ export type BattleDebugEdit =
     side: BattleSide;
   }
   | {
+    // Moves the top `count` cards of `side`'s deck to its void (rules §Erode).
+    // An erode against an empty deck causes Fatigue, awarding the opponent the
+    // doubling ⍟ sequence (rules §Fatigue). Basic automation introduces this
+    // edit; the Phase 4 side-scoped rail surfaces the UI on top of it.
+    kind: "ERODE";
+    side: BattleSide;
+    count: number;
+  }
+  | {
     kind: "DISCARD_CARD";
     battleCardId: string;
   }
@@ -432,6 +441,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
       return "card-instance";
     case "MOVE_CARD_TO_ZONE":
     case "DRAW_CARD":
+    case "ERODE":
     case "DISCARD_CARD":
     case "CREATE_CARD_COPY":
     case "CREATE_FIGMENT":
@@ -555,6 +565,7 @@ function collectDebugEditTargets(
           ? makeSlotTarget(edit.destination)
           : makeZoneTarget(edit.destination.side, edit.destination.zone),
       ];
+    case "ERODE":
     case "REORDER_DECK":
       return [makeSideTarget(edit.side), makeZoneTarget(edit.side, "deck")];
     case "REVEAL_DECK_TOP":
@@ -603,6 +614,8 @@ function createDebugEditLabel(
       return `Swap ${formatSlotLabel(edit.source)} with ${formatSlotLabel(edit.target)}`;
     case "DRAW_CARD":
       return `Draw 1 for ${formatSideLabel(edit.side)}`;
+    case "ERODE":
+      return `Erode ${String(edit.count)} for ${formatSideLabel(edit.side)}`;
     case "DISCARD_CARD":
       return `Discard ${readCardName(state, edit.battleCardId)}`;
     case "KINDLE": {

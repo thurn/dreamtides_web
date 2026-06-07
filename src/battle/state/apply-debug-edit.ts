@@ -222,6 +222,8 @@ export function applyDebugEdit(
       return swapBattlefieldSlots(state, edit.source, edit.target);
     case "DRAW_CARD":
       return drawCardToHand(state, edit.side);
+    case "ERODE":
+      return erodeDeck(state, edit.side, edit.count);
     case "DISCARD_CARD":
       return discardHandCard(state, edit.battleCardId);
     case "KINDLE":
@@ -1418,9 +1420,14 @@ function drawCardToHand(
 } {
   const battleCardId = state.sides[side].deck[0];
 
+  // Drawing from an empty deck causes Fatigue instead (rules §Fatigue): the
+  // opponent scores the next term of the doubling sequence and the drawing
+  // side's `fatigueCount` increments.
   if (battleCardId === undefined) {
+    const nextState = cloneBattleMutableState(state);
+    applyFatigueInPlace(nextState, side);
     return {
-      state,
+      state: nextState,
       transition: createEmptyTransitionData(),
     };
   }
@@ -1434,6 +1441,59 @@ function drawCardToHand(
     state: nextState,
     transition: createEmptyTransitionData(),
   };
+}
+
+/**
+ * Erode: moves the top `count` cards of `side`'s deck to its void (rules
+ * §Erode). Each card the side cannot supply from its deck triggers Fatigue
+ * instead (rules §Fatigue), awarding the opponent the doubling ⍟ sequence.
+ */
+function erodeDeck(
+  state: BattleMutableState,
+  side: BattleSide,
+  count: number,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  if (count <= 0) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  const nextState = cloneBattleMutableState(state);
+  for (let index = 0; index < count; index += 1) {
+    const battleCardId = nextState.sides[side].deck[0];
+    if (battleCardId === undefined) {
+      applyFatigueInPlace(nextState, side);
+      continue;
+    }
+    nextState.sides[side].deck.shift();
+    nextState.sides[side].void.push(battleCardId);
+    nextState.cardInstances[battleCardId].controller = side;
+  }
+
+  return {
+    state: nextState,
+    transition: createEmptyTransitionData(),
+  };
+}
+
+/**
+ * Applies a single Fatigue event to `side` in place (rules §Fatigue): the
+ * opponent scores `2^fatigueCount` ⍟ and `side.fatigueCount` increments by one,
+ * so the doubling sequence (1⍟, 2⍟, 4⍟, …) is reproducible across snapshots.
+ */
+function applyFatigueInPlace(
+  state: BattleMutableState,
+  side: BattleSide,
+): void {
+  const opponent: BattleSide = side === "player" ? "enemy" : "player";
+  const sideState = state.sides[side];
+  state.sides[opponent].score += 2 ** sideState.fatigueCount;
+  sideState.fatigueCount += 1;
 }
 
 function discardHandCard(
