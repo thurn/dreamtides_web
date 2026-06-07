@@ -1,24 +1,24 @@
-Ambush Operative
-Inferno's Herald
-Kindred Sparks
-Voidshield Guardian
-Silent Observer
-Defiant Holdout
-The Calling Night
-Dreadweaver
-Duskreaper
-Ashen Remnant
-The Dread Sovereign
-Wreckland Maverick
-Gatebound Warden
-Starlight Guide
-Looming Oracle
-Avatar of Cosmic Reckoning
-Skull Weaver
-Cloaked Sentinel
-Dune Reaper
-Carrion Shepherd
-Exiles of the Last Light
-Thundercatcher
-Warfield Stalwart
-Conjured Zenith
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

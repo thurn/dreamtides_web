@@ -1,18 +1,18 @@
-Augur Crow
-Searcher in the Mists
-Fern Treader
-Ashwalker
-Looming Oracle
-Dreamvale Monarch
-Dawnrunner
-Wreckage Prowler
-Astral Angler
-Prophet of the Consumed
-Ferryman of the Falls
-Heavenward Penitent
-Dreamcatcher's Call
-Pathwalker
-Scrap Reclaimer
-Crumbling Covenant
-Moment Rewound
-Break the Sequence
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence

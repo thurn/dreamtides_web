@@ -1,27 +1,27 @@
-Sandglider
-Saffron Trailblazer
-Spirit Field Reclaimer
-Looming Oracle
-Assault Leader
-Oathbound Pair
-Starbound Striker
-Vault Infiltrator
-Reforged Automaton
-Featherlight Summoner
-Glimmerwood Scout
-Gilded Catalyst
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Dread Arbiter
-Spirit of the Greenwood
-Tethered Hollow
-Wolfbond Chieftain
-Luminwings
-Lone Castaway
-Infernal Rest
-Worldbreacher
-Through the Rift
-The Deathsworn
-Spellweaver
-Shadow Reflection
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection

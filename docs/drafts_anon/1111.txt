@@ -1,30 +1,30 @@
-Sandglider
-Oracle of Shifting Skies
-Architect of Memory
-Dreaming Obelisk
-Colossal Convergence
-Forsworn Champion
-Assault Leader
-Infernal Cavalier
-Grim Reclaimer
-Voidsire
-Fargazer
-Angel of the Eclipse
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Tethered Hollow
-Blightmaw
-Worldbreacher
-Ecliptic Vantage
-Fury of the Clan
-Marrow Mimic
-Eruption
-Cragfall
-Seaside Requiem
-Archive of the Forgotten
-Aftermath Bloom
-Twilight Troubadour
-Simulacra
-Return to Nowhere
-Intermezzo Balladeer
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer

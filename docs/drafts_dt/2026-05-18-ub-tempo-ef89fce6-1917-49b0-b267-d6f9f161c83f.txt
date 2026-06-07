@@ -1,21 +1,21 @@
-Signal Resonant
-Planetgazer
-Eternal Sentry
-Pilgrim of Old Stones
-Standoff
-Glimpse of Infinity
-Ripple of Defiance
-Rootspring Summons
-Together Against the Tide
-Dreaming Groves
-Toll of Passage
-Epiphany Unfolded
-Harvest the Forgotten
-Momentum of the Fallen
-Vertiginous Leap
-Immolate
-Defiant Parry
-Ridgecutter
-Crumbling Covenant
-Abolish
-Burning Pursuit
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

@@ -1,27 +1,27 @@
-Blade of Unity
-Silent Observer
-Looming Oracle
-Assault Leader
-Iron Executor
-Mirror Protocol
-Nineborn Specter
-Pilgrim of Old Stones
-Flamestride Rider
-Invoker of Myths
-Glimpse of Infinity
-Dread Arbiter
-Clockwork Prodigy
-Echoing Denial
-Tethered Hollow
-Ironclad Marksman
-Worldbreacher
-Fury of the Clan
-Spellweaver
-Crumbling Covenant
-Sunset Chapel Rest
-Heroic Rescue
-Aftermath Bloom
-Arc Disciple
-Twilight Troubadour
-Simulacra
-Wheel of the Heavens
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens

@@ -1,24 +1,24 @@
-Breach Artist
-Northlight Maestro
-Dreadwood Emissary
-Keeper of the Tides
-Riftwalker
-Eternal Sentry
-Driftrider
-Thronebound Arbiter
-Clockwork Prodigy
-Echoing Denial
-Together Against the Tide
-Fragments of Vision
-Null Sphere
-Guiding Light
-Knowledge Restored
-Sanctum Approach
-Vertiginous Leap
-Immolate
-Shared Revelation
-Collateral Damage
-Moonlit Voyage
-Ripple Through Reality
-Dreadcall Warden
-Last Beacon
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon

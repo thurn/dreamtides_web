@@ -1,26 +1,26 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Company Commander
-Somber Flockmaster
-Doorlight Foundling
-Titan of Forgotten Echoes
-Assault Leader
-Pit Descender
-Reforged Automaton
-Burning Revenant
-Blazing Emberwing
-Prism Caller
-Pyrewatcher
-Conduit of Ashes
-Tethered Hollow
-Wolfbond Chieftain
-Luminwings
-Call of Calamity
-Through the Rift
-Ossuary Overlord
-Last Light Herald
-Skyflame Commander
-Sunset Chapel Rest
-Aftermath Bloom
-Infernal Ascendant
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

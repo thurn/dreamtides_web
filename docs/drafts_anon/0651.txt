@@ -1,27 +1,27 @@
-Augur Crow
-Starchaser
-Crucible Warlord
-Driftcaller Sovereign
-Stargazer Adrift
-Starrunner
-Cloaked Sentinel
-Ashen Remnant
-The Dread Sovereign
-Reclaimer of Lost Paths
-Titan of Forgotten Echoes
-Lumineth
-Petal-Seer
-Nocturne
-Scuttled Fortune
-Nightmare Manifest
-Passage Through Oblivion
-Veil Shatter
-Lithic Severance
-Moment Rewound
-Cragfall
-Abolish
-Crumbling Behemoth
-Beacon of Tomorrow
-Curio Dealer
-Infernal Ascendant
-Radiant Trio
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio

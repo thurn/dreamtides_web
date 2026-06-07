@@ -1,22 +1,22 @@
-Inferno's Herald
-Tidecaller
-Signal Resonant
-The Calling Night
-Duskreaper
-Salvage Engine
-Avatar of Cosmic Reckoning
-Dune Reaper
-Riftwalker
-Carrion Shepherd
-Tethered Hollow
-Luminwings
-Fangbound
-Thundercatcher
-Secrets of the Deep
-Marrow Mimic
-Stolen Genesis
-Hope's Vanguard
-Phantasmal Recruiter
-Warfield Stalwart
-Twilight Suppressor
-Arc Disciple
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple

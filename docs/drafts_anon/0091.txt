@@ -1,28 +1,28 @@
-Ripple of Defiance
-Undying Fang
-Ebonwing
-Ruin Scavenger
-Crucible Warlord
-Looming Oracle
-Frost Visionary
-Sage of the Prelude
-Gatebound Warden
-Starlight Guide
-Rift Pilgrim
-Duskmount
-Call to the Unknown
-Abyssal Enforcer
-Wraith of Twisting Shadows
-Light of Emergence
-Blazepath Traveler
-Lumen Rover
-Spirit of the Greenwood
-Guiding Light
-Lightningborn
-Toll of Passage
-Veil Shatter
-Passage Through Oblivion
-Break the Sequence
-Threadbreaker
-Roots of Rebirth
-Radiant Trio
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio

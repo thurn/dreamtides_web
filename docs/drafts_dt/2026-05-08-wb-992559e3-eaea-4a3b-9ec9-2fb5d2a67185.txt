@@ -1,22 +1,22 @@
-Blade of Unity
-Inferno's Herald
-Tidecaller
-Apocalypse Vigilante
-Company Commander
-Momentum's Edge
-Cloaked Sentinel
-Frost Visionary
-Mirror Protocol
-Revenant of the Lost
-Gilded Catalyst
-Dread Arbiter
-Tethered Hollow
-Luminwings
-Lightningborn
-Infernal Rest
-Worldbreacher
-Vertiginous Leap
-The Grand Heist
-Last Light Herald
-Skyflame Commander
-Fading Farewell
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

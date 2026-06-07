@@ -1,24 +1,24 @@
-Starchaser
-Ruin Scavenger
-Undying Fang
-Abomination of Memory
-Driftcaller Sovereign
-Selfless Rescuer
-Lumineth
-Doorlight Foundling
-Endless Projection
-Sylvan Matriarch
-Augur Crow
-Steel Abomination
-Emerald Guardian
-Carrion Lord
-The Forsaker
-Ruptured Dynamo
-Ordained Collapse
-Heavenward Penitent
-Dreamcatcher's Call
-Cragfall
-Crumbling Covenant
-Moment Rewound
-Cindermarch
-Conduit of Resonance
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance

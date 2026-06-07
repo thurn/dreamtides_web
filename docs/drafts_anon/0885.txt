@@ -1,25 +1,25 @@
-Tidecaller
-Ruin Scavenger
-Harvester of Despair
-Silent Avenger
-Wreckland Maverick
-Cinderblade Legionnaire
-Deathwalker
-Nocturne
-Call to the Unknown
-Graywatch
-Soulreaver
-Rusted Monolith
-Standoff
-Glimpse of Infinity
-Ordained Collapse
-Luminwings
-Lurking Dread
-Shatter the Frail
-Whisper of the Past
-Stolen Genesis
-Collateral Damage
-Standard Bearer
-Borrowed Minutes
-Fathomscourge
-Smoldering Ancient
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient

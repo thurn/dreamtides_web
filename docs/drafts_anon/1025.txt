@@ -1,28 +1,28 @@
-Oracle of Shifting Skies
-Architect of Memory
-The Devourer
-Liminal Dreamer
-Unbroken
-Shadowprowler
-Pattern Seeker
-Verdant Wayfarer
-Urban Cipher
-Gateweaver
-Pyre Challenger
-Thornwood Delver
-Dragonward
-Woodland Apparition
-Wandering Archivist
-Rubble Diviner
-The Ringleader
-Wreckborn
-Tethered Hollow
-Molten Duel
-Derelict Voyage
-Fell the Mighty
-Fell Swoop
-Spiral Offering
-Eruption
-Scorched Reckoning
-Shadowbinder
-Keeper of the Lightpath
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath

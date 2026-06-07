@@ -1,24 +1,24 @@
-Harvester of Despair
-Scrapyard Custodian
-Defiant Holdout
-Wreckheap Survivor
-Entropy Spike
-Stargazer Adrift
-Ashborn Necromancer
-The Calling Night
-Silent Avenger
-Ashwalker
-Cinderblade Legionnaire
-Skull Weaver
-Veil of the Wastes
-Dawnrunner
-Carrion Shepherd
-Soulreaver
-Rusted Monolith
-Collapse Protocol
-The Thinning
-Collateral Damage
-Moonlit Voyage
-Rite of Summoning
-Conjured Zenith
-Burning Pursuit
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

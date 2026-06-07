@@ -1,80 +1,80 @@
-Gatebound Warden
-Starlight Guide
-Frost Visionary
-Call to the Unknown
-Forgotten Factory Titan
-Prism Caller
-Mirror Protocol
-Lanternhearted
-Barrage Specialist
-Cosmic Puppeteer
-Soulreaver
-Echo Architect
-Ghostlight Wolves
-Eternal Stag
-Blazebound Sentinel
-Lord of Hidden Paths
-Ethereal Trailblazer
-Dreamborne Leviathan
-Spiritbound Alpha
-Sylvan Matriarch
-Embersummoner
-Shardwoven Tyrant
-Harrowing Officiant
-Ridge Vortex Explorer
-Wreckland Maverick
-Cinderheart
-Vortex Claimant
-Ferryman of the Falls
-Resilient Wanderer
-Doorlight Foundling
-Demonbane
-Blade of Oblivion
-Wired Duelist
-Ironclad Holdout
-Fern Treader
-Lightningborn
-Grounded
-Clockwork Prodigy
-Echoing Denial
-Reunion
-Knowledge Restored
-Break the Sequence
-Fractured Veil
-Ripple Through Reality
-Cragfall
-A New Adventure
-Moment Rewound
-Crumbling Covenant
-Maelstrom Denial
-Path to Redemption
-Nebula's Wake
-Immolate and Rise
-Peak Plunder
-Moonlit Voyage
-Hope's Vanguard
-Fleeting Reunion
-Molten Duel
-Spiral Offering
-Cascade of Reflections
-Seaside Requiem
-Cascading Detonation
-Burst of Obliteration
-Spent Courier
-Forsaken Skyline
-Dreamcatcher's Call
-Sunset Chronicler
-Radiant Trio
-Ashfront Lieutenant
-Marrow Drinker
-Crimson Pilgrimage
-Luminous Ascent
-Warfield Stalwart
-Conjured Zenith
-Blight Weaver
-Seedling Sage
-Ochre Prospector
-Rebirth Ritualist
-Glimpse of Infinity
-Nightmare Manifest
-Tethered Hollow
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow

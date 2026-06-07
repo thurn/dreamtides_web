@@ -1,15 +1,15 @@
-Dreaming Obelisk
-Company Commander
-Momentum's Edge
-Fern Treader
-Reforged Automaton
-Cosmic Puppeteer
-Silent Gatherer
-Blazepath Traveler
-Lumen Rover
-Wired Duelist
-Fangbound
-Null Sphere
-Starshot Gunner
-Inverted Reflection
-Key to the Moment
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment

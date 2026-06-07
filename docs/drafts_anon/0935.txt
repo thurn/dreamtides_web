@@ -1,28 +1,28 @@
-Augur Crow
-Starchaser
-Ethereal Trailblazer
-Abomination of Memory
-Mystic Runefish
-Selfless Rescuer
-Frostbound Defiant
-Emberwolf Triad
-Wondrous Clearing
-Veilseeker
-Sage of the Prelude
-Wreckage Prowler
-Astral Angler
-Prophet of the Consumed
-Winterbough Monk
-Wraith of Twisting Shadows
-Light of Emergence
-Starsea Traveler
-Carrion Lord
-Ferryman of the Falls
-The Forsaker
-Ruptured Dynamo
-Grounded
-Celestial Reverie
-Bloomweaver
-Pathwalker
-Scrap Reclaimer
-Clockwork Conductor
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor

@@ -1,21 +1,21 @@
-Rift Pilgrim
-Seeker of the Radiant Wilds
-Gatebound Warden
-Starlight Guide
-Cinderblade Legionnaire
-Looming Oracle
-Pilgrim of Old Stones
-Driftrider
-Glimmerwood Scout
-Thronebound Arbiter
-Standoff
-Ripple of Defiance
-Lurking Dread
-Lunar Hart
-Defiant Parry
-Apocalypse
-Ripple Through Reality
-Crumbling Covenant
-Moment Rewound
-Sunset Chapel Rest
-Fractured Veil
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil

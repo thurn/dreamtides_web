@@ -27,8 +27,11 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join, dirname, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'smol-toml';
+import { corpusLineToken, loadCardMaps, resolveToken } from './lib/card-refs.mjs';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// Corpus files reference cards by their stable id UUID; resolve to current names.
+const CARD_MAPS = loadCardMaps(join(REPO_ROOT, 'data', 'tabula', 'cards_v2.toml'));
 
 const FLAGS = {
   target: {
@@ -143,8 +146,8 @@ function parseArgs(argv) {
 function parseDeck(path) {
   const seen = new Set();
   for (const line of readFileSync(path, 'utf8').split('\n')) {
-    const name = line.trim();
-    if (name) seen.add(name);
+    const token = corpusLineToken(line);
+    if (token) seen.add(resolveToken(token, CARD_MAPS).name);
   }
   return { set: seen };
 }

@@ -1,22 +1,22 @@
-Sorrow Watcher
-Tidewreck Navigator
-Voidshield Guardian
-Apocalypse Vigilante
-The Calling Night
-Salvage Engine
-Avatar of Cosmic Reckoning
-Vanishing Inquisitor
-Oathbound Pair
-Eternal Sentry
-Revenant of the Lost
-Driftrider
-Glimmerwood Scout
-Thronebound Arbiter
-Together Against the Tide
-Dreaming Groves
-Starfall
-Infernal Rest
-Bladefall
-Shattering Gambit
-Immolate
-Burning Pursuit
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

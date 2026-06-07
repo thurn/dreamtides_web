@@ -1,24 +1,24 @@
-The Devourer
-Driftcaller Sovereign
-Cloudmantle Ray
-Blazebound Sentinel
-Somber Flockmaster
-Wreckage Prowler
-Astral Angler
-Winterbough Monk
-Woodland Apparition
-Shatterpoint Agent
-Wistful Angler
-Ashen Avenger
-Emerald Guardian
-Glimpse of Infinity
-Unleashed Destruction
-Derelict Voyage
-Fell the Mighty
-Weight of Memory
-Duneveil Vanguard
-Fell Swoop
-Eruption
-Summons of the Bonded
-Data Pulse
-Scorched Reckoning
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning

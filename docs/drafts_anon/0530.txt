@@ -1,23 +1,23 @@
-Ambush Operative
-Meadowlight Charger
-Spirit Field Reclaimer
-Sundown Surfer
-Frost Visionary
-Oathbound Pair
-Reforged Automaton
-Boundless Wanderer
-Field Reverent
-Featherlight Summoner
-Revenant of the Lost
-Glimmerwood Scout
-Gilded Catalyst
-Sundown Ronin
-Prism Caller
-Emberfang
-Blight Weaver
-Through the Rift
-Shattering Gambit
-Veil Shatter
-The Grand Heist
-Wasteland Holdout
-Shadow Reflection
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection

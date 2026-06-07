@@ -1,25 +1,25 @@
-Dawnprowler Panther
-Cloudmantle Ray
-Overstory Explorer
-Skyborne Jellyfish
-Wreckage Prowler
-Astral Angler
-Wraith of Twisting Shadows
-Light of Emergence
-Starsea Traveler
-Shatterpoint Agent
-Duskmount
-Steel Abomination
-Spirit Bond
-The Forsaker
-Ruptured Dynamo
-Glimpse of Infinity
-Twice-Lit Portal
-Dreamcatcher's Call
-Unleashed Destruction
-Desolation's Edge
-Virtuoso of Harmony
-Abolish
-Moment Rewound
-Wheel of the Heavens
-Nexus Wayfinder
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

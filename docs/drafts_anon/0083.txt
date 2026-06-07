@@ -1,30 +1,30 @@
-Ironclad Holdout
-Dreadmount Sovereign
-Sigil Analyst
-Company Commander
-Spirit Field Reclaimer
-Colossal Convergence
-Forsworn Champion
-Iron Executor
-Mirror Protocol
-Vault Infiltrator
-Reforged Automaton
-Tranquil Duelist
-Burning Revenant
-Infernal Cavalier
-Grim Reclaimer
-Voidsire
-Gilded Catalyst
-Wired Duelist
-Prism Caller
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Rebirth Ritualist
-Tethered Hollow
-Starshot Gunner
-Lightningborn
-Chronicle Reclaimer
-Radiants' Captain
-Through the Rift
-Marrow Mimic
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic

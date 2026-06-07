@@ -1,26 +1,26 @@
-Harrowing Officiant
-Paradox Enforcer
-Hallowed Stag
-Ruin Scavenger
-Searcher in the Mists
-Herald of the Last Light
-Harvester of Despair
-Enginespeaker
-The Rising God
-Ashwalker
-Veil Crosser
-Rooftop Prophet
-Skull Weaver
-Depthwalker
-Winterbough Monk
-Wistful Angler
-Ashen Avenger
-Graywatch
-Spirit of the Greenwood
-Dreaming Groves
-Vertiginous Leap
-Curio Dealer
-Unleash Ruin
-Pyrokinetic Surge
-Ashfront Lieutenant
-Marrow Drinker
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker

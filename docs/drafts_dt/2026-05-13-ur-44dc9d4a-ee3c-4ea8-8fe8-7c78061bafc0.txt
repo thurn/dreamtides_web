@@ -1,23 +1,23 @@
-Blade of Oblivion
-Minstrel of Falling Light
-Key Sifter
-The Ringleader
-Fangbound
-Pulse of Sacrifice
-Fragments of Vision
-Desperation
-Arc Gate Opening
-Hatching Ground
-Sanctum Awakened
-Data Pulse
-Cascading Detonation
-Ridgecutter
-A New Adventure
-Across the Void
-Aftermath Bloom
-Wheel of the Heavens
-From the Barrow
-Intermezzo Balladeer
-Surge of Fury
-Echoes of the Journey
-Reunion
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

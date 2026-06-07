@@ -1,23 +1,23 @@
-Blade of Unity
-Ambush Operative
-Sky Voyager
-Voidcaller
-Looming Oracle
-Torn Circuit Feeder
-Scorched Crusader
-Blazing Emberwing
-Endless Projection
-Wraith of Twisting Shadows
-Light of Emergence
-Shatterpoint Agent
-Embersummoner
-Shardwoven Tyrant
-Spirit of the Greenwood
-Fangbound
-Heavenward Penitent
-Grounded
-Lightningborn
-Veil Shatter
-Wasteland Holdout
-Void Pilgrim
-Roots of Rebirth
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

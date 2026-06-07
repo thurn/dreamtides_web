@@ -1,23 +1,23 @@
-Ambush Operative
-Silent Observer
-Crucible Warlord
-Forgotten Factory Titan
-Frost Visionary
-Oathbound Pair
-Still Dreamer
-Vault Infiltrator
-Reclaimer of Lost Paths
-Blazepath Traveler
-Lumen Rover
-Glimmerwood Scout
-Passage Through Oblivion
-Grounded
-Thundercatcher
-Blight Weaver
-Infernal Rest
-Through the Rift
-Shattering Gambit
-Veil Shatter
-The Grand Heist
-Wasteland Holdout
-Void Pilgrim
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim

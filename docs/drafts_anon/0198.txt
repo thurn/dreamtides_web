@@ -1,25 +1,25 @@
-Aspiring Guardian
-Sandglider
-Dreadmount Sovereign
-Sigil Analyst
-Fern Treader
-Colossal Convergence
-Forsworn Champion
-Mirror Protocol
-Reforged Automaton
-Burning Revenant
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Gilded Catalyst
-Sundown Ronin
-Prism Caller
-Pulse of Sacrifice
-Blightmaw
-Epiphany Unfolded
-Marrow Mimic
-Standard Bearer
-Ossuary Overlord
-Cragfall
-Spellweaver
-Aftermath Bloom
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom

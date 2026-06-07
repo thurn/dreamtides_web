@@ -1,23 +1,23 @@
-Ambush Operative
-Crucible Warlord
-Dreadwood Emissary
-Keeper of the Tides
-Looming Oracle
-Oathbound Pair
-Vortex Claimant
-Pathfinder Adrift
-Veilpiercer
-Pilgrim of Old Stones
-Barrage Specialist
-Abyssal Enforcer
-Duskmount
-Threadbreaker
-Passage Through Oblivion
-Gleam Below
-Lithic Severance
-Lightningborn
-Infernal Rest
-Bladefall
-Ridgecutter
-Crumbling Covenant
-Break the Sequence
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence

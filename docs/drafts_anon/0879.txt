@@ -1,20 +1,20 @@
-Pulse of Sacrifice
-Epiphany Unfolded
-Call of Calamity
-Blight Weaver
-Desperation
-Ecliptic Vantage
-Inverted Reflection
-Shared Revelation
-Spiral Offering
-Arc Gate Opening
-Packcaller of Shadows
-Moonlit Voyage
-Crimson Pilgrimage
-Moment Rewound
-Sunset Chapel Rest
-Cascade of Reflections
-Starfall Communion
-Call of the Lost
-Intermezzo Balladeer
-Surge of Fury
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury

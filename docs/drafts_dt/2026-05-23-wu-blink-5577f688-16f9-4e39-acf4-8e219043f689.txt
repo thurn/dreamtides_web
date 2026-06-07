@@ -1,21 +1,21 @@
-Planetgazer
-Northlight Maestro
-Rift Pilgrim
-Looming Oracle
-Frost Visionary
-Vortex Claimant
-Still Dreamer
-Duskmount
-Soulflame Predator
-Nomad of Endless Paths
-Threadbreaker
-Ripple of Defiance
-Passage Through Oblivion
-Epiphany Unfolded
-Lithic Severance
-Lightningborn
-Infernal Rest
-Ecliptic Vantage
-Cragfall
-Crumbling Covenant
-Fractured Veil
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil

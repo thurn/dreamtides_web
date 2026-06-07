@@ -1,27 +1,27 @@
-Ambush Operative
-Vortex Claimant
-Barrage Specialist
-Abyssal Enforcer
-Blazepath Traveler
-Lumen Rover
-Glimmerwood Scout
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Rebirth Ritualist
-Emberfang
-Ripple of Defiance
-Fangbound
-Passage Through Oblivion
-Fragments of Vision
-Toll of Passage
-Guiding Light
-Defiant Parry
-Spellweaver
-Ripple Through Reality
-Crumbling Covenant
-Abolish
-Twilight Troubadour
-Simulacra
-Key to the Moment
-Reunion
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

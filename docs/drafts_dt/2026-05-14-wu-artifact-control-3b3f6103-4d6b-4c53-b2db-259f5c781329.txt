@@ -1,23 +1,23 @@
-Sandglider
-Inferno's Herald
-Saffron Trailblazer
-Dreadmount Sovereign
-Sigil Analyst
-Seeker of the Radiant Wilds
-Iron Executor
-Reforged Automaton
-Inspiring Templar
-Grim Reclaimer
-Voidsire
-Flamestride Rider
-Invoker of Myths
-Fangbound
-Epiphany Unfolded
-Blight Weaver
-Ecliptic Vantage
-Through the Rift
-The Deathsworn
-Moment Rewound
-Twilight Suppressor
-Wheel of the Heavens
-Fading Farewell
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

@@ -1,28 +1,28 @@
-Demonbane
-Saffron Trailblazer
-Apocalypse Vigilante
-Seeker of the Radiant Wilds
-Reforged Automaton
-Burning Revenant
-Grim Reclaimer
-Voidsire
-Flamestride Rider
-Invoker of Myths
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Nightmare Manifest
-Evacuation Enforcer
-Wolfbond Chieftain
-Fangbound
-Starshot Gunner
-Blight Weaver
-Chronicle Reclaimer
-Radiants' Captain
-Dawnblade Wanderer
-Shattering Gambit
-The Deathsworn
-Last Light Herald
-Skyflame Commander
-Shadow Reflection
-Wake the Fallen
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

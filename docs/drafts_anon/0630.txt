@@ -1,24 +1,24 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Blade of Unity
-Voidshield Guardian
-Momentum's Edge
-Cloaked Sentinel
-Oathbound Pair
-Reclaimer of Lost Paths
-Boundless Wanderer
-Field Reverent
-Featherlight Summoner
-Revenant of the Lost
-Blazepath Traveler
-Lumen Rover
-Urban Desperado
-Verdant Pioneer
-Call to the Unknown
-Flamestride Rider
-Invoker of Myths
-Lithic Severance
-Through the Rift
-Shattering Gambit
-Conjured Zenith
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

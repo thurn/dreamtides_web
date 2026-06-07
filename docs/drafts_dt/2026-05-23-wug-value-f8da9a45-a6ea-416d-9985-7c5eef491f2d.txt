@@ -1,25 +1,25 @@
-Ambush Operative
-Dreadwood Emissary
-Doorlight Foundling
-Dusk Duelist
-Veilpiercer
-Blazing Emberwing
-Winterbough Monk
-Wraith of Twisting Shadows
-Light of Emergence
-Abyssal Enforcer
-Soulflame Predator
-Nomad of Endless Paths
-Glimmerwood Scout
-Carrion Lord
-Specter of Silent Snow
-Glimpse of Infinity
-Clockwork Prodigy
-Echoing Denial
-Passage Through Oblivion
-Knowledge Restored
-Sanctum Approach
-Unleash Ruin
-Sanctum Awakened
-Cragfall
-Shadow March
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March

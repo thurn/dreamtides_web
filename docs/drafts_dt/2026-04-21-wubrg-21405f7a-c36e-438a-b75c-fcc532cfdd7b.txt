@@ -1,24 +1,24 @@
-Demonbane
-Undying Fang
-Abomination of Memory
-Wondrous Clearing
-Overstory Explorer
-Skyborne Jellyfish
-Veilseeker
-Sage of the Prelude
-Endless Projection
-Wraith of Twisting Shadows
-Light of Emergence
-Sylvan Matriarch
-Young Beastcaller
-Steel Abomination
-Wistful Angler
-Ashen Avenger
-Ferryman of the Falls
-Miraculous Arrival
-Break the Veil
-Duneveil Vanguard
-Bloomweaver
-Virtuoso of Harmony
-Luminous Ascent
-Keeper of Forgotten Light
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

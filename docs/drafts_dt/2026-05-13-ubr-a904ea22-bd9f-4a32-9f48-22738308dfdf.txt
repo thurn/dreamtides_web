@@ -1,21 +1,21 @@
-Terminus
-Cinderblade Legionnaire
-Standoff
-Fangbound
-Pulse of Sacrifice
-Together Against the Tide
-Lurking Dread
-Lunar Hart
-Collapse Protocol
-The Thinning
-Stolen Genesis
-Nebula's Wake
-Packcaller of Shadows
-Cascading Detonation
-Ridgecutter
-Moment Rewound
-Wheel of the Heavens
-Key to the Moment
-From the Barrow
-Broadcast Array
-Echoes of the Journey
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

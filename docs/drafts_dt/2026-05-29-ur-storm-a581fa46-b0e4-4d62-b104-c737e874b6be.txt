@@ -1,21 +1,21 @@
-Fangbound
-The Power Within
-Sunken Radiance
-Starfall
-Call of Calamity
-Lunar Hart
-Ancient Descent
-Hatching Ground
-Cascading Detonation
-Ridgecutter
-Archive of the Forgotten
-Starfall Communion
-Wheel of the Heavens
-Key to the Moment
-Call of the Lost
-Intermezzo Balladeer
-Surge of Fury
-Miraculous Arrival
-Across the Void
-Echoes of the Journey
-Reunion
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

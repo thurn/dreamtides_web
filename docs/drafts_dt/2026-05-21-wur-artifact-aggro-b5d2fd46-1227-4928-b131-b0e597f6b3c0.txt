@@ -1,25 +1,25 @@
-Inferno's Herald
-The Devourer
-Dreadmount Sovereign
-Sigil Analyst
-Liminal Dreamer
-Fern Treader
-Colossal Convergence
-Forsworn Champion
-Pallid Arbiter
-Iron Executor
-Inspiring Templar
-Grim Reclaimer
-Voidsire
-Urban Desperado
-Verdant Pioneer
-Gilded Catalyst
-Wired Duelist
-Worldbreacher
-Fell the Mighty
-Weight of Memory
-Dawnblade Wanderer
-Fury of the Clan
-Last Light Herald
-Skyflame Commander
-Starfall Communion
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion

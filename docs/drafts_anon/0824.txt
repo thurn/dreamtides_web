@@ -1,22 +1,22 @@
-Echo Architect
-Seeker of the Radiant Wilds
-Minstrel of Falling Light
-Key Sifter
-The Ringleader
-Pyrewatcher
-Miraculous Arrival
-Fangbound
-Lone Castaway
-Sunken Radiance
-Guiding Light
-Knowledge Restored
-Desperation
-Genesis Burst
-Vertiginous Leap
-Nebula's Wake
-Moonlit Voyage
-Crimson Pilgrimage
-Archive of the Forgotten
-A New Adventure
-Starfall Communion
-Echoes of the Journey
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

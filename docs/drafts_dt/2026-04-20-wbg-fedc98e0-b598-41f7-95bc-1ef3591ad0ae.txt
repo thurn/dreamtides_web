@@ -1,26 +1,26 @@
-Ruin Scavenger
-Ebonwing
-Ethereal Trailblazer
-Dawnprowler Panther
-Driftcaller Sovereign
-Torn Circuit Feeder
-Titan of Forgotten Echoes
-Dreamvale Monarch
-Mother of Flames
-Still Dreamer
-Lord of Hidden Paths
-Reclaimer of Lost Paths
-Endless Projection
-Petal-Seer
-Exiles of the Last Light
-Young Beastcaller
-Embersummoner
-Shardwoven Tyrant
-Spirit Bond
-Spirit of the Greenwood
-Packcaller of Shadows
-Luminous Ascent
-Radiant Trio
-Cindermarch
-Conduit of Resonance
-Nexus Wayfinder
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

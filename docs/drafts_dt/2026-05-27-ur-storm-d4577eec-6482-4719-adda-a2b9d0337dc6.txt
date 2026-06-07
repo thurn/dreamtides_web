@@ -1,23 +1,23 @@
-Blade of Oblivion
-Pilgrim of Old Stones
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-The Power Within
-Guiding Light
-Ironclad Marksman
-Gleam Below
-Knowledge Restored
-Harvest the Forgotten
-Ecliptic Vantage
-Fell Swoop
-Inverted Reflection
-Arc Gate Opening
-Sanctum Awakened
-Crimson Pilgrimage
-Break the Sequence
-Across the Void
-Dreamscatter
-Echoes of Eternity
-Echoes of the Journey
-Reunion
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

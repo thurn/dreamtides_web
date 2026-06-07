@@ -1,25 +1,25 @@
-Ambush Operative
-Crucible Warlord
-Spirit Field Reclaimer
-Gatebound Warden
-Starlight Guide
-Frost Visionary
-Oathbound Pair
-Mirror Protocol
-Vault Infiltrator
-Reclaimer of Lost Paths
-Boundless Wanderer
-Field Reverent
-Nocturne
-Duskmount
-Soulflame Predator
-Nomad of Endless Paths
-Glimmerwood Scout
-Gilded Catalyst
-Prism Caller
-Seedling Sage
-Bladefall
-Wasteland Holdout
-Standard Bearer
-Void Pilgrim
-Conjured Zenith
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

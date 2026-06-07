@@ -1,22 +1,22 @@
-Aspiring Guardian
-Silent Observer
-Apocalypse Vigilante
-Iron Executor
-Reforged Automaton
-Inspiring Templar
-Featherlight Summoner
-Grim Reclaimer
-Voidsire
-Gilded Catalyst
-Flamestride Rider
-Invoker of Myths
-Rebirth Ritualist
-Wolfbond Chieftain
-Epiphany Unfolded
-Chronicle Reclaimer
-Radiants' Captain
-Dawnblade Wanderer
-Cragfall
-Last Light Herald
-Skyflame Commander
-Spellweaver
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver

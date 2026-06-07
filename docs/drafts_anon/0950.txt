@@ -1,29 +1,29 @@
-Paradox Enforcer
-Harrowing Officiant
-Forgotten Titan
-Harborwarden
-Signal Resonant
-Verdant Wayfarer
-Urban Cipher
-Gleamharvester
-Shoreline Penitent
-Gateweaver
-Dawnrunner
-Duskwall Delver
-Twilight Reclaimer
-Cinderfang
-Wreckborn
-The Ringleader
-Rusted Monolith
-Shadowcaller
-Twice-Lit Portal
-Canopy of Stars
-Thundercatcher
-Lurking Dread
-Unleashed Destruction
-Apocalypse
-Heroic Rescue
-Shadowbinder
-Keeper of the Lightpath
-Clockwork Conductor
-Starfall Communion
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion

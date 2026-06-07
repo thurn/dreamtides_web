@@ -1,34 +1,34 @@
-Luminwings
-Aspiring Guardian
-Sandglider
-Seedling Sage
-Apocalypse Vigilante
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Pit Descender
-Grim Reclaimer
-Voidsire
-Inspiring Templar
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Tranquil Duelist
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Sundown Ronin
-Tethered Hollow
-Wolfbond Chieftain
-Blight Weaver
-Marrow Mimic
-Junkfield Renegade
-Worldbreacher
-Ironclad Marksman
-Rootspring Summons
-Guiding Light
-Lightningborn
-The Deathsworn
-Spellweaver
-Sanctum Awakened
-Ripple of Defiance
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance

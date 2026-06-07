@@ -1,23 +1,23 @@
-Keeper of the Tides
-Seeker of the Radiant Wilds
-Vanishing Inquisitor
-Riftwalker
-Eternal Sentry
-Driftrider
-Thronebound Arbiter
-Threadbreaker
-The Power Within
-Lurking Dread
-Null Sphere
-Knowledge Restored
-Lunar Hart
-Sanctum Approach
-Door to Possibility
-Cragfall
-Moonlit Voyage
-Ripple Through Reality
-Crumbling Covenant
-Break the Sequence
-Dreadcall Warden
-Last Beacon
-Burning Pursuit
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

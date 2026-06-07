@@ -11,6 +11,7 @@ import { buildPoolData } from "../src/draft/pool/index.ts";
 import { idf2Corpus } from "../src/draft/pool/variant-idf2.ts";
 import { growIdfPool } from "../src/draft/pool/variant-idf.ts";
 import { TIER_TARGET } from "./buildaround-support-experiment.mjs";
+import { supportEntryByName } from "./lib/card-refs.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
@@ -31,7 +32,7 @@ function shareOf(counts, theme) {
   let size = 0, sup = 0;
   for (const [name, raw] of counts) {
     size += cap(raw);
-    const e = meta.cards[name];
+    const e = supportEntryByName(meta, name);
     if (e && (e.supports ?? []).includes(theme)) sup += cap(raw);
   }
   return { share: sup / size, sup, size };
@@ -41,9 +42,9 @@ function shareOf(counts, theme) {
 console.log("Payoff cards per short theme (and how many decks carry each):");
 const deckCountOf = (name) => decks.filter((d) => d.cards.has(name)).length;
 for (const theme of SHORT) {
-  const payoffs = Object.entries(meta.cards)
-    .filter(([, e]) => (e.needs ?? []).some((n) => n.theme === theme))
-    .map(([name, e]) => ({ name, tier: e.needs.find((n) => n.theme === theme).tier }));
+  const payoffs = Object.values(meta.cards)
+    .filter((e) => (e.needs ?? []).some((n) => n.theme === theme))
+    .map((e) => ({ name: e.name, tier: e.needs.find((n) => n.theme === theme).tier }));
   const supporters = Object.entries(meta.cards).filter(([, e]) => (e.supports ?? []).includes(theme));
   console.log(`\n== ${theme}  (target ${(TIER_TARGET[payoffs[0]?.tier] ?? 0) * 100}%, ${supporters.length} distinct supporters in metadata)`);
   for (const p of payoffs.sort((a, b) => deckCountOf(b.name) - deckCountOf(a.name))) {

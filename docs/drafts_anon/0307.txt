@@ -1,19 +1,19 @@
-Sandglider
-Starchaser
-Blade of Unity
-Company Commander
-Vault Infiltrator
-Fern Treader
-Gateway Defender
-Pathfinder Adrift
-Hatching Ground
-Grim Reclaimer
-Voidsire
-Pilgrim of Old Stones
-Seedling Sage
-Ironclad Marksman
-Dawnblade Wanderer
-Standard Bearer
-Shadow Reflection
-Tethered Hollow
-Wolfbond Chieftain
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain

@@ -1,28 +1,28 @@
-Ruin Scavenger
-Verdant Pilgrim
-Mystic Runefish
-Selfless Rescuer
-Frostbound Defiant
-Emberwolf Triad
-Cloudmantle Ray
-Overstory Explorer
-Lumineth
-Veil Crosser
-Rooftop Prophet
-Starrunner
-Veil of the Wastes
-Petal-Seer
-Ferryman of the Falls
-The Forsaker
-Ruptured Dynamo
-Heavenward Penitent
-Dreaming Groves
-Lurking Dread
-Door to Possibility
-Immolate
-Virtuoso of Harmony
-Crumbling Behemoth
-Beacon of Tomorrow
-Pathwalker
-Scrap Reclaimer
-Hope's Vanguard
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard

@@ -1,27 +1,27 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Augur Crow
-Sunshadow Eagle
-Driftcaller Sovereign
-Cloudmantle Ray
-Celestial Lookout
-Skyborne Jellyfish
-Wreckage Prowler
-Astral Angler
-Abyssal Enforcer
-Steel Abomination
-Specter of Silent Snow
-Clockwork Prodigy
-Echoing Denial
-Dreamcatcher's Call
-Call of Calamity
-Ochre Prospector
-Desolation's Edge
-Summons of the Bonded
-Virtuoso of Harmony
-Pathwalker
-Scrap Reclaimer
-Forge Inheritor
-Twilight Troubadour
-Simulacra
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra

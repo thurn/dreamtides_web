@@ -1,22 +1,22 @@
-Ambush Operative
-Ethereal Courser
-Worldsong Behemoth
-Driftcaller Sovereign
-Blazebound Sentinel
-Celestial Lookout
-Rift Pilgrim
-Frost Visionary
-Veilpiercer
-Pilgrim of Old Stones
-Abyssal Enforcer
-Shatterpoint Agent
-Duskmount
-Emerald Guardian
-Emberfang
-Spirit of the Greenwood
-Dreamcatcher's Call
-Grounded
-Bladefall
-Shattering Gambit
-Crumbling Covenant
-Moment Rewound
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound

@@ -1,24 +1,24 @@
-Demonbane
-Blade of Unity
-Sandglider
-Saffron Trailblazer
-Meadowlight Charger
-Silent Observer
-Apocalypse Vigilante
-Ironclad Holdout
-Sundown Surfer
-Assault Leader
-Gateway Defender
-Reforged Automaton
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Flamestride Rider
-Invoker of Myths
-Prism Caller
-Conduit of Ashes
-Marrow Mimic
-Void Pilgrim
-Spellweaver
-Shadow Reflection
-Aftermath Bloom
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom

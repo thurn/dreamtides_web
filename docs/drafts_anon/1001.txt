@@ -1,23 +1,23 @@
-Augur Crow
-Undying Fang
-Moonbound Wolf
-Abomination of Memory
-Wondrous Clearing
-Dusk Duelist
-Starsea Traveler
-Duskmount
-Young Beastcaller
-The Forsaker
-Ruptured Dynamo
-Glimpse of Infinity
-Dreamcatcher's Call
-Forsaken Pact
-Fragments of Vision
-Gleam Below
-Bladefall
-Through the Rift
-The Grand Heist
-Sanctum Awakened
-Ripple Through Reality
-Clockwork Conductor
-Wake the Fallen
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

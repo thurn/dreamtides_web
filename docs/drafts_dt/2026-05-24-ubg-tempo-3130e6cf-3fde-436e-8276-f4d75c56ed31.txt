@@ -1,37 +1,37 @@
-Demonbane
-Harrowing Officiant
-Paradox Enforcer
-Searcher in the Mists
-Kindred Sparks
-Sorrow Watcher
-Tidewreck Navigator
-Terminus
-Veil of the Wastes
-Salvage Engine
-Dune Reaper
-Northlight Maestro
-Ashen Remnant
-The Dread Sovereign
-Verdant Wayfarer
-Urban Cipher
-Burning Revenant
-Resilient Wanderer
-Carrion Shepherd
-Exiles of the Last Light
-Barrage Specialist
-Driftrider
-Thronebound Arbiter
-Wolfbond Chieftain
-Shadowcaller
-Nightmare Manifest
-Ferryman's Tithe
-Lunar Hart
-Harvest the Forgotten
-Knowledge Restored
-Toll of Passage
-Cragfall
-Soulrender
-Crumbling Behemoth
-Beacon of Tomorrow
-Virtuoso of Harmony
-Across the Void
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void

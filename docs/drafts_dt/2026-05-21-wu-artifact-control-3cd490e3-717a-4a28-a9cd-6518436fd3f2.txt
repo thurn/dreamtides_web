@@ -1,26 +1,26 @@
-Ambush Operative
-Inferno's Herald
-Tidecaller
-Silent Observer
-Company Commander
-Starbound Striker
-Tranquil Duelist
-Featherlight Summoner
-Infernal Cavalier
-Grim Reclaimer
-Voidsire
-Gilded Catalyst
-Wired Duelist
-Prism Caller
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Conduit of Ashes
-Lightningborn
-Ochre Prospector
-Worldbreacher
-Wasteland Holdout
-Defiant Parry
-Abolish
-Moment Rewound
-Fractured Veil
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil

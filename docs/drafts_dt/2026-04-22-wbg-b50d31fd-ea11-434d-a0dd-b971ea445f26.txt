@@ -1,26 +1,26 @@
-Harrowing Officiant
-Wondrous Clearing
-Searcher in the Mists
-Veilseeker
-Veil of the Wastes
-Wraith of Twisting Shadows
-Light of Emergence
-Starsea Traveler
-Shatterpoint Agent
-Steel Abomination
-Wistful Angler
-Ashen Avenger
-Carrion Lord
-Specter of Silent Snow
-Thundercatcher
-Bloomweaver
-Virtuoso of Harmony
-Hope's Vanguard
-Nightmare
-Phantom Flotilla
-Shadow March
-Clockwork Conductor
-Bladefall
-Unleash Ruin
-Glimmerwood Scout
-Radiant Trio
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio

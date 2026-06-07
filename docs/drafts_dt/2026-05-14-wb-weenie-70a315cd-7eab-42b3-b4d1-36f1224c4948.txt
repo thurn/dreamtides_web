@@ -1,24 +1,24 @@
-Ambush Operative
-Silent Observer
-Searcher in the Mists
-Wreckheap Survivor
-Stargazer Adrift
-The Calling Night
-Duskreaper
-Wreckland Maverick
-Avatar of Cosmic Reckoning
-Twilight Reclaimer
-Cinderfang
-Skull Weaver
-Dawnrunner
-Revenant of the Lost
-Carrion Shepherd
-Scuttled Fortune
-Dustborn Veteran
-Nightmare Manifest
-Ferryman's Tithe
-Glimpse of Infinity
-Shattering Gambit
-Immolate
-Stolen Genesis
-Wasteland Holdout
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout

@@ -1,27 +1,27 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Dreaming Obelisk
-Liminal Dreamer
-Company Commander
-Pit Descender
-Reforged Automaton
-Tranquil Duelist
-Burning Revenant
-Infernal Cavalier
-Grim Reclaimer
-Voidsire
-Sundown Ronin
-Prism Caller
-Luminwings
-Fangbound
-Lunar Hart
-Bladefall
-Veil Shatter
-Marrow Mimic
-Last Light Herald
-Skyflame Commander
-Shadow Reflection
-Aftermath Bloom
-Twilight Troubadour
-Simulacra
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra

@@ -1,26 +1,26 @@
-Augur Crow
-Ruin Scavenger
-Worldsong Behemoth
-Cloudmantle Ray
-Skyborne Jellyfish
-The Rising God
-Veilseeker
-Pyre Challenger
-Thornwood Delver
-Mother of Flames
-Dusk Duelist
-Winterbough Monk
-Dragonward
-Petal-Seer
-Exiles of the Last Light
-Specter of Silent Snow
-Spirit of the Greenwood
-Blight Weaver
-Desperation
-Duneveil Vanguard
-Melodist of the Finale
-Pathwalker
-Scrap Reclaimer
-Starfall Communion
-Keeper of Forgotten Light
-Torchbearer of the Abyss
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss

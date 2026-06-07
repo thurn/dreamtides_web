@@ -1,27 +1,27 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Voidshield Guardian
-Meadowlight Charger
-Silent Observer
-Ironclad Holdout
-Momentum's Edge
-Gatebound Warden
-Starlight Guide
-Sundown Surfer
-Pallid Arbiter
-Cloaked Sentinel
-Still Dreamer
-Boundless Wanderer
-Field Reverent
-Abyssal Enforcer
-Urban Desperado
-Verdant Pioneer
-Call to the Unknown
-Glimmerwood Scout
-Gilded Catalyst
-Prism Caller
-Infernal Rest
-Veil Shatter
-The Grand Heist
-Charnel Seraph
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

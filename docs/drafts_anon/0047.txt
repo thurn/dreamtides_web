@@ -1,20 +1,20 @@
-The Devourer
-Echo Architect
-Somber Flockmaster
-Gateweaver
-Cosmonaut of Tides
-Minstrel of Falling Light
-Key Sifter
-Glimpse of Infinity
-Clockwork Prodigy
-Echoing Denial
-Molten Duel
-Epiphany Unfolded
-Ancient Descent
-Unleashed Destruction
-Derelict Voyage
-Fell the Mighty
-Weight of Memory
-Fell Swoop
-Scorched Reckoning
-Forsaken Skyline
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline

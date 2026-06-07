@@ -1,21 +1,21 @@
-Terminus
-Dreadwood Emissary
-Minstrel of Falling Light
-Key Sifter
-Rebirth Ritualist
-Emberfang
-Standoff
-Sunken Radiance
-Vertiginous Leap
-Door to Possibility
-Arc Gate Opening
-Sanctum Awakened
-Nebula's Wake
-Break the Sequence
-Sunset Chapel Rest
-Starfall Communion
-Wheel of the Heavens
-Key to the Moment
-Intermezzo Balladeer
-Surge of Fury
-Reunion
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

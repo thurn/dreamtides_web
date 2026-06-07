@@ -1,23 +1,23 @@
-Inferno's Herald
-Kindred Sparks
-Defiant Holdout
-Entropy Spike
-Ashborn Necromancer
-Duskreaper
-Wreckland Maverick
-Skull Weaver
-Dune Reaper
-Wasteland Tamer
-Riftwalker
-Scuttled Fortune
-Passage Through Oblivion
-Thundercatcher
-Maelstrom Denial
-Fractured Vessel
-Bladefall
-Collateral Damage
-Apocalypse
-Warfield Stalwart
-Conjured Zenith
-Arc Disciple
-Infernal Ascendant
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

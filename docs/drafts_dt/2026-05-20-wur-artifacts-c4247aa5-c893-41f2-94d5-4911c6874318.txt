@@ -1,30 +1,30 @@
-Vaultbreaker
-Meadowlight Charger
-Company Commander
-Rift Pilgrim
-Skyborne Jellyfish
-Colossal Convergence
-Forsworn Champion
-Starbound Striker
-Mirror Protocol
-Infernal Cavalier
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Gilded Catalyst
-Pyrewatcher
-Tethered Hollow
-Wolfbond Chieftain
-Junkfield Renegade
-Unleashed Destruction
-Desperation
-Last Light Herald
-Skyflame Commander
-Fathomscourge
-Smoldering Ancient
-Shadowbinder
-Keeper of the Lightpath
-Charnel Seraph
-Return to Nowhere
-From the Barrow
-Intermezzo Balladeer
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer

@@ -1,26 +1,26 @@
-Shadowprowler
-Pattern Seeker
-Spirit Field Reclaimer
-Iron Executor
-Mirror Protocol
-Vault Infiltrator
-Reforged Automaton
-Reclaimer of Lost Paths
-Gleamharvester
-Shoreline Penitent
-Dragonward
-Urban Desperado
-Verdant Pioneer
-Gilded Catalyst
-Sundown Ronin
-Glimpse of Infinity
-Luminwings
-Fangbound
-Derelict Voyage
-Bladefall
-Wasteland Holdout
-Forge Inheritor
-Saltless Mariner
-Obliterator of Worlds
-Forsaken Skyline
-Charnel Seraph
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

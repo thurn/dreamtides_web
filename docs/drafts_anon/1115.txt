@@ -1,27 +1,27 @@
-The Devourer
-Liminal Dreamer
-Shadowprowler
-Pattern Seeker
-Somber Flockmaster
-Sundown Surfer
-Pallid Arbiter
-Pyre Challenger
-Thornwood Delver
-Gleamharvester
-Shoreline Penitent
-Woodland Apparition
-Urban Desperado
-Verdant Pioneer
-Glimmerwood Scout
-Wreckborn
-Junkfield Renegade
-Molten Duel
-Blight Weaver
-Unleashed Destruction
-Derelict Voyage
-Fell the Mighty
-Weight of Memory
-Scorched Reckoning
-Saltless Mariner
-Obliterator of Worlds
-Starfall Communion
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion

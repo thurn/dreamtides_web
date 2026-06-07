@@ -1,34 +1,34 @@
-Soulkindler
-Unquenched
-Pyrestone Avatar
-Pinnacle Ascendant
-Ironclad Holdout
-Mirror Protocol
-Colossal Convergence
-Forsworn Champion
-Sundown Surfer
-Iron Executor
-Company Commander
-Pit Descender
-Assault Leader
-Gatebound Warden
-Starlight Guide
-Cosmonaut of Tides
-Fargazer
-Angel of the Eclipse
-Flamestride Rider
-Invoker of Myths
-Call to the Unknown
-Wired Duelist
-Blade of Unity
-Wolfbond Chieftain
-Lone Castaway
-Evacuation Enforcer
-Pyrewatcher
-Aurora Confluence
-Lightningborn
-Junkfield Renegade
-Ossuary Overlord
-Arc Disciple
-Charnel Seraph
-Shadow March
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March

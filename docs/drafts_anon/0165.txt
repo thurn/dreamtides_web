@@ -1,25 +1,25 @@
-Ruin Scavenger
-Ethereal Trailblazer
-Vaultbreaker
-Abomination of Memory
-Driftcaller Sovereign
-Veilseeker
-Veil Crosser
-Rooftop Prophet
-Doorlight Foundling
-Pyre Challenger
-Thornwood Delver
-Starsea Traveler
-Steel Abomination
-Wistful Angler
-Ashen Avenger
-Ferryman of the Falls
-Lone Castaway
-Heavenward Penitent
-Forsaken Pact
-Break the Veil
-Duneveil Vanguard
-Pathwalker
-Scrap Reclaimer
-Hope's Vanguard
-Clockwork Conductor
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor

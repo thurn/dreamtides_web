@@ -1,30 +1,30 @@
-Forgotten Titan
-Harborwarden
-Emberwatch Veteran
-Vessel of Echoes
-Shadowprowler
-Pattern Seeker
-The Calling Night
-Verdant Wayfarer
-Urban Cipher
-Cinderheart
-Seeker of the Radiant Wilds
-Part the Veil
-Grotto Seer
-Graywatch
-Emberfang
-Ferryman's Tithe
-Junkfield Renegade
-Shadowpaw
-Lurking Dread
-Shatter the Frail
-Whisper of the Past
-Maelstrom Denial
-Break the Veil
-Fell the Mighty
-Aurora Confluence
-Secrets of the Deep
-Rootbound Witness
-Skies of Change
-Forge Inheritor
-Charnel Seraph
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

@@ -1,13 +1,13 @@
-Sunshadow Eagle
-Sky Voyager
-Voidcaller
-Veilseeker
-Starrunner
-Mother of Flames
-Lord of Hidden Paths
-Dusk Duelist
-Spirit Bond
-Dreamcatcher's Call
-Melodist of the Finale
-Cindermarch
-Conduit of Resonance
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance

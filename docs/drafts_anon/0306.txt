@@ -1,24 +1,24 @@
-Starchaser
-Worldsong Behemoth
-Mystic Runefish
-Dawnhorn Elder
-Cloudmantle Ray
-Celestial Lookout
-Skyborne Jellyfish
-Torn Circuit Feeder
-Dreamvale Monarch
-Lord of Hidden Paths
-Sage of the Prelude
-Starsea Traveler
-Nocturne
-Sylvan Matriarch
-Young Beastcaller
-Emerald Guardian
-Carrion Lord
-Lunar Hart
-Crumbling Behemoth
-Beacon of Tomorrow
-Packcaller of Shadows
-Luminous Ascent
-Lumin-Gate Seer
-Radiant Trio
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio

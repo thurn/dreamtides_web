@@ -1,30 +1,30 @@
-Oracle of Shifting Skies
-Architect of Memory
-Meadowlight Charger
-The Devourer
-Saffron Trailblazer
-Flagbearer of Decay
-Assault Leader
-Shadowprowler
-Pattern Seeker
-Sundown Surfer
-Cosmonaut of Tides
-Dreadwood Emissary
-Seeker for the Way
-Gateway Defender
-The Ringleader
-Minstrel of Falling Light
-Key Sifter
-Northlight Maestro
-Fangbound
-Fury of the Clan
-Thundercatcher
-Desperation
-Weight of Memory
-Molten Duel
-Crimson Pilgrimage
-Defiant Parry
-Cascading Detonation
-Seaside Requiem
-Return to Nowhere
-Twice-Lit Portal
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal

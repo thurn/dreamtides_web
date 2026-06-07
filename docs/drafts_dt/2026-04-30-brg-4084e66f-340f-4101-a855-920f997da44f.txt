@@ -1,29 +1,29 @@
-Harrowing Officiant
-Starchaser
-Hallowed Stag
-Ethereal Trailblazer
-Undying Fang
-Frostbound Defiant
-Emberwolf Triad
-Shadowprowler
-Pattern Seeker
-The Calling Night
-Veilseeker
-Ashen Remnant
-The Dread Sovereign
-Veil Crosser
-Rooftop Prophet
-Avatar of Cosmic Reckoning
-Pyre Challenger
-Thornwood Delver
-Winterbough Monk
-Revenant of the Lost
-Dragonward
-Young Beastcaller
-Rusted Monolith
-Dreamcatcher's Call
-Thundercatcher
-Bloomweaver
-Ashfront Lieutenant
-Marrow Drinker
-Starfall Communion
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion

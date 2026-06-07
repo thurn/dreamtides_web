@@ -1,25 +1,25 @@
-Harvester of Despair
-Silent Avenger
-Gateweaver
-Duskwall Delver
-Skull Weaver
-Pyre Challenger
-Thornwood Delver
-Dawnrunner
-Woodland Apparition
-Part the Veil
-Grotto Seer
-Wreckborn
-Soulreaver
-Volcanic Channeler
-Lone Castaway
-Sunken Radiance
-Molten Duel
-Thundercatcher
-Unleashed Destruction
-Weight of Memory
-Vertiginous Leap
-Collateral Damage
-Lanternwood Scout
-Saltless Mariner
-Obliterator of Worlds
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds

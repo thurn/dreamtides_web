@@ -1,27 +1,27 @@
-Sunshadow Eagle
-Verdant Pilgrim
-Ethereal Trailblazer
-Dawnprowler Panther
-Dawnhorn Elder
-Frostbound Defiant
-Emberwolf Triad
-Wondrous Clearing
-Skyborne Jellyfish
-Veilseeker
-Mountainwatch Alpha
-Starrunner
-Mother of Flames
-Depthwalker
-Dusk Duelist
-Starsea Traveler
-Ghostlight Wolves
-Eternal Stag
-Petal-Seer
-Young Beastcaller
-Wistful Angler
-Ashen Avenger
-Spirit Bond
-Crumbling Behemoth
-Beacon of Tomorrow
-Luminous Ascent
-Nexus Wayfinder
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

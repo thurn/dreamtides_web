@@ -1,26 +1,26 @@
-Demonbane
-Aspiring Guardian
-Ironclad Holdout
-Dreaming Obelisk
-Company Commander
-Seeker for the Way
-Iron Executor
-Pit Descender
-Infernal Cavalier
-Grim Reclaimer
-Voidsire
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Conduit of Ashes
-Evacuation Enforcer
-Fangbound
-Spent Courier
-Junkfield Renegade
-Epiphany Unfolded
-Ochre Prospector
-Marrow Mimic
-Ossuary Overlord
-Last Light Herald
-Skyflame Commander
-Moment Rewound
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound

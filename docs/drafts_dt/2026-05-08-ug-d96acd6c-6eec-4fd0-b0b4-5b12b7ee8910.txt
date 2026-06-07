@@ -1,27 +1,27 @@
-Starchaser
-Sunshadow Eagle
-Hallowed Stag
-Dawnprowler Panther
-Worldsong Behemoth
-Abomination of Memory
-Sky Voyager
-Voidcaller
-Veilseeker
-Ashen Remnant
-The Dread Sovereign
-Doorlight Foundling
-Dreamvale Monarch
-Dusk Duelist
-Prophet of the Consumed
-Nightmare Manifest
-Spirit of the Greenwood
-Ripple of Defiance
-Heavenward Penitent
-Forsaken Pact
-Melodist of the Finale
-Pathwalker
-Scrap Reclaimer
-Luminous Ascent
-Soulrender
-Wheel of the Heavens
-Sunset Chronicler
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler

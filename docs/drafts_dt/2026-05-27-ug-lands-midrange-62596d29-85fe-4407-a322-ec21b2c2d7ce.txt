@@ -1,22 +1,22 @@
-Verdant Pilgrim
-Driftcaller Sovereign
-Dawnhorn Elder
-Doorlight Foundling
-Sage of the Prelude
-Prophet of the Consumed
-Wraith of Twisting Shadows
-Light of Emergence
-Starsea Traveler
-Petal-Seer
-Ferryman of the Falls
-Ordained Collapse
-Forsaken Pact
-Gleam Below
-Lunar Hart
-Cragfall
-Pathwalker
-Scrap Reclaimer
-Ripple Through Reality
-Crumbling Covenant
-Sunset Chapel Rest
-Return to Nowhere
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

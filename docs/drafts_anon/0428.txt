@@ -1,34 +1,34 @@
-Demonbane
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Meadowlight Charger
-Dreadmount Sovereign
-Sigil Analyst
-Forgotten Factory Titan
-Momentum's Edge
-Colossal Convergence
-Forsworn Champion
-Avatar of Cosmic Reckoning
-Iron Executor
-Vault Infiltrator
-Revenant of the Lost
-Grim Reclaimer
-Voidsire
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Gilded Catalyst
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Tethered Hollow
-Luminwings
-Fangbound
-Worldbreacher
-Shattering Gambit
-Last Light Herald
-Skyflame Commander
-Spellweaver
-Nightmare
-Phantom Flotilla
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla

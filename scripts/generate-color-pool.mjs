@@ -50,15 +50,15 @@ const DREAMCALLER_TOML = new URL(
 
 /**
  * Load and normalize the card records the generator needs. The card list (names)
- * comes from cards_v2.toml; the draft-pool metadata is merged in by name from
- * {@link CARDS_V2_POOL_METADATA}.
+ * comes from cards_v2.toml; the draft-pool metadata is merged in by each card's
+ * stable id from {@link CARDS_V2_POOL_METADATA}.
  */
 export function loadCards(tomlPath = CARD_TOML) {
   const parsed = parse(readFileSync(tomlPath, "utf8"));
   return parsed.cards
     .filter((card) => card.rarity !== "Starter")
     .map((card) => {
-      const meta = CARDS_V2_POOL_METADATA[card.name] ?? {};
+      const meta = CARDS_V2_POOL_METADATA[card.id] ?? {};
       return {
         name: card.name,
         tides: meta.tides ?? [],

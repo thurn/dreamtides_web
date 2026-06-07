@@ -22,6 +22,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { buildPoolData, generatePoolFromData } from "../src/draft/pool/index.ts";
+import { mapsFromCards, readCorpusDeckNames } from "./lib/card-refs.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // True only when this file is the entry point. When another script imports it
@@ -112,7 +113,7 @@ const jaccard = (a, b) => {
 // label; a card joins the merged list when it recurs in >= `threshold` of that
 // label's decks. This is the ONLY "curation", and it is fully mechanical.
 // ===========================================================================
-const validNames = new Set(cards.map((c) => c.name));
+const cardMaps = mapsFromCards(cards);
 const FILE_RE =
   /^\d{4}-\d{2}-\d{2}-(.+)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const MIN_DECK = 16;
@@ -129,10 +130,7 @@ export function buildMergedLists(threshold) {
     if (!m) continue;
     const label = m[1];
     if (colorPrefix(label) === "" || label === colorPrefix(label)) continue; // need colors + an archetype name
-    const names = readFileSync(resolve(dir, file), "utf8")
-      .split("\n")
-      .map((l) => l.trim())
-      .filter((l) => l && validNames.has(l));
+    const names = readCorpusDeckNames(resolve(dir, file), cardMaps);
     const set = new Set(names);
     if (set.size < MIN_DECK || set.size > MAX_DECK) continue;
     if (!byLabel.has(label)) byLabel.set(label, []);

@@ -1,25 +1,25 @@
-Sorrowful Prince
-Oblivion Guide
-Oracle of Shifting Skies
-Architect of Memory
-The Devourer
-Liminal Dreamer
-Shadowprowler
-Pattern Seeker
-Verdant Wayfarer
-Urban Cipher
-Somber Flockmaster
-Gateweaver
-Gleamharvester
-Shoreline Penitent
-Dragonward
-Woodland Apparition
-Wandering Archivist
-Rubble Diviner
-Glimpse of Infinity
-Molten Duel
-Unleashed Destruction
-Derelict Voyage
-Fell the Mighty
-Scorched Reckoning
-Forsaken Skyline
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline

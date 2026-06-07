@@ -1,27 +1,27 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Aspiring Guardian
-Ironclad Holdout
-Dreadmount Sovereign
-Sigil Analyst
-Company Commander
-Colossal Convergence
-Forsworn Champion
-Pallid Arbiter
-Starbound Striker
-Mirror Protocol
-Reforged Automaton
-Featherlight Summoner
-Gilded Catalyst
-Wired Duelist
-Flamestride Rider
-Invoker of Myths
-Sundown Ronin
-Lightningborn
-Blight Weaver
-Dawnblade Wanderer
-Void Pilgrim
-Last Light Herald
-Skyflame Commander
-Spellweaver
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver

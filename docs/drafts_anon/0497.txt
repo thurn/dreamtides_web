@@ -1,24 +1,24 @@
-Kindred Sparks
-Harvester of Despair
-Scrapyard Custodian
-Wreckheap Survivor
-The Calling Night
-Silent Avenger
-Ashwalker
-Duskwall Delver
-Avatar of Cosmic Reckoning
-Deathwalker
-Wasteland Tamer
-Dawnrunner
-Exiles of the Last Light
-Soulreaver
-Rusted Monolith
-Nightmare Manifest
-Standoff
-Ferryman's Tithe
-Starfall
-Immolate
-Pyrokinetic Surge
-Moonlit Voyage
-Rite of Summoning
-Burning Pursuit
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

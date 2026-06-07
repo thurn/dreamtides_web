@@ -1,23 +1,23 @@
-Paradox Enforcer
-Ruin Scavenger
-Veilseeker
-Fern Treader
-Doorlight Foundling
-Sage of the Prelude
-Wraith of Twisting Shadows
-Light of Emergence
-Abyssal Enforcer
-Emerald Guardian
-Carrion Lord
-Specter of Silent Snow
-Ferryman of the Falls
-Forsaken Pact
-Unleashed Destruction
-Weight of Memory
-Curio Dealer
-Unleash Ruin
-Data Pulse
-Pathwalker
-Scrap Reclaimer
-Dreadcall Warden
-Last Beacon
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon

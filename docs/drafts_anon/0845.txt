@@ -1,22 +1,22 @@
-Voidshield Guardian
-Silent Observer
-Forgotten Factory Titan
-Cloaked Sentinel
-Frost Visionary
-Oathbound Pair
-Vault Infiltrator
-Reclaimer of Lost Paths
-Featherlight Summoner
-Revenant of the Lost
-Blazepath Traveler
-Lumen Rover
-Call to the Unknown
-Glimmerwood Scout
-Prism Caller
-Passage Through Oblivion
-Thundercatcher
-Infernal Rest
-Mirrorlight Architect
-Wasteland Holdout
-Nightmare
-Phantom Flotilla
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla

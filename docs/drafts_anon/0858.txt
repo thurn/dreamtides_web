@@ -1,49 +1,49 @@
-Sandglider
-Voidshield Guardian
-Apocalypse Vigilante
-Dreaming Obelisk
-Avatar of Cosmic Reckoning
-Seeker for the Way
-Pit Descender
-Mirror Protocol
-Blade of Oblivion
-Reforged Automaton
-Tranquil Duelist
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Infernal Cavalier
-Wired Duelist
-Inspiring Templar
-Gilded Catalyst
-Burning Revenant
-Veilpiercer
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Prism Caller
-Tethered Hollow
-Threadbreaker
-Wolfbond Chieftain
-Marrow Mimic
-Grounded
-Shattering Gambit
-The Grand Heist
-Ironclad Marksman
-Epiphany Unfolded
-Lithic Severance
-Heroic Rescue
-Desolation's Edge
-Last Light Herald
-Skyflame Commander
-Standard Bearer
-Ossuary Overlord
-Ridgecutter
-Saltless Mariner
-Obliterator of Worlds
-Aftermath Bloom
-Twilight Suppressor
-Shadow March
-Wake the Fallen
-Spirit Reaping
-Fading Farewell
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

@@ -1,25 +1,25 @@
-Forgotten Titan
-Harborwarden
-The Devourer
-Ironclad Holdout
-Shadowprowler
-Pattern Seeker
-Pit Descender
-Gleamharvester
-Shoreline Penitent
-Wreckborn
-Rebirth Ritualist
-Molten Duel
-Burst of Obliteration
-Unleashed Destruction
-Derelict Voyage
-Bladefall
-Weight of Memory
-Fury of the Clan
-Shattering Gambit
-Spiral Offering
-Data Pulse
-Saltless Mariner
-Obliterator of Worlds
-Twilight Troubadour
-Simulacra
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra

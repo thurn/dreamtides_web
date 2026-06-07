@@ -1,36 +1,36 @@
-Ethereal Courser
-Vaultbreaker
-Soulbinder
-Cosmonaut of Tides
-Gateweaver
-Pit Descender
-Dune Reaper
-Inspiring Templar
-Clockwork Prodigy
-Echoing Denial
-Wolfbond Chieftain
-Fangbound
-Twice-Lit Portal
-Knowledge Restored
-Sunken Radiance
-Junkfield Renegade
-Genesis Burst
-Fleeting Reunion
-Epiphany Unfolded
-Ochre Prospector
-Fell Swoop
-Crumbling Covenant
-Rootbound Witness
-Skies of Change
-Break the Sequence
-Spellweaver
-Data Pulse
-Fathomscourge
-Smoldering Ancient
-Lanternwood Scout
-Last Light Herald
-Skyflame Commander
-A New Adventure
-Torchbearer of the Abyss
-Key to the Moment
-Broadcast Array
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

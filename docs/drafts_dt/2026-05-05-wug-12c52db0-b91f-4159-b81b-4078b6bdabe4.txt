@@ -1,24 +1,24 @@
-Starchaser
-Sunshadow Eagle
-Ruin Scavenger
-Voidshield Guardian
-Silent Observer
-Worldsong Behemoth
-Crucible Warlord
-Celestial Lookout
-Sundown Surfer
-Torn Circuit Feeder
-Doorlight Foundling
-Dreamvale Monarch
-Starrunner
-Oathbound Pair
-Vortex Claimant
-Sylvan Matriarch
-Urban Desperado
-Verdant Pioneer
-Heavenward Penitent
-Passage Through Oblivion
-Forsaken Pact
-Infernal Rest
-Forge Inheritor
-Fractured Veil
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil

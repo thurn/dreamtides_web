@@ -1,24 +1,24 @@
-Scrapyard Custodian
-Defiant Holdout
-Dreadweaver
-Silent Avenger
-Duskreaper
-Avatar of Cosmic Reckoning
-Skull Weaver
-Wasteland Tamer
-Dawnrunner
-Revenant of the Lost
-Dustborn Veteran
-Soulreaver
-Ferryman's Tithe
-Immolate and Rise
-Peak Plunder
-Thundercatcher
-Door to Possibility
-Secrets of the Deep
-Immolate
-Wasteland Holdout
-Collateral Damage
-Pyrokinetic Surge
-Moonlit Voyage
-Hope's Vanguard
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard

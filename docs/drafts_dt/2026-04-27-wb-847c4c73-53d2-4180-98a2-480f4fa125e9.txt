@@ -1,27 +1,27 @@
-Sorrow Watcher
-Tidewreck Navigator
-Voidshield Guardian
-Silent Observer
-Harvester of Despair
-Defiant Holdout
-Crucible Warlord
-Wreckheap Survivor
-Wasteland Arbitrator
-Silent Avenger
-Twilight Reclaimer
-Cinderfang
-Skull Weaver
-Wasteland Tamer
-Riftwalker
-Veil of the Wastes
-Revenant of the Lost
-Nightmare Manifest
-Conduit of Ashes
-Glimpse of Infinity
-Lurking Dread
-Lightningborn
-Collapse Protocol
-The Thinning
-Secrets of the Deep
-Moonlit Voyage
-Conjured Zenith
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

@@ -1,28 +1,28 @@
-Silent Observer
-Ironclad Holdout
-Dreadmount Sovereign
-Sigil Analyst
-Forgotten Factory Titan
-Company Commander
-Momentum's Edge
-Gatebound Warden
-Starlight Guide
-Sundown Surfer
-Starbound Striker
-Dune Reaper
-Reforged Automaton
-Boundless Wanderer
-Field Reverent
-Grim Reclaimer
-Voidsire
-Conduit of Ashes
-Lightningborn
-Bladefall
-Dawnblade Wanderer
-Through the Rift
-Shattering Gambit
-Veil Shatter
-Mirrorlight Architect
-Last Light Herald
-Skyflame Commander
-Forge Inheritor
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor

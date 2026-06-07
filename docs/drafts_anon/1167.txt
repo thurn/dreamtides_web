@@ -1,23 +1,23 @@
-Sandglider
-Meadowlight Charger
-Forgotten Factory Titan
-Spirit Field Reclaimer
-Sundown Surfer
-Oathbound Pair
-Dune Reaper
-Mirror Protocol
-Reforged Automaton
-Inspiring Templar
-Urban Desperado
-Verdant Pioneer
-Call to the Unknown
-Rebirth Ritualist
-Lightningborn
-Infernal Rest
-Shattering Gambit
-Veil Shatter
-The Grand Heist
-Wasteland Holdout
-Void Pilgrim
-Charnel Seraph
-Fading Farewell
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

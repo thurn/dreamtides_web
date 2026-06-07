@@ -1,24 +1,24 @@
-Ambush Operative
-Voidshield Guardian
-Silent Observer
-Ashborn Necromancer
-Duskreaper
-Wreckland Maverick
-Gatebound Warden
-Starlight Guide
-Duskwall Delver
-Skull Weaver
-Cloaked Sentinel
-Wasteland Tamer
-Riftwalker
-Revenant of the Lost
-Volcanic Channeler
-Immolate and Rise
-Peak Plunder
-Dreaming Groves
-Thundercatcher
-Bladefall
-Pyrokinetic Surge
-Borrowed Minutes
-Apocalypse
-Warfield Stalwart
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart

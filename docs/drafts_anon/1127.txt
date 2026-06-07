@@ -1,24 +1,24 @@
-Sunshadow Eagle
-Verdant Pilgrim
-Moonbound Wolf
-Worldsong Behemoth
-Abomination of Memory
-Celestial Lookout
-Veil Crosser
-Rooftop Prophet
-Doorlight Foundling
-Starrunner
-Mother of Flames
-Prophet of the Consumed
-Starsea Traveler
-Nocturne
-Petal-Seer
-Steel Abomination
-Spirit of the Greenwood
-Heavenward Penitent
-Celestial Reverie
-Duneveil Vanguard
-Curio Dealer
-Unleash Ruin
-Rite of Summoning
-Clockwork Conductor
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor

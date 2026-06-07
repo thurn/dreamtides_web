@@ -1,24 +1,24 @@
-Sorrow Watcher
-Tidewreck Navigator
-Wreckheap Survivor
-Ashborn Necromancer
-Dreadweaver
-Duskreaper
-Twilight Reclaimer
-Cinderfang
-Deathwalker
-Wasteland Tamer
-Veil of the Wastes
-Dustborn Veteran
-Soulreaver
-Volcanic Channeler
-Emberfang
-Ferryman's Tithe
-Together Against the Tide
-Starfall
-Break the Veil
-Collateral Damage
-Void Pilgrim
-Nebula's Wake
-Hope's Vanguard
-Path to Redemption
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption

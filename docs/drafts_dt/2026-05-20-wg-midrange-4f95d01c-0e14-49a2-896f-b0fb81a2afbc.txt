@@ -1,27 +1,27 @@
-Ambush Operative
-Sunshadow Eagle
-Undying Fang
-Stoneborn Eternal
-Abomination of Memory
-Dawnhorn Elder
-Frostbound Defiant
-Emberwolf Triad
-Crucible Warlord
-Mountainwatch Alpha
-Torn Circuit Feeder
-Oathbound Pair
-Blazing Emberwing
-Endless Projection
-Blazepath Traveler
-Lumen Rover
-Embersummoner
-Shardwoven Tyrant
-Spirit Bond
-Fangbound
-Lithic Severance
-Shattering Gambit
-Wasteland Holdout
-Crumbling Behemoth
-Beacon of Tomorrow
-Luminous Ascent
-Roots of Rebirth
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

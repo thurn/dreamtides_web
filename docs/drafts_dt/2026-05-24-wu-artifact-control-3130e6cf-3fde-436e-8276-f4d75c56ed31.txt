@@ -1,25 +1,25 @@
-Dreadmount Sovereign
-Sigil Analyst
-Assault Leader
-Starbound Striker
-Mirror Protocol
-Vault Infiltrator
-Reforged Automaton
-Inspiring Templar
-Gilded Catalyst
-Flamestride Rider
-Invoker of Myths
-Sundown Ronin
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Rebirth Ritualist
-Emberfang
-Junkfield Renegade
-Worldbreacher
-Dawnblade Wanderer
-The Deathsworn
-Last Light Herald
-Skyflame Commander
-Forge Inheritor
-Aftermath Bloom
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom

@@ -1,27 +1,27 @@
-Starchaser
-Vaultbreaker
-Abomination of Memory
-Selfless Rescuer
-Mountainwatch Alpha
-Torn Circuit Feeder
-Wraith of Twisting Shadows
-Light of Emergence
-Shatterpoint Agent
-Petal-Seer
-Carrion Lord
-Specter of Silent Snow
-Ferryman of the Falls
-The Forsaker
-Ruptured Dynamo
-Glimpse of Infinity
-Heavenward Penitent
-Forsaken Pact
-Call of Calamity
-Standard Bearer
-Virtuoso of Harmony
-Rite of Summoning
-Pathwalker
-Scrap Reclaimer
-Moment Rewound
-Cindermarch
-Conduit of Resonance
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance

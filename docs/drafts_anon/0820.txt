@@ -1,25 +1,25 @@
-Terminus
-Dreadwood Emissary
-Pyrewatcher
-Conduit of Ashes
-Dread Arbiter
-Tethered Hollow
-Wolfbond Chieftain
-Pulse of Sacrifice
-The Power Within
-Fragments of Vision
-Epiphany Unfolded
-Ancient Descent
-Genesis Burst
-Door to Possibility
-Hatching Ground
-Nebula's Wake
-Rite of Summoning
-Data Pulse
-Cascading Detonation
-Across the Void
-Path to Redemption
-Flash of Power
-Call of the Lost
-Broadcast Array
-Reunion
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

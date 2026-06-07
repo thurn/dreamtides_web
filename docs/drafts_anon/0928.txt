@@ -1,24 +1,24 @@
-Ambush Operative
-Voidshield Guardian
-Crucible Warlord
-Forgotten Factory Titan
-Gatebound Warden
-Starlight Guide
-Sundown Surfer
-Cloaked Sentinel
-Frost Visionary
-Oathbound Pair
-Boundless Wanderer
-Field Reverent
-Featherlight Summoner
-Urban Desperado
-Verdant Pioneer
-Glimmerwood Scout
-Prism Caller
-Emberfang
-Lightningborn
-Thundercatcher
-Bladefall
-Shattering Gambit
-Veil Shatter
-Charnel Seraph
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

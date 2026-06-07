@@ -1,23 +1,23 @@
-Liminal Dreamer
-Verdant Wayfarer
-Urban Cipher
-Somber Flockmaster
-Dune Reaper
-Riftwalker
-Silent Gatherer
-Dragonward
-Fargazer
-Angel of the Eclipse
-Standoff
-Lurking Dread
-Derelict Voyage
-Desperation
-Weight of Memory
-Fury of the Clan
-Door to Possibility
-Spiral Offering
-Pyrokinetic Surge
-Scorched Reckoning
-Saltless Mariner
-Obliterator of Worlds
-Starfall Communion
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion

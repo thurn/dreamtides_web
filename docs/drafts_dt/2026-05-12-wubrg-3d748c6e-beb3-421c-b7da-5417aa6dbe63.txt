@@ -1,22 +1,22 @@
-Augur Crow
-Sunshadow Eagle
-Abomination of Memory
-Cloudmantle Ray
-Veilseeker
-Wreckland Maverick
-Pallid Arbiter
-Starsea Traveler
-Duskmount
-Carrion Lord
-Ferryman of the Falls
-Rootspring Summons
-Forsaken Pact
-Grounded
-Lunar Hart
-Through the Rift
-Duneveil Vanguard
-Virtuoso of Harmony
-Pathwalker
-Scrap Reclaimer
-Ridgecutter
-Keeper of Forgotten Light
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

@@ -1,24 +1,24 @@
-The Devourer
-Unbroken
-Pyre Challenger
-Thornwood Delver
-Dragonward
-Woodland Apparition
-Part the Veil
-Grotto Seer
-Fargazer
-Angel of the Eclipse
-Wreckborn
-Fangbound
-Twice-Lit Portal
-Together Against the Tide
-Molten Duel
-Derelict Voyage
-Desperation
-Spiral Offering
-Data Pulse
-Seaside Requiem
-Archive of the Forgotten
-Scorched Reckoning
-Forsaken Skyline
-Keeper of Forgotten Light
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

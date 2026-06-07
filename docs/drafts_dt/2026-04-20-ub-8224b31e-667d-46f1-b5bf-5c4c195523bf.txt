@@ -1,23 +1,23 @@
-Signal Resonant
-Wreckheap Survivor
-Northlight Maestro
-Seeker of the Radiant Wilds
-Vanishing Inquisitor
-Dune Reaper
-Gateway Defender
-Riftwalker
-Pathfinder Adrift
-Cosmic Puppeteer
-Dawnrunner
-Thronebound Arbiter
-Null Sphere
-Epiphany Unfolded
-Sanctum Approach
-Maelstrom Denial
-Secrets of the Deep
-Immolate
-Pyrokinetic Surge
-Rite of Summoning
-Ridgecutter
-Dreadcall Warden
-Last Beacon
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon

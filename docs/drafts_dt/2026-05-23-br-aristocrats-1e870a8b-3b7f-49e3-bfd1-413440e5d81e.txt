@@ -1,24 +1,24 @@
-Defiant Holdout
-Ashborn Necromancer
-Shadowprowler
-Pattern Seeker
-Cinderheart
-Gateweaver
-Pyre Challenger
-Thornwood Delver
-Veil of the Wastes
-Dawnrunner
-Fathomless Maw
-Kindlehorn
-Carrion Shepherd
-Soulreaver
-Rusted Monolith
-Standoff
-Molten Duel
-Thundercatcher
-Stolen Genesis
-Collateral Damage
-Moonlit Voyage
-Saltless Mariner
-Obliterator of Worlds
-Burning Pursuit
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

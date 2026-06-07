@@ -1,22 +1,22 @@
-Oracle of Shifting Skies
-Architect of Memory
-The Devourer
-Gateweaver
-Pathfinder Adrift
-Emberfang
-Ripple of Defiance
-Lone Castaway
-Together Against the Tide
-Sunken Radiance
-Harvest the Forgotten
-Fell the Mighty
-Moonlit Voyage
-Rite of Summoning
-Data Pulse
-Crimson Pilgrimage
-Moment Rewound
-Across the Void
-Torchbearer of the Abyss
-Return to Nowhere
-Call of the Lost
-Broadcast Array
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

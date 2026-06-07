@@ -1,26 +1,26 @@
-Demonbane
-Aspiring Guardian
-Tidecaller
-Sundown Surfer
-Assault Leader
-Iron Executor
-Starbound Striker
-Mirror Protocol
-Featherlight Summoner
-Grim Reclaimer
-Voidsire
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Flamestride Rider
-Invoker of Myths
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Rebirth Ritualist
-Starshot Gunner
-Infernal Rest
-Through the Rift
-The Deathsworn
-Void Pilgrim
-Ossuary Overlord
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord

@@ -1,23 +1,23 @@
-Breach Artist
-Signal Resonant
-The Calling Night
-Keeper of the Tides
-Seeker of the Radiant Wilds
-Cosmonaut of Tides
-Wasteland Tamer
-Pathfinder Adrift
-Eternal Sentry
-Resilient Wanderer
-Fangbound
-Lone Castaway
-Dreaming Groves
-Lurking Dread
-Starfall
-Collapse Protocol
-The Thinning
-Ecliptic Vantage
-Cragfall
-Moonlit Voyage
-Rite of Summoning
-Ripple Through Reality
-Burning Pursuit
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

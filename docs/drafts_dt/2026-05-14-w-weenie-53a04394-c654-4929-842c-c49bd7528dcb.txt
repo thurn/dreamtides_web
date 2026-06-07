@@ -1,25 +1,25 @@
-Silent Observer
-Crucible Warlord
-Momentum's Edge
-Spirit Field Reclaimer
-Looming Oracle
-Sundown Surfer
-Pallid Arbiter
-Frost Visionary
-Reclaimer of Lost Paths
-Boundless Wanderer
-Field Reverent
-Urban Desperado
-Verdant Pioneer
-Gilded Catalyst
-Lithic Severance
-Bladefall
-Shattering Gambit
-Veil Shatter
-The Grand Heist
-Mirrorlight Architect
-Void Pilgrim
-Moment Rewound
-Nightmare
-Phantom Flotilla
-Charnel Seraph
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

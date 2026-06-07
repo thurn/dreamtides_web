@@ -1,24 +1,24 @@
-Sunshadow Eagle
-Ebonwing
-Verdant Pilgrim
-Stoneborn Eternal
-Moonbound Wolf
-Worldsong Behemoth
-Abomination of Memory
-Driftcaller Sovereign
-Dawnhorn Elder
-Cloudmantle Ray
-Blazebound Sentinel
-Mountainwatch Alpha
-Depthwalker
-Dusk Duelist
-Blazing Emberwing
-Starsea Traveler
-Petal-Seer
-Young Beastcaller
-Heavenward Penitent
-Dreamcatcher's Call
-Celestial Reverie
-Melodist of the Finale
-Crumbling Behemoth
-Beacon of Tomorrow
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow

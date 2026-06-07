@@ -1,24 +1,24 @@
-Starchaser
-Sunshadow Eagle
-Hallowed Stag
-Ruin Scavenger
-Verdant Pilgrim
-Ethereal Trailblazer
-Undying Fang
-Worldsong Behemoth
-Mystic Runefish
-Driftcaller Sovereign
-Blazebound Sentinel
-Sky Voyager
-Voidcaller
-Winterbough Monk
-Nocturne
-Ghostlight Wolves
-Eternal Stag
-Sylvan Matriarch
-Carrion Lord
-Melodist of the Finale
-Cindermarch
-Conduit of Resonance
-Sunset Chronicler
-Roots of Rebirth
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

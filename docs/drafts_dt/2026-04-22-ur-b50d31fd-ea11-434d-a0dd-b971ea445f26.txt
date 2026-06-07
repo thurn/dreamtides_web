@@ -1,21 +1,21 @@
-Cosmonaut of Tides
-Miraculous Arrival
-Molten Duel
-Starfall
-Call of Calamity
-Harvest the Forgotten
-Derelict Voyage
-Fell the Mighty
-Fell Swoop
-Vertiginous Leap
-Spiral Offering
-Arc Gate Opening
-Cascading Detonation
-Crumbling Covenant
-Crimson Pilgrimage
-Archive of the Forgotten
-Forsaken Skyline
-Flash of Power
-Twilight Troubadour
-Simulacra
-Return to Nowhere
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

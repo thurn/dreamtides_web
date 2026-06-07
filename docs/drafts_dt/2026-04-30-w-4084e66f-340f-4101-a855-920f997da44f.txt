@@ -1,24 +1,24 @@
-Blade of Unity
-Saffron Trailblazer
-Meadowlight Charger
-Silent Observer
-Ironclad Holdout
-Momentum's Edge
-Gatebound Warden
-Starlight Guide
-Colossal Convergence
-Forsworn Champion
-Sundown Surfer
-Cloaked Sentinel
-Oathbound Pair
-Vault Infiltrator
-Reforged Automaton
-Featherlight Summoner
-Blazepath Traveler
-Lumen Rover
-Glimmerwood Scout
-Gilded Catalyst
-Fangbound
-Lightningborn
-Lunar Hart
-Void Pilgrim
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim

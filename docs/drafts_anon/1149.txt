@@ -1,24 +1,24 @@
-Kindred Sparks
-Silent Observer
-Scrapyard Custodian
-Defiant Holdout
-Silent Avenger
-Duskreaper
-Ashwalker
-Wreckland Maverick
-Gatebound Warden
-Starlight Guide
-Skull Weaver
-Wasteland Tamer
-Revenant of the Lost
-Scuttled Fortune
-Exiles of the Last Light
-Dustborn Veteran
-Volcanic Channeler
-Nightmare Manifest
-Ferryman's Tithe
-Fractured Vessel
-Rite of Summoning
-Borrowed Minutes
-Warfield Stalwart
-Burning Pursuit
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

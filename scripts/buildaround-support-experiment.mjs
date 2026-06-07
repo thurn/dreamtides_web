@@ -58,6 +58,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { buildPoolData, generatePoolFromData } from "../src/draft/pool/index.ts";
+import { supportEntryByName } from "./lib/card-refs.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
@@ -100,7 +101,7 @@ const SHORT_THEMES = new Set([
 export function dominantSignatureTheme(signatureCards, meta) {
   const tally = new Map();
   for (const name of signatureCards ?? []) {
-    const entry = meta.cards[name];
+    const entry = supportEntryByName(meta, name);
     if (!entry) continue;
     for (const t of entry.supports ?? []) tally.set(t, (tally.get(t) ?? 0) + 1);
     for (const n of entry.needs ?? []) tally.set(n.theme, (tally.get(n.theme) ?? 0) + 1);
@@ -121,7 +122,8 @@ export function dominantSignatureTheme(signatureCards, meta) {
  * *payoff instance*: a build-around present in the pool, for each theme it needs.
  *
  * @param counts Map<cardName, copies> (a 2-of is capped at 2 copies).
- * @param meta   { cards: Record<name,{needs,supports}>, themes }.
+ * @param meta   { cards: Record<cardId,{name,needs,supports}>, themes };
+ *   entries are looked up by current card name via `supportEntryByName`.
  * @param tierTarget tier -> target support share.
  * @param allowedThemes optional Set; when given, only emit instances whose theme
  *   is in it (support copies are still counted across every theme).
@@ -139,7 +141,7 @@ export function scorePool(
   // Total support copies available per theme across the whole pool.
   const supportCopies = new Map();
   for (const [name, raw] of counts) {
-    const entry = meta.cards[name];
+    const entry = supportEntryByName(meta, name);
     if (!entry) continue;
     const copies = cap(raw);
     for (const theme of entry.supports ?? []) {
@@ -150,7 +152,7 @@ export function scorePool(
   const instances = [];
   if (size === 0) return instances;
   for (const [name, raw] of counts) {
-    const entry = meta.cards[name];
+    const entry = supportEntryByName(meta, name);
     if (!entry || !(entry.needs ?? []).length) continue;
     const copies = cap(raw);
     for (const need of entry.needs) {

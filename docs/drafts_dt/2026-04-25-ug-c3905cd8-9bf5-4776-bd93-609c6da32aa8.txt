@@ -1,25 +1,25 @@
-Verdant Pilgrim
-Stoneborn Eternal
-Dawnprowler Panther
-Moonbound Wolf
-Worldsong Behemoth
-Abomination of Memory
-Cloudmantle Ray
-Celestial Lookout
-Doorlight Foundling
-Starrunner
-Mother of Flames
-Lord of Hidden Paths
-Sylvan Matriarch
-Embersummoner
-Shardwoven Tyrant
-Emerald Guardian
-Spirit Bond
-Spirit of the Greenwood
-Celestial Reverie
-Melodist of the Finale
-Forge Inheritor
-Sunset Chapel Rest
-Lumin-Gate Seer
-Roots of Rebirth
-Nexus Wayfinder
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

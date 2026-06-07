@@ -1,24 +1,24 @@
-Paradox Enforcer
-Kindred Sparks
-Scrapyard Custodian
-Wreckheap Survivor
-Entropy Spike
-The Calling Night
-Enginespeaker
-Dreadweaver
-The Rising God
-Duskwall Delver
-Twilight Reclaimer
-Cinderfang
-Riftwalker
-Veil of the Wastes
-Exiles of the Last Light
-Dustborn Veteran
-Graywatch
-Soulreaver
-Rusted Monolith
-Glimpse of Infinity
-Immolate and Rise
-Peak Plunder
-Lurking Dread
-Starfall
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall

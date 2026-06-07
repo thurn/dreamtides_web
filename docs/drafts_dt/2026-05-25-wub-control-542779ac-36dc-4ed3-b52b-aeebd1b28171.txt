@@ -1,19 +1,19 @@
-Seeker of the Radiant Wilds
-Cosmic Puppeteer
-Pilgrim of Old Stones
-Barrage Specialist
-The Power Within
-Rootspring Summons
-Grounded
-Bladefall
-The Grand Heist
-Cragfall
-Spellweaver
-Apocalypse
-Crumbling Covenant
-Abolish
-Break the Sequence
-Fractured Veil
-Conjured Zenith
-Across the Void
-Wheel of the Heavens
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens

@@ -1,31 +1,31 @@
-Herald of the Last Light
-Wondrous Clearing
-Moonbound Wolf
-Wreckheap Survivor
-Sorrow Watcher
-Tidewreck Navigator
-Unbroken
-Overstory Explorer
-Lumineth
-Ashen Remnant
-The Dread Sovereign
-The Rising God
-Ashwalker
-Veil Crosser
-Rooftop Prophet
-Skull Weaver
-Twilight Reclaimer
-Cinderfang
-Sylvan Matriarch
-Nocturne
-Wistful Angler
-Ashen Avenger
-Volcanic Channeler
-Ferryman of the Falls
-Shadowcaller
-Nightmare Manifest
-Maelstrom Denial
-Immolate
-Dreamcatcher's Call
-Rite of Summoning
-Burning Pursuit
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

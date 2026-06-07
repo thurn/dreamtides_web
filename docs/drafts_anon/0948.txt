@@ -1,27 +1,27 @@
-Driftcaller Sovereign
-Harvester of Despair
-Selfless Rescuer
-Frostbound Defiant
-Emberwolf Triad
-Lumineth
-Veilseeker
-Mountainwatch Alpha
-Veil Crosser
-Rooftop Prophet
-Wasteland Tamer
-Depthwalker
-Blazing Emberwing
-Winterbough Monk
-Carrion Shepherd
-Wistful Angler
-Ashen Avenger
-Embersummoner
-Shardwoven Tyrant
-Lurking Dread
-Celestial Reverie
-Thundercatcher
-Secrets of the Deep
-Unleash Ruin
-Moonlit Voyage
-Rite of Summoning
-Conjured Zenith
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

@@ -1,24 +1,24 @@
-Kindred Sparks
-Searcher in the Mists
-Wreckheap Survivor
-Entropy Spike
-Stargazer Adrift
-Wasteland Arbitrator
-The Calling Night
-Enginespeaker
-Dreadweaver
-Silent Avenger
-Ashwalker
-Cinderblade Legionnaire
-Scuttled Fortune
-Volcanic Channeler
-The Rising God
-Immolate and Rise
-Peak Plunder
-Together Against the Tide
-Dreaming Groves
-Starfall
-Vertiginous Leap
-Stolen Genesis
-Collateral Damage
-Ferryman's Tithe
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe

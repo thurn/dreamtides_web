@@ -1,23 +1,23 @@
-Hallowed Stag
-Ruin Scavenger
-The Calling Night
-Dreadwood Emissary
-Seeker of the Radiant Wilds
-Doorlight Foundling
-Duskwall Delver
-Wasteland Tamer
-Veil of the Wastes
-Depthwalker
-Prophet of the Consumed
-Steel Abomination
-Graywatch
-Standoff
-Glimpse of Infinity
-Dreamcatcher's Call
-Shatter the Frail
-Whisper of the Past
-Curio Dealer
-Unleash Ruin
-Pyrokinetic Surge
-Moonlit Voyage
-Moment Rewound
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound

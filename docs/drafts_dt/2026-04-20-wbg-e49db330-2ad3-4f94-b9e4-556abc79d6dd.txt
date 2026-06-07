@@ -1,27 +1,27 @@
-Starchaser
-Harvester of Despair
-Scrapyard Custodian
-Frostbound Defiant
-Emberwolf Triad
-Enginespeaker
-Veil Crosser
-Rooftop Prophet
-Titan of Forgotten Echoes
-Scorched Crusader
-Wasteland Tamer
-Endless Projection
-Sylvan Matriarch
-Call to the Unknown
-Embersummoner
-Shardwoven Tyrant
-Rusted Monolith
-Volcanic Channeler
-Spirit of the Greenwood
-Stolen Genesis
-Unleash Ruin
-Borrowed Minutes
-Ashfront Lieutenant
-Marrow Drinker
-Arc Disciple
-Infernal Ascendant
-Roots of Rebirth
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

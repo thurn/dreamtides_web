@@ -1,24 +1,24 @@
-Blade of Unity
-Starchaser
-Sunshadow Eagle
-Hallowed Stag
-Ruin Scavenger
-Ethereal Courser
-Worldsong Behemoth
-Abomination of Memory
-Driftcaller Sovereign
-Veilseeker
-Mountainwatch Alpha
-Doorlight Foundling
-Dreamvale Monarch
-Mother of Flames
-Sage of the Prelude
-Ghostlight Wolves
-Eternal Stag
-Dreamcatcher's Call
-Radiant Trio
-Curio Dealer
-Melodist of the Finale
-Luminous Ascent
-A New Adventure
-Sunset Chronicler
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler

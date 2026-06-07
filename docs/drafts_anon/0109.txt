@@ -1,20 +1,20 @@
-Oracle of Shifting Skies
-Architect of Memory
-Shadowprowler
-Pattern Seeker
-Somber Flockmaster
-Gateweaver
-Cosmonaut of Tides
-Minstrel of Falling Light
-Key Sifter
-Molten Duel
-Call of Calamity
-Ancient Descent
-Ecliptic Vantage
-Momentum of the Fallen
-Fell Swoop
-Shared Revelation
-Cascading Detonation
-Ripple Through Reality
-Break the Sequence
-Scorched Reckoning
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning

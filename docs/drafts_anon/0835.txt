@@ -1,29 +1,29 @@
-Inferno's Herald
-Dreaming Obelisk
-Keeper of the Tides
-Colossal Convergence
-Forsworn Champion
-Pilgrim of Old Stones
-Dragonward
-Grim Reclaimer
-Voidsire
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Sundown Ronin
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Emberfang
-Evacuation Enforcer
-Clockwork Prodigy
-Echoing Denial
-Wolfbond Chieftain
-Fragments of Vision
-Ironclad Marksman
-Derelict Voyage
-Worldbreacher
-Desolation's Edge
-Abolish
-Wheel of the Heavens
-Spirit Reaping
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

@@ -1,22 +1,22 @@
-Echo Architect
-Gateweaver
-Barrage Specialist
-The Ringleader
-Sunken Radiance
-Gleam Below
-Lunar Hart
-Canopy of Stars
-Genesis Burst
-Inverted Reflection
-Marrow Mimic
-Hatching Ground
-Nebula's Wake
-Cascading Detonation
-Seaside Requiem
-Crimson Pilgrimage
-Archive of the Forgotten
-Across the Void
-Cascade of Reflections
-Starfall Communion
-Surge of Fury
-Reunion
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

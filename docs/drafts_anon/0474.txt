@@ -1,29 +1,29 @@
-Worldsong Behemoth
-Breach Artist
-Frostbound Defiant
-Emberwolf Triad
-Ridge Vortex Explorer
-Veil Crosser
-Rooftop Prophet
-Torn Circuit Feeder
-Sky Voyager
-Voidcaller
-Celestial Lookout
-Depthwalker
-Veilseeker
-Salvage Engine
-Sylvan Matriarch
-Starsea Traveler
-Augur Crow
-Steel Abomination
-Paradox Enforcer
-Epiphany Unfolded
-Heavenward Penitent
-Dreamcatcher's Call
-Forsaken Pact
-Null Sphere
-Packcaller of Shadows
-Moment Rewound
-Curio Dealer
-Clockwork Conductor
-Nexus Wayfinder
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

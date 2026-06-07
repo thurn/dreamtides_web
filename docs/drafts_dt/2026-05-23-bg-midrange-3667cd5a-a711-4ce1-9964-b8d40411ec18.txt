@@ -1,26 +1,26 @@
-Harrowing Officiant
-Paradox Enforcer
-Hallowed Stag
-Ruin Scavenger
-Ethereal Trailblazer
-Worldsong Behemoth
-Searcher in the Mists
-Harvester of Despair
-Dreadweaver
-Silent Avenger
-The Rising God
-Ashwalker
-Veil Crosser
-Rooftop Prophet
-Veil of the Wastes
-Depthwalker
-Shatterpoint Agent
-Ferryman of the Falls
-Nightmare Manifest
-Lurking Dread
-Vertiginous Leap
-Curio Dealer
-Unleash Ruin
-Moonlit Voyage
-Ashfront Lieutenant
-Marrow Drinker
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker

@@ -1,26 +1,26 @@
-Starchaser
-Sunshadow Eagle
-Hallowed Stag
-Verdant Pilgrim
-Ethereal Trailblazer
-Undying Fang
-Dawnprowler Panther
-Moonbound Wolf
-Frostbound Defiant
-Emberwolf Triad
-Blazebound Sentinel
-Mountainwatch Alpha
-Dreamborne Leviathan
-Spiritbound Alpha
-Dreamvale Monarch
-Dusk Duelist
-Blazing Emberwing
-Ghostlight Wolves
-Eternal Stag
-Young Beastcaller
-Emerald Guardian
-Glimpse of Infinity
-Spirit of the Greenwood
-Dreamcatcher's Call
-Curio Dealer
-Nexus Wayfinder
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

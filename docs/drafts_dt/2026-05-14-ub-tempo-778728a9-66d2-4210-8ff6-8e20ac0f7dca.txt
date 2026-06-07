@@ -1,20 +1,20 @@
-Kindred Sparks
-Northlight Maestro
-Keeper of the Tides
-Vanishing Inquisitor
-Eternal Sentry
-Resilient Wanderer
-Carrion Shepherd
-Soulreaver
-Thronebound Arbiter
-Ripple of Defiance
-Together Against the Tide
-Lurking Dread
-Null Sphere
-Epiphany Unfolded
-Ecliptic Vantage
-Door to Possibility
-Immolate
-Collateral Damage
-Defiant Parry
-Rite of Summoning
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning

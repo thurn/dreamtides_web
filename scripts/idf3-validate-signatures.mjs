@@ -11,6 +11,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { mapsFromCards, readCorpusDeckNames } from "./lib/card-refs.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
@@ -39,14 +40,11 @@ const colorPrefix = (n) => {
 };
 const FILE_RE =
   /^\d{4}-\d{2}-\d{2}-(.+)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-const validNames = new Set(cards.map((c) => c.name));
+const cardMaps = mapsFromCards(cards);
 const rawLabels = [];
 for (const file of readdirSync(resolve(ROOT, "docs/drafts_dt")).sort()) {
   if (!file.endsWith(".txt")) continue;
-  const lines = readFileSync(resolve(ROOT, "docs/drafts_dt", file), "utf8")
-    .split("\n")
-    .map((l) => l.trim())
-    .filter((l) => l.length > 0 && validNames.has(l));
+  const lines = readCorpusDeckNames(resolve(ROOT, "docs/drafts_dt", file), cardMaps);
   if (lines.length === 0) continue;
   const m = FILE_RE.exec(file.replace(/\.txt$/u, ""));
   let label = m ? m[1] : null;

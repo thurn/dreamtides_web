@@ -1,22 +1,22 @@
-Augur Crow
-Ebonwing
-Driftcaller Sovereign
-Wondrous Clearing
-Cloudmantle Ray
-Looming Oracle
-Doorlight Foundling
-Dreamvale Monarch
-Pilgrim of Old Stones
-Prophet of the Consumed
-Abyssal Enforcer
-Duskmount
-Petal-Seer
-Sylvan Matriarch
-Threadbreaker
-Ripple of Defiance
-Lone Castaway
-The Power Within
-Epiphany Unfolded
-Ancient Descent
-Cindermarch
-Conduit of Resonance
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance

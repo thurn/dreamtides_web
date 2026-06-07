@@ -1,24 +1,24 @@
-Voidshield Guardian
-Apocalypse Vigilante
-Ironclad Holdout
-Momentum's Edge
-Spirit Field Reclaimer
-Oathbound Pair
-Reclaimer of Lost Paths
-Boundless Wanderer
-Field Reverent
-Revenant of the Lost
-Soulflame Predator
-Nomad of Endless Paths
-Urban Desperado
-Verdant Pioneer
-Prism Caller
-Lightningborn
-Infernal Rest
-Shattering Gambit
-Veil Shatter
-The Grand Heist
-Wasteland Holdout
-Nightmare
-Phantom Flotilla
-Charnel Seraph
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

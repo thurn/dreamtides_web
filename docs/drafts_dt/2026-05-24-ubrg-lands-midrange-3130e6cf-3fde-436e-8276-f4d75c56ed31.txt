@@ -1,25 +1,25 @@
-Hallowed Stag
-Ethereal Trailblazer
-Worldsong Behemoth
-Abomination of Memory
-Driftcaller Sovereign
-Selfless Rescuer
-Frostbound Defiant
-Emberwolf Triad
-Wondrous Clearing
-Cloudmantle Ray
-Doorlight Foundling
-Depthwalker
-Dusk Duelist
-Starsea Traveler
-Young Beastcaller
-Steel Abomination
-Wistful Angler
-Ashen Avenger
-Carrion Lord
-Spirit of the Greenwood
-Forsaken Pact
-Duneveil Vanguard
-Immolate
-Clockwork Conductor
-Keeper of Forgotten Light
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

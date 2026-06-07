@@ -1,25 +1,25 @@
-Aspiring Guardian
-Sandglider
-Company Commander
-Pathfinder Adrift
-Cosmic Puppeteer
-Infernal Cavalier
-Barrage Specialist
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Emberfang
-Conduit of Ashes
-Starshot Gunner
-Gleam Below
-Worldbreacher
-Marrow Mimic
-Hatching Ground
-Sunset Chapel Rest
-Across the Void
-Aftermath Bloom
-Key to the Moment
-Surge of Fury
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury

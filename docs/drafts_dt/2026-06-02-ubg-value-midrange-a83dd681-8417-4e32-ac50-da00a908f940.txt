@@ -1,34 +1,34 @@
-Ethereal Courser
-Selfless Rescuer
-Saffron Trailblazer
-Breach Artist
-Kindred Sparks
-Worldsong Behemoth
-Avatar of Cosmic Reckoning
-Riftwalker
-Company Commander
-Wasteland Tamer
-Northlight Maestro
-Veil of the Wastes
-Seeker of the Radiant Wilds
-Starbound Striker
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Wired Duelist
-Volcanic Channeler
-Thronebound Arbiter
-Glimpse of Infinity
-Ripple of Defiance
-Epiphany Unfolded
-Forsaken Pact
-Dreaming Groves
-Together Against the Tide
-Momentum of the Fallen
-Mirrorlight Architect
-Harvest the Forgotten
-Fractured Veil
-Rite of Summoning
-Unleash Ruin
-Shadow Reflection
-Roots of Rebirth
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

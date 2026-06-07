@@ -1,26 +1,26 @@
-Sunshadow Eagle
-Hallowed Stag
-Verdant Pilgrim
-Undying Fang
-Dawnprowler Panther
-Moonbound Wolf
-Mystic Runefish
-Selfless Rescuer
-Frostbound Defiant
-Emberwolf Triad
-Blazebound Sentinel
-Skyborne Jellyfish
-Lumineth
-Mountainwatch Alpha
-Dreamvale Monarch
-Mother of Flames
-Petal-Seer
-Young Beastcaller
-Spirit of the Greenwood
-Dreamcatcher's Call
-Celestial Reverie
-Melodist of the Finale
-Crumbling Behemoth
-Beacon of Tomorrow
-Clockwork Conductor
-Nexus Wayfinder
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

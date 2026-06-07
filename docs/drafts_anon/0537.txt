@@ -1,27 +1,27 @@
-Soulbinder
-Ethereal Trailblazer
-Frostbound Defiant
-Emberwolf Triad
-Wondrous Clearing
-Cloudmantle Ray
-Veil Crosser
-Rooftop Prophet
-Scorched Crusader
-Winterbough Monk
-Wraith of Twisting Shadows
-Light of Emergence
-Starsea Traveler
-Nocturne
-Wistful Angler
-Ashen Avenger
-Carrion Lord
-Ferryman of the Falls
-The Forsaker
-Ruptured Dynamo
-Dreamcatcher's Call
-Forsaken Pact
-Ecliptic Vantage
-Bloomweaver
-Summons of the Bonded
-Shadow March
-Clockwork Conductor
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor

@@ -1,21 +1,21 @@
-Echo Architect
-The Ringleader
-Pyrewatcher
-Glimpse of Infinity
-Blightmaw
-Dreaming Groves
-Call of Calamity
-Canopy of Stars
-Momentum of the Fallen
-Door to Possibility
-Arc Gate Opening
-Hatching Ground
-Sanctum Awakened
-Nebula's Wake
-Data Pulse
-Crimson Pilgrimage
-A New Adventure
-Path to Redemption
-Return to Nowhere
-Surge of Fury
-Broadcast Array
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

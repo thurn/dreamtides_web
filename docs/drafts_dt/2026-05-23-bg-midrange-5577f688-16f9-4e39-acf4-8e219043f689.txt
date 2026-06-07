@@ -1,35 +1,35 @@
-Selfless Rescuer
-Abomination of Memory
-Wondrous Clearing
-Overstory Explorer
-Driftcaller Sovereign
-Cloudmantle Ray
-Ruin Scavenger
-Ashen Remnant
-The Dread Sovereign
-Cinderblade Legionnaire
-Veil of the Wastes
-Veil Crosser
-Rooftop Prophet
-Sky Voyager
-Voidcaller
-Dusk Duelist
-Starsea Traveler
-Wraith of Twisting Shadows
-Light of Emergence
-Wistful Angler
-Ashen Avenger
-Carrion Lord
-Ferryman of the Falls
-The Forsaker
-Ruptured Dynamo
-Standoff
-Forsaken Pact
-Secrets of the Deep
-Bloomweaver
-Virtuoso of Harmony
-Pyrokinetic Surge
-Unleash Ruin
-Curio Dealer
-Pathwalker
-Scrap Reclaimer
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer

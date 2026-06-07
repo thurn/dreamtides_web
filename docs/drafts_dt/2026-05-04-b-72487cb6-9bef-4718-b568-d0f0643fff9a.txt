@@ -1,26 +1,26 @@
-Kindred Sparks
-Sorrow Watcher
-Tidewreck Navigator
-Herald of the Last Light
-Harvester of Despair
-Scrapyard Custodian
-Stargazer Adrift
-Dreadweaver
-Ashwalker
-Ashen Remnant
-The Dread Sovereign
-Avatar of Cosmic Reckoning
-Twilight Reclaimer
-Cinderfang
-Skull Weaver
-Veil of the Wastes
-Carrion Shepherd
-Exiles of the Last Light
-Graywatch
-Soulreaver
-Volcanic Channeler
-Standoff
-Thundercatcher
-Collateral Damage
-Rite of Summoning
-Soulrender
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender

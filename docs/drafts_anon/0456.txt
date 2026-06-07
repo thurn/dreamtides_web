@@ -1,39 +1,39 @@
-Aspiring Guardian
-Ironclad Holdout
-Saffron Trailblazer
-Spirit Field Reclaimer
-Colossal Convergence
-Forsworn Champion
-Forgotten Factory Titan
-Pit Descender
-Vault Infiltrator
-Assault Leader
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Infernal Cavalier
-Inspiring Templar
-Gilded Catalyst
-Burning Revenant
-Tranquil Duelist
-Inferno's Herald
-Prism Caller
-Dreadmount Sovereign
-Sigil Analyst
-Tethered Hollow
-Luminwings
-Worldbreacher
-Veil Shatter
-Junkfield Renegade
-Spent Courier
-Lightningborn
-Fury of the Clan
-Void Pilgrim
-Wasteland Holdout
-Last Light Herald
-Skyflame Commander
-Ossuary Overlord
-The Deathsworn
-Forge Inheritor
-Shadow Reflection
-Wake the Fallen
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

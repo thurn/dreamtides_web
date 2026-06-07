@@ -1,27 +1,27 @@
-Dreadmount Sovereign
-Sigil Analyst
-Seeker of the Radiant Wilds
-Spirit Field Reclaimer
-Looming Oracle
-Starbound Striker
-Vault Infiltrator
-Reforged Automaton
-Tranquil Duelist
-Burning Revenant
-Flamestride Rider
-Invoker of Myths
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Conduit of Ashes
-Glimpse of Infinity
-Luminwings
-Infernal Rest
-Chronicle Reclaimer
-Radiants' Captain
-Through the Rift
-Marrow Mimic
-Rite of Summoning
-Spellweaver
-Conjured Zenith
-Aftermath Bloom
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom

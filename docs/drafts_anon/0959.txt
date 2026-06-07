@@ -1,37 +1,37 @@
-Tidecaller
-Dreadmount Sovereign
-Sigil Analyst
-Moonbound Wolf
-Ashen Remnant
-The Dread Sovereign
-Silent Avenger
-Reforged Automaton
-Gateway Defender
-Blade of Oblivion
-Exiles of the Last Light
-Scuttled Fortune
-Tranquil Duelist
-Thronebound Arbiter
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Blade of Unity
-Wolfbond Chieftain
-Fangbound
-Clockwork Prodigy
-Echoing Denial
-Lunar Hart
-Bladefall
-Ecliptic Vantage
-Epiphany Unfolded
-Dreaming Groves
-Genesis Burst
-Momentum of the Fallen
-Standard Bearer
-Ridgecutter
-Ripple Through Reality
-Aftermath Bloom
-Path to Redemption
-Intermezzo Balladeer
-Call of the Lost
-Broadcast Array
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

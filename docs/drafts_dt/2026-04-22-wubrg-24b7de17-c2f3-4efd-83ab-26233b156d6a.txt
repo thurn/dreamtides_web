@@ -1,43 +1,43 @@
-Ruin Scavenger
-Starchaser
-Oracle of Shifting Skies
-Architect of Memory
-Selfless Rescuer
-Breach Artist
-Driftcaller Sovereign
-Sunshadow Eagle
-The Rising God
-Spirit Field Reclaimer
-Mother of Flames
-Depthwalker
-Wasteland Arbitrator
-Flagbearer of Decay
-Lord of Hidden Paths
-Scorched Crusader
-Boundless Wanderer
-Field Reverent
-Winterbough Monk
-Scuttled Fortune
-Dustborn Veteran
-Fathomless Maw
-Kindlehorn
-Ghostlight Wolves
-Eternal Stag
-Glimmerwood Scout
-Woodland Apparition
-Nocturne
-Soulreaver
-Carrion Lord
-Specter of Silent Snow
-Spirit Bond
-Luminwings
-Vertiginous Leap
-Starfall
-Rite of Summoning
-Soulrender
-Desolation's Edge
-Phantasmal Recruiter
-Moment Rewound
-A New Adventure
-Starfall Communion
-Echoes of the Journey
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

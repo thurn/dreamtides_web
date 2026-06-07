@@ -1,23 +1,23 @@
-Blade of Oblivion
-Conduit of Ashes
-Ripple of Defiance
-Wolfbond Chieftain
-Rootspring Summons
-Spent Courier
-Blightmaw
-Sunken Radiance
-Ironclad Marksman
-Call of Calamity
-Genesis Burst
-Marrow Mimic
-Arc Gate Opening
-Hatching Ground
-Defiant Parry
-Cascading Detonation
-Abolish
-Sunset Chapel Rest
-Path to Redemption
-Starfall Communion
-Wheel of the Heavens
-Call of the Lost
-Echoes of the Journey
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

@@ -7,6 +7,13 @@ import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
 import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
 import { DREAMCALLER_ARCHETYPES } from "../src/data/dreamcallers-v2-database.ts";
+import {
+  CARD_ID_RE,
+  corpusFiles,
+  corpusLine,
+  corpusLineToken,
+  resolveToken,
+} from "./lib/card-refs.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DATA_DIR = join(ROOT, "data");
@@ -226,7 +233,7 @@ function mergedColorPrefix(name) {
  * `MERGED_MAX_LIST`. Returns a plain object (label -> card-name array) ready to
  * serialize.
  */
-export function buildMergedArchetypeLists(draftsAnonDir, knownCardNames) {
+export function buildMergedArchetypeLists(draftsAnonDir, cardMaps) {
   const byLabel = new Map(); // label -> array of Set<name>
   for (const filename of readdirSync(draftsAnonDir).sort()) {
     if (!filename.endsWith(".txt")) continue;
@@ -237,10 +244,14 @@ export function buildMergedArchetypeLists(draftsAnonDir, knownCardNames) {
     if (mergedColorPrefix(label) === "" || label === mergedColorPrefix(label)) {
       continue;
     }
-    const names = readFileSync(join(draftsAnonDir, filename), "utf8")
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0 && knownCardNames.has(line));
+    const names = [];
+    for (const line of readFileSync(join(draftsAnonDir, filename), "utf8").split(
+      "\n",
+    )) {
+      const token = corpusLineToken(line);
+      if (token.length === 0) continue;
+      names.push(resolveToken(token, cardMaps).name);
+    }
     const set = new Set(names);
     if (set.size < MERGED_MIN_DECK || set.size > MERGED_MAX_DECK) continue;
     if (!byLabel.has(label)) byLabel.set(label, []);
@@ -260,6 +271,70 @@ export function buildMergedArchetypeLists(draftsAnonDir, knownCardNames) {
     if (kept.length > 0) lists[label] = kept.map(([card]) => card);
   }
   return lists;
+}
+
+/**
+ * Build id<->name lookup maps from the parsed cards_v2 records. The `id` UUID is
+ * the stable key every card-reference system uses; the maps resolve a reference
+ * back to the current display name (and let a tolerant reader accept a bare name).
+ */
+export function buildCardMaps(cardsV2) {
+  const idToName = new Map();
+  const nameToId = new Map();
+  for (const card of cardsV2) {
+    if (typeof card.id !== "string") {
+      throw new Error(`cards_v2 card "${String(card.name)}" is missing an id`);
+    }
+    idToName.set(card.id, card.name);
+    if (!nameToId.has(card.name)) nameToId.set(card.name, card.id);
+  }
+  return { idToName, nameToId };
+}
+
+/**
+ * Read every `.txt` deck file in a corpus directory, resolving each `<uuid>`
+ * reference to its current card name. The `# Name` comment is regenerated from
+ * the current name and the file rewritten in place when it changed, so the
+ * human-readable comments never drift after a rename (the write is skipped when
+ * nothing changed, so a clean repo stays clean). Returns one name array per deck;
+ * throws on any reference that resolves to no card.
+ */
+export function refreshAndReadCorpus(dir, cardMaps) {
+  const decks = [];
+  for (const filename of corpusFiles(dir)) {
+    const path = join(dir, filename);
+    const original = readFileSync(path, "utf8");
+    const names = [];
+    const out = original.split("\n").map((line) => {
+      const token = corpusLineToken(line);
+      if (token.length === 0) return line;
+      const { id, name } = resolveToken(token, cardMaps);
+      names.push(name);
+      return corpusLine(id, name);
+    });
+    let text = out.join("\n").replace(/\n+$/u, "");
+    if (text.length > 0) text += "\n";
+    if (text !== original) writeFileSync(path, text);
+    decks.push(names);
+  }
+  return decks;
+}
+
+/**
+ * Fail the build if any UUID in `keys` is not a real cards_v2 card. `label`
+ * names the source file for the error message.
+ */
+export function validateCardIds(keys, idToName, label) {
+  const unknown = [];
+  for (const key of keys) {
+    if (!CARD_ID_RE.test(key) || !idToName.has(key)) unknown.push(key);
+  }
+  if (unknown.length > 0) {
+    throw new Error(
+      `${label} references ${String(unknown.length)} unknown card id(s): ` +
+        unknown.slice(0, 5).join(", "),
+    );
+  }
 }
 
 /**
@@ -448,14 +523,43 @@ export function setupAssets({
     throw new Error("Expected [[cards]] array in cards_v2.toml");
   }
 
+  // id<->name maps for resolving the UUID-keyed reference systems (signatures,
+  // pool metadata, build-around metadata, and the decklist corpora) back to the
+  // current display names. Validate the two TypeScript/JSON reference files up
+  // front so a dangling UUID fails the build loudly.
+  const cardMaps = buildCardMaps(allCardsV2);
+  validateCardIds(
+    Object.keys(CARDS_V2_POOL_METADATA),
+    cardMaps.idToName,
+    "cards-v2-metadata.ts",
+  );
+  const buildaroundPath = join(DATA_DIR, "buildaround_support.json");
+  const buildaroundOriginal = readFileSync(buildaroundPath, "utf8");
+  const buildaroundSupport = JSON.parse(buildaroundOriginal);
+  validateCardIds(
+    Object.keys(buildaroundSupport.cards ?? {}),
+    cardMaps.idToName,
+    "buildaround_support.json",
+  );
+  // The build-around metadata is keyed by card id but looked up by current card
+  // name (idf4 / the experiment harness index it on `entry.name`), so refresh the
+  // name field from the current card name. Renaming a card needs no edit here.
+  for (const [id, entry] of Object.entries(buildaroundSupport.cards ?? {})) {
+    entry.name = cardMaps.idToName.get(id);
+  }
+  const buildaroundNext = `${JSON.stringify(buildaroundSupport, null, 2)}\n`;
+  if (buildaroundNext !== buildaroundOriginal) {
+    writeFileSync(buildaroundPath, buildaroundNext);
+  }
+
   // The draft-pool metadata (core/colors/draft-archetypes) the non-`idf3`
   // pool variants consume lives in TypeScript (`cards-v2-metadata.ts`), not in
-  // cards_v2.toml. Merge it back into each record by name before serializing so
-  // the generated JSON the pool experiments read is complete. The standard
-  // `idf3` variant ignores all of it. Per-card `tides` are deliberately not
-  // injected: the runtime card data carries no tide values.
+  // cards_v2.toml. It is keyed by the stable card id; merge it back into each
+  // record before serializing so the generated JSON the pool experiments read is
+  // complete. The standard `idf3` variant ignores all of it. Per-card `tides`
+  // are deliberately not injected: the runtime card data carries no tide values.
   const jsonCardsV2 = allCardsV2.map((card) => {
-    const meta = CARDS_V2_POOL_METADATA[card.name];
+    const meta = CARDS_V2_POOL_METADATA[card.id];
     if (meta) {
       if (meta.core !== undefined) card.core = meta.core;
       if (meta.colors) card.colors = meta.colors;
@@ -466,24 +570,22 @@ export function setupAssets({
   writeFileSync(cardV2JsonPath, JSON.stringify(jsonCardsV2, null, 2) + "\n");
   console.log(`Wrote ${jsonCardsV2.length} cards to cards_v2-data.json`);
 
-  // Real per-deck card lists (`docs/drafts_anon/*.txt`) bundled for the draft
-  // test's `decklists` pool variant, which builds a pool by snowballing
-  // similar real decklists rather than synthesizing one from archetype themes.
-  // Each file is one deck: a newline-separated list of card names. We keep only
-  // names that exist in cards_v2 (so the bundle never references unknown cards)
-  // and drop empty files; all size filtering happens in the algorithm so it
-  // stays tunable. Output shape is `string[][]` (one inner array per deck).
-  console.log("Bundling real decklists from docs/drafts_anon...");
-  const knownCardNames = new Set(jsonCardsV2.map((card) => card.name));
-  const decklists = [];
-  for (const filename of readdirSync(draftsAnonDir).sort()) {
-    if (!filename.endsWith(".txt")) continue;
-    const lines = readFileSync(join(draftsAnonDir, filename), "utf8")
-      .split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line.length > 0 && knownCardNames.has(line));
-    if (lines.length > 0) decklists.push(lines);
-  }
+  // Real per-deck card lists (the `docs/drafts_anon` / `docs/drafts_dt`
+  // corpora) bundled for the draft test's `decklists` pool variant, which builds
+  // a pool by snowballing similar real decklists rather than synthesizing one
+  // from archetype themes. Each file is one deck: a newline-separated list of
+  // `<uuid> # Name` references. Reading resolves each UUID to its current name
+  // and rewrites the `# Name` comment when it drifted, so renaming a card in
+  // cards_v2.toml needs no edit here. Empty decks are dropped; all size filtering
+  // happens in the algorithm so it stays tunable. The runtime bundle is keyed by
+  // current card name (`string[][]`, one inner array per deck), matching the
+  // name-based pool engine and oracle tests. Both corpora are refreshed so their
+  // comments stay current; `drafts_dt` is read by the offline experiments.
+  console.log("Bundling real decklists from the corpus...");
+  refreshAndReadCorpus(join(ROOT, "docs", "drafts_dt"), cardMaps);
+  const decklists = refreshAndReadCorpus(draftsAnonDir, cardMaps).filter(
+    (deck) => deck.length > 0,
+  );
   writeFileSync(decklistsJsonPath, JSON.stringify(decklists) + "\n");
   console.log(`Wrote ${decklists.length} decklists to decklists-data.json`);
 
@@ -492,7 +594,7 @@ export function setupAssets({
   // labeled `docs/drafts_anon` files here (offline) into one list per archetype
   // and bundle them for the browser. See `buildMergedArchetypeLists`.
   console.log("Building merged archetype lists from docs/drafts_anon...");
-  const mergedLists = buildMergedArchetypeLists(draftsAnonDir, knownCardNames);
+  const mergedLists = buildMergedArchetypeLists(draftsAnonDir, cardMaps);
   writeFileSync(mergedListsJsonPath, JSON.stringify(mergedLists) + "\n");
   console.log(
     `Wrote ${Object.keys(mergedLists).length} merged archetype lists to merged-archetype-lists-data.json`,
@@ -531,10 +633,21 @@ export function setupAssets({
     throw new Error("Expected [[dreamcaller]] array in dreamcallers_v2.toml");
   }
 
+  // Signatures are authored as stable card-id UUIDs (`docs/cards2/
+  // idf3_signature_design.md`). Resolve them to the current card names here so
+  // the runtime bundle and the name-based pool engine see names, and so a
+  // dangling signature UUID fails the build. Renaming a card in cards_v2.toml
+  // therefore needs no edit to dreamcallers_v2.toml.
   const jsonDreamcallersV2 = allDreamcallersV2.map((dreamcaller) => {
     const archetypes = DREAMCALLER_ARCHETYPES[dreamcaller.name];
     if (archetypes) dreamcaller["draft-archetypes"] = archetypes;
-    return transformDreamcaller(dreamcaller);
+    const transformed = transformDreamcaller(dreamcaller);
+    if (Array.isArray(transformed.signatureCards)) {
+      transformed.signatureCards = transformed.signatureCards.map(
+        (ref) => resolveToken(ref, cardMaps).name,
+      );
+    }
+    return transformed;
   });
   writeFileSync(
     dreamcallerV2JsonPath,

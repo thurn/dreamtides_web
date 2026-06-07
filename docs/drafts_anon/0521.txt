@@ -1,24 +1,24 @@
-Oracle of Shifting Skies
-Architect of Memory
-Unbroken
-Somber Flockmaster
-Pathfinder Adrift
-Pilgrim of Old Stones
-Minstrel of Falling Light
-Key Sifter
-Ripple of Defiance
-Molten Duel
-Epiphany Unfolded
-Lunar Hart
-Sanctum Approach
-Ecliptic Vantage
-Momentum of the Fallen
-Defiant Parry
-Crumbling Covenant
-Abolish
-Break the Sequence
-Forsaken Skyline
-A New Adventure
-Twilight Troubadour
-Simulacra
-Return to Nowhere
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

@@ -1,21 +1,21 @@
-Echo Architect
-Pathfinder Adrift
-Exiles of the Last Light
-Miraculous Arrival
-Emberfang
-Dread Arbiter
-Pulse of Sacrifice
-Lone Castaway
-Together Against the Tide
-Maelstrom Denial
-Blight Weaver
-Annular Recall
-Momentum of the Fallen
-Immolate
-Hatching Ground
-Data Pulse
-Ridgecutter
-Crimson Pilgrimage
-Sunset Chapel Rest
-Aftermath Bloom
-Path to Redemption
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption

@@ -1,22 +1,22 @@
-Oracle of Shifting Skies
-Architect of Memory
-The Devourer
-Echo Architect
-Somber Flockmaster
-Gateweaver
-Pyre Challenger
-Thornwood Delver
-Twice-Lit Portal
-Null Sphere
-Molten Duel
-Knowledge Restored
-Call of Calamity
-Harvest the Forgotten
-Derelict Voyage
-Fell the Mighty
-Weight of Memory
-Fell Swoop
-Data Pulse
-Scorched Reckoning
-Forsaken Skyline
-Return to Nowhere
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

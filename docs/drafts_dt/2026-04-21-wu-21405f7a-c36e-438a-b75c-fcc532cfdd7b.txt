@@ -1,23 +1,23 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Crucible Warlord
-Fern Treader
-Looming Oracle
-Assault Leader
-Duskmount
-Prism Caller
-Clockwork Prodigy
-Echoing Denial
-Tethered Hollow
-Luminwings
-Passage Through Oblivion
-Blight Weaver
-Immolate
-Wasteland Holdout
-Abolish
-Sunset Chapel Rest
-Shadow March
-Key to the Moment
-Wake the Fallen
-Fading Farewell
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

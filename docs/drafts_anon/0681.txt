@@ -1,23 +1,23 @@
-Voidshield Guardian
-Harvester of Despair
-Defiant Holdout
-Dreadweaver
-Duskreaper
-Avatar of Cosmic Reckoning
-Deathwalker
-Dune Reaper
-Wasteland Tamer
-Blazepath Traveler
-Lumen Rover
-Urban Desperado
-Verdant Pioneer
-Glimmerwood Scout
-Prism Caller
-Lone Castaway
-Thundercatcher
-Bladefall
-Shattering Gambit
-The Grand Heist
-Pyrokinetic Surge
-Apocalypse
-Conjured Zenith
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

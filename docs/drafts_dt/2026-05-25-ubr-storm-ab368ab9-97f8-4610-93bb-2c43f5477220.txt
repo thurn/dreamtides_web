@@ -1,23 +1,23 @@
-Unbroken
-Blade of Oblivion
-Minstrel of Falling Light
-Key Sifter
-Dread Arbiter
-Guiding Light
-Unleashed Destruction
-Desperation
-Dawnblade Wanderer
-Spiral Offering
-Cascading Detonation
-Crimson Pilgrimage
-Archive of the Forgotten
-Path to Redemption
-Starfall Communion
-Twilight Troubadour
-Simulacra
-Return to Nowhere
-Broadcast Array
-Miraculous Arrival
-Echoes of the Journey
-Reunion
-Knowledge Restored
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored

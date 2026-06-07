@@ -1,22 +1,22 @@
-Dreadwood Emissary
-Blade of Oblivion
-Luminwings
-The Power Within
-Blightmaw
-Sunken Radiance
-Ancient Descent
-Blight Weaver
-Desperation
-Fell the Mighty
-Door to Possibility
-Shared Revelation
-Rootbound Witness
-Skies of Change
-Arc Gate Opening
-Hatching Ground
-Nebula's Wake
-Ridgecutter
-Archive of the Forgotten
-Cascade of Reflections
-Starfall Communion
-Call of the Lost
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost

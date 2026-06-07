@@ -1,21 +1,21 @@
-Oracle of Shifting Skies
-Architect of Memory
-Terminus
-Somber Flockmaster
-Cosmonaut of Tides
-Minstrel of Falling Light
-Key Sifter
-Miraculous Arrival
-Emberfang
-Dread Arbiter
-Pulse of Sacrifice
-Lurking Dread
-Lunar Hart
-Desperation
-Aurora Confluence
-Archive of the Forgotten
-Flash of Power
-Call of the Lost
-Broadcast Array
-Dreamscatter
-Echoes of Eternity
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

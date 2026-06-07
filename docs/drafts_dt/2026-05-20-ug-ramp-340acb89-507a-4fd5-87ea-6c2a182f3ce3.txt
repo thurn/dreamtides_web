@@ -1,23 +1,23 @@
-Starchaser
-Sunshadow Eagle
-Dawnprowler Panther
-Worldsong Behemoth
-Driftcaller Sovereign
-Selfless Rescuer
-Frostbound Defiant
-Emberwolf Triad
-Lumineth
-Mountainwatch Alpha
-Sage of the Prelude
-Blazing Emberwing
-Prophet of the Consumed
-Shatterpoint Agent
-Emerald Guardian
-Carrion Lord
-Spirit Bond
-Rebirth Ritualist
-Emberfang
-Annular Recall
-Melodist of the Finale
-Cindermarch
-Conduit of Resonance
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance

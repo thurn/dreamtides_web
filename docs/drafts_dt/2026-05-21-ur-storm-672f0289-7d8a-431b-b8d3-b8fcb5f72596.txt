@@ -1,23 +1,23 @@
-Terminus
-Dreadwood Emissary
-Barrage Specialist
-Miraculous Arrival
-Rebirth Ritualist
-Fangbound
-Guiding Light
-Starfall
-Epiphany Unfolded
-Call of Calamity
-Desperation
-Inverted Reflection
-Shared Revelation
-Spiral Offering
-Arc Gate Opening
-Nebula's Wake
-Packcaller of Shadows
-Archive of the Forgotten
-Across the Void
-Cascade of Reflections
-Call of the Lost
-Intermezzo Balladeer
-Surge of Fury
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury

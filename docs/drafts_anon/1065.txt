@@ -1,24 +1,24 @@
-Ambush Operative
-Voidshield Guardian
-Silent Observer
-Spirit Field Reclaimer
-Looming Oracle
-Sundown Surfer
-Oathbound Pair
-Revenant of the Lost
-Abyssal Enforcer
-Soulflame Predator
-Nomad of Endless Paths
-Urban Desperado
-Verdant Pioneer
-Glimmerwood Scout
-Flamestride Rider
-Invoker of Myths
-Passage Through Oblivion
-Epiphany Unfolded
-Lithic Severance
-Lightningborn
-Infernal Rest
-Bladefall
-The Grand Heist
-Heroic Rescue
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue

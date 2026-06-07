@@ -1,24 +1,24 @@
-Sunshadow Eagle
-Hallowed Stag
-Verdant Pilgrim
-Stoneborn Eternal
-Dawnprowler Panther
-Moonbound Wolf
-Frostbound Defiant
-Emberwolf Triad
-Mountainwatch Alpha
-Dreamvale Monarch
-Ghostlight Wolves
-Eternal Stag
-Wistful Angler
-Ashen Avenger
-Emerald Guardian
-Spirit Bond
-Emberfang
-Dreamcatcher's Call
-Celestial Reverie
-Packcaller of Shadows
-Luminous Ascent
-Cindermarch
-Conduit of Resonance
-Nexus Wayfinder
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

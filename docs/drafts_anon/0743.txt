@@ -1,26 +1,26 @@
-Demonbane
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Blade of Unity
-Verdant Pilgrim
-Ethereal Trailblazer
-Mystic Runefish
-Driftcaller Sovereign
-Dawnhorn Elder
-Cloudmantle Ray
-Celestial Lookout
-Veilseeker
-Lord of Hidden Paths
-Dusk Duelist
-Blazing Emberwing
-Winterbough Monk
-Sylvan Matriarch
-Wistful Angler
-Ashen Avenger
-Spirit Bond
-Spirit of the Greenwood
-Curio Dealer
-Cindermarch
-Conduit of Resonance
-Nexus Wayfinder
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

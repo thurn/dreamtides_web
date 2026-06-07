@@ -1,24 +1,24 @@
-Voidshield Guardian
-Apocalypse Vigilante
-Sundown Surfer
-Cloaked Sentinel
-Frost Visionary
-Oathbound Pair
-Boundless Wanderer
-Field Reverent
-Featherlight Summoner
-Duskmount
-Soulflame Predator
-Nomad of Endless Paths
-Blazepath Traveler
-Lumen Rover
-Urban Desperado
-Verdant Pioneer
-Call to the Unknown
-Grounded
-Lithic Severance
-Lightningborn
-Dawnblade Wanderer
-Shattering Gambit
-The Grand Heist
-Moment Rewound
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound

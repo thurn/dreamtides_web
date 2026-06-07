@@ -1,25 +1,25 @@
-Sandglider
-Inferno's Herald
-Ironclad Holdout
-Crucible Warlord
-Wreckland Maverick
-Looming Oracle
-Torn Circuit Feeder
-Titan of Forgotten Echoes
-Frost Visionary
-Iron Executor
-Dune Reaper
-Reclaimer of Lost Paths
-Boundless Wanderer
-Field Reverent
-Featherlight Summoner
-Urban Desperado
-Verdant Pioneer
-Call to the Unknown
-Emberfang
-Lone Castaway
-Shattering Gambit
-The Grand Heist
-Last Light Herald
-Skyflame Commander
-Twilight Suppressor
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor

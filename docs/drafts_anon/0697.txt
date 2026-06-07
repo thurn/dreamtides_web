@@ -1,23 +1,23 @@
-Dreaming Obelisk
-Gateweaver
-Pathfinder Adrift
-Conduit of Ashes
-Tethered Hollow
-Immolate and Rise
-Peak Plunder
-Blightmaw
-Lunar Hart
-Sanctum Approach
-Derelict Voyage
-Genesis Burst
-Vertiginous Leap
-Summons of the Bonded
-Moonlit Voyage
-Cascading Detonation
-Archive of the Forgotten
-Across the Void
-Key to the Moment
-Call of the Lost
-Intermezzo Balladeer
-Surge of Fury
-Broadcast Array
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

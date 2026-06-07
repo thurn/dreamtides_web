@@ -1,26 +1,26 @@
-Harrowing Officiant
-Hallowed Stag
-Ruin Scavenger
-Ethereal Trailblazer
-Worldsong Behemoth
-Searcher in the Mists
-Driftcaller Sovereign
-Dawnhorn Elder
-Scrapyard Custodian
-The Rising God
-Ashen Remnant
-The Dread Sovereign
-Duskwall Delver
-Wistful Angler
-Ashen Avenger
-Emerald Guardian
-Nightmare Manifest
-Forsaken Pact
-Maelstrom Denial
-Immolate
-Unleash Ruin
-Rite of Summoning
-Pathwalker
-Scrap Reclaimer
-Ashfront Lieutenant
-Marrow Drinker
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker

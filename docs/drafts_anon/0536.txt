@@ -1,17 +1,17 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Ambush Operative
-Voidshield Guardian
-Crucible Warlord
-Duskreaper
-Spirit Field Reclaimer
-Gatebound Warden
-Starlight Guide
-Oathbound Pair
-Revenant of the Lost
-Glimmerwood Scout
-Thundercatcher
-Shattering Gambit
-Wasteland Holdout
-Conjured Zenith
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

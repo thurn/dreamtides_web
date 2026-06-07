@@ -1,26 +1,26 @@
-Forgotten Titan
-Harborwarden
-Ambush Operative
-Tidecaller
-Wasteland Arbitrator
-Silent Avenger
-Ashen Remnant
-The Dread Sovereign
-Oathbound Pair
-Riftwalker
-Veil of the Wastes
-Volcanic Channeler
-Nightmare Manifest
-Immolate and Rise
-Peak Plunder
-Starfall
-Shatter the Frail
-Whisper of the Past
-Maelstrom Denial
-Collapse Protocol
-The Thinning
-Through the Rift
-Vertiginous Leap
-Door to Possibility
-Stolen Genesis
-Infernal Ascendant
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

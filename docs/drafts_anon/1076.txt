@@ -1,28 +1,28 @@
-Forgotten Titan
-Harborwarden
-Wasteland Arbitrator
-The Rising God
-Salvage Engine
-Pyre Challenger
-Thornwood Delver
-Riftwalker
-Silent Gatherer
-Fathomless Maw
-Kindlehorn
-Wandering Archivist
-Rubble Diviner
-Part the Veil
-Grotto Seer
-Graywatch
-Together Against the Tide
-Sunken Radiance
-Maelstrom Denial
-Derelict Voyage
-Fell the Mighty
-Immolate
-Spiral Offering
-Collateral Damage
-Seaside Requiem
-Scorched Reckoning
-Starfall Communion
-Torchbearer of the Abyss
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss

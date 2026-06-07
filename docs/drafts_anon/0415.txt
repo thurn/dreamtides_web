@@ -1,25 +1,25 @@
-Starchaser
-Hallowed Stag
-Verdant Pilgrim
-Vaultbreaker
-Worldsong Behemoth
-Mystic Runefish
-Cloudmantle Ray
-Skyborne Jellyfish
-Veilseeker
-Fern Treader
-Veil Crosser
-Rooftop Prophet
-Scorched Crusader
-Dreamvale Monarch
-Wreckage Prowler
-Astral Angler
-Shatterpoint Agent
-Sylvan Matriarch
-Ferryman of the Falls
-Lone Castaway
-Heavenward Penitent
-Lunar Hart
-Bloomweaver
-Clockwork Conductor
-Nexus Wayfinder
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

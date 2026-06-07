@@ -1,26 +1,26 @@
-Ambush Operative
-Inferno's Herald
-Tidecaller
-Silent Observer
-Seeker of the Radiant Wilds
-Wreckland Maverick
-Colossal Convergence
-Forsworn Champion
-Tranquil Duelist
-Featherlight Summoner
-Revenant of the Lost
-Blazepath Traveler
-Lumen Rover
-Gilded Catalyst
-Flamestride Rider
-Invoker of Myths
-Passage Through Oblivion
-Lithic Severance
-Blight Weaver
-Chronicle Reclaimer
-Radiants' Captain
-Marrow Mimic
-The Deathsworn
-Ossuary Overlord
-Forge Inheritor
-Aftermath Bloom
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom

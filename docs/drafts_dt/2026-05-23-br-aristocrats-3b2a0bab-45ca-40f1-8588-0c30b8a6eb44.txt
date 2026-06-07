@@ -1,23 +1,23 @@
-Unbroken
-Salvage Engine
-Cinderblade Legionnaire
-Avatar of Cosmic Reckoning
-Wandering Archivist
-Rubble Diviner
-Scuttled Fortune
-Wreckborn
-Rusted Monolith
-Vaultbreaker
-Fleeting Reunion
-Molten Duel
-Nebula's Wake
-Virtuoso of Harmony
-Saltless Mariner
-Obliterator of Worlds
-Forsaken Skyline
-Shadowbinder
-Keeper of the Lightpath
-Infernal Ascendant
-Starfall Communion
-Dreamscatter
-Echoes of Eternity
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

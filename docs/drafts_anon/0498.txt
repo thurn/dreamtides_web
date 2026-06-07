@@ -1,22 +1,22 @@
-Paradox Enforcer
-Searcher in the Mists
-Wasteland Arbitrator
-The Calling Night
-Dreadweaver
-Silent Avenger
-The Rising God
-Ashwalker
-Avatar of Cosmic Reckoning
-Riftwalker
-Veil of the Wastes
-Carrion Shepherd
-Scuttled Fortune
-Graywatch
-Soulreaver
-Volcanic Channeler
-Together Against the Tide
-Vertiginous Leap
-Stolen Genesis
-Collateral Damage
-Pyrokinetic Surge
-Burning Pursuit
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

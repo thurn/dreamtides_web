@@ -1,24 +1,24 @@
-Kindred Sparks
-Harvester of Despair
-Stargazer Adrift
-Ashborn Necromancer
-Enginespeaker
-Silent Avenger
-Cinderblade Legionnaire
-Duskwall Delver
-Avatar of Cosmic Reckoning
-Skull Weaver
-Deathwalker
-Veil of the Wastes
-Dawnrunner
-Scuttled Fortune
-Exiles of the Last Light
-Soulreaver
-Nightmare Manifest
-Dreaming Groves
-Lurking Dread
-Thundercatcher
-Lunar Hart
-Collateral Damage
-Pyrokinetic Surge
-Rite of Summoning
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning

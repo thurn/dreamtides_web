@@ -1,24 +1,24 @@
-Oracle of Shifting Skies
-Architect of Memory
-Meadowlight Charger
-Shadowprowler
-Pattern Seeker
-Cloaked Sentinel
-Frost Visionary
-Urban Desperado
-Verdant Pioneer
-Wreckborn
-Gilded Catalyst
-Glimpse of Infinity
-Seedling Sage
-Fangbound
-Sunken Radiance
-Unleashed Destruction
-Derelict Voyage
-Weight of Memory
-Dawnblade Wanderer
-Saltless Mariner
-Obliterator of Worlds
-Forsaken Skyline
-Starfall Communion
-Charnel Seraph
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

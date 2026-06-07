@@ -1,25 +1,25 @@
-Sorrowful Prince
-Oblivion Guide
-The Devourer
-Forgotten Titan
-Harborwarden
-Emberwatch Veteran
-Vessel of Echoes
-Dune Reaper
-Gleamharvester
-Shoreline Penitent
-Dreadweaver
-Salvage Engine
-Duskwall Delver
-Flagbearer of Decay
-Forgotten Factory Titan
-Fell the Mighty
-Weight of Memory
-Maelstrom Denial
-Desperation
-Call of Calamity
-Molten Duel
-Break the Veil
-Scorched Reckoning
-Hope's Vanguard
-Starfall Communion
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion

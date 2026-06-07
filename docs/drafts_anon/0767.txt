@@ -1,26 +1,26 @@
-Tidecaller
-Voidshield Guardian
-Seeker of the Radiant Wilds
-Avatar of Cosmic Reckoning
-Assault Leader
-Cloaked Sentinel
-Oathbound Pair
-Mirror Protocol
-Gateway Defender
-Reforged Automaton
-Inspiring Templar
-Urban Desperado
-Verdant Pioneer
-Flamestride Rider
-Invoker of Myths
-Seedling Sage
-Wolfbond Chieftain
-Blight Weaver
-Worldbreacher
-Dawnblade Wanderer
-Cragfall
-Spellweaver
-Crumbling Covenant
-Shadow Reflection
-Conjured Zenith
-Aftermath Bloom
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom

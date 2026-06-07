@@ -1,26 +1,26 @@
-Starchaser
-Ruin Scavenger
-Undying Fang
-Abomination of Memory
-Dawnhorn Elder
-Selfless Rescuer
-Veilseeker
-Veil Crosser
-Rooftop Prophet
-Starrunner
-Depthwalker
-Winterbough Monk
-Starsea Traveler
-Young Beastcaller
-Steel Abomination
-Wistful Angler
-Ashen Avenger
-Ferryman of the Falls
-Forsaken Pact
-Bloomweaver
-Eruption
-Virtuoso of Harmony
-Pathwalker
-Scrap Reclaimer
-Shadow March
-Clockwork Conductor
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor

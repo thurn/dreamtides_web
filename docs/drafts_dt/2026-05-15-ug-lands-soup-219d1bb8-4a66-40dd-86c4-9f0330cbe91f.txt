@@ -1,27 +1,27 @@
-Hallowed Stag
-Ethereal Trailblazer
-Undying Fang
-Abomination of Memory
-Wondrous Clearing
-Veilseeker
-Mountainwatch Alpha
-Starrunner
-Sage of the Prelude
-Wraith of Twisting Shadows
-Light of Emergence
-Starsea Traveler
-Ghostlight Wolves
-Eternal Stag
-Young Beastcaller
-Steel Abomination
-Wistful Angler
-Ashen Avenger
-Emerald Guardian
-The Forsaker
-Ruptured Dynamo
-Heavenward Penitent
-Lunar Hart
-Bloomweaver
-Radiant Trio
-Nexus Wayfinder
-Reunion
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

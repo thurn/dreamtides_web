@@ -1,27 +1,27 @@
-Ambush Operative
-Voidshield Guardian
-Dreadwood Emissary
-Keeper of the Tides
-Gatebound Warden
-Starlight Guide
-Frost Visionary
-Oathbound Pair
-Cosmic Puppeteer
-Veilpiercer
-Featherlight Summoner
-Revenant of the Lost
-Blazepath Traveler
-Lumen Rover
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Clockwork Prodigy
-Echoing Denial
-Null Sphere
-Epiphany Unfolded
-Lithic Severance
-Bladefall
-Shattering Gambit
-Veil Shatter
-Wasteland Holdout
-Ripple Through Reality
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality

@@ -1,23 +1,23 @@
-Starchaser
-Voidshield Guardian
-Silent Observer
-Selfless Rescuer
-Spirit Field Reclaimer
-Looming Oracle
-Torn Circuit Feeder
-Titan of Forgotten Echoes
-Scorched Crusader
-Oathbound Pair
-Reclaimer of Lost Paths
-Featherlight Summoner
-Endless Projection
-Nocturne
-Sylvan Matriarch
-Urban Desperado
-Verdant Pioneer
-Lone Castaway
-Passage Through Oblivion
-Lunar Hart
-Bladefall
-Through the Rift
-Radiant Trio
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio

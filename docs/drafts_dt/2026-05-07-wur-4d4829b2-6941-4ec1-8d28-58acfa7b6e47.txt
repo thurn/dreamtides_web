@@ -1,25 +1,25 @@
-Terminus
-Rift Pilgrim
-Cosmic Puppeteer
-Miraculous Arrival
-Lone Castaway
-Toll of Passage
-Molten Duel
-Ironclad Marksman
-Burst of Obliteration
-Ancient Descent
-Momentum of the Fallen
-Hatching Ground
-Sanctum Awakened
-Sunset Chapel Rest
-Nightmare
-Phantom Flotilla
-Starfall Communion
-Twilight Troubadour
-Simulacra
-Wake the Fallen
-Call of the Lost
-Fading Farewell
-Intermezzo Balladeer
-Dreamscatter
-Echoes of Eternity
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

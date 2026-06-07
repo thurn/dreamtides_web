@@ -1,12 +1,12 @@
-Saffron Trailblazer
-The Devourer
-Scrapyard Custodian
-Echo Architect
-Cinderheart
-Riftwalker
-Vaultbreaker
-Fleeting Reunion
-Spent Courier
-Seaside Requiem
-Twilight Suppressor
-Flash of Power
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power

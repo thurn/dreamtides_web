@@ -1,21 +1,21 @@
-Somber Flockmaster
-Gateweaver
-Pilgrim of Old Stones
-Minstrel of Falling Light
-Key Sifter
-Null Sphere
-Unleashed Destruction
-Fell the Mighty
-Fell Swoop
-Ridgecutter
-Crumbling Covenant
-Crimson Pilgrimage
-Scorched Reckoning
-Sunset Chapel Rest
-Forsaken Skyline
-Ripple of Defiance
-Twice-Lit Portal
-Return to Nowhere
-Clockwork Prodigy
-Echoing Denial
-Knowledge Restored
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored

@@ -1,24 +1,24 @@
-Ambush Operative
-Starchaser
-Hallowed Stag
-Ebonwing
-Verdant Pilgrim
-Selfless Rescuer
-Wondrous Clearing
-Cloudmantle Ray
-Scorched Crusader
-Iron Executor
-Winterbough Monk
-Starsea Traveler
-Emerald Guardian
-Specter of Silent Snow
-The Forsaker
-Ruptured Dynamo
-Dreamcatcher's Call
-Fleeting Reunion
-Sunken Radiance
-Duneveil Vanguard
-Bloomweaver
-Cindermarch
-Conduit of Resonance
-Keeper of Forgotten Light
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

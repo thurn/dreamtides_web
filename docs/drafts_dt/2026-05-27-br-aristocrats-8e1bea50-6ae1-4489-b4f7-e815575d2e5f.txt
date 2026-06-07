@@ -1,44 +1,44 @@
-Sorrowful Prince
-Oblivion Guide
-Demonbane
-Emberwatch Veteran
-Vessel of Echoes
-Sorrow Watcher
-Tidewreck Navigator
-Vaultbreaker
-Flagbearer of Decay
-Shadowprowler
-Pattern Seeker
-Verdant Wayfarer
-Urban Cipher
-Enginespeaker
-Pyre Challenger
-Thornwood Delver
-Wasteland Arbitrator
-Salvage Engine
-Wandering Archivist
-Rubble Diviner
-Part the Veil
-Grotto Seer
-Dragonward
-Rusted Monolith
-Shadowcaller
-Ferryman's Tithe
-Molten Duel
-The Power Within
-Aurora Confluence
-Shadowpaw
-Shatter the Frail
-Whisper of the Past
-Immolate and Rise
-Peak Plunder
-Rootbound Witness
-Skies of Change
-Saltless Mariner
-Obliterator of Worlds
-Rite of Summoning
-Pyrokinetic Surge
-Void Pilgrim
-Fathomscourge
-Smoldering Ancient
-Torchbearer of the Abyss
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss

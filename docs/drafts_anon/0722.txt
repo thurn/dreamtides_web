@@ -1,24 +1,24 @@
-Inferno's Herald
-Kindred Sparks
-Emberwatch Veteran
-Vessel of Echoes
-Shadowprowler
-Pattern Seeker
-The Calling Night
-Pyre Challenger
-Thornwood Delver
-Wasteland Tamer
-Riftwalker
-Veil of the Wastes
-Fathomless Maw
-Kindlehorn
-Graywatch
-Dreaming Groves
-Derelict Voyage
-Fractured Vessel
-Ecliptic Vantage
-Immolate
-Pyrokinetic Surge
-Fathomscourge
-Smoldering Ancient
-Burning Pursuit
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

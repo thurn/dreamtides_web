@@ -1,27 +1,27 @@
-Aspiring Guardian
-Tidecaller
-Dreadmount Sovereign
-Sigil Analyst
-Company Commander
-Starbound Striker
-Nineborn Specter
-Tranquil Duelist
-Infernal Cavalier
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Pyrewatcher
-Emberfang
-Conduit of Ashes
-Clockwork Prodigy
-Echoing Denial
-Tethered Hollow
-Luminwings
-Fractured Vessel
-Worldbreacher
-Marrow Mimic
-Standard Bearer
-The Deathsworn
-Shadow Reflection
-Aftermath Bloom
-Spirit Reaping
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

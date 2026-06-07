@@ -1,25 +1,25 @@
-Starchaser
-Abomination of Memory
-Overstory Explorer
-Scorched Crusader
-Depthwalker
-Wreckage Prowler
-Astral Angler
-Wraith of Twisting Shadows
-Light of Emergence
-Young Beastcaller
-Steel Abomination
-Carrion Lord
-Specter of Silent Snow
-Forsaken Pact
-Grounded
-Chronicle Reclaimer
-Radiants' Captain
-Weight of Memory
-Bloomweaver
-Summons of the Bonded
-Virtuoso of Harmony
-Shadow March
-Aftermath Bloom
-Clockwork Conductor
-Keeper of Forgotten Light
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

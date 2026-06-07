@@ -1,27 +1,27 @@
-Oracle of Shifting Skies
-Architect of Memory
-The Devourer
-Echo Architect
-Verdant Wayfarer
-Urban Cipher
-Somber Flockmaster
-Gateweaver
-Gleamharvester
-Shoreline Penitent
-Minstrel of Falling Light
-Key Sifter
-Part the Veil
-Grotto Seer
-Glimpse of Infinity
-Clockwork Prodigy
-Echoing Denial
-Molten Duel
-Gleam Below
-Harvest the Forgotten
-Derelict Voyage
-Fell the Mighty
-Momentum of the Fallen
-Crimson Pilgrimage
-Scorched Reckoning
-Fractured Veil
-Return to Nowhere
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

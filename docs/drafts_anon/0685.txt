@@ -1,33 +1,33 @@
-Aspiring Guardian
-Sandglider
-Ironclad Holdout
-Silent Observer
-Lanternhearted
-Starbound Striker
-Seeker for the Way
-Assault Leader
-Reforged Automaton
-Burning Revenant
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Grim Reclaimer
-Voidsire
-Wired Duelist
-Flamestride Rider
-Invoker of Myths
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Prism Caller
-Tethered Hollow
-Genesis Burst
-Dawnblade Wanderer
-The Grand Heist
-The Deathsworn
-Soulrender
-Cindermarch
-Conduit of Resonance
-Aftermath Bloom
-Intermezzo Balladeer
-Spirit Reaping
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

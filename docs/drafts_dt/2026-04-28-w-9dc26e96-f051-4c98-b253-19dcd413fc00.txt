@@ -1,27 +1,27 @@
-Crucible Warlord
-Spirit Field Reclaimer
-Gatebound Warden
-Starlight Guide
-Colossal Convergence
-Forsworn Champion
-Cloaked Sentinel
-Oathbound Pair
-Dune Reaper
-Mirror Protocol
-Vault Infiltrator
-Reforged Automaton
-Blazepath Traveler
-Lumen Rover
-Urban Desperado
-Verdant Pioneer
-Call to the Unknown
-Flamestride Rider
-Invoker of Myths
-Glimpse of Infinity
-Luminwings
-Grounded
-Thundercatcher
-Fractured Vessel
-Mirrorlight Architect
-Immolate
-Forge Inheritor
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor

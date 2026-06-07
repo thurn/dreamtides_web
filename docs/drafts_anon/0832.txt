@@ -1,22 +1,22 @@
-Oracle of Shifting Skies
-Architect of Memory
-The Ringleader
-Conduit of Ashes
-Clockwork Prodigy
-Echoing Denial
-Twice-Lit Portal
-The Power Within
-Molten Duel
-Canopy of Stars
-Fell the Mighty
-Genesis Burst
-Fell Swoop
-Spiral Offering
-Arc Gate Opening
-Nebula's Wake
-Data Pulse
-Archive of the Forgotten
-Cascade of Reflections
-From the Barrow
-Call of the Lost
-Surge of Fury
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury

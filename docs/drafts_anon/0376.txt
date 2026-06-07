@@ -1,26 +1,26 @@
-Sandglider
-Inferno's Herald
-Dreaming Obelisk
-Fern Treader
-Tranquil Duelist
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Pulse of Sacrifice
-The Power Within
-Blightmaw
-Starfall
-Blight Weaver
-Door to Possibility
-The Deathsworn
-Lanternwood Scout
-Ossuary Overlord
-Spellweaver
-Fathomscourge
-Smoldering Ancient
-Moment Rewound
-Aftermath Bloom
-Arc Disciple
-Starfall Communion
-Twilight Troubadour
-Simulacra
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra

@@ -1,22 +1,22 @@
-Shadowprowler
-Pattern Seeker
-Keeper of the Tides
-Pit Descender
-Pathfinder Adrift
-Gleamharvester
-Shoreline Penitent
-Dragonward
-Threadbreaker
-Tethered Hollow
-Junkfield Renegade
-Null Sphere
-Starshot Gunner
-Knowledge Restored
-Derelict Voyage
-Fury of the Clan
-Shared Revelation
-Cragfall
-Ripple Through Reality
-Seaside Requiem
-Crimson Pilgrimage
-Return to Nowhere
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

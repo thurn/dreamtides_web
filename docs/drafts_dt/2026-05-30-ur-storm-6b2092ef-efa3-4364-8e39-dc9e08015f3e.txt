@@ -1,22 +1,22 @@
-Echo Architect
-Pyrewatcher
-Miraculous Arrival
-Conduit of Ashes
-Ripple of Defiance
-Wolfbond Chieftain
-Twice-Lit Portal
-Sunken Radiance
-Lunar Hart
-Ecliptic Vantage
-Fell Swoop
-Arc Gate Opening
-Cascading Detonation
-Crimson Pilgrimage
-Moment Rewound
-Archive of the Forgotten
-Sunset Chapel Rest
-Return to Nowhere
-Intermezzo Balladeer
-Surge of Fury
-Broadcast Array
-Reunion
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

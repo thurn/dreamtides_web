@@ -1,25 +1,25 @@
-Voidshield Guardian
-Liminal Dreamer
-Crucible Warlord
-Spirit Field Reclaimer
-Gatebound Warden
-Starlight Guide
-Boundless Wanderer
-Field Reverent
-Dragonward
-Woodland Apparition
-Soulflame Predator
-Nomad of Endless Paths
-Call to the Unknown
-Glimmerwood Scout
-Prism Caller
-Seedling Sage
-Fangbound
-Grounded
-Molten Duel
-Bladefall
-Weight of Memory
-Veil Shatter
-Mirrorlight Architect
-Last Light Herald
-Skyflame Commander
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander

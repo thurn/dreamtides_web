@@ -1,31 +1,31 @@
-Together Against the Tide
-Saffron Trailblazer
-Wreckheap Survivor
-Crucible Warlord
-Oathbound Pair
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Dawnrunner
-Riftwalker
-Avatar of Cosmic Reckoning
-Frost Visionary
-Cloaked Sentinel
-Blazepath Traveler
-Lumen Rover
-Nocturne
-Wraith of Twisting Shadows
-Light of Emergence
-Abyssal Enforcer
-Gilded Catalyst
-Shatterpoint Agent
-Boundless Wanderer
-Field Reverent
-Endless Projection
-Veilpiercer
-Prophet of the Consumed
-Duskmount
-Maelstrom Denial
-Passage Through Oblivion
-Dawnblade Wanderer
-Veil Shatter
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter

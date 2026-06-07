@@ -1,31 +1,31 @@
-Sandglider
-Dreadmount Sovereign
-Sigil Analyst
-Ironclad Holdout
-Company Commander
-Pyre Challenger
-Thornwood Delver
-Nineborn Specter
-Sundown Surfer
-Mirror Protocol
-Forgotten Factory Titan
-Enginespeaker
-Grim Reclaimer
-Voidsire
-Wired Duelist
-Boundless Wanderer
-Field Reverent
-Inspiring Templar
-Call to the Unknown
-Wolfbond Chieftain
-Lightningborn
-Thundercatcher
-Toll of Passage
-Abolish
-Wasteland Holdout
-Last Light Herald
-Skyflame Commander
-Moment Rewound
-Aftermath Bloom
-Shadow March
-Wake the Fallen
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

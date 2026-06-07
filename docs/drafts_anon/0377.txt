@@ -1,36 +1,36 @@
-Augur Crow
-Entropy Spike
-Verdant Pilgrim
-Vaultbreaker
-Echo Architect
-The Rising God
-Seeker of the Radiant Wilds
-Gateweaver
-The Calling Night
-Vault Infiltrator
-Deathwalker
-Twilight Reclaimer
-Cinderfang
-Soulreaver
-Carrion Lord
-Rusted Monolith
-Standoff
-Canopy of Stars
-Fragments of Vision
-Lurking Dread
-Duneveil Vanguard
-Vertiginous Leap
-Starfall
-Spiral Offering
-Forge Inheritor
-Eruption
-Virtuoso of Harmony
-Moment Rewound
-Nebula's Wake
-Shared Revelation
-Melodist of the Finale
-Desolation's Edge
-Wheel of the Heavens
-Across the Void
-Broadcast Array
-From the Barrow
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow

@@ -1,27 +1,27 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Tidecaller
-Entropy Spike
-Stargazer Adrift
-The Calling Night
-Salvage Engine
-Spirit Field Reclaimer
-Wreckland Maverick
-Sundown Surfer
-Avatar of Cosmic Reckoning
-Skull Weaver
-Pallid Arbiter
-Dawnrunner
-Revenant of the Lost
-Blazepath Traveler
-Lumen Rover
-Soulreaver
-Emberfang
-Dread Arbiter
-Tethered Hollow
-Fractured Vessel
-Veil Shatter
-Apocalypse
-Forge Inheritor
-Warfield Stalwart
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart

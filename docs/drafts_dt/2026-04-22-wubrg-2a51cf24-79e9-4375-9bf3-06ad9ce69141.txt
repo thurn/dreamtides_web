@@ -1,27 +1,27 @@
-Augur Crow
-Soulkindler
-Unquenched
-Pyrestone Avatar
-Pinnacle Ascendant
-Driftcaller Sovereign
-Frostbound Defiant
-Emberwolf Triad
-Forgotten Factory Titan
-Ashborn Necromancer
-Enginespeaker
-Doorlight Foundling
-Skull Weaver
-Scorched Crusader
-Dreamvale Monarch
-Vortex Claimant
-Nocturne
-Sylvan Matriarch
-Young Beastcaller
-Soulreaver
-Grounded
-Eruption
-Crumbling Behemoth
-Beacon of Tomorrow
-Scorched Reckoning
-Forsaken Skyline
-Twilight Suppressor
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor

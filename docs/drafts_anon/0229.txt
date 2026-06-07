@@ -1,24 +1,24 @@
-Sorrow Watcher
-Tidewreck Navigator
-Signal Resonant
-Dreadwood Emissary
-Keeper of the Tides
-Resilient Wanderer
-Driftrider
-Thronebound Arbiter
-Immolate and Rise
-Peak Plunder
-Rootspring Summons
-Together Against the Tide
-Dreaming Groves
-Starshot Gunner
-Guiding Light
-Starfall
-Gleam Below
-Harvest the Forgotten
-Collapse Protocol
-The Thinning
-Ecliptic Vantage
-Pyrokinetic Surge
-Moonlit Voyage
-Rite of Summoning
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning

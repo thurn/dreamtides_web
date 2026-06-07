@@ -1,28 +1,28 @@
-Saffron Trailblazer
-Meadowlight Charger
-Crucible Warlord
-Spirit Field Reclaimer
-Colossal Convergence
-Forsworn Champion
-Cloaked Sentinel
-Reforged Automaton
-Dragonward
-Fargazer
-Angel of the Eclipse
-Soulflame Predator
-Nomad of Endless Paths
-Urban Desperado
-Verdant Pioneer
-Call to the Unknown
-Glimpse of Infinity
-Luminwings
-Junkfield Renegade
-Lightningborn
-Unleashed Destruction
-Fury of the Clan
-Shattering Gambit
-Rootbound Witness
-Skies of Change
-Forge Inheritor
-Shadow Reflection
-Forsaken Skyline
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline

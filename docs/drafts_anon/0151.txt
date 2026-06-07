@@ -1,25 +1,25 @@
-Augur Crow
-Ethereal Courser
-Ethereal Trailblazer
-Dawnprowler Panther
-Moonbound Wolf
-Worldsong Behemoth
-Dawnhorn Elder
-Blazebound Sentinel
-Mountainwatch Alpha
-Dreamvale Monarch
-Starrunner
-Lord of Hidden Paths
-Emerald Guardian
-Spirit Bond
-Spirit of the Greenwood
-Dreamcatcher's Call
-Celestial Reverie
-Curio Dealer
-Crumbling Behemoth
-Beacon of Tomorrow
-Packcaller of Shadows
-Lumin-Gate Seer
-Cindermarch
-Conduit of Resonance
-Roots of Rebirth
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

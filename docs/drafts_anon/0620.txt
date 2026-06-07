@@ -1,28 +1,28 @@
-Harrowing Officiant
-Ethereal Trailblazer
-Stoneborn Eternal
-Moonbound Wolf
-Mystic Runefish
-Dawnhorn Elder
-Frostbound Defiant
-Emberwolf Triad
-Wondrous Clearing
-Blazebound Sentinel
-Celestial Lookout
-Sky Voyager
-Voidcaller
-Mountainwatch Alpha
-Fern Treader
-Doorlight Foundling
-Sage of the Prelude
-Wraith of Twisting Shadows
-Light of Emergence
-Ghostlight Wolves
-Eternal Stag
-Emerald Guardian
-Carrion Lord
-Spirit Bond
-Glimpse of Infinity
-Celestial Reverie
-Cindermarch
-Conduit of Resonance
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance

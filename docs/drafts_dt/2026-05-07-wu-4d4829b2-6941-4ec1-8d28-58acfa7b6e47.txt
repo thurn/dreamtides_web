@@ -1,23 +1,23 @@
-Ambush Operative
-Ethereal Courser
-Planetgazer
-Crucible Warlord
-Dreadwood Emissary
-Keeper of the Tides
-Looming Oracle
-Titan of Forgotten Echoes
-Vanishing Inquisitor
-Frost Visionary
-Veilpiercer
-Nocturne
-Duskmount
-Soulflame Predator
-Nomad of Endless Paths
-Blazepath Traveler
-Lumen Rover
-Emberfang
-Bladefall
-Shattering Gambit
-Wasteland Holdout
-Ripple Through Reality
-Heroic Rescue
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue

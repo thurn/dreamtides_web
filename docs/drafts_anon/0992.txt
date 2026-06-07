@@ -1,27 +1,27 @@
-The Devourer
-Meadowlight Charger
-Liminal Dreamer
-Shadowprowler
-Pattern Seeker
-Somber Flockmaster
-Seeker for the Way
-Sundown Surfer
-Frost Visionary
-Oathbound Pair
-Gleamharvester
-Shoreline Penitent
-Dragonward
-Soulflame Predator
-Nomad of Endless Paths
-Flamestride Rider
-Invoker of Myths
-Prism Caller
-Unleashed Destruction
-Infernal Rest
-Fell the Mighty
-Bladefall
-The Grand Heist
-Mirrorlight Architect
-Void Pilgrim
-Forsaken Skyline
-Conjured Zenith
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

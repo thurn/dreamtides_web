@@ -1,22 +1,22 @@
-Sorrowful Prince
-Oblivion Guide
-Oracle of Shifting Skies
-Architect of Memory
-Liminal Dreamer
-Unbroken
-The Calling Night
-Cinderblade Legionnaire
-Gleamharvester
-Shoreline Penitent
-Carrion Shepherd
-Wreckborn
-Molten Duel
-Maelstrom Denial
-Unleashed Destruction
-Derelict Voyage
-Fell the Mighty
-Weight of Memory
-Fury of the Clan
-Pyrokinetic Surge
-Charnel Seraph
-Burning Pursuit
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

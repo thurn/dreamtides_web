@@ -1,27 +1,27 @@
-Oracle of Shifting Skies
-Architect of Memory
-Scrapyard Custodian
-Liminal Dreamer
-Wreckheap Survivor
-Dreadweaver
-Sundown Surfer
-Duskwall Delver
-Avatar of Cosmic Reckoning
-Dune Reaper
-Riftwalker
-Nightmare Manifest
-Emberfang
-Dreaming Groves
-Derelict Voyage
-Desperation
-Stolen Genesis
-Wasteland Holdout
-Standard Bearer
-Borrowed Minutes
-Fathomscourge
-Smoldering Ancient
-Saltless Mariner
-Obliterator of Worlds
-Twilight Suppressor
-Torchbearer of the Abyss
-Burning Pursuit
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

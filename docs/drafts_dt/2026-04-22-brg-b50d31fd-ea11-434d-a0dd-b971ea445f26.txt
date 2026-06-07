@@ -1,26 +1,26 @@
-Soulbinder
-Vaultbreaker
-Herald of the Last Light
-Enginespeaker
-Silent Avenger
-Ashen Remnant
-The Dread Sovereign
-Avatar of Cosmic Reckoning
-Skull Weaver
-Starrunner
-Dawnrunner
-Fathomless Maw
-Kindlehorn
-Dragonward
-Soulreaver
-Embersummoner
-Shardwoven Tyrant
-Rusted Monolith
-Volcanic Channeler
-Curio Dealer
-Collateral Damage
-Melodist of the Finale
-Phantasmal Recruiter
-Saltless Mariner
-Obliterator of Worlds
-Infernal Ascendant
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

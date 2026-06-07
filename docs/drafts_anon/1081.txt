@@ -1,23 +1,23 @@
-Breach Artist
-Scrapyard Custodian
-Planetgazer
-Northlight Maestro
-Dreadwood Emissary
-Assault Leader
-Pathfinder Adrift
-Driftrider
-Thronebound Arbiter
-Sundown Ronin
-Glimpse of Infinity
-Spirit of the Greenwood
-Ripple of Defiance
-Rootspring Summons
-Together Against the Tide
-Gleam Below
-Door to Possibility
-Cragfall
-Forge Inheritor
-Crumbling Covenant
-Dreadcall Warden
-Last Beacon
-Surge of Fury
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury

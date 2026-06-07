@@ -1,23 +1,23 @@
-Tidecaller
-Dreadmount Sovereign
-Sigil Analyst
-Company Commander
-Fern Treader
-Burning Revenant
-Infernal Cavalier
-Wired Duelist
-Sundown Ronin
-Rebirth Ritualist
-Emberfang
-Wolfbond Chieftain
-Junkfield Renegade
-Lightningborn
-Worldbreacher
-Standard Bearer
-The Deathsworn
-Ossuary Overlord
-Last Light Herald
-Skyflame Commander
-Shadow March
-Fading Farewell
-Spirit Reaping
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

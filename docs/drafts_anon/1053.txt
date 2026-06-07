@@ -1,22 +1,22 @@
-Kindred Sparks
-Searcher in the Mists
-Harvester of Despair
-Scrapyard Custodian
-Entropy Spike
-Ashborn Necromancer
-Wasteland Arbitrator
-Dreadweaver
-Silent Avenger
-Duskreaper
-Salvage Engine
-Gatebound Warden
-Starlight Guide
-Deathwalker
-Revenant of the Lost
-Carrion Shepherd
-Starfall
-Collateral Damage
-Borrowed Minutes
-Warfield Stalwart
-Conjured Zenith
-Infernal Ascendant
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

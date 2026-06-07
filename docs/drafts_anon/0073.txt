@@ -1,23 +1,23 @@
-Demonbane
-Sandglider
-Dreaming Obelisk
-Seeker for the Way
-Pit Descender
-Mirror Protocol
-Burning Revenant
-Grim Reclaimer
-Voidsire
-Wired Duelist
-Prism Caller
-Spent Courier
-Junkfield Renegade
-Blightmaw
-Ironclad Marksman
-Blight Weaver
-Ochre Prospector
-Worldbreacher
-The Deathsworn
-Rite of Summoning
-Shadow March
-Return to Nowhere
-Spirit Reaping
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

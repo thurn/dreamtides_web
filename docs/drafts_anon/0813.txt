@@ -1,27 +1,27 @@
-Blade of Unity
-Sandglider
-Dreadmount Sovereign
-Sigil Analyst
-Colossal Convergence
-Forsworn Champion
-Assault Leader
-Starbound Striker
-Reforged Automaton
-Burning Revenant
-Wired Duelist
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Dread Arbiter
-Ripple of Defiance
-Luminwings
-Worldbreacher
-Genesis Burst
-Inverted Reflection
-Desolation's Edge
-Cragfall
-Last Light Herald
-Skyflame Commander
-Spellweaver
-Crumbling Covenant
-Key to the Moment
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment

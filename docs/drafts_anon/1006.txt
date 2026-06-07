@@ -1,23 +1,23 @@
-Tidecaller
-Searcher in the Mists
-Harvester of Despair
-Scrapyard Custodian
-Wreckheap Survivor
-Silent Avenger
-Cinderblade Legionnaire
-Duskwall Delver
-Avatar of Cosmic Reckoning
-Deathwalker
-Dune Reaper
-Riftwalker
-Dawnrunner
-Scuttled Fortune
-Dustborn Veteran
-Soulreaver
-Volcanic Channeler
-Lurking Dread
-Thundercatcher
-Last Light Herald
-Skyflame Commander
-Charnel Seraph
-Burning Pursuit
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

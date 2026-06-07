@@ -1,22 +1,22 @@
-Echo Architect
-The Ringleader
-Pyrewatcher
-Fangbound
-Fragments of Vision
-Guiding Light
-Starfall
-Desperation
-Genesis Burst
-Inverted Reflection
-Rite of Summoning
-Data Pulse
-Cascading Detonation
-Ridgecutter
-Archive of the Forgotten
-A New Adventure
-Across the Void
-Path to Redemption
-Flash of Power
-Key to the Moment
-Intermezzo Balladeer
-Echoes of the Journey
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

@@ -1,23 +1,23 @@
-Terminus
-Barrage Specialist
-Minstrel of Falling Light
-Key Sifter
-Miraculous Arrival
-Conduit of Ashes
-Fangbound
-Pulse of Sacrifice
-Desperation
-Genesis Burst
-Marrow Mimic
-Arc Gate Opening
-Hatching Ground
-Nebula's Wake
-Archive of the Forgotten
-A New Adventure
-Across the Void
-Path to Redemption
-Key to the Moment
-Intermezzo Balladeer
-Broadcast Array
-Echoes of the Journey
-Reunion
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

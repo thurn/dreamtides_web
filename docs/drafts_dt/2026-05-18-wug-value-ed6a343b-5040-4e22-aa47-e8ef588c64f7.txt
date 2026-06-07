@@ -1,23 +1,23 @@
-Ethereal Courser
-Worldsong Behemoth
-Driftcaller Sovereign
-Wondrous Clearing
-Gatebound Warden
-Starlight Guide
-Looming Oracle
-Doorlight Foundling
-Frost Visionary
-Starrunner
-Abyssal Enforcer
-Shatterpoint Agent
-Duskmount
-Glimmerwood Scout
-Emerald Guardian
-Threadbreaker
-Ripple of Defiance
-Passage Through Oblivion
-Lunar Hart
-Bladefall
-Momentum of the Fallen
-Break the Sequence
-Radiant Trio
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio

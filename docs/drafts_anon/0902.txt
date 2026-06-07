@@ -1,22 +1,22 @@
-Forgotten Titan
-Harborwarden
-Kindred Sparks
-The Rising God
-Cinderheart
-Duskwall Delver
-Deathwalker
-Wasteland Tamer
-Riftwalker
-Fathomless Maw
-Kindlehorn
-Standoff
-Immolate and Rise
-Peak Plunder
-Together Against the Tide
-Dreaming Groves
-Lurking Dread
-Starfall
-Lunar Hart
-Maelstrom Denial
-Derelict Voyage
-Pyrokinetic Surge
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge

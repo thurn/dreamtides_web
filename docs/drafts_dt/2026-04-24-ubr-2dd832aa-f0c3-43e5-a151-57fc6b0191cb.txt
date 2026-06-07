@@ -1,19 +1,19 @@
-Oracle of Shifting Skies
-Architect of Memory
-Terminus
-Somber Flockmaster
-Conduit of Ashes
-Clockwork Prodigy
-Echoing Denial
-Pulse of Sacrifice
-Together Against the Tide
-Starfall
-Desperation
-Door to Possibility
-Secrets of the Deep
-Shared Revelation
-Pyrokinetic Surge
-Archive of the Forgotten
-Cascade of Reflections
-From the Barrow
-Call of the Lost
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost

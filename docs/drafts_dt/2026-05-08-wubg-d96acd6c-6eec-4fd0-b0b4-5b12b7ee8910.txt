@@ -1,22 +1,22 @@
-Wondrous Clearing
-Ashborn Necromancer
-Lumineth
-Scorched Crusader
-Frost Visionary
-Oathbound Pair
-Vortex Claimant
-Still Dreamer
-Reclaimer of Lost Paths
-Veilpiercer
-Abyssal Enforcer
-Duskmount
-Soulflame Predator
-Nomad of Endless Paths
-Call to the Unknown
-Glimmerwood Scout
-Lone Castaway
-Molten Duel
-Collateral Damage
-Rite of Summoning
-Moment Rewound
-Fractured Veil
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil

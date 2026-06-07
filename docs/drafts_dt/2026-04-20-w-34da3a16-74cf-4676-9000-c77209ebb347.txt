@@ -1,26 +1,26 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Inferno's Herald
-Saffron Trailblazer
-Crucible Warlord
-Company Commander
-Spirit Field Reclaimer
-Colossal Convergence
-Forsworn Champion
-Sundown Surfer
-Assault Leader
-Oathbound Pair
-Reforged Automaton
-Featherlight Summoner
-Gilded Catalyst
-Flamestride Rider
-Invoker of Myths
-Dread Arbiter
-Luminwings
-Lone Castaway
-Lightningborn
-Thundercatcher
-Last Light Herald
-Skyflame Commander
-Spellweaver
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver

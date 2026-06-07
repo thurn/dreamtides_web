@@ -65,13 +65,20 @@ const IDF4_SIG = {
 };
 
 // The support metadata shape this variant reads from buildaround_support.json.
+// It is keyed by each card's stable id UUID and carries the current card name in
+// `name`; this variant works in card-name space, so it indexes entries by name.
+interface SupportEntry {
+  name: string;
+  needs?: { theme: string; tier: number }[];
+  supports?: string[];
+}
 interface SupportMeta {
-  cards: Record<
-    string,
-    { needs?: { theme: string; tier: number }[]; supports?: string[] }
-  >;
+  cards: Record<string, SupportEntry>;
 }
 const META = supportMeta as SupportMeta;
+const SUPPORT_BY_NAME = new Map<string, SupportEntry>(
+  Object.values(META.cards).map((entry) => [entry.name, entry]),
+);
 
 // Self-adequacy of one raw decklist: treat it as a pool (copies capped at 2) and,
 // for each payoff instance it carries (a card whose `needs` is non-empty, once per
@@ -93,7 +100,7 @@ function deckSelfAdequacy(deck: readonly string[]): number | null {
   // Support copies available per theme across the whole deck-pool.
   const supportCopies = new Map<string, number>();
   for (const [name, copies] of counts) {
-    const entry = META.cards[name];
+    const entry = SUPPORT_BY_NAME.get(name);
     if (!entry) continue;
     for (const theme of entry.supports ?? []) {
       supportCopies.set(theme, (supportCopies.get(theme) ?? 0) + copies);
@@ -102,7 +109,7 @@ function deckSelfAdequacy(deck: readonly string[]): number | null {
 
   const adequacies: number[] = [];
   for (const [name, copies] of counts) {
-    const entry = META.cards[name];
+    const entry = SUPPORT_BY_NAME.get(name);
     if (!entry || !(entry.needs ?? []).length) continue;
     for (const need of entry.needs ?? []) {
       const target = TIER_TARGET[need.tier];

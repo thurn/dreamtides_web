@@ -1,28 +1,28 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Dreadmount Sovereign
-Sigil Analyst
-Seeker of the Radiant Wilds
-Pallid Arbiter
-Starbound Striker
-Vault Infiltrator
-Grim Reclaimer
-Voidsire
-Blazepath Traveler
-Lumen Rover
-Prism Caller
-Rebirth Ritualist
-Conduit of Ashes
-Tethered Hollow
-Luminwings
-Fangbound
-Chronicle Reclaimer
-Radiants' Captain
-Worldbreacher
-Through the Rift
-Shattering Gambit
-Marrow Mimic
-Wasteland Holdout
-The Deathsworn
-Spellweaver
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver

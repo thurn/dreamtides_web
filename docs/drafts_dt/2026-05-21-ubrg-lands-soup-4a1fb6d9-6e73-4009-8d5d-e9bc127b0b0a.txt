@@ -1,25 +1,25 @@
-Starchaser
-Frostbound Defiant
-Emberwolf Triad
-Cloudmantle Ray
-Blazebound Sentinel
-Overstory Explorer
-Skyborne Jellyfish
-Mountainwatch Alpha
-Doorlight Foundling
-Sage of the Prelude
-Dusk Duelist
-Winterbough Monk
-Shatterpoint Agent
-Young Beastcaller
-Wistful Angler
-Ashen Avenger
-Ferryman of the Falls
-Spirit Bond
-Virtuoso of Harmony
-Rite of Summoning
-Pathwalker
-Scrap Reclaimer
-Forge Inheritor
-Radiant Trio
-Return to Nowhere
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

@@ -1,22 +1,22 @@
-Kindred Sparks
-Harvester of Despair
-Entropy Spike
-Ashborn Necromancer
-Enginespeaker
-Dreadweaver
-Duskreaper
-Wreckland Maverick
-Cinderblade Legionnaire
-Avatar of Cosmic Reckoning
-Deathwalker
-Wasteland Tamer
-Dawnrunner
-Revenant of the Lost
-Volcanic Channeler
-Immolate and Rise
-Peak Plunder
-Collapse Protocol
-The Thinning
-Bladefall
-Apocalypse
-Conjured Zenith
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

@@ -1,22 +1,22 @@
-Breach Artist
-Northlight Maestro
-Keeper of the Tides
-Cinderblade Legionnaire
-Wasteland Tamer
-Eternal Sentry
-Pilgrim of Old Stones
-Barrage Specialist
-Carrion Shepherd
-Driftrider
-Thronebound Arbiter
-Clockwork Prodigy
-Echoing Denial
-Ripple of Defiance
-The Power Within
-Together Against the Tide
-Toll of Passage
-Lurking Dread
-Harvest the Forgotten
-Momentum of the Fallen
-Vertiginous Leap
-Ripple Through Reality
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality

@@ -1,25 +1,25 @@
-Apocalypse Vigilante
-Sundown Surfer
-Starbound Striker
-Mirror Protocol
-Nineborn Specter
-Tranquil Duelist
-Burning Revenant
-Inspiring Templar
-Infernal Cavalier
-Volcanic Channeler
-Rebirth Ritualist
-Nightmare Manifest
-Emberfang
-Wolfbond Chieftain
-Luminwings
-Thundercatcher
-Lunar Hart
-Blight Weaver
-Shattering Gambit
-Collateral Damage
-Last Light Herald
-Skyflame Commander
-Spellweaver
-Warfield Stalwart
-Shadow March
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March

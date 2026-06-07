@@ -1,24 +1,24 @@
-Sorrowful Prince
-Oblivion Guide
-Dreadwood Emissary
-Somber Flockmaster
-Gateweaver
-Cosmonaut of Tides
-Eternal Sentry
-Standoff
-Clockwork Prodigy
-Echoing Denial
-Immolate and Rise
-Peak Plunder
-Burst of Obliteration
-Maelstrom Denial
-Desperation
-Fell the Mighty
-Ecliptic Vantage
-Weight of Memory
-Abolish
-Archive of the Forgotten
-Sunset Chapel Rest
-Dreadcall Warden
-Last Beacon
-Burning Pursuit
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

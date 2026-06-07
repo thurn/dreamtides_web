@@ -1,20 +1,20 @@
-Oracle of Shifting Skies
-Architect of Memory
-The Devourer
-Shadowprowler
-Pattern Seeker
-Rift Pilgrim
-Somber Flockmaster
-Pathfinder Adrift
-Null Sphere
-Molten Duel
-Ancient Descent
-Harvest the Forgotten
-Derelict Voyage
-Fell the Mighty
-Break the Sequence
-Scorched Reckoning
-Forsaken Skyline
-Wheel of the Heavens
-Across the Void
-Fractured Veil
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil

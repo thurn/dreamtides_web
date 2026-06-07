@@ -1,45 +1,45 @@
-Paradox Enforcer
-Ethereal Courser
-Terminus
-Vault Infiltrator
-Sage of the Prelude
-Reforged Automaton
-Oathbound Pair
-Spirit Field Reclaimer
-Silent Avenger
-Celestial Lookout
-Gleamharvester
-Shoreline Penitent
-Tranquil Duelist
-Call to the Unknown
-Barrage Specialist
-Flamestride Rider
-Invoker of Myths
-Veilpiercer
-Graywatch
-Shatterpoint Agent
-Abyssal Enforcer
-Dustborn Veteran
-Prism Caller
-Pyrewatcher
-Rebirth Ritualist
-Wolfbond Chieftain
-Lone Castaway
-Miraculous Arrival
-Lunar Hart
-Through the Rift
-Momentum of the Fallen
-Fragments of Vision
-Worldbreacher
-Knowledge Restored
-Starshot Gunner
-Ossuary Overlord
-Curio Dealer
-Standard Bearer
-Heroic Rescue
-Charnel Seraph
-Shadow March
-Spirit Reaping
-Key to the Moment
-Dreamscatter
-Echoes of Eternity
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

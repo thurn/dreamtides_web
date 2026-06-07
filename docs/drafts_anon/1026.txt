@@ -1,26 +1,26 @@
-Starchaser
-Ethereal Trailblazer
-Selfless Rescuer
-Frostbound Defiant
-Emberwolf Triad
-Cloudmantle Ray
-Veilseeker
-Mountainwatch Alpha
-Depthwalker
-Sage of the Prelude
-Dusk Duelist
-Wreckage Prowler
-Astral Angler
-Winterbough Monk
-Wraith of Twisting Shadows
-Light of Emergence
-Starsea Traveler
-Petal-Seer
-Carrion Lord
-Duneveil Vanguard
-Bloomweaver
-Cragfall
-Pathwalker
-Scrap Reclaimer
-Radiant Trio
-Keeper of Forgotten Light
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

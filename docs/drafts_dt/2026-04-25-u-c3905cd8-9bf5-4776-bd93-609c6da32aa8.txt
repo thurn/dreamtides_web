@@ -1,26 +1,26 @@
-Demonbane
-Pit Descender
-Burning Revenant
-Grim Reclaimer
-Voidsire
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Emberfang
-Dread Arbiter
-Pulse of Sacrifice
-Rootspring Summons
-Blightmaw
-Starshot Gunner
-Ironclad Marksman
-Gleam Below
-Ochre Prospector
-Worldbreacher
-Momentum of the Fallen
-Shared Revelation
-Hatching Ground
-Rite of Summoning
-Crimson Pilgrimage
-A New Adventure
-Aftermath Bloom
-Reunion
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

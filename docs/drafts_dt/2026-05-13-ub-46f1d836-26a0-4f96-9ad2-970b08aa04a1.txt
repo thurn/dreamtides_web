@@ -1,27 +1,27 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Tidecaller
-Dreadmount Sovereign
-Sigil Analyst
-Company Commander
-Colossal Convergence
-Forsworn Champion
-Nineborn Specter
-Burning Revenant
-Infernal Cavalier
-Emberfang
-Dread Arbiter
-Tethered Hollow
-Wolfbond Chieftain
-Blightmaw
-Blight Weaver
-Worldbreacher
-Annular Recall
-Marrow Mimic
-Standard Bearer
-The Deathsworn
-Spellweaver
-Arc Disciple
-Dreadcall Warden
-Last Beacon
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon

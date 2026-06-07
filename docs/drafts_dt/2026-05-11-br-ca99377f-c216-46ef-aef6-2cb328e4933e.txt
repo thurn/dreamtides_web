@@ -1,25 +1,25 @@
-Sorrowful Prince
-Oblivion Guide
-Shadowprowler
-Pattern Seeker
-The Calling Night
-Somber Flockmaster
-Salvage Engine
-Carrion Shepherd
-Scuttled Fortune
-Twice-Lit Portal
-Sunken Radiance
-Desperation
-Aurora Confluence
-Weight of Memory
-Fell Swoop
-Door to Possibility
-Immolate
-Stolen Genesis
-Spiral Offering
-Moonlit Voyage
-Seaside Requiem
-Shadowbinder
-Keeper of the Lightpath
-Starfall Communion
-Torchbearer of the Abyss
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss

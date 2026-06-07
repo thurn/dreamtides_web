@@ -1,22 +1,22 @@
-Pyrewatcher
-Dread Arbiter
-Clockwork Prodigy
-Echoing Denial
-Luminwings
-Fangbound
-Pulse of Sacrifice
-The Power Within
-Blightmaw
-Starshot Gunner
-Gleam Below
-Through the Rift
-Genesis Burst
-Nebula's Wake
-Spellweaver
-Across the Void
-Twilight Troubadour
-Simulacra
-Intermezzo Balladeer
-Broadcast Array
-Echoes of the Journey
-Reunion
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

@@ -1,21 +1,21 @@
-Tidecaller
-The Calling Night
-Enginespeaker
-The Rising God
-Salvage Engine
-Wasteland Tamer
-Riftwalker
-Carrion Shepherd
-Scuttled Fortune
-Driftrider
-Dustborn Veteran
-Standoff
-Lone Castaway
-Immolate and Rise
-Peak Plunder
-Starfall
-Maelstrom Denial
-Vertiginous Leap
-Stolen Genesis
-Hope's Vanguard
-Burning Pursuit
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

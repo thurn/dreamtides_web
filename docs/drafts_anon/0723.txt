@@ -1,24 +1,24 @@
-Blade of Unity
-Apocalypse Vigilante
-Liminal Dreamer
-Gateweaver
-Twilight Reclaimer
-Cinderfang
-Pit Descender
-Fathomless Maw
-Kindlehorn
-Woodland Apparition
-Carrion Shepherd
-Spent Courier
-Junkfield Renegade
-Thundercatcher
-Derelict Voyage
-Chronicle Reclaimer
-Radiants' Captain
-Bladefall
-Ossuary Overlord
-Moonlit Voyage
-Twilight Suppressor
-Shadowbinder
-Keeper of the Lightpath
-Charnel Seraph
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

@@ -1,26 +1,26 @@
-Paradox Enforcer
-Hallowed Stag
-Worldsong Behemoth
-Driftcaller Sovereign
-Harvester of Despair
-Frostbound Defiant
-Emberwolf Triad
-Enginespeaker
-Lumineth
-Torn Circuit Feeder
-Scorched Crusader
-Dreamvale Monarch
-Starrunner
-Nocturne
-Scuttled Fortune
-Nightmare Manifest
-Spirit of the Greenwood
-Lithic Severance
-Lunar Hart
-Soulrender
-Ashfront Lieutenant
-Marrow Drinker
-Phantasmal Recruiter
-Infernal Ascendant
-Roots of Rebirth
-Nexus Wayfinder
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

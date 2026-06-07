@@ -1,24 +1,24 @@
-Gateway Defender
-Burning Revenant
-Inspiring Templar
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Sundown Ronin
-Miraculous Arrival
-Dread Arbiter
-Wolfbond Chieftain
-Pulse of Sacrifice
-Rootspring Summons
-Epiphany Unfolded
-Marrow Mimic
-Sanctum Awakened
-Moment Rewound
-A New Adventure
-Across the Void
-Arc Disciple
-Wheel of the Heavens
-Key to the Moment
-Spirit Reaping
-Surge of Fury
-Echoes of the Journey
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

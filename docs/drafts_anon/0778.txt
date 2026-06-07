@@ -1,21 +1,21 @@
-Oracle of Shifting Skies
-Architect of Memory
-Vaultbreaker
-Liminal Dreamer
-Echo Architect
-Gleamharvester
-Shoreline Penitent
-Wreckborn
-Rusted Monolith
-Emberfang
-Fleeting Reunion
-Derelict Voyage
-Fell the Mighty
-Aurora Confluence
-Fury of the Clan
-Fell Swoop
-Rootbound Witness
-Skies of Change
-Void Pilgrim
-Cascading Detonation
-Scorched Reckoning
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning

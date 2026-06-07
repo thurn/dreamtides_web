@@ -1,23 +1,23 @@
-Tidecaller
-Meadowlight Charger
-Scrapyard Custodian
-Mirror Protocol
-Infernal Cavalier
-Lone Castaway
-Junkfield Renegade
-Chronicle Reclaimer
-Radiants' Captain
-Bladefall
-Dawnblade Wanderer
-Shattering Gambit
-Standard Bearer
-Fathomscourge
-Smoldering Ancient
-Moment Rewound
-Soulrender
-Shadow March
-Nightmare
-Phantom Flotilla
-Starfall Communion
-Wake the Fallen
-Spirit Reaping
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

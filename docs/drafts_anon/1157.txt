@@ -1,24 +1,24 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Aspiring Guardian
-Fern Treader
-Seeker for the Way
-Gateweaver
-Pit Descender
-Nineborn Specter
-Burning Revenant
-Rebirth Ritualist
-Pulse of Sacrifice
-Lone Castaway
-Junkfield Renegade
-Weight of Memory
-Stolen Genesis
-Lanternwood Scout
-Ossuary Overlord
-Last Light Herald
-Skyflame Commander
-Moonlit Voyage
-Fathomscourge
-Smoldering Ancient
-Twilight Suppressor
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor

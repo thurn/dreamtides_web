@@ -1,24 +1,24 @@
-Blade of Unity
-Voidshield Guardian
-Meadowlight Charger
-Silent Observer
-Ironclad Holdout
-Company Commander
-Spirit Field Reclaimer
-Gatebound Warden
-Starlight Guide
-Sundown Surfer
-Assault Leader
-Oathbound Pair
-Vault Infiltrator
-Reforged Automaton
-Featherlight Summoner
-Gilded Catalyst
-Fangbound
-Lone Castaway
-Lightningborn
-Infernal Rest
-Wasteland Holdout
-Void Pilgrim
-Last Light Herald
-Skyflame Commander
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander

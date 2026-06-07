@@ -1,13 +1,13 @@
-Aspiring Guardian
-Meadowlight Charger
-Duskreaper
-Dune Reaper
-Pilgrim of Old Stones
-Gilded Catalyst
-Sundown Ronin
-Nightmare Manifest
-Evacuation Enforcer
-The Power Within
-Blight Weaver
-Aftermath Bloom
-Arc Disciple
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple

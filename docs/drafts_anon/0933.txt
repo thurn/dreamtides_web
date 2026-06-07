@@ -1,53 +1,53 @@
-Paradox Enforcer
-Ruin Scavenger
-Herald of the Last Light
-Sorrow Watcher
-Tidewreck Navigator
-Tidecaller
-Vaultbreaker
-Lumineth
-Avatar of Cosmic Reckoning
-Dreadweaver
-Twilight Reclaimer
-Cinderfang
-Pallid Arbiter
-Lord of Hidden Paths
-Shatterpoint Agent
-Scuttled Fortune
-Urban Desperado
-Verdant Pioneer
-Embersummoner
-Shardwoven Tyrant
-Wreckborn
-Boundless Wanderer
-Field Reverent
-Exiles of the Last Light
-Dustborn Veteran
-Volcanic Channeler
-Specter of Silent Snow
-Evacuation Enforcer
-Nightmare Manifest
-Through the Rift
-Infernal Rest
-Shatter the Frail
-Whisper of the Past
-Weight of Memory
-Saltless Mariner
-Obliterator of Worlds
-Luminous Ascent
-Stolen Genesis
-Ashfront Lieutenant
-Marrow Drinker
-Unleash Ruin
-Lanternwood Scout
-Packcaller of Shadows
-Desolation's Edge
-Hope's Vanguard
-Eruption
-Infernal Ascendant
-Arc Disciple
-Sunset Chronicler
-Gearwright
-Shadow Soloist
-Moonlit Dancer
-Fading Farewell
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

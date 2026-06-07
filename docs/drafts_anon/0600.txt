@@ -1,24 +1,24 @@
-Kindred Sparks
-Vaultbreaker
-Signal Resonant
-Scrapyard Custodian
-Echo Architect
-Dreadweaver
-Silent Avenger
-Cinderheart
-Somber Flockmaster
-Pyre Challenger
-Thornwood Delver
-Gleamharvester
-Shoreline Penitent
-Silent Gatherer
-Fathomless Maw
-Kindlehorn
-Molten Duel
-Thundercatcher
-Unleashed Destruction
-Derelict Voyage
-Break the Veil
-Duneveil Vanguard
-Collateral Damage
-Summons of the Bonded
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded

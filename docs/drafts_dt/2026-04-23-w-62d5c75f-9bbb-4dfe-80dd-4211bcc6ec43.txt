@@ -1,30 +1,30 @@
-Apocalypse Vigilante
-Crucible Warlord
-Meadowlight Charger
-Reforged Automaton
-Spirit Field Reclaimer
-Fern Treader
-Blade of Unity
-Starbound Striker
-Shadow Reflection
-Tranquil Duelist
-Burning Revenant
-Flamestride Rider
-Invoker of Myths
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Inferno's Herald
-Sundown Ronin
-Luminwings
-Lightningborn
-Dawnblade Wanderer
-Ochre Prospector
-Lithic Severance
-Void Pilgrim
-Veil Shatter
-Last Light Herald
-Skyflame Commander
-Spirit Reaping
-Wolfbond Chieftain
-Tethered Hollow
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow

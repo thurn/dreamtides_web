@@ -1,24 +1,24 @@
-Blade of Unity
-Voidshield Guardian
-Ironclad Holdout
-Gatebound Warden
-Starlight Guide
-Assault Leader
-Oathbound Pair
-Still Dreamer
-Burning Revenant
-Featherlight Summoner
-Infernal Cavalier
-Woodland Apparition
-Fargazer
-Angel of the Eclipse
-Sundown Ronin
-Tethered Hollow
-Seedling Sage
-Derelict Voyage
-Dawnblade Wanderer
-Wasteland Holdout
-The Deathsworn
-Heroic Rescue
-Shadow Reflection
-Wake the Fallen
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

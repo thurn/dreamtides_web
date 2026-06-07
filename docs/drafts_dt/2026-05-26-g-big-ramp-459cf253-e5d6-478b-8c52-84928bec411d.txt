@@ -1,25 +1,25 @@
-Sunshadow Eagle
-Verdant Pilgrim
-Ethereal Trailblazer
-Undying Fang
-Worldsong Behemoth
-Mystic Runefish
-Driftcaller Sovereign
-Dawnhorn Elder
-Frostbound Defiant
-Emberwolf Triad
-Cloudmantle Ray
-Skyborne Jellyfish
-Dreamborne Leviathan
-Spiritbound Alpha
-Lord of Hidden Paths
-Dusk Duelist
-Blazing Emberwing
-Young Beastcaller
-Emerald Guardian
-Spirit Bond
-Celestial Reverie
-Lunar Hart
-Bloomweaver
-Crumbling Behemoth
-Beacon of Tomorrow
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow

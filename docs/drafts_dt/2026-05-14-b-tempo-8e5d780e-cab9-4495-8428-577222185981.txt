@@ -1,15 +1,15 @@
-Harvester of Despair
-Wreckheap Survivor
-The Calling Night
-Silent Avenger
-Ashwalker
-Avatar of Cosmic Reckoning
-Wasteland Tamer
-Carrion Shepherd
-Exiles of the Last Light
-Dustborn Veteran
-Glimpse of Infinity
-Together Against the Tide
-Dreaming Groves
-Immolate
-Rite of Summoning
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning

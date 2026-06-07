@@ -1,29 +1,29 @@
-Starchaser
-Ruin Scavenger
-Abomination of Memory
-Selfless Rescuer
-Frostbound Defiant
-Emberwolf Triad
-Wondrous Clearing
-Cloudmantle Ray
-Scorched Crusader
-Dreamborne Leviathan
-Spiritbound Alpha
-Lord of Hidden Paths
-Wreckage Prowler
-Astral Angler
-Wraith of Twisting Shadows
-Light of Emergence
-Starsea Traveler
-Ghostlight Wolves
-Eternal Stag
-Wistful Angler
-Ashen Avenger
-Ferryman of the Falls
-Heavenward Penitent
-Dreaming Groves
-Summons of the Bonded
-Melodist of the Finale
-Pathwalker
-Scrap Reclaimer
-Clockwork Conductor
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor

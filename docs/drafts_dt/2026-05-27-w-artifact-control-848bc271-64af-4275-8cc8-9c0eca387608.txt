@@ -1,28 +1,28 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Aspiring Guardian
-Inferno's Herald
-Silent Observer
-Crucible Warlord
-Company Commander
-Colossal Convergence
-Forsworn Champion
-Assault Leader
-Mirror Protocol
-Vault Infiltrator
-Reforged Automaton
-Burning Revenant
-Featherlight Summoner
-Gilded Catalyst
-Flamestride Rider
-Invoker of Myths
-Prism Caller
-Tethered Hollow
-Wolfbond Chieftain
-Lightningborn
-Worldbreacher
-Wasteland Holdout
-The Deathsworn
-Last Light Herald
-Skyflame Commander
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander

@@ -1,19 +1,19 @@
-Kindred Sparks
-Harvester of Despair
-Blazebound Sentinel
-Enginespeaker
-Duskwall Delver
-Twilight Reclaimer
-Cinderfang
-Revenant of the Lost
-Soulreaver
-Tidecaller
-Volcanic Channeler
-Paradox Enforcer
-Dread Arbiter
-Lurking Dread
-Vertiginous Leap
-Rite of Summoning
-Path to Redemption
-Immolate
-From the Barrow
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow

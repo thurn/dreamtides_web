@@ -1,26 +1,26 @@
-Veilseeker
-Seeker of the Radiant Wilds
-Doorlight Foundling
-Scorched Crusader
-Blazing Emberwing
-Wreckage Prowler
-Astral Angler
-Dragonward
-Starsea Traveler
-Steel Abomination
-Ferryman of the Falls
-Clockwork Prodigy
-Echoing Denial
-Ordained Collapse
-Lone Castaway
-Heavenward Penitent
-Grounded
-Ironclad Marksman
-Starfall
-Duneveil Vanguard
-Unleash Ruin
-Defiant Parry
-Pathwalker
-Scrap Reclaimer
-Shadow March
-Return to Nowhere
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

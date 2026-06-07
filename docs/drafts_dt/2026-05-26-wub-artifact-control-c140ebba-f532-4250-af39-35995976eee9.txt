@@ -1,31 +1,31 @@
-Demonbane
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Sandglider
-Apocalypse Vigilante
-Dreadmount Sovereign
-Sigil Analyst
-Assault Leader
-Gateway Defender
-Vault Infiltrator
-Reforged Automaton
-Burning Revenant
-Inspiring Templar
-Infernal Cavalier
-Revenant of the Lost
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Rebirth Ritualist
-Spirit of the Greenwood
-Seedling Sage
-Wolfbond Chieftain
-Ironclad Marksman
-Blight Weaver
-Through the Rift
-Last Light Herald
-Skyflame Commander
-Spellweaver
-Warfield Stalwart
-Aftermath Bloom
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom

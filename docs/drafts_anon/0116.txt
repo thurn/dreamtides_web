@@ -1,27 +1,27 @@
-Cloudmantle Ray
-Forgotten Factory Titan
-Sky Voyager
-Voidcaller
-Fern Treader
-Ashen Remnant
-The Dread Sovereign
-Torn Circuit Feeder
-Scorched Crusader
-Cloaked Sentinel
-Pyre Challenger
-Thornwood Delver
-Sundown Surfer
-Fargazer
-Angel of the Eclipse
-Call to the Unknown
-Glimmerwood Scout
-Embersummoner
-Shardwoven Tyrant
-Grounded
-Sunken Radiance
-Lithic Severance
-Burst of Obliteration
-Soulrender
-Conjured Zenith
-Twilight Suppressor
-Roots of Rebirth
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

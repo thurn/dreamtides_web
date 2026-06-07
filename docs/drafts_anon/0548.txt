@@ -1,22 +1,22 @@
-Hallowed Stag
-Wreckland Maverick
-Torn Circuit Feeder
-Doorlight Foundling
-Pallid Arbiter
-Barrage Specialist
-Starsea Traveler
-Young Beastcaller
-Forsaken Pact
-Epiphany Unfolded
-Through the Rift
-Marrow Mimic
-Unleash Ruin
-Pathwalker
-Scrap Reclaimer
-Abolish
-Fractured Veil
-Across the Void
-Clockwork Conductor
-Flash of Power
-Wheel of the Heavens
-Return to Nowhere
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

@@ -1,24 +1,24 @@
-Harrowing Officiant
-Hallowed Stag
-Herald of the Last Light
-Harvester of Despair
-Wondrous Clearing
-The Rising God
-Ashwalker
-Veil Crosser
-Rooftop Prophet
-Depthwalker
-Exiles of the Last Light
-Wistful Angler
-Ashen Avenger
-Graywatch
-Specter of Silent Snow
-Standoff
-Dreamcatcher's Call
-Together Against the Tide
-Forsaken Pact
-Immolate
-Curio Dealer
-Data Pulse
-Ashfront Lieutenant
-Marrow Drinker
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker

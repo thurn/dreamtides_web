@@ -1,24 +1,24 @@
-Echo Architect
-Pyrewatcher
-Nightmare Manifest
-Dread Arbiter
-Wolfbond Chieftain
-Heavenward Penitent
-Blightmaw
-Guiding Light
-Harvest the Forgotten
-Desperation
-Ecliptic Vantage
-Dawnblade Wanderer
-Ridgecutter
-Seaside Requiem
-Crimson Pilgrimage
-Archive of the Forgotten
-Scorched Reckoning
-Fractured Veil
-Across the Void
-Path to Redemption
-Cascade of Reflections
-Surge of Fury
-Dreamscatter
-Echoes of Eternity
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

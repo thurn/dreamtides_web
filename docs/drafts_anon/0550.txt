@@ -1,35 +1,35 @@
-Demonbane
-Sandglider
-Dreadmount Sovereign
-Sigil Analyst
-Ironclad Holdout
-Silent Observer
-Mirror Protocol
-Assault Leader
-Pit Descender
-Colossal Convergence
-Forsworn Champion
-Starbound Striker
-Reforged Automaton
-Dreadlord
-Echo Technician
-Dream Garden Visitor
-Burning Revenant
-Featherlight Summoner
-Abyssal Enforcer
-Gilded Catalyst
-Forge-Twin
-Speaker for the Forgotten
-Crescendo Channeler
-Prism Caller
-Sundown Ronin
-Pyrewatcher
-Evacuation Enforcer
-Mirrorlight Architect
-Junkfield Renegade
-Blight Weaver
-Momentum of the Fallen
-Lightningborn
-Last Light Herald
-Skyflame Commander
-Lanternwood Scout
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout

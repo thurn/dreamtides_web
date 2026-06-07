@@ -1,22 +1,22 @@
-Driftcaller Sovereign
-Crucible Warlord
-Cloaked Sentinel
-Oathbound Pair
-Pathfinder Adrift
-Eternal Sentry
-Revenant of the Lost
-Conduit of Ashes
-Passage Through Oblivion
-Together Against the Tide
-Grounded
-Fragments of Vision
-Ancient Descent
-Unleashed Destruction
-Bladefall
-Veil Shatter
-Vertiginous Leap
-Cragfall
-Moonlit Voyage
-Nightmare
-Phantom Flotilla
-Wheel of the Heavens
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens

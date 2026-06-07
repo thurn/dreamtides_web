@@ -1,26 +1,26 @@
-The Devourer
-Voidshield Guardian
-Liminal Dreamer
-Shadowprowler
-Pattern Seeker
-Somber Flockmaster
-Gatebound Warden
-Starlight Guide
-Gateweaver
-Pyre Challenger
-Thornwood Delver
-Oathbound Pair
-Reforged Automaton
-Woodland Apparition
-Blazepath Traveler
-Lumen Rover
-Glimmerwood Scout
-Gilded Catalyst
-Junkfield Renegade
-Derelict Voyage
-Fell the Mighty
-Bladefall
-Weight of Memory
-Fury of the Clan
-Veil Shatter
-Void Pilgrim
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim

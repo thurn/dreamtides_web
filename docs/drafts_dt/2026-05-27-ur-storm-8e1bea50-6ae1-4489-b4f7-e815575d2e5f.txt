@@ -1,25 +1,25 @@
-Terminus
-Cosmonaut of Tides
-Blade of Oblivion
-The Ringleader
-Pyrewatcher
-Nightmare Manifest
-Dread Arbiter
-Pulse of Sacrifice
-Junkfield Renegade
-Blightmaw
-Knowledge Restored
-Burst of Obliteration
-Annular Recall
-Fell Swoop
-Spiral Offering
-Packcaller of Shadows
-Cascading Detonation
-Seaside Requiem
-Crimson Pilgrimage
-Archive of the Forgotten
-Flash of Power
-Call of the Lost
-Intermezzo Balladeer
-Dreamscatter
-Echoes of Eternity
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

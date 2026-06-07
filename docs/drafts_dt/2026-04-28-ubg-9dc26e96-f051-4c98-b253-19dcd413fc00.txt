@@ -1,25 +1,25 @@
-Hallowed Stag
-Worldsong Behemoth
-Driftcaller Sovereign
-Dawnhorn Elder
-Selfless Rescuer
-Wondrous Clearing
-Skyborne Jellyfish
-Mountainwatch Alpha
-Starrunner
-Sage of the Prelude
-Dusk Duelist
-Sylvan Matriarch
-Wistful Angler
-Ashen Avenger
-Spirit Bond
-Spirit of the Greenwood
-Fragments of Vision
-Vertiginous Leap
-Crumbling Behemoth
-Beacon of Tomorrow
-Rite of Summoning
-Ripple Through Reality
-Break the Sequence
-Lumin-Gate Seer
-Reunion
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

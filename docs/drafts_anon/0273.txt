@@ -1,25 +1,25 @@
-Starchaser
-Verdant Pilgrim
-Ethereal Trailblazer
-Undying Fang
-Abomination of Memory
-Driftcaller Sovereign
-Frostbound Defiant
-Emberwolf Triad
-Wondrous Clearing
-Cloudmantle Ray
-Celestial Lookout
-Wreckage Prowler
-Astral Angler
-Prophet of the Consumed
-Winterbough Monk
-Starsea Traveler
-Petal-Seer
-Emerald Guardian
-Ferryman of the Falls
-Heavenward Penitent
-Dreamcatcher's Call
-Call of Calamity
-Eruption
-Pathwalker
-Scrap Reclaimer
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer

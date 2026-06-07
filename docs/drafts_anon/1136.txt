@@ -1,21 +1,21 @@
-Ambush Operative
-Ethereal Courser
-Selfless Rescuer
-Crucible Warlord
-Wondrous Clearing
-Blazebound Sentinel
-Rift Pilgrim
-Vortex Claimant
-Sage of the Prelude
-Veilpiercer
-Featherlight Summoner
-Soulflame Predator
-Nomad of Endless Paths
-Young Beastcaller
-Emerald Guardian
-The Power Within
-Passage Through Oblivion
-Grounded
-Epiphany Unfolded
-Lumin-Gate Seer
-Radiant Trio
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio

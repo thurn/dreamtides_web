@@ -1,26 +1,26 @@
-Harrowing Officiant
-Starchaser
-Abomination of Memory
-Driftcaller Sovereign
-Cloudmantle Ray
-Celestial Lookout
-Shadowprowler
-Pattern Seeker
-Veilseeker
-Seeker of the Radiant Wilds
-Veil Crosser
-Rooftop Prophet
-Looming Oracle
-Torn Circuit Feeder
-Doorlight Foundling
-Depthwalker
-Wraith of Twisting Shadows
-Light of Emergence
-Starsea Traveler
-Young Beastcaller
-Ferryman of the Falls
-Dreamcatcher's Call
-Veil Shatter
-Rite of Summoning
-Shadow March
-Keeper of Forgotten Light
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

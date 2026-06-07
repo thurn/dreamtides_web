@@ -1,23 +1,23 @@
-Starchaser
-Voidshield Guardian
-Meadowlight Charger
-Apocalypse Vigilante
-Crucible Warlord
-Momentum's Edge
-Cloaked Sentinel
-Frost Visionary
-Oathbound Pair
-Reclaimer of Lost Paths
-Nocturne
-Blazepath Traveler
-Lumen Rover
-Urban Desperado
-Verdant Pioneer
-Glimmerwood Scout
-Sundown Ronin
-Lone Castaway
-Lithic Severance
-Bladefall
-Shattering Gambit
-The Grand Heist
-Conjured Zenith
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

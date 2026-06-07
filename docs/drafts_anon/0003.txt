@@ -1,30 +1,30 @@
-Paradox Enforcer
-Sorrow Watcher
-Tidewreck Navigator
-Ethereal Trailblazer
-Undying Fang
-Emberwatch Veteran
-Vessel of Echoes
-Searcher in the Mists
-Herald of the Last Light
-Lumineth
-Ashen Remnant
-The Dread Sovereign
-Veil Crosser
-Rooftop Prophet
-Veil of the Wastes
-Starsea Traveler
-Young Beastcaller
-Steel Abomination
-Wistful Angler
-Ashen Avenger
-Embersummoner
-Shardwoven Tyrant
-Ferryman's Tithe
-Heavenward Penitent
-Lurking Dread
-Bloomweaver
-Curio Dealer
-Virtuoso of Harmony
-Pathwalker
-Scrap Reclaimer
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer

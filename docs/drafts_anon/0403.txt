@@ -1,23 +1,23 @@
-Ruin Scavenger
-Lanternhearted
-Doorlight Foundling
-Starsea Traveler
-Ordained Collapse
-Pulse of Sacrifice
-Heavenward Penitent
-Forsaken Pact
-Junkfield Renegade
-Fragments of Vision
-Burst of Obliteration
-Unleashed Destruction
-Aurora Confluence
-Bloomweaver
-Secrets of the Deep
-Packcaller of Shadows
-Data Pulse
-A New Adventure
-Wheel of the Heavens
-Keeper of Forgotten Light
-Surge of Fury
-Dreamscatter
-Echoes of Eternity
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

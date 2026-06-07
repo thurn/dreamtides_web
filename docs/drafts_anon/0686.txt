@@ -1,24 +1,24 @@
-Demonbane
-Sandglider
-Ambush Operative
-Liminal Dreamer
-Forgotten Factory Titan
-Spirit Field Reclaimer
-Frost Visionary
-Vortex Claimant
-Mirror Protocol
-Veilpiercer
-Featherlight Summoner
-Revenant of the Lost
-Urban Desperado
-Verdant Pioneer
-Nightmare Manifest
-Fangbound
-Passage Through Oblivion
-Epiphany Unfolded
-Lightningborn
-Veil Shatter
-Void Pilgrim
-Nightmare
-Phantom Flotilla
-Wake the Fallen
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

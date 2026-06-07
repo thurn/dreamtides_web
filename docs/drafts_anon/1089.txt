@@ -1,26 +1,26 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Ambush Operative
-Inferno's Herald
-Apocalypse Vigilante
-Ironclad Holdout
-Crucible Warlord
-Company Commander
-Momentum's Edge
-Wreckland Maverick
-Colossal Convergence
-Forsworn Champion
-Pallid Arbiter
-Dune Reaper
-Vault Infiltrator
-Glimmerwood Scout
-Gilded Catalyst
-Nightmare Manifest
-Evacuation Enforcer
-Dread Arbiter
-Luminwings
-Dawnblade Wanderer
-Veil Shatter
-Borrowed Minutes
-Conjured Zenith
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

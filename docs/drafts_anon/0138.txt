@@ -1,29 +1,29 @@
-Eclipse Herald
-Horizon Follower
-Ashen Harbinger
-Blade of Unity
-Ambush Operative
-Saffron Trailblazer
-Silent Observer
-Spirit Field Reclaimer
-Colossal Convergence
-Forsworn Champion
-Iron Executor
-Vault Infiltrator
-Nineborn Specter
-Tranquil Duelist
-Featherlight Summoner
-Glimmerwood Scout
-Flamestride Rider
-Invoker of Myths
-Nightmare Manifest
-Fangbound
-Lunar Hart
-Bladefall
-Wasteland Holdout
-Void Pilgrim
-Last Light Herald
-Skyflame Commander
-Warfield Stalwart
-Nightmare
-Phantom Flotilla
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla

@@ -1,34 +1,34 @@
-Harrowing Officiant
-Frostbound Defiant
-Emberwolf Triad
-Emberwatch Veteran
-Vessel of Echoes
-Blazebound Sentinel
-Dawnhorn Elder
-Undying Fang
-Sunshadow Eagle
-Wreckheap Survivor
-Mystic Runefish
-Nineborn Specter
-Riftwalker
-Ashwalker
-Dreamvale Monarch
-Wasteland Tamer
-Duskwall Delver
-Salvage Engine
-Nocturne
-Shatterpoint Agent
-Scuttled Fortune
-Revenant of the Lost
-Starsea Traveler
-Volcanic Channeler
-Shadowcaller
-Celestial Reverie
-Ashfront Lieutenant
-Marrow Drinker
-Unleash Ruin
-Pyrokinetic Surge
-Apocalypse
-Infernal Ascendant
-Roots of Rebirth
-Nexus Wayfinder
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

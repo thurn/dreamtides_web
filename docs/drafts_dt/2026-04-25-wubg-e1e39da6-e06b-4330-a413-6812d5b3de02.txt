@@ -1,21 +1,21 @@
-Cosmonaut of Tides
-Abyssal Enforcer
-Duskmount
-Petal-Seer
-Young Beastcaller
-Steel Abomination
-Miraculous Arrival
-Ancient Descent
-Harvest the Forgotten
-Ecliptic Vantage
-Bladefall
-Shattering Gambit
-Duneveil Vanguard
-Bloomweaver
-Unleash Ruin
-Defiant Parry
-Pyrokinetic Surge
-Apocalypse
-Ripple Through Reality
-Abolish
-Conjured Zenith
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
