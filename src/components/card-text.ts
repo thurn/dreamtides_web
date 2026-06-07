@@ -2,14 +2,24 @@ import type { CardData } from "../types/cards";
 import { lookupGlossaryTerm, type GlossaryEntry } from "../data/glossary";
 
 /** Symbol types recognized in card rules text. */
-export type SymbolType = "energy" | "spark" | "trigger" | "fast";
+export type SymbolType =
+  | "energy"
+  | "spark"
+  | "trigger"
+  | "fast"
+  | "points"
+  | "lunar"
+  | "store";
 
 /**
  * A parsed segment of rules text.
  *
  * - `text` is a plain string run.
- * - `symbol` is a recognized glyph rendered with its own styling (and, for
- *   energy, swapped for the Boxicons flame).
+ * - `symbol` is a recognized glyph rendered with its own styling. Most are
+ *   swapped for a Boxicons mark by the renderer: energy → flame, spark →
+ *   sparkle, points `⍟` → star-circle, lunar `☪` → moon, store `⧗` →
+ *   hourglass, trigger `▸` → caret. The fast bolt `↯` renders as a colored
+ *   character.
  * - `nobreak` groups inner segments that must render on the same line. The
  *   renderer wraps them in a `white-space: nowrap` span. Used to keep the
  *   trigger arrow `▸` glued to its keyword (e.g. `▸ Judgment:`) and the fast
@@ -44,6 +54,12 @@ const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
   "✦": "spark",
   "▸": "trigger",
   "↯": "fast",
+  // Points scored toward winning (rendered as the filled star-circle).
+  "⍟": "points",
+  // The lunar activation cost (rendered as the filled moon).
+  "☪": "lunar",
+  // Stored-time counters (rendered as the filled hourglass).
+  "⧗": "store",
 };
 
 const TRIGGER_CHAR = "▸";

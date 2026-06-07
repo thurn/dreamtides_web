@@ -172,23 +172,41 @@ describe("RulesText", () => {
   });
 
   // Backlog task 018: the trigger arrow `▸` reads as a typographic guide,
-  // not a UI alert. It uses the muted slate `#94a3b8` shared with secondary
-  // text elsewhere — explicitly NOT the bright orange `#f97316` that the
-  // draft selection ring and HUD warnings claim.
-  it("renders the trigger arrow ▸ in muted slate, not accent orange", () => {
+  // not a UI alert. It renders as the filled caret icon in the muted slate
+  // `#94a3b8` shared with secondary text elsewhere — explicitly NOT the bright
+  // orange `#f97316` that the draft selection ring and HUD warnings claim.
+  it("renders the trigger arrow ▸ as a caret icon in muted slate, not accent orange", () => {
     const { container, root } = mount(
       <RulesText text="▸ Judgment: Draw a card." />,
     );
 
-    const arrowSpan = Array.from(container.querySelectorAll("span")).find(
-      (s) => s.textContent === "▸",
-    );
-    expect(arrowSpan).toBeDefined();
-    const style = arrowSpan?.getAttribute("style") ?? "";
+    const caret = container.querySelector<HTMLElement>("i.bxf.bx-caret-right");
+    expect(caret).not.toBeNull();
+    expect(container.textContent).not.toContain("▸");
+    const style = caret?.getAttribute("style") ?? "";
     // jsdom normalizes the hex to lowercase; match either form.
     expect(style.toLowerCase()).toContain("color: rgb(148, 163, 184)");
     expect(style.toLowerCase()).not.toContain("rgb(249, 115, 22)");
     expect(style.toLowerCase()).not.toContain("#f97316");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  // The points `⍟`, lunar `☪`, and store `⧗` glyphs each swap for their filled
+  // Boxicons mark rather than printing the literal character.
+  it("renders points ⍟, lunar ☪, and store ⧗ as filled boxicons marks", () => {
+    const { container, root } = mount(
+      <RulesText text="Gain 2⍟. ☪: Store 1⧗." />,
+    );
+
+    expect(container.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-moon")).not.toBeNull();
+    expect(container.querySelector("i.bxf.bx-hourglass")).not.toBeNull();
+    expect(container.textContent).not.toContain("⍟");
+    expect(container.textContent).not.toContain("☪");
+    expect(container.textContent).not.toContain("⧗");
 
     act(() => {
       root.unmount();

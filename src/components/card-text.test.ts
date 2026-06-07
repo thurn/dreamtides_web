@@ -86,6 +86,34 @@ describe("tokenizeRulesText", () => {
     expect(result.filter((s) => s.kind === "bolt")).toHaveLength(1);
   });
 
+  // Points `\u235F`, lunar `\u262A`, and store `\u29D7` each tokenize to their own symbol
+  // type so the renderer can swap them for a filled Boxicons mark.
+  it("identifies the points symbol \u235F", () => {
+    const result = tokenizeRulesText("Gain 2\u235F.");
+    expect(result).toEqual([
+      { kind: "text", value: "Gain 2" },
+      { kind: "symbol", symbol: "points", char: "\u235F" },
+      { kind: "text", value: "." },
+    ]);
+  });
+
+  it("identifies the lunar symbol \u262A", () => {
+    const result = tokenizeRulesText("\u262A: Draw a card.");
+    expect(result).toEqual([
+      { kind: "symbol", symbol: "lunar", char: "\u262A" },
+      { kind: "text", value: ": Draw a card." },
+    ]);
+  });
+
+  it("identifies the store symbol \u29D7", () => {
+    const result = tokenizeRulesText("Store 1\u29D7.");
+    expect(result).toEqual([
+      { kind: "text", value: "Store 1" },
+      { kind: "symbol", symbol: "store", char: "\u29D7" },
+      { kind: "text", value: "." },
+    ]);
+  });
+
   it("identifies the trigger prefix \u25B8 when not followed by a keyword", () => {
     const result = tokenizeRulesText("\u25B8When played:");
     expect(result).toEqual([

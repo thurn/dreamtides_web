@@ -20,7 +20,10 @@ import {
  *   - the spark `✦` glyph swapped for the amber-gold sparkle mark
  *   - the activated-ability marker `❖` (and interrupt `❖❖`) swapped for the
  *     filled lightning bolt(s) shown before the card name in the title bar
- *   - the trigger `▸` and fast `↯` glyphs colored
+ *   - the points `⍟`, lunar `☪`, store `⧗`, and trigger `▸` glyphs swapped
+ *     for their filled marks (star-circle, moon, hourglass, caret), the
+ *     trigger keeping its muted slate
+ *   - the fast `↯` glyph colored
  *   - glossary terms (Materialized, Judgment, Reclaim, Foresee, void,
  *     spark, ally, fast, etc.) wrapped in an underlined hover popover
  *     showing their plain-language definition
@@ -51,6 +54,27 @@ const SYMBOL_COLORS: Readonly<Record<string, string>> = {
  * the title bar shows before the card name so the two read as the same mark.
  */
 const BOLT_ICON_COLOR = "#ffffff";
+
+/**
+ * Symbol types that render as an inline Boxicons mark sized to the surrounding
+ * text. Energy and spark keep their dedicated branches below (each pins a
+ * resource hue with a matching corner stat); these are the remaining glyphs
+ * swapped for a filled icon. The trigger caret keeps the muted slate it has
+ * always used so it reads as a typographic guide rather than a UI alert; the
+ * rest inherit the rules-text color.
+ */
+const SYMBOL_ICON_CLASSES: Readonly<
+  Record<string, { className: string; color?: string; label: string }>
+> = {
+  trigger: {
+    className: "bxf bx-caret-right",
+    color: SYMBOL_COLORS.trigger,
+    label: "trigger",
+  },
+  points: { className: "bxf bx-star-circle", label: "points" },
+  lunar: { className: "bxf bx-moon", label: "lunar" },
+  store: { className: "bxf bx-hourglass", label: "stored time" },
+};
 
 /** Inline-block trigger styling so the underline stays close to the word. */
 const TERM_STYLE: CSSProperties = {
@@ -203,6 +227,20 @@ function renderSegment(
         aria-label="spark"
         className={`${SPARK_INLINE_ICON_CLASS} align-middle`}
         style={{ color: SPARK_ICON_COLOR }}
+      />
+    );
+  }
+  const iconSpec = SYMBOL_ICON_CLASSES[segment.symbol];
+  if (iconSpec !== undefined) {
+    // The glyph renders as a filled Boxicons mark flowing inline with the text.
+    // The marks' mass sits low in their em box, so a small upward nudge centers
+    // them on the line instead of riding the baseline.
+    return (
+      <i
+        key={key}
+        aria-label={iconSpec.label}
+        className={`${iconSpec.className} align-middle`}
+        style={{ color: iconSpec.color, transform: "translateY(-0.06em)" }}
       />
     );
   }
