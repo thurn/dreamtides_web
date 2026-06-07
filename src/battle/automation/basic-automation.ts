@@ -1,20 +1,20 @@
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
-import { energyRampEdits } from "../engine/energy";
 import {
-  isFigmentInstance,
-  selectEffectiveSparkForInstance,
-  selectFigmentChallengeLossCount,
-  selectFigmentCount,
-} from "../state/figments";
+  type ChallengeResolution,
+  resolveChallenge,
+} from "../engine/challenge";
+import { energyRampEdits } from "../engine/energy";
 import { selectBattleCardLocation } from "../state/selectors";
 import type {
-  BattleCardInstance,
   BattleMutableState,
   BattlePhase,
   BattleResult,
   BattleSide,
 } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+
+/** An empty support map: the human/automation path runs over an unmodeled board. */
+const NO_SUPPORT_CONTRIBUTION: ReadonlyMap<string, number> = new Map();
 
 /**
  * The eight battle phases in turn order (rules §Turn Structure). The five
@@ -96,24 +96,6 @@ export interface BasicAutomationCaps {
   maxEnergyCap: number;
   scoreToWin: number;
 }
-
-type ResolutionKeyword = "unstoppable" | "vengeful" | "preeminence";
-
-/**
- * Figment base types carry an implicit keyword (rules §Figments). Their printed
- * text is usually empty, so the subtype is the only signal of the keyword.
- */
-const FIGMENT_KEYWORDS: Readonly<Record<string, ResolutionKeyword>> = {
-  ancient: "unstoppable",
-  wraith: "vengeful",
-  celestial: "preeminence",
-};
-
-const KEYWORD_PATTERNS: Readonly<Record<ResolutionKeyword, RegExp>> = {
-  unstoppable: /\bunstoppable\b/i,
-  vengeful: /\bvengeful\b/i,
-  preeminence: /\bpreeminence\b/i,
-};
 
 /**
  * Expands a single user command into the ordered command list that "basic
@@ -223,7 +205,11 @@ function planTurnHandoff(
     return [command];
   }
 
-  const challenge = resolveChallenge(state, outgoingSide);
+  const challenge = resolveChallenge({
+    state,
+    activeSide: outgoingSide,
+    supportContribution: NO_SUPPORT_CONTRIBUTION,
+  });
   const commands: BattleCommand[] = challenge.edits.map(autoCommand);
 
   const victoryCommand = buildVictoryCommand(state, challenge, caps.scoreToWin);
@@ -273,7 +259,11 @@ function planChallengeOnly(
   command: BattleCommand,
   caps: BasicAutomationCaps,
 ): BattleCommand[] {
-  const challenge = resolveChallenge(state, state.activeSide);
+  const challenge = resolveChallenge({
+    state,
+    activeSide: state.activeSide,
+    supportContribution: NO_SUPPORT_CONTRIBUTION,
+  });
   const commands: BattleCommand[] = [command, ...challenge.edits.map(autoCommand)];
   const victoryCommand = buildVictoryCommand(state, challenge, caps.scoreToWin);
   if (victoryCommand !== null) {
@@ -363,149 +353,6 @@ function bookendEffectEdits(
     default:
       return [];
   }
-}
-
-export interface ChallengeResolution {
-  edits: BattleDebugEdit[];
-  playerScoreDelta: number;
-  enemyScoreDelta: number;
-}
-
-/**
- * Resolves every front-rank lane for `activeSide`, returning the score deltas
- * and the edits (score adjustments + void moves) that commit the outcome. Pure:
- * it never mutates `state`.
- */
-export function resolveChallenge(
-  state: BattleMutableState,
-  activeSide: BattleSide,
-): ChallengeResolution {
-  const opposingSide: BattleSide = activeSide === "player" ? "enemy" : "player";
-  const dissolved: { battleCardId: string; side: BattleSide }[] = [];
-  let activeScored = 0;
-  let opposingScored = 0;
-
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
-    const challengerId = state.sides[activeSide].frontRank[slotId];
-    const defenderId = state.sides[opposingSide].frontRank[slotId];
-    const challenger = challengerId === null ? null : state.cardInstances[challengerId] ?? null;
-    const defender = defenderId === null ? null : state.cardInstances[defenderId] ?? null;
-
-    // A lane with no challenger never scores or dissolves for the active side.
-    if (challenger === null || challengerId === null) {
-      continue;
-    }
-
-    const challengerSpark = selectEffectiveSparkForInstance(challenger);
-
-    // Unpaired challenger: scores ⍟ equal to its spark.
-    if (defender === null || defenderId === null) {
-      activeScored += challengerSpark;
-      continue;
-    }
-
-    const defenderSpark = selectEffectiveSparkForInstance(defender);
-
-    // Base spark comparison, with Preeminence breaking ties.
-    const baseChallengerDissolves = dissolvesAgainst(challenger, challengerSpark, defender, defenderSpark);
-    const baseDefenderDissolves = dissolvesAgainst(defender, defenderSpark, challenger, challengerSpark);
-    let challengerDissolves = baseChallengerDissolves;
-    let defenderDissolves = baseDefenderDissolves;
-
-    // Vengeful: a bearer that loses dissolves the opposing character too.
-    if (baseChallengerDissolves && hasKeyword(challenger, "vengeful")) {
-      defenderDissolves = true;
-    }
-    if (baseDefenderDissolves && hasKeyword(defender, "vengeful")) {
-      challengerDissolves = true;
-    }
-
-    // Unstoppable: a defended character that survives still scores its spark.
-    if (!challengerDissolves && defenderDissolves && hasKeyword(challenger, "unstoppable")) {
-      activeScored += challengerSpark;
-    }
-    if (!defenderDissolves && challengerDissolves && hasKeyword(defender, "unstoppable")) {
-      opposingScored += defenderSpark;
-    }
-
-    if (challengerDissolves) {
-      dissolved.push({ battleCardId: challengerId, side: activeSide });
-    }
-    if (defenderDissolves) {
-      dissolved.push({ battleCardId: defenderId, side: opposingSide });
-    }
-  }
-
-  const edits: BattleDebugEdit[] = [];
-  if (activeScored > 0) {
-    edits.push({ kind: "ADJUST_SCORE", side: activeSide, amount: activeScored });
-  }
-  if (opposingScored > 0) {
-    edits.push({ kind: "ADJUST_SCORE", side: opposingSide, amount: opposingScored });
-  }
-  for (const entry of dissolved) {
-    edits.push({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: entry.battleCardId,
-      destination: { side: entry.side, zone: "void" },
-    });
-  }
-
-  return {
-    edits,
-    playerScoreDelta: activeSide === "player" ? activeScored : opposingScored,
-    enemyScoreDelta: activeSide === "enemy" ? activeScored : opposingScored,
-  };
-}
-
-/**
- * Whether `self` dissolves when challenged against `opposing`. A non-figment
- * dissolves on a lower or tied spark, except a tie won by Preeminence. A figment
- * stack dissolves only when the opposing spark covers every figment.
- */
-function dissolvesAgainst(
-  self: BattleCardInstance,
-  selfSpark: number,
-  opposing: BattleCardInstance,
-  opposingSpark: number,
-): boolean {
-  if (isFigmentInstance(self)) {
-    const fullyDissolved = selectFigmentChallengeLossCount(self, opposingSpark) >= selectFigmentCount(self);
-    if (!fullyDissolved) {
-      return false;
-    }
-    // A stack whose total spark exactly ties survives if its top figment has
-    // Preeminence (rules §Figments / §Keywords).
-    if (selfSpark === opposingSpark && winsTieByPreeminence(self, opposing)) {
-      return false;
-    }
-    return true;
-  }
-  if (selfSpark > opposingSpark) {
-    return false;
-  }
-  if (selfSpark < opposingSpark) {
-    return true;
-  }
-  // Spark tie: Preeminence wins unless the opponent also has it.
-  return !winsTieByPreeminence(self, opposing);
-}
-
-/** Whether `self` wins a spark tie because only it carries Preeminence. */
-function winsTieByPreeminence(self: BattleCardInstance, opposing: BattleCardInstance): boolean {
-  return hasKeyword(self, "preeminence") && !hasKeyword(opposing, "preeminence");
-}
-
-function hasKeyword(instance: BattleCardInstance, keyword: ResolutionKeyword): boolean {
-  const text = instance.definition.renderedText;
-  if (text && KEYWORD_PATTERNS[keyword].test(text)) {
-    return true;
-  }
-  if (isFigmentInstance(instance)) {
-    const subtype = instance.definition.subtype.trim().toLowerCase();
-    return FIGMENT_KEYWORDS[subtype] === keyword;
-  }
-  return false;
 }
 
 /**

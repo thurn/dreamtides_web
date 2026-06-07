@@ -96,6 +96,7 @@ interface PlacementSpec {
   slotId: FrontRankSlotId;
   figmentCount?: number;
   subtype?: string;
+  renderedText?: string;
 }
 
 /**
@@ -122,6 +123,7 @@ function makeJudgmentState(
         definition: {
           ...makeCharacterDefinition(spec.name, spec.spark),
           subtype,
+          renderedText: spec.renderedText ?? "",
         },
         owner: side,
         controller: side,
@@ -419,6 +421,107 @@ describe("resolveJudgment", () => {
       kind: "ADJUST_SCORE",
       side: "enemy",
       amount: 5,
+    });
+  });
+
+  // The AI-facing judgment now delegates to the keyword-aware unified resolver
+  // (Task 3.2). These cases prove the four combat keywords flow through
+  // `resolveJudgment` — behavior the prior keyword-blind judgment path dropped.
+  describe("keyword awareness (delegated to the unified resolver)", () => {
+    it("lets a Preeminence character win a spark tie instead of dissolving both", () => {
+      // Keyword-blind: a 4v4 tie dissolved both. Keyword-aware: the Preeminence
+      // bearer survives and only the defender dissolves.
+      const { state, ids } = makeJudgmentState("player", {
+        player: [
+          { name: "challenger", spark: 4, slotId: "F0", renderedText: "Preeminence" },
+        ],
+        enemy: [{ name: "defender", spark: 4, slotId: "F0" }],
+      });
+
+      const proposal = resolveJudgment({ state, activeSide: "player" });
+
+      const lane = proposal.resolution.lanes.find((entry) => entry.slotId === "F0");
+      expect(lane?.winner).toBe("player");
+      expect(proposal.edits).toContainEqual({
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: ids.defender,
+        destination: { side: "enemy", zone: "void" },
+      });
+      expect(
+        proposal.edits.some(
+          (edit) =>
+            edit.kind === "MOVE_CARD_TO_ZONE" && edit.battleCardId === ids.challenger,
+        ),
+      ).toBe(false);
+    });
+
+    it("drags the surviving winner down when the loser is Vengeful", () => {
+      // Keyword-blind: only the 2-spark loser dissolved. Keyword-aware: the
+      // Vengeful loser drags the 5-spark winner down too — both dissolve.
+      const { state, ids } = makeJudgmentState("player", {
+        player: [{ name: "challenger", spark: 5, slotId: "F0" }],
+        enemy: [
+          { name: "defender", spark: 2, slotId: "F0", renderedText: "Vengeful" },
+        ],
+      });
+
+      const proposal = resolveJudgment({ state, activeSide: "player" });
+
+      const dissolves = proposal.edits.filter(
+        (edit) => edit.kind === "MOVE_CARD_TO_ZONE",
+      );
+      expect(dissolves).toHaveLength(2);
+      expect(proposal.edits).toContainEqual({
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: ids.challenger,
+        destination: { side: "player", zone: "void" },
+      });
+      expect(proposal.edits).toContainEqual({
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: ids.defender,
+        destination: { side: "enemy", zone: "void" },
+      });
+    });
+
+    it("scores a defended Unstoppable challenger that survives", () => {
+      // Keyword-blind: a defended challenger never scored. Keyword-aware: an
+      // Unstoppable challenger that survives scores its spark for the active side.
+      const { state } = makeJudgmentState("player", {
+        player: [
+          { name: "challenger", spark: 6, slotId: "F0", renderedText: "Unstoppable" },
+        ],
+        enemy: [{ name: "defender", spark: 3, slotId: "F0" }],
+      });
+
+      const proposal = resolveJudgment({ state, activeSide: "player" });
+
+      expect(proposal.resolution.playerScoreDelta).toBe(6);
+      expect(proposal.edits).toContainEqual({
+        kind: "ADJUST_SCORE",
+        side: "player",
+        amount: 6,
+      });
+    });
+
+    it("scores a surviving Unstoppable defender for the opposing side", () => {
+      // The opposing (defending) side can score too — the keyword-blind path
+      // only ever scored the active side, dropping this entirely.
+      const { state } = makeJudgmentState("player", {
+        player: [{ name: "challenger", spark: 2, slotId: "F0" }],
+        enemy: [
+          { name: "defender", spark: 6, slotId: "F0", renderedText: "Unstoppable" },
+        ],
+      });
+
+      const proposal = resolveJudgment({ state, activeSide: "player" });
+
+      expect(proposal.resolution.enemyScoreDelta).toBe(6);
+      expect(proposal.resolution.playerScoreDelta).toBe(0);
+      expect(proposal.edits).toContainEqual({
+        kind: "ADJUST_SCORE",
+        side: "enemy",
+        amount: 6,
+      });
     });
   });
 });

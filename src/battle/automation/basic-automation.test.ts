@@ -10,10 +10,7 @@ import type {
 } from "../types";
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
-import {
-  planBasicAutomationCommands,
-  resolveChallenge,
-} from "./basic-automation";
+import { planBasicAutomationCommands } from "./basic-automation";
 
 const CAPS = { maxEnergyCap: 10, scoreToWin: 25 };
 
@@ -238,149 +235,11 @@ describe("planBasicAutomationCommands — playing cards", () => {
   });
 });
 
-describe("resolveChallenge — spark comparison", () => {
-  it("scores an unpaired challenger's spark for the active side", () => {
-    const state = makeState({
-      activeSide: "player",
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
-    });
-
-    const resolution = resolveChallenge(state, "player");
-    expect(resolution.playerScoreDelta).toBe(4);
-    expect(resolution.edits).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 4 });
-  });
-
-  it("dissolves the lower-spark character in a defended lane", () => {
-    const state = makeState({
-      activeSide: "player",
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      enemy: { frontRank: frontRankSlots("F0", "e0") },
-      instances: [
-        makeInstance("p0", { owner: "player", printedSpark: 5 }),
-        makeInstance("e0", { owner: "enemy", printedSpark: 3 }),
-      ],
-    });
-
-    const resolution = resolveChallenge(state, "player");
-    expect(resolution.playerScoreDelta).toBe(0);
-    expect(resolution.edits).toContainEqual({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "e0",
-      destination: { side: "enemy", zone: "void" },
-    });
-    expect(resolution.edits).not.toContainEqual({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "p0",
-      destination: { side: "player", zone: "void" },
-    });
-  });
-
-  it("dissolves both characters on a spark tie", () => {
-    const state = makeState({
-      activeSide: "player",
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      enemy: { frontRank: frontRankSlots("F0", "e0") },
-      instances: [
-        makeInstance("p0", { owner: "player", printedSpark: 4 }),
-        makeInstance("e0", { owner: "enemy", printedSpark: 4 }),
-      ],
-    });
-
-    const dissolves = resolveChallenge(state, "player").edits.filter(
-      (edit) => edit.kind === "MOVE_CARD_TO_ZONE",
-    );
-    expect(dissolves).toHaveLength(2);
-  });
-});
-
-describe("resolveChallenge — keyword awareness", () => {
-  it("lets a Preeminence character win a spark tie", () => {
-    const state = makeState({
-      activeSide: "player",
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      enemy: { frontRank: frontRankSlots("F0", "e0") },
-      instances: [
-        makeInstance("p0", { owner: "player", printedSpark: 4, renderedText: "Preeminence" }),
-        makeInstance("e0", { owner: "enemy", printedSpark: 4 }),
-      ],
-    });
-
-    const resolution = resolveChallenge(state, "player");
-    expect(resolution.edits).toContainEqual({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "e0",
-      destination: { side: "enemy", zone: "void" },
-    });
-    expect(resolution.edits).not.toContainEqual({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "p0",
-      destination: { side: "player", zone: "void" },
-    });
-  });
-
-  it("dissolves the winner too when the loser is Vengeful", () => {
-    const state = makeState({
-      activeSide: "player",
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      enemy: { frontRank: frontRankSlots("F0", "e0") },
-      instances: [
-        makeInstance("p0", { owner: "player", printedSpark: 5 }),
-        makeInstance("e0", { owner: "enemy", printedSpark: 2, renderedText: "Vengeful" }),
-      ],
-    });
-
-    const dissolves = resolveChallenge(state, "player").edits.filter(
-      (edit) => edit.kind === "MOVE_CARD_TO_ZONE",
-    );
-    expect(dissolves).toHaveLength(2);
-  });
-
-  it("scores a defended Unstoppable challenger that survives", () => {
-    const state = makeState({
-      activeSide: "player",
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      enemy: { frontRank: frontRankSlots("F0", "e0") },
-      instances: [
-        makeInstance("p0", { owner: "player", printedSpark: 6, renderedText: "Unstoppable" }),
-        makeInstance("e0", { owner: "enemy", printedSpark: 3 }),
-      ],
-    });
-
-    const resolution = resolveChallenge(state, "player");
-    expect(resolution.playerScoreDelta).toBe(6);
-    expect(resolution.edits).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 6 });
-  });
-
-  it("recognizes the Celestial figment's implicit Preeminence keyword", () => {
-    const state = makeState({
-      activeSide: "player",
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      enemy: { frontRank: frontRankSlots("F0", "e0") },
-      instances: [
-        makeInstance("p0", {
-          owner: "player",
-          printedSpark: 2,
-          subtype: "Celestial",
-          isFigment: true,
-        }),
-        makeInstance("e0", { owner: "enemy", printedSpark: 2 }),
-      ],
-    });
-
-    const resolution = resolveChallenge(state, "player");
-    expect(resolution.edits).toContainEqual({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "e0",
-      destination: { side: "enemy", zone: "void" },
-    });
-    expect(resolution.edits).not.toContainEqual({
-      kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "p0",
-      destination: { side: "player", zone: "void" },
-    });
-  });
-});
+// The Challenge resolver itself (spark comparison, the four combat keywords,
+// figment dissolution) is unit-tested in `src/battle/engine/challenge.test.ts`,
+// its canonical home. Here we exercise the automation path that routes through
+// it (turn handoff and bookend advance), proving the resolver's edits are folded
+// into the automation command stream.
 
 describe("planBasicAutomationCommands — turn handoff", () => {
   it("resolves the challenge, ramps energy, and draws for the incoming side", () => {
