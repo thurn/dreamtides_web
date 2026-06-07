@@ -44,7 +44,7 @@ export interface ReplayDeps {
  * best `offerSize` cards of the pack for this pick, the whole pack when it is
  * small, or `[]` once the sequence is exhausted (e.g. `pickNumber > 30`).
  */
-function buildReplayOffer(
+export function buildReplayOffer(
   state: ReplayDraftState,
   deps: ReplayDeps,
 ): number[] {

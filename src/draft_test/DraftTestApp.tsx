@@ -12,8 +12,13 @@ import {
 import { cardImageUrl } from "../data/card-database";
 import { CARD_ASPECT_RATIO } from "../components/card-aspect";
 import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
-import { drawAndSpendUniqueCards } from "../draft/draft-engine";
-import type { DraftState } from "../types/draft";
+import {
+  buildReplayOffer,
+  createInitialReplayDraftState,
+  drawAndSpendUniqueCards,
+} from "../draft/draft-engine";
+import type { DraftState, ReplayDraftState } from "../types/draft";
+import type { ReplayDeps } from "../draft/draft-engine";
 import type { CardData } from "../types/cards";
 import {
   buildPoolData,
@@ -26,13 +31,22 @@ import {
   buildNameIndex,
   loadCardsV2Database,
   loadDecklists,
+  loadDraftRecords,
   loadHumanDecklists,
   loadMergedArchetypeLists,
   resolvePool,
 } from "../data/cards-v2-database";
+import type { DraftRecord } from "../data/cards-v2-database";
 import { loadDreamcallersV2 } from "../data/dreamcallers-v2-database";
 import type { DraftDreamcaller } from "../data/dreamcallers-v2-database";
 import { DraftDreamcallerSelect } from "./DraftDreamcallerSelect";
+import {
+  buildPackSequence,
+  resolveCardNames,
+  selectRecordIndex,
+} from "../draft/replay/draft-records";
+import { buildFitModel } from "../draft/replay/fit-model";
+import type { FitModel } from "../draft/replay/fit-model";
 
 const OFFER_SIZE = 4;
 const DECK_ROW_HEIGHT_PX = 36;
@@ -391,6 +405,10 @@ export default function DraftTestApp() {
   const poolVariant = useMemo(readPoolVariant, []);
   const poolSeed = useMemo(readPoolSeed, []);
   const poolSizeOverride = useMemo(readPoolSize, []);
+  const replayMode = useMemo(
+    () => new URLSearchParams(window.location.search).get("algo") === "replay",
+    [],
+  );
   const [status, setStatus] = useState<
     "loading" | "select" | "ready" | "error"
   >("loading");
@@ -398,6 +416,7 @@ export default function DraftTestApp() {
   const [database, setDatabase] = useState<Map<number, CardData>>(new Map());
   const [dreamcallers, setDreamcallers] = useState<DraftDreamcaller[]>([]);
   const [poolInfo, setPoolInfo] = useState<PoolInfo | null>(null);
+  const [replayRecordId, setReplayRecordId] = useState<string | null>(null);
   const [currentOffer, setCurrentOffer] = useState<number[]>([]);
   const [deck, setDeck] = useState<number[]>([]);
   const [showSidebar, setShowSidebar] = useState(true);
@@ -406,31 +425,60 @@ export default function DraftTestApp() {
 
   const draftStateRef = useRef<DraftState | null>(null);
   const poolDataRef = useRef<PoolData | null>(null);
+  const recordsRef = useRef<DraftRecord[]>([]);
+  const fitModelRef = useRef<FitModel | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     void (async () => {
       try {
-        const [db, loadedDreamcallers, decklists, mergedLists, humanDecklists] =
-          await Promise.all([
+        if (replayMode) {
+          const [db, loadedDreamcallers, records] = await Promise.all([
             loadCardsV2Database(),
             loadDreamcallersV2(),
-            loadDecklists(),
-            loadMergedArchetypeLists(),
-            loadHumanDecklists(),
+            loadDraftRecords(),
           ]);
-        if (cancelled) return;
+          if (cancelled) return;
 
-        poolDataRef.current = buildPoolData(
-          [...db.values()],
-          decklists,
-          mergedLists,
-          humanDecklists,
-        );
-        setDatabase(db);
-        setDreamcallers(loadedDreamcallers);
-        setStatus("select");
+          if (records.length === 0) {
+            setErrorMessage(
+              "No draft records found. Run `node scripts/setup-assets.mjs` to generate the draft-records-data.json bundle.",
+            );
+            setStatus("error");
+            return;
+          }
+
+          recordsRef.current = records;
+          const nameIndex = buildNameIndex(db);
+          fitModelRef.current = buildFitModel(
+            records.map((r) => r.mainboard),
+            nameIndex,
+          );
+          setDatabase(db);
+          setDreamcallers(loadedDreamcallers);
+          setStatus("select");
+        } else {
+          const [db, loadedDreamcallers, decklists, mergedLists, humanDecklists] =
+            await Promise.all([
+              loadCardsV2Database(),
+              loadDreamcallersV2(),
+              loadDecklists(),
+              loadMergedArchetypeLists(),
+              loadHumanDecklists(),
+            ]);
+          if (cancelled) return;
+
+          poolDataRef.current = buildPoolData(
+            [...db.values()],
+            decklists,
+            mergedLists,
+            humanDecklists,
+          );
+          setDatabase(db);
+          setDreamcallers(loadedDreamcallers);
+          setStatus("select");
+        }
       } catch (error) {
         if (cancelled) return;
         setErrorMessage(error instanceof Error ? error.message : String(error));
@@ -441,60 +489,97 @@ export default function DraftTestApp() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [replayMode]);
 
   const handleSelectDreamcaller = useCallback(
     (dreamcaller: DraftDreamcaller) => {
-      const poolData = poolDataRef.current;
-      if (!poolData) return;
+      if (replayMode) {
+        const records = recordsRef.current;
+        const fitModel = fitModelRef.current;
+        if (records.length === 0 || !fitModel) return;
 
-      const pool: GeneratedPool = generatePoolFromData(
-        poolData,
-        poolSeed,
-        dreamcaller.draftArchetypes,
-        poolVariant,
-        dreamcaller.themeArchetypes,
-        poolSizeOverride,
-        dreamcaller.signatureCards,
-      );
-      const nameIndex = buildNameIndex(database);
-      const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(
-        pool,
-        nameIndex,
-      );
-      if (unresolvedNames.length > 0) {
-        console.warn(
-          `[draft_test] ${String(unresolvedNames.length)} pool card names had no match in cards_v2: ${unresolvedNames.join(", ")}`,
+        const nameIndex = buildNameIndex(database);
+        const seed =
+          poolSeed ?? (Math.floor(Math.random() * 2 ** 32) >>> 0);
+        const index = selectRecordIndex(seed, records.length);
+        const record = records[index];
+        const packSequence = buildPackSequence(record, nameIndex);
+        const signatureCardNumbers = resolveCardNames(
+          dreamcaller.signatureCards ?? [],
+          nameIndex,
         );
+
+        const draftState: ReplayDraftState = createInitialReplayDraftState({
+          recordId: record.id,
+          packSequence,
+          signatureCardNumbers,
+        });
+        draftStateRef.current = draftState;
+
+        const deps: ReplayDeps = {
+          deckCardNumbers: [],
+          fitModel,
+          offerSize: OFFER_SIZE,
+        };
+        const offer = buildReplayOffer(draftState, deps);
+        draftState.currentOffer = offer;
+
+        setReplayRecordId(record.id);
+        setPoolInfo(null);
+        setCurrentOffer(offer);
+        setStatus("ready");
+      } else {
+        const poolData = poolDataRef.current;
+        if (!poolData) return;
+
+        const pool: GeneratedPool = generatePoolFromData(
+          poolData,
+          poolSeed,
+          dreamcaller.draftArchetypes,
+          poolVariant,
+          dreamcaller.themeArchetypes,
+          poolSizeOverride,
+          dreamcaller.signatureCards,
+        );
+        const nameIndex = buildNameIndex(database);
+        const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(
+          pool,
+          nameIndex,
+        );
+        if (unresolvedNames.length > 0) {
+          console.warn(
+            `[draft_test] ${String(unresolvedNames.length)} pool card names had no match in cards_v2: ${unresolvedNames.join(", ")}`,
+          );
+        }
+        logPoolTrace(dreamcaller.name, pool);
+
+        const draftState: DraftState = {
+          mode: "pool",
+          draftPoolCopiesByCard,
+          remainingCopiesByCard: { ...draftPoolCopiesByCard },
+          currentOffer: [],
+          activeSiteId: "draft_test",
+          pickNumber: 1,
+          sitePicksCompleted: 0,
+        };
+        draftStateRef.current = draftState;
+
+        const firstOffer = drawAndSpendUniqueCards(draftState, OFFER_SIZE);
+
+        setPoolInfo({
+          dreamcaller: dreamcaller.name,
+          identity: pool.identity,
+          themes: pool.themes,
+          size: pool.size,
+          uniqueCount: pool.counts.size,
+          seed: pool.seed,
+          variant: pool.variant,
+        });
+        setCurrentOffer(firstOffer);
+        setStatus("ready");
       }
-      logPoolTrace(dreamcaller.name, pool);
-
-      const draftState: DraftState = {
-        mode: "pool",
-        draftPoolCopiesByCard,
-        remainingCopiesByCard: { ...draftPoolCopiesByCard },
-        currentOffer: [],
-        activeSiteId: "draft_test",
-        pickNumber: 1,
-        sitePicksCompleted: 0,
-      };
-      draftStateRef.current = draftState;
-
-      const firstOffer = drawAndSpendUniqueCards(draftState, OFFER_SIZE);
-
-      setPoolInfo({
-        dreamcaller: dreamcaller.name,
-        identity: pool.identity,
-        themes: pool.themes,
-        size: pool.size,
-        uniqueCount: pool.counts.size,
-        seed: pool.seed,
-        variant: pool.variant,
-      });
-      setCurrentOffer(firstOffer);
-      setStatus("ready");
     },
-    [database, poolVariant, poolSeed, poolSizeOverride],
+    [database, poolVariant, poolSeed, poolSizeOverride, replayMode],
   );
 
   const offerCards = useMemo(() => {
@@ -509,13 +594,39 @@ export default function DraftTestApp() {
     [deck, database],
   );
 
-  const handlePick = useCallback((cardNumber: number) => {
-    const state = draftStateRef.current;
-    if (!state) return;
-    setDeck((previous) => [...previous, cardNumber]);
-    const nextOffer = drawAndSpendUniqueCards(state, OFFER_SIZE);
-    setCurrentOffer(nextOffer);
-  }, []);
+  const handlePick = useCallback(
+    (cardNumber: number) => {
+      const state = draftStateRef.current;
+      if (!state) return;
+
+      if (replayMode) {
+        const replayState = state as ReplayDraftState;
+        const fitModel = fitModelRef.current;
+        if (!fitModel) return;
+
+        // Standalone free-draft harness: advance the replay cursor directly
+        // (no draft-site 5-pick cap). Side effects (cursor mutation, offer
+        // recompute) stay OUT of the setDeck updater, which React StrictMode
+        // double-invokes; running them once here keeps pickNumber in step.
+        const nextDeck = [...deck, cardNumber];
+        replayState.pickNumber += 1;
+        const deps: ReplayDeps = {
+          deckCardNumbers: nextDeck,
+          fitModel,
+          offerSize: OFFER_SIZE,
+        };
+        const offer = buildReplayOffer(replayState, deps);
+        replayState.currentOffer = offer;
+        setDeck(nextDeck);
+        setCurrentOffer(offer);
+      } else {
+        setDeck((previous) => [...previous, cardNumber]);
+        const nextOffer = drawAndSpendUniqueCards(state, OFFER_SIZE);
+        setCurrentOffer(nextOffer);
+      }
+    },
+    [replayMode, deck],
+  );
 
   const handleInspect = useCallback((card: CardData) => {
     setOverlayCard(card);
@@ -603,9 +714,34 @@ export default function DraftTestApp() {
           <OfferingScreenHeader
             compact
             title="Draft Test"
-            subtitle={`Pick ${String(deck.length + 1)}`}
+            subtitle={
+              replayMode && currentOffer.length === 0
+                ? "Draft complete"
+                : `Pick ${String(deck.length + 1)}`
+            }
             rightSlot={
-              poolInfo ? (
+              replayMode ? (
+                replayRecordId ? (
+                  <div
+                    data-testid="draft-test-replay-info"
+                    className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-[11px] opacity-80"
+                  >
+                    <span
+                      className="rounded px-2 py-0.5 font-bold uppercase tracking-widest"
+                      style={{
+                        background: "rgba(59, 130, 246, 0.18)",
+                        border: "1px solid rgba(59, 130, 246, 0.4)",
+                        color: "#60a5fa",
+                      }}
+                    >
+                      replay
+                    </span>
+                    <span className="font-mono opacity-60">
+                      {replayRecordId.slice(0, 12)}
+                    </span>
+                  </div>
+                ) : undefined
+              ) : poolInfo ? (
                 <div
                   data-testid="draft-test-pool-info"
                   className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-[11px] opacity-80"
@@ -669,47 +805,58 @@ export default function DraftTestApp() {
           />
         </div>
 
-        {/* 2x2 card grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`offer-${currentOffer.join(",")}`}
-            className="order-2 grid gap-3 md:gap-4"
-            style={{
-              gridTemplateColumns: "repeat(2, auto)",
-              gridTemplateRows: "repeat(2, auto)",
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {offerCards.map((card) => (
-              <div
-                key={`card-${String(card.cardNumber)}`}
-                data-testid={`draft-test-offer-card-${String(card.cardNumber)}`}
-                className="draft-offer-card-wrapper relative rounded-lg"
-                style={DRAFT_OFFER_CARD_STYLE}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  handleInspect(card);
-                }}
-              >
-                <CardDisplay
-                  card={card}
-                  className="h-full w-full"
-                  large
-                  onClick={() => {
-                    handlePick(card.cardNumber);
+        {/* 2x2 card grid or draft-complete message */}
+        {replayMode && currentOffer.length === 0 ? (
+          <div className="order-2 flex flex-col items-center justify-center gap-3 px-4 py-8 text-center">
+            <p className="text-base font-bold" style={{ color: "#c084fc" }}>
+              Draft complete
+            </p>
+            <p className="text-sm opacity-50">
+              {String(deck.length)} cards drafted. Refresh for a new draft.
+            </p>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={`offer-${currentOffer.join(",")}`}
+              className="order-2 grid gap-3 md:gap-4"
+              style={{
+                gridTemplateColumns: "repeat(2, auto)",
+                gridTemplateRows: "repeat(2, auto)",
+              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {offerCards.map((card) => (
+                <div
+                  key={`card-${String(card.cardNumber)}`}
+                  data-testid={`draft-test-offer-card-${String(card.cardNumber)}`}
+                  className="draft-offer-card-wrapper relative rounded-lg"
+                  style={DRAFT_OFFER_CARD_STYLE}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    handleInspect(card);
                   }}
-                />
-              </div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+                >
+                  <CardDisplay
+                    card={card}
+                    className="h-full w-full"
+                    large
+                    onClick={() => {
+                      handlePick(card.cardNumber);
+                    }}
+                  />
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         <p className="order-3 px-4 py-2 text-center text-[11px] opacity-40">
           Click a card to draft it. Right-click to inspect. Refresh for a new
-          pool.
+          {replayMode ? " draft." : " pool."}
         </p>
       </div>
 
