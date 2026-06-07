@@ -2361,7 +2361,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Discover"]
+tags = ["Discover", "Art Rework"]
 image-number = 1891048579
 art-owned = false
 card-number = 130
@@ -3925,6 +3925,7 @@ tags = []
 image-number = 1794244543
 art-owned = true
 card-number = 217
+art = { x = -0.032, y = -0.445, scale = 1.37 }
 
 [[cards]]
 name = "Forge-Twin"
@@ -3938,7 +3939,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Spark Scaler"]
+tags = ["Spark Scaler", "Art Rework"]
 image-number = 768349747
 art-owned = false
 card-number = 218
@@ -5020,7 +5021,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = []
+tags = ["Art Rework"]
 image-number = 658076044
 art-owned = false
 card-number = 278
@@ -5492,7 +5493,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = []
+tags = ["Art Rework"]
 image-number = 789291016
 art-owned = false
 card-number = 304
@@ -5943,13 +5944,13 @@ art-owned = false
 card-number = 328
 
 [[cards]]
-name = "Forgotten Titan"
+name = "Forgotten Sleeper"
 mtg-name = "Asmoranomardicadaistinaculdacar"
 id = "f7c68226-def4-4eb0-bdfe-b028482e1351"
 rendered-text = "If you've discarded a card this turn, this character costs 3● less."
 energy-cost = 4
 card-type = "Character"
-subtype = "Ancient"
+subtype = "Synth"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -5958,6 +5959,7 @@ tags = []
 image-number = 2424248089
 art-owned = true
 card-number = 329
+art = { x = 0.882, y = 0.032, scale = 1.17 }
 
 [[cards]]
 name = "Harborwarden"
@@ -6671,7 +6673,7 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Removal"]
+tags = ["Removal", "Art Rework"]
 image-number = 336703103
 art-owned = false
 card-number = 368
@@ -7092,7 +7094,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = []
+tags = ["Art Rework"]
 image-number = 292275560
 art-owned = false
 card-number = 391
@@ -8013,7 +8015,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["ETB Bounce"]
+tags = ["ETB Bounce", "Art Rework"]
 image-number = 539227192
 art-owned = false
 card-number = 441
@@ -9005,6 +9007,7 @@ tags = []
 image-number = 478671142
 art-owned = false
 card-number = 496
+art = { x = 0.228, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Resilient Wanderer"
