@@ -493,6 +493,22 @@ export function PoolViewer({
                 barExtras={sourceToggle}
               />
 
+              {source === "deck" && replayRecord !== null ? (
+                <div
+                  data-pool-deck-source=""
+                  style={{
+                    fontSize: "0.78rem",
+                    color: "#9fb0ac",
+                    wordBreak: "break-all",
+                  }}
+                >
+                  {"Record deck: "}
+                  <span style={{ color: "#8edbd1", fontWeight: 600 }}>
+                    {replayRecord.sourceFile}
+                  </span>
+                </div>
+              ) : null}
+
               {source === "history" ? (
                 replayRecord !== null && replayRecord.packs.length > 0 ? (
                   <ReplayPickHistory

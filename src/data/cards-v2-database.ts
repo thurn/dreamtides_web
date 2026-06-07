@@ -73,6 +73,7 @@ export async function loadMergedArchetypeLists(): Promise<
 export interface DraftRecord {
   id: string;
   draftId: string;
+  sourceFile: string;  // adapted-record JSON filename this seat came from
   mainboard: string[];
   packs: string[][];  // 30 trimmed packs of card names (raw order)
   picks: string[][];  // human picks aligned to packs (each 0..3 names)

@@ -71,6 +71,7 @@ function makeRec(id: string, packs: string[][]): DraftRecord {
   return {
     id,
     draftId: `draft-${id}`,
+    sourceFile: `draft-${id}-records.json`,
     mainboard: packs.flat(),
     packs,
     picks: packs.map(() => []),
@@ -190,6 +191,7 @@ describe("buildPackSequence", () => {
     const record: DraftRecord = {
       id: "rec-1",
       draftId: "draft-1",
+      sourceFile: "draft-1-records.json",
       mainboard: ["a", "b"],
       packs: [
         ["a", "b", "ghost"], // ghost dropped
@@ -213,6 +215,7 @@ describe("buildPackSequence", () => {
     const record: DraftRecord = {
       id: "rec-2",
       draftId: "draft-2",
+      sourceFile: "draft-2-records.json",
       mainboard: [],
       packs: [["known"], ["unknown1", "unknown2"], ["known", "unknown1"]],
       picks: [[], [], []],

@@ -186,6 +186,7 @@ function makeReplayRecord(): DraftRecord {
   return {
     id: "record-0",
     draftId: "draft-0",
+    sourceFile: "draft-0-records.json",
     mainboard: corpus[0],
     // 30 packs, each a 4-card pack of real corpus cards.
     packs: Array.from({ length: 30 }, (_, i) => {

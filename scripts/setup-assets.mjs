@@ -348,6 +348,7 @@ export function buildDraftRecords(dir, cardMaps) {
       records.push({
         id: `${draftId}#${seat}`,
         draftId,
+        sourceFile: filename,
         mainboard,
         packs,
         picks,

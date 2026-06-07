@@ -100,6 +100,7 @@ const replayDraftState: DraftState = {
 const replayRecord: DraftRecord = {
   id: "seat-7",
   draftId: "draft-1",
+  sourceFile: "draft-1-records.json",
   // Mainboard with a doubled "Alpha Seer" so the deck grid shows an x2 badge.
   mainboard: ["Alpha Seer", "Alpha Seer", "Beta Guard", "Unknown Relic"],
   packs: [
@@ -478,6 +479,11 @@ describe("PoolViewer", () => {
     expect(container.querySelector('[data-pool-card-number="2"]')).not.toBeNull();
     // Quick Spark (#4) is not in the mainboard.
     expect(container.querySelector('[data-pool-card-number="4"]')).toBeNull();
+
+    // The record deck screen names the source record JSON file.
+    expect(
+      container.querySelector('[data-pool-deck-source]')?.textContent,
+    ).toContain("draft-1-records.json");
 
     act(() => {
       root.unmount();

@@ -177,6 +177,7 @@ describe("loadQuestContent", () => {
     const fixtureRecord: DraftRecord = {
       id: "rec-1",
       draftId: "draft-1",
+      sourceFile: "draft-1-records.json",
       mainboard: ["Card 1", "Card 2", "Card 3"],
       packs: [["Card 1", "Card 2"], ["Card 3"]],
       picks: [["Card 1"], ["Card 2"]],
@@ -213,6 +214,7 @@ function makeRecord(id: string, packCardNames: string[][]): DraftRecord {
   return {
     id,
     draftId: `draft-${id}`,
+    sourceFile: `draft-${id}-records.json`,
     mainboard: packCardNames.flat(),
     packs: packCardNames,
     picks: packCardNames.map(() => []),
