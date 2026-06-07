@@ -231,6 +231,77 @@ function minMaxNormalize(values: readonly number[]): number[] {
 }
 
 /**
+ * neighborCF stage: a similarity-weighted vote from the K nearest corpus decks.
+ * Build the deck's IDF vector, score every corpus deck by IDF-cosine, take the
+ * top K (tie-break by corpus index ascending for determinism), then for each
+ * candidate sum the similarities of the neighbours that ran it, normalize by the
+ * total similarity mass, and scale by the candidate's idf so a distinctive
+ * shared card counts more than a staple. An empty deck has no neighbours to vote,
+ * so this returns an empty map (every candidate then scores 0).
+ */
+function scoreNeighborCF(
+  candidateNames: readonly string[],
+  deckSet: Set<string>,
+  model: Pick<FitModel, "idf" | "decks" | "tuning">,
+): Map<string, number> {
+  const { idf, decks, tuning } = model;
+  const scores = new Map<string, number>();
+  if (deckSet.size === 0) return scores;
+
+  let sq = 0;
+  for (const c of deckSet) {
+    const w = idf.get(c) ?? 0;
+    sq += w * w;
+  }
+  const deckVec: IdfDeck = { cards: deckSet, norm: Math.sqrt(sq) || 1 };
+  const idfOf = (c: string): number => idf.get(c) ?? 0;
+
+  const scored = decks.map((d, i) => ({
+    i,
+    sim: idfCosine(deckVec, d, idfOf),
+  }));
+  // Top K by similarity desc, tie-break by corpus index asc.
+  scored.sort((a, b) => b.sim - a.sim || a.i - b.i);
+  const neighbors = scored.slice(0, tuning.K);
+  let sumSim = 0;
+  for (const nb of neighbors) sumSim += nb.sim;
+  const denom = Math.max(sumSim, 1e-9);
+
+  for (const name of candidateNames) {
+    let acc = 0;
+    for (const nb of neighbors) {
+      if (decks[nb.i].cards.has(name)) acc += nb.sim;
+    }
+    scores.set(name, (acc / denom) * (idf.get(name) ?? 0));
+  }
+  return scores;
+}
+
+/**
+ * cooccur stage: the mean IDF-weighted partnership strength between each
+ * candidate and the cards already in the deck, read from the model's normalized
+ * co-occurrence lookup and averaged over the deck size. An empty deck has no
+ * partners, so this returns an empty map (every candidate then scores 0).
+ */
+function scoreCooccur(
+  candidateNames: readonly string[],
+  deckSet: Set<string>,
+  model: Pick<FitModel, "coocNorm">,
+): Map<string, number> {
+  const { coocNorm } = model;
+  const scores = new Map<string, number>();
+  if (deckSet.size === 0) return scores;
+
+  const sizeDenom = Math.max(deckSet.size, 1);
+  for (const name of candidateNames) {
+    let acc = 0;
+    for (const d of deckSet) acc += coocNorm.get(d)?.get(name) ?? 0;
+    scores.set(name, acc / sizeDenom);
+  }
+  return scores;
+}
+
+/**
  * Rank the cards of a single pack by how well they fit the player's current
  * deck and return the best `offerSize` of them. Pure and deterministic: no RNG,
  * and the input arrays are never mutated.
@@ -253,8 +324,7 @@ export function computeReplayOffer(
   fitModel: FitModel,
   offerSize: number,
 ): number[] {
-  const { numberToName, nameIndex, idf, prior, coocNorm, decks, tuning } =
-    fitModel;
+  const { numberToName, nameIndex, prior } = fitModel;
 
   // 1. Candidates: pack numbers -> names, drop unknowns, dedupe first-seen.
   const candidateNames = namesFromNumbers(packCardNumbers, numberToName);
@@ -277,67 +347,26 @@ export function computeReplayOffer(
   const deckSet = new Set(
     namesFromNumbers([...deckCardNumbers, ...signatureCardNumbers], numberToName),
   );
-  const deckEmpty = deckSet.size === 0;
 
-  // 4a. neighborCF: similarity-weighted vote from the K nearest corpus decks.
-  //     Build the deck's IDF vector, score every corpus deck by IDF-cosine, take
-  //     the top K (tie-break by corpus index ascending for determinism), then
-  //     for each candidate sum the similarities of the neighbours that ran it,
-  //     normalize by the total similarity mass, and scale by the candidate's idf
-  //     so a distinctive shared card counts more than a staple. Empty deck -> 0.
-  const neighborCF = new Map<string, number>();
-  if (!deckEmpty) {
-    let sq = 0;
-    for (const c of deckSet) {
-      const w = idf.get(c) ?? 0;
-      sq += w * w;
-    }
-    const deckVec: IdfDeck = { cards: deckSet, norm: Math.sqrt(sq) || 1 };
-    const idfOf = (c: string): number => idf.get(c) ?? 0;
+  // 4. Score each stage independently in card-name space. neighborCF and cooccur
+  //    both vanish on an empty deck; prior is a trivial lookup handled inline.
+  const neighborCF = scoreNeighborCF(candidateNames, deckSet, fitModel);
+  const cooccur = scoreCooccur(candidateNames, deckSet, fitModel);
 
-    const scored = decks.map((d, i) => ({
-      i,
-      sim: idfCosine(deckVec, d, idfOf),
-    }));
-    // Top K by similarity desc, tie-break by corpus index asc.
-    scored.sort((a, b) => (b.sim - a.sim) || (a.i - b.i));
-    const neighbors = scored.slice(0, tuning.K);
-    let sumSim = 0;
-    for (const nb of neighbors) sumSim += nb.sim;
-    const denom = Math.max(sumSim, 1e-9);
-
-    for (const name of candidateNames) {
-      let acc = 0;
-      for (const nb of neighbors) {
-        if (decks[nb.i].cards.has(name)) acc += nb.sim;
-      }
-      neighborCF.set(name, (acc / denom) * (idf.get(name) ?? 0));
-    }
-  }
-
-  // 4b. cooccur: mean partnership strength between the candidate and the cards
-  //     already in the deck. Empty deck -> 0.
-  const cooccur = new Map<string, number>();
-  if (!deckEmpty) {
-    const sizeDenom = Math.max(deckSet.size, 1);
-    for (const name of candidateNames) {
-      let acc = 0;
-      for (const d of deckSet) acc += coocNorm.get(d)?.get(name) ?? 0;
-      cooccur.set(name, acc / sizeDenom);
-    }
-  }
-
-  // 4c. prior: global play-rate (0 if the model has never seen the card).
   // 5. Min-max normalize each term across the candidates independently, then
   //    blend. A term constant across candidates normalizes to all-zero and so
   //    drops out of the ranking for this pick (it has no discriminating power).
   const nfRaw = candidateNames.map((c) => neighborCF.get(c) ?? 0);
   const coRaw = candidateNames.map((c) => cooccur.get(c) ?? 0);
+  // prior is intentionally computed over ALL cards (including idf-zeroed
+  // staples), so it still has a value for the popular early-pack cards and works
+  // as the pick-1 fallback when the deck is empty and the other two terms are 0.
   const prRaw = candidateNames.map((c) => prior.get(c) ?? 0);
   const nf = minMaxNormalize(nfRaw);
   const co = minMaxNormalize(coRaw);
   const pr = minMaxNormalize(prRaw);
 
+  const { tuning } = fitModel;
   const scoredCandidates = candidateNames.map((name, idx) => ({
     number: toNumber(name),
     fit: tuning.alpha * nf[idx] + tuning.beta * co[idx] + tuning.gamma * pr[idx],
