@@ -1,5 +1,5 @@
 01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
 6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer

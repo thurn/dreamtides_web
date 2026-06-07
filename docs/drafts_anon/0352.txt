@@ -1,4 +1,4 @@
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
 cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning

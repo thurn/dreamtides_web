@@ -1,6 +1,6 @@
 c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
 66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
 516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender

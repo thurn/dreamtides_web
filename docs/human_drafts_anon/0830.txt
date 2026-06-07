@@ -1,5 +1,5 @@
 c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
 629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer

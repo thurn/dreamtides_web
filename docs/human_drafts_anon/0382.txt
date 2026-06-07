@@ -18,7 +18,7 @@ d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
 b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
 3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
 123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
 8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

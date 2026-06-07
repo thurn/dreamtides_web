@@ -35,5 +35,5 @@ b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
 41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
 3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
 b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden

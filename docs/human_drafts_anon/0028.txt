@@ -1,4 +1,4 @@
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
 ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower

@@ -1,5 +1,5 @@
 8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
 4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken

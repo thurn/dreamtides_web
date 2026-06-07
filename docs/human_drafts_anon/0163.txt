@@ -3,7 +3,7 @@ ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
 9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
 66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
 c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
 ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian

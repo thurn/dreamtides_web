@@ -2,7 +2,7 @@
 1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
 7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
 e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
 4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken

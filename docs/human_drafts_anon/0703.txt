@@ -1,7 +1,7 @@
 3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
 31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
 4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
-f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Sleeper
 956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
 455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
 1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
