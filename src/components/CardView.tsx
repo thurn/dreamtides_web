@@ -46,11 +46,36 @@ export const DEFAULT_ART_CROP = { x: 0, y: 0, scale: 1.17 } as const;
 const ART_SOURCE_BOTTOM_CROP = 21 / 280;
 
 /**
+ * Vertical pan bounds (as fractions of the image's own height) for a cover image
+ * of the given over-cover height `renderH` (≥ 1). `maxPanYFrac` is the symmetric
+ * overscan bound: at the down extreme the raw image bottom meets the frame
+ * bottom. `lowerPanYFrac` is the *up* bound, raised above `-maxPanYFrac` by the
+ * watermark crop so it is the *usable* (post-watermark) bottom — not the clipped
+ * strip — that meets the frame bottom. Without this, panning up lifts the hidden
+ * watermark strip into the art region and leaves a gap that the fill band paints
+ * above the rules box. When the overscan is too small to cover the frame after
+ * the crop (low zoom), the up bound collapses onto the down bound so the art
+ * sits as low as it can. Callers must guard `renderH > 1` before calling.
+ */
+function artPanYBounds(renderH: number): {
+  maxPanYFrac: number;
+  lowerPanYFrac: number;
+} {
+  const maxPanYFrac = (renderH - 1) / (2 * renderH);
+  const lowerPanYFrac = Math.min(
+    ART_SOURCE_BOTTOM_CROP - maxPanYFrac,
+    maxPanYFrac,
+  );
+  return { maxPanYFrac, lowerPanYFrac };
+}
+
+/**
  * Cover metrics for an art crop against a frame: the rendered image size (as a
  * multiple of the frame, ≥ 1 on the covered axis) and the pan translate (as a
  * percentage of the image's own size, bounded so |pan| === 1 aligns the image
- * edge with the frame edge). `frameAspect` is the width-to-height ratio of the
- * box being covered.
+ * edge with the frame edge — except the up direction, which is bounded by
+ * `artPanYBounds` to keep the watermark strip out of the art region).
+ * `frameAspect` is the width-to-height ratio of the box being covered.
  */
 function artCoverMetrics(
   art: { x: number; y: number; scale: number },
@@ -66,9 +91,33 @@ function artCoverMetrics(
   const renderH = art.scale * coverH;
   const panX =
     renderW > 1 ? ((art.x * (renderW - 1)) / (2 * renderW)) * 100 : 0;
-  const panY =
-    renderH > 1 ? ((art.y * (renderH - 1)) / (2 * renderH)) * 100 : 0;
+  let panY = 0;
+  if (renderH > 1) {
+    const { maxPanYFrac, lowerPanYFrac } = artPanYBounds(renderH);
+    panY = Math.max(art.y * maxPanYFrac, lowerPanYFrac) * 100;
+  }
   return { renderW, renderH, panX, panY };
+}
+
+/**
+ * Lowest (most upward) `art.y` offset that still keeps the watermark-clipped art
+ * covering the art-region seam, for a given source aspect and zoom. The art crop
+ * editor clamps pan to this so the up arrow stops where the fill band would
+ * otherwise be exposed above the rules box, and the data-fix script uses it to
+ * pull previously over-panned crops back into range. Returns the editor's
+ * `OFFSET_MIN` floor when the image is wide enough that the symmetric bound is
+ * already the binding constraint (no extra up-pan room is lost to the watermark).
+ */
+export function minArtOffsetY(imageAspect: number, scale: number): number {
+  const ratio = imageAspect / ART_REGION_ASPECT_RATIO_VALUE;
+  const coverH = ratio >= 1 ? 1 : 1 / ratio;
+  const renderH = scale * coverH;
+  if (renderH <= 1) {
+    return 0;
+  }
+  const { maxPanYFrac, lowerPanYFrac } = artPanYBounds(renderH);
+  // Convert the clamped pan fraction back to an `art.y` in [-1, 1].
+  return Math.max(-1, Math.min(1, lowerPanYFrac / maxPanYFrac));
 }
 
 /**

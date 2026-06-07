@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { CardView, DEFAULT_ART_CROP } from "../components/CardView";
+import { CardView, DEFAULT_ART_CROP, minArtOffsetY } from "../components/CardView";
+import { cardImageUrl, hasAssignedImage } from "../data/card-database";
 import type { ArtCrop } from "../types/cards";
 import type { EditorCardRecord } from "./types";
 
@@ -133,6 +134,30 @@ export default function ArtCropEditor({
 }: ArtCropEditorProps) {
   const [art, setArt] = useState<ArtCrop>(() => readCardArt(card));
 
+  // The lowest valid up-pan depends on the source aspect (and the current zoom),
+  // so load the image to learn its aspect. Until it resolves, pan is clamped to
+  // the editor's plain `OFFSET_MIN`; once known, `minArtOffsetY` bounds the up
+  // arrow so it stops where the art would otherwise pull the watermark strip
+  // into view and expose the fill band above the rules box.
+  const imageNumber = card.preview.imageNumber;
+  const [imageAspect, setImageAspect] = useState<number | null>(null);
+  useEffect(() => {
+    if (!hasAssignedImage(imageNumber)) {
+      setImageAspect(null);
+      return;
+    }
+    const image = new Image();
+    image.onload = () => {
+      if (image.naturalWidth > 0 && image.naturalHeight > 0) {
+        setImageAspect(image.naturalWidth / image.naturalHeight);
+      }
+    };
+    image.src = cardImageUrl(imageNumber);
+    return () => {
+      image.onload = null;
+    };
+  }, [imageNumber]);
+
   // Persist the latest art shortly after the user stops pressing buttons so a
   // burst of pan/zoom clicks results in a single save. The newest value is
   // captured in a ref so the unmount flush always saves the final crop.
@@ -175,20 +200,26 @@ export default function ArtCropEditor({
   const nudge = useCallback(
     (deltas: Partial<ArtCrop>) => {
       setArt((current) => {
+        const scale = roundTo(
+          clamp(current.scale + (deltas.scale ?? 0), SCALE_MIN, SCALE_MAX),
+          2,
+        );
+        // The up-pan floor tracks the new zoom: lower zoom leaves less overscan,
+        // so the watermark would reach the seam sooner. Recomputing per nudge
+        // also re-clamps a prior down-panned crop when the user zooms back out.
+        const minY =
+          imageAspect !== null ? minArtOffsetY(imageAspect, scale) : OFFSET_MIN;
         const next: ArtCrop = {
           x: roundTo(clamp(current.x + (deltas.x ?? 0), OFFSET_MIN, OFFSET_MAX), 3),
-          y: roundTo(clamp(current.y + (deltas.y ?? 0), OFFSET_MIN, OFFSET_MAX), 3),
-          scale: roundTo(
-            clamp(current.scale + (deltas.scale ?? 0), SCALE_MIN, SCALE_MAX),
-            2,
-          ),
+          y: roundTo(clamp(current.y + (deltas.y ?? 0), minY, OFFSET_MAX), 3),
+          scale,
         };
         latestArtRef.current = next;
         return next;
       });
       scheduleSave();
     },
-    [scheduleSave],
+    [scheduleSave, imageAspect],
   );
 
   const resetCrop = useCallback(() => {

@@ -6983,7 +6983,7 @@ tags = ["Discover"]
 image-number = 789290998
 art-owned = false
 card-number = 387
-art = { x = 0, y = -0.4, scale = 1.17 }
+art = { x = 0, y = 0.032, scale = 1.17 }
 
 [[cards]]
 name = "Evacuation Enforcer"
