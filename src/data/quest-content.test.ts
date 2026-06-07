@@ -1,8 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { buildReplayDraftState, loadQuestContent } from "./quest-content";
+import { buildReplayDraftState, hashStringToSeed, loadQuestContent } from "./quest-content";
 import type { CardData } from "../types/cards";
 import type { DraftRecord } from "./cards-v2-database";
 import type { DreamcallerContent } from "../types/content";
+import type { FitModel } from "../draft/replay/fit-model";
+import {
+  selectRecordIndex,
+  selectReplayRecordIndex,
+} from "../draft/replay/draft-records";
 
 function makeCard(cardNumber: number): CardData {
   return {
@@ -302,5 +307,80 @@ describe("buildReplayDraftState", () => {
     }
     // Both records must appear across the 20 seeds (probability of failure ≈ 2^-19).
     expect(ids.size).toBe(2);
+  });
+
+  // -------------------------------------------------------------------------
+  // fitModel integration
+  // -------------------------------------------------------------------------
+
+  /**
+   * Build a minimal FitModel stub with only the idf field populated.
+   * The other fields are unused by buildReplayDraftState (only the idf map
+   * flows through to selectReplayRecordIndex).
+   */
+  function makeFitModelStub(idfEntries: [string, number][]): FitModel {
+    return {
+      idf: new Map(idfEntries),
+      decks: [],
+      prior: new Map(),
+      coocNorm: new Map(),
+      numberToName: new Map(),
+      nameIndex: new Map(),
+      tuning: {
+        alpha: 1,
+        beta: 0.9,
+        gamma: 0.25,
+        K: 50,
+        idfPower: 1,
+        minDf: 2,
+        maxDfFrac: 0.6,
+        minDeckSize: 16,
+        maxDeckSize: 34,
+      },
+    };
+  }
+
+  it("without a fitModel the selection equals the uniform fallback", () => {
+    const dc = makeDreamcaller([card1.name]);
+    // No fitModel → uniform seeded draw.
+    const state = buildReplayDraftState(dc, nameIndex, "quest-fm-0", records);
+    const expectedSeed = hashStringToSeed("quest-fm-0:replay");
+    const expectedIndex = selectRecordIndex(expectedSeed, records.length);
+    expect(state.recordId).toBe(records[expectedIndex].id);
+  });
+
+  it("with a fitModel favoring a record's packs, the fitModel steers selection away from the uniform draw", () => {
+    // Only recordA has card1 in its packs, so a positive IDF weight makes it the
+    // single matched record. Placing it at index 1 makes the matched shortlist
+    // order [recordA, recordB] differ from the uniform order [recordB, recordA]
+    // for every seed, so the choice provably depends on the fitModel. The ranking
+    // math itself is covered exhaustively in draft-records.test.ts.
+    const fitModel = makeFitModelStub([[card1.name, 3.0]]);
+    const dc = makeDreamcaller([card1.name]);
+    const ordered = [recordB, recordA];
+    const seed = "quest-fm-1";
+
+    const matched = buildReplayDraftState(dc, nameIndex, seed, ordered, fitModel);
+    const uniform = buildReplayDraftState(dc, nameIndex, seed, ordered);
+    expect(matched.recordId).not.toBe(uniform.recordId);
+
+    // buildReplayDraftState delegates to selectReplayRecordIndex with fitModel.idf.
+    const expectedIndex = selectReplayRecordIndex(
+      dc.signatureCards ?? [],
+      ordered,
+      fitModel.idf,
+      hashStringToSeed(`${seed}:replay`),
+    );
+    expect(matched.recordId).toBe(ordered[expectedIndex].id);
+  });
+
+  it("with a fitModel whose idf has no weight for any signature, falls back to uniform", () => {
+    // All idf weights are 0 for the signature cards.
+    const fitModel = makeFitModelStub([[card1.name, 0], [card2.name, 0]]);
+    const dc = makeDreamcaller([card1.name, card2.name]);
+    const state1 = buildReplayDraftState(dc, nameIndex, "quest-fm-2", records, fitModel);
+    const state2 = buildReplayDraftState(dc, nameIndex, "quest-fm-2", records);
+    // Both should pick the same record (uniform fallback in both cases).
+    expect(state1.recordId).toBe(state2.recordId);
   });
 });

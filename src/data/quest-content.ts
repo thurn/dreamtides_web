@@ -26,7 +26,7 @@ import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
 import {
-  selectRecordIndex,
+  selectReplayRecordIndex,
   resolveCardNames,
   buildPackSequence,
 } from "../draft/replay/draft-records";
@@ -298,10 +298,14 @@ export async function loadQuestContent(
 
 /**
  * Build a {@link ReplayDraftState} for a new quest run in replay mode. Selects
- * a draft record deterministically from the corpus using a salted hash of
- * `questSeed` (the `:replay` salt keeps the selection independent from the
- * per-Dreamcaller pool-gen draw, which uses `${questSeed}:${dreamcaller.id}`),
- * resolves its pack sequence to card numbers, and constructs the initial state.
+ * a draft record deterministically from the corpus, biased toward records whose
+ * served packs contain the Dreamcaller's signature (archetype) cards so the
+ * player can draft toward that archetype. The salted hash of `questSeed` (the
+ * `:replay` salt keeps the selection independent from the per-Dreamcaller
+ * pool-gen draw, which uses `${questSeed}:${dreamcaller.id}`) seeds the final
+ * pick within the matched shortlist, keeping the selection reproducible per
+ * seed. When no usable IDF signal is available (no fitModel, no weighted
+ * signatures) the selection falls back to a uniform seeded draw.
  *
  * @throws If `draftRecords` is empty.
  */
@@ -310,13 +314,16 @@ export function buildReplayDraftState(
   nameIndex: Map<string, number>,
   questSeed: string,
   draftRecords: readonly DraftRecord[],
+  fitModel?: FitModel,
 ): ReplayDraftState {
   if (draftRecords.length === 0) {
     throw new Error("buildReplayDraftState requires at least one draft record");
   }
-  const index = selectRecordIndex(
+  const index = selectReplayRecordIndex(
+    dreamcaller.signatureCards ?? [],
+    draftRecords,
+    fitModel?.idf,
     hashStringToSeed(`${questSeed}:replay`),
-    draftRecords.length,
   );
   const record = draftRecords[index];
   const packSequence = buildPackSequence(record, nameIndex);

@@ -8,6 +8,7 @@ import {
   buildPackSequence,
   resolveCardNames,
   selectRecordIndex,
+  selectReplayRecordIndex,
 } from "./draft-records.ts";
 
 describe("selectRecordIndex", () => {
@@ -58,6 +59,123 @@ describe("resolveCardNames", () => {
   it("returns an empty array when nothing resolves", () => {
     const index = new Map<string, number>([["alpha", 1]]);
     expect(resolveCardNames(["x", "y"], index)).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// selectReplayRecordIndex
+// ---------------------------------------------------------------------------
+
+/** Minimal record builder for selectReplayRecordIndex tests. */
+function makeRec(id: string, packs: string[][]): DraftRecord {
+  return {
+    id,
+    draftId: `draft-${id}`,
+    mainboard: packs.flat(),
+    packs,
+    picks: packs.map(() => []),
+  };
+}
+
+describe("selectReplayRecordIndex", () => {
+  // A tiny IDF map: "alpha" and "beta" have positive weights; "common" has 0.
+  const idf = new Map<string, number>([
+    ["alpha", 2.5],
+    ["beta", 1.0],
+    ["common", 0],
+  ]);
+
+  // recRich: packs contain "alpha" in 2 packs and "beta" in 1 pack → high score.
+  // recPoor: packs contain neither → score 0.
+  const recRich = makeRec("rich", [
+    ["alpha", "other"],
+    ["alpha", "beta"],
+    ["other"],
+  ]);
+  const recPoor = makeRec("poor", [
+    ["other"],
+    ["other2"],
+    ["other3"],
+  ]);
+
+  it("prefers a record whose packs contain the signature cards over one that does not", () => {
+    const records = [recPoor, recRich]; // recPoor at index 0, recRich at index 1
+    // With shortlistSize=1 the single best-scoring record is always chosen.
+    const chosen = selectReplayRecordIndex(["alpha", "beta"], records, idf, 99, 1);
+    expect(chosen).toBe(1); // recRich is at index 1
+  });
+
+  it("is deterministic for a fixed seed", () => {
+    const records = [recRich, recPoor];
+    const a = selectReplayRecordIndex(["alpha"], records, idf, 12345);
+    const b = selectReplayRecordIndex(["alpha"], records, idf, 12345);
+    expect(a).toBe(b);
+  });
+
+  it("varies across seeds within the matched shortlist", () => {
+    // Build enough records so the shortlist (25 by default) has variety.
+    const richRecords = Array.from({ length: 30 }, (_, i) =>
+      makeRec(`rich-${String(i)}`, [["alpha"], ["beta"]]),
+    );
+    const results = new Set<number>();
+    for (let seed = 0; seed < 100; seed += 1) {
+      results.add(selectReplayRecordIndex(["alpha"], richRecords, idf, seed));
+    }
+    // Expect multiple distinct records to be chosen across 100 seeds.
+    expect(results.size).toBeGreaterThan(1);
+  });
+
+  it("falls back to uniform when idf is undefined", () => {
+    const records = [recRich, recPoor];
+    const seed = 42;
+    const fallback = selectReplayRecordIndex(["alpha"], records, undefined, seed);
+    expect(fallback).toBe(selectRecordIndex(seed, records.length));
+    expect(fallback).toBeGreaterThanOrEqual(0);
+    expect(fallback).toBeLessThan(records.length);
+  });
+
+  it("falls back to uniform when signatures are empty", () => {
+    const records = [recRich, recPoor];
+    const seed = 77;
+    const fallback = selectReplayRecordIndex([], records, idf, seed);
+    expect(fallback).toBe(selectRecordIndex(seed, records.length));
+  });
+
+  it("falls back to uniform when no signature has positive idf weight", () => {
+    const records = [recRich, recPoor];
+    const seed = 55;
+    // "common" has idf weight 0, "unknown" is not in the map (defaults to 0).
+    const fallback = selectReplayRecordIndex(["common", "unknown"], records, idf, seed);
+    expect(fallback).toBe(selectRecordIndex(seed, records.length));
+  });
+
+  it("respects shortlistSize=1 by always returning the single best-scoring record", () => {
+    const records = [recPoor, recPoor, recRich, recPoor]; // recRich at index 2
+    for (let seed = 0; seed < 20; seed += 1) {
+      const chosen = selectReplayRecordIndex(["alpha"], records, idf, seed, 1);
+      expect(chosen).toBe(2); // always recRich regardless of seed
+    }
+  });
+
+  it("tie-breaks by original index ascending when scores are equal", () => {
+    // Both records have identical packs so their scores are equal.
+    const rec0 = makeRec("tie-0", [["alpha"]]);
+    const rec1 = makeRec("tie-1", [["alpha"]]);
+    // With shortlistSize=1 the first (lower index) record wins.
+    const chosen = selectReplayRecordIndex(["alpha"], [rec0, rec1], idf, 0, 1);
+    expect(chosen).toBe(0);
+  });
+
+  it("returns 0 when there are no records", () => {
+    expect(selectReplayRecordIndex(["alpha"], [], idf, 42)).toBe(0);
+  });
+
+  it("deduplicates signature card names before scoring", () => {
+    const records = [recPoor, recRich];
+    // Passing "alpha" three times should score the same as passing it once.
+    const deduped = selectReplayRecordIndex(["alpha", "alpha", "alpha"], records, idf, 7, 1);
+    const single = selectReplayRecordIndex(["alpha"], records, idf, 7, 1);
+    expect(deduped).toBe(single);
   });
 });
 

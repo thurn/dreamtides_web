@@ -43,7 +43,7 @@ import { DraftDreamcallerSelect } from "./DraftDreamcallerSelect";
 import {
   buildPackSequence,
   resolveCardNames,
-  selectRecordIndex,
+  selectReplayRecordIndex,
 } from "../draft/replay/draft-records";
 import { buildFitModel } from "../draft/replay/fit-model";
 import type { FitModel } from "../draft/replay/fit-model";
@@ -501,7 +501,12 @@ export default function DraftTestApp() {
         const nameIndex = buildNameIndex(database);
         const seed =
           poolSeed ?? (Math.floor(Math.random() * 2 ** 32) >>> 0);
-        const index = selectRecordIndex(seed, records.length);
+        const index = selectReplayRecordIndex(
+          dreamcaller.signatureCards ?? [],
+          records,
+          fitModel.idf,
+          seed,
+        );
         const record = records[index];
         const packSequence = buildPackSequence(record, nameIndex);
         const signatureCardNumbers = resolveCardNames(

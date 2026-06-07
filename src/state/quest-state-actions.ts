@@ -403,6 +403,7 @@ export function startQuestFromDreamcaller({
         poolContext.nameIndex,
         seed,
         questContent.draftRecords ?? [],
+        questContent.fitModel,
       )
     : createInitialDraftState(questContent.cardDatabase, resolvedPackage);
 
