@@ -120,6 +120,21 @@ function alreadySaved(targetDir, draftId) {
   }
 }
 
+// Tally human seat entries across every saved record file in targetDir (the
+// whole cumulative dataset, not just this run). Returns { files, records }.
+function countSavedRecords(targetDir) {
+  let files = 0;
+  let records = 0;
+  for (const f of readdirSync(targetDir)) {
+    if (!f.endsWith("-records.json")) continue;
+    const data = loadJson(join(targetDir, f), null);
+    if (!data?.seats) continue;
+    files++;
+    records += data.seats.length;
+  }
+  return { files, records };
+}
+
 async function main() {
   const { input, targetArg, limit, delay } = parseArgs(process.argv.slice(2));
   const shortId = parseCubeShortId(input);
@@ -177,6 +192,11 @@ async function main() {
   if (saved < limit) {
     console.log("Reached the end of the cube's draft list before hitting the limit.");
   }
+
+  const { files, records } = countSavedRecords(targetDir);
+  console.log(
+    `Total: ${records} human record(s) across ${files} draft file(s) in ${targetDir}.`,
+  );
 }
 
 main().catch((err) => {
