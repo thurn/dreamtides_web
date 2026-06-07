@@ -10,7 +10,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 287269511
 art-owned = false
 card-number = 1
@@ -112,6 +112,7 @@ tags = []
 image-number = 1721490835
 art-owned = false
 card-number = 6
+art = { x = -0.084, y = -0.152, scale = 2.27 }
 
 [[cards]]
 name = "Wheel of the Heavens"
@@ -283,7 +284,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Event Payoff"]
+tags = ["Event Payoff", "Art Rework"]
 image-number = 730423171
 art-owned = false
 card-number = 16
@@ -877,6 +878,7 @@ tags = ["Spirit Lord"]
 image-number = 2127752129
 art-owned = false
 card-number = 48
+art = { x = 0.084, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Eternal Stag"
@@ -1251,7 +1253,7 @@ id = "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7"
 rendered-text = '''
 Phasing
 
-▸Materialized: You may pay 2● to return an enemy to hand.'''
+▸Materialized: Return an enemy to hand.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Monster"
@@ -1259,7 +1261,7 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 3
-tags = []
+tags = ["Art Rework"]
 image-number = 515170831
 art-owned = false
 card-number = 69
@@ -1476,7 +1478,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = []
+tags = ["Art Rework"]
 image-number = 1740270992
 art-owned = false
 card-number = 81
@@ -1622,7 +1624,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = []
+tags = ["Art Rework"]
 image-number = 2600774397
 art-owned = false
 card-number = 89
@@ -2239,6 +2241,7 @@ tags = ["ETB Draw"]
 image-number = 2218612343
 art-owned = true
 card-number = 123
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Aurora Confluence"
@@ -2544,7 +2547,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 499788403
 art-owned = false
 card-number = 140
@@ -2712,7 +2715,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Removal"]
+tags = ["Removal", "Art Rework"]
 image-number = 2155438709
 art-owned = false
 card-number = 149
@@ -2823,6 +2826,7 @@ tags = []
 image-number = 2218612339
 art-owned = false
 card-number = 155
+art = { x = -0.378, y = 1, scale = 1.27 }
 
 [[cards]]
 name = "Revenant of the Lost"
@@ -2929,6 +2933,7 @@ tags = ["Cantrips"]
 image-number = 1739438660
 art-owned = false
 card-number = 161
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Lurking Dread"
@@ -3076,7 +3081,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = []
+tags = ["Art Rework"]
 image-number = 2030910782
 art-owned = true
 card-number = 169
@@ -3196,7 +3201,7 @@ id = "b6d1df72-d989-4689-a599-4490a0c2568d"
 rendered-text = "When you play an event, materialize a 1✦ ethereal figment."
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Mage"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -3205,6 +3210,7 @@ tags = ["Figment Maker", "Event Payoff"]
 image-number = 1913887477
 art-owned = false
 card-number = 176
+art = { x = 0, y = 1, scale = 1.27 }
 
 [[cards]]
 name = "Reunion"
@@ -3745,6 +3751,7 @@ tags = []
 image-number = 2197688369
 art-owned = false
 card-number = 207
+art = { x = 0, y = 0, scale = 1.77 }
 
 [[cards]]
 name = "Abyssal Enforcer"
@@ -4046,7 +4053,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 5
-tags = []
+tags = ["Art Rework"]
 image-number = 571228789
 art-owned = true
 card-number = 224
@@ -4265,6 +4272,7 @@ tags = []
 image-number = 1328168243
 art-owned = true
 card-number = 236
+art = { x = 0, y = 1, scale = 1.67 }
 
 [[cards]]
 name = "Cradle of Storms"
@@ -4735,7 +4743,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Elves"]
+tags = ["Elves", "Art Rework"]
 image-number = 2261959339
 art-owned = false
 card-number = 262
@@ -4882,6 +4890,7 @@ tags = []
 image-number = 1026869323
 art-owned = false
 card-number = 270
+art = { x = 0, y = 0, scale = 1.97 }
 
 [[cards]]
 name = "Scorched Crusader"
@@ -5699,6 +5708,7 @@ tags = []
 image-number = 1219782715
 art-owned = false
 card-number = 315
+art = { x = 0, y = 0, scale = 1.57 }
 
 [[cards]]
 name = "Vortex Claimant"
@@ -5845,6 +5855,7 @@ tags = []
 image-number = 1314287447
 art-owned = false
 card-number = 323
+art = { x = 0.178, y = 0.212, scale = 1.37 }
 
 [[cards]]
 name = "Reforged Automaton"
@@ -5976,7 +5987,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Removal", "Figment Maker"]
+tags = ["Removal", "Figment Maker", "Art Rework"]
 image-number = 2212744817
 art-owned = false
 card-number = 330
@@ -6067,7 +6078,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = []
+tags = ["Art Rework"]
 image-number = 515170900
 art-owned = false
 card-number = 335
@@ -6090,6 +6101,7 @@ tags = ["Removal"]
 image-number = 2303852059
 art-owned = true
 card-number = 336
+art = { x = -0.294, y = 0.032, scale = 1.17 }
 
 [[cards]]
 name = "Cosmic Puppeteer"
@@ -6183,6 +6195,7 @@ tags = ["Cantrips"]
 image-number = 457875913
 art-owned = false
 card-number = 341
+art = { x = 0, y = -0.681, scale = 1.57 }
 
 [[cards]]
 name = "Momentum's Edge"
@@ -6564,7 +6577,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Spark Scaler"]
+tags = ["Spark Scaler", "Art Rework"]
 image-number = 2189428529
 art-owned = false
 card-number = 362
@@ -7874,6 +7887,7 @@ tags = []
 image-number = 323698610
 art-owned = false
 card-number = 433
+art = { x = 0, y = 0.608, scale = 1.17 }
 
 [[cards]]
 name = "Through the Rift"
@@ -8193,6 +8207,7 @@ tags = ["Ritual"]
 image-number = 2191235671
 art-owned = true
 card-number = 451
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Silent Gatherer"
@@ -8524,7 +8539,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 1557999812
 art-owned = false
 card-number = 470
@@ -8561,7 +8576,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 1727859046
 art-owned = false
 card-number = 472
