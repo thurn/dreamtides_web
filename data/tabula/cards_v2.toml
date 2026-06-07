@@ -199,7 +199,7 @@ tags = ["Ritual", "Art OK"]
 image-number = 1164289066
 art-owned = false
 card-number = 11
-art = { x = 0, y = 0, scale = 1.17 }
+art = { x = 0.084, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Moonlit Voyage"
@@ -1652,6 +1652,7 @@ tags = ["Art OK"]
 image-number = 1042405690
 art-owned = false
 card-number = 91
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Seeker for the Way"
@@ -7521,7 +7522,7 @@ tags = ["Art OK"]
 image-number = 1200949222
 art-owned = true
 card-number = 416
-art = { x = 0, y = 0, scale = 1.17 }
+art = { x = 0.084, y = 0.032, scale = 1.17 }
 
 [[cards]]
 name = "Skyborne Jellyfish"
@@ -8725,7 +8726,7 @@ tags = ["Counterspell", "Art OK"]
 image-number = 1282908322
 art-owned = true
 card-number = 483
-art = { x = 0, y = 1, scale = 1.17 }
+art = { x = 0.084, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Wasteland Arbitrator"
