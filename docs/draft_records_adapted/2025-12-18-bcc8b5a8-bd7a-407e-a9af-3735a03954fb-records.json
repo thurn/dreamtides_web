@@ -1,0 +1,696 @@
+{
+  "draftId": "bcc8b5a8-bd7a-407e-a9af-3735a03954fb",
+  "date": "2025-12-18T19:20:04.182Z",
+  "name": "UR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 1,
+  "packs": 3,
+  "packSize": 12,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UR"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UR",
+      "mainboard": [
+        "Ethereal Courser",
+        "The Waking Titan",
+        "Duskshore Virtuoso",
+        "Barrage Specialist",
+        "Iconoclast",
+        "Starcatcher",
+        "Conduit of Ashes",
+        "Glimpse of Infinity",
+        "Pyrewatcher",
+        "Fangbound",
+        "Pulse of Sacrifice",
+        "Epiphany Unfolded",
+        "Genesis Burst",
+        "Inverted Reflection",
+        "The Power Within",
+        "Fell the Mighty",
+        "Ecliptic Vantage",
+        "Annular Recall",
+        "Burst of Obliteration",
+        "Cragfall",
+        "Sunset Chapel Rest",
+        "Cascading Detonation",
+        "Ripple Through Reality",
+        "Moment Rewound",
+        "Cascade of Reflections",
+        "Wheel of the Heavens",
+        "Clockwork Prodigy",
+        "Echoing Denial",
+        "Across the Void",
+        "Reunion"
+      ],
+      "sideboard": [
+        "Gleamharvester",
+        "Shoreline Penitent"
+      ],
+      "pool": [
+        "Burst of Obliteration",
+        "Gleamharvester",
+        "Shoreline Penitent",
+        "Ethereal Courser",
+        "Iconoclast",
+        "Starcatcher",
+        "Annular Recall",
+        "Pulse of Sacrifice",
+        "Fangbound",
+        "Moment Rewound",
+        "Pyrewatcher",
+        "Barrage Specialist",
+        "Reunion",
+        "Ripple Through Reality",
+        "Clockwork Prodigy",
+        "Echoing Denial",
+        "The Waking Titan",
+        "Duskshore Virtuoso",
+        "Cascading Detonation",
+        "Across the Void",
+        "Ecliptic Vantage",
+        "Fell the Mighty",
+        "Sunset Chapel Rest",
+        "Wheel of the Heavens",
+        "The Power Within",
+        "Cascade of Reflections",
+        "Cragfall",
+        "Glimpse of Infinity",
+        "Conduit of Ashes",
+        "Inverted Reflection",
+        "Genesis Burst",
+        "Epiphany Unfolded"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [],
+          "pickId": "054f2276-2dd5-43da-bb26-c57c560861fe",
+          "packCards": [
+            "Burst of Obliteration",
+            "Gleamharvester",
+            "Shoreline Penitent",
+            "Ethereal Courser",
+            "Iconoclast",
+            "Starcatcher",
+            "Annular Recall",
+            "Pulse of Sacrifice",
+            "Fangbound",
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Burst of Obliteration"
+          ],
+          "pickId": "5b012532-1186-4dc8-9d42-867e418b0280",
+          "packCards": [
+            "Burst of Obliteration",
+            "Gleamharvester",
+            "Shoreline Penitent",
+            "Ethereal Courser",
+            "Iconoclast",
+            "Starcatcher",
+            "Annular Recall",
+            "Pulse of Sacrifice",
+            "Fangbound",
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Gleamharvester",
+            "Shoreline Penitent"
+          ],
+          "pickId": "742a7487-70a2-448b-8e66-c33cba798a32",
+          "packCards": [
+            "Gleamharvester",
+            "Shoreline Penitent",
+            "Ethereal Courser",
+            "Iconoclast",
+            "Starcatcher",
+            "Annular Recall",
+            "Pulse of Sacrifice",
+            "Fangbound",
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [],
+          "pickId": "16c8d2fa-54a7-46e8-980c-905258497c90",
+          "packCards": [
+            "Ethereal Courser",
+            "Iconoclast",
+            "Starcatcher",
+            "Annular Recall",
+            "Pulse of Sacrifice",
+            "Fangbound",
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Ethereal Courser"
+          ],
+          "pickId": "63971a64-c5f3-4d1f-ae0d-489d7d5b18f0",
+          "packCards": [
+            "Ethereal Courser",
+            "Iconoclast",
+            "Starcatcher",
+            "Annular Recall",
+            "Pulse of Sacrifice",
+            "Fangbound",
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": [
+            "Iconoclast",
+            "Starcatcher"
+          ],
+          "pickId": "44657ab1-0a6a-4a5f-9688-86f239083821",
+          "packCards": [
+            "Iconoclast",
+            "Starcatcher",
+            "Annular Recall",
+            "Pulse of Sacrifice",
+            "Fangbound",
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 1,
+          "pickInPack": 7,
+          "pick": [
+            "Annular Recall"
+          ],
+          "pickId": "265b80cd-2e9c-4e4b-a065-eafb29b3e07a",
+          "packCards": [
+            "Annular Recall",
+            "Pulse of Sacrifice",
+            "Fangbound",
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 1,
+          "pickInPack": 8,
+          "pick": [
+            "Pulse of Sacrifice"
+          ],
+          "pickId": "63bacc32-d6ba-420c-9b49-299c08e5fb39",
+          "packCards": [
+            "Pulse of Sacrifice",
+            "Fangbound",
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 1,
+          "pickInPack": 9,
+          "pick": [
+            "Fangbound"
+          ],
+          "pickId": "6a058e68-70af-4a64-859c-c881e5578368",
+          "packCards": [
+            "Fangbound",
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 1,
+          "pickInPack": 10,
+          "pick": [
+            "Moment Rewound"
+          ],
+          "pickId": "4ab981aa-d815-439a-b8ff-2043bf42c392",
+          "packCards": [
+            "Moment Rewound",
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 1,
+          "pickInPack": 11,
+          "pick": [
+            "Pyrewatcher"
+          ],
+          "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
+          "packCards": [
+            "Pyrewatcher"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 1,
+          "pickInPack": 12,
+          "pick": [],
+          "pickId": "0015d273-5f49-4154-9bd1-d3aef62d1c73",
+          "packCards": []
+        },
+        {
+          "pickNumber": 13,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [],
+          "pickId": "7996ab8e-5fa4-4d39-8c7b-12e4258bf8a9",
+          "packCards": [
+            "Barrage Specialist",
+            "Reunion",
+            "Ripple Through Reality",
+            "Clockwork Prodigy",
+            "Echoing Denial",
+            "The Waking Titan",
+            "Duskshore Virtuoso",
+            "Cascading Detonation",
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": [
+            "Barrage Specialist"
+          ],
+          "pickId": "74b4c336-5d4c-4bc5-b82a-35084a6ad808",
+          "packCards": [
+            "Barrage Specialist",
+            "Reunion",
+            "Ripple Through Reality",
+            "Clockwork Prodigy",
+            "Echoing Denial",
+            "The Waking Titan",
+            "Duskshore Virtuoso",
+            "Cascading Detonation",
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": [],
+          "pickId": "327cf118-cc92-4073-85d0-94d2a0a6989a",
+          "packCards": [
+            "Reunion",
+            "Ripple Through Reality",
+            "Clockwork Prodigy",
+            "Echoing Denial",
+            "The Waking Titan",
+            "Duskshore Virtuoso",
+            "Cascading Detonation",
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 16,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": [
+            "Reunion"
+          ],
+          "pickId": "f3d62dbd-63db-4ac9-950f-9852627f23f2",
+          "packCards": [
+            "Reunion",
+            "Ripple Through Reality",
+            "Clockwork Prodigy",
+            "Echoing Denial",
+            "The Waking Titan",
+            "Duskshore Virtuoso",
+            "Cascading Detonation",
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 17,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": [
+            "Ripple Through Reality"
+          ],
+          "pickId": "2d85cc30-ccae-4af8-834a-f7870dace679",
+          "packCards": [
+            "Ripple Through Reality",
+            "Clockwork Prodigy",
+            "Echoing Denial",
+            "The Waking Titan",
+            "Duskshore Virtuoso",
+            "Cascading Detonation",
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 18,
+          "pack": 2,
+          "pickInPack": 6,
+          "pick": [],
+          "pickId": "054f2276-2dd5-43da-bb26-c57c560861fe",
+          "packCards": [
+            "Clockwork Prodigy",
+            "Echoing Denial",
+            "The Waking Titan",
+            "Duskshore Virtuoso",
+            "Cascading Detonation",
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 19,
+          "pack": 2,
+          "pickInPack": 7,
+          "pick": [
+            "Clockwork Prodigy",
+            "Echoing Denial"
+          ],
+          "pickId": "89f612d6-7c59-4a7b-a87d-45f789e88ba5",
+          "packCards": [
+            "Clockwork Prodigy",
+            "Echoing Denial",
+            "The Waking Titan",
+            "Duskshore Virtuoso",
+            "Cascading Detonation",
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 20,
+          "pack": 2,
+          "pickInPack": 8,
+          "pick": [
+            "The Waking Titan",
+            "Duskshore Virtuoso"
+          ],
+          "pickId": "359d1b13-6156-43b0-a9a7-6bfff36c1a91",
+          "packCards": [
+            "The Waking Titan",
+            "Duskshore Virtuoso",
+            "Cascading Detonation",
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 21,
+          "pack": 2,
+          "pickInPack": 9,
+          "pick": [
+            "Cascading Detonation"
+          ],
+          "pickId": "2a362d78-76a1-4dbc-80cc-0360e98ba280",
+          "packCards": [
+            "Cascading Detonation",
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 22,
+          "pack": 2,
+          "pickInPack": 10,
+          "pick": [
+            "Across the Void"
+          ],
+          "pickId": "eabe1af2-d26e-4086-a71d-f818fb41fa25",
+          "packCards": [
+            "Across the Void",
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 23,
+          "pack": 2,
+          "pickInPack": 11,
+          "pick": [
+            "Ecliptic Vantage"
+          ],
+          "pickId": "122f2cc2-5f4d-497c-96b5-ed5698f28b51",
+          "packCards": [
+            "Ecliptic Vantage"
+          ]
+        },
+        {
+          "pickNumber": 24,
+          "pack": 2,
+          "pickInPack": 12,
+          "pick": [],
+          "pickId": "1abdfbaa-5bd7-4732-b62b-ab27581bc6bb",
+          "packCards": []
+        },
+        {
+          "pickNumber": 25,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [
+            "Fell the Mighty"
+          ],
+          "pickId": "2dc16614-5cf8-444d-a5ae-cac25018af68",
+          "packCards": [
+            "Fell the Mighty",
+            "Sunset Chapel Rest",
+            "Wheel of the Heavens",
+            "The Power Within",
+            "Cascade of Reflections",
+            "Cragfall",
+            "Glimpse of Infinity",
+            "Conduit of Ashes",
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 26,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": [
+            "Sunset Chapel Rest"
+          ],
+          "pickId": "24e608b2-d18d-49a9-a041-b06dece40792",
+          "packCards": [
+            "Sunset Chapel Rest",
+            "Wheel of the Heavens",
+            "The Power Within",
+            "Cascade of Reflections",
+            "Cragfall",
+            "Glimpse of Infinity",
+            "Conduit of Ashes",
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 27,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": [],
+          "pickId": "1eb3178b-dac5-4b34-9d3e-4f5a170d1c87",
+          "packCards": [
+            "Wheel of the Heavens",
+            "The Power Within",
+            "Cascade of Reflections",
+            "Cragfall",
+            "Glimpse of Infinity",
+            "Conduit of Ashes",
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 28,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": [
+            "Wheel of the Heavens"
+          ],
+          "pickId": "01bda3d7-122a-48a0-bab3-676c4a557b74",
+          "packCards": [
+            "Wheel of the Heavens",
+            "The Power Within",
+            "Cascade of Reflections",
+            "Cragfall",
+            "Glimpse of Infinity",
+            "Conduit of Ashes",
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 29,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": [
+            "The Power Within"
+          ],
+          "pickId": "262285ab-3a6f-4932-b53b-8ab20bcad955",
+          "packCards": [
+            "The Power Within",
+            "Cascade of Reflections",
+            "Cragfall",
+            "Glimpse of Infinity",
+            "Conduit of Ashes",
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 30,
+          "pack": 3,
+          "pickInPack": 6,
+          "pick": [
+            "Cascade of Reflections"
+          ],
+          "pickId": "e21aa266-4264-4e02-9403-02930e641573",
+          "packCards": [
+            "Cascade of Reflections",
+            "Cragfall",
+            "Glimpse of Infinity",
+            "Conduit of Ashes",
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 31,
+          "pack": 3,
+          "pickInPack": 7,
+          "pick": [
+            "Cragfall"
+          ],
+          "pickId": "3c429c40-2389-41e5-8681-4bb274e25eba",
+          "packCards": [
+            "Cragfall",
+            "Glimpse of Infinity",
+            "Conduit of Ashes",
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 32,
+          "pack": 3,
+          "pickInPack": 8,
+          "pick": [
+            "Glimpse of Infinity"
+          ],
+          "pickId": "0948e6dc-8af7-45d3-91de-a2aebee83e82",
+          "packCards": [
+            "Glimpse of Infinity",
+            "Conduit of Ashes",
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 33,
+          "pack": 3,
+          "pickInPack": 9,
+          "pick": [
+            "Conduit of Ashes"
+          ],
+          "pickId": "153983dd-54dc-420d-9249-665b0d669614",
+          "packCards": [
+            "Conduit of Ashes",
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 34,
+          "pack": 3,
+          "pickInPack": 10,
+          "pick": [
+            "Inverted Reflection"
+          ],
+          "pickId": "1571b584-9007-45ee-a3c3-6c72f227fee2",
+          "packCards": [
+            "Inverted Reflection",
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 35,
+          "pack": 3,
+          "pickInPack": 11,
+          "pick": [
+            "Genesis Burst"
+          ],
+          "pickId": "4686bbb9-517f-4cce-aa7a-5db41e22c02b",
+          "packCards": [
+            "Genesis Burst",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 36,
+          "pack": 3,
+          "pickInPack": 12,
+          "pick": [
+            "Epiphany Unfolded"
+          ],
+          "pickId": "2dd41293-d7c8-4422-9f0c-b3e96350f5c9",
+          "packCards": [
+            "Epiphany Unfolded"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,950 @@
+{
+  "draftId": "305bb1d4-f162-4810-9f9e-802b274b3676",
+  "date": "2026-02-20T08:23:29.885Z",
+  "name": "W Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 15,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "W",
+    "WU",
+    "BG",
+    "BR",
+    "UB",
+    "B",
+    "UR",
+    "BRG"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "W",
+      "mainboard": [
+        "Eclipse Herald",
+        "Horizon Follower",
+        "Ashen Harbinger",
+        "Demonbane",
+        "Meadowlight Charger",
+        "Voidshield Guardian",
+        "Breach Artist",
+        "Ironclad Holdout",
+        "Assault Leader",
+        "Frost Visionary",
+        "Cloaked Sentinel",
+        "Reforged Automaton",
+        "Gatebound Warden",
+        "Starlight Guide",
+        "Reclaimer of Lost Paths",
+        "Featherlight Summoner",
+        "Flamestride Rider",
+        "Invoker of Myths",
+        "Urban Desperado",
+        "Verdant Pioneer",
+        "Sundown Surfer",
+        "Blazepath Traveler",
+        "Lumen Rover",
+        "Sundown Ronin",
+        "Prism Caller",
+        "Harrowing Officiant",
+        "Dread Arbiter",
+        "Lithic Severance",
+        "Lightningborn",
+        "Shattering Gambit",
+        "Bladefall",
+        "The Grand Heist",
+        "Fleeting Reunion",
+        "Thundercatcher",
+        "Void Pilgrim",
+        "Shadow Reflection"
+      ],
+      "sideboard": [
+        "Passage Through Oblivion",
+        "Grounded",
+        "Sorrowful Prince",
+        "Oblivion Guide",
+        "Borrowed Minutes",
+        "Cosmonaut of Tides",
+        "Torn Circuit Feeder",
+        "Apocalypse",
+        "Forgotten Factory Titan",
+        "Graywatch",
+        "Boundless Wanderer",
+        "Field Reverent",
+        "Soulflame Predator",
+        "Nomad of Endless Paths",
+        "Abyssal Enforcer"
+      ],
+      "pool": [
+        "Harrowing Officiant",
+        "Abyssal Enforcer",
+        "Blazepath Traveler",
+        "Lumen Rover",
+        "Forgotten Factory Titan",
+        "Demonbane",
+        "Sorrowful Prince",
+        "Oblivion Guide",
+        "Grounded",
+        "Reclaimer of Lost Paths",
+        "Passage Through Oblivion",
+        "Prism Caller",
+        "Eclipse Herald",
+        "Horizon Follower",
+        "Ashen Harbinger",
+        "Dread Arbiter",
+        "Gatebound Warden",
+        "Starlight Guide",
+        "Sundown Surfer",
+        "Thundercatcher",
+        "Fleeting Reunion",
+        "Apocalypse",
+        "Soulflame Predator",
+        "Nomad of Endless Paths",
+        "Boundless Wanderer",
+        "Field Reverent",
+        "Ironclad Holdout",
+        "The Grand Heist",
+        "Reforged Automaton",
+        "Urban Desperado",
+        "Verdant Pioneer",
+        "Void Pilgrim",
+        "Shadow Reflection",
+        "Bladefall",
+        "Flamestride Rider",
+        "Invoker of Myths",
+        "Shattering Gambit",
+        "Breach Artist",
+        "Graywatch",
+        "Torn Circuit Feeder",
+        "Cloaked Sentinel",
+        "Frost Visionary",
+        "Cosmonaut of Tides",
+        "Borrowed Minutes",
+        "Lightningborn",
+        "Voidshield Guardian",
+        "Lithic Severance",
+        "Meadowlight Charger",
+        "Sundown Ronin",
+        "Featherlight Summoner",
+        "Assault Leader"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Harrowing Officiant"
+          ],
+          "pickId": "4b205bc3-379a-4790-90a0-c589bbbb1803",
+          "packCards": [
+            "Harrowing Officiant",
+            "Steel Abomination",
+            "Seeker of the Radiant Wilds",
+            "Aurora Confluence",
+            "Scorched Crusader",
+            "Reunion",
+            "Passage Through Oblivion",
+            "Minstrel of Falling Light",
+            "Key Sifter",
+            "Twilight Reclaimer",
+            "Cinderfang",
+            "Cragfall",
+            "Wired Duelist",
+            "Wistful Angler",
+            "Ashen Avenger"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Abyssal Enforcer"
+          ],
+          "pickId": "85397a1d-1fd1-4ca1-a1fc-f32e3a063c81",
+          "packCards": [
+            "Abyssal Enforcer",
+            "Resilient Wanderer",
+            "Cindermarch",
+            "Conduit of Resonance",
+            "Defiant Holdout",
+            "Collapse Protocol",
+            "The Thinning",
+            "Vaultbreaker",
+            "Emerald Guardian",
+            "Momentum's Edge",
+            "Prism Caller",
+            "Augur Crow",
+            "Planetgazer",
+            "Soulreaver",
+            "Spirit Reaping"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Blazepath Traveler",
+            "Lumen Rover"
+          ],
+          "pickId": "59faa45d-868b-4bc7-934c-0e077642e129",
+          "packCards": [
+            "Blazepath Traveler",
+            "Lumen Rover",
+            "Glimmerwood Scout",
+            "Cascading Detonation",
+            "Burst of Obliteration",
+            "Door to Possibility",
+            "Celestial Reverie",
+            "Iron Executor",
+            "Eclipse Herald",
+            "Horizon Follower",
+            "Ashen Harbinger",
+            "Wheel of the Heavens"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [
+            "Forgotten Factory Titan"
+          ],
+          "pickId": "85e9e58a-0ac1-405c-906e-16e981763b3a",
+          "packCards": [
+            "Forgotten Factory Titan",
+            "Woodland Apparition",
+            "Fell Swoop",
+            "Entropy Spike",
+            "Conjured Zenith",
+            "Dune Reaper",
+            "Rusted Monolith",
+            "Desolation's Edge",
+            "Dread Arbiter",
+            "Spirit of the Greenwood",
+            "Dreadwood Emissary",
+            "Cinderheart"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Demonbane"
+          ],
+          "pickId": "c2152030-6007-493f-a616-545723a00249",
+          "packCards": [
+            "Demonbane",
+            "Torchbearer of the Abyss",
+            "Fragments of Vision",
+            "Dreaming Groves",
+            "Clockwork Prodigy",
+            "Echoing Denial",
+            "Pit Descender",
+            "Starrunner",
+            "Spellweaver",
+            "Gatebound Warden",
+            "Starlight Guide"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": [
+            "Sorrowful Prince",
+            "Oblivion Guide"
+          ],
+          "pickId": "4404fc9c-ef02-479c-9638-0cc163f0b48f",
+          "packCards": [
+            "Sorrowful Prince",
+            "Oblivion Guide",
+            "Starfall Communion",
+            "Lanternwood Scout",
+            "Cloudmantle Ray",
+            "Intermezzo Balladeer",
+            "Sundown Surfer"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 1,
+          "pickInPack": 7,
+          "pick": [
+            "Grounded"
+          ],
+          "pickId": "825969b9-3c70-4fca-8cab-696e9ca7cdb2",
+          "packCards": [
+            "Grounded",
+            "Oracle of Shifting Skies",
+            "Architect of Memory",
+            "Collateral Damage",
+            "Abomination of Memory",
+            "Saffron Trailblazer",
+            "Thundercatcher"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 1,
+          "pickInPack": 8,
+          "pick": [
+            "Reclaimer of Lost Paths"
+          ],
+          "pickId": "1717da7b-9e87-4694-873b-abd4e3bcd5e2",
+          "packCards": [
+            "Reclaimer of Lost Paths",
+            "Virtuoso of Harmony",
+            "Shadowcaller",
+            "Arc Disciple",
+            "Silent Observer"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 1,
+          "pickInPack": 9,
+          "pick": [
+            "Passage Through Oblivion"
+          ],
+          "pickId": "2da5f3f8-5eef-498f-ba2c-2f3fbc3745aa",
+          "packCards": [
+            "Passage Through Oblivion",
+            "Minstrel of Falling Light",
+            "Key Sifter",
+            "Twilight Reclaimer",
+            "Cinderfang",
+            "Cragfall",
+            "Wired Duelist",
+            "Wistful Angler",
+            "Ashen Avenger"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 1,
+          "pickInPack": 10,
+          "pick": [
+            "Prism Caller"
+          ],
+          "pickId": "0ec9ef7c-88de-4346-a8f9-44beda59fa68",
+          "packCards": [
+            "Prism Caller",
+            "Augur Crow",
+            "Planetgazer",
+            "Soulreaver",
+            "Spirit Reaping"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 1,
+          "pickInPack": 11,
+          "pick": [
+            "Eclipse Herald",
+            "Horizon Follower",
+            "Ashen Harbinger"
+          ],
+          "pickId": "0db963e2-38df-4036-a312-35854dc3521c",
+          "packCards": [
+            "Eclipse Herald",
+            "Horizon Follower",
+            "Ashen Harbinger",
+            "Wheel of the Heavens"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 1,
+          "pickInPack": 12,
+          "pick": [
+            "Dread Arbiter"
+          ],
+          "pickId": "2b8877c3-1f04-4452-9f2c-98fb8dc71e5f",
+          "packCards": [
+            "Dread Arbiter",
+            "Spirit of the Greenwood",
+            "Dreadwood Emissary",
+            "Cinderheart"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 1,
+          "pickInPack": 13,
+          "pick": [
+            "Gatebound Warden",
+            "Starlight Guide"
+          ],
+          "pickId": "55707746-da6e-46e5-a5ca-7ac843fdc38e",
+          "packCards": [
+            "Gatebound Warden",
+            "Starlight Guide"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 1,
+          "pickInPack": 14,
+          "pick": [
+            "Sundown Surfer"
+          ],
+          "pickId": "2616aa0e-8413-4e63-877c-bffd5263f552",
+          "packCards": [
+            "Sundown Surfer"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 1,
+          "pickInPack": 15,
+          "pick": [
+            "Thundercatcher"
+          ],
+          "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
+          "packCards": [
+            "Thundercatcher"
+          ]
+        },
+        {
+          "pickNumber": 16,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [
+            "Fleeting Reunion"
+          ],
+          "pickId": "b782ffb4-3c9d-4d5c-a927-8988166c2d94",
+          "packCards": [
+            "Fleeting Reunion",
+            "Looming Oracle",
+            "Soulrender",
+            "Headtaker Wurm",
+            "Salvage Engine",
+            "Return to Nowhere",
+            "Specter of Silent Snow",
+            "Urban Desperado",
+            "Verdant Pioneer",
+            "Aftermath Bloom",
+            "Sunset Chronicler",
+            "Pathfinder Adrift",
+            "Stolen Genesis"
+          ]
+        },
+        {
+          "pickNumber": 17,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": [
+            "Apocalypse"
+          ],
+          "pickId": "1b25c224-4531-4fdc-9845-6663eaf60540",
+          "packCards": [
+            "Apocalypse",
+            "Infernal Rest",
+            "Ashen Remnant",
+            "The Dread Sovereign",
+            "Genesis Burst",
+            "Void Pilgrim",
+            "Company Commander",
+            "Starchaser",
+            "Spent Courier",
+            "Herald of the Last Light"
+          ]
+        },
+        {
+          "pickNumber": 18,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": [
+            "Soulflame Predator",
+            "Nomad of Endless Paths"
+          ],
+          "pickId": "29adb64e-b584-46de-a96f-57f56587a2b8",
+          "packCards": [
+            "Soulflame Predator",
+            "Nomad of Endless Paths",
+            "Crucible Warlord",
+            "Twilight Suppressor",
+            "Saltless Mariner",
+            "Obliterator of Worlds",
+            "Ripple of Defiance",
+            "Sorrow Watcher",
+            "Tidewreck Navigator",
+            "Weblight Waif",
+            "Spiral Offering",
+            "Shadow Reflection",
+            "Starbound Striker",
+            "Lord of Hidden Paths",
+            "Tidecaller",
+            "Momentum of the Fallen"
+          ]
+        },
+        {
+          "pickNumber": 19,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": [
+            "Boundless Wanderer",
+            "Field Reverent"
+          ],
+          "pickId": "295c8a21-7a4e-42cb-9420-9e59a1b75954",
+          "packCards": [
+            "Boundless Wanderer",
+            "Field Reverent",
+            "Veilpiercer",
+            "Overstory Explorer",
+            "Gateway Defender",
+            "Surge of Fury",
+            "Revenant of the Lost",
+            "The Devourer",
+            "Forsaken Pact",
+            "Bladefall",
+            "Ironclad Marksman",
+            "Dawnhorn Elder",
+            "Seeker for the Way"
+          ]
+        },
+        {
+          "pickNumber": 20,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": [],
+          "pickId": "16c8d2fa-54a7-46e8-980c-905258497c90",
+          "packCards": [
+            "Ripple Through Reality",
+            "Unleash Ruin",
+            "Fury of the Clan",
+            "Seer of the Fallen",
+            "Flamestride Rider",
+            "Invoker of Myths",
+            "Blightmaw"
+          ]
+        },
+        {
+          "pickNumber": 21,
+          "pack": 2,
+          "pickInPack": 6,
+          "pick": [
+            "Ironclad Holdout"
+          ],
+          "pickId": "bb95d15e-0911-475c-8283-43bb742b166b",
+          "packCards": [
+            "Ironclad Holdout",
+            "Frostbound Defiant",
+            "Emberwolf Triad",
+            "Immolate",
+            "Vertiginous Leap",
+            "The Power Within",
+            "Shattering Gambit"
+          ]
+        },
+        {
+          "pickNumber": 22,
+          "pack": 2,
+          "pickInPack": 7,
+          "pick": [
+            "The Grand Heist"
+          ],
+          "pickId": "07313dd3-d0dc-40ca-98a3-fa4d39e5bcae",
+          "packCards": [
+            "The Grand Heist",
+            "Crumbling Covenant",
+            "Lumineth",
+            "Apocalypse Vigilante",
+            "Echo Architect",
+            "Clockwork Conductor"
+          ]
+        },
+        {
+          "pickNumber": 23,
+          "pack": 2,
+          "pickInPack": 8,
+          "pick": [
+            "Reforged Automaton"
+          ],
+          "pickId": "2ad29773-7c1b-410d-9f69-7aa751f6ebca",
+          "packCards": [
+            "Reforged Automaton",
+            "Spirit Bond",
+            "Worldbreacher",
+            "Barrage Specialist",
+            "Fractured Vessel",
+            "Derelict Voyage"
+          ]
+        },
+        {
+          "pickNumber": 24,
+          "pack": 2,
+          "pickInPack": 9,
+          "pick": [
+            "Urban Desperado",
+            "Verdant Pioneer"
+          ],
+          "pickId": "05958bc8-e70c-4970-9fd2-a0f162786ad7",
+          "packCards": [
+            "Urban Desperado",
+            "Verdant Pioneer",
+            "Aftermath Bloom",
+            "Sunset Chronicler",
+            "Pathfinder Adrift",
+            "Stolen Genesis"
+          ]
+        },
+        {
+          "pickNumber": 25,
+          "pack": 2,
+          "pickInPack": 10,
+          "pick": [
+            "Void Pilgrim"
+          ],
+          "pickId": "2680ed41-da35-475a-9d80-ae2f4686feed",
+          "packCards": [
+            "Void Pilgrim",
+            "Company Commander",
+            "Starchaser",
+            "Spent Courier",
+            "Herald of the Last Light"
+          ]
+        },
+        {
+          "pickNumber": 26,
+          "pack": 2,
+          "pickInPack": 11,
+          "pick": [
+            "Shadow Reflection"
+          ],
+          "pickId": "0a7cb0f8-2946-4b00-a192-0b31c8e1ec5c",
+          "packCards": [
+            "Shadow Reflection",
+            "Starbound Striker",
+            "Lord of Hidden Paths",
+            "Tidecaller",
+            "Momentum of the Fallen"
+          ]
+        },
+        {
+          "pickNumber": 27,
+          "pack": 2,
+          "pickInPack": 12,
+          "pick": [
+            "Bladefall"
+          ],
+          "pickId": "057d2410-30d3-4b7a-9dc3-f2512c1cf31c",
+          "packCards": [
+            "Bladefall",
+            "Ironclad Marksman",
+            "Dawnhorn Elder",
+            "Seeker for the Way"
+          ]
+        },
+        {
+          "pickNumber": 28,
+          "pack": 2,
+          "pickInPack": 13,
+          "pick": [
+            "Flamestride Rider",
+            "Invoker of Myths"
+          ],
+          "pickId": "92bc35a8-1337-43da-a002-71f5a85e8853",
+          "packCards": [
+            "Flamestride Rider",
+            "Invoker of Myths",
+            "Blightmaw"
+          ]
+        },
+        {
+          "pickNumber": 29,
+          "pack": 2,
+          "pickInPack": 14,
+          "pick": [
+            "Shattering Gambit"
+          ],
+          "pickId": "045ce37b-86d2-4e56-84af-b6625b53d13c",
+          "packCards": [
+            "Shattering Gambit"
+          ]
+        },
+        {
+          "pickNumber": 30,
+          "pack": 2,
+          "pickInPack": 15,
+          "pick": [],
+          "pickId": "19557351-b65f-4b04-b971-66abdc07000a",
+          "packCards": []
+        },
+        {
+          "pickNumber": 31,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [
+            "Breach Artist"
+          ],
+          "pickId": "89a698a5-f4ac-4b04-96dc-32e1eeef6ac7",
+          "packCards": [
+            "Breach Artist",
+            "Call to the Unknown",
+            "Rootspring Summons",
+            "Dawnrunner",
+            "Broadcast Array",
+            "Chronicle Reclaimer",
+            "Radiants' Captain",
+            "Sky Voyager",
+            "Voidcaller",
+            "Tethered Hollow",
+            "Voidshield Guardian",
+            "Hallowed Stag",
+            "Fell the Mighty",
+            "Radiant Trio",
+            "Luminwings",
+            "Rite of Summoning"
+          ]
+        },
+        {
+          "pickNumber": 32,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": [
+            "Graywatch"
+          ],
+          "pickId": "ca79cd21-daaa-4a1c-bab5-cc4c783994ae",
+          "packCards": [
+            "Graywatch",
+            "Wasteland Tamer",
+            "Inspiring Templar",
+            "Enginespeaker",
+            "Echoes of the Journey",
+            "Avatar of Cosmic Reckoning",
+            "Dreamcatcher's Call",
+            "Standard Bearer",
+            "Lithic Severance",
+            "Data Pulse",
+            "Dreaming Obelisk"
+          ]
+        },
+        {
+          "pickNumber": 33,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": [
+            "Torn Circuit Feeder"
+          ],
+          "pickId": "14dee5be-94fd-4b5d-9265-edd1b58c8026",
+          "packCards": [
+            "Torn Circuit Feeder",
+            "Ordained Collapse",
+            "Scorched Reckoning",
+            "Maelstrom Denial",
+            "Phantasmal Recruiter",
+            "Mountainwatch Alpha",
+            "Spirit Field Reclaimer",
+            "Meadowlight Charger",
+            "Wondrous Clearing",
+            "Sanctum Approach",
+            "Riftwalker"
+          ]
+        },
+        {
+          "pickNumber": 34,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": [
+            "Cloaked Sentinel"
+          ],
+          "pickId": "1bbde9d9-1723-4f26-8700-63c459ac80cb",
+          "packCards": [
+            "Cloaked Sentinel",
+            "Somber Flockmaster",
+            "Dreadweaver",
+            "Ancient Descent",
+            "Rebirth Ritualist",
+            "Young Beastcaller",
+            "Aspiring Guardian",
+            "Sundown Ronin",
+            "Starsea Traveler",
+            "Molten Duel"
+          ]
+        },
+        {
+          "pickNumber": 35,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": [
+            "Frost Visionary"
+          ],
+          "pickId": "5aa91a9e-2fe2-43bc-aa9c-cfb8a71829ff",
+          "packCards": [
+            "Frost Visionary",
+            "Harvest the Forgotten",
+            "Burning Pursuit",
+            "Annular Recall",
+            "Pyrokinetic Surge",
+            "Skyborne Jellyfish",
+            "Wake the Fallen",
+            "Bloomweaver",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 36,
+          "pack": 3,
+          "pickInPack": 6,
+          "pick": [
+            "Cosmonaut of Tides"
+          ],
+          "pickId": "1e14e677-9bfa-4bcc-9772-8e7758d7538a",
+          "packCards": [
+            "Cosmonaut of Tides",
+            "Duneveil Vanguard",
+            "Crimson Pilgrimage",
+            "Exiles of the Last Light",
+            "Sage of the Prelude",
+            "Ruin Scavenger",
+            "Burning Revenant",
+            "Featherlight Summoner"
+          ]
+        },
+        {
+          "pickNumber": 37,
+          "pack": 3,
+          "pickInPack": 7,
+          "pick": [
+            "Borrowed Minutes"
+          ],
+          "pickId": "6d9efacb-9d7c-41f4-9b11-59df1be50e11",
+          "packCards": [
+            "Borrowed Minutes",
+            "Veilseeker",
+            "Gateweaver",
+            "Carrion Shepherd",
+            "Fathomscourge",
+            "Smoldering Ancient",
+            "Lone Castaway",
+            "Wolfbond Chieftain",
+            "Assault Leader"
+          ]
+        },
+        {
+          "pickNumber": 38,
+          "pack": 3,
+          "pickInPack": 8,
+          "pick": [
+            "Lightningborn"
+          ],
+          "pickId": "35a4e4b7-bd0a-48f4-be2e-c7453e3ba4d1",
+          "packCards": [
+            "Lightningborn",
+            "Petal-Seer",
+            "Cascade of Reflections",
+            "Inferno's Herald"
+          ]
+        },
+        {
+          "pickNumber": 39,
+          "pack": 3,
+          "pickInPack": 9,
+          "pick": [
+            "Voidshield Guardian"
+          ],
+          "pickId": "4e117771-5a8b-4812-b487-32ba34b7f724",
+          "packCards": [
+            "Voidshield Guardian",
+            "Hallowed Stag",
+            "Fell the Mighty",
+            "Radiant Trio",
+            "Luminwings",
+            "Rite of Summoning"
+          ]
+        },
+        {
+          "pickNumber": 40,
+          "pack": 3,
+          "pickInPack": 10,
+          "pick": [
+            "Lithic Severance"
+          ],
+          "pickId": "975dcfab-0281-4fee-92aa-021ea6c524c7",
+          "packCards": [
+            "Lithic Severance",
+            "Data Pulse",
+            "Dreaming Obelisk"
+          ]
+        },
+        {
+          "pickNumber": 41,
+          "pack": 3,
+          "pickInPack": 11,
+          "pick": [
+            "Meadowlight Charger"
+          ],
+          "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
+          "packCards": [
+            "Meadowlight Charger",
+            "Wondrous Clearing",
+            "Sanctum Approach",
+            "Riftwalker"
+          ]
+        },
+        {
+          "pickNumber": 42,
+          "pack": 3,
+          "pickInPack": 12,
+          "pick": [
+            "Sundown Ronin"
+          ],
+          "pickId": "03bf39c3-9e25-42dc-8538-f903eceb0a74",
+          "packCards": [
+            "Sundown Ronin",
+            "Starsea Traveler",
+            "Molten Duel"
+          ]
+        },
+        {
+          "pickNumber": 43,
+          "pack": 3,
+          "pickInPack": 13,
+          "pick": [],
+          "pickId": "1daf4348-05c5-4c55-bcf2-c7bec7988bfc",
+          "packCards": [
+            "Bloomweaver",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 44,
+          "pack": 3,
+          "pickInPack": 14,
+          "pick": [
+            "Featherlight Summoner"
+          ],
+          "pickId": "277bc4e5-f43a-4f1e-a7e9-11796e78fcdf",
+          "packCards": [
+            "Featherlight Summoner"
+          ]
+        },
+        {
+          "pickNumber": 45,
+          "pack": 3,
+          "pickInPack": 15,
+          "pick": [
+            "Assault Leader"
+          ],
+          "pickId": "292ac228-7a1e-4c21-b81e-204014c0f3b1",
+          "packCards": [
+            "Assault Leader"
+          ]
+        }
+      ]
+    }
+  ]
+}

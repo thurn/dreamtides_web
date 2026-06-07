@@ -1,0 +1,320 @@
+{
+  "draftId": "0e182512-f478-47de-b397-69c32cb3fe54",
+  "date": "2026-01-05T18:30:07.224Z",
+  "name": "WB Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 6,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "WB",
+    "U",
+    "WUBG",
+    "WBG",
+    "UBR",
+    "WURG",
+    "URG",
+    "UB"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "WB",
+      "mainboard": [
+        "Apocalypse Vigilante",
+        "Vault Infiltrator",
+        "Sky Voyager",
+        "Voidcaller",
+        "Urban Desperado",
+        "Verdant Pioneer",
+        "Gilded Catalyst",
+        "Burning Revenant",
+        "Lithic Severance",
+        "Veil Shatter",
+        "Wasteland Holdout",
+        "Apocalypse",
+        "Warfield Stalwart",
+        "Void Pilgrim",
+        "Shadow Reflection"
+      ],
+      "sideboard": [
+        "Nightmare",
+        "Phantom Flotilla"
+      ],
+      "pool": [
+        "Void Pilgrim",
+        "Apocalypse",
+        "Sky Voyager",
+        "Voidcaller",
+        "Veil Shatter",
+        "Warfield Stalwart",
+        "Nightmare",
+        "Phantom Flotilla",
+        "Wasteland Holdout",
+        "Vault Infiltrator",
+        "Burning Revenant",
+        "Lithic Severance",
+        "Apocalypse Vigilante",
+        "Gilded Catalyst",
+        "Urban Desperado",
+        "Verdant Pioneer",
+        "Shadow Reflection"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Void Pilgrim"
+          ],
+          "pickId": "1daf0244-ffb9-42f3-8301-34cee7b9ae1b",
+          "packCards": [
+            "Void Pilgrim",
+            "Wired Duelist",
+            "Reunion",
+            "Ebonwing"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Apocalypse"
+          ],
+          "pickId": "1b25c224-4531-4fdc-9845-6663eaf60540",
+          "packCards": [
+            "Apocalypse",
+            "Chronicle Reclaimer",
+            "Radiants' Captain",
+            "Threadbreaker",
+            "Exiles of the Last Light"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [],
+          "pickId": "4da892c5-071f-416f-9e42-c4bff102eb88",
+          "packCards": [
+            "Glimpse of Infinity",
+            "Lunar Hart"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [
+            "Sky Voyager",
+            "Voidcaller"
+          ],
+          "pickId": "d6f47fe1-36c6-4af9-a9eb-f2919e8e3446",
+          "packCards": [
+            "Sky Voyager",
+            "Voidcaller",
+            "Volcanic Channeler"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Veil Shatter"
+          ],
+          "pickId": "553fb946-2706-475b-89f9-e4355ec9ea2b",
+          "packCards": [
+            "Veil Shatter",
+            "Nebula's Wake"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": [
+            "Warfield Stalwart"
+          ],
+          "pickId": "25cd9d58-d957-487b-ad7b-a47ffd21defb",
+          "packCards": [
+            "Warfield Stalwart"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [
+            "Nightmare",
+            "Phantom Flotilla"
+          ],
+          "pickId": "0f055754-58cf-474a-a3a9-59490dbf9dce",
+          "packCards": [
+            "Nightmare",
+            "Phantom Flotilla",
+            "Conduit of Ashes",
+            "Lanternwood Scout",
+            "Soulreaver"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": [
+            "Wasteland Holdout"
+          ],
+          "pickId": "ab1d1461-1625-4163-aacd-a939f4871fad",
+          "packCards": [
+            "Wasteland Holdout",
+            "Fractured Veil",
+            "Overstory Explorer",
+            "Arc Disciple",
+            "Rusted Monolith"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": [
+            "Vault Infiltrator"
+          ],
+          "pickId": "2aebe7a8-b982-4be4-83ca-3594e8f606b4",
+          "packCards": [
+            "Vault Infiltrator",
+            "Vortex Claimant",
+            "Avatar of Cosmic Reckoning",
+            "Embersummoner",
+            "Shardwoven Tyrant"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": [
+            "Burning Revenant"
+          ],
+          "pickId": "36ec47ec-f86c-489d-ad0b-d0fbdee10102",
+          "packCards": [
+            "Burning Revenant",
+            "Momentum's Edge",
+            "Endless Projection"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": [
+            "Lithic Severance"
+          ],
+          "pickId": "975dcfab-0281-4fee-92aa-021ea6c524c7",
+          "packCards": [
+            "Lithic Severance",
+            "Infernal Ascendant"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 2,
+          "pickInPack": 6,
+          "pick": [
+            "Apocalypse Vigilante"
+          ],
+          "pickId": "f254239c-c07a-4c41-98f7-8f4de539c73e",
+          "packCards": [
+            "Apocalypse Vigilante"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [],
+          "pickId": "05ab141b-ba27-4127-a973-ff0cd72d2c64",
+          "packCards": [
+            "Grim Reclaimer",
+            "Voidsire",
+            "Gateweaver",
+            "Pyrokinetic Surge",
+            "Dreamborne Leviathan",
+            "Spiritbound Alpha"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": [
+            "Gilded Catalyst"
+          ],
+          "pickId": "5270882b-2382-450e-bb0c-7804be4f19ea",
+          "packCards": [
+            "Gilded Catalyst",
+            "Starshot Gunner",
+            "Return to Nowhere",
+            "Standoff"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": [
+            "Urban Desperado",
+            "Verdant Pioneer"
+          ],
+          "pickId": "05958bc8-e70c-4970-9fd2-a0f162786ad7",
+          "packCards": [
+            "Urban Desperado",
+            "Verdant Pioneer",
+            "Assault Leader"
+          ]
+        },
+        {
+          "pickNumber": 16,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": [],
+          "pickId": "45026d57-0324-4312-8b86-2e7d4f581ee9",
+          "packCards": [
+            "Derelict Voyage"
+          ]
+        },
+        {
+          "pickNumber": 17,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": [
+            "Shadow Reflection"
+          ],
+          "pickId": "0a7cb0f8-2946-4b00-a192-0b31c8e1ec5c",
+          "packCards": [
+            "Shadow Reflection"
+          ]
+        },
+        {
+          "pickNumber": 18,
+          "pack": 3,
+          "pickInPack": 6,
+          "pick": [],
+          "pickId": "19557351-b65f-4b04-b971-66abdc07000a",
+          "packCards": []
+        }
+      ]
+    }
+  ]
+}

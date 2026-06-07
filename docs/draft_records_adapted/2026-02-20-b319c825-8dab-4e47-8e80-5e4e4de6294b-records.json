@@ -1,0 +1,133 @@
+{
+  "draftId": "b319c825-8dab-4e47-8e80-5e4e4de6294b",
+  "date": "2026-02-20T05:32:31.627Z",
+  "name": "UR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 2,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UR",
+    "W",
+    "UBR",
+    "WBRG",
+    "U",
+    "BRG",
+    "WU",
+    "UBRG"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UR",
+      "mainboard": [
+        "Oracle of Shifting Skies",
+        "Architect of Memory",
+        "Terminus",
+        "Dreadwood Emissary",
+        "Chronicle Reclaimer",
+        "Radiants' Captain",
+        "A New Adventure",
+        "Spirit Reaping"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Chronicle Reclaimer",
+        "Radiants' Captain",
+        "Spirit Reaping",
+        "Oracle of Shifting Skies",
+        "Architect of Memory",
+        "Dreadwood Emissary",
+        "Terminus",
+        "A New Adventure"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Chronicle Reclaimer",
+            "Radiants' Captain"
+          ],
+          "pickId": "187b6719-e5ed-4615-a00b-3313ceca055b",
+          "packCards": [
+            "Chronicle Reclaimer",
+            "Radiants' Captain"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Spirit Reaping"
+          ],
+          "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
+          "packCards": [
+            "Spirit Reaping"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [
+            "Oracle of Shifting Skies",
+            "Architect of Memory"
+          ],
+          "pickId": "2429510d-ce59-472d-b0df-5e6b7cdf63af",
+          "packCards": [
+            "Oracle of Shifting Skies",
+            "Architect of Memory",
+            "Ochre Prospector"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": [
+            "Dreadwood Emissary"
+          ],
+          "pickId": "12917e60-cea1-460b-b3f1-8d47cc24afdc",
+          "packCards": [
+            "Dreadwood Emissary"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [
+            "Terminus"
+          ],
+          "pickId": "69e615d8-1b79-4a82-ba9f-ee211d67dc95",
+          "packCards": [
+            "Terminus"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": [
+            "A New Adventure"
+          ],
+          "pickId": "0eb00e3c-b67a-44c7-ae61-23ecf4d4971a",
+          "packCards": [
+            "A New Adventure"
+          ]
+        }
+      ]
+    }
+  ]
+}

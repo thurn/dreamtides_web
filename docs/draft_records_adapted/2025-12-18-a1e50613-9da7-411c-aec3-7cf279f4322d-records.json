@@ -1,0 +1,101 @@
+{
+  "draftId": "a1e50613-9da7-411c-aec3-7cf279f4322d",
+  "date": "2025-12-18T18:59:30.869Z",
+  "name": "UBRG Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 5,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UBRG",
+    "RG",
+    "U",
+    "UB",
+    "BRG",
+    "UBR",
+    "UB",
+    "WR"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UBRG",
+      "mainboard": [
+        "Cosmic Puppeteer",
+        "Glimpse of Infinity",
+        "Immolate"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Cosmic Puppeteer",
+        "Immolate",
+        "Glimpse of Infinity"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Cosmic Puppeteer"
+          ],
+          "pickId": "06996ff1-7f57-4e73-940a-a58c4482cadd",
+          "packCards": [
+            "Cosmic Puppeteer",
+            "Starshot Gunner"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Immolate"
+          ],
+          "pickId": "064dfdeb-485f-473e-9fa0-8fdb7638cdc6",
+          "packCards": [
+            "Immolate",
+            "Guiding Light",
+            "Derelict Voyage"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [],
+          "pickId": "2a717b98-cdac-416d-bf6c-f6b6638e65d1",
+          "packCards": [
+            "Marrow Mimic"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [],
+          "pickId": "be77b98a-dd79-477c-8ab2-7ebf5637a89e",
+          "packCards": []
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Glimpse of Infinity"
+          ],
+          "pickId": "0948e6dc-8af7-45d3-91de-a2aebee83e82",
+          "packCards": [
+            "Glimpse of Infinity"
+          ]
+        }
+      ]
+    }
+  ]
+}

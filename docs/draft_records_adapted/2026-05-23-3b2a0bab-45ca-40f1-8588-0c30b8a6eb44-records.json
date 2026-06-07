@@ -1,0 +1,338 @@
+{
+  "draftId": "3b2a0bab-45ca-40f1-8588-0c30b8a6eb44",
+  "date": "2026-05-23T05:44:44.361Z",
+  "name": "WG Midrange Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 6,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "WG Midrange",
+    "BR Aristocrats",
+    "WUR Artifacts",
+    "URG Artifact Control",
+    "BG Aristocrats",
+    "WURG Welder",
+    "UBRG Storm",
+    "WBG Weenie"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "WG Midrange",
+      "mainboard": [
+        "Cloudmantle Ray",
+        "Emberwatch Veteran",
+        "Vessel of Echoes",
+        "Voidshield Guardian",
+        "Abomination of Memory",
+        "Gatebound Warden",
+        "Starlight Guide",
+        "Depthwalker",
+        "Dreamvale Monarch",
+        "Augur Crow",
+        "Veilpiercer",
+        "Spirit of the Greenwood",
+        "Glimpse of Infinity",
+        "Dreamcatcher's Call",
+        "Bloomweaver",
+        "Standard Bearer"
+      ],
+      "sideboard": [
+        "Veil Crosser",
+        "Rooftop Prophet"
+      ],
+      "pool": [
+        "Abomination of Memory",
+        "Voidshield Guardian",
+        "Glimpse of Infinity",
+        "Emberwatch Veteran",
+        "Vessel of Echoes",
+        "Veil Crosser",
+        "Rooftop Prophet",
+        "Bloomweaver",
+        "Dreamcatcher's Call",
+        "Cloudmantle Ray",
+        "Veilpiercer",
+        "Dreamvale Monarch",
+        "Augur Crow",
+        "Depthwalker",
+        "Spirit of the Greenwood",
+        "Standard Bearer",
+        "Gatebound Warden",
+        "Starlight Guide"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Abomination of Memory"
+          ],
+          "pickId": "3826a901-7219-46d1-acae-07a981877149",
+          "packCards": [
+            "Abomination of Memory",
+            "Ferryman's Tithe",
+            "A New Adventure",
+            "Grim Reclaimer",
+            "Voidsire",
+            "Duskwall Delver",
+            "Epiphany Unfolded"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Voidshield Guardian"
+          ],
+          "pickId": "4e117771-5a8b-4812-b487-32ba34b7f724",
+          "packCards": [
+            "Voidshield Guardian",
+            "Moonlit Voyage",
+            "Ancient Descent",
+            "Aftermath Bloom",
+            "Volcanic Channeler"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Glimpse of Infinity"
+          ],
+          "pickId": "0948e6dc-8af7-45d3-91de-a2aebee83e82",
+          "packCards": [
+            "Glimpse of Infinity",
+            "Lightningborn",
+            "Frostbound Defiant",
+            "Emberwolf Triad",
+            "Sylvan Matriarch"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [
+            "Emberwatch Veteran",
+            "Vessel of Echoes"
+          ],
+          "pickId": "1b9e6c5c-4bc4-4f41-8c2c-f5b8c97c53c5",
+          "packCards": [
+            "Emberwatch Veteran",
+            "Vessel of Echoes",
+            "Endless Projection",
+            "Ferryman of the Falls"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Veil Crosser",
+            "Rooftop Prophet"
+          ],
+          "pickId": "a15570c0-4210-4959-8584-987ec85f8283",
+          "packCards": [
+            "Veil Crosser",
+            "Rooftop Prophet",
+            "Ashen Remnant",
+            "The Dread Sovereign"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": [
+            "Bloomweaver"
+          ],
+          "pickId": "368bcae1-1750-4a1a-9d9e-14eb3ed8e50b",
+          "packCards": [
+            "Bloomweaver"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [
+            "Dreamcatcher's Call"
+          ],
+          "pickId": "01794178-cf41-454c-ac37-1d8b18e42db2",
+          "packCards": [
+            "Dreamcatcher's Call",
+            "Unbroken",
+            "The Forsaker",
+            "Ruptured Dynamo",
+            "Soulreaver",
+            "Seeker for the Way"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": [
+            "Cloudmantle Ray"
+          ],
+          "pickId": "0003aa31-d42e-4972-9fb9-086aefe29a2c",
+          "packCards": [
+            "Cloudmantle Ray",
+            "Rusted Monolith",
+            "Inverted Reflection",
+            "Enginespeaker"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": [
+            "Veilpiercer"
+          ],
+          "pickId": "2b46a6c6-26d0-4ccb-84c9-2702f1a0f65b",
+          "packCards": [
+            "Veilpiercer",
+            "Virtuoso of Harmony",
+            "Cosmic Puppeteer",
+            "Ripple Through Reality"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": [
+            "Dreamvale Monarch"
+          ],
+          "pickId": "186212d3-4b41-42a2-b2ee-81e035e22408",
+          "packCards": [
+            "Dreamvale Monarch",
+            "Nebula's Wake",
+            "Key to the Moment"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": [
+            "Augur Crow"
+          ],
+          "pickId": "b770471c-1bf7-4179-8418-dcd790ca5405",
+          "packCards": [
+            "Augur Crow",
+            "Dreamscatter",
+            "Echoes of Eternity"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 2,
+          "pickInPack": 6,
+          "pick": [],
+          "pickId": "26343f80-4d60-407a-a44a-ee6295d2e5ec",
+          "packCards": []
+        },
+        {
+          "pickNumber": 13,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [
+            "Depthwalker"
+          ],
+          "pickId": "0973a109-811a-4c78-9404-19a26f4b40c7",
+          "packCards": [
+            "Depthwalker",
+            "Prism Caller",
+            "Momentum of the Fallen",
+            "Angel of the Eclipse",
+            "Path to Redemption",
+            "Forge-Twin",
+            "Speaker for the Forgotten",
+            "Crescendo Channeler"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": [
+            "Spirit of the Greenwood"
+          ],
+          "pickId": "25b0b816-0583-44aa-9dc5-f3ff48993a51",
+          "packCards": [
+            "Spirit of the Greenwood",
+            "Sanctum Approach",
+            "Sundown Surfer",
+            "Revenant of the Lost"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": [
+            "Standard Bearer"
+          ],
+          "pickId": "93bd7e73-63dc-45b2-aaa8-984be8b900ab",
+          "packCards": [
+            "Standard Bearer",
+            "Borrowed Minutes",
+            "Barrage Specialist",
+            "Spirit Field Reclaimer"
+          ]
+        },
+        {
+          "pickNumber": 16,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": [],
+          "pickId": "45026d57-0324-4312-8b86-2e7d4f581ee9",
+          "packCards": [
+            "Ambush Operative",
+            "Crimson Pilgrimage"
+          ]
+        },
+        {
+          "pickNumber": 17,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": [],
+          "pickId": "4da892c5-071f-416f-9e42-c4bff102eb88",
+          "packCards": [
+            "Glimmerwood Scout"
+          ]
+        },
+        {
+          "pickNumber": 18,
+          "pack": 3,
+          "pickInPack": 6,
+          "pick": [
+            "Gatebound Warden",
+            "Starlight Guide"
+          ],
+          "pickId": "55707746-da6e-46e5-a5ca-7ac843fdc38e",
+          "packCards": [
+            "Gatebound Warden",
+            "Starlight Guide"
+          ]
+        }
+      ]
+    }
+  ]
+}

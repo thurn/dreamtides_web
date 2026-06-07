@@ -1,0 +1,44 @@
+{
+  "draftId": "d3456697-85d0-4c8a-b635-d3b33c21052c",
+  "date": "2026-05-03T19:52:32.447Z",
+  "name": "C Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 1,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "C",
+    "C",
+    "C",
+    "R",
+    "C",
+    "W",
+    "C",
+    "C"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "C",
+      "mainboard": [],
+      "sideboard": [],
+      "pool": [],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [],
+          "pickId": "9869a753-5e41-4098-ab41-e75b4396ec50",
+          "packCards": []
+        }
+      ]
+    }
+  ]
+}

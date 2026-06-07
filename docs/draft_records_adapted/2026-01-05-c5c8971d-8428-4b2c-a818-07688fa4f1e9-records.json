@@ -1,0 +1,76 @@
+{
+  "draftId": "c5c8971d-8428-4b2c-a818-07688fa4f1e9",
+  "date": "2026-01-05T18:44:25.227Z",
+  "name": "B Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 1,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "B",
+    "G",
+    "UB",
+    "C",
+    "WUG",
+    "UBRG",
+    "WUBG",
+    "W"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "B",
+      "mainboard": [
+        "Scrapyard Custodian",
+        "Forge Inheritor"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Scrapyard Custodian",
+        "Forge Inheritor"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Scrapyard Custodian"
+          ],
+          "pickId": "32cf273e-b8f7-434b-9d5d-883dfd6f7423",
+          "packCards": [
+            "Scrapyard Custodian"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [],
+          "pickId": "26343f80-4d60-407a-a44a-ee6295d2e5ec",
+          "packCards": []
+        },
+        {
+          "pickNumber": 3,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [
+            "Forge Inheritor"
+          ],
+          "pickId": "019b51b0-e5c6-4208-922b-7736686dddcd",
+          "packCards": [
+            "Forge Inheritor"
+          ]
+        }
+      ]
+    }
+  ]
+}

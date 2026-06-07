@@ -1,0 +1,55 @@
+{
+  "draftId": "9fa3804f-ec94-456f-a3dd-4c511bbbf471",
+  "date": "2026-02-15T09:21:30.916Z",
+  "name": "UBRG Sealed of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "s",
+  "complete": true,
+  "seatCount": 1,
+  "packs": 1,
+  "packSize": 0,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UBRG"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UBRG",
+      "mainboard": [
+        "Rift Pilgrim",
+        "Scrapyard Custodian",
+        "Wasteland Arbitrator",
+        "Veil of the Wastes",
+        "Silent Gatherer",
+        "Angel of the Eclipse",
+        "Soulbinder",
+        "Winterbough Monk",
+        "Lumineth",
+        "Eternal Sentry",
+        "Ferryman of the Falls",
+        "Minstrel of Falling Light",
+        "Key Sifter",
+        "Vortex Claimant",
+        "Eclipse Herald",
+        "Horizon Follower",
+        "Ashen Harbinger",
+        "Sandglider",
+        "Tranquil Duelist",
+        "Moonlit Voyage",
+        "Rite of Summoning",
+        "Flash of Power",
+        "Call of the Lost",
+        "Bloomweaver",
+        "Ordained Collapse",
+        "Fangbound"
+      ],
+      "sideboard": [],
+      "pool": [],
+      "picks": []
+    }
+  ]
+}

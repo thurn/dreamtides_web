@@ -1,0 +1,229 @@
+{
+  "draftId": "bdc5e18c-a9e3-481b-9e3b-75e075998992",
+  "date": "2026-05-25T06:46:26.279Z",
+  "name": "UB Reanimator Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 4,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UB Reanimator",
+    "BR Aristocrats",
+    "G Big Ramp",
+    "U Control",
+    "WR Artifact Aggro",
+    "WB Value",
+    "UBR Storm",
+    "WUB Artifact Control"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UB Reanimator",
+      "mainboard": [
+        "Emberwatch Veteran",
+        "Vessel of Echoes",
+        "Sorrow Watcher",
+        "Tidewreck Navigator",
+        "Wreckheap Survivor",
+        "Spirit of Smoldering Echoes",
+        "Manufactured Abomination",
+        "Deathwalker",
+        "Lone Castaway",
+        "Epiphany Unfolded",
+        "Ecliptic Vantage",
+        "Burning Pursuit",
+        "Clockwork Prodigy",
+        "Echoing Denial"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Wreckheap Survivor",
+        "Sorrow Watcher",
+        "Tidewreck Navigator",
+        "Deathwalker",
+        "Emberwatch Veteran",
+        "Vessel of Echoes",
+        "Burning Pursuit",
+        "Lone Castaway",
+        "Spirit of Smoldering Echoes",
+        "Manufactured Abomination",
+        "Ecliptic Vantage",
+        "Clockwork Prodigy",
+        "Echoing Denial",
+        "Epiphany Unfolded"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Wreckheap Survivor"
+          ],
+          "pickId": "107081ae-dfda-4e54-9963-ac01161cc437",
+          "packCards": [
+            "Wreckheap Survivor",
+            "Nightmare Manifest",
+            "Ethereal Courser"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Sorrow Watcher",
+            "Tidewreck Navigator"
+          ],
+          "pickId": "629e37d1-c0f3-44f2-926e-41eb3687c1d9",
+          "packCards": [
+            "Sorrow Watcher",
+            "Tidewreck Navigator",
+            "Evacuation Enforcer",
+            "Pyrokinetic Surge"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Deathwalker"
+          ],
+          "pickId": "5d86f1a9-7c51-4456-b1d9-7fe82f073929",
+          "packCards": [
+            "Deathwalker",
+            "Arc Disciple"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [
+            "Emberwatch Veteran",
+            "Vessel of Echoes"
+          ],
+          "pickId": "1b9e6c5c-4bc4-4f41-8c2c-f5b8c97c53c5",
+          "packCards": [
+            "Emberwatch Veteran",
+            "Vessel of Echoes"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [
+            "Burning Pursuit"
+          ],
+          "pickId": "1b2c44f7-7b54-4cdf-8f53-ab78c515795b",
+          "packCards": [
+            "Burning Pursuit",
+            "Vaultbreaker",
+            "Dreamcatcher's Call"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": [
+            "Lone Castaway"
+          ],
+          "pickId": "28028830-83ed-45e2-b495-3b9ad9d3e988",
+          "packCards": [
+            "Lone Castaway",
+            "Flash of Power",
+            "Lord of Hidden Paths"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": [],
+          "pickId": "068bb15a-fc2d-42a2-859b-837b946d23c0",
+          "packCards": [
+            "Saffron Trailblazer"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": [
+            "Spirit of Smoldering Echoes",
+            "Manufactured Abomination"
+          ],
+          "pickId": "02d6d693-f1f3-4317-bcc0-c21fa8490d38",
+          "packCards": [
+            "Spirit of Smoldering Echoes",
+            "Manufactured Abomination"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [],
+          "pickId": "24a5cc2c-0fbf-4a5f-b175-6e0ffd0d0787",
+          "packCards": [
+            "Blight Weaver",
+            "Starfall",
+            "Bladefall"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": [
+            "Ecliptic Vantage"
+          ],
+          "pickId": "122f2cc2-5f4d-497c-96b5-ed5698f28b51",
+          "packCards": [
+            "Ecliptic Vantage",
+            "The Power Within",
+            "Wheel of the Heavens"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": [
+            "Clockwork Prodigy",
+            "Echoing Denial"
+          ],
+          "pickId": "89f612d6-7c59-4a7b-a87d-45f789e88ba5",
+          "packCards": [
+            "Clockwork Prodigy",
+            "Echoing Denial"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": [
+            "Epiphany Unfolded"
+          ],
+          "pickId": "2dd41293-d7c8-4422-9f0c-b3e96350f5c9",
+          "packCards": [
+            "Epiphany Unfolded"
+          ]
+        }
+      ]
+    }
+  ]
+}

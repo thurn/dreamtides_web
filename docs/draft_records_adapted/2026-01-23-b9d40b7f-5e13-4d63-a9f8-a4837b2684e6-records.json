@@ -1,0 +1,536 @@
+{
+  "draftId": "b9d40b7f-5e13-4d63-a9f8-a4837b2684e6",
+  "date": "2026-01-23T03:07:20.805Z",
+  "name": "WUR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 5,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "WUR",
+    "URG",
+    "WBR",
+    "UBRG",
+    "WUR",
+    "UBG",
+    "WUG",
+    "UB"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "WUR",
+      "mainboard": [
+        "The Devourer",
+        "Stoneborn Eternal",
+        "Gateweaver",
+        "Oathbound Pair",
+        "Boundless Wanderer",
+        "Field Reverent",
+        "Pyrewatcher",
+        "Sanctum Approach",
+        "Canopy of Stars",
+        "Lightningborn",
+        "Moment Rewound",
+        "Spiral Offering",
+        "Wasteland Holdout",
+        "Gearwright",
+        "Shadow Soloist",
+        "Moonlit Dancer"
+      ],
+      "sideboard": [
+        "Salvage Engine"
+      ],
+      "pool": [
+        "Stoneborn Eternal",
+        "Boundless Wanderer",
+        "Field Reverent",
+        "Salvage Engine",
+        "The Devourer",
+        "Oathbound Pair",
+        "Wasteland Holdout",
+        "Lightningborn",
+        "Pyrewatcher",
+        "Spiral Offering",
+        "Canopy of Stars",
+        "Sanctum Approach",
+        "Gateweaver",
+        "Gearwright",
+        "Shadow Soloist",
+        "Moonlit Dancer",
+        "Moment Rewound"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Stoneborn Eternal"
+          ],
+          "pickId": "193c3ed7-975e-4249-9c2f-74b7cd68f219",
+          "packCards": [
+            "Stoneborn Eternal",
+            "Dustborn Veteran",
+            "Duskwall Delver",
+            "Forsaken Pact",
+            "Torn Circuit Feeder"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Boundless Wanderer",
+            "Field Reverent"
+          ],
+          "pickId": "295c8a21-7a4e-42cb-9420-9e59a1b75954",
+          "packCards": [
+            "Boundless Wanderer",
+            "Field Reverent",
+            "Scuttled Fortune",
+            "Sunshadow Eagle",
+            "Kindred Sparks"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Salvage Engine"
+          ],
+          "pickId": "9675b8ea-47f9-440e-9535-de879da53f76",
+          "packCards": [
+            "Salvage Engine",
+            "Desolation's Edge",
+            "Titan of Forgotten Echoes"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [
+            "The Devourer"
+          ],
+          "pickId": "15db4353-9c46-4fe4-b22e-0cf024aa9dfc",
+          "packCards": [
+            "The Devourer",
+            "Dreadweaver"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Oathbound Pair"
+          ],
+          "pickId": "dcd27fa3-f6b6-4137-9b6c-4cba7187664c",
+          "packCards": [
+            "Oathbound Pair"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [
+            "Wasteland Holdout"
+          ],
+          "pickId": "ab1d1461-1625-4163-aacd-a939f4871fad",
+          "packCards": [
+            "Wasteland Holdout",
+            "Frostbound Defiant",
+            "Emberwolf Triad",
+            "Through the Rift",
+            "Shared Revelation"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": [
+            "Lightningborn"
+          ],
+          "pickId": "35a4e4b7-bd0a-48f4-be2e-c7453e3ba4d1",
+          "packCards": [
+            "Lightningborn",
+            "Cindermarch",
+            "Conduit of Resonance",
+            "Reforged Automaton",
+            "Gleam Below"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": [
+            "Pyrewatcher"
+          ],
+          "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
+          "packCards": [
+            "Pyrewatcher",
+            "Pallid Arbiter",
+            "Fathomscourge",
+            "Smoldering Ancient"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": [
+            "Spiral Offering"
+          ],
+          "pickId": "3196dc6e-cee8-49c9-b687-8095b9ad43a7",
+          "packCards": [
+            "Spiral Offering",
+            "Burst of Obliteration"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": [
+            "Canopy of Stars"
+          ],
+          "pickId": "10548126-2bac-435d-b7ee-cbfea97a40ea",
+          "packCards": [
+            "Canopy of Stars"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [
+            "Sanctum Approach"
+          ],
+          "pickId": "6920c895-bc98-4871-a53f-219fa27a74e5",
+          "packCards": [
+            "Sanctum Approach",
+            "Cosmic Puppeteer",
+            "Pathfinder Adrift"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": [],
+          "pickId": "1daf4348-05c5-4c55-bcf2-c7bec7988bfc",
+          "packCards": [
+            "Guiding Light",
+            "Gateway Defender",
+            "Marrow Mimic"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": [
+            "Gateweaver"
+          ],
+          "pickId": "218af707-cc60-407e-af20-e21879a0e902",
+          "packCards": [
+            "Gateweaver"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": [
+            "Gearwright",
+            "Shadow Soloist",
+            "Moonlit Dancer"
+          ],
+          "pickId": "9a8399fc-4cba-44c5-888e-2cfc0f6739f6",
+          "packCards": [
+            "Gearwright",
+            "Shadow Soloist",
+            "Moonlit Dancer",
+            "Terminus"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": [
+            "Moment Rewound"
+          ],
+          "pickId": "4ab981aa-d815-439a-b8ff-2043bf42c392",
+          "packCards": [
+            "Moment Rewound"
+          ]
+        }
+      ]
+    },
+    {
+      "seat": 4,
+      "name": "WUR",
+      "mainboard": [
+        "Oracle of Shifting Skies",
+        "Architect of Memory",
+        "Pathfinder Adrift",
+        "Barrage Specialist",
+        "Unleashed Destruction",
+        "Crimson Pilgrimage",
+        "Shared Revelation",
+        "Shadow March"
+      ],
+      "sideboard": [
+        "Fractured Vessel",
+        "Passage Through Oblivion",
+        "Torn Circuit Feeder",
+        "Duskreaper",
+        "Mother of Flames",
+        "Fathomless Maw",
+        "Kindlehorn",
+        "Veilpiercer"
+      ],
+      "pool": [
+        "Shadow March",
+        "Mother of Flames",
+        "Duskreaper",
+        "Torn Circuit Feeder",
+        "Veilpiercer",
+        "Passage Through Oblivion",
+        "Fathomless Maw",
+        "Kindlehorn",
+        "Fractured Vessel",
+        "Shared Revelation",
+        "Unleashed Destruction",
+        "Oracle of Shifting Skies",
+        "Architect of Memory",
+        "Crimson Pilgrimage",
+        "Barrage Specialist",
+        "Pathfinder Adrift"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Shadow March"
+          ],
+          "pickId": "4e50ee7c-f2a2-4d49-a1cc-8233fd8dd0c5",
+          "packCards": [
+            "Shadow March",
+            "Paradox Enforcer",
+            "Lord of Hidden Paths",
+            "Wondrous Clearing",
+            "Oathbound Pair"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Mother of Flames"
+          ],
+          "pickId": "3aacabde-f5ec-4519-895d-17f5e48746ee",
+          "packCards": [
+            "Mother of Flames",
+            "Dusk Duelist",
+            "Forgotten Factory Titan",
+            "Blazing Emberwing"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Duskreaper"
+          ],
+          "pickId": "87ead6ac-b1c5-4852-8413-7fa43c6cfc57",
+          "packCards": [
+            "Duskreaper",
+            "Gilded Catalyst"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [],
+          "pickId": "18d2e383-d380-4d18-8aad-bd8ea093a16c",
+          "packCards": [
+            "Overstory Explorer"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Torn Circuit Feeder"
+          ],
+          "pickId": "14dee5be-94fd-4b5d-9265-edd1b58c8026",
+          "packCards": [
+            "Torn Circuit Feeder"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [
+            "Veilpiercer"
+          ],
+          "pickId": "9b76bcd4-580a-4435-afe9-290940b1837f",
+          "packCards": [
+            "Veilpiercer",
+            "Driftcaller Sovereign",
+            "Immolate and Rise",
+            "Peak Plunder",
+            "Canopy of Stars"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": [
+            "Passage Through Oblivion"
+          ],
+          "pickId": "2da5f3f8-5eef-498f-ba2c-2f3fbc3745aa",
+          "packCards": [
+            "Passage Through Oblivion",
+            "Saffron Trailblazer",
+            "Twilight Suppressor",
+            "Miraculous Arrival"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": [
+            "Fathomless Maw",
+            "Kindlehorn"
+          ],
+          "pickId": "087ff277-902f-4285-93b6-dc18e6d4fe15",
+          "packCards": [
+            "Fathomless Maw",
+            "Kindlehorn",
+            "Celestial Reverie",
+            "Liminal Dreamer"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": [
+            "Fractured Vessel"
+          ],
+          "pickId": "04ef8493-d986-45f8-a718-617b028f7ad4",
+          "packCards": [
+            "Fractured Vessel"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": [
+            "Shared Revelation"
+          ],
+          "pickId": "1a6f256b-943e-4cfb-9fc9-d1ded68b5f97",
+          "packCards": [
+            "Shared Revelation"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [
+            "Unleashed Destruction"
+          ],
+          "pickId": "2cc1ba79-9671-4183-b9ca-50f63c6a42fb",
+          "packCards": [
+            "Unleashed Destruction",
+            "Moonlit Voyage",
+            "Starbound Striker",
+            "Moment Rewound"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": [
+            "Oracle of Shifting Skies",
+            "Architect of Memory"
+          ],
+          "pickId": "2429510d-ce59-472d-b0df-5e6b7cdf63af",
+          "packCards": [
+            "Oracle of Shifting Skies",
+            "Architect of Memory",
+            "Colossal Convergence",
+            "Forsworn Champion",
+            "Rootspring Summons"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": [
+            "Crimson Pilgrimage"
+          ],
+          "pickId": "0963b49f-4193-4b37-8042-a24ee7e91ddd",
+          "packCards": [
+            "Crimson Pilgrimage",
+            "Fragments of Vision"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": [
+            "Barrage Specialist"
+          ],
+          "pickId": "74b4c336-5d4c-4bc5-b82a-35084a6ad808",
+          "packCards": [
+            "Barrage Specialist"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": [
+            "Pathfinder Adrift"
+          ],
+          "pickId": "7ea4b5bc-18a4-45db-a56a-ab3f8bd2fb0d",
+          "packCards": [
+            "Pathfinder Adrift"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "draftId": "5c355f96-d2fc-444b-82e3-9b658e15d5e7",
+  "date": "2026-01-19T22:52:08.180Z",
+  "name": "WG Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 8,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "WG",
+    "UBR",
+    "UB",
+    "BRG",
+    "WB",
+    "WU",
+    "BRG",
+    "UR"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "WG",
+      "mainboard": [
+        "Undying Fang",
+        "Ebonwing",
+        "Forgotten Factory Titan",
+        "Starsea Traveler",
+        "Grounded",
+        "Packcaller of Shadows"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Forgotten Factory Titan",
+        "Ebonwing",
+        "Starsea Traveler",
+        "Undying Fang",
+        "Packcaller of Shadows",
+        "Grounded"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Forgotten Factory Titan"
+          ],
+          "pickId": "85e9e58a-0ac1-405c-906e-16e981763b3a",
+          "packCards": [
+            "Forgotten Factory Titan",
+            "Vaultbreaker",
+            "Wondrous Clearing",
+            "Gilded Catalyst",
+            "Secrets of the Deep"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Ebonwing"
+          ],
+          "pickId": "473d3633-6dc7-4026-a50e-3ea76b9e8c20",
+          "packCards": [
+            "Ebonwing",
+            "Sanctum Awakened",
+            "Dreamvale Monarch",
+            "Shadow March",
+            "Conjured Zenith",
+            "Headtaker Wurm"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Starsea Traveler"
+          ],
+          "pickId": "3f8a0a0e-81f7-40a2-b393-bdc1423549f6",
+          "packCards": [
+            "Starsea Traveler",
+            "Resilient Wanderer",
+            "Mystic Runefish",
+            "Dreadlord",
+            "Echo Technician",
+            "Dream Garden Visitor",
+            "Spirit Field Reclaimer"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [],
+          "pickId": "2d9d4f2e-5a41-410d-b1c3-47e4aca07177",
+          "packCards": [
+            "Minstrel of Falling Light",
+            "Key Sifter",
+            "Crumbling Behemoth",
+            "Beacon of Tomorrow",
+            "Spellweaver",
+            "Shattering Gambit"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Undying Fang"
+          ],
+          "pickId": "4b81165e-f091-4211-8b47-5ea6868b0d4c",
+          "packCards": [
+            "Undying Fang",
+            "Weight of Memory",
+            "Vortex Claimant"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": [
+            "Packcaller of Shadows"
+          ],
+          "pickId": "9426c906-e665-40a4-823a-0245bc39fbda",
+          "packCards": [
+            "Packcaller of Shadows",
+            "Weblight Waif",
+            "Virtuoso of Harmony"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 1,
+          "pickInPack": 7,
+          "pick": [
+            "Grounded"
+          ],
+          "pickId": "825969b9-3c70-4fca-8cab-696e9ca7cdb2",
+          "packCards": [
+            "Grounded",
+            "Shared Revelation"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 1,
+          "pickInPack": 8,
+          "pick": [],
+          "pickId": "0e9aeaa8-9a75-4719-992f-cbb316f72175",
+          "packCards": []
+        }
+      ]
+    }
+  ]
+}

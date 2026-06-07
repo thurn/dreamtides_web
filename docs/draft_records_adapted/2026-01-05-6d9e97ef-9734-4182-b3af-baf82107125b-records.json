@@ -1,0 +1,66 @@
+{
+  "draftId": "6d9e97ef-9734-4182-b3af-baf82107125b",
+  "date": "2026-01-05T18:43:23.328Z",
+  "name": "G Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 2,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "G",
+    "WB",
+    "UB",
+    "W",
+    "G",
+    "U",
+    "WURG",
+    "WUB"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "G",
+      "mainboard": [
+        "Mother of Flames",
+        "Curio Dealer"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Curio Dealer",
+        "Mother of Flames"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Curio Dealer"
+          ],
+          "pickId": "c060c178-3c0e-493f-b6f0-ead5b1d6f191",
+          "packCards": [
+            "Curio Dealer"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Mother of Flames"
+          ],
+          "pickId": "3aacabde-f5ec-4519-895d-17f5e48746ee",
+          "packCards": [
+            "Mother of Flames"
+          ]
+        }
+      ]
+    }
+  ]
+}

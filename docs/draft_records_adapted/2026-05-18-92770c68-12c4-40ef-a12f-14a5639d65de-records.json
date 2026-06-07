@@ -1,0 +1,323 @@
+{
+  "draftId": "92770c68-12c4-40ef-a12f-14a5639d65de",
+  "date": "2026-05-18T04:43:43.551Z",
+  "name": "WUBG Artifacts Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 6,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "WUBG Artifacts",
+    "WBG Midrange",
+    "G Big Ramp",
+    "B Tempo",
+    "UR Spellslinger",
+    "UBR Storm",
+    "WR Artifacts",
+    "WR Aggro"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "WUBG Artifacts",
+      "mainboard": [
+        "Celestial Lookout",
+        "Wolfbond Chieftain",
+        "Luminwings",
+        "Chronicle Reclaimer",
+        "Radiants' Captain",
+        "Crumbling Covenant",
+        "Heroic Rescue",
+        "Moment Rewound",
+        "Last Light Herald",
+        "Skyflame Commander",
+        "Aftermath Bloom"
+      ],
+      "sideboard": [
+        "Meadowlight Charger",
+        "Shattering Gambit",
+        "Looming Oracle",
+        "Standard Bearer",
+        "Steel Abomination"
+      ],
+      "pool": [
+        "Last Light Herald",
+        "Skyflame Commander",
+        "Shattering Gambit",
+        "Moment Rewound",
+        "Steel Abomination",
+        "Standard Bearer",
+        "Looming Oracle",
+        "Heroic Rescue",
+        "Celestial Lookout",
+        "Meadowlight Charger",
+        "Crumbling Covenant",
+        "Chronicle Reclaimer",
+        "Radiants' Captain",
+        "Luminwings",
+        "Aftermath Bloom",
+        "Wolfbond Chieftain"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Last Light Herald",
+            "Skyflame Commander"
+          ],
+          "pickId": "169b74e2-72cf-47df-b128-b632313cd24c",
+          "packCards": [
+            "Last Light Herald",
+            "Skyflame Commander",
+            "Lightningborn",
+            "Company Commander",
+            "Cragfall",
+            "Molten Duel",
+            "Rite of Summoning"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Shattering Gambit"
+          ],
+          "pickId": "045ce37b-86d2-4e56-84af-b6625b53d13c",
+          "packCards": [
+            "Shattering Gambit",
+            "Frost Visionary",
+            "Vault Infiltrator",
+            "Rebirth Ritualist",
+            "Wheel of the Heavens"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Moment Rewound"
+          ],
+          "pickId": "4ab981aa-d815-439a-b8ff-2043bf42c392",
+          "packCards": [
+            "Moment Rewound",
+            "Arc Gate Opening",
+            "Fangbound"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [],
+          "pickId": "1c7d50d6-b63a-4d8c-88fa-1d78ae693a45",
+          "packCards": [
+            "Shadowcaller",
+            "Soulflame Predator",
+            "Nomad of Endless Paths"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Steel Abomination"
+          ],
+          "pickId": "05c107dc-f915-4d29-a80f-9383c4564014",
+          "packCards": [
+            "Steel Abomination"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": [
+            "Standard Bearer"
+          ],
+          "pickId": "93bd7e73-63dc-45b2-aaa8-984be8b900ab",
+          "packCards": [
+            "Standard Bearer"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": [],
+          "pickId": "2d9d4f2e-5a41-410d-b1c3-47e4aca07177",
+          "packCards": [
+            "Spirit Field Reclaimer",
+            "Eternal Sentry",
+            "Wasteland Tamer",
+            "Sanctum Approach"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": [
+            "Looming Oracle"
+          ],
+          "pickId": "0596155d-8f83-40ca-be31-9a0df1ced65e",
+          "packCards": [
+            "Looming Oracle",
+            "Cloudmantle Ray",
+            "Break the Veil",
+            "Dreadwood Emissary"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": [
+            "Heroic Rescue"
+          ],
+          "pickId": "40fd5347-c0ac-4b4a-b65b-34bfb737c5a9",
+          "packCards": [
+            "Heroic Rescue",
+            "Depthwalker",
+            "Dusk Duelist",
+            "Stargazer Adrift"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": [
+            "Celestial Lookout"
+          ],
+          "pickId": "0286f92c-f153-4035-b31e-b6d05f53ea06",
+          "packCards": [
+            "Celestial Lookout",
+            "Veil Crosser",
+            "Rooftop Prophet",
+            "Dreamvale Monarch"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": [
+            "Meadowlight Charger"
+          ],
+          "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
+          "packCards": [
+            "Meadowlight Charger"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 2,
+          "pickInPack": 6,
+          "pick": [
+            "Crumbling Covenant"
+          ],
+          "pickId": "0b54b6f3-9ee3-4f6e-bde6-b54fc038a132",
+          "packCards": [
+            "Crumbling Covenant"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": [],
+          "pickId": "7996ab8e-5fa4-4d39-8c7b-12e4258bf8a9",
+          "packCards": [
+            "Sundown Surfer",
+            "Dreadlord",
+            "Echo Technician",
+            "Dream Garden Visitor",
+            "Shared Revelation",
+            "Collateral Damage"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": [
+            "Chronicle Reclaimer",
+            "Radiants' Captain"
+          ],
+          "pickId": "187b6719-e5ed-4615-a00b-3313ceca055b",
+          "packCards": [
+            "Chronicle Reclaimer",
+            "Radiants' Captain",
+            "Vaultbreaker",
+            "Inferno's Herald",
+            "Vertiginous Leap"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": [
+            "Luminwings"
+          ],
+          "pickId": "56001a36-126b-4c08-af98-a6cc4d84210e",
+          "packCards": [
+            "Luminwings",
+            "Ripple Through Reality",
+            "Twilight Troubadour",
+            "Simulacra",
+            "Guiding Light"
+          ]
+        },
+        {
+          "pickNumber": 16,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": [
+            "Aftermath Bloom"
+          ],
+          "pickId": "0e1374a3-0465-4edb-b63e-22c8baaad864",
+          "packCards": [
+            "Aftermath Bloom",
+            "Woodland Apparition",
+            "Spirit Reaping"
+          ]
+        },
+        {
+          "pickNumber": 17,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": [
+            "Wolfbond Chieftain"
+          ],
+          "pickId": "ad7ac9a5-340f-4509-826c-7b9416d47887",
+          "packCards": [
+            "Wolfbond Chieftain",
+            "Fury of the Clan"
+          ]
+        },
+        {
+          "pickNumber": 18,
+          "pack": 3,
+          "pickInPack": 6,
+          "pick": [],
+          "pickId": "1eb3178b-dac5-4b34-9d3e-4f5a170d1c87",
+          "packCards": []
+        }
+      ]
+    }
+  ]
+}

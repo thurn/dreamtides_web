@@ -1,0 +1,163 @@
+{
+  "draftId": "6d456aa8-f023-44fb-99cc-f2e590d4956a",
+  "date": "2026-03-22T05:30:50.694Z",
+  "name": "U Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 4,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "U",
+    "U",
+    "BRG",
+    "U",
+    "W",
+    "W",
+    "B",
+    "R"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "U",
+      "mainboard": [
+        "Company Commander",
+        "Burning Revenant",
+        "Forge-Twin",
+        "Speaker for the Forgotten",
+        "Crescendo Channeler",
+        "Dread Arbiter"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Burning Revenant",
+        "Dread Arbiter",
+        "Company Commander",
+        "Forge-Twin",
+        "Speaker for the Forgotten",
+        "Crescendo Channeler"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Burning Revenant"
+          ],
+          "pickId": "36ec47ec-f86c-489d-ad0b-d0fbdee10102",
+          "packCards": [
+            "Burning Revenant",
+            "Scorched Reckoning",
+            "Rite of Summoning"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Dread Arbiter"
+          ],
+          "pickId": "2b8877c3-1f04-4452-9f2c-98fb8dc71e5f",
+          "packCards": [
+            "Dread Arbiter"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Company Commander"
+          ],
+          "pickId": "5d753bef-7043-42d0-929a-b82f0079f3b8",
+          "packCards": [
+            "Company Commander",
+            "Shadowprowler",
+            "Pattern Seeker"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [
+            "Forge-Twin",
+            "Speaker for the Forgotten",
+            "Crescendo Channeler"
+          ],
+          "pickId": "18b26e53-1fc2-4d07-a56f-9000ed25580d",
+          "packCards": [
+            "Forge-Twin",
+            "Speaker for the Forgotten",
+            "Crescendo Channeler"
+          ]
+        }
+      ]
+    },
+    {
+      "seat": 4,
+      "name": "W",
+      "mainboard": [
+        "Bladefall"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Bladefall"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Bladefall"
+          ],
+          "pickId": "057d2410-30d3-4b7a-9dc3-f2512c1cf31c",
+          "packCards": [
+            "Bladefall",
+            "Annular Recall",
+            "Pulse of Sacrifice"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [],
+          "pickId": null,
+          "packCards": [
+            "Ripple Through Reality",
+            "Frostbound Defiant",
+            "Emberwolf Triad"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [],
+          "pickId": null,
+          "packCards": [
+            "Defiant Parry"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [],
+          "pickId": null,
+          "packCards": []
+        }
+      ]
+    }
+  ]
+}

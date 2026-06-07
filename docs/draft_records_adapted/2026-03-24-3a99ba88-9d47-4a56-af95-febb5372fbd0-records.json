@@ -1,0 +1,261 @@
+{
+  "draftId": "3a99ba88-9d47-4a56-af95-febb5372fbd0",
+  "date": "2026-03-24T01:09:30.280Z",
+  "name": "UBR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 7,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UBR",
+    "UB",
+    "UBR",
+    "BR",
+    "UG",
+    "WUB",
+    "WUB",
+    "UB"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UBR",
+      "mainboard": [
+        "Stargazer Adrift",
+        "Barrage Specialist",
+        "Sanctum Approach",
+        "Rite of Summoning",
+        "Ripple Through Reality"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Stargazer Adrift",
+        "Ripple Through Reality",
+        "Rite of Summoning",
+        "Sanctum Approach",
+        "Barrage Specialist"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Stargazer Adrift"
+          ],
+          "pickId": "24277de8-7412-496c-bd44-61d9629a3473",
+          "packCards": [
+            "Stargazer Adrift",
+            "Driftrider",
+            "Cloudmantle Ray",
+            "Tranquil Duelist",
+            "Arc Gate Opening"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [],
+          "pickId": "6d09be4f-785a-4faf-b03b-ca462cd375ca",
+          "packCards": [
+            "Forge Inheritor",
+            "Rebirth Ritualist",
+            "Pilgrim of Old Stones",
+            "Ripple of Defiance",
+            "Inferno's Herald"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [],
+          "pickId": "139b90cd-8272-457a-be32-1298145345be",
+          "packCards": [
+            "Shadow Reflection",
+            "Spellweaver"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [
+            "Ripple Through Reality"
+          ],
+          "pickId": "2d85cc30-ccae-4af8-834a-f7870dace679",
+          "packCards": [
+            "Ripple Through Reality"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Rite of Summoning"
+          ],
+          "pickId": "085ed548-a8c8-40b3-8183-51c060bc95cb",
+          "packCards": [
+            "Rite of Summoning",
+            "Dread Arbiter",
+            "Break the Sequence"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": [
+            "Sanctum Approach"
+          ],
+          "pickId": "6920c895-bc98-4871-a53f-219fa27a74e5",
+          "packCards": [
+            "Sanctum Approach",
+            "Ironclad Marksman"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 1,
+          "pickInPack": 7,
+          "pick": [
+            "Barrage Specialist"
+          ],
+          "pickId": "74b4c336-5d4c-4bc5-b82a-35084a6ad808",
+          "packCards": [
+            "Barrage Specialist"
+          ]
+        }
+      ]
+    },
+    {
+      "seat": 4,
+      "name": "UG",
+      "mainboard": [
+        "Cloudmantle Ray",
+        "Ethereal Trailblazer",
+        "Dreadwood Emissary",
+        "Dreamcatcher's Call",
+        "Ridgecutter",
+        "Ripple of Defiance"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Dreamcatcher's Call",
+        "Ridgecutter",
+        "Ethereal Trailblazer",
+        "Dreadwood Emissary",
+        "Cloudmantle Ray",
+        "Ripple of Defiance"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": [
+            "Dreamcatcher's Call"
+          ],
+          "pickId": "01794178-cf41-454c-ac37-1d8b18e42db2",
+          "packCards": [
+            "Dreamcatcher's Call",
+            "Forgotten Titan",
+            "Harborwarden",
+            "Weblight Waif",
+            "Rite of Summoning",
+            "Dread Arbiter",
+            "Break the Sequence"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": [
+            "Ridgecutter"
+          ],
+          "pickId": "1959f078-4b7b-4df2-a256-d43b2d97e853",
+          "packCards": [
+            "Ridgecutter",
+            "Fern Treader",
+            "Crimson Pilgrimage",
+            "Sanctum Approach",
+            "Ironclad Marksman"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": [
+            "Ethereal Trailblazer"
+          ],
+          "pickId": "4d50fa57-db11-419e-b73b-666a6b25f7de",
+          "packCards": [
+            "Ethereal Trailblazer",
+            "Fragments of Vision",
+            "Barrage Specialist"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": [
+            "Dreadwood Emissary"
+          ],
+          "pickId": "12917e60-cea1-460b-b3f1-8d47cc24afdc",
+          "packCards": [
+            "Dreadwood Emissary",
+            "Thundercatcher",
+            "Toll of Passage",
+            "Door to Possibility"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": [
+            "Cloudmantle Ray"
+          ],
+          "pickId": "0003aa31-d42e-4972-9fb9-086aefe29a2c",
+          "packCards": [
+            "Cloudmantle Ray",
+            "Tranquil Duelist",
+            "Arc Gate Opening"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": [
+            "Ripple of Defiance"
+          ],
+          "pickId": "1825a719-1b2a-4af9-9cd2-7cb497cd0317",
+          "packCards": [
+            "Ripple of Defiance",
+            "Inferno's Herald"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 1,
+          "pickInPack": 7,
+          "pick": [],
+          "pickId": null,
+          "packCards": []
+        }
+      ]
+    }
+  ]
+}
