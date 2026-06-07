@@ -3,6 +3,14 @@
 # Managed by the card editor's "Manage tags" panel.
 
 [[tags]]
+name = "Art OK"
+color = "#15803d"
+
+[[tags]]
+name = "Art Rework"
+color = "#b91c1c"
+
+[[tags]]
 name = "Cantrips"
 color = "#7c3aed"
 
@@ -109,7 +117,3 @@ color = "#a21caf"
 [[tags]]
 name = "Score Trigger"
 color = "#d97706"
-
-[[tags]]
-name = "Art OK"
-color = "#15803d"
