@@ -32,7 +32,7 @@ function makeBareState(): BattleMutableState {
     battleId: "battle-forward-model-test",
     activeSide: "player",
     turnNumber: 1,
-    phase: "main",
+    phase: "day",
     result: null,
     forcedResult: null,
     nextBattleCardOrdinal: 1,

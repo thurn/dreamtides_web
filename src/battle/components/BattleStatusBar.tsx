@@ -127,14 +127,10 @@ export function BattleStatusBar({
 
 function normalizeVisiblePhase(phase: BattleMutableState["phase"]) {
   switch (phase) {
-    case "startOfTurn":
+    case "dreamwell":
     case "draw":
       return "dawn";
-    case "main":
-      return "day";
-    case "judgment":
     case "challenge":
-    case "endOfTurn":
     case "ending":
       return "night";
     default:

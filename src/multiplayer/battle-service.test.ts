@@ -84,7 +84,7 @@ function makeRawSnapshot(overrides: Record<string, unknown>) {
         battleId: "battle:test",
         activeSide: "player",
         turnNumber: 1,
-        phase: "main",
+        phase: "day",
         result: null,
         forcedResult: null,
         nextBattleCardOrdinal: 0,

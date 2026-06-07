@@ -43,7 +43,7 @@ function makeBareState(): BattleMutableState {
     battleId: "battle-ai-hook-test",
     activeSide: "enemy",
     turnNumber: 2,
-    phase: "main",
+    phase: "day",
     result: null,
     forcedResult: null,
     nextBattleCardOrdinal: 1,

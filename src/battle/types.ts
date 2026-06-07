@@ -21,17 +21,14 @@ export type BrowseableZone = "deck" | "hand" | "void" | "banished";
 export type MarkerDiffState = "set" | "cleared" | "unchanged";
 
 export type BattlePhase =
+  | "dreamwell"
+  | "draw"
   | "dawn"
   | "day"
   | "dusk"
   | "night"
   | "challenge"
-  | "ending"
-  | "startOfTurn"
-  | "judgment"
-  | "draw"
-  | "main"
-  | "endOfTurn";
+  | "ending";
 export type BattleResult = "victory" | "defeat" | "draw";
 export type BattleCardKind = "character" | "event";
 export type BattleCardTiming = "standard" | "fast" | "interrupt";

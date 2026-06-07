@@ -100,6 +100,27 @@ describe("BattleStatusBar", () => {
     });
   });
 
+  it.each([
+    ["dreamwell", "dawn"],
+    ["draw", "dawn"],
+    ["ending", "night"],
+  ] as const)(
+    "resolves bookend phase %s to the %s surfaced chip",
+    (phase, surfacedChip) => {
+      const { container, root } = mount({ phase });
+
+      expect(
+        container
+          .querySelector(`[data-battle-phase-chip="${surfacedChip}"]`)
+          ?.getAttribute("data-active"),
+      ).toBe("true");
+
+      act(() => {
+        root.unmount();
+      });
+    },
+  );
+
   it("keeps phase increment controls out of the top bar", () => {
     const onSetPhase = vi.fn();
     const { container, root } = mount({ phase: "night", onSetPhase });

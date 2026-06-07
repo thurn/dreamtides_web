@@ -1015,7 +1015,7 @@ function PlayableBattleScreenInner({
                   />
                   <div
                     data-battle-region="judgment-divider"
-                    className={`judgment-divider ${reducerState.mutable.phase === "judgment" ? "active" : ""}`}
+                    className={`judgment-divider ${reducerState.mutable.phase === "challenge" ? "active" : ""}`}
                   />
                   <BattlefieldGrid
                     side="player"
@@ -1598,14 +1598,10 @@ function computePhaseControlTarget(
 
 function normalizePhaseForControls(phase: BattleMutableState["phase"]): (typeof PHASE_CONTROL_SEQUENCE)[number] {
   switch (phase) {
-    case "startOfTurn":
+    case "dreamwell":
     case "draw":
       return "dawn";
-    case "main":
-      return "day";
-    case "judgment":
     case "challenge":
-    case "endOfTurn":
     case "ending":
       return "night";
     default:

@@ -6,6 +6,10 @@ export function formatSideLabel(side: BattleSide): string {
 
 export function formatPhaseLabel(phase: BattlePhase): string {
   switch (phase) {
+    case "dreamwell":
+      return "Dreamwell";
+    case "draw":
+      return "Draw";
     case "dawn":
       return "Dawn";
     case "day":
@@ -17,16 +21,6 @@ export function formatPhaseLabel(phase: BattlePhase): string {
     case "challenge":
       return "Challenge";
     case "ending":
-      return "Ending";
-    case "startOfTurn":
-      return "Dawn";
-    case "judgment":
-      return "Challenge";
-    case "draw":
-      return "Dawn";
-    case "main":
-      return "Day";
-    case "endOfTurn":
       return "Ending";
   }
 }
