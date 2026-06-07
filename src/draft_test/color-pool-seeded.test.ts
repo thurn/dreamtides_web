@@ -70,8 +70,8 @@ describe("Dreamcaller-seeded color pool", () => {
       expect(pool.size).toBeLessThanOrEqual(220);
     }
 
-    // Different seeds pick different listed archetypes, so the identity varies.
-    expect(seenIdentities.size).toBeGreaterThan(1);
+    // Fixed seeds cover each listed identity family.
+    expect(seenIdentities).toEqual(new Set(["b", "w", "wb"]));
   });
 
   it("matches the unconstrained pool when no archetypes are supplied", () => {

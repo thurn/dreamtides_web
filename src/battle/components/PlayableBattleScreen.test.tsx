@@ -33,6 +33,7 @@ import type { BattleInit, BattleMutableState } from "../types";
 import { PlayableBattleScreen, computeBattlefieldScale } from "./PlayableBattleScreen";
 
 const BATTLE_CSS = readFileSync(join(process.cwd(), "src/battle/battle.css"), "utf8");
+const mountedRoots = new Set<Root>();
 
 const battleCompletionBridge = vi.hoisted(() => ({
   completeBattleSiteVictory: vi.fn(),
@@ -154,6 +155,12 @@ function mount(element: ReactElement): {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
+  const unmountRoot = root.unmount.bind(root);
+  root.unmount = () => {
+    mountedRoots.delete(root);
+    unmountRoot();
+  };
+  mountedRoots.add(root);
 
   act(() => {
     root.render(
@@ -203,6 +210,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  act(() => {
+    for (const root of [...mountedRoots]) {
+      root.unmount();
+    }
+  });
+  mountedRoots.clear();
   document.body.innerHTML = "";
   vi.restoreAllMocks();
 });

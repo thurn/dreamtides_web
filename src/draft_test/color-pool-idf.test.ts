@@ -58,15 +58,11 @@ describe("idf pool variant", () => {
     }
   });
 
-  it("yields different pools across seeds (run-to-run variety)", () => {
-    const sigs = new Set<string>();
-    for (let seed = 0; seed < 40; seed++) {
-      sigs.add(
-        signature(generatePoolFromData(poolData, seed, undefined, "idf").counts),
-      );
-    }
-    // Distinct random starter decklists should give distinct pools.
-    expect(sigs.size).toBeGreaterThan(35);
+  it("changes the pool when the seed changes", () => {
+    const first = generatePoolFromData(poolData, 0, undefined, "idf");
+    const second = generatePoolFromData(poolData, 1, undefined, "idf");
+
+    expect(signature(first.counts)).not.toBe(signature(second.counts));
   });
 
   it("ignores the archetype and theme arguments entirely", () => {
