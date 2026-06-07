@@ -295,7 +295,7 @@ describe("leave-one-out behaviour (synthetic recall)", () => {
     const model = buildFitModel(corpusWithSim(false), TUNING);
     const offer = rankTop4(pack, deck, model, TUNING, numberOf, 1);
     // Without the simulated deck, anchor only ever paired with decoy, so the
-    // heuristic now prefers decoy -- it no longer surfaces partner.
+    // heuristic prefers decoy and does not surface partner.
     expect(offer).not.toEqual(["partner"]);
     expect(offer).toEqual(["decoy"]);
   });
