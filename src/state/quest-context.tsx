@@ -658,6 +658,7 @@ export function QuestProvider({
     seedOverride: null,
     startInBattle: false,
     aiMode: false,
+    basicAutomation: false,
     gameId: null,
     databaseMode: "emulator",
   },

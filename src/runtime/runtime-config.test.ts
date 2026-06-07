@@ -7,6 +7,7 @@ describe("parseRuntimeConfig", () => {
       seedOverride: null,
       startInBattle: false,
       aiMode: true,
+      basicAutomation: true,
       gameId: null,
       databaseMode: "emulator",
       poolVariant: "idf3",
@@ -27,6 +28,19 @@ describe("parseRuntimeConfig", () => {
 
     it("returns false only when ai=0", () => {
       expect(parseRuntimeConfig("?ai=0").aiMode).toBe(false);
+    });
+  });
+
+  describe("basicAutomation", () => {
+    it("defaults to true when automation is absent or any value other than 0", () => {
+      expect(parseRuntimeConfig("").basicAutomation).toBe(true);
+      expect(parseRuntimeConfig("?automation=1").basicAutomation).toBe(true);
+      expect(parseRuntimeConfig("?automation=true").basicAutomation).toBe(true);
+      expect(parseRuntimeConfig("?automation=").basicAutomation).toBe(true);
+    });
+
+    it("returns false only when automation=0", () => {
+      expect(parseRuntimeConfig("?automation=0").basicAutomation).toBe(false);
     });
   });
 

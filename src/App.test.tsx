@@ -309,6 +309,7 @@ describe("App", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: "ab12cd",
           databaseMode: "emulator",
         }}
@@ -337,6 +338,7 @@ describe("App", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -367,6 +369,7 @@ describe("App", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "realtime",
         }}
@@ -419,6 +422,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -450,6 +454,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -493,6 +498,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -527,6 +533,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -555,6 +562,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -604,6 +612,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: true,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -637,6 +646,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -689,6 +699,7 @@ describe("QuestApp", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}

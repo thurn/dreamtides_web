@@ -288,6 +288,7 @@ describe("BattleSiteRoute", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -310,6 +311,7 @@ describe("BattleSiteRoute", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -339,6 +341,7 @@ describe("BattleSiteRoute", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -368,6 +371,7 @@ describe("BattleSiteRoute", () => {
           seedOverride: null,
           startInBattle: false,
           aiMode: false,
+          basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
         }}
@@ -392,6 +396,7 @@ describe("BattleSiteRoute", () => {
               seedOverride: null,
               startInBattle: false,
               aiMode: false,
+              basicAutomation: false,
               gameId: null,
               databaseMode: "emulator",
             }}

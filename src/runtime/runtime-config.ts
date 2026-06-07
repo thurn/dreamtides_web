@@ -6,6 +6,11 @@ export interface RuntimeConfig {
   seedOverride: number | null;
   startInBattle: boolean;
   aiMode: boolean;
+  /**
+   * Gates Basic Automation (the bookend-phase auto-advance and the Dawn/Ending
+   * automated effects). Mirrors `aiMode`: enabled unless `?automation=0`.
+   */
+  basicAutomation: boolean;
   gameId: string | null;
   databaseMode: DatabaseMode;
   /**
@@ -46,6 +51,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     seedOverride: parseSeedOverride(params.get("seed")),
     startInBattle: params.get("startInBattle") === "1",
     aiMode: params.get("ai") !== "0",
+    basicAutomation: params.get("automation") !== "0",
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
     poolVariant: resolvePoolVariant(params.get("algo")),
