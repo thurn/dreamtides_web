@@ -19,6 +19,7 @@ import { idfStrategy } from "./variant-idf.ts";
 import { idf2Strategy } from "./variant-idf2.ts";
 import { idf3Strategy } from "./variant-idf3.ts";
 import { idf4Strategy } from "./variant-idf4.ts";
+import { idfHumanStrategy } from "./variant-idf-human.ts";
 import { mergedStrategy } from "./variant-merged.ts";
 
 /** Every registered strategy, keyed by the `?algo=` id that selects it. */
@@ -31,6 +32,7 @@ export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
   idf2: idf2Strategy,
   idf3: idf3Strategy,
   idf4: idf4Strategy,
+  idf_human: idfHumanStrategy,
 };
 
 /**

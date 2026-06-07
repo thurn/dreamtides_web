@@ -29,11 +29,13 @@ describe("loadQuestContent", () => {
     dreamcallers,
     dreamsigns,
     decklists,
+    humanDecklists = [],
   }: {
     cards: CardData[];
     dreamcallers: unknown[];
     dreamsigns: unknown[];
     decklists: string[][];
+    humanDecklists?: string[][];
   }): void {
     vi.stubGlobal(
       "fetch",
@@ -58,6 +60,12 @@ describe("loadQuestContent", () => {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(decklists),
+          });
+        }
+        if (path === "/human-decklists-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(humanDecklists),
           });
         }
         return Promise.reject(new Error(`Unexpected fetch path: ${path}`));

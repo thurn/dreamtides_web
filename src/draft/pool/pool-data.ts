@@ -47,6 +47,7 @@ export function buildPoolData(
   cards: readonly PoolCard[],
   decklists?: readonly (readonly string[])[],
   mergedArchetypeLists?: Readonly<Record<string, readonly string[]>>,
+  humanDecklists?: readonly (readonly string[])[],
 ): PoolData {
   const core = new Set<string>();
   const archLists = new Map<string, Set<string>>();
@@ -74,6 +75,7 @@ export function buildPoolData(
     archLists: orderedMap(archLists),
     draftLists: orderedMap(draftLists),
     decklists,
+    humanDecklists,
     mergedLists,
   };
 }

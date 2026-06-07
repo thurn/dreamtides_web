@@ -926,3 +926,32 @@ whole-deck union step, downstream of the starter draw.
 Like `idf`, `idf2` reports no color identity — it consumes no color metadata, so
 the identity string is left empty and the header shows none. The theme labels are
 `idf2` plus `deck#<index>`, recording which corpus decklist started the pool.
+
+## The `idf_human` algorithm
+
+`idf_human` is the `idf3` algorithm run over a different corpus. Where `idf3`
+grows its pool from the synthetic decklists in `docs/drafts_anon`, `idf_human`
+grows from the **real human Cube Cobra draft records** in
+`docs/human_drafts_anon` — the final built decks (the seat mainboards) from the
+adapted draft records, each a `<uuid> # Name` list in the same corpus format.
+
+### Where the data comes from
+
+`scripts/setup-assets.mjs` bundles `docs/human_drafts_anon/*.txt` into
+`public/human-decklists-data.json`, one card-name array per deck, exactly as it
+bundles the synthetic corpus into `decklists-data.json`. The browser loads it via
+`loadHumanDecklists` and `buildPoolData` stores it on `PoolData.humanDecklists`,
+alongside the `decklists` field `idf3` reads.
+
+### How it runs
+
+The strategy swaps `PoolData.decklists` for `PoolData.humanDecklists` and delegates
+to `generateIdf3` unchanged. Every step — the diversity-weighted starter draw, the
+signature anchor affinity, the capped starter weight, the best-first whole-deck
+growth, and the provenance surface — is `idf3`'s; only the source corpus differs.
+The derived view is cached per `PoolData` so the shared `idf2`/`idf` corpus caches
+(which key on object identity and carry an O(decks²) near-twin pass) stay warm. With
+no human decklists bundled it falls back to the `default` algorithm, like `idf3`.
+
+Select it with `?algo=idf_human`. The theme labels are `idf3` plus `deck#<index>`,
+since the delegated generator records its own variant tag.

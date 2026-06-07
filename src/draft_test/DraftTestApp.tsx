@@ -26,6 +26,7 @@ import {
   buildNameIndex,
   loadCardsV2Database,
   loadDecklists,
+  loadHumanDecklists,
   loadMergedArchetypeLists,
   resolvePool,
 } from "../data/cards-v2-database";
@@ -411,12 +412,13 @@ export default function DraftTestApp() {
 
     void (async () => {
       try {
-        const [db, loadedDreamcallers, decklists, mergedLists] =
+        const [db, loadedDreamcallers, decklists, mergedLists, humanDecklists] =
           await Promise.all([
             loadCardsV2Database(),
             loadDreamcallersV2(),
             loadDecklists(),
             loadMergedArchetypeLists(),
+            loadHumanDecklists(),
           ]);
         if (cancelled) return;
 
@@ -424,6 +426,7 @@ export default function DraftTestApp() {
           [...db.values()],
           decklists,
           mergedLists,
+          humanDecklists,
         );
         setDatabase(db);
         setDreamcallers(loadedDreamcallers);

@@ -473,8 +473,10 @@ export function setupAssets({
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
   const decklistsJsonPath = join(publicDir, "decklists-data.json");
+  const humanDecklistsJsonPath = join(publicDir, "human-decklists-data.json");
   const mergedListsJsonPath = join(publicDir, "merged-archetype-lists-data.json");
   const draftsAnonDir = join(ROOT, "docs", "drafts_anon");
+  const humanDraftsAnonDir = join(ROOT, "docs", "human_drafts_anon");
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
   const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
@@ -588,6 +590,20 @@ export function setupAssets({
   );
   writeFileSync(decklistsJsonPath, JSON.stringify(decklists) + "\n");
   console.log(`Wrote ${decklists.length} decklists to decklists-data.json`);
+
+  // The human draft corpus (`docs/human_drafts_anon`): the final decks from the
+  // real Cube Cobra draft records, in the same `<uuid> # Name` format. Bundled to
+  // its own JSON for the `idf_human` pool variant, which runs the `idf3`
+  // algorithm over these real decks instead of the synthetic corpus above.
+  console.log("Bundling human draft decklists from the corpus...");
+  const humanDecklists = refreshAndReadCorpus(
+    humanDraftsAnonDir,
+    cardMaps,
+  ).filter((deck) => deck.length > 0);
+  writeFileSync(humanDecklistsJsonPath, JSON.stringify(humanDecklists) + "\n");
+  console.log(
+    `Wrote ${humanDecklists.length} decklists to human-decklists-data.json`,
+  );
 
   // Merged archetype lists for the draft test's `merged` pool variant. The
   // archetype label is dropped from decklists-data.json, so we collapse the

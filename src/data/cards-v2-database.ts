@@ -36,6 +36,19 @@ export async function loadDecklists(): Promise<string[][]> {
 }
 
 /**
+ * Fetch the bundled human draft decklists (`docs/human_drafts_anon`, written to
+ * `/human-decklists-data.json` by `scripts/setup-assets.mjs`) used by the
+ * `idf_human` pool variant. Each inner array is one human draft deck's card
+ * names. Returns an empty array if the bundle is missing so the harness still
+ * loads (the variant then falls back to the `default` algorithm).
+ */
+export async function loadHumanDecklists(): Promise<string[][]> {
+  const response = await fetch("/human-decklists-data.json");
+  if (!response.ok) return [];
+  return (await response.json()) as string[][];
+}
+
+/**
  * Fetch the bundled merged archetype lists (`docs/drafts_dt`, collapsed offline
  * to `/merged-archetype-lists-data.json` by `scripts/setup-assets.mjs`) used by
  * the `merged` pool variant. Maps each archetype label (e.g. `br-aristocrats`)

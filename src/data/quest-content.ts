@@ -17,6 +17,7 @@ import {
   buildNameIndex,
   loadCardsV2Database,
   loadDecklists,
+  loadHumanDecklists,
   resolvePool,
 } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
@@ -195,13 +196,19 @@ export function buildDreamcallerProvenance(
 export async function loadQuestContent(
   poolVariant: PoolVariant = DEFAULT_POOL_VARIANT,
 ): Promise<QuestContent> {
-  const [cardDatabase, draftDreamcallers, dreamsignTemplates, decklists] =
-    await Promise.all([
-      loadCardsV2Database(),
-      loadDreamcallersV2(),
-      loadDreamsignTemplates(),
-      loadDecklists(),
-    ]);
+  const [
+    cardDatabase,
+    draftDreamcallers,
+    dreamsignTemplates,
+    decklists,
+    humanDecklists,
+  ] = await Promise.all([
+    loadCardsV2Database(),
+    loadDreamcallersV2(),
+    loadDreamsignTemplates(),
+    loadDecklists(),
+    loadHumanDecklists(),
+  ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
     id: dc.id,
@@ -214,7 +221,12 @@ export async function loadQuestContent(
   }));
 
   const poolContext: RunPoolContext = {
-    poolData: buildPoolData(Array.from(cardDatabase.values()), decklists),
+    poolData: buildPoolData(
+      Array.from(cardDatabase.values()),
+      decklists,
+      undefined,
+      humanDecklists,
+    ),
     nameIndex: buildNameIndex(cardDatabase),
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),
     poolVariant,

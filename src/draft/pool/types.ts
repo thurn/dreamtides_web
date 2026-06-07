@@ -16,7 +16,8 @@ export type PoolVariant =
   | "idf"
   | "idf2"
   | "idf3"
-  | "idf4";
+  | "idf4"
+  | "idf_human";
 // The quest prototype and the draft test harness both fall back to this when
 // `?algo=` is absent or unrecognised.
 export const DEFAULT_POOL_VARIANT: PoolVariant = "idf3";
@@ -46,6 +47,14 @@ export interface PoolData {
    * the `decklists` variant falls back to the `default` algorithm.
    */
   decklists?: readonly (readonly string[])[];
+  /**
+   * Real per-deck card lists drawn from the human Cube Cobra draft records
+   * (`docs/human_drafts_anon`) used by the `idf_human` variant, which runs the
+   * `idf3` algorithm over this corpus instead of {@link decklists}. Optional for
+   * the same reasons as `decklists`; when absent the `idf_human` variant falls
+   * back to the `default` algorithm.
+   */
+  humanDecklists?: readonly (readonly string[])[];
   /**
    * Merged archetype lists used by the `merged` variant: archetype label (e.g.
    * `br-aristocrats`) -> the cards that recur across that archetype's real
