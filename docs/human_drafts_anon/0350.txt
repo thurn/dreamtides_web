@@ -1,0 +1,47 @@
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

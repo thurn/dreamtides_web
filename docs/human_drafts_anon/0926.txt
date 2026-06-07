@@ -1,0 +1,46 @@
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath

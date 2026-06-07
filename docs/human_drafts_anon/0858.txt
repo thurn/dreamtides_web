@@ -1,0 +1,25 @@
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens

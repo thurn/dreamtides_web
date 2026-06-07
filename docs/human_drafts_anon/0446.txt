@@ -1,0 +1,45 @@
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

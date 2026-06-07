@@ -1,0 +1,44 @@
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

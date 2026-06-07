@@ -1,0 +1,47 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler

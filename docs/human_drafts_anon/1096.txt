@@ -1,0 +1,46 @@
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

@@ -1,0 +1,42 @@
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

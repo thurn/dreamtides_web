@@ -1,0 +1,28 @@
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer

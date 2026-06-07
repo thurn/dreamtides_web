@@ -1,0 +1,26 @@
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist

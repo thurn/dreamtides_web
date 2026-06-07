@@ -1,0 +1,31 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil

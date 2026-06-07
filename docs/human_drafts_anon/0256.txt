@@ -1,0 +1,42 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

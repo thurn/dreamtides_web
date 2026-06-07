@@ -1,0 +1,46 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

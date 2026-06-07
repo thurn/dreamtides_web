@@ -1,0 +1,55 @@
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

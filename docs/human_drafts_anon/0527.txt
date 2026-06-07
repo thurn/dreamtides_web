@@ -1,0 +1,39 @@
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

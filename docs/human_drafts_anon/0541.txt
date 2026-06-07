@@ -1,0 +1,56 @@
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury

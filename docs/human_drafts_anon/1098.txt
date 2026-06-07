@@ -1,0 +1,27 @@
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change

@@ -1,0 +1,39 @@
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

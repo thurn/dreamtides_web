@@ -1,0 +1,48 @@
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath

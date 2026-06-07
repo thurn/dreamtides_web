@@ -1,0 +1,47 @@
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost

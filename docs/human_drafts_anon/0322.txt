@@ -1,0 +1,35 @@
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

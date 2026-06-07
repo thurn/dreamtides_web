@@ -1,0 +1,33 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored

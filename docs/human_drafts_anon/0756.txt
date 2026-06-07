@@ -1,0 +1,37 @@
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler

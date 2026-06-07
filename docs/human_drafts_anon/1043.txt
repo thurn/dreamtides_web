@@ -1,0 +1,28 @@
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

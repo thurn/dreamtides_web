@@ -1,0 +1,41 @@
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored

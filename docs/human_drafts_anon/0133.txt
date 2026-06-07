@@ -1,0 +1,15 @@
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection

@@ -1,0 +1,38 @@
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss

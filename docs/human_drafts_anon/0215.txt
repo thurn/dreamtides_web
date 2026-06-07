@@ -1,0 +1,25 @@
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff

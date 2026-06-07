@@ -1,0 +1,26 @@
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

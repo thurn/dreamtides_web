@@ -1,0 +1,34 @@
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

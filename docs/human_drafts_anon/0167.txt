@@ -1,0 +1,32 @@
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

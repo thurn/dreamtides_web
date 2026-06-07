@@ -1,0 +1,25 @@
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

@@ -1,0 +1,27 @@
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist

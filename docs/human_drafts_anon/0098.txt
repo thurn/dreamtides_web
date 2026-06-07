@@ -1,0 +1,43 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe

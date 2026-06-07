@@ -1,0 +1,46 @@
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

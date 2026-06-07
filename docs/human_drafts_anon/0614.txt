@@ -1,0 +1,45 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

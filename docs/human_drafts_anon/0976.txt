@@ -1,0 +1,33 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

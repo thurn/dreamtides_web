@@ -1,0 +1,42 @@
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra

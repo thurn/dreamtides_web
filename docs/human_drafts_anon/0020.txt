@@ -1,0 +1,24 @@
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest

@@ -1,0 +1,42 @@
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

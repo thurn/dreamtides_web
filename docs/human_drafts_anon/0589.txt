@@ -1,0 +1,24 @@
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard

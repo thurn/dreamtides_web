@@ -1,0 +1,43 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival

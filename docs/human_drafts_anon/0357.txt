@@ -1,0 +1,30 @@
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor

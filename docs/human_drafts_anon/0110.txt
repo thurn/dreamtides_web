@@ -1,0 +1,30 @@
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

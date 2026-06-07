@@ -1,0 +1,26 @@
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens

@@ -1,0 +1,31 @@
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption

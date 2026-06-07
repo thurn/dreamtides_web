@@ -1,0 +1,38 @@
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

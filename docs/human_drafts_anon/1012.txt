@@ -1,0 +1,36 @@
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla

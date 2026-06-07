@@ -1,0 +1,32 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer

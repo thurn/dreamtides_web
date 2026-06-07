@@ -1,0 +1,25 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge

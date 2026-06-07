@@ -1,0 +1,6 @@
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance

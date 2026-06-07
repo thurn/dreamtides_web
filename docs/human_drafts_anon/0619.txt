@@ -1,0 +1,34 @@
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

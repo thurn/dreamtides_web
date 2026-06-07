@@ -1,0 +1,38 @@
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

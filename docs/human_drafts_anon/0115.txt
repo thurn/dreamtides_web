@@ -1,0 +1,48 @@
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard

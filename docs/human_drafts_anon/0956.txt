@@ -1,0 +1,30 @@
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue

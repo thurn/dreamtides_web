@@ -1,0 +1,27 @@
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller

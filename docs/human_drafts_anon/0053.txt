@@ -1,0 +1,44 @@
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

@@ -1,0 +1,28 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial

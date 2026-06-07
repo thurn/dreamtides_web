@@ -1,0 +1,43 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

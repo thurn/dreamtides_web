@@ -1,0 +1,34 @@
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

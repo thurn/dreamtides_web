@@ -1,0 +1,25 @@
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

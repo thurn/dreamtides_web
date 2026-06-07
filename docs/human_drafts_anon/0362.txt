@@ -1,0 +1,29 @@
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

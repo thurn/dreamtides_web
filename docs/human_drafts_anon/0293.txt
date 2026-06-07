@@ -1,0 +1,16 @@
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer

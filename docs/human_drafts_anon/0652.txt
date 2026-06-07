@@ -1,0 +1,41 @@
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

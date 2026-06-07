@@ -1,0 +1,37 @@
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

@@ -1,0 +1,49 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer

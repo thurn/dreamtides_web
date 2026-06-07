@@ -1,0 +1,42 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

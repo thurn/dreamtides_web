@@ -1,0 +1,49 @@
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

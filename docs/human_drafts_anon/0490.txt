@@ -1,0 +1,29 @@
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

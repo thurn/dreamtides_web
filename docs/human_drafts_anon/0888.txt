@@ -1,0 +1,24 @@
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

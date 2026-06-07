@@ -1,0 +1,46 @@
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice

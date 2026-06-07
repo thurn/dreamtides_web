@@ -1,0 +1,44 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

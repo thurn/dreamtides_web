@@ -1,0 +1,46 @@
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

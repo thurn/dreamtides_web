@@ -1,0 +1,33 @@
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March

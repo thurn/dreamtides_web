@@ -1,0 +1,27 @@
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer

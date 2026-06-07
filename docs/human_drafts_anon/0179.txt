@@ -1,0 +1,33 @@
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

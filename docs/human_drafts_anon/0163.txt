@@ -1,0 +1,32 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

@@ -1,0 +1,46 @@
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

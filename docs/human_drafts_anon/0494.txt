@@ -1,0 +1,27 @@
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance

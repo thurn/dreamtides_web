@@ -1,0 +1,52 @@
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

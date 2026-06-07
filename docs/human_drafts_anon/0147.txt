@@ -1,0 +1,31 @@
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

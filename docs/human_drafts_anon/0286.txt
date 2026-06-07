@@ -1,0 +1,36 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March

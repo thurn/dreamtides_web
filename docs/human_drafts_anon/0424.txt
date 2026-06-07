@@ -1,0 +1,58 @@
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

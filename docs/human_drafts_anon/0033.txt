@@ -1,0 +1,38 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer

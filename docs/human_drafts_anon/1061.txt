@@ -1,0 +1,25 @@
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil

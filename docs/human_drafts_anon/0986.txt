@@ -1,0 +1,36 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler

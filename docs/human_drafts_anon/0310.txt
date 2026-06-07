@@ -1,0 +1,31 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff

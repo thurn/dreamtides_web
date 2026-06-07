@@ -1,0 +1,25 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

@@ -1,0 +1,30 @@
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer

@@ -1,0 +1,37 @@
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler

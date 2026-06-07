@@ -1,0 +1,47 @@
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph

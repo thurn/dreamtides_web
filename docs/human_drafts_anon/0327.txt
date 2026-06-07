@@ -1,0 +1,33 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

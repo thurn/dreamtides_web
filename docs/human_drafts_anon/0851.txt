@@ -1,0 +1,27 @@
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction

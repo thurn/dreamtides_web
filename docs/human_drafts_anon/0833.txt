@@ -1,0 +1,46 @@
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

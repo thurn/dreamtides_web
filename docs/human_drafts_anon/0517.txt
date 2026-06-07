@@ -1,0 +1,27 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor

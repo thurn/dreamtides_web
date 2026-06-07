@@ -1,0 +1,32 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

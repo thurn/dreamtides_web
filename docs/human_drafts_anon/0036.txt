@@ -1,0 +1,28 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie

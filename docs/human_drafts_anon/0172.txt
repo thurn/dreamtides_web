@@ -1,0 +1,28 @@
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival

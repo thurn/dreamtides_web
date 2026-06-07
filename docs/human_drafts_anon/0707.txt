@@ -1,0 +1,38 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

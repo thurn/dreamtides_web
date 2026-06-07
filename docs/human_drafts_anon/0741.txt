@@ -1,0 +1,35 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

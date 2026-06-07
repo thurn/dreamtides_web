@@ -1,0 +1,41 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

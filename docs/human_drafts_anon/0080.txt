@@ -1,0 +1,44 @@
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury

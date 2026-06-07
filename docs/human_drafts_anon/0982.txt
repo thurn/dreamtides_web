@@ -1,0 +1,45 @@
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

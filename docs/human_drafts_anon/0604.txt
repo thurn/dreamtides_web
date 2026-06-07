@@ -1,0 +1,30 @@
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void

@@ -1,0 +1,30 @@
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio

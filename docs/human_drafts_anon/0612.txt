@@ -1,0 +1,23 @@
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+58f96494-87ec-4145-9e1c-95951d0ab711 # Sanctum Approach
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse

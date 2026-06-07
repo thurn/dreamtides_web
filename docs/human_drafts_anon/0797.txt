@@ -1,0 +1,27 @@
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored

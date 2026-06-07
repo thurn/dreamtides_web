@@ -1,0 +1,38 @@
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow

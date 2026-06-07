@@ -1,0 +1,34 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor

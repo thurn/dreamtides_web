@@ -1,0 +1,35 @@
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

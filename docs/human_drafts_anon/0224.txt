@@ -1,0 +1,27 @@
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

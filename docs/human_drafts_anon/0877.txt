@@ -1,0 +1,34 @@
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

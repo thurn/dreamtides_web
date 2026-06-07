@@ -1,0 +1,29 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

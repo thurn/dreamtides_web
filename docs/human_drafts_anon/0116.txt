@@ -1,0 +1,23 @@
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

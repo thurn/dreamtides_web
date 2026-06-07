@@ -1,0 +1,44 @@
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+3811a0a2-66af-4c06-b179-948dfa9b2ee3 # Weblight Waif
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

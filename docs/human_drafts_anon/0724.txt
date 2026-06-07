@@ -1,0 +1,36 @@
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

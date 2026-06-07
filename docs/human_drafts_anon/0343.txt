@@ -1,0 +1,44 @@
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury

@@ -1,0 +1,38 @@
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

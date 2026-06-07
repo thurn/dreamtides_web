@@ -1,0 +1,35 @@
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

@@ -1,0 +1,31 @@
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

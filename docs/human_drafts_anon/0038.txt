@@ -1,0 +1,31 @@
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla

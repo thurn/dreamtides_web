@@ -1,0 +1,29 @@
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

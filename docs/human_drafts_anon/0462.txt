@@ -1,0 +1,29 @@
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout

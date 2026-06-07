@@ -1,0 +1,28 @@
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

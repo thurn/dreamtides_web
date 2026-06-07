@@ -1,0 +1,45 @@
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment

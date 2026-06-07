@@ -1,0 +1,21 @@
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff

@@ -1,0 +1,42 @@
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

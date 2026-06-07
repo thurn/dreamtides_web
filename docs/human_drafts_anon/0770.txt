@@ -1,0 +1,30 @@
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

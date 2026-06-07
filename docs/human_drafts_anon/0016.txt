@@ -1,0 +1,23 @@
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

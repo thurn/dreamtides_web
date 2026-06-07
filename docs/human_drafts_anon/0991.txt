@@ -1,0 +1,30 @@
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

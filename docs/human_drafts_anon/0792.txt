@@ -1,0 +1,45 @@
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

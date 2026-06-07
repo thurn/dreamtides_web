@@ -1,0 +1,21 @@
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

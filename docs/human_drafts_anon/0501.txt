@@ -1,0 +1,24 @@
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

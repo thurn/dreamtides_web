@@ -1,0 +1,25 @@
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla

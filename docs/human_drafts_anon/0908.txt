@@ -1,0 +1,46 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

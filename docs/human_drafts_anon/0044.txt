@@ -1,0 +1,46 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

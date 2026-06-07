@@ -1,0 +1,26 @@
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

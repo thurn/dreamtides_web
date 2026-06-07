@@ -1,0 +1,29 @@
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner

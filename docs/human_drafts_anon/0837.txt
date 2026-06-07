@@ -1,0 +1,34 @@
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest

@@ -1,0 +1,35 @@
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

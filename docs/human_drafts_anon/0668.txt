@@ -1,0 +1,42 @@
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+84fd9c6e-79c6-4b65-878b-1534f3e4b220 # Ecliptic Vantage
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow

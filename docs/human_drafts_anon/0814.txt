@@ -1,0 +1,35 @@
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth

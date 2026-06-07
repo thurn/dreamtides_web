@@ -1,0 +1,26 @@
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+874d5e8f-4e12-4426-a2e7-1ab761d2ca12 # Echoes of the Journey

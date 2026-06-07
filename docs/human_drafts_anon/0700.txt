@@ -1,0 +1,26 @@
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost

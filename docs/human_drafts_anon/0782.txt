@@ -1,0 +1,30 @@
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover

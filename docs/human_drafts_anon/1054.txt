@@ -1,0 +1,33 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+81074582-dfb3-497c-8c04-f97a24d6b1d4 # Pit Descender
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple

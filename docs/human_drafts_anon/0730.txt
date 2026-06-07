@@ -1,0 +1,36 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra

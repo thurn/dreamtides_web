@@ -1,0 +1,28 @@
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost

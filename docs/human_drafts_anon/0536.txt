@@ -1,0 +1,29 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow

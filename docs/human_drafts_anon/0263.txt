@@ -1,0 +1,28 @@
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe

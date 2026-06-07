@@ -1,0 +1,51 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

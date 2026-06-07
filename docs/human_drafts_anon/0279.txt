@@ -1,0 +1,44 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter

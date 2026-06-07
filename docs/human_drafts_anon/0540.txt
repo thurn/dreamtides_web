@@ -1,0 +1,46 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

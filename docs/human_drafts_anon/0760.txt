@@ -1,0 +1,35 @@
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

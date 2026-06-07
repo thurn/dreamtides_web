@@ -1,0 +1,30 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer

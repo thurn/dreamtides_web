@@ -1,0 +1,29 @@
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+071bcab4-ed02-48a0-93dc-8fd0f36611c8 # Northlight Maestro
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+3b5f5686-f63b-4998-b713-2f6777ecbb5f # Dreadcall Warden
+8e003d04-e489-4c55-9c72-fc5612909d07 # Last Beacon
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial

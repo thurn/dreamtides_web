@@ -1,0 +1,28 @@
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith

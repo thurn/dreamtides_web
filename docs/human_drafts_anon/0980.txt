@@ -1,0 +1,11 @@
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom

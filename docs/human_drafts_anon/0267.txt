@@ -1,0 +1,36 @@
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

@@ -1,0 +1,42 @@
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

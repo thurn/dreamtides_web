@@ -1,0 +1,25 @@
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light

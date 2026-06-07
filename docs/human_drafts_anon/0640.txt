@@ -1,0 +1,38 @@
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

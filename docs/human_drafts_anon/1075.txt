@@ -1,0 +1,44 @@
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

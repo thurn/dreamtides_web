@@ -1,0 +1,29 @@
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March

@@ -1,0 +1,56 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+b78d776b-15dd-4d0c-ad12-68b97b8d9fb6 # Starsea Traveler
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

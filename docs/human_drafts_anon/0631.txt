@@ -1,0 +1,35 @@
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla

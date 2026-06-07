@@ -1,0 +1,24 @@
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender

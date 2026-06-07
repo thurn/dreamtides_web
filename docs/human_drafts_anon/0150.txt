@@ -1,0 +1,23 @@
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff

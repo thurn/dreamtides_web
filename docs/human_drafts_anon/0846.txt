@@ -1,0 +1,40 @@
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline

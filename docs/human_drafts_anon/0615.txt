@@ -1,0 +1,40 @@
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

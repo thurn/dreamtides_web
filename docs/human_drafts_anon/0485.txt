@@ -1,0 +1,39 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+61060827-8bed-4b63-b63d-6c3b0536e941 # Sunshadow Eagle
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+1521c06c-f5ac-4d29-a6bd-7030b63a3c3e # Doorlight Foundling
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler

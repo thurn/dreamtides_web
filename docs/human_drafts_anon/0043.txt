@@ -1,0 +1,36 @@
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection

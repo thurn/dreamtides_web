@@ -1,0 +1,30 @@
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

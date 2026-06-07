@@ -1,0 +1,24 @@
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

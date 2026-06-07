@@ -1,0 +1,42 @@
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+0269e363-5567-47a4-80cd-8ebc061fe7e1 # Wasteland Tamer
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+0a19c54c-7a2e-4614-99c9-2c9142729ebb # Endless Projection
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

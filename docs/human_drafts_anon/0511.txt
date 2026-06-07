@@ -1,0 +1,25 @@
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+954e8d50-d494-4fb2-b4c7-74979083b774 # Driftrider
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+8bf53fe6-8a25-401e-9a99-84343a026bb0 # Burning Pursuit

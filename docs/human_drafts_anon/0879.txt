@@ -1,0 +1,31 @@
+8cb543d7-e70b-4526-b473-bb17dcaee2a7 # Planetgazer
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+99101fce-f2b4-4032-b999-317ce3e4a6dd # Keeper of the Tides
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+cebcd591-dbd6-40b1-813d-f7f01e1b7fdb # Thronebound Arbiter
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+3725379c-676d-4efd-81ee-7e45d80db6d0 # Fragments of Vision
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

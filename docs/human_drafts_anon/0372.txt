@@ -1,0 +1,30 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+a7c2ee76-48c9-4587-8f01-81d00ae280cb # Defiant Holdout
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell

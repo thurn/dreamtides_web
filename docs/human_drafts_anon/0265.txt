@@ -1,0 +1,39 @@
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+9495f501-f627-4b74-a848-b3d928641229 # Emberwatch Veteran
+d55d9fd8-ad2d-41f4-aa7f-5958432f00aa # Vessel of Echoes
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9 # Seeker of the Radiant Wilds
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+9d63ba3e-fafb-466e-8418-ce5f8941ba30 # Dawnrunner
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse

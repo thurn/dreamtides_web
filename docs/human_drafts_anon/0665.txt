@@ -1,0 +1,29 @@
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+3811a0a2-66af-4c06-b179-948dfa9b2ee3 # Weblight Waif
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void

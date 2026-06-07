@@ -1,0 +1,34 @@
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+acbc1ace-4f6d-45a3-8bf5-a560d1c8485b # Blazepath Traveler
+31ecf933-c897-41a5-ab94-822ea65898d8 # Lumen Rover
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler

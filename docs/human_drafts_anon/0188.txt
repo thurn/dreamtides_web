@@ -1,0 +1,28 @@
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+edb479be-68a5-45bc-bd19-2602156edb57 # Mystic Runefish
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+86fd585b-e9d0-4dc1-bce9-488014b9316d # Cloudmantle Ray
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2 # Melodist of the Finale
+33cf7dca-d8d2-42b7-854a-b3f503b03488 # Lumin-Gate Seer
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+e2f542eb-090f-4a22-a42c-a120eb6caaa3 # Dreamborne Leviathan
+a75c22ac-e343-4757-964e-a0bb981b5a28 # Spiritbound Alpha
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+c8579b20-95ff-4b1d-b4c6-6bd049fc4760 # Ghostlight Wolves
+4e3c04a9-1cdd-468a-b42a-40157ed9c9d6 # Eternal Stag
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine

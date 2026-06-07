@@ -1,0 +1,37 @@
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+cd7ff671-2317-4a54-b9da-acfefb90e6b0 # The Rising God
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne

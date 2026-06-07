@@ -1,0 +1,40 @@
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c # Duskmount
+15b63630-d9f8-473b-9717-15ad91ff2f16 # Threadbreaker
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+20a6474c-55b8-4b1b-9155-baac62a06f1e # Cindermarch
+245b49b9-e1e5-4dd0-ae18-718c437b8eb0 # Conduit of Resonance
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow

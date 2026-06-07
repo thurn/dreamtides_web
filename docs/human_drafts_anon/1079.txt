@@ -1,0 +1,32 @@
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+7530e916-e4b9-4988-b3ac-0e400c7a04ff # Pilgrim of Old Stones
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple

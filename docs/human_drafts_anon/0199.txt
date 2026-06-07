@@ -1,0 +1,43 @@
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+7dd2214f-8d16-453a-9f28-62712e64eae1 # Hallowed Stag
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+965ce3b2-a722-475c-99c5-5b35685d2404 # Dreamvale Monarch
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+3811a0a2-66af-4c06-b179-948dfa9b2ee3 # Weblight Waif
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost

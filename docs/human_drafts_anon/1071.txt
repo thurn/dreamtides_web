@@ -1,0 +1,34 @@
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+cc1c1acd-f0ff-46cc-94d9-401b9daf253f # Forgotten Factory Titan
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment

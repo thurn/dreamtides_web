@@ -1,0 +1,28 @@
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+3d1fadf6-42e5-4d03-9a72-9bc25968c2b9 # Sky Voyager
+40b44ed7-d737-455b-bd42-e617a263b110 # Voidcaller
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+f10a9ba9-f5eb-4011-9426-a89c5de3b550 # Veil Crosser
+f46490a5-7030-4ade-93e9-bedb5813f590 # Rooftop Prophet
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+41c14462-86b9-42a4-8a61-859d59ffa466 # Summons of the Bonded
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+20fd609a-7529-4582-a362-b8151b0ae011 # Rite of Summoning
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent

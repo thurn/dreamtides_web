@@ -1,0 +1,31 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+7be2e6d7-abff-4c44-a0c3-35460da1693c # Gatebound Warden
+161482b6-af07-4d9e-822d-8c738672beb9 # Starlight Guide
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+f4b34207-2ad4-421b-8798-9c20320607ae # The Power Within
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom

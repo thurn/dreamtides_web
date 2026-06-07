@@ -1,0 +1,30 @@
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow

@@ -1,0 +1,30 @@
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a # Stoneborn Eternal
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+14ac6804-ed1d-4148-aad7-11796b6fff6c # Undying Fang
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+fb41a90e-279c-419c-80fc-7c3469ba0c74 # Lord of Hidden Paths
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+cd2d4eaf-6295-451d-aaa2-ea74188bac3b # Young Beastcaller
+18ff6a45-148a-40bf-85ae-4a51f32f406a # Blazing Emberwing
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+50267984-eaa3-415e-a23f-581c54b0ad2d # Reunion

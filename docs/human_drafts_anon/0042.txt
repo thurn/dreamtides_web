@@ -1,0 +1,49 @@
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial

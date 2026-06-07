@@ -1,0 +1,30 @@
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+95711262-8510-475c-a572-c1cd144d54cb # Somber Flockmaster
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+97bc4b48-9ea1-40e9-94bb-a88ae4f55d83 # Epiphany Unfolded
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity
+b1d36337-5668-4f1d-b155-2d07fc00f872 # Across the Void

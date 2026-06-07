@@ -1,0 +1,50 @@
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+312e42cb-e8ee-43da-9ef8-173a69583c97 # Reforged Automaton
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+967c714f-40c5-4a77-8e22-40691a2755d4 # Passage Through Oblivion
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver
+d6e8842f-c0a4-4b4c-93bd-377cfae60894 # Ride of the Vanguard
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+43628666-2ecd-47a7-b2c0-241cda0de5e8 # Void Pilgrim
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

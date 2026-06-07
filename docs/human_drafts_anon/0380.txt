@@ -1,0 +1,49 @@
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+0d848dc8-a1a2-410b-b19a-b5f65375e141 # Path to Redemption
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+bf323913-3695-49ee-8d13-8165657e3dc9 # Dreadwood Emissary
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+89c0d03c-2199-415a-bc66-89e451034328 # Sylvan Matriarch
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+b56ef7e8-c634-4d40-ac08-fab591dfbc4a # Miraculous Arrival
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+848b41b3-9f87-45fb-b86f-b52fc913d201 # Genesis Burst
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+4d4618bd-4779-4953-b446-dab05e1da5db # Nebula's Wake
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

@@ -1,0 +1,51 @@
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+d2a3d344-613c-449e-9a87-0f720a85585d # Overstory Explorer
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+d8c90a33-a581-469a-9fd3-9a80d1cc5315 # Veilseeker
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath

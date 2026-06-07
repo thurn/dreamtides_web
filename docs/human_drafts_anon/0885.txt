@@ -1,0 +1,33 @@
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+f1452b45-51dc-453a-916e-88bd9d29e36e # The Calling Night
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+1cfc72e9-b75c-4d55-8bcf-54bb301d7e40 # Ashwalker
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+831bc7cf-e8c9-4943-8156-91b7397ef849 # Resilient Wanderer
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+a42fbd1b-7629-48c9-90da-e9a4246867d7 # Dawnblade Wanderer
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss

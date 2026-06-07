@@ -1,0 +1,27 @@
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+145f72b9-5ff7-4477-b7f5-55ca89a135ae # Defiant Parry
+d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad # Ripple Through Reality
+01d53e49-7833-4122-a970-b72c73ad2c28 # Crimson Pilgrimage
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
+e3431bd0-5a81-497f-9ec9-18275b568c00 # Return to Nowhere

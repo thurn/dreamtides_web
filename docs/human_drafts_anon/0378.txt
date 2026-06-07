@@ -1,0 +1,49 @@
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+6b739127-1a23-4c5d-877a-8829dd7a8b8c # Entropy Spike
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+8571d7b3-5401-4678-9e81-e14538c8c46e # Fargazer
+1d92e103-8415-433d-97d6-ac8a83660b34 # Searcher in the Mists
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+88994286-96db-4ba6-a660-b30ae9b52cff # Gleamharvester
+d755cfa4-d7c0-46d8-a836-909c45c68890 # Shoreline Penitent
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+cf173b05-7bf2-465b-91e2-41f213c536d1 # Phantasmal Recruiter
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler

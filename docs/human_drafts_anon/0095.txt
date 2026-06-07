@@ -1,0 +1,41 @@
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+4b20e66e-2466-4518-8ef9-67f580bd6f14 # Looming Oracle
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+a031eada-2c47-49c6-8c19-d2fe85f8ce97 # Barrage Specialist
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+b4754e5a-29e6-418c-bdfa-8e0230a21b7b # Featherlight Summoner
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+3995100d-cdde-4c6a-9bf9-87167c8deb57 # Immolate and Rise
+6475483c-07de-43a0-b419-aaae6f436ec6 # Peak Plunder
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+f4082c01-fdc8-4583-afdb-76bac980b3bf # Wasteland Holdout
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea # Apocalypse
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

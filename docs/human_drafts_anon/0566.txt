@@ -1,0 +1,27 @@
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+cbabe603-1333-42bd-85c0-555c664b60b3 # Avatar of Cosmic Reckoning
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

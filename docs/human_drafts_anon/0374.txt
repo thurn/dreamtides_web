@@ -1,0 +1,43 @@
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+76766584-a8fb-41cc-8c4b-09655f478703 # Ebonwing
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+f9a65b32-537b-457c-9eaf-b512cf1f3791 # Still Dreamer
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+470bbf9d-a73c-4e00-bc66-cb0fa767c8de # Depthwalker
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+374ec185-b0f7-40e6-9988-09e96abccebe # Celestial Lookout
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+680abf68-d7bb-47cf-885a-d808dc0a8e09 # Embersummoner
+35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b # Shardwoven Tyrant
+46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+ccbefadc-aab8-4f8c-a705-07bd70c91731 # Mirrorlight Architect
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7 # Packcaller of Shadows
+f95cae7b-6502-4dbe-ae26-16853959d9a3 # Sunset Chronicler
+f7ffe999-685d-4ea2-85de-2e567eb2a042 # Key to the Moment
+fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277 # Nexus Wayfinder

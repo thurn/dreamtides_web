@@ -1,0 +1,47 @@
+455ef341-8a26-44e1-b287-19e53bdc6158 # Soulkindler
+1750c85c-f547-4d21-b7e3-9e5c5fcb3171 # Unquenched
+7ad10754-690c-45fa-abe6-28944da6eef6 # Pyrestone Avatar
+e4e8d3b9-3463-4b92-8fbe-35064f72402d # Pinnacle Ascendant
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+16f4962d-2950-4360-8f55-bc47428480ef # Sorrow Watcher
+34ea77a8-66e4-49b8-a934-a9d95cb74376 # Tidewreck Navigator
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+382dafa1-f8ff-47b4-9151-15b84067a5b2 # Tidecaller
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+8951e112-92d2-4246-9859-39320620231b # Spirit of Smoldering Echoes
+e26e0ac8-d6c9-4b0c-8672-4f73651f2586 # Manufactured Abomination
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+6f0b709d-0f57-46de-bfba-6a8b4df2b991 # Derelict Voyage
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+6044f6da-cf71-4dbb-9feb-f71ae66a4f5b # Molten Duel
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+6196d53d-a226-490d-a3bb-159a78d1b2b7 # Null Sphere
+eae700c9-5005-4627-b8d6-a5c2c273e61a # Secrets of the Deep
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+3fdf265c-8aa2-4367-9fee-43e242bdb462 # Shared Revelation
+29088c75-c2c9-40dc-a77a-65360e464b45 # Abolish
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

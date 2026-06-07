@@ -1,0 +1,37 @@
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+881e3a5f-280f-413a-b927-352aeb3bda71 # Emberfang
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+b1bea643-1a7b-4e5e-b072-7174d3405421 # Silent Observer
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+bbf83d18-81b6-48c8-886f-4b9f0feb599f # Frost Visionary
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+19aeffa6-fd1b-4b8f-bb0c-c35659521976 # Nocturne
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2a828466-450a-4637-9c68-6b54522450c0 # Rusted Monolith
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+be7cf049-29df-4801-9ca6-0e39dc1101af # Shattering Gambit
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+bd27a996-bcdd-4f49-95c2-92c9d5875344 # Lurking Dread
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+13c45db4-ebab-4364-a14a-59a2e9c52bb5 # Dreaming Groves
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+c36e67ab-fbee-4d83-b57b-34d34f60e17c # Shadowcaller
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

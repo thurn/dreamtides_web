@@ -1,0 +1,32 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+4b4cc613-2e28-4851-975f-14146286a062 # Forge-Twin
+7e4cca36-5134-415a-b30a-c4876b58976c # Speaker for the Forgotten
+867b98cf-171b-497b-9252-9af5dcf70726 # Crescendo Channeler
+a9b5afaa-e149-4bf4-9007-077e8e9f12e6 # Starshot Gunner
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

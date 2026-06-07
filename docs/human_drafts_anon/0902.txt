@@ -1,0 +1,40 @@
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
+1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+6da831c8-6fda-4078-9f2b-873db2416aad # Cloaked Sentinel
+4ef8b2e7-3525-4c25-aa30-f751467f182f # Cosmic Puppeteer
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+cb2d9f1e-8888-44c7-9918-57b2ec8c78e1 # Wired Duelist
+dbd014b1-1ec8-4762-bd96-48a2a4824de2 # Abyssal Enforcer
+401bb341-8385-41e9-8f6f-7b48e9ce174d # Soulflame Predator
+44ae8838-4714-43a5-a7bd-e9f806f35ca9 # Nomad of Endless Paths
+886c9d49-b25f-4ddd-97f0-2ec4b42eda89 # Prism Caller
+be6a2712-cfe3-4d61-b62c-fab8990786a1 # Wolfbond Chieftain
+1658d9a0-c3b0-4eb7-babc-4933acf362c4 # Glimpse of Infinity
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+5c5e316f-c499-4991-9733-bb6e3d826d7e # Harvest the Forgotten
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+06f8cfff-92ec-4668-afbc-f33a274c3b1a # Fractured Veil
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+1ce0f0f2-4b1a-483d-b93b-74c36e946a08 # The Deathsworn
+c06b993d-a1f4-42ad-85a9-ebf611d9a129 # Surge of Fury
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

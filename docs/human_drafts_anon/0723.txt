@@ -1,0 +1,48 @@
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+42427d15-c019-4786-9d7e-285829c4f3cb # Signal Resonant
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+09e17f29-8ee1-477f-8175-ff37eb1f254a # Seer of the Fallen
+2d180bd7-4cc7-49fb-b76c-0990656cedc0 # Ashborn Necromancer
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+f68774ce-0e94-489f-90a5-68e03a549ff6 # Deathwalker
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+401fdd0a-356b-49c1-806d-d50617b084d2 # Enginespeaker
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+6d6ce556-60df-486f-b2d8-5df168a6f75e # Wreckborn
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+7762759b-c1df-4c86-9dbb-a49d152f3616 # Shatter the Frail
+5931e388-1856-4e5a-85f8-a5aa34f867b1 # Whisper of the Past
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+e7c93c3b-14db-4131-ab50-71d152331777 # Rootbound Witness
+dcaba429-6fbc-4ea5-b063-871134ccd03b # Skies of Change
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+d89f4c33-ffd3-4313-8106-0a9f7013cad8 # Lanternwood Scout
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor

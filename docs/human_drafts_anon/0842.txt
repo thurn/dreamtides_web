@@ -1,0 +1,29 @@
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+ce09ddfa-c349-4b32-b524-fb74444cddcb # Pallid Arbiter
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+4b2f044c-0afe-432a-a121-2ea785bb1182 # Tranquil Duelist
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d # Evacuation Enforcer
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+b8a66998-f2d8-401d-8262-d5a658563936 # Spent Courier
+c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f # Junkfield Renegade
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+f0a70e7d-46af-4d32-92cc-9d510e97a07e # Fathomscourge
+d6ec65a2-d61e-4617-bdd0-75d5573c063d # Smoldering Ancient
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+174a5909-48e2-4aab-8cc5-fa3292281d1d # Twilight Troubadour
+ccff822e-e2ae-4d38-9720-6df289dbe4cd # Simulacra
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

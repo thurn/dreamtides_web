@@ -1,0 +1,21 @@
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+5a27e236-86d7-442f-81d2-fb29a2b7f12a # Shadowbinder
+3a4ee059-4b6a-4a85-b3b8-a472834ea843 # Keeper of the Lightpath
+c430ed7b-523e-4580-9a53-d43d11265633 # Flash of Power
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4752fc43-6696-4bc3-88d0-4d5b97622fa8 # From the Barrow
+d217303e-b115-484a-b22c-0e44d5701389 # Broadcast Array

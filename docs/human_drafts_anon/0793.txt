@@ -1,0 +1,40 @@
+ad76c77a-e456-4e59-bbf7-6bcb56f892ee # Ethereal Courser
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+bbdc6ee7-e9b1-488b-90b9-19337b65fee6 # Dreadlord
+cd3d8e4a-618e-4c2f-be60-0363b81887f1 # Echo Technician
+96e2c30c-930c-47af-abb0-d4fbab454d56 # Dream Garden Visitor
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+5e1b943f-9fa2-4055-b613-5dd09a048c99 # Call to the Unknown
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+a37876f4-08a7-4352-bb3a-6d24f5c9407d # Guiding Light
+120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+6e019832-2e0c-4166-81c3-54f7995425df # Momentum of the Fallen
+fb967cc1-4199-4a08-8070-724e07cebea5 # Cascading Detonation
+be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+1654d50f-815d-4172-b46b-8baa34a124db # Cragfall
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+fc4b06d6-3b30-4769-af98-88fcea5b54dd # Cascade of Reflections
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

@@ -1,0 +1,26 @@
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+08fe3190-f559-4152-941d-33ec4180f509 # Data Pulse
+4cec92f2-9bac-4949-a602-cd0a44618aaf # The Ringleader
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+fa7dadd8-c72f-42e7-b203-3d22aa36122f # Torn Circuit Feeder
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+6e2188f8-580e-4a66-a3e3-267d509de903 # Terminus
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+1c8e6736-13d6-42d1-8668-46f422fec11e # Burst of Obliteration
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist

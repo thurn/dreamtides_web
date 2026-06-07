@@ -1,0 +1,46 @@
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+6fa9c440-3912-4b1e-868c-840ae772fe1c # The Devourer
+78b5a42d-b099-48f1-a1b4-5b6bc177adeb # Crucible Warlord
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+47b1d6b7-0388-4bb9-abfc-ed832d902e9f # The Waking Titan
+8d35aec1-29ad-432c-9c23-25a52804cbae # Duskshore Virtuoso
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+4f29a241-9265-4669-a189-5a2a91923e12 # Vanishing Inquisitor
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+32f3d6f2-43c5-4510-a23e-558769a7a8c9 # Glimmerwood Scout
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+7d5672d2-c8fa-4837-9e98-8cccdd07ff56 # Twice-Lit Portal
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+c6ae1899-c94c-464f-8edb-4a0b1ec2c981 # Knowledge Restored
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+2a8dff0b-759f-40cc-af40-393a4e7129d4 # Weight of Memory
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+45e3d703-7efc-4dc2-b854-33211f8d4f11 # Gleam Below
+11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6 # Fell the Mighty
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+a8bca1eb-abc8-42e0-b770-0f03af250b81 # Annular Recall
+0211963d-d097-4427-9d16-5e857621e481 # Sanctum Awakened
+5ce69085-aa75-4654-8abe-f9e773931e63 # Sunset Chapel Rest
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
+b4838d67-f055-4fd3-a64d-0a4d2b6678cc # Torchbearer of the Abyss
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

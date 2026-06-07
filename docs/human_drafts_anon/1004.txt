@@ -1,0 +1,33 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+5b2b2188-b9f0-4b3b-9185-26a820d343c7 # Pathfinder Adrift
+22239029-f53c-4ba9-b9b6-29f6592bb722 # Rift Pilgrim
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7 # Headtaker Wurm
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+6cf545ba-b014-4333-a0da-573e8f97d734 # Clockwork Prodigy
+128d1878-a505-4766-91a2-e5a29498bc4e # Echoing Denial
+ce84b8af-b802-42d3-8a31-36827cff17b2 # Ripple of Defiance
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+6b1c0e39-0e70-4061-b037-0e10026cfabb # Seedling Sage
+50fe6c54-4bf2-4177-a2f7-4c00a4a4c188 # Aurora Confluence
+0fde04ac-8552-45ce-83a3-5ab2384b36da # Toll of Passage
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+3cc9253a-4db6-4b02-92d6-a37805d192fb # Ancient Descent
+006e2f95-59a2-4cda-a777-e64f4aa31060 # Unleashed Destruction
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+29d25251-8b42-4d3d-97e6-6c3abaabd9a2 # Hatching Ground
+69552516-14bc-42b9-b4b6-3a0cdc29686b # Archive of the Forgotten
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4 # Gearwright
+181b4924-743b-49c3-8056-6afd08ebde1d # Shadow Soloist
+34ef6c0c-1a23-4870-a52c-90d34e9769be # Moonlit Dancer
+2690912e-0295-4d12-a603-5946d37902d3 # Call of the Lost
+4fac8060-2644-409f-806b-c6a845ef6f31 # Dreamscatter
+d24ea640-638d-4ce2-b15d-b3f4588bda6b # Echoes of Eternity

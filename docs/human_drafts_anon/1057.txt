@@ -1,0 +1,36 @@
+8a5d7d67-91c9-41c4-b22e-8287954efa09 # Dreaming Obelisk
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+a7820b34-9fdc-46cc-8357-53c8caa056b1 # Mirror Protocol
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+8624f9c7-dc92-4f4a-9c79-319b9c121b19 # Cinderheart
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+1cbbfd57-f510-4a02-a4b3-f043a4fb99d6 # Ochre Prospector
+2931e20b-1a80-4ddd-8944-20e68d182886 # Sunken Radiance
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+01298848-1ebb-48a1-b00b-d7e0af890870 # Ashfront Lieutenant
+f3985df4-0867-4fd6-8312-6b358dc26883 # Marrow Drinker
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+e72245f2-c153-4e79-ba8e-956d18202b48 # Forge Inheritor
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping

@@ -1,0 +1,30 @@
+98f16d26-be71-49ad-9034-5fafb5d3f053 # Frostbound Defiant
+b8ecc46d-bd92-4826-a416-7ce177e69cbf # Emberwolf Triad
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+4edf2d8d-61e4-4c3a-a388-4b52b2ebd005 # Pathwalker
+975f49d3-213a-43fc-8079-5fe40f126a7b # Scrap Reclaimer
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+8896c178-757e-4775-b117-a4357ebfe30f # Minstrel of Falling Light
+c86c1364-6ac4-4c90-8053-4e49441a2c83 # Key Sifter
+faadc87f-98fe-4a58-b1a9-a7c0cff70e08 # Wandering Archivist
+d1c25546-dcf2-481e-8f00-9afef3adf24b # Rubble Diviner
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+f7b135ea-4894-46ab-b41d-ba2f74b070a1 # A New Adventure
+570895fe-cd21-45d2-89ff-162f46978776 # Starfall Communion
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+cc21a902-e482-46c0-bf07-e04035f39190 # Steel Abomination
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer

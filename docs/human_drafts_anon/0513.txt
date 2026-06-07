@@ -1,0 +1,37 @@
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+66959155-9e79-459e-afdb-eb4c0fbdeb11 # Aspiring Guardian
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+b5fbff03-f850-4627-94eb-12ed4dc15334 # Worldsong Behemoth
+9b9c2743-75b3-499d-b5fb-c3429c92d420 # Driftcaller Sovereign
+78673e2b-a6d1-43de-8850-3d3327de5cc6 # Spirit Field Reclaimer
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+fd355778-abea-4513-844c-91bf75929ebe # Dune Reaper
+1bae969b-0bc4-4777-86f3-1e860d601c5c # Riftwalker
+44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e # Nineborn Specter
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+5832785d-fb97-40b5-a12b-bb660f5e04b6 # Momentum's Edge
+75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a # Iron Executor
+890970bd-475f-4da4-b835-2fb75882a84d # Vortex Claimant
+4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e # Revenant of the Lost
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+5aaf13de-25bc-467f-a4a0-fe2c4373cc9f # Prophet of the Consumed
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+ebda8a89-9cc7-4fcd-96bd-0e022bb88a49 # Luminwings
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+f82c7407-b642-4ab1-8878-171f9121b3eb # Blightmaw
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+28f8d95a-be99-4b4c-b9ef-92a4b40fffe7 # Ironclad Marksman
+0be20cfb-595b-4bb1-9cea-f7c2f41fee5a # Standard Bearer
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+2305722e-59c1-47d7-9e05-dc1c32c946a2 # Intermezzo Balladeer

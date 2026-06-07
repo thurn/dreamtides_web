@@ -1,0 +1,39 @@
+8fed2e20-09c6-43e0-b6e0-5a4a417529a1 # Sandglider
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+7697da0e-d759-4c75-8c9c-477e9058b035 # Apocalypse Vigilante
+bd43b120-2503-406c-8b72-ea3dc55198a0 # Selfless Rescuer
+7992dbb5-ca45-4066-aca3-ff1d6d87619e # Moonbound Wolf
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+73fc1b7f-3c2b-4993-9590-924240515c2f # Lunar Hart
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+55340736-7fc5-4555-8f47-081d770a6e8d # Ironclad Holdout
+26a05558-4692-43d2-ae6c-a6eb385a6d22 # Meadowlight Charger
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+c61c8b29-6911-4bbf-b1c4-0c18b22ed33f # Last Light Herald
+56411ed4-bda9-4fdf-82e5-b5492de67039 # Skyflame Commander
+82749215-ed35-44e3-a745-72ca76036c7c # Colossal Convergence
+747859fb-6fca-49fc-a653-08011a9bb44c # Forsworn Champion
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+7ecc1da1-dc39-4596-9a1d-262a261ffeea # Company Commander
+78599234-6054-4df1-8e79-c38782517f9a # Sundown Surfer
+0f1ac858-a28a-489b-9dd4-4d28f8f1abf5 # Skyborne Jellyfish
+5639053e-1fe3-4a42-b9c3-3fdf894bfab6 # Ashen Remnant
+648237c5-ceff-4a28-aaf8-4aa099eae80d # The Dread Sovereign
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+28c3ef90-c0dc-4b85-92c8-40758b99e0ce # Petal-Seer
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+4a8bdcd7-cf88-48d4-80d0-a83fd6617d81 # Roots of Rebirth
+c32ef131-d283-4bf1-bf65-2d5e5d232168 # Harrowing Officiant
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent

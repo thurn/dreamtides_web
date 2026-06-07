@@ -1,0 +1,32 @@
+99ca2635-a91a-46ba-a9d3-4d2581c354f3 # Spirit of the Greenwood
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+48257e3e-9600-4edf-a905-e73a41ab5ec1 # Ethereal Trailblazer
+691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
+bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver
+2708c635-9332-4cfb-b43d-889ba2e329b6 # Voidshield Guardian
+06a4709d-fbef-4ea2-aa5e-caa2beac80ab # Ridge Vortex Explorer
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+ac2b2fc5-90d3-47e0-8332-25f7ba767035 # Forsaken Pact
+caaee8a9-0c22-41b4-950f-4c1131b98221 # Celestial Reverie
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+f160fd01-b3c3-4904-b15f-339f6fcf5ca5 # Luminous Ascent
+f3282494-2fcf-4c06-bfbe-3474b28aa87a # Oathbound Pair
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+738a5af0-f848-4d48-bceb-9a43c9b11066 # Reclaimer of Lost Paths
+017a7b4b-3ccf-4635-9956-28a72b22274e # Wraith of Twisting Shadows
+7977748d-02c1-4702-ba68-5c49f7f0759b # Light of Emergence
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
+a5056a4c-542b-4a7c-8fe6-895126c7d4c8 # Carrion Lord
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+3cda9dd7-cb81-43c1-9db5-1444d7363e13 # Spirit Bond
+8451340c-02c5-465a-8c25-51efb2dc857a # Crumbling Behemoth
+331e2846-85d1-4667-8c64-dc6c21a418ed # Beacon of Tomorrow
+c7c95f67-a838-4e39-879c-cfbf0591540c # Cosmonaut of Tides

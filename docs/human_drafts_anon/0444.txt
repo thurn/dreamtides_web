@@ -1,0 +1,27 @@
+f7c68226-def4-4eb0-bdfe-b028482e1351 # Forgotten Titan
+956aaeb1-5280-4294-bf80-73079f35c5f6 # Harborwarden
+8e7b0eb9-4933-420b-abee-413bf5b3d2fc # Liminal Dreamer
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+7e2f2ac0-4e3c-4520-80c6-c830581b40de # Eternal Sentry
+5f4bc2cf-4464-409f-acd5-fe4d6df28a05 # Seeker for the Way
+5a747998-7219-4e23-be42-b8cb3be12348 # Salvage Engine
+22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf # Cinderblade Legionnaire
+af739e3d-bc61-4fab-bf81-a22e78d7e524 # Silent Gatherer
+3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1 # Graywatch
+f4c570d4-c500-4b66-ad97-e8ccbef19392 # Standoff
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+435ed83c-f7a6-4a73-a684-67fcc4e49bc4 # Call of Calamity
+625fe37e-8059-481c-99fd-109fd02ceedd # Maelstrom Denial
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+ca0e9275-7fbe-47ce-b776-da5b2607145e # Vertiginous Leap
+ed4d5342-0690-40b7-ab48-6b76035466f2 # Shadowpaw
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+a911ef71-799c-4240-ad13-8fabd3caeafa # Moment Rewound
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+795a7b54-40d5-42f9-bc3a-9e92bc938c2d # Crumbling Covenant
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline

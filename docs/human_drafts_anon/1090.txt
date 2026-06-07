@@ -1,0 +1,32 @@
+31501d09-5dde-44f4-a938-7ca95ad988a0 # Sorrowful Prince
+4fe9f53e-149a-4b9f-8fac-f75560c986f2 # Oblivion Guide
+4124a05c-b6dd-4334-b202-59fa17d77668 # Unbroken
+86881031-393f-4359-96f5-3adde6bdd74d # Abomination of Memory
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+87aba308-00b4-40d8-a46f-4e6f58a664a8 # Breach Artist
+b6d1df72-d989-4689-a599-4490a0c2568d # Gateweaver
+6f1833a0-30f5-4718-9a3e-7620beb72bfc # Flagbearer of Decay
+c11eb833-a45b-4983-949d-848039d0504c # Shadowprowler
+9a18d375-1b6d-4df4-95ec-c7c5c3f36379 # Pattern Seeker
+b4df0b25-0c46-4faa-8db6-84f5f3c3444b # Pyre Challenger
+c6d8a7cc-3856-4030-96eb-450e406dec33 # Thornwood Delver
+94818862-2875-4ee1-8f72-7c0cdc624202 # Lumineth
+650b2ed4-f016-46c0-815a-f53fffe08a9a # Part the Veil
+770b21e4-ea6a-4910-8fca-2ec5b8813da1 # Grotto Seer
+1268a899-b209-46bb-bce4-6def1dcd0404 # Woodland Apparition
+b957466e-f748-4a95-89b2-8509dc762223 # Iconoclast
+91d9afed-ea29-43af-9021-0f3ecbdc252e # Starcatcher
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc # Verdant Wayfarer
+8adfa141-6864-4f5f-a9ca-59306eaf5432 # Urban Cipher
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+f79c63f6-7cf1-4030-be39-217fd3c2fb7f # Fury of the Clan
+18979c10-39b8-42fb-ac1d-dd784da498d1 # Fell Swoop
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+7ea13d02-9d97-492e-9edb-f326eb3b4d1c # Seaside Requiem
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant

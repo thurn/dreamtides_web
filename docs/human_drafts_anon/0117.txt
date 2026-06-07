@@ -1,0 +1,31 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+01a8482b-5b4f-4c49-8791-2702cb5dfd3d # Inferno's Herald
+742a376f-68db-466a-b087-405188634ba4 # Assault Leader
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+9629a58a-9f30-40f0-9199-835ea2dddc76 # Vault Infiltrator
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+3fab0780-59d4-45f1-8aac-a870ad8729ac # Gilded Catalyst
+f07dfe42-566c-4e91-a250-9e2781e9d06f # Flamestride Rider
+8367b757-c3d2-4c22-9043-8baadee1c5ba # Invoker of Myths
+243a15d3-a4eb-415c-b106-86d4a2b7ec6a # Sundown Ronin
+d95533f4-7809-44a8-a882-7675c61cee1c # Tethered Hollow
+49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed # Dread Arbiter
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+8436eaae-e410-4bfb-89d2-55bebf5a8144 # Pyrewatcher
+1434440c-c86f-4b7d-83e7-3bd1f7dde63e # Pulse of Sacrifice
+c73f978e-8196-4589-a432-845265115555 # Lightningborn
+3076694f-ffc2-46c9-8e1a-39f3878c73c9 # Through the Rift
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+c96c6c7f-c0fe-4272-b856-a54ace01f596 # Veil Shatter
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
+64ce3ebc-c0ac-4dd3-95ca-eeb67530187c # Ossuary Overlord
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+ca37f80e-8474-4d40-b793-7a900f6ca467 # Shadow Reflection
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla

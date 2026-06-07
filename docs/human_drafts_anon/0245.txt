@@ -1,0 +1,35 @@
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5 # Ambush Operative
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+c92a7dc0-04b0-4c54-9485-59a92505eabc # Blade of Unity
+33874387-2490-48ed-93bc-a47a16e399ad # Soulbinder
+1b341984-d32e-42a7-ae56-b22059c59737 # Wreckheap Survivor
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+4644db03-fbcd-4af5-a229-17962ce093d5 # Duskreaper
+37d9165f-2b3a-44a2-848b-401cf4466a7c # Silent Avenger
+2c9711c7-800c-4e55-a488-17ea5a6813c6 # Angel of the Eclipse
+b56b3411-50c7-4cc9-90e0-d4ffcaec73c6 # Exiles of the Last Light
+f7084ba7-8c85-4847-80df-b0c98ec77d78 # Carrion Shepherd
+d09a6760-6630-4964-9c77-decc641df713 # Urban Desperado
+ae90a3e1-c650-4f21-83af-de3208151b11 # Verdant Pioneer
+2a230602-a39b-4ec2-a467-97b92b389aff # Scuttled Fortune
+e656cfd3-7481-46e5-934d-4dd242b00031 # Ordained Collapse
+4eb42989-7498-4995-a3ab-89eb026b0c13 # Ferryman's Tithe
+8f69312f-4bec-4671-99da-e752ec6d4cbc # Desperation
+8b7883ee-a235-4793-aa56-086fb1e28d36 # Bladefall
+465d3463-1d8a-466d-b91f-b1993332b4d3 # Blight Weaver
+7df5255e-bf23-4c14-b31b-be89fb864ee0 # Grounded
+21e376da-f4c3-4a60-bd63-a272b35db5a6 # Infernal Rest
+7c9f3a38-1434-4db4-a856-24fe744e8322 # Canopy of Stars
+7ffb1179-6c94-4f80-9613-ece2b799f19d # Saltless Mariner
+f3f97e2c-3bb6-4a20-9880-f59c50e5af93 # Obliterator of Worlds
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+2a6af0b8-11da-4d4b-8217-3bd7ed399dfa # Borrowed Minutes
+fed69d6e-acb5-40fb-b416-e6ef6c0e63fb # Heroic Rescue
+9d14885c-a757-40cc-b43e-87dbec7ec379 # Forsaken Skyline
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen

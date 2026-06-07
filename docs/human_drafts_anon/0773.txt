@@ -1,0 +1,42 @@
+aba40bc6-3e9e-4874-be8a-6984cbf13146 # The Forsaker
+ed02e610-2e68-4457-95a6-c7c6db60ca40 # Ruptured Dynamo
+ffa4fa56-8897-465d-b812-3798e3cf5a1f # Augur Crow
+3e802ecd-a83b-491b-9528-a4672d0e986f # Paradox Enforcer
+cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
+f0165a60-df1c-41db-87bb-a784c26835a5 # Blazebound Sentinel
+87f075b1-b058-4570-a75f-c4f8f544e192 # Wondrous Clearing
+f38ab9b6-bea7-4c6e-b5db-2609796ba46b # Dawnprowler Panther
+cfa78375-85b7-47e9-95f5-b31e6d112c52 # Ruin Scavenger
+a36898f6-707e-4b28-89dc-ec896f484203 # Verdant Pilgrim
+eed92573-8052-494c-adae-9838de5375a1 # Mountainwatch Alpha
+de946f5a-1e27-4d40-ae44-9ef8cc041949 # Mother of Flames
+409147ec-d959-4f66-b126-564702e2cd4a # Veil of the Wastes
+7def28c4-d75a-47e1-ae86-5b7093cc0419 # Duskwall Delver
+0d867086-8413-40c3-820f-1a5de486577e # Fathomless Maw
+a6866438-3632-408d-b464-c10f8a43a5c2 # Kindlehorn
+0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
+db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
+6af8cf81-9e9e-481f-b518-f5dadad99b27 # Winterbough Monk
+ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b # Wreckage Prowler
+9af63811-7fef-4e28-b672-95ea82796f45 # Astral Angler
+3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
+b6bad2a1-b857-4dd7-8b22-050eb68433a5 # Ferryman of the Falls
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+8a971ba7-9dfb-45be-bfbb-bf5e4f11974a # Together Against the Tide
+7f90d17b-9146-4550-a372-a9d77e814ce6 # Collapse Protocol
+23a7aca4-3c64-4963-a9a0-d3638822df48 # The Thinning
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
+f9c66b3e-4771-4a3c-8577-9d2f1c987bc7 # Heavenward Penitent
+3b4ec013-0e07-4bf8-9879-5fbe3bf318b2 # Duneveil Vanguard
+a952f833-825a-435f-82b1-8d85f872d274 # Virtuoso of Harmony
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+027ae231-6569-49bb-866f-7c36ec794a11 # Scorched Reckoning
+8a8af982-d1a1-42a0-9229-5e3af13e8dbe # Eruption
+4f0f0811-1a4c-4d42-a804-77dba8707792 # Curio Dealer
+8855e20c-e23f-4499-a5e8-a7a46ff81d2b # Desolation's Edge
+09332e5b-3b4e-458f-9df0-3fc0419f65c3 # Unleash Ruin
+8b5eb29c-146f-46fb-9407-55004128fba7 # Keeper of Forgotten Light
+fa036c27-2234-4f76-8857-c242530627ce # Clockwork Conductor
+151b80b1-0a3f-48d4-9c85-99a9c274fd7f # Radiant Trio

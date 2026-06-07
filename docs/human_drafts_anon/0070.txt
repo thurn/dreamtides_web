@@ -1,0 +1,38 @@
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+ecf77f27-df0f-47c4-99c2-48d7fa46a137 # Scrapyard Custodian
+0637b453-4362-4f01-b3e6-07c27af9c847 # Herald of the Last Light
+e455225f-c444-44a2-8796-805cae2b755f # Oracle of Shifting Skies
+29c4c45d-33df-42ac-bf28-387eb00264aa # Architect of Memory
+629fe4d4-826f-41b9-a913-458a503856a8 # Saffron Trailblazer
+16d2e85d-f940-43dd-9867-784b3a5ec5d7 # Stargazer Adrift
+c97b0a5b-64d0-480f-8db7-3fde93738d86 # Vaultbreaker
+a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
+21965e95-0c8c-470c-a1e1-06d7b87a8d00 # Echo Architect
+ffec9fdd-d948-4756-b7df-39b9e982613e # Skull Weaver
+bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034 # Dreadweaver
+bedee263-27b9-4d73-ab77-6b5c747dff69 # Wasteland Arbitrator
+ea118471-164b-4d7f-bb02-044c862ed07e # Wreckland Maverick
+920ef495-5560-4fa6-9a95-b9584ef6a4cf # Scorched Crusader
+123baf70-305a-4583-bdba-a10b5153fbeb # Dustborn Veteran
+2e8571c0-4faf-4e7a-a702-26952d2035ee # Soulreaver
+7fb4b7f5-0dfc-4151-8a88-82f822960b61 # Boundless Wanderer
+4f7cb174-6324-46a8-9973-44adfa7fef9f # Field Reverent
+69d9e550-eacc-49f2-8cc5-30b8940c9eed # Dragonward
+290ea9db-0340-4838-842a-0dea09b5340a # Volcanic Channeler
+4ccb9bb6-e4db-48c3-a534-b0ab454f0f15 # Specter of Silent Snow
+0458658d-7e02-4286-9249-93674d16620b # Nightmare Manifest
+eae928f6-aab2-415e-b4b1-b9c3ed8e6818 # Conduit of Ashes
+e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
+f860e815-3ed9-463d-ac4d-ed8d2778f8ad # Lone Castaway
+79b37916-c05d-4818-9d67-3b90e340926e # Fleeting Reunion
+2ce84a16-1295-4738-9e2d-1f57590b2269 # Thundercatcher
+85251f03-c873-46d8-81be-ab421c901a53 # Fractured Vessel
+fbf32510-0bad-4567-859f-b3db6d7be5d5 # Break the Veil
+97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
+cd4d689d-1442-4a19-8e6a-182b425d066d # Warfield Stalwart
+7b55efd1-6d9f-4156-9de7-1c71ccc410cb # Stolen Genesis
+4cece464-2fde-483d-af92-04cd0341be5b # Collateral Damage
+f8678d24-f18b-4c94-a6c2-50efb8193b7f # Moonlit Voyage
+20896b2e-59cc-4494-942c-eb95b75adaf9 # Hope's Vanguard
+491e4233-0911-46ed-bced-0498e69b5bba # Conjured Zenith
+448abb34-d77d-40ac-8292-58db03176247 # Arc Disciple

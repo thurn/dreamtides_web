@@ -1,0 +1,36 @@
+fc0c6f10-8864-4660-904a-8e90d261c6ef # Demonbane
+764b62f6-6af9-40ad-8d1f-653cc1a11030 # Eclipse Herald
+ec4c1ea2-067d-49e4-9d21-9de3f64a05e3 # Horizon Follower
+9d51dca1-28d7-4e8e-bc13-c5b665d6db72 # Ashen Harbinger
+49641e8e-93a8-46cb-92a9-246b0fd57899 # Harvester of Despair
+f256a0e7-e396-492b-8881-284ecd36025b # Fern Treader
+516dbd2d-dae4-4873-937e-adfeeee4444d # Gateway Defender
+0bddeb19-ff49-4a77-bc06-955377ba3ed1 # Blade of Oblivion
+9adbe3db-d872-4b75-92b5-d7f2798c22ce # Titan of Forgotten Echoes
+d30bd488-f921-49cb-a44f-353c54cb6548 # Starrunner
+4e1c0192-2649-489f-aad3-75ff2887c0a7 # Twilight Reclaimer
+4733876a-d6b1-48d2-b322-5f71aee9f3d6 # Cinderfang
+b5a5c1ba-4784-4829-aa08-af9f8f41ebb7 # Starbound Striker
+426825c7-7259-41af-ac1c-c042b878d69b # Burning Revenant
+b64f0beb-6ba4-4559-b6ab-091c2f60a613 # Infernal Cavalier
+b977afaf-f583-45ec-8e34-99fbfa4e9190 # Grim Reclaimer
+90a6a7a0-b739-475e-8379-647741aab423 # Voidsire
+95d37f76-eb3d-4bcd-a8af-0ae37feabd4d # Veilpiercer
+1dc8f23e-58bd-47e5-9510-b48315fba1df # Lanternhearted
+8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
+9e9efbc0-d438-48a9-9551-85c93fb33f3e # Lithic Severance
+e4ab6a18-c3b2-4149-a446-c7c1e8d66714 # Marrow Mimic
+68978d92-aa8b-4873-bb0b-6e52f12b0849 # Chronicle Reclaimer
+724a1362-3f0f-4b77-b14e-22c0b877349a # Radiants' Captain
+acefcfcf-cba5-46ec-913e-32f1091afbda # Spiral Offering
+475fcc5b-c82d-4ef7-8020-90a8aeb2df53 # Break the Sequence
+77f31db4-0397-49a7-8886-f5459ee960e9 # Soulrender
+8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd # Charnel Seraph
+54471b31-4449-453d-9a6e-814d6225520a # Shadow March
+fbf725ca-8837-46d4-970c-922153e27b6e # Infernal Ascendant
+d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c # Aftermath Bloom
+74e82d0d-e107-4207-ad2a-73d016ea54a9 # Nightmare
+3e83cbe2-2b21-4804-9906-4b4735db9869 # Phantom Flotilla
+6a3bb4ae-a537-4b79-8bdd-5093f05ec07a # Spirit Reaping
+72debe2e-1f47-4a66-83c3-71bb72876663 # Wake the Fallen
+8a6fc6ea-9a88-441e-bdc2-d40dfec37481 # Fading Farewell
