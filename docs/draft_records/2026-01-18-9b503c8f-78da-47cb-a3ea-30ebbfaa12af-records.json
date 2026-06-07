@@ -1,0 +1,63 @@
+{
+  "draftId": "9b503c8f-78da-47cb-a3ea-30ebbfaa12af",
+  "date": "2026-01-18T21:32:36.301Z",
+  "name": "C Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 2,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "C",
+    "B",
+    "G",
+    "UBG",
+    "WUB",
+    "U",
+    "WURG",
+    "UBR"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "C",
+      "mainboard": [
+        "Marsh Flats",
+        "Flooded Strand"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Flooded Strand",
+        "Marsh Flats"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Flooded Strand",
+          "pickId": "7996ab8e-5fa4-4d39-8c7b-12e4258bf8a9",
+          "packCards": [
+            "Flooded Strand",
+            "Myr Retriever"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Marsh Flats",
+          "pickId": "45026d57-0324-4312-8b86-2e7d4f581ee9",
+          "packCards": [
+            "Marsh Flats"
+          ]
+        }
+      ]
+    }
+  ]
+}

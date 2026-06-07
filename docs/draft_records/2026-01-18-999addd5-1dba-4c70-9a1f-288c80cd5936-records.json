@@ -1,0 +1,50 @@
+{
+  "draftId": "999addd5-1dba-4c70-9a1f-288c80cd5936",
+  "date": "2026-01-18T21:28:53.708Z",
+  "name": "C Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 1,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "C",
+    "C",
+    "R",
+    "BR",
+    "UG",
+    "C",
+    "UR",
+    "U"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "C",
+      "mainboard": [
+        "Tolarian Academy"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Tolarian Academy"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Tolarian Academy",
+          "pickId": "ad7ac9a5-340f-4509-826c-7b9416d47887",
+          "packCards": [
+            "Tolarian Academy"
+          ]
+        }
+      ]
+    }
+  ]
+}

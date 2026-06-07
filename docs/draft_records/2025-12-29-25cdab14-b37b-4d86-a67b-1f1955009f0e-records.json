@@ -1,0 +1,153 @@
+{
+  "draftId": "25cdab14-b37b-4d86-a67b-1f1955009f0e",
+  "date": "2025-12-29T04:47:05.584Z",
+  "name": "G Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 2,
+  "packs": 1,
+  "packSize": 4,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "G",
+    "BR"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "G",
+      "mainboard": [
+        "Aftermath Analyst",
+        "Bayou",
+        "Windswept Heath",
+        "Finale of Devastation"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Windswept Heath",
+        "Bayou",
+        "Finale of Devastation",
+        "Aftermath Analyst"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Windswept Heath",
+          "pickId": "26343f80-4d60-407a-a44a-ee6295d2e5ec",
+          "packCards": [
+            "Windswept Heath",
+            "Ziatora's Proving Ground",
+            "Finale of Devastation",
+            "Taiga"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Bayou",
+          "pickId": "17db2b6a-eaa8-4a08-9e86-370bbd058574",
+          "packCards": [
+            "Bayou",
+            "Savai Triome",
+            "Aftermath Analyst"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "Finale of Devastation",
+          "pickId": "985453e7-997e-4d77-a338-cc0290791ebe",
+          "packCards": [
+            "Finale of Devastation",
+            "Taiga"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Aftermath Analyst",
+          "pickId": "1c1aa6f8-2d34-4f4b-9184-0eab2e4745f7",
+          "packCards": [
+            "Aftermath Analyst"
+          ]
+        }
+      ]
+    },
+    {
+      "seat": 1,
+      "name": "BR",
+      "mainboard": [
+        "Mons's Goblin Waiters",
+        "Putrid Imp",
+        "Taiga",
+        "Savai Triome",
+        "Ziatora's Proving Ground"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Putrid Imp",
+        "Ziatora's Proving Ground",
+        "Savai Triome",
+        "Taiga",
+        "Mons's Goblin Waiters"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Putrid Imp",
+          "pickId": "1b9e6c5c-4bc4-4f41-8c2c-f5b8c97c53c5",
+          "packCards": [
+            "Putrid Imp",
+            "Bayou",
+            "Savai Triome",
+            "Aftermath Analyst"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Ziatora's Proving Ground",
+          "pickId": "75fdce80-e338-4a50-bdc6-786511feaeef",
+          "packCards": [
+            "Ziatora's Proving Ground",
+            "Finale of Devastation",
+            "Taiga"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "Savai Triome",
+          "pickId": "748e6a61-9c1f-4225-9f04-e54002f63ac3",
+          "packCards": [
+            "Savai Triome",
+            "Aftermath Analyst"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Taiga",
+          "pickId": "01006833-6007-4c16-9ebb-20d31c60a57a",
+          "packCards": [
+            "Taiga"
+          ]
+        }
+      ]
+    }
+  ]
+}

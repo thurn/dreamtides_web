@@ -1,0 +1,473 @@
+{
+  "draftId": "b9d40b7f-5e13-4d63-a9f8-a4837b2684e6",
+  "date": "2026-01-23T03:07:20.805Z",
+  "name": "WUR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 5,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "WUR",
+    "URG",
+    "WBR",
+    "UBRG",
+    "WUR",
+    "UBG",
+    "WUG",
+    "UB"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "WUR",
+      "mainboard": [
+        "Grim Lavamancer",
+        "Nettle Sentinel",
+        "Young Pyromancer",
+        "Luminarch Aspirant",
+        "Mirror Entity",
+        "Plateau",
+        "Lotus Bloom",
+        "Occult Epiphany",
+        "Rite of Flame",
+        "Portable Hole",
+        "Time Walk",
+        "Cathartic Reunion",
+        "Staff of the Storyteller",
+        "Jeskai Ascendancy"
+      ],
+      "sideboard": [
+        "Oona's Prowler"
+      ],
+      "pool": [
+        "Nettle Sentinel",
+        "Mirror Entity",
+        "Oona's Prowler",
+        "Grim Lavamancer",
+        "Luminarch Aspirant",
+        "Staff of the Storyteller",
+        "Portable Hole",
+        "Lotus Bloom",
+        "Cathartic Reunion",
+        "Rite of Flame",
+        "Occult Epiphany",
+        "Plateau",
+        "Young Pyromancer",
+        "Jeskai Ascendancy",
+        "Time Walk"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Nettle Sentinel",
+          "pickId": "193c3ed7-975e-4249-9c2f-74b7cd68f219",
+          "packCards": [
+            "Nettle Sentinel",
+            "Headless Rider",
+            "Nether Traitor",
+            "Crop Rotation",
+            "Safehold Elite"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Mirror Entity",
+          "pickId": "295c8a21-7a4e-42cb-9420-9e59a1b75954",
+          "packCards": [
+            "Mirror Entity",
+            "Liliana's Standard Bearer",
+            "Heritage Druid",
+            "Gravecrawler"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "Oona's Prowler",
+          "pickId": "9675b8ea-47f9-440e-9535-de879da53f76",
+          "packCards": [
+            "Oona's Prowler",
+            "Ratchet Bomb",
+            "Vizier of Remedies"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Grim Lavamancer",
+          "pickId": "15db4353-9c46-4fe4-b22e-0cf024aa9dfc",
+          "packCards": [
+            "Grim Lavamancer",
+            "Priest of Forgotten Gods"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": "Luminarch Aspirant",
+          "pickId": "dcd27fa3-f6b6-4137-9b6c-4cba7187664c",
+          "packCards": [
+            "Luminarch Aspirant"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": "Staff of the Storyteller",
+          "pickId": "ab1d1461-1625-4163-aacd-a939f4871fad",
+          "packCards": [
+            "Staff of the Storyteller",
+            "Ignoble Hierarch",
+            "Enlightened Tutor",
+            "Tundra",
+            "Chart a Course"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": "Portable Hole",
+          "pickId": "35a4e4b7-bd0a-48f4-be2e-c7453e3ba4d1",
+          "packCards": [
+            "Portable Hole",
+            "Intruder Alarm",
+            "Ingenious Smith",
+            "Serum Visions"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": "Lotus Bloom",
+          "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
+          "packCards": [
+            "Lotus Bloom",
+            "Phyrexian Revoker",
+            "Oni-Cult Anvil"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": "Cathartic Reunion",
+          "pickId": "3196dc6e-cee8-49c9-b687-8095b9ad43a7",
+          "packCards": [
+            "Cathartic Reunion",
+            "Banefire"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": "Rite of Flame",
+          "pickId": "10548126-2bac-435d-b7ee-cbfea97a40ea",
+          "packCards": [
+            "Rite of Flame"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": "Occult Epiphany",
+          "pickId": "6920c895-bc98-4871-a53f-219fa27a74e5",
+          "packCards": [
+            "Occult Epiphany",
+            "Blood Crypt",
+            "Thieving Skydiver",
+            "Watery Grave",
+            "Ledger Shredder"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": "Plateau",
+          "pickId": "1daf4348-05c5-4c55-bcf2-c7bec7988bfc",
+          "packCards": [
+            "Plateau",
+            "Consider",
+            "Spellskite",
+            "Chromatic Star"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": "Young Pyromancer",
+          "pickId": "218af707-cc60-407e-af20-e21879a0e902",
+          "packCards": [
+            "Young Pyromancer",
+            "Underground Sea",
+            "Steam Vents"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": "Jeskai Ascendancy",
+          "pickId": "9a8399fc-4cba-44c5-888e-2cfc0f6739f6",
+          "packCards": [
+            "Jeskai Ascendancy",
+            "Thassa's Oracle"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": "Time Walk",
+          "pickId": "4ab981aa-d815-439a-b8ff-2043bf42c392",
+          "packCards": [
+            "Time Walk"
+          ]
+        }
+      ]
+    },
+    {
+      "seat": 4,
+      "name": "WUR",
+      "mainboard": [
+        "Dragon's Rage Channeler",
+        "Ledger Shredder",
+        "Spellseeker",
+        "Firebolt",
+        "Expressive Iteration",
+        "Chart a Course",
+        "Second Sunrise"
+      ],
+      "sideboard": [
+        "Temple Garden",
+        "Witch's Oven",
+        "Ephemerate",
+        "Safehold Elite",
+        "Cruel Celebrant",
+        "Scryb Ranger",
+        "Mayhem Devil",
+        "Spell Queller"
+      ],
+      "pool": [
+        "Second Sunrise",
+        "Scryb Ranger",
+        "Cruel Celebrant",
+        "Temple Garden",
+        "Safehold Elite",
+        "Spell Queller",
+        "Ephemerate",
+        "Mayhem Devil",
+        "Witch's Oven",
+        "Chart a Course",
+        "Firebolt",
+        "Dragon's Rage Channeler",
+        "Expressive Iteration",
+        "Spellseeker",
+        "Ledger Shredder"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Second Sunrise",
+          "pickId": "4e50ee7c-f2a2-4d49-a1cc-8233fd8dd0c5",
+          "packCards": [
+            "Second Sunrise",
+            "Hogaak, Arisen Necropolis",
+            "Leaf-Crowned Visionary",
+            "Arboreal Grazer",
+            "Luminarch Aspirant"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Scryb Ranger",
+          "pickId": "3aacabde-f5ec-4519-895d-17f5e48746ee",
+          "packCards": [
+            "Scryb Ranger",
+            "Reclamation Sage",
+            "Kor Skyfisher",
+            "Circle of Dreams Druid"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "Cruel Celebrant",
+          "pickId": "87ead6ac-b1c5-4852-8413-7fa43c6cfc57",
+          "packCards": [
+            "Cruel Celebrant",
+            "Stomping Ground",
+            "Digsite Engineer"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Temple Garden",
+          "pickId": "18d2e383-d380-4d18-8aad-bd8ea093a16c",
+          "packCards": [
+            "Temple Garden",
+            "Veteran Explorer"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": "Safehold Elite",
+          "pickId": "14dee5be-94fd-4b5d-9265-edd1b58c8026",
+          "packCards": [
+            "Safehold Elite"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": "Spell Queller",
+          "pickId": "9b76bcd4-580a-4435-afe9-290940b1837f",
+          "packCards": [
+            "Spell Queller",
+            "Noble Hierarch",
+            "Savai Triome",
+            "Cabal Therapy",
+            "Rite of Flame"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": "Ephemerate",
+          "pickId": "2da5f3f8-5eef-498f-ba2c-2f3fbc3745aa",
+          "packCards": [
+            "Ephemerate",
+            "Gingerbrute",
+            "Blasting Station",
+            "Gush"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": "Mayhem Devil",
+          "pickId": "087ff277-902f-4285-93b6-dc18e6d4fe15",
+          "packCards": [
+            "Mayhem Devil",
+            "Glimpse of Nature",
+            "Bomat Courier"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": "Witch's Oven",
+          "pickId": "04ef8493-d986-45f8-a718-617b028f7ad4",
+          "packCards": [
+            "Witch's Oven",
+            "Zagoth Triome"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": "Chart a Course",
+          "pickId": "1a6f256b-943e-4cfb-9fc9-d1ded68b5f97",
+          "packCards": [
+            "Chart a Course"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": "Firebolt",
+          "pickId": "2cc1ba79-9671-4183-b9ca-50f63c6a42fb",
+          "packCards": [
+            "Firebolt",
+            "Night's Whisper",
+            "Myr Retriever",
+            "Verdant Catacombs",
+            "Time Walk"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": "Dragon's Rage Channeler",
+          "pickId": "2429510d-ce59-472d-b0df-5e6b7cdf63af",
+          "packCards": [
+            "Dragon's Rage Channeler",
+            "Watery Grave",
+            "Arcbound Ravager",
+            "Hard Evidence"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": "Expressive Iteration",
+          "pickId": "0963b49f-4193-4b37-8042-a24ee7e91ddd",
+          "packCards": [
+            "Expressive Iteration",
+            "Brainstorm",
+            "Bloodstained Mire"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": "Spellseeker",
+          "pickId": "74b4c336-5d4c-4bc5-b82a-35084a6ad808",
+          "packCards": [
+            "Spellseeker",
+            "Prismatic Vista"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": "Ledger Shredder",
+          "pickId": "7ea4b5bc-18a4-45db-a56a-ab3f8bd2fb0d",
+          "packCards": [
+            "Ledger Shredder"
+          ]
+        }
+      ]
+    }
+  ]
+}

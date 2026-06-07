@@ -1,0 +1,302 @@
+{
+  "draftId": "3b2a0bab-45ca-40f1-8588-0c30b8a6eb44",
+  "date": "2026-05-23T05:44:44.361Z",
+  "name": "WG Midrange Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 6,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "WG Midrange",
+    "BR Aristocrats",
+    "WUR Artifacts",
+    "URG Artifact Control",
+    "BG Aristocrats",
+    "WURG Welder",
+    "UBRG Storm",
+    "WBG Weenie"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "WG Midrange",
+      "mainboard": [
+        "Birds of Paradise",
+        "Putrid Imp",
+        "Giver of Runes",
+        "Elvish Reclaimer",
+        "Phelia, Exuberant Shepherd",
+        "Satyr Wayfinder",
+        "Elvish Visionary",
+        "Endurance",
+        "Spell Queller",
+        "Mox Pearl",
+        "Marsh Flats",
+        "Gaea's Cradle",
+        "Windswept Heath",
+        "Black Lotus",
+        "Green Sun's Zenith",
+        "Fastbond",
+        "Genesis Chamber"
+      ],
+      "sideboard": [
+        "Wight of the Reliquary"
+      ],
+      "pool": [
+        "Elvish Reclaimer",
+        "Giver of Runes",
+        "Black Lotus",
+        "Putrid Imp",
+        "Wight of the Reliquary",
+        "Fastbond",
+        "Green Sun's Zenith",
+        "Birds of Paradise",
+        "Spell Queller",
+        "Elvish Visionary",
+        "Endurance",
+        "Windswept Heath",
+        "Satyr Wayfinder",
+        "Gaea's Cradle",
+        "Genesis Chamber",
+        "Marsh Flats",
+        "Mox Pearl",
+        "Phelia, Exuberant Shepherd"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Elvish Reclaimer",
+          "pickId": "3826a901-7219-46d1-acae-07a981877149",
+          "packCards": [
+            "Elvish Reclaimer",
+            "Flare of Malice",
+            "Frantic Search",
+            "Sai, Master Thopterist",
+            "Nether Traitor",
+            "Ancestral Recall"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Giver of Runes",
+          "pickId": "4e117771-5a8b-4812-b487-32ba34b7f724",
+          "packCards": [
+            "Giver of Runes",
+            "Night's Whisper",
+            "Opt",
+            "Tinker",
+            "Pitiless Plunderer"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "Black Lotus",
+          "pickId": "0948e6dc-8af7-45d3-91de-a2aebee83e82",
+          "packCards": [
+            "Black Lotus",
+            "Portable Hole",
+            "Ignoble Hierarch",
+            "Arwen, Weaver of Hope"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Putrid Imp",
+          "pickId": "1b9e6c5c-4bc4-4f41-8c2c-f5b8c97c53c5",
+          "packCards": [
+            "Putrid Imp",
+            "Torens, Fist of the Angels",
+            "The Gitrog Monster"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": "Wight of the Reliquary",
+          "pickId": "a15570c0-4210-4959-8584-987ec85f8283",
+          "packCards": [
+            "Wight of the Reliquary",
+            "Fiend Artisan"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": "Fastbond",
+          "pickId": "368bcae1-1750-4a1a-9d9e-14eb3ed8e50b",
+          "packCards": [
+            "Fastbond"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": "Green Sun's Zenith",
+          "pickId": "01794178-cf41-454c-ac37-1d8b18e42db2",
+          "packCards": [
+            "Green Sun's Zenith",
+            "Marauding Mako",
+            "Vibrance",
+            "Zuran Orb",
+            "Midnight Reaper",
+            "Scrapwork Mutt"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": "Birds of Paradise",
+          "pickId": "0003aa31-d42e-4972-9fb9-086aefe29a2c",
+          "packCards": [
+            "Birds of Paradise",
+            "Murderous Redcap",
+            "Mystical Tutor",
+            "Jetmir's Garden",
+            "Putrid Goblin"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": "Spell Queller",
+          "pickId": "2b46a6c6-26d0-4ccb-84c9-2702f1a0f65b",
+          "packCards": [
+            "Spell Queller",
+            "Squandered Resources",
+            "Thieving Skydiver",
+            "Memory Lapse"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": "Elvish Visionary",
+          "pickId": "186212d3-4b41-42a2-b2ee-81e035e22408",
+          "packCards": [
+            "Elvish Visionary",
+            "Cabal Ritual",
+            "Paradoxical Outcome"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": "Endurance",
+          "pickId": "b770471c-1bf7-4179-8418-dcd790ca5405",
+          "packCards": [
+            "Endurance",
+            "Expansion // Explosion"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 2,
+          "pickInPack": 6,
+          "pick": "Windswept Heath",
+          "pickId": "26343f80-4d60-407a-a44a-ee6295d2e5ec",
+          "packCards": [
+            "Windswept Heath"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": "Satyr Wayfinder",
+          "pickId": "0973a109-811a-4c78-9404-19a26f4b40c7",
+          "packCards": [
+            "Satyr Wayfinder",
+            "Teshar, Ancestor's Apostle",
+            "Spell Pierce",
+            "Molten Gatekeeper",
+            "Yawgmoth's Will",
+            "Urza, Lord High Artificer"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": "Gaea's Cradle",
+          "pickId": "25b0b816-0583-44aa-9dc5-f3ff48993a51",
+          "packCards": [
+            "Gaea's Cradle",
+            "Bloodstained Mire",
+            "Occult Epiphany",
+            "Porcelain Legionnaire",
+            "Lurrus of the Dream-Den"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": "Genesis Chamber",
+          "pickId": "93bd7e73-63dc-45b2-aaa8-984be8b900ab",
+          "packCards": [
+            "Genesis Chamber",
+            "Rally the Ancestors",
+            "Spellseeker",
+            "Lion Sash"
+          ]
+        },
+        {
+          "pickNumber": 16,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": "Marsh Flats",
+          "pickId": "45026d57-0324-4312-8b86-2e7d4f581ee9",
+          "packCards": [
+            "Marsh Flats",
+            "Solitude",
+            "Expressive Iteration"
+          ]
+        },
+        {
+          "pickNumber": 17,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": "Mox Pearl",
+          "pickId": "4da892c5-071f-416f-9e42-c4bff102eb88",
+          "packCards": [
+            "Mox Pearl",
+            "Skyclave Apparition"
+          ]
+        },
+        {
+          "pickNumber": 18,
+          "pack": 3,
+          "pickInPack": 6,
+          "pick": "Phelia, Exuberant Shepherd",
+          "pickId": "55707746-da6e-46e5-a5ca-7ac843fdc38e",
+          "packCards": [
+            "Phelia, Exuberant Shepherd"
+          ]
+        }
+      ]
+    }
+  ]
+}

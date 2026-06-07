@@ -1,0 +1,63 @@
+{
+  "draftId": "3e6bba99-057e-4fd5-9dc8-9f9dea230b32",
+  "date": "2026-02-28T04:21:37.178Z",
+  "name": "W Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 2,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "W",
+    "C",
+    "U",
+    "U",
+    "WR",
+    "BR",
+    "BG",
+    "WUB"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "W",
+      "mainboard": [
+        "Teshar, Ancestor's Apostle",
+        "Lotus Petal"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Teshar, Ancestor's Apostle",
+        "Lotus Petal"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Teshar, Ancestor's Apostle",
+          "pickId": "0ec9ef7c-88de-4346-a8f9-44beda59fa68",
+          "packCards": [
+            "Teshar, Ancestor's Apostle",
+            "Scrubland"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Lotus Petal",
+          "pickId": "153983dd-54dc-420d-9249-665b0d669614",
+          "packCards": [
+            "Lotus Petal"
+          ]
+        }
+      ]
+    }
+  ]
+}

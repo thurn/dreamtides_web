@@ -1,0 +1,251 @@
+{
+  "draftId": "c3aa3147-3804-4334-993b-1a9227c2b96f",
+  "date": "2026-01-18T21:30:36.512Z",
+  "name": "WUBR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 5,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "WUBR",
+    "BRG",
+    "WBG",
+    "UBG",
+    "WUB",
+    "WR",
+    "UB",
+    "WG"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "WUBR",
+      "mainboard": [
+        "Master of Etherium",
+        "Thought Monitor",
+        "Hallowed Fountain",
+        "Scrubland",
+        "Retrofitter Foundry",
+        "Mystical Tutor",
+        "Oust",
+        "Thopter Foundry",
+        "Izzet Charm"
+      ],
+      "sideboard": [
+        "The Underworld Cookbook",
+        "Diamond Lion",
+        "Sneaky Snacker",
+        "Lurrus of the Dream-Den",
+        "Lingering Souls",
+        "Reflector Mage"
+      ],
+      "pool": [
+        "Izzet Charm",
+        "Sneaky Snacker",
+        "The Underworld Cookbook",
+        "Oust",
+        "Reflector Mage",
+        "Hallowed Fountain",
+        "Scrubland",
+        "Mystical Tutor",
+        "Diamond Lion",
+        "Thought Monitor",
+        "Master of Etherium",
+        "Thopter Foundry",
+        "Retrofitter Foundry",
+        "Lingering Souls",
+        "Lurrus of the Dream-Den"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Izzet Charm",
+          "pickId": "15af0592-a1cb-4b1e-b051-dde978939706",
+          "packCards": [
+            "Izzet Charm",
+            "Samwise Gamgee",
+            "Fatestitcher",
+            "Past in Flames",
+            "Paradise Mantle"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Sneaky Snacker",
+          "pickId": "0e3aedae-e4bb-48e3-9f8b-bea0430df306",
+          "packCards": [
+            "Sneaky Snacker",
+            "Headless Rider",
+            "Liliana's Standard Bearer",
+            "Lava Dart"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "The Underworld Cookbook",
+          "pickId": "039d62b0-3309-4424-a2ea-5a0d88d4bd72",
+          "packCards": [
+            "The Underworld Cookbook",
+            "Steam Vents",
+            "High Tide"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Oust",
+          "pickId": "07313dd3-d0dc-40ca-98a3-fa4d39e5bcae",
+          "packCards": [
+            "Oust",
+            "Indatha Triome"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": "Reflector Mage",
+          "pickId": "85397a1d-1fd1-4ca1-a1fc-f32e3a063c81",
+          "packCards": [
+            "Reflector Mage"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": "Hallowed Fountain",
+          "pickId": "af7091c9-5f98-4078-a42b-c9e057346d9b",
+          "packCards": [
+            "Hallowed Fountain",
+            "Gamble",
+            "Phyrexian Altar",
+            "Poxwalkers",
+            "Blade Splicer"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": "Scrubland",
+          "pickId": "14065271-d942-42a8-aa38-d8a622c0375d",
+          "packCards": [
+            "Scrubland",
+            "Ox of Agonas",
+            "Godless Shrine",
+            "Boseiju, Who Endures"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": "Mystical Tutor",
+          "pickId": "1571b584-9007-45ee-a3c3-6c72f227fee2",
+          "packCards": [
+            "Mystical Tutor",
+            "Fiend Artisan",
+            "Ichor Wellspring"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": "Diamond Lion",
+          "pickId": "317a8ed5-1ec2-4a5d-a606-8c6ba781c8a3",
+          "packCards": [
+            "Diamond Lion",
+            "Cathartic Reunion"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": "Thought Monitor",
+          "pickId": "01179c70-a87a-46aa-a95d-3269889e87ff",
+          "packCards": [
+            "Thought Monitor"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": "Master of Etherium",
+          "pickId": "2c860286-9807-4ab5-b66f-e8696e9e6ac9",
+          "packCards": [
+            "Master of Etherium",
+            "Chatterstorm",
+            "Memory Lapse",
+            "Chain Lightning",
+            "Esper Sentinel"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": "Thopter Foundry",
+          "pickId": "34ec1216-1b8c-418f-bc25-c3f5ad4fda00",
+          "packCards": [
+            "Thopter Foundry",
+            "Scryb Ranger",
+            "Preordain",
+            "Detective's Phoenix"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": "Retrofitter Foundry",
+          "pickId": "2ad34311-c7ef-4333-8978-f82d0dfe2836",
+          "packCards": [
+            "Retrofitter Foundry",
+            "Ramunap Excavator",
+            "Collective Brutality"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": "Lingering Souls",
+          "pickId": "09cd56b2-1987-40c2-a436-5f3cbc564f1c",
+          "packCards": [
+            "Lingering Souls",
+            "Birchlore Rangers"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": "Lurrus of the Dream-Den",
+          "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
+          "packCards": [
+            "Lurrus of the Dream-Den"
+          ]
+        }
+      ]
+    }
+  ]
+}

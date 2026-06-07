@@ -1,0 +1,115 @@
+{
+  "draftId": "b319c825-8dab-4e47-8e80-5e4e4de6294b",
+  "date": "2026-02-20T05:32:31.627Z",
+  "name": "UR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 2,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UR",
+    "W",
+    "UBR",
+    "WBRG",
+    "U",
+    "BRG",
+    "WU",
+    "UBRG"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UR",
+      "mainboard": [
+        "Dragon's Rage Channeler",
+        "Thassa's Oracle",
+        "Snapcaster Mage",
+        "Currency Converter",
+        "Frantic Search",
+        "Krark-Clan Ironworks"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Currency Converter",
+        "Krark-Clan Ironworks",
+        "Dragon's Rage Channeler",
+        "Snapcaster Mage",
+        "Thassa's Oracle",
+        "Frantic Search"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Currency Converter",
+          "pickId": "187b6719-e5ed-4615-a00b-3313ceca055b",
+          "packCards": [
+            "Currency Converter",
+            "Abrade"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Krark-Clan Ironworks",
+          "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
+          "packCards": [
+            "Krark-Clan Ironworks"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": "Dragon's Rage Channeler",
+          "pickId": "2429510d-ce59-472d-b0df-5e6b7cdf63af",
+          "packCards": [
+            "Dragon's Rage Channeler",
+            "Wizard's Rockets"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": "Snapcaster Mage",
+          "pickId": "12917e60-cea1-460b-b3f1-8d47cc24afdc",
+          "packCards": [
+            "Snapcaster Mage"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": "Thassa's Oracle",
+          "pickId": "69e615d8-1b79-4a82-ba9f-ee211d67dc95",
+          "packCards": [
+            "Thassa's Oracle",
+            "Ziatora's Proving Ground"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": "Frantic Search",
+          "pickId": "0eb00e3c-b67a-44c7-ae61-23ecf4d4971a",
+          "packCards": [
+            "Frantic Search"
+          ]
+        }
+      ]
+    }
+  ]
+}

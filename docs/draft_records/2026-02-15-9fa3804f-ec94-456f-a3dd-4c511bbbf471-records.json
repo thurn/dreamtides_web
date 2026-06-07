@@ -1,0 +1,59 @@
+{
+  "draftId": "9fa3804f-ec94-456f-a3dd-4c511bbbf471",
+  "date": "2026-02-15T09:21:30.916Z",
+  "name": "UBRG Sealed of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "s",
+  "complete": true,
+  "seatCount": 1,
+  "packs": 1,
+  "packSize": 0,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UBRG"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UBRG",
+      "mainboard": [
+        "Watcher for Tomorrow",
+        "Cauldron Familiar",
+        "Rotting Rats",
+        "Bloodghast",
+        "Squee, Goblin Nabob",
+        "Molten Gatekeeper",
+        "Mons's Goblin Waiters",
+        "Eternal Witness",
+        "Fauna Shaman",
+        "Sneaky Snacker",
+        "The Gitrog Monster",
+        "Rielle, the Everwise",
+        "Scheming Fence",
+        "Walking Ballista",
+        "Ornithopter",
+        "Junk Diver",
+        "Night's Whisper",
+        "Demonic Tutor",
+        "Seething Song",
+        "Empty the Warrens",
+        "Fastbond",
+        "Mox Sapphire",
+        "Mox Pearl",
+        "Engineered Explosives",
+        "Chrome Mox",
+        "Scrubland",
+        "Verdant Catacombs",
+        "Tundra",
+        "Steam Vents",
+        "Underground Sea"
+      ],
+      "sideboard": [],
+      "pool": [],
+      "picks": []
+    }
+  ]
+}

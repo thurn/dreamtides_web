@@ -1,0 +1,896 @@
+{
+  "draftId": "f73eb5a3-07f0-41c9-9fb0-e3496b76204a",
+  "date": "2026-02-20T13:57:54.719Z",
+  "name": "WBR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 15,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "initial-state",
+  "seatNames": [
+    "WBR",
+    "WBRG",
+    "WBRG",
+    "WU",
+    "G",
+    "WBR",
+    "UR",
+    "U"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "WBR",
+      "mainboard": [
+        "Anger",
+        "Hope of Ghirapur",
+        "Greater Gargadon",
+        "Mons's Goblin Waiters",
+        "Oswald Fiddlebender",
+        "Juri, Master of the Revue",
+        "Undead Augur",
+        "Dualcaster Mage",
+        "Scrap Trawler",
+        "Recruiter of the Guard",
+        "Junk Diver",
+        "Glint-Horn Buccaneer",
+        "Strip Mine",
+        "Jetmir's Garden",
+        "Lotus Bloom",
+        "Mox Jet",
+        "Sacred Foundry",
+        "Flooded Strand",
+        "Aether Spellbomb",
+        "Chromatic Sphere",
+        "Portable Hole",
+        "Enlightened Tutor",
+        "Molten Vortex",
+        "Pyrite Spellbomb",
+        "Ephemerate",
+        "Increasing Vengeance",
+        "Brought Back",
+        "Punishing Fire",
+        "Incinerate",
+        "Rally the Ancestors",
+        "Wishclaw Talisman",
+        "Valakut Exploration",
+        "Bonus Round",
+        "Wheel of Fortune",
+        "Second Sunrise",
+        "Faith's Reward",
+        "Krark-Clan Ironworks",
+        "Enduring Renewal"
+      ],
+      "sideboard": [
+        "Arboreal Grazer",
+        "Finale of Devastation",
+        "Chandra, Acolyte of Flame",
+        "Seething Song",
+        "Formidable Speaker",
+        "Birgi, God of Storytelling // Harnfel, Horn of Bounty",
+        "Lodestone Golem"
+      ],
+      "pool": [
+        "Dualcaster Mage",
+        "Increasing Vengeance",
+        "Faith's Reward",
+        "Oswald Fiddlebender",
+        "Aether Spellbomb",
+        "Chromatic Sphere",
+        "Valakut Exploration",
+        "Hope of Ghirapur",
+        "Krark-Clan Ironworks",
+        "Portable Hole",
+        "Brought Back",
+        "Bonus Round",
+        "Anger",
+        "Formidable Speaker",
+        "Lodestone Golem",
+        "Strip Mine",
+        "Wheel of Fortune",
+        "Second Sunrise",
+        "Jetmir's Garden",
+        "Enduring Renewal",
+        "Lotus Bloom",
+        "Enlightened Tutor",
+        "Birgi, God of Storytelling // Harnfel, Horn of Bounty",
+        "Punishing Fire",
+        "Molten Vortex",
+        "Greater Gargadon",
+        "Chandra, Acolyte of Flame",
+        "Seething Song",
+        "Arboreal Grazer",
+        "Finale of Devastation",
+        "Mox Jet",
+        "Incinerate",
+        "Scrap Trawler",
+        "Pyrite Spellbomb",
+        "Rally the Ancestors",
+        "Mons's Goblin Waiters",
+        "Sacred Foundry",
+        "Flooded Strand",
+        "Recruiter of the Guard",
+        "Ephemerate",
+        "Junk Diver",
+        "Wishclaw Talisman",
+        "Juri, Master of the Revue",
+        "Glint-Horn Buccaneer",
+        "Undead Augur"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Dualcaster Mage",
+          "pickId": "0b80c8a0-0870-4836-bee1-f4a805d119d6",
+          "packCards": [
+            "Dualcaster Mage",
+            "Timetwister",
+            "Tinker",
+            "Mana Vault",
+            "Indatha Triome",
+            "Esper Sentinel",
+            "Staff of the Storyteller",
+            "Shardless Agent",
+            "Krark-Clan Ironworks",
+            "Urza, Lord High Artificer",
+            "Phyrexian Revoker",
+            "Cryptbreaker",
+            "Burning Inquiry",
+            "Rielle, the Everwise",
+            "Blast from the Past"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Increasing Vengeance",
+          "pickId": "2a362d78-76a1-4dbc-80cc-0360e98ba280",
+          "packCards": [
+            "Increasing Vengeance",
+            "Snapcaster Mage",
+            "Hangarback Walker",
+            "Verdant Catacombs",
+            "Boreal Druid",
+            "Spara's Headquarters",
+            "Genesis Chamber",
+            "Veteran Explorer",
+            "Portable Hole",
+            "Gush",
+            "Grafted Wargear",
+            "Luminarch Aspirant",
+            "Fatestitcher",
+            "Pinnacle Monk // Mystic Peak"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "Faith's Reward",
+          "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
+          "packCards": [
+            "Faith's Reward",
+            "Sensei's Divining Top",
+            "Ketria Triome",
+            "Taiga",
+            "Manamorphose",
+            "Wall of Omens",
+            "Nested Shambler",
+            "Squandered Resources",
+            "Brought Back",
+            "Ninja of the Deep Hours",
+            "Voldaren Bloodcaster // Bloodbat Summoner",
+            "Kolaghan's Command",
+            "Anax, Hardened in the Forge"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Oswald Fiddlebender",
+          "pickId": "bba1650f-eddf-49a9-820e-489cb8d5b6fa",
+          "packCards": [
+            "Oswald Fiddlebender",
+            "Ledger Shredder",
+            "Nettlecyst",
+            "Godless Shrine",
+            "Insidious Roots",
+            "Thalia, Guardian of Thraben",
+            "Flare of Malice",
+            "Collective Brutality",
+            "Bonus Round",
+            "Gingerbrute",
+            "Anje's Ravager",
+            "Rotting Rats"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": "Aether Spellbomb",
+          "pickId": "48ef7938-7c68-4aeb-9403-4ab1af944a81",
+          "packCards": [
+            "Aether Spellbomb",
+            "Ponder",
+            "Echo of Eons",
+            "Inti, Seneschal of the Sun",
+            "Exploration",
+            "Oust",
+            "Tidehollow Sculler",
+            "Gamble",
+            "Anger",
+            "Cathartic Reunion",
+            "Banefire"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": "Chromatic Sphere",
+          "pickId": "920cd17f-9274-443e-906f-c9904f0658d5",
+          "packCards": [
+            "Chromatic Sphere",
+            "High Tide",
+            "Currency Converter",
+            "Watery Grave",
+            "Zuran Orb",
+            "Jace, Vryn's Prodigy // Jace, Telepath Unbound",
+            "Michiko's Reign of Truth // Portrait of Michiko",
+            "Monument to Endurance",
+            "Formidable Speaker",
+            "Impulse"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 1,
+          "pickInPack": 7,
+          "pick": "Valakut Exploration",
+          "pickId": "18cb7bf6-9c7c-4e62-a678-7b75862e2f64",
+          "packCards": [
+            "Valakut Exploration",
+            "Dig Through Time",
+            "Sai, Master Thopterist",
+            "Wizard's Rockets",
+            "Metallic Mimic",
+            "Stern Scolding",
+            "Springleaf Drum",
+            "Deep Analysis",
+            "Lodestone Golem"
+          ]
+        },
+        {
+          "pickNumber": 8,
+          "pack": 1,
+          "pickInPack": 8,
+          "pick": "Hope of Ghirapur",
+          "pickId": "6f4bcadd-7eff-4294-94d5-52482a734d5b",
+          "packCards": [
+            "Hope of Ghirapur",
+            "Thopter Foundry",
+            "Patchwork Automaton",
+            "Dreadhorde Arcanist",
+            "Diamond Lion",
+            "Porcelain Legionnaire",
+            "Poxwalkers",
+            "Digsite Engineer"
+          ]
+        },
+        {
+          "pickNumber": 9,
+          "pack": 1,
+          "pickInPack": 9,
+          "pick": "Krark-Clan Ironworks",
+          "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
+          "packCards": [
+            "Krark-Clan Ironworks",
+            "Urza, Lord High Artificer",
+            "Phyrexian Revoker",
+            "Cryptbreaker",
+            "Burning Inquiry",
+            "Rielle, the Everwise",
+            "Blast from the Past"
+          ]
+        },
+        {
+          "pickNumber": 10,
+          "pack": 1,
+          "pickInPack": 10,
+          "pick": "Portable Hole",
+          "pickId": "80fca8c0-ae3e-439e-b202-228b9f360e9a",
+          "packCards": [
+            "Portable Hole",
+            "Gush",
+            "Grafted Wargear",
+            "Luminarch Aspirant",
+            "Fatestitcher",
+            "Pinnacle Monk // Mystic Peak"
+          ]
+        },
+        {
+          "pickNumber": 11,
+          "pack": 1,
+          "pickInPack": 11,
+          "pick": "Brought Back",
+          "pickId": "aecdc315-95e5-450c-bedc-998eea46cf8c",
+          "packCards": [
+            "Brought Back",
+            "Ninja of the Deep Hours",
+            "Voldaren Bloodcaster // Bloodbat Summoner",
+            "Kolaghan's Command",
+            "Anax, Hardened in the Forge"
+          ]
+        },
+        {
+          "pickNumber": 12,
+          "pack": 1,
+          "pickInPack": 12,
+          "pick": "Bonus Round",
+          "pickId": "e21aa266-4264-4e02-9403-02930e641573",
+          "packCards": [
+            "Bonus Round",
+            "Gingerbrute",
+            "Anje's Ravager",
+            "Rotting Rats"
+          ]
+        },
+        {
+          "pickNumber": 13,
+          "pack": 1,
+          "pickInPack": 13,
+          "pick": "Anger",
+          "pickId": "0c7ce363-3f57-49ed-b89a-f12bb5227ab4",
+          "packCards": [
+            "Anger",
+            "Cathartic Reunion",
+            "Banefire"
+          ]
+        },
+        {
+          "pickNumber": 14,
+          "pack": 1,
+          "pickInPack": 14,
+          "pick": "Formidable Speaker",
+          "pickId": "265522eb-4f6a-40e7-b374-3833fa63c80b",
+          "packCards": [
+            "Formidable Speaker",
+            "Impulse"
+          ]
+        },
+        {
+          "pickNumber": 15,
+          "pack": 1,
+          "pickInPack": 15,
+          "pick": "Lodestone Golem",
+          "pickId": "683a5707-cddb-494d-9b41-51b4584ded69",
+          "packCards": [
+            "Lodestone Golem"
+          ]
+        },
+        {
+          "pickNumber": 16,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": "Strip Mine",
+          "pickId": "2b5315a4-6a78-456f-8d5a-fea9d62f3f0e",
+          "packCards": [
+            "Strip Mine",
+            "Wooded Foothills",
+            "Vizier of Remedies",
+            "Hallowed Fountain",
+            "Aluren",
+            "Hallowed Fountain",
+            "Vendilion Clique",
+            "Tropical Island",
+            "Punishing Fire",
+            "The Gitrog Monster",
+            "Savannah",
+            "Temple Garden",
+            "Llanowar Visionary",
+            "Bazaar of Baghdad",
+            "Past in Flames"
+          ]
+        },
+        {
+          "pickNumber": 17,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": "Wheel of Fortune",
+          "pickId": "67b369c4-faa8-45c8-a1b9-98f228b69682",
+          "packCards": [
+            "Wheel of Fortune",
+            "Windswept Heath",
+            "Polluted Delta",
+            "Treasure Cruise",
+            "Birchlore Rangers",
+            "Raffine's Tower",
+            "Goblin Welder",
+            "Izzet Charm",
+            "Molten Vortex",
+            "Nissa, Resurgent Animist",
+            "Zagoth Triome",
+            "Memnite",
+            "Green Sun's Zenith",
+            "The Underworld Cookbook"
+          ]
+        },
+        {
+          "pickNumber": 18,
+          "pack": 2,
+          "pickInPack": 3,
+          "pick": "Second Sunrise",
+          "pickId": "4e50ee7c-f2a2-4d49-a1cc-8233fd8dd0c5",
+          "packCards": [
+            "Second Sunrise",
+            "Faithless Looting",
+            "Murderous Redcap",
+            "Solitude",
+            "Arbor Elf",
+            "Conjurer's Bauble",
+            "Prismari Command",
+            "Consider",
+            "Greater Gargadon",
+            "Gau, Feral Youth",
+            "Ophiomancer",
+            "Soulherder",
+            "Undead Butler"
+          ]
+        },
+        {
+          "pickNumber": 19,
+          "pack": 2,
+          "pickInPack": 4,
+          "pick": "Jetmir's Garden",
+          "pickId": "26d40e03-6de4-4373-9fbf-04c1dd79e995",
+          "packCards": [
+            "Jetmir's Garden",
+            "Elvish Reclaimer",
+            "Viscera Seer",
+            "Skyclave Apparition",
+            "Joraga Treespeaker",
+            "Baleful Strix",
+            "Zabaz, the Glimmerwasp",
+            "Slogurk, the Overslime",
+            "Chandra, Acolyte of Flame",
+            "Deathrite Shaman",
+            "Prismatic Ending",
+            "Boseiju, Who Endures"
+          ]
+        },
+        {
+          "pickNumber": 20,
+          "pack": 2,
+          "pickInPack": 5,
+          "pick": "Enduring Renewal",
+          "pickId": "57a966e3-c9ba-4105-a36b-54ca70ba9b77",
+          "packCards": [
+            "Enduring Renewal",
+            "Sylvan Safekeeper",
+            "Putrid Goblin",
+            "Scheming Fence",
+            "Collected Company",
+            "Hidden Stockpile",
+            "Marauding Mako",
+            "Kaito Shizuki",
+            "Seething Song",
+            "Kitchen Finks",
+            "Relentless Dead"
+          ]
+        },
+        {
+          "pickNumber": 21,
+          "pack": 2,
+          "pickInPack": 6,
+          "pick": "Lotus Bloom",
+          "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
+          "packCards": [
+            "Lotus Bloom",
+            "Bloodstained Mire",
+            "Plateau",
+            "Phelia, Exuberant Shepherd",
+            "Scryb Ranger",
+            "Accursed Marauder",
+            "Marketback Walker",
+            "March of Otherworldly Light",
+            "Arboreal Grazer",
+            "Jadar, Ghoulcaller of Nephalia"
+          ]
+        },
+        {
+          "pickNumber": 22,
+          "pack": 2,
+          "pickInPack": 7,
+          "pick": "Enlightened Tutor",
+          "pickId": "0c9ebec9-3474-4062-9607-2e2a72f78299",
+          "packCards": [
+            "Enlightened Tutor",
+            "Badlands",
+            "Safehold Elite",
+            "Burst Lightning",
+            "Circle of Dreams Druid",
+            "Diabolic Intent",
+            "Krark, the Thumbless",
+            "Masked Vandal",
+            "Finale of Devastation"
+          ]
+        },
+        {
+          "pickNumber": 23,
+          "pack": 2,
+          "pickInPack": 8,
+          "pick": "Birgi, God of Storytelling // Harnfel, Horn of Bounty",
+          "pickId": "44657ab1-0a6a-4a5f-9688-86f239083821",
+          "packCards": [
+            "Birgi, God of Storytelling // Harnfel, Horn of Bounty",
+            "Knight of the Reliquary",
+            "Blade Splicer",
+            "Losheel, Clockwork Scholar",
+            "Mind's Desire",
+            "Cabal Therapy",
+            "Bridge from Below",
+            "Darkblast"
+          ]
+        },
+        {
+          "pickNumber": 24,
+          "pack": 2,
+          "pickInPack": 9,
+          "pick": "Punishing Fire",
+          "pickId": "0da4409b-fe3f-4500-bf4b-890593f7d313",
+          "packCards": [
+            "Punishing Fire",
+            "The Gitrog Monster",
+            "Savannah",
+            "Temple Garden",
+            "Llanowar Visionary",
+            "Bazaar of Baghdad",
+            "Past in Flames"
+          ]
+        },
+        {
+          "pickNumber": 25,
+          "pack": 2,
+          "pickInPack": 10,
+          "pick": "Molten Vortex",
+          "pickId": "d99fd073-c249-4cd2-9d71-be417c88c493",
+          "packCards": [
+            "Molten Vortex",
+            "Nissa, Resurgent Animist",
+            "Zagoth Triome",
+            "Memnite",
+            "Green Sun's Zenith",
+            "The Underworld Cookbook"
+          ]
+        },
+        {
+          "pickNumber": 26,
+          "pack": 2,
+          "pickInPack": 11,
+          "pick": "Greater Gargadon",
+          "pickId": "2b922fc5-602b-4f92-9588-00a77a9d803c",
+          "packCards": [
+            "Greater Gargadon",
+            "Gau, Feral Youth",
+            "Ophiomancer",
+            "Soulherder",
+            "Undead Butler"
+          ]
+        },
+        {
+          "pickNumber": 27,
+          "pack": 2,
+          "pickInPack": 12,
+          "pick": "Chandra, Acolyte of Flame",
+          "pickId": "2cabfcfe-012e-4cab-bba2-24052eac0946",
+          "packCards": [
+            "Chandra, Acolyte of Flame",
+            "Deathrite Shaman",
+            "Prismatic Ending",
+            "Boseiju, Who Endures"
+          ]
+        },
+        {
+          "pickNumber": 28,
+          "pack": 2,
+          "pickInPack": 13,
+          "pick": "Seething Song",
+          "pickId": "9213d580-7953-455f-abbe-99d3db2705cf",
+          "packCards": [
+            "Seething Song",
+            "Kitchen Finks",
+            "Relentless Dead"
+          ]
+        },
+        {
+          "pickNumber": 29,
+          "pack": 2,
+          "pickInPack": 14,
+          "pick": "Arboreal Grazer",
+          "pickId": "c4a5f86f-44a8-4735-909a-770586d33a15",
+          "packCards": [
+            "Arboreal Grazer",
+            "Jadar, Ghoulcaller of Nephalia"
+          ]
+        },
+        {
+          "pickNumber": 30,
+          "pack": 2,
+          "pickInPack": 15,
+          "pick": "Finale of Devastation",
+          "pickId": "985453e7-997e-4d77-a338-cc0290791ebe",
+          "packCards": [
+            "Finale of Devastation"
+          ]
+        },
+        {
+          "pickNumber": 31,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": "Mox Jet",
+          "pickId": "5f6927e1-c580-483a-8e2a-6e2deb74800e",
+          "packCards": [
+            "Mox Jet",
+            "Ancestral Recall",
+            "Mishra's Workshop",
+            "Arid Mesa",
+            "Heritage Druid",
+            "Raugrin Triome",
+            "Sacred Foundry",
+            "Six",
+            "Recruiter of the Guard",
+            "Thousand-Faced Shadow",
+            "Workshop Assistant",
+            "Changeling Outcast",
+            "Brain Freeze",
+            "Faerie Seer",
+            "Scourge of Nel Toth"
+          ]
+        },
+        {
+          "pickNumber": 32,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": "Incinerate",
+          "pickId": "1af92296-455a-425e-9397-a96d09937767",
+          "packCards": [
+            "Incinerate",
+            "Memory Lapse",
+            "Emry, Lurker of the Loch",
+            "Marionette Apprentice",
+            "Elvish Warmaster",
+            "Reflector Mage",
+            "Earthcraft",
+            "Raven's Crime",
+            "Ephemerate",
+            "Daze",
+            "Turnabout",
+            "Lingering Souls",
+            "Ineffable Blessing",
+            "Phyrexian Tower"
+          ]
+        },
+        {
+          "pickNumber": 33,
+          "pack": 3,
+          "pickInPack": 3,
+          "pick": "Scrap Trawler",
+          "pickId": "68abc75f-596f-4169-96fc-ada941ef47ed",
+          "packCards": [
+            "Scrap Trawler",
+            "Thieving Skydiver",
+            "Arcum's Astrolabe",
+            "Bone Shards",
+            "Time Spiral",
+            "Spell Queller",
+            "Makeshift Munitions",
+            "Asmoranomardicadaistinaculdacar",
+            "Junk Diver",
+            "Paradise Mantle",
+            "Ornithopter",
+            "Ox of Agonas",
+            "Rite of Flame"
+          ]
+        },
+        {
+          "pickNumber": 34,
+          "pack": 3,
+          "pickInPack": 4,
+          "pick": "Pyrite Spellbomb",
+          "pickId": "088c801d-381f-403b-aeb7-fbbfafee99bf",
+          "packCards": [
+            "Pyrite Spellbomb",
+            "Opt",
+            "Mishra's Bauble",
+            "Underground Sea",
+            "Allosaurus Shepherd",
+            "Stoneforge Mystic",
+            "The Meathook Massacre",
+            "Llanowar Elves",
+            "Wishclaw Talisman",
+            "Shambling Ghast",
+            "Hogaak, Arisen Necropolis",
+            "Baloth Prime"
+          ]
+        },
+        {
+          "pickNumber": 35,
+          "pack": 3,
+          "pickInPack": 5,
+          "pick": "Rally the Ancestors",
+          "pickId": "6d9efacb-9d7c-41f4-9b11-59df1be50e11",
+          "packCards": [
+            "Rally the Ancestors",
+            "Xander's Lounge",
+            "Grove of the Burnwillows",
+            "Dark Confidant",
+            "Fecundity",
+            "Mana Tithe",
+            "Cauldron Familiar",
+            "Stitcher's Supplier",
+            "Juri, Master of the Revue",
+            "Gravecrawler",
+            "Vibrance"
+          ]
+        },
+        {
+          "pickNumber": 36,
+          "pack": 3,
+          "pickInPack": 6,
+          "pick": "Mons's Goblin Waiters",
+          "pickId": "729238ee-b3ea-4c1d-852c-2dc9a2c58356",
+          "packCards": [
+            "Mons's Goblin Waiters",
+            "Moon-Circuit Hacker",
+            "Steam Vents",
+            "Smuggler's Copter",
+            "Lotus Petal",
+            "Swift Reconfiguration",
+            "Scrubland",
+            "Yawgmoth's Will",
+            "Glint-Horn Buccaneer",
+            "Tendrils of Agony"
+          ]
+        },
+        {
+          "pickNumber": 37,
+          "pack": 3,
+          "pickInPack": 7,
+          "pick": "Sacred Foundry",
+          "pickId": "0a26d900-c652-4f9c-8681-a35c5f8b1937",
+          "packCards": [
+            "Sacred Foundry",
+            "Thassa's Oracle",
+            "Goblin Engineer",
+            "Duress",
+            "Night's Whisper",
+            "Dragon's Rage Channeler",
+            "Mayhem Devil",
+            "Mesmeric Fiend",
+            "Undead Augur"
+          ]
+        },
+        {
+          "pickNumber": 38,
+          "pack": 3,
+          "pickInPack": 8,
+          "pick": "Flooded Strand",
+          "pickId": "8c2996d9-3287-4480-8c04-7a378e37e3cf",
+          "packCards": [
+            "Flooded Strand",
+            "Sword of the Meek",
+            "Galvanic Blast",
+            "Chain Lightning",
+            "Ranger-Captain of Eos",
+            "Conspiracy Theorist",
+            "Cruel Celebrant",
+            "Finale of Promise"
+          ]
+        },
+        {
+          "pickNumber": 39,
+          "pack": 3,
+          "pickInPack": 9,
+          "pick": "Recruiter of the Guard",
+          "pickId": "bb9ad57f-cca2-4717-a951-cbe3c7782efe",
+          "packCards": [
+            "Recruiter of the Guard",
+            "Thousand-Faced Shadow",
+            "Workshop Assistant",
+            "Changeling Outcast",
+            "Brain Freeze",
+            "Faerie Seer",
+            "Scourge of Nel Toth"
+          ]
+        },
+        {
+          "pickNumber": 40,
+          "pack": 3,
+          "pickInPack": 10,
+          "pick": "Ephemerate",
+          "pickId": "2da5f3f8-5eef-498f-ba2c-2f3fbc3745aa",
+          "packCards": [
+            "Ephemerate",
+            "Daze",
+            "Turnabout",
+            "Lingering Souls",
+            "Ineffable Blessing",
+            "Phyrexian Tower"
+          ]
+        },
+        {
+          "pickNumber": 41,
+          "pack": 3,
+          "pickInPack": 11,
+          "pick": "Junk Diver",
+          "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
+          "packCards": [
+            "Junk Diver",
+            "Paradise Mantle",
+            "Ornithopter",
+            "Ox of Agonas",
+            "Rite of Flame"
+          ]
+        },
+        {
+          "pickNumber": 42,
+          "pack": 3,
+          "pickInPack": 12,
+          "pick": "Wishclaw Talisman",
+          "pickId": "07c17b01-ee5d-491a-8403-b3f819b778c4",
+          "packCards": [
+            "Wishclaw Talisman",
+            "Shambling Ghast",
+            "Hogaak, Arisen Necropolis",
+            "Baloth Prime"
+          ]
+        },
+        {
+          "pickNumber": 43,
+          "pack": 3,
+          "pickInPack": 13,
+          "pick": "Juri, Master of the Revue",
+          "pickId": "aec6b2b7-625a-451d-bc0b-4456f5bf2719",
+          "packCards": [
+            "Juri, Master of the Revue",
+            "Gravecrawler",
+            "Vibrance"
+          ]
+        },
+        {
+          "pickNumber": 44,
+          "pack": 3,
+          "pickInPack": 14,
+          "pick": "Glint-Horn Buccaneer",
+          "pickId": "df2df9cb-14f5-470f-b438-20f4ae8d0d59",
+          "packCards": [
+            "Glint-Horn Buccaneer",
+            "Tendrils of Agony"
+          ]
+        },
+        {
+          "pickNumber": 45,
+          "pack": 3,
+          "pickInPack": 15,
+          "pick": "Undead Augur",
+          "pickId": "c6e3049e-9397-4bef-914b-e9664661419c",
+          "packCards": [
+            "Undead Augur"
+          ]
+        }
+      ]
+    }
+  ]
+}

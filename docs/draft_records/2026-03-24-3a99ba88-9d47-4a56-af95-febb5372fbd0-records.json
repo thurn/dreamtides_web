@@ -1,0 +1,257 @@
+{
+  "draftId": "3a99ba88-9d47-4a56-af95-febb5372fbd0",
+  "date": "2026-03-24T01:09:30.280Z",
+  "name": "UBR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 7,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UBR",
+    "UB",
+    "UBR",
+    "BR",
+    "UG",
+    "WUB",
+    "WUB",
+    "UB"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UBR",
+      "mainboard": [
+        "Viscera Seer",
+        "Spellseeker",
+        "Watery Grave",
+        "Occult Epiphany",
+        "Demonic Tutor",
+        "Memory Lapse",
+        "Kolaghan's Command"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Viscera Seer",
+        "Kolaghan's Command",
+        "Watery Grave",
+        "Memory Lapse",
+        "Demonic Tutor",
+        "Occult Epiphany",
+        "Spellseeker"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Viscera Seer",
+          "pickId": "24277de8-7412-496c-bd44-61d9629a3473",
+          "packCards": [
+            "Viscera Seer",
+            "Yuriko, the Tiger's Shadow",
+            "Xander's Lounge",
+            "Wasteland",
+            "Birds of Paradise",
+            "Junk Diver",
+            "Desperate Ritual"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Kolaghan's Command",
+          "pickId": "6d09be4f-785a-4faf-b03b-ca462cd375ca",
+          "packCards": [
+            "Kolaghan's Command",
+            "Agatha's Soul Cauldron",
+            "Urza's Bauble",
+            "Vendilion Clique",
+            "Force of Negation",
+            "Hangarback Walker"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "Watery Grave",
+          "pickId": "139b90cd-8272-457a-be32-1298145345be",
+          "packCards": [
+            "Watery Grave",
+            "Nettlecyst",
+            "Thopter Foundry",
+            "Tundra",
+            "(card undefined)"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Memory Lapse",
+          "pickId": "2d85cc30-ccae-4af8-834a-f7870dace679",
+          "packCards": [
+            "Memory Lapse",
+            "Hope of Ghirapur",
+            "Verdant Catacombs",
+            "Volcanic Island"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": "Demonic Tutor",
+          "pickId": "085ed548-a8c8-40b3-8183-51c060bc95cb",
+          "packCards": [
+            "Demonic Tutor",
+            "Mishra's Bauble",
+            "Remand"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": "Occult Epiphany",
+          "pickId": "6920c895-bc98-4871-a53f-219fa27a74e5",
+          "packCards": [
+            "Occult Epiphany",
+            "Conjurer's Bauble"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 1,
+          "pickInPack": 7,
+          "pick": "Spellseeker",
+          "pickId": "74b4c336-5d4c-4bc5-b82a-35084a6ad808",
+          "packCards": [
+            "Spellseeker"
+          ]
+        }
+      ]
+    },
+    {
+      "seat": 4,
+      "name": "UG",
+      "mainboard": [
+        "Birds of Paradise",
+        "Elvish Mystic",
+        "Snapcaster Mage",
+        "Green Sun's Zenith",
+        "Snap",
+        "Force of Negation"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Green Sun's Zenith",
+        "Snap",
+        "Elvish Mystic",
+        "Snapcaster Mage",
+        "Birds of Paradise",
+        "Force of Negation"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Green Sun's Zenith",
+          "pickId": "01794178-cf41-454c-ac37-1d8b18e42db2",
+          "packCards": [
+            "Green Sun's Zenith",
+            "Asmoranomardicadaistinaculdacar",
+            "Pinnacle Monk // Mystic Peak",
+            "Bloodstained Mire",
+            "Demonic Tutor",
+            "Mishra's Bauble",
+            "Remand"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Snap",
+          "pickId": "1959f078-4b7b-4df2-a256-d43b2d97e853",
+          "packCards": [
+            "Snap",
+            "Ornithopter of Paradise",
+            "Expressive Iteration",
+            "Polluted Delta",
+            "Occult Epiphany",
+            "Conjurer's Bauble"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "Elvish Mystic",
+          "pickId": "4d50fa57-db11-419e-b73b-666a6b25f7de",
+          "packCards": [
+            "Elvish Mystic",
+            "Arid Mesa",
+            "Brainstorm",
+            "Underground Sea",
+            "Spellseeker"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Snapcaster Mage",
+          "pickId": "12917e60-cea1-460b-b3f1-8d47cc24afdc",
+          "packCards": [
+            "Snapcaster Mage",
+            "Skullclamp",
+            "Spell Snare",
+            "Vampiric Tutor"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 1,
+          "pickInPack": 5,
+          "pick": "Birds of Paradise",
+          "pickId": "0003aa31-d42e-4972-9fb9-086aefe29a2c",
+          "packCards": [
+            "Birds of Paradise",
+            "Junk Diver",
+            "Desperate Ritual"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 1,
+          "pickInPack": 6,
+          "pick": "Force of Negation",
+          "pickId": "1825a719-1b2a-4af9-9cd2-7cb497cd0317",
+          "packCards": [
+            "Force of Negation",
+            "Hangarback Walker"
+          ]
+        },
+        {
+          "pickNumber": 7,
+          "pack": 1,
+          "pickInPack": 7,
+          "pick": "(card undefined)",
+          "pickId": null,
+          "packCards": [
+            "(card undefined)"
+          ]
+        }
+      ]
+    }
+  ]
+}

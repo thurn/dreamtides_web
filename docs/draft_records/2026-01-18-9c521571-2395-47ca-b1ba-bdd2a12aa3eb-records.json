@@ -1,0 +1,116 @@
+{
+  "draftId": "9c521571-2395-47ca-b1ba-bdd2a12aa3eb",
+  "date": "2026-01-18T21:23:04.089Z",
+  "name": "RG Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 3,
+  "packSize": 2,
+  "passDirections": [
+    -1,
+    1,
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "RG",
+    "WUG",
+    "WU",
+    "UB",
+    "WBG",
+    "UBR",
+    "WUB",
+    "WB"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "RG",
+      "mainboard": [
+        "Scryb Ranger",
+        "Arwen, Weaver of Hope",
+        "Imperial Recruiter",
+        "Gaea's Cradle",
+        "Overgrown Tomb"
+      ],
+      "sideboard": [
+        "Baloth Prime"
+      ],
+      "pool": [
+        "Imperial Recruiter",
+        "Overgrown Tomb",
+        "Arwen, Weaver of Hope",
+        "Scryb Ranger",
+        "Baloth Prime",
+        "Gaea's Cradle"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Imperial Recruiter",
+          "pickId": "05bd329b-5707-42fc-af1c-084cc604e805",
+          "packCards": [
+            "Imperial Recruiter",
+            "Scrubland"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Overgrown Tomb",
+          "pickId": "1c7d50d6-b63a-4d8c-88fa-1d78ae693a45",
+          "packCards": [
+            "Overgrown Tomb"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 2,
+          "pickInPack": 1,
+          "pick": "Arwen, Weaver of Hope",
+          "pickId": "4d4f4d41-232d-4377-be69-de590b880edb",
+          "packCards": [
+            "Arwen, Weaver of Hope",
+            "Misty Rainforest"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 2,
+          "pickInPack": 2,
+          "pick": "Scryb Ranger",
+          "pickId": "3aacabde-f5ec-4519-895d-17f5e48746ee",
+          "packCards": [
+            "Scryb Ranger"
+          ]
+        },
+        {
+          "pickNumber": 5,
+          "pack": 3,
+          "pickInPack": 1,
+          "pick": "Baloth Prime",
+          "pickId": "2c723fc9-d5c9-4126-a9a6-f80c247a4b6b",
+          "packCards": [
+            "Baloth Prime",
+            "Thraben Inspector"
+          ]
+        },
+        {
+          "pickNumber": 6,
+          "pack": 3,
+          "pickInPack": 2,
+          "pick": "Gaea's Cradle",
+          "pickId": "25b0b816-0583-44aa-9dc5-f3ff48993a51",
+          "packCards": [
+            "Gaea's Cradle"
+          ]
+        }
+      ]
+    }
+  ]
+}

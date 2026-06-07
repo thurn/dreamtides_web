@@ -1,0 +1,92 @@
+{
+  "draftId": "93eecde7-1d21-430f-94af-02372eb39bee",
+  "date": "2025-12-18T19:47:08.979Z",
+  "name": "UR Draft of Caleb Gannon's Powered Synergy Cube",
+  "cubeId": "5fab13510efe0d1071b87fae",
+  "type": "d",
+  "complete": true,
+  "seatCount": 8,
+  "packs": 1,
+  "packSize": 4,
+  "passDirections": [
+    -1
+  ],
+  "packStateSource": "convention",
+  "seatNames": [
+    "UR",
+    "WB",
+    "U",
+    "R",
+    "WUB",
+    "BRG",
+    "W",
+    "WB"
+  ],
+  "seats": [
+    {
+      "seat": 0,
+      "name": "UR",
+      "mainboard": [
+        "Dreadhorde Arcanist",
+        "Thassa's Oracle",
+        "Arid Mesa",
+        "Chain Lightning"
+      ],
+      "sideboard": [],
+      "pool": [
+        "Thassa's Oracle",
+        "Arid Mesa",
+        "Chain Lightning",
+        "Dreadhorde Arcanist"
+      ],
+      "picks": [
+        {
+          "pickNumber": 1,
+          "pack": 1,
+          "pickInPack": 1,
+          "pick": "Thassa's Oracle",
+          "pickId": "69e615d8-1b79-4a82-ba9f-ee211d67dc95",
+          "packCards": [
+            "Thassa's Oracle",
+            "Sevinne's Reclamation",
+            "Whitemane Lion",
+            "Allosaurus Shepherd"
+          ]
+        },
+        {
+          "pickNumber": 2,
+          "pack": 1,
+          "pickInPack": 2,
+          "pick": "Arid Mesa",
+          "pickId": "16c8d2fa-54a7-46e8-980c-905258497c90",
+          "packCards": [
+            "Arid Mesa",
+            "Blood Artist",
+            "Spirited Companion"
+          ]
+        },
+        {
+          "pickNumber": 3,
+          "pack": 1,
+          "pickInPack": 3,
+          "pick": "Chain Lightning",
+          "pickId": "111282a0-28be-40f0-a0e7-2f362268c0a3",
+          "packCards": [
+            "Chain Lightning",
+            "Scrapyard Recombiner"
+          ]
+        },
+        {
+          "pickNumber": 4,
+          "pack": 1,
+          "pickInPack": 4,
+          "pick": "Dreadhorde Arcanist",
+          "pickId": "27933adb-9c7a-4248-9908-f01e6a6bf12c",
+          "packCards": [
+            "Dreadhorde Arcanist"
+          ]
+        }
+      ]
+    }
+  ]
+}
