@@ -6,6 +6,19 @@ Do not create new branches unless explicitly requested.
 
 Do not print a summary of changes.
 
+# Cards
+
+Card data lives in data/tabula/cards_v2.toml
+
+Legacy cards are in data/tabula/rendered-cards.toml, this is
+no longer used and kept for historical reference.
+
+Dreamcallers live in data/tabula/dreamcallers_v2.toml
+
+Ignore all metadata systems on cards like "tides", "tags",
+"archetypes", etc. These are all legacy. Tides no longer
+exist.
+
 # Verification
 
 Run the core checks after code changes:
