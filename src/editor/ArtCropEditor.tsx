@@ -1,11 +1,27 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { CardView, DEFAULT_ART_CROP, minArtOffsetY } from "../components/CardView";
+import {
+  CardView,
+  DEFAULT_ART_CROP,
+  artPanStep,
+  minArtOffsetY,
+} from "../components/CardView";
 import { cardImageUrl, hasAssignedImage } from "../data/card-database";
 import type { ArtCrop } from "../types/cards";
 import type { EditorCardRecord } from "./types";
 
-/** Fraction of the available pan range each pan press shifts the crop. */
+/**
+ * On-screen distance (as a fraction of the card) the art shifts per pan press.
+ * The actual `art` offset step is derived per axis from this so a press moves
+ * the image the same visible amount horizontally and vertically (see
+ * `artPanStep`), rather than the crop offset stepping by a fixed amount and the
+ * visible move differing wildly with the source's aspect.
+ */
+const PAN_CARD_FRACTION = 0.03;
+/**
+ * Pan step used until the source aspect is known (no image, or still loading),
+ * applied to the raw crop offset on both axes.
+ */
 const PAN_STEP = 0.1;
 /** Zoom factor change per zoom press. */
 const ZOOM_STEP = 0.1;
@@ -239,6 +255,14 @@ export default function ArtCropEditor({
   const previewCard = { ...card.preview, art };
   const statusText = saveStatusLabel(saveStatus, saveError);
 
+  // Per-axis offset step that moves the art the same visible fraction of the
+  // card on each press, derived from the source aspect and current zoom. Falls
+  // back to the fixed offset step until the aspect is known.
+  const panStep =
+    imageAspect !== null
+      ? artPanStep(imageAspect, art.scale, PAN_CARD_FRACTION)
+      : { x: PAN_STEP, y: PAN_STEP };
+
   return (
     <div
       role="dialog"
@@ -314,23 +338,23 @@ export default function ArtCropEditor({
               <ControlButton
                 ariaLabel="Pan up"
                 label="▲"
-                onClick={() => nudge({ y: -PAN_STEP })}
+                onClick={() => nudge({ y: -panStep.y })}
               />
               <span />
               <ControlButton
                 ariaLabel="Pan left"
                 label="◀"
-                onClick={() => nudge({ x: -PAN_STEP })}
+                onClick={() => nudge({ x: -panStep.x })}
               />
               <ControlButton
                 ariaLabel="Pan down"
                 label="▼"
-                onClick={() => nudge({ y: PAN_STEP })}
+                onClick={() => nudge({ y: panStep.y })}
               />
               <ControlButton
                 ariaLabel="Pan right"
                 label="▶"
-                onClick={() => nudge({ x: PAN_STEP })}
+                onClick={() => nudge({ x: panStep.x })}
               />
             </div>
           </div>

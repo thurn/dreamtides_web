@@ -121,6 +121,38 @@ export function minArtOffsetY(imageAspect: number, scale: number): number {
 }
 
 /**
+ * Per-axis `art` offset delta that nudges the image by `cardFraction` of the
+ * card on each press, for a given source aspect and zoom. The crop offset is
+ * normalized to each axis's pan range (|offset| === 1 is the image edge), so a
+ * fixed offset step slides a wide source much further across than down — it has
+ * far more horizontal overscan than vertical. Scaling the step by each axis's
+ * overscan (and, on Y, the art region's shorter height) makes one press travel
+ * the same visible distance on both axes. An axis with no overscan reports 0
+ * (nothing to pan); steps are capped at the full range so a near-flush axis
+ * traverses in a single press rather than returning an absurd multiplier.
+ */
+export function artPanStep(
+  imageAspect: number,
+  scale: number,
+  cardFraction: number,
+): { x: number; y: number } {
+  const ratio = imageAspect / ART_REGION_ASPECT_RATIO_VALUE;
+  const coverW = ratio >= 1 ? ratio : 1;
+  const coverH = ratio >= 1 ? 1 : 1 / ratio;
+  const renderW = scale * coverW;
+  const renderH = scale * coverH;
+  const x = renderW > 1 ? Math.min(1, (2 * cardFraction) / (renderW - 1)) : 0;
+  const y =
+    renderH > 1
+      ? Math.min(
+          1,
+          (2 * cardFraction) / ((renderH - 1) * (1 - ART_EXTENSION_FRACTION)),
+        )
+      : 0;
+  return { x, y };
+}
+
+/**
  * Resolve an art crop into CSS for the art image, placed inside a full-card
  * container so the image keeps its art-region size and position yet is free to
  * extend below the seam into the fill band. Used for both the crisp artwork and

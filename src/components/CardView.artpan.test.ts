@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { minArtOffsetY } from "./CardView";
-import { ART_REGION_ASPECT_RATIO_VALUE } from "./card-aspect";
+import { artPanStep, minArtOffsetY } from "./CardView";
+import {
+  ART_EXTENSION_FRACTION,
+  ART_REGION_ASPECT_RATIO_VALUE,
+} from "./card-aspect";
 
 // `minArtOffsetY` is the up-pan floor that keeps the watermark strip clipped off
 // the bottom of every source image from rising into the art region (which would
@@ -39,5 +42,49 @@ describe("minArtOffsetY", () => {
     // A source exactly as wide as the art region at scale 1 has renderH === 1:
     // no overscan, so there is no pan to bound.
     expect(minArtOffsetY(ART_REGION_ASPECT_RATIO_VALUE, 1)).toBe(0);
+  });
+});
+
+// Reconstruct the on-screen move (as a fraction of the card) a given per-axis
+// offset step produces, mirroring the placement math in `artImageStyleExtended`.
+function visualMove(
+  step: { x: number; y: number },
+  imageAspect: number,
+  scale: number,
+): { x: number; y: number } {
+  const ratio = imageAspect / ART_REGION_ASPECT_RATIO_VALUE;
+  const renderW = scale * (ratio >= 1 ? ratio : 1);
+  const renderH = scale * (ratio >= 1 ? 1 : 1 / ratio);
+  return {
+    x: (step.x * (renderW - 1)) / 2,
+    y: ((step.y * (renderH - 1)) / 2) * (1 - ART_EXTENSION_FRACTION),
+  };
+}
+
+describe("artPanStep", () => {
+  it("moves the art the same target distance on both axes for a wide source", () => {
+    const step = artPanStep(WIDE_ASPECT, 1.17, 0.03);
+    // The raw offset steps differ a lot (X has far more pan range than Y)...
+    expect(step.x).not.toBeCloseTo(step.y, 2);
+    // ...but the resulting on-screen move is ~3% of the card on each axis.
+    const move = visualMove(step, WIDE_ASPECT, 1.17);
+    expect(move.x).toBeCloseTo(0.03, 4);
+    expect(move.y).toBeCloseTo(0.03, 4);
+  });
+
+  it("holds the target move steady across zoom levels", () => {
+    for (const scale of [1.2, 2, 4]) {
+      const move = visualMove(artPanStep(WIDE_ASPECT, scale, 0.03), WIDE_ASPECT, scale);
+      expect(move.x).toBeCloseTo(0.03, 4);
+      expect(move.y).toBeCloseTo(0.03, 4);
+    }
+  });
+
+  it("reports 0 on an axis with no overscan to pan within", () => {
+    // A source matching the art region's aspect at scale 1 covers it exactly:
+    // no overscan on either axis, so neither arrow has anything to move.
+    const step = artPanStep(ART_REGION_ASPECT_RATIO_VALUE, 1, 0.03);
+    expect(step.x).toBe(0);
+    expect(step.y).toBe(0);
   });
 });
