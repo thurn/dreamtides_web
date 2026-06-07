@@ -65,6 +65,32 @@ export async function loadMergedArchetypeLists(): Promise<
 }
 
 /**
+ * A single human-seat entry from the adapted Cube Cobra draft corpus, bundled
+ * by `scripts/setup-assets.mjs` for the record-replay draft mode. `packs` and
+ * `picks` are aligned arrays of length 30 (10 picks per pack × 3 packs),
+ * containing raw card names as they appear in the source records.
+ */
+export interface DraftRecord {
+  id: string;
+  draftId: string;
+  mainboard: string[];
+  packs: string[][];  // 30 trimmed packs of card names (raw order)
+  picks: string[][];  // human picks aligned to packs (each 0..3 names)
+}
+
+/**
+ * Fetch the bundled adapted draft records (`docs/draft_records_adapted`,
+ * written to `/draft-records-data.json` by `scripts/setup-assets.mjs`) used
+ * by the record-replay draft mode. Returns an empty array if the bundle is
+ * missing so the harness still loads.
+ */
+export async function loadDraftRecords(): Promise<DraftRecord[]> {
+  const response = await fetch("/draft-records-data.json");
+  if (!response.ok) return [];
+  return (await response.json()) as DraftRecord[];
+}
+
+/**
  * Build a card-name -> card-number index from a v2 database. When two records
  * share a name the first wins; the draft pool only needs one representative
  * per name.

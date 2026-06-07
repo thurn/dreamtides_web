@@ -274,6 +274,98 @@ export function buildMergedArchetypeLists(draftsAnonDir, cardMaps) {
 }
 
 /**
+ * Bundle adapted draft records from `docs/draft_records_adapted` into a flat
+ * array of per-human-seat entries for the record-replay draft mode.
+ *
+ * Each `.json` file must have a `seats` array; files without it (e.g. a name
+ * dictionary) are silently skipped. Within each file, a seat is included when:
+ *   1. Its `mainboard` array is non-empty.
+ *   2. After trimming to the first three packs (each cut to `pickInPack <= 10`),
+ *      the seat has exactly 30 trimmed picks (10 per pack). Anything else — an
+ *      incomplete record, or a non-standard pack layout — drops the seat.
+ *
+ * Card names that do not appear in `cardMaps.nameToId` are dropped defensively
+ * from whichever mainboard/pack/pick array they appear in; the total is logged.
+ *
+ * Returns one entry per surviving seat:
+ *   `{ id, draftId, mainboard, packs, picks }` where `packs[i]` and `picks[i]`
+ *   are the raw `packCards` and `pick` arrays for the i-th trimmed pick (same
+ *   length, exactly 30).
+ */
+export function buildDraftRecords(dir, cardMaps) {
+  const { nameToId } = cardMaps;
+  let droppedNames = 0;
+  let skippedIncomplete = 0;
+
+  /**
+   * Filter an array of card names through `nameToId`, dropping any that are
+   * unknown and incrementing the global counter for each dropped name.
+   */
+  function filterNames(names) {
+    const result = [];
+    for (const name of names) {
+      if (nameToId.has(name)) {
+        result.push(name);
+      } else {
+        droppedNames++;
+      }
+    }
+    return result;
+  }
+
+  const records = [];
+
+  for (const filename of readdirSync(dir).filter((f) => f.endsWith(".json")).sort()) {
+    const raw = JSON.parse(readFileSync(join(dir, filename), "utf8"));
+    if (!Array.isArray(raw.seats)) continue;
+
+    const { draftId } = raw;
+
+    for (const seatData of raw.seats) {
+      const { seat, mainboard: rawMainboard, picks: rawPicks } = seatData;
+
+      // Skip seats without a non-empty mainboard or a picks array.
+      if (!Array.isArray(rawMainboard) || rawMainboard.length === 0) continue;
+      if (!Array.isArray(rawPicks)) continue;
+
+      // Trim to the first three packs, each cut to its first ten picks, sorted
+      // by pickNumber ascending. This drops the smallest late-pack offers
+      // (pickInPack 11+) and any packs beyond the third, so a standard 3x15
+      // draft and the first three packs of a 4+ pack draft both yield 30 picks.
+      const trimmed = rawPicks
+        .filter((p) => p.pack >= 1 && p.pack <= 3 && p.pickInPack <= 10)
+        .sort((a, b) => a.pickNumber - b.pickNumber);
+
+      if (trimmed.length !== 30) {
+        skippedIncomplete++;
+        continue;
+      }
+
+      const mainboard = filterNames(rawMainboard);
+      const packs = trimmed.map((p) => filterNames(p.packCards));
+      const picks = trimmed.map((p) => filterNames(p.pick));
+
+      records.push({
+        id: `${draftId}#${seat}`,
+        draftId,
+        mainboard,
+        packs,
+        picks,
+      });
+    }
+  }
+
+  if (skippedIncomplete > 0) {
+    console.log(`Skipped ${skippedIncomplete} draft seats that did not yield exactly 30 trimmed picks`);
+  }
+  if (droppedNames > 0) {
+    console.log(`Dropped ${droppedNames} unresolved card names from draft records`);
+  }
+
+  return records;
+}
+
+/**
  * Build id<->name lookup maps from the parsed cards_v2 records. The `id` UUID is
  * the stable key every card-reference system uses; the maps resolve a reference
  * back to the current display name (and let a tolerant reader accept a bare name).
@@ -475,6 +567,8 @@ export function setupAssets({
   const decklistsJsonPath = join(publicDir, "decklists-data.json");
   const humanDecklistsJsonPath = join(publicDir, "human-decklists-data.json");
   const mergedListsJsonPath = join(publicDir, "merged-archetype-lists-data.json");
+  const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
+  const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
   const draftsAnonDir = join(ROOT, "docs", "drafts_anon");
   const humanDraftsAnonDir = join(ROOT, "docs", "human_drafts_anon");
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
@@ -604,6 +698,15 @@ export function setupAssets({
   console.log(
     `Wrote ${humanDecklists.length} decklists to human-decklists-data.json`,
   );
+
+  // Adapted draft records from the human Cube Cobra corpus bundled for the
+  // record-replay draft mode. Each JSON file in `docs/draft_records_adapted`
+  // is one draft event; we extract one entry per human seat (trimmed to the
+  // first 10 picks per pack) and write the flat array to the browser bundle.
+  console.log("Bundling adapted draft records from the corpus...");
+  const draftRecords = buildDraftRecords(draftRecordsAdaptedDir, cardMaps);
+  writeFileSync(draftRecordsJsonPath, JSON.stringify(draftRecords) + "\n");
+  console.log(`Wrote ${draftRecords.length} draft-record seats to draft-records-data.json`);
 
   // Merged archetype lists for the draft test's `merged` pool variant. The
   // archetype label is dropped from decklists-data.json, so we collapse the

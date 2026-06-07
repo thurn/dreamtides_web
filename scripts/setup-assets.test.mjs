@@ -11,6 +11,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  buildDraftRecords,
   imageHash,
   parseEnergyCost,
   parseSpark,
@@ -486,5 +487,231 @@ describe("transformCard spark", () => {
     const result = transformCard({ ...base, spark: "" });
     expect(result.spark).toBe(null);
     expect("sparkVariable" in result).toBe(false);
+  });
+});
+
+describe("buildDraftRecords", () => {
+  /**
+   * Minimal cardMaps stub covering names A..F, a duplicate-test name "Dup", and
+   * per-pack markers P1..P3 used to assert which packs survive trimming.
+   */
+  const cardMaps = {
+    nameToId: new Map([
+      ["A", "id-a"],
+      ["B", "id-b"],
+      ["C", "id-c"],
+      ["D", "id-d"],
+      ["E", "id-e"],
+      ["F", "id-f"],
+      ["Dup", "id-dup"],
+      ["P1", "id-p1"],
+      ["P2", "id-p2"],
+      ["P3", "id-p3"],
+    ]),
+    idToName: new Map(),
+  };
+
+  /**
+   * Build a synthetic picks array: 3 packs × `picksPerPack` picks.
+   * pickInPack runs 1..picksPerPack for each pack.
+   * packCards for every pick contains ["A","B","C"] plus an optional extra.
+   */
+  function makePicks({ picksPerPack = 15, extraPackCards = [] } = {}) {
+    const picks = [];
+    let pickNumber = 0;
+    for (let pack = 1; pack <= 3; pack++) {
+      for (let pip = 1; pip <= picksPerPack; pip++) {
+        pickNumber++;
+        picks.push({
+          pickNumber,
+          pack,
+          pickInPack: pip,
+          pick: pip === 1 ? ["A"] : [],
+          packCards: ["A", "B", "C", ...extraPackCards],
+        });
+      }
+    }
+    return picks;
+  }
+
+  it("skips a file that has no seats array", () => {
+    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    writeFileSync(
+      join(dir, "names.json"),
+      JSON.stringify({ notSeats: true }),
+    );
+    const result = buildDraftRecords(dir, cardMaps);
+    expect(result).toEqual([]);
+  });
+
+  it("drops a seat with empty mainboard", () => {
+    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    writeFileSync(
+      join(dir, "draft.json"),
+      JSON.stringify({
+        draftId: "draft1",
+        seats: [
+          { seat: 0, mainboard: [], picks: makePicks() },
+          { seat: 1, mainboard: ["A"], picks: makePicks() },
+        ],
+      }),
+    );
+    const result = buildDraftRecords(dir, cardMaps);
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe("draft1#1");
+  });
+
+  it("skips a seat with no picks array without throwing", () => {
+    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    writeFileSync(
+      join(dir, "draft.json"),
+      JSON.stringify({
+        draftId: "nopicks",
+        seats: [
+          { seat: 0, mainboard: ["A"] },
+          { seat: 1, mainboard: ["A"], picks: makePicks() },
+        ],
+      }),
+    );
+    const result = buildDraftRecords(dir, cardMaps);
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe("nopicks#1");
+  });
+
+  it("trims a complete seat to exactly 30 packs and picks, in pickNumber order, preserving raw packCards order including duplicates", () => {
+    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    // Pack 2, pick-in-pack 3 gets a duplicate "Dup" to prove no dedup.
+    const picks = makePicks({ extraPackCards: [] });
+    // Insert a duplicate into pack 2, pickInPack 3 (which trims to <=10, so it stays).
+    const targetPick = picks.find((p) => p.pack === 2 && p.pickInPack === 3);
+    targetPick.packCards = ["A", "Dup", "Dup", "B"];
+
+    writeFileSync(
+      join(dir, "draft.json"),
+      JSON.stringify({
+        draftId: "abc",
+        seats: [{ seat: 2, mainboard: ["A", "B"], picks }],
+      }),
+    );
+    const result = buildDraftRecords(dir, cardMaps);
+    expect(result).toHaveLength(1);
+    const rec = result[0];
+
+    // 30 trimmed picks (10 per pack × 3)
+    expect(rec.packs).toHaveLength(30);
+    expect(rec.picks).toHaveLength(30);
+
+    // Packs and picks are aligned
+    expect(rec.packs.length).toBe(rec.picks.length);
+
+    // Ordered by pickNumber: first pick in pack 1 is pick 1
+    expect(rec.packs[0]).toContain("A");
+
+    // The duplicate "Dup" is preserved in its raw order (not deduped)
+    // Pack 2, pip 3 is the 13th trimmed pick (10 from pack1 + 3rd from pack2 = index 12).
+    expect(rec.packs[12]).toEqual(["A", "Dup", "Dup", "B"]);
+
+    // pick arrays are passed through as-is
+    expect(rec.picks[0]).toEqual(["A"]);
+    expect(rec.picks[1]).toEqual([]);
+  });
+
+  it("emits id as <draftId>#<seat>", () => {
+    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    writeFileSync(
+      join(dir, "draft.json"),
+      JSON.stringify({
+        draftId: "xyz-123",
+        seats: [{ seat: 5, mainboard: ["A"], picks: makePicks() }],
+      }),
+    );
+    const result = buildDraftRecords(dir, cardMaps);
+    expect(result[0].id).toBe("xyz-123#5");
+    expect(result[0].draftId).toBe("xyz-123");
+  });
+
+  it("skips a seat with fewer than 30 trimmed picks (incomplete record)", () => {
+    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    // Only 2 packs × 10 = 20 trimmed picks — incomplete.
+    const incompletePicks = makePicks({ picksPerPack: 10 }).filter(
+      (p) => p.pack <= 2,
+    );
+    writeFileSync(
+      join(dir, "draft.json"),
+      JSON.stringify({
+        draftId: "incomplete",
+        seats: [{ seat: 0, mainboard: ["A"], picks: incompletePicks }],
+      }),
+    );
+    const result = buildDraftRecords(dir, cardMaps);
+    expect(result).toHaveLength(0);
+  });
+
+  it("keeps only the first three packs from a draft with more than three packs", () => {
+    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    // A 5-pack draft, 10 picks per pack. Packs 1-3 (pickInPack <= 10) yield the
+    // 30 trimmed picks; packs 4-5 are dropped entirely. Each pick is tagged with
+    // its pack marker (P1..P5) so we can assert which packs survived.
+    const picks = [];
+    let pickNumber = 0;
+    for (let pack = 1; pack <= 5; pack++) {
+      for (let pip = 1; pip <= 10; pip++) {
+        pickNumber++;
+        picks.push({
+          pickNumber,
+          pack,
+          pickInPack: pip,
+          pick: ["A"],
+          packCards: [`P${pack}`, "A", "B"],
+        });
+      }
+    }
+    writeFileSync(
+      join(dir, "draft.json"),
+      JSON.stringify({
+        draftId: "fivepack",
+        seats: [{ seat: 0, mainboard: ["A"], picks }],
+      }),
+    );
+    const result = buildDraftRecords(dir, cardMaps);
+    expect(result).toHaveLength(1);
+    expect(result[0].packs).toHaveLength(30);
+    // First trimmed pick is from pack 1, last is from pack 3.
+    expect(result[0].packs[0]).toContain("P1");
+    expect(result[0].packs[29]).toContain("P3");
+    // No surviving pack came from packs 4 or 5 (P4/P5 markers never appear).
+    const allNames = result[0].packs.flat();
+    expect(allNames).not.toContain("P4");
+    expect(allNames).not.toContain("P5");
+  });
+
+  it("drops names absent from cardMaps.nameToId and excludes them from output", () => {
+    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    // "Unknown" is not in cardMaps.nameToId.
+    const picks = makePicks();
+    picks[0].packCards = ["A", "Unknown", "B"];
+    picks[0].pick = ["Unknown"];
+
+    writeFileSync(
+      join(dir, "draft.json"),
+      JSON.stringify({
+        draftId: "nametest",
+        seats: [{ seat: 0, mainboard: ["A", "Unknown", "C"], picks }],
+      }),
+    );
+    const result = buildDraftRecords(dir, cardMaps);
+    expect(result).toHaveLength(1);
+    const rec = result[0];
+
+    // "Unknown" dropped from mainboard
+    expect(rec.mainboard).not.toContain("Unknown");
+    expect(rec.mainboard).toContain("A");
+
+    // "Unknown" dropped from pack
+    expect(rec.packs[0]).not.toContain("Unknown");
+    expect(rec.packs[0]).toContain("A");
+
+    // "Unknown" dropped from pick (leaving empty array)
+    expect(rec.picks[0]).toEqual([]);
   });
 });
