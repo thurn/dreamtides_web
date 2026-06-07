@@ -1,12 +1,14 @@
 import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
-import { buildDreamcallerPackage } from "../data/quest-content";
+import { buildDreamcallerPackage, buildReplayDraftState } from "../data/quest-content";
 import type { QuestContent } from "../data/quest-content";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import {
   createInitialDraftState,
   processPlayerPickWithoutLogging,
 } from "../draft/draft-engine";
+import { replayDepsFor } from "../draft/replay/replay-deps";
+import type { FitModel } from "../draft/replay/fit-model";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
 import type {
@@ -77,11 +79,17 @@ export function pickDraftCardInQuestState({
   siteId,
   cardNumber,
   cardDatabase,
+  fitModel,
 }: {
   prev: QuestState;
   siteId: string;
   cardNumber: number;
   cardDatabase: Map<number, CardData>;
+  /**
+   * Live deck-fit model, only present in replay mode. When set, the NEXT
+   * offer is ranked against the deck *after* this pick (see below).
+   */
+  fitModel?: FitModel;
 }): QuestState {
   if (prev.draftState === null) {
     throw new Error("Draft state is unavailable.");
@@ -91,10 +99,27 @@ export function pickDraftCardInQuestState({
     throw new Error(`Draft site ${siteId} is not active.`);
   }
 
+  // Append the picked card FIRST so the replay deck-fit ranking for the NEXT
+  // offer reflects the deck *including* the just-picked card. For pool mode
+  // the offer never reads the deck, so this reordering is observationally
+  // identical to advancing the draft state first. The engine's offer-
+  // membership check still validates `cardNumber` against the PRE-pick
+  // `currentOffer` (unchanged), so the reorder is safe.
+  const withCard = addCardToQuestState(prev, cardNumber, false);
   const draftState = structuredClone(prev.draftState);
-  processPlayerPickWithoutLogging(cardNumber, draftState, cardDatabase);
+  const replayDeps =
+    draftState.mode === "replay"
+      ? replayDepsFor(withCard.deck, fitModel)
+      : undefined;
+  processPlayerPickWithoutLogging(
+    cardNumber,
+    draftState,
+    cardDatabase,
+    undefined,
+    replayDeps,
+  );
 
-  return addCardToQuestState({ ...prev, draftState }, cardNumber, false);
+  return { ...withCard, draftState };
 }
 
 export function prepareDraftCardPickInQuestState({
@@ -102,11 +127,14 @@ export function prepareDraftCardPickInQuestState({
   siteId,
   cardNumber,
   cardDatabase,
+  fitModel,
 }: {
   prev: QuestState;
   siteId: string;
   cardNumber: number;
   cardDatabase: Map<number, CardData>;
+  /** Live deck-fit model, only present in replay mode. Passed straight through. */
+  fitModel?: FitModel;
 }): PreparedDraftPick {
   if (prev.draftState === null) {
     throw new Error("Draft state is unavailable.");
@@ -124,6 +152,7 @@ export function prepareDraftCardPickInQuestState({
     siteId,
     cardNumber,
     cardDatabase,
+    fitModel,
   });
 
   return {
@@ -359,6 +388,24 @@ export function startQuestFromDreamcaller({
     (node) => node.status === "available",
   );
 
+  // In replay mode the draft state is a frozen real-pack sequence chosen from
+  // the bundled record corpus; pool mode draws offers from the generated run
+  // multiset. The resolved package is still built normally in both modes — it
+  // provides signatures, the dreamsign pool, the starter decklist, and the
+  // shop pool (which replay shops draw from).
+  const useReplayDraft =
+    questContent.draftMode === "replay"
+    && questContent.draftRecords !== undefined
+    && questContent.draftRecords.length > 0;
+  const draftState = useReplayDraft
+    ? buildReplayDraftState(
+        dreamcaller,
+        poolContext.nameIndex,
+        seed,
+        questContent.draftRecords ?? [],
+      )
+    : createInitialDraftState(questContent.cardDatabase, resolvedPackage);
+
   return {
     ...prev,
     seed,
@@ -367,10 +414,7 @@ export function startQuestFromDreamcaller({
     dreamcaller: toQuestDreamcaller(dreamcaller),
     resolvedPackage,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
-    draftState: createInitialDraftState(
-      questContent.cardDatabase,
-      resolvedPackage,
-    ),
+    draftState,
     atlas,
     currentDreamscape: firstNode?.id ?? null,
     visitedSites: firstNode === undefined ? prev.visitedSites : [],

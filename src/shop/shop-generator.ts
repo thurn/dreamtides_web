@@ -1,6 +1,6 @@
 import type { CardData } from "../types/cards";
-import type { DreamsignTemplate } from "../types/content";
-import type { DraftState } from "../types/draft";
+import type { DreamsignTemplate, ResolvedDreamcallerPackage } from "../types/content";
+import type { DraftState, PoolDraftState } from "../types/draft";
 import type { Dreamsign, RuntimeShopSlot } from "../types/quest";
 
 import { drawAndSpendUniqueCards } from "../draft/draft-engine";
@@ -176,6 +176,34 @@ export function runtimeSlotsToShopSlots(
       ...base,
     };
   });
+}
+
+/**
+ * Build a transient pool {@link PoolDraftState} for shops to draw from when the
+ * run's live draft state is a replay state (which has no card multiset of its
+ * own). The pool comes from the resolved package's idf3 draft pool. Returns
+ * `null` when there is no package or the pool is empty. The caller passes this
+ * to {@link generateShopInventory} in place of the replay draft state, and on
+ * write-back keeps the replay state (it does NOT persist the spent pool), so
+ * replay shops draw fresh from the package pool each generation — acceptable,
+ * since the draft pool is not shared with the replay draft.
+ */
+export function replayShopDraftState(
+  resolvedPackage: ResolvedDreamcallerPackage | null | undefined,
+): PoolDraftState | null {
+  const copies = resolvedPackage?.draftPoolCopiesByCard;
+  if (copies === undefined || Object.keys(copies).length === 0) {
+    return null;
+  }
+  return {
+    mode: "pool",
+    draftPoolCopiesByCard: copies,
+    remainingCopiesByCard: { ...copies },
+    currentOffer: [],
+    activeSiteId: null,
+    pickNumber: 1,
+    sitePicksCompleted: 0,
+  };
 }
 
 /**

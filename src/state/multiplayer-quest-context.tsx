@@ -69,6 +69,7 @@ import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
   effectivePrice,
   generateShopInventory,
+  replayShopDraftState,
   rerollCost,
   shopSlotsToRuntime,
 } from "../shop/shop-generator";
@@ -1270,6 +1271,11 @@ export function MultiplayerQuestProvider({
 
   const pickDraftCard = useCallback((siteId: string, cardNumber: number) => {
     const current = currentRef.current;
+    // Capture the fit model BEFORE the RTDB transaction so every retry of the
+    // updater reuses the same instance (it is stable for the session). It is
+    // only consumed by `prepare` (which computes the next offer); `commit`
+    // CAS-validates and writes `prepared.next`, so it never needs the model.
+    const fitModel = current.questContent.fitModel;
     let prepared: ReturnType<typeof prepareDraftCardPickInQuestState>;
     try {
       prepared = prepareDraftCardPickInQuestState({
@@ -1277,6 +1283,7 @@ export function MultiplayerQuestProvider({
         siteId,
         cardNumber,
         cardDatabase: current.questContent.cardDatabase,
+        fitModel,
       });
     } catch {
       return;
@@ -1877,9 +1884,16 @@ export function MultiplayerQuestProvider({
       let nextDraftState: DraftState | null = current.state.draftState;
 
       if (current.state.siteRuntime[site.id] === undefined) {
+        // In replay mode the live draft state has no card multiset; shops draw
+        // from a transient pool built from the package's idf3 draft pool, and
+        // the replay draft state is preserved unchanged on write-back.
+        const isReplay = current.state.draftState?.mode === "replay";
+        const shopDraftState = isReplay
+          ? replayShopDraftState(current.state.resolvedPackage)
+          : current.state.draftState;
         const generated = generateShopInventory({
           cardDatabase: current.questContent.cardDatabase,
-          draftState: current.state.draftState,
+          draftState: shopDraftState,
           remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
           dreamsignTemplates: current.questContent.dreamsignTemplates,
           dreamsignRegenerationPoolIds:
@@ -1895,7 +1909,11 @@ export function MultiplayerQuestProvider({
           remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
         };
         remainingDreamsignPool = generated.remainingDreamsignPoolIds;
-        nextDraftState = generated.draftState;
+        // Pool mode persists the spent multiset; replay mode keeps its replay
+        // state (the transient shop pool is discarded).
+        nextDraftState = isReplay
+          ? current.state.draftState
+          : generated.draftState;
       }
 
       const now = new Date().toISOString();
@@ -2166,9 +2184,16 @@ export function MultiplayerQuestProvider({
       return;
     }
     const expectedDraftSignature = stableStringify(current.state.draftState);
+    // In replay mode the live draft state has no card multiset; the reroll
+    // draws from a transient pool built from the package's idf3 draft pool and
+    // the replay draft state is preserved unchanged on write-back.
+    const isReplay = current.state.draftState?.mode === "replay";
+    const shopDraftState = isReplay
+      ? replayShopDraftState(current.state.resolvedPackage)
+      : current.state.draftState;
     const generated = generateShopInventory({
       cardDatabase: current.questContent.cardDatabase,
-      draftState: current.state.draftState,
+      draftState: shopDraftState,
       remainingDreamsignPoolIds: expectedRuntime.remainingDreamsignPoolIds,
       dreamsignTemplates: current.questContent.dreamsignTemplates,
       dreamsignRegenerationPoolIds:
@@ -2178,6 +2203,9 @@ export function MultiplayerQuestProvider({
           ? (current.state.resolvedPackage?.starterDecklistCardNumbers ?? [])
           : undefined,
     });
+    const nextDraftState = isReplay
+      ? current.state.draftState
+      : generated.draftState;
     const replacements = shopSlotsToRuntime(generated.slots);
     let replacementIndex = 0;
     const rerollCount = expectedRuntime.rerollCount + 1;
@@ -2237,7 +2265,7 @@ export function MultiplayerQuestProvider({
                 }
               : room.questState.shopModifiers,
             remainingDreamsignPool: generated.remainingDreamsignPoolIds,
-            draftState: generated.draftState,
+            draftState: nextDraftState,
             siteRuntime: {
               ...room.questState.siteRuntime,
               [site.id]: {

@@ -66,6 +66,7 @@ import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
   effectivePrice,
   generateShopInventory,
+  replayShopDraftState,
   rerollCost,
   shopSlotsToRuntime,
 } from "../shop/shop-generator";
@@ -1181,9 +1182,16 @@ export function QuestProvider({
           return prev;
         }
 
+        // In replay mode the live draft state has no card multiset; shops draw
+        // from a transient pool built from the package's idf3 draft pool, and
+        // the replay draft state is preserved unchanged on write-back.
+        const isReplay = prev.draftState?.mode === "replay";
+        const shopDraftState = isReplay
+          ? replayShopDraftState(prev.resolvedPackage)
+          : prev.draftState;
         const generated = generateShopInventory({
           cardDatabase,
-          draftState: prev.draftState,
+          draftState: shopDraftState,
           remainingDreamsignPoolIds: prev.remainingDreamsignPool,
           dreamsignTemplates: questContent.dreamsignTemplates,
           dreamsignRegenerationPoolIds:
@@ -1208,7 +1216,9 @@ export function QuestProvider({
         return {
           ...prev,
           remainingDreamsignPool: generated.remainingDreamsignPoolIds,
-          draftState: generated.draftState,
+          // Pool mode persists the spent multiset; replay mode keeps its
+          // replay state (the transient shop pool is discarded).
+          draftState: isReplay ? prev.draftState : generated.draftState,
           siteRuntime: {
             ...prev.siteRuntime,
             [site.id]: runtime,
@@ -1408,9 +1418,16 @@ export function QuestProvider({
           return prev;
         }
 
+        // In replay mode the live draft state has no card multiset; the reroll
+        // draws from a transient pool built from the package's idf3 draft pool
+        // and the replay draft state is preserved unchanged on write-back.
+        const isReplay = prev.draftState?.mode === "replay";
+        const shopDraftState = isReplay
+          ? replayShopDraftState(prev.resolvedPackage)
+          : prev.draftState;
         const generated = generateShopInventory({
           cardDatabase,
-          draftState: prev.draftState,
+          draftState: shopDraftState,
           remainingDreamsignPoolIds: runtime.remainingDreamsignPoolIds,
           dreamsignTemplates: questContent.dreamsignTemplates,
           dreamsignRegenerationPoolIds:
@@ -1461,7 +1478,9 @@ export function QuestProvider({
           ...prev,
           omens: newOmens,
           remainingDreamsignPool: generated.remainingDreamsignPoolIds,
-          draftState: generated.draftState,
+          // Pool mode persists the spent multiset; replay mode keeps its
+          // replay state (the transient shop pool is discarded).
+          draftState: isReplay ? prev.draftState : generated.draftState,
           shopModifiers: nextShopModifiers,
           siteRuntime: {
             ...prev.siteRuntime,

@@ -19,11 +19,15 @@ import { PipBadge } from "../components/PipBadge";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
+  DEFAULT_DRAFT_CONFIG,
   enterDraftSite,
   SITE_PICKS,
 } from "../draft/draft-engine";
+import { replayDepsFor } from "../draft/replay/replay-deps";
+import type { FitModel } from "../draft/replay/fit-model";
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
+import type { DeckEntry } from "../types/quest";
 import { cardImageUrl } from "../data/card-database";
 import { CARD_ASPECT_RATIO } from "../components/card-aspect";
 import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
@@ -399,19 +403,25 @@ function bootstrapLocalDraftState(
   liveDraftState: DraftState | null,
   siteId: string,
   cardDatabase: Map<number, CardData>,
+  deck: readonly DeckEntry[],
+  fitModel: FitModel | undefined,
 ): DraftState | null {
   if (cardDatabase.size === 0) return null;
   if (liveDraftState === null) return null;
   if (liveDraftState.activeSiteId === siteId) return null;
 
   const cloned = JSON.parse(JSON.stringify(liveDraftState)) as DraftState;
-  enterDraftSite(cloned, siteId, cardDatabase);
+  // A replay draft state requires deck-fit deps to reveal its first offer; a
+  // pool state ignores them.
+  const replayDeps =
+    cloned.mode === "replay" ? replayDepsFor(deck, fitModel) : undefined;
+  enterDraftSite(cloned, siteId, cardDatabase, DEFAULT_DRAFT_CONFIG, replayDeps);
   return cloned;
 }
 
 /** The draft site screen: 4-card pack display, card picking, and summary. */
 export function DraftSiteScreen({ siteId }: { siteId: string }) {
-  const { state, mutations, cardDatabase } = useQuest();
+  const { state, mutations, cardDatabase, questContent } = useQuest();
   const [pickPhase, setPickPhase] = useState<PickPhase>("idle");
   const [pickedCardNumber, setPickedCardNumber] = useState<number | null>(null);
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
@@ -423,7 +433,14 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
   // this site, so the screen has a real offer to show before the RTDB write
   // round-trips. Cleared once the live state matches.
   const [localDraftState, setLocalDraftState] = useState<DraftState | null>(
-    () => bootstrapLocalDraftState(state.draftState, siteId, cardDatabase),
+    () =>
+      bootstrapLocalDraftState(
+        state.draftState,
+        siteId,
+        cardDatabase,
+        state.deck,
+        questContent.fitModel,
+      ),
   );
   const draftStateRef = useRef<DraftState | null>(null);
   // Latches the local draft state we have already pushed to RTDB so the
@@ -544,12 +561,32 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     }
 
     const cloned = JSON.parse(JSON.stringify(state.draftState)) as DraftState;
-    enterDraftSite(cloned, siteId, cardDatabase);
+    // A replay draft state requires deck-fit deps to reveal its first offer; a
+    // pool state ignores them.
+    const replayDeps =
+      cloned.mode === "replay"
+        ? replayDepsFor(state.deck, questContent.fitModel)
+        : undefined;
+    enterDraftSite(
+      cloned,
+      siteId,
+      cardDatabase,
+      DEFAULT_DRAFT_CONFIG,
+      replayDeps,
+    );
     draftStateRef.current = cloned;
     setLocalDraftState(cloned);
     writtenLocalDraftStateRef.current = cloned;
     mutations.setDraftState(cloned, "draft_site_enter");
-  }, [siteId, state.draftState, cardDatabase, mutations, localDraftState]);
+  }, [
+    siteId,
+    state.draftState,
+    state.deck,
+    cardDatabase,
+    mutations,
+    localDraftState,
+    questContent.fitModel,
+  ]);
 
   useEffect(() => {
     mutations.setCardSourceDebug(cardSourceDebugState, "draft_site_cards_shown");
