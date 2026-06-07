@@ -10,7 +10,7 @@
     "editor2": "npm install && npm run dev:vite -- --open \"/editor?toml=data/tabula/cards_v2.toml\"",
     "draft_test": "npm install && npm run dev:vite -- --open /draft_test",
     "start": "node scripts/dev-with-emulator.mjs",
-    "dev": "npm start",
+    "dev": "node scripts/dev-with-emulator.mjs",
     "dev:vite": "node scripts/setup-assets.mjs && vite --port 5173 --strictPort",
     "build": "node scripts/setup-assets.mjs && tsc && vite build",
     "preview": "vite preview",

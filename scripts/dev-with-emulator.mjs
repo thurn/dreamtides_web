@@ -4,8 +4,8 @@ import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createServer } from "node:net";
+import { pathToFileURL } from "node:url";
 
-const viteArgs = process.argv.slice(2);
 const databaseHost = "127.0.0.1";
 const preferredDatabasePort = 9000;
 const preferredUiPort = 4000;
@@ -24,6 +24,24 @@ const baseChildEnv = {
     process.env.PATH ?? "",
   ].join(":"),
 };
+
+export function normalizeForwardedViteArgs(argv) {
+  const forwardedArgs = argv[0] === "--" ? argv.slice(1) : [...argv];
+  const hasPort = forwardedArgs.some(
+    (arg) => arg === "--port" || arg.startsWith("--port="),
+  );
+  const hasStrictPort = forwardedArgs.some((arg) => arg === "--strictPort");
+  const defaultArgs = [];
+
+  if (!hasPort) {
+    defaultArgs.push("--port", "5173");
+  }
+  if (!hasStrictPort) {
+    defaultArgs.push("--strictPort");
+  }
+
+  return [...defaultArgs, ...forwardedArgs];
+}
 
 function spawnChild(command, args, envOverrides = {}) {
   const child = spawn(command, args, {
@@ -193,69 +211,75 @@ async function waitForDatabaseEmulator(databasePort) {
   throw new Error("Timed out waiting for the Realtime Database emulator.");
 }
 
-process.on("SIGINT", () => shutdown(130, "SIGINT"));
-process.on("SIGTERM", () => shutdown(143, "SIGTERM"));
-process.on("exit", () => {
-  if (!shuttingDown) {
-    for (const child of children) {
-      child.kill("SIGTERM");
+function registerShutdownHandlers() {
+  process.on("SIGINT", () => shutdown(130, "SIGINT"));
+  process.on("SIGTERM", () => shutdown(143, "SIGTERM"));
+  process.on("exit", () => {
+    if (!shuttingDown) {
+      for (const child of children) {
+        child.kill("SIGTERM");
+      }
     }
+    cleanupTempConfig();
+  });
+}
+
+export async function runDevWithEmulator(argv = process.argv.slice(2)) {
+  registerShutdownHandlers();
+
+  try {
+    const databasePort = await findAvailablePort(preferredDatabasePort);
+    const uiPort = await findAvailablePort(preferredUiPort);
+    const hubPort = await findAvailablePort(preferredHubPort);
+    const loggingPort = await findAvailablePort(preferredLoggingPort);
+    const firebaseConfigPath = await writeFirebaseConfig(
+      databasePort,
+      uiPort,
+      hubPort,
+      loggingPort,
+    );
+    const emulatorEnv = {
+      VITE_FIREBASE_DATABASE_EMULATOR_HOST: databaseHost,
+      VITE_FIREBASE_DATABASE_EMULATOR_PORT: String(databasePort),
+    };
+
+    console.log(
+      `Firebase database emulator: ${databaseHost}:${databasePort}; Emulator UI: ${databaseHost}:${uiPort}; Hub: ${databaseHost}:${hubPort}; Logging: ${databaseHost}:${loggingPort}`,
+    );
+
+    const emulator = spawnChild("firebase", [
+      "emulators:start",
+      "--only",
+      "database",
+      "--project",
+      projectId,
+      "--config",
+      firebaseConfigPath,
+    ]);
+
+    emulator.on("exit", (code, signal) => {
+      if (!shuttingDown) {
+        console.error(`Firebase emulator exited with ${signal ?? code}.`);
+        shutdown(typeof code === "number" ? code : 1);
+      }
+    });
+
+    await waitForExit(spawnChild(process.execPath, ["scripts/setup-assets.mjs"]));
+    await waitForDatabaseEmulator(databasePort);
+
+    const vite = spawnChild("vite", normalizeForwardedViteArgs(argv), emulatorEnv);
+    vite.on("exit", (code, signal) => {
+      if (!shuttingDown) {
+        shutdown(typeof code === "number" ? code : signal === "SIGINT" ? 130 : 1);
+      }
+    });
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    shutdown(1);
+    await new Promise(() => {});
   }
-  cleanupTempConfig();
-});
+}
 
-try {
-  const databasePort = await findAvailablePort(preferredDatabasePort);
-  const uiPort = await findAvailablePort(preferredUiPort);
-  const hubPort = await findAvailablePort(preferredHubPort);
-  const loggingPort = await findAvailablePort(preferredLoggingPort);
-  const firebaseConfigPath = await writeFirebaseConfig(
-    databasePort,
-    uiPort,
-    hubPort,
-    loggingPort,
-  );
-  const emulatorEnv = {
-    VITE_FIREBASE_DATABASE_EMULATOR_HOST: databaseHost,
-    VITE_FIREBASE_DATABASE_EMULATOR_PORT: String(databasePort),
-  };
-
-  console.log(
-    `Firebase database emulator: ${databaseHost}:${databasePort}; Emulator UI: ${databaseHost}:${uiPort}; Hub: ${databaseHost}:${hubPort}; Logging: ${databaseHost}:${loggingPort}`,
-  );
-
-  const emulator = spawnChild("firebase", [
-    "emulators:start",
-    "--only",
-    "database",
-    "--project",
-    projectId,
-    "--config",
-    firebaseConfigPath,
-  ]);
-
-  emulator.on("exit", (code, signal) => {
-    if (!shuttingDown) {
-      console.error(`Firebase emulator exited with ${signal ?? code}.`);
-      shutdown(typeof code === "number" ? code : 1);
-    }
-  });
-
-  await waitForExit(spawnChild(process.execPath, ["scripts/setup-assets.mjs"]));
-  await waitForDatabaseEmulator(databasePort);
-
-  const vite = spawnChild(
-    "vite",
-    ["--port", "5173", "--strictPort", ...viteArgs],
-    emulatorEnv,
-  );
-  vite.on("exit", (code, signal) => {
-    if (!shuttingDown) {
-      shutdown(typeof code === "number" ? code : signal === "SIGINT" ? 130 : 1);
-    }
-  });
-} catch (error) {
-  console.error(error instanceof Error ? error.message : error);
-  shutdown(1);
-  await new Promise(() => {});
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  await runDevWithEmulator();
 }
