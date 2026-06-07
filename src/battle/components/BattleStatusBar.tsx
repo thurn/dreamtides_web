@@ -7,6 +7,7 @@ const PHASE_STEPS = [
   { id: "day", label: "Day", icon: "bx-sun" },
   { id: "dusk", label: "Dusk", icon: "bx-sun phase-icon-sunset" },
   { id: "night", label: "Night", icon: "bx-moon" },
+  { id: "challenge", label: "Challenge", icon: "bx-shield" },
 ] as const;
 
 export function BattleStatusBar({
@@ -130,7 +131,6 @@ function normalizeVisiblePhase(phase: BattleMutableState["phase"]) {
     case "dreamwell":
     case "draw":
       return "dawn";
-    case "challenge":
     case "ending":
       return "night";
     default:

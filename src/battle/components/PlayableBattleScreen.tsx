@@ -75,7 +75,7 @@ import {
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
-const PHASE_CONTROL_SEQUENCE = ["dawn", "day", "dusk", "night"] as const satisfies readonly BattlePhase[];
+const PHASE_CONTROL_SEQUENCE = ["dawn", "day", "dusk", "night", "challenge"] as const satisfies readonly BattlePhase[];
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
 type RewardOverlayState = {
   rewardSource: string;
@@ -1601,7 +1601,6 @@ function normalizePhaseForControls(phase: BattleMutableState["phase"]): (typeof 
     case "dreamwell":
     case "draw":
       return "dawn";
-    case "challenge":
     case "ending":
       return "night";
     default:

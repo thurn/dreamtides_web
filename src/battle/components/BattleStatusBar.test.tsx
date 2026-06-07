@@ -121,6 +121,23 @@ describe("BattleStatusBar", () => {
     },
   );
 
+  it.each(["dawn", "day", "dusk", "night", "challenge"] as const)(
+    "treats surfaced phase %s as its own active chip",
+    (phase) => {
+      const { container, root } = mount({ phase });
+
+      expect(
+        container
+          .querySelector(`[data-battle-phase-chip="${phase}"]`)
+          ?.getAttribute("data-active"),
+      ).toBe("true");
+
+      act(() => {
+        root.unmount();
+      });
+    },
+  );
+
   it("keeps phase increment controls out of the top bar", () => {
     const onSetPhase = vi.fn();
     const { container, root } = mount({ phase: "night", onSetPhase });

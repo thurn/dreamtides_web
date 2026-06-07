@@ -622,7 +622,7 @@ describe("PlayableBattleScreen", () => {
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Night");
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Challenge");
     expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 1");
     expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
 
@@ -643,7 +643,7 @@ describe("PlayableBattleScreen", () => {
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Night");
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Challenge");
     expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 1");
     expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Player");
 
@@ -652,9 +652,30 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("advances active side when the next floating phase control wraps", () => {
+  it("advances the phase from night to challenge with the next floating phase control", () => {
     const { container, root } = renderScreen((state) => {
       state.phase = "night";
+      state.activeSide = "player";
+      state.turnNumber = 1;
+    });
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Challenge");
+    expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 1");
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Player");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("advances active side when the next floating phase control wraps from challenge", () => {
+    const { container, root } = renderScreen((state) => {
+      state.phase = "challenge";
       state.activeSide = "player";
       state.turnNumber = 1;
     });
