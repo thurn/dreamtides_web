@@ -10,8 +10,7 @@ import type {
   FrontRankSlotId,
   BackRankSlotId,
 } from "../types";
-
-const OPENING_ENERGY = 2;
+import { OPENING_ENERGY } from "../engine/energy";
 
 /**
  * Default per-card status: every flag false and every numeric counter zero. A
