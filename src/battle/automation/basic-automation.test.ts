@@ -688,6 +688,190 @@ describe("planBasicAutomationCommands — turn handoff", () => {
   });
 });
 
+describe("planBasicAutomationCommands — bookend phase auto-advance", () => {
+  // A `SET_PHASE` to a bookend (dreamwell / draw / dawn / ending) carries no
+  // player action: automation folds in the bookend's effect edits and a
+  // follow-on `SET_PHASE` that steps forward, chaining through consecutive
+  // bookends until it lands on a surfaced phase the player drives (rules §Turn
+  // Structure). The integration invariant: navigating into `dreamwell` lands the
+  // active side in `day` with energy ramped, a card drawn, and exhaustion
+  // cleared, applying each bookend's effect exactly once.
+  it("expands a dreamwell gesture into the full bookend chain landing in day", () => {
+    const exhausted = makeInstance("p0", { owner: "player", printedSpark: 2 });
+    exhausted.status.isExhausted = true;
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 3,
+      player: {
+        deck: ["d0", "d1"],
+        frontRank: frontRankSlots("F0", "p0"),
+      },
+      instances: [exhausted],
+    });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "dreamwell" },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+
+    // The original dreamwell navigation is preserved.
+    expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "dreamwell" });
+    // Dreamwell folds in the energy ramp (turn 3 → min(2 + 2, 10) = 4).
+    expect(result).toContainEqual({ kind: "SET_MAX_ENERGY", side: "player", value: 4 });
+    expect(result).toContainEqual({ kind: "SET_CURRENT_ENERGY", side: "player", value: 4 });
+    // Draw folds in a card for the active side (turn > 1).
+    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "player" });
+    // Dawn folds in the exhaust-clear for the active side.
+    expect(result).toContainEqual({
+      kind: "SET_CARD_STATUS",
+      battleCardId: "p0",
+      status: { isExhausted: false },
+    });
+    // The chain lands the active side in the next surfaced phase, `day`.
+    expect(result[result.length - 1]).toEqual({ kind: "SET_PHASE", phase: "day" });
+    // No bookend effect is applied twice.
+    expect(result.filter((edit) => edit.kind === "DRAW_CARD")).toHaveLength(1);
+    expect(result.filter((edit) => edit.kind === "SET_MAX_ENERGY")).toHaveLength(1);
+  });
+
+  it("skips the draw on the very first turn of the battle", () => {
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 1,
+      player: { deck: ["d0"] },
+    });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "dreamwell" },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
+    // Still lands in day.
+    expect(result[result.length - 1]).toEqual({ kind: "SET_PHASE", phase: "day" });
+  });
+
+  it("expands a draw gesture into draw + dawn landing in day", () => {
+    const state = makeState({
+      activeSide: "enemy",
+      turnNumber: 2,
+      enemy: { deck: ["d0"] },
+    });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "draw" },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "draw" });
+    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
+    // A draw gesture does not re-apply the dreamwell ramp.
+    expect(result.some((edit) => edit.kind === "SET_MAX_ENERGY")).toBe(false);
+    expect(result[result.length - 1]).toEqual({ kind: "SET_PHASE", phase: "day" });
+  });
+
+  it("expands a dawn gesture into the exhaust-clear landing in day", () => {
+    const exhausted = makeInstance("p0", { owner: "player", printedSpark: 2 });
+    exhausted.status.isExhausted = true;
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 4,
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      instances: [exhausted],
+    });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "dawn" },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "dawn" });
+    expect(result).toContainEqual({
+      kind: "SET_CARD_STATUS",
+      battleCardId: "p0",
+      status: { isExhausted: false },
+    });
+    // A dawn gesture does not re-draw or re-ramp.
+    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
+    expect(result.some((edit) => edit.kind === "SET_MAX_ENERGY")).toBe(false);
+    expect(result[result.length - 1]).toEqual({ kind: "SET_PHASE", phase: "day" });
+  });
+
+  it("expands an ending gesture into the hand-limit discard and banish", () => {
+    const overfullHand = Array.from({ length: 12 }, (_, index) => `h${String(index)}`);
+    const ephemeral = makeInstance("h11", { owner: "player" });
+    ephemeral.status.ephemeral = true;
+    const offering = makeInstance("p-off", { owner: "player", printedSpark: 3 });
+    offering.status.offering = true;
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 4,
+      player: {
+        hand: overfullHand,
+        frontRank: frontRankSlots("F0", "p-off"),
+      },
+      instances: [ephemeral, offering],
+    });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "ending" },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "ending" });
+    // Hand-limit discard for the active side.
+    expect(result).toContainEqual({ kind: "DISCARD_CARD", battleCardId: "h11" });
+    expect(result).toContainEqual({ kind: "DISCARD_CARD", battleCardId: "h10" });
+    // Offering in-play card is banished.
+    expect(result).toContainEqual({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: "p-off",
+      destination: { side: "player", zone: "banished" },
+    });
+    // An ending gesture does not flip the side (that is the handoff's job).
+    expect(result.some((edit) => edit.kind === "SET_BATTLE_FLOW")).toBe(false);
+  });
+
+  it("stops at surfaced phases without expanding them", () => {
+    const state = makeState({ activeSide: "player", turnNumber: 2, player: { deck: ["d0"] } });
+    for (const phase of ["day", "dusk", "night"] as const) {
+      const gesture: BattleCommand = {
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_PHASE", phase },
+        sourceSurface: "phase-controls",
+      };
+      // Surfaced phases pass through untouched — the player drives them.
+      expect(planBasicAutomationCommands(state, gesture, CAPS)).toEqual([gesture]);
+    }
+  });
+
+  it("still resolves the challenge when navigating to the challenge phase", () => {
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 3,
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
+    });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "challenge" },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "challenge" });
+    expect(result).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 4 });
+    // The challenge navigation does not advance past challenge.
+    expect(result.some((edit) => edit.kind === "SET_PHASE" && edit.phase !== "challenge")).toBe(false);
+  });
+});
+
 describe("planBasicAutomationCommands — passthrough", () => {
   it("returns non-automated commands unchanged", () => {
     const state = makeState({});

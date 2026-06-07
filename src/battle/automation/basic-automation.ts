@@ -10,10 +10,41 @@ import { selectBattleCardLocation } from "../state/selectors";
 import type {
   BattleCardInstance,
   BattleMutableState,
+  BattlePhase,
   BattleResult,
   BattleSide,
 } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+
+/**
+ * The eight battle phases in turn order (rules §Turn Structure). The five
+ * surfaced phases — `dawn` is woken by Dawn automation but, like the other
+ * bookends, carries no player action — are driven by the player; the bookend
+ * phases auto-advance.
+ */
+const PHASE_SEQUENCE: readonly BattlePhase[] = [
+  "dreamwell",
+  "draw",
+  "dawn",
+  "day",
+  "dusk",
+  "night",
+  "challenge",
+  "ending",
+];
+
+/**
+ * The bookend phases (rules §Turn Structure). Each carries no player action:
+ * entering one immediately applies its effect and advances to the next phase.
+ * Dreamwell ramps energy, Draw draws, Dawn clears exhaustion, and Ending
+ * enforces the hand limit and banishes end-of-turn statuses.
+ */
+const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
+  "dreamwell",
+  "draw",
+  "dawn",
+  "ending",
+]);
 
 /**
  * "Basic automation" applies the small, deterministic subset of the Dreamtides
@@ -39,6 +70,10 @@ import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
  *  - **Keyword awareness.** Preeminence wins spark ties, Vengeful drags the
  *    winner down when its bearer loses, and Unstoppable scores when a defended
  *    character survives (rules §Keywords and Effects).
+ *  - **Bookend phases auto-advance.** A `SET_PHASE` into a bookend phase
+ *    (`dreamwell`, `draw`, `dawn`, `ending`) carries no player action: it folds
+ *    in that bookend's effect and steps forward — chaining through consecutive
+ *    bookends — until it lands on a surfaced phase (rules §Turn Structure).
  *  - **Start of turn ramps energy and draws.** The incoming player's energy
  *    ramps to the per-turn maximum and they draw a card (skipped on the very
  *    first turn of the battle) (rules §Turn Structure — Dreamwell / Draw).
@@ -100,9 +135,13 @@ export function planBasicAutomationCommands(
     case "SET_BATTLE_FLOW":
       return planTurnHandoff(state, command, command.edit, caps);
     case "SET_PHASE":
-      return command.edit.phase === "challenge"
-        ? planChallengeOnly(state, command, caps)
-        : [command];
+      if (command.edit.phase === "challenge") {
+        return planChallengeOnly(state, command, caps);
+      }
+      if (BOOKEND_PHASES.has(command.edit.phase)) {
+        return planBookendAdvance(state, command, command.edit, caps);
+      }
+      return [command];
     default:
       return [command];
   }
@@ -241,6 +280,89 @@ function planChallengeOnly(
     commands.push(victoryCommand);
   }
   return commands;
+}
+
+/**
+ * A `SET_PHASE` into a bookend phase carries no player action (rules §Turn
+ * Structure). Automation keeps the original navigation, folds in that bookend's
+ * effect edits, then steps to the next phase — chaining through any consecutive
+ * bookends (each contributing its own effect once) until it lands on a surfaced
+ * phase the player drives. The active side and turn number are unchanged: this
+ * is within-turn phase navigation, not a turn handoff (that is `SET_BATTLE_FLOW`).
+ */
+function planBookendAdvance(
+  state: BattleMutableState,
+  command: BattleCommand,
+  edit: Extract<BattleDebugEdit, { kind: "SET_PHASE" }>,
+  caps: BasicAutomationCaps,
+): BattleCommand[] {
+  const side = state.activeSide;
+  // Keep the original navigation so the bookend entry stays in history.
+  const commands: BattleCommand[] = [command];
+
+  let phase = edit.phase;
+  // Each iteration applies the current bookend's effect and advances one phase.
+  // The loop terminates because every step moves strictly forward through the
+  // finite `PHASE_SEQUENCE` toward a surfaced phase (`ending` is the last
+  // bookend and resolves to `day`).
+  while (BOOKEND_PHASES.has(phase)) {
+    for (const effectEdit of bookendEffectEdits(state, side, phase, state.turnNumber, caps)) {
+      commands.push(autoCommand(effectEdit));
+    }
+    phase = nextSurfaceableTarget(phase);
+    commands.push(autoCommand({ kind: "SET_PHASE", phase }));
+  }
+
+  return commands;
+}
+
+/**
+ * The phase a bookend advances into. A bookend hands off to the next phase in
+ * turn order; `ending` is terminal, so it advances to the following turn's first
+ * surfaced phase, `day` (the side flip and turn increment belong to the
+ * `SET_BATTLE_FLOW` handoff, not to bare phase navigation).
+ */
+function nextSurfaceableTarget(phase: BattlePhase): BattlePhase {
+  if (phase === "ending") {
+    return "day";
+  }
+  const index = PHASE_SEQUENCE.indexOf(phase);
+  return PHASE_SEQUENCE[index + 1] ?? "day";
+}
+
+/**
+ * The deterministic effect edits a single bookend phase folds in when entered
+ * (rules §Turn Structure). Pure: it only reads `state`.
+ *
+ *  - **Dreamwell:** ramp the active side's max ● (and refill current ●) on the
+ *    per-turn schedule.
+ *  - **Draw:** draw one card for the active side, skipping the very first turn.
+ *  - **Dawn:** clear the active side's exhausted characters.
+ *  - **Ending:** discard the active side down to the hand limit, then banish its
+ *    end-of-turn statuses (ephemeral in hand, offering in play).
+ */
+function bookendEffectEdits(
+  state: BattleMutableState,
+  side: BattleSide,
+  phase: BattlePhase,
+  turnNumber: number,
+  caps: BasicAutomationCaps,
+): BattleDebugEdit[] {
+  switch (phase) {
+    case "dreamwell":
+      return energyRampEdits(side, turnNumber, caps.maxEnergyCap);
+    case "draw":
+      return turnNumber > 1 ? [{ kind: "DRAW_CARD", side }] : [];
+    case "dawn":
+      return dawnExhaustClearEdits(state, side);
+    case "ending":
+      return [
+        ...handLimitDiscardEdits(state, side),
+        ...endingBanishEdits(state, side),
+      ];
+    default:
+      return [];
+  }
 }
 
 export interface ChallengeResolution {
