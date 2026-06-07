@@ -6,6 +6,7 @@ import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { FitModel } from "./replay/fit-model";
 import {
   completeDraftSite,
+  createInitialFresh20DraftState,
   createInitialReplayDraftState,
   drawAndSpendUniqueCards,
   enterDraftSite,
@@ -15,6 +16,10 @@ import {
   type ReplayDeps,
   SITE_PICKS,
 } from "./draft-engine";
+import {
+  FRESH20_COOLDOWN_PICKS,
+  type Fresh20Deps,
+} from "./fresh20/fresh20-offer";
 
 function makeCard(cardNumber: number): CardData {
   return {
@@ -663,5 +668,120 @@ describe("completeDraftSite", () => {
     expect(completionEvent?.siteId).toBe("site-a");
     expect(completionEvent?.cardsDrafted).toEqual([4, 7]);
     expect(completionEvent?.picksCompleted).toBe(2);
+  });
+});
+
+describe("fresh20 mode", () => {
+  const fakeFitModel = {} as unknown as FitModel;
+
+  // A deterministic ranker: returns the first `offerSize` cards of the pack so
+  // the offer is a pure function of the (deterministically sampled) pack.
+  function makeHeadOffer(): NonNullable<Fresh20Deps["computeOffer"]> {
+    return vi.fn(
+      (pack: readonly number[], _deck, _sig, _model, offerSize: number) =>
+        pack.slice(0, offerSize),
+    );
+  }
+
+  // rng = 0 on every draw makes the partial Fisher–Yates a no-op, so a pack is
+  // the first `packSize` eligible cards in input order — fully deterministic.
+  const zeroRng = (): number => 0;
+
+  function makeFresh20Deps(
+    allCardNumbers: number[],
+    overrides: Partial<Fresh20Deps> = {},
+  ): Fresh20Deps {
+    return {
+      deckCardNumbers: [],
+      fitModel: fakeFitModel,
+      offerSize: 4,
+      allCardNumbers,
+      rng: zeroRng,
+      computeOffer: makeHeadOffer(),
+      ...overrides,
+    };
+  }
+
+  it("rolls a fresh pack and offers the ranker's slice on entry", () => {
+    const all = Array.from({ length: 60 }, (_, i) => i + 1);
+    const cardDatabase = buildDB(all.map((n) => makeCard(n)));
+    const state = createInitialFresh20DraftState({ packSize: 20 });
+    const computeOffer = makeHeadOffer();
+
+    enterDraftSite(
+      state,
+      "site-a",
+      cardDatabase,
+      undefined,
+      makeFresh20Deps(all, { computeOffer }),
+    );
+
+    // packSize 20, zero rng → pack [1..20]; head ranker → first four.
+    expect(state.currentOffer).toEqual([1, 2, 3, 4]);
+    expect(computeOffer).toHaveBeenCalledTimes(1);
+  });
+
+  it("records every shown card so it goes on cooldown next pick", () => {
+    const all = Array.from({ length: 60 }, (_, i) => i + 1);
+    const cardDatabase = buildDB(all.map((n) => makeCard(n)));
+    const state = createInitialFresh20DraftState({ packSize: 20 });
+
+    enterDraftSite(state, "site-a", cardDatabase, undefined, makeFresh20Deps(all));
+    expect(state.currentOffer).toEqual([1, 2, 3, 4]);
+    // All four shown cards are recorded at pick 1.
+    for (const card of [1, 2, 3, 4]) {
+      expect(state.shownPicksByCard[String(card)]).toEqual([1]);
+    }
+
+    const complete = processPlayerPick(
+      state.currentOffer[0],
+      state,
+      cardDatabase,
+      undefined,
+      makeFresh20Deps(all),
+    );
+
+    expect(complete).toBe(false);
+    expect(state.pickNumber).toBe(2);
+    // Pick 2's pack must exclude the four cards shown at pick 1 (cooldown), so
+    // the next eligible head-of-list cards [5..8] are offered instead.
+    expect(state.currentOffer).toEqual([5, 6, 7, 8]);
+  });
+
+  it("frees a card again once its cooldown elapses", () => {
+    // A tiny universe forces reuse: 8 cards, packSize 8 → every pick shows the 4
+    // best of all 8 still-eligible cards. Card 1, shown at pick 1, must be
+    // offerable again exactly FRESH20_COOLDOWN_PICKS picks later.
+    const all = [1, 2, 3, 4, 5, 6, 7, 8];
+    const cardDatabase = buildDB(all.map((n) => makeCard(n)));
+    const state = createInitialFresh20DraftState({ packSize: 8 });
+    // Pretend card 1 was shown once, long enough ago to be free at pick
+    // 1 + FRESH20_COOLDOWN_PICKS.
+    state.shownPicksByCard = { "1": [1] };
+    state.pickNumber = 1 + FRESH20_COOLDOWN_PICKS;
+    state.activeSiteId = null;
+
+    const seenPacks: number[][] = [];
+    enterDraftSite(
+      state,
+      "site-a",
+      cardDatabase,
+      undefined,
+      makeFresh20Deps(all, {
+        computeOffer: vi.fn((pack: readonly number[], _d, _s, _m, n: number) => {
+          seenPacks.push([...pack]);
+          return pack.slice(0, n);
+        }),
+      }),
+    );
+    expect(seenPacks[0]).toContain(1);
+  });
+
+  it("throws when fresh20 deps are missing", () => {
+    const cardDatabase = buildDB([makeCard(1), makeCard(2)]);
+    const state = createInitialFresh20DraftState({ packSize: 20 });
+    expect(() => enterDraftSite(state, "site-a", cardDatabase)).toThrow(
+      /fresh20Deps/,
+    );
   });
 });

@@ -3,12 +3,18 @@ import type { ResolvedDreamcallerPackage } from "../types/content";
 import type {
   DraftConfig,
   DraftState,
+  Fresh20DraftState,
   PackContext,
   PoolDraftState,
   ReplayDraftState,
 } from "../types/draft";
 import { logEvent } from "../logging";
 import { computeReplayOffer, type FitModel } from "./replay/fit-model";
+import {
+  computeFresh20Offer,
+  recordFresh20Shown,
+  type Fresh20Deps,
+} from "./fresh20/fresh20-offer";
 import { DEFAULT_DRAFT_SITE_PICK_COUNT } from "./draft-site-config";
 
 /** Default shared draft configuration. */
@@ -38,6 +44,14 @@ export interface ReplayDeps {
   /** Ranker. Defaults to the real {@link computeReplayOffer}; tests inject a fake. */
   computeOffer?: typeof computeReplayOffer;
 }
+
+/**
+ * Per-offer dependencies for the deck-fit draft modes. `revealOffer` and the
+ * pick/entry helpers accept whichever member matches the active draft state:
+ * {@link ReplayDeps} for `mode:"replay"`, {@link Fresh20Deps} for
+ * `mode:"fresh20"`. Pool-mode calls pass `undefined`.
+ */
+export type OfferDeps = ReplayDeps | Fresh20Deps;
 
 /**
  * Compute a replay offer from the frozen pack sequence. Returns the deck-fit
@@ -191,13 +205,33 @@ function revealOffer(
   state: DraftState,
   config: DraftConfig,
   options: { logEvents: boolean } = { logEvents: true },
-  replayDeps?: ReplayDeps,
+  offerDeps?: OfferDeps,
 ): boolean {
   if (state.mode === "replay") {
-    if (replayDeps === undefined) {
+    if (offerDeps === undefined) {
       throw new Error("revealOffer requires replayDeps for a replay draft state");
     }
-    state.currentOffer = buildReplayOffer(state, replayDeps);
+    state.currentOffer = buildReplayOffer(state, offerDeps as ReplayDeps);
+    if (options.logEvents) {
+      logEvent("draft_offer_revealed", {
+        pickNumber: state.pickNumber,
+        offerCards: state.currentOffer,
+      });
+    }
+    return state.currentOffer.length > 0;
+  }
+
+  if (state.mode === "fresh20") {
+    if (offerDeps === undefined) {
+      throw new Error(
+        "revealOffer requires fresh20Deps for a fresh20 draft state",
+      );
+    }
+    state.currentOffer = computeFresh20Offer(state, offerDeps as Fresh20Deps);
+    // Record the shown cards so the cooldown / twice-then-never caps apply on
+    // later picks. Done here (once per pick) rather than in the pure offer
+    // computation so the offer builder stays side-effect free.
+    recordFresh20Shown(state, state.currentOffer);
     if (options.logEvents) {
       logEvent("draft_offer_revealed", {
         pickNumber: state.pickNumber,
@@ -329,6 +363,25 @@ export function createInitialReplayDraftState(args: {
   };
 }
 
+/**
+ * Create an initial {@link Fresh20DraftState}. The packs are rolled lazily at
+ * each pick, so nothing is frozen up front: only the pack size and the (empty)
+ * show history are seeded here.
+ */
+export function createInitialFresh20DraftState(args: {
+  packSize: number;
+}): Fresh20DraftState {
+  return {
+    mode: "fresh20",
+    packSize: args.packSize,
+    shownPicksByCard: {},
+    currentOffer: [],
+    activeSiteId: null,
+    pickNumber: 1,
+    sitePicksCompleted: 0,
+  };
+}
+
 /** Create initial DraftState from the resolved Dreamcaller package. */
 export function initializeDraftState(
   cardDatabase: Map<number, CardData>,
@@ -351,7 +404,7 @@ export function enterDraftSite(
   siteId: string,
   _cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
-  replayDeps?: ReplayDeps,
+  offerDeps?: OfferDeps,
 ): void {
   if (state.activeSiteId === siteId) {
     logEvent("draft_site_entered", {
@@ -373,7 +426,7 @@ export function enterDraftSite(
 
   state.activeSiteId = siteId;
   state.sitePicksCompleted = 0;
-  const hasOffer = revealOffer(state, config, { logEvents: true }, replayDeps);
+  const hasOffer = revealOffer(state, config, { logEvents: true }, offerDeps);
 
   logEvent("draft_site_entered", {
     siteId,
@@ -403,7 +456,7 @@ function processPlayerPickInternal(
   cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
   options: { logEvents: boolean },
-  replayDeps?: ReplayDeps,
+  offerDeps?: OfferDeps,
 ): boolean {
   const currentOffer = [...state.currentOffer];
   if (!currentOffer.includes(cardNumber)) {
@@ -440,7 +493,7 @@ function processPlayerPickInternal(
     return true;
   }
 
-  return !revealOffer(state, config, options, replayDeps);
+  return !revealOffer(state, config, options, offerDeps);
 }
 
 export function processPlayerPick(
@@ -448,7 +501,7 @@ export function processPlayerPick(
   state: DraftState,
   cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
-  replayDeps?: ReplayDeps,
+  offerDeps?: OfferDeps,
 ): boolean {
   return processPlayerPickInternal(
     cardNumber,
@@ -456,7 +509,7 @@ export function processPlayerPick(
     cardDatabase,
     config,
     { logEvents: true },
-    replayDeps,
+    offerDeps,
   );
 }
 
@@ -465,7 +518,7 @@ export function processPlayerPickWithoutLogging(
   state: DraftState,
   cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
-  replayDeps?: ReplayDeps,
+  offerDeps?: OfferDeps,
 ): boolean {
   return processPlayerPickInternal(
     cardNumber,
@@ -473,7 +526,7 @@ export function processPlayerPickWithoutLogging(
     cardDatabase,
     config,
     { logEvents: false },
-    replayDeps,
+    offerDeps,
   );
 }
 

@@ -18,14 +18,21 @@ export interface RuntimeConfig {
   poolVariant?: PoolVariant;
   /**
    * Selects the draft mode: `"replay"` activates the record-replay draft (from
-   * `?algo=replay`); `"pool"` is the default pool-based draft. `poolVariant`
-   * still resolves normally alongside this — for `?algo=replay` it falls back
-   * to the default (idf3), which is what we want (replay still needs a pool
-   * variant for the resolved package). `parseRuntimeConfig` always sets it;
+   * `?algo=replay`); `"fresh20"` activates the fresh-random-pack draft (from
+   * `?algo=fresh20`); `"pool"` is the default pool-based draft. `poolVariant`
+   * still resolves normally alongside this — for `?algo=replay`/`fresh20` it
+   * falls back to the default (idf3), which is what we want (both still need a
+   * pool variant for the resolved package). `parseRuntimeConfig` always sets it;
    * it is optional only so test config literals can omit it and inherit the
    * pool default.
    */
-  draftMode?: "pool" | "replay";
+  draftMode?: "pool" | "replay" | "fresh20";
+  /**
+   * Cards per freshly generated pack in `?algo=fresh20`, from `?packsize=`.
+   * A positive integer; absent or invalid values leave it unset and the
+   * fresh20 draft uses its default pack size.
+   */
+  fresh20PackSize?: number;
   debugJourneyShape?: string | null;
   debugJourneyReward?: string | null;
   debugJourneyCost?: string | null;
@@ -42,11 +49,29 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
     poolVariant: resolvePoolVariant(params.get("algo")),
-    draftMode: params.get("algo") === "replay" ? "replay" : "pool",
+    draftMode: parseDraftMode(params.get("algo")),
+    fresh20PackSize: parsePackSize(params.get("packsize")),
     debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),
     debugJourneyReward: parseDebugJourneyId(params.get("debugJourneyReward")),
     debugJourneyCost: parseDebugJourneyId(params.get("debugJourneyCost")),
   };
+}
+
+function parseDraftMode(rawAlgo: string | null): "pool" | "replay" | "fresh20" {
+  if (rawAlgo === "replay") return "replay";
+  if (rawAlgo === "fresh20") return "fresh20";
+  return "pool";
+}
+
+function parsePackSize(rawPackSize: string | null): number | undefined {
+  if (rawPackSize === null || !/^\d+$/.test(rawPackSize)) {
+    return undefined;
+  }
+  const parsed = Number(rawPackSize);
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return undefined;
+  }
+  return parsed;
 }
 
 function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {

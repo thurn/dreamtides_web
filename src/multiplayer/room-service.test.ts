@@ -611,6 +611,114 @@ describe("room service", () => {
     });
   });
 
+  it("round-trips a fresh20 draft state whose show history arrived as numeric-keyed objects", () => {
+    const listener = vi.fn();
+    // RTDB stores arrays as numeric-keyed objects and drops empty ones, so a
+    // persisted fresh20 draft state arrives with `shownPicksByCard` and its pick
+    // lists shaped as objects. The normalizer must coerce them back.
+    const strippedQuestState = {
+      ...createDefaultState(),
+      draftState: {
+        mode: "fresh20",
+        packSize: 20,
+        pickNumber: 5,
+        sitePicksCompleted: 1,
+        currentOffer: { "0": 30, "1": 31 },
+        shownPicksByCard: {
+          "30": { "0": 1, "1": 5 },
+          "31": { "0": 5 },
+        },
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready.room.questState?.draftState).toEqual({
+      mode: "fresh20",
+      packSize: 20,
+      pickNumber: 5,
+      sitePicksCompleted: 1,
+      currentOffer: [30, 31],
+      shownPicksByCard: {
+        "30": [1, 5],
+        "31": [5],
+      },
+      activeSiteId: null,
+    });
+  });
+
+  it("defaults a fresh20 draft state's dropped fields back to empty", () => {
+    const listener = vi.fn();
+    // A fresh run's fresh20 state persists with an empty `{}` show history (RTDB
+    // drops it) and a fresh-start pick scalar. Only `mode` and `packSize`
+    // survive; the normalizer backfills the rest.
+    const strippedQuestState = {
+      ...createDefaultState(),
+      draftState: {
+        mode: "fresh20",
+        packSize: 12,
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready.room.questState?.draftState).toEqual({
+      mode: "fresh20",
+      packSize: 12,
+      pickNumber: 1,
+      sitePicksCompleted: 0,
+      currentOffer: [],
+      shownPicksByCard: {},
+      activeSiteId: null,
+    });
+  });
+
+  it("restores a fresh20 default pack size when RTDB drops it", () => {
+    const listener = vi.fn();
+    // If a fresh20 state were ever written with the default pack size that RTDB
+    // happened to strip, the normalizer restores the standard pack size rather
+    // than leaving it undefined.
+    const strippedQuestState = {
+      ...createDefaultState(),
+      draftState: {
+        mode: "fresh20",
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    const draftState = ready.room.questState?.draftState;
+    expect(draftState?.mode).toBe("fresh20");
+    expect(draftState).toMatchObject({ packSize: 20, shownPicksByCard: {} });
+  });
+
   it("restores RTDB-stripped provenance fields on cardSourceDebug entries", () => {
     const listener = vi.fn();
     const strippedQuestState = {

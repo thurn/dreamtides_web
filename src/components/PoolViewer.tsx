@@ -358,18 +358,21 @@ export function PoolViewer({
         }
       : { background: "#101417", color: "#f7f1df" };
 
-  // The algorithm chip names the draft strategy actually in effect. In replay
-  // mode that is "replay" — the pool generator still resolves a `poolVariant`
-  // (the IDF3 fallback) for the run, but it does not drive the draft, so
-  // surfacing it here would be misleading.
-  const algoLabel = isReplay ? "replay" : poolVariant;
+  // The algorithm chip names the draft strategy actually in effect. In the
+  // deck-fit modes that is "replay" / "fresh20" — the pool generator still
+  // resolves a `poolVariant` (the IDF3 fallback) for the run, but it does not
+  // drive the draft, so surfacing it here would be misleading.
+  const isFresh20 = draftState?.mode === "fresh20";
+  const algoLabel = isReplay ? "replay" : isFresh20 ? "fresh20" : poolVariant;
   const algoTitle = isReplay
     ? replayRecord !== null
       ? `Record-replay draft · replaying record ${replayRecord.id}`
       : "Record-replay draft"
-    : poolVariant !== null
-      ? poolStrategyFor(poolVariant).description
-      : "";
+    : isFresh20
+      ? "Fresh-pack draft · fresh random packs ranked by deck fit"
+      : poolVariant !== null
+        ? poolStrategyFor(poolVariant).description
+        : "";
 
   const sourceToggle = (
     <div role="group" aria-label="Card source" style={segmentedStyle}>

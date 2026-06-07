@@ -334,7 +334,11 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
   const [firebaseError, setFirebaseError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadQuestContent(runtimeConfig.poolVariant, runtimeConfig.draftMode)
+    loadQuestContent(
+      runtimeConfig.poolVariant,
+      runtimeConfig.draftMode,
+      runtimeConfig.fresh20PackSize,
+    )
       .then((content) => {
         setQuestContent(content);
         setLoadError(null);
@@ -344,7 +348,11 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
           error instanceof Error ? error.message : "Failed to load quest content.",
         );
       });
-  }, [runtimeConfig.poolVariant, runtimeConfig.draftMode]);
+  }, [
+    runtimeConfig.poolVariant,
+    runtimeConfig.draftMode,
+    runtimeConfig.fresh20PackSize,
+  ]);
 
   useEffect(() => {
     if (questContent === null) {

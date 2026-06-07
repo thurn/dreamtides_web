@@ -5,9 +5,12 @@ import type { QuestContent } from "../data/quest-content";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import {
   createInitialDraftState,
+  createInitialFresh20DraftState,
   processPlayerPickWithoutLogging,
 } from "../draft/draft-engine";
 import { replayDepsFor } from "../draft/replay/replay-deps";
+import { fresh20DepsFor } from "../draft/fresh20/fresh20-deps";
+import { FRESH20_DEFAULT_PACK_SIZE } from "../draft/fresh20/fresh20-offer";
 import type { FitModel } from "../draft/replay/fit-model";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
@@ -107,16 +110,18 @@ export function pickDraftCardInQuestState({
   // `currentOffer` (unchanged), so the reorder is safe.
   const withCard = addCardToQuestState(prev, cardNumber, false);
   const draftState = structuredClone(prev.draftState);
-  const replayDeps =
+  const offerDeps =
     draftState.mode === "replay"
       ? replayDepsFor(withCard.deck, fitModel)
-      : undefined;
+      : draftState.mode === "fresh20"
+        ? fresh20DepsFor(withCard.deck, fitModel, cardDatabase)
+        : undefined;
   processPlayerPickWithoutLogging(
     cardNumber,
     draftState,
     cardDatabase,
     undefined,
-    replayDeps,
+    offerDeps,
   );
 
   return { ...withCard, draftState };
@@ -389,14 +394,18 @@ export function startQuestFromDreamcaller({
   );
 
   // In replay mode the draft state is a frozen real-pack sequence chosen from
-  // the bundled record corpus; pool mode draws offers from the generated run
-  // multiset. The resolved package is still built normally in both modes — it
-  // provides signatures, the dreamsign pool, the starter decklist, and the
-  // shop pool (which replay shops draw from).
+  // the bundled record corpus; fresh20 mode rolls fresh random packs each pick;
+  // pool mode draws offers from the generated run multiset. The resolved package
+  // is still built normally in every mode — it provides signatures, the
+  // dreamsign pool, the starter decklist, and the shop pool (which the deck-fit
+  // modes' shops draw from). The deck-fit modes both require a fit model; when
+  // the record corpus failed to load they fall back to the pool draft.
   const useReplayDraft =
     questContent.draftMode === "replay"
     && questContent.draftRecords !== undefined
     && questContent.draftRecords.length > 0;
+  const useFresh20Draft =
+    questContent.draftMode === "fresh20" && questContent.fitModel !== undefined;
   const draftState = useReplayDraft
     ? buildReplayDraftState(
         dreamcaller,
@@ -405,7 +414,11 @@ export function startQuestFromDreamcaller({
         questContent.draftRecords ?? [],
         questContent.fitModel,
       )
-    : createInitialDraftState(questContent.cardDatabase, resolvedPackage);
+    : useFresh20Draft
+      ? createInitialFresh20DraftState({
+          packSize: questContent.fresh20PackSize ?? FRESH20_DEFAULT_PACK_SIZE,
+        })
+      : createInitialDraftState(questContent.cardDatabase, resolvedPackage);
 
   return {
     ...prev,

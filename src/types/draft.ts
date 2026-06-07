@@ -56,5 +56,27 @@ export interface ReplayDraftState extends DraftStateCommon {
   signatureCardNumbers: number[];
 }
 
+/**
+ * Fresh-pack draft state: at each pick a brand-new random pack of `packSize`
+ * cards is generated from the cards currently eligible to be shown, and the
+ * same deck-fit ranking as the replay draft selects the best slice to offer.
+ *
+ * The packs are not frozen up front: each one depends on which cards have
+ * already been shown, so the pack for a pick can only be rolled once the prior
+ * picks are resolved. Offers are persisted in `currentOffer` exactly like the
+ * other modes, so a reload never re-rolls a pick that has already been shown.
+ */
+export interface Fresh20DraftState extends DraftStateCommon {
+  mode: "fresh20";
+  /** Number of cards in each freshly generated random pack (e.g. 20). */
+  packSize: number;
+  /**
+   * Show history keyed by card number: the (ascending, deduped) pick numbers at
+   * which each card has appeared in a shown offer. Drives the show cooldown and
+   * the twice-then-never cap; cards never shown are absent.
+   */
+  shownPicksByCard: Record<string, number[]>;
+}
+
 /** Persistent draft state, survives across dreamscape visits. */
-export type DraftState = PoolDraftState | ReplayDraftState;
+export type DraftState = PoolDraftState | ReplayDraftState | Fresh20DraftState;

@@ -129,6 +129,10 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?algo=replay").draftMode).toBe("replay");
     });
 
+    it("returns fresh20 when algo=fresh20", () => {
+      expect(parseRuntimeConfig("?algo=fresh20").draftMode).toBe("fresh20");
+    });
+
     it("returns pool when algo is absent or a known pool variant", () => {
       expect(parseRuntimeConfig("").draftMode).toBe("pool");
       expect(parseRuntimeConfig("?algo=idf3").draftMode).toBe("pool");
@@ -145,6 +149,32 @@ describe("parseRuntimeConfig", () => {
       // back to the default (idf3). This is intentional: replay still needs a
       // pool variant for the resolved package.
       expect(parseRuntimeConfig("?algo=replay").poolVariant).toBe("idf3");
+    });
+
+    it("falls back poolVariant to idf3 (the default) when algo=fresh20", () => {
+      // fresh20 is likewise not a pool variant; the resolved package still needs
+      // one, so it falls back to the default.
+      expect(parseRuntimeConfig("?algo=fresh20").poolVariant).toBe("idf3");
+    });
+  });
+
+  describe("fresh20PackSize", () => {
+    it("is undefined when packsize is absent", () => {
+      expect(parseRuntimeConfig("").fresh20PackSize).toBeUndefined();
+      expect(parseRuntimeConfig("?algo=fresh20").fresh20PackSize).toBeUndefined();
+    });
+
+    it("parses a positive integer packsize", () => {
+      expect(parseRuntimeConfig("?packsize=15").fresh20PackSize).toBe(15);
+      expect(parseRuntimeConfig("?packsize=1").fresh20PackSize).toBe(1);
+    });
+
+    it("ignores zero, negative, non-integer, and non-numeric packsize", () => {
+      expect(parseRuntimeConfig("?packsize=0").fresh20PackSize).toBeUndefined();
+      expect(parseRuntimeConfig("?packsize=-4").fresh20PackSize).toBeUndefined();
+      expect(parseRuntimeConfig("?packsize=2.5").fresh20PackSize).toBeUndefined();
+      expect(parseRuntimeConfig("?packsize=abc").fresh20PackSize).toBeUndefined();
+      expect(parseRuntimeConfig("?packsize=").fresh20PackSize).toBeUndefined();
     });
   });
 });

@@ -23,9 +23,11 @@ import {
 import { createDefaultState } from "../state/quest-context";
 import type {
   DraftState,
+  Fresh20DraftState,
   PoolDraftState,
   ReplayDraftState,
 } from "../types/draft";
+import { FRESH20_DEFAULT_PACK_SIZE } from "../draft/fresh20/fresh20-offer";
 import {
   DEFAULT_STARTING_ESSENCE,
   type ResolvedDreamcallerPackage,
@@ -152,6 +154,26 @@ function coerceNumberMatrix(value: unknown): number[][] {
   return [];
 }
 
+/**
+ * Coerce an RTDB-round-tripped value back into a `Record<string, number[]>`
+ * (the fresh20 show history). The top-level map and each pick list may arrive
+ * as a numeric-keyed object; a missing value becomes `{}`, and empty lists are
+ * dropped so the result matches the in-memory invariant (shown cards only).
+ */
+function coerceShownPicks(value: unknown): Record<string, number[]> {
+  if (value === null || typeof value !== "object") {
+    return {};
+  }
+  const result: Record<string, number[]> = {};
+  for (const [key, picks] of Object.entries(value as Record<string, unknown>)) {
+    const list = coerceNumberArray(picks);
+    if (list.length > 0) {
+      result[key] = list;
+    }
+  }
+  return result;
+}
+
 function normalizeDraftState(draftState: DraftState | null | undefined): DraftState | null {
   if (draftState === null || draftState === undefined) {
     return null;
@@ -159,8 +181,14 @@ function normalizeDraftState(draftState: DraftState | null | undefined): DraftSt
   // RTDB drops the `mode` field on states persisted before the discriminated
   // union existed, so an absent mode means a pool draft.
   const raw = draftState as Partial<ReplayDraftState> &
-    Partial<PoolDraftState> & { mode?: unknown };
-  const mode = raw.mode === "replay" ? "replay" : "pool";
+    Partial<PoolDraftState> &
+    Partial<Fresh20DraftState> & { mode?: unknown };
+  const mode =
+    raw.mode === "replay"
+      ? "replay"
+      : raw.mode === "fresh20"
+        ? "fresh20"
+        : "pool";
   const common = {
     currentOffer: coerceNumberArray(draftState.currentOffer),
     activeSiteId: draftState.activeSiteId ?? null,
@@ -174,6 +202,19 @@ function normalizeDraftState(draftState: DraftState | null | undefined): DraftSt
       recordId: raw.recordId ?? "",
       signatureCardNumbers: coerceNumberArray(raw.signatureCardNumbers),
       packSequence: coerceNumberMatrix(raw.packSequence),
+    };
+  }
+  if (mode === "fresh20") {
+    return {
+      ...common,
+      mode: "fresh20",
+      // RTDB strips a default/zero number; restore the standard pack size.
+      packSize:
+        typeof raw.packSize === "number" && raw.packSize > 0
+          ? raw.packSize
+          : FRESH20_DEFAULT_PACK_SIZE,
+      // RTDB strips the empty `{}` on a fresh run; restore it.
+      shownPicksByCard: coerceShownPicks(raw.shownPicksByCard),
     };
   }
   return {

@@ -1182,11 +1182,13 @@ export function QuestProvider({
           return prev;
         }
 
-        // In replay mode the live draft state has no card multiset; shops draw
-        // from a transient pool built from the package's idf3 draft pool, and
-        // the replay draft state is preserved unchanged on write-back.
-        const isReplay = prev.draftState?.mode === "replay";
-        const shopDraftState = isReplay
+        // The deck-fit draft modes (replay, fresh20) have no card multiset;
+        // shops draw from a transient pool built from the package's idf3 draft
+        // pool, and the live draft state is preserved unchanged on write-back.
+        const isDeckFitDraft =
+          prev.draftState?.mode === "replay"
+          || prev.draftState?.mode === "fresh20";
+        const shopDraftState = isDeckFitDraft
           ? replayShopDraftState(prev.resolvedPackage)
           : prev.draftState;
         const generated = generateShopInventory({
@@ -1216,9 +1218,9 @@ export function QuestProvider({
         return {
           ...prev,
           remainingDreamsignPool: generated.remainingDreamsignPoolIds,
-          // Pool mode persists the spent multiset; replay mode keeps its
-          // replay state (the transient shop pool is discarded).
-          draftState: isReplay ? prev.draftState : generated.draftState,
+          // Pool mode persists the spent multiset; the deck-fit modes keep their
+          // own draft state (the transient shop pool is discarded).
+          draftState: isDeckFitDraft ? prev.draftState : generated.draftState,
           siteRuntime: {
             ...prev.siteRuntime,
             [site.id]: runtime,
@@ -1418,11 +1420,13 @@ export function QuestProvider({
           return prev;
         }
 
-        // In replay mode the live draft state has no card multiset; the reroll
-        // draws from a transient pool built from the package's idf3 draft pool
-        // and the replay draft state is preserved unchanged on write-back.
-        const isReplay = prev.draftState?.mode === "replay";
-        const shopDraftState = isReplay
+        // The deck-fit draft modes (replay, fresh20) have no card multiset; the
+        // reroll draws from a transient pool built from the package's idf3 draft
+        // pool and the live draft state is preserved unchanged on write-back.
+        const isDeckFitDraft =
+          prev.draftState?.mode === "replay"
+          || prev.draftState?.mode === "fresh20";
+        const shopDraftState = isDeckFitDraft
           ? replayShopDraftState(prev.resolvedPackage)
           : prev.draftState;
         const generated = generateShopInventory({
@@ -1478,9 +1482,9 @@ export function QuestProvider({
           ...prev,
           omens: newOmens,
           remainingDreamsignPool: generated.remainingDreamsignPoolIds,
-          // Pool mode persists the spent multiset; replay mode keeps its
-          // replay state (the transient shop pool is discarded).
-          draftState: isReplay ? prev.draftState : generated.draftState,
+          // Pool mode persists the spent multiset; the deck-fit modes keep their
+          // own draft state (the transient shop pool is discarded).
+          draftState: isDeckFitDraft ? prev.draftState : generated.draftState,
           shopModifiers: nextShopModifiers,
           siteRuntime: {
             ...prev.siteRuntime,

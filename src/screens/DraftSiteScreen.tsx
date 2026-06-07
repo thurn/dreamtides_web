@@ -24,6 +24,7 @@ import {
   SITE_PICKS,
 } from "../draft/draft-engine";
 import { replayDepsFor } from "../draft/replay/replay-deps";
+import { fresh20DepsFor } from "../draft/fresh20/fresh20-deps";
 import type { FitModel } from "../draft/replay/fit-model";
 import type { DraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
@@ -399,6 +400,24 @@ function DeckSidebarToggle({
  * offer once the snapshot round-trips. That double-render is what produced
  * the visible "fade out / fade in" flicker on draft entry.
  */
+/**
+ * Build the per-offer deck-fit deps a draft state needs to reveal an offer:
+ * replay and fresh20 each require their own deps; a pool state ignores them
+ * (returns `undefined`).
+ */
+function offerDepsForDraftState(
+  draftState: DraftState,
+  deck: readonly DeckEntry[],
+  fitModel: FitModel | undefined,
+  cardDatabase: Map<number, CardData>,
+) {
+  if (draftState.mode === "replay") return replayDepsFor(deck, fitModel);
+  if (draftState.mode === "fresh20") {
+    return fresh20DepsFor(deck, fitModel, cardDatabase);
+  }
+  return undefined;
+}
+
 function bootstrapLocalDraftState(
   liveDraftState: DraftState | null,
   siteId: string,
@@ -411,11 +430,8 @@ function bootstrapLocalDraftState(
   if (liveDraftState.activeSiteId === siteId) return null;
 
   const cloned = JSON.parse(JSON.stringify(liveDraftState)) as DraftState;
-  // A replay draft state requires deck-fit deps to reveal its first offer; a
-  // pool state ignores them.
-  const replayDeps =
-    cloned.mode === "replay" ? replayDepsFor(deck, fitModel) : undefined;
-  enterDraftSite(cloned, siteId, cardDatabase, DEFAULT_DRAFT_CONFIG, replayDeps);
+  const offerDeps = offerDepsForDraftState(cloned, deck, fitModel, cardDatabase);
+  enterDraftSite(cloned, siteId, cardDatabase, DEFAULT_DRAFT_CONFIG, offerDeps);
   return cloned;
 }
 
@@ -471,9 +487,10 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const draftCurrentOfferKey = isActiveDraftSite
     ? (effectiveDraftState?.currentOffer ?? []).join(",")
     : "";
-  // Pool-only stat: total copies left in the run multiset. Replay has no
-  // multiset, so it reports 0; that is safe because replay completion is driven
-  // by an empty current offer (see `isComplete` below), not this count.
+  // Pool-only stat: total copies left in the run multiset. The deck-fit modes
+  // (replay, fresh20) have no multiset, so they report 0; that is safe because
+  // their completion is driven by an empty current offer at the site's final
+  // pick (see `isComplete` below), not this count.
   const draftRemainingTotal =
     effectiveDraftState && effectiveDraftState.mode === "pool"
       ? countRemainingCards(effectiveDraftState.remainingCopiesByCard)
@@ -561,18 +578,18 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     }
 
     const cloned = JSON.parse(JSON.stringify(state.draftState)) as DraftState;
-    // A replay draft state requires deck-fit deps to reveal its first offer; a
-    // pool state ignores them.
-    const replayDeps =
-      cloned.mode === "replay"
-        ? replayDepsFor(state.deck, questContent.fitModel)
-        : undefined;
+    const offerDeps = offerDepsForDraftState(
+      cloned,
+      state.deck,
+      questContent.fitModel,
+      cardDatabase,
+    );
     enterDraftSite(
       cloned,
       siteId,
       cardDatabase,
       DEFAULT_DRAFT_CONFIG,
-      replayDeps,
+      offerDeps,
     );
     draftStateRef.current = cloned;
     setLocalDraftState(cloned);

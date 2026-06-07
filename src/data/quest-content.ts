@@ -38,12 +38,21 @@ export interface QuestContent {
   dreamcallers: DreamcallerContent[];
   dreamsignTemplates: readonly DreamsignTemplate[];
   poolContext?: RunPoolContext;
-  /** Draft mode for this run: `"replay"` activates the record-replay draft; `"pool"` is the default. From `?algo=replay`. */
-  draftMode?: "pool" | "replay";
-  /** Loaded only in replay mode: the full adapted draft-record corpus. */
+  /**
+   * Draft mode for this run: `"replay"` activates the record-replay draft;
+   * `"fresh20"` activates the fresh-random-pack draft; `"pool"` is the default.
+   * From `?algo=`.
+   */
+  draftMode?: "pool" | "replay" | "fresh20";
+  /** Loaded in replay mode (the full adapted draft-record corpus). */
   draftRecords?: DraftRecord[];
-  /** Loaded only in replay mode: the live deck-fit model built from all record mainboards. */
+  /**
+   * The live deck-fit model built from all record mainboards. Loaded in both
+   * the replay and fresh20 modes, which share the same fit ranking.
+   */
   fitModel?: FitModel;
+  /** Cards per fresh pack in fresh20 mode (from `?packsize=`); defaults applied at use. */
+  fresh20PackSize?: number;
 }
 
 /**
@@ -210,14 +219,19 @@ export function buildDreamcallerProvenance(
  * Loads V2 quest content (cards, Dreamcallers, decklists) and the run pool
  * context. `poolVariant` (from `?algo=`) selects the pool-construction strategy
  * for the run; it defaults to {@link DEFAULT_POOL_VARIANT}. `draftMode` (from
- * `?algo=replay`) switches to the record-replay draft: the full draft-record
- * corpus is fetched and the live deck-fit model is built. In pool mode, no
- * records are fetched, keeping the default path cost-free.
+ * `?algo=`) switches to a deck-fit draft: `"replay"` replays a real record's
+ * packs, `"fresh20"` rolls fresh random packs. Both fetch the full draft-record
+ * corpus and build the live deck-fit model from it. In pool mode no records are
+ * fetched, keeping the default path cost-free. `fresh20PackSize` (from
+ * `?packsize=`) is carried through for the fresh20 draft.
  */
 export async function loadQuestContent(
   poolVariant: PoolVariant = DEFAULT_POOL_VARIANT,
-  draftMode: "pool" | "replay" = "pool",
+  draftMode: "pool" | "replay" | "fresh20" = "pool",
+  fresh20PackSize?: number,
 ): Promise<QuestContent> {
+  // Both deck-fit modes need the record corpus to build the fit model.
+  const usesFitModel = draftMode === "replay" || draftMode === "fresh20";
   const [
     cardDatabase,
     draftDreamcallers,
@@ -231,9 +245,9 @@ export async function loadQuestContent(
     loadDreamsignTemplates(),
     loadDecklists(),
     loadHumanDecklists(),
-    // Only fetch the draft records corpus in replay mode; pool mode skips this
-    // entirely so the default load path incurs no extra network cost.
-    draftMode === "replay" ? loadDraftRecords() : Promise.resolve([] as DraftRecord[]),
+    // Only fetch the draft records corpus for the deck-fit modes; pool mode
+    // skips this entirely so the default load path incurs no extra network cost.
+    usesFitModel ? loadDraftRecords() : Promise.resolve([] as DraftRecord[]),
   ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
@@ -262,7 +276,7 @@ export async function loadQuestContent(
     poolVariant,
   };
 
-  if (draftMode === "replay") {
+  if (usesFitModel) {
     // Live fit corpus = all record mainboards (no per-record leave-one-out).
     // Live play does not teacher-force the deck along the replayed record's pick
     // path, so the self-neighbour leak the offline eval guards against does not
@@ -284,6 +298,7 @@ export async function loadQuestContent(
       draftMode,
       draftRecords,
       fitModel,
+      fresh20PackSize,
     };
   }
 
