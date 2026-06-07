@@ -271,7 +271,13 @@ export interface BattleCardInstance {
   definition: BattleDeckCardDefinition;
   owner: BattleSide;
   controller: BattleSide;
-  figmentCount?: number;
+  /**
+   * For a figment stack (`provenance.kind === "generated-figment"`), the spark
+   * of each member figment, kept sorted descending so the top of the stack is
+   * index 0. Empty or `undefined` for non-figment cards. A figment's effective
+   * spark is the sum of these values; its member count is the array length.
+   */
+  figments?: number[];
   sparkDelta: number;
   isRevealedToPlayer: boolean;
   status: BattleCardStatus;

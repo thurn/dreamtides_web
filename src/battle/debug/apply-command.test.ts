@@ -939,7 +939,7 @@ describe("applyBattleCommand", () => {
 
     expect(second.mutable.sides.player.backRank.B0).toBe(firstFigmentId);
     expect(second.mutable.sides.player.backRank.B1).toBeNull();
-    expect(second.mutable.cardInstances[firstFigmentId].figmentCount).toBe(2);
+    expect(second.mutable.cardInstances[firstFigmentId].figments).toHaveLength(2);
     expect(Object.values(second.mutable.sides.player.backRank).filter((cardId) => {
       if (cardId === null) return false;
       return second.mutable.cardInstances[cardId].definition.subtype === "Shadow";

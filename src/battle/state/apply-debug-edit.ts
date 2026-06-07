@@ -46,7 +46,9 @@ import {
   canMergeFigments,
   findBattlefieldFigmentStack,
   isFigmentInstance,
+  mergeFigmentsIntoStackInPlace,
   selectFigmentCount,
+  selectFigmentSparks,
 } from "./figments";
 
 export function applyDebugEdit(
@@ -889,7 +891,7 @@ function createFigment(
       chosenSubtype,
     );
     if (existingStack !== null) {
-      addFigmentsToStackInPlace(nextState, existingStack.battleCardId, 1);
+      addFigmentsToStackInPlace(nextState, existingStack.battleCardId, 1, chosenSpark);
       const stack = nextState.cardInstances[existingStack.battleCardId];
       return {
         state: nextState,
@@ -901,7 +903,7 @@ function createFigment(
               {
                 battleCardId: existingStack.battleCardId,
                 destinationZone: formatDestinationZoneLabel(existingStack.location),
-                figmentCount: stack?.figmentCount ?? 1,
+                figmentCount: stack === undefined ? 1 : selectFigmentCount(stack),
                 name: stack?.definition.name ?? name,
                 ownerSide: side,
                 printedSpark: stack?.definition.printedSpark ?? chosenSpark,
@@ -969,7 +971,7 @@ function createFigment(
           {
             battleCardId,
             destinationZone: formatDestinationZoneLabel(destination),
-            figmentCount: nextState.cardInstances[battleCardId].figmentCount ?? 1,
+            figmentCount: selectFigmentCount(nextState.cardInstances[battleCardId]),
             name,
             ownerSide: side,
             printedSpark: chosenSpark,
@@ -1176,23 +1178,24 @@ function moveCardToDebugZone(
     }
   }
 
+  const sourceFigmentSparks = selectFigmentSparks(sourceInstance);
   const nextState = cloneBattleMutableState(state);
   removeBattleCardFromLocation(nextState, source);
   if (destinationStack !== null) {
-    addFigmentsToStackInPlace(
+    mergeFigmentsIntoStackInPlace(
       nextState,
       destinationStack.battleCardId,
-      selectFigmentCount(sourceInstance),
+      sourceFigmentSparks,
     );
     delete nextState.cardInstances[battleCardId];
   } else if (
     destinationOccupant !== null &&
     canMergeFigments(sourceInstance, state.cardInstances[destinationOccupant])
   ) {
-    addFigmentsToStackInPlace(
+    mergeFigmentsIntoStackInPlace(
       nextState,
       destinationOccupant,
-      selectFigmentCount(sourceInstance),
+      sourceFigmentSparks,
     );
     delete nextState.cardInstances[battleCardId];
   } else {

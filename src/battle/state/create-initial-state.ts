@@ -94,6 +94,7 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
             {
               ...instance,
               definition: cloneBattleDeckCardDefinition(instance.definition),
+              ...(instance.figments === undefined ? {} : { figments: [...instance.figments] }),
               status: { ...instance.status },
               markers: { ...instance.markers },
               notes: instance.notes.map((note) => ({
@@ -130,7 +131,9 @@ export function allocateBattleCardInstance(
     definition: params.definition,
     owner: params.owner,
     controller: params.controller,
-    ...(params.provenance.kind === "generated-figment" ? { figmentCount: 1 } : {}),
+    ...(params.provenance.kind === "generated-figment"
+      ? { figments: [params.definition.printedSpark] }
+      : {}),
     sparkDelta: 0,
     isRevealedToPlayer: params.isRevealedToPlayer,
     status: createDefaultBattleCardStatus(),

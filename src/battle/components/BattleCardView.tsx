@@ -14,6 +14,7 @@ export interface BattleCardVisualData {
   cost: number;
   isFast: boolean;
   figmentCount: number;
+  effectiveSpark: number;
   kind: "character" | "event";
   name: string;
   printedSpark: number;
@@ -30,6 +31,9 @@ export function battleCardVisualFromInstance(
     artUrl: instance.definition.imageNumber > 0 ? cardImageUrl(instance.definition.imageNumber) : null,
     cost: instance.definition.energyCost,
     figmentCount: selectFigmentCount(instance),
+    effectiveSpark: instance.definition.battleCardKind === "character"
+      ? selectEffectiveSparkForInstance(instance)
+      : 0,
     isFast: instance.definition.isFast,
     kind: instance.definition.battleCardKind,
     name: instance.definition.name,
@@ -48,6 +52,7 @@ export function battleCardVisualFromReward(
     artUrl: card.artOwned ? cardImageUrl(card.imageNumber) : null,
     cost: card.energyCost ?? 0,
     figmentCount: 1,
+    effectiveSpark: card.cardType === "Character" ? Math.max(0, card.spark ?? 0) : 0,
     isFast: card.isFast,
     kind: card.cardType === "Character" ? "character" : "event",
     name: card.name,
@@ -123,9 +128,7 @@ export function BattleCardView({
   onMouseLeave?: MouseEventHandler<HTMLDivElement>;
   onMouseMove?: MouseEventHandler<HTMLDivElement>;
 }) {
-  const effectiveSpark = data.kind === "character"
-    ? Math.max(0, data.printedSpark * Math.max(1, data.figmentCount) + data.sparkDelta)
-    : 0;
+  const effectiveSpark = data.kind === "character" ? data.effectiveSpark : 0;
   const sparkClassName = data.sparkDelta > 0
     ? "boosted"
     : data.sparkDelta < 0

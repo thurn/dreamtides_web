@@ -130,7 +130,10 @@ function makeJudgmentState(
           : questDeckProvenance(),
       });
       if (isFigment) {
-        state.cardInstances[battleCardId].figmentCount = spec.figmentCount;
+        state.cardInstances[battleCardId].figments = Array.from(
+          { length: spec.figmentCount ?? 1 },
+          () => spec.spark,
+        );
       }
       state.sides[side].frontRank[spec.slotId] = battleCardId;
       ids[spec.name] = battleCardId;

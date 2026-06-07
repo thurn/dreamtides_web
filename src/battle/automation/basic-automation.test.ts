@@ -51,7 +51,9 @@ function makeInstance(
     },
     owner: options.owner,
     controller: options.owner,
-    figmentCount: options.isFigment ? options.figmentCount ?? 1 : undefined,
+    figments: options.isFigment
+      ? Array.from({ length: options.figmentCount ?? 1 }, () => options.printedSpark ?? 0)
+      : undefined,
     sparkDelta: options.sparkDelta ?? 0,
     isRevealedToPlayer: true,
     status: createDefaultBattleCardStatus(),

@@ -183,7 +183,7 @@ function areCardInstanceDictionariesEqual(
       leftInstance.battleCardId !== rightInstance.battleCardId ||
       leftInstance.owner !== rightInstance.owner ||
       leftInstance.controller !== rightInstance.controller ||
-      (leftInstance.figmentCount ?? 1) !== (rightInstance.figmentCount ?? 1) ||
+      !figmentsEqual(leftInstance.figments, rightInstance.figments) ||
       leftInstance.sparkDelta !== rightInstance.sparkDelta ||
       leftInstance.isRevealedToPlayer !== rightInstance.isRevealedToPlayer ||
       leftInstance.markers.isPrevented !== rightInstance.markers.isPrevented ||
@@ -209,6 +209,23 @@ function areCardInstanceDictionariesEqual(
       ) {
         return false;
       }
+    }
+  }
+  return true;
+}
+
+function figmentsEqual(
+  left: readonly number[] | undefined,
+  right: readonly number[] | undefined,
+): boolean {
+  const leftValues = left ?? [];
+  const rightValues = right ?? [];
+  if (leftValues.length !== rightValues.length) {
+    return false;
+  }
+  for (let i = 0; i < leftValues.length; i += 1) {
+    if (leftValues[i] !== rightValues[i]) {
+      return false;
     }
   }
   return true;

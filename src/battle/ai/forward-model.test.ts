@@ -111,7 +111,10 @@ function addInstance(
     state.cardInstances[id].sparkDelta = options.sparkDelta;
   }
   if (options.figment && options.figmentCount !== undefined) {
-    state.cardInstances[id].figmentCount = options.figmentCount;
+    state.cardInstances[id].figments = Array.from(
+      { length: options.figmentCount },
+      () => definition.printedSpark,
+    );
   }
   return id;
 }
