@@ -21,7 +21,8 @@
     "setup-assets": "node scripts/setup-assets.mjs",
     "generate-pool": "node scripts/generate-color-pool.mjs",
     "simulate-pools": "node scripts/simulate-dreamcaller-pools.mjs",
-    "buildaround-metric": "node scripts/buildaround-support-experiment.mjs"
+    "buildaround-metric": "node scripts/buildaround-support-experiment.mjs",
+    "draft-replay-metric": "node scripts/draft-replay-experiment.mjs"
   },
   "dependencies": {
     "@dicebear/collection": "^9.4.2",

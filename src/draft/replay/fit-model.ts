@@ -16,6 +16,10 @@
 //     fallback that dominates on pick 1 when the deck is empty.
 // The IDF math (corpus build recipe, weighted cosine) mirrors the pool
 // `variant-idf` module; `idfCosine` is imported and reused directly.
+//
+// A plain-JS mirror of this scoring lives in
+// `scripts/draft-replay-experiment.mjs` (the offline recall@4 harness that tuned
+// `DEFAULT_FIT_TUNING`). If you change a formula here, change it there too.
 
 import { idfCosine, type IdfDeck } from "../pool/variant-idf.ts";
 
@@ -47,13 +51,28 @@ export interface FitTuning {
 }
 
 /**
- * PLACEHOLDER defaults. Task 3 retunes these against the recall@4 metric over
- * the real corpus; the values here are reasonable starting points mirrored from
- * the pool `variant-idf` corpus hygiene plus an even-handed term blend.
+ * Tuned defaults. Chosen by `scripts/draft-replay-experiment.mjs` (run it via
+ * `npm run draft-replay-metric`), which measures recall@4 — how often the
+ * top-four offer contains the card the human actually took — under sibling-safe
+ * leave-one-out over the full 993-record draft corpus.
+ *
+ * This config scores recall@4 = 80.4%, versus a popularity-4 baseline of 52.1%
+ * and a random-4 baseline of 46.7% (+28.3 points over popularity). Recall rises
+ * monotonically as the deck defines itself: by pack P1 75.4% < P2 82.0% < P3
+ * 84.0%, and by stage early 69.5% < mid 82.2% < late 89.5% — evidence that
+ * deck-FIT, not mere card popularity, drives the ranking.
+ *
+ * The sweep showed `K` (neighbour count) is the dominant lever — recall climbs
+ * from ~70% at K=10 to a plateau by K=50 — so K=50 buys the full plateau at half
+ * the per-pick neighbour cost of K=100. `beta` (co-occurrence) is a useful
+ * secondary signal. `gamma` (the global prior) is kept small on purpose: a large
+ * gamma pulls toward popular cards and erodes mid/late recall, while a small
+ * weight aids the early picks and is the intended pick-1 fallback for an empty
+ * deck. The IDF corpus knobs mirror the pool `variant-idf` module's hygiene.
  */
 export const DEFAULT_FIT_TUNING: FitTuning = {
   alpha: 1.0,
-  beta: 0.6,
+  beta: 0.9,
   gamma: 0.25,
   K: 50,
   idfPower: 1,
