@@ -329,6 +329,7 @@ function makeCardDatabase(): Map<number, CardData> {
 
 function makeDraftState(): DraftState {
   return {
+    mode: "pool",
     draftPoolCopiesByCard: {
       "201": 1,
       "202": 1,
@@ -637,7 +638,11 @@ describe("DraftSiteScreen", () => {
 
     mutations.pickDraftCard = vi.fn((siteId: string, cardNumber: number) => {
       const draftState = currentState.draftState;
-      if (draftState === null || draftState.activeSiteId !== siteId) {
+      if (
+        draftState === null ||
+        draftState.mode !== "pool" ||
+        draftState.activeSiteId !== siteId
+      ) {
         return;
       }
 
@@ -884,6 +889,7 @@ describe("DraftSiteScreen", () => {
           },
         ],
         draftState: {
+          mode: "pool",
           draftPoolCopiesByCard: {},
           remainingCopiesByCard: {},
           currentOffer: [],
@@ -1122,6 +1128,7 @@ describe("DraftSiteScreen", () => {
       // Draft pool seeded with cards 101..104 only — bootstrap must select
       // exactly these four numbers in some order.
       const unEnteredDraftState: DraftState = {
+        mode: "pool",
         draftPoolCopiesByCard: {
           "101": 1,
           "102": 1,

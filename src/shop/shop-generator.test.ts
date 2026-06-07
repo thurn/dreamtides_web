@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
-import type { DraftState } from "../types/draft";
+import type { PoolDraftState } from "../types/draft";
 import {
   generateShopInventory,
   effectivePrice,
@@ -38,12 +38,13 @@ function makeDatabase(cards: CardData[]): Map<number, CardData> {
   return db;
 }
 
-function makeDraftState(copies: Record<number, number>): DraftState {
+function makeDraftState(copies: Record<number, number>): PoolDraftState {
   const draftPoolCopiesByCard: Record<string, number> = {};
   for (const [cardNumber, count] of Object.entries(copies)) {
     draftPoolCopiesByCard[cardNumber] = count;
   }
   return {
+    mode: "pool",
     draftPoolCopiesByCard,
     remainingCopiesByCard: { ...draftPoolCopiesByCard },
     currentOffer: [],
@@ -279,9 +280,10 @@ describe("generateShopInventory", () => {
       .map((slot) => slot.card!.cardNumber);
     expect(drawnCardNumbers).toHaveLength(3);
     // Spent cards were removed from the returned draft state.
+    const resultPoolState = result.draftState as PoolDraftState | null;
     for (const cardNumber of drawnCardNumbers) {
       expect(
-        result.draftState?.remainingCopiesByCard[String(cardNumber)],
+        resultPoolState?.remainingCopiesByCard[String(cardNumber)],
       ).toBeUndefined();
     }
     // The original draft state is not mutated.
@@ -367,7 +369,9 @@ describe("generateShopInventory", () => {
     // The original passed-in object is unchanged.
     expect(draftState.remainingCopiesByCard).toEqual(before);
     // The returned draft state still has the full multiset.
-    expect(result.draftState?.remainingCopiesByCard).toEqual(before);
+    expect(
+      (result.draftState as PoolDraftState | null)?.remainingCopiesByCard,
+    ).toEqual(before);
   });
 
   it("prices Specialty Shop card slots at the specialty price", () => {
@@ -399,7 +403,10 @@ describe("generateShopInventory", () => {
     }
     // The regular shop spends drawn cards from the draft multiset.
     expect(
-      Object.keys(result.draftState?.remainingCopiesByCard ?? {}).length,
+      Object.keys(
+        (result.draftState as PoolDraftState | null)?.remainingCopiesByCard ??
+          {},
+      ).length,
     ).toBeLessThan(Object.keys(draftState.remainingCopiesByCard).length);
   });
 

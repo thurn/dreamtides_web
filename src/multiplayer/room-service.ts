@@ -21,7 +21,11 @@ import {
   type RoomMetadata,
 } from "./room-types";
 import { createDefaultState } from "../state/quest-context";
-import type { DraftState } from "../types/draft";
+import type {
+  DraftState,
+  PoolDraftState,
+  ReplayDraftState,
+} from "../types/draft";
 import {
   DEFAULT_STARTING_ESSENCE,
   type ResolvedDreamcallerPackage,
@@ -116,19 +120,68 @@ function normalizeCardSourceDebug(
   };
 }
 
+/**
+ * Coerce an RTDB-round-tripped value back into a `number[]`. Realtime Database
+ * stores arrays as numeric-keyed objects and drops empty ones, so an array
+ * arrives as either an array, an object keyed by index, or `undefined`.
+ */
+function coerceNumberArray(value: unknown): number[] {
+  if (Array.isArray(value)) {
+    return value.map((v) => Number(v)).filter((v) => Number.isFinite(v));
+  }
+  if (value !== null && typeof value === "object") {
+    return Object.values(value as Record<string, unknown>)
+      .map((v) => Number(v))
+      .filter((v) => Number.isFinite(v));
+  }
+  return [];
+}
+
+/**
+ * Coerce an RTDB-round-tripped value back into a `number[][]` (e.g. a replay
+ * pack sequence). Both the outer and inner arrays may arrive as numeric-keyed
+ * objects; a missing value becomes `[]`.
+ */
+function coerceNumberMatrix(value: unknown): number[][] {
+  if (Array.isArray(value)) {
+    return value.map(coerceNumberArray);
+  }
+  if (value !== null && typeof value === "object") {
+    return Object.values(value as Record<string, unknown>).map(coerceNumberArray);
+  }
+  return [];
+}
+
 function normalizeDraftState(draftState: DraftState | null | undefined): DraftState | null {
   if (draftState === null || draftState === undefined) {
     return null;
   }
-  return {
-    ...draftState,
-    draftPoolCopiesByCard:
-      draftState.draftPoolCopiesByCard
-      ?? draftState.remainingCopiesByCard
-      ?? {},
-    remainingCopiesByCard: draftState.remainingCopiesByCard ?? {},
-    currentOffer: draftState.currentOffer ?? [],
+  // RTDB drops the `mode` field on states persisted before the discriminated
+  // union existed, so an absent mode means a pool draft.
+  const raw = draftState as Partial<ReplayDraftState> &
+    Partial<PoolDraftState> & { mode?: unknown };
+  const mode = raw.mode === "replay" ? "replay" : "pool";
+  const common = {
+    currentOffer: coerceNumberArray(draftState.currentOffer),
     activeSiteId: draftState.activeSiteId ?? null,
+    pickNumber: draftState.pickNumber ?? 1,
+    sitePicksCompleted: draftState.sitePicksCompleted ?? 0,
+  };
+  if (mode === "replay") {
+    return {
+      ...common,
+      mode: "replay",
+      recordId: raw.recordId ?? "",
+      signatureCardNumbers: coerceNumberArray(raw.signatureCardNumbers),
+      packSequence: coerceNumberMatrix(raw.packSequence),
+    };
+  }
+  return {
+    ...common,
+    mode: "pool",
+    draftPoolCopiesByCard:
+      raw.draftPoolCopiesByCard ?? raw.remainingCopiesByCard ?? {},
+    remainingCopiesByCard: raw.remainingCopiesByCard ?? {},
   };
 }
 

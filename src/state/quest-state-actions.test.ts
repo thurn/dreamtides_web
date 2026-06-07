@@ -8,6 +8,7 @@ import {
   makeTestPoolContext,
 } from "../__test-helpers__/pool-context";
 import type { DreamAtlas, QuestState } from "../types/quest";
+import type { PoolDraftState } from "../types/draft";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import { createDefaultState } from "./quest-context";
 import {
@@ -181,6 +182,7 @@ describe("quest state actions", () => {
     const prev: QuestState = {
       ...createDefaultState(),
       draftState: {
+        mode: "pool",
         draftPoolCopiesByCard: {
           "201": 1,
           "202": 1,
@@ -234,6 +236,7 @@ describe("quest state actions", () => {
     const prev: QuestState = {
       ...createDefaultState(),
       draftState: {
+        mode: "pool",
         draftPoolCopiesByCard: {
           "201": 1,
           "202": 1,
@@ -315,10 +318,11 @@ describe("quest state actions", () => {
     expect(next.deck.map((entry) => entry.entryId)).toEqual(
       STARTER_CARD_NUMBERS.map((_, index) => `deck-${String(index + 1)}`),
     );
-    expect(next.draftState?.draftPoolCopiesByCard).toEqual(
+    const nextPoolState = next.draftState as PoolDraftState | null;
+    expect(nextPoolState?.draftPoolCopiesByCard).toEqual(
       next.resolvedPackage?.draftPoolCopiesByCard,
     );
-    expect(next.draftState?.remainingCopiesByCard).toEqual(
+    expect(nextPoolState?.remainingCopiesByCard).toEqual(
       next.resolvedPackage?.draftPoolCopiesByCard,
     );
     expect(next.draftState?.currentOffer).toEqual([]);

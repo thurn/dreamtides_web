@@ -51,13 +51,27 @@ export function extractDraftDebugInfo(
     return null;
   }
 
-  return {
+  const common = {
     currentOffer: draftState.currentOffer
       .map((cardNumber) => cardDatabase.get(cardNumber))
       .filter((card): card is CardData => card !== undefined),
     currentOfferSize: draftState.currentOffer.length,
     pickNumber: draftState.pickNumber,
     sitePicksCompleted: draftState.sitePicksCompleted,
+  };
+
+  // Replay drafts have no spend-down pool; surface empty pool metrics.
+  if (draftState.mode !== "pool") {
+    return {
+      ...common,
+      remainingCards: 0,
+      remainingUniqueCards: 0,
+      topRemainingCards: [],
+    };
+  }
+
+  return {
+    ...common,
     remainingCards: countRemainingCards(draftState.remainingCopiesByCard),
     remainingUniqueCards: countRemainingUniqueCards(draftState.remainingCopiesByCard),
     topRemainingCards: Object.entries(draftState.remainingCopiesByCard)

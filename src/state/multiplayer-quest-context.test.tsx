@@ -672,6 +672,7 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       draftState: {
+        mode: "pool",
         draftPoolCopiesByCard: {
           "201": 1,
           "202": 1,
@@ -756,6 +757,7 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       draftState: {
+        mode: "pool",
         draftPoolCopiesByCard: {
           "201": 1,
           "202": 1,

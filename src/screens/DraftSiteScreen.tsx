@@ -454,9 +454,13 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const draftCurrentOfferKey = isActiveDraftSite
     ? (effectiveDraftState?.currentOffer ?? []).join(",")
     : "";
-  const draftRemainingTotal = effectiveDraftState
-    ? countRemainingCards(effectiveDraftState.remainingCopiesByCard)
-    : 0;
+  // Pool-only stat: total copies left in the run multiset. Replay has no
+  // multiset, so it reports 0; that is safe because replay completion is driven
+  // by an empty current offer (see `isComplete` below), not this count.
+  const draftRemainingTotal =
+    effectiveDraftState && effectiveDraftState.mode === "pool"
+      ? countRemainingCards(effectiveDraftState.remainingCopiesByCard)
+      : 0;
 
   const draftedCardNumbers = useMemo(() => {
     if (!isActiveDraftSite || draftSitePicksCompleted === 0) {

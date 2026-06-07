@@ -128,6 +128,7 @@ function makeCard(cardNumber: number): CardData {
 
 function makeDraftState(): DraftState {
   return {
+    mode: "pool",
     draftPoolCopiesByCard: {
       "101": 1,
       "202": 2,
@@ -457,6 +458,7 @@ describe("Task 02 state transitions", () => {
     const next = applyDraftState(createDefaultState(), makeDraftState());
 
     expect(next.draftState).toEqual({
+      mode: "pool",
       draftPoolCopiesByCard: {
         "101": 1,
         "202": 2,

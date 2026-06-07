@@ -519,11 +519,94 @@ describe("room service", () => {
     expect(restoredNode?.sites).toEqual([]);
     expect(restoredNode?.enhancedSiteType).toBeNull();
     expect(ready.room.questState?.draftState).toEqual({
+      mode: "pool",
       pickNumber: 1,
       sitePicksCompleted: 0,
       draftPoolCopiesByCard: { "42": 2 },
       remainingCopiesByCard: { "42": 2 },
       currentOffer: [],
+      activeSiteId: null,
+    });
+  });
+
+  it("round-trips a replay draft state whose packSequence arrived as numeric-keyed objects", () => {
+    const listener = vi.fn();
+    // RTDB stores arrays as numeric-keyed objects and drops empty ones, so a
+    // persisted replay draft state arrives with `packSequence` (and its inner
+    // packs) shaped as objects. The normalizer must coerce them back.
+    const strippedQuestState = {
+      ...createDefaultState(),
+      draftState: {
+        mode: "replay",
+        recordId: "seat-12",
+        pickNumber: 3,
+        sitePicksCompleted: 2,
+        currentOffer: { "0": 11, "1": 12 },
+        signatureCardNumbers: { "0": 501, "1": 502 },
+        packSequence: {
+          "0": { "0": 1, "1": 2, "2": 3 },
+          "1": { "0": 11, "1": 12 },
+        },
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready.room.questState?.draftState).toEqual({
+      mode: "replay",
+      recordId: "seat-12",
+      pickNumber: 3,
+      sitePicksCompleted: 2,
+      currentOffer: [11, 12],
+      signatureCardNumbers: [501, 502],
+      packSequence: [
+        [1, 2, 3],
+        [11, 12],
+      ],
+      activeSiteId: null,
+    });
+  });
+
+  it("defaults a replay draft state's dropped fields back to empty", () => {
+    const listener = vi.fn();
+    // A replay state persisted with empty/zero fields loses them on write
+    // (RTDB drops empty arrays and the default-`0` pick scalars). Only `mode`
+    // survives. The normalizer backfills the rest.
+    const strippedQuestState = {
+      ...createDefaultState(),
+      draftState: {
+        mode: "replay",
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation((_entryRef, next: SnapshotListener) => {
+      next({ exists: () => true, val: () => room });
+      return vi.fn();
+    });
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    expect(ready.room.questState?.draftState).toEqual({
+      mode: "replay",
+      recordId: "",
+      pickNumber: 1,
+      sitePicksCompleted: 0,
+      currentOffer: [],
+      signatureCardNumbers: [],
+      packSequence: [],
       activeSiteId: null,
     });
   });

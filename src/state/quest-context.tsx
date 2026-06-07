@@ -754,12 +754,16 @@ export function QuestProvider({
             pickNumber: next.draftState.pickNumber,
             sitePicksCompleted: next.draftState.sitePicksCompleted,
             currentOfferSize: next.draftState.currentOffer.length,
-            remainingCards: countRemainingCards(
-              next.draftState.remainingCopiesByCard,
-            ),
-            remainingUniqueCards: countRemainingUniqueCards(
-              next.draftState.remainingCopiesByCard,
-            ),
+            ...(next.draftState.mode === "pool"
+              ? {
+                  remainingCards: countRemainingCards(
+                    next.draftState.remainingCopiesByCard,
+                  ),
+                  remainingUniqueCards: countRemainingUniqueCards(
+                    next.draftState.remainingCopiesByCard,
+                  ),
+                }
+              : {}),
           });
         }
 
@@ -2165,8 +2169,14 @@ export function QuestProvider({
       pickNumber: draftState.pickNumber,
       sitePicksCompleted: draftState.sitePicksCompleted,
       currentOfferSize: draftState.currentOffer.length,
-      remainingCards: countRemainingCards(draftState.remainingCopiesByCard),
-      remainingUniqueCards: countRemainingUniqueCards(draftState.remainingCopiesByCard),
+      ...(draftState.mode === "pool"
+        ? {
+            remainingCards: countRemainingCards(draftState.remainingCopiesByCard),
+            remainingUniqueCards: countRemainingUniqueCards(
+              draftState.remainingCopiesByCard,
+            ),
+          }
+        : {}),
     });
     setState((prev) => applyDraftState(prev, draftState));
   }, []);

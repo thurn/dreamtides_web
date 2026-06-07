@@ -470,6 +470,7 @@ export default function DraftTestApp() {
       logPoolTrace(dreamcaller.name, pool);
 
       const draftState: DraftState = {
+        mode: "pool",
         draftPoolCopiesByCard,
         remainingCopiesByCard: { ...draftPoolCopiesByCard },
         currentOffer: [],

@@ -48,6 +48,7 @@ const cards = [
 const cardDatabase = new Map(cards.map((card) => [card.cardNumber, card]));
 
 const draftState: DraftState = {
+  mode: "pool",
   draftPoolCopiesByCard: { "1": 3, "2": 1, "3": 2 },
   remainingCopiesByCard: { "1": 2, "2": 0, "3": 1 },
   currentOffer: [],

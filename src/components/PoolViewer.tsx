@@ -481,7 +481,7 @@ function buildRunPoolEntries(
   draftState: DraftState | null,
   cardDatabase: ReadonlyMap<number, CardData>,
 ): PoolCardEntry[] {
-  if (draftState === null) {
+  if (draftState === null || draftState.mode !== "pool") {
     return [];
   }
 

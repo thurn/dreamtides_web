@@ -3,7 +3,7 @@ import {
   extractDraftDebugInfo,
   extractPackageDebugInfo,
 } from "./debug-helpers";
-import type { DraftState } from "../types/draft";
+import type { PoolDraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
 import type {
   DreamsignTemplate,
@@ -28,9 +28,10 @@ function makeCard(num: number, name: string): CardData {
 }
 
 function makeDraftState(
-  overrides: Partial<DraftState> = {},
-): DraftState {
+  overrides: Partial<PoolDraftState> = {},
+): PoolDraftState {
   return {
+    mode: "pool",
     draftPoolCopiesByCard: {},
     remainingCopiesByCard: {},
     currentOffer: [],
