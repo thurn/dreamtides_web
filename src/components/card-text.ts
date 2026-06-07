@@ -21,13 +21,18 @@ export type SymbolType = "energy" | "spark" | "trigger" | "fast";
  * - `sparkPip` represents the spark glyph followed immediately by an integer
  *   (e.g. `⍏2`). The renderer draws this as a circled-number `PipBadge` so
  *   inline references match the spark stat badge on character cards.
+ * - `bolt` represents the activated-ability marker `❖` (and the interrupt
+ *   marker `❖❖`). The renderer draws `count` filled lightning bolts, the same
+ *   mark shown before the card name in the title bar — one bolt for a normal
+ *   activated ability, two almost-touching bolts for an interrupt.
  */
 export type TextSegment =
   | { kind: "text"; value: string }
   | { kind: "symbol"; symbol: SymbolType; char: string }
   | { kind: "nobreak"; segments: TextSegment[] }
   | { kind: "term"; word: string; entry: GlossaryEntry }
-  | { kind: "sparkPip"; value: string };
+  | { kind: "sparkPip"; value: string }
+  | { kind: "bolt"; count: number };
 
 /** Maps special Unicode characters to their symbol type. */
 const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
@@ -44,6 +49,14 @@ const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
 const TRIGGER_CHAR = "▸";
 const FAST_CHAR = "↯";
 const SPARK_CHAR = "⍏";
+
+/**
+ * Activated-ability marker. A single `❖` opens a normal activated ability; two
+ * `❖❖` open an interrupt. The renderer collapses a run of these into a single
+ * `bolt` segment carrying the count so it can draw one or two filled lightning
+ * bolts (the same mark the title bar shows before the card name).
+ */
+const ACTIVATED_CHAR = "❖";
 
 /**
  * Matches the spark glyph followed immediately by one or more digits, e.g.
@@ -207,6 +220,19 @@ export function tokenizeRulesText(text: string): TextSegment[] {
         i += match[0].length;
         continue;
       }
+    }
+
+    if (char === ACTIVATED_CHAR) {
+      // Collapse a run of `❖` into one bolt segment carrying the count, so a
+      // single marker draws one bolt and the interrupt marker `❖❖` draws two.
+      flushBufferAndExtractTerms();
+      let count = 0;
+      while (text[i] === ACTIVATED_CHAR) {
+        count += 1;
+        i += 1;
+      }
+      segments.push({ kind: "bolt", count });
+      continue;
     }
 
     const symbolType = char !== undefined ? SYMBOL_MAP[char] : undefined;

@@ -108,6 +108,39 @@ describe("RulesText", () => {
     });
   });
 
+  // The activated-ability marker `❖` renders as the filled lightning bolt
+  // (the same `bxf bx-bolt` mark the title bar shows before the card name), not
+  // the literal diamond character.
+  it("renders the activated-ability marker ❖ as the boxicons bolt icon", () => {
+    const { container, root } = mount(
+      <RulesText text="❖ – 1●: Move this character." />,
+    );
+
+    const bolts = container.querySelectorAll("i.bxf.bx-bolt");
+    expect(bolts).toHaveLength(1);
+    expect(container.textContent).not.toContain("❖");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  // The interrupt marker `❖❖` renders as two bolts so it reads the same as the
+  // double-bolt interrupt chip in the title bar.
+  it("renders the interrupt marker ❖❖ as two bolt icons", () => {
+    const { container, root } = mount(
+      <RulesText text="❖❖ – Abandon an ally: Effect." />,
+    );
+
+    const bolts = container.querySelectorAll("i.bxf.bx-bolt");
+    expect(bolts).toHaveLength(2);
+    expect(container.textContent).not.toContain("❖");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("does not wrap unknown words", () => {
     const { container, root } = mount(<RulesText text="Deal 3 damage." />);
 

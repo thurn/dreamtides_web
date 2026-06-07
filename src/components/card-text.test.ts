@@ -70,6 +70,22 @@ describe("tokenizeRulesText", () => {
     ]);
   });
 
+  // The activated-ability marker `\u2756` collapses into a `bolt` segment so
+  // the renderer can draw the filled lightning bolt the title bar shows before
+  // the card name. A single `\u2756` is a normal activated ability (one bolt);
+  // `\u2756\u2756` is an interrupt (two almost-touching bolts).
+  it("collapses a single \u2756 into a bolt segment with count 1", () => {
+    const result = tokenizeRulesText("\u2756 \u2013 1\u25CF: Move this character.");
+    expect(result[0]).toEqual({ kind: "bolt", count: 1 });
+  });
+
+  it("collapses a double \u2756\u2756 into a single bolt segment with count 2", () => {
+    const result = tokenizeRulesText("\u2756\u2756 \u2013 Abandon an ally: Effect.");
+    expect(result[0]).toEqual({ kind: "bolt", count: 2 });
+    // The two markers must collapse into one segment, not two single bolts.
+    expect(result.filter((s) => s.kind === "bolt")).toHaveLength(1);
+  });
+
   it("identifies the trigger prefix \u25B8 when not followed by a keyword", () => {
     const result = tokenizeRulesText("\u25B8When played:");
     expect(result).toEqual([

@@ -29,6 +29,14 @@ export const SPARK_ICON_CLASS = "bxf bx-sparkles";
 export const ENERGY_ICON_CLASS = "bxf bx-fire-alt";
 
 /**
+ * Filled lightning-bolt mark for activated abilities. Shared by the card
+ * title-bar fast/interrupt chips (`CardView`) and the inline `❖` / `❖❖`
+ * activated-ability markers in rules text (`RulesText`) so both read as the
+ * same glyph.
+ */
+export const BOLT_ICON_CLASS = "bxf bx-bolt";
+
+/**
  * Spark glyph for inline rules text. The single "sparkle" star reads more
  * cleanly than the busier multi-star "sparkles" at the small inline size,
  * while the corner spark stat keeps `SPARK_ICON_CLASS` at its larger size.

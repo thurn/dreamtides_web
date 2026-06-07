@@ -7,6 +7,7 @@ import { HoverPopover } from "./HoverPopover";
 import { PipBadge } from "./PipBadge";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 import {
+  BOLT_ICON_CLASS,
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
   SPARK_ICON_COLOR,
@@ -17,6 +18,8 @@ import {
  * Renders rules text with:
  *   - the energy `●` glyph swapped for the blue flame (`bxf bx-fire-alt`)
  *   - the spark `✦` glyph swapped for the amber-gold sparkle mark
+ *   - the activated-ability marker `❖` (and interrupt `❖❖`) swapped for the
+ *     filled lightning bolt(s) shown before the card name in the title bar
  *   - the trigger `▸` and fast `↯` glyphs colored
  *   - glossary terms (Materialized, Judgment, Reclaim, Foresee, void,
  *     spark, ally, fast, etc.) wrapped in an underlined hover popover
@@ -42,6 +45,12 @@ const SYMBOL_COLORS: Readonly<Record<string, string>> = {
   trigger: "#94a3b8",
   fast: "#facc15",
 };
+
+/**
+ * White fill for the inline activated-ability bolt, matching the filled bolt
+ * the title bar shows before the card name so the two read as the same mark.
+ */
+const BOLT_ICON_COLOR = "#ffffff";
 
 /** Inline-block trigger styling so the underline stays close to the word. */
 const TERM_STYLE: CSSProperties = {
@@ -131,6 +140,35 @@ function renderSegment(
           size="sm"
           scale={options.pipScale}
         />
+      </span>
+    );
+  }
+  if (segment.kind === "bolt") {
+    // The activated-ability marker renders as the filled lightning bolt — the
+    // same white mark the title bar shows before the card name. A single bolt
+    // opens a normal activated ability; an interrupt draws two bolts pulled
+    // together so they almost touch (matching the title-bar treatment). The
+    // bolt's mass sits low in its em box, so a small upward nudge centers it on
+    // the text. The whole group stays on one line.
+    return (
+      <span
+        key={key}
+        aria-label={segment.count >= 2 ? "interrupt" : "activated ability"}
+        style={{ color: BOLT_ICON_COLOR, whiteSpace: "nowrap" }}
+      >
+        {Array.from({ length: segment.count }, (_, index) => (
+          <i
+            key={index}
+            className={`${BOLT_ICON_CLASS} align-middle`}
+            style={{
+              transform: "translateY(-0.05em)",
+              // Pull each bolt after the first inward so an interrupt's two
+              // bolts almost touch.
+              marginLeft: index === 0 ? undefined : "-0.35em",
+            }}
+            aria-hidden="true"
+          />
+        ))}
       </span>
     );
   }

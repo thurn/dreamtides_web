@@ -15,6 +15,7 @@ import {
 } from "./card-aspect";
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
+import { BOLT_ICON_CLASS } from "./GlowIcon";
 import { CardStatOrb } from "./CardStatOrb";
 import { renderRulesText } from "./RulesText";
 import { useFitText } from "./useFitText";
@@ -555,9 +556,6 @@ interface AttributeChip {
   boltCount: number;
   ariaLabel: string;
 }
-
-/** Filled lightning-bolt mark shared by the fast and interrupt chips. */
-const BOLT_ICON_CLASS = "bxf bx-bolt";
 
 /**
  * Builds the attribute chips for a card. An interrupt is always also a fast
