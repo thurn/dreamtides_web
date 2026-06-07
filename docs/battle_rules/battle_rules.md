@@ -402,6 +402,10 @@ you play" triggers.
 **Rematerialize** — Trigger an in-play character's materialization again, firing
 its ▸Materialized trigger and any "When you materialize" triggers.
 
+**Phasing** — ▸Materialized: Return another ally to hand, then move this
+character to that ally's position. Phasing is resolved through the normal
+return-to-hand and repositioning tools.
+
 **Awakened** — A character with this keyword enters play without the exhausted
 status. See [Exhaust and Awaken](#exhaust-and-awaken).
 
