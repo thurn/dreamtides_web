@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   cardBestAdequacies,
+  dominantTheme,
+  draftableUniverse,
+  giniCoefficient,
+  normalizedEntropy,
+  poolPayoffThemes,
+  poolSupportShares,
   scorePool,
   TIER_TARGET,
   trapCards,
@@ -148,5 +154,146 @@ describe("trapCards", () => {
     expect(trapCards(counts, META, TIER_TARGET, 0.41)).toEqual(["Lord"]);
     expect(trapCards(counts, META, TIER_TARGET, 0.4)).toEqual([]);
     expect(trapCards(counts, META, TIER_TARGET, 0.3)).toEqual([]);
+  });
+});
+
+describe("poolSupportShares", () => {
+  it("reports gross support copies per theme as a fraction of pool size", () => {
+    // size 10; warriors support = Lord(1)+Grunt(1)=2 (no self exclusion);
+    // events support = AnEvent(1)=1.
+    const counts = withFiller(
+      new Map([["Lord", 1], ["Grunt", 1], ["AnEvent", 1]]),
+      7,
+    );
+    const shares = poolSupportShares(counts, META);
+    expect(shares.get("warriors")).toBeCloseTo(0.2, 10);
+    expect(shares.get("events")).toBeCloseTo(0.1, 10);
+  });
+
+  it("returns an empty map for an empty pool", () => {
+    expect([...poolSupportShares(new Map(), META).entries()]).toEqual([]);
+  });
+});
+
+describe("poolPayoffThemes", () => {
+  it("collects every theme any present payoff needs", () => {
+    const counts = withFiller(
+      new Map([["Lord", 1], ["EventPayoff", 1], ["Grunt", 1]]),
+      7,
+    );
+    expect([...poolPayoffThemes(counts, META)].sort()).toEqual([
+      "events",
+      "warriors",
+    ]);
+  });
+
+  it("is empty when only support/filler cards are present", () => {
+    const counts = withFiller(new Map([["Grunt", 2], ["AnEvent", 2]]), 6);
+    expect([...poolPayoffThemes(counts, META)]).toEqual([]);
+  });
+});
+
+describe("dominantTheme", () => {
+  const baseline = new Map([
+    ["warriors", 0.2],
+    ["events", 0.2],
+  ]);
+
+  it("picks the candidate theme most over-represented vs baseline (lift)", () => {
+    // warriors at 2x baseline beats events at 1x, even though shares could tie.
+    const shares = new Map([
+      ["warriors", 0.4],
+      ["events", 0.2],
+    ]);
+    expect(dominantTheme(shares, ["warriors", "events"], baseline)).toBe(
+      "warriors",
+    );
+  });
+
+  it("only considers candidate themes", () => {
+    const shares = new Map([
+      ["warriors", 0.9],
+      ["events", 0.1],
+    ]);
+    // warriors has the higher lift but is not a candidate => events wins.
+    expect(dominantTheme(shares, ["events"], baseline)).toBe("events");
+  });
+
+  it("returns null when there are no candidates", () => {
+    expect(dominantTheme(new Map(), [], baseline)).toBeNull();
+  });
+
+  it("breaks lift ties toward higher raw share then theme name", () => {
+    // Equal lift (both 1x baseline): warriors .2/.2, events .2/.2. Higher raw
+    // share is a tie too (both .2) => name order: events < warriors.
+    const shares = new Map([
+      ["warriors", 0.2],
+      ["events", 0.2],
+    ]);
+    expect(dominantTheme(shares, ["warriors", "events"], baseline)).toBe(
+      "events",
+    );
+  });
+});
+
+describe("normalizedEntropy", () => {
+  it("is 1 for a perfectly even distribution", () => {
+    expect(normalizedEntropy([5, 5, 5, 5])).toBeCloseTo(1, 10);
+  });
+
+  it("is 0 when all mass is on one category", () => {
+    expect(normalizedEntropy([10, 0, 0, 0])).toBe(0);
+  });
+
+  it("folds absent categories into the normalizer", () => {
+    // Two equal nonzero buckets across a universe of 4 categories => log2/log4 = .5.
+    expect(normalizedEntropy([5, 5], 4)).toBeCloseTo(0.5, 10);
+  });
+
+  it("returns 0 for an all-zero distribution or a single category", () => {
+    expect(normalizedEntropy([0, 0, 0])).toBe(0);
+    expect(normalizedEntropy([7], 1)).toBe(0);
+  });
+});
+
+describe("giniCoefficient", () => {
+  it("is 0 for a perfectly even distribution", () => {
+    expect(giniCoefficient([3, 3, 3, 3])).toBeCloseTo(0, 10);
+  });
+
+  it("approaches 1 as one category hoards everything", () => {
+    const g = giniCoefficient([0, 0, 0, 100]);
+    expect(g).toBeGreaterThan(0.7);
+  });
+
+  it("is 0 for an empty or all-zero distribution", () => {
+    expect(giniCoefficient([])).toBe(0);
+    expect(giniCoefficient([0, 0])).toBe(0);
+  });
+});
+
+describe("draftableUniverse", () => {
+  it("unions every card-name source the generator can pull from", () => {
+    const poolData = {
+      core: new Set(["CoreA"]),
+      archLists: new Map([["arch", new Set(["ArchB"])]]),
+      draftLists: new Map([["wu", new Set(["DraftC"])]]),
+      decklists: [["DeckD", "CoreA"]],
+      humanDecklists: [["HumanE"]],
+      mergedLists: new Map([["br", new Set(["MergedF"])]]),
+    };
+    expect([...draftableUniverse(poolData)].sort()).toEqual([
+      "ArchB",
+      "CoreA",
+      "DeckD",
+      "DraftC",
+      "HumanE",
+      "MergedF",
+    ]);
+  });
+
+  it("tolerates missing optional sources", () => {
+    const poolData = { core: new Set(["Only"]), archLists: new Map(), draftLists: new Map() };
+    expect([...draftableUniverse(poolData)]).toEqual(["Only"]);
   });
 });
