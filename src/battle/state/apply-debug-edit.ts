@@ -17,6 +17,7 @@ import type {
   BattleCardInstance,
   BattleCardMarkers,
   BattleCardNote,
+  BattleCardStatus,
   BattleCardProvenance,
   BattleDeckCardDefinition,
   BattleEngineEmissionContext,
@@ -283,6 +284,8 @@ export function applyDebugEdit(
         edit.markers,
         context,
       );
+    case "SET_CARD_STATUS":
+      return setCardStatus(state, nextState, edit.battleCardId, edit.status);
     case "CREATE_CARD_COPY":
       return createCardCopy(
         state,
@@ -798,6 +801,51 @@ function setCardMarkers(
         ),
       ],
     },
+  };
+}
+
+/**
+ * Merges a partial `BattleCardStatus` onto the instance's status. Basic
+ * automation uses this to clear `isExhausted` on the incoming side's characters
+ * during the Dawn phase (rules §Dawn). Acts only on the status FIELD; the merge
+ * leaves untouched fields intact. A merge that changes nothing is a no-op.
+ */
+function setCardStatus(
+  state: BattleMutableState,
+  nextState: BattleMutableState,
+  battleCardId: string,
+  status: Partial<BattleCardStatus>,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const card = nextState.cardInstances[battleCardId];
+  if (card === undefined) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  const current = card.status;
+  const changed = (Object.keys(status) as (keyof BattleCardStatus)[]).some(
+    (key) => status[key] !== undefined && status[key] !== current[key],
+  );
+  if (!changed) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  nextState.cardInstances[battleCardId].status = {
+    ...current,
+    ...status,
+  };
+
+  return {
+    state: nextState,
+    transition: createEmptyTransitionData(),
   };
 }
 

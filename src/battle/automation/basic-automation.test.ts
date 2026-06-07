@@ -466,6 +466,103 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     expect(result).toContainEqual({ id: "FORCE_RESULT", result: "victory", sourceSurface: "auto-system" });
   });
 
+  it("clears exhaustion for every in-play character of the incoming side", () => {
+    const incomingFront = makeInstance("e-front", { owner: "enemy", printedSpark: 2 });
+    const incomingBack = makeInstance("e-back", { owner: "enemy", printedSpark: 1 });
+    const outgoingFront = makeInstance("p-front", { owner: "player", printedSpark: 3 });
+    incomingFront.status.isExhausted = true;
+    incomingBack.status.isExhausted = true;
+    outgoingFront.status.isExhausted = true;
+
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 5,
+      player: { frontRank: frontRankSlots("F1", "p-front") },
+      enemy: {
+        deck: ["d-enemy"],
+        frontRank: frontRankSlots("F0", "e-front"),
+        backRank: {
+          B0: "e-back",
+          B1: null,
+          B2: null,
+          B3: null,
+          B4: null,
+        },
+      },
+      instances: [incomingFront, incomingBack, outgoingFront],
+    });
+    const handoff: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 5 },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
+
+    // Both the incoming side's front- and back-rank characters are cleared.
+    expect(result).toContainEqual({
+      kind: "SET_CARD_STATUS",
+      battleCardId: "e-front",
+      status: { isExhausted: false },
+    });
+    expect(result).toContainEqual({
+      kind: "SET_CARD_STATUS",
+      battleCardId: "e-back",
+      status: { isExhausted: false },
+    });
+    // The outgoing side's exhaustion is untouched.
+    expect(
+      result.some(
+        (edit) => edit.kind === "SET_CARD_STATUS" && edit.battleCardId === "p-front",
+      ),
+    ).toBe(false);
+  });
+
+  it("clears exhaustion before the incoming side's draw and energy ramp", () => {
+    const incoming = makeInstance("e-front", { owner: "enemy", printedSpark: 2 });
+    incoming.status.isExhausted = true;
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 4,
+      enemy: {
+        deck: ["d-enemy"],
+        frontRank: frontRankSlots("F0", "e-front"),
+      },
+      instances: [incoming],
+    });
+    const handoff: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 4 },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
+    const clearIndex = result.findIndex(
+      (edit) => edit.kind === "SET_CARD_STATUS" && edit.battleCardId === "e-front",
+    );
+    const flowIndex = result.findIndex((edit) => edit.kind === "SET_BATTLE_FLOW");
+    expect(clearIndex).toBeGreaterThanOrEqual(0);
+    // The exhaust-clear is part of the incoming side's turn, so it follows the
+    // side flip just like the ramp and draw.
+    expect(clearIndex).toBeGreaterThan(flowIndex);
+  });
+
+  it("emits no status clear when the incoming side has no characters in play", () => {
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 3,
+      enemy: { deck: ["d-enemy"] },
+    });
+    const handoff: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 3 },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
+    expect(result.some((edit) => edit.kind === "SET_CARD_STATUS")).toBe(false);
+  });
+
   it("leaves non-handoff flow edits unchanged", () => {
     const state = makeState({ activeSide: "player", turnNumber: 2 });
     const sameSideFlow: BattleCommand = {

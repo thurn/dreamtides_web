@@ -1,4 +1,5 @@
 import type {
+  BattleCardStatus,
   BattleHistory,
   BattleHistoryEntry,
   BattleHistoryEntryMetadata,
@@ -188,6 +189,7 @@ function areCardInstanceDictionariesEqual(
       leftInstance.isRevealedToPlayer !== rightInstance.isRevealedToPlayer ||
       leftInstance.markers.isPrevented !== rightInstance.markers.isPrevented ||
       leftInstance.markers.isCopied !== rightInstance.markers.isCopied ||
+      !statusEqual(leftInstance.status, rightInstance.status) ||
       leftInstance.notes.length !== rightInstance.notes.length ||
       leftInstance.definition.name !== rightInstance.definition.name ||
       leftInstance.definition.printedSpark !== rightInstance.definition.printedSpark ||
@@ -212,6 +214,26 @@ function areCardInstanceDictionariesEqual(
     }
   }
   return true;
+}
+
+/**
+ * Compares the full per-instance status so a status-only edit (e.g. the Dawn
+ * exhaust-clear) registers as a real change and is committed to history rather
+ * than collapsed into a no-op.
+ */
+function statusEqual(left: BattleCardStatus, right: BattleCardStatus): boolean {
+  return (
+    left.isExhausted === right.isExhausted &&
+    left.counters === right.counters &&
+    left.reclaimed === right.reclaimed &&
+    left.offering === right.offering &&
+    left.ephemeral === right.ephemeral &&
+    left.veil === right.veil &&
+    left.grantedUnstoppable === right.grantedUnstoppable &&
+    left.grantedVengeful === right.grantedVengeful &&
+    left.grantedPreeminence === right.grantedPreeminence &&
+    left.grantedAwakened === right.grantedAwakened
+  );
 }
 
 function figmentsEqual(

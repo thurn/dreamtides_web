@@ -206,3 +206,46 @@ describe("exhausted-can't-advance rule", () => {
     });
   });
 });
+
+function setCardStatus(
+  state: BattleReducerState,
+  battleCardId: string,
+  status: Partial<BattleReducerState["mutable"]["cardInstances"][string]["status"]>,
+): BattleReducerState {
+  return battleControllerReducer(state, {
+    type: "APPLY_COMMAND",
+    command: {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_CARD_STATUS", battleCardId, status },
+    },
+  });
+}
+
+describe("SET_CARD_STATUS", () => {
+  it("merges the partial status, clearing isExhausted while leaving siblings intact", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state.mutable.cardInstances[cardId].status.isExhausted = true;
+    state.mutable.cardInstances[cardId].status.offering = true;
+
+    const result = setCardStatus(state, cardId, { isExhausted: false });
+
+    expect(result.mutable.cardInstances[cardId].status.isExhausted).toBe(false);
+    // Untouched sibling fields are preserved by the merge.
+    expect(result.mutable.cardInstances[cardId].status.offering).toBe(true);
+  });
+
+  it("is a no-op when the partial matches the current status", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    // The default status already has isExhausted === false.
+    const result = setCardStatus(state, cardId, { isExhausted: false });
+    expect(result.mutable.cardInstances[cardId]).toBe(state.mutable.cardInstances[cardId]);
+  });
+
+  it("ignores an unknown card id", () => {
+    const state = createBattle();
+    const result = setCardStatus(state, "missing-card", { isExhausted: false });
+    expect(result.mutable).toBe(state.mutable);
+  });
+});

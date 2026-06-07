@@ -4,6 +4,7 @@ import type {
   BattleAiChoiceTrace,
   BattleCardMarkers,
   BattleCardNoteExpiry,
+  BattleCardStatus,
   BattleCommandActor,
   BattleCommandSourceSurface,
   BattleCommandTarget,
@@ -134,6 +135,15 @@ export type BattleDebugEdit =
     kind: "SET_CARD_MARKERS";
     battleCardId: string;
     markers: BattleCardMarkers;
+  }
+  | {
+    // Merges a partial `BattleCardStatus` onto the instance's status. Basic
+    // automation emits this during the Dawn phase to clear `isExhausted` on the
+    // incoming side's characters (rules §Dawn). Task 4.1 extends its handler
+    // with the ☪ auto-retreat behaviour and surfaces the toggle UI.
+    kind: "SET_CARD_STATUS";
+    battleCardId: string;
+    status: Partial<BattleCardStatus>;
   }
   | {
     kind: "CREATE_CARD_COPY";
@@ -418,6 +428,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "DISMISS_CARD_NOTE":
     case "CLEAR_CARD_NOTES":
     case "SET_CARD_MARKERS":
+    case "SET_CARD_STATUS":
       return "card-instance";
     case "MOVE_CARD_TO_ZONE":
     case "DRAW_CARD":
@@ -513,6 +524,7 @@ function collectDebugEditTargets(
     case "DISMISS_CARD_NOTE":
     case "CLEAR_CARD_NOTES":
     case "SET_CARD_MARKERS":
+    case "SET_CARD_STATUS":
       return [makeCardTarget(edit.battleCardId)];
     case "MOVE_CARD_TO_ZONE":
       return [
@@ -616,6 +628,8 @@ function createDebugEditLabel(
       return `Clear Notes on ${readCardName(state, edit.battleCardId)}`;
     case "SET_CARD_MARKERS":
       return createMarkerDiffLabel(state, edit.battleCardId, edit.markers);
+    case "SET_CARD_STATUS":
+      return createStatusEditLabel(state, edit.battleCardId, edit.status);
     case "CREATE_CARD_COPY":
       return `Create Copy of ${readCardName(state, edit.sourceBattleCardId)}`;
     case "CREATE_FIGMENT":
@@ -663,6 +677,24 @@ function createMarkerDiffLabel(
   }
 
   return `Set ${name} Markers`;
+}
+
+/**
+ * Renders a status edit (a partial `BattleCardStatus` merge) as a label. The
+ * common single-field exhaust toggle reads naturally; multi-field merges fall
+ * back to a generic "Set <card> Status".
+ */
+function createStatusEditLabel(
+  state: BattleMutableState,
+  battleCardId: string,
+  status: Partial<BattleCardStatus>,
+): string {
+  const name = readCardName(state, battleCardId);
+  const keys = Object.keys(status);
+  if (keys.length === 1 && status.isExhausted !== undefined) {
+    return status.isExhausted ? `Exhaust ${name}` : `Awaken ${name}`;
+  }
+  return `Set ${name} Status`;
 }
 
 function formatDebugEditCommandId(edit: BattleDebugEdit): string {

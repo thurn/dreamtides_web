@@ -13,7 +13,7 @@ import type {
   BattleResult,
   BattleSide,
 } from "../types";
-import { FRONT_RANK_SLOT_IDS } from "../types";
+import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 
 /**
  * "Basic automation" applies the small, deterministic subset of the Dreamtides
@@ -42,6 +42,8 @@ import { FRONT_RANK_SLOT_IDS } from "../types";
  *  - **Start of turn ramps energy and draws.** The incoming player's energy
  *    ramps to the per-turn maximum and they draw a card (skipped on the very
  *    first turn of the battle) (rules §Turn Structure — Dreamwell / Draw).
+ *  - **Dawn clears exhaustion.** When a side begins its turn, every in-play
+ *    character it controls loses the exhausted status (rules §Dawn).
  *  - **End-of-turn hand limit.** The outgoing player discards down to ten cards
  *    (rules §Turn Structure — Ending).
  *  - **Victory threshold.** When a side reaches the score threshold after the
@@ -193,6 +195,13 @@ function planTurnHandoff(
 
   // The user's own flow edit performs the side flip.
   commands.push(command);
+
+  // Dawn: the incoming side's exhausted characters lose the exhausted status
+  // (rules §Dawn). Clearing follows the side flip because it belongs to the
+  // incoming player's turn, alongside the ramp and draw.
+  for (const clearEdit of dawnExhaustClearEdits(state, incomingSide)) {
+    commands.push(autoCommand(clearEdit));
+  }
 
   for (const rampEdit of energyRampEdits(incomingSide, edit.turnNumber, caps.maxEnergyCap)) {
     commands.push(autoCommand(rampEdit));
@@ -386,6 +395,48 @@ function handLimitDiscardEdits(
     edits.push({ kind: "DISCARD_CARD", battleCardId });
   }
   return edits;
+}
+
+/**
+ * Dawn: clears the exhausted status from every in-play character (front or back
+ * rank) of `side` (rules §Dawn). Emits a `SET_CARD_STATUS` clear only for
+ * characters that are currently exhausted, so a board with nothing to wake
+ * produces no edits.
+ */
+function dawnExhaustClearEdits(
+  state: BattleMutableState,
+  side: BattleSide,
+): BattleDebugEdit[] {
+  const edits: BattleDebugEdit[] = [];
+  const sideState = state.sides[side];
+
+  for (const slotId of BACK_RANK_SLOT_IDS) {
+    appendExhaustClearEdit(state, sideState.backRank[slotId], edits);
+  }
+  for (const slotId of FRONT_RANK_SLOT_IDS) {
+    appendExhaustClearEdit(state, sideState.frontRank[slotId], edits);
+  }
+
+  return edits;
+}
+
+function appendExhaustClearEdit(
+  state: BattleMutableState,
+  battleCardId: string | null,
+  edits: BattleDebugEdit[],
+): void {
+  if (battleCardId === null) {
+    return;
+  }
+  const instance = state.cardInstances[battleCardId];
+  if (instance === undefined || !instance.status.isExhausted) {
+    return;
+  }
+  edits.push({
+    kind: "SET_CARD_STATUS",
+    battleCardId,
+    status: { isExhausted: false },
+  });
 }
 
 /**
