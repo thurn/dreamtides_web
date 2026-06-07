@@ -1200,6 +1200,22 @@ function moveCardToDebugZone(
     };
   }
 
+  // Rules §The Play Area: an exhausted character cannot be moved to the front
+  // rank by either player. Reject the move as a no-op when the moving instance
+  // is exhausted and it would advance into a front-rank slot from elsewhere. A
+  // reposition that begins in the front rank is already there and stays legal.
+  if (
+    "slotId" in destination &&
+    destination.zone === "frontRank" &&
+    source.zone !== "frontRank" &&
+    state.cardInstances[battleCardId].status.isExhausted
+  ) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
   const sourceInstance = state.cardInstances[battleCardId];
   const destinationStack = "slotId" in destination && isFigmentInstance(sourceInstance)
     ? findBattlefieldFigmentStack(state, destination.side, sourceInstance.definition.subtype, battleCardId)
@@ -1309,6 +1325,24 @@ function swapBattlefieldSlots(
   const targetOccupant = selectBattlefieldSlotOccupant(state, target);
 
   if (sourceOccupant === null || targetOccupant === null) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  // Rules §The Play Area: an exhausted character cannot be moved to the front
+  // rank by either player. A swap that would carry an exhausted occupant from
+  // the back rank into a front-rank slot is rejected as a no-op. The source
+  // occupant lands on `target`; the target occupant lands on `source`. A
+  // front-to-front swap repositions a body already in the front rank and does
+  // not advance it, so it stays legal.
+  const sourceAdvancesToFront = target.zone === "frontRank" && source.zone !== "frontRank";
+  const targetAdvancesToFront = source.zone === "frontRank" && target.zone !== "frontRank";
+  if (
+    (sourceAdvancesToFront && state.cardInstances[sourceOccupant].status.isExhausted) ||
+    (targetAdvancesToFront && state.cardInstances[targetOccupant].status.isExhausted)
+  ) {
     return {
       state,
       transition: createEmptyTransitionData(),
