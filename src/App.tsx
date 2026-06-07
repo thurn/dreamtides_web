@@ -79,6 +79,19 @@ export function QuestApp({
   const hasDraftData = state.resolvedPackage !== null;
   const hasCardSourceDebug = state.cardSourceDebug !== null;
 
+  // In record-replay draft mode the Pool Viewer surfaces the replayed record's
+  // own deck and pick log. Resolve the record the draft state points at from
+  // the bundled corpus (loaded into `questContent`) so the viewer can show the
+  // deck the original drafter built and their pack-by-pack picks.
+  const draftState = state.draftState;
+  const replayRecord = useMemo(() => {
+    if (draftState === null || draftState.mode !== "replay") {
+      return null;
+    }
+    const records = questContent.draftRecords ?? [];
+    return records.find((record) => record.id === draftState.recordId) ?? null;
+  }, [draftState, questContent.draftRecords]);
+
   // Recompute the full idf3 provenance for the "Why Cards" overlay on demand
   // from the run seed and the pool corpus. It is deterministic per
   // `(state.seed, dreamcaller.id)`, so it reproduces the exact pool the player
@@ -243,6 +256,7 @@ export function QuestApp({
             draftState={state.draftState}
             resolvedPackage={state.resolvedPackage}
             poolVariant={runtimeConfig.poolVariant}
+            replayRecord={replayRecord}
             isOpen={poolViewerOpen}
             onClose={handleClosePoolViewer}
           />

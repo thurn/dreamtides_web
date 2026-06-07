@@ -6,6 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
 import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { DraftState } from "../types/draft";
+import type { DraftRecord } from "../data/cards-v2-database";
+import type { PoolVariant } from "../draft/pool/types";
 import { logEvent } from "../logging";
 import { PoolViewer } from "./PoolViewer";
 
@@ -84,6 +86,29 @@ function makeResolvedPackage(
   };
 }
 
+const replayDraftState: DraftState = {
+  mode: "replay",
+  recordId: "seat-7",
+  packSequence: [[1, 2]],
+  signatureCardNumbers: [1],
+  currentOffer: [],
+  activeSiteId: null,
+  pickNumber: 1,
+  sitePicksCompleted: 0,
+};
+
+const replayRecord: DraftRecord = {
+  id: "seat-7",
+  draftId: "draft-1",
+  // Mainboard with a doubled "Alpha Seer" so the deck grid shows an x2 badge.
+  mainboard: ["Alpha Seer", "Alpha Seer", "Beta Guard", "Unknown Relic"],
+  packs: [
+    ["Alpha Seer", "Beta Guard"],
+    ["Null Rain", "Quick Spark"],
+  ],
+  picks: [["Alpha Seer"], ["Quick Spark"]],
+};
+
 function mount(element: ReactElement): {
   container: HTMLDivElement;
   root: Root;
@@ -101,6 +126,8 @@ function renderPool(
   overrides: Partial<{
     draftState: DraftState | null;
     onPoolCardDragStart: (card: CardData) => void;
+    poolVariant: PoolVariant | null;
+    replayRecord: DraftRecord | null;
     resolvedPackage: ResolvedDreamcallerPackage | null;
   }> = {},
 ) {
@@ -113,6 +140,8 @@ function renderPool(
           : draftState
       }
       resolvedPackage={overrides.resolvedPackage ?? null}
+      poolVariant={overrides.poolVariant ?? null}
+      replayRecord={overrides.replayRecord ?? null}
       isOpen
       onClose={vi.fn()}
       onPoolCardDragStart={overrides.onPoolCardDragStart}
@@ -383,6 +412,117 @@ describe("PoolViewer", () => {
     });
 
     expect(logEvent).toHaveBeenCalledWith("card_preview", { cardNumber: 1 });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("labels the algorithm chip 'pool' variant in pool mode and 'replay' in replay mode", () => {
+    const pool = renderPool({ poolVariant: "idf3" });
+    expect(
+      pool.container.querySelector("[data-pool-algo]")?.getAttribute(
+        "data-pool-algo",
+      ),
+    ).toBe("idf3");
+    act(() => {
+      pool.root.unmount();
+    });
+
+    // Replay runs still resolve a pool variant (the idf3 fallback), but the chip
+    // must name the draft algorithm actually in effect: replay.
+    const replay = renderPool({
+      poolVariant: "idf3",
+      draftState: replayDraftState,
+      replayRecord,
+    });
+    expect(
+      replay.container.querySelector("[data-pool-algo]")?.getAttribute(
+        "data-pool-algo",
+      ),
+    ).toBe("replay");
+    act(() => {
+      replay.root.unmount();
+    });
+  });
+
+  it("swaps pool sources for replay diagnostics in replay mode", () => {
+    const { container, root } = renderPool({
+      draftState: replayDraftState,
+      replayRecord,
+      resolvedPackage: makeResolvedPackage({
+        starterDecklistCardNumbers: [2, 3],
+        signatureCards: ["Alpha Seer"],
+      }),
+    });
+
+    // Pool-mode sources are hidden; replay sources take their place.
+    expect(container.querySelector('[data-pool-source="run"]')).toBeNull();
+    expect(container.querySelector('[data-pool-source="idf3"]')).toBeNull();
+    expect(container.querySelector('[data-pool-source="deck"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-pool-source="history"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-pool-source="signature"]'),
+    ).not.toBeNull();
+
+    // The default source is the record deck: the deck the drafter built, with a
+    // doubled Alpha Seer badged x2 and the unresolved "Unknown Relic" dropped.
+    expect(container.querySelector('[data-pool-card-number="1"]')).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-pool-card-number="1"] [data-pool-copy-badge]',
+      )?.textContent,
+    ).toBe("x2");
+    expect(container.querySelector('[data-pool-card-number="2"]')).not.toBeNull();
+    // Quick Spark (#4) is not in the mainboard.
+    expect(container.querySelector('[data-pool-card-number="4"]')).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the pick history with the chosen card highlighted", () => {
+    const { container, root } = renderPool({
+      draftState: replayDraftState,
+      replayRecord,
+    });
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('[data-pool-source="history"]')
+        ?.click();
+    });
+
+    const history = container.querySelector("[data-pool-pick-history]");
+    expect(history).not.toBeNull();
+    expect(history?.textContent).toContain("seat-7");
+
+    const rows = container.querySelectorAll("[data-pool-pick-row]");
+    expect(rows.length).toBe(2);
+    expect(rows[0]?.textContent).toContain("Pick 1");
+    expect(rows[0]?.textContent).toContain("chose Alpha Seer");
+
+    // The drafter's choice in pack 1 (Alpha Seer) is flagged picked; Beta Guard
+    // was offered but passed.
+    const pickedChips = rows[0]?.querySelectorAll(
+      '[data-pool-pick-card="picked"]',
+    );
+    expect(pickedChips?.length).toBe(1);
+    expect(pickedChips?.[0]?.textContent).toBe("Alpha Seer");
+    expect(
+      rows[0]?.querySelectorAll('[data-pool-pick-card="offered"]').length,
+    ).toBe(1);
+
+    // Clicking a resolvable offered chip opens the zoom overlay.
+    act(() => {
+      rows[0]
+        ?.querySelector<HTMLButtonElement>('[data-pool-pick-card="offered"]')
+        ?.click();
+    });
+    expect(logEvent).toHaveBeenCalledWith("card_preview", { cardNumber: 2 });
 
     act(() => {
       root.unmount();

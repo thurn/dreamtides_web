@@ -4,6 +4,7 @@ import type { CSSProperties } from "react";
 import type { CardData } from "../types/cards";
 import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { DraftState } from "../types/draft";
+import type { DraftRecord } from "../data/cards-v2-database";
 import { poolStrategyFor } from "../draft/pool/registry";
 import type { PoolVariant } from "../draft/pool/types";
 import { BrowserCard } from "./card-browser/BrowserCard";
@@ -19,7 +20,13 @@ import {
 } from "./card-browser/card-browser-filter";
 import { CardOverlay } from "./CardOverlay";
 
-type PoolViewerSource = "run" | "catalog" | "idf3" | "signature";
+type PoolViewerSource =
+  | "run"
+  | "catalog"
+  | "idf3"
+  | "signature"
+  | "deck"
+  | "history";
 type PoolViewerVariant = "overlay" | "floating";
 
 const SOURCE_LABELS: Record<PoolViewerSource, string> = {
@@ -27,6 +34,8 @@ const SOURCE_LABELS: Record<PoolViewerSource, string> = {
   catalog: "All Cards",
   idf3: "IDF3 Decklist",
   signature: "Signature Cards",
+  deck: "Record Deck",
+  history: "Pick History",
 };
 
 const EMPTY_BASE_MESSAGES: Record<PoolViewerSource, string> = {
@@ -34,6 +43,8 @@ const EMPTY_BASE_MESSAGES: Record<PoolViewerSource, string> = {
   catalog: "No cards match the current filters.",
   idf3: "No IDF3 starting decklist is available for this run.",
   signature: "This Dreamcaller has no signature cards.",
+  deck: "The replay record has no resolvable deck cards.",
+  history: "The replay record has no pick history.",
 };
 type FloatingPosition = { x: number; y: number };
 type FloatingDragState = { offsetX: number; offsetY: number } | null;
@@ -81,6 +92,13 @@ function sourceButtonStyle(active: boolean): CSSProperties {
  * matching data — an IDF3 starter decklist and a non-empty signature list,
  * respectively — so runs without that content show just the run-pool and
  * catalog sources.
+ *
+ * In record-replay draft mode (`draftState.mode === "replay"`) the pool-mode
+ * sources are replaced by replay diagnostics drawn from `replayRecord`: a
+ * "Record Deck" grid of the deck the original drafter eventually built and a
+ * "Pick History" panel walking their pack-by-pack picks. The algorithm chip
+ * then reads `algo: replay` rather than the IDF3 fallback the pool generator
+ * resolves for the run.
  */
 export function PoolViewer({
   cardDatabase,
@@ -90,6 +108,7 @@ export function PoolViewer({
   onPoolCardDragEnd,
   onPoolCardDragStart,
   poolVariant = null,
+  replayRecord = null,
   resolvedPackage = null,
   title = "Pool Viewer",
   variant = "overlay",
@@ -101,6 +120,7 @@ export function PoolViewer({
   onPoolCardDragEnd?: () => void;
   onPoolCardDragStart?: (card: CardData) => void;
   poolVariant?: PoolVariant | null;
+  replayRecord?: DraftRecord | null;
   resolvedPackage?: ResolvedDreamcallerPackage | null;
   title?: string;
   variant?: PoolViewerVariant;
@@ -173,6 +193,25 @@ export function PoolViewer({
     };
   }, [floatingDrag]);
 
+  // Record-replay draft mode swaps the pool-mode sources (run pool, IDF3
+  // starter) for the historical record's own deck and pick log. The IDF3
+  // starter that `resolvedPackage` still carries describes how the pool would
+  // have been seeded in pool mode, so it is hidden here to avoid implying the
+  // replay draft came from it.
+  const isReplay = draftState?.mode === "replay" && replayRecord !== null;
+
+  // Resolve card NAMES (how draft records store cards) to the CardData the grid
+  // renders. First occurrence of a name wins, matching the rest of the viewer.
+  const cardsByName = useMemo(() => {
+    const byName = new Map<string, CardData>();
+    for (const card of cardDatabase.values()) {
+      if (!byName.has(card.name)) {
+        byName.set(card.name, card);
+      }
+    }
+    return byName;
+  }, [cardDatabase]);
+
   const idf3Entries = useMemo<PoolCardEntry[]>(
     () =>
       buildEntriesFromCardNumbers(
@@ -191,7 +230,21 @@ export function PoolViewer({
     [cardDatabase, resolvedPackage],
   );
 
+  // The deck the original drafter eventually built, resolved from the record's
+  // mainboard. Copies are counted so a doubled card shows an "x2" badge.
+  const deckEntries = useMemo<PoolCardEntry[]>(
+    () => buildDeckEntries(replayRecord?.mainboard ?? [], cardsByName),
+    [cardsByName, replayRecord],
+  );
+
   const availableSources = useMemo<PoolViewerSource[]>(() => {
+    if (isReplay) {
+      const sources: PoolViewerSource[] = ["deck", "history", "catalog"];
+      if (signatureEntries.length > 0) {
+        sources.push("signature");
+      }
+      return sources;
+    }
     const sources: PoolViewerSource[] = ["run", "catalog"];
     if (idf3Entries.length > 0) {
       sources.push("idf3");
@@ -200,13 +253,14 @@ export function PoolViewer({
       sources.push("signature");
     }
     return sources;
-  }, [idf3Entries.length, signatureEntries.length]);
+  }, [idf3Entries.length, isReplay, signatureEntries.length]);
 
-  // Fall back to the always-present run pool if the selected source loses its
-  // backing data (for example when a new run drops the signature cards).
+  // Fall back to the first available source if the selected one loses its
+  // backing data (a new run dropping the signature cards, or switching between
+  // pool and replay draft modes).
   useEffect(() => {
     if (!availableSources.includes(source)) {
-      setSource("run");
+      setSource(availableSources[0]);
     }
   }, [availableSources, source]);
 
@@ -216,8 +270,12 @@ export function PoolViewer({
         return buildRunPoolEntries(draftState, cardDatabase);
       case "idf3":
         return idf3Entries;
+      case "deck":
+        return deckEntries;
       case "signature":
         return signatureEntries;
+      case "history":
+        return [];
       case "catalog":
       default:
         return Array.from(cardDatabase.values()).map((card) => ({
@@ -225,7 +283,7 @@ export function PoolViewer({
           copies: null,
         }));
     }
-  }, [cardDatabase, draftState, idf3Entries, signatureEntries, source]);
+  }, [cardDatabase, deckEntries, draftState, idf3Entries, signatureEntries, source]);
 
   const baseCards = useMemo(
     () => baseEntries.map((entry) => entry.card),
@@ -300,6 +358,19 @@ export function PoolViewer({
         }
       : { background: "#101417", color: "#f7f1df" };
 
+  // The algorithm chip names the draft strategy actually in effect. In replay
+  // mode that is "replay" — the pool generator still resolves a `poolVariant`
+  // (the IDF3 fallback) for the run, but it does not drive the draft, so
+  // surfacing it here would be misleading.
+  const algoLabel = isReplay ? "replay" : poolVariant;
+  const algoTitle = isReplay
+    ? replayRecord !== null
+      ? `Record-replay draft · replaying record ${replayRecord.id}`
+      : "Record-replay draft"
+    : poolVariant !== null
+      ? poolStrategyFor(poolVariant).description
+      : "";
+
   const sourceToggle = (
     <div role="group" aria-label="Card source" style={segmentedStyle}>
       {availableSources.map((value) => (
@@ -357,9 +428,10 @@ export function PoolViewer({
                 <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800 }}>
                   {title}
                 </h2>
-                {poolVariant ? (
+                {algoLabel ? (
                   <span
-                    title={poolStrategyFor(poolVariant).description}
+                    data-pool-algo={algoLabel}
+                    title={algoTitle}
                     style={{
                       display: "inline-flex",
                       alignItems: "center",
@@ -373,7 +445,7 @@ export function PoolViewer({
                       letterSpacing: "0.02em",
                     }}
                   >
-                    {`algo: ${poolVariant}`}
+                    {`algo: ${algoLabel}`}
                   </span>
                 ) : null}
               </div>
@@ -408,12 +480,36 @@ export function PoolViewer({
                 values={values}
                 onPatch={handlePatch}
                 subtypeOptions={subtypeOptions}
-                visibleCount={filteredCards.length}
-                totalCount={baseCards.length}
+                visibleCount={
+                  source === "history"
+                    ? (replayRecord?.packs.length ?? 0)
+                    : filteredCards.length
+                }
+                totalCount={
+                  source === "history"
+                    ? (replayRecord?.packs.length ?? 0)
+                    : baseCards.length
+                }
                 barExtras={sourceToggle}
               />
 
-              {filteredCards.length === 0 ? (
+              {source === "history" ? (
+                replayRecord !== null && replayRecord.packs.length > 0 ? (
+                  <ReplayPickHistory
+                    record={replayRecord}
+                    cardsByName={cardsByName}
+                    onCardClick={setOverlayCard}
+                  />
+                ) : (
+                  <div
+                    className="flex flex-1 items-center justify-center text-sm"
+                    style={{ color: "#9fb0ac" }}
+                    data-pool-empty=""
+                  >
+                    {EMPTY_BASE_MESSAGES.history}
+                  </div>
+                )
+              ) : filteredCards.length === 0 ? (
                 <div
                   className="flex flex-1 items-center justify-center text-sm"
                   style={{ color: "#9fb0ac" }}
@@ -477,6 +573,119 @@ export function PoolViewer({
   );
 }
 
+/**
+ * Pack-by-pack walkthrough of the replayed record's original picks. Each row is
+ * one of the 30 served packs: the offered cards as chips with the drafter's
+ * choice highlighted, and a header naming the chosen card(s). Chips that resolve
+ * to a card in the database open the zoom overlay on click; unresolved names
+ * (cards absent from the current set) render as inert labels.
+ */
+function ReplayPickHistory({
+  record,
+  cardsByName,
+  onCardClick,
+}: {
+  record: DraftRecord;
+  cardsByName: ReadonlyMap<string, CardData>;
+  onCardClick: (card: CardData) => void;
+}) {
+  return (
+    <div
+      data-pool-pick-history=""
+      style={{
+        display: "flex",
+        flex: "1 1 auto",
+        flexDirection: "column",
+        gap: "8px",
+        minHeight: 0,
+        overflowY: "auto",
+      }}
+    >
+      <p style={{ margin: 0, fontSize: "0.82rem", color: "#9fb0ac" }}>
+        {"Replaying record "}
+        <strong style={{ color: "#8edbd1" }}>{record.id}</strong>
+        {
+          ". These are the original drafter's picks, pack by pack — the offered cards with the chosen one highlighted."
+        }
+      </p>
+      {record.packs.map((pack, index) => {
+        const picks = record.picks[index] ?? [];
+        const pickedNames = new Set(picks);
+        return (
+          <div
+            key={index}
+            data-pool-pick-row={String(index + 1)}
+            style={{
+              borderRadius: "6px",
+              border: "1px solid rgba(142, 219, 209, 0.16)",
+              background: "rgba(22, 36, 42, 0.6)",
+              padding: "8px 10px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "baseline",
+                flexWrap: "wrap",
+                gap: "8px",
+                marginBottom: "6px",
+              }}
+            >
+              <span
+                style={{
+                  fontWeight: 800,
+                  fontSize: "0.78rem",
+                  color: "#f7f1df",
+                }}
+              >
+                {`Pick ${String(index + 1)}`}
+              </span>
+              <span style={{ fontSize: "0.72rem", color: "#9fb0ac" }}>
+                {picks.length > 0
+                  ? `chose ${picks.join(", ")}`
+                  : "no pick recorded"}
+              </span>
+            </div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+              {pack.map((name, cardIndex) => {
+                const picked = pickedNames.has(name);
+                const card = cardsByName.get(name);
+                return (
+                  <button
+                    key={`${name}-${String(cardIndex)}`}
+                    type="button"
+                    data-pool-pick-card={picked ? "picked" : "offered"}
+                    onClick={
+                      card !== undefined ? () => onCardClick(card) : undefined
+                    }
+                    disabled={card === undefined}
+                    style={{
+                      borderRadius: "4px",
+                      border: picked
+                        ? "1px solid rgba(142, 219, 209, 0.7)"
+                        : "1px solid rgba(247, 241, 223, 0.14)",
+                      background: picked
+                        ? "rgba(45, 138, 128, 0.4)"
+                        : "rgba(16, 20, 23, 0.6)",
+                      color: picked ? "#ffffff" : "#d9e1dd",
+                      fontWeight: picked ? 800 : 500,
+                      fontSize: "0.72rem",
+                      padding: "2px 7px",
+                      cursor: card !== undefined ? "pointer" : "default",
+                    }}
+                  >
+                    {name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function buildRunPoolEntries(
   draftState: DraftState | null,
   cardDatabase: ReadonlyMap<number, CardData>,
@@ -519,6 +728,41 @@ function buildEntriesFromCardNumbers(
     entries.push({ card, copies: null });
   }
   return entries;
+}
+
+/**
+ * Resolve a replay record's mainboard (the deck the original drafter eventually
+ * built) from card names into pool entries, deduping on first occurrence and
+ * counting copies so doubled cards carry an "x2" badge. Names with no matching
+ * card in the current set are skipped.
+ */
+function buildDeckEntries(
+  mainboard: readonly string[],
+  cardsByName: ReadonlyMap<string, CardData>,
+): PoolCardEntry[] {
+  const order: number[] = [];
+  const copiesByNumber = new Map<number, number>();
+  const cardByNumber = new Map<number, CardData>();
+  for (const name of mainboard) {
+    const card = cardsByName.get(name);
+    if (card === undefined) {
+      continue;
+    }
+    if (!copiesByNumber.has(card.cardNumber)) {
+      order.push(card.cardNumber);
+      cardByNumber.set(card.cardNumber, card);
+    }
+    copiesByNumber.set(
+      card.cardNumber,
+      (copiesByNumber.get(card.cardNumber) ?? 0) + 1,
+    );
+  }
+  return order.map((cardNumber) => ({
+    // `order` only holds numbers inserted alongside their card, so both lookups
+    // are guaranteed present.
+    card: cardByNumber.get(cardNumber)!,
+    copies: copiesByNumber.get(cardNumber)!,
+  }));
 }
 
 /**
