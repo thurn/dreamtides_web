@@ -214,6 +214,29 @@ export interface BattleCardMarkers {
   isCopied: boolean;
 }
 
+/**
+ * Per-card-instance status state grouped into a single object so the
+ * create/clone churn stays in one place. Every field defaults to a falsy /
+ * zero value (see `createDefaultBattleCardStatus`). `counters` holds the ⧗
+ * counters stored on this card and resets to 0 when the card leaves play. The
+ * `granted*` flags record combat keywords an effect has granted to a non-figment
+ * character; the resolver also text-scans printed keywords and reads figment
+ * types, so these flags cover only the granted-by-effect case.
+ */
+export interface BattleCardStatus {
+  isExhausted: boolean;
+  counters: number;
+  reclaimed: boolean;
+  offering: boolean;
+  ephemeral: boolean;
+  /** Veil N● targeting tax; 0 = no veil. */
+  veil: number;
+  grantedUnstoppable: boolean;
+  grantedVengeful: boolean;
+  grantedPreeminence: boolean;
+  grantedAwakened: boolean;
+}
+
 export type BattleCardNoteExpiry =
   | { kind: "manual" }
   | { kind: "atStartOfTurn"; side: BattleSide; turnNumber: number };
@@ -251,6 +274,7 @@ export interface BattleCardInstance {
   figmentCount?: number;
   sparkDelta: number;
   isRevealedToPlayer: boolean;
+  status: BattleCardStatus;
   markers: BattleCardMarkers;
   notes: readonly BattleCardNote[];
   provenance: BattleCardProvenance;

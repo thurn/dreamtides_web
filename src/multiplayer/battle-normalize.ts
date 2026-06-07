@@ -11,6 +11,7 @@ import {
   type FrontRankSlotId,
   type BackRankSlotId,
 } from "../battle/types";
+import { createDefaultBattleCardStatus } from "../battle/state/create-initial-state";
 import type {
   SharedBattleReducerSlice,
   SharedBattleState,
@@ -55,6 +56,7 @@ function normalizeCardInstance(
   return {
     ...raw,
     notes: raw.notes ?? [],
+    status: { ...createDefaultBattleCardStatus(), ...(raw.status ?? {}) },
     definition: {
       ...raw.definition,
       timing: raw.definition.timing ?? (raw.definition.isFast ? "fast" : "standard"),

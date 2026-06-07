@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { needsManualResolution } from "./capability-check";
+import { createDefaultBattleCardStatus } from "../state/create-initial-state";
 import type { BattleCardInstance } from "../types";
 
 /**
@@ -30,6 +31,7 @@ function makeInstance(renderedText: string, cardNumber: number): BattleCardInsta
     controller: "player",
     sparkDelta: 0,
     isRevealedToPlayer: true,
+    status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: {

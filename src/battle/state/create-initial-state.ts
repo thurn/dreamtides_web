@@ -1,6 +1,7 @@
 import type {
   BattleCardInstance,
   BattleCardProvenance,
+  BattleCardStatus,
   BattleDeckCardDefinition,
   BattleInit,
   BattleMutableState,
@@ -11,6 +12,26 @@ import type {
 } from "../types";
 
 const OPENING_ENERGY = 2;
+
+/**
+ * Default per-card status: every flag false and every numeric counter zero. A
+ * fresh object is returned on each call so card instances never alias a shared
+ * status (which would corrupt undo via history-snapshot aliasing).
+ */
+export function createDefaultBattleCardStatus(): BattleCardStatus {
+  return {
+    isExhausted: false,
+    counters: 0,
+    reclaimed: false,
+    offering: false,
+    ephemeral: false,
+    veil: 0,
+    grantedUnstoppable: false,
+    grantedVengeful: false,
+    grantedPreeminence: false,
+    grantedAwakened: false,
+  };
+}
 
 export function createInitialBattleState(battleInit: BattleInit): BattleMutableState {
   const state: BattleMutableState = {
@@ -73,6 +94,7 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
             {
               ...instance,
               definition: cloneBattleDeckCardDefinition(instance.definition),
+              status: { ...instance.status },
               markers: { ...instance.markers },
               notes: instance.notes.map((note) => ({
                 ...note,
@@ -111,6 +133,7 @@ export function allocateBattleCardInstance(
     ...(params.provenance.kind === "generated-figment" ? { figmentCount: 1 } : {}),
     sparkDelta: 0,
     isRevealedToPlayer: params.isRevealedToPlayer,
+    status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: params.provenance,

@@ -9,6 +9,7 @@ import type {
   FrontRankSlotId,
 } from "../types";
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import { createDefaultBattleCardStatus } from "../state/create-initial-state";
 import {
   planBasicAutomationCommands,
   resolveChallenge,
@@ -53,6 +54,7 @@ function makeInstance(
     figmentCount: options.isFigment ? options.figmentCount ?? 1 : undefined,
     sparkDelta: options.sparkDelta ?? 0,
     isRevealedToPlayer: true,
+    status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },
     notes: [],
     provenance: {

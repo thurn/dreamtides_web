@@ -5,6 +5,7 @@ import type { BattleDeckCardDefinition } from "../types";
 import {
   allocateBattleCardInstance,
   cloneBattleMutableState,
+  createDefaultBattleCardStatus,
   createInitialBattleState,
 } from "./create-initial-state";
 
@@ -137,6 +138,7 @@ describe("cloneBattleMutableState", () => {
 
     expect(clonedInstance).not.toBe(sourceInstance);
     expect(clonedInstance.definition).not.toBe(sourceInstance.definition);
+    expect(clonedInstance.status).not.toBe(sourceInstance.status);
     expect(clonedInstance.markers).not.toBe(sourceInstance.markers);
     expect(clonedInstance.notes).not.toBe(sourceInstance.notes);
     expect(clonedInstance.provenance).not.toBe(sourceInstance.provenance);
@@ -144,8 +146,12 @@ describe("cloneBattleMutableState", () => {
     // Mutating the clone must not affect the source.
     clonedInstance.sparkDelta = 7;
     clonedInstance.markers.isPrevented = true;
+    clonedInstance.status.counters = 3;
+    clonedInstance.status.isExhausted = true;
     expect(sourceInstance.sparkDelta).toBe(0);
     expect(sourceInstance.markers.isPrevented).toBe(false);
+    expect(sourceInstance.status.counters).toBe(0);
+    expect(sourceInstance.status.isExhausted).toBe(false);
   });
 
   it("preserves scalar fields, activeSide, and nextBattleCardOrdinal exactly", () => {
@@ -241,6 +247,21 @@ describe("allocateBattleCardInstance", () => {
     expect(firstInstance.isRevealedToPlayer).toBe(true);
     expect(secondInstance.isRevealedToPlayer).toBe(false);
     expect(firstInstance.sparkDelta).toBe(0);
+    expect(firstInstance.status).toEqual({
+      isExhausted: false,
+      counters: 0,
+      reclaimed: false,
+      offering: false,
+      ephemeral: false,
+      veil: 0,
+      grantedUnstoppable: false,
+      grantedVengeful: false,
+      grantedPreeminence: false,
+      grantedAwakened: false,
+    });
+    // Each allocated instance must own a fresh status object (no shared aliasing
+    // that would corrupt undo via history snapshots).
+    expect(firstInstance.status).not.toBe(secondInstance.status);
     expect(firstInstance.markers).toEqual({ isPrevented: false, isCopied: false });
     expect(firstInstance.notes).toEqual([]);
     expect(firstInstance.provenance.kind).toBe("generated-figment");
@@ -277,5 +298,30 @@ describe("allocateBattleCardInstance", () => {
 
     expect(state.cardInstances[id].definition).toBe(definition);
     expect(state.cardInstances[id].provenance).toBe(provenance);
+  });
+});
+
+describe("createDefaultBattleCardStatus", () => {
+  it("returns an all-false / zero status with every documented field", () => {
+    expect(createDefaultBattleCardStatus()).toEqual({
+      isExhausted: false,
+      counters: 0,
+      reclaimed: false,
+      offering: false,
+      ephemeral: false,
+      veil: 0,
+      grantedUnstoppable: false,
+      grantedVengeful: false,
+      grantedPreeminence: false,
+      grantedAwakened: false,
+    });
+  });
+
+  it("returns a fresh object on each call so instances never alias a shared status", () => {
+    const first = createDefaultBattleCardStatus();
+    const second = createDefaultBattleCardStatus();
+    expect(first).not.toBe(second);
+    first.counters = 5;
+    expect(second.counters).toBe(0);
   });
 });

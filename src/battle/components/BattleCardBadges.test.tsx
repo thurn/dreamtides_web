@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { BattleCardInstance, BattleCardNote } from "../types";
+import { createDefaultBattleCardStatus } from "../state/create-initial-state";
 import { BattleCardBadges } from "./BattleCardBadges";
 
 beforeEach(() => {
@@ -120,6 +121,7 @@ function makeInstance(overrides: {
     controller: "player",
     sparkDelta: 0,
     isRevealedToPlayer: true,
+    status: createDefaultBattleCardStatus(),
     markers: overrides.markers ?? { isPrevented: false, isCopied: false },
     notes: overrides.notes ?? [],
     provenance: {
