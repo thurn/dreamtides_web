@@ -248,7 +248,7 @@ subtype = ""
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 0
+spark = ""
 tags = []
 image-number = 347770439
 art-owned = false
@@ -389,7 +389,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 2197688373
 art-owned = false
 card-number = 22
@@ -897,6 +897,7 @@ tags = ["Spirit Lord"]
 image-number = 1543022372
 art-owned = false
 card-number = 49
+art = { x = 0.168, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Avatar of Cosmic Reckoning"
@@ -1387,6 +1388,7 @@ tags = []
 image-number = 1021646686
 art-owned = false
 card-number = 76
+art = { x = 0, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Scorched Reckoning"
@@ -1783,7 +1785,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 2018848973
 art-owned = false
 card-number = 98
@@ -2507,7 +2509,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 5
-tags = []
+tags = ["Art Rework"]
 image-number = 640098148
 art-owned = false
 card-number = 138
@@ -2562,7 +2564,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Elves"]
+tags = ["Elves", "Art Rework"]
 image-number = 2293194523
 art-owned = false
 card-number = 141
@@ -2766,6 +2768,7 @@ tags = ["Ritual"]
 image-number = 1063277315
 art-owned = false
 card-number = 152
+art = { x = 0.042, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Nightmare Manifest"
@@ -3033,7 +3036,7 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Removal"]
+tags = ["Removal", "Art Rework"]
 image-number = 1125132764
 art-owned = false
 card-number = 167
@@ -3110,7 +3113,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Figment Maker"]
+tags = ["Figment Maker", "Art Rework"]
 image-number = 2022594404
 art-owned = false
 card-number = 171
@@ -3252,7 +3255,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 8
-tags = []
+tags = ["Art Rework"]
 image-number = 511427716
 art-owned = false
 card-number = 179
@@ -3481,7 +3484,7 @@ tags = ["Free Sacrifice"]
 image-number = 457875892
 art-owned = false
 card-number = 192
-art = { x = -0.3, y = 0.3, scale = 1.17 }
+art = { x = -0.414, y = 0.3, scale = 1.17 }
 
 [[cards]]
 name = "Pyre Challenger"
@@ -4966,7 +4969,7 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Removal"]
+tags = ["Removal", "Art Rework"]
 image-number = 2027158295
 art-owned = true
 card-number = 275
@@ -5436,7 +5439,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 662452573
 art-owned = false
 card-number = 301
@@ -5457,6 +5460,7 @@ tags = ["Figment Maker", "Character Payoff"]
 image-number = 2131591279
 art-owned = false
 card-number = 302
+art = { x = 0.084, y = 0.032, scale = 1.17 }
 
 [[cards]]
 name = "Dawnprowler Panther"
@@ -6019,12 +6023,12 @@ Awakened
 ▸Dawn: Gain 1●."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Explorer"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = []
+tags = ["Art Rework"]
 image-number = 1950881317
 art-owned = false
 card-number = 333
@@ -6595,7 +6599,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Elves"]
+tags = ["Elves", "Art Rework"]
 image-number = 1047769090
 art-owned = true
 card-number = 364
@@ -6944,6 +6948,7 @@ tags = ["ETB Draw"]
 image-number = 1169640025
 art-owned = false
 card-number = 383
+art = { x = -0.294, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Spirit of Smoldering Echoes"
@@ -7024,7 +7029,7 @@ Awakened
 ☪: Draw 2 cards, then discard 3 cards."""
 energy-cost = 1
 card-type = "Character"
-subtype = "Trooper"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -7033,6 +7038,7 @@ tags = []
 image-number = 2269064809
 art-owned = true
 card-number = 388
+art = { x = 0.42, y = 0.032, scale = 1.17 }
 
 [[cards]]
 name = "Pallid Arbiter"
@@ -7356,15 +7362,15 @@ card-number = 405
 name = "Flamestride Rider"
 mtg-name = "Losheel, Clockwork Scholar"
 id = "f07dfe42-566c-4e91-a250-9e2781e9d06f"
-rendered-text = "Allied warriors cannot be dissolved while challenging."
+rendered-text = "Other allied warriors cannot be dissolved."
 energy-cost = 4
 card-type = "Character"
 subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 3
-tags = []
+spark = 5
+tags = ["Art Rework"]
 image-number = 2586513025
 art-owned = false
 card-number = 406
@@ -7620,7 +7626,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 2258761879
 art-owned = false
 card-number = 420
@@ -7769,7 +7775,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 1213574257
 art-owned = false
 card-number = 428
@@ -7831,6 +7837,7 @@ tags = ["Figment Maker"]
 image-number = 730423177
 art-owned = false
 card-number = 431
+art = { x = -0.753, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Shardwoven Tyrant"
@@ -8077,7 +8084,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["ETB Bounce"]
+tags = ["ETB Bounce", "Art Rework"]
 image-number = 2127752123
 art-owned = false
 card-number = 445
@@ -8166,6 +8173,7 @@ tags = []
 image-number = 658076065
 art-owned = false
 card-number = 450
+art = { x = -1, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Glimpse of Infinity"
@@ -8526,12 +8534,12 @@ id = "881e3a5f-280f-413a-b927-352aeb3bda71"
 rendered-text = "▸Materialized, ▸Dawn: Gain 2●. The opponent gains 3⍟."
 energy-cost = 0
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = []
+tags = ["Art Rework"]
 image-number = 2186149275
 art-owned = false
 card-number = 471
@@ -8884,7 +8892,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 5
-tags = []
+tags = ["Art Rework"]
 image-number = 1725212353
 art-owned = false
 card-number = 490
@@ -9220,6 +9228,7 @@ tags = ["Removal"]
 image-number = 450440617
 art-owned = false
 card-number = 508
+art = { x = -0.342, y = 0.032, scale = 1.17 }
 
 [[cards]]
 name = "Lithic Severance"
@@ -9322,6 +9331,7 @@ tags = []
 image-number = 1793552419
 art-owned = false
 card-number = 514
+art = { x = 0.21, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Wildflower Colossus"
