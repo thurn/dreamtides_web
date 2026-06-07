@@ -6,7 +6,7 @@ Petal-Seer
 Starchaser
 Carrion Lord
 Cloudmantle Ray
-Blazeguard
+Heroic Rescue
 Doorlight Foundling
 Spirit Bond
 Forsaken Pact
@@ -59,7 +59,7 @@ Wistful Angler
 Ashen Avenger
 Steel Abomination
 Virtuoso of Harmony
-Ember Shepherd
+Selfless Rescuer
 Terminus
 Ferryman of the Falls
 Keeper of Forgotten Light

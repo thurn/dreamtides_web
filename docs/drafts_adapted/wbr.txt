@@ -32,7 +32,7 @@ Duskreaper
 Sorrow Watcher
 Tidewreck Navigator
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 Apocalypse
 Seaside Requiem
 Stolen Genesis
@@ -167,7 +167,7 @@ Dawnblade Wanderer
 Wasteland Holdout
 Assault Leader
 Blade of Unity
-Challenge of the Blade
+Bladefall
 Prism Caller
 Collateral Damage
 Shadowpaw

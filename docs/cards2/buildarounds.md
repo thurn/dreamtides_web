@@ -229,7 +229,7 @@ payoffs to make the discarding worthwhile.
 - **Torchbearer of the Abyss** (3●, Visitor) — "Once per turn, when you discard a card, draw a card and gain 1●."
 - **Key Sifter** (2●, Tinkerer) — "Once per turn, when you discard one or more cards, draw that many cards."
 - **Unbroken** (1●, Renegade) — "When you discard a card, this character gains +1✦."
-- **Ashcrown Charger** (1●, Warrior) — "When you discard a card, store 1⧗. ☪, 1⧗: Materialize a 2✦ radiant figment."
+- **Radiants' Captain** (1●, Warrior) — "When you discard a card, store 1⧗. ☪, 1⧗: Materialize a 2✦ radiant figment."
 - **Flagbearer of Decay** (2●, Warrior) — "When you discard a card, you may play that card from your void this turn."
 - **Gleamharvester** (3●, Explorer) — "When you discard a card, this character gains +2✦ until end of turn."
 - **Pattern Seeker** (2●, Child) — "When you discard a card, draw a card with ephemeral."
@@ -239,7 +239,7 @@ payoffs to make the discarding worthwhile.
 
 **Madness payoffs (gain reclaim/value when discarded):**
 
-- **Part the Veil** (4● event), **Shadowcaller** (3●, Visitor), **Pinnacle Ascendant** (5●, Tinkerer), **Cradle of Storms** (2● event), **Desperation** (2● event), **From the Barrow** (5● event), **Forsaken Skyline** (2● event), **Ashmaze Guide** (1●, Explorer), **Shoreline Penitent** (2●, Explorer) — all read "When you discard this card, it gains reclaim…", so they only shine alongside a discard outlet.
+- **Part the Veil** (4● event), **Shadowcaller** (3●, Visitor), **Pinnacle Ascendant** (5●, Tinkerer), **Cradle of Storms** (2● event), **Desperation** (2● event), **From the Barrow** (5● event), **Forsaken Skyline** (2● event), **Oblivion Guide** (1●, Explorer), **Shoreline Penitent** (2●, Explorer) — all read "When you discard this card, it gains reclaim…", so they only shine alongside a discard outlet.
 - **Ridge Vortex Explorer** (2●, Explorer) — "When you discard this card, materialize it." Wants to be discarded.
 
 **Discard outlets** (the other half of the pair): Chronicle Reclaimer, Salvage
@@ -416,7 +416,7 @@ listed here because the "store" half references an action the deck must repeat.
 - **Desolation's Edge** (2●, Warrior) — "☪: Store 1⧗. Abandon this character: Dissolve each character with cost ≤ the stored ⧗."
 
 Other storage payoffs key their "store" to a theme already covered: discard
-(Ashcrown Charger), abandon (Soulbinder, Obliterator of Worlds, Phantasmal
+(Radiants' Captain), abandon (Soulbinder, Obliterator of Worlds, Phantasmal
 Recruiter, Lanternwood Scout), figments (Wasteland Holdout), materialize/play a
 character (Scorched Crusader, Twilight Suppressor, Seedling Sage), or spirit
 animals (Sunshadow Eagle).

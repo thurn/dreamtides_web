@@ -22,7 +22,7 @@ Veil of the Wastes
 Ebonwing
 Hatching Ground
 Shadowcaller
-Blazeguard
+Heroic Rescue
 Immolate and Rise
 Peak Plunder
 Harvester of Despair
@@ -160,8 +160,8 @@ Virtuoso of Harmony
 Searcher in the Mists
 Curio Dealer
 Lithic Severance
-Challenge of the Blade
-Ember Shepherd
+Bladefall
+Selfless Rescuer
 Cloaked Sentinel
 Ferryman of the Falls
 Vertiginous Leap

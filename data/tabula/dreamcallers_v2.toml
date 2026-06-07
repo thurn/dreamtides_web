@@ -124,7 +124,7 @@ title = "Ashbroker"
 id = "86026206-1B11-4F38-A24E-FD3C697F5353"
 image-number = "0087"
 rendered-text = "Once per turn, when you discard a card, draw a card with ephemeral."
-signature-cards = ["Wreckborn", "Shadowbinder", "Keeper of the Lightpath", "Sorrowful Prince", "Ashmaze Guide", "Oracle of Shifting Skies", "Architect of Memory", "The Devourer"]
+signature-cards = ["Wreckborn", "Shadowbinder", "Keeper of the Lightpath", "Sorrowful Prince", "Oblivion Guide", "Oracle of Shifting Skies", "Architect of Memory", "The Devourer"]
 
 [[dreamcaller]]
 name = "Seraveth"

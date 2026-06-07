@@ -22,7 +22,7 @@ so an outlet that would otherwise cost you a card is paying you instead. Part
 the Veil is the marquee example: a 4● event that erodes 4 and lets you put two
 of those cards into your hand, and "When you discard this card, it gains reclaim
 2● until end of turn" — so discarding it to an outlet turns it into a 2● dig you
-play straight from the void that same turn. Ashmaze Guide is the cheap creature
+play straight from the void that same turn. Oblivion Guide is the cheap creature
 version, a 1● explorer that gains reclaim 0● until end of turn when discarded, so
 it lands on the board for free after being thrown away. Ridge Vortex Explorer
 goes one step further — "When you discard this card, materialize it" — so the
@@ -51,7 +51,7 @@ turns any card in your hand into raw void fuel.
 Pulse of Sacrifice is the most explosive outlet. For 0● it discards your entire
 hand and gains 3● — so it dumps every madness card you are holding into the void
 *and* pays you a burst of energy to immediately play them back from there. An
-opening of Pulse of Sacrifice into a hand of Ashmaze Guide, Sorrowful Prince, and
+opening of Pulse of Sacrifice into a hand of Oblivion Guide, Sorrowful Prince, and
 Part the Veil discards everything for three energy, then redeploys the lot off
 the reclaim it just handed out: a free board and a dig, on turn one. It is the
 ritual that powers the fast starts.
@@ -243,7 +243,7 @@ the Wheel effects as the mass options and Pulse of Sacrifice as the explosive
 enabler. Then pick up the payoffs that make the discards card-positive: Key
 Sifter, Minstrel of Falling Light, and Flagbearer of Decay are the cheap engine,
 Wandering Archivist and Shoreline Penitent the value glue. Lean on the
-reclaim-when-discarded cards (Part the Veil, Ashmaze Guide, Ridge Vortex
+reclaim-when-discarded cards (Part the Veil, Oblivion Guide, Ridge Vortex
 Explorer, Sorrowful Prince, Forsaken Skyline, Pinnacle Ascendant) so that every
 discard parks a live card in the void. Decide on a finish: the aggressive build
 weaponizes the discards with Wandering Archivist, Fleeting Reunion, and Silent

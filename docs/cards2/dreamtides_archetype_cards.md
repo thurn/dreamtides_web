@@ -230,7 +230,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 18. Forsaken Pact
 19. Abomination of Memory
 20. Sorrowful Prince
-21. Ashmaze Guide
+21. Oblivion Guide
 22. Ridge Vortex Explorer
 23. Pit Descender
 24. Dreadweaver
@@ -319,7 +319,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 36. Winterbough Monk
 37. Ashwalker
 38. Borrowed Minutes
-39. Blazeguard
+39. Heroic Rescue
 40. Rite of Summoning
 41. Door to Possibility
 42. Path to Redemption
@@ -368,7 +368,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 11. Ruptured Dynamo
 12. Wreckage Prowler
 13. Astral Angler
-14. Blazeguard
+14. Heroic Rescue
 15. Shadow March
 16. Wake the Fallen
 17. Forsaken Pact
@@ -407,7 +407,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 19. Pilgrim of Old Stones
 20. Sky Voyager
 21. Voidcaller
-22. Challenge of the Blade
+22. Bladefall
 23. Cloudmantle Ray
 24. Rift Pilgrim
 25. Barrage Specialist
@@ -610,7 +610,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 18. Curio Dealer
 19. Borrowed Minutes
 20. Gateway Defender
-21. Ember Shepherd
+21. Selfless Rescuer
 22. Door to Possibility
 23. Ashen Remnant
 24. The Dread Sovereign
@@ -621,7 +621,7 @@ than one. Archetypes follow the order in `dreamtides_archetypes.md`.
 ### Wake the Fallen / Shadow March Combo
 
 1. Shadow March
-2. Blazeguard
+2. Heroic Rescue
 3. Wake the Fallen
 4. The Forsaker
 5. Ruptured Dynamo

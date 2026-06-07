@@ -9,7 +9,7 @@ Iconoclast
 Starcatcher
 Glimpse of Infinity
 Liminal Dreamer
-Blazeguard
+Heroic Rescue
 Shadowbinder
 Keeper of the Lightpath
 Marrow Mimic
@@ -101,7 +101,7 @@ Silent Gatherer
 Assault Leader
 Null Sphere
 The Deathsworn
-Challenge of the Blade
+Bladefall
 Prism Caller
 Cosmic Puppeteer
 Dreadmount Sovereign

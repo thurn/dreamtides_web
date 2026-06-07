@@ -75,4 +75,4 @@ A companion to [blink.md](blink.md), listing every CardsV2 card with a specific 
 
 ## Named removal
 
-45. Challenge of the Blade — 1● fast "Banish an enemy"; the clean cheap answer for slots where you just need to remove a threat.
+45. Bladefall — 1● fast "Banish an enemy"; the clean cheap answer for slots where you just need to remove a threat.

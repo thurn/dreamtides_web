@@ -7,12 +7,12 @@ Featherlight Summoner
 Twilight Suppressor
 Silent Avenger
 Liminal Dreamer
-Blazeguard
+Heroic Rescue
 Fangbound
 Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 The Calling Night
 Gilded Catalyst
 Fading Farewell
@@ -94,7 +94,7 @@ Soulflame Predator
 Nomad of Endless Paths
 Blade of Unity
 Lithic Severance
-Challenge of the Blade
+Bladefall
 Prism Caller
 Cloaked Sentinel
 Cosmic Puppeteer

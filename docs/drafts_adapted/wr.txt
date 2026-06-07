@@ -11,7 +11,7 @@ Glimpse of Infinity
 Featherlight Summoner
 Forsaken Skyline
 Liminal Dreamer
-Blazeguard
+Heroic Rescue
 Aurora Confluence
 Fell the Mighty
 Derelict Voyage
@@ -24,7 +24,7 @@ Flagbearer of Decay
 Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 Seaside Requiem
 Rite of Summoning
 Woodland Apparition
@@ -136,7 +136,7 @@ Assault Leader
 Soulflame Predator
 Nomad of Endless Paths
 The Deathsworn
-Challenge of the Blade
+Bladefall
 Prism Caller
 Cloaked Sentinel
 Dreadmount Sovereign

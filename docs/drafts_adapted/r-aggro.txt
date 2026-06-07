@@ -9,7 +9,7 @@ Burst of Obliteration
 Featherlight Summoner
 Forsaken Skyline
 Sorrowful Prince
-Ashmaze Guide
+Oblivion Guide
 Liminal Dreamer
 Fell the Mighty
 Spiral Offering
@@ -61,7 +61,7 @@ Thundercatcher
 Void Pilgrim
 Lunar Hart
 Blade of Unity
-Challenge of the Blade
+Bladefall
 Weight of Memory
 Rebirth Ritualist
 Still Dreamer

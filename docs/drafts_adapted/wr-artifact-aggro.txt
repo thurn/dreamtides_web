@@ -16,7 +16,7 @@ Skies of Change
 Featherlight Summoner
 Forsaken Skyline
 Liminal Dreamer
-Blazeguard
+Heroic Rescue
 Aurora Confluence
 Fell the Mighty
 Derelict Voyage
@@ -118,7 +118,7 @@ Assault Leader
 Blade of Unity
 Lithic Severance
 The Deathsworn
-Challenge of the Blade
+Bladefall
 Prism Caller
 Cloaked Sentinel
 Crucible Warlord

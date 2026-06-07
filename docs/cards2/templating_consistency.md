@@ -97,7 +97,7 @@ not. The de-facto rule is:
 
 Cards that break the singular-target rule:
 
-- #345 Ember Shepherd — `An allied character cannot be targeted…`, versus
+- #345 Selfless Rescuer — `An allied character cannot be targeted…`, versus
   #207 Gateway Defender — `An ally cannot be targeted…` (same effect, two
   nouns).
 - #216 Colossal Convergence — `An allied character gains…`, versus

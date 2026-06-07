@@ -17,7 +17,7 @@ Veil of the Wastes
 Wreckheap Survivor
 Ebonwing
 Shadowcaller
-Blazeguard
+Heroic Rescue
 Immolate and Rise
 Peak Plunder
 Harvester of Despair
@@ -136,7 +136,7 @@ Lunar Hart
 Virtuoso of Harmony
 Searcher in the Mists
 Curio Dealer
-Ember Shepherd
+Selfless Rescuer
 Ferryman of the Falls
 Vertiginous Leap
 Ashwalker

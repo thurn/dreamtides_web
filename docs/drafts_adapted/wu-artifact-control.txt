@@ -10,7 +10,7 @@ Forsworn Champion
 Seeker of the Radiant Wilds
 Featherlight Summoner
 Twilight Suppressor
-Blazeguard
+Heroic Rescue
 Blightmaw
 Marrow Mimic
 Fangbound
@@ -21,7 +21,7 @@ Last Light Herald
 Skyflame Commander
 Clockwork Conductor
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 Defiant Parry
 Sanctum Awakened
 Fractured Veil
@@ -137,7 +137,7 @@ Assault Leader
 Null Sphere
 Blade of Unity
 The Deathsworn
-Challenge of the Blade
+Bladefall
 Prism Caller
 Cloaked Sentinel
 Cosmic Puppeteer

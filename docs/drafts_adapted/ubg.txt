@@ -11,7 +11,7 @@ Ridge Vortex Explorer
 Pyrokinetic Surge
 Glimpse of Infinity
 Sorrowful Prince
-Ashmaze Guide
+Oblivion Guide
 Veil of the Wastes
 Wreckheap Survivor
 Fragments of Vision
@@ -85,7 +85,7 @@ Standoff
 Null Sphere
 Searcher in the Mists
 Curio Dealer
-Ember Shepherd
+Selfless Rescuer
 Ferryman of the Falls
 Vertiginous Leap
 Breach Artist

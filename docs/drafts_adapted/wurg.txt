@@ -12,7 +12,7 @@ Iconoclast
 Starcatcher
 Featherlight Summoner
 Sorrowful Prince
-Ashmaze Guide
+Oblivion Guide
 Marrow Mimic
 Gleamharvester
 Shoreline Penitent
@@ -63,7 +63,7 @@ Ethereal Courser
 Void Pilgrim
 Frost Visionary
 Wasteland Holdout
-Challenge of the Blade
+Bladefall
 Broadcast Array
 Shadowpaw
 Breach Artist

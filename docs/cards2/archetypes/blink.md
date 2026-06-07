@@ -136,7 +136,7 @@ cards and grows your Duskmount each turn.
 
 - Ambush Operative
 - Cosmic Puppeteer
-- Challenge of the Blade
+- Bladefall
 
 The premium removal extends the suite. Ambush Operative is a 5● body with
 Offering and "▸Materialized: Banish an enemy" — you can drop it for 0● by

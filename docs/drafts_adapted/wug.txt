@@ -22,7 +22,7 @@ Guiding Light
 Abolish
 Forsaken Pact
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 Defiant Parry
 Ruin Scavenger
 Starrunner
@@ -116,8 +116,8 @@ Frost Visionary
 Blade of Unity
 Curio Dealer
 Lithic Severance
-Challenge of the Blade
-Ember Shepherd
+Bladefall
+Selfless Rescuer
 Crucible Warlord
 Reunion
 Moment Rewound

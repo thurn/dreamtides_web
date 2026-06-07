@@ -41,7 +41,7 @@ Blazebound Sentinel
 Overstory Explorer
 Abomination of Memory
 Lumineth
-Ember Shepherd
+Selfless Rescuer
 Ethereal Trailblazer
 Endless Projection
 Ashen Remnant
@@ -53,7 +53,7 @@ Colossal Convergence
 Forsworn Champion
 Sundown Ronin
 Demonbane
-Blazeguard
+Heroic Rescue
 Fading Farewell
 Grounded
 Annular Recall

@@ -10,7 +10,7 @@ Glimpse of Infinity
 Forsaken Pact
 Clockwork Conductor
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 Ruin Scavenger
 Rite of Summoning
 Dreaming Groves
@@ -62,7 +62,7 @@ Ashen Avenger
 Steel Abomination
 Virtuoso of Harmony
 Curio Dealer
-Ember Shepherd
+Selfless Rescuer
 Ferryman of the Falls
 Moment Rewound
 Aftermath Bloom

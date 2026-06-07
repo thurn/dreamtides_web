@@ -5,7 +5,7 @@ Pyrokinetic Surge
 Cinderblade Legionnaire
 Veil of the Wastes
 Shadowcaller
-Blazeguard
+Heroic Rescue
 Harvester of Despair
 Embersummoner
 Shardwoven Tyrant
@@ -58,7 +58,7 @@ Standoff
 Ambush Operative
 Searcher in the Mists
 Blade of Unity
-Challenge of the Blade
+Bladefall
 Prism Caller
 Collateral Damage
 Wreckland Maverick

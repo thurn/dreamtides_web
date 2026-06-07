@@ -23,7 +23,7 @@ Cinderblade Legionnaire
 Glimpse of Infinity
 Twilight Suppressor
 Sorrowful Prince
-Ashmaze Guide
+Oblivion Guide
 Silent Avenger
 Veil of the Wastes
 Wreckheap Survivor
@@ -32,7 +32,7 @@ Cascade of Reflections
 Hatching Ground
 Fragments of Vision
 Shadowcaller
-Blazeguard
+Heroic Rescue
 Aurora Confluence
 Nebula's Wake
 Immolate and Rise
@@ -55,7 +55,7 @@ Clockwork Conductor
 Sorrow Watcher
 Tidewreck Navigator
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 The Calling Night
 Starfall
 Shatter the Frail

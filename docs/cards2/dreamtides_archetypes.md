@@ -145,7 +145,7 @@ becomes infinite drain or erosion. The pieces are individually useful, so
 disrupting one does not collapse the deck.
 
 ### Wake the Fallen / Shadow March Combo
-A loop built on mass-return effects (Wake the Fallen, Shadow March, Blazeguard)
+A loop built on mass-return effects (Wake the Fallen, Shadow March, Heroic Rescue)
 that materialize every character that dissolved this turn, re-firing their
 ▸Materialized and ▸Dissolved triggers for repeated value. Combined with abandon
 outlets and engines like The Forsaker, Ruptured Dynamo, and Keeper of Forgotten

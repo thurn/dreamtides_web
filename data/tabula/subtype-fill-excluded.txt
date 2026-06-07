@@ -36,7 +36,7 @@ Sunset Chronicler	image=691496698	subtype=Survivor
 Wraith of Twisting Shadows	image=2025883232	subtype=Outsider
 Wreckage Prowler	image=1129012511	subtype=Survivor
 Shadowpaw	image=410444914	subtype=Spirit Animal
-Ember Shepherd	image=700253818	subtype=Warrior
+Selfless Rescuer	image=700253818	subtype=Warrior
 Specter of Silent Snow	image=529374445	subtype=Outsider
 Tidecaller	image=309018608	subtype=Outsider
 Shadowcaller	image=281111747	subtype=Warrior

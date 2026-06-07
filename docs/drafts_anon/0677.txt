@@ -24,4 +24,4 @@ Infernal Rest
 Dawnblade Wanderer
 Shattering Gambit
 Wasteland Holdout
-Blazeguard
+Heroic Rescue

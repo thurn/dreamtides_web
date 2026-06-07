@@ -1,6 +1,6 @@
 Breach Artist
 Sorrowful Prince
-Ashmaze Guide
+Oblivion Guide
 Mystic Runefish
 Herald of the Last Light
 The Devourer
@@ -36,7 +36,7 @@ Ruptured Dynamo
 Lone Castaway
 Passage Through Oblivion
 Shadowpaw
-Challenge of the Blade
+Bladefall
 Marrow Mimic
 Ochre Prospector
 Infernal Rest

@@ -6,7 +6,7 @@ A companion to [wake-the-fallen-combo.md](wake-the-fallen-combo.md), listing eve
 
 1. Wake the Fallen — The marquee enabler: 3● to materialize *everything* in your void that dissolved this turn, no cost ceiling, so it returns your whole abandoned board at once.
 2. Shadow March — Functionally the second Wake the Fallen at 3●, returning all dissolved-this-turn bodies with cost 2● or less — exactly the half the deck is built from.
-3. Blazeguard — The cheap surgical version at 1●: materialize up to three chosen dissolved-this-turn characters, enough to re-arm a loop without paying full price and leaving fodder behind on purpose.
+3. Heroic Rescue — The cheap surgical version at 1●: materialize up to three chosen dissolved-this-turn characters, enough to re-arm a loop without paying full price and leaving fodder behind on purpose.
 4. Veilseeker — A mass-return engine on a body: "5●, ☪, Abandon this character: Return all characters with cost 2● or less from your void to play." Re-arms the whole loop and feeds the void abandoning itself.
 5. Phantom Flotilla — Materializes up to two 2● bodies from your void regardless of when they died, and Reclaim 5● lets it come back to re-arm a loop on a turn you did not abandon a full board.
 6. Borrowed Minutes — Materializes each character with cost X● or less in your void and banishes them at end of turn — a one-turn army built straight out of the void that you abandon through your outlets before it banishes anyway.
@@ -83,8 +83,8 @@ A companion to [wake-the-fallen-combo.md](wake-the-fallen-combo.md), listing eve
 59. Cascade of Reflections — "Until end of turn, when you play an event, copy it," making every mass-return resolve doubled and copying the outlets and drains in between.
 60. Cascading Detonation — "The next time you play an event this turn, copy it twice. Reclaim 5●," tripling the next return and coming back from the void for another go.
 61. Twice-Lit Portal — "The next time you play an event this turn, copy it," with Offering — a cheap copy effect that doubles the next mass-return.
-62. Echoes of Eternity — "The next time you play an event with cost 2● or less this turn, copy it" — doubles a Blazeguard for cheap.
-63. Cosmonaut of Tides — "▸Materialized: The next time you play an event with cost 2● or less this turn, copy it twice," tripling a Blazeguard off a body.
+62. Echoes of Eternity — "The next time you play an event with cost 2● or less this turn, copy it" — doubles a Heroic Rescue for cheap.
+63. Cosmonaut of Tides — "▸Materialized: The next time you play an event with cost 2● or less this turn, copy it twice," tripling a Heroic Rescue off a body.
 
 ## Energy to keep going
 

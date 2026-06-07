@@ -56,7 +56,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["u", "r", "wu", "wb", "wr", "ub", "ur", "br", "wub", "wug", "wbr", "ubr", "wubr", "ubrg"],
     draftArchetypes: ["bg-midrange", "br-aristocrats", "brg-midrange", "u-artifacts", "w-artifact-aggro", "w-weenie", "wb-artifact-control", "wbrg-lands-soup", "wg-ramp", "wu-artifact-control", "wub-artifact-control", "wubg-artifacts", "wubr-artifact-aggro"],
   },
-  "Ashcrown Charger": {
+  "Radiants' Captain": {
     tides: ["Discard / Madness"],
     colors: ["u", "r", "wu", "wb", "wr", "ub", "ur", "br", "wub", "wug", "wbr", "ubr", "wubr", "ubrg"],
     draftArchetypes: ["bg-midrange", "br-aristocrats", "brg-midrange", "u-artifacts", "w-artifact-aggro", "w-weenie", "wb-artifact-control", "wbrg-lands-soup", "wg-ramp", "wu-artifact-control", "wub-artifact-control", "wubg-artifacts", "wubr-artifact-aggro"],
@@ -1530,7 +1530,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["u", "wu", "ub", "ur", "wub", "wubr", "wubrg"],
     draftArchetypes: ["ub-tempo", "ug-ramp", "ug-sneak", "ur-welder", "wu-control", "wub-control", "wug-value"],
   },
-  "Blazeguard": {
+  "Heroic Rescue": {
     tides: ["Abandon", "Cheap Characters", "Wake the Fallen / Shadow March Combo", "Warrior Combo"],
     colors: ["wu", "wb", "wr", "bg", "wub", "wbg", "wubg", "ubrg", "wubrg"],
     draftArchetypes: ["br-aristocrats", "rg-lands-soup", "urg-lands-soup", "w-artifact-aggro", "w-weenie", "wb-weenie", "wbg-weenie", "wr-artifact-aggro", "wr-artifacts", "wu-academy", "wu-artifact-control", "wu-artifacts", "wu-midrange-weenie", "wub-artifact-control", "wubg-artifacts", "wug-value", "wur-artifacts"],
@@ -1679,7 +1679,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["g", "wu", "wg", "ug", "wug", "ubg", "urg", "brg", "wubg", "wubrg"],
     draftArchetypes: ["rg-lands-soup", "ubg-value-midrange", "ubrg-lands-soup", "ug-lands-midrange", "ug-lands-soup", "ug-ramp", "wg-lands-soup", "wg-ramp", "wu-control", "wubg-value-midrange", "wubrg-lands-soup", "wug-value", "wurg-lands-soup"],
   },
-  "Challenge of the Blade": {
+  "Bladefall": {
     tides: ["Blink"],
     core: true,
     colors: ["w", "wu", "wb", "wr", "wg", "wub", "wur", "wug", "wbr", "wbg", "wrg", "wubg", "wurg", "wubrg"],
@@ -1710,7 +1710,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["br", "rg", "wbr", "ubr", "brg", "wurg", "ubrg", "wubrg"],
     draftArchetypes: ["bg-midrange", "br-aristocrats", "br-welder", "u-welder", "wr-artifacts"],
   },
-  "Ember Shepherd": {
+  "Selfless Rescuer": {
     tides: ["Reclaim Combo"],
     colors: ["g", "wg", "ug", "bg", "wug", "wbg", "wrg", "ubg", "brg", "wbrg", "wubrg"],
     draftArchetypes: ["bg-big-ramp", "bg-lands-soup", "bg-midrange", "brg-lands-soup", "g-big-ramp", "g-lands-soup", "rg-lands-soup", "ubg-value-midrange", "ubrg-lands-midrange", "ug-lands-soup", "ug-ramp", "urg-lands-soup", "wbg-midrange", "wbrg-lands-soup", "wg-big-ramp", "wg-lands-soup", "wg-midrange", "wubg-big-ramp", "wubg-lands-soup", "wug-lands-soup", "wug-value", "wurg-lands-soup"],
@@ -1860,7 +1860,7 @@ export const CARDS_V2_POOL_METADATA: Record<string, CardV2PoolMetadata> = {
     colors: ["r", "wu", "ur", "br", "ubr", "ubg", "brg", "wurg", "ubrg"],
     draftArchetypes: ["br-aristocrats", "brg-lands-monsters", "r-aggro", "r-burn", "ub-tempo", "ubr-control", "ubrg-storm", "ur-burn", "wbr-artifact-aggro", "wur-aggro"],
   },
-  "Ashmaze Guide": {
+  "Oblivion Guide": {
     tides: ["Discard / Madness"],
     colors: ["r", "wu", "ur", "br", "ubr", "ubg", "brg", "wurg", "ubrg"],
     draftArchetypes: ["br-aristocrats", "brg-lands-monsters", "r-aggro", "r-burn", "ub-tempo", "ubr-control", "ubrg-storm", "ur-burn", "wbr-artifact-aggro", "wur-aggro"],

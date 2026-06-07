@@ -31,7 +31,7 @@ Forsaken Pact
 Sorrow Watcher
 Tidewreck Navigator
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 Apocalypse
 Starfall
 Shatter the Frail
@@ -142,7 +142,7 @@ Virtuoso of Harmony
 Searcher in the Mists
 Blade of Unity
 Curio Dealer
-Ember Shepherd
+Selfless Rescuer
 Ferryman of the Falls
 Collateral Damage
 Shadowpaw

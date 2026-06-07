@@ -15,7 +15,7 @@ Featherlight Summoner
 Wreckheap Survivor
 Fragments of Vision
 Headtaker Wurm
-Blazeguard
+Heroic Rescue
 Nebula's Wake
 Immolate and Rise
 Peak Plunder
@@ -34,7 +34,7 @@ Duskreaper
 Sorrow Watcher
 Tidewreck Navigator
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 Apocalypse
 The Calling Night
 Starfall
@@ -173,7 +173,7 @@ Assault Leader
 Searcher in the Mists
 Blade of Unity
 Lithic Severance
-Challenge of the Blade
+Bladefall
 Broadcast Array
 Prism Caller
 Cloaked Sentinel

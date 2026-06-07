@@ -2,7 +2,7 @@
 
 This is perhaps the strangest engine in the pool, so it merits its own writeup.
 There are three key enablers to look for: Wake the Fallen, Shadow March, and
-Blazeguard. All three read a variation on the same line — they materialize
+Heroic Rescue. All three read a variation on the same line — they materialize
 characters in your void that *dissolved this turn*. A first read makes them look
 like insurance against a wrath, a way to claw a board back after it trades away.
 They do far more than that. Because Abandon sends one of your own characters to
@@ -19,7 +19,7 @@ drain has run away with the game.
 
 - Wake the Fallen
 - Shadow March
-- Blazeguard
+- Heroic Rescue
 
 These three are the heart of the archetype, and the differences between them
 matter. Wake the Fallen ("Materialize all characters in your void which dissolved
@@ -30,7 +30,7 @@ and your fodder all at once. Shadow March ("Materialize all characters with cost
 cheap half of what dissolved — which is exactly the half the deck is built from,
 since almost every body it wants to loop is a one- or two-cost character. The
 restriction barely bites in a dedicated list and Shadow March is functionally the
-second copy of the effect. Blazeguard ("Materialize up to three chosen characters
+second copy of the effect. Heroic Rescue ("Materialize up to three chosen characters
 in your void which dissolved this turn") is the cheap, surgical option at 1●: it
 returns up to three specific bodies rather than the whole pile, which is enough to
 re-arm a loop without paying full price, and the "up to three chosen" wording lets
@@ -231,7 +231,7 @@ for almost nothing on top of everything else the abandons did.
 
 The fair build does not try to win in one turn. It assembles an outlet, a payoff,
 and a board of cheap fodder, then grinds: each turn it abandons a body or two for
-energy and a point, fires the ▸Dissolved payoffs, and uses Blazeguard or a
+energy and a point, fires the ▸Dissolved payoffs, and uses Heroic Rescue or a
 mass-return every few turns to reset the board to where it started. Keeper of
 Forgotten Light keeps the hand full through every return, Spent Courier and Ossuary
 Overlord make the fodder card-neutral coming and going, and The Forsaker and Silent
@@ -263,7 +263,7 @@ on hand to clear blockers or erode toward Fatigue if a point total is not enough
 ## Overlap with other archetypes
 
 The mass-return engine shares almost its entire core with the Characters with Cost
-2● or Less deck — Shadow March, Blazeguard, Forsaken Pact, Phantom Flotilla, The
+2● or Less deck — Shadow March, Heroic Rescue, Forsaken Pact, Phantom Flotilla, The
 Forsaker, Keeper of Forgotten Light, and Ruptured Dynamo all care about cheap
 bodies looping through the void, and Shadow March's own "cost 2● or less" clause is
 written for exactly that pool. The Warrior Combo deck supplies a parallel set of

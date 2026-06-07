@@ -208,12 +208,12 @@ turn the abandons back into more figments to keep feeding.
 
 - Wake the Fallen
 - Shadow March
-- Blazeguard
+- Heroic Rescue
 
 The biggest combo turns route through mass-return effects. Wake the Fallen
 ("Materialize all characters in your void which dissolved this turn"), Shadow
 March ("Materialize all characters with cost 2● or less in your void which
-dissolved this turn"), and Blazeguard ("Materialize up to three chosen characters
+dissolved this turn"), and Heroic Rescue ("Materialize up to three chosen characters
 in your void which dissolved this turn") bring back everything you have abandoned
 this turn at once, re-firing every ▸Materialized and ▸Dissolved trigger so you can
 abandon the whole board again. Pair them with an outlet and an engine like The
@@ -299,6 +299,6 @@ Forsaker, and Ferryman of the Falls to loop cheap bodies for value. Survivors
 leans on the same drains and ▸Dissolved fodder, since most of the cheap abandon
 targets happen to be survivors. The Warrior Combo deck uses Spirit Reaping,
 Dreaming Obelisk, Pit Descender, and Aftermath Bloom to loop warriors. And the
-mass-return combos — Wake the Fallen, Shadow March, Blazeguard — are shared with
+mass-return combos — Wake the Fallen, Shadow March, Heroic Rescue — are shared with
 the figment and recursion decks. Whatever the table leaves open, an abandon core
 of an outlet, a drain, and a board of cheap bodies will find a home.

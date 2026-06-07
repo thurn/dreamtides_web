@@ -18,7 +18,7 @@ Maelstrom Denial
 Hatching Ground
 Fragments of Vision
 Shadowcaller
-Blazeguard
+Heroic Rescue
 Nebula's Wake
 Blazing Emberwing
 Doorlight Foundling
@@ -155,7 +155,7 @@ Soulflame Predator
 Nomad of Endless Paths
 Curio Dealer
 Lithic Severance
-Challenge of the Blade
+Bladefall
 Broadcast Array
 Prism Caller
 Cloaked Sentinel

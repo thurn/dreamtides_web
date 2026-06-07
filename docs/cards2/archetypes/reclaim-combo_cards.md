@@ -64,7 +64,7 @@ A companion to [reclaim-combo.md](reclaim-combo.md), listing every CardsV2 card 
 34. Momentum's Edge — picks a type and gives it +1✦, leaning on Enginespeaker and Ashen Harbinger for an anthem on the loop bodies.
 35. Ashen Harbinger — "This character has all character types," supporting the type-anthem package.
 36. Cloudmantle Ray — ▸Dawn energy dork with Reclaim 3●, recurring fuel if not free.
-37. Ember Shepherd — "❖❖ – Abandon another character: An ally cannot be targeted by effects this turn," an Interrupt outlet that protects the static mid-loop.
+37. Selfless Rescuer — "❖❖ – Abandon another character: An ally cannot be targeted by effects this turn," an Interrupt outlet that protects the static mid-loop.
 38. Gateway Defender — the same protection on "❖❖ – Abandon this character," shielding the static when the opponent reaches for it.
 39. Blade of Unity — an Unstoppable X/X threat to round out the curve and close a fair game.
 40. Molten Duel — cheap fast removal to clear blockers and protect the engine.

@@ -15,7 +15,7 @@ Featherlight Summoner
 Ebonwing
 Fragments of Vision
 Headtaker Wurm
-Blazeguard
+Heroic Rescue
 Blazing Emberwing
 Doorlight Foundling
 Roots of Rebirth
@@ -117,8 +117,8 @@ Soulflame Predator
 Nomad of Endless Paths
 Curio Dealer
 Lithic Severance
-Challenge of the Blade
-Ember Shepherd
+Bladefall
+Selfless Rescuer
 Cloaked Sentinel
 Cosmic Puppeteer
 Breach Artist

@@ -157,7 +157,7 @@ also good cards. Momentum's Edge is a 2● 2✦ Explorer that picks a type and g
 it +1✦, leaning on Enginespeaker and Ashen Harbinger ("This character has all
 character types") for the anthem. Eclipse Herald and Horizon Follower are ⧗-based
 threats that convert spare energy into removal or ⍟. Cloudmantle Ray is an energy
-dork with ▸Dawn and Reclaim 3● — recurring, if not free. Ember Shepherd and
+dork with ▸Dawn and Reclaim 3● — recurring, if not free. Selfless Rescuer and
 Gateway Defender are Interrupt abandon outlets ("❖❖ – Abandon … : An ally cannot
 be targeted by effects this turn") that double as protection for the static when
 the opponent reaches for it. Volcanic Channeler ("When an ally is dissolved, gain
@@ -200,7 +200,7 @@ play, because it is the static that removes the reclaimed status as the body
 moves. If the opponent dissolves your static mid-loop, the body in play keeps the
 status it entered with, but the next body you reclaim will banish on the way out
 and the loop ends — which is exactly why running two copies of the static, and
-holding Ember Shepherd or Gateway Defender to protect them, matters.
+holding Selfless Rescuer or Gateway Defender to protect them, matters.
 
 ## Winning the Game
 

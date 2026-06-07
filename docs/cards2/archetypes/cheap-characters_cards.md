@@ -38,7 +38,7 @@ A companion to [cheap-characters.md](cheap-characters.md), listing every CardsV2
 
 24. Wake the Fallen — "Materialize all characters in your void which dissolved this turn"; the broadest one-card mass return after an abandon turn.
 25. Shadow March — "Materialize all characters with cost 2● or less in your void which dissolved this turn"; the version keyed exactly on the deck's bodies.
-26. Blazeguard — "Materialize up to three chosen characters in your void which dissolved this turn"; the cheap, selective burst.
+26. Heroic Rescue — "Materialize up to three chosen characters in your void which dissolved this turn"; the cheap, selective burst.
 27. Roots of Rebirth — "Materialize two random characters with cost 2● or less from your deck"; goes wide off the deck directly into play.
 
 ## Abandon outlets and void fill

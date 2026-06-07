@@ -21,7 +21,7 @@ Cinderblade Legionnaire
 Glimpse of Infinity
 Forsaken Skyline
 Sorrowful Prince
-Ashmaze Guide
+Oblivion Guide
 Veil of the Wastes
 Liminal Dreamer
 Maelstrom Denial
@@ -54,7 +54,7 @@ Abolish
 Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 Apocalypse
 Starfall
 Defiant Parry

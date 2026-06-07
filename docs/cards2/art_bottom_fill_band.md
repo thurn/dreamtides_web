@@ -341,7 +341,7 @@ behavior that everything else trades against:
 
 - **One line** (e.g. *Blade of Unity*, *Blazepath Traveler*) — the hardest case;
   watch for blur above the box and for a seam at the box top.
-- **Two lines** (e.g. *Blazeguard*, *A New Adventure*).
+- **Two lines** (e.g. *Heroic Rescue*, *A New Adventure*).
 - **Three lines** (e.g. *Abomination of Memory*).
 
 Also confirm: no watermark strip on bright-bottomed art (e.g. *Abyssal

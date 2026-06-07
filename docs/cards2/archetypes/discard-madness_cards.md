@@ -63,7 +63,7 @@ A companion to [discard-madness.md](discard-madness.md), listing every CardsV2 c
 51. Pattern Seeker — "When you discard a card, draw a card with ephemeral"; free card per discard.
 52. Torchbearer of the Abyss — "Once per turn, when you discard a card, draw a card and gain 1●"; loots and ramps on discard.
 53. Unbroken — "When you discard a card, this character gains +1✦"; cheap growing discard payoff.
-54. Ashcrown Charger — "When you discard a card, store 1⧗" then makes figments; converts discards into a board.
+54. Radiants' Captain — "When you discard a card, store 1⧗" then makes figments; converts discards into a board.
 55. Emberwatch Veteran — "Discard a card: gains vengeful"; turns a discard into a combat trick / removal.
 56. Duneveil Vanguard — "Discard a character with cost 2● or less: Dissolve an enemy"; points discards at the board.
 57. Gloomantler — "When you discard your third card in a turn, materialize this from your void," plus a void-play engine; a discard-built threat.
@@ -71,7 +71,7 @@ A companion to [discard-madness.md](discard-madness.md), listing every CardsV2 c
 ## Madness (reclaim-when-discarded) cards
 
 58. Part the Veil — erode 4, take two; "When you discard this, it gains reclaim 2● until end of turn"; the marquee madness event.
-59. Ashmaze Guide — "When you discard this, it gains reclaim 0●"; a free body off any discard.
+59. Oblivion Guide — "When you discard this, it gains reclaim 0●"; a free body off any discard.
 60. Ridge Vortex Explorer — "When you discard this, materialize it"; the discard is the deployment.
 61. Sorrowful Prince — "X●: +X✦"; the pumpable madness body that comes down off a discard and threatens to score.
 62. Forsaken Skyline — dissolve an enemy with 2✦ or less; reclaim 1● when discarded; cheap removal from the void.

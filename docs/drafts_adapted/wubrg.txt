@@ -39,7 +39,7 @@ Liminal Dreamer
 Maelstrom Denial
 Fragments of Vision
 Shadowcaller
-Blazeguard
+Heroic Rescue
 Aurora Confluence
 Fell the Mighty
 Immolate and Rise
@@ -328,8 +328,8 @@ Blade of Unity
 Curio Dealer
 Lithic Severance
 The Deathsworn
-Challenge of the Blade
-Ember Shepherd
+Bladefall
+Selfless Rescuer
 Broadcast Array
 Prism Caller
 Ferryman of the Falls

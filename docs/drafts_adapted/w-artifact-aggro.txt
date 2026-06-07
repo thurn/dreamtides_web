@@ -3,12 +3,12 @@ Forsworn Champion
 Glimpse of Infinity
 Featherlight Summoner
 Liminal Dreamer
-Blazeguard
+Heroic Rescue
 Marrow Mimic
 Last Light Herald
 Skyflame Commander
 Chronicle Reclaimer
-Ashcrown Charger
+Radiants' Captain
 Gilded Catalyst
 Dreadlord
 Echo Technician
@@ -51,7 +51,7 @@ Glimmerwood Scout
 Void Pilgrim
 Assault Leader
 Lithic Severance
-Challenge of the Blade
+Bladefall
 Prism Caller
 Dreadmount Sovereign
 Sigil Analyst

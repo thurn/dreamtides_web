@@ -116,7 +116,7 @@ each abandon shaving 1● off its cost while filling the void.
 
 - Wake the Fallen
 - Shadow March
-- Blazeguard
+- Heroic Rescue
 
 These effects accelerate you the way the recursion engines do, but all at once:
 rather than buying back one body per turn, they return everything that dissolved
@@ -129,7 +129,7 @@ dissolved this turn") is the broadest version — abandon four cheap characters 
 Virtuoso of Harmony and Conduit of Ashes for energy, then bring all four back
 materialized for one card. Shadow March (a 3● event, "Materialize all characters
 with cost 2● or less in your void which dissolved this turn") is the focused
-version that keys exactly on the deck's chosen bodies. Blazeguard (a 1● event,
+version that keys exactly on the deck's chosen bodies. Heroic Rescue (a 1● event,
 "Materialize up to three chosen characters in your void which dissolved this
 turn") is the cheap, selective option for a smaller burst. Because materializing
 from the void is not playing — it costs no energy, does not use the stack, and

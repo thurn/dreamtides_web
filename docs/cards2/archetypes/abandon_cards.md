@@ -138,7 +138,7 @@ A companion to [abandon.md](abandon.md), listing every CardsV2 card with a speci
 
 106. Wake the Fallen — "Materialize all characters in your void which dissolved this turn"; refills an exhausted loop into another full lap.
 107. Shadow March — "Materialize all ≤2● characters in your void which dissolved this turn"; cheap mass-return for the cheap-body loops.
-108. Blazeguard — "Materialize up to three chosen characters in your void which dissolved this turn"; selective mass-return for a combo turn.
+108. Heroic Rescue — "Materialize up to three chosen characters in your void which dissolved this turn"; selective mass-return for a combo turn.
 109. Borrowed Minutes — "Materialize each ≤X● character in your void. Banish them at end of turn"; drops a temporary board you abandon before it banishes.
 110. Path to Redemption — "Until end of turn, cards in your void gain reclaim"; lets a stocked void of fodder come back at once.
 111. Veilseeker — "5●, ☪, Abandon this character: Return all ≤2● characters from void to play"; self-abandoning mass-return engine.

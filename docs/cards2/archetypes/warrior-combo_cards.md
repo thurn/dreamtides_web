@@ -120,7 +120,7 @@ A companion to [warrior-combo.md](warrior-combo.md), listing every CardsV2 card 
 
 82. Shadow March — "Materialize all characters ≤2● in your void which dissolved this turn" — a mass-return blowout for the cheap-warrior shell.
 83. Wake the Fallen — "Materialize all characters which dissolved this turn" — the broader mass-return for the abandon board.
-84. Blazeguard — "Materialize up to three chosen characters which dissolved this turn" — a cheap fast-speed mass return.
+84. Heroic Rescue — "Materialize up to three chosen characters which dissolved this turn" — a cheap fast-speed mass return.
 85. Speaker for the Forgotten — "5●: Erode 1. That card gains reclaim 0●" — self-mills loop fodder into the void for replay or Terminus.
 
 ## Disruption and removal

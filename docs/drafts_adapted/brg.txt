@@ -28,7 +28,7 @@ Skies of Change
 Cinderblade Legionnaire
 Forsaken Skyline
 Sorrowful Prince
-Ashmaze Guide
+Oblivion Guide
 Silent Avenger
 Veil of the Wastes
 Maelstrom Denial
@@ -203,7 +203,7 @@ Silent Gatherer
 Searcher in the Mists
 Curio Dealer
 The Deathsworn
-Ember Shepherd
+Selfless Rescuer
 Ferryman of the Falls
 Collateral Damage
 Shadowpaw

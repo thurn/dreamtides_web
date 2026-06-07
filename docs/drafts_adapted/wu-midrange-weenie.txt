@@ -1,7 +1,7 @@
 Epiphany Unfolded
 Featherlight Summoner
 Liminal Dreamer
-Blazeguard
+Heroic Rescue
 Fangbound
 Through the Rift
 Passage Through Oblivion
@@ -42,6 +42,6 @@ Frost Visionary
 Soulflame Predator
 Nomad of Endless Paths
 Lithic Severance
-Challenge of the Blade
+Bladefall
 Looming Oracle
 Rift Pilgrim
