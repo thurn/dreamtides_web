@@ -17,17 +17,33 @@ import {
   buildNameIndex,
   loadCardsV2Database,
   loadDecklists,
+  loadDraftRecords,
   loadHumanDecklists,
   resolvePool,
+  type DraftRecord,
 } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
+import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
+import {
+  selectRecordIndex,
+  resolveCardNames,
+  buildPackSequence,
+} from "../draft/replay/draft-records";
+import { createInitialReplayDraftState } from "../draft/draft-engine";
+import type { ReplayDraftState } from "../types/draft";
 
 export interface QuestContent {
   cardDatabase: Map<number, CardData>;
   dreamcallers: DreamcallerContent[];
   dreamsignTemplates: readonly DreamsignTemplate[];
   poolContext?: RunPoolContext;
+  /** Draft mode for this run: `"replay"` activates the record-replay draft; `"pool"` is the default. From `?algo=replay`. */
+  draftMode?: "pool" | "replay";
+  /** Loaded only in replay mode: the full adapted draft-record corpus. */
+  draftRecords?: DraftRecord[];
+  /** Loaded only in replay mode: the live deck-fit model built from all record mainboards. */
+  fitModel?: FitModel;
 }
 
 /**
@@ -51,9 +67,11 @@ const POOL_TARGET_SIZE = 200;
 /**
  * FNV-1a hash of a string into a 32-bit unsigned integer, used to derive the
  * idf3 generator's numeric seed from the quest seed and Dreamcaller id so each
- * run's pool is reproducible.
+ * run's pool is reproducible. Exported so replay record selection derives its
+ * record index from the same quest seed (with a `:replay` salt), keeping draft
+ * selection reproducible per run.
  */
-function hashStringToSeed(input: string): number {
+export function hashStringToSeed(input: string): number {
   let hash = 2166136261;
   for (let i = 0; i < input.length; i += 1) {
     hash ^= input.charCodeAt(i);
@@ -191,10 +209,14 @@ export function buildDreamcallerProvenance(
 /**
  * Loads V2 quest content (cards, Dreamcallers, decklists) and the run pool
  * context. `poolVariant` (from `?algo=`) selects the pool-construction strategy
- * for the run; it defaults to {@link DEFAULT_POOL_VARIANT}.
+ * for the run; it defaults to {@link DEFAULT_POOL_VARIANT}. `draftMode` (from
+ * `?algo=replay`) switches to the record-replay draft: the full draft-record
+ * corpus is fetched and the live deck-fit model is built. In pool mode, no
+ * records are fetched, keeping the default path cost-free.
  */
 export async function loadQuestContent(
   poolVariant: PoolVariant = DEFAULT_POOL_VARIANT,
+  draftMode: "pool" | "replay" = "pool",
 ): Promise<QuestContent> {
   const [
     cardDatabase,
@@ -202,12 +224,16 @@ export async function loadQuestContent(
     dreamsignTemplates,
     decklists,
     humanDecklists,
+    draftRecords,
   ] = await Promise.all([
     loadCardsV2Database(),
     loadDreamcallersV2(),
     loadDreamsignTemplates(),
     loadDecklists(),
     loadHumanDecklists(),
+    // Only fetch the draft records corpus in replay mode; pool mode skips this
+    // entirely so the default load path incurs no extra network cost.
+    draftMode === "replay" ? loadDraftRecords() : Promise.resolve([] as DraftRecord[]),
   ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
@@ -220,6 +246,10 @@ export async function loadQuestContent(
     signatureCards: [...(dc.signatureCards ?? [])],
   }));
 
+  // Build the name index once; reused by both poolContext and (in replay mode)
+  // the fit model to avoid building it twice.
+  const nameIndex = buildNameIndex(cardDatabase);
+
   const poolContext: RunPoolContext = {
     poolData: buildPoolData(
       Array.from(cardDatabase.values()),
@@ -227,17 +257,78 @@ export async function loadQuestContent(
       undefined,
       humanDecklists,
     ),
-    nameIndex: buildNameIndex(cardDatabase),
+    nameIndex,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),
     poolVariant,
   };
+
+  if (draftMode === "replay") {
+    // Live fit corpus = all record mainboards (no per-record leave-one-out).
+    // Live play does not teacher-force the deck along the replayed record's pick
+    // path, so the self-neighbour leak the offline eval guards against does not
+    // occur here; the eval's leave-one-out exists only to produce an honest
+    // offline metric.
+    const fitModel =
+      draftRecords.length > 0
+        ? buildFitModel(
+            draftRecords.map((r) => r.mainboard),
+            nameIndex,
+          )
+        : undefined;
+
+    return {
+      cardDatabase,
+      dreamcallers,
+      dreamsignTemplates,
+      poolContext,
+      draftMode,
+      draftRecords,
+      fitModel,
+    };
+  }
 
   return {
     cardDatabase,
     dreamcallers,
     dreamsignTemplates,
     poolContext,
+    draftMode,
   };
+}
+
+/**
+ * Build a {@link ReplayDraftState} for a new quest run in replay mode. Selects
+ * a draft record deterministically from the corpus using a salted hash of
+ * `questSeed` (the `:replay` salt keeps the selection independent from the
+ * per-Dreamcaller pool-gen draw, which uses `${questSeed}:${dreamcaller.id}`),
+ * resolves its pack sequence to card numbers, and constructs the initial state.
+ *
+ * @throws If `draftRecords` is empty.
+ */
+export function buildReplayDraftState(
+  dreamcaller: DreamcallerContent,
+  nameIndex: Map<string, number>,
+  questSeed: string,
+  draftRecords: readonly DraftRecord[],
+): ReplayDraftState {
+  if (draftRecords.length === 0) {
+    throw new Error("buildReplayDraftState requires at least one draft record");
+  }
+  const index = selectRecordIndex(
+    hashStringToSeed(`${questSeed}:replay`),
+    draftRecords.length,
+  );
+  const record = draftRecords[index];
+  const packSequence = buildPackSequence(record, nameIndex);
+  const signatureCardNumbers = resolveCardNames(
+    dreamcaller.signatureCards ?? [],
+    nameIndex,
+  );
+  return createInitialReplayDraftState({
+    recordId: record.id,
+    packSequence,
+    signatureCardNumbers,
+  });
 }
 
 function countDraftPoolSize(draftPoolCopiesByCard: Record<string, number>): number {

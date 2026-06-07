@@ -16,6 +16,16 @@ export interface RuntimeConfig {
    * inherit the default.
    */
   poolVariant?: PoolVariant;
+  /**
+   * Selects the draft mode: `"replay"` activates the record-replay draft (from
+   * `?algo=replay`); `"pool"` is the default pool-based draft. `poolVariant`
+   * still resolves normally alongside this — for `?algo=replay` it falls back
+   * to the default (idf3), which is what we want (replay still needs a pool
+   * variant for the resolved package). `parseRuntimeConfig` always sets it;
+   * it is optional only so test config literals can omit it and inherit the
+   * pool default.
+   */
+  draftMode?: "pool" | "replay";
   debugJourneyShape?: string | null;
   debugJourneyReward?: string | null;
   debugJourneyCost?: string | null;
@@ -32,6 +42,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
     poolVariant: resolvePoolVariant(params.get("algo")),
+    draftMode: params.get("algo") === "replay" ? "replay" : "pool",
     debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),
     debugJourneyReward: parseDebugJourneyId(params.get("debugJourneyReward")),
     debugJourneyCost: parseDebugJourneyId(params.get("debugJourneyCost")),

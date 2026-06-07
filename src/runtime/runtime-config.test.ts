@@ -10,6 +10,7 @@ describe("parseRuntimeConfig", () => {
       gameId: null,
       databaseMode: "emulator",
       poolVariant: "idf3",
+      draftMode: "pool",
       debugJourneyShape: null,
       debugJourneyReward: null,
       debugJourneyCost: null,
@@ -120,6 +121,30 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?realtime=0").databaseMode).toBe("emulator");
       expect(parseRuntimeConfig("?realtime=true").databaseMode).toBe("emulator");
       expect(parseRuntimeConfig("?realtime=2").databaseMode).toBe("emulator");
+    });
+  });
+
+  describe("draftMode", () => {
+    it("returns replay when algo=replay", () => {
+      expect(parseRuntimeConfig("?algo=replay").draftMode).toBe("replay");
+    });
+
+    it("returns pool when algo is absent or a known pool variant", () => {
+      expect(parseRuntimeConfig("").draftMode).toBe("pool");
+      expect(parseRuntimeConfig("?algo=idf3").draftMode).toBe("pool");
+      expect(parseRuntimeConfig("?algo=color_pool").draftMode).toBe("pool");
+    });
+
+    it("returns pool when algo is an unknown value", () => {
+      expect(parseRuntimeConfig("?algo=nonsense").draftMode).toBe("pool");
+      expect(parseRuntimeConfig("?algo=").draftMode).toBe("pool");
+    });
+
+    it("falls back poolVariant to idf3 (the default) when algo=replay", () => {
+      // replay is not a registered pool variant, so resolvePoolVariant falls
+      // back to the default (idf3). This is intentional: replay still needs a
+      // pool variant for the resolved package.
+      expect(parseRuntimeConfig("?algo=replay").poolVariant).toBe("idf3");
     });
   });
 });
