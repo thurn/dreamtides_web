@@ -16,8 +16,9 @@ import { FRONT_RANK_SLOT_IDS, type FrontRankSlotId } from "../types";
  * `opponentVoidCount`. It never inspects real opponent card definitions.
  *
  * Combat is resolved directly over the projection (NOT via
- * `engine/judgment.ts`, which needs real `BattleMutableState` instances),
- * applying the rules in `battle_rules.md` §"Challenge phase resolution":
+ * `engine/challenge.ts`, the unified resolver, which needs real
+ * `BattleMutableState` instances the projection deliberately omits), applying
+ * the rules in `battle_rules.md` §"Challenge phase resolution":
  *   - Defended challenger vs defender: the lower effective spark dissolves; a
  *     tie dissolves both; a defended challenger does not score.
  *   - Unpaired challenger: scores victory points equal to its spark.

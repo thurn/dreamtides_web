@@ -22,8 +22,9 @@ import { starterCardModels } from "./index";
  * {@link starterCardModels}; cards without a registered model contribute
  * nothing. Cards that receive no bonus are simply absent from the map.
  *
- * The same map is consumed by the judgment resolver's `supportContribution`
- * and by board evaluation, so support math stays in one place.
+ * The same map is consumed by the unified Challenge resolver's
+ * `supportContribution` (`engine/challenge.ts`) and by board evaluation, so
+ * support math stays in one place.
  */
 export function buildSupportContribution(model: ForwardModel): Map<string, number> {
   const contribution = new Map<string, number>();

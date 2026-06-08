@@ -6,7 +6,7 @@ import { AI_DIFFICULTY_V1 } from "./difficulty";
 import { buildTrace } from "./trace";
 import { actionToCommands } from "./driver";
 import { buildSupportContribution } from "./cards/support-contribution";
-import { resolveJudgment } from "../engine/judgment";
+import { resolveChallenge } from "../engine/challenge";
 import { planHandoff } from "../engine/handoff";
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import {
@@ -373,11 +373,16 @@ function enrichDeferredCommands(
 }
 
 /**
- * Builds the endTurn proposal: the challenge-resolution edits from
- * {@link resolveJudgment} (using the card-keyed support map from
+ * Builds the endTurn proposal: the challenge-resolution edits from the unified,
+ * keyword-aware {@link resolveChallenge} (using the card-keyed support map from
  * {@link buildSupportContribution}), followed by the handoff edits
  * (`flowEdit`, `drawEdits`, `energyEdits`) from {@link planHandoff}. Every edit
  * is wrapped as an AI-authored DEBUG_EDIT command.
+ *
+ * The AI resolves combat through the same source of truth the rest of the
+ * engine uses, so its committed Challenge outcome honors the four combat
+ * keywords (Unstoppable, Vengeful, Preeminence, Awakened) and figment
+ * dissolution exactly as the human path does.
  */
 function buildEndTurnProposal(
   mutable: BattleMutableState,
@@ -386,7 +391,7 @@ function buildEndTurnProposal(
   caps: BattleCapsInput | undefined,
 ): AiProposal {
   const supportContribution = buildSupportContribution(model);
-  const judgment = resolveJudgment({
+  const challenge = resolveChallenge({
     state: mutable,
     activeSide: aiSide,
     supportContribution,
@@ -400,7 +405,7 @@ function buildEndTurnProposal(
   });
 
   const edits: BattleDebugEdit[] = [
-    ...judgment.edits,
+    ...challenge.edits,
     handoff.flowEdit,
     ...handoff.drawEdits,
     ...handoff.energyEdits,

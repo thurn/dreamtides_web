@@ -7,7 +7,7 @@ import { useBattleAi, type AiProposal } from "./use-battle-ai";
 import { aiMayRunHere } from "./ai-may-run-here";
 import { createBattleReducerState } from "../state/reducer";
 import { allocateBattleCardInstance } from "../state/create-initial-state";
-import type { BattleCommand } from "../debug/commands";
+import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import type {
   BattleCardProvenance,
   BattleDeckCardDefinition,
@@ -109,6 +109,66 @@ function makeEnemyTurnState(
   mutable.sides.enemy.backRank.B0 = cardId;
   mutate?.(mutable);
   return createBattleReducerState(mutable);
+}
+
+/** A character with the given printed spark and rendered keyword text. */
+function keywordCharacterDefinition(
+  name: string,
+  printedSpark: number,
+  renderedText: string,
+): BattleDeckCardDefinition {
+  return {
+    sourceDeckEntryId: null,
+    cardNumber: 0,
+    name,
+    battleCardKind: "character",
+    subtype: "Warrior",
+    energyCost: 1,
+    printedEnergyCost: 1,
+    printedSpark,
+    isFast: false,
+    reclaimCost: null,
+    renderedText,
+    imageNumber: 0,
+    transfiguration: null,
+    isBane: false,
+  };
+}
+
+/**
+ * Places a character in `side`'s front-rank `F0` with the given spark and
+ * keyword text, returning its allocated battleCardId. Used to prove the AI's
+ * endTurn proposal resolves the Challenge through the keyword-aware unified
+ * resolver.
+ */
+function placeFrontRankCharacter(
+  state: BattleMutableState,
+  side: BattleSide,
+  name: string,
+  printedSpark: number,
+  renderedText: string,
+): string {
+  const id = allocateBattleCardInstance(state, {
+    definition: keywordCharacterDefinition(name, printedSpark, renderedText),
+    owner: side,
+    controller: side,
+    isRevealedToPlayer: side === "enemy" ? false : true,
+    provenance: questDeckProvenance(),
+  });
+  state.sides[side].frontRank.F0 = id;
+  return id;
+}
+
+/** The DEBUG_EDIT edits carried by the current proposal's commands. */
+function proposalEdits(): BattleDebugEdit[] {
+  const commands = latest?.proposal?.commands ?? [];
+  const edits: BattleDebugEdit[] = [];
+  for (const command of commands) {
+    if (command.id === "DEBUG_EDIT") {
+      edits.push(command.edit);
+    }
+  }
+  return edits;
 }
 
 // --- React harness ---------------------------------------------------------
@@ -340,5 +400,87 @@ describe("useBattleAi", () => {
 
     expect(latest?.proposal).toBeNull();
     expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  // The endTurn proposal resolves the Challenge through the unified, keyword-
+  // aware `engine/challenge.resolveChallenge` (Task 5.2). These cases prove the
+  // four combat keywords flow through the AI's committed Challenge edits —
+  // outcomes the prior keyword-blind judgment shim dropped. Each places the AI's
+  // (enemy) challenger and the player's defender in front-rank F0, then inspects
+  // the endTurn proposal's DEBUG_EDIT edits.
+  describe("endTurn proposal — keyword-aware Challenge resolution", () => {
+    function endTurnEdits(
+      place: (mutable: BattleMutableState) => void,
+    ): BattleDebugEdit[] {
+      const dispatch = vi.fn();
+      const state = makeEnemyTurnState(place);
+      mount(<HookHarness initialState={state} dispatch={dispatch} />);
+      act(() => {
+        latest?.endAiTurn();
+      });
+      expect(latest?.proposal?.kind).toBe("endTurn");
+      expect(dispatch).not.toHaveBeenCalled();
+      return proposalEdits();
+    }
+
+    it("scores a surviving defended Unstoppable challenger for the AI side", () => {
+      // Keyword-blind: a defended challenger never scored. Keyword-aware: the
+      // AI's surviving Unstoppable challenger scores its spark.
+      const edits = endTurnEdits((mutable) => {
+        placeFrontRankCharacter(mutable, "enemy", "aiUnstoppable", 6, "Unstoppable");
+        placeFrontRankCharacter(mutable, "player", "defender", 3, "");
+      });
+
+      expect(edits).toContainEqual({
+        kind: "ADJUST_SCORE",
+        side: "enemy",
+        amount: 6,
+      });
+    });
+
+    it("drags the AI winner down when the opposing loser is Vengeful", () => {
+      // Keyword-blind: only the 2-spark loser dissolved. Keyword-aware: the
+      // Vengeful loser drags the AI's surviving 5-spark winner down too.
+      let winner = "";
+      let loser = "";
+      const edits = endTurnEdits((mutable) => {
+        winner = placeFrontRankCharacter(mutable, "enemy", "aiWinner", 5, "");
+        loser = placeFrontRankCharacter(mutable, "player", "vengefulLoser", 2, "Vengeful");
+      });
+
+      expect(edits).toContainEqual({
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: winner,
+        destination: { side: "enemy", zone: "void" },
+      });
+      expect(edits).toContainEqual({
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: loser,
+        destination: { side: "player", zone: "void" },
+      });
+    });
+
+    it("lets an AI Preeminence character win a spark tie instead of trading", () => {
+      // Keyword-blind: a 4v4 tie dissolved both. Keyword-aware: the AI's
+      // Preeminence bearer survives; only the opposing defender dissolves.
+      let champion = "";
+      let defender = "";
+      const edits = endTurnEdits((mutable) => {
+        champion = placeFrontRankCharacter(mutable, "enemy", "aiPreeminence", 4, "Preeminence");
+        defender = placeFrontRankCharacter(mutable, "player", "defender", 4, "");
+      });
+
+      expect(edits).toContainEqual({
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: defender,
+        destination: { side: "player", zone: "void" },
+      });
+      expect(
+        edits.some(
+          (edit) =>
+            edit.kind === "MOVE_CARD_TO_ZONE" && edit.battleCardId === champion,
+        ),
+      ).toBe(false);
+    });
   });
 });

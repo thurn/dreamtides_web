@@ -30,8 +30,8 @@ export function actionToCommands(action: PlannedAction, aiSide: BattleSide): Bat
       return moveCardCommands(action, aiSide);
     case "END_TURN":
       // The end-of-turn flow (challenge resolution then handoff) is orchestrated
-      // by the hook (Task 5.4) via `resolveJudgment` + `planHandoff`, which need
-      // turn state the driver does not carry. The driver therefore emits NO
+      // by the hook via `engine/challenge.resolveChallenge` + `planHandoff`,
+      // which need turn state the driver does not carry. The driver emits NO
       // command for END_TURN; the hook composes the challenge + handoff edits.
       return [];
   }
