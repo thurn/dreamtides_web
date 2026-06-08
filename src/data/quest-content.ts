@@ -17,6 +17,7 @@ import { generatePoolFromData } from "../draft/pool/generate.ts";
 import { buildPoolData } from "../draft/pool/pool-data";
 import {
   buildNameIndex,
+  loadAffinityCorpus,
   loadCardsV2Database,
   loadDecklists,
   loadDraftRecords,
@@ -98,6 +99,22 @@ export function poolVariantNeedsRecords(variant: PoolVariant): boolean {
 }
 
 /**
+ * Pool variants that grow their pool from the committed card embedding
+ * (`data/affinity_embedding.json`, served as `/affinity-corpus-data.json`)
+ * instead of the draft records. In pool mode the embedding is fetched only for
+ * these variants and set on `poolData.affinityCorpus`; they do not need the raw
+ * records, so the records fetch stays gated on
+ * {@link POOL_VARIANTS_NEEDING_RECORDS} alone.
+ */
+const POOL_VARIANTS_NEEDING_EMBEDDING: ReadonlySet<PoolVariant> =
+  new Set<PoolVariant>(["embedded"]);
+
+/** Whether `variant` grows its pool from the committed card embedding. */
+export function poolVariantNeedsEmbedding(variant: PoolVariant): boolean {
+  return POOL_VARIANTS_NEEDING_EMBEDDING.has(variant);
+}
+
+/**
  * Pool variants that draw one random seed card and grow a pool around it, so
  * each produces a {@link SeedProvenanceSummary}: the `seed` variant (decklist
  * co-occurrence) plus the pick-record variants. These are the variants whose
@@ -106,7 +123,11 @@ export function poolVariantNeedsRecords(variant: PoolVariant): boolean {
  * listed here, or its seed provenance will not be computed for those surfaces.
  */
 export const AFFINITY_GROWN_POOL_VARIANTS: ReadonlySet<PoolVariant> =
-  new Set<PoolVariant>(["seed", ...POOL_VARIANTS_NEEDING_RECORDS]);
+  new Set<PoolVariant>([
+    "seed",
+    ...POOL_VARIANTS_NEEDING_RECORDS,
+    ...POOL_VARIANTS_NEEDING_EMBEDDING,
+  ]);
 
 /**
  * FNV-1a hash of a string into a 32-bit unsigned integer, used to derive the
@@ -389,12 +410,17 @@ export async function loadQuestContent(
   // random color-pool generator — an unfocused pool that is not the variant the
   // run asked for.
   const poolNeedsRecords = POOL_VARIANTS_NEEDING_RECORDS.has(poolVariant);
+  // The `embedded` variant grows from the committed card embedding instead of
+  // the records, so it fetches `/affinity-corpus-data.json` rather than the
+  // 19 MB record bundle; other pool modes skip it.
+  const poolNeedsEmbedding = POOL_VARIANTS_NEEDING_EMBEDDING.has(poolVariant);
   const [
     cardDatabase,
     draftDreamcallers,
     dreamsignTemplates,
     decklists,
     draftRecords,
+    affinityCorpus,
   ] = await Promise.all([
     loadCardsV2Database(),
     loadDreamcallersV2(),
@@ -406,6 +432,10 @@ export async function loadQuestContent(
     usesFitModel || poolNeedsRecords
       ? loadDraftRecords()
       : Promise.resolve([] as DraftRecord[]),
+    // Fetch the committed embedding only for the variants that grow from it.
+    poolNeedsEmbedding
+      ? loadAffinityCorpus()
+      : Promise.resolve(null),
   ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
@@ -422,14 +452,19 @@ export async function loadQuestContent(
   // the fit model to avoid building it twice.
   const nameIndex = buildNameIndex(cardDatabase);
 
+  const poolData = buildPoolData(
+    Array.from(cardDatabase.values()),
+    decklists,
+    // The pick-data variants key on stable card ids, so feed them the
+    // records' id arrays.
+    draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds })),
+  );
+  // The `embedded` variant reads its corpus from here; every other variant
+  // ignores it, so this never changes any other variant's pools.
+  if (affinityCorpus) poolData.affinityCorpus = affinityCorpus;
+
   const poolContext: RunPoolContext = {
-    poolData: buildPoolData(
-      Array.from(cardDatabase.values()),
-      decklists,
-      // The pick-data variants key on stable card ids, so feed them the
-      // records' id arrays.
-      draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds })),
-    ),
+    poolData,
     nameIndex,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),
     poolVariant,

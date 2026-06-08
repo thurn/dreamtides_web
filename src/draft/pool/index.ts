@@ -22,6 +22,19 @@
 export { buildPoolData } from "./pool-data.ts";
 export { generatePool, generatePoolFromData } from "./generate.ts";
 export { poolToLines } from "./util.ts";
+export {
+  applyOverlay,
+  deserializeCorpus,
+  fitEmbedding,
+  DEFAULT_EMBEDDING_RANK,
+} from "./affinity-corpus-io.ts";
+export type {
+  AffinityEmbeddingJson,
+  AffinityOverlay,
+  AffinityOverlayEntry,
+  FitEmbeddingOptions,
+} from "./affinity-corpus-io.ts";
+export type { AffinityCorpus } from "./affinity-grower.ts";
 export { DEFAULT_POOL_VARIANT } from "./types.ts";
 export {
   POOL_STRATEGIES,

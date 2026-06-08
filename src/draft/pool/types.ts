@@ -1,5 +1,7 @@
 // Shared public and internal types for the pool generator.
 
+import type { AffinityCorpus } from "./affinity-grower.ts";
+
 // `color_pool` is the original color-identity algorithm. `diverse` is an
 // experimental variant tuned to spread cards and archetypes more evenly across
 // pools (see `docs/cards2/draft_pool_algorithms.md`). Each id names a
@@ -23,7 +25,8 @@ export type PoolVariant =
   | "pickchoice"
   | "pickcohere"
   | "picksig"
-  | "sigseed";
+  | "sigseed"
+  | "embedded";
 // The quest prototype and the draft test harness use this when `?algo=` is
 // absent. An unrecognised `?algo=` value is a hard error, not a fall-through to
 // this default.
@@ -102,6 +105,16 @@ export interface PoolData {
    * `default` algorithm.
    */
   draftRecords?: readonly PickRecord[];
+  /**
+   * A prebuilt affinity corpus the `embedded` variant grows from, reconstructed
+   * from the committed card embedding (`data/affinity_embedding.json`, served as
+   * `/affinity-corpus-data.json`) rather than rebuilt from {@link draftRecords}.
+   * When set, the `embedded` variant reads it directly; the record-derived
+   * variants ignore it and keep building their corpus from `draftRecords`, so
+   * setting it never changes any other variant's pools. Absent for every variant
+   * but `embedded`.
+   */
+  affinityCorpus?: AffinityCorpus;
   /**
    * Current display name -> stable cards_v2 UUID, built from the card records in
    * {@link buildPoolData} when they carry an `id`. The `seed` variant reads it to

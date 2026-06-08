@@ -29,6 +29,7 @@ import {
 import type { GeneratedPool, PoolData, PoolVariant } from "../draft/pool";
 import {
   buildNameIndex,
+  loadAffinityCorpus,
   loadCardsV2Database,
   loadDecklists,
   loadDraftRecords,
@@ -457,14 +458,20 @@ export default function DraftTestApp() {
           setDreamcallers(loadedDreamcallers);
           setStatus("select");
         } else {
-          const [db, loadedDreamcallers, decklists] = await Promise.all([
-            loadCardsV2Database(),
-            loadDreamcallersV2(),
-            loadDecklists(),
-          ]);
+          const [db, loadedDreamcallers, decklists, affinityCorpus] =
+            await Promise.all([
+              loadCardsV2Database(),
+              loadDreamcallersV2(),
+              loadDecklists(),
+              // The committed embedding the `embedded` variant grows from; other
+              // variants ignore it, so loading it never changes their pools.
+              loadAffinityCorpus(),
+            ]);
           if (cancelled) return;
 
-          poolDataRef.current = buildPoolData([...db.values()], decklists);
+          const poolData = buildPoolData([...db.values()], decklists);
+          if (affinityCorpus) poolData.affinityCorpus = affinityCorpus;
+          poolDataRef.current = poolData;
           setDatabase(db);
           setDreamcallers(loadedDreamcallers);
           setStatus("select");

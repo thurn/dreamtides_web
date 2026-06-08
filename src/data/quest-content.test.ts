@@ -54,18 +54,32 @@ beforeEach(() => {
 });
 
 describe("loadQuestContent", () => {
+  // A minimal valid card embedding (2 cards, rank 1) so the `embedded` variant's
+  // `/affinity-corpus-data.json` fetch deserializes without error.
+  const tinyEmbedding = {
+    version: 1,
+    kind: "embedding",
+    rank: 1,
+    cards: ["card-1", "card-2"],
+    prior: [0.5, 0.5],
+    U: [[1], [1]],
+    V: [[1], [1]],
+  };
+
   function stubFetch({
     cards,
     dreamcallers,
     dreamsigns,
     decklists,
     draftRecords = [],
+    affinityEmbedding = tinyEmbedding,
   }: {
     cards: CardData[];
     dreamcallers: unknown[];
     dreamsigns: unknown[];
     decklists: string[][];
     draftRecords?: DraftRecord[];
+    affinityEmbedding?: unknown;
   }): void {
     vi.stubGlobal(
       "fetch",
@@ -96,6 +110,12 @@ describe("loadQuestContent", () => {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(draftRecords),
+          });
+        }
+        if (path === "/affinity-corpus-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve(affinityEmbedding),
           });
         }
         return Promise.reject(new Error(`Unexpected fetch path: ${path}`));
@@ -263,6 +283,41 @@ describe("loadQuestContent", () => {
     expect(content.draftRecords).toEqual([fixtureRecord]);
     expect(content.fitModel).toBeDefined();
     expect(content.fresh20PackSize).toBeUndefined();
+  });
+
+  it("fetches the committed embedding (not the records) for the embedded variant", async () => {
+    // The `embedded` variant grows from `/affinity-corpus-data.json`, so it
+    // fetches the embedding in place of the 19 MB record bundle. The corpus is
+    // reconstructed and threaded onto poolData.affinityCorpus.
+    const cards = [makeCard(1), makeCard(2)];
+    const dreamcallers = [
+      {
+        id: "dc-a",
+        name: "Alpha",
+        title: "A",
+        renderedText: "",
+        imageNumber: "0001",
+        startingEssence: 250,
+        signatureCards: ["Card 1"],
+      },
+    ];
+    stubFetch({
+      cards,
+      dreamcallers,
+      dreamsigns: [],
+      decklists: [["Card 1", "Card 2"]],
+    });
+
+    const content = await loadQuestContent("embedded");
+
+    const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
+    expect(fetchedPaths).toContain("/affinity-corpus-data.json");
+    expect(fetchedPaths).not.toContain("/draft-records-data.json");
+    expect(content.poolContext!.poolData.affinityCorpus).toBeDefined();
+    expect(content.poolContext!.poolData.affinityCorpus!.cards).toEqual([
+      "card-1",
+      "card-2",
+    ]);
   });
 
   it("offers every Dreamcaller without a validation skip loop", async () => {

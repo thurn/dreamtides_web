@@ -15,6 +15,7 @@ import { DEFAULT_POOL_VARIANT, type PoolVariant } from "./types.ts";
 import { colorPoolStrategy } from "./variant-color-pool.ts";
 import { decklistsStrategy } from "./variant-decklists.ts";
 import { diverseStrategy } from "./variant-diverse.ts";
+import { embeddedStrategy } from "./variant-embedded.ts";
 import { idfStrategy } from "./variant-idf.ts";
 import { idf2Strategy } from "./variant-idf2.ts";
 import { idf3Strategy } from "./variant-idf3.ts";
@@ -45,6 +46,7 @@ export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
   pickcohere: pickCohereStrategy,
   picksig: pickSigStrategy,
   sigseed: sigSeedStrategy,
+  embedded: embeddedStrategy,
 };
 
 /**
