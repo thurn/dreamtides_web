@@ -21,6 +21,9 @@ import { idf3Strategy } from "./variant-idf3.ts";
 import { idf4Strategy } from "./variant-idf4.ts";
 import { idfHumanStrategy } from "./variant-idf-human.ts";
 import { mergedStrategy } from "./variant-merged.ts";
+import { pickChoiceStrategy } from "./variant-pickchoice.ts";
+import { pickEarlyStrategy } from "./variant-pickearly.ts";
+import { pickPosStrategy } from "./variant-pickpos.ts";
 import { pickfitStrategy } from "./variant-pickfit.ts";
 import { seedStrategy } from "./variant-seed.ts";
 
@@ -37,6 +40,9 @@ export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
   idf_human: idfHumanStrategy,
   seed: seedStrategy,
   pickfit: pickfitStrategy,
+  pickearly: pickEarlyStrategy,
+  pickpos: pickPosStrategy,
+  pickchoice: pickChoiceStrategy,
 };
 
 /**

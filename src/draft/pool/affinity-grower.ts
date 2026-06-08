@@ -20,9 +20,12 @@
 // onto display names on the way out.
 
 import type {
+  PoolData,
   SeedPoolCardProvenance,
   SeedPoolProvenance,
+  VariantResult,
 } from "./types.ts";
+import { generate } from "./variant-color-pool.ts";
 
 // IDF-weighted card-to-card affinity plus a play-rate prior over a fixed card
 // universe. `affinity.get(a).get(b)` reads as "how strongly b partners a";
@@ -198,6 +201,41 @@ export function growAffinityPool(
     cardProvenanceByName,
   };
   return { counts, provenance };
+}
+
+// Run a single-card-seeded pool from a prebuilt corpus, the shape every
+// affinity-grown variant shares: fall back to the default algorithm when the
+// corpus is empty, otherwise draw one card uniformly, grow to `targetSize`, and
+// map the id-keyed result back onto current display names via `cardNameById`.
+// `label` is the variant's id, recorded in `selected` for provenance.
+export function growPoolFromCorpus(
+  rng: () => number,
+  poolData: PoolData,
+  corpus: AffinityCorpus | null,
+  targetSize: number,
+  tuning: AffinityGrowerTuning,
+  label: string,
+): VariantResult {
+  if (!corpus || corpus.cards.length === 0) return generate(rng, poolData);
+
+  const seedKey = corpus.cards[Math.floor(rng() * corpus.cards.length)];
+  const { counts, provenance } = growAffinityPool(
+    corpus,
+    seedKey,
+    targetSize,
+    tuning,
+  );
+
+  const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
+  const namedCounts = new Map<string, number>();
+  for (const [key, copies] of counts) namedCounts.set(nameOf(key), copies);
+
+  return {
+    C: new Set(),
+    selected: [label, `card:${nameOf(seedKey)}`],
+    counts: namedCounts,
+    seedProvenance: toNamedProvenance(provenance, nameOf),
+  };
 }
 
 // Remap a key-keyed provenance record onto current display names, the form the

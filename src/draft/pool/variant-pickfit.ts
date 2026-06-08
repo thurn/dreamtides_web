@@ -36,12 +36,11 @@
 import {
   type AffinityCorpus,
   type AffinityGrowerTuning,
-  growAffinityPool,
-  toNamedProvenance,
+  growPoolFromCorpus,
 } from "./affinity-grower.ts";
+import { accumulatePickStats, buildExcessLiftCorpus } from "./pick-stats.ts";
 import type { PoolStrategy } from "./strategy.ts";
 import type { PoolData, VariantResult } from "./types.ts";
-import { generate } from "./variant-color-pool.ts";
 
 // Tuning for the `pickfit` variant. Mirrors `SEED`, extending the shared grower
 // tuning with the pool-size target and the two dials governing how the synergy
@@ -71,93 +70,22 @@ export const PICKFIT: PickfitTuning = {
 
 const pickfitCorpusCache = new WeakMap<PoolData, AffinityCorpus | null>();
 
-// Increment m[outer][inner] by one, creating the inner map on first write.
-function bumpPair(
-  m: Map<string, Map<string, number>>,
-  outer: string,
-  inner: string,
-): void {
-  let row = m.get(outer);
-  if (row === undefined) {
-    row = new Map<string, number>();
-    m.set(outer, row);
-  }
-  row.set(inner, (row.get(inner) ?? 0) + 1);
-}
-
-// Build the `pickfit` corpus from the bundled draft pick records. Walks each
-// seat's picks in order, accumulating the cards taken so far so the conditional
-// "take c given d already picked" can be counted, then derives the prior and the
-// shrunk synergy affinity. Everything is keyed by the rename-proof card key.
+// Build the `pickfit` corpus from the bundled draft pick records: equal-weight
+// pick stats over every pick (the shared accumulator), turned into an
+// availability-corrected pick-rate prior and shrunk excess-lift synergy.
 // Exported for the corpus unit test.
 export function buildPickfitCorpus(poolData: PoolData): AffinityCorpus | null {
   const cached = pickfitCorpusCache.get(poolData);
   if (cached !== undefined) return cached;
 
   const records = poolData.draftRecords;
-  let result: AffinityCorpus | null = null;
-  if (records && records.length > 0) {
-    // Unconditional offer/take counts per card key.
-    const offered = new Map<string, number>();
-    const taken = new Map<string, number>();
-    // Conditional counts: how often c was offered / taken while d was already in
-    // the drafter's pool, keyed offeredWith[d][c].
-    const offeredWith = new Map<string, Map<string, number>>();
-    const takenWith = new Map<string, Map<string, number>>();
-
-    for (const rec of records) {
-      const poolSoFar = new Set<string>();
-      const len = Math.min(rec.packs.length, rec.picks.length);
-      for (let i = 0; i < len; i += 1) {
-        // Dedupe the pack to card ids; a duplicate id collapses to one offer so
-        // it does not double-count.
-        const packKeys = [...new Set(rec.packs[i])];
-        const chosen = new Set(rec.picks[i]);
-        for (const c of packKeys) {
-          offered.set(c, (offered.get(c) ?? 0) + 1);
-          const isTaken = chosen.has(c);
-          if (isTaken) taken.set(c, (taken.get(c) ?? 0) + 1);
-          for (const d of poolSoFar) {
-            if (d === c) continue;
-            bumpPair(offeredWith, d, c);
-            if (isTaken) bumpPair(takenWith, d, c);
-          }
-        }
-        for (const c of chosen) poolSoFar.add(c);
-      }
-    }
-
-    if (offered.size > 0) {
-      // Availability-corrected play-rate prior.
-      const prior = new Map<string, number>();
-      for (const [c, o] of offered) prior.set(c, (taken.get(c) ?? 0) / o);
-
-      // Shrunk EXCESS pick rate (condRate above baseline) as the synergy
-      // affinity, floored at zero so only positive synergy is recorded; power is
-      // left to the prior term.
-      const { shrinkage, minSupport } = PICKFIT;
-      const affinity = new Map<string, Map<string, number>>();
-      for (const [d, row] of offeredWith) {
-        const tRow = takenWith.get(d);
-        const normRow = new Map<string, number>();
-        for (const [c, ow] of row) {
-          if (ow < minSupport) continue;
-          const condRate = (tRow?.get(c) ?? 0) / ow;
-          const baseline = prior.get(c) ?? 0;
-          const w = ow / (ow + shrinkage);
-          const excess = w * (condRate - baseline);
-          if (excess > 0) normRow.set(c, excess);
-        }
-        if (normRow.size > 0) affinity.set(d, normRow);
-      }
-
-      // The drawable universe and grower candidate set: every card that was
-      // taken into a real deck at least once, mirroring `seed`'s "cards that
-      // appear in real decks". Cards offered but never taken stay out of pools.
-      const cards = [...taken.keys()];
-      result = { cards, affinity, prior };
-    }
-  }
+  const result =
+    records && records.length > 0
+      ? buildExcessLiftCorpus(accumulatePickStats(records), {
+          shrinkage: PICKFIT.shrinkage,
+          minSupport: PICKFIT.minSupport,
+        })
+      : null;
 
   pickfitCorpusCache.set(poolData, result);
   return result;
@@ -174,31 +102,14 @@ export function generatePickfit(
   rng: () => number,
   poolData: PoolData,
 ): VariantResult {
-  const corpus = buildPickfitCorpus(poolData);
-  if (!corpus || corpus.cards.length === 0) return generate(rng, poolData);
-
-  // Step 1 — draw the seed uniformly at random from every corpus card key.
-  const seedKey = corpus.cards[Math.floor(rng() * corpus.cards.length)];
-
-  // Step 2 — grow the pool from it by blended affinity, entirely in key space.
-  const { counts, provenance } = growAffinityPool(
-    corpus,
-    seedKey,
+  return growPoolFromCorpus(
+    rng,
+    poolData,
+    buildPickfitCorpus(poolData),
     PICKFIT.targetSize,
     PICKFIT,
+    "pickfit",
   );
-
-  // Step 3 — map the UUID-keyed pool back onto current display names.
-  const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
-  const namedCounts = new Map<string, number>();
-  for (const [key, copies] of counts) namedCounts.set(nameOf(key), copies);
-
-  return {
-    C: new Set(),
-    selected: ["pickfit", `card:${nameOf(seedKey)}`],
-    counts: namedCounts,
-    seedProvenance: toNamedProvenance(provenance, nameOf),
-  };
 }
 
 /** Strategy adapter for the `pickfit` algorithm. */

@@ -19,7 +19,10 @@ export type PoolVariant =
   | "idf4"
   | "idf_human"
   | "seed"
-  | "pickfit";
+  | "pickfit"
+  | "pickearly"
+  | "pickpos"
+  | "pickchoice";
 // The quest prototype and the draft test harness both fall back to this when
 // `?algo=` is absent or unrecognised.
 export const DEFAULT_POOL_VARIANT: PoolVariant = "idf3";
