@@ -811,6 +811,13 @@ function setCardMarkers(
  * automation uses this to clear `isExhausted` on the incoming side's characters
  * during the Dawn phase (rules §Dawn). Acts only on the status FIELD; the merge
  * leaves untouched fields intact. A merge that changes nothing is a no-op.
+ *
+ * ☪ auto-retreat (rules §Exhaust and Awaken): when the merge sets
+ * `isExhausted: true` on a front-rank character, the body is automatically moved
+ * to an available back-rank position so it does not remain a potential
+ * challenger or defender. If the back rank has no open position, the exhaust is
+ * rejected entirely (the state is returned unchanged), matching the rule that a
+ * front-rank source which cannot retreat cannot pay the ☪ cost.
  */
 function setCardStatus(
   state: BattleMutableState,
@@ -840,6 +847,24 @@ function setCardStatus(
     };
   }
 
+  // The exhaust is becoming newly true: a front-rank source must retreat first.
+  const isExhausting = status.isExhausted === true && !current.isExhausted;
+  if (isExhausting) {
+    const location = selectBattleCardLocation(nextState, battleCardId);
+    if (location !== null && location.zone === "frontRank") {
+      const retreatSlot = selectFirstOpenBackRankSlot(nextState, location.side);
+      if (retreatSlot === null) {
+        // No open back-rank position to retreat into: reject the exhaust whole.
+        return {
+          state,
+          transition: createEmptyTransitionData(),
+        };
+      }
+      removeBattleCardFromLocation(nextState, location);
+      setBattlefieldSlotOccupant(nextState, retreatSlot, battleCardId);
+    }
+  }
+
   nextState.cardInstances[battleCardId].status = {
     ...current,
     ...status,
@@ -849,6 +874,22 @@ function setCardStatus(
     state: nextState,
     transition: createEmptyTransitionData(),
   };
+}
+
+/**
+ * Returns the first open back-rank slot address on `side`, scanning B0…B4 in
+ * order, or null when every back-rank position is occupied.
+ */
+function selectFirstOpenBackRankSlot(
+  state: BattleMutableState,
+  side: BattleSide,
+): BattleFieldSlotAddress | null {
+  for (const slotId of BACK_RANK_SLOT_IDS) {
+    if (state.sides[side].backRank[slotId] === null) {
+      return { side, zone: "backRank", slotId };
+    }
+  }
+  return null;
 }
 
 function createCardCopy(

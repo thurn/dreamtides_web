@@ -7,6 +7,7 @@ import {
   selectBattleCardLocation,
 } from "../state/selectors";
 import type {
+  BattleCardStatus,
   BattleCommandSourceSurface,
   BattleFieldSlotAddress,
   BattleMutableState,
@@ -232,6 +233,12 @@ export function BattleContextMenu({
         },
       ],
     });
+    if (card.definition.battleCardKind === "character") {
+      result.push({
+        label: "Status",
+        submenu: createStatusSubmenu(),
+      });
+    }
     result.push({
       label: "Add Note…",
       action: () => onOpenNoteEditor(battleCardId),
@@ -283,6 +290,75 @@ export function BattleContextMenu({
           },
           sourceSurface,
         }),
+      };
+    }
+
+    function setStatus(status: Partial<BattleCardStatus>): void {
+      onCommand({
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_CARD_STATUS", battleCardId, status },
+        sourceSurface,
+      });
+    }
+
+    /**
+     * Card-scoped status toggles emitting `SET_CARD_STATUS` (rules §Exhaust and
+     * Awaken, §Keywords). Exhausting a front-rank body triggers the engine's ☪
+     * auto-retreat to an open back-rank position (and is rejected when the back
+     * rank is full); the menu just dispatches the edit and the engine applies
+     * that positional rule. Awaken clears the exhausted status in place.
+     */
+    function createStatusSubmenu(): ContextMenuItem[] {
+      const status = card.status;
+      const items: ContextMenuItem[] = [];
+
+      items.push({
+        label: status.isExhausted ? "Awaken" : "Exhaust ☪",
+        action: () => setStatus({ isExhausted: !status.isExhausted }),
+      });
+      items.push({ divider: true });
+
+      items.push({
+        label: status.reclaimed ? "Clear Reclaimed" : "Mark Reclaimed",
+        action: () => setStatus({ reclaimed: !status.reclaimed }),
+      });
+      items.push({
+        label: status.offering ? "Clear Offering" : "Mark Offering",
+        action: () => setStatus({ offering: !status.offering }),
+      });
+      items.push({
+        label: status.ephemeral ? "Clear Ephemeral" : "Mark Ephemeral",
+        action: () => setStatus({ ephemeral: !status.ephemeral }),
+      });
+      items.push({ divider: true });
+
+      for (const value of [0, 1, 2, 3]) {
+        if (value === status.veil) {
+          continue;
+        }
+        items.push({
+          label: value === 0 ? "Clear Veil" : `Veil ${String(value)}●`,
+          action: () => setStatus({ veil: value }),
+        });
+      }
+      items.push({ divider: true });
+
+      items.push(grantedKeywordItem("Unstoppable", "grantedUnstoppable", status.grantedUnstoppable));
+      items.push(grantedKeywordItem("Vengeful", "grantedVengeful", status.grantedVengeful));
+      items.push(grantedKeywordItem("Preeminence", "grantedPreeminence", status.grantedPreeminence));
+      items.push(grantedKeywordItem("Awakened", "grantedAwakened", status.grantedAwakened));
+
+      return items;
+    }
+
+    function grantedKeywordItem(
+      label: string,
+      field: "grantedUnstoppable" | "grantedVengeful" | "grantedPreeminence" | "grantedAwakened",
+      isGranted: boolean,
+    ): ContextMenuItem {
+      return {
+        label: isGranted ? `Clear ${label}` : `Grant ${label}`,
+        action: () => setStatus({ [field]: !isGranted }),
       };
     }
   }, [battleCardId, card, location, onCommand, onOpenNoteEditor, sourceSurface, state]);

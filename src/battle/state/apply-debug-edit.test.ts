@@ -8,6 +8,7 @@ import {
 } from "../test-support";
 import type { BattleDebugZoneDestination } from "../debug/commands";
 import type { BattleFieldSlotAddress } from "../types";
+import { BACK_RANK_SLOT_IDS } from "../types";
 import {
   battleControllerReducer,
   createBattleControllerState,
@@ -343,5 +344,108 @@ describe("SET_CARD_STATUS", () => {
     const state = createBattle();
     const result = setCardStatus(state, "missing-card", { isExhausted: false });
     expect(result.mutable).toBe(state.mutable);
+  });
+
+  it("merges a partial without clobbering counters or other sibling fields", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state.mutable.cardInstances[cardId].status.counters = 3;
+    state.mutable.cardInstances[cardId].status.veil = 2;
+
+    const result = setCardStatus(state, cardId, { reclaimed: true });
+
+    expect(result.mutable.cardInstances[cardId].status.reclaimed).toBe(true);
+    // Toggling reclaimed leaves counters and veil intact.
+    expect(result.mutable.cardInstances[cardId].status.counters).toBe(3);
+    expect(result.mutable.cardInstances[cardId].status.veil).toBe(2);
+  });
+});
+
+describe("SET_CARD_STATUS ☪ auto-retreat", () => {
+  it("retreats a front-rank character to an open back-rank slot when it is exhausted", () => {
+    let state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state = moveCard(state, cardId, { side: "player", zone: "frontRank", slotId: "F0" });
+
+    const result = setCardStatus(state, cardId, { isExhausted: true });
+
+    // The front-rank slot empties and the body lands in the first open back-rank
+    // slot (rules §Exhaust and Awaken: a front-rank source paying ☪ is moved to
+    // an available back-rank position).
+    expect(result.mutable.sides.player.frontRank.F0).toBeNull();
+    expect(result.mutable.sides.player.backRank.B0).toBe(cardId);
+    expect(result.mutable.cardInstances[cardId].status.isExhausted).toBe(true);
+  });
+
+  it("rejects the exhaust when the back rank is full (no open slot to retreat into)", () => {
+    let state = createBattle();
+    const frontCardId = state.mutable.sides.player.hand[0];
+    state = moveCard(state, frontCardId, { side: "player", zone: "frontRank", slotId: "F0" });
+
+    // Fill every back-rank slot so there is no open position to retreat into.
+    // Draw into the hand first when it has run dry so each of the five slots
+    // (B0..B4) is occupied; the front card already consumed one hand card.
+    const backCardIds: string[] = [];
+    for (let index = 0; index < BACK_RANK_SLOT_IDS.length; index += 1) {
+      if (state.mutable.sides.player.hand.length === 0) {
+        state = drawCard(state, "player");
+      }
+      const handCardId = state.mutable.sides.player.hand[0];
+      backCardIds.push(handCardId);
+      state = moveCard(state, handCardId, {
+        side: "player",
+        zone: "backRank",
+        slotId: BACK_RANK_SLOT_IDS[index],
+      });
+    }
+
+    // Sanity-check the setup: all five back-rank slots are occupied.
+    for (const slotId of BACK_RANK_SLOT_IDS) {
+      expect(state.mutable.sides.player.backRank[slotId]).not.toBeNull();
+    }
+
+    const result = setCardStatus(state, frontCardId, { isExhausted: true });
+
+    // The exhaust is rejected as a whole: the body stays in the front rank and
+    // un-exhausted.
+    expect(result.mutable).toBe(state.mutable);
+    expect(result.mutable.sides.player.frontRank.F0).toBe(frontCardId);
+    expect(result.mutable.cardInstances[frontCardId].status.isExhausted).toBe(false);
+  });
+
+  it("does not retreat a back-rank character when it is exhausted", () => {
+    let state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B1" });
+
+    const result = setCardStatus(state, cardId, { isExhausted: true });
+
+    // A body already in the back rank stays where it is.
+    expect(result.mutable.sides.player.backRank.B1).toBe(cardId);
+    expect(result.mutable.cardInstances[cardId].status.isExhausted).toBe(true);
+  });
+
+  it("does not retreat when an exhaust edit clears isExhausted instead of setting it", () => {
+    let state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state = moveCard(state, cardId, { side: "player", zone: "frontRank", slotId: "F0" });
+    state.mutable.cardInstances[cardId].status.isExhausted = true;
+
+    const result = setCardStatus(state, cardId, { isExhausted: false });
+
+    // Awakening (clearing exhaustion) leaves the front-rank position untouched.
+    expect(result.mutable.sides.player.frontRank.F0).toBe(cardId);
+    expect(result.mutable.cardInstances[cardId].status.isExhausted).toBe(false);
+  });
+
+  it("does not retreat when the status edit does not touch isExhausted", () => {
+    let state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state = moveCard(state, cardId, { side: "player", zone: "frontRank", slotId: "F0" });
+
+    const result = setCardStatus(state, cardId, { reclaimed: true });
+
+    expect(result.mutable.sides.player.frontRank.F0).toBe(cardId);
+    expect(result.mutable.cardInstances[cardId].status.reclaimed).toBe(true);
   });
 });
