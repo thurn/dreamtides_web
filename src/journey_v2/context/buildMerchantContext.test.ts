@@ -9,6 +9,7 @@ import {
   makeMerchantTestDreamsignTemplate,
   makeMerchantTestFitModel,
   makeMerchantTestQuestState,
+  makeMerchantTestResolvedPackage,
   makeMerchantTestSite,
 } from "../testing/fixtures";
 
@@ -121,6 +122,52 @@ describe("buildMerchantContext", () => {
     ]);
   });
 
+  it("uses the run card pool for grant candidates when a pool exists", () => {
+    const inPoolCard = makeMerchantTestCard({
+      id: TEST_CARD_UUIDS.ordinary,
+      cardNumber: 401,
+    });
+    const outsidePoolCard = makeMerchantTestCard({
+      id: TEST_CARD_UUIDS.outsidePool,
+      cardNumber: 402,
+    });
+    const inPoolStarterCard = makeMerchantTestCard({
+      id: TEST_CARD_UUIDS.starterRarity,
+      cardNumber: 403,
+      rarity: "Starter",
+    });
+    const inPoolSpecialCard = makeMerchantTestCard({
+      id: TEST_CARD_UUIDS.specialRarity,
+      cardNumber: 404,
+      rarity: "Special",
+    });
+
+    const context = buildMerchantContext({
+      questState: makeMerchantTestQuestState({
+        resolvedPackage: makeMerchantTestResolvedPackage({
+          draftPoolCopiesByCard: {
+            [String(inPoolCard.cardNumber)]: 1,
+            [String(inPoolStarterCard.cardNumber)]: 1,
+            [String(inPoolSpecialCard.cardNumber)]: 1,
+          },
+        }),
+      }),
+      questContent: makeMerchantTestContent({
+        cards: [
+          inPoolCard,
+          outsidePoolCard,
+          inPoolStarterCard,
+          inPoolSpecialCard,
+        ],
+      }),
+      site: makeMerchantTestSite(),
+    });
+
+    expect(context.candidateGrantCards.map((card) => card.cardUuid)).toEqual([
+      TEST_CARD_UUIDS.ordinary,
+    ]);
+  });
+
   it("excludes held Dreamsign ids from Dreamsign candidates", () => {
     const heldTemplate = makeMerchantTestDreamsignTemplate({ id: "sign-held" });
     const openTemplate = makeMerchantTestDreamsignTemplate({ id: "sign-open" });
@@ -137,6 +184,35 @@ describe("buildMerchantContext", () => {
     });
 
     expect(context.heldDreamsignIds).toEqual(new Set(["sign-held"]));
+    expect(context.heldDreamsignFallbackNames).toEqual(new Set());
+    expect(context.candidateDreamsigns).toEqual([openTemplate]);
+  });
+
+  it("keeps name fallback separate for held Dreamsigns missing ids", () => {
+    const heldNameTemplate = makeMerchantTestDreamsignTemplate({
+      id: "sign-held-name",
+      name: "Shared Name",
+    });
+    const openTemplate = makeMerchantTestDreamsignTemplate({ id: "sign-open" });
+
+    const context = buildMerchantContext({
+      questState: makeMerchantTestQuestState({
+        dreamsigns: [
+          makeMerchantTestDreamsign({
+            id: undefined,
+            name: "Shared Name",
+          }),
+        ],
+      }),
+      questContent: makeMerchantTestContent({
+        cards: [],
+        dreamsignTemplates: [heldNameTemplate, openTemplate],
+      }),
+      site: makeMerchantTestSite(),
+    });
+
+    expect(context.heldDreamsignIds).toEqual(new Set());
+    expect(context.heldDreamsignFallbackNames).toEqual(new Set(["Shared Name"]));
     expect(context.candidateDreamsigns).toEqual([openTemplate]);
   });
 

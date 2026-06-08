@@ -1,7 +1,11 @@
 import type { FitModel } from "../../draft/replay/fit-model";
 import type { QuestContent } from "../../data/quest-content";
 import type { CardData } from "../../types/cards";
-import type { DreamsignTemplate } from "../../types/content";
+import type {
+  DreamcallerContent,
+  DreamsignTemplate,
+  ResolvedDreamcallerPackage,
+} from "../../types/content";
 import type { DeckEntry, Dreamsign, QuestState, SiteState } from "../../types/quest";
 import { createDefaultState } from "../../state/quest-context";
 
@@ -11,6 +15,7 @@ export const TEST_CARD_UUIDS = {
   starterFlag: "33333333-3333-4333-8333-333333333333",
   starterRarity: "44444444-4444-4444-8444-444444444444",
   specialRarity: "55555555-5555-4555-8555-555555555555",
+  outsidePool: "66666666-6666-4666-8666-666666666666",
 } as const;
 
 export function makeMerchantTestCard(
@@ -89,6 +94,33 @@ export function makeMerchantTestQuestState(
     seed: "merchant-fixture-seed",
     essence: 120,
     essenceCap: 360,
+    ...overrides,
+  };
+}
+
+function makeMerchantTestDreamcallerContent(): DreamcallerContent {
+  return {
+    id: "dreamcaller-fixture",
+    name: "Fixture Dreamcaller",
+    title: "Fixture",
+    renderedText: "",
+    imageNumber: "0000",
+    startingEssence: 120,
+  };
+}
+
+export function makeMerchantTestResolvedPackage(
+  overrides: Partial<ResolvedDreamcallerPackage> = {},
+): ResolvedDreamcallerPackage {
+  return {
+    dreamcaller: makeMerchantTestDreamcallerContent(),
+    draftPoolCopiesByCard: {},
+    dreamsignPoolIds: [],
+    mandatoryOnlyPoolSize: 0,
+    draftPoolSize: 0,
+    doubledCardCount: 0,
+    legalSubsetCount: 0,
+    preferredSubsetCount: 0,
     ...overrides,
   };
 }

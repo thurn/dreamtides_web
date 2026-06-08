@@ -48,6 +48,7 @@ export interface MerchantContext {
   supportMetaByUuid: ReadonlyMap<string, MerchantSupportMeta>;
   ownedCardUuids: ReadonlySet<string>;
   heldDreamsignIds: ReadonlySet<string>;
+  heldDreamsignFallbackNames: ReadonlySet<string>;
   candidateGrantCards: readonly MerchantCatalogCard[];
   candidateDreamsigns: readonly DreamsignTemplate[];
   fitModel?: FitModel;
