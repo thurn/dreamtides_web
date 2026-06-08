@@ -105,16 +105,7 @@ describe("buildMerchantContext", () => {
     });
 
     const context = buildMerchantContext({
-      questState: makeMerchantTestQuestState({
-        resolvedPackage: makeMerchantTestResolvedPackage({
-          draftPoolCopiesByCard: {
-            [String(ordinaryCard.cardNumber)]: 1,
-            [String(starterFlagCard.cardNumber)]: 1,
-            [String(starterRarityCard.cardNumber)]: 1,
-            [String(specialRarityCard.cardNumber)]: 1,
-          },
-        }),
-      }),
+      questState: makeMerchantTestQuestState(),
       questContent: makeMerchantTestContent({
         cards: [
           ordinaryCard,
@@ -131,7 +122,7 @@ describe("buildMerchantContext", () => {
     ]);
   });
 
-  it("has no card grant candidates when run pool data is missing", () => {
+  it("uses loaded catalog cards for grant candidates without run pool data", () => {
     const ordinaryCard = makeMerchantTestCard({
       id: TEST_CARD_UUIDS.ordinary,
       cardNumber: 305,
@@ -143,10 +134,12 @@ describe("buildMerchantContext", () => {
       site: makeMerchantTestSite(),
     });
 
-    expect(context.candidateGrantCards).toEqual([]);
+    expect(context.candidateGrantCards.map((card) => card.cardUuid)).toEqual([
+      TEST_CARD_UUIDS.ordinary,
+    ]);
   });
 
-  it("uses the run card pool for grant candidates when a pool exists", () => {
+  it("includes ordinary catalog cards outside the run pool", () => {
     const inPoolCard = makeMerchantTestCard({
       id: TEST_CARD_UUIDS.ordinary,
       cardNumber: 401,
@@ -189,6 +182,7 @@ describe("buildMerchantContext", () => {
 
     expect(context.candidateGrantCards.map((card) => card.cardUuid)).toEqual([
       TEST_CARD_UUIDS.ordinary,
+      TEST_CARD_UUIDS.outsidePool,
     ]);
   });
 

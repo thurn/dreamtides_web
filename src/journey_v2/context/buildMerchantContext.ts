@@ -70,28 +70,6 @@ function projectCatalogCard(card: CardData): MerchantCatalogCard {
   };
 }
 
-function buildRunPoolCardNumbers(
-  questState: QuestState,
-): ReadonlySet<number> | null {
-  const poolCopies =
-    questState.draftState?.mode === "pool"
-      ? questState.draftState.draftPoolCopiesByCard
-      : questState.resolvedPackage?.draftPoolCopiesByCard;
-
-  if (poolCopies === undefined) return null;
-
-  const cardNumbers = new Set<number>();
-  for (const [cardNumberText, copies] of Object.entries(poolCopies)) {
-    if (copies <= 0) continue;
-
-    const cardNumber = Number(cardNumberText);
-    if (Number.isInteger(cardNumber)) {
-      cardNumbers.add(cardNumber);
-    }
-  }
-  return cardNumbers;
-}
-
 function buildHeldDreamsignIds(dreamsigns: readonly Dreamsign[]): ReadonlySet<string> {
   const heldDreamsignIds = new Set<string>();
   for (const dreamsign of dreamsigns) {
@@ -146,15 +124,8 @@ export function buildMerchantContext({
     ownedCardUuids.add(deckCard.cardUuid);
   }
 
-  const runPoolCardNumbers = buildRunPoolCardNumbers(questState);
-  const grantSourceCards =
-    runPoolCardNumbers === null
-      ? []
-      : [...runPoolCardNumbers]
-          .map((cardNumber) => cardByNumber.get(cardNumber))
-          .filter((card): card is CardData => card !== undefined);
   const candidateGrantCards = Object.freeze(
-    grantSourceCards.filter(isGrantCandidate).map(projectCatalogCard),
+    [...cardByNumber.values()].filter(isGrantCandidate).map(projectCatalogCard),
   );
 
   const heldDreamsignIds = buildHeldDreamsignIds(questState.dreamsigns);
