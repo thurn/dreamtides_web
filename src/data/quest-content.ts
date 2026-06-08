@@ -47,11 +47,11 @@ export interface QuestContent {
    * From `?algo=`.
    */
   draftMode?: "pool" | "replay" | "fresh20";
-  /** Loaded in replay mode (the full adapted draft-record corpus). */
+  /** The full adapted draft-record corpus when the run needs record-backed ranking. */
   draftRecords?: DraftRecord[];
   /**
-   * The live deck-fit model built from all record mainboards. Loaded in both
-   * the replay and fresh20 modes, which share the same fit ranking.
+   * The live deck-fit model built from all record mainboards when the run uses
+   * record-backed recommendations or draft ranking.
    */
   fitModel?: FitModel;
   /** Cards per fresh pack in fresh20 mode (from `?packsize=`); defaults applied at use. */
