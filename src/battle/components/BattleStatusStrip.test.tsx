@@ -44,6 +44,7 @@ function mount(withBanished = false): {
   onSetScore: ReturnType<typeof vi.fn>;
   onIncreaseMaxEnergyAndFill: ReturnType<typeof vi.fn>;
   onDrawCard: ReturnType<typeof vi.fn>;
+  onErode: ReturnType<typeof vi.fn>;
   onCloseSummary: ReturnType<typeof vi.fn>;
   onOpenSummary: ReturnType<typeof vi.fn>;
   root: Root;
@@ -59,6 +60,7 @@ function mount(withBanished = false): {
   const onOpenSummary = vi.fn();
   const onIncreaseMaxEnergyAndFill = vi.fn();
   const onDrawCard = vi.fn();
+  const onErode = vi.fn();
   const onSetEnergy = vi.fn();
   const onSetScore = vi.fn();
   const container = document.createElement("div");
@@ -84,6 +86,7 @@ function mount(withBanished = false): {
         onSetScore={onSetScore}
         onIncreaseMaxEnergyAndFill={onIncreaseMaxEnergyAndFill}
         onDrawCard={onDrawCard}
+        onErode={onErode}
         onCloseSummary={onCloseSummary}
         onOpenSummary={onOpenSummary}
       />,
@@ -98,6 +101,7 @@ function mount(withBanished = false): {
     onSetScore,
     onIncreaseMaxEnergyAndFill,
     onDrawCard,
+    onErode,
     onCloseSummary,
     onOpenSummary,
     root,
@@ -301,6 +305,7 @@ describe("BattleStatusStrip", () => {
         onSetScore={onSetScore}
         onIncreaseMaxEnergyAndFill={vi.fn()}
         onDrawCard={vi.fn()}
+        onErode={vi.fn()}
         onCloseSummary={vi.fn()}
         onOpenSummary={vi.fn()}
       />,
@@ -323,6 +328,68 @@ describe("BattleStatusStrip", () => {
 
     expect(container.querySelector('[data-battle-stat="player:score"]')?.getAttribute("data-battle-value"))
       .toBe("99");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("erodes the chosen count from the side's deck", () => {
+    const { container, onErode, root } = mount();
+    const erodeButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-action="status-erode-player"]',
+    );
+
+    expect(erodeButton).not.toBeNull();
+    // The count defaults to 1 so the first erode moves a single card.
+    expect(erodeButton?.textContent).toContain("Erode 1");
+
+    act(() => {
+      erodeButton?.click();
+    });
+
+    expect(onErode).toHaveBeenCalledTimes(1);
+    expect(onErode).toHaveBeenCalledWith(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("steps the erode count and erodes that many cards", () => {
+    const { container, onErode, root } = mount();
+    const increase = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Increase erode count for you"]',
+    );
+    const decrease = container.querySelector<HTMLButtonElement>(
+      'button[aria-label="Decrease erode count for you"]',
+    );
+
+    act(() => {
+      increase?.click();
+      increase?.click();
+    });
+
+    const erodeButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-action="status-erode-player"]',
+    );
+    expect(erodeButton?.textContent).toContain("Erode 3");
+
+    act(() => {
+      erodeButton?.click();
+    });
+
+    expect(onErode).toHaveBeenCalledWith(3);
+
+    // The count never drops below 1.
+    act(() => {
+      decrease?.click();
+      decrease?.click();
+      decrease?.click();
+      decrease?.click();
+    });
+
+    expect(erodeButton?.textContent).toContain("Erode 1");
 
     act(() => {
       root.unmount();

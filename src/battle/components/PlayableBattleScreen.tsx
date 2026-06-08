@@ -967,6 +967,11 @@ function PlayableBattleScreenInner({
                     edit: { kind: "DRAW_CARD", side: "player" },
                     sourceSurface: "status-strip",
                   })}
+                  onErode={(count) => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "ERODE", side: "player", count },
+                    sourceSurface: "status-strip",
+                  })}
                   onOpenSummary={() => handleOpenSummary("player")}
                   onCloseSummary={() => handleCloseSummary("player")}
                 />
@@ -1086,6 +1091,11 @@ function PlayableBattleScreenInner({
                   onDrawCard={() => handleCommand({
                     id: "DEBUG_EDIT",
                     edit: { kind: "DRAW_CARD", side: "enemy" },
+                    sourceSurface: "status-strip",
+                  })}
+                  onErode={(count) => handleCommand({
+                    id: "DEBUG_EDIT",
+                    edit: { kind: "ERODE", side: "enemy", count },
                     sourceSurface: "status-strip",
                   })}
                   onOpenSummary={() => handleOpenSummary("enemy")}

@@ -716,6 +716,18 @@
   outline: none;
 }
 
+.status-strip-erode {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.status-strip-erode .stat-stepper {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
 .stat {
   display: flex;
   align-items: center;
