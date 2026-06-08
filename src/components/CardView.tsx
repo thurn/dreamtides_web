@@ -303,25 +303,19 @@ const ART_BAND_DEFAULT_TOP_PCT = (1 - ART_EXTENSION_FRACTION) * 100;
 const ART_BAND_MIN_TOP_PCT = 55;
 const ART_BAND_MAX_TOP_PCT = 94;
 /**
- * Feather geometry (card-height %). The blur ramp begins `ABOVE` the box top and
- * reaches full opacity `BELOW` it, so the transition eases in from the crisp art
- * over a long, gentle gradient (no hard line where it shows beside the box) and
- * the fully-blurred seam stays a short distance below the box top. Keeping
- * `BELOW` small holds the solid dark band thin, while the longer `ABOVE` lead-in
- * is what dissolves the seam.
- *
- * The above-lead-in is a fixed share of card height, so on a short (1–2 line)
- * box it is a large fraction of the small band and makes the blur feel tall,
- * while on a full three-line box it is a small fraction of an already-tall band.
- * To shorten the band on short boxes without altering the full ones, the lead-in
- * uses the smaller `SHORT` value until the box reaches its three-line max height,
- * where the `MAX` value (which dissolves the longer seam) takes over.
+ * Feather geometry (card-height %). The fill band's seam — where the crisp art
+ * fully gives way to the dark band — is anchored a fixed distance below the
+ * measured box top: `ART_SAFE_AREA_OVERLAP`, the box's first text-line baseline,
+ * the same target the art-coverage envelope is held to. So on every card the art
+ * extends the same fixed amount under the box, whatever the box height. The blur
+ * ramps in over `FEATHER_ABOVE_PCT` of card height ending at the seam, so the
+ * transition eases up from the crisp art over a long, gentle gradient (no hard
+ * line where it shows beside the box) and the solid dark band holds from the
+ * seam down.
  */
-const ART_EXTENSION_FEATHER_ABOVE_MAX_PCT = 7;
-const ART_EXTENSION_FEATHER_ABOVE_SHORT_PCT = 5;
-const ART_EXTENSION_FEATHER_BELOW_PCT = 3;
-/** Card-height % above the box top where the tint begins its gentle lead-in. */
-const ART_EXTENSION_TINT_ABOVE_PCT = 3;
+const ART_EXTENSION_FEATHER_ABOVE_PCT = 10;
+/** Card-height % over which the dark tint ramps in, ending at the seam. */
+const ART_EXTENSION_TINT_ABOVE_PCT = 7;
 /** Blur radius as a fraction of the rendered card width. */
 const ART_EXTENSION_BLUR_RATIO = 0.06;
 /**
@@ -332,60 +326,19 @@ const ART_EXTENSION_BLUR_RATIO = 0.06;
  * connecting art, while leaving already-dark bands dark.
  */
 const ART_EXTENSION_BLUR_BRIGHTNESS = 0.6;
-/** Neutral dark base used until the art's bottom color has been sampled. */
-const ART_EXTENSION_BASE_COLOR = "#0b0b0d";
 /**
- * Fraction of the source image's height, measured from its bottom, averaged into
- * a single color used to tint and darken the fill band so it matches the art's
- * own palette instead of fading toward a neutral gray.
+ * Uniform dark color of the fill band. It both backs the art (so any sliver the
+ * extended art does not reach matches) and is the tint gradient's color, so the
+ * band grounds out to one consistent near-black gray on every card.
  */
-const ART_BOTTOM_SAMPLE_FRACTION = 0.3;
-/** The sampled bottom color is multiplied by this to darken the band tint. */
-const ART_EXTENSION_TINT_DARKEN = 0.4;
+const ART_BAND_COLOR = { r: 16, g: 16, b: 19 };
+const ART_BAND_COLOR_CSS = `rgb(${ART_BAND_COLOR.r}, ${ART_BAND_COLOR.g}, ${ART_BAND_COLOR.b})`;
 /**
  * Tint alpha at the seam (lets the blurred art read through) and at the bottom
- * edge (nearly solid, so the band grounds out dark and color-matched).
+ * edge (nearly solid, so the band grounds out dark).
  */
 const ART_EXTENSION_TINT_SEAM_ALPHA = 0.5;
 const ART_EXTENSION_TINT_EDGE_ALPHA = 0.92;
-
-interface BottomColor {
-  r: number;
-  g: number;
-  b: number;
-}
-
-/**
- * Average color of the source image's bottom strip, used to tint the fill band.
- * Drawing the strip into a 1×1 canvas averages it in one step. Same-origin card
- * images do not taint the canvas; any read failure falls back to null (the band
- * then darkens toward the neutral base color).
- */
-function sampleBottomColor(image: HTMLImageElement): BottomColor | null {
-  try {
-    const w = image.naturalWidth;
-    const h = image.naturalHeight;
-    if (w <= 0 || h <= 0) {
-      return null;
-    }
-    const canvas = document.createElement("canvas");
-    canvas.width = 1;
-    canvas.height = 1;
-    const ctx = canvas.getContext("2d");
-    if (ctx === null) {
-      return null;
-    }
-    // Sample the band just above the watermark strip, not the strip itself.
-    const usableBottom = Math.round(h * (1 - ART_SOURCE_BOTTOM_CROP));
-    const strip = Math.max(1, Math.round(h * ART_BOTTOM_SAMPLE_FRACTION));
-    const top = Math.max(0, usableBottom - strip);
-    ctx.drawImage(image, 0, top, w, usableBottom - top, 0, 0, 1, 1);
-    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-    return { r, g, b };
-  } catch {
-    return null;
-  }
-}
 
 /**
  * The full-bleed card art: the crisp source artwork fitted into the top region,
@@ -402,10 +355,8 @@ function ArtLayers({
   artCrop,
   imageAspect,
   safeAreaTarget,
-  bottomColor,
   widthPx,
   bandTopPct,
-  featherAbovePct,
   onLoad,
   onError,
 }: {
@@ -414,10 +365,8 @@ function ArtLayers({
   artCrop: { x: number; y: number; scale: number };
   imageAspect: number | null;
   safeAreaTarget: number;
-  bottomColor: BottomColor | null;
   widthPx: number;
   bandTopPct: number;
-  featherAbovePct: number;
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
@@ -427,35 +376,33 @@ function ArtLayers({
     safeAreaTarget,
   );
   const blurPx = Math.max(2, widthPx * ART_EXTENSION_BLUR_RATIO);
-  // The band's tint is the art's own bottom color, darkened. Until it is
-  // sampled, fall back to black so the band still grounds dark (never light).
-  const tintRgb =
-    bottomColor !== null
-      ? `${Math.round(bottomColor.r * ART_EXTENSION_TINT_DARKEN)}, ${Math.round(bottomColor.g * ART_EXTENSION_TINT_DARKEN)}, ${Math.round(bottomColor.b * ART_EXTENSION_TINT_DARKEN)}`
-      : "0, 0, 0";
-  const baseColor =
-    bottomColor !== null ? `rgb(${tintRgb})` : ART_EXTENSION_BASE_COLOR;
+  // The band is one uniform dark color: it backs the art and is the tint
+  // gradient's color, so the fill grounds out to the same near-black gray on
+  // every card.
+  const tintRgb = `${ART_BAND_COLOR.r}, ${ART_BAND_COLOR.g}, ${ART_BAND_COLOR.b}`;
 
-  // Resolve the band geometry from the measured rules-box top. The blur ramp
-  // eases in from above the box top and reaches full opacity just below it, so
-  // the transition is a long gentle gradient (no seam) while the solid dark band
-  // stays thin and scales with the box.
+  // Resolve the band geometry from the measured rules-box top. The seam — where
+  // the crisp art fully gives way to the dark band — sits a fixed distance below
+  // the box top (`ART_SAFE_AREA_OVERLAP`, the box's first text-line baseline),
+  // so the art extends the same fixed amount under the box on every card whatever
+  // its height. The blur and tint ramp up to the seam from above, so the
+  // transition is a long gentle gradient rather than a hard line.
   const bandTop = Math.min(
     Math.max(bandTopPct, ART_BAND_MIN_TOP_PCT),
     ART_BAND_MAX_TOP_PCT,
   );
-  const featherStartPct = Math.max(0, bandTop - featherAbovePct);
-  const seamPct = Math.min(100, bandTop + ART_EXTENSION_FEATHER_BELOW_PCT);
+  const seamPct = Math.min(100, bandTop + ART_SAFE_AREA_OVERLAP * 100);
+  const featherStartPct = Math.max(0, seamPct - ART_EXTENSION_FEATHER_ABOVE_PCT);
   const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct.toFixed(2)}%, rgba(0,0,0,1) ${seamPct.toFixed(2)}%, rgba(0,0,0,1) 100%)`;
-  const tintStartPct = Math.max(0, bandTop - ART_EXTENSION_TINT_ABOVE_PCT);
+  const tintStartPct = Math.max(0, seamPct - ART_EXTENSION_TINT_ABOVE_PCT);
   const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${tintStartPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${seamPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
   return (
     <>
-      {/* Base behind the band: the art's darkened bottom color, so any sliver the
-          extended art does not reach matches rather than going neutral. */}
+      {/* Base behind the band: the uniform dark band color, so any sliver the
+          extended art does not reach matches the band rather than going neutral. */}
       <div
         aria-hidden="true"
-        style={{ position: "absolute", inset: 0, background: baseColor }}
+        style={{ position: "absolute", inset: 0, background: ART_BAND_COLOR_CSS }}
       />
 
       {/* Crisp artwork, drawn full-card (watermark-clipped) so the blurred band
@@ -799,14 +746,9 @@ export function CardView({
 }: CardViewProps) {
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
-  const [bottomColor, setBottomColor] = useState<BottomColor | null>(null);
   // Top of the rules text box as a fraction of card height, measured live so the
   // art fill band can size itself to the box (null until measured / no box).
   const [boxTopFrac, setBoxTopFrac] = useState<number | null>(null);
-  // Whether the rules box has grown to its three-line max-height cap. A full box
-  // keeps the longer blur lead-in; a shorter (1–2 line) box uses a shorter one so
-  // its band does not feel tall.
-  const [boxAtMaxHeight, setBoxAtMaxHeight] = useState(false);
   const bandBoxRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
 
@@ -836,7 +778,6 @@ export function CardView({
   useEffect(() => {
     setImageError(false);
     setImageAspect(null);
-    setBottomColor(null);
   }, [card.imageNumber]);
 
   // `identicons=1` forces the generated identicon for every card; otherwise it
@@ -1129,7 +1070,6 @@ export function CardView({
     const boxEl = bandBoxRef.current;
     if (cardEl === null || boxEl === null) {
       setBoxTopFrac(null);
-      setBoxAtMaxHeight(false);
       return;
     }
 
@@ -1146,14 +1086,6 @@ export function CardView({
       setBoxTopFrac((prev) =>
         prev !== null && Math.abs(prev - frac) < 0.002 ? prev : frac,
       );
-      // The box has `overflow: hidden` and a `max-height` cap, so when its text
-      // fills (or is shrunk to) three lines its rendered height reaches that cap.
-      // Comparing the two tells the band whether to use the full or short blur
-      // lead-in; a small tolerance absorbs sub-pixel rounding.
-      const capPx = Number.parseFloat(getComputedStyle(boxEl).maxHeight);
-      const atMax =
-        Number.isFinite(capPx) && capPx > 0 && boxRect.height >= capPx - 1;
-      setBoxAtMaxHeight((prev) => (prev === atMax ? prev : atMax));
     }
 
     measure();
@@ -1173,9 +1105,6 @@ export function CardView({
 
   const bandTopPct =
     boxTopFrac !== null ? boxTopFrac * 100 : ART_BAND_DEFAULT_TOP_PCT;
-  const featherAbovePct = boxAtMaxHeight
-    ? ART_EXTENSION_FEATHER_ABOVE_MAX_PCT
-    : ART_EXTENSION_FEATHER_ABOVE_SHORT_PCT;
   // The art's pan/zoom envelope is held against this card-height target so its
   // watermark-clipped bottom always tucks under the box's first text line.
   const safeAreaTarget = artSafeAreaTarget(boxTopFrac);
@@ -1248,16 +1177,13 @@ export function CardView({
           artCrop={artCrop}
           imageAspect={imageAspect}
           safeAreaTarget={safeAreaTarget}
-          bottomColor={bottomColor}
           widthPx={widthPx}
           bandTopPct={bandTopPct}
-          featherAbovePct={featherAbovePct}
           onLoad={(event) => {
             const image = event.currentTarget;
             const { naturalWidth, naturalHeight } = image;
             if (naturalWidth > 0 && naturalHeight > 0) {
               setImageAspect(naturalWidth / naturalHeight);
-              setBottomColor(sampleBottomColor(image));
             }
           }}
           onError={() => {
