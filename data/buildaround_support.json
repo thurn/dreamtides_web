@@ -153,8 +153,8 @@
       "name": "Architect of Memory",
       "needs": [
         {
-          "theme": "void",
-          "tier": 3
+          "theme": "storm",
+          "tier": 1
         }
       ],
       "supports": [
@@ -633,12 +633,6 @@
     },
     "caaee8a9-0c22-41b4-950f-4c1131b98221": {
       "name": "Celestial Reverie",
-      "needs": [
-        {
-          "theme": "storm",
-          "tier": 2
-        }
-      ],
       "supports": [
         "events",
         "storm"
@@ -2273,7 +2267,7 @@
       "needs": [
         {
           "theme": "void",
-          "tier": 3
+          "tier": 1
         }
       ],
       "supports": [
@@ -2300,7 +2294,7 @@
       "needs": [
         {
           "theme": "outsiders",
-          "tier": 2
+          "tier": 1
         }
       ],
       "supports": [
@@ -2863,12 +2857,6 @@
     },
     "5b2b2188-b9f0-4b3b-9185-26a820d343c7": {
       "name": "Pathfinder Adrift",
-      "needs": [
-        {
-          "theme": "storm",
-          "tier": 2
-        }
-      ],
       "supports": [
         "discard",
         "cheap-characters"
@@ -3540,7 +3528,7 @@
       "needs": [
         {
           "theme": "figments",
-          "tier": 2
+          "tier": 1
         }
       ],
       "supports": []
@@ -3812,12 +3800,6 @@
     },
     "7e4cca36-5134-415a-b30a-c4876b58976c": {
       "name": "Speaker for the Forgotten",
-      "needs": [
-        {
-          "theme": "reclaim",
-          "tier": 2
-        }
-      ],
       "supports": [
         "reclaim",
         "void"

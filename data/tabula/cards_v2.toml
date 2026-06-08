@@ -7858,8 +7858,10 @@ art = { x = -0.753, y = 1, scale = 1.47 }
 name = "Shardwoven Tyrant"
 mtg-name = "Chatterfang, Squirrel General"
 id = "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b"
-rendered-text = "1●, Abandon X figments: Dissolve an enemy with X✦."
-energy-cost = 2
+rendered-text = '''▸Dawn: Materialize 1✦ ethereal figment.
+
+1●, Abandon X figments: Dissolve an enemy with X✦.'''
+energy-cost = 3
 card-type = "Character"
 subtype = "Ancient"
 rarity = ""
