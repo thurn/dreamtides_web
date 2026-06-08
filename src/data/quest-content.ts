@@ -274,6 +274,9 @@ export async function loadQuestContent(
 ): Promise<QuestContent> {
   // Both deck-fit modes need the record corpus to build the fit model.
   const usesFitModel = draftMode === "replay" || draftMode === "fresh20";
+  // The `pickfit` pool variant grows its pool from the same record corpus, so it
+  // needs the records fetched in pool mode too.
+  const poolNeedsRecords = poolVariant === "pickfit";
   const [
     cardDatabase,
     draftDreamcallers,
@@ -287,9 +290,12 @@ export async function loadQuestContent(
     loadDreamsignTemplates(),
     loadDecklists(),
     loadHumanDecklists(),
-    // Only fetch the draft records corpus for the deck-fit modes; pool mode
-    // skips this entirely so the default load path incurs no extra network cost.
-    usesFitModel ? loadDraftRecords() : Promise.resolve([] as DraftRecord[]),
+    // Fetch the draft records corpus when a deck-fit mode or the `pickfit` pool
+    // variant needs it; other pool modes skip it so the default load path incurs
+    // no extra network cost.
+    usesFitModel || poolNeedsRecords
+      ? loadDraftRecords()
+      : Promise.resolve([] as DraftRecord[]),
   ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
@@ -312,6 +318,7 @@ export async function loadQuestContent(
       decklists,
       undefined,
       humanDecklists,
+      draftRecords,
     ),
     nameIndex,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),

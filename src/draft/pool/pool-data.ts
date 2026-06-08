@@ -1,7 +1,7 @@
 // Reconstruct the generator's inputs ({@link PoolData}) from card metadata.
 
 import { TIDE_TO_ARCHETYPE } from "./constants.ts";
-import type { PoolCard, PoolData } from "./types.ts";
+import type { PickRecord, PoolCard, PoolData } from "./types.ts";
 
 // The historical generator read one list per file and iterated them in directory
 // order, which is the code-unit sort of the `<name>.txt` filenames ('-' < '.', so
@@ -48,6 +48,7 @@ export function buildPoolData(
   decklists?: readonly (readonly string[])[],
   mergedArchetypeLists?: Readonly<Record<string, readonly string[]>>,
   humanDecklists?: readonly (readonly string[])[],
+  draftRecords?: readonly PickRecord[],
 ): PoolData {
   const core = new Set<string>();
   const archLists = new Map<string, Set<string>>();
@@ -90,6 +91,7 @@ export function buildPoolData(
     decklists,
     humanDecklists,
     mergedLists,
+    draftRecords,
     cardIdByName,
     cardNameById,
   };

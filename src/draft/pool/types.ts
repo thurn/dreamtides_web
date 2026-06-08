@@ -18,7 +18,8 @@ export type PoolVariant =
   | "idf3"
   | "idf4"
   | "idf_human"
-  | "seed";
+  | "seed"
+  | "pickfit";
 // The quest prototype and the draft test harness both fall back to this when
 // `?algo=` is absent or unrecognised.
 export const DEFAULT_POOL_VARIANT: PoolVariant = "idf3";
@@ -42,6 +43,18 @@ export interface PoolCard {
   core?: boolean;
   colors?: readonly string[];
   draftArchetypes?: readonly string[];
+}
+
+/**
+ * One real draft seat's pick trajectory, the minimal slice the `pickfit` variant
+ * needs from a bundled draft record: `packs[i]` is the full set of cards offered
+ * at pick `i` (what was available), `picks[i]` is the card name(s) the human
+ * actually took at that pick (0–3 names), aligned index-for-index with `packs`.
+ * The pair captures the taken-over-passed signal decklists cannot.
+ */
+export interface PickRecord {
+  packs: readonly (readonly string[])[];
+  picks: readonly (readonly string[])[];
 }
 
 /** The generator's reconstructed inputs. */
@@ -71,6 +84,15 @@ export interface PoolData {
    * `merged` variant falls back to the `default` algorithm.
    */
   mergedLists?: Map<string, Set<string>>;
+  /**
+   * Real draft pick trajectories drawn from the adapted draft records
+   * (`docs/draft_records_adapted`) used by the `pickfit` variant, which grows a
+   * pool from an availability-corrected pick-rate prior and a behavioural synergy
+   * affinity instead of decklist co-occurrence. Optional for the same reasons as
+   * {@link decklists}; when absent the `pickfit` variant falls back to the
+   * `default` algorithm.
+   */
+  draftRecords?: readonly PickRecord[];
   /**
    * Current display name -> stable cards_v2 UUID, built from the card records in
    * {@link buildPoolData} when they carry an `id`. The `seed` variant reads it to

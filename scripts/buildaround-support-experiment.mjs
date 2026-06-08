@@ -404,6 +404,11 @@ export function draftableUniverse(poolData) {
   for (const set of (poolData.mergedLists ?? new Map()).values()) {
     for (const name of set) universe.add(name);
   }
+  for (const rec of poolData.draftRecords ?? []) {
+    for (const pack of rec.packs ?? []) {
+      for (const name of pack) universe.add(name);
+    }
+  }
   return universe;
 }
 
@@ -465,6 +470,7 @@ function loadContext(argv) {
   const decklists = readJson("public/decklists-data.json");
   const humanDecklists = readJson("public/human-decklists-data.json");
   const mergedLists = readJson("public/merged-archetype-lists-data.json");
+  const draftRecords = readJson("public/draft-records-data.json");
   let dreamcallers = readJson("public/dreamcallers-v2-data.json");
   const meta = readJson("data/buildaround_support.json");
 
@@ -479,13 +485,15 @@ function loadContext(argv) {
       process.exit(1);
     }
   }
-  // Pass every corpus so all variants (including `idf_human` and `merged`) run
-  // their real algorithm under `--compare` rather than falling back to default.
+  // Pass every corpus so all variants (including `idf_human`, `merged`, and
+  // `pickfit`) run their real algorithm under `--compare` rather than falling
+  // back to default.
   const poolData = buildPoolData(
     cards,
     decklists,
     Object.keys(mergedLists ?? {}).length ? mergedLists : undefined,
     humanDecklists,
+    Array.isArray(draftRecords) && draftRecords.length ? draftRecords : undefined,
   );
   return { dreamcallers, meta, poolData };
 }
