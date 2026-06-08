@@ -1118,10 +1118,12 @@
 }
 
 .phase-float-actions {
-  /* Anchored in the enemy zone column's flow, directly beneath the enemy
-     banished zone and above the player's hand. */
+  /* Anchored to the bottom of the enemy zone column so the buttons rest at the
+     top-right of the player's hand, with their bottom edge aligned to the line
+     that demarcates the hand. */
   width: 100%;
   flex: 0 0 auto;
+  margin-top: auto;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
@@ -1130,7 +1132,7 @@
 .phase-float-button {
   position: relative;
   width: 100%;
-  height: 34px;
+  height: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
