@@ -77,6 +77,9 @@ function makeSteeredPoolContext(): {
     poolData,
     nameIndex,
     allDreamsignPoolIds: [],
+    // These tests assert idf3's signature-card steering of the enemy deck, so
+    // pin the variant rather than inheriting the records-driven default.
+    poolVariant: "idf3",
   };
   return { poolContext, decklistA, decklistB };
 }
@@ -747,6 +750,9 @@ describe("createBattleInit", () => {
         poolData: makeSteeredPoolContext().poolContext.poolData,
         nameIndex: new Map<string, number>([["does-not-exist", -1]]),
         allDreamsignPoolIds: [],
+        // idf3 produces a starter deck whose names cannot resolve through this
+        // mismatched index, exercising the empty-resolved-list fallback.
+        poolVariant: "idf3",
       };
       const init = createBattleInit({
         ...makeBaseInput(),

@@ -321,8 +321,8 @@ function deriveEnemyPoolSeed(seed: number): number {
 
 /**
  * Builds the enemy battle deck from the run's pool strategy
- * (`poolContext.poolVariant`, default `idf3`) steered by the enemy Dreamcaller's
- * signature cards, mirroring how the player's draft pool is built.
+ * (`poolContext.poolVariant`, default `pickcohere`) steered by the enemy
+ * Dreamcaller's signature cards, mirroring how the player's draft pool is built.
  *
  * With a `poolContext`, a pool is generated from the run's decklist corpus
  * steered by `enemySignatureCards`; the chosen anchor decklist's card names are

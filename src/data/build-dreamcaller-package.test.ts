@@ -50,6 +50,10 @@ function makeContext(): RunPoolContext {
     poolData,
     nameIndex,
     allDreamsignPoolIds: ["ds1", "ds2", "ds3"],
+    // These tests exercise idf3 package building and its provenance summary
+    // (which is only produced for idf3), so pin the variant rather than
+    // inheriting the records-driven default.
+    poolVariant: "idf3",
   };
 }
 

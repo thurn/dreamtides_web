@@ -75,5 +75,9 @@ export function makeTestPoolContext(
     poolData: buildPoolData(cards, TEST_DECKLISTS),
     nameIndex: buildTestNameIndex(),
     allDreamsignPoolIds,
+    // This corpus has decklists but no draft records, so pin idf3 (which builds
+    // from the decklist corpus) rather than inheriting the records-driven
+    // default, which would throw on the empty record corpus.
+    poolVariant: "idf3",
   };
 }

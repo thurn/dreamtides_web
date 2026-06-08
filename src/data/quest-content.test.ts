@@ -154,7 +154,39 @@ describe("loadQuestContent", () => {
     expect(fetchedPaths).toContain("/draft-records-data.json");
   });
 
-  it("skips the draft-record corpus for the default pool variant", async () => {
+  it("fetches the draft-record corpus for the default pool variant", async () => {
+    // The default variant (pickcohere) grows its pool from the draft records, so
+    // the no-argument load path must fetch them; otherwise the corpus is empty
+    // and pool generation throws the moment a Dreamcaller is picked.
+    const cards = [makeCard(1), makeCard(2), makeCard(3)];
+    const dreamcallers = [
+      {
+        id: "dc-a",
+        name: "Alpha",
+        title: "A",
+        renderedText: "",
+        imageNumber: "0001",
+        startingEssence: 250,
+        signatureCards: ["Card 1"],
+      },
+    ];
+    stubFetch({
+      cards,
+      dreamcallers,
+      dreamsigns: [],
+      decklists: [["Card 1", "Card 2"]],
+      draftRecords: [],
+    });
+
+    await loadQuestContent();
+
+    const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
+    expect(fetchedPaths).toContain("/draft-records-data.json");
+  });
+
+  it("skips the draft-record corpus for a pool variant that does not use records", async () => {
+    // idf3 builds its pool from decklist similarity, not the draft records, so
+    // the default load path skips the records fetch to stay cost-free.
     const cards = [makeCard(1), makeCard(2), makeCard(3)];
     const dreamcallers = [
       {
@@ -174,7 +206,7 @@ describe("loadQuestContent", () => {
       decklists: [["Card 1", "Card 2"]],
     });
 
-    await loadQuestContent();
+    await loadQuestContent("idf3");
 
     const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
     expect(fetchedPaths).not.toContain("/draft-records-data.json");
