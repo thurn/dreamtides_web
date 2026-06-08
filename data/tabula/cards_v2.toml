@@ -9511,6 +9511,7 @@ tags = []
 image-number = 2633345429
 art-owned = false
 card-number = 517
+art = { x = -0.336, y = 0.839, scale = 1.17 }
 
 [[cards]]
 name = "Sign of Arrival"
