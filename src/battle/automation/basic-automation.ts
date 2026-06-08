@@ -17,10 +17,10 @@ import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 const NO_SUPPORT_CONTRIBUTION: ReadonlyMap<string, number> = new Map();
 
 /**
- * The eight battle phases in turn order (rules §Turn Structure). The five
- * surfaced phases — `dawn` is woken by Dawn automation but, like the other
- * bookends, carries no player action — are driven by the player; the bookend
- * phases auto-advance.
+ * The eight battle phases in turn order (rules §Turn Structure). Five phases —
+ * Dawn, Day, Dusk, Night, and Challenge — are surfaced in the UI, but only four
+ * of those (Day, Dusk, Night, Challenge) carry player actions. Dawn auto-advances
+ * after waking Dawn triggers, as do the Dreamwell, Draw, and Ending bookends.
  */
 const PHASE_SEQUENCE: readonly BattlePhase[] = [
   "dreamwell",

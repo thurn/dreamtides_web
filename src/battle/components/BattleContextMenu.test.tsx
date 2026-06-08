@@ -114,6 +114,34 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
+describe("BattleContextMenu location header", () => {
+  it("labels a back-rank character via the shared zone/side helpers", () => {
+    const state = createState();
+    const battleCardId = placeCharacter(state, "backRank", "B0");
+    const { container, root } = mount(state, battleCardId);
+
+    const header = container.querySelector(".ctx-loc");
+    expect(header?.textContent).toBe("Player · Back Rank B0");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("labels a front-rank character via the shared zone/side helpers", () => {
+    const state = createState();
+    const battleCardId = placeCharacter(state, "frontRank", "F1");
+    const { container, root } = mount(state, battleCardId);
+
+    const header = container.querySelector(".ctx-loc");
+    expect(header?.textContent).toBe("Player · Front Rank F1");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+});
+
 describe("BattleContextMenu status toggles", () => {
   it("renders the Status submenu for a battlefield character", () => {
     const state = createState();

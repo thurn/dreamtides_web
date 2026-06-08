@@ -18,7 +18,7 @@ import {
   createMoveCardToRowCommand,
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
-import { formatZoneLabel } from "../ui/format";
+import { formatSideLabel, formatZoneLabel } from "../ui/format";
 
 export function BattleContextMenu({
   battleCardId,
@@ -437,8 +437,8 @@ export function BattleContextMenu({
   const left = Math.min(x, window.innerWidth - 248);
   const top = Math.min(y, window.innerHeight - menuHeight - 8);
   const locationLabel = location.zone === "backRank" || location.zone === "frontRank"
-    ? `${location.side === "player" ? "YOU" : "ENEMY"} · ${location.zone.toUpperCase()} ${location.slotId}`
-    : `${location.side === "player" ? "YOU" : "ENEMY"} · ${location.zone.toUpperCase()}`;
+    ? `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)} ${location.slotId}`
+    : `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)}`;
 
   return (
     <div

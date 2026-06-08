@@ -29,8 +29,8 @@ export function BattleSideSummaryPopover({
 }) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const sideState = state.sides[side];
-  const reserveCount = BACK_RANK_SLOT_IDS.filter((slotId) => sideState.backRank[slotId] !== null).length;
-  const deployedCount = FRONT_RANK_SLOT_IDS.filter((slotId) => sideState.frontRank[slotId] !== null).length;
+  const backRankCount = BACK_RANK_SLOT_IDS.filter((slotId) => sideState.backRank[slotId] !== null).length;
+  const frontRankCount = FRONT_RANK_SLOT_IDS.filter((slotId) => sideState.frontRank[slotId] !== null).length;
   const showDreamcallerSummary = dreamcaller !== null;
 
   useEffect(() => {
@@ -99,11 +99,11 @@ export function BattleSideSummaryPopover({
           </div>
           <div className="summary-stat">
             <span className="label">Back Rank</span>
-            <span className="value">{String(reserveCount)}/5</span>
+            <span className="value">{String(backRankCount)}/5</span>
           </div>
           <div className="summary-stat">
             <span className="label">Front Rank</span>
-            <span className="value">{String(deployedCount)}/4</span>
+            <span className="value">{String(frontRankCount)}/4</span>
           </div>
         </div>
       )}

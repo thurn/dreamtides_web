@@ -506,14 +506,14 @@ function ZoneCountRow({
   state: BattleMutableState;
 }) {
   const sideState = state.sides[side];
-  const reserveCount = Object.values(sideState.backRank).filter(Boolean).length;
-  const deployedCount = Object.values(sideState.frontRank).filter(Boolean).length;
+  const backRankCount = Object.values(sideState.backRank).filter(Boolean).length;
+  const frontRankCount = Object.values(sideState.frontRank).filter(Boolean).length;
 
   return (
     <div className="row-ctl">
       <span className="lbl">{label}</span>
       <span className="val">
-        H{String(sideState.hand.length)} D{String(sideState.deck.length)} V{String(sideState.void.length)} B{String(sideState.banished.length)} R{String(reserveCount)} P{String(deployedCount)}
+        H{String(sideState.hand.length)} D{String(sideState.deck.length)} V{String(sideState.void.length)} B{String(sideState.banished.length)} Bk{String(backRankCount)} Fr{String(frontRankCount)}
       </span>
     </div>
   );

@@ -86,6 +86,10 @@ describe("BattleInspector", () => {
     expect(container.textContent).toContain("History");
     expect(container.textContent).not.toContain("Card State");
     expect(container.textContent).not.toContain("Right-click this card");
+    const stateRow = [...container.querySelectorAll(".row-ctl .val")].find((node) =>
+      node.textContent?.includes("Bk"),
+    );
+    expect(stateRow?.textContent).toMatch(/Bk\d+ Fr\d+/);
     expect(container.querySelector('[data-battle-inspector-handle]')?.textContent).toContain("CLOSE");
 
     act(() => {
