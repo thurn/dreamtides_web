@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  buildableThemes,
   cardBestAdequacies,
-  dominantTheme,
   draftableUniverse,
   giniCoefficient,
   normalizedEntropy,
@@ -193,46 +193,47 @@ describe("poolPayoffThemes", () => {
   });
 });
 
-describe("dominantTheme", () => {
-  const baseline = new Map([
-    ["warriors", 0.2],
-    ["events", 0.2],
-  ]);
+describe("buildableThemes", () => {
+  const standalone = ["warriors", "events"];
 
-  it("picks the candidate theme most over-represented vs baseline (lift)", () => {
-    // warriors at 2x baseline beats events at 1x, even though shares could tie.
-    const shares = new Map([
-      ["warriors", 0.4],
-      ["events", 0.2],
-    ]);
-    expect(dominantTheme(shares, ["warriors", "events"], baseline)).toBe(
+  it("flags a theme buildable when a payoff is present and support clears the bar", () => {
+    // size 10; warriors support = Lord(1)+Grunt(1) => share .2; Lord is a payoff.
+    const counts = withFiller(
+      new Map([["Lord", 1], ["Grunt", 1]]),
+      8,
+    );
+    expect([...buildableThemes(counts, META, standalone, 0.18)]).toEqual([
       "warriors",
+    ]);
+  });
+
+  it("excludes a theme whose support is below the buildable share", () => {
+    // Only 1 warrior support copy in a pool of 10 => share .1 < .18.
+    const counts = withFiller(new Map([["Lord", 1], ["Grunt", 1]]), 8);
+    expect([...buildableThemes(counts, META, standalone, 0.25)]).toEqual([]);
+  });
+
+  it("excludes a well-supported theme with no payoff present", () => {
+    // 2 warrior support copies (share .2) but no warrior payoff card => not buildable.
+    const counts = withFiller(new Map([["Grunt", 2]]), 8);
+    expect([...buildableThemes(counts, META, standalone, 0.1)]).toEqual([]);
+  });
+
+  it("can flag multiple archetypes at once", () => {
+    // Warriors: Lord+Grunt => .2; events: EventPayoff present + 2 events => .2.
+    const counts = withFiller(
+      new Map([
+        ["Lord", 1],
+        ["Grunt", 1],
+        ["EventPayoff", 1],
+        ["AnEvent", 2],
+      ]),
+      5,
     );
-  });
-
-  it("only considers candidate themes", () => {
-    const shares = new Map([
-      ["warriors", 0.9],
-      ["events", 0.1],
-    ]);
-    // warriors has the higher lift but is not a candidate => events wins.
-    expect(dominantTheme(shares, ["events"], baseline)).toBe("events");
-  });
-
-  it("returns null when there are no candidates", () => {
-    expect(dominantTheme(new Map(), [], baseline)).toBeNull();
-  });
-
-  it("breaks lift ties toward higher raw share then theme name", () => {
-    // Equal lift (both 1x baseline): warriors .2/.2, events .2/.2. Higher raw
-    // share is a tie too (both .2) => name order: events < warriors.
-    const shares = new Map([
-      ["warriors", 0.2],
-      ["events", 0.2],
-    ]);
-    expect(dominantTheme(shares, ["warriors", "events"], baseline)).toBe(
+    expect([...buildableThemes(counts, META, standalone, 0.18)].sort()).toEqual([
       "events",
-    );
+      "warriors",
+    ]);
   });
 });
 

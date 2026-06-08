@@ -36,15 +36,18 @@
 //         draftable universe ever used), a normalized-entropy evenness score
 //         (1 = perfectly even), plus the dead cards (never appear) and ubiquitous
 //         cards (in nearly every pool).
-//      B) Theme spread -- do pools land on a VARIETY of standalone archetypes, or
-//         almost always the same one or two? Each pool is assigned a single
-//         dominant standalone theme (the standalone archetype it is most built
-//         around). Reported as the evenness of that dominant-theme histogram plus
-//         each standalone theme's dominance rate. Only the standalone themes
-//         (see STANDALONE_THEMES) can be a pool's identity; the remaining
-//         (supporting) themes are tracked separately by how often they show up at
-//         a useful support level, because a rich pool still wants them present
-//         even though they are never a pool's whole identity.
+//      B) Theme spread -- across the run, is each standalone archetype DRAFTABLE
+//         at a healthy rate, or do pools only ever support the same one or two?
+//         For each pool, a standalone theme is "buildable" when the pool carries
+//         a payoff for it AND enough support to build around it (support share >=
+//         `--buildable-share`). Reported as each archetype's buildable rate plus
+//         the evenness of those rates -- collapse onto one archetype shows up as
+//         low evenness, while a theme that is supported in every pool (e.g.
+//         abandon) correctly reads as highly buildable rather than being hidden.
+//         Only the standalone themes (see STANDALONE_THEMES) are scored this way;
+//         the remaining (supporting) themes are tracked separately by how often
+//         they show up at a useful support level, because a rich pool still wants
+//         them present even though they are never a pool's whole identity.
 //    The diversity headline blends the card-utilization and theme-spread evenness
 //    scores.
 //
@@ -74,7 +77,8 @@
 //   node scripts/buildaround-support-experiment.mjs --json > result.json
 // Shared flags: --seeds, --variant, --pool-size, --dreamcaller, --top, --json.
 // Metric flags: --themes short|all (adequacy), --trap-tau N (traps),
-//   --standalone-themes a,b,c / --present-share N / --ubiquity N (diversity).
+//   --standalone-themes a,b,c / --buildable-share N / --present-share N /
+//   --ubiquity N (diversity).
 // `--traps` is a back-compat alias for `--metric traps`.
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -108,9 +112,12 @@ const DEFAULT_TOP = 20;
 // Default trap threshold: a payoff whose best-supportable theme sits under 35%
 // of its demand target is a trap (picking it leaves the player stuck).
 const DEFAULT_TRAP_TAU = 0.35;
-// Diversity defaults: a supporting theme counts as "present" in a pool once its
-// support reaches this share; a card is "ubiquitous" once it appears in this
-// fraction of pools.
+// Diversity defaults: a standalone archetype is "buildable" in a pool once its
+// support reaches this share (and a payoff is present) -- anchored to the tier-2
+// demand target, i.e. enough support to actually build around; a supporting
+// theme counts as merely "present" at a lower share; a card is "ubiquitous" once
+// it appears in this fraction of pools.
+const DEFAULT_BUILDABLE_SHARE = 0.18;
 const DEFAULT_PRESENT_SHARE = 0.05;
 const DEFAULT_UBIQUITY = 0.9;
 
@@ -311,37 +318,32 @@ export function poolPayoffThemes(counts, meta) {
 }
 
 /**
- * The single dominant standalone theme of a pool: among the candidate themes
- * (the standalone themes the pool has a payoff for), the one whose support share
- * is most over-represented relative to its run-wide baseline (highest lift =
- * share / baseline). Lift -- not raw share -- is used so the always-present glue
- * themes don't win; the pool's *distinctive* archetype does. Ties break toward
- * higher raw share, then theme name (for determinism).
+ * The standalone archetypes a pool can actually be drafted into: those the pool
+ * carries a payoff for AND supports densely enough to build around (support share
+ * >= `buildableShare`). This measures archetype *availability*, not which single
+ * theme is most distinctive -- so a theme that is well supported in nearly every
+ * pool (e.g. abandon, whose support is pervasive) correctly reads as broadly
+ * buildable instead of being hidden behind a flashier tribe's spike.
  *
- * @param shares    Map<theme, share> for this pool (from poolSupportShares).
- * @param candidateThemes iterable of themes eligible to be the dominant theme.
- * @param baseline  Map<theme, meanShare> across the whole run.
- * @returns the dominant theme, or null when no candidate exists.
+ * @param counts   Map<cardName, copies>.
+ * @param meta     build-around support metadata.
+ * @param standaloneThemes iterable of the standalone archetype themes.
+ * @param buildableShare minimum support share to count as buildable.
+ * @returns Set<theme> of the buildable standalone archetypes.
  */
-export function dominantTheme(shares, candidateThemes, baseline, eps = 1e-9) {
-  let best = null;
-  let bestLift = -Infinity;
-  let bestShare = -Infinity;
-  for (const t of candidateThemes) {
-    const s = shares.get(t) ?? 0;
-    const b = baseline.get(t) ?? 0;
-    const lift = s / Math.max(b, eps);
-    if (
-      lift > bestLift ||
-      (lift === bestLift &&
-        (s > bestShare || (s === bestShare && (best === null || t < best))))
-    ) {
-      best = t;
-      bestLift = lift;
-      bestShare = s;
-    }
+export function buildableThemes(
+  counts,
+  meta,
+  standaloneThemes,
+  buildableShare = DEFAULT_BUILDABLE_SHARE,
+) {
+  const shares = poolSupportShares(counts, meta);
+  const payoffs = poolPayoffThemes(counts, meta);
+  const out = new Set();
+  for (const t of standaloneThemes) {
+    if (payoffs.has(t) && (shares.get(t) ?? 0) >= buildableShare) out.add(t);
   }
-  return best;
+  return out;
 }
 
 /**
@@ -817,52 +819,48 @@ function runTraps(argv) {
 
 function computeDiversity(
   ctx,
-  { seeds, poolSize, variant, standalone, presentShare, ubiquity },
+  { seeds, poolSize, variant, standalone, buildableShare, presentShare, ubiquity },
 ) {
   const universe = draftableUniverse(ctx.poolData);
   const standaloneSet = standalone;
+  const standaloneArr = [...standaloneSet];
   const supportingThemes = Object.keys(ctx.meta.themes).filter(
     (t) => !standaloneSet.has(t),
   );
 
-  // Pass 1: simulate every pool, collecting per-pool shares + candidate themes,
-  // card appearances, theme-share sums (for baselines), and supporting presence.
-  const perPool = []; // { shares, candidates }
+  // Single pass: simulate every pool, accumulating card appearances, per-archetype
+  // buildable counts (payoff present AND support >= buildableShare), and supporting
+  // theme presence (support >= presentShare).
   const cardAppearances = new Map();
-  const themeShareSum = new Map();
-  const supportPresence = new Map(); // theme -> pools with share >= presentShare
+  const buildableHist = new Map(); // standalone theme -> pools where buildable
+  for (const t of standaloneSet) buildableHist.set(t, 0);
+  const supportPresence = new Map(); // supporting theme -> pools where present
+  let buildableArchetypeSum = 0; // total (theme, pool) buildable hits
+  let poolsBuildable = 0; // pools buildable for >= 1 archetype
   let appearedOutsideUniverse = 0;
   let totalPools = 0;
 
   for (const { pool } of simulateRealDrafts(ctx, { seeds, variant, poolSize })) {
     totalPools += 1;
     const shares = poolSupportShares(pool.counts, ctx.meta);
-    for (const [theme, s] of shares) {
-      themeShareSum.set(theme, (themeShareSum.get(theme) ?? 0) + s);
-      if (s >= presentShare) {
-        supportPresence.set(theme, (supportPresence.get(theme) ?? 0) + 1);
+    for (const t of supportingThemes) {
+      if ((shares.get(t) ?? 0) >= presentShare) {
+        supportPresence.set(t, (supportPresence.get(t) ?? 0) + 1);
       }
     }
-    const payoffThemes = poolPayoffThemes(pool.counts, ctx.meta);
-    const candidates = [...payoffThemes].filter((t) => standaloneSet.has(t));
-    perPool.push({ shares, candidates });
+    const buildable = buildableThemes(
+      pool.counts,
+      ctx.meta,
+      standaloneSet,
+      buildableShare,
+    );
+    for (const t of buildable) buildableHist.set(t, buildableHist.get(t) + 1);
+    buildableArchetypeSum += buildable.size;
+    if (buildable.size > 0) poolsBuildable += 1;
     for (const card of pool.counts.keys()) {
       cardAppearances.set(card, (cardAppearances.get(card) ?? 0) + 1);
       if (!universe.has(card)) appearedOutsideUniverse += 1;
     }
-  }
-
-  const baseline = new Map();
-  for (const [theme, sum] of themeShareSum) baseline.set(theme, sum / totalPools);
-
-  // Pass 2: assign each pool its dominant standalone theme.
-  const dominantHist = new Map();
-  for (const t of standaloneSet) dominantHist.set(t, 0);
-  let unfocused = 0;
-  for (const p of perPool) {
-    const dom = dominantTheme(p.shares, p.candidates, baseline);
-    if (dom == null) unfocused += 1;
-    else dominantHist.set(dom, (dominantHist.get(dom) ?? 0) + 1);
   }
 
   // Card utilization over the draftable universe.
@@ -885,20 +883,23 @@ function computeDiversity(
     .map(([card, pools]) => ({ card, pools, pct: pools / totalPools }))
     .sort((a, b) => b.pools - a.pools);
 
-  // Theme spread over the standalone themes.
-  const standaloneArr = [...standaloneSet];
-  const themeEvenness = normalizedEntropy(
-    standaloneArr.map((t) => dominantHist.get(t) ?? 0),
-    standaloneArr.length,
-  );
-  const focusedFraction = totalPools ? (totalPools - unfocused) / totalPools : 0;
-  const dominanceRates = standaloneArr
+  // Theme spread: each standalone archetype's buildable rate, and the evenness of
+  // those rates (1 = every archetype buildable equally often, low = collapse onto
+  // one). Evenness is the normalized entropy of the buildable-count vector.
+  const buildableRates = standaloneArr
     .map((t) => ({
       theme: t,
-      pools: dominantHist.get(t) ?? 0,
-      rate: totalPools ? (dominantHist.get(t) ?? 0) / totalPools : 0,
+      pools: buildableHist.get(t) ?? 0,
+      rate: totalPools ? (buildableHist.get(t) ?? 0) / totalPools : 0,
     }))
-    .sort((a, b) => b.pools - a.pools);
+    .sort((a, b) => b.rate - a.rate);
+  const themeEvenness = normalizedEntropy(
+    standaloneArr.map((t) => buildableHist.get(t) ?? 0),
+    standaloneArr.length,
+  );
+  const meanBuildableRate = mean(buildableRates.map((e) => e.rate));
+  const meanBuildableArchetypes = totalPools ? buildableArchetypeSum / totalPools : 0;
+  const poolsBuildablePct = totalPools ? poolsBuildable / totalPools : 0;
 
   const supportingRates = supportingThemes
     .map((t) => ({
@@ -925,9 +926,10 @@ function computeDiversity(
     ubiquitousCards,
     usedRanked,
     themeEvenness,
-    focusedFraction,
-    unfocused,
-    dominanceRates,
+    buildableRates,
+    meanBuildableRate,
+    meanBuildableArchetypes,
+    poolsBuildablePct,
     supportingRates,
     meanSupportingPresence,
   };
@@ -936,7 +938,7 @@ function computeDiversity(
 function reportDiversity(
   res,
   ctx,
-  { seeds, poolSize, variant, standalone, presentShare, ubiquity, top, asJson },
+  { seeds, poolSize, variant, standalone, buildableShare, presentShare, ubiquity, top, asJson },
 ) {
   if (asJson) {
     console.log(
@@ -949,6 +951,7 @@ function reportDiversity(
             seeds,
             dreamcallers: ctx.dreamcallers.length,
             standaloneThemes: [...standalone],
+            buildableShare,
             presentShare,
             ubiquity,
           },
@@ -968,9 +971,10 @@ function reportDiversity(
           },
           themeSpread: {
             evenness: res.themeEvenness,
-            focusedFraction: res.focusedFraction,
-            unfocusedPools: res.unfocused,
-            dominanceRates: res.dominanceRates,
+            meanBuildableRate: res.meanBuildableRate,
+            meanBuildableArchetypes: res.meanBuildableArchetypes,
+            poolsBuildablePct: res.poolsBuildablePct,
+            buildableRates: res.buildableRates,
           },
           supportingThemePresence: {
             meanPresence: res.meanSupportingPresence,
@@ -1016,12 +1020,15 @@ function reportDiversity(
     for (const c of res.deadCards.slice(0, top)) console.log(`    ${c}`);
   }
 
-  console.log("\n-- Theme spread (standalone archetype each pool lands on) --");
+  console.log("\n-- Theme spread (how often each standalone archetype is draftable) --");
   console.log(
-    `  evenness ${(res.themeEvenness * 100).toFixed(0)}/100   focused pools ${pctd(res.focusedFraction)} (${res.unfocused} pools have no standalone payoff)`,
+    `  evenness ${(res.themeEvenness * 100).toFixed(0)}/100   mean buildable rate ${pctd(res.meanBuildableRate)}   archetypes buildable/pool ${res.meanBuildableArchetypes.toFixed(2)}   pools buildable for >=1 ${pctd(res.poolsBuildablePct)}`,
   );
-  console.log(`  ${"archetype".padEnd(20)} ${"dominates".padStart(10)}`);
-  for (const e of res.dominanceRates) {
+  console.log(
+    `  (buildable = a payoff is present AND support share >= ${pctd(buildableShare)} of the pool)`,
+  );
+  console.log(`  ${"archetype".padEnd(20)} ${"buildable".padStart(10)}`);
+  for (const e of res.buildableRates) {
     console.log(
       `  ${themeName(e.theme).padEnd(20)} ${pctd(e.rate).padStart(7)}  (${e.pools})`,
     );
@@ -1064,6 +1071,7 @@ function runDiversity(argv) {
   const top = num(argv, "--top", DEFAULT_TOP);
   const asJson = argv.includes("--json");
   const standalone = parseStandaloneThemes(argv, ctx.meta);
+  const buildableShare = num(argv, "--buildable-share", DEFAULT_BUILDABLE_SHARE);
   const presentShare = num(argv, "--present-share", DEFAULT_PRESENT_SHARE);
   const ubiquity = num(argv, "--ubiquity", DEFAULT_UBIQUITY);
   const res = computeDiversity(ctx, {
@@ -1071,6 +1079,7 @@ function runDiversity(argv) {
     poolSize,
     variant,
     standalone,
+    buildableShare,
     presentShare,
     ubiquity,
   });
@@ -1079,6 +1088,7 @@ function runDiversity(argv) {
     poolSize,
     variant,
     standalone,
+    buildableShare,
     presentShare,
     ubiquity,
     top,
@@ -1100,6 +1110,7 @@ function runCompare(argv, metric) {
   const allowedThemes = themeMode === "short" ? STANDALONE_THEMES : null;
   const tau = num(argv, "--trap-tau", DEFAULT_TRAP_TAU);
   const standalone = parseStandaloneThemes(argv, ctx.meta);
+  const buildableShare = num(argv, "--buildable-share", DEFAULT_BUILDABLE_SHARE);
   const presentShare = num(argv, "--present-share", DEFAULT_PRESENT_SHARE);
   const ubiquity = num(argv, "--ubiquity", DEFAULT_UBIQUITY);
 
@@ -1127,6 +1138,7 @@ function runCompare(argv, metric) {
         poolSize,
         variant,
         standalone,
+        buildableShare,
         presentShare,
         ubiquity,
       });
@@ -1136,7 +1148,7 @@ function runCompare(argv, metric) {
         cardEvenness: r.cardEvenness,
         coverage: r.coverage,
         themeEvenness: r.themeEvenness,
-        focusedFraction: r.focusedFraction,
+        meanBuildableRate: r.meanBuildableRate,
         deadCards: r.deadCards.length,
       });
     }
@@ -1178,11 +1190,11 @@ function runCompare(argv, metric) {
   } else {
     rows.sort((a, b) => b.headline - a.headline);
     console.log(
-      `  ${"algorithm".padEnd(12)} ${"diversity".padStart(10)} ${"cardEven".padStart(9)} ${"coverage".padStart(9)} ${"themeEven".padStart(10)} ${"focused".padStart(8)} ${"dead".padStart(5)}`,
+      `  ${"algorithm".padEnd(12)} ${"diversity".padStart(10)} ${"cardEven".padStart(9)} ${"coverage".padStart(9)} ${"themeEven".padStart(10)} ${"build%".padStart(7)} ${"dead".padStart(5)}`,
     );
     for (const r of rows) {
       console.log(
-        `  ${r.variant.padEnd(12)} ${r.headline.toFixed(1).padStart(10)} ${(r.cardEvenness * 100).toFixed(0).padStart(9)} ${pctd(r.coverage).padStart(9)} ${(r.themeEvenness * 100).toFixed(0).padStart(10)} ${pctd(r.focusedFraction).padStart(8)} ${String(r.deadCards).padStart(5)}`,
+        `  ${r.variant.padEnd(12)} ${r.headline.toFixed(1).padStart(10)} ${(r.cardEvenness * 100).toFixed(0).padStart(9)} ${pctd(r.coverage).padStart(9)} ${(r.themeEvenness * 100).toFixed(0).padStart(10)} ${pctd(r.meanBuildableRate).padStart(7)} ${String(r.deadCards).padStart(5)}`,
       );
     }
   }
