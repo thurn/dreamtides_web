@@ -13,7 +13,7 @@ export interface RuntimeConfig {
   basicAutomation: boolean;
   gameId: string | null;
   databaseMode: DatabaseMode;
-  journeyVariant: "classic" | "v2";
+  journeyVariant: JourneyVariant;
   /**
    * Draft-pool construction strategy from `?algo=`, resolved to a registered
    * `PoolVariant`. An absent `?algo=` uses `DEFAULT_POOL_VARIANT`; a draft-mode
@@ -75,6 +75,10 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
   };
 }
 
+function parseJourneyVariant(rawJourney: string | null): JourneyVariant {
+  return rawJourney === "v2" ? "v2" : "classic";
+}
+
 function parseDraftMode(rawAlgo: string | null): "pool" | "replay" | "fresh20" {
   if (rawAlgo === "replay") return "replay";
   if (rawAlgo === "fresh20") return "fresh20";
@@ -94,10 +98,6 @@ function parsePackSize(rawPackSize: string | null): number | undefined {
 
 function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {
   return rawRealtime === "1" ? "realtime" : "emulator";
-}
-
-function parseJourneyVariant(rawJourney: string | null): "classic" | "v2" {
-  return rawJourney === "v2" ? "v2" : "classic";
 }
 
 function parseDebugJourneyId(rawId: string | null): string | null {
