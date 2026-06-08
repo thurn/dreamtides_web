@@ -10,7 +10,7 @@ describe("parseRuntimeConfig", () => {
       basicAutomation: true,
       gameId: null,
       databaseMode: "emulator",
-      poolVariant: "pickcohere",
+      poolVariant: "picksig",
       draftMode: "pool",
       debugJourneyShape: null,
       debugJourneyReward: null,
@@ -109,9 +109,9 @@ describe("parseRuntimeConfig", () => {
   });
 
   describe("poolVariant", () => {
-    it("uses pickcohere (the default) when algo is absent", () => {
-      expect(parseRuntimeConfig("").poolVariant).toBe("pickcohere");
-      expect(parseRuntimeConfig("?algo=").poolVariant).toBe("pickcohere");
+    it("uses picksig (the default) when algo is absent", () => {
+      expect(parseRuntimeConfig("").poolVariant).toBe("picksig");
+      expect(parseRuntimeConfig("?algo=").poolVariant).toBe("picksig");
     });
 
     it("throws on an unrecognised algo (no silent fallback)", () => {
@@ -162,17 +162,17 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?algo=").draftMode).toBe("pool");
     });
 
-    it("uses pickcohere (the default) for poolVariant when algo=replay", () => {
+    it("uses picksig (the default) for poolVariant when algo=replay", () => {
       // replay is a draft mode, not a pool variant, so it never reaches the
       // pool-variant resolution; the resolved package still needs a pool variant,
-      // so it uses the default (pickcohere).
-      expect(parseRuntimeConfig("?algo=replay").poolVariant).toBe("pickcohere");
+      // so it uses the default (picksig).
+      expect(parseRuntimeConfig("?algo=replay").poolVariant).toBe("picksig");
     });
 
-    it("uses pickcohere (the default) for poolVariant when algo=fresh20", () => {
+    it("uses picksig (the default) for poolVariant when algo=fresh20", () => {
       // fresh20 is likewise a draft mode; the resolved package still needs a pool
       // variant, so it uses the default.
-      expect(parseRuntimeConfig("?algo=fresh20").poolVariant).toBe("pickcohere");
+      expect(parseRuntimeConfig("?algo=fresh20").poolVariant).toBe("picksig");
     });
   });
 

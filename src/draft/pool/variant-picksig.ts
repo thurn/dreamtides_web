@@ -87,7 +87,7 @@ export function buildPickSigCorpus(poolData: PoolData): AffinityCorpus | null {
 // entry is matched as a name via `cardIdByName` first, then — for robustness, and
 // for synthetic test corpora keyed directly by UUID — as a literal lowercase UUID.
 // Returns the set of corpus keys the signature locates.
-function resolveSignatureToCorpus(
+export function resolveSignatureToCorpus(
   corpus: AffinityCorpus,
   signatureCards: readonly string[],
   cardIdByName: ReadonlyMap<string, string> | undefined,

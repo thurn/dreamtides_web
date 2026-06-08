@@ -24,7 +24,8 @@ export type PoolVariant =
   | "pickpos"
   | "pickchoice"
   | "pickcohere"
-  | "picksig";
+  | "picksig"
+  | "sigseed";
 // The quest prototype and the draft test harness use this when `?algo=` is
 // absent. An unrecognised `?algo=` value is a hard error, not a fall-through to
 // this default.

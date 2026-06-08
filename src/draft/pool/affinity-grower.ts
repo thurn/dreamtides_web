@@ -73,15 +73,19 @@ export interface AffinityGrowerTuning {
   seedDraws?: number;
 }
 
-// Grow a pool from one seed card by greedy blended-affinity expansion, operating
-// entirely on card keys. Returns the capped copy counts and a per-card
-// provenance record — each keyed by card key, which the caller maps onto current
-// names — describing, for every card, the order it entered, its (normalised)
-// affinity to the seed and to the pool at that moment, and its blended score —
-// the "how the pool grew" story.
-export function growAffinityPool(
+// Grow a pool from one OR MORE seed cards by greedy blended-affinity expansion,
+// operating entirely on card keys. The pool starts holding copy 1 of every seed
+// card and then expands; a candidate's seed-affinity term is its strongest tie to
+// ANY seed card, so multiple seeds describe a region of the card space rather than
+// a single point. Returns the capped copy counts and a per-card provenance record
+// — each keyed by card key, which the caller maps onto current names — describing,
+// for every card, the order it entered, its (normalised) affinity to the seeds and
+// to the pool at that moment, and its blended score — the "how the pool grew"
+// story. Single-seed callers use the {@link growAffinityPool} wrapper, which is
+// exactly this function with a one-card seed set.
+export function growAffinityPoolFromSeeds(
   corpus: AffinityCorpus,
-  seedCard: string,
+  seedCards: readonly string[],
   targetSize: number,
   tuning: AffinityGrowerTuning,
 ): { counts: Map<string, number>; provenance: SeedPoolProvenance } {
@@ -90,12 +94,24 @@ export function growAffinityPool(
     affinity.get(a) ?? new Map<string, number>();
   const priorOf = (c: string): number => prior.get(c) ?? 0;
 
-  // Seed affinity, normalised once so it lands in [0, 1] alongside the pool term.
-  const seedRow = affOf(seedCard);
-  let maxSeedAff = 0;
-  for (const v of seedRow.values()) if (v > maxSeedAff) maxSeedAff = v;
-  const seedAffNorm = (c: string): number =>
-    maxSeedAff > 0 ? (seedRow.get(c) ?? 0) / maxSeedAff : 0;
+  // Seed affinity, normalised PER seed so each lands in [0, 1], then combined as
+  // the strongest tie to ANY seed card. With one seed this is exactly that seed's
+  // normalised affinity row.
+  const seeds = [...new Set(seedCards)];
+  const seedRows = seeds.map((s) => {
+    const row = affOf(s);
+    let max = 0;
+    for (const v of row.values()) if (v > max) max = v;
+    return { row, max };
+  });
+  const seedAffNorm = (c: string): number => {
+    let best = 0;
+    for (const { row, max } of seedRows) {
+      const v = max > 0 ? (row.get(c) ?? 0) / max : 0;
+      if (v > best) best = v;
+    }
+    return best;
+  };
 
   // Running sum of each card's affinity to the cards already in the pool; the
   // mean (divided by the distinct count) is the pool-coherence term. Updated by
@@ -111,20 +127,23 @@ export function growAffinityPool(
 
   const { seedAffinityWeight: w, priorWeight, secondCopyFactor, cap } = tuning;
 
-  // Seed the pool: copy 1 of the drawn card, provenance order 0.
-  counts.set(seedCard, 1);
-  addToPoolAff(seedCard);
-  order.push(seedCard);
-  cardProvenanceByName[seedCard] = {
-    isSeed: true,
-    copies: 1,
-    addOrder: 0,
-    seedAffinity: 1,
-    poolAffinity: 1,
-    blendedScore: 1,
-  };
-  let total = 1;
-  let distinct = 1;
+  // Seed the pool: copy 1 of every seed card, provenance order 0, 1, … in the
+  // order given. One seed reduces to the single-card start.
+  for (const seedCard of seeds) {
+    counts.set(seedCard, 1);
+    addToPoolAff(seedCard);
+    order.push(seedCard);
+    cardProvenanceByName[seedCard] = {
+      isSeed: true,
+      copies: 1,
+      addOrder: order.length - 1,
+      seedAffinity: 1,
+      poolAffinity: 1,
+      blendedScore: 1,
+    };
+  }
+  let total = seeds.length;
+  let distinct = seeds.length;
 
   while (total < targetSize) {
     // First pass: raw pool-affinity means, to min-max normalise this step.
@@ -190,17 +209,22 @@ export function growAffinityPool(
     }
   }
 
-  // The seed's strongest partners actually pulled into the pool, for the panels.
+  // The seeds' strongest partners actually pulled into the pool, for the panels —
+  // ranked by their tie to the nearest seed (the single-seed row when there is one
+  // seed), the seed cards themselves excluded.
+  const seedSet = new Set(seeds);
   const topPartnerCardNames = order
-    .filter((c) => c !== seedCard)
-    .sort((a, b) => (seedRow.get(b) ?? 0) - (seedRow.get(a) ?? 0) || (a < b ? -1 : 1))
+    .filter((c) => !seedSet.has(c))
+    .sort((a, b) => seedAffNorm(b) - seedAffNorm(a) || (a < b ? -1 : 1))
     .slice(0, tuning.topPartnerCount);
 
   let doubledCardCount = 0;
   for (const v of counts.values()) if (v >= 2) doubledCardCount += 1;
 
   const provenance: SeedPoolProvenance = {
-    seedCardName: seedCard,
+    // The headline seed is the first seed card; every seed is flagged `isSeed`
+    // in `cardProvenanceByName`, so a multi-seed start is fully recoverable.
+    seedCardName: seeds[0],
     targetSize,
     seedAffinityWeight: w,
     distinctCardCount: distinct,
@@ -210,6 +234,19 @@ export function growAffinityPool(
     cardProvenanceByName,
   };
   return { counts, provenance };
+}
+
+// Grow a pool from a SINGLE seed card — the shape every single-card-seeded variant
+// (`seed`, `pickfit`, `pickcohere`, `picksig`) uses. A thin pass-through to
+// {@link growAffinityPoolFromSeeds} with a one-card seed set, so both share one
+// growth implementation and one provenance contract.
+export function growAffinityPool(
+  corpus: AffinityCorpus,
+  seedCard: string,
+  targetSize: number,
+  tuning: AffinityGrowerTuning,
+): { counts: Map<string, number>; provenance: SeedPoolProvenance } {
+  return growAffinityPoolFromSeeds(corpus, [seedCard], targetSize, tuning);
 }
 
 // The internal coherence of a grown pool: the mean affinity over every ordered
@@ -297,7 +334,6 @@ export function growPoolFromCorpus(
   // rng() draws are consumed regardless of the winner, so the result stays
   // deterministic in the seed. K = 1 is a single draw.
   const draws = Math.max(1, Math.floor(tuning.seedDraws ?? 1));
-  let seedKey = "";
   let counts: Map<string, number> | null = null;
   let provenance: SeedPoolProvenance | null = null;
   let bestCoherence = -Infinity;
@@ -307,7 +343,6 @@ export function growPoolFromCorpus(
     const coherence = poolCoherence(grown.counts, corpus.affinity);
     if (coherence > bestCoherence) {
       bestCoherence = coherence;
-      seedKey = candidate;
       counts = grown.counts;
       provenance = grown.provenance;
     }
@@ -318,13 +353,26 @@ export function growPoolFromCorpus(
     missingPoolData(label, "no candidate seed could be drawn from its corpus");
   }
 
+  return toNamedVariantResult(poolData, counts, provenance, label);
+}
+
+// Map a key-keyed grown pool (counts + provenance) onto a {@link VariantResult} in
+// current display-name space: the shared tail every affinity-grown variant returns.
+// `label` is the variant id recorded in `selected`; the seed card is read from the
+// provenance, so the result always names the pool's actual seed.
+export function toNamedVariantResult(
+  poolData: PoolData,
+  counts: Map<string, number>,
+  provenance: SeedPoolProvenance,
+  label: string,
+): VariantResult {
   const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
   const namedCounts = new Map<string, number>();
   for (const [key, copies] of counts) namedCounts.set(nameOf(key), copies);
 
   return {
     C: new Set(),
-    selected: [label, `card:${nameOf(seedKey)}`],
+    selected: [label, `card:${nameOf(provenance.seedCardName)}`],
     counts: namedCounts,
     seedProvenance: toNamedProvenance(provenance, nameOf),
   };
