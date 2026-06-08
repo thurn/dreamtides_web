@@ -28,7 +28,7 @@ export type PoolVariant =
 // The quest prototype and the draft test harness use this when `?algo=` is
 // absent. An unrecognised `?algo=` value is a hard error, not a fall-through to
 // this default.
-export const DEFAULT_POOL_VARIANT: PoolVariant = "pickcohere";
+export const DEFAULT_POOL_VARIANT: PoolVariant = "picksig";
 
 /**
  * Throw because a pool variant cannot build a pool: its required source data
