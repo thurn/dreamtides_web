@@ -151,9 +151,9 @@ http://localhost:5173/draft_test?algo=diverse   # draft harness, diverse algorit
 
 ## `journey`
 
-When set to exactly `v2`, Dream Journey sites render the Dream Merchant v2
-encounter. Any other value (including empty or absent) renders the classic
-Dream Journey encounter.
+When set to exactly `v2`, `parseRuntimeConfig` sets
+`runtimeConfig.journeyVariant` to `"v2"`. Any other value (including empty or
+absent) sets `journeyVariant` to `"classic"`.
 
 ## Dream Journey Debug Harness
 
