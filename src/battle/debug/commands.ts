@@ -104,6 +104,24 @@ export type BattleDebugEdit =
     count: number;
   }
   | {
+    // Abandon: voluntarily move one of your own characters from play to the
+    // void (rules §Abandon). When the target is a figment stack of more than
+    // one member, only the topmost figment is abandoned (the stack stays in
+    // play with its remaining members); a single-member figment or any other
+    // character moves wholesale to its controller's void. Abandon only applies
+    // to a character currently in play; off-battlefield targets are a no-op.
+    kind: "ABANDON";
+    battleCardId: string;
+  }
+  | {
+    // Rematerialize: re-run an in-play character's ▸Materialized resolution
+    // manually (rules §Rematerialize). The keyword's actual effects are player
+    // resolved, so this edit makes no structural change; it is a log-only
+    // gesture whose command envelope records the intent in the battle log.
+    kind: "REMATERIALIZE";
+    battleCardId: string;
+  }
+  | {
     kind: "DISCARD_CARD";
     battleCardId: string;
   }
@@ -447,8 +465,10 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "SET_CARD_MARKERS":
     case "SET_CARD_STATUS":
     case "SET_COUNTERS":
+    case "REMATERIALIZE":
       return "card-instance";
     case "MOVE_CARD_TO_ZONE":
+    case "ABANDON":
     case "DRAW_CARD":
     case "ERODE":
     case "DISCARD_CARD":
@@ -485,6 +505,8 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
  * - `MOVE_CARD_TO_ZONE`: zone transition; the battlefield-to-battlefield
  *   path also edits three fields (source slot, target slot, controller),
  *   and cross-zone moves are enough to warrant the flag for log clarity.
+ * - `ABANDON`: a void move whose figment-stack variant drops the topmost
+ *   member in place; flagged for the same log-clarity reasons as a move.
  * - `INCREASE_MAX_ENERGY_AND_FILL`: edits both current and maximum energy.
  * - All simple numeric edits, flag toggles, and visibility changes stay
  *   non-composite.
@@ -497,6 +519,7 @@ function isCompositeDebugEdit(edit: BattleDebugEdit): boolean {
     case "CREATE_FIGMENT":
     case "CREATE_CARD_FROM_DEFINITION":
     case "MOVE_CARD_TO_ZONE":
+    case "ABANDON":
     case "INCREASE_MAX_ENERGY_AND_FILL":
     case "SET_BATTLE_FLOW":
       return true;
@@ -538,6 +561,8 @@ function collectDebugEditTargets(
     case "SET_CARD_SPARK":
     case "SET_CARD_SPARK_DELTA":
     case "DISCARD_CARD":
+    case "ABANDON":
+    case "REMATERIALIZE":
     case "SET_CARD_VISIBILITY":
     case "ADD_CARD_NOTE":
     case "DISMISS_CARD_NOTE":
@@ -628,6 +653,10 @@ function createDebugEditLabel(
       return `Erode ${String(edit.count)} for ${formatSideLabel(edit.side)}`;
     case "DISCARD_CARD":
       return `Discard ${readCardName(state, edit.battleCardId)}`;
+    case "ABANDON":
+      return `Abandon ${readCardName(state, edit.battleCardId)}`;
+    case "REMATERIALIZE":
+      return `Rematerialize ${readCardName(state, edit.battleCardId)}`;
     case "KINDLE": {
       const targetId = selectKindleTargetBattleCardId(
         state,

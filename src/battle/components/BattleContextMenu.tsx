@@ -242,6 +242,29 @@ export function BattleContextMenu({
         label: `Counters ⧗ (${String(card.status.counters)})`,
         submenu: createCountersSubmenu(),
       });
+      // Abandon and Rematerialize are in-play character gestures (rules
+      // §Abandon, §Rematerialize): Abandon voluntarily sends a character (or a
+      // figment stack's topmost member) to the void; Rematerialize re-runs the
+      // ▸Materialized resolution and is player-resolved (log-only).
+      if (location.zone === "backRank" || location.zone === "frontRank") {
+        result.push({ divider: true });
+        result.push({
+          label: "Abandon",
+          action: () => onCommand({
+            id: "DEBUG_EDIT",
+            edit: { kind: "ABANDON", battleCardId },
+            sourceSurface,
+          }),
+        });
+        result.push({
+          label: "Rematerialize",
+          action: () => onCommand({
+            id: "DEBUG_EDIT",
+            edit: { kind: "REMATERIALIZE", battleCardId },
+            sourceSurface,
+          }),
+        });
+      }
     }
     result.push({
       label: "Add Note…",

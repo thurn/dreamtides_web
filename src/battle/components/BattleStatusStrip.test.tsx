@@ -44,6 +44,7 @@ function mount(withBanished = false): {
   onSetScore: ReturnType<typeof vi.fn>;
   onIncreaseMaxEnergyAndFill: ReturnType<typeof vi.fn>;
   onDrawCard: ReturnType<typeof vi.fn>;
+  onDreamwellDraw: ReturnType<typeof vi.fn>;
   onErode: ReturnType<typeof vi.fn>;
   onCloseSummary: ReturnType<typeof vi.fn>;
   onOpenSummary: ReturnType<typeof vi.fn>;
@@ -60,6 +61,7 @@ function mount(withBanished = false): {
   const onOpenSummary = vi.fn();
   const onIncreaseMaxEnergyAndFill = vi.fn();
   const onDrawCard = vi.fn();
+  const onDreamwellDraw = vi.fn();
   const onErode = vi.fn();
   const onSetEnergy = vi.fn();
   const onSetScore = vi.fn();
@@ -86,6 +88,7 @@ function mount(withBanished = false): {
         onSetScore={onSetScore}
         onIncreaseMaxEnergyAndFill={onIncreaseMaxEnergyAndFill}
         onDrawCard={onDrawCard}
+        onDreamwellDraw={onDreamwellDraw}
         onErode={onErode}
         onCloseSummary={onCloseSummary}
         onOpenSummary={onOpenSummary}
@@ -101,6 +104,7 @@ function mount(withBanished = false): {
     onSetScore,
     onIncreaseMaxEnergyAndFill,
     onDrawCard,
+    onDreamwellDraw,
     onErode,
     onCloseSummary,
     onOpenSummary,
@@ -305,6 +309,7 @@ describe("BattleStatusStrip", () => {
         onSetScore={onSetScore}
         onIncreaseMaxEnergyAndFill={vi.fn()}
         onDrawCard={vi.fn()}
+        onDreamwellDraw={vi.fn()}
         onErode={vi.fn()}
         onCloseSummary={vi.fn()}
         onOpenSummary={vi.fn()}
@@ -390,6 +395,25 @@ describe("BattleStatusStrip", () => {
     });
 
     expect(erodeButton?.textContent).toContain("Erode 1");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("fires the Dreamwell-draw callback from the side-scoped button", () => {
+    const { container, onDreamwellDraw, root } = mount();
+    const dreamwellButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-action="status-dreamwell-draw-player"]',
+    );
+
+    expect(dreamwellButton?.textContent).toContain("Dreamwell + draw");
+
+    act(() => {
+      dreamwellButton?.click();
+    });
+
+    expect(onDreamwellDraw).toHaveBeenCalledTimes(1);
 
     act(() => {
       root.unmount();

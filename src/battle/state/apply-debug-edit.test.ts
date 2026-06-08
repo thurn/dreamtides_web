@@ -6,6 +6,7 @@ import {
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
+import { createDebugEditHistoryMetadata } from "../debug/commands";
 import type { BattleDebugZoneDestination } from "../debug/commands";
 import type { BattleFieldSlotAddress } from "../types";
 import { BACK_RANK_SLOT_IDS } from "../types";
@@ -535,5 +536,149 @@ describe("SET_COUNTERS", () => {
     const result = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B1" });
 
     expect(result.mutable.cardInstances[cardId].status.counters).toBe(2);
+  });
+});
+
+function abandon(
+  state: BattleReducerState,
+  battleCardId: string,
+): BattleReducerState {
+  return battleControllerReducer(state, {
+    type: "APPLY_COMMAND",
+    command: {
+      id: "DEBUG_EDIT",
+      edit: { kind: "ABANDON", battleCardId },
+    },
+  });
+}
+
+function rematerialize(
+  state: BattleReducerState,
+  battleCardId: string,
+): BattleReducerState {
+  return battleControllerReducer(state, {
+    type: "APPLY_COMMAND",
+    command: {
+      id: "DEBUG_EDIT",
+      edit: { kind: "REMATERIALIZE", battleCardId },
+    },
+  });
+}
+
+function createFigmentInSlot(
+  state: BattleReducerState,
+  slotId: "B0" | "B1",
+): { state: BattleReducerState; battleCardId: string } {
+  const next = battleControllerReducer(state, {
+    type: "APPLY_COMMAND",
+    command: {
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "CREATE_FIGMENT",
+        side: "player",
+        chosenSubtype: "Spark",
+        chosenSpark: 1,
+        name: "Spark Figment",
+        destination: { side: "player", zone: "backRank", slotId },
+        createdAtMs: 0,
+      },
+    },
+  });
+  const battleCardId = next.mutable.sides.player.backRank[slotId];
+  if (battleCardId === null) {
+    throw new Error("expected figment to be created in slot");
+  }
+  return { state: next, battleCardId };
+}
+
+describe("ABANDON", () => {
+  it("moves a non-figment character from play to its controller's void", () => {
+    let state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B0" });
+    const voidBefore = state.mutable.sides.player.void.length;
+
+    const result = abandon(state, cardId);
+
+    expect(result.mutable.sides.player.backRank.B0).toBeNull();
+    expect(result.mutable.sides.player.void).toContain(cardId);
+    expect(result.mutable.sides.player.void.length).toBe(voidBefore + 1);
+  });
+
+  it("abandons only the topmost figment of a multi-member stack, leaving the rest in play", () => {
+    const created = createFigmentInSlot(createBattle(), "B0");
+    const state = created.state;
+    const figmentId = created.battleCardId;
+    // A three-member stack with sparks [3, 2, 1]; the top member is the 3.
+    state.mutable.cardInstances[figmentId].figments = [3, 2, 1];
+
+    const result = abandon(state, figmentId);
+
+    // The stack stays in play with its remaining members (top member dropped).
+    expect(result.mutable.sides.player.backRank.B0).toBe(figmentId);
+    expect(result.mutable.cardInstances[figmentId].figments).toEqual([2, 1]);
+    expect(result.mutable.sides.player.void).not.toContain(figmentId);
+  });
+
+  it("moves a single-member figment stack wholesale to the void", () => {
+    const created = createFigmentInSlot(createBattle(), "B0");
+    const state = created.state;
+    const figmentId = created.battleCardId;
+    state.mutable.cardInstances[figmentId].figments = [2];
+
+    const result = abandon(state, figmentId);
+
+    expect(result.mutable.sides.player.backRank.B0).toBeNull();
+    expect(result.mutable.sides.player.void).toContain(figmentId);
+  });
+
+  it("is a no-op for a card that is not in play", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+
+    const result = abandon(state, cardId);
+
+    expect(result.mutable).toBe(state.mutable);
+    expect(result.mutable.sides.player.hand).toContain(cardId);
+  });
+
+  it("records the Abandon intent in command history metadata", () => {
+    let state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    const cardName = state.mutable.cardInstances[cardId].definition.name;
+    state = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B0" });
+
+    const result = abandon(state, cardId);
+    const entry = result.history.past[result.history.past.length - 1];
+
+    expect(entry.metadata.commandId).toBe("ABANDON");
+    expect(entry.metadata.label).toBe(`Abandon ${cardName}`);
+  });
+});
+
+describe("REMATERIALIZE", () => {
+  it("makes no structural change but yields a labeled command-history entry", () => {
+    let state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    const cardName = state.mutable.cardInstances[cardId].definition.name;
+    state = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B0" });
+    const mutableBefore = state.mutable;
+
+    const result = rematerialize(state, cardId);
+
+    // Log-only gesture: the battle state is unchanged.
+    expect(result.mutable).toBe(mutableBefore);
+
+    // The metadata factory still produces the labeled command id, so the log
+    // surfaces the player's intent even though no state field changes.
+    expect(
+      createDebugEditHistoryMetadata(
+        { kind: "REMATERIALIZE", battleCardId: cardId },
+        result.mutable,
+      ),
+    ).toMatchObject({
+      commandId: "REMATERIALIZE",
+      label: `Rematerialize ${cardName}`,
+    });
   });
 });

@@ -45,6 +45,7 @@ import {
 import {
   addFigmentsToStackInPlace,
   canMergeFigments,
+  dissolveFigmentsFromStackInPlace,
   findBattlefieldFigmentStack,
   isFigmentInstance,
   mergeFigmentsIntoStackInPlace,
@@ -226,6 +227,10 @@ export function applyDebugEdit(
       return erodeDeck(state, edit.side, edit.count);
     case "DISCARD_CARD":
       return discardHandCard(state, edit.battleCardId);
+    case "ABANDON":
+      return abandonCard(state, edit.battleCardId);
+    case "REMATERIALIZE":
+      return rematerializeCard(state, edit.battleCardId);
     case "KINDLE":
       return kindleCard(state, edit.side, edit.amount, edit.preferredBattleCardId ?? null);
     case "SET_CARD_VISIBILITY":
@@ -1612,6 +1617,74 @@ function discardHandCard(
 
   return {
     state: nextState,
+    transition: createEmptyTransitionData(),
+  };
+}
+
+/**
+ * Abandon: voluntarily moves one of `battleCardId`'s controller's characters
+ * from play to the void (rules §Abandon). Abandon applies only to a character
+ * currently in the back or front rank; a target off the battlefield is a no-op.
+ *
+ * When the target is a figment stack of more than one member, only the topmost
+ * figment is abandoned (rules §Abandon, §Figments): the top member is dropped
+ * and the stack stays in play with its remaining members. A single-member
+ * figment, or any other character, moves wholesale to its controller's void.
+ */
+function abandonCard(
+  state: BattleMutableState,
+  battleCardId: string,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const location = selectBattleCardLocation(state, battleCardId);
+  const instance = state.cardInstances[battleCardId];
+  if (
+    location === null ||
+    instance === undefined ||
+    (location.zone !== "backRank" && location.zone !== "frontRank")
+  ) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  // A multi-member figment stack abandons only its topmost member, leaving the
+  // rest of the stack in play.
+  if (isFigmentInstance(instance) && selectFigmentCount(instance) > 1) {
+    const nextState = cloneBattleMutableState(state);
+    dissolveFigmentsFromStackInPlace(nextState, battleCardId, 1);
+    return {
+      state: nextState,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  // Otherwise the whole character moves from play to its controller's void.
+  return moveCardToDebugZone(state, battleCardId, {
+    side: location.side,
+    zone: "void",
+  });
+}
+
+/**
+ * Rematerialize: re-runs an in-play character's ▸Materialized resolution
+ * manually (rules §Rematerialize). The keyword's actual effects are player
+ * resolved through the debug rail, so this edit makes no structural change to
+ * the battle state. It is a state no-op whose command envelope records the
+ * intent in the battle log.
+ */
+function rematerializeCard(
+  state: BattleMutableState,
+  _battleCardId: string,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  return {
+    state,
     transition: createEmptyTransitionData(),
   };
 }

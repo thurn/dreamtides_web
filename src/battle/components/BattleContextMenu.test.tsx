@@ -306,3 +306,59 @@ describe("BattleContextMenu counters tool", () => {
     });
   });
 });
+
+describe("BattleContextMenu abandon / rematerialize tools", () => {
+  it("emits ABANDON for a battlefield character", () => {
+    const state = createState();
+    const battleCardId = placeCharacter(state, "backRank", "B0");
+    const { container, onCommand, root } = mount(state, battleCardId);
+
+    clickItem(container, "Abandon");
+
+    expect(onCommand).toHaveBeenCalledWith({
+      id: "DEBUG_EDIT",
+      edit: { kind: "ABANDON", battleCardId },
+      sourceSurface: "inspector",
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("emits REMATERIALIZE for a battlefield character", () => {
+    const state = createState();
+    const battleCardId = placeCharacter(state, "frontRank", "F0");
+    const { container, onCommand, root } = mount(state, battleCardId);
+
+    clickItem(container, "Rematerialize");
+
+    expect(onCommand).toHaveBeenCalledWith({
+      id: "DEBUG_EDIT",
+      edit: { kind: "REMATERIALIZE", battleCardId },
+      sourceSurface: "inspector",
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("does not offer Abandon / Rematerialize for a character still in hand", () => {
+    const state = createState();
+    const handCharacterId = state.sides.player.hand.find(
+      (id) => state.cardInstances[id]?.definition.battleCardKind === "character",
+    );
+    if (handCharacterId === undefined) {
+      throw new Error("expected a player character in hand");
+    }
+    const { container, root } = mount(state, handCharacterId);
+
+    expect(container.textContent).not.toContain("Abandon");
+    expect(container.textContent).not.toContain("Rematerialize");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+});

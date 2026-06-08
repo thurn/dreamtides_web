@@ -250,6 +250,25 @@ function PlayableBattleScreenInner({
     battleInit.scoreToWin,
   ]);
 
+  // Dreamwell-draw rail tool (Task 4.5): on demand, run a side's Dreamwell
+  // energy ramp (Task 2.1 `energyRampEdits`, anchored to the current turn
+  // number and capped by `maxEnergyCap`) followed by its draw step. The very
+  // first turn (turn 1) is the Dreamwell opening and skips the draw, matching
+  // the start-of-turn handoff rule; every later turn draws.
+  const runDreamwellDraw = useCallback((side: BattleSide): void => {
+    const turnNumber = reducerState.mutable.turnNumber;
+    for (const edit of energyRampEdits(side, turnNumber, battleInit.maxEnergyCap)) {
+      handleCommand({ id: "DEBUG_EDIT", edit, sourceSurface: "status-strip" });
+    }
+    if (turnNumber > 1) {
+      handleCommand({
+        id: "DEBUG_EDIT",
+        edit: { kind: "DRAW_CARD", side },
+        sourceSurface: "status-strip",
+      });
+    }
+  }, [handleCommand, reducerState.mutable.turnNumber, battleInit.maxEnergyCap]);
+
   useEffect(() => {
     if (reducerState.mutable !== battleState.reducer.mutable) {
       return;
@@ -966,6 +985,7 @@ function PlayableBattleScreenInner({
                     edit: { kind: "DRAW_CARD", side: "player" },
                     sourceSurface: "status-strip",
                   })}
+                  onDreamwellDraw={() => runDreamwellDraw("player")}
                   onErode={(count) => handleCommand({
                     id: "DEBUG_EDIT",
                     edit: { kind: "ERODE", side: "player", count },
@@ -1092,6 +1112,7 @@ function PlayableBattleScreenInner({
                     edit: { kind: "DRAW_CARD", side: "enemy" },
                     sourceSurface: "status-strip",
                   })}
+                  onDreamwellDraw={() => runDreamwellDraw("enemy")}
                   onErode={(count) => handleCommand({
                     id: "DEBUG_EDIT",
                     edit: { kind: "ERODE", side: "enemy", count },

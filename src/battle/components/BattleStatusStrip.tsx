@@ -21,6 +21,7 @@ export function BattleStatusStrip({
   onSetScore,
   onIncreaseMaxEnergyAndFill,
   onDrawCard,
+  onDreamwellDraw,
   onErode,
   onCloseSummary,
   onOpenSummary,
@@ -36,6 +37,7 @@ export function BattleStatusStrip({
   onSetScore: (value: number) => void;
   onIncreaseMaxEnergyAndFill: () => void;
   onDrawCard: () => void;
+  onDreamwellDraw: () => void;
   onErode: (count: number) => void;
   onCloseSummary: () => void;
   onOpenSummary: () => void;
@@ -132,6 +134,17 @@ export function BattleStatusStrip({
         onClick={onDrawCard}
       >
         Draw card
+      </button>
+      <button
+        type="button"
+        aria-label={`Run the Dreamwell energy ramp and draw for ${
+          side === "player" ? "you" : "the enemy"
+        }`}
+        className="status-strip-action"
+        data-battle-action={`status-dreamwell-draw-${side}`}
+        onClick={onDreamwellDraw}
+      >
+        Dreamwell + draw
       </button>
       <div className="status-strip-erode" data-battle-status-erode={side}>
         <span className="stat-stepper">
