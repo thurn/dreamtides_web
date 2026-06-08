@@ -19,6 +19,14 @@ Ignore all metadata systems on cards like "tides", "tags",
 "archetypes", etc. These are all legacy. Tides no longer
 exist.
 
+# Draft Data
+
+The directory docs/draft_records_adapted/ has a high quality set of data about real Dreamtides drafts.
+
+There are many other legacy directories with draft data, consumed by some of our algorithms, but this
+data is much lower quality. Assume we want to migrate all code to consume `draft_records_adapted`, and
+only use `draft_records_adapted` going forward.
+
 # Verification
 
 Run the core checks after code changes:
