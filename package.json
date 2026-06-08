@@ -8,6 +8,7 @@
     "qai": "npm install && npm start -- --open \"/?ai=1\"",
     "editor": "npm install && npm run dev:vite -- --open /editor",
     "editor2": "npm install && npm run dev:vite -- --open \"/editor?toml=data/tabula/cards_v2.toml\"",
+    "images": "npm install && npm run dev:vite -- --open /images",
     "draft_test": "npm install && npm run dev:vite -- --open /draft_test",
     "start": "node scripts/dev-with-emulator.mjs",
     "dev": "node scripts/dev-with-emulator.mjs",

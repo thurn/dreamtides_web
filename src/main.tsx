@@ -22,6 +22,11 @@ const pathname = window.location.pathname.replace(/\/+$/, "");
 
 if (pathname === "/editor") {
   renderStrict(<CardEditorApp />);
+} else if (pathname === "/images") {
+  const { default: ImageViewerApp } = await import(
+    "./image_viewer/ImageViewerApp"
+  );
+  renderStrict(<ImageViewerApp />);
 } else if (pathname === "/draft_test") {
   const { default: DraftTestApp } = await import("./draft_test/DraftTestApp");
   renderStrict(<DraftTestApp />);

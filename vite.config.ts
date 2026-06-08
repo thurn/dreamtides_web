@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
+import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -48,6 +49,21 @@ function cardEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createCardEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Vite plugin that serves the candidate-image viewer endpoints. */
+function imageViewerApiPlugin(): Plugin {
+  return {
+    name: "image-viewer-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(
+        createImageViewerApiMiddleware({
+          cardsTomlPath: path.join(__dirname, "data", "tabula", "cards_v2.toml"),
+        }),
+      );
     },
   };
 }
@@ -167,6 +183,7 @@ export default defineConfig({
     tailwindcss(),
     questLogPlugin(),
     cardEditorApiPlugin(),
+    imageViewerApiPlugin(),
     generatedCardDataDriftPlugin(),
   ],
   test: {
