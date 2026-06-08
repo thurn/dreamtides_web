@@ -29,12 +29,13 @@ export interface AiCard {
   figmentCount: number;
   /**
    * Whether this character is allowed to challenge (or, on the opponent's turn,
-   * defend) during the current turn. Projection derives it from the engine's
-   * {@link BattleCardInstance.enteredPlayTurnNumber} stamp: a body is exhausted
-   * — and so cannot act — until its controller's next turn, so a character that
-   * entered play on the AI's most recent turn is `false` and any older body (or
-   * one with no stamp) is `true`. The planner additionally sets it to `false`
-   * on cards it plays during the simulated turn.
+   * defend) during the current turn. Projection reads the authoritative
+   * {@link BattleCardStatus.isExhausted} flag: an exhausted body cannot
+   * challenge, defend, or pay ☪ costs, so a character with `isExhausted` set is
+   * `false` and an awakened body is `true`. Characters enter play exhausted and
+   * the active side's exhaustion is cleared during the Dawn phase (see
+   * `battle_rules.md` §Exhaust and Awaken). The planner additionally sets this
+   * to `false` on cards it plays during the simulated turn.
    */
   canChallengeThisTurn: boolean;
 }
@@ -92,14 +93,11 @@ function opposingSide(side: BattleSide): BattleSide {
  * which is coerced to `0` (these cards do have a real cost in play, but a null
  * is treated as free for planning so the projection never produces `NaN`).
  */
-function projectAiCard(instance: BattleCardInstance, aiLatestTurn: number): AiCard {
+function projectAiCard(instance: BattleCardInstance): AiCard {
   const rawCost: number | null = instance.definition.energyCost;
-  // A body is exhausted — and so cannot challenge or be moved up to defend —
-  // until its controller's next turn. It entered play on its controller's
-  // most recent turn iff its stamp equals `aiLatestTurn`; an older stamp (or
-  // none) means a Dawn has since cleared the exhausted status.
-  const enteredThisTurn = instance.enteredPlayTurnNumber != null
-    && instance.enteredPlayTurnNumber === aiLatestTurn;
+  // An exhausted body cannot challenge or be moved up to defend. The status is
+  // authoritative: it is set on entering play (unless awakened) and cleared for
+  // the active side during the Dawn phase.
   return {
     battleCardId: instance.battleCardId,
     cardNumber: instance.definition.cardNumber,
@@ -108,35 +106,22 @@ function projectAiCard(instance: BattleCardInstance, aiLatestTurn: number): AiCa
     basePrintedSpark: instance.definition.printedSpark,
     sparkDelta: instance.sparkDelta,
     figmentCount: selectFigmentCount(instance),
-    canChallengeThisTurn: !enteredThisTurn,
+    canChallengeThisTurn: !instance.status.isExhausted,
   };
 }
 
 function projectZone(
   state: BattleMutableState,
   ids: readonly string[],
-  aiLatestTurn: number,
 ): AiCard[] {
   const cards: AiCard[] = [];
   for (const id of ids) {
     const instance = state.cardInstances[id];
     if (instance !== undefined) {
-      cards.push(projectAiCard(instance, aiLatestTurn));
+      cards.push(projectAiCard(instance));
     }
   }
   return cards;
-}
-
-/**
- * The AI's most recent turn number. Within a turn pair the player acts before
- * the enemy at the same `turnNumber` (see `advanceTurnPair` in
- * `engine/handoff.ts`), so when it is the AI's own turn its latest turn is the
- * current one, and when it is the opponent's turn the AI's latest turn is the
- * previous number. A body whose `enteredPlayTurnNumber` equals this value is
- * still exhausted.
- */
-function aiLatestTurnNumber(state: BattleMutableState, aiSide: BattleSide): number {
-  return state.activeSide === aiSide ? state.turnNumber : state.turnNumber - 1;
 }
 
 /**
@@ -148,7 +133,6 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   const ai = state.sides[aiSide];
   const opponentSide = opposingSide(aiSide);
   const opponent = state.sides[opponentSide];
-  const aiLatestTurn = aiLatestTurnNumber(state, aiSide);
 
   const aiFrontRank: Record<FrontRankSlotId, AiCard | null> = {
     F0: null,
@@ -159,7 +143,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   for (const slotId of FRONT_RANK_SLOT_IDS) {
     const id = ai.frontRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
-    aiFrontRank[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
+    aiFrontRank[slotId] = instance === undefined ? null : projectAiCard(instance);
   }
 
   const aiBackRank: Record<BackRankSlotId, AiCard | null> = {
@@ -172,7 +156,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   for (const slotId of BACK_RANK_SLOT_IDS) {
     const id = ai.backRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
-    aiBackRank[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
+    aiBackRank[slotId] = instance === undefined ? null : projectAiCard(instance);
   }
 
   const opponentBodies: AiOpponentBody[] = [];
@@ -210,9 +194,9 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     aiMaxEnergy: ai.maxEnergy,
     aiScore: ai.score,
     playerScore: opponent.score,
-    aiHand: projectZone(state, ai.hand, aiLatestTurn),
-    aiDeck: projectZone(state, ai.deck, aiLatestTurn),
-    aiVoid: projectZone(state, ai.void, aiLatestTurn),
+    aiHand: projectZone(state, ai.hand),
+    aiDeck: projectZone(state, ai.deck),
+    aiVoid: projectZone(state, ai.void),
     aiFrontRank,
     aiBackRank,
     opponentBodies,

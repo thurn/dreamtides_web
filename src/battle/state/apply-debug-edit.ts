@@ -886,7 +886,8 @@ function setCardStatus(
 /**
  * Sets the card's stored ⧗ counters to `value`, clamped to ≥ 0 (rules
  * §Counters). Counters are local to a card; the leave-play path (see
- * {@link stampEnteredPlay}) zeroes them when the card leaves the battlefield.
+ * {@link clearCountersOnLeavingPlay}) zeroes them when the card leaves the
+ * battlefield.
  * A set that does not change the clamped value is a no-op.
  */
 function setCounters(
@@ -1402,7 +1403,7 @@ function moveCardToDebugZone(
     insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
     const moved = nextState.cardInstances[battleCardId];
     moved.controller = destination.side;
-    stampEnteredPlay(moved, source.zone, destination.zone, state.turnNumber);
+    clearCountersOnLeavingPlay(moved, source.zone, destination.zone);
   }
 
   return {
@@ -1414,31 +1415,19 @@ function moveCardToDebugZone(
 const BATTLEFIELD_ZONE_NAMES = new Set<string>(["backRank", "frontRank"]);
 
 /**
- * Maintains {@link BattleCardInstance.enteredPlayTurnNumber} across a zone move.
- * A card that materializes into the battlefield (a `reserve`/`deployed` slot)
- * from any other zone is stamped with the current `turnNumber`; a card that
- * leaves the battlefield has the stamp cleared. A move within the battlefield
- * (a reposition between `reserve` and `deployed`) leaves the stamp untouched,
- * so a character keeps its entered-play turn while it stays in play.
- *
- * Leaving the battlefield also resets the card's stored ⧗ counters to 0 (rules
+ * Resets a card's stored ⧗ counters to 0 when it leaves the battlefield (rules
  * §Counters): counters are local to a card and do not travel with it across a
- * zone change out of play.
+ * zone change out of play. A move within the battlefield (a reposition between
+ * back and front rank) or into play leaves the counters untouched.
  */
-function stampEnteredPlay(
+function clearCountersOnLeavingPlay(
   instance: BattleCardInstance,
   sourceZone: string,
   destinationZone: string,
-  turnNumber: number,
 ): void {
-  const enteringPlay =
-    BATTLEFIELD_ZONE_NAMES.has(destinationZone) && !BATTLEFIELD_ZONE_NAMES.has(sourceZone);
   const leavingPlay =
     !BATTLEFIELD_ZONE_NAMES.has(destinationZone) && BATTLEFIELD_ZONE_NAMES.has(sourceZone);
-  if (enteringPlay) {
-    instance.enteredPlayTurnNumber = turnNumber;
-  } else if (leavingPlay) {
-    instance.enteredPlayTurnNumber = null;
+  if (leavingPlay) {
     instance.status = {
       ...instance.status,
       counters: 0,

@@ -192,19 +192,18 @@ describe("forwardModelFromState", () => {
     expect(model.aiBackRank.B3?.canChallengeThisTurn).toBe(true);
   });
 
-  it("marks a body that entered play on the AI's current turn as unable to challenge", () => {
+  it("marks an exhausted body as unable to challenge and an awakened body as able", () => {
     const state = makeBareState();
     const ai: BattleSide = "enemy";
     state.activeSide = ai;
-    state.turnNumber = 4;
 
-    const fresh = addInstance(state, ai, makeCharacterDefinition("Fresh", 201, 3, 1));
-    state.cardInstances[fresh].enteredPlayTurnNumber = 4;
-    state.sides[ai].backRank.B0 = fresh;
+    const exhausted = addInstance(state, ai, makeCharacterDefinition("Exhausted", 201, 3, 1));
+    state.cardInstances[exhausted].status.isExhausted = true;
+    state.sides[ai].backRank.B0 = exhausted;
 
-    const aged = addInstance(state, ai, makeCharacterDefinition("Aged", 202, 2, 1));
-    state.cardInstances[aged].enteredPlayTurnNumber = 2;
-    state.sides[ai].backRank.B1 = aged;
+    const awakened = addInstance(state, ai, makeCharacterDefinition("Awakened", 202, 2, 1));
+    state.cardInstances[awakened].status.isExhausted = false;
+    state.sides[ai].backRank.B1 = awakened;
 
     const model = forwardModelFromState(state, ai);
 
@@ -212,27 +211,25 @@ describe("forwardModelFromState", () => {
     expect(model.aiBackRank.B1?.canChallengeThisTurn).toBe(true);
   });
 
-  it("keeps a body exhausted through the opponent's turn until the AI's next Dawn", () => {
+  it("reads exhaustion from status.isExhausted during the opponent's turn", () => {
     const state = makeBareState();
     const ai: BattleSide = "enemy";
     const opponent: BattleSide = "player";
-    // The opponent is active at turnNumber 5; the AI's most recent turn was 4.
     state.activeSide = opponent;
-    state.turnNumber = 5;
 
-    const playedLastAiTurn = addInstance(state, ai, makeCharacterDefinition("Recent", 201, 3, 1));
-    state.cardInstances[playedLastAiTurn].enteredPlayTurnNumber = 4;
-    state.sides[ai].backRank.B0 = playedLastAiTurn;
+    // An exhausted body cannot be moved up to block while the opponent is
+    // active; the status (not the turn number) is authoritative.
+    const stillExhausted = addInstance(state, ai, makeCharacterDefinition("Recent", 201, 3, 1));
+    state.cardInstances[stillExhausted].status.isExhausted = true;
+    state.sides[ai].backRank.B0 = stillExhausted;
 
-    const playedEarlier = addInstance(state, ai, makeCharacterDefinition("Older", 202, 2, 1));
-    state.cardInstances[playedEarlier].enteredPlayTurnNumber = 3;
-    state.sides[ai].backRank.B1 = playedEarlier;
+    const cleared = addInstance(state, ai, makeCharacterDefinition("Older", 202, 2, 1));
+    state.cardInstances[cleared].status.isExhausted = false;
+    state.sides[ai].backRank.B1 = cleared;
 
     const model = forwardModelFromState(state, ai);
 
-    // Still exhausted during the opponent's turn → cannot be moved up to block.
     expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
-    // Cleared at the AI's last Dawn → available to block.
     expect(model.aiBackRank.B1?.canChallengeThisTurn).toBe(true);
   });
 

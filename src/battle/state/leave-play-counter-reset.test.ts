@@ -15,10 +15,10 @@ import { createInitialBattleState } from "./create-initial-state";
 import type { BattleReducerState } from "../types";
 
 /**
- * Coverage for `BattleCardInstance.enteredPlayTurnNumber` (the engine's record
- * of when a card entered play). The Battle AI reads it to derive exhaustion, so
- * the reducer must stamp it on materialization, preserve it across a reposition,
- * and clear it when the card leaves play.
+ * Coverage for the leave-play counter reset (rules §Counters): a card's stored
+ * ⧗ counters are local to it and reset to 0 when the body leaves the
+ * battlefield, while a reposition within play or an entry into play leaves the
+ * counters untouched.
  */
 function createBattle(): BattleReducerState {
   const battleInit = createBattleInit({
@@ -45,43 +45,45 @@ function moveCard(
   });
 }
 
-describe("enteredPlayTurnNumber stamping", () => {
-  it("stamps the current turn when a hand card materializes into play", () => {
-    let state = createBattle();
-    const cardId = state.mutable.sides.player.hand[0];
-    const turnNumber = state.mutable.turnNumber;
-
-    expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).toBeUndefined();
-
-    state = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B0" });
-
-    expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).toBe(turnNumber);
+function setCounters(
+  state: BattleReducerState,
+  battleCardId: string,
+  value: number,
+): BattleReducerState {
+  return battleControllerReducer(state, {
+    type: "APPLY_COMMAND",
+    command: {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_COUNTERS", battleCardId, value },
+    },
   });
+}
 
-  it("preserves the stamp across a reserve-to-deployed reposition", () => {
+describe("leave-play counter reset", () => {
+  it("preserves counters across a back-to-front reposition within play", () => {
     let state = createBattle();
     const cardId = state.mutable.sides.player.hand[0];
-    const turnNumber = state.mutable.turnNumber;
 
     state = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B0" });
-    expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).toBe(turnNumber);
+    state = setCounters(state, cardId, 3);
+    expect(state.mutable.cardInstances[cardId].status.counters).toBe(3);
 
     state = moveCard(state, cardId, { side: "player", zone: "frontRank", slotId: "F0" });
 
-    // A reposition within the battlefield does not re-stamp: the body keeps the
-    // turn it first entered play.
-    expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).toBe(turnNumber);
+    // A reposition within the battlefield does not reset counters.
+    expect(state.mutable.cardInstances[cardId].status.counters).toBe(3);
   });
 
-  it("clears the stamp when a body leaves play to the void", () => {
+  it("zeroes counters when a body leaves play to the void", () => {
     let state = createBattle();
     const cardId = state.mutable.sides.player.hand[0];
 
     state = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B0" });
-    expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).not.toBeNull();
+    state = setCounters(state, cardId, 3);
+    expect(state.mutable.cardInstances[cardId].status.counters).toBe(3);
 
     state = moveCard(state, cardId, { side: "player", zone: "void" });
 
-    expect(state.mutable.cardInstances[cardId].enteredPlayTurnNumber).toBeNull();
+    expect(state.mutable.cardInstances[cardId].status.counters).toBe(0);
   });
 });
