@@ -1,10 +1,10 @@
 *Always* commit changes with detailed description, then `git push` immediately.
 
-When making a *minor* revision to a commit which has not been pushed to remote, it's fine to amend instead of making a new commit.
-
 Do not create new branches unless explicitly requested.
 
 Do not print a summary of changes.
+
+Dreamtides battle rules are in docs/battle_rules/battle_rules.md
 
 # Cards
 
