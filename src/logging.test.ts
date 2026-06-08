@@ -7,10 +7,12 @@ import {
   createBattleProtoNoteAddedLogEvent,
   createBattleProtoNoteClearedLogEvent,
   createBattleProtoNoteDismissedLogEvent,
+  clearLogContext,
   getLogEntries,
   logEvent,
   logEventOnce,
   resetLog,
+  setLogContext,
 } from "./logging";
 import type { BattleMutableState } from "./battle/types";
 
@@ -65,6 +67,44 @@ describe("logEvent", () => {
     expect(() => {
       (entry as Record<string, unknown>).event = "mutated";
     }).toThrow();
+  });
+});
+
+describe("setLogContext", () => {
+  it("merges ambient fields into every subsequent event", () => {
+    setLogContext({ gameId: "h3ppju" });
+    const a = logEvent("alpha");
+    const b = logEvent("beta", { extra: 1 });
+    expect(a.gameId).toBe("h3ppju");
+    expect(b.gameId).toBe("h3ppju");
+    expect(b.extra).toBe(1);
+  });
+
+  it("lets explicit fields win over the context", () => {
+    setLogContext({ gameId: "ctx" });
+    const entry = logEvent("override", { gameId: "explicit" });
+    expect(entry.gameId).toBe("explicit");
+  });
+
+  it("strips reserved keys from the context", () => {
+    setLogContext({ seq: 999, event: "tampered", gameId: "kept" });
+    const entry = logEvent("guarded");
+    expect(entry.seq).toBe(1);
+    expect(entry.event).toBe("guarded");
+    expect(entry.gameId).toBe("kept");
+  });
+
+  it("stops stamping once clearLogContext runs", () => {
+    setLogContext({ gameId: "room" });
+    expect(logEvent("with").gameId).toBe("room");
+    clearLogContext();
+    expect(logEvent("without").gameId).toBeUndefined();
+  });
+
+  it("is reset by resetLog", () => {
+    setLogContext({ gameId: "room" });
+    resetLog();
+    expect(logEvent("after_reset").gameId).toBeUndefined();
   });
 });
 

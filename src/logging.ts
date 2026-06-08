@@ -32,6 +32,35 @@ const onceKeys = new Set<string>();
 let logSnapshotCache: ReadonlyArray<Readonly<LogEntry>> = [];
 let isLogSnapshotDirty = false;
 
+// Ambient fields merged into every event so a whole session can be filtered out
+// of the shared `logs/quest-log.jsonl`. The room gate sets `{ gameId }` once a
+// room is ready, which is what lets `grep '"gameId":"h3ppju"'` isolate one
+// game's events from every other run interleaved in the same file. Defaults to
+// empty, so off the multiplayer path (tests, isolated units) entries are
+// untouched. Explicit `fields` on a call win over context; reserved keys can be
+// set by neither.
+let logContext: Record<string, unknown> = {};
+
+/**
+ * Replace the ambient log context merged into every subsequent {@link logEvent}.
+ * Reserved keys (`timestamp`, `event`, `seq`) are stripped. Pass `{}` (or call
+ * {@link clearLogContext}) to detach the context when leaving a room.
+ */
+export function setLogContext(fields: Record<string, unknown>): void {
+  const next: Record<string, unknown> = {};
+  for (const key of Object.keys(fields)) {
+    if (!RESERVED_KEYS.has(key)) {
+      next[key] = fields[key];
+    }
+  }
+  logContext = next;
+}
+
+/** Clear the ambient log context. Equivalent to `setLogContext({})`. */
+export function clearLogContext(): void {
+  logContext = {};
+}
+
 /**
  * Log a structured event. Assigns timestamp and sequence number
  * automatically, writes single-line JSON to console.log, and stores
@@ -53,6 +82,7 @@ export function logEvent(
     }
   }
   const entry: LogEntry = {
+    ...logContext,
     ...sanitized,
     timestamp: new Date().toISOString(),
     event,
@@ -377,6 +407,7 @@ export function resetLog(): void {
   onceKeys.clear();
   logSnapshotCache = [];
   isLogSnapshotDirty = false;
+  logContext = {};
   notifyLogListeners();
 }
 

@@ -124,6 +124,62 @@ describe("loadQuestContent", () => {
     expect(poolContext.poolData.decklists).not.toHaveLength(0);
   });
 
+  it("fetches the draft-record corpus for pick-data pool variants", async () => {
+    // pickearly (like pickfit/pickpos/pickchoice) grows its pool from the draft
+    // records; without them it would silently fall back to the random color
+    // pool. The records must therefore be fetched even in pool mode.
+    const cards = [makeCard(1), makeCard(2), makeCard(3)];
+    const dreamcallers = [
+      {
+        id: "dc-a",
+        name: "Alpha",
+        title: "A",
+        renderedText: "",
+        imageNumber: "0001",
+        startingEssence: 250,
+        signatureCards: ["Card 1"],
+      },
+    ];
+    stubFetch({
+      cards,
+      dreamcallers,
+      dreamsigns: [],
+      decklists: [["Card 1", "Card 2"]],
+      draftRecords: [],
+    });
+
+    await loadQuestContent("pickearly");
+
+    const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
+    expect(fetchedPaths).toContain("/draft-records-data.json");
+  });
+
+  it("skips the draft-record corpus for the default pool variant", async () => {
+    const cards = [makeCard(1), makeCard(2), makeCard(3)];
+    const dreamcallers = [
+      {
+        id: "dc-a",
+        name: "Alpha",
+        title: "A",
+        renderedText: "",
+        imageNumber: "0001",
+        startingEssence: 250,
+        signatureCards: ["Card 1"],
+      },
+    ];
+    stubFetch({
+      cards,
+      dreamcallers,
+      dreamsigns: [],
+      decklists: [["Card 1", "Card 2"]],
+    });
+
+    await loadQuestContent();
+
+    const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
+    expect(fetchedPaths).not.toContain("/draft-records-data.json");
+  });
+
   it("offers every Dreamcaller without a validation skip loop", async () => {
     const cards = [makeCard(1), makeCard(2)];
     const dreamcallers = [

@@ -207,6 +207,10 @@ function makeReplayRecord(): DraftRecord {
 }
 
 beforeEach(() => {
+  // Restore first so each test starts with a clean console.log spy: quest start
+  // now emits a `draft_pool_constructed` log, and without clearing, that call
+  // count would leak into later tests' `not.toHaveBeenCalled()` assertions.
+  vi.restoreAllMocks();
   vi.spyOn(console, "log").mockImplementation(() => {});
 });
 
@@ -437,7 +441,15 @@ describe("quest state actions", () => {
     // at the default `false` so the popup opens once when the dreamcaller
     // is first picked.
     expect(next.hasSeenStartingDeckPopup).toBe(false);
-    expect(logSpy).not.toHaveBeenCalled();
+    // Quest start builds the draft pool, which emits exactly one provenance log
+    // recording the algorithm and seed the pool was constructed from.
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    const constructed = JSON.parse(
+      logSpy.mock.calls[0][0] as string,
+    ) as Record<string, unknown>;
+    expect(constructed.event).toBe("draft_pool_constructed");
+    expect(constructed.dreamcallerId).toBe(dreamcaller.id);
+    expect(typeof constructed.seed).toBe("number");
   });
 
   it("sets the quest screen and active site together", () => {

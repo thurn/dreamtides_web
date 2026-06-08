@@ -1,8 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { buildPoolData } from "../draft/pool/pool-data.ts";
 import type { PoolCard } from "../draft/pool/types.ts";
 import type { DreamcallerContent } from "../types/content";
+import { getLogEntries, resetLog } from "../logging";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import {
   buildDreamcallerPackage,
@@ -135,6 +136,59 @@ describe("buildDreamcallerPackage", () => {
     const ctx = makeContext();
     const pkg = buildDreamcallerPackage(makeDreamcaller(), ctx, "seed-abc");
     expect(pkg.dreamsignPoolIds).toEqual(["ds1", "ds2", "ds3"]);
+  });
+});
+
+describe("buildDreamcallerPackage draft_pool_constructed logging", () => {
+  beforeEach(() => {
+    resetLog();
+  });
+
+  function constructedEvent(): Record<string, unknown> {
+    const events = getLogEntries().filter(
+      (e) => e.event === "draft_pool_constructed",
+    );
+    expect(events).toHaveLength(1);
+    return events[0] as Record<string, unknown>;
+  }
+
+  it("records the algorithm, seed, and size for every variant", () => {
+    const ctx = makeContext();
+    buildDreamcallerPackage(makeDreamcaller(), ctx, "seed-abc");
+    const event = constructedEvent();
+    expect(event.dreamcallerId).toBe("dc-test");
+    // The context has no poolVariant, so it falls back to the default (idf3).
+    expect(event.algo).toBe("idf3");
+    expect(typeof event.seed).toBe("number");
+    expect(event.poolSize).toBeGreaterThan(0);
+    expect(event.distinctCardCount).toBeGreaterThan(0);
+  });
+
+  it("captures the seed card, partners, and top cards for affinity-grown pools", () => {
+    const ctx: RunPoolContext = { ...makeContext(), poolVariant: "seed" };
+    buildDreamcallerPackage(makeDreamcaller(), ctx, "seed-abc");
+    const event = constructedEvent();
+
+    expect(event.algo).toBe("seed");
+    expect(typeof event.seedCardName).toBe("string");
+    expect(typeof event.seedAffinityWeight).toBe("number");
+    expect(Array.isArray(event.topPartners)).toBe(true);
+
+    const topCards = event.topCards as Array<Record<string, number | string>>;
+    expect(Array.isArray(topCards)).toBe(true);
+    expect(topCards.length).toBeGreaterThan(0);
+    expect(topCards.length).toBeLessThanOrEqual(20);
+    // Sorted by blended admission score, highest first.
+    for (let i = 1; i < topCards.length; i += 1) {
+      expect(topCards[i - 1].blendedScore).toBeGreaterThanOrEqual(
+        topCards[i].blendedScore as number,
+      );
+    }
+    for (const card of topCards) {
+      expect(typeof card.name).toBe("string");
+      expect(typeof card.addOrder).toBe("number");
+      expect(card.copies).toBeGreaterThanOrEqual(1);
+    }
   });
 });
 

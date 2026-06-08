@@ -76,6 +76,20 @@ export interface RunPoolContext {
 const POOL_TARGET_SIZE = 200;
 
 /**
+ * Pool variants that grow their pool from the draft-record corpus
+ * (`poolData.draftRecords`). In pool mode the records are only fetched for these
+ * variants; any variant added here must read records in its corpus builder, and
+ * any record-driven variant omitted here will silently fall back to the random
+ * color-pool generator at runtime.
+ */
+const POOL_VARIANTS_NEEDING_RECORDS: ReadonlySet<PoolVariant> = new Set<PoolVariant>([
+  "pickfit",
+  "pickearly",
+  "pickpos",
+  "pickchoice",
+]);
+
+/**
  * FNV-1a hash of a string into a 32-bit unsigned integer, used to derive the
  * idf3 generator's numeric seed from the quest seed and Dreamcaller id so each
  * run's pool is reproducible. Exported so replay record selection derives its
@@ -117,6 +131,74 @@ function generateDreamcallerPool(
   );
 }
 
+/** How many top cards (by blended admission score) `draft_pool_constructed` records. */
+const POOL_CONSTRUCTED_LOG_TOP_CARDS = 20;
+
+function roundTo3(value: number): number {
+  return Math.round(value * 1000) / 1000;
+}
+
+/**
+ * Emit `draft_pool_constructed`, the "why is my pool shaped like this" record,
+ * captured at the one point the freshly built {@link GeneratedPool} (and its
+ * provenance) is in hand. Always logs the algorithm (`?algo=`), the seed, and
+ * the size, which together reproduce and identify the pool. For the
+ * affinity-grown variants (`pickearly`/`pickfit`/`seed`/`pickpos`/`pickchoice`)
+ * it adds the single seed card the pool grew outward from, the seed-vs-pool
+ * blend weight, the seed's strongest partners that landed in the pool, and the
+ * top {@link POOL_CONSTRUCTED_LOG_TOP_CARDS} cards by blended admission score —
+ * each with the order it joined, copies, and its seed/pool affinities. Read it
+ * from `logs/quest-log.jsonl` filtered by the run's `gameId`. Variants with no
+ * seed-growth story (e.g. `idf3`, `color_pool`) log the base fields only.
+ */
+function logPoolConstructed(
+  dreamcaller: DreamcallerContent,
+  ctx: RunPoolContext,
+  pool: GeneratedPool,
+): void {
+  const numberOf = (name: string): number | null => ctx.nameIndex.get(name) ?? null;
+  const base = {
+    dreamcallerId: dreamcaller.id,
+    algo: pool.variant,
+    seed: pool.seed,
+    poolSize: pool.size,
+    distinctCardCount: pool.counts.size,
+  };
+
+  const provenance = pool.seedProvenance;
+  if (provenance === undefined) {
+    logEvent("draft_pool_constructed", base);
+    return;
+  }
+
+  const topCards = Object.entries(provenance.cardProvenanceByName)
+    .sort((a, b) => b[1].blendedScore - a[1].blendedScore)
+    .slice(0, POOL_CONSTRUCTED_LOG_TOP_CARDS)
+    .map(([name, entry]) => ({
+      name,
+      cardNumber: numberOf(name),
+      addOrder: entry.addOrder,
+      copies: entry.copies,
+      seedAffinity: roundTo3(entry.seedAffinity),
+      poolAffinity: roundTo3(entry.poolAffinity),
+      blendedScore: roundTo3(entry.blendedScore),
+    }));
+
+  logEvent("draft_pool_constructed", {
+    ...base,
+    seedCardName: provenance.seedCardName,
+    seedCardNumber: numberOf(provenance.seedCardName),
+    seedAffinityWeight: provenance.seedAffinityWeight,
+    totalCopies: provenance.totalCopies,
+    doubledCardCount: provenance.doubledCardCount,
+    topPartners: provenance.topPartnerCardNames.map((name) => ({
+      name,
+      cardNumber: numberOf(name),
+    })),
+    topCards,
+  });
+}
+
 /**
  * Build the draft package for one Dreamcaller by generating its pool with the
  * run's selected strategy (see {@link generateDreamcallerPool}), resolving it
@@ -129,6 +211,7 @@ export function buildDreamcallerPackage(
   questSeed: string,
 ): ResolvedDreamcallerPackage {
   const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
+  logPoolConstructed(dreamcaller, ctx, pool);
 
   const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(pool, ctx.nameIndex);
   if (unresolvedNames.length > 0) {
@@ -274,9 +357,12 @@ export async function loadQuestContent(
 ): Promise<QuestContent> {
   // Both deck-fit modes need the record corpus to build the fit model.
   const usesFitModel = draftMode === "replay" || draftMode === "fresh20";
-  // The `pickfit` pool variant grows its pool from the same record corpus, so it
-  // needs the records fetched in pool mode too.
-  const poolNeedsRecords = poolVariant === "pickfit";
+  // The pick-data pool variants grow their pool from the same record corpus, so
+  // they need the records fetched in pool mode too. Without the records each
+  // builds an empty corpus and `growPoolFromCorpus` silently falls back to the
+  // random color-pool generator — an unfocused pool that is not the variant the
+  // run asked for.
+  const poolNeedsRecords = POOL_VARIANTS_NEEDING_RECORDS.has(poolVariant);
   const [
     cardDatabase,
     draftDreamcallers,
@@ -290,7 +376,7 @@ export async function loadQuestContent(
     loadDreamsignTemplates(),
     loadDecklists(),
     loadHumanDecklists(),
-    // Fetch the draft records corpus when a deck-fit mode or the `pickfit` pool
+    // Fetch the draft records corpus when a deck-fit mode or a pick-data pool
     // variant needs it; other pool modes skip it so the default load path incurs
     // no extra network cost.
     usesFitModel || poolNeedsRecords
@@ -318,7 +404,8 @@ export async function loadQuestContent(
       decklists,
       undefined,
       humanDecklists,
-      // `pickfit` keys on stable card ids, so feed it the records' id arrays.
+      // The pick-data variants key on stable card ids, so feed them the
+      // records' id arrays.
       draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds })),
     ),
     nameIndex,

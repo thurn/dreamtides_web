@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Database, Unsubscribe } from "firebase/database";
+import { clearLogContext, setLogContext } from "../logging";
 import type { DatabaseMode } from "../runtime/runtime-config";
 import { generateRoomId } from "./room-id";
 import {
@@ -65,6 +66,21 @@ export function MultiplayerRoomGate({
     gameId === null ? { status: "create" } : { status: "loading", roomId: gameId },
   );
   const readyRoomId = gateState.status === "ready" ? gateState.roomId : null;
+
+  // Stamp the room id onto every log event for this session so one game can be
+  // grepped out of the shared `logs/quest-log.jsonl` (`"gameId":"<id>"`). Set
+  // once the room is ready — before any Dreamcaller pick builds a pool — and
+  // detached on unmount or when the room changes.
+  useEffect(() => {
+    if (readyRoomId === null) {
+      clearLogContext();
+      return undefined;
+    }
+    setLogContext({ gameId: readyRoomId });
+    return () => {
+      clearLogContext();
+    };
+  }, [readyRoomId]);
 
   useEffect(() => {
     setActiveRoomId(gameId);
