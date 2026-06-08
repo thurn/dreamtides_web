@@ -238,6 +238,7 @@ tags = []
 image-number = 1913887486
 art-owned = false
 card-number = 13
+art = { x = -0.294, y = -0.102, scale = 1.17 }
 
 [[cards]]
 name = "Fading Farewell"
@@ -602,6 +603,7 @@ tags = []
 image-number = 2287054239
 art-owned = true
 card-number = 33
+art = { x = -0.022, y = -0.517, scale = 1.77 }
 
 [[cards]]
 name = "Pathfinder Adrift"
@@ -715,6 +717,7 @@ tags = ["Lurrus"]
 image-number = 1084620233
 art-owned = true
 card-number = 39
+art = { x = 0, y = -0.083, scale = 1.27 }
 
 [[cards]]
 name = "The Waking Titan"
@@ -768,7 +771,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 2415692455
 art-owned = false
 card-number = 42
@@ -785,7 +788,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 432001924
 art-owned = false
 card-number = 43
@@ -826,6 +829,7 @@ tags = []
 image-number = 2278837667
 art-owned = false
 card-number = 45
+art = { x = -0.336, y = 0.369, scale = 1.17 }
 
 [[cards]]
 name = "Nomad of Endless Paths"
@@ -977,7 +981,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Ichor Wellspring"]
+tags = ["Ichor Wellspring", "Art Rework"]
 image-number = 1185684769
 art-owned = false
 card-number = 53
@@ -1035,6 +1039,7 @@ tags = []
 image-number = 1785274670
 art-owned = true
 card-number = 56
+art = { x = -0.42, y = 0.369, scale = 1.17 }
 
 [[cards]]
 name = "Verdant Wayfarer"
@@ -1102,7 +1107,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 439817398
 art-owned = false
 card-number = 60
@@ -1124,7 +1129,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 2586513019
 art-owned = false
 card-number = 61
@@ -1326,6 +1331,7 @@ tags = []
 image-number = 776481901
 art-owned = false
 card-number = 72
+art = { x = 0.084, y = 0.31, scale = 1.17 }
 
 [[cards]]
 name = "Salvage Engine"
@@ -1784,6 +1790,7 @@ tags = []
 image-number = 450440599
 art-owned = false
 card-number = 97
+art = { x = -0.334, y = -0.438, scale = 1.27 }
 
 [[cards]]
 name = "Enginespeaker"
@@ -1820,7 +1827,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Elves"]
+tags = ["Elves", "Art Rework"]
 image-number = 748956871
 art-owned = false
 card-number = 99
@@ -1837,7 +1844,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = []
+tags = ["Art Rework"]
 image-number = 482055286
 art-owned = false
 card-number = 100
@@ -1963,7 +1970,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 424818601
 art-owned = false
 card-number = 107
@@ -2001,6 +2008,7 @@ tags = []
 image-number = 2295991865
 art-owned = false
 card-number = 109
+art = { x = -0.168, y = 0.839, scale = 1.17 }
 
 [[cards]]
 name = "Petal-Seer"
@@ -2073,7 +2081,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 2303852061
 art-owned = false
 card-number = 113
@@ -2111,6 +2119,7 @@ tags = []
 image-number = 465449504
 art-owned = false
 card-number = 115
+art = { x = 0.353, y = 0.931, scale = 1.17 }
 
 [[cards]]
 name = "Call of the Lost"
@@ -2144,7 +2153,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = []
+tags = ["Art Rework"]
 image-number = 2155438703
 art-owned = false
 card-number = 117
@@ -2455,7 +2464,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Removal", "Figment Maker"]
+tags = ["Removal", "Figment Maker", "Art Rework"]
 image-number = 2299755787
 art-owned = false
 card-number = 134
@@ -2983,7 +2992,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = []
+tags = ["Art Rework"]
 image-number = 512756368
 art-owned = false
 card-number = 163
@@ -3158,7 +3167,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 608687441
 art-owned = false
 card-number = 172
@@ -3320,6 +3329,7 @@ tags = []
 image-number = 1727859040
 art-owned = false
 card-number = 181
+art = { x = 0.294, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Burning Pursuit"
@@ -3991,6 +4001,7 @@ tags = []
 image-number = 2278837663
 art-owned = true
 card-number = 219
+art = { x = 0.084, y = 0.839, scale = 1.17 }
 
 [[cards]]
 name = "Crescendo Channeler"
@@ -4240,7 +4251,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Figment Maker", "Character Payoff"]
+tags = ["Figment Maker", "Character Payoff", "Art Rework"]
 image-number = 2186149271
 art-owned = false
 card-number = 233
@@ -4406,7 +4417,7 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Removal"]
+tags = ["Removal", "Art Rework"]
 image-number = 1570031575
 art-owned = true
 card-number = 242
@@ -4447,6 +4458,7 @@ tags = ["Spirit Lord"]
 image-number = 2303852065
 art-owned = false
 card-number = 244
+art = { x = 0.059, y = 0, scale = 1.67 }
 
 [[cards]]
 name = "Voidshield Guardian"
@@ -5573,7 +5585,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 691496698
 art-owned = false
 card-number = 306
@@ -5683,7 +5695,7 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 2
-tags = ["ETB Bounce"]
+tags = ["ETB Bounce", "Art Rework"]
 image-number = 758082490
 art-owned = false
 card-number = 312
@@ -6400,6 +6412,7 @@ tags = []
 image-number = 529374445
 art-owned = false
 card-number = 350
+art = { x = -0.105, y = -0.654, scale = 1.57 }
 
 [[cards]]
 name = "Lone Castaway"
@@ -6470,7 +6483,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = []
+tags = ["Art Rework"]
 image-number = 1037215513
 art-owned = false
 card-number = 354
@@ -6527,10 +6540,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Removal"]
+tags = ["Removal", "Art Rework"]
 image-number = 2123360840
 art-owned = false
 card-number = 357
+art = { x = 0.126, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Break the Veil"
@@ -6830,15 +6844,16 @@ id = "31501d09-5dde-44f4-a938-7ca95ad988a0"
 rendered-text = "X●: This character gains +X✦ until end of turn."
 energy-cost = 2
 card-type = "Character"
-subtype = "Warrior"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 432001912
 art-owned = false
 card-number = 374
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Oblivion Guide"
@@ -7016,7 +7031,7 @@ id = "8951e112-92d2-4246-9859-39320620231b"
 rendered-text = "2●: An event in your void gains reclaim."
 energy-cost = 2
 card-type = "Character"
-subtype = "Ancient"
+subtype = "Elemental"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -7401,6 +7416,7 @@ tags = []
 image-number = 735243049
 art-owned = false
 card-number = 404
+art = { x = -0.057, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Prism Caller"
@@ -7562,10 +7578,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 5
-tags = []
+tags = ["Art Rework"]
 image-number = 403770319
 art-owned = true
 card-number = 413
+art = { x = 0.114, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Pit Descender"
@@ -7638,6 +7655,7 @@ tags = ["Spirit Lord"]
 image-number = 674166508
 art-owned = false
 card-number = 417
+art = { x = -0.513, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Wreckheap Survivor"
@@ -7675,6 +7693,7 @@ tags = ["Free Sacrifice"]
 image-number = 2438838891
 art-owned = false
 card-number = 419
+art = { x = -0.353, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Emberwatch Veteran"
@@ -8042,7 +8061,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = []
+tags = ["Art Rework"]
 image-number = 2269064819
 art-owned = false
 card-number = 439
@@ -8168,7 +8187,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = []
+tags = ["Art Rework"]
 image-number = 2433164309
 art-owned = false
 card-number = 446
@@ -8219,10 +8238,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = []
+tags = ["Art Rework"]
 image-number = 1419437210
 art-owned = false
 card-number = 449
+art = { x = 0.42, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Entropy Spike"
@@ -8930,7 +8950,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = []
+tags = ["Art Rework"]
 image-number = 2018053220
 art-owned = false
 card-number = 488
@@ -9191,6 +9211,7 @@ tags = []
 image-number = 1648927918
 art-owned = false
 card-number = 502
+art = { x = 0.378, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Stolen Genesis"
@@ -9211,6 +9232,7 @@ tags = []
 image-number = 2293194527
 art-owned = false
 card-number = 503
+art = { x = 0.126, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Secrets of the Deep"
