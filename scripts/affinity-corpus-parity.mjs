@@ -30,6 +30,7 @@ import {
 } from "../src/draft/pool/index.ts";
 import { buildPickfitCorpus } from "../src/draft/pool/variant-pickfit.ts";
 import { makeRng } from "../src/draft/pool/rng.ts";
+import { stripJsonComments } from "./lib/card-refs.mjs";
 import {
   scorePool,
   trapCards,
@@ -42,6 +43,10 @@ import {
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
+// The committed embedding is JSONC (provenance header over JSON), so strip
+// comments before parsing.
+const readJsonc = (p) =>
+  JSON.parse(stripJsonComments(readFileSync(resolve(ROOT, p), "utf8")));
 
 const POOL_TARGET_SIZE = 200;
 const DEFAULT_SEEDS = 25;
@@ -216,11 +221,11 @@ function run() {
   const asJson = argv.includes("--json");
   const ctx = loadContext();
 
-  if (!existsSync(resolve(ROOT, "data/affinity_embedding.json"))) {
-    console.error("Missing data/affinity_embedding.json. Run `npm run bake-affinity-corpus` first.");
+  if (!existsSync(resolve(ROOT, "data/affinity_embedding.jsonc"))) {
+    console.error("Missing data/affinity_embedding.jsonc. Run `npm run bake-affinity-corpus` first.");
     process.exit(1);
   }
-  const embedding = deserializeCorpus(readJson("data/affinity_embedding.json"));
+  const embedding = deserializeCorpus(readJsonc("data/affinity_embedding.jsonc"));
 
   // 1. Fidelity (sets ctx.poolData.affinityCorpus = matrix while it runs).
   const fidelity = checkFidelity(ctx, fidelityPairs);

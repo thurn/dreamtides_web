@@ -1,3 +1,38 @@
+// data/affinity_embedding.jsonc — committed card embedding for the `embedded` draft-pool variant.
+//
+// GENERATED FILE. The JSON body below is regenerated wholesale by
+// `npm run bake-affinity-corpus` — do not hand-edit the vectors. A re-bake
+// rotates the randomized-SVD basis, so every number changes at once; review it
+// for size/sanity and metric parity, not line-by-line. (This comment header IS
+// preserved across re-bakes, so notes added here are safe.)
+//
+// WHAT THIS IS
+//   A low-rank distillation of the draft-record-derived card-by-card synergy.
+//   Card i carries a source vector U[i], a target vector V[i] (each length
+//   `rank`), and a play-rate prior[i]; cards/prior/U/V are aligned row-for-row
+//   and floats are rounded to 5 decimals. The `embedded` variant reconstructs
+//   synergy as  affinity(d, c) = max(0, U[d] · V[c])  and grows pools from it
+//   exactly like `sigseed`.
+//
+// HOW IT WAS GENERATED  (scripts/bake-affinity-corpus.mjs)
+//   1. Build the base record-derived affinity corpus (buildPickfitCorpus) from
+//      the bundled draft records in public/draft-records-data.json.
+//   2. Fold in the committed "resembles" recipes from data/affinity_overlay.jsonc.
+//   3. Fit this embedding with a seeded randomized truncated SVD. All randomness
+//      is seeded from constants, so the same records + overlay reproduce these
+//      vectors byte-for-byte.
+//
+// HOW TO UPDATE IT
+//   1. Edit data/affinity_overlay.jsonc to add or re-point a card (and, for
+//      build-around metric credit, data/buildaround_support.json).
+//   2. Re-bake and refresh the served copy:
+//        npm run bake-affinity-corpus     # rewrites this file (header preserved)
+//        npm run setup-assets             # copies it to public/affinity-corpus-data.json (comments stripped)
+//   3. Validate:  npm run affinity-corpus-parity
+//   4. Commit this file together with data/affinity_overlay.jsonc.
+//   When fresh drafts land in docs/draft_records_adapted/, re-run setup-assets
+//   then bake to refit from the larger record set; the overlay recipes re-apply
+//   automatically. See docs/cards2/affinity_embedding_workflow.md.
 {
   "version": 1,
   "kind": "embedding",

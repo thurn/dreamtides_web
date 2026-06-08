@@ -100,7 +100,7 @@ export function poolVariantNeedsRecords(variant: PoolVariant): boolean {
 
 /**
  * Pool variants that grow their pool from the committed card embedding
- * (`data/affinity_embedding.json`, served as `/affinity-corpus-data.json`)
+ * (`data/affinity_embedding.jsonc`, served as `/affinity-corpus-data.json`)
  * instead of the draft records. In pool mode the embedding is fetched only for
  * these variants and set on `poolData.affinityCorpus`; they do not need the raw
  * records, so the records fetch stays gated on

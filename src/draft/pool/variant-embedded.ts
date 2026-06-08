@@ -7,7 +7,7 @@
 //
 // `sigseed` rebuilds its corpus from the 19 MB draft-record bundle every page
 // load; `embedded` reads `poolData.affinityCorpus`, a corpus reconstructed from
-// the committed `data/affinity_embedding.json` (served as
+// the committed `data/affinity_embedding.jsonc` (served as
 // `/affinity-corpus-data.json`). That embedding is a low-rank distillation of the
 // same record-derived synergy — validated as metric-equivalent to the exact
 // generator — folded with a committed "resembles" overlay so new and changed
@@ -46,7 +46,7 @@ export function generateEmbedded(
     missingPoolData(
       "embedded",
       "its committed affinity embedding was not loaded " +
-        "(data/affinity_embedding.json -> /affinity-corpus-data.json)",
+        "(data/affinity_embedding.jsonc -> /affinity-corpus-data.json)",
     );
   }
 
@@ -85,7 +85,7 @@ export const embeddedStrategy: PoolStrategy = {
   description:
     "Grows the pool exactly like sigseed — from a random subset of a " +
     "Dreamcaller's signature cards expanded by pick-affinity — but reads its " +
-    "synergy from the committed card embedding (data/affinity_embedding.json) " +
+    "synergy from the committed card embedding (data/affinity_embedding.jsonc) " +
     "instead of rebuilding it from the draft records, so new and changed cards " +
     "can be authored in the affinity overlay. Reduces to pickcohere with no signature.",
   generate: ({ rng, poolData, signatureCards }) =>

@@ -602,17 +602,22 @@ export function setupAssets({
 
   // The committed card embedding the `embedded` pool variant grows from. It is an
   // authored/baked artifact (run `npm run bake-affinity-corpus` to regenerate it
-  // from the records and the affinity overlay), so it is copied verbatim to the
-  // served path rather than rebuilt here — the committed file stays authoritative
-  // like a lockfile. Absent only in a checkout that has not baked it yet.
-  const affinityEmbeddingPath = join(DATA_DIR, "affinity_embedding.json");
+  // from the records and the affinity overlay) committed as JSONC with a
+  // provenance header. The browser fetches the served copy and parses it with
+  // `JSON.parse`, so the comments are stripped on the way to the served path; the
+  // committed source stays authoritative like a lockfile. Absent only in a
+  // checkout that has not baked it yet.
+  const affinityEmbeddingPath = join(DATA_DIR, "affinity_embedding.jsonc");
   const affinityCorpusJsonPath = join(publicDir, "affinity-corpus-data.json");
   if (existsSync(affinityEmbeddingPath)) {
-    writeFileSync(affinityCorpusJsonPath, readFileSync(affinityEmbeddingPath, "utf8"));
-    console.log("Copied affinity_embedding.json to affinity-corpus-data.json");
+    const embeddingJsonc = readFileSync(affinityEmbeddingPath, "utf8");
+    // Strip comments and re-serialize so the served asset is valid JSON.
+    const served = JSON.stringify(JSON.parse(stripJsonComments(embeddingJsonc)));
+    writeFileSync(affinityCorpusJsonPath, served + "\n");
+    console.log("Copied affinity_embedding.jsonc to affinity-corpus-data.json (comments stripped)");
   } else {
     console.log(
-      "No data/affinity_embedding.json found; the `embedded` pool variant will " +
+      "No data/affinity_embedding.jsonc found; the `embedded` pool variant will " +
         "be unavailable until `npm run bake-affinity-corpus` is run.",
     );
   }

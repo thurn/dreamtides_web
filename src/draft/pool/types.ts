@@ -107,7 +107,7 @@ export interface PoolData {
   draftRecords?: readonly PickRecord[];
   /**
    * A prebuilt affinity corpus the `embedded` variant grows from, reconstructed
-   * from the committed card embedding (`data/affinity_embedding.json`, served as
+   * from the committed card embedding (`data/affinity_embedding.jsonc`, served as
    * `/affinity-corpus-data.json`) rather than rebuilt from {@link draftRecords}.
    * When set, the `embedded` variant reads it directly; the record-derived
    * variants ignore it and keep building their corpus from `draftRecords`, so

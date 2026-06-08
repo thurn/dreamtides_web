@@ -19,7 +19,7 @@ from those records; pool generation is otherwise a deterministic function of
 play, the generator cannot accommodate a **new** card (it has no synergy data), a
 **changed** card (its data is stale), or a designer's intent ("this card plays like
 A, B, C") — the only lever is to collect more real drafts. This migration distills
-the corpus into a **committed per-card embedding** (`data/affinity_embedding.json`):
+the corpus into a **committed per-card embedding** (`data/affinity_embedding.jsonc`):
 each card becomes a pair of vectors plus a prior — a true card vector database —
 checked into version control and loaded directly by the generator. New and changed
 cards are authored in a **committed overlay** of "resembles" recipes that are folded
@@ -231,7 +231,7 @@ Separate three concerns that the current system fuses:
 | Concern | Current | Target |
 |---|---|---|
 | **Upstream data** | historical records, recompiled at runtime | records, read **only at bake time** |
-| **Runtime artifact** | matrix rebuilt in-browser from records | committed **embedding** `data/affinity_embedding.json`, served and loaded directly |
+| **Runtime artifact** | matrix rebuilt in-browser from records | committed **embedding** `data/affinity_embedding.jsonc`, served and loaded directly |
 | **Card edits / new cards** | (impossible without new records) | committed **overlay** of "resembles" recipes, folded into the embedding at bake time |
 
 ### 5.1 The runtime substrate is the committed embedding
@@ -242,7 +242,7 @@ Each card is `(U[card], V[card], prior[card])`, where `U`/`V` are rank-`R` vecto
 in-memory `AffinityCorpus`, so **the grower and every variant are untouched** —
 they keep consuming `AffinityCorpus` exactly as today.
 
-The embedding is **checked into version control** at `data/affinity_embedding.json`
+The embedding is **checked into version control** at `data/affinity_embedding.jsonc`
 (alongside other committed derived artifacts like `data/buildaround_support.json`).
 `scripts/setup-assets.mjs` copies it to `public/affinity-corpus-data.json` (a
 gitignored served asset) the same way it emits the other `public/` JSON, and the
@@ -296,7 +296,7 @@ one.)
 
 Two committed files. Both key cards by lowercase UUID; floats rounded to 5 decimals.
 
-### 6.1 The embedding — `data/affinity_embedding.json` (committed; the artifact)
+### 6.1 The embedding — `data/affinity_embedding.jsonc` (committed; the artifact)
 
 ```jsonc
 {
@@ -394,7 +394,7 @@ step, the new card receives a consistent latent vector automatically.
    - Left singular vectors `u_i = Q w_i`; `B^T w_i = σ_i v_i`.
    - Split σ evenly into the stored vectors: `U[:,i] = u_i·√σ_i`,
      `V[:,i] = (B^T w_i)/√σ_i`.
-3. Write `data/affinity_embedding.json` (Section 6.1). Reconstruction clamps
+3. Write `data/affinity_embedding.jsonc` (Section 6.1). Reconstruction clamps
    negatives to 0 at load.
 
 Determinism: seed the SVD's random projection from a fixed constant so re-bakes are
@@ -411,7 +411,7 @@ reproducible. `rank` is tunable; **16–32 is the validated band, 32 is the defa
    `bake-affinity-corpus`. Loads the same inputs as the metric's `loadContext`;
    builds the base corpus via `buildPoolData` + `buildPickfitCorpus`; applies the
    overlay (Section 7); fits the embedding (Section 8); writes
-   **`data/affinity_embedding.json`**. This command is run **on demand** (when
+   **`data/affinity_embedding.jsonc`**. This command is run **on demand** (when
    records or the overlay change) and its output is **committed** — it is not run
    by `setup-assets`, so the committed embedding stays authoritative (like a
    lockfile).
@@ -429,7 +429,7 @@ reproducible. `rank` is tunable; **16–32 is the validated band, 32 is the defa
    set `poolData.affinityCorpus`; the pool path then no longer calls
    `loadDraftRecords` (records are loaded only for record-replay mode / the
    fit-model). Extend the `poolVariantNeedsRecords` gate accordingly.
-5. **Wire `setup-assets.mjs`** to copy `data/affinity_embedding.json` →
+5. **Wire `setup-assets.mjs`** to copy `data/affinity_embedding.jsonc` →
    `public/affinity-corpus-data.json` (do **not** regenerate it there). Add the
    served path to `.gitignore`.
 
@@ -508,7 +508,7 @@ controls, and (c) scores each with the metric's **exported** pure functions
   from a hypothetical exact-matrix generator; the *quality distribution* is what is
   preserved, and Section 10.2 is the bar that holds it. Section 10.1 keeps the
   matrix step exact so the embedding is the *only* approximation in the chain.
-- **Committed-artifact diffs.** `data/affinity_embedding.json` is a generated file;
+- **Committed-artifact diffs.** `data/affinity_embedding.jsonc` is a generated file;
   a re-bake rewrites all vectors wholesale (SVD basis rotation), so review it for
   size/sanity and metric parity, not line-by-line. The human-meaningful diffs live
   in `data/affinity_overlay.jsonc` and the records.
@@ -533,7 +533,7 @@ controls, and (c) scores each with the metric's **exported** pure functions
 
 ## Appendix A. Key references
 
-**Committed artifacts (new):** `data/affinity_embedding.json` (the embedding),
+**Committed artifacts (new):** `data/affinity_embedding.jsonc` (the embedding),
 `data/affinity_overlay.jsonc` (recipes). **Served (gitignored):**
 `public/affinity-corpus-data.json` (copy of the embedding).
 

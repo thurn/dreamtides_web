@@ -1,5 +1,5 @@
 // Serialize an {@link AffinityCorpus} to a committed per-card embedding and
-// reconstruct it back. The embedding (`data/affinity_embedding.json`) is the
+// reconstruct it back. The embedding (`data/affinity_embedding.jsonc`) is the
 // runtime artifact the `embedded` pool variant grows from: each card becomes a
 // pair of rank-`R` vectors plus a prior, and synergy is reconstructed as
 //   affinity(d, c) = max(0, U[d] · V[c]).
@@ -26,7 +26,7 @@
 import type { AffinityCorpus } from "./affinity-grower.ts";
 import { makeRng } from "./rng.ts";
 
-// The committed embedding's on-disk schema (`data/affinity_embedding.json`).
+// The committed embedding's on-disk schema (`data/affinity_embedding.jsonc`).
 // Cards are keyed by lowercase UUID; floats are rounded to 5 decimals. `U` is the
 // source factor ("what this card pulls"), `V` the target factor ("what pulls this
 // card"); both are N×`rank`, aligned row-for-row to `cards`.

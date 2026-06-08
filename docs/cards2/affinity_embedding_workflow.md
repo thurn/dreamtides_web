@@ -14,8 +14,8 @@ Full design and validation evidence:
 | File | Role |
 |---|---|
 | `data/affinity_overlay.jsonc` | **The file you edit.** Recipes for new/changed cards. |
-| `data/affinity_embedding.json` | Committed embedding, baked from the records + overlay. The runtime artifact. |
-| `public/affinity-corpus-data.json` | Served copy of the embedding (gitignored; written by `setup-assets`). |
+| `data/affinity_embedding.jsonc` | Committed embedding (JSONC: a provenance header over the JSON body), baked from the records + overlay. The source of truth. Generated — do not hand-edit the vectors; the header comments are preserved across re-bakes. |
+| `public/affinity-corpus-data.json` | Served copy the browser loads (gitignored; written by `setup-assets`, which strips the JSONC comments so it is valid JSON). |
 | `data/buildaround_support.json` | Independent theme metadata the quality metric reads. |
 
 ## Editing how a card drafts
@@ -47,7 +47,7 @@ Full design and validation evidence:
    ```
 
 3. Commit **both** `data/affinity_overlay.jsonc` and the regenerated
-   `data/affinity_embedding.json`. A re-bake rewrites every vector wholesale (the
+   `data/affinity_embedding.jsonc`. A re-bake rewrites every vector wholesale (the
    SVD basis rotates), so review the embedding for size/sanity and metric parity,
    not line-by-line — the human-meaningful diff lives in the overlay.
 

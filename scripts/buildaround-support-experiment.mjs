@@ -90,10 +90,13 @@ import {
   generatePoolFromData,
   POOL_VARIANT_IDS,
 } from "../src/draft/pool/index.ts";
-import { supportEntryByName } from "./lib/card-refs.mjs";
+import { stripJsonComments, supportEntryByName } from "./lib/card-refs.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
+// The committed embedding is JSONC (provenance header over JSON).
+const readJsonc = (p) =>
+  JSON.parse(stripJsonComments(readFileSync(resolve(ROOT, p), "utf8")));
 
 // Demand-tier -> target support share (fraction of the whole pool, in copies).
 // One tunable block. Anchored to the user's warrior example: a "+1 for each
@@ -492,9 +495,9 @@ function loadContext(argv) {
   // The `embedded` variant grows from the committed embedding rather than the
   // records; load it (when baked) so it runs under `--compare`/`--variant
   // embedded`. Every other variant ignores `affinityCorpus`.
-  const embeddingPath = resolve(ROOT, "data/affinity_embedding.json");
+  const embeddingPath = resolve(ROOT, "data/affinity_embedding.jsonc");
   if (existsSync(embeddingPath)) {
-    poolData.affinityCorpus = deserializeCorpus(readJson("data/affinity_embedding.json"));
+    poolData.affinityCorpus = deserializeCorpus(readJsonc("data/affinity_embedding.jsonc"));
   }
   return { dreamcallers, meta, poolData };
 }

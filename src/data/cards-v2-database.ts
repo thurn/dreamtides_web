@@ -71,7 +71,7 @@ export async function loadDraftRecords(): Promise<DraftRecord[]> {
 }
 
 /**
- * Fetch the committed card embedding (`data/affinity_embedding.json`, copied to
+ * Fetch the committed card embedding (`data/affinity_embedding.jsonc`, copied to
  * `/affinity-corpus-data.json` by `scripts/setup-assets.mjs`) and reconstruct the
  * {@link AffinityCorpus} the `embedded` pool variant grows from. Returns `null`
  * if the asset is missing so the caller can surface a clear configuration error
