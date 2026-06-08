@@ -109,23 +109,29 @@ type HoverPreviewState = {
 export function PlayableBattleScreen({
   site,
   aiMode = false,
+  basicAutomation = false,
 }: {
   site: SiteState;
   aiMode?: boolean;
+  basicAutomation?: boolean;
 }) {
   const { battleState, reducerState } = useMultiplayerBattle();
   if (battleState === null || reducerState === null) {
     return null; // BattleSiteRoute already shows the loading state.
   }
-  return <PlayableBattleScreenInner site={site} aiMode={aiMode} />;
+  return (
+    <PlayableBattleScreenInner site={site} aiMode={aiMode} basicAutomation={basicAutomation} />
+  );
 }
 
 function PlayableBattleScreenInner({
   site,
   aiMode,
+  basicAutomation,
 }: {
   site: SiteState;
   aiMode: boolean;
+  basicAutomation: boolean;
 }) {
   const {
     battleState: maybeBattleState,
@@ -167,7 +173,9 @@ function PlayableBattleScreenInner({
   const [openNoteEditor, setOpenNoteEditor] = useState<string | null>(null);
   const [openSideSummary, setOpenSideSummary] = useState<BattleSide | null>(null);
   const [isDreamcallerPanelOpen, setIsDreamcallerPanelOpen] = useState(false);
-  const [isBasicAutomationEnabled, setIsBasicAutomationEnabled] = useState(false);
+  // Initialize from the runtime flag (default ON; `?automation=0` forces off).
+  // The gear toggle below is a manual override that flips this at runtime.
+  const [isBasicAutomationEnabled, setIsBasicAutomationEnabled] = useState(basicAutomation);
   const [rewardOverlay, setRewardOverlay] = useState<RewardOverlayState>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] = useState(false);
   const loggedCommandSerialRef = useRef(0);

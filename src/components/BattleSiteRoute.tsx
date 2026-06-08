@@ -62,5 +62,11 @@ export function BattleSiteRoute({
     );
   }
 
-  return <PlayableBattleScreen site={site} aiMode={runtimeConfig.aiMode} />;
+  return (
+    <PlayableBattleScreen
+      site={site}
+      aiMode={runtimeConfig.aiMode}
+      basicAutomation={runtimeConfig.basicAutomation}
+    />
+  );
 }

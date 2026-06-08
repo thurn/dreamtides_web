@@ -175,7 +175,7 @@ function mount(element: ReactElement): {
 
 function renderScreen(
   mutateInitialState?: (state: ReturnType<typeof createTestBattle>["initialState"]) => void,
-  options?: { aiMode?: boolean },
+  options?: { aiMode?: boolean; basicAutomation?: boolean },
 ) {
   const testBattle = createTestBattle();
   mutateInitialState?.(testBattle.initialState);
@@ -186,7 +186,11 @@ function renderScreen(
         battleInit={testBattle.battleInit}
         initialState={testBattle.initialState}
       >
-        <PlayableBattleScreen site={testBattle.site} aiMode={options?.aiMode ?? false} />
+        <PlayableBattleScreen
+          site={testBattle.site}
+          aiMode={options?.aiMode ?? false}
+          basicAutomation={options?.basicAutomation ?? false}
+        />
       </TestMultiplayerBattleHost>,
     ),
   };
@@ -336,17 +340,51 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("renders a basic automation gear toggle that flips on click", () => {
-    const { container, root } = renderScreen();
+  it("starts the basic automation gear ON from runtimeConfig and toggles off then on with the gear", () => {
+    const { container, root } = renderScreen(undefined, { basicAutomation: true });
     const toggle = container.querySelector<HTMLElement>('[data-battle-action="toggle-automation"]');
     expect(toggle).not.toBeNull();
-    expect(toggle?.getAttribute("data-battle-automation-enabled")).toBe("false");
+    expect(toggle?.getAttribute("data-battle-automation-enabled")).toBe("true");
     expect(toggle?.querySelector("i.bxf.bx-cog")).not.toBeNull();
 
+    // The gear is a manual override: the first click turns the default-on
+    // automation OFF.
     act(() => {
       toggle?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
+    expect(
+      container
+        .querySelector('[data-battle-action="toggle-automation"]')
+        ?.getAttribute("data-battle-automation-enabled"),
+    ).toBe("false");
 
+    // A second click toggles it back ON, proving the override flips both ways.
+    act(() => {
+      container
+        .querySelector('[data-battle-action="toggle-automation"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+    expect(
+      container
+        .querySelector('[data-battle-action="toggle-automation"]')
+        ?.getAttribute("data-battle-automation-enabled"),
+    ).toBe("true");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("starts the basic automation gear OFF when runtimeConfig disables it (?automation=0)", () => {
+    const { container, root } = renderScreen(undefined, { basicAutomation: false });
+    const toggle = container.querySelector<HTMLElement>('[data-battle-action="toggle-automation"]');
+    expect(toggle).not.toBeNull();
+    expect(toggle?.getAttribute("data-battle-automation-enabled")).toBe("false");
+
+    // The gear is still a manual override: a click turns automation ON.
+    act(() => {
+      toggle?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
     expect(
       container
         .querySelector('[data-battle-action="toggle-automation"]')
@@ -381,13 +419,7 @@ describe("PlayableBattleScreen", () => {
       state.sides.player.hand = [eventCardId];
       state.sides.player.currentEnergy = 8;
       state.sides.player.maxEnergy = 8;
-    });
-
-    act(() => {
-      container
-        .querySelector('[data-battle-action="toggle-automation"]')
-        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
-    });
+    }, { basicAutomation: true });
 
     const handCard = container.querySelector<HTMLElement>(
       `[data-battle-region="player-hand-tray"] [data-battle-card-id="${eventCardId}"]`,
