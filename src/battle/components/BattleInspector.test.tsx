@@ -28,11 +28,15 @@ function createFixture() {
 function mount(): {
   container: HTMLDivElement;
   onCommand: ReturnType<typeof vi.fn>;
+  onDreamwellDraw: ReturnType<typeof vi.fn>;
+  onErode: ReturnType<typeof vi.fn>;
   onToggleOpponentHand: ReturnType<typeof vi.fn>;
   root: Root;
 } {
   const { battleInit, state } = createFixture();
   const onCommand = vi.fn();
+  const onDreamwellDraw = vi.fn();
+  const onErode = vi.fn();
   const onToggleOpponentHand = vi.fn();
   const container = document.createElement("div");
   document.body.append(container);
@@ -53,6 +57,8 @@ function mount(): {
         onClose={() => undefined}
         onOpen={() => undefined}
         onCommand={onCommand}
+        onDreamwellDraw={onDreamwellDraw}
+        onErode={onErode}
         onOpenFigmentCreator={() => undefined}
         onOpenPoolViewer={() => undefined}
         onOpenForesee={() => undefined}
@@ -65,7 +71,7 @@ function mount(): {
     );
   });
 
-  return { container, onCommand, onToggleOpponentHand, root };
+  return { container, onCommand, onDreamwellDraw, onErode, onToggleOpponentHand, root };
 }
 
 afterEach(() => {
@@ -103,6 +109,41 @@ describe("BattleInspector", () => {
       sourceSurface: "inspector",
     });
     expect(onToggleOpponentHand).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("runs Dreamwell + draw and erode from the debug rail", () => {
+    const { container, onDreamwellDraw, onErode, root } = mount();
+
+    expect(container.textContent).toContain("Dreamwell + draw");
+
+    const erodeButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-action="debug-erode-player"]',
+    );
+    expect(erodeButton?.textContent).toContain("Erode 1");
+
+    act(() => {
+      clickChip(container, "Dreamwell + draw");
+    });
+
+    expect(onDreamwellDraw).toHaveBeenCalledWith("player");
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>('button[aria-label="Increase erode count for you"]')
+        ?.click();
+    });
+
+    expect(erodeButton?.textContent).toContain("Erode 2");
+
+    act(() => {
+      erodeButton?.click();
+    });
+
+    expect(onErode).toHaveBeenCalledWith("player", 2);
 
     act(() => {
       root.unmount();

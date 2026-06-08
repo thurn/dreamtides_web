@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { BattleCommand } from "../debug/commands";
 import type {
   BattleInit,
@@ -27,6 +27,8 @@ export function BattleInspector({
   onClose,
   onOpen,
   onCommand,
+  onDreamwellDraw,
+  onErode,
   onOpenFigmentCreator,
   onOpenPoolViewer,
   onOpenForesee,
@@ -52,6 +54,8 @@ export function BattleInspector({
   onClose: () => void;
   onOpen?: () => void;
   onCommand: (command: BattleCommand) => void;
+  onDreamwellDraw: (side: BattleSide) => void;
+  onErode: (side: BattleSide, count: number) => void;
   onOpenFigmentCreator: (side: BattleSide) => void;
   onOpenPoolViewer: () => void;
   onOpenForesee: (side: BattleSide, count: number) => void;
@@ -161,6 +165,8 @@ export function BattleInspector({
             <SideEditor
               side="player"
               state={state}
+              onDreamwellDraw={onDreamwellDraw}
+              onErode={onErode}
               onOpenFigmentCreator={onOpenFigmentCreator}
               onOpenForesee={onOpenForesee}
               onOpenZone={onOpenZone}
@@ -170,6 +176,8 @@ export function BattleInspector({
             <SideEditor
               side="enemy"
               state={state}
+              onDreamwellDraw={onDreamwellDraw}
+              onErode={onErode}
               onOpenFigmentCreator={onOpenFigmentCreator}
               onOpenForesee={onOpenForesee}
               onOpenZone={onOpenZone}
@@ -208,6 +216,8 @@ export function BattleInspector({
 function SideEditor({
   side,
   state,
+  onDreamwellDraw,
+  onErode,
   onOpenFigmentCreator,
   onOpenForesee,
   onOpenZone,
@@ -216,6 +226,8 @@ function SideEditor({
 }: {
   side: BattleSide;
   state: BattleMutableState;
+  onDreamwellDraw: (side: BattleSide) => void;
+  onErode: (side: BattleSide, count: number) => void;
   onOpenFigmentCreator: (side: BattleSide) => void;
   onOpenForesee: (side: BattleSide, count: number) => void;
   onOpenZone: (side: BattleSide, zone: BrowseableZone) => void;
@@ -223,6 +235,8 @@ function SideEditor({
   discardCommand: BattleCommand | null;
 }) {
   const sideState = state.sides[side];
+  const sideWord = side === "player" ? "you" : "enemy";
+  const [erodeCount, setErodeCount] = useState(1);
 
   return (
     <div className="insp-section">
@@ -291,6 +305,57 @@ function SideEditor({
             onClick={() => onOpenZone(side, "deck")}
           >
             Open Deck
+          </button>
+        </div>
+      </div>
+      <div className="row-ctl">
+        <span className="lbl">Dreamwell</span>
+        <div className="chip-row">
+          <button
+            type="button"
+            aria-label={`Run the Dreamwell energy ramp and draw for ${
+              side === "player" ? "you" : "the enemy"
+            }`}
+            data-battle-action={`debug-dreamwell-draw-${side}`}
+            className="chip"
+            onClick={() => onDreamwellDraw(side)}
+          >
+            Dreamwell + draw
+          </button>
+        </div>
+      </div>
+      <div className="row-ctl">
+        <span className="lbl">Erode</span>
+        <div className="chip-row">
+          <div className="stepper">
+            <button
+              type="button"
+              aria-label={`Decrease erode count for ${sideWord}`}
+              onClick={() => setErodeCount((current) => Math.max(1, current - 1))}
+            >
+              −
+            </button>
+            <span className="val" data-battle-status-erode-count={side}>
+              {String(erodeCount)}
+            </span>
+            <button
+              type="button"
+              aria-label={`Increase erode count for ${sideWord}`}
+              onClick={() => setErodeCount((current) => current + 1)}
+            >
+              +
+            </button>
+          </div>
+          <button
+            type="button"
+            aria-label={`Erode the top ${String(erodeCount)} cards of ${
+              side === "player" ? "your" : "the enemy's"
+            } deck`}
+            data-battle-action={`debug-erode-${side}`}
+            className="chip"
+            onClick={() => onErode(side, erodeCount)}
+          >
+            {`Erode ${String(erodeCount)}`}
           </button>
         </div>
       </div>

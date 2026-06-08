@@ -21,8 +21,6 @@ export function BattleStatusStrip({
   onSetScore,
   onIncreaseMaxEnergyAndFill,
   onDrawCard,
-  onDreamwellDraw,
-  onErode,
   onCloseSummary,
   onOpenSummary,
 }: {
@@ -37,14 +35,10 @@ export function BattleStatusStrip({
   onSetScore: (value: number) => void;
   onIncreaseMaxEnergyAndFill: () => void;
   onDrawCard: () => void;
-  onDreamwellDraw: () => void;
-  onErode: (count: number) => void;
   onCloseSummary: () => void;
   onOpenSummary: () => void;
 }) {
   const summaryTargetRef = useRef<HTMLButtonElement | null>(null);
-  const [erodeCount, setErodeCount] = useState(1);
-  const sideWord = side === "player" ? "you" : "enemy";
 
   useEffect(() => {
     const target = summaryTargetRef.current;
@@ -135,51 +129,6 @@ export function BattleStatusStrip({
       >
         Draw card
       </button>
-      <button
-        type="button"
-        aria-label={`Run the Dreamwell energy ramp and draw for ${
-          side === "player" ? "you" : "the enemy"
-        }`}
-        className="status-strip-action"
-        data-battle-action={`status-dreamwell-draw-${side}`}
-        onClick={onDreamwellDraw}
-      >
-        Dreamwell + draw
-      </button>
-      <div className="status-strip-erode" data-battle-status-erode={side}>
-        <span className="stat-stepper">
-          <button
-            type="button"
-            aria-label={`Decrease erode count for ${sideWord}`}
-            className="stat-stepper-button"
-            onClick={() => setErodeCount((current) => Math.max(1, current - 1))}
-          >
-            {"<"}
-          </button>
-          <span className="val" data-battle-status-erode-count={side}>
-            {String(erodeCount)}
-          </span>
-          <button
-            type="button"
-            aria-label={`Increase erode count for ${sideWord}`}
-            className="stat-stepper-button"
-            onClick={() => setErodeCount((current) => current + 1)}
-          >
-            {">"}
-          </button>
-        </span>
-        <button
-          type="button"
-          aria-label={`Erode the top ${String(erodeCount)} cards of ${
-            side === "player" ? "your" : "the enemy's"
-          } deck`}
-          className="status-strip-action"
-          data-battle-action={`status-erode-${side}`}
-          onClick={() => onErode(erodeCount)}
-        >
-          {`Erode ${String(erodeCount)}`}
-        </button>
-      </div>
     </section>
   );
 }

@@ -993,12 +993,6 @@ function PlayableBattleScreenInner({
                     edit: { kind: "DRAW_CARD", side: "player" },
                     sourceSurface: "status-strip",
                   })}
-                  onDreamwellDraw={() => runDreamwellDraw("player")}
-                  onErode={(count) => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "ERODE", side: "player", count },
-                    sourceSurface: "status-strip",
-                  })}
                   onOpenSummary={() => handleOpenSummary("player")}
                   onCloseSummary={() => handleCloseSummary("player")}
                 />
@@ -1118,12 +1112,6 @@ function PlayableBattleScreenInner({
                   onDrawCard={() => handleCommand({
                     id: "DEBUG_EDIT",
                     edit: { kind: "DRAW_CARD", side: "enemy" },
-                    sourceSurface: "status-strip",
-                  })}
-                  onDreamwellDraw={() => runDreamwellDraw("enemy")}
-                  onErode={(count) => handleCommand({
-                    id: "DEBUG_EDIT",
-                    edit: { kind: "ERODE", side: "enemy", count },
                     sourceSurface: "status-strip",
                   })}
                   onOpenSummary={() => handleOpenSummary("enemy")}
@@ -1263,6 +1251,12 @@ function PlayableBattleScreenInner({
           onClose={() => setIsInspectorDrawerOpen(false)}
           onOpen={() => setIsInspectorDrawerOpen(true)}
           onCommand={handleCommand}
+          onDreamwellDraw={(side) => runDreamwellDraw(side)}
+          onErode={(side, count) => handleCommand({
+            id: "DEBUG_EDIT",
+            edit: { kind: "ERODE", side, count },
+            sourceSurface: "inspector",
+          })}
           onOpenFigmentCreator={(side) => setOpenFigmentCreator(side)}
           onOpenPoolViewer={() => setIsPoolViewerOpen(true)}
           onOpenForesee={(side, count) => setOpenForeseeOverlay({ side, count })}

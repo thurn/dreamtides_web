@@ -1113,8 +1113,14 @@
 }
 
 .phase-float-actions {
-  flex: 0 0 auto;
-  z-index: 18;
+  /* Pinned to the viewport so the phase controls stay reachable at any screen
+     size. They previously lived in the enemy zone column's flow and were
+     clipped by the battlefield layout's overflow on short viewports. */
+  position: fixed;
+  right: 16px;
+  bottom: 84px;
+  width: clamp(150px, 14vw, 174px);
+  z-index: 42;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
