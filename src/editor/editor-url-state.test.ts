@@ -209,6 +209,18 @@ describe("editor URL display state", () => {
     expect(parseEditorDisplayState(params).sort).toBe("rulesTextFontSize");
   });
 
+  it("round-trips the popularity sort field", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      sort: "popularity" as const,
+      dir: "desc" as const,
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.get("sort")).toBe("popularity");
+    expect(parseEditorDisplayState(params).sort).toBe("popularity");
+  });
+
   it("dedupes and trims tag filters and defaults tag-editing off", () => {
     const parsed = parseEditorDisplayState("?tag=Removal&tag=Removal&tag=%20Elves%20");
     expect(parsed.tagFilters).toEqual(["Removal", "Elves"]);

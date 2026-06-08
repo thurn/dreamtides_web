@@ -141,6 +141,36 @@ describe("readEditorCards", () => {
       cardNumber: 7,
     });
   });
+
+  it("defaults popularity to 0 when no draft record corpus is present", () => {
+    const rootDir = writeFixtureRoot();
+
+    const cards = readEditorCards({ rootDir });
+
+    expect(cards.map((card) => card.popularity)).toEqual([0, 0]);
+  });
+
+  it("counts mainboard appearances by UUID across the adapted draft corpus", () => {
+    const rootDir = writeFixtureRoot();
+    const recordsDir = join(rootDir, "docs", "draft_records_adapted");
+    mkdirSync(recordsDir, { recursive: true });
+    // Two seats run the first card (once each) and one seat runs the second, so
+    // popularity tallies total mainboard appearances per UUID across all seats.
+    writeFileSync(
+      join(recordsDir, "2025-01-01-aaaa-records.jsonc"),
+      JSON.stringify({
+        seats: [
+          { mainboard: [`${FIRST_ID}`, `${SECOND_ID}`] },
+          { mainboard: [`${FIRST_ID}`] },
+        ],
+      }),
+    );
+
+    const cards = readEditorCards({ rootDir });
+
+    expect(cards.find((card) => card.id === FIRST_ID)?.popularity).toBe(2);
+    expect(cards.find((card) => card.id === SECOND_ID)?.popularity).toBe(1);
+  });
 });
 
 describe("validateCardEdit", () => {

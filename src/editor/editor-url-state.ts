@@ -49,6 +49,7 @@ const SORT_PARAM_TO_FIELD = new Map<string, EditorSortField>([
   ["rulestextfontsize", "rulesTextFontSize"],
   ["namelength", "nameLength"],
   ["tidecount", "tideCount"],
+  ["popularity", "popularity"],
 ]);
 const SORT_FIELD_TO_PARAM: Record<EditorSortField, string> = {
   cardNumber: "number",
@@ -61,6 +62,7 @@ const SORT_FIELD_TO_PARAM: Record<EditorSortField, string> = {
   rulesTextFontSize: "rulestextfontsize",
   nameLength: "namelength",
   tideCount: "tidecount",
+  popularity: "popularity",
 };
 const DIR_VALUES = new Set<EditorSortDirection>(["asc", "desc"]);
 const SIZE_VALUES = new Set<EditorCardSize>(["small", "medium", "large"]);

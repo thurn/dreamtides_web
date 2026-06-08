@@ -29,6 +29,7 @@ const EDITOR_SORT_OPTIONS: ReadonlyArray<CardBrowserSortOption> = [
   ...CARD_BROWSER_SORT_OPTIONS,
   { value: "rulesTextFontSize", label: "Rules Text Font Size" },
   { value: "tideCount", label: "Tide Count" },
+  { value: "popularity", label: "Popularity" },
 ];
 
 const inputStyle = {

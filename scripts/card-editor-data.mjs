@@ -2,6 +2,10 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
+import {
+  DEFAULT_DRAFT_RECORDS_DIR,
+  readCardPopularity,
+} from "./lib/card-popularity.mjs";
 import { BANE_NAMES, transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -120,7 +124,7 @@ function readSourceCards(rootDir, cardTomlPath = DEFAULT_CARD_TOML_PATH) {
   return cards;
 }
 
-function editorRecordFromCard(card) {
+function editorRecordFromCard(card, popularityCounts) {
   return {
     id: card.id,
     cardNumber: card["card-number"],
@@ -134,6 +138,9 @@ function editorRecordFromCard(card) {
     tags: normalizeTagList(card.tags),
     tides: normalizeTagList(card.tides),
     mtgName: typeof card["mtg-name"] === "string" ? card["mtg-name"] : "",
+    // Mainboard appearances of this card's UUID across the adapted draft record
+    // corpus; 0 for a card no drafted deck has ever run.
+    popularity: popularityCounts.get(card.id) ?? 0,
     source: card,
     preview: transformCard(card),
   };
@@ -157,13 +164,20 @@ function normalizeTagList(rawTags) {
   return tags;
 }
 
-export function readEditorCards({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
+export function readEditorCards({
+  rootDir = ROOT,
+  cardTomlPath = DEFAULT_CARD_TOML_PATH,
+  draftRecordsDir = DEFAULT_DRAFT_RECORDS_DIR,
+} = {}) {
+  // Popularity is keyed by the card's stable UUID, which is shared across every
+  // source TOML, so the same corpus tally applies regardless of cardTomlPath.
+  const popularityCounts = readCardPopularity(join(rootDir, draftRecordsDir));
   // The editor does not display Special-rarity records: the only two are the
   // "Void Indicator Card" placeholder and the "Nightmare" bane, neither of
   // which is meaningful to edit through the card editor.
   return readSourceCards(rootDir, cardTomlPath)
     .filter((card) => card.rarity !== "Special")
-    .map(editorRecordFromCard);
+    .map((card) => editorRecordFromCard(card, popularityCounts));
 }
 
 function validationFailure(field, message, value) {
