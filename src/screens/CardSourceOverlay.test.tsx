@@ -126,6 +126,7 @@ function makeProvenance(): Idf3ProvenanceSummary {
 
 function makeSeedProvenance(): SeedProvenanceSummary {
   return {
+    variant: "seed",
     seedCardName: "Lantern Broker",
     seedCardNumber: 11,
     targetSize: 150,
@@ -187,6 +188,31 @@ describe("CardSourceOverlay", () => {
     });
   });
 
+  it("describes the pick-record story for the pickfit family instead of decklist co-occurrence", () => {
+    const { container, root } = mount(
+      <CardSourceOverlay
+        cardSourceDebug={makeOverlayState()}
+        idf3Provenance={makeProvenance()}
+        seedProvenance={{ ...makeSeedProvenance(), variant: "pickfit" }}
+        isOpen
+        onClose={vi.fn()}
+      />,
+    );
+
+    const text = container.textContent ?? "";
+    expect(text).toContain("How this pool was built");
+    // The pickfit-specific affinity wording.
+    expect(text).toContain("took over what they passed");
+    // Not the seed variant's decklist-co-occurrence wording.
+    expect(text).not.toContain("co-occurs with the seed");
+    // Per-card growth metrics still trace each shown card.
+    expect(text).toContain("Driftbound Relic");
+    expect(text).toContain("affinity to the");
+
+    act(() => {
+      root.unmount();
+    });
+  });
 
   it("walks the signature -> anchors -> starter -> growth chain and traces each card", () => {
     const { container, root } = mount(

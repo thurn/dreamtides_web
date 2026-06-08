@@ -90,6 +90,17 @@ const POOL_VARIANTS_NEEDING_RECORDS: ReadonlySet<PoolVariant> = new Set<PoolVari
 ]);
 
 /**
+ * Pool variants that draw one random seed card and grow a pool around it, so
+ * each produces a {@link SeedProvenanceSummary}: the `seed` variant (decklist
+ * co-occurrence) plus the pick-record variants. These are the variants whose
+ * starting card and per-card growth metrics the Pool Viewer and "Why Cards"
+ * overlay surface. Any affinity-grown variant added to the registry must be
+ * listed here, or its seed provenance will not be computed for those surfaces.
+ */
+export const AFFINITY_GROWN_POOL_VARIANTS: ReadonlySet<PoolVariant> =
+  new Set<PoolVariant>(["seed", ...POOL_VARIANTS_NEEDING_RECORDS]);
+
+/**
  * FNV-1a hash of a string into a 32-bit unsigned integer, used to derive the
  * idf3 generator's numeric seed from the quest seed and Dreamcaller id so each
  * run's pool is reproducible. Exported so replay record selection derives its
@@ -301,13 +312,15 @@ export function buildDreamcallerProvenance(
 }
 
 /**
- * Recompute the full `seed` provenance for one Dreamcaller's pool, resolved
+ * Recompute the full seed-growth provenance for one Dreamcaller's pool, resolved
  * against the run's name index so per-card entries are keyed by card number.
  * Reproduces the exact pool {@link buildDreamcallerPackage} built (same seed and
  * inputs), so the "Why Cards" surface can explain the random seed card and how
- * the pool grew without the provenance ever being persisted. Returns `null` for
- * non-`seed` pools. Per-card entries for starter cards are dropped, since those
- * never appear as draftable pool cards.
+ * the pool grew without the provenance ever being persisted. Returns a summary
+ * for every affinity-grown variant (`seed`, `pickfit`, `pickearly`, `pickpos`,
+ * `pickchoice`) and `null` for variants that produce no seed-growth story.
+ * Per-card entries for starter cards are dropped, since those never appear as
+ * draftable pool cards.
  */
 export function buildDreamcallerSeedProvenance(
   dreamcaller: DreamcallerContent,
@@ -328,6 +341,7 @@ export function buildDreamcallerSeedProvenance(
   }
 
   return {
+    variant: pool.variant,
     seedCardName: provenance.seedCardName,
     seedCardNumber: ctx.nameIndex.get(provenance.seedCardName) ?? null,
     targetSize: provenance.targetSize,

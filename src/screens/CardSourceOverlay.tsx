@@ -10,6 +10,7 @@ import type {
   SeedCardProvenance,
   SeedProvenanceSummary,
 } from "../types/content";
+import { seedProvenanceVariantCopy } from "../draft/pool/seed-provenance-copy";
 
 interface CardSourceOverlayProps {
   cardSourceDebug: CardSourceDebugState | null;
@@ -43,16 +44,20 @@ function surfaceCopy(surface: CardSourceDebugState["surface"]): string {
   }
 }
 
-function seedSurfaceCopy(surface: CardSourceDebugState["surface"]): string {
+function seedSurfaceCopy(
+  surface: CardSourceDebugState["surface"],
+  tail: string,
+): string {
+  const grown = `from a pool grown around a single card drawn at random, expanding ${tail}.`;
   switch (surface) {
     case "Draft":
-      return "These draft cards come from a pool grown around a single card drawn at random, expanding by how strongly cards co-occur in real decks.";
+      return `These draft cards come ${grown}`;
     case "Shop":
     case "SpecialtyShop":
-      return "Shop cards are drawn from a pool grown around a single card drawn at random, expanding by how strongly cards co-occur in real decks.";
+      return `Shop cards are drawn ${grown}`;
     case "BattleReward":
     case "Reward":
-      return "Rewards are drawn from a pool grown around a single card drawn at random, expanding by how strongly cards co-occur in real decks.";
+      return `Rewards are drawn ${grown}`;
   }
 }
 
@@ -414,28 +419,26 @@ function CardExplanation({
   );
 }
 
-/** The `seed`-variant walkthrough: seed card -> affinity -> growth. */
+/** The affinity-grown walkthrough: seed card -> affinity -> growth. */
 function SeedProvenanceWalkthrough({
   provenance,
 }: {
   provenance: SeedProvenanceSummary;
 }) {
+  const copy = seedProvenanceVariantCopy(provenance.variant);
   return (
     <div className="space-y-2.5">
       <Step index={1} title="Seed card">
         <p>
-          One card was drawn <strong>uniformly at random</strong> from every card
-          that sees real play. The whole pool grew out from it.
+          One card was drawn <strong>uniformly at random</strong> from{" "}
+          {copy.seedSource}. The whole pool grew out from it.
         </p>
         <CardChips names={[provenance.seedCardName]} />
       </Step>
 
       <Step index={2} title="Affinity">
         <p>
-          Every other card was scored by how strongly it{" "}
-          <strong>co-occurs</strong> with the seed and with the cards already
-          chosen, IDF-weighted so "fits with" means "shares distinctive cards" —
-          the same signal the deck-fit draft model reads. The blend leans{" "}
+          {copy.affinityExplanation} The blend leans{" "}
           <strong>{pct(provenance.seedAffinityWeight)}</strong> on the seed,{" "}
           <strong>{pct(1 - provenance.seedAffinityWeight)}</strong> on coherence
           with the growing pool.
@@ -626,7 +629,11 @@ export function CardSourceOverlay({
               </h2>
               <p className="mt-1 text-xs opacity-70">
                 {seedProvenance !== null
-                  ? seedSurfaceCopy(cardSourceDebug.surface)
+                  ? seedSurfaceCopy(
+                      cardSourceDebug.surface,
+                      seedProvenanceVariantCopy(seedProvenance.variant)
+                        .headerAffinityTail,
+                    )
                   : surfaceCopy(cardSourceDebug.surface)}
               </p>
             </div>

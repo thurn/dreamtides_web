@@ -3,6 +3,7 @@ import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
 import type { QuestContent } from "./data/quest-content";
 import {
+  AFFINITY_GROWN_POOL_VARIANTS,
   buildDreamcallerProvenance,
   buildDreamcallerSeedProvenance,
   loadQuestContent,
@@ -120,14 +121,17 @@ export function QuestApp({
     state.seed,
   ]);
 
-  // The `seed` variant's provenance: the random seed card and the affinity growth
-  // that built the pool. Recomputed on demand (same determinism guarantees as the
+  // Seed-growth provenance: the random seed card and the affinity growth that
+  // built the pool. Recomputed on demand (same determinism guarantees as the
   // idf3 provenance above) for the "Why Cards" overlay and the Pool Viewer, so
-  // both surfaces describe the exact pool the player drafts from. Only computed
-  // for the `seed` variant; null otherwise.
-  const isSeedVariant = runtimeConfig.poolVariant === "seed";
+  // both surfaces describe the exact pool the player drafts from. Computed for
+  // every affinity-grown variant (`seed` and the pick-record family); null for
+  // variants that grow no seed (idf3, color_pool, ...).
+  const isAffinityGrownVariant =
+    runtimeConfig.poolVariant !== undefined &&
+    AFFINITY_GROWN_POOL_VARIANTS.has(runtimeConfig.poolVariant);
   const seedProvenanceNeeded =
-    isSeedVariant && (cardSourceOverlayOpen || poolViewerOpen);
+    isAffinityGrownVariant && (cardSourceOverlayOpen || poolViewerOpen);
   const seedProvenance = useMemo(() => {
     const poolContext = questContent.poolContext;
     if (!seedProvenanceNeeded || poolContext === undefined) return null;

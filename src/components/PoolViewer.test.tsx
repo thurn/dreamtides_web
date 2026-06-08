@@ -192,6 +192,7 @@ afterEach(() => {
 describe("PoolViewer", () => {
   it("describes the seed card and growth when seed provenance is supplied", () => {
     const seedProvenance: SeedProvenanceSummary = {
+      variant: "seed",
       seedCardName: "Alpha Seer",
       seedCardNumber: 1,
       targetSize: 150,

@@ -3,6 +3,8 @@
  * value. Persistence helpers (see `normalizeQuestState`) also fall back to
  * this constant so RTDB-stripped rooms render with a sensible value.
  */
+import type { PoolVariant } from "../draft/pool/types.ts";
+
 export const DEFAULT_STARTING_ESSENCE = 250;
 
 export interface DreamcallerContent {
@@ -115,13 +117,21 @@ export interface SeedCardProvenance {
 }
 
 /**
- * Full provenance for one Dreamcaller's resolved `seed` pool, keyed by card
- * number. Records the random seed card and how the pool grew outward from it, so
- * the "Why Cards" surface can explain what the initial card was and how the pool
- * reached its target size. Recomputed on demand from the run seed and the pool
- * corpus; never persisted.
+ * Full provenance for one Dreamcaller's resolved affinity-grown pool, keyed by
+ * card number. Produced by the family of variants that draw one random seed card
+ * and grow a pool around it (`seed` plus the pick-record variants `pickfit`,
+ * `pickearly`, `pickpos`, `pickchoice`). Records the seed card and how the pool
+ * grew outward from it, so the "Why Cards" surface can explain what the initial
+ * card was and how the pool reached its target size. Recomputed on demand from
+ * the run seed and the pool corpus; never persisted.
  */
 export interface SeedProvenanceSummary {
+  /**
+   * The pool-construction variant that grew this pool. Drives the player-facing
+   * copy so the explanation matches the algorithm the run actually used (see
+   * `seedProvenanceVariantCopy`).
+   */
+  variant: PoolVariant;
   /** The card drawn uniformly at random that seeded the whole pool. */
   seedCardName: string;
   /** Card number of the seed card, or null if it does not resolve to one. */

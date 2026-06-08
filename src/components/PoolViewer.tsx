@@ -9,6 +9,7 @@ import type {
 import type { DraftState } from "../types/draft";
 import type { DraftRecord } from "../data/cards-v2-database";
 import { poolStrategyFor } from "../draft/pool/registry";
+import { seedProvenanceVariantCopy } from "../draft/pool/seed-provenance-copy";
 import type { PoolVariant } from "../draft/pool/types";
 import { BrowserCard } from "./card-browser/BrowserCard";
 import CardBrowserGrid from "./card-browser/CardBrowserGrid";
@@ -520,7 +521,10 @@ export function PoolViewer({
                   </span>
                   {` (${String(seedProvenance.distinctCardCount)} cards, ${String(
                     seedProvenance.doubledCardCount,
-                  )} doubled) by co-occurrence affinity to the seed and to the cards already chosen.`}
+                  )} doubled) by ${
+                    seedProvenanceVariantCopy(seedProvenance.variant)
+                      .poolViewerAffinityBasis
+                  } to the seed and to the cards already chosen.`}
                 </div>
               ) : null}
 
