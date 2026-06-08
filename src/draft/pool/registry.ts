@@ -25,6 +25,7 @@ import { pickChoiceStrategy } from "./variant-pickchoice.ts";
 import { pickCohereStrategy } from "./variant-pickcohere.ts";
 import { pickEarlyStrategy } from "./variant-pickearly.ts";
 import { pickPosStrategy } from "./variant-pickpos.ts";
+import { pickSigStrategy } from "./variant-picksig.ts";
 import { pickfitStrategy } from "./variant-pickfit.ts";
 import { seedStrategy } from "./variant-seed.ts";
 
@@ -45,6 +46,7 @@ export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
   pickpos: pickPosStrategy,
   pickchoice: pickChoiceStrategy,
   pickcohere: pickCohereStrategy,
+  picksig: pickSigStrategy,
 };
 
 /**

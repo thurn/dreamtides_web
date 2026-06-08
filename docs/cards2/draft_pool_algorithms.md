@@ -555,8 +555,9 @@ archetypes, and signature cards — looks the chosen id up in the registry, and
 calls that strategy's `generate`. The request carries every input any algorithm
 might read; each strategy destructures only the fields it uses (`color_pool` and
 `diverse` read the seed archetypes, `decklists` and `merged` additionally read
-the theme archetypes, `idf3` reads the signature cards, and `idf`/`idf2` read
-neither), so `generate.ts` never branches on which algorithm runs. Whatever the
+the theme archetypes, `idf3` and `picksig` read the signature cards, and
+`idf`/`idf2` read neither), so `generate.ts` never branches on which algorithm
+runs. Whatever the
 strategy returns, `generate.ts` caps every card at two copies, derives the
 ordered color-identity string, and returns the pool together with its identity,
 chosen themes, copy counts, the seed used, the final size, and which variant

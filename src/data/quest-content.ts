@@ -88,6 +88,7 @@ const POOL_VARIANTS_NEEDING_RECORDS: ReadonlySet<PoolVariant> = new Set<PoolVari
   "pickpos",
   "pickchoice",
   "pickcohere",
+  "picksig",
 ]);
 
 /**

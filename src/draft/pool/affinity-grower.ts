@@ -236,12 +236,47 @@ export function poolCoherence(
   return pairs > 0 ? sum / pairs : 0;
 }
 
+// A categorical draw over the corpus's cards, returning one card key per call.
+// The default is uniform; variants that steer the seed (e.g. `picksig`, whose
+// seeds are biased toward a Dreamcaller's signature) supply their own draw. Each
+// call consumes exactly one `rng()` value, so the best-of-K loop's determinism
+// and rng-consumption are independent of which draw is used.
+export type SeedDraw = (rng: () => number, corpus: AffinityCorpus) => string;
+
+const uniformSeedDraw: SeedDraw = (rng, corpus) =>
+  corpus.cards[Math.floor(rng() * corpus.cards.length)];
+
+// Build a `SeedDraw` from per-card relative weights (card key → non-negative
+// weight). Cards absent from the map, or with non-positive/non-finite weight,
+// get zero mass. When every weight is zero (e.g. an empty signature) the draw
+// falls back to uniform, so a steered variant with no signal reduces exactly to
+// its uniform-seeded base. Precomputes a cumulative table once, then each draw
+// consumes a single `rng()` — identical consumption to the uniform draw.
+export function weightedSeedDraw(weights: ReadonlyMap<string, number>): SeedDraw {
+  return (rng, corpus) => {
+    const cumulative: number[] = [];
+    let total = 0;
+    for (const card of corpus.cards) {
+      const w = weights.get(card) ?? 0;
+      if (w > 0 && Number.isFinite(w)) total += w;
+      cumulative.push(total);
+    }
+    if (total <= 0) return uniformSeedDraw(rng, corpus);
+    const target = rng() * total;
+    for (let i = 0; i < corpus.cards.length; i++) {
+      if (target < cumulative[i]) return corpus.cards[i];
+    }
+    return corpus.cards[corpus.cards.length - 1];
+  };
+}
+
 // Run a single-card-seeded pool from a prebuilt corpus, the shape every
 // affinity-grown variant shares: fall back to the default algorithm when the
 // corpus is empty, otherwise draw `tuning.seedDraws` candidate seeds (default 1)
-// uniformly, grow a pool from each, keep the most coherent, grow to `targetSize`,
-// and map the id-keyed result back onto current display names via `cardNameById`.
-// `label` is the variant's id, recorded in `selected` for provenance.
+// from `seedDraw` (uniform unless a steered variant supplies its own), grow a
+// pool from each, keep the most coherent, grow to `targetSize`, and map the
+// id-keyed result back onto current display names via `cardNameById`. `label` is
+// the variant's id, recorded in `selected` for provenance.
 export function growPoolFromCorpus(
   rng: () => number,
   poolData: PoolData,
@@ -249,6 +284,7 @@ export function growPoolFromCorpus(
   targetSize: number,
   tuning: AffinityGrowerTuning,
   label: string,
+  seedDraw: SeedDraw = uniformSeedDraw,
 ): VariantResult {
   if (!corpus || corpus.cards.length === 0) {
     missingPoolData(
@@ -259,14 +295,14 @@ export function growPoolFromCorpus(
 
   // Best-of-K: draw K seeds, grow each, keep the most internally coherent. All K
   // rng() draws are consumed regardless of the winner, so the result stays
-  // deterministic in the seed. K = 1 is a single uniform draw.
+  // deterministic in the seed. K = 1 is a single draw.
   const draws = Math.max(1, Math.floor(tuning.seedDraws ?? 1));
   let seedKey = "";
   let counts: Map<string, number> | null = null;
   let provenance: SeedPoolProvenance | null = null;
   let bestCoherence = -Infinity;
   for (let i = 0; i < draws; i++) {
-    const candidate = corpus.cards[Math.floor(rng() * corpus.cards.length)];
+    const candidate = seedDraw(rng, corpus);
     const grown = growAffinityPool(corpus, candidate, targetSize, tuning);
     const coherence = poolCoherence(grown.counts, corpus.affinity);
     if (coherence > bestCoherence) {

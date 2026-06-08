@@ -31,8 +31,10 @@ export interface PoolGenerationRequest {
    */
   themeArchetypes?: readonly string[];
   /**
-   * A Dreamcaller's signature card names, used by the `idf3` strategy to steer
-   * the pool toward the Dreamcaller's decks. Other strategies ignore it.
+   * A Dreamcaller's signature card UUIDs, used by the `idf3` strategy to steer
+   * its decklist starter draw and by `picksig` to bias its pick-affinity seed
+   * draw toward the Dreamcaller's region of the card space. Other strategies
+   * ignore it.
    */
   signatureCards?: readonly string[];
   /**
