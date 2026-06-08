@@ -27,19 +27,19 @@
       "seat": 0,
       "name": "UBR",
       "mainboard": [
-        "Stargazer Adrift",
-        "Barrage Specialist",
-        "Sanctum Approach",
-        "Rite of Summoning",
-        "Ripple Through Reality"
+        "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+        "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+        "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
+        "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
+        "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad" // Ripple Through Reality
       ],
       "sideboard": [],
       "pool": [
-        "Stargazer Adrift",
-        "Ripple Through Reality",
-        "Rite of Summoning",
-        "Sanctum Approach",
-        "Barrage Specialist"
+        "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+        "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+        "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
+        "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
+        "a031eada-2c47-49c6-8c19-d2fe85f8ce97" // Barrage Specialist
       ],
       "picks": [
         {
@@ -47,15 +47,15 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Stargazer Adrift"
+            "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
           ],
           "pickId": "24277de8-7412-496c-bd44-61d9629a3473",
           "packCards": [
-            "Stargazer Adrift",
-            "Driftrider",
-            "Cloudmantle Ray",
-            "Tranquil Duelist",
-            "Arc Gate Opening"
+            "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+            "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
+            "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "be72bd04-21a6-4035-a117-2b7213ad1a34" // Arc Gate Opening
           ]
         },
         {
@@ -65,11 +65,11 @@
           "pick": [],
           "pickId": "6d09be4f-785a-4faf-b03b-ca462cd375ca",
           "packCards": [
-            "Forge Inheritor",
-            "Rebirth Ritualist",
-            "Pilgrim of Old Stones",
-            "Ripple of Defiance",
-            "Inferno's Herald"
+            "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
+            "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
+            "01a8482b-5b4f-4c49-8791-2702cb5dfd3d" // Inferno's Herald
           ]
         },
         {
@@ -79,8 +79,8 @@
           "pick": [],
           "pickId": "139b90cd-8272-457a-be32-1298145345be",
           "packCards": [
-            "Shadow Reflection",
-            "Spellweaver"
+            "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
+            "41044897-b70a-4e2b-8eb6-baf843a14a43" // Spellweaver
           ]
         },
         {
@@ -88,11 +88,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "Ripple Through Reality"
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad" // Ripple Through Reality
           ],
           "pickId": "2d85cc30-ccae-4af8-834a-f7870dace679",
           "packCards": [
-            "Ripple Through Reality"
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad" // Ripple Through Reality
           ]
         },
         {
@@ -100,13 +100,13 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "Rite of Summoning"
+            "20fd609a-7529-4582-a362-b8151b0ae011" // Rite of Summoning
           ],
           "pickId": "085ed548-a8c8-40b3-8183-51c060bc95cb",
           "packCards": [
-            "Rite of Summoning",
-            "Dread Arbiter",
-            "Break the Sequence"
+            "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
+            "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
+            "475fcc5b-c82d-4ef7-8020-90a8aeb2df53" // Break the Sequence
           ]
         },
         {
@@ -114,12 +114,12 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "Sanctum Approach"
+            "58f96494-87ec-4145-9e1c-95951d0ab711" // Sanctum Approach
           ],
           "pickId": "6920c895-bc98-4871-a53f-219fa27a74e5",
           "packCards": [
-            "Sanctum Approach",
-            "Ironclad Marksman"
+            "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
+            "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7" // Ironclad Marksman
           ]
         },
         {
@@ -127,11 +127,11 @@
           "pack": 1,
           "pickInPack": 7,
           "pick": [
-            "Barrage Specialist"
+            "a031eada-2c47-49c6-8c19-d2fe85f8ce97" // Barrage Specialist
           ],
           "pickId": "74b4c336-5d4c-4bc5-b82a-35084a6ad808",
           "packCards": [
-            "Barrage Specialist"
+            "a031eada-2c47-49c6-8c19-d2fe85f8ce97" // Barrage Specialist
           ]
         }
       ]
@@ -140,21 +140,21 @@
       "seat": 4,
       "name": "UG",
       "mainboard": [
-        "Cloudmantle Ray",
-        "Ethereal Trailblazer",
-        "Dreadwood Emissary",
-        "Dreamcatcher's Call",
-        "Ridgecutter",
-        "Ripple of Defiance"
+        "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
+        "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
+        "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
+        "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
+        "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
+        "ce84b8af-b802-42d3-8a31-36827cff17b2" // Ripple of Defiance
       ],
       "sideboard": [],
       "pool": [
-        "Dreamcatcher's Call",
-        "Ridgecutter",
-        "Ethereal Trailblazer",
-        "Dreadwood Emissary",
-        "Cloudmantle Ray",
-        "Ripple of Defiance"
+        "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
+        "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
+        "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
+        "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
+        "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
+        "ce84b8af-b802-42d3-8a31-36827cff17b2" // Ripple of Defiance
       ],
       "picks": [
         {
@@ -162,17 +162,17 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Dreamcatcher's Call"
+            "d9434b04-217c-4b37-b763-c46404d8fef9" // Dreamcatcher's Call
           ],
           "pickId": "01794178-cf41-454c-ac37-1d8b18e42db2",
           "packCards": [
-            "Dreamcatcher's Call",
+            "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "Forgotten Titan",
-            "Harborwarden",
-            "Weblight Waif",
-            "Rite of Summoning",
-            "Dread Arbiter",
-            "Break the Sequence"
+            "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
+            "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
+            "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
+            "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
+            "475fcc5b-c82d-4ef7-8020-90a8aeb2df53" // Break the Sequence
           ]
         },
         {
@@ -180,15 +180,15 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Ridgecutter"
+            "25173cac-333f-4efc-9a03-b532d5783419" // Ridgecutter
           ],
           "pickId": "1959f078-4b7b-4df2-a256-d43b2d97e853",
           "packCards": [
-            "Ridgecutter",
-            "Fern Treader",
-            "Crimson Pilgrimage",
-            "Sanctum Approach",
-            "Ironclad Marksman"
+            "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
+            "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
+            "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
+            "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
+            "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7" // Ironclad Marksman
           ]
         },
         {
@@ -196,13 +196,13 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "Ethereal Trailblazer"
+            "48257e3e-9600-4edf-a905-e73a41ab5ec1" // Ethereal Trailblazer
           ],
           "pickId": "4d50fa57-db11-419e-b73b-666a6b25f7de",
           "packCards": [
-            "Ethereal Trailblazer",
-            "Fragments of Vision",
-            "Barrage Specialist"
+            "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
+            "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
+            "a031eada-2c47-49c6-8c19-d2fe85f8ce97" // Barrage Specialist
           ]
         },
         {
@@ -210,14 +210,14 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "Dreadwood Emissary"
+            "bf323913-3695-49ee-8d13-8165657e3dc9" // Dreadwood Emissary
           ],
           "pickId": "12917e60-cea1-460b-b3f1-8d47cc24afdc",
           "packCards": [
-            "Dreadwood Emissary",
-            "Thundercatcher",
-            "Toll of Passage",
-            "Door to Possibility"
+            "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
+            "d26d31c0-7bd2-4d58-bed9-444e032a1087" // Door to Possibility
           ]
         },
         {
@@ -225,13 +225,13 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "Cloudmantle Ray"
+            "86fd585b-e9d0-4dc1-bce9-488014b9316d" // Cloudmantle Ray
           ],
           "pickId": "0003aa31-d42e-4972-9fb9-086aefe29a2c",
           "packCards": [
-            "Cloudmantle Ray",
-            "Tranquil Duelist",
-            "Arc Gate Opening"
+            "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "be72bd04-21a6-4035-a117-2b7213ad1a34" // Arc Gate Opening
           ]
         },
         {
@@ -239,12 +239,12 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "Ripple of Defiance"
+            "ce84b8af-b802-42d3-8a31-36827cff17b2" // Ripple of Defiance
           ],
           "pickId": "1825a719-1b2a-4af9-9cd2-7cb497cd0317",
           "packCards": [
-            "Ripple of Defiance",
-            "Inferno's Herald"
+            "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
+            "01a8482b-5b4f-4c49-8791-2702cb5dfd3d" // Inferno's Herald
           ]
         },
         {

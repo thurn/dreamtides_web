@@ -274,52 +274,102 @@ export function buildMergedArchetypeLists(draftsAnonDir, cardMaps) {
 }
 
 /**
+ * Strip `//` line comments from JSONC text, leaving anything inside string
+ * literals untouched (escape sequences honoured). The adapted draft records use
+ * `//` only for trailing card-name annotations, so this is sufficient — there
+ * are no block comments. Newlines are preserved so error offsets stay aligned.
+ */
+export function stripJsonComments(text) {
+  let out = "";
+  let inString = false;
+  let escaped = false;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (inString) {
+      out += ch;
+      if (escaped) escaped = false;
+      else if (ch === "\\") escaped = true;
+      else if (ch === '"') inString = false;
+      continue;
+    }
+    if (ch === '"') {
+      inString = true;
+      out += ch;
+      continue;
+    }
+    if (ch === "/" && text[i + 1] === "/") {
+      while (i < text.length && text[i] !== "\n") i += 1;
+      out += "\n";
+      continue;
+    }
+    out += ch;
+  }
+  return out;
+}
+
+/**
  * Bundle adapted draft records from `docs/draft_records_adapted` into a flat
  * array of per-human-seat entries for the record-replay draft mode.
  *
- * Each `.json` file must have a `seats` array; files without it (e.g. a name
- * dictionary) are silently skipped. Within each file, a seat is included when:
+ * Each file is JSONC (`docs/draft_records_adapted/*.json` carry inline `//`
+ * card-name comments written by `add-uuids-to-draft-records.mjs`); the comments
+ * are stripped before parsing. Each file must have a `seats` array; files without
+ * it (e.g. a name dictionary) are silently skipped. Within each file, a seat is
+ * included when:
  *   1. Its `mainboard` array is non-empty.
  *   2. After trimming to the first three packs (each cut to `pickInPack <= 10`),
  *      the seat has exactly 30 trimmed picks (10 per pack). Anything else — an
  *      incomplete record, or a non-standard pack layout — drops the seat.
  *
- * Card names that do not appear in `cardMaps.nameToId` are dropped defensively
- * from whichever mainboard/pack/pick array they appear in; the total is logged.
+ * The corpus stores each card as its stable cards_v2 UUID (a bare card name is
+ * also accepted, e.g. an unmigrated record or a name that never resolved to an
+ * id, and is looked up through `cardMaps.nameToId`). A token whose id does not
+ * resolve to a known card is dropped from whichever mainboard/pack/pick array it
+ * appears in; the total is logged. Storing the id is what makes the corpus
+ * rename-proof: a renamed card keeps its id, so its picks survive and the bundle
+ * just refreshes the display name from `idToName`.
  *
  * Returns one entry per surviving seat:
- *   `{ id, draftId, mainboard, packs, picks }` where `packs[i]` and `picks[i]`
- *   are the raw `packCards` and `pick` arrays for the i-th trimmed pick (same
- *   length, exactly 30).
+ *   `{ id, draftId, sourceFile, mainboard, packs, picks, packIds, pickIds }`.
+ *   `packs[i]`/`picks[i]` are the i-th trimmed pick's cards as CURRENT display
+ *   names (resolved from the id), and `packIds[i]`/`pickIds[i]` are the matching
+ *   stable UUIDs, index-for-index. All four pick arrays have length 30.
  */
 export function buildDraftRecords(dir, cardMaps) {
-  const { nameToId } = cardMaps;
+  const { nameToId, idToName } = cardMaps;
   let droppedNames = 0;
   let skippedIncomplete = 0;
-
-  /**
-   * Filter an array of card names through `nameToId`, dropping any that are
-   * unknown and incrementing the global counter for each dropped name.
-   */
-  function filterNames(names) {
-    const result = [];
-    for (const name of names) {
-      if (nameToId.has(name)) {
-        result.push(name);
-      } else {
-        droppedNames++;
-      }
-    }
-    return result;
-  }
 
   const records = [];
 
   for (const filename of readdirSync(dir).filter((f) => f.endsWith(".json")).sort()) {
-    const raw = JSON.parse(readFileSync(join(dir, filename), "utf8"));
+    const raw = JSON.parse(
+      stripJsonComments(readFileSync(join(dir, filename), "utf8")),
+    );
     if (!Array.isArray(raw.seats)) continue;
 
     const { draftId } = raw;
+
+    /**
+     * Resolve an array of card tokens (stable UUIDs, or bare names for unmigrated
+     * records) to current names + ids. Tokens whose id does not resolve to a
+     * known card are dropped (incrementing the global counter), so the returned
+     * `names` and `ids` stay index-aligned.
+     */
+    function resolve(tokens) {
+      const outNames = [];
+      const outIds = [];
+      for (const token of tokens) {
+        const id = CARD_ID_RE.test(token) ? token : nameToId.get(token);
+        if (id !== undefined && idToName.has(id)) {
+          outNames.push(idToName.get(id));
+          outIds.push(id);
+        } else {
+          droppedNames++;
+        }
+      }
+      return { names: outNames, ids: outIds };
+    }
 
     for (const seatData of raw.seats) {
       const { seat, mainboard: rawMainboard, picks: rawPicks } = seatData;
@@ -341,17 +391,19 @@ export function buildDraftRecords(dir, cardMaps) {
         continue;
       }
 
-      const mainboard = filterNames(rawMainboard);
-      const packs = trimmed.map((p) => filterNames(p.packCards));
-      const picks = trimmed.map((p) => filterNames(p.pick));
+      const mainboard = resolve(rawMainboard).names;
+      const resolvedPacks = trimmed.map((p) => resolve(p.packCards));
+      const resolvedPicks = trimmed.map((p) => resolve(p.pick));
 
       records.push({
         id: `${draftId}#${seat}`,
         draftId,
         sourceFile: filename,
         mainboard,
-        packs,
-        picks,
+        packs: resolvedPacks.map((r) => r.names),
+        picks: resolvedPicks.map((r) => r.names),
+        packIds: resolvedPacks.map((r) => r.ids),
+        pickIds: resolvedPicks.map((r) => r.ids),
       });
     }
   }

@@ -29,36 +29,36 @@
       "seat": 0,
       "name": "WUBR",
       "mainboard": [
-        "Inspiring Templar",
-        "Dreadmount Sovereign",
-        "Sigil Analyst",
-        "Worldbreacher",
-        "Inverted Reflection",
-        "The Grand Heist",
-        "Spellweaver"
+        "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+        "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
+        "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
+        "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
+        "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+        "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
+        "41044897-b70a-4e2b-8eb6-baf843a14a43" // Spellweaver
       ],
       "sideboard": [
-        "Shadowpaw",
-        "Blade of Oblivion",
-        "Eternal Sentry",
-        "Revenant of the Lost",
-        "Conjured Zenith",
-        "Abyssal Enforcer"
+        "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+        "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
+        "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+        "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
+        "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+        "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
       ],
       "pool": [
-        "Eternal Sentry",
-        "Shadowpaw",
-        "The Grand Heist",
-        "Abyssal Enforcer",
-        "Inverted Reflection",
-        "Blade of Oblivion",
-        "Dreadmount Sovereign",
-        "Sigil Analyst",
-        "Inspiring Templar",
-        "Spellweaver",
-        "Worldbreacher",
-        "Conjured Zenith",
-        "Revenant of the Lost"
+        "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+        "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+        "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
+        "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
+        "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+        "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
+        "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
+        "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
+        "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+        "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+        "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
+        "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+        "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
       ],
       "picks": [
         {
@@ -68,10 +68,10 @@
           "pick": [],
           "pickId": "15af0592-a1cb-4b1e-b051-dde978939706",
           "packCards": [
-            "Scorched Crusader",
-            "Lanternhearted",
-            "From the Barrow",
-            "Seedling Sage"
+            "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
+            "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "6b1c0e39-0e70-4061-b037-0e10026cfabb" // Seedling Sage
           ]
         },
         {
@@ -79,14 +79,14 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Eternal Sentry"
+            "7e2f2ac0-4e3c-4520-80c6-c830581b40de" // Eternal Sentry
           ],
           "pickId": "0e3aedae-e4bb-48e3-9f8b-bea0430df306",
           "packCards": [
-            "Eternal Sentry",
-            "Dustborn Veteran",
-            "Scuttled Fortune",
-            "Fell Swoop"
+            "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+            "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
+            "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
+            "18979c10-39b8-42fb-ac1d-dd784da498d1" // Fell Swoop
           ]
         },
         {
@@ -94,12 +94,12 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "Shadowpaw"
+            "ed4d5342-0690-40b7-ab48-6b76035466f2" // Shadowpaw
           ],
           "pickId": "039d62b0-3309-4424-a2ea-5a0d88d4bd72",
           "packCards": [
-            "Shadowpaw",
-            "Genesis Burst"
+            "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+            "848b41b3-9f87-45fb-b86f-b52fc913d201" // Genesis Burst
           ]
         },
         {
@@ -107,11 +107,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "The Grand Heist"
+            "8904714c-38a9-491f-92ce-5cb5ece26ab1" // The Grand Heist
           ],
           "pickId": "07313dd3-d0dc-40ca-98a3-fa4d39e5bcae",
           "packCards": [
-            "The Grand Heist"
+            "8904714c-38a9-491f-92ce-5cb5ece26ab1" // The Grand Heist
           ]
         },
         {
@@ -119,11 +119,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "Abyssal Enforcer"
+            "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
           ],
           "pickId": "85397a1d-1fd1-4ca1-a1fc-f32e3a063c81",
           "packCards": [
-            "Abyssal Enforcer"
+            "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
           ]
         },
         {
@@ -133,10 +133,10 @@
           "pick": [],
           "pickId": "af7091c9-5f98-4078-a42b-c9e057346d9b",
           "packCards": [
-            "Desperation",
-            "Infernal Ascendant",
-            "Graywatch",
-            "Featherlight Summoner"
+            "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+            "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
+            "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
+            "b4754e5a-29e6-418c-bdfa-8e0230a21b7b" // Featherlight Summoner
           ]
         },
         {
@@ -146,8 +146,8 @@
           "pick": [],
           "pickId": "14065271-d942-42a8-aa38-d8a622c0375d",
           "packCards": [
-            "Verdant Wayfarer",
-            "Urban Cipher"
+            "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
+            "8adfa141-6864-4f5f-a9ca-59306eaf5432" // Urban Cipher
           ]
         },
         {
@@ -155,14 +155,14 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "Inverted Reflection"
+            "120ea441-f6ff-434b-973c-bde459f65368" // Inverted Reflection
           ],
           "pickId": "1571b584-9007-45ee-a3c3-6c72f227fee2",
           "packCards": [
-            "Inverted Reflection",
-            "Ashen Remnant",
-            "The Dread Sovereign",
-            "Ossuary Overlord"
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
+            "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
+            "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c" // Ossuary Overlord
           ]
         },
         {
@@ -170,12 +170,12 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
-            "Blade of Oblivion"
+            "0bddeb19-ff49-4a77-bc06-955377ba3ed1" // Blade of Oblivion
           ],
           "pickId": "317a8ed5-1ec2-4a5d-a606-8c6ba781c8a3",
           "packCards": [
-            "Blade of Oblivion",
-            "Spiral Offering"
+            "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
+            "acefcfcf-cba5-46ec-913e-32f1091afbda" // Spiral Offering
           ]
         },
         {
@@ -183,13 +183,13 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "Dreadmount Sovereign",
-            "Sigil Analyst"
+            "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
+            "1b4d2adc-64ab-4020-bae6-b35321898bf0" // Sigil Analyst
           ],
           "pickId": "01179c70-a87a-46aa-a95d-3269889e87ff",
           "packCards": [
-            "Dreadmount Sovereign",
-            "Sigil Analyst"
+            "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
+            "1b4d2adc-64ab-4020-bae6-b35321898bf0" // Sigil Analyst
           ]
         },
         {
@@ -197,15 +197,15 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "Inspiring Templar"
+            "57bb1572-6075-4efd-a592-102b134132fd" // Inspiring Templar
           ],
           "pickId": "2c860286-9807-4ab5-b66f-e8696e9e6ac9",
           "packCards": [
-            "Inspiring Templar",
-            "Packcaller of Shadows",
-            "Ripple Through Reality",
-            "Derelict Voyage",
-            "Silent Observer"
+            "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+            "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+            "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
+            "b1bea643-1a7b-4e5e-b072-7174d3405421" // Silent Observer
           ]
         },
         {
@@ -213,14 +213,14 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "Spellweaver"
+            "41044897-b70a-4e2b-8eb6-baf843a14a43" // Spellweaver
           ],
           "pickId": "34ec1216-1b8c-418f-bc25-c3f5ad4fda00",
           "packCards": [
-            "Spellweaver",
-            "Mother of Flames",
-            "Ecliptic Vantage",
-            "Woodland Apparition"
+            "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+            "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
+            "1268a899-b209-46bb-bce4-6def1dcd0404" // Woodland Apparition
           ]
         },
         {
@@ -228,12 +228,12 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "Worldbreacher"
+            "8c117d3f-09af-4312-9897-694a76bd23c6" // Worldbreacher
           ],
           "pickId": "2ad34311-c7ef-4333-8978-f82d0dfe2836",
           "packCards": [
-            "Worldbreacher",
-            "Starsea Traveler"
+            "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
+            "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6" // Starsea Traveler
           ]
         },
         {
@@ -241,12 +241,12 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
-            "Conjured Zenith"
+            "491e4233-0911-46ed-bced-0498e69b5bba" // Conjured Zenith
           ],
           "pickId": "09cd56b2-1987-40c2-a436-5f3cbc564f1c",
           "packCards": [
-            "Conjured Zenith",
-            "Dawnprowler Panther"
+            "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+            "f38ab9b6-bea7-4c6e-b5db-2609796ba46b" // Dawnprowler Panther
           ]
         },
         {
@@ -254,11 +254,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "Revenant of the Lost"
+            "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
-            "Revenant of the Lost"
+            "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         }
       ]

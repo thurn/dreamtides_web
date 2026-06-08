@@ -29,23 +29,23 @@
       "seat": 0,
       "name": "WUBG",
       "mainboard": [
-        "Sage of the Prelude",
-        "Rebirth Ritualist",
-        "Starfall",
-        "Ridgecutter",
-        "Wheel of the Heavens",
-        "Immolate",
-        "Twilight Suppressor"
+        "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
+        "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
+        "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+        "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f" // Twilight Suppressor
       ],
       "sideboard": [],
       "pool": [
-        "Rebirth Ritualist",
-        "Sage of the Prelude",
-        "Ridgecutter",
-        "Twilight Suppressor",
-        "Immolate",
-        "Starfall",
-        "Wheel of the Heavens"
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+        "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
+        "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
+        "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
+        "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
+        "25d00336-5ad7-433b-8ced-71720a9f074a" // Wheel of the Heavens
       ],
       "picks": [
         {
@@ -53,14 +53,14 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Rebirth Ritualist"
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "Rebirth Ritualist",
-            "Immolate and Rise",
-            "Peak Plunder",
-            "Heroic Rescue"
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
+            "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
+            "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb" // Heroic Rescue
           ]
         },
         {
@@ -68,12 +68,12 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Sage of the Prelude"
+            "41d0aa36-f15a-487d-b97c-7fd765973921" // Sage of the Prelude
           ],
           "pickId": "1950aed0-f34b-4dc6-a01e-31313fa442bc",
           "packCards": [
-            "Sage of the Prelude",
-            "Dragonward"
+            "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+            "69d9e550-eacc-49f2-8cc5-30b8940c9eed" // Dragonward
           ]
         },
         {
@@ -81,11 +81,11 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "Ridgecutter"
+            "25173cac-333f-4efc-9a03-b532d5783419" // Ridgecutter
           ],
           "pickId": "1959f078-4b7b-4df2-a256-d43b2d97e853",
           "packCards": [
-            "Ridgecutter"
+            "25173cac-333f-4efc-9a03-b532d5783419" // Ridgecutter
           ]
         },
         {
@@ -93,11 +93,11 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "Twilight Suppressor"
+            "60feb0d0-89b8-48fc-b01a-ce54e2c9941f" // Twilight Suppressor
           ],
           "pickId": "71e2f832-6601-4232-b250-fd1c88538fbd",
           "packCards": [
-            "Twilight Suppressor"
+            "60feb0d0-89b8-48fc-b01a-ce54e2c9941f" // Twilight Suppressor
           ]
         },
         {
@@ -107,7 +107,7 @@
           "pick": [],
           "pickId": "4a08ca06-58db-4ce6-b490-be4bea8956a1",
           "packCards": [
-            "Derelict Voyage"
+            "6f0b709d-0f57-46de-bfba-6a8b4df2b991" // Derelict Voyage
           ]
         },
         {
@@ -115,11 +115,11 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "Immolate"
+            "a56e0f68-30b6-404e-9b83-a7584177f21e" // Immolate
           ],
           "pickId": "064dfdeb-485f-473e-9fa0-8fdb7638cdc6",
           "packCards": [
-            "Immolate"
+            "a56e0f68-30b6-404e-9b83-a7584177f21e" // Immolate
           ]
         },
         {
@@ -127,13 +127,13 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "Starfall"
+            "cc98441a-a8f9-421f-9895-423bd7fc31b4" // Starfall
           ],
           "pickId": "0690f724-eb95-416b-b064-f1239e2a30e8",
           "packCards": [
-            "Starfall",
-            "Archive of the Forgotten",
-            "Mystic Runefish"
+            "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
+            "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
+            "edb479be-68a5-45bc-bd19-2602156edb57" // Mystic Runefish
           ]
         },
         {
@@ -141,12 +141,12 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "Wheel of the Heavens"
+            "25d00336-5ad7-433b-8ced-71720a9f074a" // Wheel of the Heavens
           ],
           "pickId": "01bda3d7-122a-48a0-bab3-676c4a557b74",
           "packCards": [
-            "Wheel of the Heavens",
-            "Conduit of Ashes"
+            "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818" // Conduit of Ashes
           ]
         },
         {

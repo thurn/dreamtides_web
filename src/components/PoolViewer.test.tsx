@@ -111,6 +111,11 @@ const replayRecord: DraftRecord = {
     ["Null Rain", "Quick Spark"],
   ],
   picks: [["Alpha Seer"], ["Quick Spark"]],
+  packIds: [
+    ["Alpha Seer", "Beta Guard"],
+    ["Null Rain", "Quick Spark"],
+  ],
+  pickIds: [["Alpha Seer"], ["Quick Spark"]],
 };
 
 function mount(element: ReactElement): {

@@ -27,15 +27,15 @@
       "seat": 0,
       "name": "UR",
       "mainboard": [
-        "Somber Flockmaster",
-        "Terminus",
-        "Derelict Voyage"
+        "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
+        "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
+        "6f0b709d-0f57-46de-bfba-6a8b4df2b991" // Derelict Voyage
       ],
       "sideboard": [],
       "pool": [
-        "Terminus",
-        "Derelict Voyage",
-        "Somber Flockmaster"
+        "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
+        "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
+        "95711262-8510-475c-a572-c1cd144d54cb" // Somber Flockmaster
       ],
       "picks": [
         {
@@ -43,15 +43,15 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Terminus"
+            "6e2188f8-580e-4a66-a3e3-267d509de903" // Terminus
           ],
           "pickId": "69e615d8-1b79-4a82-ba9f-ee211d67dc95",
           "packCards": [
-            "Terminus",
-            "Nightmare",
-            "Phantom Flotilla",
-            "Still Dreamer",
-            "Mystic Runefish"
+            "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
+            "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
+            "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
+            "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
+            "edb479be-68a5-45bc-bd19-2602156edb57" // Mystic Runefish
           ]
         },
         {
@@ -61,8 +61,8 @@
           "pick": [],
           "pickId": "16c8d2fa-54a7-46e8-980c-905258497c90",
           "packCards": [
-            "Silent Avenger",
-            "Frost Visionary"
+            "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
+            "bbf83d18-81b6-48c8-886f-4b9f0feb599f" // Frost Visionary
           ]
         },
         {
@@ -70,12 +70,12 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "Derelict Voyage"
+            "6f0b709d-0f57-46de-bfba-6a8b4df2b991" // Derelict Voyage
           ],
           "pickId": "111282a0-28be-40f0-a0e7-2f362268c0a3",
           "packCards": [
-            "Derelict Voyage",
-            "Wired Duelist"
+            "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
+            "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
           ]
         },
         {
@@ -83,11 +83,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "Somber Flockmaster"
+            "95711262-8510-475c-a572-c1cd144d54cb" // Somber Flockmaster
           ],
           "pickId": "27933adb-9c7a-4248-9908-f01e6a6bf12c",
           "packCards": [
-            "Somber Flockmaster"
+            "95711262-8510-475c-a572-c1cd144d54cb" // Somber Flockmaster
           ]
         }
       ]

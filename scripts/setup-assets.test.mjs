@@ -16,6 +16,7 @@ import {
   parseEnergyCost,
   parseSpark,
   setupAssets,
+  stripJsonComments,
   transformCard,
 } from "./setup-assets.mjs";
 
@@ -495,20 +496,21 @@ describe("buildDraftRecords", () => {
    * Minimal cardMaps stub covering names A..F, a duplicate-test name "Dup", and
    * per-pack markers P1..P3 used to assert which packs survive trimming.
    */
+  const nameToId = new Map([
+    ["A", "id-a"],
+    ["B", "id-b"],
+    ["C", "id-c"],
+    ["D", "id-d"],
+    ["E", "id-e"],
+    ["F", "id-f"],
+    ["Dup", "id-dup"],
+    ["P1", "id-p1"],
+    ["P2", "id-p2"],
+    ["P3", "id-p3"],
+  ]);
   const cardMaps = {
-    nameToId: new Map([
-      ["A", "id-a"],
-      ["B", "id-b"],
-      ["C", "id-c"],
-      ["D", "id-d"],
-      ["E", "id-e"],
-      ["F", "id-f"],
-      ["Dup", "id-dup"],
-      ["P1", "id-p1"],
-      ["P2", "id-p2"],
-      ["P3", "id-p3"],
-    ]),
-    idToName: new Map(),
+    nameToId,
+    idToName: new Map([...nameToId].map(([name, id]) => [id, name])),
   };
 
   /**
@@ -614,6 +616,12 @@ describe("buildDraftRecords", () => {
     // pick arrays are passed through as-is
     expect(rec.picks[0]).toEqual(["A"]);
     expect(rec.picks[1]).toEqual([]);
+
+    // packIds/pickIds carry the stable ids, aligned index-for-index with names.
+    expect(rec.packIds).toHaveLength(30);
+    expect(rec.pickIds).toHaveLength(30);
+    expect(rec.packIds[12]).toEqual(["id-a", "id-dup", "id-dup", "id-b"]);
+    expect(rec.pickIds[0]).toEqual(["id-a"]);
   });
 
   it("emits id as <draftId>#<seat>", () => {
@@ -713,5 +721,77 @@ describe("buildDraftRecords", () => {
 
     // "Unknown" dropped from pick (leaving empty array)
     expect(rec.picks[0]).toEqual([]);
+  });
+
+  it("resolves UUID tokens through idToName, surviving a rename (JSONC input)", () => {
+    const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
+    // The corpus stores stable ids. `RENAMED_ID`'s historical display name is
+    // gone from nameToId (the card was renamed), but idToName still maps the id
+    // to its current name — so the pick must survive and surface the new name.
+    const RENAMED_ID = "11111111-1111-1111-1111-111111111111";
+    const STAPLE_ID = "22222222-2222-2222-2222-222222222222";
+    const renameMaps = {
+      nameToId: new Map([["Staple", STAPLE_ID]]),
+      idToName: new Map([
+        [STAPLE_ID, "Staple"],
+        [RENAMED_ID, "Reborn Hero"],
+      ]),
+    };
+    // 30 trimmed picks; packs hold ids. Written as JSONC with a trailing comment
+    // to exercise comment stripping in buildDraftRecords.
+    const picks = [];
+    let pickNumber = 0;
+    for (let pack = 1; pack <= 3; pack++) {
+      for (let pip = 1; pip <= 10; pip++) {
+        pickNumber++;
+        picks.push({
+          pickNumber,
+          pack,
+          pickInPack: pip,
+          pick: pip === 1 ? [RENAMED_ID] : [],
+          packCards: [RENAMED_ID, STAPLE_ID],
+        });
+      }
+    }
+    const jsonc = `{
+  "draftId": "renamed",
+  "seats": [
+    {
+      "seat": 0,
+      "mainboard": [
+        "${RENAMED_ID}", // Reborn Hero (renamed since the draft)
+        "${STAPLE_ID}" // Staple
+      ],
+      "picks": ${JSON.stringify(picks)}
+    }
+  ]
+}`;
+    writeFileSync(join(dir, "draft.json"), jsonc);
+    const result = buildDraftRecords(dir, renameMaps);
+    expect(result).toHaveLength(1);
+    const rec = result[0];
+
+    // The renamed card surfaces under its CURRENT name, keyed by its stable id.
+    expect(rec.packs[0]).toEqual(["Reborn Hero", "Staple"]);
+    expect(rec.packIds[0]).toEqual([RENAMED_ID, STAPLE_ID]);
+    expect(rec.picks[0]).toEqual(["Reborn Hero"]);
+    expect(rec.pickIds[0]).toEqual([RENAMED_ID]);
+    // The name only exists in idToName, never in nameToId — proving the id, not a
+    // name lookup, carried it through.
+    expect(renameMaps.nameToId.has("Reborn Hero")).toBe(false);
+  });
+});
+
+describe("stripJsonComments", () => {
+  it("removes trailing line comments outside strings", () => {
+    const input = '{\n  "a": "x", // a comment\n  "b": 1\n}';
+    expect(JSON.parse(stripJsonComments(input))).toEqual({ a: "x", b: 1 });
+  });
+
+  it("preserves // sequences inside string values", () => {
+    const input = '{ "url": "https://example.com" }';
+    expect(JSON.parse(stripJsonComments(input))).toEqual({
+      url: "https://example.com",
+    });
   });
 });

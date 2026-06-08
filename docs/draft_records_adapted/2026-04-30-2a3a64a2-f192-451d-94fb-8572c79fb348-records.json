@@ -20,87 +20,87 @@
       "seat": 0,
       "name": "WUBRG",
       "mainboard": [
-        "Glimmerwood Scout",
-        "Voidshield Guardian",
-        "Frost Visionary",
-        "Oathbound Pair",
-        "Veil of the Wastes",
-        "Stargazer Adrift",
-        "Kindred Sparks",
-        "Signal Resonant",
-        "The Calling Night",
-        "Dustborn Veteran",
-        "Carrion Shepherd",
-        "Wandering Archivist",
-        "Rubble Diviner",
-        "Gleamharvester",
-        "Shoreline Penitent",
-        "Shadowprowler",
-        "Pattern Seeker",
-        "Weblight Waif",
-        "Wreckborn",
-        "Mother of Flames",
-        "Ghostlight Wolves",
-        "Eternal Stag",
-        "Cloudmantle Ray",
-        "Dusk Duelist",
-        "Sky Voyager",
-        "Voidcaller",
-        "Starrunner",
-        "Blazing Emberwing",
-        "Frostbound Defiant",
-        "Emberwolf Triad",
-        "Worldsong Behemoth",
-        "Dreamvale Monarch",
-        "Undying Fang",
-        "Fathomless Maw",
-        "Kindlehorn",
-        "Paradox Enforcer",
-        "Minstrel of Falling Light",
-        "Key Sifter",
-        "Thronebound Arbiter",
-        "Iron Executor",
-        "Dune Reaper",
-        "Sundown Ronin",
-        "Inferno's Herald",
-        "Nineborn Specter",
-        "Aspiring Guardian",
-        "Sandglider",
-        "Tranquil Duelist",
-        "Meadowlight Charger",
-        "Fading Farewell",
-        "Lightningborn",
-        "Null Sphere",
-        "Genesis Burst",
-        "Inverted Reflection",
-        "Surge of Fury",
-        "Annular Recall",
-        "Ferryman's Tithe",
-        "Hope's Vanguard",
-        "Spent Courier",
-        "Unleashed Destruction",
-        "Derelict Voyage",
-        "Aurora Confluence",
-        "Nexus Wayfinder",
-        "Packcaller of Shadows",
-        "Pathwalker",
-        "Scrap Reclaimer",
-        "Roots of Rebirth",
-        "Virtuoso of Harmony",
-        "Spellweaver",
-        "Crimson Pilgrimage",
-        "Fractured Vessel",
-        "Infernal Ascendant",
-        "Clockwork Conductor",
-        "Worldbreacher",
-        "Thundercatcher",
-        "Luminwings",
-        "Glimpse of Infinity",
-        "Conduit of Ashes",
-        "Pyrewatcher",
-        "Charnel Seraph",
-        "Soulrender",
-        "Wolfbond Chieftain"
+        "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
+        "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
+        "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
+        "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
+        "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
+        "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+        "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
+        "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
+        "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+        "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
+        "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
+        "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
+        "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
+        "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
+        "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
+        "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
+        "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
+        "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
+        "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
+        "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
+        "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
+        "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
+        "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
+        "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+        "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
+        "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
+        "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
+        "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
+        "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
+        "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
+        "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
+        "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
+        "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
+        "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
+        "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
+        "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
+        "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
+        "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
+        "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
+        "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+        "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+        "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
+        "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
+        "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
+        "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
+        "c73f978e-8196-4589-a432-845265115555", // Lightningborn
+        "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
+        "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+        "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+        "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
+        "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+        "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+        "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
+        "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
+        "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
+        "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
+        "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
+        "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
+        "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+        "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
+        "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
+        "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
+        "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
+        "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+        "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
+        "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+        "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
+        "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
+        "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+        "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
       ],
       "sideboard": [],
       "pool": [],

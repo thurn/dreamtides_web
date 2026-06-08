@@ -27,13 +27,13 @@
       "seat": 0,
       "name": "W",
       "mainboard": [
-        "Prism Caller",
-        "Conduit of Ashes"
+        "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
+        "eae928f6-aab2-415e-b4b1-b9c3ed8e6818" // Conduit of Ashes
       ],
       "sideboard": [],
       "pool": [
-        "Prism Caller",
-        "Conduit of Ashes"
+        "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
+        "eae928f6-aab2-415e-b4b1-b9c3ed8e6818" // Conduit of Ashes
       ],
       "picks": [
         {
@@ -41,11 +41,11 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Prism Caller"
+            "886c9d49-b25f-4ddd-97f0-2ec4b42eda89" // Prism Caller
           ],
           "pickId": "0ec9ef7c-88de-4346-a8f9-44beda59fa68",
           "packCards": [
-            "Prism Caller"
+            "886c9d49-b25f-4ddd-97f0-2ec4b42eda89" // Prism Caller
           ]
         },
         {
@@ -53,11 +53,11 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Conduit of Ashes"
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818" // Conduit of Ashes
           ],
           "pickId": "153983dd-54dc-420d-9249-665b0d669614",
           "packCards": [
-            "Conduit of Ashes"
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818" // Conduit of Ashes
           ]
         }
       ]

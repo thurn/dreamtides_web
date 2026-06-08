@@ -29,13 +29,13 @@
       "seat": 0,
       "name": "B",
       "mainboard": [
-        "Scrapyard Custodian",
-        "Forge Inheritor"
+        "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
+        "e72245f2-c153-4e79-ba8e-956d18202b48" // Forge Inheritor
       ],
       "sideboard": [],
       "pool": [
-        "Scrapyard Custodian",
-        "Forge Inheritor"
+        "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
+        "e72245f2-c153-4e79-ba8e-956d18202b48" // Forge Inheritor
       ],
       "picks": [
         {
@@ -43,11 +43,11 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Scrapyard Custodian"
+            "ecf77f27-df0f-47c4-99c2-48d7fa46a137" // Scrapyard Custodian
           ],
           "pickId": "32cf273e-b8f7-434b-9d5d-883dfd6f7423",
           "packCards": [
-            "Scrapyard Custodian"
+            "ecf77f27-df0f-47c4-99c2-48d7fa46a137" // Scrapyard Custodian
           ]
         },
         {
@@ -63,11 +63,11 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "Forge Inheritor"
+            "e72245f2-c153-4e79-ba8e-956d18202b48" // Forge Inheritor
           ],
           "pickId": "019b51b0-e5c6-4208-922b-7736686dddcd",
           "packCards": [
-            "Forge Inheritor"
+            "e72245f2-c153-4e79-ba8e-956d18202b48" // Forge Inheritor
           ]
         }
       ]

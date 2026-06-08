@@ -20,89 +20,89 @@
       "seat": 0,
       "name": "WUBRG",
       "mainboard": [
-        "Mirror Protocol",
-        "Blazepath Traveler",
-        "Lumen Rover",
-        "Call to the Unknown",
-        "Urban Desperado",
-        "Verdant Pioneer",
-        "Boundless Wanderer",
-        "Field Reverent",
-        "Gatebound Warden",
-        "Starlight Guide",
-        "Pilgrim of Old Stones",
-        "Lanternhearted",
-        "Harvester of Despair",
-        "Twilight Reclaimer",
-        "Cinderfang",
-        "Signal Resonant",
-        "Dustborn Veteran",
-        "The Rising God",
-        "Stargazer Adrift",
-        "Enginespeaker",
-        "Skull Weaver",
-        "Oracle of Shifting Skies",
-        "Architect of Memory",
-        "Pit Descender",
-        "Woodland Apparition",
-        "Dragonward",
-        "Angel of the Eclipse",
-        "Soulbinder",
-        "Driftcaller Sovereign",
-        "Dusk Duelist",
-        "Wondrous Clearing",
-        "Augur Crow",
-        "Worldsong Behemoth",
-        "Sky Voyager",
-        "Voidcaller",
-        "Wistful Angler",
-        "Ashen Avenger",
-        "Nocturne",
-        "Revenant of the Lost",
-        "Scorched Crusader",
-        "Abyssal Enforcer",
-        "Resilient Wanderer",
-        "Herald of the Last Light",
-        "Seeker of the Radiant Wilds",
-        "Nineborn Specter",
-        "Aspiring Guardian",
-        "Ride of the Vanguard",
-        "Epiphany Unfolded",
-        "Ripple Through Reality",
-        "Gleam Below",
-        "Cindermarch",
-        "Conduit of Resonance",
-        "Cragfall",
-        "Across the Void",
-        "Null Sphere",
-        "Sanctum Awakened",
-        "Reunion",
-        "Ripple of Defiance",
-        "Rootspring Summons",
-        "Pyrokinetic Surge",
-        "Starfall",
-        "Ferryman's Tithe",
-        "Vertiginous Leap",
-        "Keeper of Forgotten Light",
-        "Eruption",
-        "Canopy of Stars",
-        "Fleeting Reunion",
-        "Melodist of the Finale",
-        "Pathwalker",
-        "Scrap Reclaimer",
-        "Packcaller of Shadows",
-        "Heavenward Penitent",
-        "Data Pulse",
-        "Warfield Stalwart",
-        "Mirrorlight Architect",
-        "Glimpse of Infinity",
-        "Desolation's Edge",
-        "Worldbreacher",
-        "Shadowpaw",
-        "Pulse of Sacrifice",
-        "Thundercatcher",
-        "Torchbearer of the Abyss",
-        "Spirit of the Greenwood"
+        "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
+        "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
+        "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
+        "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
+        "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
+        "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
+        "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
+        "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
+        "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
+        "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
+        "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
+        "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
+        "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
+        "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
+        "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
+        "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
+        "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
+        "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
+        "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+        "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
+        "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
+        "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
+        "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
+        "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
+        "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
+        "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
+        "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
+        "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
+        "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
+        "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+        "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
+        "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
+        "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
+        "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
+        "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
+        "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
+        "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
+        "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
+        "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
+        "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
+        "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
+        "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
+        "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
+        "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
+        "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
+        "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
+        "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
+        "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
+        "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+        "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
+        "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
+        "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
+        "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+        "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+        "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
+        "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
+        "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
+        "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
+        "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
+        "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
+        "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
+        "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+        "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
+        "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
+        "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
+        "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
+        "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+        "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
+        "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
+        "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
+        "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+        "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
+        "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
+        "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+        "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
+        "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+        "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
+        "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
+        "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+        "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
+        "99ca2635-a91a-46ba-a9d3-4d2581c354f3" // Spirit of the Greenwood
       ],
       "sideboard": [],
       "pool": [],

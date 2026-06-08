@@ -21,15 +21,15 @@
       "seat": 0,
       "name": "G",
       "mainboard": [
-        "Veilseeker",
-        "Crumbling Behemoth",
-        "Beacon of Tomorrow"
+        "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
+        "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
+        "331e2846-85d1-4667-8c64-dc6c21a418ed" // Beacon of Tomorrow
       ],
       "sideboard": [],
       "pool": [
-        "Crumbling Behemoth",
-        "Beacon of Tomorrow",
-        "Veilseeker"
+        "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
+        "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
+        "d8c90a33-a581-469a-9fd3-9a80d1cc5315" // Veilseeker
       ],
       "picks": [
         {
@@ -39,8 +39,8 @@
           "pick": [],
           "pickId": "26343f80-4d60-407a-a44a-ee6295d2e5ec",
           "packCards": [
-            "Crumbling Behemoth",
-            "Beacon of Tomorrow"
+            "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
+            "331e2846-85d1-4667-8c64-dc6c21a418ed" // Beacon of Tomorrow
           ]
         },
         {
@@ -50,7 +50,7 @@
           "pick": [],
           "pickId": "17db2b6a-eaa8-4a08-9e86-370bbd058574",
           "packCards": [
-            "Veilseeker"
+            "d8c90a33-a581-469a-9fd3-9a80d1cc5315" // Veilseeker
           ]
         },
         {
@@ -58,13 +58,13 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "Crumbling Behemoth",
-            "Beacon of Tomorrow"
+            "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
+            "331e2846-85d1-4667-8c64-dc6c21a418ed" // Beacon of Tomorrow
           ],
           "pickId": "985453e7-997e-4d77-a338-cc0290791ebe",
           "packCards": [
-            "Crumbling Behemoth",
-            "Beacon of Tomorrow"
+            "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
+            "331e2846-85d1-4667-8c64-dc6c21a418ed" // Beacon of Tomorrow
           ]
         },
         {
@@ -72,11 +72,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "Veilseeker"
+            "d8c90a33-a581-469a-9fd3-9a80d1cc5315" // Veilseeker
           ],
           "pickId": "1c1aa6f8-2d34-4f4b-9184-0eab2e4745f7",
           "packCards": [
-            "Veilseeker"
+            "d8c90a33-a581-469a-9fd3-9a80d1cc5315" // Veilseeker
           ]
         }
       ]
@@ -85,15 +85,15 @@
       "seat": 1,
       "name": "BR",
       "mainboard": [
-        "Soulbinder",
-        "Emberwatch Veteran",
-        "Vessel of Echoes"
+        "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
+        "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
+        "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa" // Vessel of Echoes
       ],
       "sideboard": [],
       "pool": [
-        "Emberwatch Veteran",
-        "Vessel of Echoes",
-        "Soulbinder"
+        "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
+        "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
+        "33874387-2490-48ed-93bc-a47a16e399ad" // Soulbinder
       ],
       "picks": [
         {
@@ -101,14 +101,14 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Emberwatch Veteran",
-            "Vessel of Echoes"
+            "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
+            "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa" // Vessel of Echoes
           ],
           "pickId": "1b9e6c5c-4bc4-4f41-8c2c-f5b8c97c53c5",
           "packCards": [
-            "Emberwatch Veteran",
-            "Vessel of Echoes",
-            "Veilseeker"
+            "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
+            "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
+            "d8c90a33-a581-469a-9fd3-9a80d1cc5315" // Veilseeker
           ]
         },
         {
@@ -118,8 +118,8 @@
           "pick": [],
           "pickId": "75fdce80-e338-4a50-bdc6-786511feaeef",
           "packCards": [
-            "Crumbling Behemoth",
-            "Beacon of Tomorrow"
+            "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
+            "331e2846-85d1-4667-8c64-dc6c21a418ed" // Beacon of Tomorrow
           ]
         },
         {
@@ -129,7 +129,7 @@
           "pick": [],
           "pickId": "748e6a61-9c1f-4225-9f04-e54002f63ac3",
           "packCards": [
-            "Veilseeker"
+            "d8c90a33-a581-469a-9fd3-9a80d1cc5315" // Veilseeker
           ]
         },
         {

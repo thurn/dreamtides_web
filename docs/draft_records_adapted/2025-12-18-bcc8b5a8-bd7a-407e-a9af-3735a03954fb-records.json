@@ -22,74 +22,74 @@
       "seat": 0,
       "name": "UR",
       "mainboard": [
-        "Ethereal Courser",
-        "The Waking Titan",
-        "Duskshore Virtuoso",
-        "Barrage Specialist",
-        "Iconoclast",
-        "Starcatcher",
-        "Conduit of Ashes",
-        "Glimpse of Infinity",
-        "Pyrewatcher",
-        "Fangbound",
-        "Pulse of Sacrifice",
-        "Epiphany Unfolded",
-        "Genesis Burst",
-        "Inverted Reflection",
-        "The Power Within",
-        "Fell the Mighty",
-        "Ecliptic Vantage",
-        "Annular Recall",
-        "Burst of Obliteration",
-        "Cragfall",
-        "Sunset Chapel Rest",
-        "Cascading Detonation",
-        "Ripple Through Reality",
-        "Moment Rewound",
-        "Cascade of Reflections",
-        "Wheel of the Heavens",
-        "Clockwork Prodigy",
-        "Echoing Denial",
-        "Across the Void",
-        "Reunion"
+        "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+        "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+        "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+        "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+        "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
+        "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+        "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+        "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+        "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+        "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
+        "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+        "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+        "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+        "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
+        "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
+        "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+        "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+        "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+        "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+        "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+        "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+        "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+        "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+        "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+        "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+        "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+        "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+        "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
       ],
       "sideboard": [
-        "Gleamharvester",
-        "Shoreline Penitent"
+        "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
+        "d755cfa4-d7c0-46d8-a836-909c45c68890" // Shoreline Penitent
       ],
       "pool": [
-        "Burst of Obliteration",
-        "Gleamharvester",
-        "Shoreline Penitent",
-        "Ethereal Courser",
-        "Iconoclast",
-        "Starcatcher",
-        "Annular Recall",
-        "Pulse of Sacrifice",
-        "Fangbound",
-        "Moment Rewound",
-        "Pyrewatcher",
-        "Barrage Specialist",
-        "Reunion",
-        "Ripple Through Reality",
-        "Clockwork Prodigy",
-        "Echoing Denial",
-        "The Waking Titan",
-        "Duskshore Virtuoso",
-        "Cascading Detonation",
-        "Across the Void",
-        "Ecliptic Vantage",
-        "Fell the Mighty",
-        "Sunset Chapel Rest",
-        "Wheel of the Heavens",
-        "The Power Within",
-        "Cascade of Reflections",
-        "Cragfall",
-        "Glimpse of Infinity",
-        "Conduit of Ashes",
-        "Inverted Reflection",
-        "Genesis Burst",
-        "Epiphany Unfolded"
+        "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+        "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
+        "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
+        "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+        "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
+        "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+        "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+        "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+        "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+        "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+        "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
+        "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+        "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+        "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+        "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+        "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+        "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+        "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+        "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
+        "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
+        "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+        "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+        "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+        "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+        "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+        "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+        "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+        "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+        "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+        "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
       ],
       "picks": [
         {
@@ -99,17 +99,17 @@
           "pick": [],
           "pickId": "054f2276-2dd5-43da-bb26-c57c560861fe",
           "packCards": [
-            "Burst of Obliteration",
-            "Gleamharvester",
-            "Shoreline Penitent",
-            "Ethereal Courser",
-            "Iconoclast",
-            "Starcatcher",
-            "Annular Recall",
-            "Pulse of Sacrifice",
-            "Fangbound",
-            "Moment Rewound",
-            "Pyrewatcher"
+            "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+            "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
+            "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
+            "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+            "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
+            "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+            "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+            "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -117,21 +117,21 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Burst of Obliteration"
+            "1c8e6736-13d6-42d1-8668-46f422fec11e" // Burst of Obliteration
           ],
           "pickId": "5b012532-1186-4dc8-9d42-867e418b0280",
           "packCards": [
-            "Burst of Obliteration",
-            "Gleamharvester",
-            "Shoreline Penitent",
-            "Ethereal Courser",
-            "Iconoclast",
-            "Starcatcher",
-            "Annular Recall",
-            "Pulse of Sacrifice",
-            "Fangbound",
-            "Moment Rewound",
-            "Pyrewatcher"
+            "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+            "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
+            "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
+            "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+            "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
+            "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+            "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+            "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -139,21 +139,21 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "Gleamharvester",
-            "Shoreline Penitent"
+            "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
+            "d755cfa4-d7c0-46d8-a836-909c45c68890" // Shoreline Penitent
           ],
           "pickId": "742a7487-70a2-448b-8e66-c33cba798a32",
           "packCards": [
-            "Gleamharvester",
-            "Shoreline Penitent",
-            "Ethereal Courser",
-            "Iconoclast",
-            "Starcatcher",
-            "Annular Recall",
-            "Pulse of Sacrifice",
-            "Fangbound",
-            "Moment Rewound",
-            "Pyrewatcher"
+            "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
+            "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
+            "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+            "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
+            "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+            "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+            "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -163,14 +163,14 @@
           "pick": [],
           "pickId": "16c8d2fa-54a7-46e8-980c-905258497c90",
           "packCards": [
-            "Ethereal Courser",
-            "Iconoclast",
-            "Starcatcher",
-            "Annular Recall",
-            "Pulse of Sacrifice",
-            "Fangbound",
-            "Moment Rewound",
-            "Pyrewatcher"
+            "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+            "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
+            "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+            "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+            "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -178,18 +178,18 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "Ethereal Courser"
+            "ad76c77a-e456-4e59-bbf7-6bcb56f892ee" // Ethereal Courser
           ],
           "pickId": "63971a64-c5f3-4d1f-ae0d-489d7d5b18f0",
           "packCards": [
-            "Ethereal Courser",
-            "Iconoclast",
-            "Starcatcher",
-            "Annular Recall",
-            "Pulse of Sacrifice",
-            "Fangbound",
-            "Moment Rewound",
-            "Pyrewatcher"
+            "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+            "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
+            "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+            "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+            "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -197,18 +197,18 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "Iconoclast",
-            "Starcatcher"
+            "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
+            "91d9afed-ea29-43af-9021-0f3ecbdc252e" // Starcatcher
           ],
           "pickId": "44657ab1-0a6a-4a5f-9688-86f239083821",
           "packCards": [
-            "Iconoclast",
-            "Starcatcher",
-            "Annular Recall",
-            "Pulse of Sacrifice",
-            "Fangbound",
-            "Moment Rewound",
-            "Pyrewatcher"
+            "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
+            "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+            "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+            "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -216,15 +216,15 @@
           "pack": 1,
           "pickInPack": 7,
           "pick": [
-            "Annular Recall"
+            "a8bca1eb-abc8-42e0-b770-0f03af250b81" // Annular Recall
           ],
           "pickId": "265b80cd-2e9c-4e4b-a065-eafb29b3e07a",
           "packCards": [
-            "Annular Recall",
-            "Pulse of Sacrifice",
-            "Fangbound",
-            "Moment Rewound",
-            "Pyrewatcher"
+            "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+            "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -232,14 +232,14 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
-            "Pulse of Sacrifice"
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e" // Pulse of Sacrifice
           ],
           "pickId": "63bacc32-d6ba-420c-9b49-299c08e5fb39",
           "packCards": [
-            "Pulse of Sacrifice",
-            "Fangbound",
-            "Moment Rewound",
-            "Pyrewatcher"
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+            "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -247,13 +247,13 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
-            "Fangbound"
+            "c750af2e-8185-4af0-bb38-4a41430c71b3" // Fangbound
           ],
           "pickId": "6a058e68-70af-4a64-859c-c881e5578368",
           "packCards": [
-            "Fangbound",
-            "Moment Rewound",
-            "Pyrewatcher"
+            "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -261,12 +261,12 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
-            "Moment Rewound"
+            "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
           ],
           "pickId": "4ab981aa-d815-439a-b8ff-2043bf42c392",
           "packCards": [
-            "Moment Rewound",
-            "Pyrewatcher"
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -274,11 +274,11 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
-            "Pyrewatcher"
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "Pyrewatcher"
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
           ]
         },
         {
@@ -296,16 +296,16 @@
           "pick": [],
           "pickId": "7996ab8e-5fa4-4d39-8c7b-12e4258bf8a9",
           "packCards": [
-            "Barrage Specialist",
-            "Reunion",
-            "Ripple Through Reality",
-            "Clockwork Prodigy",
-            "Echoing Denial",
-            "The Waking Titan",
-            "Duskshore Virtuoso",
-            "Cascading Detonation",
-            "Across the Void",
-            "Ecliptic Vantage"
+            "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+            "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+            "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+            "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+            "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+            "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+            "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -313,20 +313,20 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "Barrage Specialist"
+            "a031eada-2c47-49c6-8c19-d2fe85f8ce97" // Barrage Specialist
           ],
           "pickId": "74b4c336-5d4c-4bc5-b82a-35084a6ad808",
           "packCards": [
-            "Barrage Specialist",
-            "Reunion",
-            "Ripple Through Reality",
-            "Clockwork Prodigy",
-            "Echoing Denial",
-            "The Waking Titan",
-            "Duskshore Virtuoso",
-            "Cascading Detonation",
-            "Across the Void",
-            "Ecliptic Vantage"
+            "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+            "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+            "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+            "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+            "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+            "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+            "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -336,15 +336,15 @@
           "pick": [],
           "pickId": "327cf118-cc92-4073-85d0-94d2a0a6989a",
           "packCards": [
-            "Reunion",
-            "Ripple Through Reality",
-            "Clockwork Prodigy",
-            "Echoing Denial",
-            "The Waking Titan",
-            "Duskshore Virtuoso",
-            "Cascading Detonation",
-            "Across the Void",
-            "Ecliptic Vantage"
+            "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+            "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+            "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+            "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+            "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+            "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -352,19 +352,19 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
-            "Reunion"
+            "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
           ],
           "pickId": "f3d62dbd-63db-4ac9-950f-9852627f23f2",
           "packCards": [
-            "Reunion",
-            "Ripple Through Reality",
-            "Clockwork Prodigy",
-            "Echoing Denial",
-            "The Waking Titan",
-            "Duskshore Virtuoso",
-            "Cascading Detonation",
-            "Across the Void",
-            "Ecliptic Vantage"
+            "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+            "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+            "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+            "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+            "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+            "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -372,18 +372,18 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "Ripple Through Reality"
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad" // Ripple Through Reality
           ],
           "pickId": "2d85cc30-ccae-4af8-834a-f7870dace679",
           "packCards": [
-            "Ripple Through Reality",
-            "Clockwork Prodigy",
-            "Echoing Denial",
-            "The Waking Titan",
-            "Duskshore Virtuoso",
-            "Cascading Detonation",
-            "Across the Void",
-            "Ecliptic Vantage"
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+            "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+            "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+            "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+            "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+            "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -393,13 +393,13 @@
           "pick": [],
           "pickId": "054f2276-2dd5-43da-bb26-c57c560861fe",
           "packCards": [
-            "Clockwork Prodigy",
-            "Echoing Denial",
-            "The Waking Titan",
-            "Duskshore Virtuoso",
-            "Cascading Detonation",
-            "Across the Void",
-            "Ecliptic Vantage"
+            "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+            "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+            "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+            "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+            "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -407,18 +407,18 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
-            "Clockwork Prodigy",
-            "Echoing Denial"
+            "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+            "128d1878-a505-4766-91a2-e5a29498bc4e" // Echoing Denial
           ],
           "pickId": "89f612d6-7c59-4a7b-a87d-45f789e88ba5",
           "packCards": [
-            "Clockwork Prodigy",
-            "Echoing Denial",
-            "The Waking Titan",
-            "Duskshore Virtuoso",
-            "Cascading Detonation",
-            "Across the Void",
-            "Ecliptic Vantage"
+            "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+            "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+            "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+            "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+            "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -426,16 +426,16 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
-            "The Waking Titan",
-            "Duskshore Virtuoso"
+            "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+            "8d35aec1-29ad-432c-9c23-25a52804cbae" // Duskshore Virtuoso
           ],
           "pickId": "359d1b13-6156-43b0-a9a7-6bfff36c1a91",
           "packCards": [
-            "The Waking Titan",
-            "Duskshore Virtuoso",
-            "Cascading Detonation",
-            "Across the Void",
-            "Ecliptic Vantage"
+            "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
+            "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+            "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -443,13 +443,13 @@
           "pack": 2,
           "pickInPack": 9,
           "pick": [
-            "Cascading Detonation"
+            "fb967cc1-4199-4a08-8070-724e07cebea5" // Cascading Detonation
           ],
           "pickId": "2a362d78-76a1-4dbc-80cc-0360e98ba280",
           "packCards": [
-            "Cascading Detonation",
-            "Across the Void",
-            "Ecliptic Vantage"
+            "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -457,12 +457,12 @@
           "pack": 2,
           "pickInPack": 10,
           "pick": [
-            "Across the Void"
+            "b1d36337-5668-4f1d-b155-2d07fc00f872" // Across the Void
           ],
           "pickId": "eabe1af2-d26e-4086-a71d-f818fb41fa25",
           "packCards": [
-            "Across the Void",
-            "Ecliptic Vantage"
+            "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -470,11 +470,11 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
-            "Ecliptic Vantage"
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ],
           "pickId": "122f2cc2-5f4d-497c-96b5-ed5698f28b51",
           "packCards": [
-            "Ecliptic Vantage"
+            "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
         },
         {
@@ -490,21 +490,21 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "Fell the Mighty"
+            "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6" // Fell the Mighty
           ],
           "pickId": "2dc16614-5cf8-444d-a5ae-cac25018af68",
           "packCards": [
-            "Fell the Mighty",
-            "Sunset Chapel Rest",
-            "Wheel of the Heavens",
-            "The Power Within",
-            "Cascade of Reflections",
-            "Cragfall",
-            "Glimpse of Infinity",
-            "Conduit of Ashes",
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
+            "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+            "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+            "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+            "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+            "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -512,20 +512,20 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "Sunset Chapel Rest"
+            "5ce69085-aa75-4654-8abe-f9e773931e63" // Sunset Chapel Rest
           ],
           "pickId": "24e608b2-d18d-49a9-a041-b06dece40792",
           "packCards": [
-            "Sunset Chapel Rest",
-            "Wheel of the Heavens",
-            "The Power Within",
-            "Cascade of Reflections",
-            "Cragfall",
-            "Glimpse of Infinity",
-            "Conduit of Ashes",
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+            "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+            "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+            "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+            "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -535,15 +535,15 @@
           "pick": [],
           "pickId": "1eb3178b-dac5-4b34-9d3e-4f5a170d1c87",
           "packCards": [
-            "Wheel of the Heavens",
-            "The Power Within",
-            "Cascade of Reflections",
-            "Cragfall",
-            "Glimpse of Infinity",
-            "Conduit of Ashes",
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+            "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+            "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+            "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -551,19 +551,19 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
-            "Wheel of the Heavens"
+            "25d00336-5ad7-433b-8ced-71720a9f074a" // Wheel of the Heavens
           ],
           "pickId": "01bda3d7-122a-48a0-bab3-676c4a557b74",
           "packCards": [
-            "Wheel of the Heavens",
-            "The Power Within",
-            "Cascade of Reflections",
-            "Cragfall",
-            "Glimpse of Infinity",
-            "Conduit of Ashes",
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+            "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+            "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+            "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -571,18 +571,18 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "The Power Within"
+            "f4b34207-2ad4-421b-8798-9c20320607ae" // The Power Within
           ],
           "pickId": "262285ab-3a6f-4932-b53b-8ab20bcad955",
           "packCards": [
-            "The Power Within",
-            "Cascade of Reflections",
-            "Cragfall",
-            "Glimpse of Infinity",
-            "Conduit of Ashes",
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+            "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+            "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -590,17 +590,17 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
-            "Cascade of Reflections"
+            "fc4b06d6-3b30-4769-af98-88fcea5b54dd" // Cascade of Reflections
           ],
           "pickId": "e21aa266-4264-4e02-9403-02930e641573",
           "packCards": [
-            "Cascade of Reflections",
-            "Cragfall",
-            "Glimpse of Infinity",
-            "Conduit of Ashes",
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+            "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -608,16 +608,16 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
-            "Cragfall"
+            "1654d50f-815d-4172-b46b-8baa34a124db" // Cragfall
           ],
           "pickId": "3c429c40-2389-41e5-8681-4bb274e25eba",
           "packCards": [
-            "Cragfall",
-            "Glimpse of Infinity",
-            "Conduit of Ashes",
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -625,15 +625,15 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
-            "Glimpse of Infinity"
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ],
           "pickId": "0948e6dc-8af7-45d3-91de-a2aebee83e82",
           "packCards": [
-            "Glimpse of Infinity",
-            "Conduit of Ashes",
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -641,14 +641,14 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
-            "Conduit of Ashes"
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818" // Conduit of Ashes
           ],
           "pickId": "153983dd-54dc-420d-9249-665b0d669614",
           "packCards": [
-            "Conduit of Ashes",
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -656,13 +656,13 @@
           "pack": 3,
           "pickInPack": 10,
           "pick": [
-            "Inverted Reflection"
+            "120ea441-f6ff-434b-973c-bde459f65368" // Inverted Reflection
           ],
           "pickId": "1571b584-9007-45ee-a3c3-6c72f227fee2",
           "packCards": [
-            "Inverted Reflection",
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -670,12 +670,12 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
-            "Genesis Burst"
+            "848b41b3-9f87-45fb-b86f-b52fc913d201" // Genesis Burst
           ],
           "pickId": "4686bbb9-517f-4cce-aa7a-5db41e22c02b",
           "packCards": [
-            "Genesis Burst",
-            "Epiphany Unfolded"
+            "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         },
         {
@@ -683,11 +683,11 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
-            "Epiphany Unfolded"
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ],
           "pickId": "2dd41293-d7c8-4422-9f0c-b3e96350f5c9",
           "packCards": [
-            "Epiphany Unfolded"
+            "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
           ]
         }
       ]

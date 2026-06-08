@@ -318,7 +318,8 @@ export async function loadQuestContent(
       decklists,
       undefined,
       humanDecklists,
-      draftRecords,
+      // `pickfit` keys on stable card ids, so feed it the records' id arrays.
+      draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds })),
     ),
     nameIndex,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),

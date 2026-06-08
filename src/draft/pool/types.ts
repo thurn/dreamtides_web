@@ -48,9 +48,11 @@ export interface PoolCard {
 /**
  * One real draft seat's pick trajectory, the minimal slice the `pickfit` variant
  * needs from a bundled draft record: `packs[i]` is the full set of cards offered
- * at pick `i` (what was available), `picks[i]` is the card name(s) the human
- * actually took at that pick (0–3 names), aligned index-for-index with `packs`.
- * The pair captures the taken-over-passed signal decklists cannot.
+ * at pick `i` (what was available), `picks[i]` is the card(s) the human actually
+ * took at that pick (0–3 cards), aligned index-for-index with `packs`. The pair
+ * captures the taken-over-passed signal decklists cannot. Cards are identified by
+ * their stable cards_v2 UUID (the bundle's `packIds`/`pickIds`), so the variant is
+ * unaffected by card renames.
  */
 export interface PickRecord {
   packs: readonly (readonly string[])[];

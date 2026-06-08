@@ -27,19 +27,19 @@
       "seat": 0,
       "name": "WUR",
       "mainboard": [
-        "Minstrel of Falling Light",
-        "Key Sifter",
-        "Bladefall",
-        "The Power Within",
-        "Infernal Rest"
+        "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
+        "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
+        "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
+        "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+        "21e376da-f4c3-4a60-bd63-a272b35db5a6" // Infernal Rest
       ],
       "sideboard": [],
       "pool": [
-        "Minstrel of Falling Light",
-        "Key Sifter",
-        "Infernal Rest",
-        "The Power Within",
-        "Bladefall"
+        "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
+        "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
+        "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
+        "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+        "8b7883ee-a235-4793-aa56-086fb1e28d36" // Bladefall
       ],
       "picks": [
         {
@@ -47,15 +47,15 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Minstrel of Falling Light",
-            "Key Sifter"
+            "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
+            "c86c1364-6ac4-4c90-8053-4e49441a2c83" // Key Sifter
           ],
           "pickId": "5f03c944-1929-4cb2-a373-d57eefa29ed1",
           "packCards": [
-            "Minstrel of Falling Light",
-            "Key Sifter",
-            "Worldsong Behemoth",
-            "Duskreaper"
+            "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
+            "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
+            "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
+            "4644db03-fbcd-4af5-a229-17962ce093d5" // Duskreaper
           ]
         },
         {
@@ -63,13 +63,13 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Infernal Rest"
+            "21e376da-f4c3-4a60-bd63-a272b35db5a6" // Infernal Rest
           ],
           "pickId": "7d48d622-f397-4f31-b1a5-0c23f60aa71c",
           "packCards": [
-            "Infernal Rest",
-            "Lumin-Gate Seer",
-            "Threadbreaker"
+            "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
+            "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
+            "15b63630-d9f8-473b-9717-15ad91ff2f16" // Threadbreaker
           ]
         },
         {
@@ -77,12 +77,12 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "The Power Within"
+            "f4b34207-2ad4-421b-8798-9c20320607ae" // The Power Within
           ],
           "pickId": "262285ab-3a6f-4932-b53b-8ab20bcad955",
           "packCards": [
-            "The Power Within",
-            "Lord of Hidden Paths"
+            "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+            "fb41a90e-279c-419c-80fc-7c3469ba0c74" // Lord of Hidden Paths
           ]
         },
         {
@@ -90,11 +90,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "Bladefall"
+            "8b7883ee-a235-4793-aa56-086fb1e28d36" // Bladefall
           ],
           "pickId": "057d2410-30d3-4b7a-9dc3-f2512c1cf31c",
           "packCards": [
-            "Bladefall"
+            "8b7883ee-a235-4793-aa56-086fb1e28d36" // Bladefall
           ]
         }
       ]

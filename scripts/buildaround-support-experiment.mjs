@@ -404,9 +404,12 @@ export function draftableUniverse(poolData) {
   for (const set of (poolData.mergedLists ?? new Map()).values()) {
     for (const name of set) universe.add(name);
   }
+  // Draft-record packs are card ids; map them to current names for the universe.
   for (const rec of poolData.draftRecords ?? []) {
     for (const pack of rec.packs ?? []) {
-      for (const name of pack) universe.add(name);
+      for (const id of pack) {
+        universe.add(poolData.cardNameById?.get(id) ?? id);
+      }
     }
   }
   return universe;
@@ -488,12 +491,16 @@ function loadContext(argv) {
   // Pass every corpus so all variants (including `idf_human`, `merged`, and
   // `pickfit`) run their real algorithm under `--compare` rather than falling
   // back to default.
+  const pickRecords =
+    Array.isArray(draftRecords) && draftRecords.length
+      ? draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }))
+      : undefined;
   const poolData = buildPoolData(
     cards,
     decklists,
     Object.keys(mergedLists ?? {}).length ? mergedLists : undefined,
     humanDecklists,
-    Array.isArray(draftRecords) && draftRecords.length ? draftRecords : undefined,
+    pickRecords,
   );
   return { dreamcallers, meta, poolData };
 }

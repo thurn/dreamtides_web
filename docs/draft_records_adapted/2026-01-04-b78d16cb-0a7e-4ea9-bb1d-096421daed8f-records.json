@@ -27,13 +27,13 @@
       "seat": 0,
       "name": "G",
       "mainboard": [
-        "Blazing Emberwing",
-        "Roots of Rebirth"
+        "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
+        "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81" // Roots of Rebirth
       ],
       "sideboard": [],
       "pool": [
-        "Blazing Emberwing",
-        "Roots of Rebirth"
+        "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
+        "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81" // Roots of Rebirth
       ],
       "picks": [
         {
@@ -41,12 +41,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Blazing Emberwing"
+            "18ff6a45-148a-40bf-85ae-4a51f32f406a" // Blazing Emberwing
           ],
           "pickId": "be6fdec0-a2c4-4da2-ae14-961185eaee66",
           "packCards": [
-            "Blazing Emberwing",
-            "Radiant Trio"
+            "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
+            "151b80b1-0a3f-48d4-9c85-99a9c274fd7f" // Radiant Trio
           ]
         },
         {
@@ -54,11 +54,11 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Roots of Rebirth"
+            "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81" // Roots of Rebirth
           ],
           "pickId": "7ba6a508-3286-4938-b0a5-94b794ab6456",
           "packCards": [
-            "Roots of Rebirth"
+            "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81" // Roots of Rebirth
           ]
         }
       ]
@@ -67,13 +67,13 @@
       "seat": 4,
       "name": "WR",
       "mainboard": [
-        "Crucible Warlord",
-        "Assault Leader"
+        "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+        "742a376f-68db-466a-b087-405188634ba4" // Assault Leader
       ],
       "sideboard": [],
       "pool": [
-        "Crucible Warlord",
-        "Assault Leader"
+        "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+        "742a376f-68db-466a-b087-405188634ba4" // Assault Leader
       ],
       "picks": [
         {
@@ -81,12 +81,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Crucible Warlord"
+            "78b5a42d-b099-48f1-a1b4-5b6bc177adeb" // Crucible Warlord
           ],
           "pickId": "08a5007f-06a0-40fa-a252-c38baa6b5c6f",
           "packCards": [
-            "Crucible Warlord",
-            "Starbound Striker"
+            "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7" // Starbound Striker
           ]
         },
         {
@@ -94,11 +94,11 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Assault Leader"
+            "742a376f-68db-466a-b087-405188634ba4" // Assault Leader
           ],
           "pickId": "292ac228-7a1e-4c21-b81e-204014c0f3b1",
           "packCards": [
-            "Assault Leader"
+            "742a376f-68db-466a-b087-405188634ba4" // Assault Leader
           ]
         }
       ]

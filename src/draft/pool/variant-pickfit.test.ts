@@ -27,7 +27,8 @@ const cPassed: PickRecord = {
   picks: [["filler"]],
 };
 
-// No source cards carry an id, so the corpus keys by card name.
+// Records hold card ids directly (here short stand-in tokens); with no
+// cardNameById map the corpus keys on those tokens verbatim.
 function corpusFrom(records: PickRecord[]) {
   const corpus = buildPickfitCorpus(
     buildPoolData([], undefined, undefined, undefined, records),

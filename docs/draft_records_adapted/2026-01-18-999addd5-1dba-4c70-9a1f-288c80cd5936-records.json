@@ -27,11 +27,11 @@
       "seat": 0,
       "name": "C",
       "mainboard": [
-        "Wolfbond Chieftain"
+        "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
       ],
       "sideboard": [],
       "pool": [
-        "Wolfbond Chieftain"
+        "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
       ],
       "picks": [
         {
@@ -39,11 +39,11 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Wolfbond Chieftain"
+            "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
           ],
           "pickId": "ad7ac9a5-340f-4509-826c-7b9416d47887",
           "packCards": [
-            "Wolfbond Chieftain"
+            "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
           ]
         }
       ]

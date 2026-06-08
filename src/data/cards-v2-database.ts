@@ -67,16 +67,21 @@ export async function loadMergedArchetypeLists(): Promise<
 /**
  * A single human-seat entry from the adapted Cube Cobra draft corpus, bundled
  * by `scripts/setup-assets.mjs` for the record-replay draft mode. `packs` and
- * `picks` are aligned arrays of length 30 (10 picks per pack × 3 packs),
- * containing raw card names as they appear in the source records.
+ * `picks` are aligned arrays of length 30 (10 picks per pack × 3 packs); their
+ * entries are CURRENT display names, refreshed from each card's stable id at
+ * bundle time. `packIds`/`pickIds` carry the matching cards_v2 UUIDs, aligned
+ * index-for-index, so a rename-stable consumer (the `pickfit` pool variant) can
+ * key on ids instead of names.
  */
 export interface DraftRecord {
   id: string;
   draftId: string;
   sourceFile: string;  // adapted-record JSON filename this seat came from
   mainboard: string[];
-  packs: string[][];  // 30 trimmed packs of card names (raw order)
+  packs: string[][];  // 30 trimmed packs of current card names (raw order)
   picks: string[][];  // human picks aligned to packs (each 0..3 names)
+  packIds: string[][];  // stable cards_v2 UUIDs aligned to `packs`
+  pickIds: string[][];  // stable cards_v2 UUIDs aligned to `picks`
 }
 
 /**

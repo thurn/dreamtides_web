@@ -20,82 +20,82 @@
       "seat": 0,
       "name": "WUBG",
       "mainboard": [
-        "Urban Desperado",
-        "Verdant Pioneer",
-        "Still Dreamer",
-        "Crucible Warlord",
-        "Boundless Wanderer",
-        "Field Reverent",
-        "Vanishing Inquisitor",
-        "Terminus",
-        "Stargazer Adrift",
-        "Duskwall Delver",
-        "Scrapyard Custodian",
-        "Wasteland Tamer",
-        "Avatar of Cosmic Reckoning",
-        "Ashwalker",
-        "Veil of the Wastes",
-        "Volcanic Channeler",
-        "Carrion Shepherd",
-        "Skull Weaver",
-        "Dawnprowler Panther",
-        "Young Beastcaller",
-        "Mountainwatch Alpha",
-        "Verdant Pilgrim",
-        "Abomination of Memory",
-        "Blazing Emberwing",
-        "Worldsong Behemoth",
-        "Emerald Guardian",
-        "Celestial Lookout",
-        "Torn Circuit Feeder",
-        "Seeker of the Radiant Wilds",
-        "Duskmount",
-        "Ruin Scavenger",
-        "Rusted Monolith",
-        "Pallid Arbiter",
-        "Fern Treader",
-        "Saffron Trailblazer",
-        "Aspiring Guardian",
-        "Sundown Ronin",
-        "Lithic Severance",
-        "Lightningborn",
-        "Through the Rift",
-        "Toll of Passage",
-        "Break the Sequence",
-        "Gleam Below",
-        "Genesis Burst",
-        "Cragfall",
-        "Ancient Descent",
-        "Ridgecutter",
-        "The Power Within",
-        "Wheel of the Heavens",
-        "Null Sphere",
-        "Threadbreaker",
-        "Door to Possibility",
-        "Starfall",
-        "Moonlit Voyage",
-        "Break the Veil",
-        "Ferryman's Tithe",
-        "Weight of Memory",
-        "Shadowbinder",
-        "Keeper of the Lightpath",
-        "Duneveil Vanguard",
-        "From the Barrow",
-        "Sunset Chronicler",
-        "Virtuoso of Harmony",
-        "Gearwright",
-        "Shadow Soloist",
-        "Moonlit Dancer",
-        "Conjured Zenith",
-        "Apocalypse",
-        "Clockwork Conductor",
-        "Dread Arbiter",
-        "Intermezzo Balladeer",
-        "Seedling Sage",
-        "Worldbreacher",
-        "Spirit Reaping",
-        "Shadow Reflection",
-        "Forge Inheritor"
+        "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
+        "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
+        "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
+        "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+        "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
+        "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
+        "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
+        "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
+        "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+        "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
+        "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
+        "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
+        "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
+        "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
+        "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
+        "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
+        "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
+        "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
+        "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
+        "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
+        "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
+        "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
+        "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
+        "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
+        "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
+        "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
+        "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
+        "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+        "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
+        "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
+        "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
+        "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
+        "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
+        "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
+        "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
+        "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
+        "c73f978e-8196-4589-a432-845265115555", // Lightningborn
+        "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
+        "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
+        "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
+        "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
+        "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+        "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+        "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
+        "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
+        "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+        "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+        "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
+        "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
+        "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
+        "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
+        "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
+        "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+        "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+        "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
+        "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
+        "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
+        "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
+        "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
+        "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
+        "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
+        "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
+        "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
+        "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+        "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
+        "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
+        "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
+        "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
+        "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
+        "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
+        "e72245f2-c153-4e79-ba8e-956d18202b48" // Forge Inheritor
       ],
       "sideboard": [],
       "pool": [],

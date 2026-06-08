@@ -22,11 +22,11 @@
       "seat": 0,
       "name": "WU",
       "mainboard": [
-        "Abyssal Enforcer"
+        "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
       ],
       "sideboard": [],
       "pool": [
-        "Abyssal Enforcer"
+        "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
       ],
       "picks": [
         {
@@ -34,11 +34,11 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Abyssal Enforcer"
+            "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
           ],
           "pickId": "85397a1d-1fd1-4ca1-a1fc-f32e3a063c81",
           "packCards": [
-            "Abyssal Enforcer"
+            "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
           ]
         }
       ]

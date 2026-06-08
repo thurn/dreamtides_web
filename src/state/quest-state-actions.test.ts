@@ -183,22 +183,26 @@ function makeReplayDraftState(): ReplayDraftState {
 /** Minimal replay record fixture: a single record so selection is index 0. */
 function makeReplayRecord(): DraftRecord {
   const corpus = buildReplayCorpus();
+  // 30 packs, each a 4-card pack of real corpus cards.
+  const packs = Array.from({ length: 30 }, (_, i) => {
+    const base = (i % 9) + 5; // rotate through filler cards C5..C13
+    return [
+      `C${String(base)}`,
+      `C${String(base + 1)}`,
+      `C${String(base + 2)}`,
+      `C${String(base + 3)}`,
+    ];
+  });
+  const picks: string[][] = Array.from({ length: 30 }, () => []);
   return {
     id: "record-0",
     draftId: "draft-0",
     sourceFile: "draft-0-records.json",
     mainboard: corpus[0],
-    // 30 packs, each a 4-card pack of real corpus cards.
-    packs: Array.from({ length: 30 }, (_, i) => {
-      const base = (i % 9) + 5; // rotate through filler cards C5..C13
-      return [
-        `C${String(base)}`,
-        `C${String(base + 1)}`,
-        `C${String(base + 2)}`,
-        `C${String(base + 3)}`,
-      ];
-    }),
-    picks: Array.from({ length: 30 }, () => []),
+    packs,
+    picks,
+    packIds: packs,
+    pickIds: picks,
   };
 }
 

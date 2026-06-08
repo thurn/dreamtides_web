@@ -29,42 +29,42 @@
       "seat": 0,
       "name": "WUBG Artifacts",
       "mainboard": [
-        "Celestial Lookout",
-        "Wolfbond Chieftain",
-        "Luminwings",
-        "Chronicle Reclaimer",
-        "Radiants' Captain",
-        "Crumbling Covenant",
-        "Heroic Rescue",
-        "Moment Rewound",
-        "Last Light Herald",
-        "Skyflame Commander",
-        "Aftermath Bloom"
+        "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
+        "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
+        "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
+        "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
+        "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+        "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+        "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c" // Aftermath Bloom
       ],
       "sideboard": [
-        "Meadowlight Charger",
-        "Shattering Gambit",
-        "Looming Oracle",
-        "Standard Bearer",
-        "Steel Abomination"
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
+        "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+        "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+        "cc21a902-e482-46c0-bf07-e04035f39190" // Steel Abomination
       ],
       "pool": [
-        "Last Light Herald",
-        "Skyflame Commander",
-        "Shattering Gambit",
-        "Moment Rewound",
-        "Steel Abomination",
-        "Standard Bearer",
-        "Looming Oracle",
-        "Heroic Rescue",
-        "Celestial Lookout",
-        "Meadowlight Charger",
-        "Crumbling Covenant",
-        "Chronicle Reclaimer",
-        "Radiants' Captain",
-        "Luminwings",
-        "Aftermath Bloom",
-        "Wolfbond Chieftain"
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+        "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
+        "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+        "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
+        "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+        "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+        "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+        "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
+        "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
+        "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
+        "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
       ],
       "picks": [
         {
@@ -72,18 +72,18 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Last Light Herald",
-            "Skyflame Commander"
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ],
           "pickId": "169b74e2-72cf-47df-b128-b632313cd24c",
           "packCards": [
-            "Last Light Herald",
-            "Skyflame Commander",
-            "Lightningborn",
-            "Company Commander",
-            "Cragfall",
-            "Molten Duel",
-            "Rite of Summoning"
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+            "c73f978e-8196-4589-a432-845265115555", // Lightningborn
+            "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
+            "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+            "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
+            "20fd609a-7529-4582-a362-b8151b0ae011" // Rite of Summoning
           ]
         },
         {
@@ -91,15 +91,15 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Shattering Gambit"
+            "be7cf049-29df-4801-9ca6-0e39dc1101af" // Shattering Gambit
           ],
           "pickId": "045ce37b-86d2-4e56-84af-b6625b53d13c",
           "packCards": [
-            "Shattering Gambit",
-            "Frost Visionary",
-            "Vault Infiltrator",
-            "Rebirth Ritualist",
-            "Wheel of the Heavens"
+            "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
+            "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
+            "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "25d00336-5ad7-433b-8ced-71720a9f074a" // Wheel of the Heavens
           ]
         },
         {
@@ -107,13 +107,13 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "Moment Rewound"
+            "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
           ],
           "pickId": "4ab981aa-d815-439a-b8ff-2043bf42c392",
           "packCards": [
-            "Moment Rewound",
-            "Arc Gate Opening",
-            "Fangbound"
+            "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
+            "c750af2e-8185-4af0-bb38-4a41430c71b3" // Fangbound
           ]
         },
         {
@@ -123,9 +123,9 @@
           "pick": [],
           "pickId": "1c7d50d6-b63a-4d8c-88fa-1d78ae693a45",
           "packCards": [
-            "Shadowcaller",
-            "Soulflame Predator",
-            "Nomad of Endless Paths"
+            "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
+            "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
+            "44ae8838-4714-43a5-a7bd-e9f806f35ca9" // Nomad of Endless Paths
           ]
         },
         {
@@ -133,11 +133,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "Steel Abomination"
+            "cc21a902-e482-46c0-bf07-e04035f39190" // Steel Abomination
           ],
           "pickId": "05c107dc-f915-4d29-a80f-9383c4564014",
           "packCards": [
-            "Steel Abomination"
+            "cc21a902-e482-46c0-bf07-e04035f39190" // Steel Abomination
           ]
         },
         {
@@ -145,11 +145,11 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "Standard Bearer"
+            "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a" // Standard Bearer
           ],
           "pickId": "93bd7e73-63dc-45b2-aaa8-984be8b900ab",
           "packCards": [
-            "Standard Bearer"
+            "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a" // Standard Bearer
           ]
         },
         {
@@ -159,10 +159,10 @@
           "pick": [],
           "pickId": "2d9d4f2e-5a41-410d-b1c3-47e4aca07177",
           "packCards": [
-            "Spirit Field Reclaimer",
-            "Eternal Sentry",
-            "Wasteland Tamer",
-            "Sanctum Approach"
+            "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+            "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
+            "58f96494-87ec-4145-9e1c-95951d0ab711" // Sanctum Approach
           ]
         },
         {
@@ -170,14 +170,14 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "Looming Oracle"
+            "4b20e66e-2466-4518-8ef9-67f580bd6f14" // Looming Oracle
           ],
           "pickId": "0596155d-8f83-40ca-be31-9a0df1ced65e",
           "packCards": [
-            "Looming Oracle",
-            "Cloudmantle Ray",
-            "Break the Veil",
-            "Dreadwood Emissary"
+            "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+            "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
+            "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+            "bf323913-3695-49ee-8d13-8165657e3dc9" // Dreadwood Emissary
           ]
         },
         {
@@ -185,14 +185,14 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "Heroic Rescue"
+            "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb" // Heroic Rescue
           ],
           "pickId": "40fd5347-c0ac-4b4a-b65b-34bfb737c5a9",
           "packCards": [
-            "Heroic Rescue",
-            "Depthwalker",
-            "Dusk Duelist",
-            "Stargazer Adrift"
+            "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
+            "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+            "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
           ]
         },
         {
@@ -200,14 +200,14 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
-            "Celestial Lookout"
+            "374ec185-b0f7-40e6-9988-09e96abccebe" // Celestial Lookout
           ],
           "pickId": "0286f92c-f153-4035-b31e-b6d05f53ea06",
           "packCards": [
-            "Celestial Lookout",
-            "Veil Crosser",
-            "Rooftop Prophet",
-            "Dreamvale Monarch"
+            "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
+            "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
+            "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
+            "965ce3b2-a722-475c-99c5-5b35685d2404" // Dreamvale Monarch
           ]
         },
         {
@@ -215,11 +215,11 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "Meadowlight Charger"
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "Meadowlight Charger"
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
           ]
         },
         {
@@ -227,11 +227,11 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
-            "Crumbling Covenant"
+            "795a7b54-40d5-42f9-bc3a-9e92bc938c2d" // Crumbling Covenant
           ],
           "pickId": "0b54b6f3-9ee3-4f6e-bde6-b54fc038a132",
           "packCards": [
-            "Crumbling Covenant"
+            "795a7b54-40d5-42f9-bc3a-9e92bc938c2d" // Crumbling Covenant
           ]
         },
         {
@@ -241,12 +241,12 @@
           "pick": [],
           "pickId": "7996ab8e-5fa4-4d39-8c7b-12e4258bf8a9",
           "packCards": [
-            "Sundown Surfer",
-            "Dreadlord",
-            "Echo Technician",
-            "Dream Garden Visitor",
-            "Shared Revelation",
-            "Collateral Damage"
+            "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
+            "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
+            "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
+            "4cece464-2fde-483d-af92-04cd0341be5b" // Collateral Damage
           ]
         },
         {
@@ -254,16 +254,16 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "Chronicle Reclaimer",
-            "Radiants' Captain"
+            "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
+            "724a1362-3f0f-4b77-b14e-22c0b877349a" // Radiants' Captain
           ],
           "pickId": "187b6719-e5ed-4615-a00b-3313ceca055b",
           "packCards": [
-            "Chronicle Reclaimer",
-            "Radiants' Captain",
-            "Vaultbreaker",
-            "Inferno's Herald",
-            "Vertiginous Leap"
+            "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
+            "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
+            "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
+            "ca0e9275-7fbe-47ce-b776-da5b2607145e" // Vertiginous Leap
           ]
         },
         {
@@ -271,15 +271,15 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "Luminwings"
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Luminwings
           ],
           "pickId": "56001a36-126b-4c08-af98-a6cc4d84210e",
           "packCards": [
-            "Luminwings",
-            "Ripple Through Reality",
-            "Twilight Troubadour",
-            "Simulacra",
-            "Guiding Light"
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+            "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
+            "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
+            "a37876f4-08a7-4352-bb3a-6d24f5c9407d" // Guiding Light
           ]
         },
         {
@@ -287,13 +287,13 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
-            "Aftermath Bloom"
+            "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c" // Aftermath Bloom
           ],
           "pickId": "0e1374a3-0465-4edb-b63e-22c8baaad864",
           "packCards": [
-            "Aftermath Bloom",
-            "Woodland Apparition",
-            "Spirit Reaping"
+            "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
+            "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
           ]
         },
         {
@@ -301,12 +301,12 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "Wolfbond Chieftain"
+            "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
           ],
           "pickId": "ad7ac9a5-340f-4509-826c-7b9416d47887",
           "packCards": [
-            "Wolfbond Chieftain",
-            "Fury of the Clan"
+            "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
+            "f79c63f6-7cf1-4030-be39-217fd3c2fb7f" // Fury of the Clan
           ]
         },
         {

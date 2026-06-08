@@ -75,6 +75,8 @@ function makeRec(id: string, packs: string[][]): DraftRecord {
     mainboard: packs.flat(),
     packs,
     picks: packs.map(() => []),
+    packIds: packs,
+    pickIds: packs.map(() => []),
   };
 }
 
@@ -199,6 +201,12 @@ describe("buildPackSequence", () => {
         ["a", "d"],
       ],
       picks: [["a"], ["c"], ["d"]],
+      packIds: [
+        ["a", "b", "ghost"],
+        ["c", "c", "d"],
+        ["a", "d"],
+      ],
+      pickIds: [["a"], ["c"], ["d"]],
     };
     const seq = buildPackSequence(record, index);
     // Same number of packs, same order, resolved + deduped per pack.
@@ -219,6 +227,8 @@ describe("buildPackSequence", () => {
       mainboard: [],
       packs: [["known"], ["unknown1", "unknown2"], ["known", "unknown1"]],
       picks: [[], [], []],
+      packIds: [["known"], ["unknown1", "unknown2"], ["known", "unknown1"]],
+      pickIds: [[], [], []],
     };
     const seq = buildPackSequence(record, index);
     expect(seq).toEqual([[7], [], [7]]);

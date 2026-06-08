@@ -26,11 +26,12 @@
 // far, and the prior), dialled by the `PICKFIT` block below.
 //
 // Cards are identified by their stable cards_v2 UUID, not by display name (the
-// same rename-proof identity `seed` uses): the record corpus arrives keyed by
-// current name, is translated into UUID space on the way in
-// (`PoolData.cardIdByName`), and the finished pool is mapped back onto current
-// names on the way out (`PoolData.cardNameById`). When the source cards carry no
-// id, both maps are absent and the variant keys by name.
+// same rename-proof identity `seed` uses). The record corpus already arrives in
+// UUID space — `PickRecord.packs`/`picks` hold ids, frozen into the corpus by
+// `add-uuids-to-draft-records.mjs` — so the whole computation runs on ids and a
+// card rename never shifts the draw, growth, or provenance. The finished pool is
+// mapped back onto current names on the way out via `PoolData.cardNameById`;
+// absent that map (synthetic test cards keyed by name), keys pass through as-is.
 
 import {
   type AffinityCorpus,
@@ -96,9 +97,6 @@ export function buildPickfitCorpus(poolData: PoolData): AffinityCorpus | null {
   const records = poolData.draftRecords;
   let result: AffinityCorpus | null = null;
   if (records && records.length > 0) {
-    const keyOf = (name: string): string =>
-      poolData.cardIdByName?.get(name) ?? name;
-
     // Unconditional offer/take counts per card key.
     const offered = new Map<string, number>();
     const taken = new Map<string, number>();
@@ -111,10 +109,10 @@ export function buildPickfitCorpus(poolData: PoolData): AffinityCorpus | null {
       const poolSoFar = new Set<string>();
       const len = Math.min(rec.packs.length, rec.picks.length);
       for (let i = 0; i < len; i += 1) {
-        // Dedupe the pack to card keys; a duplicate display name collapses to one
-        // offer so it does not double-count.
-        const packKeys = [...new Set(rec.packs[i].map(keyOf))];
-        const chosen = new Set(rec.picks[i].map(keyOf));
+        // Dedupe the pack to card ids; a duplicate id collapses to one offer so
+        // it does not double-count.
+        const packKeys = [...new Set(rec.packs[i])];
+        const chosen = new Set(rec.picks[i]);
         for (const c of packKeys) {
           offered.set(c, (offered.get(c) ?? 0) + 1);
           const isTaken = chosen.has(c);

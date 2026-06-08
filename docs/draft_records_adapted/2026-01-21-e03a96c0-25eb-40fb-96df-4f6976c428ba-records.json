@@ -31,7 +31,7 @@
           "pick": [],
           "pickId": "15faa763-b897-4e86-b094-73f3236291a9",
           "packCards": [
-            "Assault Leader"
+            "742a376f-68db-466a-b087-405188634ba4" // Assault Leader
           ]
         },
         {
@@ -48,13 +48,13 @@
       "seat": 1,
       "name": "U",
       "mainboard": [
-        "Assault Leader",
-        "Wolfbond Chieftain"
+        "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
+        "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
       ],
       "sideboard": [],
       "pool": [
-        "Wolfbond Chieftain",
-        "Assault Leader"
+        "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
+        "742a376f-68db-466a-b087-405188634ba4" // Assault Leader
       ],
       "picks": [
         {
@@ -62,11 +62,11 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Wolfbond Chieftain"
+            "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
           ],
           "pickId": "ad7ac9a5-340f-4509-826c-7b9416d47887",
           "packCards": [
-            "Wolfbond Chieftain"
+            "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
           ]
         },
         {
@@ -74,11 +74,11 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Assault Leader"
+            "742a376f-68db-466a-b087-405188634ba4" // Assault Leader
           ],
           "pickId": "292ac228-7a1e-4c21-b81e-204014c0f3b1",
           "packCards": [
-            "Assault Leader"
+            "742a376f-68db-466a-b087-405188634ba4" // Assault Leader
           ]
         }
       ]

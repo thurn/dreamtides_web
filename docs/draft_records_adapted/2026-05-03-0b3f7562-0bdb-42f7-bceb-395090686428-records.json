@@ -20,96 +20,96 @@
       "seat": 0,
       "name": "WUBRG",
       "mainboard": [
-        "Still Dreamer",
-        "Ambush Operative",
-        "Soulflame Predator",
-        "Nomad of Endless Paths",
-        "Featherlight Summoner",
-        "Urban Desperado",
-        "Verdant Pioneer",
-        "Gatebound Warden",
-        "Starlight Guide",
-        "Cosmic Puppeteer",
-        "Inspiring Templar",
-        "Avatar of Cosmic Reckoning",
-        "Dreadweaver",
-        "Exiles of the Last Light",
-        "The Calling Night",
-        "The Rising God",
-        "Twilight Reclaimer",
-        "Cinderfang",
-        "Silent Gatherer",
-        "Shadowprowler",
-        "Pattern Seeker",
-        "Part the Veil",
-        "Grotto Seer",
-        "Soulkindler",
-        "Unquenched",
-        "Pyrestone Avatar",
-        "Pinnacle Ascendant",
-        "Oracle of Shifting Skies",
-        "Architect of Memory",
-        "Angel of the Eclipse",
-        "Young Beastcaller",
-        "Ghostlight Wolves",
-        "Eternal Stag",
-        "Mother of Flames",
-        "Harrowing Officiant",
-        "Spirit Bond",
-        "Sky Voyager",
-        "Voidcaller",
-        "Blazebound Sentinel",
-        "Overstory Explorer",
-        "Abomination of Memory",
-        "Lumineth",
-        "Selfless Rescuer",
-        "Ethereal Trailblazer",
-        "Endless Projection",
-        "Ashen Remnant",
-        "The Dread Sovereign",
-        "Cinderheart",
-        "Revenant of the Lost",
-        "Blade of Oblivion",
-        "Colossal Convergence",
-        "Forsworn Champion",
-        "Sundown Ronin",
-        "Demonbane",
-        "Heroic Rescue",
-        "Fading Farewell",
-        "Grounded",
-        "Annular Recall",
-        "Sanctum Approach",
-        "Toll of Passage",
-        "Reunion",
-        "Break the Sequence",
-        "Aftermath Bloom",
-        "Sanctum Awakened",
-        "The Power Within",
-        "Cindermarch",
-        "Conduit of Resonance",
-        "Across the Void",
-        "Abolish",
-        "Threadbreaker",
-        "Inverted Reflection",
-        "Shadowcaller",
-        "Door to Possibility",
-        "Fell the Mighty",
-        "Call of Calamity",
-        "Lumin-Gate Seer",
-        "Celestial Reverie",
-        "Twilight Troubadour",
-        "Simulacra",
-        "Return to Nowhere",
-        "Summons of the Bonded",
-        "Soulrender",
-        "Thundercatcher",
-        "Conduit of Ashes",
-        "Pyrewatcher",
-        "Clockwork Conductor",
-        "Fractured Vessel",
-        "Starshot Gunner",
-        "Standard Bearer",
-        "Evacuation Enforcer"
+        "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
+        "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
+        "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
+        "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
+        "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
+        "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
+        "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
+        "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
+        "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
+        "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+        "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+        "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
+        "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
+        "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
+        "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+        "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
+        "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
+        "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
+        "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+        "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
+        "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
+        "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
+        "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
+        "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
+        "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
+        "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
+        "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
+        "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
+        "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
+        "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
+        "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
+        "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
+        "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
+        "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
+        "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+        "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
+        "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
+        "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
+        "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
+        "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
+        "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
+        "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
+        "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
+        "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
+        "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
+        "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
+        "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
+        "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
+        "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
+        "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
+        "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
+        "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
+        "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+        "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
+        "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
+        "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+        "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
+        "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
+        "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
+        "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
+        "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
+        "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
+        "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+        "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
+        "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
+        "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
+        "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
+        "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
+        "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+        "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
+        "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
+        "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
+        "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
+        "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
+        "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
+        "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
+        "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
+        "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
+        "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
+        "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+        "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
+        "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+        "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d" // Evacuation Enforcer
       ],
       "sideboard": [],
       "pool": [],

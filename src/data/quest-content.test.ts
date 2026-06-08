@@ -181,6 +181,8 @@ describe("loadQuestContent", () => {
       mainboard: ["Card 1", "Card 2", "Card 3"],
       packs: [["Card 1", "Card 2"], ["Card 3"]],
       picks: [["Card 1"], ["Card 2"]],
+      packIds: [["Card 1", "Card 2"], ["Card 3"]],
+      pickIds: [["Card 1"], ["Card 2"]],
     };
 
     stubFetch({
@@ -218,6 +220,8 @@ function makeRecord(id: string, packCardNames: string[][]): DraftRecord {
     mainboard: packCardNames.flat(),
     packs: packCardNames,
     picks: packCardNames.map(() => []),
+    packIds: packCardNames,
+    pickIds: packCardNames.map(() => []),
   };
 }
 

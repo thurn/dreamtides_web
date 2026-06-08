@@ -20,87 +20,87 @@
       "seat": 0,
       "name": "WUBRG",
       "mainboard": [
-        "Forgotten Factory Titan",
-        "Vault Infiltrator",
-        "Vanishing Inquisitor",
-        "Planetgazer",
-        "Inspiring Templar",
-        "Duskwall Delver",
-        "Ashborn Necromancer",
-        "Kindred Sparks",
-        "Harvester of Despair",
-        "Signal Resonant",
-        "Exiles of the Last Light",
-        "Vaultbreaker",
-        "Gateweaver",
-        "Woodland Apparition",
-        "Lord of Hidden Paths",
-        "Dusk Duelist",
-        "Spirit Bond",
-        "Petal-Seer",
-        "Embersummoner",
-        "Shardwoven Tyrant",
-        "Undying Fang",
-        "Prophet of the Consumed",
-        "Scorched Crusader",
-        "Duskmount",
-        "Eternal Sentry",
-        "Wreckage Prowler",
-        "Astral Angler",
-        "Ferryman of the Falls",
-        "Ashen Remnant",
-        "The Dread Sovereign",
-        "Starbound Striker",
-        "Blade of Unity",
-        "Meadowlight Charger",
-        "Bladefall",
-        "Lithic Severance",
-        "Grounded",
-        "Lightningborn",
-        "Passage Through Oblivion",
-        "Moment Rewound",
-        "Sanctum Approach",
-        "Knowledge Restored",
-        "Clockwork Prodigy",
-        "Echoing Denial",
-        "Miraculous Arrival",
-        "Threadbreaker",
-        "Aftermath Bloom",
-        "Reunion",
-        "Key to the Moment",
-        "Broadcast Array",
-        "Dreaming Groves",
-        "Rite of Summoning",
-        "Immolate and Rise",
-        "Peak Plunder",
-        "Moonlit Voyage",
-        "Secrets of the Deep",
-        "Maelstrom Denial",
-        "Aurora Confluence",
-        "Burst of Obliteration",
-        "Rootbound Witness",
-        "Skies of Change",
-        "Twice-Lit Portal",
-        "Derelict Voyage",
-        "Canopy of Stars",
-        "Seaside Requiem",
-        "Archive of the Forgotten",
-        "Keeper of Forgotten Light",
-        "Nexus Wayfinder",
-        "Dreamcatcher's Call",
-        "Pathwalker",
-        "Scrap Reclaimer",
-        "Dreamscatter",
-        "Echoes of Eternity",
-        "Twilight Troubadour",
-        "Simulacra",
-        "Data Pulse",
-        "Apocalypse",
-        "Seedling Sage",
-        "Fractured Vessel",
-        "Torchbearer of the Abyss",
-        "Pulse of Sacrifice",
-        "Spirit of the Greenwood"
+        "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
+        "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
+        "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
+        "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
+        "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+        "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
+        "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+        "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
+        "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
+        "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
+        "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
+        "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+        "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
+        "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
+        "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
+        "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+        "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
+        "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
+        "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
+        "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
+        "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
+        "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
+        "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
+        "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
+        "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+        "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
+        "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
+        "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
+        "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
+        "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
+        "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
+        "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
+        "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
+        "c73f978e-8196-4589-a432-845265115555", // Lightningborn
+        "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
+        "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+        "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
+        "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
+        "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+        "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+        "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
+        "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
+        "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
+        "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
+        "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
+        "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
+        "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
+        "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
+        "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
+        "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
+        "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
+        "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
+        "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
+        "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
+        "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+        "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
+        "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
+        "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
+        "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
+        "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
+        "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
+        "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
+        "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
+        "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
+        "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
+        "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
+        "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
+        "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
+        "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
+        "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
+        "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
+        "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
+        "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
+        "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
+        "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+        "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
+        "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+        "99ca2635-a91a-46ba-a9d3-4d2581c354f3" // Spirit of the Greenwood
       ],
       "sideboard": [],
       "pool": [],

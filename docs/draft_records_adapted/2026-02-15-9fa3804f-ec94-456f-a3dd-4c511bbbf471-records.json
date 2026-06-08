@@ -20,32 +20,32 @@
       "seat": 0,
       "name": "UBRG",
       "mainboard": [
-        "Rift Pilgrim",
-        "Scrapyard Custodian",
-        "Wasteland Arbitrator",
-        "Veil of the Wastes",
-        "Silent Gatherer",
-        "Angel of the Eclipse",
-        "Soulbinder",
-        "Winterbough Monk",
-        "Lumineth",
-        "Eternal Sentry",
-        "Ferryman of the Falls",
-        "Minstrel of Falling Light",
-        "Key Sifter",
-        "Vortex Claimant",
-        "Eclipse Herald",
-        "Horizon Follower",
-        "Ashen Harbinger",
-        "Sandglider",
-        "Tranquil Duelist",
-        "Moonlit Voyage",
-        "Rite of Summoning",
-        "Flash of Power",
-        "Call of the Lost",
-        "Bloomweaver",
-        "Ordained Collapse",
-        "Fangbound"
+        "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
+        "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
+        "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
+        "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
+        "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+        "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
+        "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
+        "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
+        "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
+        "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+        "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
+        "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
+        "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
+        "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
+        "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
+        "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
+        "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
+        "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
+        "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
+        "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+        "c750af2e-8185-4af0-bb38-4a41430c71b3" // Fangbound
       ],
       "sideboard": [],
       "pool": [],

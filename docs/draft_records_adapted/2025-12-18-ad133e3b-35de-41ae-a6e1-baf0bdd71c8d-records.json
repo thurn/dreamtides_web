@@ -27,15 +27,15 @@
       "seat": 0,
       "name": "UBRG",
       "mainboard": [
-        "Cosmic Puppeteer",
-        "Glimpse of Infinity",
-        "Immolate"
+        "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+        "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+        "a56e0f68-30b6-404e-9b83-a7584177f21e" // Immolate
       ],
       "sideboard": [],
       "pool": [
-        "Cosmic Puppeteer",
-        "Immolate",
-        "Glimpse of Infinity"
+        "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+        "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
+        "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
       ],
       "picks": [
         {
@@ -43,12 +43,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Cosmic Puppeteer"
+            "4ef8b2e7-3525-4c25-aa30-f751467f182f" // Cosmic Puppeteer
           ],
           "pickId": "06996ff1-7f57-4e73-940a-a58c4482cadd",
           "packCards": [
-            "Cosmic Puppeteer",
-            "Starshot Gunner"
+            "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+            "a9b5afaa-e149-4bf4-9007-077e8e9f12e6" // Starshot Gunner
           ]
         },
         {
@@ -56,13 +56,13 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Immolate"
+            "a56e0f68-30b6-404e-9b83-a7584177f21e" // Immolate
           ],
           "pickId": "064dfdeb-485f-473e-9fa0-8fdb7638cdc6",
           "packCards": [
-            "Immolate",
-            "Guiding Light",
-            "Derelict Voyage"
+            "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
+            "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
+            "6f0b709d-0f57-46de-bfba-6a8b4df2b991" // Derelict Voyage
           ]
         },
         {
@@ -72,7 +72,7 @@
           "pick": [],
           "pickId": "2a717b98-cdac-416d-bf6c-f6b6638e65d1",
           "packCards": [
-            "Marrow Mimic"
+            "e4ab6a18-c3b2-4149-a446-c7c1e8d66714" // Marrow Mimic
           ]
         },
         {
@@ -88,11 +88,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "Glimpse of Infinity"
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ],
           "pickId": "0948e6dc-8af7-45d3-91de-a2aebee83e82",
           "packCards": [
-            "Glimpse of Infinity"
+            "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
         }
       ]

@@ -29,25 +29,25 @@
       "seat": 0,
       "name": "UR",
       "mainboard": [
-        "Oracle of Shifting Skies",
-        "Architect of Memory",
-        "Terminus",
-        "Dreadwood Emissary",
-        "Chronicle Reclaimer",
-        "Radiants' Captain",
-        "A New Adventure",
-        "Spirit Reaping"
+        "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
+        "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
+        "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
+        "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
+        "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
+        "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
+        "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
       ],
       "sideboard": [],
       "pool": [
-        "Chronicle Reclaimer",
-        "Radiants' Captain",
-        "Spirit Reaping",
-        "Oracle of Shifting Skies",
-        "Architect of Memory",
-        "Dreadwood Emissary",
-        "Terminus",
-        "A New Adventure"
+        "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
+        "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
+        "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
+        "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
+        "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
+        "f7b135ea-4894-46ab-b41d-ba2f74b070a1" // A New Adventure
       ],
       "picks": [
         {
@@ -55,13 +55,13 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Chronicle Reclaimer",
-            "Radiants' Captain"
+            "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
+            "724a1362-3f0f-4b77-b14e-22c0b877349a" // Radiants' Captain
           ],
           "pickId": "187b6719-e5ed-4615-a00b-3313ceca055b",
           "packCards": [
-            "Chronicle Reclaimer",
-            "Radiants' Captain"
+            "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
+            "724a1362-3f0f-4b77-b14e-22c0b877349a" // Radiants' Captain
           ]
         },
         {
@@ -69,11 +69,11 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "Spirit Reaping"
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "Spirit Reaping"
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
           ]
         },
         {
@@ -81,14 +81,14 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "Oracle of Shifting Skies",
-            "Architect of Memory"
+            "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
+            "29c4c45d-33df-42ac-bf28-387eb00264aa" // Architect of Memory
           ],
           "pickId": "2429510d-ce59-472d-b0df-5e6b7cdf63af",
           "packCards": [
-            "Oracle of Shifting Skies",
-            "Architect of Memory",
-            "Ochre Prospector"
+            "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
+            "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
+            "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6" // Ochre Prospector
           ]
         },
         {
@@ -96,11 +96,11 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "Dreadwood Emissary"
+            "bf323913-3695-49ee-8d13-8165657e3dc9" // Dreadwood Emissary
           ],
           "pickId": "12917e60-cea1-460b-b3f1-8d47cc24afdc",
           "packCards": [
-            "Dreadwood Emissary"
+            "bf323913-3695-49ee-8d13-8165657e3dc9" // Dreadwood Emissary
           ]
         },
         {
@@ -108,11 +108,11 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "Terminus"
+            "6e2188f8-580e-4a66-a3e3-267d509de903" // Terminus
           ],
           "pickId": "69e615d8-1b79-4a82-ba9f-ee211d67dc95",
           "packCards": [
-            "Terminus"
+            "6e2188f8-580e-4a66-a3e3-267d509de903" // Terminus
           ]
         },
         {
@@ -120,11 +120,11 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "A New Adventure"
+            "f7b135ea-4894-46ab-b41d-ba2f74b070a1" // A New Adventure
           ],
           "pickId": "0eb00e3c-b67a-44c7-ae61-23ecf4d4971a",
           "packCards": [
-            "A New Adventure"
+            "f7b135ea-4894-46ab-b41d-ba2f74b070a1" // A New Adventure
           ]
         }
       ]

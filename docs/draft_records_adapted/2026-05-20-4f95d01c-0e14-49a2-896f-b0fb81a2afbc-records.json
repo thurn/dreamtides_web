@@ -27,80 +27,80 @@
       "seat": 0,
       "name": "UBG Value Midrange",
       "mainboard": [
-        "Harrowing Officiant",
-        "Mystic Runefish",
-        "Ruin Scavenger",
-        "Ethereal Courser",
-        "Depthwalker",
-        "Doorlight Foundling",
-        "Sage of the Prelude",
-        "Lumineth",
-        "Dreamborne Leviathan",
-        "Spiritbound Alpha",
-        "Dune Reaper",
-        "Sylvan Matriarch",
-        "Young Beastcaller",
-        "Prophet of the Consumed",
-        "Silent Gatherer",
-        "Carrion Lord",
-        "Specter of Silent Snow",
-        "Demonbane",
-        "Emberfang",
-        "Spirit of the Greenwood",
-        "Shatter the Frail",
-        "Whisper of the Past",
-        "Break the Veil",
-        "Immolate",
-        "Seedling Sage",
-        "Celestial Reverie",
-        "Unleash Ruin",
-        "Standard Bearer"
+        "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+        "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
+        "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
+        "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+        "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
+        "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
+        "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+        "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
+        "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
+        "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
+        "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+        "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
+        "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
+        "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
+        "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+        "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
+        "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
+        "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
+        "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
+        "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+        "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
+        "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
+        "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
+        "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+        "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a" // Standard Bearer
       ],
       "sideboard": [
-        "Fractured Vessel",
-        "Veilpiercer",
-        "Mirrorlight Architect",
-        "Meadowlight Charger",
-        "Sandglider",
-        "Flamestride Rider",
-        "Invoker of Myths"
+        "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+        "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
+        "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
+        "8367b757-c3d2-4c22-9043-8baadee1c5ba" // Invoker of Myths
       ],
       "pool": [
-        "Emberfang",
-        "Sandglider",
-        "Flamestride Rider",
-        "Invoker of Myths",
-        "Ethereal Courser",
-        "Meadowlight Charger",
-        "Doorlight Foundling",
-        "Depthwalker",
-        "Mirrorlight Architect",
-        "Ruin Scavenger",
-        "Mystic Runefish",
-        "Break the Veil",
-        "Unleash Ruin",
-        "Shatter the Frail",
-        "Whisper of the Past",
-        "Harrowing Officiant",
-        "Sylvan Matriarch",
-        "Standard Bearer",
-        "Immolate",
-        "Young Beastcaller",
-        "Sage of the Prelude",
-        "Specter of Silent Snow",
-        "Fractured Vessel",
-        "Spirit of the Greenwood",
-        "Carrion Lord",
-        "Demonbane",
-        "Seedling Sage",
-        "Veilpiercer",
-        "Celestial Reverie",
-        "Lumineth",
-        "Prophet of the Consumed",
-        "Dreamborne Leviathan",
-        "Spiritbound Alpha",
-        "Dune Reaper",
-        "Silent Gatherer"
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
+        "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+        "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
+        "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
+        "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
+        "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
+        "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
+        "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+        "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+        "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
+        "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
+        "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+        "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
+        "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+        "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
+        "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
+        "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+        "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
+        "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+        "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
+        "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
+        "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
+        "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
+        "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
+        "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
+        "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
+        "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
+        "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+        "af739e3d-bc61-4fab-bf81-a22e78d7e524" // Silent Gatherer
       ],
       "picks": [
         {
@@ -108,20 +108,20 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "Emberfang"
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "Emberfang",
-            "Shattering Gambit",
-            "Dreadwood Emissary",
-            "Ferryman's Tithe",
-            "Flamestride Rider",
-            "Invoker of Myths",
-            "Oathbound Pair",
-            "Ironclad Holdout",
-            "Nightmare Manifest",
-            "Depthwalker"
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
+            "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
+            "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+            "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
+            "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+            "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
+            "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker
           ]
         },
         {
@@ -131,11 +131,11 @@
           "pick": [],
           "pickId": "efd35cb4-862d-4699-a197-b744989b3ceb",
           "packCards": [
-            "Torn Circuit Feeder",
-            "Gateweaver",
-            "Ethereal Courser",
-            "Aurora Confluence",
-            "Keeper of the Tides"
+            "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+            "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
+            "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+            "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
+            "99101fce-f2b4-4032-b999-317ce3e4a6dd" // Keeper of the Tides
           ]
         },
         {
@@ -143,18 +143,18 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "Sandglider"
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "Sandglider",
-            "Apocalypse Vigilante",
-            "Barrage Specialist",
-            "Scuttled Fortune",
-            "Meadowlight Charger",
-            "Ordained Collapse",
-            "Twilight Troubadour",
-            "Simulacra"
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
+            "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+            "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+            "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
+            "ccff822e-e2ae-4d38-9720-6df289dbe4cd" // Simulacra
           ]
         },
         {
@@ -164,10 +164,10 @@
           "pick": [],
           "pickId": "1daf4348-05c5-4c55-bcf2-c7bec7988bfc",
           "packCards": [
-            "Junkfield Renegade",
-            "Wasteland Arbitrator",
-            "Doorlight Foundling",
-            "Blazing Emberwing"
+            "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
+            "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
+            "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
+            "18ff6a45-148a-40bf-85ae-4a51f32f406a" // Blazing Emberwing
           ]
         },
         {
@@ -175,17 +175,17 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "Flamestride Rider",
-            "Invoker of Myths"
+            "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
+            "8367b757-c3d2-4c22-9043-8baadee1c5ba" // Invoker of Myths
           ],
           "pickId": "db1d67fe-bffe-45ad-af6a-cb131ddb1a12",
           "packCards": [
-            "Flamestride Rider",
-            "Invoker of Myths",
-            "Oathbound Pair",
-            "Ironclad Holdout",
-            "Nightmare Manifest",
-            "Depthwalker"
+            "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
+            "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+            "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
+            "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker
           ]
         },
         {
@@ -193,13 +193,13 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "Ethereal Courser"
+            "ad76c77a-e456-4e59-bbf7-6bcb56f892ee" // Ethereal Courser
           ],
           "pickId": "63971a64-c5f3-4d1f-ae0d-489d7d5b18f0",
           "packCards": [
-            "Ethereal Courser",
-            "Aurora Confluence",
-            "Keeper of the Tides"
+            "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+            "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
+            "99101fce-f2b4-4032-b999-317ce3e4a6dd" // Keeper of the Tides
           ]
         },
         {
@@ -207,14 +207,14 @@
           "pack": 1,
           "pickInPack": 7,
           "pick": [
-            "Meadowlight Charger"
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "Meadowlight Charger",
-            "Ordained Collapse",
-            "Twilight Troubadour",
-            "Simulacra"
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+            "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
+            "ccff822e-e2ae-4d38-9720-6df289dbe4cd" // Simulacra
           ]
         },
         {
@@ -222,12 +222,12 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
-            "Doorlight Foundling"
+            "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ],
           "pickId": "19719b9b-a384-4ebe-9a5a-7f51132f3c44",
           "packCards": [
-            "Doorlight Foundling",
-            "Blazing Emberwing"
+            "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
+            "18ff6a45-148a-40bf-85ae-4a51f32f406a" // Blazing Emberwing
           ]
         },
         {
@@ -235,11 +235,11 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
-            "Depthwalker"
+            "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker
           ],
           "pickId": "13c5a1ce-932a-4b3d-8b86-ed920e646afc",
           "packCards": [
-            "Depthwalker"
+            "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker
           ]
         },
         {
@@ -247,18 +247,18 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "Mirrorlight Architect"
+            "ccbefadc-aab8-4f8c-a705-07bd70c91731" // Mirrorlight Architect
           ],
           "pickId": "11bb73ca-0e3c-4fb6-becc-98c9924531b8",
           "packCards": [
-            "Mirrorlight Architect",
-            "Cinderblade Legionnaire",
-            "Endless Projection",
-            "Mystic Runefish",
-            "Ochre Prospector",
-            "Keeper of Forgotten Light",
-            "Dawnhorn Elder",
-            "Harrowing Officiant"
+            "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
+            "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
+            "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
+            "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
+            "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
+            "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
+            "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
+            "c32ef131-d283-4bf1-bf65-2d5e5d232168" // Harrowing Officiant
           ]
         },
         {
@@ -266,17 +266,17 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "Ruin Scavenger"
+            "cfa78375-85b7-47e9-95f5-b31e6d112c52" // Ruin Scavenger
           ],
           "pickId": "70496f16-c4c0-4c03-beef-454eb4824cd1",
           "packCards": [
-            "Ruin Scavenger",
-            "Entropy Spike",
-            "Spiral Offering",
-            "Worldbreacher",
-            "Break the Veil",
-            "Knowledge Restored",
-            "Somber Flockmaster"
+            "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
+            "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
+            "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
+            "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
+            "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+            "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
+            "95711262-8510-475c-a572-c1cd144d54cb" // Somber Flockmaster
           ]
         },
         {
@@ -286,14 +286,14 @@
           "pick": [],
           "pickId": "b0d161fc-4a2a-4f1d-82b4-a746552552df",
           "packCards": [
-            "Clockwork Prodigy",
-            "Echoing Denial",
-            "Pyre Challenger",
-            "Thornwood Delver",
-            "Veilseeker",
-            "Unleash Ruin",
-            "Terminus",
-            "Lanternhearted"
+            "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
+            "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
+            "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
+            "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
+            "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
+            "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+            "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
+            "1dc8f23e-58bd-47e5-9510-b48315fba1df" // Lanternhearted
           ]
         },
         {
@@ -303,13 +303,13 @@
           "pick": [],
           "pickId": "c6cad746-a1dc-4739-9707-9c12c42e141a",
           "packCards": [
-            "Resilient Wanderer",
-            "Sunshadow Eagle",
-            "Shatter the Frail",
-            "Whisper of the Past",
-            "Gearwright",
-            "Shadow Soloist",
-            "Moonlit Dancer"
+            "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
+            "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
+            "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
+            "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
+            "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
+            "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
+            "34ef6c0c-1a23-4870-a52c-90d34e9769be" // Moonlit Dancer
           ]
         },
         {
@@ -317,15 +317,15 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "Mystic Runefish"
+            "edb479be-68a5-45bc-bd19-2602156edb57" // Mystic Runefish
           ],
           "pickId": "0ee4a931-5d61-49ba-affc-f022263938ca",
           "packCards": [
-            "Mystic Runefish",
-            "Ochre Prospector",
-            "Keeper of Forgotten Light",
-            "Dawnhorn Elder",
-            "Harrowing Officiant"
+            "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
+            "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
+            "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
+            "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
+            "c32ef131-d283-4bf1-bf65-2d5e5d232168" // Harrowing Officiant
           ]
         },
         {
@@ -333,13 +333,13 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
-            "Break the Veil"
+            "fbf32510-0bad-4567-859f-b3db6d7be5d5" // Break the Veil
           ],
           "pickId": "7271436b-897a-4b24-a5d2-d29dbea8c1bf",
           "packCards": [
-            "Break the Veil",
-            "Knowledge Restored",
-            "Somber Flockmaster"
+            "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+            "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
+            "95711262-8510-475c-a572-c1cd144d54cb" // Somber Flockmaster
           ]
         },
         {
@@ -347,13 +347,13 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
-            "Unleash Ruin"
+            "09332e5b-3b4e-458f-9df0-3fc0419f65c3" // Unleash Ruin
           ],
           "pickId": "3b1e92b4-6e53-4dba-a572-c67e01965ac5",
           "packCards": [
-            "Unleash Ruin",
-            "Terminus",
-            "Lanternhearted"
+            "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+            "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
+            "1dc8f23e-58bd-47e5-9510-b48315fba1df" // Lanternhearted
           ]
         },
         {
@@ -361,16 +361,16 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
-            "Shatter the Frail",
-            "Whisper of the Past"
+            "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
+            "5931e388-1856-4e5a-85f8-a5aa34f867b1" // Whisper of the Past
           ],
           "pickId": "0dcaba91-06d3-4492-9e07-36a1b858ca47",
           "packCards": [
-            "Shatter the Frail",
-            "Whisper of the Past",
-            "Gearwright",
-            "Shadow Soloist",
-            "Moonlit Dancer"
+            "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
+            "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
+            "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
+            "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
+            "34ef6c0c-1a23-4870-a52c-90d34e9769be" // Moonlit Dancer
           ]
         },
         {
@@ -378,11 +378,11 @@
           "pack": 2,
           "pickInPack": 9,
           "pick": [
-            "Harrowing Officiant"
+            "c32ef131-d283-4bf1-bf65-2d5e5d232168" // Harrowing Officiant
           ],
           "pickId": "4b205bc3-379a-4790-90a0-c589bbbb1803",
           "packCards": [
-            "Harrowing Officiant"
+            "c32ef131-d283-4bf1-bf65-2d5e5d232168" // Harrowing Officiant
           ]
         },
         {
@@ -390,20 +390,20 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "Sylvan Matriarch"
+            "89c0d03c-2199-415a-bc66-89e451034328" // Sylvan Matriarch
           ],
           "pickId": "4d4f4d41-232d-4377-be69-de590b880edb",
           "packCards": [
-            "Sylvan Matriarch",
-            "Embersummoner",
-            "Shardwoven Tyrant",
-            "Pathfinder Adrift",
-            "Riftwalker",
-            "Young Beastcaller",
-            "Shadow Reflection",
-            "Starshot Gunner",
-            "Soulreaver",
-            "Fractured Vessel"
+            "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
+            "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
+            "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
+            "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
+            "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
+            "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
+            "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
+            "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
+            "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
+            "85251f03-c873-46d8-81be-ab421c901a53" // Fractured Vessel
           ]
         },
         {
@@ -413,11 +413,11 @@
           "pick": [],
           "pickId": "17c6ba55-2470-4dde-a7fa-137a60716c96",
           "packCards": [
-            "Undying Fang",
-            "Pilgrim of Old Stones",
-            "Fractured Veil",
-            "Sage of the Prelude",
-            "Rift Pilgrim"
+            "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
+            "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
+            "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
+            "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+            "22239029-f53c-4ba9-b9b6-29f6592bb722" // Rift Pilgrim
           ]
         },
         {
@@ -425,14 +425,14 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "Standard Bearer"
+            "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a" // Standard Bearer
           ],
           "pickId": "93bd7e73-63dc-45b2-aaa8-984be8b900ab",
           "packCards": [
-            "Standard Bearer",
-            "Torchbearer of the Abyss",
-            "Deathwalker",
-            "Vaultbreaker"
+            "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+            "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
+            "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
+            "c97b0a5b-64d0-480f-8db7-3fde93738d86" // Vaultbreaker
           ]
         },
         {
@@ -440,16 +440,16 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
-            "Immolate"
+            "a56e0f68-30b6-404e-9b83-a7584177f21e" // Immolate
           ],
           "pickId": "064dfdeb-485f-473e-9fa0-8fdb7638cdc6",
           "packCards": [
-            "Immolate",
-            "Luminous Ascent",
-            "Fury of the Clan",
-            "Echoes of the Journey",
-            "Specter of Silent Snow",
-            "Dragonward"
+            "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
+            "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
+            "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
+            "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
+            "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
+            "69d9e550-eacc-49f2-8cc5-30b8940c9eed" // Dragonward
           ]
         },
         {
@@ -457,15 +457,15 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "Young Beastcaller"
+            "cd2d4eaf-6295-451d-aaa2-ea74188bac3b" // Young Beastcaller
           ],
           "pickId": "248c76d3-b5cb-4582-be17-7cd1d0cb0f58",
           "packCards": [
-            "Young Beastcaller",
-            "Shadow Reflection",
-            "Starshot Gunner",
-            "Soulreaver",
-            "Fractured Vessel"
+            "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
+            "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
+            "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
+            "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
+            "85251f03-c873-46d8-81be-ab421c901a53" // Fractured Vessel
           ]
         },
         {
@@ -473,12 +473,12 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
-            "Sage of the Prelude"
+            "41d0aa36-f15a-487d-b97c-7fd765973921" // Sage of the Prelude
           ],
           "pickId": "05aa5b50-0f8a-4f8a-8b48-3c52512ea615",
           "packCards": [
-            "Sage of the Prelude",
-            "Rift Pilgrim"
+            "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+            "22239029-f53c-4ba9-b9b6-29f6592bb722" // Rift Pilgrim
           ]
         },
         {
@@ -488,7 +488,7 @@
           "pick": [],
           "pickId": "f29f3415-971c-4a5d-aae9-3893f4bdab1e",
           "packCards": [
-            "Vaultbreaker"
+            "c97b0a5b-64d0-480f-8db7-3fde93738d86" // Vaultbreaker
           ]
         },
         {
@@ -496,12 +496,12 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
-            "Specter of Silent Snow"
+            "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
           ],
           "pickId": "67629212-a080-4245-8d7d-20d38cc4ad87",
           "packCards": [
-            "Specter of Silent Snow",
-            "Dragonward"
+            "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
+            "69d9e550-eacc-49f2-8cc5-30b8940c9eed" // Dragonward
           ]
         },
         {
@@ -509,11 +509,11 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
-            "Fractured Vessel"
+            "85251f03-c873-46d8-81be-ab421c901a53" // Fractured Vessel
           ],
           "pickId": "04ef8493-d986-45f8-a718-617b028f7ad4",
           "packCards": [
-            "Fractured Vessel"
+            "85251f03-c873-46d8-81be-ab421c901a53" // Fractured Vessel
           ]
         },
         {
@@ -523,16 +523,16 @@
           "pick": [],
           "pickId": "6d14bd1a-068e-4338-8014-d5271cb2fe4d",
           "packCards": [
-            "Miraculous Arrival",
-            "Summons of the Bonded",
-            "Crucible Warlord",
-            "Demonbane",
-            "Twilight Reclaimer",
-            "Cinderfang",
-            "Inspiring Templar",
-            "Blazepath Traveler",
-            "Lumen Rover",
-            "Veilpiercer"
+            "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
+            "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
+            "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
+            "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
+            "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+            "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
+            "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
+            "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer
           ]
         },
         {
@@ -542,12 +542,12 @@
           "pick": [],
           "pickId": "068bb15a-fc2d-42a2-859b-837b946d23c0",
           "packCards": [
-            "Dreaming Groves",
-            "Scorched Reckoning",
-            "Saffron Trailblazer",
-            "Unbroken",
-            "Fathomscourge",
-            "Smoldering Ancient"
+            "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
+            "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
+            "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
+            "d6ec65a2-d61e-4617-bdd0-75d5573c063d" // Smoldering Ancient
           ]
         },
         {
@@ -555,15 +555,15 @@
           "pack": 4,
           "pickInPack": 3,
           "pick": [
-            "Spirit of the Greenwood"
+            "99ca2635-a91a-46ba-a9d3-4d2581c354f3" // Spirit of the Greenwood
           ],
           "pickId": "25b0b816-0583-44aa-9dc5-f3ff48993a51",
           "packCards": [
-            "Spirit of the Greenwood",
-            "Sunset Chapel Rest",
-            "Crumbling Behemoth",
-            "Beacon of Tomorrow",
-            "Blade of Oblivion"
+            "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
+            "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+            "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
+            "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
+            "0bddeb19-ff49-4a77-bc06-955377ba3ed1" // Blade of Oblivion
           ]
         },
         {
@@ -571,14 +571,14 @@
           "pack": 4,
           "pickInPack": 4,
           "pick": [
-            "Carrion Lord"
+            "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord
           ],
           "pickId": "2c723fc9-d5c9-4126-a9a6-f80c247a4b6b",
           "packCards": [
-            "Carrion Lord",
-            "Spirit Bond",
-            "Seedling Sage",
-            "Borrowed Minutes"
+            "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
+            "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
+            "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
+            "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa" // Borrowed Minutes
           ]
         },
         {
@@ -586,17 +586,17 @@
           "pack": 4,
           "pickInPack": 5,
           "pick": [
-            "Demonbane"
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "Demonbane",
-            "Twilight Reclaimer",
-            "Cinderfang",
-            "Inspiring Templar",
-            "Blazepath Traveler",
-            "Lumen Rover",
-            "Veilpiercer"
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
+            "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
+            "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+            "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
+            "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
+            "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer
           ]
         },
         {
@@ -606,9 +606,9 @@
           "pick": [],
           "pickId": "a2c56479-4bee-4edb-80d7-4af010b7c793",
           "packCards": [
-            "Unbroken",
-            "Fathomscourge",
-            "Smoldering Ancient"
+            "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
+            "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
+            "d6ec65a2-d61e-4617-bdd0-75d5573c063d" // Smoldering Ancient
           ]
         },
         {
@@ -618,7 +618,7 @@
           "pick": [],
           "pickId": "fce07335-cc78-4683-b2f0-9c98a06ea1d8",
           "packCards": [
-            "Blade of Oblivion"
+            "0bddeb19-ff49-4a77-bc06-955377ba3ed1" // Blade of Oblivion
           ]
         },
         {
@@ -626,12 +626,12 @@
           "pack": 4,
           "pickInPack": 8,
           "pick": [
-            "Seedling Sage"
+            "6b1c0e39-0e70-4061-b037-0e10026cfabb" // Seedling Sage
           ],
           "pickId": "1252e9e2-2dd5-4bd6-aa56-f0a0ba056a77",
           "packCards": [
-            "Seedling Sage",
-            "Borrowed Minutes"
+            "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
+            "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa" // Borrowed Minutes
           ]
         },
         {
@@ -639,11 +639,11 @@
           "pack": 4,
           "pickInPack": 9,
           "pick": [
-            "Veilpiercer"
+            "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer
           ],
           "pickId": "9b76bcd4-580a-4435-afe9-290940b1837f",
           "packCards": [
-            "Veilpiercer"
+            "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer
           ]
         },
         {
@@ -653,14 +653,14 @@
           "pick": [],
           "pickId": "47033ba4-8f26-4a6b-97bd-5b366327325e",
           "packCards": [
-            "Nightmare",
-            "Phantom Flotilla",
-            "Shared Revelation",
-            "Tidecaller",
-            "From the Barrow",
-            "Fargazer",
-            "Searcher in the Mists",
-            "Silent Gatherer"
+            "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
+            "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
+            "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
+            "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
+            "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
+            "af739e3d-bc61-4fab-bf81-a22e78d7e524" // Silent Gatherer
           ]
         },
         {
@@ -668,17 +668,17 @@
           "pack": 5,
           "pickInPack": 2,
           "pick": [
-            "Celestial Reverie"
+            "caaee8a9-0c22-41b4-950f-4c1131b98221" // Celestial Reverie
           ],
           "pickId": "1ddcd76b-a7a1-4ae6-bf4a-f929c6574bdc",
           "packCards": [
-            "Celestial Reverie",
-            "Abomination of Memory",
-            "Maelstrom Denial",
-            "Prophet of the Consumed",
-            "Iron Executor",
-            "Twice-Lit Portal",
-            "Intermezzo Balladeer"
+            "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
+            "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
+            "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
+            "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
+            "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
+            "2305722e-59c1-47d7-9e05-dc1c32c946a2" // Intermezzo Balladeer
           ]
         },
         {
@@ -686,17 +686,17 @@
           "pack": 5,
           "pickInPack": 3,
           "pick": [
-            "Lumineth"
+            "94818862-2875-4ee1-8f72-7c0cdc624202" // Lumineth
           ],
           "pickId": "bddcec63-a60a-4d73-af6d-9ac978703811",
           "packCards": [
-            "Lumineth",
-            "Stoneborn Eternal",
-            "Pulse of Sacrifice",
-            "The Calling Night",
-            "Dreamborne Leviathan",
-            "Spiritbound Alpha",
-            "Apocalypse"
+            "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
+            "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
+            "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
+            "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+            "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
+            "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
+            "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea" // Apocalypse
           ]
         },
         {
@@ -706,11 +706,11 @@
           "pick": [],
           "pickId": "f19a6f20-8ca1-4a8b-8488-bcb5d86868dc",
           "packCards": [
-            "Lithic Severance",
-            "Thronebound Arbiter",
-            "Dune Reaper",
-            "Ashfront Lieutenant",
-            "Marrow Drinker"
+            "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
+            "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
+            "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+            "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
+            "f3985df4-0867-4fd6-8312-6b358dc26883" // Marrow Drinker
           ]
         },
         {
@@ -720,10 +720,10 @@
           "pick": [],
           "pickId": "377cee38-e769-47b0-abd5-0f528600f36a",
           "packCards": [
-            "From the Barrow",
-            "Fargazer",
-            "Searcher in the Mists",
-            "Silent Gatherer"
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
+            "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
+            "af739e3d-bc61-4fab-bf81-a22e78d7e524" // Silent Gatherer
           ]
         },
         {
@@ -731,14 +731,14 @@
           "pack": 5,
           "pickInPack": 6,
           "pick": [
-            "Prophet of the Consumed"
+            "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f" // Prophet of the Consumed
           ],
           "pickId": "d8a9bf68-a07a-4296-823f-072a5df0b5c7",
           "packCards": [
-            "Prophet of the Consumed",
-            "Iron Executor",
-            "Twice-Lit Portal",
-            "Intermezzo Balladeer"
+            "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
+            "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
+            "2305722e-59c1-47d7-9e05-dc1c32c946a2" // Intermezzo Balladeer
           ]
         },
         {
@@ -746,14 +746,14 @@
           "pack": 5,
           "pickInPack": 7,
           "pick": [
-            "Dreamborne Leviathan",
-            "Spiritbound Alpha"
+            "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
+            "a75c22ac-e343-4757-964e-a0bb981b5a28" // Spiritbound Alpha
           ],
           "pickId": "58da074a-a776-4e3f-be04-9e7f18320ae1",
           "packCards": [
-            "Dreamborne Leviathan",
-            "Spiritbound Alpha",
-            "Apocalypse"
+            "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
+            "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
+            "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea" // Apocalypse
           ]
         },
         {
@@ -761,13 +761,13 @@
           "pack": 5,
           "pickInPack": 8,
           "pick": [
-            "Dune Reaper"
+            "fd355778-abea-4513-844c-91bf75929ebe" // Dune Reaper
           ],
           "pickId": "216a8e4e-ea7b-41c7-a982-b5751025ff25",
           "packCards": [
-            "Dune Reaper",
-            "Ashfront Lieutenant",
-            "Marrow Drinker"
+            "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+            "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
+            "f3985df4-0867-4fd6-8312-6b358dc26883" // Marrow Drinker
           ]
         },
         {
@@ -775,11 +775,11 @@
           "pack": 5,
           "pickInPack": 9,
           "pick": [
-            "Silent Gatherer"
+            "af739e3d-bc61-4fab-bf81-a22e78d7e524" // Silent Gatherer
           ],
           "pickId": "2bca6f8b-6e6a-43dd-b6a4-9eedfcc24281",
           "packCards": [
-            "Silent Gatherer"
+            "af739e3d-bc61-4fab-bf81-a22e78d7e524" // Silent Gatherer
           ]
         }
       ]
