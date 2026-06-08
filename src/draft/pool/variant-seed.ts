@@ -25,6 +25,15 @@
 // Like the rest of the pool family this reads nothing but the bundled decklists —
 // no colors, tides, archetype labels, dreamcallers, or signatures. The only
 // randomness is which card seeds the pool.
+//
+// Cards are identified by their stable cards_v2 UUID, not by display name, so a
+// card rename never shifts the draw, the growth tie-breaks, or the provenance.
+// The decklist corpus arrives keyed by current name; this variant translates it
+// into UUID space on the way in (`PoolData.cardIdByName`) and maps the finished
+// pool back onto current names on the way out (`PoolData.cardNameById`), leaving
+// the downstream name→card-number resolution untouched. When the source cards
+// carry no id (some experiments and tests), both maps are absent and the variant
+// falls back to keying by name.
 
 import type { PoolStrategy } from "./strategy.ts";
 import type {
@@ -80,12 +89,14 @@ export const SEED: SeedTuning = {
 // normalisation (a's and b's document frequencies differ), which is fine: growth
 // always scores a candidate's partnership with cards already chosen.
 interface SeedCorpus {
-  // All distinct card names appearing in the (size-filtered) corpus — the uniform
-  // universe the seed card is drawn from.
+  // Every distinct card key appearing in the (size-filtered) corpus — the uniform
+  // universe the seed card is drawn from. A key is the card's stable cards_v2
+  // UUID when available, else its name (the fallback when no id map is supplied).
   cards: string[];
-  // affinity[a][b] = mean IDF-weighted partnership strength of b for decks with a.
+  // affinity[a][b] = mean IDF-weighted partnership strength of b for decks with a,
+  // keyed by card key on both axes.
   affinity: Map<string, Map<string, number>>;
-  // Global play-rate prior: df(c) / numberOfDecks, in [0, 1].
+  // Global play-rate prior: df(c) / numberOfDecks, in [0, 1], keyed by card key.
   prior: Map<string, number>;
 }
 
@@ -101,16 +112,27 @@ function buildSeedCorpus(poolData: PoolData): SeedCorpus | null {
   let result: SeedCorpus | null = null;
   if (corpus && corpus.decks.length > 0) {
     const { decks, idf } = corpus;
-    const idfOf = (c: string): number => idf.get(c) ?? 0;
+    // IDF weights are keyed by the corpus's display names; identity (df, affinity,
+    // prior, every map key below) is keyed by the rename-proof card key.
+    const idfOf = (name: string): number => idf.get(name) ?? 0;
+    const keyOf = (name: string): string =>
+      poolData.cardIdByName?.get(name) ?? name;
     const n = decks.length;
 
-    // Document frequency per card, and the play-rate prior derived from it.
+    // Document frequency per card key, and the play-rate prior derived from it.
+    // Counted once per deck per key, so two names that share a key (a duplicate
+    // display name) do not inflate the frequency.
     const df = new Map<string, number>();
-    for (const deck of decks) for (const c of deck.cards) df.set(c, (df.get(c) ?? 0) + 1);
+    for (const deck of decks) {
+      const keys = new Set<string>();
+      for (const c of deck.cards) keys.add(keyOf(c));
+      for (const k of keys) df.set(k, (df.get(k) ?? 0) + 1);
+    }
     const prior = new Map<string, number>();
     for (const [c, d] of df) prior.set(c, d / n);
 
-    // Raw IDF-weighted co-occurrence over every within-deck card pair.
+    // Raw IDF-weighted co-occurrence over every within-deck card pair, accumulated
+    // by card key while the IDF weights are read from the source names.
     const cooc = new Map<string, Map<string, number>>();
     const bump = (a: string, b: string, w: number): void => {
       let row = cooc.get(a);
@@ -121,17 +143,18 @@ function buildSeedCorpus(poolData: PoolData): SeedCorpus | null {
       row.set(b, (row.get(b) ?? 0) + w);
     };
     for (const deck of decks) {
-      const cards = [...deck.cards];
-      for (let i = 0; i < cards.length; i += 1) {
-        const a = cards[i];
-        const wa = idfOf(a);
+      const names = [...deck.cards];
+      for (let i = 0; i < names.length; i += 1) {
+        const aKey = keyOf(names[i]);
+        const wa = idfOf(names[i]);
         if (wa === 0) continue;
-        for (let j = i + 1; j < cards.length; j += 1) {
-          const b = cards[j];
-          const w = wa * idfOf(b);
+        for (let j = i + 1; j < names.length; j += 1) {
+          const bKey = keyOf(names[j]);
+          if (bKey === aKey) continue;
+          const w = wa * idfOf(names[j]);
           if (w === 0) continue;
-          bump(a, b, w);
-          bump(b, a, w);
+          bump(aKey, bKey, w);
+          bump(bKey, aKey, w);
         }
       }
     }
@@ -153,10 +176,12 @@ function buildSeedCorpus(poolData: PoolData): SeedCorpus | null {
   return result;
 }
 
-// Grow a pool from one seed card by greedy blended-affinity expansion. Returns
-// the capped copy counts and a per-card provenance record describing, for every
-// card, the order it entered, its (normalised) affinity to the seed and to the
-// pool at that moment, and its blended score — the "how the pool grew" story.
+// Grow a pool from one seed card by greedy blended-affinity expansion, operating
+// entirely on card keys (UUIDs when available). Returns the capped copy counts
+// and a per-card provenance record — each keyed by card key, which the caller
+// maps onto current names — describing, for every card, the order it entered, its
+// (normalised) affinity to the seed and to the pool at that moment, and its
+// blended score — the "how the pool grew" story.
 function growSeedPool(
   corpus: SeedCorpus,
   seedCard: string,
@@ -225,7 +250,7 @@ function growSeedPool(
       const sPool = maxPoolRaw > 0 ? (poolAffSum.get(c) ?? 0) / distinct / maxPoolRaw : 0;
       const base = w * sSeed + (1 - w) * sPool + priorWeight * priorOf(c);
       const marginal = have === 1 ? base * secondCopyFactor : base;
-      // Tie-break: prefer a fresh first copy over a second copy, then lower name.
+      // Tie-break: prefer a fresh first copy over a second copy, then lower key.
       if (
         marginal > bestScore ||
         (marginal === bestScore &&
@@ -289,26 +314,54 @@ function growSeedPool(
   return { counts, provenance };
 }
 
+// Remap a UUID-keyed provenance record onto current display names, the form the
+// public {@link SeedPoolProvenance} and the downstream name→card-number
+// resolution expect. `nameOf` is the identity when the keys are already names.
+function toNamedProvenance(
+  provenance: SeedPoolProvenance,
+  nameOf: (key: string) => string,
+): SeedPoolProvenance {
+  const cardProvenanceByName: Record<string, SeedPoolCardProvenance> = {};
+  for (const [key, entry] of Object.entries(provenance.cardProvenanceByName)) {
+    cardProvenanceByName[nameOf(key)] = entry;
+  }
+  return {
+    ...provenance,
+    seedCardName: nameOf(provenance.seedCardName),
+    topPartnerCardNames: provenance.topPartnerCardNames.map(nameOf),
+    cardProvenanceByName,
+  };
+}
+
 // Build a `seed` pool: draw one card uniformly at random from the corpus, then
 // grow the pool around it by blended IDF-affinity to `SEED.targetSize` copies.
-// Ignores `signatureCards`, `seedArchetypes`, `themeArchetypes`, and the passed
-// `targetSize` (the variant owns its size via `SEED.targetSize`). Falls back to
-// the `default` algorithm when no usable decklists are bundled.
+// Cards are drawn and grown in UUID-key space (rename-proof); the finished pool
+// is mapped back onto current names. Ignores `signatureCards`, `seedArchetypes`,
+// `themeArchetypes`, and the passed `targetSize` (the variant owns its size via
+// `SEED.targetSize`). Falls back to the `default` algorithm when no usable
+// decklists are bundled.
 export function generateSeed(rng: () => number, poolData: PoolData): VariantResult {
   const corpus = buildSeedCorpus(poolData);
   if (!corpus || corpus.cards.length === 0) return generate(rng, poolData);
 
-  // Step 1 — draw the seed uniformly at random from every corpus card.
-  const seedCard = corpus.cards[Math.floor(rng() * corpus.cards.length)];
+  // Step 1 — draw the seed uniformly at random from every corpus card key.
+  const seedKey = corpus.cards[Math.floor(rng() * corpus.cards.length)];
 
-  // Step 2 — grow the pool from it by blended affinity.
-  const { counts, provenance } = growSeedPool(corpus, seedCard, SEED.targetSize);
+  // Step 2 — grow the pool from it by blended affinity, entirely in key space.
+  const { counts, provenance } = growSeedPool(corpus, seedKey, SEED.targetSize);
+
+  // Step 3 — map the UUID-keyed pool back onto current display names so the
+  // downstream name→card-number resolution stays unchanged. When no id map is
+  // supplied the key is already a name and `nameOf` is the identity.
+  const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
+  const namedCounts = new Map<string, number>();
+  for (const [key, copies] of counts) namedCounts.set(nameOf(key), copies);
 
   return {
     C: new Set(),
-    selected: ["seed", `card:${seedCard}`],
-    counts,
-    seedProvenance: provenance,
+    selected: ["seed", `card:${nameOf(seedKey)}`],
+    counts: namedCounts,
+    seedProvenance: toNamedProvenance(provenance, nameOf),
   };
 }
 

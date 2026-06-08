@@ -52,7 +52,20 @@ export function buildPoolData(
   const core = new Set<string>();
   const archLists = new Map<string, Set<string>>();
   const draftLists = new Map<string, Set<string>>();
+  // Name<->UUID maps for the `seed` variant's rename-proof identity. Built only
+  // from cards that carry a stable `id`; first writer wins on name collisions, so
+  // these agree with the runtime `buildNameIndex` (name -> card number). Left
+  // undefined when no source card carries an id (e.g. synthetic test cards), in
+  // which case the `seed` variant keys by name.
+  let cardIdByName: Map<string, string> | undefined;
+  let cardNameById: Map<string, string> | undefined;
   for (const card of cards) {
+    if (card.id !== undefined) {
+      cardIdByName ??= new Map<string, string>();
+      cardNameById ??= new Map<string, string>();
+      if (!cardIdByName.has(card.name)) cardIdByName.set(card.name, card.id);
+      if (!cardNameById.has(card.id)) cardNameById.set(card.id, card.name);
+    }
     if (card.core) core.add(card.name);
     for (const tide of card.tides ?? []) {
       const key = TIDE_TO_ARCHETYPE.get(tide);
@@ -77,5 +90,7 @@ export function buildPoolData(
     decklists,
     humanDecklists,
     mergedLists,
+    cardIdByName,
+    cardNameById,
   };
 }

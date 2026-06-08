@@ -27,6 +27,13 @@ export const DEFAULT_POOL_VARIANT: PoolVariant = "idf3";
 export interface PoolCard {
   name: string;
   /**
+   * The stable cards_v2 UUID. Present on runtime catalog cards (`CardData`) and
+   * used by the `seed` variant as the rename-proof card identity; absent on the
+   * synthetic cards some experiments and tests build, where the `seed` variant
+   * falls back to keying by name.
+   */
+  id?: string;
+  /**
    * Mechanic-archetype tides for the experimental cards_v2 pool. Supplied by the
    * `draft_test` experiment harness from `cards-v2-metadata.ts`; absent on
    * runtime catalog cards, where the tide-derived archetype lists are unused.
@@ -64,6 +71,20 @@ export interface PoolData {
    * `merged` variant falls back to the `default` algorithm.
    */
   mergedLists?: Map<string, Set<string>>;
+  /**
+   * Current display name -> stable cards_v2 UUID, built from the card records in
+   * {@link buildPoolData} when they carry an `id`. The `seed` variant reads it to
+   * translate the name-keyed decklist corpus into its rename-proof UUID identity
+   * space; absent when no source card carries an `id`.
+   */
+  cardIdByName?: Map<string, string>;
+  /**
+   * Stable cards_v2 UUID -> current display name, the inverse of
+   * {@link cardIdByName}. The `seed` variant reads it to map its UUID-keyed
+   * results back onto current names for the downstream name→card-number
+   * resolution; absent when no source card carries an `id`.
+   */
+  cardNameById?: Map<string, string>;
 }
 
 /**

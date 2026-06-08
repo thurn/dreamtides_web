@@ -61,6 +61,8 @@ export function loadCards(tomlPath = CARD_TOML) {
       const meta = CARDS_V2_POOL_METADATA[card.id] ?? {};
       return {
         name: card.name,
+        // The stable cards_v2 UUID, the `seed` variant's rename-proof identity.
+        id: card.id,
         tides: meta.tides ?? [],
         core: meta.core === true,
         colors: meta.colors ?? [],

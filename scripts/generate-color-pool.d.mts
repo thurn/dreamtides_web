@@ -12,6 +12,7 @@ export type { PoolVariant };
 /** A card record the generator reads. */
 export interface PoolCard {
   name: string;
+  id?: string;
   tides: string[];
   core: boolean;
   colors: string[];
