@@ -661,6 +661,7 @@ export function QuestProvider({
     basicAutomation: false,
     gameId: null,
     databaseMode: "emulator",
+    journeyVariant: "classic",
   },
 }: {
   children: ReactNode;

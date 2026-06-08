@@ -11,9 +11,10 @@ describe("parseRuntimeConfig", () => {
       basicAutomation: true,
       gameId: null,
       databaseMode: "emulator",
+      journeyVariant: "classic",
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
-      journeyVariant: "classic",
+      fresh20PackSize: undefined,
       debugJourneyShape: null,
       debugJourneyReward: null,
       debugJourneyCost: null,
@@ -43,6 +44,25 @@ describe("parseRuntimeConfig", () => {
 
     it("returns false only when automation=0", () => {
       expect(parseRuntimeConfig("?automation=0").basicAutomation).toBe(false);
+    });
+  });
+
+  describe("journeyVariant", () => {
+    it("defaults to classic when journey is absent", () => {
+      expect(parseRuntimeConfig("").journeyVariant).toBe("classic");
+    });
+
+    it("returns v2 only when journey=v2", () => {
+      expect(parseRuntimeConfig("?journey=v2").journeyVariant).toBe("v2");
+    });
+
+    it("returns classic for any other journey value", () => {
+      expect(parseRuntimeConfig("?journey=").journeyVariant).toBe("classic");
+      expect(parseRuntimeConfig("?journey=classic").journeyVariant).toBe(
+        "classic",
+      );
+      expect(parseRuntimeConfig("?journey=V2").journeyVariant).toBe("classic");
+      expect(parseRuntimeConfig("?journey=v2x").journeyVariant).toBe("classic");
     });
   });
 

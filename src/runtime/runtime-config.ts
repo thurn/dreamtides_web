@@ -13,6 +13,7 @@ export interface RuntimeConfig {
   basicAutomation: boolean;
   gameId: string | null;
   databaseMode: DatabaseMode;
+  journeyVariant: "classic" | "v2";
   /**
    * Draft-pool construction strategy from `?algo=`, resolved to a registered
    * `PoolVariant`. An absent `?algo=` uses `DEFAULT_POOL_VARIANT`; a draft-mode
@@ -39,12 +40,6 @@ export interface RuntimeConfig {
    * fresh20 draft uses its default pack size.
    */
   fresh20PackSize?: number;
-  /**
-   * Selects the journey/reward recommendation variant. `parseRuntimeConfig`
-   * always sets it; it is optional only so test config literals can omit it and
-   * inherit the classic path.
-   */
-  journeyVariant?: JourneyVariant;
   debugJourneyShape?: string | null;
   debugJourneyReward?: string | null;
   debugJourneyCost?: string | null;
@@ -70,18 +65,14 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     basicAutomation: params.get("automation") !== "0",
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
+    journeyVariant: parseJourneyVariant(params.get("journey")),
     poolVariant,
     draftMode,
     fresh20PackSize: parsePackSize(params.get("packsize")),
-    journeyVariant: parseJourneyVariant(params.get("journey")),
     debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),
     debugJourneyReward: parseDebugJourneyId(params.get("debugJourneyReward")),
     debugJourneyCost: parseDebugJourneyId(params.get("debugJourneyCost")),
   };
-}
-
-function parseJourneyVariant(rawJourney: string | null): JourneyVariant {
-  return rawJourney === "v2" ? "v2" : "classic";
 }
 
 function parseDraftMode(rawAlgo: string | null): "pool" | "replay" | "fresh20" {
@@ -103,6 +94,10 @@ function parsePackSize(rawPackSize: string | null): number | undefined {
 
 function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {
   return rawRealtime === "1" ? "realtime" : "emulator";
+}
+
+function parseJourneyVariant(rawJourney: string | null): "classic" | "v2" {
+  return rawJourney === "v2" ? "v2" : "classic";
 }
 
 function parseDebugJourneyId(rawId: string | null): string | null {

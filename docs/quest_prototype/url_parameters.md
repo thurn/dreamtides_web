@@ -149,6 +149,12 @@ http://localhost:5173/?algo=fresh20&packsize=30 # fresh-pack draft with 30-card 
 http://localhost:5173/draft_test?algo=diverse   # draft harness, diverse algorithm
 ```
 
+## `journey`
+
+When set to exactly `v2`, Dream Journey sites render the Dream Merchant v2
+encounter. Any other value (including empty or absent) renders the classic
+Dream Journey encounter.
+
 ## Dream Journey Debug Harness
 
 In local development, Dream Journey QA can force selected generation inputs:
@@ -238,6 +244,7 @@ http://localhost:5173/editor?identicons=1       # same, in the card editor
 http://localhost:5173/?debugJourneyShape=single_offer
 http://localhost:5173/?debugJourneyReward=gain_essence
 http://localhost:5173/?debugJourneyCost=pay_essence
+http://localhost:5173/?journey=v2
 http://localhost:5173/?seed=7&startInBattle=1
 http://localhost:5173/?startInBattle=1          # battle vs the local AI opponent (default)
 http://localhost:5173/?startInBattle=1&ai=0     # manual battle, no AI opponent

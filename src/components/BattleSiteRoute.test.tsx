@@ -291,6 +291,7 @@ describe("BattleSiteRoute", () => {
           basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
+          journeyVariant: "classic",
         }}
       />,
       null,
@@ -314,6 +315,7 @@ describe("BattleSiteRoute", () => {
           basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
+          journeyVariant: "classic",
         }}
       />,
       null,
@@ -344,6 +346,7 @@ describe("BattleSiteRoute", () => {
           basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
+          journeyVariant: "classic",
         }}
       />,
       fakeBattleState,
@@ -374,6 +377,7 @@ describe("BattleSiteRoute", () => {
           basicAutomation: false,
           gameId: null,
           databaseMode: "emulator",
+          journeyVariant: "classic",
         }}
       />,
       fakeBattleState,
@@ -399,6 +403,7 @@ describe("BattleSiteRoute", () => {
               basicAutomation: false,
               gameId: null,
               databaseMode: "emulator",
+              journeyVariant: "classic",
             }}
           />,
           fakeBattleState,
