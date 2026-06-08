@@ -70,7 +70,8 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
   }
 
   if (CHARACTER_CARD_NUMBERS.has(self.cardNumber)) {
-    // Character: materialize the body into the chosen reserve slot, then pay.
+    // Character: materialize the body into the chosen reserve slot, mark it
+    // exhausted, then pay.
     const slotId = action.toSlot as BackRankSlotId | undefined;
     const commands: BattleCommand[] = [];
     if (slotId !== undefined) {
@@ -85,6 +86,25 @@ function playCardCommands(action: PlannedAction, aiSide: BattleSide): BattleComm
         ),
       );
     }
+    // Rules §Exhaust and Awaken: a character enters play exhausted and so cannot
+    // challenge the turn it is played. `MOVE_CARD_TO_ZONE` only places the body;
+    // it does not set the status. Without this edit the body lands in the reserve
+    // with `isExhausted` false, so re-projecting the state would read
+    // `canChallengeThisTurn` as true and the planner could reposition the
+    // just-played character into the front rank — declaring it an illegal
+    // challenger. Marking it exhausted here mirrors the forward model
+    // (`playCharacterToBackRank` clears `canChallengeThisTurn`), and the body's
+    // own Dawn clears the status on the AI's next turn.
+    commands.push(
+      edit(
+        {
+          kind: "SET_CARD_STATUS",
+          battleCardId: self.battleCardId,
+          status: { isExhausted: true },
+        },
+        aiSide,
+      ),
+    );
     commands.push(
       edit({ kind: "ADJUST_CURRENT_ENERGY", side: aiSide, amount: -self.energyCost }, aiSide),
     );

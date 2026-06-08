@@ -52,7 +52,7 @@ function editOf(command: BattleCommand, actor: BattleSide = "enemy"): BattleDebu
 // --- PLAY_CARD character ---------------------------------------------------
 
 describe("actionToCommands — character play", () => {
-  it("emits a reserve placement and pays the energy cost", () => {
+  it("emits a reserve placement, exhausts the body, and pays the energy cost", () => {
     const self = aiCard({ battleCardId: "strummer-1", cardNumber: 510, energyCost: 2 });
     const action: PlannedAction = {
       stage: "character",
@@ -64,7 +64,7 @@ describe("actionToCommands — character play", () => {
     };
 
     const commands = actionToCommands(action, "enemy");
-    expect(commands).toHaveLength(2);
+    expect(commands).toHaveLength(3);
 
     const move = editOf(commands[0]);
     expect(move.kind).toBe("MOVE_CARD_TO_ZONE");
@@ -72,7 +72,15 @@ describe("actionToCommands — character play", () => {
     expect(move.battleCardId).toBe("strummer-1");
     expect(move.destination).toEqual({ side: "enemy", zone: "backRank", slotId: "B2" });
 
-    const energy = editOf(commands[1]);
+    // Rules §Exhaust and Awaken: the body enters play exhausted so it cannot be
+    // repositioned into the front rank as a challenger the turn it is played.
+    const status = editOf(commands[1]);
+    expect(status.kind).toBe("SET_CARD_STATUS");
+    if (status.kind !== "SET_CARD_STATUS") throw new Error("expected status");
+    expect(status.battleCardId).toBe("strummer-1");
+    expect(status.status).toEqual({ isExhausted: true });
+
+    const energy = editOf(commands[2]);
     expect(energy.kind).toBe("ADJUST_CURRENT_ENERGY");
     if (energy.kind !== "ADJUST_CURRENT_ENERGY") throw new Error("expected energy");
     expect(energy.side).toBe("enemy");
@@ -212,7 +220,10 @@ describe("actionToCommands — envelope", () => {
     const move = editOf(commands[0], side);
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
     expect(move.destination).toEqual({ side: "player", zone: "backRank", slotId: "B0" });
-    const energy = editOf(commands[1], side);
+    const status = editOf(commands[1], side);
+    if (status.kind !== "SET_CARD_STATUS") throw new Error("expected status");
+    expect(status.status).toEqual({ isExhausted: true });
+    const energy = editOf(commands[2], side);
     if (energy.kind !== "ADJUST_CURRENT_ENERGY") throw new Error("expected energy");
     expect(energy.side).toBe("player");
   });
