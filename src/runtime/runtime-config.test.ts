@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { DEFAULT_POOL_VARIANT } from "../draft/pool";
 import { parseRuntimeConfig } from "./runtime-config";
 
 describe("parseRuntimeConfig", () => {
@@ -10,7 +11,7 @@ describe("parseRuntimeConfig", () => {
       basicAutomation: true,
       gameId: null,
       databaseMode: "emulator",
-      poolVariant: "picksig",
+      poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       debugJourneyShape: null,
       debugJourneyReward: null,
@@ -109,9 +110,9 @@ describe("parseRuntimeConfig", () => {
   });
 
   describe("poolVariant", () => {
-    it("uses picksig (the default) when algo is absent", () => {
-      expect(parseRuntimeConfig("").poolVariant).toBe("picksig");
-      expect(parseRuntimeConfig("?algo=").poolVariant).toBe("picksig");
+    it("uses the default pool variant when algo is absent", () => {
+      expect(parseRuntimeConfig("").poolVariant).toBe(DEFAULT_POOL_VARIANT);
+      expect(parseRuntimeConfig("?algo=").poolVariant).toBe(DEFAULT_POOL_VARIANT);
     });
 
     it("throws on an unrecognised algo (no silent fallback)", () => {
@@ -162,17 +163,21 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?algo=").draftMode).toBe("pool");
     });
 
-    it("uses picksig (the default) for poolVariant when algo=replay", () => {
+    it("uses the default pool variant when algo=replay", () => {
       // replay is a draft mode, not a pool variant, so it never reaches the
       // pool-variant resolution; the resolved package still needs a pool variant,
-      // so it uses the default (picksig).
-      expect(parseRuntimeConfig("?algo=replay").poolVariant).toBe("picksig");
+      // so it uses the default.
+      expect(parseRuntimeConfig("?algo=replay").poolVariant).toBe(
+        DEFAULT_POOL_VARIANT,
+      );
     });
 
-    it("uses picksig (the default) for poolVariant when algo=fresh20", () => {
+    it("uses the default pool variant when algo=fresh20", () => {
       // fresh20 is likewise a draft mode; the resolved package still needs a pool
       // variant, so it uses the default.
-      expect(parseRuntimeConfig("?algo=fresh20").poolVariant).toBe("picksig");
+      expect(parseRuntimeConfig("?algo=fresh20").poolVariant).toBe(
+        DEFAULT_POOL_VARIANT,
+      );
     });
   });
 

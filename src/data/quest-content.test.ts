@@ -1,5 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { buildReplayDraftState, hashStringToSeed, loadQuestContent } from "./quest-content";
+import {
+  buildReplayDraftState,
+  hashStringToSeed,
+  loadQuestContent,
+  poolVariantNeedsRecords,
+} from "./quest-content";
+import { DEFAULT_POOL_VARIANT } from "../draft/pool";
 import type { CardData } from "../types/cards";
 import type { DraftRecord } from "./cards-v2-database";
 import type { DreamcallerContent } from "../types/content";
@@ -146,10 +152,12 @@ describe("loadQuestContent", () => {
     expect(fetchedPaths).toContain("/draft-records-data.json");
   });
 
-  it("fetches the draft-record corpus for the default pool variant", async () => {
-    // The default variant (pickcohere) grows its pool from the draft records, so
-    // the no-argument load path must fetch them; otherwise the corpus is empty
-    // and pool generation throws the moment a Dreamcaller is picked.
+  it("wires the draft-record fetch to the default pool variant's needs", async () => {
+    // The no-argument load path uses DEFAULT_POOL_VARIANT. Whatever that default
+    // is, the records must be fetched exactly when that variant grows its pool
+    // from them — a record-driven default that skipped the fetch would throw the
+    // moment a Dreamcaller is picked. Deriving the expectation from
+    // `poolVariantNeedsRecords` keeps this green when the default changes.
     const cards = [makeCard(1), makeCard(2), makeCard(3)];
     const dreamcallers = [
       {
@@ -173,7 +181,9 @@ describe("loadQuestContent", () => {
     await loadQuestContent();
 
     const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
-    expect(fetchedPaths).toContain("/draft-records-data.json");
+    expect(fetchedPaths.includes("/draft-records-data.json")).toBe(
+      poolVariantNeedsRecords(DEFAULT_POOL_VARIANT),
+    );
   });
 
   it("skips the draft-record corpus for a pool variant that does not use records", async () => {

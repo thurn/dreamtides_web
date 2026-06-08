@@ -88,7 +88,13 @@ const POOL_VARIANTS_NEEDING_RECORDS: ReadonlySet<PoolVariant> = new Set<PoolVari
   "pickchoice",
   "pickcohere",
   "picksig",
+  "sigseed",
 ]);
+
+/** Whether `variant` grows its pool from the draft-record corpus. */
+export function poolVariantNeedsRecords(variant: PoolVariant): boolean {
+  return POOL_VARIANTS_NEEDING_RECORDS.has(variant);
+}
 
 /**
  * Pool variants that draw one random seed card and grow a pool around it, so
