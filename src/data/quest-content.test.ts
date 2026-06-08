@@ -32,6 +32,23 @@ function makeCard(cardNumber: number): CardData {
   };
 }
 
+function makeCards(count: number): CardData[] {
+  return Array.from({ length: count }, (_value, index) => makeCard(index + 1));
+}
+
+function makeValidDraftRecord(id: string, mainboard: readonly string[]): DraftRecord {
+  return {
+    id,
+    draftId: `draft-${id}`,
+    sourceFile: `draft-${id}-records.json`,
+    mainboard: [...mainboard],
+    packs: [mainboard.slice(0, 4)],
+    picks: [[mainboard[0]]],
+    packIds: [mainboard.slice(0, 4)],
+    pickIds: [[mainboard[0]]],
+  };
+}
+
 beforeEach(() => {
   vi.restoreAllMocks();
 });
@@ -214,6 +231,40 @@ describe("loadQuestContent", () => {
     expect(fetchedPaths).not.toContain("/draft-records-data.json");
   });
 
+  it("loads draft records and builds a fit model for v2 pool mode", async () => {
+    const cards = makeCards(20);
+    const dreamcallers = [
+      {
+        id: "dc-a",
+        name: "Alpha",
+        title: "A",
+        renderedText: "",
+        imageNumber: "0001",
+        startingEssence: 250,
+        signatureCards: ["Card 1"],
+      },
+    ];
+    const fixtureRecord = makeValidDraftRecord(
+      "rec-1",
+      cards.map((card) => card.name),
+    );
+
+    stubFetch({
+      cards,
+      dreamcallers,
+      dreamsigns: [],
+      decklists: [cards.slice(0, 4).map((card) => card.name)],
+      draftRecords: [fixtureRecord],
+    });
+
+    const content = await loadQuestContent("idf3", "pool", undefined, "v2");
+
+    expect(content.draftMode).toBe("pool");
+    expect(content.draftRecords).toEqual([fixtureRecord]);
+    expect(content.fitModel).toBeDefined();
+    expect(content.fresh20PackSize).toBeUndefined();
+  });
+
   it("offers every Dreamcaller without a validation skip loop", async () => {
     const cards = [makeCard(1), makeCard(2)];
     const dreamcallers = [
@@ -247,7 +298,7 @@ describe("loadQuestContent", () => {
   });
 
   it("populates draftMode, draftRecords, and fitModel in replay mode", async () => {
-    const cards = [makeCard(1), makeCard(2), makeCard(3)];
+    const cards = makeCards(20);
     const dreamcallers = [
       {
         id: "dc-a",
@@ -259,27 +310,16 @@ describe("loadQuestContent", () => {
         signatureCards: ["Card 1"],
       },
     ];
-    // A minimal record corpus with enough distinct cards to pass the fit-model
-    // hygiene filter (minDeckSize = 16 by default). Since we're just checking
-    // the plumbing, we use a small corpus and accept that fitModel may be
-    // undefined when the corpus is too small — the test only asserts presence
-    // of the fields, not a fully-trained model.
-    const fixtureRecord: DraftRecord = {
-      id: "rec-1",
-      draftId: "draft-1",
-      sourceFile: "draft-1-records.json",
-      mainboard: ["Card 1", "Card 2", "Card 3"],
-      packs: [["Card 1", "Card 2"], ["Card 3"]],
-      picks: [["Card 1"], ["Card 2"]],
-      packIds: [["Card 1", "Card 2"], ["Card 3"]],
-      pickIds: [["Card 1"], ["Card 2"]],
-    };
+    const fixtureRecord = makeValidDraftRecord(
+      "rec-1",
+      cards.map((card) => card.name),
+    );
 
     stubFetch({
       cards,
       dreamcallers,
       dreamsigns: [],
-      decklists: [["Card 1", "Card 2"]],
+      decklists: [cards.slice(0, 4).map((card) => card.name)],
       draftRecords: [fixtureRecord],
     });
 
@@ -290,10 +330,7 @@ describe("loadQuestContent", () => {
     expect(content.draftRecords).toBeDefined();
     expect(content.draftRecords).toHaveLength(1);
     expect(content.draftRecords![0].id).toBe("rec-1");
-    // fitModel is only defined when the corpus passes the hygiene filter; with
-    // a tiny corpus it is undefined, which is the documented graceful fallback.
-    // The important check is that the field is present (possibly undefined).
-    expect("fitModel" in content).toBe(true);
+    expect(content.fitModel).toBeDefined();
   });
 });
 

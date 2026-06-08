@@ -373,6 +373,7 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
       runtimeConfig.poolVariant,
       runtimeConfig.draftMode,
       runtimeConfig.fresh20PackSize,
+      runtimeConfig.journeyVariant,
     )
       .then((content) => {
         setQuestContent(content);
@@ -387,6 +388,7 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
     runtimeConfig.poolVariant,
     runtimeConfig.draftMode,
     runtimeConfig.fresh20PackSize,
+    runtimeConfig.journeyVariant,
   ]);
 
   useEffect(() => {

@@ -33,6 +33,7 @@ import {
 } from "../draft/replay/draft-records";
 import { createInitialReplayDraftState } from "../draft/draft-engine";
 import type { ReplayDraftState } from "../types/draft";
+import type { JourneyVariant } from "../runtime/runtime-config";
 
 export interface QuestContent {
   cardDatabase: Map<number, CardData>;
@@ -367,17 +368,21 @@ export function buildDreamcallerSeedProvenance(
  * for the run; it defaults to {@link DEFAULT_POOL_VARIANT}. `draftMode` (from
  * `?algo=`) switches to a deck-fit draft: `"replay"` replays a real record's
  * packs, `"fresh20"` rolls fresh random packs. Both fetch the full draft-record
- * corpus and build the live deck-fit model from it. In pool mode no records are
- * fetched, keeping the default path cost-free. `fresh20PackSize` (from
- * `?packsize=`) is carried through for the fresh20 draft.
+ * corpus and build the live deck-fit model from it. The v2 journey variant uses
+ * the same model in pool mode. Classic pool mode fetches records when the pool
+ * variant uses the draft-record corpus. `fresh20PackSize` (from `?packsize=`)
+ * is carried through for the fresh20 draft.
  */
 export async function loadQuestContent(
   poolVariant: PoolVariant = DEFAULT_POOL_VARIANT,
   draftMode: "pool" | "replay" | "fresh20" = "pool",
   fresh20PackSize?: number,
+  journeyVariant: JourneyVariant = "classic",
 ): Promise<QuestContent> {
-  // Both deck-fit modes need the record corpus to build the fit model.
-  const usesFitModel = draftMode === "replay" || draftMode === "fresh20";
+  // Deck-fit modes and the v2 merchant path need the record corpus to build the
+  // fit model.
+  const usesFitModel =
+    draftMode === "replay" || draftMode === "fresh20" || journeyVariant === "v2";
   // The pick-data pool variants grow their pool from the same record corpus, so
   // they need the records fetched in pool mode too. Without the records each
   // builds an empty corpus and `growPoolFromCorpus` silently falls back to the
