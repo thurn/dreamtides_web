@@ -57,11 +57,22 @@ export function isPoolVariant(value: unknown): value is PoolVariant {
 }
 
 /**
- * Resolve a raw `?algo=` value to a registered strategy id, falling back to
- * {@link DEFAULT_POOL_VARIANT} for absent or unknown values.
+ * Resolve a raw `?algo=` value to a registered strategy id. An absent value
+ * (null/undefined/empty string) uses {@link DEFAULT_POOL_VARIANT}; any other
+ * value must name a registered strategy, or this throws. An unrecognised
+ * `?algo=` is a hard error rather than a silent fall-through to the default.
  */
 export function resolvePoolVariant(value: unknown): PoolVariant {
-  return isPoolVariant(value) ? value : DEFAULT_POOL_VARIANT;
+  if (value === null || value === undefined || value === "") {
+    return DEFAULT_POOL_VARIANT;
+  }
+  if (!isPoolVariant(value)) {
+    throw new Error(
+      `Unrecognized ?algo= pool variant: ${JSON.stringify(value)}. ` +
+        `Valid variants: ${POOL_VARIANT_IDS.join(", ")}.`,
+    );
+  }
+  return value;
 }
 
 /** Look up the strategy for a registered id. */

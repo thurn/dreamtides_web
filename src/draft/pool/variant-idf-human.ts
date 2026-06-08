@@ -7,8 +7,7 @@
 // `idf3`'s; only the source corpus changes.
 
 import type { PoolStrategy } from "./strategy.ts";
-import type { PoolData, VariantResult } from "./types.ts";
-import { generate } from "./variant-color-pool.ts";
+import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
 import { generateIdf3 } from "./variant-idf3.ts";
 
 // A PoolData view whose `decklists` is the human corpus, computed once per
@@ -35,7 +34,7 @@ export function generateIdfHuman(
   targetSize?: number,
 ): VariantResult {
   if (!poolData.humanDecklists || poolData.humanDecklists.length === 0) {
-    return generate(rng, poolData, undefined, targetSize);
+    missingPoolData("idf_human", "no human decklists are bundled");
   }
   return generateIdf3(rng, humanPoolDataFor(poolData), signatureCards, targetSize);
 }

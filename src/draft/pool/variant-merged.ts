@@ -9,9 +9,8 @@
 
 import { randInt, shuffle, weightedPick } from "./rng.ts";
 import type { PoolStrategy } from "./strategy.ts";
-import type { PoolData, VariantResult } from "./types.ts";
+import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
 import { colorPrefix, poolSize } from "./util.ts";
-import { generate } from "./variant-color-pool.ts";
 
 // Knobs for the `merged` variant. Grouped here so tuning is a one-stop edit.
 interface MergedTuning {
@@ -70,7 +69,7 @@ export function generateMerged(
 ): VariantResult {
   const { core, archLists, mergedLists } = poolData;
   if (!mergedLists || mergedLists.size === 0) {
-    return generate(rng, poolData, seedArchetypes, targetSize);
+    missingPoolData("merged", "no merged lists are bundled");
   }
 
   // The Dreamcaller's theme: the union of cards in its mechanic-archetype tide

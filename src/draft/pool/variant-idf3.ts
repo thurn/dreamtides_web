@@ -31,14 +31,14 @@
 // below against the real `idf2` oracle.
 
 import type { PoolStrategy } from "./strategy.ts";
-import type {
-  Idf3PoolCardProvenance,
-  Idf3PoolProvenance,
-  Idf3PoolSourceDeck,
-  PoolData,
-  VariantResult,
+import {
+  missingPoolData,
+  type Idf3PoolCardProvenance,
+  type Idf3PoolProvenance,
+  type Idf3PoolSourceDeck,
+  type PoolData,
+  type VariantResult,
 } from "./types.ts";
-import { generate } from "./variant-color-pool.ts";
 import { type IdfDeck, idfCosine, growIdfPool } from "./variant-idf.ts";
 import { IDF2, idf2Corpus } from "./variant-idf2.ts";
 
@@ -95,7 +95,7 @@ export function generateIdf3(
   targetSize?: number,
 ): VariantResult {
   const corpus = idf2Corpus(poolData);
-  if (!corpus) return generate(rng, poolData, undefined, targetSize);
+  if (!corpus) missingPoolData("idf3", "no usable decklists are bundled");
   const { base, twinCount } = corpus;
   const { decks, idf } = base;
   const idfOf = (c: string): number => idf.get(c) ?? 0;

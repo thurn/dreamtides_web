@@ -84,11 +84,11 @@ describe("idf2 pool variant", () => {
     }
   });
 
-  it("falls back to the default algorithm when no decklists are bundled", () => {
+  it("throws when no decklists are bundled (no silent fallback)", () => {
     const noDecks = buildPoolData(cards);
-    const fallback = generatePoolFromData(noDecks, 3, undefined, "idf2");
-    const expected = generatePoolFromData(noDecks, 3, undefined, "color_pool");
-    expect(signature(fallback.counts)).toBe(signature(expected.counts));
+    expect(() => generatePoolFromData(noDecks, 3, undefined, "idf2")).toThrow(
+      /cannot build a pool/,
+    );
   });
 
   it("draws a starter distribution that differs from idf's uniform draw", () => {

@@ -23,9 +23,26 @@ export type PoolVariant =
   | "pickearly"
   | "pickpos"
   | "pickchoice";
-// The quest prototype and the draft test harness both fall back to this when
-// `?algo=` is absent or unrecognised.
+// The quest prototype and the draft test harness use this when `?algo=` is
+// absent. An unrecognised `?algo=` value is a hard error, not a fall-through to
+// this default.
 export const DEFAULT_POOL_VARIANT: PoolVariant = "idf3";
+
+/**
+ * Throw because a pool variant cannot build a pool: its required source data
+ * (a draft-record corpus, a decklist corpus, etc.) is missing. Pool generation
+ * does not silently degrade to the random color pool — a missing corpus is a
+ * configuration error (for example the draft records were never fetched), and
+ * quietly substituting an unrelated pool hides it. `detail` names the missing
+ * input.
+ */
+export function missingPoolData(variant: string, detail: string): never {
+  throw new Error(
+    `Pool variant "${variant}" cannot build a pool: ${detail}. Pool generation ` +
+      `does not fall back to the random color pool; supply the missing data or ` +
+      `choose a different ?algo=.`,
+  );
+}
 
 /** The card fields the pool generator reads. `CardData` satisfies this shape. */
 export interface PoolCard {

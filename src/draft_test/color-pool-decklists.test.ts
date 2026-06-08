@@ -90,10 +90,10 @@ describe("decklists pool variant", () => {
     expect(themed).toBeGreaterThan(unthemed);
   });
 
-  it("falls back to the default algorithm when no decklists are bundled", () => {
+  it("throws when no decklists are bundled (no silent fallback)", () => {
     const noDecks = buildPoolData(cards);
-    const fallback = generatePoolFromData(noDecks, 3, undefined, "decklists");
-    const expected = generatePoolFromData(noDecks, 3, undefined, "color_pool");
-    expect(signature(fallback.counts)).toBe(signature(expected.counts));
+    expect(() => generatePoolFromData(noDecks, 3, undefined, "decklists")).toThrow(
+      /cannot build a pool/,
+    );
   });
 });

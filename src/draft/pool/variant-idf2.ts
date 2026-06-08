@@ -15,8 +15,7 @@
 // while pool coherence barely moves.
 
 import type { PoolStrategy } from "./strategy.ts";
-import type { PoolData, VariantResult } from "./types.ts";
-import { generate } from "./variant-color-pool.ts";
+import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
 import {
   type IdfCorpus,
   idfCorpus,
@@ -88,7 +87,7 @@ export function generateIdf2(
   targetSize?: number,
 ): VariantResult {
   const corpus = idf2Corpus(poolData);
-  if (!corpus) return generate(rng, poolData, undefined, targetSize);
+  if (!corpus) missingPoolData("idf2", "no usable decklists are bundled");
   const { base, twinCount } = corpus;
   const { decks, idf } = base;
 

@@ -40,8 +40,7 @@ import {
   toNamedProvenance,
 } from "./affinity-grower.ts";
 import type { PoolStrategy } from "./strategy.ts";
-import type { PoolData, VariantResult } from "./types.ts";
-import { generate } from "./variant-color-pool.ts";
+import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
 import { idfCorpus } from "./variant-idf.ts";
 
 // Tuning for the `seed` variant. One-stop edit, mirroring the `IDF`/`IDF3`
@@ -153,7 +152,9 @@ function buildSeedCorpus(poolData: PoolData): AffinityCorpus | null {
 // decklists are bundled.
 export function generateSeed(rng: () => number, poolData: PoolData): VariantResult {
   const corpus = buildSeedCorpus(poolData);
-  if (!corpus || corpus.cards.length === 0) return generate(rng, poolData);
+  if (!corpus || corpus.cards.length === 0) {
+    missingPoolData("seed", "no usable decklists are bundled");
+  }
 
   // Step 1 — draw the seed uniformly at random from every corpus card key.
   const seedKey = corpus.cards[Math.floor(rng() * corpus.cards.length)];

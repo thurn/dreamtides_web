@@ -57,14 +57,14 @@ describe("generateIdf3 starterDeck", () => {
     expect(new Set(result.starterDeck)).toEqual(new Set(DECKLISTS[startIdx]));
   });
 
-  it("falls back without a starterDeck when the corpus has no decklists", () => {
-    // With no decklists idf3 has no anchor deck to grow from, so it falls back
-    // to the default variant, which sets no starterDeck. generate.ts defaults
-    // the field to [] when assembling the GeneratedPool.
+  it("throws when the corpus has no decklists (no silent fallback)", () => {
+    // With no decklists idf3 has no anchor deck to grow from. It throws rather
+    // than silently degrading to an unrelated pool.
     const cards = minimalCards(DECKLISTS, SIGNATURE_CARDS);
     const poolData = buildPoolData(cards, []);
-    const result = generateIdf3(makeRng(12345), poolData, SIGNATURE_CARDS, 30);
 
-    expect(result.starterDeck).toBeUndefined();
+    expect(() => generateIdf3(makeRng(12345), poolData, SIGNATURE_CARDS, 30)).toThrow(
+      /cannot build a pool/,
+    );
   });
 });

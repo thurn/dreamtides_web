@@ -10,9 +10,8 @@
 import { COLORS } from "./constants.ts";
 import { randInt, shuffle, weightedPick } from "./rng.ts";
 import type { PoolStrategy } from "./strategy.ts";
-import type { PoolData, VariantResult } from "./types.ts";
+import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
 import { colorPrefix, poolSize } from "./util.ts";
-import { generate } from "./variant-color-pool.ts";
 
 // Knobs for the `decklists` variant. Grouped here so tuning is a one-stop edit.
 interface DecklistsTuning {
@@ -138,7 +137,7 @@ export function generateDecklists(
   targetSize?: number,
 ): VariantResult {
   const corpus = deckCorpus(poolData);
-  if (!corpus) return generate(rng, poolData, seedArchetypes, targetSize);
+  if (!corpus) missingPoolData("decklists", "no usable decklists are bundled");
 
   const { core, archLists, draftLists } = poolData;
   const { decks, idf } = corpus;

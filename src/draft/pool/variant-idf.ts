@@ -9,8 +9,7 @@
 // helpers here are shared with the `idf2` variant.
 
 import type { PoolStrategy } from "./strategy.ts";
-import type { PoolData, VariantResult } from "./types.ts";
-import { generate } from "./variant-color-pool.ts";
+import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
 
 // Knobs for the `idf` variant. These are the in-app equivalents of the
 // `scripts/similar-pool.mjs` command-line flags; edit here to retune. Grouped so
@@ -277,7 +276,7 @@ export function generateIdf(
   targetSize?: number,
 ): VariantResult {
   const corpus = idfCorpus(poolData);
-  if (!corpus) return generate(rng, poolData, undefined, targetSize);
+  if (!corpus) missingPoolData("idf", "no usable decklists are bundled");
   const { decks, idf } = corpus;
 
   // Pick the starter decklist uniformly at random, then grow the pool from it.

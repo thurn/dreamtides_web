@@ -1,4 +1,4 @@
-import { resolvePoolVariant } from "../draft/pool";
+import { DEFAULT_POOL_VARIANT, resolvePoolVariant } from "../draft/pool";
 import type { PoolVariant } from "../draft/pool";
 import { normalizeRoomId } from "../multiplayer/room-id";
 
@@ -15,10 +15,11 @@ export interface RuntimeConfig {
   databaseMode: DatabaseMode;
   /**
    * Draft-pool construction strategy from `?algo=`, resolved to a registered
-   * `PoolVariant` (unknown or absent values fall back to `DEFAULT_POOL_VARIANT`).
-   * Drives the quest prototype's draft and enemy pools. `parseRuntimeConfig`
-   * always sets it; it is optional only so test config literals can omit it and
-   * inherit the default.
+   * `PoolVariant`. An absent `?algo=` uses `DEFAULT_POOL_VARIANT`; a draft-mode
+   * value (`replay`/`fresh20`) also uses the default; any other value must name
+   * a registered strategy or `parseRuntimeConfig` throws. Drives the quest
+   * prototype's draft and enemy pools. `parseRuntimeConfig` always sets it; it is
+   * optional only so test config literals can omit it and inherit the default.
    */
   poolVariant?: PoolVariant;
   /**
@@ -47,6 +48,14 @@ export type DatabaseMode = "emulator" | "realtime";
 
 export function parseRuntimeConfig(search: string): RuntimeConfig {
   const params = new URLSearchParams(search);
+  const rawAlgo = params.get("algo");
+  const draftMode = parseDraftMode(rawAlgo);
+  // `?algo=replay`/`fresh20` select a draft mode, not a pool variant, but both
+  // still need a pool variant for the resolved package, so they use the default.
+  // Only in pool mode is the raw value resolved as a pool variant — where an
+  // unrecognised value throws rather than silently using the default.
+  const poolVariant =
+    draftMode === "pool" ? resolvePoolVariant(rawAlgo) : DEFAULT_POOL_VARIANT;
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
     startInBattle: params.get("startInBattle") === "1",
@@ -54,8 +63,8 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     basicAutomation: params.get("automation") !== "0",
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
-    poolVariant: resolvePoolVariant(params.get("algo")),
-    draftMode: parseDraftMode(params.get("algo")),
+    poolVariant,
+    draftMode,
     fresh20PackSize: parsePackSize(params.get("packsize")),
     debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),
     debugJourneyReward: parseDebugJourneyId(params.get("debugJourneyReward")),

@@ -96,10 +96,10 @@ describe("idf_human pool variant", () => {
     expect(signature(human.counts)).not.toBe(signature(idf3.counts));
   });
 
-  it("falls back to the default algorithm when no human decklists are bundled", () => {
+  it("throws when no human decklists are bundled (no silent fallback)", () => {
     const noHuman = buildPoolData(cards, synthDecklists);
-    const fallback = generatePoolFromData(noHuman, 3, undefined, "idf_human");
-    const expected = generatePoolFromData(noHuman, 3, undefined, "color_pool");
-    expect(signature(fallback.counts)).toBe(signature(expected.counts));
+    expect(() => generatePoolFromData(noHuman, 3, undefined, "idf_human")).toThrow(
+      /cannot build a pool/,
+    );
   });
 });

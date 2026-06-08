@@ -91,11 +91,11 @@ describe("seed pool variant", () => {
     expect(pool.size).toBe(SEED.targetSize);
   });
 
-  it("falls back to the default algorithm when no decklists are bundled", () => {
+  it("throws when no decklists are bundled (no silent fallback)", () => {
     const noDecks = buildPoolData(cards);
-    const fallback = generatePoolFromData(noDecks, 3, undefined, "seed");
-    const expected = generatePoolFromData(noDecks, 3, undefined, "color_pool");
-    expect(signature(fallback.counts)).toBe(signature(expected.counts));
+    expect(() => generatePoolFromData(noDecks, 3, undefined, "seed")).toThrow(
+      /cannot build a pool/,
+    );
   });
 
   describe("provenance", () => {

@@ -8,6 +8,7 @@
 
 import { describe, expect, it } from "vitest";
 
+import { generatePoolFromData } from "./generate.ts";
 import { buildPoolData } from "./pool-data.ts";
 import type { PickRecord } from "./types.ts";
 import { PICKFIT, buildPickfitCorpus } from "./variant-pickfit.ts";
@@ -91,4 +92,18 @@ describe("buildPickfitCorpus", () => {
     const corpus = corpusFrom([pThenC, pThenC]);
     expect(corpus.affinity.get("P")?.get("C")).toBeUndefined();
   });
+});
+
+describe("pick-data variants without a record corpus", () => {
+  // With no draft records the pick-data corpus is empty, so the shared grower
+  // has nothing to grow from. Each variant throws rather than silently degrading
+  // to the random color pool.
+  for (const variant of ["pickfit", "pickearly", "pickpos", "pickchoice"] as const) {
+    it(`throws for ${variant} when no draft records are bundled`, () => {
+      const poolData = buildPoolData([{ name: "A" }, { name: "B" }]);
+      expect(() => generatePoolFromData(poolData, 0, undefined, variant)).toThrow(
+        /cannot build a pool/,
+      );
+    });
+  }
 });

@@ -25,8 +25,7 @@
 
 import supportMeta from "../../../data/buildaround_support.json" with { type: "json" };
 import type { PoolStrategy } from "./strategy.ts";
-import type { PoolData, VariantResult } from "./types.ts";
-import { generate } from "./variant-color-pool.ts";
+import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
 import {
   type IdfDeck,
   growCoherentPool,
@@ -173,14 +172,13 @@ export function generateIdf4(
   rng: () => number,
   poolData: PoolData,
   signatureCards?: readonly string[],
-  targetSize?: number,
+  _targetSize?: number,
 ): VariantResult {
   const { prunedPoolData } = prunedPoolFor(poolData);
-  // No usable decklists: same fallback idf3 uses.
-  if (!prunedPoolData) return generate(rng, poolData, undefined, targetSize);
+  if (!prunedPoolData) missingPoolData("idf4", "no usable decklists are bundled");
 
   const corpus = idf2Corpus(prunedPoolData);
-  if (!corpus) return generate(rng, poolData, undefined, targetSize);
+  if (!corpus) missingPoolData("idf4", "the idf2 corpus is empty");
   const { base, twinCount } = corpus;
   const { decks, idf } = base;
   const idfOf = (c: string): number => idf.get(c) ?? 0;
@@ -240,7 +238,7 @@ export function generateIdf4(
   }
 
   // Step 6 — grow the pool by coherent full-pool growth to idf4's pinned size.
-  // The request's `targetSize` is deliberately ignored.
+  // The request's `_targetSize` is deliberately ignored.
   const counts = growCoherentPool(decks, idfOf, startIdx, IDF4_POOL_SIZE);
 
   return {

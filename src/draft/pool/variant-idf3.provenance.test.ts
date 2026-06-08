@@ -110,10 +110,11 @@ describe("generateIdf3 provenance", () => {
     );
   });
 
-  it("omits provenance when the corpus has no decklists (default fallback)", () => {
+  it("throws when the corpus has no decklists (no silent fallback)", () => {
     const cards = minimalCards(DECKLISTS, SIGNATURE_CARDS);
     const poolData = buildPoolData(cards, []);
-    const result = generateIdf3(makeRng(12345), poolData, SIGNATURE_CARDS, 30);
-    expect(result.idf3Provenance).toBeUndefined();
+    expect(() => generateIdf3(makeRng(12345), poolData, SIGNATURE_CARDS, 30)).toThrow(
+      /cannot build a pool/,
+    );
   });
 });

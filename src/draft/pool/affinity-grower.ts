@@ -19,13 +19,13 @@
 // a cards_v2 UUID when available, else the card name); the caller maps keys back
 // onto display names on the way out.
 
-import type {
-  PoolData,
-  SeedPoolCardProvenance,
-  SeedPoolProvenance,
-  VariantResult,
+import {
+  missingPoolData,
+  type PoolData,
+  type SeedPoolCardProvenance,
+  type SeedPoolProvenance,
+  type VariantResult,
 } from "./types.ts";
-import { generate } from "./variant-color-pool.ts";
 
 // IDF-weighted card-to-card affinity plus a play-rate prior over a fixed card
 // universe. `affinity.get(a).get(b)` reads as "how strongly b partners a";
@@ -216,7 +216,12 @@ export function growPoolFromCorpus(
   tuning: AffinityGrowerTuning,
   label: string,
 ): VariantResult {
-  if (!corpus || corpus.cards.length === 0) return generate(rng, poolData);
+  if (!corpus || corpus.cards.length === 0) {
+    missingPoolData(
+      label,
+      "its draft-record corpus is empty (the draft records were not loaded)",
+    );
+  }
 
   const seedKey = corpus.cards[Math.floor(rng() * corpus.cards.length)];
   const { counts, provenance } = growAffinityPool(

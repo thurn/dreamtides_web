@@ -109,10 +109,15 @@ describe("parseRuntimeConfig", () => {
   });
 
   describe("poolVariant", () => {
-    it("defaults to idf3 when algo is absent or unrecognised", () => {
+    it("uses idf3 when algo is absent", () => {
       expect(parseRuntimeConfig("").poolVariant).toBe("idf3");
       expect(parseRuntimeConfig("?algo=").poolVariant).toBe("idf3");
-      expect(parseRuntimeConfig("?algo=nonsense").poolVariant).toBe("idf3");
+    });
+
+    it("throws on an unrecognised algo (no silent fallback)", () => {
+      expect(() => parseRuntimeConfig("?algo=nonsense")).toThrow(
+        /Unrecognized \?algo=/,
+      );
     });
 
     it("returns a registered strategy id when algo matches one", () => {
@@ -153,21 +158,20 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?algo=color_pool").draftMode).toBe("pool");
     });
 
-    it("returns pool when algo is an unknown value", () => {
-      expect(parseRuntimeConfig("?algo=nonsense").draftMode).toBe("pool");
+    it("returns pool when algo is empty", () => {
       expect(parseRuntimeConfig("?algo=").draftMode).toBe("pool");
     });
 
-    it("falls back poolVariant to idf3 (the default) when algo=replay", () => {
-      // replay is not a registered pool variant, so resolvePoolVariant falls
-      // back to the default (idf3). This is intentional: replay still needs a
-      // pool variant for the resolved package.
+    it("uses idf3 (the default) for poolVariant when algo=replay", () => {
+      // replay is a draft mode, not a pool variant, so it never reaches the
+      // pool-variant resolution; the resolved package still needs a pool variant,
+      // so it uses the default (idf3).
       expect(parseRuntimeConfig("?algo=replay").poolVariant).toBe("idf3");
     });
 
-    it("falls back poolVariant to idf3 (the default) when algo=fresh20", () => {
-      // fresh20 is likewise not a pool variant; the resolved package still needs
-      // one, so it falls back to the default.
+    it("uses idf3 (the default) for poolVariant when algo=fresh20", () => {
+      // fresh20 is likewise a draft mode; the resolved package still needs a pool
+      // variant, so it uses the default.
       expect(parseRuntimeConfig("?algo=fresh20").poolVariant).toBe("idf3");
     });
   });
