@@ -2,7 +2,7 @@ import type { FitModel } from "../draft/replay/fit-model";
 import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
-import type { DeckEntry, SiteState } from "../types/quest";
+import type { DeckEntry, SiteState, TransfigurationType } from "../types/quest";
 
 export interface MerchantCardIdentity {
   cardUuid: string;
@@ -56,28 +56,74 @@ export interface MerchantContext {
   dreamsignTemplates: readonly DreamsignTemplate[];
 }
 
-export type MerchantNeed =
-  | {
-      needId: string;
-      needType: "card";
-      label: string;
-      score: number;
-      cardUuid: string;
-      cardNumber: number;
-      entryId?: string;
-      dreamsignId?: string;
-    }
-  | {
-      needId: string;
-      needType: "theme";
-      themeId: string;
-      label: string;
-      score: number;
-      cardUuid?: string;
-      cardNumber?: number;
-      entryId?: string;
-      dreamsignId?: string;
-    };
+export type MerchantNeedKind =
+  | "under_supported_payoff"
+  | "missing_role"
+  | "upgrade_target"
+  | "curve_problem"
+  | "weak_card"
+  | "dreamsign_gap";
+
+export type MerchantRoleNeed =
+  | "draw"
+  | "recursion"
+  | "interaction"
+  | "cheap_early_play"
+  | "events"
+  | "characters"
+  | "abandon_outlet"
+  | "finisher";
+
+export interface MerchantNeedObservation {
+  summary: string;
+  subject?: string;
+  roleLabel?: string;
+  theme?: string;
+  metric?: {
+    label: string;
+    value?: string | number;
+    from?: string | number | null;
+    to?: string | number | null;
+  };
+}
+
+export interface MerchantNeedReference extends MerchantCardIdentity {
+  displayName?: string;
+}
+
+export interface MerchantNeedProjection {
+  transfiguration: TransfigurationType;
+  description: string;
+  metric?: MerchantNeedObservation["metric"];
+  previewCard: CardData;
+}
+
+export interface MerchantNeed {
+  needId: string;
+  needType: "card" | "theme";
+  needKind: MerchantNeedKind;
+  label: string;
+  score: number;
+  severity: number;
+  confidence: number;
+  observation: MerchantNeedObservation;
+  compatibleRewardBuilderIds: readonly string[];
+  cardUuid?: string;
+  cardNumber?: number;
+  entryId?: string;
+  dreamsignId?: string;
+  themeId?: string;
+  role?: MerchantRoleNeed;
+  references?: readonly MerchantNeedReference[];
+  support?: {
+    theme: string;
+    tier?: number;
+    supportCount?: number;
+    requiredCount?: number;
+    adequacy?: number;
+  };
+  projection?: MerchantNeedProjection;
+}
 
 export type MerchantReward =
   | ({
