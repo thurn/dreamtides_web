@@ -308,12 +308,6 @@
     },
     "9af63811-7fef-4e28-b672-95ea82796f45": {
       "name": "Astral Angler",
-      "needs": [
-        {
-          "theme": "discard",
-          "tier": 1
-        }
-      ],
       "supports": [
         "discard",
         "cheap-characters"
@@ -1941,12 +1935,6 @@
     },
     "956aaeb1-5280-4294-bf80-73079f35c5f6": {
       "name": "Harborwarden",
-      "needs": [
-        {
-          "theme": "warriors",
-          "tier": 1
-        }
-      ],
       "supports": [
         "warriors",
         "figments",
@@ -2791,7 +2779,7 @@
       "needs": [
         {
           "theme": "storm",
-          "tier": 3
+          "tier": 1
         }
       ],
       "supports": [
