@@ -25,6 +25,9 @@ interface PickEarlyTuning extends AffinityGrowerTuning {
   // `earlyPicks` of each 10-pick pack.
   earlyPicks: number;
 }
+// Identical to `PICKFIT` in every shared field — the variant is exactly
+// "pickfit, but counting only the first `earlyPicks` picks of each pack", so the
+// early-pick window is the single deliberate difference.
 export const PICKEARLY: PickEarlyTuning = {
   targetSize: 150,
   cap: 2,
@@ -33,7 +36,7 @@ export const PICKEARLY: PickEarlyTuning = {
   secondCopyFactor: 0.55,
   topPartnerCount: 8,
   shrinkage: 5,
-  minSupport: 2,
+  minSupport: 3,
   earlyPicks: 5,
 };
 
