@@ -47,27 +47,53 @@ export const DEFAULT_ART_CROP = { x: 0, y: 0, scale: 1.17 } as const;
 const ART_SOURCE_BOTTOM_CROP = 21 / 280;
 
 /**
- * Vertical pan bounds (as fractions of the image's own height) for a cover image
- * of the given over-cover height `renderH` (≥ 1). `maxPanYFrac` is the symmetric
- * overscan bound: at the down extreme the raw image bottom meets the frame
- * bottom. `lowerPanYFrac` is the *up* bound, raised above `-maxPanYFrac` by the
- * watermark crop so it is the *usable* (post-watermark) bottom — not the clipped
- * strip — that meets the frame bottom. Without this, panning up lifts the hidden
- * watermark strip into the art region and leaves a gap that the fill band paints
- * above the rules box. When the overscan is too small to cover the frame after
- * the crop (low zoom), the up bound collapses onto the down bound so the art
- * sits as low as it can. Callers must guard `renderH > 1` before calling.
+ * Card-height fraction (measured from the card top) the watermark-clipped art
+ * bottom is kept covering down to, so the fill band never opens a gap above the
+ * rules box. The art is held to just under the box's first text line — the box
+ * top plus `ART_SAFE_AREA_OVERLAP` (roughly the box's top padding plus one rules
+ * line). The whole pan/zoom envelope is resolved against this target, so it moves
+ * with the box: a tall multi-line box (a high top) lets the art zoom out further,
+ * while a short box (a low top near the card bottom) holds it more zoomed in.
  */
-function artPanYBounds(renderH: number): {
-  maxPanYFrac: number;
-  lowerPanYFrac: number;
-} {
-  const maxPanYFrac = (renderH - 1) / (2 * renderH);
-  const lowerPanYFrac = Math.min(
-    ART_SOURCE_BOTTOM_CROP - maxPanYFrac,
-    maxPanYFrac,
-  );
-  return { maxPanYFrac, lowerPanYFrac };
+export const ART_SAFE_AREA_OVERLAP = 0.06;
+
+/**
+ * Resolve the safe-area coverage target from the measured rules-box top. Until
+ * the box is measured (or for a card with no rules box) the art-region seam is
+ * used, matching the fill band's default top. The result is capped just shy of
+ * the card bottom so a stray box measurement cannot drive the target off-card.
+ */
+export function artSafeAreaTarget(boxTopFrac: number | null): number {
+  if (boxTopFrac === null) {
+    return 1 - ART_EXTENSION_FRACTION;
+  }
+  return Math.min(0.98, boxTopFrac + ART_SAFE_AREA_OVERLAP);
+}
+
+/**
+ * Symmetric vertical overscan bound (fraction of the image's own height) for a
+ * cover image of over-cover height `renderH` (> 1): at the down extreme the raw
+ * image bottom meets the art-region bottom and its top meets the region top, so
+ * neither edge opens a gap. Callers must guard `renderH > 1` before calling.
+ */
+function artMaxPanYFrac(renderH: number): number {
+  return (renderH - 1) / (2 * renderH);
+}
+
+/**
+ * Up-pan bound (fraction of the image's own height) that keeps the
+ * watermark-clipped art bottom at or below `target` (a card-height fraction), so
+ * panning up never lifts a gap into view above the rules box. The image renders
+ * the source 1:1 along its height and the bottom `ART_SOURCE_BOTTOM_CROP` is
+ * clipped, so the visible bottom sits at `region/2 + imgH * (p + 0.5 - crop)` for
+ * a pan fraction `p`; this solves that for `target`. It is capped at the
+ * symmetric down bound so it never asks the art to pan past its own overscan.
+ */
+function artPanYLowerFrac(renderH: number, target: number): number {
+  const region = 1 - ART_EXTENSION_FRACTION;
+  const imgH = renderH * region;
+  const pMin = (target - region / 2) / imgH - 0.5 + ART_SOURCE_BOTTOM_CROP;
+  return Math.min(pMin, artMaxPanYFrac(renderH));
 }
 
 /**
@@ -75,13 +101,14 @@ function artPanYBounds(renderH: number): {
  * multiple of the frame, ≥ 1 on the covered axis) and the pan translate (as a
  * percentage of the image's own size, bounded so |pan| === 1 aligns the image
  * edge with the frame edge — except the up direction, which is bounded by
- * `artPanYBounds` to keep the watermark strip out of the art region).
+ * `artPanYLowerFrac` so the art stays covering down to `target`).
  * `frameAspect` is the width-to-height ratio of the box being covered.
  */
 function artCoverMetrics(
   art: { x: number; y: number; scale: number },
   imageAspect: number,
   frameAspect: number,
+  target: number,
 ): { renderW: number; renderH: number; panX: number; panY: number } {
   // ratio > 1 means the image is wider than the frame (its sides are cropped by
   // covering); ratio < 1 means it is taller (its top/bottom are cropped).
@@ -94,7 +121,8 @@ function artCoverMetrics(
     renderW > 1 ? ((art.x * (renderW - 1)) / (2 * renderW)) * 100 : 0;
   let panY = 0;
   if (renderH > 1) {
-    const { maxPanYFrac, lowerPanYFrac } = artPanYBounds(renderH);
+    const maxPanYFrac = artMaxPanYFrac(renderH);
+    const lowerPanYFrac = artPanYLowerFrac(renderH, target);
     panY = Math.max(art.y * maxPanYFrac, lowerPanYFrac) * 100;
   }
   return { renderW, renderH, panX, panY };
@@ -102,23 +130,51 @@ function artCoverMetrics(
 
 /**
  * Lowest (most upward) `art.y` offset that still keeps the watermark-clipped art
- * covering the art-region seam, for a given source aspect and zoom. The art crop
+ * covering down to `target`, for a given source aspect and zoom. The art crop
  * editor clamps pan to this so the up arrow stops where the fill band would
  * otherwise be exposed above the rules box, and the data-fix script uses it to
- * pull previously over-panned crops back into range. Returns the editor's
- * `OFFSET_MIN` floor when the image is wide enough that the symmetric bound is
- * already the binding constraint (no extra up-pan room is lost to the watermark).
+ * pull previously over-panned crops back into range. Defaults to the art-region
+ * seam when no box-relative target is supplied. Returns 0 when the image has no
+ * overscan (`renderH ≤ 1`), so there is no vertical pan to bound.
  */
-export function minArtOffsetY(imageAspect: number, scale: number): number {
+export function minArtOffsetY(
+  imageAspect: number,
+  scale: number,
+  target: number = 1 - ART_EXTENSION_FRACTION,
+): number {
   const ratio = imageAspect / ART_REGION_ASPECT_RATIO_VALUE;
   const coverH = ratio >= 1 ? 1 : 1 / ratio;
   const renderH = scale * coverH;
   if (renderH <= 1) {
     return 0;
   }
-  const { maxPanYFrac, lowerPanYFrac } = artPanYBounds(renderH);
+  const maxPanYFrac = artMaxPanYFrac(renderH);
+  const lowerPanYFrac = artPanYLowerFrac(renderH, target);
   // Convert the clamped pan fraction back to an `art.y` in [-1, 1].
   return Math.max(-1, Math.min(1, lowerPanYFrac / maxPanYFrac));
+}
+
+/**
+ * Smallest cover zoom for which the art can still be panned to keep its
+ * watermark-clipped bottom at `target` while also covering the art region's top
+ * and full width. Zooming out below this leaves the source too small to reach the
+ * safe area at any pan (the gap the fill band would paint above the rules box), so
+ * the editor floors zoom-out here and the renderer clamps stored crops up to it.
+ *
+ * At the down-most pan the visible bottom reduces to `renderH * region *
+ * (1 - crop)` (the top is simultaneously flush), so the height that just reaches
+ * `target` is `target / (region * (1 - crop))`; `renderH` is floored at 1 so the
+ * image never sits shorter than the region, and the width floor `1 / coverW`
+ * guards the horizontal cover for a source narrower than the region.
+ */
+export function minArtScale(imageAspect: number, target: number): number {
+  const ratio = imageAspect / ART_REGION_ASPECT_RATIO_VALUE;
+  const coverW = ratio >= 1 ? ratio : 1;
+  const coverH = ratio >= 1 ? 1 : 1 / ratio;
+  const region = 1 - ART_EXTENSION_FRACTION;
+  const renderHForTarget = target / (region * (1 - ART_SOURCE_BOTTOM_CROP));
+  const renderHMin = Math.max(1, renderHForTarget);
+  return Math.max(1 / coverW, renderHMin / coverH);
 }
 
 /**
@@ -169,6 +225,7 @@ export function artPanStep(
 function artImageStyleExtended(
   art: { x: number; y: number; scale: number },
   imageAspect: number | null,
+  target: number,
 ): CSSProperties {
   // Clip the watermark strip off the source bottom (the image renders the source
   // 1:1 along its own height, so the clipped sliver falls behind the fill/box).
@@ -186,10 +243,15 @@ function artImageStyleExtended(
   }
 
   const region = 1 - ART_EXTENSION_FRACTION;
+  // Floor the zoom at the safe-area minimum so a stored (or in-flight) crop that
+  // is too zoomed out can never leave the source short of the box; this is what
+  // keeps existing under-zoomed cards rendering inside the safe area.
+  const safeScale = Math.max(art.scale, minArtScale(imageAspect, target));
   const { renderW, renderH, panX, panY } = artCoverMetrics(
-    art,
+    { x: art.x, y: art.y, scale: safeScale },
     imageAspect,
     ART_REGION_ASPECT_RATIO_VALUE,
+    target,
   );
   // Heights are fractions of the art region; scale them to fractions of the
   // full card, and center on the art region's center (not the card's), so the
@@ -339,6 +401,7 @@ function ArtLayers({
   alt,
   artCrop,
   imageAspect,
+  safeAreaTarget,
   bottomColor,
   widthPx,
   bandTopPct,
@@ -350,6 +413,7 @@ function ArtLayers({
   alt: string;
   artCrop: { x: number; y: number; scale: number };
   imageAspect: number | null;
+  safeAreaTarget: number;
   bottomColor: BottomColor | null;
   widthPx: number;
   bandTopPct: number;
@@ -357,7 +421,11 @@ function ArtLayers({
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
-  const extendedStyle = artImageStyleExtended(artCrop, imageAspect);
+  const extendedStyle = artImageStyleExtended(
+    artCrop,
+    imageAspect,
+    safeAreaTarget,
+  );
   const blurPx = Math.max(2, widthPx * ART_EXTENSION_BLUR_RATIO);
   // The band's tint is the art's own bottom color, darkened. Until it is
   // sampled, fall back to black so the band still grounds dark (never light).
@@ -682,6 +750,13 @@ export interface CardViewProps {
    */
   onRulesFontSizeChange?: (fontSizePx: number) => void;
   /**
+   * Called with the rules text box's top as a fraction of card height (null when
+   * the card has no rules box or it is not yet measured), whenever it changes.
+   * The art-crop editor uses this to floor zoom-out and pan against the same
+   * box-relative safe area the card renders with.
+   */
+  onBoxTopFracChange?: (boxTopFrac: number | null) => void;
+  /**
    * Measure the rules-text fit immediately instead of deferring until the card
    * nears the viewport. The card editor sets this while sorting by font size so
    * every card reports a stable fitted size up front; without it the sort would
@@ -718,6 +793,7 @@ export function CardView({
   suppressHoverHelp = false,
   slots = {},
   onRulesFontSizeChange,
+  onBoxTopFracChange,
   eagerRulesFit = false,
   rulesTextboxExpanded = false,
 }: CardViewProps) {
@@ -1100,6 +1176,15 @@ export function CardView({
   const featherAbovePct = boxAtMaxHeight
     ? ART_EXTENSION_FEATHER_ABOVE_MAX_PCT
     : ART_EXTENSION_FEATHER_ABOVE_SHORT_PCT;
+  // The art's pan/zoom envelope is held against this card-height target so its
+  // watermark-clipped bottom always tucks under the box's first text line.
+  const safeAreaTarget = artSafeAreaTarget(boxTopFrac);
+
+  // Report the measured box top so the art-crop editor can floor zoom-out and
+  // pan against the same box-relative safe area the card renders with.
+  useEffect(() => {
+    onBoxTopFracChange?.(boxTopFrac);
+  }, [boxTopFrac, onBoxTopFracChange]);
 
   // The box shrinks to its rules text, bottom-aligned, capped at the three-line
   // height (`--cv-textbox-height`): a short card gets a short box, while text
@@ -1162,6 +1247,7 @@ export function CardView({
           alt={card.name}
           artCrop={artCrop}
           imageAspect={imageAspect}
+          safeAreaTarget={safeAreaTarget}
           bottomColor={bottomColor}
           widthPx={widthPx}
           bandTopPct={bandTopPct}

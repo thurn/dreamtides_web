@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { artPanStep, minArtOffsetY } from "./CardView";
+import {
+  ART_SAFE_AREA_OVERLAP,
+  artPanStep,
+  artSafeAreaTarget,
+  minArtOffsetY,
+  minArtScale,
+} from "./CardView";
 import {
   ART_EXTENSION_FRACTION,
   ART_REGION_ASPECT_RATIO_VALUE,
@@ -42,6 +48,64 @@ describe("minArtOffsetY", () => {
     // A source exactly as wide as the art region at scale 1 has renderH === 1:
     // no overscan, so there is no pan to bound.
     expect(minArtOffsetY(ART_REGION_ASPECT_RATIO_VALUE, 1)).toBe(0);
+  });
+});
+
+const ART_SOURCE_BOTTOM_CROP = 21 / 280;
+
+// Reconstruct the watermark-clipped art bottom (as a fraction of card height) for
+// a crop at a given pan/zoom, mirroring the placement math in
+// `artImageStyleExtended` / `artCoverMetrics`. The lowest the bottom can sit
+// (greatest coverage) is at the down-most pan, which is what `minArtScale` and
+// the safe-area target are defined against.
+function visibleBottomAtMaxDownPan(imageAspect: number, scale: number): number {
+  const ratio = imageAspect / ART_REGION_ASPECT_RATIO_VALUE;
+  const coverH = ratio >= 1 ? 1 : 1 / ratio;
+  const region = 1 - ART_EXTENSION_FRACTION;
+  const renderH = scale * coverH;
+  return renderH * region * (1 - ART_SOURCE_BOTTOM_CROP);
+}
+
+describe("artSafeAreaTarget", () => {
+  it("falls back to the art-region seam when the box is unmeasured", () => {
+    expect(artSafeAreaTarget(null)).toBeCloseTo(1 - ART_EXTENSION_FRACTION, 6);
+  });
+
+  it("targets just under the box's first text line when measured", () => {
+    expect(artSafeAreaTarget(0.62)).toBeCloseTo(0.62 + ART_SAFE_AREA_OVERLAP, 6);
+  });
+
+  it("caps the target just shy of the card bottom", () => {
+    expect(artSafeAreaTarget(0.97)).toBeLessThanOrEqual(0.98);
+  });
+});
+
+describe("minArtScale", () => {
+  it("floors zoom so a wide image just covers down to the target", () => {
+    // At the floor, the down-most-pan bottom sits exactly on the target.
+    const target = artSafeAreaTarget(0.9); // a short, low box
+    const floor = minArtScale(WIDE_ASPECT, target);
+    expect(visibleBottomAtMaxDownPan(WIDE_ASPECT, floor)).toBeCloseTo(target, 4);
+  });
+
+  it("lets a taller box (higher top) zoom out further than a short one", () => {
+    const tallBox = minArtScale(WIDE_ASPECT, artSafeAreaTarget(0.62));
+    const shortBox = minArtScale(WIDE_ASPECT, artSafeAreaTarget(0.9));
+    expect(tallBox).toBeLessThan(shortBox);
+  });
+
+  it("never lets the source sit shorter than the art region", () => {
+    // A very high target still cannot push the floor below renderH === 1.
+    for (const top of [0.4, 0.62, 0.8, 0.9]) {
+      const floor = minArtScale(WIDE_ASPECT, artSafeAreaTarget(top));
+      expect(floor).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it("floors a narrow source at the width-covering zoom", () => {
+    // Narrower than the art region: height is covered well before width, so the
+    // floor is the width-covering scale of 1.
+    expect(minArtScale(0.6, artSafeAreaTarget(0.9))).toBeCloseTo(1, 4);
   });
 });
 

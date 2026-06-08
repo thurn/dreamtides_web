@@ -4,7 +4,9 @@ import {
   CardView,
   DEFAULT_ART_CROP,
   artPanStep,
+  artSafeAreaTarget,
   minArtOffsetY,
+  minArtScale,
 } from "../components/CardView";
 import { cardImageUrl, hasAssignedImage } from "../data/card-database";
 import type { ArtCrop } from "../types/cards";
@@ -27,6 +29,12 @@ const PAN_STEP = 0.1;
 const ZOOM_STEP = 0.1;
 const OFFSET_MIN = -1;
 const OFFSET_MAX = 1;
+/**
+ * Fallback zoom-out floor used until the source aspect is known. Once it loads,
+ * the floor becomes the box-relative `minArtScale`, which keeps the art from
+ * zooming out past the point where it would no longer cover down to under the
+ * box's first text line.
+ */
 const SCALE_MIN = 1;
 const SCALE_MAX = 5;
 /** Delay before an adjustment is persisted, coalescing rapid button presses. */
@@ -157,6 +165,13 @@ export default function ArtCropEditor({
   // into view and expose the fill band above the rules box.
   const imageNumber = card.preview.imageNumber;
   const [imageAspect, setImageAspect] = useState<number | null>(null);
+  // The preview card measures its rules-box top and reports it here, so the
+  // zoom-out floor and up-pan bound track the same box-relative safe area the
+  // card renders with (a taller box lets the art zoom out further).
+  const [boxTopFrac, setBoxTopFrac] = useState<number | null>(null);
+  const handleBoxTopFracChange = useCallback((frac: number | null) => {
+    setBoxTopFrac((prev) => (prev === frac ? prev : frac));
+  }, []);
   useEffect(() => {
     if (!hasAssignedImage(imageNumber)) {
       setImageAspect(null);
@@ -216,15 +231,21 @@ export default function ArtCropEditor({
   const nudge = useCallback(
     (deltas: Partial<ArtCrop>) => {
       setArt((current) => {
+        // The safe-area target follows the measured box, so the zoom-out floor
+        // and up-pan bound are both resolved against it: zooming out cannot pull
+        // the art above the box's first text line, and a lower zoom leaves less
+        // overscan so the up-pan floor rises with it.
+        const target = artSafeAreaTarget(boxTopFrac);
+        const scaleMin =
+          imageAspect !== null ? minArtScale(imageAspect, target) : SCALE_MIN;
         const scale = roundTo(
-          clamp(current.scale + (deltas.scale ?? 0), SCALE_MIN, SCALE_MAX),
+          clamp(current.scale + (deltas.scale ?? 0), scaleMin, SCALE_MAX),
           2,
         );
-        // The up-pan floor tracks the new zoom: lower zoom leaves less overscan,
-        // so the watermark would reach the seam sooner. Recomputing per nudge
-        // also re-clamps a prior down-panned crop when the user zooms back out.
         const minY =
-          imageAspect !== null ? minArtOffsetY(imageAspect, scale) : OFFSET_MIN;
+          imageAspect !== null
+            ? minArtOffsetY(imageAspect, scale, target)
+            : OFFSET_MIN;
         const next: ArtCrop = {
           x: roundTo(clamp(current.x + (deltas.x ?? 0), OFFSET_MIN, OFFSET_MAX), 3),
           y: roundTo(clamp(current.y + (deltas.y ?? 0), minY, OFFSET_MAX), 3),
@@ -235,7 +256,7 @@ export default function ArtCropEditor({
       });
       scheduleSave();
     },
-    [scheduleSave, imageAspect],
+    [scheduleSave, imageAspect, boxTopFrac],
   );
 
   const resetCrop = useCallback(() => {
@@ -283,7 +304,12 @@ export default function ArtCropEditor({
     >
       <div style={panelStyle}>
         <div style={{ width: "260px", maxWidth: "60vw" }}>
-          <CardView card={previewCard} large suppressHoverHelp />
+          <CardView
+            card={previewCard}
+            large
+            suppressHoverHelp
+            onBoxTopFracChange={handleBoxTopFracChange}
+          />
         </div>
 
         <div
