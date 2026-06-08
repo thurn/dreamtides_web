@@ -191,6 +191,15 @@ function planCardPlay(
  * outgoing player's turn and begins the incoming player's. Automation resolves
  * the outgoing Challenge, enforces the hand limit, forces a result if the
  * threshold was reached, then ramps energy and draws for the incoming side.
+ *
+ * The Challenge resolves exactly once per turn, at the moment the outgoing side
+ * *enters* the `challenge` phase — whether that entry came from the Challenge
+ * phase chip (`planChallengeOnly`) or from advancing the phase float control
+ * into Challenge (a same-side `SET_BATTLE_FLOW`, handled below). By the time the
+ * handoff fires the side already sits in `challenge` with its scoring committed,
+ * so the handoff does not re-resolve; it only runs the rest of the Ending
+ * bookend (hand-limit discard, end-of-turn banishes) plus the incoming side's
+ * Dawn clear, ramp, and draw.
  */
 function planTurnHandoff(
   state: BattleMutableState,
@@ -202,19 +211,30 @@ function planTurnHandoff(
   const incomingSide = edit.activeSide;
   const isHandoff = incomingSide !== outgoingSide;
   if (!isHandoff) {
+    // A same-side flow edit into `challenge` is the phase-float counterpart of
+    // the Challenge chip: resolve the Challenge on entry so scoring happens
+    // exactly once, here, rather than at the later handoff.
+    if (edit.phase === "challenge" && state.phase !== "challenge") {
+      return planChallengeOnly(state, command, caps);
+    }
     return [command];
   }
 
-  const challenge = resolveChallenge({
-    state,
-    activeSide: outgoingSide,
-    supportContribution: NO_SUPPORT_CONTRIBUTION,
-  });
-  const commands: BattleCommand[] = challenge.edits.map(autoCommand);
+  const challengeAlreadyResolved = state.phase === "challenge";
+  const commands: BattleCommand[] = [];
 
-  const victoryCommand = buildVictoryCommand(state, challenge, caps.scoreToWin);
-  if (victoryCommand !== null) {
-    commands.push(victoryCommand);
+  if (!challengeAlreadyResolved) {
+    const challenge = resolveChallenge({
+      state,
+      activeSide: outgoingSide,
+      supportContribution: NO_SUPPORT_CONTRIBUTION,
+    });
+    commands.push(...challenge.edits.map(autoCommand));
+
+    const victoryCommand = buildVictoryCommand(state, challenge, caps.scoreToWin);
+    if (victoryCommand !== null) {
+      commands.push(victoryCommand);
+    }
   }
 
   for (const discardEdit of handLimitDiscardEdits(state, outgoingSide)) {

@@ -4,6 +4,7 @@ import type {
   BattleCardInstance,
   BattleCardKind,
   BattleMutableState,
+  BattlePhase,
   BattleSide,
   BattleSideMutableState,
   FrontRankSlotId,
@@ -88,6 +89,7 @@ function emptySide(overrides: Partial<BattleSideMutableState> = {}): BattleSideM
 function makeState(options: {
   activeSide?: BattleSide;
   turnNumber?: number;
+  phase?: BattlePhase;
   player?: Partial<BattleSideMutableState>;
   enemy?: Partial<BattleSideMutableState>;
   instances?: BattleCardInstance[];
@@ -96,7 +98,7 @@ function makeState(options: {
     battleId: "battle-test",
     activeSide: options.activeSide ?? "player",
     turnNumber: options.turnNumber ?? 1,
-    phase: "day",
+    phase: options.phase ?? "day",
     result: null,
     forcedResult: null,
     nextBattleCardOrdinal: 100,
@@ -266,6 +268,33 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     expect(result).toContainEqual({ kind: "SET_MAX_ENERGY", side: "enemy", value: 4 });
     expect(result).toContainEqual({ kind: "SET_CURRENT_ENERGY", side: "enemy", value: 4 });
     // Incoming-side draw (turn > 1).
+    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
+  });
+
+  it("does not re-resolve the challenge when the outgoing side already sits in the challenge phase", () => {
+    // Reaching the challenge phase resolves the Challenge once (planChallengeOnly).
+    // The subsequent handoff must not score or dissolve a second time.
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 3,
+      phase: "challenge",
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      enemy: { deck: ["d-enemy"] },
+      instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
+    });
+    const handoff: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 3 },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
+
+    // No second scoring of the outgoing player's surviving challenger.
+    expect(result.some((edit) => edit.kind === "ADJUST_SCORE")).toBe(false);
+    // The handoff still flips the side, ramps, and draws for the incoming side.
+    expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 3 });
+    expect(result).toContainEqual({ kind: "SET_MAX_ENERGY", side: "enemy", value: 4 });
     expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
   });
 
@@ -728,6 +757,27 @@ describe("planBasicAutomationCommands — bookend phase auto-advance", () => {
     expect(result).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 4 });
     // The challenge navigation does not advance past challenge.
     expect(result.some((edit) => edit.kind === "SET_PHASE" && edit.phase !== "challenge")).toBe(false);
+  });
+
+  it("resolves the challenge when the phase float advances into challenge (same-side flow)", () => {
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 3,
+      phase: "night",
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
+    });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_BATTLE_FLOW", phase: "challenge", activeSide: "player", turnNumber: 3 },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    // Entering challenge resolves the outgoing side's Challenge exactly here.
+    expect(result).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 4 });
+    // The flow edit itself is preserved and there is no side flip.
+    expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "challenge", activeSide: "player", turnNumber: 3 });
   });
 });
 
