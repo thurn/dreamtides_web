@@ -1927,10 +1927,7 @@ describe("PlayableBattleScreen", () => {
       clickChip(container, "Create Figment");
     });
     act(() => {
-      const input = container.querySelector<HTMLInputElement>('[data-battle-figment-field="subtype"]');
-      const descriptor = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value");
-      descriptor?.set?.call(input, "Seeker");
-      input?.dispatchEvent(new Event("input", { bubbles: true }));
+      selectFigmentType(container, "Warrior");
     });
     act(() => {
       container
@@ -1942,10 +1939,7 @@ describe("PlayableBattleScreen", () => {
       clickChip(container, "Create Figment");
     });
     act(() => {
-      const input = container.querySelector<HTMLInputElement>('[data-battle-figment-field="subtype"]');
-      const descriptor = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value");
-      descriptor?.set?.call(input, "Seeker");
-      input?.dispatchEvent(new Event("input", { bubbles: true }));
+      selectFigmentType(container, "Warrior");
     });
     act(() => {
       container
@@ -2737,6 +2731,21 @@ describe("PlayableBattleScreen", () => {
     });
   });
 });
+
+function selectFigmentType(container: HTMLElement, subtype: string): void {
+  const select = container.querySelector<HTMLSelectElement>(
+    '[data-battle-figment-field="subtype"]',
+  );
+  if (select === null) {
+    throw new Error("missing figment-type select");
+  }
+  const descriptor = Object.getOwnPropertyDescriptor(
+    window.HTMLSelectElement.prototype,
+    "value",
+  );
+  descriptor?.set?.call(select, subtype);
+  select.dispatchEvent(new Event("change", { bubbles: true }));
+}
 
 function clickChip(container: HTMLElement, label: string, matchIndex = 0): void {
   const chips = [...container.querySelectorAll<HTMLElement>(".chip")].filter(

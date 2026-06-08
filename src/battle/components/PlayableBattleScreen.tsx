@@ -779,7 +779,6 @@ function PlayableBattleScreenInner({
       ) : null}
       {openFigmentCreator !== null ? (
         <BattleFigmentCreator
-          cardDatabase={cardDatabase}
           initialSide={openFigmentCreator}
           state={reducerState.mutable}
           onClose={() => setOpenFigmentCreator(null)}

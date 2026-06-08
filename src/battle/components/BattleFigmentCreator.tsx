@@ -1,33 +1,47 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { CardData } from "../../types/cards";
+import { useEffect, useRef, useState } from "react";
 import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
 import type { BattleMutableState, BattleSide, FrontRankSlotId, BackRankSlotId } from "../types";
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import {
+  FIGMENT_CATALOG_ENTRIES,
+  lookupFigmentCatalogEntry,
+  type FigmentCatalogEntry,
+  type FigmentKeyword,
+} from "../state/figment-catalog";
 
 type FigmentZone = "hand" | "backRank" | "frontRank" | "void" | "banished" | "deck";
 type FigmentDeckPosition = "top" | "bottom";
 type FigmentBattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
-const DEFAULT_FIGMENT_NAME = "Shadow Figment";
 const DEFAULT_FIGMENT_SUBTYPE = "Shadow";
-const DEFAULT_FIGMENT_SPARK = "1";
-const BUILT_IN_FIGMENT_SUBTYPES = [DEFAULT_FIGMENT_SUBTYPE] as const;
+
+function figmentTypeName(subtype: string): string {
+  return `${subtype} Figment`;
+}
+
+const FIGMENT_KEYWORD_LABELS: Readonly<Record<FigmentKeyword, string>> = {
+  unstoppable: "Unstoppable",
+  support: "Support",
+  preeminence: "Preeminence",
+  vengeful: "Vengeful",
+  awakened: "Awakened",
+};
 
 export function BattleFigmentCreator({
-  cardDatabase,
   initialSide,
   onClose,
   onSubmit,
   state,
 }: {
-  cardDatabase: ReadonlyMap<number, CardData>;
   initialSide: BattleSide;
   onClose: () => void;
   onSubmit: (edit: BattleDebugEdit) => void;
   state: BattleMutableState;
 }) {
-  const [name, setName] = useState(DEFAULT_FIGMENT_NAME);
-  const [subtype, setSubtype] = useState(DEFAULT_FIGMENT_SUBTYPE);
-  const [sparkText, setSparkText] = useState(DEFAULT_FIGMENT_SPARK);
+  const defaultEntry =
+    lookupFigmentCatalogEntry(DEFAULT_FIGMENT_SUBTYPE) ?? FIGMENT_CATALOG_ENTRIES[0];
+  const [subtype, setSubtype] = useState<string>(defaultEntry.subtype);
+  const [name, setName] = useState(figmentTypeName(defaultEntry.subtype));
+  const [sparkText, setSparkText] = useState(String(defaultEntry.baseSpark));
   const [side, setSide] = useState<BattleSide>(initialSide);
   const [zone, setZone] = useState<FigmentZone>("backRank");
   const [position, setPosition] = useState<FigmentDeckPosition>("top");
@@ -72,10 +86,25 @@ export function BattleFigmentCreator({
     };
   }, [onClose]);
 
-  const subtypeOptions = useMemo(
-    () => collectFigmentSubtypeOptions(cardDatabase),
-    [cardDatabase],
-  );
+  const selectedEntry = lookupFigmentCatalogEntry(subtype);
+  const selectedKeyword = selectedEntry?.keyword;
+
+  function handleSelectType(nextSubtype: string): void {
+    // Selecting a catalog type pre-fills the figment's base spark and derives a
+    // default name from the type. The spark stays editable for off-base
+    // figments (rules §Figments). The name follows the type only while it still
+    // matches the auto-derived pattern, so a hand-edited name is preserved.
+    const entry = lookupFigmentCatalogEntry(nextSubtype);
+    setSubtype(nextSubtype);
+    if (entry !== undefined) {
+      setSparkText(String(entry.baseSpark));
+    }
+    setName((current) =>
+      current.trim() === "" || isAutoDerivedFigmentName(current)
+        ? figmentTypeName(nextSubtype)
+        : current,
+    );
+  }
 
   const spark = Number.parseInt(sparkText, 10);
   const sparkIsValid = !Number.isNaN(spark) && spark >= 0;
@@ -149,8 +178,9 @@ export function BattleFigmentCreator({
             Synthesize a figment token
           </h3>
           <p className="mt-1 text-sm text-slate-400">
-            Figments mint a fresh battle card instance with a user-chosen subtype and
-            spark. The payload never touches the quest deck.
+            Pick one of the 14 figment types. Each type seeds its base spark and
+            carries its implicit keyword; spark stays editable for off-base
+            figments. The payload never touches the quest deck.
           </p>
         </header>
         <label className="flex flex-col gap-1">
@@ -168,22 +198,28 @@ export function BattleFigmentCreator({
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-            Subtype
+            Figment Type
           </span>
-          <input
+          <select
             data-battle-figment-field="subtype"
-            type="text"
-            list="figment-subtypes"
             value={subtype}
-            onChange={(event) => setSubtype(event.target.value)}
-            placeholder="e.g. Seeker"
-            className="rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-violet-300/60 focus:outline-none"
-          />
-          <datalist id="figment-subtypes">
-            {subtypeOptions.map((option) => (
-              <option key={option} value={option} />
+            onChange={(event) => handleSelectType(event.target.value)}
+            className="rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 focus:border-violet-300/60 focus:outline-none"
+          >
+            {FIGMENT_CATALOG_ENTRIES.map((entry) => (
+              <option key={entry.key} value={entry.subtype}>
+                {formatCatalogOptionLabel(entry)}
+              </option>
             ))}
-          </datalist>
+          </select>
+          <span
+            data-battle-figment-keyword=""
+            className="text-[11px] text-slate-400"
+          >
+            {selectedKeyword === undefined
+              ? "No keyword."
+              : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`}
+          </span>
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
@@ -197,6 +233,11 @@ export function BattleFigmentCreator({
             onChange={(event) => setSparkText(event.target.value)}
             className="w-28 rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 focus:border-violet-300/60 focus:outline-none"
           />
+          <span className="text-[11px] text-slate-400">
+            {selectedEntry === undefined
+              ? "Custom spark."
+              : `Base spark ${String(selectedEntry.baseSpark)} — editable.`}
+          </span>
         </label>
         <fieldset
           data-battle-figment-field="side"
@@ -375,16 +416,23 @@ function buildDestination({
   };
 }
 
-function collectFigmentSubtypeOptions(
-  cardDatabase: ReadonlyMap<number, CardData>,
-): string[] {
-  const options = new Set<string>(BUILT_IN_FIGMENT_SUBTYPES);
-  for (const card of cardDatabase.values()) {
-    if (card.subtype !== "" && card.subtype !== "*") {
-      options.add(card.subtype);
-    }
-  }
-  return [...options].sort();
+function formatCatalogOptionLabel(entry: FigmentCatalogEntry): string {
+  const keywordSuffix =
+    entry.keyword === undefined
+      ? ""
+      : ` · ${FIGMENT_KEYWORD_LABELS[entry.keyword]}`;
+  return `${entry.subtype} (✦${String(entry.baseSpark)})${keywordSuffix}`;
+}
+
+/**
+ * Whether `name` matches the auto-derived `"<Type> Figment"` pattern for any of
+ * the 14 catalog types, so type-switching can keep the name in sync until the
+ * user hand-edits it.
+ */
+function isAutoDerivedFigmentName(name: string): boolean {
+  return FIGMENT_CATALOG_ENTRIES.some(
+    (entry) => figmentTypeName(entry.subtype) === name.trim(),
+  );
 }
 
 function formatZoneLabel(zone: FigmentZone): string {

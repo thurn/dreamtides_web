@@ -3,10 +3,10 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { CardData } from "../../types/cards";
 import type { BattleDebugEdit } from "../debug/commands";
 import { createBattleInit } from "../integration/create-battle-init";
 import { allocateBattleCardInstance, createInitialBattleState } from "../state/create-initial-state";
+import { FIGMENT_CATALOG_ENTRIES } from "../state/figment-catalog";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
@@ -36,13 +36,6 @@ function mount(options: { state?: BattleMutableState } = {}): {
 } {
   const submits: BattleDebugEdit[] = [];
   const closes = { count: 0 };
-  const cardDatabase = new Map<number, CardData>([
-    [1, makeCardStub({ subtype: "Seeker" })],
-    [2, makeCardStub({ subtype: "Seeker" })],
-    [3, makeCardStub({ subtype: "Wisp" })],
-    [4, makeCardStub({ subtype: "*" })],
-    [5, makeCardStub({ subtype: "" })],
-  ]);
   const state = options.state ?? buildBattleState();
   const container = document.createElement("div");
   document.body.append(container);
@@ -50,7 +43,6 @@ function mount(options: { state?: BattleMutableState } = {}): {
   act(() => {
     root.render(
       <BattleFigmentCreator
-        cardDatabase={cardDatabase}
         initialSide="player"
         onClose={() => {
           closes.count += 1;
@@ -78,18 +70,91 @@ afterEach(() => {
 });
 
 describe("BattleFigmentCreator", () => {
-  it("blocks submit when subtype is empty", () => {
+  it("lists all 14 catalog types in the picker", () => {
+    const { root } = mount();
+
+    const select = document.querySelector<HTMLSelectElement>(
+      '[data-battle-figment-field="subtype"]',
+    );
+    expect(select).not.toBeNull();
+    const values = Array.from(select?.querySelectorAll("option") ?? []).map(
+      (option) => option.value,
+    );
+    expect(values).toEqual(FIGMENT_CATALOG_ENTRIES.map((entry) => entry.subtype));
+    expect(values).toHaveLength(14);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("pre-fills base spark and surfaces the keyword when selecting Ancient", () => {
+    const { root } = mount();
+
+    setSelectValue('[data-battle-figment-field="subtype"]', "Ancient");
+
+    expect(
+      document.querySelector<HTMLInputElement>('[data-battle-figment-field="spark"]')?.value,
+    ).toBe("4");
+    expect(
+      document.querySelector<HTMLElement>("[data-battle-figment-keyword]")?.textContent,
+    ).toContain("Unstoppable");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("dispatches CREATE_FIGMENT with the catalog subtype and base spark", () => {
+    vi.spyOn(Date, "now").mockReturnValue(999);
     const { root, submits } = mount();
-    setInputValue('[data-battle-figment-field="subtype"]', "");
+
+    setSelectValue('[data-battle-figment-field="subtype"]', "Celestial");
 
     const submitButton = document.querySelector<HTMLButtonElement>(
       '[data-battle-figment-action="submit"]',
     );
-    expect(submitButton?.disabled).toBe(true);
+    expect(submitButton?.disabled).toBe(false);
     act(() => {
       submitButton?.click();
     });
-    expect(submits).toHaveLength(0);
+
+    expect(submits).toHaveLength(1);
+    const edit = submits[0];
+    if (edit.kind !== "CREATE_FIGMENT") {
+      throw new Error("expected CREATE_FIGMENT edit");
+    }
+    expect(edit.chosenSubtype).toBe("Celestial");
+    // Celestial's catalog base spark is 2 (rules §Figments); the keyword
+    // (Preeminence) is stamped by the CREATE_FIGMENT reducer from the subtype.
+    expect(edit.chosenSpark).toBe(2);
+    expect(edit.name).toBe("Celestial Figment");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("keeps spark editable for an off-base figment", () => {
+    const { root, submits } = mount();
+
+    setSelectValue('[data-battle-figment-field="subtype"]', "Warrior");
+    setInputValue('[data-battle-figment-field="spark"]', "7");
+
+    const submitButton = document.querySelector<HTMLButtonElement>(
+      '[data-battle-figment-action="submit"]',
+    );
+    act(() => {
+      submitButton?.click();
+    });
+
+    expect(submits).toHaveLength(1);
+    const edit = submits[0];
+    if (edit.kind !== "CREATE_FIGMENT") {
+      throw new Error("expected CREATE_FIGMENT edit");
+    }
+    expect(edit.chosenSubtype).toBe("Warrior");
+    expect(edit.chosenSpark).toBe(7);
 
     act(() => {
       root.unmount();
@@ -99,7 +164,7 @@ describe("BattleFigmentCreator", () => {
   it("blocks submit when spark is negative", () => {
     const { root, submits } = mount();
 
-    setInputValue('[data-battle-figment-field="subtype"]', "Wisp");
+    setSelectValue('[data-battle-figment-field="subtype"]', "Warrior");
     setInputValue('[data-battle-figment-field="spark"]', "-1");
 
     const submitButton = document.querySelector<HTMLButtonElement>(
@@ -128,16 +193,12 @@ describe("BattleFigmentCreator", () => {
 
     const submits: BattleDebugEdit[] = [];
     const closes = { count: 0 };
-    const cardDatabase = new Map<number, CardData>([
-      [1, makeCardStub({ subtype: "Seeker" })],
-    ]);
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
     act(() => {
       root.render(
         <BattleFigmentCreator
-          cardDatabase={cardDatabase}
           initialSide="enemy"
           onClose={() => {
             closes.count += 1;
@@ -156,7 +217,7 @@ describe("BattleFigmentCreator", () => {
     ).toBe("Shadow");
     expect(
       document.querySelector<HTMLInputElement>('[data-battle-figment-field="spark"]')?.value,
-    ).toBe("1");
+    ).toBe("2");
     expect(
       document.querySelector<HTMLInputElement>(
         'input[name="battle-figment-slot"][value="B1"]',
@@ -178,7 +239,7 @@ describe("BattleFigmentCreator", () => {
     }
     expect(edit.side).toBe("enemy");
     expect(edit.chosenSubtype).toBe("Shadow");
-    expect(edit.chosenSpark).toBe(1);
+    expect(edit.chosenSpark).toBe(2);
     expect(edit.name).toBe("Shadow Figment");
     expect(edit.destination).toEqual({
       side: "enemy",
@@ -197,8 +258,8 @@ describe("BattleFigmentCreator", () => {
     vi.spyOn(Date, "now").mockReturnValue(555);
     const { root, submits, closes } = mount();
 
+    setSelectValue('[data-battle-figment-field="subtype"]', "Outsider");
     setInputValue('[data-battle-figment-field="name"]', "Custom Figment");
-    setInputValue('[data-battle-figment-field="subtype"]', "Wisp");
     setInputValue('[data-battle-figment-field="spark"]', "4");
 
     const submitButton = document.querySelector<HTMLButtonElement>(
@@ -216,7 +277,7 @@ describe("BattleFigmentCreator", () => {
       throw new Error("expected CREATE_FIGMENT edit");
     }
     expect(edit.side).toBe("player");
-    expect(edit.chosenSubtype).toBe("Wisp");
+    expect(edit.chosenSubtype).toBe("Outsider");
     expect(edit.chosenSpark).toBe(4);
     expect(edit.name).toBe("Custom Figment");
     expect(edit.destination).toEqual({
@@ -244,7 +305,7 @@ describe("BattleFigmentCreator", () => {
 
     const { root, submits } = mount({ state });
 
-    setInputValue('[data-battle-figment-field="subtype"]', "Wisp");
+    setSelectValue('[data-battle-figment-field="subtype"]', "Warrior");
     setInputValue('[data-battle-figment-field="spark"]', "2");
 
     const submitButton = document.querySelector<HTMLButtonElement>(
@@ -351,7 +412,7 @@ describe("BattleFigmentCreator", () => {
     act(() => {
       r0Radio!.click();
     });
-    setInputValue('[data-battle-figment-field="subtype"]', "Shadow");
+    setSelectValue('[data-battle-figment-field="subtype"]', "Shadow");
 
     const submitButton = document.querySelector<HTMLButtonElement>(
       '[data-battle-figment-action="submit"]',
@@ -376,28 +437,23 @@ describe("BattleFigmentCreator", () => {
       root.unmount();
     });
   });
-
-  it("renders a dedup'd datalist filtered to meaningful subtypes", () => {
-    const { root } = mount();
-
-    const datalist = document.querySelector<HTMLDataListElement>(
-      "#figment-subtypes",
-    );
-    expect(datalist).not.toBeNull();
-    const values = Array.from(datalist?.querySelectorAll("option") ?? [])
-      .map((option) => option.getAttribute("value"));
-    expect(values).toContain("Seeker");
-    expect(values).toContain("Shadow");
-    expect(values).toContain("Wisp");
-    expect(values).not.toContain("*");
-    expect(values).not.toContain("");
-    expect(values).toEqual([...new Set(values)]);
-
-    act(() => {
-      root.unmount();
-    });
-  });
 });
+
+function setSelectValue(selector: string, value: string): void {
+  const select = document.querySelector<HTMLSelectElement>(selector);
+  if (select === null) {
+    throw new Error(`Missing select for ${selector}`);
+  }
+
+  const descriptor = Object.getOwnPropertyDescriptor(
+    window.HTMLSelectElement.prototype,
+    "value",
+  );
+  act(() => {
+    descriptor?.set?.call(select, value);
+    select.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+}
 
 function setInputValue(selector: string, value: string): void {
   const input = document.querySelector<HTMLInputElement>(selector);
@@ -413,22 +469,4 @@ function setInputValue(selector: string, value: string): void {
     descriptor?.set?.call(input, value);
     input.dispatchEvent(new Event("input", { bubbles: true }));
   });
-}
-
-function makeCardStub(overrides: Partial<CardData>): CardData {
-  return {
-    name: "Stub",
-    id: "stub-card",
-    cardNumber: 1,
-    cardType: "Character",
-    subtype: "",
-    isStarter: false,
-    energyCost: 1,
-    spark: 1,
-    isFast: false,
-    renderedText: "",
-    imageNumber: 1,
-    artOwned: false,
-    ...overrides,
-  };
 }
