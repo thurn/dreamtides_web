@@ -385,7 +385,7 @@
   }
 
   .battle-small-zone-row {
-    flex-basis: clamp(156px, 21vh, 218px);
+    flex-basis: clamp(88px, 13vh, 168px);
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: repeat(2, minmax(0, 1fr));
   }
@@ -566,8 +566,8 @@
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
-  gap: 8px;
-  padding: 10px;
+  gap: 6px;
+  padding: 8px;
   border-radius: 8px;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -592,7 +592,8 @@
 .status-strip .who {
   font-family: system-ui, sans-serif;
   font-style: italic;
-  font-size: 16px;
+  font-size: 13px;
+  line-height: 1.1;
   color: var(--text-dim);
 }
 
@@ -600,10 +601,10 @@
   width: 100%;
   min-width: 0;
   text-align: left;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  justify-items: stretch;
-  gap: 7px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
 }
 
 .summary-hover-target {
@@ -625,14 +626,18 @@
 }
 
 .summary-trigger-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
 .status-dreamcaller-thumb {
   position: relative;
   display: block;
-  width: min(82px, 100%);
-  justify-self: center;
+  flex: 0 0 auto;
+  width: 46px;
   border-radius: 8px;
 }
 
@@ -1113,14 +1118,10 @@
 }
 
 .phase-float-actions {
-  /* Pinned to the viewport so the phase controls stay reachable at any screen
-     size. They previously lived in the enemy zone column's flow and were
-     clipped by the battlefield layout's overflow on short viewports. */
-  position: fixed;
-  right: 16px;
-  bottom: 84px;
-  width: clamp(150px, 14vw, 174px);
-  z-index: 42;
+  /* Anchored in the enemy zone column's flow, directly beneath the enemy
+     banished zone and above the player's hand. */
+  width: 100%;
+  flex: 0 0 auto;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 6px;
@@ -1129,7 +1130,7 @@
 .phase-float-button {
   position: relative;
   width: 100%;
-  height: 36px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1143,7 +1144,7 @@
 }
 
 .phase-float-button .bx {
-  font-size: 22px;
+  font-size: 20px;
   line-height: 1;
 }
 
@@ -1157,7 +1158,7 @@
 .phase-float-button::after {
   content: attr(data-preview);
   position: absolute;
-  top: calc(100% + 8px);
+  bottom: calc(100% + 8px);
   right: 0;
   min-width: 126px;
   max-width: 176px;
@@ -1173,8 +1174,9 @@
   text-align: center;
   pointer-events: none;
   opacity: 0;
-  transform: translateY(-4px);
+  transform: translateY(4px);
   transition: opacity 120ms ease, transform 120ms ease;
+  z-index: 5;
 }
 
 .phase-float-button:hover::after,
