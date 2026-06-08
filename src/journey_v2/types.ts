@@ -98,7 +98,7 @@ export interface MerchantNeedProjection {
   previewCard: CardData;
 }
 
-export interface MerchantNeed {
+export interface MerchantNeedBase {
   needId: string;
   needType: "card" | "theme";
   needKind: MerchantNeedKind;
@@ -108,22 +108,78 @@ export interface MerchantNeed {
   confidence: number;
   observation: MerchantNeedObservation;
   compatibleRewardBuilderIds: readonly string[];
-  cardUuid?: string;
-  cardNumber?: number;
-  entryId?: string;
   dreamsignId?: string;
+}
+
+export interface MerchantCardTargetNeed extends MerchantNeedBase {
+  needType: "card";
+  cardUuid: string;
+  cardNumber: number;
+  entryId: string;
+  references: readonly MerchantNeedReference[];
+}
+
+export interface MerchantThemeNeed extends MerchantNeedBase {
+  needType: "theme";
   themeId?: string;
-  role?: MerchantRoleNeed;
-  references?: readonly MerchantNeedReference[];
-  support?: {
+}
+
+export interface MerchantUnderSupportedPayoffNeed extends MerchantCardTargetNeed {
+  needKind: "under_supported_payoff";
+  themeId: string;
+  support: {
     theme: string;
-    tier?: number;
+    tier: number;
+    supportCount: number;
+    adequacy: number;
+  };
+}
+
+export interface MerchantUpgradeTargetNeed extends MerchantCardTargetNeed {
+  needKind: "upgrade_target";
+  projection: MerchantNeedProjection;
+}
+
+export interface MerchantWeakCardNeed extends MerchantCardTargetNeed {
+  needKind: "weak_card";
+}
+
+export interface MerchantMissingRoleNeed extends MerchantThemeNeed {
+  needKind: "missing_role";
+  themeId: string;
+  role?: MerchantRoleNeed;
+  support: {
+    theme: string;
     supportCount?: number;
     requiredCount?: number;
-    adequacy?: number;
   };
-  projection?: MerchantNeedProjection;
 }
+
+export interface MerchantCurveProblemNeed extends MerchantThemeNeed {
+  needKind: "curve_problem";
+  themeId: "curve";
+  role: "cheap_early_play";
+  curveDirection: "top_heavy" | "early_plays";
+  support: {
+    theme: "curve";
+    supportCount: number;
+    requiredCount: number;
+  };
+}
+
+export interface MerchantDreamsignGapNeed extends MerchantThemeNeed {
+  needKind: "dreamsign_gap";
+  themeId: "dreamsign";
+  dreamsignId: string;
+}
+
+export type MerchantNeed =
+  | MerchantUnderSupportedPayoffNeed
+  | MerchantUpgradeTargetNeed
+  | MerchantWeakCardNeed
+  | MerchantMissingRoleNeed
+  | MerchantCurveProblemNeed
+  | MerchantDreamsignGapNeed;
 
 export type MerchantReward =
   | ({

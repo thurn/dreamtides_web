@@ -26,6 +26,10 @@ const UUIDS = {
   fillerC: "10000000-0000-4000-8000-000000000007",
   fillerD: "10000000-0000-4000-8000-000000000008",
   draw: "10000000-0000-4000-8000-000000000009",
+  recursion: "10000000-0000-4000-8000-000000000010",
+  interaction: "10000000-0000-4000-8000-000000000011",
+  earlyA: "10000000-0000-4000-8000-000000000012",
+  earlyB: "10000000-0000-4000-8000-000000000013",
 } as const;
 
 function card(
@@ -48,22 +52,28 @@ function card(
 function contextFor(
   cards: readonly CardData[],
   supportMetaByUuid: ReadonlyMap<string, MerchantSupportMeta> = new Map(),
+  options: {
+    deckEntries?: ReturnType<typeof makeMerchantTestDeckEntry>[];
+    dreamsignTemplates?: Parameters<typeof makeMerchantTestContent>[0]["dreamsignTemplates"];
+  } = {},
 ): MerchantContext {
   const questState = makeMerchantTestQuestState({
-    deck: cards.map((testCard, index) =>
-      makeMerchantTestDeckEntry({
-        entryId: `entry-${String(index + 1).padStart(2, "0")}`,
-        cardNumber: testCard.cardNumber,
-      }),
-    ),
+    deck:
+      options.deckEntries ??
+      cards.map((testCard, index) =>
+        makeMerchantTestDeckEntry({
+          entryId: `entry-${String(index + 1).padStart(2, "0")}`,
+          cardNumber: testCard.cardNumber,
+        }),
+      ),
   });
   const base = buildMerchantContext({
     questState,
     questContent: makeMerchantTestContent({
       cards,
-      dreamsignTemplates: [
-        makeMerchantTestDreamsignTemplate({ id: "dreamsign-fixture" }),
-      ],
+      dreamsignTemplates:
+        options.dreamsignTemplates ??
+        [makeMerchantTestDreamsignTemplate({ id: "dreamsign-fixture" })],
     }),
     site: makeMerchantTestSite(),
   });
@@ -81,6 +91,9 @@ function expectNeedShape(need: MerchantNeed): void {
   expect(need.confidence).toBeLessThanOrEqual(1);
   expect(need.observation.summary.length).toBeGreaterThan(0);
   expect(need.compatibleRewardBuilderIds.length).toBeGreaterThan(0);
+  if (need.needType === "theme") {
+    expect(need.themeId).toBeTruthy();
+  }
 }
 
 describe("readMerchantDeck", () => {
@@ -136,7 +149,7 @@ describe("readMerchantDeck", () => {
       (need) => need.needKind === "missing_role" && need.role === "draw",
     );
 
-    expect(drawNeed?.compatibleRewardBuilderIds).toContain("grant_draw_card");
+    expect(drawNeed?.compatibleRewardBuilderIds).toContain("grant_support_card");
   });
 
   it("emits curve_problem for a top-heavy deck", () => {
@@ -181,8 +194,12 @@ describe("readMerchantDeck", () => {
         need.projection?.transfiguration === "Viridian",
     );
 
-    expect(upgrade?.entryId).toBe("entry-01");
-    expect(upgrade?.projection).toMatchObject({
+    expect(upgrade?.needKind).toBe("upgrade_target");
+    if (upgrade === undefined || upgrade.needKind !== "upgrade_target") {
+      throw new Error("expected Viridian upgrade target");
+    }
+    expect(upgrade.entryId).toBe("entry-01");
+    expect(upgrade.projection).toMatchObject({
       transfiguration: "Viridian",
       metric: {
         label: "cost",
@@ -190,7 +207,81 @@ describe("readMerchantDeck", () => {
         to: 3,
       },
     });
-    expect(upgrade?.compatibleRewardBuilderIds).toContain("transfigure_upgrade");
+    expect(upgrade.compatibleRewardBuilderIds).toContain("transfigure_card");
+  });
+
+  it("counts effective Reclaim keyword modifications as recursion support", () => {
+    const reclaimCard = card(UUIDS.recursion, 34, {
+      renderedText: "",
+    });
+    const cards = [
+      reclaimCard,
+      card(UUIDS.draw, 35, { renderedText: "Draw a card." }),
+      card(UUIDS.fillerA, 36),
+      card(UUIDS.fillerB, 37),
+    ];
+    const context = contextFor(cards, new Map(), {
+      deckEntries: cards.map((testCard, index) =>
+        makeMerchantTestDeckEntry({
+          entryId: `entry-${String(index + 1).padStart(2, "0")}`,
+          cardNumber: testCard.cardNumber,
+          keywordModification:
+            testCard.id === UUIDS.recursion ? { reclaim: 1 } : null,
+        }),
+      ),
+    });
+
+    const needs = readMerchantDeck(context);
+
+    expect(needs).not.toContainEqual(
+      expect.objectContaining({
+        needKind: "missing_role",
+        role: "recursion",
+      }),
+    );
+  });
+
+  it("uses effective type changes for early-play curve reads", () => {
+    const typeChangedEarly = card(UUIDS.earlyA, 38, {
+      cardType: "Event",
+      energyCost: 1,
+    });
+    const naturalEarly = card(UUIDS.earlyB, 39, {
+      cardType: "Character",
+      energyCost: 1,
+    });
+    const cards = [
+      typeChangedEarly,
+      naturalEarly,
+      card(UUIDS.draw, 40, { renderedText: "Draw a card." }),
+      card(UUIDS.recursion, 41, { renderedText: "Reclaim 1●" }),
+    ];
+    const context = contextFor(cards, new Map(), {
+      deckEntries: cards.map((testCard, index) =>
+        makeMerchantTestDeckEntry({
+          entryId: `entry-${String(index + 1).padStart(2, "0")}`,
+          cardNumber: testCard.cardNumber,
+          typeChange:
+            testCard.id === UUIDS.earlyA
+              ? {
+                  predicateId: "fixture-type-change",
+                  cardType: "Character",
+                  subtype: "Fixture",
+                  label: "Character",
+                }
+              : null,
+        }),
+      ),
+    });
+
+    const needs = readMerchantDeck(context);
+
+    expect(needs).not.toContainEqual(
+      expect.objectContaining({
+        needKind: "curve_problem",
+        curveDirection: "early_plays",
+      }),
+    );
   });
 
   it("does not emit weak_card for the sole support of a detected payoff theme", () => {
@@ -284,8 +375,47 @@ describe("readMerchantDeck", () => {
       if (need.needType === "card") {
         expect(need.cardUuid).toBeTruthy();
         expect(need.entryId).toBeTruthy();
+        expect(need.cardNumber).toBeGreaterThan(0);
       }
     }
+  });
+
+  it("fills to two broad actionable needs without Dreamsign candidates", () => {
+    const cards = [
+      card(UUIDS.draw, 80, { renderedText: "Draw a card.", energyCost: 2 }),
+      card(UUIDS.recursion, 81, { renderedText: "Reclaim 1●", energyCost: 2 }),
+      card(UUIDS.interaction, 82, {
+        renderedText: "Banish an enemy.",
+        cardType: "Event",
+        energyCost: 2,
+        spark: null,
+      }),
+      card(UUIDS.earlyA, 83, { energyCost: 1 }),
+      card(UUIDS.earlyB, 84, { energyCost: 1 }),
+      card(UUIDS.fillerA, 85, { cardType: "Event", spark: null, energyCost: 2 }),
+      card(UUIDS.fillerB, 86, { spark: 4, energyCost: 2 }),
+      card(UUIDS.fillerC, 87, { energyCost: 2 }),
+    ];
+    const context = contextFor(cards, new Map(), {
+      dreamsignTemplates: [],
+      deckEntries: cards.map((testCard, index) =>
+        makeMerchantTestDeckEntry({
+          entryId: `entry-${String(index + 1).padStart(2, "0")}`,
+          cardNumber: testCard.cardNumber,
+          transfiguration: "Viridian",
+        }),
+      ),
+    });
+
+    const needs = readMerchantDeck(context);
+
+    expect(needs).toHaveLength(2);
+    expect(needs.map((need) => need.needId)).toEqual([
+      "need:missing-role:broad-support",
+      "need:missing-role:deck-fit",
+    ]);
+    expect(needs[0]?.compatibleRewardBuilderIds).toContain("grant_support_card");
+    expect(needs[1]?.compatibleRewardBuilderIds).toContain("replace_weak_with_fit");
   });
 
   it("orders needs deterministically for unchanged context", () => {

@@ -1,4 +1,4 @@
-import { computeDeckSummary } from "../../components/deck-summary";
+import { applyDeckEntryCardModification } from "../../card-type-change";
 import {
   applyTransfigurationToCard,
   describeTransfiguration,
@@ -13,6 +13,13 @@ import type {
   MerchantNeedObservation,
   MerchantRoleNeed,
 } from "../types";
+
+type MerchantNeedInput = MerchantNeed extends infer Need
+  ? Need extends MerchantNeed
+    ? Omit<Need, "score">
+    : never
+  : never;
+type MerchantUpgradeNeed = Extract<MerchantNeed, { needKind: "upgrade_target" }>;
 
 interface RoleProfile {
   counts: Record<MerchantRoleNeed, number>;
@@ -39,14 +46,14 @@ const ROLE_LABELS: Readonly<Record<MerchantRoleNeed, string>> = {
 };
 
 const ROLE_BUILDER_IDS: Readonly<Record<MerchantRoleNeed, readonly string[]>> = {
-  draw: ["grant_draw_card", "add_draw_to_event"],
-  recursion: ["grant_recursion_card", "reclaim_key_event"],
-  interaction: ["grant_interaction_card"],
-  cheap_early_play: ["grant_cheap_card", "lower_curve_card"],
-  events: ["grant_event_card"],
-  characters: ["grant_character_card"],
-  abandon_outlet: ["grant_theme_support", "grant_abandon_outlet"],
-  finisher: ["grant_finisher_card", "transfigure_upgrade"],
+  draw: ["grant_support_card", "grant_exact_card", "transfigure_card"],
+  recursion: ["grant_support_card", "add_reclaim_to_event"],
+  interaction: ["grant_support_card", "grant_exact_card", "add_fast_to_event"],
+  cheap_early_play: ["grant_support_card", "grant_exact_card", "transfigure_card"],
+  events: ["grant_support_card", "grant_exact_card"],
+  characters: ["grant_support_card", "grant_exact_card"],
+  abandon_outlet: ["grant_support_card", "duplicate_keystone"],
+  finisher: ["grant_support_card", "duplicate_keystone", "transfigure_card"],
 };
 
 function clamp01(value: number): number {
@@ -75,13 +82,26 @@ function ref(deckCard: MerchantDeckCard) {
   };
 }
 
-function makeNeed(input: Omit<MerchantNeed, "score">): MerchantNeed {
-  return {
+function makeNeed<T extends MerchantNeedInput>(
+  input: T,
+): T & Pick<MerchantNeed, "score"> {
+  return ({
     ...input,
     severity: clamp01(input.severity),
     confidence: clamp01(input.confidence),
     score: score(input.severity, input.confidence),
-  };
+  } as unknown) as T & Pick<MerchantNeed, "score">;
+}
+
+function getEffectiveCard(deckCard: MerchantDeckCard): CardData {
+  const transfigured =
+    deckCard.deckEntry.transfiguration === null
+      ? deckCard.card
+      : applyTransfigurationToCard(deckCard.card, deckCard.deckEntry.transfiguration);
+  return applyDeckEntryCardModification(transfigured, {
+    typeChange: deckCard.deckEntry.typeChange,
+    keywords: deckCard.deckEntry.keywordModification,
+  });
 }
 
 function text(card: CardData): string {
@@ -93,12 +113,13 @@ function hasRole(
   context: MerchantContext,
   role: MerchantRoleNeed,
 ): boolean {
-  const cardText = text(deckCard.card);
+  const card = getEffectiveCard(deckCard);
+  const cardText = text(card);
   const supports = context.supportMetaByUuid.get(deckCard.cardUuid)?.supports ?? [];
 
   switch (role) {
     case "draw":
-      return /\bdraw(s|ing)?\b/i.test(deckCard.card.renderedText);
+      return /\bdraw(s|ing)?\b/i.test(card.renderedText);
     case "recursion":
       return (
         supports.includes("reclaim") ||
@@ -106,22 +127,22 @@ function hasRole(
       );
     case "interaction":
       return /(banish|dissolve an enemy|return [^.]*to (their|its)|prevent)/i.test(
-        deckCard.card.renderedText,
+        card.renderedText,
       );
     case "cheap_early_play":
       return (
-        deckCard.card.cardType === "Character" &&
-        deckCard.card.energyCost !== null &&
-        deckCard.card.energyCost <= 1
+        card.cardType === "Character" &&
+        card.energyCost !== null &&
+        card.energyCost <= 1
       );
     case "events":
-      return deckCard.card.cardType === "Event";
+      return card.cardType === "Event";
     case "characters":
-      return deckCard.card.cardType === "Character";
+      return card.cardType === "Character";
     case "abandon_outlet":
-      return supports.includes("abandon") || /\babandon\b/i.test(deckCard.card.renderedText);
+      return supports.includes("abandon") || /\babandon\b/i.test(card.renderedText);
     case "finisher":
-      return (deckCard.card.spark ?? 0) >= 4 || /gains \+\d+/.test(cardText);
+      return (card.spark ?? 0) >= 4 || /gains \+\d+/.test(cardText);
   }
 }
 
@@ -213,7 +234,11 @@ function detectUnderSupportedPayoffs(
               roleLabel: supportNeed.theme,
             },
           ),
-          compatibleRewardBuilderIds: ["grant_theme_support", "draft_theme_support"],
+          compatibleRewardBuilderIds: [
+            "grant_support_card",
+            "grant_dreamsign",
+            "duplicate_keystone",
+          ],
           cardUuid: deckCard.cardUuid,
           cardNumber: deckCard.cardNumber,
           entryId: deckCard.entryId,
@@ -340,11 +365,10 @@ function projectionMetric(
 
 function transfigurationBenefit(
   transfiguration: TransfigurationType,
-  deckCard: MerchantDeckCard,
+  card: CardData,
   previewCard: CardData,
   profile: RoleProfile,
 ): number {
-  const card = deckCard.card;
   switch (transfiguration) {
     case "Viridian": {
       const saved = (card.energyCost ?? 0) - (previewCard.energyCost ?? 0);
@@ -366,17 +390,27 @@ function transfigurationBenefit(
   }
 }
 
-function centrality(deckCard: MerchantDeckCard, context: MerchantContext): number {
-  const prior = context.fitModel?.prior.get(deckCard.displayName);
-  if (prior !== undefined) {
+function fitPriorByCardNumber(deckCard: MerchantDeckCard, context: MerchantContext): number | null {
+  const fitName = context.fitModel?.numberToName.get(deckCard.cardNumber);
+  if (fitName === undefined) return null;
+  return context.fitModel?.prior.get(fitName) ?? null;
+}
+
+function centrality(
+  deckCard: MerchantDeckCard,
+  effectiveCard: CardData,
+  context: MerchantContext,
+): number {
+  const prior = fitPriorByCardNumber(deckCard, context);
+  if (prior !== null) {
     return clamp01(prior);
   }
 
   let value = 0.25;
-  if (!deckCard.card.isStarter && deckCard.card.rarity !== "Starter") value += 0.2;
+  if (!effectiveCard.isStarter && effectiveCard.rarity !== "Starter") value += 0.2;
   if (context.supportMetaByUuid.get(deckCard.cardUuid)?.needs?.length) value += 0.25;
   if (context.supportMetaByUuid.get(deckCard.cardUuid)?.supports?.length) value += 0.15;
-  if ((deckCard.card.spark ?? 0) >= 3) value += 0.15;
+  if ((effectiveCard.spark ?? 0) >= 3) value += 0.15;
   return clamp01(value);
 }
 
@@ -384,18 +418,26 @@ function detectUpgradeTargets(
   context: MerchantContext,
   profile: RoleProfile,
 ): MerchantNeed[] {
-  const candidates: MerchantNeed[] = [];
+  const candidates: MerchantUpgradeNeed[] = [];
 
   for (const deckCard of context.deckCards) {
     if (deckCard.deckEntry.transfiguration !== null) continue;
+    const effectiveCard = getEffectiveCard(deckCard);
 
-    for (const transfiguration of eligibleTransfigurations(deckCard.card)) {
-      const previewCard = applyTransfigurationToCard(deckCard.card, transfiguration);
-      const benefit = transfigurationBenefit(transfiguration, deckCard, previewCard, profile);
+    for (const transfiguration of eligibleTransfigurations(effectiveCard)) {
+      const previewCard = applyTransfigurationToCard(effectiveCard, transfiguration);
+      const benefit = transfigurationBenefit(
+        transfiguration,
+        effectiveCard,
+        previewCard,
+        profile,
+      );
       if (benefit <= 0) continue;
 
-      const severity = clamp01(0.35 + 0.45 * benefit + 0.2 * centrality(deckCard, context));
-      const metric = projectionMetric(transfiguration, deckCard.card, previewCard);
+      const severity = clamp01(
+        0.35 + 0.45 * benefit + 0.2 * centrality(deckCard, effectiveCard, context),
+      );
+      const metric = projectionMetric(transfiguration, effectiveCard, previewCard);
       candidates.push(
         makeNeed({
           needId: `need:upgrade-target:${deckCard.entryId}:${deckCard.cardUuid}:${transfiguration}`,
@@ -411,15 +453,15 @@ function detectUpgradeTargets(
           ),
           compatibleRewardBuilderIds:
             transfiguration === "Viridian"
-              ? ["transfigure_upgrade", "lower_curve_card"]
-              : ["transfigure_upgrade"],
+              ? ["transfigure_card", "grant_support_card"]
+              : ["transfigure_card"],
           cardUuid: deckCard.cardUuid,
           cardNumber: deckCard.cardNumber,
           entryId: deckCard.entryId,
           references: [ref(deckCard)],
           projection: {
             transfiguration,
-            description: describeTransfiguration(deckCard.card, transfiguration),
+            description: describeTransfiguration(effectiveCard, transfiguration),
             metric,
             previewCard,
           },
@@ -428,13 +470,10 @@ function detectUpgradeTargets(
     }
   }
 
-  const bestByEntry = new Map<string, MerchantNeed>();
+  const bestByEntry = new Map<string, MerchantUpgradeNeed>();
   for (const candidate of candidates) {
-    const existing = candidate.entryId === undefined ? undefined : bestByEntry.get(candidate.entryId);
-    if (
-      candidate.entryId !== undefined &&
-      (existing === undefined || compareNeeds(candidate, existing) < 0)
-    ) {
+    const existing = bestByEntry.get(candidate.entryId);
+    if (existing === undefined || compareNeeds(candidate, existing) < 0) {
       bestByEntry.set(candidate.entryId, candidate);
     }
   }
@@ -446,57 +485,92 @@ function detectCurveProblems(
   context: MerchantContext,
   profile: RoleProfile,
 ): MerchantNeed[] {
-  const summary = computeDeckSummary(
-    context.deckCards.map((deckCard) => deckCard.deckEntry),
-    new Map(context.cardByNumber),
-  );
+  const effectiveCards = context.deckCards.map(getEffectiveCard);
+  const cardsWithCost = effectiveCards.filter((card) => card.energyCost !== null);
+  const averageCost =
+    cardsWithCost.length === 0
+      ? 0
+      : Math.round(
+          (cardsWithCost.reduce((sum, card) => sum + (card.energyCost ?? 0), 0) /
+            cardsWithCost.length) *
+            10,
+        ) / 10;
   const earlyCount = profile.counts.cheap_early_play;
-  const highCostCount = context.deckCards.filter((deckCard) => (deckCard.card.energyCost ?? 0) >= 4).length;
-  const averageCost = summary.averageEnergyCost ?? 0;
+  const highCostCount = effectiveCards.filter((card) => (card.energyCost ?? 0) >= 4).length;
   const topHeavy = averageCost >= 2.8 || highCostCount >= Math.max(3, context.deckCards.length * 0.35);
   const earlyShort = earlyCount < Math.max(2, Math.ceil(context.deckCards.length * 0.18));
+  const requiredEarly = Math.max(2, Math.ceil(context.deckCards.length * 0.18));
+  const needs: MerchantNeed[] = [];
 
-  if (!topHeavy && !earlyShort) return [];
-
-  const severity = clamp01(
-    Math.max(
-      averageCost >= 2.8 ? (averageCost - 2.3) / 2 : 0,
-      earlyShort ? 0.45 : 0,
-      highCostCount / Math.max(1, context.deckCards.length),
-    ),
-  );
-
-  return [
-    makeNeed({
-      needId: "need:curve-problem:top-heavy",
-      needType: "theme",
-      needKind: "curve_problem",
-      label: "Curve is top-heavy",
-      severity,
-      confidence: 0.78,
-      observation: observe("The deck wants more early plays or cheaper key cards.", {
-        label: "average cost",
-        value: averageCost,
+  if (topHeavy) {
+    const severity = clamp01(
+      Math.max(
+        averageCost >= 2.8 ? (averageCost - 2.3) / 2 : 0,
+        highCostCount / Math.max(1, context.deckCards.length),
+      ),
+    );
+    needs.push(
+      makeNeed({
+        needId: "need:curve-problem:top-heavy",
+        needType: "theme",
+        needKind: "curve_problem",
+        label: "Curve is top-heavy",
+        severity,
+        confidence: 0.78,
+        observation: observe("The deck wants cheaper key cards or more early plays.", {
+          label: "average cost",
+          value: averageCost,
+        }),
+        compatibleRewardBuilderIds: ["transfigure_card", "grant_support_card"],
+        role: "cheap_early_play",
+        themeId: "curve",
+        curveDirection: "top_heavy",
+        support: {
+          theme: "curve",
+          supportCount: earlyCount,
+          requiredCount: requiredEarly,
+        },
       }),
-      compatibleRewardBuilderIds: ["lower_curve_card", "grant_cheap_card"],
-      role: "cheap_early_play",
-      themeId: "curve",
-      support: {
-        theme: "curve",
-        supportCount: earlyCount,
-        requiredCount: Math.max(2, Math.ceil(context.deckCards.length * 0.18)),
-      },
-    }),
-  ];
+    );
+  }
+
+  if (earlyShort) {
+    needs.push(
+      makeNeed({
+        needId: "need:curve-problem:early-plays",
+        needType: "theme",
+        needKind: "curve_problem",
+        label: "Needs more early plays",
+        severity: clamp01((requiredEarly - earlyCount) / requiredEarly),
+        confidence: 0.76,
+        observation: observe("The deck is short on cheap early characters.", {
+          label: "early plays",
+          value: earlyCount,
+        }),
+        compatibleRewardBuilderIds: ["grant_support_card", "grant_exact_card"],
+        role: "cheap_early_play",
+        themeId: "curve",
+        curveDirection: "early_plays",
+        support: {
+          theme: "curve",
+          supportCount: earlyCount,
+          requiredCount: requiredEarly,
+        },
+      }),
+    );
+  }
+
+  return needs;
 }
 
 function weakContribution(deckCard: MerchantDeckCard, context: MerchantContext): number {
+  const effectiveCard = getEffectiveCard(deckCard);
   let contribution = 0.45;
-  if (deckCard.card.isStarter || deckCard.card.rarity === "Starter") contribution -= 0.35;
+  if (effectiveCard.isStarter || effectiveCard.rarity === "Starter") contribution -= 0.35;
   if (deckCard.deckEntry.isBane) contribution -= 0.25;
-  if ((deckCard.card.energyCost ?? 0) <= 1) contribution += 0.05;
-  if ((deckCard.card.spark ?? 0) >= 3) contribution += 0.12;
-  if (/\bdraw|reclaim|banish|abandon\b/i.test(deckCard.card.renderedText)) contribution += 0.14;
+  if ((effectiveCard.energyCost ?? 0) <= 1) contribution += 0.05;
+  if ((effectiveCard.spark ?? 0) >= 3) contribution += 0.12;
+  if (/\bdraw|reclaim|banish|abandon\b/i.test(effectiveCard.renderedText)) contribution += 0.14;
 
   const meta = context.supportMetaByUuid.get(deckCard.cardUuid);
   if (meta?.supports?.length) contribution += 0.2;
@@ -536,7 +610,7 @@ function detectWeakCards(
         { label: "contribution", value: Math.round(weakest.contribution * 100) / 100 },
         { subject: weakest.deckCard.displayName },
       ),
-      compatibleRewardBuilderIds: ["purge_weak_card"],
+      compatibleRewardBuilderIds: ["purge_weak_card", "replace_weak_with_fit"],
       cardUuid: weakest.deckCard.cardUuid,
       cardNumber: weakest.deckCard.cardNumber,
       entryId: weakest.deckCard.entryId,
@@ -547,6 +621,7 @@ function detectWeakCards(
 
 function detectDreamsignGap(context: MerchantContext): MerchantNeed[] {
   if (context.candidateDreamsigns.length === 0 || context.deckCards.length === 0) return [];
+  const dreamsign = context.candidateDreamsigns[0];
 
   return [
     makeNeed({
@@ -561,8 +636,51 @@ function detectDreamsignGap(context: MerchantContext): MerchantNeed[] {
         value: context.candidateDreamsigns.length,
       }),
       compatibleRewardBuilderIds: ["grant_dreamsign"],
-      dreamsignId: context.candidateDreamsigns[0]?.id,
+      dreamsignId: dreamsign.id,
       themeId: "dreamsign",
+    }),
+  ];
+}
+
+function detectBroadGrantFallbacks(context: MerchantContext): MerchantNeed[] {
+  if (context.deckCards.length === 0 || context.candidateGrantCards.length === 0) {
+    return [];
+  }
+
+  return [
+    makeNeed({
+      needId: "need:missing-role:broad-support",
+      needType: "theme",
+      needKind: "missing_role",
+      label: "Could use broader support",
+      severity: 0.34,
+      confidence: 0.55,
+      observation: observe("A support card could give the deck another angle.", {
+        label: "grant candidates",
+        value: context.candidateGrantCards.length,
+      }),
+      compatibleRewardBuilderIds: ["grant_support_card", "grant_exact_card"],
+      themeId: "broad_support",
+      support: {
+        theme: "broad_support",
+      },
+    }),
+    makeNeed({
+      needId: "need:missing-role:deck-fit",
+      needType: "theme",
+      needKind: "missing_role",
+      label: "Could improve deck fit",
+      severity: 0.3,
+      confidence: 0.52,
+      observation: observe("A fitted replacement could lift the deck's floor.", {
+        label: "grant candidates",
+        value: context.candidateGrantCards.length,
+      }),
+      compatibleRewardBuilderIds: ["replace_weak_with_fit", "grant_exact_card"],
+      themeId: "deck_fit",
+      support: {
+        theme: "deck_fit",
+      },
     }),
   ];
 }
@@ -618,10 +736,17 @@ export function readMerchantDeck(context: MerchantContext): readonly MerchantNee
   ];
 
   const deduped = dedupeConflicts(needs).sort(compareNeeds);
-  const withFallbacks =
-    deduped.length >= 2
-      ? deduped
-      : [...deduped, ...detectDreamsignGap(context)].sort(compareNeeds);
+  const fallbackCandidates = [
+    ...detectDreamsignGap(context),
+    ...detectBroadGrantFallbacks(context),
+  ].filter(
+    (fallback) => !deduped.some((need) => need.needId === fallback.needId),
+  );
+  const withFallbacks = [...deduped];
+  for (const fallback of fallbackCandidates.sort(compareNeeds)) {
+    if (withFallbacks.length >= 2) break;
+    withFallbacks.push(fallback);
+  }
 
-  return withFallbacks;
+  return withFallbacks.sort(compareNeeds);
 }
