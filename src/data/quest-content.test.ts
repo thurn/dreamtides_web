@@ -54,16 +54,14 @@ beforeEach(() => {
 });
 
 describe("loadQuestContent", () => {
-  // A minimal valid card embedding (2 cards, rank 1) so the `embedded` variant's
+  // A minimal valid affinity corpus (2 cards) so the `embedded` variant's
   // `/affinity-corpus-data.json` fetch deserializes without error.
-  const tinyEmbedding = {
-    version: 1,
-    kind: "embedding",
-    rank: 1,
+  const tinyCorpus = {
+    version: 2,
+    kind: "matrix",
     cards: ["card-1", "card-2"],
     prior: [0.5, 0.5],
-    U: [[1], [1]],
-    V: [[1], [1]],
+    affinity: [[0, [[1, 0.4]]]],
   };
 
   function stubFetch({
@@ -72,14 +70,14 @@ describe("loadQuestContent", () => {
     dreamsigns,
     decklists,
     draftRecords = [],
-    affinityEmbedding = tinyEmbedding,
+    affinityCorpus = tinyCorpus,
   }: {
     cards: CardData[];
     dreamcallers: unknown[];
     dreamsigns: unknown[];
     decklists: string[][];
     draftRecords?: DraftRecord[];
-    affinityEmbedding?: unknown;
+    affinityCorpus?: unknown;
   }): void {
     vi.stubGlobal(
       "fetch",
@@ -115,7 +113,7 @@ describe("loadQuestContent", () => {
         if (path === "/affinity-corpus-data.json") {
           return Promise.resolve({
             ok: true,
-            json: () => Promise.resolve(affinityEmbedding),
+            json: () => Promise.resolve(affinityCorpus),
           });
         }
         return Promise.reject(new Error(`Unexpected fetch path: ${path}`));

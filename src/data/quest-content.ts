@@ -99,19 +99,19 @@ export function poolVariantNeedsRecords(variant: PoolVariant): boolean {
 }
 
 /**
- * Pool variants that grow their pool from the committed card embedding
- * (`data/affinity_embedding.jsonc`, served as `/affinity-corpus-data.json`)
- * instead of the draft records. In pool mode the embedding is fetched only for
- * these variants and set on `poolData.affinityCorpus`; they do not need the raw
+ * Pool variants that grow their pool from the committed affinity corpus
+ * (`data/affinity_corpus.jsonc`, served as `/affinity-corpus-data.json`) instead
+ * of the draft records. In pool mode the corpus is fetched only for these
+ * variants and set on `poolData.affinityCorpus`; they do not need the raw
  * records, so the records fetch stays gated on
  * {@link POOL_VARIANTS_NEEDING_RECORDS} alone.
  */
-const POOL_VARIANTS_NEEDING_EMBEDDING: ReadonlySet<PoolVariant> =
+const POOL_VARIANTS_NEEDING_CORPUS: ReadonlySet<PoolVariant> =
   new Set<PoolVariant>(["embedded"]);
 
-/** Whether `variant` grows its pool from the committed card embedding. */
-export function poolVariantNeedsEmbedding(variant: PoolVariant): boolean {
-  return POOL_VARIANTS_NEEDING_EMBEDDING.has(variant);
+/** Whether `variant` grows its pool from the committed affinity corpus. */
+export function poolVariantNeedsCorpus(variant: PoolVariant): boolean {
+  return POOL_VARIANTS_NEEDING_CORPUS.has(variant);
 }
 
 /**
@@ -126,7 +126,7 @@ export const AFFINITY_GROWN_POOL_VARIANTS: ReadonlySet<PoolVariant> =
   new Set<PoolVariant>([
     "seed",
     ...POOL_VARIANTS_NEEDING_RECORDS,
-    ...POOL_VARIANTS_NEEDING_EMBEDDING,
+    ...POOL_VARIANTS_NEEDING_CORPUS,
   ]);
 
 /**
@@ -410,10 +410,10 @@ export async function loadQuestContent(
   // random color-pool generator — an unfocused pool that is not the variant the
   // run asked for.
   const poolNeedsRecords = POOL_VARIANTS_NEEDING_RECORDS.has(poolVariant);
-  // The `embedded` variant grows from the committed card embedding instead of
+  // The `embedded` variant grows from the committed affinity corpus instead of
   // the records, so it fetches `/affinity-corpus-data.json` rather than the
   // 19 MB record bundle; other pool modes skip it.
-  const poolNeedsEmbedding = POOL_VARIANTS_NEEDING_EMBEDDING.has(poolVariant);
+  const poolNeedsCorpus = POOL_VARIANTS_NEEDING_CORPUS.has(poolVariant);
   const [
     cardDatabase,
     draftDreamcallers,
@@ -432,8 +432,8 @@ export async function loadQuestContent(
     usesFitModel || poolNeedsRecords
       ? loadDraftRecords()
       : Promise.resolve([] as DraftRecord[]),
-    // Fetch the committed embedding only for the variants that grow from it.
-    poolNeedsEmbedding
+    // Fetch the committed corpus only for the variants that grow from it.
+    poolNeedsCorpus
       ? loadAffinityCorpus()
       : Promise.resolve(null),
   ]);

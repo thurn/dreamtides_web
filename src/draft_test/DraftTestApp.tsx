@@ -463,7 +463,7 @@ export default function DraftTestApp() {
               loadCardsV2Database(),
               loadDreamcallersV2(),
               loadDecklists(),
-              // The committed embedding the `embedded` variant grows from; other
+              // The committed corpus the `embedded` variant grows from; other
               // variants ignore it, so loading it never changes their pools.
               loadAffinityCorpus(),
             ]);

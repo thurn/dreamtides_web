@@ -1,22 +1,23 @@
-// The `embedded` variant: `sigseed`'s pool, grown from the COMMITTED card
-// embedding instead of the records rebuilt in-browser. It seeds and grows
+// The `embedded` variant: `sigseed`'s pool, grown from the COMMITTED affinity
+// corpus instead of the records rebuilt in-browser. It seeds and grows
 // identically to `sigseed` — a random subset of the Dreamcaller's signature
 // cards expanded by the shared deterministic affinity grower
 // ({@link growAffinityPoolFromSeeds}), reducing to `pickcohere` when no signature
 // resolves — and differs only in the SOURCE of its {@link AffinityCorpus}.
 //
 // `sigseed` rebuilds its corpus from the 19 MB draft-record bundle every page
-// load; `embedded` reads `poolData.affinityCorpus`, a corpus reconstructed from
-// the committed `data/affinity_embedding.jsonc` (served as
-// `/affinity-corpus-data.json`). That embedding is a low-rank distillation of the
-// same record-derived synergy — validated as metric-equivalent to the exact
-// generator — folded with a committed "resembles" overlay so new and changed
-// cards can be authored as a text edit plus a re-bake rather than collected as
-// fresh drafts. See `docs/cards2/affinity_corpus_distillation_design.md`.
+// load; `embedded` reads `poolData.affinityCorpus`, reconstructed from the
+// committed `data/affinity_corpus.jsonc` (served as `/affinity-corpus-data.json`).
+// That committed corpus IS the same record-derived affinity matrix `sigseed`
+// builds (rounded to the precision at which it reproduces `sigseed` byte-for-
+// byte), with a committed "resembles" overlay folded in so new and changed cards
+// can be authored as a text edit plus a re-bake rather than collected as fresh
+// drafts. So `embedded` draws the same pools as `sigseed` from an editable card
+// set. See `docs/cards2/affinity_embedding_workflow.md`.
 //
 // Because the corpus arrives prebuilt, `embedded` does not read the draft
-// records: the runtime fetches the embedding for this variant in place of the
-// records. Cards are identified by UUID throughout, exactly as `sigseed`.
+// records: the runtime fetches the committed corpus for this variant in place of
+// the records. Cards are identified by UUID throughout, exactly as `sigseed`.
 
 import {
   growAffinityPoolFromSeeds,
@@ -45,8 +46,8 @@ export function generateEmbedded(
   if (!corpus || corpus.cards.length === 0) {
     missingPoolData(
       "embedded",
-      "its committed affinity embedding was not loaded " +
-        "(data/affinity_embedding.jsonc -> /affinity-corpus-data.json)",
+      "its committed affinity corpus was not loaded " +
+        "(data/affinity_corpus.jsonc -> /affinity-corpus-data.json)",
     );
   }
 
@@ -57,7 +58,7 @@ export function generateEmbedded(
   );
   if (signatureSet.size === 0) {
     // No signature anchor in the corpus: grow the unsteered best-of-K base over
-    // the embedding, the same fallback `sigseed` takes via `pickcohere`.
+    // the committed corpus, the same fallback `sigseed` takes via `pickcohere`.
     return growPoolFromCorpus(
       rng,
       poolData,
@@ -85,7 +86,7 @@ export const embeddedStrategy: PoolStrategy = {
   description:
     "Grows the pool exactly like sigseed — from a random subset of a " +
     "Dreamcaller's signature cards expanded by pick-affinity — but reads its " +
-    "synergy from the committed card embedding (data/affinity_embedding.jsonc) " +
+    "synergy from the committed affinity corpus (data/affinity_corpus.jsonc) " +
     "instead of rebuilding it from the draft records, so new and changed cards " +
     "can be authored in the affinity overlay. Reduces to pickcohere with no signature.",
   generate: ({ rng, poolData, signatureCards }) =>

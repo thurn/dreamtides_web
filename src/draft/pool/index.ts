@@ -25,14 +25,14 @@ export { poolToLines } from "./util.ts";
 export {
   applyOverlay,
   deserializeCorpus,
-  fitEmbedding,
-  DEFAULT_EMBEDDING_RANK,
+  serializeCorpus,
+  DEFAULT_DECIMALS,
 } from "./affinity-corpus-io.ts";
 export type {
-  AffinityEmbeddingJson,
+  AffinityCorpusJson,
   AffinityOverlay,
   AffinityOverlayEntry,
-  FitEmbeddingOptions,
+  SerializeCorpusOptions,
 } from "./affinity-corpus-io.ts";
 export type { AffinityCorpus } from "./affinity-grower.ts";
 export { DEFAULT_POOL_VARIANT } from "./types.ts";

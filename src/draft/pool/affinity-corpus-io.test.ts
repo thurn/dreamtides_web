@@ -3,7 +3,7 @@ import type { AffinityCorpus } from "./affinity-grower.ts";
 import {
   applyOverlay,
   deserializeCorpus,
-  fitEmbedding,
+  serializeCorpus,
 } from "./affinity-corpus-io.ts";
 
 // A tiny synthetic corpus for the overlay-blend math.
@@ -118,74 +118,81 @@ describe("applyOverlay — edit", () => {
   });
 });
 
-// A 6x6 matrix that is exactly rank 2 and strictly positive, so a rank-2 fit
-// should reconstruct it closely.
-function rank2Corpus(): AffinityCorpus {
-  const u1 = [1, 2, 1, 0.5, 1.5, 1];
-  const v1 = [0.5, 1, 0.2, 0.3, 0.4, 0.6];
-  const u2 = [0.2, 0.1, 1, 1, 0.5, 0.3];
-  const v2 = [1, 0.3, 0.5, 0.2, 0.6, 0.4];
-  const cards = ["c0", "c1", "c2", "c3", "c4", "c5"];
-  const affinity = new Map<string, Map<string, number>>();
-  for (let i = 0; i < 6; i++) {
-    const row = new Map<string, number>();
-    for (let j = 0; j < 6; j++) {
-      row.set(cards[j], u1[i] * v1[j] + u2[i] * v2[j]);
+describe("serializeCorpus / deserializeCorpus", () => {
+  it("round-trips a corpus exactly at the default precision", () => {
+    const corpus = tinyCorpus();
+    const back = deserializeCorpus(serializeCorpus(corpus));
+    expect(back.cards).toEqual(corpus.cards);
+    for (const c of corpus.cards) {
+      expect(near(back.prior.get(c)!, corpus.prior.get(c)!)).toBe(true);
     }
-    affinity.set(cards[i], row);
-  }
-  const prior = new Map(cards.map((c, i) => [c, 0.1 * (i + 1)]));
-  return { cards, affinity, prior };
-}
-
-describe("fitEmbedding / deserializeCorpus", () => {
-  it("reconstructs a rank-2 matrix closely at rank 2", () => {
-    const corpus = rank2Corpus();
-    const json = fitEmbedding(corpus, { rank: 2, oversample: 4 });
-    expect(json.rank).toBe(2);
-    expect(json.cards).toEqual(corpus.cards);
-    const back = deserializeCorpus(json);
-    for (const d of corpus.cards) {
-      for (const c of corpus.cards) {
-        const original = corpus.affinity.get(d)!.get(c)!;
-        const recon = back.affinity.get(d)?.get(c) ?? 0;
-        expect(Math.abs(recon - original)).toBeLessThan(0.01);
+    for (const [d, row] of corpus.affinity) {
+      for (const [c, v] of row) {
+        expect(near(back.affinity.get(d)!.get(c)!, v)).toBe(true);
       }
     }
   });
 
-  it("carries prior and cards across unchanged (within rounding)", () => {
-    const corpus = rank2Corpus();
-    const back = deserializeCorpus(fitEmbedding(corpus, { rank: 2 }));
-    expect(back.cards).toEqual(corpus.cards);
-    for (const c of corpus.cards) {
-      expect(near(back.prior.get(c)!, corpus.prior.get(c)!, 1e-5)).toBe(true);
-    }
+  it("emits an index-keyed sparse matrix sorted by target index", () => {
+    const json = serializeCorpus(tinyCorpus());
+    expect(json.kind).toBe("matrix");
+    expect(json.cards).toEqual(["a", "b", "c"]);
+    // Row for "a" (index 0): targets b(1)=0.4, c(2)=0.2, sorted by index.
+    const rowA = json.affinity.find(([d]) => d === 0);
+    expect(rowA).toBeDefined();
+    expect(rowA![1]).toEqual([
+      [1, 0.4],
+      [2, 0.2],
+    ]);
+    // No row is emitted for "c" (index 2), which has no outgoing affinity.
+    expect(json.affinity.some(([d]) => d === 2)).toBe(false);
   });
 
-  it("clamps reconstructed negatives to zero (no negative affinity entries)", () => {
-    const back = deserializeCorpus(fitEmbedding(rank2Corpus(), { rank: 2 }));
-    for (const row of back.affinity.values()) {
-      for (const v of row.values()) expect(v).toBeGreaterThan(0);
-    }
+  it("rounds to the requested decimals and drops entries that round to zero", () => {
+    const corpus: AffinityCorpus = {
+      cards: ["a", "b", "c"],
+      affinity: new Map([["a", new Map([["b", 0.123456789], ["c", 0.0000001]])]]),
+      prior: new Map([["a", 0], ["b", 0], ["c", 0]]),
+    };
+    const json = serializeCorpus(corpus, { decimals: 3 });
+    const rowA = json.affinity.find(([d]) => d === 0)![1];
+    expect(rowA).toEqual([[1, 0.123]]); // c rounds to 0 and is dropped
   });
 
   it("is deterministic — same input yields byte-identical output", () => {
-    const a = fitEmbedding(rank2Corpus(), { rank: 3 });
-    const b = fitEmbedding(rank2Corpus(), { rank: 3 });
+    const a = serializeCorpus(tinyCorpus());
+    const b = serializeCorpus(tinyCorpus());
     expect(JSON.stringify(a)).toEqual(JSON.stringify(b));
   });
 
-  it("rejects a malformed embedding", () => {
+  it("does not mutate the input corpus", () => {
+    const corpus = tinyCorpus();
+    serializeCorpus(corpus);
+    expect(corpus.cards).toEqual(["a", "b", "c"]);
+    expect(corpus.affinity.get("a")!.get("b")).toBe(0.4);
+  });
+
+  it("rejects a wrong kind", () => {
     expect(() =>
       deserializeCorpus({
-        version: 1,
+        version: 2,
+        // @ts-expect-error testing a malformed artifact at runtime
         kind: "embedding",
-        rank: 2,
+        cards: ["a"],
+        prior: [0.1],
+        affinity: [],
+      }),
+    ).toThrow(/kind/);
+  });
+
+  it("rejects a prior length that does not match cards", () => {
+    expect(() =>
+      deserializeCorpus({
+        version: 2,
+        kind: "matrix",
         cards: ["a", "b"],
         prior: [0.1],
-        U: [[1, 0]],
-        V: [[1, 0]],
+        affinity: [],
       }),
     ).toThrow(/malformed/);
   });

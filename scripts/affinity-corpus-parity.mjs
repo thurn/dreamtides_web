@@ -1,15 +1,15 @@
-// Acceptance harness for the committed card embedding and the `embedded` pool
-// variant (docs/cards2/affinity_corpus_distillation_design.md §10). It asserts
-// three properties and exits non-zero if any fails:
+// Acceptance harness for the committed affinity corpus and the `embedded` pool
+// variant. It asserts three properties and exits non-zero if any fails:
 //
-//   1. BAKE-PIPELINE FIDELITY (the matrix step must be exact). The `embedded`
-//      variant fed the in-memory record-derived matrix produces pools
-//      byte-identical to the official `sigseed` generator on the live records,
-//      isolating the SVD as the only approximation in the chain.
-//   2. EMBEDDING METRIC PARITY (the shipping bar). The committed rank-R embedding
-//      scores adequacy/traps/theme-evenness/#cards within the acceptance band of
-//      the exact generator, measured with the existing quality metric's exported
-//      pure functions over `seeds × 32` real-draft pools.
+//   1. CORPUS FIDELITY (the shipping guarantee). The `embedded` variant, fed the
+//      COMMITTED corpus (`data/affinity_corpus.jsonc`, reconstructed via
+//      `deserializeCorpus`), produces pools byte-identical to the official
+//      `sigseed` generator on the live records, across the full real-draft
+//      simulation. This is the whole point: `embedded` IS `sigseed`, sourced from
+//      an editable committed corpus instead of a runtime rebuild.
+//   2. METRIC PARITY. The committed corpus scores adequacy/traps/theme-evenness/
+//      #cards within the acceptance band of the live generator, measured with the
+//      existing quality metric's exported pure functions over `seeds × 32` pools.
 //   3. NEGATIVE CONTROLS RETAINED. A synergy-shuffled corpus and a prior-only
 //      corpus score materially worse, proving the metric still discriminates.
 //
@@ -17,9 +17,9 @@
 //   node scripts/affinity-corpus-parity.mjs --seeds 10    # quicker smoke run
 //   node scripts/affinity-corpus-parity.mjs --json
 //
-// All randomness (SVD projection, control shuffle) is seeded from constants, so
-// the run is reproducible. Requires the public assets (`npm run setup-assets`)
-// and the committed embedding (`npm run bake-affinity-corpus`).
+// The control shuffle is seeded from a constant, so the run is reproducible.
+// Requires the public assets (`npm run setup-assets`) and the committed corpus
+// (`npm run bake-affinity-corpus`).
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
@@ -43,8 +43,8 @@ import {
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
-// The committed embedding is JSONC (provenance header over JSON), so strip
-// comments before parsing.
+// The committed corpus is JSONC (provenance header over JSON), so strip comments
+// before parsing.
 const readJsonc = (p) =>
   JSON.parse(stripJsonComments(readFileSync(resolve(ROOT, p), "utf8")));
 
@@ -52,7 +52,8 @@ const POOL_TARGET_SIZE = 200;
 const DEFAULT_SEEDS = 25;
 const TRAP_TAU = 0.35;
 
-// Section 10.2 acceptance band for rank >= 16.
+// Acceptance band (the live generator clears these comfortably; the committed
+// corpus reproduces it, so it does too).
 const ACCEPT = {
   adequacy: 97.5,
   traps: 1.0,
@@ -88,38 +89,21 @@ function canonicalPool(pool) {
   );
 }
 
-// 1. Bake-pipeline fidelity: `embedded` on the record matrix == official sigseed.
-function checkFidelity(ctx, pairs) {
-  const matrix = buildPickfitCorpus(ctx.poolData);
-  ctx.poolData.affinityCorpus = matrix;
+// 1. Corpus fidelity: `embedded` on the COMMITTED corpus == official sigseed, over
+//    every (Dreamcaller, seed) in the simulation. Requires
+//    ctx.poolData.affinityCorpus to be the committed corpus before calling.
+function checkFidelity(ctx, seeds) {
   let checked = 0;
   let identical = 0;
   const mismatches = [];
-  outer: for (let seed = 0; seed < 64; seed++) {
-    for (const dc of ctx.dreamcallers) {
-      const sig = dc.signatureCards ?? [];
-      const sigPool = generatePoolFromData(
-        ctx.poolData,
-        seed >>> 0,
-        undefined,
-        "sigseed",
-        undefined,
-        POOL_TARGET_SIZE,
-        sig,
-      );
-      const embPool = generatePoolFromData(
-        ctx.poolData,
-        seed >>> 0,
-        undefined,
-        "embedded",
-        undefined,
-        POOL_TARGET_SIZE,
-        sig,
-      );
+  for (const dc of ctx.dreamcallers) {
+    const sig = dc.signatureCards ?? [];
+    for (let seed = 0; seed < seeds; seed++) {
+      const sigPool = generatePoolFromData(ctx.poolData, seed >>> 0, undefined, "sigseed", undefined, POOL_TARGET_SIZE, sig);
+      const embPool = generatePoolFromData(ctx.poolData, seed >>> 0, undefined, "embedded", undefined, POOL_TARGET_SIZE, sig);
       checked += 1;
       if (canonicalPool(sigPool) === canonicalPool(embPool)) identical += 1;
       else mismatches.push(`${dc.name} @ seed ${seed}`);
-      if (checked >= pairs) break outer;
     }
   }
   return { checked, identical, mismatches, pass: identical === checked };
@@ -179,10 +163,10 @@ function computeMetrics(ctx, variant, seeds) {
   };
 }
 
-// Negative-control corpora (Section 11): synergy shuffled / synergy dropped.
-// `shuffled` keeps each row's value multiset but reassigns those values to
-// randomly drawn target cards from the whole universe, destroying which-partners-
-// which globally while preserving the value distribution.
+// Negative-control corpora: synergy shuffled / synergy dropped. `shuffled` keeps
+// each row's value multiset but reassigns those values to randomly drawn target
+// cards from the whole universe, destroying which-partners-which globally while
+// preserving the value distribution.
 function makeShuffledCorpus(corpus) {
   const rng = makeRng(0xc0ffee);
   const universe = corpus.cards;
@@ -217,25 +201,23 @@ function makePriorOnlyCorpus(corpus) {
 function run() {
   const argv = process.argv.slice(2);
   const seeds = num(argv, "--seeds", DEFAULT_SEEDS);
-  const fidelityPairs = num(argv, "--fidelity-pairs", 32);
   const asJson = argv.includes("--json");
   const ctx = loadContext();
 
-  if (!existsSync(resolve(ROOT, "data/affinity_embedding.jsonc"))) {
-    console.error("Missing data/affinity_embedding.jsonc. Run `npm run bake-affinity-corpus` first.");
+  if (!existsSync(resolve(ROOT, "data/affinity_corpus.jsonc"))) {
+    console.error("Missing data/affinity_corpus.jsonc. Run `npm run bake-affinity-corpus` first.");
     process.exit(1);
   }
-  const embedding = deserializeCorpus(readJsonc("data/affinity_embedding.jsonc"));
+  const committed = deserializeCorpus(readJsonc("data/affinity_corpus.jsonc"));
 
-  // 1. Fidelity (sets ctx.poolData.affinityCorpus = matrix while it runs).
-  const fidelity = checkFidelity(ctx, fidelityPairs);
+  // 1. Fidelity: `embedded` on the committed corpus vs official sigseed (records).
+  ctx.poolData.affinityCorpus = committed;
+  const fidelity = checkFidelity(ctx, seeds);
 
-  // Reference: the live records sigseed generator.
-  ctx.poolData.affinityCorpus = buildPickfitCorpus(ctx.poolData);
+  // Reference: the live records sigseed generator (ignores affinityCorpus).
   const live = computeMetrics(ctx, "sigseed", seeds);
 
-  // 2. Embedding metric parity.
-  ctx.poolData.affinityCorpus = embedding;
+  // 2. Committed-corpus metric parity (affinityCorpus is still the committed corpus).
   const emb = computeMetrics(ctx, "embedded", seeds);
 
   // 3. Negative controls.
@@ -264,17 +246,17 @@ function run() {
   const f3 = (x) => x.toFixed(3);
   const f1 = (x) => x.toFixed(1);
   console.log(`Affinity-corpus parity (${seeds} seeds x ${ctx.dreamcallers.length} Dreamcallers)\n`);
-  console.log(`1. Bake-pipeline fidelity (embedded on records matrix == official sigseed):`);
+  console.log(`1. Corpus fidelity (embedded on the committed corpus == official sigseed):`);
   console.log(`   ${fidelity.identical}/${fidelity.checked} pools byte-identical   ${fidelity.pass ? "PASS" : "FAIL"}`);
   if (fidelity.mismatches.length) {
     console.log(`   mismatches: ${fidelity.mismatches.slice(0, 5).join("; ")}`);
   }
   console.log("");
-  console.log(`2. Embedding metric parity (acceptance for rank >= 16):`);
+  console.log(`2. Metric parity:`);
   const row = (label, m) =>
     `   ${label.padEnd(12)} adeq ${f1(m.adequacy).padStart(5)}  adeq(steer) ${f1(m.adequacySteered).padStart(5)}  traps ${f3(m.traps).padStart(6)}  themeEven ${f1(m.themeEvenness).padStart(5)}  #cards ${String(m.cards).padStart(4)}`;
   console.log(row("exact/live", live));
-  console.log(row("embedding", emb));
+  console.log(row("committed", emb));
   console.log(
     `   bar:         adeq >= ${ACCEPT.adequacy}   traps <= ${ACCEPT.traps}   themeEven >= ${ACCEPT.themeEvenness}   #cards >= ${ACCEPT.cards}`,
   );

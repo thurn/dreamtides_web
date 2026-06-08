@@ -1,7 +1,7 @@
 import type { CardData } from "../types/cards";
 import type { AffinityCorpus, GeneratedPool } from "../draft/pool";
 import { deserializeCorpus } from "../draft/pool";
-import type { AffinityEmbeddingJson } from "../draft/pool";
+import type { AffinityCorpusJson } from "../draft/pool";
 
 /**
  * Fetches the experimental v2 card pool (generated from `cards_v2.toml` by
@@ -71,7 +71,7 @@ export async function loadDraftRecords(): Promise<DraftRecord[]> {
 }
 
 /**
- * Fetch the committed card embedding (`data/affinity_embedding.jsonc`, copied to
+ * Fetch the committed affinity corpus (`data/affinity_corpus.jsonc`, copied to
  * `/affinity-corpus-data.json` by `scripts/setup-assets.mjs`) and reconstruct the
  * {@link AffinityCorpus} the `embedded` pool variant grows from. Returns `null`
  * if the asset is missing so the caller can surface a clear configuration error
@@ -80,7 +80,7 @@ export async function loadDraftRecords(): Promise<DraftRecord[]> {
 export async function loadAffinityCorpus(): Promise<AffinityCorpus | null> {
   const response = await fetch("/affinity-corpus-data.json");
   if (!response.ok) return null;
-  const json = (await response.json()) as AffinityEmbeddingJson;
+  const json = (await response.json()) as AffinityCorpusJson;
   return deserializeCorpus(json);
 }
 

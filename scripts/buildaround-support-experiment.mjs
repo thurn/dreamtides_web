@@ -492,12 +492,12 @@ function loadContext(argv) {
       ? draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }))
       : undefined;
   const poolData = buildPoolData(cards, decklists, pickRecords);
-  // The `embedded` variant grows from the committed embedding rather than the
-  // records; load it (when baked) so it runs under `--compare`/`--variant
+  // The `embedded` variant grows from the committed affinity corpus rather than
+  // the records; load it (when baked) so it runs under `--compare`/`--variant
   // embedded`. Every other variant ignores `affinityCorpus`.
-  const embeddingPath = resolve(ROOT, "data/affinity_embedding.jsonc");
-  if (existsSync(embeddingPath)) {
-    poolData.affinityCorpus = deserializeCorpus(readJsonc("data/affinity_embedding.jsonc"));
+  const corpusPath = resolve(ROOT, "data/affinity_corpus.jsonc");
+  if (existsSync(corpusPath)) {
+    poolData.affinityCorpus = deserializeCorpus(readJsonc("data/affinity_corpus.jsonc"));
   }
   return { dreamcallers, meta, poolData };
 }

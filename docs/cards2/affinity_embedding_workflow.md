@@ -2,11 +2,14 @@
 
 The `?algo=embedded` draft-pool variant grows pools exactly like `sigseed` — a
 random subset of a Dreamcaller's signature cards expanded by pick-affinity — but
-reads its synergy from a **committed card embedding** instead of rebuilding it
-from the draft records in the browser. The embedding is editable: new and changed
-cards are authored as text recipes and folded into the embedding at bake time.
+reads its synergy from a **committed affinity corpus** instead of rebuilding it
+from the draft records in the browser. The committed corpus IS the same
+record-derived affinity matrix `sigseed` builds (rounded to the precision at which
+it reproduces `sigseed` byte-for-byte), so `embedded` draws the same pools as
+`sigseed` — but from an editable card set: new and changed cards are authored as
+text recipes and folded into the corpus at bake time.
 
-Full design and validation evidence:
+Design background and the evaluation that led here:
 [`affinity_corpus_distillation_design.md`](affinity_corpus_distillation_design.md).
 
 ## Files
@@ -14,7 +17,7 @@ Full design and validation evidence:
 | File | Role |
 |---|---|
 | `data/affinity_overlay.jsonc` | **The file you edit.** Recipes for new/changed cards. |
-| `data/affinity_embedding.jsonc` | Committed embedding (JSONC: a provenance header over the JSON body), baked from the records + overlay. The source of truth. Generated — do not hand-edit the vectors; the header comments are preserved across re-bakes. |
+| `data/affinity_corpus.jsonc` | Committed affinity corpus (JSONC: a provenance header over the JSON body) — a play-rate `prior` plus a sparse `affinity` matrix in index space, baked from the records + overlay. The source of truth. Generated — do not hand-edit it; the header comments are preserved across re-bakes. |
 | `public/affinity-corpus-data.json` | Served copy the browser loads (gitignored; written by `setup-assets`, which strips the JSONC comments so it is valid JSON). |
 | `data/buildaround_support.json` | Independent theme metadata the quality metric reads. |
 
@@ -39,17 +42,17 @@ Full design and validation evidence:
    lowercase cards_v2 ids; `resembles` may reference any base card or an earlier
    overlay `add`. `priorScale` defaults to `1.0`.
 
-2. Re-bake the embedding (run on demand; **not** run by `setup-assets`, so the
+2. Re-bake the corpus (run on demand; **not** run by `setup-assets`, so the
    committed file stays authoritative like a lockfile):
    ```bash
-   npm run bake-affinity-corpus            # rank 32 (default)
-   npm run setup-assets                    # copy the embedding to public/
+   npm run bake-affinity-corpus            # rewrites data/affinity_corpus.jsonc
+   npm run setup-assets                    # copy it to public/ (comments stripped)
    ```
 
 3. Commit **both** `data/affinity_overlay.jsonc` and the regenerated
-   `data/affinity_embedding.jsonc`. A re-bake rewrites every vector wholesale (the
-   SVD basis rotates), so review the embedding for size/sanity and metric parity,
-   not line-by-line — the human-meaningful diff lives in the overlay.
+   `data/affinity_corpus.jsonc`. The diff is meaningful: only the rows for cards
+   the overlay touched (plus any whose columns reference them) change, so review
+   the corpus alongside the overlay.
 
 ## Making a card count in the quality metric
 
@@ -66,11 +69,12 @@ npm run affinity-corpus-parity            # 25 seeds × 32 Dreamcallers
 
 This asserts three things and exits non-zero on any failure:
 
-1. **Bake-pipeline fidelity** — `embedded` on the in-memory record matrix is
-   byte-identical to the official `sigseed` generator (the SVD is the only
-   approximation in the chain).
-2. **Embedding metric parity** — adequacy ≥ 97.5, traps ≤ 1.0, themeEvenness
-   ≥ 95.0, #cards ≥ 460, measured against the live generator.
+1. **Corpus fidelity** — `embedded` on the committed corpus produces pools
+   byte-identical to the official `sigseed` generator, across the whole
+   simulation. This is the guarantee: `embedded` IS `sigseed`, from an editable
+   committed corpus.
+2. **Metric parity** — adequacy ≥ 97.5, traps ≤ 1.0, themeEvenness ≥ 95.0,
+   #cards ≥ 460, measured against the live generator.
 3. **Negative controls** — a synergy-shuffled and a prior-only corpus score
    materially worse, proving the metric still discriminates.
 
@@ -83,7 +87,7 @@ npm run buildaround-metric -- --compare        # embedded alongside every algori
 ## Re-baking after new drafts
 
 When fresh records land in `docs/draft_records_adapted/`, re-run
-`npm run setup-assets && npm run bake-affinity-corpus` to refit the embedding from
+`npm run setup-assets && npm run bake-affinity-corpus` to rebuild the corpus from
 the larger record set. The overlay recipes re-apply automatically — they are
-stored as recipes, not latent vectors, precisely so they survive a re-fit in any
-SVD basis.
+stored as declarative "resembles" recipes, not as raw matrix rows, so they fold
+cleanly into the updated matrix.
