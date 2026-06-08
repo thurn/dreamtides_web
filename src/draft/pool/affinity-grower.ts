@@ -62,6 +62,15 @@ export interface AffinityGrowerTuning {
   // How many of the seed's strongest affinity partners to surface on the "why
   // cards" / pool-viewer provenance panels.
   topPartnerCount: number;
+  // How many candidate seeds to draw before growing the final pool. With the
+  // default of 1 the grower draws a single seed and grows it (uniform seeding).
+  // With K > 1 it grows a pool from each of K independently-drawn seeds and keeps
+  // the most internally COHERENT one — the pool whose cards partner each other
+  // most strongly (see {@link poolCoherence}). A generic seed (premium removal,
+  // card draw) grows a loose, low-coherence pool, so best-of-K steers away from
+  // those without any external metadata. Reads only the corpus affinity, so it
+  // stays purely draft-record-derived.
+  seedDraws?: number;
 }
 
 // Grow a pool from one seed card by greedy blended-affinity expansion, operating
@@ -203,10 +212,35 @@ export function growAffinityPool(
   return { counts, provenance };
 }
 
+// The internal coherence of a grown pool: the mean affinity over every ordered
+// pair of DISTINCT cards in the pool, read from the corpus affinity. High means
+// the pool's cards strongly partner each other (a tight, focused pool); low
+// means a loose, scattered pool — the signature of a generic seed that pulled in
+// cards with little to do with one another. Used to choose between best-of-K
+// candidate seeds. Operates in the corpus's card-key space.
+export function poolCoherence(
+  counts: Map<string, number>,
+  affinity: Map<string, Map<string, number>>,
+): number {
+  const ids = [...counts.keys()];
+  let sum = 0;
+  let pairs = 0;
+  for (const a of ids) {
+    const row = affinity.get(a);
+    for (const b of ids) {
+      if (a === b) continue;
+      sum += row?.get(b) ?? 0;
+      pairs += 1;
+    }
+  }
+  return pairs > 0 ? sum / pairs : 0;
+}
+
 // Run a single-card-seeded pool from a prebuilt corpus, the shape every
 // affinity-grown variant shares: fall back to the default algorithm when the
-// corpus is empty, otherwise draw one card uniformly, grow to `targetSize`, and
-// map the id-keyed result back onto current display names via `cardNameById`.
+// corpus is empty, otherwise draw `tuning.seedDraws` candidate seeds (default 1)
+// uniformly, grow a pool from each, keep the most coherent, grow to `targetSize`,
+// and map the id-keyed result back onto current display names via `cardNameById`.
 // `label` is the variant's id, recorded in `selected` for provenance.
 export function growPoolFromCorpus(
   rng: () => number,
@@ -223,13 +257,30 @@ export function growPoolFromCorpus(
     );
   }
 
-  const seedKey = corpus.cards[Math.floor(rng() * corpus.cards.length)];
-  const { counts, provenance } = growAffinityPool(
-    corpus,
-    seedKey,
-    targetSize,
-    tuning,
-  );
+  // Best-of-K: draw K seeds, grow each, keep the most internally coherent. All K
+  // rng() draws are consumed regardless of the winner, so the result stays
+  // deterministic in the seed. K = 1 is a single uniform draw.
+  const draws = Math.max(1, Math.floor(tuning.seedDraws ?? 1));
+  let seedKey = "";
+  let counts: Map<string, number> | null = null;
+  let provenance: SeedPoolProvenance | null = null;
+  let bestCoherence = -Infinity;
+  for (let i = 0; i < draws; i++) {
+    const candidate = corpus.cards[Math.floor(rng() * corpus.cards.length)];
+    const grown = growAffinityPool(corpus, candidate, targetSize, tuning);
+    const coherence = poolCoherence(grown.counts, corpus.affinity);
+    if (coherence > bestCoherence) {
+      bestCoherence = coherence;
+      seedKey = candidate;
+      counts = grown.counts;
+      provenance = grown.provenance;
+    }
+  }
+  // The loop runs at least once, so a winner is always chosen; this guard only
+  // satisfies the type checker (and narrows the nullable accumulators).
+  if (counts === null || provenance === null) {
+    missingPoolData(label, "no candidate seed could be drawn from its corpus");
+  }
 
   const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
   const namedCounts = new Map<string, number>();
