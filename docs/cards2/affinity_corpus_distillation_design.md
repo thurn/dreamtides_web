@@ -11,21 +11,27 @@ Status: design / handoff. Author: design exploration, 2026-06-08.
 
 ## 0. One-paragraph summary
 
-The `sigseed` draft-pool generator (the shipping default) reads a 19 MB bundle of
-historical draft records at runtime and rebuilds, in the browser, a card×card
-"affinity corpus" — a synergy matrix plus a play-rate prior — every time. That
-corpus is the **only** thing the generator derives from those records; pool
-generation is otherwise a deterministic function of `(corpus, signature, seed)`.
-This migration replaces the records with a **committed per-card embedding**: each
-card becomes a small pair of vectors plus a prior, checked into version control
-(`data/affinity_embedding.json`, ~50–90 KB gzip), from which the synergy is
-reconstructed on the fly. This is the core deliverable — a true card vector
-database. A small **declarative overlay** (also committed) lets new or changed
-cards be authored as "this card plays like cards A, B, C" and folded into the
-embedding at bake time, without touching the historical data. The embedding is a
-low-rank distillation of the record-derived synergy, validated as
-**metric-equivalent** to the exact generator against the existing
-`buildaround-support-experiment.mjs` quality metric.
+The `sigseed` draft-pool generator (the shipping default) derives a card×card
+"affinity corpus" — a synergy matrix plus a play-rate prior — from a large set of
+historical draft records. That corpus is the **only** thing the generator derives
+from those records; pool generation is otherwise a deterministic function of
+`(corpus, signature, seed)`. Because the corpus is built entirely from historical
+play, the generator cannot accommodate a **new** card (it has no synergy data), a
+**changed** card (its data is stale), or a designer's intent ("this card plays like
+A, B, C") — the only lever is to collect more real drafts. This migration distills
+the corpus into a **committed per-card embedding** (`data/affinity_embedding.json`):
+each card becomes a pair of vectors plus a prior — a true card vector database —
+checked into version control and loaded directly by the generator. New and changed
+cards are authored in a **committed overlay** of "resembles" recipes that are folded
+into the embedding at bake time. The historical records become an upstream bake
+input rather than the live source. The embedding is a low-rank distillation of the
+record-derived synergy, validated as **metric-equivalent** to the exact generator
+against the existing `buildaround-support-experiment.mjs` quality metric.
+
+> Motivation is **editability**, not artifact size: this prototype is not served
+> over the internet, so the byte size of the records is not itself a concern. The
+> goal is to decouple the generator from the historical dataset so cards can be
+> added and changed directly.
 
 ---
 
@@ -82,7 +88,7 @@ pick `i`) and `pickIds[i]` (UUIDs taken), aligned index-for-index — the
 ### 2.2 Runtime path (browser)
 
 1. `loadDraftRecords()` (`src/data/cards-v2-database.ts:~66`) `fetch`es
-   `/draft-records-data.json` — **the 19 MB download**.
+   `/draft-records-data.json` — the 19 MB records bundle.
 2. `quest-content.ts:~421` calls
    `buildPoolData(cards, decklists, draftRecords.map(r => ({packs: r.packIds, picks: r.pickIds})))`
    (`src/draft/pool/pool-data.ts:46`) → a `PoolData` carrying `draftRecords`.
@@ -147,14 +153,20 @@ This is what makes the migration possible and safe.
 
 ## 3. The problem this migration solves
 
-1. **Data volume.** The 19 MB records are downloaded by the client and the corpus
-   is recomputed in-browser on every load — the dominant payload of the pool
-   feature.
-2. **Extensibility coupling.** The corpus is keyed entirely by historical card
-   UUIDs. A **new** card has no row/column and cannot enter a pool. A **changed**
-   card keeps stale historical synergies. There is no first-class way to say "this
-   new card plays like A, B, C, so place it near them" — the only lever is to
-   collect more real drafts and re-bundle.
+**The generator's behavior is locked inside a large historical dataset; there is no
+file a designer can edit to change it.** The corpus is keyed entirely by historical
+card UUIDs and built solely from past play, so:
+
+- a **new** card has no row/column and cannot enter a pool at all;
+- a **changed** card keeps its stale historical synergies;
+- design intent — "this new card plays like A, B, C, so place it near them" — has
+  nowhere to live.
+
+The only lever today is to collect more real drafts and re-bundle. The goal of this
+migration is an **editable, committed file** that defines additions and changes to
+drafting behavior, so evolving the card set is a text edit plus a re-bake rather
+than a data-collection exercise. (This is about editability; the prototype is not
+served over the internet, so the records' byte size is not itself a concern.)
 
 ---
 
@@ -204,9 +216,10 @@ Result (25 seeds × 32 Dreamcallers = 800 pools per corpus):
    per-card vector representation loses nothing that matters. **This is what
    licenses making the embedding the committed runtime artifact.**
 
-Sizes for reference: raw records 19 MB / 4.5 MB gz; full in-memory matrix
-serialized (index-keyed, 5-digit) 1.4 MB / 385 KB gz; **rank-32 embedding 88 KB
-gz**.
+The size column is incidental, not a goal (the prototype is not served over the
+internet). It is reported only because a committed artifact should be comfortable
+to diff and review: the rank-32 embedding is ~88 KB gz (a few hundred KB raw),
+versus the 1.4 MB in-memory matrix it is fit from.
 
 ---
 
@@ -217,7 +230,7 @@ Separate three concerns that the current system fuses:
 
 | Concern | Current | Target |
 |---|---|---|
-| **Upstream data** | 19 MB records, re-read at runtime | records, read **only at bake time** |
+| **Upstream data** | historical records, recompiled at runtime | records, read **only at bake time** |
 | **Runtime artifact** | matrix rebuilt in-browser from records | committed **embedding** `data/affinity_embedding.json`, served and loaded directly |
 | **Card edits / new cards** | (impossible without new records) | committed **overlay** of "resembles" recipes, folded into the embedding at bake time |
 
@@ -232,8 +245,10 @@ they keep consuming `AffinityCorpus` exactly as today.
 The embedding is **checked into version control** at `data/affinity_embedding.json`
 (alongside other committed derived artifacts like `data/buildaround_support.json`).
 `scripts/setup-assets.mjs` copies it to `public/affinity-corpus-data.json` (a
-gitignored served asset) the same way it emits the other `public/` JSON. The client
-fetches that copy instead of the 19 MB records.
+gitignored served asset) the same way it emits the other `public/` JSON, and the
+generator loads that copy. Loading the committed embedding — rather than rebuilding
+the corpus from records at runtime — is what makes the overlay-authored cards and
+edits take effect; a from-records rebuild would not contain them.
 
 The record-derived **matrix is a build-time intermediate**: it is materialized
 in-memory during the bake to fit the embedding, and during validation as the exact
@@ -242,8 +257,10 @@ reference (Section 10). It is not shipped and need not be checked in. The record
 
 ### 5.2 Card edits are recipes, not hand-tuned vectors
 
-A card addition/edit is stored as a **recipe** ("X resembles A, B, C") in a
-committed overlay (`data/affinity_overlay.jsonc`), applied to the in-memory matrix
+The overlay (`data/affinity_overlay.jsonc`) is **the human-editable surface — the
+file a designer opens to evolve the card set.** The embedding is baked from it and
+is not hand-edited (opaque float vectors). A card addition/edit is stored as a
+**recipe** ("X resembles A, B, C") in the overlay, applied to the in-memory matrix
 **at bake time**, before the embedding is fit. This is essential: SVD axes are
 arbitrary up to rotation, so hand-tuned latent vectors would not survive a re-bake
 from updated records, whereas a recipe re-applies in any basis. Adding a card to
@@ -266,12 +283,12 @@ keep working as-is:
   (`buildFitModel(draftRecords.map(r => r.mainboard))`, `quest-content.ts:~440`) —
   a different corpus, separately distillable later.
 
-**Payload win:** the client skips the 19 MB fetch whenever the active pool variant
-is corpus-driven **and** neither record-replay mode nor the `replay` fit-model is
-in use. The fetch is already gated by `poolVariantNeedsRecords`; extend that gate
-so a corpus-driven variant fetches the **embedding** instead of the records. A run
-that uses record-replay still fetches the records — expected, and unrelated to pool
-quality.
+**Runtime dependency:** the pool path loads the committed embedding rather than the
+records. The records are still loaded when a run uses record-replay mode or the
+`replay` fit-model. The pool fetch is gated by `poolVariantNeedsRecords`; extend
+that gate so a corpus-driven variant loads the embedding. (Whether the records are
+still loaded for those other features is a scope/correctness matter, not a size
+one.)
 
 ---
 
@@ -382,7 +399,7 @@ step, the new card receives a consistent latent vector automatically.
 
 Determinism: seed the SVD's random projection from a fixed constant so re-bakes are
 reproducible. `rank` is tunable; **16–32 is the validated band, 32 is the default**
-(safest fidelity at 88 KB gz).
+(the safest fidelity in that band — see Section 4).
 
 ---
 
@@ -408,15 +425,15 @@ reproducible. `rank` is tunable; **16–32 is the validated band, 32 is the defa
    that passes raw records). The `WeakMap` cache still applies.
 4. **Runtime loader.** Add `loadAffinityCorpus()` to `cards-v2-database.ts` (fetch
    `/affinity-corpus-data.json`, `deserializeCorpus`). In `quest-content.ts`
-   (~line 421), when the active variant is corpus-driven, fetch the embedding and
-   set `poolData.affinityCorpus`, and **skip the 19 MB `loadDraftRecords` fetch**
-   for pool purposes (keep it only for record-replay mode / fit-model). Extend the
-   `poolVariantNeedsRecords` gate accordingly.
+   (~line 421), when the active variant is corpus-driven, load the embedding and
+   set `poolData.affinityCorpus`; the pool path then no longer calls
+   `loadDraftRecords` (records are loaded only for record-replay mode / the
+   fit-model). Extend the `poolVariantNeedsRecords` gate accordingly.
 5. **Wire `setup-assets.mjs`** to copy `data/affinity_embedding.json` →
    `public/affinity-corpus-data.json` (do **not** regenerate it there). Add the
    served path to `.gitignore`.
 
-### Phase 2 — declarative overlay (extensibility)
+### Phase 2 — the editable overlay (the core value)
 
 6. **New committed `data/affinity_overlay.jsonc`** (Section 6.2), initially
    `{add:[],edit:[]}`.
