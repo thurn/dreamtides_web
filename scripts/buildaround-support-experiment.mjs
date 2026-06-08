@@ -83,8 +83,10 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { existsSync } from "node:fs";
 import {
   buildPoolData,
+  deserializeCorpus,
   generatePoolFromData,
   POOL_VARIANT_IDS,
 } from "../src/draft/pool/index.ts";
@@ -487,6 +489,13 @@ function loadContext(argv) {
       ? draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }))
       : undefined;
   const poolData = buildPoolData(cards, decklists, pickRecords);
+  // The `embedded` variant grows from the committed embedding rather than the
+  // records; load it (when baked) so it runs under `--compare`/`--variant
+  // embedded`. Every other variant ignores `affinityCorpus`.
+  const embeddingPath = resolve(ROOT, "data/affinity_embedding.json");
+  if (existsSync(embeddingPath)) {
+    poolData.affinityCorpus = deserializeCorpus(readJson("data/affinity_embedding.json"));
+  }
   return { dreamcallers, meta, poolData };
 }
 
