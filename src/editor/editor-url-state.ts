@@ -15,6 +15,7 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   cost: "all",
   subtype: "",
   tagFilters: [],
+  excludedTagFilters: [],
   tideFilters: [],
   tagEditing: false,
   tideEditing: false,
@@ -135,6 +136,11 @@ export function parseEditorDisplayState(
     cost: parseCost(params.get("cost")),
     subtype: params.get("subtype") ?? DEFAULT_EDITOR_DISPLAY_STATE.subtype,
     tagFilters: parseFacetFilters(params, "tag"),
+    // Exclude filters are the tags a card must not carry. Drop any that also
+    // appear as include filters so a tag is never both at once.
+    excludedTagFilters: parseFacetFilters(params, "nottag").filter(
+      (tag) => !parseFacetFilters(params, "tag").includes(tag),
+    ),
     // Tide filtering is single-select; keep only the first value if a URL
     // somehow carries more than one `tide` param.
     tideFilters: parseFacetFilters(params, "tide").slice(0, 1),
@@ -171,6 +177,9 @@ export function serializeEditorDisplayState(
   }
   for (const tag of state.tagFilters) {
     params.append("tag", tag);
+  }
+  for (const tag of state.excludedTagFilters) {
+    params.append("nottag", tag);
   }
   for (const tide of state.tideFilters) {
     params.append("tide", tide);

@@ -14,6 +14,8 @@ export interface TagChipProps {
   title?: string;
   /** Optional leading content, e.g. a checkmark for selected filter chips. */
   leading?: ReactNode;
+  /** Strikes through the name, used to mark an excluded ("missing") filter. */
+  strikethrough?: boolean;
 }
 
 export default function TagChip({
@@ -25,6 +27,7 @@ export default function TagChip({
   size = "md",
   title,
   leading,
+  strikethrough = false,
 }: TagChipProps) {
   const textColor = readableTextColor(color);
   const paddingY = size === "sm" ? "1px" : "2px";
@@ -60,6 +63,7 @@ export default function TagChip({
           overflow: "hidden",
           textOverflow: "ellipsis",
           whiteSpace: "nowrap",
+          textDecoration: strikethrough ? "line-through" : undefined,
         }}
       >
         {name}

@@ -168,6 +168,7 @@ export default function CardEditorToolbar({
       cost: DEFAULT_EDITOR_DISPLAY_STATE.cost,
       subtype: DEFAULT_EDITOR_DISPLAY_STATE.subtype,
       tagFilters: [],
+      excludedTagFilters: [],
       tideFilters: [],
       sort: DEFAULT_EDITOR_DISPLAY_STATE.sort,
       dir: DEFAULT_EDITOR_DISPLAY_STATE.dir,
@@ -467,6 +468,31 @@ export default function CardEditorToolbar({
         availableTags={availableTags}
         selected={displayState.tagFilters}
         onChange={(tagFilters) => updateDisplayState({ tagFilters })}
+        excluded={displayState.excludedTagFilters}
+        onExcludedChange={(excludedTagFilters) =>
+          updateDisplayState({ excludedTagFilters })
+        }
+        onToggleExclude={(name) => {
+          // Move the tag across the include/exclude lists in a single update so
+          // it never lands in both (which would match no cards).
+          if (displayState.excludedTagFilters.includes(name)) {
+            updateDisplayState({
+              excludedTagFilters: displayState.excludedTagFilters.filter(
+                (tag) => tag !== name,
+              ),
+              tagFilters: displayState.tagFilters.includes(name)
+                ? displayState.tagFilters
+                : [...displayState.tagFilters, name],
+            });
+          } else {
+            updateDisplayState({
+              tagFilters: displayState.tagFilters.filter((tag) => tag !== name),
+              excludedTagFilters: displayState.excludedTagFilters.includes(name)
+                ? displayState.excludedTagFilters
+                : [...displayState.excludedTagFilters, name],
+            });
+          }
+        }}
       />
 
       <TagFilterControl
@@ -490,7 +516,9 @@ export default function CardEditorToolbar({
       totalCount={totalCount}
       sortOptions={EDITOR_SORT_OPTIONS}
       extraActiveFilterCount={
-        displayState.tagFilters.length + displayState.tideFilters.length
+        displayState.tagFilters.length +
+        displayState.excludedTagFilters.length +
+        displayState.tideFilters.length
       }
       onClear={clearFilters}
       barExtras={barExtras}

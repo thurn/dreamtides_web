@@ -88,6 +88,13 @@ export interface EditorDisplayState {
    */
   tagFilters: string[];
   /**
+   * Tag names a card must NOT carry to remain visible: a card is hidden if it
+   * has any of these tags. Lets you filter to cards missing a tag. A tag is
+   * either an include filter or an exclude filter, never both. Empty means no
+   * exclude filtering.
+   */
+  excludedTagFilters: string[];
+  /**
    * Tide names to filter by. Single-select: selecting a tide replaces any prior
    * selection, so this holds at most one name. Empty means no tide filtering.
    */

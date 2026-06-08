@@ -90,6 +90,7 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-cost": displayState.cost,
     "data-editor-subtype": displayState.subtype,
     "data-editor-tags": displayState.tagFilters.join(","),
+    "data-editor-excluded-tags": displayState.excludedTagFilters.join(","),
     "data-editor-tides": displayState.tideFilters.join(","),
     "data-editor-tag-editing": String(displayState.tagEditing),
     "data-editor-tide-editing": String(displayState.tideEditing),
@@ -232,6 +233,15 @@ function filteredAndSortedCards(
       if (
         displayState.tagFilters.length > 0 &&
         !displayState.tagFilters.every((tag) => card.tags.includes(tag))
+      ) {
+        return false;
+      }
+
+      // Exclude filters hide any card that carries one of the excluded tags, so
+      // the grid shows cards missing those tags.
+      if (
+        displayState.excludedTagFilters.length > 0 &&
+        displayState.excludedTagFilters.some((tag) => card.tags.includes(tag))
       ) {
         return false;
       }

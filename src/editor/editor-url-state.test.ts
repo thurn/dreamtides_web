@@ -49,6 +49,7 @@ describe("editor URL display state", () => {
       cost: "5plus",
       subtype: "Scout",
       tagFilters: [],
+      excludedTagFilters: [],
       tideFilters: [],
       tagEditing: false,
       tideEditing: false,
@@ -109,6 +110,30 @@ describe("editor URL display state", () => {
     const parsed = parseEditorDisplayState(params);
     expect(parsed.tagFilters).toEqual(["Removal", "Elves"]);
     expect(parsed.tagEditing).toBe(true);
+  });
+
+  it("round-trips excluded tag filters through nottag", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      tagFilters: ["Removal"],
+      excludedTagFilters: ["Elves", "Tokens"],
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.getAll("tag")).toEqual(["Removal"]);
+    expect(params.getAll("nottag")).toEqual(["Elves", "Tokens"]);
+
+    const parsed = parseEditorDisplayState(params);
+    expect(parsed.tagFilters).toEqual(["Removal"]);
+    expect(parsed.excludedTagFilters).toEqual(["Elves", "Tokens"]);
+  });
+
+  it("drops an excluded tag that also appears as an include filter", () => {
+    const parsed = parseEditorDisplayState(
+      "?tag=Removal&nottag=Removal&nottag=Elves",
+    );
+    expect(parsed.tagFilters).toEqual(["Removal"]);
+    expect(parsed.excludedTagFilters).toEqual(["Elves"]);
   });
 
   it("round-trips a single tide filter and tide-editing mode", () => {

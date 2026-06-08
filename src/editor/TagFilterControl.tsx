@@ -1,13 +1,26 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import TagChip from "./TagChip";
-import { tagColor } from "./tag-color";
+import { readableTextColor, tagColor } from "./tag-color";
 import type { EditorTag } from "./types";
 
 export interface TagFilterControlProps {
   availableTags: EditorTag[];
   selected: string[];
   onChange: (selected: string[]) => void;
+  /**
+   * Tag names that are excluded ("missing") filters: cards carrying any of
+   * these are hidden. When `onExcludedChange` is provided, each selected chip
+   * gains a checkbox that flips it between "has tag" and "missing tag".
+   */
+  excluded?: string[];
+  onExcludedChange?: (excluded: string[]) => void;
+  /**
+   * Flips a single tag between include ("has tag") and exclude ("missing tag").
+   * The parent applies the move to both lists atomically. Providing this enables
+   * the per-chip negate checkbox.
+   */
+  onToggleExclude?: (name: string) => void;
   /** Singular label for the facet, e.g. "tag" or "tide". */
   noun?: string;
   /**
@@ -15,6 +28,63 @@ export interface TagFilterControlProps {
    * replaces the current selection rather than adding to it.
    */
   singleSelect?: boolean;
+}
+
+interface NegateCheckboxProps {
+  /** True when the tag is an exclude ("missing") filter. */
+  excluded: boolean;
+  /** Text color of the surrounding chip, used for contrast against its fill. */
+  textColor: string;
+  tagName: string;
+  onToggle: () => void;
+}
+
+/**
+ * The per-chip checkbox that flips a tag filter between "card has this tag" and
+ * "card is missing this tag". Checked means the chip is an exclude filter.
+ */
+function NegateCheckbox({
+  excluded,
+  textColor,
+  tagName,
+  onToggle,
+}: NegateCheckboxProps) {
+  return (
+    <button
+      type="button"
+      role="checkbox"
+      aria-checked={excluded}
+      aria-label={
+        excluded
+          ? `Showing cards missing ${tagName}; click to require ${tagName} instead`
+          : `Showing cards with ${tagName}; click to require cards missing ${tagName} instead`
+      }
+      title={excluded ? `Cards missing ${tagName}` : `Cards with ${tagName}`}
+      onClick={(event) => {
+        event.stopPropagation();
+        onToggle();
+      }}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "14px",
+        height: "14px",
+        marginLeft: "-2px",
+        padding: 0,
+        borderRadius: "3px",
+        border: `1px solid ${textColor}`,
+        background: excluded ? textColor : "transparent",
+        color: excluded ? readableTextColor(textColor) : textColor,
+        fontSize: "0.7rem",
+        fontWeight: 900,
+        lineHeight: 1,
+        cursor: "pointer",
+      }}
+    >
+      <span aria-hidden="true">{excluded ? "✕" : ""}</span>
+    </button>
+  );
 }
 
 const triggerStyle: CSSProperties = {
@@ -68,9 +138,15 @@ export default function TagFilterControl({
   availableTags,
   selected,
   onChange,
+  excluded,
+  onExcludedChange,
+  onToggleExclude,
   noun = "tag",
   singleSelect = false,
 }: TagFilterControlProps) {
+  // Negation is available only when the parent wires up the toggle callback.
+  const negatable = onToggleExclude !== undefined;
+  const excludedList = excluded ?? [];
   const label = `${noun.charAt(0).toUpperCase()}${noun.slice(1)}s`;
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -106,7 +182,8 @@ export default function TagFilterControl({
   }, [open]);
 
   const selectable = useMemo(() => {
-    const chosen = new Set(selected);
+    // A tag already used as an include or exclude filter is not offered again.
+    const chosen = new Set([...selected, ...excludedList]);
     const normalizedQuery = query.trim().toLowerCase();
     return availableTags
       .filter((tag) => !chosen.has(tag.name))
@@ -115,7 +192,7 @@ export default function TagFilterControl({
           normalizedQuery === "" ||
           tag.name.toLowerCase().includes(normalizedQuery),
       );
-  }, [availableTags, selected, query]);
+  }, [availableTags, selected, excludedList, query]);
 
   const addFilter = (name: string) => {
     if (singleSelect) {
@@ -135,6 +212,16 @@ export default function TagFilterControl({
     onChange(selected.filter((tag) => tag !== name));
   };
 
+  const removeExcluded = (name: string) => {
+    onExcludedChange?.(excludedList.filter((tag) => tag !== name));
+  };
+
+  // Flip a chip between include ("has tag") and exclude ("missing tag"). The
+  // parent moves the tag across both lists in one update so they stay disjoint.
+  const toggleNegate = (name: string) => {
+    onToggleExclude?.(name);
+  };
+
   return (
     <div
       ref={containerRef}
@@ -152,6 +239,12 @@ export default function TagFilterControl({
         {label}
         {!singleSelect && selected.length > 1 ? (
           <span style={{ color: "#8edbd1", fontWeight: 700 }}> (matching all)</span>
+        ) : null}
+        {negatable && (selected.length > 0 || excludedList.length > 0) ? (
+          <span style={{ color: "#9fb0ab", fontWeight: 600 }}>
+            {" "}
+            (check the box to show cards missing a {noun})
+          </span>
         ) : null}
       </span>
 
@@ -173,15 +266,51 @@ export default function TagFilterControl({
           </span>
         </button>
 
-        {selected.map((name) => (
-          <TagChip
-            key={name}
-            name={name}
-            color={tagColor(name, availableTags)}
-            size="sm"
-            onRemove={() => removeFilter(name)}
-          />
-        ))}
+        {selected.map((name) => {
+          const color = tagColor(name, availableTags);
+          return (
+            <TagChip
+              key={name}
+              name={name}
+              color={color}
+              size="sm"
+              onRemove={() => removeFilter(name)}
+              leading={
+                negatable ? (
+                  <NegateCheckbox
+                    excluded={false}
+                    textColor={readableTextColor(color)}
+                    tagName={name}
+                    onToggle={() => toggleNegate(name)}
+                  />
+                ) : undefined
+              }
+            />
+          );
+        })}
+
+        {excludedList.map((name) => {
+          const color = tagColor(name, availableTags);
+          return (
+            <TagChip
+              key={`not-${name}`}
+              name={name}
+              color={color}
+              size="sm"
+              strikethrough
+              title={`Cards missing ${name}`}
+              onRemove={() => removeExcluded(name)}
+              leading={
+                <NegateCheckbox
+                  excluded
+                  textColor={readableTextColor(color)}
+                  tagName={name}
+                  onToggle={() => toggleNegate(name)}
+                />
+              }
+            />
+          );
+        })}
       </div>
 
       {open ? (
