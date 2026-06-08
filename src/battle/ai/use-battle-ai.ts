@@ -406,7 +406,12 @@ function buildEndTurnProposal(
 
   const edits: BattleDebugEdit[] = [
     ...challenge.edits,
+    // Ending (outgoing side) precedes the side flip; Dawn clear (incoming side)
+    // follows it, matching the Basic Automation handoff order so the AI's
+    // end-of-turn composes the same bookend effects.
+    ...handoff.endingBanishEdits,
     handoff.flowEdit,
+    ...handoff.dawnClearEdits,
     ...handoff.drawEdits,
     ...handoff.energyEdits,
   ];

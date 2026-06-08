@@ -228,4 +228,63 @@ describe("planHandoff", () => {
       expect(plan.drawEdits).toHaveLength(1);
     });
   });
+
+  describe("bookend edits — Ending banish (outgoing) and Dawn clear (incoming)", () => {
+    function instanceWithStatus(
+      battleCardId: string,
+      status: { isExhausted?: boolean; ephemeral?: boolean; offering?: boolean },
+    ): BattleMutableState["cardInstances"][string] {
+      return {
+        battleCardId,
+        // The shape only needs `status` for these edit builders; the rest is
+        // structurally satisfied via a cast so the test stays focused.
+        status: {
+          isExhausted: status.isExhausted ?? false,
+          ephemeral: status.ephemeral ?? false,
+          offering: status.offering ?? false,
+        },
+      } as BattleMutableState["cardInstances"][string];
+    }
+
+    it("clears exhaustion for the INCOMING side's in-play characters", () => {
+      // enemy ends turn → player (incoming) is the side whose Dawn clears.
+      const state = makeHandoffState({ activeSide: "enemy", turnNumber: 2 });
+      state.sides.player.frontRank.F0 = "p-front";
+      state.sides.player.backRank.B0 = "p-back";
+      state.cardInstances = {
+        "p-front": instanceWithStatus("p-front", { isExhausted: true }),
+        "p-back": instanceWithStatus("p-back", { isExhausted: false }),
+      };
+
+      const plan = planHandoff({ state, ...DEFAULT_CONFIG });
+
+      // Only the exhausted character is cleared.
+      expect(plan.dawnClearEdits).toEqual([
+        { kind: "SET_CARD_STATUS", battleCardId: "p-front", status: { isExhausted: false } },
+      ]);
+      // The outgoing side's exhaustion is untouched here.
+      expect(plan.endingBanishEdits).toEqual([]);
+    });
+
+    it("banishes the OUTGOING side's ephemeral hand and offering in-play cards", () => {
+      // player ends turn → player is the outgoing side whose Ending banishes.
+      const state = makeHandoffState({ activeSide: "player", turnNumber: 3 });
+      state.sides.player.hand = ["p-eph", "p-keep"];
+      state.sides.player.frontRank.F0 = "p-off";
+      state.cardInstances = {
+        "p-eph": instanceWithStatus("p-eph", { ephemeral: true }),
+        "p-keep": instanceWithStatus("p-keep", {}),
+        "p-off": instanceWithStatus("p-off", { offering: true }),
+      };
+
+      const plan = planHandoff({ state, ...DEFAULT_CONFIG });
+
+      const banishedIds = plan.endingBanishEdits.map((edit) =>
+        edit.kind === "MOVE_CARD_TO_ZONE" ? edit.battleCardId : null,
+      );
+      expect(banishedIds).toContain("p-eph");
+      expect(banishedIds).toContain("p-off");
+      expect(banishedIds).not.toContain("p-keep");
+    });
+  });
 });

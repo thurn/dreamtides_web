@@ -4,6 +4,7 @@ import {
   resolveChallenge,
 } from "../engine/challenge";
 import { energyRampEdits } from "../engine/energy";
+import { dawnClearEdits, endingBanishEdits } from "../engine/handoff";
 import { selectBattleCardLocation } from "../state/selectors";
 import type {
   BattleMutableState,
@@ -11,7 +12,6 @@ import type {
   BattleResult,
   BattleSide,
 } from "../types";
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 
 /** An empty support map: the human/automation path runs over an unmodeled board. */
 const NO_SUPPORT_CONTRIBUTION: ReadonlyMap<string, number> = new Map();
@@ -254,7 +254,7 @@ function planTurnHandoff(
   // Dawn: the incoming side's exhausted characters lose the exhausted status
   // (rules §Dawn). Clearing follows the side flip because it belongs to the
   // incoming player's turn, alongside the ramp and draw.
-  for (const clearEdit of dawnExhaustClearEdits(state, incomingSide)) {
+  for (const clearEdit of dawnClearEdits(state, incomingSide)) {
     commands.push(autoCommand(clearEdit));
   }
 
@@ -364,7 +364,7 @@ function bookendEffectEdits(
     case "draw":
       return turnNumber > 1 ? [{ kind: "DRAW_CARD", side }] : [];
     case "dawn":
-      return dawnExhaustClearEdits(state, side);
+      return dawnClearEdits(state, side);
     case "ending":
       return [
         ...handLimitDiscardEdits(state, side),
@@ -402,89 +402,6 @@ function handLimitDiscardEdits(
  * hand, and any card with `status.offering` still in play (front or back rank),
  * is moved to `banished`. Pure: it only reads `state` and never mutates it.
  */
-function endingBanishEdits(
-  state: BattleMutableState,
-  side: BattleSide,
-): BattleDebugEdit[] {
-  const edits: BattleDebugEdit[] = [];
-  const sideState = state.sides[side];
-
-  for (const battleCardId of sideState.hand) {
-    appendBanishEdit(state, side, battleCardId, "ephemeral", edits);
-  }
-  for (const slotId of BACK_RANK_SLOT_IDS) {
-    appendBanishEdit(state, side, sideState.backRank[slotId], "offering", edits);
-  }
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
-    appendBanishEdit(state, side, sideState.frontRank[slotId], "offering", edits);
-  }
-
-  return edits;
-}
-
-function appendBanishEdit(
-  state: BattleMutableState,
-  side: BattleSide,
-  battleCardId: string | null,
-  statusKey: "ephemeral" | "offering",
-  edits: BattleDebugEdit[],
-): void {
-  if (battleCardId === null) {
-    return;
-  }
-  const instance = state.cardInstances[battleCardId];
-  if (instance === undefined || !instance.status[statusKey]) {
-    return;
-  }
-  edits.push({
-    kind: "MOVE_CARD_TO_ZONE",
-    battleCardId,
-    destination: { side, zone: "banished" },
-  });
-}
-
-/**
- * Dawn: clears the exhausted status from every in-play character (front or back
- * rank) of `side` (rules §Dawn). Emits a `SET_CARD_STATUS` clear only for
- * characters that are currently exhausted, so a board with nothing to wake
- * produces no edits.
- */
-function dawnExhaustClearEdits(
-  state: BattleMutableState,
-  side: BattleSide,
-): BattleDebugEdit[] {
-  const edits: BattleDebugEdit[] = [];
-  const sideState = state.sides[side];
-
-  for (const slotId of BACK_RANK_SLOT_IDS) {
-    appendExhaustClearEdit(state, sideState.backRank[slotId], edits);
-  }
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
-    appendExhaustClearEdit(state, sideState.frontRank[slotId], edits);
-  }
-
-  return edits;
-}
-
-function appendExhaustClearEdit(
-  state: BattleMutableState,
-  battleCardId: string | null,
-  edits: BattleDebugEdit[],
-): void {
-  if (battleCardId === null) {
-    return;
-  }
-  const instance = state.cardInstances[battleCardId];
-  if (instance === undefined || !instance.status.isExhausted) {
-    return;
-  }
-  edits.push({
-    kind: "SET_CARD_STATUS",
-    battleCardId,
-    status: { isExhausted: false },
-  });
-}
-
 /**
  * Forces the battle result (from the player's POV) when the Challenge scoring
  * pushes a side to the victory threshold (rules §Objective).
