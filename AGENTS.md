@@ -19,6 +19,9 @@ Ignore all metadata systems on cards like "tides", "tags",
 "archetypes", etc. These are all legacy. Tides no longer
 exist.
 
+Please always identify cards by UUID, *never* by card name. A lot of our
+legacy algorithm code does this and it's a huge nightmare to support.
+
 # Draft Data
 
 The directory docs/draft_records_adapted/ has a high quality set of data about real Dreamtides drafts.
