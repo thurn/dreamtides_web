@@ -53,8 +53,8 @@ It is written to be read alongside:
 - Deep, exact understanding of the AI's *own* ten cards.
 - Visible AI reasoning: the player can see what the AI is doing and, in a debug
   surface, why.
-- Enabled by a URL parameter and integrated through the existing battle
-  controller, command vocabulary, and log surfaces.
+- On by default, toggled off by a URL parameter (`?ai=0`), and integrated
+  through the existing battle controller, command vocabulary, and log surfaces.
 
 **Non-Goals.**
 
@@ -69,10 +69,11 @@ It is written to be read alongside:
 - Networked/remote AI. The AI runs locally on the quest client (see
   [Codebase Integration](#codebase-integration)).
 
-## Current Battle Architecture
+## Battle Architecture
 
-The playable battle (`src/battle/`) is today a manual control sandbox. Three
-facts shape this design:
+The playable battle (`src/battle/`) implements the Dreamtides rules with
+structural automation on by default; the human resolves the printed effects of
+their own cards through the debug rail. Four facts shape this design:
 
 1. **All gameplay is expressed as `BattleDebugEdit` primitives.** Every state
    change — playing a card, moving between zones, repositioning, adjusting
@@ -83,37 +84,39 @@ facts shape this design:
    in a `BattleCommand` (`DEBUG_EDIT` / `FORCE_RESULT` / `SKIP_TO_REWARDS`) and
    applied through the reducer in `src/battle/state/reducer.ts`.
 
-2. **The engine performs no automatic resolution.** Challenge/judgment, energy
-   progression, turn handoff, and win detection are all manual. The type model
-   already reserves slots for these — `BattleJudgmentResolution`,
-   `BattleEnergyChange`, `BattleScoreChange` on `BattleTransitionData` — but they
-   are currently always empty (see `createEmptyTransitionData` in
-   `src/battle/engine/result.ts`).
+2. **Basic Automation handles the deterministic rules.** `runtimeConfig.basicAutomation`
+   (on unless `?automation=0`) drives `src/battle/automation/basic-automation.ts`,
+   which rewrites the gestures it understands into the ordered edits the rules
+   require: paying energy on a play (events resolve to the void), the energy ramp
+   and draw at the start of a turn, the Dawn exhaust-clear, the Challenge
+   resolution via `engine/challenge.ts`, the Ending hand-limit discard and
+   end-of-turn banishes, the auto-advancing bookend phases, and forcing the
+   result at the score threshold. Automation acts only on card structure and
+   status fields, never on printed effect prose.
 
-3. **AI scaffolding already exists in the type model.** `src/battle/types.ts`
-   defines `BattleAiDecisionStage = "character" | "reposition" | "nonCharacter" |
+3. **AI scaffolding lives in the type model.** `src/battle/types.ts` defines
+   `BattleAiDecisionStage = "character" | "reposition" | "nonCharacter" |
    "endTurn"`, a `BattleAiChoiceTrace` record (including `heuristicScoreBefore`
    and `heuristicScoreAfter`), and an `aiChoices: BattleAiChoiceTrace[]` field on
-   every transition that already flows through `src/multiplayer/battle-normalize.ts`
-   to the log surfaces. This design fills that scaffolding in rather than
-   inventing a parallel structure.
+   every transition that flows through `src/multiplayer/battle-normalize.ts` to
+   the log surfaces. The AI fills that scaffolding rather than inventing a
+   parallel structure.
 
-The board model is two ranks per side. In code, `deployed` (slots `D0`–`D3`, 4
-positions) is the **front rank** whose characters become challengers and
-defenders, and `reserve` (slots `R0`–`R4`, 5 positions) is the **back rank**.
-Characters materialize into `reserve`, exhausted (`selectDefaultCharacterPlaySlot`
-fills reserve first). Effective spark is `printedSpark * figmentCount +
-sparkDelta` via `selectEffectiveSparkForInstance`; note that Support and static
-spark bonuses are **not** auto-applied by the engine, so the AI computes them
-itself.
+The board model is two ranks per side: the **front rank** (zone `frontRank`,
+slots `F0`–`F3`, 4 positions) whose characters become challengers and defenders,
+and the **back rank** (zone `backRank`, slots `B0`–`B4`, 5 positions).
+Characters materialize into the back rank, exhausted. Effective spark comes from
+`selectEffectiveSparkForInstance`: a regular character scores `printedSpark +
+sparkDelta`, and a figment stack scores the sum of its discrete figment sparks.
+Support and static spark bonuses are computed by the side that needs them (the
+AI's forward model applies the support-adjacency map itself).
 
 The screen is wired through `useMultiplayerBattle()` in
 `PlayableBattleScreen.tsx`, which exposes the current `reducerState.mutable`
 (`BattleMutableState`) and a `dispatch` that takes
-`{ type: "APPLY_COMMAND", command }`. There is no automatic enemy actor today;
-`hasAiOpponent` (on `BattleStatusBar`) and `canPlayerAct` (in
-`PlayableBattleScreen`) are present but hardcoded. These are the seams the AI
-plugs into.
+`{ type: "APPLY_COMMAND", command }`. `hasAiOpponent` (on `BattleStatusBar`) and
+`canPlayerAct` (in `PlayableBattleScreen`) gate the proposal surface while the AI
+holds an un-approved action. These are the seams the AI plugs into.
 
 ## The AI Deck
 
@@ -154,10 +157,10 @@ is three copies of each card (30 cards); the exact counts are a tuning knob (see
 [Open Questions](#open-questions)).
 
 The deck's strategic shape, which the evaluation weights should reflect:
-cheap bodies and a Support package (Nocturne Strummer behind Meadowforged
+cheap bodies and a Support package (Nocturne Strummer behind Wildflower
 Colossus or any front-line body), one piece of removal (Flashpoint Detonation), card
-selection (Glimpse, Circlewatch, Sign of Arrival), a proactive pump (Distant
-Worlds), and a slow inevitability source (Runebound Champion's ▸Dawn points).
+selection (Glimpse of What Was, Ringwatcher, Sign of Arrival), a proactive pump
+(Worlds Await), and a slow inevitability source (Runebound Champion's ▸Dawn points).
 
 ## Design Principles
 
@@ -214,8 +217,8 @@ src/battle/
   components/
     BattleAiProposalBar.tsx  Approve / Reject / End AI Turn for the current proposal
   engine/
-    judgment.ts        NEW shared Challenge-phase resolver (used by both sides)
-    energy.ts          NEW shared start-of-turn energy ramp
+    challenge.ts       Shared Challenge-phase resolver (used by both sides)
+    energy.ts          Shared start-of-turn energy ramp
 ```
 
 Data flow on the enemy turn:
@@ -239,7 +242,7 @@ activeSide === "enemy"  (watched by use-battle-ai.ts)
   dispatch({ type: "APPLY_COMMAND", command })  -->  re-plan from live state
         |
         v (loop until the AI proposes End Turn, which the human approves)
-  human Dusk/Night windows, then judgment.ts proposes the Challenge outcome,
+  human Dusk/Night windows, then challenge.ts proposes the Challenge outcome,
   the human approves it, and SET_BATTLE_FLOW hands the turn back
 ```
 
@@ -250,16 +253,17 @@ Enabling AI mode therefore also turns on a thin, shared rules spine so that a
 real game is actually played. This spine is deliberately minimal and is shared
 by both sides (the human benefits from it too).
 
-- **Judgment resolver (`engine/judgment.ts`).** At the Challenge phase, for each
-  front-rank lane `D0`–`D3`, compare the controller's challenger spark against
+- **Challenge resolver (`engine/challenge.ts`).** At the Challenge phase, for each
+  front-rank lane `F0`–`F3`, compare the controller's challenger spark against
   the opposing defender directly opposite. Apply the rules in
   `battle_rules.md` §Challengers, Defenders, and Scoring: lower spark dissolves,
   ties dissolve both (respecting Preeminence — absent from the Starter pool but
   cheap to support), unpaired challengers score their spark, figment stacks
   resolve top-down using the existing `selectFigmentChallengeLossCount`.
-  `resolveJudgment` is a pure function: it reads the state but mutates nothing,
-  returning a `{ resolution, edits }` pair. The `BattleJudgmentResolution`
-  describes the outcome lane-by-lane for display, and the `BattleDebugEdit[]` —
+  `resolveChallenge` is a pure function: it reads the state but mutates nothing,
+  returning a `ChallengeResolution` with the score deltas and the edits that
+  commit them. The resolution describes the outcome lane-by-lane for display, and
+  its `BattleDebugEdit[]` —
   an `ADJUST_SCORE` for the points scored plus a `MOVE_CARD_TO_ZONE`-to-void per
   dissolved body — are the edits that commit the outcome (firing `▸Dissolved`,
   e.g. Final Witness) once the human approves. Effective spark here must include
@@ -301,10 +305,10 @@ can change a turn's outcome:
    challengers; play Fast cards) and a Night Fast window. These are not triggers;
    they are the human's turn to react, and they must be preserved.
 2. **Triggers that fire inside resolution.** ▸Night and ▸Challenge fire at the
-   start of Night; ▸Dissolved fires after each lane. Lanes resolve `D0`→`D3` in
+   start of Night; ▸Dissolved fires after each lane. Lanes resolve `F0`→`F3` in
    order, so a ▸Dissolved — or a Support source dissolving — in an early lane can
-   change the spark of later lanes: a supporter dying in `D0` silently drops +✦
-   from a challenger in `D2`.
+   change the spark of later lanes: a supporter dying in `F0` silently drops +✦
+   from a challenger in `F2`.
 3. **Keywords and statics that bend the comparison.** Unstoppable, Vengeful,
    Preeminence, and continuous Support / "+X✦ for each…" each change a lane's
    result.
@@ -346,7 +350,7 @@ their own cards. The flow is therefore *auto-propose, human-in-the-loop* rather
 than *auto-resolve*.
 
 This maps cleanly onto the existing code. The resolver returns a
-`BattleJudgmentResolution` proposal plus the `BattleDebugEdit[]` that commit it,
+`ChallengeResolution` proposal plus the `BattleDebugEdit[]` that commit it,
 while a separate per-card `needsManualResolution` capability check
 (`engine/capability-check.ts`) flags any in-play card whose text the engine
 cannot model so the surrounding flow can pause for a manual step;
@@ -380,7 +384,7 @@ times per turn. `forward-model.ts` provides a cheap, mutable projection of
 - Derived, recomputed-on-read **effective spark including Support and static
   bonuses**, because the engine does not apply these. The model implements the
   support-adjacency map from `battle_rules.md` (B0→F0; B1→F0,F1; B2→F1,F2;
-  B3→F2,F3; B4→F3, i.e. `reserve` slot → up-to-two `deployed` slots) so that
+  B3→F2,F3; B4→F3, i.e. a back-rank slot → up-to-two front-rank slots) so that
   Nocturne Strummer's "+2✦ to supported" and Wildflower Colossus's "+2✦ per
   supporting ally" produce correct numbers.
 
@@ -412,9 +416,9 @@ interface StarterCardModel {
   chooseTargets(model: ForwardModel, self: AiCard): AiTargetChoice | null;
   // Apply the play to the forward model (materialize, resolve event, pay cost).
   play(model: ForwardModel, self: AiCard, targets: AiTargetChoice | null): void;
-  // Trigger hooks the planner/judgment fire at the right time.
-  onMaterialized?(model: ForwardModel, self: AiCard): void;   // Circlewatch
-  onDawn?(model: ForwardModel, self: AiCard): void;           // Sigilsworn
+  // Trigger hooks the planner/Challenge resolution fire at the right time.
+  onMaterialized?(model: ForwardModel, self: AiCard): void;   // Ringwatcher
+  onDawn?(model: ForwardModel, self: AiCard): void;           // Runebound Champion
   onDissolved?(model: ForwardModel, self: AiCard): void;      // Final Witness
   // Static contribution to a board the planner is evaluating.
   staticSparkContribution?(model: ForwardModel, self: AiCard): SparkEdit[];
@@ -443,7 +447,7 @@ Per-card notes that the models encode:
   abstract body when known; unknown-cost bodies are treated conservatively.
 - **Worlds Await (+3✦ to an ally)** — standard timing means it cannot be an
   instant combat trick; the AI plays it proactively to push a challenger past a
-  likely blocker, grow Meadowforged toward lethal, or set up a favorable trade.
+  likely blocker, grow Wildflower Colossus toward lethal, or set up a favorable trade.
 - **Runebound Champion (▸Dawn: gain 1⍟)** — a per-turn point source; its value
   rises the longer the AI expects the game to run, so the evaluation rewards
   keeping it alive in the back rank.
@@ -464,9 +468,9 @@ of view (higher is better). It is a weighted sum of interpretable terms:
 | Score differential | `aiScore - playerScore`, weighted heavily; 25 wins. |
 | Board spark | Effective spark of AI bodies minus opponent bodies, with front-rank/un-exhausted spark weighted above back-rank. |
 | Expected next-Challenge points | Estimated spark that will score unblocked given the committed front rank and the opponent-response model. |
-| Card advantage | AI hand size, plus "virtual" cards from active engines (Final Witness, Glimpse, Sign of Arrival, Circlewatch). |
+| Card advantage | AI hand size, plus "virtual" cards from active engines (Final Witness, Glimpse of What Was, Sign of Arrival, Ringwatcher). |
 | Tempo / energy waste | Small penalty for unspent energy. |
-| Inevitability | Bonus for live recurring sources (Sigilsworn ▸Dawn) scaled by expected remaining turns. |
+| Inevitability | Bonus for live recurring sources (Runebound Champion ▸Dawn) scaled by expected remaining turns. |
 | Risk exposure | Penalty for over-committing fragile bodies into likely removal/blocks (informed by the opponent model). |
 | Terminal | `+∞` when AI reaches `scoreToWin`; `-∞` when the opponent does. |
 
@@ -485,10 +489,10 @@ map one-to-one onto the existing `BattleAiDecisionStage` enum:
 
 1. **`character`** — choose which characters to play from hand (materialize into
    the back rank, exhausted), in cost order, paying energy. Synergy ordering
-   matters here (e.g. play Nocturne Strummer before Meadowforged so the Colossus
+   matters here (e.g. play Nocturne Strummer before Wildflower Colossus so the Colossus
    evaluates with its supporter present).
 2. **`reposition`** — arrange the board: which un-exhausted characters to push
-   from `reserve` to `deployed` to become challengers, and how to place
+   from the back rank to the front rank to become challengers, and how to place
    supporters in the adjacency that benefits front-rank bodies. (Recall a
    character is exhausted the turn it is played and cannot challenge until the
    AI's next turn, so this stage operates mostly on bodies played on prior
@@ -511,8 +515,8 @@ root/END_TURN baseline is therefore the floor: a line that goes nowhere loses to
 passing, while a setup→payoff line that beats passing is proposed. Beam search
 (rather than greedy) is what captures these order-sensitive synergies without
 exploding the branching factor. Because the action set per round is tiny and
-bounded by finite energy and board space (each play spends energy and a reserve
-slot, each reposition fills a deploy slot, and draw events only add cards a later
+bounded by finite energy and board space (each play spends energy and a back-rank
+slot, each reposition fills a front-rank slot, and draw events only add cards a later
 node can play if it can still pay for them), plus a MAX_DEPTH cap, the whole
 search visits at most a few hundred states.
 
@@ -568,7 +572,7 @@ be selected by a difficulty setting:
 those archetypes — including sampling *which* unknown card the opponent might
 hold — resolving each directly over the forward-model projection (the abstract
 opponent bodies) with the same combat rules, and averaging. The shared
-`resolveJudgment` operates on full `BattleMutableState` with real instances, so
+`resolveChallenge` operates on full `BattleMutableState` with real instances, so
 it is reserved for the authoritative end-of-turn commit; the opponent model
 applies the matching lower-spark-dissolves / unpaired-scores comparison itself
 against the projection. With a board this small, sampling is cheap, and the
@@ -606,7 +610,7 @@ The loop, for the AI's turn:
      regardless of remaining proposals.
 4. When the AI's best action is to pass, it proposes **End Turn**. Approving it
    declares the AI's challengers and yields the human's Dusk/Night windows.
-5. The Challenge phase resolves the same way: the judgment resolver produces a
+5. The Challenge phase resolves the same way: the Challenge resolver produces a
    previewed outcome (lane-by-lane dissolves and score deltas), rendered as a
    single **Approve outcome** proposal that the human confirms — and can hand-edit
    first if a trigger on their own card should change it. Only on approval do the
@@ -652,31 +656,31 @@ work behind a single proposal, computed when the previous one is resolved.
 
 To make the pieces concrete, here is a representative enemy turn. Suppose it is
 the AI's turn 4 (max energy 5 under the default ramp). The AI's hand holds
-Marked Direwolf (4●), Nocturne Strummer (2●), Flashpoint Detonation (2●), Distant
-Worlds (1●). On the board it already has a Wildflower Colossus in `reserve`
+Marked Direwolf (4●), Nocturne Strummer (2●), Flashpoint Detonation (2●), Worlds
+Await (1●). On the board it already has a Wildflower Colossus in the back rank
 (played last turn, now awakened) and the player has a lone 3✦ body in their front
 rank.
 
 1. **Proposal: play Nocturne Strummer (2●).** Internally the planner weighs
-   Marked Direwolf (4●) against Nocturne Strummer (2●) and prefers Minstrel
+   Marked Direwolf (4●) against Nocturne Strummer (2●) and prefers the Strummer
    first, because its Support lifts the Colossus and any front-rank body by +2✦.
    It surfaces "Play Nocturne Strummer to the back rank." You click **Approve**;
    the materialization commits and the planner re-plans.
-2. **Proposal: Flashpoint Detonation on your 3✦ body.** With the Minstrel down, the
+2. **Proposal: Flashpoint Detonation on your 3✦ body.** With the Strummer down, the
    next-best action is removal — dissolving the player's only defender raises the
    AI's expected Challenge points. The proposal names the exact target. You click
    **Approve** (or **Reject** if you know it should fizzle — say the body has Veil
    you have not revealed).
 3. **Proposal: declare Wildflower Colossus as a challenger.** The awakened
-   Colossus is pushed to `deployed`, with the Minstrel placed in a supporting
-   `reserve` slot. The proposal shows its computed effective spark — 6 base + 2
-   per supporting ally + 2 from Minstrel's Support, via the adjacency map. You
+   Colossus is pushed to the front rank, with the Strummer placed in a supporting
+   back-rank slot. The proposal shows its computed effective spark — 6 base + 2
+   per supporting ally + 2 from the Strummer's Support, via the adjacency map. You
    **Approve**.
 4. **Proposal: Worlds Await (+3✦) on the Colossus.** With the defender gone the
    opponent model expects no block, so the extra spark converts straight to
    points. You **Approve**.
 5. **Proposal: End Turn.** Approving it declares challengers and yields your Dusk
-   window (position a defender, play a Fast card). The judgment resolver then
+   window (position a defender, play a Fast card). The Challenge resolver then
    proposes the outcome — "Wildflower Colossus scores N⍟, no defenders" — which
    you **Approve**. Only then does the score commit; the spine checks the win
    condition, ramps energy, and hands the turn back via `SET_BATTLE_FLOW`.
@@ -688,12 +692,13 @@ and every entry in it was something you clicked to allow.
 
 ## Codebase Integration
 
-**1. URL parameter and runtime config.** Add `aiMode: boolean` to `RuntimeConfig`
-in `src/runtime/runtime-config.ts`, parsed as `params.get("ai") === "1"` (mirror
-the existing `startInBattle` parsing). Thread it the way `startInBattle` is
-already threaded: `App.tsx` → quest context/screen router → `BattleSiteRoute` →
-`PlayableBattleScreen`. The fast QA path becomes
-`http://localhost:5173/?startInBattle=1&ai=1`.
+**1. URL parameter and runtime config.** `RuntimeConfig` in
+`src/runtime/runtime-config.ts` carries `aiMode: boolean`, parsed as
+`params.get("ai") !== "0"` so the AI opponent is on by default and `?ai=0`
+disables it. It is threaded the way `startInBattle` is: `App.tsx` → quest
+context/screen router → `BattleSiteRoute` → `PlayableBattleScreen`. The fast QA
+path is `http://localhost:5173/?startInBattle=1` (add `&ai=0` for a manual
+battle).
 
 **2. The AI deck.** `ai/deck.ts` builds the enemy deck from Starter cards:
 `Array.from(cardDatabase.values()).filter((c) => c.isStarter)` (the `isStarter`
@@ -793,29 +798,29 @@ channel that already exists end to end.
   matching the project norm of answering design questions by simulation rather
   than argument.
 - **Unit tests** (Vitest, alongside the modules): per-card `StarterCardModel`
-  effects and targeting; the support-adjacency spark computation; the judgment
+  effects and targeting; the support-adjacency spark computation; the Challenge
   resolver against the worked examples in `battle_rules.md` (including
   figment-stack top-down loss via `selectFigmentChallengeLossCount`); the
   time-budget guard returning a valid best-so-far plan under an artificially
   tiny deadline; deterministic planning under a fixed seed.
 - **Browser QA** (`agent-browser` against a non-5173 port per repo QA rules) on
-  `?startInBattle=1&ai=1`: confirm the enemy takes a visible, paced turn, the
+  `?startInBattle=1` (the AI opponent is on by default): confirm the enemy takes
+  a visible, paced turn, the
   player is gated from acting during it, the log shows the AI's choices, scores
   move on Challenge resolution, and the reward flow fires on a real win. Capture
   the error buffer and confirm no render errors or unhandled rejections.
 
 ## Phased Implementation Plan
 
-1. **Rules spine.** `engine/judgment.ts` and `engine/energy.ts` plus turn
-   handoff, with unit tests against the rules doc. Gated behind AI mode so the
-   manual sandbox is unaffected when off.
+1. **Rules spine.** `engine/challenge.ts` and `engine/energy.ts` plus turn
+   handoff, with unit tests against the rules doc.
 2. **AI deck + forward model.** `ai/deck.ts`, `ai/forward-model.ts`, and the
    support-adjacency spark computation, with tests.
 3. **Per-card models + evaluation.** `ai/cards/*` and `ai/evaluate.ts`.
 4. **Planner + opponent model.** `ai/planner.ts`, `ai/opponent-model.ts`, the
    time-budget guard, and the self-play harness for weight tuning.
 5. **Driver + approval surface + integration.** `ai/use-battle-ai.ts`,
-   `components/BattleAiProposalBar.tsx`, the `?ai=1` runtime-config plumbing, deck
+   `components/BattleAiProposalBar.tsx`, the `?ai` runtime-config plumbing, deck
    injection in `createBattleInit`, and the `canPlayerAct` / `hasAiOpponent`
    wiring (gated to the proposal bar during AI proposals).
 6. **Presentation.** `aiChoices` trace population, the proposal bar's
@@ -850,15 +855,15 @@ entirely through the headless harness.
   one click per action always required?
 - **Multiplayer coexistence.** Confirm the AI should be disabled in shared
   multiplayer rooms (or owner-gated), so two clients never both drive the enemy.
-- **Doc/term alignment.** The code uses `deployed`/`reserve`; the rules doc uses
-  front/back rank. The AI modules will use the code terms with rules-doc
-  references in comments. Confirm that is the preferred convention.
+- **Term alignment.** The code, the rules doc, and the AI modules share the
+  front/back rank terminology (zones `frontRank`/`backRank`, slots `F0`–`F3` and
+  `B0`–`B4`).
 
 ## Appendix: File-by-File Change Summary
 
 | File | Change |
 | --- | --- |
-| `src/runtime/runtime-config.ts` | Add `aiMode` parsed from `?ai=1`. |
+| `src/runtime/runtime-config.ts` | `aiMode` parsed from `?ai` (on unless `?ai=0`). |
 | `src/App.tsx` / screen router / `BattleSiteRoute` | Thread `aiMode` to the battle screen (mirror `startInBattle`). |
 | `src/battle/integration/create-battle-init.ts` | When `aiMode`, build `enemyDeckDefinition` from the Starter deck. |
 | `src/battle/ai/deck.ts` | NEW — Starter-deck builder. |
@@ -871,8 +876,8 @@ entirely through the headless harness.
 | `src/battle/ai/use-battle-ai.ts` | NEW — hook watching `activeSide`; holds the current proposal, commits on approval, re-plans. |
 | `src/battle/ai/trace.ts` | NEW — builds `BattleAiChoiceTrace` entries (proposal + log). |
 | `src/battle/components/BattleAiProposalBar.tsx` | NEW — proposal/approval surface (Approve / Reject / End AI Turn + rationale). |
-| `src/battle/engine/judgment.ts` | NEW — shared Challenge-phase resolver. |
-| `src/battle/engine/energy.ts` | NEW — shared start-of-turn energy ramp. |
+| `src/battle/engine/challenge.ts` | Shared Challenge-phase resolver. |
+| `src/battle/engine/energy.ts` | Shared start-of-turn energy ramp. |
 | `src/battle/components/PlayableBattleScreen.tsx` | Mount the AI hook + proposal bar; gate `canPlayerAct` to the proposal during AI proposals; pass `hasAiOpponent`. |
 | `src/battle/components/BattleInspector.tsx` | Debug-gated AI reasoning tab. |
 | `src/battle/components/BattleLogDrawer.tsx` | Render populated `aiChoices`. |

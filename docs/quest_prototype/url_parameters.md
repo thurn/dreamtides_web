@@ -41,6 +41,29 @@ shared multiplayer room (when two or more clients are connected). The battle is
 the default, so `startInBattle=1` enters straight into an AI battle; pair it
 with `ai=0` for a manual battle (`?startInBattle=1&ai=0`).
 
+## `automation`
+
+The playable battle runs Basic Automation on by default
+(`runtimeConfig.basicAutomation`). Basic Automation applies the deterministic
+subset of the battle rules that follows purely from board state, so neither the
+human nor the AI hand-drives routine bookkeeping. It costs energy when a card is
+played (routing events to the void), ramps energy and draws at the start of a
+turn (the Dreamwell), clears exhaustion at Dawn, resolves each front-rank lane
+during the Challenge phase via `engine/challenge.ts` (keyword-aware:
+Unstoppable, Vengeful, Preeminence, Awakened), enforces the ten-card hand limit
+and end-of-turn banishes during Ending, auto-advances the bookend phases
+(Dreamwell, Draw, Dawn, Ending), and forces the result when a side reaches the
+score threshold.
+
+Set `automation=0` to turn Basic Automation off: the player advances every phase
+by hand, plays cost no energy on their own, and the Challenge resolves only when
+driven manually. Any other value (including `1`, `true`, empty, or absent) keeps
+Basic Automation on.
+
+`automation` is independent of `ai`: each defaults on and is disabled by its own
+`=0`. Pair them as needed, for example `?startInBattle=1&ai=0&automation=0` for
+a fully manual sandbox with both off.
+
 ## `realtime`
 
 Selects the Firebase Realtime Database target. When set to exactly `1`, the app
@@ -218,6 +241,8 @@ http://localhost:5173/?debugJourneyCost=pay_essence
 http://localhost:5173/?seed=7&startInBattle=1
 http://localhost:5173/?startInBattle=1          # battle vs the local AI opponent (default)
 http://localhost:5173/?startInBattle=1&ai=0     # manual battle, no AI opponent
+http://localhost:5173/?startInBattle=1&automation=0          # battle with Basic Automation off
+http://localhost:5173/?startInBattle=1&ai=0&automation=0     # fully manual sandbox (both off)
 http://localhost:5173/editor?q=moon&type=event
 http://localhost:5173/draft_test?algo=diverse   # diverse draft-pool algorithm
 ```
