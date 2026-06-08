@@ -376,8 +376,9 @@ function enrichDeferredCommands(
  * Builds the endTurn proposal: the challenge-resolution edits from the unified,
  * keyword-aware {@link resolveChallenge} (using the card-keyed support map from
  * {@link buildSupportContribution}), followed by the handoff edits
- * (`flowEdit`, `drawEdits`, `energyEdits`) from {@link planHandoff}. Every edit
- * is wrapped as an AI-authored DEBUG_EDIT command.
+ * (`endingBanishEdits`, `flowEdit`, `dawnClearEdits`, `drawEdits`,
+ * `energyEdits`) from {@link planHandoff}. Every edit is wrapped as an
+ * AI-authored DEBUG_EDIT command.
  *
  * The AI resolves combat through the same source of truth the rest of the
  * engine uses, so its committed Challenge outcome honors the four combat
@@ -404,6 +405,8 @@ function buildEndTurnProposal(
     maxEnergyCap: caps?.maxEnergyCap ?? DEFAULT_MAX_ENERGY_CAP,
   });
 
+  // Hand-limit discard is the human player's responsibility and is
+  // intentionally omitted from the AI proposal.
   const edits: BattleDebugEdit[] = [
     ...challenge.edits,
     // Ending (outgoing side) precedes the side flip; Dawn clear (incoming side)

@@ -397,12 +397,6 @@ function handLimitDiscardEdits(
 }
 
 /**
- * Ending: banishes the outgoing side's end-of-turn statuses (rules §Turn
- * Structure — Ending). Any card with `status.ephemeral` still in that side's
- * hand, and any card with `status.offering` still in play (front or back rank),
- * is moved to `banished`. Pure: it only reads `state` and never mutates it.
- */
-/**
  * Forces the battle result (from the player's POV) when the Challenge scoring
  * pushes a side to the victory threshold (rules §Objective).
  */
