@@ -24,8 +24,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: { F0: null, F1: null, F2: null, F3: null },
-    aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
+    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -45,8 +45,8 @@ describe("Nocturne Strummer (#510)", () => {
     const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
     // B1 supports F0 and F1.
     const model = makeModel({
-      aiDeployed: { F0: ally, F1: null, F2: null, F3: null },
-      aiReserve: { B0: null, B1: minstrel, B2: null, B3: null, B4: null },
+      aiFrontRank: { F0: ally, F1: null, F2: null, F3: null },
+      aiBackRank: { B0: null, B1: minstrel, B2: null, B3: null, B4: null },
     });
     const contribution = buildSupportContribution(model);
     expect(contribution.get("ally")).toBe(2);
@@ -57,8 +57,8 @@ describe("Nocturne Strummer (#510)", () => {
     const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
     // B0 supports only F0; an ally in F3 is not covered.
     const model = makeModel({
-      aiDeployed: { F0: null, F1: null, F2: null, F3: ally },
-      aiReserve: { B0: minstrel, B1: null, B2: null, B3: null, B4: null },
+      aiFrontRank: { F0: null, F1: null, F2: null, F3: ally },
+      aiBackRank: { B0: minstrel, B1: null, B2: null, B3: null, B4: null },
     });
     expect(buildSupportContribution(model).get("ally")).toBeUndefined();
   });
@@ -69,7 +69,7 @@ describe("Nocturne Strummer (#510)", () => {
     nocturneStrummer.play(model, self, null);
     expect(model.aiEnergy).toBe(3);
     expect(model.aiHand).toHaveLength(0);
-    expect(model.aiReserve.B0?.battleCardId).toBe("minstrel");
-    expect(model.aiReserve.B0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiBackRank.B0?.battleCardId).toBe("minstrel");
+    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
   });
 });

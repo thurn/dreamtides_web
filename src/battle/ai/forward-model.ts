@@ -60,7 +60,7 @@ export interface AiOpponentBody {
    * to `0` for a card with no printed cost.
    */
   energyCost: number;
-  /** `front` = deployed, `back` = reserve. */
+  /** `front` = front rank, `back` = back rank. */
   rank: "front" | "back";
   /** The slot id, e.g. "F0" / "B2". */
   slot: string;
@@ -75,8 +75,8 @@ export interface ForwardModel {
   aiHand: AiCard[];
   aiDeck: AiCard[];
   aiVoid: AiCard[];
-  aiDeployed: Record<FrontRankSlotId, AiCard | null>;
-  aiReserve: Record<BackRankSlotId, AiCard | null>;
+  aiFrontRank: Record<FrontRankSlotId, AiCard | null>;
+  aiBackRank: Record<BackRankSlotId, AiCard | null>;
   opponentBodies: AiOpponentBody[];
   opponentHandCount: number;
   opponentVoidCount: number;
@@ -150,7 +150,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   const opponent = state.sides[opponentSide];
   const aiLatestTurn = aiLatestTurnNumber(state, aiSide);
 
-  const aiDeployed: Record<FrontRankSlotId, AiCard | null> = {
+  const aiFrontRank: Record<FrontRankSlotId, AiCard | null> = {
     F0: null,
     F1: null,
     F2: null,
@@ -159,10 +159,10 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   for (const slotId of FRONT_RANK_SLOT_IDS) {
     const id = ai.frontRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
-    aiDeployed[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
+    aiFrontRank[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
   }
 
-  const aiReserve: Record<BackRankSlotId, AiCard | null> = {
+  const aiBackRank: Record<BackRankSlotId, AiCard | null> = {
     B0: null,
     B1: null,
     B2: null,
@@ -172,7 +172,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   for (const slotId of BACK_RANK_SLOT_IDS) {
     const id = ai.backRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
-    aiReserve[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
+    aiBackRank[slotId] = instance === undefined ? null : projectAiCard(instance, aiLatestTurn);
   }
 
   const opponentBodies: AiOpponentBody[] = [];
@@ -213,8 +213,8 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     aiHand: projectZone(state, ai.hand, aiLatestTurn),
     aiDeck: projectZone(state, ai.deck, aiLatestTurn),
     aiVoid: projectZone(state, ai.void, aiLatestTurn),
-    aiDeployed,
-    aiReserve,
+    aiFrontRank,
+    aiBackRank,
     opponentBodies,
     opponentHandCount: opponent.hand.length,
     opponentVoidCount: opponent.void.length,
@@ -223,13 +223,13 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
 
 /**
  * Computes the effective spark of the AI card occupying `slot`, adding support
- * bonuses from back-rank (reserve) cards whose `battleCardId` appears in
+ * bonuses from back-rank cards whose `battleCardId` appears in
  * `supportSources`.
  *
  * Base spark = `basePrintedSpark * figmentCount + sparkDelta`.
  *
- * For each occupied reserve slot whose card's `battleCardId` is a key in
- * `supportSources`, if that reserve slot's adjacency covers `slot` (per
+ * For each occupied back-rank slot whose card's `battleCardId` is a key in
+ * `supportSources`, if that back-rank slot's adjacency covers `slot` (per
  * `supportedDeploySlots`), the mapped value is added to the total. Each
  * support source contributes its full value to every slot it covers
  * independently — the value is not divided across supported slots.
@@ -244,7 +244,7 @@ export function effectiveSpark(
   slot: FrontRankSlotId,
   supportSources: ReadonlyMap<string, number>,
 ): number {
-  const card = model.aiDeployed[slot];
+  const card = model.aiFrontRank[slot];
   if (card === null) {
     return 0;
   }
@@ -252,16 +252,16 @@ export function effectiveSpark(
   const base = card.basePrintedSpark * card.figmentCount + card.sparkDelta;
 
   let supportBonus = 0;
-  for (const reserveSlot of BACK_RANK_SLOT_IDS) {
-    const reserveCard = model.aiReserve[reserveSlot];
-    if (reserveCard === null) {
+  for (const backRankSlot of BACK_RANK_SLOT_IDS) {
+    const backRankCard = model.aiBackRank[backRankSlot];
+    if (backRankCard === null) {
       continue;
     }
-    const bonus = supportSources.get(reserveCard.battleCardId);
+    const bonus = supportSources.get(backRankCard.battleCardId);
     if (bonus === undefined) {
       continue;
     }
-    if (supportedDeploySlots(reserveSlot).includes(slot)) {
+    if (supportedDeploySlots(backRankSlot).includes(slot)) {
       supportBonus += bonus;
     }
   }
@@ -292,18 +292,18 @@ export function cloneForwardModel(model: ForwardModel): ForwardModel {
     aiHand: model.aiHand.map(cloneAiCard),
     aiDeck: model.aiDeck.map(cloneAiCard),
     aiVoid: model.aiVoid.map(cloneAiCard),
-    aiDeployed: {
-      F0: cloneAiCardOrNull(model.aiDeployed.F0),
-      F1: cloneAiCardOrNull(model.aiDeployed.F1),
-      F2: cloneAiCardOrNull(model.aiDeployed.F2),
-      F3: cloneAiCardOrNull(model.aiDeployed.F3),
+    aiFrontRank: {
+      F0: cloneAiCardOrNull(model.aiFrontRank.F0),
+      F1: cloneAiCardOrNull(model.aiFrontRank.F1),
+      F2: cloneAiCardOrNull(model.aiFrontRank.F2),
+      F3: cloneAiCardOrNull(model.aiFrontRank.F3),
     },
-    aiReserve: {
-      B0: cloneAiCardOrNull(model.aiReserve.B0),
-      B1: cloneAiCardOrNull(model.aiReserve.B1),
-      B2: cloneAiCardOrNull(model.aiReserve.B2),
-      B3: cloneAiCardOrNull(model.aiReserve.B3),
-      B4: cloneAiCardOrNull(model.aiReserve.B4),
+    aiBackRank: {
+      B0: cloneAiCardOrNull(model.aiBackRank.B0),
+      B1: cloneAiCardOrNull(model.aiBackRank.B1),
+      B2: cloneAiCardOrNull(model.aiBackRank.B2),
+      B3: cloneAiCardOrNull(model.aiBackRank.B3),
+      B4: cloneAiCardOrNull(model.aiBackRank.B4),
     },
     opponentBodies: model.opponentBodies.map((body) => ({ ...body })),
     opponentHandCount: model.opponentHandCount,

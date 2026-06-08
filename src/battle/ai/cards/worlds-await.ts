@@ -9,13 +9,13 @@ const MEADOWFORGED_COLOSSUS = 515;
 function friendlyAllies(model: ForwardModel): AiCard[] {
   const allies: AiCard[] = [];
   for (const slot of FRONT_RANK_SLOT_IDS) {
-    const card = model.aiDeployed[slot];
+    const card = model.aiFrontRank[slot];
     if (card !== null) {
       allies.push(card);
     }
   }
   for (const slot of BACK_RANK_SLOT_IDS) {
-    const card = model.aiReserve[slot];
+    const card = model.aiBackRank[slot];
     if (card !== null) {
       allies.push(card);
     }

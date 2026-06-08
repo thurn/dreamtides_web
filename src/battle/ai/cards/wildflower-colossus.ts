@@ -23,13 +23,13 @@ export const wildflowerColossus: StarterCardModel = {
   },
   selfStaticSpark(model: ForwardModel, self: AiCard): number {
     const deploySlot = FRONT_RANK_SLOT_IDS.find(
-      (slot) => model.aiDeployed[slot]?.battleCardId === self.battleCardId,
+      (slot) => model.aiFrontRank[slot]?.battleCardId === self.battleCardId,
     );
     if (deploySlot === undefined) {
       return 0;
     }
     const supporters = supportingReserveSlots(deploySlot).filter(
-      (reserveSlot) => model.aiReserve[reserveSlot] !== null,
+      (reserveSlot) => model.aiBackRank[reserveSlot] !== null,
     ).length;
     return 2 * supporters;
   },

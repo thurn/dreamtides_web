@@ -113,7 +113,7 @@ function createRng(seed: number): () => number {
 // --- Building the committed front rank ------------------------------------
 
 /**
- * The AI's committed front rank: every `aiDeployed` character that
+ * The AI's committed front rank: every front-rank character that
  * `canChallengeThisTurn`, with its effective spark = base spark plus its support
  * contribution. Sorted descending by spark so "biggest" is index 0.
  */
@@ -121,7 +121,7 @@ function buildChallengers(model: ForwardModel): Challenger[] {
   const support = buildSupportContribution(model);
   const challengers: Challenger[] = [];
   for (const slot of FRONT_RANK_SLOT_IDS) {
-    const card = model.aiDeployed[slot];
+    const card = model.aiFrontRank[slot];
     if (card === null || !card.canChallengeThisTurn) {
       continue;
     }
@@ -145,13 +145,13 @@ function buildDefenders(model: ForwardModel): DefenderBody[] {
 
 // --- Applying a response to a cloned model --------------------------------
 
-/** Moves the AI card occupying `slot` from deployed into the void. */
+/** Moves the AI card occupying `slot` from the front rank into the void. */
 function dissolveChallenger(model: ForwardModel, slot: FrontRankSlotId): void {
-  const card = model.aiDeployed[slot];
+  const card = model.aiFrontRank[slot];
   if (card === null) {
     return;
   }
-  model.aiDeployed[slot] = null;
+  model.aiFrontRank[slot] = null;
   model.aiVoid.push(card);
 }
 

@@ -23,8 +23,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: { F0: null, F1: null, F2: null, F3: null },
-    aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
+    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -43,7 +43,7 @@ describe("Worlds Await (#519)", () => {
     const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
     const model = makeModel({
       aiEnergy: 0,
-      aiDeployed: { F0: ally, F1: null, F2: null, F3: null },
+      aiFrontRank: { F0: ally, F1: null, F2: null, F3: null },
     });
     expect(worldsAwait.canPlay(model, self)).toBe(false);
   });
@@ -53,7 +53,7 @@ describe("Worlds Await (#519)", () => {
     const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
     const model = makeModel({
       aiEnergy: 1,
-      aiReserve: { B0: ally, B1: null, B2: null, B3: null, B4: null },
+      aiBackRank: { B0: ally, B1: null, B2: null, B3: null, B4: null },
     });
     expect(worldsAwait.canPlay(model, self)).toBe(true);
   });
@@ -65,15 +65,15 @@ describe("Worlds Await (#519)", () => {
     const model = makeModel({
       aiEnergy: 2,
       aiHand: [self],
-      aiDeployed: { F0: small, F1: big, F2: null, F3: null },
+      aiFrontRank: { F0: small, F1: big, F2: null, F3: null },
     });
 
     const targets = worldsAwait.chooseTargets(model, self);
     worldsAwait.play(model, self, targets);
 
     // Highest-base-spark deployed ally (big) gets the pump.
-    expect(model.aiDeployed.F1?.sparkDelta).toBe(3);
-    expect(model.aiDeployed.F0?.sparkDelta).toBe(0);
+    expect(model.aiFrontRank.F1?.sparkDelta).toBe(3);
+    expect(model.aiFrontRank.F0?.sparkDelta).toBe(0);
     expect(model.aiEnergy).toBe(1);
     expect(model.aiVoid.map((c) => c.battleCardId)).toEqual(["dw"]);
   });
@@ -84,12 +84,12 @@ describe("Worlds Await (#519)", () => {
     const model = makeModel({
       aiEnergy: 2,
       aiHand: [self],
-      aiReserve: { B0: null, B1: ally, B2: null, B3: null, B4: null },
+      aiBackRank: { B0: null, B1: ally, B2: null, B3: null, B4: null },
     });
 
     const targets = worldsAwait.chooseTargets(model, self);
     worldsAwait.play(model, self, targets);
 
-    expect(model.aiReserve.B1?.sparkDelta).toBe(3);
+    expect(model.aiBackRank.B1?.sparkDelta).toBe(3);
   });
 });

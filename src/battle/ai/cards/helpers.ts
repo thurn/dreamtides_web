@@ -22,7 +22,7 @@ export function characterCanPlay(model: ForwardModel, self: AiCard): boolean {
   if (model.aiEnergy < self.energyCost) {
     return false;
   }
-  return BACK_RANK_SLOT_IDS.some((slot) => model.aiReserve[slot] === null);
+  return BACK_RANK_SLOT_IDS.some((slot) => model.aiBackRank[slot] === null);
 }
 
 /**
@@ -39,8 +39,8 @@ export function playCharacterToReserve(model: ForwardModel, self: AiCard): void 
   const card = removeFromHand(model, self) ?? self;
   card.canChallengeThisTurn = false;
   for (const slot of BACK_RANK_SLOT_IDS) {
-    if (model.aiReserve[slot] === null) {
-      model.aiReserve[slot] = card;
+    if (model.aiBackRank[slot] === null) {
+      model.aiBackRank[slot] = card;
       return;
     }
   }

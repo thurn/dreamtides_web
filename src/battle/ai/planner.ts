@@ -73,7 +73,7 @@ interface PlanAction {
   toSlot: BattlefieldSlotId | null;
   /** Hand index of the played card in the model the action was generated from. */
   sourceHandIndex: number | null;
-  /** Reserve slot a MOVE_CARD pulls the card from. */
+  /** Back-rank slot a MOVE_CARD pulls the card from. */
   sourceSlotId: BattlefieldSlotId | null;
 }
 
@@ -88,14 +88,14 @@ interface BeamEntry {
 // --- Scoring --------------------------------------------------------------
 
 /**
- * Whether the AI has any committed challenger — a deployed body that can act
+ * Whether the AI has any committed challenger — a front-rank body that can act
  * this turn. When it does, scoring routes through the opponent-response model so
  * the plan accounts for the opponent's likely defense/removal; otherwise the
  * cheaper static {@link evaluate} is enough.
  */
 function hasCommittedChallenger(model: ForwardModel): boolean {
   for (const slot of FRONT_RANK_SLOT_IDS) {
-    const card = model.aiDeployed[slot];
+    const card = model.aiFrontRank[slot];
     if (card !== null && card.canChallengeThisTurn) {
       return true;
     }
@@ -115,7 +115,7 @@ function scorePlan(model: ForwardModel, opts: PlannerOptions): number {
 /**
  * Applies a {@link PlanAction} to `model` (already a clone). Locates the card by
  * `battleCardId` so the action composes against any equivalent state, then
- * mutates via the card model (plays + triggers) or a reserve→deploy move.
+ * mutates via the card model (plays + triggers) or a back-rank→front-rank move.
  */
 function applyAction(model: ForwardModel, action: PlanAction): void {
   if (action.kind === "PLAY_CARD") {
@@ -132,39 +132,39 @@ function applyAction(model: ForwardModel, action: PlanAction): void {
     cardModel.onMaterialized?.(model, self);
     return;
   }
-  // MOVE_CARD: reserve → empty deploy slot.
+  // MOVE_CARD: back rank → empty front-rank slot.
   const fromSlot = action.sourceSlotId as BackRankSlotId | null;
   const toSlot = action.toSlot as FrontRankSlotId | null;
   if (fromSlot === null || toSlot === null) {
     return;
   }
-  const card = model.aiReserve[fromSlot];
+  const card = model.aiBackRank[fromSlot];
   if (card === null || card.battleCardId !== action.card.battleCardId) {
-    // The card moved/changed in the clone; locate it by id across reserve.
+    // The card moved/changed in the clone; locate it by id across the back rank.
     let found: BackRankSlotId | null = null;
     for (const slot of BACK_RANK_SLOT_IDS) {
-      if (model.aiReserve[slot]?.battleCardId === action.card.battleCardId) {
+      if (model.aiBackRank[slot]?.battleCardId === action.card.battleCardId) {
         found = slot;
         break;
       }
     }
-    if (found === null || model.aiDeployed[toSlot] !== null) {
+    if (found === null || model.aiFrontRank[toSlot] !== null) {
       return;
     }
-    model.aiDeployed[toSlot] = model.aiReserve[found];
-    model.aiReserve[found] = null;
+    model.aiFrontRank[toSlot] = model.aiBackRank[found];
+    model.aiBackRank[found] = null;
     return;
   }
-  if (model.aiDeployed[toSlot] !== null) {
+  if (model.aiFrontRank[toSlot] !== null) {
     return;
   }
-  model.aiDeployed[toSlot] = card;
-  model.aiReserve[fromSlot] = null;
+  model.aiFrontRank[toSlot] = card;
+  model.aiBackRank[fromSlot] = null;
 }
 
-function firstEmptyDeploySlot(model: ForwardModel): FrontRankSlotId | null {
+function firstEmptyFrontRankSlot(model: ForwardModel): FrontRankSlotId | null {
   for (const slot of FRONT_RANK_SLOT_IDS) {
-    if (model.aiDeployed[slot] === null) {
+    if (model.aiFrontRank[slot] === null) {
       return slot;
     }
   }
@@ -172,13 +172,13 @@ function firstEmptyDeploySlot(model: ForwardModel): FrontRankSlotId | null {
 }
 
 /**
- * The reserve slot a character play lands in: the first empty slot, matching
+ * The back-rank slot a character play lands in: the first empty slot, matching
  * {@link playCharacterToReserve}. Recording it on the action lets the driver
- * emit the body's `MOVE_CARD_TO_ZONE` to a concrete reserve destination.
+ * emit the body's `MOVE_CARD_TO_ZONE` to a concrete back-rank destination.
  */
-function firstEmptyReserveSlot(model: ForwardModel): BackRankSlotId | null {
+function firstEmptyBackRankSlot(model: ForwardModel): BackRankSlotId | null {
   for (const slot of BACK_RANK_SLOT_IDS) {
-    if (model.aiReserve[slot] === null) {
+    if (model.aiBackRank[slot] === null) {
       return slot;
     }
   }
@@ -188,7 +188,7 @@ function firstEmptyReserveSlot(model: ForwardModel): BackRankSlotId | null {
 /**
  * Generates every legal next action from `model`, tagged by stage. Legality is
  * mandatory: a `PLAY_CARD` is generated only when the card model's `canPlay` is
- * true; a `MOVE_CARD` only into an empty deploy slot from a ready reserve card.
+ * true; a `MOVE_CARD` only into an empty front-rank slot from a ready back-rank card.
  *
  * The staged order (`battle_ai.md` §"The Planner") is reflected by stage tags
  * and by the order actions are emitted: character plays, then repositions, then
@@ -212,23 +212,24 @@ function generateActions(model: ForwardModel): PlanAction[] {
       kind: "PLAY_CARD",
       card,
       targets: cardModel.chooseTargets(model, card),
-      // The character body materializes into the first empty reserve slot
+      // The character body materializes into the first empty back-rank slot
       // (see `playCharacterToReserve`). Record it so the driver moves the
       // card out of hand rather than only paying its energy.
-      toSlot: firstEmptyReserveSlot(model),
+      toSlot: firstEmptyBackRankSlot(model),
       sourceHandIndex: handIndex,
       sourceSlotId: null,
     });
   });
 
-  // Stage 2: reposition — push a ready reserve character into an empty deploy
-  // slot so it becomes a challenger. Only the FIRST empty deploy slot is offered
-  // per ready card; deploy slots are interchangeable for scoring, so enumerating
-  // all of them only multiplies the branching factor without changing value.
-  const targetDeploySlot = firstEmptyDeploySlot(model);
-  if (targetDeploySlot !== null) {
-    for (const reserveSlot of BACK_RANK_SLOT_IDS) {
-      const card = model.aiReserve[reserveSlot];
+  // Stage 2: reposition — push a ready back-rank character into an empty
+  // front-rank slot so it becomes a challenger. Only the FIRST empty front-rank
+  // slot is offered per ready card; front-rank slots are interchangeable for
+  // scoring, so enumerating all of them only multiplies the branching factor
+  // without changing value.
+  const targetFrontRankSlot = firstEmptyFrontRankSlot(model);
+  if (targetFrontRankSlot !== null) {
+    for (const backRankSlot of BACK_RANK_SLOT_IDS) {
+      const card = model.aiBackRank[backRankSlot];
       if (card === null || !card.canChallengeThisTurn) {
         continue;
       }
@@ -237,9 +238,9 @@ function generateActions(model: ForwardModel): PlanAction[] {
         kind: "MOVE_CARD",
         card,
         targets: null,
-        toSlot: targetDeploySlot,
+        toSlot: targetFrontRankSlot,
         sourceHandIndex: null,
-        sourceSlotId: reserveSlot,
+        sourceSlotId: backRankSlot,
       });
     }
   }
@@ -304,7 +305,7 @@ function actionSortKey(action: PlanAction): string {
  *
  * Expansion is a real bounded beam, NOT greedy: a partial plan is expanded by
  * EVERY legal next action, with no "strictly improving" gate. A momentarily
- * neutral-or-worse setup play (e.g. dropping Nocturne Strummer into the reserve)
+ * neutral-or-worse setup play (e.g. dropping Nocturne Strummer into the back rank)
  * is allowed to remain in the beam so a later step (repositioning Meadowforged
  * Colossus into a slot the Minstrel supports) can pay off within the same turn.
  * A line that genuinely goes nowhere still loses to the root baseline, so the
@@ -312,8 +313,8 @@ function actionSortKey(action: PlanAction): string {
  *
  * Work is bounded by `beamWidth` (top-K kept each round), the {@link MAX_DEPTH}
  * safety cap, and the deadline guard. The per-node action set is bounded by
- * finite energy and board space: each play spends energy and a reserve slot,
- * each reposition fills a deploy slot, and draw events (Glimpse, Sign of Arrival)
+ * finite energy and board space: each play spends energy and a back-rank slot,
+ * each reposition fills a front-rank slot, and draw events (Glimpse, Sign of Arrival)
  * only add cards a later node can play if it can still pay for them. Combined
  * with the MAX_DEPTH cap the search terminates well before the cap.
  */

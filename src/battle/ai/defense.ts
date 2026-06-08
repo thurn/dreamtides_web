@@ -10,10 +10,10 @@ import type { PlannedAction } from "./planner";
  * the opponent's Dusk the AI is the defender: it positions front-rank blockers
  * opposite the opponent's challengers so they do not score unopposed
  * (`battle_rules.md` §Challengers, Defenders, and Scoring — a defended
- * challenger does not score). This module decides which reserve bodies to push
+ * challenger does not score). This module decides which back-rank bodies to push
  * up into which lanes; the hook dispatches the resulting moves.
  *
- * Only an un-exhausted reserve body can be moved to the front (the engine
+ * Only an un-exhausted back-rank body can be moved to the front (the engine
  * stamps entered-play turns, projected as `canChallengeThisTurn`), matching the
  * rule that an exhausted character cannot be moved to the front rank.
  */
@@ -23,7 +23,7 @@ export interface DefenseOptions {
   scoreToWin: number;
 }
 
-interface ReserveBody {
+interface BackRankBody {
   slot: BackRankSlotId;
   card: AiCard;
   /** Effective spark this body brings to the lane it blocks in. */
@@ -35,29 +35,29 @@ interface Challenger {
   spark: number;
 }
 
-const DEPLOY_SLOT_SET = new Set<string>(FRONT_RANK_SLOT_IDS);
+const FRONT_RANK_SLOT_SET = new Set<string>(FRONT_RANK_SLOT_IDS);
 
 /**
  * Plans the AI's defensive repositions against the opponent's committed
  * challengers, returning one `MOVE_CARD` action per lane the AI chooses to
- * block (reserve body → the deploy slot directly opposite the challenger).
+ * block (back-rank body → the front-rank slot directly opposite the challenger).
  *
- * Lanes are defended biggest-threat-first so the scarce reserve bodies cover
+ * Lanes are defended biggest-threat-first so the scarce back-rank bodies cover
  * the challengers that would score the most. A lane already holding an AI body
  * is left alone — that body already defends it.
  */
 export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedAction[] {
   const challengers: Challenger[] = model.opponentBodies
-    .filter((body) => body.rank === "front" && DEPLOY_SLOT_SET.has(body.slot))
+    .filter((body) => body.rank === "front" && FRONT_RANK_SLOT_SET.has(body.slot))
     .map((body) => ({ slot: body.slot as FrontRankSlotId, spark: body.effectiveSpark }))
     .sort((a, b) => b.spark - a.spark);
   if (challengers.length === 0) {
     return [];
   }
 
-  const available: ReserveBody[] = [];
+  const available: BackRankBody[] = [];
   for (const slot of BACK_RANK_SLOT_IDS) {
-    const card = model.aiReserve[slot];
+    const card = model.aiBackRank[slot];
     if (card !== null && card.canChallengeThisTurn) {
       available.push({ slot, card, spark: bodySpark(card) });
     }
@@ -67,17 +67,17 @@ export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedA
   }
 
   const moves: PlannedAction[] = [];
-  const usedReserve = new Set<BackRankSlotId>();
+  const usedBackRank = new Set<BackRankSlotId>();
   for (const challenger of challengers) {
     // A body already sitting opposite the challenger is already defending it.
-    if (model.aiDeployed[challenger.slot] !== null) {
+    if (model.aiFrontRank[challenger.slot] !== null) {
       continue;
     }
-    const blocker = chooseBlocker(available, usedReserve, challenger.spark, model, opts);
+    const blocker = chooseBlocker(available, usedBackRank, challenger.spark, model, opts);
     if (blocker === null) {
       continue;
     }
-    usedReserve.add(blocker.slot);
+    usedBackRank.add(blocker.slot);
     moves.push(makeBlockAction(blocker.card, challenger.slot));
   }
   return moves;
@@ -88,7 +88,7 @@ function bodySpark(card: AiCard): number {
 }
 
 /**
- * Picks the best available reserve body to block a challenger of `challengerSpark`:
+ * Picks the best available back-rank body to block a challenger of `challengerSpark`:
  *
  * 1. **Favorable** — the smallest body that still outsparks the challenger,
  *    killing it and surviving. Using the smallest keeps bigger bodies free for
@@ -102,12 +102,12 @@ function bodySpark(card: AiCard): number {
  * Returns `null` when no body is worth committing.
  */
 function chooseBlocker(
-  available: ReserveBody[],
+  available: BackRankBody[],
   used: ReadonlySet<BackRankSlotId>,
   challengerSpark: number,
   model: ForwardModel,
   opts: DefenseOptions,
-): ReserveBody | null {
+): BackRankBody | null {
   const candidates = available
     .filter((body) => !used.has(body.slot))
     .sort((a, b) => a.spark - b.spark);

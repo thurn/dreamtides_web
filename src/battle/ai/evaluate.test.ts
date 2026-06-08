@@ -2,11 +2,11 @@ import { describe, expect, it } from "vitest";
 import { evaluate } from "./evaluate";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 
-function emptyDeployed(): ForwardModel["aiDeployed"] {
+function emptyFrontRank(): ForwardModel["aiFrontRank"] {
   return { F0: null, F1: null, F2: null, F3: null };
 }
 
-function emptyReserve(): ForwardModel["aiReserve"] {
+function emptyBackRank(): ForwardModel["aiBackRank"] {
   return { B0: null, B1: null, B2: null, B3: null, B4: null };
 }
 
@@ -19,8 +19,8 @@ function baseModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: emptyDeployed(),
-    aiReserve: emptyReserve(),
+    aiFrontRank: emptyFrontRank(),
+    aiBackRank: emptyBackRank(),
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -83,8 +83,8 @@ describe("evaluate", () => {
     it("short-circuits the player win even with an otherwise winning board", () => {
       const board = baseModel({
         playerScore: 25,
-        aiDeployed: {
-          ...emptyDeployed(),
+        aiFrontRank: {
+          ...emptyFrontRank(),
           F0: makeCard({ basePrintedSpark: 99 }),
         },
       });
@@ -116,15 +116,15 @@ describe("evaluate", () => {
   describe("board spark", () => {
     it("favors the AI when it has strictly more board spark", () => {
       const aiAhead = baseModel({
-        aiDeployed: {
-          ...emptyDeployed(),
+        aiFrontRank: {
+          ...emptyFrontRank(),
           F0: makeCard({ basePrintedSpark: 5 }),
         },
         opponentBodies: [opponentBody({ effectiveSpark: 1, rank: "front", slot: "F0" })],
       });
       const oppAhead = baseModel({
-        aiDeployed: {
-          ...emptyDeployed(),
+        aiFrontRank: {
+          ...emptyFrontRank(),
           F0: makeCard({ basePrintedSpark: 1 }),
         },
         opponentBodies: [opponentBody({ effectiveSpark: 5, rank: "front", slot: "F0" })],
@@ -134,10 +134,10 @@ describe("evaluate", () => {
 
     it("weights front-rank spark above back-rank spark", () => {
       const front = baseModel({
-        aiDeployed: { ...emptyDeployed(), F0: makeCard({ basePrintedSpark: 4 }) },
+        aiFrontRank: { ...emptyFrontRank(), F0: makeCard({ basePrintedSpark: 4 }) },
       });
       const back = baseModel({
-        aiReserve: { ...emptyReserve(), B0: makeCard({ basePrintedSpark: 4 }) },
+        aiBackRank: { ...emptyBackRank(), B0: makeCard({ basePrintedSpark: 4 }) },
       });
       expect(evaluate(front)).toBeGreaterThan(evaluate(back));
     });

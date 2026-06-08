@@ -24,8 +24,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: { F0: null, F1: null, F2: null, F3: null },
-    aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
+    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -38,7 +38,7 @@ describe("Wildflower Colossus (#515)", () => {
     const self = makeCard({ battleCardId: "colossus", cardNumber: 515 });
     // Sitting in reserve, not deployed.
     const model = makeModel({
-      aiReserve: { B0: self, B1: null, B2: null, B3: null, B4: null },
+      aiBackRank: { B0: self, B1: null, B2: null, B3: null, B4: null },
     });
     expect(wildflowerColossus.selfStaticSpark?.(model, self)).toBe(0);
   });
@@ -46,7 +46,7 @@ describe("Wildflower Colossus (#515)", () => {
   it("selfStaticSpark returns 0 when deployed with no supporters", () => {
     const self = makeCard({ battleCardId: "colossus", cardNumber: 515 });
     const model = makeModel({
-      aiDeployed: { F1: self, F0: null, F2: null, F3: null },
+      aiFrontRank: { F1: self, F0: null, F2: null, F3: null },
     });
     expect(wildflowerColossus.selfStaticSpark?.(model, self)).toBe(0);
   });
@@ -57,8 +57,8 @@ describe("Wildflower Colossus (#515)", () => {
     const supB = makeCard({ battleCardId: "b", cardNumber: 512 });
     // F1 is supported by B1 and B2; fill both.
     const model = makeModel({
-      aiDeployed: { F0: null, F1: self, F2: null, F3: null },
-      aiReserve: { B0: null, B1: supA, B2: supB, B3: null, B4: null },
+      aiFrontRank: { F0: null, F1: self, F2: null, F3: null },
+      aiBackRank: { B0: null, B1: supA, B2: supB, B3: null, B4: null },
     });
     expect(wildflowerColossus.selfStaticSpark?.(model, self)).toBe(4);
   });
@@ -67,8 +67,8 @@ describe("Wildflower Colossus (#515)", () => {
     const self = makeCard({ battleCardId: "colossus", cardNumber: 515 });
     const supA = makeCard({ battleCardId: "a", cardNumber: 512 });
     const model = makeModel({
-      aiDeployed: { F0: self, F1: null, F2: null, F3: null },
-      aiReserve: { B0: supA, B1: null, B2: null, B3: null, B4: null },
+      aiFrontRank: { F0: self, F1: null, F2: null, F3: null },
+      aiBackRank: { B0: supA, B1: null, B2: null, B3: null, B4: null },
     });
     // F0 supported by B0 and B1; only B0 occupied -> +2 to the Colossus.
     expect(buildSupportContribution(model).get("colossus")).toBe(2);
@@ -79,7 +79,7 @@ describe("Wildflower Colossus (#515)", () => {
     const model = makeModel({ aiEnergy: 6, aiHand: [self] });
     wildflowerColossus.play(model, self, null);
     expect(model.aiEnergy).toBe(0);
-    expect(model.aiReserve.B0?.battleCardId).toBe("colossus");
-    expect(model.aiReserve.B0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiBackRank.B0?.battleCardId).toBe("colossus");
+    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
   });
 });

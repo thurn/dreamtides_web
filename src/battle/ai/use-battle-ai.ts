@@ -237,7 +237,7 @@ function computeProposal(
 
 /**
  * Plans the next action, skipping any whose exclusion key is in `excludedKeys`.
- * Re-plans against a model with the excluded card removed from hand/reserve so
+ * Re-plans against a model with the excluded card removed from hand/back rank so
  * the planner advances to the next-best line, falling back to `null` (→ endTurn)
  * when every remaining option is excluded.
  */
@@ -250,8 +250,8 @@ function planNonExcludedAction(
   let workingModel = model;
 
   // Bounded retry: each iteration removes one excluded card and re-plans, so the
-  // loop terminates after the hand/reserve is exhausted.
-  const maxAttempts = model.aiHand.length + RESERVE_AND_DEPLOY_SLOTS + 1;
+  // loop terminates after the hand/back rank is exhausted.
+  const maxAttempts = model.aiHand.length + BATTLEFIELD_SLOT_COUNT + 1;
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     const action = planNextAction(workingModel, opts);
     if (action.kind === "END_TURN") {
@@ -271,11 +271,11 @@ function planNonExcludedAction(
   return null;
 }
 
-const RESERVE_AND_DEPLOY_SLOTS = BACK_RANK_SLOT_IDS.length + FRONT_RANK_SLOT_IDS.length;
+const BATTLEFIELD_SLOT_COUNT = BACK_RANK_SLOT_IDS.length + FRONT_RANK_SLOT_IDS.length;
 
 /**
  * Returns a clone of `model` with the card identified by `battleCardId` removed
- * from hand and every reserve/deploy slot, or `null` when the id is missing
+ * from hand and every back-rank/front-rank slot, or `null` when the id is missing
  * (nothing to remove — stop re-planning).
  */
 function removeCardFromModel(
@@ -287,25 +287,25 @@ function removeCardFromModel(
   }
   const handLengthBefore = model.aiHand.length;
   const aiHand = model.aiHand.filter((c) => c.battleCardId !== battleCardId);
-  const aiDeployed = { ...model.aiDeployed };
-  const aiReserve = { ...model.aiReserve };
+  const aiFrontRank = { ...model.aiFrontRank };
+  const aiBackRank = { ...model.aiBackRank };
   let removedFromBoard = false;
-  for (const slot of Object.keys(aiDeployed) as (keyof typeof aiDeployed)[]) {
-    if (aiDeployed[slot]?.battleCardId === battleCardId) {
-      aiDeployed[slot] = null;
+  for (const slot of Object.keys(aiFrontRank) as (keyof typeof aiFrontRank)[]) {
+    if (aiFrontRank[slot]?.battleCardId === battleCardId) {
+      aiFrontRank[slot] = null;
       removedFromBoard = true;
     }
   }
-  for (const slot of Object.keys(aiReserve) as (keyof typeof aiReserve)[]) {
-    if (aiReserve[slot]?.battleCardId === battleCardId) {
-      aiReserve[slot] = null;
+  for (const slot of Object.keys(aiBackRank) as (keyof typeof aiBackRank)[]) {
+    if (aiBackRank[slot]?.battleCardId === battleCardId) {
+      aiBackRank[slot] = null;
       removedFromBoard = true;
     }
   }
   if (aiHand.length === handLengthBefore && !removedFromBoard) {
     return null;
   }
-  return { ...model, aiHand, aiDeployed, aiReserve };
+  return { ...model, aiHand, aiFrontRank, aiBackRank };
 }
 
 /** Builds an action proposal: trace, description, and enriched commands. */

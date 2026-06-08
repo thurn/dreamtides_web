@@ -35,8 +35,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: { F0: null, F1: null, F2: null, F3: null },
-    aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
+    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -49,7 +49,7 @@ const OPTS = { scoreToWin: 25 };
 describe("planDefense", () => {
   it("returns no moves when the opponent has no front-rank challengers", () => {
     const model = makeModel({
-      aiReserve: {
+      aiBackRank: {
         B0: makeCard({ battleCardId: "blocker", basePrintedSpark: 5 }),
         B1: null,
         B2: null,
@@ -63,7 +63,7 @@ describe("planDefense", () => {
 
   it("blocks a challenger in its own lane with a favorable body that survives", () => {
     const model = makeModel({
-      aiReserve: {
+      aiBackRank: {
         B0: makeCard({ battleCardId: "wolf", basePrintedSpark: 4 }),
         B1: null,
         B2: null,
@@ -83,7 +83,7 @@ describe("planDefense", () => {
 
   it("prefers the smallest body that still beats the challenger", () => {
     const model = makeModel({
-      aiReserve: {
+      aiBackRank: {
         B0: makeCard({ battleCardId: "huge", basePrintedSpark: 9 }),
         B1: makeCard({ battleCardId: "just-enough", basePrintedSpark: 4 }),
         B2: null,
@@ -100,7 +100,7 @@ describe("planDefense", () => {
 
   it("does not move a still-exhausted reserve body up to block", () => {
     const model = makeModel({
-      aiReserve: {
+      aiBackRank: {
         B0: makeCard({ battleCardId: "exhausted", basePrintedSpark: 6, canChallengeThisTurn: false }),
         B1: null,
         B2: null,
@@ -114,13 +114,13 @@ describe("planDefense", () => {
 
   it("skips a lane already defended by a deployed body", () => {
     const model = makeModel({
-      aiDeployed: {
+      aiFrontRank: {
         F0: makeCard({ battleCardId: "onguard", basePrintedSpark: 2 }),
         F1: null,
         F2: null,
         F3: null,
       },
-      aiReserve: {
+      aiBackRank: {
         B0: makeCard({ battleCardId: "backRank", basePrintedSpark: 5 }),
         B1: null,
         B2: null,
@@ -136,7 +136,7 @@ describe("planDefense", () => {
     const model = makeModel({
       aiScore: 0,
       playerScore: 5,
-      aiReserve: {
+      aiBackRank: {
         B0: makeCard({ battleCardId: "small", basePrintedSpark: 1 }),
         B1: makeCard({ battleCardId: "medium", basePrintedSpark: 2 }),
         B2: null,
@@ -156,7 +156,7 @@ describe("planDefense", () => {
     const model = makeModel({
       aiScore: 20,
       playerScore: 0,
-      aiReserve: {
+      aiBackRank: {
         B0: makeCard({ battleCardId: "precious", basePrintedSpark: 5 }),
         B1: null,
         B2: null,
@@ -171,7 +171,7 @@ describe("planDefense", () => {
 
   it("assigns the strongest blockers to the biggest threats first", () => {
     const model = makeModel({
-      aiReserve: {
+      aiBackRank: {
         B0: makeCard({ battleCardId: "b3", basePrintedSpark: 3 }),
         B1: makeCard({ battleCardId: "b5", basePrintedSpark: 5 }),
         B2: null,

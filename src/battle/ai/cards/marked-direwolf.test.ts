@@ -23,8 +23,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: { F0: null, F1: null, F2: null, F3: null },
-    aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
+    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -47,8 +47,8 @@ describe("Marked Direwolf (#512)", () => {
     markedDirewolf.play(model, self, null);
     expect(model.aiEnergy).toBe(2);
     expect(model.aiHand).toHaveLength(0);
-    expect(model.aiReserve.B0?.battleCardId).toBe("wolf");
-    expect(model.aiReserve.B0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiBackRank.B0?.battleCardId).toBe("wolf");
+    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
   });
 
   it("canPlay is false without enough energy", () => {

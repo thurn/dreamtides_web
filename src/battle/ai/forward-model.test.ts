@@ -175,21 +175,21 @@ describe("forwardModelFromState", () => {
 
     for (const slot of FRONT_RANK_SLOT_IDS) {
       if (slot === "F1") {
-        expect(model.aiDeployed[slot]?.cardNumber).toBe(201);
+        expect(model.aiFrontRank[slot]?.cardNumber).toBe(201);
       } else {
-        expect(model.aiDeployed[slot]).toBeNull();
+        expect(model.aiFrontRank[slot]).toBeNull();
       }
     }
     for (const slot of BACK_RANK_SLOT_IDS) {
       if (slot === "B3") {
-        expect(model.aiReserve[slot]?.cardNumber).toBe(202);
+        expect(model.aiBackRank[slot]?.cardNumber).toBe(202);
       } else {
-        expect(model.aiReserve[slot]).toBeNull();
+        expect(model.aiBackRank[slot]).toBeNull();
       }
     }
 
-    expect(model.aiDeployed.F1?.canChallengeThisTurn).toBe(true);
-    expect(model.aiReserve.B3?.canChallengeThisTurn).toBe(true);
+    expect(model.aiFrontRank.F1?.canChallengeThisTurn).toBe(true);
+    expect(model.aiBackRank.B3?.canChallengeThisTurn).toBe(true);
   });
 
   it("marks a body that entered play on the AI's current turn as unable to challenge", () => {
@@ -208,8 +208,8 @@ describe("forwardModelFromState", () => {
 
     const model = forwardModelFromState(state, ai);
 
-    expect(model.aiReserve.B0?.canChallengeThisTurn).toBe(false);
-    expect(model.aiReserve.B1?.canChallengeThisTurn).toBe(true);
+    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiBackRank.B1?.canChallengeThisTurn).toBe(true);
   });
 
   it("keeps a body exhausted through the opponent's turn until the AI's next Dawn", () => {
@@ -231,9 +231,9 @@ describe("forwardModelFromState", () => {
     const model = forwardModelFromState(state, ai);
 
     // Still exhausted during the opponent's turn → cannot be moved up to block.
-    expect(model.aiReserve.B0?.canChallengeThisTurn).toBe(false);
+    expect(model.aiBackRank.B0?.canChallengeThisTurn).toBe(false);
     // Cleared at the AI's last Dawn → available to block.
-    expect(model.aiReserve.B1?.canChallengeThisTurn).toBe(true);
+    expect(model.aiBackRank.B1?.canChallengeThisTurn).toBe(true);
   });
 
   it("projects opponent bodies as abstract spark/rank/slot without identity", () => {
@@ -377,23 +377,23 @@ describe("cloneForwardModel", () => {
     const original = buildModel();
     const clone = cloneForwardModel(original);
     const slot: FrontRankSlotId = "F0";
-    clone.aiDeployed[slot] = null;
-    expect(original.aiDeployed[slot]?.cardNumber).toBe(502);
+    clone.aiFrontRank[slot] = null;
+    expect(original.aiFrontRank[slot]?.cardNumber).toBe(502);
   });
 
   it("does not alias a deployed AiCard object", () => {
     const original = buildModel();
     const clone = cloneForwardModel(original);
     const slot: FrontRankSlotId = "F0";
-    clone.aiDeployed[slot]!.canChallengeThisTurn = false;
-    expect(original.aiDeployed[slot]?.canChallengeThisTurn).toBe(true);
+    clone.aiFrontRank[slot]!.canChallengeThisTurn = false;
+    expect(original.aiFrontRank[slot]?.canChallengeThisTurn).toBe(true);
   });
 
   it("does not alias reserve slot record", () => {
     const original = buildModel();
     const clone = cloneForwardModel(original);
     const slot: BackRankSlotId = "B0";
-    clone.aiReserve[slot] = {
+    clone.aiBackRank[slot] = {
       battleCardId: "r",
       cardNumber: 0,
       name: "r",
@@ -403,7 +403,7 @@ describe("cloneForwardModel", () => {
       figmentCount: 1,
       canChallengeThisTurn: false,
     };
-    expect(original.aiReserve[slot]).toBeNull();
+    expect(original.aiBackRank[slot]).toBeNull();
   });
 
   it("does not alias opponent body objects", () => {
@@ -442,8 +442,8 @@ describe("effectiveSpark", () => {
       aiHand: [],
       aiDeck: [],
       aiVoid: [],
-      aiDeployed: { F0: null, F1: null, F2: null, F3: null },
-      aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
+      aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
+      aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
       opponentBodies: [],
       opponentHandCount: 0,
       opponentVoidCount: 0,
@@ -458,17 +458,17 @@ describe("effectiveSpark", () => {
   it("computes base spark as basePrintedSpark * figmentCount + sparkDelta", () => {
     const model = makeEmptyModel();
     // basePrintedSpark=3, figmentCount=4, sparkDelta=2 → 3*4+2 = 14
-    model.aiDeployed.F0 = makeAiCard("card-a", 3, 2, 4);
+    model.aiFrontRank.F0 = makeAiCard("card-a", 3, 2, 4);
     expect(effectiveSpark(model, "F0", new Map())).toBe(14);
   });
 
   it("B1 supports F0 and F1 but not F2", () => {
     const model = makeEmptyModel();
     // base spark = 5*1+0 = 5
-    model.aiDeployed.F0 = makeAiCard("body-d0", 5, 0, 1);
-    model.aiDeployed.F1 = makeAiCard("body-d1", 5, 0, 1);
-    model.aiDeployed.F2 = makeAiCard("body-d2", 5, 0, 1);
-    model.aiReserve.B1 = makeAiCard("r1-support", 2, 0, 1);
+    model.aiFrontRank.F0 = makeAiCard("body-d0", 5, 0, 1);
+    model.aiFrontRank.F1 = makeAiCard("body-d1", 5, 0, 1);
+    model.aiFrontRank.F2 = makeAiCard("body-d2", 5, 0, 1);
+    model.aiBackRank.B1 = makeAiCard("r1-support", 2, 0, 1);
     const sources = new Map([["r1-support", 2]]);
 
     expect(effectiveSpark(model, "F0", sources)).toBe(7); // 5 + 2
@@ -478,9 +478,9 @@ describe("effectiveSpark", () => {
 
   it("B0 supports only F0, not F1", () => {
     const model = makeEmptyModel();
-    model.aiDeployed.F0 = makeAiCard("body-d0", 3, 0, 1);
-    model.aiDeployed.F1 = makeAiCard("body-d1", 3, 0, 1);
-    model.aiReserve.B0 = makeAiCard("r0-support", 1, 0, 1);
+    model.aiFrontRank.F0 = makeAiCard("body-d0", 3, 0, 1);
+    model.aiFrontRank.F1 = makeAiCard("body-d1", 3, 0, 1);
+    model.aiBackRank.B0 = makeAiCard("r0-support", 1, 0, 1);
     const sources = new Map([["r0-support", 2]]);
 
     expect(effectiveSpark(model, "F0", sources)).toBe(5); // 3 + 2
@@ -490,9 +490,9 @@ describe("effectiveSpark", () => {
   it("two sources both supporting the same slot stack additively", () => {
     const model = makeEmptyModel();
     // B1 supports F0,F1; B2 supports F1,F2 → F1 gets both
-    model.aiDeployed.F1 = makeAiCard("body-d1", 4, 0, 1);
-    model.aiReserve.B1 = makeAiCard("r1-card", 1, 0, 1);
-    model.aiReserve.B2 = makeAiCard("r2-card", 1, 0, 1);
+    model.aiFrontRank.F1 = makeAiCard("body-d1", 4, 0, 1);
+    model.aiBackRank.B1 = makeAiCard("r1-card", 1, 0, 1);
+    model.aiBackRank.B2 = makeAiCard("r2-card", 1, 0, 1);
     const sources = new Map([
       ["r1-card", 2],
       ["r2-card", 1],
@@ -504,8 +504,8 @@ describe("effectiveSpark", () => {
 
   it("a reserve card absent from supportSources contributes nothing", () => {
     const model = makeEmptyModel();
-    model.aiDeployed.F0 = makeAiCard("body-d0", 5, 0, 1);
-    model.aiReserve.B1 = makeAiCard("r1-no-support", 2, 0, 1);
+    model.aiFrontRank.F0 = makeAiCard("body-d0", 5, 0, 1);
+    model.aiBackRank.B1 = makeAiCard("r1-no-support", 2, 0, 1);
     // r1-no-support is NOT in sources
     const sources = new Map<string, number>();
 
@@ -514,9 +514,9 @@ describe("effectiveSpark", () => {
 
   it("support is not divided — each supported slot gets the full value", () => {
     const model = makeEmptyModel();
-    model.aiDeployed.F0 = makeAiCard("body-d0", 3, 0, 1);
-    model.aiDeployed.F1 = makeAiCard("body-d1", 3, 0, 1);
-    model.aiReserve.B1 = makeAiCard("r1-wide", 1, 0, 1);
+    model.aiFrontRank.F0 = makeAiCard("body-d0", 3, 0, 1);
+    model.aiFrontRank.F1 = makeAiCard("body-d1", 3, 0, 1);
+    model.aiBackRank.B1 = makeAiCard("r1-wide", 1, 0, 1);
     const sources = new Map([["r1-wide", 3]]);
 
     // Both slots get +3, not +1.5

@@ -6,11 +6,11 @@ import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 
 // --- Fixture helpers -------------------------------------------------------
 
-function emptyDeployed(): ForwardModel["aiDeployed"] {
+function emptyFrontRank(): ForwardModel["aiFrontRank"] {
   return { F0: null, F1: null, F2: null, F3: null };
 }
 
-function emptyReserve(): ForwardModel["aiReserve"] {
+function emptyBackRank(): ForwardModel["aiBackRank"] {
   return { B0: null, B1: null, B2: null, B3: null, B4: null };
 }
 
@@ -23,8 +23,8 @@ function baseModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: emptyDeployed(),
-    aiReserve: emptyReserve(),
+    aiFrontRank: emptyFrontRank(),
+    aiBackRank: emptyBackRank(),
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -132,8 +132,8 @@ describe("planNextAction", () => {
       });
       const model = baseModel({
         aiEnergy: 0,
-        aiReserve: { ...emptyReserve(), B0: ready },
-        aiDeployed: {
+        aiBackRank: { ...emptyBackRank(), B0: ready },
+        aiFrontRank: {
           F0: makeCard({ basePrintedSpark: 1 }),
           F1: makeCard({ basePrintedSpark: 1 }),
           F2: makeCard({ basePrintedSpark: 1 }),
@@ -157,7 +157,7 @@ describe("planNextAction", () => {
       const model = baseModel({
         aiEnergy: 3,
         aiHand: [minstrel()],
-        aiDeployed: { ...emptyDeployed(), F0: challenger },
+        aiFrontRank: { ...emptyFrontRank(), F0: challenger },
       });
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("PLAY_CARD");
@@ -165,7 +165,7 @@ describe("planNextAction", () => {
       expect(action.toSlot).toBeDefined();
       expect(BACK_RANK_SLOT_IDS).toContain(action.toSlot);
       // The named slot is empty in the source model.
-      expect(model.aiReserve[action.toSlot as "B0"]).toBeNull();
+      expect(model.aiBackRank[action.toSlot as "B0"]).toBeNull();
     });
 
     it("a returned MOVE_CARD targets an empty, legal deploy slot from a ready reserve card", () => {
@@ -177,7 +177,7 @@ describe("planNextAction", () => {
       });
       const model = baseModel({
         aiEnergy: 0,
-        aiReserve: { ...emptyReserve(), B0: ready },
+        aiBackRank: { ...emptyBackRank(), B0: ready },
         opponentBodies: [],
       });
       const action = planNextAction(model, defaultOptions());
@@ -185,7 +185,7 @@ describe("planNextAction", () => {
       expect(action.toSlot).toBeDefined();
       expect(FRONT_RANK_SLOT_IDS).toContain(action.toSlot);
       // Destination is empty in the source model.
-      expect(model.aiDeployed[action.toSlot as "F0"]).toBeNull();
+      expect(model.aiFrontRank[action.toSlot as "F0"]).toBeNull();
       expect(action.self?.battleCardId).toBe(ready.battleCardId);
     });
 
@@ -216,14 +216,14 @@ describe("planNextAction", () => {
         } else if (action.kind === "MOVE_CARD") {
           const self = action.self as AiCard;
           const toSlot = action.toSlot as "F0";
-          expect(model.aiDeployed[toSlot]).toBeNull();
+          expect(model.aiFrontRank[toSlot]).toBeNull();
           // Apply the move on the live model.
           for (const slot of BACK_RANK_SLOT_IDS) {
-            if (model.aiReserve[slot]?.battleCardId === self.battleCardId) {
-              model.aiReserve[slot] = null;
+            if (model.aiBackRank[slot]?.battleCardId === self.battleCardId) {
+              model.aiBackRank[slot] = null;
             }
           }
-          model.aiDeployed[toSlot] = self;
+          model.aiFrontRank[toSlot] = self;
         }
       }
     });
@@ -291,7 +291,7 @@ describe("planNextAction", () => {
       const model = baseModel({
         aiEnergy: 3,
         aiHand: [colossus(), minstrel()],
-        aiDeployed: { ...emptyDeployed(), F0: challenger },
+        aiFrontRank: { ...emptyFrontRank(), F0: challenger },
       });
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("PLAY_CARD");
@@ -333,7 +333,7 @@ describe("planNextAction", () => {
       const model = baseModel({
         aiEnergy: 2,
         aiHand: [minstrel()],
-        aiReserve: { ...emptyReserve(), B2: colossusOnBoard },
+        aiBackRank: { ...emptyBackRank(), B2: colossusOnBoard },
         opponentBodies: [],
       });
 

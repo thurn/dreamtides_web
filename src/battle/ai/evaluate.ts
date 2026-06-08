@@ -36,10 +36,10 @@ const SCORE_TO_WIN = 25;
 /** Score differential dominates; one point is worth a large board swing. */
 const SCORE_DIFF_WEIGHT = 10;
 
-/** Front-rank (deployed) board spark. Weighted above back-rank. */
+/** Front-rank board spark. Weighted above back-rank. */
 const FRONT_SPARK_WEIGHT = 1;
 
-/** Back-rank (reserve) board spark. Lower than front so deployed bodies lead. */
+/** Back-rank board spark. Lower than front so front-rank bodies lead. */
 const BACK_SPARK_WEIGHT = 0.5;
 
 /** Each card in the AI's hand. */
@@ -97,13 +97,13 @@ export function evaluate(model: ForwardModel): number {
   score += SCORE_DIFF_WEIGHT * (model.aiScore - model.playerScore);
 
   // Board spark. AI effective spark adds the support contribution to each
-  // deployed body's base spark; opponent bodies use their abstract
+  // front-rank body's base spark; opponent bodies use their abstract
   // `effectiveSpark` directly, split front/back by `rank`.
   const support = buildSupportContribution(model);
 
   let aiFrontSpark = 0;
   let expectedPoints = 0;
-  // Opponent front spark, per deployed slot, used to floor the simple
+  // Opponent front spark, per front-rank slot, used to floor the simple
   // expected-points estimate (a body opposite a defender scores its excess).
   const opponentFrontSparkBySlot = new Map<string, number>();
   for (const body of model.opponentBodies) {
@@ -116,14 +116,14 @@ export function evaluate(model: ForwardModel): number {
   }
 
   for (const slot of FRONT_RANK_SLOT_IDS) {
-    const card = model.aiDeployed[slot];
+    const card = model.aiFrontRank[slot];
     if (card === null) {
       continue;
     }
     const spark = baseSpark(card) + (support.get(card.battleCardId) ?? 0);
     aiFrontSpark += spark;
 
-    // Simple expected next-Challenge points: a deployed challenger that can act
+    // Simple expected next-Challenge points: a front-rank challenger that can act
     // this turn scores its effective spark minus the directly-opposing front
     // body's spark, floored at 0. The opponent-model-weighted refinement (other
     // archetypal responses, removal risk) lives in the planner.
@@ -135,7 +135,7 @@ export function evaluate(model: ForwardModel): number {
 
   let aiBackSpark = 0;
   for (const slot of BACK_RANK_SLOT_IDS) {
-    const card = model.aiReserve[slot];
+    const card = model.aiBackRank[slot];
     if (card !== null) {
       aiBackSpark += baseSpark(card) + (support.get(card.battleCardId) ?? 0);
     }
@@ -166,7 +166,7 @@ export function evaluate(model: ForwardModel): number {
     hintTotal += valueHintSum(model, card);
   }
   for (const slot of FRONT_RANK_SLOT_IDS) {
-    const card = model.aiDeployed[slot];
+    const card = model.aiFrontRank[slot];
     if (card !== null) {
       hintTotal += valueHintSum(model, card);
       if (card.cardNumber === SIGILSWORN_CHAMPION) {
@@ -175,7 +175,7 @@ export function evaluate(model: ForwardModel): number {
     }
   }
   for (const slot of BACK_RANK_SLOT_IDS) {
-    const card = model.aiReserve[slot];
+    const card = model.aiBackRank[slot];
     if (card !== null) {
       hintTotal += valueHintSum(model, card);
       if (card.cardNumber === SIGILSWORN_CHAMPION) {

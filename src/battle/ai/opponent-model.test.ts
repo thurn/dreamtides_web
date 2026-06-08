@@ -38,8 +38,8 @@ function emptyModel(): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiDeployed: { F0: null, F1: null, F2: null, F3: null },
-    aiReserve: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
+    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -49,17 +49,17 @@ function emptyModel(): ForwardModel {
 /** A model with three AI challengers (sparks 5, 3, 2) and no opponent bodies. */
 function modelWithChallengers(): ForwardModel {
   const model = emptyModel();
-  model.aiDeployed.F0 = makeCard({
+  model.aiFrontRank.F0 = makeCard({
     battleCardId: "ai-0",
     basePrintedSpark: 5,
     canChallengeThisTurn: true,
   });
-  model.aiDeployed.F1 = makeCard({
+  model.aiFrontRank.F1 = makeCard({
     battleCardId: "ai-1",
     basePrintedSpark: 3,
     canChallengeThisTurn: true,
   });
-  model.aiDeployed.F2 = makeCard({
+  model.aiFrontRank.F2 = makeCard({
     battleCardId: "ai-2",
     basePrintedSpark: 2,
     canChallengeThisTurn: true,
@@ -121,7 +121,7 @@ describe("scoreAgainstOpponent", () => {
     const spy = vi.spyOn(evaluateModule, "evaluate");
 
     const model = modelWithChallengers();
-    model.aiDeployed.F3 = makeCard({
+    model.aiFrontRank.F3 = makeCard({
       battleCardId: "ai-3",
       basePrintedSpark: 7,
       canChallengeThisTurn: true,
@@ -144,7 +144,7 @@ describe("scoreAgainstOpponent", () => {
 
   it("does not explode on a large board with a small sampleCap", () => {
     const model = modelWithChallengers();
-    model.aiDeployed.F3 = makeCard({
+    model.aiFrontRank.F3 = makeCard({
       battleCardId: "ai-3",
       basePrintedSpark: 9,
       canChallengeThisTurn: true,
@@ -197,7 +197,7 @@ describe("scoreAgainstOpponent", () => {
     model.aiScore = 20;
     model.playerScore = 25;
     // Single challenger with spark 5: unblocked it scores 5, reaching aiScore 25.
-    model.aiDeployed.F0 = makeCard({
+    model.aiFrontRank.F0 = makeCard({
       battleCardId: "ai-near-win",
       basePrintedSpark: 5,
       canChallengeThisTurn: true,
@@ -215,7 +215,7 @@ describe("scoreAgainstOpponent", () => {
   it("ignores deployed cards that cannot challenge this turn", () => {
     const exhausted = modelWithChallengers();
     for (const slot of ["F0", "F1", "F2"] as const) {
-      const card = exhausted.aiDeployed[slot];
+      const card = exhausted.aiFrontRank[slot];
       if (card !== null) {
         card.canChallengeThisTurn = false;
       }
