@@ -77,7 +77,7 @@ function defaultOptions(overrides: Partial<PlannerOptions> = {}): PlannerOptions
 // Real-card fixtures, drawn from the AI's Starter pool so the planner's
 // card-model lookups (canPlay / play / triggers) exercise real behavior.
 
-function minstrel(): AiCard {
+function strummer(): AiCard {
   // #510 Nocturne Strummer — 2●, 1✦, Support +2✦.
   return makeCard({ cardNumber: 510, name: "Nocturne Strummer", energyCost: 2, basePrintedSpark: 1 });
 }
@@ -101,7 +101,7 @@ describe("planNextAction", () => {
       const fixtures: ForwardModel[] = [
         baseModel({
           aiEnergy: 1,
-          aiHand: [minstrel(), direwolf(), colossus()],
+          aiHand: [strummer(), direwolf(), colossus()],
         }),
         baseModel({
           aiEnergy: 3,
@@ -110,7 +110,7 @@ describe("planNextAction", () => {
         }),
         baseModel({
           aiEnergy: 0,
-          aiHand: [minstrel()],
+          aiHand: [strummer()],
         }),
       ];
 
@@ -156,7 +156,7 @@ describe("planNextAction", () => {
       });
       const model = baseModel({
         aiEnergy: 3,
-        aiHand: [minstrel()],
+        aiHand: [strummer()],
         aiFrontRank: { ...emptyFrontRank(), F0: challenger },
       });
       const action = planNextAction(model, defaultOptions());
@@ -194,7 +194,7 @@ describe("planNextAction", () => {
       // and confirm no illegal proposal is ever produced.
       const model = baseModel({
         aiEnergy: 8,
-        aiHand: [minstrel(), direwolf(), colossus()],
+        aiHand: [strummer(), direwolf(), colossus()],
         opponentBodies: [opponentBody({ effectiveSpark: 1 })],
       });
 
@@ -233,7 +233,7 @@ describe("planNextAction", () => {
     it("returns a valid PlannedAction without throwing when the deadline has passed", () => {
       const model = baseModel({
         aiEnergy: 8,
-        aiHand: [minstrel(), direwolf(), colossus()],
+        aiHand: [strummer(), direwolf(), colossus()],
         opponentBodies: [opponentBody({ effectiveSpark: 3 })],
       });
       const opts = defaultOptions({ nowMs: 2_000_000, deadlineMs: 1_000_000 });
@@ -258,7 +258,7 @@ describe("planNextAction", () => {
       const build = (): ForwardModel =>
         baseModel({
           aiEnergy: 8,
-          aiHand: [minstrel(), direwolf(), colossus()],
+          aiHand: [strummer(), direwolf(), colossus()],
           opponentBodies: [opponentBody({ effectiveSpark: 2, slot: "F0" })],
         });
 
@@ -277,10 +277,10 @@ describe("planNextAction", () => {
 
   describe("synergy ordering", () => {
     it("plays Nocturne Strummer before Wildflower Colossus when only one is affordable", () => {
-      // Energy for exactly ONE of the two: 2 (Minstrel) but not 6 (Colossus).
-      // A deployed challenger in F0 makes the Minstrel's Support immediately
+      // Energy for exactly ONE of the two: 2 (Strummer) but not 6 (Colossus).
+      // A deployed challenger in F0 makes the Strummer's Support immediately
       // valuable (it lifts that front body, and would lift a future Colossus),
-      // so the character stage should lead with the Minstrel even though it is
+      // so the character stage should lead with the Strummer even though it is
       // listed AFTER the Colossus in hand.
       const challenger = makeCard({
         cardNumber: 512,
@@ -290,7 +290,7 @@ describe("planNextAction", () => {
       });
       const model = baseModel({
         aiEnergy: 3,
-        aiHand: [colossus(), minstrel()],
+        aiHand: [colossus(), strummer()],
         aiFrontRank: { ...emptyFrontRank(), F0: challenger },
       });
       const action = planNextAction(model, defaultOptions());
@@ -307,23 +307,23 @@ describe("planNextAction", () => {
       // play it. The board is otherwise empty and there are no opponent bodies.
       //
       // The winning completed line is:
-      //   1. play Minstrel  -> lands in B0 (first empty reserve slot)
+      //   1. play Strummer  -> lands in B0 (first empty reserve slot)
       //   2. reposition Colossus from B2 -> F0 (first empty deploy slot)
       // In the final board the Colossus stands in F0 with 1 supporting ally
-      // (Minstrel in B0, which supports F0), so its effective spark is
-      //   6 (base) + 2 (Minstrel Support, B0 supports F0)
+      // (Strummer in B0, which supports F0), so its effective spark is
+      //   6 (base) + 2 (Strummer Support, B0 supports F0)
       //             + 2 (own +2-per-supporter self-static, 1 supporter) = 10,
       // scored unblocked against an empty opponent board. That completed plan
       // scores far above END_TURN.
       //
-      // Crucially, playing the Minstrel ON ITS OWN is NON-IMPROVING: it spends a
+      // Crucially, playing the Strummer ON ITS OWN is NON-IMPROVING: it spends a
       // hand card and energy and only adds a back-rank body, scoring slightly
       // BELOW the do-nothing/END_TURN baseline (~3.5 vs ~4.0). The old
       // strictly-improving beam pruned this setup step and never reached the
       // payoff; it would instead reposition the Colossus alone (still better than
-      // passing, but the lesser line) and never play the Minstrel. The real beam
+      // passing, but the lesser line) and never play the Strummer. The real beam
       // keeps the neutral setup node so the payoff is discovered, and the best
-      // complete plan begins with the Minstrel play.
+      // complete plan begins with the Strummer play.
       const colossusOnBoard = makeCard({
         cardNumber: 515,
         name: "Wildflower Colossus",
@@ -332,14 +332,14 @@ describe("planNextAction", () => {
       });
       const model = baseModel({
         aiEnergy: 2,
-        aiHand: [minstrel()],
+        aiHand: [strummer()],
         aiBackRank: { ...emptyBackRank(), B2: colossusOnBoard },
         opponentBodies: [],
       });
 
       const action = planNextAction(model, defaultOptions());
 
-      // The first action of the best complete plan is the Minstrel play (the
+      // The first action of the best complete plan is the Strummer play (the
       // setup step of the winning line) — NOT END_TURN, and NOT the lesser
       // reposition-only line the greedy version would take.
       expect(action.kind).toBe("PLAY_CARD");
@@ -349,13 +349,13 @@ describe("planNextAction", () => {
 
   describe("over-development guard (no greedy cutoff != over-develop)", () => {
     it("returns END_TURN when the only legal develop is a losing line", () => {
-      // A legal action EXISTS (the AI can afford the Minstrel) but playing it
+      // A legal action EXISTS (the AI can afford the Strummer) but playing it
       // strictly lowers the score: it spends a hand card and energy to add a
       // lone back-rank body with no front body to support and no payoff to set
       // up. With the greedy cutoff removed the beam still explores this play, but
       // because it scores below the do-nothing/END_TURN baseline the best
       // complete plan is the empty/root plan and the planner passes.
-      const model = baseModel({ aiEnergy: 3, aiHand: [minstrel()] });
+      const model = baseModel({ aiEnergy: 3, aiHand: [strummer()] });
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("END_TURN");
     });
@@ -378,7 +378,7 @@ describe("planNextAction", () => {
 
   describe("trace", () => {
     it("populates existing trace fields for a PLAY_CARD action", () => {
-      const model = baseModel({ aiEnergy: 3, aiHand: [minstrel()] });
+      const model = baseModel({ aiEnergy: 3, aiHand: [strummer()] });
       const action = planNextAction(model, defaultOptions());
       expect(action.trace.choice).toBe(action.kind);
       expect(action.trace.stage).toBe(action.stage);

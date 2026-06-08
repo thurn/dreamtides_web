@@ -173,7 +173,7 @@ function firstEmptyFrontRankSlot(model: ForwardModel): FrontRankSlotId | null {
 
 /**
  * The back-rank slot a character play lands in: the first empty slot, matching
- * {@link playCharacterToReserve}. Recording it on the action lets the driver
+ * {@link playCharacterToBackRank}. Recording it on the action lets the driver
  * emit the body's `MOVE_CARD_TO_ZONE` to a concrete back-rank destination.
  */
 function firstEmptyBackRankSlot(model: ForwardModel): BackRankSlotId | null {
@@ -193,7 +193,8 @@ function firstEmptyBackRankSlot(model: ForwardModel): BackRankSlotId | null {
  * The staged order (`battle_ai.md` §"The Planner") is reflected by stage tags
  * and by the order actions are emitted: character plays, then repositions, then
  * non-character (event) plays. The beam ranks the resulting models by score, so
- * order-sensitive synergies (Minstrel before Colossus) surface naturally.
+ * order-sensitive synergies (Nocturne Strummer before Wildflower Colossus)
+ * surface naturally.
  */
 function generateActions(model: ForwardModel): PlanAction[] {
   const actions: PlanAction[] = [];
@@ -213,7 +214,7 @@ function generateActions(model: ForwardModel): PlanAction[] {
       card,
       targets: cardModel.chooseTargets(model, card),
       // The character body materializes into the first empty back-rank slot
-      // (see `playCharacterToReserve`). Record it so the driver moves the
+      // (see `playCharacterToBackRank`). Record it so the driver moves the
       // card out of hand rather than only paying its energy.
       toSlot: firstEmptyBackRankSlot(model),
       sourceHandIndex: handIndex,
@@ -306,8 +307,9 @@ function actionSortKey(action: PlanAction): string {
  * Expansion is a real bounded beam, NOT greedy: a partial plan is expanded by
  * EVERY legal next action, with no "strictly improving" gate. A momentarily
  * neutral-or-worse setup play (e.g. dropping Nocturne Strummer into the back rank)
- * is allowed to remain in the beam so a later step (repositioning Meadowforged
- * Colossus into a slot the Minstrel supports) can pay off within the same turn.
+ * is allowed to remain in the beam so a later step (repositioning Wildflower
+ * Colossus into a slot the Nocturne Strummer supports) can pay off within the
+ * same turn.
  * A line that genuinely goes nowhere still loses to the root baseline, so the
  * planner does not over-develop into losing positions.
  *

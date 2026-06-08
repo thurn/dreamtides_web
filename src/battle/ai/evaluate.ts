@@ -58,7 +58,7 @@ const EXPECTED_POINTS_WEIGHT = 1;
 const INEVITABILITY_WEIGHT = 2;
 
 /** Card number of Runebound Champion (▸Dawn: gain 1⍟). */
-const SIGILSWORN_CHAMPION = 513;
+const RUNEBOUND_CHAMPION = 513;
 
 // --- Helpers --------------------------------------------------------------
 
@@ -161,7 +161,7 @@ export function evaluate(model: ForwardModel): number {
   score += HAND_CARD_WEIGHT * model.aiHand.length;
 
   let hintTotal = 0;
-  let hasLiveSigilsworn = false;
+  let hasLiveRuneboundChampion = false;
   for (const card of model.aiHand) {
     hintTotal += valueHintSum(model, card);
   }
@@ -169,8 +169,8 @@ export function evaluate(model: ForwardModel): number {
     const card = model.aiFrontRank[slot];
     if (card !== null) {
       hintTotal += valueHintSum(model, card);
-      if (card.cardNumber === SIGILSWORN_CHAMPION) {
-        hasLiveSigilsworn = true;
+      if (card.cardNumber === RUNEBOUND_CHAMPION) {
+        hasLiveRuneboundChampion = true;
       }
     }
   }
@@ -178,15 +178,15 @@ export function evaluate(model: ForwardModel): number {
     const card = model.aiBackRank[slot];
     if (card !== null) {
       hintTotal += valueHintSum(model, card);
-      if (card.cardNumber === SIGILSWORN_CHAMPION) {
-        hasLiveSigilsworn = true;
+      if (card.cardNumber === RUNEBOUND_CHAMPION) {
+        hasLiveRuneboundChampion = true;
       }
     }
   }
   score += VALUE_HINT_WEIGHT * hintTotal;
 
   // Inevitability: a live Runebound Champion is a recurring ▸Dawn point source.
-  if (hasLiveSigilsworn) {
+  if (hasLiveRuneboundChampion) {
     score += INEVITABILITY_WEIGHT;
   }
 

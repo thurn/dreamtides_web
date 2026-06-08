@@ -2,7 +2,7 @@ import { supportingReserveSlots } from "../../engine/support";
 import { FRONT_RANK_SLOT_IDS } from "../../types";
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { StarterCardModel } from "./index";
-import { characterCanPlay, playCharacterToReserve } from "./helpers";
+import { characterCanPlay, playCharacterToBackRank } from "./helpers";
 
 /**
  * #515 Wildflower Colossus (Character, 6●, 6✦) — "This character has +2✦ for
@@ -19,7 +19,7 @@ export const wildflowerColossus: StarterCardModel = {
     return null;
   },
   play(model: ForwardModel, self: AiCard): void {
-    playCharacterToReserve(model, self);
+    playCharacterToBackRank(model, self);
   },
   selfStaticSpark(model: ForwardModel, self: AiCard): number {
     const deploySlot = FRONT_RANK_SLOT_IDS.find(

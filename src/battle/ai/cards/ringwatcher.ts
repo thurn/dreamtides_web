@@ -1,6 +1,6 @@
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { StarterCardModel } from "./index";
-import { characterCanPlay, foresee, playCharacterToReserve } from "./helpers";
+import { characterCanPlay, foresee, playCharacterToBackRank } from "./helpers";
 
 /**
  * #511 Ringwatcher (Character, 3●, 1✦) — "▸Materialized: Foresee 1."
@@ -17,7 +17,7 @@ export const ringwatcher: StarterCardModel = {
     return null;
   },
   play(model: ForwardModel, self: AiCard): void {
-    playCharacterToReserve(model, self);
+    playCharacterToBackRank(model, self);
   },
   onMaterialized(model: ForwardModel): void {
     foresee(model, 1);

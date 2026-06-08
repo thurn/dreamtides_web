@@ -41,8 +41,8 @@ const DEFAULT_TURN_LIMIT = 50;
 const DEFAULT_MAX_ENERGY_CAP = 10;
 
 /** Worlds Await (#519) grants +3✦ to the chosen ally. */
-const DISTANT_WORLDS_CARD_NUMBER = 519;
-const DISTANT_WORLDS_SPARK_BONUS = 3;
+const WORLDS_AWAIT_CARD_NUMBER = 519;
+const WORLDS_AWAIT_SPARK_BONUS = 3;
 
 interface BattleCapsInput {
   scoreToWin?: number;
@@ -319,8 +319,8 @@ function buildActionProposal(
   enrichDeferredCommands(commands, action, mutable, aiSide);
   // Attach the trace to the FIRST command so the resulting transition's
   // `aiChoices` carries this action's rationale into the battle log. The first
-  // command is the action's primary edit; subsequent edits (e.g. Distant
-  // Worlds' deferred spark) ride the same transition but need no trace. We
+  // command is the action's primary edit; subsequent edits (e.g. Worlds
+  // Await's deferred spark) ride the same transition but need no trace. We
   // replace the command rather than mutating it in place so the proposal's
   // stored command stays a plain rebuild on each render.
   const [firstCommand, ...restCommands] = commands;
@@ -349,7 +349,7 @@ function enrichDeferredCommands(
   if (action.kind !== "PLAY_CARD") {
     return;
   }
-  if (action.self?.cardNumber !== DISTANT_WORLDS_CARD_NUMBER) {
+  if (action.self?.cardNumber !== WORLDS_AWAIT_CARD_NUMBER) {
     return;
   }
   const targetId = action.targets?.targetBattleCardId ?? null;
@@ -365,7 +365,7 @@ function enrichDeferredCommands(
       {
         kind: "SET_CARD_SPARK_DELTA",
         battleCardId: targetId,
-        value: target.sparkDelta + DISTANT_WORLDS_SPARK_BONUS,
+        value: target.sparkDelta + WORLDS_AWAIT_SPARK_BONUS,
       },
       aiSide,
     ),

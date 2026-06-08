@@ -3,7 +3,7 @@ import type { ForwardModel, AiCard } from "../forward-model";
 import type { AiTargetChoice, StarterCardModel } from "./index";
 import { playEvent } from "./helpers";
 
-const MEADOWFORGED_COLOSSUS = 515;
+const WILDFLOWER_COLOSSUS = 515;
 
 /** Every AI ally on the board, deployed cards first (preferred challengers). */
 function friendlyAllies(model: ForwardModel): AiCard[] {
@@ -30,7 +30,8 @@ function baseSpark(card: AiCard): number {
 /**
  * #519 Worlds Await (Event, 1●) — "Give an ally +3✦." (`battle_ai.md`
  * §"The AI Deck"). A proactive pump: standard timing, so the AI plays it to
- * push a challenger past a likely blocker or grow Meadowforged toward lethal.
+ * push a challenger past a likely blocker or grow Wildflower Colossus toward
+ * lethal.
  *
  * Target choice: prefer a deployed challenger (allies are listed deployed-first
  * and chosen by highest base spark); a Wildflower Colossus is favored on a
@@ -54,8 +55,8 @@ export const worldsAwait: StarterCardModel = {
       const beats = baseSpark(ally) > baseSpark(best);
       const tieToColossus =
         baseSpark(ally) === baseSpark(best) &&
-        ally.cardNumber === MEADOWFORGED_COLOSSUS &&
-        best.cardNumber !== MEADOWFORGED_COLOSSUS;
+        ally.cardNumber === WILDFLOWER_COLOSSUS &&
+        best.cardNumber !== WILDFLOWER_COLOSSUS;
       if (beats || tieToColossus) {
         best = ally;
       }

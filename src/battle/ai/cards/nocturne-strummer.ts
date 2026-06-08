@@ -1,6 +1,6 @@
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { StarterCardModel } from "./index";
-import { characterCanPlay, playCharacterToReserve } from "./helpers";
+import { characterCanPlay, playCharacterToBackRank } from "./helpers";
 
 /**
  * #510 Nocturne Strummer (Character, 2●, 1✦) — "Support – Supported characters
@@ -17,7 +17,7 @@ export const nocturneStrummer: StarterCardModel = {
     return null;
   },
   play(model: ForwardModel, self: AiCard): void {
-    playCharacterToReserve(model, self);
+    playCharacterToBackRank(model, self);
   },
   supportSpark(): number {
     return 2;

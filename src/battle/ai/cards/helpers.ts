@@ -16,7 +16,7 @@ export function removeFromHand(model: ForwardModel, self: AiCard): AiCard | null
 
 /**
  * Returns whether a character can be played now: the AI can afford its energy
- * cost and at least one reserve slot is free to receive it.
+ * cost and at least one back-rank slot is free to receive it.
  */
 export function characterCanPlay(model: ForwardModel, self: AiCard): boolean {
   if (model.aiEnergy < self.energyCost) {
@@ -27,14 +27,14 @@ export function characterCanPlay(model: ForwardModel, self: AiCard): boolean {
 
 /**
  * Resolves a character `play`: pays `self.energyCost`, removes `self` from
- * hand, and places it into the first empty reserve slot with
+ * hand, and places it into the first empty back-rank slot with
  * `canChallengeThisTurn = false` (a character cannot challenge the turn it is
  * played — see `battle_ai.md` §"The Planner"). The placed card is the instance
- * pulled from hand when present, falling back to `self`. If every reserve slot
+ * pulled from hand when present, falling back to `self`. If every back-rank slot
  * is occupied the card is dropped after paying its cost (the planner only
- * proposes a character play when a reserve slot is free).
+ * proposes a character play when a back-rank slot is free).
  */
-export function playCharacterToReserve(model: ForwardModel, self: AiCard): void {
+export function playCharacterToBackRank(model: ForwardModel, self: AiCard): void {
   model.aiEnergy -= self.energyCost;
   const card = removeFromHand(model, self) ?? self;
   card.canChallengeThisTurn = false;

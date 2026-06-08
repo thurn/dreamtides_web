@@ -1,6 +1,6 @@
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { StarterCardModel } from "./index";
-import { characterCanPlay, drawTopCard, playCharacterToReserve } from "./helpers";
+import { characterCanPlay, drawTopCard, playCharacterToBackRank } from "./helpers";
 
 /**
  * #514 Final Witness (Character, 3●, 2✦) — "▸Dissolved: Draw a card."
@@ -16,7 +16,7 @@ export const finalWitness: StarterCardModel = {
     return null;
   },
   play(model: ForwardModel, self: AiCard): void {
-    playCharacterToReserve(model, self);
+    playCharacterToBackRank(model, self);
   },
   onDissolved(model: ForwardModel): void {
     drawTopCard(model);

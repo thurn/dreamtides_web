@@ -53,14 +53,14 @@ function editOf(command: BattleCommand, actor: BattleSide = "enemy"): BattleDebu
 
 describe("actionToCommands — character play", () => {
   it("emits a reserve placement and pays the energy cost", () => {
-    const self = aiCard({ battleCardId: "minstrel-1", cardNumber: 510, energyCost: 2 });
+    const self = aiCard({ battleCardId: "strummer-1", cardNumber: 510, energyCost: 2 });
     const action: PlannedAction = {
       stage: "character",
       kind: "PLAY_CARD",
       self,
       targets: null,
       toSlot: "B2",
-      trace: baseTrace({ battleCardId: "minstrel-1", targetSlotId: "B2" }),
+      trace: baseTrace({ battleCardId: "strummer-1", targetSlotId: "B2" }),
     };
 
     const commands = actionToCommands(action, "enemy");
@@ -69,7 +69,7 @@ describe("actionToCommands — character play", () => {
     const move = editOf(commands[0]);
     expect(move.kind).toBe("MOVE_CARD_TO_ZONE");
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
-    expect(move.battleCardId).toBe("minstrel-1");
+    expect(move.battleCardId).toBe("strummer-1");
     expect(move.destination).toEqual({ side: "enemy", zone: "backRank", slotId: "B2" });
 
     const energy = editOf(commands[1]);
@@ -190,14 +190,14 @@ describe("actionToCommands — END_TURN", () => {
 
 describe("actionToCommands — envelope", () => {
   it("threads the aiSide through energy/void edits when the AI is the player side", () => {
-    const self = aiCard({ battleCardId: "minstrel-2", cardNumber: 510, energyCost: 2 });
+    const self = aiCard({ battleCardId: "strummer-2", cardNumber: 510, energyCost: 2 });
     const action: PlannedAction = {
       stage: "character",
       kind: "PLAY_CARD",
       self,
       targets: null,
       toSlot: "B0",
-      trace: baseTrace({ battleCardId: "minstrel-2", targetSlotId: "B0" }),
+      trace: baseTrace({ battleCardId: "strummer-2", targetSlotId: "B0" }),
     };
 
     const side: BattleSide = "player";
@@ -266,10 +266,10 @@ describe("buildTrace", () => {
     const playTrace = buildTrace({
       stage: "character",
       kind: "PLAY_CARD",
-      self: aiCard({ battleCardId: "minstrel-1", cardNumber: 510, name: "Nocturne Strummer" }),
+      self: aiCard({ battleCardId: "strummer-1", cardNumber: 510, name: "Nocturne Strummer" }),
       targets: null,
       toSlot: "B2",
-      trace: baseTrace({ battleCardId: "minstrel-1", cardName: "Nocturne Strummer" }),
+      trace: baseTrace({ battleCardId: "strummer-1", cardName: "Nocturne Strummer" }),
     });
     expect(playTrace.rationale).toContain("Nocturne Strummer");
     expect(playTrace.targetBattleCardId).toBeNull();

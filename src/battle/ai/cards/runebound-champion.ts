@@ -1,6 +1,6 @@
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { StarterCardModel } from "./index";
-import { characterCanPlay, playCharacterToReserve } from "./helpers";
+import { characterCanPlay, playCharacterToBackRank } from "./helpers";
 
 /**
  * #513 Runebound Champion (Character, 5●, 3✦) — "▸Dawn: Gain 1⍟."
@@ -16,7 +16,7 @@ export const runeboundChampion: StarterCardModel = {
     return null;
   },
   play(model: ForwardModel, self: AiCard): void {
-    playCharacterToReserve(model, self);
+    playCharacterToBackRank(model, self);
   },
   onDawn(model: ForwardModel): void {
     model.aiScore += 1;
