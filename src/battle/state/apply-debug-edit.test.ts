@@ -449,3 +449,91 @@ describe("SET_CARD_STATUS ☪ auto-retreat", () => {
     expect(result.mutable.cardInstances[cardId].status.reclaimed).toBe(true);
   });
 });
+
+function setCounters(
+  state: BattleReducerState,
+  battleCardId: string,
+  value: number,
+): BattleReducerState {
+  return battleControllerReducer(state, {
+    type: "APPLY_COMMAND",
+    command: {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_COUNTERS", battleCardId, value },
+    },
+  });
+}
+
+describe("SET_COUNTERS", () => {
+  it("sets status.counters to the requested value", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+
+    const result = setCounters(state, cardId, 3);
+
+    expect(result.mutable.cardInstances[cardId].status.counters).toBe(3);
+  });
+
+  it("clamps a negative value to 0", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state.mutable.cardInstances[cardId].status.counters = 4;
+
+    const result = setCounters(state, cardId, -2);
+
+    expect(result.mutable.cardInstances[cardId].status.counters).toBe(0);
+  });
+
+  it("leaves sibling status fields untouched", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state.mutable.cardInstances[cardId].status.veil = 2;
+    state.mutable.cardInstances[cardId].status.reclaimed = true;
+
+    const result = setCounters(state, cardId, 5);
+
+    expect(result.mutable.cardInstances[cardId].status.counters).toBe(5);
+    expect(result.mutable.cardInstances[cardId].status.veil).toBe(2);
+    expect(result.mutable.cardInstances[cardId].status.reclaimed).toBe(true);
+  });
+
+  it("is a no-op when the value already matches (clamped)", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    // counters defaults to 0; clamped -1 also resolves to 0, so nothing changes.
+    const result = setCounters(state, cardId, -1);
+    expect(result.mutable.cardInstances[cardId]).toBe(state.mutable.cardInstances[cardId]);
+  });
+
+  it("ignores an unknown card id", () => {
+    const state = createBattle();
+    const result = setCounters(state, "missing-card", 2);
+    expect(result.mutable).toBe(state.mutable);
+  });
+
+  it("zeroes counters when the card leaves play (rules §Counters)", () => {
+    let state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    // Put a character on the battlefield and store counters on it.
+    state = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B0" });
+    state = setCounters(state, cardId, 4);
+    expect(state.mutable.cardInstances[cardId].status.counters).toBe(4);
+
+    // Moving it off the battlefield (to the void) resets its counters to 0.
+    const result = moveCard(state, cardId, { side: "player", zone: "void" });
+
+    expect(result.mutable.cardInstances[cardId].status.counters).toBe(0);
+  });
+
+  it("preserves counters on a reposition within the battlefield", () => {
+    let state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    state = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B0" });
+    state = setCounters(state, cardId, 2);
+
+    // A reposition between battlefield slots keeps counters (the card stays in play).
+    const result = moveCard(state, cardId, { side: "player", zone: "backRank", slotId: "B1" });
+
+    expect(result.mutable.cardInstances[cardId].status.counters).toBe(2);
+  });
+});

@@ -155,6 +155,14 @@ export type BattleDebugEdit =
     status: Partial<BattleCardStatus>;
   }
   | {
+    // Sets the card's stored ⧗ counters to `value`, clamped to ≥ 0 (rules
+    // §Counters). Counters are local to a card and reset to 0 when it leaves
+    // play; the leave-play path zeroes them automatically.
+    kind: "SET_COUNTERS";
+    battleCardId: string;
+    value: number;
+  }
+  | {
     kind: "CREATE_CARD_COPY";
     sourceBattleCardId: string;
     destination: BattleDebugZoneDestination;
@@ -438,6 +446,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "CLEAR_CARD_NOTES":
     case "SET_CARD_MARKERS":
     case "SET_CARD_STATUS":
+    case "SET_COUNTERS":
       return "card-instance";
     case "MOVE_CARD_TO_ZONE":
     case "DRAW_CARD":
@@ -535,6 +544,7 @@ function collectDebugEditTargets(
     case "CLEAR_CARD_NOTES":
     case "SET_CARD_MARKERS":
     case "SET_CARD_STATUS":
+    case "SET_COUNTERS":
       return [makeCardTarget(edit.battleCardId)];
     case "MOVE_CARD_TO_ZONE":
       return [
@@ -643,6 +653,8 @@ function createDebugEditLabel(
       return createMarkerDiffLabel(state, edit.battleCardId, edit.markers);
     case "SET_CARD_STATUS":
       return createStatusEditLabel(state, edit.battleCardId, edit.status);
+    case "SET_COUNTERS":
+      return `Set ${readCardName(state, edit.battleCardId)} Counters to ${String(Math.max(0, edit.value))}`;
     case "CREATE_CARD_COPY":
       return `Create Copy of ${readCardName(state, edit.sourceBattleCardId)}`;
     case "CREATE_FIGMENT":

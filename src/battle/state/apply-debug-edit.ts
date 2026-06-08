@@ -288,6 +288,8 @@ export function applyDebugEdit(
       );
     case "SET_CARD_STATUS":
       return setCardStatus(state, nextState, edit.battleCardId, edit.status);
+    case "SET_COUNTERS":
+      return setCounters(state, nextState, edit.battleCardId, edit.value);
     case "CREATE_CARD_COPY":
       return createCardCopy(
         state,
@@ -877,6 +879,48 @@ function setCardStatus(
 }
 
 /**
+ * Sets the card's stored ⧗ counters to `value`, clamped to ≥ 0 (rules
+ * §Counters). Counters are local to a card; the leave-play path (see
+ * {@link stampEnteredPlay}) zeroes them when the card leaves the battlefield.
+ * A set that does not change the clamped value is a no-op.
+ */
+function setCounters(
+  state: BattleMutableState,
+  nextState: BattleMutableState,
+  battleCardId: string,
+  value: number,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const card = nextState.cardInstances[battleCardId];
+  if (card === undefined) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  const clamped = Math.max(0, Math.trunc(value));
+  if (card.status.counters === clamped) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  nextState.cardInstances[battleCardId].status = {
+    ...card.status,
+    counters: clamped,
+  };
+
+  return {
+    state: nextState,
+    transition: createEmptyTransitionData(),
+  };
+}
+
+/**
  * Returns the first open back-rank slot address on `side`, scanning B0…B4 in
  * order, or null when every back-rank position is occupied.
  */
@@ -1371,6 +1415,10 @@ const BATTLEFIELD_ZONE_NAMES = new Set<string>(["backRank", "frontRank"]);
  * leaves the battlefield has the stamp cleared. A move within the battlefield
  * (a reposition between `reserve` and `deployed`) leaves the stamp untouched,
  * so a character keeps its entered-play turn while it stays in play.
+ *
+ * Leaving the battlefield also resets the card's stored ⧗ counters to 0 (rules
+ * §Counters): counters are local to a card and do not travel with it across a
+ * zone change out of play.
  */
 function stampEnteredPlay(
   instance: BattleCardInstance,
@@ -1386,6 +1434,10 @@ function stampEnteredPlay(
     instance.enteredPlayTurnNumber = turnNumber;
   } else if (leavingPlay) {
     instance.enteredPlayTurnNumber = null;
+    instance.status = {
+      ...instance.status,
+      counters: 0,
+    };
   }
 }
 

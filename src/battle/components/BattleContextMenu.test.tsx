@@ -214,3 +214,95 @@ describe("BattleContextMenu status toggles", () => {
     });
   });
 });
+
+describe("BattleContextMenu counters tool", () => {
+  it("shows the current counter value in the submenu label", () => {
+    const state = createState();
+    const battleCardId = placeCharacter(state, "backRank", "B0");
+    state.cardInstances[battleCardId].status.counters = 2;
+    const { container, root } = mount(state, battleCardId);
+
+    expect(container.textContent).toContain("Counters ⧗ (2)");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("emits SET_COUNTERS incrementing the stored value by one", () => {
+    const state = createState();
+    const battleCardId = placeCharacter(state, "backRank", "B0");
+    state.cardInstances[battleCardId].status.counters = 1;
+    const { container, onCommand, root } = mount(state, battleCardId);
+
+    openSubmenu(container, "Counters ⧗ (1)");
+    clickItem(container, "+1 ⧗");
+
+    expect(onCommand).toHaveBeenCalledWith({
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_COUNTERS", battleCardId, value: 2 },
+      sourceSurface: "inspector",
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("emits SET_COUNTERS decrementing the stored value, clamped at zero", () => {
+    const state = createState();
+    const battleCardId = placeCharacter(state, "backRank", "B0");
+    state.cardInstances[battleCardId].status.counters = 3;
+    const { container, onCommand, root } = mount(state, battleCardId);
+
+    openSubmenu(container, "Counters ⧗ (3)");
+    clickItem(container, "-1 ⧗");
+
+    expect(onCommand).toHaveBeenCalledWith({
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_COUNTERS", battleCardId, value: 2 },
+      sourceSurface: "inspector",
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("emits SET_COUNTERS clearing the stored value to zero", () => {
+    const state = createState();
+    const battleCardId = placeCharacter(state, "backRank", "B0");
+    state.cardInstances[battleCardId].status.counters = 4;
+    const { container, onCommand, root } = mount(state, battleCardId);
+
+    openSubmenu(container, "Counters ⧗ (4)");
+    clickItem(container, "Clear ⧗");
+
+    expect(onCommand).toHaveBeenCalledWith({
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_COUNTERS", battleCardId, value: 0 },
+      sourceSurface: "inspector",
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("does not show the Counters submenu for an event card", () => {
+    const state = createState();
+    const eventCardId = state.sides.player.hand.find(
+      (id) => state.cardInstances[id]?.definition.battleCardKind === "event",
+    );
+    if (eventCardId === undefined) {
+      throw new Error("expected a player event card in hand");
+    }
+    const { container, root } = mount(state, eventCardId);
+
+    expect(container.textContent).not.toContain("Counters");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+});

@@ -238,6 +238,10 @@ export function BattleContextMenu({
         label: "Status",
         submenu: createStatusSubmenu(),
       });
+      result.push({
+        label: `Counters ⧗ (${String(card.status.counters)})`,
+        submenu: createCountersSubmenu(),
+      });
     }
     result.push({
       label: "Add Note…",
@@ -360,6 +364,45 @@ export function BattleContextMenu({
         label: isGranted ? `Clear ${label}` : `Grant ${label}`,
         action: () => setStatus({ [field]: !isGranted }),
       };
+    }
+
+    function setCounters(value: number): void {
+      onCommand({
+        id: "DEBUG_EDIT",
+        edit: { kind: "SET_COUNTERS", battleCardId, value: Math.max(0, value) },
+        sourceSurface,
+      });
+    }
+
+    /**
+     * Card-scoped ⧗ counter stepper emitting `SET_COUNTERS` (rules §Counters).
+     * The engine clamps the stored value to ≥ 0 and resets counters when the
+     * card leaves play. The stepper offers ±1 increments plus a clear-to-0
+     * shortcut; the current value is shown in the parent submenu label.
+     */
+    function createCountersSubmenu(): ContextMenuItem[] {
+      const current = card.status.counters;
+      const items: ContextMenuItem[] = [];
+      items.push({
+        label: "+1 ⧗",
+        action: () => setCounters(current + 1),
+      });
+      const decrementDisabled = current <= 0;
+      items.push({
+        label: "-1 ⧗",
+        action: () => {
+          if (decrementDisabled) {
+            return;
+          }
+          setCounters(current - 1);
+        },
+      });
+      items.push({ divider: true });
+      items.push({
+        label: "Clear ⧗",
+        action: () => setCounters(0),
+      });
+      return items;
     }
   }, [battleCardId, card, location, onCommand, onOpenNoteEditor, sourceSurface, state]);
 
