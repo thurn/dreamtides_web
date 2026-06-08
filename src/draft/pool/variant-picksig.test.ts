@@ -67,7 +67,7 @@ function clusterCorpusRecords(): PickRecord[] {
 }
 
 function clusterPoolData() {
-  return buildPoolData([], undefined, undefined, undefined, clusterCorpusRecords());
+  return buildPoolData([], undefined, clusterCorpusRecords());
 }
 
 describe("buildSignatureAffinity", () => {

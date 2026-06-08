@@ -1,19 +1,12 @@
 # Draft Pool Construction Algorithms
 
 The draft test mode (`draft_test`) builds a card pool that a player drafts
-from. The pool is assembled by one of six interchangeable construction
+from. The pool is assembled by one of several interchangeable construction
 algorithms, selected with the `?algo=` URL parameter: `color_pool`, `diverse`,
-`decklists`, `merged`, `idf`, and `idf2` (for example,
-`draft_test?algo=decklists`). The run-time half of all six lives in
+`decklists`, `idf`, and `idf2` (for example,
+`draft_test?algo=decklists`). The run-time half of all of them lives in
 `src/draft_test/color-pool.ts`. This document explains, in detail, how each one
 works.
-
-This document is the canonical description of the five algorithms. The `merged`
-algorithm (the merged-archetype-lists construction) does part of its work
-offline: `scripts/setup-assets.mjs` collapses the real decks into merged lists
-and bundles them, and `color-pool.ts` reads those lists at run time.
-`scripts/merged-archetype-pool-experiment.mjs` evaluates `merged` against
-`decklists` by simulation.
 
 ## Shared foundations
 
@@ -53,13 +46,14 @@ once, because the rest of this document refers to these stores by name.
   `dreamcallers-v2-database.ts` (so `Kragg` resolves to `["abandon"]`). That map
   is the single source of truth for which mechanic a Dreamcaller pulls toward.
 
-- **The real decklists** start as plain-text files in `docs/drafts_dt/` — one
-  file per drafted deck, one card name per line. `scripts/setup-assets.mjs`
-  reads every `*.txt`, keeps only the lines whose names exist in `cards_v2`
-  (so the bundle never references unknown cards), drops empty files, and writes
-  `public/decklists-data.json` as an array of arrays of names. `loadDecklists`
-  (in `cards-v2-database.ts`) fetches it into `string[][]`, or returns an empty
-  array if the bundle is missing.
+- **The real decklists** are each seat's mainboard in the adapted draft records
+  under `docs/draft_records_adapted/` — one JSONC file per draft event, with one
+  `mainboard` array of card UUIDs per seat. `scripts/setup-assets.mjs` reads
+  every record, emits one decklist per seat, keeps only the cards whose UUIDs
+  resolve to a known `cards_v2` entry (so the bundle never references unknown
+  cards), drops empty mainboards, and writes `public/decklists-data.json` as an
+  array of arrays of names. `loadDecklists` (in `cards-v2-database.ts`) fetches
+  it into `string[][]`, or returns an empty array if the bundle is missing.
 
 The draft test page (`DraftTestApp.tsx`) loads all three at startup, then calls
 `buildPoolData` once to fold the card records (and the decklists) into the single
@@ -503,10 +497,10 @@ That fixes the pool's color identity to **`br`**, and the card set stored at
 `draftLists.get("br-aristocrats")` becomes the yardstick for the starter.
 
 **Step 2 — pick the starter.** Every real deck in the corpus (from
-`PoolData.decklists`, the filtered `docs/drafts_dt` files) is scored by its fit
-to `br-aristocrats`: the total IDF weight of the cards it shares with that list,
-then multiplied by the deck's Abandon theme density. The black-red sacrifice
-decks in `docs/drafts_dt` (the `*-br-*.txt` files, say) score highest. Rather
+`PoolData.decklists`, the filtered seat mainboards from
+`docs/draft_records_adapted`) is scored by its fit to `br-aristocrats`: the total
+IDF weight of the cards it shares with that list, then multiplied by the deck's
+Abandon theme density. The black-red sacrifice seats score highest. Rather
 than always taking the single best, the algorithm keeps the top 25 and samples
 one weighted toward the top scores; suppose it draws a particular BR sacrifice
 deck. That deck is the **starter**.
@@ -554,7 +548,7 @@ When a pool is requested, `generate.ts` builds one uniform `PoolGenerationReques
 archetypes, and signature cards — looks the chosen id up in the registry, and
 calls that strategy's `generate`. The request carries every input any algorithm
 might read; each strategy destructures only the fields it uses (`color_pool` and
-`diverse` read the seed archetypes, `decklists` and `merged` additionally read
+`diverse` read the seed archetypes, `decklists` additionally reads
 the theme archetypes, `idf3`/`picksig`/`sigseed` read the signature cards, and
 `idf`/`idf2` read neither), so `generate.ts` never branches on which algorithm
 runs. Whatever the
@@ -565,244 +559,11 @@ produced it.
 
 ---
 
-## The `merged` algorithm
-
-The `decklists` algorithm earns its complexity by doing all of its work at run
-time: it holds the full corpus of real decks in memory and, every time a pool is
-built, searches that corpus with IDF-weighted cosine similarity to find a starter
-and its neighbors, gates them through a spine, and snowballs them with a softmax.
-The **merged-archetype-lists** algorithm starts from a single observation: almost
-none of that machinery is about the player's pool — it is plumbing for *finding
-decks that belong together* inside a large, unlabeled pile. If that grouping is
-done **once, offline**, the run-time step collapses to something a paragraph can
-describe: roll one archetype, keep the lists that share its colors, and shuffle a
-few of them together.
-
-This algorithm is selected with `?algo=merged`. Its run-time phase lives in
-`src/draft_test/color-pool.ts` (the `generateMerged` function and the `MERGED`
-tuning block) alongside the other three; its offline phase — the merged-list
-build — lives in `scripts/setup-assets.mjs`, which writes the lists to
-`public/merged-archetype-lists-data.json` for the browser to fetch.
-`scripts/merged-archetype-pool-experiment.mjs` evaluates it against the
-`decklists` algorithm by simulation (see *How it is measured*, below).
-
-### Two phases: an offline collapse, then a trivial run-time pick
-
-The algorithm has two clearly separated phases, and the data flows strictly from
-the first into the second:
-
-- **Phase 1 (offline, built once).** Collapse the real decks into a small set of
-  **merged archetype lists** — one list per drafted archetype, each holding the
-  cards that recur across that archetype's real decks. This is the set of lists
-  the run-time step draws from. It is the only "curation" the algorithm does, and
-  it is fully mechanical.
-- **Phase 2 (run time, once per pool).** Given a Dreamcaller, choose a subset of
-  those lists and shuffle them into a pool. Every per-pool decision is a plain
-  weighted random pick; there is no similarity search.
-
-### Where the data comes from
-
-This is the part most worth slowing down on, because the inputs arrive from four
-different places and one of them is recovered in an unusual way.
-
-- **The merged lists are built from the raw decklist files in `docs/drafts_dt/`,
-  read directly — not from the `decklists-data.json` bundle.** The reason is the
-  archetype label. Each drafted deck is saved as `<date>-<label>-<uuid>.txt`,
-  where the label is the drafter's own name for the deck (`br-aristocrats`,
-  `ur-storm`, `g-big-ramp`, …). `scripts/setup-assets.mjs` keeps only the card
-  names when it writes `decklists-data.json`, so the bundle carries no label.
-  Phase 1 therefore reads the `*.txt` filenames itself to recover each deck's
-  label, then groups by it.
-- **The set of valid card names** comes from `public/cards_v2-data.json`; a line
-  in a decklist file is ignored unless it names a known card.
-- **The core staples and the theme card set** come from the same `PoolData` the
-  other three algorithms use (`buildPoolData`): `PoolData.core` is the set of
-  `core = true` cards, and the theme card set is read out of `PoolData.archLists`
-  (built from each card's `tides`) using the Dreamcaller's theme slugs, exactly as
-  in `decklists`.
-- **The Dreamcaller's seed archetypes** — the candidate archetypes it may lead
-  with — are its `draftArchetypes`, from the `draft-archetypes` list in
-  `dreamcallers_v2.toml`. These are the same color-plus-archetype names that label
-  the decks and key the merged lists, which is what lets a Dreamcaller's list of
-  archetypes line up with the merged lists by name.
-
-### Phase 1 — collapsing the decks into merged archetype lists
-
-`buildMergedArchetypeLists` (in `scripts/setup-assets.mjs`; the experiment's
-`buildMergedLists` mirrors it) walks every file in `docs/drafts_dt/` and produces
-a map from archetype label to a set of card names:
-
-1. **Parse the label.** A filename is matched against `<YYYY-MM-DD>-<label>-<uuid>`;
-   files that do not match (or are not `.txt`) are skipped.
-2. **Keep only archetype labels.** The label must begin with a color run *and*
-   carry an archetype name after it: `br-aristocrats` is kept; a bare color like
-   `ur` is dropped (it names no archetype); a colorless `c-…` label is dropped
-   (its head is not a color).
-3. **Read and clean the deck.** The file's lines are trimmed and filtered to known
-   card names. A deck is dropped unless it holds between 16 and 34 distinct cards —
-   the same window `decklists` uses, which excludes partial files and the few
-   oversized aggregate files.
-4. **Group and threshold.** Decks are grouped by label. A label with fewer than
-   three real decks is dropped (too little signal to merge). For each surviving
-   label, the algorithm counts, for every card, how many of that label's decks
-   contain it, and keeps the cards that appear in at least `threshold` decks
-   (default two). The survivors — most frequent first, capped at 100 — become that
-   label's merged list.
-
-On the current data set, the default threshold yields **49 merged lists**,
-averaging about 46 cards each (all within the 100-card cap), and every themed
-Dreamcaller has at least one of its archetypes represented.
-
-The threshold is the quiet but important step. Because a card has to **recur
-across several real decks** of an archetype to survive, the merged list holds "the
-cards this archetype keeps playing" rather than "every card legal in these
-colors." That recurrence test is itself a co-occurrence filter, which is what lets
-these compact lists stand in for whole real decks (see *How it is measured*).
-
-### The tuning knobs
-
-Phase 2 is governed by a handful of knobs — the `MERGED` tuning block in
-`color-pool.ts`. The parenthesized value is the production setting, chosen to
-reproduce the `decklists` output; the experiment sweeps them to justify that
-choice:
-
-- **`targetSize` / `targetJitter`** — the pool aims for `targetSize` copies with a
-  small random wobble (150 ± 8), matching `decklists`.
-- **`themeExp`** — the exponent applied to a candidate's theme overlap when rolling
-  the primary archetype (1.5). Higher leans the roll harder toward the
-  Dreamcaller's mechanic.
-- **`weighting`** — how each *next* list is chosen during the snowball: `overlap`
-  (favor lists that share cards with what is already chosen, for coherence),
-  `theme` (favor theme-dense lists), or `uniform`. (`overlap`.)
-- **`includeProb`** — when a list is folded in, each of its cards joins the pool
-  with this probability (0.7). Below one, each list contributes a *partial* view,
-  which raises run-to-run variance and lowers how completely any one archetype is
-  handed over.
-- **`themeCoreFrac`** — the per-Dreamcaller **core**: the fraction of the on-color
-  theme cards that are always seeded into the pool (1.0 to match `decklists`; lower
-  for a less theme-saturated, more varied pool).
-- **`themeKeep`** — when true, theme cards ignore the `includeProb` dropout and are
-  always taken when a list is folded (true). Together with `themeCoreFrac` it is
-  the lever that keeps a themed pool on its mechanic.
-
-### Phase 2 — building a pool
-
-Given a Dreamcaller's seed archetypes and theme slugs, plus the merged lists from
-Phase 1, `generateMerged` builds one pool:
-
-1. **Roll the primary archetype.** Among the Dreamcaller's seed archetypes, the
-   **eligible** ones are those that have a merged list and a color prefix. Each is
-   weighted by `(1 + how many of its cards are theme cards) ^ themeExp`, and one is
-   drawn — so a theme-dense archetype is rolled far more often than an off-theme
-   one. The chosen archetype's color prefix becomes the pool's **color identity**
-   (e.g. `br`). A Dreamcaller with no eligible archetype produces an open pool,
-   where the primary is just a random merged list.
-2. **Gather the on-color candidates.** Every merged list whose color prefix fits
-   inside the identity (every letter of its prefix is an identity color) is a
-   candidate to fold in. A `br` identity admits the `b`, `r`, and `br` lists but
-   not, say, `bg-midrange` — its `g` is off-color — even when that is one of the
-   Dreamcaller's own archetypes.
-3. **Seed the pool.** The pool's copy counts start with the core staples at one
-   copy each. Then the **theme core** is laid down: the theme cards that appear in
-   at least one on-color list are each seeded (one copy) with probability
-   `themeCoreFrac`. This is the always-present spine of the Dreamcaller's mechanic
-   — the "core list for this Dreamcaller," derived automatically from its theme and
-   chosen colors rather than authored by hand.
-4. **Fold in the primary.** The primary list's cards are added in shuffled order,
-   each kept with probability `includeProb` (theme cards always kept when
-   `themeKeep`), bumping copy counts, until the target size is reached.
-5. **Snowball the rest.** While the pool is below target, the algorithm repeatedly
-   picks one unused on-color list — weighted by `weighting`, by default by how much
-   it overlaps what is already chosen — and folds it in the same way. It stops at
-   the target, or early if thirty picks in a row add nothing new.
-6. **Cap and label.** As with the other algorithms, every card is capped at two
-   copies, so a card reaches two only by appearing across several of the seeded and
-   folded lists. The pool's identity is the rolled archetype's colors.
-
-### Worked example: building Kragg's pool
-
-To make the chain concrete, here is one run for the Dreamcaller **Kragg**, the
-same Dreamcaller the `decklists` worked example uses, so the two can be compared
-directly.
-
-**Setup — what Kragg brings.** As before, from `dreamcallers_v2.toml` Kragg's
-`draftArchetypes` are his **seed archetypes** (the aristocrats, black-midrange,
-and ramp lists such as `br-aristocrats`, `b-aristocrats`, `bg-midrange`,
-`ug-cheaty-ramp`, …), and `loadDreamcallersV2` attaches `themeArchetypes =
-["abandon"]`. The **theme card set** is every Abandon card in
-`PoolData.archLists`.
-
-**Phase 1 is already done.** Offline, `buildMergedLists` has produced the ~49
-merged lists. Several of Kragg's archetypes are among them — the aristocrats lists
-(`b-aristocrats`, `br-aristocrats`, `wb-aristocrats`, …) and the black-midrange
-lists each have enough real decks to merge. Each is a compact set of the cards
-that recur across that archetype's real decks.
-
-**Step 1 — roll the primary.** Kragg's eligible archetypes are weighted by how
-many Abandon cards each merged list holds, raised to 1.5. The aristocrats lists are
-dense in Abandon payoffs, so one of them is rolled far more often than, say, a ramp
-list that shares almost no Abandon cards. Suppose the roll lands on
-**`br-aristocrats`**; the identity is **`br`**.
-
-**Step 2 — on-color candidates.** The candidate lists are the merged lists whose
-colors fit inside `{b, r}`: `b-aristocrats`, `br-aristocrats`, and any black or red
-lists such as `r-burn` or `b-tempo`. A `bg-midrange` list is excluded — its green
-is off-color — even though it is one of Kragg's archetypes.
-
-**Step 3 — seed.** The core staples go in at one copy each. Then the Abandon theme
-core: the Abandon cards that appear in some on-color (black or red) merged list are
-each seeded, so the pool leads with its sacrifice payoffs no matter which lists are
-folded next.
-
-**Step 4–5 — fold and snowball.** The `br-aristocrats` list is folded in (its
-Abandon cards always kept), then the algorithm repeatedly folds the on-color list
-that overlaps most with what is already chosen — pulling in the other black-red
-sacrifice and aristocrats cards — until the pool reaches its ~150-copy target.
-
-**Result.** Kragg's pool comes out as a roughly 150-copy black-red sacrifice pool:
-a `br` identity, led by Abandon payoffs from the theme core, fleshed out with the
-cards that recur across real BR aristocrats decks. As with `decklists`, the exact
-lists folded depend on the seed; the data sources and the order of operations do
-not.
-
-### How it is measured
-
-The experiment script judges `merged` against `decklists` the way the
-`decklists` work was originally judged: it imports the real
-`generatePoolFromData` as an oracle and runs both algorithms over the same 20
-themed Dreamcallers and 10 fixed seeds, reporting four numbers per pool, averaged:
-
-- **recall** — the fraction of the pool's unique cards that carry the
-  Dreamcaller's theme tide. A coherence measure: how on-theme the pool is.
-- **coverage** — the fraction of the on-color theme-tide set that the pool actually
-  contains. A "hand-fed" measure: near 1.0 means the player is handed essentially
-  the whole theme kit.
-- **varJac** — the average pairwise Jaccard of the unique-card sets across the ten
-  seeds for one Dreamcaller. A variance measure: *lower* means the pool changes more
-  from run to run.
-- **coc** — the average number of real decks in which two of the pool's distinctive
-  (non-core) cards co-occur, sampled over card pairs. A *micro-coherence* measure:
-  higher means the pool's cards genuinely get played together in real decks, not
-  merely share a color.
-
-On the current data set, with a full theme core (`themeCoreFrac = 1`, `themeKeep`,
-`includeProb = 0.7`, `overlap` weighting) the merged selector lands on top of the
-`decklists` oracle: recall 0.47 vs 0.51, coverage 0.72 vs 0.71, varJac 0.56 vs 0.62
-(slightly more varied), and coc 8.46 vs 8.13 (micro-coherence preserved). Lowering
-`themeCoreFrac` trades theme saturation for variance and a less hand-fed pool, so
-that one knob is a dial the `decklists` algorithm does not expose. Running the same
-selector over the broad existing `draftLists` instead of the merged lists (skipping
-Phase 1) gives coverage 1.0 and coc 6.17 — it hands over the entire kit and its
-cards barely co-occur — which is what shows the Phase 1 merge is doing the real
-work.
-
----
-
 ## The `idf` algorithm
 
 The `idf` algorithm is the simplest decklist-based pool, and the only one that
-reads nothing but the real decklists. The `color_pool`, `diverse`, `decklists`, and
-`merged` algorithms all consult the synthesized inputs — core staples, mechanic
+reads nothing but the real decklists. The `color_pool`, `diverse`, and `decklists`
+algorithms all consult the synthesized inputs — core staples, mechanic
 tides, color lists, draft archetypes, and the Dreamcaller's seed and theme
 archetypes. `idf` ignores all of them. It picks one real decklist at random and
 grows a pool around it by IDF-weighted similarity. The premise is the most
@@ -927,32 +688,3 @@ whole-deck union step, downstream of the starter draw.
 Like `idf`, `idf2` reports no color identity — it consumes no color metadata, so
 the identity string is left empty and the header shows none. The theme labels are
 `idf2` plus `deck#<index>`, recording which corpus decklist started the pool.
-
-## The `idf_human` algorithm
-
-`idf_human` is the `idf3` algorithm run over a different corpus. Where `idf3`
-grows its pool from the synthetic decklists in `docs/drafts_anon`, `idf_human`
-grows from the **real human Cube Cobra draft records** in
-`docs/human_drafts_anon` — the final built decks (the seat mainboards) from the
-adapted draft records, each a `<uuid> # Name` list in the same corpus format.
-
-### Where the data comes from
-
-`scripts/setup-assets.mjs` bundles `docs/human_drafts_anon/*.txt` into
-`public/human-decklists-data.json`, one card-name array per deck, exactly as it
-bundles the synthetic corpus into `decklists-data.json`. The browser loads it via
-`loadHumanDecklists` and `buildPoolData` stores it on `PoolData.humanDecklists`,
-alongside the `decklists` field `idf3` reads.
-
-### How it runs
-
-The strategy swaps `PoolData.decklists` for `PoolData.humanDecklists` and delegates
-to `generateIdf3` unchanged. Every step — the diversity-weighted starter draw, the
-signature anchor affinity, the capped starter weight, the best-first whole-deck
-growth, and the provenance surface — is `idf3`'s; only the source corpus differs.
-The derived view is cached per `PoolData` so the shared `idf2`/`idf` corpus caches
-(which key on object identity and carry an O(decks²) near-twin pass) stay warm. With
-no human decklists bundled it falls back to the `default` algorithm, like `idf3`.
-
-Select it with `?algo=idf_human`. The theme labels are `idf3` plus `deck#<index>`,
-since the delegated generator records its own variant tag.

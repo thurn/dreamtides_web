@@ -32,8 +32,6 @@ import {
   loadCardsV2Database,
   loadDecklists,
   loadDraftRecords,
-  loadHumanDecklists,
-  loadMergedArchetypeLists,
   resolvePool,
 } from "../data/cards-v2-database";
 import type { DraftRecord } from "../data/cards-v2-database";
@@ -459,22 +457,14 @@ export default function DraftTestApp() {
           setDreamcallers(loadedDreamcallers);
           setStatus("select");
         } else {
-          const [db, loadedDreamcallers, decklists, mergedLists, humanDecklists] =
-            await Promise.all([
-              loadCardsV2Database(),
-              loadDreamcallersV2(),
-              loadDecklists(),
-              loadMergedArchetypeLists(),
-              loadHumanDecklists(),
-            ]);
+          const [db, loadedDreamcallers, decklists] = await Promise.all([
+            loadCardsV2Database(),
+            loadDreamcallersV2(),
+            loadDecklists(),
+          ]);
           if (cancelled) return;
 
-          poolDataRef.current = buildPoolData(
-            [...db.values()],
-            decklists,
-            mergedLists,
-            humanDecklists,
-          );
+          poolDataRef.current = buildPoolData([...db.values()], decklists);
           setDatabase(db);
           setDreamcallers(loadedDreamcallers);
           setStatus("select");

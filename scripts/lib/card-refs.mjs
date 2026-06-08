@@ -2,16 +2,15 @@
 //
 // Every system that names cards in data — the signature lists in
 // `dreamcallers_v2.toml`, the pool metadata in `cards-v2-metadata.ts`, the
-// build-around metadata in `buildaround_support.json`, and the real-decklist
-// corpora under `docs/drafts_anon` / `docs/drafts_dt` — keys cards by their
-// `id` UUID from `data/tabula/cards_v2.toml`. The UUID is stable across display
-// renames, so renaming a card in `cards_v2.toml` no longer desynchronizes any of
-// those files.
+// build-around metadata in `buildaround_support.json`, and the adapted draft
+// records under `docs/draft_records_adapted` — keys cards by their `id` UUID
+// from `data/tabula/cards_v2.toml`. The UUID is stable across display renames,
+// so renaming a card in `cards_v2.toml` keeps every one of those files in sync.
 //
-// Corpus files store one card per line as `<uuid> # <Card Name>`: code reads the
-// UUID and ignores the trailing comment, while the comment keeps the file
-// human-readable. `setup-assets.mjs` regenerates the comment from the current
-// card name on every build, so it never goes stale.
+// The adapted draft records (`docs/draft_records_adapted/*.jsonc`) store one
+// card per array entry as a `<uuid>` string with an inline `// <Card Name>`
+// comment; code reads the UUID and ignores the comment, while the comment keeps
+// the file human-readable.
 
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -117,39 +116,70 @@ export function resolveToken(token, { idToName, nameToId }) {
   return { id, name: token };
 }
 
-/** Render a canonical corpus line: `<uuid> # <Card Name>`. */
-export function corpusLine(id, name) {
-  return `${id} # ${name}`;
-}
-
 /**
- * Read a corpus `.txt` deck file and return the resolved card entries
- * (`{ id, name }`) for its non-blank lines, in order. Throws on any unresolved
- * reference.
+ * Strip `//` line comments from JSONC text, leaving anything inside string
+ * literals untouched (escape sequences honoured). The adapted draft records use
+ * `//` only for trailing card-name annotations, so this is sufficient — there
+ * are no block comments. Newlines are preserved so error offsets stay aligned.
  */
-export function readCorpusDeck(path, maps) {
-  const out = [];
-  for (const line of readFileSync(path, "utf8").split("\n")) {
-    const token = corpusLineToken(line);
-    if (token.length === 0) continue;
-    out.push(resolveToken(token, maps));
+export function stripJsonComments(text) {
+  let out = "";
+  let inString = false;
+  let escaped = false;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (inString) {
+      out += ch;
+      if (escaped) {
+        escaped = false;
+      } else if (ch === "\\") {
+        escaped = true;
+      } else if (ch === '"') {
+        inString = false;
+      }
+      continue;
+    }
+    if (ch === '"') {
+      inString = true;
+      out += ch;
+      continue;
+    }
+    if (ch === "/" && text[i + 1] === "/") {
+      while (i < text.length && text[i] !== "\n") i += 1;
+      out += "\n";
+      continue;
+    }
+    out += ch;
   }
   return out;
 }
 
-/** Read a corpus deck file and return just the current card names, in order. */
-export function readCorpusDeckNames(path, maps) {
-  return readCorpusDeck(path, maps).map((c) => c.name);
-}
-
-/** List the `.txt` deck filenames in a corpus directory, sorted. */
-export function corpusFiles(dir) {
-  return readdirSync(dir)
-    .filter((f) => f.endsWith(".txt"))
-    .sort();
-}
-
-/** Convenience: absolute path to a corpus deck file. */
-export function corpusPath(dir, filename) {
-  return join(dir, filename);
+/**
+ * Read every adapted draft record (`*.jsonc`) in `dir` and return one decklist
+ * per seat that has a non-empty mainboard: the seat's `mainboard` resolved to
+ * current card names, in order. Card tokens are stable UUIDs (a bare name is
+ * also accepted, e.g. an unmigrated record); a token that resolves to no known
+ * card is dropped from that decklist. Seats with an empty (or fully unresolved)
+ * mainboard are skipped, as are files without a `seats` array.
+ */
+export function readAdaptedRecordDecklists(dir, { idToName, nameToId }) {
+  const decks = [];
+  for (const filename of readdirSync(dir)
+    .filter((f) => f.endsWith(".jsonc"))
+    .sort()) {
+    const raw = JSON.parse(
+      stripJsonComments(readFileSync(join(dir, filename), "utf8")),
+    );
+    if (!Array.isArray(raw.seats)) continue;
+    for (const seat of raw.seats) {
+      if (!Array.isArray(seat.mainboard)) continue;
+      const names = [];
+      for (const token of seat.mainboard) {
+        const id = CARD_ID_RE.test(token) ? token : nameToId.get(token);
+        if (id !== undefined && idToName.has(id)) names.push(idToName.get(id));
+      }
+      if (names.length > 0) decks.push(names);
+    }
+  }
+  return decks;
 }

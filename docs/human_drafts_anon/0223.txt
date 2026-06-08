@@ -1,7 +1,0 @@
-57bb1572-6075-4efd-a592-102b134132fd # Inspiring Templar
-6497d8b1-85b8-486d-99e2-5c141486d508 # Dreadmount Sovereign
-1b4d2adc-64ab-4020-bae6-b35321898bf0 # Sigil Analyst
-8c117d3f-09af-4312-9897-694a76bd23c6 # Worldbreacher
-120ea441-f6ff-434b-973c-bde459f65368 # Inverted Reflection
-8904714c-38a9-491f-92ce-5cb5ece26ab1 # The Grand Heist
-41044897-b70a-4e2b-8eb6-baf843a14a43 # Spellweaver

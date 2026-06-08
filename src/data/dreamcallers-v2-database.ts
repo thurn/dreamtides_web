@@ -85,7 +85,7 @@ export const DREAMCALLER_THEMES: Record<string, readonly string[]> = {
 /**
  * Maps each themed Dreamcaller (by name) to the draft archetypes its pool is
  * steered toward by the non-`idf3` `?algo=` variants (`default`, `diverse`,
- * `decklists`, `merged`). The standard `idf3` variant reads none of this — it
+ * `decklists`). The standard `idf3` variant reads none of this — it
  * steers from each Dreamcaller's `signature-cards` in `dreamcallers_v2.toml`
  * instead. These labels live here in TypeScript rather
  * than in `dreamcallers_v2.toml`; `scripts/setup-assets.mjs` merges them into

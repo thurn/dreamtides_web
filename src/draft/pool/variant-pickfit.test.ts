@@ -32,7 +32,7 @@ const cPassed: PickRecord = {
 // cardNameById map the corpus keys on those tokens verbatim.
 function corpusFrom(records: PickRecord[]) {
   const corpus = buildPickfitCorpus(
-    buildPoolData([], undefined, undefined, undefined, records),
+    buildPoolData([], undefined, records),
   );
   if (!corpus) throw new Error("expected a corpus");
   return corpus;

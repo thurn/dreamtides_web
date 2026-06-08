@@ -7,9 +7,8 @@
 // exactly (its [180, 220] band collapses onto it); `diverse` lands at the target
 // or just above (it never drops a card below a 1-of, so a small target can leave
 // a thin floor of overshoot); and the decklist-based variants (`decklists`,
-// `merged`, `idf`, `idf2`) honor the target as the ceiling their fill stops at,
-// landing within their own jitter/tolerance of it (`merged` may stop well short
-// when a rolled archetype's lists run dry, which is its normal behavior).
+// `idf`, `idf2`) honor the target as the ceiling their fill stops at, landing
+// within their own jitter/tolerance of it.
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -24,13 +23,7 @@ const cards = loadCards();
 const decklists = JSON.parse(
   readFileSync(join(process.cwd(), "public", "decklists-data.json"), "utf8"),
 ) as string[][];
-const mergedLists = JSON.parse(
-  readFileSync(
-    join(process.cwd(), "public", "merged-archetype-lists-data.json"),
-    "utf8",
-  ),
-) as Record<string, string[]>;
-const poolData = buildPoolData(cards, decklists, mergedLists);
+const poolData = buildPoolData(cards, decklists);
 
 const TARGET = 160;
 
@@ -68,12 +61,6 @@ describe("targetSize pins the draft pool size for every variant", () => {
       20000,
     );
   }
-
-  it("throws for merged because no merged lists are bundled", () => {
-    expect(() =>
-      generatePoolFromData(poolData, 0, undefined, "merged", undefined, TARGET),
-    ).toThrow(/cannot build a pool/);
-  });
 
   it("lands color_pool on the exact requested size, well outside its default band", () => {
     // The unconstrained `color_pool` pool sits in [180, 220]; an override drives it

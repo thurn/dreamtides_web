@@ -1,7 +1,8 @@
 // @vitest-environment node
 //
 // The `idf2` pool variant is `idf` with a diversity-biased starter draw: same
-// corpus (`docs/drafts_dt`, bundled to `public/decklists-data.json`), same
+// corpus (each seat's mainboard in `docs/draft_records_adapted`, bundled to
+// `public/decklists-data.json`), same
 // IDF-weighted cosine ranking, same best-first whole-deck union, but the starter
 // decklist is drawn weighted by the inverse of its near-twin count instead of
 // uniformly, so over-represented archetypes start fewer pools. Like `idf` it
@@ -33,9 +34,10 @@ describe("idf2 pool variant", () => {
     for (let seed = 0; seed < 200; seed++) {
       const pool = generatePoolFromData(poolData, seed, undefined, "idf2");
       // Same target/window as `idf` (targetSize 100, window 90-110); a single
-      // deck can jump a little across the boundary, so allow a small margin.
-      expect(pool.size, `size seed=${String(seed)}`).toBeGreaterThanOrEqual(85);
-      expect(pool.size, `size seed=${String(seed)}`).toBeLessThanOrEqual(115);
+      // deck can jump a little across the boundary, so allow a small margin
+      // (observed range across 1000 seeds is 86-116).
+      expect(pool.size, `size seed=${String(seed)}`).toBeGreaterThanOrEqual(84);
+      expect(pool.size, `size seed=${String(seed)}`).toBeLessThanOrEqual(118);
       for (const [card, copies] of pool.counts) {
         expect(copies, `${card} seed=${String(seed)}`).toBeLessThanOrEqual(2);
       }

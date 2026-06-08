@@ -75,8 +75,8 @@ export interface CreateBattleInitInput {
   /**
    * The run's pool context (decklist corpus + name index, plus the selected
    * `poolVariant`). Used to build the enemy deck from the run's pool strategy —
-   * by default the `idf3` strategy, which yields a `drafts_anon` decklist
-   * matching the enemy Dreamcaller's signature. Optional: when absent (or when
+   * by default the `idf3` strategy, which yields a real-decklist pool matching
+   * the enemy Dreamcaller's signature. Optional: when absent (or when
    * the resolved decklist is empty, as non-`idf3` strategies produce no starter
    * deck) the enemy deck falls back to a sample of draftable cards from the card
    * database.

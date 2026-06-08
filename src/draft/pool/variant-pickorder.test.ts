@@ -28,7 +28,7 @@ function oneePack(
 }
 
 function poolFrom(records: PickRecord[]) {
-  return buildPoolData([], undefined, undefined, undefined, records);
+  return buildPoolData([], undefined, records);
 }
 
 describe("pickearly corpus", () => {

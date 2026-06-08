@@ -36,14 +36,12 @@ describe("loadQuestContent", () => {
     dreamcallers,
     dreamsigns,
     decklists,
-    humanDecklists = [],
     draftRecords = [],
   }: {
     cards: CardData[];
     dreamcallers: unknown[];
     dreamsigns: unknown[];
     decklists: string[][];
-    humanDecklists?: string[][];
     draftRecords?: DraftRecord[];
   }): void {
     vi.stubGlobal(
@@ -69,12 +67,6 @@ describe("loadQuestContent", () => {
           return Promise.resolve({
             ok: true,
             json: () => Promise.resolve(decklists),
-          });
-        }
-        if (path === "/human-decklists-data.json") {
-          return Promise.resolve({
-            ok: true,
-            json: () => Promise.resolve(humanDecklists),
           });
         }
         if (path === "/draft-records-data.json") {

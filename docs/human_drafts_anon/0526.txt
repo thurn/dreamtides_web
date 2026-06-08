@@ -1,7 +1,0 @@
-41d0aa36-f15a-487d-b97c-7fd765973921 # Sage of the Prelude
-e3193b23-2002-40a9-91fc-e0713200355e # Rebirth Ritualist
-cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
-25173cac-333f-4efc-9a03-b532d5783419 # Ridgecutter
-25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens
-a56e0f68-30b6-404e-9b83-a7584177f21e # Immolate
-60feb0d0-89b8-48fc-b01a-ce54e2c9941f # Twilight Suppressor

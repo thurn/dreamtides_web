@@ -26,8 +26,8 @@ export interface PoolGenerationRequest {
    */
   seedArchetypes?: readonly string[];
   /**
-   * A Dreamcaller's mechanic-archetype tide slugs, used by the `decklists` and
-   * `merged` strategies to bias toward that theme. Other strategies ignore it.
+   * A Dreamcaller's mechanic-archetype tide slugs, used by the `decklists`
+   * strategy to bias toward that theme. Other strategies ignore it.
    */
   themeArchetypes?: readonly string[];
   /**

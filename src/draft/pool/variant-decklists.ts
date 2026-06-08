@@ -1,6 +1,7 @@
 // The `decklists` variant. It ignores the synthesized archetype themes the
 // other variants walk and instead grows a pool out of real, human-shaped
-// decklists (`docs/drafts_dt`, bundled to `decklists-data.json`): pick a
+// decklists (each seat's mainboard in `docs/draft_records_adapted`, bundled to
+// `decklists-data.json`): pick a
 // Dreamcaller strategy, grab a real decklist rich in that strategy's cards as
 // the "starter", then repeatedly add the decklists most *similar* to the starter
 // until the pool reaches the target size. Similarity is cosine over IDF-weighted

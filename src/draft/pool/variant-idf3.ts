@@ -26,9 +26,9 @@
 //   weight(i) = ( sigEps + min( anchorAffinity(i), sigCap ) ) ^ sigAlpha × div(i)
 // With no signature (or none of its cards carrying IDF weight) there are no
 // anchors, every affinity is 0, and the weight reduces to a constant × div(i) —
-// exactly the `idf2` diversity-only draw — with no separate code path.
-// `scripts/idf3-signature-experiment.mjs` validates this scheme and the constants
-// below against the real `idf2` oracle.
+// exactly the `idf2` diversity-only draw — with no separate code path. The
+// `variant-idf.coherent.test.ts` suite pins this scheme and the constants below
+// against the real `idf2` oracle.
 
 import type { PoolStrategy } from "./strategy.ts";
 import {

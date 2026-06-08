@@ -9,11 +9,14 @@ import { CARDS_V2_POOL_METADATA } from "../src/data/cards-v2-metadata.ts";
 import { DREAMCALLER_ARCHETYPES } from "../src/data/dreamcallers-v2-database.ts";
 import {
   CARD_ID_RE,
-  corpusFiles,
-  corpusLine,
-  corpusLineToken,
+  readAdaptedRecordDecklists,
   resolveToken,
+  stripJsonComments,
 } from "./lib/card-refs.mjs";
+
+// Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
+// stripper alongside the asset-build helpers defined here.
+export { stripJsonComments };
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DATA_DIR = join(ROOT, "data");
@@ -194,119 +197,6 @@ export function transformCard(card) {
   return result;
 }
 
-// --- merged archetype lists (the `merged` draft-test pool variant) -----------
-// The `merged` pool algorithm draws from one card list per drafted archetype,
-// each holding the cards that recur across that archetype's real decks. That
-// collapse is done once, here, offline: the run-time browser cannot read the
-// `docs/drafts_anon` filenames, and the `decklists-data.json` bundle keeps only
-// card names (the archetype label is dropped), so the merged lists are baked
-// into their own JSON. The algorithm and these knobs are described in
-// `docs/cards2/draft_pool_algorithms.md`; `scripts/merged-archetype-pool-experiment.mjs`
-// mirrors this build to evaluate the variant against `decklists`.
-const MERGED_LIST_FILE_RE =
-  /^\d{4}-\d{2}-\d{2}-(.+)-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
-const MERGED_MIN_DECK = 16; // distinct cards: drop partial/near-empty files
-const MERGED_MAX_DECK = 34; // distinct cards: drop oversized aggregate files
-const MERGED_MIN_DECKS_PER_LABEL = 3; // labels with fewer real decks are too thin to merge
-const MERGED_CARD_THRESHOLD = 2; // a card joins when it recurs in >= this many of the label's decks
-const MERGED_MAX_LIST = 100; // a merged list holds at most this many cards
-
-/** Leading run of w/u/b/r/g color letters in a label ('' if it has none). */
-function mergedColorPrefix(name) {
-  const head = name.split("-")[0];
-  const isColors = head.length > 0 && [...head].every((c) => "wubrg".includes(c));
-  return isColors ? head : "";
-}
-
-/**
- * Collapse the real decklist files (`docs/drafts_anon/*.txt`) into merged
- * archetype lists: a map from each drafted archetype label (e.g.
- * `br-aristocrats`) to the cards that recur across that archetype's decks.
- *
- * The archetype label is recovered from each filename
- * (`<YYYY-MM-DD>-<label>-<uuid>.txt`); files whose label is a bare color (`ur`)
- * or carries no color prefix are skipped because they name no archetype. A deck
- * is used only if it has 16-34 distinct known cards. Decks are grouped by label,
- * labels with fewer than three decks are dropped, and within a surviving label a
- * card is kept when it appears in at least `MERGED_CARD_THRESHOLD` of the label's
- * decks. Survivors are ordered most-frequent first and capped at
- * `MERGED_MAX_LIST`. Returns a plain object (label -> card-name array) ready to
- * serialize.
- */
-export function buildMergedArchetypeLists(draftsAnonDir, cardMaps) {
-  const byLabel = new Map(); // label -> array of Set<name>
-  for (const filename of readdirSync(draftsAnonDir).sort()) {
-    if (!filename.endsWith(".txt")) continue;
-    const match = MERGED_LIST_FILE_RE.exec(filename.replace(/\.txt$/u, ""));
-    if (!match) continue;
-    const label = match[1];
-    // Need both a color prefix and an archetype name after it.
-    if (mergedColorPrefix(label) === "" || label === mergedColorPrefix(label)) {
-      continue;
-    }
-    const names = [];
-    for (const line of readFileSync(join(draftsAnonDir, filename), "utf8").split(
-      "\n",
-    )) {
-      const token = corpusLineToken(line);
-      if (token.length === 0) continue;
-      names.push(resolveToken(token, cardMaps).name);
-    }
-    const set = new Set(names);
-    if (set.size < MERGED_MIN_DECK || set.size > MERGED_MAX_DECK) continue;
-    if (!byLabel.has(label)) byLabel.set(label, []);
-    byLabel.get(label).push(set);
-  }
-
-  const lists = {};
-  for (const [label, decks] of byLabel) {
-    if (decks.length < MERGED_MIN_DECKS_PER_LABEL) continue;
-    const freq = new Map();
-    for (const deck of decks) {
-      for (const card of deck) freq.set(card, (freq.get(card) ?? 0) + 1);
-    }
-    let kept = [...freq.entries()].filter(([, n]) => n >= MERGED_CARD_THRESHOLD);
-    kept.sort((a, b) => b[1] - a[1]);
-    if (kept.length > MERGED_MAX_LIST) kept = kept.slice(0, MERGED_MAX_LIST);
-    if (kept.length > 0) lists[label] = kept.map(([card]) => card);
-  }
-  return lists;
-}
-
-/**
- * Strip `//` line comments from JSONC text, leaving anything inside string
- * literals untouched (escape sequences honoured). The adapted draft records use
- * `//` only for trailing card-name annotations, so this is sufficient — there
- * are no block comments. Newlines are preserved so error offsets stay aligned.
- */
-export function stripJsonComments(text) {
-  let out = "";
-  let inString = false;
-  let escaped = false;
-  for (let i = 0; i < text.length; i += 1) {
-    const ch = text[i];
-    if (inString) {
-      out += ch;
-      if (escaped) escaped = false;
-      else if (ch === "\\") escaped = true;
-      else if (ch === '"') inString = false;
-      continue;
-    }
-    if (ch === '"') {
-      inString = true;
-      out += ch;
-      continue;
-    }
-    if (ch === "/" && text[i + 1] === "/") {
-      while (i < text.length && text[i] !== "\n") i += 1;
-      out += "\n";
-      continue;
-    }
-    out += ch;
-  }
-  return out;
-}
-
 /**
  * Bundle adapted draft records from `docs/draft_records_adapted` into a flat
  * array of per-human-seat entries for the record-replay draft mode.
@@ -434,35 +324,6 @@ export function buildCardMaps(cardsV2) {
     if (!nameToId.has(card.name)) nameToId.set(card.name, card.id);
   }
   return { idToName, nameToId };
-}
-
-/**
- * Read every `.txt` deck file in a corpus directory, resolving each `<uuid>`
- * reference to its current card name. The `# Name` comment is regenerated from
- * the current name and the file rewritten in place when it changed, so the
- * human-readable comments never drift after a rename (the write is skipped when
- * nothing changed, so a clean repo stays clean). Returns one name array per deck;
- * throws on any reference that resolves to no card.
- */
-export function refreshAndReadCorpus(dir, cardMaps) {
-  const decks = [];
-  for (const filename of corpusFiles(dir)) {
-    const path = join(dir, filename);
-    const original = readFileSync(path, "utf8");
-    const names = [];
-    const out = original.split("\n").map((line) => {
-      const token = corpusLineToken(line);
-      if (token.length === 0) return line;
-      const { id, name } = resolveToken(token, cardMaps);
-      names.push(name);
-      return corpusLine(id, name);
-    });
-    let text = out.join("\n").replace(/\n+$/u, "");
-    if (text.length > 0) text += "\n";
-    if (text !== original) writeFileSync(path, text);
-    decks.push(names);
-  }
-  return decks;
 }
 
 /**
@@ -618,12 +479,8 @@ export function setupAssets({
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
   const decklistsJsonPath = join(publicDir, "decklists-data.json");
-  const humanDecklistsJsonPath = join(publicDir, "human-decklists-data.json");
-  const mergedListsJsonPath = join(publicDir, "merged-archetype-lists-data.json");
   const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
   const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
-  const draftsAnonDir = join(ROOT, "docs", "drafts_anon");
-  const humanDraftsAnonDir = join(ROOT, "docs", "human_drafts_anon");
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
   const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
@@ -719,58 +576,29 @@ export function setupAssets({
   writeFileSync(cardV2JsonPath, JSON.stringify(jsonCardsV2, null, 2) + "\n");
   console.log(`Wrote ${jsonCardsV2.length} cards to cards_v2-data.json`);
 
-  // Real per-deck card lists (the `docs/drafts_anon` / `docs/drafts_dt`
-  // corpora) bundled for the draft test's `decklists` pool variant, which builds
-  // a pool by snowballing similar real decklists rather than synthesizing one
-  // from archetype themes. Each file is one deck: a newline-separated list of
-  // `<uuid> # Name` references. Reading resolves each UUID to its current name
-  // and rewrites the `# Name` comment when it drifted, so renaming a card in
-  // cards_v2.toml needs no edit here. Empty decks are dropped; all size filtering
-  // happens in the algorithm so it stays tunable. The runtime bundle is keyed by
-  // current card name (`string[][]`, one inner array per deck), matching the
-  // name-based pool engine and oracle tests. Both corpora are refreshed so their
-  // comments stay current; `drafts_dt` is read by the offline experiments.
-  console.log("Bundling real decklists from the corpus...");
-  refreshAndReadCorpus(join(ROOT, "docs", "drafts_dt"), cardMaps);
-  const decklists = refreshAndReadCorpus(draftsAnonDir, cardMaps).filter(
-    (deck) => deck.length > 0,
-  );
+  // Real per-deck card lists bundled for the draft test's `decklists` pool
+  // variant (and the `idf`/`idf2`/`idf3` variants), which build a pool by
+  // snowballing similar real decklists rather than synthesizing one from
+  // archetype themes. Each seat in the adapted draft records
+  // (`docs/draft_records_adapted`) contributes its `mainboard` as one deck, with
+  // every card resolved from its stable cards_v2 UUID to the current name, so
+  // renaming a card needs no edit here. Empty decks are dropped; all size
+  // filtering happens in the algorithm so it stays tunable. The runtime bundle is
+  // keyed by current card name (`string[][]`, one inner array per deck), matching
+  // the name-based pool engine and oracle tests.
+  console.log("Bundling real decklists from the adapted draft records...");
+  const decklists = readAdaptedRecordDecklists(draftRecordsAdaptedDir, cardMaps);
   writeFileSync(decklistsJsonPath, JSON.stringify(decklists) + "\n");
   console.log(`Wrote ${decklists.length} decklists to decklists-data.json`);
 
-  // The human draft corpus (`docs/human_drafts_anon`): the final decks from the
-  // real Cube Cobra draft records, in the same `<uuid> # Name` format. Bundled to
-  // its own JSON for the `idf_human` pool variant, which runs the `idf3`
-  // algorithm over these real decks instead of the synthetic corpus above.
-  console.log("Bundling human draft decklists from the corpus...");
-  const humanDecklists = refreshAndReadCorpus(
-    humanDraftsAnonDir,
-    cardMaps,
-  ).filter((deck) => deck.length > 0);
-  writeFileSync(humanDecklistsJsonPath, JSON.stringify(humanDecklists) + "\n");
-  console.log(
-    `Wrote ${humanDecklists.length} decklists to human-decklists-data.json`,
-  );
-
-  // Adapted draft records from the human Cube Cobra corpus bundled for the
-  // record-replay draft mode. Each JSON file in `docs/draft_records_adapted`
-  // is one draft event; we extract one entry per human seat (trimmed to the
-  // first 10 picks per pack) and write the flat array to the browser bundle.
+  // Adapted draft records bundled for the record-replay draft mode and the
+  // pick-data pool variants. Each JSON file in `docs/draft_records_adapted` is
+  // one draft event; we extract one entry per seat (trimmed to the first 10 picks
+  // per pack) and write the flat array to the browser bundle.
   console.log("Bundling adapted draft records from the corpus...");
   const draftRecords = buildDraftRecords(draftRecordsAdaptedDir, cardMaps);
   writeFileSync(draftRecordsJsonPath, JSON.stringify(draftRecords) + "\n");
   console.log(`Wrote ${draftRecords.length} draft-record seats to draft-records-data.json`);
-
-  // Merged archetype lists for the draft test's `merged` pool variant. The
-  // archetype label is dropped from decklists-data.json, so we collapse the
-  // labeled `docs/drafts_anon` files here (offline) into one list per archetype
-  // and bundle them for the browser. See `buildMergedArchetypeLists`.
-  console.log("Building merged archetype lists from docs/drafts_anon...");
-  const mergedLists = buildMergedArchetypeLists(draftsAnonDir, cardMaps);
-  writeFileSync(mergedListsJsonPath, JSON.stringify(mergedLists) + "\n");
-  console.log(
-    `Wrote ${Object.keys(mergedLists).length} merged archetype lists to merged-archetype-lists-data.json`,
-  );
 
   console.log("Parsing dreamcallers.toml...");
   const dreamcallerTomlContent = readFileSync(dreamcallerTomlPath, "utf8");

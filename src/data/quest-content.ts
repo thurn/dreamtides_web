@@ -20,7 +20,6 @@ import {
   loadCardsV2Database,
   loadDecklists,
   loadDraftRecords,
-  loadHumanDecklists,
   resolvePool,
   type DraftRecord,
 } from "./cards-v2-database";
@@ -384,14 +383,12 @@ export async function loadQuestContent(
     draftDreamcallers,
     dreamsignTemplates,
     decklists,
-    humanDecklists,
     draftRecords,
   ] = await Promise.all([
     loadCardsV2Database(),
     loadDreamcallersV2(),
     loadDreamsignTemplates(),
     loadDecklists(),
-    loadHumanDecklists(),
     // Fetch the draft records corpus when a deck-fit mode or a pick-data pool
     // variant needs it; other pool modes skip it so the default load path incurs
     // no extra network cost.
@@ -418,8 +415,6 @@ export async function loadQuestContent(
     poolData: buildPoolData(
       Array.from(cardDatabase.values()),
       decklists,
-      undefined,
-      humanDecklists,
       // The pick-data variants key on stable card ids, so feed them the
       // records' id arrays.
       draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds })),

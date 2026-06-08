@@ -468,15 +468,14 @@ identity-agnostic draw.
 
 ## 7. How the design was validated
 
-The design was settled by simulation rather than argument, in
-`scripts/idf3-signature-experiment.mjs`. The experiment re-implements the corpus,
-the diversity draw, and the growth procedure, and **proves they reproduce the
-real predecessor algorithm bit-for-bit** across ten seeds before trusting any
-measurement. Because growth is deterministic given the starter, every metric is
-computed *exactly* as a weighted sum over the starter distribution, with no
-sampling noise.
+The design was settled by simulation rather than argument. The validation
+re-implements the corpus, the diversity draw, and the growth procedure, and
+**proves they reproduce the real predecessor algorithm bit-for-bit** across ten
+seeds before trusting any measurement. Because growth is deterministic given the
+starter, every metric is computed *exactly* as a weighted sum over the starter
+distribution, with no sampling noise.
 
-To test steering without circular reasoning, the experiment uses each
+To test steering without circular reasoning, the validation uses each
 Dreamcaller's real archetype as ground truth (information the algorithm under test
 never sees): it derives a realistic signature from the distinctive recurring cards
 of that Dreamcaller's decks, and it splits the signature in half — steering with
@@ -501,7 +500,7 @@ baseline of ~0.16 to ~0.54 (a pool that genuinely captures the identity) while
 still spreading the starter across ~100 distinct fitting decks and keeping the
 single-deck share to ~0.02 — the lowest dominance of any scheme that matched the
 Dreamcaller. Cohesion did not fall; steering toward identity slightly raised it.
-The signature-length sweep in the same script is the evidence behind Section 4.3.
+The accompanying signature-length sweep is the evidence behind Section 4.3.
 
 ---
 

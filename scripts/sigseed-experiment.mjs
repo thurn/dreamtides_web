@@ -69,7 +69,7 @@ function loadContext(argv) {
     Array.isArray(draftRecords) && draftRecords.length
       ? draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }))
       : undefined;
-  const poolData = buildPoolData(cards, undefined, undefined, undefined, pickRecords);
+  const poolData = buildPoolData(cards, undefined, pickRecords);
   return { dreamcallers, poolData };
 }
 

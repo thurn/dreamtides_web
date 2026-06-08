@@ -1,9 +1,0 @@
-cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c # Starchaser
-691883df-63d8-4664-a1fe-d5f3b5becd11 # Dawnhorn Elder
-3e6a5236-9850-4a69-9fe1-48389365a399 # Dusk Duelist
-fcb830e5-85ff-48f3-be1e-46e102a5c8e8 # Shatterpoint Agent
-0e1209c3-1041-4079-9b1c-f96816a7deb5 # Wistful Angler
-db4618f6-121b-4c97-98d3-c29849c5824e # Ashen Avenger
-46783333-78f9-4146-a8ec-0d1b81e1bf2f # Emerald Guardian
-d9434b04-217c-4b37-b763-c46404d8fef9 # Dreamcatcher's Call
-bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea # Bloomweaver

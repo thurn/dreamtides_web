@@ -398,12 +398,6 @@ export function draftableUniverse(poolData) {
   for (const deck of poolData.decklists ?? []) {
     for (const name of deck) universe.add(name);
   }
-  for (const deck of poolData.humanDecklists ?? []) {
-    for (const name of deck) universe.add(name);
-  }
-  for (const set of (poolData.mergedLists ?? new Map()).values()) {
-    for (const name of set) universe.add(name);
-  }
   // Draft-record packs are card ids; map them to current names for the universe.
   for (const rec of poolData.draftRecords ?? []) {
     for (const pack of rec.packs ?? []) {
@@ -471,8 +465,6 @@ function resolveMetric(argv) {
 function loadContext(argv) {
   const cards = readJson("public/cards_v2-data.json");
   const decklists = readJson("public/decklists-data.json");
-  const humanDecklists = readJson("public/human-decklists-data.json");
-  const mergedLists = readJson("public/merged-archetype-lists-data.json");
   const draftRecords = readJson("public/draft-records-data.json");
   let dreamcallers = readJson("public/dreamcallers-v2-data.json");
   const meta = readJson("data/buildaround_support.json");
@@ -488,20 +480,13 @@ function loadContext(argv) {
       process.exit(1);
     }
   }
-  // Pass every corpus so all variants (including `idf_human`, `merged`, and
-  // `pickfit`) run their real algorithm under `--compare` rather than falling
-  // back to default.
+  // Pass every corpus so all variants (including `pickfit`) run their real
+  // algorithm under `--compare` rather than falling back to default.
   const pickRecords =
     Array.isArray(draftRecords) && draftRecords.length
       ? draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }))
       : undefined;
-  const poolData = buildPoolData(
-    cards,
-    decklists,
-    Object.keys(mergedLists ?? {}).length ? mergedLists : undefined,
-    humanDecklists,
-    pickRecords,
-  );
+  const poolData = buildPoolData(cards, decklists, pickRecords);
   return { dreamcallers, meta, poolData };
 }
 

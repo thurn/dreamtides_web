@@ -19,8 +19,6 @@ import { idfStrategy } from "./variant-idf.ts";
 import { idf2Strategy } from "./variant-idf2.ts";
 import { idf3Strategy } from "./variant-idf3.ts";
 import { idf4Strategy } from "./variant-idf4.ts";
-import { idfHumanStrategy } from "./variant-idf-human.ts";
-import { mergedStrategy } from "./variant-merged.ts";
 import { pickChoiceStrategy } from "./variant-pickchoice.ts";
 import { pickCohereStrategy } from "./variant-pickcohere.ts";
 import { pickEarlyStrategy } from "./variant-pickearly.ts";
@@ -35,12 +33,10 @@ export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
   color_pool: colorPoolStrategy,
   diverse: diverseStrategy,
   decklists: decklistsStrategy,
-  merged: mergedStrategy,
   idf: idfStrategy,
   idf2: idf2Strategy,
   idf3: idf3Strategy,
   idf4: idf4Strategy,
-  idf_human: idfHumanStrategy,
   seed: seedStrategy,
   pickfit: pickfitStrategy,
   pickearly: pickEarlyStrategy,

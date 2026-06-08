@@ -46,8 +46,6 @@ function addTo(
 export function buildPoolData(
   cards: readonly PoolCard[],
   decklists?: readonly (readonly string[])[],
-  mergedArchetypeLists?: Readonly<Record<string, readonly string[]>>,
-  humanDecklists?: readonly (readonly string[])[],
   draftRecords?: readonly PickRecord[],
 ): PoolData {
   const core = new Set<string>();
@@ -77,20 +75,11 @@ export function buildPoolData(
       addTo(draftLists, list, card.name);
     }
   }
-  let mergedLists: Map<string, Set<string>> | undefined;
-  if (mergedArchetypeLists) {
-    mergedLists = new Map<string, Set<string>>();
-    for (const [label, names] of Object.entries(mergedArchetypeLists)) {
-      mergedLists.set(label, new Set(names));
-    }
-  }
   return {
     core,
     archLists: orderedMap(archLists),
     draftLists: orderedMap(draftLists),
     decklists,
-    humanDecklists,
-    mergedLists,
     draftRecords,
     cardIdByName,
     cardNameById,

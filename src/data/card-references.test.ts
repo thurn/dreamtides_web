@@ -1,13 +1,15 @@
-// Guards the UUID-keyed card-reference systems against drift. Every place that
-// names cards in data — the `signature-cards` in `dreamcallers_v2.toml`, the pool
-// metadata in `cards-v2-metadata.ts`, the build-around metadata in
-// `buildaround_support.json`, and the real-decklist corpora under
-// `docs/drafts_anon` / `docs/drafts_dt` — references cards by their stable `id`
-// UUID from `cards_v2.toml`. These tests fail if any reference points at a UUID
-// that is not a real card, so renaming a card can never silently desynchronize
-// one of these files.
+// Guards the UUID-keyed card-reference systems against drift. Every hand-authored
+// place that names cards in data — the `signature-cards` in
+// `dreamcallers_v2.toml`, the pool metadata in `cards-v2-metadata.ts`, and the
+// build-around metadata in `buildaround_support.json` — references cards by their
+// stable `id` UUID from `cards_v2.toml`. These tests fail if any reference points
+// at a UUID that is not a real card, so renaming a card can never silently
+// desynchronize one of these files. (The adapted draft records in
+// `docs/draft_records_adapted` are imported data, not a maintained reference: the
+// asset build resolves them tolerantly and drops tokens for cards no longer in
+// the catalog, so they are not guarded here.)
 
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse as parseToml } from "smol-toml";
@@ -80,24 +82,5 @@ describe("card references resolve to real cards", () => {
         name,
       );
     }
-  });
-
-  it("every corpus deck line is a real card UUID", () => {
-    let checked = 0;
-    for (const dir of ["drafts_anon", "drafts_dt"]) {
-      const corpusDir = join(ROOT, "docs", dir);
-      for (const file of readdirSync(corpusDir)) {
-        if (!file.endsWith(".txt")) continue;
-        const lines = readFileSync(join(corpusDir, file), "utf8").split("\n");
-        for (const line of lines) {
-          const hash = line.indexOf("#");
-          const token = (hash === -1 ? line : line.slice(0, hash)).trim();
-          if (token.length === 0) continue;
-          expectCard(`${dir}/${file}`, token);
-          checked += 1;
-        }
-      }
-    }
-    expect(checked).toBeGreaterThan(0);
   });
 });

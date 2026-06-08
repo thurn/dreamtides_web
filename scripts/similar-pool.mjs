@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // Build a pool from one input decklist by unioning it with the most "uniquely
-// similar" decklists in a corpus of decklists.
+// similar" decklists in a corpus of decklists. The corpus is every seat's
+// mainboard in the adapted draft records (`docs/draft_records_adapted`); the
+// input is a single `.txt` decklist of `<uuid> # Name` lines.
 //
 // Similarity is IDF-weighted cosine over card-presence vectors. Each deck is a
 // binary vector over the card universe (the corpus lists are singletons, so a
@@ -23,11 +25,16 @@
 //
 // Run with --help for the full flag list.
 
-import { readFileSync, readdirSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join, dirname, resolve, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'smol-toml';
-import { corpusLineToken, loadCardMaps, resolveToken } from './lib/card-refs.mjs';
+import {
+  corpusLineToken,
+  loadCardMaps,
+  readAdaptedRecordDecklists,
+  resolveToken,
+} from './lib/card-refs.mjs';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Corpus files reference cards by their stable id UUID; resolve to current names.
@@ -57,9 +64,10 @@ const FLAGS = {
     help: 'How many ranked matches to print in the report. Default 10.',
   },
   dir: {
-    def: join(REPO_ROOT, 'docs', 'drafts_anon'),
+    def: join(REPO_ROOT, 'docs', 'draft_records_adapted'),
     parse: String,
-    help: 'Corpus directory of *.txt decklists. Default docs/drafts_anon.',
+    help: 'Corpus directory of adapted draft records (*.jsonc). '
+      + 'Default docs/draft_records_adapted.',
   },
   'idf-power': {
     def: 1,
@@ -97,7 +105,7 @@ function printHelp() {
     console.log(`  ${sample.padEnd(22)} ${spec.help} (default: ${JSON.stringify(spec.def)})`);
   }
   console.log('\nExamples:');
-  console.log('  node scripts/similar-pool.mjs docs/drafts_anon/0001.txt');
+  console.log('  node scripts/similar-pool.mjs my-deck.txt');
   console.log('  node scripts/similar-pool.mjs my-deck.txt --target=60 --cap=3');
   console.log('  node scripts/similar-pool.mjs my-deck.txt --idf-power=2 --max-df-frac=0.05');
   console.log('  node scripts/similar-pool.mjs my-deck.txt --target=120 --tolerance=15');
@@ -166,13 +174,18 @@ function loadRulesText() {
   return byName;
 }
 
+// The corpus is every seat's mainboard in the adapted draft records, one deck
+// each, keyed by a synthetic `deck-NNNN` label for the report. As with the input,
+// a deck is the set of its distinct card names.
 function loadCorpus(dir) {
-  const decks = new Map(); // filename -> { set }
-  for (const file of readdirSync(dir)) {
-    if (!file.endsWith('.txt')) continue;
-    const deck = parseDeck(join(dir, file));
-    if (deck.set.size > 0) decks.set(file, deck);
-  }
+  const decks = new Map(); // label -> { set }
+  const lists = readAdaptedRecordDecklists(dir, CARD_MAPS);
+  lists.forEach((names, index) => {
+    const set = new Set(names);
+    if (set.size > 0) {
+      decks.set(`deck-${String(index).padStart(4, '0')}`, { set });
+    }
+  });
   return decks;
 }
 

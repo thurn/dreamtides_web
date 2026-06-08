@@ -1,12 +1,12 @@
 // Draft-pool metadata for the experimental cards_v2 pool, keyed by each card's
 // stable `id` UUID from `cards_v2.toml`. Keying by UUID keeps the metadata in
-// sync across display renames; the trailing `// Name` comments are refreshed
-// from the current card name by `scripts/migrate-card-refs.mjs`.
+// sync across display renames; the trailing `// Name` comments are maintained
+// from the current card name.
 //
 // The `idf3` pool variant (the standard algorithm) reads none of this — it works
 // from the bundled real decklists plus each Dreamcaller's signature alone. These
 // fields exist only for the other `?algo=` variants (`default`, `diverse`,
-// `decklists`, `merged`): `core` flags an always-included staple, `tides` supply
+// `decklists`): `core` flags an always-included staple, `tides` supply
 // the mechanic-archetype themes, and `colors` / `draftArchetypes` supply the
 // color-combo lists and color+archetype slices. They live here in TypeScript
 // rather than in `cards_v2.toml`; `scripts/setup-assets.mjs` merges them into

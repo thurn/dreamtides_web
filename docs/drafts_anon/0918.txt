@@ -1,8 +1,0 @@
-a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa # Kindred Sparks
-c750af2e-8185-4af0-bb38-4a41430c71b3 # Fangbound
-56f019a8-6b77-4bcb-bfa6-37b94e188ead # Rootspring Summons
-cc98441a-a8f9-421f-9895-423bd7fc31b4 # Starfall
-d26d31c0-7bd2-4d58-bed9-444e032a1087 # Door to Possibility
-be72bd04-21a6-4035-a117-2b7213ad1a34 # Arc Gate Opening
-97b359ee-5a7a-4f54-bd65-e6221a893208 # Pyrokinetic Surge
-25d00336-5ad7-433b-8ced-71720a9f074a # Wheel of the Heavens

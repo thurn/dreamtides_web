@@ -280,16 +280,12 @@ describe("draftableUniverse", () => {
       archLists: new Map([["arch", new Set(["ArchB"])]]),
       draftLists: new Map([["wu", new Set(["DraftC"])]]),
       decklists: [["DeckD", "CoreA"]],
-      humanDecklists: [["HumanE"]],
-      mergedLists: new Map([["br", new Set(["MergedF"])]]),
     };
     expect([...draftableUniverse(poolData)].sort()).toEqual([
       "ArchB",
       "CoreA",
       "DeckD",
       "DraftC",
-      "HumanE",
-      "MergedF",
     ]);
   });
 

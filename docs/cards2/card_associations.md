@@ -1,9 +1,10 @@
 # Card Associations in Draft Decks
 
 For each card below, this lists the five cards **most uniquely associated** with it
-across the 1,172 draft decklists in `docs/drafts/`. The goal is to surface the cards
-that specifically signal a card's archetype, not the generically powerful staples that
-show up in every deck.
+across the real draft decklists — each seat's mainboard in
+`docs/draft_records_adapted` (bundled to `public/decklists-data.json`). The goal is
+to surface the cards that specifically signal a card's archetype, not the
+generically powerful staples that show up in every deck.
 
 ## Method
 

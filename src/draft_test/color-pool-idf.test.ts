@@ -1,7 +1,8 @@
 // @vitest-environment node
 //
 // The `idf` pool variant is the simplest decklist-based pool: pick one real
-// decklist (`docs/drafts_dt`, bundled to `public/decklists-data.json`) at
+// decklist (each seat's mainboard in `docs/draft_records_adapted`, bundled to
+// `public/decklists-data.json`) at
 // random, rank the rest by IDF-weighted cosine similarity to it, and union whole
 // decklists best-first until the size lands closest to the target. It reads
 // nothing else — no archetypes, tides, colors, dreamcallers, or core staples —
@@ -32,9 +33,9 @@ describe("idf pool variant", () => {
       const pool = generatePoolFromData(poolData, seed, undefined, "idf");
       // targetSize 100, window 90-110; the closest whole-deck boundary can sit
       // a little outside the window when a single deck jumps across it (observed
-      // range across 1000 seeds is 88-111).
-      expect(pool.size, `size seed=${String(seed)}`).toBeGreaterThanOrEqual(85);
-      expect(pool.size, `size seed=${String(seed)}`).toBeLessThanOrEqual(115);
+      // range across 1000 seeds is 86-116).
+      expect(pool.size, `size seed=${String(seed)}`).toBeGreaterThanOrEqual(84);
+      expect(pool.size, `size seed=${String(seed)}`).toBeLessThanOrEqual(118);
       for (const [card, copies] of pool.counts) {
         expect(copies, `${card} seed=${String(seed)}`).toBeLessThanOrEqual(2);
       }

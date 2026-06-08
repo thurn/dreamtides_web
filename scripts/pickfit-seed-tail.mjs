@@ -29,13 +29,12 @@ const mean = (xs) => (xs.length ? xs.reduce((s, x) => s + x, 0) / xs.length : 0)
 
 const cards = readJson("public/cards_v2-data.json");
 const decklists = readJson("public/decklists-data.json");
-const human = readJson("public/human-decklists-data.json");
-const merged = readJson("public/merged-archetype-lists-data.json");
 const draftRecords = readJson("public/draft-records-data.json");
 const meta = readJson("data/buildaround_support.json");
 
 const poolData = buildPoolData(
-  cards, decklists, Object.keys(merged ?? {}).length ? merged : undefined, human,
+  cards,
+  decklists,
   draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds })),
 );
 const corpus = buildPickfitCorpus(poolData);

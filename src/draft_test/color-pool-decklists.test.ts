@@ -1,7 +1,8 @@
 // @vitest-environment node
 //
 // The `decklists` pool variant builds a pool by snowballing real decklists
-// (`docs/drafts_dt`, bundled to `public/decklists-data.json`) around a starter
+// (each seat's mainboard in `docs/draft_records_adapted`, bundled to
+// `public/decklists-data.json`) around a starter
 // chosen for the Dreamcaller's rolled strategy, rather than synthesizing one
 // from archetype themes. These tests pin its contract: bounded near the target
 // size, capped at 2 copies, reproducible from a seed, varied across seeds, and

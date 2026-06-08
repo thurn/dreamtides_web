@@ -23,9 +23,10 @@ export async function loadCardsV2Database(): Promise<Map<number, CardData>> {
 }
 
 /**
- * Fetch the bundled real decklists (`docs/drafts_dt`, written to
- * `/decklists-data.json` by `scripts/setup-assets.mjs`) used by the `decklists`
- * pool variant. Each inner array is one deck's card names. Returns an empty
+ * Fetch the bundled real decklists (each seat's mainboard from
+ * `docs/draft_records_adapted`, written to `/decklists-data.json` by
+ * `scripts/setup-assets.mjs`) used by the `decklists`, `idf`, `idf2`, and `idf3`
+ * pool variants. Each inner array is one deck's card names. Returns an empty
  * array if the bundle is missing so the harness still loads (the variant then
  * falls back to the `default` algorithm).
  */
@@ -33,35 +34,6 @@ export async function loadDecklists(): Promise<string[][]> {
   const response = await fetch("/decklists-data.json");
   if (!response.ok) return [];
   return (await response.json()) as string[][];
-}
-
-/**
- * Fetch the bundled human draft decklists (`docs/human_drafts_anon`, written to
- * `/human-decklists-data.json` by `scripts/setup-assets.mjs`) used by the
- * `idf_human` pool variant. Each inner array is one human draft deck's card
- * names. Returns an empty array if the bundle is missing so the harness still
- * loads (the variant then falls back to the `default` algorithm).
- */
-export async function loadHumanDecklists(): Promise<string[][]> {
-  const response = await fetch("/human-decklists-data.json");
-  if (!response.ok) return [];
-  return (await response.json()) as string[][];
-}
-
-/**
- * Fetch the bundled merged archetype lists (`docs/drafts_dt`, collapsed offline
- * to `/merged-archetype-lists-data.json` by `scripts/setup-assets.mjs`) used by
- * the `merged` pool variant. Maps each archetype label (e.g. `br-aristocrats`)
- * to the cards that recur across that archetype's real decks. Returns an empty
- * object if the bundle is missing so the harness still loads (the variant then
- * falls back to the `default` algorithm).
- */
-export async function loadMergedArchetypeLists(): Promise<
-  Record<string, string[]>
-> {
-  const response = await fetch("/merged-archetype-lists-data.json");
-  if (!response.ok) return {};
-  return (await response.json()) as Record<string, string[]>;
 }
 
 /**

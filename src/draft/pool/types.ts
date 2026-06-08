@@ -12,12 +12,10 @@ export type PoolVariant =
   | "color_pool"
   | "diverse"
   | "decklists"
-  | "merged"
   | "idf"
   | "idf2"
   | "idf3"
   | "idf4"
-  | "idf_human"
   | "seed"
   | "pickfit"
   | "pickearly"
@@ -88,27 +86,13 @@ export interface PoolData {
   archLists: Map<string, Set<string>>;
   draftLists: Map<string, Set<string>>;
   /**
-   * Real per-deck card lists used by the `decklists` variant. Optional because
-   * the theme-based variants and the Node tooling do not need them; when absent
-   * the `decklists` variant falls back to the `default` algorithm.
-   */
-  decklists?: readonly (readonly string[])[];
-  /**
-   * Real per-deck card lists drawn from the human Cube Cobra draft records
-   * (`docs/human_drafts_anon`) used by the `idf_human` variant, which runs the
-   * `idf3` algorithm over this corpus instead of {@link decklists}. Optional for
-   * the same reasons as `decklists`; when absent the `idf_human` variant falls
+   * Real per-deck card lists used by the `decklists`, `idf`, `idf2`, and `idf3`
+   * variants: each seat's mainboard from the adapted draft records
+   * (`docs/draft_records_adapted`). Optional because the theme-based variants and
+   * the Node tooling do not need them; when absent the `decklists` variant falls
    * back to the `default` algorithm.
    */
-  humanDecklists?: readonly (readonly string[])[];
-  /**
-   * Merged archetype lists used by the `merged` variant: archetype label (e.g.
-   * `br-aristocrats`) -> the cards that recur across that archetype's real
-   * decks. Built offline by `scripts/setup-assets.mjs`. Optional because the
-   * other variants and the Node tooling do not need them; when absent the
-   * `merged` variant falls back to the `default` algorithm.
-   */
-  mergedLists?: Map<string, Set<string>>;
+  decklists?: readonly (readonly string[])[];
   /**
    * Real draft pick trajectories drawn from the adapted draft records
    * (`docs/draft_records_adapted`) used by the `pickfit` variant, which grows a
