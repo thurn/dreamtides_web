@@ -149,7 +149,7 @@ export function buildMerchantContext({
   const runPoolCardNumbers = buildRunPoolCardNumbers(questState);
   const grantSourceCards =
     runPoolCardNumbers === null
-      ? [...cardByNumber.values()]
+      ? []
       : [...runPoolCardNumbers]
           .map((cardNumber) => cardByNumber.get(cardNumber))
           .filter((card): card is CardData => card !== undefined);
