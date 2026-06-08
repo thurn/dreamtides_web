@@ -810,6 +810,85 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
+  it("ramps and draws for the enemy exactly once on the player turn handoff when automation is on", () => {
+    const { container, root } = renderScreen(
+      (state) => {
+        state.phase = "night";
+        state.activeSide = "player";
+        state.turnNumber = 2;
+        state.sides.enemy.currentEnergy = 2;
+        state.sides.enemy.maxEnergy = 2;
+      },
+      { basicAutomation: true },
+    );
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+    const enemyHandBefore = container.querySelectorAll(".revealed-hand-card.opponent").length;
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next-major"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
+    const enemyEnergy = container.querySelector('[data-battle-stat="enemy:energy"]');
+    // Single turn-2 ramp via the automation handoff: min(turnNumber + 1, cap) === 3.
+    expect(enemyEnergy?.getAttribute("data-battle-current-energy")).toBe("3");
+    expect(enemyEnergy?.getAttribute("data-battle-max-energy")).toBe("3");
+    expect(container.querySelectorAll(".revealed-hand-card.opponent").length).toBe(
+      enemyHandBefore + 1,
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("ramps and draws once for the enemy when both AI mode and automation are on", () => {
+    // The AI-on + automation-on cross-product at the player -> enemy boundary.
+    // Automation's turn-handoff plan owns the enemy's start-of-turn ramp and
+    // draw; the AI-specific `isAiEnemyHandoff` shortcut must stand down (its
+    // `!isBasicAutomationEnabled` guard) so the enemy ramps and draws exactly
+    // once, not twice.
+    const { container, root } = renderScreen(
+      (state) => {
+        state.phase = "night";
+        state.activeSide = "player";
+        state.turnNumber = 2;
+        state.sides.enemy.currentEnergy = 2;
+        state.sides.enemy.maxEnergy = 2;
+      },
+      { aiMode: true, basicAutomation: true },
+    );
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-action="toggle-opponent-hand"]')?.click();
+    });
+    const enemyHandBefore = container.querySelectorAll(".revealed-hand-card.opponent").length;
+
+    act(() => {
+      container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next-major"]')
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Day");
+    expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
+    const enemyEnergy = container.querySelector('[data-battle-stat="enemy:energy"]');
+    // Exactly one ramp: 3, NOT a double ramp to 6 (automation + AI handoff).
+    expect(enemyEnergy?.getAttribute("data-battle-current-energy")).toBe("3");
+    expect(enemyEnergy?.getAttribute("data-battle-max-energy")).toBe("3");
+    // Exactly one draw for the incoming enemy side, not two.
+    expect(container.querySelectorAll(".revealed-hand-card.opponent").length).toBe(
+      enemyHandBefore + 1,
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("reveals compact player and opponent hand trays from the action bar", () => {
     const { container, initialState, root } = renderScreen();
 
