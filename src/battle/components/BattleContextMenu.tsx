@@ -94,7 +94,7 @@ export function BattleContextMenu({
         );
         if (deployedTarget !== null) {
           result.push({
-            label: "Play, deploy",
+            label: `Play to ${formatZoneLabel("frontRank")}`,
             action: () => onCommand(deployedTarget),
           });
         }

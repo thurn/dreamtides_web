@@ -1645,7 +1645,7 @@ describe("PlayableBattleScreen", () => {
 
     const menu = container.querySelector("[data-battle-context-menu]");
     expect(menu?.textContent).toContain("Play to Back Rank");
-    expect(menu?.textContent).toContain("Play, deploy");
+    expect(menu?.textContent).toContain("Play to Front Rank");
     expect(menu?.textContent).toContain("Kindle");
     expect(menu?.textContent).toContain("→ Back Rank");
     expect(menu?.textContent).toContain("→ Front Rank");
