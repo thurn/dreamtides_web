@@ -149,8 +149,10 @@ ordered edits the rules require:
   rules apply.
 - **Ending banish and Fatigue.** The outgoing side discards down to the ten-card
   hand limit, then banishes its ephemeral cards still in hand and offering cards
-  still in play. Drawing from an empty deck increments `fatigueCount` and
-  erodes.
+  still in play. Drawing from an empty deck triggers Fatigue: the opponent gains
+  2^`fatigueCount` ⍟ (the doubling sequence: 1⍟, 2⍟, 4⍟, …) and the drawing
+  side's `fatigueCount` increments. The Erode debug edit likewise triggers
+  Fatigue for any shortfall when the deck cannot supply the requested cards.
 - **Victory threshold.** When the Challenge scoring pushes a side to
   `scoreToWin`, the battle result is forced.
 
@@ -162,7 +164,7 @@ scans for the four sanctioned keywords: **Preeminence** wins spark ties,
 **Vengeful** drags the winner down when its bearer loses, and **Unstoppable**
 scores even when defended. **Awakened** is detected only so keyword detection is
 uniform across all four; the exhaust system, not the resolver, consumes it. The
-resolver returns the score deltas and the dissolve/banish edits that commit the
+resolver returns the score deltas and the dissolve-to-void edits that commit the
 outcome.
 
 ### The debug rail
