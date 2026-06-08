@@ -11,9 +11,10 @@
 // name string with no comment; `buildDraftRecords` drops such tokens at bundle
 // time, exactly as before.
 //
-// The output is JSONC (JSON + `//` line comments). `buildDraftRecords` strips the
-// comments before parsing. Idempotent: a token already in UUID form is kept and
-// re-commented from the current name, so re-running only refreshes comments.
+// The corpus files are JSONC (`.jsonc`, JSON + `//` line comments);
+// `buildDraftRecords` strips the comments before parsing. Idempotent: a token
+// already in UUID form is kept and re-commented from the current name, so
+// re-running only refreshes comments.
 //
 // Usage:
 //   node scripts/add-uuids-to-draft-records.mjs            # migrate all files
@@ -25,7 +26,7 @@ import { resolve, join } from "node:path";
 import { parse } from "smol-toml";
 
 import { CARD_ID_RE } from "./lib/card-refs.mjs";
-import { buildCardMaps } from "./setup-assets.mjs";
+import { buildCardMaps, stripJsonComments } from "./setup-assets.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DIR = join(ROOT, "docs", "draft_records_adapted");
@@ -96,18 +97,15 @@ function serialize(value, indent, key) {
 }
 
 const files = readdirSync(DIR)
-  .filter((f) => f.endsWith(".json"))
+  .filter((f) => f.endsWith(".jsonc"))
   .sort()
   .slice(0, limit);
 
 let written = 0;
 for (const filename of files) {
   const path = join(DIR, filename);
-  const record = JSON.parse(readFileSync(path, "utf8"));
+  const record = JSON.parse(stripJsonComments(readFileSync(path, "utf8")));
   if (!Array.isArray(record.seats)) continue;
-
-  // Drop any earlier `cardIds` dictionary experiment.
-  delete record.cardIds;
 
   for (const seat of record.seats) {
     for (const key of ["mainboard", "sideboard", "pool"]) {

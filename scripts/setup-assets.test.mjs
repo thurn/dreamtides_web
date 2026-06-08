@@ -539,7 +539,7 @@ describe("buildDraftRecords", () => {
   it("skips a file that has no seats array", () => {
     const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
     writeFileSync(
-      join(dir, "names.json"),
+      join(dir, "names.jsonc"),
       JSON.stringify({ notSeats: true }),
     );
     const result = buildDraftRecords(dir, cardMaps);
@@ -549,7 +549,7 @@ describe("buildDraftRecords", () => {
   it("drops a seat with empty mainboard", () => {
     const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
     writeFileSync(
-      join(dir, "draft.json"),
+      join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "draft1",
         seats: [
@@ -566,7 +566,7 @@ describe("buildDraftRecords", () => {
   it("skips a seat with no picks array without throwing", () => {
     const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
     writeFileSync(
-      join(dir, "draft.json"),
+      join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "nopicks",
         seats: [
@@ -589,7 +589,7 @@ describe("buildDraftRecords", () => {
     targetPick.packCards = ["A", "Dup", "Dup", "B"];
 
     writeFileSync(
-      join(dir, "draft.json"),
+      join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "abc",
         seats: [{ seat: 2, mainboard: ["A", "B"], picks }],
@@ -627,7 +627,7 @@ describe("buildDraftRecords", () => {
   it("emits id as <draftId>#<seat>", () => {
     const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
     writeFileSync(
-      join(dir, "draft.json"),
+      join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "xyz-123",
         seats: [{ seat: 5, mainboard: ["A"], picks: makePicks() }],
@@ -645,7 +645,7 @@ describe("buildDraftRecords", () => {
       (p) => p.pack <= 2,
     );
     writeFileSync(
-      join(dir, "draft.json"),
+      join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "incomplete",
         seats: [{ seat: 0, mainboard: ["A"], picks: incompletePicks }],
@@ -675,7 +675,7 @@ describe("buildDraftRecords", () => {
       }
     }
     writeFileSync(
-      join(dir, "draft.json"),
+      join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "fivepack",
         seats: [{ seat: 0, mainboard: ["A"], picks }],
@@ -701,7 +701,7 @@ describe("buildDraftRecords", () => {
     picks[0].pick = ["Unknown"];
 
     writeFileSync(
-      join(dir, "draft.json"),
+      join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "nametest",
         seats: [{ seat: 0, mainboard: ["A", "Unknown", "C"], picks }],
@@ -766,7 +766,7 @@ describe("buildDraftRecords", () => {
     }
   ]
 }`;
-    writeFileSync(join(dir, "draft.json"), jsonc);
+    writeFileSync(join(dir, "draft.jsonc"), jsonc);
     const result = buildDraftRecords(dir, renameMaps);
     expect(result).toHaveLength(1);
     const rec = result[0];

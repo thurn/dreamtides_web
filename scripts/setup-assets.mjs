@@ -311,7 +311,7 @@ export function stripJsonComments(text) {
  * Bundle adapted draft records from `docs/draft_records_adapted` into a flat
  * array of per-human-seat entries for the record-replay draft mode.
  *
- * Each file is JSONC (`docs/draft_records_adapted/*.json` carry inline `//`
+ * Each file is JSONC (`docs/draft_records_adapted/*.jsonc` carry inline `//`
  * card-name comments written by `add-uuids-to-draft-records.mjs`); the comments
  * are stripped before parsing. Each file must have a `seats` array; files without
  * it (e.g. a name dictionary) are silently skipped. Within each file, a seat is
@@ -342,7 +342,7 @@ export function buildDraftRecords(dir, cardMaps) {
 
   const records = [];
 
-  for (const filename of readdirSync(dir).filter((f) => f.endsWith(".json")).sort()) {
+  for (const filename of readdirSync(dir).filter((f) => f.endsWith(".jsonc")).sort()) {
     const raw = JSON.parse(
       stripJsonComments(readFileSync(join(dir, filename), "utf8")),
     );
