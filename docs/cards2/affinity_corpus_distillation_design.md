@@ -1,4 +1,4 @@
-# Affinity-Corpus Distillation: decoupling `sigseed` from the raw draft records
+# Affinity-Corpus Distillation: a committed card-embedding for `sigseed`
 
 Status: design / handoff. Author: design exploration, 2026-06-08.
 
@@ -13,16 +13,18 @@ Status: design / handoff. Author: design exploration, 2026-06-08.
 
 The `sigseed` draft-pool generator (the shipping default) reads a 19 MB bundle of
 historical draft records at runtime and rebuilds, in the browser, a card×card
-"affinity corpus" every time. That corpus — a synergy matrix plus a play-rate
-prior — is the **only** thing the generator derives from those records; pool
+"affinity corpus" — a synergy matrix plus a play-rate prior — every time. That
+corpus is the **only** thing the generator derives from those records; pool
 generation is otherwise a deterministic function of `(corpus, signature, seed)`.
-This migration **bakes the corpus once at build time** into a small JSON artifact
-(~385 KB gzip, exact) and loads that instead of the 19 MB records, and adds a
-small **declarative overlay** so new or changed cards can be authored as "this
-card plays like cards A, B, C" without touching the historical data. An optional
-**embedding** form compresses the artifact further (~50–90 KB gzip) and turns it
-into a true per-card vector database, at the cost of being an approximation
-(validated as metric-equivalent). All of this is validated against the existing
+This migration replaces the records with a **committed per-card embedding**: each
+card becomes a small pair of vectors plus a prior, checked into version control
+(`data/affinity_embedding.json`, ~50–90 KB gzip), from which the synergy is
+reconstructed on the fly. This is the core deliverable — a true card vector
+database. A small **declarative overlay** (also committed) lets new or changed
+cards be authored as "this card plays like cards A, B, C" and folded into the
+embedding at bake time, without touching the historical data. The embedding is a
+low-rank distillation of the record-derived synergy, validated as
+**metric-equivalent** to the exact generator against the existing
 `buildaround-support-experiment.mjs` quality metric.
 
 ---
@@ -61,20 +63,21 @@ corpus**.
 ### 2.1 Data inputs (build-time → runtime)
 
 `scripts/setup-assets.mjs` runs at build/dev start and produces the runtime JSON
-assets in `public/`:
+assets in `public/` (all gitignored — they are regenerated from the checked-in
+sources in `data/` and `docs/`):
 
-| Source (checked in) | Built asset (`public/`) | Role |
+| Source (checked in) | Built asset (`public/`, gitignored) | Role |
 |---|---|---|
 | `data/tabula/cards_v2.toml` | `cards_v2-data.json` (516 KB) | card catalog (519 cards: id, name, …) |
 | `docs/draft_records_adapted/*.jsonc` (1061 files) | `draft-records-data.json` (**19 MB**) | 993 real draft "seats", each 30 picks with the full pack offered at each pick |
 | `docs/draft_records_adapted/*` (mainboards) | `decklists-data.json` (709 KB) | finished decklists (used by other variants) |
 | `data/tabula/dreamcallers_v2.toml` | `dreamcallers-v2-data.json` (23 KB) | the 32 Dreamcallers + their signatures |
-| (first-principles card read) | `data/buildaround_support.json` (99 KB) | per-card theme metadata for the **quality metric** (Section 4) |
+| `data/buildaround_support.json` (checked in) | (read directly) | per-card theme metadata for the **quality metric** (Section 4) |
 
-`buildDraftRecords` (`scripts/setup-assets.mjs:228`) is what bundles the adapted
-records into `draft-records-data.json`. Each seat record carries `packIds[i]`
-(the UUIDs offered at pick `i`) and `pickIds[i]` (the UUIDs the human took),
-aligned index-for-index — the "taken-over-passed" signal.
+`buildDraftRecords` (`scripts/setup-assets.mjs:228`) bundles the adapted records
+into `draft-records-data.json`. Each seat carries `packIds[i]` (UUIDs offered at
+pick `i`) and `pickIds[i]` (UUIDs taken), aligned index-for-index — the
+"taken-over-passed" signal.
 
 ### 2.2 Runtime path (browser)
 
@@ -82,8 +85,7 @@ aligned index-for-index — the "taken-over-passed" signal.
    `/draft-records-data.json` — **the 19 MB download**.
 2. `quest-content.ts:~421` calls
    `buildPoolData(cards, decklists, draftRecords.map(r => ({packs: r.packIds, picks: r.pickIds})))`
-   (`src/draft/pool/pool-data.ts:46`) → a `PoolData` object carrying
-   `draftRecords` (UUID-keyed `PickRecord[]`).
+   (`src/draft/pool/pool-data.ts:46`) → a `PoolData` carrying `draftRecords`.
 3. Per Dreamcaller, `generateDreamcallerPool` (`quest-content.ts:136`) calls
    `generatePoolFromData(poolData, seed, …, "sigseed", …, signatureCards)`
    (`src/draft/pool/generate.ts:60`), which builds a seeded RNG
@@ -92,12 +94,11 @@ aligned index-for-index — the "taken-over-passed" signal.
    - `buildSigSeedCorpus` → `buildPickfitCorpus` (`variant-pickfit.ts:77`) →
      `buildExcessLiftCorpus(accumulatePickStats(records))`
      (`src/draft/pool/pick-stats.ts:59` and `:127`). **This is the only place the
-     records are consumed.** The result is memoized in a `WeakMap` keyed by
-     `poolData` (`variant-pickfit.ts:71`), so it is rebuilt once per page load.
+     records are consumed.** Memoized in a `WeakMap` keyed by `poolData`
+     (`variant-pickfit.ts:71`), so it is built once per page load.
    - `resolveSignatureToCorpus` (`variant-picksig.ts:90`) maps the signature
      names→UUIDs and intersects with the corpus.
-   - `drawSignatureSubset` (`variant-sigseed.ts:72`) draws a random 1–4 of the
-     signature cards.
+   - `drawSignatureSubset` (`variant-sigseed.ts:72`) draws a random 1–4 of them.
    - `growAffinityPoolFromSeeds` (`affinity-grower.ts:86`) greedily grows the pool
      to `SIGSEED.targetSize` (150 copies) by blended affinity.
    - If no signature card resolves, it falls back to `pickcohere`
@@ -116,23 +117,23 @@ interface AffinityCorpus {
 ```
 
 - `prior(c) = taken(c) / offered(c)` — how desirable c is, corrected for how often
-  it was even offered.
+  it was offered.
 - `affinity[d][c]` = shrunk **excess** conditional pick rate: how much more likely
-  drafters were to take `c` once `d` was already in their pool, above `c`'s
-  baseline rate, floored at 0. This isolates *synergy* from raw card power (power
-  lives in the prior). Asymmetric; each row normalized by its own source card.
+  drafters were to take `c` once `d` was in their pool, above `c`'s baseline,
+  floored at 0. Isolates *synergy* from raw power (power lives in the prior).
+  Asymmetric; each row normalized by its own source card.
 
-The grower (`affinity-grower.ts:86`) scores each candidate card as
+The grower (`affinity-grower.ts:86`) scores each candidate as
 `score(c) = w·seedAffinity(c) + (1−w)·poolAffinity(c) + p·prior(c)` and adds the
 argmax each step, capping copies at 2. **It reads nothing but the corpus, the seed
 set, and the tuning constants.** Tie-breaks are by `(fewer copies, then lower
-card-key)` — i.e. independent of the order of `corpus.cards`.
+card-key)` — independent of the order of `corpus.cards`.
 
 ### 2.4 The load-bearing fact
 
 > Everything `sigseed` derives from the 19 MB of records is captured in the
-> `AffinityCorpus`. Given that corpus, a Dreamcaller's signature, and a seed, pool
-> generation is fully deterministic. The records themselves are never read again.
+> `AffinityCorpus`. Given that corpus, a signature, and a seed, pool generation is
+> fully deterministic. The records are never read again.
 
 This is what makes the migration possible and safe.
 
@@ -147,27 +148,26 @@ This is what makes the migration possible and safe.
 ## 3. The problem this migration solves
 
 1. **Data volume.** The 19 MB records are downloaded by the client and the corpus
-   is recomputed in-browser on every load. This is the dominant payload of the
-   pool feature.
+   is recomputed in-browser on every load — the dominant payload of the pool
+   feature.
 2. **Extensibility coupling.** The corpus is keyed entirely by historical card
    UUIDs. A **new** card has no row/column and cannot enter a pool. A **changed**
-   card keeps its stale historical synergies. There is no first-class way to say
-   "this new card plays like A, B, C, so place it near them" — the only lever is
-   to collect more real drafts and re-bundle.
+   card keeps stale historical synergies. There is no first-class way to say "this
+   new card plays like A, B, C, so place it near them" — the only lever is to
+   collect more real drafts and re-bundle.
 
 ---
 
-## 4. Validated findings (evidence base — do not re-derive, but do reproduce)
+## 4. Validated findings (evidence base — reproduce, do not re-derive)
 
 A throwaway harness rebuilt `sigseed` against swappable corpora and scored each
 with the **existing** quality metric (`scripts/buildaround-support-experiment.mjs`,
 see Section 11). The metric simulates every Dreamcaller × N seeds and reports, per
-pool generator:
+generator:
 
 - **adequacy** (0–100): when a build-around payoff is in a pool, is its supporting
-  theme present densely enough? Higher is better.
-- **adequacy (steered)**: same, restricted to Dreamcallers with a real signature
-  identity.
+  theme present densely enough? Higher better.
+- **adequacy (steered)**: same, restricted to Dreamcallers with a real signature.
 - **traps/pool**: expected count of payoff cards the pool *cannot* support (lower
   better).
 - **themeEvenness** (0–100): are the standalone archetypes draftable at even rates,
@@ -179,147 +179,130 @@ Result (25 seeds × 32 Dreamcallers = 800 pools per corpus):
 | corpus | adeq | adeq(steer) | traps | themeEven | #cards | size (gz) |
 |---|---|---|---|---|---|---|
 | **exact (live, 19 MB records)** | 98.2 | 97.2 | 0.74 | 96.0 | 491 | 4.5 MB (records) |
-| frozen corpus, rounded 5-digit | 98.2 | 97.2 | 0.74 | 96.0 | 491 | **385 KB** |
-| embedding, rank 8 | 97.7 | 97.2 | 0.91 | 93.8 | 465 | **34 KB** |
-| embedding, rank 16 | 98.1 | 97.2 | 0.80 | 95.6 | 466 | **52 KB** |
-| embedding, rank 32 | 97.9 | 96.9 | 0.69 | 95.7 | 472 | **88 KB** |
+| in-memory matrix, rounded 5-digit | 98.2 | 97.2 | 0.74 | 96.0 | 491 | 385 KB |
+| **embedding, rank 16** | 98.1 | 97.2 | 0.80 | 95.6 | 466 | **52 KB** |
+| **embedding, rank 32** | 97.9 | 96.9 | 0.69 | 95.7 | 472 | **88 KB** |
+| embedding, rank 8 | 97.7 | 97.2 | 0.91 | 93.8 | 465 | 34 KB |
 | embedding, rank 64 | 97.6 | 96.3 | 0.94 | 96.4 | 485 | 160 KB |
 | _CTRL: synergy shuffled_ | 84.7 | 84.4 | 4.57 | 43.0 | 481 | — |
 | _CTRL: prior-only (no synergy)_ | 93.2 | 93.3 | 3.70 | 43.1 | 236 | — |
 
 **Conclusions:**
 
-1. **Freezing the corpus is exactly lossless.** The rounded-corpus row equals the
-   live row on every metric, and a per-pool byte-identity check matched the
-   official `generatePoolFromData(..., "sigseed", ...)` output **5/5** for a
-   sample of `(Dreamcaller, seed)`. Freezing is a pure caching refactor.
+1. **The record→matrix step is exactly lossless.** A rounded in-memory matrix
+   equals the live numbers on every metric, and a per-pool byte-identity check
+   matched the official `generatePoolFromData(..., "sigseed", ...)` output **5/5**
+   for a sample of `(Dreamcaller, seed)`. This is the reference the embedding is
+   measured against.
 2. **The metric genuinely discriminates** (so ~97 is preserved signal, not a
-   saturated ceiling): shuffling the synergy entries tanks adequacy to 84.7 and
-   traps to 4.57; dropping synergy entirely (prior-only) collapses theme-evenness
-   to 43 and distinct cards to 236 (near-identical pools every time).
-3. **Low-rank embeddings preserve the metric down to rank ~16** (52 KB gz), and
-   rank 32 (88 KB gz) is indistinguishable from exact. The synergy matrix is
-   effectively low-rank with respect to pool quality.
+   saturated ceiling): shuffling synergy tanks adequacy to 84.7 and traps to 4.57;
+   dropping synergy (prior-only) collapses theme-evenness to 43 and distinct cards
+   to 236.
+3. **The embedding is metric-equivalent to the exact generator.** Rank 16 (52 KB
+   gz) and rank 32 (88 KB gz) are indistinguishable from exact on every metric.
+   The synergy matrix is effectively low-rank with respect to pool quality, so a
+   per-card vector representation loses nothing that matters. **This is what
+   licenses making the embedding the committed runtime artifact.**
 
-Sizes for reference: raw records 19 MB / 4.5 MB gz; explicit corpus (index-keyed,
-5-digit floats) 1.4 MB / 385 KB gz; naive UUID-keyed object form 6 MB / 1.5 MB gz
-(avoid — use the index-keyed form).
+Sizes for reference: raw records 19 MB / 4.5 MB gz; full in-memory matrix
+serialized (index-keyed, 5-digit) 1.4 MB / 385 KB gz; **rank-32 embedding 88 KB
+gz**.
 
 ---
 
 ## 5. Target architecture
 
+The committed **embedding** is the runtime artifact and the core of this design.
 Separate three concerns that the current system fuses:
 
 | Concern | Current | Target |
 |---|---|---|
-| **Source of truth** | 19 MB records, re-read at runtime | records, read **only at build time** to bake the corpus |
-| **Runtime artifact** | rebuilt in-browser from records | a small baked JSON corpus, fetched directly |
-| **How card edits are stored** | (impossible without new records) | a checked-in **declarative overlay** of "resembles" recipes |
+| **Upstream data** | 19 MB records, re-read at runtime | records, read **only at bake time** |
+| **Runtime artifact** | matrix rebuilt in-browser from records | committed **embedding** `data/affinity_embedding.json`, served and loaded directly |
+| **Card edits / new cards** | (impossible without new records) | committed **overlay** of "resembles" recipes, folded into the embedding at bake time |
 
-### 5.1 Substrate choice (a documented decision, both validated)
+### 5.1 The runtime substrate is the committed embedding
 
-The runtime artifact can be either:
+Each card is `(U[card], V[card], prior[card])`, where `U`/`V` are rank-`R` vectors
+(default **R = 32**), and synergy is reconstructed as
+`affinity(d, c) = max(0, U[d]·V[c])`. The loader turns the embedding back into an
+in-memory `AffinityCorpus`, so **the grower and every variant are untouched** —
+they keep consuming `AffinityCorpus` exactly as today.
 
-- **Explicit matrix** (recommended default): the corpus verbatim, 385 KB gz.
-  **Exact** — byte-identical pools to today. Zero behavioral risk.
-- **Embedding** (optional): per-card vectors `U`, `V` (rank ~16–32) with
-  `affinity(d,c) = max(0, U[d]·V[c])`, 52–88 KB gz. **Approximate** but
-  metric-equivalent (Section 4). Also usable as a similarity index for authoring
-  (Section 5.3).
+The embedding is **checked into version control** at `data/affinity_embedding.json`
+(alongside other committed derived artifacts like `data/buildaround_support.json`).
+`scripts/setup-assets.mjs` copies it to `public/affinity-corpus-data.json` (a
+gitignored served asset) the same way it emits the other `public/` JSON. The client
+fetches that copy instead of the 19 MB records.
 
-These are interchangeable because the **loader produces an `AffinityCorpus` either
-way, and the grower is untouched.** Implement the explicit path first; add the
-embedding path behind the same loader interface. Choose per build via a flag.
+The record-derived **matrix is a build-time intermediate**: it is materialized
+in-memory during the bake to fit the embedding, and during validation as the exact
+reference (Section 10). It is not shipped and need not be checked in. The records
+(`docs/draft_records_adapted`) remain the upstream input used when re-baking.
 
-> The embedding is *derived from* the explicit matrix and *validated against* it.
-> Keep the explicit matrix as the bake target and reference even if you ship the
-> embedding. "Replace the shipped artifact" — yes. "Delete the matrix from the
-> pipeline" — no.
+### 5.2 Card edits are recipes, not hand-tuned vectors
 
-### 5.2 Edits as recipes, not baked vectors
-
-A card addition/edit is stored as a **recipe** ("X resembles A, B, C"), applied to
-the explicit matrix **at bake time**, before any embedding fit. This is essential:
-SVD axes are arbitrary up to rotation, so hand-tuned latent vectors would not
-survive a re-bake from updated records, whereas a recipe re-applies in any basis.
-Recipes also work identically on both substrates.
+A card addition/edit is stored as a **recipe** ("X resembles A, B, C") in a
+committed overlay (`data/affinity_overlay.jsonc`), applied to the in-memory matrix
+**at bake time**, before the embedding is fit. This is essential: SVD axes are
+arbitrary up to rotation, so hand-tuned latent vectors would not survive a re-bake
+from updated records, whereas a recipe re-applies in any basis. Adding a card to
+the overlay and re-running the bake yields a new committed embedding in which the
+card has a consistent vector.
 
 ### 5.3 Scope — what this covers and what it does not
 
 **Covers** the affinity-corpus consumers: `sigseed` (default) and the rest of the
-affinity-grown family (`pickfit`, `pickcohere`, `picksig`, `pickearly`,
-`pickpos`, `pickchoice`) — see `POOL_VARIANTS_NEEDING_RECORDS`
-(`quest-content.ts:84`).
+affinity-grown family (`pickfit`, `pickcohere`, `picksig`, `pickearly`, `pickpos`,
+`pickchoice`) — see `POOL_VARIANTS_NEEDING_RECORDS` (`quest-content.ts:84`).
 
 **Does not cover** two other runtime consumers of `draft-records-data.json`, which
-are out of scope and keep working as-is:
+keep working as-is:
 
 - **Record-replay draft mode** replays actual recorded drafts and fundamentally
   needs the raw seats (`loadDraftRecords` → `quest-state-actions.ts:~414`,
   `App.tsx:~96`).
 - **The `replay` fit-model** is built from record *mainboards*
   (`buildFitModel(draftRecords.map(r => r.mainboard))`, `quest-content.ts:~440`) —
-  a different corpus (decklists), separately distillable later.
+  a different corpus, separately distillable later.
 
-**Implication for the payload win:** the client can skip the 19 MB fetch whenever
-the active pool variant is corpus-driven **and** neither record-replay mode nor the
-`replay` fit-model is in use. Gate the fetch on actual need (it is already gated by
-`poolVariantNeedsRecords`; extend that gate so a corpus-driven variant fetches the
-**baked corpus** instead of the records). When a run does use record-replay, it
-still fetches the records — that is expected and unrelated to pool quality.
+**Payload win:** the client skips the 19 MB fetch whenever the active pool variant
+is corpus-driven **and** neither record-replay mode nor the `replay` fit-model is
+in use. The fetch is already gated by `poolVariantNeedsRecords`; extend that gate
+so a corpus-driven variant fetches the **embedding** instead of the records. A run
+that uses record-replay still fetches the records — expected, and unrelated to pool
+quality.
 
 ---
 
 ## 6. Data formats (precise schemas)
 
-All three files key cards by lowercase UUID. Floats rounded to 5 decimals.
+Two committed files. Both key cards by lowercase UUID; floats rounded to 5 decimals.
 
-### 6.1 Explicit corpus — `public/affinity-corpus-data.json`
-
-Index-keyed to avoid repeating 36-char UUIDs in every matrix entry:
-
-```jsonc
-{
-  "version": 1,
-  "kind": "explicit",
-  "cards": ["<uuid0>", "<uuid1>", ...],   // length N; the card-key universe
-  "prior": [0.42, 0.0, ...],              // length N, aligned to `cards`
-  "affinity": [                            // sparse rows
-    [d, [[c, v], [c2, v2], ...]],          // d, c, c2 are INDICES into `cards`
-    ...                                     // v in (0,1]; omit zeros
-  ]
-}
-```
-
-Deserialize to `AffinityCorpus` by mapping indices back through `cards`.
-**Emit `cards` in the corpus's natural `[...taken.keys()]` order** to guarantee
-byte-identical output to today (grower tie-breaks are key-based, so order does not
-change pool output, but preserving it keeps the parity test trivially green and the
-file diff-stable). Ensure the bake reads `docs/draft_records_adapted` in sorted
-filename order so the universe order is stable across machines.
-
-### 6.2 Embedding corpus — same filename, `kind: "embedding"`
+### 6.1 The embedding — `data/affinity_embedding.json` (committed; the artifact)
 
 ```jsonc
 {
   "version": 1,
   "kind": "embedding",
-  "rank": 16,
-  "cards": ["<uuid0>", ...],   // length N
-  "prior": [0.42, ...],        // length N
-  "U": [[...rank floats...], ...],   // N x rank — source ("what this card pulls")
-  "V": [[...rank floats...], ...]    // N x rank — target ("what pulls this card")
+  "rank": 32,
+  "cards": ["<uuid0>", "<uuid1>", ...],   // length N; the card-key universe
+  "prior": [0.42, 0.0, ...],              // length N, aligned to `cards`
+  "U": [[...rank floats...], ...],        // N x rank — source ("what this card pulls")
+  "V": [[...rank floats...], ...]         // N x rank — target ("what pulls this card")
 }
 // Reconstruct: affinity(d, c) = max(0, sum_r U[d][r] * V[c][r])
 ```
 
-Loader densifies into the sparse `Map<Map>` shape the grower expects (keep entries
-> 1e-6). N=501, rank≤32 → a few MB of transient memory; acceptable. The grower's
-per-step row fold is ~2.4× wider on a densified matrix than on the native sparse
-one, which is negligible for 32 pools/run.
+The loader (`deserializeCorpus`) reconstructs the `AffinityCorpus`: `prior` and
+`cards` map straight across; `affinity` is densified from the dot products, keeping
+entries `> 1e-6`. N = 501, rank ≤ 32 → a few MB transient memory and a per-step row
+fold ~2.4× wider than the native sparse matrix — negligible for 32 pools per run.
 
-### 6.3 Authoring overlay — `data/affinity_overlay.jsonc` (checked in, editable)
+`setup-assets.mjs` copies this file verbatim to
+`public/affinity-corpus-data.json`; add that served path to `.gitignore`.
+
+### 6.2 Authoring overlay — `data/affinity_overlay.jsonc` (committed; human-edited)
 
 ```jsonc
 {
@@ -343,14 +326,21 @@ processed overlay entry), enabling composition. Adding a card here changes how i
 **drafts**; to make it count in the **quality metric**, also add its theme entry to
 `data/buildaround_support.json` (the two metadata systems are independent).
 
+### 6.3 Optional matrix dump (debug only, not committed)
+
+For inspecting raw synergies, the bake may optionally emit the in-memory matrix in
+an index-keyed sparse form (`{cards, prior:[...], affinity:[[d,[[c,v],...]],...]}`,
+indices into `cards`). This is a debugging convenience, not a shipped or committed
+artifact.
+
 ---
 
 ## 7. The blend ("resembles") algorithm
 
-Applied to the explicit matrix at bake time, after building the base corpus from
-records and **before** any embedding fit. Process `add` then `edit`, each in array
-order. Let `R = resembles`, `s = priorScale ?? 1`, and let `mean_r f(r)` average
-over `r ∈ R`.
+Applied to the in-memory matrix at bake time, after building the base corpus from
+records and **before** the embedding fit. Process `add` then `edit`, each in array
+order. Let `R = resembles`, `s = priorScale ?? 1`, and `mean_r f(r)` average over
+`r ∈ R`.
 
 For an **add** `{id: X, resembles: R, priorScale: s}` (error if X already present):
 
@@ -369,74 +359,76 @@ For an **edit** `{id: X, resembles?: R, priorScale?: s}` (X must exist): recompu
 Rationale: a card's *outgoing* row is "what I pull into the pool"; its *incoming*
 column is "what pulls me in". Averaging neighbors' rows/columns places `X` in the
 synergy geometry next to A/B/C, so a signature or pool containing A/B/C-like cards
-will pull `X`, and `X` will pull their partners.
+pulls `X`, and `X` pulls their partners. Because the embedding is fit *after* this
+step, the new card receives a consistent latent vector automatically.
 
 ---
 
-## 8. The embedding fit (if shipping `kind: "embedding"`)
+## 8. The embedding fit
 
-1. Materialize the post-overlay matrix `A` (N×N dense, row=source, col=target).
-2. Randomized truncated SVD at rank `k` (k≈16–32). Standard recipe, no external
-   deps (a ~120-line implementation exists in the validation harness, Section 11):
-   - `Ω` = N×(k+p) deterministic pseudo-Gaussian (p≈12 oversampling; seed it — do
-     not use `Math.random`).
+1. Materialize the post-overlay matrix `A` (N×N dense, row = source, col = target).
+2. Randomized truncated SVD at rank `R` (default **32**). Standard recipe, no
+   external deps (a ~120-line implementation is in the validation harness,
+   Section 11):
+   - `Ω` = N×(R+p) deterministic pseudo-Gaussian (p ≈ 12 oversampling; **seed it —
+     do not use `Math.random`**).
    - `Y = AΩ`; orthonormalize `Y → Q` (modified Gram–Schmidt).
    - `B = QᵀA`; symmetric `S = BBᵀ` (small); Jacobi eigendecomposition of `S`.
    - Left singular vectors `u_i = Q w_i`; `B^T w_i = σ_i v_i`.
-   - Per-card vectors split σ evenly: `U[:,i] = u_i·√σ_i`, `V[:,i] = (B^T w_i)/√σ_i`.
-3. Store `U`, `V`, `prior`, `cards`. Reconstruction clamps negatives to 0 at load.
+   - Split σ evenly into the stored vectors: `U[:,i] = u_i·√σ_i`,
+     `V[:,i] = (B^T w_i)/√σ_i`.
+3. Write `data/affinity_embedding.json` (Section 6.1). Reconstruction clamps
+   negatives to 0 at load.
 
-Determinism: seed the SVD's random projection from a fixed constant so re-bakes
-are reproducible.
+Determinism: seed the SVD's random projection from a fixed constant so re-bakes are
+reproducible. `rank` is tunable; **16–32 is the validated band, 32 is the default**
+(safest fidelity at 88 KB gz).
 
 ---
 
 ## 9. Implementation plan (file-by-file)
 
-Sequence in three phases; each is independently shippable and independently
-validated by Section 10.
+### Phase 1 — the committed embedding, baked and loaded (the core)
 
-### Phase 1 — bake + load the explicit matrix (exact, low risk)
-
-1. **New `scripts/bake-affinity-corpus.mjs`.** Imports `buildPoolData`
-   (`src/draft/pool/index.ts`) and `buildPickfitCorpus`
-   (`src/draft/pool/variant-pickfit.ts`); loads the same inputs as the metric's
-   `loadContext`; builds the base corpus; (Phase 2) applies the overlay; (Phase 3)
-   fits the embedding; serializes per Section 6 to `public/affinity-corpus-data.json`.
-2. **New serialization module** `src/draft/pool/affinity-corpus-io.ts`:
-   `serializeCorpus(corpus): string` and `deserializeCorpus(json): AffinityCorpus`
-   (handles both `kind`s). Pure, unit-tested.
+1. **New `scripts/bake-affinity-corpus.mjs`** + `npm` script
+   `bake-affinity-corpus`. Loads the same inputs as the metric's `loadContext`;
+   builds the base corpus via `buildPoolData` + `buildPickfitCorpus`; applies the
+   overlay (Section 7); fits the embedding (Section 8); writes
+   **`data/affinity_embedding.json`**. This command is run **on demand** (when
+   records or the overlay change) and its output is **committed** — it is not run
+   by `setup-assets`, so the committed embedding stays authoritative (like a
+   lockfile).
+2. **New `src/draft/pool/affinity-corpus-io.ts`**: `serializeEmbedding(...)` and
+   `deserializeCorpus(json): AffinityCorpus` (densifies vectors → `Map<Map>`).
+   Pure, unit-tested.
 3. **Thread a prebuilt corpus through `PoolData`.** Add optional
    `affinityCorpus?: AffinityCorpus` to `PoolData` (`types.ts:84`). In
-   `buildPickfitCorpus` (`variant-pickfit.ts:77`), return
-   `poolData.affinityCorpus` when present, else fall back to building from
-   `draftRecords` (preserves every test/experiment that passes raw records). The
-   `WeakMap` cache still applies.
-4. **Runtime loader.** Add `loadAffinityCorpus()` to
-   `src/data/cards-v2-database.ts` (fetch `/affinity-corpus-data.json`,
-   `deserializeCorpus`). In `quest-content.ts` (~line 421), when the active
-   variant is corpus-driven, fetch the baked corpus and set
-   `poolData.affinityCorpus`, and **skip the 19 MB `loadDraftRecords` fetch** for
-   pool purposes (keep it only for record-replay mode / fit-model). Extend the
-   existing `poolVariantNeedsRecords` gate accordingly.
-5. **Wire into `scripts/setup-assets.mjs`** so `affinity-corpus-data.json` is
-   regenerated alongside the other assets (after `draft-records-data.json` is
-   built — it reads from the same adapted records). Add an `npm` script
-   `bake-affinity-corpus`.
+   `buildPickfitCorpus` (`variant-pickfit.ts:77`), return `poolData.affinityCorpus`
+   when present, else build from `draftRecords` (preserves every test/experiment
+   that passes raw records). The `WeakMap` cache still applies.
+4. **Runtime loader.** Add `loadAffinityCorpus()` to `cards-v2-database.ts` (fetch
+   `/affinity-corpus-data.json`, `deserializeCorpus`). In `quest-content.ts`
+   (~line 421), when the active variant is corpus-driven, fetch the embedding and
+   set `poolData.affinityCorpus`, and **skip the 19 MB `loadDraftRecords` fetch**
+   for pool purposes (keep it only for record-replay mode / fit-model). Extend the
+   `poolVariantNeedsRecords` gate accordingly.
+5. **Wire `setup-assets.mjs`** to copy `data/affinity_embedding.json` →
+   `public/affinity-corpus-data.json` (do **not** regenerate it there). Add the
+   served path to `.gitignore`.
 
 ### Phase 2 — declarative overlay (extensibility)
 
-6. **New `data/affinity_overlay.jsonc`** (Section 6.3), initially `{add:[],edit:[]}`.
-7. **Apply it in the bake** (Section 7), after the base corpus, before embedding.
-   Unit-test the blend math on a tiny synthetic corpus.
+6. **New committed `data/affinity_overlay.jsonc`** (Section 6.2), initially
+   `{add:[],edit:[]}`.
+7. **Apply it in the bake** (Section 7), after the base corpus, before the
+   embedding fit. Unit-test the blend math on a tiny synthetic corpus. Document the
+   author workflow: edit the overlay (and `buildaround_support.json` for metric
+   credit) → `npm run bake-affinity-corpus` → commit the updated embedding.
 
-### Phase 3 — embedding substrate (optional compression + vector DB)
+### Phase 3 — authoring index (quality-of-life)
 
-8. **Embedding fit in the bake** (Section 8), behind a `--kind embedding --rank N`
-   flag. Loader already handles `kind: "embedding"` from step 2.
-9. **(Optional) authoring index.** A small tool that, given a card's vectors,
-   returns its nearest neighbors (cosine over `U`/`V`) to *suggest* `resembles`
-   targets for new cards.
+8. A small tool that, given a card's vectors, returns nearest neighbors (cosine
+   over `U`/`V`) to **suggest** `resembles` targets when authoring a new card.
 
 ---
 
@@ -444,102 +436,105 @@ validated by Section 10.
 
 The metric is `scripts/buildaround-support-experiment.mjs`
 (`npm run buildaround-metric`). Add a committed acceptance script
-(`scripts/affinity-corpus-parity.mjs`, adapted from Section 11) that asserts:
+(`scripts/affinity-corpus-parity.mjs`, adapted from Section 11) asserting:
 
-1. **Fidelity (explicit substrate must be exact).** For a sample of ≥10
-   `(Dreamcaller, seed)` pairs, pools generated from the baked explicit corpus are
+1. **Bake-pipeline fidelity (the matrix step must be exact).** Build the matrix
+   in-memory from records (no embedding) and confirm pools generated from it are
    **byte-identical** to `generatePoolFromData(..., "sigseed", ..., signature)` on
-   the live records path. (The harness already achieved 5/5; require 100 %.)
-2. **Metric parity.** Run adequacy + traps + diversity for the baked corpus and the
-   live corpus over ≥25 seeds × 32 Dreamcallers. Acceptance:
-   - explicit substrate: **identical** headline numbers (Section 4 row 2).
-   - embedding substrate (rank ≥16): within tolerance of exact — adequacy ≥ 97.5,
-     traps ≤ 1.0, themeEvenness ≥ 95.0 (Section 4 rows for rank 16/32).
-3. **Negative controls present.** Keep the `shuffled` and `prior-only` controls in
-   the acceptance script as guards that the metric still discriminates (adequacy
-   must drop to ~85 / ~93 respectively); if a code change makes the controls score
-   as well as the real corpus, the metric or harness has broken.
+   the live records path, for ≥10 `(Dreamcaller, seed)` pairs (harness achieved
+   5/5; require 100 %). This isolates the SVD as the only approximation.
+2. **Embedding metric parity (the shipping bar).** Run adequacy + traps + diversity
+   for the committed embedding and for the live corpus over ≥25 seeds × 32
+   Dreamcallers. Acceptance for rank ≥ 16: **adequacy ≥ 97.5, traps ≤ 1.0,
+   themeEvenness ≥ 95.0, #cards ≥ 460** (Section 4 rank-16/32 rows).
+3. **Negative controls retained.** Keep the `shuffled` and `prior-only` controls as
+   guards that the metric still discriminates (adequacy must drop to ~85 / ~93). If
+   a change lets a control score as well as the real embedding, the metric or
+   harness has broken.
 
-Also run the standard checks from `AGENTS.md` after code changes:
+Run the standard checks from `AGENTS.md` after code changes:
 `npm run lint && npm run typecheck && npm test`.
 
 ---
 
 ## 11. Reference: the validation harness used to produce Section 4
 
-This is the throwaway harness that produced the evidence. Commit a cleaned version
-as the Section-10 acceptance script. It (a) cross-checks a from-scratch `sigseed`
-replica against the official path, (b) builds rounded / low-rank / control
-corpora, and (c) scores each with the metric's **exported** pure functions
+This throwaway harness produced the evidence; commit a cleaned version as the
+Section-10 acceptance script. It (a) cross-checks a from-scratch `sigseed` replica
+against the official path, (b) builds the rounded matrix, low-rank embeddings, and
+controls, and (c) scores each with the metric's **exported** pure functions
 (`scorePool`, `trapCards`, `buildableThemes`, `dominantSignatureTheme`,
-`STANDALONE_THEMES`, `TIER_TARGET`, `normalizedEntropy`). Key implementation notes:
+`STANDALONE_THEMES`, `TIER_TARGET`, `normalizedEntropy`). Notes:
 
-- Run with `node` (Node 24 strips TypeScript, so `.mjs` can import `.ts` directly).
+- Run with `node` (Node 24 strips TypeScript, so `.mjs` imports `.ts` directly).
   Place the script at repo root or in `scripts/` so relative `./src/...` imports
   resolve.
 - Reproduce `sigseed` from an arbitrary corpus: `makeRng(seed)` →
   `resolveSignatureToCorpus` → (empty ⇒ `growPoolFromCorpus(..., PICKCOHERE)`
   fallback) → `drawSignatureSubset` → `growAffinityPoolFromSeeds(corpus, seeds,
   SIGSEED.targetSize, SIGSEED)` → map keys to names via `poolData.cardNameById`.
-  This matched the official generator exactly, proving the replica is faithful.
-- Build the dense matrix in `corpus.cards` index order; keep that exact order for
-  every derived corpus so determinism holds.
+  This matched the official generator 5/5, proving the replica is faithful.
+- Build the dense matrix in `corpus.cards` index order; keep that order for every
+  derived corpus so determinism holds.
 - Randomized SVD + Jacobi eigensolver are ~120 lines, no dependencies; seed the
   Gaussian projection deterministically.
-- Negative controls: **shuffled** = permute each row's target keys (preserves value
-  distribution, destroys which-partners-which); **prior-only** = empty affinity map
-  (pools grow on the prior alone).
-
-> Note: `Math.random`, `Date.now`, and `new Date()` should be avoided in any baked
-> pipeline that must be reproducible; seed all randomness from constants.
+- Controls: **shuffled** = permute each row's target keys (preserves the value
+  distribution, destroys which-partners-which); **prior-only** = empty affinity map.
+- Avoid `Math.random`, `Date.now`, `new Date()` anywhere in the bake/validation —
+  seed all randomness from constants so artifacts are reproducible.
 
 ---
 
 ## 12. Risks, edge cases, open questions
 
-- **Other record consumers (Section 5.3).** Do not break record-replay mode or the
-  `replay` fit-model. Only the *pool* path stops fetching records; gate carefully.
-- **Re-bake stability.** Recipes (not vectors) must be the stored edit form so they
-  survive re-fits. New cards added via overlay are part of the matrix, so the SVD
-  gives them consistent vectors automatically.
+- **The embedding is the live generator.** Because it ships, pool *contents* differ
+  from a hypothetical exact-matrix generator; the *quality distribution* is what is
+  preserved, and Section 10.2 is the bar that holds it. Section 10.1 keeps the
+  matrix step exact so the embedding is the *only* approximation in the chain.
+- **Committed-artifact diffs.** `data/affinity_embedding.json` is a generated file;
+  a re-bake rewrites all vectors wholesale (SVD basis rotation), so review it for
+  size/sanity and metric parity, not line-by-line. The human-meaningful diffs live
+  in `data/affinity_overlay.jsonc` and the records.
+- **Re-bake stability.** Recipes (not vectors) are the stored edit form so they
+  survive re-fits; new overlay cards become part of the matrix and get consistent
+  vectors automatically.
 - **Two metadata systems.** Adding/altering a card touches both the affinity overlay
-  (how it drafts) and `data/buildaround_support.json` (what themes it pays
-  off/supports, for the metric). Document this for card authors.
-- **Embedding is approximate.** Shipping it redefines the live generator as
-  embedding-`sigseed`; pools differ in contents from today (quality distribution
-  preserved). This is a conscious product decision, not a free compression — prefer
-  the explicit substrate unless the 88 KB / vector-DB ergonomics are specifically
-  wanted.
-- **Float precision.** 5 decimals were validated as lossless on the metric. If you
-  prune small affinity entries to shrink the explicit file, treat that as a
-  separate change and re-run parity — pruning is not the same as low-rank.
-- **Universe order.** Emit `cards` in the corpus's natural order and read adapted
-  records in sorted filename order, so the baked file is reproducible and the
-  fidelity test stays exact.
+  (how it drafts) and `data/buildaround_support.json` (themes it pays off/supports,
+  for the metric). Document this for card authors.
+- **Other record consumers (Section 5.3).** Do not break record-replay mode or the
+  `replay` fit-model; only the *pool* path stops fetching records.
+- **Universe order.** Emit `cards` in the corpus's natural `[...taken.keys()]` order
+  and read adapted records in sorted filename order, so the embedding is
+  reproducible and the matrix fidelity test stays exact.
 - **`targetSize` quirk to preserve.** `sigseed` ignores the `targetSize` passed by
   callers and uses `SIGSEED.targetSize` (150). The metric labels pools "200" but
-  they are ~150 copies; the baked path must reproduce this (it will, since it runs
-  the same grower with the same tuning).
+  they are ~150 copies; the baked path reproduces this (same grower, same tuning).
+- **Rank as a tuning knob.** Default 32; 16 is validated and smaller. If a future
+  card set needs higher fidelity, raise `rank` and re-run Section 10.
 
 ---
 
-## Appendix A. Key code references
+## Appendix A. Key references
+
+**Committed artifacts (new):** `data/affinity_embedding.json` (the embedding),
+`data/affinity_overlay.jsonc` (recipes). **Served (gitignored):**
+`public/affinity-corpus-data.json` (copy of the embedding).
 
 | Symbol | Location | Role |
 |---|---|---|
-| `AffinityCorpus` | `affinity-grower.ts:34` | the object to bake |
+| `AffinityCorpus` | `affinity-grower.ts:34` | what the loader reconstructs |
 | `growAffinityPoolFromSeeds` | `affinity-grower.ts:86` | growth engine (untouched) |
 | `growPoolFromCorpus` | `affinity-grower.ts:317` | best-of-K wrapper (pickcohere fallback) |
-| `buildExcessLiftCorpus` / `accumulatePickStats` | `pick-stats.ts:127` / `:59` | records → corpus (bake step) |
-| `buildPickfitCorpus` (+ `WeakMap` cache) | `variant-pickfit.ts:77` / `:71` | corpus provider to patch |
+| `buildExcessLiftCorpus` / `accumulatePickStats` | `pick-stats.ts:127` / `:59` | records → matrix (bake step) |
+| `buildPickfitCorpus` (+ `WeakMap`) | `variant-pickfit.ts:77` / `:71` | corpus provider to patch (prefer `poolData.affinityCorpus`) |
 | `generateSigSeed` / `drawSignatureSubset` / `SIGSEED` | `variant-sigseed.ts:97` / `:72` / `:47` | the variant |
 | `resolveSignatureToCorpus` | `variant-picksig.ts:90` | signature → corpus keys |
 | `generatePickCohere` / `PICKCOHERE` | `variant-pickcohere.ts:56` / `:36` | no-signature fallback |
 | `buildPoolData` / `PoolData` | `pool-data.ts:46` / `types.ts:84` | add `affinityCorpus` here |
 | `generatePoolFromData` / `makeRng` | `generate.ts:60` / `rng.ts:4` | entry point + RNG |
 | runtime fetch / build | `cards-v2-database.ts:~66` / `quest-content.ts:~421` | where the 19 MB loads today |
-| variant gate | `quest-content.ts:84` (`POOL_VARIANTS_NEEDING_RECORDS`) | extend to fetch baked corpus |
-| asset bake | `setup-assets.mjs:228` (`buildDraftRecords`), `:599` | wire the new bake in here |
+| variant gate | `quest-content.ts:84` (`POOL_VARIANTS_NEEDING_RECORDS`) | extend to fetch the embedding |
+| asset bake | `setup-assets.mjs:228`, `:599` | wire the copy-to-public here |
 | quality metric | `buildaround-support-experiment.mjs` (`npm run buildaround-metric`) | acceptance oracle |
 | metric card metadata | `data/buildaround_support.json` | add entries for new cards |
 
@@ -548,11 +543,13 @@ corpora, and (c) scores each with the metric's **exported** pure functions
 - **Dreamcaller** — the run's hero; 32 exist; each may have a signature.
 - **Signature** — a Dreamcaller's defining card UUIDs; steers the pool.
 - **Pool** — the drafted-from multiset (~150–200 copies, ≤2 each).
-- **Affinity corpus** — `{cards, affinity, prior}`; the baked artifact.
+- **Affinity corpus** — `{cards, affinity, prior}`; the in-memory object the grower
+  reads.
+- **Embedding** — the committed per-card vectors `(U, V, prior)`; the runtime
+  artifact, from which affinity is reconstructed as `max(0, U[d]·V[c])`.
 - **Prior** — availability-corrected pick rate (card desirability).
 - **Affinity / excess lift** — synergy: extra pick rate of `c` once `d` is held.
 - **Grower** — the greedy blended-affinity pool expander; reads only the corpus.
-- **Substrate** — the runtime form of the corpus: explicit matrix or embedding.
 - **Recipe / overlay** — a declarative "card X resembles A, B, C" edit, applied at
-  bake time.
+  bake time before the embedding is fit.
 - **Build-around / adequacy / trap** — quality-metric concepts (Section 4).
