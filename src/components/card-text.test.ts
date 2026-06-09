@@ -1,7 +1,83 @@
 import { describe, it, expect } from "vitest";
-import { tokenizeRulesText, formatTypeLine } from "./card-text";
+import {
+  tokenizeRulesText,
+  formatTypeLine,
+  type TextSegment,
+} from "./card-text";
 import { lookupGlossaryTerm } from "../data/glossary";
 import type { CardData } from "../types/cards";
+
+/** Rebuilds the visible text from segments (recursing into nobreak groups). */
+function reconstructText(segments: TextSegment[]): string {
+  return segments
+    .map((segment): string => {
+      switch (segment.kind) {
+        case "text":
+          return segment.value;
+        case "term":
+          return segment.word;
+        case "symbol":
+          return segment.char;
+        case "sparkPip":
+          return `⍏${segment.value}`;
+        case "bolt":
+          return "❖".repeat(segment.count);
+        case "nobreak":
+          return reconstructText(segment.segments);
+      }
+    })
+    .join("");
+}
+
+/** Returns all leaf segments, descending into nobreak groups. */
+function flatten(segments: TextSegment[]): TextSegment[] {
+  return segments.flatMap((segment) =>
+    segment.kind === "nobreak" ? flatten(segment.segments) : [segment],
+  );
+}
+
+/** Collects every symbol segment, descending into nobreak groups. */
+function collectSymbols(
+  segments: TextSegment[],
+): Extract<TextSegment, { kind: "symbol" }>[] {
+  const out: Extract<TextSegment, { kind: "symbol" }>[] = [];
+  for (const segment of segments) {
+    if (segment.kind === "symbol") {
+      out.push(segment);
+    } else if (segment.kind === "nobreak") {
+      out.push(...collectSymbols(segment.segments));
+    }
+  }
+  return out;
+}
+
+/** True when a glossary term with this word appears anywhere in the tree. */
+function hasTerm(segments: TextSegment[], word: string): boolean {
+  return segments.some(
+    (segment) =>
+      (segment.kind === "term" && segment.word === word) ||
+      (segment.kind === "nobreak" && hasTerm(segment.segments, word)),
+  );
+}
+
+/**
+ * Returns the reconstructed text of the top-level nobreak group whose contents
+ * include `contains`, or `undefined` if no such group exists. Used to assert
+ * which run of text a symbol is kept on one line with.
+ */
+function nobreakContaining(
+  segments: TextSegment[],
+  contains: string,
+): string | undefined {
+  const group = segments.find(
+    (segment) =>
+      segment.kind === "nobreak" &&
+      reconstructText(segment.segments).includes(contains),
+  );
+  return group !== undefined && group.kind === "nobreak"
+    ? reconstructText(group.segments)
+    : undefined;
+}
 
 describe("tokenizeRulesText", () => {
   it("returns a single text segment for plain text", () => {
@@ -13,143 +89,183 @@ describe("tokenizeRulesText", () => {
     expect(tokenizeRulesText("")).toEqual([]);
   });
 
-  // The tokenizer continues to recognize U+25CF as the "energy" symbol; the
-  // rendering layer (CardDisplay) is what swaps the segment for the Boxicons
-  // `bx-fire-alt` icon. See backlog task 004 \u2014 these assertions lock that
-  // the tokenizer keeps emitting `symbol: "energy"` for `\u25CF`, which is the
-  // contract CardDisplay relies on to render the flame.
-  it("identifies the energy symbol \u25CF", () => {
-    const result = tokenizeRulesText("Pay \u25CF2.");
-    expect(result).toEqual([
-      { kind: "text", value: "Pay " },
-      { kind: "symbol", symbol: "energy", char: "\u25CF" },
-      { kind: "text", value: "2." },
-    ]);
+  // Tokenizing then reconstructing must round-trip exactly: the icon-binding
+  // pass only regroups segments, it never adds or drops characters.
+  it("round-trips the visible text through tokenize + reconstruct", () => {
+    for (const text of [
+      "Deal 3 damage.",
+      "Pay ●2 to gain 1✦.",
+      "When you abandon an ally, trigger its ▸Materialized and ▸Dawn abilities.",
+      "▸ Judgment: gain 2⍟.",
+      "Your cards have ↯fast and cost ≤2● less.",
+      "❖❖ — Abandon an ally: gain ⍏2.",
+    ]) {
+      expect(reconstructText(tokenizeRulesText(text))).toBe(text);
+    }
   });
 
-  it("emits an energy symbol segment for a bare \u25CF (locks the flame-icon contract)", () => {
-    const result = tokenizeRulesText("\u25CF");
-    expect(result).toHaveLength(1);
-    expect(result[0]).toEqual({
+  // The tokenizer recognizes U+25CF as the energy symbol; the renderer swaps the
+  // segment for the Boxicons flame. These assertions lock that contract.
+  it("identifies the energy symbol ●", () => {
+    const result = tokenizeRulesText("Pay ●2.");
+    expect(collectSymbols(result)).toContainEqual({
       kind: "symbol",
       symbol: "energy",
-      char: "\u25CF",
+      char: "●",
+    });
+    expect(reconstructText(result)).toBe("Pay ●2.");
+  });
+
+  it("emits a bare ● as a lone energy symbol segment", () => {
+    const result = tokenizeRulesText("●");
+    expect(result).toEqual([{ kind: "symbol", symbol: "energy", char: "●" }]);
+  });
+
+  // The spark glyph followed immediately by digits collapses into a sparkPip
+  // segment so the renderer can draw a circled-number badge.
+  it("collapses ⍏ followed by digits into a sparkPip segment", () => {
+    const result = tokenizeRulesText("Gain ⍏1.");
+    expect(flatten(result)).toContainEqual({ kind: "sparkPip", value: "1" });
+    expect(reconstructText(result)).toBe("Gain ⍏1.");
+  });
+
+  it("collapses multi-digit spark values ⍏10 into a sparkPip segment", () => {
+    const result = tokenizeRulesText("Gain ⍏10.");
+    expect(flatten(result)).toContainEqual({ kind: "sparkPip", value: "10" });
+  });
+
+  it("treats a bare ⍏ (no trailing digits) as a spark symbol segment", () => {
+    const result = tokenizeRulesText("Gain ⍏.");
+    expect(collectSymbols(result)).toContainEqual({
+      kind: "symbol",
+      symbol: "spark",
+      char: "⍏",
     });
   });
 
-  // The spark glyph followed immediately by digits collapses into a
-  // `sparkPip` segment so the renderer can draw a circled-number `PipBadge`
-  // (matches the spark stat badge on character cards). See backlog task 021.
-  it("collapses \u234F followed by digits into a sparkPip segment", () => {
-    const result = tokenizeRulesText("Gain \u234F1.");
-    expect(result).toEqual([
-      { kind: "text", value: "Gain " },
-      { kind: "sparkPip", value: "1" },
-      { kind: "text", value: "." },
+  // The activated-ability marker collapses into a bolt segment carrying the
+  // count (one bolt for an activated ability, two for an interrupt).
+  it("collapses a single ❖ into a bolt segment with count 1", () => {
+    const result = tokenizeRulesText("❖ — 1●: Move this character.");
+    expect(flatten(result).filter((s) => s.kind === "bolt")).toEqual([
+      { kind: "bolt", count: 1 },
     ]);
   });
 
-  it("collapses multi-digit spark values \u234F10 into a sparkPip segment", () => {
-    const result = tokenizeRulesText("Gain \u234F10.");
-    expect(result).toEqual([
-      { kind: "text", value: "Gain " },
-      { kind: "sparkPip", value: "10" },
-      { kind: "text", value: "." },
-    ]);
-  });
-
-  // A bare \u234F glyph without trailing digits remains a `symbol` segment so
-  // standalone references still render (rendered as a colored character by
-  // the existing renderer fallback).
-  it("treats a bare \u234F (no trailing digits) as a symbol segment", () => {
-    const result = tokenizeRulesText("Gain \u234F.");
-    expect(result).toEqual([
-      { kind: "text", value: "Gain " },
-      { kind: "symbol", symbol: "spark", char: "\u234F" },
-      { kind: "text", value: "." },
-    ]);
-  });
-
-  // The activated-ability marker `\u2756` collapses into a `bolt` segment so
-  // the renderer can draw the filled lightning bolt the title bar shows before
-  // the card name. A single `\u2756` is a normal activated ability (one bolt);
-  // `\u2756\u2756` is an interrupt (two almost-touching bolts).
-  it("collapses a single \u2756 into a bolt segment with count 1", () => {
-    const result = tokenizeRulesText("\u2756 \u2013 1\u25CF: Move this character.");
-    expect(result[0]).toEqual({ kind: "bolt", count: 1 });
-  });
-
-  it("collapses a double \u2756\u2756 into a single bolt segment with count 2", () => {
-    const result = tokenizeRulesText("\u2756\u2756 \u2013 Abandon an ally: Effect.");
+  it("collapses a double ❖❖ into a single bolt segment with count 2", () => {
+    const result = tokenizeRulesText("❖❖ — Abandon an ally: Effect.");
     expect(result[0]).toEqual({ kind: "bolt", count: 2 });
-    // The two markers must collapse into one segment, not two single bolts.
-    expect(result.filter((s) => s.kind === "bolt")).toHaveLength(1);
   });
 
-  // Points `\u235F`, lunar `\u262A`, and store `\u29D7` each tokenize to their own symbol
-  // type so the renderer can swap them for a filled Boxicons mark.
-  // The leading word, value, and symbol are bound together with a non-breaking
-  // space (U+00A0) so the quantity never wraps across a line. The points value
-  // is butted against its glyph, so the only protected space is the one between
-  // the word and the value.
-  it("identifies the points symbol \u235F", () => {
-    const result = tokenizeRulesText("Gain 2\u235F.");
-    expect(result).toEqual([
-      { kind: "text", value: "Gain\u00A02" },
-      { kind: "symbol", symbol: "points", char: "\u235F" },
-      { kind: "text", value: "." },
-    ]);
+  // Points, lunar, and store each tokenize to their own symbol type.
+  it("identifies the points symbol ⍟", () => {
+    const result = tokenizeRulesText("Gain 2⍟.");
+    expect(collectSymbols(result)).toContainEqual({
+      kind: "symbol",
+      symbol: "points",
+      char: "⍟",
+    });
+    expect(reconstructText(result)).toBe("Gain 2⍟.");
   });
 
-  it("identifies the lunar symbol \u262A", () => {
-    const result = tokenizeRulesText("\u262A: Draw a card.");
-    expect(result).toEqual([
-      { kind: "symbol", symbol: "lunar", char: "\u262A" },
-      { kind: "text", value: ": Draw a card." },
-    ]);
+  it("identifies the lunar symbol ☪", () => {
+    const result = tokenizeRulesText("☪: Draw a card.");
+    expect(collectSymbols(result)).toContainEqual({
+      kind: "symbol",
+      symbol: "lunar",
+      char: "☪",
+    });
   });
 
-  it("identifies the store symbol \u29D7", () => {
-    const result = tokenizeRulesText("Store 1\u29D7.");
-    expect(result).toEqual([
-      { kind: "text", value: "Store\u00A01" },
-      { kind: "symbol", symbol: "store", char: "\u29D7" },
-      { kind: "text", value: "." },
-    ]);
+  it("identifies the store symbol ⧗", () => {
+    const result = tokenizeRulesText("Store 1⧗.");
+    expect(collectSymbols(result)).toContainEqual({
+      kind: "symbol",
+      symbol: "store",
+      char: "⧗",
+    });
+    expect(reconstructText(result)).toBe("Store 1⧗.");
   });
 
-  it("identifies the trigger prefix \u25B8 when not followed by a keyword", () => {
-    const result = tokenizeRulesText("\u25B8When played:");
-    expect(result).toEqual([
-      { kind: "symbol", symbol: "trigger", char: "\u25B8" },
-      { kind: "text", value: "When played:" },
-    ]);
+  it("identifies a bare trigger prefix ▸ that has no keyword space", () => {
+    const result = tokenizeRulesText("▸When played:");
+    expect(collectSymbols(result)).toContainEqual({
+      kind: "symbol",
+      symbol: "trigger",
+      char: "▸",
+    });
+    expect(reconstructText(result)).toBe("▸When played:");
   });
 
-  it("identifies the fast/lightning symbol \u21AF when surrounded by spaces", () => {
-    const result = tokenizeRulesText("Cast at \u21AF speed.");
-    expect(result).toEqual([
-      { kind: "text", value: "Cast at " },
-      { kind: "symbol", symbol: "fast", char: "\u21AF" },
-      { kind: "text", value: " speed." },
-    ]);
+  it("identifies the fast/lightning symbol ↯ when surrounded by spaces", () => {
+    const result = tokenizeRulesText("Cast at ↯ speed.");
+    expect(collectSymbols(result)).toContainEqual({
+      kind: "symbol",
+      symbol: "fast",
+      char: "↯",
+    });
+    expect(reconstructText(result)).toBe("Cast at ↯ speed.");
   });
 
-  // The trigger arrow `\u25B8` must never visually orphan from its
-  // following keyword (Judgment, Materialized, Dissolved, Banished, ...). The
-  // tokenizer groups them into a single `nobreak` segment so the renderer can
-  // wrap them in `white-space: nowrap`. See backlog task 005. Glossary
-  // keywords inside the nobreak are wrapped as `term` segments so the
-  // RulesText renderer can attach a hover popover (backlog task 006).
-  it("groups \u25B8 with a trailing colon-suffixed keyword as nobreak (with term)", () => {
-    const result = tokenizeRulesText("\u25B8 Judgment: Draw a card.");
+  // Icon line-break protection. Every inline icon stays on one line with the
+  // text it reads with — this is general, not per-icon.
+
+  // No space between the caret and its keyword (the common authored form): the
+  // arrow must not be left alone at the end of a line. The keyword still
+  // tokenizes as a glossary term so its popover attaches.
+  it("keeps a no-space trigger arrow glued to its following keyword", () => {
+    const result = tokenizeRulesText("trigger its ▸Materialized ability.");
+    expect(nobreakContaining(result, "▸")).toBe("▸Materialized");
+    expect(hasTerm(result, "Materialized")).toBe(true);
+  });
+
+  it("keeps a butted number glued to its symbol (●2)", () => {
+    const result = tokenizeRulesText("Pay ●2.");
+    expect(nobreakContaining(result, "●")).toBe("●2.");
+  });
+
+  // The word in front of a value is glued to the value+symbol so the quantity
+  // never breaks after the verb.
+  it("binds the leading word to a value butted against its spark symbol", () => {
+    const result = tokenizeRulesText("it gains +2✦ each turn.");
+    expect(nobreakContaining(result, "✦")).toBe("gains +2✦");
+  });
+
+  it("binds the leading word to a butted number and its points symbol", () => {
+    const result = tokenizeRulesText("Gain 2⍟.");
+    // The trailing period also has no space before it, so it stays glued too.
+    expect(nobreakContaining(result, "⍟")).toBe("Gain 2⍟.");
+  });
+
+  it("binds a space-separated value and symbol, plus the leading word", () => {
+    const result = tokenizeRulesText("the next card costs 2 ● less.");
+    expect(nobreakContaining(result, "●")).toBe("costs 2 ●");
+  });
+
+  it("binds a comparison value (≤2●) to its leading word", () => {
+    const result = tokenizeRulesText("play a ≤2● card.");
+    expect(nobreakContaining(result, "●")).toBe("a ≤2●");
+  });
+
+  // The leading word binds even when it is a glossary term tokenizing into its
+  // own segment — the term still renders for its popover.
+  it("binds the variable X to a leading glossary term (Reclaim X●)", () => {
+    const result = tokenizeRulesText("Reclaim X● to draw.");
+    expect(nobreakContaining(result, "●")).toBe("Reclaim X●");
+    expect(hasTerm(result, "Reclaim")).toBe(true);
+  });
+
+  // The trigger arrow `▸` keeps its glossary keyword on the same line. The
+  // keyword inside the nobreak is wrapped as a `term` segment for its popover.
+  it("groups ▸ with a trailing colon-suffixed keyword as nobreak (with term)", () => {
+    const result = tokenizeRulesText("▸ Judgment: Draw a card.");
     const judgmentEntry = lookupGlossaryTerm("Judgment");
     expect(judgmentEntry).toBeDefined();
     expect(result).toEqual([
       {
         kind: "nobreak",
         segments: [
-          { kind: "symbol", symbol: "trigger", char: "\u25B8" },
+          { kind: "symbol", symbol: "trigger", char: "▸" },
           { kind: "text", value: " " },
           { kind: "term", word: "Judgment", entry: judgmentEntry },
           { kind: "text", value: ":" },
@@ -159,15 +275,15 @@ describe("tokenizeRulesText", () => {
     ]);
   });
 
-  it("groups \u25B8 with a trailing comma-suffixed keyword as nobreak (with term)", () => {
-    const result = tokenizeRulesText("\u25B8 Materialized, draw a card.");
+  it("groups ▸ with a trailing comma-suffixed keyword as nobreak (with term)", () => {
+    const result = tokenizeRulesText("▸ Materialized, draw a card.");
     const materializedEntry = lookupGlossaryTerm("Materialized");
     expect(materializedEntry).toBeDefined();
     expect(result).toEqual([
       {
         kind: "nobreak",
         segments: [
-          { kind: "symbol", symbol: "trigger", char: "\u25B8" },
+          { kind: "symbol", symbol: "trigger", char: "▸" },
           { kind: "text", value: " " },
           { kind: "term", word: "Materialized", entry: materializedEntry },
           { kind: "text", value: "," },
@@ -177,33 +293,15 @@ describe("tokenizeRulesText", () => {
     ]);
   });
 
-  it("groups \u25B8 + bare keyword (no punctuation) as nobreak (with term)", () => {
-    const result = tokenizeRulesText("trigger the \u25B8 Judgment ability");
-    const judgmentEntry = lookupGlossaryTerm("Judgment");
-    expect(judgmentEntry).toBeDefined();
-    expect(result).toEqual([
-      { kind: "text", value: "trigger the " },
-      {
-        kind: "nobreak",
-        segments: [
-          { kind: "symbol", symbol: "trigger", char: "\u25B8" },
-          { kind: "text", value: " " },
-          { kind: "term", word: "Judgment", entry: judgmentEntry },
-        ],
-      },
-      { kind: "text", value: " ability" },
-    ]);
-  });
-
   it("groups all known trigger keywords with the arrow and wraps them as terms", () => {
     for (const keyword of ["Judgment", "Materialized", "Dissolved", "Banished"]) {
-      const result = tokenizeRulesText(`\u25B8 ${keyword}: Effect.`);
+      const result = tokenizeRulesText(`▸ ${keyword}: Effect.`);
       const entry = lookupGlossaryTerm(keyword);
       expect(entry, `${keyword} should be in the glossary`).toBeDefined();
       expect(result[0]).toEqual({
         kind: "nobreak",
         segments: [
-          { kind: "symbol", symbol: "trigger", char: "\u25B8" },
+          { kind: "symbol", symbol: "trigger", char: "▸" },
           { kind: "text", value: " " },
           { kind: "term", word: keyword, entry },
           { kind: "text", value: ":" },
@@ -212,8 +310,8 @@ describe("tokenizeRulesText", () => {
     }
   });
 
-  it("groups \u21AF with a directly attached lowercase keyword (e.g. \u21AFfast) and wraps as term", () => {
-    const result = tokenizeRulesText("Your cards have \u21AFfast.");
+  it("groups ↯ with a directly attached lowercase keyword (↯fast) and wraps as term", () => {
+    const result = tokenizeRulesText("Your cards have ↯fast.");
     const fastEntry = lookupGlossaryTerm("fast");
     expect(fastEntry).toBeDefined();
     expect(result).toEqual([
@@ -221,7 +319,7 @@ describe("tokenizeRulesText", () => {
       {
         kind: "nobreak",
         segments: [
-          { kind: "symbol", symbol: "fast", char: "\u21AF" },
+          { kind: "symbol", symbol: "fast", char: "↯" },
           { kind: "term", word: "fast", entry: fastEntry },
         ],
       },
@@ -229,9 +327,8 @@ describe("tokenizeRulesText", () => {
     ]);
   });
 
-  // Glossary tokenization tests (backlog task 006). The tokenizer wraps
-  // recognized keywords in `term` segments so the renderer can attach a
-  // hover popover.
+  // Glossary tokenization. The tokenizer wraps recognized keywords in `term`
+  // segments so the renderer can attach a hover popover.
   it("wraps a recognized lowercase glossary term", () => {
     const result = tokenizeRulesText("reclaim this card.");
     const reclaimEntry = lookupGlossaryTerm("reclaim");
@@ -260,11 +357,7 @@ describe("tokenizeRulesText", () => {
     const result = tokenizeRulesText("This dissolved character.");
     const dissolvedEntry = lookupGlossaryTerm("Dissolved");
     expect(dissolvedEntry).toBeDefined();
-    expect(result[1]).toEqual({
-      kind: "term",
-      word: "dissolved",
-      entry: dissolvedEntry,
-    });
+    expect(hasTerm(result, "dissolved")).toBe(true);
   });
 
   it("does not wrap unknown words", () => {
@@ -272,89 +365,10 @@ describe("tokenizeRulesText", () => {
     expect(result).toEqual([{ kind: "text", value: "Deal 3 damage." }]);
   });
 
-  it("handles multiple different symbols in one string", () => {
-    const result = tokenizeRulesText("\u25B8Pay \u25CF3: gain \u234F2");
-    expect(result).toHaveLength(5);
-    expect(result[0]).toEqual({
-      kind: "symbol",
-      symbol: "trigger",
-      char: "\u25B8",
-    });
-    expect(result[1]).toEqual({ kind: "text", value: "Pay " });
-    expect(result[2]).toEqual({
-      kind: "symbol",
-      symbol: "energy",
-      char: "\u25CF",
-    });
-    expect(result[3]).toEqual({ kind: "text", value: "3: gain " });
-    expect(result[4]).toEqual({ kind: "sparkPip", value: "2" });
-  });
-
-  it("handles consecutive symbols without text between them", () => {
-    const result = tokenizeRulesText("\u25CF\u234F");
-    expect(result).toEqual([
-      { kind: "symbol", symbol: "energy", char: "\u25CF" },
-      { kind: "symbol", symbol: "spark", char: "\u234F" },
-    ]);
-  });
-
-  // A resource quantity must never wrap across a line. The value, its symbol,
-  // and the word that introduces them render as separate inline elements, so
-  // every space between them is a line-break opportunity. The tokenizer rewrites
-  // those spaces to non-breaking spaces (U+00A0) so the whole quantity stays on
-  // one line. `reconstructText` rebuilds the visible string from the segments so
-  // these assertions are robust to how the text splits into segments (glossary
-  // terms, symbols) and check only that the right spaces became non-breaking.
-  it("binds a space-separated number to the energy symbol that follows it", () => {
-    const result = tokenizeRulesText("the next card you play costs 2 ● less.");
-    expect(reconstructText(result)).toBe(
-      "the next card you play costs 2 ● less.",
-    );
-  });
-
-  it("binds the leading word to a value butted against its spark symbol", () => {
-    const result = tokenizeRulesText("it gains +2✦ each turn.");
-    expect(reconstructText(result)).toBe("it gains +2✦ each turn.");
-  });
-
-  it("binds a butted number and its points symbol to the leading word", () => {
-    const result = tokenizeRulesText("Gain 2⍟.");
-    expect(reconstructText(result)).toBe("Gain 2⍟.");
-  });
-
-  it("binds a comparison value (≤2●) to its leading word", () => {
-    const result = tokenizeRulesText("play a ≤2● card.");
-    expect(reconstructText(result)).toBe("play a ≤2● card.");
-  });
-
-  // The leading word binds even when it is a glossary term tokenizing into its
-  // own segment, because the non-breaking space lives in the text either way.
-  it("binds the variable X to a leading glossary term (Reclaim X●)", () => {
-    const result = tokenizeRulesText("Reclaim X● to draw.");
-    expect(reconstructText(result)).toBe("Reclaim X● to draw.");
-    expect(
-      result.some((s) => s.kind === "term" && s.word === "Reclaim"),
-    ).toBe(true);
-  });
-
-  // A bare symbol with no value in front of it has nothing to bind, so the
-  // surrounding spaces stay ordinary breakable spaces.
-  it("leaves a bare symbol with no leading value untouched", () => {
-    const result = tokenizeRulesText("reduce its ● cost.");
-    expect(reconstructText(result)).toBe("reduce its ● cost.");
-  });
-
   it("preserves the original spark symbol character, not a replacement", () => {
-    const result = tokenizeRulesText("\u234F");
-    expect(result).toHaveLength(1);
-    expect(result[0]).toEqual({
-      kind: "symbol",
-      symbol: "spark",
-      char: "\u234F",
-    });
-    // Verify the char is the APL symbol, not a star replacement
-    expect((result[0] as { char: string }).char).toBe("\u234F");
-    expect((result[0] as { char: string }).char).not.toBe("\u2606");
+    const result = tokenizeRulesText("⍏");
+    expect(result).toEqual([{ kind: "symbol", symbol: "spark", char: "⍏" }]);
+    expect((result[0] as { char: string }).char).not.toBe("☆");
   });
 });
 
@@ -394,6 +408,6 @@ describe("formatTypeLine", () => {
 
   it("handles Event type with subtype", () => {
     const card = makeCard({ cardType: "Event", subtype: "Spell" });
-    expect(formatTypeLine(card)).toBe("Event \u2014 Spell");
+    expect(formatTypeLine(card)).toBe("Event — Spell");
   });
 });

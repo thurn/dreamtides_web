@@ -21,9 +21,9 @@ export type SymbolType =
  *   hourglass, trigger `▸` → caret. The fast bolt `↯` renders as a colored
  *   character.
  * - `nobreak` groups inner segments that must render on the same line. The
- *   renderer wraps them in a `white-space: nowrap` span. Used to keep the
- *   trigger arrow `▸` glued to its keyword (e.g. `▸ Judgment:`) and the fast
- *   bolt `↯` glued to its trailing keyword (e.g. `↯fast`).
+ *   renderer wraps them in a `white-space: nowrap` span. A post-tokenization
+ *   pass (`bindIconsToText`) wraps every inline icon together with the text it
+ *   reads with so an icon never wraps to a line by itself.
  * - `term` is a glossary-recognized word that should render with a hover
  *   popover showing its definition. Carries the matched word as written
  *   (with its original capitalization and trailing punctuation) plus the
@@ -149,53 +149,193 @@ function maybeWrapKeyword(value: string): TextSegment[] {
 }
 
 /**
- * Matches a resource quantity in rules text — an optional leading word, the
- * value that sits in front of the symbol (digits with an optional `+`/`-` sign
- * or `≤`/`≥` comparison, or the variable `X`), and the resource symbol itself
- * (`●` energy, `✦` spark, `⍟` points, `☪` lunar, `⧗` store). The two capture
- * groups for whitespace let `bindResourceQuantities` swap the breakable spaces
- * for non-breaking ones.
- *
- * The spark pip glyph `⍏` is intentionally excluded: `⍏N` renders as its own
- * circled-number badge and is handled separately.
+ * An intermediate token used by `bindIconsToText` when regrouping segments so
+ * inline icons never wrap away from the text they belong to. A `space` is a run
+ * of whitespace (a potential line-break point); a `unit` is everything else — a
+ * word of plain text, a glossary term, or an icon (`symbol`/`sparkPip`/`bolt`).
+ * Each unit carries the segment to render plus the bare `word` used to decide
+ * whether it reads as a numeric value.
  */
-const RESOURCE_QUANTITY_RE =
-  /(?:(\S+)(\s+))?([+\-]?[≤≥]?(?:\d+|X))(\s*)([●✦⍟☪⧗])/g;
+type Atom =
+  | { kind: "space"; value: string }
+  | { kind: "unit"; segment: TextSegment; word: string; icon: boolean };
 
 /**
- * Non-breaking space (U+00A0). Renders at the normal space width but is never a
- * line-break opportunity.
+ * True when a unit reads as a numeric value that pairs with a resource symbol —
+ * a run containing a digit (covering `2`, `+1`, `≤3`) or the variable `X`. The
+ * word in front of such a value is glued to it so e.g. `gains +2✦` never breaks
+ * after `gains`.
  */
-const NBSP = "\u00A0";
+function isValueWord(word: string): boolean {
+  return /\d/.test(word) || word === "X";
+}
+
+/** Returns the bare word of a unit atom, or `undefined` for spaces/missing. */
+function unitWord(atom: Atom | undefined): string | undefined {
+  return atom !== undefined && atom.kind === "unit" ? atom.word : undefined;
+}
+
+/** True when the atom at this position is a whitespace run. */
+function isSpace(atom: Atom | undefined): boolean {
+  return atom !== undefined && atom.kind === "space";
+}
+
+/** Splits a flat segment list into atoms (words, spaces, and icons). */
+function toAtoms(segments: TextSegment[]): Atom[] {
+  const atoms: Atom[] = [];
+  for (const segment of segments) {
+    if (segment.kind === "text") {
+      // Split into alternating whitespace and non-whitespace runs.
+      for (const part of segment.value.split(/(\s+)/)) {
+        if (part === "") {
+          continue;
+        }
+        if (/\s/.test(part)) {
+          atoms.push({ kind: "space", value: part });
+        } else {
+          atoms.push({
+            kind: "unit",
+            segment: { kind: "text", value: part },
+            word: part,
+            icon: false,
+          });
+        }
+      }
+      continue;
+    }
+    const icon =
+      segment.kind === "symbol" ||
+      segment.kind === "sparkPip" ||
+      segment.kind === "bolt";
+    atoms.push({
+      kind: "unit",
+      segment,
+      word: segment.kind === "term" ? segment.word : "",
+      icon,
+    });
+  }
+  return atoms;
+}
 
 /**
- * Keeps a resource quantity from wrapping across a line.
+ * Marks the spaces (by atom index) that must not break so every inline icon
+ * stays glued to the text it reads with.
  *
- * A value and its symbol — and the word that introduces them — render as
- * separate inline elements, so each space between them (e.g. in `gains +2✦` or
- * `costs 2 ●`) is a line-break opportunity. Left alone the layout can strand
- * the leading word at the end of one line and drop the `+2✦` to the next, or
- * split the number from its icon. This pass replaces the space between the
- * word and the value, and between the value and the symbol, with a non-breaking
- * space so the whole quantity always renders on one line. Using non-breaking
- * spaces (rather than wrapping segments) keeps the grouping intact even when
- * the leading word is a glossary term that tokenizes into its own segment
- * (e.g. `Reclaim X●`).
+ * Each icon renders as its own inline element, so a line break can land on
+ * either side of one — even where the source writes no space (e.g.
+ * `▸Materialized`, `2●`). No-space adjacencies need no marking here, because
+ * `groupAtoms` keeps touching atoms in the same run regardless; this only has
+ * to protect the spaces:
+ *   - between a value written a space away from its icon (`2 ●`);
+ *   - in front of a value (the word that introduces it), so `gains +2✦` and
+ *     `costs 2 ●` stay whole.
  */
-function bindResourceQuantities(text: string): string {
-  return text.replace(
-    RESOURCE_QUANTITY_RE,
-    (_full, word, _wsWord, value, wsSymbol, symbol) => {
-      const lead = word === undefined ? "" : `${word}${NBSP}`;
-      const gap = wsSymbol.length > 0 ? NBSP : "";
-      return `${lead}${value}${gap}${symbol}`;
-    },
-  );
+function protectedSpaces(atoms: Atom[]): Set<number> {
+  const result = new Set<number>();
+  for (let i = 0; i < atoms.length; i += 1) {
+    const atom = atoms[i];
+    if (atom.kind !== "unit" || !atom.icon) {
+      continue;
+    }
+    // A value sits directly against the icon (`+2✦`, `2●`): glue the word in
+    // front of the value.
+    const attached = unitWord(atoms[i - 1]);
+    if (
+      attached !== undefined &&
+      isValueWord(attached) &&
+      isSpace(atoms[i - 2]) &&
+      unitWord(atoms[i - 3]) !== undefined
+    ) {
+      result.add(i - 2);
+    }
+    // The value is written a space away from the icon (`2 ●`): glue the value,
+    // and the word in front of it.
+    if (isSpace(atoms[i - 1])) {
+      const spaced = unitWord(atoms[i - 2]);
+      if (spaced !== undefined && isValueWord(spaced)) {
+        result.add(i - 1);
+        if (isSpace(atoms[i - 3]) && unitWord(atoms[i - 4]) !== undefined) {
+          result.add(i - 3);
+        }
+      }
+    }
+  }
+  return result;
+}
+
+/** Appends a segment, coalescing consecutive plain-text runs into one. */
+function pushSegment(list: TextSegment[], segment: TextSegment): void {
+  const last = list[list.length - 1];
+  if (segment.kind === "text" && last !== undefined && last.kind === "text") {
+    list[list.length - 1] = { kind: "text", value: last.value + segment.value };
+  } else {
+    list.push(segment);
+  }
+}
+
+/** Maps a cluster of atoms back to segments, coalescing adjacent text runs. */
+function clusterSegments(cluster: Atom[]): TextSegment[] {
+  const segments: TextSegment[] = [];
+  for (const atom of cluster) {
+    pushSegment(
+      segments,
+      atom.kind === "space"
+        ? { kind: "text", value: atom.value }
+        : atom.segment,
+    );
+  }
+  return segments;
+}
+
+/**
+ * Regroups atoms into segments, wrapping each run that contains an icon in a
+ * `nobreak` group so it renders on one line. Atoms join the same run across
+ * no-space adjacencies and across the spaces marked by `protectedSpaces`; an
+ * unmarked space ends the current run and renders as an ordinary breakable
+ * space.
+ */
+function groupAtoms(atoms: Atom[], protectedSet: Set<number>): TextSegment[] {
+  const out: TextSegment[] = [];
+  let cluster: Atom[] = [];
+  const flush = () => {
+    if (cluster.length === 0) {
+      return;
+    }
+    const hasIcon = cluster.some((a) => a.kind === "unit" && a.icon);
+    if (hasIcon && cluster.length > 1) {
+      out.push({ kind: "nobreak", segments: clusterSegments(cluster) });
+    } else {
+      for (const segment of clusterSegments(cluster)) {
+        pushSegment(out, segment);
+      }
+    }
+    cluster = [];
+  };
+  atoms.forEach((atom, i) => {
+    if (atom.kind === "space" && !protectedSet.has(i)) {
+      flush();
+      pushSegment(out, { kind: "text", value: atom.value });
+    } else {
+      cluster.push(atom);
+    }
+  });
+  flush();
+  return out;
+}
+
+/**
+ * Keeps every inline icon glued to the text it reads with so it never wraps to
+ * a line by itself. See `protectedSpaces` for which spaces are held and
+ * `groupAtoms` for how runs become `nobreak` segments. Existing `nobreak`
+ * groups (the trigger/fast keyword groups) pass through untouched.
+ */
+function bindIconsToText(segments: TextSegment[]): TextSegment[] {
+  const atoms = toAtoms(segments);
+  return groupAtoms(atoms, protectedSpaces(atoms));
 }
 
 /** Parses rules text into segments of plain text, symbols, and glossary terms. */
-export function tokenizeRulesText(input: string): TextSegment[] {
-  const text = bindResourceQuantities(input);
+export function tokenizeRulesText(text: string): TextSegment[] {
   const segments: TextSegment[] = [];
   let buffer = "";
 
@@ -309,7 +449,7 @@ export function tokenizeRulesText(input: string): TextSegment[] {
     i += 1;
   }
   flushBufferAndExtractTerms();
-  return segments;
+  return bindIconsToText(segments);
 }
 
 /** Format the card type and subtype line. */

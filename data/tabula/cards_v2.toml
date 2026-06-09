@@ -897,7 +897,7 @@ name = "Eternal Stag"
 mtg-name = "Elvish Archdruid"
 id = "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6"
 rendered-text = """
-Allied spirit animals have +1✦.
+Support – Supported spirit animals have +1✦.
 
 2●, ☪: Draw a spirit animal."""
 energy-cost = 2
