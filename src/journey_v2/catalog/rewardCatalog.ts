@@ -605,11 +605,6 @@ function isMerchantRewardBuilderId(value: string): value is MerchantRewardBuilde
   return value in MERCHANT_REWARD_BUILDERS;
 }
 
-function fallbackBuilderIdsForNeed(need: MerchantNeed): readonly MerchantRewardBuilderId[] {
-  if (need.needType !== "theme") return [];
-  return ["gain_essence", "raise_essence_cap"];
-}
-
 export function buildMerchantRewardWithBuilder(
   context: MerchantContext,
   need: MerchantNeed,
@@ -624,10 +619,7 @@ export function buildMerchantRewardsForNeed(
   need: MerchantNeed,
   options: BuildMerchantRewardsOptions = {},
 ): MerchantRewardOption[] {
-  const builderIds = [
-    ...need.compatibleRewardBuilderIds.filter(isMerchantRewardBuilderId),
-    ...fallbackBuilderIdsForNeed(need),
-  ];
+  const builderIds = need.compatibleRewardBuilderIds.filter(isMerchantRewardBuilderId);
   const seen = new Set<MerchantRewardBuilderId>();
   const rewards: MerchantReward[] = [];
   const mergedOptions = mergeOptions(options);

@@ -4,6 +4,7 @@ import {
   MERCHANT_REWARD_BUILDERS,
   buildMerchantRewardCatalog,
   buildMerchantRewardWithBuilder,
+  buildMerchantRewardsForNeed,
   resolveMerchantChoice,
 } from "./rewardCatalog";
 import type { CardData } from "../../types/cards";
@@ -335,6 +336,40 @@ describe("rewardCatalog", () => {
     expect(cardUuids).not.toContain(UUIDS.weak);
     expect(cardUuids).not.toContain(UUIDS.starter);
     expect(cardUuids).not.toContain(UUIDS.special);
+  });
+
+  it("does not add resource rewards to a missing draw need by fallback", () => {
+    const context = contextFor({
+      cards: supportCards(),
+      supportMetaByUuid: supportMeta(),
+    });
+
+    const rewards = buildMerchantRewardsForNeed(
+      context,
+      missingRoleNeed(["grant_support_card"]),
+    );
+
+    expect(rewards.map((reward) => reward.builderId)).toEqual([
+      "grant_support_card",
+    ]);
+  });
+
+  it("builds resource rewards when a need explicitly allows them", () => {
+    const context = contextFor({
+      cards: supportCards(),
+      supportMetaByUuid: supportMeta(),
+    });
+
+    const rewards = buildMerchantRewardsForNeed(
+      context,
+      missingRoleNeed(["gain_essence", "raise_essence_cap"]),
+    );
+
+    expect(rewards.map((reward) => reward.builderId)).toEqual([
+      "gain_essence",
+      "raise_essence_cap",
+    ]);
+    expect(rewards.every((reward) => reward.applyPayload !== undefined)).toBe(true);
   });
 
   it("grant_exact_card returns the highest-ranked direct catalog card grant", () => {
