@@ -170,16 +170,16 @@ export const OBSERVATION_TEMPLATES: Readonly<
   ]),
   curve_problem: makeTemplates("observation-curve-problem", [
     (s) => `The curve is asking for ${s.role}; ${s.summary}`,
-    (s) => `Too much business waits late, so ${s.role} carries a premium.`,
+    (s) => `The timing account points at ${s.role}. ${s.metric}`,
     (s) => `A deck with this shape wants earlier receipts. ${s.metric}`,
     (s) => `The timing problem is plain: more ${s.role}.`,
-    (_s) => `I would balance the account before adding another heavy promise.`,
-    (_s) => `Your early turns need stock on the shelf, not just plans in the back.`,
+    (s) => `I would balance the account around ${s.role}. ${s.summary}`,
+    (s) => `The opening shelf wants more ${s.role}. ${s.metric}`,
     (s) => `The curve points downward toward ${s.role}.`,
     (s) => `A merchant respects timing; this deck needs ${s.role}.`,
-    (_s) => `The late goods are present. The early counter wants help.`,
-    (_s) => `A small card at the right hour can pay better than a grand one late.`,
-    (_s) => `Your curve has weight; I can offer a steadier first step.`,
+    (s) => `The curve read names ${s.role}, not a vague remedy.`,
+    (s) => `A card at the right hour matters here. ${s.summary}`,
+    (s) => `The curve wants a steadier step through ${s.role}.`,
     (s) => `The number I mind is early access. ${s.metric}`,
   ]),
   weak_card: makeTemplates("observation-weak-card", [
@@ -303,6 +303,24 @@ export const PRICE_FRAMING_TEMPLATES = makeTemplates<PriceSlots>("price", [
   (s) => `The receipt would show ${s.price} essence for ${s.offerLabel}.`,
   (s) => `${s.offerLabel} asks ${s.price} essence from the purse.`,
 ]);
+
+export const LOCKED_PRICE_FRAMING_TEMPLATES = makeTemplates<PriceSlots>(
+  "locked-price",
+  [
+    (s) => `${s.offerLabel} is marked at ${s.price} essence, but your purse is short.`,
+    (s) => `The ledger names ${s.price} essence for ${s.offerLabel}; it cannot be paid yet.`,
+    (s) => `${s.offerLabel} stays unavailable until you can cover ${s.price} essence.`,
+    (s) => `I can name ${s.price} essence for ${s.offerLabel}, but not collect it from this purse.`,
+    (s) => `The counter holds ${s.offerLabel} back; ${s.price} essence is more than you carry.`,
+    (s) => `${s.offerLabel} is locked behind a ${s.price}-essence purse line.`,
+    (s) => `Short purse, clear math: ${s.offerLabel} needs ${s.price} essence before it can move.`,
+    (s) => `${s.offerLabel} remains only a quote at ${s.price} essence for now.`,
+    (s) => `The price on ${s.offerLabel} is ${s.price} essence, and the purse cannot meet it yet.`,
+    (s) => `I cannot release ${s.offerLabel}; the shortfall stands at a ${s.price}-essence price.`,
+    (s) => `${s.offerLabel} is not payable yet, though the tag reads ${s.price} essence.`,
+    (s) => `The bargain is unavailable until ${s.price} essence is in hand for ${s.offerLabel}.`,
+  ],
+);
 
 export const WALK_AWAY_TEMPLATES = makeTemplates<ReactionSlots>("walk-away", [
   () => "Walking away is a clean choice; unsold goods keep no grudge.",
@@ -456,6 +474,7 @@ function beat(input: {
   id: string;
   template: { id: string };
   kind: MerchantDialogueBeat["kind"];
+  phase: MerchantDialogueBeat["phase"];
   text: string;
   offer?: MerchantOffer;
   need?: MerchantNeed;
@@ -465,6 +484,7 @@ function beat(input: {
     id: input.id,
     templateId: input.template.id,
     kind: input.kind,
+    phase: input.phase,
     text: input.text,
     ...(input.offer === undefined
       ? {}
@@ -506,6 +526,7 @@ export function renderMerchantDialogue(
       id: "greeting",
       template: greeting,
       kind: "greeting",
+      phase: "pre_offer",
       text: greeting.render(sharedReactionSlots),
     }),
   );
@@ -527,6 +548,7 @@ export function renderMerchantDialogue(
         id: `observation:${offer.offerId}:${need.needId}`,
         template: observation,
         kind: "observation",
+        phase: "pre_offer",
         text: observation.render(observationSlots(need)),
         offer,
         need,
@@ -546,6 +568,7 @@ export function renderMerchantDialogue(
         id: `offer:${offer.offerId}`,
         template: offerTemplate,
         kind: "offer_framing",
+        phase: "pre_offer",
         text: offerTemplate.render(offerSlots(offer, rewardFamily)),
         offer,
         rewardFamily,
@@ -554,9 +577,17 @@ export function renderMerchantDialogue(
   }
 
   for (const offer of offers) {
+    const priceBank = offer.locked
+      ? LOCKED_PRICE_FRAMING_TEMPLATES
+      : PRICE_FRAMING_TEMPLATES;
     const priceTemplate = selectTemplate(
-      PRICE_FRAMING_TEMPLATES,
-      [...seedParts, "price", offer.offerId, String(offer.price)],
+      priceBank,
+      [
+        ...seedParts,
+        offer.locked ? "locked-price" : "price",
+        offer.offerId,
+        String(offer.price),
+      ],
       usedTemplateIds,
     );
     beats.push(
@@ -564,6 +595,7 @@ export function renderMerchantDialogue(
         id: `price:${offer.offerId}`,
         template: priceTemplate,
         kind: "price_framing",
+        phase: "pre_offer",
         text: priceTemplate.render(priceSlots(offer)),
         offer,
         rewardFamily: merchantRewardFamilyFor(offer.rewardBuilderId),
@@ -581,6 +613,7 @@ export function renderMerchantDialogue(
       id: "walk-away",
       template: walkAway,
       kind: "walk_away",
+      phase: "pre_offer",
       text: walkAway.render(sharedReactionSlots),
     }),
   );
@@ -595,6 +628,7 @@ export function renderMerchantDialogue(
       id: "accept-reaction",
       template: accept,
       kind: "accept_reaction",
+      phase: "accept_reaction",
       text: accept.render(sharedReactionSlots),
     }),
   );
@@ -609,6 +643,7 @@ export function renderMerchantDialogue(
       id: "decline-reaction",
       template: decline,
       kind: "decline_reaction",
+      phase: "decline_reaction",
       text: decline.render(sharedReactionSlots),
     }),
   );

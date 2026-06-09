@@ -328,10 +328,16 @@ export type MerchantDialogueBeatKind =
   | "accept_reaction"
   | "decline_reaction";
 
+export type MerchantDialogueBeatPhase =
+  | "pre_offer"
+  | "accept_reaction"
+  | "decline_reaction";
+
 export interface MerchantDialogueBeat {
   id: string;
   templateId: string;
   kind: MerchantDialogueBeatKind;
+  phase: MerchantDialogueBeatPhase;
   text: string;
   offerId?: string;
   needId?: string;
