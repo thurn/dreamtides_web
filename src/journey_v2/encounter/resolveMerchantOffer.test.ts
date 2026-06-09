@@ -161,8 +161,8 @@ describe("resolveMerchantOffer", () => {
     const fixture = makeFixture();
     const encounter = encounterFor(fixture);
     // Accept a direct-payload (non-chooser) offer; choosers are exercised by
-    // the per-archetype builder tests. At least one such offer is always
-    // present given the registered grant/dreamsign archetypes.
+    // the per-archetype builder tests. The accepted payload must apply and the
+    // site must complete; the observable effect depends on the payload kind.
     const directOffer = encounter.offers.find(
       (offer) => offer.applyPayload !== undefined,
     );
@@ -170,6 +170,7 @@ describe("resolveMerchantOffer", () => {
     if (directOffer === undefined) return;
     const beforeDeckSize = fixture.state.deck.length;
     const beforeDreamsigns = fixture.state.dreamsigns.length;
+    const beforeDeckJson = JSON.stringify(fixture.state.deck);
     const result = resolveMerchantOffer({
       state: fixture.state,
       questContent: fixture.questContent,
@@ -180,10 +181,15 @@ describe("resolveMerchantOffer", () => {
     if (!result.ok) return;
     expect(result.state.screen).toEqual({ type: "dreamscape" });
     expect(result.state.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
-    if (directOffer.applyPayload?.kind === "add_dreamsign") {
+    const kind = directOffer.applyPayload?.kind;
+    if (kind === "add_dreamsign") {
       expect(result.state.dreamsigns.length).toBe(beforeDreamsigns + 1);
-    } else {
+    } else if (kind === "add_catalog_card") {
       expect(result.state.deck.length).toBeGreaterThan(beforeDeckSize);
+    } else {
+      // In-place deck modifications (transfigure/keyword/type) keep the deck
+      // size but mutate an entry; assert the deck content changed.
+      expect(JSON.stringify(result.state.deck)).not.toBe(beforeDeckJson);
     }
   });
 
