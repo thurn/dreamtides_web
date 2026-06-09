@@ -1,4 +1,5 @@
 import { dreamsignBuilder } from "./dreamsign";
+import { duplicateBuilder } from "./duplicate";
 import {
   cardBundleBuilder,
   categoryDraftKnownBuilder,
@@ -15,6 +16,7 @@ import {
   transfigureBuilder,
   tribalChangeBuilder,
 } from "./improve";
+import { purgeBuilder, purgeReplaceBuilder } from "./remove";
 import type { MerchantArchetypeBuilder } from "./types";
 
 /**
@@ -39,5 +41,8 @@ export const MERCHANT_ARCHETYPE_BUILDERS: readonly MerchantArchetypeBuilder[] = 
   starterTransfigureBuilder,
   keywordModBuilder,
   tribalChangeBuilder,
+  purgeBuilder,
+  purgeReplaceBuilder,
+  duplicateBuilder,
   dreamsignBuilder,
 ];

@@ -1,0 +1,490 @@
+import { describe, expect, it } from "vitest";
+import { applyMerchantPayloadToState } from "../encounter/resolveMerchantOffer";
+import { fitLooByEntry } from "../signals/fit";
+import { merchantRng } from "../signals/rng";
+import { buildMerchantContext } from "../context/buildMerchantContext";
+import {
+  makeMerchantTestCard,
+  makeMerchantTestContent,
+  makeMerchantTestCorpus,
+  makeMerchantTestDeckEntry,
+  makeMerchantTestQuestState,
+  makeMerchantTestSite,
+} from "../testing/fixtures";
+import type { CardData } from "../../types/cards";
+import type { DeckEntry } from "../../types/quest";
+import type { FitModel } from "../../draft/replay/fit-model";
+import type { MerchantContext } from "../types";
+import { purgeBuilder, purgeReplaceBuilder } from "./remove";
+
+function uuid(n: number): string {
+  const hex = n.toString(16).padStart(12, "0");
+  return `00000000-0000-4000-8000-${hex}`;
+}
+
+/**
+ * Builds a merchant context from explicit card + deck-entry fixtures.
+ */
+function makeContext(input: {
+  cards: readonly CardData[];
+  deckEntries: readonly DeckEntry[];
+  corpusCards?: Record<
+    string,
+    { quality: number; multiplicity?: number; df?: number }
+  >;
+  fitModel?: FitModel;
+  poolCards?: readonly CardData[];
+}): MerchantContext {
+  // Pool cards are all cards passed; the context filters by isGrantCandidate.
+  const allCards = [...input.cards, ...(input.poolCards ?? [])];
+  const questContent = makeMerchantTestContent({
+    cards: allCards,
+    fitModel: input.fitModel,
+    merchantCorpus: makeMerchantTestCorpus({ cards: input.corpusCards ?? {} }),
+  });
+  const questState = makeMerchantTestQuestState({ deck: [...input.deckEntries] });
+  return buildMerchantContext({
+    questState,
+    questContent,
+    site: makeMerchantTestSite(),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Bug-class: purge never selects a bane
+// ---------------------------------------------------------------------------
+
+describe("purge — bane exclusion", () => {
+  it("never selects a bane entry as the purge target", () => {
+    // Deck of 8: one starter (non-bane) + one starter (bane) + 6 non-starters.
+    // The bane entry is a bane; the non-bane starter is the normal purge target.
+    // Purge must never select the bane.
+
+    const nonBaneStarterCard = makeMerchantTestCard({
+      id: uuid(1),
+      cardNumber: 1,
+      isStarter: true,
+    });
+    const baneCard = makeMerchantTestCard({
+      id: uuid(2),
+      cardNumber: 2,
+      isStarter: true, // starters are eligible but only if NOT bane
+    });
+    const nonStarterCards = Array.from({ length: 6 }, (_, i) =>
+      makeMerchantTestCard({ id: uuid(10 + i), cardNumber: 10 + i }),
+    );
+
+    const nonBaneStarterEntry = makeMerchantTestDeckEntry({
+      entryId: "non-bane-starter",
+      cardNumber: 1,
+      isBane: false,
+    });
+    const baneEntry = makeMerchantTestDeckEntry({
+      entryId: "bane-entry",
+      cardNumber: 2,
+      isBane: true, // THIS is the bane — must never be selected
+    });
+    const nonStarterEntries = nonStarterCards.map((c, i) =>
+      makeMerchantTestDeckEntry({ entryId: `e${String(i)}`, cardNumber: c.cardNumber }),
+    );
+
+    // Corpus for all cards
+    const corpusCards: Record<string, { quality: number; df: number }> = {};
+    corpusCards[uuid(1)] = { quality: 0.5, df: 10 };
+    corpusCards[uuid(2)] = { quality: 0.5, df: 10 };
+    nonStarterCards.forEach((c) => {
+      corpusCards[c.id] = { quality: 0.5, df: 10 };
+    });
+
+    const context = makeContext({
+      cards: [nonBaneStarterCard, baneCard, ...nonStarterCards],
+      deckEntries: [nonBaneStarterEntry, baneEntry, ...nonStarterEntries],
+      corpusCards,
+    });
+
+    expect(purgeBuilder.eligible(context)).toBe(true);
+
+    // Over multiple seeds, confirm bane is never selected
+    for (let seed = 0; seed < 30; seed += 1) {
+      const rng = merchantRng("purge-bane-test", String(seed));
+      const offer = purgeBuilder.build(context, rng);
+      if (offer !== null && offer.applyPayload !== undefined) {
+        if (offer.applyPayload.kind === "remove_deck_entry") {
+          expect(offer.applyPayload.entryId).not.toBe("bane-entry");
+        }
+      }
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bug-class: purge never selects a no-corpus-signal non-starter
+// ---------------------------------------------------------------------------
+
+describe("purge — no-corpus-signal non-starter exclusion", () => {
+  it("never selects a non-starter entry whose card has no corpus signal", () => {
+    // A non-starter with NO corpus signal: should never be a purge candidate.
+    // We need 8 deck cards; one non-starter has no signal, rest do.
+    const noSignalCard = makeMerchantTestCard({
+      id: uuid(200),
+      cardNumber: 200,
+      isStarter: false,
+    });
+
+    // Other 7 cards: starters (always in candidate set)
+    const starterCards = Array.from({ length: 7 }, (_, i) =>
+      makeMerchantTestCard({
+        id: uuid(201 + i),
+        cardNumber: 201 + i,
+        isStarter: true,
+      }),
+    );
+
+    const noSignalEntry = makeMerchantTestDeckEntry({
+      entryId: "no-signal-entry",
+      cardNumber: 200,
+    });
+    const starterEntries = starterCards.map((c, i) =>
+      makeMerchantTestDeckEntry({ entryId: `se${String(i)}`, cardNumber: c.cardNumber }),
+    );
+
+    // Corpus: only the starters have corpus signal; no-signal card is absent
+    const corpusCards: Record<string, { quality: number; df: number }> = {};
+    starterCards.forEach((c) => {
+      corpusCards[c.id] = { quality: 0.5, df: 10 };
+    });
+    // noSignalCard is intentionally absent from corpusCards
+
+    const context = makeContext({
+      cards: [noSignalCard, ...starterCards],
+      deckEntries: [noSignalEntry, ...starterEntries],
+      corpusCards,
+    });
+
+    expect(purgeBuilder.eligible(context)).toBe(true);
+
+    for (let seed = 0; seed < 30; seed += 1) {
+      const rng = merchantRng("purge-nosignal-test", String(seed));
+      const offer = purgeBuilder.build(context, rng);
+      if (offer !== null && offer.applyPayload !== undefined) {
+        if (offer.applyPayload.kind === "remove_deck_entry") {
+          expect(offer.applyPayload.entryId).not.toBe("no-signal-entry");
+        }
+      }
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bug-class: purge target diversity (anti-argmax)
+// ---------------------------------------------------------------------------
+
+describe("purge — target diversity over 30 seeds", () => {
+  it("yields >= 2 distinct targets on a deck with 1 starter + 3 bottom-band misfits", () => {
+    // Deck: 8 cards total
+    // 1 starter (always a candidate)
+    // 3 bottom-band non-starters with low LOO scores (candidates via purgeMisfitFraction)
+    // 4 non-starters with high LOO scores (not candidates)
+    //
+    // We use a tiny FitModel with explicit co-occurrence so the LOO scores
+    // are fully controlled.
+
+    const starterCard = makeMerchantTestCard({
+      id: uuid(300),
+      cardNumber: 300,
+      isStarter: true,
+    });
+
+    // 3 misfits: low co-occurrence with the rest of the deck
+    const misfitCards = [
+      makeMerchantTestCard({ id: uuid(301), cardNumber: 301 }),
+      makeMerchantTestCard({ id: uuid(302), cardNumber: 302 }),
+      makeMerchantTestCard({ id: uuid(303), cardNumber: 303 }),
+    ];
+
+    // 4 good fit cards
+    const goodCards = [
+      makeMerchantTestCard({ id: uuid(304), cardNumber: 304 }),
+      makeMerchantTestCard({ id: uuid(305), cardNumber: 305 }),
+      makeMerchantTestCard({ id: uuid(306), cardNumber: 306 }),
+      makeMerchantTestCard({ id: uuid(307), cardNumber: 307 }),
+    ];
+
+    const allCards = [starterCard, ...misfitCards, ...goodCards];
+    const deckEntries = [
+      makeMerchantTestDeckEntry({ entryId: "starter-e", cardNumber: 300 }),
+      makeMerchantTestDeckEntry({ entryId: "misfit-e1", cardNumber: 301 }),
+      makeMerchantTestDeckEntry({ entryId: "misfit-e2", cardNumber: 302 }),
+      makeMerchantTestDeckEntry({ entryId: "misfit-e3", cardNumber: 303 }),
+      makeMerchantTestDeckEntry({ entryId: "good-e1", cardNumber: 304 }),
+      makeMerchantTestDeckEntry({ entryId: "good-e2", cardNumber: 305 }),
+      makeMerchantTestDeckEntry({ entryId: "good-e3", cardNumber: 306 }),
+      makeMerchantTestDeckEntry({ entryId: "good-e4", cardNumber: 307 }),
+    ];
+
+    // Build a FitModel where misfits have near-zero co-occurrence with others,
+    // good cards have high co-occurrence with each other.
+    // Card names (for the model) = uuid strings
+    const allNames = allCards.map((c) => c.id);
+    const idf = new Map<string, number>(allNames.map((n) => [n, 1]));
+    const prior = new Map<string, number>(allNames.map((n) => [n, 0.5]));
+
+    // Build coocNorm: misfits co-occur ~0 with good cards; good cards ~0.9 with each other
+    const coocNorm = new Map<string, Map<string, number>>();
+    for (const a of allNames) {
+      const row = new Map<string, number>();
+      for (const b of allNames) {
+        if (a === b) {
+          row.set(b, 0);
+          continue;
+        }
+        const aIsGood = goodCards.some((c) => c.id === a);
+        const bIsGood = goodCards.some((c) => c.id === b);
+        if (aIsGood && bIsGood) {
+          row.set(b, 0.9);
+        } else {
+          row.set(b, 0.01); // misfits barely co-occur with anything
+        }
+      }
+      coocNorm.set(a, row);
+    }
+
+    // numberToName: cardNumber -> id (uuid used as name here)
+    const numberToName = new Map<number, string>(
+      allCards.map((c) => [c.cardNumber, c.id]),
+    );
+    const nameIndex = new Map<string, number>(
+      allCards.map((c) => [c.id, c.cardNumber]),
+    );
+
+    const fitModel: FitModel = {
+      decks: [],
+      idf,
+      prior,
+      coocNorm,
+      numberToName,
+      nameIndex,
+      tuning: {
+        alpha: 1,
+        beta: 1,
+        gamma: 1,
+        K: 1,
+        idfPower: 1,
+        minDf: 1,
+        maxDfFrac: 1,
+        minDeckSize: 1,
+        maxDeckSize: 99,
+      },
+    };
+
+    // Corpus: all cards have signal
+    const corpusCards: Record<string, { quality: number; df: number }> = {};
+    allCards.forEach((c) => {
+      corpusCards[c.id] = { quality: 0.5, df: 10 };
+    });
+
+    const context = makeContext({
+      cards: allCards,
+      deckEntries,
+      corpusCards,
+      fitModel,
+    });
+
+    // Verify that misfits actually have lower LOO scores
+    const looScores = fitLooByEntry(context.deckCards, fitModel);
+    const misfitLoos = ["misfit-e1", "misfit-e2", "misfit-e3"].map(
+      (id) => looScores.get(id) ?? 0,
+    );
+    const goodLoos = ["good-e1", "good-e2", "good-e3", "good-e4"].map(
+      (id) => looScores.get(id) ?? 0,
+    );
+    const maxMisfit = Math.max(...misfitLoos);
+    const minGood = Math.min(...goodLoos);
+    expect(maxMisfit).toBeLessThan(minGood);
+
+    expect(purgeBuilder.eligible(context)).toBe(true);
+
+    const targets = new Set<string>();
+    for (let seed = 0; seed < 30; seed += 1) {
+      const rng = merchantRng("purge-diversity-test", String(seed));
+      const offer = purgeBuilder.build(context, rng);
+      if (offer !== null && offer.applyPayload?.kind === "remove_deck_entry") {
+        targets.add(offer.applyPayload.entryId);
+      }
+    }
+
+    // At least 2 distinct targets (anti-argmax guarantee)
+    expect(targets.size).toBeGreaterThanOrEqual(2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bug-class: purge eligibility gate
+// ---------------------------------------------------------------------------
+
+describe("purge — eligibility", () => {
+  it("is ineligible when deck size < minDeckForPurge (8)", () => {
+    // 7 starters (< 8), all with corpus signal
+    const cards = Array.from({ length: 7 }, (_, i) =>
+      makeMerchantTestCard({
+        id: uuid(400 + i),
+        cardNumber: 400 + i,
+        isStarter: true,
+      }),
+    );
+    const entries = cards.map((c, i) =>
+      makeMerchantTestDeckEntry({ entryId: `e${String(i)}`, cardNumber: c.cardNumber }),
+    );
+    const corpusCards: Record<string, { quality: number; df: number }> = {};
+    cards.forEach((c) => {
+      corpusCards[c.id] = { quality: 0.5, df: 10 };
+    });
+    const context = makeContext({ cards, deckEntries: entries, corpusCards });
+    expect(purgeBuilder.eligible(context)).toBe(false);
+  });
+
+  it("is ineligible when no candidates exist (all non-starter, no-signal)", () => {
+    // 8 non-starters, none with corpus signal => fitLooByEntry returns empty map
+    // => no bottom fraction entries => no starters => 0 candidates
+    const cards = Array.from({ length: 8 }, (_, i) =>
+      makeMerchantTestCard({ id: uuid(500 + i), cardNumber: 500 + i }),
+    );
+    const entries = cards.map((c, i) =>
+      makeMerchantTestDeckEntry({ entryId: `e${String(i)}`, cardNumber: c.cardNumber }),
+    );
+    // Empty corpus — no cards have signal
+    const context = makeContext({ cards, deckEntries: entries, corpusCards: {} });
+    expect(purgeBuilder.eligible(context)).toBe(false);
+  });
+
+  it("is eligible at deck size == 8 with at least one starter", () => {
+    const starterCard = makeMerchantTestCard({
+      id: uuid(600),
+      cardNumber: 600,
+      isStarter: true,
+    });
+    const otherCards = Array.from({ length: 7 }, (_, i) =>
+      makeMerchantTestCard({ id: uuid(601 + i), cardNumber: 601 + i }),
+    );
+    const entries = [
+      makeMerchantTestDeckEntry({ entryId: "s0", cardNumber: 600 }),
+      ...otherCards.map((c, i) =>
+        makeMerchantTestDeckEntry({ entryId: `o${String(i)}`, cardNumber: c.cardNumber }),
+      ),
+    ];
+    const corpusCards: Record<string, { quality: number; df: number }> = {};
+    corpusCards[uuid(600)] = { quality: 0.5, df: 10 };
+    otherCards.forEach((c) => {
+      corpusCards[c.id] = { quality: 0.5, df: 10 };
+    });
+    const context = makeContext({
+      cards: [starterCard, ...otherCards],
+      deckEntries: entries,
+      corpusCards,
+    });
+    expect(purgeBuilder.eligible(context)).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bug-class: purge_replace net deck size unchanged (via applyMerchantPayloadToState)
+// ---------------------------------------------------------------------------
+
+describe("purge_replace — accept removes exactly one entry and adds exactly one", () => {
+  it("net deck size is unchanged after accepting a purge_replace offer", () => {
+    // Need 8 deck cards + a pool for replacements.
+    const starterCard = makeMerchantTestCard({
+      id: uuid(700),
+      cardNumber: 700,
+      isStarter: true,
+    });
+    const deckOtherCards = Array.from({ length: 7 }, (_, i) =>
+      makeMerchantTestCard({ id: uuid(701 + i), cardNumber: 701 + i }),
+    );
+    // Pool cards for replacement (non-starter, not in deck)
+    const poolCards = Array.from({ length: 20 }, (_, i) =>
+      makeMerchantTestCard({ id: uuid(800 + i), cardNumber: 800 + i }),
+    );
+
+    const allCards = [starterCard, ...deckOtherCards, ...poolCards];
+    const deckEntries = [
+      makeMerchantTestDeckEntry({ entryId: "starter-e", cardNumber: 700 }),
+      ...deckOtherCards.map((c, i) =>
+        makeMerchantTestDeckEntry({ entryId: `de${String(i)}`, cardNumber: c.cardNumber }),
+      ),
+    ];
+
+    const corpusCards: Record<string, { quality: number; df: number }> = {};
+    [starterCard, ...deckOtherCards, ...poolCards].forEach((c) => {
+      corpusCards[c.id] = { quality: 0.5, df: 10 };
+    });
+
+    const questContent = makeMerchantTestContent({
+      cards: allCards,
+      merchantCorpus: makeMerchantTestCorpus({ cards: corpusCards }),
+    });
+    const questState = makeMerchantTestQuestState({ deck: [...deckEntries] });
+
+    const context = buildMerchantContext({
+      questState,
+      questContent,
+      site: makeMerchantTestSite(),
+    });
+
+    expect(purgeReplaceBuilder.eligible(context)).toBe(true);
+
+    const initialDeckSize = questState.deck.length;
+
+    // Find a seed that builds a valid offer
+    let foundOffer = false;
+    for (let seed = 0; seed < 10; seed += 1) {
+      const rng = merchantRng("purge-replace-apply-test", String(seed));
+      const offer = purgeReplaceBuilder.build(context, rng);
+      if (offer === null) continue;
+
+      // For a direct offer (applyPayload): pick the first candidate
+      let payload = offer.applyPayload;
+      if (payload === undefined && offer.choiceRequest !== undefined) {
+        payload = offer.choiceRequest.candidates[0]?.applyPayload;
+      }
+      if (payload === undefined) continue;
+
+      const resultState = applyMerchantPayloadToState({
+        state: questState,
+        questContent,
+        payload,
+      });
+
+      expect(resultState).not.toBeNull();
+      if (resultState !== null) {
+        expect(resultState.deck.length).toBe(initialDeckSize);
+        foundOffer = true;
+      }
+      break;
+    }
+
+    expect(foundOffer).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bug-class: purge_replace eligibility — both halves must be eligible
+// ---------------------------------------------------------------------------
+
+describe("purge_replace — eligibility requires both halves", () => {
+  it("is ineligible when deck is too small for purge (< 8)", () => {
+    // 7 starters
+    const cards = Array.from({ length: 7 }, (_, i) =>
+      makeMerchantTestCard({ id: uuid(900 + i), cardNumber: 900 + i, isStarter: true }),
+    );
+    const entries = cards.map((c, i) =>
+      makeMerchantTestDeckEntry({ entryId: `e${String(i)}`, cardNumber: c.cardNumber }),
+    );
+    const corpusCards: Record<string, { quality: number; df: number }> = {};
+    cards.forEach((c) => {
+      corpusCards[c.id] = { quality: 0.5, df: 10 };
+    });
+    const context = makeContext({ cards, deckEntries: entries, corpusCards });
+    expect(purgeReplaceBuilder.eligible(context)).toBe(false);
+  });
+});
