@@ -165,7 +165,7 @@ function applyMerchantPayload(
           {
             entryId: entryIds.next(),
             cardNumber: payload.cardNumber,
-            transfiguration: null,
+            transfiguration: payload.transfiguration ?? null,
             isBane: false,
           },
         ],

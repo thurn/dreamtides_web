@@ -78,6 +78,12 @@ export type MerchantApplyPayload =
       kind: "add_catalog_card";
       cardUuid: string;
       cardNumber: number;
+      /**
+       * When set, the granted deck entry enters pre-transfigured with this
+       * transfiguration. Used by `transfigured_draft`, where a composite child
+       * cannot target a deck entry that does not exist yet.
+       */
+      transfiguration?: TransfigurationType;
     }
   | {
       kind: "add_dreamsign";

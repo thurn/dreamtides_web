@@ -410,9 +410,9 @@ describe("Dream Merchant v2 mutations", () => {
     const fixture = makeMerchantProviderFixture();
     const offer = requireMerchantOffer(
       merchantEncounterFor(fixture).offers,
-      (candidate) =>
-        candidate.applyPayload !== undefined ||
-        (candidate.choiceRequest?.candidates.length ?? 0) > 0,
+      // A direct-payload offer accepts without a chooser selection; chooser
+      // acceptance is covered by the per-archetype builder tests.
+      (candidate) => candidate.applyPayload !== undefined,
     );
     const quest = mountQuestContext({
       cardDatabase: fixture.questContent.cardDatabase,

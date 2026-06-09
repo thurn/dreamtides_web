@@ -1,10 +1,13 @@
 import { dreamsignBuilder } from "./dreamsign";
 import {
+  cardBundleBuilder,
+  categoryDraftKnownBuilder,
   copiesDraftBuilder,
   fitCardDraftBuilder,
   fitCardGrantBuilder,
   premiumDraftBuilder,
   strongCardBuilder,
+  transfiguredDraftBuilder,
 } from "./grant";
 import type { MerchantArchetypeBuilder } from "./types";
 
@@ -23,5 +26,8 @@ export const MERCHANT_ARCHETYPE_BUILDERS: readonly MerchantArchetypeBuilder[] = 
   fitCardDraftBuilder,
   copiesDraftBuilder,
   premiumDraftBuilder,
+  categoryDraftKnownBuilder,
+  cardBundleBuilder,
+  transfiguredDraftBuilder,
   dreamsignBuilder,
 ];

@@ -160,26 +160,30 @@ describe("resolveMerchantOffer", () => {
   it("applies the payload and completes the site on a valid accept", () => {
     const fixture = makeFixture();
     const encounter = encounterFor(fixture);
-    const grantOffer =
-      encounter.offers.find((offer) => offer.archetypeId === "strong_card") ??
-      encounter.offers[0];
+    // Accept a direct-payload (non-chooser) offer; choosers are exercised by
+    // the per-archetype builder tests. At least one such offer is always
+    // present given the registered grant/dreamsign archetypes.
+    const directOffer = encounter.offers.find(
+      (offer) => offer.applyPayload !== undefined,
+    );
+    expect(directOffer).toBeDefined();
+    if (directOffer === undefined) return;
     const beforeDeckSize = fixture.state.deck.length;
+    const beforeDreamsigns = fixture.state.dreamsigns.length;
     const result = resolveMerchantOffer({
       state: fixture.state,
       questContent: fixture.questContent,
       site: fixture.site,
-      request: requestFor(grantOffer),
+      request: requestFor(directOffer),
     });
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.state.screen).toEqual({ type: "dreamscape" });
     expect(result.state.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
-    if (grantOffer.archetypeId === "strong_card") {
-      expect(result.state.deck.length).toBe(beforeDeckSize + 1);
+    if (directOffer.applyPayload?.kind === "add_dreamsign") {
+      expect(result.state.dreamsigns.length).toBe(beforeDreamsigns + 1);
     } else {
-      expect(result.state.dreamsigns.length).toBe(
-        fixture.state.dreamsigns.length + 1,
-      );
+      expect(result.state.deck.length).toBeGreaterThan(beforeDeckSize);
     }
   });
 
