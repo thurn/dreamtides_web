@@ -127,6 +127,26 @@ describe("priceMerchantReward", () => {
     expect(result.price).toBe(140);
   });
 
+  it("treats blank or unknown rarity values as ordinary for finite prices", () => {
+    const blank = priceMerchantReward(
+      baseInput({
+        rarity: "",
+      }),
+    );
+    const unknown = priceMerchantReward(
+      baseInput({
+        rarity: "Rare",
+      }),
+    );
+
+    expect(Number.isFinite(blank.price)).toBe(true);
+    expect(Number.isFinite(blank.scarcityMultiplier)).toBe(true);
+    expect(blank.scarcityMultiplier).toBe(
+      priceMerchantReward(baseInput({ rarity: null })).scarcityMultiplier,
+    );
+    expect(Number.isFinite(unknown.price)).toBe(true);
+  });
+
   it("reports locked state when unaffordable and unlocked state when affordable", () => {
     const unaffordable = priceMerchantReward(
       baseInput({

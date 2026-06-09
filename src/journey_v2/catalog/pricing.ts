@@ -20,7 +20,7 @@ export type MerchantRewardFamily =
 export interface MerchantRewardScarcityInput {
   rewardFamily?: MerchantRewardFamily;
   chooserCount?: number;
-  rarity?: Rarity | null;
+  rarity?: string | null;
   broadCatalogReach?: number;
   outsidePool?: boolean;
 }
@@ -128,9 +128,11 @@ export function marketJitterFor(input: {
 export function scarcityMultiplierFor(input: MerchantRewardScarcityInput): number {
   const familyMultiplier = FAMILY_MULTIPLIERS[input.rewardFamily ?? "other"];
   const rarityMultiplier =
-    input.rarity === undefined || input.rarity === null
+    input.rarity === undefined ||
+    input.rarity === null ||
+    !Object.prototype.hasOwnProperty.call(RARITY_MULTIPLIERS, input.rarity)
       ? 1
-      : RARITY_MULTIPLIERS[input.rarity];
+      : RARITY_MULTIPLIERS[input.rarity as Rarity];
   const chooserCount = Math.max(1, Math.floor(finiteOr(input.chooserCount, 1)));
   const chooserMultiplier = 1 + Math.min(0.12, (chooserCount - 1) * 0.025);
   const broadCatalogReach = clamp(finiteOr(input.broadCatalogReach, 0), 0, 1);
