@@ -25,6 +25,22 @@ export interface CardBrowserToolbarProps {
   className?: string;
   /** Whether to show the search-scope dropdown. */
   showSearchScope?: boolean;
+  /** Search-scope options offered when the search-scope dropdown is visible. */
+  searchScopeOptions?: ReadonlyArray<{
+    value: CardBrowserSearchScope;
+    label: string;
+    placeholder: string;
+  }>;
+  /** Label used in the visible-count text and aria labels. */
+  itemLabelPlural?: string;
+  /** Accessible label for the search input. */
+  searchAriaLabel?: string;
+  /** Whether to show the card type filter. */
+  showTypeFilter?: boolean;
+  /** Whether to show the card cost filter. */
+  showCostFilter?: boolean;
+  /** Whether to show the subtype filter. */
+  showSubtypeFilter?: boolean;
   /** Controls injected into the bar between the size control and Filters. */
   barExtras?: ReactNode;
   /** Controls injected into the expandable filter panel before Sort. */
@@ -206,6 +222,12 @@ export default function CardBrowserToolbar({
   ariaLabel = "Card browser controls",
   className = "card-browser-toolbar",
   showSearchScope = true,
+  searchScopeOptions = SCOPE_OPTIONS,
+  itemLabelPlural = "cards",
+  searchAriaLabel = "Search cards",
+  showTypeFilter = true,
+  showCostFilter = true,
+  showSubtypeFilter = true,
   barExtras,
   panelExtras,
   extraActiveFilterCount = 0,
@@ -248,7 +270,7 @@ export default function CardBrowserToolbar({
       <div className="card-browser-toolbar-bar" style={barStyle}>
         <div
           aria-live="polite"
-          aria-label="Visible card count"
+          aria-label={`Visible ${itemLabelPlural} count`}
           style={{
             color: "#f3d46b",
             fontWeight: 800,
@@ -256,7 +278,7 @@ export default function CardBrowserToolbar({
             whiteSpace: "nowrap",
           }}
         >
-          {visibleCount} / {totalCount} cards
+          {visibleCount} / {totalCount} {itemLabelPlural}
         </div>
 
         <div
@@ -333,16 +355,16 @@ export default function CardBrowserToolbar({
         <label style={{ ...labelStyle, flex: "1 1 220px" }}>
           Search
           <input
-            aria-label="Search cards"
+            aria-label={searchAriaLabel}
             type="search"
             value={values.searchText}
             onChange={(event) =>
               onPatch({ searchText: event.currentTarget.value })
             }
             placeholder={
-              SCOPE_OPTIONS.find(
+              searchScopeOptions.find(
                 (option) => option.value === values.searchScope,
-              )?.placeholder ?? "Card name"
+              )?.placeholder ?? "Search"
             }
             style={inputStyle}
           />
@@ -362,7 +384,7 @@ export default function CardBrowserToolbar({
               }
               style={inputStyle}
             >
-              {SCOPE_OPTIONS.map((option) => (
+              {searchScopeOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -371,62 +393,68 @@ export default function CardBrowserToolbar({
           </label>
         ) : null}
 
-        <label style={labelStyle}>
-          Type
-          <select
-            aria-label="Type filter"
-            value={values.type}
-            onChange={(event) =>
-              onPatch({
-                type: event.currentTarget.value as CardBrowserTypeFilter,
-              })
-            }
-            style={inputStyle}
-          >
-            {TYPE_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        {showTypeFilter ? (
+          <label style={labelStyle}>
+            Type
+            <select
+              aria-label="Type filter"
+              value={values.type}
+              onChange={(event) =>
+                onPatch({
+                  type: event.currentTarget.value as CardBrowserTypeFilter,
+                })
+              }
+              style={inputStyle}
+            >
+              {TYPE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
 
-        <label style={labelStyle}>
-          Cost
-          <select
-            aria-label="Cost filter"
-            value={values.cost}
-            onChange={(event) =>
-              onPatch({
-                cost: event.currentTarget.value as CardBrowserCostFilter,
-              })
-            }
-            style={inputStyle}
-          >
-            {COST_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        {showCostFilter ? (
+          <label style={labelStyle}>
+            Cost
+            <select
+              aria-label="Cost filter"
+              value={values.cost}
+              onChange={(event) =>
+                onPatch({
+                  cost: event.currentTarget.value as CardBrowserCostFilter,
+                })
+              }
+              style={inputStyle}
+            >
+              {COST_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
 
-        <label style={labelStyle}>
-          Subtype
-          <select
-            aria-label="Subtype filter"
-            value={values.subtype}
-            onChange={(event) => onPatch({ subtype: event.currentTarget.value })}
-            style={inputStyle}
-          >
-            <option value="">Any subtype</option>
-            {visibleSubtypeOptions.map((subtype) => (
-              <option key={subtype} value={subtype}>
-                {subtype}
-              </option>
-            ))}
-          </select>
-        </label>
+        {showSubtypeFilter ? (
+          <label style={labelStyle}>
+            Subtype
+            <select
+              aria-label="Subtype filter"
+              value={values.subtype}
+              onChange={(event) => onPatch({ subtype: event.currentTarget.value })}
+              style={inputStyle}
+            >
+              <option value="">Any subtype</option>
+              {visibleSubtypeOptions.map((subtype) => (
+                <option key={subtype} value={subtype}>
+                  {subtype}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
 
         {panelExtras}
 

@@ -147,7 +147,7 @@ function editorRecordFromCard(card, popularityCounts) {
   };
 }
 
-function normalizeTagList(rawTags) {
+export function normalizeTagList(rawTags) {
   if (!Array.isArray(rawTags)) {
     return [];
   }
@@ -496,11 +496,15 @@ function isTopLevelTableHeaderLine(line) {
   return /^\s*(?:\[[^\[\]]+\]|\[\[[^\[\]]+\]\])\s*(?:#.*)?$/u.test(line.trimEnd());
 }
 
-function cardBlocks(source) {
+function tableBlocks(source, tableName) {
   const blocks = [];
   let currentStart = null;
   let offset = 0;
   let activeMultilineDelimiter = null;
+  const tablePattern = new RegExp(
+    `^\\s*\\[\\[${escapeRegExp(tableName)}\\]\\]\\s*(?:#.*)?$`,
+    "u",
+  );
 
   while (offset < source.length) {
     const end = lineEndIndex(source, offset);
@@ -518,7 +522,7 @@ function cardBlocks(source) {
         currentStart = null;
       }
 
-      if (/^\s*\[\[cards\]\]\s*(?:#.*)?$/u.test(line.trimEnd())) {
+      if (tablePattern.test(line.trimEnd())) {
         currentStart = offset;
       }
     }
@@ -536,6 +540,10 @@ function cardBlocks(source) {
   }
 
   return blocks;
+}
+
+function cardBlocks(source) {
+  return tableBlocks(source, "cards");
 }
 
 function topLevelFieldOffset(blockText, field) {
@@ -568,13 +576,17 @@ function topLevelFieldLine(blockText, field) {
   return blockText.slice(start, lineEndIndex(blockText, start));
 }
 
-function findCardBlock(source, cardId) {
-  const idPattern = new RegExp(`^\\s*id\\s*=\\s*"${escapeRegExp(cardId)}"\\s*(?:#.*)?$`, "u");
+function findRecordBlock(source, tableName, recordId) {
+  const idPattern = new RegExp(`^\\s*id\\s*=\\s*"${escapeRegExp(recordId)}"\\s*(?:#.*)?$`, "u");
 
-  return cardBlocks(source).find((block) => {
+  return tableBlocks(source, tableName).find((block) => {
     const idLine = topLevelFieldLine(block.text, "id");
     return idLine !== null && idPattern.test(idLine.trimEnd());
   });
+}
+
+function findCardBlock(source, cardId) {
+  return findRecordBlock(source, "cards", cardId);
 }
 
 function firstMultilineDelimiter(text) {
@@ -708,23 +720,32 @@ function tomlValue(value) {
   return tomlString(stringValue);
 }
 
-export function patchRenderedCardsToml(source, { cardId, field, value }) {
-  if (!EDITABLE_CARD_FIELDS.has(field)) {
+export function patchTomlRecord(source, {
+  id,
+  tableName,
+  editableFields,
+  validateEdit,
+  field,
+  value,
+  optionalFields = new Set(),
+  notFoundNoun = "Record",
+}) {
+  if (!editableFields.has(field)) {
     throw new Error(`Field ${field} is not editable`);
   }
 
-  const validation = validateCardEdit(field, value);
+  const validation = validateEdit(field, value);
   if (!validation.ok) {
     throw new Error(validation.message);
   }
 
-  const block = findCardBlock(source, cardId);
+  const block = findRecordBlock(source, tableName, id);
   if (block === undefined) {
-    throw new Error(`Card ${cardId} was not found`);
+    throw new Error(`${notFoundNoun} ${id} was not found`);
   }
 
   let patchedSource;
-  if (field === "art" && topLevelFieldOffset(block.text, field) === -1) {
+  if (optionalFields.has(field) && topLevelFieldOffset(block.text, field) === -1) {
     // The art crop is optional and absent on cards that have never been
     // cropped, so add it to the card block. Every other field already exists on
     // every card; a missing one signals a malformed record and still throws via
@@ -746,6 +767,19 @@ export function patchRenderedCardsToml(source, { cardId, field, value }) {
   return {
     source: patchedSource,
   };
+}
+
+export function patchRenderedCardsToml(source, { cardId, field, value }) {
+  return patchTomlRecord(source, {
+    id: cardId,
+    tableName: "cards",
+    editableFields: EDITABLE_CARD_FIELDS,
+    validateEdit: validateCardEdit,
+    field,
+    value,
+    optionalFields: new Set(["art"]),
+    notFoundNoun: "Card",
+  });
 }
 
 /**
@@ -777,10 +811,14 @@ export function refreshCardDataJson({ rootDir = ROOT, cardTomlPath = DEFAULT_CAR
   };
 }
 
-function usedFacetNames(rootDir, cardTomlPath, facet) {
+function usedFacetNames(rootDir, cardTomlPath, facet, sourceArrayKey = "cards") {
   const used = [];
-  for (const card of readSourceCards(rootDir, cardTomlPath)) {
-    for (const value of normalizeTagList(card[facet.field])) {
+  const absoluteTomlPath = join(rootDir, cardTomlPath);
+  const parsed = parse(readFileSync(absoluteTomlPath, "utf8"));
+  const records = Array.isArray(parsed[sourceArrayKey]) ? parsed[sourceArrayKey] : [];
+
+  for (const record of records) {
+    for (const value of normalizeTagList(record[facet.field])) {
       if (!used.includes(value)) {
         used.push(value);
       }
@@ -800,6 +838,7 @@ export function readFacetRegistry({
   rootDir = ROOT,
   cardTomlPath = DEFAULT_CARD_TOML_PATH,
   facet = TAG_FACET,
+  sourceArrayKey = "cards",
 } = {}) {
   const registryPath = join(rootDir, facetRegistryPathFor(cardTomlPath, facet));
   const tags = [];
@@ -825,7 +864,7 @@ export function readFacetRegistry({
     }
   }
 
-  const unregistered = usedFacetNames(rootDir, cardTomlPath, facet)
+  const unregistered = usedFacetNames(rootDir, cardTomlPath, facet, sourceArrayKey)
     .filter((name) => !seen.has(name))
     .sort((left, right) => left.localeCompare(right, undefined, { sensitivity: "base" }));
 
@@ -878,13 +917,13 @@ export function validateTagRegistry(rawTags) {
 
 export function serializeFacetRegistry(
   tags,
-  { cardTomlBasename, facet = TAG_FACET } = {},
+  { cardTomlBasename, facet = TAG_FACET, resourceNoun = "card", editorName = "card editor" } = {},
 ) {
   const headerTarget = cardTomlBasename ? ` for ${cardTomlBasename}` : "";
   const lines = [
     `# ${facet.Noun} registry${headerTarget}.`,
-    `# Each [[${facet.field}]] entry defines an available card ${facet.noun} and its display color.`,
-    `# Managed by the card editor's "Manage ${facet.noun}s" panel.`,
+    `# Each [[${facet.field}]] entry defines an available ${resourceNoun} ${facet.noun} and its display color.`,
+    `# Managed by the ${editorName}'s "Manage ${facet.noun}s" panel.`,
     "",
   ];
 

@@ -6,6 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
+import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
@@ -50,6 +51,17 @@ function cardEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createCardEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Vite plugin that serves local dreamsign editor read/write endpoints. */
+function dreamsignEditorApiPlugin(): Plugin {
+  return {
+    name: "dreamsign-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(createDreamsignEditorApiMiddleware({ rootDir: __dirname }));
     },
   };
 }
@@ -204,6 +216,7 @@ export default defineConfig({
     tailwindcss(),
     questLogPlugin(),
     cardEditorApiPlugin(),
+    dreamsignEditorApiPlugin(),
     imageViewerApiPlugin(),
     cardImageApiPlugin(),
     generatedCardDataDriftPlugin(),

@@ -18,6 +18,12 @@ vi.mock("./CardEditorApp", () => ({
   },
 }));
 
+vi.mock("./DreamsignEditorApp", () => ({
+  default: function MockDreamsignEditorApp() {
+    return null;
+  },
+}));
+
 vi.mock("../App.tsx", () => {
   mocks.appImport();
   return {
@@ -43,6 +49,18 @@ afterEach(() => {
 describe("main editor route", () => {
   it("mounts the isolated editor for the Vite-served /editor/ path", async () => {
     window.history.pushState(null, "", "/editor/");
+
+    await import("../main.tsx");
+
+    expect(mocks.appImport).not.toHaveBeenCalled();
+    expect(mocks.createRoot).toHaveBeenCalledWith(
+      document.getElementById("root"),
+    );
+    expect(mocks.render).toHaveBeenCalledTimes(1);
+  });
+
+  it("mounts the isolated dreamsign editor for the Vite-served /dreamsigns/ path", async () => {
+    window.history.pushState(null, "", "/dreamsigns/");
 
     await import("../main.tsx");
 

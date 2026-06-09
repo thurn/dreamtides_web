@@ -9,12 +9,15 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import type { EditableCardField } from "./types";
-import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
+import type {
+  EditableFieldName,
+  EditableFieldSaveEntry,
+  EditableFieldValue,
+} from "./save-state";
 import { applySymbolReplacements } from "./symbol-replacements";
 
 export interface EditableFieldProps {
-  field: EditableCardField;
+  field: EditableFieldName;
   value: EditableFieldValue;
   layout?: "block" | "inline" | "pip";
   mode?: "single-line" | "multiline";
@@ -100,7 +103,7 @@ function FieldStatusBadge({
   children,
 }: {
   anchorRef: RefObject<HTMLElement | null>;
-  field: EditableCardField;
+  field: EditableFieldName;
   tone: StatusTone;
   children: ReactNode;
 }) {

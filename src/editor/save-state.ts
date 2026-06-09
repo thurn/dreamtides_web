@@ -1,11 +1,10 @@
-import type { EditableCardField } from "./types";
-
 export type EditableFieldValue = string | number;
+export type EditableFieldName = string;
 export type EditableFieldStatus = "idle" | "editing" | "saving" | "saved" | "error";
 
 export interface EditableFieldSaveEntry {
   cardId: string;
-  field: EditableCardField;
+  field: EditableFieldName;
   status: EditableFieldStatus;
   clientRevision: number;
   submittedRevision: number;
@@ -20,7 +19,7 @@ export interface EditableSaveState {
 
 export interface FieldTarget {
   cardId: string;
-  field: EditableCardField;
+  field: EditableFieldName;
 }
 
 export const EMPTY_EDITOR_SAVE_STATE: EditableSaveState = {
