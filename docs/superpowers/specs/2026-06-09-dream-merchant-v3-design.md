@@ -23,8 +23,11 @@ property of the system.
   dreamscapes).
 - Essence or omens as merchant currency or merchant rewards (no prices, no
   locked offers, no essence/omen grants, no shop or reroll modifiers).
-- Card type conversion (character/event conversion rewards).
-- Site/route manipulation rewards (adding or replacing dreamscape sites).
+- Card type conversion (character/event conversion rewards). Subtype changes
+  within the Character type are in scope (see `tribal_change`).
+- Future-scoped site rewards: adding sites to the *next* dreamscape, replacing
+  site types, or boosting site appearance chances. Adding a site to the
+  current dreamscape is in scope (see `add_site`).
 - Regex- or tag-based inference of card function (removal, draw, payoff tiers).
 - Changes to the transfiguration rules themselves
   (`src/transfiguration/transfiguration-logic.ts` is consumed as-is).
@@ -110,12 +113,13 @@ pull in materially different directions:
 | Family | Archetypes |
 |---|---|
 | `grant` | fit_card_grant, fit_card_draft, copies_draft, strong_card, premium_draft, category_draft_known, card_bundle, transfigured_draft |
-| `improve` | transfigure, starter_transfigure, keyword_mod |
-| `remove` | purge, purge_replace, cleanse |
+| `improve` | transfigure, starter_transfigure, keyword_mod, tribal_change |
+| `remove` | purge, purge_replace |
 | `duplicate` | duplicate |
 | `dreamsign` | dreamsign, dreamsign_draft |
+| `site` | add_site |
 
-17 archetypes across 5 families give several hundred valid ordered (A, B)
+18 archetypes across 6 families give several hundred valid ordered (A, B)
 archetype pairs before target variance multiplies in.
 
 ## Offer archetypes
@@ -198,13 +202,27 @@ Event with Reclaim cost > 1 pairs with `reduce_reclaim`. Seeded-sample 1 pair
 uniformly — no Legendary/cost argmax. Face-up with preview. Eligible when >= 1
 pair exists.
 
+**`tribal_change`** (w=6) — *Change a character's subtype to your tribe.* The
+four main tribes are the Warrior, Spirit Animal, Survivor, and Outsider
+subtypes. A tribe is **active** when the deck holds >= 4 Characters of that
+subtype (hard data only). Candidates: (entry, tribe) pairs where the tribe is
+active, the entry is a Character whose effective subtype differs from the
+tribe, and the entry has no prior type change. Signal: the entry's centrality
+(as defined for `transfigure`) — converting your better off-tribe characters
+matters more. Band-sample 1 pair. Face-up with a preview ("<name> becomes a
+Warrior"). Applied via the `change_deck_entry_type` payload, keeping the
+Character card type and changing only the subtype. Eligible when >= 1 pair
+exists, i.e. only when the deck is actually committed to one of the four
+tribes.
+
 ### Remove family
 
 **`purge`** (w=8) — *Remove a weak card from your deck.* Candidate set:
 starter-rarity entries, plus non-starter entries whose leave-one-out misfit
 ranks in the bottom 20% of the deck **and** whose card has corpus signal
 (df >= minDf) — cards too new for the corpus are never called "weak". Banes are
-excluded (see `cleanse`). Signal for ranking: misfit (worst first), starters
+excluded (bane removal belongs to Cleanse sites, which `add_site` can place).
+Signal for ranking: misfit (worst first), starters
 get +0.25. Band-sample 1 from the worst band. Face-up. Eligible when deck size
 >= 8 and >= 1 candidate exists.
 
@@ -212,10 +230,6 @@ get +0.25. Band-sample 1 from the worst band. Face-up. Eligible when deck size
 Removal target selected exactly as `purge`; replacements are a face-up
 `fit_card_draft`-style band sample of 4. Both halves apply on accept. Eligible
 when both halves are individually eligible.
-
-**`cleanse`** (w=6) — *Remove 1–2 Bane cards from your deck.* Candidates: deck
-entries with `isBane`. Seeded count (1–2, capped by available banes), seeded
-uniform selection. Face-up. Eligible when >= 1 bane exists.
 
 ### Duplicate family
 
@@ -237,14 +251,26 @@ dreamsign exists.
 signal; band-sample up to 4 (minimum 2). Face-up chooser. Eligible while >= 2
 unheld dreamsigns exist.
 
+### Site family
+
+**`add_site`** (w=6) — *Add a site to the current dreamscape.* Adds one new
+site of a seeded-sampled type to the dreamscape the player is currently in,
+reusing the v1 site-placement operation (`add_site_to_dreamscape`). The site
+type is sampled uniformly from the standard placeable site list (Shop,
+Specialty Shop, Purge, Transfiguration, Dreamsign Offering, Dreamsign Draft,
+Duplication, Reward, Cleanse, Essence). The effect is immediate and permanent:
+the site appears on the current dreamscape map. Face-up (the offer names the
+site type). Always eligible.
+
 ### Journey v1 reward types deliberately excluded
 
 From the v1 catalog (`src/journeys/journey/shared/rewards.ts`, 64 templates):
-essence/omen operations (currency is out of merchant scope), site/route and
-shop-modifier rewards (different subsystem, several are future-scoped), all
-time-limited and battle-window rewards, card type changes, dreamwell stubs,
-and the composite "gain 2 rewards" meta-template (a candidate for a later
-iteration once single-reward tuning is stable).
+essence/omen operations (currency is out of merchant scope), future-scoped
+site rewards (next-dreamscape placement, site replacement, appearance-chance
+boosts) and shop modifiers, all time-limited and battle-window rewards,
+character/event type conversions, dreamwell stubs, and the composite "gain 2
+rewards" meta-template (a candidate for a later iteration once single-reward
+tuning is stable).
 
 ## Transfiguration: mechanics and selection
 
@@ -428,6 +454,8 @@ Retained (adapted):
   regenerate-validate-apply), extended with the commit mutation.
 - Transfiguration application (`transfiguration-logic.ts`) and keyword
   modification storage/merge (`card-type-change.ts`), both unchanged.
+- The v1 site-placement operation (`add_site_to_dreamscape`) backing
+  `add_site`.
 
 New:
 
@@ -445,7 +473,8 @@ Deleted:
   curve_problem, weak_card, dreamsign_gap detection and the role regexes).
 - `catalog/pricing.ts` and every essence cost, locked-offer, and payment path.
 - `gain_essence` and `raise_essence_cap` reward builders.
-- `convert_event_to_role` and the `change_deck_entry_type` merchant payload.
+- The `convert_event_to_role` reward builder. The `change_deck_entry_type`
+  payload kind is retained for `tribal_change` (subtype-only changes).
 - The seven-beat dialogue grammar and its template banks.
 - The merchant's consumption of `data/buildaround_support.json`.
 
@@ -465,5 +494,10 @@ Deleted:
   pick against regenerated candidates, stale signatures are rejected without
   mutation.
 - Family distinctness: slots A and B always come from different families.
+- Tribal change: ineligible until a tribe reaches 4 Characters; candidates
+  exclude in-tribe Characters, non-Characters, and entries with a prior type
+  change; the applied change preserves the Character card type.
+- Add site: the placed site appears on the current dreamscape and the offer
+  names the site type.
 - Browser QA through the normal player workflow on a non-5173 Vite port, per
   the standard QA process.
