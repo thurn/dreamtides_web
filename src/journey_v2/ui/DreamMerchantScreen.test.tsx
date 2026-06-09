@@ -367,9 +367,37 @@ describe("DreamMerchantScreen", () => {
     expect(byTestId(container, "merchant-offer-action-A").textContent).toBe(
       "Take",
     );
-    expect(byTestId(container, "merchant-offer-choose-B").textContent).toBe(
+    expect(byTestId(container, "merchant-offer-action-B").textContent).toBe(
       "Choose",
     );
+  });
+
+  it("renders user-facing merchant reads instead of internal need ids", () => {
+    const merchantEncounter = encounter({
+      dialogue: [
+        {
+          id: "dialogue-greeting",
+          templateId: "greeting-1",
+          kind: "greeting",
+          phase: "pre_offer",
+          text: "The Dream Merchant opens a quiet ledger.",
+        },
+        {
+          id: "dialogue-observation-A",
+          templateId: "observation-1",
+          kind: "observation",
+          phase: "pre_offer",
+          text: "Lantern Broker is ready to leave the ledger.",
+          offerId: "A",
+          needId: "need-weak-card",
+        },
+      ],
+    });
+    const { container } = renderScreen({ merchantEncounter });
+
+    const needRead = byTestId(container, "merchant-offer-need-A").textContent ?? "";
+    expect(needRead).toContain("Lantern Broker is ready");
+    expect(needRead).not.toContain("need-weak-card");
   });
 
   it("renders pre-action dialogue and excludes reaction beats before action", () => {
@@ -414,7 +442,7 @@ describe("DreamMerchantScreen", () => {
     const onAcceptOffer = vi.fn();
     const { container } = renderScreen({ onAcceptOffer });
 
-    click(byTestId(container, "merchant-offer-choose-B"));
+    click(byTestId(container, "merchant-offer-action-B"));
 
     expect(byTestId(container, "merchant-chooser-panel").textContent).toContain(
       "Choose one sign",
@@ -425,7 +453,7 @@ describe("DreamMerchantScreen", () => {
     expect(
       (byTestId(container, "merchant-offer-action-B") as HTMLButtonElement)
         .disabled,
-    ).toBe(true);
+    ).toBe(false);
 
     click(byTestId(container, "merchant-choice-choice-ledger"));
 

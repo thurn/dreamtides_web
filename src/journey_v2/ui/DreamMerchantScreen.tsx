@@ -46,6 +46,15 @@ export function DreamMerchantScreen({
     return selectedChoices.get(offer.offerId);
   }
 
+  function needReadFor(offer: MerchantOffer): string {
+    const observation = preActionDialogue.find(
+      (beat) =>
+        beat.kind === "observation" &&
+        (beat.offerId === offer.offerId || beat.needId === offer.needId),
+    );
+    return observation?.text ?? offer.reward.summary;
+  }
+
   function acceptOffer(offer: MerchantOffer) {
     const choice = selectedChoiceFor(offer);
     const request: MerchantAcceptRequest = {
@@ -102,6 +111,7 @@ export function DreamMerchantScreen({
             <OfferCard
               offer={encounter.offers[0]}
               label="A"
+              needRead={needReadFor(encounter.offers[0])}
               isChooserOpen={choosingOfferId === encounter.offers[0].offerId}
               selectedChoice={selectedChoiceFor(encounter.offers[0])}
               onTake={acceptOffer}
@@ -116,12 +126,7 @@ export function DreamMerchantScreen({
             data-testid="dream-merchant-image-slot"
             aria-label="Dream Merchant image slot"
           >
-            <div className="max-w-[260px] text-center">
-              <div className="mx-auto h-20 w-20 rounded-md border border-slate-500/40 bg-slate-800/40" />
-              <p className="mt-4 text-sm leading-snug text-slate-400">
-                Merchant image slot
-              </p>
-            </div>
+            <div className="h-24 w-24 rounded-md border border-slate-500/35 bg-slate-800/30" />
           </section>
 
           <section
@@ -168,6 +173,7 @@ export function DreamMerchantScreen({
             <OfferCard
               offer={encounter.offers[1]}
               label="B"
+              needRead={needReadFor(encounter.offers[1])}
               isChooserOpen={choosingOfferId === encounter.offers[1].offerId}
               selectedChoice={selectedChoiceFor(encounter.offers[1])}
               onTake={acceptOffer}

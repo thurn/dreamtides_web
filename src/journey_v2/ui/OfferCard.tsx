@@ -4,6 +4,7 @@ import { MerchantGameObjectList } from "./MerchantGameObjectView";
 interface OfferCardProps {
   offer: MerchantOffer;
   label: string;
+  needRead: string;
   isChooserOpen: boolean;
   selectedChoice?: MerchantChoice;
   onTake: (offer: MerchantOffer) => void;
@@ -20,6 +21,7 @@ function lockCopy(offer: MerchantOffer): string {
 export function OfferCard({
   offer,
   label,
+  needRead,
   isChooserOpen,
   selectedChoice,
   onTake,
@@ -31,7 +33,7 @@ export function OfferCard({
       ? "Choose"
       : "Confirm"
     : "Take";
-  const disabled = offer.locked || (hasChoices && selectedChoice === undefined);
+  const disabled = offer.locked;
 
   return (
     <article
@@ -69,12 +71,10 @@ export function OfferCard({
         data-testid={`merchant-offer-need-${offer.offerId}`}
       >
         <p className="text-xs font-semibold uppercase text-slate-400">
-          Need read
+          Merchant read
         </p>
         <p className="mt-1 text-sm leading-snug text-slate-100">
-          {offer.reward.answersNeedIds.includes(offer.needId)
-            ? offer.needId
-            : offer.reward.answersNeedIds.join(", ")}
+          {needRead}
         </p>
       </section>
 
@@ -117,16 +117,6 @@ export function OfferCard({
         >
           {offer.locked ? "Locked" : actionLabel}
         </button>
-        {hasChoices && selectedChoice === undefined && !offer.locked && (
-          <button
-            type="button"
-            className="min-h-10 w-full rounded-md border border-slate-600 bg-slate-900 px-4 py-2 text-sm font-semibold text-slate-100 transition hover:bg-slate-800"
-            data-testid={`merchant-offer-choose-${offer.offerId}`}
-            onClick={() => onChoose(offer)}
-          >
-            Choose
-          </button>
-        )}
       </footer>
     </article>
   );
