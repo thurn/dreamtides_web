@@ -343,6 +343,12 @@ describe("rewardCatalog", () => {
     expect(reward?.choiceRequest?.candidates.every((candidate) =>
       candidate.applyPayload.kind === "add_catalog_card",
     )).toBe(true);
+    expect(reward?.choiceRequest?.candidates[0]?.debug).toMatchObject({
+      source: "catalog_rank",
+      rank: 1,
+    });
+    expect(reward?.choiceRequest?.candidates[0]?.debug?.score).toBeGreaterThan(0);
+    expect(reward?.choiceRequest?.candidates[0]?.debug?.matchScore).toBeGreaterThan(0);
   });
 
   it("grant_support_card excludes starter, special, and already-owned UUIDs by default", () => {

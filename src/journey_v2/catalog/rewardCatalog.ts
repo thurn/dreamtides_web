@@ -8,6 +8,7 @@ import type {
   MerchantCatalogCard,
   MerchantChoice,
   MerchantChoiceCandidate,
+  MerchantChoiceCandidateDebug,
   MerchantContext,
   MerchantDeckCard,
   MerchantGameObject,
@@ -35,6 +36,12 @@ interface ScoredCatalogCard {
   catalogCard: MerchantCatalogCard;
   score: number;
   matchScore: number;
+  roleScore: number;
+  supportFit: number;
+  curveScore: number;
+  modelFit: number;
+  rarityValueScore: number;
+  tieBreak: number;
 }
 
 const DEFAULT_BUILD_OPTIONS: Required<BuildMerchantRewardsOptions> = {
@@ -187,21 +194,32 @@ function rankCatalogCards(
           : 0;
       const supportFit = supportScore(meta, themes);
       const modelFit = fitScore(context, catalogCard.card);
+      const rarityScore = rarityValueScore(catalogCard.card);
       const matchScore = supportFit + roleScore + curveScore + modelFit;
       const score =
         supportFit +
         roleScore +
         curveScore +
         modelFit +
-        rarityValueScore(catalogCard.card);
-      return { catalogCard, score, matchScore };
+        rarityScore;
+      const tieBreak = stableTieBreak(context, need, catalogCard.cardUuid);
+      return {
+        catalogCard,
+        score,
+        matchScore,
+        roleScore,
+        supportFit,
+        curveScore,
+        modelFit,
+        rarityValueScore: rarityScore,
+        tieBreak,
+      };
     })
     .filter((scored) => scored.matchScore > 0 || need.needKind === "weak_card")
     .sort(
       (a, b) =>
         b.score - a.score ||
-        stableTieBreak(context, need, a.catalogCard.cardUuid) -
-          stableTieBreak(context, need, b.catalogCard.cardUuid) ||
+        a.tieBreak - b.tieBreak ||
         a.catalogCard.cardNumber - b.catalogCard.cardNumber,
     );
 }
@@ -220,6 +238,7 @@ function catalogChoiceCandidate(
   catalogCard: MerchantCatalogCard,
   summary: string,
   applyPayload: MerchantApplyPayload = cardGrantPayload(catalogCard),
+  debug?: MerchantChoiceCandidateDebug,
 ): MerchantChoiceCandidate {
   return {
     choiceId: `${builderId}:${need.needId}:${catalogCard.cardUuid}`,
@@ -232,6 +251,25 @@ function catalogChoiceCandidate(
     applyPayload,
     cardUuid: catalogCard.cardUuid,
     cardNumber: catalogCard.cardNumber,
+    ...(debug === undefined ? {} : { debug }),
+  };
+}
+
+function catalogCandidateDebug(
+  scored: ScoredCatalogCard,
+  rank: number,
+): MerchantChoiceCandidateDebug {
+  return {
+    source: "catalog_rank",
+    rank,
+    score: scored.score,
+    matchScore: scored.matchScore,
+    roleScore: scored.roleScore,
+    supportFit: scored.supportFit,
+    curveScore: scored.curveScore,
+    modelFit: scored.modelFit,
+    rarityValueScore: scored.rarityValueScore,
+    tieBreak: scored.tieBreak,
   };
 }
 
@@ -333,12 +371,14 @@ function grantSupportCard(
 
   const candidates = rankCatalogCards(context, need, options)
     .slice(0, SUPPORT_CARD_MAX_CHOICES)
-    .map((scored) =>
+    .map((scored, index) =>
       catalogChoiceCandidate(
         "grant_support_card",
         need,
         scored.catalogCard,
         `Add ${scored.catalogCard.displayName} to answer ${need.label}.`,
+        undefined,
+        catalogCandidateDebug(scored, index + 1),
       ),
     );
   if (candidates.length < SUPPORT_CARD_MIN_CHOICES) return null;
@@ -379,7 +419,7 @@ function grantDreamsign(
         a.id.localeCompare(b.id),
     )
     .slice(0, DREAMSIGN_MAX_CHOICES)
-    .map<MerchantChoiceCandidate>((template) => ({
+    .map<MerchantChoiceCandidate>((template, index) => ({
       choiceId: `grant_dreamsign:${need.needId}:${template.id}`,
       title: template.name,
       summary: template.effectDescription,
@@ -393,6 +433,12 @@ function grantDreamsign(
         dreamsignTemplate: template,
       },
       dreamsignId: template.id,
+      debug: {
+        source: "dreamsign_rank",
+        rank: index + 1,
+        roleScore: dreamsignRoleScore(template, need),
+        tieBreak: stableTieBreak(context, need, template.id),
+      },
     }));
 
   if (candidates.length < DREAMSIGN_MIN_CHOICES) return null;
@@ -539,7 +585,7 @@ function replaceWeakWithFit(
 
   const candidates = rankCatalogCards(context, need, options)
     .slice(0, SUPPORT_CARD_MAX_CHOICES)
-    .map((scored) => {
+    .map((scored, index) => {
       const payload = replacementPayload(need, scored.catalogCard);
       return catalogChoiceCandidate(
         "replace_weak_with_fit",
@@ -547,6 +593,7 @@ function replaceWeakWithFit(
         scored.catalogCard,
         `Remove ${weakDeckCard.displayName} and add ${scored.catalogCard.displayName}.`,
         payload,
+        catalogCandidateDebug(scored, index + 1),
       );
     });
   if (candidates.length < SUPPORT_CARD_MIN_CHOICES) return null;

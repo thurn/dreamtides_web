@@ -15,6 +15,7 @@ import type {
   MerchantOffer,
   MerchantReward,
   MerchantRewardBuilderId,
+  MerchantRoleNeed,
 } from "../types";
 import type {
   MerchantRewardFamily,
@@ -27,6 +28,92 @@ interface MerchantOfferCandidate {
   needRank: number;
   rewardRank: number;
   targetKey: string;
+}
+
+export interface MerchantNeedDebug {
+  needRank: number;
+  needId: string;
+  needType: MerchantNeed["needType"];
+  needKind: MerchantNeed["needKind"];
+  score: number;
+  severity: number;
+  confidence: number;
+  role?: MerchantRoleNeed;
+  themeId?: string;
+  dreamsignId?: string;
+  entryId?: string;
+  cardUuid?: string;
+  cardNumber?: number;
+  compatibleRewardBuilderIds: readonly string[];
+  observationMetric?: MerchantNeed["observation"]["metric"];
+  support?: Extract<
+    MerchantNeed,
+    { needKind: "under_supported_payoff" | "missing_role" | "curve_problem" }
+  >["support"];
+  curveDirection?: Extract<MerchantNeed, { needKind: "curve_problem" }>["curveDirection"];
+  projection?: {
+    transfiguration: Extract<
+      MerchantNeed,
+      { needKind: "upgrade_target" }
+    >["projection"]["transfiguration"];
+    metric?: MerchantNeed["observation"]["metric"];
+    previewCard: ReturnType<typeof summarizeCardState>;
+  };
+  references?: readonly {
+    cardUuid: string;
+    cardNumber: number;
+    entryId?: string;
+    dreamsignId?: string;
+  }[];
+}
+
+export interface MerchantOfferCandidateDebug {
+  candidateId: string;
+  candidateIndex: number;
+  selectable: boolean;
+  selectedOfferId?: string;
+  baseRank: number | null;
+  distinctivenessFromFirst: number | null;
+  needRank: number;
+  rewardRank: number;
+  targetKey: string;
+  needId: string;
+  needKind: MerchantNeed["needKind"];
+  needScore: number;
+  needSeverity: number;
+  rewardBuilderId: MerchantReward["builderId"];
+  rewardValueEssence: number;
+  rewardFamily: MerchantRewardFamily;
+  rewardHasApplyPayload: boolean;
+  rewardChoiceCount: number;
+  baseSortKey: readonly number[];
+  reward: ReturnType<typeof summarizeReward>;
+}
+
+export interface MerchantGeneratedOfferDebug {
+  offerId: string;
+  selectedCandidateId: string;
+  needId: string;
+  rewardBuilderId: MerchantReward["builderId"];
+  price: number;
+  priceDetail: MerchantRewardPrice;
+  locked: boolean;
+  lockedReason?: MerchantRewardPrice["lockedReason"];
+  reward: ReturnType<typeof summarizeReward>;
+}
+
+export interface MerchantEncounterGenerationDebug {
+  input: ReturnType<typeof inputSignature>;
+  selectionPolicy: {
+    offerIds: readonly string[];
+    firstOfferRule: string;
+    secondOfferRule: string;
+  };
+  needs: readonly MerchantNeedDebug[];
+  candidates: readonly MerchantOfferCandidateDebug[];
+  selectedCandidates: readonly MerchantOfferCandidateDebug[];
+  offers: readonly MerchantGeneratedOfferDebug[];
+  encounterSignature: string;
 }
 
 type StableJsonValue =
@@ -146,6 +233,10 @@ function buildCandidates(
   }
 
   return candidates;
+}
+
+function candidateId(candidate: MerchantOfferCandidate): string {
+  return `${candidate.need.needId}:${candidate.reward.builderId}:${candidate.targetKey}`;
 }
 
 function candidateSortKey(candidate: MerchantOfferCandidate): readonly number[] {
@@ -286,6 +377,53 @@ function summarizeCardState(card: CardData) {
   };
 }
 
+function summarizeNeed(need: MerchantNeed, needRank: number): MerchantNeedDebug {
+  const references =
+    "references" in need
+      ? need.references.map((reference) => ({
+          cardUuid: reference.cardUuid,
+          cardNumber: reference.cardNumber,
+          ...(reference.entryId === undefined ? {} : { entryId: reference.entryId }),
+          ...(reference.dreamsignId === undefined
+            ? {}
+            : { dreamsignId: reference.dreamsignId }),
+        }))
+      : undefined;
+  const base = {
+    needRank,
+    needId: need.needId,
+    needType: need.needType,
+    needKind: need.needKind,
+    score: need.score,
+    severity: need.severity,
+    confidence: need.confidence,
+    role: "role" in need ? need.role : undefined,
+    themeId: "themeId" in need ? need.themeId : undefined,
+    dreamsignId: "dreamsignId" in need ? need.dreamsignId : undefined,
+    entryId: "entryId" in need ? need.entryId : undefined,
+    cardUuid: "cardUuid" in need ? need.cardUuid : undefined,
+    cardNumber: "cardNumber" in need ? need.cardNumber : undefined,
+    compatibleRewardBuilderIds: need.compatibleRewardBuilderIds,
+    observationMetric: need.observation.metric,
+    support: "support" in need ? need.support : undefined,
+    curveDirection: "curveDirection" in need ? need.curveDirection : undefined,
+    references,
+  };
+
+  if (need.needKind !== "upgrade_target") {
+    return base;
+  }
+
+  return {
+    ...base,
+    projection: {
+      transfiguration: need.projection.transfiguration,
+      metric: need.projection.metric,
+      previewCard: summarizeCardState(need.projection.previewCard),
+    },
+  };
+}
+
 function summarizeApplyPayload(payload: MerchantApplyPayload): unknown {
   switch (payload.kind) {
     case "add_catalog_card":
@@ -407,6 +545,7 @@ function summarizeReward(reward: MerchantReward) {
               cardNumber: candidate.cardNumber,
               dreamsignId: candidate.dreamsignId,
               valueEssence: candidate.valueEssence,
+              debug: candidate.debug,
               applyPayload: summarizeApplyPayload(candidate.applyPayload),
               gameObjects: candidate.gameObjects.map(summarizeGameObject),
             })),
@@ -438,6 +577,73 @@ function inputSignature(context: MerchantContext) {
       isBane: deckCard.deckEntry.isBane,
     })),
     heldDreamsignIds: [...context.heldDreamsignIds].sort(),
+  };
+}
+
+function buildBaseRankByCandidateId(
+  candidates: readonly MerchantOfferCandidate[],
+): ReadonlyMap<string, number> {
+  return new Map(
+    candidates
+      .filter((candidate) => rewardHasPayload(candidate.reward))
+      .sort(compareCandidateBase)
+      .map((candidate, index) => [candidateId(candidate), index + 1]),
+  );
+}
+
+function summarizeCandidate(
+  candidate: MerchantOfferCandidate,
+  input: {
+    candidateIndex: number;
+    baseRankByCandidateId: ReadonlyMap<string, number>;
+    firstSelected: MerchantOfferCandidate | undefined;
+    offerIdByCandidateId: ReadonlyMap<string, string>;
+  },
+): MerchantOfferCandidateDebug {
+  const id = candidateId(candidate);
+  return {
+    candidateId: id,
+    candidateIndex: input.candidateIndex,
+    selectable: rewardHasPayload(candidate.reward),
+    selectedOfferId: input.offerIdByCandidateId.get(id),
+    baseRank: input.baseRankByCandidateId.get(id) ?? null,
+    distinctivenessFromFirst:
+      input.firstSelected === undefined || id === candidateId(input.firstSelected)
+        ? null
+        : distinctivenessScore(candidate, input.firstSelected),
+    needRank: candidate.needRank + 1,
+    rewardRank: candidate.rewardRank + 1,
+    targetKey: candidate.targetKey,
+    needId: candidate.need.needId,
+    needKind: candidate.need.needKind,
+    needScore: candidate.need.score,
+    needSeverity: candidate.need.severity,
+    rewardBuilderId: candidate.reward.builderId,
+    rewardValueEssence: candidate.reward.valueEssence,
+    rewardFamily: BUILDER_FAMILY[candidate.reward.builderId],
+    rewardHasApplyPayload: candidate.reward.applyPayload !== undefined,
+    rewardChoiceCount: candidate.reward.choiceRequest?.candidates.length ?? 0,
+    baseSortKey: candidateSortKey(candidate),
+    reward: summarizeReward(candidate.reward),
+  };
+}
+
+function summarizeOffer(
+  offer: MerchantOffer,
+  selectedCandidate: MerchantOfferCandidate,
+): MerchantGeneratedOfferDebug {
+  return {
+    offerId: offer.offerId,
+    selectedCandidateId: candidateId(selectedCandidate),
+    needId: offer.needId,
+    rewardBuilderId: offer.rewardBuilderId,
+    price: offer.price,
+    priceDetail: offer.priceDetail,
+    locked: offer.locked,
+    ...(offer.lockedReason === undefined
+      ? {}
+      : { lockedReason: offer.lockedReason }),
+    reward: summarizeReward(offer.reward),
   };
 }
 
@@ -508,14 +714,12 @@ function assertValidEncounter(
   }
 }
 
-export function generateMerchantEncounter(
+export function generateMerchantEncounterWithDebug(
   context: MerchantContext,
-): MerchantEncounter {
+): { encounter: MerchantEncounter; debug: MerchantEncounterGenerationDebug } {
   const needs = readMerchantDeck(context);
-  const selected = selectCandidates(buildCandidates(context, needs)).slice(
-    0,
-    OFFER_IDS.length,
-  );
+  const candidates = buildCandidates(context, needs);
+  const selected = selectCandidates(candidates).slice(0, OFFER_IDS.length);
   if (selected.length !== OFFER_IDS.length) {
     throw new Error(
       `Dream Merchant encounter requires exactly two buildable offers; selected ${selected.length}`,
@@ -558,5 +762,48 @@ export function generateMerchantEncounter(
   };
 
   assertValidEncounter(encounter, needs);
-  return encounter;
+  const offerIdByCandidateId = new Map(
+    selected.map((candidate, index) => [candidateId(candidate), OFFER_IDS[index]]),
+  );
+  const baseRankByCandidateId = buildBaseRankByCandidateId(candidates);
+  const candidateDebug = candidates.map((candidate, index) =>
+    summarizeCandidate(candidate, {
+      candidateIndex: index + 1,
+      baseRankByCandidateId,
+      firstSelected: selected[0],
+      offerIdByCandidateId,
+    }),
+  );
+  const selectedCandidateDebug = selected
+    .map((candidate) =>
+      candidateDebug.find((debug) => debug.candidateId === candidateId(candidate)),
+    )
+    .filter(
+      (debug): debug is MerchantOfferCandidateDebug => debug !== undefined,
+    );
+
+  return {
+    encounter,
+    debug: {
+      input: inputSignature(context),
+      selectionPolicy: {
+        offerIds: OFFER_IDS,
+        firstOfferRule:
+          "Choose the selectable candidate with the lowest base rank after sorting by need rank, reward rank, need score, severity, and stable ids.",
+        secondOfferRule:
+          "Choose the remaining selectable candidate with the highest distinctiveness from offer A, then lowest base rank.",
+      },
+      needs: needs.map((need, index) => summarizeNeed(need, index + 1)),
+      candidates: candidateDebug,
+      selectedCandidates: selectedCandidateDebug,
+      offers: offers.map((offer, index) => summarizeOffer(offer, selected[index])),
+      encounterSignature,
+    },
+  };
+}
+
+export function generateMerchantEncounter(
+  context: MerchantContext,
+): MerchantEncounter {
+  return generateMerchantEncounterWithDebug(context).encounter;
 }

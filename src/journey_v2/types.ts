@@ -280,6 +280,19 @@ export interface MerchantChoice {
   choiceId: string;
 }
 
+export interface MerchantChoiceCandidateDebug {
+  source: "catalog_rank" | "dreamsign_rank";
+  rank: number;
+  score?: number;
+  matchScore?: number;
+  roleScore?: number;
+  supportFit?: number;
+  curveScore?: number;
+  modelFit?: number;
+  rarityValueScore?: number;
+  tieBreak: number;
+}
+
 export interface MerchantChoiceCandidate {
   choiceId: string;
   title: string;
@@ -292,6 +305,7 @@ export interface MerchantChoiceCandidate {
   cardUuid?: string;
   cardNumber?: number;
   dreamsignId?: string;
+  debug?: MerchantChoiceCandidateDebug;
 }
 
 export interface MerchantReward {

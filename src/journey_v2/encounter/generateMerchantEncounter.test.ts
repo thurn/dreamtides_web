@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import { readMerchantDeck } from "../read/deckRead";
-import { generateMerchantEncounter } from "./generateMerchantEncounter";
+import {
+  generateMerchantEncounter,
+  generateMerchantEncounterWithDebug,
+} from "./generateMerchantEncounter";
 import type { CardData } from "../../types/cards";
 import type { SiteState } from "../../types/quest";
 import type { MerchantContext, MerchantNeed } from "../types";
@@ -209,6 +212,37 @@ describe("generateMerchantEncounter", () => {
 
     expect(encounter.offers).toHaveLength(2);
     expect(encounter.offers.map((offer) => offer.offerId)).toEqual(["A", "B"]);
+  });
+
+  it("returns enough generation debug to reconstruct selected offers", () => {
+    const { encounter, debug } = generateMerchantEncounterWithDebug(contextFor());
+
+    expect(debug.encounterSignature).toBe(encounter.encounterSignature);
+    expect(debug.input.questSeed).toBe("merchant-encounter-seed");
+    expect(debug.selectionPolicy.offerIds).toEqual(["A", "B"]);
+    expect(debug.needs.length).toBeGreaterThan(0);
+    expect(JSON.stringify(debug.needs)).not.toContain("displayName");
+    expect(debug.candidates.length).toBeGreaterThan(0);
+    expect(debug.selectedCandidates.map((candidate) => candidate.selectedOfferId)).toEqual([
+      "A",
+      "B",
+    ]);
+    expect(debug.offers.map((offer) => offer.offerId)).toEqual(["A", "B"]);
+    for (const offer of debug.offers) {
+      expect(
+        debug.candidates.some(
+          (candidate) => candidate.candidateId === offer.selectedCandidateId,
+        ),
+      ).toBe(true);
+    }
+    expect(
+      debug.candidates.some(
+        (candidate) =>
+          candidate.reward.choiceRequest?.candidates.some(
+            (choice) => choice.debug?.source === "catalog_rank",
+          ) === true,
+      ),
+    ).toBe(true);
   });
 
   it("makes both offers answer existing detected need ids", () => {

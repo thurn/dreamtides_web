@@ -295,7 +295,7 @@ describe("ScreenRouter DreamJourney routing", () => {
     expect(container.querySelector('[data-testid="classic-journey-screen"]')).toBeNull();
   });
 
-  it("logs shown offers once per encounter signature under strict mode", () => {
+  it("logs the generated encounter debug once per encounter signature under strict mode", () => {
     const site = makeSite("DreamJourney");
     const state = makeStateFor(site);
     renderWithQuest({
@@ -306,10 +306,22 @@ describe("ScreenRouter DreamJourney routing", () => {
     });
 
     const shownLogs = getLogEntries().filter(
-      (entry) => entry.event === "merchant_offer_shown",
+      (entry) => entry.event === "merchant_encounter_generated",
     );
-    expect(shownLogs).toHaveLength(2);
-    expect(shownLogs.map((entry) => entry.offerId)).toEqual(["A", "B"]);
+    expect(shownLogs).toHaveLength(1);
+    expect(shownLogs[0]?.offerCount).toBe(2);
+    expect(shownLogs[0]?.debug).toMatchObject({
+      encounterSignature: shownLogs[0]?.encounterSignature,
+      selectionPolicy: {
+        offerIds: ["A", "B"],
+      },
+    });
+    const debug = shownLogs[0]?.debug as
+      | { needs?: unknown[]; candidates?: unknown[]; offers?: unknown[] }
+      | undefined;
+    expect(debug?.needs?.length).toBeGreaterThan(0);
+    expect(debug?.candidates?.length).toBeGreaterThan(0);
+    expect(debug?.offers?.length).toBe(2);
   });
 
   it("sets card source debug for visible merchant grant cards", () => {

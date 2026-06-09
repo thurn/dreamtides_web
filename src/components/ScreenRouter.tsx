@@ -27,7 +27,7 @@ import {
 import {
   DreamMerchantScreen,
   buildMerchantContext,
-  generateMerchantEncounter,
+  generateMerchantEncounterWithDebug,
   type MerchantAcceptRequest,
   type MerchantCatalogCard,
   type MerchantDeclineRequest,
@@ -294,7 +294,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       try {
         return {
           ok: true as const,
-          encounter: generateMerchantEncounter(merchantContext),
+          ...generateMerchantEncounterWithDebug(merchantContext),
         };
       } catch (error) {
         return {
@@ -323,17 +323,12 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       return;
     }
     loggedOfferSignatureRef.current = encounterResult.encounter.encounterSignature;
-    for (const offer of encounterResult.encounter.offers) {
-      logEvent("merchant_offer_shown", {
-        siteId: site.id,
-        encounterSignature: encounterResult.encounter.encounterSignature,
-        offerId: offer.offerId,
-        needId: offer.needId,
-        rewardBuilderId: offer.rewardBuilderId,
-        price: offer.price,
-        locked: offer.locked,
-      });
-    }
+    logEvent("merchant_encounter_generated", {
+      siteId: site.id,
+      encounterSignature: encounterResult.encounter.encounterSignature,
+      offerCount: encounterResult.encounter.offers.length,
+      debug: encounterResult.debug,
+    });
   }, [encounterResult, site.id]);
 
   const visibleGrantCards = useMemo(

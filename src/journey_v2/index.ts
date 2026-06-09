@@ -7,7 +7,10 @@ export {
   makeMerchantTypeChangePayload,
   resolveMerchantChoice,
 } from "./catalog/rewardCatalog";
-export { generateMerchantEncounter } from "./encounter/generateMerchantEncounter";
+export {
+  generateMerchantEncounter,
+  generateMerchantEncounterWithDebug,
+} from "./encounter/generateMerchantEncounter";
 export { DreamMerchantScreen } from "./ui/DreamMerchantScreen";
 export { MerchantChooserPanel } from "./ui/MerchantChooserPanel";
 export {
@@ -56,11 +59,18 @@ export type {
   DreamMerchantScreenProps,
 } from "./ui/DreamMerchantScreen";
 export type {
+  MerchantEncounterGenerationDebug,
+  MerchantGeneratedOfferDebug,
+  MerchantNeedDebug,
+  MerchantOfferCandidateDebug,
+} from "./encounter/generateMerchantEncounter";
+export type {
   MerchantApplyPayload,
   MerchantAcceptRequest,
   MerchantCatalogCard,
   MerchantChoice,
   MerchantChoiceCandidate,
+  MerchantChoiceCandidateDebug,
   MerchantChoiceRequest,
   MerchantContext,
   MerchantDeckCard,
