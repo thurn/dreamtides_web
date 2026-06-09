@@ -57,7 +57,7 @@ function card(
 
 function dreamsign(
   id: string,
-  overrides: Partial<DreamsignTemplate> & { isBane?: boolean } = {},
+  overrides: Partial<DreamsignTemplate> = {},
 ): DreamsignTemplate {
   return {
     ...makeMerchantTestDreamsignTemplate({
@@ -170,6 +170,41 @@ function weakCardNeed(): MerchantNeed {
   };
 }
 
+function underSupportedPayoffNeed(): MerchantNeed {
+  return {
+    needId: "need:under-supported-payoff:entry-1",
+    needType: "card",
+    needKind: "under_supported_payoff",
+    label: "Owned Draw needs abandon support",
+    score: 0.9,
+    severity: 0.9,
+    confidence: 0.95,
+    observation: {
+      summary: "Owned Draw is asking for more abandon support.",
+      theme: "abandon",
+    },
+    compatibleRewardBuilderIds: ["grant_support_card", "duplicate_keystone"],
+    cardUuid: UUIDS.owned,
+    cardNumber: 1,
+    entryId: "entry-1",
+    references: [
+      {
+        cardUuid: UUIDS.owned,
+        cardNumber: 1,
+        entryId: "entry-1",
+        displayName: "Owned Draw",
+      },
+    ],
+    themeId: "abandon",
+    support: {
+      theme: "abandon",
+      tier: 3,
+      supportCount: 0,
+      adequacy: 0,
+    },
+  };
+}
+
 function upgradeNeed(previewCard: CardData): MerchantNeed {
   return {
     needId: "need:upgrade-target:entry-1",
@@ -216,7 +251,7 @@ function supportCards(): CardData[] {
       energyCost: 5,
       spark: null,
     }),
-    card(UUIDS.supportA, 4, { name: "Support A" }),
+    card(UUIDS.supportA, 4, { name: "Support A", rarity: "Legendary" }),
     card(UUIDS.supportB, 5, { name: "Support B" }),
     card(UUIDS.supportC, 6, { name: "Support C" }),
     card(UUIDS.supportD, 7, { name: "Support D" }),
@@ -302,7 +337,57 @@ describe("rewardCatalog", () => {
     expect(cardUuids).not.toContain(UUIDS.special);
   });
 
-  it("grant_dreamsign returns 2-4 non-held non-bane candidates", () => {
+  it("grant_exact_card returns the highest-ranked direct catalog card grant", () => {
+    const context = contextFor({
+      cards: supportCards(),
+      supportMetaByUuid: supportMeta(),
+    });
+
+    const reward = buildMerchantRewardWithBuilder(
+      context,
+      missingRoleNeed(["grant_exact_card"]),
+      "grant_exact_card",
+    );
+
+    expect(reward).toMatchObject({
+      builderId: "grant_exact_card",
+      answersNeedIds: ["need:missing-role:draw"],
+      applyPayload: {
+        kind: "add_catalog_card",
+        cardUuid: UUIDS.supportA,
+        cardNumber: 4,
+      },
+    });
+    expect(reward?.choiceRequest).toBeUndefined();
+    expect(reward?.gameObjects).toEqual([
+      expect.objectContaining({
+        objectType: "catalogCard",
+        cardUuid: UUIDS.supportA,
+      }),
+    ]);
+    expect(reward?.valueEssence).toBeGreaterThan(0);
+  });
+
+  it("grant_exact_card does not trigger for low-confidence broad needs", () => {
+    const context = contextFor({
+      cards: supportCards(),
+      supportMetaByUuid: supportMeta(),
+    });
+    const lowConfidenceNeed = {
+      ...missingRoleNeed(["grant_exact_card"]),
+      confidence: 0.6,
+    };
+
+    expect(
+      buildMerchantRewardWithBuilder(
+        context,
+        lowConfidenceNeed,
+        "grant_exact_card",
+      ),
+    ).toBeNull();
+  });
+
+  it("grant_dreamsign returns 2-4 non-held candidates", () => {
     const context = contextFor({
       cards: supportCards(),
       dreamsignTemplates: [
@@ -311,7 +396,6 @@ describe("rewardCatalog", () => {
         dreamsign("sign-open-b"),
         dreamsign("sign-open-c"),
         dreamsign("sign-open-d"),
-        dreamsign("sign-bane", { isBane: true }),
       ],
       heldDreamsignIds: ["sign-held"],
     });
@@ -328,7 +412,6 @@ describe("rewardCatalog", () => {
     expect(dreamsignIds.length).toBeGreaterThanOrEqual(2);
     expect(dreamsignIds.length).toBeLessThanOrEqual(4);
     expect(dreamsignIds).not.toContain("sign-held");
-    expect(dreamsignIds).not.toContain("sign-bane");
     expect(reward?.choiceRequest?.candidates.every((candidate) =>
       candidate.applyPayload.kind === "add_dreamsign",
     )).toBe(true);
@@ -366,6 +449,42 @@ describe("rewardCatalog", () => {
       badge: { label: "Viridian", detail: "5 -> 3" },
       previewCard: { energyCost: 3 },
     });
+  });
+
+  it("duplicate_keystone does not claim to answer upgrade targets", () => {
+    const sourceCard = card(UUIDS.highCost, 3, {
+      cardType: "Event",
+      energyCost: 5,
+      spark: null,
+    });
+    const previewCard = { ...sourceCard, energyCost: 3 };
+    const context = contextFor({
+      cards: [sourceCard],
+      deckCards: [sourceCard],
+    });
+
+    expect(
+      buildMerchantRewardWithBuilder(
+        context,
+        upgradeNeed(previewCard),
+        "duplicate_keystone",
+      ),
+    ).toBeNull();
+  });
+
+  it("duplicate_keystone does not claim to solve missing support", () => {
+    const context = contextFor({
+      cards: supportCards(),
+      supportMetaByUuid: supportMeta(),
+    });
+
+    expect(
+      buildMerchantRewardWithBuilder(
+        context,
+        underSupportedPayoffNeed(),
+        "duplicate_keystone",
+      ),
+    ).toBeNull();
   });
 
   it("purge_weak_card returns a deck-entry game object with a remove payload and badge", () => {

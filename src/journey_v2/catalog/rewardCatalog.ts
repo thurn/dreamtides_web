@@ -48,7 +48,6 @@ const DREAMSIGN_MAX_CHOICES = 4;
 const VALUE_ESSENCE = {
   transfiguration: 85,
   purgeWeakCard: 70,
-  duplicateKeystone: 80,
   weakReplacementBonus: 55,
   gainEssence: 50,
   raiseEssenceCap: 75,
@@ -251,11 +250,6 @@ function dreamsignDisplay(template: DreamsignTemplate): MerchantGameObject {
   };
 }
 
-function isBaneDreamsignTemplate(template: DreamsignTemplate): boolean {
-  const candidate = template as DreamsignTemplate & { isBane?: unknown };
-  return candidate.isBane === true;
-}
-
 function dreamsignRoleScore(
   template: DreamsignTemplate,
   need: MerchantNeed,
@@ -329,8 +323,7 @@ function grantDreamsign(
     return null;
   }
 
-  const candidates = context.candidateDreamsigns
-    .filter((template) => !isBaneDreamsignTemplate(template))
+  const candidates = [...context.candidateDreamsigns]
     .sort(
       (a, b) =>
         dreamsignRoleScore(b, need) - dreamsignRoleScore(a, need) ||
@@ -440,28 +433,32 @@ function purgeWeakCard(
   };
 }
 
-function duplicateKeystone(
+function grantExactCard(
   context: MerchantContext,
   need: MerchantNeed,
-  _options: Required<BuildMerchantRewardsOptions>,
+  options: Required<BuildMerchantRewardsOptions>,
 ): MerchantReward | null {
-  if (need.needType !== "card" || need.needKind === "weak_card") return null;
-  const deckCard = context.deckEntryById.get(need.entryId);
-  if (deckCard === undefined) return null;
+  if (need.confidence < 0.75) return null;
+  if (
+    need.needKind !== "under_supported_payoff" &&
+    need.needKind !== "missing_role" &&
+    need.needKind !== "curve_problem"
+  ) {
+    return null;
+  }
+
+  const highestRanked = rankCatalogCards(context, need, options)[0];
+  if (highestRanked === undefined) return null;
+  const catalogCard = highestRanked.catalogCard;
 
   return {
-    builderId: "duplicate_keystone",
-    title: `Duplicate ${deckCard.displayName}`,
-    summary: `Add another deck entry for ${deckCard.displayName}.`,
+    builderId: "grant_exact_card",
+    title: `Gain ${catalogCard.displayName}`,
+    summary: `Add ${catalogCard.displayName} to answer ${need.label}.`,
     answersNeedIds: [need.needId],
-    gameObjects: [cloneDeckCard(deckCard, { label: "Duplicate", detail: "New copy" })],
-    valueEssence: VALUE_ESSENCE.duplicateKeystone,
-    applyPayload: {
-      kind: "duplicate_deck_entry",
-      entryId: need.entryId,
-      cardUuid: need.cardUuid,
-      cardNumber: need.cardNumber,
-    },
+    gameObjects: [catalogCard],
+    valueEssence: valueEssenceForCardGrant(catalogCard.card.rarity),
+    applyPayload: cardGrantPayload(catalogCard),
   };
 }
 
@@ -593,7 +590,7 @@ export const MERCHANT_REWARD_BUILDERS: Readonly<
   grant_dreamsign: grantDreamsign,
   transfigure_card: transfigureCard,
   purge_weak_card: purgeWeakCard,
-  duplicate_keystone: duplicateKeystone,
+  duplicate_keystone: noReward,
   replace_weak_with_fit: replaceWeakWithFit,
   gain_essence: gainEssence,
   raise_essence_cap: raiseEssenceCap,
@@ -601,7 +598,7 @@ export const MERCHANT_REWARD_BUILDERS: Readonly<
   add_fast_to_event: noReward,
   reduce_reclaim_cost: noReward,
   convert_event_to_role: noReward,
-  grant_exact_card: noReward,
+  grant_exact_card: grantExactCard,
 };
 
 function isMerchantRewardBuilderId(value: string): value is MerchantRewardBuilderId {
