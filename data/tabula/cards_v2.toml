@@ -259,7 +259,7 @@ art-owned = false
 card-number = 14
 
 [[cards]]
-name = "Luminwings"
+name = "Ethereal Trailblazer"
 mtg-name = "Mox Opal"
 id = "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49"
 rendered-text = "▸Dawn: With 3 allied warriors, gain 1●."
@@ -270,10 +270,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Art Rework"]
-image-number = 529374502
+tags = ["Art Rework", "Art OK"]
+image-number = 1047769090
 art-owned = false
 card-number = 15
+art = { x = -0.294, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Gearwright"
@@ -1007,7 +1008,7 @@ art-owned = false
 card-number = 54
 
 [[cards]]
-name = "Last Light Herald"
+name = "Battlefield Medic"
 mtg-name = "Cranial Plating"
 id = "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f"
 rendered-text = """
@@ -1021,10 +1022,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework"]
-image-number = 644603722
+tags = ["Art Rework", "Art OK"]
+image-number = 1328168246
 art-owned = false
 card-number = 55
+art = { x = -0.042, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Skyflame Commander"
@@ -1892,7 +1894,7 @@ card-number = 102
 art = { x = -0.096, y = 0.9, scale = 1.67 }
 
 [[cards]]
-name = "Pyrewatcher"
+name = "Frontline Martyr"
 mtg-name = "Lotus Bloom"
 id = "8436eaae-e410-4bfb-89d2-55bebf5a8144"
 rendered-text = "Abandon this character: Gain 3●."
@@ -1903,10 +1905,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Lotus Petal", "Art Rework"]
-image-number = 2182865323
+tags = ["Lotus Petal", "Art Rework", "Art OK"]
+image-number = 1361568698
 art-owned = false
 card-number = 103
+art = { x = 0, y = 1, scale = 1.16 }
 
 [[cards]]
 name = "Unleash Ruin"
@@ -2147,7 +2150,7 @@ art-owned = false
 card-number = 116
 
 [[cards]]
-name = "Blight Weaver"
+name = "Blood Reaver"
 mtg-name = "Krark-Clan Ironworks"
 id = "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a"
 rendered-text = "Abandon a warrior: Gain 2●."
@@ -2159,10 +2162,10 @@ is-fast = false
 is-interrupt = false
 spark = 3
 tags = ["Art Rework", "Art OK"]
-image-number = 436090600
+image-number = 2667786601
 art-owned = false
 card-number = 117
-art = { x = -0.31, y = 0.514, scale = 1.67 }
+art = { x = -0.1, y = -0.434, scale = 1.4 }
 
 [[cards]]
 name = "Toll of Passage"
@@ -2440,7 +2443,7 @@ art-owned = true
 card-number = 132
 
 [[cards]]
-name = "Rebirth Ritualist"
+name = "Blood Moon Ronin"
 mtg-name = "Urza's Bauble"
 id = "e3193b23-2002-40a9-91fc-e0713200355e"
 rendered-text = "Abandon this character: Draw a card with ephemeral."
@@ -2451,11 +2454,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Lotus Petal", "Art Rework"]
-image-number = 2131591275
+tags = ["Lotus Petal", "Art Rework", "Art OK"]
+image-number = 565499662
 art-owned = true
 card-number = 133
-art = { x = 0, y = 0.46, scale = 1.37 }
+art = { x = 0.448, y = 0.25, scale = 1.57 }
 
 [[cards]]
 name = "Sorrow Watcher"
@@ -2499,10 +2502,10 @@ card-number = 135
 art = { x = 0, y = 0.243, scale = 1.37 }
 
 [[cards]]
-name = "Sandglider"
+name = "Young Huntress"
 mtg-name = "Ornithopter"
 id = "8fed2e20-09c6-43e0-b6e0-5a4a417529a1"
-rendered-text = "(no ability)"
+rendered-text = "Unstoppable"
 energy-cost = 0
 card-type = "Character"
 subtype = "Warrior"
@@ -2510,10 +2513,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 0
-tags = ["Vanilla", "Art Rework"]
-image-number = 2657255499
+tags = ["Vanilla", "Art Rework", "Art OK"]
+image-number = 1739438663
 art-owned = false
 card-number = 136
+art = { x = 0.042, y = 0.839, scale = 1.17 }
 
 [[cards]]
 name = "Together Against the Tide"
@@ -2608,7 +2612,7 @@ art-owned = false
 card-number = 141
 
 [[cards]]
-name = "Blight Weaver"
+name = "Blight Weaver2"
 mtg-name = "Mana Vault"
 id = "465d3463-1d8a-466d-b91f-b1993332b4d3"
 rendered-text = """
@@ -3085,7 +3089,7 @@ art-owned = false
 card-number = 167
 
 [[cards]]
-name = "Meadowlight Charger"
+name = "Emberfang"
 mtg-name = "Zabaz, the Glimmerwasp"
 id = "26a05558-4692-43d2-ae6c-a6eb385a6d22"
 rendered-text = """
@@ -3099,10 +3103,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework"]
-image-number = 2123360858
+tags = ["Art Rework", "Art OK"]
+image-number = 2186149275
 art-owned = false
 card-number = 168
+art = { x = 0.714, y = 0.31, scale = 1.17 }
 
 [[cards]]
 name = "Gleamharvester"
@@ -4262,10 +4267,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Figment Maker", "Character Payoff", "Art Rework"]
+tags = ["Figment Maker", "Character Payoff", "Art Rework", "Art OK"]
 image-number = 2186149271
 art-owned = false
 card-number = 233
+art = { x = 0.042, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Wasteland Tamer"
@@ -4380,7 +4386,7 @@ art-owned = false
 card-number = 239
 
 [[cards]]
-name = "Dreadcall Warden"
+name = "Dreadcall Warden2"
 mtg-name = "Kaito Shizuki"
 id = "3b5f5686-f63b-4998-b713-2f6777ecbb5f"
 rendered-text = "▸Night: Draw a card, then discard a card unless you have an allied challenger."
@@ -6769,7 +6775,7 @@ art-owned = false
 card-number = 368
 
 [[cards]]
-name = "Tranquil Duelist"
+name = "Cinderblade Legionnaire"
 mtg-name = "Junk Diver"
 id = "4b2f044c-0afe-432a-a121-2ea785bb1182"
 rendered-text = """
@@ -6783,10 +6789,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework"]
-image-number = 1794244549
+tags = ["Art Rework", "Art OK"]
+image-number = 337161542
 art-owned = true
 card-number = 369
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Borrowed Minutes"
@@ -6985,7 +6992,7 @@ art-owned = false
 card-number = 380
 
 [[cards]]
-name = "Saffron Trailblazer"
+name = "Clifftop Marksman"
 mtg-name = "Gingerbrute"
 id = "629fe4d4-826f-41b9-a913-458a503856a8"
 rendered-text = """
@@ -6999,10 +7006,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework"]
-image-number = 682942894
+tags = ["Art Rework", "Art OK"]
+image-number = 2521694539
 art-owned = false
 card-number = 381
+art = { x = 0.252, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Ebonwing"
@@ -8147,7 +8155,7 @@ card-number = 442
 art = { x = -0.353, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Ironclad Holdout"
+name = "Barrage Specialist"
 mtg-name = "Signal Pest"
 id = "55340736-7fc5-4555-8f47-081d770a6e8d"
 rendered-text = "▸Challenge: Each challenging ally gains +1✦."
@@ -8158,10 +8166,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework"]
-image-number = 1511229272
+tags = ["Art Rework", "Art OK"]
+image-number = 450347140
 art-owned = false
 card-number = 443
+art = { x = -0.689, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Inspiring Templar"
@@ -8646,7 +8655,7 @@ art-owned = false
 card-number = 470
 
 [[cards]]
-name = "Emberfang"
+name = "Bloodpact Berserker"
 mtg-name = "Mana Crypt"
 id = "881e3a5f-280f-413a-b927-352aeb3bda71"
 rendered-text = "▸Materialized, ▸Dawn: Gain 2●. The opponent gains 3⍟."
@@ -8657,10 +8666,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Art Rework"]
-image-number = 2186149275
+tags = ["Art Rework", "Art OK"]
+image-number = 2419795161
 art-owned = false
 card-number = 471
+art = { x = 0, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Herald of the Last Light"
@@ -8700,7 +8710,7 @@ art-owned = false
 card-number = 473
 
 [[cards]]
-name = "Demonbane"
+name = "Tranquil Duelist"
 mtg-name = "Marketback Walker"
 id = "fc0c6f10-8864-4660-904a-8e90d261c6ef"
 rendered-text = """
@@ -8714,10 +8724,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework"]
-image-number = 1785274676
+tags = ["Art Rework", "Art OK"]
+image-number = 1794244549
 art-owned = false
 card-number = 474
+art = { x = 0, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Warfield Stalwart"
@@ -8779,7 +8790,7 @@ card-number = 477
 art = { x = -0.546, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Blade of Unity"
+name = "Assault Trooper"
 mtg-name = "Stonecoil Serpent"
 id = "c92a7dc0-04b0-4c54-9485-59a92505eabc"
 rendered-text = "Unstoppable"
@@ -8790,10 +8801,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = "X"
-tags = ["Art Rework"]
-image-number = 1891048570
+tags = ["Art Rework", "Art OK"]
+image-number = 393588439
 art-owned = true
 card-number = 478
+art = { x = -0.228, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Carrion Shepherd"
