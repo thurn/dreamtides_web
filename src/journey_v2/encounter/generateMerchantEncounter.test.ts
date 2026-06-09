@@ -99,6 +99,22 @@ function deckCardNumbers(): number[] {
   return [1, 2, 3, 4, 5, 6];
 }
 
+const CANDIDATE_CARD_NUMBERS = [
+  101,
+  102,
+  103,
+  104,
+  201,
+  202,
+  203,
+  301,
+  302,
+  303,
+  401,
+  402,
+  403,
+] as const;
+
 function contextFor(
   overrides: {
     seed?: string;
@@ -129,6 +145,32 @@ function contextFor(
       cards,
     }),
     site: makeMerchantTestSite(overrides.site),
+    });
+}
+
+function insufficientCandidateContext(): MerchantContext {
+  const onlyCard = card(UUIDS.deckHighEvent, 1, {
+    cardType: "Event",
+    energyCost: 5,
+    spark: null,
+    renderedText: "Fast.",
+  });
+  return buildMerchantContext({
+    questState: makeMerchantTestQuestState({
+      seed: "merchant-insufficient-candidates",
+      essence: 180,
+      essenceCap: 360,
+      deck: [
+        makeMerchantTestDeckEntry({
+          entryId: "only-entry",
+          cardNumber: onlyCard.cardNumber,
+        }),
+      ],
+    }),
+    questContent: makeMerchantTestContent({
+      cards: [onlyCard],
+    }),
+    site: makeMerchantTestSite(),
   });
 }
 
@@ -220,22 +262,44 @@ describe("generateMerchantEncounter", () => {
     expect(siteChanged).not.toBe(base);
   });
 
-  it("changes signatures when offered payload summaries change", () => {
+  it("does not change signatures when offered candidate names change", () => {
     const base = generateMerchantEncounter(contextFor()).encounterSignature;
-    const payloadSummaryChanged = generateMerchantEncounter(
+    const candidateNamesChanged = generateMerchantEncounter(
       contextFor({
         cardOverridesByNumber: new Map(
-          [101, 102, 103, 104, 201, 202, 203, 301, 302, 303, 401, 402, 403].map(
-            (cardNumber) => [
-              cardNumber,
-              { name: `Altered Candidate ${cardNumber}` },
-            ],
-          ),
+          CANDIDATE_CARD_NUMBERS.map((cardNumber) => [
+            cardNumber,
+            { name: `Altered Candidate ${cardNumber}` },
+          ]),
         ),
       }),
     ).encounterSignature;
 
-    expect(payloadSummaryChanged).not.toBe(base);
+    expect(candidateNamesChanged).toBe(base);
+  });
+
+  it("changes signatures when offered choice identity changes", () => {
+    const base = generateMerchantEncounter(contextFor()).encounterSignature;
+    const candidateIdentityChanged = generateMerchantEncounter(
+      contextFor({
+        cardOverridesByNumber: new Map(
+          CANDIDATE_CARD_NUMBERS.map((cardNumber) => [
+            cardNumber,
+            {
+              id: `80000000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`,
+            },
+          ]),
+        ),
+      }),
+    ).encounterSignature;
+
+    expect(candidateIdentityChanged).not.toBe(base);
+  });
+
+  it("fails clearly instead of returning a partial encounter when two offers cannot be built", () => {
+    expect(() => generateMerchantEncounter(insufficientCandidateContext())).toThrow(
+      "Dream Merchant encounter requires exactly two buildable offers; selected 1",
+    );
   });
 
   it("satisfies honest-broker invariants across 25 deterministic seeds", () => {

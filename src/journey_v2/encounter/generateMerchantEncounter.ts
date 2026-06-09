@@ -2,7 +2,7 @@ import { sha256 } from "js-sha256";
 import { buildMerchantRewardsForNeed } from "../catalog/rewardCatalog";
 import { priceMerchantReward } from "../catalog/pricing";
 import { readMerchantDeck } from "../read/deckRead";
-import type { Rarity } from "../../types/cards";
+import type { CardData, Rarity } from "../../types/cards";
 import type {
   MerchantApplyPayload,
   MerchantContext,
@@ -231,6 +231,89 @@ function priceForCandidate(input: {
   });
 }
 
+function summarizeCardState(card: CardData) {
+  return {
+    id: card.id,
+    cardNumber: card.cardNumber,
+    cardType: card.cardType,
+    subtype: card.subtype,
+    isStarter: card.isStarter,
+    rarity: card.rarity,
+    energyCost: card.energyCost,
+    energyCosts: card.energyCosts,
+    spark: card.spark,
+    sparkVariable: card.sparkVariable,
+    isFast: card.isFast,
+    isInterrupt: card.isInterrupt,
+    reclaimCost: card.reclaimCost,
+  };
+}
+
+function summarizeApplyPayload(payload: MerchantApplyPayload): unknown {
+  switch (payload.kind) {
+    case "add_catalog_card":
+      return {
+        kind: payload.kind,
+        cardUuid: payload.cardUuid,
+        cardNumber: payload.cardNumber,
+      };
+    case "add_dreamsign":
+      return {
+        kind: payload.kind,
+        dreamsignId: payload.dreamsignId,
+        dreamsignTemplateId: payload.dreamsignTemplate.id,
+      };
+    case "transfigure_deck_entry":
+      return {
+        kind: payload.kind,
+        entryId: payload.entryId,
+        cardUuid: payload.cardUuid,
+        cardNumber: payload.cardNumber,
+        transfiguration: payload.transfiguration,
+        previewCard: summarizeCardState(payload.previewCard),
+      };
+    case "duplicate_deck_entry":
+    case "remove_deck_entry":
+      return {
+        kind: payload.kind,
+        entryId: payload.entryId,
+        cardUuid: payload.cardUuid,
+        cardNumber: payload.cardNumber,
+      };
+    case "change_deck_entry_keywords":
+      return {
+        kind: payload.kind,
+        entryId: payload.entryId,
+        cardUuid: payload.cardUuid,
+        cardNumber: payload.cardNumber,
+        keywords: payload.keywords,
+      };
+    case "change_deck_entry_type":
+      return {
+        kind: payload.kind,
+        entryId: payload.entryId,
+        cardUuid: payload.cardUuid,
+        cardNumber: payload.cardNumber,
+        typeChange: {
+          predicateId: payload.typeChange.predicateId,
+          cardType: payload.typeChange.cardType,
+          subtype: payload.typeChange.subtype,
+        },
+      };
+    case "change_essence":
+    case "change_max_essence":
+      return {
+        kind: payload.kind,
+        amount: payload.amount,
+      };
+    case "composite":
+      return {
+        kind: payload.kind,
+        children: payload.children.map(summarizeApplyPayload),
+      };
+  }
+}
+
 function summarizeGameObject(object: MerchantReward["gameObjects"][number]) {
   switch (object.objectType) {
     case "catalogCard":
@@ -238,8 +321,6 @@ function summarizeGameObject(object: MerchantReward["gameObjects"][number]) {
         objectType: object.objectType,
         cardUuid: object.cardUuid,
         cardNumber: object.cardNumber,
-        displayName: object.displayName,
-        badge: object.badge,
       };
     case "deckCard":
       return {
@@ -247,26 +328,22 @@ function summarizeGameObject(object: MerchantReward["gameObjects"][number]) {
         entryId: object.entryId,
         cardUuid: object.cardUuid,
         cardNumber: object.cardNumber,
-        badge: object.badge,
         previewCardNumber: object.previewCard?.cardNumber,
-        previewName: object.previewCard?.name,
-        previewText: object.previewCard?.renderedText,
-        previewCost: object.previewCard?.energyCost,
-        previewSpark: object.previewCard?.spark,
+        previewCard:
+          object.previewCard === undefined
+            ? undefined
+            : summarizeCardState(object.previewCard),
       };
     case "dreamsign":
       return {
         objectType: object.objectType,
         dreamsignId: object.dreamsignId,
-        name: object.dreamsignTemplate.name,
-        effectDescription: object.dreamsignTemplate.effectDescription,
-        badge: object.badge,
+        dreamsignTemplateId: object.dreamsignTemplate.id,
       };
     case "essence":
       return {
         objectType: object.objectType,
         amount: object.amount,
-        badge: object.badge,
       };
   }
 }
@@ -274,28 +351,26 @@ function summarizeGameObject(object: MerchantReward["gameObjects"][number]) {
 function summarizeReward(reward: MerchantReward) {
   return {
     builderId: reward.builderId,
-    title: reward.title,
-    summary: reward.summary,
     answersNeedIds: reward.answersNeedIds,
     valueEssence: reward.valueEssence,
-    applyPayload: reward.applyPayload,
+    applyPayload:
+      reward.applyPayload === undefined
+        ? undefined
+        : summarizeApplyPayload(reward.applyPayload),
     choiceRequest:
       reward.choiceRequest === undefined
         ? undefined
         : {
             choiceType: reward.choiceRequest.choiceType,
-            prompt: reward.choiceRequest.prompt,
             candidates: reward.choiceRequest.candidates.map((candidate) => ({
               choiceId: candidate.choiceId,
-              title: candidate.title,
-              summary: candidate.summary,
               needId: candidate.needId,
               builderId: candidate.builderId,
               cardUuid: candidate.cardUuid,
               cardNumber: candidate.cardNumber,
               dreamsignId: candidate.dreamsignId,
               valueEssence: candidate.valueEssence,
-              applyPayload: candidate.applyPayload,
+              applyPayload: summarizeApplyPayload(candidate.applyPayload),
               gameObjects: candidate.gameObjects.map(summarizeGameObject),
             })),
           },
@@ -352,6 +427,20 @@ function assertValidEncounter(
   encounter: MerchantEncounter,
   needs: readonly MerchantNeed[],
 ): void {
+  if (encounter.offers.length !== OFFER_IDS.length) {
+    throw new Error(
+      `Dream Merchant encounter requires exactly two offers; generated ${encounter.offers.length}`,
+    );
+  }
+  for (const [index, expectedOfferId] of OFFER_IDS.entries()) {
+    const offer = encounter.offers[index];
+    if (offer?.offerId !== expectedOfferId) {
+      throw new Error(
+        `Dream Merchant offer ${index + 1} must have id ${expectedOfferId}`,
+      );
+    }
+  }
+
   const needIds = new Set(needs.map((need) => need.needId));
   const offerIds = new Set<string>();
   for (const offer of encounter.offers) {
@@ -390,6 +479,11 @@ export function generateMerchantEncounter(
     0,
     OFFER_IDS.length,
   );
+  if (selected.length !== OFFER_IDS.length) {
+    throw new Error(
+      `Dream Merchant encounter requires exactly two buildable offers; selected ${selected.length}`,
+    );
+  }
 
   const unsignedOffers = selected.map<Omit<MerchantOffer, "encounterSignature">>(
     (candidate, index) => {
