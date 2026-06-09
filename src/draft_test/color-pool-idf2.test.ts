@@ -95,11 +95,23 @@ describe("idf2 pool variant", () => {
 
   it("draws a starter distribution that differs from idf's uniform draw", () => {
     // The whole point of idf2: the diversity bias must actually change which
-    // deck anchors the pool for a fixed seed, even though every other step is
-    // shared with idf.
-    const idf = generatePoolFromData(poolData, 0, undefined, "idf");
-    const idf2 = generatePoolFromData(poolData, 0, undefined, "idf2");
-
-    expect(signature(idf.counts)).not.toBe(signature(idf2.counts));
+    // deck anchors the pool, even though every other step is shared with idf.
+    // Any individual seed can coincide (both draws can land on the same deck),
+    // so we scan a range and require the bias to change the result for at least
+    // one seed. This pins the contract without depending on which deck a single
+    // hard-coded seed happens to pick as the underlying card pool shifts.
+    let anyDifferent = false;
+    for (let seed = 0; seed < 50; seed++) {
+      const idf = generatePoolFromData(poolData, seed, undefined, "idf");
+      const idf2 = generatePoolFromData(poolData, seed, undefined, "idf2");
+      if (signature(idf.counts) !== signature(idf2.counts)) {
+        anyDifferent = true;
+        break;
+      }
+    }
+    expect(
+      anyDifferent,
+      "idf2's diversity-biased draw produced the same pool as idf for every seed 0-49",
+    ).toBe(true);
   });
 });
