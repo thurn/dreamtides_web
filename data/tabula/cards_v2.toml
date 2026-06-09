@@ -440,7 +440,7 @@ art-owned = true
 card-number = 24
 
 [[cards]]
-name = "Arc Disciple"
+name = "Shadowbinder"
 mtg-name = "Ashnod's Altar"
 id = "448abb34-d77d-40ac-8292-58db03176247"
 rendered-text = "Abandon another character: Gain 2●."
@@ -451,11 +451,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework"]
-image-number = 1125132389
+tags = ["Art Rework", "Art OK"]
+image-number = 1450052381
 art-owned = false
 card-number = 25
-art = { x = 0, y = 0.1, scale = 1.2 }
+art = { x = -0.08, y = 0.586, scale = 1.2 }
 
 [[cards]]
 name = "Echo Architect"
@@ -6931,7 +6931,7 @@ card-number = 377
 art = { x = 0.21, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Horizon Follower"
+name = "Gleamshield Knight"
 mtg-name = "Walking Ballista"
 id = "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3"
 rendered-text = "4●: Gain 1⍟. This character gains +1✦."
@@ -6942,8 +6942,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework"]
-image-number = 2275146333
+tags = ["Art Rework", "Art OK"]
+image-number = 653554603
 art-owned = false
 card-number = 378
 
