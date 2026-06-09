@@ -437,6 +437,25 @@ at that stage), so measurements reflect real deck states.
    seeds and deck states; no archetype starved or dominant beyond its intended
    weight (each eligible archetype's observed share within 2x of its
    weight-implied share).
+5. **Content coverage** — across the full sweep (all deck states x seeds), the
+   merchant must exercise the whole content space, not a favored subset:
+   - *Transfiguration types*: all 8 types appear in offers
+     (`transfigure`, `starter_transfigure`, `transfigured_draft` combined);
+     report the share per type, each share > 0.
+   - *Dreamsigns*: fraction of dreamsign templates ever offered. Target:
+     100% (every dreamsign is offerable somewhere; generic profiles
+     guarantee a floor).
+   - *Cards*: fraction of non-starter pool cards ever offered through any
+     grant/draft archetype. Target: >= 90%, with the never-offered remainder
+     listed by name in the report (no silent gaps).
+   - *Deck-target diversity*: for offers targeting deck cards (`purge`,
+     `duplicate`, `transfigure`, `keyword_mod`, `tribal_change`), the
+     distribution of chosen target cards — reported per archetype as the
+     count of distinct targets and the effective target count (perplexity),
+     both globally and across seeds within a fixed deck state. A fixed deck
+     state must produce multiple distinct targets across seeds; a single
+     target capturing the large majority of an archetype's offers indicates
+     a residual argmax.
 
 Archetype weights, band fractions, and blend constants are tuned against these
 metrics, the same way pool generation is tuned today.
