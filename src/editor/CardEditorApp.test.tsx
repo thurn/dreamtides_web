@@ -991,6 +991,131 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("keeps a newly saved art image when a later crop save returns an older card snapshot", async () => {
+    window.history.pushState(null, "", "/editor?artedit=1");
+    const imageSave =
+      deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardImageNumber"]>>>();
+    const artSave =
+      deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardArt"]>>>();
+    const originalCard = makeEditorCard({
+      id: "card-id-1",
+      source: { "image-number": 12 },
+      preview: makePreview({ id: "card-id-1", imageNumber: 12 }),
+    });
+    const saveEditorCardImageNumber = vi
+      .fn<EditorApiClient["saveEditorCardImageNumber"]>()
+      .mockReturnValue(imageSave.promise);
+    const saveEditorCardArt = vi
+      .fn<EditorApiClient["saveEditorCardArt"]>()
+      .mockReturnValue(artSave.promise);
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([originalCard]),
+          vi.fn(),
+          {
+            saveEditorCardImageNumber,
+            saveEditorCardArt,
+          },
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"]',
+    );
+    const cardButton = editorCard?.querySelector<HTMLElement>('[role="button"]');
+    if (editorCard === null || cardButton === null || cardButton === undefined) {
+      throw new Error("Missing art-edit card");
+    }
+
+    act(() => {
+      cardButton.click();
+    });
+
+    const imageNumberInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-art-image-number-input="true"]',
+    );
+    const panRightButton = container.querySelector<HTMLButtonElement>(
+      '[aria-label="Pan right"]',
+    );
+    if (imageNumberInput === null || panRightButton === null) {
+      throw new Error("Missing art editor controls");
+    }
+
+    act(() => {
+      setInputValue(imageNumberInput, "99");
+      imageNumberInput.form?.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true }),
+      );
+      panRightButton.click();
+    });
+
+    await act(async () => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 450);
+      });
+    });
+
+    expect(saveEditorCardImageNumber).toHaveBeenCalledWith({
+      id: "card-id-1",
+      imageNumber: 99,
+    });
+    const artSaveRequest = saveEditorCardArt.mock.calls[0]?.[0];
+    expect(artSaveRequest?.id).toBe("card-id-1");
+    expect(typeof artSaveRequest?.art.x).toBe("number");
+
+    await act(async () => {
+      imageSave.resolve({
+        card: makeEditorCard({
+          id: "card-id-1",
+          source: { "image-number": 99 },
+          preview: makePreview({ id: "card-id-1", imageNumber: 99 }),
+        }),
+        timing: makeSaveTiming(),
+      });
+      await flushAsyncWork();
+    });
+    expect(
+      editorCard.querySelector<HTMLImageElement>('img[src*="/cards/"]')?.getAttribute(
+        "src",
+      ),
+    ).toBe("/cards/99.webp");
+
+    await act(async () => {
+      artSave.resolve({
+        card: makeEditorCard({
+          id: "card-id-1",
+          source: {
+            "image-number": 12,
+            art: { x: 0.1, y: 0, scale: 1.17 },
+          },
+          preview: makePreview({
+            id: "card-id-1",
+            imageNumber: 12,
+            art: { x: 0.1, y: 0, scale: 1.17 },
+          }),
+        }),
+        timing: makeSaveTiming(),
+      });
+      await flushAsyncWork();
+    });
+
+    expect(
+      editorCard.querySelector<HTMLImageElement>('img[src*="/cards/"]')?.getAttribute(
+        "src",
+      ),
+    ).toBe("/cards/99.webp");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("shows the source MTG name on hover while art-edit mode is active", async () => {
     window.history.pushState(null, "", "/editor?artedit=1");
     const { container, root } = mount(

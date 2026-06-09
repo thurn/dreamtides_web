@@ -665,7 +665,13 @@ export default function CardEditorApp({
     handleFieldSave(card, field, value);
   }
 
-  function replaceConfirmedCard(nextCard: EditorCardRecord) {
+  function replaceConfirmedCard(
+    nextCard: EditorCardRecord,
+    mergeCard: (
+      currentCard: EditorCardRecord,
+      nextCard: EditorCardRecord,
+    ) => EditorCardRecord = (_currentCard, confirmedCard) => confirmedCard,
+  ) {
     setLoadStatus((current) => {
       if (current.kind !== "loaded") {
         return current;
@@ -674,10 +680,63 @@ export default function CardEditorApp({
       return {
         kind: "loaded",
         cards: current.cards.map((card) =>
-          card.id === nextCard.id ? nextCard : card,
+          card.id === nextCard.id ? mergeCard(card, nextCard) : card,
         ),
       };
     });
+  }
+
+  function mergeConfirmedArt(
+    currentCard: EditorCardRecord,
+    nextCard: EditorCardRecord,
+  ): EditorCardRecord {
+    const source = { ...currentCard.source };
+    source.art = nextCard.source.art ?? nextCard.preview.art;
+
+    return {
+      ...currentCard,
+      source,
+      preview: {
+        ...currentCard.preview,
+        art: nextCard.preview.art,
+      },
+    };
+  }
+
+  function mergeConfirmedName(
+    currentCard: EditorCardRecord,
+    nextCard: EditorCardRecord,
+  ): EditorCardRecord {
+    return {
+      ...currentCard,
+      name: nextCard.name,
+      source: {
+        ...currentCard.source,
+        name: nextCard.source.name ?? nextCard.name,
+      },
+      preview: {
+        ...currentCard.preview,
+        name: nextCard.preview.name,
+      },
+    };
+  }
+
+  function mergeConfirmedImageNumber(
+    currentCard: EditorCardRecord,
+    nextCard: EditorCardRecord,
+  ): EditorCardRecord {
+    return {
+      ...currentCard,
+      source: {
+        ...currentCard.source,
+        "image-number":
+          nextCard.source["image-number"] ?? nextCard.preview.imageNumber,
+      },
+      preview: {
+        ...currentCard.preview,
+        imageNumber: nextCard.preview.imageNumber,
+      },
+    };
   }
 
   function handleFieldSave(
@@ -933,7 +992,7 @@ export default function CardEditorApp({
     void apiClient
       .saveEditorCardArt({ id: card.id, art })
       .then((response) => {
-        replaceConfirmedCard(response.card);
+        replaceConfirmedCard(response.card, mergeConfirmedArt);
         setArtSaveStatus("saved");
       })
       .catch((error: unknown) => {
@@ -949,7 +1008,7 @@ export default function CardEditorApp({
     void apiClient
       .saveEditorCardField({ id: card.id, field: "name", value: name })
       .then((response) => {
-        replaceConfirmedCard(response.card);
+        replaceConfirmedCard(response.card, mergeConfirmedName);
         setCardNameSaveStatus("saved");
       })
       .catch((error: unknown) => {
@@ -965,7 +1024,7 @@ export default function CardEditorApp({
     void apiClient
       .saveEditorCardImageNumber({ id: card.id, imageNumber })
       .then((response) => {
-        replaceConfirmedCard(response.card);
+        replaceConfirmedCard(response.card, mergeConfirmedImageNumber);
         setImageNumberSaveStatus("saved");
       })
       .catch((error: unknown) => {
