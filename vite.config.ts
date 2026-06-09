@@ -62,6 +62,10 @@ function imageViewerApiPlugin(): Plugin {
       server.middlewares.use(
         createImageViewerApiMiddleware({
           cardsTomlPath: path.join(__dirname, "data", "tabula", "cards_v2.toml"),
+          nameHistoryTomlPaths: [
+            path.join(__dirname, "data", "tabula", "cards_v2.toml"),
+            path.join(__dirname, "data", "tabula", "rendered-cards.toml"),
+          ],
         }),
       );
     },

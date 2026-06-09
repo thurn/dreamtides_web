@@ -106,6 +106,24 @@ export default function ImageGrid({ images, columns }: ImageGridProps) {
               {image.imageNumber}
               {image.used ? " · used" : ""}
             </span>
+            {image.cardNames.length > 0 ? (
+              <span
+                data-image-viewer-card-names=""
+                style={{
+                  marginTop: "2px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1px",
+                  fontSize: "0.72rem",
+                  fontWeight: 600,
+                  color: "rgba(200, 137, 63, 0.85)",
+                }}
+              >
+                {image.cardNames.map((cardName) => (
+                  <span key={cardName}>{cardName}</span>
+                ))}
+              </span>
+            ) : null}
           </figcaption>
         </figure>
       ))}

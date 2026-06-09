@@ -42,6 +42,17 @@ export const ART_REWORK_TAG = "Art Rework";
 export const DEFAULT_CARDS_TOML = join("data", "tabula", "cards_v2.toml");
 
 /**
+ * Card data files scanned for the names an image number has ever been given.
+ * `cards_v2.toml` is the live card set and `rendered-cards.toml` is the legacy
+ * set kept for historical reference; together they record every name a given
+ * Shutterstock image has been published under.
+ */
+export const DEFAULT_NAME_HISTORY_TOMLS = [
+  join("data", "tabula", "cards_v2.toml"),
+  join("data", "tabula", "rendered-cards.toml"),
+];
+
+/**
  * Extract the trailing numeric Shutterstock id from a candidate filename. The
  * convention is `<arbitrary-prefix>-<digits>.<ext>`. Returns null when the
  * filename does not match (e.g. the metadata JSON or a stray file).
@@ -84,6 +95,53 @@ export function readUsedImageNumbers(cardsTomlPath) {
   }
 
   return used;
+}
+
+/**
+ * Read every card-data TOML in `tomlPaths` into a map from image number to the
+ * distinct card names that image has been published under. Names keep their
+ * first-seen order across the files, and a name repeated for the same image
+ * (for example the same card appearing in both the live and legacy sets) is
+ * recorded once. Missing files are skipped. Returns `Map<string, string[]>`
+ * keyed by image number as a string, matching `imageNumberFromFilename`.
+ */
+export function readNameHistory(tomlPaths) {
+  const byImageNumber = new Map();
+
+  for (const tomlPath of tomlPaths) {
+    if (!existsSync(tomlPath)) {
+      continue;
+    }
+
+    const parsed = parse(readFileSync(tomlPath, "utf8"));
+    const cards = Array.isArray(parsed.cards) ? parsed.cards : [];
+
+    for (const card of cards) {
+      const imageNumber = card["image-number"];
+      if (
+        imageNumber === undefined ||
+        imageNumber === null ||
+        imageNumber === "" ||
+        Number(imageNumber) <= 0
+      ) {
+        continue;
+      }
+      const name = typeof card.name === "string" ? card.name.trim() : "";
+      if (name === "") {
+        continue;
+      }
+
+      const key = String(imageNumber);
+      const names = byImageNumber.get(key);
+      if (names === undefined) {
+        byImageNumber.set(key, [name]);
+      } else if (!names.includes(name)) {
+        names.push(name);
+      }
+    }
+  }
+
+  return byImageNumber;
 }
 
 /**
@@ -147,17 +205,20 @@ export function listCategories(root) {
  *
  * Each image entry records its category (subdirectory), filename, trailing
  * image number, the authored card name / narrative (when present in the
- * metadata JSON), and whether a non-rework card already uses the image. The
+ * metadata JSON), the names the image has ever been published under in the
+ * card-data TOMLs, and whether a non-rework card already uses the image. The
  * frontend filters this manifest by category and by the used flag.
  */
 export function buildImageManifest({
   root = DEFAULT_TAGGED_ROOT,
   cardsTomlPath = DEFAULT_CARDS_TOML,
+  nameHistoryTomlPaths = DEFAULT_NAME_HISTORY_TOMLS,
 } = {}) {
   const categories = listCategories(root);
   const usedImageNumbers = existsSync(cardsTomlPath)
     ? readUsedImageNumbers(cardsTomlPath)
     : new Set();
+  const nameHistory = readNameHistory(nameHistoryTomlPaths);
   const metadata = readImageMetadata(join(root, METADATA_FILENAME));
 
   const images = [];
@@ -183,6 +244,7 @@ export function buildImageManifest({
         cardName: meta?.cardName ?? null,
         narrative: meta?.narrative ?? null,
         subtype: meta?.subtype ?? null,
+        cardNames: nameHistory.get(imageNumber) ?? [],
       });
     }
   }

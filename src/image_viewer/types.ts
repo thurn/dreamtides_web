@@ -14,6 +14,12 @@ export interface ImageManifestEntry {
   narrative: string | null;
   /** Character subtype from the metadata JSON, when present. */
   subtype: string | null;
+  /**
+   * Every distinct name this image number has been published under in the
+   * card-data TOMLs, in first-seen order. Empty when the image has never been
+   * attached to a card.
+   */
+  cardNames: string[];
 }
 
 /** The full manifest payload returned by the image-viewer API. */

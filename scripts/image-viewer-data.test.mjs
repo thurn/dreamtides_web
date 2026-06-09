@@ -6,6 +6,7 @@ import {
   buildImageManifest,
   imageNumberFromFilename,
   readImageMetadata,
+  readNameHistory,
   readUsedImageNumbers,
 } from "./image-viewer-data.mjs";
 
@@ -24,10 +25,12 @@ describe("imageNumberFromFilename", () => {
 describe("data helpers over a temp working set", () => {
   let root;
   let cardsTomlPath;
+  let legacyTomlPath;
 
   beforeEach(() => {
     root = mkdtempSync(join(tmpdir(), "image-viewer-"));
     cardsTomlPath = join(root, "cards.toml");
+    legacyTomlPath = join(root, "rendered-cards.toml");
 
     mkdirSync(join(root, "warrior"));
     mkdirSync(join(root, "child"));
@@ -36,6 +39,22 @@ describe("data helpers over a temp working set", () => {
     writeFileSync(join(root, "child", "c-kid-3333.jpg"), "");
     // Stray file without a trailing number is ignored.
     writeFileSync(join(root, "warrior", "notes.txt"), "");
+
+    // The legacy set published image 1111 under an older name, and shares the
+    // current name for 2222 (recorded once). 3333 has no card history.
+    writeFileSync(
+      legacyTomlPath,
+      [
+        "[[cards]]",
+        'name = "Old Gate Knight"',
+        "image-number = 1111",
+        "",
+        "[[cards]]",
+        'name = "Archer"',
+        "image-number = 2222",
+        "",
+      ].join("\n"),
+    );
 
     writeFileSync(
       join(root, "untagged-categorized.json"),
@@ -57,11 +76,13 @@ describe("data helpers over a temp working set", () => {
       [
         "[[cards]]",
         'id = "00000000-0000-0000-0000-000000000001"',
+        'name = "Gate Knight"',
         'image-number = 1111',
         "tags = []",
         "",
         "[[cards]]",
         'id = "00000000-0000-0000-0000-000000000002"',
+        'name = "Archer"',
         'image-number = 2222',
         'tags = ["Art Rework"]',
         "",
@@ -79,13 +100,33 @@ describe("data helpers over a temp working set", () => {
     expect(used.has("2222")).toBe(false);
   });
 
+  it("collects distinct names per image across both card sets", () => {
+    const history = readNameHistory([cardsTomlPath, legacyTomlPath]);
+    expect(history.get("1111")).toEqual(["Gate Knight", "Old Gate Knight"]);
+    // "Archer" appears in both files but is recorded once.
+    expect(history.get("2222")).toEqual(["Archer"]);
+    expect(history.has("3333")).toBe(false);
+  });
+
+  it("skips missing name-history files", () => {
+    const history = readNameHistory([
+      cardsTomlPath,
+      join(root, "does-not-exist.toml"),
+    ]);
+    expect(history.get("1111")).toEqual(["Gate Knight"]);
+  });
+
   it("reads metadata keyed by image number", () => {
     const metadata = readImageMetadata(join(root, "untagged-categorized.json"));
     expect(metadata.get("1111")?.cardName).toBe("Gate Knight");
   });
 
   it("builds a manifest with categories, used flags, and metadata", () => {
-    const manifest = buildImageManifest({ root, cardsTomlPath });
+    const manifest = buildImageManifest({
+      root,
+      cardsTomlPath,
+      nameHistoryTomlPaths: [cardsTomlPath, legacyTomlPath],
+    });
     expect(manifest.categories).toEqual(["child", "warrior"]);
 
     const byNumber = new Map(manifest.images.map((i) => [i.imageNumber, i]));
@@ -95,12 +136,15 @@ describe("data helpers over a temp working set", () => {
       used: true,
       cardName: "Gate Knight",
       subtype: "Warrior",
+      cardNames: ["Gate Knight", "Old Gate Knight"],
     });
     expect(byNumber.get("2222")?.used).toBe(false);
+    expect(byNumber.get("2222")?.cardNames).toEqual(["Archer"]);
     expect(byNumber.get("3333")).toMatchObject({
       category: "child",
       used: false,
       cardName: null,
+      cardNames: [],
     });
   });
 });

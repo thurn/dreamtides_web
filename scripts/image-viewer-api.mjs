@@ -2,6 +2,7 @@ import { createReadStream, existsSync, statSync } from "node:fs";
 import { join, normalize, resolve } from "node:path";
 import {
   DEFAULT_CARDS_TOML,
+  DEFAULT_NAME_HISTORY_TOMLS,
   DEFAULT_TAGGED_ROOT,
   buildImageManifest,
 } from "./image-viewer-data.mjs";
@@ -57,6 +58,9 @@ function resolveImagePath(root, rawPath) {
 export function createImageViewerApiMiddleware({
   root = DEFAULT_TAGGED_ROOT,
   cardsTomlPath = join(resolve("."), DEFAULT_CARDS_TOML),
+  nameHistoryTomlPaths = DEFAULT_NAME_HISTORY_TOMLS.map((relativePath) =>
+    join(resolve("."), relativePath),
+  ),
 } = {}) {
   return function imageViewerApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
@@ -76,7 +80,11 @@ export function createImageViewerApiMiddleware({
         return;
       }
       try {
-        jsonResponse(res, 200, buildImageManifest({ root, cardsTomlPath }));
+        jsonResponse(
+          res,
+          200,
+          buildImageManifest({ root, cardsTomlPath, nameHistoryTomlPaths }),
+        );
       } catch (error) {
         errorResponse(
           res,
