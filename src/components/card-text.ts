@@ -149,59 +149,53 @@ function maybeWrapKeyword(value: string): TextSegment[] {
 }
 
 /**
- * Matches a trailing number followed by whitespace at the end of a text run,
- * e.g. the `2 ` in `costs 2 `. The whitespace is required: it is the only
- * line-break opportunity between the number and the symbol that follows, so a
- * number butted directly against its symbol (`2●`) needs no grouping. The
- * leading group captures everything before the number so it can stay its own
- * text segment.
+ * Matches a resource quantity in rules text — an optional leading word, the
+ * value that sits in front of the symbol (digits with an optional `+`/`-` sign
+ * or `≤`/`≥` comparison, or the variable `X`), and the resource symbol itself
+ * (`●` energy, `✦` spark, `⍟` points, `☪` lunar, `⧗` store). The two capture
+ * groups for whitespace let `bindResourceQuantities` swap the breakable spaces
+ * for non-breaking ones.
+ *
+ * The spark pip glyph `⍏` is intentionally excluded: `⍏N` renders as its own
+ * circled-number badge and is handled separately.
  */
-const TRAILING_NUMBER_RE = /^([\s\S]*?)(\d+\s+)$/;
+const RESOURCE_QUANTITY_RE =
+  /(?:(\S+)(\s+))?([+\-]?[≤≥]?(?:\d+|X))(\s*)([●✦⍟☪⧗])/g;
 
 /**
- * Keeps a number glued to the resource symbol that immediately follows it.
- *
- * The number and the symbol's icon render as separate inline elements, so the
- * whitespace between them (e.g. the space in `costs 2 ●`) is a line-break
- * opportunity — the layout can leave the `2` at the end of one line and drop
- * the icon to the next. This pass detects a text run ending in a number and
- * whitespace directly before a symbol segment, peels that number (with its
- * trailing whitespace) off the text run, and wraps it together with the symbol
- * in a `nobreak` group so they always render on the same line. The trigger and
- * fast keyword groups already carry their own `nobreak`, so their symbols are
- * never bare here.
+ * Non-breaking space (U+00A0). Renders at the normal space width but is never a
+ * line-break opportunity.
  */
-function bindNumbersToSymbols(segments: TextSegment[]): TextSegment[] {
-  const result: TextSegment[] = [];
-  for (const segment of segments) {
-    if (segment.kind !== "symbol") {
-      result.push(segment);
-      continue;
-    }
-    const prev = result[result.length - 1];
-    if (prev === undefined || prev.kind !== "text") {
-      result.push(segment);
-      continue;
-    }
-    const match = TRAILING_NUMBER_RE.exec(prev.value);
-    if (match === null) {
-      result.push(segment);
-      continue;
-    }
-    result.pop();
-    if (match[1] !== "") {
-      result.push({ kind: "text", value: match[1] });
-    }
-    result.push({
-      kind: "nobreak",
-      segments: [{ kind: "text", value: match[2] }, segment],
-    });
-  }
-  return result;
+const NBSP = "\u00A0";
+
+/**
+ * Keeps a resource quantity from wrapping across a line.
+ *
+ * A value and its symbol — and the word that introduces them — render as
+ * separate inline elements, so each space between them (e.g. in `gains +2✦` or
+ * `costs 2 ●`) is a line-break opportunity. Left alone the layout can strand
+ * the leading word at the end of one line and drop the `+2✦` to the next, or
+ * split the number from its icon. This pass replaces the space between the
+ * word and the value, and between the value and the symbol, with a non-breaking
+ * space so the whole quantity always renders on one line. Using non-breaking
+ * spaces (rather than wrapping segments) keeps the grouping intact even when
+ * the leading word is a glossary term that tokenizes into its own segment
+ * (e.g. `Reclaim X●`).
+ */
+function bindResourceQuantities(text: string): string {
+  return text.replace(
+    RESOURCE_QUANTITY_RE,
+    (_full, word, _wsWord, value, wsSymbol, symbol) => {
+      const lead = word === undefined ? "" : `${word}${NBSP}`;
+      const gap = wsSymbol.length > 0 ? NBSP : "";
+      return `${lead}${value}${gap}${symbol}`;
+    },
+  );
 }
 
 /** Parses rules text into segments of plain text, symbols, and glossary terms. */
-export function tokenizeRulesText(text: string): TextSegment[] {
+export function tokenizeRulesText(input: string): TextSegment[] {
+  const text = bindResourceQuantities(input);
   const segments: TextSegment[] = [];
   let buffer = "";
 
@@ -315,7 +309,7 @@ export function tokenizeRulesText(text: string): TextSegment[] {
     i += 1;
   }
   flushBufferAndExtractTerms();
-  return bindNumbersToSymbols(segments);
+  return segments;
 }
 
 /** Format the card type and subtype line. */

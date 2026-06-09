@@ -1,0 +1,7 @@
+# Tag registry for dreamsigns.toml.
+# Each [[tags]] entry defines an available dreamsign tag and its display color.
+# Managed by the dreamsign editor's "Manage tags" panel.
+
+[[tags]]
+name = "Tag OK"
+color = "#15803d"

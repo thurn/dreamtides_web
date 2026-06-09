@@ -88,10 +88,14 @@ describe("tokenizeRulesText", () => {
 
   // Points `\u235F`, lunar `\u262A`, and store `\u29D7` each tokenize to their own symbol
   // type so the renderer can swap them for a filled Boxicons mark.
+  // The leading word, value, and symbol are bound together with a non-breaking
+  // space (U+00A0) so the quantity never wraps across a line. The points value
+  // is butted against its glyph, so the only protected space is the one between
+  // the word and the value.
   it("identifies the points symbol \u235F", () => {
     const result = tokenizeRulesText("Gain 2\u235F.");
     expect(result).toEqual([
-      { kind: "text", value: "Gain 2" },
+      { kind: "text", value: "Gain\u00A02" },
       { kind: "symbol", symbol: "points", char: "\u235F" },
       { kind: "text", value: "." },
     ]);
@@ -108,7 +112,7 @@ describe("tokenizeRulesText", () => {
   it("identifies the store symbol \u29D7", () => {
     const result = tokenizeRulesText("Store 1\u29D7.");
     expect(result).toEqual([
-      { kind: "text", value: "Store 1" },
+      { kind: "text", value: "Store\u00A01" },
       { kind: "symbol", symbol: "store", char: "\u29D7" },
       { kind: "text", value: "." },
     ]);
@@ -294,50 +298,50 @@ describe("tokenizeRulesText", () => {
     ]);
   });
 
-  // A number must never wrap away from the resource symbol it sits next to.
-  // The number and the symbol icon render as separate inline elements, so the
-  // space between them (e.g. `costs 2 ●`) is a line-break opportunity. The
-  // tokenizer groups the number (with its trailing space) and the symbol into a
-  // single `nobreak` segment so they always render on the same line.
-  it("glues a space-separated number to the energy symbol that follows it", () => {
+  // A resource quantity must never wrap across a line. The value, its symbol,
+  // and the word that introduces them render as separate inline elements, so
+  // every space between them is a line-break opportunity. The tokenizer rewrites
+  // those spaces to non-breaking spaces (U+00A0) so the whole quantity stays on
+  // one line. `reconstructText` rebuilds the visible string from the segments so
+  // these assertions are robust to how the text splits into segments (glossary
+  // terms, symbols) and check only that the right spaces became non-breaking.
+  it("binds a space-separated number to the energy symbol that follows it", () => {
     const result = tokenizeRulesText("the next card you play costs 2 ● less.");
-    expect(result).toEqual([
-      { kind: "text", value: "the next card you play costs " },
-      {
-        kind: "nobreak",
-        segments: [
-          { kind: "text", value: "2 " },
-          { kind: "symbol", symbol: "energy", char: "●" },
-        ],
-      },
-      { kind: "text", value: " less." },
-    ]);
+    expect(reconstructText(result)).toBe(
+      "the next card you play costs 2 ● less.",
+    );
   });
 
-  it("glues a space-separated number to a trailing points symbol", () => {
-    const result = tokenizeRulesText("Gain 2 ⍟.");
-    expect(result).toEqual([
-      { kind: "text", value: "Gain " },
-      {
-        kind: "nobreak",
-        segments: [
-          { kind: "text", value: "2 " },
-          { kind: "symbol", symbol: "points", char: "⍟" },
-        ],
-      },
-      { kind: "text", value: "." },
-    ]);
+  it("binds the leading word to a value butted against its spark symbol", () => {
+    const result = tokenizeRulesText("it gains +2✦ each turn.");
+    expect(reconstructText(result)).toBe("it gains +2✦ each turn.");
   });
 
-  // A number butted directly against its symbol has no break opportunity
-  // between them, so it stays a plain text run (no `nobreak` grouping).
-  it("leaves a number butted against its symbol ungrouped", () => {
+  it("binds a butted number and its points symbol to the leading word", () => {
     const result = tokenizeRulesText("Gain 2⍟.");
-    expect(result).toEqual([
-      { kind: "text", value: "Gain 2" },
-      { kind: "symbol", symbol: "points", char: "⍟" },
-      { kind: "text", value: "." },
-    ]);
+    expect(reconstructText(result)).toBe("Gain 2⍟.");
+  });
+
+  it("binds a comparison value (≤2●) to its leading word", () => {
+    const result = tokenizeRulesText("play a ≤2● card.");
+    expect(reconstructText(result)).toBe("play a ≤2● card.");
+  });
+
+  // The leading word binds even when it is a glossary term tokenizing into its
+  // own segment, because the non-breaking space lives in the text either way.
+  it("binds the variable X to a leading glossary term (Reclaim X●)", () => {
+    const result = tokenizeRulesText("Reclaim X● to draw.");
+    expect(reconstructText(result)).toBe("Reclaim X● to draw.");
+    expect(
+      result.some((s) => s.kind === "term" && s.word === "Reclaim"),
+    ).toBe(true);
+  });
+
+  // A bare symbol with no value in front of it has nothing to bind, so the
+  // surrounding spaces stay ordinary breakable spaces.
+  it("leaves a bare symbol with no leading value untouched", () => {
+    const result = tokenizeRulesText("reduce its ● cost.");
+    expect(reconstructText(result)).toBe("reduce its ● cost.");
   });
 
   it("preserves the original spark symbol character, not a replacement", () => {

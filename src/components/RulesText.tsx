@@ -1,8 +1,5 @@
 import { type CSSProperties, type ReactNode } from "react";
-import {
-  tokenizeRulesText,
-  type TextSegment,
-} from "./card-text";
+import { tokenizeRulesText, type TextSegment } from "./card-text";
 import { HoverPopover } from "./HoverPopover";
 import { PipBadge } from "./PipBadge";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
@@ -220,13 +217,14 @@ function renderSegment(
     // `1✦` reads as the same resource as the corner spark stat (which uses the
     // busier multi-star glyph at its larger size). Like the energy flame it is a
     // plain inline `<i>` so it flows with the text instead of sitting in an
-    // oversized box.
+    // oversized box. The sparkle's mass sits a touch low in its em box, so a
+    // small upward nudge centers it on the adjacent number and text.
     return (
       <i
         key={key}
         aria-label="spark"
         className={`${SPARK_INLINE_ICON_CLASS} align-middle`}
-        style={{ color: SPARK_ICON_COLOR }}
+        style={{ color: SPARK_ICON_COLOR, transform: "translateY(-0.09em)" }}
       />
     );
   }
@@ -301,14 +299,9 @@ export function renderRulesText(
   const paragraphs = splitRulesTextIntoParagraphs(text);
   return paragraphs.map((paragraph, p) => {
     const segments = tokenizeRulesText(paragraph);
-    const style: CSSProperties =
-      p === 0 ? {} : { marginTop: PARAGRAPH_GAP };
+    const style: CSSProperties = p === 0 ? {} : { marginTop: PARAGRAPH_GAP };
     return (
-      <div
-        key={p}
-        data-rules-text-paragraph=""
-        style={style}
-      >
+      <div key={p} data-rules-text-paragraph="" style={style}>
         {segments.map((segment, i) =>
           renderSegment(segment, `${p}-${i}`, options),
         )}

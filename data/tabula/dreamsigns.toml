@@ -3,74 +3,85 @@ id = "C706D0BA-2F41-4B14-95D8-DB168AC6246C"
 name = "Golden Acorn"
 image_name = "acorn_gold.png"
 tides = ["discard_velocity", "hand_cycling", "cost_reduction", "resource_burst", "discard_outlets"]
-rendered-text = "The second time you discard a card each turn, your next card this turn costs 2● less."
+rendered-text = "Once per turn, when you discard a card, your next card this turn costs 2● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "278EC1AB-F532-4862-84AE-63DF5E49548C"
 name = "Pyramid Relic"
 image_name = "aertfact.png"
 tides = ["character_chain", "character_curve", "cost_reduction", "big_energy"]
-rendered-text = "When you play your first character each turn, the next character you play this turn costs 2● less."
+rendered-text = "The second character you play each turn costs 1● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "6E20E6C7-295A-48B1-B252-B8B00D6902C9"
 name = "Amanita"
 image_name = "amanita.png"
 tides = ["leave_play_enablers", "cost_reduction", "big_energy", "finishers"]
-rendered-text = "The first character you play each turn costs 2● less if an ally left play this turn."
+rendered-text = "Once per turn, when an ally leaves play, your next character this turn costs 2● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "49990864-1DB0-4C08-91AE-40A1F04223E4"
 name = "Algae"
 image_name = "algae.png"
-rendered-text = "The first character you draw each turn costs 2● less until end of turn."
+rendered-text = "The first character you draw each turn costs 2● less until your next Dawn phase."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "3DD05E97-1AF8-4AE9-8E1F-954EAA63E112"
 name = "Worm Apple"
 image_name = "apple.png"
-rendered-text = "The first character you play each turn costs 0●. It has 1✦."
+rendered-text = "The first character you play each turn costs 2● less and has 0✦."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "A42C99B2-F480-4F63-91A0-BD556120427D"
 name = "Green Amulet"
 image_name = "amulet_2.png"
 rendered-text = "The second card you draw each turn costs 2● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "3FD8861D-FC4C-4097-9E28-89CC37F5B3F4"
 name = "Cloud Lens"
 image_name = "amulet_3.png"
 tides = ["event_chain", "cost_reduction", "event_setup", "resource_burst"]
-rendered-text = "Your second event each turn costs 1● less."
+rendered-text = "The second event you play each turn costs 1● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "8778BF17-4E0A-4CE7-B23C-4DAF49A782A7"
 name = "Wolf Sigil"
 image_name = "amulet_4.png"
 tides = ["discard_velocity", "hand_cycling", "cost_reduction", "resource_burst"]
-rendered-text = "The first card you play each turn after you discard a card costs 1● less."
+rendered-text = "Reclaim abilities cost you 1● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "12EC9625-CBFB-4056-9C3E-98ED8C8BEA70"
 name = "Trinket Necklace"
 image_name = "amulet_5.png"
 tides = ["materialize_tempo", "bounce_blink_tools", "leave_play_enablers", "materialized_staples", "cost_reduction"]
-rendered-text = "When you return an ally to hand or banish an ally, the next character you play this turn costs 1● less."
+rendered-text = "Once per turn, when you return an ally to hand, your next character this turn costs 1● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "95F0F483-9A76-47C6-A839-01A1D9122945"
 name = "Bead Charm"
 image_name = "amulet_6.png"
 tides = ["materialize_tempo", "bounce_blink_tools", "cost_reduction"]
-rendered-text = "When you return an ally to hand, it costs 1● less this turn."
+rendered-text = "When you return an ally to hand, it gains +2✦."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "553D2317-32F9-47BC-BAE0-5018CA26D56A"
 name = "Eye Amulet"
 image_name = "amulet_7.png"
 tides = ["fast_tempo", "fast_interaction", "fast_setup", "cost_reduction"]
-rendered-text = "The first Fast card you play during the opponent's turn costs 1● less."
+rendered-text = "The first ❖ card you play during the opponent's turn costs 1● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "0D668E16-1729-4289-AD1D-0FB3C1374EE9"
@@ -78,48 +89,55 @@ name = "Skull Pendant"
 image_name = "amulet_8.png"
 tides = ["materialize_value", "materialize_tempo", "materialized_staples", "cost_reduction", "big_energy"]
 rendered-text = "Characters with ▸Materialized abilities cost you 1● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "EDE46F71-AA77-4B12-9824-0D3706DA6A22"
 name = "Spider Medallion"
 image_name = "amulet_9.png"
 tides = ["materialize_value", "materialize_tempo", "materialized_staples", "big_energy"]
-rendered-text = "[FLAGGED] The first character you materialize each turn has Unbound."
+rendered-text = "The first character you materialize each turn has Awakened."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "3380C657-79CA-400B-ABB7-4B56FBB92AF4"
 name = "Leather Satchel"
 image_name = "bag_2.png"
 tides = ["abandon_value", "materialize_value", "trigger_reuse", "leave_play_enablers", "materialized_staples"]
-rendered-text = "[FLAGGED] Once per turn, when you abandon an ally, trigger its ▸Materialized ability."
+rendered-text = "When you abandon an ally, trigger its ▸Materialized and ▸Dawn abilities."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "2EBF0BBB-440C-4DBA-8E48-228DAADC0A1E"
 name = "Glow Pouch"
 image_name = "bag_3.png"
 tides = ["abandon_value", "materialize_value", "copy_effects", "leave_play_enablers"]
-rendered-text = "Once per turn, when you abandon an ally, materialize a 1✦ figment copy of it."
+rendered-text = "Once per turn, when you abandon an ally, materialize a 0✦ figment copy of it."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "2D4EB3EE-0931-45ED-8365-69F18096EAD5"
 name = "Charm Pouch"
 image_name = "bag_4.png"
 tides = ["materialize_tempo", "bounce_blink_tools", "trigger_reuse", "materialize_value"]
-rendered-text = "[FLAGGED] When you banish an ally and then materialize it, its ▸Materialized ability gains Echo."
+rendered-text = "The first time each turn you trigger a ▸Materialized ability, trigger that ability again."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "A98F468B-5E76-4041-83EE-69C0871A6BF0"
 name = "Bat Wing"
 image_name = "bat_wings.png"
 tides = ["materialize_tempo", "materialize_value", "bounce_blink_tools", "card_flow"]
-rendered-text = "Once per turn, when you banish and materialize an ally, draw a card."
+rendered-text = "Once per turn, when you dissolve or banish an enemy, draw a card."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5"
 name = "Bell"
 image_name = "bell.png"
 tides = ["void_recursion", "reclaim_characters", "materialize_value", "trigger_reuse"]
-rendered-text = "[FLAGGED] When you play a character from your void, its ▸Materialized ability gains Echo."
+rendered-text = "When you play a character from your void, rematerialize it."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "D76684C3-797E-44AE-A2BA-333E77D46A4D"
@@ -127,27 +145,31 @@ name = "Belladonna"
 image_name = "belladonna.png"
 tides = ["materialize_value", "trigger_reuse", "character_chain", "materialized_staples"]
 rendered-text = "At the end of your turn, if you materialized 2 allies this turn, rematerialize the last one."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "00CC7E7F-4245-4447-B9DC-F647DC6241A2"
 name = "Berries"
 image_name = "berries.png"
 tides = ["materialize_value", "trigger_reuse", "spark_growth", "materialized_staples"]
-rendered-text = "When an ally's ▸Materialized ability triggers, that ally gains +1✦."
+rendered-text = "Characters in your deck with cost ≤2● have +1✦."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "47081BDE-F35D-4B5C-BA17-53E5DBF5B419"
 name = "Green Beetle"
 image_name = "bettle.png"
 tides = ["big_energy", "finishers", "spark_tall", "character_curve"]
-rendered-text = "[FLAGGED] Your ≥5● cost characters have Unbound."
+rendered-text = "Characters in your deck with cost ≥4● have awakened."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "3ED05D9A-DAE0-4260-9B99-AD22D02FC583"
 name = "Bezoar"
 image_name = "bezoar.png"
 tides = ["abandon_value", "materialize_value", "materialized_staples", "leave_play_enablers"]
-rendered-text = "[FLAGGED] If you abandoned a character this turn, characters you materialize have Unbound."
+rendered-text = "When you abandon a character, characters you materialize this turn have awakened."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "9F34B5F6-4766-4A7E-A841-D7B945CAD504"
@@ -155,13 +177,15 @@ name = "Brown Acorn"
 image_name = "black-acorn.png"
 tides = ["warrior_pressure", "warrior_bastion", "spark_growth"]
 rendered-text = "When you add a warrior card to your deck, that card gains +1✦."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "94E5683D-A24C-4F89-8AFA-652D7C6C79AA"
 name = "Black Rose"
 image_name = "black_rose.png"
 tides = ["warrior_pressure", "warrior_bastion", "event_chain", "copy_effects"]
-rendered-text = "[FLAGGED] With ≥3 allied warriors, events you play gain Echo."
+rendered-text = "When you play an event with ≥3 allied warriors, copy it."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "4409A691-49B4-4FB0-82F6-4F45AE86D8C2"
