@@ -1,5 +1,13 @@
 export { buildMerchantContext } from "./context/buildMerchantContext";
 export {
+  MERCHANT_REWARD_BUILDERS,
+  buildMerchantRewardCatalog,
+  buildMerchantRewardWithBuilder,
+  buildMerchantRewardsForNeed,
+  makeMerchantTypeChangePayload,
+  resolveMerchantChoice,
+} from "./catalog/rewardCatalog";
+export {
   MERCHANT_MARKET_JITTER_MAX,
   MERCHANT_MARKET_JITTER_MIN,
   MERCHANT_NEED_SEVERITY_MULTIPLIER_MAX,
@@ -19,9 +27,15 @@ export type {
   PriceMerchantRewardInput,
 } from "./catalog/pricing";
 export type {
+  BuildMerchantRewardsOptions,
+  MerchantRewardOption,
+} from "./catalog/rewardCatalog";
+export type {
+  MerchantApplyPayload,
   MerchantAcceptRequest,
   MerchantCatalogCard,
   MerchantChoice,
+  MerchantChoiceCandidate,
   MerchantChoiceRequest,
   MerchantContext,
   MerchantDeckCard,
@@ -34,6 +48,7 @@ export type {
   MerchantNeedProjection,
   MerchantNeedReference,
   MerchantOffer,
+  MerchantRewardBuilderId,
   MerchantRoleNeed,
   MerchantReward,
 } from "./types";

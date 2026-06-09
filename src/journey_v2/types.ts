@@ -2,7 +2,18 @@ import type { FitModel } from "../draft/replay/fit-model";
 import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
-import type { DeckEntry, SiteState, TransfigurationType } from "../types/quest";
+import type {
+  CardKeywordModification,
+  CardTypeChange,
+  DeckEntry,
+  SiteState,
+  TransfigurationType,
+} from "../types/quest";
+
+export interface MerchantGameObjectBadge {
+  label: string;
+  detail?: string;
+}
 
 export interface MerchantCardIdentity {
   cardUuid: string;
@@ -17,12 +28,15 @@ export interface MerchantDeckCard extends MerchantCardIdentity {
   deckEntry: DeckEntry;
   card: CardData;
   displayName: string;
+  badge?: MerchantGameObjectBadge;
+  previewCard?: CardData;
 }
 
 export interface MerchantCatalogCard extends MerchantCardIdentity {
   objectType: "catalogCard";
   card: CardData;
   displayName: string;
+  badge?: MerchantGameObjectBadge;
 }
 
 export interface MerchantSupportNeed {
@@ -181,44 +195,119 @@ export type MerchantNeed =
   | MerchantCurveProblemNeed
   | MerchantDreamsignGapNeed;
 
-export type MerchantReward =
-  | ({
-      rewardBuilderId: string;
-      rewardType: "cardGrant";
-      card: CardData;
-      displayName: string;
-    } & MerchantCardIdentity)
+export type MerchantRewardBuilderId =
+  | "grant_support_card"
+  | "grant_dreamsign"
+  | "transfigure_card"
+  | "purge_weak_card"
+  | "duplicate_keystone"
+  | "replace_weak_with_fit"
+  | "gain_essence"
+  | "raise_essence_cap"
+  | "add_reclaim_to_event"
+  | "add_fast_to_event"
+  | "reduce_reclaim_cost"
+  | "convert_event_to_role"
+  | "grant_exact_card";
+
+export type MerchantApplyPayload =
   | {
-      rewardBuilderId: string;
-      rewardType: "dreamsign";
-      dreamsignId: string;
-      dreamsignTemplate: DreamsignTemplate;
-      displayName: string;
+      kind: "add_catalog_card";
+      cardUuid: string;
+      cardNumber: number;
     }
   | {
-      rewardBuilderId: string;
-      rewardType: "essence";
+      kind: "add_dreamsign";
+      dreamsignId: string;
+      dreamsignTemplate: DreamsignTemplate;
+    }
+  | {
+      kind: "transfigure_deck_entry";
+      entryId: string;
+      cardUuid: string;
+      cardNumber: number;
+      transfiguration: TransfigurationType;
+      previewCard: CardData;
+      description: string;
+    }
+  | {
+      kind: "duplicate_deck_entry";
+      entryId: string;
+      cardUuid: string;
+      cardNumber: number;
+    }
+  | {
+      kind: "remove_deck_entry";
+      entryId: string;
+      cardUuid: string;
+      cardNumber: number;
+    }
+  | {
+      kind: "change_deck_entry_keywords";
+      entryId: string;
+      cardUuid: string;
+      cardNumber: number;
+      keywords: CardKeywordModification;
+    }
+  | {
+      kind: "change_deck_entry_type";
+      entryId: string;
+      cardUuid: string;
+      cardNumber: number;
+      typeChange: CardTypeChange;
+    }
+  | {
+      kind: "change_essence";
       amount: number;
+    }
+  | {
+      kind: "change_max_essence";
+      amount: number;
+    }
+  | {
+      kind: "composite";
+      children: readonly MerchantApplyPayload[];
     };
 
 export interface MerchantChoiceRequest {
-  context: MerchantContext;
-  need: MerchantNeed;
-  rewardBuilderId: string;
-  choiceCount: number;
+  choiceType: "catalogCard" | "dreamsign" | "replacementCard";
+  prompt: string;
+  candidates: readonly MerchantChoiceCandidate[];
 }
 
 export interface MerchantChoice {
   choiceId: string;
+}
+
+export interface MerchantChoiceCandidate {
+  choiceId: string;
+  title: string;
+  summary: string;
   needId: string;
-  rewardBuilderId: string;
-  reward: MerchantReward;
+  builderId: MerchantRewardBuilderId;
+  gameObjects: readonly MerchantGameObject[];
+  valueEssence: number;
+  applyPayload: MerchantApplyPayload;
+  cardUuid?: string;
+  cardNumber?: number;
+  dreamsignId?: string;
+}
+
+export interface MerchantReward {
+  builderId: MerchantRewardBuilderId;
+  title: string;
+  summary: string;
+  answersNeedIds: readonly string[];
+  gameObjects: readonly MerchantGameObject[];
+  valueEssence: number;
+  applyPayload?: MerchantApplyPayload;
+  choiceRequest?: MerchantChoiceRequest;
 }
 
 export interface MerchantOffer {
   offerId: string;
   encounterSignature: string;
-  rewardBuilderId: string;
+  rewardBuilderId: MerchantRewardBuilderId;
   needId: string;
   price: number;
   rewards: readonly MerchantReward[];
@@ -235,7 +324,7 @@ export interface MerchantAcceptRequest {
   encounterSignature: string;
   offerId: string;
   expectedPrice: number;
-  rewardBuilderId: string;
+  rewardBuilderId: MerchantRewardBuilderId;
   needId: string;
   choice?: MerchantChoice;
 }
@@ -256,8 +345,10 @@ export type MerchantGameObject =
       dreamsignId: string;
       dreamsignTemplate: DreamsignTemplate;
       displayName: string;
+      badge?: MerchantGameObjectBadge;
     }
   | {
       objectType: "essence";
       amount: number;
+      badge?: MerchantGameObjectBadge;
     };
