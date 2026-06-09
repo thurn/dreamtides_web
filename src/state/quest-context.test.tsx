@@ -411,7 +411,7 @@ describe("Dream Merchant v2 mutations", () => {
     });
 
     act(() => {
-      quest.mutations.acceptDreamMerchantOffer!(
+      quest.mutations.acceptDreamMerchantOffer(
         fixture.site.id,
         merchantAcceptRequestFor(offer),
       );
@@ -451,7 +451,7 @@ describe("Dream Merchant v2 mutations", () => {
     const before = quest.state;
 
     act(() => {
-      quest.mutations.acceptDreamMerchantOffer!(fixture.site.id, {
+      quest.mutations.acceptDreamMerchantOffer(fixture.site.id, {
         ...merchantAcceptRequestFor(offer),
         encounterSignature: `${offer.encounterSignature}-stale`,
       });
@@ -481,7 +481,7 @@ describe("Dream Merchant v2 mutations", () => {
     });
 
     act(() => {
-      quest.mutations.declineDreamMerchant!(
+      quest.mutations.declineDreamMerchant(
         fixture.site.id,
         merchantDeclineRequestFor(offer),
       );

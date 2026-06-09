@@ -92,6 +92,8 @@ const mutations: QuestMutations = {
   acceptTransfigurationChoice: noop,
   acceptDuplicationChoice: noop,
   completeDreamJourneySite: noop,
+  acceptDreamMerchantOffer: noop,
+  declineDreamMerchant: noop,
   pickDraftCard: noop,
   addCard: noop,
   addBaneCard: noop,

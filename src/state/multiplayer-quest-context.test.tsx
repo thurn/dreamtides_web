@@ -2618,7 +2618,7 @@ describe("MultiplayerQuestProvider", () => {
       </MultiplayerQuestProvider>,
     );
 
-    captured[captured.length - 1]?.mutations.acceptDreamMerchantOffer!(
+    captured[captured.length - 1]?.mutations.acceptDreamMerchantOffer(
       fixture.site.id,
       merchantAcceptRequestFor(offer),
     );
@@ -2677,7 +2677,7 @@ describe("MultiplayerQuestProvider", () => {
       </MultiplayerQuestProvider>,
     );
 
-    captured[captured.length - 1]?.mutations.acceptDreamMerchantOffer!(
+    captured[captured.length - 1]?.mutations.acceptDreamMerchantOffer(
       fixture.site.id,
       {
         ...merchantAcceptRequestFor(offer),
@@ -2721,7 +2721,7 @@ describe("MultiplayerQuestProvider", () => {
       </MultiplayerQuestProvider>,
     );
 
-    captured[captured.length - 1]?.mutations.declineDreamMerchant!(
+    captured[captured.length - 1]?.mutations.declineDreamMerchant(
       fixture.site.id,
       merchantDeclineRequestFor(offer),
     );

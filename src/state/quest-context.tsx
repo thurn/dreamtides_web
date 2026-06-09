@@ -149,11 +149,11 @@ export interface QuestMutations {
    * visit-tracking bookkeeping.
    */
   completeDreamJourneySite: (siteId: string) => void;
-  acceptDreamMerchantOffer?: (
+  acceptDreamMerchantOffer: (
     siteId: string,
     request: MerchantAcceptRequest,
   ) => void;
-  declineDreamMerchant?: (
+  declineDreamMerchant: (
     siteId: string,
     request: MerchantDeclineRequest,
   ) => void;
