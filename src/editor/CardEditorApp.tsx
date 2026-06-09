@@ -1122,6 +1122,11 @@ export default function CardEditorApp({
               availableTides={tides}
               visibleCount={visibleCards.length}
               totalCount={loadStatus.cards.length}
+              checkboxTagCount={
+                displayState.checkboxTag === ""
+                  ? 0
+                  : (tagUsageCounts[displayState.checkboxTag] ?? 0)
+              }
               onDisplayStateChange={handleDisplayStateChange}
               onOpenManageTags={() => setManageTagsOpen(true)}
               onOpenManageTides={() => setManageTidesOpen(true)}

@@ -18,6 +18,8 @@ interface CardEditorToolbarProps {
   availableTides: EditorTag[];
   visibleCount: number;
   totalCount: number;
+  /** How many cards in the whole pool carry the active checkbox tag. */
+  checkboxTagCount: number;
   onDisplayStateChange: (state: EditorDisplayState) => void;
   onOpenManageTags: () => void;
   onOpenManageTides: () => void;
@@ -110,6 +112,7 @@ export default function CardEditorToolbar({
   availableTides,
   visibleCount,
   totalCount,
+  checkboxTagCount,
   onDisplayStateChange,
   onOpenManageTags,
   onOpenManageTides,
@@ -515,6 +518,8 @@ export default function CardEditorToolbar({
       subtypeOptions={subtypeOptions}
       visibleCount={visibleCount}
       totalCount={totalCount}
+      checkboxTagLabel={displayState.checkboxTag}
+      checkboxTagCount={checkboxTagCount}
       sortOptions={EDITOR_SORT_OPTIONS}
       extraActiveFilterCount={
         displayState.tagFilters.length +

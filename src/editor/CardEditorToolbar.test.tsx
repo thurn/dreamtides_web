@@ -64,6 +64,7 @@ function StatefulToolbar({
       onOpenManageTides={vi.fn()}
       visibleCount={2}
       totalCount={5}
+      checkboxTagCount={0}
       onDisplayStateChange={(nextState) => {
         setDisplayState(nextState);
         onChange?.(nextState);
@@ -97,6 +98,7 @@ describe("CardEditorToolbar", () => {
       onOpenManageTides={vi.fn()}
         visibleCount={2}
         totalCount={5}
+        checkboxTagCount={0}
         onDisplayStateChange={vi.fn()}
       />,
     );
@@ -238,6 +240,7 @@ describe("CardEditorToolbar", () => {
       onOpenManageTides={vi.fn()}
         visibleCount={0}
         totalCount={5}
+        checkboxTagCount={0}
         onDisplayStateChange={vi.fn()}
       />,
     );
@@ -273,6 +276,7 @@ describe("CardEditorToolbar", () => {
         onOpenManageTides={vi.fn()}
         visibleCount={2}
         totalCount={5}
+        checkboxTagCount={0}
         onDisplayStateChange={vi.fn()}
       />,
     );

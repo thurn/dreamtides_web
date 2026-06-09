@@ -17,6 +17,8 @@ interface DreamsignEditorToolbarProps {
   availableTags: EditorTag[];
   visibleCount: number;
   totalCount: number;
+  /** How many dreamsigns in the whole pool carry the active checkbox tag. */
+  checkboxTagCount: number;
   onDisplayStateChange: (state: DreamsignDisplayState) => void;
   onOpenManageTags: () => void;
 }
@@ -84,6 +86,7 @@ export default function DreamsignEditorToolbar({
   availableTags,
   visibleCount,
   totalCount,
+  checkboxTagCount,
   onDisplayStateChange,
   onOpenManageTags,
 }: DreamsignEditorToolbarProps) {
@@ -409,6 +412,8 @@ export default function DreamsignEditorToolbar({
       subtypeOptions={[]}
       visibleCount={visibleCount}
       totalCount={totalCount}
+      checkboxTagLabel={displayState.checkboxTag}
+      checkboxTagCount={checkboxTagCount}
       sortOptions={DREAMSIGN_SORT_OPTIONS}
       searchScopeOptions={SEARCH_SCOPE_OPTIONS}
       itemLabelPlural="dreamsigns"

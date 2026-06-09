@@ -678,6 +678,11 @@ export default function DreamsignEditorApp({
               availableTags={tags}
               visibleCount={visibleDreamsigns.length}
               totalCount={loadStatus.dreamsigns.length}
+              checkboxTagCount={
+                displayState.checkboxTag === ""
+                  ? 0
+                  : (tagUsageCounts[displayState.checkboxTag] ?? 0)
+              }
               onDisplayStateChange={handleDisplayStateChange}
               onOpenManageTags={() => setManageTagsOpen(true)}
             />

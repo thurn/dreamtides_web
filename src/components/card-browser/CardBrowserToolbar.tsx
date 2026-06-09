@@ -33,6 +33,14 @@ export interface CardBrowserToolbarProps {
   }>;
   /** Label used in the visible-count text and aria labels. */
   itemLabelPlural?: string;
+  /**
+   * Name of the active checkbox tag. When non-empty, a chip showing how many
+   * items in the whole pool carry the tag is rendered next to the overall
+   * count. Empty means checkbox tagging is off and no chip is shown.
+   */
+  checkboxTagLabel?: string;
+  /** Number of items carrying `checkboxTagLabel` across the whole pool. */
+  checkboxTagCount?: number;
   /** Accessible label for the search input. */
   searchAriaLabel?: string;
   /** Whether to show the card type filter. */
@@ -224,6 +232,8 @@ export default function CardBrowserToolbar({
   showSearchScope = true,
   searchScopeOptions = SCOPE_OPTIONS,
   itemLabelPlural = "cards",
+  checkboxTagLabel = "",
+  checkboxTagCount = 0,
   searchAriaLabel = "Search cards",
   showTypeFilter = true,
   showCostFilter = true,
@@ -269,16 +279,44 @@ export default function CardBrowserToolbar({
     <section aria-label={ariaLabel} className={className} style={toolbarStyle}>
       <div className="card-browser-toolbar-bar" style={barStyle}>
         <div
-          aria-live="polite"
-          aria-label={`Visible ${itemLabelPlural} count`}
           style={{
-            color: "#f3d46b",
-            fontWeight: 800,
-            fontSize: "0.92rem",
-            whiteSpace: "nowrap",
+            display: "flex",
+            alignItems: "baseline",
+            gap: "12px",
+            flexWrap: "wrap",
           }}
         >
-          {visibleCount} / {totalCount} {itemLabelPlural}
+          <div
+            aria-live="polite"
+            aria-label={`Visible ${itemLabelPlural} count`}
+            style={{
+              color: "#f3d46b",
+              fontWeight: 800,
+              fontSize: "0.92rem",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {visibleCount} / {totalCount} {itemLabelPlural}
+          </div>
+
+          {checkboxTagLabel !== "" ? (
+            <div
+              aria-live="polite"
+              aria-label={`${itemLabelPlural} tagged ${checkboxTagLabel} count`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "5px",
+                color: "#8edbd1",
+                fontWeight: 800,
+                fontSize: "0.86rem",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <span aria-hidden="true">☑</span>
+              {checkboxTagCount} {checkboxTagLabel}
+            </div>
+          ) : null}
         </div>
 
         <div
