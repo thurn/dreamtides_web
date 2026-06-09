@@ -33,6 +33,7 @@ export function generatePool(
   themeArchetypes?: readonly string[],
   targetSize?: number,
   signatureCards?: readonly string[],
+  dreamcallerId?: string,
 ): GeneratedPool {
   return generatePoolFromData(
     buildPoolData(cards),
@@ -42,6 +43,7 @@ export function generatePool(
     themeArchetypes,
     targetSize,
     signatureCards,
+    dreamcallerId,
   );
 }
 
@@ -55,7 +57,9 @@ export function generatePool(
  * `targetSize` to pin the pool to that many copies; omit it for each variant's
  * own default size band. Pass `signatureCards` (a Dreamcaller's signature) to
  * steer the `idf3` variant toward the Dreamcaller's decks; the other variants
- * ignore it.
+ * ignore it. Pass `dreamcallerId` (the Dreamcaller's UUID) so the `tides`
+ * variant can look up the Dreamcaller's baked favored tide decks; the other
+ * variants ignore it.
  */
 export function generatePoolFromData(
   poolData: PoolData,
@@ -65,6 +69,7 @@ export function generatePoolFromData(
   themeArchetypes?: readonly string[],
   targetSize?: number,
   signatureCards?: readonly string[],
+  dreamcallerId?: string,
 ): GeneratedPool {
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
@@ -77,6 +82,7 @@ export function generatePoolFromData(
       themeArchetypes,
       signatureCards,
       targetSize,
+      dreamcallerId,
     });
 
   const capped = new Map<string, number>();

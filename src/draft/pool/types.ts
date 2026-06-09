@@ -1,6 +1,7 @@
 // Shared public and internal types for the pool generator.
 
 import type { AffinityCorpus } from "./affinity-grower.ts";
+import type { TideDecksJson } from "./tides-io.ts";
 
 // `color_pool` is the original color-identity algorithm. `diverse` is an
 // experimental variant tuned to spread cards and archetypes more evenly across
@@ -26,7 +27,8 @@ export type PoolVariant =
   | "pickcohere"
   | "picksig"
   | "sigseed"
-  | "embedded";
+  | "embedded"
+  | "tides";
 // The quest prototype and the draft test harness use this when `?algo=` is
 // absent. An unrecognised `?algo=` value is a hard error, not a fall-through to
 // this default.
@@ -115,6 +117,14 @@ export interface PoolData {
    * but `embedded`.
    */
   affinityCorpus?: AffinityCorpus;
+  /**
+   * The committed tide-deck artifact the `tides` variant combines into pools
+   * (`data/tides.jsonc`, served as `/tides-data.json`): 32 preconstructed decks
+   * keyed by cards_v2 UUID, mapped back to current names via
+   * {@link cardNameById} at generation time. Set only when the run's variant is
+   * `tides`; every other variant ignores it.
+   */
+  tideDecks?: TideDecksJson;
   /**
    * Current display name -> stable cards_v2 UUID, built from the card records in
    * {@link buildPoolData} when they carry an `id`. The `seed` variant reads it to

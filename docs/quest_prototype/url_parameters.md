@@ -97,6 +97,11 @@ provides:
   around it by IDF-weighted co-occurrence affinity, both to the seed card and to
   the cards already chosen (the same co-occurrence signal the deck-fit draft model
   reads). Copies cap at 2; the most central cards earn the second copy.
+- `algo=tides` — shuffles together five of the 32 preconstructed tide decks
+  (`data/tides.jsonc`, rendered as `docs/cards2/tide_decklists.md`): two of the
+  Dreamcaller's baked favored tides plus three drawn at random, dealing 200
+  cards with at most 2 copies of any card. The human-legible counterpart of
+  `idf3`; requires the baked artifact (`npm run bake-tides`).
 
 Most of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
 not registered (including empty or absent) falls back to `DEFAULT_POOL_VARIANT`,

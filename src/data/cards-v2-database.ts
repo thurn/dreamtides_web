@@ -1,6 +1,6 @@
 import type { CardData } from "../types/cards";
-import type { AffinityCorpus, GeneratedPool } from "../draft/pool";
-import { deserializeCorpus } from "../draft/pool";
+import type { AffinityCorpus, GeneratedPool, TideDecksJson } from "../draft/pool";
+import { deserializeCorpus, validateTideDecks } from "../draft/pool";
 import type { AffinityCorpusJson } from "../draft/pool";
 
 /**
@@ -82,6 +82,18 @@ export async function loadAffinityCorpus(): Promise<AffinityCorpus | null> {
   if (!response.ok) return null;
   const json = (await response.json()) as AffinityCorpusJson;
   return deserializeCorpus(json);
+}
+
+/**
+ * Fetch the committed tide decks (`data/tides.jsonc`, copied to
+ * `/tides-data.json` by `scripts/setup-assets.mjs`) the `tides` pool variant
+ * combines into pools. Returns `null` if the asset is missing so the caller
+ * can surface a clear configuration error when the variant runs.
+ */
+export async function loadTideDecks(): Promise<TideDecksJson | null> {
+  const response = await fetch("/tides-data.json");
+  if (!response.ok) return null;
+  return validateTideDecks(await response.json());
 }
 
 /**

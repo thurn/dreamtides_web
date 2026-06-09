@@ -89,6 +89,7 @@ import {
   deserializeCorpus,
   generatePoolFromData,
   POOL_VARIANT_IDS,
+  validateTideDecks,
 } from "../src/draft/pool/index.ts";
 import { stripJsonComments, supportEntryByName } from "./lib/card-refs.mjs";
 
@@ -499,6 +500,13 @@ function loadContext(argv) {
   if (existsSync(corpusPath)) {
     poolData.affinityCorpus = deserializeCorpus(readJsonc("data/affinity_corpus.jsonc"));
   }
+  // The `tides` variant combines the committed tide decks; load them (when
+  // baked) so it runs under `--compare`/`--variant tides`. Every other variant
+  // ignores `tideDecks`.
+  const tidesPath = resolve(ROOT, "data/tides.jsonc");
+  if (existsSync(tidesPath)) {
+    poolData.tideDecks = validateTideDecks(readJsonc("data/tides.jsonc"));
+  }
   return { dreamcallers, meta, poolData };
 }
 
@@ -520,6 +528,7 @@ function* simulateRealDrafts(ctx, { seeds, variant, poolSize }) {
         undefined,
         poolSize,
         signature,
+        dc.id,
       );
       yield { dc, seed, pool };
     }

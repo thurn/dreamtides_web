@@ -33,6 +33,7 @@ import {
   loadCardsV2Database,
   loadDecklists,
   loadDraftRecords,
+  loadTideDecks,
   resolvePool,
 } from "../data/cards-v2-database";
 import type { DraftRecord } from "../data/cards-v2-database";
@@ -455,7 +456,7 @@ export default function DraftTestApp() {
           setDreamcallers(loadedDreamcallers);
           setStatus("select");
         } else {
-          const [db, loadedDreamcallers, decklists, affinityCorpus] =
+          const [db, loadedDreamcallers, decklists, affinityCorpus, tideDecks] =
             await Promise.all([
               loadCardsV2Database(),
               loadDreamcallersV2(),
@@ -463,11 +464,15 @@ export default function DraftTestApp() {
               // The committed corpus the `embedded` variant grows from; other
               // variants ignore it, so loading it never changes their pools.
               loadAffinityCorpus(),
+              // The committed tide decks the `tides` variant combines; other
+              // variants ignore them.
+              loadTideDecks(),
             ]);
           if (cancelled) return;
 
           const poolData = buildPoolData([...db.values()], decklists);
           if (affinityCorpus) poolData.affinityCorpus = affinityCorpus;
+          if (tideDecks) poolData.tideDecks = tideDecks;
           poolDataRef.current = poolData;
           setDatabase(db);
           setDreamcallers(loadedDreamcallers);
@@ -538,6 +543,7 @@ export default function DraftTestApp() {
           dreamcaller.themeArchetypes,
           poolSizeOverride,
           dreamcaller.signatureCards,
+          dreamcaller.id,
         );
         const nameIndex = buildNameIndex(database);
         const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(

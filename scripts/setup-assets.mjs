@@ -630,6 +630,24 @@ export function setupAssets({
     );
   }
 
+  // The committed tide decks the `tides` pool variant combines into pools. A
+  // baked artifact like the affinity corpus above (run `npm run bake-tides` to
+  // regenerate it from the bundled decklists), committed as JSONC with a
+  // provenance header and served as plain JSON.
+  const tidesSourcePath = join(DATA_DIR, "tides.jsonc");
+  const tidesJsonPath = join(publicDir, "tides-data.json");
+  if (existsSync(tidesSourcePath)) {
+    const tidesJsonc = readFileSync(tidesSourcePath, "utf8");
+    const served = JSON.stringify(JSON.parse(stripJsonComments(tidesJsonc)));
+    writeFileSync(tidesJsonPath, served + "\n");
+    console.log("Copied tides.jsonc to tides-data.json (comments stripped)");
+  } else {
+    console.log(
+      "No data/tides.jsonc found; the `tides` pool variant will be " +
+        "unavailable until `npm run bake-tides` is run.",
+    );
+  }
+
   console.log("Parsing dreamcallers.toml...");
   const dreamcallerTomlContent = readFileSync(dreamcallerTomlPath, "utf8");
   const parsedDreamcallers = parse(dreamcallerTomlContent);

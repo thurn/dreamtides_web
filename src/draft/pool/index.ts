@@ -35,6 +35,14 @@ export type {
   SerializeCorpusOptions,
 } from "./affinity-corpus-io.ts";
 export type { AffinityCorpus } from "./affinity-grower.ts";
+export { idfCorpus, idfCosine } from "./variant-idf.ts";
+export type { IdfCorpus, IdfDeck } from "./variant-idf.ts";
+export { validateTideDecks } from "./tides-io.ts";
+export type {
+  TideDeckCardJson,
+  TideDeckJson,
+  TideDecksJson,
+} from "./tides-io.ts";
 export { DEFAULT_POOL_VARIANT } from "./types.ts";
 export {
   POOL_STRATEGIES,

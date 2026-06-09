@@ -42,6 +42,12 @@ export interface PoolGenerationRequest {
    * size band.
    */
   targetSize?: number;
+  /**
+   * The Dreamcaller's stable UUID, used by the `tides` strategy to look up the
+   * Dreamcaller's baked favored tide decks. Other strategies ignore it; when
+   * omitted the `tides` strategy draws all its tide decks at random.
+   */
+  dreamcallerId?: string;
 }
 
 /**

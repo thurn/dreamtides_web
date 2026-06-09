@@ -26,7 +26,9 @@
     "buildaround-metric": "node scripts/buildaround-support-experiment.mjs",
     "draft-replay-metric": "node scripts/draft-replay-experiment.mjs",
     "bake-affinity-corpus": "node scripts/bake-affinity-corpus.mjs",
-    "affinity-corpus-parity": "node scripts/affinity-corpus-parity.mjs"
+    "affinity-corpus-parity": "node scripts/affinity-corpus-parity.mjs",
+    "bake-tides": "node scripts/bake-tides.mjs",
+    "tides-similarity": "node scripts/tides-similarity-experiment.mjs"
   },
   "dependencies": {
     "@dicebear/collection": "^9.4.2",

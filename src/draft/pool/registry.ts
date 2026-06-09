@@ -28,6 +28,7 @@ import { pickSigStrategy } from "./variant-picksig.ts";
 import { pickfitStrategy } from "./variant-pickfit.ts";
 import { seedStrategy } from "./variant-seed.ts";
 import { sigSeedStrategy } from "./variant-sigseed.ts";
+import { tidesStrategy } from "./variant-tides.ts";
 
 /** Every registered strategy, keyed by the `?algo=` id that selects it. */
 export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
@@ -47,6 +48,7 @@ export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
   picksig: pickSigStrategy,
   sigseed: sigSeedStrategy,
   embedded: embeddedStrategy,
+  tides: tidesStrategy,
 };
 
 /**
