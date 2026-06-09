@@ -9,6 +9,11 @@ export {
 } from "./catalog/rewardCatalog";
 export { generateMerchantEncounter } from "./encounter/generateMerchantEncounter";
 export {
+  applyMerchantPayloadToState,
+  resolveMerchantDecline,
+  resolveMerchantOffer,
+} from "./encounter/resolveMerchantOffer";
+export {
   merchantRewardFamilyFor,
   renderMerchantDialogue,
 } from "./dialogue/dialogue";
@@ -31,6 +36,11 @@ export type {
   MerchantRewardScarcityInput,
   PriceMerchantRewardInput,
 } from "./catalog/pricing";
+export type {
+  MerchantResolveFailureReason,
+  ResolveMerchantDeclineResult,
+  ResolveMerchantOfferResult,
+} from "./encounter/resolveMerchantOffer";
 export type {
   BuildMerchantRewardsOptions,
   MerchantRewardOption,
