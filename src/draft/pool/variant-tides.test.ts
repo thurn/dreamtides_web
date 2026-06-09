@@ -86,23 +86,24 @@ describe("generateTides", () => {
     }
   });
 
-  it("labels the pool with the algorithm and the chosen tide ids", () => {
+  it("labels the pool with the algorithm and joins tides until a full pool is dealable", () => {
     const data = makeTideDecks(10, 30);
     const poolData = makePoolData(data);
-    const result = generateTides(makeRng(5), poolData, "dc-favored", 60);
+    // Each disjoint tide deals 60 copies, so a 150-copy pool needs 3 tides.
+    const result = generateTides(makeRng(5), poolData, "dc-favored", 150);
     expect(result.selected[0]).toBe("tides");
     const tideIds = new Set(data.tides.map((t) => t.id));
     const chosen = result.selected.slice(1);
-    expect(chosen.length).toBe(TIDES.tideCount);
+    expect(chosen.length).toBe(3);
     for (const id of chosen) expect(tideIds.has(id)).toBe(true);
   });
 
   it("draws all tides at random without a dreamcaller id or favored entry", () => {
     const poolData = makePoolData(makeTideDecks(10, 30));
-    const noId = generateTides(makeRng(11), poolData, undefined, 60);
-    const unknownId = generateTides(makeRng(11), poolData, "dc-unknown", 60);
+    const noId = generateTides(makeRng(11), poolData, undefined, 150);
+    const unknownId = generateTides(makeRng(11), poolData, "dc-unknown", 150);
     expect(noId.selected).toEqual(unknownId.selected);
-    expect(noId.selected.slice(1).length).toBe(TIDES.tideCount);
+    expect(noId.selected.slice(1).length).toBe(3);
   });
 
   it("includes the core tide in every pool when the artifact carries one", () => {
@@ -110,10 +111,9 @@ describe("generateTides", () => {
     data.coreTideId = "tide-3";
     const poolData = makePoolData(data);
     for (let seed = 0; seed < 10; seed += 1) {
-      const result = generateTides(makeRng(seed), poolData, undefined, 60);
-      expect(result.selected).toContain("tide-3");
-      // The core tide is additional to the drawn tides.
-      expect(result.selected.slice(1).length).toBe(TIDES.tideCount + 1);
+      const result = generateTides(makeRng(seed), poolData, undefined, 150);
+      // The core tide always joins first.
+      expect(result.selected[1]).toBe("tide-3");
     }
   });
 

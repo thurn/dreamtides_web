@@ -13,13 +13,15 @@
 //   1. Build the IDF corpus over the bundled real decklists (the exact filter
 //      and weights `idf`/`idf2`/`idf3` use).
 //   2. 32 ARCHETYPE tides: deterministic k-medoids clustering of the corpus
-//      (distance = 1 - IDF-cosine, the similarity `idf3` grows by). Each tide
-//      is its cluster's frequency-ranked card list, with 2 copies for cards in
-//      at least half the cluster's decks, cut at ~`tideSize` copies. The
-//      tide's name is its medoid deck's most distinctive (highest-IDF) cards.
-//      (No "core" staples tide: the corpus's most-played card appears in only
-//      ~14% of decks, so a deck forced into every pool would make its cards
-//      ubiquitous in a way no real-deck distribution is.)
+//      (distance = 1 - IDF-cosine, the similarity `idf3` grows by), balanced
+//      so dense corpus regions get several tides (see `minClusterMembers`).
+//      Each tide is its cluster's card list ranked by frequency x IDF
+//      distinctiveness, with 2 copies for cards in at least `doubleShare` of
+//      the cluster's decks, cut at ~`tideSize` copies. The tide's name is its
+//      medoid deck's most distinctive (highest-IDF) cards. (No "core" staples
+//      tide: the corpus's most-played card appears in only ~14% of decks, so
+//      a deck forced into every pool would make its cards ubiquitous in a way
+//      no real-deck distribution is.)
 //   3. FAVORED tides per Dreamcaller: the tides most IDF-cosine-similar to the
 //      Dreamcaller's signature cards — the same probe `idf3` uses to find its
 //      anchor decks — baked as an inspectable list. The runtime draws a subset
@@ -46,20 +48,31 @@ const TUNING = {
   // Tide deck count (the player-facing "32 tides").
   clusters: 32,
   // Target copies per tide (the cut point of the ranked card list).
-  tideSize: 55,
+  tideSize: 160,
   // Cluster-frequency floor: cards in fewer member decks than this are dropped
   // (only applied when the cluster has at least `minClusterFreqAt` members).
   minClusterFreq: 2,
   minClusterFreqAt: 4,
   // A card gets 2 copies in its tide when at least this fraction of the
   // cluster's decks run it.
-  doubleShare: 0.5,
+  doubleShare: 0.35,
+  // Exponent on a card's IDF weight in the tide ranking score
+  // (frequency x idf^idfRankWeight). 0 ranks by raw cluster frequency; higher
+  // values concentrate each tide on its cluster's DISTINCTIVE cards, raising
+  // the on-theme support share a single tide contributes to a pool.
+  idfRankWeight: 2,
   // How many favored tides are baked per signatured Dreamcaller. The runtime
   // draws a subset (see `TIDES.favoredDraw` in variant-tides.ts), so a wider
   // list here means more pool-to-pool variety per Dreamcaller.
   favoredPerDreamcaller: 4,
   // k-medoids refinement rounds (stops earlier when assignments stabilise).
   maxRefineRounds: 20,
+  // Cluster balance: clusters with fewer member decks than this are dissolved
+  // into their neighbours, and the largest clusters are split to keep the tide
+  // count at `clusters`. Dense corpus regions then get several tides — the
+  // share of tides covering an archetype tracks the share of real decks
+  // playing it, which is what makes the random tide draw mirror the corpus.
+  minClusterMembers: 6,
   // How many of the medoid's highest-IDF cards name a tide.
   nameCards: 2,
 };
@@ -188,6 +201,112 @@ function kMedoids(sim, k, maxRounds) {
   return clusters;
 }
 
+// The cluster member minimizing total distance to its cluster (ties to the
+// earliest member, keeping the bake deterministic).
+function centralMember(sim, members) {
+  let best = members[0];
+  let bestTotal = Infinity;
+  for (const i of members) {
+    let t = 0;
+    for (const m of members) t += 1 - sim[i][m];
+    if (t < bestTotal) {
+      bestTotal = t;
+      best = i;
+    }
+  }
+  return best;
+}
+
+// Split one cluster into two by 2-medoid refinement: the most central member
+// and the member farthest from it seed the halves, then a few assign/recenter
+// rounds settle the split. Deterministic ties throughout.
+function splitCluster(sim, cluster, rounds = 10) {
+  const members = cluster.members;
+  let a = centralMember(sim, members);
+  let b = members[0];
+  let worst = Infinity;
+  for (const i of members) {
+    if (sim[i][a] < worst) {
+      worst = sim[i][a];
+      b = i;
+    }
+  }
+  let left = [];
+  let right = [];
+  for (let round = 0; round < rounds; round++) {
+    const nextLeft = [];
+    const nextRight = [];
+    for (const i of members) {
+      if (sim[i][a] >= sim[i][b]) nextLeft.push(i);
+      else nextRight.push(i);
+    }
+    if (
+      nextLeft.length === left.length &&
+      nextLeft.every((v, i) => v === left[i])
+    ) {
+      break;
+    }
+    left = nextLeft;
+    right = nextRight;
+    if (left.length === 0 || right.length === 0) break;
+    a = centralMember(sim, left);
+    b = centralMember(sim, right);
+  }
+  if (left.length === 0 || right.length === 0) return [cluster];
+  return [
+    { medoid: a, members: left },
+    { medoid: b, members: right },
+  ];
+}
+
+// Balance the clustering toward corpus density: dissolve clusters smaller
+// than `minMembers` (their decks join the nearest surviving cluster), then
+// split the largest clusters until the count is back to `k`. Dense regions of
+// the corpus end up with several tides, in proportion to how many real decks
+// play there.
+function balanceClusters(sim, clusters, k, minMembers) {
+  const cs = clusters.map((c) => ({ medoid: c.medoid, members: [...c.members] }));
+
+  // Dissolve the smallest under-threshold cluster until none remain.
+  for (;;) {
+    let smallest = -1;
+    for (let c = 0; c < cs.length; c++) {
+      if (cs[c].members.length >= minMembers) continue;
+      if (smallest === -1 || cs[c].members.length < cs[smallest].members.length) {
+        smallest = c;
+      }
+    }
+    if (smallest === -1 || cs.length <= 1) break;
+    const orphans = cs[smallest].members;
+    cs.splice(smallest, 1);
+    for (const i of orphans) {
+      let best = 0;
+      let bestSim = -Infinity;
+      for (let c = 0; c < cs.length; c++) {
+        const s = sim[i][cs[c].medoid];
+        if (s > bestSim) {
+          bestSim = s;
+          best = c;
+        }
+      }
+      cs[best].members.push(i);
+    }
+    for (const c of cs) c.medoid = centralMember(sim, c.members);
+  }
+
+  // Split the largest cluster until the tide count is restored.
+  while (cs.length < k) {
+    let largest = 0;
+    for (let c = 1; c < cs.length; c++) {
+      if (cs[c].members.length > cs[largest].members.length) largest = c;
+    }
+    const parts = splitCluster(sim, cs[largest]);
+    if (parts.length < 2) break;
+    cs.splice(largest, 1, ...parts);
+  }
+  return cs;
+}
+
 // --- Tide construction --------------------------------------------------------
 
 function buildClusterTide(cluster, decks, idfOf, tuning) {
@@ -199,11 +318,14 @@ function buildClusterTide(cluster, decks, idfOf, tuning) {
     }
   }
   const minFreq = members.length >= tuning.minClusterFreqAt ? tuning.minClusterFreq : 1;
+  const score = (name, f) => f * idfOf(name) ** tuning.idfRankWeight;
   const ranked = [...freq.entries()]
     .filter(([, f]) => f >= minFreq)
     .sort(
       (a, b) =>
-        b[1] - a[1] || idfOf(b[0]) - idfOf(a[0]) || (a[0] < b[0] ? -1 : 1),
+        score(b[0], b[1]) - score(a[0], a[1]) ||
+        b[1] - a[1] ||
+        (a[0] < b[0] ? -1 : 1),
     );
 
   const cards = [];
@@ -253,9 +375,9 @@ const HEADER = `// data/tides.jsonc — the 32 committed tide decks the \`tides\
 // not hand-edit the JSON body. The human-readable rendering of the same data
 // is docs/cards2/tide_decklists.md.
 //
-// Player-facing contract: a draft pool is built by shuffling together five of
-// the 32 tides — two of the Dreamcaller's favored tides and three drawn at
-// random — then dealing the first 200 cards (never more than 2 copies of a
+// Player-facing contract: a draft pool is built by shuffling together one of
+// the Dreamcaller's favored tides with tides drawn at random until there are
+// enough cards, then dealing the first 200 (never more than 2 copies of a
 // card).
 //
 // Cards are keyed by stable cards_v2 UUID; \`name\` fields are informational,
@@ -316,9 +438,9 @@ function renderMarkdown(json, dreamcallers, tideStats) {
   lines.push("");
   lines.push(
     "The 32 preconstructed decks (\"tides\") the `?algo=tides` draft-pool variant",
-    "combines into draft pools. A pool is built by shuffling together five of",
-    "the 32 tides — two of the Dreamcaller's favored tides and three drawn at",
-    "random — then dealing the first 200 cards (never more than 2 copies of a",
+    "combines into draft pools. A pool is built by shuffling together one of the",
+    "Dreamcaller's favored tides with tides drawn at random until there are",
+    "enough cards, then dealing the first 200 (never more than 2 copies of a",
     "card).",
     "",
     "GENERATED FILE — regenerated by `npm run bake-tides` together with",
@@ -382,9 +504,15 @@ function run() {
   const idfOf = (c) => idf.get(c) ?? 0;
   console.log(`Corpus: ${decks.length} filtered decklists, ${idf.size} distinct cards.`);
 
-  // Archetype tides from deterministic k-medoids clusters.
+  // Archetype tides from deterministic k-medoids clusters, balanced so the
+  // tide count per corpus region tracks how many real decks play there.
   const sim = similarityMatrix(decks, idfOf);
-  const clusters = kMedoids(sim, TUNING.clusters, TUNING.maxRefineRounds);
+  const clusters = balanceClusters(
+    sim,
+    kMedoids(sim, TUNING.clusters, TUNING.maxRefineRounds),
+    TUNING.clusters,
+    TUNING.minClusterMembers,
+  );
   const namedTides = clusters
     .map((cluster) => buildClusterTide(cluster, decks, idfOf, TUNING))
     .filter((t) => t.cards.length > 0);
