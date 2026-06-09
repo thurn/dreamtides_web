@@ -751,7 +751,7 @@ rendered-text = "When you play your third character each turn, gain 2●."
 id = "9204FBC8-BA40-4E33-9FBC-F62CCC4A43D1"
 name = "Powder Bowl"
 image_name = "powder_magic.png"
-tides = ["point_pressure", "cost_reduction", "character_curve", "finishers"]
+tides = ["point_pressure", "cost_rfeduction", "character_curve", "finishers"]
 rendered-text = "Characters cost you 1● less if an ally scored ⍟ last turn."
 
 [[dreamsign]]
