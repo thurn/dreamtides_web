@@ -5295,7 +5295,7 @@ card-number = 289
 art = { x = 0, y = 0, scale = 1.47 }
 
 [[cards]]
-name = "Dreadlord"
+name = "Revered Prince"
 mtg-name = "Emry, Lurker of the Loch"
 id = "bbdc6ee7-e9b1-488b-90b9-19337b65fee6"
 rendered-text = "This character costs 1● less for each allied warrior."
@@ -5306,10 +5306,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 5
-tags = ["Art Rework"]
-image-number = 2421338071
+tags = ["Art Rework", "Art OK"]
+image-number = 432001912
 art-owned = false
 card-number = 290
+art = { x = 0.138, y = 1, scale = 1.61 }
 
 [[cards]]
 name = "Echo Technician"
@@ -6946,6 +6947,7 @@ tags = ["Art Rework", "Art OK"]
 image-number = 653554603
 art-owned = false
 card-number = 378
+art = { x = -0.353, y = 0.399, scale = 1.17 }
 
 [[cards]]
 name = "Ashen Harbinger"
