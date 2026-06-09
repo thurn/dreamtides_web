@@ -46,9 +46,12 @@ export interface ArtCropEditorProps {
   card: EditorCardRecord;
   saveStatus: ArtSaveStatus;
   saveError: string | null;
+  cardNameSaveStatus: ArtSaveStatus;
+  cardNameSaveError: string | null;
   imageNumberSaveStatus: ArtSaveStatus;
   imageNumberSaveError: string | null;
   onSave: (art: ArtCrop) => void;
+  onSaveCardName: (name: string) => void;
   onSaveImageNumber: (imageNumber: number) => void;
   onClose: () => void;
 }
@@ -82,6 +85,10 @@ function readCardArt(card: EditorCardRecord): ArtCrop {
     return { ...DEFAULT_ART_CROP };
   }
   return { x: art.x, y: art.y, scale: art.scale };
+}
+
+function validateCardName(text: string): string | null {
+  return text.trim().length === 0 ? null : text.trim();
 }
 
 const overlayStyle: CSSProperties = {
@@ -170,13 +177,33 @@ export default function ArtCropEditor({
   card,
   saveStatus,
   saveError,
+  cardNameSaveStatus,
+  cardNameSaveError,
   imageNumberSaveStatus,
   imageNumberSaveError,
   onSave,
+  onSaveCardName,
   onSaveImageNumber,
   onClose,
 }: ArtCropEditorProps) {
   const [art, setArt] = useState<ArtCrop>(() => readCardArt(card));
+  const [cardNameText, setCardNameText] = useState<string>(() => card.name);
+  const [cardNameInputError, setCardNameInputError] = useState<string | null>(
+    null,
+  );
+
+  const handleCardNameSubmit = useCallback(() => {
+    const parsed = validateCardName(cardNameText);
+    if (parsed === null) {
+      setCardNameInputError("Name cannot be blank.");
+      return;
+    }
+    setCardNameInputError(null);
+    if (parsed === card.name) {
+      return;
+    }
+    onSaveCardName(parsed);
+  }, [cardNameText, card.name, onSaveCardName]);
 
   // The image number selects which art file the card renders. The text field is
   // seeded from the card's current value; typing a valid number previews that
@@ -324,8 +351,13 @@ export default function ArtCropEditor({
     ...card.preview,
     art,
     imageNumber: effectiveImageNumber,
+    name: validateCardName(cardNameText) ?? card.preview.name,
   };
   const statusText = saveStatusLabel(saveStatus, saveError);
+  const cardNameStatusText =
+    cardNameInputError ?? saveStatusLabel(cardNameSaveStatus, cardNameSaveError);
+  const cardNameStatusIsError =
+    cardNameInputError !== null || cardNameSaveStatus === "error";
   const imageNumberStatusText =
     imageNumberInputError ??
     saveStatusLabel(imageNumberSaveStatus, imageNumberSaveError);
@@ -403,6 +435,65 @@ export default function ArtCropEditor({
               ×
             </button>
           </div>
+
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleCardNameSubmit();
+            }}
+          >
+            <p style={sectionLabelStyle}>Card name</p>
+            <div style={{ display: "flex", gap: "6px" }}>
+              <input
+                type="text"
+                aria-label="Card name"
+                data-editor-art-card-name-input="true"
+                value={cardNameText}
+                onChange={(event) => {
+                  setCardNameText(event.target.value);
+                  setCardNameInputError(null);
+                }}
+                style={{
+                  flex: "1 1 auto",
+                  minWidth: 0,
+                  padding: "0 10px",
+                  height: "40px",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(247, 241, 223, 0.28)",
+                  background: "#16242a",
+                  color: "#f7f1df",
+                  fontSize: "0.95rem",
+                  fontWeight: 600,
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  ...controlButtonStyle,
+                  minWidth: "auto",
+                  padding: "0 14px",
+                  fontSize: "0.85rem",
+                }}
+              >
+                Set
+              </button>
+            </div>
+            <span
+              role="status"
+              aria-live="polite"
+              data-editor-art-card-name-status="true"
+              style={{
+                display: "block",
+                marginTop: "4px",
+                minHeight: "1.1em",
+                fontSize: "0.78rem",
+                fontWeight: 700,
+                color: cardNameStatusIsError ? "#f0a8a0" : "#8edbd1",
+              }}
+            >
+              {cardNameStatusText}
+            </span>
+          </form>
 
           <form
             onSubmit={(event) => {

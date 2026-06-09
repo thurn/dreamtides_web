@@ -910,6 +910,87 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("saves card names from the art editor above the image number control", async () => {
+    window.history.pushState(null, "", "/editor?artedit=1");
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            name: String(request.value),
+            preview: makePreview({
+              id: request.id,
+              name: String(request.value),
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () => Promise.resolve([makeEditorCard({ id: "card-id-1" })]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"]',
+    );
+    const cardButton = editorCard?.querySelector<HTMLElement>('[role="button"]');
+    if (cardButton === null || cardButton === undefined) {
+      throw new Error("Missing art-edit card button");
+    }
+
+    act(() => {
+      cardButton.click();
+    });
+
+    const nameInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-art-card-name-input="true"]',
+    );
+    const imageNumberInput = container.querySelector<HTMLInputElement>(
+      '[data-editor-art-image-number-input="true"]',
+    );
+    if (nameInput === null || imageNumberInput === null) {
+      throw new Error("Missing art editor inputs");
+    }
+
+    expect(
+      nameInput.compareDocumentPosition(imageNumberInput) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).not.toBe(0);
+    expect(nameInput.value).toBe("Moonlit Envoy");
+
+    await act(async () => {
+      setInputValue(nameInput, "Renamed Envoy");
+      nameInput.form?.dispatchEvent(
+        new Event("submit", { bubbles: true, cancelable: true }),
+      );
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "card-id-1",
+      field: "name",
+      value: "Renamed Envoy",
+    });
+    expect(
+      container.querySelector('[data-editor-art-card-name-status="true"]')?.textContent,
+    ).toContain("Saved");
+    expect(container.querySelector("h2")?.textContent).toBe("Renamed Envoy");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("discards name edits with Escape and saves them on blur", async () => {
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>

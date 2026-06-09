@@ -427,6 +427,9 @@ export default function CardEditorApp({
   const [artEditorCardId, setArtEditorCardId] = useState<string | null>(null);
   const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
+  const [cardNameSaveStatus, setCardNameSaveStatus] =
+    useState<ArtSaveStatus>("idle");
+  const [cardNameSaveError, setCardNameSaveError] = useState<string | null>(null);
   const [imageNumberSaveStatus, setImageNumberSaveStatus] =
     useState<ArtSaveStatus>("idle");
   const [imageNumberSaveError, setImageNumberSaveError] = useState<string | null>(
@@ -907,6 +910,8 @@ export default function CardEditorApp({
     setArtEditorCardId(card.id);
     setArtSaveStatus("idle");
     setArtSaveError(null);
+    setCardNameSaveStatus("idle");
+    setCardNameSaveError(null);
     setImageNumberSaveStatus("idle");
     setImageNumberSaveError(null);
   }
@@ -915,6 +920,8 @@ export default function CardEditorApp({
     setArtEditorCardId(null);
     setArtSaveStatus("idle");
     setArtSaveError(null);
+    setCardNameSaveStatus("idle");
+    setCardNameSaveError(null);
     setImageNumberSaveStatus("idle");
     setImageNumberSaveError(null);
   }
@@ -932,6 +939,22 @@ export default function CardEditorApp({
       .catch((error: unknown) => {
         setArtSaveStatus("error");
         setArtSaveError(errorMessageFor(error));
+      });
+  }
+
+  function handleCardNameSave(card: EditorCardRecord, name: string) {
+    setCardNameSaveStatus("saving");
+    setCardNameSaveError(null);
+
+    void apiClient
+      .saveEditorCardField({ id: card.id, field: "name", value: name })
+      .then((response) => {
+        replaceConfirmedCard(response.card);
+        setCardNameSaveStatus("saved");
+      })
+      .catch((error: unknown) => {
+        setCardNameSaveStatus("error");
+        setCardNameSaveError(errorMessageFor(error));
       });
   }
 
@@ -1119,9 +1142,12 @@ export default function CardEditorApp({
           card={artEditorCard}
           saveStatus={artSaveStatus}
           saveError={artSaveError}
+          cardNameSaveStatus={cardNameSaveStatus}
+          cardNameSaveError={cardNameSaveError}
           imageNumberSaveStatus={imageNumberSaveStatus}
           imageNumberSaveError={imageNumberSaveError}
           onSave={(art) => handleArtSave(artEditorCard, art)}
+          onSaveCardName={(name) => handleCardNameSave(artEditorCard, name)}
           onSaveImageNumber={(imageNumber) =>
             handleImageNumberSave(artEditorCard, imageNumber)
           }
