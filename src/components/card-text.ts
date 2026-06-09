@@ -148,6 +148,58 @@ function maybeWrapKeyword(value: string): TextSegment[] {
   return segments;
 }
 
+/**
+ * Matches a trailing number followed by whitespace at the end of a text run,
+ * e.g. the `2 ` in `costs 2 `. The whitespace is required: it is the only
+ * line-break opportunity between the number and the symbol that follows, so a
+ * number butted directly against its symbol (`2●`) needs no grouping. The
+ * leading group captures everything before the number so it can stay its own
+ * text segment.
+ */
+const TRAILING_NUMBER_RE = /^([\s\S]*?)(\d+\s+)$/;
+
+/**
+ * Keeps a number glued to the resource symbol that immediately follows it.
+ *
+ * The number and the symbol's icon render as separate inline elements, so the
+ * whitespace between them (e.g. the space in `costs 2 ●`) is a line-break
+ * opportunity — the layout can leave the `2` at the end of one line and drop
+ * the icon to the next. This pass detects a text run ending in a number and
+ * whitespace directly before a symbol segment, peels that number (with its
+ * trailing whitespace) off the text run, and wraps it together with the symbol
+ * in a `nobreak` group so they always render on the same line. The trigger and
+ * fast keyword groups already carry their own `nobreak`, so their symbols are
+ * never bare here.
+ */
+function bindNumbersToSymbols(segments: TextSegment[]): TextSegment[] {
+  const result: TextSegment[] = [];
+  for (const segment of segments) {
+    if (segment.kind !== "symbol") {
+      result.push(segment);
+      continue;
+    }
+    const prev = result[result.length - 1];
+    if (prev === undefined || prev.kind !== "text") {
+      result.push(segment);
+      continue;
+    }
+    const match = TRAILING_NUMBER_RE.exec(prev.value);
+    if (match === null) {
+      result.push(segment);
+      continue;
+    }
+    result.pop();
+    if (match[1] !== "") {
+      result.push({ kind: "text", value: match[1] });
+    }
+    result.push({
+      kind: "nobreak",
+      segments: [{ kind: "text", value: match[2] }, segment],
+    });
+  }
+  return result;
+}
+
 /** Parses rules text into segments of plain text, symbols, and glossary terms. */
 export function tokenizeRulesText(text: string): TextSegment[] {
   const segments: TextSegment[] = [];
@@ -263,7 +315,7 @@ export function tokenizeRulesText(text: string): TextSegment[] {
     i += 1;
   }
   flushBufferAndExtractTerms();
-  return segments;
+  return bindNumbersToSymbols(segments);
 }
 
 /** Format the card type and subtype line. */

@@ -294,6 +294,52 @@ describe("tokenizeRulesText", () => {
     ]);
   });
 
+  // A number must never wrap away from the resource symbol it sits next to.
+  // The number and the symbol icon render as separate inline elements, so the
+  // space between them (e.g. `costs 2 ●`) is a line-break opportunity. The
+  // tokenizer groups the number (with its trailing space) and the symbol into a
+  // single `nobreak` segment so they always render on the same line.
+  it("glues a space-separated number to the energy symbol that follows it", () => {
+    const result = tokenizeRulesText("the next card you play costs 2 ● less.");
+    expect(result).toEqual([
+      { kind: "text", value: "the next card you play costs " },
+      {
+        kind: "nobreak",
+        segments: [
+          { kind: "text", value: "2 " },
+          { kind: "symbol", symbol: "energy", char: "●" },
+        ],
+      },
+      { kind: "text", value: " less." },
+    ]);
+  });
+
+  it("glues a space-separated number to a trailing points symbol", () => {
+    const result = tokenizeRulesText("Gain 2 ⍟.");
+    expect(result).toEqual([
+      { kind: "text", value: "Gain " },
+      {
+        kind: "nobreak",
+        segments: [
+          { kind: "text", value: "2 " },
+          { kind: "symbol", symbol: "points", char: "⍟" },
+        ],
+      },
+      { kind: "text", value: "." },
+    ]);
+  });
+
+  // A number butted directly against its symbol has no break opportunity
+  // between them, so it stays a plain text run (no `nobreak` grouping).
+  it("leaves a number butted against its symbol ungrouped", () => {
+    const result = tokenizeRulesText("Gain 2⍟.");
+    expect(result).toEqual([
+      { kind: "text", value: "Gain 2" },
+      { kind: "symbol", symbol: "points", char: "⍟" },
+      { kind: "text", value: "." },
+    ]);
+  });
+
   it("preserves the original spark symbol character, not a replacement", () => {
     const result = tokenizeRulesText("\u234F");
     expect(result).toHaveLength(1);
