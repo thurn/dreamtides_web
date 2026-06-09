@@ -2147,7 +2147,7 @@ art-owned = false
 card-number = 116
 
 [[cards]]
-name = "Spirit Reaping"
+name = "Blight Weaver"
 mtg-name = "Krark-Clan Ironworks"
 id = "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a"
 rendered-text = "Abandon a warrior: Gain 2●."
@@ -2158,10 +2158,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework"]
-image-number = 2155438703
+tags = ["Art Rework", "Art OK"]
+image-number = 436090600
 art-owned = false
 card-number = 117
+art = { x = -0.31, y = 0.514, scale = 1.67 }
 
 [[cards]]
 name = "Toll of Passage"
@@ -7253,7 +7254,7 @@ art-owned = false
 card-number = 394
 
 [[cards]]
-name = "Thundercatcher"
+name = "Dreadcall Warden"
 mtg-name = "Skullclamp"
 id = "2ce84a16-1295-4738-9e2d-1f57590b2269"
 rendered-text = "2●, Abandon a 1✦ ally: Draw 2 cards."
@@ -7264,10 +7265,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework"]
-image-number = 533945362
+tags = ["Art Rework", "Art OK"]
+image-number = 2521694547
 art-owned = false
 card-number = 395
+art = { x = 0, y = 0.311, scale = 1.47 }
 
 [[cards]]
 name = "Vaultbreaker"
@@ -8974,7 +8976,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = []
+tags = ["Art Rework", "Art OK"]
 image-number = 2639857441
 art-owned = false
 card-number = 488
