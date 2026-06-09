@@ -10,6 +10,9 @@ Do not write tests which fail when I change my production TOML files
 or change things like default algorithm chocies. Assume all TOML
 game design data is subject to change at any time.
 
+Ignore the legacy `src/draft_test/` directory for most changes, there is
+no need to update this code when making changes.
+
 # Cards
 
 Card data lives in data/tabula/cards_v2.toml
