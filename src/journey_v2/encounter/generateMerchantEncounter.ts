@@ -1,5 +1,8 @@
 import { sha256 } from "js-sha256";
-import { buildMerchantRewardsForNeed } from "../catalog/rewardCatalog";
+import {
+  buildMerchantRewardWithBuilder,
+  buildMerchantRewardsForNeed,
+} from "../catalog/rewardCatalog";
 import { priceMerchantReward } from "../catalog/pricing";
 import { renderMerchantDialogue } from "../dialogue/dialogue";
 import { readMerchantDeck } from "../read/deckRead";
@@ -11,6 +14,7 @@ import type {
   MerchantNeed,
   MerchantOffer,
   MerchantReward,
+  MerchantRewardBuilderId,
 } from "../types";
 import type {
   MerchantRewardFamily,
@@ -34,6 +38,13 @@ type StableJsonValue =
   | { readonly [key: string]: StableJsonValue };
 
 const OFFER_IDS = ["A", "B"] as const;
+const FALLBACK_BUILDER_IDS: readonly MerchantRewardBuilderId[] = [
+  "transfigure_card",
+  "purge_weak_card",
+  "grant_dreamsign",
+  "gain_essence",
+  "raise_essence_cap",
+];
 
 const BUILDER_FAMILY: Readonly<Record<MerchantReward["builderId"], MerchantRewardFamily>> = {
   grant_support_card: "cardGrant",
@@ -101,7 +112,7 @@ function buildCandidates(
   context: MerchantContext,
   needs: readonly MerchantNeed[],
 ): MerchantOfferCandidate[] {
-  return needs.flatMap((need, needRank) =>
+  const candidates = needs.flatMap((need, needRank) =>
     buildMerchantRewardsForNeed(context, need).map((reward, rewardRank) => ({
       need,
       reward,
@@ -110,6 +121,31 @@ function buildCandidates(
       targetKey: targetKeyForNeed(need),
     })),
   );
+  const seen = new Set(
+    candidates.map(
+      (candidate) =>
+        `${candidate.need.needId}:${candidate.reward.builderId}:${candidate.targetKey}`,
+    ),
+  );
+
+  for (const [needRank, need] of needs.entries()) {
+    for (const [fallbackRank, builderId] of FALLBACK_BUILDER_IDS.entries()) {
+      const key = `${need.needId}:${builderId}:${targetKeyForNeed(need)}`;
+      if (seen.has(key)) continue;
+      const reward = buildMerchantRewardWithBuilder(context, need, builderId);
+      if (reward === null) continue;
+      seen.add(key);
+      candidates.push({
+        need,
+        reward,
+        needRank,
+        rewardRank: 100 + fallbackRank,
+        targetKey: targetKeyForNeed(need),
+      });
+    }
+  }
+
+  return candidates;
 }
 
 function candidateSortKey(candidate: MerchantOfferCandidate): readonly number[] {

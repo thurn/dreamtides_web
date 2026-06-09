@@ -75,6 +75,7 @@ export type {
   MerchantNeedProjection,
   MerchantNeedReference,
   MerchantOffer,
+  MerchantOfferActionResult,
   MerchantRewardBuilderId,
   MerchantRoleNeed,
   MerchantReward,

@@ -362,6 +362,15 @@ export interface MerchantAcceptRequest {
   choice?: MerchantChoice;
 }
 
+export type MerchantOfferActionResult =
+  | {
+      ok: true;
+    }
+  | {
+      ok: false;
+      reason: string;
+    };
+
 export interface MerchantDeclineRequest {
   encounterSignature: string;
   offerId: string;

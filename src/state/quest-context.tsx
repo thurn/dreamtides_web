@@ -82,6 +82,7 @@ import type {
   MerchantAcceptRequest,
   MerchantApplyPayload,
   MerchantDeclineRequest,
+  MerchantOfferActionResult,
 } from "../journey_v2";
 
 export { deriveEntryIdCounter };
@@ -152,7 +153,7 @@ export interface QuestMutations {
   acceptDreamMerchantOffer: (
     siteId: string,
     request: MerchantAcceptRequest,
-  ) => void;
+  ) => MerchantOfferActionResult | void;
   declineDreamMerchant: (
     siteId: string,
     request: MerchantDeclineRequest,
@@ -1810,9 +1811,11 @@ export function QuestProvider({
 
   const acceptDreamMerchantOffer = useCallback(
     (siteId: string, request: MerchantAcceptRequest) => {
+      let outcome: MerchantOfferActionResult = { ok: true };
       setState((prev) => {
         const site = findSite(prev, siteId);
         if (site === null) {
+          outcome = { ok: false, reason: "site_unavailable" };
           logEvent("merchant_offer_validation_failed", {
             ...merchantRequestLogFields(siteId, request),
             reason: "site_unavailable",
@@ -1827,6 +1830,7 @@ export function QuestProvider({
           request,
         });
         if (!result.ok) {
+          outcome = { ok: false, reason: result.reason };
           logEvent("merchant_offer_validation_failed", {
             ...merchantRequestLogFields(siteId, request),
             reason: result.reason,
@@ -1834,6 +1838,7 @@ export function QuestProvider({
           return prev;
         }
 
+        outcome = { ok: true };
         logEvent("merchant_offer_accepted", {
           ...merchantRequestLogFields(siteId, request),
           builderId: result.offer.rewardBuilderId,
@@ -1844,6 +1849,7 @@ export function QuestProvider({
         entryIdCounter.current = deriveEntryIdCounter(result.state.deck);
         return result.state;
       });
+      return outcome;
     },
     [questContent],
   );

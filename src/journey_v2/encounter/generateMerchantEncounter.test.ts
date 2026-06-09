@@ -298,10 +298,16 @@ describe("generateMerchantEncounter", () => {
     expect(candidateIdentityChanged).not.toBe(base);
   });
 
-  it("fails clearly instead of returning a partial encounter when two offers cannot be built", () => {
-    expect(() => generateMerchantEncounter(insufficientCandidateContext())).toThrow(
-      "Dream Merchant encounter requires exactly two buildable offers; selected 1",
-    );
+  it("falls back to alternate builders instead of returning a partial encounter", () => {
+    const encounter = generateMerchantEncounter(insufficientCandidateContext());
+
+    expect(encounter.offers).toHaveLength(2);
+    expect(encounter.offers.map((offer) => offer.offerId)).toEqual(["A", "B"]);
+    expect(encounter.offers.some((offer) =>
+      offer.rewardBuilderId === "gain_essence" ||
+      offer.rewardBuilderId === "raise_essence_cap" ||
+      offer.rewardBuilderId === "grant_dreamsign",
+    )).toBe(true);
   });
 
   it("satisfies honest-broker invariants across 25 deterministic seeds", () => {

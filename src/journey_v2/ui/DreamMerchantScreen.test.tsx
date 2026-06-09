@@ -438,6 +438,17 @@ describe("DreamMerchantScreen", () => {
     });
   });
 
+  it("shows a stale-offer message when acceptance reports validation failure", () => {
+    const onAcceptOffer = vi.fn(() => ({ ok: false, reason: "stale_encounter" }));
+    const { container } = renderScreen({ onAcceptOffer });
+
+    click(byTestId(container, "merchant-offer-action-A"));
+
+    expect(byTestId(container, "merchant-validation-message").textContent).toContain(
+      "offer changed",
+    );
+  });
+
   it("opens chooser choices, preserves price, confirms selection, and accepts choice id", () => {
     const onAcceptOffer = vi.fn();
     const { container } = renderScreen({ onAcceptOffer });

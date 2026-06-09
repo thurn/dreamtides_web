@@ -6,6 +6,7 @@ import type {
   MerchantDeclineRequest,
   MerchantEncounter,
   MerchantOffer,
+  MerchantOfferActionResult,
 } from "../types";
 import type { QuestState, SiteState } from "../../types/quest";
 import { useMemo, useState } from "react";
@@ -15,7 +16,7 @@ import { OfferCard } from "./OfferCard";
 export interface DreamMerchantScreenProps {
   site: SiteState;
   encounter: MerchantEncounter;
-  onAcceptOffer: (request: MerchantAcceptRequest) => void;
+  onAcceptOffer: (request: MerchantAcceptRequest) => MerchantOfferActionResult | void;
   onDecline: (request: MerchantDeclineRequest) => void;
   context?: MerchantContext;
   questState?: QuestState;
@@ -33,6 +34,7 @@ export function DreamMerchantScreen({
   const [selectedChoices, setSelectedChoices] = useState<
     ReadonlyMap<string, MerchantChoice>
   >(new Map());
+  const [validationMessage, setValidationMessage] = useState<string | null>(null);
 
   const choosingOffer = useMemo(
     () => encounter.offers.find((offer) => offer.offerId === choosingOfferId),
@@ -56,6 +58,7 @@ export function DreamMerchantScreen({
   }
 
   function acceptOffer(offer: MerchantOffer) {
+    setValidationMessage(null);
     const choice = selectedChoiceFor(offer);
     const request: MerchantAcceptRequest = {
       encounterSignature: encounter.encounterSignature,
@@ -65,7 +68,10 @@ export function DreamMerchantScreen({
       needId: offer.needId,
       ...(choice === undefined ? {} : { choice }),
     };
-    onAcceptOffer(request);
+    const result = onAcceptOffer(request);
+    if (result?.ok === false) {
+      setValidationMessage(validationMessageFor(result.reason));
+    }
   }
 
   function declineEncounter() {
@@ -85,10 +91,12 @@ export function DreamMerchantScreen({
 
   function openChooser(offer: MerchantOffer) {
     if (offer.locked) return;
+    setValidationMessage(null);
     setChoosingOfferId(offer.offerId);
   }
 
   function selectCandidate(offer: MerchantOffer, candidate: MerchantChoiceCandidate) {
+    setValidationMessage(null);
     setSelectedChoices((previous) => {
       const next = new Map(previous);
       next.set(offer.offerId, { choiceId: candidate.choiceId });
@@ -149,6 +157,15 @@ export function DreamMerchantScreen({
             </div>
           </section>
 
+          {validationMessage !== null && (
+            <p
+              className="rounded-md border border-amber-300/45 bg-amber-950/35 px-4 py-3 text-sm font-semibold text-amber-100"
+              data-testid="merchant-validation-message"
+            >
+              {validationMessage}
+            </p>
+          )}
+
           <button
             type="button"
             className="min-h-12 rounded-md border border-slate-600 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-100 transition hover:bg-slate-800"
@@ -187,4 +204,19 @@ export function DreamMerchantScreen({
       )}
     </div>
   );
+}
+
+function validationMessageFor(reason: string): string {
+  if (
+    reason === "stale_encounter" ||
+    reason === "price_changed" ||
+    reason === "reward_mismatch" ||
+    reason === "need_mismatch"
+  ) {
+    return "The offer changed while you were deciding. Review the new deal and try again.";
+  }
+  if (reason === "insufficient_essence" || reason === "offer_locked") {
+    return "That offer is out of reach right now.";
+  }
+  return "The merchant cannot complete that trade. Review the offer and try again.";
 }

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act, type ReactElement, type ReactNode } from "react";
+import { StrictMode, act, type ReactElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ScreenRouter } from "./ScreenRouter";
@@ -12,13 +12,14 @@ import {
 import { parseRuntimeConfig } from "../runtime/runtime-config";
 import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
-import type { QuestState, SiteState } from "../types/quest";
+import type { CardSourceDebugState, QuestState, SiteState } from "../types/quest";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
   makeMerchantTestDeckEntry,
   makeMerchantTestQuestState,
 } from "../journey_v2/testing/fixtures";
+import { getLogEntries, resetLog } from "../logging";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -224,11 +225,13 @@ function renderWithQuest({
   questContent,
   mutations = makeMutations(),
   children,
+  strict = false,
 }: {
   state: QuestState;
   questContent: QuestContent;
   mutations?: QuestMutations;
   children: ReactElement;
+  strict?: boolean;
 }) {
   const container = document.createElement("div");
   document.body.appendChild(container);
@@ -236,7 +239,7 @@ function renderWithQuest({
   roots.push(root);
 
   act(() => {
-    root.render(
+    const tree = (
       <QuestContextProvider
         value={{
           state,
@@ -246,8 +249,9 @@ function renderWithQuest({
         }}
       >
         {children}
-      </QuestContextProvider>,
+      </QuestContextProvider>
     );
+    root.render(strict ? <StrictMode>{tree}</StrictMode> : tree);
   });
 
   return container;
@@ -261,6 +265,7 @@ afterEach(() => {
   }
   document.body.innerHTML = "";
   vi.clearAllMocks();
+  resetLog();
 });
 
 describe("ScreenRouter DreamJourney routing", () => {
@@ -288,6 +293,45 @@ describe("ScreenRouter DreamJourney routing", () => {
 
     expect(container.querySelector('[data-testid="dream-merchant-v2-screen"]')).not.toBeNull();
     expect(container.querySelector('[data-testid="classic-journey-screen"]')).toBeNull();
+  });
+
+  it("logs shown offers once per encounter signature under strict mode", () => {
+    const site = makeSite("DreamJourney");
+    const state = makeStateFor(site);
+    renderWithQuest({
+      state,
+      questContent: makeMerchantTestContent({ cards: fixtureCards() }),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+      strict: true,
+    });
+
+    const shownLogs = getLogEntries().filter(
+      (entry) => entry.event === "merchant_offer_shown",
+    );
+    expect(shownLogs).toHaveLength(2);
+    expect(shownLogs.map((entry) => entry.offerId)).toEqual(["A", "B"]);
+  });
+
+  it("sets card source debug for visible merchant grant cards", () => {
+    const site = makeSite("DreamJourney");
+    const state = makeStateFor(site);
+    const mutations = makeMutations();
+    renderWithQuest({
+      state,
+      mutations,
+      questContent: makeMerchantTestContent({ cards: fixtureCards() }),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+    });
+
+    const [debugState, source] =
+      vi.mocked(mutations.setCardSourceDebug).mock.calls[0] ?? [];
+    const cardSourceDebug = debugState as CardSourceDebugState | null | undefined;
+    expect(source).toBe("merchant_grant_cards_shown");
+    expect(cardSourceDebug?.screenLabel).toBe("Dream Merchant Offers");
+    expect(cardSourceDebug?.surface).toBe("Reward");
+    expect(cardSourceDebug?.entries.some((entry) =>
+      typeof entry.cardNumber === "number",
+    )).toBe(true);
   });
 
   it("does not route a non-DreamJourney site to the v2 screen in v2 config", () => {

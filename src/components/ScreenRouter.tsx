@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { AtlasScreen } from "../screens/AtlasScreen";
@@ -29,8 +29,11 @@ import {
   buildMerchantContext,
   generateMerchantEncounter,
   type MerchantAcceptRequest,
+  type MerchantCatalogCard,
   type MerchantDeclineRequest,
+  type MerchantGameObject,
 } from "../journey_v2";
+import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import type { QuestContent } from "../data/quest-content";
 import { siteTypeName } from "../atlas/atlas-generator";
 import { logEvent } from "../logging";
@@ -268,6 +271,7 @@ function DreamJourneySiteScreen({
 
 function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
   const { state, mutations, questContent } = useQuest();
+  const loggedOfferSignatureRef = useRef<string | null>(null);
 
   useEffect(() => {
     logEvent("site_entered", {
@@ -312,6 +316,13 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
 
   useEffect(() => {
     if (!encounterResult.ok) return;
+    if (
+      loggedOfferSignatureRef.current ===
+      encounterResult.encounter.encounterSignature
+    ) {
+      return;
+    }
+    loggedOfferSignatureRef.current = encounterResult.encounter.encounterSignature;
     for (const offer of encounterResult.encounter.offers) {
       logEvent("merchant_offer_shown", {
         siteId: site.id,
@@ -325,9 +336,42 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
     }
   }, [encounterResult, site.id]);
 
+  const visibleGrantCards = useMemo(
+    () =>
+      encounterResult.ok
+        ? collectVisibleGrantCards(encounterResult.encounter.offers)
+        : [],
+    [encounterResult],
+  );
+
+  const cardSourceDebugState = useMemo(
+    () =>
+      buildCardSourceDebugState(
+        "Dream Merchant Offers",
+        "Reward",
+        visibleGrantCards.map((catalogCard) => catalogCard.card),
+        state.resolvedPackage,
+      ),
+    [state.resolvedPackage, visibleGrantCards],
+  );
+
+  useEffect(() => {
+    mutations.setCardSourceDebug(
+      cardSourceDebugState,
+      "merchant_grant_cards_shown",
+    );
+  }, [cardSourceDebugState, mutations]);
+
+  useEffect(
+    () => () => {
+      mutations.setCardSourceDebug(null, "merchant_grant_cards_hidden");
+    },
+    [mutations],
+  );
+
   const handleAcceptOffer = useCallback(
     (request: MerchantAcceptRequest) => {
-      mutations.acceptDreamMerchantOffer(site.id, request);
+      return mutations.acceptDreamMerchantOffer(site.id, request);
     },
     [mutations, site.id],
   );
@@ -383,6 +427,28 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       onDecline={handleDecline}
     />
   );
+}
+
+function collectVisibleGrantCards(
+  offers: readonly { reward: { gameObjects: readonly MerchantGameObject[]; choiceRequest?: { candidates: readonly { gameObjects: readonly MerchantGameObject[] }[] } } }[],
+): MerchantCatalogCard[] {
+  const byUuid = new Map<string, MerchantCatalogCard>();
+  const collect = (objects: readonly MerchantGameObject[]) => {
+    for (const object of objects) {
+      if (object.objectType === "catalogCard") {
+        byUuid.set(object.cardUuid, object);
+      }
+    }
+  };
+
+  for (const offer of offers) {
+    collect(offer.reward.gameObjects);
+    for (const candidate of offer.reward.choiceRequest?.candidates ?? []) {
+      collect(candidate.gameObjects);
+    }
+  }
+
+  return [...byUuid.values()];
 }
 
 function debugJourneyForcingFor(
