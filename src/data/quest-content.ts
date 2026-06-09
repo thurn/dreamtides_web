@@ -1,4 +1,6 @@
 import { loadDreamsignTemplates } from "./dreamsigns";
+import { loadMerchantCorpus, type MerchantCorpus } from "./merchant-corpus";
+import { loadDreamsignProfiles, type DreamsignProfile } from "./dreamsign-profiles";
 import { logEvent } from "../logging";
 import {
   DEFAULT_STARTING_ESSENCE,
@@ -59,6 +61,19 @@ export interface QuestContent {
   fitModel?: FitModel;
   /** Cards per fresh pack in fresh20 mode (from `?packsize=`); defaults applied at use. */
   fresh20PackSize?: number;
+  /**
+   * Baked merchant corpus artifact (quality, multiplicity, clusters) loaded
+   * from `public/merchant-corpus-data.json`.  Populated unconditionally when
+   * the v2 journey can be reached; absent before `npm run bake-merchant-corpus`
+   * has been run.
+   */
+  merchantCorpus?: MerchantCorpus;
+  /**
+   * Curated dreamsign profiles keyed by dreamsign UUID, loaded from
+   * `public/dreamsign-profiles-data.json`.  A dreamsign absent from the map
+   * is treated as featureless quality 2 by the merchant signal layer.
+   */
+  dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
 }
 
 /**
@@ -476,6 +491,8 @@ export async function loadQuestContent(
     affinityCorpus,
     tideDecks,
     tides2Decks,
+    merchantCorpus,
+    dreamsignProfiles,
   ] = await Promise.all([
     loadCardsV2Database(),
     loadDreamcallersV2(),
@@ -495,6 +512,12 @@ export async function loadQuestContent(
     poolNeedsTides ? loadTideDecks() : Promise.resolve(null),
     // Fetch the committed `tides2` tide decks only for the `tides2` variant.
     poolNeedsTides2 ? loadTides2Decks() : Promise.resolve(null),
+    // The merchant corpus and dreamsign profiles are small and always loaded
+    // unconditionally so the v2 journey's merchant has signals on every path.
+    loadMerchantCorpus().catch(() => undefined as MerchantCorpus | undefined),
+    loadDreamsignProfiles().catch(
+      () => undefined as ReadonlyMap<string, DreamsignProfile> | undefined,
+    ),
   ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
@@ -563,6 +586,8 @@ export async function loadQuestContent(
       draftRecords,
       fitModel,
       fresh20PackSize,
+      merchantCorpus,
+      dreamsignProfiles,
     };
   }
 
@@ -572,6 +597,8 @@ export async function loadQuestContent(
     dreamsignTemplates,
     poolContext,
     draftMode,
+    merchantCorpus,
+    dreamsignProfiles,
   };
 }
 

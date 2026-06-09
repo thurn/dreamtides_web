@@ -1,0 +1,36 @@
+# Curated dreamsign profiles for the dream merchant v3 matching system.
+#
+# Each entry maps a dreamsign UUID to the hard deck features its ability
+# rewards. The merchant uses these to score how well each dreamsign fits
+# the player's current deck.
+#
+# Fields (all lists default to empty = generically useful):
+#   id         — dreamsign UUID (must match dreamsigns.toml)
+#   subtypes   — card subtypes the dreamsign rewards (e.g. ["Warrior"])
+#   card-types — card types rewarded: "Character", "Event"
+#   cost-bands — cost bands rewarded: "cheap" (<=1), "mid" (2-3), "big" (>=4)
+#   keywords   — keyword mechanics rewarded: "reclaim", "fast"
+#   quality    — 1 = premium, 2 = solid, 3 = niche
+#
+# Task 4 will fill out the full set of dreamsigns. This placeholder contains
+# two entries for schema validation.
+
+# Wolf Sigil — rewards Reclaim abilities costing less, so decks with reclaim
+# cards benefit directly.
+[[dreamsigns]]
+id = "8778BF17-4E0A-4CE7-B23C-4DAF49A782A7"
+subtypes = []
+card-types = []
+cost-bands = []
+keywords = ["reclaim"]
+quality = 2
+
+# Pyramid Relic — rewards playing multiple characters per turn, especially
+# in cost-reduction / big-energy character chains.
+[[dreamsigns]]
+id = "278EC1AB-F532-4862-84AE-63DF5E49548C"
+subtypes = []
+card-types = ["Character"]
+cost-bands = []
+keywords = []
+quality = 2

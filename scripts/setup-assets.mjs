@@ -466,12 +466,26 @@ function readDreamsignAltText(dreamsignArtDir) {
   return altTextByImageName;
 }
 
+/**
+ * Convert a TOML dreamsign-profiles record to its runtime JSON representation,
+ * converting kebab-case keys to camelCase.
+ */
+export function transformDreamsignProfile(profile) {
+  const result = {};
+  for (const [key, value] of Object.entries(profile)) {
+    result[kebabToCamel(key)] = value;
+  }
+  return result;
+}
+
 export function setupAssets({
   cardTomlPath = join(DATA_DIR, "tabula", "rendered-cards.toml"),
   cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   dreamcallerTomlPath = join(DATA_DIR, "tabula", "dreamcallers.toml"),
   dreamcallerV2TomlPath = join(DATA_DIR, "tabula", "dreamcallers_v2.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
+  dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
+  merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
   publicDir = PUBLIC_DIR,
   imageCacheDir = IMAGE_CACHE_DIR,
   dreamcallerArtDir = defaultDreamcallerArtDir(),
@@ -492,6 +506,8 @@ export function setupAssets({
   const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
   const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
+  const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
+  const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
 
   console.log("Parsing rendered-cards.toml...");
@@ -758,6 +774,41 @@ export function setupAssets({
   console.log(
     `Wrote ${jsonDreamsigns.length} dreamsigns to dreamsign-data.json`,
   );
+
+  // Dreamsign profiles: parse the curated TOML and write the kebab->camel JSON
+  // the runtime loader fetches.
+  console.log("Parsing dreamsign_profiles.toml...");
+  const dreamsignProfilesTomlContent = readFileSync(dreamsignProfilesTomlPath, "utf8");
+  const parsedDreamsignProfiles = parse(dreamsignProfilesTomlContent);
+  const allDreamsignProfiles = parsedDreamsignProfiles.dreamsigns;
+
+  if (!Array.isArray(allDreamsignProfiles)) {
+    throw new Error("Expected [[dreamsigns]] array in dreamsign_profiles.toml");
+  }
+
+  const jsonDreamsignProfiles = allDreamsignProfiles.map(transformDreamsignProfile);
+  writeFileSync(
+    dreamsignProfilesJsonPath,
+    JSON.stringify(jsonDreamsignProfiles, null, 2) + "\n",
+  );
+  console.log(
+    `Wrote ${jsonDreamsignProfiles.length} dreamsign profiles to dreamsign-profiles-data.json`,
+  );
+
+  // Merchant corpus: copy the baked artifact as-is to the public directory so
+  // the runtime loader can fetch it as /merchant-corpus-data.json.  If the
+  // file has not been baked yet (`npm run bake-merchant-corpus`), warn and
+  // continue — the merchant will fall back to an empty corpus at runtime.
+  if (existsSync(merchantCorpusJsonPath)) {
+    const corpusJson = readFileSync(merchantCorpusJsonPath, "utf8");
+    writeFileSync(merchantCorpusPublicPath, corpusJson);
+    console.log("Copied merchant_corpus.json to merchant-corpus-data.json");
+  } else {
+    console.warn(
+      "  Warning: no data/merchant_corpus.json found; the dream merchant will " +
+        "have no corpus signals until `npm run bake-merchant-corpus` is run.",
+    );
+  }
 
   // Create card image symlinks
   recreateDir(cardsDir);
