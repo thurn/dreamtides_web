@@ -19,11 +19,15 @@ property of the system.
 
 ## Non-goals
 
-- Time-limited journey effects (effects scoped to the next N battles).
-- Essence as a currency at the merchant (no prices, no locked offers, no
-  essence-granting rewards).
+- Time-limited journey effects (effects scoped to the next N battles or
+  dreamscapes).
+- Essence or omens as merchant currency or merchant rewards (no prices, no
+  locked offers, no essence/omen grants, no shop or reroll modifiers).
 - Card type conversion (character/event conversion rewards).
+- Site/route manipulation rewards (adding or replacing dreamscape sites).
 - Regex- or tag-based inference of card function (removal, draw, payoff tiers).
+- Changes to the transfiguration rules themselves
+  (`src/transfiguration/transfiguration-logic.ts` is consumed as-is).
 
 ## Encounter structure
 
@@ -35,12 +39,12 @@ property of the system.
   retained: acceptance rebuilds the encounter from current state, validates the
   encounter signature and offer identity, applies the reward, and completes the
   site.
-- Any chooser shown to the player contains at most 4 cards.
+- Any chooser shown to the player contains at most 4 items.
 
 ### Commit-then-reveal for hidden drafts
 
-Two archetypes (`category_draft_known`, `premium_draft`) hide their candidate
-cards until the player commits. Accepting one of these is two steps:
+Archetypes that hide their candidate cards until the player commits
+(`category_draft_known`, `premium_draft`) accept in two steps:
 
 1. **Commit mutation**: records the committed offer id in quest state and
    forfeits the other offer. The site is not yet complete. The commit flag
@@ -52,92 +56,254 @@ cards until the player commits. Accepting one of these is two steps:
 
 Fully face-up archetypes keep the single accept-with-choice mutation.
 
+## Seeded randomness
+
+All sampling uses the existing stable-hash utility (SHA-256 over string parts,
+as used today for jitter and dialogue selection), mapped to uniform floats.
+Every draw salts the hash with (quest seed, site id, slot, purpose), e.g.
+`hash(seed, siteId, "B", "archetype")`, `hash(seed, siteId, "B", "target", i)`.
+Draws are therefore independent of one another and reproducible. The same run
+always shows the same offers at a given merchant; different runs diverge
+heavily.
+
+### Band sampling (used throughout)
+
+"Sample from the band" below always means:
+
+1. Rank candidates by the stated signal, descending.
+2. Keep the top `bandFraction` of candidates, with a minimum of
+   `bandMinimum` candidates when the pool has at least that many (defaults:
+   `bandFraction = 0.25`, `bandMinimum = 5`).
+3. Seeded-sample uniformly within the band, without replacement when picking
+   multiple items.
+
+The band floor delivers "plausibly want it"; uniform sampling within the band
+delivers "never know what you'll get". Archetypes may override `bandFraction`
+(noted per archetype).
+
 ## Generation pipeline
 
 ```
 buildMerchantContext(questState, questContent)
-  -> MerchantContext { deck, dreamsigns, cardDatabase, corpus signals }
+  -> MerchantContext { deck, dreamsigns, cardDatabase, corpus signals,
+                       dreamsign profiles }
 
 Stage 1: archetype roll
   - Evaluate eligibility predicates for all archetypes against deck state.
   - Seeded weighted draw over eligible archetypes for slot A.
-  - Seeded weighted draw over remaining eligible archetypes for slot B,
-    constrained to a different archetype than A.
+  - Seeded weighted draw for slot B over eligible archetypes whose FAMILY
+    differs from A's family.
 
 Stage 2: target sampling (per offer)
-  - Build the archetype's candidate list, ranked by its corpus signal.
-  - Keep the top quantile (default: top 25%, minimum 5 candidates where the
-    pool allows; top 10% for premium_draft).
-  - Seeded-sample the target (or the 4-card chooser set) uniformly from the
-    band.
+  - Build the archetype's candidate list, ranked by its signal.
+  - Band-sample the target (or the chooser set).
 
 Dialogue: one merchant line (<=10 words) hinting at one seeded-chosen offer.
 Resolve: regenerate, validate, apply, complete site.
 ```
 
-Seeds derive from (quest seed, site id, slot, salt) via stable hashing, so each
-roll is independent and reproducible. The same run always shows the same offers
-at a given merchant; different runs diverge heavily.
+### Archetype families and the distinctness rule
 
-### Why two-stage sampling
+Slot B must come from a different family than slot A, so the two offers always
+pull in materially different directions:
 
-An argmax selection rule maps a given deck state to a single outcome. Here,
-"plausibly want it" comes from the quantile floor (only the top band of corpus-ranked candidates is offerable) and
-"never know what you'll get" comes from sampling within that band and from the
-archetype lottery above it. Eleven archetypes give up to 110 ordered (A, B)
-pairs before target variance multiplies in.
+| Family | Archetypes |
+|---|---|
+| `grant` | fit_card_grant, fit_card_draft, copies_draft, strong_card, premium_draft, category_draft_known, card_bundle, transfigured_draft |
+| `improve` | transfigure, starter_transfigure, keyword_mod |
+| `remove` | purge, purge_replace, cleanse |
+| `duplicate` | duplicate |
+| `dreamsign` | dreamsign, dreamsign_draft |
+
+17 archetypes across 5 families give several hundred valid ordered (A, B)
+archetype pairs before target variance multiplies in.
 
 ## Offer archetypes
 
-Each archetype has a base weight (constants in code), an eligibility predicate,
-and a target signal. Weights and quantile constants are tuning levers for the
-metrics harness.
+Base weights are plain constants in code and are tuning levers for the metrics
+harness. Initial values below; `w` is the stage-1 lottery weight.
 
-| Archetype | Player-facing shape | Visibility | Target signal |
-|---|---|---|---|
-| `fit_card_grant` | Receive one named card that fits your deck | Face-up | Fit-model score |
-| `fit_card_draft` | Draft 1 of 4 cards that fit your deck | Face-up | Fit-model score |
-| `strong_card` | Receive one named premium card | Face-up | Corpus quality rating |
-| `category_draft_known` | "Draft a Warrior" / "Draft an Event" / "Draft a cheap character" / "Draft from the *Skull Weaver* package" — pick 1 of 4 | Category visible, cards hidden until commit | Fit score within the sampled category |
-| `premium_draft` | Draft 1 of 4 exceptionally strong cards | Cards hidden until commit | Corpus quality rating (top 10% band), lightly blended with fit |
-| `card_bundle` | Gain 2–3 cards that work together and with your deck | Face-up | Affinity growth from a sampled seed card (reuses affinity-grower logic) |
-| `transfigure` | Permanently improve a deck card | Face-up with preview | Transfiguration benefit score; non-starters strongly preferred |
-| `keyword_mod` | Add Reclaim to an event / make an event fast / reduce a Reclaim cost | Face-up with preview | Sampling among eligible events |
-| `purge` | Remove a weak card from your deck | Face-up | Starters plus bottom-decile leave-one-out misfit |
-| `duplicate` | Add a copy of a deck card | Face-up | Corpus multiplicity × fit |
-| `dreamsign` | Gain a dreamsign suited to your deck | Face-up | Curated-profile match against deck hard data |
+### Grant family
 
-### Eligibility notes
+**`fit_card_grant`** (w=10) — *Receive one named card that fits your deck.*
+Candidates: all pool cards excluding starter rarity, excluding UUIDs already in
+the deck. Signal: fit-model score against the current deck. Band-sample 1.
+Face-up. Eligible when deck size >= 6 (below that the fit signal is mostly
+prior and `strong_card` covers the same ground).
 
-- `purge`: requires a starter card or a bottom-decile misfit card in the deck,
-  and a minimum deck size.
-- `duplicate`: requires a deck card with meaningful corpus multiplicity signal.
-- `transfigure`: requires a non-starter deck entry with a beneficial,
-  not-yet-applied transfiguration; starters qualify only when no non-starter
-  does.
-- `keyword_mod`: requires an eligible event (without Reclaim, not fast, or with
-  reducible Reclaim cost respectively).
-- Fit-based archetypes (`fit_card_grant`, `fit_card_draft`) require a minimum
-  deck size for the fit signal to be informative.
-- Always-eligible archetypes: `strong_card`, `category_draft_known`,
-  `premium_draft`, `card_bundle`, `dreamsign` (while unheld dreamsigns with
-  matching or neutral profiles exist). A visit with zero drafted cards
-  therefore still has real variety.
+**`fit_card_draft`** (w=10) — *Draft 1 of 4 cards that fit your deck.*
+Same candidate pool and signal; band-sample 4 without replacement. Face-up
+chooser. Eligible when deck size >= 6 and the band has >= 4 cards.
 
-### Category sources for `category_draft_known`
+**`copies_draft`** (w=6) — *Draft 1 of 4 cards; receive 2 copies of your
+pick.* Same as `fit_card_draft`, but the accepted card is added twice.
+Candidates are additionally filtered to multiplicity `m(c) >= 0.15` (cards
+real decks actually run as multiples). Eligible when that filtered band has
+>= 4 cards.
 
-Categories come from two tag-free sources:
+**`strong_card`** (w=8) — *Receive one named premium card.* Candidates: all
+non-starter pool cards. Signal: corpus quality rating. Band-sample 1 with
+`bandFraction = 0.15`. Face-up. Always eligible.
 
-1. **Hard card data**: card type, subtype (Warrior, Spirit Animal, ...), energy
-   cost band, spark band, fast/interrupt.
-2. **Corpus clusters**: communities mined from the affinity graph — "cards that
-   travel together." Each cluster is presented by its flagship card (highest
-   IDF × quality member): "the *Skull Weaver* package." Self-describing, with
-   no curated names.
+**`premium_draft`** (w=6) — *Draft 1 of 4 exceptionally strong cards.*
+Candidates: all non-starter pool cards. Signal:
+`0.8 * qualityNorm(c) + 0.2 * fitNorm(c)` (fit term is zero on an empty deck).
+Band-sample 4 with `bandFraction = 0.10`. Cards hidden until commit; the offer
+is sold purely on strength. Always eligible.
 
-The category for a given encounter is seeded-sampled from categories where the
-deck shows affinity, with a minority chance of a deliberately off-profile
-category for variety.
+**`category_draft_known`** (w=10) — *"Draft a Warrior" / "Draft an Event" /
+"Draft a cheap character" / "Draft from the Skull Weaver package" — pick 1 of
+4.* Category construction and sampling below. Within the sampled category,
+candidates are non-starter pool cards in the category; signal: fit score;
+band-sample 4. Category visible, cards hidden until commit. Eligible when at
+least one category has >= 8 non-starter pool cards.
+
+**`card_bundle`** (w=8) — *Gain 2–3 cards that work together and with your
+deck.* Algorithm: band-sample a seed card from the `fit_card_grant` candidate
+band (quality band when deck < 6 cards); grow 1–2 more cards greedily using the
+affinity-grower scoring shape,
+`score(c) = 0.5 * affinityToSeed(c) + 0.3 * affinityToBundle(c) + 0.2 * fitNorm(c)`,
+sampling each addition from the top 5 by that score. Bundle size: seeded 2 or 3.
+All bundle cards are granted on accept. Face-up. Always eligible.
+
+**`transfigured_draft`** (w=6) — *Draft 1 of 4 cards that arrive already
+transfigured.* Candidates: non-starter pool cards with at least one eligible
+transfiguration; signal: fit score (quality when deck < 6). Band-sample 4; each
+candidate is paired with its highest-benefit eligible transfiguration (benefit
+table below) and displayed as the transfigured preview. Face-up chooser.
+Eligible when the band has >= 4 such cards.
+
+### Improve family
+
+**`transfigure`** (w=10) — *Permanently improve a deck card.* Candidates: all
+(deck entry, eligible transfiguration) **pairs** where the entry has no
+transfiguration yet and benefit > 0. Starters are excluded unless no
+non-starter pair exists. Signal:
+`0.7 * benefit + 0.3 * centrality(entry)`. Band-sample 1 pair. Face-up with a
+before/after preview. Eligible when >= 1 pair exists.
+
+**`starter_transfigure`** (w=6) — *Improve 1–2 of your starter cards.*
+Candidates: untransfigured starter entries with >= 1 eligible transfiguration.
+Seeded-sample 1–2 entries uniformly; each gets a seeded-sampled eligible
+transfiguration (uniform over its eligible list, benefit > 0). Face-up with
+previews. Eligible when >= 1 such starter exists. Rationale: starters are
+otherwise dead weight; polishing them is a distinct, fun outcome that the
+non-starter preference of `transfigure` would never produce.
+
+**`keyword_mod`** (w=8) — *Add Reclaim to an event / make an event fast /
+reduce a Reclaim cost.* Build the flat candidate list of (entry, variant)
+pairs: every deck Event without base or modified Reclaim pairs with
+`add_reclaim`; every non-fast deck Event pairs with `add_fast`; every deck
+Event with Reclaim cost > 1 pairs with `reduce_reclaim`. Seeded-sample 1 pair
+uniformly — no Legendary/cost argmax. Face-up with preview. Eligible when >= 1
+pair exists.
+
+### Remove family
+
+**`purge`** (w=8) — *Remove a weak card from your deck.* Candidate set:
+starter-rarity entries, plus non-starter entries whose leave-one-out misfit
+ranks in the bottom 20% of the deck **and** whose card has corpus signal
+(df >= minDf) — cards too new for the corpus are never called "weak". Banes are
+excluded (see `cleanse`). Signal for ranking: misfit (worst first), starters
+get +0.25. Band-sample 1 from the worst band. Face-up. Eligible when deck size
+>= 8 and >= 1 candidate exists.
+
+**`purge_replace`** (w=8) — *Remove a weak card and draft 1 of 4 replacements.*
+Removal target selected exactly as `purge`; replacements are a face-up
+`fit_card_draft`-style band sample of 4. Both halves apply on accept. Eligible
+when both halves are individually eligible.
+
+**`cleanse`** (w=6) — *Remove 1–2 Bane cards from your deck.* Candidates: deck
+entries with `isBane`. Seeded count (1–2, capped by available banes), seeded
+uniform selection. Face-up. Eligible when >= 1 bane exists.
+
+### Duplicate family
+
+**`duplicate`** (w=8) — *Duplicate a deck card (pick 1 of up to 3).*
+Candidates: non-starter deck entries. Signal:
+`0.6 * multiplicityNorm(card) + 0.4 * fitLooNorm(entry)` (cards real decks run
+as multiples, weighted toward ones that pull with this deck). Band-sample up
+to 3 as a face-up chooser; a single candidate renders as a direct offer.
+Eligible when >= 1 candidate has multiplicity signal (`m(c) >= 0.1`).
+
+### Dreamsign family
+
+**`dreamsign`** (w=8) — *Gain a dreamsign suited to your deck.* Candidates:
+unheld dreamsigns. Signal: profile match score (below). Band-sample 1, with
+`bandFraction = 0.4` (small population). Face-up. Eligible while >= 1 unheld
+dreamsign exists.
+
+**`dreamsign_draft`** (w=6) — *Pick 1 of 2–4 dreamsigns.* Same candidates and
+signal; band-sample up to 4 (minimum 2). Face-up chooser. Eligible while >= 2
+unheld dreamsigns exist.
+
+### Journey v1 reward types deliberately excluded
+
+From the v1 catalog (`src/journeys/journey/shared/rewards.ts`, 64 templates):
+essence/omen operations (currency is out of merchant scope), site/route and
+shop-modifier rewards (different subsystem, several are future-scoped), all
+time-limited and battle-window rewards, card type changes, dreamwell stubs,
+and the composite "gain 2 rewards" meta-template (a candidate for a later
+iteration once single-reward tuning is stable).
+
+## Transfiguration: mechanics and selection
+
+### System facts (consumed as-is)
+
+`src/transfiguration/transfiguration-logic.ts` defines 8 types:
+
+| Type | Eligibility | Effect |
+|---|---|---|
+| Viridian | energyCost > 0 | cost becomes `round(cost / 2)` |
+| Scarlet | Character | spark 0 becomes 1, otherwise spark doubles |
+| Golden | text contains a digit | first number in text +1 |
+| Azure | Event | appends "Draw a card." |
+| Bronze | Event | appends "Reclaim." |
+| Magenta | text matches materialize/dawn/once-per-turn | trigger fires more often |
+| Rose | text mentions an activated ability | activated ability costs 1 less |
+| Prismatic | eligible for 2+ other types | applies every eligible type |
+
+A deck entry holds at most one transfiguration
+(`DeckEntry.transfiguration: TransfigurationType | null`); transfigured cards
+are excluded from further transfiguration. Effective cards are computed by
+applying the transfiguration first, then type changes, then keyword
+modifications (`getEffectiveCard` ordering), and keyword modifications merge
+additively (`mergeCardKeywordModification`).
+
+### v3 benefit scores
+
+Benefit is mechanical where the effect is numeric and a flat constant where it
+is textual. The deck-conditional bonuses in the current scorer (Azure/Bronze
+checking regex-derived draw/recursion counts) are replaced by flat constants,
+since the role counts they depend on come from the deleted regex engine.
+
+| Type | Benefit |
+|---|---|
+| Viridian | `clamp01((oldCost - newCost) / 2)` |
+| Scarlet | `clamp01((newSpark - oldSpark) / 4)` |
+| Golden | 0.4 |
+| Azure | 0.55 |
+| Bronze | 0.55 |
+| Magenta | 0.5 |
+| Rose | 0.5 |
+| Prismatic | 0.65 |
+
+Centrality of the target entry uses corpus signals only:
+`centrality = clamp01(0.65 * fitPrior(card) + 0.35 * fitCooccurrence(card, deck))`,
+falling back to `0.25 + 0.15 * (spark >= 3)` for cards without corpus signal.
+
+### Determinism bug addressed
+
+The current detector applies argmax three times: it keeps only the single
+best transfiguration per entry, then only the top 2 entries globally, with
+deterministic benefit constants — which is why a 4-spark starter character
+reliably produces "Scarlet on Marked Direwolf" as the first merchant's offer.
+v3 requirement: the `transfigure` candidate set is **every**
+(entry, transfiguration) pair with positive benefit, and the offered pair is
+band-sampled. A Viridian on an expensive card, a Bronze on an event, and the
+Scarlet on the direwolf are all in the band; any of them can be drawn. The
+metrics harness's distinct-outcomes and repetition measures verify this
+property rather than leaving it to inspection.
 
 ## Corpus signal layer
 
@@ -145,81 +311,109 @@ New module `src/journey_v2/signals/`, leaning on existing draft code. All deck
 understanding is mechanical; cards are identified by UUID throughout.
 
 - **Fit** — `FitModel` from `src/draft/replay/fit-model.ts`, used as-is
-  (neighbor-CF + IDF co-occurrence + prior; recall@4 ≈ 80%). Ranks pool cards
-  for grants, drafts, and category shelves.
+  (neighbor-CF + IDF co-occurrence + prior; recall@4 ≈ 80%). `fitNorm` is the
+  min-max normalization of fit scores over the candidate pool for the current
+  deck. `fitPrior` and `fitCooccurrence` are the model's component signals.
 - **Quality** — the conditional-logit `quality[c]` term from
-  `src/draft/pool/variant-pickchoice.ts` (taken-over-passed strength). Powers
-  `strong_card` and `premium_draft`. Baked offline.
-- **Misfit** — leave-one-out score per deck entry: mean IDF-weighted
-  co-occurrence between a card and the rest of the deck, computed at runtime
-  from the affinity matrix. Bottom decile plus the starter rarity flag drives
-  `purge`; also down-weights transfigure targets.
-- **Multiplicity** — `P(deck runs 2+ copies | runs >= 1)` per card, computed
-  offline from corpus mainboards. Drives `duplicate`.
-- **Clusters** — offline community detection over the affinity graph, with a
-  flagship card per cluster. Drives `category_draft_known`.
+  `src/draft/pool/variant-pickchoice.ts` (taken-over-passed strength), fit
+  offline over the adapted records and baked. `qualityNorm` is min-max
+  normalized over the pool.
+- **Misfit (leave-one-out)** — for deck entry `e` with card `c`:
+  `fitLoo(e) = mean over other distinct deck cards d of coocNorm[d][c]`,
+  computed at runtime from the baked affinity matrix; `misfit = 1 -
+  fitLooNorm`. Entries whose card lacks corpus signal (df < minDf) are
+  excluded from misfit-based candidacy in both directions.
+- **Multiplicity** — `m(c) = |{corpus mainboards with >= 2 copies of c}| /
+  |{corpus mainboards with >= 1 copy of c}|`, computed offline; `m(c) = 0`
+  when fewer than 5 mainboards contain the card.
+- **Clusters** — offline greedy-modularity community detection over the
+  affinity graph, keeping each card's top 10 affinity edges; clusters with >= 8
+  members are retained. Each cluster's flagship is its member with maximal
+  `idf(c) * quality(c)`, and the cluster is presented as "the *<flagship>*
+  package".
 
 ### Baked artifact
 
 One committed file, `data/merchant_corpus.json`, holding quality ratings,
-multiplicity, and cluster assignments — same pattern as the affinity corpus:
-a bake script regenerates it from `docs/draft_records_adapted/`, and a parity
+multiplicity, and cluster assignments — same pattern as the affinity corpus: a
+bake script regenerates it from `docs/draft_records_adapted/`, and a parity
 check validates the committed artifact against a live rebuild. Runtime never
 re-derives these from draft records.
 
-### The one curated file
+## Category construction (`category_draft_known`)
 
-`data/tabula/dreamsign_profiles.toml`. Dreamsigns never appear in draft
-records, so they get no corpus signal. A subagent deep-reads each dreamsign's
-ability text (no regexes) and records a structured profile, reviewed by hand:
+The category universe is built from two tag-free sources:
+
+1. **Hard card data**: card type (Character, Event); each subtype with >= 12
+   non-starter pool cards; cost bands cheap (<= 1), mid (2–3), big (>= 4);
+   fast cards (when >= 12 exist).
+2. **Corpus clusters**: each retained cluster, presented by flagship.
+
+A category is **deck-affine** when the deck contains >= 2 cards in it (>= 1
+for clusters). The encounter's category is seeded-sampled: 75% weight on
+deck-affine categories, 25% on the full universe — relevant most of the time,
+occasionally a curveball.
+
+## Dreamsign profiles and matching
+
+`data/tabula/dreamsign_profiles.toml` is the one curated file. Dreamsigns
+never appear in draft records, so they get no corpus signal. A subagent
+deep-reads each dreamsign's ability text (no regexes) and records a structured
+profile, reviewed by hand:
 
 ```toml
 [[dreamsigns]]
 id = "<dreamsign uuid>"
-# Hard deck features this dreamsign rewards.
+# Hard deck features this dreamsign rewards. Empty lists = generically useful.
 subtypes = ["Warrior"]
 card-types = []
-cost-bands = []          # e.g. ["cheap"]
-keywords = []            # e.g. ["reclaim"]
+cost-bands = []          # of "cheap", "mid", "big"
+keywords = []            # e.g. ["reclaim", "fast"]
 quality = 2              # 1 = premium, 2 = solid, 3 = niche
 ```
 
-The merchant matches profiles against the deck's actual composition (hard data
-only) and samples from the top-matching band. At ~32 dreamsigns this is cheap
-to maintain.
+Match score for a deck: each profile feature is satisfied when the deck holds
+>= 3 cards exhibiting it (subtype match, card type match, cost band match, or
+keyword presence — all hard fields). Score =
+`(0.5 + 0.5 * satisfiedFraction) * qualityWeight`, with `qualityWeight` 1.2 /
+1.0 / 0.8 for quality 1 / 2 / 3. Profiles with no features score as 0.5 *
+qualityWeight (generic dreamsigns stay offerable everywhere, premium generic
+ones readily). At ~32 dreamsigns this file is cheap to maintain.
 
 ## Dialogue
 
 Each encounter renders exactly one merchant line of at most 10 words, hinting
 at the motivation for one seeded-chosen offer — e.g. "That direwolf of yours
 could be so much more." Small per-archetype template banks (6–10 lines each),
-slot-filled with at most the target's name. One short accept reaction (at most
-6 words). Nothing else: no greetings, price framing, walk-away lines, or
-decline reactions.
+slot-filled with at most the target's display name. One short accept reaction
+(at most 6 words). Nothing else: no greetings, price framing, walk-away lines,
+or decline reactions.
 
 ## Metrics harness
 
 `scripts/merchant-experiment.mjs`, exposed as `npm run merchant-metric`,
 following the pool-experiment pattern. Simulated decks are prefixes of real
-adapted draft records (a record truncated at picks 0/5/10/20 models a player at
-that stage), so measurements reflect real deck states.
+adapted draft records (a record truncated at picks 0/5/10/20 models a player
+at that stage), so measurements reflect real deck states.
 
 1. **Distinct outcomes** — generate first-dreamscape encounters across many
    seeds per deck state; count distinct (archetype + target identity) offer
    pairs. Target: >= 50 distinct outcomes, reported alongside effective outcome
    count (perplexity) so one dominant pair cannot hide behind a long tail.
-2. **Desirability** — for card offers, the offered card's fit percentile
-   against the full eligible pool (target: median >= 75th percentile, floor >=
-   50th); for purges, the target's misfit percentile; per-archetype
-   definitions.
+2. **Desirability** — per-archetype: for card grants/drafts, the offered
+   card's fit percentile against the full eligible pool (target: median >=
+   75th percentile, floor >= 50th); for premium/strong offers, quality
+   percentile with the same targets; for purges, the target's misfit
+   percentile; for transfigure, the pair's blended score percentile.
 3. **Repetition** — probability that two random seeds yield an identical offer
    pair for the same deck state. Target: < 2%.
 4. **Archetype coverage** — empirical distribution of shown archetypes across
    seeds and deck states; no archetype starved or dominant beyond its intended
-   weight.
+   weight (each eligible archetype's observed share within 2x of its
+   weight-implied share).
 
-Archetype weights and quantile constants are tuned against these metrics, the
-same way pool generation is tuned today.
+Archetype weights, band fractions, and blend constants are tuned against these
+metrics, the same way pool generation is tuned today.
 
 ## Module changes
 
@@ -228,16 +422,18 @@ Retained (adapted):
 - UI shell: `DreamMerchantScreen`, `OfferCard`, `MerchantChooserPanel`,
   `MerchantGameObjectView` — with pricing/locked-offer UI removed and the
   commit-then-reveal flow added.
-- `buildMerchantContext` shape — support metadata replaced by corpus signals.
+- `buildMerchantContext` shape — support metadata replaced by corpus signals
+  and dreamsign profiles.
 - `resolveMerchantOffer` validation pattern (encounter signature,
   regenerate-validate-apply), extended with the commit mutation.
-- Transfiguration and keyword-modification application code
-  (`data/transfiguration`, `data/card-type-change` keyword paths).
+- Transfiguration application (`transfiguration-logic.ts`) and keyword
+  modification storage/merge (`card-type-change.ts`), both unchanged.
 
 New:
 
-- `src/journey_v2/signals/` — fit/quality/misfit/multiplicity/cluster access.
-- Stage-1 archetype roll and stage-2 target sampling in
+- `src/journey_v2/signals/` — fit/quality/misfit/multiplicity/cluster access
+  and dreamsign profile matching.
+- Stage-1 archetype roll and stage-2 band sampling in
   `encounter/generateMerchantEncounter.ts` (rewritten).
 - `data/merchant_corpus.json` + bake script + parity check.
 - `data/tabula/dreamsign_profiles.toml` + subagent curation pass.
@@ -259,11 +455,15 @@ Deleted:
   on production TOML or draft-record contents.
 - Determinism: same (seed, site, deck state) produces an identical encounter.
 - Eligibility gates: each archetype's predicate, including the empty-deck
-  visit, which must still yield two valid offers.
-- Quantile floor: no offered card falls below its archetype's band.
+  visit, which must still yield two valid offers from different families.
+- Band sampling: no offered target falls below its archetype's band; chooser
+  sets never exceed 4 items and contain no duplicates.
+- Transfigure candidates: pairs are enumerated per (entry, transfiguration),
+  starters excluded while non-starter pairs exist, transfigured entries
+  excluded.
 - Commit-then-reveal: commit forfeits the other offer, reveal validates the
   pick against regenerated candidates, stale signatures are rejected without
   mutation.
-- Chooser size: no chooser ever exceeds 4 cards.
+- Family distinctness: slots A and B always come from different families.
 - Browser QA through the normal player workflow on a non-5173 Vite port, per
   the standard QA process.
