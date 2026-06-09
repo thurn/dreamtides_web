@@ -6,6 +6,7 @@ import {
   marketJitterFor,
   needSeverityMultiplierFor,
   priceMerchantReward,
+  valueEssenceForCardGrant,
 } from "./pricing";
 import type { PriceMerchantRewardInput } from "./pricing";
 
@@ -81,6 +82,34 @@ describe("priceMerchantReward", () => {
     expect(result.price).toBe(MERCHANT_PRICE_MINIMUM);
   });
 
+  it("keeps positive-value rewards at the floor and locked when essence cap is zero", () => {
+    const result = priceMerchantReward(
+      baseInput({
+        valueEssence: 90,
+        currentEssence: 0,
+        essenceCap: 0,
+      }),
+    );
+
+    expect(result.price).toBe(MERCHANT_PRICE_MINIMUM);
+    expect(result.locked).toBe(true);
+    expect(result.lockedReason).toBe("insufficient_essence");
+  });
+
+  it("keeps positive-value rewards at the floor and locked when essence cap is below the floor", () => {
+    const result = priceMerchantReward(
+      baseInput({
+        valueEssence: 90,
+        currentEssence: 10,
+        essenceCap: 10,
+      }),
+    );
+
+    expect(result.price).toBe(MERCHANT_PRICE_MINIMUM);
+    expect(result.locked).toBe(true);
+    expect(result.lockedReason).toBe("insufficient_essence");
+  });
+
   it("caps price at the essence cap", () => {
     const result = priceMerchantReward(
       baseInput({
@@ -139,5 +168,17 @@ describe("priceMerchantReward", () => {
       light.needSeverityMultiplier,
     );
     expect(severe.price).toBeLessThanOrEqual(light.price);
+  });
+
+  it("maps v2 card grant rarity to sensible essence values", () => {
+    const ordinary = valueEssenceForCardGrant();
+    const nullRarity = valueEssenceForCardGrant(null);
+    const legendary = valueEssenceForCardGrant("Legendary");
+
+    expect(ordinary).toBeGreaterThan(0);
+    expect(nullRarity).toBe(ordinary);
+    expect(valueEssenceForCardGrant("Starter")).toBe(ordinary);
+    expect(valueEssenceForCardGrant("Special")).toBe(ordinary);
+    expect(legendary).toBeGreaterThan(ordinary);
   });
 });

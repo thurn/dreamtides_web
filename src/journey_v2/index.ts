@@ -5,11 +5,11 @@ export {
   MERCHANT_NEED_SEVERITY_MULTIPLIER_MAX,
   MERCHANT_NEED_SEVERITY_MULTIPLIER_MIN,
   MERCHANT_PRICE_MINIMUM,
-  MERCHANT_VALUE_REFERENCES,
   marketJitterFor,
   needSeverityMultiplierFor,
   priceMerchantReward,
   scarcityMultiplierFor,
+  valueEssenceForCardGrant,
 } from "./catalog/pricing";
 export { readMerchantDeck } from "./read/deckRead";
 export type {

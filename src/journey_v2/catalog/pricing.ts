@@ -54,8 +54,9 @@ export const MERCHANT_MARKET_JITTER_MAX = 1.08;
 export const MERCHANT_NEED_SEVERITY_MULTIPLIER_MIN = 0.9;
 export const MERCHANT_NEED_SEVERITY_MULTIPLIER_MAX = 1.12;
 
-export const MERCHANT_VALUE_REFERENCES = {
-  cardGrantByRarity: CARD_VALUE_CONSTANTS.namedVisibleByRarity,
+const MERCHANT_VALUE_REFERENCES = {
+  ordinaryCardGrant: CARD_VALUE_CONSTANTS.namedVisibleByRarity.common,
+  legendaryCardGrant: CARD_VALUE_CONSTANTS.namedVisibleByRarity.legendary,
   draftChoiceValues: CARD_VALUE_CONSTANTS.draftChoiceValues,
   dreamsignGain: DREAMSIGN_VALUE_CONSTANTS.namedGain,
   dreamsignPurchase: DREAMSIGN_OPERATION_VALUE_CONSTANTS.purchase,
@@ -145,6 +146,12 @@ export function scarcityMultiplierFor(input: MerchantRewardScarcityInput): numbe
   );
 }
 
+export function valueEssenceForCardGrant(rarity?: Rarity | null): number {
+  return rarity === "Legendary"
+    ? MERCHANT_VALUE_REFERENCES.legendaryCardGrant
+    : MERCHANT_VALUE_REFERENCES.ordinaryCardGrant;
+}
+
 export function priceMerchantReward(
   input: PriceMerchantRewardInput,
 ): MerchantRewardPrice {
@@ -161,10 +168,18 @@ export function priceMerchantReward(
     valueEssence * needSeverityMultiplier * scarcityMultiplier * marketJitter,
   );
   const cap = Math.max(0, Math.round(finiteOr(input.essenceCap, 0)));
-  const minimum = Math.min(MERCHANT_PRICE_MINIMUM, cap);
-  const price = clamp(rawPrice, minimum, cap);
+  const positiveValue = valueEssence > 0;
+  const price =
+    positiveValue && cap < MERCHANT_PRICE_MINIMUM
+      ? MERCHANT_PRICE_MINIMUM
+      : clamp(
+          rawPrice,
+          positiveValue ? MERCHANT_PRICE_MINIMUM : 0,
+          Math.max(MERCHANT_PRICE_MINIMUM, cap),
+        );
   const currentEssence = Math.max(0, Math.round(finiteOr(input.currentEssence, 0)));
-  const locked = price > currentEssence;
+  const locked =
+    price > currentEssence || (positiveValue && cap < MERCHANT_PRICE_MINIMUM);
 
   return {
     price,
