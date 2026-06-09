@@ -485,6 +485,8 @@ export default function EditableCard({
         ref={cardRef}
         aria-label={visibleName}
         data-editor-card-id={card.id}
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
         style={{ display: "block", position: "relative" }}
       >
         <CardView
@@ -497,6 +499,9 @@ export default function EditableCard({
         />
         {fontSizeOverlay}
         {checkboxControl}
+        {hovering && mtgName !== "" ? (
+          <MtgNameTooltip anchorRef={cardRef} mtgName={mtgName} />
+        ) : null}
       </article>
     );
   }

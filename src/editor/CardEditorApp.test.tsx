@@ -991,6 +991,50 @@ describe("CardEditorApp", () => {
     });
   });
 
+  it("shows the source MTG name on hover while art-edit mode is active", async () => {
+    window.history.pushState(null, "", "/editor?artedit=1");
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(() =>
+          Promise.resolve([
+            makeEditorCard({
+              id: "card-id-1",
+              mtgName: "Dauthi Horror",
+            }),
+          ]),
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(document.body.textContent).not.toContain("MTG: Dauthi Horror");
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"]',
+    );
+    if (editorCard === null) {
+      throw new Error("Missing art-mode editor card");
+    }
+
+    act(() => {
+      editorCard.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+    });
+
+    expect(document.body.textContent).toContain("MTG: Dauthi Horror");
+
+    act(() => {
+      editorCard.dispatchEvent(new MouseEvent("mouseout", { bubbles: true }));
+    });
+
+    expect(document.body.textContent).not.toContain("MTG: Dauthi Horror");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("discards name edits with Escape and saves them on blur", async () => {
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>
