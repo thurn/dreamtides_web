@@ -390,10 +390,33 @@ function transfigurationBenefit(
   }
 }
 
-function fitPriorByCardNumber(deckCard: MerchantDeckCard, context: MerchantContext): number | null {
+interface FitSignals {
+  prior: number;
+  cooccurrence: number;
+}
+
+function fitSignalsForDeckCard(
+  deckCard: MerchantDeckCard,
+  context: MerchantContext,
+): FitSignals | null {
   const fitName = context.fitModel?.numberToName.get(deckCard.cardNumber);
   if (fitName === undefined) return null;
-  return context.fitModel?.prior.get(fitName) ?? null;
+  const otherDeckNames = context.deckCards
+    .filter((candidate) => candidate.entryId !== deckCard.entryId)
+    .map((candidate) => context.fitModel?.numberToName.get(candidate.cardNumber))
+    .filter((name): name is string => name !== undefined);
+  const cooccurrence =
+    otherDeckNames.length === 0
+      ? 0
+      : otherDeckNames.reduce(
+          (total, deckName) =>
+            total + (context.fitModel?.coocNorm.get(deckName)?.get(fitName) ?? 0),
+          0,
+        ) / otherDeckNames.length;
+  return {
+    prior: context.fitModel?.prior.get(fitName) ?? 0,
+    cooccurrence,
+  };
 }
 
 function centrality(
@@ -401,9 +424,9 @@ function centrality(
   effectiveCard: CardData,
   context: MerchantContext,
 ): number {
-  const prior = fitPriorByCardNumber(deckCard, context);
-  if (prior !== null) {
-    return clamp01(prior);
+  const fitSignals = fitSignalsForDeckCard(deckCard, context);
+  if (fitSignals !== null) {
+    return clamp01(fitSignals.prior * 0.65 + fitSignals.cooccurrence * 0.35);
   }
 
   let value = 0.25;
@@ -575,6 +598,11 @@ function weakContribution(deckCard: MerchantDeckCard, context: MerchantContext):
   const meta = context.supportMetaByUuid.get(deckCard.cardUuid);
   if (meta?.supports?.length) contribution += 0.2;
   if (meta?.needs?.length) contribution += 0.16;
+
+  const fitSignals = fitSignalsForDeckCard(deckCard, context);
+  if (fitSignals !== null) {
+    contribution += fitSignals.prior * 0.18 + fitSignals.cooccurrence * 0.16;
+  }
 
   return contribution;
 }

@@ -222,10 +222,12 @@ function makeStateFor(site: SiteState): QuestState {
 function renderWithQuest({
   state,
   questContent,
+  mutations = makeMutations(),
   children,
 }: {
   state: QuestState;
   questContent: QuestContent;
+  mutations?: QuestMutations;
   children: ReactElement;
 }) {
   const container = document.createElement("div");
@@ -238,7 +240,7 @@ function renderWithQuest({
       <QuestContextProvider
         value={{
           state,
-          mutations: makeMutations(),
+          mutations,
           cardDatabase: questContent.cardDatabase,
           questContent,
         }}
@@ -258,6 +260,7 @@ afterEach(() => {
     });
   }
   document.body.innerHTML = "";
+  vi.clearAllMocks();
 });
 
 describe("ScreenRouter DreamJourney routing", () => {
@@ -298,5 +301,31 @@ describe("ScreenRouter DreamJourney routing", () => {
 
     expect(container.querySelector('[data-testid="reward-site-screen"]')).not.toBeNull();
     expect(container.querySelector('[data-testid="dream-merchant-v2-screen"]')).toBeNull();
+  });
+
+  it("renders a contained v2 fallback when merchant generation is unavailable", () => {
+    const site = makeSite("DreamJourney");
+    const state = makeStateFor(site);
+    const mutations = makeMutations();
+    const container = renderWithQuest({
+      state,
+      mutations,
+      questContent: makeMerchantTestContent({ cards: [] }),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+    });
+
+    expect(container.querySelector('[data-testid="dream-merchant-v2-fallback"]')).not.toBeNull();
+    const walkAway = container.querySelector(
+      '[data-testid="merchant-fallback-walk-away"]',
+    );
+    if (!(walkAway instanceof HTMLButtonElement)) {
+      throw new Error("expected fallback walk-away button");
+    }
+
+    act(() => {
+      walkAway.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(mutations.completeDreamJourneySite).toHaveBeenCalledWith(site.id);
   });
 });

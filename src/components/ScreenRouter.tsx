@@ -285,10 +285,45 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       }),
     [questContent, site, state],
   );
-  const encounter = useMemo(
-    () => generateMerchantEncounter(merchantContext),
+  const encounterResult = useMemo(
+    () => {
+      try {
+        return {
+          ok: true as const,
+          encounter: generateMerchantEncounter(merchantContext),
+        };
+      } catch (error) {
+        return {
+          ok: false as const,
+          message: error instanceof Error ? error.message : String(error),
+        };
+      }
+    },
     [merchantContext],
   );
+
+  useEffect(() => {
+    if (merchantContext.fitModel === undefined) {
+      logEvent("merchant_fit_model_missing", {
+        siteId: site.id,
+      });
+    }
+  }, [merchantContext.fitModel, site.id]);
+
+  useEffect(() => {
+    if (!encounterResult.ok) return;
+    for (const offer of encounterResult.encounter.offers) {
+      logEvent("merchant_offer_shown", {
+        siteId: site.id,
+        encounterSignature: encounterResult.encounter.encounterSignature,
+        offerId: offer.offerId,
+        needId: offer.needId,
+        rewardBuilderId: offer.rewardBuilderId,
+        price: offer.price,
+        locked: offer.locked,
+      });
+    }
+  }, [encounterResult, site.id]);
 
   const handleAcceptOffer = useCallback(
     (request: MerchantAcceptRequest) => {
@@ -303,12 +338,47 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
     [mutations, site.id],
   );
 
+  const handleFallbackWalkAway = useCallback(() => {
+    logEvent("merchant_offer_validation_failed", {
+      siteId: site.id,
+      reason: "encounter_unavailable",
+      message: encounterResult.ok ? undefined : encounterResult.message,
+    });
+    mutations.completeDreamJourneySite(site.id);
+  }, [encounterResult, mutations, site.id]);
+
+  if (!encounterResult.ok) {
+    return (
+      <main
+        className="min-h-full bg-[#090b10] p-6 text-slate-100"
+        data-testid="dream-merchant-v2-fallback"
+      >
+        <section className="mx-auto grid min-h-[70vh] max-w-2xl place-items-center text-center">
+          <div className="grid gap-4">
+            <h2 className="text-2xl font-bold">Dream Merchant</h2>
+            <p className="text-sm leading-relaxed text-slate-300">
+              The counter is bare tonight. The road remains open.
+            </p>
+            <button
+              type="button"
+              className="min-h-12 rounded-md border border-slate-600 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-100 transition hover:bg-slate-800"
+              data-testid="merchant-fallback-walk-away"
+              onClick={handleFallbackWalkAway}
+            >
+              Walk away
+            </button>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <DreamMerchantScreen
       site={site}
       context={merchantContext}
       questState={state}
-      encounter={encounter}
+      encounter={encounterResult.encounter}
       onAcceptOffer={handleAcceptOffer}
       onDecline={handleDecline}
     />

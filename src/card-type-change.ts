@@ -30,7 +30,9 @@ export function applyCardKeywordModification<T extends CardKeywordFields>(
   card: T,
   keywordModification: CardKeywordModification | null | undefined,
 ): T {
-  const reclaimCost = normalizedReclaimCost(keywordModification?.reclaim);
+  const reclaimCost = normalizedReclaimCost(
+    keywordModification?.setReclaim ?? keywordModification?.reclaim,
+  );
   if (keywordModification?.fast !== true && reclaimCost === null) {
     return card;
   }
@@ -56,6 +58,10 @@ export function mergeCardKeywordModification(
   if (incoming.reclaim !== undefined) {
     next.reclaim = (existing?.reclaim ?? 0) + incoming.reclaim;
   }
+  if (incoming.setReclaim !== undefined) {
+    next.setReclaim = incoming.setReclaim;
+    delete next.reclaim;
+  }
   return next;
 }
 
@@ -67,6 +73,11 @@ function normalizedReclaimCost(reclaim: number | undefined): number | null {
 
 function appendReclaimText(renderedText: string, reclaimCost: number): string {
   const reclaimLine = `Reclaim ${String(reclaimCost)}●`;
+  const textWithReplacement = renderedText.replace(
+    /Reclaim\s+\d+●/i,
+    reclaimLine,
+  );
+  if (textWithReplacement !== renderedText) return textWithReplacement;
   return renderedText.trimEnd().endsWith(reclaimLine)
     ? renderedText
     : `${renderedText.trimEnd()}\n\n${reclaimLine}`;

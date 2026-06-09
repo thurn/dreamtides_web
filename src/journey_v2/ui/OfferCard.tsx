@@ -37,7 +37,7 @@ export function OfferCard({
 
   return (
     <article
-      className="grid min-h-[520px] grid-rows-[auto_auto_1fr_auto] gap-4 rounded-md border border-slate-600/70 bg-slate-950/70 p-4 text-left shadow-xl shadow-black/25"
+      className="grid min-h-[520px] grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-4 rounded-md border border-slate-600/70 bg-slate-950/70 p-4 text-left shadow-xl shadow-black/25 lg:h-[calc(100vh-9rem)] lg:max-h-[720px]"
       data-offer-id={offer.offerId}
       data-testid={`merchant-offer-card-${offer.offerId}`}
     >
@@ -78,7 +78,7 @@ export function OfferCard({
         </p>
       </section>
 
-      <section className="min-w-0 overflow-hidden">
+      <section className="min-w-0 overflow-y-auto pr-1">
         <MerchantGameObjectList objects={offer.reward.gameObjects} compact />
       </section>
 

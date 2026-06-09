@@ -13,6 +13,8 @@ import type {
   MerchantApplyPayload,
   MerchantContext,
   MerchantNeed,
+  MerchantMissingRoleNeed,
+  MerchantRoleNeed,
   MerchantSupportMeta,
 } from "../types";
 import {
@@ -104,7 +106,7 @@ function contextFor(options: {
 
 function missingRoleNeed(
   compatibleRewardBuilderIds: readonly string[] = ["grant_support_card"],
-): MerchantNeed {
+): MerchantMissingRoleNeed {
   return {
     needId: "need:missing-role:draw",
     needType: "theme",
@@ -124,6 +126,31 @@ function missingRoleNeed(
       theme: "draw",
       supportCount: 0,
       requiredCount: 2,
+    },
+  };
+}
+
+function missingRoleNeedFor(
+  role: MerchantRoleNeed,
+  compatibleRewardBuilderIds: readonly string[],
+): MerchantMissingRoleNeed {
+  const roleLabel = role.replace(/_/g, " ");
+  return {
+    needId: `need:missing-role:${role}`,
+    needType: "theme",
+    needKind: "missing_role",
+    label: `Needs ${roleLabel}`,
+    score: 0.7,
+    severity: 0.7,
+    confidence: 1,
+    observation: { summary: `The deck is short on ${roleLabel}.`, roleLabel },
+    compatibleRewardBuilderIds,
+    role,
+    themeId: role,
+    support: {
+      theme: role,
+      supportCount: 0,
+      requiredCount: 1,
     },
   };
 }
@@ -507,19 +534,143 @@ describe("rewardCatalog", () => {
     ).toBeNull();
   });
 
-  it("duplicate_keystone does not claim to solve missing support", () => {
+  it("duplicate_keystone duplicates a referenced payoff card", () => {
     const context = contextFor({
       cards: supportCards(),
+      deckCards: [supportCards()[0]],
       supportMetaByUuid: supportMeta(),
     });
 
-    expect(
-      buildMerchantRewardWithBuilder(
-        context,
-        underSupportedPayoffNeed(),
-        "duplicate_keystone",
-      ),
-    ).toBeNull();
+    const reward = buildMerchantRewardWithBuilder(
+      context,
+      underSupportedPayoffNeed(),
+      "duplicate_keystone",
+    );
+
+    expect(reward).toMatchObject({
+      builderId: "duplicate_keystone",
+      applyPayload: {
+        kind: "duplicate_deck_entry",
+        entryId: "entry-1",
+        cardUuid: UUIDS.owned,
+      },
+    });
+    expect(reward?.gameObjects[0]).toMatchObject({
+      objectType: "deckCard",
+      badge: { label: "Duplicate" },
+    });
+  });
+
+  it("adds Reclaim to an event for recursion needs", () => {
+    const eventCard = card(UUIDS.highCost, 3, {
+      name: "Grave Contract",
+      cardType: "Event",
+      reclaimCost: null,
+    });
+    const context = contextFor({
+      cards: [eventCard],
+      deckCards: [eventCard],
+    });
+
+    const reward = buildMerchantRewardWithBuilder(
+      context,
+      missingRoleNeedFor("recursion", ["add_reclaim_to_event"]),
+      "add_reclaim_to_event",
+    );
+
+    expect(reward).toMatchObject({
+      builderId: "add_reclaim_to_event",
+      applyPayload: {
+        kind: "change_deck_entry_keywords",
+        entryId: "entry-1",
+        keywords: { reclaim: 1 },
+      },
+    });
+  });
+
+  it("adds fast to an event for interaction needs", () => {
+    const eventCard = card(UUIDS.highCost, 3, {
+      name: "Slow Answer",
+      cardType: "Event",
+      isFast: false,
+    });
+    const context = contextFor({
+      cards: [eventCard],
+      deckCards: [eventCard],
+    });
+
+    const reward = buildMerchantRewardWithBuilder(
+      context,
+      missingRoleNeedFor("interaction", ["add_fast_to_event"]),
+      "add_fast_to_event",
+    );
+
+    expect(reward).toMatchObject({
+      builderId: "add_fast_to_event",
+      applyPayload: {
+        kind: "change_deck_entry_keywords",
+        entryId: "entry-1",
+        keywords: { fast: true },
+      },
+    });
+  });
+
+  it("lowers reclaim cost on an event with existing Reclaim", () => {
+    const eventCard = card(UUIDS.highCost, 3, {
+      name: "Costly Return",
+      cardType: "Event",
+      reclaimCost: 3,
+      renderedText: "Draw a card.\n\nReclaim 3●",
+    });
+    const context = contextFor({
+      cards: [eventCard],
+      deckCards: [eventCard],
+    });
+
+    const reward = buildMerchantRewardWithBuilder(
+      context,
+      missingRoleNeedFor("recursion", ["reduce_reclaim_cost"]),
+      "reduce_reclaim_cost",
+    );
+
+    expect(reward).toMatchObject({
+      builderId: "reduce_reclaim_cost",
+      applyPayload: {
+        kind: "change_deck_entry_keywords",
+        entryId: "entry-1",
+        keywords: { setReclaim: 2 },
+      },
+    });
+  });
+
+  it("converts a deck entry type to cover event or character role gaps", () => {
+    const eventCard = card(UUIDS.highCost, 3, {
+      name: "Transforming Rite",
+      cardType: "Event",
+      subtype: "",
+    });
+    const context = contextFor({
+      cards: [eventCard],
+      deckCards: [eventCard],
+    });
+
+    const reward = buildMerchantRewardWithBuilder(
+      context,
+      missingRoleNeedFor("characters", ["convert_event_to_role"]),
+      "convert_event_to_role",
+    );
+
+    expect(reward).toMatchObject({
+      builderId: "convert_event_to_role",
+      applyPayload: {
+        kind: "change_deck_entry_type",
+        entryId: "entry-1",
+        typeChange: {
+          cardType: "Character",
+          subtype: "Visitor",
+        },
+      },
+    });
   });
 
   it("purge_weak_card returns a deck-entry game object with a remove payload and badge", () => {

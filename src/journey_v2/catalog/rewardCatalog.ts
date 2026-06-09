@@ -2,6 +2,7 @@ import { sha256 } from "js-sha256";
 import { valueEssenceForCardGrant } from "./pricing";
 import type { CardData, CardType } from "../../types/cards";
 import type { DreamsignTemplate } from "../../types/content";
+import type { CardKeywordModification } from "../../types/quest";
 import type {
   MerchantApplyPayload,
   MerchantCatalogCard,
@@ -49,6 +50,11 @@ const VALUE_ESSENCE = {
   transfiguration: 85,
   purgeWeakCard: 70,
   weakReplacementBonus: 55,
+  duplicateKeystone: 95,
+  addReclaim: 60,
+  addFast: 55,
+  reduceReclaimCost: 45,
+  convertType: 65,
   gainEssence: 50,
   raiseEssenceCap: 75,
 } as const;
@@ -238,6 +244,48 @@ function cloneDeckCard(
     ...deckCard,
     ...(badge === undefined ? {} : { badge }),
     ...(previewCard === undefined ? {} : { previewCard }),
+  };
+}
+
+function targetDeckCardForNeed(
+  context: MerchantContext,
+  need: MerchantNeed,
+): MerchantDeckCard | null {
+  if (need.needType !== "card") return null;
+  return context.deckEntryById.get(need.entryId) ?? null;
+}
+
+function deckCardKeywordPayload(
+  deckCard: MerchantDeckCard,
+  keywords: CardKeywordModification,
+): MerchantApplyPayload {
+  return {
+    kind: "change_deck_entry_keywords",
+    entryId: deckCard.entryId,
+    cardUuid: deckCard.cardUuid,
+    cardNumber: deckCard.cardNumber,
+    keywords,
+  };
+}
+
+function deckCardDuplicatePayload(deckCard: MerchantDeckCard): MerchantApplyPayload {
+  return {
+    kind: "duplicate_deck_entry",
+    entryId: deckCard.entryId,
+    cardUuid: deckCard.cardUuid,
+    cardNumber: deckCard.cardNumber,
+  };
+}
+
+function typeChangedPreview(
+  deckCard: MerchantDeckCard,
+  cardType: CardType,
+  subtype: string,
+): CardData {
+  return {
+    ...deckCard.card,
+    cardType,
+    subtype,
   };
 }
 
@@ -575,12 +623,165 @@ function raiseEssenceCap(
   };
 }
 
-function noReward(
-  _context: MerchantContext,
-  _need: MerchantNeed,
+function duplicateKeystone(
+  context: MerchantContext,
+  need: MerchantNeed,
   _options: Required<BuildMerchantRewardsOptions>,
 ): MerchantReward | null {
-  return null;
+  if (need.needKind !== "under_supported_payoff") return null;
+  const deckCard = targetDeckCardForNeed(context, need);
+  if (deckCard === null) return null;
+
+  return {
+    builderId: "duplicate_keystone",
+    title: `Duplicate ${deckCard.displayName}`,
+    summary: `Add another copy of ${deckCard.displayName} to reinforce this deck plan.`,
+    answersNeedIds: [need.needId],
+    gameObjects: [cloneDeckCard(deckCard, { label: "Duplicate", detail: "Deck entry" })],
+    valueEssence: VALUE_ESSENCE.duplicateKeystone,
+    applyPayload: deckCardDuplicatePayload(deckCard),
+  };
+}
+
+function bestDeckEvent(
+  context: MerchantContext,
+  predicate: (deckCard: MerchantDeckCard, card: CardData) => boolean,
+): MerchantDeckCard | null {
+  return (
+    context.deckCards
+      .filter((deckCard) => predicate(deckCard, deckCard.card))
+      .sort(
+        (a, b) =>
+          (b.card.rarity === "Legendary" ? 1 : 0) -
+            (a.card.rarity === "Legendary" ? 1 : 0) ||
+          (b.card.energyCost ?? 0) - (a.card.energyCost ?? 0) ||
+          a.entryId.localeCompare(b.entryId),
+      )[0] ?? null
+  );
+}
+
+function addReclaimToEvent(
+  context: MerchantContext,
+  need: MerchantNeed,
+  _options: Required<BuildMerchantRewardsOptions>,
+): MerchantReward | null {
+  if (roleForNeed(need) !== "recursion") return null;
+  const deckCard = bestDeckEvent(
+    context,
+    (_deckCard, card) =>
+      card.cardType === "Event" &&
+      (card.reclaimCost === null || card.reclaimCost === undefined),
+  );
+  if (deckCard === null) return null;
+
+  return {
+    builderId: "add_reclaim_to_event",
+    title: `Give ${deckCard.displayName} Reclaim`,
+    summary: `${deckCard.displayName} gains Reclaim 1.`,
+    answersNeedIds: [need.needId],
+    gameObjects: [cloneDeckCard(deckCard, { label: "Reclaim", detail: "1" })],
+    valueEssence: VALUE_ESSENCE.addReclaim,
+    applyPayload: deckCardKeywordPayload(deckCard, { reclaim: 1 }),
+  };
+}
+
+function addFastToEvent(
+  context: MerchantContext,
+  need: MerchantNeed,
+  _options: Required<BuildMerchantRewardsOptions>,
+): MerchantReward | null {
+  if (roleForNeed(need) !== "interaction") return null;
+  const deckCard = bestDeckEvent(
+    context,
+    (_deckCard, card) => card.cardType === "Event" && !card.isFast,
+  );
+  if (deckCard === null) return null;
+
+  return {
+    builderId: "add_fast_to_event",
+    title: `Quicken ${deckCard.displayName}`,
+    summary: `${deckCard.displayName} becomes fast.`,
+    answersNeedIds: [need.needId],
+    gameObjects: [cloneDeckCard(deckCard, { label: "Fast" })],
+    valueEssence: VALUE_ESSENCE.addFast,
+    applyPayload: deckCardKeywordPayload(deckCard, { fast: true }),
+  };
+}
+
+function reduceReclaimCost(
+  context: MerchantContext,
+  need: MerchantNeed,
+  _options: Required<BuildMerchantRewardsOptions>,
+): MerchantReward | null {
+  if (roleForNeed(need) !== "recursion") return null;
+  const deckCard = bestDeckEvent(
+    context,
+    (_deckCard, card) => card.cardType === "Event" && (card.reclaimCost ?? 0) > 1,
+  );
+  if (
+    deckCard === null ||
+    deckCard.card.reclaimCost === undefined ||
+    deckCard.card.reclaimCost === null
+  ) {
+    return null;
+  }
+
+  const nextReclaimCost = Math.max(1, deckCard.card.reclaimCost - 1);
+  return {
+    builderId: "reduce_reclaim_cost",
+    title: `Lower ${deckCard.displayName} Reclaim`,
+    summary: `${deckCard.displayName} costs ${nextReclaimCost} to reclaim.`,
+    answersNeedIds: [need.needId],
+    gameObjects: [
+      cloneDeckCard(deckCard, {
+        label: "Reclaim",
+        detail: `${deckCard.card.reclaimCost} -> ${nextReclaimCost}`,
+      }),
+    ],
+    valueEssence: VALUE_ESSENCE.reduceReclaimCost,
+    applyPayload: deckCardKeywordPayload(deckCard, { setReclaim: nextReclaimCost }),
+  };
+}
+
+function convertEventToRole(
+  context: MerchantContext,
+  need: MerchantNeed,
+  _options: Required<BuildMerchantRewardsOptions>,
+): MerchantReward | null {
+  const role = roleForNeed(need);
+  const targetType =
+    role === "events" ? "Event" : role === "characters" ? "Character" : null;
+  if (targetType === null) return null;
+  const sourceType: CardType = targetType === "Event" ? "Character" : "Event";
+  const deckCard =
+    context.deckCards.find((candidate) => candidate.card.cardType === sourceType) ?? null;
+  if (deckCard === null) return null;
+
+  const subtype = targetType === "Event" ? "Rite" : "Visitor";
+  const label = targetType === "Event" ? "Event" : "Character";
+  return {
+    builderId: "convert_event_to_role",
+    title: `Make ${deckCard.displayName} a ${label}`,
+    summary: `${deckCard.displayName} changes type to cover a missing ${label.toLowerCase()} slot.`,
+    answersNeedIds: [need.needId],
+    gameObjects: [
+      cloneDeckCard(
+        deckCard,
+        { label, detail: subtype },
+        typeChangedPreview(deckCard, targetType, subtype),
+      ),
+    ],
+    valueEssence: VALUE_ESSENCE.convertType,
+    applyPayload: makeMerchantTypeChangePayload({
+      entryId: deckCard.entryId,
+      cardUuid: deckCard.cardUuid,
+      cardNumber: deckCard.cardNumber,
+      predicateId: `merchant:${need.needId}:${targetType.toLowerCase()}`,
+      cardType: targetType,
+      subtype,
+      label,
+    }),
+  };
 }
 
 export const MERCHANT_REWARD_BUILDERS: Readonly<
@@ -590,14 +791,14 @@ export const MERCHANT_REWARD_BUILDERS: Readonly<
   grant_dreamsign: grantDreamsign,
   transfigure_card: transfigureCard,
   purge_weak_card: purgeWeakCard,
-  duplicate_keystone: noReward,
+  duplicate_keystone: duplicateKeystone,
   replace_weak_with_fit: replaceWeakWithFit,
   gain_essence: gainEssence,
   raise_essence_cap: raiseEssenceCap,
-  add_reclaim_to_event: noReward,
-  add_fast_to_event: noReward,
-  reduce_reclaim_cost: noReward,
-  convert_event_to_role: noReward,
+  add_reclaim_to_event: addReclaimToEvent,
+  add_fast_to_event: addFastToEvent,
+  reduce_reclaim_cost: reduceReclaimCost,
+  convert_event_to_role: convertEventToRole,
   grant_exact_card: grantExactCard,
 };
 

@@ -26,6 +26,8 @@ export interface CardKeywordModification {
   fast?: boolean;
   /** Added Reclaim cost. Repeated grants add to this value. */
   reclaim?: number;
+  /** Exact Reclaim cost override for one concrete deck entry. */
+  setReclaim?: number;
 }
 
 /** Persistent card modifications applied to one concrete deck entry. */
