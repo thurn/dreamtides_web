@@ -8,6 +8,7 @@ export {
   resolveMerchantChoice,
 } from "./catalog/rewardCatalog";
 export { generateMerchantEncounter } from "./encounter/generateMerchantEncounter";
+export { DreamMerchantScreen } from "./ui/DreamMerchantScreen";
 export {
   applyMerchantPayloadToState,
   resolveMerchantDecline,
@@ -45,6 +46,9 @@ export type {
   BuildMerchantRewardsOptions,
   MerchantRewardOption,
 } from "./catalog/rewardCatalog";
+export type {
+  DreamMerchantScreenProps,
+} from "./ui/DreamMerchantScreen";
 export type {
   MerchantApplyPayload,
   MerchantAcceptRequest,

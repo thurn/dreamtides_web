@@ -24,6 +24,13 @@ import {
   type JourneyExplanation,
   type JourneyDebugForcing,
 } from "../journeys";
+import {
+  DreamMerchantScreen,
+  buildMerchantContext,
+  generateMerchantEncounter,
+  type MerchantAcceptRequest,
+  type MerchantDeclineRequest,
+} from "../journey_v2";
 import type { QuestContent } from "../data/quest-content";
 import { siteTypeName } from "../atlas/atlas-generator";
 import { logEvent } from "../logging";
@@ -157,6 +164,10 @@ function SiteScreen({
   }
 
   if (site.type === "DreamJourney") {
+    if (runtimeConfig.journeyVariant === "v2") {
+      return <DreamMerchantSiteScreen site={site} />;
+    }
+
     return (
       <DreamJourneySiteScreen
         site={site}
@@ -251,6 +262,55 @@ function DreamJourneySiteScreen({
       mutations={journeyMutations}
       debugForcing={debugForcing}
       onExplanationChange={onJourneyExplanationChange}
+    />
+  );
+}
+
+function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
+  const { state, mutations, questContent } = useQuest();
+
+  useEffect(() => {
+    logEvent("site_entered", {
+      siteType: "DreamJourney",
+      isEnhanced: site.isEnhanced,
+    });
+  }, [site.id, site.isEnhanced]);
+
+  const merchantContext = useMemo(
+    () =>
+      buildMerchantContext({
+        questState: state,
+        questContent,
+        site,
+      }),
+    [questContent, site, state],
+  );
+  const encounter = useMemo(
+    () => generateMerchantEncounter(merchantContext),
+    [merchantContext],
+  );
+
+  const handleAcceptOffer = useCallback(
+    (request: MerchantAcceptRequest) => {
+      mutations.acceptDreamMerchantOffer(site.id, request);
+    },
+    [mutations, site.id],
+  );
+  const handleDecline = useCallback(
+    (request: MerchantDeclineRequest) => {
+      mutations.declineDreamMerchant(site.id, request);
+    },
+    [mutations, site.id],
+  );
+
+  return (
+    <DreamMerchantScreen
+      site={site}
+      context={merchantContext}
+      questState={state}
+      encounter={encounter}
+      onAcceptOffer={handleAcceptOffer}
+      onDecline={handleDecline}
     />
   );
 }
